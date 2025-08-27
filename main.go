@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/joho/godotenv"
@@ -14,18 +14,30 @@ import (
 )
 
 type apiConfig struct {
-	db             *database.Queries
+	db             	*database.Queries
+	dbConn			*sql.DB
+	platform		string
+	adminApiKey		string
 }
 
 func main() {
 	//const filepathRoot = "."
-	//const port = "8080"
-	const testmail = "idontknow@gmail.com"
+	const port = "8080"
 
 	godotenv.Load()
 	dbURL := os.Getenv("DB_URL")
 	if dbURL == "" {
 		log.Fatal("DB_URL must be set")
+	}
+
+	platform := os.Getenv("PLATFORM")
+	if platform == "" {
+		log.Fatal("PLATFORM must be set")
+	}
+
+	adminApiKey := os.Getenv("ADMIN_API_KEY")
+	if adminApiKey == "" {
+		log.Fatal("ADMIN_API_KEY must be set")
 	}
 
 	dbConn, err := sql.Open("postgres", dbURL)
@@ -36,19 +48,33 @@ func main() {
 
 	apiCfg := apiConfig{
 		db:             dbQueries,
+		dbConn: 		dbConn,
+		platform: 		platform,
+		adminApiKey: 	adminApiKey,
 	}
 
-	for i := range 10 {
-		email := testmail + strconv.Itoa(i+1)
-		apiCfg.handlerUsersCreate(email)
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /api/healthz", handlerReadiness)
+	mux.HandleFunc("POST /admin/reset", apiCfg.handlerResetDatabase)
+
+
+
+	srv := &http.Server{
+		Addr:    ":" + port,
+		Handler: mux,
 	}
+
+	log.Printf("Serving on port: %s\n", port)
+	log.Fatal(srv.ListenAndServe())
 }
 
 
-
+// just a test function
 func (cfg *apiConfig) handlerUsersCreate(email string) {
 	_, err := cfg.db.CreateUser(context.Background(), email)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
+
