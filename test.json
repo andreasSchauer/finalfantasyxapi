@@ -1,0 +1,18 @@
+[
+    {
+        "num": 1,
+        "floater": 5
+    },
+    {
+        "num": 2,
+        "floater": 5.25
+    },
+    {
+        "num": -3,
+        "floater": -5.25
+    },
+    {
+        "num": 4,
+        "floater": null
+    }
+]

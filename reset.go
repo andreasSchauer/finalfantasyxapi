@@ -8,11 +8,11 @@ import (
 
 func (cfg *apiConfig) handlerResetDatabase(w http.ResponseWriter, r *http.Request) {
 	providedKey := r.Header.Get("X-Admin-Key")
-    if providedKey != cfg.adminApiKey {
-        http.Error(w, "Unauthorized", http.StatusUnauthorized)
-        return
-    }
-	
+	if providedKey != cfg.adminApiKey {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
 	if cfg.platform != "dev" {
 		http.Error(w, "Reset is only allowed in dev environment.", http.StatusForbidden)
 		return

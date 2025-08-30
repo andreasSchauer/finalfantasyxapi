@@ -1,4 +1,4 @@
-package main
+package seeding
 
 import (
 	"database/sql"
@@ -13,11 +13,11 @@ func getNullString(s *string) sql.NullString {
     return sql.NullString{String: *s, Valid: true}
 }
 
-func getNullInt64(i *int) sql.NullInt64 {
+func getNullInt32(i *int32) sql.NullInt32 {
     if i == nil {
-        return sql.NullInt64{}
+        return sql.NullInt32{}
     }
-    return sql.NullInt64{Int64: int64(*i), Valid: true}
+    return sql.NullInt32{Int32: *i, Valid: true}
 }
 
 func getNullFloat64(f *float64) sql.NullFloat64 {

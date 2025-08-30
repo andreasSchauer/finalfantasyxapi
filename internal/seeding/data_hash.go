@@ -1,4 +1,4 @@
-package main
+package seeding
 
 import (
     "crypto/sha256"

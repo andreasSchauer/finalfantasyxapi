@@ -1,3 +1,5 @@
 connection_string.txt
 .env
+notes.txt
+table_dependencies.txt
 testrequests.http

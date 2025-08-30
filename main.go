@@ -1,23 +1,22 @@
 package main
 
 import (
-	"context"
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 type apiConfig struct {
-	db             	*database.Queries
-	dbConn			*sql.DB
-	platform		string
-	adminApiKey		string
+	db          *database.Queries
+	dbConn      *sql.DB
+	platform    string
+	adminApiKey string
 }
 
 func main() {
@@ -47,10 +46,10 @@ func main() {
 	dbQueries := database.New(dbConn)
 
 	apiCfg := apiConfig{
-		db:             dbQueries,
-		dbConn: 		dbConn,
-		platform: 		platform,
-		adminApiKey: 	adminApiKey,
+		db:          dbQueries,
+		dbConn:      dbConn,
+		platform:    platform,
+		adminApiKey: adminApiKey,
 	}
 
 	mux := http.NewServeMux()
@@ -58,7 +57,10 @@ func main() {
 	mux.HandleFunc("GET /api/healthz", handlerReadiness)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerResetDatabase)
 
-
+	err = seeding.SeedStats(apiCfg.db, apiCfg.dbConn)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	srv := &http.Server{
 		Addr:    ":" + port,
@@ -68,13 +70,3 @@ func main() {
 	log.Printf("Serving on port: %s\n", port)
 	log.Fatal(srv.ListenAndServe())
 }
-
-
-// just a test function
-func (cfg *apiConfig) handlerUsersCreate(email string) {
-	_, err := cfg.db.CreateUser(context.Background(), email)
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-

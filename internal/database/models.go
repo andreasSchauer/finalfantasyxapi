@@ -5,12 +5,15 @@
 package database
 
 import (
-	"time"
+	"database/sql"
 )
 
-type User struct {
-	ID        int32
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Email     string
+type Stat struct {
+	ID       int32
+	DataHash string
+	Name     string
+	Effect   string
+	MinVal   int32
+	MaxVal   int32
+	MaxVal2  sql.NullInt32
 }
