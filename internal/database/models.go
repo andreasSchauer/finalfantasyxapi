@@ -6,7 +6,101 @@ package database
 
 import (
 	"database/sql"
+	"database/sql/driver"
+	"fmt"
 )
+
+type OverdriveType string
+
+const (
+	OverdriveTypeFormula   OverdriveType = "formula"
+	OverdriveTypePerAction OverdriveType = "per-action"
+)
+
+func (e *OverdriveType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = OverdriveType(s)
+	case string:
+		*e = OverdriveType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for OverdriveType: %T", src)
+	}
+	return nil
+}
+
+type NullOverdriveType struct {
+	OverdriveType OverdriveType
+	Valid         bool // Valid is true if OverdriveType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullOverdriveType) Scan(value interface{}) error {
+	if value == nil {
+		ns.OverdriveType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.OverdriveType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullOverdriveType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.OverdriveType), nil
+}
+
+type Affinity struct {
+	ID           int32
+	DataHash     string
+	Name         string
+	DamageFactor sql.NullFloat64
+}
+
+type AgilitySubtier struct {
+	ID                int32
+	DataHash          string
+	AgilityTierID     int32
+	SubtierMinAgility int32
+	SubtierMaxAgility int32
+	CharacterMinIcv   sql.NullInt32
+}
+
+type AgilityTier struct {
+	ID              int32
+	DataHash        string
+	MinAgility      int32
+	MaxAgility      int32
+	TickSpeed       int32
+	MonsterMinIcv   sql.NullInt32
+	MonsterMaxIcv   sql.NullInt32
+	CharacterMaxIcv sql.NullInt32
+}
+
+type Element struct {
+	ID       int32
+	DataHash string
+	Name     string
+}
+
+type OverdriveMode struct {
+	ID          int32
+	DataHash    string
+	Name        string
+	Description string
+	Effect      string
+	Type        OverdriveType
+	FillRate    sql.NullFloat64
+}
+
+type Property struct {
+	ID       int32
+	DataHash string
+	Name     string
+	Effect   string
+}
 
 type Stat struct {
 	ID       int32
@@ -16,4 +110,11 @@ type Stat struct {
 	MinVal   int32
 	MaxVal   int32
 	MaxVal2  sql.NullInt32
+}
+
+type StatusCondition struct {
+	ID       int32
+	DataHash string
+	Name     string
+	Effect   string
 }

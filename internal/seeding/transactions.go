@@ -6,6 +6,7 @@ import(
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
+
 func queryInTransaction(db *database.Queries, dbConn *sql.DB, f func(*database.Queries) error) error {
 	tx, err := dbConn.Begin()
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 )
 
 // use these for dealing with pointer-fields when inputting values that can be null for a database query
+// can also write functions that do the opposite with the sqlc return values (return pointers)
 
 func getNullString(s *string) sql.NullString {
     if s == nil {
@@ -20,11 +21,11 @@ func getNullInt32(i *int32) sql.NullInt32 {
     return sql.NullInt32{Int32: *i, Valid: true}
 }
 
-func getNullFloat64(f *float64) sql.NullFloat64 {
+func getNullFloat64(f *float32) sql.NullFloat64 {
     if f == nil {
         return sql.NullFloat64{}
     }
-    return sql.NullFloat64{Float64: *f, Valid: true}
+    return sql.NullFloat64{Float64: float64(*f), Valid: true}
 }
 
 func getNullBool(b *bool) sql.NullBool {

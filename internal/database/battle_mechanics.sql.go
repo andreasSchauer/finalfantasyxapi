@@ -10,11 +10,153 @@ import (
 	"database/sql"
 )
 
-const createStat = `-- name: CreateStat :one
+const createAffinity = `-- name: CreateAffinity :exec
+INSERT INTO affinities (data_hash, name, damage_factor)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAffinityParams struct {
+	DataHash     string
+	Name         string
+	DamageFactor sql.NullFloat64
+}
+
+func (q *Queries) CreateAffinity(ctx context.Context, arg CreateAffinityParams) error {
+	_, err := q.db.ExecContext(ctx, createAffinity, arg.DataHash, arg.Name, arg.DamageFactor)
+	return err
+}
+
+const createAgilitySubtier = `-- name: CreateAgilitySubtier :exec
+INSERT INTO agility_subtiers (data_hash, agility_tier_id, subtier_min_agility, subtier_max_agility, character_min_icv)
+VALUES ($1, $2, $3, $4, $5)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAgilitySubtierParams struct {
+	DataHash          string
+	AgilityTierID     int32
+	SubtierMinAgility int32
+	SubtierMaxAgility int32
+	CharacterMinIcv   sql.NullInt32
+}
+
+func (q *Queries) CreateAgilitySubtier(ctx context.Context, arg CreateAgilitySubtierParams) error {
+	_, err := q.db.ExecContext(ctx, createAgilitySubtier,
+		arg.DataHash,
+		arg.AgilityTierID,
+		arg.SubtierMinAgility,
+		arg.SubtierMaxAgility,
+		arg.CharacterMinIcv,
+	)
+	return err
+}
+
+const createAgilityTier = `-- name: CreateAgilityTier :one
+INSERT INTO agility_tiers (data_hash, min_agility, max_agility, tick_speed, monster_min_icv, monster_max_icv, character_max_icv)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+ON CONFLICT (data_hash) DO UPDATE SET data_hash = agility_tiers.data_hash
+RETURNING id, data_hash, min_agility, max_agility, tick_speed, monster_min_icv, monster_max_icv, character_max_icv
+`
+
+type CreateAgilityTierParams struct {
+	DataHash        string
+	MinAgility      int32
+	MaxAgility      int32
+	TickSpeed       int32
+	MonsterMinIcv   sql.NullInt32
+	MonsterMaxIcv   sql.NullInt32
+	CharacterMaxIcv sql.NullInt32
+}
+
+func (q *Queries) CreateAgilityTier(ctx context.Context, arg CreateAgilityTierParams) (AgilityTier, error) {
+	row := q.db.QueryRowContext(ctx, createAgilityTier,
+		arg.DataHash,
+		arg.MinAgility,
+		arg.MaxAgility,
+		arg.TickSpeed,
+		arg.MonsterMinIcv,
+		arg.MonsterMaxIcv,
+		arg.CharacterMaxIcv,
+	)
+	var i AgilityTier
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MinAgility,
+		&i.MaxAgility,
+		&i.TickSpeed,
+		&i.MonsterMinIcv,
+		&i.MonsterMaxIcv,
+		&i.CharacterMaxIcv,
+	)
+	return i, err
+}
+
+const createElement = `-- name: CreateElement :exec
+INSERT INTO elements (data_hash, name)
+VALUES ($1, $2)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateElementParams struct {
+	DataHash string
+	Name     string
+}
+
+func (q *Queries) CreateElement(ctx context.Context, arg CreateElementParams) error {
+	_, err := q.db.ExecContext(ctx, createElement, arg.DataHash, arg.Name)
+	return err
+}
+
+const createOverdriveMode = `-- name: CreateOverdriveMode :exec
+INSERT INTO overdrive_modes (data_hash, name, description, effect, type, fill_rate)
+VALUES ($1, $2, $3, $4, $5, $6)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateOverdriveModeParams struct {
+	DataHash    string
+	Name        string
+	Description string
+	Effect      string
+	Type        OverdriveType
+	FillRate    sql.NullFloat64
+}
+
+func (q *Queries) CreateOverdriveMode(ctx context.Context, arg CreateOverdriveModeParams) error {
+	_, err := q.db.ExecContext(ctx, createOverdriveMode,
+		arg.DataHash,
+		arg.Name,
+		arg.Description,
+		arg.Effect,
+		arg.Type,
+		arg.FillRate,
+	)
+	return err
+}
+
+const createProperty = `-- name: CreateProperty :exec
+INSERT INTO properties (data_hash, name, effect)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertyParams struct {
+	DataHash string
+	Name     string
+	Effect   string
+}
+
+func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) error {
+	_, err := q.db.ExecContext(ctx, createProperty, arg.DataHash, arg.Name, arg.Effect)
+	return err
+}
+
+const createStat = `-- name: CreateStat :exec
 INSERT INTO stats (data_hash, name, effect, min_val, max_val, max_val_2)
 VALUES ($1, $2, $3, $4, $5, $6)
 ON CONFLICT(data_hash) DO NOTHING
-RETURNING id, data_hash, name, effect, min_val, max_val, max_val_2
 `
 
 type CreateStatParams struct {
@@ -26,8 +168,8 @@ type CreateStatParams struct {
 	MaxVal2  sql.NullInt32
 }
 
-func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) (Stat, error) {
-	row := q.db.QueryRowContext(ctx, createStat,
+func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) error {
+	_, err := q.db.ExecContext(ctx, createStat,
 		arg.DataHash,
 		arg.Name,
 		arg.Effect,
@@ -35,15 +177,22 @@ func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) (Stat, e
 		arg.MaxVal,
 		arg.MaxVal2,
 	)
-	var i Stat
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Effect,
-		&i.MinVal,
-		&i.MaxVal,
-		&i.MaxVal2,
-	)
-	return i, err
+	return err
+}
+
+const createStatusCondition = `-- name: CreateStatusCondition :exec
+INSERT INTO status_conditions (data_hash, name, effect)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionParams struct {
+	DataHash string
+	Name     string
+	Effect   string
+}
+
+func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusConditionParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusCondition, arg.DataHash, arg.Name, arg.Effect)
+	return err
 }

@@ -30,7 +30,7 @@ func(s Stat) ToHashFields() []any {
 }
 
 
-func SeedStats(db *database.Queries, dbConn *sql.DB) error {
+func seedStats(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/stats.json"
 
 	var stats []Stat
@@ -39,15 +39,15 @@ func SeedStats(db *database.Queries, dbConn *sql.DB) error {
 		return err
 	}
 
-	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, stat := range stats {
-			_, err := qtx.CreateStat(context.Background(), database.CreateStatParams{
-				DataHash: generateDataHash(stat.ToHashFields()),
-				Name: stat.Name,
-				Effect: stat.Effect,
-				MinVal: stat.MinVal,
-				MaxVal: stat.MaxVal,
-				MaxVal2: getNullInt32(stat.MaxVal2),
+			err = qtx.CreateStat(context.Background(), database.CreateStatParams{
+				DataHash: 	generateDataHash(stat.ToHashFields()),
+				Name: 		stat.Name,
+				Effect: 	stat.Effect,
+				MinVal: 	stat.MinVal,
+				MaxVal: 	stat.MaxVal,
+				MaxVal2: 	getNullInt32(stat.MaxVal2),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Stat: %s: %v", stat.Name, err)
@@ -55,11 +55,6 @@ func SeedStats(db *database.Queries, dbConn *sql.DB) error {
 		}
 		return nil
 	})
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 

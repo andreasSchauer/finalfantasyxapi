@@ -57,7 +57,7 @@ func main() {
 	mux.HandleFunc("GET /api/healthz", handlerReadiness)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerResetDatabase)
 
-	err = seeding.SeedStats(apiCfg.db, apiCfg.dbConn)
+	err = seeding.Seed_database(apiCfg.db, apiCfg.dbConn)
 	if err != nil {
 		log.Fatal(err)
 	}

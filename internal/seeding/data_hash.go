@@ -21,7 +21,6 @@ func derefOrNil[T any](ptr *T) any {
 }
 
 
-
 func combineFields(fields []any) string {
     var combined string
     
