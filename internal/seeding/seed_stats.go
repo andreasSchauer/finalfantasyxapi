@@ -42,7 +42,7 @@ func seedStats(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, stat := range stats {
 			err = qtx.CreateStat(context.Background(), database.CreateStatParams{
-				DataHash: 	generateDataHash(stat.ToHashFields()),
+				DataHash: 	generateDataHash(stat),
 				Name: 		stat.Name,
 				Effect: 	stat.Effect,
 				MinVal: 	stat.MinVal,

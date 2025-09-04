@@ -1,12 +1,10 @@
 package seeding
 
-import(
+import (
 	"database/sql"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
-
-
 
 func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 	seedFunctions := []func(*database.Queries, *sql.DB) error{
@@ -17,14 +15,16 @@ func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 		seedOverdriveModes,
 		seedStatusConditions,
 		seedProperties,
+		seedCharacters,
+		seedAeons,
+		seedDefaultAbilitiesEntries,
 	}
 
-	for _, fn := range seedFunctions {
-		err := fn(db, dbConn)
-		if err != nil {
-			return err
-		}
-	}
+	for _, seedFunc := range seedFunctions {
+        if err := seedFunc(db, dbConn); err != nil {
+            return err
+        }
+    }
 
 	return nil
 }

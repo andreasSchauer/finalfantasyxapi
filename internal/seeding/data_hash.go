@@ -40,8 +40,9 @@ func combineFields(fields []any) string {
 }
 
 
-func generateDataHash(fields []any) string {
-	combined := combineFields(fields)
+func generateDataHash(h Hashable) string {
+	fields := h.ToHashFields()
+    combined := combineFields(fields)
 	hash := sha256.Sum256([]byte(combined))
 	return fmt.Sprintf("%x", hash)
 }

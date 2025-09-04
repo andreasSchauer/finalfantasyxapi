@@ -34,6 +34,7 @@ func (a Affinity) ToHashFields() []any {
 	}
 }
 
+
 func seedElements(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elements.json"
 
@@ -46,7 +47,7 @@ func seedElements(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, element := range elements {
 			err = qtx.CreateElement(context.Background(), database.CreateElementParams{
-				DataHash: generateDataHash(element.ToHashFields()),
+				DataHash: generateDataHash(element),
 				Name:     element.Name,
 			})
 			if err != nil {
@@ -56,6 +57,7 @@ func seedElements(db *database.Queries, dbConn *sql.DB) error {
 		return nil
 	})
 }
+
 
 func seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elemental_affinities.json"
@@ -69,7 +71,7 @@ func seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, affinity := range affinities {
 			err = qtx.CreateAffinity(context.Background(), database.CreateAffinityParams{
-				DataHash:     generateDataHash(affinity.ToHashFields()),
+				DataHash:     generateDataHash(affinity),
 				Name:         affinity.Name,
 				DamageFactor: getNullFloat64(affinity.DamageFactor),
 			})

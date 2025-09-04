@@ -10,6 +10,352 @@ import (
 	"fmt"
 )
 
+type AccuracySource string
+
+const (
+	AccuracySourceAccuracy AccuracySource = "accuracy"
+	AccuracySourceRate     AccuracySource = "rate"
+)
+
+func (e *AccuracySource) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AccuracySource(s)
+	case string:
+		*e = AccuracySource(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AccuracySource: %T", src)
+	}
+	return nil
+}
+
+type NullAccuracySource struct {
+	AccuracySource AccuracySource
+	Valid          bool // Valid is true if AccuracySource is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAccuracySource) Scan(value interface{}) error {
+	if value == nil {
+		ns.AccuracySource, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AccuracySource.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAccuracySource) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AccuracySource), nil
+}
+
+type AeonCategory string
+
+const (
+	AeonCategoryStandardAeons AeonCategory = "standard-aeons"
+	AeonCategoryMagusSisters  AeonCategory = "magus-sisters"
+)
+
+func (e *AeonCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AeonCategory(s)
+	case string:
+		*e = AeonCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AeonCategory: %T", src)
+	}
+	return nil
+}
+
+type NullAeonCategory struct {
+	AeonCategory AeonCategory
+	Valid        bool // Valid is true if AeonCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAeonCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.AeonCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AeonCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAeonCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AeonCategory), nil
+}
+
+type ArmorType string
+
+const (
+	ArmorTypeShield       ArmorType = "shield"
+	ArmorTypeRing         ArmorType = "ring"
+	ArmorTypeArmguard     ArmorType = "armguard"
+	ArmorTypeBangle       ArmorType = "bangle"
+	ArmorTypeArmlet       ArmorType = "armlet"
+	ArmorTypeBracer       ArmorType = "bracer"
+	ArmorTypeTarge        ArmorType = "targe"
+	ArmorTypeSeymourArmor ArmorType = "seymour-armor"
+)
+
+func (e *ArmorType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ArmorType(s)
+	case string:
+		*e = ArmorType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ArmorType: %T", src)
+	}
+	return nil
+}
+
+type NullArmorType struct {
+	ArmorType ArmorType
+	Valid     bool // Valid is true if ArmorType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullArmorType) Scan(value interface{}) error {
+	if value == nil {
+		ns.ArmorType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ArmorType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullArmorType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ArmorType), nil
+}
+
+type BlitzballItemSlot string
+
+const (
+	BlitzballItemSlot1st       BlitzballItemSlot = "1st"
+	BlitzballItemSlot2nd       BlitzballItemSlot = "2nd"
+	BlitzballItemSlot3rd       BlitzballItemSlot = "3rd"
+	BlitzballItemSlotTopScorer BlitzballItemSlot = "top-scorer"
+)
+
+func (e *BlitzballItemSlot) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BlitzballItemSlot(s)
+	case string:
+		*e = BlitzballItemSlot(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BlitzballItemSlot: %T", src)
+	}
+	return nil
+}
+
+type NullBlitzballItemSlot struct {
+	BlitzballItemSlot BlitzballItemSlot
+	Valid             bool // Valid is true if BlitzballItemSlot is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullBlitzballItemSlot) Scan(value interface{}) error {
+	if value == nil {
+		ns.BlitzballItemSlot, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.BlitzballItemSlot.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullBlitzballItemSlot) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.BlitzballItemSlot), nil
+}
+
+type BlitzballTournamentCategory string
+
+const (
+	BlitzballTournamentCategoryLeague     BlitzballTournamentCategory = "league"
+	BlitzballTournamentCategoryTournament BlitzballTournamentCategory = "tournament"
+)
+
+func (e *BlitzballTournamentCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BlitzballTournamentCategory(s)
+	case string:
+		*e = BlitzballTournamentCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BlitzballTournamentCategory: %T", src)
+	}
+	return nil
+}
+
+type NullBlitzballTournamentCategory struct {
+	BlitzballTournamentCategory BlitzballTournamentCategory
+	Valid                       bool // Valid is true if BlitzballTournamentCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullBlitzballTournamentCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.BlitzballTournamentCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.BlitzballTournamentCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullBlitzballTournamentCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.BlitzballTournamentCategory), nil
+}
+
+type CreationsUnlockedCategory string
+
+const (
+	CreationsUnlockedCategoryArea    CreationsUnlockedCategory = "area"
+	CreationsUnlockedCategorySpecies CreationsUnlockedCategory = "species"
+)
+
+func (e *CreationsUnlockedCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = CreationsUnlockedCategory(s)
+	case string:
+		*e = CreationsUnlockedCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for CreationsUnlockedCategory: %T", src)
+	}
+	return nil
+}
+
+type NullCreationsUnlockedCategory struct {
+	CreationsUnlockedCategory CreationsUnlockedCategory
+	Valid                     bool // Valid is true if CreationsUnlockedCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullCreationsUnlockedCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.CreationsUnlockedCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.CreationsUnlockedCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullCreationsUnlockedCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.CreationsUnlockedCategory), nil
+}
+
+type LootType string
+
+const (
+	LootTypeItem      LootType = "item"
+	LootTypeEquipment LootType = "equipment"
+	LootTypeGil       LootType = "gil"
+)
+
+func (e *LootType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = LootType(s)
+	case string:
+		*e = LootType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for LootType: %T", src)
+	}
+	return nil
+}
+
+type NullLootType struct {
+	LootType LootType
+	Valid    bool // Valid is true if LootType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullLootType) Scan(value interface{}) error {
+	if value == nil {
+		ns.LootType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.LootType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullLootType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.LootType), nil
+}
+
+type MaCreationCategory string
+
+const (
+	MaCreationCategoryArea     MaCreationCategory = "area"
+	MaCreationCategorySpecies  MaCreationCategory = "species"
+	MaCreationCategoryOriginal MaCreationCategory = "original"
+)
+
+func (e *MaCreationCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = MaCreationCategory(s)
+	case string:
+		*e = MaCreationCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for MaCreationCategory: %T", src)
+	}
+	return nil
+}
+
+type NullMaCreationCategory struct {
+	MaCreationCategory MaCreationCategory
+	Valid              bool // Valid is true if MaCreationCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullMaCreationCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.MaCreationCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.MaCreationCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullMaCreationCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.MaCreationCategory), nil
+}
+
 type OverdriveType string
 
 const (
@@ -52,6 +398,198 @@ func (ns NullOverdriveType) Value() (driver.Value, error) {
 	return string(ns.OverdriveType), nil
 }
 
+type QuestType string
+
+const (
+	QuestTypeSidequest QuestType = "sidequest"
+	QuestTypeSubquest  QuestType = "subquest"
+)
+
+func (e *QuestType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = QuestType(s)
+	case string:
+		*e = QuestType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for QuestType: %T", src)
+	}
+	return nil
+}
+
+type NullQuestType struct {
+	QuestType QuestType
+	Valid     bool // Valid is true if QuestType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullQuestType) Scan(value interface{}) error {
+	if value == nil {
+		ns.QuestType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.QuestType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullQuestType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.QuestType), nil
+}
+
+type ShopCategory string
+
+const (
+	ShopCategoryStandard     ShopCategory = "standard"
+	ShopCategoryOaka         ShopCategory = "oaka"
+	ShopCategoryTravelAgency ShopCategory = "travel-agency"
+	ShopCategoryWantz        ShopCategory = "wantz"
+)
+
+func (e *ShopCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ShopCategory(s)
+	case string:
+		*e = ShopCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ShopCategory: %T", src)
+	}
+	return nil
+}
+
+type NullShopCategory struct {
+	ShopCategory ShopCategory
+	Valid        bool // Valid is true if ShopCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullShopCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.ShopCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ShopCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullShopCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ShopCategory), nil
+}
+
+type TreasureType string
+
+const (
+	TreasureTypeChest  TreasureType = "chest"
+	TreasureTypeGift   TreasureType = "gift"
+	TreasureTypeObject TreasureType = "object"
+)
+
+func (e *TreasureType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = TreasureType(s)
+	case string:
+		*e = TreasureType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for TreasureType: %T", src)
+	}
+	return nil
+}
+
+type NullTreasureType struct {
+	TreasureType TreasureType
+	Valid        bool // Valid is true if TreasureType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullTreasureType) Scan(value interface{}) error {
+	if value == nil {
+		ns.TreasureType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.TreasureType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullTreasureType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.TreasureType), nil
+}
+
+type WeaponType string
+
+const (
+	WeaponTypeSword        WeaponType = "sword"
+	WeaponTypeStaff        WeaponType = "staff"
+	WeaponTypeBlitzball    WeaponType = "blitzball"
+	WeaponTypeDoll         WeaponType = "doll"
+	WeaponTypeSpear        WeaponType = "spear"
+	WeaponTypeBlade        WeaponType = "blade"
+	WeaponTypeClaw         WeaponType = "claw"
+	WeaponTypeSeymourStaff WeaponType = "seymour-staff"
+)
+
+func (e *WeaponType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = WeaponType(s)
+	case string:
+		*e = WeaponType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for WeaponType: %T", src)
+	}
+	return nil
+}
+
+type NullWeaponType struct {
+	WeaponType WeaponType
+	Valid      bool // Valid is true if WeaponType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullWeaponType) Scan(value interface{}) error {
+	if value == nil {
+		ns.WeaponType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.WeaponType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullWeaponType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.WeaponType), nil
+}
+
+type Aeon struct {
+	ID                    int32
+	DataHash              string
+	Name                  string
+	Category              NullAeonCategory
+	IsOptional            bool
+	BattlesToRegenerate   int32
+	PhysAtkDamageConstant sql.NullInt32
+	PhysAtkRange          sql.NullInt32
+	PhysAtkShatterRate    sql.NullInt32
+	PhysAtkAccSource      NullAccuracySource
+	PhysAtkHitChance      sql.NullInt32
+	PhysAtkAccModifier    sql.NullFloat64
+}
+
 type Affinity struct {
 	ID           int32
 	DataHash     string
@@ -79,10 +617,45 @@ type AgilityTier struct {
 	CharacterMaxIcv sql.NullInt32
 }
 
+type BlitzballItemsList struct {
+	ID       int32
+	DataHash string
+	Category BlitzballTournamentCategory
+	Slot     BlitzballItemSlot
+}
+
+type Character struct {
+	ID                  int32
+	DataHash            string
+	Name                string
+	WeaponType          WeaponType
+	ArmorType           ArmorType
+	PhysicalAttackRange int32
+	CanFightUnderwater  bool
+}
+
+type DefaultAbility struct {
+	ID       int32
+	DataHash string
+	Name     string
+}
+
 type Element struct {
 	ID       int32
 	DataHash string
 	Name     string
+}
+
+type MonsterArenaCreation struct {
+	ID                        int32
+	DataHash                  string
+	Name                      string
+	Category                  MaCreationCategory
+	RequiredArea              sql.NullString
+	RequiredSpecies           sql.NullString
+	UnderwaterOnly            bool
+	CreationsUnlockedCategory NullCreationsUnlockedCategory
+	Amount                    int32
 }
 
 type OverdriveMode struct {
@@ -102,6 +675,26 @@ type Property struct {
 	Effect   string
 }
 
+type Quest struct {
+	ID       int32
+	DataHash string
+	Name     string
+	Type     QuestType
+}
+
+type Shop struct {
+	ID       int32
+	DataHash string
+	Version  sql.NullInt32
+	Notes    sql.NullString
+	Category ShopCategory
+}
+
+type Sidequest struct {
+	ID      int32
+	QuestID int32
+}
+
 type Stat struct {
 	ID       int32
 	DataHash string
@@ -117,4 +710,26 @@ type StatusCondition struct {
 	DataHash string
 	Name     string
 	Effect   string
+}
+
+type Subquest struct {
+	ID                int32
+	QuestID           int32
+	ParentSidequestID int32
+}
+
+type Treasure struct {
+	ID              int32
+	DataHash        string
+	TreasureListID  int32
+	TreasureType    TreasureType
+	LootType        LootType
+	IsPostAirship   bool
+	IsAnimaTreasure bool
+	Notes           sql.NullString
+	GilAmount       sql.NullInt32
+}
+
+type TreasureList struct {
+	ID int32
 }

@@ -34,14 +34,14 @@ func seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
 	}
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, sc := range statusConditions {
+		for _, condition := range statusConditions {
 			err = qtx.CreateStatusCondition(context.Background(), database.CreateStatusConditionParams{
-				DataHash: 	generateDataHash(sc.ToHashFields()),
-				Name: 		sc.Name,
-				Effect: 	sc.Effect,
+				DataHash: 	generateDataHash(condition),
+				Name: 		condition.Name,
+				Effect: 	condition.Effect,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Status Condition: %s: %v", sc.Name, err)
+				return fmt.Errorf("couldn't create Status Condition: %s: %v", condition.Name, err)
 			}
 		}
 		return nil

@@ -40,17 +40,17 @@ func seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error {
 	}
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, om := range overdriveModes {
+		for _, mode := range overdriveModes {
 			err = qtx.CreateOverdriveMode(context.Background(), database.CreateOverdriveModeParams{
-				DataHash: 	generateDataHash(om.ToHashFields()),
-				Name: 			om.Name,
-				Description: 	om.Description,
-				Effect: 		om.Effect,
-				Type:			database.OverdriveType(om.Type),
-				FillRate: 		getNullFloat64(om.FillRate),
+				DataHash: 		generateDataHash(mode),
+				Name: 			mode.Name,
+				Description: 	mode.Description,
+				Effect: 		mode.Effect,
+				Type:			database.OverdriveType(mode.Type),
+				FillRate: 		getNullFloat64(mode.FillRate),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Overdrive Mode: %s: %v", om.Name, err)
+				return fmt.Errorf("couldn't create Overdrive Mode: %s: %v", mode.Name, err)
 			}
 		}
 		return nil

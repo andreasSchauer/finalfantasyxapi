@@ -62,7 +62,7 @@ func seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for i, agilityTier := range agilityTiers {
 			tier, err := qtx.CreateAgilityTier(context.Background(), database.CreateAgilityTierParams{
-				DataHash: 			generateDataHash(agilityTier.ToHashFields()),
+				DataHash: 			generateDataHash(agilityTier),
 				MinAgility: 		agilityTier.MinAgility,
 				MaxAgility: 		agilityTier.MaxAgility,
 				TickSpeed: 			agilityTier.TickSpeed,
@@ -76,7 +76,7 @@ func seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 
 			for j, subtier := range agilityTier.CharacterMinICVs {
 				err = qtx.CreateAgilitySubtier(context.Background(), database.CreateAgilitySubtierParams{
-					DataHash: 			generateDataHash(subtier.ToHashFields()),
+					DataHash: 			generateDataHash(subtier),
 					AgilityTierID: 		tier.ID,
 					SubtierMinAgility: 	subtier.SubtierMinAgility,
 					SubtierMaxAgility: 	subtier.SubtierMaxAgility,

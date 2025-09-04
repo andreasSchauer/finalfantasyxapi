@@ -36,7 +36,7 @@ func seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, property := range properties {
 			err = qtx.CreateProperty(context.Background(), database.CreatePropertyParams{
-				DataHash: 	generateDataHash(property.ToHashFields()),
+				DataHash: 	generateDataHash(property),
 				Name: 		property.Name,
 				Effect: 	property.Effect,
 			})
