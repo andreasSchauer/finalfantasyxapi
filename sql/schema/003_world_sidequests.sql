@@ -38,7 +38,8 @@ CREATE TABLE blitzball_items_lists (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     category blitzball_tournament_category NOT NULL,
-    slot blitzball_item_slot NOT NULL
+    slot blitzball_item_slot NOT NULL,
+    UNIQUE(category, slot)
 );
 
 

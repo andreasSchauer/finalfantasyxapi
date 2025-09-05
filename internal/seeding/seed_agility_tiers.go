@@ -36,6 +36,7 @@ func(a AgilityTier) ToHashFields() []any {
 type AgilitySubtier struct {
 	//id 			int32
 	//dataHash		string
+	AgilityTierID			int32
 	SubtierMinAgility		int32 	`json:"subtier_min_agility"`
 	SubtierMaxAgility		int32	`json:"subtier_max_agility"`
 	CharacterMinICV			*int32	`json:"character_min_icv"`
@@ -43,6 +44,7 @@ type AgilitySubtier struct {
 
 func(a AgilitySubtier) ToHashFields() []any {
 	return []any{
+		a.AgilityTierID,
 		a.SubtierMinAgility,
 		a.SubtierMaxAgility,
 		derefOrNil(a.CharacterMinICV),
@@ -75,15 +77,17 @@ func seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			for j, subtier := range agilityTier.CharacterMinICVs {
+				subtier.AgilityTierID = tier.ID
+
 				err = qtx.CreateAgilitySubtier(context.Background(), database.CreateAgilitySubtierParams{
 					DataHash: 			generateDataHash(subtier),
-					AgilityTierID: 		tier.ID,
+					AgilityTierID: 		subtier.AgilityTierID,
 					SubtierMinAgility: 	subtier.SubtierMinAgility,
 					SubtierMaxAgility: 	subtier.SubtierMaxAgility,
 					CharacterMinIcv: 	getNullInt32(subtier.CharacterMinICV),
 				})
 				if err != nil {
-					return fmt.Errorf("couldn't create Agility Subtier: %d-%d: %v", i, j, err)
+					return fmt.Errorf("couldn't create Agility Subtier: %d - %d: %v", i, j, err)
 				}
 			}
 		}

@@ -18,6 +18,9 @@ func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 		seedCharacters,
 		seedAeons,
 		seedDefaultAbilitiesEntries,
+		seedBlitzballItems,
+		seedSidequests,
+		seedMonsterArenaCreations,
 	}
 
 	for _, seedFunc := range seedFunctions {
