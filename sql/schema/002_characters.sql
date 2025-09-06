@@ -1,6 +1,5 @@
 -- +goose Up
 CREATE TYPE weapon_type AS ENUM ('sword', 'staff', 'blitzball', 'doll', 'spear', 'blade', 'claw', 'seymour-staff');
-
 CREATE TYPE armor_type AS ENUM ('shield', 'ring', 'armguard', 'bangle', 'armlet', 'bracer', 'targe', 'seymour-armor');
 
 CREATE TABLE characters (

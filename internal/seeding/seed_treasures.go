@@ -17,6 +17,7 @@ type Treasure struct {
 	//id 				int32
 	//dataHash			string
 	TreasureListID		int32
+	Version				int32
 	TreasureType		string					`json:"treasure_type"`
 	LootType			string					`json:"loot_type"`
 	IsPostAirship		bool					`json:"is_post_airship"`
@@ -28,6 +29,7 @@ type Treasure struct {
 func(t Treasure) ToHashFields() []any {
 	return []any{
 		t.TreasureListID,
+		t.Version,
 		t.TreasureType,
 		t.LootType,
 		t.IsPostAirship,
@@ -35,6 +37,30 @@ func(t Treasure) ToHashFields() []any {
 		derefOrNil(t.Notes),
 		derefOrNil(t.GilAmount),
 	}
+}
+
+
+type TreasureCounter struct {
+    Chest  int32
+    Gift   int32
+    Object int32
+}
+
+
+func (c *TreasureCounter) IncreaseCounter(treasureType string) int32 {
+    switch treasureType {
+    case "chest":
+        c.Chest++
+        return c.Chest
+    case "gift":
+        c.Gift++
+        return c.Gift
+    case "object":
+        c.Object++
+        return c.Object
+    default:
+        return 0
+    }
 }
 
 
@@ -54,12 +80,16 @@ func seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 				return fmt.Errorf("couldn't create Treasure List: %d: %v", i, err)
 			}
 
+			counter := &TreasureCounter{}
+
 			for j, treasure := range list.Treasures {
 				treasure.TreasureListID = listID
+				treasure.Version = counter.IncreaseCounter(treasure.TreasureType)
 				
 				err = qtx.CreateTreasure(context.Background(), database.CreateTreasureParams{
 					DataHash: 			generateDataHash(treasure),
 					TreasureListID: 	treasure.TreasureListID,
+					Version:			treasure.Version,
 					TreasureType: 		database.TreasureType(treasure.TreasureType),
 					LootType: 			database.LootType(treasure.LootType),
 					IsPostAirship: 		treasure.IsPostAirship,

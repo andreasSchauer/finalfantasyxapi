@@ -107,42 +107,51 @@ func (q *Queries) CreateShop(ctx context.Context, arg CreateShopParams) error {
 }
 
 const createSidequest = `-- name: CreateSidequest :one
-INSERT INTO sidequests (quest_id)
-VALUES ($1)
-RETURNING id, quest_id
+INSERT INTO sidequests (data_hash, quest_id)
+VALUES ($1, $2)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = sidequests.data_hash
+RETURNING id, data_hash, quest_id
 `
 
-func (q *Queries) CreateSidequest(ctx context.Context, questID int32) (Sidequest, error) {
-	row := q.db.QueryRowContext(ctx, createSidequest, questID)
+type CreateSidequestParams struct {
+	DataHash string
+	QuestID  int32
+}
+
+func (q *Queries) CreateSidequest(ctx context.Context, arg CreateSidequestParams) (Sidequest, error) {
+	row := q.db.QueryRowContext(ctx, createSidequest, arg.DataHash, arg.QuestID)
 	var i Sidequest
-	err := row.Scan(&i.ID, &i.QuestID)
+	err := row.Scan(&i.ID, &i.DataHash, &i.QuestID)
 	return i, err
 }
 
 const createSubquest = `-- name: CreateSubquest :exec
-INSERT INTO subquests (quest_id, parent_sidequest_id)
-VALUES ($1, $2)
+INSERT INTO subquests (data_hash, quest_id, parent_sidequest_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateSubquestParams struct {
+	DataHash          string
 	QuestID           int32
 	ParentSidequestID int32
 }
 
 func (q *Queries) CreateSubquest(ctx context.Context, arg CreateSubquestParams) error {
-	_, err := q.db.ExecContext(ctx, createSubquest, arg.QuestID, arg.ParentSidequestID)
+	_, err := q.db.ExecContext(ctx, createSubquest, arg.DataHash, arg.QuestID, arg.ParentSidequestID)
 	return err
 }
 
 const createTreasure = `-- name: CreateTreasure :exec
-INSERT INTO treasures (data_hash, treasure_list_id, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+INSERT INTO treasures (data_hash, treasure_list_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateTreasureParams struct {
 	DataHash        string
 	TreasureListID  int32
+	Version         int32
 	TreasureType    TreasureType
 	LootType        LootType
 	IsPostAirship   bool
@@ -155,6 +164,7 @@ func (q *Queries) CreateTreasure(ctx context.Context, arg CreateTreasureParams) 
 	_, err := q.db.ExecContext(ctx, createTreasure,
 		arg.DataHash,
 		arg.TreasureListID,
+		arg.Version,
 		arg.TreasureType,
 		arg.LootType,
 		arg.IsPostAirship,

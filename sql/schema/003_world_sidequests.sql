@@ -11,6 +11,7 @@ CREATE TABLE treasures (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     treasure_list_id INTEGER NOT NULL REFERENCES treasure_lists(id),
+    version INTEGER NOT NULL,
     treasure_type treasure_type NOT NULL,
     loot_type loot_type NOT NULL,
     is_post_airship BOOLEAN NOT NULL,
@@ -56,14 +57,17 @@ CREATE TABLE quests (
 
 CREATE TABLE sidequests (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    quest_id INTEGER NOT NULL REFERENCES quests(id)
+    data_hash TEXT UNIQUE NOT NULL,
+    quest_id INTEGER UNIQUE NOT NULL REFERENCES quests(id)
 );
 
 
 CREATE TABLE subquests (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
     quest_id INTEGER NOT NULL REFERENCES quests(id),
-    parent_sidequest_id INTEGER NOT NULL REFERENCES sidequests(id)
+    parent_sidequest_id INTEGER NOT NULL REFERENCES sidequests(id),
+    UNIQUE(quest_id, parent_sidequest_id)
 );
 
 

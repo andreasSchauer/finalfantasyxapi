@@ -46,3 +46,12 @@ func generateDataHash(h Hashable) string {
 	hash := sha256.Sum256([]byte(combined))
 	return fmt.Sprintf("%x", hash)
 }
+
+
+// only used, if an entry purely consists of id references,
+// since creating a Hashable just for that every time would be nonsensical
+func manualDataHash(fields []any) string {
+    combined := combineFields(fields)
+	hash := sha256.Sum256([]byte(combined))
+	return fmt.Sprintf("%x", hash)
+}

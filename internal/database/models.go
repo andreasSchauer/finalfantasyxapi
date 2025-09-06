@@ -691,8 +691,9 @@ type Shop struct {
 }
 
 type Sidequest struct {
-	ID      int32
-	QuestID int32
+	ID       int32
+	DataHash string
+	QuestID  int32
 }
 
 type Stat struct {
@@ -714,6 +715,7 @@ type StatusCondition struct {
 
 type Subquest struct {
 	ID                int32
+	DataHash          string
 	QuestID           int32
 	ParentSidequestID int32
 }
@@ -722,6 +724,7 @@ type Treasure struct {
 	ID              int32
 	DataHash        string
 	TreasureListID  int32
+	Version         int32
 	TreasureType    TreasureType
 	LootType        LootType
 	IsPostAirship   bool

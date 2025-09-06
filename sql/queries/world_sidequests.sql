@@ -4,8 +4,8 @@ RETURNING *;
 
 
 -- name: CreateTreasure :exec
-INSERT INTO treasures (data_hash, treasure_list_id, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+INSERT INTO treasures (data_hash, treasure_list_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
@@ -29,14 +29,16 @@ RETURNING *;
 
 
 -- name: CreateSidequest :one
-INSERT INTO sidequests (quest_id)
-VALUES ($1)
+INSERT INTO sidequests (data_hash, quest_id)
+VALUES ($1, $2)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = sidequests.data_hash
 RETURNING *;
 
 
 -- name: CreateSubquest :exec
-INSERT INTO subquests (quest_id, parent_sidequest_id)
-VALUES ($1, $2);
+INSERT INTO subquests (data_hash, quest_id, parent_sidequest_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateMonsterArenaCreation :exec
