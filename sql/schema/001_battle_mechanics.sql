@@ -60,11 +60,14 @@ CREATE TABLE overdrive_modes (
 );
 
 
+CREATE TYPE nullify_armored AS ENUM ('target', 'bearer');
+
 CREATE TABLE status_conditions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
-    effect TEXT NOT NULL
+    effect TEXT NOT NULL,
+    nullify_armored nullify_armored
 );
 
 
@@ -72,11 +75,13 @@ CREATE TABLE properties (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
-    effect TEXT NOT NULL
+    effect TEXT NOT NULL,
+    nullify_armored nullify_armored
 );
 
 
 -- +goose Down
+DROP TYPE IF EXISTS nullify_armored;
 DROP TABLE IF EXISTS properties;
 DROP TABLE IF EXISTS status_conditions;
 DROP TABLE IF EXISTS overdrive_modes;

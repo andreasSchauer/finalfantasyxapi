@@ -11,6 +11,11 @@ func main() {
         "AccuracySource",
         "AeonCategory",
         "CreationsUnlockedCategory",
+        "NullifyArmored",
+        "CounterType",
+        "RecoveryType",
+        "ElementType",
+        "Parameter",
     }
 
     filePath := "./internal/seeding/null_enums.go"

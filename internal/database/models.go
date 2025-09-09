@@ -10,6 +10,50 @@ import (
 	"fmt"
 )
 
+type AaActivationCondition string
+
+const (
+	AaActivationConditionAlways        AaActivationCondition = "always"
+	AaActivationConditionActiveParty   AaActivationCondition = "active-party"
+	AaActivationConditionHpCritical    AaActivationCondition = "hp-critical"
+	AaActivationConditionOutsideBattle AaActivationCondition = "outside-battle"
+)
+
+func (e *AaActivationCondition) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AaActivationCondition(s)
+	case string:
+		*e = AaActivationCondition(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AaActivationCondition: %T", src)
+	}
+	return nil
+}
+
+type NullAaActivationCondition struct {
+	AaActivationCondition AaActivationCondition
+	Valid                 bool // Valid is true if AaActivationCondition is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAaActivationCondition) Scan(value interface{}) error {
+	if value == nil {
+		ns.AaActivationCondition, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AaActivationCondition.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAaActivationCondition) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AaActivationCondition), nil
+}
+
 type AccuracySource string
 
 const (
@@ -142,6 +186,58 @@ func (ns NullArmorType) Value() (driver.Value, error) {
 	return string(ns.ArmorType), nil
 }
 
+type AutoAbilityCategory string
+
+const (
+	AutoAbilityCategoryApOverdrive         AutoAbilityCategory = "ap-overdrive"
+	AutoAbilityCategoryAutoCure            AutoAbilityCategory = "auto-cure"
+	AutoAbilityCategoryAutoStatus          AutoAbilityCategory = "auto-status"
+	AutoAbilityCategoryBreakLimit          AutoAbilityCategory = "break-limit"
+	AutoAbilityCategoryCounter             AutoAbilityCategory = "counter"
+	AutoAbilityCategoryElementalProtection AutoAbilityCategory = "elemental-protection"
+	AutoAbilityCategoryElementalStrike     AutoAbilityCategory = "elemental-strike"
+	AutoAbilityCategoryOther               AutoAbilityCategory = "other"
+	AutoAbilityCategorySosStatus           AutoAbilityCategory = "sos-status"
+	AutoAbilityCategoryStatX               AutoAbilityCategory = "stat-+x%"
+	AutoAbilityCategoryStatusInfliction    AutoAbilityCategory = "status-infliction"
+	AutoAbilityCategoryStatusProtection    AutoAbilityCategory = "status-protection"
+)
+
+func (e *AutoAbilityCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AutoAbilityCategory(s)
+	case string:
+		*e = AutoAbilityCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AutoAbilityCategory: %T", src)
+	}
+	return nil
+}
+
+type NullAutoAbilityCategory struct {
+	AutoAbilityCategory AutoAbilityCategory
+	Valid               bool // Valid is true if AutoAbilityCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAutoAbilityCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.AutoAbilityCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AutoAbilityCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAutoAbilityCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AutoAbilityCategory), nil
+}
+
 type BlitzballItemSlot string
 
 const (
@@ -228,6 +324,91 @@ func (ns NullBlitzballTournamentCategory) Value() (driver.Value, error) {
 	return string(ns.BlitzballTournamentCategory), nil
 }
 
+type CelestialFormula string
+
+const (
+	CelestialFormulaHpHigh CelestialFormula = "hp-high"
+	CelestialFormulaHpLow  CelestialFormula = "hp-low"
+	CelestialFormulaMpHigh CelestialFormula = "mp-high"
+)
+
+func (e *CelestialFormula) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = CelestialFormula(s)
+	case string:
+		*e = CelestialFormula(s)
+	default:
+		return fmt.Errorf("unsupported scan type for CelestialFormula: %T", src)
+	}
+	return nil
+}
+
+type NullCelestialFormula struct {
+	CelestialFormula CelestialFormula
+	Valid            bool // Valid is true if CelestialFormula is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullCelestialFormula) Scan(value interface{}) error {
+	if value == nil {
+		ns.CelestialFormula, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.CelestialFormula.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullCelestialFormula) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.CelestialFormula), nil
+}
+
+type CounterType string
+
+const (
+	CounterTypePhysical CounterType = "physical"
+	CounterTypeMagical  CounterType = "magical"
+)
+
+func (e *CounterType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = CounterType(s)
+	case string:
+		*e = CounterType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for CounterType: %T", src)
+	}
+	return nil
+}
+
+type NullCounterType struct {
+	CounterType CounterType
+	Valid       bool // Valid is true if CounterType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullCounterType) Scan(value interface{}) error {
+	if value == nil {
+		ns.CounterType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.CounterType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullCounterType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.CounterType), nil
+}
+
 type CreationsUnlockedCategory string
 
 const (
@@ -268,6 +449,140 @@ func (ns NullCreationsUnlockedCategory) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.CreationsUnlockedCategory), nil
+}
+
+type ElementType string
+
+const (
+	ElementTypeFire      ElementType = "fire"
+	ElementTypeLightning ElementType = "lightning"
+	ElementTypeWater     ElementType = "water"
+	ElementTypeIce       ElementType = "ice"
+	ElementTypeHoly      ElementType = "holy"
+)
+
+func (e *ElementType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ElementType(s)
+	case string:
+		*e = ElementType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ElementType: %T", src)
+	}
+	return nil
+}
+
+type NullElementType struct {
+	ElementType ElementType
+	Valid       bool // Valid is true if ElementType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullElementType) Scan(value interface{}) error {
+	if value == nil {
+		ns.ElementType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ElementType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullElementType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ElementType), nil
+}
+
+type EquipType string
+
+const (
+	EquipTypeWeapon EquipType = "weapon"
+	EquipTypeArmor  EquipType = "armor"
+)
+
+func (e *EquipType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = EquipType(s)
+	case string:
+		*e = EquipType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for EquipType: %T", src)
+	}
+	return nil
+}
+
+type NullEquipType struct {
+	EquipType EquipType
+	Valid     bool // Valid is true if EquipType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullEquipType) Scan(value interface{}) error {
+	if value == nil {
+		ns.EquipType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.EquipType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullEquipType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.EquipType), nil
+}
+
+type KeyItemBase string
+
+const (
+	KeyItemBaseSun     KeyItemBase = "sun"
+	KeyItemBaseMoon    KeyItemBase = "moon"
+	KeyItemBaseJupiter KeyItemBase = "jupiter"
+	KeyItemBaseVenus   KeyItemBase = "venus"
+	KeyItemBaseSaturn  KeyItemBase = "saturn"
+	KeyItemBaseMars    KeyItemBase = "mars"
+	KeyItemBaseMercury KeyItemBase = "mercury"
+)
+
+func (e *KeyItemBase) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = KeyItemBase(s)
+	case string:
+		*e = KeyItemBase(s)
+	default:
+		return fmt.Errorf("unsupported scan type for KeyItemBase: %T", src)
+	}
+	return nil
+}
+
+type NullKeyItemBase struct {
+	KeyItemBase KeyItemBase
+	Valid       bool // Valid is true if KeyItemBase is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullKeyItemBase) Scan(value interface{}) error {
+	if value == nil {
+		ns.KeyItemBase, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.KeyItemBase.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullKeyItemBase) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.KeyItemBase), nil
 }
 
 type LootType string
@@ -356,6 +671,48 @@ func (ns NullMaCreationCategory) Value() (driver.Value, error) {
 	return string(ns.MaCreationCategory), nil
 }
 
+type NullifyArmored string
+
+const (
+	NullifyArmoredTarget NullifyArmored = "target"
+	NullifyArmoredBearer NullifyArmored = "bearer"
+)
+
+func (e *NullifyArmored) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = NullifyArmored(s)
+	case string:
+		*e = NullifyArmored(s)
+	default:
+		return fmt.Errorf("unsupported scan type for NullifyArmored: %T", src)
+	}
+	return nil
+}
+
+type NullNullifyArmored struct {
+	NullifyArmored NullifyArmored
+	Valid          bool // Valid is true if NullifyArmored is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullNullifyArmored) Scan(value interface{}) error {
+	if value == nil {
+		ns.NullifyArmored, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.NullifyArmored.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullNullifyArmored) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.NullifyArmored), nil
+}
+
 type OverdriveType string
 
 const (
@@ -398,6 +755,76 @@ func (ns NullOverdriveType) Value() (driver.Value, error) {
 	return string(ns.OverdriveType), nil
 }
 
+type Parameter string
+
+const (
+	ParameterAccuracyPercentage     Parameter = "accuracy-percentage"
+	ParameterAmbushChance           Parameter = "ambush-chance"
+	ParameterApGain                 Parameter = "ap-gain"
+	ParameterBuffFactorMagBased     Parameter = "buff-factor-mag-based"
+	ParameterBuffFactorStrBased     Parameter = "buff-factor-str-based"
+	ParameterCommonStealRate        Parameter = "common-steal-rate"
+	ParameterCriticalHitDefense     Parameter = "critical-hit-defense"
+	ParameterCriticalHitRate        Parameter = "critical-hit-rate"
+	ParameterCurrentHp              Parameter = "current-hp"
+	ParameterDamageLimit            Parameter = "damage-limit"
+	ParameterEncounterRate          Parameter = "encounter-rate"
+	ParameterFinalEvasionRate       Parameter = "final-evasion-rate"
+	ParameterFinalHitRate           Parameter = "final-hit-rate"
+	ParameterGilGain                Parameter = "gil-gain"
+	ParameterHpLimit                Parameter = "hp-limit"
+	ParameterInitialCounterValue    Parameter = "initial-counter-value"
+	ParameterItemsHealing           Parameter = "items-healing"
+	ParameterMagicalDamageDealt     Parameter = "magical-damage-dealt"
+	ParameterMagicalDamageTaken     Parameter = "magical-damage-taken"
+	ParameterMpLimit                Parameter = "mp-limit"
+	ParameterOverdriveCharge        Parameter = "overdrive-charge"
+	ParameterPercentageDamageTaken  Parameter = "percentage-damage-taken"
+	ParameterPhysicalDamageDealt    Parameter = "physical-damage-dealt"
+	ParameterPhysicalDamageTaken    Parameter = "physical-damage-taken"
+	ParameterMpCost                 Parameter = "mp-cost"
+	ParameterPreemptiveStrikeChance Parameter = "preemptive-strike-chance"
+	ParameterRareStealRate          Parameter = "rare-steal-rate"
+	ParameterSpecialDamageDealt     Parameter = "special-damage-dealt"
+	ParameterSpecialDamageTaken     Parameter = "special-damage-taken"
+	ParameterTickSpeed              Parameter = "tick-speed"
+)
+
+func (e *Parameter) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Parameter(s)
+	case string:
+		*e = Parameter(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Parameter: %T", src)
+	}
+	return nil
+}
+
+type NullParameter struct {
+	Parameter Parameter
+	Valid     bool // Valid is true if Parameter is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullParameter) Scan(value interface{}) error {
+	if value == nil {
+		ns.Parameter, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Parameter.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullParameter) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Parameter), nil
+}
+
 type QuestType string
 
 const (
@@ -438,6 +865,48 @@ func (ns NullQuestType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.QuestType), nil
+}
+
+type RecoveryType string
+
+const (
+	RecoveryTypeHp RecoveryType = "hp"
+	RecoveryTypeMp RecoveryType = "mp"
+)
+
+func (e *RecoveryType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = RecoveryType(s)
+	case string:
+		*e = RecoveryType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for RecoveryType: %T", src)
+	}
+	return nil
+}
+
+type NullRecoveryType struct {
+	RecoveryType RecoveryType
+	Valid        bool // Valid is true if RecoveryType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullRecoveryType) Scan(value interface{}) error {
+	if value == nil {
+		ns.RecoveryType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.RecoveryType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullRecoveryType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.RecoveryType), nil
 }
 
 type ShopCategory string
@@ -629,11 +1098,36 @@ type Area struct {
 	HasCompilationSphere bool
 }
 
+type AutoAbility struct {
+	ID                  int32
+	DataHash            string
+	Name                string
+	Description         sql.NullString
+	Effect              string
+	Type                EquipType
+	Category            AutoAbilityCategory
+	AbilityValue        sql.NullInt32
+	ActivationCondition AaActivationCondition
+	Counter             NullCounterType
+	GradualRecovery     NullRecoveryType
+	OnHitElement        NullElementType
+	ConversionFrom      NullParameter
+	ConversionTo        NullParameter
+}
+
 type BlitzballItemsList struct {
 	ID       int32
 	DataHash string
 	Category BlitzballTournamentCategory
 	Slot     BlitzballItemSlot
+}
+
+type CelestialWeapon struct {
+	ID          int32
+	DataHash    string
+	Name        string
+	KeyItemBase KeyItemBase
+	Formula     CelestialFormula
 }
 
 type Character struct {
@@ -687,10 +1181,11 @@ type OverdriveMode struct {
 }
 
 type Property struct {
-	ID       int32
-	DataHash string
-	Name     string
-	Effect   string
+	ID             int32
+	DataHash       string
+	Name           string
+	Effect         string
+	NullifyArmored NullNullifyArmored
 }
 
 type Quest struct {
@@ -725,10 +1220,11 @@ type Stat struct {
 }
 
 type StatusCondition struct {
-	ID       int32
-	DataHash string
-	Name     string
-	Effect   string
+	ID             int32
+	DataHash       string
+	Name           string
+	Effect         string
+	NullifyArmored NullNullifyArmored
 }
 
 type SubLocation struct {

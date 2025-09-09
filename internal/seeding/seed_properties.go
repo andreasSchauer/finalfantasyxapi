@@ -12,14 +12,16 @@ import (
 type Property struct {
 	//id 		int32
 	//dataHash	string
-	Name		string 		`json:"name"`
-	Effect		string 		`json:"effect"`
+	Name			string 		`json:"name"`
+	Effect			string 		`json:"effect"`
+	NullifyArmored 	*string		`json:"nullify_armored"`
 }
 
 func(p Property) ToHashFields() []any {
 	return []any{
 		p.Name,
 		p.Effect,
+		derefOrNil(p.NullifyArmored),
 	}
 }
 
@@ -36,9 +38,10 @@ func seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, property := range properties {
 			err = qtx.CreateProperty(context.Background(), database.CreatePropertyParams{
-				DataHash: 	generateDataHash(property),
-				Name: 		property.Name,
-				Effect: 	property.Effect,
+				DataHash: 		generateDataHash(property),
+				Name: 			property.Name,
+				Effect: 		property.Effect,
+				NullifyArmored: nullNullifyArmored(property.NullifyArmored),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Property: %s: %v", property.Name, err)

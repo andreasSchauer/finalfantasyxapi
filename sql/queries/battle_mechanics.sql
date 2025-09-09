@@ -36,12 +36,12 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateStatusCondition :exec
-INSERT INTO status_conditions (data_hash, name, effect)
-VALUES ($1, $2, $3)
+INSERT INTO status_conditions (data_hash, name, effect, nullify_armored)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateProperty :exec
-INSERT INTO properties (data_hash, name, effect)
-VALUES ($1, $2, $3)
+INSERT INTO properties (data_hash, name, effect, nullify_armored)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;

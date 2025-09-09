@@ -137,19 +137,25 @@ func (q *Queries) CreateOverdriveMode(ctx context.Context, arg CreateOverdriveMo
 }
 
 const createProperty = `-- name: CreateProperty :exec
-INSERT INTO properties (data_hash, name, effect)
-VALUES ($1, $2, $3)
+INSERT INTO properties (data_hash, name, effect, nullify_armored)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreatePropertyParams struct {
-	DataHash string
-	Name     string
-	Effect   string
+	DataHash       string
+	Name           string
+	Effect         string
+	NullifyArmored NullNullifyArmored
 }
 
 func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) error {
-	_, err := q.db.ExecContext(ctx, createProperty, arg.DataHash, arg.Name, arg.Effect)
+	_, err := q.db.ExecContext(ctx, createProperty,
+		arg.DataHash,
+		arg.Name,
+		arg.Effect,
+		arg.NullifyArmored,
+	)
 	return err
 }
 
@@ -181,18 +187,24 @@ func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) error {
 }
 
 const createStatusCondition = `-- name: CreateStatusCondition :exec
-INSERT INTO status_conditions (data_hash, name, effect)
-VALUES ($1, $2, $3)
+INSERT INTO status_conditions (data_hash, name, effect, nullify_armored)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateStatusConditionParams struct {
-	DataHash string
-	Name     string
-	Effect   string
+	DataHash       string
+	Name           string
+	Effect         string
+	NullifyArmored NullNullifyArmored
 }
 
 func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusConditionParams) error {
-	_, err := q.db.ExecContext(ctx, createStatusCondition, arg.DataHash, arg.Name, arg.Effect)
+	_, err := q.db.ExecContext(ctx, createStatusCondition,
+		arg.DataHash,
+		arg.Name,
+		arg.Effect,
+		arg.NullifyArmored,
+	)
 	return err
 }

@@ -39,3 +39,63 @@ func nullCreationsUnlockedCategory(s *string) database.NullCreationsUnlockedCate
 }
 
 
+func nullNullifyArmored(s *string) database.NullNullifyArmored {
+    if s == nil {
+        return database.NullNullifyArmored{}
+    }
+    
+    return database.NullNullifyArmored{
+        NullifyArmored: database.NullifyArmored(*s),
+        Valid: true,
+    }
+}
+
+
+func nullCounterType(s *string) database.NullCounterType {
+    if s == nil {
+        return database.NullCounterType{}
+    }
+    
+    return database.NullCounterType{
+        CounterType: database.CounterType(*s),
+        Valid: true,
+    }
+}
+
+
+func nullRecoveryType(s *string) database.NullRecoveryType {
+    if s == nil {
+        return database.NullRecoveryType{}
+    }
+    
+    return database.NullRecoveryType{
+        RecoveryType: database.RecoveryType(*s),
+        Valid: true,
+    }
+}
+
+
+func nullElementType(s *string) database.NullElementType {
+    if s == nil {
+        return database.NullElementType{}
+    }
+    
+    return database.NullElementType{
+        ElementType: database.ElementType(*s),
+        Valid: true,
+    }
+}
+
+
+func nullParameter(s *string) database.NullParameter {
+    if s == nil {
+        return database.NullParameter{}
+    }
+    
+    return database.NullParameter{
+        Parameter: database.Parameter(*s),
+        Valid: true,
+    }
+}
+
+
