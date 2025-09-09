@@ -5,7 +5,7 @@ CREATE TYPE armor_type AS ENUM ('shield', 'ring', 'armguard', 'bangle', 'armlet'
 CREATE TABLE characters (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    name TEXT NOT NULL,
+    name TEXT UNIQUE NOT NULL,
     weapon_type weapon_type NOT NULL,
     armor_type armor_type NOT NULL,
     physical_attack_range INTEGER NOT NULL,
@@ -19,7 +19,7 @@ CREATE TYPE accuracy_source AS ENUM ('accuracy', 'rate');
 CREATE TABLE aeons (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    name TEXT NOT NULL,
+    name TEXT UNIQUE NOT NULL,
     category aeon_category,
     is_optional BOOLEAN NOT NULL,
     battles_to_regenerate INTEGER NOT NULL,

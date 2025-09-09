@@ -617,6 +617,18 @@ type AgilityTier struct {
 	CharacterMaxIcv sql.NullInt32
 }
 
+type Area struct {
+	ID                   int32
+	DataHash             string
+	SubLocationID        int32
+	Name                 string
+	Section              sql.NullString
+	CanRevisit           bool
+	HasSaveSphere        bool
+	AirshipDropOff       bool
+	HasCompilationSphere bool
+}
+
 type BlitzballItemsList struct {
 	ID       int32
 	DataHash string
@@ -641,6 +653,12 @@ type DefaultAbility struct {
 }
 
 type Element struct {
+	ID       int32
+	DataHash string
+	Name     string
+}
+
+type Location struct {
 	ID       int32
 	DataHash string
 	Name     string
@@ -711,6 +729,14 @@ type StatusCondition struct {
 	DataHash string
 	Name     string
 	Effect   string
+}
+
+type SubLocation struct {
+	ID            int32
+	DataHash      string
+	LocationID    int32
+	Name          string
+	Specification sql.NullString
 }
 
 type Subquest struct {
