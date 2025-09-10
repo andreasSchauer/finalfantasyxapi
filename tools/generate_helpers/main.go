@@ -16,6 +16,8 @@ func main() {
         "RecoveryType",
         "ElementType",
         "Parameter",
+        "MaCreationArea",
+        "MaCreationSpecies",
     }
 
     filePath := "./internal/seeding/null_enums.go"

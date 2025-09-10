@@ -36,8 +36,8 @@ ON CONFLICT(data_hash) DO NOTHING
 type CreateAgilitySubtierParams struct {
 	DataHash          string
 	AgilityTierID     int32
-	SubtierMinAgility int32
-	SubtierMaxAgility int32
+	SubtierMinAgility interface{}
+	SubtierMaxAgility interface{}
 	CharacterMinIcv   sql.NullInt32
 }
 
@@ -61,8 +61,8 @@ RETURNING id, data_hash, min_agility, max_agility, tick_speed, monster_min_icv, 
 
 type CreateAgilityTierParams struct {
 	DataHash        string
-	MinAgility      int32
-	MaxAgility      int32
+	MinAgility      interface{}
+	MaxAgility      interface{}
 	TickSpeed       int32
 	MonsterMinIcv   sql.NullInt32
 	MonsterMaxIcv   sql.NullInt32
@@ -121,7 +121,7 @@ type CreateOverdriveModeParams struct {
 	Description string
 	Effect      string
 	Type        OverdriveType
-	FillRate    sql.NullFloat64
+	FillRate    interface{}
 }
 
 func (q *Queries) CreateOverdriveMode(ctx context.Context, arg CreateOverdriveModeParams) error {

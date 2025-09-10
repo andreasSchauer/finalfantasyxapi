@@ -23,10 +23,10 @@ type CreateAeonParams struct {
 	IsOptional            bool
 	BattlesToRegenerate   int32
 	PhysAtkDamageConstant sql.NullInt32
-	PhysAtkRange          sql.NullInt32
-	PhysAtkShatterRate    sql.NullInt32
+	PhysAtkRange          interface{}
+	PhysAtkShatterRate    interface{}
 	PhysAtkAccSource      NullAccuracySource
-	PhysAtkHitChance      sql.NullInt32
+	PhysAtkHitChance      interface{}
 	PhysAtkAccModifier    sql.NullFloat64
 }
 
@@ -58,7 +58,7 @@ type CreateCharacterParams struct {
 	Name                string
 	WeaponType          WeaponType
 	ArmorType           ArmorType
-	PhysicalAttackRange int32
+	PhysicalAttackRange interface{}
 	CanFightUnderwater  bool
 }
 

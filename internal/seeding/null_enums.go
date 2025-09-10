@@ -99,3 +99,27 @@ func nullParameter(s *string) database.NullParameter {
 }
 
 
+func nullMaCreationArea(s *string) database.NullMaCreationArea {
+    if s == nil {
+        return database.NullMaCreationArea{}
+    }
+    
+    return database.NullMaCreationArea{
+        MaCreationArea: database.MaCreationArea(*s),
+        Valid: true,
+    }
+}
+
+
+func nullMaCreationSpecies(s *string) database.NullMaCreationSpecies {
+    if s == nil {
+        return database.NullMaCreationSpecies{}
+    }
+    
+    return database.NullMaCreationSpecies{
+        MaCreationSpecies: database.MaCreationSpecies(*s),
+        Valid: true,
+    }
+}
+
+

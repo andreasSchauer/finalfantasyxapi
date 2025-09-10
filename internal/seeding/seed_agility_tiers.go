@@ -63,7 +63,7 @@ func seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for i, agilityTier := range agilityTiers {
-			tier, err := qtx.CreateAgilityTier(context.Background(), database.CreateAgilityTierParams{
+			dbAgilityTier, err := qtx.CreateAgilityTier(context.Background(), database.CreateAgilityTierParams{
 				DataHash: 			generateDataHash(agilityTier),
 				MinAgility: 		agilityTier.MinAgility,
 				MaxAgility: 		agilityTier.MaxAgility,
@@ -76,21 +76,33 @@ func seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 				return fmt.Errorf("couldn't create Agility Tier: %d: %v", i, err)
 			}
 
-			for j, subtier := range agilityTier.CharacterMinICVs {
-				subtier.AgilityTierID = tier.ID
-
-				err = qtx.CreateAgilitySubtier(context.Background(), database.CreateAgilitySubtierParams{
-					DataHash: 			generateDataHash(subtier),
-					AgilityTierID: 		subtier.AgilityTierID,
-					SubtierMinAgility: 	subtier.SubtierMinAgility,
-					SubtierMaxAgility: 	subtier.SubtierMaxAgility,
-					CharacterMinIcv: 	getNullInt32(subtier.CharacterMinICV),
-				})
-				if err != nil {
-					return fmt.Errorf("couldn't create Agility Subtier: %d - %d: %v", i, j, err)
-				}
+			err = seedAgilitySubtiers(qtx, agilityTier, dbAgilityTier.ID)
+			if err != nil {
+				return err
 			}
 		}
 		return nil
 	})
+}
+
+
+
+func seedAgilitySubtiers(qtx *database.Queries, agilityTier AgilityTier, agilityTierID int32) error {
+	for i, subtier := range agilityTier.CharacterMinICVs {
+		subtier.AgilityTierID = agilityTierID
+
+		err := qtx.CreateAgilitySubtier(context.Background(), database.CreateAgilitySubtierParams{
+			DataHash: 			generateDataHash(subtier),
+			AgilityTierID: 		subtier.AgilityTierID,
+			SubtierMinAgility: 	subtier.SubtierMinAgility,
+			SubtierMaxAgility: 	subtier.SubtierMaxAgility,
+			CharacterMinIcv: 	getNullInt32(subtier.CharacterMinICV),
+		})
+		if err != nil {
+			agilityTierIndex := agilityTierID - 1
+			return fmt.Errorf("couldn't create Agility Subtier: %d - %d: %v", agilityTierIndex, i, err)
+		}
+	}
+
+	return nil
 }

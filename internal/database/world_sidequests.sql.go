@@ -37,8 +37,8 @@ type CreateMonsterArenaCreationParams struct {
 	DataHash                  string
 	Name                      string
 	Category                  MaCreationCategory
-	RequiredArea              sql.NullString
-	RequiredSpecies           sql.NullString
+	RequiredArea              NullMaCreationArea
+	RequiredSpecies           NullMaCreationSpecies
 	UnderwaterOnly            bool
 	CreationsUnlockedCategory NullCreationsUnlockedCategory
 	Amount                    int32

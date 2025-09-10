@@ -628,6 +628,59 @@ func (ns NullLootType) Value() (driver.Value, error) {
 	return string(ns.LootType), nil
 }
 
+type MaCreationArea string
+
+const (
+	MaCreationAreaBesaid                 MaCreationArea = "besaid"
+	MaCreationAreaKilika                 MaCreationArea = "kilika"
+	MaCreationAreaMiihenHighroad         MaCreationArea = "mi'ihen-highroad"
+	MaCreationAreaMushroomRockRoad       MaCreationArea = "mushroom-rock-road"
+	MaCreationAreaDjose                  MaCreationArea = "djose"
+	MaCreationAreaThunderPlains          MaCreationArea = "thunder-plains"
+	MaCreationAreaMacalania              MaCreationArea = "macalania"
+	MaCreationAreaBikanel                MaCreationArea = "bikanel"
+	MaCreationAreaCalmLands              MaCreationArea = "calm-lands"
+	MaCreationAreaCavernOfTheStolenFayth MaCreationArea = "cavern-of-the-stolen-fayth"
+	MaCreationAreaMountGagazet           MaCreationArea = "mount-gagazet"
+	MaCreationAreaSin                    MaCreationArea = "sin"
+	MaCreationAreaOmegaRuins             MaCreationArea = "omega-ruins"
+)
+
+func (e *MaCreationArea) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = MaCreationArea(s)
+	case string:
+		*e = MaCreationArea(s)
+	default:
+		return fmt.Errorf("unsupported scan type for MaCreationArea: %T", src)
+	}
+	return nil
+}
+
+type NullMaCreationArea struct {
+	MaCreationArea MaCreationArea
+	Valid          bool // Valid is true if MaCreationArea is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullMaCreationArea) Scan(value interface{}) error {
+	if value == nil {
+		ns.MaCreationArea, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.MaCreationArea.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullMaCreationArea) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.MaCreationArea), nil
+}
+
 type MaCreationCategory string
 
 const (
@@ -669,6 +722,156 @@ func (ns NullMaCreationCategory) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.MaCreationCategory), nil
+}
+
+type MaCreationSpecies string
+
+const (
+	MaCreationSpeciesBird      MaCreationSpecies = "bird"
+	MaCreationSpeciesBomb      MaCreationSpecies = "bomb"
+	MaCreationSpeciesDrake     MaCreationSpecies = "drake"
+	MaCreationSpeciesElemental MaCreationSpecies = "elemental"
+	MaCreationSpeciesEvilEye   MaCreationSpecies = "evil-eye"
+	MaCreationSpeciesFlan      MaCreationSpecies = "flan"
+	MaCreationSpeciesFungus    MaCreationSpecies = "fungus"
+	MaCreationSpeciesHelm      MaCreationSpecies = "helm"
+	MaCreationSpeciesImp       MaCreationSpecies = "imp"
+	MaCreationSpeciesIronGiant MaCreationSpecies = "iron-giant"
+	MaCreationSpeciesLupine    MaCreationSpecies = "lupine"
+	MaCreationSpeciesReptile   MaCreationSpecies = "reptile"
+	MaCreationSpeciesRuminant  MaCreationSpecies = "ruminant"
+	MaCreationSpeciesWasp      MaCreationSpecies = "wasp"
+)
+
+func (e *MaCreationSpecies) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = MaCreationSpecies(s)
+	case string:
+		*e = MaCreationSpecies(s)
+	default:
+		return fmt.Errorf("unsupported scan type for MaCreationSpecies: %T", src)
+	}
+	return nil
+}
+
+type NullMaCreationSpecies struct {
+	MaCreationSpecies MaCreationSpecies
+	Valid             bool // Valid is true if MaCreationSpecies is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullMaCreationSpecies) Scan(value interface{}) error {
+	if value == nil {
+		ns.MaCreationSpecies, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.MaCreationSpecies.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullMaCreationSpecies) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.MaCreationSpecies), nil
+}
+
+type MonsterSpecies string
+
+const (
+	MonsterSpeciesAdamantoise  MonsterSpecies = "adamantoise"
+	MonsterSpeciesAeon         MonsterSpecies = "aeon"
+	MonsterSpeciesArmor        MonsterSpecies = "armor"
+	MonsterSpeciesBasilisk     MonsterSpecies = "basilisk"
+	MonsterSpeciesBlade        MonsterSpecies = "blade"
+	MonsterSpeciesBehemoth     MonsterSpecies = "behemoth"
+	MonsterSpeciesBird         MonsterSpecies = "bird"
+	MonsterSpeciesBomb         MonsterSpecies = "bomb"
+	MonsterSpeciesCactuar      MonsterSpecies = "cactuar"
+	MonsterSpeciesCephalopod   MonsterSpecies = "cephalopod"
+	MonsterSpeciesChest        MonsterSpecies = "chest"
+	MonsterSpeciesChimera      MonsterSpecies = "chimera"
+	MonsterSpeciesCoeurl       MonsterSpecies = "coeurl"
+	MonsterSpeciesDefender     MonsterSpecies = "defender"
+	MonsterSpeciesDinofish     MonsterSpecies = "dinofish"
+	MonsterSpeciesDoomstone    MonsterSpecies = "doomstone"
+	MonsterSpeciesDrake        MonsterSpecies = "drake"
+	MonsterSpeciesEater        MonsterSpecies = "eater"
+	MonsterSpeciesElemental    MonsterSpecies = "elemental"
+	MonsterSpeciesEvilEye      MonsterSpecies = "evil-eye"
+	MonsterSpeciesFlan         MonsterSpecies = "flan"
+	MonsterSpeciesFungus       MonsterSpecies = "fungus"
+	MonsterSpeciesGel          MonsterSpecies = "gel"
+	MonsterSpeciesGeo          MonsterSpecies = "geo"
+	MonsterSpeciesHaizhe       MonsterSpecies = "haizhe"
+	MonsterSpeciesHelm         MonsterSpecies = "helm"
+	MonsterSpeciesHermit       MonsterSpecies = "hermit"
+	MonsterSpeciesHumanoid     MonsterSpecies = "humanoid"
+	MonsterSpeciesImp          MonsterSpecies = "imp"
+	MonsterSpeciesIronGiant    MonsterSpecies = "iron-giant"
+	MonsterSpeciesLarva        MonsterSpecies = "larva"
+	MonsterSpeciesLupine       MonsterSpecies = "lupine"
+	MonsterSpeciesMachina      MonsterSpecies = "machina"
+	MonsterSpeciesMalboro      MonsterSpecies = "malboro"
+	MonsterSpeciesMech         MonsterSpecies = "mech"
+	MonsterSpeciesMimic        MonsterSpecies = "mimic"
+	MonsterSpeciesOchu         MonsterSpecies = "ochu"
+	MonsterSpeciesOgre         MonsterSpecies = "ogre"
+	MonsterSpeciesPhantom      MonsterSpecies = "phantom"
+	MonsterSpeciesPiranha      MonsterSpecies = "piranha"
+	MonsterSpeciesPlant        MonsterSpecies = "plant"
+	MonsterSpeciesReptile      MonsterSpecies = "reptile"
+	MonsterSpeciesRoc          MonsterSpecies = "roc"
+	MonsterSpeciesRuminant     MonsterSpecies = "ruminant"
+	MonsterSpeciesSacredBeast  MonsterSpecies = "sacred-beast"
+	MonsterSpeciesSahagin      MonsterSpecies = "sahagin"
+	MonsterSpeciesSin          MonsterSpecies = "sin"
+	MonsterSpeciesSinspawn     MonsterSpecies = "sinspawn"
+	MonsterSpeciesSpellspinner MonsterSpecies = "spellspinner"
+	MonsterSpeciesSpiritBeast  MonsterSpecies = "spirit-beast"
+	MonsterSpeciesTonberry     MonsterSpecies = "tonberry"
+	MonsterSpeciesUnspecified  MonsterSpecies = "unspecified"
+	MonsterSpeciesWasp         MonsterSpecies = "wasp"
+	MonsterSpeciesWeapon       MonsterSpecies = "weapon"
+	MonsterSpeciesWorm         MonsterSpecies = "worm"
+	MonsterSpeciesWyrm         MonsterSpecies = "wyrm"
+)
+
+func (e *MonsterSpecies) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = MonsterSpecies(s)
+	case string:
+		*e = MonsterSpecies(s)
+	default:
+		return fmt.Errorf("unsupported scan type for MonsterSpecies: %T", src)
+	}
+	return nil
+}
+
+type NullMonsterSpecies struct {
+	MonsterSpecies MonsterSpecies
+	Valid          bool // Valid is true if MonsterSpecies is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullMonsterSpecies) Scan(value interface{}) error {
+	if value == nil {
+		ns.MonsterSpecies, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.MonsterSpecies.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullMonsterSpecies) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.MonsterSpecies), nil
 }
 
 type NullifyArmored string
@@ -1052,10 +1255,10 @@ type Aeon struct {
 	IsOptional            bool
 	BattlesToRegenerate   int32
 	PhysAtkDamageConstant sql.NullInt32
-	PhysAtkRange          sql.NullInt32
-	PhysAtkShatterRate    sql.NullInt32
+	PhysAtkRange          interface{}
+	PhysAtkShatterRate    interface{}
 	PhysAtkAccSource      NullAccuracySource
-	PhysAtkHitChance      sql.NullInt32
+	PhysAtkHitChance      interface{}
 	PhysAtkAccModifier    sql.NullFloat64
 }
 
@@ -1070,16 +1273,16 @@ type AgilitySubtier struct {
 	ID                int32
 	DataHash          string
 	AgilityTierID     int32
-	SubtierMinAgility int32
-	SubtierMaxAgility int32
+	SubtierMinAgility interface{}
+	SubtierMaxAgility interface{}
 	CharacterMinIcv   sql.NullInt32
 }
 
 type AgilityTier struct {
 	ID              int32
 	DataHash        string
-	MinAgility      int32
-	MaxAgility      int32
+	MinAgility      interface{}
+	MaxAgility      interface{}
 	TickSpeed       int32
 	MonsterMinIcv   sql.NullInt32
 	MonsterMaxIcv   sql.NullInt32
@@ -1136,7 +1339,7 @@ type Character struct {
 	Name                string
 	WeaponType          WeaponType
 	ArmorType           ArmorType
-	PhysicalAttackRange int32
+	PhysicalAttackRange interface{}
 	CanFightUnderwater  bool
 }
 
@@ -1158,13 +1361,43 @@ type Location struct {
 	Name     string
 }
 
+type Monster struct {
+	ID                   int32
+	DataHash             string
+	Name                 string
+	Version              sql.NullInt32
+	Specification        sql.NullString
+	Notes                sql.NullString
+	Species              MonsterSpecies
+	IsStoryBased         bool
+	CanBeCaptured        bool
+	AreaConquestLocation NullMaCreationArea
+	IsBoss               bool
+	HasOverdrive         bool
+	IsUnderwater         bool
+	IsZombie             bool
+	Distance             interface{}
+	Ap                   int32
+	ApOverkill           int32
+	OverkillDamage       int32
+	Gil                  int32
+	StealGil             sql.NullInt32
+	DoomCountdown        interface{}
+	PoisonRate           interface{}
+	ThreatenChance       interface{}
+	ZanmatoLevel         int32
+	MonsterArenaPrice    sql.NullInt32
+	SensorText           string
+	ScanText             sql.NullString
+}
+
 type MonsterArenaCreation struct {
 	ID                        int32
 	DataHash                  string
 	Name                      string
 	Category                  MaCreationCategory
-	RequiredArea              sql.NullString
-	RequiredSpecies           sql.NullString
+	RequiredArea              NullMaCreationArea
+	RequiredSpecies           NullMaCreationSpecies
 	UnderwaterOnly            bool
 	CreationsUnlockedCategory NullCreationsUnlockedCategory
 	Amount                    int32
@@ -1177,7 +1410,7 @@ type OverdriveMode struct {
 	Description string
 	Effect      string
 	Type        OverdriveType
-	FillRate    sql.NullFloat64
+	FillRate    interface{}
 }
 
 type Property struct {

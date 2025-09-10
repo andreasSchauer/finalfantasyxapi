@@ -2,7 +2,7 @@
 CREATE TABLE locations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    name TEXT NOT NULL
+    name TEXT UNIQUE NOT NULL
 );
 
 
@@ -11,7 +11,9 @@ CREATE TABLE sub_locations (
     data_hash TEXT UNIQUE NOT NULL,
     location_id INTEGER NOT NULL REFERENCES locations(id),
     name TEXT NOT NULL,
-    specification TEXT
+    specification TEXT,
+
+    UNIQUE(name, specification)
 );
 
 
@@ -25,6 +27,7 @@ CREATE TABLE areas (
     has_save_sphere BOOLEAN NOT NULL,
     airship_drop_off BOOLEAN NOT NULL,
     has_compilation_sphere BOOLEAN NOT NULL,
+    
     UNIQUE(sub_location_id, name, section)
 );
 

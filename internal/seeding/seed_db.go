@@ -7,7 +7,7 @@ import (
 )
 
 func Seed_database(db *database.Queries, dbConn *sql.DB) error {
-	seedFunctions := []func(*database.Queries, *sql.DB) error{
+	seedFunctions := []func(*database.Queries, *sql.DB) error {
 		seedStats,
 		seedElements,
 		seedAffinities,
@@ -25,6 +25,7 @@ func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 		seedLocations,
 		seedCelestialWeapons,
 		seedAutoAbilities,
+		seedMonsters,
 	}
 
 	for _, seedFunc := range seedFunctions {
