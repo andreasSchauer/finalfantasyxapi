@@ -367,6 +367,48 @@ func (ns NullCelestialFormula) Value() (driver.Value, error) {
 	return string(ns.CelestialFormula), nil
 }
 
+type CommandCategory string
+
+const (
+	CommandCategoryMenu          CommandCategory = "menu"
+	CommandCategoryRandomAbility CommandCategory = "random-ability"
+)
+
+func (e *CommandCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = CommandCategory(s)
+	case string:
+		*e = CommandCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for CommandCategory: %T", src)
+	}
+	return nil
+}
+
+type NullCommandCategory struct {
+	CommandCategory CommandCategory
+	Valid           bool // Valid is true if CommandCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullCommandCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.CommandCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.CommandCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullCommandCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.CommandCategory), nil
+}
+
 type CounterType string
 
 const (
@@ -1343,6 +1385,15 @@ type Character struct {
 	CanFightUnderwater  bool
 }
 
+type Command struct {
+	ID          int32
+	DataHash    string
+	Name        string
+	Description string
+	Effect      string
+	Category    CommandCategory
+}
+
 type DefaultAbility struct {
 	ID       int32
 	DataHash string
@@ -1401,6 +1452,29 @@ type MonsterArenaCreation struct {
 	UnderwaterOnly            bool
 	CreationsUnlockedCategory NullCreationsUnlockedCategory
 	Amount                    int32
+}
+
+type Overdrife struct {
+	ID               int32
+	DataHash         string
+	OdCommandID      sql.NullInt32
+	Name             string
+	Version          sql.NullInt32
+	Description      string
+	Effect           string
+	Rank             int32
+	AppearsInHelpBar bool
+	CanCopycat       bool
+	UnlockCondition  sql.NullString
+	CountdownInSec   sql.NullInt32
+}
+
+type OverdriveCommand struct {
+	ID          int32
+	DataHash    string
+	Name        string
+	Description string
+	Rank        int32
 }
 
 type OverdriveMode struct {

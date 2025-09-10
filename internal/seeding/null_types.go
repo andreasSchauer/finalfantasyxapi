@@ -27,3 +27,10 @@ func getNullFloat64(f *float32) sql.NullFloat64 {
     }
     return sql.NullFloat64{Float64: float64(*f), Valid: true}
 }
+
+func getNullBool(b *bool) sql.NullBool {
+    if b == nil {
+        return sql.NullBool{}
+    }
+    return sql.NullBool{Bool: *b, Valid: true}
+}
