@@ -123,3 +123,15 @@ func nullMaCreationSpecies(s *string) database.NullMaCreationSpecies {
 }
 
 
+func nullSubmenuType(s *string) database.NullSubmenuType {
+    if s == nil {
+        return database.NullSubmenuType{}
+    }
+    
+    return database.NullSubmenuType{
+        SubmenuType: database.SubmenuType(*s),
+        Valid: true,
+    }
+}
+
+

@@ -20,7 +20,7 @@ type Monster struct {
 	IsStoryBased			bool 		`json:"is_story_based"`
 	CanBeCaptured			bool 		`json:"can_be_captured"`
 	AreaConquestLocation	*string 	`json:"area_conquest_location"`
-	IsBoss					bool 		`json:"is_boss"`
+	CTBIconType				string 		`json:"ctb_icon_type"`
 	HasOverdrive			bool 		`json:"has_overdrive"`
 	IsUnderwater			bool 		`json:"is_underwater"`
 	IsZombie				bool 		`json:"is_zombie"`
@@ -49,7 +49,7 @@ func(m Monster) ToHashFields() []any {
 		m.IsStoryBased,
 		m.CanBeCaptured,
 		derefOrNil(m.AreaConquestLocation),
-		m.IsBoss,
+		m.CTBIconType,
 		m.HasOverdrive,
 		m.IsUnderwater,
 		m.IsZombie,
@@ -91,7 +91,7 @@ func seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 				IsStoryBased: 			monster.IsStoryBased,
 				CanBeCaptured: 			monster.CanBeCaptured,
 				AreaConquestLocation: 	nullMaCreationArea(monster.AreaConquestLocation),
-				IsBoss: 				monster.IsBoss,
+				CtbIconType: 			database.CtbIconType(monster.CTBIconType),
 				HasOverdrive: 			monster.HasOverdrive,
 				IsUnderwater: 			monster.IsUnderwater,
 				IsZombie: 				monster.IsZombie,

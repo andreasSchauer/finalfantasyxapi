@@ -2,6 +2,8 @@ package seeding
 
 import (
 	"database/sql"
+	"fmt"
+	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
@@ -28,13 +30,23 @@ func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 		seedMonsters,
 		seedCommands,
 		seedOverdriveCommands,
+		seedPlayerAbilities,
+		seedEnemyAbilities,
+		seedOverdriveAbilities,
+		seedTriggerCommands,
 	}
+
+	start := time.Now()
 
 	for _, seedFunc := range seedFunctions {
         if err := seedFunc(db, dbConn); err != nil {
             return err
         }
     }
+
+	duration := time.Since(start)
+
+	fmt.Printf("seeding took %.2f seconds\n", duration.Seconds())
 
 	return nil
 }

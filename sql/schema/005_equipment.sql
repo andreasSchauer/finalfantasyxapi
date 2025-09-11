@@ -19,7 +19,7 @@ CREATE TYPE recovery_type AS ENUM ('hp', 'mp');
 CREATE TYPE element_type AS ENUM ('fire', 'lightning', 'water', 'ice', 'holy');
 
 
-CREATE TYPE parameter AS ENUM ('accuracy-percentage', 'ambush-chance', 'ap-gain', 'buff-factor-mag-based', 'buff-factor-str-based', 'common-steal-rate', 'critical-hit-defense', 'critical-hit-rate', 'current-hp', 'damage-limit', 'encounter-rate', 'final-evasion-rate', 'final-hit-rate', 'gil-gain', 'hp-limit', 'initial-counter-value', 'items-healing', 'magical-damage-dealt', 'magical-damage-taken', 'mp-limit', 'overdrive-charge', 'percentage-damage-taken', 'physical-damage-dealt', 'physical-damage-taken', 'mp-cost', 'preemptive-strike-chance', 'rare-steal-rate', 'special-damage-dealt', 'special-damage-taken', 'tick-speed');
+CREATE TYPE parameter AS ENUM ('accuracy-percentage', 'ambush-chance', 'ap-gain', 'buff-factor-mag-based', 'buff-factor-str-based', 'common-steal-rate', 'critical-hit-defense', 'critical-hit-rate', 'current-hp', 'damage-limit', 'encounter-rate', 'final-evasion-rate', 'final-hit-rate', 'gil-gain', 'hp-limit', 'initial-counter-value', 'items-healing', 'magical-damage-dealt', 'magical-damage-taken', 'mp-limit', 'overdrive-charge', 'overdrive-gauge', 'percentage-damage-taken', 'physical-damage-dealt', 'physical-damage-taken', 'mp-cost', 'preemptive-strike-chance', 'rare-steal-rate', 'special-damage-dealt', 'special-damage-taken', 'tick-speed');
 
 
 CREATE TABLE auto_abilities (

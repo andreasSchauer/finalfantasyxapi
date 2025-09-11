@@ -54,6 +54,51 @@ func (ns NullAaActivationCondition) Value() (driver.Value, error) {
 	return string(ns.AaActivationCondition), nil
 }
 
+type AbilityType string
+
+const (
+	AbilityTypePlayerAbility    AbilityType = "player-ability"
+	AbilityTypeEnemyAbility     AbilityType = "enemy-ability"
+	AbilityTypeOverdriveAbility AbilityType = "overdrive-ability"
+	AbilityTypeTriggerCommand   AbilityType = "trigger-command"
+	AbilityTypeItem             AbilityType = "item"
+)
+
+func (e *AbilityType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AbilityType(s)
+	case string:
+		*e = AbilityType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AbilityType: %T", src)
+	}
+	return nil
+}
+
+type NullAbilityType struct {
+	AbilityType AbilityType
+	Valid       bool // Valid is true if AbilityType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAbilityType) Scan(value interface{}) error {
+	if value == nil {
+		ns.AbilityType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AbilityType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAbilityType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AbilityType), nil
+}
+
 type AccuracySource string
 
 const (
@@ -491,6 +536,50 @@ func (ns NullCreationsUnlockedCategory) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.CreationsUnlockedCategory), nil
+}
+
+type CtbIconType string
+
+const (
+	CtbIconTypeMonster      CtbIconType = "monster"
+	CtbIconTypeBoss         CtbIconType = "boss"
+	CtbIconTypeBossNumbered CtbIconType = "boss-numbered"
+	CtbIconTypeSummon       CtbIconType = "summon"
+)
+
+func (e *CtbIconType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = CtbIconType(s)
+	case string:
+		*e = CtbIconType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for CtbIconType: %T", src)
+	}
+	return nil
+}
+
+type NullCtbIconType struct {
+	CtbIconType CtbIconType
+	Valid       bool // Valid is true if CtbIconType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullCtbIconType) Scan(value interface{}) error {
+	if value == nil {
+		ns.CtbIconType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.CtbIconType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullCtbIconType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.CtbIconType), nil
 }
 
 type ElementType string
@@ -1024,6 +1113,7 @@ const (
 	ParameterMagicalDamageTaken     Parameter = "magical-damage-taken"
 	ParameterMpLimit                Parameter = "mp-limit"
 	ParameterOverdriveCharge        Parameter = "overdrive-charge"
+	ParameterOverdriveGauge         Parameter = "overdrive-gauge"
 	ParameterPercentageDamageTaken  Parameter = "percentage-damage-taken"
 	ParameterPhysicalDamageDealt    Parameter = "physical-damage-dealt"
 	ParameterPhysicalDamageTaken    Parameter = "physical-damage-taken"
@@ -1198,6 +1288,51 @@ func (ns NullShopCategory) Value() (driver.Value, error) {
 	return string(ns.ShopCategory), nil
 }
 
+type SubmenuType string
+
+const (
+	SubmenuTypeBlkMagic SubmenuType = "blk-magic"
+	SubmenuTypeSkill    SubmenuType = "skill"
+	SubmenuTypeSpecial  SubmenuType = "special"
+	SubmenuTypeSummon   SubmenuType = "summon"
+	SubmenuTypeWhtMagic SubmenuType = "wht-magic"
+)
+
+func (e *SubmenuType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = SubmenuType(s)
+	case string:
+		*e = SubmenuType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for SubmenuType: %T", src)
+	}
+	return nil
+}
+
+type NullSubmenuType struct {
+	SubmenuType SubmenuType
+	Valid       bool // Valid is true if SubmenuType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullSubmenuType) Scan(value interface{}) error {
+	if value == nil {
+		ns.SubmenuType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.SubmenuType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullSubmenuType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.SubmenuType), nil
+}
+
 type TreasureType string
 
 const (
@@ -1287,6 +1422,15 @@ func (ns NullWeaponType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.WeaponType), nil
+}
+
+type Ability struct {
+	ID            int32
+	DataHash      string
+	Name          string
+	Version       sql.NullInt32
+	Specification sql.NullString
+	Type          AbilityType
 }
 
 type Aeon struct {
@@ -1406,6 +1550,16 @@ type Element struct {
 	Name     string
 }
 
+type EnemyAbility struct {
+	ID               int32
+	DataHash         string
+	AbilityID        int32
+	Effect           sql.NullString
+	Rank             int32
+	AppearsInHelpBar bool
+	CanCopycat       bool
+}
+
 type Location struct {
 	ID       int32
 	DataHash string
@@ -1423,7 +1577,7 @@ type Monster struct {
 	IsStoryBased         bool
 	CanBeCaptured        bool
 	AreaConquestLocation NullMaCreationArea
-	IsBoss               bool
+	CtbIconType          CtbIconType
 	HasOverdrive         bool
 	IsUnderwater         bool
 	IsZombie             bool
@@ -1469,6 +1623,12 @@ type Overdrife struct {
 	CountdownInSec   sql.NullInt32
 }
 
+type OverdriveAbility struct {
+	ID        int32
+	DataHash  string
+	AbilityID int32
+}
+
 type OverdriveCommand struct {
 	ID          int32
 	DataHash    string
@@ -1485,6 +1645,20 @@ type OverdriveMode struct {
 	Effect      string
 	Type        OverdriveType
 	FillRate    interface{}
+}
+
+type PlayerAbility struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	Description         sql.NullString
+	Effect              string
+	Submenu             NullSubmenuType
+	CanUseOutsideBattle bool
+	MpCost              sql.NullInt32
+	Rank                sql.NullInt32
+	AppearsInHelpBar    bool
+	CanCopycat          bool
 }
 
 type Property struct {
@@ -1564,4 +1738,15 @@ type Treasure struct {
 
 type TreasureList struct {
 	ID int32
+}
+
+type TriggerCommand struct {
+	ID               int32
+	DataHash         string
+	AbilityID        int32
+	Description      string
+	Effect           string
+	Rank             int32
+	AppearsInHelpBar bool
+	CanCopycat       bool
 }

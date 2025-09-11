@@ -1,6 +1,7 @@
 -- +goose Up
 CREATE TYPE monster_species AS ENUM ('adamantoise', 'aeon', 'armor', 'basilisk', 'blade', 'behemoth', 'bird', 'bomb', 'cactuar', 'cephalopod', 'chest', 'chimera', 'coeurl', 'defender', 'dinofish', 'doomstone', 'drake', 'eater', 'elemental', 'evil-eye', 'flan', 'fungus', 'gel', 'geo', 'haizhe', 'helm', 'hermit', 'humanoid', 'imp', 'iron-giant', 'larva', 'lupine', 'machina', 'malboro', 'mech', 'mimic', 'ochu', 'ogre', 'phantom', 'piranha', 'plant', 'reptile', 'roc', 'ruminant', 'sacred-beast', 'sahagin', 'sin', 'sinspawn', 'spellspinner', 'spirit-beast', 'tonberry', 'unspecified', 'wasp', 'weapon', 'worm', 'wyrm');
 
+CREATE TYPE ctb_icon_type AS ENUM ('monster', 'boss', 'boss-numbered', 'summon');
 
 
 CREATE TABLE monsters (
@@ -14,7 +15,7 @@ CREATE TABLE monsters (
     is_story_based BOOLEAN NOT NULL,
     can_be_captured BOOLEAN NOT NULL,
     area_conquest_location ma_creation_area,
-    is_boss BOOLEAN NOT NULL,
+    ctb_icon_type ctb_icon_type NOT NULL,
     has_overdrive BOOLEAN NOT NULL,
     is_underwater BOOLEAN NOT NULL,
     is_zombie BOOLEAN NOT NULL,
@@ -41,3 +42,4 @@ CREATE TABLE monsters (
 -- +goose Down
 DROP TABLE IF EXISTS monsters;
 DROP TYPE IF EXISTS monster_species;
+DROP TYPE IF EXISTS ctb_icon_type;
