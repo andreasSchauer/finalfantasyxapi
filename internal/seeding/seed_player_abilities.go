@@ -30,34 +30,17 @@ type PlayerAbility struct {
 }
 
 
-type Ability struct {
-	Name				string					`json:"name"`
-	Version				*int32					`json:"version"`
-	Specification		*string					`json:"specification"`
-	Type				database.AbilityType
-}
-
-
-func(a Ability) ToHashFields() []any {
-	return []any{
-		a.Name,
-		derefOrNil(a.Version),
-		derefOrNil(a.Specification),
-		a.Type,
-	}
-}
-
 
 type PlayerAbilityInfo struct {
 	AbilityID			int32
-	Description			*string		`json:"description"`
-	Effect				string		`json:"effect"`
-	Submenu				*string		`json:"submenu"`
-	CanUseOutsideBattle	bool		`json:"can_use_outside_battle"`
-	MPCost				*int32		`json:"mp_cost"`
-	Rank				*int32		`json:"rank"`
-	AppearsInHelpBar	bool		`json:"appears_in_help_bar"`
-	CanCopycat			bool		`json:"can_copycat"`
+	Description			*string
+	Effect				string
+	Submenu				*string
+	CanUseOutsideBattle	bool
+	MPCost				*int32
+	Rank				*int32
+	AppearsInHelpBar	bool
+	CanCopycat			bool
 }
 
 func(a PlayerAbilityInfo) ToHashFields() []any {

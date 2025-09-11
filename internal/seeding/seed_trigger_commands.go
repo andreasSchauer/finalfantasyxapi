@@ -30,10 +30,10 @@ type TriggerCommand struct {
 type TriggerCommandInfo struct {
 	AbilityID			int32
 	Description			string
-	Effect				string		`json:"effect"`
-	Rank				int32		`json:"rank"`
-	AppearsInHelpBar	bool		`json:"appears_in_help_bar"`
-	CanCopycat			bool		`json:"can_copycat"`
+	Effect				string
+	Rank				int32
+	AppearsInHelpBar	bool
+	CanCopycat			bool
 }
 
 func(t TriggerCommandInfo) ToHashFields() []any {
