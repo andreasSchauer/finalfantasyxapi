@@ -23,6 +23,7 @@ CREATE TABLE aeons (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     name TEXT UNIQUE NOT NULL,
+    unlock_condition TEXT NOT NULL,
     category aeon_category,
     is_optional BOOLEAN NOT NULL,
     battles_to_regenerate INTEGER NOT NULL,

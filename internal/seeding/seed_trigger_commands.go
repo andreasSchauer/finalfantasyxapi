@@ -17,6 +17,7 @@ type TriggerCommandJSON struct {
 	Rank				int32		`json:"rank"`
 	AppearsInHelpBar	bool		`json:"appears_in_help_bar"`
 	CanCopycat			bool		`json:"can_copycat"`
+	Cursor				string		`json:"cursor"`
 }
 
 
@@ -34,6 +35,7 @@ type TriggerCommandInfo struct {
 	Rank				int32
 	AppearsInHelpBar	bool
 	CanCopycat			bool
+	Cursor				string
 }
 
 func(t TriggerCommandInfo) ToHashFields() []any {
@@ -44,6 +46,7 @@ func(t TriggerCommandInfo) ToHashFields() []any {
 		t.Rank,
 		t.AppearsInHelpBar,
 		t.CanCopycat,
+		t.Cursor,
 	}
 }
 
@@ -87,6 +90,7 @@ func seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
 				Rank: 					info.Rank,
 				AppearsInHelpBar: 		info.AppearsInHelpBar,
 				CanCopycat: 			info.CanCopycat,
+				Cursor: 				database.TargetType(info.Cursor),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create TriggerCommand: %s: %v", ability.Name, err)
@@ -114,6 +118,7 @@ func jsonToTriggerCommands(json_data []TriggerCommandJSON) []TriggerCommand {
             Rank:               item.Rank,
             AppearsInHelpBar:   item.AppearsInHelpBar,
             CanCopycat:         item.CanCopycat,
+			Cursor: 			item.Cursor,
         }
 
 		triggerCommands = append(triggerCommands, TriggerCommand{

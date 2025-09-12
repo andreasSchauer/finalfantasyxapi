@@ -10,9 +10,10 @@ import (
 
 
 type OverdriveCommand struct {
-	Name 			string 		`json:"name"`
+	Name 			string 			`json:"name"`
 	Description		string			`json:"description"`
 	Rank			int32			`json:"rank"`
+	OpenMenu		*string			`json:"open_menu"`
 	Overdrives		[]Overdrive		`json:"overdrives"`
 }
 
@@ -22,21 +23,23 @@ func(oc OverdriveCommand) ToHashFields() []any {
 		oc.Name,
 		oc.Description,
 		oc.Rank,
+		derefOrNil(oc.OpenMenu),
 	}
 }
 
 
 type Overdrive struct {	
 	odCommandID			*int32
-	Name				string		`json:""`
-	Version				*int32		`json:""`
-	Description			string		`json:""`
-	Effect				string		`json:""`
-	Rank				int32		`json:""`
-	AppearsInHelpBar	bool		`json:""`
-	CanCopycat			bool		`json:""`
-	UnlockCondition		*string		`json:""`
-	CountdownInSec		*int32		`json:""`
+	Name				string		`json:"name"`
+	Version				*int32		`json:"version"`
+	Description			string		`json:"description"`
+	Effect				string		`json:"effect"`
+	Rank				int32		`json:"rank"`
+	AppearsInHelpBar	bool		`json:"appears_in_help_bar"`
+	CanCopycat			bool		`json:"can_copycat"`
+	UnlockCondition		*string		`json:"unlock_condition"`
+	CountdownInSec		*int32		`json:"countdown_in_sec"`
+	Cursor				*string		`json:"cursor"`
 }
 
 
@@ -52,6 +55,7 @@ func(o Overdrive) ToHashFields() []any {
 		o.CanCopycat,
 		derefOrNil(o.UnlockCondition),
 		derefOrNil(o.CountdownInSec),
+		derefOrNil(o.Cursor),
 	}
 }
 
@@ -76,6 +80,7 @@ func seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
 					Name: 			command.Name,
 					Description: 	command.Description,
 					Rank: 			command.Rank,
+					OpenMenu: 		nullSubmenuType(command.OpenMenu),
 				})
 				if err != nil {
 					return fmt.Errorf("couldn't create Overdrive Command: %s: %v", command.Name, err)
@@ -111,6 +116,7 @@ func seedOverdrives(qtx *database.Queries, command OverdriveCommand, odCommandID
 			CanCopycat: 		overdrive.CanCopycat,
 			UnlockCondition: 	getNullString(overdrive.UnlockCondition),
 			CountdownInSec: 	getNullInt32(overdrive.CountdownInSec),
+			Cursor: 			nullTargetType(overdrive.Cursor),
 		})
 		if err != nil {
 			return fmt.Errorf("couldn't create Overdrive: %s: %v", overdrive.Name, err)

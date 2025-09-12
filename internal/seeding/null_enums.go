@@ -135,3 +135,15 @@ func nullSubmenuType(s *string) database.NullSubmenuType {
 }
 
 
+func nullTargetType(s *string) database.NullTargetType {
+    if s == nil {
+        return database.NullTargetType{}
+    }
+    
+    return database.NullTargetType{
+        TargetType: database.TargetType(*s),
+        Valid: true,
+    }
+}
+
+

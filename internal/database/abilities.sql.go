@@ -89,8 +89,8 @@ func (q *Queries) CreateOverdriveAbility(ctx context.Context, arg CreateOverdriv
 }
 
 const createPlayerAbility = `-- name: CreatePlayerAbility :exec
-INSERT INTO player_abilities (data_hash, ability_id, description, effect, submenu, can_use_outside_battle, mp_cost, rank, appears_in_help_bar, can_copycat)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+INSERT INTO player_abilities (data_hash, ability_id, description, effect, submenu, can_use_outside_battle, mp_cost, rank, appears_in_help_bar, can_copycat, cursor, open_menu)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
@@ -105,6 +105,8 @@ type CreatePlayerAbilityParams struct {
 	Rank                sql.NullInt32
 	AppearsInHelpBar    bool
 	CanCopycat          bool
+	Cursor              NullTargetType
+	OpenMenu            NullSubmenuType
 }
 
 func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbilityParams) error {
@@ -119,13 +121,15 @@ func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbili
 		arg.Rank,
 		arg.AppearsInHelpBar,
 		arg.CanCopycat,
+		arg.Cursor,
+		arg.OpenMenu,
 	)
 	return err
 }
 
 const createTriggerCommand = `-- name: CreateTriggerCommand :exec
-INSERT INTO trigger_commands (data_hash, ability_id, description, effect, rank, appears_in_help_bar, can_copycat)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+INSERT INTO trigger_commands (data_hash, ability_id, description, effect, rank, appears_in_help_bar, can_copycat, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
@@ -137,6 +141,7 @@ type CreateTriggerCommandParams struct {
 	Rank             int32
 	AppearsInHelpBar bool
 	CanCopycat       bool
+	Cursor           TargetType
 }
 
 func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCommandParams) error {
@@ -148,6 +153,7 @@ func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCom
 		arg.Rank,
 		arg.AppearsInHelpBar,
 		arg.CanCopycat,
+		arg.Cursor,
 	)
 	return err
 }

@@ -11,8 +11,8 @@ import (
 )
 
 const createCommand = `-- name: CreateCommand :exec
-INSERT INTO commands (data_hash, name, description, effect, category)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO commands (data_hash, name, description, effect, category, cursor)
+VALUES ($1, $2, $3, $4, $5, $6)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
@@ -22,6 +22,7 @@ type CreateCommandParams struct {
 	Description string
 	Effect      string
 	Category    CommandCategory
+	Cursor      NullTargetType
 }
 
 func (q *Queries) CreateCommand(ctx context.Context, arg CreateCommandParams) error {
@@ -31,13 +32,14 @@ func (q *Queries) CreateCommand(ctx context.Context, arg CreateCommandParams) er
 		arg.Description,
 		arg.Effect,
 		arg.Category,
+		arg.Cursor,
 	)
 	return err
 }
 
 const createOverdrive = `-- name: CreateOverdrive :exec
-INSERT INTO overdrives (data_hash, od_command_id, name, version, description, effect, rank, appears_in_help_bar, can_copycat, unlock_condition, countdown_in_sec)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+INSERT INTO overdrives (data_hash, od_command_id, name, version, description, effect, rank, appears_in_help_bar, can_copycat, unlock_condition, countdown_in_sec, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
@@ -53,6 +55,7 @@ type CreateOverdriveParams struct {
 	CanCopycat       bool
 	UnlockCondition  sql.NullString
 	CountdownInSec   sql.NullInt32
+	Cursor           NullTargetType
 }
 
 func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams) error {
@@ -68,15 +71,16 @@ func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams
 		arg.CanCopycat,
 		arg.UnlockCondition,
 		arg.CountdownInSec,
+		arg.Cursor,
 	)
 	return err
 }
 
 const createOverdriveCommand = `-- name: CreateOverdriveCommand :one
-INSERT INTO overdrive_commands (data_hash, name, description, rank)
-VALUES ($1, $2, $3, $4)
+INSERT INTO overdrive_commands (data_hash, name, description, rank, open_menu)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT (data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
-RETURNING id, data_hash, name, description, rank
+RETURNING id, data_hash, name, description, rank, open_menu
 `
 
 type CreateOverdriveCommandParams struct {
@@ -84,6 +88,7 @@ type CreateOverdriveCommandParams struct {
 	Name        string
 	Description string
 	Rank        int32
+	OpenMenu    NullSubmenuType
 }
 
 func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriveCommandParams) (OverdriveCommand, error) {
@@ -92,6 +97,7 @@ func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriv
 		arg.Name,
 		arg.Description,
 		arg.Rank,
+		arg.OpenMenu,
 	)
 	var i OverdriveCommand
 	err := row.Scan(
@@ -100,6 +106,7 @@ func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriv
 		&i.Name,
 		&i.Description,
 		&i.Rank,
+		&i.OpenMenu,
 	)
 	return i, err
 }

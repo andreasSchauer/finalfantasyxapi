@@ -16,6 +16,7 @@ type Command struct {
 	Description		string		`json:"description"`
 	Effect			string		`json:"effect"`
 	Category		string		`json:"category"`
+	Cursor			*string		`json:"cursor"`
 }
 
 func(c Command) ToHashFields() []any {
@@ -24,6 +25,7 @@ func(c Command) ToHashFields() []any {
 		c.Description,
 		c.Effect,
 		c.Category,
+		derefOrNil(c.Cursor),
 	}
 }
 
@@ -45,6 +47,7 @@ func seedCommands(db *database.Queries, dbConn *sql.DB) error {
 				Description: 	command.Description,
 				Effect: 		command.Effect,
 				Category: 		database.CommandCategory(command.Category),
+				Cursor: 		nullTargetType(command.Cursor),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Command: %s: %v", command.Name, err)

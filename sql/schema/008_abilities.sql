@@ -13,8 +13,6 @@ CREATE TABLE abilities (
 );
 
 
-CREATE TYPE submenu_type AS ENUM ('blk-magic', 'skill', 'special', 'summon', 'wht-magic');
-
 CREATE TABLE player_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -26,7 +24,9 @@ CREATE TABLE player_abilities (
     mp_cost INTEGER,
     rank INTEGER,
     appears_in_help_bar BOOLEAN NOT NULL,
-    can_copycat BOOLEAN NOT NULL
+    can_copycat BOOLEAN NOT NULL,
+    cursor target_type,
+    open_menu submenu_type
 );
 
 
@@ -56,7 +56,8 @@ CREATE TABLE trigger_commands (
     effect TEXT NOT NULL,
     rank INTEGER NOT NULL,
     appears_in_help_bar BOOLEAN NOT NULL,
-    can_copycat BOOLEAN NOT NULL
+    can_copycat BOOLEAN NOT NULL,
+    cursor target_type NOT NULL
 );
 
 
@@ -66,6 +67,5 @@ DROP TABLE IF EXISTS trigger_commands;
 DROP TABLE IF EXISTS overdrive_abilities;
 DROP TABLE IF EXISTS enemy_abilities;
 DROP TABLE IF EXISTS player_abilities;
-DROP TYPE IF EXISTS submenu_type;
 DROP TABLE IF EXISTS abilities;
 DROP TYPE IF EXISTS ability_type;

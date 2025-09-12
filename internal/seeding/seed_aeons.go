@@ -13,6 +13,7 @@ type Aeon struct {
 	//id 		int32
 	//dataHash	string
 	Name				string 		`json:"name"`
+	UnlockCondition		string 		`json:"unlock_condition"`
 	Category			*string		`json:"category"`
 	IsOptional			bool		`json:"is_optional"`
 	BattlesToRegenerate	int32		`json:"num_battles_to_regenerate"`
@@ -27,6 +28,7 @@ type Aeon struct {
 func(a Aeon) ToHashFields() []any {
 	return []any{
 		a.Name,
+		a.UnlockCondition,
 		derefOrNil(a.Category),
 		a.IsOptional,
 		a.BattlesToRegenerate,
@@ -54,6 +56,7 @@ func seedAeons(db *database.Queries, dbConn *sql.DB) error {
 			err = qtx.CreateAeon(context.Background(), database.CreateAeonParams{
 				DataHash: 				generateDataHash(aeon),
 				Name: 					aeon.Name,
+				UnlockCondition: 		aeon.UnlockCondition,
 				Category: 				nullAeonCategory(aeon.Category),
 				IsOptional: 			aeon.IsOptional,
 				BattlesToRegenerate: 	aeon.BattlesToRegenerate,

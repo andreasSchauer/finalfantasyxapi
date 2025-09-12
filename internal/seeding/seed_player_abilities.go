@@ -21,6 +21,8 @@ type PlayerAbilityJSON struct {
 	Rank				*int32		`json:"rank"`
 	AppearsInHelpBar	bool		`json:"appears_in_help_bar"`
 	CanCopycat			bool		`json:"can_copycat"`
+	Cursor				*string		`json:"cursor"`
+	OpenMenu			*string		`json:"open_menu"`
 }
 
 
@@ -41,6 +43,8 @@ type PlayerAbilityInfo struct {
 	Rank				*int32
 	AppearsInHelpBar	bool
 	CanCopycat			bool
+	Cursor				*string
+	OpenMenu			*string
 }
 
 func(a PlayerAbilityInfo) ToHashFields() []any {
@@ -54,6 +58,8 @@ func(a PlayerAbilityInfo) ToHashFields() []any {
 		derefOrNil(a.Rank),
 		a.AppearsInHelpBar,
 		a.CanCopycat,
+		derefOrNil(a.Cursor),
+		derefOrNil(a.OpenMenu),
 	}
 }
 
@@ -100,6 +106,8 @@ func seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error {
 				Rank: 					getNullInt32(info.Rank),
 				AppearsInHelpBar: 		info.AppearsInHelpBar,
 				CanCopycat: 			info.CanCopycat,
+				Cursor: 				nullTargetType(info.Cursor),
+				OpenMenu: 				nullSubmenuType(info.OpenMenu),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Player Ability: %s: %v", ability.Name, err)
@@ -129,6 +137,8 @@ func jsonToPlayerAbilities(json_data []PlayerAbilityJSON) []PlayerAbility {
             Rank:                item.Rank,
             AppearsInHelpBar:    item.AppearsInHelpBar,
             CanCopycat:          item.CanCopycat,
+			Cursor: 			 item.Cursor,
+			OpenMenu: 			 item.OpenMenu,
         }
 
 		playerAbilities = append(playerAbilities, PlayerAbility{

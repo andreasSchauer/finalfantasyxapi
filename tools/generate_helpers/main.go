@@ -19,6 +19,7 @@ func main() {
         "MaCreationArea",
         "MaCreationSpecies",
         "SubmenuType",
+        "TargetType",
     }
 
     filePath := "./internal/seeding/null_enums.go"

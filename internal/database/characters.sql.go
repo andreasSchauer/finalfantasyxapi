@@ -11,14 +11,15 @@ import (
 )
 
 const createAeon = `-- name: CreateAeon :exec
-INSERT INTO aeons (data_hash, name, category, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+INSERT INTO aeons (data_hash, name, unlock_condition, category, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateAeonParams struct {
 	DataHash              string
 	Name                  string
+	UnlockCondition       string
 	Category              NullAeonCategory
 	IsOptional            bool
 	BattlesToRegenerate   int32
@@ -34,6 +35,7 @@ func (q *Queries) CreateAeon(ctx context.Context, arg CreateAeonParams) error {
 	_, err := q.db.ExecContext(ctx, createAeon,
 		arg.DataHash,
 		arg.Name,
+		arg.UnlockCondition,
 		arg.Category,
 		arg.IsOptional,
 		arg.BattlesToRegenerate,

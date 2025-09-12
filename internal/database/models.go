@@ -1291,11 +1291,17 @@ func (ns NullShopCategory) Value() (driver.Value, error) {
 type SubmenuType string
 
 const (
-	SubmenuTypeBlkMagic SubmenuType = "blk-magic"
-	SubmenuTypeSkill    SubmenuType = "skill"
-	SubmenuTypeSpecial  SubmenuType = "special"
-	SubmenuTypeSummon   SubmenuType = "summon"
-	SubmenuTypeWhtMagic SubmenuType = "wht-magic"
+	SubmenuTypeBlkMagic   SubmenuType = "blk-magic"
+	SubmenuTypeSkill      SubmenuType = "skill"
+	SubmenuTypeSpecial    SubmenuType = "special"
+	SubmenuTypeSummon     SubmenuType = "summon"
+	SubmenuTypeWhtMagic   SubmenuType = "wht-magic"
+	SubmenuTypeItem       SubmenuType = "item"
+	SubmenuTypeWeapon     SubmenuType = "weapon"
+	SubmenuTypeArmor      SubmenuType = "armor"
+	SubmenuTypeCharacters SubmenuType = "characters"
+	SubmenuTypeUse        SubmenuType = "use"
+	SubmenuTypeOverdrive  SubmenuType = "overdrive"
 )
 
 func (e *SubmenuType) Scan(src interface{}) error {
@@ -1331,6 +1337,55 @@ func (ns NullSubmenuType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.SubmenuType), nil
+}
+
+type TargetType string
+
+const (
+	TargetTypeSelf            TargetType = "self"
+	TargetTypeSingleCharacter TargetType = "single-character"
+	TargetTypeSingleEnemy     TargetType = "single-enemy"
+	TargetTypeSingleTarget    TargetType = "single-target"
+	TargetTypeRandomEnemy     TargetType = "random-enemy"
+	TargetTypeAllCharacters   TargetType = "all-characters"
+	TargetTypeAllEnemies      TargetType = "all-enemies"
+	TargetTypeTargetParty     TargetType = "target-party"
+	TargetTypeEveryone        TargetType = "everyone"
+)
+
+func (e *TargetType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = TargetType(s)
+	case string:
+		*e = TargetType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for TargetType: %T", src)
+	}
+	return nil
+}
+
+type NullTargetType struct {
+	TargetType TargetType
+	Valid      bool // Valid is true if TargetType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullTargetType) Scan(value interface{}) error {
+	if value == nil {
+		ns.TargetType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.TargetType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullTargetType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.TargetType), nil
 }
 
 type TreasureType string
@@ -1437,6 +1492,7 @@ type Aeon struct {
 	ID                    int32
 	DataHash              string
 	Name                  string
+	UnlockCondition       string
 	Category              NullAeonCategory
 	IsOptional            bool
 	BattlesToRegenerate   int32
@@ -1536,6 +1592,7 @@ type Command struct {
 	Description string
 	Effect      string
 	Category    CommandCategory
+	Cursor      NullTargetType
 }
 
 type DefaultAbility struct {
@@ -1621,6 +1678,7 @@ type Overdrife struct {
 	CanCopycat       bool
 	UnlockCondition  sql.NullString
 	CountdownInSec   sql.NullInt32
+	Cursor           NullTargetType
 }
 
 type OverdriveAbility struct {
@@ -1635,6 +1693,7 @@ type OverdriveCommand struct {
 	Name        string
 	Description string
 	Rank        int32
+	OpenMenu    NullSubmenuType
 }
 
 type OverdriveMode struct {
@@ -1659,6 +1718,8 @@ type PlayerAbility struct {
 	Rank                sql.NullInt32
 	AppearsInHelpBar    bool
 	CanCopycat          bool
+	Cursor              NullTargetType
+	OpenMenu            NullSubmenuType
 }
 
 type Property struct {
@@ -1749,4 +1810,5 @@ type TriggerCommand struct {
 	Rank             int32
 	AppearsInHelpBar bool
 	CanCopycat       bool
+	Cursor           TargetType
 }
