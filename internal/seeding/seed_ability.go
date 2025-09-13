@@ -67,7 +67,7 @@ func seedAbility(qtx *database.Queries, attributes AbilityAttributes, ability Ab
 		Type: 			ability.Type,
 	})
 	if err != nil {
-		return database.Ability{}, fmt.Errorf("couldn't create Ability: %s-%d, type: %s: %v", ability.Name, *ability.Version, ability.Type, err)
+		return database.Ability{}, fmt.Errorf("couldn't create Ability: %s-%d, type: %s: %v", ability.Name, derefOrNil(ability.Version), ability.Type, err)
 	}
 
 	return dbAbility, nil

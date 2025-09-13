@@ -627,6 +627,137 @@ func (ns NullEquipType) Value() (driver.Value, error) {
 	return string(ns.EquipType), nil
 }
 
+type ItemCategory string
+
+const (
+	ItemCategoryDistiller ItemCategory = "distiller"
+	ItemCategoryHealing   ItemCategory = "healing"
+	ItemCategoryOffensive ItemCategory = "offensive"
+	ItemCategoryOther     ItemCategory = "other"
+	ItemCategorySphere    ItemCategory = "sphere"
+	ItemCategorySupport   ItemCategory = "support"
+)
+
+func (e *ItemCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ItemCategory(s)
+	case string:
+		*e = ItemCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ItemCategory: %T", src)
+	}
+	return nil
+}
+
+type NullItemCategory struct {
+	ItemCategory ItemCategory
+	Valid        bool // Valid is true if ItemCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullItemCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.ItemCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ItemCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullItemCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ItemCategory), nil
+}
+
+type ItemType string
+
+const (
+	ItemTypeItem    ItemType = "item"
+	ItemTypeKeyItem ItemType = "key-item"
+)
+
+func (e *ItemType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ItemType(s)
+	case string:
+		*e = ItemType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ItemType: %T", src)
+	}
+	return nil
+}
+
+type NullItemType struct {
+	ItemType ItemType
+	Valid    bool // Valid is true if ItemType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullItemType) Scan(value interface{}) error {
+	if value == nil {
+		ns.ItemType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ItemType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullItemType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ItemType), nil
+}
+
+type ItemUsability string
+
+const (
+	ItemUsabilityAlways        ItemUsability = "always"
+	ItemUsabilityInBattle      ItemUsability = "in-battle"
+	ItemUsabilityOutsideBattle ItemUsability = "outside-battle"
+)
+
+func (e *ItemUsability) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ItemUsability(s)
+	case string:
+		*e = ItemUsability(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ItemUsability: %T", src)
+	}
+	return nil
+}
+
+type NullItemUsability struct {
+	ItemUsability ItemUsability
+	Valid         bool // Valid is true if ItemUsability is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullItemUsability) Scan(value interface{}) error {
+	if value == nil {
+		ns.ItemUsability, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ItemUsability.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullItemUsability) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ItemUsability), nil
+}
+
 type KeyItemBase string
 
 const (
@@ -672,6 +803,51 @@ func (ns NullKeyItemBase) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.KeyItemBase), nil
+}
+
+type KeyItemCategory string
+
+const (
+	KeyItemCategoryCelestial   KeyItemCategory = "celestial"
+	KeyItemCategoryJechtSphere KeyItemCategory = "jecht-sphere"
+	KeyItemCategoryOther       KeyItemCategory = "other"
+	KeyItemCategoryPrimer      KeyItemCategory = "primer"
+	KeyItemCategoryStory       KeyItemCategory = "story"
+)
+
+func (e *KeyItemCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = KeyItemCategory(s)
+	case string:
+		*e = KeyItemCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for KeyItemCategory: %T", src)
+	}
+	return nil
+}
+
+type NullKeyItemCategory struct {
+	KeyItemCategory KeyItemCategory
+	Valid           bool // Valid is true if KeyItemCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullKeyItemCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.KeyItemCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.KeyItemCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullKeyItemCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.KeyItemCategory), nil
 }
 
 type LootType string
@@ -1580,10 +1756,47 @@ type EnemyAbility struct {
 	Effect    sql.NullString
 }
 
+type Item struct {
+	ID                    int32
+	DataHash              string
+	MasterItemsID         int32
+	Description           string
+	Effect                string
+	SphereGridDescription sql.NullString
+	Category              ItemCategory
+	Usability             NullItemUsability
+	BasePrice             sql.NullInt32
+	SellValue             int32
+}
+
+type ItemAbility struct {
+	ID        int32
+	DataHash  string
+	ItemID    int32
+	AbilityID int32
+	Cursor    TargetType
+}
+
+type KeyItem struct {
+	ID            int32
+	DataHash      string
+	MasterItemsID int32
+	Category      KeyItemCategory
+	Description   string
+	Effect        string
+}
+
 type Location struct {
 	ID       int32
 	DataHash string
 	Name     string
+}
+
+type MasterItem struct {
+	ID       int32
+	DataHash string
+	Name     string
+	Type     ItemType
 }
 
 type MenuCommand struct {

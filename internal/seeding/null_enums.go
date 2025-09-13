@@ -147,3 +147,15 @@ func nullTargetType(s *string) database.NullTargetType {
 }
 
 
+func nullItemUsability(s *string) database.NullItemUsability {
+    if s == nil {
+        return database.NullItemUsability{}
+    }
+    
+    return database.NullItemUsability{
+        ItemUsability: database.ItemUsability(*s),
+        Valid: true,
+    }
+}
+
+

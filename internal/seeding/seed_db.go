@@ -21,8 +21,8 @@ func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 		seedAeons,
 		seedDefaultAbilitiesEntries,
 		seedBlitzballItems,
-		seedSidequests,
 		seedMonsterArenaCreations,
+		seedSidequests,
 		seedTreasures,
 		seedLocations,
 		seedCelestialWeapons,
@@ -35,6 +35,8 @@ func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 		seedOverdriveAbilities,
 		seedTriggerCommands,
 		seedOverdriveCommands,
+		seedItems,
+		seedKeyItems,
 	}
 
 	start := time.Now()

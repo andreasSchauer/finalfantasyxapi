@@ -6,18 +6,27 @@ import (
 )
 
 
-// ToHashFields simply puts all values of all fields of an entity into an []any slice (including nil)
-// Use derefOrNil for every field that is a pointer
-
 type Hashable interface {
     ToHashFields() []any
 }
+
+
+// ToHashFields simply puts all values of all fields of an entity into an []any slice (including nil)
+// Use derefOrNil for every field that is a pointer
 
 func derefOrNil[T any](ptr *T) any {
     if ptr == nil {
         return nil
     }
     return *ptr
+}
+
+
+func generateDataHash(h Hashable) string {
+	fields := h.ToHashFields()
+    combined := combineFields(fields)
+	hash := sha256.Sum256([]byte(combined))
+	return fmt.Sprintf("%x", hash)
 }
 
 
@@ -39,19 +48,3 @@ func combineFields(fields []any) string {
 	return combined
 }
 
-
-func generateDataHash(h Hashable) string {
-	fields := h.ToHashFields()
-    combined := combineFields(fields)
-	hash := sha256.Sum256([]byte(combined))
-	return fmt.Sprintf("%x", hash)
-}
-
-
-// only used, if an entry purely consists of id references,
-// since creating a Hashable just for that every time would be nonsensical
-func manualDataHash(fields []any) string {
-    combined := combineFields(fields)
-	hash := sha256.Sum256([]byte(combined))
-	return fmt.Sprintf("%x", hash)
-}
