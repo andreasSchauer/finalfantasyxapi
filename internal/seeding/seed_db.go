@@ -28,12 +28,13 @@ func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 		seedCelestialWeapons,
 		seedAutoAbilities,
 		seedMonsters,
-		seedCommands,
-		seedOverdriveCommands,
+		seedAeonCommands,
+		seedMenuCommands,
 		seedPlayerAbilities,
 		seedEnemyAbilities,
 		seedOverdriveAbilities,
 		seedTriggerCommands,
+		seedOverdriveCommands,
 	}
 
 	start := time.Now()

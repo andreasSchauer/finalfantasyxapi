@@ -9,45 +9,42 @@ import (
 )
 
 
-type AeonCommand struct {
+type MenuCommand struct {
 	//id 		int32
 	//dataHash	string
 	Name			string 		`json:"name"`
 	Description		string		`json:"description"`
 	Effect			string		`json:"effect"`
-	Cursor			*string		`json:"cursor"`
 }
 
-func(c AeonCommand) ToHashFields() []any {
+func(c MenuCommand) ToHashFields() []any {
 	return []any{
 		c.Name,
 		c.Description,
 		c.Effect,
-		derefOrNil(c.Cursor),
 	}
 }
 
 
-func seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/aeon_commands.json"
+func seedMenuCommands(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "./data/menu_commands.json"
 
-	var aeon_commands []AeonCommand
-	err := loadJSONFile(string(srcPath), &aeon_commands)
+	var menu_commands []MenuCommand
+	err := loadJSONFile(string(srcPath), &menu_commands)
 	if err != nil {
 		return err
 	}
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, command := range aeon_commands {
-			err = qtx.CreateAeonCommand(context.Background(), database.CreateAeonCommandParams{
+		for _, command := range menu_commands {
+			err = qtx.CreateMenuCommand(context.Background(), database.CreateMenuCommandParams{
 				DataHash: 		generateDataHash(command),
 				Name: 			command.Name,
 				Description: 	command.Description,
 				Effect: 		command.Effect,
-				Cursor: 		nullTargetType(command.Cursor),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Aeon Command: %s: %v", command.Name, err)
+				return fmt.Errorf("couldn't create Menu Command: %s: %v", command.Name, err)
 			}
 		}
 		return nil

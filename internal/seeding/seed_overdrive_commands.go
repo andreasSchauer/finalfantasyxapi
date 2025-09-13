@@ -30,13 +30,10 @@ func(oc OverdriveCommand) ToHashFields() []any {
 
 type Overdrive struct {	
 	odCommandID			*int32
-	Name				string		`json:"name"`
-	Version				*int32		`json:"version"`
+	Ability
+	AbilityAttributes
 	Description			string		`json:"description"`
 	Effect				string		`json:"effect"`
-	Rank				int32		`json:"rank"`
-	AppearsInHelpBar	bool		`json:"appears_in_help_bar"`
-	CanCopycat			bool		`json:"can_copycat"`
 	UnlockCondition		*string		`json:"unlock_condition"`
 	CountdownInSec		*int32		`json:"countdown_in_sec"`
 	Cursor				*string		`json:"cursor"`
@@ -50,9 +47,7 @@ func(o Overdrive) ToHashFields() []any {
 		derefOrNil(o.Version),
 		o.Description,
 		o.Effect,
-		o.Rank,
-		o.AppearsInHelpBar,
-		o.CanCopycat,
+		derefOrNil(o.AttributesID),
 		derefOrNil(o.UnlockCondition),
 		derefOrNil(o.CountdownInSec),
 		derefOrNil(o.Cursor),
@@ -104,16 +99,21 @@ func seedOverdrives(qtx *database.Queries, command OverdriveCommand, odCommandID
 	for _, overdrive := range command.Overdrives {
 		overdrive.odCommandID = odCommandID
 
-		err := qtx.CreateOverdrive(context.Background(), database.CreateOverdriveParams{
+		attributes, err := seedAbilityAttributes(qtx, overdrive.AbilityAttributes, overdrive.Ability)
+		if err != nil {
+			return err
+		}
+
+		overdrive.AttributesID = &attributes.ID
+
+		err = qtx.CreateOverdrive(context.Background(), database.CreateOverdriveParams{
 			DataHash: 			generateDataHash(overdrive),
 			OdCommandID: 		getNullInt32(overdrive.odCommandID),
 			Name: 				overdrive.Name,
 			Version: 			getNullInt32(overdrive.Version),
 			Description: 		overdrive.Description,
 			Effect: 			overdrive.Effect,
-			Rank: 				overdrive.Rank,
-			AppearsInHelpBar: 	overdrive.AppearsInHelpBar,
-			CanCopycat: 		overdrive.CanCopycat,
+			AttributesID: 		*overdrive.AttributesID,
 			UnlockCondition: 	getNullString(overdrive.UnlockCondition),
 			CountdownInSec: 	getNullInt32(overdrive.CountdownInSec),
 			Cursor: 			nullTargetType(overdrive.Cursor),

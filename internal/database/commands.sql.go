@@ -7,106 +7,52 @@ package database
 
 import (
 	"context"
-	"database/sql"
 )
 
-const createCommand = `-- name: CreateCommand :exec
-INSERT INTO commands (data_hash, name, description, effect, category, cursor)
-VALUES ($1, $2, $3, $4, $5, $6)
+const createAeonCommand = `-- name: CreateAeonCommand :exec
+INSERT INTO aeon_commands (data_hash, name, description, effect, cursor)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateCommandParams struct {
+type CreateAeonCommandParams struct {
 	DataHash    string
 	Name        string
 	Description string
 	Effect      string
-	Category    CommandCategory
 	Cursor      NullTargetType
 }
 
-func (q *Queries) CreateCommand(ctx context.Context, arg CreateCommandParams) error {
-	_, err := q.db.ExecContext(ctx, createCommand,
+func (q *Queries) CreateAeonCommand(ctx context.Context, arg CreateAeonCommandParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonCommand,
 		arg.DataHash,
 		arg.Name,
 		arg.Description,
 		arg.Effect,
-		arg.Category,
 		arg.Cursor,
 	)
 	return err
 }
 
-const createOverdrive = `-- name: CreateOverdrive :exec
-INSERT INTO overdrives (data_hash, od_command_id, name, version, description, effect, rank, appears_in_help_bar, can_copycat, unlock_condition, countdown_in_sec, cursor)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+const createMenuCommand = `-- name: CreateMenuCommand :exec
+INSERT INTO menu_commands (data_hash, name, description, effect)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateOverdriveParams struct {
-	DataHash         string
-	OdCommandID      sql.NullInt32
-	Name             string
-	Version          sql.NullInt32
-	Description      string
-	Effect           string
-	Rank             int32
-	AppearsInHelpBar bool
-	CanCopycat       bool
-	UnlockCondition  sql.NullString
-	CountdownInSec   sql.NullInt32
-	Cursor           NullTargetType
-}
-
-func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams) error {
-	_, err := q.db.ExecContext(ctx, createOverdrive,
-		arg.DataHash,
-		arg.OdCommandID,
-		arg.Name,
-		arg.Version,
-		arg.Description,
-		arg.Effect,
-		arg.Rank,
-		arg.AppearsInHelpBar,
-		arg.CanCopycat,
-		arg.UnlockCondition,
-		arg.CountdownInSec,
-		arg.Cursor,
-	)
-	return err
-}
-
-const createOverdriveCommand = `-- name: CreateOverdriveCommand :one
-INSERT INTO overdrive_commands (data_hash, name, description, rank, open_menu)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
-RETURNING id, data_hash, name, description, rank, open_menu
-`
-
-type CreateOverdriveCommandParams struct {
+type CreateMenuCommandParams struct {
 	DataHash    string
 	Name        string
 	Description string
-	Rank        int32
-	OpenMenu    NullSubmenuType
+	Effect      string
 }
 
-func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriveCommandParams) (OverdriveCommand, error) {
-	row := q.db.QueryRowContext(ctx, createOverdriveCommand,
+func (q *Queries) CreateMenuCommand(ctx context.Context, arg CreateMenuCommandParams) error {
+	_, err := q.db.ExecContext(ctx, createMenuCommand,
 		arg.DataHash,
 		arg.Name,
 		arg.Description,
-		arg.Rank,
-		arg.OpenMenu,
+		arg.Effect,
 	)
-	var i OverdriveCommand
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Description,
-		&i.Rank,
-		&i.OpenMenu,
-	)
-	return i, err
+	return err
 }
