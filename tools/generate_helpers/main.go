@@ -12,6 +12,8 @@ func main() {
         "AeonCategory",
         "CreationsUnlockedCategory",
         "NullifyArmored",
+        "EquipType",
+        "AaActivationCondition",
         "CounterType",
         "RecoveryType",
         "ElementType",

@@ -39,6 +39,7 @@ func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 		seedAutoAbilities,
 		seedEquipment,
 		seedLocations,
+		seedLocationBased,
 	}
 
 	start := time.Now()

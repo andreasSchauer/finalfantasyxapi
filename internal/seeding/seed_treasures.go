@@ -2,22 +2,22 @@ package seeding
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 type TreasureList struct {
-	Treasures []Treasure	`json:"treasures"`
+	LocationArea 	LocationArea 	`json:"location_area"`
+	Treasures 		[]Treasure		`json:"treasures"`
 }
 
 
 type Treasure struct {
 	//id 				int32
 	//dataHash			string
-	TreasureListID		int32
 	Version				int32
+	AreaID			int32
 	TreasureType		string					`json:"treasure_type"`
 	LootType			string					`json:"loot_type"`
 	IsPostAirship		bool					`json:"is_post_airship"`
@@ -28,8 +28,8 @@ type Treasure struct {
 
 func(t Treasure) ToHashFields() []any {
 	return []any{
-		t.TreasureListID,
 		t.Version,
+		t.AreaID,
 		t.TreasureType,
 		t.LootType,
 		t.IsPostAirship,
@@ -40,31 +40,8 @@ func(t Treasure) ToHashFields() []any {
 }
 
 
-type TreasureCounter struct {
-    Chest  int32
-    Gift   int32
-    Object int32
-}
 
-
-func (c *TreasureCounter) IncreaseCounter(treasureType string) int32 {
-    switch treasureType {
-    case "chest":
-        c.Chest++
-        return c.Chest
-    case "gift":
-        c.Gift++
-        return c.Gift
-    case "object":
-        c.Object++
-        return c.Object
-    default:
-        return 0
-    }
-}
-
-
-func seedTreasures(db *database.Queries, dbConn *sql.DB) error {
+func seedTreasures(qtx *database.Queries, lookup map[string]int32) error {
 	const srcPath = "./data/treasures.json"
 
 	var treasureLists []TreasureList
@@ -73,35 +50,35 @@ func seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 		return err
 	}
 
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for i, list := range treasureLists {
-			listID, err := qtx.CreateTreasureList(context.Background())
+
+	for _, list := range treasureLists {
+		locationArea := list.LocationArea
+		locationAreaID, err := getAreaID(locationArea, lookup)
+		if err != nil {
+			return fmt.Errorf("treasures: %v", err)
+		}
+		
+
+		for j, treasure := range list.Treasures {
+			treasure.AreaID = locationAreaID
+			treasure.Version = int32(j + 1)
+			
+			err = qtx.CreateTreasure(context.Background(), database.CreateTreasureParams{
+				DataHash: 			generateDataHash(treasure),
+				AreaID: 			treasure.AreaID,
+				Version:			treasure.Version,
+				TreasureType: 		database.TreasureType(treasure.TreasureType),
+				LootType: 			database.LootType(treasure.LootType),
+				IsPostAirship: 		treasure.IsPostAirship,
+				IsAnimaTreasure: 	treasure.IsAnimaTreasure,
+				Notes: 				getNullString(treasure.Notes),
+				GilAmount: 			getNullInt32(treasure.GilAmount),
+			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Treasure List: %d: %v", i, err)
-			}
-
-			counter := &TreasureCounter{}
-
-			for j, treasure := range list.Treasures {
-				treasure.TreasureListID = listID
-				treasure.Version = counter.IncreaseCounter(treasure.TreasureType)
-				
-				err = qtx.CreateTreasure(context.Background(), database.CreateTreasureParams{
-					DataHash: 			generateDataHash(treasure),
-					TreasureListID: 	treasure.TreasureListID,
-					Version:			treasure.Version,
-					TreasureType: 		database.TreasureType(treasure.TreasureType),
-					LootType: 			database.LootType(treasure.LootType),
-					IsPostAirship: 		treasure.IsPostAirship,
-					IsAnimaTreasure: 	treasure.IsAnimaTreasure,
-					Notes: 				getNullString(treasure.Notes),
-					GilAmount: 			getNullInt32(treasure.GilAmount),
-				})
-				if err != nil {
-					return fmt.Errorf("couldn't create Treasure: %d - %d: %v", i, j, err)
-				}
+				return fmt.Errorf("couldn't create Treasure: %s - %s - %d - %s - %d - %d: %v", locationArea.Location, locationArea.SubLocation, derefOrNil(locationArea.SVersion), locationArea.Area, derefOrNil(locationArea.AVersion), treasure.Version, err)
 			}
 		}
-		return nil
-	})
+	}
+	return nil
+
 }

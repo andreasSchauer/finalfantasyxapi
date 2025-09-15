@@ -7,7 +7,6 @@ package database
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createBlitzballItemList = `-- name: CreateBlitzballItemList :exec
@@ -83,29 +82,6 @@ func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest
 	return i, err
 }
 
-const createShop = `-- name: CreateShop :exec
-INSERT INTO shops (data_hash, version, notes, category)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateShopParams struct {
-	DataHash string
-	Version  sql.NullInt32
-	Notes    sql.NullString
-	Category ShopCategory
-}
-
-func (q *Queries) CreateShop(ctx context.Context, arg CreateShopParams) error {
-	_, err := q.db.ExecContext(ctx, createShop,
-		arg.DataHash,
-		arg.Version,
-		arg.Notes,
-		arg.Category,
-	)
-	return err
-}
-
 const createSidequest = `-- name: CreateSidequest :one
 INSERT INTO sidequests (data_hash, quest_id)
 VALUES ($1, $2)
@@ -140,49 +116,4 @@ type CreateSubquestParams struct {
 func (q *Queries) CreateSubquest(ctx context.Context, arg CreateSubquestParams) error {
 	_, err := q.db.ExecContext(ctx, createSubquest, arg.DataHash, arg.QuestID, arg.ParentSidequestID)
 	return err
-}
-
-const createTreasure = `-- name: CreateTreasure :exec
-INSERT INTO treasures (data_hash, treasure_list_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateTreasureParams struct {
-	DataHash        string
-	TreasureListID  int32
-	Version         int32
-	TreasureType    TreasureType
-	LootType        LootType
-	IsPostAirship   bool
-	IsAnimaTreasure bool
-	Notes           sql.NullString
-	GilAmount       sql.NullInt32
-}
-
-func (q *Queries) CreateTreasure(ctx context.Context, arg CreateTreasureParams) error {
-	_, err := q.db.ExecContext(ctx, createTreasure,
-		arg.DataHash,
-		arg.TreasureListID,
-		arg.Version,
-		arg.TreasureType,
-		arg.LootType,
-		arg.IsPostAirship,
-		arg.IsAnimaTreasure,
-		arg.Notes,
-		arg.GilAmount,
-	)
-	return err
-}
-
-const createTreasureList = `-- name: CreateTreasureList :one
-INSERT INTO treasure_lists DEFAULT VALUES
-RETURNING id
-`
-
-func (q *Queries) CreateTreasureList(ctx context.Context) (int32, error) {
-	row := q.db.QueryRowContext(ctx, createTreasureList)
-	var id int32
-	err := row.Scan(&id)
-	return id, err
 }

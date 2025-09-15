@@ -37,3 +37,13 @@ func convertNullString(s sql.NullString) *string {
     val := s.String
     return &val
 }
+
+
+func convertNullInt32(i sql.NullInt32) *int32 {
+    if !i.Valid {
+        return nil
+    }
+
+    val := i.Int32
+    return &val
+}

@@ -1,37 +1,4 @@
 -- +goose Up
-CREATE TABLE treasure_lists (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY
-);
-
-
-CREATE TYPE treasure_type AS ENUM ('chest', 'gift', 'object');
-CREATE TYPE loot_type AS ENUM ('item', 'equipment', 'gil');
-
-CREATE TABLE treasures (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    treasure_list_id INTEGER NOT NULL REFERENCES treasure_lists(id),
-    version INTEGER NOT NULL,
-    treasure_type treasure_type NOT NULL,
-    loot_type loot_type NOT NULL,
-    is_post_airship BOOLEAN NOT NULL,
-    is_anima_treasure BOOLEAN NOT NULL,
-    notes TEXT,
-    gil_amount INTEGER
-);
-
-
-CREATE TYPE shop_category AS ENUM ('standard', 'oaka', 'travel-agency', 'wantz');
-
-CREATE TABLE shops (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    version INTEGER,
-    notes TEXT,
-    category shop_category NOT NULL
-);
-
-
 CREATE TYPE blitzball_tournament_category AS ENUM ('league', 'tournament');
 CREATE TYPE blitzball_item_slot AS ENUM ('1st', '2nd', '3rd', 'top-scorer');
 
@@ -109,9 +76,3 @@ DROP TYPE IF EXISTS quest_type;
 DROP TABLE IF EXISTS blitzball_items_lists;
 DROP TYPE IF EXISTS blitzball_tournament_category;
 DROP TYPE IF EXISTS blitzball_item_slot;
-DROP TABLE IF EXISTS shops;
-DROP TYPE IF EXISTS shop_category;
-DROP TABLE IF EXISTS treasures;
-DROP TYPE IF EXISTS treasure_type;
-DROP TYPE IF EXISTS loot_type;
-DROP TABLE IF EXISTS treasure_lists;

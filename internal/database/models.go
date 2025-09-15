@@ -1797,10 +1797,10 @@ type AutoAbility struct {
 	Name                string
 	Description         sql.NullString
 	Effect              string
-	Type                EquipType
+	Type                NullEquipType
 	Category            AutoAbilityCategory
 	AbilityValue        sql.NullInt32
-	ActivationCondition AaActivationCondition
+	ActivationCondition NullAaActivationCondition
 	Counter             NullCounterType
 	GradualRecovery     NullRecoveryType
 	OnHitElement        NullElementType
@@ -1980,6 +1980,14 @@ type MonsterArenaCreation struct {
 	Amount                    int32
 }
 
+type MonsterFormationList struct {
+	ID       int32
+	DataHash string
+	Version  sql.NullInt32
+	AreaID   int32
+	Notes    sql.NullString
+}
+
 type Overdrife struct {
 	ID              int32
 	DataHash        string
@@ -2059,6 +2067,7 @@ type Shop struct {
 	ID       int32
 	DataHash string
 	Version  sql.NullInt32
+	AreaID   int32
 	Notes    sql.NullString
 	Category ShopCategory
 }
@@ -2106,7 +2115,7 @@ type Subquest struct {
 type Treasure struct {
 	ID              int32
 	DataHash        string
-	TreasureListID  int32
+	AreaID          int32
 	Version         int32
 	TreasureType    TreasureType
 	LootType        LootType
@@ -2114,10 +2123,6 @@ type Treasure struct {
 	IsAnimaTreasure bool
 	Notes           sql.NullString
 	GilAmount       sql.NullInt32
-}
-
-type TreasureList struct {
-	ID int32
 }
 
 type TriggerCommand struct {

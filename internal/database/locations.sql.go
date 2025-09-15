@@ -62,6 +62,54 @@ func (q *Queries) CreateLocation(ctx context.Context, arg CreateLocationParams) 
 	return i, err
 }
 
+const createMonsterFormationList = `-- name: CreateMonsterFormationList :exec
+INSERT INTO monster_formation_lists (data_hash, version, area_id, notes)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonsterFormationListParams struct {
+	DataHash string
+	Version  sql.NullInt32
+	AreaID   int32
+	Notes    sql.NullString
+}
+
+func (q *Queries) CreateMonsterFormationList(ctx context.Context, arg CreateMonsterFormationListParams) error {
+	_, err := q.db.ExecContext(ctx, createMonsterFormationList,
+		arg.DataHash,
+		arg.Version,
+		arg.AreaID,
+		arg.Notes,
+	)
+	return err
+}
+
+const createShop = `-- name: CreateShop :exec
+INSERT INTO shops (data_hash, version, area_id, notes, category)
+VALUES ($1, $2, $3, $4, $5)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateShopParams struct {
+	DataHash string
+	Version  sql.NullInt32
+	AreaID   int32
+	Notes    sql.NullString
+	Category ShopCategory
+}
+
+func (q *Queries) CreateShop(ctx context.Context, arg CreateShopParams) error {
+	_, err := q.db.ExecContext(ctx, createShop,
+		arg.DataHash,
+		arg.Version,
+		arg.AreaID,
+		arg.Notes,
+		arg.Category,
+	)
+	return err
+}
+
 const createSubLocation = `-- name: CreateSubLocation :one
 INSERT INTO sub_locations (data_hash, location_id, name, version, specification)
 VALUES ($1, $2, $3, $4, $5)
@@ -95,4 +143,97 @@ func (q *Queries) CreateSubLocation(ctx context.Context, arg CreateSubLocationPa
 		&i.Specification,
 	)
 	return i, err
+}
+
+const createTreasure = `-- name: CreateTreasure :exec
+INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateTreasureParams struct {
+	DataHash        string
+	AreaID          int32
+	Version         int32
+	TreasureType    TreasureType
+	LootType        LootType
+	IsPostAirship   bool
+	IsAnimaTreasure bool
+	Notes           sql.NullString
+	GilAmount       sql.NullInt32
+}
+
+func (q *Queries) CreateTreasure(ctx context.Context, arg CreateTreasureParams) error {
+	_, err := q.db.ExecContext(ctx, createTreasure,
+		arg.DataHash,
+		arg.AreaID,
+		arg.Version,
+		arg.TreasureType,
+		arg.LootType,
+		arg.IsPostAirship,
+		arg.IsAnimaTreasure,
+		arg.Notes,
+		arg.GilAmount,
+	)
+	return err
+}
+
+const getLocationAreas = `-- name: GetLocationAreas :many
+SELECT
+    l.id as location_id,
+    s.id as sub_location_id,
+    a.id as area_id,
+    l.name as location_name,
+    s.name as sub_location_name,
+    a.name as area_name,
+    s.version as s_version,
+    a.version as a_version
+FROM areas a
+LEFT JOIN sub_locations s
+ON a.sub_location_id = s.id
+LEFT JOIN locations l
+ON s.location_id = l.id
+`
+
+type GetLocationAreasRow struct {
+	LocationID      sql.NullInt32
+	SubLocationID   sql.NullInt32
+	AreaID          int32
+	LocationName    sql.NullString
+	SubLocationName sql.NullString
+	AreaName        string
+	SVersion        sql.NullInt32
+	AVersion        sql.NullInt32
+}
+
+func (q *Queries) GetLocationAreas(ctx context.Context) ([]GetLocationAreasRow, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationAreas)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetLocationAreasRow
+	for rows.Next() {
+		var i GetLocationAreasRow
+		if err := rows.Scan(
+			&i.LocationID,
+			&i.SubLocationID,
+			&i.AreaID,
+			&i.LocationName,
+			&i.SubLocationName,
+			&i.AreaName,
+			&i.SVersion,
+			&i.AVersion,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

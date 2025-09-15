@@ -42,13 +42,13 @@ func seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 			return err
 		}
 
-		itemNameToID := make(map[string]int32, len(keyItems))
+		keyItemNameToID := make(map[string]int32, len(keyItems))
 		for _, keyItem := range keyItems {
-			itemNameToID[*convertNullString(keyItem.Name)] = keyItem.KeyItemID
+			keyItemNameToID[*convertNullString(keyItem.Name)] = keyItem.KeyItemID
 		}
 
 		for _, primer := range primers {
-			keyItemID, found := itemNameToID[primer.Name]
+			keyItemID, found := keyItemNameToID[primer.Name]
 			if !found {
 				return fmt.Errorf("couldn't find Key Item %s", primer.Name)
 			}

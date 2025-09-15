@@ -15,10 +15,10 @@ type AutoAbility struct {
 	Name         		string   	`json:"name"`
 	Description			*string   	`json:"description"`
 	Effect				string   	`json:"effect"`
-	Type				string   	`json:"type"`
+	Type				*string   	`json:"type"`
 	Category			string   	`json:"category"`
 	AbilityValue		*int32   	`json:"ability_value"`
-	ActivationCondition	string   	`json:"activation_condition"`
+	ActivationCondition	*string   	`json:"activation_condition"`
 	Counter				*string   	`json:"counter"`
 	GradualRecovery		*string   	`json:"gradual_recovery"`
 	OnHitElement		*string   	`json:"on_hit_element"`
@@ -31,10 +31,10 @@ func (a AutoAbility) ToHashFields() []any {
 		a.Name,
 		derefOrNil(a.Description),
 		a.Effect,
-		a.Type,
+		derefOrNil(a.Type),
 		a.Category,
 		derefOrNil(a.AbilityValue),
-		a.ActivationCondition,
+		derefOrNil(a.ActivationCondition),
 		derefOrNil(a.Counter),
 		derefOrNil(a.GradualRecovery),
 		derefOrNil(a.OnHitElement),
@@ -60,10 +60,10 @@ func seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 				Name:         			ability.Name,
 				Description: 			getNullString(ability.Description),
 				Effect: 				ability.Effect,
-				Type: 					database.EquipType(ability.Type),
+				Type: 					nullEquipType(ability.Type),
 				Category: 				database.AutoAbilityCategory(ability.Category),
 				AbilityValue: 			getNullInt32(ability.AbilityValue),
-				ActivationCondition: 	database.AaActivationCondition(ability.ActivationCondition),
+				ActivationCondition: 	nullAaActivationCondition(ability.ActivationCondition),
 				Counter: 				nullCounterType(ability.Counter),
 				GradualRecovery: 		nullRecoveryType(ability.GradualRecovery),
 				OnHitElement: 			nullElementType(ability.OnHitElement),

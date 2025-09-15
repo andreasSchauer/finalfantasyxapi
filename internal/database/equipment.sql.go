@@ -21,10 +21,10 @@ type CreateAutoAbilityParams struct {
 	Name                string
 	Description         sql.NullString
 	Effect              string
-	Type                EquipType
+	Type                NullEquipType
 	Category            AutoAbilityCategory
 	AbilityValue        sql.NullInt32
-	ActivationCondition AaActivationCondition
+	ActivationCondition NullAaActivationCondition
 	Counter             NullCounterType
 	GradualRecovery     NullRecoveryType
 	OnHitElement        NullElementType

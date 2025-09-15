@@ -1,20 +1,3 @@
--- name: CreateTreasureList :one
-INSERT INTO treasure_lists DEFAULT VALUES
-RETURNING *;
-
-
--- name: CreateTreasure :exec
-INSERT INTO treasures (data_hash, treasure_list_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateShop :exec
-INSERT INTO shops (data_hash, version, notes, category)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
 -- name: CreateBlitzballItemList :exec
 INSERT INTO blitzball_items_lists (data_hash, category, slot)
 VALUES ($1, $2, $3)

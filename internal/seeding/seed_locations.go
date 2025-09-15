@@ -69,6 +69,26 @@ func(a Area) ToHashFields() []any {
 }
 
 
+type LocationArea struct {
+	Location 		string 		`json:"location"`
+	SubLocation		string		`json:"sub_location"`
+	SVersion		*int32		`json:"s_version"`
+	Area			string		`json:"area"`
+	AVersion		*int32		`json:"a_version"`
+}
+
+
+func (la LocationArea) ToHashFields() []any {
+	return []any{
+		la.Location,
+		la.SubLocation,
+		derefOrNil(la.SVersion),
+		la.Area,
+		derefOrNil(la.AVersion),
+	}
+}
+
+
 
 
 func seedLocations(db *database.Queries, dbConn *sql.DB) error {

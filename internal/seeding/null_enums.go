@@ -51,6 +51,30 @@ func nullNullifyArmored(s *string) database.NullNullifyArmored {
 }
 
 
+func nullEquipType(s *string) database.NullEquipType {
+    if s == nil {
+        return database.NullEquipType{}
+    }
+    
+    return database.NullEquipType{
+        EquipType: database.EquipType(*s),
+        Valid: true,
+    }
+}
+
+
+func nullAaActivationCondition(s *string) database.NullAaActivationCondition {
+    if s == nil {
+        return database.NullAaActivationCondition{}
+    }
+    
+    return database.NullAaActivationCondition{
+        AaActivationCondition: database.AaActivationCondition(*s),
+        Valid: true,
+    }
+}
+
+
 func nullCounterType(s *string) database.NullCounterType {
     if s == nil {
         return database.NullCounterType{}
