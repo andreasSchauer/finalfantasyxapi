@@ -585,6 +585,49 @@ func (ns NullElementType) Value() (driver.Value, error) {
 	return string(ns.ElementType), nil
 }
 
+type EquipClass string
+
+const (
+	EquipClassStandard        EquipClass = "standard"
+	EquipClassUnique          EquipClass = "unique"
+	EquipClassCelestialWeapon EquipClass = "celestial-weapon"
+)
+
+func (e *EquipClass) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = EquipClass(s)
+	case string:
+		*e = EquipClass(s)
+	default:
+		return fmt.Errorf("unsupported scan type for EquipClass: %T", src)
+	}
+	return nil
+}
+
+type NullEquipClass struct {
+	EquipClass EquipClass
+	Valid      bool // Valid is true if EquipClass is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullEquipClass) Scan(value interface{}) error {
+	if value == nil {
+		ns.EquipClass, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.EquipClass.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullEquipClass) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.EquipClass), nil
+}
+
 type EquipType string
 
 const (
@@ -1041,6 +1084,58 @@ func (ns NullMaCreationSpecies) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.MaCreationSpecies), nil
+}
+
+type MixCategory string
+
+const (
+	MixCategory9999Damage         MixCategory = "9999-damage"
+	MixCategoryCriticalHits       MixCategory = "critical-hits"
+	MixCategoryFireElemental      MixCategory = "fire-elemental"
+	MixCategoryGravityBased       MixCategory = "gravity-based"
+	MixCategoryHpMp               MixCategory = "hp-mp"
+	MixCategoryIceElemental       MixCategory = "ice-elemental"
+	MixCategoryLightningElemental MixCategory = "lightning-elemental"
+	MixCategoryNonElemental       MixCategory = "non-elemental"
+	MixCategoryOverdriveSpeed     MixCategory = "overdrive-speed"
+	MixCategoryPositiveStatus     MixCategory = "positive-status"
+	MixCategoryRecovery           MixCategory = "recovery"
+	MixCategoryWaterElemental     MixCategory = "water-elemental"
+)
+
+func (e *MixCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = MixCategory(s)
+	case string:
+		*e = MixCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for MixCategory: %T", src)
+	}
+	return nil
+}
+
+type NullMixCategory struct {
+	MixCategory MixCategory
+	Valid       bool // Valid is true if MixCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullMixCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.MixCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.MixCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullMixCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.MixCategory), nil
 }
 
 type MonsterSpecies string
@@ -1757,6 +1852,19 @@ type EnemyAbility struct {
 	Effect    sql.NullString
 }
 
+type EquipmentAbility struct {
+	ID                  int32
+	DataHash            string
+	Type                EquipType
+	Classification      EquipClass
+	SpecificCharacterID sql.NullInt32
+	Version             sql.NullInt32
+	Priority            sql.NullInt32
+	Pool1Amt            sql.NullInt32
+	Pool2Amt            sql.NullInt32
+	EmptySlotsAmt       int32
+}
+
 type Item struct {
 	ID                    int32
 	DataHash              string
@@ -1806,6 +1914,28 @@ type MenuCommand struct {
 	Name        string
 	Description string
 	Effect      string
+}
+
+type Mix struct {
+	ID          int32
+	DataHash    string
+	OverdriveID int32
+	Category    MixCategory
+}
+
+type MixCombination struct {
+	ID           int32
+	DataHash     string
+	FirstItemID  int32
+	SecondItemID int32
+}
+
+type MixComboJunction struct {
+	ID          int32
+	DataHash    string
+	MixID       int32
+	ComboID     int32
+	IsBestCombo bool
 }
 
 type Monster struct {

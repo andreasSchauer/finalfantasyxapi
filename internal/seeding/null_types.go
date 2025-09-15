@@ -27,3 +27,13 @@ func getNullFloat64(f *float32) sql.NullFloat64 {
     }
     return sql.NullFloat64{Float64: float64(*f), Valid: true}
 }
+
+
+func convertNullString(s sql.NullString) *string {
+    if !s.Valid {
+        return nil
+    }
+
+    val := s.String
+    return &val
+}

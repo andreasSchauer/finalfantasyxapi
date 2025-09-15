@@ -130,6 +130,79 @@ func (q *Queries) CreateMasterItem(ctx context.Context, arg CreateMasterItemPara
 	return i, err
 }
 
+const createMix = `-- name: CreateMix :one
+INSERT INTO mixes (data_hash, overdrive_id, category)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = mixes.data_hash
+RETURNING id, data_hash, overdrive_id, category
+`
+
+type CreateMixParams struct {
+	DataHash    string
+	OverdriveID int32
+	Category    MixCategory
+}
+
+func (q *Queries) CreateMix(ctx context.Context, arg CreateMixParams) (Mix, error) {
+	row := q.db.QueryRowContext(ctx, createMix, arg.DataHash, arg.OverdriveID, arg.Category)
+	var i Mix
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.OverdriveID,
+		&i.Category,
+	)
+	return i, err
+}
+
+const createMixCombination = `-- name: CreateMixCombination :one
+INSERT INTO mix_combinations (data_hash, first_item_id, second_item_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = mix_combinations.data_hash
+RETURNING id, data_hash, first_item_id, second_item_id
+`
+
+type CreateMixCombinationParams struct {
+	DataHash     string
+	FirstItemID  int32
+	SecondItemID int32
+}
+
+func (q *Queries) CreateMixCombination(ctx context.Context, arg CreateMixCombinationParams) (MixCombination, error) {
+	row := q.db.QueryRowContext(ctx, createMixCombination, arg.DataHash, arg.FirstItemID, arg.SecondItemID)
+	var i MixCombination
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.FirstItemID,
+		&i.SecondItemID,
+	)
+	return i, err
+}
+
+const createMixComboJunction = `-- name: CreateMixComboJunction :exec
+INSERT INTO mix_combo_junctions (data_hash, mix_id, combo_id, is_best_combo)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMixComboJunctionParams struct {
+	DataHash    string
+	MixID       int32
+	ComboID     int32
+	IsBestCombo bool
+}
+
+func (q *Queries) CreateMixComboJunction(ctx context.Context, arg CreateMixComboJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMixComboJunction,
+		arg.DataHash,
+		arg.MixID,
+		arg.ComboID,
+		arg.IsBestCombo,
+	)
+	return err
+}
+
 const createPrimer = `-- name: CreatePrimer :exec
 INSERT INTO primers (data_hash, key_item_id, al_bhed_letter, english_letter)
 VALUES ($1, $2, $3, $4)
@@ -151,6 +224,137 @@ func (q *Queries) CreatePrimer(ctx context.Context, arg CreatePrimerParams) erro
 		arg.EnglishLetter,
 	)
 	return err
+}
+
+const getItemByName = `-- name: GetItemByName :one
+SELECT
+    i.id as item_id,
+    i.data_hash as item_data_hash,
+    mi.id as master_item_id,
+    mi.name,
+    i.description,
+    i.effect,
+    i.sphere_grid_description,
+    i.category,
+    i.usability,
+    i.base_price,
+    i.sell_value,
+    mi.data_hash as master_item_data_hash,
+    mi.type
+FROM items i
+LEFT JOIN master_items mi
+ON mi.id = i.master_item_id
+WHERE mi.name = $1
+`
+
+type GetItemByNameRow struct {
+	ItemID                int32
+	ItemDataHash          string
+	MasterItemID          sql.NullInt32
+	Name                  sql.NullString
+	Description           string
+	Effect                string
+	SphereGridDescription sql.NullString
+	Category              ItemCategory
+	Usability             NullItemUsability
+	BasePrice             sql.NullInt32
+	SellValue             int32
+	MasterItemDataHash    sql.NullString
+	Type                  NullItemType
+}
+
+func (q *Queries) GetItemByName(ctx context.Context, name string) (GetItemByNameRow, error) {
+	row := q.db.QueryRowContext(ctx, getItemByName, name)
+	var i GetItemByNameRow
+	err := row.Scan(
+		&i.ItemID,
+		&i.ItemDataHash,
+		&i.MasterItemID,
+		&i.Name,
+		&i.Description,
+		&i.Effect,
+		&i.SphereGridDescription,
+		&i.Category,
+		&i.Usability,
+		&i.BasePrice,
+		&i.SellValue,
+		&i.MasterItemDataHash,
+		&i.Type,
+	)
+	return i, err
+}
+
+const getItems = `-- name: GetItems :many
+SELECT
+    i.id as item_id,
+    i.data_hash as item_data_hash,
+    mi.id as master_item_id,
+    mi.name,
+    i.description,
+    i.effect,
+    i.sphere_grid_description,
+    i.category,
+    i.usability,
+    i.base_price,
+    i.sell_value,
+    mi.data_hash as master_item_data_hash,
+    mi.type
+FROM items i
+LEFT JOIN master_items mi
+ON mi.id = i.master_item_id
+`
+
+type GetItemsRow struct {
+	ItemID                int32
+	ItemDataHash          string
+	MasterItemID          sql.NullInt32
+	Name                  sql.NullString
+	Description           string
+	Effect                string
+	SphereGridDescription sql.NullString
+	Category              ItemCategory
+	Usability             NullItemUsability
+	BasePrice             sql.NullInt32
+	SellValue             int32
+	MasterItemDataHash    sql.NullString
+	Type                  NullItemType
+}
+
+func (q *Queries) GetItems(ctx context.Context) ([]GetItemsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getItems)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetItemsRow
+	for rows.Next() {
+		var i GetItemsRow
+		if err := rows.Scan(
+			&i.ItemID,
+			&i.ItemDataHash,
+			&i.MasterItemID,
+			&i.Name,
+			&i.Description,
+			&i.Effect,
+			&i.SphereGridDescription,
+			&i.Category,
+			&i.Usability,
+			&i.BasePrice,
+			&i.SellValue,
+			&i.MasterItemDataHash,
+			&i.Type,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getKeyItemByName = `-- name: GetKeyItemByName :one
@@ -197,4 +401,65 @@ func (q *Queries) GetKeyItemByName(ctx context.Context, name string) (GetKeyItem
 		&i.Type,
 	)
 	return i, err
+}
+
+const getKeyItems = `-- name: GetKeyItems :many
+SELECT
+    ki.id as key_item_id,
+    ki.data_hash as key_item_data_hash,
+    mi.name,
+    ki.category,
+    ki.description,
+    ki.effect,
+    mi.id as master_item_id,
+    mi.data_hash as master_item_data_hash,
+    mi.type
+FROM key_items ki
+LEFT JOIN master_items mi
+ON mi.id = ki.master_item_id
+`
+
+type GetKeyItemsRow struct {
+	KeyItemID          int32
+	KeyItemDataHash    string
+	Name               sql.NullString
+	Category           KeyItemCategory
+	Description        string
+	Effect             string
+	MasterItemID       sql.NullInt32
+	MasterItemDataHash sql.NullString
+	Type               NullItemType
+}
+
+func (q *Queries) GetKeyItems(ctx context.Context) ([]GetKeyItemsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getKeyItems)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetKeyItemsRow
+	for rows.Next() {
+		var i GetKeyItemsRow
+		if err := rows.Scan(
+			&i.KeyItemID,
+			&i.KeyItemDataHash,
+			&i.Name,
+			&i.Category,
+			&i.Description,
+			&i.Effect,
+			&i.MasterItemID,
+			&i.MasterItemDataHash,
+			&i.Type,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

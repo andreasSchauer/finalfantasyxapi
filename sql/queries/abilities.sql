@@ -47,3 +47,8 @@ RETURNING *;
 INSERT INTO overdrives (data_hash, od_command_id, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: GetOverdriveByName :one
+SELECT * FROM overdrives
+WHERE name = $1;

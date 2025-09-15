@@ -73,3 +73,36 @@ func (q *Queries) CreateCelestialWeapon(ctx context.Context, arg CreateCelestial
 	)
 	return err
 }
+
+const createEquipmentAbility = `-- name: CreateEquipmentAbility :exec
+INSERT INTO equipment_abilities (data_hash, type, classification, specific_character_id, version, priority, pool_1_amt, pool_2_amt, empty_slots_amt)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateEquipmentAbilityParams struct {
+	DataHash            string
+	Type                EquipType
+	Classification      EquipClass
+	SpecificCharacterID sql.NullInt32
+	Version             sql.NullInt32
+	Priority            sql.NullInt32
+	Pool1Amt            sql.NullInt32
+	Pool2Amt            sql.NullInt32
+	EmptySlotsAmt       int32
+}
+
+func (q *Queries) CreateEquipmentAbility(ctx context.Context, arg CreateEquipmentAbilityParams) error {
+	_, err := q.db.ExecContext(ctx, createEquipmentAbility,
+		arg.DataHash,
+		arg.Type,
+		arg.Classification,
+		arg.SpecificCharacterID,
+		arg.Version,
+		arg.Priority,
+		arg.Pool1Amt,
+		arg.Pool2Amt,
+		arg.EmptySlotsAmt,
+	)
+	return err
+}

@@ -37,13 +37,23 @@ func seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 	}
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		keyItems, err := qtx.GetKeyItems(context.Background())
+		if err != nil {
+			return err
+		}
+
+		itemNameToID := make(map[string]int32, len(keyItems))
+		for _, keyItem := range keyItems {
+			itemNameToID[*convertNullString(keyItem.Name)] = keyItem.KeyItemID
+		}
+
 		for _, primer := range primers {
-			dbKeyItem, err := qtx.GetKeyItemByName(context.Background(), primer.Name)
-			if err != nil {
-				return err
+			keyItemID, found := itemNameToID[primer.Name]
+			if !found {
+				return fmt.Errorf("couldn't find Key Item %s", primer.Name)
 			}
 
-			primer.KeyItemID = dbKeyItem.KeyItemID
+			primer.KeyItemID = keyItemID
 
 			err = qtx.CreatePrimer(context.Background(), database.CreatePrimerParams{
 				DataHash:     generateDataHash(primer),

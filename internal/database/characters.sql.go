@@ -91,3 +91,23 @@ func (q *Queries) CreateDefaultAbilitesEntry(ctx context.Context, arg CreateDefa
 	_, err := q.db.ExecContext(ctx, createDefaultAbilitesEntry, arg.DataHash, arg.Name)
 	return err
 }
+
+const getCharacterByName = `-- name: GetCharacterByName :one
+SELECT id, data_hash, name, weapon_type, armor_type, physical_attack_range, can_fight_underwater FROM characters
+WHERE name = $1
+`
+
+func (q *Queries) GetCharacterByName(ctx context.Context, name string) (Character, error) {
+	row := q.db.QueryRowContext(ctx, getCharacterByName, name)
+	var i Character
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.WeaponType,
+		&i.ArmorType,
+		&i.PhysicalAttackRange,
+		&i.CanFightUnderwater,
+	)
+	return i, err
+}

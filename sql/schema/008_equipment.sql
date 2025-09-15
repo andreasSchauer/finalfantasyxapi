@@ -41,8 +41,27 @@ CREATE TABLE auto_abilities (
 );
 
 
+CREATE TYPE equip_class AS ENUM ('standard', 'unique', 'celestial-weapon');
+
+CREATE TABLE equipment_abilities (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    type equip_type NOT NULL,
+    classification equip_class NOT NULL,
+    specific_character_id INTEGER REFERENCES characters(id),
+    version INTEGER,
+    priority INTEGER,
+    pool_1_amt INTEGER,
+    pool_2_amt INTEGER,
+    empty_slots_amt INTEGER NOT NULL,
+    UNIQUE(type, classification, specific_character_id, version, priority)
+);
+
+
 
 -- +goose Down
+DROP TABLE IF EXISTS equipment_abilities;
+DROP TYPE IF EXISTS equip_class;
 DROP TABLE IF EXISTS auto_abilities;
 DROP TYPE IF EXISTS parameter;
 DROP TYPE IF EXISTS element_type;

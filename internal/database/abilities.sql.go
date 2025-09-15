@@ -240,3 +240,27 @@ func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCom
 	)
 	return err
 }
+
+const getOverdriveByName = `-- name: GetOverdriveByName :one
+SELECT id, data_hash, od_command_id, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor FROM overdrives
+WHERE name = $1
+`
+
+func (q *Queries) GetOverdriveByName(ctx context.Context, name string) (Overdrife, error) {
+	row := q.db.QueryRowContext(ctx, getOverdriveByName, name)
+	var i Overdrife
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.OdCommandID,
+		&i.Name,
+		&i.Version,
+		&i.Description,
+		&i.Effect,
+		&i.AttributesID,
+		&i.UnlockCondition,
+		&i.CountdownInSec,
+		&i.Cursor,
+	)
+	return i, err
+}

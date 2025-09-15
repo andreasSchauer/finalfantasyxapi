@@ -58,7 +58,44 @@ CREATE TABLE primers (
 );
 
 
+CREATE TYPE mix_category AS ENUM ('9999-damage', 'critical-hits', 'fire-elemental', 'gravity-based', 'hp-mp', 'ice-elemental', 'lightning-elemental', 'non-elemental', 'overdrive-speed', 'positive-status', 'recovery', 'water-elemental');
+
+CREATE TABLE mixes (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    overdrive_id INTEGER UNIQUE NOT NULL REFERENCES overdrives(id),
+    category mix_category NOT NULL
+);
+
+
+CREATE TABLE mix_combinations (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    first_item_id INTEGER NOT NULL REFERENCES items(id),
+    second_item_id INTEGER NOT NULL REFERENCES items(id),
+
+    UNIQUE(first_item_id, second_item_id)
+);
+
+
+CREATE TABLE mix_combo_junctions (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    mix_id INTEGER NOT NULL REFERENCES mixes(id),
+    combo_id INTEGER NOT NULL REFERENCES mix_combinations(id),
+    is_best_combo BOOLEAN NOT NULL,
+
+    UNIQUE (mix_id, combo_id)
+);
+
+
+
+
 -- +goose Down
+DROP TABLE IF EXISTS mix_combo_junctions;
+DROP TABLE IF EXISTS mix_combinations;
+DROP TABLE IF EXISTS mixes;
+DROP TYPE IF EXISTS mix_category;
 DROP TABLE IF EXISTS primers;
 DROP TABLE IF EXISTS key_items;
 DROP TABLE IF EXISTS item_abilities;
