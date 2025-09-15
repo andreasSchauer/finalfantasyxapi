@@ -11,8 +11,8 @@ import (
 )
 
 const createArea = `-- name: CreateArea :exec
-INSERT INTO areas (data_hash, sub_location_id, name, section, can_revisit, has_save_sphere, airship_drop_off, has_compilation_sphere)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+INSERT INTO areas (data_hash, sub_location_id, name, version, specification, can_revisit, has_save_sphere, airship_drop_off, has_compilation_sphere)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
@@ -20,7 +20,8 @@ type CreateAreaParams struct {
 	DataHash             string
 	SubLocationID        int32
 	Name                 string
-	Section              sql.NullString
+	Version              sql.NullInt32
+	Specification        sql.NullString
 	CanRevisit           bool
 	HasSaveSphere        bool
 	AirshipDropOff       bool
@@ -32,7 +33,8 @@ func (q *Queries) CreateArea(ctx context.Context, arg CreateAreaParams) error {
 		arg.DataHash,
 		arg.SubLocationID,
 		arg.Name,
-		arg.Section,
+		arg.Version,
+		arg.Specification,
 		arg.CanRevisit,
 		arg.HasSaveSphere,
 		arg.AirshipDropOff,
@@ -61,16 +63,17 @@ func (q *Queries) CreateLocation(ctx context.Context, arg CreateLocationParams) 
 }
 
 const createSubLocation = `-- name: CreateSubLocation :one
-INSERT INTO sub_locations (data_hash, location_id, name, specification)
-VALUES ($1, $2, $3, $4)
+INSERT INTO sub_locations (data_hash, location_id, name, version, specification)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = sub_locations.data_hash
-RETURNING id, data_hash, location_id, name, specification
+RETURNING id, data_hash, location_id, name, version, specification
 `
 
 type CreateSubLocationParams struct {
 	DataHash      string
 	LocationID    int32
 	Name          string
+	Version       sql.NullInt32
 	Specification sql.NullString
 }
 
@@ -79,6 +82,7 @@ func (q *Queries) CreateSubLocation(ctx context.Context, arg CreateSubLocationPa
 		arg.DataHash,
 		arg.LocationID,
 		arg.Name,
+		arg.Version,
 		arg.Specification,
 	)
 	var i SubLocation
@@ -87,6 +91,7 @@ func (q *Queries) CreateSubLocation(ctx context.Context, arg CreateSubLocationPa
 		&i.DataHash,
 		&i.LocationID,
 		&i.Name,
+		&i.Version,
 		&i.Specification,
 	)
 	return i, err

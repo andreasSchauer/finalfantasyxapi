@@ -25,6 +25,7 @@ func(l Location) ToHashFields() []any {
 type SubLocation struct {	
 	locationID		int32
 	Name			string		`json:"sub_location"`
+	Version			*int32		`json:"version"`
 	Specification	*string		`json:"specification"`
 	Areas			[]Area		`json:"areas"`
 }
@@ -34,6 +35,7 @@ func(s SubLocation) ToHashFields() []any {
 	return []any{
 		s.locationID,
 		s.Name,
+		derefOrNil(s.Version),
 		derefOrNil(s.Specification),
 	}
 }
@@ -44,7 +46,8 @@ type Area struct {
 	//dataHash				string
 	SubLocationID			int32
 	Name					string		`json:"area"`
-	Section					*string		`json:"section"`
+	Version					*int32		`json:"version"`
+	Specification			*string		`json:"specification"`
 	CanRevisit				bool		`json:"can_revisit"`
 	HasSaveSphere			bool		`json:"has_save_sphere"`
 	AirshipDropOff			bool		`json:"airship_drop_off"`
@@ -56,7 +59,8 @@ func(a Area) ToHashFields() []any {
 	return []any{
 		a.SubLocationID,
 		a.Name,
-		derefOrNil(a.Section),
+		derefOrNil(a.Version),
+		derefOrNil(a.Specification),
 		a.CanRevisit,
 		a.HasSaveSphere,
 		a.AirshipDropOff,
@@ -105,6 +109,7 @@ func seedSubLocations(qtx *database.Queries, location Location, locationID int32
 			DataHash: 		generateDataHash(subLocation),
 			LocationID: 	subLocation.locationID,
 			Name: 			subLocation.Name,
+			Version: 		getNullInt32(subLocation.Version),
 			Specification: 	getNullString(subLocation.Specification),
 		})
 		if err != nil {
@@ -130,7 +135,8 @@ func seedAreas(qtx *database.Queries, location Location, subLocation SubLocation
 			DataHash: 				generateDataHash(area),
 			SubLocationID: 			area.SubLocationID,
 			Name: 					area.Name,
-			Section: 				getNullString(area.Section),
+			Version: 				getNullInt32(area.Version),
+			Specification: 			getNullString(area.Specification),
 			CanRevisit: 			area.CanRevisit,
 			HasSaveSphere: 			area.HasSaveSphere,
 			AirshipDropOff: 		area.AirshipDropOff,

@@ -11,9 +11,10 @@ CREATE TABLE sub_locations (
     data_hash TEXT UNIQUE NOT NULL,
     location_id INTEGER NOT NULL REFERENCES locations(id),
     name TEXT NOT NULL,
+    version INTEGER,
     specification TEXT,
 
-    UNIQUE(name, specification)
+    UNIQUE(name, version)
 );
 
 
@@ -22,13 +23,14 @@ CREATE TABLE areas (
     data_hash TEXT UNIQUE NOT NULL,
     sub_location_id INTEGER NOT NULL REFERENCES sub_locations(id),
     name TEXT NOT NULL,
-    section TEXT,
+    version INTEGER,
+    specification TEXT,
     can_revisit BOOLEAN NOT NULL,
     has_save_sphere BOOLEAN NOT NULL,
     airship_drop_off BOOLEAN NOT NULL,
     has_compilation_sphere BOOLEAN NOT NULL,
     
-    UNIQUE(sub_location_id, name, section)
+    UNIQUE(sub_location_id, name, version)
 );
 
 

@@ -49,7 +49,7 @@ func seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 
 			err = qtx.CreateKeyItem(context.Background(), database.CreateKeyItemParams{
 				DataHash:    	generateDataHash(keyItem),
-				MasterItemsID:  keyItem.MasterItemsID,
+				MasterItemID:  keyItem.MasterItemsID,
 				Category:    	database.KeyItemCategory(keyItem.Category),
 				Description: 	keyItem.Description,
 				Effect:      	keyItem.Effect,

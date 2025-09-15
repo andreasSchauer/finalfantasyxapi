@@ -17,7 +17,7 @@ CREATE TABLE master_items (
 CREATE TABLE items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    master_items_id INTEGER UNIQUE NOT NULL REFERENCES master_items(id),
+    master_item_id INTEGER UNIQUE NOT NULL REFERENCES master_items(id),
     description TEXT NOT NULL,
     effect TEXT NOT NULL,
     sphere_grid_description TEXT,
@@ -42,14 +42,24 @@ CREATE TABLE item_abilities (
 CREATE TABLE key_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    master_items_id INTEGER UNIQUE NOT NULL REFERENCES master_items(id),
+    master_item_id INTEGER UNIQUE NOT NULL REFERENCES master_items(id),
     category key_item_category NOT NULL,
     description TEXT NOT NULL,
     effect TEXT NOT NULL
 );
 
 
+CREATE TABLE primers (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    key_item_id INTEGER UNIQUE NOT NULL REFERENCES key_items(id),
+    al_bhed_letter TEXT UNIQUE NOT NULL,
+    english_letter TEXT UNIQUE NOT NULL
+);
+
+
 -- +goose Down
+DROP TABLE IF EXISTS primers;
 DROP TABLE IF EXISTS key_items;
 DROP TABLE IF EXISTS item_abilities;
 DROP TABLE IF EXISTS items;

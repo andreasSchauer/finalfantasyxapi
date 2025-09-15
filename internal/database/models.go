@@ -1688,7 +1688,8 @@ type Area struct {
 	DataHash             string
 	SubLocationID        int32
 	Name                 string
-	Section              sql.NullString
+	Version              sql.NullInt32
+	Specification        sql.NullString
 	CanRevisit           bool
 	HasSaveSphere        bool
 	AirshipDropOff       bool
@@ -1759,7 +1760,7 @@ type EnemyAbility struct {
 type Item struct {
 	ID                    int32
 	DataHash              string
-	MasterItemsID         int32
+	MasterItemID          int32
 	Description           string
 	Effect                string
 	SphereGridDescription sql.NullString
@@ -1778,12 +1779,12 @@ type ItemAbility struct {
 }
 
 type KeyItem struct {
-	ID            int32
-	DataHash      string
-	MasterItemsID int32
-	Category      KeyItemCategory
-	Description   string
-	Effect        string
+	ID           int32
+	DataHash     string
+	MasterItemID int32
+	Category     KeyItemCategory
+	Description  string
+	Effect       string
 }
 
 type Location struct {
@@ -1901,6 +1902,14 @@ type PlayerAbility struct {
 	OpenMenu            NullSubmenuType
 }
 
+type Primer struct {
+	ID            int32
+	DataHash      string
+	KeyItemID     int32
+	AlBhedLetter  string
+	EnglishLetter string
+}
+
 type Property struct {
 	ID             int32
 	DataHash       string
@@ -1953,6 +1962,7 @@ type SubLocation struct {
 	DataHash      string
 	LocationID    int32
 	Name          string
+	Version       sql.NullInt32
 	Specification sql.NullString
 }
 

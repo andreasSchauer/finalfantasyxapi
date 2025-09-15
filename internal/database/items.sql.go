@@ -11,15 +11,15 @@ import (
 )
 
 const createItem = `-- name: CreateItem :one
-INSERT INTO items (data_hash, master_items_id, description, effect, sphere_grid_description, category, usability, base_price, sell_value)
+INSERT INTO items (data_hash, master_item_id, description, effect, sphere_grid_description, category, usability, base_price, sell_value)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = items.data_hash
-RETURNING id, data_hash, master_items_id, description, effect, sphere_grid_description, category, usability, base_price, sell_value
+RETURNING id, data_hash, master_item_id, description, effect, sphere_grid_description, category, usability, base_price, sell_value
 `
 
 type CreateItemParams struct {
 	DataHash              string
-	MasterItemsID         int32
+	MasterItemID          int32
 	Description           string
 	Effect                string
 	SphereGridDescription sql.NullString
@@ -32,7 +32,7 @@ type CreateItemParams struct {
 func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) (Item, error) {
 	row := q.db.QueryRowContext(ctx, createItem,
 		arg.DataHash,
-		arg.MasterItemsID,
+		arg.MasterItemID,
 		arg.Description,
 		arg.Effect,
 		arg.SphereGridDescription,
@@ -45,7 +45,7 @@ func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) (Item, e
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
-		&i.MasterItemsID,
+		&i.MasterItemID,
 		&i.Description,
 		&i.Effect,
 		&i.SphereGridDescription,
@@ -81,23 +81,23 @@ func (q *Queries) CreateItemAbility(ctx context.Context, arg CreateItemAbilityPa
 }
 
 const createKeyItem = `-- name: CreateKeyItem :exec
-INSERT INTO key_items (data_hash, master_items_id, category, description, effect)
+INSERT INTO key_items (data_hash, master_item_id, category, description, effect)
 VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateKeyItemParams struct {
-	DataHash      string
-	MasterItemsID int32
-	Category      KeyItemCategory
-	Description   string
-	Effect        string
+	DataHash     string
+	MasterItemID int32
+	Category     KeyItemCategory
+	Description  string
+	Effect       string
 }
 
 func (q *Queries) CreateKeyItem(ctx context.Context, arg CreateKeyItemParams) error {
 	_, err := q.db.ExecContext(ctx, createKeyItem,
 		arg.DataHash,
-		arg.MasterItemsID,
+		arg.MasterItemID,
 		arg.Category,
 		arg.Description,
 		arg.Effect,
@@ -125,6 +125,75 @@ func (q *Queries) CreateMasterItem(ctx context.Context, arg CreateMasterItemPara
 		&i.ID,
 		&i.DataHash,
 		&i.Name,
+		&i.Type,
+	)
+	return i, err
+}
+
+const createPrimer = `-- name: CreatePrimer :exec
+INSERT INTO primers (data_hash, key_item_id, al_bhed_letter, english_letter)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePrimerParams struct {
+	DataHash      string
+	KeyItemID     int32
+	AlBhedLetter  string
+	EnglishLetter string
+}
+
+func (q *Queries) CreatePrimer(ctx context.Context, arg CreatePrimerParams) error {
+	_, err := q.db.ExecContext(ctx, createPrimer,
+		arg.DataHash,
+		arg.KeyItemID,
+		arg.AlBhedLetter,
+		arg.EnglishLetter,
+	)
+	return err
+}
+
+const getKeyItemByName = `-- name: GetKeyItemByName :one
+SELECT
+    ki.id as key_item_id,
+    ki.data_hash as key_item_data_hash,
+    mi.name,
+    ki.category,
+    ki.description,
+    ki.effect,
+    mi.id as master_item_id,
+    mi.data_hash as master_item_data_hash,
+    mi.type
+FROM key_items ki
+LEFT JOIN master_items mi
+ON mi.id = ki.master_item_id
+WHERE mi.name = $1
+`
+
+type GetKeyItemByNameRow struct {
+	KeyItemID          int32
+	KeyItemDataHash    string
+	Name               sql.NullString
+	Category           KeyItemCategory
+	Description        string
+	Effect             string
+	MasterItemID       sql.NullInt32
+	MasterItemDataHash sql.NullString
+	Type               NullItemType
+}
+
+func (q *Queries) GetKeyItemByName(ctx context.Context, name string) (GetKeyItemByNameRow, error) {
+	row := q.db.QueryRowContext(ctx, getKeyItemByName, name)
+	var i GetKeyItemByNameRow
+	err := row.Scan(
+		&i.KeyItemID,
+		&i.KeyItemDataHash,
+		&i.Name,
+		&i.Category,
+		&i.Description,
+		&i.Effect,
+		&i.MasterItemID,
+		&i.MasterItemDataHash,
 		&i.Type,
 	)
 	return i, err

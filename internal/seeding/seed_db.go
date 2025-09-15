@@ -37,6 +37,7 @@ func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 		seedOverdriveCommands,
 		seedItems,
 		seedKeyItems,
+		seedPrimers,
 	}
 
 	start := time.Now()

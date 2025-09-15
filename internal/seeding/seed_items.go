@@ -96,7 +96,7 @@ func seedItem(qtx *database.Queries, item Item, allItemID int32) (database.Item,
 
 	dbItem, err := qtx.CreateItem(context.Background(), database.CreateItemParams{
 		DataHash:              generateDataHash(item),
-		MasterItemsID:         item.MasterItemsID,
+		MasterItemID:         item.MasterItemsID,
 		Description:           item.Description,
 		Effect:                item.Effect,
 		SphereGridDescription: getNullString(item.SphereGridDescription),
