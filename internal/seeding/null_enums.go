@@ -183,3 +183,15 @@ func nullItemUsability(s *string) database.NullItemUsability {
 }
 
 
+func nullMusicUseCase(s *string) database.NullMusicUseCase {
+    if s == nil {
+        return database.NullMusicUseCase{}
+    }
+    
+    return database.NullMusicUseCase{
+        MusicUseCase: database.MusicUseCase(*s),
+        Valid: true,
+    }
+}
+
+

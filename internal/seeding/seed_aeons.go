@@ -8,24 +8,23 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type Aeon struct {
 	//id 		int32
 	//dataHash	string
-	Name				string 		`json:"name"`
-	UnlockCondition		string 		`json:"unlock_condition"`
-	Category			*string		`json:"category"`
-	IsOptional			bool		`json:"is_optional"`
-	BattlesToRegenerate	int32		`json:"num_battles_to_regenerate"`
-	PhysAtkDmgConstant	*int32		`json:"phys_atk_damage_constant"`
-	PhysAtkRange		*int32		`json:"phys_atk_range"`
-	PhysAtkShatterRate	*int32		`json:"phys_atk_shatter_rate"`
-	PhysAtkAccSource	*string		`json:"phys_atk_acc_source"`
-	PhysAtkHitChance	*int32		`json:"phys_atk_hit_chance"`
-	PhysAtkAccModifier	*float32	`json:"phys_atk_acc_modifier"`
+	Name                string   `json:"name"`
+	UnlockCondition     string   `json:"unlock_condition"`
+	Category            *string  `json:"category"`
+	IsOptional          bool     `json:"is_optional"`
+	BattlesToRegenerate int32    `json:"num_battles_to_regenerate"`
+	PhysAtkDmgConstant  *int32   `json:"phys_atk_damage_constant"`
+	PhysAtkRange        *int32   `json:"phys_atk_range"`
+	PhysAtkShatterRate  *int32   `json:"phys_atk_shatter_rate"`
+	PhysAtkAccSource    *string  `json:"phys_atk_acc_source"`
+	PhysAtkHitChance    *int32   `json:"phys_atk_hit_chance"`
+	PhysAtkAccModifier  *float32 `json:"phys_atk_acc_modifier"`
 }
 
-func(a Aeon) ToHashFields() []any {
+func (a Aeon) ToHashFields() []any {
 	return []any{
 		a.Name,
 		a.UnlockCondition,
@@ -41,8 +40,7 @@ func(a Aeon) ToHashFields() []any {
 	}
 }
 
-
-func seedAeons(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeons.json"
 
 	var aeons []Aeon
@@ -54,18 +52,18 @@ func seedAeons(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, aeon := range aeons {
 			err = qtx.CreateAeon(context.Background(), database.CreateAeonParams{
-				DataHash: 				generateDataHash(aeon),
-				Name: 					aeon.Name,
-				UnlockCondition: 		aeon.UnlockCondition,
-				Category: 				nullAeonCategory(aeon.Category),
-				IsOptional: 			aeon.IsOptional,
-				BattlesToRegenerate: 	aeon.BattlesToRegenerate,
-				PhysAtkDamageConstant: 	getNullInt32(aeon.PhysAtkDmgConstant),
-				PhysAtkRange: 			getNullInt32(aeon.PhysAtkRange),
-				PhysAtkShatterRate: 	getNullInt32(aeon.PhysAtkShatterRate),
-				PhysAtkAccSource: 		nullAccuracySource(aeon.PhysAtkAccSource),
-				PhysAtkHitChance: 		getNullInt32(aeon.PhysAtkHitChance),
-				PhysAtkAccModifier: 	getNullFloat64(aeon.PhysAtkAccModifier),
+				DataHash:              generateDataHash(aeon),
+				Name:                  aeon.Name,
+				UnlockCondition:       aeon.UnlockCondition,
+				Category:              nullAeonCategory(aeon.Category),
+				IsOptional:            aeon.IsOptional,
+				BattlesToRegenerate:   aeon.BattlesToRegenerate,
+				PhysAtkDamageConstant: getNullInt32(aeon.PhysAtkDmgConstant),
+				PhysAtkRange:          getNullInt32(aeon.PhysAtkRange),
+				PhysAtkShatterRate:    getNullInt32(aeon.PhysAtkShatterRate),
+				PhysAtkAccSource:      nullAccuracySource(aeon.PhysAtkAccSource),
+				PhysAtkHitChance:      getNullInt32(aeon.PhysAtkHitChance),
+				PhysAtkAccModifier:    getNullFloat64(aeon.PhysAtkAccModifier),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Aeon: %s: %v", aeon.Name, err)

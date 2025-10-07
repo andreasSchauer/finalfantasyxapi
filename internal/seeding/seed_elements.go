@@ -20,8 +20,7 @@ func (e Element) ToHashFields() []any {
 	}
 }
 
-
-func seedElements(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elements.json"
 
 	var elements []Element
@@ -43,5 +42,3 @@ func seedElements(db *database.Queries, dbConn *sql.DB) error {
 		return nil
 	})
 }
-
-

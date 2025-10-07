@@ -10,10 +10,11 @@ import (
 	"database/sql"
 )
 
-const createArea = `-- name: CreateArea :exec
-INSERT INTO areas (data_hash, sub_location_id, name, version, specification, can_revisit, has_save_sphere, airship_drop_off, has_compilation_sphere)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-ON CONFLICT(data_hash) DO NOTHING
+const createArea = `-- name: CreateArea :one
+INSERT INTO areas (data_hash, sub_location_id, name, version, specification, story_only, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = areas.data_hash
+RETURNING id, data_hash, sub_location_id, name, version, specification, story_only, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo
 `
 
 type CreateAreaParams struct {
@@ -22,25 +23,41 @@ type CreateAreaParams struct {
 	Name                 string
 	Version              sql.NullInt32
 	Specification        sql.NullString
-	CanRevisit           bool
+	StoryOnly            bool
 	HasSaveSphere        bool
 	AirshipDropOff       bool
 	HasCompilationSphere bool
+	CanRideChocobo       bool
 }
 
-func (q *Queries) CreateArea(ctx context.Context, arg CreateAreaParams) error {
-	_, err := q.db.ExecContext(ctx, createArea,
+func (q *Queries) CreateArea(ctx context.Context, arg CreateAreaParams) (Area, error) {
+	row := q.db.QueryRowContext(ctx, createArea,
 		arg.DataHash,
 		arg.SubLocationID,
 		arg.Name,
 		arg.Version,
 		arg.Specification,
-		arg.CanRevisit,
+		arg.StoryOnly,
 		arg.HasSaveSphere,
 		arg.AirshipDropOff,
 		arg.HasCompilationSphere,
+		arg.CanRideChocobo,
 	)
-	return err
+	var i Area
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.SubLocationID,
+		&i.Name,
+		&i.Version,
+		&i.Specification,
+		&i.StoryOnly,
+		&i.HasSaveSphere,
+		&i.AirshipDropOff,
+		&i.HasCompilationSphere,
+		&i.CanRideChocobo,
+	)
+	return i, err
 }
 
 const createLocation = `-- name: CreateLocation :one
@@ -111,17 +128,16 @@ func (q *Queries) CreateShop(ctx context.Context, arg CreateShopParams) error {
 }
 
 const createSubLocation = `-- name: CreateSubLocation :one
-INSERT INTO sub_locations (data_hash, location_id, name, version, specification)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO sub_locations (data_hash, location_id, name, specification)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = sub_locations.data_hash
-RETURNING id, data_hash, location_id, name, version, specification
+RETURNING id, data_hash, location_id, name, specification
 `
 
 type CreateSubLocationParams struct {
 	DataHash      string
 	LocationID    int32
 	Name          string
-	Version       sql.NullInt32
 	Specification sql.NullString
 }
 
@@ -130,7 +146,6 @@ func (q *Queries) CreateSubLocation(ctx context.Context, arg CreateSubLocationPa
 		arg.DataHash,
 		arg.LocationID,
 		arg.Name,
-		arg.Version,
 		arg.Specification,
 	)
 	var i SubLocation
@@ -139,7 +154,6 @@ func (q *Queries) CreateSubLocation(ctx context.Context, arg CreateSubLocationPa
 		&i.DataHash,
 		&i.LocationID,
 		&i.Name,
-		&i.Version,
 		&i.Specification,
 	)
 	return i, err
@@ -186,8 +200,7 @@ SELECT
     l.name as location_name,
     s.name as sub_location_name,
     a.name as area_name,
-    s.version as s_version,
-    a.version as a_version
+    a.version as version
 FROM areas a
 LEFT JOIN sub_locations s
 ON a.sub_location_id = s.id
@@ -202,8 +215,7 @@ type GetLocationAreasRow struct {
 	LocationName    sql.NullString
 	SubLocationName sql.NullString
 	AreaName        string
-	SVersion        sql.NullInt32
-	AVersion        sql.NullInt32
+	Version         sql.NullInt32
 }
 
 func (q *Queries) GetLocationAreas(ctx context.Context) ([]GetLocationAreasRow, error) {
@@ -222,8 +234,7 @@ func (q *Queries) GetLocationAreas(ctx context.Context) ([]GetLocationAreasRow, 
 			&i.LocationName,
 			&i.SubLocationName,
 			&i.AreaName,
-			&i.SVersion,
-			&i.AVersion,
+			&i.Version,
 		); err != nil {
 			return nil, err
 		}

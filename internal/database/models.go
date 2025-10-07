@@ -1234,6 +1234,54 @@ func (ns NullMonsterSpecies) Value() (driver.Value, error) {
 	return string(ns.MonsterSpecies), nil
 }
 
+type MusicUseCase string
+
+const (
+	MusicUseCaseBlitzballGame          MusicUseCase = "blitzball-game"
+	MusicUseCaseBlitzballMenu          MusicUseCase = "blitzball-menu"
+	MusicUseCaseBossBattleDefault      MusicUseCase = "boss-battle-default"
+	MusicUseCaseChocobo                MusicUseCase = "chocobo"
+	MusicUseCaseGameOver               MusicUseCase = "game-over"
+	MusicUseCaseMainMenu               MusicUseCase = "main-menu"
+	MusicUseCaseRandomEncounterDefault MusicUseCase = "random-encounter-default"
+	MusicUseCaseVictory                MusicUseCase = "victory"
+)
+
+func (e *MusicUseCase) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = MusicUseCase(s)
+	case string:
+		*e = MusicUseCase(s)
+	default:
+		return fmt.Errorf("unsupported scan type for MusicUseCase: %T", src)
+	}
+	return nil
+}
+
+type NullMusicUseCase struct {
+	MusicUseCase MusicUseCase
+	Valid        bool // Valid is true if MusicUseCase is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullMusicUseCase) Scan(value interface{}) error {
+	if value == nil {
+		ns.MusicUseCase, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.MusicUseCase.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullMusicUseCase) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.MusicUseCase), nil
+}
+
 type NullifyArmored string
 
 const (
@@ -1785,10 +1833,11 @@ type Area struct {
 	Name                 string
 	Version              sql.NullInt32
 	Specification        sql.NullString
-	CanRevisit           bool
+	StoryOnly            bool
 	HasSaveSphere        bool
 	AirshipDropOff       bool
 	HasCompilationSphere bool
+	CanRideChocobo       bool
 }
 
 type AutoAbility struct {
@@ -1863,6 +1912,16 @@ type EquipmentAbility struct {
 	Pool1Amt            sql.NullInt32
 	Pool2Amt            sql.NullInt32
 	EmptySlotsAmt       int32
+}
+
+type Fmv struct {
+	ID                  int32
+	DataHash            string
+	Name                string
+	Translation         sql.NullString
+	CutsceneDescription string
+	SongID              sql.NullInt32
+	AreaID              int32
 }
 
 type Item struct {
@@ -2078,6 +2137,33 @@ type Sidequest struct {
 	QuestID  int32
 }
 
+type Song struct {
+	ID                   int32
+	DataHash             string
+	Name                 string
+	StreamingName        sql.NullString
+	InGameName           sql.NullString
+	OstName              sql.NullString
+	Translation          sql.NullString
+	StreamingTrackNumber sql.NullInt32
+	MusicSphereID        sql.NullInt32
+	OstDisc              interface{}
+	OstTrackNumber       sql.NullInt32
+	DurationInSeconds    int32
+	CanLoop              bool
+	SpecialUseCase       NullMusicUseCase
+	CreditsID            sql.NullInt32
+}
+
+type SongCredit struct {
+	ID        int32
+	DataHash  string
+	Composer  sql.NullString
+	Arranger  sql.NullString
+	Performer sql.NullString
+	Lyricist  sql.NullString
+}
+
 type Stat struct {
 	ID       int32
 	DataHash string
@@ -2101,7 +2187,6 @@ type SubLocation struct {
 	DataHash      string
 	LocationID    int32
 	Name          string
-	Version       sql.NullInt32
 	Specification sql.NullString
 }
 

@@ -8,19 +8,16 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type TriggerCommand struct {
 	Ability
 	AbilityAttributes
-	AbilityID			int32
-	Description			string		`json:"description"`
-	Effect				string		`json:"effect"`
-	Cursor				string		`json:"cursor"`
+	AbilityID   int32
+	Description string `json:"description"`
+	Effect      string `json:"effect"`
+	Cursor      string `json:"cursor"`
 }
 
-
-
-func(t TriggerCommand) ToHashFields() []any {
+func (t TriggerCommand) ToHashFields() []any {
 	return []any{
 		t.AbilityID,
 		t.Description,
@@ -29,8 +26,7 @@ func(t TriggerCommand) ToHashFields() []any {
 	}
 }
 
-
-func seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/trigger_commands.json"
 
 	var triggerCommands []TriggerCommand
@@ -46,7 +42,7 @@ func seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
 			attributes := command.AbilityAttributes
 			ability.Type = database.AbilityTypeTriggerCommand
 
-			dbAbility, err := seedAbility(qtx, attributes, ability)
+			dbAbility, err := l.seedAbility(qtx, attributes, ability)
 			if err != nil {
 				return err
 			}
@@ -54,11 +50,11 @@ func seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
 			command.AbilityID = dbAbility.ID
 
 			err = qtx.CreateTriggerCommand(context.Background(), database.CreateTriggerCommandParams{
-				DataHash: 				generateDataHash(command),
-				AbilityID: 				command.AbilityID,
-				Description: 			command.Description,
-				Effect: 				command.Effect,
-				Cursor: 				database.TargetType(command.Cursor),
+				DataHash:    generateDataHash(command),
+				AbilityID:   command.AbilityID,
+				Description: command.Description,
+				Effect:      command.Effect,
+				Cursor:      database.TargetType(command.Cursor),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create TriggerCommand: %s: %v", ability.Name, err)

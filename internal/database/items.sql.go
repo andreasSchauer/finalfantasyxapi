@@ -80,10 +80,11 @@ func (q *Queries) CreateItemAbility(ctx context.Context, arg CreateItemAbilityPa
 	return err
 }
 
-const createKeyItem = `-- name: CreateKeyItem :exec
+const createKeyItem = `-- name: CreateKeyItem :one
 INSERT INTO key_items (data_hash, master_item_id, category, description, effect)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = key_items.data_hash
+RETURNING id, data_hash, master_item_id, category, description, effect
 `
 
 type CreateKeyItemParams struct {
@@ -94,15 +95,24 @@ type CreateKeyItemParams struct {
 	Effect       string
 }
 
-func (q *Queries) CreateKeyItem(ctx context.Context, arg CreateKeyItemParams) error {
-	_, err := q.db.ExecContext(ctx, createKeyItem,
+func (q *Queries) CreateKeyItem(ctx context.Context, arg CreateKeyItemParams) (KeyItem, error) {
+	row := q.db.QueryRowContext(ctx, createKeyItem,
 		arg.DataHash,
 		arg.MasterItemID,
 		arg.Category,
 		arg.Description,
 		arg.Effect,
 	)
-	return err
+	var i KeyItem
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MasterItemID,
+		&i.Category,
+		&i.Description,
+		&i.Effect,
+	)
+	return i, err
 }
 
 const createMasterItem = `-- name: CreateMasterItem :one

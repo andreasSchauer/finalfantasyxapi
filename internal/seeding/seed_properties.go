@@ -8,16 +8,15 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type Property struct {
 	//id 		int32
 	//dataHash	string
-	Name			string 		`json:"name"`
-	Effect			string 		`json:"effect"`
-	NullifyArmored 	*string		`json:"nullify_armored"`
+	Name           string  `json:"name"`
+	Effect         string  `json:"effect"`
+	NullifyArmored *string `json:"nullify_armored"`
 }
 
-func(p Property) ToHashFields() []any {
+func (p Property) ToHashFields() []any {
 	return []any{
 		p.Name,
 		p.Effect,
@@ -25,8 +24,7 @@ func(p Property) ToHashFields() []any {
 	}
 }
 
-
-func seedProperties(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
 
 	var properties []Property
@@ -38,9 +36,9 @@ func seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, property := range properties {
 			err = qtx.CreateProperty(context.Background(), database.CreatePropertyParams{
-				DataHash: 		generateDataHash(property),
-				Name: 			property.Name,
-				Effect: 		property.Effect,
+				DataHash:       generateDataHash(property),
+				Name:           property.Name,
+				Effect:         property.Effect,
 				NullifyArmored: nullNullifyArmored(property.NullifyArmored),
 			})
 			if err != nil {

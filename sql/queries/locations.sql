@@ -6,16 +6,17 @@ RETURNING *;
 
 
 -- name: CreateSubLocation :one
-INSERT INTO sub_locations (data_hash, location_id, name, version, specification)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO sub_locations (data_hash, location_id, name, specification)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = sub_locations.data_hash
 RETURNING *;
 
 
--- name: CreateArea :exec
-INSERT INTO areas (data_hash, sub_location_id, name, version, specification, can_revisit, has_save_sphere, airship_drop_off, has_compilation_sphere)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-ON CONFLICT(data_hash) DO NOTHING;
+-- name: CreateArea :one
+INSERT INTO areas (data_hash, sub_location_id, name, version, specification, story_only, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = areas.data_hash
+RETURNING *;
 
 
 -- name: GetLocationAreas :many
@@ -26,8 +27,7 @@ SELECT
     l.name as location_name,
     s.name as sub_location_name,
     a.name as area_name,
-    s.version as s_version,
-    a.version as a_version
+    a.version as version
 FROM areas a
 LEFT JOIN sub_locations s
 ON a.sub_location_id = s.id

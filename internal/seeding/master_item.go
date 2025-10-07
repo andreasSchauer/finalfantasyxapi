@@ -20,8 +20,15 @@ func (i MasterItem) ToHashFields() []any {
 	}
 }
 
+func (i MasterItem) ToKeyFields() []any {
+	return []any{
+		i.Name,
+		i.Type,
+	}
+}
 
-func seedMasterItem(qtx *database.Queries, item MasterItem) (database.MasterItem, error) {
+
+func (l *lookup) seedMasterItem(qtx *database.Queries, item MasterItem) (database.MasterItem, error) {
 	dbMasterItem, err := qtx.CreateMasterItem(context.Background(), database.CreateMasterItemParams{
 		DataHash: generateDataHash(item),
 		Name:     item.Name,

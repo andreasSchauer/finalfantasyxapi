@@ -8,21 +8,18 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type OverdriveAbility struct {
 	Ability
-	AbilityID	int32
+	AbilityID int32
 }
 
-
-func(a OverdriveAbility) ToHashFields() []any {
+func (a OverdriveAbility) ToHashFields() []any {
 	return []any{
 		a.AbilityID,
 	}
 }
 
-
-func seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_abilities.json"
 
 	var overdriveAbilities []OverdriveAbility
@@ -36,8 +33,8 @@ func seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
 		for _, overdriveAbility := range overdriveAbilities {
 			ability := overdriveAbility.Ability
 			ability.Type = database.AbilityTypeOverdriveAbility
-			
-			dbAbility, err := seedAbility(qtx, AbilityAttributes{}, ability)
+
+			dbAbility, err := l.seedAbility(qtx, AbilityAttributes{}, ability)
 			if err != nil {
 				return err
 			}
@@ -45,8 +42,8 @@ func seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
 			overdriveAbility.AbilityID = dbAbility.ID
 
 			err = qtx.CreateEnemyAbility(context.Background(), database.CreateEnemyAbilityParams{
-				DataHash: 				generateDataHash(overdriveAbility),
-				AbilityID: 				overdriveAbility.AbilityID,
+				DataHash:  generateDataHash(overdriveAbility),
+				AbilityID: overdriveAbility.AbilityID,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Overdrive Ability: %s: %v", ability.Name, err)

@@ -8,16 +8,15 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type StatusCondition struct {
 	//id 		int32
 	//dataHash	string
-	Name			string 		`json:"name"`
-	Effect			string 		`json:"effect"`
-	NullifyArmored 	*string		`json:"nullify_armored"`
+	Name           string  `json:"name"`
+	Effect         string  `json:"effect"`
+	NullifyArmored *string `json:"nullify_armored"`
 }
 
-func(s StatusCondition) ToHashFields() []any {
+func (s StatusCondition) ToHashFields() []any {
 	return []any{
 		s.Name,
 		s.Effect,
@@ -25,8 +24,7 @@ func(s StatusCondition) ToHashFields() []any {
 	}
 }
 
-
-func seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/status_conditions.json"
 
 	var statusConditions []StatusCondition
@@ -38,9 +36,9 @@ func seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, condition := range statusConditions {
 			err = qtx.CreateStatusCondition(context.Background(), database.CreateStatusConditionParams{
-				DataHash: 		generateDataHash(condition),
-				Name: 			condition.Name,
-				Effect: 		condition.Effect,
+				DataHash:       generateDataHash(condition),
+				Name:           condition.Name,
+				Effect:         condition.Effect,
 				NullifyArmored: nullNullifyArmored(condition.NullifyArmored),
 			})
 			if err != nil {

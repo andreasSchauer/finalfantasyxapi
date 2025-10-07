@@ -59,10 +59,11 @@ LEFT JOIN master_items mi
 ON mi.id = i.master_item_id;
 
 
--- name: CreateKeyItem :exec
+-- name: CreateKeyItem :one
 INSERT INTO key_items (data_hash, master_item_id, category, description, effect)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO NOTHING;
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = key_items.data_hash
+RETURNING *;
 
 
 -- name: GetKeyItemByName :one

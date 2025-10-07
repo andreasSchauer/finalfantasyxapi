@@ -8,18 +8,17 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type Stat struct {
 	//id 		int32
 	//dataHash	string
-	Name		string 	`json:"name"`
-	Effect		string 	`json:"effect"`
-	MinVal		int32	`json:"min_val"`
-	MaxVal		int32	`json:"max_val"`
-	MaxVal2		*int32	`json:"max_val_2"`
+	Name    string `json:"name"`
+	Effect  string `json:"effect"`
+	MinVal  int32  `json:"min_val"`
+	MaxVal  int32  `json:"max_val"`
+	MaxVal2 *int32 `json:"max_val_2"`
 }
 
-func(s Stat) ToHashFields() []any {
+func (s Stat) ToHashFields() []any {
 	return []any{
 		s.Name,
 		s.Effect,
@@ -29,8 +28,7 @@ func(s Stat) ToHashFields() []any {
 	}
 }
 
-
-func seedStats(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/stats.json"
 
 	var stats []Stat
@@ -42,12 +40,12 @@ func seedStats(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, stat := range stats {
 			err = qtx.CreateStat(context.Background(), database.CreateStatParams{
-				DataHash: 	generateDataHash(stat),
-				Name: 		stat.Name,
-				Effect: 	stat.Effect,
-				MinVal: 	stat.MinVal,
-				MaxVal: 	stat.MaxVal,
-				MaxVal2: 	getNullInt32(stat.MaxVal2),
+				DataHash: generateDataHash(stat),
+				Name:     stat.Name,
+				Effect:   stat.Effect,
+				MinVal:   stat.MinVal,
+				MaxVal:   stat.MaxVal,
+				MaxVal2:  getNullInt32(stat.MaxVal2),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Stat: %s: %v", stat.Name, err)
@@ -56,6 +54,3 @@ func seedStats(db *database.Queries, dbConn *sql.DB) error {
 		return nil
 	})
 }
-
-
-

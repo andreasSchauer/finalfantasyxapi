@@ -4,10 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
-
 
 type Affinity struct {
 	//id 			int32
@@ -23,8 +22,7 @@ func (a Affinity) ToHashFields() []any {
 	}
 }
 
-
-func seedAffinities(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elemental_affinities.json"
 
 	var affinities []Affinity

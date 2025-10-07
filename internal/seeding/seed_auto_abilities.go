@@ -4,26 +4,25 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
-
 
 type AutoAbility struct {
 	//id 			int32
 	//dataHash		string
-	Name         		string   	`json:"name"`
-	Description			*string   	`json:"description"`
-	Effect				string   	`json:"effect"`
-	Type				*string   	`json:"type"`
-	Category			string   	`json:"category"`
-	AbilityValue		*int32   	`json:"ability_value"`
-	ActivationCondition	*string   	`json:"activation_condition"`
-	Counter				*string   	`json:"counter"`
-	GradualRecovery		*string   	`json:"gradual_recovery"`
-	OnHitElement		*string   	`json:"on_hit_element"`
-	ConversionFrom		*string   	`json:"conversion_from"`
-	ConversionTo		*string   	`json:"conversion_to"`
+	Name                string  `json:"name"`
+	Description         *string `json:"description"`
+	Effect              string  `json:"effect"`
+	Type                *string `json:"type"`
+	Category            string  `json:"category"`
+	AbilityValue        *int32  `json:"ability_value"`
+	ActivationCondition *string `json:"activation_condition"`
+	Counter             *string `json:"counter"`
+	GradualRecovery     *string `json:"gradual_recovery"`
+	OnHitElement        *string `json:"on_hit_element"`
+	ConversionFrom      *string `json:"conversion_from"`
+	ConversionTo        *string `json:"conversion_to"`
 }
 
 func (a AutoAbility) ToHashFields() []any {
@@ -43,8 +42,7 @@ func (a AutoAbility) ToHashFields() []any {
 	}
 }
 
-
-func seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/auto_abilities.json"
 
 	var autoAbilities []AutoAbility
@@ -56,19 +54,19 @@ func seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, ability := range autoAbilities {
 			err = qtx.CreateAutoAbility(context.Background(), database.CreateAutoAbilityParams{
-				DataHash:     			generateDataHash(ability),
-				Name:         			ability.Name,
-				Description: 			getNullString(ability.Description),
-				Effect: 				ability.Effect,
-				Type: 					nullEquipType(ability.Type),
-				Category: 				database.AutoAbilityCategory(ability.Category),
-				AbilityValue: 			getNullInt32(ability.AbilityValue),
-				ActivationCondition: 	nullAaActivationCondition(ability.ActivationCondition),
-				Counter: 				nullCounterType(ability.Counter),
-				GradualRecovery: 		nullRecoveryType(ability.GradualRecovery),
-				OnHitElement: 			nullElementType(ability.OnHitElement),
-				ConversionFrom: 		nullParameter(ability.ConversionFrom),
-				ConversionTo: 			nullParameter(ability.ConversionTo),
+				DataHash:            generateDataHash(ability),
+				Name:                ability.Name,
+				Description:         getNullString(ability.Description),
+				Effect:              ability.Effect,
+				Type:                nullEquipType(ability.Type),
+				Category:            database.AutoAbilityCategory(ability.Category),
+				AbilityValue:        getNullInt32(ability.AbilityValue),
+				ActivationCondition: nullAaActivationCondition(ability.ActivationCondition),
+				Counter:             nullCounterType(ability.Counter),
+				GradualRecovery:     nullRecoveryType(ability.GradualRecovery),
+				OnHitElement:        nullElementType(ability.OnHitElement),
+				ConversionFrom:      nullParameter(ability.ConversionFrom),
+				ConversionTo:        nullParameter(ability.ConversionTo),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Auto-Ability: %s: %v", ability.Name, err)

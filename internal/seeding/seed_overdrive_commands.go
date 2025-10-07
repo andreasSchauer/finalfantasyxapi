@@ -8,17 +8,15 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type OverdriveCommand struct {
-	Name 			string 			`json:"name"`
-	Description		string			`json:"description"`
-	Rank			int32			`json:"rank"`
-	OpenMenu		*string			`json:"open_menu"`
-	Overdrives		[]Overdrive		`json:"overdrives"`
+	Name        string      `json:"name"`
+	Description string      `json:"description"`
+	Rank        int32       `json:"rank"`
+	OpenMenu    *string     `json:"open_menu"`
+	Overdrives  []Overdrive `json:"overdrives"`
 }
 
-
-func(oc OverdriveCommand) ToHashFields() []any {
+func (oc OverdriveCommand) ToHashFields() []any {
 	return []any{
 		oc.Name,
 		oc.Description,
@@ -27,20 +25,18 @@ func(oc OverdriveCommand) ToHashFields() []any {
 	}
 }
 
-
-type Overdrive struct {	
-	odCommandID			*int32
+type Overdrive struct {
+	odCommandID *int32
 	Ability
 	AbilityAttributes
-	Description			string		`json:"description"`
-	Effect				string		`json:"effect"`
-	UnlockCondition		*string		`json:"unlock_condition"`
-	CountdownInSec		*int32		`json:"countdown_in_sec"`
-	Cursor				*string		`json:"cursor"`
+	Description     string  `json:"description"`
+	Effect          string  `json:"effect"`
+	UnlockCondition *string `json:"unlock_condition"`
+	CountdownInSec  *int32  `json:"countdown_in_sec"`
+	Cursor          *string `json:"cursor"`
 }
 
-
-func(o Overdrive) ToHashFields() []any {
+func (o Overdrive) ToHashFields() []any {
 	return []any{
 		derefOrNil(o.odCommandID),
 		o.Name,
@@ -54,9 +50,7 @@ func(o Overdrive) ToHashFields() []any {
 	}
 }
 
-
-
-func seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_commands.json"
 
 	var overdriveCommands []OverdriveCommand
@@ -71,11 +65,11 @@ func seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
 
 			if command.Name != "" {
 				dbODCommand, err := qtx.CreateOverdriveCommand(context.Background(), database.CreateOverdriveCommandParams{
-					DataHash: 		generateDataHash(command),
-					Name: 			command.Name,
-					Description: 	command.Description,
-					Rank: 			command.Rank,
-					OpenMenu: 		nullSubmenuType(command.OpenMenu),
+					DataHash:    generateDataHash(command),
+					Name:        command.Name,
+					Description: command.Description,
+					Rank:        command.Rank,
+					OpenMenu:    nullSubmenuType(command.OpenMenu),
 				})
 				if err != nil {
 					return fmt.Errorf("couldn't create Overdrive Command: %s: %v", command.Name, err)
@@ -84,22 +78,21 @@ func seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
 				overdriveCommandID = &dbODCommand.ID
 			}
 
-			err = seedOverdrives(qtx, command, overdriveCommandID)
+			err = l.seedOverdrives(qtx, command, overdriveCommandID)
 			if err != nil {
 				return err
 			}
 		}
-		
+
 		return nil
 	})
 }
 
-
-func seedOverdrives(qtx *database.Queries, command OverdriveCommand, odCommandID *int32) error {
+func (l *lookup) seedOverdrives(qtx *database.Queries, command OverdriveCommand, odCommandID *int32) error {
 	for _, overdrive := range command.Overdrives {
 		overdrive.odCommandID = odCommandID
 
-		attributes, err := seedAbilityAttributes(qtx, overdrive.AbilityAttributes, overdrive.Ability)
+		attributes, err := l.seedAbilityAttributes(qtx, overdrive.AbilityAttributes, overdrive.Ability)
 		if err != nil {
 			return err
 		}
@@ -107,16 +100,16 @@ func seedOverdrives(qtx *database.Queries, command OverdriveCommand, odCommandID
 		overdrive.AttributesID = &attributes.ID
 
 		err = qtx.CreateOverdrive(context.Background(), database.CreateOverdriveParams{
-			DataHash: 			generateDataHash(overdrive),
-			OdCommandID: 		getNullInt32(overdrive.odCommandID),
-			Name: 				overdrive.Name,
-			Version: 			getNullInt32(overdrive.Version),
-			Description: 		overdrive.Description,
-			Effect: 			overdrive.Effect,
-			AttributesID: 		*overdrive.AttributesID,
-			UnlockCondition: 	getNullString(overdrive.UnlockCondition),
-			CountdownInSec: 	getNullInt32(overdrive.CountdownInSec),
-			Cursor: 			nullTargetType(overdrive.Cursor),
+			DataHash:        generateDataHash(overdrive),
+			OdCommandID:     getNullInt32(overdrive.odCommandID),
+			Name:            overdrive.Name,
+			Version:         getNullInt32(overdrive.Version),
+			Description:     overdrive.Description,
+			Effect:          overdrive.Effect,
+			AttributesID:    *overdrive.AttributesID,
+			UnlockCondition: getNullString(overdrive.UnlockCondition),
+			CountdownInSec:  getNullInt32(overdrive.CountdownInSec),
+			Cursor:          nullTargetType(overdrive.Cursor),
 		})
 		if err != nil {
 			return fmt.Errorf("couldn't create Overdrive: %s: %v", overdrive.Name, err)
@@ -125,5 +118,3 @@ func seedOverdrives(qtx *database.Queries, command OverdriveCommand, odCommandID
 
 	return nil
 }
-
-

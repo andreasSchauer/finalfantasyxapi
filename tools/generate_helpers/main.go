@@ -23,6 +23,7 @@ func main() {
         "SubmenuType",
         "TargetType",
         "ItemUsability",
+        "MusicUseCase",
     }
 
     filePath := "./internal/seeding/null_enums.go"
