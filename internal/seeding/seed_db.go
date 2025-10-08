@@ -6,11 +6,13 @@ import (
 	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/pressly/goose/v3"
 )
 
-func Seed_database(db *database.Queries, dbConn *sql.DB) error {
+func SeedDatabase(db *database.Queries, dbConn *sql.DB, migrationsDir string) error {
 	lookup := lookupInit()
-	seedFunctions := []func(*database.Queries, *sql.DB) error {
+
+	seedFunctions := []func(*database.Queries, *sql.DB) error{
 		lookup.seedStats,
 		lookup.seedElements,
 		lookup.seedAffinities,
@@ -47,17 +49,58 @@ func Seed_database(db *database.Queries, dbConn *sql.DB) error {
 		lookup.seedFMVs,
 	}
 
-	start := time.Now()
+	err := databaseSetup(dbConn, migrationsDir)
+	if err != nil {
+		return fmt.Errorf("couldn't setup database: %v", err)
+	}
+
+	seedStart := time.Now()
 
 	for _, seedFunc := range seedFunctions {
-        if err := seedFunc(db, dbConn); err != nil {
-            return err
-        }
-    }
+		if err := seedFunc(db, dbConn); err != nil {
+			return err
+		}
+	}
 
-	duration := time.Since(start)
+	seedDuration := time.Since(seedStart)
+	fmt.Printf("initial seeding took %.2f seconds\n", seedDuration.Seconds())
 
-	fmt.Printf("seeding took %.2f seconds\n", duration.Seconds())
+	// will do relationships here
+
+	relationshipFunctions := []func(*database.Queries, *sql.DB) error{
+		lookup.createStatsRelationships,
+	}
+
+	relStart := time.Now()
+
+	for _, relFunc := range relationshipFunctions {
+		if err := relFunc(db, dbConn); err != nil {
+			return err
+		}
+	}
+
+	relDuration := time.Since(relStart)
+	fmt.Printf("establishing relationships took %.2f seconds\n", relDuration.Seconds())
+
+	return nil
+}
+
+
+func databaseSetup(dbConn *sql.DB, migrationsDir string) error {
+	err := goose.SetDialect("postgres")
+	if err != nil {
+		return err
+	}
+
+	err = goose.DownTo(dbConn, migrationsDir, 0)
+	if err != nil {
+		return err
+	}
+
+	err = goose.Up(dbConn, migrationsDir)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

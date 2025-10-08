@@ -36,12 +36,12 @@ func (l *lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, primer := range primers {
-			keyItemID, err := l.getKeyItemID(primer.Name)
+			keyItem, err := l.getKeyItem(primer.Name)
 			if err != nil {
 				return err
 			}
 
-			primer.KeyItemID = keyItemID
+			primer.KeyItemID = keyItem.ID
 
 			err = qtx.CreatePrimer(context.Background(), database.CreatePrimerParams{
 				DataHash:      generateDataHash(primer),

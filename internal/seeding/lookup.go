@@ -6,90 +6,91 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type Lookupable interface {
 	ToKeyFields() []any
 }
-
 
 func createLookupKey(l Lookupable) string {
 	fields := l.ToKeyFields()
 	return combineFields(fields)
 }
 
-
 type lookup struct {
-	locationAreaToID map[string]int32
-	itemNameToID map[string]int32
-	keyItemNameToID map[string]int32
-	songNameToID map[string]int32
+	items         map[string]ItemLookup
+	keyItems      map[string]KeyItemLookup
+	locationAreas map[string]LocationAreaLookup
+	songs         map[string]SongLookup
+	stats         map[string]StatLookup
 }
-
 
 func lookupInit() lookup {
 	return lookup{
-		locationAreaToID: make(map[string]int32),
-		itemNameToID: make(map[string]int32),
-		keyItemNameToID: make(map[string]int32),
-		songNameToID: make(map[string]int32),
+		items:         make(map[string]ItemLookup),
+		keyItems:      make(map[string]KeyItemLookup),
+		locationAreas: make(map[string]LocationAreaLookup),
+		songs:         make(map[string]SongLookup),
+		stats:         make(map[string]StatLookup),
 	}
 
 }
 
+// whether to take a Lookupable or a string as an input depends on vibes. if it's just one field, I'll take the string. if it's a composite key, I'll make a struct.
 
-func (l *lookup) getAreaID(locationArea LocationArea) (int32, error) {
+func (l *lookup) getArea(locationArea LocationArea) (LocationAreaLookup, error) {
 	key := createLookupKey(locationArea)
-	locationAreaID, found := l.locationAreaToID[key]
+
+	area, found := l.locationAreas[key]
 	if !found {
-		return 0, fmt.Errorf("couldn't find location area: %s - %s - %s - %d", locationArea.Location, locationArea.SubLocation, locationArea.Area, derefOrNil(locationArea.Version))
+		return LocationAreaLookup{}, fmt.Errorf("couldn't find location area: %s - %s - %s - %d", locationArea.Location, locationArea.SubLocation, locationArea.Area, derefOrNil(locationArea.Version))
 	}
 
-	return locationAreaID, nil
+	return area, nil
 }
 
-
-func (l *lookup) getItemID(itemName string) (int32, error) {
+func (l *lookup) getItem(itemName string) (ItemLookup, error) {
 	masterItem := MasterItem{
 		Name: itemName,
 		Type: database.ItemTypeItem,
 	}
 	key := createLookupKey(masterItem)
 
-	itemID, found := l.itemNameToID[key]
+	item, found := l.items[key]
 	if !found {
-		return 0, fmt.Errorf("couldn't find Item %s", itemName)
+		return ItemLookup{}, fmt.Errorf("couldn't find Item %s", itemName)
 	}
 
-	return itemID, nil
+	return item, nil
 }
 
-
-func (l *lookup) getKeyItemID(itemName string) (int32, error) {
+func (l *lookup) getKeyItem(itemName string) (KeyItemLookup, error) {
 	masterItem := MasterItem{
 		Name: itemName,
 		Type: database.ItemTypeKeyItem,
 	}
 	key := createLookupKey(masterItem)
 
-	itemID, found := l.keyItemNameToID[key]
+	keyItem, found := l.keyItems[key]
 	if !found {
-		return 0, fmt.Errorf("couldn't find Key Item %s", itemName)
+		return KeyItemLookup{}, fmt.Errorf("couldn't find Key Item %s", itemName)
 	}
 
-	return itemID, nil
+	return keyItem, nil
 }
 
-
-func (l *lookup) getSongID(songName string) (int32, error) {
-	song := Song{
-		Name: songName,
-	}
-	key := createLookupKey(song)
-
-	songID, found := l.songNameToID[key]
+func (l *lookup) getSong(songName string) (SongLookup, error) {
+	songID, found := l.songs[songName]
 	if !found {
-		return 0, fmt.Errorf("couldn't find Song %s", songName)
+		return SongLookup{}, fmt.Errorf("couldn't find Song %s", songName)
 	}
 
 	return songID, nil
+}
+
+func (l *lookup) getStat(statName string) (StatLookup, error) {
+	stat, found := l.stats[statName]
+	if !found {
+		return StatLookup{}, fmt.Errorf("couldn't find Stat %s", statName)
+	}
+
+	return stat, nil
 }

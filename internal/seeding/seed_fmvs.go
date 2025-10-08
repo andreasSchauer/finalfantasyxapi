@@ -11,13 +11,13 @@ import (
 type FMV struct {
 	//id 			int32
 	//dataHash		string
-	Name 					string			`json:"name"`
-	Translation 			*string			`json:"translation"`
-	CutsceneDescription 	string			`json:"cutscene_description"`
-	SongName				*string			`json:"music"`
-	LocationArea 			LocationArea 	`json:"location_area"`
-	SongID					*int32
-	AreaID 					int32
+	Name                string       `json:"name"`
+	Translation         *string      `json:"translation"`
+	CutsceneDescription string       `json:"cutscene_description"`
+	SongName            *string      `json:"music"`
+	LocationArea        LocationArea `json:"location_area"`
+	SongID              *int32
+	AreaID              int32
 }
 
 func (f FMV) ToHashFields() []any {
@@ -43,26 +43,26 @@ func (l *lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, fmv := range fmvs {
 			if fmv.SongName != nil {
-				songID, err := l.getSongID(*fmv.SongName)
+				song, err := l.getSong(*fmv.SongName)
 				if err != nil {
 					return err
 				}
-				fmv.SongID = &songID
+				fmv.SongID = &song.ID
 			}
 
-			areaID, err := l.getAreaID(fmv.LocationArea)
+			area, err := l.getArea(fmv.LocationArea)
 			if err != nil {
 				return err
 			}
-			fmv.AreaID = areaID
+			fmv.AreaID = area.ID
 
 			err = qtx.CreateFMV(context.Background(), database.CreateFMVParams{
-				DataHash: 				generateDataHash(fmv),
-				Name:     				fmv.Name,
-				Translation: 			getNullString(fmv.Translation),
-				CutsceneDescription: 	fmv.CutsceneDescription,
-				SongID: 				getNullInt32(fmv.SongID),
-				AreaID: 				fmv.AreaID,
+				DataHash:            generateDataHash(fmv),
+				Name:                fmv.Name,
+				Translation:         getNullString(fmv.Translation),
+				CutsceneDescription: fmv.CutsceneDescription,
+				SongID:              getNullInt32(fmv.SongID),
+				AreaID:              fmv.AreaID,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create FMV: %s: %v", fmv.Name, err)

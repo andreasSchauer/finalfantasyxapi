@@ -129,18 +129,18 @@ func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix, dbMixID int
 }
 
 func (l *lookup) seedMixCombination(qtx *database.Queries, combo MixCombination) (database.MixCombination, error) {
-	firstItemID, err := l.getItemID(combo.FirstItem)
+	firstItem, err := l.getItem(combo.FirstItem)
 	if err != nil {
 		return database.MixCombination{}, err
 	}
 
-	secondItemID, err := l.getItemID(combo.SecondItem)
+	secondItem, err := l.getItem(combo.SecondItem)
 	if err != nil {
 		return database.MixCombination{}, err
 	}
 
-	combo.FirstItemID = firstItemID
-	combo.SecondItemID = secondItemID
+	combo.FirstItemID = firstItem.ID
+	combo.SecondItemID = secondItem.ID
 
 	dbCombo, err := qtx.CreateMixCombination(context.Background(), database.CreateMixCombinationParams{
 		DataHash:     generateDataHash(combo),

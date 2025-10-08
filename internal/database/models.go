@@ -2172,6 +2172,7 @@ type Stat struct {
 	MinVal   int32
 	MaxVal   int32
 	MaxVal2  sql.NullInt32
+	SphereID sql.NullInt32
 }
 
 type StatusCondition struct {

@@ -27,6 +27,12 @@ func (k KeyItem) ToHashFields() []any {
 	}
 }
 
+type KeyItemLookup struct {
+	KeyItem
+	ID 		int32
+}
+
+
 func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/key_items.json"
 
@@ -58,7 +64,10 @@ func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			key := createLookupKey(keyItem.MasterItem)
-			l.keyItemNameToID[key] = dbKeyItem.ID
+			l.keyItems[key] = KeyItemLookup{
+				KeyItem: 	keyItem,
+				ID: 		dbKeyItem.ID,
+			}
 		}
 		return nil
 	})

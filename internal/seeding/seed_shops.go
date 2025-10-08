@@ -39,12 +39,12 @@ func (l *lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, shop := range shops {
 			locationArea := shop.LocationArea
-			locationAreaID, err := l.getAreaID(locationArea)
+			area, err := l.getArea(locationArea)
 			if err != nil {
 				return fmt.Errorf("shops: %v", err)
 			}
 
-			shop.AreaID = locationAreaID
+			shop.AreaID = area.ID
 
 			err = qtx.CreateShop(context.Background(), database.CreateShopParams{
 				DataHash: generateDataHash(shop),

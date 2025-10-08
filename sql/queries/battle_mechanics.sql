@@ -1,7 +1,20 @@
--- name: CreateStat :exec
+-- name: CreateStat :one
 INSERT INTO stats (data_hash, name, effect, min_val, max_val, max_val_2)
 VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO NOTHING;
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = stats.data_hash
+RETURNING *;
+
+
+-- name: UpdateStat :exec
+UPDATE stats
+SET data_hash = $1,
+    name = $2,
+    effect = $3,
+    min_val = $4,
+    max_val = $5,
+    max_val_2 = $6,
+    sphere_id = $7
+WHERE id = $8;
 
 
 -- name: CreateElement :exec

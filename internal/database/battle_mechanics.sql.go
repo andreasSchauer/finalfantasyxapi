@@ -159,10 +159,11 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 	return err
 }
 
-const createStat = `-- name: CreateStat :exec
+const createStat = `-- name: CreateStat :one
 INSERT INTO stats (data_hash, name, effect, min_val, max_val, max_val_2)
 VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = stats.data_hash
+RETURNING id, data_hash, name, effect, min_val, max_val, max_val_2, sphere_id
 `
 
 type CreateStatParams struct {
@@ -174,8 +175,8 @@ type CreateStatParams struct {
 	MaxVal2  sql.NullInt32
 }
 
-func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) error {
-	_, err := q.db.ExecContext(ctx, createStat,
+func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) (Stat, error) {
+	row := q.db.QueryRowContext(ctx, createStat,
 		arg.DataHash,
 		arg.Name,
 		arg.Effect,
@@ -183,7 +184,18 @@ func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) error {
 		arg.MaxVal,
 		arg.MaxVal2,
 	)
-	return err
+	var i Stat
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Effect,
+		&i.MinVal,
+		&i.MaxVal,
+		&i.MaxVal2,
+		&i.SphereID,
+	)
+	return i, err
 }
 
 const createStatusCondition = `-- name: CreateStatusCondition :exec
@@ -205,6 +217,43 @@ func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusCon
 		arg.Name,
 		arg.Effect,
 		arg.NullifyArmored,
+	)
+	return err
+}
+
+const updateStat = `-- name: UpdateStat :exec
+UPDATE stats
+SET data_hash = $1,
+    name = $2,
+    effect = $3,
+    min_val = $4,
+    max_val = $5,
+    max_val_2 = $6,
+    sphere_id = $7
+WHERE id = $8
+`
+
+type UpdateStatParams struct {
+	DataHash string
+	Name     string
+	Effect   string
+	MinVal   int32
+	MaxVal   int32
+	MaxVal2  sql.NullInt32
+	SphereID sql.NullInt32
+	ID       int32
+}
+
+func (q *Queries) UpdateStat(ctx context.Context, arg UpdateStatParams) error {
+	_, err := q.db.ExecContext(ctx, updateStat,
+		arg.DataHash,
+		arg.Name,
+		arg.Effect,
+		arg.MinVal,
+		arg.MaxVal,
+		arg.MaxVal2,
+		arg.SphereID,
+		arg.ID,
 	)
 	return err
 }

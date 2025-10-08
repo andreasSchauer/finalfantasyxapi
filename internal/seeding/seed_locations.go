@@ -69,14 +69,6 @@ type LocationArea struct {
 	Version     *int32 `json:"version"`
 }
 
-func (la LocationArea) ToHashFields() []any {
-	return []any{
-		la.Location,
-		la.SubLocation,
-		la.Area,
-		derefOrNil(la.Version),
-	}
-}
 
 func (la LocationArea) ToKeyFields() []any {
 	return []any{
@@ -86,6 +78,13 @@ func (la LocationArea) ToKeyFields() []any {
 		derefOrNil(la.Version),
 	}
 }
+
+
+type LocationAreaLookup struct {
+	LocationArea
+	ID 				int32
+}
+
 
 func (l *lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/locations.json"
@@ -166,7 +165,10 @@ func (l *lookup) seedAreas(qtx *database.Queries, location Location, subLocation
 			Version: 		area.Version,
 		}
 		key := createLookupKey(locationArea)
-		l.locationAreaToID[key] = dbArea.ID
+		l.locationAreas[key] = LocationAreaLookup{
+			LocationArea: 	locationArea,
+			ID: 			dbArea.ID,
+		}
 	}
 
 	return nil

@@ -53,6 +53,12 @@ func (s Song) ToKeyFields() []any {
 }
 
 
+type SongLookup struct {
+	Song
+	ID 		int32
+}
+
+
 type SongCredits struct {
 	Composer	*string		`json:"composer"`
 	Arranger	*string		`json:"arranger"`
@@ -118,7 +124,10 @@ func (l *lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			key := createLookupKey(song)
-			l.songNameToID[key] = dbSong.ID
+			l.songs[key] = SongLookup{
+				Song: 	song,
+				ID: 	dbSong.ID,
+			}
 		}
 		return nil
 	})

@@ -36,6 +36,11 @@ func (i Item) ToHashFields() []any {
 	}
 }
 
+type ItemLookup struct {
+	Item
+	ID 		int32
+}
+
 
 type ItemAbility struct {
 	Ability
@@ -108,7 +113,10 @@ func (l *lookup) seedItem(qtx *database.Queries, item Item, allItemID int32) (da
 	}
 
 	key := createLookupKey(item.MasterItem)
-	l.itemNameToID[key] = dbItem.ID
+	l.items[key] = ItemLookup{
+		Item: 	item,
+		ID: 	dbItem.ID,
+	}
 
 	return dbItem, nil
 }

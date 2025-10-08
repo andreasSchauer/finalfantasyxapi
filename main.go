@@ -22,6 +22,7 @@ type apiConfig struct {
 func main() {
 	//const filepathRoot = "."
 	const port = "8080"
+	const migrationsDir = "./sql/schema/"
 
 	godotenv.Load()
 	dbURL := os.Getenv("DB_URL")
@@ -57,7 +58,7 @@ func main() {
 	mux.HandleFunc("GET /api/healthz", handlerReadiness)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerResetDatabase)
 
-	err = seeding.Seed_database(apiCfg.db, apiCfg.dbConn)
+	err = seeding.SeedDatabase(apiCfg.db, apiCfg.dbConn, migrationsDir)
 	if err != nil {
 		log.Fatal(err)
 	}
