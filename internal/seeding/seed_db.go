@@ -49,7 +49,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB, migrationsDir string) er
 		lookup.seedFMVs,
 	}
 
-	err := databaseSetup(dbConn, migrationsDir)
+	err := setupDB(dbConn, migrationsDir)
 	if err != nil {
 		return fmt.Errorf("couldn't setup database: %v", err)
 	}
@@ -64,8 +64,6 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB, migrationsDir string) er
 
 	seedDuration := time.Since(seedStart)
 	fmt.Printf("initial seeding took %.2f seconds\n", seedDuration.Seconds())
-
-	// will do relationships here
 
 	relationshipFunctions := []func(*database.Queries, *sql.DB) error{
 		lookup.createStatsRelationships,
@@ -86,7 +84,8 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB, migrationsDir string) er
 }
 
 
-func databaseSetup(dbConn *sql.DB, migrationsDir string) error {
+
+func setupDB(dbConn *sql.DB, migrationsDir string) error {
 	err := goose.SetDialect("postgres")
 	if err != nil {
 		return err

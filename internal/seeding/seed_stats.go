@@ -87,7 +87,7 @@ func (l *lookup) createStatsRelationships(db *database.Queries, dbConn *sql.DB) 
 			if err != nil {
 				return err
 			}
-			
+
 			sphere, err := l.getItem(jsonStat.Sphere)
 			if err != nil {
 				return err

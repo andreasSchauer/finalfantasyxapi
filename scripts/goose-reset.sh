@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e  # Exit on any error
 
-echo "Making one down and one up migration..."
+echo "Resetting database..."
 
 cd sql/schema
-goose postgres "postgres://andreasschauer:@localhost:5432/ffxapi" down
+goose postgres "postgres://andreasschauer:@localhost:5432/ffxapi" down-to 0
 goose postgres "postgres://andreasschauer:@localhost:5432/ffxapi" up
 cd ..
 cd ..

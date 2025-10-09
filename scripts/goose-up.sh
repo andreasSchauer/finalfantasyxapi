@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e  # Exit on any error
 
-echo "Making one up migration..."
+echo "Making up migration..."
 
 cd sql/schema
 goose postgres "postgres://andreasschauer:@localhost:5432/ffxapi" up
