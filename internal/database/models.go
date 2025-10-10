@@ -1096,6 +1096,50 @@ func (ns NullMixCategory) Value() (driver.Value, error) {
 	return string(ns.MixCategory), nil
 }
 
+type ModifierType string
+
+const (
+	ModifierTypeBattleDependent ModifierType = "battle-dependent"
+	ModifierTypeFactor          ModifierType = "factor"
+	ModifierTypeFixedValue      ModifierType = "fixed-value"
+	ModifierTypePercentage      ModifierType = "percentage"
+)
+
+func (e *ModifierType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ModifierType(s)
+	case string:
+		*e = ModifierType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ModifierType: %T", src)
+	}
+	return nil
+}
+
+type NullModifierType struct {
+	ModifierType ModifierType
+	Valid        bool // Valid is true if ModifierType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullModifierType) Scan(value interface{}) error {
+	if value == nil {
+		ns.ModifierType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ModifierType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullModifierType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ModifierType), nil
+}
+
 type MonsterSpecies string
 
 const (
@@ -1322,77 +1366,6 @@ func (ns NullOverdriveType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.OverdriveType), nil
-}
-
-type Parameter string
-
-const (
-	ParameterAccuracyPercentage     Parameter = "accuracy-percentage"
-	ParameterAmbushChance           Parameter = "ambush-chance"
-	ParameterApGain                 Parameter = "ap-gain"
-	ParameterBuffFactorMagBased     Parameter = "buff-factor-mag-based"
-	ParameterBuffFactorStrBased     Parameter = "buff-factor-str-based"
-	ParameterCommonStealRate        Parameter = "common-steal-rate"
-	ParameterCriticalHitDefense     Parameter = "critical-hit-defense"
-	ParameterCriticalHitRate        Parameter = "critical-hit-rate"
-	ParameterCurrentHp              Parameter = "current-hp"
-	ParameterDamageLimit            Parameter = "damage-limit"
-	ParameterEncounterRate          Parameter = "encounter-rate"
-	ParameterFinalEvasionRate       Parameter = "final-evasion-rate"
-	ParameterFinalHitRate           Parameter = "final-hit-rate"
-	ParameterGilGain                Parameter = "gil-gain"
-	ParameterHpLimit                Parameter = "hp-limit"
-	ParameterInitialCounterValue    Parameter = "initial-counter-value"
-	ParameterItemsHealing           Parameter = "items-healing"
-	ParameterMagicalDamageDealt     Parameter = "magical-damage-dealt"
-	ParameterMagicalDamageTaken     Parameter = "magical-damage-taken"
-	ParameterMpLimit                Parameter = "mp-limit"
-	ParameterOverdriveCharge        Parameter = "overdrive-charge"
-	ParameterOverdriveGauge         Parameter = "overdrive-gauge"
-	ParameterPercentageDamageTaken  Parameter = "percentage-damage-taken"
-	ParameterPhysicalDamageDealt    Parameter = "physical-damage-dealt"
-	ParameterPhysicalDamageTaken    Parameter = "physical-damage-taken"
-	ParameterMpCost                 Parameter = "mp-cost"
-	ParameterPreemptiveStrikeChance Parameter = "preemptive-strike-chance"
-	ParameterRareStealRate          Parameter = "rare-steal-rate"
-	ParameterSpecialDamageDealt     Parameter = "special-damage-dealt"
-	ParameterSpecialDamageTaken     Parameter = "special-damage-taken"
-	ParameterTickSpeed              Parameter = "tick-speed"
-)
-
-func (e *Parameter) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = Parameter(s)
-	case string:
-		*e = Parameter(s)
-	default:
-		return fmt.Errorf("unsupported scan type for Parameter: %T", src)
-	}
-	return nil
-}
-
-type NullParameter struct {
-	Parameter Parameter
-	Valid     bool // Valid is true if Parameter is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullParameter) Scan(value interface{}) error {
-	if value == nil {
-		ns.Parameter, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.Parameter.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullParameter) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.Parameter), nil
 }
 
 type QuestType string
@@ -1852,8 +1825,6 @@ type AutoAbility struct {
 	Counter             NullCounterType
 	GradualRecovery     NullRecoveryType
 	OnHitElement        NullElementType
-	ConversionFrom      NullParameter
-	ConversionTo        NullParameter
 }
 
 type BlitzballItemsList struct {
@@ -2001,6 +1972,15 @@ type MixComboJunction struct {
 	MixID       int32
 	ComboID     int32
 	IsBestCombo bool
+}
+
+type Modifier struct {
+	ID           int32
+	DataHash     string
+	Name         string
+	Effect       string
+	Type         ModifierType
+	DefaultValue sql.NullFloat64
 }
 
 type Monster struct {

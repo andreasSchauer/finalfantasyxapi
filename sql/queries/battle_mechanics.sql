@@ -58,3 +58,10 @@ ON CONFLICT(data_hash) DO NOTHING;
 INSERT INTO properties (data_hash, name, effect, nullify_armored)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateModifier :one
+INSERT INTO modifiers (data_hash, name, effect, type, default_value)
+VALUES ($1, $2, $3, $4, $5)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifiers.data_hash
+RETURNING *;

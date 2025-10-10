@@ -74,7 +74,11 @@ func (l *lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, mix := range mixes {
-			overdrive, err := l.getOverdrive(mix.Name, nil)
+			ability := Ability{
+				Name: mix.Name,
+			}
+
+			overdrive, err := l.getOverdrive(ability)
 			if err != nil {
 				return err
 			}

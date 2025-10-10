@@ -109,6 +109,41 @@ func (q *Queries) CreateElement(ctx context.Context, arg CreateElementParams) er
 	return err
 }
 
+const createModifier = `-- name: CreateModifier :one
+INSERT INTO modifiers (data_hash, name, effect, type, default_value)
+VALUES ($1, $2, $3, $4, $5)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifiers.data_hash
+RETURNING id, data_hash, name, effect, type, default_value
+`
+
+type CreateModifierParams struct {
+	DataHash     string
+	Name         string
+	Effect       string
+	Type         ModifierType
+	DefaultValue sql.NullFloat64
+}
+
+func (q *Queries) CreateModifier(ctx context.Context, arg CreateModifierParams) (Modifier, error) {
+	row := q.db.QueryRowContext(ctx, createModifier,
+		arg.DataHash,
+		arg.Name,
+		arg.Effect,
+		arg.Type,
+		arg.DefaultValue,
+	)
+	var i Modifier
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Effect,
+		&i.Type,
+		&i.DefaultValue,
+	)
+	return i, err
+}
+
 const createOverdriveMode = `-- name: CreateOverdriveMode :exec
 INSERT INTO overdrive_modes (data_hash, name, description, effect, type, fill_rate)
 VALUES ($1, $2, $3, $4, $5, $6)

@@ -46,13 +46,6 @@ func (s Song) ToHashFields() []any {
 }
 
 
-func (s Song) ToKeyFields() []any {
-	return []any{
-		s.Name,
-	}
-}
-
-
 type SongLookup struct {
 	Song
 	ID 		int32
@@ -123,8 +116,7 @@ func (l *lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 				return fmt.Errorf("couldn't create Song: %s: %v", song.Name, err)
 			}
 
-			key := createLookupKey(song)
-			l.songs[key] = SongLookup{
+			l.songs[song.Name] = SongLookup{
 				Song: 	song,
 				ID: 	dbSong.ID,
 			}

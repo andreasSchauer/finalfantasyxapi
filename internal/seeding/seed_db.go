@@ -10,75 +10,82 @@ import (
 )
 
 func SeedDatabase(db *database.Queries, dbConn *sql.DB, migrationsDir string) error {
-	lookup := lookupInit()
-
-	seedFunctions := []func(*database.Queries, *sql.DB) error{
-		lookup.seedStats,
-		lookup.seedElements,
-		lookup.seedAffinities,
-		lookup.seedAgilityTiers,
-		lookup.seedOverdriveModes,
-		lookup.seedStatusConditions,
-		lookup.seedProperties,
-		lookup.seedCharacters,
-		lookup.seedAeons,
-		lookup.seedDefaultAbilitiesEntries,
-		lookup.seedBlitzballItems,
-		lookup.seedMonsterArenaCreations,
-		lookup.seedSidequests,
-		lookup.seedMonsters,
-		lookup.seedAeonCommands,
-		lookup.seedMenuCommands,
-		lookup.seedPlayerAbilities,
-		lookup.seedEnemyAbilities,
-		lookup.seedOverdriveAbilities,
-		lookup.seedTriggerCommands,
-		lookup.seedOverdriveCommands,
-		lookup.seedItems,
-		lookup.seedKeyItems,
-		lookup.seedPrimers,
-		lookup.seedMixes,
-		lookup.seedCelestialWeapons,
-		lookup.seedAutoAbilities,
-		lookup.seedEquipment,
-		lookup.seedLocations,
-		lookup.seedTreasures,
-		lookup.seedShops,
-		lookup.seedMonsterFormations,
-		lookup.seedSongs,
-		lookup.seedFMVs,
-	}
-
 	err := setupDB(dbConn, migrationsDir)
 	if err != nil {
 		return fmt.Errorf("couldn't setup database: %v", err)
 	}
 
-	seedStart := time.Now()
+	l := lookupInit()
 
-	for _, seedFunc := range seedFunctions {
-		if err := seedFunc(db, dbConn); err != nil {
-			return err
-		}
+	seedFunctions := []func(*database.Queries, *sql.DB) error{
+		l.seedStats,
+		l.seedElements,
+		l.seedAffinities,
+		l.seedAgilityTiers,
+		l.seedOverdriveModes,
+		l.seedStatusConditions,
+		l.seedProperties,
+		l.seedModifiers,
+		l.seedCharacters,
+		l.seedAeons,
+		l.seedDefaultAbilitiesEntries,
+		l.seedBlitzballItems,
+		l.seedMonsterArenaCreations,
+		l.seedSidequests,
+		l.seedMonsters,
+		l.seedAeonCommands,
+		l.seedMenuCommands,
+		l.seedPlayerAbilities,
+		l.seedEnemyAbilities,
+		l.seedOverdriveAbilities,
+		l.seedTriggerCommands,
+		l.seedOverdriveCommands,
+		l.seedItems,
+		l.seedKeyItems,
+		l.seedPrimers,
+		l.seedMixes,
+		l.seedCelestialWeapons,
+		l.seedAutoAbilities,
+		l.seedEquipment,
+		l.seedLocations,
+		l.seedTreasures,
+		l.seedShops,
+		l.seedMonsterFormations,
+		l.seedSongs,
+		l.seedFMVs,
 	}
-
-	seedDuration := time.Since(seedStart)
-	fmt.Printf("initial seeding took %.2f seconds\n", seedDuration.Seconds())
 
 	relationshipFunctions := []func(*database.Queries, *sql.DB) error{
-		lookup.createStatsRelationships,
+		l.createStatsRelationships,
 	}
 
-	relStart := time.Now()
+	err = handleDBFunctions(db, dbConn, seedFunctions, "initial seeding")
+	if err != nil {
+		return err
+	}
 
-	for _, relFunc := range relationshipFunctions {
-		if err := relFunc(db, dbConn); err != nil {
+	err = handleDBFunctions(db, dbConn, relationshipFunctions, "establishing relationships")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+
+
+func handleDBFunctions(db *database.Queries, dbConn *sql.DB, functions []func(*database.Queries, *sql.DB) error, infotext string) error {
+	start := time.Now()
+
+	for _, function := range functions {
+		err := function(db, dbConn)
+		if err != nil {
 			return err
 		}
 	}
 
-	relDuration := time.Since(relStart)
-	fmt.Printf("establishing relationships took %.2f seconds\n", relDuration.Seconds())
+	duration := time.Since(start)
+	fmt.Printf("%s took %.2f seconds\n", infotext, duration.Seconds())
 
 	return nil
 }

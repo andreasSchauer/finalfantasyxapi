@@ -84,7 +84,21 @@ CREATE TABLE properties (
 );
 
 
+CREATE TYPE modifier_type AS ENUM ('battle-dependent', 'factor','fixed-value', 'percentage');
+
+CREATE TABLE modifiers (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    name TEXT UNIQUE NOT NULL,
+    effect TEXT NOT NULL,
+    type modifier_type NOT NULL,
+    default_value REAL
+);
+
+
 -- +goose Down
+DROP TABLE IF EXISTS modifiers;
+DROP TYPE IF EXISTS modifier_type;
 DROP TABLE IF EXISTS properties;
 DROP TABLE IF EXISTS status_conditions;
 DROP TYPE IF EXISTS nullify_armored;

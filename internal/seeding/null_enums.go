@@ -99,18 +99,6 @@ func nullElementType(s *string) database.NullElementType {
 }
 
 
-func nullParameter(s *string) database.NullParameter {
-    if s == nil {
-        return database.NullParameter{}
-    }
-    
-    return database.NullParameter{
-        Parameter: database.Parameter(*s),
-        Valid: true,
-    }
-}
-
-
 func nullMaCreationArea(s *string) database.NullMaCreationArea {
     if s == nil {
         return database.NullMaCreationArea{}

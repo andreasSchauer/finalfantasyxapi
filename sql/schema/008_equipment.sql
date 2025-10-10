@@ -19,7 +19,7 @@ CREATE TYPE recovery_type AS ENUM ('hp', 'mp');
 CREATE TYPE element_type AS ENUM ('fire', 'lightning', 'water', 'ice', 'holy');
 
 
-CREATE TYPE parameter AS ENUM ('accuracy-percentage', 'ambush-chance', 'ap-gain', 'buff-factor-mag-based', 'buff-factor-str-based', 'common-steal-rate', 'critical-hit-defense', 'critical-hit-rate', 'current-hp', 'damage-limit', 'encounter-rate', 'final-evasion-rate', 'final-hit-rate', 'gil-gain', 'hp-limit', 'initial-counter-value', 'items-healing', 'magical-damage-dealt', 'magical-damage-taken', 'mp-limit', 'overdrive-charge', 'overdrive-gauge', 'percentage-damage-taken', 'physical-damage-dealt', 'physical-damage-taken', 'mp-cost', 'preemptive-strike-chance', 'rare-steal-rate', 'special-damage-dealt', 'special-damage-taken', 'tick-speed');
+
 
 
 CREATE TABLE auto_abilities (
@@ -35,8 +35,6 @@ CREATE TABLE auto_abilities (
     counter counter_type,
     gradual_recovery recovery_type,
     on_hit_element element_type,
-    conversion_from parameter,
-    conversion_to parameter,
     CHECK (on_hit_element != 'holy')
 );
 
@@ -63,7 +61,6 @@ CREATE TABLE equipment_abilities (
 DROP TABLE IF EXISTS equipment_abilities;
 DROP TYPE IF EXISTS equip_class;
 DROP TABLE IF EXISTS auto_abilities;
-DROP TYPE IF EXISTS parameter;
 DROP TYPE IF EXISTS element_type;
 DROP TYPE IF EXISTS recovery_type;
 DROP TYPE IF EXISTS counter_type;

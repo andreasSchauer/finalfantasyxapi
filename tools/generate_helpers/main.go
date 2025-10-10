@@ -16,7 +16,6 @@ func main() {
         "CounterType",
         "RecoveryType",
         "ElementType",
-        "Parameter",
         "MaCreationArea",
         "MaCreationSpecies",
         "SubmenuType",

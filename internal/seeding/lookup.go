@@ -22,6 +22,7 @@ type lookup struct {
 	items         	map[string]ItemLookup
 	keyItems      	map[string]KeyItemLookup
 	locationAreas 	map[string]LocationAreaLookup
+	modifiers		map[string]ModifierLookup
 	overdrives		map[string]OverdriveLookup
 	songs         	map[string]SongLookup
 	stats         	map[string]StatLookup
@@ -35,6 +36,7 @@ func lookupInit() lookup {
 		items:         	make(map[string]ItemLookup),
 		keyItems:      	make(map[string]KeyItemLookup),
 		locationAreas: 	make(map[string]LocationAreaLookup),
+		modifiers: 		make(map[string]ModifierLookup),
 		overdrives: 	make(map[string]OverdriveLookup),
 		songs:         	make(map[string]SongLookup),
 		stats:         	make(map[string]StatLookup),
@@ -42,8 +44,8 @@ func lookupInit() lookup {
 
 }
 
-// whether to take a Lookupable or a string as an input depends on vibes. if it's just one field, I'll take the string. if it's a composite key, I'll make a struct.
 
+// Lookupable for composite keys, string for simple name keys
 
 func (l *lookup) getAeon(aeonName string) (AeonLookup, error) {
 	playerUnit := PlayerUnit{
@@ -98,6 +100,7 @@ func (l *lookup) getArea(locationArea LocationArea) (LocationAreaLookup, error) 
 	return area, nil
 }
 
+
 func (l *lookup) getItem(itemName string) (ItemLookup, error) {
 	masterItem := MasterItem{
 		Name: itemName,
@@ -112,6 +115,7 @@ func (l *lookup) getItem(itemName string) (ItemLookup, error) {
 
 	return item, nil
 }
+
 
 func (l *lookup) getKeyItem(itemName string) (KeyItemLookup, error) {
 	masterItem := MasterItem{
@@ -129,12 +133,17 @@ func (l *lookup) getKeyItem(itemName string) (KeyItemLookup, error) {
 }
 
 
-func (l *lookup) getOverdrive(overdriveName string, version *int32) (OverdriveLookup, error) {
-	ability := Ability{
-		Name: overdriveName,
-		Version: version,
+func (l *lookup) getModifier(modifierName string) (ModifierLookup, error) {
+	modifier, found := l.modifiers[modifierName]
+	if !found {
+		return ModifierLookup{}, fmt.Errorf("couldn't find Modifier %s", modifierName)
 	}
-	
+
+	return modifier, nil
+}
+
+
+func (l *lookup) getOverdrive(ability Ability) (OverdriveLookup, error) {
 	key := createLookupKey(ability)
 
 	overdrive, found := l.overdrives[key]
@@ -147,13 +156,14 @@ func (l *lookup) getOverdrive(overdriveName string, version *int32) (OverdriveLo
 
 
 func (l *lookup) getSong(songName string) (SongLookup, error) {
-	songID, found := l.songs[songName]
+	song, found := l.songs[songName]
 	if !found {
 		return SongLookup{}, fmt.Errorf("couldn't find Song %s", songName)
 	}
 
-	return songID, nil
+	return song, nil
 }
+
 
 func (l *lookup) getStat(statName string) (StatLookup, error) {
 	stat, found := l.stats[statName]

@@ -65,8 +65,6 @@ func (l *lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 				Counter:             nullCounterType(ability.Counter),
 				GradualRecovery:     nullRecoveryType(ability.GradualRecovery),
 				OnHitElement:        nullElementType(ability.OnHitElement),
-				ConversionFrom:      nullParameter(ability.ConversionFrom),
-				ConversionTo:        nullParameter(ability.ConversionTo),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Auto-Ability: %s: %v", ability.Name, err)

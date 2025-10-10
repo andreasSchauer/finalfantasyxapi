@@ -1,10 +1,10 @@
 -- +goose Up
-CREATE DOMAIN distance as INTEGER
-    CHECK (VALUE IN (1, 2, 3, 4));
 CREATE TYPE weapon_type AS ENUM ('sword', 'staff', 'blitzball', 'doll', 'spear', 'blade', 'claw', 'seymour-staff');
 CREATE TYPE armor_type AS ENUM ('shield', 'ring', 'armguard', 'bangle', 'armlet', 'bracer', 'targe', 'seymour-armor');
 CREATE TYPE unit_type AS ENUM ('aeon', 'character');
 
+CREATE DOMAIN distance as INTEGER
+    CHECK (VALUE IN (1, 2, 3, 4));
 
 
 CREATE TABLE player_units (
