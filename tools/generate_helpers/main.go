@@ -9,7 +9,6 @@ import (
 func main() {
     enumTypes := []string{
         "AccuracySource",
-        "AeonCategory",
         "CreationsUnlockedCategory",
         "NullifyArmored",
         "EquipType",

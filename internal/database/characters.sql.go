@@ -10,17 +10,17 @@ import (
 	"database/sql"
 )
 
-const createAeon = `-- name: CreateAeon :exec
-INSERT INTO aeons (data_hash, name, unlock_condition, category, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-ON CONFLICT(data_hash) DO NOTHING
+const createAeon = `-- name: CreateAeon :one
+INSERT INTO aeons (data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeons.data_hash
+RETURNING id, data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier
 `
 
 type CreateAeonParams struct {
 	DataHash              string
-	Name                  string
+	UnitID                int32
 	UnlockCondition       string
-	Category              NullAeonCategory
 	IsOptional            bool
 	BattlesToRegenerate   int32
 	PhysAtkDamageConstant sql.NullInt32
@@ -31,12 +31,11 @@ type CreateAeonParams struct {
 	PhysAtkAccModifier    sql.NullFloat64
 }
 
-func (q *Queries) CreateAeon(ctx context.Context, arg CreateAeonParams) error {
-	_, err := q.db.ExecContext(ctx, createAeon,
+func (q *Queries) CreateAeon(ctx context.Context, arg CreateAeonParams) (Aeon, error) {
+	row := q.db.QueryRowContext(ctx, createAeon,
 		arg.DataHash,
-		arg.Name,
+		arg.UnitID,
 		arg.UnlockCondition,
-		arg.Category,
 		arg.IsOptional,
 		arg.BattlesToRegenerate,
 		arg.PhysAtkDamageConstant,
@@ -46,34 +45,82 @@ func (q *Queries) CreateAeon(ctx context.Context, arg CreateAeonParams) error {
 		arg.PhysAtkHitChance,
 		arg.PhysAtkAccModifier,
 	)
-	return err
+	var i Aeon
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.UnitID,
+		&i.UnlockCondition,
+		&i.IsOptional,
+		&i.BattlesToRegenerate,
+		&i.PhysAtkDamageConstant,
+		&i.PhysAtkRange,
+		&i.PhysAtkShatterRate,
+		&i.PhysAtkAccSource,
+		&i.PhysAtkHitChance,
+		&i.PhysAtkAccModifier,
+	)
+	return i, err
 }
 
-const createCharacter = `-- name: CreateCharacter :exec
-INSERT INTO characters (data_hash, name, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
-VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO NOTHING
+const createCharacter = `-- name: CreateCharacter :one
+INSERT INTO characters (data_hash, unit_id, story_only, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = characters.data_hash
+RETURNING id, data_hash, unit_id, story_only, weapon_type, armor_type, physical_attack_range, can_fight_underwater
 `
 
 type CreateCharacterParams struct {
 	DataHash            string
-	Name                string
+	UnitID              int32
+	StoryOnly           bool
 	WeaponType          WeaponType
 	ArmorType           ArmorType
 	PhysicalAttackRange interface{}
 	CanFightUnderwater  bool
 }
 
-func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams) error {
-	_, err := q.db.ExecContext(ctx, createCharacter,
+func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams) (Character, error) {
+	row := q.db.QueryRowContext(ctx, createCharacter,
 		arg.DataHash,
-		arg.Name,
+		arg.UnitID,
+		arg.StoryOnly,
 		arg.WeaponType,
 		arg.ArmorType,
 		arg.PhysicalAttackRange,
 		arg.CanFightUnderwater,
 	)
-	return err
+	var i Character
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.UnitID,
+		&i.StoryOnly,
+		&i.WeaponType,
+		&i.ArmorType,
+		&i.PhysicalAttackRange,
+		&i.CanFightUnderwater,
+	)
+	return i, err
+}
+
+const createCharacterClass = `-- name: CreateCharacterClass :one
+INSERT INTO character_classes (data_hash, name)
+VALUES ($1, $2)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = character_classes.data_hash
+RETURNING id, data_hash, name
+`
+
+type CreateCharacterClassParams struct {
+	DataHash string
+	Name     string
+}
+
+func (q *Queries) CreateCharacterClass(ctx context.Context, arg CreateCharacterClassParams) (CharacterClass, error) {
+	row := q.db.QueryRowContext(ctx, createCharacterClass, arg.DataHash, arg.Name)
+	var i CharacterClass
+	err := row.Scan(&i.ID, &i.DataHash, &i.Name)
+	return i, err
 }
 
 const createDefaultAbilitesEntry = `-- name: CreateDefaultAbilitesEntry :exec
@@ -92,22 +139,44 @@ func (q *Queries) CreateDefaultAbilitesEntry(ctx context.Context, arg CreateDefa
 	return err
 }
 
-const getCharacterByName = `-- name: GetCharacterByName :one
-SELECT id, data_hash, name, weapon_type, armor_type, physical_attack_range, can_fight_underwater FROM characters
-WHERE name = $1
+const createPlayerUnit = `-- name: CreatePlayerUnit :one
+INSERT INTO player_units (data_hash, name, type)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = player_units.data_hash
+RETURNING id, data_hash, name, type
 `
 
-func (q *Queries) GetCharacterByName(ctx context.Context, name string) (Character, error) {
-	row := q.db.QueryRowContext(ctx, getCharacterByName, name)
-	var i Character
+type CreatePlayerUnitParams struct {
+	DataHash string
+	Name     string
+	Type     UnitType
+}
+
+func (q *Queries) CreatePlayerUnit(ctx context.Context, arg CreatePlayerUnitParams) (PlayerUnit, error) {
+	row := q.db.QueryRowContext(ctx, createPlayerUnit, arg.DataHash, arg.Name, arg.Type)
+	var i PlayerUnit
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
 		&i.Name,
-		&i.WeaponType,
-		&i.ArmorType,
-		&i.PhysicalAttackRange,
-		&i.CanFightUnderwater,
+		&i.Type,
 	)
 	return i, err
+}
+
+const createUnitsCharClassesJunction = `-- name: CreateUnitsCharClassesJunction :exec
+INSERT INTO units_character_classes (data_hash, unit_id, class_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateUnitsCharClassesJunctionParams struct {
+	DataHash string
+	UnitID   int32
+	ClassID  int32
+}
+
+func (q *Queries) CreateUnitsCharClassesJunction(ctx context.Context, arg CreateUnitsCharClassesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createUnitsCharClassesJunction, arg.DataHash, arg.UnitID, arg.ClassID)
+	return err
 }

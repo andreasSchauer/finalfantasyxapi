@@ -47,12 +47,12 @@ func (l *lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, entry := range equipmentAbilities {
 			if entry.SpecificCharacter != nil {
-				dbCharacter, err := qtx.GetCharacterByName(context.Background(), *entry.SpecificCharacter)
+				character, err := l.getCharacter(*entry.SpecificCharacter)
 				if err != nil {
 					return err
 				}
 
-				entry.SpecificCharacterID = &dbCharacter.ID
+				entry.SpecificCharacterID = &character.ID
 			}
 
 			err = qtx.CreateEquipmentAbility(context.Background(), database.CreateEquipmentAbilityParams{

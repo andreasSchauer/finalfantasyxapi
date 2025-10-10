@@ -15,18 +15,6 @@ func nullAccuracySource(s *string) database.NullAccuracySource {
 }
 
 
-func nullAeonCategory(s *string) database.NullAeonCategory {
-    if s == nil {
-        return database.NullAeonCategory{}
-    }
-    
-    return database.NullAeonCategory{
-        AeonCategory: database.AeonCategory(*s),
-        Valid: true,
-    }
-}
-
-
 func nullCreationsUnlockedCategory(s *string) database.NullCreationsUnlockedCategory {
     if s == nil {
         return database.NullCreationsUnlockedCategory{}

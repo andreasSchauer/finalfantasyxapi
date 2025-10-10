@@ -11,7 +11,9 @@ import (
 type Character struct {
 	//id 		int32
 	//dataHash	string
-	Name               string `json:"name"`
+	PlayerUnit
+	UnitID			   int32
+	StoryOnly		   bool   `json:"story_only"`
 	WeaponType         string `json:"weapon_type"`
 	ArmorType          string `json:"armor_type"`
 	PhysAtkRange       int32  `json:"physical_attack_range"`
@@ -20,13 +22,22 @@ type Character struct {
 
 func (c Character) ToHashFields() []any {
 	return []any{
-		c.Name,
+		c.UnitID,
+		c.StoryOnly,
 		c.WeaponType,
 		c.ArmorType,
 		c.PhysAtkRange,
 		c.CanFightUnderwater,
 	}
 }
+
+
+type CharacterLookup struct {
+	Character
+	ID 			int32
+}
+
+
 
 func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/characters.json"
@@ -39,16 +50,37 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, character := range characters {
-			err = qtx.CreateCharacter(context.Background(), database.CreateCharacterParams{
-				DataHash:            generateDataHash(character),
-				Name:                character.Name,
-				WeaponType:          database.WeaponType(character.WeaponType),
-				ArmorType:           database.ArmorType(character.ArmorType),
-				PhysicalAttackRange: character.PhysAtkRange,
-				CanFightUnderwater:  character.CanFightUnderwater,
+			character.Type = database.UnitTypeCharacter
+
+			dbPlayerUnit, err := l.seedPlayerUnit(qtx, character.PlayerUnit)
+			if err != nil {
+				return err
+			}
+
+			character.UnitID = dbPlayerUnit.ID
+			
+			dbCharacter, err := qtx.CreateCharacter(context.Background(), database.CreateCharacterParams{
+				DataHash:            	generateDataHash(character),
+				UnitID:              	character.UnitID,
+				StoryOnly: 				character.StoryOnly,	
+				WeaponType:          	database.WeaponType(character.WeaponType),
+				ArmorType:           	database.ArmorType(character.ArmorType),
+				PhysicalAttackRange: 	character.PhysAtkRange,
+				CanFightUnderwater:  	character.CanFightUnderwater,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Character: %s: %v", character.Name, err)
+			}
+
+			key := createLookupKey(character.PlayerUnit)
+			l.characters[key] = CharacterLookup{
+				Character: 	character,
+				ID: 		dbCharacter.ID,
+			}
+
+			err = l.seedCharacterClasses(qtx, character.PlayerUnit)
+			if err != nil {
+				return err
 			}
 		}
 		return nil

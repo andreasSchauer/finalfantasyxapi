@@ -16,25 +16,76 @@ func createLookupKey(l Lookupable) string {
 }
 
 type lookup struct {
-	items         map[string]ItemLookup
-	keyItems      map[string]KeyItemLookup
-	locationAreas map[string]LocationAreaLookup
-	songs         map[string]SongLookup
-	stats         map[string]StatLookup
+	aeons			map[string]AeonLookup
+	characters		map[string]CharacterLookup
+	charClasses		map[string]CharClassLookup
+	items         	map[string]ItemLookup
+	keyItems      	map[string]KeyItemLookup
+	locationAreas 	map[string]LocationAreaLookup
+	overdrives		map[string]OverdriveLookup
+	songs         	map[string]SongLookup
+	stats         	map[string]StatLookup
 }
 
 func lookupInit() lookup {
 	return lookup{
-		items:         make(map[string]ItemLookup),
-		keyItems:      make(map[string]KeyItemLookup),
-		locationAreas: make(map[string]LocationAreaLookup),
-		songs:         make(map[string]SongLookup),
-		stats:         make(map[string]StatLookup),
+		aeons: 			make(map[string]AeonLookup),
+		characters: 	make(map[string]CharacterLookup),
+		charClasses: 	make(map[string]CharClassLookup),
+		items:         	make(map[string]ItemLookup),
+		keyItems:      	make(map[string]KeyItemLookup),
+		locationAreas: 	make(map[string]LocationAreaLookup),
+		overdrives: 	make(map[string]OverdriveLookup),
+		songs:         	make(map[string]SongLookup),
+		stats:         	make(map[string]StatLookup),
 	}
 
 }
 
 // whether to take a Lookupable or a string as an input depends on vibes. if it's just one field, I'll take the string. if it's a composite key, I'll make a struct.
+
+
+func (l *lookup) getAeon(aeonName string) (AeonLookup, error) {
+	playerUnit := PlayerUnit{
+		Name: aeonName,
+		Type: database.UnitTypeAeon,
+	}
+	key := createLookupKey(playerUnit)
+
+	aeon, found := l.aeons[key]
+	if !found {
+		return AeonLookup{}, fmt.Errorf("couldn't find Aeon %s", aeonName)
+	}
+
+	return aeon, nil
+}
+
+
+func (l *lookup) getCharacter(charName string) (CharacterLookup, error) {
+	playerUnit := PlayerUnit{
+		Name: charName,
+		Type: database.UnitTypeCharacter,
+	}
+	key := createLookupKey(playerUnit)
+
+	character, found := l.characters[key]
+	if !found {
+		return CharacterLookup{}, fmt.Errorf("couldn't find Character %s", charName)
+	}
+
+	return character, nil
+}
+
+
+func (l *lookup) getCharacterClass(className string) (CharClassLookup, error) {
+	classID, found := l.charClasses[className]
+	if !found {
+		return CharClassLookup{}, fmt.Errorf("couldn't find Character Class %s", className)
+	}
+
+	return classID, nil
+}
+
 
 func (l *lookup) getArea(locationArea LocationArea) (LocationAreaLookup, error) {
 	key := createLookupKey(locationArea)
@@ -76,6 +127,24 @@ func (l *lookup) getKeyItem(itemName string) (KeyItemLookup, error) {
 
 	return keyItem, nil
 }
+
+
+func (l *lookup) getOverdrive(overdriveName string, version *int32) (OverdriveLookup, error) {
+	ability := Ability{
+		Name: overdriveName,
+		Version: version,
+	}
+	
+	key := createLookupKey(ability)
+
+	overdrive, found := l.overdrives[key]
+	if !found {
+		return OverdriveLookup{}, fmt.Errorf("couldn't find overdrive: %s - %d", ability.Name, derefOrNil(ability.Version))
+	}
+
+	return overdrive, nil
+}
+
 
 func (l *lookup) getSong(songName string) (SongLookup, error) {
 	songID, found := l.songs[songName]

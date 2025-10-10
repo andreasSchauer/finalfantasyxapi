@@ -5,4 +5,4 @@ connection_string.txt
 notes.txt
 table_dependencies.txt
 testrequests.http
-./scripts/goose-reset.sh
+./scripts/goose-*.sh

@@ -40,6 +40,15 @@ func (m MixCombination) ToHashFields() []any {
 	}
 }
 
+
+func (m MixCombination) ToKeyFields() []any {
+	return []any{
+		m.FirstItem,
+		m.SecondItem,
+	}
+}
+
+
 type MixComboJunction struct {
 	MixID       int32
 	ComboID     int32
@@ -65,12 +74,12 @@ func (l *lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, mix := range mixes {
-			dbOverdrive, err := qtx.GetOverdriveByName(context.Background(), mix.Name)
+			overdrive, err := l.getOverdrive(mix.Name, nil)
 			if err != nil {
 				return err
 			}
 
-			mix.OverdriveID = dbOverdrive.ID
+			mix.OverdriveID = overdrive.ID
 
 			dbMix, err := qtx.CreateMix(context.Background(), database.CreateMixParams{
 				DataHash:    generateDataHash(mix),
@@ -92,17 +101,13 @@ func (l *lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix, dbMixID int32) error {
-	bestComboMap := make(map[string]struct{})
-	for _, combo := range mix.BestCombinations {
-		key := combo.FirstItem + "|" + combo.SecondItem
-		bestComboMap[key] = struct{}{}
-	}
+	bestComboMap := getBestComboMap(mix)
 
 	for _, combo := range mix.PossibleCombinations {
 		mixComboJunction := MixComboJunction{
 			MixID: dbMixID,
 		}
-		key := combo.FirstItem + "|" + combo.SecondItem
+		key := createLookupKey(combo)
 		if _, exists := bestComboMap[key]; exists {
 			mixComboJunction.IsBestCombo = true
 		}
@@ -127,6 +132,18 @@ func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix, dbMixID int
 
 	return nil
 }
+
+
+func getBestComboMap(mix Mix) map[string]struct{} {
+	bestComboMap := make(map[string]struct{})
+	for _, combo := range mix.BestCombinations {
+		key := createLookupKey(combo)
+		bestComboMap[key] = struct{}{}
+	}
+
+	return bestComboMap
+}
+
 
 func (l *lookup) seedMixCombination(qtx *database.Queries, combo MixCombination) (database.MixCombination, error) {
 	firstItem, err := l.getItem(combo.FirstItem)

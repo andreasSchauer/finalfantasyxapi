@@ -94,8 +94,9 @@ func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedItem(qtx *database.Queries, item Item, allItemID int32) (database.Item, error) {
-	item.MasterItemsID = allItemID
+
+func (l *lookup) seedItem(qtx *database.Queries, item Item, masterItemID int32) (database.Item, error) {
+	item.MasterItemsID = masterItemID
 
 	dbItem, err := qtx.CreateItem(context.Background(), database.CreateItemParams{
 		DataHash:              generateDataHash(item),
@@ -120,6 +121,7 @@ func (l *lookup) seedItem(qtx *database.Queries, item Item, allItemID int32) (da
 
 	return dbItem, nil
 }
+
 
 func (l *lookup) seedItemAbility(qtx *database.Queries, item Item, itemID int32) error {
 	itemAbility := item.ItemAbility

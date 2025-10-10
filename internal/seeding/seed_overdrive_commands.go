@@ -50,6 +50,13 @@ func (o Overdrive) ToHashFields() []any {
 	}
 }
 
+
+type OverdriveLookup struct {
+	Overdrive
+	ID			int32
+}
+
+
 func (l *lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_commands.json"
 
@@ -99,7 +106,7 @@ func (l *lookup) seedOverdrives(qtx *database.Queries, command OverdriveCommand,
 
 		overdrive.AttributesID = &attributes.ID
 
-		err = qtx.CreateOverdrive(context.Background(), database.CreateOverdriveParams{
+		dbOverdrive, err := qtx.CreateOverdrive(context.Background(), database.CreateOverdriveParams{
 			DataHash:        generateDataHash(overdrive),
 			OdCommandID:     getNullInt32(overdrive.odCommandID),
 			Name:            overdrive.Name,
@@ -113,6 +120,12 @@ func (l *lookup) seedOverdrives(qtx *database.Queries, command OverdriveCommand,
 		})
 		if err != nil {
 			return fmt.Errorf("couldn't create Overdrive: %s: %v", overdrive.Name, err)
+		}
+
+		key := createLookupKey(overdrive.Ability)
+		l.overdrives[key] = OverdriveLookup{
+			Overdrive: 	overdrive,
+			ID: 		dbOverdrive.ID,
 		}
 	}
 

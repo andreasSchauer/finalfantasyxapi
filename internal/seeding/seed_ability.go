@@ -25,6 +25,16 @@ func (a Ability) ToHashFields() []any {
 	}
 }
 
+
+func (a Ability) ToKeyFields() []any {
+	return []any{
+		a.Name,
+		derefOrNil(a.Version),
+		a.Type,
+	}
+}
+
+
 type AbilityAttributes struct {
 	Rank             *int32 `json:"rank"`
 	AppearsInHelpBar bool   `json:"appears_in_help_bar"`

@@ -28,6 +28,15 @@ func getNullFloat64(f *float32) sql.NullFloat64 {
     return sql.NullFloat64{Float64: float64(*f), Valid: true}
 }
 
+
+func stringPtrToString(s *string) string {
+    if s == nil {
+        return ""
+    }
+
+    return *s
+}
+
 /*
 
 func convertNullString(s sql.NullString) *string {

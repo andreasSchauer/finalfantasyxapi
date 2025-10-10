@@ -141,48 +141,6 @@ func (ns NullAccuracySource) Value() (driver.Value, error) {
 	return string(ns.AccuracySource), nil
 }
 
-type AeonCategory string
-
-const (
-	AeonCategoryStandardAeons AeonCategory = "standard-aeons"
-	AeonCategoryMagusSisters  AeonCategory = "magus-sisters"
-)
-
-func (e *AeonCategory) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = AeonCategory(s)
-	case string:
-		*e = AeonCategory(s)
-	default:
-		return fmt.Errorf("unsupported scan type for AeonCategory: %T", src)
-	}
-	return nil
-}
-
-type NullAeonCategory struct {
-	AeonCategory AeonCategory
-	Valid        bool // Valid is true if AeonCategory is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullAeonCategory) Scan(value interface{}) error {
-	if value == nil {
-		ns.AeonCategory, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.AeonCategory.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullAeonCategory) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.AeonCategory), nil
-}
-
 type ArmorType string
 
 const (
@@ -1708,6 +1666,48 @@ func (ns NullTreasureType) Value() (driver.Value, error) {
 	return string(ns.TreasureType), nil
 }
 
+type UnitType string
+
+const (
+	UnitTypeAeon      UnitType = "aeon"
+	UnitTypeCharacter UnitType = "character"
+)
+
+func (e *UnitType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = UnitType(s)
+	case string:
+		*e = UnitType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for UnitType: %T", src)
+	}
+	return nil
+}
+
+type NullUnitType struct {
+	UnitType UnitType
+	Valid    bool // Valid is true if UnitType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullUnitType) Scan(value interface{}) error {
+	if value == nil {
+		ns.UnitType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.UnitType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullUnitType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.UnitType), nil
+}
+
 type WeaponType string
 
 const (
@@ -1777,9 +1777,8 @@ type AbilityAttribute struct {
 type Aeon struct {
 	ID                    int32
 	DataHash              string
-	Name                  string
+	UnitID                int32
 	UnlockCondition       string
-	Category              NullAeonCategory
 	IsOptional            bool
 	BattlesToRegenerate   int32
 	PhysAtkDamageConstant sql.NullInt32
@@ -1875,11 +1874,18 @@ type CelestialWeapon struct {
 type Character struct {
 	ID                  int32
 	DataHash            string
-	Name                string
+	UnitID              int32
+	StoryOnly           bool
 	WeaponType          WeaponType
 	ArmorType           ArmorType
 	PhysicalAttackRange interface{}
 	CanFightUnderwater  bool
+}
+
+type CharacterClass struct {
+	ID       int32
+	DataHash string
+	Name     string
 }
 
 type DefaultAbility struct {
@@ -2099,6 +2105,13 @@ type PlayerAbility struct {
 	OpenMenu            NullSubmenuType
 }
 
+type PlayerUnit struct {
+	ID       int32
+	DataHash string
+	Name     string
+	Type     UnitType
+}
+
 type Primer struct {
 	ID            int32
 	DataHash      string
@@ -2218,4 +2231,11 @@ type TriggerCommand struct {
 	Description string
 	Effect      string
 	Cursor      TargetType
+}
+
+type UnitsCharacterClass struct {
+	ID       int32
+	DataHash string
+	UnitID   int32
+	ClassID  int32
 }

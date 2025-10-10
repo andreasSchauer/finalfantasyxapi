@@ -19,23 +19,6 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = areas.data_hash
 RETURNING *;
 
 
--- name: GetLocationAreas :many
-SELECT
-    l.id as location_id,
-    s.id as sub_location_id,
-    a.id as area_id,
-    l.name as location_name,
-    s.name as sub_location_name,
-    a.name as area_name,
-    a.version as version
-FROM areas a
-LEFT JOIN sub_locations s
-ON a.sub_location_id = s.id
-LEFT JOIN locations l
-ON s.location_id = l.id;
-
-
-
 -- name: CreateTreasure :exec
 INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)

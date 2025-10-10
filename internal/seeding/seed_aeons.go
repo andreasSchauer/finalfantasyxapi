@@ -11,7 +11,8 @@ import (
 type Aeon struct {
 	//id 		int32
 	//dataHash	string
-	Name                string   `json:"name"`
+	PlayerUnit
+	UnitID				int32
 	UnlockCondition     string   `json:"unlock_condition"`
 	Category            *string  `json:"category"`
 	IsOptional          bool     `json:"is_optional"`
@@ -26,9 +27,8 @@ type Aeon struct {
 
 func (a Aeon) ToHashFields() []any {
 	return []any{
-		a.Name,
+		a.UnitID,
 		a.UnlockCondition,
-		derefOrNil(a.Category),
 		a.IsOptional,
 		a.BattlesToRegenerate,
 		derefOrNil(a.PhysAtkDmgConstant),
@@ -39,6 +39,13 @@ func (a Aeon) ToHashFields() []any {
 		derefOrNil(a.PhysAtkAccModifier),
 	}
 }
+
+
+type AeonLookup struct {
+	Aeon
+	ID		int32
+}
+
 
 func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeons.json"
@@ -51,11 +58,19 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, aeon := range aeons {
-			err = qtx.CreateAeon(context.Background(), database.CreateAeonParams{
+			aeon.Type = database.UnitTypeAeon
+
+			dbPlayerUnit, err := l.seedPlayerUnit(qtx, aeon.PlayerUnit)
+			if err != nil {
+				return err
+			}
+
+			aeon.UnitID = dbPlayerUnit.ID
+
+			dbAeon, err := qtx.CreateAeon(context.Background(), database.CreateAeonParams{
 				DataHash:              generateDataHash(aeon),
-				Name:                  aeon.Name,
+				UnitID:                aeon.UnitID,
 				UnlockCondition:       aeon.UnlockCondition,
-				Category:              nullAeonCategory(aeon.Category),
 				IsOptional:            aeon.IsOptional,
 				BattlesToRegenerate:   aeon.BattlesToRegenerate,
 				PhysAtkDamageConstant: getNullInt32(aeon.PhysAtkDmgConstant),
@@ -68,7 +83,19 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return fmt.Errorf("couldn't create Aeon: %s: %v", aeon.Name, err)
 			}
+
+			key := createLookupKey(aeon.PlayerUnit)
+			l.aeons[key] = AeonLookup{
+				Aeon: 	aeon,
+				ID: 	dbAeon.ID,
+			}
+
+			err = l.seedCharacterClasses(qtx, aeon.PlayerUnit)
+			if err != nil {
+				return err
+			}
 		}
 		return nil
 	})
 }
+

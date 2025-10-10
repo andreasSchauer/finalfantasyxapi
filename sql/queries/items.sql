@@ -18,85 +18,12 @@ VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: GetItemByName :one
-SELECT
-    i.id as item_id,
-    i.data_hash as item_data_hash,
-    mi.id as master_item_id,
-    mi.name,
-    i.description,
-    i.effect,
-    i.sphere_grid_description,
-    i.category,
-    i.usability,
-    i.base_price,
-    i.sell_value,
-    mi.data_hash as master_item_data_hash,
-    mi.type
-FROM items i
-LEFT JOIN master_items mi
-ON mi.id = i.master_item_id
-WHERE mi.name = $1;
-
-
--- name: GetItems :many
-SELECT
-    i.id as item_id,
-    i.data_hash as item_data_hash,
-    mi.id as master_item_id,
-    mi.name,
-    i.description,
-    i.effect,
-    i.sphere_grid_description,
-    i.category,
-    i.usability,
-    i.base_price,
-    i.sell_value,
-    mi.data_hash as master_item_data_hash,
-    mi.type
-FROM items i
-LEFT JOIN master_items mi
-ON mi.id = i.master_item_id;
-
 
 -- name: CreateKeyItem :one
 INSERT INTO key_items (data_hash, master_item_id, category, description, effect)
 VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = key_items.data_hash
 RETURNING *;
-
-
--- name: GetKeyItemByName :one
-SELECT
-    ki.id as key_item_id,
-    ki.data_hash as key_item_data_hash,
-    mi.name,
-    ki.category,
-    ki.description,
-    ki.effect,
-    mi.id as master_item_id,
-    mi.data_hash as master_item_data_hash,
-    mi.type
-FROM key_items ki
-LEFT JOIN master_items mi
-ON mi.id = ki.master_item_id
-WHERE mi.name = $1;
-
-
--- name: GetKeyItems :many
-SELECT
-    ki.id as key_item_id,
-    ki.data_hash as key_item_data_hash,
-    mi.name,
-    ki.category,
-    ki.description,
-    ki.effect,
-    mi.id as master_item_id,
-    mi.data_hash as master_item_data_hash,
-    mi.type
-FROM key_items ki
-LEFT JOIN master_items mi
-ON mi.id = ki.master_item_id;
 
 
 

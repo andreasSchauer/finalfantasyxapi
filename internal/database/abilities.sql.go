@@ -97,10 +97,11 @@ func (q *Queries) CreateEnemyAbility(ctx context.Context, arg CreateEnemyAbility
 	return err
 }
 
-const createOverdrive = `-- name: CreateOverdrive :exec
+const createOverdrive = `-- name: CreateOverdrive :one
 INSERT INTO overdrives (data_hash, od_command_id, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrives.data_hash
+RETURNING id, data_hash, od_command_id, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor
 `
 
 type CreateOverdriveParams struct {
@@ -116,8 +117,8 @@ type CreateOverdriveParams struct {
 	Cursor          NullTargetType
 }
 
-func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams) error {
-	_, err := q.db.ExecContext(ctx, createOverdrive,
+func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams) (Overdrife, error) {
+	row := q.db.QueryRowContext(ctx, createOverdrive,
 		arg.DataHash,
 		arg.OdCommandID,
 		arg.Name,
@@ -129,7 +130,21 @@ func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams
 		arg.CountdownInSec,
 		arg.Cursor,
 	)
-	return err
+	var i Overdrife
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.OdCommandID,
+		&i.Name,
+		&i.Version,
+		&i.Description,
+		&i.Effect,
+		&i.AttributesID,
+		&i.UnlockCondition,
+		&i.CountdownInSec,
+		&i.Cursor,
+	)
+	return i, err
 }
 
 const createOverdriveAbility = `-- name: CreateOverdriveAbility :exec
@@ -239,28 +254,4 @@ func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCom
 		arg.Cursor,
 	)
 	return err
-}
-
-const getOverdriveByName = `-- name: GetOverdriveByName :one
-SELECT id, data_hash, od_command_id, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor FROM overdrives
-WHERE name = $1
-`
-
-func (q *Queries) GetOverdriveByName(ctx context.Context, name string) (Overdrife, error) {
-	row := q.db.QueryRowContext(ctx, getOverdriveByName, name)
-	var i Overdrife
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.OdCommandID,
-		&i.Name,
-		&i.Version,
-		&i.Description,
-		&i.Effect,
-		&i.AttributesID,
-		&i.UnlockCondition,
-		&i.CountdownInSec,
-		&i.Cursor,
-	)
-	return i, err
 }
