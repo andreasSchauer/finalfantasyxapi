@@ -38,6 +38,7 @@ type StatLookup struct {
 }
 
 
+
 func (l *lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/stats.json"
 

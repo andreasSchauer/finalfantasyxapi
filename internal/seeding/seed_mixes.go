@@ -108,12 +108,12 @@ func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix, dbMixID int
 	bestComboMap := getBestComboMap(mix)
 
 	for _, combo := range mix.PossibleCombinations {
-		mixComboJunction := MixComboJunction{
+		junction := MixComboJunction{
 			MixID: dbMixID,
 		}
 		key := createLookupKey(combo)
 		if _, exists := bestComboMap[key]; exists {
-			mixComboJunction.IsBestCombo = true
+			junction.IsBestCombo = true
 		}
 
 		dbCombo, err := l.seedMixCombination(qtx, combo)
@@ -121,13 +121,13 @@ func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix, dbMixID int
 			return err
 		}
 
-		mixComboJunction.ComboID = dbCombo.ID
+		junction.ComboID = dbCombo.ID
 
 		err = qtx.CreateMixComboJunction(context.Background(), database.CreateMixComboJunctionParams{
-			DataHash:    generateDataHash(mixComboJunction),
-			MixID:       mixComboJunction.MixID,
-			ComboID:     mixComboJunction.ComboID,
-			IsBestCombo: mixComboJunction.IsBestCombo,
+			DataHash:    generateDataHash(junction),
+			MixID:       junction.MixID,
+			ComboID:     junction.ComboID,
+			IsBestCombo: junction.IsBestCombo,
 		})
 		if err != nil {
 			return fmt.Errorf("couldn't create Junction between Mix: %s and Combo %s-%s: %v", mix.Name, combo.FirstItem, combo.SecondItem, err)

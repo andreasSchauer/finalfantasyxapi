@@ -191,7 +191,7 @@ func (q *Queries) CreateMixCombination(ctx context.Context, arg CreateMixCombina
 }
 
 const createMixComboJunction = `-- name: CreateMixComboJunction :exec
-INSERT INTO mix_combo_junctions (data_hash, mix_id, combo_id, is_best_combo)
+INSERT INTO j_mix_combo (data_hash, mix_id, combo_id, is_best_combo)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `

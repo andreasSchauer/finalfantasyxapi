@@ -10,6 +10,31 @@ import (
 	"database/sql"
 )
 
+const createActionToLearn = `-- name: CreateActionToLearn :one
+INSERT INTO actions_to_learn (data_hash, user_id, amount)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = actions_to_learn.data_hash
+RETURNING id, data_hash, user_id, amount
+`
+
+type CreateActionToLearnParams struct {
+	DataHash string
+	UserID   int32
+	Amount   int32
+}
+
+func (q *Queries) CreateActionToLearn(ctx context.Context, arg CreateActionToLearnParams) (ActionsToLearn, error) {
+	row := q.db.QueryRowContext(ctx, createActionToLearn, arg.DataHash, arg.UserID, arg.Amount)
+	var i ActionsToLearn
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.UserID,
+		&i.Amount,
+	)
+	return i, err
+}
+
 const createAffinity = `-- name: CreateAffinity :exec
 INSERT INTO affinities (data_hash, name, damage_factor)
 VALUES ($1, $2, $3)
@@ -93,10 +118,11 @@ func (q *Queries) CreateAgilityTier(ctx context.Context, arg CreateAgilityTierPa
 	return i, err
 }
 
-const createElement = `-- name: CreateElement :exec
+const createElement = `-- name: CreateElement :one
 INSERT INTO elements (data_hash, name)
 VALUES ($1, $2)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = elements.data_hash
+RETURNING id, data_hash, name, opposite_element_id
 `
 
 type CreateElementParams struct {
@@ -104,9 +130,16 @@ type CreateElementParams struct {
 	Name     string
 }
 
-func (q *Queries) CreateElement(ctx context.Context, arg CreateElementParams) error {
-	_, err := q.db.ExecContext(ctx, createElement, arg.DataHash, arg.Name)
-	return err
+func (q *Queries) CreateElement(ctx context.Context, arg CreateElementParams) (Element, error) {
+	row := q.db.QueryRowContext(ctx, createElement, arg.DataHash, arg.Name)
+	var i Element
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.OppositeElementID,
+	)
+	return i, err
 }
 
 const createModifier = `-- name: CreateModifier :one
@@ -144,10 +177,60 @@ func (q *Queries) CreateModifier(ctx context.Context, arg CreateModifierParams) 
 	return i, err
 }
 
-const createOverdriveMode = `-- name: CreateOverdriveMode :exec
+const createModifierChange = `-- name: CreateModifierChange :one
+INSERT INTO modifier_changes (data_hash, modifier_id, calculation_type, value)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifier_changes.data_hash
+RETURNING id, data_hash, modifier_id, calculation_type, value
+`
+
+type CreateModifierChangeParams struct {
+	DataHash        string
+	ModifierID      int32
+	CalculationType CalculationType
+	Value           float32
+}
+
+func (q *Queries) CreateModifierChange(ctx context.Context, arg CreateModifierChangeParams) (ModifierChange, error) {
+	row := q.db.QueryRowContext(ctx, createModifierChange,
+		arg.DataHash,
+		arg.ModifierID,
+		arg.CalculationType,
+		arg.Value,
+	)
+	var i ModifierChange
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.ModifierID,
+		&i.CalculationType,
+		&i.Value,
+	)
+	return i, err
+}
+
+const createODModeActionJunction = `-- name: CreateODModeActionJunction :exec
+INSERT INTO j_od_mode_action (data_hash, overdrive_mode_id, action_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateODModeActionJunctionParams struct {
+	DataHash        string
+	OverdriveModeID int32
+	ActionID        int32
+}
+
+func (q *Queries) CreateODModeActionJunction(ctx context.Context, arg CreateODModeActionJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createODModeActionJunction, arg.DataHash, arg.OverdriveModeID, arg.ActionID)
+	return err
+}
+
+const createOverdriveMode = `-- name: CreateOverdriveMode :one
 INSERT INTO overdrive_modes (data_hash, name, description, effect, type, fill_rate)
 VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_modes.data_hash
+RETURNING id, data_hash, name, description, effect, type, fill_rate
 `
 
 type CreateOverdriveModeParams struct {
@@ -159,8 +242,8 @@ type CreateOverdriveModeParams struct {
 	FillRate    interface{}
 }
 
-func (q *Queries) CreateOverdriveMode(ctx context.Context, arg CreateOverdriveModeParams) error {
-	_, err := q.db.ExecContext(ctx, createOverdriveMode,
+func (q *Queries) CreateOverdriveMode(ctx context.Context, arg CreateOverdriveModeParams) (OverdriveMode, error) {
+	row := q.db.QueryRowContext(ctx, createOverdriveMode,
 		arg.DataHash,
 		arg.Name,
 		arg.Description,
@@ -168,13 +251,24 @@ func (q *Queries) CreateOverdriveMode(ctx context.Context, arg CreateOverdriveMo
 		arg.Type,
 		arg.FillRate,
 	)
-	return err
+	var i OverdriveMode
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Description,
+		&i.Effect,
+		&i.Type,
+		&i.FillRate,
+	)
+	return i, err
 }
 
-const createProperty = `-- name: CreateProperty :exec
+const createProperty = `-- name: CreateProperty :one
 INSERT INTO properties (data_hash, name, effect, nullify_armored)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = properties.data_hash
+RETURNING id, data_hash, name, effect, nullify_armored
 `
 
 type CreatePropertyParams struct {
@@ -184,13 +278,89 @@ type CreatePropertyParams struct {
 	NullifyArmored NullNullifyArmored
 }
 
-func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) error {
-	_, err := q.db.ExecContext(ctx, createProperty,
+func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) (Property, error) {
+	row := q.db.QueryRowContext(ctx, createProperty,
 		arg.DataHash,
 		arg.Name,
 		arg.Effect,
 		arg.NullifyArmored,
 	)
+	var i Property
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Effect,
+		&i.NullifyArmored,
+	)
+	return i, err
+}
+
+const createPropertyModifierChangeJunction = `-- name: CreatePropertyModifierChangeJunction :exec
+INSERT INTO j_property_modifier_change (data_hash, property_id, modifier_change_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertyModifierChangeJunctionParams struct {
+	DataHash         string
+	PropertyID       int32
+	ModifierChangeID int32
+}
+
+func (q *Queries) CreatePropertyModifierChangeJunction(ctx context.Context, arg CreatePropertyModifierChangeJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createPropertyModifierChangeJunction, arg.DataHash, arg.PropertyID, arg.ModifierChangeID)
+	return err
+}
+
+const createPropertyStatChangeJunction = `-- name: CreatePropertyStatChangeJunction :exec
+INSERT INTO j_property_stat_change (data_hash, property_id, stat_change_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertyStatChangeJunctionParams struct {
+	DataHash     string
+	PropertyID   int32
+	StatChangeID int32
+}
+
+func (q *Queries) CreatePropertyStatChangeJunction(ctx context.Context, arg CreatePropertyStatChangeJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createPropertyStatChangeJunction, arg.DataHash, arg.PropertyID, arg.StatChangeID)
+	return err
+}
+
+const createPropertyStatJunction = `-- name: CreatePropertyStatJunction :exec
+INSERT INTO j_property_stat (data_hash, property_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertyStatJunctionParams struct {
+	DataHash   string
+	PropertyID int32
+	StatID     int32
+}
+
+func (q *Queries) CreatePropertyStatJunction(ctx context.Context, arg CreatePropertyStatJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createPropertyStatJunction, arg.DataHash, arg.PropertyID, arg.StatID)
+	return err
+}
+
+const createPropertyStatusConditionJunction = `-- name: CreatePropertyStatusConditionJunction :exec
+INSERT INTO j_property_status_condition (data_hash, property_id, status_condition_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertyStatusConditionJunctionParams struct {
+	DataHash          string
+	PropertyID        int32
+	StatusConditionID int32
+}
+
+func (q *Queries) CreatePropertyStatusConditionJunction(ctx context.Context, arg CreatePropertyStatusConditionJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createPropertyStatusConditionJunction, arg.DataHash, arg.PropertyID, arg.StatusConditionID)
 	return err
 }
 
@@ -233,10 +403,43 @@ func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) (Stat, e
 	return i, err
 }
 
-const createStatusCondition = `-- name: CreateStatusCondition :exec
+const createStatChange = `-- name: CreateStatChange :one
+INSERT INTO stat_changes (data_hash, stat_id, calculation_type, value)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = stat_changes.data_hash
+RETURNING id, data_hash, stat_id, calculation_type, value
+`
+
+type CreateStatChangeParams struct {
+	DataHash        string
+	StatID          int32
+	CalculationType CalculationType
+	Value           float32
+}
+
+func (q *Queries) CreateStatChange(ctx context.Context, arg CreateStatChangeParams) (StatChange, error) {
+	row := q.db.QueryRowContext(ctx, createStatChange,
+		arg.DataHash,
+		arg.StatID,
+		arg.CalculationType,
+		arg.Value,
+	)
+	var i StatChange
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.StatID,
+		&i.CalculationType,
+		&i.Value,
+	)
+	return i, err
+}
+
+const createStatusCondition = `-- name: CreateStatusCondition :one
 INSERT INTO status_conditions (data_hash, name, effect, nullify_armored)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_conditions.data_hash
+RETURNING id, data_hash, name, effect, nullify_armored
 `
 
 type CreateStatusConditionParams struct {
@@ -246,12 +449,113 @@ type CreateStatusConditionParams struct {
 	NullifyArmored NullNullifyArmored
 }
 
-func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusConditionParams) error {
-	_, err := q.db.ExecContext(ctx, createStatusCondition,
+func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusConditionParams) (StatusCondition, error) {
+	row := q.db.QueryRowContext(ctx, createStatusCondition,
 		arg.DataHash,
 		arg.Name,
 		arg.Effect,
 		arg.NullifyArmored,
+	)
+	var i StatusCondition
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Effect,
+		&i.NullifyArmored,
+	)
+	return i, err
+}
+
+const createStatusConditionModifierChangeJunction = `-- name: CreateStatusConditionModifierChangeJunction :exec
+INSERT INTO j_status_condition_modifier_change (data_hash, status_condition_id, modifier_change_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionModifierChangeJunctionParams struct {
+	DataHash          string
+	StatusConditionID int32
+	ModifierChangeID  int32
+}
+
+func (q *Queries) CreateStatusConditionModifierChangeJunction(ctx context.Context, arg CreateStatusConditionModifierChangeJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionModifierChangeJunction, arg.DataHash, arg.StatusConditionID, arg.ModifierChangeID)
+	return err
+}
+
+const createStatusConditionSelfJunction = `-- name: CreateStatusConditionSelfJunction :exec
+INSERT INTO j_status_condition_self (data_hash, parent_condition_id, child_condition_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionSelfJunctionParams struct {
+	DataHash          string
+	ParentConditionID int32
+	ChildConditionID  int32
+}
+
+func (q *Queries) CreateStatusConditionSelfJunction(ctx context.Context, arg CreateStatusConditionSelfJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionSelfJunction, arg.DataHash, arg.ParentConditionID, arg.ChildConditionID)
+	return err
+}
+
+const createStatusConditionStatChangeJunction = `-- name: CreateStatusConditionStatChangeJunction :exec
+INSERT INTO j_status_condition_stat_change (data_hash, status_condition_id, stat_change_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionStatChangeJunctionParams struct {
+	DataHash          string
+	StatusConditionID int32
+	StatChangeID      int32
+}
+
+func (q *Queries) CreateStatusConditionStatChangeJunction(ctx context.Context, arg CreateStatusConditionStatChangeJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionStatChangeJunction, arg.DataHash, arg.StatusConditionID, arg.StatChangeID)
+	return err
+}
+
+const createStatusConditionStatJunction = `-- name: CreateStatusConditionStatJunction :exec
+INSERT INTO j_status_condition_stat (data_hash, status_condition_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionStatJunctionParams struct {
+	DataHash          string
+	StatusConditionID int32
+	StatID            int32
+}
+
+func (q *Queries) CreateStatusConditionStatJunction(ctx context.Context, arg CreateStatusConditionStatJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionStatJunction, arg.DataHash, arg.StatusConditionID, arg.StatID)
+	return err
+}
+
+const updateElement = `-- name: UpdateElement :exec
+UPDATE elements
+SET data_hash = $1,
+    name = $2,
+    opposite_element_id = $3
+WHERE id = $4
+`
+
+type UpdateElementParams struct {
+	DataHash          string
+	Name              string
+	OppositeElementID sql.NullInt32
+	ID                int32
+}
+
+func (q *Queries) UpdateElement(ctx context.Context, arg UpdateElementParams) error {
+	_, err := q.db.ExecContext(ctx, updateElement,
+		arg.DataHash,
+		arg.Name,
+		arg.OppositeElementID,
+		arg.ID,
 	)
 	return err
 }

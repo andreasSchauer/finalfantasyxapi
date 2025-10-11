@@ -16,30 +16,38 @@ func createLookupKey(l Lookupable) string {
 }
 
 type lookup struct {
-	aeons			map[string]AeonLookup
-	characters		map[string]CharacterLookup
-	charClasses		map[string]CharClassLookup
-	items         	map[string]ItemLookup
-	keyItems      	map[string]KeyItemLookup
-	locationAreas 	map[string]LocationAreaLookup
-	modifiers		map[string]ModifierLookup
-	overdrives		map[string]OverdriveLookup
-	songs         	map[string]SongLookup
-	stats         	map[string]StatLookup
+	aeons				map[string]AeonLookup
+	characters			map[string]CharacterLookup
+	charClasses			map[string]CharClassLookup
+	elements			map[string]ElementLookup
+	items         		map[string]ItemLookup
+	keyItems      		map[string]KeyItemLookup
+	locationAreas 		map[string]LocationAreaLookup
+	modifiers			map[string]ModifierLookup
+	overdriveModes		map[string]OverdriveModeLookup
+	overdrives			map[string]OverdriveLookup
+	properties			map[string]PropertyLookup
+	songs         		map[string]SongLookup
+	stats         		map[string]StatLookup
+	statusConditions	map[string]StatusConditionLookup
 }
 
 func lookupInit() lookup {
 	return lookup{
-		aeons: 			make(map[string]AeonLookup),
-		characters: 	make(map[string]CharacterLookup),
-		charClasses: 	make(map[string]CharClassLookup),
-		items:         	make(map[string]ItemLookup),
-		keyItems:      	make(map[string]KeyItemLookup),
-		locationAreas: 	make(map[string]LocationAreaLookup),
-		modifiers: 		make(map[string]ModifierLookup),
-		overdrives: 	make(map[string]OverdriveLookup),
-		songs:         	make(map[string]SongLookup),
-		stats:         	make(map[string]StatLookup),
+		aeons: 				make(map[string]AeonLookup),
+		characters: 		make(map[string]CharacterLookup),
+		charClasses: 		make(map[string]CharClassLookup),
+		elements: 			make(map[string]ElementLookup),
+		items:         		make(map[string]ItemLookup),
+		keyItems:      		make(map[string]KeyItemLookup),
+		locationAreas: 		make(map[string]LocationAreaLookup),
+		modifiers: 			make(map[string]ModifierLookup),
+		overdriveModes:		make(map[string]OverdriveModeLookup),
+		overdrives: 		make(map[string]OverdriveLookup),
+		properties: 		make(map[string]PropertyLookup),
+		songs:         		make(map[string]SongLookup),
+		stats:         		make(map[string]StatLookup),
+		statusConditions: 	make(map[string]StatusConditionLookup),
 	}
 
 }
@@ -80,12 +88,22 @@ func (l *lookup) getCharacter(charName string) (CharacterLookup, error) {
 
 
 func (l *lookup) getCharacterClass(className string) (CharClassLookup, error) {
-	classID, found := l.charClasses[className]
+	class, found := l.charClasses[className]
 	if !found {
 		return CharClassLookup{}, fmt.Errorf("couldn't find Character Class %s", className)
 	}
 
-	return classID, nil
+	return class, nil
+}
+
+
+func (l *lookup) getElement(elementName string) (ElementLookup, error) {
+	element, found := l.elements[elementName]
+	if !found {
+		return ElementLookup{}, fmt.Errorf("couldn't find Element %s", elementName)
+	}
+
+	return element, nil
 }
 
 
@@ -155,6 +173,26 @@ func (l *lookup) getOverdrive(ability Ability) (OverdriveLookup, error) {
 }
 
 
+func (l *lookup) getOverdriveMode(modeName string) (OverdriveModeLookup, error) {
+	mode, found := l.overdriveModes[modeName]
+	if !found {
+		return OverdriveModeLookup{}, fmt.Errorf("couldn't find Overdrive Mode %s", modeName)
+	}
+
+	return mode, nil
+}
+
+
+func (l *lookup) getProperty(propertyName string) (PropertyLookup, error) {
+	property, found := l.properties[propertyName]
+	if !found {
+		return PropertyLookup{}, fmt.Errorf("couldn't find Property %s", propertyName)
+	}
+
+	return property, nil
+}
+
+
 func (l *lookup) getSong(songName string) (SongLookup, error) {
 	song, found := l.songs[songName]
 	if !found {
@@ -172,4 +210,14 @@ func (l *lookup) getStat(statName string) (StatLookup, error) {
 	}
 
 	return stat, nil
+}
+
+
+func (l *lookup) getStatusCondition(conditionName string) (StatusConditionLookup, error) {
+	condition, found := l.statusConditions[conditionName]
+	if !found {
+		return StatusConditionLookup{}, fmt.Errorf("couldn't find Status Condition %s", conditionName)
+	}
+
+	return condition, nil
 }

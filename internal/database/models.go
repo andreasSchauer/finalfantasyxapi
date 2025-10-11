@@ -327,6 +327,51 @@ func (ns NullBlitzballTournamentCategory) Value() (driver.Value, error) {
 	return string(ns.BlitzballTournamentCategory), nil
 }
 
+type CalculationType string
+
+const (
+	CalculationTypeAddedPercentage CalculationType = "added-percentage"
+	CalculationTypeAddedValue      CalculationType = "added-value"
+	CalculationTypeMultiply        CalculationType = "multiply"
+	CalculationTypeMultiplyHighest CalculationType = "multiply-highest"
+	CalculationTypeSetValue        CalculationType = "set-value"
+)
+
+func (e *CalculationType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = CalculationType(s)
+	case string:
+		*e = CalculationType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for CalculationType: %T", src)
+	}
+	return nil
+}
+
+type NullCalculationType struct {
+	CalculationType CalculationType
+	Valid           bool // Valid is true if CalculationType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullCalculationType) Scan(value interface{}) error {
+	if value == nil {
+		ns.CalculationType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.CalculationType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullCalculationType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.CalculationType), nil
+}
+
 type CelestialFormula string
 
 const (
@@ -1747,6 +1792,13 @@ type AbilityAttribute struct {
 	CanCopycat       bool
 }
 
+type ActionsToLearn struct {
+	ID       int32
+	DataHash string
+	UserID   int32
+	Amount   int32
+}
+
 type Aeon struct {
 	ID                    int32
 	DataHash              string
@@ -1866,9 +1918,10 @@ type DefaultAbility struct {
 }
 
 type Element struct {
-	ID       int32
-	DataHash string
-	Name     string
+	ID                int32
+	DataHash          string
+	Name              string
+	OppositeElementID sql.NullInt32
 }
 
 type EnemyAbility struct {
@@ -1922,6 +1975,84 @@ type ItemAbility struct {
 	Cursor    TargetType
 }
 
+type JMixCombo struct {
+	ID          int32
+	DataHash    string
+	MixID       int32
+	ComboID     int32
+	IsBestCombo bool
+}
+
+type JOdModeAction struct {
+	ID              int32
+	DataHash        string
+	OverdriveModeID int32
+	ActionID        int32
+}
+
+type JPropertyModifierChange struct {
+	ID               int32
+	DataHash         string
+	PropertyID       int32
+	ModifierChangeID int32
+}
+
+type JPropertyStat struct {
+	ID         int32
+	DataHash   string
+	PropertyID int32
+	StatID     int32
+}
+
+type JPropertyStatChange struct {
+	ID           int32
+	DataHash     string
+	PropertyID   int32
+	StatChangeID int32
+}
+
+type JPropertyStatusCondition struct {
+	ID                int32
+	DataHash          string
+	PropertyID        int32
+	StatusConditionID int32
+}
+
+type JStatusConditionModifierChange struct {
+	ID                int32
+	DataHash          string
+	StatusConditionID int32
+	ModifierChangeID  int32
+}
+
+type JStatusConditionSelf struct {
+	ID                int32
+	DataHash          string
+	ParentConditionID int32
+	ChildConditionID  int32
+}
+
+type JStatusConditionStat struct {
+	ID                int32
+	DataHash          string
+	StatusConditionID int32
+	StatID            int32
+}
+
+type JStatusConditionStatChange struct {
+	ID                int32
+	DataHash          string
+	StatusConditionID int32
+	StatChangeID      int32
+}
+
+type JUnitCharacterClass struct {
+	ID       int32
+	DataHash string
+	UnitID   int32
+	ClassID  int32
+}
+
 type KeyItem struct {
 	ID           int32
 	DataHash     string
@@ -1966,14 +2097,6 @@ type MixCombination struct {
 	SecondItemID int32
 }
 
-type MixComboJunction struct {
-	ID          int32
-	DataHash    string
-	MixID       int32
-	ComboID     int32
-	IsBestCombo bool
-}
-
 type Modifier struct {
 	ID           int32
 	DataHash     string
@@ -1981,6 +2104,14 @@ type Modifier struct {
 	Effect       string
 	Type         ModifierType
 	DefaultValue sql.NullFloat64
+}
+
+type ModifierChange struct {
+	ID              int32
+	DataHash        string
+	ModifierID      int32
+	CalculationType CalculationType
+	Value           float32
 }
 
 type Monster struct {
@@ -2168,6 +2299,14 @@ type Stat struct {
 	SphereID sql.NullInt32
 }
 
+type StatChange struct {
+	ID              int32
+	DataHash        string
+	StatID          int32
+	CalculationType CalculationType
+	Value           float32
+}
+
 type StatusCondition struct {
 	ID             int32
 	DataHash       string
@@ -2211,11 +2350,4 @@ type TriggerCommand struct {
 	Description string
 	Effect      string
 	Cursor      TargetType
-}
-
-type UnitsCharacterClass struct {
-	ID       int32
-	DataHash string
-	UnitID   int32
-	ClassID  int32
 }

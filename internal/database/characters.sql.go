@@ -165,7 +165,7 @@ func (q *Queries) CreatePlayerUnit(ctx context.Context, arg CreatePlayerUnitPara
 }
 
 const createUnitsCharClassesJunction = `-- name: CreateUnitsCharClassesJunction :exec
-INSERT INTO units_character_classes (data_hash, unit_id, class_id)
+INSERT INTO j_unit_character_class (data_hash, unit_id, class_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `

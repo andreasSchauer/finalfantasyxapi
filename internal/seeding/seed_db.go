@@ -57,6 +57,10 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB, migrationsDir string) er
 
 	relationshipFunctions := []func(*database.Queries, *sql.DB) error{
 		l.createStatsRelationships,
+		l.createElementsRelationships,
+		l.createOverdriveModesRelationships,
+		l.createStatusConditionsRelationships,
+		l.createPropertiesRelationships,
 	}
 
 	err = handleDBFunctions(db, dbConn, seedFunctions, "initial seeding")
@@ -71,8 +75,6 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB, migrationsDir string) er
 
 	return nil
 }
-
-
 
 func handleDBFunctions(db *database.Queries, dbConn *sql.DB, functions []func(*database.Queries, *sql.DB) error, infotext string) error {
 	start := time.Now()
@@ -89,8 +91,6 @@ func handleDBFunctions(db *database.Queries, dbConn *sql.DB, functions []func(*d
 
 	return nil
 }
-
-
 
 func setupDB(dbConn *sql.DB, migrationsDir string) error {
 	err := goose.SetDialect("postgres")
