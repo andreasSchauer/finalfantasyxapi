@@ -14,6 +14,7 @@ type AeonCommand struct {
 	Name        string  `json:"name"`
 	Description string  `json:"description"`
 	Effect      string  `json:"effect"`
+	Topmenu		string	`json:"topmenu"`
 	Cursor      *string `json:"cursor"`
 }
 
@@ -22,6 +23,7 @@ func (c AeonCommand) ToHashFields() []any {
 		c.Name,
 		c.Description,
 		c.Effect,
+		c.Topmenu,
 		derefOrNil(c.Cursor),
 	}
 }
@@ -38,11 +40,12 @@ func (l *lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, command := range aeon_commands {
 			err = qtx.CreateAeonCommand(context.Background(), database.CreateAeonCommandParams{
-				DataHash:    generateDataHash(command),
-				Name:        command.Name,
-				Description: command.Description,
-				Effect:      command.Effect,
-				Cursor:      nullTargetType(command.Cursor),
+				DataHash:    	generateDataHash(command),
+				Name:        	command.Name,
+				Description: 	command.Description,
+				Effect:      	command.Effect,
+				Topmenu: 		database.TopmenuType(command.Topmenu),
+				Cursor:      	nullTargetType(command.Cursor),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Aeon Command: %s: %v", command.Name, err)

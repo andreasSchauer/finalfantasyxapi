@@ -121,7 +121,7 @@ func (l *lookup) createOverdriveModesRelationships(db *database.Queries, dbConn 
 				
 				action.UserID = user.ID
 
-				dbAction, err := qtx.CreateActionToLearn(context.Background(), database.CreateActionToLearnParams{
+				dbAction, err := qtx.CreateODModeAction(context.Background(), database.CreateODModeActionParams{
 					DataHash: 			generateDataHash(action),
 					UserID: 			action.UserID,
 					Amount: 			action.Amount,

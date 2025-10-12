@@ -98,10 +98,10 @@ func (q *Queries) CreateEnemyAbility(ctx context.Context, arg CreateEnemyAbility
 }
 
 const createOverdrive = `-- name: CreateOverdrive :one
-INSERT INTO overdrives (data_hash, od_command_id, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+INSERT INTO overdrives (data_hash, od_command_id, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrives.data_hash
-RETURNING id, data_hash, od_command_id, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor
+RETURNING id, data_hash, od_command_id, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor
 `
 
 type CreateOverdriveParams struct {
@@ -111,6 +111,7 @@ type CreateOverdriveParams struct {
 	Version         sql.NullInt32
 	Description     string
 	Effect          string
+	Topmenu         NullTopmenuType
 	AttributesID    int32
 	UnlockCondition sql.NullString
 	CountdownInSec  sql.NullInt32
@@ -125,6 +126,7 @@ func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams
 		arg.Version,
 		arg.Description,
 		arg.Effect,
+		arg.Topmenu,
 		arg.AttributesID,
 		arg.UnlockCondition,
 		arg.CountdownInSec,
@@ -139,6 +141,7 @@ func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams
 		&i.Version,
 		&i.Description,
 		&i.Effect,
+		&i.Topmenu,
 		&i.AttributesID,
 		&i.UnlockCondition,
 		&i.CountdownInSec,
@@ -164,10 +167,10 @@ func (q *Queries) CreateOverdriveAbility(ctx context.Context, arg CreateOverdriv
 }
 
 const createOverdriveCommand = `-- name: CreateOverdriveCommand :one
-INSERT INTO overdrive_commands (data_hash, name, description, rank, open_menu)
+INSERT INTO overdrive_commands (data_hash, name, description, rank, topmenu)
 VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT (data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
-RETURNING id, data_hash, name, description, rank, open_menu
+RETURNING id, data_hash, name, description, rank, topmenu
 `
 
 type CreateOverdriveCommandParams struct {
@@ -175,7 +178,7 @@ type CreateOverdriveCommandParams struct {
 	Name        string
 	Description string
 	Rank        int32
-	OpenMenu    NullSubmenuType
+	Topmenu     NullTopmenuType
 }
 
 func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriveCommandParams) (OverdriveCommand, error) {
@@ -184,7 +187,7 @@ func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriv
 		arg.Name,
 		arg.Description,
 		arg.Rank,
-		arg.OpenMenu,
+		arg.Topmenu,
 	)
 	var i OverdriveCommand
 	err := row.Scan(
@@ -193,14 +196,14 @@ func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriv
 		&i.Name,
 		&i.Description,
 		&i.Rank,
-		&i.OpenMenu,
+		&i.Topmenu,
 	)
 	return i, err
 }
 
 const createPlayerAbility = `-- name: CreatePlayerAbility :exec
-INSERT INTO player_abilities (data_hash, ability_id, description, effect, submenu, can_use_outside_battle, mp_cost, cursor, open_menu)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO player_abilities (data_hash, ability_id, description, effect, topmenu, can_use_outside_battle, mp_cost, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
@@ -209,11 +212,10 @@ type CreatePlayerAbilityParams struct {
 	AbilityID           int32
 	Description         sql.NullString
 	Effect              string
-	Submenu             NullSubmenuType
+	Topmenu             NullTopmenuType
 	CanUseOutsideBattle bool
 	MpCost              sql.NullInt32
 	Cursor              NullTargetType
-	OpenMenu            NullSubmenuType
 }
 
 func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbilityParams) error {
@@ -222,18 +224,17 @@ func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbili
 		arg.AbilityID,
 		arg.Description,
 		arg.Effect,
-		arg.Submenu,
+		arg.Topmenu,
 		arg.CanUseOutsideBattle,
 		arg.MpCost,
 		arg.Cursor,
-		arg.OpenMenu,
 	)
 	return err
 }
 
 const createTriggerCommand = `-- name: CreateTriggerCommand :exec
-INSERT INTO trigger_commands (data_hash, ability_id, description, effect, cursor)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO trigger_commands (data_hash, ability_id, description, effect, topmenu, cursor)
+VALUES ($1, $2, $3, $4, $5, $6)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
@@ -242,6 +243,7 @@ type CreateTriggerCommandParams struct {
 	AbilityID   int32
 	Description string
 	Effect      string
+	Topmenu     TopmenuType
 	Cursor      TargetType
 }
 
@@ -251,6 +253,7 @@ func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCom
 		arg.AbilityID,
 		arg.Description,
 		arg.Effect,
+		arg.Topmenu,
 		arg.Cursor,
 	)
 	return err

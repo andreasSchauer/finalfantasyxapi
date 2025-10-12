@@ -58,10 +58,10 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_modes.data_hash
 RETURNING *;
 
 
--- name: CreateActionToLearn :one
-INSERT INTO actions_to_learn (data_hash, user_id, amount)
+-- name: CreateODModeAction :one
+INSERT INTO od_mode_actions (data_hash, user_id, amount)
 VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = actions_to_learn.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = od_mode_actions.data_hash
 RETURNING *;
 
 
@@ -116,19 +116,10 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifiers.data_hash
 RETURNING *;
 
 
-
-
 -- name: CreateStatChange :one
 INSERT INTO stat_changes (data_hash, stat_id, calculation_type, value)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = stat_changes.data_hash
-RETURNING *;
-
-
--- name: CreateModifierChange :one
-INSERT INTO modifier_changes (data_hash, modifier_id, calculation_type, value)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifier_changes.data_hash
 RETURNING *;
 
 
@@ -138,14 +129,21 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateStatusConditionModifierChangeJunction :exec
-INSERT INTO j_status_condition_modifier_change (data_hash, status_condition_id, modifier_change_id)
+-- name: CreatePropertyStatChangeJunction :exec
+INSERT INTO j_property_stat_change (data_hash, property_id, stat_change_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreatePropertyStatChangeJunction :exec
-INSERT INTO j_property_stat_change (data_hash, property_id, stat_change_id)
+-- name: CreateModifierChange :one
+INSERT INTO modifier_changes (data_hash, modifier_id, calculation_type, value)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifier_changes.data_hash
+RETURNING *;
+
+
+-- name: CreateStatusConditionModifierChangeJunction :exec
+INSERT INTO j_status_condition_modifier_change (data_hash, status_condition_id, modifier_change_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

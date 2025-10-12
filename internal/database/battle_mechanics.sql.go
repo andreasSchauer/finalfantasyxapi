@@ -10,31 +10,6 @@ import (
 	"database/sql"
 )
 
-const createActionToLearn = `-- name: CreateActionToLearn :one
-INSERT INTO actions_to_learn (data_hash, user_id, amount)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = actions_to_learn.data_hash
-RETURNING id, data_hash, user_id, amount
-`
-
-type CreateActionToLearnParams struct {
-	DataHash string
-	UserID   int32
-	Amount   int32
-}
-
-func (q *Queries) CreateActionToLearn(ctx context.Context, arg CreateActionToLearnParams) (ActionsToLearn, error) {
-	row := q.db.QueryRowContext(ctx, createActionToLearn, arg.DataHash, arg.UserID, arg.Amount)
-	var i ActionsToLearn
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.UserID,
-		&i.Amount,
-	)
-	return i, err
-}
-
 const createAffinity = `-- name: CreateAffinity :exec
 INSERT INTO affinities (data_hash, name, damage_factor)
 VALUES ($1, $2, $3)
@@ -205,6 +180,31 @@ func (q *Queries) CreateModifierChange(ctx context.Context, arg CreateModifierCh
 		&i.ModifierID,
 		&i.CalculationType,
 		&i.Value,
+	)
+	return i, err
+}
+
+const createODModeAction = `-- name: CreateODModeAction :one
+INSERT INTO od_mode_actions (data_hash, user_id, amount)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = od_mode_actions.data_hash
+RETURNING id, data_hash, user_id, amount
+`
+
+type CreateODModeActionParams struct {
+	DataHash string
+	UserID   int32
+	Amount   int32
+}
+
+func (q *Queries) CreateODModeAction(ctx context.Context, arg CreateODModeActionParams) (OdModeAction, error) {
+	row := q.db.QueryRowContext(ctx, createODModeAction, arg.DataHash, arg.UserID, arg.Amount)
+	var i OdModeAction
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.UserID,
+		&i.Amount,
 	)
 	return i, err
 }

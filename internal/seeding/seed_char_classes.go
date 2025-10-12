@@ -72,13 +72,8 @@ func (l *lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit
 		return fmt.Errorf("%s: %v", character.Name, err)
 	}
 
-	err = l.seedCharacterClass(qtx, "characters", character.UnitID)
-	if err != nil {
-		return fmt.Errorf("%s: %v", character.Name, err)
-	}
-
 	if !character.StoryOnly {
-		err := l.seedCharacterClass(qtx, "permanent-characters", character.UnitID)
+		err := l.seedCharacterClass(qtx, "characters", character.UnitID)
 		if err != nil {
 			return fmt.Errorf("%s: %v", character.Name, err)
 		}

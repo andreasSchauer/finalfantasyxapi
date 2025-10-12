@@ -7,10 +7,11 @@ import (
 )
 
 func main() {
-    enumTypes := []string{
+    nullEnumTypes := []string{
+        "NullifyArmored",
         "AccuracySource",
         "CreationsUnlockedCategory",
-        "NullifyArmored",
+        "TopmenuType",
         "EquipType",
         "AaActivationCondition",
         "CounterType",
@@ -18,7 +19,6 @@ func main() {
         "ElementType",
         "MaCreationArea",
         "MaCreationSpecies",
-        "SubmenuType",
         "TargetType",
         "ItemUsability",
         "MusicUseCase",
@@ -29,7 +29,7 @@ func main() {
     var output strings.Builder
     output.WriteString("package seeding\n\nimport \"github.com/andreasSchauer/finalfantasyxapi/internal/database\"\n\n\n")
 
-    for _, enumType := range enumTypes {
+    for _, enumType := range nullEnumTypes {
         funcName := "null" + enumType
         output.WriteString(fmt.Sprintf(`func %s(s *string) database.Null%s {
     if s == nil {

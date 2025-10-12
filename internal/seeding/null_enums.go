@@ -3,6 +3,18 @@ package seeding
 import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
 
 
+func nullNullifyArmored(s *string) database.NullNullifyArmored {
+    if s == nil {
+        return database.NullNullifyArmored{}
+    }
+    
+    return database.NullNullifyArmored{
+        NullifyArmored: database.NullifyArmored(*s),
+        Valid: true,
+    }
+}
+
+
 func nullAccuracySource(s *string) database.NullAccuracySource {
     if s == nil {
         return database.NullAccuracySource{}
@@ -27,13 +39,13 @@ func nullCreationsUnlockedCategory(s *string) database.NullCreationsUnlockedCate
 }
 
 
-func nullNullifyArmored(s *string) database.NullNullifyArmored {
+func nullTopmenuType(s *string) database.NullTopmenuType {
     if s == nil {
-        return database.NullNullifyArmored{}
+        return database.NullTopmenuType{}
     }
     
-    return database.NullNullifyArmored{
-        NullifyArmored: database.NullifyArmored(*s),
+    return database.NullTopmenuType{
+        TopmenuType: database.TopmenuType(*s),
         Valid: true,
     }
 }
@@ -118,18 +130,6 @@ func nullMaCreationSpecies(s *string) database.NullMaCreationSpecies {
     
     return database.NullMaCreationSpecies{
         MaCreationSpecies: database.MaCreationSpecies(*s),
-        Valid: true,
-    }
-}
-
-
-func nullSubmenuType(s *string) database.NullSubmenuType {
-    if s == nil {
-        return database.NullSubmenuType{}
-    }
-    
-    return database.NullSubmenuType{
-        SubmenuType: database.SubmenuType(*s),
         Valid: true,
     }
 }

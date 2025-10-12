@@ -12,6 +12,7 @@ type OverdriveCommand struct {
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
 	Rank        int32       `json:"rank"`
+	Topmenu		*string		`json:"topmenu"`
 	OpenMenu    *string     `json:"open_menu"`
 	Overdrives  []Overdrive `json:"overdrives"`
 }
@@ -21,6 +22,7 @@ func (oc OverdriveCommand) ToHashFields() []any {
 		oc.Name,
 		oc.Description,
 		oc.Rank,
+		derefOrNil(oc.Topmenu),
 		derefOrNil(oc.OpenMenu),
 	}
 }
@@ -31,6 +33,7 @@ type Overdrive struct {
 	AbilityAttributes
 	Description     string  `json:"description"`
 	Effect          string  `json:"effect"`
+	Topmenu			*string	`json:"topmenu"`
 	UnlockCondition *string `json:"unlock_condition"`
 	CountdownInSec  *int32  `json:"countdown_in_sec"`
 	Cursor          *string `json:"cursor"`
@@ -43,6 +46,7 @@ func (o Overdrive) ToHashFields() []any {
 		derefOrNil(o.Version),
 		o.Description,
 		o.Effect,
+		derefOrNil(o.Topmenu),
 		derefOrNil(o.AttributesID),
 		derefOrNil(o.UnlockCondition),
 		derefOrNil(o.CountdownInSec),
@@ -76,7 +80,7 @@ func (l *lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 					Name:        command.Name,
 					Description: command.Description,
 					Rank:        command.Rank,
-					OpenMenu:    nullSubmenuType(command.OpenMenu),
+					Topmenu: 	 nullTopmenuType(command.Topmenu),
 				})
 				if err != nil {
 					return fmt.Errorf("couldn't create Overdrive Command: %s: %v", command.Name, err)
@@ -113,6 +117,7 @@ func (l *lookup) seedOverdrives(qtx *database.Queries, command OverdriveCommand,
 			Version:         getNullInt32(overdrive.Version),
 			Description:     overdrive.Description,
 			Effect:          overdrive.Effect,
+			Topmenu: 		 nullTopmenuType(overdrive.Topmenu),
 			AttributesID:    *overdrive.AttributesID,
 			UnlockCondition: getNullString(overdrive.UnlockCondition),
 			CountdownInSec:  getNullInt32(overdrive.CountdownInSec),

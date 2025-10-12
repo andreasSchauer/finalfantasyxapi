@@ -1541,57 +1541,6 @@ func (ns NullShopCategory) Value() (driver.Value, error) {
 	return string(ns.ShopCategory), nil
 }
 
-type SubmenuType string
-
-const (
-	SubmenuTypeBlkMagic   SubmenuType = "blk-magic"
-	SubmenuTypeSkill      SubmenuType = "skill"
-	SubmenuTypeSpecial    SubmenuType = "special"
-	SubmenuTypeSummon     SubmenuType = "summon"
-	SubmenuTypeWhtMagic   SubmenuType = "wht-magic"
-	SubmenuTypeItem       SubmenuType = "item"
-	SubmenuTypeWeapon     SubmenuType = "weapon"
-	SubmenuTypeArmor      SubmenuType = "armor"
-	SubmenuTypeCharacters SubmenuType = "characters"
-	SubmenuTypeUse        SubmenuType = "use"
-	SubmenuTypeOverdrive  SubmenuType = "overdrive"
-)
-
-func (e *SubmenuType) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = SubmenuType(s)
-	case string:
-		*e = SubmenuType(s)
-	default:
-		return fmt.Errorf("unsupported scan type for SubmenuType: %T", src)
-	}
-	return nil
-}
-
-type NullSubmenuType struct {
-	SubmenuType SubmenuType
-	Valid       bool // Valid is true if SubmenuType is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullSubmenuType) Scan(value interface{}) error {
-	if value == nil {
-		ns.SubmenuType, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.SubmenuType.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullSubmenuType) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.SubmenuType), nil
-}
-
 type TargetType string
 
 const (
@@ -1639,6 +1588,50 @@ func (ns NullTargetType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.TargetType), nil
+}
+
+type TopmenuType string
+
+const (
+	TopmenuTypeMain   TopmenuType = "main"
+	TopmenuTypeLeft   TopmenuType = "left"
+	TopmenuTypeRight  TopmenuType = "right"
+	TopmenuTypeHidden TopmenuType = "hidden"
+)
+
+func (e *TopmenuType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = TopmenuType(s)
+	case string:
+		*e = TopmenuType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for TopmenuType: %T", src)
+	}
+	return nil
+}
+
+type NullTopmenuType struct {
+	TopmenuType TopmenuType
+	Valid       bool // Valid is true if TopmenuType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullTopmenuType) Scan(value interface{}) error {
+	if value == nil {
+		ns.TopmenuType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.TopmenuType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullTopmenuType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.TopmenuType), nil
 }
 
 type TreasureType string
@@ -1792,13 +1785,6 @@ type AbilityAttribute struct {
 	CanCopycat       bool
 }
 
-type ActionsToLearn struct {
-	ID       int32
-	DataHash string
-	UserID   int32
-	Amount   int32
-}
-
 type Aeon struct {
 	ID                    int32
 	DataHash              string
@@ -1820,6 +1806,7 @@ type AeonCommand struct {
 	Name        string
 	Description string
 	Effect      string
+	Topmenu     TopmenuType
 	Cursor      NullTargetType
 }
 
@@ -2075,14 +2062,6 @@ type MasterItem struct {
 	Type     ItemType
 }
 
-type MenuCommand struct {
-	ID          int32
-	DataHash    string
-	Name        string
-	Description string
-	Effect      string
-}
-
 type Mix struct {
 	ID          int32
 	DataHash    string
@@ -2164,6 +2143,13 @@ type MonsterFormationList struct {
 	Notes    sql.NullString
 }
 
+type OdModeAction struct {
+	ID       int32
+	DataHash string
+	UserID   int32
+	Amount   int32
+}
+
 type Overdrife struct {
 	ID              int32
 	DataHash        string
@@ -2172,6 +2158,7 @@ type Overdrife struct {
 	Version         sql.NullInt32
 	Description     string
 	Effect          string
+	Topmenu         NullTopmenuType
 	AttributesID    int32
 	UnlockCondition sql.NullString
 	CountdownInSec  sql.NullInt32
@@ -2190,7 +2177,7 @@ type OverdriveCommand struct {
 	Name        string
 	Description string
 	Rank        int32
-	OpenMenu    NullSubmenuType
+	Topmenu     NullTopmenuType
 }
 
 type OverdriveMode struct {
@@ -2209,11 +2196,10 @@ type PlayerAbility struct {
 	AbilityID           int32
 	Description         sql.NullString
 	Effect              string
-	Submenu             NullSubmenuType
+	Topmenu             NullTopmenuType
 	CanUseOutsideBattle bool
 	MpCost              sql.NullInt32
 	Cursor              NullTargetType
-	OpenMenu            NullSubmenuType
 }
 
 type PlayerUnit struct {
@@ -2323,6 +2309,15 @@ type SubLocation struct {
 	Specification sql.NullString
 }
 
+type Submenu struct {
+	ID          int32
+	DataHash    string
+	Name        string
+	Description string
+	Effect      string
+	Topmenu     NullTopmenuType
+}
+
 type Subquest struct {
 	ID                int32
 	DataHash          string
@@ -2349,5 +2344,6 @@ type TriggerCommand struct {
 	AbilityID   int32
 	Description string
 	Effect      string
+	Topmenu     TopmenuType
 	Cursor      TargetType
 }

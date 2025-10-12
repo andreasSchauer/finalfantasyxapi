@@ -6,7 +6,7 @@ ALTER TABLE elements
 ADD COLUMN opposite_element_id INTEGER REFERENCES elements(id);
 
 
-CREATE TABLE actions_to_learn (
+CREATE TABLE od_mode_actions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     user_id INTEGER NOT NULL REFERENCES characters(id),
@@ -18,7 +18,7 @@ CREATE TABLE j_od_mode_action (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     overdrive_mode_id INTEGER NOT NULL REFERENCES overdrive_modes(id),
-    action_id INTEGER NOT NULL REFERENCES actions_to_learn(id)
+    action_id INTEGER NOT NULL REFERENCES od_mode_actions(id)
 );
 
 
@@ -119,7 +119,7 @@ DROP TYPE IF EXISTS calculation_type;
 DROP TABLE IF EXISTS j_status_condition_self;
 DROP TABLE IF EXISTS j_status_condition_stat;
 DROP TABLE IF EXISTS j_od_mode_action;
-DROP TABLE IF EXISTS actions_to_learn;
+DROP TABLE IF EXISTS od_mode_actions;
 
 ALTER TABLE elements
 DROP COLUMN IF EXISTS opposite_element_id;

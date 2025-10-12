@@ -14,11 +14,10 @@ type PlayerAbility struct {
 	AbilityID           int32
 	Description         *string `json:"description"`
 	Effect              string  `json:"effect"`
-	Submenu             *string `json:"submenu"`
+	Topmenu             *string `json:"topmenu"`
 	CanUseOutsideBattle bool    `json:"can_use_outside_battle"`
 	MPCost              *int32  `json:"mp_cost"`
 	Cursor              *string `json:"cursor"`
-	OpenMenu            *string `json:"open_menu"`
 }
 
 func (a PlayerAbility) ToHashFields() []any {
@@ -26,11 +25,10 @@ func (a PlayerAbility) ToHashFields() []any {
 		a.AbilityID,
 		derefOrNil(a.Description),
 		a.Effect,
-		derefOrNil(a.Submenu),
+		derefOrNil(a.Topmenu),
 		a.CanUseOutsideBattle,
 		derefOrNil(a.MPCost),
 		derefOrNil(a.Cursor),
-		derefOrNil(a.OpenMenu),
 	}
 }
 
@@ -62,11 +60,10 @@ func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 				AbilityID:           playerAbility.AbilityID,
 				Description:         getNullString(playerAbility.Description),
 				Effect:              playerAbility.Effect,
-				Submenu:             nullSubmenuType(playerAbility.Submenu),
+				Topmenu: 			 nullTopmenuType(playerAbility.Topmenu),
 				CanUseOutsideBattle: playerAbility.CanUseOutsideBattle,
 				MpCost:              getNullInt32(playerAbility.MPCost),
 				Cursor:              nullTargetType(playerAbility.Cursor),
-				OpenMenu:            nullSubmenuType(playerAbility.OpenMenu),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Player Ability: %s: %v", ability.Name, err)

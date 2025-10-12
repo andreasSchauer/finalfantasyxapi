@@ -9,7 +9,9 @@ import (
 	"github.com/pressly/goose/v3"
 )
 
-func SeedDatabase(db *database.Queries, dbConn *sql.DB, migrationsDir string) error {
+func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
+	const migrationsDir = "./sql/schema/"
+
 	err := setupDB(dbConn, migrationsDir)
 	if err != nil {
 		return fmt.Errorf("couldn't setup database: %v", err)
@@ -34,7 +36,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB, migrationsDir string) er
 		l.seedSidequests,
 		l.seedMonsters,
 		l.seedAeonCommands,
-		l.seedMenuCommands,
+		l.seedSubmenus,
 		l.seedPlayerAbilities,
 		l.seedEnemyAbilities,
 		l.seedOverdriveAbilities,

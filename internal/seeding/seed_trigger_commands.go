@@ -14,6 +14,7 @@ type TriggerCommand struct {
 	AbilityID   int32
 	Description string `json:"description"`
 	Effect      string `json:"effect"`
+	Topmenu		string	`json:"topmenu"`
 	Cursor      string `json:"cursor"`
 }
 
@@ -22,6 +23,7 @@ func (t TriggerCommand) ToHashFields() []any {
 		t.AbilityID,
 		t.Description,
 		t.Effect,
+		t.Topmenu,
 		t.Cursor,
 	}
 }
@@ -50,11 +52,12 @@ func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 			command.AbilityID = dbAbility.ID
 
 			err = qtx.CreateTriggerCommand(context.Background(), database.CreateTriggerCommandParams{
-				DataHash:    generateDataHash(command),
-				AbilityID:   command.AbilityID,
-				Description: command.Description,
-				Effect:      command.Effect,
-				Cursor:      database.TargetType(command.Cursor),
+				DataHash:    	generateDataHash(command),
+				AbilityID:   	command.AbilityID,
+				Description: 	command.Description,
+				Effect:      	command.Effect,
+				Topmenu: 		database.TopmenuType(command.Topmenu),
+				Cursor:      	database.TargetType(command.Cursor),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create TriggerCommand: %s: %v", ability.Name, err)

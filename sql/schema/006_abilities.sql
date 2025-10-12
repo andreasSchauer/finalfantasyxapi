@@ -28,7 +28,7 @@ CREATE TABLE abilities (
     )
 );
 
-CREATE TYPE submenu_type AS ENUM ('blk-magic', 'skill', 'special', 'summon', 'wht-magic', 'item', 'weapon', 'armor', 'characters', 'use', 'overdrive');
+
 
 CREATE TABLE player_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -36,11 +36,10 @@ CREATE TABLE player_abilities (
     ability_id INTEGER UNIQUE NOT NULL REFERENCES abilities(id),
     description TEXT,
     effect TEXT NOT NULL,
-    submenu submenu_type,
+    topmenu topmenu_type,
     can_use_outside_battle BOOLEAN NOT NULL,
     mp_cost INTEGER,
-    cursor target_type,
-    open_menu submenu_type
+    cursor target_type
 );
 
 
@@ -65,6 +64,7 @@ CREATE TABLE trigger_commands (
     ability_id INTEGER UNIQUE NOT NULL REFERENCES abilities(id),
     description TEXT NOT NULL,
     effect TEXT NOT NULL,
+    topmenu topmenu_type NOT NULL,
     cursor target_type NOT NULL
 );
 
@@ -75,7 +75,7 @@ CREATE TABLE overdrive_commands (
     name TEXT UNIQUE NOT NULL,
     description TEXT NOT NULL,
     rank INTEGER NOT NULL,
-    open_menu submenu_type
+    topmenu topmenu_type
 );
 
 
@@ -88,6 +88,7 @@ CREATE TABLE overdrives (
     version INTEGER,
     description TEXT NOT NULL,
     effect TEXT NOT NULL,
+    topmenu topmenu_type,
     attributes_id INTEGER NOT NULL REFERENCES ability_attributes(id),
     unlock_condition TEXT,
     countdown_in_sec INTEGER,
