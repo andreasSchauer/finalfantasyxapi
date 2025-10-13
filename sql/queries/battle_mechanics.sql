@@ -17,6 +17,13 @@ SET data_hash = $1,
 WHERE id = $8;
 
 
+-- name: CreateBaseStat :one
+INSERT INTO base_stats (data_hash, stat_id, value)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = base_stats.data_hash
+RETURNING *;
+
+
 -- name: CreateElement :one
 INSERT INTO elements (data_hash, name)
 VALUES ($1, $2)

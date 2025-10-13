@@ -11,13 +11,13 @@ import (
 type Property struct {
 	//id 		int32
 	//dataHash	string
-	Name           			string  			`json:"name"`
-	Effect         			string  			`json:"effect"`
-	RelatedStats			[]string			`json:"related_stats"`
-	RemovedStatusConditions	[]string			`json:"removed_status_conditions"`
-	NullifyArmored 			*string 			`json:"nullify_armored"`
-	StatChanges				[]StatChange		`json:"stat_changes"`
-	ModifierChanges			[]ModifierChange	`json:"modifier_changes"`
+	Name                    string           `json:"name"`
+	Effect                  string           `json:"effect"`
+	RelatedStats            []string         `json:"related_stats"`
+	RemovedStatusConditions []string         `json:"removed_status_conditions"`
+	NullifyArmored          *string          `json:"nullify_armored"`
+	StatChanges             []StatChange     `json:"stat_changes"`
+	ModifierChanges         []ModifierChange `json:"modifier_changes"`
 }
 
 func (p Property) ToHashFields() []any {
@@ -28,64 +28,10 @@ func (p Property) ToHashFields() []any {
 	}
 }
 
-
 type PropertyLookup struct {
 	Property
-	ID			int32
+	ID int32
 }
-
-
-type PropertyStatJunction struct {
-	PropertyID	int32
-	StatID		int32
-}
-
-func (p PropertyStatJunction) ToHashFields() []any {
-	return []any{
-		p.PropertyID,
-		p.StatID,
-	}
-}
-
-
-type PropertyStatusConditionJunction struct {
-	PropertyID			int32
-	StatusConditionID	int32
-}
-
-func (s PropertyStatusConditionJunction) ToHashFields() []any {
-	return []any{
-		s.PropertyID,
-		s.StatusConditionID,
-	}
-}
-
-
-type PropertyStatChangeJunction struct {
-	PropertyID		int32
-	StatChangeID	int32
-}
-
-func (p PropertyStatChangeJunction) ToHashFields() []any {
-	return []any{
-		p.PropertyID,
-		p.StatChangeID,
-	}
-}
-
-
-type PropertyModifierChangeJunction struct {
-	PropertyID	int32
-	ModifierID	int32
-}
-
-func (p PropertyModifierChangeJunction) ToHashFields() []any {
-	return []any{
-		p.PropertyID,
-		p.ModifierID,
-	}
-}
-
 
 func (l *lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
@@ -109,14 +55,13 @@ func (l *lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			l.properties[property.Name] = PropertyLookup{
-				Property: 	property,
-				ID: 		dbProperty.ID,
+				Property: property,
+				ID:       dbProperty.ID,
 			}
 		}
 		return nil
 	})
 }
-
 
 func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
@@ -134,26 +79,35 @@ func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql
 				return err
 			}
 
-			relationshipFunctions := []func(*database.Queries, PropertyLookup) error{
-				l.createPropertyRelatedStats,
-				l.createPropertyRemovedConditions,
-				l.createPropertyStatChanges,
-				l.createPropertyModifierChanges,
+			err = l.createPropertyRelatedStats(db, property)
+			if err != nil {
+				return err
 			}
 
-			for _, function := range relationshipFunctions {
-				err := function(db, property)
-				if err != nil {
-					return err
-				}
+			err = l.createPropertyRemovedConditions(db, property)
+			if err != nil {
+				return err
 			}
+
+			statChangesNew, err := l.createPropertyStatChanges(db, property)
+			if err != nil {
+				return err
+			}
+
+			modifierChangesNew, err := l.createPropertyModifierChanges(db, property)
+			if err != nil {
+				return err
+			}
+
+			property.StatChanges = statChangesNew
+			property.ModifierChanges = modifierChangesNew
+			l.properties[property.Name] = property
 		}
 
 		return nil
 	})
 
 }
-
 
 func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property PropertyLookup) error {
 	for _, jsonStat := range property.RelatedStats {
@@ -162,15 +116,15 @@ func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property Prop
 			return err
 		}
 
-		junction := PropertyStatJunction{
-			PropertyID: property.ID,
-			StatID: 	stat.ID,
+		junction := Junction{
+			ParentID: 	property.ID,
+			ChildID:  	stat.ID,
 		}
 
 		err = qtx.CreatePropertyStatJunction(context.Background(), database.CreatePropertyStatJunctionParams{
-			DataHash: 		generateDataHash(junction),
-			PropertyID: 	junction.PropertyID,
-			StatID: 		junction.StatID,
+			DataHash:   generateDataHash(junction),
+			PropertyID: junction.ParentID,
+			StatID:     junction.ChildID,
 		})
 		if err != nil {
 			return err
@@ -179,8 +133,6 @@ func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property Prop
 
 	return nil
 }
-
-
 
 func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property PropertyLookup) error {
 	for _, jsonCondition := range property.RemovedStatusConditions {
@@ -189,15 +141,15 @@ func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property
 			return err
 		}
 
-		junction := PropertyStatusConditionJunction{
-			PropertyID: 		property.ID,
-			StatusConditionID: 	condition.ID,
+		junction := Junction{
+			ParentID: 	property.ID,
+			ChildID:  	condition.ID,
 		}
 
 		err = qtx.CreatePropertyStatusConditionJunction(context.Background(), database.CreatePropertyStatusConditionJunctionParams{
-			DataHash: 			generateDataHash(junction),
-			PropertyID: 		junction.PropertyID,
-			StatusConditionID: 	junction.StatusConditionID,
+			DataHash:          generateDataHash(junction),
+			PropertyID:        junction.ParentID,
+			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
 			return err
@@ -207,56 +159,56 @@ func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property
 	return nil
 }
 
-
-
-func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property PropertyLookup) error {
-	for _, statChange := range property.StatChanges {
+func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property PropertyLookup) ([]StatChange, error) {
+	for i, statChange := range property.StatChanges {
 		dbStatChange, err := l.seedStatChange(qtx, statChange)
 		if err != nil {
-			return err
+			return []StatChange{}, err
 		}
+		statChange.StatID = dbStatChange.StatID
+		property.StatChanges[i] = statChange
 
-		junction := PropertyStatChangeJunction{
-			PropertyID: 	property.ID,
-			StatChangeID: 	dbStatChange.ID,
+		junction := Junction{
+			ParentID: 	property.ID,
+			ChildID:  	dbStatChange.ID,
 		}
 
 		err = qtx.CreatePropertyStatChangeJunction(context.Background(), database.CreatePropertyStatChangeJunctionParams{
-			DataHash: 		generateDataHash(junction),
-			PropertyID: 	junction.PropertyID,
-			StatChangeID: 	junction.StatChangeID,
+			DataHash:     generateDataHash(junction),
+			PropertyID:   junction.ParentID,
+			StatChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return []StatChange{}, err
 		}
 	}
 
-	return nil
+	return property.StatChanges, nil
 }
 
-
-
-func (l *lookup) createPropertyModifierChanges(qtx *database.Queries, property PropertyLookup) error {
-	for _, modifierChange := range property.ModifierChanges {
+func (l *lookup) createPropertyModifierChanges(qtx *database.Queries, property PropertyLookup) ([]ModifierChange, error) {
+	for i, modifierChange := range property.ModifierChanges {
 		dbModifierChange, err := l.seedModifierChange(qtx, modifierChange)
 		if err != nil {
-			return err
+			return []ModifierChange{}, err
 		}
+		modifierChange.ModifierID = dbModifierChange.ModifierID
+		property.ModifierChanges[i] = modifierChange
 
-		junction := PropertyModifierChangeJunction{
-			PropertyID: 	property.ID,
-			ModifierID: 	dbModifierChange.ID,
+		junction := Junction{
+			ParentID: 	property.ID,
+			ChildID:  	dbModifierChange.ID,
 		}
 
 		err = qtx.CreatePropertyModifierChangeJunction(context.Background(), database.CreatePropertyModifierChangeJunctionParams{
-			DataHash: 			generateDataHash(junction),
-			PropertyID: 		junction.PropertyID,
-			ModifierChangeID: 	junction.ModifierID,
+			DataHash:         generateDataHash(junction),
+			PropertyID:       junction.ParentID,
+			ModifierChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return []ModifierChange{}, err
 		}
 	}
 
-	return nil
+	return property.ModifierChanges, nil
 }

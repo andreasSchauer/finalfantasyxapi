@@ -40,7 +40,6 @@ func (m MixCombination) ToHashFields() []any {
 	}
 }
 
-
 func (m MixCombination) ToKeyFields() []any {
 	return []any{
 		m.FirstItem,
@@ -48,17 +47,15 @@ func (m MixCombination) ToKeyFields() []any {
 	}
 }
 
-
 type MixComboJunction struct {
-	MixID       int32
-	ComboID     int32
+	Junction
 	IsBestCombo bool
 }
 
 func (m MixComboJunction) ToHashFields() []any {
 	return []any{
-		m.MixID,
-		m.ComboID,
+		m.ParentID,
+		m.ChildID,
 		m.IsBestCombo,
 	}
 }
@@ -104,13 +101,13 @@ func (l *lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
+
 func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix, dbMixID int32) error {
 	bestComboMap := getBestComboMap(mix)
 
 	for _, combo := range mix.PossibleCombinations {
-		junction := MixComboJunction{
-			MixID: dbMixID,
-		}
+		junction := MixComboJunction{}
+
 		key := createLookupKey(combo)
 		if _, exists := bestComboMap[key]; exists {
 			junction.IsBestCombo = true
@@ -121,12 +118,13 @@ func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix, dbMixID int
 			return err
 		}
 
-		junction.ComboID = dbCombo.ID
+		junction.ParentID = dbMixID
+		junction.ChildID = dbCombo.ID
 
 		err = qtx.CreateMixComboJunction(context.Background(), database.CreateMixComboJunctionParams{
 			DataHash:    generateDataHash(junction),
-			MixID:       junction.MixID,
-			ComboID:     junction.ComboID,
+			MixID:       junction.ParentID,
+			ComboID:     junction.ChildID,
 			IsBestCombo: junction.IsBestCombo,
 		})
 		if err != nil {
@@ -138,8 +136,10 @@ func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix, dbMixID int
 }
 
 
+
 func getBestComboMap(mix Mix) map[string]struct{} {
 	bestComboMap := make(map[string]struct{})
+
 	for _, combo := range mix.BestCombinations {
 		key := createLookupKey(combo)
 		bestComboMap[key] = struct{}{}
@@ -147,6 +147,7 @@ func getBestComboMap(mix Mix) map[string]struct{} {
 
 	return bestComboMap
 }
+
 
 
 func (l *lookup) seedMixCombination(qtx *database.Queries, combo MixCombination) (database.MixCombination, error) {

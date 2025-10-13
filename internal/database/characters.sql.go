@@ -104,6 +104,24 @@ func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams
 	return i, err
 }
 
+const createCharacterBaseStatJunction = `-- name: CreateCharacterBaseStatJunction :exec
+INSERT INTO j_character_base_stat (data_hash, character_id, base_stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = j_character_base_stat.data_hash
+RETURNING id, data_hash, character_id, base_stat_id
+`
+
+type CreateCharacterBaseStatJunctionParams struct {
+	DataHash    string
+	CharacterID int32
+	BaseStatID  int32
+}
+
+func (q *Queries) CreateCharacterBaseStatJunction(ctx context.Context, arg CreateCharacterBaseStatJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createCharacterBaseStatJunction, arg.DataHash, arg.CharacterID, arg.BaseStatID)
+	return err
+}
+
 const createCharacterClass = `-- name: CreateCharacterClass :one
 INSERT INTO character_classes (data_hash, name)
 VALUES ($1, $2)

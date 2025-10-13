@@ -11,12 +11,12 @@ import (
 type OverdriveMode struct {
 	//id 		int32
 	//dataHash	string
-	Name        	string   				`json:"name"`
-	Description 	string   				`json:"description"`
-	Effect      	string   				`json:"effect"`
-	Type        	string   				`json:"type"`
-	FillRate    	*float32 				`json:"fill_rate"`
-	ActionsToLearn	[]ActionToLearn			`json:"actions_to_learn"`
+	Name           string          `json:"name"`
+	Description    string          `json:"description"`
+	Effect         string          `json:"effect"`
+	Type           string          `json:"type"`
+	FillRate       *float32        `json:"fill_rate"`
+	ActionsToLearn []ActionToLearn `json:"actions_to_learn"`
 }
 
 func (o OverdriveMode) ToHashFields() []any {
@@ -29,17 +29,15 @@ func (o OverdriveMode) ToHashFields() []any {
 	}
 }
 
-
 type OverdriveModeLookup struct {
 	OverdriveMode
-	ID				int32
+	ID int32
 }
 
-
 type ActionToLearn struct {
-	UserID			int32
-	User			string		`json:"user"`
-	Amount			int32		`json:"amount"`
+	UserID int32
+	User   string `json:"user"`
+	Amount int32  `json:"amount"`
 }
 
 func (a ActionToLearn) ToHashFields() []any {
@@ -48,21 +46,6 @@ func (a ActionToLearn) ToHashFields() []any {
 		a.Amount,
 	}
 }
-
-
-type ODModeActionJunction struct {
-	OverdriveModeID	int32
-	ActionID		int32
-}
-
-
-func (oma ODModeActionJunction) ToHashFields() []any {
-	return []any{
-		oma.OverdriveModeID,
-		oma.ActionID,
-	}
-}
-
 
 func (l *lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_modes.json"
@@ -88,14 +71,13 @@ func (l *lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error 
 			}
 
 			l.overdriveModes[mode.Name] = OverdriveModeLookup{
-				OverdriveMode: 	mode,
-				ID: 			dbOverdriveMode.ID,
+				OverdriveMode: mode,
+				ID:            dbOverdriveMode.ID,
 			}
 		}
 		return nil
 	})
 }
-
 
 func (l *lookup) createOverdriveModesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_modes.json"
@@ -118,33 +100,32 @@ func (l *lookup) createOverdriveModesRelationships(db *database.Queries, dbConn 
 				if err != nil {
 					return err
 				}
-				
+
 				action.UserID = user.ID
+				mode.ActionsToLearn[i] = action
 
 				dbAction, err := qtx.CreateODModeAction(context.Background(), database.CreateODModeActionParams{
-					DataHash: 			generateDataHash(action),
-					UserID: 			action.UserID,
-					Amount: 			action.Amount,
+					DataHash: generateDataHash(action),
+					UserID:   action.UserID,
+					Amount:   action.Amount,
 				})
 				if err != nil {
 					return err
 				}
 
-				junction := ODModeActionJunction{
-					OverdriveModeID: 	mode.ID,
-					ActionID: 			dbAction.ID,
+				junction := Junction{
+					ParentID: 	mode.ID,
+					ChildID:  	dbAction.ID,
 				}
 
 				err = qtx.CreateODModeActionJunction(context.Background(), database.CreateODModeActionJunctionParams{
-					DataHash: 			generateDataHash(junction),
-					OverdriveModeID: 	junction.OverdriveModeID,
-					ActionID: 			junction.ActionID,
+					DataHash:        generateDataHash(junction),
+					OverdriveModeID: junction.ParentID,
+					ActionID:        junction.ChildID,
 				})
 				if err != nil {
 					return err
 				}
-
-				mode.ActionsToLearn[i] = action
 			}
 
 			l.overdriveModes[mode.Name] = mode

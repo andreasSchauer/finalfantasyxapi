@@ -93,6 +93,31 @@ func (q *Queries) CreateAgilityTier(ctx context.Context, arg CreateAgilityTierPa
 	return i, err
 }
 
+const createBaseStat = `-- name: CreateBaseStat :one
+INSERT INTO base_stats (data_hash, stat_id, value)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = base_stats.data_hash
+RETURNING id, data_hash, stat_id, value
+`
+
+type CreateBaseStatParams struct {
+	DataHash string
+	StatID   int32
+	Value    int32
+}
+
+func (q *Queries) CreateBaseStat(ctx context.Context, arg CreateBaseStatParams) (BaseStat, error) {
+	row := q.db.QueryRowContext(ctx, createBaseStat, arg.DataHash, arg.StatID, arg.Value)
+	var i BaseStat
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.StatID,
+		&i.Value,
+	)
+	return i, err
+}
+
 const createElement = `-- name: CreateElement :one
 INSERT INTO elements (data_hash, name)
 VALUES ($1, $2)

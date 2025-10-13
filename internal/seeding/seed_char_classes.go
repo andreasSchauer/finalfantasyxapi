@@ -1,17 +1,15 @@
 package seeding
 
-import(
+import (
 	"context"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type CharacterClass struct {
-	Name		string
+	Name string
 }
-
 
 func (cc CharacterClass) ToHashFields() []any {
 	return []any{
@@ -19,27 +17,10 @@ func (cc CharacterClass) ToHashFields() []any {
 	}
 }
 
-
 type CharClassLookup struct {
 	CharacterClass
-	ID				int32
+	ID int32
 }
-
-
-type UnitCharClassJunction struct {
-	UnitID	int32
-	ClassID	int32
-}
-
-
-func (ucc UnitCharClassJunction) ToHashFields() []any {
-	return []any {
-		ucc.UnitID,
-		ucc.ClassID,
-	}
-}
-
-
 
 func (l *lookup) seedCharacterClasses(qtx *database.Queries, unit PlayerUnit) error {
 	if unit.Type == database.UnitTypeCharacter {
@@ -58,8 +39,6 @@ func (l *lookup) seedCharacterClasses(qtx *database.Queries, unit PlayerUnit) er
 
 	return nil
 }
-
-
 
 func (l *lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit) error {
 	character, err := l.getCharacter(unit.Name)
@@ -82,8 +61,6 @@ func (l *lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit
 	return nil
 }
 
-
-
 func (l *lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) error {
 	aeon, err := l.getAeon(unit.Name)
 	if err != nil {
@@ -91,7 +68,7 @@ func (l *lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) err
 	}
 
 	aeonCategory := stringPtrToString(aeon.Category)
-		
+
 	err = l.seedCharacterClass(qtx, aeon.Name, aeon.UnitID)
 	if err != nil {
 		return fmt.Errorf("%s: %v", aeon.Name, err)
@@ -115,11 +92,9 @@ func (l *lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) err
 			return fmt.Errorf("%s: %v", aeon.Name, err)
 		}
 	}
-	
+
 	return nil
 }
-
-
 
 func (l *lookup) seedCharacterClass(qtx *database.Queries, className string, unitID int32) error {
 	class := CharacterClass{
@@ -127,8 +102,8 @@ func (l *lookup) seedCharacterClass(qtx *database.Queries, className string, uni
 	}
 
 	dbClass, err := qtx.CreateCharacterClass(context.Background(), database.CreateCharacterClassParams{
-		DataHash: 	generateDataHash(class),
-		Name: 		class.Name,
+		DataHash: generateDataHash(class),
+		Name:     class.Name,
 	})
 	if err != nil {
 		return fmt.Errorf("couldn't create Character Class: %s: %v", class.Name, err)
@@ -136,7 +111,7 @@ func (l *lookup) seedCharacterClass(qtx *database.Queries, className string, uni
 
 	l.charClasses[className] = CharClassLookup{
 		CharacterClass: class,
-		ID: 			dbClass.ID,
+		ID:             dbClass.ID,
 	}
 
 	err = l.seedUnitCharClassJunction(qtx, unitID, dbClass.ID)
@@ -148,17 +123,16 @@ func (l *lookup) seedCharacterClass(qtx *database.Queries, className string, uni
 }
 
 
-
 func (l *lookup) seedUnitCharClassJunction(qtx *database.Queries, unitID int32, classID int32) error {
-	junction := UnitCharClassJunction{
-		UnitID: 	unitID,
-		ClassID: 	classID,
+	junction := Junction{
+		ParentID: 	unitID,
+		ChildID:  	classID,
 	}
 
 	err := qtx.CreateUnitsCharClassesJunction(context.Background(), database.CreateUnitsCharClassesJunctionParams{
-		DataHash: 	generateDataHash(junction),
-		UnitID: 	junction.UnitID,
-		ClassID: 	junction.ClassID,
+		DataHash: generateDataHash(junction),
+		UnitID:   junction.ParentID,
+		ClassID:  junction.ChildID,
 	})
 	if err != nil {
 		return err

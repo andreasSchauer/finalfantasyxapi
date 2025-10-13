@@ -35,57 +35,6 @@ type StatusConditionLookup struct {
 }
 
 
-type StatusConditionStatJunction struct {
-	StatusConditionID	int32
-	StatID				int32
-}
-
-func (s StatusConditionStatJunction) ToHashFields() []any {
-	return []any{
-		s.StatusConditionID,
-		s.StatID,
-	}
-}
-
-
-type StatusConditionSelfJunction struct {
-	ParentConditionID	int32
-	RemovedConditionID	int32
-}
-
-func (s StatusConditionSelfJunction) ToHashFields() []any {
-	return []any{
-		s.ParentConditionID,
-		s.RemovedConditionID,
-	}
-}
-
-
-type StatusConditionStatChangeJunction struct {
-	StatusConditionID	int32
-	StatChangeID		int32
-}
-
-func (s StatusConditionStatChangeJunction) ToHashFields() []any {
-	return []any{
-		s.StatusConditionID,
-		s.StatChangeID,
-	}
-}
-
-
-type StatusConditionModifierChangeJunction struct {
-	StatusConditionID	int32
-	ModifierID			int32
-}
-
-func (s StatusConditionModifierChangeJunction) ToHashFields() []any {
-	return []any{
-		s.StatusConditionID,
-		s.ModifierID,
-	}
-}
-
 
 
 func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
@@ -136,19 +85,29 @@ func (l *lookup) createStatusConditionsRelationships(db *database.Queries, dbCon
 				return err
 			}
 
-			relationshipFunctions := []func(*database.Queries, StatusConditionLookup) error{
-				l.createStatusConditionRelatedStats,
-				l.createStatusConditionRemovedConditions,
-				l.createStatusConditionStatChanges,
-				l.createStatusConditionModifierChanges,
+			err = l.createStatusConditionRelatedStats(db, condition)
+			if err != nil {
+				return err
 			}
 
-			for _, function := range relationshipFunctions {
-				err := function(db, condition)
-				if err != nil {
-					return err
-				}
+			err = l.createStatusConditionRemovedConditions(db, condition)
+			if err != nil {
+				return err
 			}
+
+			statChangesNew, err := l.createStatusConditionStatChanges(db, condition)
+			if err != nil {
+				return err
+			}
+
+			modifierChangesNew, err := l.createStatusConditionModifierChanges(db, condition)
+			if err != nil {
+				return err
+			}
+
+			condition.StatChanges = statChangesNew
+			condition.ModifierChanges = modifierChangesNew
+			l.statusConditions[condition.Name] = condition
 		}
 		return nil
 	})
@@ -162,15 +121,15 @@ func (l *lookup) createStatusConditionRelatedStats(qtx *database.Queries, condit
 			return err
 		}
 
-		junction := StatusConditionStatJunction{
-			StatusConditionID: condition.ID,
-			StatID: stat.ID,
+		junction := Junction{
+			ParentID: 	condition.ID,
+			ChildID: 	stat.ID,
 		}
 
 		err = qtx.CreateStatusConditionStatJunction(context.Background(), database.CreateStatusConditionStatJunctionParams{
 			DataHash: 			generateDataHash(junction),
-			StatusConditionID: 	junction.StatusConditionID,
-			StatID: 			junction.StatID,
+			StatusConditionID: 	junction.ParentID,
+			StatID: 			junction.ChildID,
 		})
 		if err != nil {
 			return err
@@ -189,15 +148,15 @@ func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, c
 			return err
 		}
 
-		junction := StatusConditionSelfJunction{
-			ParentConditionID: 	condition.ID,
-			RemovedConditionID: remCondition.ID,
+		junction := Junction{
+			ParentID: 	condition.ID,
+			ChildID: 	remCondition.ID,
 		}
 
 		err = qtx.CreateStatusConditionSelfJunction(context.Background(), database.CreateStatusConditionSelfJunctionParams{
 			DataHash: 			generateDataHash(junction),
-			ParentConditionID: 	junction.ParentConditionID,
-			ChildConditionID: 	junction.RemovedConditionID,
+			ParentConditionID: 	junction.ParentID,
+			ChildConditionID: 	junction.ChildID,
 		})
 		if err != nil {
 			return err
@@ -209,54 +168,58 @@ func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, c
 
 
 
-func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, condition StatusConditionLookup) error {
-	for _, statChange := range condition.StatChanges {
+func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, condition StatusConditionLookup) ([]StatChange, error) {
+	for i, statChange := range condition.StatChanges {
 		dbStatChange, err := l.seedStatChange(qtx, statChange)
 		if err != nil {
-			return err
+			return []StatChange{}, err
 		}
+		statChange.StatID = dbStatChange.StatID
+		condition.StatChanges[i] = statChange
 
-		junction := StatusConditionStatChangeJunction{
-			StatusConditionID: 	condition.ID,
-			StatChangeID: 		dbStatChange.ID,
+		junction := Junction{
+			ParentID: 	condition.ID,
+			ChildID: 	dbStatChange.ID,
 		}
 
 		err = qtx.CreateStatusConditionStatChangeJunction(context.Background(), database.CreateStatusConditionStatChangeJunctionParams{
 			DataHash: 			generateDataHash(junction),
-			StatusConditionID: 	junction.StatusConditionID,
-			StatChangeID: 		junction.StatChangeID,
+			StatusConditionID: 	junction.ParentID,
+			StatChangeID: 		junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return []StatChange{}, err
 		}
 	}
 
-	return nil
+	return condition.StatChanges, nil
 }
 
 
 
-func (l *lookup) createStatusConditionModifierChanges(qtx *database.Queries, condition StatusConditionLookup) error {
-	for _, modifierChange := range condition.ModifierChanges {
+func (l *lookup) createStatusConditionModifierChanges(qtx *database.Queries, condition StatusConditionLookup) ([]ModifierChange, error) {
+	for i, modifierChange := range condition.ModifierChanges {
 		dbModifierChange, err := l.seedModifierChange(qtx, modifierChange)
 		if err != nil {
-			return err
+			return []ModifierChange{}, err
 		}
+		modifierChange.ModifierID = dbModifierChange.ModifierID
+		condition.ModifierChanges[i] = modifierChange
 
-		junction := StatusConditionModifierChangeJunction{
-			StatusConditionID: 	condition.ID,
-			ModifierID: 		dbModifierChange.ID,
+		junction := Junction{
+			ParentID: 	condition.ID,
+			ChildID: 	dbModifierChange.ID,
 		}
 
 		err = qtx.CreateStatusConditionModifierChangeJunction(context.Background(), database.CreateStatusConditionModifierChangeJunctionParams{
 			DataHash: 			generateDataHash(junction),
-			StatusConditionID: 	junction.StatusConditionID,
-			ModifierChangeID: 	junction.ModifierID,
+			StatusConditionID: 	junction.ParentID,
+			ModifierChangeID: 	junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return []ModifierChange{}, err
 		}
 	}
 
-	return nil
+	return condition.ModifierChanges, nil
 }

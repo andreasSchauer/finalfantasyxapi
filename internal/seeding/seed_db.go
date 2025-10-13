@@ -63,6 +63,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.createOverdriveModesRelationships,
 		l.createStatusConditionsRelationships,
 		l.createPropertiesRelationships,
+		l.createCharactersRelationships,
 	}
 
 	err = handleDBFunctions(db, dbConn, seedFunctions, "initial seeding")

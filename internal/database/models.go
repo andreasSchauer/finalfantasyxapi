@@ -1866,6 +1866,13 @@ type AutoAbility struct {
 	OnHitElement        NullElementType
 }
 
+type BaseStat struct {
+	ID       int32
+	DataHash string
+	StatID   int32
+	Value    int32
+}
+
 type BlitzballItemsList struct {
 	ID       int32
 	DataHash string
@@ -1960,6 +1967,13 @@ type ItemAbility struct {
 	ItemID    int32
 	AbilityID int32
 	Cursor    TargetType
+}
+
+type JCharacterBaseStat struct {
+	ID          int32
+	DataHash    string
+	CharacterID int32
+	BaseStatID  int32
 }
 
 type JMixCombo struct {

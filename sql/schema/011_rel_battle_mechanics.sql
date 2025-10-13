@@ -2,6 +2,15 @@
 ALTER TABLE stats
 ADD COLUMN sphere_id INTEGER REFERENCES items(id);
 
+
+CREATE TABLE base_stats (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    stat_id INTEGER NOT NULL REFERENCES stats(id),
+    value INTEGER NOT NULL
+);
+
+
 ALTER TABLE elements
 ADD COLUMN opposite_element_id INTEGER REFERENCES elements(id);
 
@@ -123,6 +132,8 @@ DROP TABLE IF EXISTS od_mode_actions;
 
 ALTER TABLE elements
 DROP COLUMN IF EXISTS opposite_element_id;
+
+DROP TABLE IF EXISTS base_stats;
 
 ALTER TABLE stats
 DROP COLUMN IF EXISTS sphere_id;
