@@ -36,10 +36,11 @@ func (q *Queries) CreateAeonCommand(ctx context.Context, arg CreateAeonCommandPa
 	return err
 }
 
-const createSubmenu = `-- name: CreateSubmenu :exec
+const createSubmenu = `-- name: CreateSubmenu :one
 INSERT INTO submenus (data_hash, name, description, effect, topmenu)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = submenus.data_hash
+RETURNING id, data_hash, name, description, effect, topmenu
 `
 
 type CreateSubmenuParams struct {
@@ -50,13 +51,39 @@ type CreateSubmenuParams struct {
 	Topmenu     NullTopmenuType
 }
 
-func (q *Queries) CreateSubmenu(ctx context.Context, arg CreateSubmenuParams) error {
-	_, err := q.db.ExecContext(ctx, createSubmenu,
+func (q *Queries) CreateSubmenu(ctx context.Context, arg CreateSubmenuParams) (Submenu, error) {
+	row := q.db.QueryRowContext(ctx, createSubmenu,
 		arg.DataHash,
 		arg.Name,
 		arg.Description,
 		arg.Effect,
 		arg.Topmenu,
 	)
+	var i Submenu
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Description,
+		&i.Effect,
+		&i.Topmenu,
+	)
+	return i, err
+}
+
+const createSubmenuCharacterClassJunction = `-- name: CreateSubmenuCharacterClassJunction :exec
+INSERT INTO j_submenu_character_class (data_hash, submenu_id, character_class_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateSubmenuCharacterClassJunctionParams struct {
+	DataHash         string
+	SubmenuID        int32
+	CharacterClassID int32
+}
+
+func (q *Queries) CreateSubmenuCharacterClassJunction(ctx context.Context, arg CreateSubmenuCharacterClassJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createSubmenuCharacterClassJunction, arg.DataHash, arg.SubmenuID, arg.CharacterClassID)
 	return err
 }

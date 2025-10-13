@@ -10,14 +10,14 @@ import (
 
 type OverdriveAbility struct {
 	Ability
-	AbilityID int32
 }
 
 func (a OverdriveAbility) ToHashFields() []any {
 	return []any{
-		a.AbilityID,
+		a.Ability.ID,
 	}
 }
+
 
 func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_abilities.json"
@@ -34,16 +34,16 @@ func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 			ability := overdriveAbility.Ability
 			ability.Type = database.AbilityTypeOverdriveAbility
 
-			dbAbility, err := l.seedAbility(qtx, AbilityAttributes{}, ability)
+			dbAbility, err := l.seedAbility(qtx, ability)
 			if err != nil {
 				return err
 			}
 
-			overdriveAbility.AbilityID = dbAbility.ID
+			overdriveAbility.Ability.ID = dbAbility.ID
 
-			err = qtx.CreateEnemyAbility(context.Background(), database.CreateEnemyAbilityParams{
+			err = qtx.CreateOverdriveAbility(context.Background(), database.CreateOverdriveAbilityParams{
 				DataHash:  generateDataHash(overdriveAbility),
-				AbilityID: overdriveAbility.AbilityID,
+				AbilityID: overdriveAbility.Ability.ID,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Overdrive Ability: %s: %v", ability.Name, err)

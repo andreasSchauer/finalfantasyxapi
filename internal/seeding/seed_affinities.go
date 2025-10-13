@@ -22,6 +22,7 @@ func (a Affinity) ToHashFields() []any {
 	}
 }
 
+
 func (l *lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elemental_affinities.json"
 

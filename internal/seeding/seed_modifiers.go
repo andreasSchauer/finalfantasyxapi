@@ -9,8 +9,7 @@ import (
 )
 
 type Modifier struct {
-	//id 			int32
-	//dataHash		string
+	ID				int32
 	Name       		string		`json:"name"`
 	Effect			string		`json:"effect"`
 	Type			string		`json:"type"`
@@ -24,12 +23,6 @@ func (m Modifier) ToHashFields() []any {
 		m.Type,
 		derefOrNil(m.DefaultValue),
 	}
-}
-
-
-type ModifierLookup struct {
-	Modifier
-	ID			int32
 }
 
 
@@ -56,10 +49,8 @@ func (l *lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 				return fmt.Errorf("couldn't create Modifier: %s: %v", modifier.Name, err)
 			}
 
-			l.modifiers[modifier.Name] = ModifierLookup{
-				Modifier: 	modifier,
-				ID: 		dbModifier.ID,
-			}
+			modifier.ID = dbModifier.ID
+			l.modifiers[modifier.Name] = modifier
 		}
 		return nil
 	})

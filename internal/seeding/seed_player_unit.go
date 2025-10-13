@@ -9,8 +9,9 @@ import (
 
 
 type PlayerUnit struct {
-	Name string 			`json:"name"`
-	Type database.UnitType
+	ID		int32
+	Name 	string 				`json:"name"`
+	Type 	database.UnitType
 }
 
 func (pu PlayerUnit) ToHashFields() []any {

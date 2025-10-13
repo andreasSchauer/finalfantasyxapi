@@ -9,8 +9,7 @@ import (
 )
 
 type Stat struct {
-	//id 		int32
-	//dataHash	string
+	ID			int32
 	Name    	string `json:"name"`
 	Effect  	string `json:"effect"`
 	MinVal  	int32  `json:"min_val"`
@@ -29,12 +28,6 @@ func (s Stat) ToHashFields() []any {
 		derefOrNil(s.MaxVal2),
 		derefOrNil(s.SphereID),
 	}
-}
-
-
-type StatLookup struct {
-	Stat
-	ID		int32
 }
 
 
@@ -62,10 +55,8 @@ func (l *lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 				return fmt.Errorf("couldn't create Stat: %s: %v", stat.Name, err)
 			}
 
-			l.stats[stat.Name] = StatLookup{
-				Stat: 	stat,
-				ID: 	dbStat.ID,
-			}
+			stat.ID = dbStat.ID
+			l.stats[stat.Name] = stat
 		}
 		return nil
 	})
@@ -96,7 +87,7 @@ func (l *lookup) createStatsRelationships(db *database.Queries, dbConn *sql.DB) 
 			stat.SphereID = &sphere.ID
 
 			err = qtx.UpdateStat(context.Background(), database.UpdateStatParams{
-				DataHash: 	generateDataHash(stat.Stat),
+				DataHash: 	generateDataHash(stat),
 				Name:   	stat.Name,
 				Effect: 	stat.Effect,
 				MinVal:   	stat.MinVal,

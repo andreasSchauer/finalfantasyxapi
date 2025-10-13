@@ -42,6 +42,7 @@ func (a AutoAbility) ToHashFields() []any {
 	}
 }
 
+
 func (l *lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/auto_abilities.json"
 

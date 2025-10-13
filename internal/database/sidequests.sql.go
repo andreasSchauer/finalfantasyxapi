@@ -27,14 +27,14 @@ func (q *Queries) CreateBlitzballItemList(ctx context.Context, arg CreateBlitzba
 }
 
 const createMonsterArenaCreation = `-- name: CreateMonsterArenaCreation :exec
-INSERT INTO monster_arena_creations (data_hash, name, category, required_area, required_species, underwater_only, creations_unlocked_category, amount)
+INSERT INTO monster_arena_creations (data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateMonsterArenaCreationParams struct {
 	DataHash                  string
-	Name                      string
+	SubquestID                int32
 	Category                  MaCreationCategory
 	RequiredArea              NullMaCreationArea
 	RequiredSpecies           NullMaCreationSpecies
@@ -46,7 +46,7 @@ type CreateMonsterArenaCreationParams struct {
 func (q *Queries) CreateMonsterArenaCreation(ctx context.Context, arg CreateMonsterArenaCreationParams) error {
 	_, err := q.db.ExecContext(ctx, createMonsterArenaCreation,
 		arg.DataHash,
-		arg.Name,
+		arg.SubquestID,
 		arg.Category,
 		arg.RequiredArea,
 		arg.RequiredSpecies,
@@ -101,10 +101,11 @@ func (q *Queries) CreateSidequest(ctx context.Context, arg CreateSidequestParams
 	return i, err
 }
 
-const createSubquest = `-- name: CreateSubquest :exec
+const createSubquest = `-- name: CreateSubquest :one
 INSERT INTO subquests (data_hash, quest_id, parent_sidequest_id)
 VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = subquests.data_hash
+RETURNING id, data_hash, quest_id, parent_sidequest_id
 `
 
 type CreateSubquestParams struct {
@@ -113,7 +114,14 @@ type CreateSubquestParams struct {
 	ParentSidequestID int32
 }
 
-func (q *Queries) CreateSubquest(ctx context.Context, arg CreateSubquestParams) error {
-	_, err := q.db.ExecContext(ctx, createSubquest, arg.DataHash, arg.QuestID, arg.ParentSidequestID)
-	return err
+func (q *Queries) CreateSubquest(ctx context.Context, arg CreateSubquestParams) (Subquest, error) {
+	row := q.db.QueryRowContext(ctx, createSubquest, arg.DataHash, arg.QuestID, arg.ParentSidequestID)
+	var i Subquest
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.QuestID,
+		&i.ParentSidequestID,
+	)
+	return i, err
 }

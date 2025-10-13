@@ -8,7 +8,8 @@ import (
 )
 
 type CharacterClass struct {
-	Name string
+	ID		int32
+	Name 	string
 }
 
 func (cc CharacterClass) ToHashFields() []any {
@@ -17,10 +18,6 @@ func (cc CharacterClass) ToHashFields() []any {
 	}
 }
 
-type CharClassLookup struct {
-	CharacterClass
-	ID int32
-}
 
 func (l *lookup) seedCharacterClasses(qtx *database.Queries, unit PlayerUnit) error {
 	if unit.Type == database.UnitTypeCharacter {
@@ -40,19 +37,20 @@ func (l *lookup) seedCharacterClasses(qtx *database.Queries, unit PlayerUnit) er
 	return nil
 }
 
+
 func (l *lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit) error {
 	character, err := l.getCharacter(unit.Name)
 	if err != nil {
 		return err
 	}
 
-	err = l.seedCharacterClass(qtx, character.Name, character.UnitID)
+	err = l.seedCharacterClass(qtx, character.Name, character.PlayerUnit.ID)
 	if err != nil {
 		return fmt.Errorf("%s: %v", character.Name, err)
 	}
 
 	if !character.StoryOnly {
-		err := l.seedCharacterClass(qtx, "characters", character.UnitID)
+		err := l.seedCharacterClass(qtx, "characters", character.PlayerUnit.ID)
 		if err != nil {
 			return fmt.Errorf("%s: %v", character.Name, err)
 		}
@@ -60,6 +58,7 @@ func (l *lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit
 
 	return nil
 }
+
 
 func (l *lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) error {
 	aeon, err := l.getAeon(unit.Name)
@@ -69,25 +68,25 @@ func (l *lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) err
 
 	aeonCategory := stringPtrToString(aeon.Category)
 
-	err = l.seedCharacterClass(qtx, aeon.Name, aeon.UnitID)
+	err = l.seedCharacterClass(qtx, aeon.Name, aeon.PlayerUnit.ID)
 	if err != nil {
 		return fmt.Errorf("%s: %v", aeon.Name, err)
 	}
 
-	err = l.seedCharacterClass(qtx, "aeons", aeon.UnitID)
+	err = l.seedCharacterClass(qtx, "aeons", aeon.PlayerUnit.ID)
 	if err != nil {
 		return fmt.Errorf("%s: %v", aeon.Name, err)
 	}
 
 	if aeonCategory == "standard-aeons" {
-		err := l.seedCharacterClass(qtx, "standard-aeons", aeon.UnitID)
+		err := l.seedCharacterClass(qtx, "standard-aeons", aeon.PlayerUnit.ID)
 		if err != nil {
 			return fmt.Errorf("%s: %v", aeon.Name, err)
 		}
 	}
 
 	if aeonCategory == "magus-sisters" {
-		err := l.seedCharacterClass(qtx, "magus-sisters", aeon.UnitID)
+		err := l.seedCharacterClass(qtx, "magus-sisters", aeon.PlayerUnit.ID)
 		if err != nil {
 			return fmt.Errorf("%s: %v", aeon.Name, err)
 		}
@@ -95,6 +94,7 @@ func (l *lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) err
 
 	return nil
 }
+
 
 func (l *lookup) seedCharacterClass(qtx *database.Queries, className string, unitID int32) error {
 	class := CharacterClass{
@@ -108,11 +108,9 @@ func (l *lookup) seedCharacterClass(qtx *database.Queries, className string, uni
 	if err != nil {
 		return fmt.Errorf("couldn't create Character Class: %s: %v", class.Name, err)
 	}
+	class.ID = dbClass.ID
 
-	l.charClasses[className] = CharClassLookup{
-		CharacterClass: class,
-		ID:             dbClass.ID,
-	}
+	l.charClasses[className] = class
 
 	err = l.seedUnitCharClassJunction(qtx, unitID, dbClass.ID)
 	if err != nil {

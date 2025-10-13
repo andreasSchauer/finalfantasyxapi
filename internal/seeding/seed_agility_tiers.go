@@ -9,15 +9,14 @@ import (
 )
 
 type AgilityTier struct {
-	//id 				int32
-	//dataHash			string
-	MinAgility       int32            `json:"min_agility"`
-	MaxAgility       int32            `json:"max_agility"`
-	TickSpeed        int32            `json:"tick_speed"`
-	MonsterMinICV    *int32           `json:"monster_min_icv"`
-	MonsterMaxICV    *int32           `json:"monster_max_icv"`
-	CharacterMaxICV  *int32           `json:"character_max_icv"`
-	CharacterMinICVs []AgilitySubtier `json:"character_min_icvs"`
+	ID					int32
+	MinAgility       	int32            `json:"min_agility"`
+	MaxAgility       	int32            `json:"max_agility"`
+	TickSpeed        	int32            `json:"tick_speed"`
+	MonsterMinICV    	*int32           `json:"monster_min_icv"`
+	MonsterMaxICV    	*int32           `json:"monster_max_icv"`
+	CharacterMaxICV  	*int32           `json:"character_max_icv"`
+	CharacterMinICVs 	[]AgilitySubtier `json:"character_min_icvs"`
 }
 
 func (a AgilityTier) ToHashFields() []any {
@@ -73,7 +72,9 @@ func (l *lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 				return fmt.Errorf("couldn't create Agility Tier: %d: %v", i, err)
 			}
 
-			err = l.seedAgilitySubtiers(qtx, agilityTier, dbAgilityTier.ID)
+			agilityTier.ID = dbAgilityTier.ID
+
+			err = l.seedAgilitySubtiers(qtx, agilityTier)
 			if err != nil {
 				return err
 			}
@@ -82,9 +83,9 @@ func (l *lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedAgilitySubtiers(qtx *database.Queries, agilityTier AgilityTier, agilityTierID int32) error {
+func (l *lookup) seedAgilitySubtiers(qtx *database.Queries, agilityTier AgilityTier) error {
 	for i, subtier := range agilityTier.CharacterMinICVs {
-		subtier.AgilityTierID = agilityTierID
+		subtier.AgilityTierID = agilityTier.ID
 
 		err := qtx.CreateAgilitySubtier(context.Background(), database.CreateAgilitySubtierParams{
 			DataHash:          generateDataHash(subtier),
@@ -94,7 +95,7 @@ func (l *lookup) seedAgilitySubtiers(qtx *database.Queries, agilityTier AgilityT
 			CharacterMinIcv:   getNullInt32(subtier.CharacterMinICV),
 		})
 		if err != nil {
-			agilityTierIndex := agilityTierID - 1
+			agilityTierIndex := agilityTier.ID - 1
 			return fmt.Errorf("couldn't create Agility Subtier: %d - %d: %v", agilityTierIndex, i, err)
 		}
 	}

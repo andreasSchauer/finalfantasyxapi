@@ -8,11 +8,12 @@ import (
 )
 
 type Ability struct {
+	ID            int32
 	Name          string  `json:"name"`
 	Version       *int32  `json:"version"`
 	Specification *string `json:"specification"`
 	Type          database.AbilityType
-	AttributesID  *int32
+	Attributes
 }
 
 func (a Ability) ToHashFields() []any {
@@ -21,10 +22,9 @@ func (a Ability) ToHashFields() []any {
 		derefOrNil(a.Version),
 		derefOrNil(a.Specification),
 		a.Type,
-		derefOrNil(a.AttributesID),
+		derefOrNil(a.Attributes.ID),
 	}
 }
-
 
 func (a Ability) ToKeyFields() []any {
 	return []any{
@@ -35,13 +35,14 @@ func (a Ability) ToKeyFields() []any {
 }
 
 
-type AbilityAttributes struct {
+type Attributes struct {
+	ID               *int32
 	Rank             *int32 `json:"rank"`
 	AppearsInHelpBar bool   `json:"appears_in_help_bar"`
 	CanCopycat       bool   `json:"can_copycat"`
 }
 
-func (a AbilityAttributes) ToHashFields() []any {
+func (a Attributes) ToHashFields() []any {
 	return []any{
 		derefOrNil(a.Rank),
 		a.AppearsInHelpBar,
@@ -49,26 +50,22 @@ func (a AbilityAttributes) ToHashFields() []any {
 	}
 }
 
-func (l *lookup) seedAbility(qtx *database.Queries, attributes AbilityAttributes, ability Ability) (database.Ability, error) {
-	var attributesID *int32
-
+func (l *lookup) seedAbility(qtx *database.Queries, ability Ability) (database.Ability, error) {
 	if ability.Type != database.AbilityTypeOverdriveAbility {
-		dbAttributes, err := l.seedAbilityAttributes(qtx, attributes, ability)
+		dbAttributes, err := l.seedAbilityAttributes(qtx, ability)
 		if err != nil {
 			return database.Ability{}, err
 		}
 
-		attributesID = &dbAttributes.ID
+		ability.Attributes.ID = &dbAttributes.ID
 	}
-
-	ability.AttributesID = attributesID
 
 	dbAbility, err := qtx.CreateAbility(context.Background(), database.CreateAbilityParams{
 		DataHash:      generateDataHash(ability),
 		Name:          ability.Name,
 		Version:       getNullInt32(ability.Version),
 		Specification: getNullString(ability.Specification),
-		AttributesID:  getNullInt32(ability.AttributesID),
+		AttributesID:  getNullInt32(ability.Attributes.ID),
 		Type:          ability.Type,
 	})
 	if err != nil {
@@ -78,7 +75,9 @@ func (l *lookup) seedAbility(qtx *database.Queries, attributes AbilityAttributes
 	return dbAbility, nil
 }
 
-func (l *lookup) seedAbilityAttributes(qtx *database.Queries, attributes AbilityAttributes, ability Ability) (database.AbilityAttribute, error) {
+func (l *lookup) seedAbilityAttributes(qtx *database.Queries, ability Ability) (database.AbilityAttribute, error) {
+	attributes := ability.Attributes
+
 	dbAttributes, err := qtx.CreateAbilityAttributes(context.Background(), database.CreateAbilityAttributesParams{
 		DataHash:         generateDataHash(attributes),
 		Rank:             getNullInt32(attributes.Rank),

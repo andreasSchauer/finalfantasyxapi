@@ -9,21 +9,19 @@ import (
 )
 
 type Character struct {
-	//id 		int32
-	//dataHash	string
+	ID					int32
 	PlayerUnit
-	UnitID             int32
-	StoryOnly          bool       `json:"story_only"`
-	WeaponType         string     `json:"weapon_type"`
-	ArmorType          string     `json:"armor_type"`
-	PhysAtkRange       int32      `json:"physical_attack_range"`
-	CanFightUnderwater bool       `json:"can_fight_underwater"`
-	BaseStats          []BaseStat `json:"base_stats"`
+	StoryOnly          	bool       `json:"story_only"`
+	WeaponType         	string     `json:"weapon_type"`
+	ArmorType          	string     `json:"armor_type"`
+	PhysAtkRange       	int32      `json:"physical_attack_range"`
+	CanFightUnderwater 	bool       `json:"can_fight_underwater"`
+	BaseStats          	[]BaseStat `json:"base_stats"`
 }
 
 func (c Character) ToHashFields() []any {
 	return []any{
-		c.UnitID,
+		c.PlayerUnit.ID,
 		c.StoryOnly,
 		c.WeaponType,
 		c.ArmorType,
@@ -32,10 +30,7 @@ func (c Character) ToHashFields() []any {
 	}
 }
 
-type CharacterLookup struct {
-	Character
-	ID int32
-}
+
 
 func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/characters.json"
@@ -55,11 +50,11 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 				return err
 			}
 
-			character.UnitID = dbPlayerUnit.ID
+			character.PlayerUnit.ID = dbPlayerUnit.ID
 
 			dbCharacter, err := qtx.CreateCharacter(context.Background(), database.CreateCharacterParams{
 				DataHash:            generateDataHash(character),
-				UnitID:              character.UnitID,
+				UnitID:              character.PlayerUnit.ID,
 				StoryOnly:           character.StoryOnly,
 				WeaponType:          database.WeaponType(character.WeaponType),
 				ArmorType:           database.ArmorType(character.ArmorType),
@@ -69,12 +64,10 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return fmt.Errorf("couldn't create Character: %s: %v", character.Name, err)
 			}
-
+			
+			character.ID = dbCharacter.ID
 			key := createLookupKey(character.PlayerUnit)
-			l.characters[key] = CharacterLookup{
-				Character: character,
-				ID:        dbCharacter.ID,
-			}
+			l.characters[key] = character
 
 			err = l.seedCharacterClasses(qtx, character.PlayerUnit)
 			if err != nil {
@@ -84,6 +77,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 		return nil
 	})
 }
+
 
 func (l *lookup) createCharactersRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/characters.json"

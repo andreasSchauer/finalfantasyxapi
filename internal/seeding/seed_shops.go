@@ -27,6 +27,7 @@ func (s Shop) ToHashFields() []any {
 	}
 }
 
+
 func (l *lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/shops.json"
 

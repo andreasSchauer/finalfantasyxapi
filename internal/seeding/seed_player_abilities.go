@@ -10,8 +10,6 @@ import (
 
 type PlayerAbility struct {
 	Ability
-	AbilityAttributes
-	AbilityID           int32
 	Description         *string `json:"description"`
 	Effect              string  `json:"effect"`
 	Topmenu             *string `json:"topmenu"`
@@ -22,7 +20,7 @@ type PlayerAbility struct {
 
 func (a PlayerAbility) ToHashFields() []any {
 	return []any{
-		a.AbilityID,
+		a.Ability.ID,
 		derefOrNil(a.Description),
 		a.Effect,
 		derefOrNil(a.Topmenu),
@@ -45,19 +43,18 @@ func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, playerAbility := range playerAbilities {
 			ability := playerAbility.Ability
-			attributes := playerAbility.AbilityAttributes
 			ability.Type = database.AbilityTypePlayerAbility
 
-			dbAbility, err := l.seedAbility(qtx, attributes, ability)
+			dbAbility, err := l.seedAbility(qtx, ability)
 			if err != nil {
 				return err
 			}
 
-			playerAbility.AbilityID = dbAbility.ID
+			playerAbility.Ability.ID = dbAbility.ID
 
 			err = qtx.CreatePlayerAbility(context.Background(), database.CreatePlayerAbilityParams{
 				DataHash:            generateDataHash(playerAbility),
-				AbilityID:           playerAbility.AbilityID,
+				AbilityID:           playerAbility.Ability.ID,
 				Description:         getNullString(playerAbility.Description),
 				Effect:              playerAbility.Effect,
 				Topmenu: 			 nullTopmenuType(playerAbility.Topmenu),

@@ -1,7 +1,19 @@
--- name: CreateCelestialWeapon :exec
+-- name: CreateCelestialWeapon :one
 INSERT INTO celestial_weapons (data_hash, name, key_item_base, formula)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = celestial_weapons.data_hash
+RETURNING *;
+
+
+-- name: UpdateCelestialWeapon :exec
+UPDATE celestial_weapons
+SET data_hash = $1,
+    name = $2,
+    key_item_base = $3,
+    formula = $4,
+    character_id = $5,
+    aeon_id = $6
+WHERE id = $7;
 
 
 -- name: CreateAutoAbility :exec

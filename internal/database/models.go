@@ -1886,6 +1886,8 @@ type CelestialWeapon struct {
 	Name        string
 	KeyItemBase KeyItemBase
 	Formula     CelestialFormula
+	CharacterID sql.NullInt32
+	AeonID      sql.NullInt32
 }
 
 type Character struct {
@@ -2047,6 +2049,13 @@ type JStatusConditionStatChange struct {
 	StatChangeID      int32
 }
 
+type JSubmenuCharacterClass struct {
+	ID               int32
+	DataHash         string
+	SubmenuID        int32
+	CharacterClassID int32
+}
+
 type JUnitCharacterClass struct {
 	ID       int32
 	DataHash string
@@ -2140,7 +2149,7 @@ type Monster struct {
 type MonsterArenaCreation struct {
 	ID                        int32
 	DataHash                  string
-	Name                      string
+	SubquestID                int32
 	Category                  MaCreationCategory
 	RequiredArea              NullMaCreationArea
 	RequiredSpecies           NullMaCreationSpecies

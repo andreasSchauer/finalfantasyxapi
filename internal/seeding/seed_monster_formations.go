@@ -25,6 +25,7 @@ func (ml MonsterFormationList) ToHashFields() []any {
 	}
 }
 
+
 func (l *lookup) seedMonsterFormations(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/monster_formations.json"
 

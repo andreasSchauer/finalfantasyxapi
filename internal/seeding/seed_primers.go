@@ -25,6 +25,7 @@ func (p Primer) ToHashFields() []any {
 	}
 }
 
+
 func (l *lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/primers.json"
 

@@ -10,8 +10,6 @@ import (
 
 type TriggerCommand struct {
 	Ability
-	AbilityAttributes
-	AbilityID   int32
 	Description string `json:"description"`
 	Effect      string `json:"effect"`
 	Topmenu		string	`json:"topmenu"`
@@ -20,13 +18,14 @@ type TriggerCommand struct {
 
 func (t TriggerCommand) ToHashFields() []any {
 	return []any{
-		t.AbilityID,
+		t.Ability.ID,
 		t.Description,
 		t.Effect,
 		t.Topmenu,
 		t.Cursor,
 	}
 }
+
 
 func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/trigger_commands.json"
@@ -41,19 +40,18 @@ func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, command := range triggerCommands {
 			ability := command.Ability
-			attributes := command.AbilityAttributes
 			ability.Type = database.AbilityTypeTriggerCommand
 
-			dbAbility, err := l.seedAbility(qtx, attributes, ability)
+			dbAbility, err := l.seedAbility(qtx, ability)
 			if err != nil {
 				return err
 			}
 
-			command.AbilityID = dbAbility.ID
+			command.Ability.ID = dbAbility.ID
 
 			err = qtx.CreateTriggerCommand(context.Background(), database.CreateTriggerCommandParams{
 				DataHash:    	generateDataHash(command),
-				AbilityID:   	command.AbilityID,
+				AbilityID:   	command.Ability.ID,
 				Description: 	command.Description,
 				Effect:      	command.Effect,
 				Topmenu: 		database.TopmenuType(command.Topmenu),

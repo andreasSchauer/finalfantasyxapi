@@ -8,41 +8,29 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type Quest struct {
-	Name string `json:"name"`
-	Type database.QuestType
-}
 
-func (q Quest) ToHashFields() []any {
-	return []any{
-		q.Name,
-		q.Type,
-	}
-}
 
 type Sidequest struct {
+	ID			int32
 	Quest
-	QuestID   int32
-	Subquests []Subquest `json:"subquests"`
+	Subquests 	[]Subquest `json:"subquests"`
 }
 
 func (s Sidequest) ToHashFields() []any {
 	return []any{
-		s.QuestID,
+		s.Quest.ID,
 	}
 }
 
 type Subquest struct {
-	//id 				int32
-	//dataHash			string
+	ID			int32
 	Quest
-	QuestID     int32
 	SidequestID int32
 }
 
 func (s Subquest) ToHashFields() []any {
 	return []any{
-		s.QuestID,
+		s.Quest.ID,
 		s.SidequestID,
 	}
 }
@@ -60,26 +48,24 @@ func (l *lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 		for _, sidequest := range sidequests {
 			sidequest.Type = database.QuestTypeSidequest
 
-			dbQuest, err := qtx.CreateQuest(context.Background(), database.CreateQuestParams{
-				DataHash: generateDataHash(sidequest.Quest),
-				Name:     sidequest.Name,
-				Type:     sidequest.Type,
-			})
+			dbQuest, err := l.seedQuest(qtx, sidequest.Quest)
 			if err != nil {
-				return fmt.Errorf("couldn't create Quest: %s: %v", sidequest.Name, err)
+				return err
 			}
 
-			sidequest.QuestID = dbQuest.ID
+			sidequest.Quest.ID = dbQuest.ID
 
 			dbSidequest, err := qtx.CreateSidequest(context.Background(), database.CreateSidequestParams{
 				DataHash: generateDataHash(sidequest),
-				QuestID:  sidequest.QuestID,
+				QuestID:  sidequest.Quest.ID,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Sidequest: %s: %v", sidequest.Name, err)
 			}
 
-			err = l.seedSubquests(qtx, sidequest, dbSidequest.ID)
+			sidequest.ID = dbSidequest.ID
+
+			err = l.seedSubquests(qtx, sidequest)
 			if err != nil {
 				return err
 			}
@@ -88,30 +74,31 @@ func (l *lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest, sidequestID int32) error {
+
+func (l *lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error {
 	for _, subquest := range sidequest.Subquests {
 		subquest.Type = database.QuestTypeSubquest
 
-		dbQuest, err := qtx.CreateQuest(context.Background(), database.CreateQuestParams{
-			DataHash: generateDataHash(subquest.Quest),
-			Name:     subquest.Name,
-			Type:     subquest.Type,
-		})
+		dbQuest, err := l.seedQuest(qtx, subquest.Quest)
 		if err != nil {
-			return fmt.Errorf("couldn't create Quest: %s - %s: %v", sidequest.Name, subquest.Name, err)
+			return err
 		}
 
-		subquest.QuestID = dbQuest.ID
-		subquest.SidequestID = sidequestID
+		subquest.Quest.ID = dbQuest.ID
+		subquest.SidequestID = sidequest.ID
 
-		err = qtx.CreateSubquest(context.Background(), database.CreateSubquestParams{
+		dbSubquest, err := qtx.CreateSubquest(context.Background(), database.CreateSubquestParams{
 			DataHash:          generateDataHash(subquest),
-			QuestID:           subquest.QuestID,
+			QuestID:           subquest.Quest.ID,
 			ParentSidequestID: subquest.SidequestID,
 		})
 		if err != nil {
 			return fmt.Errorf("couldn't create Subquest: %s - %s: %v", sidequest.Name, subquest.Name, err)
 		}
+
+		subquest.ID = dbSubquest.ID
+		key := createLookupKey(subquest.Quest)
+		l.subquests[key] = subquest
 	}
 
 	return nil

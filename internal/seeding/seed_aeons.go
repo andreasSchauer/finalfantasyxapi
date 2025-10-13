@@ -9,10 +9,8 @@ import (
 )
 
 type Aeon struct {
-	//id 		int32
-	//dataHash	string
+	ID					int32
 	PlayerUnit
-	UnitID				int32
 	UnlockCondition     string   `json:"unlock_condition"`
 	Category            *string  `json:"category"`
 	IsOptional          bool     `json:"is_optional"`
@@ -27,7 +25,7 @@ type Aeon struct {
 
 func (a Aeon) ToHashFields() []any {
 	return []any{
-		a.UnitID,
+		a.PlayerUnit.ID,
 		a.UnlockCondition,
 		a.IsOptional,
 		a.BattlesToRegenerate,
@@ -40,11 +38,6 @@ func (a Aeon) ToHashFields() []any {
 	}
 }
 
-
-type AeonLookup struct {
-	Aeon
-	ID		int32
-}
 
 
 func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
@@ -65,11 +58,11 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 				return err
 			}
 
-			aeon.UnitID = dbPlayerUnit.ID
+			aeon.PlayerUnit.ID = dbPlayerUnit.ID
 
 			dbAeon, err := qtx.CreateAeon(context.Background(), database.CreateAeonParams{
 				DataHash:              generateDataHash(aeon),
-				UnitID:                aeon.UnitID,
+				UnitID:                aeon.PlayerUnit.ID,
 				UnlockCondition:       aeon.UnlockCondition,
 				IsOptional:            aeon.IsOptional,
 				BattlesToRegenerate:   aeon.BattlesToRegenerate,
@@ -83,12 +76,10 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return fmt.Errorf("couldn't create Aeon: %s: %v", aeon.Name, err)
 			}
-
+			
+			aeon.ID = dbAeon.ID
 			key := createLookupKey(aeon.PlayerUnit)
-			l.aeons[key] = AeonLookup{
-				Aeon: 	aeon,
-				ID: 	dbAeon.ID,
-			}
+			l.aeons[key] = aeon
 
 			err = l.seedCharacterClasses(qtx, aeon.PlayerUnit)
 			if err != nil {

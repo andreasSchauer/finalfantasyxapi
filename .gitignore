@@ -3,6 +3,5 @@ connection_string.txt
 .env.local
 .env.*.local
 notes.txt
-table_dependencies.txt
 testrequests.http
 ./scripts/goose-*.sh

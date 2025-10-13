@@ -9,11 +9,14 @@ import (
 )
 
 type CelestialWeapon struct {
-	//id 			int32
-	//dataHash		string
-	Name        string `json:"name"`
-	KeyItemBase string `json:"key_item_base"`
-	Formula     string `json:"formula"`
+	ID				int32
+	Name        	string	`json:"name"`
+	Character		string	`json:"character"`
+	CharacterID		*int32
+	KeyItemBase 	string	`json:"key_item_base"`
+	Aeon			*string	`json:"aeon"`
+	AeonID			*int32
+	Formula     	string	`json:"formula"`
 }
 
 func (cw CelestialWeapon) ToHashFields() []any {
@@ -23,6 +26,7 @@ func (cw CelestialWeapon) ToHashFields() []any {
 		cw.Formula,
 	}
 }
+
 
 func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/celestial_weapons.json"
@@ -35,7 +39,7 @@ func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, weapon := range celestialWeapons {
-			err = qtx.CreateCelestialWeapon(context.Background(), database.CreateCelestialWeaponParams{
+			dbWeapon, err := qtx.CreateCelestialWeapon(context.Background(), database.CreateCelestialWeaponParams{
 				DataHash:    generateDataHash(weapon),
 				Name:        weapon.Name,
 				KeyItemBase: database.KeyItemBase(weapon.KeyItemBase),
@@ -44,7 +48,61 @@ func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 			if err != nil {
 				return fmt.Errorf("couldn't create Celestial Weapon: %s: %v", weapon.Name, err)
 			}
+
+			weapon.ID = dbWeapon.ID
+			l.celestialWeapons[weapon.Name] = weapon
 		}
+		return nil
+	})
+}
+
+
+
+func (l *lookup) createCelestialWeaponsRelationships(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "./data/celestial_weapons.json"
+
+	var celestialWeapons []CelestialWeapon
+	err := loadJSONFile(string(srcPath), &celestialWeapons)
+	if err != nil {
+		return err
+	}
+
+	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		for _, jsonWeapon := range celestialWeapons {
+			weapon, err := l.getCelestialWeapon(jsonWeapon.Name)
+			if err != nil {
+				return err
+			}
+
+			character, err := l.getCharacter(jsonWeapon.Character)
+			if err != nil {
+				return err
+			}
+			weapon.CharacterID = &character.ID
+
+
+			if jsonWeapon.Aeon != nil {
+				aeon, err := l.getAeon(*jsonWeapon.Aeon)
+				if err != nil {
+					return err
+				}
+				weapon.AeonID = &aeon.ID
+			}
+
+			err = qtx.UpdateCelestialWeapon(context.Background(), database.UpdateCelestialWeaponParams{
+				DataHash:    	generateDataHash(weapon),
+				Name:        	weapon.Name,
+				KeyItemBase: 	database.KeyItemBase(weapon.KeyItemBase),
+				Formula:     	database.CelestialFormula(weapon.Formula),
+				CharacterID: 	getNullInt32(weapon.CharacterID),
+				AeonID: 		getNullInt32(weapon.AeonID),
+				ID:				weapon.ID,
+			})
+			if err != nil {
+				return fmt.Errorf("couldn't update Celestial Weapon: %s: %v", weapon.Name, err)
+			}
+		}
+
 		return nil
 	})
 }

@@ -47,7 +47,7 @@ CREATE TYPE creations_unlocked_category AS ENUM ('area', 'species');
 CREATE TABLE monster_arena_creations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    name TEXT UNIQUE NOT NULL,
+    subquest_id INTEGER NOT NULL REFERENCES subquests(id),
     category ma_creation_category NOT NULL,
     required_area ma_creation_area,
     required_species ma_creation_species,

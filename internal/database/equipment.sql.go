@@ -47,10 +47,11 @@ func (q *Queries) CreateAutoAbility(ctx context.Context, arg CreateAutoAbilityPa
 	return err
 }
 
-const createCelestialWeapon = `-- name: CreateCelestialWeapon :exec
+const createCelestialWeapon = `-- name: CreateCelestialWeapon :one
 INSERT INTO celestial_weapons (data_hash, name, key_item_base, formula)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = celestial_weapons.data_hash
+RETURNING id, data_hash, name, key_item_base, formula, character_id, aeon_id
 `
 
 type CreateCelestialWeaponParams struct {
@@ -60,14 +61,24 @@ type CreateCelestialWeaponParams struct {
 	Formula     CelestialFormula
 }
 
-func (q *Queries) CreateCelestialWeapon(ctx context.Context, arg CreateCelestialWeaponParams) error {
-	_, err := q.db.ExecContext(ctx, createCelestialWeapon,
+func (q *Queries) CreateCelestialWeapon(ctx context.Context, arg CreateCelestialWeaponParams) (CelestialWeapon, error) {
+	row := q.db.QueryRowContext(ctx, createCelestialWeapon,
 		arg.DataHash,
 		arg.Name,
 		arg.KeyItemBase,
 		arg.Formula,
 	)
-	return err
+	var i CelestialWeapon
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.KeyItemBase,
+		&i.Formula,
+		&i.CharacterID,
+		&i.AeonID,
+	)
+	return i, err
 }
 
 const createEquipmentAbility = `-- name: CreateEquipmentAbility :exec
@@ -99,6 +110,40 @@ func (q *Queries) CreateEquipmentAbility(ctx context.Context, arg CreateEquipmen
 		arg.Pool1Amt,
 		arg.Pool2Amt,
 		arg.EmptySlotsAmt,
+	)
+	return err
+}
+
+const updateCelestialWeapon = `-- name: UpdateCelestialWeapon :exec
+UPDATE celestial_weapons
+SET data_hash = $1,
+    name = $2,
+    key_item_base = $3,
+    formula = $4,
+    character_id = $5,
+    aeon_id = $6
+WHERE id = $7
+`
+
+type UpdateCelestialWeaponParams struct {
+	DataHash    string
+	Name        string
+	KeyItemBase KeyItemBase
+	Formula     CelestialFormula
+	CharacterID sql.NullInt32
+	AeonID      sql.NullInt32
+	ID          int32
+}
+
+func (q *Queries) UpdateCelestialWeapon(ctx context.Context, arg UpdateCelestialWeaponParams) error {
+	_, err := q.db.ExecContext(ctx, updateCelestialWeapon,
+		arg.DataHash,
+		arg.Name,
+		arg.KeyItemBase,
+		arg.Formula,
+		arg.CharacterID,
+		arg.AeonID,
+		arg.ID,
 	)
 	return err
 }

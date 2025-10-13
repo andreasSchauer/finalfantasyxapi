@@ -9,8 +9,7 @@ import (
 )
 
 type Property struct {
-	//id 		int32
-	//dataHash	string
+	ID						int32
 	Name                    string           `json:"name"`
 	Effect                  string           `json:"effect"`
 	RelatedStats            []string         `json:"related_stats"`
@@ -28,10 +27,6 @@ func (p Property) ToHashFields() []any {
 	}
 }
 
-type PropertyLookup struct {
-	Property
-	ID int32
-}
 
 func (l *lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
@@ -54,14 +49,13 @@ func (l *lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 				return fmt.Errorf("couldn't create Property: %s: %v", property.Name, err)
 			}
 
-			l.properties[property.Name] = PropertyLookup{
-				Property: property,
-				ID:       dbProperty.ID,
-			}
+			property.ID = dbProperty.ID
+			l.properties[property.Name] = property
 		}
 		return nil
 	})
 }
+
 
 func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
@@ -109,7 +103,8 @@ func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql
 
 }
 
-func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property PropertyLookup) error {
+
+func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property Property) error {
 	for _, jsonStat := range property.RelatedStats {
 		stat, err := l.getStat(jsonStat)
 		if err != nil {
@@ -134,7 +129,8 @@ func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property Prop
 	return nil
 }
 
-func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property PropertyLookup) error {
+
+func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property Property) error {
 	for _, jsonCondition := range property.RemovedStatusConditions {
 		condition, err := l.getStatusCondition(jsonCondition)
 		if err != nil {
@@ -159,7 +155,8 @@ func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property
 	return nil
 }
 
-func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property PropertyLookup) ([]StatChange, error) {
+
+func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property Property) ([]StatChange, error) {
 	for i, statChange := range property.StatChanges {
 		dbStatChange, err := l.seedStatChange(qtx, statChange)
 		if err != nil {
@@ -186,7 +183,8 @@ func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property Prope
 	return property.StatChanges, nil
 }
 
-func (l *lookup) createPropertyModifierChanges(qtx *database.Queries, property PropertyLookup) ([]ModifierChange, error) {
+
+func (l *lookup) createPropertyModifierChanges(qtx *database.Queries, property Property) ([]ModifierChange, error) {
 	for i, modifierChange := range property.ModifierChanges {
 		dbModifierChange, err := l.seedModifierChange(qtx, modifierChange)
 		if err != nil {

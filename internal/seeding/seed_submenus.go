@@ -9,12 +9,12 @@ import (
 )
 
 type Submenu struct {
-	//id 		int32
-	//dataHash	string
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Effect      string  `json:"effect"`
-	Topmenu     *string `json:"topmenu"`
+	ID	 		int32
+	Name        string  	`json:"name"`
+	Description string  	`json:"description"`
+	Effect      string  	`json:"effect"`
+	Topmenu     *string 	`json:"topmenu"`
+	Users		[]string	`json:"users"`
 }
 
 func (s Submenu) ToHashFields() []any {
@@ -26,6 +26,8 @@ func (s Submenu) ToHashFields() []any {
 	}
 }
 
+
+
 func (l *lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/submenus.json"
 
@@ -36,18 +38,64 @@ func (l *lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 	}
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, menu := range submenus {
-			err = qtx.CreateSubmenu(context.Background(), database.CreateSubmenuParams{
-				DataHash:    generateDataHash(menu),
-				Name:        menu.Name,
-				Description: menu.Description,
-				Effect:      menu.Effect,
-				Topmenu:     nullTopmenuType(menu.Topmenu),
+		for _, submenu := range submenus {
+			dbSubmenu, err := qtx.CreateSubmenu(context.Background(), database.CreateSubmenuParams{
+				DataHash:    generateDataHash(submenu),
+				Name:        submenu.Name,
+				Description: submenu.Description,
+				Effect:      submenu.Effect,
+				Topmenu:     nullTopmenuType(submenu.Topmenu),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Menu Command: %s: %v", menu.Name, err)
+				return fmt.Errorf("couldn't create Submenu: %s: %v", submenu.Name, err)
+			}
+			submenu.ID = dbSubmenu.ID
+
+			l.submenus[submenu.Name] = submenu
+		}
+		return nil
+	})
+}
+
+
+func (l *lookup) createSubmenusRelationships(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "./data/submenus.json"
+
+	var submenus []Submenu
+	err := loadJSONFile(string(srcPath), &submenus)
+	if err != nil {
+		return err
+	}
+
+	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		for _, jsonSubmenu := range submenus {
+			submenu, err := l.getSubmenu(jsonSubmenu.Name)
+			if err != nil {
+				return err
+			}
+
+			for _, jsonCharClass := range jsonSubmenu.Users {
+				charClass, err := l.getCharacterClass((jsonCharClass))
+				if err != nil {
+					return err
+				}
+
+				junction := Junction{
+					ParentID: 	submenu.ID,
+					ChildID: 	charClass.ID,
+				}
+
+				err = qtx.CreateSubmenuCharacterClassJunction(context.Background(), database.CreateSubmenuCharacterClassJunctionParams{
+					DataHash: generateDataHash(junction),
+					SubmenuID: 			junction.ParentID,
+					CharacterClassID: 	junction.ChildID,
+				})
+				if err != nil {
+					return err
+				}
 			}
 		}
+
 		return nil
 	})
 }

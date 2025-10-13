@@ -9,8 +9,7 @@ import (
 )
 
 type StatusCondition struct {
-	//id 		int32
-	//dataHash	string
+	ID						int32
 	Name           			string  			`json:"name"`
 	Effect         			string  			`json:"effect"`
 	RelatedStats			[]string			`json:"related_stats"`
@@ -26,12 +25,6 @@ func (s StatusCondition) ToHashFields() []any {
 		s.Effect,
 		derefOrNil(s.NullifyArmored),
 	}
-}
-
-
-type StatusConditionLookup struct {
-	StatusCondition
-	ID					int32
 }
 
 
@@ -58,15 +51,12 @@ func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 				return fmt.Errorf("couldn't create Status Condition: %s: %v", condition.Name, err)
 			}
 
-			l.statusConditions[condition.Name] = StatusConditionLookup{
-				StatusCondition: 	condition,
-				ID: 				dbCondition.ID,
-			}
+			condition.ID = dbCondition.ID
+			l.statusConditions[condition.Name] = condition
 		}
 		return nil
 	})
 }
-
 
 
 func (l *lookup) createStatusConditionsRelationships(db *database.Queries, dbConn *sql.DB) error {
@@ -114,7 +104,7 @@ func (l *lookup) createStatusConditionsRelationships(db *database.Queries, dbCon
 }
 
 
-func (l *lookup) createStatusConditionRelatedStats(qtx *database.Queries, condition StatusConditionLookup) error {
+func (l *lookup) createStatusConditionRelatedStats(qtx *database.Queries, condition StatusCondition) error {
 	for _, jsonStat := range condition.RelatedStats {
 		stat, err := l.getStat(jsonStat)
 		if err != nil {
@@ -140,8 +130,7 @@ func (l *lookup) createStatusConditionRelatedStats(qtx *database.Queries, condit
 }
 
 
-
-func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, condition StatusConditionLookup) error {
+func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, condition StatusCondition) error {
 	for _, jsonCondition := range condition.RemovedStatusConditions {
 		remCondition, err := l.getStatusCondition(jsonCondition)
 		if err != nil {
@@ -167,8 +156,7 @@ func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, c
 }
 
 
-
-func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, condition StatusConditionLookup) ([]StatChange, error) {
+func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, condition StatusCondition) ([]StatChange, error) {
 	for i, statChange := range condition.StatChanges {
 		dbStatChange, err := l.seedStatChange(qtx, statChange)
 		if err != nil {
@@ -196,8 +184,7 @@ func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, conditi
 }
 
 
-
-func (l *lookup) createStatusConditionModifierChanges(qtx *database.Queries, condition StatusConditionLookup) ([]ModifierChange, error) {
+func (l *lookup) createStatusConditionModifierChanges(qtx *database.Queries, condition StatusCondition) ([]ModifierChange, error) {
 	for i, modifierChange := range condition.ModifierChanges {
 		dbModifierChange, err := l.seedModifierChange(qtx, modifierChange)
 		if err != nil {

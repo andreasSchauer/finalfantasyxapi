@@ -9,14 +9,13 @@ import (
 )
 
 type OverdriveMode struct {
-	//id 		int32
-	//dataHash	string
-	Name           string          `json:"name"`
-	Description    string          `json:"description"`
-	Effect         string          `json:"effect"`
-	Type           string          `json:"type"`
-	FillRate       *float32        `json:"fill_rate"`
-	ActionsToLearn []ActionToLearn `json:"actions_to_learn"`
+	ID				int32
+	Name           	string          `json:"name"`
+	Description    	string          `json:"description"`
+	Effect         	string          `json:"effect"`
+	Type           	string          `json:"type"`
+	FillRate       	*float32        `json:"fill_rate"`
+	ActionsToLearn 	[]ActionToLearn `json:"actions_to_learn"`
 }
 
 func (o OverdriveMode) ToHashFields() []any {
@@ -29,10 +28,6 @@ func (o OverdriveMode) ToHashFields() []any {
 	}
 }
 
-type OverdriveModeLookup struct {
-	OverdriveMode
-	ID int32
-}
 
 type ActionToLearn struct {
 	UserID int32
@@ -46,6 +41,7 @@ func (a ActionToLearn) ToHashFields() []any {
 		a.Amount,
 	}
 }
+
 
 func (l *lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_modes.json"
@@ -70,10 +66,8 @@ func (l *lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error 
 				return fmt.Errorf("couldn't create Overdrive Mode: %s: %v", mode.Name, err)
 			}
 
-			l.overdriveModes[mode.Name] = OverdriveModeLookup{
-				OverdriveMode: mode,
-				ID:            dbOverdriveMode.ID,
-			}
+			mode.ID = dbOverdriveMode.ID
+			l.overdriveModes[mode.Name] = mode
 		}
 		return nil
 	})

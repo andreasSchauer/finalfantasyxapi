@@ -20,6 +20,7 @@ func (d DefaultAbilitiesEntry) ToHashFields() []any {
 	}
 }
 
+
 func (l *lookup) seedDefaultAbilitiesEntries(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/default_abilities.json"
 

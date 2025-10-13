@@ -38,6 +38,7 @@ type Monster struct {
 	ScanText             *string  `json:"scan_text"`
 }
 
+
 func (m Monster) ToHashFields() []any {
 	return []any{
 		m.Name,
@@ -67,6 +68,8 @@ func (m Monster) ToHashFields() []any {
 		derefOrNil(m.ScanText),
 	}
 }
+
+
 
 func (l *lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/monsters.json"

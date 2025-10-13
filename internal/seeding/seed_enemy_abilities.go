@@ -10,17 +10,16 @@ import (
 
 type EnemyAbility struct {
 	Ability
-	AbilityAttributes
-	AbilityID int32
 	Effect    *string `json:"effect"`
 }
 
 func (a EnemyAbility) ToHashFields() []any {
 	return []any{
-		a.AbilityID,
+		a.Ability.ID,
 		derefOrNil(a.Effect),
 	}
 }
+
 
 func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/enemy_abilities.json"
@@ -35,19 +34,18 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, enemyAbility := range enemyAbilities {
 			ability := enemyAbility.Ability
-			attributes := enemyAbility.AbilityAttributes
 			ability.Type = database.AbilityTypeEnemyAbility
 
-			dbAbility, err := l.seedAbility(qtx, attributes, ability)
+			dbAbility, err := l.seedAbility(qtx, ability)
 			if err != nil {
 				return err
 			}
 
-			enemyAbility.AbilityID = dbAbility.ID
+			enemyAbility.Ability.ID = dbAbility.ID
 
 			err = qtx.CreateEnemyAbility(context.Background(), database.CreateEnemyAbilityParams{
 				DataHash:  generateDataHash(enemyAbility),
-				AbilityID: enemyAbility.AbilityID,
+				AbilityID: enemyAbility.Ability.ID,
 				Effect:    getNullString(enemyAbility.Effect),
 			})
 			if err != nil {

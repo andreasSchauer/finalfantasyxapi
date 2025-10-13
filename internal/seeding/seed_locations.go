@@ -9,8 +9,9 @@ import (
 )
 
 type Location struct {
-	Name         string        `json:"location"`
-	SubLocations []SubLocation `json:"sub_locations"`
+	ID				int32
+	Name         	string        `json:"location"`
+	SubLocations 	[]SubLocation `json:"sub_locations"`
 }
 
 func (l Location) ToHashFields() []any {
@@ -20,10 +21,11 @@ func (l Location) ToHashFields() []any {
 }
 
 type SubLocation struct {
-	locationID    int32
-	Name          string  `json:"sub_location"`
-	Specification *string `json:"specification"`
-	Areas         []Area  `json:"areas"`
+	ID				int32
+	locationID    	int32
+	Name          	string  `json:"sub_location"`
+	Specification 	*string `json:"specification"`
+	Areas         	[]Area  `json:"areas"`
 }
 
 func (s SubLocation) ToHashFields() []any {
@@ -35,8 +37,7 @@ func (s SubLocation) ToHashFields() []any {
 }
 
 type Area struct {
-	//id 					int32
-	//dataHash				string
+	ID                   int32
 	SubLocationID        int32
 	Name                 string  `json:"area"`
 	Version              *int32  `json:"version"`
@@ -69,7 +70,6 @@ type LocationArea struct {
 	Version     *int32 `json:"version"`
 }
 
-
 func (la LocationArea) ToKeyFields() []any {
 	return []any{
 		la.Location,
@@ -77,12 +77,6 @@ func (la LocationArea) ToKeyFields() []any {
 		la.Area,
 		derefOrNil(la.Version),
 	}
-}
-
-
-type LocationAreaLookup struct {
-	LocationArea
-	ID 				int32
 }
 
 
@@ -104,8 +98,9 @@ func (l *lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return fmt.Errorf("couldn't create Location: %s: %v", location.Name, err)
 			}
+			location.ID = dbLocation.ID
 
-			err = l.seedSubLocations(qtx, location, dbLocation.ID)
+			err = l.seedSubLocations(qtx, location)
 			if err != nil {
 				return err
 			}
@@ -115,9 +110,10 @@ func (l *lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedSubLocations(qtx *database.Queries, location Location, locationID int32) error {
+
+func (l *lookup) seedSubLocations(qtx *database.Queries, location Location) error {
 	for _, subLocation := range location.SubLocations {
-		subLocation.locationID = locationID
+		subLocation.locationID = location.ID
 
 		dbSubLocation, err := qtx.CreateSubLocation(context.Background(), database.CreateSubLocationParams{
 			DataHash:      generateDataHash(subLocation),
@@ -128,8 +124,9 @@ func (l *lookup) seedSubLocations(qtx *database.Queries, location Location, loca
 		if err != nil {
 			return fmt.Errorf("couldn't create Sub Location: %s - %s: %v", location.Name, subLocation.Name, err)
 		}
+		subLocation.ID = dbSubLocation.ID
 
-		err = l.seedAreas(qtx, location, subLocation, dbSubLocation.ID)
+		err = l.seedAreas(qtx, location, subLocation)
 		if err != nil {
 			return err
 		}
@@ -138,9 +135,9 @@ func (l *lookup) seedSubLocations(qtx *database.Queries, location Location, loca
 	return nil
 }
 
-func (l *lookup) seedAreas(qtx *database.Queries, location Location, subLocation SubLocation, subLocationID int32) error {
+func (l *lookup) seedAreas(qtx *database.Queries, location Location, subLocation SubLocation) error {
 	for _, area := range subLocation.Areas {
-		area.SubLocationID = subLocationID
+		area.SubLocationID = subLocation.ID
 
 		dbArea, err := qtx.CreateArea(context.Background(), database.CreateAreaParams{
 			DataHash:             generateDataHash(area),
@@ -158,17 +155,15 @@ func (l *lookup) seedAreas(qtx *database.Queries, location Location, subLocation
 			return fmt.Errorf("couldn't create Area: %s - %s - %s: %v", location.Name, subLocation.Name, area.Name, err)
 		}
 
+		area.ID = dbArea.ID
 		locationArea := LocationArea{
-			Location: 		location.Name,
-			SubLocation: 	subLocation.Name,
-			Area: 			area.Name,
-			Version: 		area.Version,
+			Location:    location.Name,
+			SubLocation: subLocation.Name,
+			Area:        area.Name,
+			Version:     area.Version,
 		}
 		key := createLookupKey(locationArea)
-		l.locationAreas[key] = LocationAreaLookup{
-			LocationArea: 	locationArea,
-			ID: 			dbArea.ID,
-		}
+		l.areas[key] = area
 	}
 
 	return nil

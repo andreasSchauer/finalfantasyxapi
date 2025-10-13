@@ -35,6 +35,7 @@ func (e EquipmentAbilities) ToHashFields() []any {
 	}
 }
 
+
 func (l *lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/equipment.json"
 

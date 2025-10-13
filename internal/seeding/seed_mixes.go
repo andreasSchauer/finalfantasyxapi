@@ -9,13 +9,12 @@ import (
 )
 
 type Mix struct {
-	//id 			int32
-	//dataHash		string
-	OverdriveID          int32
-	Name                 string           `json:"name"`
-	Category             string           `json:"category"`
-	BestCombinations     []MixCombination `json:"best_combinations"`
-	PossibleCombinations []MixCombination `json:"possible_combinations"`
+	ID						int32
+	OverdriveID          	int32
+	Name                 	string           `json:"name"`
+	Category             	string           `json:"category"`
+	BestCombinations     	[]MixCombination `json:"best_combinations"`
+	PossibleCombinations 	[]MixCombination `json:"possible_combinations"`
 }
 
 func (m Mix) ToHashFields() []any {
@@ -24,6 +23,7 @@ func (m Mix) ToHashFields() []any {
 		m.Category,
 	}
 }
+
 
 type MixCombination struct {
 	FirstItem    string `json:"first_item"`
@@ -60,6 +60,7 @@ func (m MixComboJunction) ToHashFields() []any {
 	}
 }
 
+
 func (l *lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/mixes.json"
 
@@ -91,7 +92,32 @@ func (l *lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 				return fmt.Errorf("couldn't create Mix: %s: %v", mix.Name, err)
 			}
 
-			err = l.seedMixCombinations(qtx, mix, dbMix.ID)
+			mix.ID = dbMix.ID
+			l.mixes[mix.Name] = mix
+		}
+
+		return nil
+	})
+}
+
+
+func (l *lookup) createMixesRelationships(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "./data/mixes.json"
+
+	var mixes []Mix
+	err := loadJSONFile(string(srcPath), &mixes)
+	if err != nil {
+		return err
+	}
+
+	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		for _, jsonMix := range mixes {
+			mix, err := l.getMix(jsonMix.Name)
+			if err != nil {
+				return err
+			}
+
+			err = l.seedMixCombinations(qtx, mix)
 			if err != nil {
 				return err
 			}
@@ -102,7 +128,7 @@ func (l *lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 }
 
 
-func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix, dbMixID int32) error {
+func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix) error {
 	bestComboMap := getBestComboMap(mix)
 
 	for _, combo := range mix.PossibleCombinations {
@@ -118,7 +144,7 @@ func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix, dbMixID int
 			return err
 		}
 
-		junction.ParentID = dbMixID
+		junction.ParentID = mix.ID
 		junction.ChildID = dbCombo.ID
 
 		err = qtx.CreateMixComboJunction(context.Background(), database.CreateMixComboJunctionParams{

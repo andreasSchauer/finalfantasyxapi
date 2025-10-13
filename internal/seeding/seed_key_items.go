@@ -9,28 +9,22 @@ import (
 )
 
 type KeyItem struct {
-	//id 			int32
-	//dataHash		string
+	ID				int32
 	MasterItem
-	MasterItemsID int32
-	Category      string `json:"category"`
-	Description   string `json:"description"`
-	Effect        string `json:"effect"`
+	Category      	string `json:"category"`
+	Description   	string `json:"description"`
+	Effect        	string `json:"effect"`
 }
 
 func (k KeyItem) ToHashFields() []any {
 	return []any{
-		k.MasterItemsID,
+		k.MasterItem.ID,
 		k.Category,
 		k.Description,
 		k.Effect,
 	}
 }
 
-type KeyItemLookup struct {
-	KeyItem
-	ID 		int32
-}
 
 
 func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
@@ -50,11 +44,11 @@ func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 				return err
 			}
 
-			keyItem.MasterItemsID = dbMasterItem.ID
+			keyItem.MasterItem.ID = dbMasterItem.ID
 
 			dbKeyItem, err := qtx.CreateKeyItem(context.Background(), database.CreateKeyItemParams{
 				DataHash:     generateDataHash(keyItem),
-				MasterItemID: keyItem.MasterItemsID,
+				MasterItemID: keyItem.MasterItem.ID,
 				Category:     database.KeyItemCategory(keyItem.Category),
 				Description:  keyItem.Description,
 				Effect:       keyItem.Effect,
@@ -63,11 +57,9 @@ func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 				return fmt.Errorf("couldn't create Key Item: %s: %v", keyItem.Name, err)
 			}
 
+			keyItem.ID = dbKeyItem.ID
 			key := createLookupKey(keyItem.MasterItem)
-			l.keyItems[key] = KeyItemLookup{
-				KeyItem: 	keyItem,
-				ID: 		dbKeyItem.ID,
-			}
+			l.keyItems[key] = keyItem
 		}
 		return nil
 	})

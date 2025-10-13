@@ -9,23 +9,21 @@ import (
 )
 
 type Item struct {
-	//id 			int32
-	//dataHash		string
+	ID						int32
 	MasterItem
 	ItemAbility
-	MasterItemsID         int32
-	Description           string  `json:"description"`
-	Effect                string  `json:"effect"`
-	SphereGridDescription *string `json:"sphere_grid_description"`
-	Category              string  `json:"category"`
-	Usability             *string `json:"usability"`
-	BasePrice             *int32  `json:"base_price"`
-	SellValue             int32   `json:"sell_value"`
+	Description           	string  `json:"description"`
+	Effect                	string  `json:"effect"`
+	SphereGridDescription 	*string `json:"sphere_grid_description"`
+	Category              	string  `json:"category"`
+	Usability             	*string `json:"usability"`
+	BasePrice             	*int32  `json:"base_price"`
+	SellValue             	int32   `json:"sell_value"`
 }
 
 func (i Item) ToHashFields() []any {
 	return []any{
-		i.MasterItemsID,
+		i.MasterItem.ID,
 		i.Description,
 		i.Effect,
 		derefOrNil(i.SphereGridDescription),
@@ -36,24 +34,17 @@ func (i Item) ToHashFields() []any {
 	}
 }
 
-type ItemLookup struct {
-	Item
-	ID 		int32
-}
-
 
 type ItemAbility struct {
 	Ability
-	AbilityAttributes
 	ItemID    int32
-	AbilityID int32
 	Cursor    string `json:"cursor"`
 }
 
 func (i ItemAbility) ToHashFields() []any {
 	return []any{
 		i.ItemID,
-		i.AbilityID,
+		i.Ability.ID,
 		i.Cursor,
 	}
 }
@@ -75,16 +66,18 @@ func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return err
 			}
+			item.MasterItem.ID = dbMasterItem.ID
 
-			dbItem, err := l.seedItem(qtx, item, dbMasterItem.ID)
+			dbItem, err := l.seedItem(qtx, item)
 			if err != nil {
 				return err
 			}
+			item.ID = dbItem.ID
 
 			hasBattleData := item.Category != string(database.ItemCategorySphere) && item.Category != string(database.ItemCategoryOther)
 
 			if hasBattleData {
-				err = l.seedItemAbility(qtx, item, dbItem.ID)
+				err = l.seedItemAbility(qtx, item)
 				if err != nil {
 					return err
 				}
@@ -95,12 +88,10 @@ func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 }
 
 
-func (l *lookup) seedItem(qtx *database.Queries, item Item, masterItemID int32) (database.Item, error) {
-	item.MasterItemsID = masterItemID
-
+func (l *lookup) seedItem(qtx *database.Queries, item Item) (database.Item, error) {
 	dbItem, err := qtx.CreateItem(context.Background(), database.CreateItemParams{
 		DataHash:              generateDataHash(item),
-		MasterItemID:          item.MasterItemsID,
+		MasterItemID:          item.MasterItem.ID,
 		Description:           item.Description,
 		Effect:                item.Effect,
 		SphereGridDescription: getNullString(item.SphereGridDescription),
@@ -113,34 +104,32 @@ func (l *lookup) seedItem(qtx *database.Queries, item Item, masterItemID int32) 
 		return database.Item{}, fmt.Errorf("couldn't create Item: %s: %v", item.Name, err)
 	}
 
+	item.ID = dbItem.ID
 	key := createLookupKey(item.MasterItem)
-	l.items[key] = ItemLookup{
-		Item: 	item,
-		ID: 	dbItem.ID,
-	}
+	l.items[key] = item
 
 	return dbItem, nil
 }
 
 
-func (l *lookup) seedItemAbility(qtx *database.Queries, item Item, itemID int32) error {
+func (l *lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 	itemAbility := item.ItemAbility
 	ability := itemAbility.Ability
 	ability.Name = item.Name
 	ability.Type = database.AbilityTypeItem
 
-	dbAbility, err := l.seedAbility(qtx, item.AbilityAttributes, ability)
+	dbAbility, err := l.seedAbility(qtx, ability)
 	if err != nil {
 		return err
 	}
 
-	itemAbility.ItemID = itemID
-	itemAbility.AbilityID = dbAbility.ID
+	itemAbility.ItemID = item.ID
+	itemAbility.Ability.ID = dbAbility.ID
 
 	err = qtx.CreateItemAbility(context.Background(), database.CreateItemAbilityParams{
 		DataHash:  generateDataHash(itemAbility),
 		ItemID:    itemAbility.ItemID,
-		AbilityID: itemAbility.AbilityID,
+		AbilityID: itemAbility.Ability.ID,
 		Cursor:    database.TargetType(itemAbility.Cursor),
 	})
 	if err != nil {

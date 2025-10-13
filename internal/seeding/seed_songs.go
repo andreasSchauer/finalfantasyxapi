@@ -9,8 +9,7 @@ import (
 )
 
 type Song struct {
-	//id 			int32
-	//dataHash		string
+	ID						int32
 	Name 					string		`json:"name"`
 	StreamingName 			*string		`json:"streaming_name"`
 	InGameName 				*string		`json:"in_game_name"`
@@ -45,11 +44,6 @@ func (s Song) ToHashFields() []any {
 	}
 }
 
-
-type SongLookup struct {
-	Song
-	ID 		int32
-}
 
 
 type SongCredits struct {
@@ -116,10 +110,8 @@ func (l *lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 				return fmt.Errorf("couldn't create Song: %s: %v", song.Name, err)
 			}
 
-			l.songs[song.Name] = SongLookup{
-				Song: 	song,
-				ID: 	dbSong.ID,
-			}
+			song.ID = dbSong.ID
+			l.songs[song.Name] = song
 		}
 		return nil
 	})
