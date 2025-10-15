@@ -543,49 +543,49 @@ func (ns NullCtbIconType) Value() (driver.Value, error) {
 	return string(ns.CtbIconType), nil
 }
 
-type ElementType string
+type DurationType string
 
 const (
-	ElementTypeFire      ElementType = "fire"
-	ElementTypeLightning ElementType = "lightning"
-	ElementTypeWater     ElementType = "water"
-	ElementTypeIce       ElementType = "ice"
-	ElementTypeHoly      ElementType = "holy"
+	DurationTypeBlocks    DurationType = "blocks"
+	DurationTypeEndless   DurationType = "endless"
+	DurationTypeInstant   DurationType = "instant"
+	DurationTypeTurns     DurationType = "turns"
+	DurationTypeUserTurns DurationType = "user-turns"
 )
 
-func (e *ElementType) Scan(src interface{}) error {
+func (e *DurationType) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = ElementType(s)
+		*e = DurationType(s)
 	case string:
-		*e = ElementType(s)
+		*e = DurationType(s)
 	default:
-		return fmt.Errorf("unsupported scan type for ElementType: %T", src)
+		return fmt.Errorf("unsupported scan type for DurationType: %T", src)
 	}
 	return nil
 }
 
-type NullElementType struct {
-	ElementType ElementType
-	Valid       bool // Valid is true if ElementType is not NULL
+type NullDurationType struct {
+	DurationType DurationType
+	Valid        bool // Valid is true if DurationType is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullElementType) Scan(value interface{}) error {
+func (ns *NullDurationType) Scan(value interface{}) error {
 	if value == nil {
-		ns.ElementType, ns.Valid = "", false
+		ns.DurationType, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.ElementType.Scan(value)
+	return ns.DurationType.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullElementType) Value() (driver.Value, error) {
+func (ns NullDurationType) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return string(ns.ElementType), nil
+	return string(ns.DurationType), nil
 }
 
 type EquipClass string
@@ -1455,48 +1455,6 @@ func (ns NullQuestType) Value() (driver.Value, error) {
 	return string(ns.QuestType), nil
 }
 
-type RecoveryType string
-
-const (
-	RecoveryTypeHp RecoveryType = "hp"
-	RecoveryTypeMp RecoveryType = "mp"
-)
-
-func (e *RecoveryType) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = RecoveryType(s)
-	case string:
-		*e = RecoveryType(s)
-	default:
-		return fmt.Errorf("unsupported scan type for RecoveryType: %T", src)
-	}
-	return nil
-}
-
-type NullRecoveryType struct {
-	RecoveryType RecoveryType
-	Valid        bool // Valid is true if RecoveryType is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullRecoveryType) Scan(value interface{}) error {
-	if value == nil {
-		ns.RecoveryType, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.RecoveryType.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullRecoveryType) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.RecoveryType), nil
-}
-
 type ShopCategory string
 
 const (
@@ -1852,18 +1810,24 @@ type Area struct {
 }
 
 type AutoAbility struct {
-	ID                  int32
-	DataHash            string
-	Name                string
-	Description         sql.NullString
-	Effect              string
-	Type                NullEquipType
-	Category            AutoAbilityCategory
-	AbilityValue        sql.NullInt32
-	ActivationCondition NullAaActivationCondition
-	Counter             NullCounterType
-	GradualRecovery     NullRecoveryType
-	OnHitElement        NullElementType
+	ID                   int32
+	DataHash             string
+	Name                 string
+	Description          sql.NullString
+	Effect               string
+	Type                 NullEquipType
+	Category             AutoAbilityCategory
+	AbilityValue         sql.NullInt32
+	ActivationCondition  NullAaActivationCondition
+	Counter              NullCounterType
+	RequiredItemAmountID sql.NullInt32
+	GradRcvryStatID      sql.NullInt32
+	OnHitElementID       sql.NullInt32
+	AddedElemAffinityID  sql.NullInt32
+	OnHitStatusID        sql.NullInt32
+	AddedPropertyID      sql.NullInt32
+	CnvrsnFromModID      sql.NullInt32
+	CnvrsnToModID        sql.NullInt32
 }
 
 type BaseStat struct {
@@ -1920,6 +1884,13 @@ type Element struct {
 	OppositeElementID sql.NullInt32
 }
 
+type ElementalAffinity struct {
+	ID         int32
+	DataHash   string
+	ElementID  int32
+	AffinityID int32
+}
+
 type EnemyAbility struct {
 	ID        int32
 	DataHash  string
@@ -1950,6 +1921,15 @@ type Fmv struct {
 	AreaID              int32
 }
 
+type InflictedStatuss struct {
+	ID                int32
+	DataHash          string
+	StatusConditionID int32
+	Probability       interface{}
+	DurationType      DurationType
+	Amount            sql.NullInt32
+}
+
 type Item struct {
 	ID                    int32
 	DataHash              string
@@ -1969,6 +1949,62 @@ type ItemAbility struct {
 	ItemID    int32
 	AbilityID int32
 	Cursor    TargetType
+}
+
+type ItemAmount struct {
+	ID           int32
+	DataHash     string
+	MasterItemID int32
+	Amount       int32
+}
+
+type JAutoAbilityItem struct {
+	ID            int32
+	DataHash      string
+	AutoAbilityID int32
+	ItemID        int32
+}
+
+type JAutoAbilityModifierChange struct {
+	ID               int32
+	DataHash         string
+	AutoAbilityID    int32
+	ModifierChangeID int32
+}
+
+type JAutoAbilitySelf struct {
+	ID              int32
+	DataHash        string
+	ParentAbilityID int32
+	ChildAbilityID  int32
+}
+
+type JAutoAbilityStat struct {
+	ID            int32
+	DataHash      string
+	AutoAbilityID int32
+	StatID        int32
+}
+
+type JAutoAbilityStatChange struct {
+	ID            int32
+	DataHash      string
+	AutoAbilityID int32
+	StatChangeID  int32
+}
+
+type JAutoAbilityStatusCondition struct {
+	ID                int32
+	DataHash          string
+	AutoAbilityID     int32
+	StatusConditionID int32
+}
+
+type JAutoAbilityStatusResist struct {
+	ID             int32
+	DataHash       string
+	AutoAbilityID  int32
+	StatusResistID int32
 }
 
 type JCharacterBaseStat struct {
@@ -2322,6 +2358,13 @@ type StatusCondition struct {
 	Name           string
 	Effect         string
 	NullifyArmored NullNullifyArmored
+}
+
+type StatusResist struct {
+	ID                int32
+	DataHash          string
+	StatusConditionID int32
+	Resistance        interface{}
 }
 
 type SubLocation struct {

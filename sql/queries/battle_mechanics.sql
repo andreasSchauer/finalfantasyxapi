@@ -39,10 +39,18 @@ SET data_hash = $1,
 WHERE id = $4;
 
 
--- name: CreateAffinity :exec
+-- name: CreateAffinity :one
 INSERT INTO affinities (data_hash, name, damage_factor)
 VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = affinities.data_hash
+RETURNING *;
+
+
+-- name: CreateElementalAffinity :one
+INSERT INTO elemental_affinities (data_hash, element_id, affinity_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = elemental_affinities.data_hash
+RETURNING *;
 
 
 -- name: CreateAgilityTier :one
@@ -95,6 +103,20 @@ ON CONFLICT(data_hash) DO NOTHING;
 INSERT INTO j_status_condition_self (data_hash, parent_condition_id, child_condition_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateStatusResist :one
+INSERT INTO status_resists (data_hash, status_condition_id, resistance)
+VALUES ( $1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_resists.data_hash
+RETURNING *;
+
+
+-- name: CreateInflictedStatus :one
+INSERT INTO inflicted_statusses (data_hash, status_condition_id, probability, duration_type, amount)
+VALUES ( $1, $2, $3, $4, $5)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = inflicted_statusses.data_hash
+RETURNING *;
 
 
 -- name: CreateProperty :one

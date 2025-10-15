@@ -47,31 +47,11 @@ CREATE TABLE j_status_condition_self (
 );
 
 
-CREATE TYPE calculation_type AS ENUM ('added-percentage', 'added-value', 'multiply', 'multiply-highest', 'set-value');
-
-CREATE TABLE stat_changes (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    stat_id INTEGER NOT NULL REFERENCES stats(id),
-    calculation_type calculation_type NOT NULL,
-    value REAL NOT NULL
-);
-
-
 CREATE TABLE j_status_condition_stat_change (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     status_condition_id INTEGER NOT NULL REFERENCES status_conditions(id),
     stat_change_id INTEGER NOT NULL REFERENCES stat_changes(id)
-);
-
-
-CREATE TABLE modifier_changes (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    modifier_id INTEGER NOT NULL REFERENCES modifiers(id),
-    calculation_type calculation_type NOT NULL,
-    value REAL NOT NULL
 );
 
 
@@ -121,14 +101,12 @@ DROP TABLE IF EXISTS j_property_stat_change;
 DROP TABLE IF EXISTS j_property_status_condition;
 DROP TABLE IF EXISTS j_property_stat;
 DROP TABLE IF EXISTS j_status_condition_modifier_change;
-DROP TABLE IF EXISTS modifier_changes;
 DROP TABLE IF EXISTS j_status_condition_stat_change;
-DROP TABLE IF EXISTS stat_changes;
-DROP TYPE IF EXISTS calculation_type;
 DROP TABLE IF EXISTS j_status_condition_self;
 DROP TABLE IF EXISTS j_status_condition_stat;
 DROP TABLE IF EXISTS j_od_mode_action;
 DROP TABLE IF EXISTS od_mode_actions;
+
 
 ALTER TABLE elements
 DROP COLUMN IF EXISTS opposite_element_id;

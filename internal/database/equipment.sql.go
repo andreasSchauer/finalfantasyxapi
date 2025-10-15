@@ -10,10 +10,11 @@ import (
 	"database/sql"
 )
 
-const createAutoAbility = `-- name: CreateAutoAbility :exec
-INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter, gradual_recovery, on_hit_element)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-ON CONFLICT(data_hash) DO NOTHING
+const createAutoAbility = `-- name: CreateAutoAbility :one
+INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = auto_abilities.data_hash
+RETURNING id, data_hash, name, description, effect, type, category, ability_value, activation_condition, counter, required_item_amount_id, grad_rcvry_stat_id, on_hit_element_id, added_elem_affinity_id, on_hit_status_id, added_property_id, cnvrsn_from_mod_id, cnvrsn_to_mod_id
 `
 
 type CreateAutoAbilityParams struct {
@@ -26,12 +27,10 @@ type CreateAutoAbilityParams struct {
 	AbilityValue        sql.NullInt32
 	ActivationCondition NullAaActivationCondition
 	Counter             NullCounterType
-	GradualRecovery     NullRecoveryType
-	OnHitElement        NullElementType
 }
 
-func (q *Queries) CreateAutoAbility(ctx context.Context, arg CreateAutoAbilityParams) error {
-	_, err := q.db.ExecContext(ctx, createAutoAbility,
+func (q *Queries) CreateAutoAbility(ctx context.Context, arg CreateAutoAbilityParams) (AutoAbility, error) {
+	row := q.db.QueryRowContext(ctx, createAutoAbility,
 		arg.DataHash,
 		arg.Name,
 		arg.Description,
@@ -41,9 +40,147 @@ func (q *Queries) CreateAutoAbility(ctx context.Context, arg CreateAutoAbilityPa
 		arg.AbilityValue,
 		arg.ActivationCondition,
 		arg.Counter,
-		arg.GradualRecovery,
-		arg.OnHitElement,
 	)
+	var i AutoAbility
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Description,
+		&i.Effect,
+		&i.Type,
+		&i.Category,
+		&i.AbilityValue,
+		&i.ActivationCondition,
+		&i.Counter,
+		&i.RequiredItemAmountID,
+		&i.GradRcvryStatID,
+		&i.OnHitElementID,
+		&i.AddedElemAffinityID,
+		&i.OnHitStatusID,
+		&i.AddedPropertyID,
+		&i.CnvrsnFromModID,
+		&i.CnvrsnToModID,
+	)
+	return i, err
+}
+
+const createAutoAbilityItemJunction = `-- name: CreateAutoAbilityItemJunction :exec
+INSERT INTO j_auto_ability_item (data_hash, auto_ability_id, item_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilityItemJunctionParams struct {
+	DataHash      string
+	AutoAbilityID int32
+	ItemID        int32
+}
+
+func (q *Queries) CreateAutoAbilityItemJunction(ctx context.Context, arg CreateAutoAbilityItemJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilityItemJunction, arg.DataHash, arg.AutoAbilityID, arg.ItemID)
+	return err
+}
+
+const createAutoAbilityModifierChangeJunction = `-- name: CreateAutoAbilityModifierChangeJunction :exec
+INSERT INTO j_auto_ability_modifier_change (data_hash, auto_ability_id, modifier_change_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilityModifierChangeJunctionParams struct {
+	DataHash         string
+	AutoAbilityID    int32
+	ModifierChangeID int32
+}
+
+func (q *Queries) CreateAutoAbilityModifierChangeJunction(ctx context.Context, arg CreateAutoAbilityModifierChangeJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilityModifierChangeJunction, arg.DataHash, arg.AutoAbilityID, arg.ModifierChangeID)
+	return err
+}
+
+const createAutoAbilitySelfJunction = `-- name: CreateAutoAbilitySelfJunction :exec
+INSERT INTO j_auto_ability_self (data_hash, parent_ability_id, child_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilitySelfJunctionParams struct {
+	DataHash        string
+	ParentAbilityID int32
+	ChildAbilityID  int32
+}
+
+func (q *Queries) CreateAutoAbilitySelfJunction(ctx context.Context, arg CreateAutoAbilitySelfJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilitySelfJunction, arg.DataHash, arg.ParentAbilityID, arg.ChildAbilityID)
+	return err
+}
+
+const createAutoAbilityStatChangeJunction = `-- name: CreateAutoAbilityStatChangeJunction :exec
+INSERT INTO j_auto_ability_stat_change (data_hash, auto_ability_id, stat_change_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilityStatChangeJunctionParams struct {
+	DataHash      string
+	AutoAbilityID int32
+	StatChangeID  int32
+}
+
+func (q *Queries) CreateAutoAbilityStatChangeJunction(ctx context.Context, arg CreateAutoAbilityStatChangeJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilityStatChangeJunction, arg.DataHash, arg.AutoAbilityID, arg.StatChangeID)
+	return err
+}
+
+const createAutoAbilityStatJunction = `-- name: CreateAutoAbilityStatJunction :exec
+INSERT INTO j_auto_ability_stat (data_hash, auto_ability_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilityStatJunctionParams struct {
+	DataHash      string
+	AutoAbilityID int32
+	StatID        int32
+}
+
+func (q *Queries) CreateAutoAbilityStatJunction(ctx context.Context, arg CreateAutoAbilityStatJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilityStatJunction, arg.DataHash, arg.AutoAbilityID, arg.StatID)
+	return err
+}
+
+const createAutoAbilityStatusConditionJunction = `-- name: CreateAutoAbilityStatusConditionJunction :exec
+INSERT INTO j_auto_ability_status_condition (data_hash, auto_ability_id, status_condition_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilityStatusConditionJunctionParams struct {
+	DataHash          string
+	AutoAbilityID     int32
+	StatusConditionID int32
+}
+
+func (q *Queries) CreateAutoAbilityStatusConditionJunction(ctx context.Context, arg CreateAutoAbilityStatusConditionJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilityStatusConditionJunction, arg.DataHash, arg.AutoAbilityID, arg.StatusConditionID)
+	return err
+}
+
+const createAutoAbilityStatusResistJunction = `-- name: CreateAutoAbilityStatusResistJunction :exec
+INSERT INTO j_auto_ability_status_resist (data_hash, auto_ability_id, status_resist_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilityStatusResistJunctionParams struct {
+	DataHash       string
+	AutoAbilityID  int32
+	StatusResistID int32
+}
+
+func (q *Queries) CreateAutoAbilityStatusResistJunction(ctx context.Context, arg CreateAutoAbilityStatusResistJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilityStatusResistJunction, arg.DataHash, arg.AutoAbilityID, arg.StatusResistID)
 	return err
 }
 
@@ -110,6 +247,73 @@ func (q *Queries) CreateEquipmentAbility(ctx context.Context, arg CreateEquipmen
 		arg.Pool1Amt,
 		arg.Pool2Amt,
 		arg.EmptySlotsAmt,
+	)
+	return err
+}
+
+const updateAutoAbility = `-- name: UpdateAutoAbility :exec
+UPDATE auto_abilities
+SET data_hash = $1,
+    name = $2,
+    description = $3,
+    effect = $4,
+    type = $5,
+    category = $6,
+    ability_value = $7,
+    required_item_amount_id = $8,
+    activation_condition = $9,
+    counter = $10,
+    grad_rcvry_stat_id = $11,
+    on_hit_element_id = $12,
+    added_elem_affinity_id = $13,
+    on_hit_status_id = $14,
+    added_property_id = $15,
+    cnvrsn_from_mod_id = $16,
+    cnvrsn_to_mod_id = $17
+WHERE id = $18
+`
+
+type UpdateAutoAbilityParams struct {
+	DataHash             string
+	Name                 string
+	Description          sql.NullString
+	Effect               string
+	Type                 NullEquipType
+	Category             AutoAbilityCategory
+	AbilityValue         sql.NullInt32
+	RequiredItemAmountID sql.NullInt32
+	ActivationCondition  NullAaActivationCondition
+	Counter              NullCounterType
+	GradRcvryStatID      sql.NullInt32
+	OnHitElementID       sql.NullInt32
+	AddedElemAffinityID  sql.NullInt32
+	OnHitStatusID        sql.NullInt32
+	AddedPropertyID      sql.NullInt32
+	CnvrsnFromModID      sql.NullInt32
+	CnvrsnToModID        sql.NullInt32
+	ID                   int32
+}
+
+func (q *Queries) UpdateAutoAbility(ctx context.Context, arg UpdateAutoAbilityParams) error {
+	_, err := q.db.ExecContext(ctx, updateAutoAbility,
+		arg.DataHash,
+		arg.Name,
+		arg.Description,
+		arg.Effect,
+		arg.Type,
+		arg.Category,
+		arg.AbilityValue,
+		arg.RequiredItemAmountID,
+		arg.ActivationCondition,
+		arg.Counter,
+		arg.GradRcvryStatID,
+		arg.OnHitElementID,
+		arg.AddedElemAffinityID,
+		arg.OnHitStatusID,
+		arg.AddedPropertyID,
+		arg.CnvrsnFromModID,
+		arg.CnvrsnToModID,
+		arg.ID,
 	)
 	return err
 }

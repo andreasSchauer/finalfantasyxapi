@@ -15,8 +15,6 @@ CREATE TYPE equip_type AS ENUM ('weapon', 'armor');
 CREATE TYPE auto_ability_category AS ENUM ('ap-overdrive', 'auto-cure', 'auto-status', 'break-limit', 'counter', 'elemental-protection', 'elemental-strike', 'other', 'sos-status', 'stat-+x%', 'status-infliction', 'status-protection');
 CREATE TYPE aa_activation_condition AS ENUM ('always', 'active-party', 'hp-critical', 'outside-battle');
 CREATE TYPE counter_type AS ENUM ('physical', 'magical');
-CREATE TYPE recovery_type AS ENUM ('hp', 'mp');
-CREATE TYPE element_type AS ENUM ('fire', 'lightning', 'water', 'ice', 'holy');
 
 
 
@@ -32,10 +30,7 @@ CREATE TABLE auto_abilities (
     category auto_ability_category NOT NULL,
     ability_value INTEGER,
     activation_condition aa_activation_condition,
-    counter counter_type,
-    gradual_recovery recovery_type,
-    on_hit_element element_type,
-    CHECK (on_hit_element != 'holy')
+    counter counter_type
 );
 
 
@@ -61,8 +56,6 @@ CREATE TABLE equipment_abilities (
 DROP TABLE IF EXISTS equipment_abilities;
 DROP TYPE IF EXISTS equip_class;
 DROP TABLE IF EXISTS auto_abilities;
-DROP TYPE IF EXISTS element_type;
-DROP TYPE IF EXISTS recovery_type;
 DROP TYPE IF EXISTS counter_type;
 DROP TYPE IF EXISTS aa_activation_condition;
 DROP TYPE IF EXISTS auto_ability_category;

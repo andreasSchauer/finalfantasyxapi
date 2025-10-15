@@ -87,29 +87,6 @@ func nullCounterType(s *string) database.NullCounterType {
 }
 
 
-func nullRecoveryType(s *string) database.NullRecoveryType {
-    if s == nil {
-        return database.NullRecoveryType{}
-    }
-    
-    return database.NullRecoveryType{
-        RecoveryType: database.RecoveryType(*s),
-        Valid: true,
-    }
-}
-
-
-func nullElementType(s *string) database.NullElementType {
-    if s == nil {
-        return database.NullElementType{}
-    }
-    
-    return database.NullElementType{
-        ElementType: database.ElementType(*s),
-        Valid: true,
-    }
-}
-
 
 func nullMaCreationArea(s *string) database.NullMaCreationArea {
     if s == nil {

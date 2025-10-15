@@ -17,7 +17,9 @@ func createLookupKey(l Lookupable) string {
 
 type lookup struct {
 	aeons				map[string]Aeon
+	affinities			map[string]Affinity
 	areas 				map[string]Area
+	autoAbilities		map[string]AutoAbility
 	celestialWeapons	map[string]CelestialWeapon
 	characters			map[string]Character
 	charClasses			map[string]CharacterClass
@@ -29,6 +31,7 @@ type lookup struct {
 	overdriveModes		map[string]OverdriveMode
 	overdrives			map[string]Overdrive
 	properties			map[string]Property
+	sidequests			map[string]Sidequest
 	subquests			map[string]Subquest
 	songs         		map[string]Song
 	stats         		map[string]Stat
@@ -36,10 +39,13 @@ type lookup struct {
 	submenus			map[string]Submenu
 }
 
+
 func lookupInit() lookup {
 	return lookup{
 		aeons: 				make(map[string]Aeon),
+		affinities: 		make(map[string]Affinity),
 		areas: 				make(map[string]Area),
+		autoAbilities:		make(map[string]AutoAbility),
 		celestialWeapons: 	make(map[string]CelestialWeapon),
 		characters: 		make(map[string]Character),
 		charClasses: 		make(map[string]CharacterClass),
@@ -51,13 +57,13 @@ func lookupInit() lookup {
 		overdriveModes:		make(map[string]OverdriveMode),
 		overdrives: 		make(map[string]Overdrive),
 		properties: 		make(map[string]Property),
+		sidequests: 		make(map[string]Sidequest),
 		subquests: 			make(map[string]Subquest),
 		songs:         		make(map[string]Song),
 		stats:         		make(map[string]Stat),
 		statusConditions: 	make(map[string]StatusCondition),
 		submenus: 			make(map[string]Submenu),
 	}
-
 }
 
 
@@ -76,6 +82,38 @@ func (l *lookup) getAeon(aeonName string) (Aeon, error) {
 	}
 
 	return aeon, nil
+}
+
+
+func (l *lookup) getAffinity(affinityName string) (Affinity, error) {
+	affinity, found := l.affinities[affinityName]
+	if !found {
+		return Affinity{}, fmt.Errorf("couldn't find Affinity %s", affinityName)
+	}
+
+	return affinity, nil
+}
+
+
+func (l *lookup) getArea(locationArea LocationArea) (Area, error) {
+	key := createLookupKey(locationArea)
+
+	area, found := l.areas[key]
+	if !found {
+		return Area{}, fmt.Errorf("couldn't find location area: %s - %s - %s - %d", locationArea.Location, locationArea.SubLocation, locationArea.Area, derefOrNil(locationArea.Version))
+	}
+
+	return area, nil
+}
+
+
+func (l *lookup) getAutoAbility(abilityName string) (AutoAbility, error) {
+	autoAbility, found := l.autoAbilities[abilityName]
+	if !found {
+		return AutoAbility{}, fmt.Errorf("couldn't find Auto Ability %s", abilityName)
+	}
+
+	return autoAbility, nil
 }
 
 
@@ -122,18 +160,6 @@ func (l *lookup) getElement(elementName string) (Element, error) {
 	}
 
 	return element, nil
-}
-
-
-func (l *lookup) getArea(locationArea LocationArea) (Area, error) {
-	key := createLookupKey(locationArea)
-
-	area, found := l.areas[key]
-	if !found {
-		return Area{}, fmt.Errorf("couldn't find location area: %s - %s - %s - %d", locationArea.Location, locationArea.SubLocation, locationArea.Area, derefOrNil(locationArea.Version))
-	}
-
-	return area, nil
 }
 
 
@@ -218,6 +244,22 @@ func (l *lookup) getProperty(propertyName string) (Property, error) {
 	}
 
 	return property, nil
+}
+
+
+func (l *lookup) getSidequest(questName string) (Sidequest, error) {
+	quest := Quest{
+		Name: questName,
+		Type: database.QuestTypeSidequest,
+	}
+	key := createLookupKey(quest)
+
+	sidequest, found := l.sidequests[key]
+	if !found {
+		return Sidequest{}, fmt.Errorf("couldn't find Sidequest %s", questName)
+	}
+
+	return sidequest, nil
 }
 
 

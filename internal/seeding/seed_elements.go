@@ -23,6 +23,11 @@ func (e Element) ToHashFields() []any {
 }
 
 
+func (e Element) GetID() *int32 {
+	return &e.ID
+}
+
+
 
 func (l *lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elements.json"

@@ -13,3 +13,18 @@ func (j Junction) ToHashFields() []any {
 		j.ChildID,
 	}
 }
+
+
+func createJunction[T any, P HasID, C HasID](parent P, key T, lookup func(T) (C, error)) (Junction, error) {
+	child, err := lookup(key)
+	if err != nil {
+		return Junction{}, err
+	}
+
+	junction := Junction{
+		ParentID: 	*parent.GetID(),
+		ChildID: 	*child.GetID(),
+	}
+
+	return junction, nil
+}

@@ -52,3 +52,10 @@ RETURNING *;
 INSERT INTO j_mix_combo (data_hash, mix_id, combo_id, is_best_combo)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateItemAmount :one
+INSERT INTO item_amounts (data_hash, master_item_id, amount)
+VALUES ( $1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = item_amounts.data_hash
+RETURNING *;

@@ -28,6 +28,11 @@ func (p Property) ToHashFields() []any {
 }
 
 
+func (p Property) GetID() *int32 {
+	return &p.ID
+}
+
+
 func (l *lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
 
@@ -73,29 +78,19 @@ func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql
 				return err
 			}
 
-			err = l.createPropertyRelatedStats(db, property)
-			if err != nil {
-				return err
+			relationShipFunctions := []func(* database.Queries, Property) error{
+				l.createPropertyRelatedStats,
+				l.createPropertyRemovedConditions,
+				l.createPropertyStatChanges,
+				l.createPropertyModifierChanges,
 			}
 
-			err = l.createPropertyRemovedConditions(db, property)
-			if err != nil {
-				return err
+			for _, function := range relationShipFunctions {
+				err := function(qtx, property)
+				if err != nil {
+					return fmt.Errorf("property: %s: %v", property.Name, err)
+				}
 			}
-
-			statChangesNew, err := l.createPropertyStatChanges(db, property)
-			if err != nil {
-				return err
-			}
-
-			modifierChangesNew, err := l.createPropertyModifierChanges(db, property)
-			if err != nil {
-				return err
-			}
-
-			property.StatChanges = statChangesNew
-			property.ModifierChanges = modifierChangesNew
-			l.properties[property.Name] = property
 		}
 
 		return nil
@@ -122,7 +117,7 @@ func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property Prop
 			StatID:     junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return fmt.Errorf("couldn't create related stats: %v", err)
 		}
 	}
 
@@ -148,7 +143,7 @@ func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property
 			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return fmt.Errorf("couldn't create removed conditions: %v", err)
 		}
 	}
 
@@ -156,14 +151,12 @@ func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property
 }
 
 
-func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property Property) ([]StatChange, error) {
-	for i, statChange := range property.StatChanges {
+func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property Property) error {
+	for _, statChange := range property.StatChanges {
 		dbStatChange, err := l.seedStatChange(qtx, statChange)
 		if err != nil {
-			return []StatChange{}, err
+			return err
 		}
-		statChange.StatID = dbStatChange.StatID
-		property.StatChanges[i] = statChange
 
 		junction := Junction{
 			ParentID: 	property.ID,
@@ -176,22 +169,20 @@ func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property Prope
 			StatChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return []StatChange{}, err
+			return err
 		}
 	}
 
-	return property.StatChanges, nil
+	return nil
 }
 
 
-func (l *lookup) createPropertyModifierChanges(qtx *database.Queries, property Property) ([]ModifierChange, error) {
-	for i, modifierChange := range property.ModifierChanges {
+func (l *lookup) createPropertyModifierChanges(qtx *database.Queries, property Property) error {
+	for _, modifierChange := range property.ModifierChanges {
 		dbModifierChange, err := l.seedModifierChange(qtx, modifierChange)
 		if err != nil {
-			return []ModifierChange{}, err
+			return err
 		}
-		modifierChange.ModifierID = dbModifierChange.ModifierID
-		property.ModifierChanges[i] = modifierChange
 
 		junction := Junction{
 			ParentID: 	property.ID,
@@ -204,9 +195,9 @@ func (l *lookup) createPropertyModifierChanges(qtx *database.Queries, property P
 			ModifierChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return []ModifierChange{}, err
+			return err
 		}
 	}
 
-	return property.ModifierChanges, nil
+	return nil
 }

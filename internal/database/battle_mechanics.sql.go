@@ -10,10 +10,11 @@ import (
 	"database/sql"
 )
 
-const createAffinity = `-- name: CreateAffinity :exec
+const createAffinity = `-- name: CreateAffinity :one
 INSERT INTO affinities (data_hash, name, damage_factor)
 VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = affinities.data_hash
+RETURNING id, data_hash, name, damage_factor
 `
 
 type CreateAffinityParams struct {
@@ -22,9 +23,16 @@ type CreateAffinityParams struct {
 	DamageFactor sql.NullFloat64
 }
 
-func (q *Queries) CreateAffinity(ctx context.Context, arg CreateAffinityParams) error {
-	_, err := q.db.ExecContext(ctx, createAffinity, arg.DataHash, arg.Name, arg.DamageFactor)
-	return err
+func (q *Queries) CreateAffinity(ctx context.Context, arg CreateAffinityParams) (Affinity, error) {
+	row := q.db.QueryRowContext(ctx, createAffinity, arg.DataHash, arg.Name, arg.DamageFactor)
+	var i Affinity
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.DamageFactor,
+	)
+	return i, err
 }
 
 const createAgilitySubtier = `-- name: CreateAgilitySubtier :exec
@@ -138,6 +146,66 @@ func (q *Queries) CreateElement(ctx context.Context, arg CreateElementParams) (E
 		&i.DataHash,
 		&i.Name,
 		&i.OppositeElementID,
+	)
+	return i, err
+}
+
+const createElementalAffinity = `-- name: CreateElementalAffinity :one
+INSERT INTO elemental_affinities (data_hash, element_id, affinity_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = elemental_affinities.data_hash
+RETURNING id, data_hash, element_id, affinity_id
+`
+
+type CreateElementalAffinityParams struct {
+	DataHash   string
+	ElementID  int32
+	AffinityID int32
+}
+
+func (q *Queries) CreateElementalAffinity(ctx context.Context, arg CreateElementalAffinityParams) (ElementalAffinity, error) {
+	row := q.db.QueryRowContext(ctx, createElementalAffinity, arg.DataHash, arg.ElementID, arg.AffinityID)
+	var i ElementalAffinity
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.ElementID,
+		&i.AffinityID,
+	)
+	return i, err
+}
+
+const createInflictedStatus = `-- name: CreateInflictedStatus :one
+INSERT INTO inflicted_statusses (data_hash, status_condition_id, probability, duration_type, amount)
+VALUES ( $1, $2, $3, $4, $5)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = inflicted_statusses.data_hash
+RETURNING id, data_hash, status_condition_id, probability, duration_type, amount
+`
+
+type CreateInflictedStatusParams struct {
+	DataHash          string
+	StatusConditionID int32
+	Probability       interface{}
+	DurationType      DurationType
+	Amount            sql.NullInt32
+}
+
+func (q *Queries) CreateInflictedStatus(ctx context.Context, arg CreateInflictedStatusParams) (InflictedStatuss, error) {
+	row := q.db.QueryRowContext(ctx, createInflictedStatus,
+		arg.DataHash,
+		arg.StatusConditionID,
+		arg.Probability,
+		arg.DurationType,
+		arg.Amount,
+	)
+	var i InflictedStatuss
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.StatusConditionID,
+		&i.Probability,
+		&i.DurationType,
+		&i.Amount,
 	)
 	return i, err
 }
@@ -558,6 +626,31 @@ type CreateStatusConditionStatJunctionParams struct {
 func (q *Queries) CreateStatusConditionStatJunction(ctx context.Context, arg CreateStatusConditionStatJunctionParams) error {
 	_, err := q.db.ExecContext(ctx, createStatusConditionStatJunction, arg.DataHash, arg.StatusConditionID, arg.StatID)
 	return err
+}
+
+const createStatusResist = `-- name: CreateStatusResist :one
+INSERT INTO status_resists (data_hash, status_condition_id, resistance)
+VALUES ( $1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_resists.data_hash
+RETURNING id, data_hash, status_condition_id, resistance
+`
+
+type CreateStatusResistParams struct {
+	DataHash          string
+	StatusConditionID int32
+	Resistance        interface{}
+}
+
+func (q *Queries) CreateStatusResist(ctx context.Context, arg CreateStatusResistParams) (StatusResist, error) {
+	row := q.db.QueryRowContext(ctx, createStatusResist, arg.DataHash, arg.StatusConditionID, arg.Resistance)
+	var i StatusResist
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.StatusConditionID,
+		&i.Resistance,
+	)
+	return i, err
 }
 
 const updateElement = `-- name: UpdateElement :exec

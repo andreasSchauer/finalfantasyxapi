@@ -9,6 +9,7 @@ import (
 	"github.com/pressly/goose/v3"
 )
 
+
 func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 	const migrationsDir = "./sql/schema/"
 
@@ -67,6 +68,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.createSubmenusRelationships,
 		l.createMixesRelationships,
 		l.createCelestialWeaponsRelationships,
+		l.createAutoAbilitiesRelationships,
 	}
 
 	err = handleDBFunctions(db, dbConn, seedFunctions, "initial seeding")
@@ -81,6 +83,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 
 	return nil
 }
+
 
 func handleDBFunctions(db *database.Queries, dbConn *sql.DB, functions []func(*database.Queries, *sql.DB) error, infotext string) error {
 	start := time.Now()

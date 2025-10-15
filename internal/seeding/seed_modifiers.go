@@ -26,6 +26,11 @@ func (m Modifier) ToHashFields() []any {
 }
 
 
+func (m Modifier) GetID() *int32 {
+	return &m.ID
+}
+
+
 
 func (l *lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/modifiers.json"

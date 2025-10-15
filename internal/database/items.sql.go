@@ -80,6 +80,31 @@ func (q *Queries) CreateItemAbility(ctx context.Context, arg CreateItemAbilityPa
 	return err
 }
 
+const createItemAmount = `-- name: CreateItemAmount :one
+INSERT INTO item_amounts (data_hash, master_item_id, amount)
+VALUES ( $1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = item_amounts.data_hash
+RETURNING id, data_hash, master_item_id, amount
+`
+
+type CreateItemAmountParams struct {
+	DataHash     string
+	MasterItemID int32
+	Amount       int32
+}
+
+func (q *Queries) CreateItemAmount(ctx context.Context, arg CreateItemAmountParams) (ItemAmount, error) {
+	row := q.db.QueryRowContext(ctx, createItemAmount, arg.DataHash, arg.MasterItemID, arg.Amount)
+	var i ItemAmount
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MasterItemID,
+		&i.Amount,
+	)
+	return i, err
+}
+
 const createKeyItem = `-- name: CreateKeyItem :one
 INSERT INTO key_items (data_hash, master_item_id, category, description, effect)
 VALUES ($1, $2, $3, $4, $5)

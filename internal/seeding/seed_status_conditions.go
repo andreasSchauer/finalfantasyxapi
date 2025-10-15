@@ -75,29 +75,19 @@ func (l *lookup) createStatusConditionsRelationships(db *database.Queries, dbCon
 				return err
 			}
 
-			err = l.createStatusConditionRelatedStats(db, condition)
-			if err != nil {
-				return err
+			relationShipFunctions := []func(* database.Queries, StatusCondition) error{
+				l.createStatusConditionRelatedStats,
+				l.createStatusConditionRemovedConditions,
+				l.createStatusConditionStatChanges,
+				l.createStatusConditionModifierChanges,
 			}
 
-			err = l.createStatusConditionRemovedConditions(db, condition)
-			if err != nil {
-				return err
+			for _, function := range relationShipFunctions {
+				err := function(qtx, condition)
+				if err != nil {
+					return fmt.Errorf("status condition: %s: %v", condition.Name, err)
+				}
 			}
-
-			statChangesNew, err := l.createStatusConditionStatChanges(db, condition)
-			if err != nil {
-				return err
-			}
-
-			modifierChangesNew, err := l.createStatusConditionModifierChanges(db, condition)
-			if err != nil {
-				return err
-			}
-
-			condition.StatChanges = statChangesNew
-			condition.ModifierChanges = modifierChangesNew
-			l.statusConditions[condition.Name] = condition
 		}
 		return nil
 	})
@@ -122,7 +112,7 @@ func (l *lookup) createStatusConditionRelatedStats(qtx *database.Queries, condit
 			StatID: 			junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return fmt.Errorf("couldn't create related stats: %v", err)
 		}
 	}
 
@@ -148,7 +138,7 @@ func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, c
 			ChildConditionID: 	junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return fmt.Errorf("couldn't create removed conditions: %v", err)
 		}
 	}
 
@@ -156,14 +146,12 @@ func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, c
 }
 
 
-func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, condition StatusCondition) ([]StatChange, error) {
-	for i, statChange := range condition.StatChanges {
+func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, condition StatusCondition) error {
+	for _, statChange := range condition.StatChanges {
 		dbStatChange, err := l.seedStatChange(qtx, statChange)
 		if err != nil {
-			return []StatChange{}, err
+			return err
 		}
-		statChange.StatID = dbStatChange.StatID
-		condition.StatChanges[i] = statChange
 
 		junction := Junction{
 			ParentID: 	condition.ID,
@@ -176,22 +164,20 @@ func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, conditi
 			StatChangeID: 		junction.ChildID,
 		})
 		if err != nil {
-			return []StatChange{}, err
+			return err
 		}
 	}
 
-	return condition.StatChanges, nil
+	return nil
 }
 
 
-func (l *lookup) createStatusConditionModifierChanges(qtx *database.Queries, condition StatusCondition) ([]ModifierChange, error) {
-	for i, modifierChange := range condition.ModifierChanges {
+func (l *lookup) createStatusConditionModifierChanges(qtx *database.Queries, condition StatusCondition) error {
+	for _, modifierChange := range condition.ModifierChanges {
 		dbModifierChange, err := l.seedModifierChange(qtx, modifierChange)
 		if err != nil {
-			return []ModifierChange{}, err
+			return err
 		}
-		modifierChange.ModifierID = dbModifierChange.ModifierID
-		condition.ModifierChanges[i] = modifierChange
 
 		junction := Junction{
 			ParentID: 	condition.ID,
@@ -204,9 +190,9 @@ func (l *lookup) createStatusConditionModifierChanges(qtx *database.Queries, con
 			ModifierChangeID: 	junction.ChildID,
 		})
 		if err != nil {
-			return []ModifierChange{}, err
+			return err
 		}
 	}
 
-	return condition.ModifierChanges, nil
+	return nil
 }

@@ -9,10 +9,9 @@ import (
 )
 
 type Affinity struct {
-	//id 			int32
-	//dataHash		string
-	Name         string   `json:"name"`
-	DamageFactor *float32 `json:"damage_factor"`
+	ID				int32
+	Name         	string   `json:"name"`
+	DamageFactor 	*float32 `json:"damage_factor"`
 }
 
 func (a Affinity) ToHashFields() []any {
@@ -34,7 +33,7 @@ func (l *lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, affinity := range affinities {
-			err = qtx.CreateAffinity(context.Background(), database.CreateAffinityParams{
+			dbAffinity, err := qtx.CreateAffinity(context.Background(), database.CreateAffinityParams{
 				DataHash:     generateDataHash(affinity),
 				Name:         affinity.Name,
 				DamageFactor: getNullFloat64(affinity.DamageFactor),
@@ -42,6 +41,9 @@ func (l *lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return fmt.Errorf("couldn't create Elemental Affinity: %s: %v", affinity.Name, err)
 			}
+
+			affinity.ID = dbAffinity.ID
+			l.affinities[affinity.Name] = affinity
 		}
 		return nil
 	})

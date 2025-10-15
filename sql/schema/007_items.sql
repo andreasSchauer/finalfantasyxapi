@@ -89,9 +89,18 @@ CREATE TABLE j_mix_combo (
 );
 
 
+CREATE TABLE item_amounts (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    master_item_id INTEGER NOT NULL REFERENCES master_items(id),
+    amount INTEGER NOT NULL
+);
+
+
 
 
 -- +goose Down
+DROP TABLE IF EXISTS item_amounts;
 DROP TABLE IF EXISTS j_mix_combo;
 DROP TABLE IF EXISTS mix_combinations;
 DROP TABLE IF EXISTS mixes;

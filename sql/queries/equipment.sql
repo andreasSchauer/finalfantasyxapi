@@ -16,10 +16,77 @@ SET data_hash = $1,
 WHERE id = $7;
 
 
--- name: CreateAutoAbility :exec
-INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter, gradual_recovery, on_hit_element)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+-- name: CreateAutoAbility :one
+INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = auto_abilities.data_hash
+RETURNING *;
+
+
+-- name: UpdateAutoAbility :exec
+UPDATE auto_abilities
+SET data_hash = $1,
+    name = $2,
+    description = $3,
+    effect = $4,
+    type = $5,
+    category = $6,
+    ability_value = $7,
+    required_item_amount_id = $8,
+    activation_condition = $9,
+    counter = $10,
+    grad_rcvry_stat_id = $11,
+    on_hit_element_id = $12,
+    added_elem_affinity_id = $13,
+    on_hit_status_id = $14,
+    added_property_id = $15,
+    cnvrsn_from_mod_id = $16,
+    cnvrsn_to_mod_id = $17
+WHERE id = $18;
+
+
+-- name: CreateAutoAbilityStatJunction :exec
+INSERT INTO j_auto_ability_stat (data_hash, auto_ability_id, stat_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilitySelfJunction :exec
+INSERT INTO j_auto_ability_self (data_hash, parent_ability_id, child_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilityItemJunction :exec
+INSERT INTO j_auto_ability_item (data_hash, auto_ability_id, item_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilityStatusConditionJunction :exec
+INSERT INTO j_auto_ability_status_condition (data_hash, auto_ability_id, status_condition_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilityStatusResistJunction :exec
+INSERT INTO j_auto_ability_status_resist (data_hash, auto_ability_id, status_resist_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilityStatChangeJunction :exec
+INSERT INTO j_auto_ability_stat_change (data_hash, auto_ability_id, stat_change_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilityModifierChangeJunction :exec
+INSERT INTO j_auto_ability_modifier_change (data_hash, auto_ability_id, modifier_change_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
 
 
 -- name: CreateEquipmentAbility :exec

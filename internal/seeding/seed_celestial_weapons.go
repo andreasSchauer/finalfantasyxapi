@@ -74,15 +74,15 @@ func (l *lookup) createCelestialWeaponsRelationships(db *database.Queries, dbCon
 				return err
 			}
 
-			character, err := l.getCharacter(jsonWeapon.Character)
+			character, err := l.getCharacter(weapon.Character)
 			if err != nil {
 				return err
 			}
 			weapon.CharacterID = &character.ID
 
 
-			if jsonWeapon.Aeon != nil {
-				aeon, err := l.getAeon(*jsonWeapon.Aeon)
+			if weapon.Aeon != nil {
+				aeon, err := l.getAeon(*weapon.Aeon)
 				if err != nil {
 					return err
 				}
