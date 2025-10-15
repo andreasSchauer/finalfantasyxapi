@@ -9,9 +9,9 @@ import (
 )
 
 type Affinity struct {
-	ID				int32
-	Name         	string   `json:"name"`
-	DamageFactor 	*float32 `json:"damage_factor"`
+	ID           int32
+	Name         string   `json:"name"`
+	DamageFactor *float32 `json:"damage_factor"`
 }
 
 func (a Affinity) ToHashFields() []any {
@@ -21,6 +21,9 @@ func (a Affinity) ToHashFields() []any {
 	}
 }
 
+func (a Affinity) GetID() int32 {
+	return a.ID
+}
 
 func (l *lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elemental_affinities.json"

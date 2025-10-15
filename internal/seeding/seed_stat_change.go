@@ -6,14 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type StatChange struct {
-	StatID			int32
-	StatName		string	`json:"name"`
-	CalculationType	string	`json:"calculation_type"`
-	Value			float32	`json:"value"`
+	ID              int32
+	StatID          int32
+	StatName        string  `json:"name"`
+	CalculationType string  `json:"calculation_type"`
+	Value           float32 `json:"value"`
 }
-
 
 func (s StatChange) ToHashFields() []any {
 	return []any{
@@ -23,24 +22,28 @@ func (s StatChange) ToHashFields() []any {
 	}
 }
 
+func (s StatChange) GetID() int32 {
+	return s.ID
+}
 
-func (l *lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (database.StatChange, error) {
-	stat, err := l.getStat(statChange.StatName)
+func (l *lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (StatChange, error) {
+	var err error
+	
+	statChange.StatID, err = assignFK(statChange.StatName, l.getStat)
 	if err != nil {
-		return database.StatChange{}, err
+		return StatChange{}, err
 	}
-
-	statChange.StatID = stat.ID
 
 	dbStatChange, err := qtx.CreateStatChange(context.Background(), database.CreateStatChangeParams{
-		DataHash: 			generateDataHash(statChange),
-		StatID: 			statChange.StatID,
-		CalculationType: 	database.CalculationType(statChange.CalculationType),
-		Value: 				statChange.Value,
+		DataHash:        generateDataHash(statChange),
+		StatID:          statChange.StatID,
+		CalculationType: database.CalculationType(statChange.CalculationType),
+		Value:           statChange.Value,
 	})
 	if err != nil {
-		return database.StatChange{}, err
+		return StatChange{}, err
 	}
+	statChange.ID = dbStatChange.ID
 
-	return dbStatChange, nil
+	return statChange, nil
 }

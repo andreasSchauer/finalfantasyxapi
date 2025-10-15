@@ -28,11 +28,16 @@ func (o OverdriveMode) ToHashFields() []any {
 	}
 }
 
+func (o OverdriveMode) GetID() int32 {
+	return o.ID
+}
+
 
 type ActionToLearn struct {
-	UserID int32
-	User   string `json:"user"`
-	Amount int32  `json:"amount"`
+	ID		int32
+	UserID 	int32
+	User   	string `json:"user"`
+	Amount 	int32  `json:"amount"`
 }
 
 func (a ActionToLearn) ToHashFields() []any {
@@ -40,6 +45,10 @@ func (a ActionToLearn) ToHashFields() []any {
 		a.UserID,
 		a.Amount,
 	}
+}
+
+func (a ActionToLearn) GetID() int32 {
+	return a.ID
 }
 
 
@@ -89,27 +98,10 @@ func (l *lookup) createOverdriveModesRelationships(db *database.Queries, dbConn 
 				return err
 			}
 
-			for i, action := range mode.ActionsToLearn {
-				user, err := l.getCharacter(action.User)
+			for _, action := range mode.ActionsToLearn {
+				junction, err := createJunctionSeed(qtx, mode, action, l.seedODModeAction)
 				if err != nil {
 					return err
-				}
-
-				action.UserID = user.ID
-				mode.ActionsToLearn[i] = action
-
-				dbAction, err := qtx.CreateODModeAction(context.Background(), database.CreateODModeActionParams{
-					DataHash: generateDataHash(action),
-					UserID:   action.UserID,
-					Amount:   action.Amount,
-				})
-				if err != nil {
-					return err
-				}
-
-				junction := Junction{
-					ParentID: 	mode.ID,
-					ChildID:  	dbAction.ID,
 				}
 
 				err = qtx.CreateODModeActionJunction(context.Background(), database.CreateODModeActionJunctionParams{
@@ -121,9 +113,30 @@ func (l *lookup) createOverdriveModesRelationships(db *database.Queries, dbConn 
 					return err
 				}
 			}
-
-			l.overdriveModes[mode.Name] = mode
 		}
 		return nil
 	})
 }
+
+
+func (l *lookup) seedODModeAction(qtx *database.Queries, action ActionToLearn) (ActionToLearn, error) {
+	var err error
+
+	action.UserID, err = assignFK(action.User, l.getCharacter)
+	if err != nil {
+		return ActionToLearn{}, err
+	}
+
+	dbAction, err := qtx.CreateODModeAction(context.Background(), database.CreateODModeActionParams{
+		DataHash: generateDataHash(action),
+		UserID:   action.UserID,
+		Amount:   action.Amount,
+	})
+	if err != nil {
+		return ActionToLearn{}, err
+	}
+
+	action.ID = dbAction.ID
+
+	return action, nil
+ }

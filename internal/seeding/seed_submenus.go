@@ -26,6 +26,10 @@ func (s Submenu) ToHashFields() []any {
 	}
 }
 
+func (s Submenu) GetID() int32 {
+	return s.ID
+}
+
 
 
 func (l *lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
@@ -75,14 +79,9 @@ func (l *lookup) createSubmenusRelationships(db *database.Queries, dbConn *sql.D
 			}
 
 			for _, jsonCharClass := range jsonSubmenu.Users {
-				charClass, err := l.getCharacterClass((jsonCharClass))
+				junction, err := createJunction(submenu, jsonCharClass, l.getCharacterClass)
 				if err != nil {
 					return err
-				}
-
-				junction := Junction{
-					ParentID: 	submenu.ID,
-					ChildID: 	charClass.ID,
 				}
 
 				err = qtx.CreateSubmenuCharacterClassJunction(context.Background(), database.CreateSubmenuCharacterClassJunctionParams{

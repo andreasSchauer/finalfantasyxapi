@@ -8,12 +8,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
-
 type Sidequest struct {
-	ID			int32
+	ID int32
 	Quest
-	Subquests 	[]Subquest `json:"subquests"`
+	Subquests []Subquest `json:"subquests"`
 }
 
 func (s Sidequest) ToHashFields() []any {
@@ -22,8 +20,12 @@ func (s Sidequest) ToHashFields() []any {
 	}
 }
 
+func (s Sidequest) GetID() int32 {
+	return s.ID
+}
+
 type Subquest struct {
-	ID			int32
+	ID int32
 	Quest
 	SidequestID int32
 }
@@ -33,6 +35,10 @@ func (s Subquest) ToHashFields() []any {
 		s.Quest.ID,
 		s.SidequestID,
 	}
+}
+
+func (s Subquest) GetID() int32 {
+	return s.ID
 }
 
 func (l *lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
@@ -46,14 +52,13 @@ func (l *lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, sidequest := range sidequests {
+			var err error
 			sidequest.Type = database.QuestTypeSidequest
 
-			dbQuest, err := l.seedQuest(qtx, sidequest.Quest)
+			sidequest.Quest, err = seedObjAssignFK(qtx, sidequest.Quest, l.seedQuest)
 			if err != nil {
 				return err
 			}
-
-			sidequest.Quest.ID = dbQuest.ID
 
 			dbSidequest, err := qtx.CreateSidequest(context.Background(), database.CreateSidequestParams{
 				DataHash: generateDataHash(sidequest),
@@ -74,18 +79,16 @@ func (l *lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-
 func (l *lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error {
 	for _, subquest := range sidequest.Subquests {
+		var err error
 		subquest.Type = database.QuestTypeSubquest
+		subquest.SidequestID = sidequest.ID
 
-		dbQuest, err := l.seedQuest(qtx, subquest.Quest)
+		subquest.Quest, err = seedObjAssignFK(qtx, subquest.Quest, l.seedQuest)
 		if err != nil {
 			return err
 		}
-
-		subquest.Quest.ID = dbQuest.ID
-		subquest.SidequestID = sidequest.ID
 
 		dbSubquest, err := qtx.CreateSubquest(context.Background(), database.CreateSubquestParams{
 			DataHash:          generateDataHash(subquest),

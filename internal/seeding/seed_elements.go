@@ -9,10 +9,10 @@ import (
 )
 
 type Element struct {
-	ID 					int32
-	Name              	string  `json:"name"`
-	OppositeElement   	*string `json:"opposite_element"`
-	OppositeElementID 	*int32
+	ID                int32
+	Name              string  `json:"name"`
+	OppositeElement   *string `json:"opposite_element"`
+	OppositeElementID *int32
 }
 
 func (e Element) ToHashFields() []any {
@@ -22,12 +22,9 @@ func (e Element) ToHashFields() []any {
 	}
 }
 
-
-func (e Element) GetID() *int32 {
-	return &e.ID
+func (e Element) GetID() int32 {
+	return e.ID
 }
-
-
 
 func (l *lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elements.json"
@@ -54,7 +51,6 @@ func (l *lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 		return nil
 	})
 }
-
 
 func (l *lookup) createElementsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elements.json"

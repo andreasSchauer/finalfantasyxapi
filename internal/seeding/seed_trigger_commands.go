@@ -12,7 +12,7 @@ type TriggerCommand struct {
 	Ability
 	Description string `json:"description"`
 	Effect      string `json:"effect"`
-	Topmenu		string	`json:"topmenu"`
+	Topmenu     string `json:"topmenu"`
 	Cursor      string `json:"cursor"`
 }
 
@@ -26,7 +26,6 @@ func (t TriggerCommand) ToHashFields() []any {
 	}
 }
 
-
 func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/trigger_commands.json"
 
@@ -39,26 +38,24 @@ func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, command := range triggerCommands {
-			ability := command.Ability
-			ability.Type = database.AbilityTypeTriggerCommand
+			var err error
+			command.Type = database.AbilityTypeTriggerCommand
 
-			dbAbility, err := l.seedAbility(qtx, ability)
+			command.Ability, err = seedObjAssignFK(qtx, command.Ability, l.seedAbility)
 			if err != nil {
 				return err
 			}
 
-			command.Ability.ID = dbAbility.ID
-
 			err = qtx.CreateTriggerCommand(context.Background(), database.CreateTriggerCommandParams{
-				DataHash:    	generateDataHash(command),
-				AbilityID:   	command.Ability.ID,
-				Description: 	command.Description,
-				Effect:      	command.Effect,
-				Topmenu: 		database.TopmenuType(command.Topmenu),
-				Cursor:      	database.TargetType(command.Cursor),
+				DataHash:    generateDataHash(command),
+				AbilityID:   command.Ability.ID,
+				Description: command.Description,
+				Effect:      command.Effect,
+				Topmenu:     database.TopmenuType(command.Topmenu),
+				Cursor:      database.TargetType(command.Cursor),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create TriggerCommand: %s: %v", ability.Name, err)
+				return fmt.Errorf("couldn't create TriggerCommand: %s: %v", command.Name, err)
 			}
 		}
 		return nil

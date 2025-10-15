@@ -9,16 +9,16 @@ import (
 )
 
 type Item struct {
-	ID						int32
+	ID int32
 	MasterItem
 	ItemAbility
-	Description           	string  `json:"description"`
-	Effect                	string  `json:"effect"`
-	SphereGridDescription 	*string `json:"sphere_grid_description"`
-	Category              	string  `json:"category"`
-	Usability             	*string `json:"usability"`
-	BasePrice             	*int32  `json:"base_price"`
-	SellValue             	int32   `json:"sell_value"`
+	Description           string  `json:"description"`
+	Effect                string  `json:"effect"`
+	SphereGridDescription *string `json:"sphere_grid_description"`
+	Category              string  `json:"category"`
+	Usability             *string `json:"usability"`
+	BasePrice             *int32  `json:"base_price"`
+	SellValue             int32   `json:"sell_value"`
 }
 
 func (i Item) ToHashFields() []any {
@@ -34,11 +34,14 @@ func (i Item) ToHashFields() []any {
 	}
 }
 
+func (i Item) GetID() int32 {
+	return i.ID
+}
 
 type ItemAbility struct {
 	Ability
-	ItemID    int32
-	Cursor    string `json:"cursor"`
+	ItemID int32
+	Cursor string `json:"cursor"`
 }
 
 func (i ItemAbility) ToHashFields() []any {
@@ -60,19 +63,18 @@ func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, item := range items {
+			var err error
 			item.Type = database.ItemTypeItem
 
-			dbMasterItem, err := l.seedMasterItem(qtx, item.MasterItem)
+			item.MasterItem, err = seedObjAssignFK(qtx, item.MasterItem, l.seedMasterItem)
 			if err != nil {
 				return err
 			}
-			item.MasterItem.ID = dbMasterItem.ID
 
-			dbItem, err := l.seedItem(qtx, item)
+			item, err = seedObjAssignFK(qtx, item, l.seedItem)
 			if err != nil {
 				return err
 			}
-			item.ID = dbItem.ID
 
 			hasBattleData := item.Category != string(database.ItemCategorySphere) && item.Category != string(database.ItemCategoryOther)
 
@@ -87,8 +89,7 @@ func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-
-func (l *lookup) seedItem(qtx *database.Queries, item Item) (database.Item, error) {
+func (l *lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
 	dbItem, err := qtx.CreateItem(context.Background(), database.CreateItemParams{
 		DataHash:              generateDataHash(item),
 		MasterItemID:          item.MasterItem.ID,
@@ -101,30 +102,27 @@ func (l *lookup) seedItem(qtx *database.Queries, item Item) (database.Item, erro
 		SellValue:             item.SellValue,
 	})
 	if err != nil {
-		return database.Item{}, fmt.Errorf("couldn't create Item: %s: %v", item.Name, err)
+		return Item{}, fmt.Errorf("couldn't create Item: %s: %v", item.Name, err)
 	}
 
 	item.ID = dbItem.ID
 	key := createLookupKey(item.MasterItem)
 	l.items[key] = item
 
-	return dbItem, nil
+	return item, nil
 }
 
-
 func (l *lookup) seedItemAbility(qtx *database.Queries, item Item) error {
+	var err error
 	itemAbility := item.ItemAbility
-	ability := itemAbility.Ability
-	ability.Name = item.Name
-	ability.Type = database.AbilityTypeItem
+	itemAbility.Name = item.Name
+	itemAbility.Type = database.AbilityTypeItem
+	itemAbility.ItemID = item.ID
 
-	dbAbility, err := l.seedAbility(qtx, ability)
+	itemAbility.Ability, err = seedObjAssignFK(qtx, itemAbility.Ability, l.seedAbility)
 	if err != nil {
 		return err
 	}
-
-	itemAbility.ItemID = item.ID
-	itemAbility.Ability.ID = dbAbility.ID
 
 	err = qtx.CreateItemAbility(context.Background(), database.CreateItemAbilityParams{
 		DataHash:  generateDataHash(itemAbility),

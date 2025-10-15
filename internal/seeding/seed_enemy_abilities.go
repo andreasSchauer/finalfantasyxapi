@@ -10,7 +10,7 @@ import (
 
 type EnemyAbility struct {
 	Ability
-	Effect    *string `json:"effect"`
+	Effect *string `json:"effect"`
 }
 
 func (a EnemyAbility) ToHashFields() []any {
@@ -19,7 +19,6 @@ func (a EnemyAbility) ToHashFields() []any {
 		derefOrNil(a.Effect),
 	}
 }
-
 
 func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/enemy_abilities.json"
@@ -33,15 +32,13 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, enemyAbility := range enemyAbilities {
-			ability := enemyAbility.Ability
-			ability.Type = database.AbilityTypeEnemyAbility
+			var err error
+			enemyAbility.Type = database.AbilityTypeEnemyAbility
 
-			dbAbility, err := l.seedAbility(qtx, ability)
+			enemyAbility.Ability, err = seedObjAssignFK(qtx, enemyAbility.Ability, l.seedAbility)
 			if err != nil {
 				return err
 			}
-
-			enemyAbility.Ability.ID = dbAbility.ID
 
 			err = qtx.CreateEnemyAbility(context.Background(), database.CreateEnemyAbilityParams{
 				DataHash:  generateDataHash(enemyAbility),
@@ -49,7 +46,7 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 				Effect:    getNullString(enemyAbility.Effect),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Enemy Ability: %s: %v", ability.Name, err)
+				return fmt.Errorf("couldn't create Enemy Ability: %s: %v", enemyAbility.Name, err)
 			}
 		}
 		return nil

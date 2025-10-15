@@ -9,7 +9,7 @@ import (
 )
 
 type Property struct {
-	ID						int32
+	ID                      int32
 	Name                    string           `json:"name"`
 	Effect                  string           `json:"effect"`
 	RelatedStats            []string         `json:"related_stats"`
@@ -27,11 +27,9 @@ func (p Property) ToHashFields() []any {
 	}
 }
 
-
-func (p Property) GetID() *int32 {
-	return &p.ID
+func (p Property) GetID() int32 {
+	return p.ID
 }
-
 
 func (l *lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
@@ -61,7 +59,6 @@ func (l *lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-
 func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
 
@@ -78,7 +75,7 @@ func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql
 				return err
 			}
 
-			relationShipFunctions := []func(* database.Queries, Property) error{
+			relationShipFunctions := []func(*database.Queries, Property) error{
 				l.createPropertyRelatedStats,
 				l.createPropertyRemovedConditions,
 				l.createPropertyStatChanges,
@@ -98,17 +95,11 @@ func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql
 
 }
 
-
 func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property Property) error {
 	for _, jsonStat := range property.RelatedStats {
-		stat, err := l.getStat(jsonStat)
+		junction, err := createJunction(property, jsonStat, l.getStat)
 		if err != nil {
 			return err
-		}
-
-		junction := Junction{
-			ParentID: 	property.ID,
-			ChildID:  	stat.ID,
 		}
 
 		err = qtx.CreatePropertyStatJunction(context.Background(), database.CreatePropertyStatJunctionParams{
@@ -124,17 +115,11 @@ func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property Prop
 	return nil
 }
 
-
 func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property Property) error {
 	for _, jsonCondition := range property.RemovedStatusConditions {
-		condition, err := l.getStatusCondition(jsonCondition)
+		junction, err := createJunction(property, jsonCondition, l.getStatusCondition)
 		if err != nil {
 			return err
-		}
-
-		junction := Junction{
-			ParentID: 	property.ID,
-			ChildID:  	condition.ID,
 		}
 
 		err = qtx.CreatePropertyStatusConditionJunction(context.Background(), database.CreatePropertyStatusConditionJunctionParams{
@@ -150,17 +135,11 @@ func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property
 	return nil
 }
 
-
 func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property Property) error {
 	for _, statChange := range property.StatChanges {
-		dbStatChange, err := l.seedStatChange(qtx, statChange)
+		junction, err := createJunctionSeed(qtx, property, statChange, l.seedStatChange)
 		if err != nil {
 			return err
-		}
-
-		junction := Junction{
-			ParentID: 	property.ID,
-			ChildID:  	dbStatChange.ID,
 		}
 
 		err = qtx.CreatePropertyStatChangeJunction(context.Background(), database.CreatePropertyStatChangeJunctionParams{
@@ -176,17 +155,11 @@ func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property Prope
 	return nil
 }
 
-
 func (l *lookup) createPropertyModifierChanges(qtx *database.Queries, property Property) error {
 	for _, modifierChange := range property.ModifierChanges {
-		dbModifierChange, err := l.seedModifierChange(qtx, modifierChange)
+		junction, err := createJunctionSeed(qtx, property, modifierChange, l.seedModifierChange)
 		if err != nil {
 			return err
-		}
-
-		junction := Junction{
-			ParentID: 	property.ID,
-			ChildID:  	dbModifierChange.ID,
 		}
 
 		err = qtx.CreatePropertyModifierChangeJunction(context.Background(), database.CreatePropertyModifierChangeJunctionParams{

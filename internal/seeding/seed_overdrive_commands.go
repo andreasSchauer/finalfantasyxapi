@@ -48,7 +48,7 @@ func (o Overdrive) ToHashFields() []any {
 		o.Description,
 		o.Effect,
 		derefOrNil(o.Topmenu),
-		derefOrNil(o.Attributes.ID),
+		ObjPtrToHashID(o.Attributes),
 		derefOrNil(o.UnlockCondition),
 		derefOrNil(o.CountdownInSec),
 		derefOrNil(o.Cursor),
@@ -93,14 +93,13 @@ func (l *lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 
 func (l *lookup) seedOverdrives(qtx *database.Queries, command OverdriveCommand) error {
 	for _, overdrive := range command.Overdrives {
+		var err error
 		overdrive.ODCommandID = command.ID
 
-		dbAttributes, err := l.seedAbilityAttributes(qtx, overdrive.Ability)
+		overdrive.Attributes, err = seedObjPtrAssignFK(qtx, overdrive.Attributes, l.seedAbilityAttributes)
 		if err != nil {
-			return err
+			return fmt.Errorf("couldn't create Ability Attributes: %s-%d, type: %s: %v", overdrive.Name, derefOrNil(overdrive.Version), overdrive.Type, err)
 		}
-
-		overdrive.Attributes.ID = &dbAttributes.ID
 
 		dbOverdrive, err := qtx.CreateOverdrive(context.Background(), database.CreateOverdriveParams{
 			DataHash:        generateDataHash(overdrive),
@@ -110,7 +109,7 @@ func (l *lookup) seedOverdrives(qtx *database.Queries, command OverdriveCommand)
 			Description:     overdrive.Description,
 			Effect:          overdrive.Effect,
 			Topmenu:         nullTopmenuType(overdrive.Topmenu),
-			AttributesID:    *overdrive.Attributes.ID,
+			AttributesID:    ObjPtrToInt32ID(overdrive.Attributes),
 			UnlockCondition: getNullString(overdrive.UnlockCondition),
 			CountdownInSec:  getNullInt32(overdrive.CountdownInSec),
 			Cursor:          nullTargetType(overdrive.Cursor),

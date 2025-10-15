@@ -18,8 +18,6 @@ CREATE TYPE counter_type AS ENUM ('physical', 'magical');
 
 
 
-
-
 CREATE TABLE auto_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

@@ -7,13 +7,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type ElementalAffinity struct {
-	ID				*int32
-	ElementID	int32
-	AffinityID	int32
-	Element		string	`json:"name"`
-	Affinity	string	`json:"affinity"`
+	ID         int32
+	ElementID  int32
+	AffinityID int32
+	Element    string `json:"name"`
+	Affinity   string `json:"affinity"`
 }
 
 func (ea ElementalAffinity) ToHashFields() []any {
@@ -23,35 +22,33 @@ func (ea ElementalAffinity) ToHashFields() []any {
 	}
 }
 
-
-func (ea ElementalAffinity) GetID() *int32 {	
+func (ea ElementalAffinity) GetID() int32 {
 	return ea.ID
 }
 
-
 func (l *lookup) seedElementalAffinity(qtx *database.Queries, elemAffinity ElementalAffinity) (ElementalAffinity, error) {
-	element, err := l.getElement(elemAffinity.Element)
-	if err != nil {
-		return ElementalAffinity{}, err
-	}
-	elemAffinity.ElementID = element.ID
+	var err error
 
-	affinity, err := l.getAffinity(elemAffinity.Affinity)
+	elemAffinity.ElementID, err = assignFK(elemAffinity.Element, l.getElement)
 	if err != nil {
 		return ElementalAffinity{}, err
 	}
-	elemAffinity.AffinityID = affinity.ID
+
+	elemAffinity.AffinityID, err = assignFK(elemAffinity.Affinity, l.getAffinity)
+	if err != nil {
+		return ElementalAffinity{}, err
+	}
 
 	dbElemAffinity, err := qtx.CreateElementalAffinity(context.Background(), database.CreateElementalAffinityParams{
-		DataHash: 	generateDataHash(elemAffinity),
-		ElementID:	elemAffinity.ElementID,
-		AffinityID:	elemAffinity.AffinityID,
+		DataHash:   generateDataHash(elemAffinity),
+		ElementID:  elemAffinity.ElementID,
+		AffinityID: elemAffinity.AffinityID,
 	})
 	if err != nil {
 		return ElementalAffinity{}, fmt.Errorf("couldn't create Elemental Affinity: %v", err)
 	}
 
-	elemAffinity.ID = &dbElemAffinity.ID
+	elemAffinity.ID = dbElemAffinity.ID
 
 	return elemAffinity, nil
 }

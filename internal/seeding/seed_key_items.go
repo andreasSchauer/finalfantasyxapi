@@ -9,11 +9,11 @@ import (
 )
 
 type KeyItem struct {
-	ID				int32
+	ID int32
 	MasterItem
-	Category      	string `json:"category"`
-	Description   	string `json:"description"`
-	Effect        	string `json:"effect"`
+	Category    string `json:"category"`
+	Description string `json:"description"`
+	Effect      string `json:"effect"`
 }
 
 func (k KeyItem) ToHashFields() []any {
@@ -25,7 +25,9 @@ func (k KeyItem) ToHashFields() []any {
 	}
 }
 
-
+func (k KeyItem) GetID() int32 {
+	return k.ID
+}
 
 func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/key_items.json"
@@ -38,13 +40,13 @@ func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, keyItem := range keyItems {
+			var err error
 			keyItem.Type = database.ItemTypeKeyItem
-			dbMasterItem, err := l.seedMasterItem(qtx, keyItem.MasterItem)
+
+			keyItem.MasterItem, err = seedObjAssignFK(qtx, keyItem.MasterItem, l.seedMasterItem)
 			if err != nil {
 				return err
 			}
-
-			keyItem.MasterItem.ID = dbMasterItem.ID
 
 			dbKeyItem, err := qtx.CreateKeyItem(context.Background(), database.CreateKeyItemParams{
 				DataHash:     generateDataHash(keyItem),

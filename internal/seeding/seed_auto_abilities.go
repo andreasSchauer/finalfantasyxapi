@@ -9,38 +9,35 @@ import (
 )
 
 type AutoAbility struct {
-	ID                   int32
-	GradRecoveryStatID   *int32
-	OnHitElementID       *int32
-	AddedPropertyID      *int32
-	CnvrsnFromModID      *int32
-	CnvrsnToModID        *int32
-	RequiredItemAmountID *int32
-	AddedElemAffinityID  *int32
-	OnHitStatusID        *int32
-	Name                 string             `json:"name"`
-	Description          *string            `json:"description"`
-	Effect               string             `json:"effect"`
-	Type                 *string            `json:"type"`
-	Category             string             `json:"category"`
-	RelatedStats         []string           `json:"related_stats"`
-	AbilityValue         *int32             `json:"ability_value"`
-	RequiredItem         *ItemAmount        `json:"required_item"`
-	LockedOutAbilities   []string           `json:"locked_out_abilities"`
-	ActivationCondition  *string            `json:"activation_condition"`
-	Counter              *string            `json:"counter"`
-	GradualRecovery      *string            `json:"gradual_recovery"`
-	AutoItemUse          []string           `json:"auto_item_use"`
-	OnHitElement         *string            `json:"on_hit_element"`
-	AddedElemAffinity    *ElementalAffinity `json:"added_elem_affinity"`
-	OnHitStatus          *InflictedStatus   `json:"on_hit_status"`
-	AddedStatusResists   []StatusResist     `json:"added_status_resists"`
-	AddedStatusses       []string           `json:"added_statusses"`
-	AddedProperty        *string            `json:"added_property"`
-	ConversionFrom       *string            `json:"conversion_from"`
-	ConversionTo         *string            `json:"conversion_to"`
-	StatChanges          []StatChange       `json:"stat_changes"`
-	ModifierChanges      []ModifierChange   `json:"modifier_changes"`
+	ID                  int32
+	GradRecoveryStatID  *int32
+	OnHitElementID      *int32
+	AddedPropertyID     *int32
+	CnvrsnFromModID     *int32
+	CnvrsnToModID       *int32
+	Name                string             `json:"name"`
+	Description         *string            `json:"description"`
+	Effect              string             `json:"effect"`
+	Type                *string            `json:"type"`
+	Category            string             `json:"category"`
+	RelatedStats        []string           `json:"related_stats"`
+	AbilityValue        *int32             `json:"ability_value"`
+	RequiredItem        *ItemAmount        `json:"required_item"`
+	LockedOutAbilities  []string           `json:"locked_out_abilities"`
+	ActivationCondition *string            `json:"activation_condition"`
+	Counter             *string            `json:"counter"`
+	GradualRecovery     *string            `json:"gradual_recovery"`
+	AutoItemUse         []string           `json:"auto_item_use"`
+	OnHitElement        *string            `json:"on_hit_element"`
+	AddedElemAffinity   *ElementalAffinity `json:"added_elem_affinity"`
+	OnHitStatus         *InflictedStatus   `json:"on_hit_status"`
+	AddedStatusResists  []StatusResist     `json:"added_status_resists"`
+	AddedStatusses      []string           `json:"added_statusses"`
+	AddedProperty       *string            `json:"added_property"`
+	ConversionFrom      *string            `json:"conversion_from"`
+	ConversionTo        *string            `json:"conversion_to"`
+	StatChanges         []StatChange       `json:"stat_changes"`
+	ModifierChanges     []ModifierChange   `json:"modifier_changes"`
 }
 
 func (a AutoAbility) ToHashFields() []any {
@@ -51,23 +48,22 @@ func (a AutoAbility) ToHashFields() []any {
 		derefOrNil(a.Type),
 		a.Category,
 		derefOrNil(a.AbilityValue),
-		derefOrNil(a.RequiredItemAmountID),
+		ObjPtrToHashID(a.RequiredItem),
 		derefOrNil(a.ActivationCondition),
 		derefOrNil(a.Counter),
 		derefOrNil(a.GradRecoveryStatID),
 		derefOrNil(a.OnHitElementID),
-		derefOrNil(a.AddedElemAffinityID),
-		derefOrNil(a.OnHitStatusID),
+		ObjPtrToHashID(a.AddedElemAffinity),
+		ObjPtrToHashID(a.OnHitStatus),
 		derefOrNil(a.AddedPropertyID),
 		derefOrNil(a.CnvrsnFromModID),
 		derefOrNil(a.CnvrsnToModID),
 	}
 }
 
-func (a AutoAbility) GetID() *int32 {
-	return &a.ID
+func (a AutoAbility) GetID() int32 {
+	return a.ID
 }
-
 
 func (l *lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/auto_abilities.json"
@@ -131,13 +127,13 @@ func (l *lookup) createAutoAbilitiesRelationships(db *database.Queries, dbConn *
 				Type:                 nullEquipType(autoAbility.Type),
 				Category:             database.AutoAbilityCategory(autoAbility.Category),
 				AbilityValue:         getNullInt32(autoAbility.AbilityValue),
-				RequiredItemAmountID: ptrObjIDToNullInt32(autoAbility.RequiredItem),
+				RequiredItemAmountID: ObjPtrToNullInt32ID(autoAbility.RequiredItem),
 				ActivationCondition:  nullAaActivationCondition(autoAbility.ActivationCondition),
 				Counter:              nullCounterType(autoAbility.Counter),
 				GradRcvryStatID:      getNullInt32(autoAbility.GradRecoveryStatID),
 				OnHitElementID:       getNullInt32(autoAbility.OnHitElementID),
-				AddedElemAffinityID:  ptrObjIDToNullInt32(autoAbility.AddedElemAffinity),
-				OnHitStatusID:        ptrObjIDToNullInt32(autoAbility.OnHitStatus),
+				AddedElemAffinityID:  ObjPtrToNullInt32ID(autoAbility.AddedElemAffinity),
+				OnHitStatusID:        ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
 				AddedPropertyID:      getNullInt32(autoAbility.AddedPropertyID),
 				CnvrsnFromModID:      getNullInt32(autoAbility.CnvrsnFromModID),
 				CnvrsnToModID:        getNullInt32(autoAbility.CnvrsnToModID),
@@ -160,49 +156,48 @@ func (l *lookup) createAutoAbilitiesRelationships(db *database.Queries, dbConn *
 func (l *lookup) assignAutoAbilityFKs(qtx *database.Queries, autoAbility AutoAbility) (AutoAbility, error) {
 	var err error
 
-	autoAbility.GradRecoveryStatID, err = assignFK(autoAbility.GradualRecovery, l.getStat)
+	autoAbility.GradRecoveryStatID, err = assignFKPtr(autoAbility.GradualRecovery, l.getStat)
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	autoAbility.OnHitElementID, err = assignFK(autoAbility.OnHitElement, l.getElement)
+	autoAbility.OnHitElementID, err = assignFKPtr(autoAbility.OnHitElement, l.getElement)
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	autoAbility.AddedPropertyID, err = assignFK(autoAbility.AddedProperty, l.getProperty)
+	autoAbility.AddedPropertyID, err = assignFKPtr(autoAbility.AddedProperty, l.getProperty)
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	autoAbility.CnvrsnFromModID, err = assignFK(autoAbility.ConversionFrom, l.getModifier)
+	autoAbility.CnvrsnFromModID, err = assignFKPtr(autoAbility.ConversionFrom, l.getModifier)
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	autoAbility.CnvrsnToModID, err = assignFK(autoAbility.ConversionTo, l.getModifier)
+	autoAbility.CnvrsnToModID, err = assignFKPtr(autoAbility.ConversionTo, l.getModifier)
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	autoAbility.RequiredItem, err = assignFKSeed(qtx, autoAbility.RequiredItem, l.seedItemAmount)
+	autoAbility.RequiredItem, err = seedObjPtrAssignFK(qtx, autoAbility.RequiredItem, l.seedItemAmount)
 	if err != nil {
 		return AutoAbility{}, fmt.Errorf("auto ability: %s: %v", autoAbility.Name, err)
 	}
 
-	autoAbility.AddedElemAffinity, err = assignFKSeed(qtx, autoAbility.AddedElemAffinity, l.seedElementalAffinity)
+	autoAbility.AddedElemAffinity, err = seedObjPtrAssignFK(qtx, autoAbility.AddedElemAffinity, l.seedElementalAffinity)
 	if err != nil {
 		return AutoAbility{}, fmt.Errorf("auto ability: %s: %v", autoAbility.Name, err)
 	}
-	
-	autoAbility.OnHitStatus, err = assignFKSeed(qtx, autoAbility.OnHitStatus, l.seedInflictedStatus)
+
+	autoAbility.OnHitStatus, err = seedObjPtrAssignFK(qtx, autoAbility.OnHitStatus, l.seedInflictedStatus)
 	if err != nil {
 		return AutoAbility{}, fmt.Errorf("auto ability: %s: %v", autoAbility.Name, err)
 	}
 
 	return autoAbility, nil
 }
-
 
 func (l *lookup) createAutoAbilityJunctions(qtx *database.Queries, autoAbility AutoAbility) error {
 	relationShipFunctions := []func(*database.Queries, AutoAbility) error{
@@ -225,7 +220,6 @@ func (l *lookup) createAutoAbilityJunctions(qtx *database.Queries, autoAbility A
 	return nil
 }
 
-
 func (l *lookup) createAutoAbilityRelatedStats(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, jsonStat := range autoAbility.RelatedStats {
 		junction, err := createJunction(autoAbility, jsonStat, l.getStat)
@@ -246,17 +240,11 @@ func (l *lookup) createAutoAbilityRelatedStats(qtx *database.Queries, autoAbilit
 	return nil
 }
 
-
 func (l *lookup) createAutoAbilityLockedOutAbilities(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, jsonAbility := range autoAbility.LockedOutAbilities {
-		lockedAbility, err := l.getAutoAbility(jsonAbility)
+		junction, err := createJunction(autoAbility, jsonAbility, l.getAutoAbility)
 		if err != nil {
 			return err
-		}
-
-		junction := Junction{
-			ParentID: autoAbility.ID,
-			ChildID:  lockedAbility.ID,
 		}
 
 		err = qtx.CreateAutoAbilitySelfJunction(context.Background(), database.CreateAutoAbilitySelfJunctionParams{
@@ -274,14 +262,9 @@ func (l *lookup) createAutoAbilityLockedOutAbilities(qtx *database.Queries, auto
 
 func (l *lookup) createAutoAbilityAutoItemUse(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, jsonItem := range autoAbility.AutoItemUse {
-		item, err := l.getItem(jsonItem)
+		junction, err := createJunction(autoAbility, jsonItem, l.getItem)
 		if err != nil {
 			return err
-		}
-
-		junction := Junction{
-			ParentID: autoAbility.ID,
-			ChildID:  item.ID,
 		}
 
 		err = qtx.CreateAutoAbilityItemJunction(context.Background(), database.CreateAutoAbilityItemJunctionParams{
@@ -299,14 +282,9 @@ func (l *lookup) createAutoAbilityAutoItemUse(qtx *database.Queries, autoAbility
 
 func (l *lookup) createAutoAbilityAddedStatusses(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, jsonStatus := range autoAbility.AddedStatusses {
-		condition, err := l.getStatusCondition(jsonStatus)
+		junction, err := createJunction(autoAbility, jsonStatus, l.getStatusCondition)
 		if err != nil {
 			return err
-		}
-
-		junction := Junction{
-			ParentID: autoAbility.ID,
-			ChildID:  condition.ID,
 		}
 
 		err = qtx.CreateAutoAbilityStatusConditionJunction(context.Background(), database.CreateAutoAbilityStatusConditionJunctionParams{
@@ -324,14 +302,9 @@ func (l *lookup) createAutoAbilityAddedStatusses(qtx *database.Queries, autoAbil
 
 func (l *lookup) createAutoAbilityAddedStatusResists(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, statusResist := range autoAbility.AddedStatusResists {
-		dbStatusResist, err := l.seedStatusResist(qtx, statusResist)
+		junction, err := createJunctionSeed(qtx, autoAbility, statusResist, l.seedStatusResist)
 		if err != nil {
 			return err
-		}
-
-		junction := Junction{
-			ParentID: autoAbility.ID,
-			ChildID:  dbStatusResist.ID,
 		}
 
 		err = qtx.CreateAutoAbilityStatusResistJunction(context.Background(), database.CreateAutoAbilityStatusResistJunctionParams{
@@ -349,14 +322,9 @@ func (l *lookup) createAutoAbilityAddedStatusResists(qtx *database.Queries, auto
 
 func (l *lookup) createAutoAbilityStatChanges(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, statChange := range autoAbility.StatChanges {
-		dbStatChange, err := l.seedStatChange(qtx, statChange)
+		junction, err := createJunctionSeed(qtx, autoAbility, statChange, l.seedStatChange)
 		if err != nil {
 			return err
-		}
-
-		junction := Junction{
-			ParentID: autoAbility.ID,
-			ChildID:  dbStatChange.ID,
 		}
 
 		err = qtx.CreateAutoAbilityStatChangeJunction(context.Background(), database.CreateAutoAbilityStatChangeJunctionParams{
@@ -374,14 +342,9 @@ func (l *lookup) createAutoAbilityStatChanges(qtx *database.Queries, autoAbility
 
 func (l *lookup) createAutoAbilityModifierChanges(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, modifierChange := range autoAbility.ModifierChanges {
-		dbModifierChange, err := l.seedModifierChange(qtx, modifierChange)
+		junction, err := createJunctionSeed(qtx, autoAbility, modifierChange, l.seedModifierChange)
 		if err != nil {
 			return err
-		}
-
-		junction := Junction{
-			ParentID: autoAbility.ID,
-			ChildID:  dbModifierChange.ID,
 		}
 
 		err = qtx.CreateAutoAbilityModifierChangeJunction(context.Background(), database.CreateAutoAbilityModifierChangeJunctionParams{

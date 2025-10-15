@@ -3,6 +3,8 @@ CREATE TYPE monster_species AS ENUM ('adamantoise', 'aeon', 'armor', 'basilisk',
 
 CREATE TYPE ctb_icon_type AS ENUM ('monster', 'boss', 'boss-numbered', 'summon');
 
+CREATE DOMAIN zanmato_level AS INTEGER
+    CHECK (VALUE >= 1 AND VALUE <= 6);
 
 CREATE TABLE monsters (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -28,18 +30,18 @@ CREATE TABLE monsters (
     doom_countdown uint8,
     poison_rate percentage,
     threaten_chance uint8,
-    zanmato_level INTEGER NOT NULL,
+    zanmato_level zanmato_level NOT NULL,
     monster_arena_price INTEGER,
     sensor_text TEXT NOT NULL,
     scan_text TEXT,
 
-    UNIQUE(name, version),
-    CHECK (zanmato_level >= 1 AND zanmato_level <= 6)
+    UNIQUE(name, version)
 );
 
 
 
 -- +goose Down
 DROP TABLE IF EXISTS monsters;
-DROP TYPE IF EXISTS monster_species;
+DROP DOMAIN IF EXISTS zanmato_level;
 DROP TYPE IF EXISTS ctb_icon_type;
+DROP TYPE IF EXISTS monster_species;

@@ -9,14 +9,14 @@ import (
 )
 
 type Character struct {
-	ID					int32
+	ID int32
 	PlayerUnit
-	StoryOnly          	bool       `json:"story_only"`
-	WeaponType         	string     `json:"weapon_type"`
-	ArmorType          	string     `json:"armor_type"`
-	PhysAtkRange       	int32      `json:"physical_attack_range"`
-	CanFightUnderwater 	bool       `json:"can_fight_underwater"`
-	BaseStats          	[]BaseStat `json:"base_stats"`
+	StoryOnly          bool       `json:"story_only"`
+	WeaponType         string     `json:"weapon_type"`
+	ArmorType          string     `json:"armor_type"`
+	PhysAtkRange       int32      `json:"physical_attack_range"`
+	CanFightUnderwater bool       `json:"can_fight_underwater"`
+	BaseStats          []BaseStat `json:"base_stats"`
 }
 
 func (c Character) ToHashFields() []any {
@@ -30,7 +30,9 @@ func (c Character) ToHashFields() []any {
 	}
 }
 
-
+func (c Character) GetID() int32 {
+	return c.ID
+}
 
 func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/characters.json"
@@ -43,14 +45,13 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, character := range characters {
+			var err error
 			character.Type = database.UnitTypeCharacter
 
-			dbPlayerUnit, err := l.seedPlayerUnit(qtx, character.PlayerUnit)
+			character.PlayerUnit, err = seedObjAssignFK(qtx, character.PlayerUnit, l.seedPlayerUnit)
 			if err != nil {
 				return err
 			}
-
-			character.PlayerUnit.ID = dbPlayerUnit.ID
 
 			dbCharacter, err := qtx.CreateCharacter(context.Background(), database.CreateCharacterParams{
 				DataHash:            generateDataHash(character),
@@ -64,7 +65,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return fmt.Errorf("couldn't create Character: %s: %v", character.Name, err)
 			}
-			
+
 			character.ID = dbCharacter.ID
 			key := createLookupKey(character.PlayerUnit)
 			l.characters[key] = character
@@ -77,7 +78,6 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 		return nil
 	})
 }
-
 
 func (l *lookup) createCharactersRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/characters.json"
@@ -95,17 +95,10 @@ func (l *lookup) createCharactersRelationships(db *database.Queries, dbConn *sql
 				return err
 			}
 
-			for i, baseStat := range character.BaseStats {
-				dbBaseStat, err := l.seedBaseStat(qtx, baseStat)
+			for _, baseStat := range character.BaseStats {
+				junction, err := createJunctionSeed(qtx, character, baseStat, l.seedBaseStat)
 				if err != nil {
 					return err
-				}
-				baseStat.StatID = dbBaseStat.StatID
-				character.BaseStats[i] = baseStat
-
-				junction := Junction{
-					ParentID: 	character.ID,
-					ChildID: 	dbBaseStat.ID,
 				}
 
 				err = qtx.CreateCharacterBaseStatJunction(context.Background(), database.CreateCharacterBaseStatJunctionParams{
@@ -117,8 +110,6 @@ func (l *lookup) createCharactersRelationships(db *database.Queries, dbConn *sql
 					return err
 				}
 			}
-
-			l.characters[character.Name] = character
 		}
 		return nil
 	})

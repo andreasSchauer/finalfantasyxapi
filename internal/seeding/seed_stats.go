@@ -9,14 +9,14 @@ import (
 )
 
 type Stat struct {
-	ID			int32
-	Name    	string `json:"name"`
-	Effect  	string `json:"effect"`
-	MinVal  	int32  `json:"min_val"`
-	MaxVal  	int32  `json:"max_val"`
-	MaxVal2 	*int32 `json:"max_val_2"`
-	SphereID 	*int32
-	Sphere		string	`json:"sphere"`
+	ID       int32
+	Name     string `json:"name"`
+	Effect   string `json:"effect"`
+	MinVal   int32  `json:"min_val"`
+	MaxVal   int32  `json:"max_val"`
+	MaxVal2  *int32 `json:"max_val_2"`
+	SphereID *int32
+	Sphere   string `json:"sphere"`
 }
 
 func (s Stat) ToHashFields() []any {
@@ -30,12 +30,9 @@ func (s Stat) ToHashFields() []any {
 	}
 }
 
-
-func (s Stat) GetID() *int32 {
-	return &s.ID
+func (s Stat) GetID() int32 {
+	return s.ID
 }
-
-
 
 func (l *lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/stats.json"
@@ -67,8 +64,6 @@ func (l *lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-
-
 func (l *lookup) createStatsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/stats.json"
 
@@ -92,19 +87,19 @@ func (l *lookup) createStatsRelationships(db *database.Queries, dbConn *sql.DB) 
 			stat.SphereID = &sphere.ID
 
 			err = qtx.UpdateStat(context.Background(), database.UpdateStatParams{
-				DataHash: 	generateDataHash(stat),
-				Name:   	stat.Name,
-				Effect: 	stat.Effect,
-				MinVal:   	stat.MinVal,
-				MaxVal:  	stat.MaxVal,
-				MaxVal2:  	getNullInt32(stat.MaxVal2),
-				SphereID: 	getNullInt32(stat.SphereID),
-				ID: 		stat.ID,
+				DataHash: generateDataHash(stat),
+				Name:     stat.Name,
+				Effect:   stat.Effect,
+				MinVal:   stat.MinVal,
+				MaxVal:   stat.MaxVal,
+				MaxVal2:  getNullInt32(stat.MaxVal2),
+				SphereID: getNullInt32(stat.SphereID),
+				ID:       stat.ID,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't update Stat: %s: %v", stat.Name, err)
 			}
-			
+
 			l.stats[stat.Name] = stat
 		}
 		return nil

@@ -1,5 +1,7 @@
 package seeding
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 
 type Junction struct {
 	ParentID 	int32
@@ -15,15 +17,30 @@ func (j Junction) ToHashFields() []any {
 }
 
 
-func createJunction[T any, P HasID, C HasID](parent P, key T, lookup func(T) (C, error)) (Junction, error) {
-	child, err := lookup(key)
+func createJunction[T any, P, C HasID](parent P, childKey T, lookup func(T) (C, error)) (Junction, error) {
+	child, err := lookup(childKey)
 	if err != nil {
 		return Junction{}, err
 	}
 
 	junction := Junction{
-		ParentID: 	*parent.GetID(),
-		ChildID: 	*child.GetID(),
+		ParentID: 	parent.GetID(),
+		ChildID: 	child.GetID(),
+	}
+
+	return junction, nil
+}
+
+
+func createJunctionSeed[P HasID, C HasID](qtx *database.Queries, parent P, child C, seed func(*database.Queries, C) (C, error)) (Junction, error) {
+	child, err := seed(qtx, child)
+	if err != nil {
+		return Junction{}, err
+	}
+
+	junction := Junction{
+		ParentID: 	parent.GetID(),
+		ChildID: 	child.GetID(),
 	}
 
 	return junction, nil

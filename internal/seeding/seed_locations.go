@@ -63,7 +63,13 @@ func (a Area) ToHashFields() []any {
 	}
 }
 
+func (a Area) GetID() int32 {
+	return a.ID
+}
+
+
 type LocationArea struct {
+	ID			int32
 	Location    string `json:"location"`
 	SubLocation string `json:"sub_location"`
 	Area        string `json:"area"`
@@ -78,6 +84,7 @@ func (la LocationArea) ToKeyFields() []any {
 		derefOrNil(la.Version),
 	}
 }
+
 
 
 func (l *lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {

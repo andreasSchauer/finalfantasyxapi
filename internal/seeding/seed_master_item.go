@@ -28,16 +28,22 @@ func (i MasterItem) ToKeyFields() []any {
 	}
 }
 
+func (i MasterItem) GetID() int32 {
+	return i.ID
+}
 
-func (l *lookup) seedMasterItem(qtx *database.Queries, item MasterItem) (database.MasterItem, error) {
+
+func (l *lookup) seedMasterItem(qtx *database.Queries, masterItem MasterItem) (MasterItem, error) {
 	dbMasterItem, err := qtx.CreateMasterItem(context.Background(), database.CreateMasterItemParams{
-		DataHash: generateDataHash(item),
-		Name:     item.Name,
-		Type:     item.Type,
+		DataHash: generateDataHash(masterItem),
+		Name:     masterItem.Name,
+		Type:     masterItem.Type,
 	})
 	if err != nil {
-		return database.MasterItem{}, fmt.Errorf("couldn't create Master Item: %s: %v", item.Name, err)
+		return MasterItem{}, fmt.Errorf("couldn't create Master Item: %s: %v", masterItem.Name, err)
 	}
 
-	return dbMasterItem, nil
+	masterItem.ID = dbMasterItem.ID
+
+	return masterItem, nil
 }

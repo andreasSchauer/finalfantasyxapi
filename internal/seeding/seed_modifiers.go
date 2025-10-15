@@ -9,11 +9,11 @@ import (
 )
 
 type Modifier struct {
-	ID				int32
-	Name       		string		`json:"name"`
-	Effect			string		`json:"effect"`
-	Type			string		`json:"type"`
-	DefaultValue	*float32	`json:"default_value"`
+	ID           int32
+	Name         string   `json:"name"`
+	Effect       string   `json:"effect"`
+	Type         string   `json:"type"`
+	DefaultValue *float32 `json:"default_value"`
 }
 
 func (m Modifier) ToHashFields() []any {
@@ -25,12 +25,9 @@ func (m Modifier) ToHashFields() []any {
 	}
 }
 
-
-func (m Modifier) GetID() *int32 {
-	return &m.ID
+func (m Modifier) GetID() int32 {
+	return m.ID
 }
-
-
 
 func (l *lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/modifiers.json"
@@ -44,11 +41,11 @@ func (l *lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, modifier := range modifiers {
 			dbModifier, err := qtx.CreateModifier(context.Background(), database.CreateModifierParams{
-				DataHash:     	generateDataHash(modifier),
-				Name:         	modifier.Name,
-				Effect: 		modifier.Effect,
-				Type: 			database.ModifierType(modifier.Type),
-				DefaultValue: 	getNullFloat64(modifier.DefaultValue),
+				DataHash:     generateDataHash(modifier),
+				Name:         modifier.Name,
+				Effect:       modifier.Effect,
+				Type:         database.ModifierType(modifier.Type),
+				DefaultValue: getNullFloat64(modifier.DefaultValue),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Modifier: %s: %v", modifier.Name, err)

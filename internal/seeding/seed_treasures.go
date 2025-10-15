@@ -50,14 +50,16 @@ func (l *lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, list := range treasureLists {
+			var err error
+
 			locationArea := list.LocationArea
-			area, err := l.getArea(locationArea)
+			list.LocationArea.ID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
-				return fmt.Errorf("treasures: %v", err)
+				return fmt.Errorf("monster formations: %v", err)
 			}
 
 			for j, treasure := range list.Treasures {
-				treasure.AreaID = area.ID
+				treasure.AreaID = list.LocationArea.ID
 				treasure.Version = int32(j + 1)
 
 				err = qtx.CreateTreasure(context.Background(), database.CreateTreasureParams{

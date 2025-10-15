@@ -28,16 +28,22 @@ func (pu PlayerUnit) ToKeyFields() []any {
 	}
 }
 
+func (pu PlayerUnit) GetID() int32 {
+	return pu.ID
+}
 
-func (l *lookup) seedPlayerUnit(qtx *database.Queries, unit PlayerUnit) (database.PlayerUnit, error) {
+
+func (l *lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (PlayerUnit, error) {
 	dbPlayerUnit, err := qtx.CreatePlayerUnit(context.Background(), database.CreatePlayerUnitParams{
-		DataHash: generateDataHash(unit),
-		Name:     unit.Name,
-		Type:     unit.Type,
+		DataHash: generateDataHash(playerUnit),
+		Name:     playerUnit.Name,
+		Type:     playerUnit.Type,
 	})
 	if err != nil {
-		return database.PlayerUnit{}, fmt.Errorf("couldn't create Player Unit: %s: %v", unit.Name, err)
+		return PlayerUnit{}, fmt.Errorf("couldn't create Player Unit: %s: %v", playerUnit.Name, err)
 	}
 
-	return dbPlayerUnit, nil
+	playerUnit.ID = dbPlayerUnit.ID
+
+	return playerUnit, nil
 }

@@ -44,12 +44,12 @@ func (l *lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB)
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, creation := range creations {
-			subquest, err := l.getSubquest(creation.Name)
+			var err error
+
+			creation.SubquestID, err = assignFK(creation.Name, l.getSubquest)
 			if err != nil {
 				return err
 			}
-
-			creation.SubquestID = subquest.ID
 
 			err = qtx.CreateMonsterArenaCreation(context.Background(), database.CreateMonsterArenaCreationParams{
 				DataHash:                  generateDataHash(creation),

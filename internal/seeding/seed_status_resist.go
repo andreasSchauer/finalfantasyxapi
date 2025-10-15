@@ -7,11 +7,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type StatusResist struct {
-	StatusConditionID	int32
-	StatusCondition		string	`json:"name"`
-	Resistance			int32	`json:"resistance"`
+	ID                int32
+	StatusConditionID int32
+	StatusCondition   string `json:"name"`
+	Resistance        int32  `json:"resistance"`
 }
 
 func (sr StatusResist) ToHashFields() []any {
@@ -21,23 +21,28 @@ func (sr StatusResist) ToHashFields() []any {
 	}
 }
 
+func (sr StatusResist) GetID() int32 {
+	return sr.ID
+}
 
-func (l *lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResist) (database.StatusResist, error) {
-	condition, err := l.getStatusCondition(statusResist.StatusCondition)
+func (l *lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResist) (StatusResist, error) {
+	var err error
+
+	statusResist.StatusConditionID, err = assignFK(statusResist.StatusCondition, l.getStatusCondition)
 	if err != nil {
-		return database.StatusResist{}, err
+		return StatusResist{}, err
 	}
-
-	statusResist.StatusConditionID = condition.ID
 
 	dbStatusResist, err := qtx.CreateStatusResist(context.Background(), database.CreateStatusResistParams{
-		DataHash: generateDataHash(statusResist),
+		DataHash:          generateDataHash(statusResist),
 		StatusConditionID: statusResist.StatusConditionID,
-		Resistance: statusResist.Resistance,
+		Resistance:        statusResist.Resistance,
 	})
 	if err != nil {
-		return database.StatusResist{}, fmt.Errorf("couldn't create status resist: %s - %d: %v", statusResist.StatusCondition, statusResist.Resistance, err)
+		return StatusResist{}, fmt.Errorf("couldn't create status resist: %s - %d: %v", statusResist.StatusCondition, statusResist.Resistance, err)
 	}
 
-	return dbStatusResist, nil
+	statusResist.ID = dbStatusResist.ID
+
+	return statusResist, nil
 }

@@ -9,7 +9,7 @@ import (
 )
 
 type Aeon struct {
-	ID					int32
+	ID int32
 	PlayerUnit
 	UnlockCondition     string   `json:"unlock_condition"`
 	Category            *string  `json:"category"`
@@ -38,7 +38,9 @@ func (a Aeon) ToHashFields() []any {
 	}
 }
 
-
+func (a Aeon) GetID() int32 {
+	return a.ID
+}
 
 func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeons.json"
@@ -51,14 +53,13 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, aeon := range aeons {
+			var err error
 			aeon.Type = database.UnitTypeAeon
 
-			dbPlayerUnit, err := l.seedPlayerUnit(qtx, aeon.PlayerUnit)
+			aeon.PlayerUnit, err = seedObjAssignFK(qtx, aeon.PlayerUnit, l.seedPlayerUnit)
 			if err != nil {
 				return err
 			}
-
-			aeon.PlayerUnit.ID = dbPlayerUnit.ID
 
 			dbAeon, err := qtx.CreateAeon(context.Background(), database.CreateAeonParams{
 				DataHash:              generateDataHash(aeon),
@@ -76,7 +77,7 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return fmt.Errorf("couldn't create Aeon: %s: %v", aeon.Name, err)
 			}
-			
+
 			aeon.ID = dbAeon.ID
 			key := createLookupKey(aeon.PlayerUnit)
 			l.aeons[key] = aeon
@@ -89,4 +90,3 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 		return nil
 	})
 }
-

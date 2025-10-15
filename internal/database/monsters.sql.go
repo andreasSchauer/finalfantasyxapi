@@ -39,7 +39,7 @@ type CreateMonsterParams struct {
 	DoomCountdown        interface{}
 	PoisonRate           interface{}
 	ThreatenChance       interface{}
-	ZanmatoLevel         int32
+	ZanmatoLevel         interface{}
 	MonsterArenaPrice    sql.NullInt32
 	SensorText           string
 	ScanText             sql.NullString

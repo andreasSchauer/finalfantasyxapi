@@ -36,13 +36,13 @@ func (l *lookup) seedMonsterFormations(db *database.Queries, dbConn *sql.DB) err
 	}
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, list := range monsterFormationLists {
+			var err error
+
 			locationArea := list.LocationArea
-			area, err := l.getArea(locationArea)
+			list.AreaID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
 				return fmt.Errorf("monster formations: %v", err)
 			}
-
-			list.AreaID = area.ID
 
 			err = qtx.CreateMonsterFormationList(context.Background(), database.CreateMonsterFormationListParams{
 				DataHash: generateDataHash(list),

@@ -44,6 +44,10 @@ func (s Song) ToHashFields() []any {
 	}
 }
 
+func (s Song) GetID() int32 {
+	return s.ID
+}
+
 
 
 type SongCredits struct {

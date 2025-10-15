@@ -9,14 +9,14 @@ import (
 )
 
 type StatusCondition struct {
-	ID						int32
-	Name           			string  			`json:"name"`
-	Effect         			string  			`json:"effect"`
-	RelatedStats			[]string			`json:"related_stats"`
-	RemovedStatusConditions	[]string			`json:"removed_status_conditions"`
-	NullifyArmored 			*string 			`json:"nullify_armored"`
-	StatChanges				[]StatChange		`json:"stat_changes"`
-	ModifierChanges			[]ModifierChange	`json:"modifier_changes"`
+	ID                      int32
+	Name                    string           `json:"name"`
+	Effect                  string           `json:"effect"`
+	RelatedStats            []string         `json:"related_stats"`
+	RemovedStatusConditions []string         `json:"removed_status_conditions"`
+	NullifyArmored          *string          `json:"nullify_armored"`
+	StatChanges             []StatChange     `json:"stat_changes"`
+	ModifierChanges         []ModifierChange `json:"modifier_changes"`
 }
 
 func (s StatusCondition) ToHashFields() []any {
@@ -27,8 +27,9 @@ func (s StatusCondition) ToHashFields() []any {
 	}
 }
 
-
-
+func (s StatusCondition) GetID() int32 {
+	return s.ID
+}
 
 func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/status_conditions.json"
@@ -58,7 +59,6 @@ func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 	})
 }
 
-
 func (l *lookup) createStatusConditionsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/status_conditions.json"
 
@@ -75,7 +75,7 @@ func (l *lookup) createStatusConditionsRelationships(db *database.Queries, dbCon
 				return err
 			}
 
-			relationShipFunctions := []func(* database.Queries, StatusCondition) error{
+			relationShipFunctions := []func(*database.Queries, StatusCondition) error{
 				l.createStatusConditionRelatedStats,
 				l.createStatusConditionRemovedConditions,
 				l.createStatusConditionStatChanges,
@@ -93,23 +93,17 @@ func (l *lookup) createStatusConditionsRelationships(db *database.Queries, dbCon
 	})
 }
 
-
 func (l *lookup) createStatusConditionRelatedStats(qtx *database.Queries, condition StatusCondition) error {
 	for _, jsonStat := range condition.RelatedStats {
-		stat, err := l.getStat(jsonStat)
+		junction, err := createJunction(condition, jsonStat, l.getStat)
 		if err != nil {
 			return err
 		}
 
-		junction := Junction{
-			ParentID: 	condition.ID,
-			ChildID: 	stat.ID,
-		}
-
 		err = qtx.CreateStatusConditionStatJunction(context.Background(), database.CreateStatusConditionStatJunctionParams{
-			DataHash: 			generateDataHash(junction),
-			StatusConditionID: 	junction.ParentID,
-			StatID: 			junction.ChildID,
+			DataHash:          generateDataHash(junction),
+			StatusConditionID: junction.ParentID,
+			StatID:            junction.ChildID,
 		})
 		if err != nil {
 			return fmt.Errorf("couldn't create related stats: %v", err)
@@ -119,23 +113,17 @@ func (l *lookup) createStatusConditionRelatedStats(qtx *database.Queries, condit
 	return nil
 }
 
-
 func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, condition StatusCondition) error {
 	for _, jsonCondition := range condition.RemovedStatusConditions {
-		remCondition, err := l.getStatusCondition(jsonCondition)
+		junction, err := createJunction(condition, jsonCondition, l.getStatusCondition)
 		if err != nil {
 			return err
 		}
 
-		junction := Junction{
-			ParentID: 	condition.ID,
-			ChildID: 	remCondition.ID,
-		}
-
 		err = qtx.CreateStatusConditionSelfJunction(context.Background(), database.CreateStatusConditionSelfJunctionParams{
-			DataHash: 			generateDataHash(junction),
-			ParentConditionID: 	junction.ParentID,
-			ChildConditionID: 	junction.ChildID,
+			DataHash:          generateDataHash(junction),
+			ParentConditionID: junction.ParentID,
+			ChildConditionID:  junction.ChildID,
 		})
 		if err != nil {
 			return fmt.Errorf("couldn't create removed conditions: %v", err)
@@ -145,23 +133,17 @@ func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, c
 	return nil
 }
 
-
 func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, condition StatusCondition) error {
 	for _, statChange := range condition.StatChanges {
-		dbStatChange, err := l.seedStatChange(qtx, statChange)
+		junction, err := createJunctionSeed(qtx, condition, statChange, l.seedStatChange)
 		if err != nil {
 			return err
 		}
 
-		junction := Junction{
-			ParentID: 	condition.ID,
-			ChildID: 	dbStatChange.ID,
-		}
-
 		err = qtx.CreateStatusConditionStatChangeJunction(context.Background(), database.CreateStatusConditionStatChangeJunctionParams{
-			DataHash: 			generateDataHash(junction),
-			StatusConditionID: 	junction.ParentID,
-			StatChangeID: 		junction.ChildID,
+			DataHash:          generateDataHash(junction),
+			StatusConditionID: junction.ParentID,
+			StatChangeID:      junction.ChildID,
 		})
 		if err != nil {
 			return err
@@ -171,23 +153,17 @@ func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, conditi
 	return nil
 }
 
-
 func (l *lookup) createStatusConditionModifierChanges(qtx *database.Queries, condition StatusCondition) error {
 	for _, modifierChange := range condition.ModifierChanges {
-		dbModifierChange, err := l.seedModifierChange(qtx, modifierChange)
+		junction, err := createJunctionSeed(qtx, condition, modifierChange, l.seedModifierChange)
 		if err != nil {
 			return err
 		}
 
-		junction := Junction{
-			ParentID: 	condition.ID,
-			ChildID: 	dbModifierChange.ID,
-		}
-
 		err = qtx.CreateStatusConditionModifierChangeJunction(context.Background(), database.CreateStatusConditionModifierChangeJunctionParams{
-			DataHash: 			generateDataHash(junction),
-			StatusConditionID: 	junction.ParentID,
-			ModifierChangeID: 	junction.ChildID,
+			DataHash:          generateDataHash(junction),
+			StatusConditionID: junction.ParentID,
+			ModifierChangeID:  junction.ChildID,
 		})
 		if err != nil {
 			return err

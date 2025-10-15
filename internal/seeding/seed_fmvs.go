@@ -43,19 +43,18 @@ func (l *lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, fmv := range fmvs {
-			if fmv.SongName != nil {
-				song, err := l.getSong(*fmv.SongName)
-				if err != nil {
-					return err
-				}
-				fmv.SongID = &song.ID
-			}
+			var err error 
 
-			area, err := l.getArea(fmv.LocationArea)
+			fmv.SongID, err = assignFKPtr(fmv.SongName, l.getSong)
 			if err != nil {
 				return err
 			}
-			fmv.AreaID = area.ID
+
+
+			fmv.AreaID, err = assignFK(fmv.LocationArea, l.getArea)
+			if err != nil {
+				return err
+			}
 
 			err = qtx.CreateFMV(context.Background(), database.CreateFMVParams{
 				DataHash:            generateDataHash(fmv),

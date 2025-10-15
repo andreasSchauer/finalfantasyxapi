@@ -74,19 +74,14 @@ func (l *lookup) createCelestialWeaponsRelationships(db *database.Queries, dbCon
 				return err
 			}
 
-			character, err := l.getCharacter(weapon.Character)
+			weapon.CharacterID, err = assignFKPtr(&weapon.Character, l.getCharacter)
 			if err != nil {
 				return err
 			}
-			weapon.CharacterID = &character.ID
 
-
-			if weapon.Aeon != nil {
-				aeon, err := l.getAeon(*weapon.Aeon)
-				if err != nil {
-					return err
-				}
-				weapon.AeonID = &aeon.ID
+			weapon.AeonID, err = assignFKPtr(weapon.Aeon, l.getAeon)
+			if err != nil {
+				return err
 			}
 
 			err = qtx.UpdateCelestialWeapon(context.Background(), database.UpdateCelestialWeaponParams{

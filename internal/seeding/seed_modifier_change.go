@@ -6,15 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
-
 type ModifierChange struct {
-	ModifierID		int32
-	ModifierName	string	`json:"name"`
-	CalculationType	string	`json:"calculation_type"`
-	Value			float32	`json:"value"`
+	ID              int32
+	ModifierID      int32
+	ModifierName    string  `json:"name"`
+	CalculationType string  `json:"calculation_type"`
+	Value           float32 `json:"value"`
 }
-
 
 func (m ModifierChange) ToHashFields() []any {
 	return []any{
@@ -24,24 +22,28 @@ func (m ModifierChange) ToHashFields() []any {
 	}
 }
 
+func (m ModifierChange) GetID() int32 {
+	return m.ID
+}
 
-func (l *lookup) seedModifierChange(qtx *database.Queries, modifierChange ModifierChange) (database.ModifierChange, error) {
-	modifier, err := l.getModifier(modifierChange.ModifierName)
-	if err != nil {
-		return database.ModifierChange{}, err
-	}
+func (l *lookup) seedModifierChange(qtx *database.Queries, modifierChange ModifierChange) (ModifierChange, error) {
+	var err error
 	
-	modifierChange.ModifierID = modifier.ID
+	modifierChange.ModifierID, err = assignFK(modifierChange.ModifierName, l.getModifier)
+	if err != nil {
+		return ModifierChange{}, err
+	}
 
 	dbModifierChange, err := qtx.CreateModifierChange(context.Background(), database.CreateModifierChangeParams{
-		DataHash: 			generateDataHash(modifierChange),
-		ModifierID: 		modifierChange.ModifierID,
-		CalculationType: 	database.CalculationType(modifierChange.CalculationType),
-		Value: 				modifierChange.Value,
+		DataHash:        generateDataHash(modifierChange),
+		ModifierID:      modifierChange.ModifierID,
+		CalculationType: database.CalculationType(modifierChange.CalculationType),
+		Value:           modifierChange.Value,
 	})
 	if err != nil {
-		return database.ModifierChange{}, err
+		return ModifierChange{}, err
 	}
+	modifierChange.ID = dbModifierChange.ID
 
-	return dbModifierChange, nil
+	return modifierChange, nil
 }

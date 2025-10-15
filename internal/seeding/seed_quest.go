@@ -30,16 +30,22 @@ func (q Quest) ToKeyFields() []any {
 }
 
 
-func (l *lookup) seedQuest(qtx *database.Queries, quest Quest) (database.Quest, error) {
+func (q Quest) GetID() int32 {
+	return q.ID
+}
+
+
+func (l *lookup) seedQuest(qtx *database.Queries, quest Quest) (Quest, error) {
 	dbQuest, err := qtx.CreateQuest(context.Background(), database.CreateQuestParams{
 		DataHash: generateDataHash(quest),
 		Name:     quest.Name,
 		Type:     quest.Type,
 	})
 	if err != nil {
-		return database.Quest{}, fmt.Errorf("couldn't create Quest: %s: %v", quest.Name, err)
+		return Quest{}, fmt.Errorf("couldn't create Quest: %s: %v", quest.Name, err)
 	}
 
+	quest.ID = dbQuest.ID
 
-	return dbQuest, nil
+	return quest, nil
 }

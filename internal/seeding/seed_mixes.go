@@ -24,13 +24,18 @@ func (m Mix) ToHashFields() []any {
 	}
 }
 
+func (m Mix) GetID() int32 {
+	return m.ID
+}
+
 
 type MixCombination struct {
-	FirstItem    string `json:"first_item"`
-	SecondItem   string `json:"second_item"`
-	FirstItemID  int32
-	SecondItemID int32
-	IsBestCombo  bool
+	ID				int32
+	FirstItem    	string `json:"first_item"`
+	SecondItem   	string `json:"second_item"`
+	FirstItemID  	int32
+	SecondItemID 	int32
+	IsBestCombo  	bool
 }
 
 func (m MixCombination) ToHashFields() []any {
@@ -45,6 +50,10 @@ func (m MixCombination) ToKeyFields() []any {
 		m.FirstItem,
 		m.SecondItem,
 	}
+}
+
+func (m MixCombination) GetID() int32 {
+	return m.ID
 }
 
 type MixComboJunction struct {
@@ -132,26 +141,24 @@ func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix) error {
 	bestComboMap := getBestComboMap(mix)
 
 	for _, combo := range mix.PossibleCombinations {
-		junction := MixComboJunction{}
+		var err error
+		mixJunction := MixComboJunction{}
 
 		key := createLookupKey(combo)
 		if _, exists := bestComboMap[key]; exists {
-			junction.IsBestCombo = true
+			mixJunction.IsBestCombo = true
 		}
 
-		dbCombo, err := l.seedMixCombination(qtx, combo)
+		mixJunction.Junction, err = createJunctionSeed(qtx, mix, combo, l.seedMixCombination)
 		if err != nil {
 			return err
 		}
 
-		junction.ParentID = mix.ID
-		junction.ChildID = dbCombo.ID
-
 		err = qtx.CreateMixComboJunction(context.Background(), database.CreateMixComboJunctionParams{
-			DataHash:    generateDataHash(junction),
-			MixID:       junction.ParentID,
-			ComboID:     junction.ChildID,
-			IsBestCombo: junction.IsBestCombo,
+			DataHash:    generateDataHash(mixJunction),
+			MixID:       mixJunction.ParentID,
+			ComboID:     mixJunction.ChildID,
+			IsBestCombo: mixJunction.IsBestCombo,
 		})
 		if err != nil {
 			return fmt.Errorf("couldn't create Junction between Mix: %s and Combo %s-%s: %v", mix.Name, combo.FirstItem, combo.SecondItem, err)
@@ -176,19 +183,17 @@ func getBestComboMap(mix Mix) map[string]struct{} {
 
 
 
-func (l *lookup) seedMixCombination(qtx *database.Queries, combo MixCombination) (database.MixCombination, error) {
-	firstItem, err := l.getItem(combo.FirstItem)
+func (l *lookup) seedMixCombination(qtx *database.Queries, combo MixCombination) (MixCombination, error) {
+	var err error
+	combo.FirstItemID, err = assignFK(combo.FirstItem, l.getItem)
 	if err != nil {
-		return database.MixCombination{}, err
+		return MixCombination{}, err
 	}
 
-	secondItem, err := l.getItem(combo.SecondItem)
+	combo.SecondItemID, err = assignFK(combo.SecondItem, l.getItem)
 	if err != nil {
-		return database.MixCombination{}, err
+		return MixCombination{}, err
 	}
-
-	combo.FirstItemID = firstItem.ID
-	combo.SecondItemID = secondItem.ID
 
 	dbCombo, err := qtx.CreateMixCombination(context.Background(), database.CreateMixCombinationParams{
 		DataHash:     generateDataHash(combo),
@@ -196,8 +201,10 @@ func (l *lookup) seedMixCombination(qtx *database.Queries, combo MixCombination)
 		SecondItemID: combo.SecondItemID,
 	})
 	if err != nil {
-		return database.MixCombination{}, fmt.Errorf("couldn't create Mix Combination: %s + %s: %v", combo.FirstItem, combo.SecondItem, err)
+		return MixCombination{}, fmt.Errorf("couldn't create Mix Combination: %s + %s: %v", combo.FirstItem, combo.SecondItem, err)
 	}
 
-	return dbCombo, nil
+	combo.ID = dbCombo.ID
+
+	return combo, nil
 }

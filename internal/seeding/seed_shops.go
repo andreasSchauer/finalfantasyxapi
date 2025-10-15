@@ -40,7 +40,7 @@ func (l *lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, shop := range shops {
 			locationArea := shop.LocationArea
-			area, err := l.getArea(locationArea)
+			area, err := l.getArea(shop.LocationArea)
 			if err != nil {
 				return fmt.Errorf("shops: %v", err)
 			}
