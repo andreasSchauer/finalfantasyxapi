@@ -529,16 +529,17 @@ func (q *Queries) CreateStatChange(ctx context.Context, arg CreateStatChangePara
 }
 
 const createStatusCondition = `-- name: CreateStatusCondition :one
-INSERT INTO status_conditions (data_hash, name, effect, nullify_armored)
-VALUES ($1, $2, $3, $4)
+INSERT INTO status_conditions (data_hash, name, effect, visualization, nullify_armored)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_conditions.data_hash
-RETURNING id, data_hash, name, effect, nullify_armored
+RETURNING id, data_hash, name, effect, visualization, nullify_armored
 `
 
 type CreateStatusConditionParams struct {
 	DataHash       string
 	Name           string
 	Effect         string
+	Visualization  sql.NullString
 	NullifyArmored NullNullifyArmored
 }
 
@@ -547,6 +548,7 @@ func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusCon
 		arg.DataHash,
 		arg.Name,
 		arg.Effect,
+		arg.Visualization,
 		arg.NullifyArmored,
 	)
 	var i StatusCondition
@@ -555,6 +557,7 @@ func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusCon
 		&i.DataHash,
 		&i.Name,
 		&i.Effect,
+		&i.Visualization,
 		&i.NullifyArmored,
 	)
 	return i, err

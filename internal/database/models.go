@@ -2357,6 +2357,7 @@ type StatusCondition struct {
 	DataHash       string
 	Name           string
 	Effect         string
+	Visualization  sql.NullString
 	NullifyArmored NullNullifyArmored
 }
 

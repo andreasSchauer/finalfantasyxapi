@@ -12,6 +12,7 @@ type StatusCondition struct {
 	ID                      int32
 	Name                    string           `json:"name"`
 	Effect                  string           `json:"effect"`
+	Visualization			*string			 `json:"visualization"`
 	RelatedStats            []string         `json:"related_stats"`
 	RemovedStatusConditions []string         `json:"removed_status_conditions"`
 	NullifyArmored          *string          `json:"nullify_armored"`
@@ -23,6 +24,7 @@ func (s StatusCondition) ToHashFields() []any {
 	return []any{
 		s.Name,
 		s.Effect,
+		derefOrNil(s.Visualization),
 		derefOrNil(s.NullifyArmored),
 	}
 }
@@ -46,6 +48,7 @@ func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 				DataHash:       generateDataHash(condition),
 				Name:           condition.Name,
 				Effect:         condition.Effect,
+				Visualization: 	getNullString(condition.Visualization),
 				NullifyArmored: nullNullifyArmored(condition.NullifyArmored),
 			})
 			if err != nil {

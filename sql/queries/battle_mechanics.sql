@@ -87,8 +87,8 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateStatusCondition :one
-INSERT INTO status_conditions (data_hash, name, effect, nullify_armored)
-VALUES ($1, $2, $3, $4)
+INSERT INTO status_conditions (data_hash, name, effect, visualization, nullify_armored)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_conditions.data_hash
 RETURNING *;
 

@@ -80,6 +80,7 @@ CREATE TABLE status_conditions (
     data_hash TEXT UNIQUE NOT NULL,
     name TEXT UNIQUE NOT NULL,
     effect TEXT NOT NULL,
+    visualization TEXT,
     nullify_armored nullify_armored
 );
 
