@@ -34,7 +34,7 @@ CREATE TABLE auto_abilities (
 
 CREATE TYPE equip_class AS ENUM ('standard', 'unique', 'celestial-weapon');
 
-CREATE TABLE equipment_abilities (
+CREATE TABLE equipment_tables (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     type equip_type NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE equipment_abilities (
 
 
 -- +goose Down
-DROP TABLE IF EXISTS equipment_abilities;
+DROP TABLE IF EXISTS equipment_tables;
 DROP TYPE IF EXISTS equip_class;
 DROP TABLE IF EXISTS auto_abilities;
 DROP TYPE IF EXISTS counter_type;

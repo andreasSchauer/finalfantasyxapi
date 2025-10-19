@@ -87,11 +87,27 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
-
-
--- name: CreateEquipmentAbility :exec
-INSERT INTO equipment_abilities (data_hash, type, classification, specific_character_id, version, priority, pool_1_amt, pool_2_amt, empty_slots_amt)
+-- name: CreateEquipmentTable :one
+INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, pool_1_amt, pool_2_amt, empty_slots_amt)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_tables.data_hash
+RETURNING *;
+
+
+-- name: CreateEquipmentName :one
+INSERT INTO equipment_names (data_hash, character_id, name)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_names.data_hash
+RETURNING *;
+
+
+-- name: CreateEquipmentTableNameClstlWpnJunction :exec
+INSERT INTO j_equipment_table_name_clstl_wpn (data_hash, equipment_table_id, equipment_name_id, celestial_weapon_id)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
+-- name: CreateEquipmentAutoAbilityJunction :exec
+INSERT INTO j_equipment_auto_ability (data_hash, equipment_table_id, auto_ability_id, ability_pool)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING;

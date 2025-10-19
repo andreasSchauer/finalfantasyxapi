@@ -10,6 +10,7 @@ import (
 
 type PlayerAbility struct {
 	Ability
+	ID					int32
 	Description         *string `json:"description"`
 	Effect              string  `json:"effect"`
 	Topmenu             *string `json:"topmenu"`
@@ -29,6 +30,12 @@ func (a PlayerAbility) ToHashFields() []any {
 		derefOrNil(a.Cursor),
 	}
 }
+
+
+func (a PlayerAbility) GetID() int32 {
+	return a.ID
+}
+
 
 func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/player_abilities.json"
@@ -50,7 +57,7 @@ func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 				return err
 			}
 
-			err = qtx.CreatePlayerAbility(context.Background(), database.CreatePlayerAbilityParams{
+			dbPlayerAbility ,err := qtx.CreatePlayerAbility(context.Background(), database.CreatePlayerAbilityParams{
 				DataHash:            generateDataHash(playerAbility),
 				AbilityID:           playerAbility.Ability.ID,
 				Description:         getNullString(playerAbility.Description),
@@ -63,6 +70,10 @@ func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 			if err != nil {
 				return fmt.Errorf("couldn't create Player Ability: %s: %v", playerAbility.Name, err)
 			}
+
+			playerAbility.ID = dbPlayerAbility.ID
+			key := createLookupKey(playerAbility.Ability)
+			l.playerAbilities[key] = playerAbility
 		}
 		return nil
 	})

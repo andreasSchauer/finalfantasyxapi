@@ -124,7 +124,7 @@ func (l *lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 		return err
 	}
 
-	err = qtx.CreateItemAbility(context.Background(), database.CreateItemAbilityParams{
+	dbItemAbility, err := qtx.CreateItemAbility(context.Background(), database.CreateItemAbilityParams{
 		DataHash:  generateDataHash(itemAbility),
 		ItemID:    itemAbility.ItemID,
 		AbilityID: itemAbility.Ability.ID,
@@ -133,6 +133,10 @@ func (l *lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 	if err != nil {
 		return fmt.Errorf("couldn't create Item Ability: %s: %v", itemAbility.Name, err)
 	}
+
+	itemAbility.ID = dbItemAbility.ID
+	key := createLookupKey(itemAbility.Ability)
+	l.itemAbilities[key] = itemAbility
 
 	return nil
 }

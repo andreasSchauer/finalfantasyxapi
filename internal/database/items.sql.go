@@ -57,10 +57,11 @@ func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) (Item, e
 	return i, err
 }
 
-const createItemAbility = `-- name: CreateItemAbility :exec
+const createItemAbility = `-- name: CreateItemAbility :one
 INSERT INTO item_abilities (data_hash, item_id, ability_id, cursor)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT (data_hash) DO UPDATE SET data_hash = item_abilities.data_hash
+RETURNING id, data_hash, item_id, ability_id, cursor
 `
 
 type CreateItemAbilityParams struct {
@@ -70,14 +71,22 @@ type CreateItemAbilityParams struct {
 	Cursor    TargetType
 }
 
-func (q *Queries) CreateItemAbility(ctx context.Context, arg CreateItemAbilityParams) error {
-	_, err := q.db.ExecContext(ctx, createItemAbility,
+func (q *Queries) CreateItemAbility(ctx context.Context, arg CreateItemAbilityParams) (ItemAbility, error) {
+	row := q.db.QueryRowContext(ctx, createItemAbility,
 		arg.DataHash,
 		arg.ItemID,
 		arg.AbilityID,
 		arg.Cursor,
 	)
-	return err
+	var i ItemAbility
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.ItemID,
+		&i.AbilityID,
+		&i.Cursor,
+	)
+	return i, err
 }
 
 const createItemAmount = `-- name: CreateItemAmount :one

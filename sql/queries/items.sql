@@ -12,10 +12,11 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = items.data_hash
 RETURNING *;
 
 
--- name: CreateItemAbility :exec
+-- name: CreateItemAbility :one
 INSERT INTO item_abilities (data_hash, item_id, ability_id, cursor)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
+ON CONFLICT (data_hash) DO UPDATE SET data_hash = item_abilities.data_hash
+RETURNING *;
 
 
 

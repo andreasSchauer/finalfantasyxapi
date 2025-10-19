@@ -27,6 +27,10 @@ func (cw CelestialWeapon) ToHashFields() []any {
 	}
 }
 
+func (cw CelestialWeapon) GetID() int32 {
+	return cw.ID
+}
+
 
 func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/celestial_weapons.json"

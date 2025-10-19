@@ -31,7 +31,6 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.seedModifiers,
 		l.seedCharacters,
 		l.seedAeons,
-		l.seedDefaultAbilitiesEntries,
 		l.seedBlitzballItems,
 		l.seedSidequests,
 		l.seedMonsterArenaCreations,
@@ -69,6 +68,8 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.createMixesRelationships,
 		l.createCelestialWeaponsRelationships,
 		l.createAutoAbilitiesRelationships,
+		l.createEquipmentRelationships,
+		l.createDefaultAbilitiesRelationships,
 	}
 
 	err = handleDBFunctions(db, dbConn, seedFunctions, "initial seeding")

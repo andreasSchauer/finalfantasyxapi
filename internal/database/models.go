@@ -241,6 +241,49 @@ func (ns NullAutoAbilityCategory) Value() (driver.Value, error) {
 	return string(ns.AutoAbilityCategory), nil
 }
 
+type AutoAbilityPool string
+
+const (
+	AutoAbilityPoolRequired AutoAbilityPool = "required"
+	AutoAbilityPoolOne      AutoAbilityPool = "one"
+	AutoAbilityPoolTwo      AutoAbilityPool = "two"
+)
+
+func (e *AutoAbilityPool) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AutoAbilityPool(s)
+	case string:
+		*e = AutoAbilityPool(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AutoAbilityPool: %T", src)
+	}
+	return nil
+}
+
+type NullAutoAbilityPool struct {
+	AutoAbilityPool AutoAbilityPool
+	Valid           bool // Valid is true if AutoAbilityPool is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAutoAbilityPool) Scan(value interface{}) error {
+	if value == nil {
+		ns.AutoAbilityPool, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AutoAbilityPool.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAutoAbilityPool) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AutoAbilityPool), nil
+}
+
 type BlitzballItemSlot string
 
 const (
@@ -1871,12 +1914,6 @@ type CharacterClass struct {
 	Name     string
 }
 
-type DefaultAbility struct {
-	ID       int32
-	DataHash string
-	Name     string
-}
-
 type Element struct {
 	ID                int32
 	DataHash          string
@@ -1898,7 +1935,14 @@ type EnemyAbility struct {
 	Effect    sql.NullString
 }
 
-type EquipmentAbility struct {
+type EquipmentName struct {
+	ID          int32
+	DataHash    string
+	CharacterID int32
+	Name        string
+}
+
+type EquipmentTable struct {
 	ID                  int32
 	DataHash            string
 	Type                EquipType
@@ -2012,6 +2056,36 @@ type JCharacterBaseStat struct {
 	DataHash    string
 	CharacterID int32
 	BaseStatID  int32
+}
+
+type JCharacterClassOverdrive struct {
+	ID          int32
+	DataHash    string
+	ClassID     int32
+	OverdriveID int32
+}
+
+type JCharacterClassPlayerAbility struct {
+	ID        int32
+	DataHash  string
+	ClassID   int32
+	AbilityID int32
+}
+
+type JEquipmentAutoAbility struct {
+	ID               int32
+	DataHash         string
+	EquipmentTableID int32
+	AutoAbilityID    int32
+	AbilityPool      AutoAbilityPool
+}
+
+type JEquipmentTableNameClstlWpn struct {
+	ID                int32
+	DataHash          string
+	EquipmentTableID  int32
+	EquipmentNameID   int32
+	CelestialWeaponID sql.NullInt32
 }
 
 type JMixCombo struct {

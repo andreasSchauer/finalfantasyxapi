@@ -73,8 +73,43 @@ CREATE TABLE j_auto_ability_modifier_change (
 );
 
 
+CREATE TABLE equipment_names (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    character_id INTEGER NOT NULL REFERENCES characters(id),
+    name TEXT NOT NULL
+);
+
+
+CREATE TABLE j_equipment_table_name_clstl_wpn (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    equipment_table_id INTEGER NOT NULL REFERENCES equipment_tables(id),
+    equipment_name_id INTEGER NOT NULL REFERENCES equipment_names(id),
+    celestial_weapon_id INTEGER REFERENCES celestial_weapons(id)
+);
+
+
+
+CREATE TYPE auto_ability_pool AS ENUM ('required', 'one', 'two');
+
+CREATE TABLE j_equipment_auto_ability (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    equipment_table_id INTEGER NOT NULL REFERENCES equipment_tables(id),
+    auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
+    ability_pool auto_ability_pool NOT NULL
+);
+
+
+
+
 
 -- +goose Down
+DROP TABLE IF EXISTS j_equipment_auto_ability;
+DROP TYPE IF EXISTS auto_ability_pool;
+DROP TABLE IF EXISTS j_equipment_table_name_clstl_wpn;
+DROP TABLE IF EXISTS equipment_names;
 DROP TABLE IF EXISTS j_auto_ability_modifier_change;
 DROP TABLE IF EXISTS j_auto_ability_stat_change;
 DROP TABLE IF EXISTS j_auto_ability_status_condition;

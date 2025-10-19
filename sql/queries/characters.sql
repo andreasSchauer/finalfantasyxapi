@@ -39,7 +39,7 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateDefaultAbilitesEntry :exec
-INSERT INTO default_abilities (data_hash, name)
-VALUES ($1, $2)
+-- name: CreateCharClassPlayerAbilityJunction :exec
+INSERT INTO j_character_class_player_ability (data_hash, class_id, ability_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;

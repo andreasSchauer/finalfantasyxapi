@@ -218,13 +218,62 @@ func (q *Queries) CreateCelestialWeapon(ctx context.Context, arg CreateCelestial
 	return i, err
 }
 
-const createEquipmentAbility = `-- name: CreateEquipmentAbility :exec
-INSERT INTO equipment_abilities (data_hash, type, classification, specific_character_id, version, priority, pool_1_amt, pool_2_amt, empty_slots_amt)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+const createEquipmentAutoAbilityJunction = `-- name: CreateEquipmentAutoAbilityJunction :exec
+INSERT INTO j_equipment_auto_ability (data_hash, equipment_table_id, auto_ability_id, ability_pool)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateEquipmentAbilityParams struct {
+type CreateEquipmentAutoAbilityJunctionParams struct {
+	DataHash         string
+	EquipmentTableID int32
+	AutoAbilityID    int32
+	AbilityPool      AutoAbilityPool
+}
+
+func (q *Queries) CreateEquipmentAutoAbilityJunction(ctx context.Context, arg CreateEquipmentAutoAbilityJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createEquipmentAutoAbilityJunction,
+		arg.DataHash,
+		arg.EquipmentTableID,
+		arg.AutoAbilityID,
+		arg.AbilityPool,
+	)
+	return err
+}
+
+const createEquipmentName = `-- name: CreateEquipmentName :one
+INSERT INTO equipment_names (data_hash, character_id, name)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_names.data_hash
+RETURNING id, data_hash, character_id, name
+`
+
+type CreateEquipmentNameParams struct {
+	DataHash    string
+	CharacterID int32
+	Name        string
+}
+
+func (q *Queries) CreateEquipmentName(ctx context.Context, arg CreateEquipmentNameParams) (EquipmentName, error) {
+	row := q.db.QueryRowContext(ctx, createEquipmentName, arg.DataHash, arg.CharacterID, arg.Name)
+	var i EquipmentName
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.CharacterID,
+		&i.Name,
+	)
+	return i, err
+}
+
+const createEquipmentTable = `-- name: CreateEquipmentTable :one
+INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, pool_1_amt, pool_2_amt, empty_slots_amt)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_tables.data_hash
+RETURNING id, data_hash, type, classification, specific_character_id, version, priority, pool_1_amt, pool_2_amt, empty_slots_amt
+`
+
+type CreateEquipmentTableParams struct {
 	DataHash            string
 	Type                EquipType
 	Classification      EquipClass
@@ -236,8 +285,8 @@ type CreateEquipmentAbilityParams struct {
 	EmptySlotsAmt       int32
 }
 
-func (q *Queries) CreateEquipmentAbility(ctx context.Context, arg CreateEquipmentAbilityParams) error {
-	_, err := q.db.ExecContext(ctx, createEquipmentAbility,
+func (q *Queries) CreateEquipmentTable(ctx context.Context, arg CreateEquipmentTableParams) (EquipmentTable, error) {
+	row := q.db.QueryRowContext(ctx, createEquipmentTable,
 		arg.DataHash,
 		arg.Type,
 		arg.Classification,
@@ -247,6 +296,42 @@ func (q *Queries) CreateEquipmentAbility(ctx context.Context, arg CreateEquipmen
 		arg.Pool1Amt,
 		arg.Pool2Amt,
 		arg.EmptySlotsAmt,
+	)
+	var i EquipmentTable
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Type,
+		&i.Classification,
+		&i.SpecificCharacterID,
+		&i.Version,
+		&i.Priority,
+		&i.Pool1Amt,
+		&i.Pool2Amt,
+		&i.EmptySlotsAmt,
+	)
+	return i, err
+}
+
+const createEquipmentTableNameClstlWpnJunction = `-- name: CreateEquipmentTableNameClstlWpnJunction :exec
+INSERT INTO j_equipment_table_name_clstl_wpn (data_hash, equipment_table_id, equipment_name_id, celestial_weapon_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateEquipmentTableNameClstlWpnJunctionParams struct {
+	DataHash          string
+	EquipmentTableID  int32
+	EquipmentNameID   int32
+	CelestialWeaponID sql.NullInt32
+}
+
+func (q *Queries) CreateEquipmentTableNameClstlWpnJunction(ctx context.Context, arg CreateEquipmentTableNameClstlWpnJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createEquipmentTableNameClstlWpnJunction,
+		arg.DataHash,
+		arg.EquipmentTableID,
+		arg.EquipmentNameID,
+		arg.CelestialWeaponID,
 	)
 	return err
 }

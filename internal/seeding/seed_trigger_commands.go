@@ -46,7 +46,7 @@ func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 				return err
 			}
 
-			err = qtx.CreateTriggerCommand(context.Background(), database.CreateTriggerCommandParams{
+			dbTriggerCommand ,err := qtx.CreateTriggerCommand(context.Background(), database.CreateTriggerCommandParams{
 				DataHash:    generateDataHash(command),
 				AbilityID:   command.Ability.ID,
 				Description: command.Description,
@@ -57,6 +57,10 @@ func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 			if err != nil {
 				return fmt.Errorf("couldn't create TriggerCommand: %s: %v", command.Name, err)
 			}
+
+			command.ID = dbTriggerCommand.ID
+			key := createLookupKey(command.Ability)
+			l.triggerCommands[key] = command
 		}
 		return nil
 	})

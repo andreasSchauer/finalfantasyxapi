@@ -11,16 +11,16 @@ import (
 type Aeon struct {
 	ID int32
 	PlayerUnit
-	UnlockCondition     string   `json:"unlock_condition"`
-	Category            *string  `json:"category"`
-	IsOptional          bool     `json:"is_optional"`
-	BattlesToRegenerate int32    `json:"num_battles_to_regenerate"`
-	PhysAtkDmgConstant  *int32   `json:"phys_atk_damage_constant"`
-	PhysAtkRange        *int32   `json:"phys_atk_range"`
-	PhysAtkShatterRate  *int32   `json:"phys_atk_shatter_rate"`
-	PhysAtkAccSource    *string  `json:"phys_atk_acc_source"`
-	PhysAtkHitChance    *int32   `json:"phys_atk_hit_chance"`
-	PhysAtkAccModifier  *float32 `json:"phys_atk_acc_modifier"`
+	UnlockCondition     string   	`json:"unlock_condition"`
+	Category			*string	 	`json:"category"`
+	IsOptional          bool     	`json:"is_optional"`
+	BattlesToRegenerate int32    	`json:"num_battles_to_regenerate"`
+	PhysAtkDmgConstant  *int32   	`json:"phys_atk_damage_constant"`
+	PhysAtkRange        *int32   	`json:"phys_atk_range"`
+	PhysAtkShatterRate  *int32   	`json:"phys_atk_shatter_rate"`
+	PhysAtkAccSource    *string  	`json:"phys_atk_acc_source"`
+	PhysAtkHitChance    *int32   	`json:"phys_atk_hit_chance"`
+	PhysAtkAccModifier  *float32 	`json:"phys_atk_acc_modifier"`
 }
 
 func (a Aeon) ToHashFields() []any {

@@ -80,10 +80,11 @@ func (q *Queries) CreateAbilityAttributes(ctx context.Context, arg CreateAbility
 	return i, err
 }
 
-const createEnemyAbility = `-- name: CreateEnemyAbility :exec
+const createEnemyAbility = `-- name: CreateEnemyAbility :one
 INSERT INTO enemy_abilities (data_hash, ability_id, effect)
 VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT (data_hash) DO UPDATE SET data_hash = enemy_abilities.data_hash
+RETURNING id, data_hash, ability_id, effect
 `
 
 type CreateEnemyAbilityParams struct {
@@ -92,9 +93,16 @@ type CreateEnemyAbilityParams struct {
 	Effect    sql.NullString
 }
 
-func (q *Queries) CreateEnemyAbility(ctx context.Context, arg CreateEnemyAbilityParams) error {
-	_, err := q.db.ExecContext(ctx, createEnemyAbility, arg.DataHash, arg.AbilityID, arg.Effect)
-	return err
+func (q *Queries) CreateEnemyAbility(ctx context.Context, arg CreateEnemyAbilityParams) (EnemyAbility, error) {
+	row := q.db.QueryRowContext(ctx, createEnemyAbility, arg.DataHash, arg.AbilityID, arg.Effect)
+	var i EnemyAbility
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AbilityID,
+		&i.Effect,
+	)
+	return i, err
 }
 
 const createOverdrive = `-- name: CreateOverdrive :one
@@ -150,10 +158,11 @@ func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams
 	return i, err
 }
 
-const createOverdriveAbility = `-- name: CreateOverdriveAbility :exec
+const createOverdriveAbility = `-- name: CreateOverdriveAbility :one
 INSERT INTO overdrive_abilities (data_hash, ability_id)
 VALUES ($1, $2)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT (data_hash) DO UPDATE SET data_hash = overdrive_abilities.data_hash
+RETURNING id, data_hash, ability_id
 `
 
 type CreateOverdriveAbilityParams struct {
@@ -161,9 +170,11 @@ type CreateOverdriveAbilityParams struct {
 	AbilityID int32
 }
 
-func (q *Queries) CreateOverdriveAbility(ctx context.Context, arg CreateOverdriveAbilityParams) error {
-	_, err := q.db.ExecContext(ctx, createOverdriveAbility, arg.DataHash, arg.AbilityID)
-	return err
+func (q *Queries) CreateOverdriveAbility(ctx context.Context, arg CreateOverdriveAbilityParams) (OverdriveAbility, error) {
+	row := q.db.QueryRowContext(ctx, createOverdriveAbility, arg.DataHash, arg.AbilityID)
+	var i OverdriveAbility
+	err := row.Scan(&i.ID, &i.DataHash, &i.AbilityID)
+	return i, err
 }
 
 const createOverdriveCommand = `-- name: CreateOverdriveCommand :one
@@ -201,10 +212,11 @@ func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriv
 	return i, err
 }
 
-const createPlayerAbility = `-- name: CreatePlayerAbility :exec
+const createPlayerAbility = `-- name: CreatePlayerAbility :one
 INSERT INTO player_abilities (data_hash, ability_id, description, effect, topmenu, can_use_outside_battle, mp_cost, cursor)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = player_abilities.data_hash
+RETURNING id, data_hash, ability_id, description, effect, topmenu, can_use_outside_battle, mp_cost, cursor
 `
 
 type CreatePlayerAbilityParams struct {
@@ -218,8 +230,8 @@ type CreatePlayerAbilityParams struct {
 	Cursor              NullTargetType
 }
 
-func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbilityParams) error {
-	_, err := q.db.ExecContext(ctx, createPlayerAbility,
+func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbilityParams) (PlayerAbility, error) {
+	row := q.db.QueryRowContext(ctx, createPlayerAbility,
 		arg.DataHash,
 		arg.AbilityID,
 		arg.Description,
@@ -229,13 +241,26 @@ func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbili
 		arg.MpCost,
 		arg.Cursor,
 	)
-	return err
+	var i PlayerAbility
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AbilityID,
+		&i.Description,
+		&i.Effect,
+		&i.Topmenu,
+		&i.CanUseOutsideBattle,
+		&i.MpCost,
+		&i.Cursor,
+	)
+	return i, err
 }
 
-const createTriggerCommand = `-- name: CreateTriggerCommand :exec
+const createTriggerCommand = `-- name: CreateTriggerCommand :one
 INSERT INTO trigger_commands (data_hash, ability_id, description, effect, topmenu, cursor)
 VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT (data_hash) DO UPDATE SET data_hash = trigger_commands.data_hash
+RETURNING id, data_hash, ability_id, description, effect, topmenu, cursor
 `
 
 type CreateTriggerCommandParams struct {
@@ -247,8 +272,8 @@ type CreateTriggerCommandParams struct {
 	Cursor      TargetType
 }
 
-func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCommandParams) error {
-	_, err := q.db.ExecContext(ctx, createTriggerCommand,
+func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCommandParams) (TriggerCommand, error) {
+	row := q.db.QueryRowContext(ctx, createTriggerCommand,
 		arg.DataHash,
 		arg.AbilityID,
 		arg.Description,
@@ -256,5 +281,15 @@ func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCom
 		arg.Topmenu,
 		arg.Cursor,
 	)
-	return err
+	var i TriggerCommand
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AbilityID,
+		&i.Description,
+		&i.Effect,
+		&i.Topmenu,
+		&i.Cursor,
+	)
+	return i, err
 }

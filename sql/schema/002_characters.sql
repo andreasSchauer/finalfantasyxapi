@@ -60,15 +60,8 @@ CREATE TABLE j_unit_character_class (
 );
 
 
-CREATE TABLE default_abilities (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    name TEXT NOT NULL
-);
-
 
 -- +goose Down
-DROP TABLE IF EXISTS default_abilities;
 DROP TABLE IF EXISTS j_unit_character_class;
 DROP TABLE IF EXISTS character_classes;
 DROP TABLE IF EXISTS aeons;

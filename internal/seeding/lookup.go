@@ -16,6 +16,12 @@ func createLookupKey(l Lookupable) string {
 }
 
 type lookup struct {
+	abilities			map[string]Ability
+	enemyAbilities		map[string]EnemyAbility
+	itemAbilities		map[string]ItemAbility
+	overdriveAbilities	map[string]OverdriveAbility
+	playerAbilities		map[string]PlayerAbility
+	triggerCommands		map[string]TriggerCommand
 	aeons				map[string]Aeon
 	affinities			map[string]Affinity
 	areas 				map[string]Area
@@ -24,6 +30,7 @@ type lookup struct {
 	characters			map[string]Character
 	charClasses			map[string]CharacterClass
 	elements			map[string]Element
+	equipmentTables		map[string]EquipmentTable
 	items         		map[string]Item
 	keyItems      		map[string]KeyItem
 	mixes				map[string]Mix
@@ -42,6 +49,12 @@ type lookup struct {
 
 func lookupInit() lookup {
 	return lookup{
+		abilities:			make(map[string]Ability),
+		enemyAbilities:		make(map[string]EnemyAbility),
+		itemAbilities: 		make(map[string]ItemAbility),
+		overdriveAbilities: make(map[string]OverdriveAbility),
+		playerAbilities: 	make(map[string]PlayerAbility),
+		triggerCommands: 	make(map[string]TriggerCommand),
 		aeons: 				make(map[string]Aeon),
 		affinities: 		make(map[string]Affinity),
 		areas: 				make(map[string]Area),
@@ -50,6 +63,7 @@ func lookupInit() lookup {
 		characters: 		make(map[string]Character),
 		charClasses: 		make(map[string]CharacterClass),
 		elements: 			make(map[string]Element),
+		equipmentTables:	make(map[string]EquipmentTable),
 		items:         		make(map[string]Item),
 		keyItems:      		make(map[string]KeyItem),
 		mixes:				make(map[string]Mix),
@@ -68,6 +82,79 @@ func lookupInit() lookup {
 
 
 // Lookupable for composite keys, string for simple name keys
+
+
+func (l *lookup) getAbility(abilityReference AbilityReference) (Ability, error) {
+	key := createLookupKey(abilityReference)
+
+	ability, found := l.abilities[key]
+	if !found {
+		return Ability{}, fmt.Errorf("couldn't find Ability %s - %d - %s", ability.Name, derefOrNil(ability.Version), ability.Type)
+	}
+
+	return ability, nil
+}
+
+
+func (l *lookup) getEnemyAbility(abilityReference AbilityReference) (EnemyAbility, error) {
+	key := createLookupKey(abilityReference)
+
+	ability, found := l.enemyAbilities[key]
+	if !found {
+		return EnemyAbility{}, fmt.Errorf("couldn't find Enemy Ability %s - %d", ability.Name, derefOrNil(ability.Version))
+	}
+
+	return ability, nil
+}
+
+
+func (l *lookup) getItemAbility(abilityReference AbilityReference) (ItemAbility, error) {
+	key := createLookupKey(abilityReference)
+
+	ability, found := l.itemAbilities[key]
+	if !found {
+		return ItemAbility{}, fmt.Errorf("couldn't find Item Ability %s - %d", ability.Name, derefOrNil(ability.Version))
+	}
+
+	return ability, nil
+}
+
+
+func (l *lookup) getOverdriveAbility(abilityReference AbilityReference) (OverdriveAbility, error) {
+	key := createLookupKey(abilityReference)
+
+	ability, found := l.overdriveAbilities[key]
+	if !found {
+		return OverdriveAbility{}, fmt.Errorf("couldn't find Overdrive Ability %s - %d", ability.Name, derefOrNil(ability.Version))
+	}
+
+	return ability, nil
+}
+
+
+func (l *lookup) getPlayerAbility(abilityReference AbilityReference) (PlayerAbility, error) {
+	key := createLookupKey(abilityReference)
+
+	ability, found := l.playerAbilities[key]
+	if !found {
+		return PlayerAbility{}, fmt.Errorf("couldn't find Player Ability %s - %d", ability.Name, derefOrNil(ability.Version))
+	}
+
+	return ability, nil
+}
+
+
+func (l *lookup) getTriggerCommand(abilityReference AbilityReference) (TriggerCommand, error) {
+	key := createLookupKey(abilityReference)
+
+	command, found := l.triggerCommands[key]
+	if !found {
+		return TriggerCommand{}, fmt.Errorf("couldn't find Trigger Command %s - %d", command.Name, derefOrNil(command.Version))
+	}
+
+	return command, nil
+}
+
 
 func (l *lookup) getAeon(aeonName string) (Aeon, error) {
 	playerUnit := PlayerUnit{
@@ -160,6 +247,16 @@ func (l *lookup) getElement(elementName string) (Element, error) {
 	}
 
 	return element, nil
+}
+
+
+func (l *lookup) getEquipmentTable(tableKey string) (EquipmentTable, error) {
+	equipmentTable, found := l.equipmentTables[tableKey]
+	if !found {
+		return EquipmentTable{}, fmt.Errorf("couldn't find Equipment Table %s", tableKey)
+	}
+
+	return equipmentTable, nil
 }
 
 

@@ -38,13 +38,17 @@ func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 				return err
 			}
 
-			err = qtx.CreateOverdriveAbility(context.Background(), database.CreateOverdriveAbilityParams{
+			dbOverdriveAbility, err := qtx.CreateOverdriveAbility(context.Background(), database.CreateOverdriveAbilityParams{
 				DataHash:  generateDataHash(overdriveAbility),
 				AbilityID: overdriveAbility.Ability.ID,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Overdrive Ability: %s: %v", overdriveAbility.Name, err)
 			}
+
+			overdriveAbility.ID = dbOverdriveAbility.ID
+			key := createLookupKey(overdriveAbility.Ability)
+			l.overdriveAbilities[key] = overdriveAbility
 		}
 		return nil
 	})

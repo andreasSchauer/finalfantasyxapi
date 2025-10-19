@@ -38,6 +38,22 @@ func (a Ability) GetID() int32 {
 	return a.ID
 }
 
+
+type AbilityReference struct{
+	Name		string		`json:"name"`
+	Version		*int32		`json:"version"`
+	AbilityType	string		`json:"ability_type"`
+}
+
+func (a AbilityReference) ToKeyFields() []any {
+	return []any{
+		a.Name,
+		derefOrNil(a.Version),
+		a.AbilityType,
+	}
+}
+
+
 type Attributes struct {
 	ID               int32
 	Rank             *int32 `json:"rank"`

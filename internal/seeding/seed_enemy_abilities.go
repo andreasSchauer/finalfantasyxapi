@@ -40,7 +40,7 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 				return err
 			}
 
-			err = qtx.CreateEnemyAbility(context.Background(), database.CreateEnemyAbilityParams{
+			dbEnemyAbility, err := qtx.CreateEnemyAbility(context.Background(), database.CreateEnemyAbilityParams{
 				DataHash:  generateDataHash(enemyAbility),
 				AbilityID: enemyAbility.Ability.ID,
 				Effect:    getNullString(enemyAbility.Effect),
@@ -48,6 +48,10 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 			if err != nil {
 				return fmt.Errorf("couldn't create Enemy Ability: %s: %v", enemyAbility.Name, err)
 			}
+
+			enemyAbility.ID = dbEnemyAbility.ID
+			key := createLookupKey(enemyAbility.Ability)
+			l.enemyAbilities[key] = enemyAbility
 		}
 		return nil
 	})

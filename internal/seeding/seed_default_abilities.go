@@ -9,19 +9,13 @@ import (
 )
 
 type DefaultAbilitiesEntry struct {
-	//id 		int32
-	//dataHash	string
-	Name string `json:"name"`
-}
-
-func (d DefaultAbilitiesEntry) ToHashFields() []any {
-	return []any{
-		d.Name,
-	}
+	Name 				string 				`json:"name"`
+	DefaultAbilities 	[]AbilityReference 	`json:"default_abilities"`
 }
 
 
-func (l *lookup) seedDefaultAbilitiesEntries(db *database.Queries, dbConn *sql.DB) error {
+
+func (l *lookup) createDefaultAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/default_abilities.json"
 
 	var entries []DefaultAbilitiesEntry
@@ -32,12 +26,25 @@ func (l *lookup) seedDefaultAbilitiesEntries(db *database.Queries, dbConn *sql.D
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, entry := range entries {
-			err = qtx.CreateDefaultAbilitesEntry(context.Background(), database.CreateDefaultAbilitesEntryParams{
-				DataHash: generateDataHash(entry),
-				Name:     entry.Name,
-			})
+			class, err := l.getCharacterClass(entry.Name)
 			if err != nil {
-				return fmt.Errorf("couldn't create Default Abilities Entry: %s: %v", entry.Name, err)
+				return err
+			}
+
+			for _, abilityRef := range entry.DefaultAbilities {
+				junction, err := createJunction(class, abilityRef, l.getPlayerAbility)
+				if err != nil {
+					return fmt.Errorf("couldn't create junction between character class %s and ability %s: %v", class.Name, createLookupKey(abilityRef), err)
+				}
+
+				err = qtx.CreateCharClassPlayerAbilityJunction(context.Background(), database.CreateCharClassPlayerAbilityJunctionParams{
+					DataHash: generateDataHash(junction),
+					ClassID: junction.ParentID,
+					AbilityID: junction.ChildID,
+				})
+				if err != nil {
+					return err
+				}
 			}
 		}
 		return nil
