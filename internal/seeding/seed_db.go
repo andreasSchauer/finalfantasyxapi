@@ -70,6 +70,8 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.createAutoAbilitiesRelationships,
 		l.createEquipmentRelationships,
 		l.createDefaultAbilitiesRelationships,
+		l.createAeonsRelationships,
+		l.createAreasRelationships,
 	}
 
 	err = handleDBFunctions(db, dbConn, seedFunctions, "initial seeding")

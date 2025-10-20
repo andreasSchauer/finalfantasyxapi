@@ -14,7 +14,7 @@ const createAeon = `-- name: CreateAeon :one
 INSERT INTO aeons (data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeons.data_hash
-RETURNING id, data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier
+RETURNING id, data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier, area_id
 `
 
 type CreateAeonParams struct {
@@ -59,24 +59,74 @@ func (q *Queries) CreateAeon(ctx context.Context, arg CreateAeonParams) (Aeon, e
 		&i.PhysAtkAccSource,
 		&i.PhysAtkHitChance,
 		&i.PhysAtkAccModifier,
+		&i.AreaID,
 	)
 	return i, err
 }
 
-const createCharClassOverdriveJunction = `-- name: CreateCharClassOverdriveJunction :exec
-INSERT INTO j_character_class_overdrive (data_hash, class_id, overdrive_id)
+const createAeonBaseStatJunction = `-- name: CreateAeonBaseStatJunction :exec
+INSERT INTO j_aeon_base_stat (data_hash, aeon_id, base_stat_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateCharClassOverdriveJunctionParams struct {
-	DataHash    string
-	ClassID     int32
-	OverdriveID int32
+type CreateAeonBaseStatJunctionParams struct {
+	DataHash   string
+	AeonID     int32
+	BaseStatID int32
 }
 
-func (q *Queries) CreateCharClassOverdriveJunction(ctx context.Context, arg CreateCharClassOverdriveJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createCharClassOverdriveJunction, arg.DataHash, arg.ClassID, arg.OverdriveID)
+func (q *Queries) CreateAeonBaseStatJunction(ctx context.Context, arg CreateAeonBaseStatJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonBaseStatJunction, arg.DataHash, arg.AeonID, arg.BaseStatID)
+	return err
+}
+
+const createAeonEquipment = `-- name: CreateAeonEquipment :one
+INSERT INTO aeon_equipments (data_hash, auto_ability_id, celestial_wpn, equip_type)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_equipments.data_hash
+RETURNING id, data_hash, auto_ability_id, celestial_wpn, equip_type
+`
+
+type CreateAeonEquipmentParams struct {
+	DataHash      string
+	AutoAbilityID int32
+	CelestialWpn  bool
+	EquipType     EquipType
+}
+
+func (q *Queries) CreateAeonEquipment(ctx context.Context, arg CreateAeonEquipmentParams) (AeonEquipment, error) {
+	row := q.db.QueryRowContext(ctx, createAeonEquipment,
+		arg.DataHash,
+		arg.AutoAbilityID,
+		arg.CelestialWpn,
+		arg.EquipType,
+	)
+	var i AeonEquipment
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AutoAbilityID,
+		&i.CelestialWpn,
+		&i.EquipType,
+	)
+	return i, err
+}
+
+const createAeonEquipmentJunction = `-- name: CreateAeonEquipmentJunction :exec
+INSERT INTO j_aeon_equipment (data_hash, aeon_id, aeon_equipment_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonEquipmentJunctionParams struct {
+	DataHash        string
+	AeonID          int32
+	AeonEquipmentID int32
+}
+
+func (q *Queries) CreateAeonEquipmentJunction(ctx context.Context, arg CreateAeonEquipmentJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonEquipmentJunction, arg.DataHash, arg.AeonID, arg.AeonEquipmentID)
 	return err
 }
 
@@ -214,5 +264,57 @@ type CreateUnitsCharClassesJunctionParams struct {
 
 func (q *Queries) CreateUnitsCharClassesJunction(ctx context.Context, arg CreateUnitsCharClassesJunctionParams) error {
 	_, err := q.db.ExecContext(ctx, createUnitsCharClassesJunction, arg.DataHash, arg.UnitID, arg.ClassID)
+	return err
+}
+
+const updateAeon = `-- name: UpdateAeon :exec
+UPDATE aeons
+SET data_hash = $1,
+    unit_id = $2,
+    unlock_condition = $3,
+    is_optional = $4,
+    battles_to_regenerate = $5,
+    phys_atk_damage_constant = $6,
+    phys_atk_range = $7,
+    phys_atk_shatter_rate = $8,
+    phys_atk_acc_source = $9,
+    phys_atk_hit_chance = $10,
+    phys_atk_acc_modifier = $11,
+    area_id = $12
+WHERE id = $13
+`
+
+type UpdateAeonParams struct {
+	DataHash              string
+	UnitID                int32
+	UnlockCondition       string
+	IsOptional            bool
+	BattlesToRegenerate   int32
+	PhysAtkDamageConstant sql.NullInt32
+	PhysAtkRange          interface{}
+	PhysAtkShatterRate    interface{}
+	PhysAtkAccSource      NullAccuracySource
+	PhysAtkHitChance      interface{}
+	PhysAtkAccModifier    sql.NullFloat64
+	AreaID                sql.NullInt32
+	ID                    int32
+}
+
+func (q *Queries) UpdateAeon(ctx context.Context, arg UpdateAeonParams) error {
+	_, err := q.db.ExecContext(ctx, updateAeon,
+		arg.DataHash,
+		arg.UnitID,
+		arg.UnlockCondition,
+		arg.IsOptional,
+		arg.BattlesToRegenerate,
+		arg.PhysAtkDamageConstant,
+		arg.PhysAtkRange,
+		arg.PhysAtkShatterRate,
+		arg.PhysAtkAccSource,
+		arg.PhysAtkHitChance,
+		arg.PhysAtkAccModifier,
+		arg.AreaID,
+		arg.ID,
+	)
 	return err
 }

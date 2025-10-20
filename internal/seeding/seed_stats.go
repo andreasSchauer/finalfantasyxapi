@@ -80,11 +80,10 @@ func (l *lookup) createStatsRelationships(db *database.Queries, dbConn *sql.DB) 
 				return err
 			}
 
-			sphere, err := l.getItem(jsonStat.Sphere)
+			stat.SphereID, err = assignFKPtr(&jsonStat.Sphere, l.getItem)
 			if err != nil {
 				return err
 			}
-			stat.SphereID = &sphere.ID
 
 			err = qtx.UpdateStat(context.Background(), database.UpdateStatParams{
 				DataHash: generateDataHash(stat),

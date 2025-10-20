@@ -39,14 +39,15 @@ func (s SubLocation) ToHashFields() []any {
 type Area struct {
 	ID                   int32
 	SubLocationID        int32
-	Name                 string  `json:"area"`
-	Version              *int32  `json:"version"`
-	Specification        *string `json:"specification"`
-	StoryOnly            bool    `json:"story_only"`
-	HasSaveSphere        bool    `json:"has_save_sphere"`
-	AirshipDropOff       bool    `json:"airship_drop_off"`
-	HasCompilationSphere bool    `json:"has_compilation_sphere"`
-	CanRideChocobo       bool    `json:"can_ride_chocobo"`
+	Name                 string  			`json:"area"`
+	Version              *int32  			`json:"version"`
+	Specification        *string 			`json:"specification"`
+	StoryOnly            bool    			`json:"story_only"`
+	HasSaveSphere        bool    			`json:"has_save_sphere"`
+	AirshipDropOff       bool    			`json:"airship_drop_off"`
+	HasCompilationSphere bool    			`json:"has_compilation_sphere"`
+	CanRideChocobo       bool    			`json:"can_ride_chocobo"`
+	ConnectedAreas		[]AreaConnection 	`json:"connected_areas"`
 }
 
 func (a Area) ToHashFields() []any {
@@ -83,6 +84,31 @@ func (la LocationArea) ToKeyFields() []any {
 		la.Area,
 		derefOrNil(la.Version),
 	}
+}
+
+
+type AreaConnection struct {
+	ID				int32
+	AreaID			int32
+	LocationArea 	LocationArea	`json:"location_area"`
+	ConnectionType	string			`json:"connection_type"`
+	StoryOnly		bool			`json:"story_only"`
+	Notes			*string			`json:"notes"`
+}
+
+
+func (ac AreaConnection) ToHashFields() []any {
+	return []any{
+		ac.AreaID,
+		ac.ConnectionType,
+		ac.StoryOnly,
+		derefOrNil(ac.Notes),
+	}
+}
+
+
+func (ac AreaConnection) GetID() int32 {
+	return ac.ID
 }
 
 
@@ -174,4 +200,77 @@ func (l *lookup) seedAreas(qtx *database.Queries, location Location, subLocation
 	}
 
 	return nil
+}
+
+
+func (l *lookup) createAreasRelationships(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "./data/locations.json"
+
+	var locations []Location
+	err := loadJSONFile(string(srcPath), &locations)
+	if err != nil {
+		return err
+	}
+
+	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		for _, location := range locations {
+			for _, subLocation := range location.SubLocations {
+				for _, jsonArea := range subLocation.Areas {
+					locationArea := LocationArea{
+						Location: location.Name,
+						SubLocation: subLocation.Name,
+						Area: jsonArea.Name,
+						Version: jsonArea.Version,
+					}
+					area, err := l.getArea(locationArea)
+					if err != nil {
+						return err
+					}
+
+					for _, connection := range area.ConnectedAreas {
+						junction, err := createJunctionSeed(qtx, area, connection, l.seedAreaConnection)
+						if err != nil {
+							return fmt.Errorf("area: %s: %v", createLookupKey(locationArea), err)
+						}
+
+						err = qtx.CreateAreaConnectionJunction(context.Background(), database.CreateAreaConnectionJunctionParams{
+							DataHash: 		generateDataHash(junction),
+							AreaID: 		junction.ParentID,
+							ConnectionID: 	junction.ChildID,
+						})
+						if err != nil {
+							return fmt.Errorf("area: %s: couldn't create connected area junction: %v", createLookupKey(locationArea), err)
+						}
+					}
+				}
+			}
+		}
+
+
+		return nil
+	})
+}
+
+
+func (l *lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnection) (AreaConnection, error) {
+	var err error
+
+	connection.AreaID, err = assignFK(connection.LocationArea, l.getArea)
+	if err != nil {
+		return AreaConnection{}, err
+	}
+
+	dbConnection, err := qtx.CreateAreaConnection(context.Background(), database.CreateAreaConnectionParams{
+		DataHash: 		generateDataHash(connection),
+		AreaID: 		connection.AreaID,
+		ConnectionType: database.AreaConnectionType(connection.ConnectionType),
+		StoryOnly: 		connection.StoryOnly,
+		Notes: 			getNullString(connection.Notes),
+	})
+	if err != nil {
+		return AreaConnection{}, fmt.Errorf("couldn't create connection: %s: %v", createLookupKey(connection.LocationArea), err)
+	}
+	connection.ID = dbConnection.ID
+
+	return connection, nil
 }

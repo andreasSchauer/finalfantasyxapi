@@ -80,6 +80,23 @@ func (q *Queries) CreateAbilityAttributes(ctx context.Context, arg CreateAbility
 	return i, err
 }
 
+const createCharClassOverdriveJunction = `-- name: CreateCharClassOverdriveJunction :exec
+INSERT INTO j_character_class_overdrive (data_hash, class_id, overdrive_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCharClassOverdriveJunctionParams struct {
+	DataHash    string
+	ClassID     int32
+	OverdriveID int32
+}
+
+func (q *Queries) CreateCharClassOverdriveJunction(ctx context.Context, arg CreateCharClassOverdriveJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createCharClassOverdriveJunction, arg.DataHash, arg.ClassID, arg.OverdriveID)
+	return err
+}
+
 const createEnemyAbility = `-- name: CreateEnemyAbility :one
 INSERT INTO enemy_abilities (data_hash, ability_id, effect)
 VALUES ($1, $2, $3)

@@ -141,6 +141,49 @@ func (ns NullAccuracySource) Value() (driver.Value, error) {
 	return string(ns.AccuracySource), nil
 }
 
+type AreaConnectionType string
+
+const (
+	AreaConnectionTypeBothDirections AreaConnectionType = "both-directions"
+	AreaConnectionTypeOneDirection   AreaConnectionType = "one-direction"
+	AreaConnectionTypeWarp           AreaConnectionType = "warp"
+)
+
+func (e *AreaConnectionType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AreaConnectionType(s)
+	case string:
+		*e = AreaConnectionType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AreaConnectionType: %T", src)
+	}
+	return nil
+}
+
+type NullAreaConnectionType struct {
+	AreaConnectionType AreaConnectionType
+	Valid              bool // Valid is true if AreaConnectionType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAreaConnectionType) Scan(value interface{}) error {
+	if value == nil {
+		ns.AreaConnectionType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AreaConnectionType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAreaConnectionType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AreaConnectionType), nil
+}
+
 type ArmorType string
 
 const (
@@ -1799,6 +1842,7 @@ type Aeon struct {
 	PhysAtkAccSource      NullAccuracySource
 	PhysAtkHitChance      interface{}
 	PhysAtkAccModifier    sql.NullFloat64
+	AreaID                sql.NullInt32
 }
 
 type AeonCommand struct {
@@ -1809,6 +1853,14 @@ type AeonCommand struct {
 	Effect      string
 	Topmenu     TopmenuType
 	Cursor      NullTargetType
+}
+
+type AeonEquipment struct {
+	ID            int32
+	DataHash      string
+	AutoAbilityID int32
+	CelestialWpn  bool
+	EquipType     EquipType
 }
 
 type Affinity struct {
@@ -1850,6 +1902,15 @@ type Area struct {
 	AirshipDropOff       bool
 	HasCompilationSphere bool
 	CanRideChocobo       bool
+}
+
+type AreaConnection struct {
+	ID             int32
+	DataHash       string
+	AreaID         int32
+	ConnectionType AreaConnectionType
+	StoryOnly      bool
+	Notes          sql.NullString
 }
 
 type AutoAbility struct {
@@ -2000,6 +2061,27 @@ type ItemAmount struct {
 	DataHash     string
 	MasterItemID int32
 	Amount       int32
+}
+
+type JAeonBaseStat struct {
+	ID         int32
+	DataHash   string
+	AeonID     int32
+	BaseStatID int32
+}
+
+type JAeonEquipment struct {
+	ID              int32
+	DataHash        string
+	AeonID          int32
+	AeonEquipmentID int32
+}
+
+type JAreaConnection struct {
+	ID           int32
+	DataHash     string
+	AreaID       int32
+	ConnectionID int32
 }
 
 type JAutoAbilityItem struct {

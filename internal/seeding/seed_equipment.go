@@ -188,6 +188,34 @@ func (l *lookup) createEquipmentRelationships(db *database.Queries, dbConn *sql.
 }
 
 
+
+func (l *lookup) seedEquipmentAutoAbilities(qtx *database.Queries, table EquipmentTable, autoAbilities []string, abilityPool string) error {
+	for _, autoAbility := range autoAbilities {
+		var err error
+		eaJunction := EquipmentAutoAbilityJunction{}
+		
+		eaJunction.Junction, err = createJunction(table, autoAbility, l.getAutoAbility)
+		if err != nil {
+			return err
+		}
+
+		eaJunction.AbilityPool = abilityPool
+
+		err = qtx.CreateEquipmentAutoAbilityJunction(context.Background(), database.CreateEquipmentAutoAbilityJunctionParams{
+			DataHash: 			generateDataHash(eaJunction),
+			EquipmentTableID: 	eaJunction.ParentID,
+			AutoAbilityID: 		eaJunction.ChildID,
+			AbilityPool: 		database.AutoAbilityPool(eaJunction.AbilityPool),
+		})
+		if err != nil {
+			return fmt.Errorf("couldn't create %s auto abilities for equipment: %s: %v", abilityPool, createLookupKey(table), err)
+		}
+	}
+
+	return nil
+}
+
+
 func (l *lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable) error {
 	for _, equipmentName := range table.EquipmentNames {
 		var err error
@@ -240,32 +268,4 @@ func (l *lookup) seedEquipmentName(qtx *database.Queries, equipmentName Equipmen
 	equipmentName.ID = dbEquipmentName.ID
 
 	return equipmentName, nil
-}
-
-
-
-func (l *lookup) seedEquipmentAutoAbilities(qtx *database.Queries, table EquipmentTable, autoAbilities []string, abilityPool string) error {
-	for _, autoAbility := range autoAbilities {
-		var err error
-		eaJunction := EquipmentAutoAbilityJunction{}
-		
-		eaJunction.Junction, err = createJunction(table, autoAbility, l.getAutoAbility)
-		if err != nil {
-			return err
-		}
-
-		eaJunction.AbilityPool = abilityPool
-
-		err = qtx.CreateEquipmentAutoAbilityJunction(context.Background(), database.CreateEquipmentAutoAbilityJunctionParams{
-			DataHash: 			generateDataHash(eaJunction),
-			EquipmentTableID: 	eaJunction.ParentID,
-			AutoAbilityID: 		eaJunction.ChildID,
-			AbilityPool: 		database.AutoAbilityPool(eaJunction.AbilityPool),
-		})
-		if err != nil {
-			return fmt.Errorf("couldn't create %s auto abilities for equipment: %s: %v", abilityPool, createLookupKey(table), err)
-		}
-	}
-
-	return nil
 }

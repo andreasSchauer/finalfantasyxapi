@@ -15,7 +15,42 @@ CREATE TABLE j_character_class_player_ability (
 );
 
 
+CREATE TABLE aeon_equipments (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
+    celestial_wpn BOOLEAN NOT NULL,
+    equip_type equip_type NOT NULL
+);
+
+
+CREATE TABLE j_aeon_equipment (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    aeon_id INTEGER NOT NULL REFERENCES aeons(id),
+    aeon_equipment_id INTEGER NOT NULL REFERENCES aeon_equipments(id)
+);
+
+
+CREATE TABLE j_aeon_base_stat (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    aeon_id INTEGER NOT NULL REFERENCES aeons(id),
+    base_stat_id INTEGER NOT NULL REFERENCES base_stats(id)
+);
+
+
+ALTER TABLE aeons
+ADD COLUMN area_id INTEGER REFERENCES areas(id);
+
+
 
 -- +goose Down
+ALTER TABLE aeons
+DROP COLUMN IF EXISTS area_id;
+
+DROP TABLE IF EXISTS j_aeon_equipment;
+DROP TABLE IF EXISTS aeon_equipments;
+DROP TABLE IF EXISTS j_aeon_base_stat;
 DROP TABLE IF EXISTS j_character_class_player_ability;
 DROP TABLE IF EXISTS j_character_base_stat;

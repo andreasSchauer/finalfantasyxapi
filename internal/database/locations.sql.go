@@ -60,6 +60,58 @@ func (q *Queries) CreateArea(ctx context.Context, arg CreateAreaParams) (Area, e
 	return i, err
 }
 
+const createAreaConnection = `-- name: CreateAreaConnection :one
+INSERT INTO area_connections (data_hash, area_id, connection_type, story_only, notes)
+VALUES ($1, $2, $3, $4, $5)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = area_connections.data_hash
+RETURNING id, data_hash, area_id, connection_type, story_only, notes
+`
+
+type CreateAreaConnectionParams struct {
+	DataHash       string
+	AreaID         int32
+	ConnectionType AreaConnectionType
+	StoryOnly      bool
+	Notes          sql.NullString
+}
+
+func (q *Queries) CreateAreaConnection(ctx context.Context, arg CreateAreaConnectionParams) (AreaConnection, error) {
+	row := q.db.QueryRowContext(ctx, createAreaConnection,
+		arg.DataHash,
+		arg.AreaID,
+		arg.ConnectionType,
+		arg.StoryOnly,
+		arg.Notes,
+	)
+	var i AreaConnection
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AreaID,
+		&i.ConnectionType,
+		&i.StoryOnly,
+		&i.Notes,
+	)
+	return i, err
+}
+
+const createAreaConnectionJunction = `-- name: CreateAreaConnectionJunction :exec
+INSERT INTO j_area_connection (data_hash, area_id, connection_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAreaConnectionJunctionParams struct {
+	DataHash     string
+	AreaID       int32
+	ConnectionID int32
+}
+
+func (q *Queries) CreateAreaConnectionJunction(ctx context.Context, arg CreateAreaConnectionJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAreaConnectionJunction, arg.DataHash, arg.AreaID, arg.ConnectionID)
+	return err
+}
+
 const createLocation = `-- name: CreateLocation :one
 INSERT INTO locations (data_hash, name)
 VALUES ($1, $2)
