@@ -51,7 +51,7 @@ func (l *lookup) seedMonsterFormations(db *database.Queries, dbConn *sql.DB) err
 				Notes:    getNullString(list.Notes),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create monster formation list: %s - %s - %s - %d - %s: %v", locationArea.Location, locationArea.SubLocation, locationArea.Area, derefOrNil(locationArea.Version), derefOrNil(list.Notes), err)
+				return fmt.Errorf("couldn't create monster formation list: %s - version: %d: %v", createLookupKey(locationArea), derefOrNil(list.Version), err)
 			}
 		}
 		return nil

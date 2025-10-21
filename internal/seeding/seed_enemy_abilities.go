@@ -35,7 +35,7 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 			var err error
 			enemyAbility.Type = database.AbilityTypeEnemyAbility
 
-			enemyAbility.Ability, err = seedObjAssignFK(qtx, enemyAbility.Ability, l.seedAbility)
+			enemyAbility.Ability, err = seedObjAssignID(qtx, enemyAbility.Ability, l.seedAbility)
 			if err != nil {
 				return err
 			}

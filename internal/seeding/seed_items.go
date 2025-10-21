@@ -66,12 +66,12 @@ func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 			var err error
 			item.Type = database.ItemTypeItem
 
-			item.MasterItem, err = seedObjAssignFK(qtx, item.MasterItem, l.seedMasterItem)
+			item.MasterItem, err = seedObjAssignID(qtx, item.MasterItem, l.seedMasterItem)
 			if err != nil {
 				return err
 			}
 
-			item, err = seedObjAssignFK(qtx, item, l.seedItem)
+			item, err = seedObjAssignID(qtx, item, l.seedItem)
 			if err != nil {
 				return err
 			}
@@ -119,7 +119,7 @@ func (l *lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 	itemAbility.Type = database.AbilityTypeItem
 	itemAbility.ItemID = item.ID
 
-	itemAbility.Ability, err = seedObjAssignFK(qtx, itemAbility.Ability, l.seedAbility)
+	itemAbility.Ability, err = seedObjAssignID(qtx, itemAbility.Ability, l.seedAbility)
 	if err != nil {
 		return err
 	}

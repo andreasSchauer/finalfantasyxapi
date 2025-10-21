@@ -44,6 +44,7 @@ func (l *lookup) seedMasterItem(qtx *database.Queries, masterItem MasterItem) (M
 	}
 
 	masterItem.ID = dbMasterItem.ID
+	l.masterItems[masterItem.Name] = masterItem
 
 	return masterItem, nil
 }

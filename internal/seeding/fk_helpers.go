@@ -30,7 +30,7 @@ func assignFKPtr[T any, R HasID](key *T, lookup func(T) (R, error)) (*int32, err
 	return &id, nil
 }
 
-func seedObjAssignFK[T HasID](qtx *database.Queries, obj T, seed func(*database.Queries, T) (T, error)) (T, error) {
+func seedObjAssignID[T HasID](qtx *database.Queries, obj T, seed func(*database.Queries, T) (T, error)) (T, error) {
 	var object T
 
 	object, err := seed(qtx, obj)

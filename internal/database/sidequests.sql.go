@@ -7,22 +7,77 @@ package database
 
 import (
 	"context"
+	"database/sql"
 )
 
-const createBlitzballItemList = `-- name: CreateBlitzballItemList :exec
-INSERT INTO blitzball_items_lists (data_hash, category, slot)
-VALUES ($1, $2, $3)
+const createBlitzballItem = `-- name: CreateBlitzballItem :exec
+INSERT INTO blitzball_items (data_hash, position_id, item_amount_id, chance)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateBlitzballItemListParams struct {
-	DataHash string
-	Category BlitzballTournamentCategory
-	Slot     BlitzballItemSlot
+type CreateBlitzballItemParams struct {
+	DataHash     string
+	PositionID   int32
+	ItemAmountID int32
+	Chance       interface{}
 }
 
-func (q *Queries) CreateBlitzballItemList(ctx context.Context, arg CreateBlitzballItemListParams) error {
-	_, err := q.db.ExecContext(ctx, createBlitzballItemList, arg.DataHash, arg.Category, arg.Slot)
+func (q *Queries) CreateBlitzballItem(ctx context.Context, arg CreateBlitzballItemParams) error {
+	_, err := q.db.ExecContext(ctx, createBlitzballItem,
+		arg.DataHash,
+		arg.PositionID,
+		arg.ItemAmountID,
+		arg.Chance,
+	)
+	return err
+}
+
+const createBlitzballPosition = `-- name: CreateBlitzballPosition :one
+INSERT INTO blitzball_positions (data_hash, category, slot)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = blitzball_positions.data_hash
+RETURNING id, data_hash, category, slot
+`
+
+type CreateBlitzballPositionParams struct {
+	DataHash string
+	Category BlitzballTournamentCategory
+	Slot     BlitzballPositionSlot
+}
+
+func (q *Queries) CreateBlitzballPosition(ctx context.Context, arg CreateBlitzballPositionParams) (BlitzballPosition, error) {
+	row := q.db.QueryRowContext(ctx, createBlitzballPosition, arg.DataHash, arg.Category, arg.Slot)
+	var i BlitzballPosition
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Category,
+		&i.Slot,
+	)
+	return i, err
+}
+
+const createCompletionLocation = `-- name: CreateCompletionLocation :exec
+INSERT INTO completion_locations (data_hash, completion_id, area_id, notes)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCompletionLocationParams struct {
+	DataHash     string
+	CompletionID int32
+	AreaID       int32
+	Notes        sql.NullString
+}
+
+func (q *Queries) CreateCompletionLocation(ctx context.Context, arg CreateCompletionLocationParams) error {
+	_, err := q.db.ExecContext(ctx, createCompletionLocation,
+		arg.DataHash,
+		arg.CompletionID,
+		arg.AreaID,
+		arg.Notes,
+	)
 	return err
 }
 
@@ -78,6 +133,38 @@ func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest
 		&i.DataHash,
 		&i.Name,
 		&i.Type,
+	)
+	return i, err
+}
+
+const createQuestCompletion = `-- name: CreateQuestCompletion :one
+INSERT INTO quest_completions (data_hash, quest_id, condition, item_amount_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
+RETURNING id, data_hash, quest_id, condition, item_amount_id
+`
+
+type CreateQuestCompletionParams struct {
+	DataHash     string
+	QuestID      int32
+	Condition    string
+	ItemAmountID int32
+}
+
+func (q *Queries) CreateQuestCompletion(ctx context.Context, arg CreateQuestCompletionParams) (QuestCompletion, error) {
+	row := q.db.QueryRowContext(ctx, createQuestCompletion,
+		arg.DataHash,
+		arg.QuestID,
+		arg.Condition,
+		arg.ItemAmountID,
+	)
+	var i QuestCompletion
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.QuestID,
+		&i.Condition,
+		&i.ItemAmountID,
 	)
 	return i, err
 }

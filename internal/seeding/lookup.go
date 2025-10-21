@@ -33,11 +33,14 @@ type lookup struct {
 	equipmentTables		map[string]EquipmentTable
 	items         		map[string]Item
 	keyItems      		map[string]KeyItem
+	masterItems			map[string]MasterItem
 	mixes				map[string]Mix
 	modifiers			map[string]Modifier
 	overdriveModes		map[string]OverdriveMode
 	overdrives			map[string]Overdrive
+	positions			map[string]BlitzballPosition
 	properties			map[string]Property
+	quests				map[string]Quest
 	sidequests			map[string]Sidequest
 	subquests			map[string]Subquest
 	songs         		map[string]Song
@@ -66,11 +69,14 @@ func lookupInit() lookup {
 		equipmentTables:	make(map[string]EquipmentTable),
 		items:         		make(map[string]Item),
 		keyItems:      		make(map[string]KeyItem),
+		masterItems: 		make(map[string]MasterItem),
 		mixes:				make(map[string]Mix),
 		modifiers: 			make(map[string]Modifier),
 		overdriveModes:		make(map[string]OverdriveMode),
 		overdrives: 		make(map[string]Overdrive),
+		positions: 			make(map[string]BlitzballPosition),
 		properties: 		make(map[string]Property),
+		quests: 			make(map[string]Quest),
 		sidequests: 		make(map[string]Sidequest),
 		subquests: 			make(map[string]Subquest),
 		songs:         		make(map[string]Song),
@@ -292,6 +298,16 @@ func (l *lookup) getKeyItem(itemName string) (KeyItem, error) {
 }
 
 
+func (l *lookup) getMasterItem(itemName string) (MasterItem, error) {
+	masterItem, found := l.masterItems[itemName]
+	if !found {
+		return MasterItem{}, fmt.Errorf("couldn't find Master Item %s", itemName)
+	}
+
+	return masterItem, nil
+}
+
+
 func (l *lookup) getMix(mixName string) (Mix, error) {
 	mix, found := l.mixes[mixName]
 	if !found {
@@ -334,6 +350,16 @@ func (l *lookup) getOverdriveMode(modeName string) (OverdriveMode, error) {
 }
 
 
+func (l *lookup) getPosition(positionKey string) (BlitzballPosition, error) {
+	position, found := l.positions[positionKey]
+	if !found {
+		return BlitzballPosition{}, fmt.Errorf("couldn't find Blitzball Position %s", positionKey)
+	}
+
+	return position, nil
+}
+
+
 func (l *lookup) getProperty(propertyName string) (Property, error) {
 	property, found := l.properties[propertyName]
 	if !found {
@@ -357,6 +383,18 @@ func (l *lookup) getSidequest(questName string) (Sidequest, error) {
 	}
 
 	return sidequest, nil
+}
+
+
+func (l *lookup) getQuest(quest Quest) (Quest, error) {
+	key := createLookupKey(quest)
+
+	quest, found := l.quests[key]
+	if !found {
+		return Quest{}, fmt.Errorf("couldn't find Quest %s", quest.Name)
+	}
+
+	return quest, nil
 }
 
 

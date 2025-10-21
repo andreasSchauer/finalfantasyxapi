@@ -327,48 +327,48 @@ func (ns NullAutoAbilityPool) Value() (driver.Value, error) {
 	return string(ns.AutoAbilityPool), nil
 }
 
-type BlitzballItemSlot string
+type BlitzballPositionSlot string
 
 const (
-	BlitzballItemSlot1st       BlitzballItemSlot = "1st"
-	BlitzballItemSlot2nd       BlitzballItemSlot = "2nd"
-	BlitzballItemSlot3rd       BlitzballItemSlot = "3rd"
-	BlitzballItemSlotTopScorer BlitzballItemSlot = "top-scorer"
+	BlitzballPositionSlot1st       BlitzballPositionSlot = "1st"
+	BlitzballPositionSlot2nd       BlitzballPositionSlot = "2nd"
+	BlitzballPositionSlot3rd       BlitzballPositionSlot = "3rd"
+	BlitzballPositionSlotTopScorer BlitzballPositionSlot = "top-scorer"
 )
 
-func (e *BlitzballItemSlot) Scan(src interface{}) error {
+func (e *BlitzballPositionSlot) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = BlitzballItemSlot(s)
+		*e = BlitzballPositionSlot(s)
 	case string:
-		*e = BlitzballItemSlot(s)
+		*e = BlitzballPositionSlot(s)
 	default:
-		return fmt.Errorf("unsupported scan type for BlitzballItemSlot: %T", src)
+		return fmt.Errorf("unsupported scan type for BlitzballPositionSlot: %T", src)
 	}
 	return nil
 }
 
-type NullBlitzballItemSlot struct {
-	BlitzballItemSlot BlitzballItemSlot
-	Valid             bool // Valid is true if BlitzballItemSlot is not NULL
+type NullBlitzballPositionSlot struct {
+	BlitzballPositionSlot BlitzballPositionSlot
+	Valid                 bool // Valid is true if BlitzballPositionSlot is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullBlitzballItemSlot) Scan(value interface{}) error {
+func (ns *NullBlitzballPositionSlot) Scan(value interface{}) error {
 	if value == nil {
-		ns.BlitzballItemSlot, ns.Valid = "", false
+		ns.BlitzballPositionSlot, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.BlitzballItemSlot.Scan(value)
+	return ns.BlitzballPositionSlot.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullBlitzballItemSlot) Value() (driver.Value, error) {
+func (ns NullBlitzballPositionSlot) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return string(ns.BlitzballItemSlot), nil
+	return string(ns.BlitzballPositionSlot), nil
 }
 
 type BlitzballTournamentCategory string
@@ -1941,11 +1941,19 @@ type BaseStat struct {
 	Value    int32
 }
 
-type BlitzballItemsList struct {
+type BlitzballItem struct {
+	ID           int32
+	DataHash     string
+	PositionID   int32
+	ItemAmountID int32
+	Chance       interface{}
+}
+
+type BlitzballPosition struct {
 	ID       int32
 	DataHash string
 	Category BlitzballTournamentCategory
-	Slot     BlitzballItemSlot
+	Slot     BlitzballPositionSlot
 }
 
 type CelestialWeapon struct {
@@ -1973,6 +1981,14 @@ type CharacterClass struct {
 	ID       int32
 	DataHash string
 	Name     string
+}
+
+type CompletionLocation struct {
+	ID           int32
+	DataHash     string
+	CompletionID int32
+	AreaID       int32
+	Notes        sql.NullString
 }
 
 type Element struct {
@@ -2445,6 +2461,14 @@ type Quest struct {
 	DataHash string
 	Name     string
 	Type     QuestType
+}
+
+type QuestCompletion struct {
+	ID           int32
+	DataHash     string
+	QuestID      int32
+	Condition    string
+	ItemAmountID int32
 }
 
 type Shop struct {

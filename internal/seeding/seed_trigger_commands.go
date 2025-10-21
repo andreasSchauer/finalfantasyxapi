@@ -41,12 +41,12 @@ func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 			var err error
 			command.Type = database.AbilityTypeTriggerCommand
 
-			command.Ability, err = seedObjAssignFK(qtx, command.Ability, l.seedAbility)
+			command.Ability, err = seedObjAssignID(qtx, command.Ability, l.seedAbility)
 			if err != nil {
 				return err
 			}
 
-			dbTriggerCommand ,err := qtx.CreateTriggerCommand(context.Background(), database.CreateTriggerCommandParams{
+			dbTriggerCommand, err := qtx.CreateTriggerCommand(context.Background(), database.CreateTriggerCommandParams{
 				DataHash:    generateDataHash(command),
 				AbilityID:   command.Ability.ID,
 				Description: command.Description,

@@ -1,12 +1,12 @@
 -- +goose Up
 CREATE TYPE blitzball_tournament_category AS ENUM ('league', 'tournament');
-CREATE TYPE blitzball_item_slot AS ENUM ('1st', '2nd', '3rd', 'top-scorer');
+CREATE TYPE blitzball_position_slot AS ENUM ('1st', '2nd', '3rd', 'top-scorer');
 
-CREATE TABLE blitzball_items_lists (
+CREATE TABLE blitzball_positions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     category blitzball_tournament_category NOT NULL,
-    slot blitzball_item_slot NOT NULL,
+    slot blitzball_position_slot NOT NULL,
     UNIQUE(category, slot)
 );
 
@@ -73,6 +73,6 @@ DROP TABLE IF EXISTS subquests;
 DROP TABLE IF EXISTS sidequests;
 DROP TABLE IF EXISTS quests;
 DROP TYPE IF EXISTS quest_type;
-DROP TABLE IF EXISTS blitzball_items_lists;
+DROP TABLE IF EXISTS blitzball_positions;
 DROP TYPE IF EXISTS blitzball_tournament_category;
-DROP TYPE IF EXISTS blitzball_item_slot;
+DROP TYPE IF EXISTS blitzball_position_slot;

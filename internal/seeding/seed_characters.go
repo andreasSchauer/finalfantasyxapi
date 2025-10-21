@@ -48,7 +48,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 			var err error
 			character.Type = database.UnitTypeCharacter
 
-			character.PlayerUnit, err = seedObjAssignFK(qtx, character.PlayerUnit, l.seedPlayerUnit)
+			character.PlayerUnit, err = seedObjAssignID(qtx, character.PlayerUnit, l.seedPlayerUnit)
 			if err != nil {
 				return err
 			}

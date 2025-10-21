@@ -39,13 +39,13 @@ func (l *lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, shop := range shops {
+			var err error
+			
 			locationArea := shop.LocationArea
-			area, err := l.getArea(shop.LocationArea)
+			shop.AreaID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
 				return fmt.Errorf("shops: %v", err)
 			}
-
-			shop.AreaID = area.ID
 
 			err = qtx.CreateShop(context.Background(), database.CreateShopParams{
 				DataHash: generateDataHash(shop),
@@ -55,7 +55,7 @@ func (l *lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 				Category: database.ShopCategory(shop.Category),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create monster formation list: %s - %s - %s - %d - %d: %v", locationArea.Location, locationArea.SubLocation, locationArea.Area, derefOrNil(locationArea.Version), derefOrNil(shop.Version), err)
+				return fmt.Errorf("couldn't create shop: %s - shop version: %d: %v", createLookupKey(locationArea), derefOrNil(shop.Version), err)
 			}
 		}
 		return nil

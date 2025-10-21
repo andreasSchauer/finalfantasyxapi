@@ -1,6 +1,13 @@
--- name: CreateBlitzballItemList :exec
-INSERT INTO blitzball_items_lists (data_hash, category, slot)
+-- name: CreateBlitzballPosition :one
+INSERT INTO blitzball_positions (data_hash, category, slot)
 VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = blitzball_positions.data_hash
+RETURNING *;
+
+
+-- name: CreateBlitzballItem :exec
+INSERT INTO blitzball_items (data_hash, position_id, item_amount_id, chance)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
@@ -23,6 +30,19 @@ INSERT INTO subquests (data_hash, quest_id, parent_sidequest_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = subquests.data_hash
 RETURNING *;
+
+
+-- name: CreateQuestCompletion :one
+INSERT INTO quest_completions (data_hash, quest_id, condition, item_amount_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
+RETURNING *;
+
+
+-- name: CreateCompletionLocation :exec
+INSERT INTO completion_locations (data_hash, completion_id, area_id, notes)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateMonsterArenaCreation :exec

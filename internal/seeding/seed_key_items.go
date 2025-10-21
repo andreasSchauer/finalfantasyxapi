@@ -43,7 +43,7 @@ func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 			var err error
 			keyItem.Type = database.ItemTypeKeyItem
 
-			keyItem.MasterItem, err = seedObjAssignFK(qtx, keyItem.MasterItem, l.seedMasterItem)
+			keyItem.MasterItem, err = seedObjAssignID(qtx, keyItem.MasterItem, l.seedMasterItem)
 			if err != nil {
 				return err
 			}

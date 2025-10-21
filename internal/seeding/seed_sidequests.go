@@ -11,7 +11,8 @@ import (
 type Sidequest struct {
 	ID int32
 	Quest
-	Subquests []Subquest `json:"subquests"`
+	Completion *QuestCompletion `json:"completion"`
+	Subquests  []Subquest      `json:"subquests"`
 }
 
 func (s Sidequest) ToHashFields() []any {
@@ -27,7 +28,8 @@ func (s Sidequest) GetID() int32 {
 type Subquest struct {
 	ID int32
 	Quest
-	SidequestID int32
+	SidequestID 	int32
+	Completions  	[]QuestCompletion `json:"completion"`
 }
 
 func (s Subquest) ToHashFields() []any {
@@ -39,6 +41,41 @@ func (s Subquest) ToHashFields() []any {
 
 func (s Subquest) GetID() int32 {
 	return s.ID
+}
+
+type QuestCompletion struct {
+	ID        int32
+	QuestID   int32
+	Condition string               `json:"condition"`
+	Locations []CompletionLocation `json:"locations"`
+	Reward    ItemAmount           `json:"reward"`
+}
+
+func (qc QuestCompletion) ToHashFields() []any {
+	return []any{
+		qc.QuestID,
+		qc.Condition,
+		qc.Reward.ID,
+	}
+}
+
+func (qc QuestCompletion) GetID() int32 {
+	return qc.ID
+}
+
+type CompletionLocation struct {
+	CompletionID int32
+	AreaID       int32
+	LocationArea LocationArea `json:"location_area"`
+	Notes        *string      `json:"notes"`
+}
+
+func (cl CompletionLocation) ToHashFields() []any {
+	return []any{
+		cl.CompletionID,
+		cl.AreaID,
+		derefOrNil(cl.Notes),
+	}
 }
 
 func (l *lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
@@ -55,7 +92,7 @@ func (l *lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 			var err error
 			sidequest.Type = database.QuestTypeSidequest
 
-			sidequest.Quest, err = seedObjAssignFK(qtx, sidequest.Quest, l.seedQuest)
+			sidequest.Quest, err = seedObjAssignID(qtx, sidequest.Quest, l.seedQuest)
 			if err != nil {
 				return err
 			}
@@ -85,7 +122,7 @@ func (l *lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 		subquest.Type = database.QuestTypeSubquest
 		subquest.SidequestID = sidequest.ID
 
-		subquest.Quest, err = seedObjAssignFK(qtx, subquest.Quest, l.seedQuest)
+		subquest.Quest, err = seedObjAssignID(qtx, subquest.Quest, l.seedQuest)
 		if err != nil {
 			return err
 		}
@@ -102,6 +139,120 @@ func (l *lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 		subquest.ID = dbSubquest.ID
 		key := createLookupKey(subquest.Quest)
 		l.subquests[key] = subquest
+	}
+
+	return nil
+}
+
+func (l *lookup) createSidequestsRelationships(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "./data/sidequests.json"
+
+	var sidequests []Sidequest
+	err := loadJSONFile(string(srcPath), &sidequests)
+	if err != nil {
+		return err
+	}
+
+	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		for _, jsonSidequest := range sidequests {
+			completion := jsonSidequest.Completion
+			questKey := Quest{
+				Name: jsonSidequest.Name,
+				Type: database.QuestTypeSidequest,
+			}
+
+			if completion != nil {
+				err := l.seedQuestCompletionRelationships(qtx, *completion, questKey)
+				if err != nil {
+					return err
+				}
+			}
+
+
+			for _, jsonSubquest := range jsonSidequest.Subquests {
+				for _, completion := range jsonSubquest.Completions {
+					questKey := Quest{
+						Name: jsonSubquest.Name,
+						Type: database.QuestTypeSubquest,
+					}
+					
+					err := l.seedQuestCompletionRelationships(qtx, completion, questKey)
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+
+		return nil
+	})
+}
+
+
+func (l *lookup) seedQuestCompletionRelationships(qtx *database.Queries, completion QuestCompletion, quest Quest) error {
+	var err error
+
+	completion.QuestID, err = assignFK(quest, l.getQuest)
+	if err != nil {
+		return fmt.Errorf("quest %s: %v", quest.Name, err)
+	}
+
+	completion, err = seedObjAssignID(qtx, completion, l.seedQuestCompletion)
+	if err != nil {
+		return fmt.Errorf("quest %s: %v", quest.Name, err)
+	}
+
+	err = l.seedCompletionLocations(qtx, completion)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+
+func (l *lookup) seedQuestCompletion(qtx *database.Queries, completion QuestCompletion) (QuestCompletion, error) {
+	var err error
+
+	completion.Reward, err = seedObjAssignID(qtx, completion.Reward, l.seedItemAmount)
+	if err != nil {
+		return QuestCompletion{}, err
+	}
+
+	dbCompletion, err := qtx.CreateQuestCompletion(context.Background(), database.CreateQuestCompletionParams{
+		DataHash:     generateDataHash(completion),
+		QuestID:      completion.QuestID,
+		Condition:    completion.Condition,
+		ItemAmountID: completion.Reward.ID,
+	})
+	if err != nil {
+		return QuestCompletion{}, fmt.Errorf("couldn't create quest completion: %v", err)
+	}
+	completion.ID = dbCompletion.ID
+
+	return completion, nil
+}
+
+
+func (l *lookup) seedCompletionLocations(qtx *database.Queries, completion QuestCompletion) error {
+	for _, location := range completion.Locations {
+		var err error
+
+		location.AreaID, err = assignFK(location.LocationArea, l.getArea)
+		if err != nil {
+			return err
+		}
+		location.CompletionID = completion.ID
+
+		err = qtx.CreateCompletionLocation(context.Background(), database.CreateCompletionLocationParams{
+			DataHash:     generateDataHash(location),
+			CompletionID: location.CompletionID,
+			AreaID:       location.AreaID,
+			Notes:        getNullString(location.Notes),
+		})
+		if err != nil {
+			return fmt.Errorf("couldn't create completion location: %s: %v", createLookupKey(location.LocationArea), err)
+		}
 	}
 
 	return nil

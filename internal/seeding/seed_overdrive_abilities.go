@@ -33,7 +33,7 @@ func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 			var err error
 			overdriveAbility.Type = database.AbilityTypeOverdriveAbility
 
-			overdriveAbility.Ability, err = seedObjAssignFK(qtx, overdriveAbility.Ability, l.seedAbility)
+			overdriveAbility.Ability, err = seedObjAssignID(qtx, overdriveAbility.Ability, l.seedAbility)
 			if err != nil {
 				return err
 			}

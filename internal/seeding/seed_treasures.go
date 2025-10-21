@@ -74,7 +74,7 @@ func (l *lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 					GilAmount:       getNullInt32(treasure.GilAmount),
 				})
 				if err != nil {
-					return fmt.Errorf("couldn't create Treasure: %s - %s - %s - %d - %d: %v", locationArea.Location, locationArea.SubLocation, locationArea.Area, derefOrNil(locationArea.Version), treasure.Version, err)
+					return fmt.Errorf("couldn't create Treasure: %s - treasure version: %d: %v", createLookupKey(locationArea), treasure.Version, err)
 				}
 			}
 		}

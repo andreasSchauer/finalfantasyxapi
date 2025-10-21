@@ -22,15 +22,15 @@ func (l Location) ToHashFields() []any {
 
 type SubLocation struct {
 	ID				int32
-	locationID    	int32
 	Name          	string  `json:"sub_location"`
 	Specification 	*string `json:"specification"`
 	Areas         	[]Area  `json:"areas"`
+	Location		Location
 }
 
 func (s SubLocation) ToHashFields() []any {
 	return []any{
-		s.locationID,
+		s.Location.ID,
 		s.Name,
 		derefOrNil(s.Specification),
 	}
@@ -38,7 +38,6 @@ func (s SubLocation) ToHashFields() []any {
 
 type Area struct {
 	ID                   int32
-	SubLocationID        int32
 	Name                 string  			`json:"area"`
 	Version              *int32  			`json:"version"`
 	Specification        *string 			`json:"specification"`
@@ -47,12 +46,13 @@ type Area struct {
 	AirshipDropOff       bool    			`json:"airship_drop_off"`
 	HasCompilationSphere bool    			`json:"has_compilation_sphere"`
 	CanRideChocobo       bool    			`json:"can_ride_chocobo"`
-	ConnectedAreas		[]AreaConnection 	`json:"connected_areas"`
+	ConnectedAreas		 []AreaConnection 	`json:"connected_areas"`
+	SubLocation			 SubLocation
 }
 
 func (a Area) ToHashFields() []any {
 	return []any{
-		a.SubLocationID,
+		a.SubLocation.ID,
 		a.Name,
 		derefOrNil(a.Version),
 		derefOrNil(a.Specification),
@@ -66,6 +66,16 @@ func (a Area) ToHashFields() []any {
 
 func (a Area) GetID() int32 {
 	return a.ID
+}
+
+
+func (a Area) GetLocationArea() LocationArea {
+	return LocationArea{
+		Location: 		a.SubLocation.Location.Name,
+		SubLocation: 	a.SubLocation.Name,
+		Area: 			a.Name,
+		Version: 		a.Version,
+	}
 }
 
 
@@ -146,11 +156,11 @@ func (l *lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 
 func (l *lookup) seedSubLocations(qtx *database.Queries, location Location) error {
 	for _, subLocation := range location.SubLocations {
-		subLocation.locationID = location.ID
+		subLocation.Location = location
 
 		dbSubLocation, err := qtx.CreateSubLocation(context.Background(), database.CreateSubLocationParams{
 			DataHash:      generateDataHash(subLocation),
-			LocationID:    subLocation.locationID,
+			LocationID:    subLocation.Location.ID,
 			Name:          subLocation.Name,
 			Specification: getNullString(subLocation.Specification),
 		})
@@ -159,7 +169,7 @@ func (l *lookup) seedSubLocations(qtx *database.Queries, location Location) erro
 		}
 		subLocation.ID = dbSubLocation.ID
 
-		err = l.seedAreas(qtx, location, subLocation)
+		err = l.seedAreas(qtx, subLocation)
 		if err != nil {
 			return err
 		}
@@ -168,13 +178,13 @@ func (l *lookup) seedSubLocations(qtx *database.Queries, location Location) erro
 	return nil
 }
 
-func (l *lookup) seedAreas(qtx *database.Queries, location Location, subLocation SubLocation) error {
+func (l *lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error {
 	for _, area := range subLocation.Areas {
-		area.SubLocationID = subLocation.ID
+		area.SubLocation = subLocation
 
 		dbArea, err := qtx.CreateArea(context.Background(), database.CreateAreaParams{
 			DataHash:             generateDataHash(area),
-			SubLocationID:        area.SubLocationID,
+			SubLocationID:        area.SubLocation.ID,
 			Name:                 area.Name,
 			Version:              getNullInt32(area.Version),
 			Specification:        getNullString(area.Specification),
@@ -185,16 +195,12 @@ func (l *lookup) seedAreas(qtx *database.Queries, location Location, subLocation
 			CanRideChocobo:       area.CanRideChocobo,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create Area: %s - %s - %s: %v", location.Name, subLocation.Name, area.Name, err)
+			return fmt.Errorf("couldn't create Area: %s - %s - %s: %v", subLocation.Location.Name, subLocation.Name, area.Name, err)
 		}
 
 		area.ID = dbArea.ID
-		locationArea := LocationArea{
-			Location:    location.Name,
-			SubLocation: subLocation.Name,
-			Area:        area.Name,
-			Version:     area.Version,
-		}
+		locationArea := area.GetLocationArea()
+
 		key := createLookupKey(locationArea)
 		l.areas[key] = area
 	}
@@ -222,33 +228,43 @@ func (l *lookup) createAreasRelationships(db *database.Queries, dbConn *sql.DB) 
 						Area: jsonArea.Name,
 						Version: jsonArea.Version,
 					}
+					
 					area, err := l.getArea(locationArea)
 					if err != nil {
 						return err
 					}
 
-					for _, connection := range area.ConnectedAreas {
-						junction, err := createJunctionSeed(qtx, area, connection, l.seedAreaConnection)
-						if err != nil {
-							return fmt.Errorf("area: %s: %v", createLookupKey(locationArea), err)
-						}
-
-						err = qtx.CreateAreaConnectionJunction(context.Background(), database.CreateAreaConnectionJunctionParams{
-							DataHash: 		generateDataHash(junction),
-							AreaID: 		junction.ParentID,
-							ConnectionID: 	junction.ChildID,
-						})
-						if err != nil {
-							return fmt.Errorf("area: %s: couldn't create connected area junction: %v", createLookupKey(locationArea), err)
-						}
+					err = l.seedAreaConnections(qtx, area)
+					if err != nil {
+						return fmt.Errorf("area: %s: couldn't create connected area junction: %v", createLookupKey(area.GetLocationArea()), err)
 					}
 				}
 			}
 		}
 
-
 		return nil
 	})
+}
+
+
+func (l *lookup) seedAreaConnections(qtx *database.Queries, area Area) error {
+	for _, connection := range area.ConnectedAreas {
+		junction, err := createJunctionSeed(qtx, area, connection, l.seedAreaConnection)
+		if err != nil {
+			return fmt.Errorf("area: %s: %v", createLookupKey(area.GetLocationArea()), err)
+		}
+
+		err = qtx.CreateAreaConnectionJunction(context.Background(), database.CreateAreaConnectionJunctionParams{
+			DataHash: 		generateDataHash(junction),
+			AreaID: 		junction.ParentID,
+			ConnectionID: 	junction.ChildID,
+		})
+		if err != nil {
+			return fmt.Errorf("area: %s: couldn't create connected area junction: %v", createLookupKey(area.GetLocationArea()), err)
+		}
+	}
+
+	return nil
 }
 
 
