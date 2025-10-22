@@ -69,7 +69,7 @@ CREATE TABLE shops (
 );
 
 
-CREATE TABLE monster_formation_lists (
+CREATE TABLE formation_locations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     version INTEGER,
@@ -81,7 +81,7 @@ CREATE TABLE monster_formation_lists (
 
 
 -- +goose Down
-DROP TABLE IF EXISTS monster_formation_lists;
+DROP TABLE IF EXISTS formation_locations;
 DROP TABLE IF EXISTS shops;
 DROP TYPE IF EXISTS shop_category;
 DROP TABLE IF EXISTS treasures;

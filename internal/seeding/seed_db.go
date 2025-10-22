@@ -9,7 +9,6 @@ import (
 	"github.com/pressly/goose/v3"
 )
 
-
 func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 	const migrationsDir = "./sql/schema/"
 
@@ -52,9 +51,10 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.seedLocations,
 		l.seedTreasures,
 		l.seedShops,
-		l.seedMonsterFormations,
+		l.seedFormationLocations,
 		l.seedSongs,
 		l.seedFMVs,
+		l.createMonsterFormationsRelationships,
 	}
 
 	relationshipFunctions := []func(*database.Queries, *sql.DB) error{
@@ -88,7 +88,6 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 
 	return nil
 }
-
 
 func handleDBFunctions(db *database.Queries, dbConn *sql.DB, functions []func(*database.Queries, *sql.DB) error, infotext string) error {
 	start := time.Now()

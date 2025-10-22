@@ -9,8 +9,7 @@ import (
 )
 
 type Monster struct {
-	//id 		int32
-	//dataHash	string
+	ID					 int32
 	Name                 string   `json:"name"`
 	Version              *int32   `json:"version"`
 	Specification        *string  `json:"specification"`
@@ -69,6 +68,18 @@ func (m Monster) ToHashFields() []any {
 	}
 }
 
+func (m Monster) ToKeyFields() []any {
+	return []any{
+		m.Name,
+		derefOrNil(m.Version),
+	}
+}
+
+
+func (m Monster) GetID() int32 {
+	return m.ID
+}
+
 
 
 func (l *lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
@@ -82,7 +93,7 @@ func (l *lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, monster := range monsters {
-			err = qtx.CreateMonster(context.Background(), database.CreateMonsterParams{
+			dbMonster, err := qtx.CreateMonster(context.Background(), database.CreateMonsterParams{
 				DataHash:             generateDataHash(monster),
 				Name:                 monster.Name,
 				Version:              getNullInt32(monster.Version),
@@ -113,7 +124,11 @@ func (l *lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return fmt.Errorf("couldn't create Monster: %s-%d: %v", monster.Name, derefOrNil(monster.Version), err)
 			}
+			monster.ID = dbMonster.ID
+			key := createLookupKey(monster)
+			l.monsters[key] = monster
 		}
+
 		return nil
 	})
 }

@@ -44,7 +44,40 @@ VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateMonsterFormationList :exec
-INSERT INTO monster_formation_lists (data_hash, version, area_id, notes)
+-- name: CreateFormationLocation :one
+INSERT INTO formation_locations (data_hash, version, area_id, notes)
 VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_locations.data_hash
+RETURNING *;
+
+
+-- name: CreateFormationBossSong :one
+INSERT INTO formation_boss_songs (data_hash, song_id, celebrate_victory)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_boss_songs.data_hash
+RETURNING *;
+
+
+-- name: CreateMonsterFormation :one
+INSERT INTO monster_formations (data_hash, formation_location_id, category, is_forced_ambush, can_escape, boss_song_id, notes)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_formations.data_hash
+RETURNING *;
+
+
+-- name: CreateLocationMonsterFormationJunction :exec
+INSERT INTO j_location_monster_formation (data_hash, formation_location_id, monster_formation_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonsterFormationMonsterAmountJunction :exec
+INSERT INTO j_monster_formation_monster_amount (data_hash, monster_formation_id, monster_amount_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonsterFormationTriggerCommandJunction :exec
+INSERT INTO j_monster_formation_trigger_command (data_hash, monster_formation_id, trigger_command_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;

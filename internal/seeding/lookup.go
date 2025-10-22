@@ -31,11 +31,13 @@ type lookup struct {
 	charClasses			map[string]CharacterClass
 	elements			map[string]Element
 	equipmentTables		map[string]EquipmentTable
+	formationLocations	map[string]FormationLocation
 	items         		map[string]Item
 	keyItems      		map[string]KeyItem
 	masterItems			map[string]MasterItem
 	mixes				map[string]Mix
 	modifiers			map[string]Modifier
+	monsters			map[string]Monster
 	overdriveModes		map[string]OverdriveMode
 	overdrives			map[string]Overdrive
 	positions			map[string]BlitzballPosition
@@ -67,11 +69,13 @@ func lookupInit() lookup {
 		charClasses: 		make(map[string]CharacterClass),
 		elements: 			make(map[string]Element),
 		equipmentTables:	make(map[string]EquipmentTable),
+		formationLocations:	make(map[string]FormationLocation),
 		items:         		make(map[string]Item),
 		keyItems:      		make(map[string]KeyItem),
 		masterItems: 		make(map[string]MasterItem),
 		mixes:				make(map[string]Mix),
 		modifiers: 			make(map[string]Modifier),
+		monsters: 			make(map[string]Monster),
 		overdriveModes:		make(map[string]OverdriveMode),
 		overdrives: 		make(map[string]Overdrive),
 		positions: 			make(map[string]BlitzballPosition),
@@ -266,6 +270,16 @@ func (l *lookup) getEquipmentTable(tableKey string) (EquipmentTable, error) {
 }
 
 
+func (l *lookup) getFormationLocation(formationKey string) (FormationLocation, error) {
+	formationLocation, found := l.formationLocations[formationKey]
+	if !found {
+		return FormationLocation{}, fmt.Errorf("couldn't find Formation Location %s", formationKey)
+	}
+
+	return formationLocation, nil
+}
+
+
 func (l *lookup) getItem(itemName string) (Item, error) {
 	masterItem := MasterItem{
 		Name: itemName,
@@ -325,6 +339,16 @@ func (l *lookup) getModifier(modifierName string) (Modifier, error) {
 	}
 
 	return modifier, nil
+}
+
+
+func (l *lookup) getMonster(monsterKey string) (Monster, error) {
+	monster, found := l.monsters[monsterKey]
+	if !found {
+		return Monster{}, fmt.Errorf("couldn't find Monster %s", monsterKey)
+	}
+
+	return monster, nil
 }
 
 

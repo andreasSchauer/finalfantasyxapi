@@ -1271,6 +1271,52 @@ func (ns NullModifierType) Value() (driver.Value, error) {
 	return string(ns.ModifierType), nil
 }
 
+type MonsterFormationCategory string
+
+const (
+	MonsterFormationCategoryBossFight       MonsterFormationCategory = "boss-fight"
+	MonsterFormationCategoryOnDemandFight   MonsterFormationCategory = "on-demand-fight"
+	MonsterFormationCategoryRandomEncounter MonsterFormationCategory = "random-encounter"
+	MonsterFormationCategoryStaticEncounter MonsterFormationCategory = "static-encounter"
+	MonsterFormationCategoryStoryFight      MonsterFormationCategory = "story-fight"
+	MonsterFormationCategoryTutorial        MonsterFormationCategory = "tutorial"
+)
+
+func (e *MonsterFormationCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = MonsterFormationCategory(s)
+	case string:
+		*e = MonsterFormationCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for MonsterFormationCategory: %T", src)
+	}
+	return nil
+}
+
+type NullMonsterFormationCategory struct {
+	MonsterFormationCategory MonsterFormationCategory
+	Valid                    bool // Valid is true if MonsterFormationCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullMonsterFormationCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.MonsterFormationCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.MonsterFormationCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullMonsterFormationCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.MonsterFormationCategory), nil
+}
+
 type MonsterSpecies string
 
 const (
@@ -2042,6 +2088,21 @@ type Fmv struct {
 	AreaID              int32
 }
 
+type FormationBossSong struct {
+	ID               int32
+	DataHash         string
+	SongID           int32
+	CelebrateVictory bool
+}
+
+type FormationLocation struct {
+	ID       int32
+	DataHash string
+	Version  sql.NullInt32
+	AreaID   int32
+	Notes    sql.NullString
+}
+
 type InflictedStatuss struct {
 	ID                int32
 	DataHash          string
@@ -2186,12 +2247,33 @@ type JEquipmentTableNameClstlWpn struct {
 	CelestialWeaponID sql.NullInt32
 }
 
+type JLocationMonsterFormation struct {
+	ID                  int32
+	DataHash            string
+	FormationLocationID int32
+	MonsterFormationID  int32
+}
+
 type JMixCombo struct {
 	ID          int32
 	DataHash    string
 	MixID       int32
 	ComboID     int32
 	IsBestCombo bool
+}
+
+type JMonsterFormationMonsterAmount struct {
+	ID                 int32
+	DataHash           string
+	MonsterFormationID int32
+	MonsterAmountID    int32
+}
+
+type JMonsterFormationTriggerCommand struct {
+	ID                 int32
+	DataHash           string
+	MonsterFormationID int32
+	TriggerCommandID   int32
 }
 
 type JOdModeAction struct {
@@ -2354,6 +2436,13 @@ type Monster struct {
 	ScanText             sql.NullString
 }
 
+type MonsterAmount struct {
+	ID        int32
+	DataHash  string
+	MonsterID int32
+	Amount    int32
+}
+
 type MonsterArenaCreation struct {
 	ID                        int32
 	DataHash                  string
@@ -2366,12 +2455,15 @@ type MonsterArenaCreation struct {
 	Amount                    int32
 }
 
-type MonsterFormationList struct {
-	ID       int32
-	DataHash string
-	Version  sql.NullInt32
-	AreaID   int32
-	Notes    sql.NullString
+type MonsterFormation struct {
+	ID                  int32
+	DataHash            string
+	FormationLocationID int32
+	Category            MonsterFormationCategory
+	IsForcedAmbush      bool
+	CanEscape           bool
+	BossSongID          sql.NullInt32
+	Notes               sql.NullString
 }
 
 type OdModeAction struct {

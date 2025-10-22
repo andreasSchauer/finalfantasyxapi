@@ -10,10 +10,11 @@ import (
 	"database/sql"
 )
 
-const createMonster = `-- name: CreateMonster :exec
+const createMonster = `-- name: CreateMonster :one
 INSERT INTO monsters (data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = monsters.data_hash
+RETURNING id, data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text
 `
 
 type CreateMonsterParams struct {
@@ -45,8 +46,8 @@ type CreateMonsterParams struct {
 	ScanText             sql.NullString
 }
 
-func (q *Queries) CreateMonster(ctx context.Context, arg CreateMonsterParams) error {
-	_, err := q.db.ExecContext(ctx, createMonster,
+func (q *Queries) CreateMonster(ctx context.Context, arg CreateMonsterParams) (Monster, error) {
+	row := q.db.QueryRowContext(ctx, createMonster,
 		arg.DataHash,
 		arg.Name,
 		arg.Version,
@@ -74,5 +75,60 @@ func (q *Queries) CreateMonster(ctx context.Context, arg CreateMonsterParams) er
 		arg.SensorText,
 		arg.ScanText,
 	)
-	return err
+	var i Monster
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Version,
+		&i.Specification,
+		&i.Notes,
+		&i.Species,
+		&i.IsStoryBased,
+		&i.CanBeCaptured,
+		&i.AreaConquestLocation,
+		&i.CtbIconType,
+		&i.HasOverdrive,
+		&i.IsUnderwater,
+		&i.IsZombie,
+		&i.Distance,
+		&i.Ap,
+		&i.ApOverkill,
+		&i.OverkillDamage,
+		&i.Gil,
+		&i.StealGil,
+		&i.DoomCountdown,
+		&i.PoisonRate,
+		&i.ThreatenChance,
+		&i.ZanmatoLevel,
+		&i.MonsterArenaPrice,
+		&i.SensorText,
+		&i.ScanText,
+	)
+	return i, err
+}
+
+const createMonsterAmount = `-- name: CreateMonsterAmount :one
+INSERT INTO monster_amounts (data_hash, monster_id, amount)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_amounts.data_hash
+RETURNING id, data_hash, monster_id, amount
+`
+
+type CreateMonsterAmountParams struct {
+	DataHash  string
+	MonsterID int32
+	Amount    int32
+}
+
+func (q *Queries) CreateMonsterAmount(ctx context.Context, arg CreateMonsterAmountParams) (MonsterAmount, error) {
+	row := q.db.QueryRowContext(ctx, createMonsterAmount, arg.DataHash, arg.MonsterID, arg.Amount)
+	var i MonsterAmount
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MonsterID,
+		&i.Amount,
+	)
+	return i, err
 }

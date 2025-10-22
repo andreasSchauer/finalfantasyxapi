@@ -39,8 +39,17 @@ CREATE TABLE monsters (
 );
 
 
+CREATE TABLE monster_amounts (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    monster_id INTEGER NOT NULL REFERENCES monsters(id),
+    amount INTEGER NOT NULL
+);
+
+
 
 -- +goose Down
+DROP TABLE IF EXISTS monster_amounts;
 DROP TABLE IF EXISTS monsters;
 DROP DOMAIN IF EXISTS zanmato_level;
 DROP TYPE IF EXISTS ctb_icon_type;
