@@ -30,6 +30,7 @@ type lookup struct {
 	characters			map[string]Character
 	charClasses			map[string]CharacterClass
 	elements			map[string]Element
+	equipmentNames		map[string]EquipmentName
 	equipmentTables		map[string]EquipmentTable
 	formationLocations	map[string]FormationLocation
 	items         		map[string]Item
@@ -45,10 +46,12 @@ type lookup struct {
 	quests				map[string]Quest
 	sidequests			map[string]Sidequest
 	subquests			map[string]Subquest
+	shops				map[string]Shop
 	songs         		map[string]Song
 	stats         		map[string]Stat
 	statusConditions	map[string]StatusCondition
 	submenus			map[string]Submenu
+	treasures			map[string]Treasure
 }
 
 
@@ -68,6 +71,7 @@ func lookupInit() lookup {
 		characters: 		make(map[string]Character),
 		charClasses: 		make(map[string]CharacterClass),
 		elements: 			make(map[string]Element),
+		equipmentNames:		make(map[string]EquipmentName),
 		equipmentTables:	make(map[string]EquipmentTable),
 		formationLocations:	make(map[string]FormationLocation),
 		items:         		make(map[string]Item),
@@ -83,10 +87,12 @@ func lookupInit() lookup {
 		quests: 			make(map[string]Quest),
 		sidequests: 		make(map[string]Sidequest),
 		subquests: 			make(map[string]Subquest),
+		shops:				make(map[string]Shop),
 		songs:         		make(map[string]Song),
 		stats:         		make(map[string]Stat),
 		statusConditions: 	make(map[string]StatusCondition),
 		submenus: 			make(map[string]Submenu),
+		treasures: 			make(map[string]Treasure),
 	}
 }
 
@@ -257,6 +263,16 @@ func (l *lookup) getElement(elementName string) (Element, error) {
 	}
 
 	return element, nil
+}
+
+
+func (l *lookup) getEquipmentName(equipmentName string) (EquipmentName, error) {
+	equipment, found := l.equipmentNames[equipmentName]
+	if !found {
+		return EquipmentName{}, fmt.Errorf("couldn't find Equipment Name %s", equipmentName)
+	}
+
+	return equipment, nil
 }
 
 
@@ -438,6 +454,16 @@ func (l *lookup) getSubquest(questName string) (Subquest, error) {
 }
 
 
+func (l *lookup) getShop(shopKey string) (Shop, error) {
+	shop, found := l.shops[shopKey]
+	if !found {
+		return Shop{}, fmt.Errorf("couldn't find Shop %s", shopKey)
+	}
+
+	return shop, nil
+}
+
+
 func (l *lookup) getSong(songName string) (Song, error) {
 	song, found := l.songs[songName]
 	if !found {
@@ -475,4 +501,14 @@ func (l *lookup) getSubmenu(menuName string) (Submenu, error) {
 	}
 
 	return submenu, nil
+}
+
+
+func (l *lookup) getTreasure(treasureKey string) (Treasure, error) {
+	treasure, found := l.treasures[treasureKey]
+	if !found {
+		return Treasure{}, fmt.Errorf("couldn't find Treasure %s", treasureKey)
+	}
+
+	return treasure, nil
 }

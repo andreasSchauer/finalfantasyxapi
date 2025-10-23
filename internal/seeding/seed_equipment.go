@@ -68,6 +68,7 @@ func (e EquipmentName) ToHashFields() []any {
 	}
 }
 
+
 func (e EquipmentName) GetID() int32 {
 	return e.ID
 }
@@ -242,6 +243,7 @@ func (l *lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 		if err != nil {
 			return fmt.Errorf("couldn't create name %s for equipment table: %s: %v", equipmentName.Name, createLookupKey(table), err)
 		}
+
 	}
 	
 	return nil
@@ -266,6 +268,7 @@ func (l *lookup) seedEquipmentName(qtx *database.Queries, equipmentName Equipmen
 	}
 
 	equipmentName.ID = dbEquipmentName.ID
+	l.equipmentNames[equipmentName.Name] = equipmentName
 
 	return equipmentName, nil
 }

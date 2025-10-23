@@ -169,6 +169,48 @@ func (q *Queries) CreateFormationLocation(ctx context.Context, arg CreateFormati
 	return i, err
 }
 
+const createFoundEquipmentAutoAbilityJunction = `-- name: CreateFoundEquipmentAutoAbilityJunction :exec
+INSERT INTO j_found_equipment_auto_ability (data_hash, found_equipment_id, auto_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateFoundEquipmentAutoAbilityJunctionParams struct {
+	DataHash         string
+	FoundEquipmentID int32
+	AutoAbilityID    int32
+}
+
+func (q *Queries) CreateFoundEquipmentAutoAbilityJunction(ctx context.Context, arg CreateFoundEquipmentAutoAbilityJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createFoundEquipmentAutoAbilityJunction, arg.DataHash, arg.FoundEquipmentID, arg.AutoAbilityID)
+	return err
+}
+
+const createFoundEquipmentPiece = `-- name: CreateFoundEquipmentPiece :one
+INSERT INTO found_equipment_pieces (data_hash, equipment_name_id, empty_slots_amount)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = found_equipment_pieces.data_hash
+RETURNING id, data_hash, equipment_name_id, empty_slots_amount
+`
+
+type CreateFoundEquipmentPieceParams struct {
+	DataHash         string
+	EquipmentNameID  int32
+	EmptySlotsAmount interface{}
+}
+
+func (q *Queries) CreateFoundEquipmentPiece(ctx context.Context, arg CreateFoundEquipmentPieceParams) (FoundEquipmentPiece, error) {
+	row := q.db.QueryRowContext(ctx, createFoundEquipmentPiece, arg.DataHash, arg.EquipmentNameID, arg.EmptySlotsAmount)
+	var i FoundEquipmentPiece
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.EquipmentNameID,
+		&i.EmptySlotsAmount,
+	)
+	return i, err
+}
+
 const createLocation = `-- name: CreateLocation :one
 INSERT INTO locations (data_hash, name)
 VALUES ($1, $2)
@@ -280,10 +322,11 @@ func (q *Queries) CreateMonsterFormationTriggerCommandJunction(ctx context.Conte
 	return err
 }
 
-const createShop = `-- name: CreateShop :exec
+const createShop = `-- name: CreateShop :one
 INSERT INTO shops (data_hash, version, area_id, notes, category)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = shops.data_hash
+RETURNING id, data_hash, version, area_id, notes, category
 `
 
 type CreateShopParams struct {
@@ -294,13 +337,118 @@ type CreateShopParams struct {
 	Category ShopCategory
 }
 
-func (q *Queries) CreateShop(ctx context.Context, arg CreateShopParams) error {
-	_, err := q.db.ExecContext(ctx, createShop,
+func (q *Queries) CreateShop(ctx context.Context, arg CreateShopParams) (Shop, error) {
+	row := q.db.QueryRowContext(ctx, createShop,
 		arg.DataHash,
 		arg.Version,
 		arg.AreaID,
 		arg.Notes,
 		arg.Category,
+	)
+	var i Shop
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Version,
+		&i.AreaID,
+		&i.Notes,
+		&i.Category,
+	)
+	return i, err
+}
+
+const createShopEquipmentPiece = `-- name: CreateShopEquipmentPiece :one
+INSERT INTO shop_equipment_pieces (data_hash, found_equipment_id, price)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = shop_equipment_pieces.data_hash
+RETURNING id, data_hash, found_equipment_id, price
+`
+
+type CreateShopEquipmentPieceParams struct {
+	DataHash         string
+	FoundEquipmentID int32
+	Price            int32
+}
+
+func (q *Queries) CreateShopEquipmentPiece(ctx context.Context, arg CreateShopEquipmentPieceParams) (ShopEquipmentPiece, error) {
+	row := q.db.QueryRowContext(ctx, createShopEquipmentPiece, arg.DataHash, arg.FoundEquipmentID, arg.Price)
+	var i ShopEquipmentPiece
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.FoundEquipmentID,
+		&i.Price,
+	)
+	return i, err
+}
+
+const createShopItem = `-- name: CreateShopItem :one
+INSERT INTO shop_items (data_hash, item_id, price)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = shop_items.data_hash
+RETURNING id, data_hash, item_id, price
+`
+
+type CreateShopItemParams struct {
+	DataHash string
+	ItemID   int32
+	Price    int32
+}
+
+func (q *Queries) CreateShopItem(ctx context.Context, arg CreateShopItemParams) (ShopItem, error) {
+	row := q.db.QueryRowContext(ctx, createShopItem, arg.DataHash, arg.ItemID, arg.Price)
+	var i ShopItem
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.ItemID,
+		&i.Price,
+	)
+	return i, err
+}
+
+const createShopShopEquipmentJunction = `-- name: CreateShopShopEquipmentJunction :exec
+INSERT INTO j_shop_shop_equipment (data_hash, shop_id, shop_equipment_id, shop_type)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateShopShopEquipmentJunctionParams struct {
+	DataHash        string
+	ShopID          int32
+	ShopEquipmentID int32
+	ShopType        ShopType
+}
+
+func (q *Queries) CreateShopShopEquipmentJunction(ctx context.Context, arg CreateShopShopEquipmentJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createShopShopEquipmentJunction,
+		arg.DataHash,
+		arg.ShopID,
+		arg.ShopEquipmentID,
+		arg.ShopType,
+	)
+	return err
+}
+
+const createShopShopItemJunction = `-- name: CreateShopShopItemJunction :exec
+INSERT INTO j_shop_shop_item (data_hash, shop_id, shop_item_id, shop_type)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateShopShopItemJunctionParams struct {
+	DataHash   string
+	ShopID     int32
+	ShopItemID int32
+	ShopType   ShopType
+}
+
+func (q *Queries) CreateShopShopItemJunction(ctx context.Context, arg CreateShopShopItemJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createShopShopItemJunction,
+		arg.DataHash,
+		arg.ShopID,
+		arg.ShopItemID,
+		arg.ShopType,
 	)
 	return err
 }
@@ -337,10 +485,11 @@ func (q *Queries) CreateSubLocation(ctx context.Context, arg CreateSubLocationPa
 	return i, err
 }
 
-const createTreasure = `-- name: CreateTreasure :exec
+const createTreasure = `-- name: CreateTreasure :one
 INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = treasures.data_hash
+RETURNING id, data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount, found_equipment_id
 `
 
 type CreateTreasureParams struct {
@@ -355,8 +504,8 @@ type CreateTreasureParams struct {
 	GilAmount       sql.NullInt32
 }
 
-func (q *Queries) CreateTreasure(ctx context.Context, arg CreateTreasureParams) error {
-	_, err := q.db.ExecContext(ctx, createTreasure,
+func (q *Queries) CreateTreasure(ctx context.Context, arg CreateTreasureParams) (Treasure, error) {
+	row := q.db.QueryRowContext(ctx, createTreasure,
 		arg.DataHash,
 		arg.AreaID,
 		arg.Version,
@@ -366,6 +515,83 @@ func (q *Queries) CreateTreasure(ctx context.Context, arg CreateTreasureParams) 
 		arg.IsAnimaTreasure,
 		arg.Notes,
 		arg.GilAmount,
+	)
+	var i Treasure
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AreaID,
+		&i.Version,
+		&i.TreasureType,
+		&i.LootType,
+		&i.IsPostAirship,
+		&i.IsAnimaTreasure,
+		&i.Notes,
+		&i.GilAmount,
+		&i.FoundEquipmentID,
+	)
+	return i, err
+}
+
+const createTreasureItemAmountJunction = `-- name: CreateTreasureItemAmountJunction :exec
+INSERT INTO j_treasure_item_amount (data_hash, treasure_id, item_amount_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateTreasureItemAmountJunctionParams struct {
+	DataHash     string
+	TreasureID   int32
+	ItemAmountID int32
+}
+
+func (q *Queries) CreateTreasureItemAmountJunction(ctx context.Context, arg CreateTreasureItemAmountJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createTreasureItemAmountJunction, arg.DataHash, arg.TreasureID, arg.ItemAmountID)
+	return err
+}
+
+const updateTreasure = `-- name: UpdateTreasure :exec
+UPDATE treasures
+SET data_hash = $1,
+    area_id = $2,
+    version = $3,
+    treasure_type = $4,
+    loot_type = $5,
+    is_post_airship = $6,
+    is_anima_treasure = $7,
+    notes = $8,
+    gil_amount = $9,
+    found_equipment_id = $10
+WHERE id = $11
+`
+
+type UpdateTreasureParams struct {
+	DataHash         string
+	AreaID           int32
+	Version          int32
+	TreasureType     TreasureType
+	LootType         LootType
+	IsPostAirship    bool
+	IsAnimaTreasure  bool
+	Notes            sql.NullString
+	GilAmount        sql.NullInt32
+	FoundEquipmentID sql.NullInt32
+	ID               int32
+}
+
+func (q *Queries) UpdateTreasure(ctx context.Context, arg UpdateTreasureParams) error {
+	_, err := q.db.ExecContext(ctx, updateTreasure,
+		arg.DataHash,
+		arg.AreaID,
+		arg.Version,
+		arg.TreasureType,
+		arg.LootType,
+		arg.IsPostAirship,
+		arg.IsAnimaTreasure,
+		arg.Notes,
+		arg.GilAmount,
+		arg.FoundEquipmentID,
+		arg.ID,
 	)
 	return err
 }

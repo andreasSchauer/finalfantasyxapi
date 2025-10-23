@@ -32,16 +32,35 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateTreasure :exec
+-- name: CreateTreasure :one
 INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-ON CONFLICT(data_hash) DO NOTHING;
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = treasures.data_hash
+RETURNING *;
 
 
--- name: CreateShop :exec
+-- name: UpdateTreasure :exec
+UPDATE treasures
+SET data_hash = $1,
+    area_id = $2,
+    version = $3,
+    treasure_type = $4,
+    loot_type = $5,
+    is_post_airship = $6,
+    is_anima_treasure = $7,
+    notes = $8,
+    gil_amount = $9,
+    found_equipment_id = $10
+WHERE id = $11;
+
+
+
+
+-- name: CreateShop :one
 INSERT INTO shops (data_hash, version, area_id, notes, category)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO NOTHING;
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = shops.data_hash
+RETURNING *;
 
 
 -- name: CreateFormationLocation :one
@@ -80,4 +99,49 @@ ON CONFLICT(data_hash) DO NOTHING;
 -- name: CreateMonsterFormationTriggerCommandJunction :exec
 INSERT INTO j_monster_formation_trigger_command (data_hash, monster_formation_id, trigger_command_id)
 VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateFoundEquipmentPiece :one
+INSERT INTO found_equipment_pieces (data_hash, equipment_name_id, empty_slots_amount)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = found_equipment_pieces.data_hash
+RETURNING *;
+
+
+-- name: CreateFoundEquipmentAutoAbilityJunction :exec
+INSERT INTO j_found_equipment_auto_ability (data_hash, found_equipment_id, auto_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateTreasureItemAmountJunction :exec
+INSERT INTO j_treasure_item_amount (data_hash, treasure_id, item_amount_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateShopItem :one
+INSERT INTO shop_items (data_hash, item_id, price)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = shop_items.data_hash
+RETURNING *;
+
+
+-- name: CreateShopEquipmentPiece :one
+INSERT INTO shop_equipment_pieces (data_hash, found_equipment_id, price)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = shop_equipment_pieces.data_hash
+RETURNING *;
+
+
+-- name: CreateShopShopItemJunction :exec
+INSERT INTO j_shop_shop_item (data_hash, shop_id, shop_item_id, shop_type)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateShopShopEquipmentJunction :exec
+INSERT INTO j_shop_shop_equipment (data_hash, shop_id, shop_equipment_id, shop_type)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;

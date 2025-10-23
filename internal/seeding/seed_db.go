@@ -54,7 +54,6 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.seedFormationLocations,
 		l.seedSongs,
 		l.seedFMVs,
-		l.createMonsterFormationsRelationships,
 	}
 
 	relationshipFunctions := []func(*database.Queries, *sql.DB) error{
@@ -74,6 +73,9 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.createAreasRelationships,
 		l.createBlitzballItemsRelationships,
 		l.createSidequestsRelationships,
+		l.createMonsterFormationsRelationships,
+		l.createTreasuresRelationships,
+		l.createShopsRelationships,
 	}
 
 	err = handleDBFunctions(db, dbConn, seedFunctions, "initial seeding")

@@ -1631,6 +1631,48 @@ func (ns NullShopCategory) Value() (driver.Value, error) {
 	return string(ns.ShopCategory), nil
 }
 
+type ShopType string
+
+const (
+	ShopTypePreAirship  ShopType = "pre-airship"
+	ShopTypePostAirship ShopType = "post-airship"
+)
+
+func (e *ShopType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ShopType(s)
+	case string:
+		*e = ShopType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ShopType: %T", src)
+	}
+	return nil
+}
+
+type NullShopType struct {
+	ShopType ShopType
+	Valid    bool // Valid is true if ShopType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullShopType) Scan(value interface{}) error {
+	if value == nil {
+		ns.ShopType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ShopType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullShopType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ShopType), nil
+}
+
 type TargetType string
 
 const (
@@ -2103,6 +2145,13 @@ type FormationLocation struct {
 	Notes    sql.NullString
 }
 
+type FoundEquipmentPiece struct {
+	ID               int32
+	DataHash         string
+	EquipmentNameID  int32
+	EmptySlotsAmount interface{}
+}
+
 type InflictedStatuss struct {
 	ID                int32
 	DataHash          string
@@ -2247,6 +2296,13 @@ type JEquipmentTableNameClstlWpn struct {
 	CelestialWeaponID sql.NullInt32
 }
 
+type JFoundEquipmentAutoAbility struct {
+	ID               int32
+	DataHash         string
+	FoundEquipmentID int32
+	AutoAbilityID    int32
+}
+
 type JLocationMonsterFormation struct {
 	ID                  int32
 	DataHash            string
@@ -2311,6 +2367,22 @@ type JPropertyStatusCondition struct {
 	StatusConditionID int32
 }
 
+type JShopShopEquipment struct {
+	ID              int32
+	DataHash        string
+	ShopID          int32
+	ShopEquipmentID int32
+	ShopType        ShopType
+}
+
+type JShopShopItem struct {
+	ID         int32
+	DataHash   string
+	ShopID     int32
+	ShopItemID int32
+	ShopType   ShopType
+}
+
 type JStatusConditionModifierChange struct {
 	ID                int32
 	DataHash          string
@@ -2344,6 +2416,13 @@ type JSubmenuCharacterClass struct {
 	DataHash         string
 	SubmenuID        int32
 	CharacterClassID int32
+}
+
+type JTreasureItemAmount struct {
+	ID           int32
+	DataHash     string
+	TreasureID   int32
+	ItemAmountID int32
 }
 
 type JUnitCharacterClass struct {
@@ -2572,6 +2651,20 @@ type Shop struct {
 	Category ShopCategory
 }
 
+type ShopEquipmentPiece struct {
+	ID               int32
+	DataHash         string
+	FoundEquipmentID int32
+	Price            int32
+}
+
+type ShopItem struct {
+	ID       int32
+	DataHash string
+	ItemID   int32
+	Price    int32
+}
+
 type Sidequest struct {
 	ID       int32
 	DataHash string
@@ -2665,16 +2758,17 @@ type Subquest struct {
 }
 
 type Treasure struct {
-	ID              int32
-	DataHash        string
-	AreaID          int32
-	Version         int32
-	TreasureType    TreasureType
-	LootType        LootType
-	IsPostAirship   bool
-	IsAnimaTreasure bool
-	Notes           sql.NullString
-	GilAmount       sql.NullInt32
+	ID               int32
+	DataHash         string
+	AreaID           int32
+	Version          int32
+	TreasureType     TreasureType
+	LootType         LootType
+	IsPostAirship    bool
+	IsAnimaTreasure  bool
+	Notes            sql.NullString
+	GilAmount        sql.NullInt32
+	FoundEquipmentID sql.NullInt32
 }
 
 type TriggerCommand struct {

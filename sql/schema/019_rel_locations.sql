@@ -66,7 +66,87 @@ CREATE TABLE j_monster_formation_trigger_command (
 
 
 
+CREATE DOMAIN empty_slots AS INTEGER
+    CHECK (VALUE >= 0 AND VALUE <= 4);
+
+
+CREATE TABLE found_equipment_pieces (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    equipment_name_id INTEGER NOT NULL REFERENCES equipment_names(id),
+    empty_slots_amount empty_slots NOT NULL
+);
+
+
+CREATE TABLE j_found_equipment_auto_ability (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    found_equipment_id INTEGER NOT NULL REFERENCES found_equipment_pieces(id),
+    auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id)
+);
+
+
+CREATE TABLE j_treasure_item_amount (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    treasure_id INTEGER NOT NULL REFERENCES treasures(id),
+    item_amount_id INTEGER NOT NULL REFERENCES item_amounts(id)
+);
+
+
+CREATE TABLE shop_items (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    item_id INTEGER NOT NULL REFERENCES items(id),
+    price INTEGER NOT NULL
+);
+
+
+CREATE TABLE shop_equipment_pieces (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    found_equipment_id INTEGER NOT NULL REFERENCES found_equipment_pieces(id),
+    price INTEGER NOT NULL
+);
+
+CREATE TYPE shop_type AS ENUM ('pre-airship', 'post-airship');
+
+CREATE TABLE j_shop_shop_item (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    shop_id INTEGER NOT NULL REFERENCES shops(id),
+    shop_item_id INTEGER NOT NULL REFERENCES shop_items(id),
+    shop_type shop_type NOT NULL
+);
+
+
+CREATE TABLE j_shop_shop_equipment (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    shop_id INTEGER NOT NULL REFERENCES shops(id),
+    shop_equipment_id INTEGER NOT NULL REFERENCES shop_equipment_pieces(id),
+    shop_type shop_type NOT NULL
+);
+
+
+ALTER TABLE treasures
+ADD COLUMN found_equipment_id INTEGER REFERENCES found_equipment_pieces(id);
+
+
+
 -- +goose Down
+ALTER TABLE treasures
+DROP COLUMN IF EXISTS found_equipment_id;
+
+DROP TABLE IF EXISTS j_shop_shop_equipment;
+DROP TABLE IF EXISTS j_shop_shop_item;
+DROP TYPE IF EXISTS shop_type;
+DROP TABLE IF EXISTS shop_equipment_pieces;
+DROP TABLE IF EXISTS shop_items;
+DROP TABLE IF EXISTS j_treasure_item_amount;
+DROP TABLE IF EXISTS j_found_equipment_auto_ability;
+DROP TABLE IF EXISTS found_equipment_pieces;
+DROP DOMAIN IF EXISTS empty_slots;
 DROP TABLE IF EXISTS j_monster_formation_trigger_command;
 DROP TABLE IF EXISTS j_monster_formation_monster_amount;
 DROP TABLE IF EXISTS j_location_monster_formation;

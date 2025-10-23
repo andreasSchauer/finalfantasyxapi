@@ -21,6 +21,13 @@ func (ia ItemAmount) ToHashFields() []any {
 	}
 }
 
+func (ia ItemAmount) ToKeyFields() []any {
+	return []any{
+		ia.ItemName,
+		ia.Amount,
+	}
+}
+
 func (ia ItemAmount) GetID() int32 {
 	return ia.ID
 }
