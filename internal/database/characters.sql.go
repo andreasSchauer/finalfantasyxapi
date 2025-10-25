@@ -130,23 +130,6 @@ func (q *Queries) CreateAeonEquipmentJunction(ctx context.Context, arg CreateAeo
 	return err
 }
 
-const createCharClassPlayerAbilityJunction = `-- name: CreateCharClassPlayerAbilityJunction :exec
-INSERT INTO j_character_class_player_ability (data_hash, class_id, ability_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateCharClassPlayerAbilityJunctionParams struct {
-	DataHash  string
-	ClassID   int32
-	AbilityID int32
-}
-
-func (q *Queries) CreateCharClassPlayerAbilityJunction(ctx context.Context, arg CreateCharClassPlayerAbilityJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createCharClassPlayerAbilityJunction, arg.DataHash, arg.ClassID, arg.AbilityID)
-	return err
-}
-
 const createCharacter = `-- name: CreateCharacter :one
 INSERT INTO characters (data_hash, unit_id, story_only, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -223,6 +206,40 @@ func (q *Queries) CreateCharacterClass(ctx context.Context, arg CreateCharacterC
 	var i CharacterClass
 	err := row.Scan(&i.ID, &i.DataHash, &i.Name)
 	return i, err
+}
+
+const createDefaultAbility = `-- name: CreateDefaultAbility :exec
+INSERT INTO default_abilities (data_hash, class_id, ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateDefaultAbilityParams struct {
+	DataHash  string
+	ClassID   int32
+	AbilityID int32
+}
+
+func (q *Queries) CreateDefaultAbility(ctx context.Context, arg CreateDefaultAbilityParams) error {
+	_, err := q.db.ExecContext(ctx, createDefaultAbility, arg.DataHash, arg.ClassID, arg.AbilityID)
+	return err
+}
+
+const createDefaultOverdriveAbility = `-- name: CreateDefaultOverdriveAbility :exec
+INSERT INTO default_overdrive_abilities (data_hash, class_id, ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateDefaultOverdriveAbilityParams struct {
+	DataHash  string
+	ClassID   int32
+	AbilityID int32
+}
+
+func (q *Queries) CreateDefaultOverdriveAbility(ctx context.Context, arg CreateDefaultOverdriveAbilityParams) error {
+	_, err := q.db.ExecContext(ctx, createDefaultOverdriveAbility, arg.DataHash, arg.ClassID, arg.AbilityID)
+	return err
 }
 
 const createPlayerUnit = `-- name: CreatePlayerUnit :one

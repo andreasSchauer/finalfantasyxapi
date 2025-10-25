@@ -76,6 +76,7 @@ func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 				return err
 			}
 
+			// might replace this with a length check on battle_behavior
 			hasBattleData := item.Category != string(database.ItemCategorySphere) && item.Category != string(database.ItemCategoryOther)
 
 			if hasBattleData {

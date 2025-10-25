@@ -23,6 +23,7 @@ type lookup struct {
 	playerAbilities		map[string]PlayerAbility
 	triggerCommands		map[string]TriggerCommand
 	aeons				map[string]Aeon
+	aeonCommands		map[string]AeonCommand
 	affinities			map[string]Affinity
 	areas 				map[string]Area
 	autoAbilities		map[string]AutoAbility
@@ -40,6 +41,7 @@ type lookup struct {
 	modifiers			map[string]Modifier
 	monsters			map[string]Monster
 	overdriveModes		map[string]OverdriveMode
+	overdriveCommands	map[string]OverdriveCommand
 	overdrives			map[string]Overdrive
 	positions			map[string]BlitzballPosition
 	properties			map[string]Property
@@ -64,6 +66,7 @@ func lookupInit() lookup {
 		playerAbilities: 	make(map[string]PlayerAbility),
 		triggerCommands: 	make(map[string]TriggerCommand),
 		aeons: 				make(map[string]Aeon),
+		aeonCommands: 		make(map[string]AeonCommand),
 		affinities: 		make(map[string]Affinity),
 		areas: 				make(map[string]Area),
 		autoAbilities:		make(map[string]AutoAbility),
@@ -81,6 +84,7 @@ func lookupInit() lookup {
 		modifiers: 			make(map[string]Modifier),
 		monsters: 			make(map[string]Monster),
 		overdriveModes:		make(map[string]OverdriveMode),
+		overdriveCommands: 	make(map[string]OverdriveCommand),
 		overdrives: 		make(map[string]Overdrive),
 		positions: 			make(map[string]BlitzballPosition),
 		properties: 		make(map[string]Property),
@@ -185,6 +189,16 @@ func (l *lookup) getAeon(aeonName string) (Aeon, error) {
 	}
 
 	return aeon, nil
+}
+
+
+func (l *lookup) getAeonCommand(commandName string) (AeonCommand, error) {
+	command, found := l.aeonCommands[commandName]
+	if !found {
+		return AeonCommand{}, fmt.Errorf("couldn't find Aeon Command %s", commandName)
+	}
+
+	return command, nil
 }
 
 
@@ -365,6 +379,16 @@ func (l *lookup) getMonster(monsterKey string) (Monster, error) {
 	}
 
 	return monster, nil
+}
+
+
+func (l *lookup) getOverdriveCommand(commandName string) (OverdriveCommand, error) {
+	command, found := l.overdriveCommands[commandName]
+	if !found {
+		return OverdriveCommand{}, fmt.Errorf("couldn't find Overdrive Command %s", commandName)
+	}
+
+	return command, nil
 }
 
 

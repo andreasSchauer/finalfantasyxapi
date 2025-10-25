@@ -7,5 +7,14 @@ CREATE TABLE j_submenu_character_class (
 );
 
 
+ALTER TABLE overdrive_commands
+ADD COLUMN character_class_id INTEGER REFERENCES character_classes(id),
+ADD COLUMN submenu_id INTEGER REFERENCES submenus(id);
+
+
 -- +goose DOWN
+ALTER TABLE overdrive_commands
+DROP COLUMN IF EXISTS submenu_id,
+DROP COLUMN IF EXISTS character_class_id;
+
 DROP TABLE IF EXISTS j_submenu_character_class;

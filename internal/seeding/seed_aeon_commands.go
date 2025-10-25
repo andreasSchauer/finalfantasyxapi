@@ -9,8 +9,7 @@ import (
 )
 
 type AeonCommand struct {
-	//id 		int32
-	//dataHash	string
+	ID			int32
 	Name        string  `json:"name"`
 	Description string  `json:"description"`
 	Effect      string  `json:"effect"`
@@ -28,6 +27,10 @@ func (c AeonCommand) ToHashFields() []any {
 	}
 }
 
+func (c AeonCommand) GetID() int32 {
+	return c.ID
+}
+
 func (l *lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeon_commands.json"
 
@@ -39,7 +42,7 @@ func (l *lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, command := range aeon_commands {
-			err = qtx.CreateAeonCommand(context.Background(), database.CreateAeonCommandParams{
+			dbAeonCommand, err := qtx.CreateAeonCommand(context.Background(), database.CreateAeonCommandParams{
 				DataHash:    	generateDataHash(command),
 				Name:        	command.Name,
 				Description: 	command.Description,
@@ -50,6 +53,9 @@ func (l *lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return fmt.Errorf("couldn't create Aeon Command: %s: %v", command.Name, err)
 			}
+
+			command.ID = dbAeonCommand.ID
+			l.aeonCommands[command.Name] = command
 		}
 		return nil
 	})

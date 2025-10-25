@@ -9,13 +9,15 @@ import (
 )
 
 type OverdriveCommand struct {
-	ID          *int32
-	Name        string      `json:"name"`
+	ID          int32
+	CharClassID	*int32
+	SubmenuID	*int32
+	Name        string     	`json:"name"`
 	Description string      `json:"description"`
+	User		string		`json:"user"`
 	Rank        int32       `json:"rank"`
-	Topmenu     *string     `json:"topmenu"`
-	OpenMenu    *string     `json:"open_menu"`
-	Overdrives  []Overdrive `json:"overdrives"`
+	Topmenu     string     	`json:"topmenu"`
+	OpenSubmenu string     	`json:"open_submenu"`
 }
 
 func (oc OverdriveCommand) ToHashFields() []any {
@@ -23,37 +25,18 @@ func (oc OverdriveCommand) ToHashFields() []any {
 		oc.Name,
 		oc.Description,
 		oc.Rank,
-		derefOrNil(oc.Topmenu),
-		derefOrNil(oc.OpenMenu),
+		oc.Topmenu,
+		oc.OpenSubmenu,
+		derefOrNil(oc.CharClassID),
+		derefOrNil(oc.SubmenuID),
 	}
 }
 
-type Overdrive struct {
-	ID          int32
-	ODCommandID *int32
-	Ability
-	Description     string  `json:"description"`
-	Effect          string  `json:"effect"`
-	Topmenu         *string `json:"topmenu"`
-	UnlockCondition *string `json:"unlock_condition"`
-	CountdownInSec  *int32  `json:"countdown_in_sec"`
-	Cursor          *string `json:"cursor"`
+func (oc OverdriveCommand) GetID() int32 {
+	return oc.ID
 }
 
-func (o Overdrive) ToHashFields() []any {
-	return []any{
-		derefOrNil(o.ODCommandID),
-		o.Name,
-		derefOrNil(o.Version),
-		o.Description,
-		o.Effect,
-		derefOrNil(o.Topmenu),
-		ObjPtrToHashID(o.Attributes),
-		derefOrNil(o.UnlockCondition),
-		derefOrNil(o.CountdownInSec),
-		derefOrNil(o.Cursor),
-	}
-}
+
 
 func (l *lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_commands.json"
@@ -66,62 +49,67 @@ func (l *lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, command := range overdriveCommands {
-			if command.Name != "" {
-				dbODCommand, err := qtx.CreateOverdriveCommand(context.Background(), database.CreateOverdriveCommandParams{
-					DataHash:    generateDataHash(command),
-					Name:        command.Name,
-					Description: command.Description,
-					Rank:        command.Rank,
-					Topmenu:     nullTopmenuType(command.Topmenu),
-				})
-				if err != nil {
-					return fmt.Errorf("couldn't create Overdrive Command: %s: %v", command.Name, err)
-				}
-
-				command.ID = &dbODCommand.ID
-			}
-
-			err = l.seedOverdrives(qtx, command)
+			dbODCommand, err := qtx.CreateOverdriveCommand(context.Background(), database.CreateOverdriveCommandParams{
+				DataHash:    generateDataHash(command),
+				Name:        command.Name,
+				Description: command.Description,
+				Rank:        command.Rank,
+				Topmenu:     database.TopmenuType(command.Topmenu),
+			})
 			if err != nil {
-				return err
+				return fmt.Errorf("couldn't create Overdrive Command: %s: %v", command.Name, err)
 			}
+
+			command.ID = dbODCommand.ID
+			l.overdriveCommands[command.Name] = command
 		}
 
 		return nil
 	})
 }
 
-func (l *lookup) seedOverdrives(qtx *database.Queries, command OverdriveCommand) error {
-	for _, overdrive := range command.Overdrives {
-		var err error
-		overdrive.ODCommandID = command.ID
 
-		overdrive.Attributes, err = seedObjPtrAssignFK(qtx, overdrive.Attributes, l.seedAbilityAttributes)
-		if err != nil {
-			return fmt.Errorf("couldn't create Ability Attributes: %s-%d, type: %s: %v", overdrive.Name, derefOrNil(overdrive.Version), overdrive.Type, err)
-		}
+func (l *lookup) createOverdriveCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "./data/overdrive_commands.json"
 
-		dbOverdrive, err := qtx.CreateOverdrive(context.Background(), database.CreateOverdriveParams{
-			DataHash:        generateDataHash(overdrive),
-			OdCommandID:     getNullInt32(overdrive.ODCommandID),
-			Name:            overdrive.Name,
-			Version:         getNullInt32(overdrive.Version),
-			Description:     overdrive.Description,
-			Effect:          overdrive.Effect,
-			Topmenu:         nullTopmenuType(overdrive.Topmenu),
-			AttributesID:    ObjPtrToInt32ID(overdrive.Attributes),
-			UnlockCondition: getNullString(overdrive.UnlockCondition),
-			CountdownInSec:  getNullInt32(overdrive.CountdownInSec),
-			Cursor:          nullTargetType(overdrive.Cursor),
-		})
-		if err != nil {
-			return fmt.Errorf("couldn't create Overdrive: %s: %v", overdrive.Name, err)
-		}
-
-		overdrive.ID = dbOverdrive.ID
-		key := createLookupKey(overdrive.Ability)
-		l.overdrives[key] = overdrive
+	var overdriveCommands []OverdriveCommand
+	err := loadJSONFile(string(srcPath), &overdriveCommands)
+	if err != nil {
+		return err
 	}
 
-	return nil
+	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		for _, jsonCommand := range overdriveCommands {
+			command, err := l.getOverdriveCommand(jsonCommand.Name)
+			if err != nil {
+				return err
+			}
+
+			command.CharClassID, err = assignFKPtr(&command.User, l.getCharacterClass)
+			if err != nil {
+				return err
+			}
+
+			command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, l.getSubmenu)
+			if err != nil {
+				return err
+			}
+
+			err = qtx.UpdateOverdriveCommand(context.Background(), database.UpdateOverdriveCommandParams{
+				DataHash:    		generateDataHash(command),
+				Name:        		command.Name,
+				Description: 		command.Description,
+				Rank:        		command.Rank,
+				Topmenu:     		database.TopmenuType(command.Topmenu),
+				CharacterClassID: 	getNullInt32(command.CharClassID),
+				SubmenuID: 			getNullInt32(command.SubmenuID),
+				ID:					command.ID,
+			})
+			if err != nil {
+				return fmt.Errorf("couldn't update Overdrive Command: %s: %v", command.Name, err)
+			}
+		}
+
+		return nil
+	})
 }

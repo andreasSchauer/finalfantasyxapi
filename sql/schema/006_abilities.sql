@@ -69,21 +69,10 @@ CREATE TABLE trigger_commands (
 );
 
 
-CREATE TABLE overdrive_commands (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    name TEXT UNIQUE NOT NULL,
-    description TEXT NOT NULL,
-    rank INTEGER NOT NULL,
-    topmenu topmenu_type
-);
-
-
 
 CREATE TABLE overdrives (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    od_command_id INTEGER references overdrive_commands(id),
     name TEXT NOT NULL,
     version INTEGER,
     description TEXT NOT NULL,
@@ -101,7 +90,6 @@ CREATE TABLE overdrives (
 
 -- +goose Down
 DROP TABLE IF EXISTS overdrives;
-DROP TABLE IF EXISTS overdrive_commands;
 DROP TABLE IF EXISTS trigger_commands;
 DROP TABLE IF EXISTS overdrive_abilities;
 DROP TABLE IF EXISTS enemy_abilities;

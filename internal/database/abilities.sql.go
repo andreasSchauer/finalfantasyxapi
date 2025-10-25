@@ -80,23 +80,6 @@ func (q *Queries) CreateAbilityAttributes(ctx context.Context, arg CreateAbility
 	return i, err
 }
 
-const createCharClassOverdriveJunction = `-- name: CreateCharClassOverdriveJunction :exec
-INSERT INTO j_character_class_overdrive (data_hash, class_id, overdrive_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateCharClassOverdriveJunctionParams struct {
-	DataHash    string
-	ClassID     int32
-	OverdriveID int32
-}
-
-func (q *Queries) CreateCharClassOverdriveJunction(ctx context.Context, arg CreateCharClassOverdriveJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createCharClassOverdriveJunction, arg.DataHash, arg.ClassID, arg.OverdriveID)
-	return err
-}
-
 const createEnemyAbility = `-- name: CreateEnemyAbility :one
 INSERT INTO enemy_abilities (data_hash, ability_id, effect)
 VALUES ($1, $2, $3)
@@ -123,15 +106,14 @@ func (q *Queries) CreateEnemyAbility(ctx context.Context, arg CreateEnemyAbility
 }
 
 const createOverdrive = `-- name: CreateOverdrive :one
-INSERT INTO overdrives (data_hash, od_command_id, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+INSERT INTO overdrives (data_hash, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrives.data_hash
-RETURNING id, data_hash, od_command_id, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor
+RETURNING id, data_hash, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor, od_command_id, character_class_id
 `
 
 type CreateOverdriveParams struct {
 	DataHash        string
-	OdCommandID     sql.NullInt32
 	Name            string
 	Version         sql.NullInt32
 	Description     string
@@ -146,7 +128,6 @@ type CreateOverdriveParams struct {
 func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams) (Overdrife, error) {
 	row := q.db.QueryRowContext(ctx, createOverdrive,
 		arg.DataHash,
-		arg.OdCommandID,
 		arg.Name,
 		arg.Version,
 		arg.Description,
@@ -161,7 +142,6 @@ func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
-		&i.OdCommandID,
 		&i.Name,
 		&i.Version,
 		&i.Description,
@@ -171,6 +151,8 @@ func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams
 		&i.UnlockCondition,
 		&i.CountdownInSec,
 		&i.Cursor,
+		&i.OdCommandID,
+		&i.CharacterClassID,
 	)
 	return i, err
 }
@@ -194,39 +176,21 @@ func (q *Queries) CreateOverdriveAbility(ctx context.Context, arg CreateOverdriv
 	return i, err
 }
 
-const createOverdriveCommand = `-- name: CreateOverdriveCommand :one
-INSERT INTO overdrive_commands (data_hash, name, description, rank, topmenu)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
-RETURNING id, data_hash, name, description, rank, topmenu
+const createOverdriveAbilityJunction = `-- name: CreateOverdriveAbilityJunction :exec
+INSERT INTO j_overdrive_ability (data_hash, overdrive_id, overdrive_ability_id)
+VALUES($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateOverdriveCommandParams struct {
-	DataHash    string
-	Name        string
-	Description string
-	Rank        int32
-	Topmenu     NullTopmenuType
+type CreateOverdriveAbilityJunctionParams struct {
+	DataHash           string
+	OverdriveID        int32
+	OverdriveAbilityID int32
 }
 
-func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriveCommandParams) (OverdriveCommand, error) {
-	row := q.db.QueryRowContext(ctx, createOverdriveCommand,
-		arg.DataHash,
-		arg.Name,
-		arg.Description,
-		arg.Rank,
-		arg.Topmenu,
-	)
-	var i OverdriveCommand
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Description,
-		&i.Rank,
-		&i.Topmenu,
-	)
-	return i, err
+func (q *Queries) CreateOverdriveAbilityJunction(ctx context.Context, arg CreateOverdriveAbilityJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createOverdriveAbilityJunction, arg.DataHash, arg.OverdriveID, arg.OverdriveAbilityID)
+	return err
 }
 
 const createPlayerAbility = `-- name: CreatePlayerAbility :one
@@ -309,4 +273,56 @@ func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCom
 		&i.Cursor,
 	)
 	return i, err
+}
+
+const updateOverdrive = `-- name: UpdateOverdrive :exec
+UPDATE overdrives
+SET data_hash = $1,
+    name = $2,
+    version = $3,
+    description = $4,
+    effect = $5,
+    topmenu = $6,
+    attributes_id = $7,
+    unlock_condition = $8,
+    countdown_in_sec = $9,
+    cursor = $10,
+    od_command_id = $11,
+    character_class_id = $12
+WHERE id = $13
+`
+
+type UpdateOverdriveParams struct {
+	DataHash         string
+	Name             string
+	Version          sql.NullInt32
+	Description      string
+	Effect           string
+	Topmenu          NullTopmenuType
+	AttributesID     int32
+	UnlockCondition  sql.NullString
+	CountdownInSec   sql.NullInt32
+	Cursor           NullTargetType
+	OdCommandID      sql.NullInt32
+	CharacterClassID sql.NullInt32
+	ID               int32
+}
+
+func (q *Queries) UpdateOverdrive(ctx context.Context, arg UpdateOverdriveParams) error {
+	_, err := q.db.ExecContext(ctx, updateOverdrive,
+		arg.DataHash,
+		arg.Name,
+		arg.Version,
+		arg.Description,
+		arg.Effect,
+		arg.Topmenu,
+		arg.AttributesID,
+		arg.UnlockCondition,
+		arg.CountdownInSec,
+		arg.Cursor,
+		arg.OdCommandID,
+		arg.CharacterClassID,
+		arg.ID,
+	)
+	return err
 }

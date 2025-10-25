@@ -37,7 +37,7 @@ func (l *lookup) createDefaultAbilitiesRelationships(db *database.Queries, dbCon
 					return fmt.Errorf("couldn't create junction between character class %s and ability %s: %v", class.Name, createLookupKey(abilityRef), err)
 				}
 
-				err = qtx.CreateCharClassPlayerAbilityJunction(context.Background(), database.CreateCharClassPlayerAbilityJunctionParams{
+				err = qtx.CreateDefaultAbility(context.Background(), database.CreateDefaultAbilityParams{
 					DataHash: generateDataHash(junction),
 					ClassID: junction.ParentID,
 					AbilityID: junction.ChildID,

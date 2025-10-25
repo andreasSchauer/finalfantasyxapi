@@ -41,6 +41,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.seedOverdriveAbilities,
 		l.seedTriggerCommands,
 		l.seedOverdriveCommands,
+		l.seedOverdrives,
 		l.seedItems,
 		l.seedKeyItems,
 		l.seedPrimers,
@@ -76,6 +77,8 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.createMonsterFormationsRelationships,
 		l.createTreasuresRelationships,
 		l.createShopsRelationships,
+		l.createOverdriveCommandsRelationships,
+		l.createOverdrivesRelationships,
 	}
 
 	err = handleDBFunctions(db, dbConn, seedFunctions, "initial seeding")

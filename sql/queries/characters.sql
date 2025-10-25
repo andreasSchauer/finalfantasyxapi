@@ -56,8 +56,14 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateCharClassPlayerAbilityJunction :exec
-INSERT INTO j_character_class_player_ability (data_hash, class_id, ability_id)
+-- name: CreateDefaultAbility :exec
+INSERT INTO default_abilities (data_hash, class_id, ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateDefaultOverdriveAbility :exec
+INSERT INTO default_overdrive_abilities (data_hash, class_id, ability_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

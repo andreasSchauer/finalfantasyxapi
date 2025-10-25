@@ -2079,6 +2079,20 @@ type CompletionLocation struct {
 	Notes        sql.NullString
 }
 
+type DefaultAbility struct {
+	ID        int32
+	DataHash  string
+	ClassID   int32
+	AbilityID int32
+}
+
+type DefaultOverdriveAbility struct {
+	ID        int32
+	DataHash  string
+	ClassID   int32
+	AbilityID int32
+}
+
 type Element struct {
 	ID                int32
 	DataHash          string
@@ -2266,20 +2280,6 @@ type JCharacterBaseStat struct {
 	BaseStatID  int32
 }
 
-type JCharacterClassOverdrive struct {
-	ID          int32
-	DataHash    string
-	ClassID     int32
-	OverdriveID int32
-}
-
-type JCharacterClassPlayerAbility struct {
-	ID        int32
-	DataHash  string
-	ClassID   int32
-	AbilityID int32
-}
-
 type JEquipmentAutoAbility struct {
 	ID               int32
 	DataHash         string
@@ -2337,6 +2337,13 @@ type JOdModeAction struct {
 	DataHash        string
 	OverdriveModeID int32
 	ActionID        int32
+}
+
+type JOverdriveAbility struct {
+	ID                 int32
+	DataHash           string
+	OverdriveID        int32
+	OverdriveAbilityID int32
 }
 
 type JPropertyModifierChange struct {
@@ -2553,18 +2560,19 @@ type OdModeAction struct {
 }
 
 type Overdrife struct {
-	ID              int32
-	DataHash        string
-	OdCommandID     sql.NullInt32
-	Name            string
-	Version         sql.NullInt32
-	Description     string
-	Effect          string
-	Topmenu         NullTopmenuType
-	AttributesID    int32
-	UnlockCondition sql.NullString
-	CountdownInSec  sql.NullInt32
-	Cursor          NullTargetType
+	ID               int32
+	DataHash         string
+	Name             string
+	Version          sql.NullInt32
+	Description      string
+	Effect           string
+	Topmenu          NullTopmenuType
+	AttributesID     int32
+	UnlockCondition  sql.NullString
+	CountdownInSec   sql.NullInt32
+	Cursor           NullTargetType
+	OdCommandID      sql.NullInt32
+	CharacterClassID sql.NullInt32
 }
 
 type OverdriveAbility struct {
@@ -2574,12 +2582,14 @@ type OverdriveAbility struct {
 }
 
 type OverdriveCommand struct {
-	ID          int32
-	DataHash    string
-	Name        string
-	Description string
-	Rank        int32
-	Topmenu     NullTopmenuType
+	ID               int32
+	DataHash         string
+	Name             string
+	Description      string
+	Rank             int32
+	Topmenu          TopmenuType
+	CharacterClassID sql.NullInt32
+	SubmenuID        sql.NullInt32
 }
 
 type OverdriveMode struct {

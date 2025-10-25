@@ -52,17 +52,8 @@ CREATE TABLE character_classes (
 );
 
 
-CREATE TABLE j_unit_character_class (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    unit_id INTEGER NOT NULL REFERENCES player_units(id),
-    class_id INTEGER NOT NULL REFERENCES character_classes(id)
-);
-
-
 
 -- +goose Down
-DROP TABLE IF EXISTS j_unit_character_class;
 DROP TABLE IF EXISTS character_classes;
 DROP TABLE IF EXISTS aeons;
 DROP TYPE IF EXISTS accuracy_source;

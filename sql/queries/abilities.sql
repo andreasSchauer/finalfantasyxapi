@@ -40,21 +40,31 @@ ON CONFLICT (data_hash) DO UPDATE SET data_hash = trigger_commands.data_hash
 RETURNING *;
 
 
--- name: CreateOverdriveCommand :one
-INSERT INTO overdrive_commands (data_hash, name, description, rank, topmenu)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
-RETURNING *;
-
-
 -- name: CreateOverdrive :one
-INSERT INTO overdrives (data_hash, od_command_id, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+INSERT INTO overdrives (data_hash, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrives.data_hash
 RETURNING *;
 
 
--- name: CreateCharClassOverdriveJunction :exec
-INSERT INTO j_character_class_overdrive (data_hash, class_id, overdrive_id)
-VALUES ($1, $2, $3)
+-- name: UpdateOverdrive :exec
+UPDATE overdrives
+SET data_hash = $1,
+    name = $2,
+    version = $3,
+    description = $4,
+    effect = $5,
+    topmenu = $6,
+    attributes_id = $7,
+    unlock_condition = $8,
+    countdown_in_sec = $9,
+    cursor = $10,
+    od_command_id = $11,
+    character_class_id = $12
+WHERE id = $13;
+
+
+-- name: CreateOverdriveAbilityJunction :exec
+INSERT INTO j_overdrive_ability (data_hash, overdrive_id, overdrive_ability_id)
+VALUES($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
