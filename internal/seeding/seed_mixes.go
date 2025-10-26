@@ -154,7 +154,7 @@ func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix) error {
 			return err
 		}
 
-		err = qtx.CreateMixComboJunction(context.Background(), database.CreateMixComboJunctionParams{
+		err = qtx.CreateMixesCombinationsJunction(context.Background(), database.CreateMixesCombinationsJunctionParams{
 			DataHash:    generateDataHash(mixJunction),
 			MixID:       mixJunction.ParentID,
 			ComboID:     mixJunction.ChildID,

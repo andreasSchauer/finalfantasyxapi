@@ -217,7 +217,7 @@ func (l *lookup) seedShopItems (qtx *database.Queries, shop Shop, subShop *SubSh
 			ShopType: subShop.Type,
 		}
 
-		err = qtx.CreateShopShopItemJunction(context.Background(), database.CreateShopShopItemJunctionParams{
+		err = qtx.CreateShopsItemsJunction(context.Background(), database.CreateShopsItemsJunctionParams{
 			DataHash: 	generateDataHash(shopJunction),
 			ShopID: 	shopJunction.ParentID,
 			ShopItemID: shopJunction.ChildID,
@@ -267,7 +267,7 @@ func (l *lookup) seedShopEquipmentPieces (qtx *database.Queries, shop Shop, subS
 			ShopType: subShop.Type,
 		}
 
-		err = qtx.CreateShopShopEquipmentJunction(context.Background(), database.CreateShopShopEquipmentJunctionParams{
+		err = qtx.CreateShopsEquipmentJunction(context.Background(), database.CreateShopsEquipmentJunctionParams{
 			DataHash: 			generateDataHash(shopJunction),
 			ShopID: 			shopJunction.ParentID,
 			ShopEquipmentID: 	shopJunction.ChildID,

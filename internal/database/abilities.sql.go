@@ -176,20 +176,20 @@ func (q *Queries) CreateOverdriveAbility(ctx context.Context, arg CreateOverdriv
 	return i, err
 }
 
-const createOverdriveAbilityJunction = `-- name: CreateOverdriveAbilityJunction :exec
-INSERT INTO j_overdrive_ability (data_hash, overdrive_id, overdrive_ability_id)
+const createOverdrivesOverdriveAbilitiesJunction = `-- name: CreateOverdrivesOverdriveAbilitiesJunction :exec
+INSERT INTO j_overdrives_overdrive_abilities (data_hash, overdrive_id, overdrive_ability_id)
 VALUES($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateOverdriveAbilityJunctionParams struct {
+type CreateOverdrivesOverdriveAbilitiesJunctionParams struct {
 	DataHash           string
 	OverdriveID        int32
 	OverdriveAbilityID int32
 }
 
-func (q *Queries) CreateOverdriveAbilityJunction(ctx context.Context, arg CreateOverdriveAbilityJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createOverdriveAbilityJunction, arg.DataHash, arg.OverdriveID, arg.OverdriveAbilityID)
+func (q *Queries) CreateOverdrivesOverdriveAbilitiesJunction(ctx context.Context, arg CreateOverdrivesOverdriveAbilitiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createOverdrivesOverdriveAbilitiesJunction, arg.DataHash, arg.OverdriveID, arg.OverdriveAbilityID)
 	return err
 }
 

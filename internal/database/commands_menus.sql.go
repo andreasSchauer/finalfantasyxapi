@@ -49,21 +49,21 @@ func (q *Queries) CreateAeonCommand(ctx context.Context, arg CreateAeonCommandPa
 	return i, err
 }
 
-const createAeonCommandAbilityJunction = `-- name: CreateAeonCommandAbilityJunction :exec
-INSERT INTO j_aeon_command_ability (data_hash, aeon_command_id, ability_id, character_class_id)
+const createAeonCommandsPossibleAbilitiesJunction = `-- name: CreateAeonCommandsPossibleAbilitiesJunction :exec
+INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, ability_id, character_class_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateAeonCommandAbilityJunctionParams struct {
+type CreateAeonCommandsPossibleAbilitiesJunctionParams struct {
 	DataHash         string
 	AeonCommandID    int32
 	AbilityID        int32
 	CharacterClassID int32
 }
 
-func (q *Queries) CreateAeonCommandAbilityJunction(ctx context.Context, arg CreateAeonCommandAbilityJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAeonCommandAbilityJunction,
+func (q *Queries) CreateAeonCommandsPossibleAbilitiesJunction(ctx context.Context, arg CreateAeonCommandsPossibleAbilitiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonCommandsPossibleAbilitiesJunction,
 		arg.DataHash,
 		arg.AeonCommandID,
 		arg.AbilityID,
@@ -144,20 +144,20 @@ func (q *Queries) CreateSubmenu(ctx context.Context, arg CreateSubmenuParams) (S
 	return i, err
 }
 
-const createSubmenuCharacterClassJunction = `-- name: CreateSubmenuCharacterClassJunction :exec
-INSERT INTO j_submenu_character_class (data_hash, submenu_id, character_class_id)
+const createSubmenusUsersJunction = `-- name: CreateSubmenusUsersJunction :exec
+INSERT INTO j_submenus_users (data_hash, submenu_id, character_class_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateSubmenuCharacterClassJunctionParams struct {
+type CreateSubmenusUsersJunctionParams struct {
 	DataHash         string
 	SubmenuID        int32
 	CharacterClassID int32
 }
 
-func (q *Queries) CreateSubmenuCharacterClassJunction(ctx context.Context, arg CreateSubmenuCharacterClassJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createSubmenuCharacterClassJunction, arg.DataHash, arg.SubmenuID, arg.CharacterClassID)
+func (q *Queries) CreateSubmenusUsersJunction(ctx context.Context, arg CreateSubmenusUsersJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createSubmenusUsersJunction, arg.DataHash, arg.SubmenuID, arg.CharacterClassID)
 	return err
 }
 

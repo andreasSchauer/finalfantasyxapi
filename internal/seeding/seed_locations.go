@@ -258,7 +258,7 @@ func (l *lookup) seedAreaConnections(qtx *database.Queries, area Area) error {
 			return fmt.Errorf("area: %s: %v", createLookupKey(area.GetLocationArea()), err)
 		}
 
-		err = qtx.CreateAreaConnectionJunction(context.Background(), database.CreateAreaConnectionJunctionParams{
+		err = qtx.CreateAreaConnectedAreasJunction(context.Background(), database.CreateAreaConnectedAreasJunctionParams{
 			DataHash: 		generateDataHash(junction),
 			AreaID: 		junction.ParentID,
 			ConnectionID: 	junction.ChildID,

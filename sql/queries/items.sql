@@ -49,8 +49,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = mix_combinations.data_hash
 RETURNING *;
 
 
--- name: CreateMixComboJunction :exec
-INSERT INTO j_mix_combo (data_hash, mix_id, combo_id, is_best_combo)
+-- name: CreateMixesCombinationsJunction :exec
+INSERT INTO j_mixes_combinations (data_hash, mix_id, combo_id, is_best_combo)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 

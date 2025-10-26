@@ -104,7 +104,7 @@ func (l *lookup) createOverdriveModesRelationships(db *database.Queries, dbConn 
 					return err
 				}
 
-				err = qtx.CreateODModeActionJunction(context.Background(), database.CreateODModeActionJunctionParams{
+				err = qtx.CreateOverdriveModesActionsToLearnJunction(context.Background(), database.CreateOverdriveModesActionsToLearnJunctionParams{
 					DataHash:        generateDataHash(junction),
 					OverdriveModeID: junction.ParentID,
 					ActionID:        junction.ChildID,

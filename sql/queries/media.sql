@@ -26,8 +26,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = background_music.data_hash
 RETURNING *;
 
 
--- name: CreateSongBackgroundMusicJunction :exec
-INSERT INTO j_song_background_music (data_hash, song_id, bm_id, area_id)
+-- name: CreateSongsBackgroundMusicJunction :exec
+INSERT INTO j_songs_background_music (data_hash, song_id, bm_id, area_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -39,8 +39,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = cues.data_hash
 RETURNING *;
 
 
--- name: CreateSongCuesJunction :exec
-INSERT INTO j_song_cues (data_hash, song_id, cue_id, area_id)
+-- name: CreateSongsCuesJunction :exec
+INSERT INTO j_songs_cues (data_hash, song_id, cue_id, area_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 

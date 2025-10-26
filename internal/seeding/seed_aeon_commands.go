@@ -139,7 +139,7 @@ func (l *lookup) seedAeonCommandPossibleAbilities(qtx *database.Queries, command
 				return err
 			}
 
-			err = qtx.CreateAeonCommandAbilityJunction(context.Background(), database.CreateAeonCommandAbilityJunctionParams{
+			err = qtx.CreateAeonCommandsPossibleAbilitiesJunction(context.Background(), database.CreateAeonCommandsPossibleAbilitiesJunctionParams{
 				DataHash: 			generateDataHash(paJunction),
 				AeonCommandID: 		paJunction.ParentID,
 				AbilityID: 			paJunction.ChildID,

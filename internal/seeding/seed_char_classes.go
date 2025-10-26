@@ -110,7 +110,7 @@ func (l *lookup) createUnitCharClass(qtx *database.Queries, className string, un
 		return err
 	}
 
-	err = qtx.CreateUnitsCharClassesJunction(context.Background(), database.CreateUnitsCharClassesJunctionParams{
+	err = qtx.CreatePlayerUnitsCharacterClassJunction(context.Background(), database.CreatePlayerUnitsCharacterClassJunctionParams{
 		DataHash: generateDataHash(junction),
 		UnitID:   junction.ParentID,
 		ClassID:  junction.ChildID,

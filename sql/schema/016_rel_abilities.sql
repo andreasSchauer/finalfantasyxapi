@@ -4,7 +4,7 @@ ADD COLUMN od_command_id INTEGER references overdrive_commands(id),
 ADD COLUMN character_class_id INTEGER REFERENCES character_classes(id);
 
 
-CREATE TABLE j_overdrive_ability (
+CREATE TABLE j_overdrives_overdrive_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     overdrive_id INTEGER NOT NULL REFERENCES overdrives(id),
@@ -13,7 +13,7 @@ CREATE TABLE j_overdrive_ability (
 
 
 -- +goose Down
-DROP TABLE IF EXISTS j_overdrive_ability;
+DROP TABLE IF EXISTS j_overdrives_overdrive_abilities;
 
 ALTER TABLE overdrives
 DROP COLUMN IF EXISTS character_class_id,

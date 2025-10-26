@@ -33,44 +33,44 @@ SET data_hash = $1,
 WHERE id = $9;
 
 
--- name: CreateAutoAbilityStatJunction :exec
-INSERT INTO j_auto_ability_stat (data_hash, auto_ability_id, stat_id)
+-- name: CreateAutoAbilitiesRelatedStatsJunction :exec
+INSERT INTO j_auto_abilities_related_stats(data_hash, auto_ability_id, stat_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAutoAbilitySelfJunction :exec
-INSERT INTO j_auto_ability_self (data_hash, parent_ability_id, child_ability_id)
+-- name: CreateAutoAbilitiesLockedOutJunction :exec
+INSERT INTO j_auto_abilities_locked_out (data_hash, parent_ability_id, child_ability_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAutoAbilityItemJunction :exec
-INSERT INTO j_auto_ability_item (data_hash, auto_ability_id, item_id)
+-- name: CreateAutoAbilitiesRequiredItemJunction :exec
+INSERT INTO j_auto_abilities_required_item (data_hash, auto_ability_id, item_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAutoAbilityStatusConditionJunction :exec
-INSERT INTO j_auto_ability_status_condition (data_hash, auto_ability_id, status_condition_id)
+-- name: CreateAutoAbilitiesAddedStatussesJunction :exec
+INSERT INTO j_auto_abilities_added_statusses (data_hash, auto_ability_id, status_condition_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAutoAbilityStatusResistJunction :exec
-INSERT INTO j_auto_ability_status_resist (data_hash, auto_ability_id, status_resist_id)
+-- name: CreateAutoAbilitiesAddedStatusResistsJunction :exec
+INSERT INTO j_auto_abilities_added_status_resists (data_hash, auto_ability_id, status_resist_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAutoAbilityStatChangeJunction :exec
-INSERT INTO j_auto_ability_stat_change (data_hash, auto_ability_id, stat_change_id)
+-- name: CreateAutoAbilitiesStatChangesJunction :exec
+INSERT INTO j_auto_abilities_stat_changes (data_hash, auto_ability_id, stat_change_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAutoAbilityModifierChangeJunction :exec
-INSERT INTO j_auto_ability_modifier_change (data_hash, auto_ability_id, modifier_change_id)
+-- name: CreateAutoAbilitiesModifierChangesJunction :exec
+INSERT INTO j_auto_abilities_modifier_changes (data_hash, auto_ability_id, modifier_change_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -89,13 +89,13 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_names.data_hash
 RETURNING *;
 
 
--- name: CreateEquipmentTableNameClstlWpnJunction :exec
-INSERT INTO j_equipment_table_name_clstl_wpn (data_hash, equipment_table_id, equipment_name_id, celestial_weapon_id)
+-- name: CreateEquipmentTablesNamesJunction :exec
+INSERT INTO j_equipment_tables_names (data_hash, equipment_table_id, equipment_name_id, celestial_weapon_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateEquipmentAutoAbilityJunction :exec
-INSERT INTO j_equipment_auto_ability (data_hash, equipment_table_id, auto_ability_id, ability_pool)
+-- name: CreateEquipmentTablesAbilityPoolJunction :exec
+INSERT INTO j_equipment_tables_ability_pool (data_hash, equipment_table_id, auto_ability_id, ability_pool)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;

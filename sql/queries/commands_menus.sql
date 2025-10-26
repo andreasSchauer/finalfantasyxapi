@@ -12,8 +12,8 @@ SET data_hash = $1,
 WHERE id = $3;
 
 
--- name: CreateAeonCommandAbilityJunction :exec
-INSERT INTO j_aeon_command_ability (data_hash, aeon_command_id, ability_id, character_class_id)
+-- name: CreateAeonCommandsPossibleAbilitiesJunction :exec
+INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, ability_id, character_class_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -25,8 +25,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = submenus.data_hash
 RETURNING *;
 
 
--- name: CreateSubmenuCharacterClassJunction :exec
-INSERT INTO j_submenu_character_class (data_hash, submenu_id, character_class_id)
+-- name: CreateSubmenusUsersJunction :exec
+INSERT INTO j_submenus_users (data_hash, submenu_id, character_class_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

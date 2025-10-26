@@ -74,8 +74,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = od_mode_actions.data_hash
 RETURNING *;
 
 
--- name: CreateODModeActionJunction :exec
-INSERT INTO j_od_mode_action (data_hash, overdrive_mode_id, action_id)
+-- name: CreateOverdriveModesActionsToLearnJunction :exec
+INSERT INTO j_overdrive_modes_actions_to_learn (data_hash, overdrive_mode_id, action_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -87,14 +87,14 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_conditions.data_hash
 RETURNING *;
 
 
--- name: CreateStatusConditionStatJunction :exec
-INSERT INTO j_status_condition_stat (data_hash, status_condition_id, stat_id)
+-- name: CreateStatusConditionsRelatedStatsJunction :exec
+INSERT INTO j_status_conditions_related_stats(data_hash, status_condition_id, stat_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateStatusConditionSelfJunction :exec
-INSERT INTO j_status_condition_self (data_hash, parent_condition_id, child_condition_id)
+-- name: CreateStatusConditionsRemovedStatusConditionsJunction :exec
+INSERT INTO j_status_conditions_removed_status_conditions (data_hash, parent_condition_id, child_condition_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -120,14 +120,14 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = properties.data_hash
 RETURNING *;
 
 
--- name: CreatePropertyStatJunction :exec
-INSERT INTO j_property_stat (data_hash, property_id, stat_id)
+-- name: CreatePropertiesRelatedStatsJunction :exec
+INSERT INTO j_properties_related_stats(data_hash, property_id, stat_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreatePropertyStatusConditionJunction :exec
-INSERT INTO j_property_status_condition (data_hash, property_id, status_condition_id)
+-- name: CreatePropertiesRemovedStatusConditionsJunction :exec
+INSERT INTO j_properties_removed_status_conditions (data_hash, property_id, status_condition_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -146,14 +146,14 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = stat_changes.data_hash
 RETURNING *;
 
 
--- name: CreateStatusConditionStatChangeJunction :exec
-INSERT INTO j_status_condition_stat_change (data_hash, status_condition_id, stat_change_id)
+-- name: CreateStatusConditionsStatChangesJunction :exec
+INSERT INTO j_status_conditions_stat_changes (data_hash, status_condition_id, stat_change_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreatePropertyStatChangeJunction :exec
-INSERT INTO j_property_stat_change (data_hash, property_id, stat_change_id)
+-- name: CreatePropertiesStatChangesJunction :exec
+INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -165,13 +165,13 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifier_changes.data_hash
 RETURNING *;
 
 
--- name: CreateStatusConditionModifierChangeJunction :exec
-INSERT INTO j_status_condition_modifier_change (data_hash, status_condition_id, modifier_change_id)
+-- name: CreateStatusConditionsModifierChangesJunction :exec
+INSERT INTO j_status_conditions_modifier_changes (data_hash, status_condition_id, modifier_change_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreatePropertyModifierChangeJunction :exec
-INSERT INTO j_property_modifier_change (data_hash, property_id, modifier_change_id)
+-- name: CreatePropertiesModifierChangesJunction :exec
+INSERT INTO j_properties_modifier_changes (data_hash, property_id, modifier_change_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;

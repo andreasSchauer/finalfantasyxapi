@@ -153,7 +153,7 @@ func (l *lookup) createAeonsRelationships(db *database.Queries, dbConn *sql.DB) 
 					return err
 				}
 
-				err = qtx.CreateAeonBaseStatJunction(context.Background(), database.CreateAeonBaseStatJunctionParams{
+				err = qtx.CreateAeonsBaseStatJunction(context.Background(), database.CreateAeonsBaseStatJunctionParams{
 					DataHash:   generateDataHash(junction),
 					AeonID:     junction.ParentID,
 					BaseStatID: junction.ChildID,
@@ -187,7 +187,7 @@ func (l *lookup) createAeonEquipmentRelationships(qtx *database.Queries, aeon Ae
 			return fmt.Errorf("aeon: %s: %v", aeon.Name, err)
 		}
 
-		err = qtx.CreateAeonEquipmentJunction(context.Background(), database.CreateAeonEquipmentJunctionParams{
+		err = qtx.CreateAeonsWeaponArmorJunction(context.Background(), database.CreateAeonsWeaponArmorJunctionParams{
 			DataHash:        generateDataHash(junction),
 			AeonID:          junction.ParentID,
 			AeonEquipmentID: junction.ChildID,

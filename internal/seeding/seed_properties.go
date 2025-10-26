@@ -102,7 +102,7 @@ func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property Prop
 			return err
 		}
 
-		err = qtx.CreatePropertyStatJunction(context.Background(), database.CreatePropertyStatJunctionParams{
+		err = qtx.CreatePropertiesRelatedStatsJunction(context.Background(), database.CreatePropertiesRelatedStatsJunctionParams{
 			DataHash:   generateDataHash(junction),
 			PropertyID: junction.ParentID,
 			StatID:     junction.ChildID,
@@ -122,7 +122,7 @@ func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property
 			return err
 		}
 
-		err = qtx.CreatePropertyStatusConditionJunction(context.Background(), database.CreatePropertyStatusConditionJunctionParams{
+		err = qtx.CreatePropertiesRemovedStatusConditionsJunction(context.Background(), database.CreatePropertiesRemovedStatusConditionsJunctionParams{
 			DataHash:          generateDataHash(junction),
 			PropertyID:        junction.ParentID,
 			StatusConditionID: junction.ChildID,
@@ -142,7 +142,7 @@ func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property Prope
 			return err
 		}
 
-		err = qtx.CreatePropertyStatChangeJunction(context.Background(), database.CreatePropertyStatChangeJunctionParams{
+		err = qtx.CreatePropertiesStatChangesJunction(context.Background(), database.CreatePropertiesStatChangesJunctionParams{
 			DataHash:     generateDataHash(junction),
 			PropertyID:   junction.ParentID,
 			StatChangeID: junction.ChildID,
@@ -162,7 +162,7 @@ func (l *lookup) createPropertyModifierChanges(qtx *database.Queries, property P
 			return err
 		}
 
-		err = qtx.CreatePropertyModifierChangeJunction(context.Background(), database.CreatePropertyModifierChangeJunctionParams{
+		err = qtx.CreatePropertiesModifierChangesJunction(context.Background(), database.CreatePropertiesModifierChangesJunctionParams{
 			DataHash:         generateDataHash(junction),
 			PropertyID:       junction.ParentID,
 			ModifierChangeID: junction.ChildID,

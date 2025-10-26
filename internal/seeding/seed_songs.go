@@ -254,7 +254,7 @@ func (l *lookup) seedBackgroundMusicEntries (qtx *database.Queries, song Song) e
 				return err
 			}
 			
-			err = qtx.CreateSongBackgroundMusicJunction(context.Background(), database.CreateSongBackgroundMusicJunctionParams{
+			err = qtx.CreateSongsBackgroundMusicJunction(context.Background(), database.CreateSongsBackgroundMusicJunctionParams{
 				DataHash: 	generateDataHash(saJunction),
 				SongID: 	saJunction.ParentID,
 				BmID: 		saJunction.ChildID,
@@ -287,7 +287,7 @@ func (l *lookup) seedCues (qtx *database.Queries, song Song) error {
 				return err
 			}
 
-			err = qtx.CreateSongCuesJunction(context.Background(), database.CreateSongCuesJunctionParams{
+			err = qtx.CreateSongsCuesJunction(context.Background(), database.CreateSongsCuesJunctionParams{
 				DataHash: 	generateDataHash(saJunction),
 				SongID: 	saJunction.ParentID,
 				CueID: 		saJunction.ChildID,

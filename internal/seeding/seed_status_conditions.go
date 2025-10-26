@@ -103,7 +103,7 @@ func (l *lookup) createStatusConditionRelatedStats(qtx *database.Queries, condit
 			return err
 		}
 
-		err = qtx.CreateStatusConditionStatJunction(context.Background(), database.CreateStatusConditionStatJunctionParams{
+		err = qtx.CreateStatusConditionsRelatedStatsJunction(context.Background(), database.CreateStatusConditionsRelatedStatsJunctionParams{
 			DataHash:          generateDataHash(junction),
 			StatusConditionID: junction.ParentID,
 			StatID:            junction.ChildID,
@@ -123,7 +123,7 @@ func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, c
 			return err
 		}
 
-		err = qtx.CreateStatusConditionSelfJunction(context.Background(), database.CreateStatusConditionSelfJunctionParams{
+		err = qtx.CreateStatusConditionsRemovedStatusConditionsJunction(context.Background(), database.CreateStatusConditionsRemovedStatusConditionsJunctionParams{
 			DataHash:          generateDataHash(junction),
 			ParentConditionID: junction.ParentID,
 			ChildConditionID:  junction.ChildID,
@@ -143,7 +143,7 @@ func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, conditi
 			return err
 		}
 
-		err = qtx.CreateStatusConditionStatChangeJunction(context.Background(), database.CreateStatusConditionStatChangeJunctionParams{
+		err = qtx.CreateStatusConditionsStatChangesJunction(context.Background(), database.CreateStatusConditionsStatChangesJunctionParams{
 			DataHash:          generateDataHash(junction),
 			StatusConditionID: junction.ParentID,
 			StatChangeID:      junction.ChildID,
@@ -163,7 +163,7 @@ func (l *lookup) createStatusConditionModifierChanges(qtx *database.Queries, con
 			return err
 		}
 
-		err = qtx.CreateStatusConditionModifierChangeJunction(context.Background(), database.CreateStatusConditionModifierChangeJunctionParams{
+		err = qtx.CreateStatusConditionsModifierChangesJunction(context.Background(), database.CreateStatusConditionsModifierChangesJunctionParams{
 			DataHash:          generateDataHash(junction),
 			StatusConditionID: junction.ParentID,
 			ModifierChangeID:  junction.ChildID,

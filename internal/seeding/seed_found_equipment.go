@@ -65,7 +65,7 @@ func (l *lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipme
 			return fmt.Errorf("couldn't create junction with auto ability %s: %v", autoAbility, err)
 		}
 
-		err = qtx.CreateFoundEquipmentAutoAbilityJunction(context.Background(), database.CreateFoundEquipmentAutoAbilityJunctionParams{
+		err = qtx.CreateFoundEquipmentAbilitiesJunction(context.Background(), database.CreateFoundEquipmentAbilitiesJunctionParams{
 			DataHash: generateDataHash(junction),
 			FoundEquipmentID: junction.ParentID,
 			AutoAbilityID: junction.ChildID,

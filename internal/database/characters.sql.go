@@ -64,27 +64,10 @@ func (q *Queries) CreateAeon(ctx context.Context, arg CreateAeonParams) (Aeon, e
 	return i, err
 }
 
-const createAeonBaseStatJunction = `-- name: CreateAeonBaseStatJunction :exec
-INSERT INTO j_aeon_base_stat (data_hash, aeon_id, base_stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAeonBaseStatJunctionParams struct {
-	DataHash   string
-	AeonID     int32
-	BaseStatID int32
-}
-
-func (q *Queries) CreateAeonBaseStatJunction(ctx context.Context, arg CreateAeonBaseStatJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAeonBaseStatJunction, arg.DataHash, arg.AeonID, arg.BaseStatID)
-	return err
-}
-
 const createAeonEquipment = `-- name: CreateAeonEquipment :one
-INSERT INTO aeon_equipments (data_hash, auto_ability_id, celestial_wpn, equip_type)
+INSERT INTO aeon_equipment (data_hash, auto_ability_id, celestial_wpn, equip_type)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_equipments.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_equipment.data_hash
 RETURNING id, data_hash, auto_ability_id, celestial_wpn, equip_type
 `
 
@@ -113,20 +96,37 @@ func (q *Queries) CreateAeonEquipment(ctx context.Context, arg CreateAeonEquipme
 	return i, err
 }
 
-const createAeonEquipmentJunction = `-- name: CreateAeonEquipmentJunction :exec
-INSERT INTO j_aeon_equipment (data_hash, aeon_id, aeon_equipment_id)
+const createAeonsBaseStatJunction = `-- name: CreateAeonsBaseStatJunction :exec
+INSERT INTO j_aeons_base_stats (data_hash, aeon_id, base_stat_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateAeonEquipmentJunctionParams struct {
+type CreateAeonsBaseStatJunctionParams struct {
+	DataHash   string
+	AeonID     int32
+	BaseStatID int32
+}
+
+func (q *Queries) CreateAeonsBaseStatJunction(ctx context.Context, arg CreateAeonsBaseStatJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatJunction, arg.DataHash, arg.AeonID, arg.BaseStatID)
+	return err
+}
+
+const createAeonsWeaponArmorJunction = `-- name: CreateAeonsWeaponArmorJunction :exec
+INSERT INTO j_aeons_weapon_armor (data_hash, aeon_id, aeon_equipment_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsWeaponArmorJunctionParams struct {
 	DataHash        string
 	AeonID          int32
 	AeonEquipmentID int32
 }
 
-func (q *Queries) CreateAeonEquipmentJunction(ctx context.Context, arg CreateAeonEquipmentJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAeonEquipmentJunction, arg.DataHash, arg.AeonID, arg.AeonEquipmentID)
+func (q *Queries) CreateAeonsWeaponArmorJunction(ctx context.Context, arg CreateAeonsWeaponArmorJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsWeaponArmorJunction, arg.DataHash, arg.AeonID, arg.AeonEquipmentID)
 	return err
 }
 
@@ -171,23 +171,6 @@ func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams
 	return i, err
 }
 
-const createCharacterBaseStatJunction = `-- name: CreateCharacterBaseStatJunction :exec
-INSERT INTO j_character_base_stat (data_hash, character_id, base_stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateCharacterBaseStatJunctionParams struct {
-	DataHash    string
-	CharacterID int32
-	BaseStatID  int32
-}
-
-func (q *Queries) CreateCharacterBaseStatJunction(ctx context.Context, arg CreateCharacterBaseStatJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createCharacterBaseStatJunction, arg.DataHash, arg.CharacterID, arg.BaseStatID)
-	return err
-}
-
 const createCharacterClass = `-- name: CreateCharacterClass :one
 INSERT INTO character_classes (data_hash, name)
 VALUES ($1, $2)
@@ -205,6 +188,23 @@ func (q *Queries) CreateCharacterClass(ctx context.Context, arg CreateCharacterC
 	var i CharacterClass
 	err := row.Scan(&i.ID, &i.DataHash, &i.Name)
 	return i, err
+}
+
+const createCharactersBaseStatsJunction = `-- name: CreateCharactersBaseStatsJunction :exec
+INSERT INTO j_characters_base_stats (data_hash, character_id, base_stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCharactersBaseStatsJunctionParams struct {
+	DataHash    string
+	CharacterID int32
+	BaseStatID  int32
+}
+
+func (q *Queries) CreateCharactersBaseStatsJunction(ctx context.Context, arg CreateCharactersBaseStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createCharactersBaseStatsJunction, arg.DataHash, arg.CharacterID, arg.BaseStatID)
+	return err
 }
 
 const createDefaultAbility = `-- name: CreateDefaultAbility :exec
@@ -266,20 +266,20 @@ func (q *Queries) CreatePlayerUnit(ctx context.Context, arg CreatePlayerUnitPara
 	return i, err
 }
 
-const createUnitsCharClassesJunction = `-- name: CreateUnitsCharClassesJunction :exec
-INSERT INTO j_unit_character_class (data_hash, unit_id, class_id)
+const createPlayerUnitsCharacterClassJunction = `-- name: CreatePlayerUnitsCharacterClassJunction :exec
+INSERT INTO j_player_units_character_class (data_hash, unit_id, class_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateUnitsCharClassesJunctionParams struct {
+type CreatePlayerUnitsCharacterClassJunctionParams struct {
 	DataHash string
 	UnitID   int32
 	ClassID  int32
 }
 
-func (q *Queries) CreateUnitsCharClassesJunction(ctx context.Context, arg CreateUnitsCharClassesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createUnitsCharClassesJunction, arg.DataHash, arg.UnitID, arg.ClassID)
+func (q *Queries) CreatePlayerUnitsCharacterClassJunction(ctx context.Context, arg CreatePlayerUnitsCharacterClassJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createPlayerUnitsCharacterClassJunction, arg.DataHash, arg.UnitID, arg.ClassID)
 	return err
 }
 

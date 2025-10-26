@@ -101,7 +101,7 @@ func (l *lookup) createCharactersRelationships(db *database.Queries, dbConn *sql
 					return err
 				}
 
-				err = qtx.CreateCharacterBaseStatJunction(context.Background(), database.CreateCharacterBaseStatJunctionParams{
+				err = qtx.CreateCharactersBaseStatsJunction(context.Background(), database.CreateCharactersBaseStatsJunctionParams{
 					DataHash:    generateDataHash(junction),
 					CharacterID: junction.ParentID,
 					BaseStatID:  junction.ChildID,

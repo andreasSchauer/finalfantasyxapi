@@ -23,7 +23,7 @@ CREATE TABLE od_mode_actions (
 );
 
 
-CREATE TABLE j_od_mode_action (
+CREATE TABLE j_overdrive_modes_actions_to_learn (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     overdrive_mode_id INTEGER NOT NULL REFERENCES overdrive_modes(id),
@@ -31,7 +31,7 @@ CREATE TABLE j_od_mode_action (
 );
 
 
-CREATE TABLE j_status_condition_stat (
+CREATE TABLE j_status_conditions_related_stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     status_condition_id INTEGER NOT NULL REFERENCES status_conditions(id),
@@ -39,7 +39,7 @@ CREATE TABLE j_status_condition_stat (
 );
 
 
-CREATE TABLE j_status_condition_self (
+CREATE TABLE j_status_conditions_removed_status_conditions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     parent_condition_id INTEGER NOT NULL REFERENCES status_conditions(id),
@@ -47,7 +47,7 @@ CREATE TABLE j_status_condition_self (
 );
 
 
-CREATE TABLE j_status_condition_stat_change (
+CREATE TABLE j_status_conditions_stat_changes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     status_condition_id INTEGER NOT NULL REFERENCES status_conditions(id),
@@ -55,7 +55,7 @@ CREATE TABLE j_status_condition_stat_change (
 );
 
 
-CREATE TABLE j_status_condition_modifier_change (
+CREATE TABLE j_status_conditions_modifier_changes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     status_condition_id INTEGER NOT NULL REFERENCES status_conditions(id),
@@ -63,7 +63,7 @@ CREATE TABLE j_status_condition_modifier_change (
 );
 
 
-CREATE TABLE j_property_stat (
+CREATE TABLE j_properties_related_stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     property_id INTEGER NOT NULL REFERENCES properties(id),
@@ -71,7 +71,7 @@ CREATE TABLE j_property_stat (
 );
 
 
-CREATE TABLE j_property_status_condition (
+CREATE TABLE j_properties_removed_status_conditions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     property_id INTEGER NOT NULL REFERENCES properties(id),
@@ -79,7 +79,7 @@ CREATE TABLE j_property_status_condition (
 );
 
 
-CREATE TABLE j_property_stat_change (
+CREATE TABLE j_properties_stat_changes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     property_id INTEGER NOT NULL REFERENCES properties(id),
@@ -87,7 +87,7 @@ CREATE TABLE j_property_stat_change (
 );
 
 
-CREATE TABLE j_property_modifier_change (
+CREATE TABLE j_properties_modifier_changes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     property_id INTEGER NOT NULL REFERENCES properties(id),
@@ -96,15 +96,15 @@ CREATE TABLE j_property_modifier_change (
 
 
 -- +goose Down
-DROP TABLE IF EXISTS j_property_modifier_change;
-DROP TABLE IF EXISTS j_property_stat_change;
-DROP TABLE IF EXISTS j_property_status_condition;
-DROP TABLE IF EXISTS j_property_stat;
-DROP TABLE IF EXISTS j_status_condition_modifier_change;
-DROP TABLE IF EXISTS j_status_condition_stat_change;
-DROP TABLE IF EXISTS j_status_condition_self;
-DROP TABLE IF EXISTS j_status_condition_stat;
-DROP TABLE IF EXISTS j_od_mode_action;
+DROP TABLE IF EXISTS j_properties_modifier_changes;
+DROP TABLE IF EXISTS j_properties_stat_changes;
+DROP TABLE IF EXISTS j_properties_removed_status_conditions;
+DROP TABLE IF EXISTS j_properties_related_stats;
+DROP TABLE IF EXISTS j_status_conditions_modifier_changes;
+DROP TABLE IF EXISTS j_status_conditions_stat_changes;
+DROP TABLE IF EXISTS j_status_conditions_removed_status_conditions;
+DROP TABLE IF EXISTS j_status_conditions_related_stats;
+DROP TABLE IF EXISTS j_overdrive_modes_actions_to_learn;
 DROP TABLE IF EXISTS od_mode_actions;
 
 

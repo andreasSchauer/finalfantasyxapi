@@ -163,7 +163,7 @@ func (l *lookup) seedTreasureItemAmounts(qtx *database.Queries, treasure Treasur
 			return err
 		}
 
-		err = qtx.CreateTreasureItemAmountJunction(context.Background(), database.CreateTreasureItemAmountJunctionParams{
+		err = qtx.CreateTreasuresItemsJunction(context.Background(), database.CreateTreasuresItemsJunctionParams{
 			DataHash: generateDataHash(junction),
 			TreasureID: junction.ParentID,
 			ItemAmountID: junction.ChildID,

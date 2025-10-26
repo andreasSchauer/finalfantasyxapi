@@ -7,7 +7,7 @@ CREATE TABLE background_music (
 );
 
 
-CREATE TABLE j_song_background_music (
+CREATE TABLE j_songs_background_music (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     song_id INTEGER NOT NULL REFERENCES songs(id),
@@ -29,7 +29,7 @@ CREATE TABLE cues (
 );
 
 
-CREATE TABLE j_song_cues(
+CREATE TABLE j_songs_cues(
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     song_id INTEGER NOT NULL REFERENCES songs(id),
@@ -60,8 +60,8 @@ ALTER TABLE songs
 DROP COLUMN IF EXISTS credits_id;
 
 DROP TABLE IF EXISTS song_credits;
-DROP TABLE IF EXISTS j_song_cues;
+DROP TABLE IF EXISTS j_songs_cues;
 DROP TABLE IF EXISTS cues;
 DROP TYPE IF EXISTS bg_replacement_type;
-DROP TABLE IF EXISTS j_song_background_music;
+DROP TABLE IF EXISTS j_songs_background_music;
 DROP TABLE IF EXISTS background_music;

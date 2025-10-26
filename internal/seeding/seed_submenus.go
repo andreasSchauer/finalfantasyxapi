@@ -84,7 +84,7 @@ func (l *lookup) createSubmenusRelationships(db *database.Queries, dbConn *sql.D
 					return err
 				}
 
-				err = qtx.CreateSubmenuCharacterClassJunction(context.Background(), database.CreateSubmenuCharacterClassJunctionParams{
+				err = qtx.CreateSubmenusUsersJunction(context.Background(), database.CreateSubmenusUsersJunctionParams{
 					DataHash: generateDataHash(junction),
 					SubmenuID: 			junction.ParentID,
 					CharacterClassID: 	junction.ChildID,

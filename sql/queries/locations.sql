@@ -26,8 +26,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = area_connections.data_hash
 RETURNING *;
 
 
--- name: CreateAreaConnectionJunction :exec
-INSERT INTO j_area_connection (data_hash, area_id, connection_id)
+-- name: CreateAreaConnectedAreasJunction :exec
+INSERT INTO j_area_connected_areas (data_hash, area_id, connection_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -56,9 +56,9 @@ RETURNING *;
 
 
 -- name: CreateFormationLocation :one
-INSERT INTO formation_locations (data_hash, version, area_id, notes)
+INSERT INTO encounter_locations (data_hash, version, area_id, notes)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_locations.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = encounter_locations.data_hash
 RETURNING *;
 
 
@@ -70,26 +70,26 @@ RETURNING *;
 
 
 -- name: CreateMonsterFormation :one
-INSERT INTO monster_formations (data_hash, formation_location_id, category, is_forced_ambush, can_escape, boss_song_id, notes)
+INSERT INTO monster_formations (data_hash, encounter_location_id, category, is_forced_ambush, can_escape, boss_song_id, notes)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_formations.data_hash
 RETURNING *;
 
 
--- name: CreateLocationMonsterFormationJunction :exec
-INSERT INTO j_location_monster_formation (data_hash, formation_location_id, monster_formation_id)
+-- name: CreateEncounterLocationFormationsJunction :exec
+INSERT INTO j_encounter_location_formations (data_hash, encounter_location_id, monster_formation_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateMonsterFormationMonsterAmountJunction :exec
-INSERT INTO j_monster_formation_monster_amount (data_hash, monster_formation_id, monster_amount_id)
+-- name: CreateMonsterFormationsMonstersJunction :exec
+INSERT INTO j_monster_formations_monsters (data_hash, monster_formation_id, monster_amount_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateMonsterFormationTriggerCommandJunction :exec
-INSERT INTO j_monster_formation_trigger_command (data_hash, monster_formation_id, trigger_command_id)
+-- name: CreateMonsterFormationsTriggerCommandsJunction :exec
+INSERT INTO j_monster_formations_trigger_commands (data_hash, monster_formation_id, trigger_command_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -101,14 +101,14 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = found_equipment_pieces.data_has
 RETURNING *;
 
 
--- name: CreateFoundEquipmentAutoAbilityJunction :exec
-INSERT INTO j_found_equipment_auto_ability (data_hash, found_equipment_id, auto_ability_id)
+-- name: CreateFoundEquipmentAbilitiesJunction :exec
+INSERT INTO j_found_equipment_abilities (data_hash, found_equipment_id, auto_ability_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateTreasureItemAmountJunction :exec
-INSERT INTO j_treasure_item_amount (data_hash, treasure_id, item_amount_id)
+-- name: CreateTreasuresItemsJunction :exec
+INSERT INTO j_treasures_items (data_hash, treasure_id, item_amount_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -127,13 +127,13 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = shop_equipment_pieces.data_hash
 RETURNING *;
 
 
--- name: CreateShopShopItemJunction :exec
-INSERT INTO j_shop_shop_item (data_hash, shop_id, shop_item_id, shop_type)
+-- name: CreateShopsItemsJunction :exec
+INSERT INTO j_shops_items (data_hash, shop_id, shop_item_id, shop_type)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateShopShopEquipmentJunction :exec
-INSERT INTO j_shop_shop_equipment (data_hash, shop_id, shop_equipment_id, shop_type)
+-- name: CreateShopsEquipmentJunction :exec
+INSERT INTO j_shops_equipment (data_hash, shop_id, shop_equipment_id, shop_type)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;

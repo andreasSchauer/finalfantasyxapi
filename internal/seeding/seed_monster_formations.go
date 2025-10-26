@@ -147,9 +147,9 @@ func (l *lookup) createMonsterFormationsRelationships(db *database.Queries, dbCo
 					return fmt.Errorf("%s: %v", createLookupKey(formationLocation), err)
 				}
 
-				err = qtx.CreateLocationMonsterFormationJunction(context.Background(), database.CreateLocationMonsterFormationJunctionParams{
+				err = qtx.CreateEncounterLocationFormationsJunction(context.Background(), database.CreateEncounterLocationFormationsJunctionParams{
 					DataHash:            generateDataHash(junction),
-					FormationLocationID: junction.ParentID,
+					EncounterLocationID: junction.ParentID,
 					MonsterFormationID:  junction.ChildID,
 				})
 				if err != nil {
@@ -173,7 +173,7 @@ func (l *lookup) seedMonsterFormation(qtx *database.Queries, formation MonsterFo
 
 	dbFormation, err := qtx.CreateMonsterFormation(context.Background(), database.CreateMonsterFormationParams{
 		DataHash:            generateDataHash(formation),
-		FormationLocationID: formation.FormationLocationID,
+		EncounterLocationID: formation.FormationLocationID,
 		Category:            database.MonsterFormationCategory(formation.Category),
 		IsForcedAmbush:      formation.IsForcedAmbush,
 		CanEscape:           formation.CanEscape,
@@ -235,7 +235,7 @@ func (l *lookup) seedFormationMonsterAmounts(qtx *database.Queries, formation Mo
 			return fmt.Errorf("couldn't create junction with Monster Amount: %s: %v", key, err)
 		}
 
-		err = qtx.CreateMonsterFormationMonsterAmountJunction(context.Background(), database.CreateMonsterFormationMonsterAmountJunctionParams{
+		err = qtx.CreateMonsterFormationsMonstersJunction(context.Background(), database.CreateMonsterFormationsMonstersJunctionParams{
 			DataHash:           generateDataHash(junction),
 			MonsterFormationID: junction.ParentID,
 			MonsterAmountID:    junction.ChildID,
@@ -256,7 +256,7 @@ func (l *lookup) seedFormationTriggerCommands(qtx *database.Queries, formation M
 			return fmt.Errorf("couldn't create junction with trigger command %s: %v", createLookupKey(abilityRef), err)
 		}
 
-		err = qtx.CreateMonsterFormationTriggerCommandJunction(context.Background(), database.CreateMonsterFormationTriggerCommandJunctionParams{
+		err = qtx.CreateMonsterFormationsTriggerCommandsJunction(context.Background(), database.CreateMonsterFormationsTriggerCommandsJunctionParams{
 			DataHash:           generateDataHash(junction),
 			MonsterFormationID: junction.ParentID,
 			TriggerCommandID:   junction.ChildID,

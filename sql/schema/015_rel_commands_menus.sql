@@ -8,7 +8,7 @@ ADD COLUMN character_class_id INTEGER REFERENCES character_classes(id),
 ADD COLUMN submenu_id INTEGER REFERENCES submenus(id);
 
 
-CREATE TABLE j_submenu_character_class (
+CREATE TABLE j_submenus_users (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     submenu_id INTEGER NOT NULL REFERENCES submenus(id),
@@ -16,7 +16,7 @@ CREATE TABLE j_submenu_character_class (
 );
 
 
-CREATE TABLE j_aeon_command_ability (
+CREATE TABLE j_aeon_commands_possible_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     aeon_command_id INTEGER NOT NULL REFERENCES aeon_commands(id),
@@ -28,8 +28,8 @@ CREATE TABLE j_aeon_command_ability (
 
 
 -- +goose DOWN
-DROP TABLE IF EXISTS j_aeon_command_ability;
-DROP TABLE IF EXISTS j_submenu_character_class;
+DROP TABLE IF EXISTS j_aeon_commands_possible_abilities;
+DROP TABLE IF EXISTS j_submenus_users;
 
 ALTER TABLE overdrive_commands
 DROP COLUMN IF EXISTS submenu_id,

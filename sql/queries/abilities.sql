@@ -55,7 +55,7 @@ SET data_hash = $1,
 WHERE id = $4;
 
 
--- name: CreateOverdriveAbilityJunction :exec
-INSERT INTO j_overdrive_ability (data_hash, overdrive_id, overdrive_ability_id)
+-- name: CreateOverdrivesOverdriveAbilitiesJunction :exec
+INSERT INTO j_overdrives_overdrive_abilities (data_hash, overdrive_id, overdrive_ability_id)
 VALUES($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;

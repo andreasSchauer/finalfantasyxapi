@@ -9,7 +9,7 @@ CREATE TABLE mix_combinations (
 );
 
 
-CREATE TABLE j_mix_combo (
+CREATE TABLE j_mixes_combinations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     mix_id INTEGER NOT NULL REFERENCES mixes(id),
@@ -22,5 +22,5 @@ CREATE TABLE j_mix_combo (
 
 
 -- +goose Down
-DROP TABLE IF EXISTS j_mix_combo;
+DROP TABLE IF EXISTS j_mixes_combinations;
 DROP TABLE IF EXISTS mix_combinations;

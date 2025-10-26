@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TABLE j_unit_character_class (
+CREATE TABLE j_player_units_character_class (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     unit_id INTEGER NOT NULL REFERENCES player_units(id),
@@ -7,7 +7,7 @@ CREATE TABLE j_unit_character_class (
 );
 
 
-CREATE TABLE j_character_base_stat (
+CREATE TABLE j_characters_base_stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     character_id INTEGER NOT NULL REFERENCES characters(id),
@@ -15,7 +15,7 @@ CREATE TABLE j_character_base_stat (
 );
 
 
-CREATE TABLE aeon_equipments (
+CREATE TABLE aeon_equipment (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
@@ -24,15 +24,15 @@ CREATE TABLE aeon_equipments (
 );
 
 
-CREATE TABLE j_aeon_equipment (
+CREATE TABLE j_aeons_weapon_armor (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     aeon_id INTEGER NOT NULL REFERENCES aeons(id),
-    aeon_equipment_id INTEGER NOT NULL REFERENCES aeon_equipments(id)
+    aeon_equipment_id INTEGER NOT NULL REFERENCES aeon_equipment(id)
 );
 
 
-CREATE TABLE j_aeon_base_stat (
+CREATE TABLE j_aeons_base_stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     aeon_id INTEGER NOT NULL REFERENCES aeons(id),
@@ -67,8 +67,8 @@ DROP COLUMN IF EXISTS area_id;
 
 DROP TABLE IF EXISTS default_overdrive_abilities;
 DROP TABLE IF EXISTS default_abilities;
-DROP TABLE IF EXISTS j_aeon_equipment;
-DROP TABLE IF EXISTS aeon_equipments;
-DROP TABLE IF EXISTS j_aeon_base_stat;
-DROP TABLE IF EXISTS j_character_base_stat;
-DROP TABLE IF EXISTS j_unit_character_class;
+DROP TABLE IF EXISTS j_aeons_weapon_armor;
+DROP TABLE IF EXISTS aeons_equipment;
+DROP TABLE IF EXISTS j_aeons_base_stats;
+DROP TABLE IF EXISTS j_characters_base_stats;
+DROP TABLE IF EXISTS j_player_units_character_class;

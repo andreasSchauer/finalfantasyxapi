@@ -141,7 +141,7 @@ func (l *lookup) createOverdriveJunctions(qtx *database.Queries, overdrive Overd
 			return fmt.Errorf("couldn't create junction between overdrive %s and ability %s: %v", overdrive.Name, createLookupKey(abilityRef), err)
 		}
 
-		err = qtx.CreateOverdriveAbilityJunction(context.Background(), database.CreateOverdriveAbilityJunctionParams{
+		err = qtx.CreateOverdrivesOverdriveAbilitiesJunction(context.Background(), database.CreateOverdrivesOverdriveAbilitiesJunctionParams{
 			DataHash: generateDataHash(junction),
 			OverdriveID: 		junction.ParentID,
 			OverdriveAbilityID: junction.ChildID,

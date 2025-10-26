@@ -224,21 +224,21 @@ func (q *Queries) CreateMixCombination(ctx context.Context, arg CreateMixCombina
 	return i, err
 }
 
-const createMixComboJunction = `-- name: CreateMixComboJunction :exec
-INSERT INTO j_mix_combo (data_hash, mix_id, combo_id, is_best_combo)
+const createMixesCombinationsJunction = `-- name: CreateMixesCombinationsJunction :exec
+INSERT INTO j_mixes_combinations (data_hash, mix_id, combo_id, is_best_combo)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateMixComboJunctionParams struct {
+type CreateMixesCombinationsJunctionParams struct {
 	DataHash    string
 	MixID       int32
 	ComboID     int32
 	IsBestCombo bool
 }
 
-func (q *Queries) CreateMixComboJunction(ctx context.Context, arg CreateMixComboJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createMixComboJunction,
+func (q *Queries) CreateMixesCombinationsJunction(ctx context.Context, arg CreateMixesCombinationsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMixesCombinationsJunction,
 		arg.DataHash,
 		arg.MixID,
 		arg.ComboID,

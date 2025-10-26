@@ -17,7 +17,7 @@ ADD CONSTRAINT aa_fk_stat_id CHECK (grad_rcvry_stat_id <= 2),
 ADD CONSTRAINT aa_fk_element_id CHECK (on_hit_element_id <= 4);
 
 
-CREATE TABLE j_auto_ability_stat (
+CREATE TABLE j_auto_abilities_related_stats(
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
@@ -25,7 +25,7 @@ CREATE TABLE j_auto_ability_stat (
 );
 
 
-CREATE TABLE j_auto_ability_self (
+CREATE TABLE j_auto_abilities_locked_out (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     parent_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
@@ -33,7 +33,7 @@ CREATE TABLE j_auto_ability_self (
 );
 
 
-CREATE TABLE j_auto_ability_item (
+CREATE TABLE j_auto_abilities_required_item (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
@@ -41,7 +41,7 @@ CREATE TABLE j_auto_ability_item (
 );
 
 
-CREATE TABLE j_auto_ability_status_condition (
+CREATE TABLE j_auto_abilities_added_statusses (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
@@ -49,7 +49,7 @@ CREATE TABLE j_auto_ability_status_condition (
 );
 
 
-CREATE TABLE j_auto_ability_status_resist (
+CREATE TABLE j_auto_abilities_added_status_resists (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
@@ -57,7 +57,7 @@ CREATE TABLE j_auto_ability_status_resist (
 );
 
 
-CREATE TABLE j_auto_ability_stat_change (
+CREATE TABLE j_auto_abilities_stat_changes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
@@ -65,7 +65,7 @@ CREATE TABLE j_auto_ability_stat_change (
 );
 
 
-CREATE TABLE j_auto_ability_modifier_change (
+CREATE TABLE j_auto_abilities_modifier_changes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
@@ -81,7 +81,7 @@ CREATE TABLE equipment_names (
 );
 
 
-CREATE TABLE j_equipment_table_name_clstl_wpn (
+CREATE TABLE j_equipment_tables_names (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     equipment_table_id INTEGER NOT NULL REFERENCES equipment_tables(id),
@@ -93,7 +93,7 @@ CREATE TABLE j_equipment_table_name_clstl_wpn (
 
 CREATE TYPE auto_ability_pool AS ENUM ('required', 'one', 'two');
 
-CREATE TABLE j_equipment_auto_ability (
+CREATE TABLE j_equipment_tables_ability_pool (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     equipment_table_id INTEGER NOT NULL REFERENCES equipment_tables(id),
@@ -106,17 +106,17 @@ CREATE TABLE j_equipment_auto_ability (
 
 
 -- +goose Down
-DROP TABLE IF EXISTS j_equipment_auto_ability;
+DROP TABLE IF EXISTS j_equipment_tables_ability_pool;
 DROP TYPE IF EXISTS auto_ability_pool;
-DROP TABLE IF EXISTS j_equipment_table_name_clstl_wpn;
+DROP TABLE IF EXISTS j_equipment_tables_names;
 DROP TABLE IF EXISTS equipment_names;
-DROP TABLE IF EXISTS j_auto_ability_modifier_change;
-DROP TABLE IF EXISTS j_auto_ability_stat_change;
-DROP TABLE IF EXISTS j_auto_ability_status_condition;
-DROP TABLE IF EXISTS j_auto_ability_status_resist;
-DROP TABLE IF EXISTS j_auto_ability_item;
-DROP TABLE IF EXISTS j_auto_ability_self;
-DROP TABLE IF EXISTS j_auto_ability_stat;
+DROP TABLE IF EXISTS j_auto_abilities_modifier_changes;
+DROP TABLE IF EXISTS j_auto_abilities_stat_changes;
+DROP TABLE IF EXISTS j_auto_abilities_added_statusses;
+DROP TABLE IF EXISTS j_auto_abilities_added_status_resists;
+DROP TABLE IF EXISTS j_auto_abilities_required_item;
+DROP TABLE IF EXISTS j_auto_abilities_locked_out;
+DROP TABLE IF EXISTS j_auto_abilities_related_stats
 
 
 ALTER TABLE auto_abilities

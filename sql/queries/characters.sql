@@ -12,8 +12,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = characters.data_hash
 RETURNING *;
 
 
--- name: CreateCharacterBaseStatJunction :exec
-INSERT INTO j_character_base_stat (data_hash, character_id, base_stat_id)
+-- name: CreateCharactersBaseStatsJunction :exec
+INSERT INTO j_characters_base_stats (data_hash, character_id, base_stat_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -39,8 +39,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = character_classes.data_hash
 RETURNING *;
 
 
--- name: CreateUnitsCharClassesJunction :exec
-INSERT INTO j_unit_character_class (data_hash, unit_id, class_id)
+-- name: CreatePlayerUnitsCharacterClassJunction :exec
+INSERT INTO j_player_units_character_class (data_hash, unit_id, class_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -58,19 +58,19 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateAeonEquipment :one
-INSERT INTO aeon_equipments (data_hash, auto_ability_id, celestial_wpn, equip_type)
+INSERT INTO aeon_equipment (data_hash, auto_ability_id, celestial_wpn, equip_type)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_equipments.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_equipment.data_hash
 RETURNING *;
 
 
--- name: CreateAeonBaseStatJunction :exec
-INSERT INTO j_aeon_base_stat (data_hash, aeon_id, base_stat_id)
+-- name: CreateAeonsBaseStatJunction :exec
+INSERT INTO j_aeons_base_stats (data_hash, aeon_id, base_stat_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAeonEquipmentJunction :exec
-INSERT INTO j_aeon_equipment (data_hash, aeon_id, aeon_equipment_id)
+-- name: CreateAeonsWeaponArmorJunction :exec
+INSERT INTO j_aeons_weapon_armor (data_hash, aeon_id, aeon_equipment_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;

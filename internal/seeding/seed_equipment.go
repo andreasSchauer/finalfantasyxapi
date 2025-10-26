@@ -202,7 +202,7 @@ func (l *lookup) seedEquipmentAutoAbilities(qtx *database.Queries, table Equipme
 
 		eaJunction.AbilityPool = abilityPool
 
-		err = qtx.CreateEquipmentAutoAbilityJunction(context.Background(), database.CreateEquipmentAutoAbilityJunctionParams{
+		err = qtx.CreateEquipmentTablesAbilityPoolJunction(context.Background(), database.CreateEquipmentTablesAbilityPoolJunctionParams{
 			DataHash: 			generateDataHash(eaJunction),
 			EquipmentTableID: 	eaJunction.ParentID,
 			AutoAbilityID: 		eaJunction.ChildID,
@@ -234,7 +234,7 @@ func (l *lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 			}
 		}
 
-		err = qtx.CreateEquipmentTableNameClstlWpnJunction(context.Background(), database.CreateEquipmentTableNameClstlWpnJunctionParams{
+		err = qtx.CreateEquipmentTablesNamesJunction(context.Background(), database.CreateEquipmentTablesNamesJunctionParams{
 			DataHash: generateDataHash(etncJunction),
 			EquipmentTableID: etncJunction.ParentID,
 			EquipmentNameID: etncJunction.ChildID,

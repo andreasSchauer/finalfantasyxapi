@@ -160,29 +160,6 @@ func (q *Queries) CreateSong(ctx context.Context, arg CreateSongParams) (Song, e
 	return i, err
 }
 
-const createSongBackgroundMusicJunction = `-- name: CreateSongBackgroundMusicJunction :exec
-INSERT INTO j_song_background_music (data_hash, song_id, bm_id, area_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateSongBackgroundMusicJunctionParams struct {
-	DataHash string
-	SongID   int32
-	BmID     int32
-	AreaID   int32
-}
-
-func (q *Queries) CreateSongBackgroundMusicJunction(ctx context.Context, arg CreateSongBackgroundMusicJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createSongBackgroundMusicJunction,
-		arg.DataHash,
-		arg.SongID,
-		arg.BmID,
-		arg.AreaID,
-	)
-	return err
-}
-
 const createSongCredit = `-- name: CreateSongCredit :one
 INSERT INTO song_credits (data_hash, composer, arranger, performer, lyricist)
 VALUES ($1, $2, $3, $4, $5)
@@ -218,21 +195,44 @@ func (q *Queries) CreateSongCredit(ctx context.Context, arg CreateSongCreditPara
 	return i, err
 }
 
-const createSongCuesJunction = `-- name: CreateSongCuesJunction :exec
-INSERT INTO j_song_cues (data_hash, song_id, cue_id, area_id)
+const createSongsBackgroundMusicJunction = `-- name: CreateSongsBackgroundMusicJunction :exec
+INSERT INTO j_songs_background_music (data_hash, song_id, bm_id, area_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateSongCuesJunctionParams struct {
+type CreateSongsBackgroundMusicJunctionParams struct {
+	DataHash string
+	SongID   int32
+	BmID     int32
+	AreaID   int32
+}
+
+func (q *Queries) CreateSongsBackgroundMusicJunction(ctx context.Context, arg CreateSongsBackgroundMusicJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createSongsBackgroundMusicJunction,
+		arg.DataHash,
+		arg.SongID,
+		arg.BmID,
+		arg.AreaID,
+	)
+	return err
+}
+
+const createSongsCuesJunction = `-- name: CreateSongsCuesJunction :exec
+INSERT INTO j_songs_cues (data_hash, song_id, cue_id, area_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateSongsCuesJunctionParams struct {
 	DataHash string
 	SongID   int32
 	CueID    int32
 	AreaID   int32
 }
 
-func (q *Queries) CreateSongCuesJunction(ctx context.Context, arg CreateSongCuesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createSongCuesJunction,
+func (q *Queries) CreateSongsCuesJunction(ctx context.Context, arg CreateSongsCuesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createSongsCuesJunction,
 		arg.DataHash,
 		arg.SongID,
 		arg.CueID,

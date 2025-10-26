@@ -218,7 +218,7 @@ func (l *lookup) createAutoAbilityRelatedStats(qtx *database.Queries, autoAbilit
 			return err
 		}
 
-		err = qtx.CreateAutoAbilityStatJunction(context.Background(), database.CreateAutoAbilityStatJunctionParams{
+		err = qtx.CreateAutoAbilitiesRelatedStatsJunction(context.Background(), database.CreateAutoAbilitiesRelatedStatsJunctionParams{
 			DataHash:      generateDataHash(junction),
 			AutoAbilityID: junction.ParentID,
 			StatID:        junction.ChildID,
@@ -238,7 +238,7 @@ func (l *lookup) createAutoAbilityLockedOutAbilities(qtx *database.Queries, auto
 			return err
 		}
 
-		err = qtx.CreateAutoAbilitySelfJunction(context.Background(), database.CreateAutoAbilitySelfJunctionParams{
+		err = qtx.CreateAutoAbilitiesLockedOutJunction(context.Background(), database.CreateAutoAbilitiesLockedOutJunctionParams{
 			DataHash:        generateDataHash(junction),
 			ParentAbilityID: junction.ParentID,
 			ChildAbilityID:  junction.ChildID,
@@ -258,7 +258,7 @@ func (l *lookup) createAutoAbilityAutoItemUse(qtx *database.Queries, autoAbility
 			return err
 		}
 
-		err = qtx.CreateAutoAbilityItemJunction(context.Background(), database.CreateAutoAbilityItemJunctionParams{
+		err = qtx.CreateAutoAbilitiesRequiredItemJunction(context.Background(), database.CreateAutoAbilitiesRequiredItemJunctionParams{
 			DataHash:      generateDataHash(junction),
 			AutoAbilityID: junction.ParentID,
 			ItemID:        junction.ChildID,
@@ -278,7 +278,7 @@ func (l *lookup) createAutoAbilityAddedStatusses(qtx *database.Queries, autoAbil
 			return err
 		}
 
-		err = qtx.CreateAutoAbilityStatusConditionJunction(context.Background(), database.CreateAutoAbilityStatusConditionJunctionParams{
+		err = qtx.CreateAutoAbilitiesAddedStatussesJunction(context.Background(), database.CreateAutoAbilitiesAddedStatussesJunctionParams{
 			DataHash:          generateDataHash(junction),
 			AutoAbilityID:     junction.ParentID,
 			StatusConditionID: junction.ChildID,
@@ -298,7 +298,7 @@ func (l *lookup) createAutoAbilityAddedStatusResists(qtx *database.Queries, auto
 			return err
 		}
 
-		err = qtx.CreateAutoAbilityStatusResistJunction(context.Background(), database.CreateAutoAbilityStatusResistJunctionParams{
+		err = qtx.CreateAutoAbilitiesAddedStatusResistsJunction(context.Background(), database.CreateAutoAbilitiesAddedStatusResistsJunctionParams{
 			DataHash:       generateDataHash(junction),
 			AutoAbilityID:  junction.ParentID,
 			StatusResistID: junction.ChildID,
@@ -318,7 +318,7 @@ func (l *lookup) createAutoAbilityStatChanges(qtx *database.Queries, autoAbility
 			return err
 		}
 
-		err = qtx.CreateAutoAbilityStatChangeJunction(context.Background(), database.CreateAutoAbilityStatChangeJunctionParams{
+		err = qtx.CreateAutoAbilitiesStatChangesJunction(context.Background(), database.CreateAutoAbilitiesStatChangesJunctionParams{
 			DataHash:      generateDataHash(junction),
 			AutoAbilityID: junction.ParentID,
 			StatChangeID:  junction.ChildID,
@@ -338,7 +338,7 @@ func (l *lookup) createAutoAbilityModifierChanges(qtx *database.Queries, autoAbi
 			return err
 		}
 
-		err = qtx.CreateAutoAbilityModifierChangeJunction(context.Background(), database.CreateAutoAbilityModifierChangeJunctionParams{
+		err = qtx.CreateAutoAbilitiesModifierChangesJunction(context.Background(), database.CreateAutoAbilitiesModifierChangesJunctionParams{
 			DataHash:         generateDataHash(junction),
 			AutoAbilityID:    junction.ParentID,
 			ModifierChangeID: junction.ChildID,

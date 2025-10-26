@@ -2167,6 +2167,14 @@ type ElementalAffinity struct {
 	AffinityID int32
 }
 
+type EncounterLocation struct {
+	ID       int32
+	DataHash string
+	Version  sql.NullInt32
+	AreaID   int32
+	Notes    sql.NullString
+}
+
 type EnemyAbility struct {
 	ID        int32
 	DataHash  string
@@ -2209,14 +2217,6 @@ type FormationBossSong struct {
 	DataHash         string
 	SongID           int32
 	CelebrateVictory bool
-}
-
-type FormationLocation struct {
-	ID       int32
-	DataHash string
-	Version  sql.NullInt32
-	AreaID   int32
-	Notes    sql.NullString
 }
 
 type FoundEquipmentPiece struct {
@@ -2263,14 +2263,7 @@ type ItemAmount struct {
 	Amount       int32
 }
 
-type JAeonBaseStat struct {
-	ID         int32
-	DataHash   string
-	AeonID     int32
-	BaseStatID int32
-}
-
-type JAeonCommandAbility struct {
+type JAeonCommandsPossibleAbility struct {
 	ID               int32
 	DataHash         string
 	AeonCommandID    int32
@@ -2278,77 +2271,91 @@ type JAeonCommandAbility struct {
 	CharacterClassID int32
 }
 
-type JAeonEquipment struct {
+type JAeonsBaseStat struct {
+	ID         int32
+	DataHash   string
+	AeonID     int32
+	BaseStatID int32
+}
+
+type JAeonsWeaponArmor struct {
 	ID              int32
 	DataHash        string
 	AeonID          int32
 	AeonEquipmentID int32
 }
 
-type JAreaConnection struct {
+type JAreaConnectedArea struct {
 	ID           int32
 	DataHash     string
 	AreaID       int32
 	ConnectionID int32
 }
 
-type JAutoAbilityItem struct {
-	ID            int32
-	DataHash      string
-	AutoAbilityID int32
-	ItemID        int32
-}
-
-type JAutoAbilityModifierChange struct {
-	ID               int32
-	DataHash         string
-	AutoAbilityID    int32
-	ModifierChangeID int32
-}
-
-type JAutoAbilitySelf struct {
-	ID              int32
-	DataHash        string
-	ParentAbilityID int32
-	ChildAbilityID  int32
-}
-
-type JAutoAbilityStat struct {
-	ID            int32
-	DataHash      string
-	AutoAbilityID int32
-	StatID        int32
-}
-
-type JAutoAbilityStatChange struct {
-	ID            int32
-	DataHash      string
-	AutoAbilityID int32
-	StatChangeID  int32
-}
-
-type JAutoAbilityStatusCondition struct {
-	ID                int32
-	DataHash          string
-	AutoAbilityID     int32
-	StatusConditionID int32
-}
-
-type JAutoAbilityStatusResist struct {
+type JAutoAbilitiesAddedStatusResist struct {
 	ID             int32
 	DataHash       string
 	AutoAbilityID  int32
 	StatusResistID int32
 }
 
-type JCharacterBaseStat struct {
+type JAutoAbilitiesAddedStatuss struct {
+	ID                int32
+	DataHash          string
+	AutoAbilityID     int32
+	StatusConditionID int32
+}
+
+type JAutoAbilitiesLockedOut struct {
+	ID              int32
+	DataHash        string
+	ParentAbilityID int32
+	ChildAbilityID  int32
+}
+
+type JAutoAbilitiesModifierChange struct {
+	ID               int32
+	DataHash         string
+	AutoAbilityID    int32
+	ModifierChangeID int32
+}
+
+type JAutoAbilitiesRelatedStat struct {
+	ID            int32
+	DataHash      string
+	AutoAbilityID int32
+	StatID        int32
+}
+
+type JAutoAbilitiesRequiredItem struct {
+	ID            int32
+	DataHash      string
+	AutoAbilityID int32
+	ItemID        int32
+}
+
+type JAutoAbilitiesStatChange struct {
+	ID            int32
+	DataHash      string
+	AutoAbilityID int32
+	StatChangeID  int32
+}
+
+type JCharactersBaseStat struct {
 	ID          int32
 	DataHash    string
 	CharacterID int32
 	BaseStatID  int32
 }
 
-type JEquipmentAutoAbility struct {
+type JEncounterLocationFormation struct {
+	ID                  int32
+	DataHash            string
+	EncounterLocationID int32
+	MonsterFormationID  int32
+}
+
+type JEquipmentTablesAbilityPool struct {
 	ID               int32
 	DataHash         string
 	EquipmentTableID int32
@@ -2356,7 +2363,7 @@ type JEquipmentAutoAbility struct {
 	AbilityPool      AutoAbilityPool
 }
 
-type JEquipmentTableNameClstlWpn struct {
+type JEquipmentTablesName struct {
 	ID                int32
 	DataHash          string
 	EquipmentTableID  int32
@@ -2364,21 +2371,14 @@ type JEquipmentTableNameClstlWpn struct {
 	CelestialWeaponID sql.NullInt32
 }
 
-type JFoundEquipmentAutoAbility struct {
+type JFoundEquipmentAbility struct {
 	ID               int32
 	DataHash         string
 	FoundEquipmentID int32
 	AutoAbilityID    int32
 }
 
-type JLocationMonsterFormation struct {
-	ID                  int32
-	DataHash            string
-	FormationLocationID int32
-	MonsterFormationID  int32
-}
-
-type JMixCombo struct {
+type JMixesCombination struct {
 	ID          int32
 	DataHash    string
 	MixID       int32
@@ -2386,63 +2386,70 @@ type JMixCombo struct {
 	IsBestCombo bool
 }
 
-type JMonsterFormationMonsterAmount struct {
+type JMonsterFormationsMonster struct {
 	ID                 int32
 	DataHash           string
 	MonsterFormationID int32
 	MonsterAmountID    int32
 }
 
-type JMonsterFormationTriggerCommand struct {
+type JMonsterFormationsTriggerCommand struct {
 	ID                 int32
 	DataHash           string
 	MonsterFormationID int32
 	TriggerCommandID   int32
 }
 
-type JOdModeAction struct {
+type JOverdriveModesActionsToLearn struct {
 	ID              int32
 	DataHash        string
 	OverdriveModeID int32
 	ActionID        int32
 }
 
-type JOverdriveAbility struct {
+type JOverdrivesOverdriveAbility struct {
 	ID                 int32
 	DataHash           string
 	OverdriveID        int32
 	OverdriveAbilityID int32
 }
 
-type JPropertyModifierChange struct {
+type JPlayerUnitsCharacterClass struct {
+	ID       int32
+	DataHash string
+	UnitID   int32
+	ClassID  int32
+}
+
+type JPropertiesModifierChange struct {
 	ID               int32
 	DataHash         string
 	PropertyID       int32
 	ModifierChangeID int32
 }
 
-type JPropertyStat struct {
+type JPropertiesRelatedStat struct {
 	ID         int32
 	DataHash   string
 	PropertyID int32
 	StatID     int32
 }
 
-type JPropertyStatChange struct {
-	ID           int32
-	DataHash     string
-	PropertyID   int32
-	StatChangeID int32
-}
-
-type JPropertyStatusCondition struct {
+type JPropertiesRemovedStatusCondition struct {
 	ID                int32
 	DataHash          string
 	PropertyID        int32
 	StatusConditionID int32
 }
 
-type JShopShopEquipment struct {
+type JPropertiesStatChange struct {
+	ID           int32
+	DataHash     string
+	PropertyID   int32
+	StatChangeID int32
+}
+
+type JShopsEquipment struct {
 	ID              int32
 	DataHash        string
 	ShopID          int32
@@ -2450,7 +2457,7 @@ type JShopShopEquipment struct {
 	ShopType        ShopType
 }
 
-type JShopShopItem struct {
+type JShopsItem struct {
 	ID         int32
 	DataHash   string
 	ShopID     int32
@@ -2458,7 +2465,7 @@ type JShopShopItem struct {
 	ShopType   ShopType
 }
 
-type JSongBackgroundMusic struct {
+type JSongsBackgroundMusic struct {
 	ID       int32
 	DataHash string
 	SongID   int32
@@ -2466,7 +2473,7 @@ type JSongBackgroundMusic struct {
 	AreaID   int32
 }
 
-type JSongCue struct {
+type JSongsCue struct {
 	ID       int32
 	DataHash string
 	SongID   int32
@@ -2474,53 +2481,46 @@ type JSongCue struct {
 	AreaID   int32
 }
 
-type JStatusConditionModifierChange struct {
+type JStatusConditionsModifierChange struct {
 	ID                int32
 	DataHash          string
 	StatusConditionID int32
 	ModifierChangeID  int32
 }
 
-type JStatusConditionSelf struct {
-	ID                int32
-	DataHash          string
-	ParentConditionID int32
-	ChildConditionID  int32
-}
-
-type JStatusConditionStat struct {
+type JStatusConditionsRelatedStat struct {
 	ID                int32
 	DataHash          string
 	StatusConditionID int32
 	StatID            int32
 }
 
-type JStatusConditionStatChange struct {
+type JStatusConditionsRemovedStatusCondition struct {
+	ID                int32
+	DataHash          string
+	ParentConditionID int32
+	ChildConditionID  int32
+}
+
+type JStatusConditionsStatChange struct {
 	ID                int32
 	DataHash          string
 	StatusConditionID int32
 	StatChangeID      int32
 }
 
-type JSubmenuCharacterClass struct {
+type JSubmenusUser struct {
 	ID               int32
 	DataHash         string
 	SubmenuID        int32
 	CharacterClassID int32
 }
 
-type JTreasureItemAmount struct {
+type JTreasuresItem struct {
 	ID           int32
 	DataHash     string
 	TreasureID   int32
 	ItemAmountID int32
-}
-
-type JUnitCharacterClass struct {
-	ID       int32
-	DataHash string
-	UnitID   int32
-	ClassID  int32
 }
 
 type KeyItem struct {
@@ -2628,7 +2628,7 @@ type MonsterArenaCreation struct {
 type MonsterFormation struct {
 	ID                  int32
 	DataHash            string
-	FormationLocationID int32
+	EncounterLocationID int32
 	Category            MonsterFormationCategory
 	IsForcedAmbush      bool
 	CanEscape           bool
