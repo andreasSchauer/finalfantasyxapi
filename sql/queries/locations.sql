@@ -42,16 +42,8 @@ RETURNING *;
 -- name: UpdateTreasure :exec
 UPDATE treasures
 SET data_hash = $1,
-    area_id = $2,
-    version = $3,
-    treasure_type = $4,
-    loot_type = $5,
-    is_post_airship = $6,
-    is_anima_treasure = $7,
-    notes = $8,
-    gil_amount = $9,
-    found_equipment_id = $10
-WHERE id = $11;
+    found_equipment_id = $2
+WHERE id = $3;
 
 
 

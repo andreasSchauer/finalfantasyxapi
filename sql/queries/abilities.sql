@@ -50,18 +50,9 @@ RETURNING *;
 -- name: UpdateOverdrive :exec
 UPDATE overdrives
 SET data_hash = $1,
-    name = $2,
-    version = $3,
-    description = $4,
-    effect = $5,
-    topmenu = $6,
-    attributes_id = $7,
-    unlock_condition = $8,
-    countdown_in_sec = $9,
-    cursor = $10,
-    od_command_id = $11,
-    character_class_id = $12
-WHERE id = $13;
+    od_command_id = $2,
+    character_class_id = $3
+WHERE id = $4;
 
 
 -- name: CreateOverdriveAbilityJunction :exec

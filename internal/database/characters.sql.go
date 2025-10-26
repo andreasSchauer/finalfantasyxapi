@@ -174,8 +174,7 @@ func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams
 const createCharacterBaseStatJunction = `-- name: CreateCharacterBaseStatJunction :exec
 INSERT INTO j_character_base_stat (data_hash, character_id, base_stat_id)
 VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = j_character_base_stat.data_hash
-RETURNING id, data_hash, character_id, base_stat_id
+ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateCharacterBaseStatJunctionParams struct {
@@ -287,51 +286,17 @@ func (q *Queries) CreateUnitsCharClassesJunction(ctx context.Context, arg Create
 const updateAeon = `-- name: UpdateAeon :exec
 UPDATE aeons
 SET data_hash = $1,
-    unit_id = $2,
-    unlock_condition = $3,
-    is_optional = $4,
-    battles_to_regenerate = $5,
-    phys_atk_damage_constant = $6,
-    phys_atk_range = $7,
-    phys_atk_shatter_rate = $8,
-    phys_atk_acc_source = $9,
-    phys_atk_hit_chance = $10,
-    phys_atk_acc_modifier = $11,
-    area_id = $12
-WHERE id = $13
+    area_id = $2
+WHERE id = $3
 `
 
 type UpdateAeonParams struct {
-	DataHash              string
-	UnitID                int32
-	UnlockCondition       string
-	IsOptional            bool
-	BattlesToRegenerate   int32
-	PhysAtkDamageConstant sql.NullInt32
-	PhysAtkRange          interface{}
-	PhysAtkShatterRate    interface{}
-	PhysAtkAccSource      NullAccuracySource
-	PhysAtkHitChance      interface{}
-	PhysAtkAccModifier    sql.NullFloat64
-	AreaID                sql.NullInt32
-	ID                    int32
+	DataHash string
+	AreaID   sql.NullInt32
+	ID       int32
 }
 
 func (q *Queries) UpdateAeon(ctx context.Context, arg UpdateAeonParams) error {
-	_, err := q.db.ExecContext(ctx, updateAeon,
-		arg.DataHash,
-		arg.UnitID,
-		arg.UnlockCondition,
-		arg.IsOptional,
-		arg.BattlesToRegenerate,
-		arg.PhysAtkDamageConstant,
-		arg.PhysAtkRange,
-		arg.PhysAtkShatterRate,
-		arg.PhysAtkAccSource,
-		arg.PhysAtkHitChance,
-		arg.PhysAtkAccModifier,
-		arg.AreaID,
-		arg.ID,
-	)
+	_, err := q.db.ExecContext(ctx, updateAeon, arg.DataHash, arg.AreaID, arg.ID)
 	return err
 }

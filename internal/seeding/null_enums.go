@@ -87,7 +87,6 @@ func nullCounterType(s *string) database.NullCounterType {
 }
 
 
-
 func nullMaCreationArea(s *string) database.NullMaCreationArea {
     if s == nil {
         return database.NullMaCreationArea{}
@@ -143,6 +142,18 @@ func nullMusicUseCase(s *string) database.NullMusicUseCase {
     
     return database.NullMusicUseCase{
         MusicUseCase: database.MusicUseCase(*s),
+        Valid: true,
+    }
+}
+
+
+func nullBgReplacementType(s *string) database.NullBgReplacementType {
+    if s == nil {
+        return database.NullBgReplacementType{}
+    }
+    
+    return database.NullBgReplacementType{
+        BgReplacementType: database.BgReplacementType(*s),
         Valid: true,
     }
 }

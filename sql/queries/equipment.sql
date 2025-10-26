@@ -8,12 +8,9 @@ RETURNING *;
 -- name: UpdateCelestialWeapon :exec
 UPDATE celestial_weapons
 SET data_hash = $1,
-    name = $2,
-    key_item_base = $3,
-    formula = $4,
-    character_id = $5,
-    aeon_id = $6
-WHERE id = $7;
+    character_id = $2,
+    aeon_id = $3
+WHERE id = $4;
 
 
 -- name: CreateAutoAbility :one
@@ -26,23 +23,14 @@ RETURNING *;
 -- name: UpdateAutoAbility :exec
 UPDATE auto_abilities
 SET data_hash = $1,
-    name = $2,
-    description = $3,
-    effect = $4,
-    type = $5,
-    category = $6,
-    ability_value = $7,
-    required_item_amount_id = $8,
-    activation_condition = $9,
-    counter = $10,
-    grad_rcvry_stat_id = $11,
-    on_hit_element_id = $12,
-    added_elem_affinity_id = $13,
-    on_hit_status_id = $14,
-    added_property_id = $15,
-    cnvrsn_from_mod_id = $16,
-    cnvrsn_to_mod_id = $17
-WHERE id = $18;
+    grad_rcvry_stat_id = $2,
+    on_hit_element_id = $3,
+    added_elem_affinity_id = $4,
+    on_hit_status_id = $5,
+    added_property_id = $6,
+    cnvrsn_from_mod_id = $7,
+    cnvrsn_to_mod_id = $8
+WHERE id = $9;
 
 
 -- name: CreateAutoAbilityStatJunction :exec

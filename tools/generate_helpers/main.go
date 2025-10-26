@@ -20,6 +20,7 @@ func main() {
         "TargetType",
         "ItemUsability",
         "MusicUseCase",
+        "BgReplacementType",
     }
 
     filePath := "./internal/seeding/null_enums.go"

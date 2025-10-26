@@ -96,6 +96,10 @@ func (la LocationArea) ToKeyFields() []any {
 	}
 }
 
+func (la LocationArea) GetID() int32 {
+	return la.ID
+}
+
 
 type AreaConnection struct {
 	ID				int32

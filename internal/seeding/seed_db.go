@@ -80,6 +80,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 		l.createMonsterFormationsRelationships,
 		l.createTreasuresRelationships,
 		l.createShopsRelationships,
+		l.createSongsRelationships,
 	}
 
 	err = handleDBFunctions(db, dbConn, seedFunctions, "initial seeding")

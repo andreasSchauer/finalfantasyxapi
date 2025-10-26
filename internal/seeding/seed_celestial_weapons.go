@@ -90,9 +90,6 @@ func (l *lookup) createCelestialWeaponsRelationships(db *database.Queries, dbCon
 
 			err = qtx.UpdateCelestialWeapon(context.Background(), database.UpdateCelestialWeaponParams{
 				DataHash:    	generateDataHash(weapon),
-				Name:        	weapon.Name,
-				KeyItemBase: 	database.KeyItemBase(weapon.KeyItemBase),
-				Formula:     	database.CelestialFormula(weapon.Formula),
 				CharacterID: 	getNullInt32(weapon.CharacterID),
 				AeonID: 		getNullInt32(weapon.AeonID),
 				ID:				weapon.ID,

@@ -278,31 +278,13 @@ func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCom
 const updateOverdrive = `-- name: UpdateOverdrive :exec
 UPDATE overdrives
 SET data_hash = $1,
-    name = $2,
-    version = $3,
-    description = $4,
-    effect = $5,
-    topmenu = $6,
-    attributes_id = $7,
-    unlock_condition = $8,
-    countdown_in_sec = $9,
-    cursor = $10,
-    od_command_id = $11,
-    character_class_id = $12
-WHERE id = $13
+    od_command_id = $2,
+    character_class_id = $3
+WHERE id = $4
 `
 
 type UpdateOverdriveParams struct {
 	DataHash         string
-	Name             string
-	Version          sql.NullInt32
-	Description      string
-	Effect           string
-	Topmenu          NullTopmenuType
-	AttributesID     int32
-	UnlockCondition  sql.NullString
-	CountdownInSec   sql.NullInt32
-	Cursor           NullTargetType
 	OdCommandID      sql.NullInt32
 	CharacterClassID sql.NullInt32
 	ID               int32
@@ -311,15 +293,6 @@ type UpdateOverdriveParams struct {
 func (q *Queries) UpdateOverdrive(ctx context.Context, arg UpdateOverdriveParams) error {
 	_, err := q.db.ExecContext(ctx, updateOverdrive,
 		arg.DataHash,
-		arg.Name,
-		arg.Version,
-		arg.Description,
-		arg.Effect,
-		arg.Topmenu,
-		arg.AttributesID,
-		arg.UnlockCondition,
-		arg.CountdownInSec,
-		arg.Cursor,
 		arg.OdCommandID,
 		arg.CharacterClassID,
 		arg.ID,

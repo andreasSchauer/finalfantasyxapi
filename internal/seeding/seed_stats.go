@@ -87,11 +87,6 @@ func (l *lookup) createStatsRelationships(db *database.Queries, dbConn *sql.DB) 
 
 			err = qtx.UpdateStat(context.Background(), database.UpdateStatParams{
 				DataHash: generateDataHash(stat),
-				Name:     stat.Name,
-				Effect:   stat.Effect,
-				MinVal:   stat.MinVal,
-				MaxVal:   stat.MaxVal,
-				MaxVal2:  getNullInt32(stat.MaxVal2),
 				SphereID: getNullInt32(stat.SphereID),
 				ID:       stat.ID,
 			})

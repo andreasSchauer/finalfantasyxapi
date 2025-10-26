@@ -97,10 +97,6 @@ func (l *lookup) createOverdriveCommandsRelationships(db *database.Queries, dbCo
 
 			err = qtx.UpdateOverdriveCommand(context.Background(), database.UpdateOverdriveCommandParams{
 				DataHash:    		generateDataHash(command),
-				Name:        		command.Name,
-				Description: 		command.Description,
-				Rank:        		command.Rank,
-				Topmenu:     		database.TopmenuType(command.Topmenu),
 				CharacterClassID: 	getNullInt32(command.CharClassID),
 				SubmenuID: 			getNullInt32(command.SubmenuID),
 				ID:					command.ID,

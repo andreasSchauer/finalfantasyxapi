@@ -8,13 +8,8 @@ RETURNING *;
 -- name: UpdateStat :exec
 UPDATE stats
 SET data_hash = $1,
-    name = $2,
-    effect = $3,
-    min_val = $4,
-    max_val = $5,
-    max_val_2 = $6,
-    sphere_id = $7
-WHERE id = $8;
+    sphere_id = $2
+WHERE id = $3;
 
 
 -- name: CreateBaseStat :one
@@ -34,9 +29,8 @@ RETURNING *;
 -- name: UpdateElement :exec
 UPDATE elements
 SET data_hash = $1,
-    name = $2,
-    opposite_element_id = $3
-WHERE id = $4;
+    opposite_element_id = $2
+WHERE id = $3;
 
 
 -- name: CreateAffinity :one

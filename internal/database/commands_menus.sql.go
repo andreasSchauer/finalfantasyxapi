@@ -164,58 +164,31 @@ func (q *Queries) CreateSubmenuCharacterClassJunction(ctx context.Context, arg C
 const updateAeonCommand = `-- name: UpdateAeonCommand :exec
 UPDATE aeon_commands
 SET data_hash = $1,
-    name = $2,
-    description = $3,
-    effect = $4,
-    topmenu = $5,
-    cursor = $6,
-    submenu_id = $7
-WHERE id = $8
+    submenu_id = $2
+WHERE id = $3
 `
 
 type UpdateAeonCommandParams struct {
-	DataHash    string
-	Name        string
-	Description string
-	Effect      string
-	Topmenu     TopmenuType
-	Cursor      NullTargetType
-	SubmenuID   sql.NullInt32
-	ID          int32
+	DataHash  string
+	SubmenuID sql.NullInt32
+	ID        int32
 }
 
 func (q *Queries) UpdateAeonCommand(ctx context.Context, arg UpdateAeonCommandParams) error {
-	_, err := q.db.ExecContext(ctx, updateAeonCommand,
-		arg.DataHash,
-		arg.Name,
-		arg.Description,
-		arg.Effect,
-		arg.Topmenu,
-		arg.Cursor,
-		arg.SubmenuID,
-		arg.ID,
-	)
+	_, err := q.db.ExecContext(ctx, updateAeonCommand, arg.DataHash, arg.SubmenuID, arg.ID)
 	return err
 }
 
 const updateOverdriveCommand = `-- name: UpdateOverdriveCommand :exec
 UPDATE overdrive_commands
 SET data_hash = $1,
-    name = $2,
-    description = $3,
-    rank = $4,
-    topmenu = $5,
-    character_class_id = $6,
-    submenu_id = $7
-WHERE id = $8
+    character_class_id = $2,
+    submenu_id = $3
+WHERE id = $4
 `
 
 type UpdateOverdriveCommandParams struct {
 	DataHash         string
-	Name             string
-	Description      string
-	Rank             int32
-	Topmenu          TopmenuType
 	CharacterClassID sql.NullInt32
 	SubmenuID        sql.NullInt32
 	ID               int32
@@ -224,10 +197,6 @@ type UpdateOverdriveCommandParams struct {
 func (q *Queries) UpdateOverdriveCommand(ctx context.Context, arg UpdateOverdriveCommandParams) error {
 	_, err := q.db.ExecContext(ctx, updateOverdriveCommand,
 		arg.DataHash,
-		arg.Name,
-		arg.Description,
-		arg.Rank,
-		arg.Topmenu,
 		arg.CharacterClassID,
 		arg.SubmenuID,
 		arg.ID,

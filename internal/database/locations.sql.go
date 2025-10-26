@@ -553,45 +553,17 @@ func (q *Queries) CreateTreasureItemAmountJunction(ctx context.Context, arg Crea
 const updateTreasure = `-- name: UpdateTreasure :exec
 UPDATE treasures
 SET data_hash = $1,
-    area_id = $2,
-    version = $3,
-    treasure_type = $4,
-    loot_type = $5,
-    is_post_airship = $6,
-    is_anima_treasure = $7,
-    notes = $8,
-    gil_amount = $9,
-    found_equipment_id = $10
-WHERE id = $11
+    found_equipment_id = $2
+WHERE id = $3
 `
 
 type UpdateTreasureParams struct {
 	DataHash         string
-	AreaID           int32
-	Version          int32
-	TreasureType     TreasureType
-	LootType         LootType
-	IsPostAirship    bool
-	IsAnimaTreasure  bool
-	Notes            sql.NullString
-	GilAmount        sql.NullInt32
 	FoundEquipmentID sql.NullInt32
 	ID               int32
 }
 
 func (q *Queries) UpdateTreasure(ctx context.Context, arg UpdateTreasureParams) error {
-	_, err := q.db.ExecContext(ctx, updateTreasure,
-		arg.DataHash,
-		arg.AreaID,
-		arg.Version,
-		arg.TreasureType,
-		arg.LootType,
-		arg.IsPostAirship,
-		arg.IsAnimaTreasure,
-		arg.Notes,
-		arg.GilAmount,
-		arg.FoundEquipmentID,
-		arg.ID,
-	)
+	_, err := q.db.ExecContext(ctx, updateTreasure, arg.DataHash, arg.FoundEquipmentID, arg.ID)
 	return err
 }

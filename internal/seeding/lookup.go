@@ -217,7 +217,7 @@ func (l *lookup) getArea(locationArea LocationArea) (Area, error) {
 
 	area, found := l.areas[key]
 	if !found {
-		return Area{}, fmt.Errorf("couldn't find location area: %s - %s - %s - %d", locationArea.Location, locationArea.SubLocation, locationArea.Area, derefOrNil(locationArea.Version))
+		return Area{}, fmt.Errorf("couldn't find location area: %s", createLookupKey(locationArea))
 	}
 
 	return area, nil

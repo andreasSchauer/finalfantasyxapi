@@ -121,15 +121,6 @@ func (l *lookup) createAutoAbilitiesRelationships(db *database.Queries, dbConn *
 
 			err = qtx.UpdateAutoAbility(context.Background(), database.UpdateAutoAbilityParams{
 				DataHash:             generateDataHash(autoAbility),
-				Name:                 autoAbility.Name,
-				Description:          getNullString(autoAbility.Description),
-				Effect:               autoAbility.Effect,
-				Type:                 nullEquipType(autoAbility.Type),
-				Category:             database.AutoAbilityCategory(autoAbility.Category),
-				AbilityValue:         getNullInt32(autoAbility.AbilityValue),
-				RequiredItemAmountID: ObjPtrToNullInt32ID(autoAbility.RequiredItem),
-				ActivationCondition:  nullAaActivationCondition(autoAbility.ActivationCondition),
-				Counter:              nullCounterType(autoAbility.Counter),
 				GradRcvryStatID:      getNullInt32(autoAbility.GradRecoveryStatID),
 				OnHitElementID:       getNullInt32(autoAbility.OnHitElementID),
 				AddedElemAffinityID:  ObjPtrToNullInt32ID(autoAbility.AddedElemAffinity),

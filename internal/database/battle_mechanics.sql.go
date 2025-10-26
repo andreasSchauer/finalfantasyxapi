@@ -659,61 +659,35 @@ func (q *Queries) CreateStatusResist(ctx context.Context, arg CreateStatusResist
 const updateElement = `-- name: UpdateElement :exec
 UPDATE elements
 SET data_hash = $1,
-    name = $2,
-    opposite_element_id = $3
-WHERE id = $4
+    opposite_element_id = $2
+WHERE id = $3
 `
 
 type UpdateElementParams struct {
 	DataHash          string
-	Name              string
 	OppositeElementID sql.NullInt32
 	ID                int32
 }
 
 func (q *Queries) UpdateElement(ctx context.Context, arg UpdateElementParams) error {
-	_, err := q.db.ExecContext(ctx, updateElement,
-		arg.DataHash,
-		arg.Name,
-		arg.OppositeElementID,
-		arg.ID,
-	)
+	_, err := q.db.ExecContext(ctx, updateElement, arg.DataHash, arg.OppositeElementID, arg.ID)
 	return err
 }
 
 const updateStat = `-- name: UpdateStat :exec
 UPDATE stats
 SET data_hash = $1,
-    name = $2,
-    effect = $3,
-    min_val = $4,
-    max_val = $5,
-    max_val_2 = $6,
-    sphere_id = $7
-WHERE id = $8
+    sphere_id = $2
+WHERE id = $3
 `
 
 type UpdateStatParams struct {
 	DataHash string
-	Name     string
-	Effect   string
-	MinVal   int32
-	MaxVal   int32
-	MaxVal2  sql.NullInt32
 	SphereID sql.NullInt32
 	ID       int32
 }
 
 func (q *Queries) UpdateStat(ctx context.Context, arg UpdateStatParams) error {
-	_, err := q.db.ExecContext(ctx, updateStat,
-		arg.DataHash,
-		arg.Name,
-		arg.Effect,
-		arg.MinVal,
-		arg.MaxVal,
-		arg.MaxVal2,
-		arg.SphereID,
-		arg.ID,
-	)
+	_, err := q.db.ExecContext(ctx, updateStat, arg.DataHash, arg.SphereID, arg.ID)
 	return err
 }

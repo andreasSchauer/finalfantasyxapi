@@ -327,6 +327,48 @@ func (ns NullAutoAbilityPool) Value() (driver.Value, error) {
 	return string(ns.AutoAbilityPool), nil
 }
 
+type BgReplacementType string
+
+const (
+	BgReplacementTypeUntilTrigger    BgReplacementType = "until-trigger"
+	BgReplacementTypeUntilZoneChange BgReplacementType = "until-zone-change"
+)
+
+func (e *BgReplacementType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BgReplacementType(s)
+	case string:
+		*e = BgReplacementType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BgReplacementType: %T", src)
+	}
+	return nil
+}
+
+type NullBgReplacementType struct {
+	BgReplacementType BgReplacementType
+	Valid             bool // Valid is true if BgReplacementType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullBgReplacementType) Scan(value interface{}) error {
+	if value == nil {
+		ns.BgReplacementType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.BgReplacementType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullBgReplacementType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.BgReplacementType), nil
+}
+
 type BlitzballPositionSlot string
 
 const (
@@ -2023,6 +2065,13 @@ type AutoAbility struct {
 	CnvrsnToModID        sql.NullInt32
 }
 
+type BackgroundMusic struct {
+	ID                     int32
+	DataHash               string
+	Condition              sql.NullString
+	ReplacesEncounterMusic bool
+}
+
 type BaseStat struct {
 	ID       int32
 	DataHash string
@@ -2078,6 +2127,16 @@ type CompletionLocation struct {
 	CompletionID int32
 	AreaID       int32
 	Notes        sql.NullString
+}
+
+type Cue struct {
+	ID                     int32
+	DataHash               string
+	SceneDescription       string
+	AreaID                 sql.NullInt32
+	ReplacesBgMusic        NullBgReplacementType
+	EndTrigger             sql.NullString
+	ReplacesEncounterMusic bool
 }
 
 type DefaultAbility struct {
@@ -2397,6 +2456,22 @@ type JShopShopItem struct {
 	ShopID     int32
 	ShopItemID int32
 	ShopType   ShopType
+}
+
+type JSongBackgroundMusic struct {
+	ID       int32
+	DataHash string
+	SongID   int32
+	BmID     int32
+	AreaID   int32
+}
+
+type JSongCue struct {
+	ID       int32
+	DataHash string
+	SongID   int32
+	CueID    int32
+	AreaID   int32
 }
 
 type JStatusConditionModifierChange struct {

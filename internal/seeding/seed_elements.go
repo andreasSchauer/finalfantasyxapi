@@ -81,7 +81,6 @@ func (l *lookup) createElementsRelationships(db *database.Queries, dbConn *sql.D
 
 			err = qtx.UpdateElement(context.Background(), database.UpdateElementParams{
 				DataHash:          generateDataHash(element),
-				Name:              element.Name,
 				OppositeElementID: getNullInt32(element.OppositeElementID),
 				ID:                element.ID,
 			})

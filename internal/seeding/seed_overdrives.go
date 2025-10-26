@@ -116,15 +116,6 @@ func (l *lookup) createOverdrivesRelationships(db *database.Queries, dbConn *sql
 
 			err = qtx.UpdateOverdrive(context.Background(), database.UpdateOverdriveParams{
 				DataHash:       	 generateDataHash(overdrive),
-				Name:            	overdrive.Name,
-				Version:         	getNullInt32(overdrive.Version),
-				Description:     	overdrive.Description,
-				Effect:          	overdrive.Effect,
-				Topmenu:         	nullTopmenuType(overdrive.Topmenu),
-				AttributesID:    	ObjPtrToInt32ID(overdrive.Attributes),
-				UnlockCondition: 	getNullString(overdrive.UnlockCondition),
-				CountdownInSec:  	getNullInt32(overdrive.CountdownInSec),
-				Cursor:          	nullTargetType(overdrive.Cursor),
 				OdCommandID: 		getNullInt32(overdrive.ODCommandID),
 				CharacterClassID: 	getNullInt32(overdrive.CharClassID),
 				ID: 				overdrive.ID,

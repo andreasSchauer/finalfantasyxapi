@@ -339,58 +339,31 @@ func (q *Queries) CreateEquipmentTableNameClstlWpnJunction(ctx context.Context, 
 const updateAutoAbility = `-- name: UpdateAutoAbility :exec
 UPDATE auto_abilities
 SET data_hash = $1,
-    name = $2,
-    description = $3,
-    effect = $4,
-    type = $5,
-    category = $6,
-    ability_value = $7,
-    required_item_amount_id = $8,
-    activation_condition = $9,
-    counter = $10,
-    grad_rcvry_stat_id = $11,
-    on_hit_element_id = $12,
-    added_elem_affinity_id = $13,
-    on_hit_status_id = $14,
-    added_property_id = $15,
-    cnvrsn_from_mod_id = $16,
-    cnvrsn_to_mod_id = $17
-WHERE id = $18
+    grad_rcvry_stat_id = $2,
+    on_hit_element_id = $3,
+    added_elem_affinity_id = $4,
+    on_hit_status_id = $5,
+    added_property_id = $6,
+    cnvrsn_from_mod_id = $7,
+    cnvrsn_to_mod_id = $8
+WHERE id = $9
 `
 
 type UpdateAutoAbilityParams struct {
-	DataHash             string
-	Name                 string
-	Description          sql.NullString
-	Effect               string
-	Type                 NullEquipType
-	Category             AutoAbilityCategory
-	AbilityValue         sql.NullInt32
-	RequiredItemAmountID sql.NullInt32
-	ActivationCondition  NullAaActivationCondition
-	Counter              NullCounterType
-	GradRcvryStatID      sql.NullInt32
-	OnHitElementID       sql.NullInt32
-	AddedElemAffinityID  sql.NullInt32
-	OnHitStatusID        sql.NullInt32
-	AddedPropertyID      sql.NullInt32
-	CnvrsnFromModID      sql.NullInt32
-	CnvrsnToModID        sql.NullInt32
-	ID                   int32
+	DataHash            string
+	GradRcvryStatID     sql.NullInt32
+	OnHitElementID      sql.NullInt32
+	AddedElemAffinityID sql.NullInt32
+	OnHitStatusID       sql.NullInt32
+	AddedPropertyID     sql.NullInt32
+	CnvrsnFromModID     sql.NullInt32
+	CnvrsnToModID       sql.NullInt32
+	ID                  int32
 }
 
 func (q *Queries) UpdateAutoAbility(ctx context.Context, arg UpdateAutoAbilityParams) error {
 	_, err := q.db.ExecContext(ctx, updateAutoAbility,
 		arg.DataHash,
-		arg.Name,
-		arg.Description,
-		arg.Effect,
-		arg.Type,
-		arg.Category,
-		arg.AbilityValue,
-		arg.RequiredItemAmountID,
-		arg.ActivationCondition,
-		arg.Counter,
 		arg.GradRcvryStatID,
 		arg.OnHitElementID,
 		arg.AddedElemAffinityID,
@@ -406,19 +379,13 @@ func (q *Queries) UpdateAutoAbility(ctx context.Context, arg UpdateAutoAbilityPa
 const updateCelestialWeapon = `-- name: UpdateCelestialWeapon :exec
 UPDATE celestial_weapons
 SET data_hash = $1,
-    name = $2,
-    key_item_base = $3,
-    formula = $4,
-    character_id = $5,
-    aeon_id = $6
-WHERE id = $7
+    character_id = $2,
+    aeon_id = $3
+WHERE id = $4
 `
 
 type UpdateCelestialWeaponParams struct {
 	DataHash    string
-	Name        string
-	KeyItemBase KeyItemBase
-	Formula     CelestialFormula
 	CharacterID sql.NullInt32
 	AeonID      sql.NullInt32
 	ID          int32
@@ -427,9 +394,6 @@ type UpdateCelestialWeaponParams struct {
 func (q *Queries) UpdateCelestialWeapon(ctx context.Context, arg UpdateCelestialWeaponParams) error {
 	_, err := q.db.ExecContext(ctx, updateCelestialWeapon,
 		arg.DataHash,
-		arg.Name,
-		arg.KeyItemBase,
-		arg.Formula,
 		arg.CharacterID,
 		arg.AeonID,
 		arg.ID,

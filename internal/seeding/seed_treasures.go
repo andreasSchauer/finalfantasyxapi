@@ -143,14 +143,6 @@ func (l *lookup) createTreasuresRelationships(db *database.Queries, dbConn *sql.
 
 				err = qtx.UpdateTreasure(context.Background(), database.UpdateTreasureParams{
 					DataHash:        	generateDataHash(treasure),
-					AreaID:          	treasure.AreaID,
-					Version:         	treasure.Version,
-					TreasureType:    	database.TreasureType(treasure.TreasureType),
-					LootType:        	database.LootType(treasure.LootType),
-					IsPostAirship:   	treasure.IsPostAirship,
-					IsAnimaTreasure: 	treasure.IsAnimaTreasure,
-					Notes:           	getNullString(treasure.Notes),
-					GilAmount:       	getNullInt32(treasure.GilAmount),
 					FoundEquipmentID: 	ObjPtrToNullInt32ID(treasure.Equipment),
 					ID: 				treasure.ID,
 				})

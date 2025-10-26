@@ -8,13 +8,8 @@ RETURNING *;
 -- name: UpdateAeonCommand :exec
 UPDATE aeon_commands
 SET data_hash = $1,
-    name = $2,
-    description = $3,
-    effect = $4,
-    topmenu = $5,
-    cursor = $6,
-    submenu_id = $7
-WHERE id = $8;
+    submenu_id = $2
+WHERE id = $3;
 
 
 -- name: CreateAeonCommandAbilityJunction :exec
@@ -46,10 +41,6 @@ RETURNING *;
 -- name: UpdateOverdriveCommand :exec
 UPDATE overdrive_commands
 SET data_hash = $1,
-    name = $2,
-    description = $3,
-    rank = $4,
-    topmenu = $5,
-    character_class_id = $6,
-    submenu_id = $7
-WHERE id = $8;
+    character_class_id = $2,
+    submenu_id = $3
+WHERE id = $4;

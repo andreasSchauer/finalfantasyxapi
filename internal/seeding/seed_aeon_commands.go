@@ -108,11 +108,6 @@ func (l *lookup) createAeonCommandsRelationships(db *database.Queries, dbConn *s
 
 			qtx.UpdateAeonCommand(context.Background(), database.UpdateAeonCommandParams{
 				DataHash:    	generateDataHash(command),
-				Name:        	command.Name,
-				Description: 	command.Description,
-				Effect:      	command.Effect,
-				Topmenu: 		database.TopmenuType(command.Topmenu),
-				Cursor:      	nullTargetType(command.Cursor),
 				SubmenuID: 		getNullInt32(command.SubmenuID),
 				ID: 			command.ID,
 			})

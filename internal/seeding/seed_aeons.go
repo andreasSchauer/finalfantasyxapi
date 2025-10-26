@@ -140,16 +140,6 @@ func (l *lookup) createAeonsRelationships(db *database.Queries, dbConn *sql.DB) 
 
 			err = qtx.UpdateAeon(context.Background(), database.UpdateAeonParams{
 				DataHash:              generateDataHash(aeon),
-				UnitID:                aeon.PlayerUnit.ID,
-				UnlockCondition:       aeon.UnlockCondition,
-				IsOptional:            aeon.IsOptional,
-				BattlesToRegenerate:   aeon.BattlesToRegenerate,
-				PhysAtkDamageConstant: getNullInt32(aeon.PhysAtkDmgConstant),
-				PhysAtkRange:          getNullInt32(aeon.PhysAtkRange),
-				PhysAtkShatterRate:    getNullInt32(aeon.PhysAtkShatterRate),
-				PhysAtkAccSource:      nullAccuracySource(aeon.PhysAtkAccSource),
-				PhysAtkHitChance:      getNullInt32(aeon.PhysAtkHitChance),
-				PhysAtkAccModifier:    getNullFloat64(aeon.PhysAtkAccModifier),
 				AreaID:                getNullInt32(aeon.AreaID),
 				ID:                    aeon.ID,
 			})
