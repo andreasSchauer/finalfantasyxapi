@@ -5,6 +5,24 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_commands.data_hash
 RETURNING *;
 
 
+-- name: UpdateAeonCommand :exec
+UPDATE aeon_commands
+SET data_hash = $1,
+    name = $2,
+    description = $3,
+    effect = $4,
+    topmenu = $5,
+    cursor = $6,
+    submenu_id = $7
+WHERE id = $8;
+
+
+-- name: CreateAeonCommandAbilityJunction :exec
+INSERT INTO j_aeon_command_ability (data_hash, aeon_command_id, ability_id, character_class_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
 -- name: CreateSubmenu :one
 INSERT INTO submenus (data_hash, name, description, effect, topmenu)
 VALUES ($1, $2, $3, $4, $5)

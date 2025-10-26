@@ -1941,6 +1941,7 @@ type AeonCommand struct {
 	Effect      string
 	Topmenu     TopmenuType
 	Cursor      NullTargetType
+	SubmenuID   sql.NullInt32
 }
 
 type AeonEquipment struct {
@@ -2208,6 +2209,14 @@ type JAeonBaseStat struct {
 	DataHash   string
 	AeonID     int32
 	BaseStatID int32
+}
+
+type JAeonCommandAbility struct {
+	ID               int32
+	DataHash         string
+	AeonCommandID    int32
+	AbilityID        int32
+	CharacterClassID int32
 }
 
 type JAeonEquipment struct {

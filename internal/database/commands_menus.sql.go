@@ -14,7 +14,7 @@ const createAeonCommand = `-- name: CreateAeonCommand :one
 INSERT INTO aeon_commands (data_hash, name, description, effect, topmenu, cursor)
 VALUES ($1, $2, $3, $4, $5, $6)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_commands.data_hash
-RETURNING id, data_hash, name, description, effect, topmenu, cursor
+RETURNING id, data_hash, name, description, effect, topmenu, cursor, submenu_id
 `
 
 type CreateAeonCommandParams struct {
@@ -44,8 +44,32 @@ func (q *Queries) CreateAeonCommand(ctx context.Context, arg CreateAeonCommandPa
 		&i.Effect,
 		&i.Topmenu,
 		&i.Cursor,
+		&i.SubmenuID,
 	)
 	return i, err
+}
+
+const createAeonCommandAbilityJunction = `-- name: CreateAeonCommandAbilityJunction :exec
+INSERT INTO j_aeon_command_ability (data_hash, aeon_command_id, ability_id, character_class_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonCommandAbilityJunctionParams struct {
+	DataHash         string
+	AeonCommandID    int32
+	AbilityID        int32
+	CharacterClassID int32
+}
+
+func (q *Queries) CreateAeonCommandAbilityJunction(ctx context.Context, arg CreateAeonCommandAbilityJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonCommandAbilityJunction,
+		arg.DataHash,
+		arg.AeonCommandID,
+		arg.AbilityID,
+		arg.CharacterClassID,
+	)
+	return err
 }
 
 const createOverdriveCommand = `-- name: CreateOverdriveCommand :one
@@ -134,6 +158,43 @@ type CreateSubmenuCharacterClassJunctionParams struct {
 
 func (q *Queries) CreateSubmenuCharacterClassJunction(ctx context.Context, arg CreateSubmenuCharacterClassJunctionParams) error {
 	_, err := q.db.ExecContext(ctx, createSubmenuCharacterClassJunction, arg.DataHash, arg.SubmenuID, arg.CharacterClassID)
+	return err
+}
+
+const updateAeonCommand = `-- name: UpdateAeonCommand :exec
+UPDATE aeon_commands
+SET data_hash = $1,
+    name = $2,
+    description = $3,
+    effect = $4,
+    topmenu = $5,
+    cursor = $6,
+    submenu_id = $7
+WHERE id = $8
+`
+
+type UpdateAeonCommandParams struct {
+	DataHash    string
+	Name        string
+	Description string
+	Effect      string
+	Topmenu     TopmenuType
+	Cursor      NullTargetType
+	SubmenuID   sql.NullInt32
+	ID          int32
+}
+
+func (q *Queries) UpdateAeonCommand(ctx context.Context, arg UpdateAeonCommandParams) error {
+	_, err := q.db.ExecContext(ctx, updateAeonCommand,
+		arg.DataHash,
+		arg.Name,
+		arg.Description,
+		arg.Effect,
+		arg.Topmenu,
+		arg.Cursor,
+		arg.SubmenuID,
+		arg.ID,
+	)
 	return err
 }
 

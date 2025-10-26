@@ -12,7 +12,6 @@ CREATE TABLE j_overdrive_ability (
 );
 
 
-
 -- +goose Down
 DROP TABLE IF EXISTS j_overdrive_ability;
 
