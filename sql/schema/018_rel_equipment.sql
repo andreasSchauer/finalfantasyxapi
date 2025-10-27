@@ -116,7 +116,7 @@ DROP TABLE IF EXISTS j_auto_abilities_added_statusses;
 DROP TABLE IF EXISTS j_auto_abilities_added_status_resists;
 DROP TABLE IF EXISTS j_auto_abilities_required_item;
 DROP TABLE IF EXISTS j_auto_abilities_locked_out;
-DROP TABLE IF EXISTS j_auto_abilities_related_stats
+DROP TABLE IF EXISTS j_auto_abilities_related_stats;
 
 
 ALTER TABLE auto_abilities

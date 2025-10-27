@@ -68,7 +68,7 @@ DROP COLUMN IF EXISTS area_id;
 DROP TABLE IF EXISTS default_overdrive_abilities;
 DROP TABLE IF EXISTS default_abilities;
 DROP TABLE IF EXISTS j_aeons_weapon_armor;
-DROP TABLE IF EXISTS aeons_equipment;
+DROP TABLE IF EXISTS aeon_equipment;
 DROP TABLE IF EXISTS j_aeons_base_stats;
 DROP TABLE IF EXISTS j_characters_base_stats;
 DROP TABLE IF EXISTS j_player_units_character_class;
