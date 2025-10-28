@@ -191,7 +191,7 @@ func (l *lookup) assignAutoAbilityFKs(qtx *database.Queries, autoAbility AutoAbi
 }
 
 func (l *lookup) createAutoAbilityJunctions(qtx *database.Queries, autoAbility AutoAbility) error {
-	relationShipFunctions := []func(*database.Queries, AutoAbility) error{
+	functions := []func(*database.Queries, AutoAbility) error{
 		l.createAutoAbilityRelatedStats,
 		l.createAutoAbilityLockedOutAbilities,
 		l.createAutoAbilityAutoItemUse,
@@ -201,7 +201,7 @@ func (l *lookup) createAutoAbilityJunctions(qtx *database.Queries, autoAbility A
 		l.createAutoAbilityModifierChanges,
 	}
 
-	for _, function := range relationShipFunctions {
+	for _, function := range functions {
 		err := function(qtx, autoAbility)
 		if err != nil {
 			return fmt.Errorf("auto ability: %s: %v", autoAbility.Name, err)

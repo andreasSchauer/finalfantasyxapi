@@ -175,41 +175,6 @@ func (q *Queries) CreateElementalAffinity(ctx context.Context, arg CreateElement
 	return i, err
 }
 
-const createInflictedStatus = `-- name: CreateInflictedStatus :one
-INSERT INTO inflicted_statusses (data_hash, status_condition_id, probability, duration_type, amount)
-VALUES ( $1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = inflicted_statusses.data_hash
-RETURNING id, data_hash, status_condition_id, probability, duration_type, amount
-`
-
-type CreateInflictedStatusParams struct {
-	DataHash          string
-	StatusConditionID int32
-	Probability       interface{}
-	DurationType      DurationType
-	Amount            sql.NullInt32
-}
-
-func (q *Queries) CreateInflictedStatus(ctx context.Context, arg CreateInflictedStatusParams) (InflictedStatuss, error) {
-	row := q.db.QueryRowContext(ctx, createInflictedStatus,
-		arg.DataHash,
-		arg.StatusConditionID,
-		arg.Probability,
-		arg.DurationType,
-		arg.Amount,
-	)
-	var i InflictedStatuss
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.StatusConditionID,
-		&i.Probability,
-		&i.DurationType,
-		&i.Amount,
-	)
-	return i, err
-}
-
 const createModifier = `-- name: CreateModifier :one
 INSERT INTO modifiers (data_hash, name, effect, type, default_value)
 VALUES ($1, $2, $3, $4, $5)
@@ -241,38 +206,6 @@ func (q *Queries) CreateModifier(ctx context.Context, arg CreateModifierParams) 
 		&i.Effect,
 		&i.Type,
 		&i.DefaultValue,
-	)
-	return i, err
-}
-
-const createModifierChange = `-- name: CreateModifierChange :one
-INSERT INTO modifier_changes (data_hash, modifier_id, calculation_type, value)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifier_changes.data_hash
-RETURNING id, data_hash, modifier_id, calculation_type, value
-`
-
-type CreateModifierChangeParams struct {
-	DataHash        string
-	ModifierID      int32
-	CalculationType CalculationType
-	Value           float32
-}
-
-func (q *Queries) CreateModifierChange(ctx context.Context, arg CreateModifierChangeParams) (ModifierChange, error) {
-	row := q.db.QueryRowContext(ctx, createModifierChange,
-		arg.DataHash,
-		arg.ModifierID,
-		arg.CalculationType,
-		arg.Value,
-	)
-	var i ModifierChange
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.ModifierID,
-		&i.CalculationType,
-		&i.Value,
 	)
 	return i, err
 }
@@ -492,38 +425,6 @@ func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) (Stat, e
 		&i.MaxVal,
 		&i.MaxVal2,
 		&i.SphereID,
-	)
-	return i, err
-}
-
-const createStatChange = `-- name: CreateStatChange :one
-INSERT INTO stat_changes (data_hash, stat_id, calculation_type, value)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = stat_changes.data_hash
-RETURNING id, data_hash, stat_id, calculation_type, value
-`
-
-type CreateStatChangeParams struct {
-	DataHash        string
-	StatID          int32
-	CalculationType CalculationType
-	Value           float32
-}
-
-func (q *Queries) CreateStatChange(ctx context.Context, arg CreateStatChangeParams) (StatChange, error) {
-	row := q.db.QueryRowContext(ctx, createStatChange,
-		arg.DataHash,
-		arg.StatID,
-		arg.CalculationType,
-		arg.Value,
-	)
-	var i StatChange
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.StatID,
-		&i.CalculationType,
-		&i.Value,
 	)
 	return i, err
 }

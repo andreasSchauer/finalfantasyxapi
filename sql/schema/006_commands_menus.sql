@@ -1,7 +1,9 @@
 -- +goose Up
 CREATE TYPE target_type AS ENUM ('self', 'single-character', 'single-enemy', 'single-target', 'random-enemy', 'all-characters', 'all-enemies', 'target-party', 'everyone');
 
+
 CREATE TYPE topmenu_type AS ENUM ('main', 'left', 'right', 'hidden');
+
 
 CREATE TABLE aeon_commands (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

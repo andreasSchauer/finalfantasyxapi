@@ -1,10 +1,14 @@
 -- +goose Up
-CREATE TYPE weapon_type AS ENUM ('sword', 'staff', 'blitzball', 'doll', 'spear', 'blade', 'claw', 'seymour-staff');
-CREATE TYPE armor_type AS ENUM ('shield', 'ring', 'armguard', 'bangle', 'armlet', 'bracer', 'targe', 'seymour-armor');
 CREATE TYPE unit_type AS ENUM ('aeon', 'character');
 
-CREATE DOMAIN distance as INTEGER
-    CHECK (VALUE IN (1, 2, 3, 4));
+
+CREATE TYPE weapon_type AS ENUM ('sword', 'staff', 'blitzball', 'doll', 'spear', 'blade', 'claw', 'seymour-staff');
+
+
+CREATE TYPE armor_type AS ENUM ('shield', 'ring', 'armguard', 'bangle', 'armlet', 'bracer', 'targe', 'seymour-armor');
+
+
+CREATE TYPE accuracy_source AS ENUM ('accuracy', 'rate');
 
 
 CREATE TABLE player_units (
@@ -27,7 +31,7 @@ CREATE TABLE characters (
 );
 
 
-CREATE TYPE accuracy_source AS ENUM ('accuracy', 'rate');
+
 
 CREATE TABLE aeons (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -56,10 +60,9 @@ CREATE TABLE character_classes (
 -- +goose Down
 DROP TABLE IF EXISTS character_classes;
 DROP TABLE IF EXISTS aeons;
-DROP TYPE IF EXISTS accuracy_source;
 DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS player_units;
-DROP DOMAIN IF EXISTS distance;
-DROP TYPE IF EXISTS unit_type;
+DROP TYPE IF EXISTS accuracy_source;
 DROP TYPE IF EXISTS weapon_type;
 DROP TYPE IF EXISTS armor_type;
+DROP TYPE IF EXISTS unit_type;

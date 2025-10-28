@@ -12,7 +12,16 @@ CREATE TABLE j_overdrives_overdrive_abilities (
 );
 
 
+CREATE TABLE j_abilities_battle_interactions (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    ability_id INTEGER NOT NULL REFERENCES abilities(id),
+    battle_interaction_id INTEGER NOT NULL REFERENCES battle_interactions(id)
+);
+
+
 -- +goose Down
+DROP TABLE IF EXISTS j_abilities_battle_interactions;
 DROP TABLE IF EXISTS j_overdrives_overdrive_abilities;
 
 ALTER TABLE overdrives

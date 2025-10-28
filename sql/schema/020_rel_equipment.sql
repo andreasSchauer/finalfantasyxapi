@@ -1,4 +1,7 @@
 -- +goose Up
+CREATE TYPE auto_ability_pool AS ENUM ('required', 'one', 'two');
+
+
 ALTER TABLE celestial_weapons
 ADD COLUMN character_id INTEGER REFERENCES characters(id),
 ADD COLUMN aeon_id INTEGER REFERENCES aeons(id);
@@ -90,9 +93,6 @@ CREATE TABLE j_equipment_tables_names (
 );
 
 
-
-CREATE TYPE auto_ability_pool AS ENUM ('required', 'one', 'two');
-
 CREATE TABLE j_equipment_tables_ability_pool (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -107,7 +107,6 @@ CREATE TABLE j_equipment_tables_ability_pool (
 
 -- +goose Down
 DROP TABLE IF EXISTS j_equipment_tables_ability_pool;
-DROP TYPE IF EXISTS auto_ability_pool;
 DROP TABLE IF EXISTS j_equipment_tables_names;
 DROP TABLE IF EXISTS equipment_names;
 DROP TABLE IF EXISTS j_auto_abilities_modifier_changes;
@@ -135,3 +134,5 @@ DROP COLUMN IF EXISTS required_item_amount_id;
 ALTER TABLE celestial_weapons
 DROP COLUMN IF EXISTS character_id,
 DROP COLUMN IF EXISTS aeon_id;
+
+DROP TYPE IF EXISTS auto_ability_pool;

@@ -9,11 +9,13 @@ import (
 )
 
 type TriggerCommand struct {
+	ID			int32
 	Ability
 	Description string `json:"description"`
 	Effect      string `json:"effect"`
 	Topmenu     string `json:"topmenu"`
 	Cursor      string `json:"cursor"`
+	BattleInteractions	[]BattleInteraction `json:"battle_interactions"`
 }
 
 func (t TriggerCommand) ToHashFields() []any {
@@ -24,6 +26,10 @@ func (t TriggerCommand) ToHashFields() []any {
 		t.Topmenu,
 		t.Cursor,
 	}
+}
+
+func (t TriggerCommand) GetID() int32 {
+	return t.ID
 }
 
 func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
@@ -62,6 +68,39 @@ func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 			key := createLookupKey(command.Ability)
 			l.triggerCommands[key] = command
 		}
+		return nil
+	})
+}
+
+
+func (l *lookup) createTriggerCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "./data/trigger_commands.json"
+
+	var triggerCommands []TriggerCommand
+
+	err := loadJSONFile(string(srcPath), &triggerCommands)
+	if err != nil {
+		return err
+	}
+
+	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		for _, jsonCommand := range triggerCommands {
+			abilityRef := AbilityReference{
+				Name: 			jsonCommand.Name,
+				Version: 		jsonCommand.Version,
+				AbilityType: 	string(database.AbilityTypeTriggerCommand),
+			}
+			command, err := l.getTriggerCommand(abilityRef)
+			if err != nil {
+				return err
+			}
+
+			err = l.seedBattleInteractions(qtx, command.Ability, command.BattleInteractions)
+			if err != nil {
+				return err
+			}
+		}
+
 		return nil
 	})
 }

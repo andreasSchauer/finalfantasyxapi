@@ -59,3 +59,9 @@ WHERE id = $4;
 INSERT INTO j_overdrives_overdrive_abilities (data_hash, overdrive_id, overdrive_ability_id)
 VALUES($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAbilitiesBattleInteractionsJunction :exec
+INSERT INTO j_abilities_battle_interactions (data_hash, ability_id, battle_interaction_id)
+VALUES($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;

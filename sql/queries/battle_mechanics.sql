@@ -99,17 +99,22 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
+-- name: CreateStatusConditionsStatChangesJunction :exec
+INSERT INTO j_status_conditions_stat_changes (data_hash, status_condition_id, stat_change_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateStatusConditionsModifierChangesJunction :exec
+INSERT INTO j_status_conditions_modifier_changes (data_hash, status_condition_id, modifier_change_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
 -- name: CreateStatusResist :one
 INSERT INTO status_resists (data_hash, status_condition_id, resistance)
 VALUES ( $1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_resists.data_hash
-RETURNING *;
-
-
--- name: CreateInflictedStatus :one
-INSERT INTO inflicted_statusses (data_hash, status_condition_id, probability, duration_type, amount)
-VALUES ( $1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = inflicted_statusses.data_hash
 RETURNING *;
 
 
@@ -132,41 +137,8 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateModifier :one
-INSERT INTO modifiers (data_hash, name, effect, type, default_value)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifiers.data_hash
-RETURNING *;
-
-
--- name: CreateStatChange :one
-INSERT INTO stat_changes (data_hash, stat_id, calculation_type, value)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = stat_changes.data_hash
-RETURNING *;
-
-
--- name: CreateStatusConditionsStatChangesJunction :exec
-INSERT INTO j_status_conditions_stat_changes (data_hash, status_condition_id, stat_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
 -- name: CreatePropertiesStatChangesJunction :exec
 INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateModifierChange :one
-INSERT INTO modifier_changes (data_hash, modifier_id, calculation_type, value)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifier_changes.data_hash
-RETURNING *;
-
-
--- name: CreateStatusConditionsModifierChangesJunction :exec
-INSERT INTO j_status_conditions_modifier_changes (data_hash, status_condition_id, modifier_change_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -175,3 +147,10 @@ ON CONFLICT(data_hash) DO NOTHING;
 INSERT INTO j_properties_modifier_changes (data_hash, property_id, modifier_change_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateModifier :one
+INSERT INTO modifiers (data_hash, name, effect, type, default_value)
+VALUES ($1, $2, $3, $4, $5)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifiers.data_hash
+RETURNING *;

@@ -1,8 +1,18 @@
 -- +goose Up
 CREATE TYPE item_type AS ENUM ('item', 'key-item');
+
+
 CREATE TYPE item_category AS ENUM ('distiller', 'healing', 'offensive', 'other', 'sphere', 'support');
+
+
 CREATE TYPE item_usability AS ENUM ('always', 'in-battle', 'outside-battle');
+
+
 CREATE TYPE key_item_category AS ENUM ('celestial', 'jecht-sphere', 'other', 'primer', 'story');
+
+
+CREATE TYPE mix_category AS ENUM ('9999-damage', 'critical-hits', 'fire-elemental', 'gravity-based', 'hp-mp', 'ice-elemental', 'lightning-elemental', 'non-elemental', 'overdrive-speed', 'positive-status', 'recovery', 'water-elemental');
+
 
 CREATE TABLE master_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -58,7 +68,6 @@ CREATE TABLE primers (
 );
 
 
-CREATE TYPE mix_category AS ENUM ('9999-damage', 'critical-hits', 'fire-elemental', 'gravity-based', 'hp-mp', 'ice-elemental', 'lightning-elemental', 'non-elemental', 'overdrive-speed', 'positive-status', 'recovery', 'water-elemental');
 
 CREATE TABLE mixes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -81,12 +90,12 @@ CREATE TABLE item_amounts (
 -- +goose Down
 DROP TABLE IF EXISTS item_amounts;
 DROP TABLE IF EXISTS mixes;
-DROP TYPE IF EXISTS mix_category;
 DROP TABLE IF EXISTS primers;
 DROP TABLE IF EXISTS key_items;
 DROP TABLE IF EXISTS item_abilities;
 DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS master_items;
+DROP TYPE IF EXISTS mix_category;
 DROP TYPE IF EXISTS item_type;
 DROP TYPE IF EXISTS item_category;
 DROP TYPE IF EXISTS item_usability;

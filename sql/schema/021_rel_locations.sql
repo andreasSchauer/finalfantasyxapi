@@ -1,6 +1,13 @@
 -- +goose Up
 CREATE TYPE area_connection_type AS ENUM('both-directions', 'one-direction', 'warp');
 
+
+CREATE TYPE monster_formation_category AS ENUM ('boss-fight', 'on-demand-fight', 'random-encounter', 'static-encounter', 'story-fight', 'tutorial');
+
+
+CREATE TYPE shop_type AS ENUM ('pre-airship', 'post-airship');
+
+
 CREATE TABLE area_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -26,8 +33,6 @@ CREATE TABLE formation_boss_songs (
     celebrate_victory BOOLEAN NOT NULL
 );
 
-
-CREATE TYPE monster_formation_category AS ENUM ('boss-fight', 'on-demand-fight', 'random-encounter', 'static-encounter', 'story-fight', 'tutorial');
 
 CREATE TABLE monster_formations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -63,11 +68,6 @@ CREATE TABLE j_monster_formations_trigger_commands (
     monster_formation_id INTEGER NOT NULL REFERENCES monster_formations(id),
     trigger_command_id INTEGER NOT NULL REFERENCES trigger_commands(id)
 );
-
-
-
-CREATE DOMAIN empty_slots AS INTEGER
-    CHECK (VALUE >= 0 AND VALUE <= 4);
 
 
 CREATE TABLE found_equipment_pieces (
@@ -109,7 +109,7 @@ CREATE TABLE shop_equipment_pieces (
     price INTEGER NOT NULL
 );
 
-CREATE TYPE shop_type AS ENUM ('pre-airship', 'post-airship');
+
 
 CREATE TABLE j_shops_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -140,19 +140,18 @@ DROP COLUMN IF EXISTS found_equipment_id;
 
 DROP TABLE IF EXISTS j_shops_equipment;
 DROP TABLE IF EXISTS j_shops_items;
-DROP TYPE IF EXISTS shop_type;
 DROP TABLE IF EXISTS shop_equipment_pieces;
 DROP TABLE IF EXISTS shop_items;
 DROP TABLE IF EXISTS j_treasures_items;
 DROP TABLE IF EXISTS j_found_equipment_abilities;
 DROP TABLE IF EXISTS found_equipment_pieces;
-DROP DOMAIN IF EXISTS empty_slots;
 DROP TABLE IF EXISTS j_monster_formations_trigger_commands;
 DROP TABLE IF EXISTS j_monster_formations_monsters;
 DROP TABLE IF EXISTS j_encounter_location_formations;
 DROP TABLE IF EXISTS monster_formations;
-DROP TYPE IF EXISTS monster_formation_category;
 DROP TABLE IF EXISTS formation_boss_songs;
 DROP TABLE IF EXISTS j_area_connected_areas;
 DROP TABLE IF EXISTS area_connections;
+DROP TYPE IF EXISTS shop_type;
+DROP TYPE IF EXISTS monster_formation_category;
 DROP TYPE IF EXISTS area_connection_type;

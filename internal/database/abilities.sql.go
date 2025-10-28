@@ -10,6 +10,23 @@ import (
 	"database/sql"
 )
 
+const createAbilitiesBattleInteractionsJunction = `-- name: CreateAbilitiesBattleInteractionsJunction :exec
+INSERT INTO j_abilities_battle_interactions (data_hash, ability_id, battle_interaction_id)
+VALUES($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAbilitiesBattleInteractionsJunctionParams struct {
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+}
+
+func (q *Queries) CreateAbilitiesBattleInteractionsJunction(ctx context.Context, arg CreateAbilitiesBattleInteractionsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAbilitiesBattleInteractionsJunction, arg.DataHash, arg.AbilityID, arg.BattleInteractionID)
+	return err
+}
+
 const createAbility = `-- name: CreateAbility :one
 INSERT INTO abilities (data_hash, name, version, specification, attributes_id, type)
 VALUES ($1, $2, $3, $4, $5, $6)

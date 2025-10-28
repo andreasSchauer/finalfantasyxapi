@@ -1,6 +1,24 @@
 -- +goose Up
 CREATE TYPE blitzball_tournament_category AS ENUM ('league', 'tournament');
+
+
 CREATE TYPE blitzball_position_slot AS ENUM ('1st', '2nd', '3rd', 'top-scorer');
+
+
+CREATE TYPE quest_type AS ENUM ('sidequest', 'subquest');
+
+
+CREATE TYPE ma_creation_category AS ENUM ('area', 'species', 'original');
+
+
+CREATE TYPE ma_creation_area AS ENUM ('besaid', 'kilika', 'mi''ihen-highroad', 'mushroom-rock-road', 'djose', 'thunder-plains', 'macalania', 'bikanel', 'calm-lands', 'cavern-of-the-stolen-fayth', 'mount-gagazet', 'sin', 'omega-ruins');
+
+
+CREATE TYPE ma_creation_species AS ENUM ('bird', 'bomb', 'drake', 'elemental', 'evil-eye', 'flan', 'fungus', 'helm', 'imp', 'iron-giant', 'lupine', 'reptile', 'ruminant', 'wasp');
+
+
+CREATE TYPE creations_unlocked_category AS ENUM ('area', 'species');
+
 
 CREATE TABLE blitzball_positions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -10,8 +28,6 @@ CREATE TABLE blitzball_positions (
     UNIQUE(category, slot)
 );
 
-
-CREATE TYPE quest_type AS ENUM ('sidequest', 'subquest');
 
 CREATE TABLE quests (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -38,12 +54,6 @@ CREATE TABLE subquests (
 );
 
 
-CREATE TYPE ma_creation_category AS ENUM ('area', 'species', 'original');
-CREATE TYPE ma_creation_area AS ENUM ('besaid', 'kilika', 'mi''ihen-highroad', 'mushroom-rock-road', 'djose', 'thunder-plains', 'macalania', 'bikanel', 'calm-lands', 'cavern-of-the-stolen-fayth', 'mount-gagazet', 'sin', 'omega-ruins');
-CREATE TYPE ma_creation_species AS ENUM ('bird', 'bomb', 'drake', 'elemental', 'evil-eye', 'flan', 'fungus', 'helm', 'imp', 'iron-giant', 'lupine', 'reptile', 'ruminant', 'wasp');
-CREATE TYPE creations_unlocked_category AS ENUM ('area', 'species');
-
-
 CREATE TABLE monster_arena_creations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -65,14 +75,14 @@ CREATE TABLE monster_arena_creations (
 
 -- +goose Down
 DROP TABLE IF EXISTS monster_arena_creations;
+DROP TABLE IF EXISTS subquests;
+DROP TABLE IF EXISTS sidequests;
+DROP TABLE IF EXISTS quests;
+DROP TABLE IF EXISTS blitzball_positions;
 DROP TYPE IF EXISTS ma_creation_area;
 DROP TYPE IF EXISTS ma_creation_species;
 DROP TYPE IF EXISTS ma_creation_category;
 DROP TYPE IF EXISTS creations_unlocked_category;
-DROP TABLE IF EXISTS subquests;
-DROP TABLE IF EXISTS sidequests;
-DROP TABLE IF EXISTS quests;
 DROP TYPE IF EXISTS quest_type;
-DROP TABLE IF EXISTS blitzball_positions;
 DROP TYPE IF EXISTS blitzball_tournament_category;
 DROP TYPE IF EXISTS blitzball_position_slot;

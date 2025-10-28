@@ -1,0 +1,37 @@
+-- +goose Up
+CREATE DOMAIN percentage AS REAL
+    CHECK (VALUE >= 0 AND VALUE <= 1);
+
+
+CREATE DOMAIN percent AS INTEGER
+    CHECK (VALUE >= 0 AND VALUE <= 100);
+
+
+CREATE DOMAIN uint8 AS INTEGER
+    CHECK (VALUE >= 0 AND VALUE <= 255);
+
+
+CREATE DOMAIN distance as INTEGER
+    CHECK (VALUE >= 1 AND VALUE <= 4);
+
+
+CREATE DOMAIN ost_disc as INTEGER
+    CHECK (VALUE >= 1 AND VALUE <= 4);
+
+
+CREATE DOMAIN empty_slots AS INTEGER
+    CHECK (VALUE >= 0 AND VALUE <= 4);
+
+
+CREATE DOMAIN zanmato_level AS INTEGER
+    CHECK (VALUE >= 1 AND VALUE <= 6);
+
+
+-- +goose Down
+DROP DOMAIN IF EXISTS zanmato_level;
+DROP DOMAIN IF EXISTS empty_slots;
+DROP DOMAIN IF EXISTS ost_disc;
+DROP DOMAIN IF EXISTS distance;
+DROP DOMAIN IF EXISTS uint8;
+DROP DOMAIN IF EXISTS percent;
+DROP DOMAIN IF EXISTS percentage;

@@ -1,10 +1,9 @@
 -- +goose Up
 CREATE TYPE monster_species AS ENUM ('adamantoise', 'aeon', 'armor', 'basilisk', 'blade', 'behemoth', 'bird', 'bomb', 'cactuar', 'cephalopod', 'chest', 'chimera', 'coeurl', 'defender', 'dinofish', 'doomstone', 'drake', 'eater', 'elemental', 'evil-eye', 'flan', 'fungus', 'gel', 'geo', 'haizhe', 'helm', 'hermit', 'humanoid', 'imp', 'iron-giant', 'larva', 'lupine', 'machina', 'malboro', 'mech', 'mimic', 'ochu', 'ogre', 'phantom', 'piranha', 'plant', 'reptile', 'roc', 'ruminant', 'sacred-beast', 'sahagin', 'sin', 'sinspawn', 'spellspinner', 'spirit-beast', 'tonberry', 'unspecified', 'wasp', 'weapon', 'worm', 'wyrm');
 
+
 CREATE TYPE ctb_icon_type AS ENUM ('monster', 'boss', 'boss-numbered', 'summon');
 
-CREATE DOMAIN zanmato_level AS INTEGER
-    CHECK (VALUE >= 1 AND VALUE <= 6);
 
 CREATE TABLE monsters (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -51,6 +50,5 @@ CREATE TABLE monster_amounts (
 -- +goose Down
 DROP TABLE IF EXISTS monster_amounts;
 DROP TABLE IF EXISTS monsters;
-DROP DOMAIN IF EXISTS zanmato_level;
 DROP TYPE IF EXISTS ctb_icon_type;
 DROP TYPE IF EXISTS monster_species;

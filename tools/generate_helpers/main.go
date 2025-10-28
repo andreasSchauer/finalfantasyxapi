@@ -21,6 +21,9 @@ func main() {
         "ItemUsability",
         "MusicUseCase",
         "BgReplacementType",
+        "SpecialActionType",
+        "CriticalType",
+        "BreakDmgLmtType",
     }
 
     filePath := "./internal/seeding/null_enums.go"

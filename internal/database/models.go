@@ -99,6 +99,48 @@ func (ns NullAbilityType) Value() (driver.Value, error) {
 	return string(ns.AbilityType), nil
 }
 
+type AccSourceType string
+
+const (
+	AccSourceTypeAccuracy AccSourceType = "accuracy"
+	AccSourceTypeRate     AccSourceType = "rate"
+)
+
+func (e *AccSourceType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AccSourceType(s)
+	case string:
+		*e = AccSourceType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AccSourceType: %T", src)
+	}
+	return nil
+}
+
+type NullAccSourceType struct {
+	AccSourceType AccSourceType
+	Valid         bool // Valid is true if AccSourceType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAccSourceType) Scan(value interface{}) error {
+	if value == nil {
+		ns.AccSourceType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AccSourceType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAccSourceType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AccSourceType), nil
+}
+
 type AccuracySource string
 
 const (
@@ -230,6 +272,49 @@ func (ns NullArmorType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.ArmorType), nil
+}
+
+type AttackType string
+
+const (
+	AttackTypeAttack AttackType = "attack"
+	AttackTypeHeal   AttackType = "heal"
+	AttackTypeAbsorb AttackType = "absorb"
+)
+
+func (e *AttackType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AttackType(s)
+	case string:
+		*e = AttackType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AttackType: %T", src)
+	}
+	return nil
+}
+
+type NullAttackType struct {
+	AttackType AttackType
+	Valid      bool // Valid is true if AttackType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAttackType) Scan(value interface{}) error {
+	if value == nil {
+		ns.AttackType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AttackType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAttackType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AttackType), nil
 }
 
 type AutoAbilityCategory string
@@ -455,6 +540,48 @@ func (ns NullBlitzballTournamentCategory) Value() (driver.Value, error) {
 	return string(ns.BlitzballTournamentCategory), nil
 }
 
+type BreakDmgLmtType string
+
+const (
+	BreakDmgLmtTypeAlways      BreakDmgLmtType = "always"
+	BreakDmgLmtTypeAutoAbility BreakDmgLmtType = "auto-ability"
+)
+
+func (e *BreakDmgLmtType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BreakDmgLmtType(s)
+	case string:
+		*e = BreakDmgLmtType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BreakDmgLmtType: %T", src)
+	}
+	return nil
+}
+
+type NullBreakDmgLmtType struct {
+	BreakDmgLmtType BreakDmgLmtType
+	Valid           bool // Valid is true if BreakDmgLmtType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullBreakDmgLmtType) Scan(value interface{}) error {
+	if value == nil {
+		ns.BreakDmgLmtType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.BreakDmgLmtType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullBreakDmgLmtType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.BreakDmgLmtType), nil
+}
+
 type CalculationType string
 
 const (
@@ -627,6 +754,91 @@ func (ns NullCreationsUnlockedCategory) Value() (driver.Value, error) {
 	return string(ns.CreationsUnlockedCategory), nil
 }
 
+type CriticalType string
+
+const (
+	CriticalTypeCrit        CriticalType = "crit"
+	CriticalTypeCritability CriticalType = "crit+ability%"
+	CriticalTypeCritweapon  CriticalType = "crit+weapon%"
+)
+
+func (e *CriticalType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = CriticalType(s)
+	case string:
+		*e = CriticalType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for CriticalType: %T", src)
+	}
+	return nil
+}
+
+type NullCriticalType struct {
+	CriticalType CriticalType
+	Valid        bool // Valid is true if CriticalType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullCriticalType) Scan(value interface{}) error {
+	if value == nil {
+		ns.CriticalType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.CriticalType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullCriticalType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.CriticalType), nil
+}
+
+type CtbAttackType string
+
+const (
+	CtbAttackTypeAttack CtbAttackType = "attack"
+	CtbAttackTypeHeal   CtbAttackType = "heal"
+)
+
+func (e *CtbAttackType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = CtbAttackType(s)
+	case string:
+		*e = CtbAttackType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for CtbAttackType: %T", src)
+	}
+	return nil
+}
+
+type NullCtbAttackType struct {
+	CtbAttackType CtbAttackType
+	Valid         bool // Valid is true if CtbAttackType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullCtbAttackType) Scan(value interface{}) error {
+	if value == nil {
+		ns.CtbAttackType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.CtbAttackType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullCtbAttackType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.CtbAttackType), nil
+}
+
 type CtbIconType string
 
 const (
@@ -669,6 +881,148 @@ func (ns NullCtbIconType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.CtbIconType), nil
+}
+
+type DamageFormula string
+
+const (
+	DamageFormulaStrVsDef          DamageFormula = "str-vs-def"
+	DamageFormulaStrIgnDef         DamageFormula = "str-ign-def"
+	DamageFormulaMagVsMdf          DamageFormula = "mag-vs-mdf"
+	DamageFormulaMagIgnMdf         DamageFormula = "mag-ign-mdf"
+	DamageFormulaPercentageCurrent DamageFormula = "percentage-current"
+	DamageFormulaPercentageMax     DamageFormula = "percentage-max"
+	DamageFormulaHealing           DamageFormula = "healing"
+	DamageFormulaSpecialNoVar      DamageFormula = "special-no-var"
+	DamageFormulaSpecialVar        DamageFormula = "special-var"
+	DamageFormulaSpecialMagic      DamageFormula = "special-magic"
+	DamageFormulaSpecialGil        DamageFormula = "special-gil"
+	DamageFormulaSpecialKills      DamageFormula = "special-kills"
+	DamageFormulaSpecial9999       DamageFormula = "special-9999"
+	DamageFormulaFixed9999         DamageFormula = "fixed-9999"
+	DamageFormulaUserMaxHp         DamageFormula = "user-max-hp"
+	DamageFormulaSwallowedA        DamageFormula = "swallowed-a"
+	DamageFormulaSwallowedB        DamageFormula = "swallowed-b"
+)
+
+func (e *DamageFormula) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = DamageFormula(s)
+	case string:
+		*e = DamageFormula(s)
+	default:
+		return fmt.Errorf("unsupported scan type for DamageFormula: %T", src)
+	}
+	return nil
+}
+
+type NullDamageFormula struct {
+	DamageFormula DamageFormula
+	Valid         bool // Valid is true if DamageFormula is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullDamageFormula) Scan(value interface{}) error {
+	if value == nil {
+		ns.DamageFormula, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.DamageFormula.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullDamageFormula) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.DamageFormula), nil
+}
+
+type DamageType string
+
+const (
+	DamageTypePhysical DamageType = "physical"
+	DamageTypeMagical  DamageType = "magical"
+	DamageTypeSpecial  DamageType = "special"
+)
+
+func (e *DamageType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = DamageType(s)
+	case string:
+		*e = DamageType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for DamageType: %T", src)
+	}
+	return nil
+}
+
+type NullDamageType struct {
+	DamageType DamageType
+	Valid      bool // Valid is true if DamageType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullDamageType) Scan(value interface{}) error {
+	if value == nil {
+		ns.DamageType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.DamageType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullDamageType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.DamageType), nil
+}
+
+type DelayType string
+
+const (
+	DelayTypeCtbBased       DelayType = "ctb-based"
+	DelayTypeTickSpeedBased DelayType = "tick-speed-based"
+)
+
+func (e *DelayType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = DelayType(s)
+	case string:
+		*e = DelayType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for DelayType: %T", src)
+	}
+	return nil
+}
+
+type NullDelayType struct {
+	DelayType DelayType
+	Valid     bool // Valid is true if DelayType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullDelayType) Scan(value interface{}) error {
+	if value == nil {
+		ns.DelayType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.DelayType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullDelayType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.DelayType), nil
 }
 
 type DurationType string
@@ -1715,6 +2069,50 @@ func (ns NullShopType) Value() (driver.Value, error) {
 	return string(ns.ShopType), nil
 }
 
+type SpecialActionType string
+
+const (
+	SpecialActionTypeBribe             SpecialActionType = "bribe"
+	SpecialActionTypeStealGil          SpecialActionType = "steal-gil"
+	SpecialActionTypeStealItem         SpecialActionType = "steal-item"
+	SpecialActionTypeTransferOverdrive SpecialActionType = "transfer-overdrive"
+)
+
+func (e *SpecialActionType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = SpecialActionType(s)
+	case string:
+		*e = SpecialActionType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for SpecialActionType: %T", src)
+	}
+	return nil
+}
+
+type NullSpecialActionType struct {
+	SpecialActionType SpecialActionType
+	Valid             bool // Valid is true if SpecialActionType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullSpecialActionType) Scan(value interface{}) error {
+	if value == nil {
+		ns.SpecialActionType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.SpecialActionType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullSpecialActionType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.SpecialActionType), nil
+}
+
 type TargetType string
 
 const (
@@ -1951,12 +2349,31 @@ type Ability struct {
 	Type          AbilityType
 }
 
+type AbilityAccuracy struct {
+	ID          int32
+	DataHash    string
+	AccSource   AccSourceType
+	HitChance   interface{}
+	AccModifier sql.NullFloat64
+}
+
 type AbilityAttribute struct {
 	ID               int32
 	DataHash         string
 	Rank             sql.NullInt32
 	AppearsInHelpBar bool
 	CanCopycat       bool
+}
+
+type AbilityDamage struct {
+	ID             int32
+	DataHash       string
+	Condition      sql.NullString
+	AttackType     AttackType
+	StatID         int32
+	DamageType     DamageType
+	DamageFormula  DamageFormula
+	DamageConstant interface{}
 }
 
 type Aeon struct {
@@ -2079,6 +2496,19 @@ type BaseStat struct {
 	Value    int32
 }
 
+type BattleInteraction struct {
+	ID                int32
+	DataHash          string
+	Target            TargetType
+	BasedOnPhysAttack bool
+	Range             interface{}
+	DamageID          sql.NullInt32
+	ShatterRate       interface{}
+	AccuracyID        int32
+	HitAmount         int32
+	SpecialAction     NullSpecialActionType
+}
+
 type BlitzballItem struct {
 	ID           int32
 	DataHash     string
@@ -2137,6 +2567,16 @@ type Cue struct {
 	ReplacesBgMusic        NullBgReplacementType
 	EndTrigger             sql.NullString
 	ReplacesEncounterMusic bool
+}
+
+type Damage struct {
+	ID              int32
+	DataHash        string
+	Critical        NullCriticalType
+	CriticalPlusVal sql.NullInt32
+	IsPiercing      bool
+	BreakDmgLimit   NullBreakDmgLmtType
+	ElementID       sql.NullInt32
 }
 
 type DefaultAbility struct {
@@ -2226,6 +2666,15 @@ type FoundEquipmentPiece struct {
 	EmptySlotsAmount interface{}
 }
 
+type InflictedDelay struct {
+	ID             int32
+	DataHash       string
+	Condition      sql.NullString
+	CtbAttackType  CtbAttackType
+	DelayType      DelayType
+	DamageConstant interface{}
+}
+
 type InflictedStatuss struct {
 	ID                int32
 	DataHash          string
@@ -2261,6 +2710,13 @@ type ItemAmount struct {
 	DataHash     string
 	MasterItemID int32
 	Amount       int32
+}
+
+type JAbilitiesBattleInteraction struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
 }
 
 type JAeonCommandsPossibleAbility struct {
@@ -2341,11 +2797,74 @@ type JAutoAbilitiesStatChange struct {
 	StatChangeID  int32
 }
 
+type JBattleInteractionsAffectedBy struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	StatusConditionID   int32
+}
+
+type JBattleInteractionsCopiedStatusCondition struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	InflictedStatusID   int32
+}
+
+type JBattleInteractionsInflictedDelay struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	InflictedDelayID    int32
+}
+
+type JBattleInteractionsInflictedStatusCondition struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	InflictedStatusID   int32
+}
+
+type JBattleInteractionsModifierChange struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	ModifierChangeID    int32
+}
+
+type JBattleInteractionsRemovedStatusCondition struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	StatusConditionID   int32
+}
+
+type JBattleInteractionsStatChange struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	StatChangeID        int32
+}
+
 type JCharactersBaseStat struct {
 	ID          int32
 	DataHash    string
 	CharacterID int32
 	BaseStatID  int32
+}
+
+type JDamagesDamageCalc struct {
+	ID              int32
+	DataHash        string
+	DamageID        int32
+	AbilityDamageID int32
 }
 
 type JEncounterLocationFormation struct {

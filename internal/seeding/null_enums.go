@@ -159,3 +159,39 @@ func nullBgReplacementType(s *string) database.NullBgReplacementType {
 }
 
 
+func nullSpecialActionType(s *string) database.NullSpecialActionType {
+    if s == nil {
+        return database.NullSpecialActionType{}
+    }
+    
+    return database.NullSpecialActionType{
+        SpecialActionType: database.SpecialActionType(*s),
+        Valid: true,
+    }
+}
+
+
+func nullCriticalType(s *string) database.NullCriticalType {
+    if s == nil {
+        return database.NullCriticalType{}
+    }
+    
+    return database.NullCriticalType{
+        CriticalType: database.CriticalType(*s),
+        Valid: true,
+    }
+}
+
+
+func nullBreakDmgLmtType(s *string) database.NullBreakDmgLmtType {
+    if s == nil {
+        return database.NullBreakDmgLmtType{}
+    }
+    
+    return database.NullBreakDmgLmtType{
+        BreakDmgLmtType: database.BreakDmgLmtType(*s),
+        Valid: true,
+    }
+}
+
+

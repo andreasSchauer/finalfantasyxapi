@@ -1,8 +1,4 @@
 -- +goose Up
-CREATE DOMAIN ost_disc as INTEGER
-    CHECK (VALUE IN (1, 2, 3, 4));
-
-
 CREATE TYPE music_use_case AS ENUM('blitzball-game', 'blitzball-menu', 'boss-battle-default', 'chocobo', 'game-over', 'main-menu', 'random-encounter-default', 'victory');
 
 
@@ -24,7 +20,6 @@ CREATE TABLE songs (
 );
 
 
-
 CREATE TABLE fmvs (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -41,4 +36,3 @@ CREATE TABLE fmvs (
 DROP TABLE IF EXISTS fmvs;
 DROP TABLE IF EXISTS songs;
 DROP TYPE IF EXISTS music_use_case;
-DROP DOMAIN IF EXISTS ost_disc;

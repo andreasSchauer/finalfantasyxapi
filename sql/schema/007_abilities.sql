@@ -97,4 +97,3 @@ DROP TABLE IF EXISTS player_abilities;
 DROP TABLE IF EXISTS abilities;
 DROP TABLE IF EXISTS ability_attributes;
 DROP TYPE IF EXISTS ability_type;
-DROP TYPE IF EXISTS submenu_type;

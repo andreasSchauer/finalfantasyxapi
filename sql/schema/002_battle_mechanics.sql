@@ -1,4 +1,13 @@
 -- +goose Up
+CREATE TYPE overdrive_type AS ENUM ('formula', 'per-action');
+
+
+CREATE TYPE nullify_armored AS ENUM ('target', 'bearer');
+
+
+CREATE TYPE modifier_type AS ENUM ('battle-dependent', 'factor','fixed-value', 'percentage');
+
+
 CREATE TABLE stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -33,8 +42,6 @@ CREATE TABLE elemental_affinities (
 );
 
 
-CREATE DOMAIN uint8 AS INTEGER
-    CHECK (VALUE >= 0 AND VALUE <= 255);
 
 CREATE TABLE agility_tiers (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -58,10 +65,6 @@ CREATE TABLE agility_subtiers (
 );
 
 
-CREATE TYPE overdrive_type AS ENUM ('formula', 'per-action');
-CREATE DOMAIN percentage AS REAL
-    CHECK (VALUE >= 0 AND VALUE <= 1);
-
 CREATE TABLE overdrive_modes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -72,8 +75,6 @@ CREATE TABLE overdrive_modes (
     fill_rate percentage
 );
 
-
-CREATE TYPE nullify_armored AS ENUM ('target', 'bearer');
 
 CREATE TABLE status_conditions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -93,18 +94,6 @@ CREATE TABLE status_resists (
 );
 
 
-CREATE TYPE duration_type AS ENUM ('blocks', 'endless', 'instant', 'turns', 'user-turns');
-
-CREATE TABLE inflicted_statusses (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    status_condition_id INTEGER NOT NULL REFERENCES status_conditions(id),
-    probability uint8 NOT NULL,
-    duration_type duration_type NOT NULL,
-    amount INTEGER
-);
-
-
 CREATE TABLE properties (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -113,8 +102,6 @@ CREATE TABLE properties (
     nullify_armored nullify_armored
 );
 
-
-CREATE TYPE modifier_type AS ENUM ('battle-dependent', 'factor','fixed-value', 'percentage');
 
 CREATE TABLE modifiers (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -126,45 +113,21 @@ CREATE TABLE modifiers (
 );
 
 
-CREATE TYPE calculation_type AS ENUM ('added-percentage', 'added-value', 'multiply', 'multiply-highest', 'set-value');
 
-CREATE TABLE stat_changes (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    stat_id INTEGER NOT NULL REFERENCES stats(id),
-    calculation_type calculation_type NOT NULL,
-    value REAL NOT NULL
-);
-
-
-CREATE TABLE modifier_changes (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    modifier_id INTEGER NOT NULL REFERENCES modifiers(id),
-    calculation_type calculation_type NOT NULL,
-    value REAL NOT NULL
-);
 
 
 -- +goose Down
-DROP TABLE IF EXISTS modifier_changes;
-DROP TABLE IF EXISTS stat_changes;
-DROP TYPE IF EXISTS calculation_type;
 DROP TABLE IF EXISTS modifiers;
-DROP TYPE IF EXISTS modifier_type;
 DROP TABLE IF EXISTS properties;
-DROP TABLE IF EXISTS inflicted_statusses;
-DROP TYPE IF EXISTS duration_type;
 DROP TABLE IF EXISTS status_resists;
 DROP TABLE IF EXISTS status_conditions;
-DROP TYPE IF EXISTS nullify_armored;
 DROP TABLE IF EXISTS overdrive_modes;
-DROP TYPE IF EXISTS overdrive_type;
-DROP DOMAIN IF EXISTS percentage;
 DROP TABLE IF EXISTS agility_subtiers;
 DROP TABLE IF EXISTS agility_tiers;
-DROP DOMAIN IF EXISTS uint8;
 DROP TABLE IF EXISTS elemental_affinities;
 DROP TABLE IF EXISTS affinities;
 DROP TABLE IF EXISTS elements;
 DROP TABLE IF EXISTS stats;
+DROP TYPE IF EXISTS modifier_type;
+DROP TYPE IF EXISTS nullify_armored;
+DROP TYPE IF EXISTS overdrive_type;

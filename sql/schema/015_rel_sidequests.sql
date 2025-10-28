@@ -1,7 +1,4 @@
 -- +goose Up
-CREATE DOMAIN percent AS INTEGER
-    CHECK (VALUE >= 0 AND VALUE <= 100);
-
 CREATE TABLE blitzball_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -33,4 +30,3 @@ CREATE TABLE completion_locations (
 DROP TABLE IF EXISTS completion_locations;
 DROP TABLE IF EXISTS quest_completions;
 DROP TABLE IF EXISTS blitzball_items;
-DROP DOMAIN IF EXISTS percent;

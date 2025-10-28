@@ -217,7 +217,7 @@ func (l *lookup) getSeeders() []seeder {
 		{
 			name: 		"trigger commands",
 			seedFunc: 	l.seedTriggerCommands,
-			relFunc: 	nil,
+			relFunc: 	l.createTriggerCommandsRelationships,
 		},
 		{
 			name: 		"overdrive commands",

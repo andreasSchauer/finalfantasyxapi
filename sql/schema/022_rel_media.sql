@@ -1,4 +1,7 @@
 -- +goose Up
+CREATE TYPE bg_replacement_type AS ENUM ('until-trigger', 'until-zone-change');
+
+
 CREATE TABLE background_music (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -15,8 +18,6 @@ CREATE TABLE j_songs_background_music (
     area_id INTEGER NOT NULL REFERENCES areas(id)
 );
 
-
-CREATE TYPE bg_replacement_type AS ENUM ('until-trigger', 'until-zone-change');
 
 CREATE TABLE cues (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -62,6 +63,6 @@ DROP COLUMN IF EXISTS credits_id;
 DROP TABLE IF EXISTS song_credits;
 DROP TABLE IF EXISTS j_songs_cues;
 DROP TABLE IF EXISTS cues;
-DROP TYPE IF EXISTS bg_replacement_type;
 DROP TABLE IF EXISTS j_songs_background_music;
 DROP TABLE IF EXISTS background_music;
+DROP TYPE IF EXISTS bg_replacement_type;
