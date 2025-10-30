@@ -52,15 +52,15 @@ func main() {
 		adminApiKey: adminApiKey,
 	}
 
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("GET /api/healthz", handlerReadiness)
-	mux.HandleFunc("POST /admin/reset", apiCfg.handlerResetDatabase)
-
 	err = seeding.SeedDatabase(apiCfg.db, apiCfg.dbConn)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /api/healthz", handlerReadiness)
+	mux.HandleFunc("POST /admin/reset", apiCfg.handlerResetDatabase)
 
 	srv := &http.Server{
 		Addr:    ":" + port,

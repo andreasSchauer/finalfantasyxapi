@@ -16,33 +16,32 @@ type Ability struct {
 	*Attributes
 }
 
-func (a Ability) ToHashFields() []any {
+func (t Ability) ToHashFields() []any {
 	return []any{
-		a.Name,
-		derefOrNil(a.Version),
-		derefOrNil(a.Specification),
-		a.Type,
-		ObjPtrToHashID(a.Attributes),
+		t.Name,
+		derefOrNil(t.Version),
+		derefOrNil(t.Specification),
+		t.Type,
+		ObjPtrToHashID(t.Attributes),
 	}
 }
 
-func (a Ability) ToKeyFields() []any {
+func (t Ability) ToKeyFields() []any {
 	return []any{
-		a.Name,
-		derefOrNil(a.Version),
-		a.Type,
+		t.Name,
+		derefOrNil(t.Version),
+		t.Type,
 	}
 }
 
-func (a Ability) GetID() int32 {
-	return a.ID
+func (t Ability) GetID() int32 {
+	return t.ID
 }
 
-
-type AbilityReference struct{
-	Name		string		`json:"name"`
-	Version		*int32		`json:"version"`
-	AbilityType	string		`json:"ability_type"`
+type AbilityReference struct {
+	Name        string `json:"name"`
+	Version     *int32 `json:"version"`
+	AbilityType string `json:"ability_type"`
 }
 
 func (a AbilityReference) ToKeyFields() []any {
@@ -52,7 +51,6 @@ func (a AbilityReference) ToKeyFields() []any {
 		a.AbilityType,
 	}
 }
-
 
 type Attributes struct {
 	ID               int32

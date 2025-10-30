@@ -83,6 +83,167 @@ func (q *Queries) CreateAbilityDamage(ctx context.Context, arg CreateAbilityDama
 	return i, err
 }
 
+const createBattleIntAffectedByJunction = `-- name: CreateBattleIntAffectedByJunction :exec
+INSERT INTO j_battle_interactions_affected_by (data_hash, ability_id, battle_interaction_id, status_condition_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntAffectedByJunctionParams struct {
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	StatusConditionID   int32
+}
+
+func (q *Queries) CreateBattleIntAffectedByJunction(ctx context.Context, arg CreateBattleIntAffectedByJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntAffectedByJunction,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.BattleInteractionID,
+		arg.StatusConditionID,
+	)
+	return err
+}
+
+const createBattleIntCopiedConditionsJunction = `-- name: CreateBattleIntCopiedConditionsJunction :exec
+INSERT INTO j_battle_interactions_copied_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntCopiedConditionsJunctionParams struct {
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	InflictedStatusID   int32
+}
+
+func (q *Queries) CreateBattleIntCopiedConditionsJunction(ctx context.Context, arg CreateBattleIntCopiedConditionsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntCopiedConditionsJunction,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.BattleInteractionID,
+		arg.InflictedStatusID,
+	)
+	return err
+}
+
+const createBattleIntInflictedConditionsJunction = `-- name: CreateBattleIntInflictedConditionsJunction :exec
+INSERT INTO j_battle_interactions_inflicted_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntInflictedConditionsJunctionParams struct {
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	InflictedStatusID   int32
+}
+
+func (q *Queries) CreateBattleIntInflictedConditionsJunction(ctx context.Context, arg CreateBattleIntInflictedConditionsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntInflictedConditionsJunction,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.BattleInteractionID,
+		arg.InflictedStatusID,
+	)
+	return err
+}
+
+const createBattleIntInflictedDelayJunction = `-- name: CreateBattleIntInflictedDelayJunction :exec
+INSERT INTO j_battle_interactions_inflicted_delay (data_hash, ability_id, battle_interaction_id, inflicted_delay_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntInflictedDelayJunctionParams struct {
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	InflictedDelayID    int32
+}
+
+func (q *Queries) CreateBattleIntInflictedDelayJunction(ctx context.Context, arg CreateBattleIntInflictedDelayJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntInflictedDelayJunction,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.BattleInteractionID,
+		arg.InflictedDelayID,
+	)
+	return err
+}
+
+const createBattleIntModifierChangesJunction = `-- name: CreateBattleIntModifierChangesJunction :exec
+INSERT INTO j_battle_interactions_modifier_changes (data_hash, ability_id, battle_interaction_id, modifier_change_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntModifierChangesJunctionParams struct {
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	ModifierChangeID    int32
+}
+
+func (q *Queries) CreateBattleIntModifierChangesJunction(ctx context.Context, arg CreateBattleIntModifierChangesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntModifierChangesJunction,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.BattleInteractionID,
+		arg.ModifierChangeID,
+	)
+	return err
+}
+
+const createBattleIntRemovedConditionsJunction = `-- name: CreateBattleIntRemovedConditionsJunction :exec
+INSERT INTO j_battle_interactions_removed_status_conditions (data_hash, ability_id, battle_interaction_id, status_condition_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntRemovedConditionsJunctionParams struct {
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	StatusConditionID   int32
+}
+
+func (q *Queries) CreateBattleIntRemovedConditionsJunction(ctx context.Context, arg CreateBattleIntRemovedConditionsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntRemovedConditionsJunction,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.BattleInteractionID,
+		arg.StatusConditionID,
+	)
+	return err
+}
+
+const createBattleIntStatChangesJunction = `-- name: CreateBattleIntStatChangesJunction :exec
+INSERT INTO j_battle_interactions_stat_changes (data_hash, ability_id, battle_interaction_id, stat_change_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntStatChangesJunctionParams struct {
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	StatChangeID        int32
+}
+
+func (q *Queries) CreateBattleIntStatChangesJunction(ctx context.Context, arg CreateBattleIntStatChangesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntStatChangesJunction,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.BattleInteractionID,
+		arg.StatChangeID,
+	)
+	return err
+}
+
 const createBattleInteraction = `-- name: CreateBattleInteraction :one
 INSERT INTO battle_interactions (data_hash, target, based_on_phys_attack, range, damage_id, shatter_rate, accuracy_id, hit_amount, special_action)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
@@ -130,167 +291,6 @@ func (q *Queries) CreateBattleInteraction(ctx context.Context, arg CreateBattleI
 	return i, err
 }
 
-const createBattleInteractionsAffectedByJunction = `-- name: CreateBattleInteractionsAffectedByJunction :exec
-INSERT INTO j_battle_interactions_affected_by (data_hash, ability_id, battle_interaction_id, status_condition_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateBattleInteractionsAffectedByJunctionParams struct {
-	DataHash            string
-	AbilityID           int32
-	BattleInteractionID int32
-	StatusConditionID   int32
-}
-
-func (q *Queries) CreateBattleInteractionsAffectedByJunction(ctx context.Context, arg CreateBattleInteractionsAffectedByJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createBattleInteractionsAffectedByJunction,
-		arg.DataHash,
-		arg.AbilityID,
-		arg.BattleInteractionID,
-		arg.StatusConditionID,
-	)
-	return err
-}
-
-const createBattleInteractionsCopiedStatusConditionsJunction = `-- name: CreateBattleInteractionsCopiedStatusConditionsJunction :exec
-INSERT INTO j_battle_interactions_copied_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateBattleInteractionsCopiedStatusConditionsJunctionParams struct {
-	DataHash            string
-	AbilityID           int32
-	BattleInteractionID int32
-	InflictedStatusID   int32
-}
-
-func (q *Queries) CreateBattleInteractionsCopiedStatusConditionsJunction(ctx context.Context, arg CreateBattleInteractionsCopiedStatusConditionsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createBattleInteractionsCopiedStatusConditionsJunction,
-		arg.DataHash,
-		arg.AbilityID,
-		arg.BattleInteractionID,
-		arg.InflictedStatusID,
-	)
-	return err
-}
-
-const createBattleInteractionsInflictedDelayJunction = `-- name: CreateBattleInteractionsInflictedDelayJunction :exec
-INSERT INTO j_battle_interactions_inflicted_delay (data_hash, ability_id, battle_interaction_id, inflicted_delay_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateBattleInteractionsInflictedDelayJunctionParams struct {
-	DataHash            string
-	AbilityID           int32
-	BattleInteractionID int32
-	InflictedDelayID    int32
-}
-
-func (q *Queries) CreateBattleInteractionsInflictedDelayJunction(ctx context.Context, arg CreateBattleInteractionsInflictedDelayJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createBattleInteractionsInflictedDelayJunction,
-		arg.DataHash,
-		arg.AbilityID,
-		arg.BattleInteractionID,
-		arg.InflictedDelayID,
-	)
-	return err
-}
-
-const createBattleInteractionsInflictedStatusConditionsJunction = `-- name: CreateBattleInteractionsInflictedStatusConditionsJunction :exec
-INSERT INTO j_battle_interactions_inflicted_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateBattleInteractionsInflictedStatusConditionsJunctionParams struct {
-	DataHash            string
-	AbilityID           int32
-	BattleInteractionID int32
-	InflictedStatusID   int32
-}
-
-func (q *Queries) CreateBattleInteractionsInflictedStatusConditionsJunction(ctx context.Context, arg CreateBattleInteractionsInflictedStatusConditionsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createBattleInteractionsInflictedStatusConditionsJunction,
-		arg.DataHash,
-		arg.AbilityID,
-		arg.BattleInteractionID,
-		arg.InflictedStatusID,
-	)
-	return err
-}
-
-const createBattleInteractionsModifierChangesJunction = `-- name: CreateBattleInteractionsModifierChangesJunction :exec
-INSERT INTO j_battle_interactions_modifier_changes (data_hash, ability_id, battle_interaction_id, modifier_change_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateBattleInteractionsModifierChangesJunctionParams struct {
-	DataHash            string
-	AbilityID           int32
-	BattleInteractionID int32
-	ModifierChangeID    int32
-}
-
-func (q *Queries) CreateBattleInteractionsModifierChangesJunction(ctx context.Context, arg CreateBattleInteractionsModifierChangesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createBattleInteractionsModifierChangesJunction,
-		arg.DataHash,
-		arg.AbilityID,
-		arg.BattleInteractionID,
-		arg.ModifierChangeID,
-	)
-	return err
-}
-
-const createBattleInteractionsRemovedStatusConditionsJunction = `-- name: CreateBattleInteractionsRemovedStatusConditionsJunction :exec
-INSERT INTO j_battle_interactions_removed_status_conditions (data_hash, ability_id, battle_interaction_id, status_condition_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateBattleInteractionsRemovedStatusConditionsJunctionParams struct {
-	DataHash            string
-	AbilityID           int32
-	BattleInteractionID int32
-	StatusConditionID   int32
-}
-
-func (q *Queries) CreateBattleInteractionsRemovedStatusConditionsJunction(ctx context.Context, arg CreateBattleInteractionsRemovedStatusConditionsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createBattleInteractionsRemovedStatusConditionsJunction,
-		arg.DataHash,
-		arg.AbilityID,
-		arg.BattleInteractionID,
-		arg.StatusConditionID,
-	)
-	return err
-}
-
-const createBattleInteractionsStatChangesJunction = `-- name: CreateBattleInteractionsStatChangesJunction :exec
-INSERT INTO j_battle_interactions_stat_changes (data_hash, ability_id, battle_interaction_id, stat_change_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateBattleInteractionsStatChangesJunctionParams struct {
-	DataHash            string
-	AbilityID           int32
-	BattleInteractionID int32
-	StatChangeID        int32
-}
-
-func (q *Queries) CreateBattleInteractionsStatChangesJunction(ctx context.Context, arg CreateBattleInteractionsStatChangesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createBattleInteractionsStatChangesJunction,
-		arg.DataHash,
-		arg.AbilityID,
-		arg.BattleInteractionID,
-		arg.StatChangeID,
-	)
-	return err
-}
-
 const createDamage = `-- name: CreateDamage :one
 INSERT INTO damages (data_hash, critical, critical_plus_val, is_piercing, break_dmg_limit, element_id)
 VALUES ($1, $2, $3, $4, $5, $6)
@@ -330,19 +330,25 @@ func (q *Queries) CreateDamage(ctx context.Context, arg CreateDamageParams) (Dam
 }
 
 const createDamagesDamageCalcJunction = `-- name: CreateDamagesDamageCalcJunction :exec
-INSERT INTO j_damages_damage_calc (data_hash, damage_id, ability_damage_id)
-VALUES ($1, $2, $3)
+INSERT INTO j_damages_damage_calc (data_hash, ability_id, damage_id, ability_damage_id)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateDamagesDamageCalcJunctionParams struct {
 	DataHash        string
+	AbilityID       int32
 	DamageID        int32
 	AbilityDamageID int32
 }
 
 func (q *Queries) CreateDamagesDamageCalcJunction(ctx context.Context, arg CreateDamagesDamageCalcJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createDamagesDamageCalcJunction, arg.DataHash, arg.DamageID, arg.AbilityDamageID)
+	_, err := q.db.ExecContext(ctx, createDamagesDamageCalcJunction,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.DamageID,
+		arg.AbilityDamageID,
+	)
 	return err
 }
 

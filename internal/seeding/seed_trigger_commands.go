@@ -9,13 +9,13 @@ import (
 )
 
 type TriggerCommand struct {
-	ID			int32
+	ID int32
 	Ability
-	Description string `json:"description"`
-	Effect      string `json:"effect"`
-	Topmenu     string `json:"topmenu"`
-	Cursor      string `json:"cursor"`
-	BattleInteractions	[]BattleInteraction `json:"battle_interactions"`
+	Description        string              `json:"description"`
+	Effect             string              `json:"effect"`
+	Topmenu            string              `json:"topmenu"`
+	Cursor             string              `json:"cursor"`
+	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (t TriggerCommand) ToHashFields() []any {
@@ -30,6 +30,14 @@ func (t TriggerCommand) ToHashFields() []any {
 
 func (t TriggerCommand) GetID() int32 {
 	return t.ID
+}
+
+func (t TriggerCommand) GetAbilityRef() AbilityReference {
+	return AbilityReference{
+		Name:        t.Name,
+		Version:     t.Version,
+		AbilityType: string(database.AbilityTypeTriggerCommand),
+	}
 }
 
 func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
@@ -72,7 +80,6 @@ func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 	})
 }
 
-
 func (l *lookup) createTriggerCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/trigger_commands.json"
 
@@ -85,17 +92,16 @@ func (l *lookup) createTriggerCommandsRelationships(db *database.Queries, dbConn
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonCommand := range triggerCommands {
-			abilityRef := AbilityReference{
-				Name: 			jsonCommand.Name,
-				Version: 		jsonCommand.Version,
-				AbilityType: 	string(database.AbilityTypeTriggerCommand),
-			}
+			abilityRef := jsonCommand.GetAbilityRef()
+
 			command, err := l.getTriggerCommand(abilityRef)
 			if err != nil {
 				return err
 			}
 
-			err = l.seedBattleInteractions(qtx, command.Ability, command.BattleInteractions)
+			l.currentAbility = command.Ability
+
+			err = l.seedBattleInteractions(qtx, l.currentAbility, command.BattleInteractions)
 			if err != nil {
 				return err
 			}

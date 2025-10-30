@@ -13,8 +13,8 @@ RETURNING *;
 
 
 -- name: CreateDamagesDamageCalcJunction :exec
-INSERT INTO j_damages_damage_calc (data_hash, damage_id, ability_damage_id)
-VALUES ($1, $2, $3)
+INSERT INTO j_damages_damage_calc (data_hash, ability_id, damage_id, ability_damage_id)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
@@ -60,43 +60,43 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = battle_interactions.data_hash
 RETURNING *;
 
 
--- name: CreateBattleInteractionsAffectedByJunction :exec
+-- name: CreateBattleIntAffectedByJunction :exec
 INSERT INTO j_battle_interactions_affected_by (data_hash, ability_id, battle_interaction_id, status_condition_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateBattleInteractionsInflictedDelayJunction :exec
+-- name: CreateBattleIntInflictedDelayJunction :exec
 INSERT INTO j_battle_interactions_inflicted_delay (data_hash, ability_id, battle_interaction_id, inflicted_delay_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateBattleInteractionsInflictedStatusConditionsJunction :exec
+-- name: CreateBattleIntInflictedConditionsJunction :exec
 INSERT INTO j_battle_interactions_inflicted_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateBattleInteractionsRemovedStatusConditionsJunction :exec
+-- name: CreateBattleIntRemovedConditionsJunction :exec
 INSERT INTO j_battle_interactions_removed_status_conditions (data_hash, ability_id, battle_interaction_id, status_condition_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateBattleInteractionsCopiedStatusConditionsJunction :exec
+-- name: CreateBattleIntCopiedConditionsJunction :exec
 INSERT INTO j_battle_interactions_copied_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateBattleInteractionsStatChangesJunction :exec
+-- name: CreateBattleIntStatChangesJunction :exec
 INSERT INTO j_battle_interactions_stat_changes (data_hash, ability_id, battle_interaction_id, stat_change_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateBattleInteractionsModifierChangesJunction :exec
+-- name: CreateBattleIntModifierChangesJunction :exec
 INSERT INTO j_battle_interactions_modifier_changes (data_hash, ability_id, battle_interaction_id, modifier_change_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;

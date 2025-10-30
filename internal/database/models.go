@@ -2863,6 +2863,7 @@ type JCharactersBaseStat struct {
 type JDamagesDamageCalc struct {
 	ID              int32
 	DataHash        string
+	AbilityID       int32
 	DamageID        int32
 	AbilityDamageID int32
 }

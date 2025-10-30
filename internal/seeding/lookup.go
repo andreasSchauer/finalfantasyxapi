@@ -16,93 +16,91 @@ func createLookupKey(l Lookupable) string {
 }
 
 type lookup struct {
-	abilities			map[string]Ability
-	enemyAbilities		map[string]EnemyAbility
-	itemAbilities		map[string]ItemAbility
-	overdriveAbilities	map[string]OverdriveAbility
-	playerAbilities		map[string]PlayerAbility
-	triggerCommands		map[string]TriggerCommand
-	aeons				map[string]Aeon
-	aeonCommands		map[string]AeonCommand
-	affinities			map[string]Affinity
-	areas 				map[string]Area
-	autoAbilities		map[string]AutoAbility
-	celestialWeapons	map[string]CelestialWeapon
-	characters			map[string]Character
-	charClasses			map[string]CharacterClass
-	elements			map[string]Element
-	equipmentNames		map[string]EquipmentName
-	equipmentTables		map[string]EquipmentTable
-	formationLocations	map[string]FormationLocation
-	items         		map[string]Item
-	keyItems      		map[string]KeyItem
-	masterItems			map[string]MasterItem
-	mixes				map[string]Mix
-	modifiers			map[string]Modifier
-	monsters			map[string]Monster
-	overdriveModes		map[string]OverdriveMode
-	overdriveCommands	map[string]OverdriveCommand
-	overdrives			map[string]Overdrive
-	positions			map[string]BlitzballPosition
-	properties			map[string]Property
-	quests				map[string]Quest
-	sidequests			map[string]Sidequest
-	subquests			map[string]Subquest
-	shops				map[string]Shop
-	songs         		map[string]Song
-	stats         		map[string]Stat
-	statusConditions	map[string]StatusCondition
-	submenus			map[string]Submenu
-	treasures			map[string]Treasure
+	currentAbility     Ability						// used for seeding of ability damage
+	abilities          map[string]Ability
+	enemyAbilities     map[string]EnemyAbility
+	itemAbilities      map[string]ItemAbility
+	overdriveAbilities map[string]OverdriveAbility
+	playerAbilities    map[string]PlayerAbility
+	triggerCommands    map[string]TriggerCommand
+	aeons              map[string]Aeon
+	aeonCommands       map[string]AeonCommand
+	affinities         map[string]Affinity
+	areas              map[string]Area
+	autoAbilities      map[string]AutoAbility
+	celestialWeapons   map[string]CelestialWeapon
+	characters         map[string]Character
+	charClasses        map[string]CharacterClass
+	elements           map[string]Element
+	equipmentNames     map[string]EquipmentName
+	equipmentTables    map[string]EquipmentTable
+	formationLocations map[string]FormationLocation
+	items              map[string]Item
+	keyItems           map[string]KeyItem
+	masterItems        map[string]MasterItem
+	mixes              map[string]Mix
+	modifiers          map[string]Modifier
+	monsters           map[string]Monster
+	overdriveModes     map[string]OverdriveMode
+	overdriveCommands  map[string]OverdriveCommand
+	overdrives         map[string]Overdrive
+	positions          map[string]BlitzballPosition
+	properties         map[string]Property
+	quests             map[string]Quest
+	sidequests         map[string]Sidequest
+	subquests          map[string]Subquest
+	shops              map[string]Shop
+	songs              map[string]Song
+	stats              map[string]Stat
+	statusConditions   map[string]StatusCondition
+	submenus           map[string]Submenu
+	treasures          map[string]Treasure
 }
-
 
 func lookupInit() lookup {
 	return lookup{
-		abilities:			make(map[string]Ability),
-		enemyAbilities:		make(map[string]EnemyAbility),
-		itemAbilities: 		make(map[string]ItemAbility),
+		abilities:          make(map[string]Ability),
+		enemyAbilities:     make(map[string]EnemyAbility),
+		itemAbilities:      make(map[string]ItemAbility),
 		overdriveAbilities: make(map[string]OverdriveAbility),
-		playerAbilities: 	make(map[string]PlayerAbility),
-		triggerCommands: 	make(map[string]TriggerCommand),
-		aeons: 				make(map[string]Aeon),
-		aeonCommands: 		make(map[string]AeonCommand),
-		affinities: 		make(map[string]Affinity),
-		areas: 				make(map[string]Area),
-		autoAbilities:		make(map[string]AutoAbility),
-		celestialWeapons: 	make(map[string]CelestialWeapon),
-		characters: 		make(map[string]Character),
-		charClasses: 		make(map[string]CharacterClass),
-		elements: 			make(map[string]Element),
-		equipmentNames:		make(map[string]EquipmentName),
-		equipmentTables:	make(map[string]EquipmentTable),
-		formationLocations:	make(map[string]FormationLocation),
-		items:         		make(map[string]Item),
-		keyItems:      		make(map[string]KeyItem),
-		masterItems: 		make(map[string]MasterItem),
-		mixes:				make(map[string]Mix),
-		modifiers: 			make(map[string]Modifier),
-		monsters: 			make(map[string]Monster),
-		overdriveModes:		make(map[string]OverdriveMode),
-		overdriveCommands: 	make(map[string]OverdriveCommand),
-		overdrives: 		make(map[string]Overdrive),
-		positions: 			make(map[string]BlitzballPosition),
-		properties: 		make(map[string]Property),
-		quests: 			make(map[string]Quest),
-		sidequests: 		make(map[string]Sidequest),
-		subquests: 			make(map[string]Subquest),
-		shops:				make(map[string]Shop),
-		songs:         		make(map[string]Song),
-		stats:         		make(map[string]Stat),
-		statusConditions: 	make(map[string]StatusCondition),
-		submenus: 			make(map[string]Submenu),
-		treasures: 			make(map[string]Treasure),
+		playerAbilities:    make(map[string]PlayerAbility),
+		triggerCommands:    make(map[string]TriggerCommand),
+		aeons:              make(map[string]Aeon),
+		aeonCommands:       make(map[string]AeonCommand),
+		affinities:         make(map[string]Affinity),
+		areas:              make(map[string]Area),
+		autoAbilities:      make(map[string]AutoAbility),
+		celestialWeapons:   make(map[string]CelestialWeapon),
+		characters:         make(map[string]Character),
+		charClasses:        make(map[string]CharacterClass),
+		elements:           make(map[string]Element),
+		equipmentNames:     make(map[string]EquipmentName),
+		equipmentTables:    make(map[string]EquipmentTable),
+		formationLocations: make(map[string]FormationLocation),
+		items:              make(map[string]Item),
+		keyItems:           make(map[string]KeyItem),
+		masterItems:        make(map[string]MasterItem),
+		mixes:              make(map[string]Mix),
+		modifiers:          make(map[string]Modifier),
+		monsters:           make(map[string]Monster),
+		overdriveModes:     make(map[string]OverdriveMode),
+		overdriveCommands:  make(map[string]OverdriveCommand),
+		overdrives:         make(map[string]Overdrive),
+		positions:          make(map[string]BlitzballPosition),
+		properties:         make(map[string]Property),
+		quests:             make(map[string]Quest),
+		sidequests:         make(map[string]Sidequest),
+		subquests:          make(map[string]Subquest),
+		shops:              make(map[string]Shop),
+		songs:              make(map[string]Song),
+		stats:              make(map[string]Stat),
+		statusConditions:   make(map[string]StatusCondition),
+		submenus:           make(map[string]Submenu),
+		treasures:          make(map[string]Treasure),
 	}
 }
 
-
 // Lookupable for composite keys, string for simple name keys
-
 
 func (l *lookup) getAbility(abilityReference AbilityReference) (Ability, error) {
 	key := createLookupKey(abilityReference)
@@ -115,7 +113,6 @@ func (l *lookup) getAbility(abilityReference AbilityReference) (Ability, error) 
 	return ability, nil
 }
 
-
 func (l *lookup) getEnemyAbility(abilityReference AbilityReference) (EnemyAbility, error) {
 	key := createLookupKey(abilityReference)
 
@@ -126,7 +123,6 @@ func (l *lookup) getEnemyAbility(abilityReference AbilityReference) (EnemyAbilit
 
 	return ability, nil
 }
-
 
 func (l *lookup) getItemAbility(abilityReference AbilityReference) (ItemAbility, error) {
 	key := createLookupKey(abilityReference)
@@ -139,7 +135,6 @@ func (l *lookup) getItemAbility(abilityReference AbilityReference) (ItemAbility,
 	return ability, nil
 }
 
-
 func (l *lookup) getOverdriveAbility(abilityReference AbilityReference) (OverdriveAbility, error) {
 	key := createLookupKey(abilityReference)
 
@@ -150,7 +145,6 @@ func (l *lookup) getOverdriveAbility(abilityReference AbilityReference) (Overdri
 
 	return ability, nil
 }
-
 
 func (l *lookup) getPlayerAbility(abilityReference AbilityReference) (PlayerAbility, error) {
 	key := createLookupKey(abilityReference)
@@ -163,7 +157,6 @@ func (l *lookup) getPlayerAbility(abilityReference AbilityReference) (PlayerAbil
 	return ability, nil
 }
 
-
 func (l *lookup) getTriggerCommand(abilityReference AbilityReference) (TriggerCommand, error) {
 	key := createLookupKey(abilityReference)
 
@@ -174,7 +167,6 @@ func (l *lookup) getTriggerCommand(abilityReference AbilityReference) (TriggerCo
 
 	return command, nil
 }
-
 
 func (l *lookup) getAeon(aeonName string) (Aeon, error) {
 	playerUnit := PlayerUnit{
@@ -191,7 +183,6 @@ func (l *lookup) getAeon(aeonName string) (Aeon, error) {
 	return aeon, nil
 }
 
-
 func (l *lookup) getAeonCommand(commandName string) (AeonCommand, error) {
 	command, found := l.aeonCommands[commandName]
 	if !found {
@@ -201,7 +192,6 @@ func (l *lookup) getAeonCommand(commandName string) (AeonCommand, error) {
 	return command, nil
 }
 
-
 func (l *lookup) getAffinity(affinityName string) (Affinity, error) {
 	affinity, found := l.affinities[affinityName]
 	if !found {
@@ -210,7 +200,6 @@ func (l *lookup) getAffinity(affinityName string) (Affinity, error) {
 
 	return affinity, nil
 }
-
 
 func (l *lookup) getArea(locationArea LocationArea) (Area, error) {
 	key := createLookupKey(locationArea)
@@ -223,7 +212,6 @@ func (l *lookup) getArea(locationArea LocationArea) (Area, error) {
 	return area, nil
 }
 
-
 func (l *lookup) getAutoAbility(abilityName string) (AutoAbility, error) {
 	autoAbility, found := l.autoAbilities[abilityName]
 	if !found {
@@ -233,7 +221,6 @@ func (l *lookup) getAutoAbility(abilityName string) (AutoAbility, error) {
 	return autoAbility, nil
 }
 
-
 func (l *lookup) getCelestialWeapon(weaponName string) (CelestialWeapon, error) {
 	weapon, found := l.celestialWeapons[weaponName]
 	if !found {
@@ -242,7 +229,6 @@ func (l *lookup) getCelestialWeapon(weaponName string) (CelestialWeapon, error) 
 
 	return weapon, nil
 }
-
 
 func (l *lookup) getCharacter(charName string) (Character, error) {
 	playerUnit := PlayerUnit{
@@ -259,7 +245,6 @@ func (l *lookup) getCharacter(charName string) (Character, error) {
 	return character, nil
 }
 
-
 func (l *lookup) getCharacterClass(className string) (CharacterClass, error) {
 	class, found := l.charClasses[className]
 	if !found {
@@ -268,7 +253,6 @@ func (l *lookup) getCharacterClass(className string) (CharacterClass, error) {
 
 	return class, nil
 }
-
 
 func (l *lookup) getElement(elementName string) (Element, error) {
 	element, found := l.elements[elementName]
@@ -279,7 +263,6 @@ func (l *lookup) getElement(elementName string) (Element, error) {
 	return element, nil
 }
 
-
 func (l *lookup) getEquipmentName(equipmentName string) (EquipmentName, error) {
 	equipment, found := l.equipmentNames[equipmentName]
 	if !found {
@@ -288,7 +271,6 @@ func (l *lookup) getEquipmentName(equipmentName string) (EquipmentName, error) {
 
 	return equipment, nil
 }
-
 
 func (l *lookup) getEquipmentTable(tableKey string) (EquipmentTable, error) {
 	equipmentTable, found := l.equipmentTables[tableKey]
@@ -299,7 +281,6 @@ func (l *lookup) getEquipmentTable(tableKey string) (EquipmentTable, error) {
 	return equipmentTable, nil
 }
 
-
 func (l *lookup) getFormationLocation(formationKey string) (FormationLocation, error) {
 	formationLocation, found := l.formationLocations[formationKey]
 	if !found {
@@ -308,7 +289,6 @@ func (l *lookup) getFormationLocation(formationKey string) (FormationLocation, e
 
 	return formationLocation, nil
 }
-
 
 func (l *lookup) getItem(itemName string) (Item, error) {
 	masterItem := MasterItem{
@@ -325,7 +305,6 @@ func (l *lookup) getItem(itemName string) (Item, error) {
 	return item, nil
 }
 
-
 func (l *lookup) getKeyItem(itemName string) (KeyItem, error) {
 	masterItem := MasterItem{
 		Name: itemName,
@@ -341,7 +320,6 @@ func (l *lookup) getKeyItem(itemName string) (KeyItem, error) {
 	return keyItem, nil
 }
 
-
 func (l *lookup) getMasterItem(itemName string) (MasterItem, error) {
 	masterItem, found := l.masterItems[itemName]
 	if !found {
@@ -350,7 +328,6 @@ func (l *lookup) getMasterItem(itemName string) (MasterItem, error) {
 
 	return masterItem, nil
 }
-
 
 func (l *lookup) getMix(mixName string) (Mix, error) {
 	mix, found := l.mixes[mixName]
@@ -361,7 +338,6 @@ func (l *lookup) getMix(mixName string) (Mix, error) {
 	return mix, nil
 }
 
-
 func (l *lookup) getModifier(modifierName string) (Modifier, error) {
 	modifier, found := l.modifiers[modifierName]
 	if !found {
@@ -370,7 +346,6 @@ func (l *lookup) getModifier(modifierName string) (Modifier, error) {
 
 	return modifier, nil
 }
-
 
 func (l *lookup) getMonster(monsterKey string) (Monster, error) {
 	monster, found := l.monsters[monsterKey]
@@ -381,7 +356,6 @@ func (l *lookup) getMonster(monsterKey string) (Monster, error) {
 	return monster, nil
 }
 
-
 func (l *lookup) getOverdriveCommand(commandName string) (OverdriveCommand, error) {
 	command, found := l.overdriveCommands[commandName]
 	if !found {
@@ -390,7 +364,6 @@ func (l *lookup) getOverdriveCommand(commandName string) (OverdriveCommand, erro
 
 	return command, nil
 }
-
 
 func (l *lookup) getOverdrive(ability Ability) (Overdrive, error) {
 	key := createLookupKey(ability)
@@ -403,7 +376,6 @@ func (l *lookup) getOverdrive(ability Ability) (Overdrive, error) {
 	return overdrive, nil
 }
 
-
 func (l *lookup) getOverdriveMode(modeName string) (OverdriveMode, error) {
 	mode, found := l.overdriveModes[modeName]
 	if !found {
@@ -412,7 +384,6 @@ func (l *lookup) getOverdriveMode(modeName string) (OverdriveMode, error) {
 
 	return mode, nil
 }
-
 
 func (l *lookup) getPosition(positionKey string) (BlitzballPosition, error) {
 	position, found := l.positions[positionKey]
@@ -423,7 +394,6 @@ func (l *lookup) getPosition(positionKey string) (BlitzballPosition, error) {
 	return position, nil
 }
 
-
 func (l *lookup) getProperty(propertyName string) (Property, error) {
 	property, found := l.properties[propertyName]
 	if !found {
@@ -432,7 +402,6 @@ func (l *lookup) getProperty(propertyName string) (Property, error) {
 
 	return property, nil
 }
-
 
 func (l *lookup) getSidequest(questName string) (Sidequest, error) {
 	quest := Quest{
@@ -449,7 +418,6 @@ func (l *lookup) getSidequest(questName string) (Sidequest, error) {
 	return sidequest, nil
 }
 
-
 func (l *lookup) getQuest(quest Quest) (Quest, error) {
 	key := createLookupKey(quest)
 
@@ -460,7 +428,6 @@ func (l *lookup) getQuest(quest Quest) (Quest, error) {
 
 	return quest, nil
 }
-
 
 func (l *lookup) getSubquest(questName string) (Subquest, error) {
 	quest := Quest{
@@ -477,7 +444,6 @@ func (l *lookup) getSubquest(questName string) (Subquest, error) {
 	return subquest, nil
 }
 
-
 func (l *lookup) getShop(shopKey string) (Shop, error) {
 	shop, found := l.shops[shopKey]
 	if !found {
@@ -486,7 +452,6 @@ func (l *lookup) getShop(shopKey string) (Shop, error) {
 
 	return shop, nil
 }
-
 
 func (l *lookup) getSong(songName string) (Song, error) {
 	song, found := l.songs[songName]
@@ -497,7 +462,6 @@ func (l *lookup) getSong(songName string) (Song, error) {
 	return song, nil
 }
 
-
 func (l *lookup) getStat(statName string) (Stat, error) {
 	stat, found := l.stats[statName]
 	if !found {
@@ -506,7 +470,6 @@ func (l *lookup) getStat(statName string) (Stat, error) {
 
 	return stat, nil
 }
-
 
 func (l *lookup) getStatusCondition(conditionName string) (StatusCondition, error) {
 	condition, found := l.statusConditions[conditionName]
@@ -517,7 +480,6 @@ func (l *lookup) getStatusCondition(conditionName string) (StatusCondition, erro
 	return condition, nil
 }
 
-
 func (l *lookup) getSubmenu(menuName string) (Submenu, error) {
 	submenu, found := l.submenus[menuName]
 	if !found {
@@ -526,7 +488,6 @@ func (l *lookup) getSubmenu(menuName string) (Submenu, error) {
 
 	return submenu, nil
 }
-
 
 func (l *lookup) getTreasure(treasureKey string) (Treasure, error) {
 	treasure, found := l.treasures[treasureKey]

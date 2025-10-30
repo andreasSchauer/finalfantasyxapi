@@ -66,6 +66,7 @@ CREATE TABLE j_battle_interactions_modifier_changes (
 CREATE TABLE j_damages_damage_calc (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
+    ability_id INTEGER NOT NULL REFERENCES abilities(id),
     damage_id INTEGER NOT NULL REFERENCES damages(id),
     ability_damage_id INTEGER NOT NULL REFERENCES ability_damages(id)
 );

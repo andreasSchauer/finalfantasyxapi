@@ -202,7 +202,7 @@ func (l *lookup) getSeeders() []seeder {
 		{
 			name: 		"player abilities",
 			seedFunc: 	l.seedPlayerAbilities,
-			relFunc: 	nil,
+			relFunc: 	l.createPlayerAbilitiesRelationships,
 		},
 		{
 			name: 		"enemy abilities",
