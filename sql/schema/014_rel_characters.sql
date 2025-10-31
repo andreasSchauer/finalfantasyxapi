@@ -57,12 +57,14 @@ CREATE TABLE default_overdrive_abilities (
 
 
 ALTER TABLE aeons
-ADD COLUMN area_id INTEGER REFERENCES areas(id);
+ADD COLUMN area_id INTEGER REFERENCES areas(id),
+ADD COLUMN accuracy_id INTEGER REFERENCES ability_accuracies(id);
 
 
 
 -- +goose Down
 ALTER TABLE aeons
+DROP COLUMN IF EXISTS accuracy_id,
 DROP COLUMN IF EXISTS area_id;
 
 DROP TABLE IF EXISTS default_overdrive_abilities;

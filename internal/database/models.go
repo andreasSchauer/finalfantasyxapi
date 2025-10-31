@@ -2389,10 +2389,8 @@ type Aeon struct {
 	PhysAtkDamageConstant sql.NullInt32
 	PhysAtkRange          interface{}
 	PhysAtkShatterRate    interface{}
-	PhysAtkAccSource      NullAccuracySource
-	PhysAtkHitChance      interface{}
-	PhysAtkAccModifier    sql.NullFloat64
 	AreaID                sql.NullInt32
+	AccuracyID            sql.NullInt32
 }
 
 type AeonCommand struct {
@@ -2800,14 +2798,6 @@ type JAutoAbilitiesStatChange struct {
 	StatChangeID  int32
 }
 
-type JBattleInteractionDamage struct {
-	ID                  int32
-	DataHash            string
-	AbilityID           int32
-	BattleInteractionID int32
-	DamageID            int32
-}
-
 type JBattleInteractionsAffectedBy struct {
 	ID                  int32
 	DataHash            string
@@ -2822,6 +2812,14 @@ type JBattleInteractionsCopiedStatusCondition struct {
 	AbilityID           int32
 	BattleInteractionID int32
 	InflictedStatusID   int32
+}
+
+type JBattleInteractionsDamage struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	DamageID            int32
 }
 
 type JBattleInteractionsInflictedDelay struct {

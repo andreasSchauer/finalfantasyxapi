@@ -42,10 +42,7 @@ CREATE TABLE aeons (
     battles_to_regenerate INTEGER NOT NULL,
     phys_atk_damage_constant INTEGER,
     phys_atk_range distance,
-    phys_atk_shatter_rate uint8,
-    phys_atk_acc_source accuracy_source,
-    phys_atk_hit_chance uint8,
-    phys_atk_acc_modifier REAL
+    phys_atk_shatter_rate uint8
 );
 
 

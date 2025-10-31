@@ -60,7 +60,7 @@ CREATE TABLE ability_accuracies (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     acc_source acc_source_type NOT NULL,
-    hit_chance uint8 NOT NULL,
+    hit_chance uint8,
     acc_modifier REAL
 );
 

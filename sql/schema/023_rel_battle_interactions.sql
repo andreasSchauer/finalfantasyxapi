@@ -3,7 +3,7 @@ ALTER TABLE battle_interactions
 ADD COLUMN damage_id INTEGER REFERENCES damages(id);
 
 
-CREATE TABLE j_battle_interaction_damage (
+CREATE TABLE j_battle_interactions_damage (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     ability_id INTEGER NOT NULL REFERENCES abilities(id),
@@ -97,7 +97,7 @@ DROP TABLE IF EXISTS j_battle_interactions_removed_status_conditions;
 DROP TABLE IF EXISTS j_battle_interactions_inflicted_status_conditions;
 DROP TABLE IF EXISTS j_battle_interactions_inflicted_delay;
 DROP TABLE IF EXISTS j_battle_interactions_affected_by;
-DROP TABLE IF EXISTS j_battle_interaction_damage;
+DROP TABLE IF EXISTS j_battle_interactions_damage;
 
 ALTER TABLE battle_interactions
 DROP COLUMN IF EXISTS damage_id;

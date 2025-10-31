@@ -11,8 +11,8 @@ import (
 type Aeon struct {
 	ID int32
 	PlayerUnit
-	UnlockCondition     string       `json:"unlock_condition"`
-	LocationArea        LocationArea `json:"location_area"`
+	UnlockCondition     string       	`json:"unlock_condition"`
+	LocationArea        LocationArea 	`json:"location_area"`
 	AreaID              *int32
 	Category            *string         `json:"category"`
 	IsOptional          bool            `json:"is_optional"`
@@ -23,9 +23,7 @@ type Aeon struct {
 	PhysAtkDmgConstant  *int32          `json:"phys_atk_damage_constant"`
 	PhysAtkRange        *int32          `json:"phys_atk_range"`
 	PhysAtkShatterRate  *int32          `json:"phys_atk_shatter_rate"`
-	PhysAtkAccSource    *string         `json:"phys_atk_acc_source"`
-	PhysAtkHitChance    *int32          `json:"phys_atk_hit_chance"`
-	PhysAtkAccModifier  *float32        `json:"phys_atk_acc_modifier"`
+	PhysAtkAccuracy		*Accuracy       `json:"phys_atk_accuracy"`
 }
 
 func (a Aeon) ToHashFields() []any {
@@ -38,9 +36,7 @@ func (a Aeon) ToHashFields() []any {
 		derefOrNil(a.PhysAtkDmgConstant),
 		derefOrNil(a.PhysAtkRange),
 		derefOrNil(a.PhysAtkShatterRate),
-		derefOrNil(a.PhysAtkAccSource),
-		derefOrNil(a.PhysAtkHitChance),
-		derefOrNil(a.PhysAtkAccModifier),
+		ObjPtrToHashID(a.PhysAtkAccuracy),
 	}
 }
 
@@ -96,9 +92,6 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 				PhysAtkDamageConstant: getNullInt32(aeon.PhysAtkDmgConstant),
 				PhysAtkRange:          getNullInt32(aeon.PhysAtkRange),
 				PhysAtkShatterRate:    getNullInt32(aeon.PhysAtkShatterRate),
-				PhysAtkAccSource:      nullAccuracySource(aeon.PhysAtkAccSource),
-				PhysAtkHitChance:      getNullInt32(aeon.PhysAtkHitChance),
-				PhysAtkAccModifier:    getNullFloat64(aeon.PhysAtkAccModifier),
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't create Aeon: %s: %v", aeon.Name, err)
@@ -138,29 +131,24 @@ func (l *lookup) createAeonsRelationships(db *database.Queries, dbConn *sql.DB) 
 				return err
 			}
 
+			aeon.PhysAtkAccuracy, err = seedObjPtrAssignFK(qtx, aeon.PhysAtkAccuracy, l.seedAccuracy)
+			if err != nil {
+				return err
+			}
+
 			err = qtx.UpdateAeon(context.Background(), database.UpdateAeonParams{
-				DataHash:              generateDataHash(aeon),
-				AreaID:                getNullInt32(aeon.AreaID),
-				ID:                    aeon.ID,
+				DataHash:		generateDataHash(aeon),
+				AreaID:         getNullInt32(aeon.AreaID),
+				AccuracyID: 	ObjPtrToNullInt32ID(aeon.PhysAtkAccuracy),
+				ID:             aeon.ID,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't update aeon: %s: %v", aeon.Name, err)
 			}
 
-			for _, baseStat := range aeon.BaseStats {
-				junction, err := createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
-				if err != nil {
-					return err
-				}
-
-				err = qtx.CreateAeonsBaseStatJunction(context.Background(), database.CreateAeonsBaseStatJunctionParams{
-					DataHash:   generateDataHash(junction),
-					AeonID:     junction.ParentID,
-					BaseStatID: junction.ChildID,
-				})
-				if err != nil {
-					return err
-				}
+			err = l.seedAeonBaseStats(qtx, aeon)
+			if err != nil {
+				return err
 			}
 
 			err = l.createAeonEquipmentRelationships(qtx, aeon, string(database.EquipTypeWeapon), aeon.Weapon)
@@ -176,6 +164,28 @@ func (l *lookup) createAeonsRelationships(db *database.Queries, dbConn *sql.DB) 
 		return nil
 	})
 }
+
+
+func (l *lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon) error {
+	for _, baseStat := range aeon.BaseStats {
+		junction, err := createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateAeonsBaseStatJunction(context.Background(), database.CreateAeonsBaseStatJunctionParams{
+			DataHash:   generateDataHash(junction),
+			AeonID:     junction.ParentID,
+			BaseStatID: junction.ChildID,
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 
 func (l *lookup) createAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon, equipType string, abilityList []AeonEquipment) error {
 	for _, entry := range abilityList {

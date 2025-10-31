@@ -12,14 +12,14 @@ import (
 type Accuracy struct {
 	ID					int32
 	AccSource			string		`json:"acc_source"`
-	HitChance			int32		`json:"hit_chance"`
+	HitChance			*int32		`json:"hit_chance"`
 	AccModifier			*float32	`json:"acc_modifier"`
 }
 
 func (a Accuracy) ToHashFields() []any {
 	return []any{
 		a.AccSource,
-		a.HitChance,
+		derefOrNil(a.HitChance),
 		derefOrNil(a.AccModifier),
 	}
 }
@@ -34,7 +34,7 @@ func (l *lookup) seedAccuracy(qtx *database.Queries, accuracy Accuracy) (Accurac
 	dbAccuracy, err := qtx.CreateAbilityAccuracy(context.Background(), database.CreateAbilityAccuracyParams{
 		DataHash: 		generateDataHash(accuracy),
 		AccSource: 		database.AccSourceType(accuracy.AccSource),
-		HitChance: 		accuracy.HitChance,
+		HitChance: 		getNullInt32(accuracy.HitChance),
 		AccModifier: 	getNullFloat64(accuracy.AccModifier),
 	})
 	if err != nil {

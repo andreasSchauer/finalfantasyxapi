@@ -19,8 +19,8 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateAeon :one
-INSERT INTO aeons (data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+INSERT INTO aeons (data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeons.data_hash
 RETURNING *;
 
@@ -28,8 +28,9 @@ RETURNING *;
 -- name: UpdateAeon :exec
 UPDATE aeons
 SET data_hash = $1,
-    area_id = $2
-WHERE id = $3;
+    area_id = $2,
+    accuracy_id = $3
+WHERE id = $4;
 
 
 -- name: CreateCharacterClass :one

@@ -11,10 +11,10 @@ import (
 )
 
 const createAeon = `-- name: CreateAeon :one
-INSERT INTO aeons (data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+INSERT INTO aeons (data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeons.data_hash
-RETURNING id, data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, phys_atk_acc_source, phys_atk_hit_chance, phys_atk_acc_modifier, area_id
+RETURNING id, data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, area_id, accuracy_id
 `
 
 type CreateAeonParams struct {
@@ -26,9 +26,6 @@ type CreateAeonParams struct {
 	PhysAtkDamageConstant sql.NullInt32
 	PhysAtkRange          interface{}
 	PhysAtkShatterRate    interface{}
-	PhysAtkAccSource      NullAccuracySource
-	PhysAtkHitChance      interface{}
-	PhysAtkAccModifier    sql.NullFloat64
 }
 
 func (q *Queries) CreateAeon(ctx context.Context, arg CreateAeonParams) (Aeon, error) {
@@ -41,9 +38,6 @@ func (q *Queries) CreateAeon(ctx context.Context, arg CreateAeonParams) (Aeon, e
 		arg.PhysAtkDamageConstant,
 		arg.PhysAtkRange,
 		arg.PhysAtkShatterRate,
-		arg.PhysAtkAccSource,
-		arg.PhysAtkHitChance,
-		arg.PhysAtkAccModifier,
 	)
 	var i Aeon
 	err := row.Scan(
@@ -56,10 +50,8 @@ func (q *Queries) CreateAeon(ctx context.Context, arg CreateAeonParams) (Aeon, e
 		&i.PhysAtkDamageConstant,
 		&i.PhysAtkRange,
 		&i.PhysAtkShatterRate,
-		&i.PhysAtkAccSource,
-		&i.PhysAtkHitChance,
-		&i.PhysAtkAccModifier,
 		&i.AreaID,
+		&i.AccuracyID,
 	)
 	return i, err
 }
@@ -286,17 +278,24 @@ func (q *Queries) CreatePlayerUnitsCharacterClassJunction(ctx context.Context, a
 const updateAeon = `-- name: UpdateAeon :exec
 UPDATE aeons
 SET data_hash = $1,
-    area_id = $2
-WHERE id = $3
+    area_id = $2,
+    accuracy_id = $3
+WHERE id = $4
 `
 
 type UpdateAeonParams struct {
-	DataHash string
-	AreaID   sql.NullInt32
-	ID       int32
+	DataHash   string
+	AreaID     sql.NullInt32
+	AccuracyID sql.NullInt32
+	ID         int32
 }
 
 func (q *Queries) UpdateAeon(ctx context.Context, arg UpdateAeonParams) error {
-	_, err := q.db.ExecContext(ctx, updateAeon, arg.DataHash, arg.AreaID, arg.ID)
+	_, err := q.db.ExecContext(ctx, updateAeon,
+		arg.DataHash,
+		arg.AreaID,
+		arg.AccuracyID,
+		arg.ID,
+	)
 	return err
 }

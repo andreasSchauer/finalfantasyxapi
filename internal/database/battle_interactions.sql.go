@@ -130,7 +130,7 @@ func (q *Queries) CreateBattleIntCopiedConditionsJunction(ctx context.Context, a
 }
 
 const createBattleIntDamageJunction = `-- name: CreateBattleIntDamageJunction :exec
-INSERT INTO j_battle_interaction_damage (data_hash, ability_id, battle_interaction_id, damage_id)
+INSERT INTO j_battle_interactions_damage (data_hash, ability_id, battle_interaction_id, damage_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
