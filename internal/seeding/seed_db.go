@@ -207,12 +207,12 @@ func (l *lookup) getSeeders() []seeder {
 		{
 			name: 		"enemy abilities",
 			seedFunc: 	l.seedEnemyAbilities,
-			relFunc: 	nil,
+			relFunc: 	l.createEnemyAbilitiesRelationships,
 		},
 		{
 			name: 		"overdrive abilities",
 			seedFunc: 	l.seedOverdriveAbilities,
-			relFunc: 	nil,
+			relFunc: 	l.createOverdriveAbilitiesRelationships,
 		},
 		{
 			name: 		"trigger commands",
@@ -232,7 +232,7 @@ func (l *lookup) getSeeders() []seeder {
 		{
 			name: 		"items",
 			seedFunc: 	l.seedItems,
-			relFunc: 	nil,
+			relFunc: 	l.createItemsRelationships,
 		},
 		{
 			name: 		"key items",

@@ -36,6 +36,22 @@ func (j ThreeWayJunction) ToHashFields() []any {
 }
 
 
+type FourWayJunction struct {
+	GreatGrandparentID	int32
+	ThreeWayJunction
+}
+
+
+func (j FourWayJunction) ToHashFields() []any {
+	return []any{
+		j.GreatGrandparentID,
+		j.GrandparentID,
+		j.ParentID,
+		j.ChildID,
+	}
+}
+
+
 func createJunction[T any, P, C HasID](parent P, childKey T, lookup func(T) (C, error)) (Junction, error) {
 	child, err := lookup(childKey)
 	if err != nil {
@@ -66,7 +82,7 @@ func createJunctionSeed[P, C HasID](qtx *database.Queries, parent P, child C, se
 }
 
 
-// first check, if they are needed
+
 func createThreeWayJunction[T any, GP, P, C HasID](grandParent GP, parent P, childKey T, lookup func(T) (C, error)) (ThreeWayJunction, error) {
 	junction, err := createJunction(parent, childKey, lookup)
 	if err != nil {
@@ -94,4 +110,19 @@ func createThreeWayJunctionSeed[GP, P, C HasID](qtx *database.Queries, grandPare
 	}
 
 	return threeWay, nil
+}
+
+
+func createFourWayJunctionSeed[GGP, GP, P, C HasID](qtx *database.Queries, greatGrandParent GGP, grandParent GP, parent P, child C, seed func(*database.Queries, C) (C, error)) (FourWayJunction, error) {
+	threeWay, err := createThreeWayJunctionSeed(qtx, grandParent, parent, child, seed)
+	if err != nil {
+		return FourWayJunction{}, fmt.Errorf("couldn't seed object and create four way junction: %v", err)
+	}
+
+	fourWay := FourWayJunction{
+		GreatGrandparentID: greatGrandParent.GetID(),
+		ThreeWayJunction: 	threeWay,
+	}
+
+	return fourWay, nil
 }

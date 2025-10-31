@@ -20,7 +20,7 @@ CREATE TYPE damage_type AS ENUM ('physical', 'magical', 'special');
 CREATE TYPE damage_formula AS ENUM ('str-vs-def', 'str-ign-def', 'mag-vs-mdf', 'mag-ign-mdf', 'percentage-current', 'percentage-max', 'healing', 'special-no-var', 'special-var', 'special-magic', 'special-gil', 'special-kills', 'special-9999', 'fixed-9999', 'user-max-hp', 'swallowed-a', 'swallowed-b');
 
 
-CREATE TYPE duration_type AS ENUM ('blocks', 'endless', 'instant', 'turns', 'user-turns');
+CREATE TYPE duration_type AS ENUM ('blocks', 'endless', 'instant', 'turns', 'user-turns', 'auto');
 
 
 CREATE TYPE ctb_attack_type AS ENUM ('attack', 'heal');
@@ -71,7 +71,6 @@ CREATE TABLE battle_interactions (
     target target_type NOT NULL,
     based_on_phys_attack BOOLEAN NOT NULL,
     range distance,
-    damage_id INTEGER REFERENCES damages(id),
     shatter_rate uint8,
     accuracy_id INTEGER NOT NULL REFERENCES ability_accuracies(id),
     hit_amount INTEGER NOT NULL,

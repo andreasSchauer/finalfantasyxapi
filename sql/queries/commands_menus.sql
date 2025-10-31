@@ -34,7 +34,7 @@ ON CONFLICT(data_hash) DO NOTHING;
 -- name: CreateOverdriveCommand :one
 INSERT INTO overdrive_commands (data_hash, name, description, rank, topmenu)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
 RETURNING *;
 
 

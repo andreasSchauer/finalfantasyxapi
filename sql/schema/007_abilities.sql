@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TYPE ability_type AS ENUM ('player-ability', 'enemy-ability', 'overdrive-ability', 'trigger-command', 'item');
+CREATE TYPE ability_type AS ENUM ('player-ability', 'enemy-ability', 'overdrive-ability', 'trigger-command', 'item-ability');
 
 
 CREATE TABLE ability_attributes (

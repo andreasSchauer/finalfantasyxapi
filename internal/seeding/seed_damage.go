@@ -92,18 +92,20 @@ func (l *lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error
 
 func (l *lookup) seedAbilityDamages(qtx *database.Queries, damage Damage) error {
 	ability := l.currentAbility
+	battleInteraction := l.currentBI
 
 	for _, abilityDamage := range damage.DamageCalc {
-		threeWay, err := createThreeWayJunctionSeed(qtx, ability, damage, abilityDamage, l.seedAbilityDamage)
+		fourWay, err := createFourWayJunctionSeed(qtx, ability, battleInteraction, damage, abilityDamage, l.seedAbilityDamage)
 		if err != nil {
 			return err
 		}
 
 		err = qtx.CreateDamagesDamageCalcJunction(context.Background(), database.CreateDamagesDamageCalcJunctionParams{
-			DataHash:        generateDataHash(threeWay),
-			AbilityID:       threeWay.GrandparentID,
-			DamageID:        threeWay.ParentID,
-			AbilityDamageID: threeWay.ChildID,
+			DataHash:        		generateDataHash(fourWay),
+			AbilityID:       		fourWay.GreatGrandparentID,
+			BattleInteractionID: 	fourWay.GrandparentID,
+			DamageID:        		fourWay.ParentID,
+			AbilityDamageID: 		fourWay.ChildID,
 		})
 		if err != nil {
 			return fmt.Errorf("couldn't create damage junction: %v", err)

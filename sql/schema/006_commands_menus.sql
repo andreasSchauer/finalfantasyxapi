@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TYPE target_type AS ENUM ('self', 'single-character', 'single-enemy', 'single-target', 'random-enemy', 'all-characters', 'all-enemies', 'target-party', 'everyone');
+CREATE TYPE target_type AS ENUM ('self', 'single-character', 'single-enemy', 'single-target', 'random-character', 'random-enemy', 'all-characters', 'all-enemies', 'target-party', 'n-targets', 'everyone');
 
 
 CREATE TYPE topmenu_type AS ENUM ('main', 'left', 'right', 'hidden');

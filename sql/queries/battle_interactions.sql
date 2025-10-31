@@ -13,8 +13,8 @@ RETURNING *;
 
 
 -- name: CreateDamagesDamageCalcJunction :exec
-INSERT INTO j_damages_damage_calc (data_hash, ability_id, damage_id, ability_damage_id)
-VALUES ($1, $2, $3, $4)
+INSERT INTO j_damages_damage_calc (data_hash, ability_id, battle_interaction_id, damage_id, ability_damage_id)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
@@ -54,10 +54,16 @@ RETURNING *;
 
 
 -- name: CreateBattleInteraction :one
-INSERT INTO battle_interactions (data_hash, target, based_on_phys_attack, range, damage_id, shatter_rate, accuracy_id, hit_amount, special_action)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO battle_interactions (data_hash, target, based_on_phys_attack, range, shatter_rate, accuracy_id, hit_amount, special_action)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = battle_interactions.data_hash
 RETURNING *;
+
+
+-- name: CreateBattleIntDamageJunction :exec
+INSERT INTO j_battle_interaction_damage (data_hash, ability_id, battle_interaction_id, damage_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateBattleIntAffectedByJunction :exec

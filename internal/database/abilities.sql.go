@@ -30,7 +30,7 @@ func (q *Queries) CreateAbilitiesBattleInteractionsJunction(ctx context.Context,
 const createAbility = `-- name: CreateAbility :one
 INSERT INTO abilities (data_hash, name, version, specification, attributes_id, type)
 VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = abilities.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = abilities.data_hash
 RETURNING id, data_hash, name, version, specification, attributes_id, type
 `
 
@@ -68,7 +68,7 @@ func (q *Queries) CreateAbility(ctx context.Context, arg CreateAbilityParams) (A
 const createAbilityAttributes = `-- name: CreateAbilityAttributes :one
 INSERT INTO ability_attributes (data_hash, rank, appears_in_help_bar, can_copycat)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = ability_attributes.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_attributes.data_hash
 RETURNING id, data_hash, rank, appears_in_help_bar, can_copycat
 `
 
@@ -100,7 +100,7 @@ func (q *Queries) CreateAbilityAttributes(ctx context.Context, arg CreateAbility
 const createEnemyAbility = `-- name: CreateEnemyAbility :one
 INSERT INTO enemy_abilities (data_hash, ability_id, effect)
 VALUES ($1, $2, $3)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = enemy_abilities.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = enemy_abilities.data_hash
 RETURNING id, data_hash, ability_id, effect
 `
 
@@ -174,10 +174,27 @@ func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams
 	return i, err
 }
 
+const createOverdriveAbilitiesRelatedStatsJunction = `-- name: CreateOverdriveAbilitiesRelatedStatsJunction :exec
+INSERT INTO j_overdrive_abilities_related_stats (data_hash, overdrive_ability_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateOverdriveAbilitiesRelatedStatsJunctionParams struct {
+	DataHash           string
+	OverdriveAbilityID int32
+	StatID             int32
+}
+
+func (q *Queries) CreateOverdriveAbilitiesRelatedStatsJunction(ctx context.Context, arg CreateOverdriveAbilitiesRelatedStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createOverdriveAbilitiesRelatedStatsJunction, arg.DataHash, arg.OverdriveAbilityID, arg.StatID)
+	return err
+}
+
 const createOverdriveAbility = `-- name: CreateOverdriveAbility :one
 INSERT INTO overdrive_abilities (data_hash, ability_id)
 VALUES ($1, $2)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = overdrive_abilities.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_abilities.data_hash
 RETURNING id, data_hash, ability_id
 `
 
@@ -210,11 +227,45 @@ func (q *Queries) CreateOverdrivesOverdriveAbilitiesJunction(ctx context.Context
 	return err
 }
 
+const createPlayerAbilitiesLearnedByJunction = `-- name: CreatePlayerAbilitiesLearnedByJunction :exec
+INSERT INTO j_player_abilities_learned_by (data_hash, player_ability_id, character_class_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePlayerAbilitiesLearnedByJunctionParams struct {
+	DataHash         string
+	PlayerAbilityID  int32
+	CharacterClassID int32
+}
+
+func (q *Queries) CreatePlayerAbilitiesLearnedByJunction(ctx context.Context, arg CreatePlayerAbilitiesLearnedByJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createPlayerAbilitiesLearnedByJunction, arg.DataHash, arg.PlayerAbilityID, arg.CharacterClassID)
+	return err
+}
+
+const createPlayerAbilitiesRelatedStatsJunction = `-- name: CreatePlayerAbilitiesRelatedStatsJunction :exec
+INSERT INTO j_player_abilities_related_stats (data_hash, player_ability_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePlayerAbilitiesRelatedStatsJunctionParams struct {
+	DataHash        string
+	PlayerAbilityID int32
+	StatID          int32
+}
+
+func (q *Queries) CreatePlayerAbilitiesRelatedStatsJunction(ctx context.Context, arg CreatePlayerAbilitiesRelatedStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createPlayerAbilitiesRelatedStatsJunction, arg.DataHash, arg.PlayerAbilityID, arg.StatID)
+	return err
+}
+
 const createPlayerAbility = `-- name: CreatePlayerAbility :one
 INSERT INTO player_abilities (data_hash, ability_id, description, effect, topmenu, can_use_outside_battle, mp_cost, cursor)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = player_abilities.data_hash
-RETURNING id, data_hash, ability_id, description, effect, topmenu, can_use_outside_battle, mp_cost, cursor
+RETURNING id, data_hash, ability_id, description, effect, topmenu, can_use_outside_battle, mp_cost, cursor, submenu_id, open_submenu_id, standard_grid_char_id, expert_grid_char_id, aeon_learn_item_id
 `
 
 type CreatePlayerAbilityParams struct {
@@ -250,6 +301,11 @@ func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbili
 		&i.CanUseOutsideBattle,
 		&i.MpCost,
 		&i.Cursor,
+		&i.SubmenuID,
+		&i.OpenSubmenuID,
+		&i.StandardGridCharID,
+		&i.ExpertGridCharID,
+		&i.AeonLearnItemID,
 	)
 	return i, err
 }
@@ -257,7 +313,7 @@ func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbili
 const createTriggerCommand = `-- name: CreateTriggerCommand :one
 INSERT INTO trigger_commands (data_hash, ability_id, description, effect, topmenu, cursor)
 VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = trigger_commands.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = trigger_commands.data_hash
 RETURNING id, data_hash, ability_id, description, effect, topmenu, cursor
 `
 
@@ -292,6 +348,23 @@ func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCom
 	return i, err
 }
 
+const createTriggerCommandsRelatedStatsJunction = `-- name: CreateTriggerCommandsRelatedStatsJunction :exec
+INSERT INTO j_trigger_commands_related_stats (data_hash, trigger_command_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateTriggerCommandsRelatedStatsJunctionParams struct {
+	DataHash         string
+	TriggerCommandID int32
+	StatID           int32
+}
+
+func (q *Queries) CreateTriggerCommandsRelatedStatsJunction(ctx context.Context, arg CreateTriggerCommandsRelatedStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createTriggerCommandsRelatedStatsJunction, arg.DataHash, arg.TriggerCommandID, arg.StatID)
+	return err
+}
+
 const updateOverdrive = `-- name: UpdateOverdrive :exec
 UPDATE overdrives
 SET data_hash = $1,
@@ -312,6 +385,40 @@ func (q *Queries) UpdateOverdrive(ctx context.Context, arg UpdateOverdriveParams
 		arg.DataHash,
 		arg.OdCommandID,
 		arg.CharacterClassID,
+		arg.ID,
+	)
+	return err
+}
+
+const updatePlayerAbility = `-- name: UpdatePlayerAbility :exec
+UPDATE player_abilities
+SET data_hash = $1,
+    submenu_id = $2,
+    open_submenu_id = $3,
+    standard_grid_char_id = $4,
+    expert_grid_char_id = $5,
+    aeon_learn_item_id = $6
+WHERE id = $7
+`
+
+type UpdatePlayerAbilityParams struct {
+	DataHash           string
+	SubmenuID          sql.NullInt32
+	OpenSubmenuID      sql.NullInt32
+	StandardGridCharID sql.NullInt32
+	ExpertGridCharID   sql.NullInt32
+	AeonLearnItemID    sql.NullInt32
+	ID                 int32
+}
+
+func (q *Queries) UpdatePlayerAbility(ctx context.Context, arg UpdatePlayerAbilityParams) error {
+	_, err := q.db.ExecContext(ctx, updatePlayerAbility,
+		arg.DataHash,
+		arg.SubmenuID,
+		arg.OpenSubmenuID,
+		arg.StandardGridCharID,
+		arg.ExpertGridCharID,
+		arg.AeonLearnItemID,
 		arg.ID,
 	)
 	return err

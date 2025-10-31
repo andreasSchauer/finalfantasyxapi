@@ -12,10 +12,22 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = items.data_hash
 RETURNING *;
 
 
+-- name: CreateItemsRelatedStatsJunction :exec
+INSERT INTO j_items_related_stats (data_hash, item_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateItemsAvailableMenusJunction :exec
+INSERT INTO j_items_available_menus (data_hash, item_id, submenu_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
 -- name: CreateItemAbility :one
 INSERT INTO item_abilities (data_hash, item_id, ability_id, cursor)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = item_abilities.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = item_abilities.data_hash
 RETURNING *;
 
 

@@ -63,7 +63,7 @@ func (q *Queries) CreateAgilitySubtier(ctx context.Context, arg CreateAgilitySub
 const createAgilityTier = `-- name: CreateAgilityTier :one
 INSERT INTO agility_tiers (data_hash, min_agility, max_agility, tick_speed, monster_min_icv, monster_max_icv, character_max_icv)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = agility_tiers.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = agility_tiers.data_hash
 RETURNING id, data_hash, min_agility, max_agility, tick_speed, monster_min_icv, monster_max_icv, character_max_icv
 `
 

@@ -7,8 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-// every slice might make use of a three way junction to be uniquely identified:
-// slice item -> BattleInteraction -> Ability
+
 type BattleInteraction struct {
 	ID                        int32
 	Target                    string            `json:"target"`
@@ -74,11 +73,6 @@ func (l *lookup) seedBattleInteractions(qtx *database.Queries, ability Ability, 
 func (l *lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction BattleInteraction) (BattleInteraction, error) {
 	var err error
 
-	battleInteraction.Damage, err = seedObjPtrAssignFK(qtx, battleInteraction.Damage, l.seedDamage)
-	if err != nil {
-		return BattleInteraction{}, err
-	}
-
 	battleInteraction.Accuracy, err = seedObjAssignID(qtx, battleInteraction.Accuracy, l.seedAccuracy)
 	if err != nil {
 		return BattleInteraction{}, err
@@ -89,7 +83,6 @@ func (l *lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 		Target:            database.TargetType(battleInteraction.Target),
 		BasedOnPhysAttack: battleInteraction.BasedOnPhysAttack,
 		Range:             getNullInt32(battleInteraction.Range),
-		DamageID:          ObjPtrToNullInt32ID(battleInteraction.Damage),
 		ShatterRate:       getNullInt32(battleInteraction.ShatterRate),
 		AccuracyID:        battleInteraction.Accuracy.ID,
 		HitAmount:         battleInteraction.HitAmount,
@@ -105,6 +98,28 @@ func (l *lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 }
 
 func (l *lookup) createBattleInteractionRelationships(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
+	
+	l.currentBI = battleInteraction
+	damage := battleInteraction.Damage
+
+	if damage != nil {
+		threeWay, err := createThreeWayJunctionSeed(qtx, ability, battleInteraction, *battleInteraction.Damage, l.seedDamage)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateBattleIntDamageJunction(context.Background(), database.CreateBattleIntDamageJunctionParams{
+			DataHash: generateDataHash(threeWay),
+			AbilityID: threeWay.GrandparentID,
+			BattleInteractionID: threeWay.ParentID,
+			DamageID: threeWay.ChildID,
+		})
+		if err != nil {
+			return err
+		}
+	}
+	
+	
 	functions := []func(*database.Queries, Ability, BattleInteraction) error{
 		l.createBattleIntAffectedBy,
 		l.createBattleIntInflictedDelay,

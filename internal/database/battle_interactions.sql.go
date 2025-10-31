@@ -129,6 +129,29 @@ func (q *Queries) CreateBattleIntCopiedConditionsJunction(ctx context.Context, a
 	return err
 }
 
+const createBattleIntDamageJunction = `-- name: CreateBattleIntDamageJunction :exec
+INSERT INTO j_battle_interaction_damage (data_hash, ability_id, battle_interaction_id, damage_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntDamageJunctionParams struct {
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	DamageID            int32
+}
+
+func (q *Queries) CreateBattleIntDamageJunction(ctx context.Context, arg CreateBattleIntDamageJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntDamageJunction,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.BattleInteractionID,
+		arg.DamageID,
+	)
+	return err
+}
+
 const createBattleIntInflictedConditionsJunction = `-- name: CreateBattleIntInflictedConditionsJunction :exec
 INSERT INTO j_battle_interactions_inflicted_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
 VALUES ($1, $2, $3, $4)
@@ -245,10 +268,10 @@ func (q *Queries) CreateBattleIntStatChangesJunction(ctx context.Context, arg Cr
 }
 
 const createBattleInteraction = `-- name: CreateBattleInteraction :one
-INSERT INTO battle_interactions (data_hash, target, based_on_phys_attack, range, damage_id, shatter_rate, accuracy_id, hit_amount, special_action)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO battle_interactions (data_hash, target, based_on_phys_attack, range, shatter_rate, accuracy_id, hit_amount, special_action)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = battle_interactions.data_hash
-RETURNING id, data_hash, target, based_on_phys_attack, range, damage_id, shatter_rate, accuracy_id, hit_amount, special_action
+RETURNING id, data_hash, target, based_on_phys_attack, range, shatter_rate, accuracy_id, hit_amount, special_action, damage_id
 `
 
 type CreateBattleInteractionParams struct {
@@ -256,7 +279,6 @@ type CreateBattleInteractionParams struct {
 	Target            TargetType
 	BasedOnPhysAttack bool
 	Range             interface{}
-	DamageID          sql.NullInt32
 	ShatterRate       interface{}
 	AccuracyID        int32
 	HitAmount         int32
@@ -269,7 +291,6 @@ func (q *Queries) CreateBattleInteraction(ctx context.Context, arg CreateBattleI
 		arg.Target,
 		arg.BasedOnPhysAttack,
 		arg.Range,
-		arg.DamageID,
 		arg.ShatterRate,
 		arg.AccuracyID,
 		arg.HitAmount,
@@ -282,11 +303,11 @@ func (q *Queries) CreateBattleInteraction(ctx context.Context, arg CreateBattleI
 		&i.Target,
 		&i.BasedOnPhysAttack,
 		&i.Range,
-		&i.DamageID,
 		&i.ShatterRate,
 		&i.AccuracyID,
 		&i.HitAmount,
 		&i.SpecialAction,
+		&i.DamageID,
 	)
 	return i, err
 }
@@ -330,22 +351,24 @@ func (q *Queries) CreateDamage(ctx context.Context, arg CreateDamageParams) (Dam
 }
 
 const createDamagesDamageCalcJunction = `-- name: CreateDamagesDamageCalcJunction :exec
-INSERT INTO j_damages_damage_calc (data_hash, ability_id, damage_id, ability_damage_id)
-VALUES ($1, $2, $3, $4)
+INSERT INTO j_damages_damage_calc (data_hash, ability_id, battle_interaction_id, damage_id, ability_damage_id)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateDamagesDamageCalcJunctionParams struct {
-	DataHash        string
-	AbilityID       int32
-	DamageID        int32
-	AbilityDamageID int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	DamageID            int32
+	AbilityDamageID     int32
 }
 
 func (q *Queries) CreateDamagesDamageCalcJunction(ctx context.Context, arg CreateDamagesDamageCalcJunctionParams) error {
 	_, err := q.db.ExecContext(ctx, createDamagesDamageCalcJunction,
 		arg.DataHash,
 		arg.AbilityID,
+		arg.BattleInteractionID,
 		arg.DamageID,
 		arg.AbilityDamageID,
 	)

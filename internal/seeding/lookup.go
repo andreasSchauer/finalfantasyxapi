@@ -16,10 +16,10 @@ func createLookupKey(l Lookupable) string {
 }
 
 type lookup struct {
-	currentAbility     Ability						// used for seeding of ability damage
+	currentAbility     Ability						// currentAbility and currentBI are
+	currentBI		   BattleInteraction			// used for seeding of ability damage
 	abilities          map[string]Ability
 	enemyAbilities     map[string]EnemyAbility
-	itemAbilities      map[string]ItemAbility
 	overdriveAbilities map[string]OverdriveAbility
 	playerAbilities    map[string]PlayerAbility
 	triggerCommands    map[string]TriggerCommand
@@ -61,7 +61,6 @@ func lookupInit() lookup {
 	return lookup{
 		abilities:          make(map[string]Ability),
 		enemyAbilities:     make(map[string]EnemyAbility),
-		itemAbilities:      make(map[string]ItemAbility),
 		overdriveAbilities: make(map[string]OverdriveAbility),
 		playerAbilities:    make(map[string]PlayerAbility),
 		triggerCommands:    make(map[string]TriggerCommand),
@@ -100,7 +99,6 @@ func lookupInit() lookup {
 	}
 }
 
-// Lookupable for composite keys, string for simple name keys
 
 func (l *lookup) getAbility(abilityReference AbilityReference) (Ability, error) {
 	key := createLookupKey(abilityReference)
@@ -119,17 +117,6 @@ func (l *lookup) getEnemyAbility(abilityReference AbilityReference) (EnemyAbilit
 	ability, found := l.enemyAbilities[key]
 	if !found {
 		return EnemyAbility{}, fmt.Errorf("couldn't find Enemy Ability %s - %d", ability.Name, derefOrNil(ability.Version))
-	}
-
-	return ability, nil
-}
-
-func (l *lookup) getItemAbility(abilityReference AbilityReference) (ItemAbility, error) {
-	key := createLookupKey(abilityReference)
-
-	ability, found := l.itemAbilities[key]
-	if !found {
-		return ItemAbility{}, fmt.Errorf("couldn't find Item Ability %s - %d", ability.Name, derefOrNil(ability.Version))
 	}
 
 	return ability, nil

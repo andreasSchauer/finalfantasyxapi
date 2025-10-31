@@ -60,7 +60,7 @@ func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) (Item, e
 const createItemAbility = `-- name: CreateItemAbility :one
 INSERT INTO item_abilities (data_hash, item_id, ability_id, cursor)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = item_abilities.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = item_abilities.data_hash
 RETURNING id, data_hash, item_id, ability_id, cursor
 `
 
@@ -112,6 +112,40 @@ func (q *Queries) CreateItemAmount(ctx context.Context, arg CreateItemAmountPara
 		&i.Amount,
 	)
 	return i, err
+}
+
+const createItemsAvailableMenusJunction = `-- name: CreateItemsAvailableMenusJunction :exec
+INSERT INTO j_items_available_menus (data_hash, item_id, submenu_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateItemsAvailableMenusJunctionParams struct {
+	DataHash  string
+	ItemID    int32
+	SubmenuID int32
+}
+
+func (q *Queries) CreateItemsAvailableMenusJunction(ctx context.Context, arg CreateItemsAvailableMenusJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createItemsAvailableMenusJunction, arg.DataHash, arg.ItemID, arg.SubmenuID)
+	return err
+}
+
+const createItemsRelatedStatsJunction = `-- name: CreateItemsRelatedStatsJunction :exec
+INSERT INTO j_items_related_stats (data_hash, item_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateItemsRelatedStatsJunctionParams struct {
+	DataHash string
+	ItemID   int32
+	StatID   int32
+}
+
+func (q *Queries) CreateItemsRelatedStatsJunction(ctx context.Context, arg CreateItemsRelatedStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createItemsRelatedStatsJunction, arg.DataHash, arg.ItemID, arg.StatID)
+	return err
 }
 
 const createKeyItem = `-- name: CreateKeyItem :one

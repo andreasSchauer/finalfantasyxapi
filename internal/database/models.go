@@ -61,7 +61,7 @@ const (
 	AbilityTypeEnemyAbility     AbilityType = "enemy-ability"
 	AbilityTypeOverdriveAbility AbilityType = "overdrive-ability"
 	AbilityTypeTriggerCommand   AbilityType = "trigger-command"
-	AbilityTypeItem             AbilityType = "item"
+	AbilityTypeItemAbility      AbilityType = "item-ability"
 )
 
 func (e *AbilityType) Scan(src interface{}) error {
@@ -1033,6 +1033,7 @@ const (
 	DurationTypeInstant   DurationType = "instant"
 	DurationTypeTurns     DurationType = "turns"
 	DurationTypeUserTurns DurationType = "user-turns"
+	DurationTypeAuto      DurationType = "auto"
 )
 
 func (e *DurationType) Scan(src interface{}) error {
@@ -2120,10 +2121,12 @@ const (
 	TargetTypeSingleCharacter TargetType = "single-character"
 	TargetTypeSingleEnemy     TargetType = "single-enemy"
 	TargetTypeSingleTarget    TargetType = "single-target"
+	TargetTypeRandomCharacter TargetType = "random-character"
 	TargetTypeRandomEnemy     TargetType = "random-enemy"
 	TargetTypeAllCharacters   TargetType = "all-characters"
 	TargetTypeAllEnemies      TargetType = "all-enemies"
 	TargetTypeTargetParty     TargetType = "target-party"
+	TargetTypeNTargets        TargetType = "n-targets"
 	TargetTypeEveryone        TargetType = "everyone"
 )
 
@@ -2502,11 +2505,11 @@ type BattleInteraction struct {
 	Target            TargetType
 	BasedOnPhysAttack bool
 	Range             interface{}
-	DamageID          sql.NullInt32
 	ShatterRate       interface{}
 	AccuracyID        int32
 	HitAmount         int32
 	SpecialAction     NullSpecialActionType
+	DamageID          sql.NullInt32
 }
 
 type BlitzballItem struct {
@@ -2797,6 +2800,14 @@ type JAutoAbilitiesStatChange struct {
 	StatChangeID  int32
 }
 
+type JBattleInteractionDamage struct {
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	DamageID            int32
+}
+
 type JBattleInteractionsAffectedBy struct {
 	ID                  int32
 	DataHash            string
@@ -2861,11 +2872,12 @@ type JCharactersBaseStat struct {
 }
 
 type JDamagesDamageCalc struct {
-	ID              int32
-	DataHash        string
-	AbilityID       int32
-	DamageID        int32
-	AbilityDamageID int32
+	ID                  int32
+	DataHash            string
+	AbilityID           int32
+	BattleInteractionID int32
+	DamageID            int32
+	AbilityDamageID     int32
 }
 
 type JEncounterLocationFormation struct {
@@ -2898,6 +2910,20 @@ type JFoundEquipmentAbility struct {
 	AutoAbilityID    int32
 }
 
+type JItemsAvailableMenu struct {
+	ID        int32
+	DataHash  string
+	ItemID    int32
+	SubmenuID int32
+}
+
+type JItemsRelatedStat struct {
+	ID       int32
+	DataHash string
+	ItemID   int32
+	StatID   int32
+}
+
 type JMixesCombination struct {
 	ID          int32
 	DataHash    string
@@ -2920,6 +2946,13 @@ type JMonsterFormationsTriggerCommand struct {
 	TriggerCommandID   int32
 }
 
+type JOverdriveAbilitiesRelatedStat struct {
+	ID                 int32
+	DataHash           string
+	OverdriveAbilityID int32
+	StatID             int32
+}
+
 type JOverdriveModesActionsToLearn struct {
 	ID              int32
 	DataHash        string
@@ -2932,6 +2965,20 @@ type JOverdrivesOverdriveAbility struct {
 	DataHash           string
 	OverdriveID        int32
 	OverdriveAbilityID int32
+}
+
+type JPlayerAbilitiesLearnedBy struct {
+	ID               int32
+	DataHash         string
+	PlayerAbilityID  int32
+	CharacterClassID int32
+}
+
+type JPlayerAbilitiesRelatedStat struct {
+	ID              int32
+	DataHash        string
+	PlayerAbilityID int32
+	StatID          int32
 }
 
 type JPlayerUnitsCharacterClass struct {
@@ -3041,6 +3088,13 @@ type JTreasuresItem struct {
 	DataHash     string
 	TreasureID   int32
 	ItemAmountID int32
+}
+
+type JTriggerCommandsRelatedStat struct {
+	ID               int32
+	DataHash         string
+	TriggerCommandID int32
+	StatID           int32
 }
 
 type KeyItem struct {
@@ -3216,6 +3270,11 @@ type PlayerAbility struct {
 	CanUseOutsideBattle bool
 	MpCost              sql.NullInt32
 	Cursor              NullTargetType
+	SubmenuID           sql.NullInt32
+	OpenSubmenuID       sql.NullInt32
+	StandardGridCharID  sql.NullInt32
+	ExpertGridCharID    sql.NullInt32
+	AeonLearnItemID     sql.NullInt32
 }
 
 type PlayerUnit struct {

@@ -75,7 +75,7 @@ func (q *Queries) CreateAeonCommandsPossibleAbilitiesJunction(ctx context.Contex
 const createOverdriveCommand = `-- name: CreateOverdriveCommand :one
 INSERT INTO overdrive_commands (data_hash, name, description, rank, topmenu)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT (data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
 RETURNING id, data_hash, name, description, rank, topmenu, character_class_id, submenu_id
 `
 

@@ -9,8 +9,10 @@ import (
 )
 
 type EnemyAbility struct {
+	ID					int32
 	Ability
-	Effect *string `json:"effect"`
+	Effect 				*string 			`json:"effect"`
+	BattleInteractions  []BattleInteraction `json:"battle_interactions"`
 }
 
 func (a EnemyAbility) ToHashFields() []any {
@@ -19,6 +21,20 @@ func (a EnemyAbility) ToHashFields() []any {
 		derefOrNil(a.Effect),
 	}
 }
+
+
+func (a EnemyAbility) GetID() int32 {
+	return a.ID
+}
+
+func (a EnemyAbility) GetAbilityRef() AbilityReference {
+	return AbilityReference{
+		Name:        a.Name,
+		Version:     a.Version,
+		AbilityType: string(database.AbilityTypeEnemyAbility),
+	}
+}
+
 
 func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/enemy_abilities.json"
@@ -53,6 +69,38 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 			key := createLookupKey(enemyAbility.Ability)
 			l.enemyAbilities[key] = enemyAbility
 		}
+		return nil
+	})
+}
+
+
+func (l *lookup) createEnemyAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "./data/enemy_abilities.json"
+
+	var enemyAbilities []EnemyAbility
+
+	err := loadJSONFile(string(srcPath), &enemyAbilities)
+	if err != nil {
+		return err
+	}
+
+	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		for _, jsonAbility := range enemyAbilities {
+			abilityRef := jsonAbility.GetAbilityRef()
+
+			ability, err := l.getEnemyAbility(abilityRef)
+			if err != nil {
+				return err
+			}
+
+			l.currentAbility = ability.Ability
+
+			err = l.seedBattleInteractions(qtx, l.currentAbility, ability.BattleInteractions)
+			if err != nil {
+				return err
+			}
+		}
+
 		return nil
 	})
 }
