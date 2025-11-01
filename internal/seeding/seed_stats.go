@@ -64,7 +64,7 @@ func (l *lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) createStatsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/stats.json"
 
 	var stats []Stat

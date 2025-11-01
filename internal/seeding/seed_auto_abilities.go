@@ -98,7 +98,7 @@ func (l *lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) createAutoAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedAutoAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/auto_abilities.json"
 
 	var autoAbilities []AutoAbility
@@ -120,21 +120,21 @@ func (l *lookup) createAutoAbilitiesRelationships(db *database.Queries, dbConn *
 			}
 
 			err = qtx.UpdateAutoAbility(context.Background(), database.UpdateAutoAbilityParams{
-				DataHash:             generateDataHash(autoAbility),
-				GradRcvryStatID:      getNullInt32(autoAbility.GradRecoveryStatID),
-				OnHitElementID:       getNullInt32(autoAbility.OnHitElementID),
-				AddedElemAffinityID:  ObjPtrToNullInt32ID(autoAbility.AddedElemAffinity),
-				OnHitStatusID:        ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
-				AddedPropertyID:      getNullInt32(autoAbility.AddedPropertyID),
-				CnvrsnFromModID:      getNullInt32(autoAbility.CnvrsnFromModID),
-				CnvrsnToModID:        getNullInt32(autoAbility.CnvrsnToModID),
-				ID:                   autoAbility.ID,
+				DataHash:            generateDataHash(autoAbility),
+				GradRcvryStatID:     getNullInt32(autoAbility.GradRecoveryStatID),
+				OnHitElementID:      getNullInt32(autoAbility.OnHitElementID),
+				AddedElemAffinityID: ObjPtrToNullInt32ID(autoAbility.AddedElemAffinity),
+				OnHitStatusID:       ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
+				AddedPropertyID:     getNullInt32(autoAbility.AddedPropertyID),
+				CnvrsnFromModID:     getNullInt32(autoAbility.CnvrsnFromModID),
+				CnvrsnToModID:       getNullInt32(autoAbility.CnvrsnToModID),
+				ID:                  autoAbility.ID,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't update auto ability: %s: %v", autoAbility.Name, err)
 			}
 
-			err = l.createAutoAbilityJunctions(qtx, autoAbility)
+			err = l.seedAutoAbilityJunctions(qtx, autoAbility)
 			if err != nil {
 				return err
 			}
@@ -190,15 +190,15 @@ func (l *lookup) assignAutoAbilityFKs(qtx *database.Queries, autoAbility AutoAbi
 	return autoAbility, nil
 }
 
-func (l *lookup) createAutoAbilityJunctions(qtx *database.Queries, autoAbility AutoAbility) error {
+func (l *lookup) seedAutoAbilityJunctions(qtx *database.Queries, autoAbility AutoAbility) error {
 	functions := []func(*database.Queries, AutoAbility) error{
-		l.createAutoAbilityRelatedStats,
-		l.createAutoAbilityLockedOutAbilities,
-		l.createAutoAbilityAutoItemUse,
-		l.createAutoAbilityAddedStatusResists,
-		l.createAutoAbilityAddedStatusses,
-		l.createAutoAbilityStatChanges,
-		l.createAutoAbilityModifierChanges,
+		l.seedAutoAbilityRelatedStats,
+		l.seedAutoAbilityLockedOutAbilities,
+		l.seedAutoAbilityAutoItemUse,
+		l.seedAutoAbilityAddedStatusResists,
+		l.seedAutoAbilityAddedStatusses,
+		l.seedAutoAbilityStatChanges,
+		l.seedAutoAbilityModifierChanges,
 	}
 
 	for _, function := range functions {
@@ -211,7 +211,7 @@ func (l *lookup) createAutoAbilityJunctions(qtx *database.Queries, autoAbility A
 	return nil
 }
 
-func (l *lookup) createAutoAbilityRelatedStats(qtx *database.Queries, autoAbility AutoAbility) error {
+func (l *lookup) seedAutoAbilityRelatedStats(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, jsonStat := range autoAbility.RelatedStats {
 		junction, err := createJunction(autoAbility, jsonStat, l.getStat)
 		if err != nil {
@@ -231,7 +231,7 @@ func (l *lookup) createAutoAbilityRelatedStats(qtx *database.Queries, autoAbilit
 	return nil
 }
 
-func (l *lookup) createAutoAbilityLockedOutAbilities(qtx *database.Queries, autoAbility AutoAbility) error {
+func (l *lookup) seedAutoAbilityLockedOutAbilities(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, jsonAbility := range autoAbility.LockedOutAbilities {
 		junction, err := createJunction(autoAbility, jsonAbility, l.getAutoAbility)
 		if err != nil {
@@ -251,7 +251,7 @@ func (l *lookup) createAutoAbilityLockedOutAbilities(qtx *database.Queries, auto
 	return nil
 }
 
-func (l *lookup) createAutoAbilityAutoItemUse(qtx *database.Queries, autoAbility AutoAbility) error {
+func (l *lookup) seedAutoAbilityAutoItemUse(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, jsonItem := range autoAbility.AutoItemUse {
 		junction, err := createJunction(autoAbility, jsonItem, l.getItem)
 		if err != nil {
@@ -271,7 +271,7 @@ func (l *lookup) createAutoAbilityAutoItemUse(qtx *database.Queries, autoAbility
 	return nil
 }
 
-func (l *lookup) createAutoAbilityAddedStatusses(qtx *database.Queries, autoAbility AutoAbility) error {
+func (l *lookup) seedAutoAbilityAddedStatusses(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, jsonStatus := range autoAbility.AddedStatusses {
 		junction, err := createJunction(autoAbility, jsonStatus, l.getStatusCondition)
 		if err != nil {
@@ -291,7 +291,7 @@ func (l *lookup) createAutoAbilityAddedStatusses(qtx *database.Queries, autoAbil
 	return nil
 }
 
-func (l *lookup) createAutoAbilityAddedStatusResists(qtx *database.Queries, autoAbility AutoAbility) error {
+func (l *lookup) seedAutoAbilityAddedStatusResists(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, statusResist := range autoAbility.AddedStatusResists {
 		junction, err := createJunctionSeed(qtx, autoAbility, statusResist, l.seedStatusResist)
 		if err != nil {
@@ -311,7 +311,7 @@ func (l *lookup) createAutoAbilityAddedStatusResists(qtx *database.Queries, auto
 	return nil
 }
 
-func (l *lookup) createAutoAbilityStatChanges(qtx *database.Queries, autoAbility AutoAbility) error {
+func (l *lookup) seedAutoAbilityStatChanges(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, statChange := range autoAbility.StatChanges {
 		junction, err := createJunctionSeed(qtx, autoAbility, statChange, l.seedStatChange)
 		if err != nil {
@@ -331,7 +331,7 @@ func (l *lookup) createAutoAbilityStatChanges(qtx *database.Queries, autoAbility
 	return nil
 }
 
-func (l *lookup) createAutoAbilityModifierChanges(qtx *database.Queries, autoAbility AutoAbility) error {
+func (l *lookup) seedAutoAbilityModifierChanges(qtx *database.Queries, autoAbility AutoAbility) error {
 	for _, modifierChange := range autoAbility.ModifierChanges {
 		junction, err := createJunctionSeed(qtx, autoAbility, modifierChange, l.seedModifierChange)
 		if err != nil {

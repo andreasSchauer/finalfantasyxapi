@@ -102,7 +102,7 @@ func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 	})
 }
 
-func (l *lookup) createPlayerAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/player_abilities.json"
 
 	var playerAbilities []PlayerAbility

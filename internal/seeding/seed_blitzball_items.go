@@ -74,7 +74,7 @@ func (l *lookup) seedBlitzballItems(db *database.Queries, dbConn *sql.DB) error 
 	})
 }
 
-func (l *lookup) createBlitzballItemsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/blitzball_items.json"
 
 	var blitzballPositions []BlitzballPosition

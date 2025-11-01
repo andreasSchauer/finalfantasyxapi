@@ -15,7 +15,7 @@ type DefaultAbilitiesEntry struct {
 
 
 
-func (l *lookup) createDefaultAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedDefaultAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/default_abilities.json"
 
 	var entries []DefaultAbilitiesEntry

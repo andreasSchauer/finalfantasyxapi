@@ -146,7 +146,7 @@ func (l *lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 
 
 
-func (l *lookup) createEquipmentRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedEquipmentRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/equipment.json"
 
 	var equipmentTables []EquipmentTable

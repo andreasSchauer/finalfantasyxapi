@@ -74,7 +74,7 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 }
 
 
-func (l *lookup) createEnemyAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/enemy_abilities.json"
 
 	var enemyAbilities []EnemyAbility

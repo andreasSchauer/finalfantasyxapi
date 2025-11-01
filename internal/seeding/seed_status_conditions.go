@@ -12,7 +12,7 @@ type StatusCondition struct {
 	ID                      int32
 	Name                    string           `json:"name"`
 	Effect                  string           `json:"effect"`
-	Visualization			*string			 `json:"visualization"`
+	Visualization           *string          `json:"visualization"`
 	RelatedStats            []string         `json:"related_stats"`
 	RemovedStatusConditions []string         `json:"removed_status_conditions"`
 	NullifyArmored          *string          `json:"nullify_armored"`
@@ -48,7 +48,7 @@ func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 				DataHash:       generateDataHash(condition),
 				Name:           condition.Name,
 				Effect:         condition.Effect,
-				Visualization: 	getNullString(condition.Visualization),
+				Visualization:  getNullString(condition.Visualization),
 				NullifyArmored: nullNullifyArmored(condition.NullifyArmored),
 			})
 			if err != nil {
@@ -62,7 +62,7 @@ func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 	})
 }
 
-func (l *lookup) createStatusConditionsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/status_conditions.json"
 
 	var statusConditions []StatusCondition
@@ -79,10 +79,10 @@ func (l *lookup) createStatusConditionsRelationships(db *database.Queries, dbCon
 			}
 
 			relationShipFunctions := []func(*database.Queries, StatusCondition) error{
-				l.createStatusConditionRelatedStats,
-				l.createStatusConditionRemovedConditions,
-				l.createStatusConditionStatChanges,
-				l.createStatusConditionModifierChanges,
+				l.seedStatusConditionRelatedStats,
+				l.seedStatusConditionRemovedConditions,
+				l.seedStatusConditionStatChanges,
+				l.seedStatusConditionModifierChanges,
 			}
 
 			for _, function := range relationShipFunctions {
@@ -96,7 +96,7 @@ func (l *lookup) createStatusConditionsRelationships(db *database.Queries, dbCon
 	})
 }
 
-func (l *lookup) createStatusConditionRelatedStats(qtx *database.Queries, condition StatusCondition) error {
+func (l *lookup) seedStatusConditionRelatedStats(qtx *database.Queries, condition StatusCondition) error {
 	for _, jsonStat := range condition.RelatedStats {
 		junction, err := createJunction(condition, jsonStat, l.getStat)
 		if err != nil {
@@ -116,7 +116,7 @@ func (l *lookup) createStatusConditionRelatedStats(qtx *database.Queries, condit
 	return nil
 }
 
-func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, condition StatusCondition) error {
+func (l *lookup) seedStatusConditionRemovedConditions(qtx *database.Queries, condition StatusCondition) error {
 	for _, jsonCondition := range condition.RemovedStatusConditions {
 		junction, err := createJunction(condition, jsonCondition, l.getStatusCondition)
 		if err != nil {
@@ -136,7 +136,7 @@ func (l *lookup) createStatusConditionRemovedConditions(qtx *database.Queries, c
 	return nil
 }
 
-func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, condition StatusCondition) error {
+func (l *lookup) seedStatusConditionStatChanges(qtx *database.Queries, condition StatusCondition) error {
 	for _, statChange := range condition.StatChanges {
 		junction, err := createJunctionSeed(qtx, condition, statChange, l.seedStatChange)
 		if err != nil {
@@ -156,7 +156,7 @@ func (l *lookup) createStatusConditionStatChanges(qtx *database.Queries, conditi
 	return nil
 }
 
-func (l *lookup) createStatusConditionModifierChanges(qtx *database.Queries, condition StatusCondition) error {
+func (l *lookup) seedStatusConditionModifierChanges(qtx *database.Queries, condition StatusCondition) error {
 	for _, modifierChange := range condition.ModifierChanges {
 		junction, err := createJunctionSeed(qtx, condition, modifierChange, l.seedModifierChange)
 		if err != nil {

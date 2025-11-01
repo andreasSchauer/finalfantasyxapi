@@ -85,7 +85,7 @@ func (l *lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 }
 
 
-func (l *lookup) createAeonCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeon_commands.json"
 
 	var aeonCommands []AeonCommand

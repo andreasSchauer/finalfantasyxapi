@@ -213,7 +213,7 @@ func (l *lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error
 }
 
 
-func (l *lookup) createAreasRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/locations.json"
 
 	var locations []Location

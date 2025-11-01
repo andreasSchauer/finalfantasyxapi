@@ -144,7 +144,7 @@ func (l *lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 	return nil
 }
 
-func (l *lookup) createSidequestsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/sidequests.json"
 
 	var sidequests []Sidequest

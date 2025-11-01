@@ -81,7 +81,7 @@ func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 	})
 }
 
-func (l *lookup) createTriggerCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/trigger_commands.json"
 
 	var triggerCommands []TriggerCommand

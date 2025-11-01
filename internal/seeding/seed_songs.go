@@ -172,7 +172,7 @@ func (l *lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 }
 
 
-func (l *lookup) createSongsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/songs.json"
 
 	var songs []Song

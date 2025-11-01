@@ -119,7 +119,7 @@ func (l *lookup) seedFormationLocations(db *database.Queries, dbConn *sql.DB) er
 	})
 }
 
-func (l *lookup) createMonsterFormationsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedMonsterFormationsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/monster_formations.json"
 
 	var formationLocations []FormationLocation

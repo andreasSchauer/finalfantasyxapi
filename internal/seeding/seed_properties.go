@@ -59,7 +59,7 @@ func (l *lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedPropertiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
 
 	var properties []Property
@@ -76,10 +76,10 @@ func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql
 			}
 
 			relationShipFunctions := []func(*database.Queries, Property) error{
-				l.createPropertyRelatedStats,
-				l.createPropertyRemovedConditions,
-				l.createPropertyStatChanges,
-				l.createPropertyModifierChanges,
+				l.seedPropertyRelatedStats,
+				l.seedPropertyRemovedConditions,
+				l.seedPropertyStatChanges,
+				l.seedPropertyModifierChanges,
 			}
 
 			for _, function := range relationShipFunctions {
@@ -95,7 +95,7 @@ func (l *lookup) createPropertiesRelationships(db *database.Queries, dbConn *sql
 
 }
 
-func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property Property) error {
+func (l *lookup) seedPropertyRelatedStats(qtx *database.Queries, property Property) error {
 	for _, jsonStat := range property.RelatedStats {
 		junction, err := createJunction(property, jsonStat, l.getStat)
 		if err != nil {
@@ -115,7 +115,7 @@ func (l *lookup) createPropertyRelatedStats(qtx *database.Queries, property Prop
 	return nil
 }
 
-func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property Property) error {
+func (l *lookup) seedPropertyRemovedConditions(qtx *database.Queries, property Property) error {
 	for _, jsonCondition := range property.RemovedStatusConditions {
 		junction, err := createJunction(property, jsonCondition, l.getStatusCondition)
 		if err != nil {
@@ -135,7 +135,7 @@ func (l *lookup) createPropertyRemovedConditions(qtx *database.Queries, property
 	return nil
 }
 
-func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property Property) error {
+func (l *lookup) seedPropertyStatChanges(qtx *database.Queries, property Property) error {
 	for _, statChange := range property.StatChanges {
 		junction, err := createJunctionSeed(qtx, property, statChange, l.seedStatChange)
 		if err != nil {
@@ -155,7 +155,7 @@ func (l *lookup) createPropertyStatChanges(qtx *database.Queries, property Prope
 	return nil
 }
 
-func (l *lookup) createPropertyModifierChanges(qtx *database.Queries, property Property) error {
+func (l *lookup) seedPropertyModifierChanges(qtx *database.Queries, property Property) error {
 	for _, modifierChange := range property.ModifierChanges {
 		junction, err := createJunctionSeed(qtx, property, modifierChange, l.seedModifierChange)
 		if err != nil {

@@ -62,7 +62,7 @@ func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 
 
 
-func (l *lookup) createCelestialWeaponsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/celestial_weapons.json"
 
 	var celestialWeapons []CelestialWeapon

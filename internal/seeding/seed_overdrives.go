@@ -8,21 +8,20 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type Overdrive struct {
-	ID          		int32
-	ODCommandID 		*int32
-	CharClassID			*int32
+	ID          int32
+	ODCommandID *int32
+	CharClassID *int32
 	Ability
-	Description     	string  			`json:"description"`
-	Effect          	string  			`json:"effect"`
-	Topmenu         	*string 			`json:"topmenu"`
-	OverdriveCommand	*string				`json:"overdrive_command"`
-	User				string				`json:"user"`
-	UnlockCondition 	*string 			`json:"unlock_condition"`
-	CountdownInSec  	*int32  			`json:"countdown_in_sec"`
-	Cursor          	*string 			`json:"cursor"`
-	OverdriveAbilities	[]AbilityReference	`json:"overdrive_abilities"`
+	Description        string             `json:"description"`
+	Effect             string             `json:"effect"`
+	Topmenu            *string            `json:"topmenu"`
+	OverdriveCommand   *string            `json:"overdrive_command"`
+	User               string             `json:"user"`
+	UnlockCondition    *string            `json:"unlock_condition"`
+	CountdownInSec     *int32             `json:"countdown_in_sec"`
+	Cursor             *string            `json:"cursor"`
+	OverdriveAbilities []AbilityReference `json:"overdrive_abilities"`
 }
 
 func (o Overdrive) ToHashFields() []any {
@@ -40,7 +39,6 @@ func (o Overdrive) ToHashFields() []any {
 		derefOrNil(o.Cursor),
 	}
 }
-
 
 func (o Overdrive) GetID() int32 {
 	return o.ID
@@ -87,8 +85,7 @@ func (l *lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-
-func (l *lookup) createOverdrivesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrives.json"
 
 	var overdrives []Overdrive
@@ -115,16 +112,16 @@ func (l *lookup) createOverdrivesRelationships(db *database.Queries, dbConn *sql
 			}
 
 			err = qtx.UpdateOverdrive(context.Background(), database.UpdateOverdriveParams{
-				DataHash:       	 generateDataHash(overdrive),
-				OdCommandID: 		getNullInt32(overdrive.ODCommandID),
-				CharacterClassID: 	getNullInt32(overdrive.CharClassID),
-				ID: 				overdrive.ID,
+				DataHash:         generateDataHash(overdrive),
+				OdCommandID:      getNullInt32(overdrive.ODCommandID),
+				CharacterClassID: getNullInt32(overdrive.CharClassID),
+				ID:               overdrive.ID,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't update Overdrive: %s: %v", overdrive.Name, err)
 			}
-			
-			err = l.createOverdriveJunctions(qtx, overdrive)
+
+			err = l.seedOverdriveJunctions(qtx, overdrive)
 			if err != nil {
 				return err
 			}
@@ -133,8 +130,7 @@ func (l *lookup) createOverdrivesRelationships(db *database.Queries, dbConn *sql
 	})
 }
 
-
-func (l *lookup) createOverdriveJunctions(qtx *database.Queries, overdrive Overdrive) error {
+func (l *lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdrive) error {
 	for _, abilityRef := range overdrive.OverdriveAbilities {
 		junction, err := createJunction(overdrive, abilityRef, l.getOverdriveAbility)
 		if err != nil {
@@ -142,8 +138,8 @@ func (l *lookup) createOverdriveJunctions(qtx *database.Queries, overdrive Overd
 		}
 
 		err = qtx.CreateOverdrivesOverdriveAbilitiesJunction(context.Background(), database.CreateOverdrivesOverdriveAbilitiesJunctionParams{
-			DataHash: generateDataHash(junction),
-			OverdriveID: 		junction.ParentID,
+			DataHash:           generateDataHash(junction),
+			OverdriveID:        junction.ParentID,
 			OverdriveAbilityID: junction.ChildID,
 		})
 		if err != nil {
@@ -178,9 +174,9 @@ func (l *lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive
 	}
 
 	err = qtx.CreateDefaultOverdriveAbility(context.Background(), database.CreateDefaultOverdriveAbilityParams{
-		DataHash: 	generateDataHash(junction),
-		ClassID: 	junction.ParentID,
-		AbilityID: 	junction.ChildID,
+		DataHash:  generateDataHash(junction),
+		ClassID:   junction.ParentID,
+		AbilityID: junction.ChildID,
 	})
 	if err != nil {
 		return fmt.Errorf("couldn't create junction between character class %s with ID %d and overdrive ability %s with ID %d: %v", overdrive.User, derefOrNil(overdrive.CharClassID), createLookupKey(abilityRef), ability.ID, err)

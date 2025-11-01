@@ -69,7 +69,7 @@ func (l *lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 }
 
 
-func (l *lookup) createOverdriveCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_commands.json"
 
 	var overdriveCommands []OverdriveCommand

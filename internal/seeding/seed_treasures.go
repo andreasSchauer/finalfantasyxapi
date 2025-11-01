@@ -108,7 +108,7 @@ func (l *lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 }
 
 
-func (l *lookup) createTreasuresRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/treasures.json"
 
 	var treasureLists []TreasureList

@@ -152,7 +152,7 @@ func (l *lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 
 
 
-func (l *lookup) createShopsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/shops.json"
 
 	var shops []Shop

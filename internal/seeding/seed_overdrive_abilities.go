@@ -72,7 +72,7 @@ func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 }
 
 
-func (l *lookup) createOverdriveAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_abilities.json"
 
 	var overdriveAbilities []OverdriveAbility

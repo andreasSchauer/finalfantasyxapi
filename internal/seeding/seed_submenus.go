@@ -62,7 +62,7 @@ func (l *lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 }
 
 
-func (l *lookup) createSubmenusRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/submenus.json"
 
 	var submenus []Submenu

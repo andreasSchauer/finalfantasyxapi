@@ -79,7 +79,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) createCharactersRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/characters.json"
 
 	var characters []Character

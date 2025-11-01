@@ -52,7 +52,7 @@ func (l *lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) createElementsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elements.json"
 
 	var elements []Element

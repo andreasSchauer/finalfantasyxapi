@@ -110,7 +110,7 @@ func (l *lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 }
 
 
-func (l *lookup) createMixesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedMixesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/mixes.json"
 
 	var mixes []Mix

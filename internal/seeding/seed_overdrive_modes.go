@@ -82,7 +82,7 @@ func (l *lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error 
 	})
 }
 
-func (l *lookup) createOverdriveModesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedOverdriveModesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_modes.json"
 
 	var overdriveModes []OverdriveMode

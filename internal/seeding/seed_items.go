@@ -160,7 +160,7 @@ func (l *lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 }
 
 
-func (l *lookup) createItemsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/items.json"
 
 	var items []Item

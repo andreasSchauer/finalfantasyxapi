@@ -7,7 +7,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type BattleInteraction struct {
 	ID                        int32
 	Target                    string            `json:"target"`
@@ -61,7 +60,7 @@ func (l *lookup) seedBattleInteractions(qtx *database.Queries, ability Ability, 
 			return fmt.Errorf("ability %s: couldn't create battle interactions: %v", createLookupKey(ability), err)
 		}
 
-		err = l.createBattleInteractionRelationships(qtx, ability, battleInteraction)
+		err = l.seedBattleInteractionRelationships(qtx, ability, battleInteraction)
 		if err != nil {
 			return err
 		}
@@ -97,8 +96,8 @@ func (l *lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 	return battleInteraction, nil
 }
 
-func (l *lookup) createBattleInteractionRelationships(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
-	
+func (l *lookup) seedBattleInteractionRelationships(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
+
 	l.currentBI = battleInteraction
 	damage := battleInteraction.Damage
 
@@ -109,25 +108,24 @@ func (l *lookup) createBattleInteractionRelationships(qtx *database.Queries, abi
 		}
 
 		err = qtx.CreateBattleIntDamageJunction(context.Background(), database.CreateBattleIntDamageJunctionParams{
-			DataHash: generateDataHash(threeWay),
-			AbilityID: threeWay.GrandparentID,
+			DataHash:            generateDataHash(threeWay),
+			AbilityID:           threeWay.GrandparentID,
 			BattleInteractionID: threeWay.ParentID,
-			DamageID: threeWay.ChildID,
+			DamageID:            threeWay.ChildID,
 		})
 		if err != nil {
 			return err
 		}
 	}
-	
-	
+
 	functions := []func(*database.Queries, Ability, BattleInteraction) error{
-		l.createBattleIntAffectedBy,
-		l.createBattleIntInflictedDelay,
-		l.createBattleIntInflictedConditions,
-		l.createBattleIntRemovedConditions,
-		l.createBattleIntCopiedConditions,
-		l.createBattleIntStatChanges,
-		l.createBattleIntModifierChanges,
+		l.seedBattleIntAffectedBy,
+		l.seedBattleIntInflictedDelay,
+		l.seedBattleIntInflictedConditions,
+		l.seedBattleIntRemovedConditions,
+		l.seedBattleIntCopiedConditions,
+		l.seedBattleIntStatChanges,
+		l.seedBattleIntModifierChanges,
 	}
 
 	for _, function := range functions {
@@ -140,7 +138,7 @@ func (l *lookup) createBattleInteractionRelationships(qtx *database.Queries, abi
 	return nil
 }
 
-func (l *lookup) createBattleIntAffectedBy(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
+func (l *lookup) seedBattleIntAffectedBy(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, condition := range battleInteraction.AffectedBy {
 		threeWay, err := createThreeWayJunction(ability, battleInteraction, condition, l.getStatusCondition)
 		if err != nil {
@@ -161,7 +159,7 @@ func (l *lookup) createBattleIntAffectedBy(qtx *database.Queries, ability Abilit
 	return nil
 }
 
-func (l *lookup) createBattleIntInflictedDelay(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
+func (l *lookup) seedBattleIntInflictedDelay(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, delay := range battleInteraction.InflictedDelay {
 		threeWay, err := createThreeWayJunctionSeed(qtx, ability, battleInteraction, delay, l.seedInflictedDelay)
 		if err != nil {
@@ -182,7 +180,7 @@ func (l *lookup) createBattleIntInflictedDelay(qtx *database.Queries, ability Ab
 	return nil
 }
 
-func (l *lookup) createBattleIntInflictedConditions(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
+func (l *lookup) seedBattleIntInflictedConditions(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, condition := range battleInteraction.InflictedStatusConditions {
 		threeWay, err := createThreeWayJunctionSeed(qtx, ability, battleInteraction, condition, l.seedInflictedStatus)
 		if err != nil {
@@ -203,7 +201,7 @@ func (l *lookup) createBattleIntInflictedConditions(qtx *database.Queries, abili
 	return nil
 }
 
-func (l *lookup) createBattleIntRemovedConditions(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
+func (l *lookup) seedBattleIntRemovedConditions(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, condition := range battleInteraction.RemovedStatusConditions {
 		threeWay, err := createThreeWayJunction(ability, battleInteraction, condition, l.getStatusCondition)
 		if err != nil {
@@ -224,7 +222,7 @@ func (l *lookup) createBattleIntRemovedConditions(qtx *database.Queries, ability
 	return nil
 }
 
-func (l *lookup) createBattleIntCopiedConditions(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
+func (l *lookup) seedBattleIntCopiedConditions(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, condition := range battleInteraction.CopiedStatusConditions {
 		threeWay, err := createThreeWayJunctionSeed(qtx, ability, battleInteraction, condition, l.seedInflictedStatus)
 		if err != nil {
@@ -245,7 +243,7 @@ func (l *lookup) createBattleIntCopiedConditions(qtx *database.Queries, ability 
 	return nil
 }
 
-func (l *lookup) createBattleIntStatChanges(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
+func (l *lookup) seedBattleIntStatChanges(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, statChange := range battleInteraction.StatChanges {
 		threeWay, err := createThreeWayJunctionSeed(qtx, ability, battleInteraction, statChange, l.seedStatChange)
 		if err != nil {
@@ -266,7 +264,7 @@ func (l *lookup) createBattleIntStatChanges(qtx *database.Queries, ability Abili
 	return nil
 }
 
-func (l *lookup) createBattleIntModifierChanges(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
+func (l *lookup) seedBattleIntModifierChanges(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, modifierChange := range battleInteraction.ModifierChanges {
 		threeWay, err := createThreeWayJunctionSeed(qtx, ability, battleInteraction, modifierChange, l.seedModifierChange)
 		if err != nil {

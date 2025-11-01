@@ -11,8 +11,8 @@ import (
 type Aeon struct {
 	ID int32
 	PlayerUnit
-	UnlockCondition     string       	`json:"unlock_condition"`
-	LocationArea        LocationArea 	`json:"location_area"`
+	UnlockCondition     string       `json:"unlock_condition"`
+	LocationArea        LocationArea `json:"location_area"`
 	AreaID              *int32
 	Category            *string         `json:"category"`
 	IsOptional          bool            `json:"is_optional"`
@@ -23,7 +23,7 @@ type Aeon struct {
 	PhysAtkDmgConstant  *int32          `json:"phys_atk_damage_constant"`
 	PhysAtkRange        *int32          `json:"phys_atk_range"`
 	PhysAtkShatterRate  *int32          `json:"phys_atk_shatter_rate"`
-	PhysAtkAccuracy		*Accuracy       `json:"phys_atk_accuracy"`
+	PhysAtkAccuracy     *Accuracy       `json:"phys_atk_accuracy"`
 }
 
 func (a Aeon) ToHashFields() []any {
@@ -110,7 +110,7 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) createAeonsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeons.json"
 
 	var aeons []Aeon
@@ -137,10 +137,10 @@ func (l *lookup) createAeonsRelationships(db *database.Queries, dbConn *sql.DB) 
 			}
 
 			err = qtx.UpdateAeon(context.Background(), database.UpdateAeonParams{
-				DataHash:		generateDataHash(aeon),
-				AreaID:         getNullInt32(aeon.AreaID),
-				AccuracyID: 	ObjPtrToNullInt32ID(aeon.PhysAtkAccuracy),
-				ID:             aeon.ID,
+				DataHash:   generateDataHash(aeon),
+				AreaID:     getNullInt32(aeon.AreaID),
+				AccuracyID: ObjPtrToNullInt32ID(aeon.PhysAtkAccuracy),
+				ID:         aeon.ID,
 			})
 			if err != nil {
 				return fmt.Errorf("couldn't update aeon: %s: %v", aeon.Name, err)
@@ -151,12 +151,12 @@ func (l *lookup) createAeonsRelationships(db *database.Queries, dbConn *sql.DB) 
 				return err
 			}
 
-			err = l.createAeonEquipmentRelationships(qtx, aeon, string(database.EquipTypeWeapon), aeon.Weapon)
+			err = l.seedAeonEquipmentRelationships(qtx, aeon, string(database.EquipTypeWeapon), aeon.Weapon)
 			if err != nil {
 				return err
 			}
 
-			err = l.createAeonEquipmentRelationships(qtx, aeon, string(database.EquipTypeArmor), aeon.Armor)
+			err = l.seedAeonEquipmentRelationships(qtx, aeon, string(database.EquipTypeArmor), aeon.Armor)
 			if err != nil {
 				return err
 			}
@@ -164,7 +164,6 @@ func (l *lookup) createAeonsRelationships(db *database.Queries, dbConn *sql.DB) 
 		return nil
 	})
 }
-
 
 func (l *lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon) error {
 	for _, baseStat := range aeon.BaseStats {
@@ -186,8 +185,7 @@ func (l *lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon) error {
 	return nil
 }
 
-
-func (l *lookup) createAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon, equipType string, abilityList []AeonEquipment) error {
+func (l *lookup) seedAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon, equipType string, abilityList []AeonEquipment) error {
 	for _, entry := range abilityList {
 		var err error
 		entry.EquipType = equipType
