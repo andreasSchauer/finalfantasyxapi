@@ -29,12 +29,16 @@ func (is InflictedStatus) GetID() int32 {
 	return is.ID
 }
 
+func (is InflictedStatus) Error() string {
+	return fmt.Sprintf("inflicted status with condition: %s, probability: %d, duration type: %s, amount: %v", is.StatusCondition, is.Probability, is.DurationType, is.Amount)
+}
+
 func (l *lookup) seedInflictedStatus(qtx *database.Queries, inflictedStatus InflictedStatus) (InflictedStatus, error) {
 	var err error
 
 	inflictedStatus.StatusConditionID, err = assignFK(inflictedStatus.StatusCondition, l.getStatusCondition)
 	if err != nil {
-		return InflictedStatus{}, err
+		return InflictedStatus{}, getErr(inflictedStatus, err)
 	}
 
 	dbInflictedStatus, err := qtx.CreateInflictedStatus(context.Background(), database.CreateInflictedStatusParams{
@@ -45,7 +49,7 @@ func (l *lookup) seedInflictedStatus(qtx *database.Queries, inflictedStatus Infl
 		Amount:            getNullInt32(inflictedStatus.Amount),
 	})
 	if err != nil {
-		return InflictedStatus{}, fmt.Errorf("couldn't create Inflicted Status: %v", err)
+		return InflictedStatus{}, getDbErr(inflictedStatus, err, "couldn't create inflicted status")
 	}
 	inflictedStatus.ID = dbInflictedStatus.ID
 

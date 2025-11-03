@@ -22,6 +22,10 @@ func (cc CharacterClass) GetID() int32 {
 	return cc.ID
 }
 
+func (cc CharacterClass) Error() string {
+	return fmt.Sprintf("character class %s", cc.Name)
+}
+
 func (l *lookup) seedCharacterClasses(qtx *database.Queries, unit PlayerUnit) error {
 	if unit.Type == database.UnitTypeCharacter {
 		err := l.seedCharClassesCharacter(qtx, unit)
@@ -48,13 +52,13 @@ func (l *lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit
 
 	err = l.seedUnitCharClass(qtx, character.Name, character.PlayerUnit)
 	if err != nil {
-		return fmt.Errorf("%s: %v", character.Name, err)
+		return getStrErr(character.Name, err, "character class")
 	}
 
 	if !character.StoryOnly {
 		err := l.seedUnitCharClass(qtx, "characters", character.PlayerUnit)
 		if err != nil {
-			return fmt.Errorf("%s: %v", character.Name, err)
+			return getStrErr("characters", err, "character class")
 		}
 	}
 
@@ -71,25 +75,25 @@ func (l *lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) err
 
 	err = l.seedUnitCharClass(qtx, aeon.Name, aeon.PlayerUnit)
 	if err != nil {
-		return fmt.Errorf("%s: %v", aeon.Name, err)
+		return getStrErr(aeon.Name, err, "character class")
 	}
 
 	err = l.seedUnitCharClass(qtx, "aeons", aeon.PlayerUnit)
 	if err != nil {
-		return fmt.Errorf("%s: %v", aeon.Name, err)
+		return getStrErr("aeons", err, "character class")
 	}
 
 	if aeonCategory == "standard-aeons" {
 		err = l.seedUnitCharClass(qtx, "standard-aeons", aeon.PlayerUnit)
 		if err != nil {
-			return fmt.Errorf("%s: %v", aeon.Name, err)
+			return getStrErr("standard-aeons", err, "character class")
 		}
 	}
 
 	if aeonCategory == "magus-sisters" {
 		err = l.seedUnitCharClass(qtx, "magus-sisters", aeon.PlayerUnit)
 		if err != nil {
-			return fmt.Errorf("%s: %v", aeon.Name, err)
+			return getStrErr("magus-sisters", err, "character class")
 		}
 	}
 
@@ -112,7 +116,7 @@ func (l *lookup) seedUnitCharClass(qtx *database.Queries, className string, unit
 		ClassID:  junction.ChildID,
 	})
 	if err != nil {
-		return err
+		return getDbErr(unit, err, "couldn't junction player unit")
 	}
 
 	return nil
@@ -124,7 +128,7 @@ func (l *lookup) seedCharacterClass(qtx *database.Queries, class CharacterClass)
 		Name:     class.Name,
 	})
 	if err != nil {
-		return CharacterClass{}, fmt.Errorf("couldn't create Character Class: %s: %v", class.Name, err)
+		return CharacterClass{}, getDbErr(class, err, "couldn't create character class")
 	}
 
 	class.ID = dbClass.ID

@@ -31,6 +31,10 @@ func (cw CelestialWeapon) GetID() int32 {
 	return cw.ID
 }
 
+func (cw CelestialWeapon) Error() string {
+	return fmt.Sprintf("celestial weapon %s", cw.Name)
+}
+
 
 func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/celestial_weapons.json"
@@ -50,7 +54,7 @@ func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 				Formula:     database.CelestialFormula(weapon.Formula),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Celestial Weapon: %s: %v", weapon.Name, err)
+				return getDbErr(weapon, err, "couldn't create celestial weapon")
 			}
 
 			weapon.ID = dbWeapon.ID
@@ -80,12 +84,12 @@ func (l *lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn 
 
 			weapon.CharacterID, err = assignFKPtr(&weapon.Character, l.getCharacter)
 			if err != nil {
-				return err
+				return getErr(weapon, err)
 			}
 
 			weapon.AeonID, err = assignFKPtr(weapon.Aeon, l.getAeon)
 			if err != nil {
-				return err
+				return getErr(weapon, err)
 			}
 
 			err = qtx.UpdateCelestialWeapon(context.Background(), database.UpdateCelestialWeaponParams{
@@ -95,7 +99,7 @@ func (l *lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn 
 				ID:				weapon.ID,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't update Celestial Weapon: %s: %v", weapon.Name, err)
+				return getDbErr(weapon, err, "couldn't update celestial weapon")
 			}
 		}
 

@@ -50,7 +50,7 @@ func (q *Queries) CreateAeonCommand(ctx context.Context, arg CreateAeonCommandPa
 }
 
 const createAeonCommandsPossibleAbilitiesJunction = `-- name: CreateAeonCommandsPossibleAbilitiesJunction :exec
-INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, ability_id, character_class_id)
+INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, character_class_id, ability_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
@@ -58,16 +58,16 @@ ON CONFLICT(data_hash) DO NOTHING
 type CreateAeonCommandsPossibleAbilitiesJunctionParams struct {
 	DataHash         string
 	AeonCommandID    int32
-	AbilityID        int32
 	CharacterClassID int32
+	AbilityID        int32
 }
 
 func (q *Queries) CreateAeonCommandsPossibleAbilitiesJunction(ctx context.Context, arg CreateAeonCommandsPossibleAbilitiesJunctionParams) error {
 	_, err := q.db.ExecContext(ctx, createAeonCommandsPossibleAbilitiesJunction,
 		arg.DataHash,
 		arg.AeonCommandID,
-		arg.AbilityID,
 		arg.CharacterClassID,
+		arg.AbilityID,
 	)
 	return err
 }

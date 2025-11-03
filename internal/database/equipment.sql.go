@@ -133,7 +133,7 @@ const createAutoAbility = `-- name: CreateAutoAbility :one
 INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = auto_abilities.data_hash
-RETURNING id, data_hash, name, description, effect, type, category, ability_value, activation_condition, counter, required_item_amount_id, grad_rcvry_stat_id, on_hit_element_id, added_elem_affinity_id, on_hit_status_id, added_property_id, cnvrsn_from_mod_id, cnvrsn_to_mod_id
+RETURNING id, data_hash, name, description, effect, type, category, ability_value, activation_condition, counter, required_item_amount_id, grad_rcvry_stat_id, on_hit_element_id, added_elem_resist_id, on_hit_status_id, added_property_id, cnvrsn_from_mod_id, cnvrsn_to_mod_id
 `
 
 type CreateAutoAbilityParams struct {
@@ -175,7 +175,7 @@ func (q *Queries) CreateAutoAbility(ctx context.Context, arg CreateAutoAbilityPa
 		&i.RequiredItemAmountID,
 		&i.GradRcvryStatID,
 		&i.OnHitElementID,
-		&i.AddedElemAffinityID,
+		&i.AddedElemResistID,
 		&i.OnHitStatusID,
 		&i.AddedPropertyID,
 		&i.CnvrsnFromModID,
@@ -341,7 +341,7 @@ UPDATE auto_abilities
 SET data_hash = $1,
     grad_rcvry_stat_id = $2,
     on_hit_element_id = $3,
-    added_elem_affinity_id = $4,
+    added_elem_resist_id = $4,
     on_hit_status_id = $5,
     added_property_id = $6,
     cnvrsn_from_mod_id = $7,
@@ -350,15 +350,15 @@ WHERE id = $9
 `
 
 type UpdateAutoAbilityParams struct {
-	DataHash            string
-	GradRcvryStatID     sql.NullInt32
-	OnHitElementID      sql.NullInt32
-	AddedElemAffinityID sql.NullInt32
-	OnHitStatusID       sql.NullInt32
-	AddedPropertyID     sql.NullInt32
-	CnvrsnFromModID     sql.NullInt32
-	CnvrsnToModID       sql.NullInt32
-	ID                  int32
+	DataHash          string
+	GradRcvryStatID   sql.NullInt32
+	OnHitElementID    sql.NullInt32
+	AddedElemResistID sql.NullInt32
+	OnHitStatusID     sql.NullInt32
+	AddedPropertyID   sql.NullInt32
+	CnvrsnFromModID   sql.NullInt32
+	CnvrsnToModID     sql.NullInt32
+	ID                int32
 }
 
 func (q *Queries) UpdateAutoAbility(ctx context.Context, arg UpdateAutoAbilityParams) error {
@@ -366,7 +366,7 @@ func (q *Queries) UpdateAutoAbility(ctx context.Context, arg UpdateAutoAbilityPa
 		arg.DataHash,
 		arg.GradRcvryStatID,
 		arg.OnHitElementID,
-		arg.AddedElemAffinityID,
+		arg.AddedElemResistID,
 		arg.OnHitStatusID,
 		arg.AddedPropertyID,
 		arg.CnvrsnFromModID,

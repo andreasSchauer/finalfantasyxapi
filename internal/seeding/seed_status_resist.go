@@ -25,12 +25,16 @@ func (sr StatusResist) GetID() int32 {
 	return sr.ID
 }
 
+func (sr StatusResist) Error() string {
+	return fmt.Sprintf("status resist with status %s, resistance %d", sr.StatusCondition, sr.Resistance)
+}
+
 func (l *lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResist) (StatusResist, error) {
 	var err error
 
 	statusResist.StatusConditionID, err = assignFK(statusResist.StatusCondition, l.getStatusCondition)
 	if err != nil {
-		return StatusResist{}, err
+		return StatusResist{}, getErr(statusResist, err)
 	}
 
 	dbStatusResist, err := qtx.CreateStatusResist(context.Background(), database.CreateStatusResistParams{
@@ -39,7 +43,7 @@ func (l *lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResi
 		Resistance:        statusResist.Resistance,
 	})
 	if err != nil {
-		return StatusResist{}, fmt.Errorf("couldn't create status resist: %s - %d: %v", statusResist.StatusCondition, statusResist.Resistance, err)
+		return StatusResist{}, getDbErr(statusResist, err, "couldn't create status resist")
 	}
 
 	statusResist.ID = dbStatusResist.ID

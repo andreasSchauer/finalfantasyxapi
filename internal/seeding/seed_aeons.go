@@ -44,6 +44,10 @@ func (a Aeon) GetID() int32 {
 	return a.ID
 }
 
+func (a Aeon) Error() string {
+	return fmt.Sprintf("aeon %s", a.Name)
+}
+
 type AeonEquipment struct {
 	ID              int32
 	AutoAbilityID   int32
@@ -64,6 +68,10 @@ func (a AeonEquipment) GetID() int32 {
 	return a.ID
 }
 
+func (a AeonEquipment) Error() string {
+	return fmt.Sprintf("aeon equipment with auto ability: %s, clstl_wpn: %t, equip type: %s", a.AutoAbility, a.CelestialWeapon, a.EquipType)
+}
+
 func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeons.json"
 
@@ -80,7 +88,7 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 
 			aeon.PlayerUnit, err = seedObjAssignID(qtx, aeon.PlayerUnit, l.seedPlayerUnit)
 			if err != nil {
-				return err
+				return getErr(aeon, err)
 			}
 
 			dbAeon, err := qtx.CreateAeon(context.Background(), database.CreateAeonParams{
@@ -94,7 +102,7 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 				PhysAtkShatterRate:    getNullInt32(aeon.PhysAtkShatterRate),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Aeon: %s: %v", aeon.Name, err)
+				return getDbErr(aeon, err, "couldn't create aeon")
 			}
 
 			aeon.ID = dbAeon.ID
@@ -103,7 +111,7 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 
 			err = l.seedCharacterClasses(qtx, aeon.PlayerUnit)
 			if err != nil {
-				return err
+				return getErr(aeon, err)
 			}
 		}
 		return nil
@@ -123,17 +131,17 @@ func (l *lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) er
 		for _, jsonAeon := range aeons {
 			aeon, err := l.getAeon(jsonAeon.Name)
 			if err != nil {
-				return err
+				return getErr(jsonAeon, err)
 			}
 
 			aeon.AreaID, err = assignFKPtr(&aeon.LocationArea, l.getArea)
 			if err != nil {
-				return err
+				return getErr(aeon, err)
 			}
 
 			aeon.PhysAtkAccuracy, err = seedObjPtrAssignFK(qtx, aeon.PhysAtkAccuracy, l.seedAccuracy)
 			if err != nil {
-				return err
+				return getErr(aeon, err)
 			}
 
 			err = qtx.UpdateAeon(context.Background(), database.UpdateAeonParams{
@@ -143,22 +151,22 @@ func (l *lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) er
 				ID:         aeon.ID,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't update aeon: %s: %v", aeon.Name, err)
+				return getDbErr(aeon, err, "couldn't update aeon")
 			}
 
 			err = l.seedAeonBaseStats(qtx, aeon)
 			if err != nil {
-				return err
+				return getErr(aeon, err)
 			}
 
 			err = l.seedAeonEquipmentRelationships(qtx, aeon, string(database.EquipTypeWeapon), aeon.Weapon)
 			if err != nil {
-				return err
+				return getErr(aeon, err)
 			}
 
 			err = l.seedAeonEquipmentRelationships(qtx, aeon, string(database.EquipTypeArmor), aeon.Armor)
 			if err != nil {
-				return err
+				return getErr(aeon, err)
 			}
 		}
 		return nil
@@ -178,7 +186,7 @@ func (l *lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon) error {
 			BaseStatID: junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return getDbErr(baseStat, err, "couldn't junction base stat")
 		}
 	}
 
@@ -192,7 +200,7 @@ func (l *lookup) seedAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon
 
 		junction, err := createJunctionSeed(qtx, aeon, entry, l.seedAeonEquipment)
 		if err != nil {
-			return fmt.Errorf("aeon: %s: %v", aeon.Name, err)
+			return err
 		}
 
 		err = qtx.CreateAeonsWeaponArmorJunction(context.Background(), database.CreateAeonsWeaponArmorJunctionParams{
@@ -201,7 +209,7 @@ func (l *lookup) seedAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon
 			AeonEquipmentID: junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return getDbErr(entry, err, "couldn't junction aeon equipment")
 		}
 	}
 
@@ -213,7 +221,7 @@ func (l *lookup) seedAeonEquipment(qtx *database.Queries, aeonEquipment AeonEqui
 
 	aeonEquipment.AutoAbilityID, err = assignFK(aeonEquipment.AutoAbility, l.getAutoAbility)
 	if err != nil {
-		return AeonEquipment{}, err
+		return AeonEquipment{}, getErr(aeonEquipment, err)
 	}
 
 	dbAeonEquipment, err := qtx.CreateAeonEquipment(context.Background(), database.CreateAeonEquipmentParams{
@@ -223,7 +231,7 @@ func (l *lookup) seedAeonEquipment(qtx *database.Queries, aeonEquipment AeonEqui
 		EquipType:     database.EquipType(aeonEquipment.EquipType),
 	})
 	if err != nil {
-		return AeonEquipment{}, fmt.Errorf("couldn't create Aeon Equipment: %s: %v", aeonEquipment.AutoAbility, err)
+		return AeonEquipment{}, getDbErr(aeonEquipment, err, "couldn't create aeon equipment")
 	}
 	aeonEquipment.ID = dbAeonEquipment.ID
 

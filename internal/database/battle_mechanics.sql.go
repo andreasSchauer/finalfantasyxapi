@@ -150,22 +150,22 @@ func (q *Queries) CreateElement(ctx context.Context, arg CreateElementParams) (E
 	return i, err
 }
 
-const createElementalAffinity = `-- name: CreateElementalAffinity :one
-INSERT INTO elemental_affinities (data_hash, element_id, affinity_id)
+const createElementalResist = `-- name: CreateElementalResist :one
+INSERT INTO elemental_resists (data_hash, element_id, affinity_id)
 VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = elemental_affinities.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = elemental_resists.data_hash
 RETURNING id, data_hash, element_id, affinity_id
 `
 
-type CreateElementalAffinityParams struct {
+type CreateElementalResistParams struct {
 	DataHash   string
 	ElementID  int32
 	AffinityID int32
 }
 
-func (q *Queries) CreateElementalAffinity(ctx context.Context, arg CreateElementalAffinityParams) (ElementalAffinity, error) {
-	row := q.db.QueryRowContext(ctx, createElementalAffinity, arg.DataHash, arg.ElementID, arg.AffinityID)
-	var i ElementalAffinity
+func (q *Queries) CreateElementalResist(ctx context.Context, arg CreateElementalResistParams) (ElementalResist, error) {
+	row := q.db.QueryRowContext(ctx, createElementalResist, arg.DataHash, arg.ElementID, arg.AffinityID)
+	var i ElementalResist
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
@@ -247,7 +247,7 @@ type CreateOverdriveModeParams struct {
 	Name        string
 	Description string
 	Effect      string
-	Type        OverdriveType
+	Type        OverdriveModeType
 	FillRate    interface{}
 }
 

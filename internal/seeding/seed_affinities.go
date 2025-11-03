@@ -25,6 +25,10 @@ func (a Affinity) GetID() int32 {
 	return a.ID
 }
 
+func (a Affinity) Error() string {
+	return fmt.Sprintf("elemental affinity %s", a.Name)
+}
+
 func (l *lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elemental_affinities.json"
 
@@ -42,7 +46,7 @@ func (l *lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 				DamageFactor: getNullFloat64(affinity.DamageFactor),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Elemental Affinity: %s: %v", affinity.Name, err)
+				return getDbErr(affinity, err, "couldn't create elemental affinity")
 			}
 
 			affinity.ID = dbAffinity.ID

@@ -2,6 +2,7 @@ package seeding
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
@@ -26,12 +27,16 @@ func (s StatChange) GetID() int32 {
 	return s.ID
 }
 
+func (s StatChange) Error() string {
+	return fmt.Sprintf("stat change with stat: %s, calc type: %s, value %f", s.StatName, s.CalculationType, s.Value)
+}
+
 func (l *lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (StatChange, error) {
 	var err error
 	
 	statChange.StatID, err = assignFK(statChange.StatName, l.getStat)
 	if err != nil {
-		return StatChange{}, err
+		return StatChange{}, getErr(statChange, err)
 	}
 
 	dbStatChange, err := qtx.CreateStatChange(context.Background(), database.CreateStatChangeParams{
@@ -41,7 +46,7 @@ func (l *lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (S
 		Value:           statChange.Value,
 	})
 	if err != nil {
-		return StatChange{}, err
+		return StatChange{}, getDbErr(statChange, err, "couldn't create stat change")
 	}
 	statChange.ID = dbStatChange.ID
 

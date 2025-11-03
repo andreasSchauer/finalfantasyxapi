@@ -7,8 +7,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-// might need a three-way junction to combine AbilityDamage with Damage and a specific ability
-// maybe even four-way: AbilityDamage -> Damage -> BattleInteraction -> Ability
 type Damage struct {
 	ID              int32
 	DamageCalc      []AbilityDamage `json:"damage_calc"`
@@ -32,6 +30,10 @@ func (d Damage) ToHashFields() []any {
 
 func (d Damage) GetID() int32 {
 	return d.ID
+}
+
+func (d Damage) Error() string {
+	return fmt.Sprintf("damage with critical: %v, crit plus: %v, piercing: %t, bdl: %v, element: %v", derefOrNil(d.Critical), derefOrNil(d.CriticalPlusVal), d.IsPiercing, derefOrNil(d.BreakDmgLimit), derefOrNil(d.Element))
 }
 
 type AbilityDamage struct {
@@ -60,12 +62,16 @@ func (ad AbilityDamage) GetID() int32 {
 	return ad.ID
 }
 
+func (ad AbilityDamage) Error() string {
+	return fmt.Sprintf("ability damage with attack type: %s, target stat: %s, damage type: %s, formula: %s, damage constant %d, condition: %v", ad.AttackType, ad.TargetStat, ad.DamageType, ad.DamageFormula, ad.DamageConstant, derefOrNil(ad.Condition))
+}
+
 func (l *lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error) {
 	var err error
 
 	damage.ElementID, err = assignFKPtr(damage.Element, l.getElement)
 	if err != nil {
-		return Damage{}, err
+		return Damage{}, getErr(damage, err)
 	}
 
 	dbDamage, err := qtx.CreateDamage(context.Background(), database.CreateDamageParams{
@@ -77,14 +83,14 @@ func (l *lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error
 		ElementID:       getNullInt32(damage.ElementID),
 	})
 	if err != nil {
-		return Damage{}, fmt.Errorf("couldn't create damage: %v", err)
+		return Damage{}, getDbErr(damage, err, "couldn't create damage")
 	}
 
 	damage.ID = dbDamage.ID
 
 	err = l.seedAbilityDamages(qtx, damage)
 	if err != nil {
-		return Damage{}, err
+		return Damage{}, getErr(damage, err)
 	}
 
 	return damage, nil
@@ -108,7 +114,7 @@ func (l *lookup) seedAbilityDamages(qtx *database.Queries, damage Damage) error 
 			AbilityDamageID: 		fourWay.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create damage junction: %v", err)
+			return getDbErr(abilityDamage, err, "couldn't junction ability damage")
 		}
 	}
 
@@ -120,7 +126,7 @@ func (l *lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityD
 
 	abilityDamage.StatID, err = assignFK(abilityDamage.TargetStat, l.getStat)
 	if err != nil {
-		return AbilityDamage{}, err
+		return AbilityDamage{}, getErr(abilityDamage, err)
 	}
 
 	dbAbilityDamage, err := qtx.CreateAbilityDamage(context.Background(), database.CreateAbilityDamageParams{
@@ -133,7 +139,7 @@ func (l *lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityD
 		DamageConstant: abilityDamage.DamageConstant,
 	})
 	if err != nil {
-		return AbilityDamage{}, fmt.Errorf("couldn't create ability damage: %v", err)
+		return AbilityDamage{}, getDbErr(abilityDamage, err, "couldn't create ability damage")
 	}
 
 	abilityDamage.ID = dbAbilityDamage.ID

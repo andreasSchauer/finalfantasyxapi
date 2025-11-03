@@ -29,6 +29,10 @@ func (id InflictedDelay) GetID() int32 {
 	return id.ID
 }
 
+func (id InflictedDelay) Error() string {
+	return fmt.Sprintf("inflicted delay with ctb attack type: %s, delay type: %s, constant: %d, condition: %v", id.CTBAttackType, id.DelayType, id.DamageConstant, derefOrNil(id.Condition))
+}
+
 
 func (l *lookup) seedInflictedDelay(qtx *database.Queries, delay InflictedDelay) (InflictedDelay, error) {
 	dbDelay, err := qtx.CreateInflictedDelay(context.Background(), database.CreateInflictedDelayParams{
@@ -39,7 +43,7 @@ func (l *lookup) seedInflictedDelay(qtx *database.Queries, delay InflictedDelay)
 		DamageConstant: delay.DamageConstant,
 	})
 	if err != nil {
-		return InflictedDelay{}, fmt.Errorf("couldn't create inflicted delay: %v", err)
+		return InflictedDelay{}, getDbErr(delay, err, "couldn't create inflicted delay")
 	}
 
 	delay.ID = dbDelay.ID

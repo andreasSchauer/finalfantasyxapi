@@ -15,29 +15,29 @@ type AutoAbility struct {
 	AddedPropertyID     *int32
 	CnvrsnFromModID     *int32
 	CnvrsnToModID       *int32
-	Name                string             `json:"name"`
-	Description         *string            `json:"description"`
-	Effect              string             `json:"effect"`
-	Type                *string            `json:"type"`
-	Category            string             `json:"category"`
-	RelatedStats        []string           `json:"related_stats"`
-	AbilityValue        *int32             `json:"ability_value"`
-	RequiredItem        *ItemAmount        `json:"required_item"`
-	LockedOutAbilities  []string           `json:"locked_out_abilities"`
-	ActivationCondition *string            `json:"activation_condition"`
-	Counter             *string            `json:"counter"`
-	GradualRecovery     *string            `json:"gradual_recovery"`
-	AutoItemUse         []string           `json:"auto_item_use"`
-	OnHitElement        *string            `json:"on_hit_element"`
-	AddedElemAffinity   *ElementalAffinity `json:"added_elem_affinity"`
-	OnHitStatus         *InflictedStatus   `json:"on_hit_status"`
-	AddedStatusResists  []StatusResist     `json:"added_status_resists"`
-	AddedStatusses      []string           `json:"added_statusses"`
-	AddedProperty       *string            `json:"added_property"`
-	ConversionFrom      *string            `json:"conversion_from"`
-	ConversionTo        *string            `json:"conversion_to"`
-	StatChanges         []StatChange       `json:"stat_changes"`
-	ModifierChanges     []ModifierChange   `json:"modifier_changes"`
+	Name                string           `json:"name"`
+	Description         *string          `json:"description"`
+	Effect              string           `json:"effect"`
+	Type                *string          `json:"type"`
+	Category            string           `json:"category"`
+	RelatedStats        []string         `json:"related_stats"`
+	AbilityValue        *int32           `json:"ability_value"`
+	RequiredItem        *ItemAmount      `json:"required_item"`
+	LockedOutAbilities  []string         `json:"locked_out_abilities"`
+	ActivationCondition *string          `json:"activation_condition"`
+	Counter             *string          `json:"counter"`
+	GradualRecovery     *string          `json:"gradual_recovery"`
+	AutoItemUse         []string         `json:"auto_item_use"`
+	OnHitElement        *string          `json:"on_hit_element"`
+	AddedElemResist     *ElementalResist `json:"added_elem_resist"`
+	OnHitStatus         *InflictedStatus `json:"on_hit_status"`
+	AddedStatusResists  []StatusResist   `json:"added_status_resists"`
+	AddedStatusses      []string         `json:"added_statusses"`
+	AddedProperty       *string          `json:"added_property"`
+	ConversionFrom      *string          `json:"conversion_from"`
+	ConversionTo        *string          `json:"conversion_to"`
+	StatChanges         []StatChange     `json:"stat_changes"`
+	ModifierChanges     []ModifierChange `json:"modifier_changes"`
 }
 
 func (a AutoAbility) ToHashFields() []any {
@@ -53,7 +53,7 @@ func (a AutoAbility) ToHashFields() []any {
 		derefOrNil(a.Counter),
 		derefOrNil(a.GradRecoveryStatID),
 		derefOrNil(a.OnHitElementID),
-		ObjPtrToHashID(a.AddedElemAffinity),
+		ObjPtrToHashID(a.AddedElemResist),
 		ObjPtrToHashID(a.OnHitStatus),
 		derefOrNil(a.AddedPropertyID),
 		derefOrNil(a.CnvrsnFromModID),
@@ -63,6 +63,10 @@ func (a AutoAbility) ToHashFields() []any {
 
 func (a AutoAbility) GetID() int32 {
 	return a.ID
+}
+
+func (a AutoAbility) Error() string {
+	return fmt.Sprintf("auto ability %s", a.Name)
 }
 
 func (l *lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
@@ -88,7 +92,7 @@ func (l *lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 				Counter:             nullCounterType(autoAbility.Counter),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Auto-Ability: %s: %v", autoAbility.Name, err)
+				return getDbErr(autoAbility, err, "couldn't create auto-ability")
 			}
 
 			autoAbility.ID = dbAutoAbility.ID
@@ -111,32 +115,32 @@ func (l *lookup) seedAutoAbilitiesRelationships(db *database.Queries, dbConn *sq
 		for _, jsonAutoAbility := range autoAbilities {
 			autoAbility, err := l.getAutoAbility(jsonAutoAbility.Name)
 			if err != nil {
-				return err
+				return getErr(jsonAutoAbility, err)
 			}
 
 			autoAbility, err = l.assignAutoAbilityFKs(qtx, autoAbility)
 			if err != nil {
-				return err
+				return getErr(autoAbility, err)
 			}
 
 			err = qtx.UpdateAutoAbility(context.Background(), database.UpdateAutoAbilityParams{
-				DataHash:            generateDataHash(autoAbility),
-				GradRcvryStatID:     getNullInt32(autoAbility.GradRecoveryStatID),
-				OnHitElementID:      getNullInt32(autoAbility.OnHitElementID),
-				AddedElemAffinityID: ObjPtrToNullInt32ID(autoAbility.AddedElemAffinity),
-				OnHitStatusID:       ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
-				AddedPropertyID:     getNullInt32(autoAbility.AddedPropertyID),
-				CnvrsnFromModID:     getNullInt32(autoAbility.CnvrsnFromModID),
-				CnvrsnToModID:       getNullInt32(autoAbility.CnvrsnToModID),
-				ID:                  autoAbility.ID,
+				DataHash:          generateDataHash(autoAbility),
+				GradRcvryStatID:   getNullInt32(autoAbility.GradRecoveryStatID),
+				OnHitElementID:    getNullInt32(autoAbility.OnHitElementID),
+				AddedElemResistID: ObjPtrToNullInt32ID(autoAbility.AddedElemResist),
+				OnHitStatusID:     ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
+				AddedPropertyID:   getNullInt32(autoAbility.AddedPropertyID),
+				CnvrsnFromModID:   getNullInt32(autoAbility.CnvrsnFromModID),
+				CnvrsnToModID:     getNullInt32(autoAbility.CnvrsnToModID),
+				ID:                autoAbility.ID,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't update auto ability: %s: %v", autoAbility.Name, err)
+				return getDbErr(autoAbility, err, "couldn't update auto ability")
 			}
 
 			err = l.seedAutoAbilityJunctions(qtx, autoAbility)
 			if err != nil {
-				return err
+				return getErr(autoAbility, err)
 			}
 		}
 
@@ -174,17 +178,17 @@ func (l *lookup) assignAutoAbilityFKs(qtx *database.Queries, autoAbility AutoAbi
 
 	autoAbility.RequiredItem, err = seedObjPtrAssignFK(qtx, autoAbility.RequiredItem, l.seedItemAmount)
 	if err != nil {
-		return AutoAbility{}, fmt.Errorf("auto ability: %s: %v", autoAbility.Name, err)
+		return AutoAbility{}, err
 	}
 
-	autoAbility.AddedElemAffinity, err = seedObjPtrAssignFK(qtx, autoAbility.AddedElemAffinity, l.seedElementalAffinity)
+	autoAbility.AddedElemResist, err = seedObjPtrAssignFK(qtx, autoAbility.AddedElemResist, l.seedElementalResist)
 	if err != nil {
-		return AutoAbility{}, fmt.Errorf("auto ability: %s: %v", autoAbility.Name, err)
+		return AutoAbility{}, err
 	}
 
 	autoAbility.OnHitStatus, err = seedObjPtrAssignFK(qtx, autoAbility.OnHitStatus, l.seedInflictedStatus)
 	if err != nil {
-		return AutoAbility{}, fmt.Errorf("auto ability: %s: %v", autoAbility.Name, err)
+		return AutoAbility{}, err
 	}
 
 	return autoAbility, nil
@@ -204,7 +208,7 @@ func (l *lookup) seedAutoAbilityJunctions(qtx *database.Queries, autoAbility Aut
 	for _, function := range functions {
 		err := function(qtx, autoAbility)
 		if err != nil {
-			return fmt.Errorf("auto ability: %s: %v", autoAbility.Name, err)
+			return err
 		}
 	}
 
@@ -224,7 +228,7 @@ func (l *lookup) seedAutoAbilityRelatedStats(qtx *database.Queries, autoAbility 
 			StatID:        junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create related stats: %v", err)
+			return getStrErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 
@@ -244,7 +248,7 @@ func (l *lookup) seedAutoAbilityLockedOutAbilities(qtx *database.Queries, autoAb
 			ChildAbilityID:  junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create locked out abilities: %v", err)
+			return getStrErr(jsonAbility, err, "couldn't junction locked out ability")
 		}
 	}
 
@@ -264,7 +268,7 @@ func (l *lookup) seedAutoAbilityAutoItemUse(qtx *database.Queries, autoAbility A
 			ItemID:        junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create auto item use: %v", err)
+			return getStrErr(jsonItem, err, "couldn't junction auto item use item")
 		}
 	}
 
@@ -284,7 +288,7 @@ func (l *lookup) seedAutoAbilityAddedStatusses(qtx *database.Queries, autoAbilit
 			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create added statusses: %v", err)
+			return getStrErr(jsonStatus, err, "couldn't junction added status")
 		}
 	}
 
@@ -304,7 +308,7 @@ func (l *lookup) seedAutoAbilityAddedStatusResists(qtx *database.Queries, autoAb
 			StatusResistID: junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create status resist junction for %s: %v", statusResist.StatusCondition, err)
+			return getDbErr(statusResist, err, "couldn't junction status resist")
 		}
 	}
 
@@ -324,7 +328,7 @@ func (l *lookup) seedAutoAbilityStatChanges(qtx *database.Queries, autoAbility A
 			StatChangeID:  junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return getDbErr(statChange, err, "couldn't junction stat change")
 		}
 	}
 
@@ -344,7 +348,7 @@ func (l *lookup) seedAutoAbilityModifierChanges(qtx *database.Queries, autoAbili
 			ModifierChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return getDbErr(modifierChange, err, "couldn't junction modifier change")
 		}
 	}
 

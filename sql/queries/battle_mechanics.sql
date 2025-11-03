@@ -40,10 +40,10 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = affinities.data_hash
 RETURNING *;
 
 
--- name: CreateElementalAffinity :one
-INSERT INTO elemental_affinities (data_hash, element_id, affinity_id)
+-- name: CreateElementalResist :one
+INSERT INTO elemental_resists (data_hash, element_id, affinity_id)
 VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = elemental_affinities.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = elemental_resists.data_hash
 RETURNING *;
 
 

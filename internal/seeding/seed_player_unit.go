@@ -32,6 +32,10 @@ func (pu PlayerUnit) GetID() int32 {
 	return pu.ID
 }
 
+func (pu PlayerUnit) Error() string {
+	return fmt.Sprintf("player unit %s, type %s", pu.Name, pu.Type)
+}
+
 
 func (l *lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (PlayerUnit, error) {
 	dbPlayerUnit, err := qtx.CreatePlayerUnit(context.Background(), database.CreatePlayerUnitParams{
@@ -40,7 +44,7 @@ func (l *lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (P
 		Type:     playerUnit.Type,
 	})
 	if err != nil {
-		return PlayerUnit{}, fmt.Errorf("couldn't create Player Unit: %s: %v", playerUnit.Name, err)
+		return PlayerUnit{}, getDbErr(playerUnit, err, "couldn't create player unit")
 	}
 
 	playerUnit.ID = dbPlayerUnit.ID

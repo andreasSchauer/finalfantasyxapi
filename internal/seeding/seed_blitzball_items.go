@@ -33,10 +33,18 @@ func (b BlitzballPosition) ToKeyFields() []any {
 	}
 }
 
-type BlitzballItem struct {
-	PositionID int32
+func (b BlitzballPosition) Error() string {
+	return fmt.Sprintf("blitzball position %s in %s", b.Slot, b.Category)
+}
+
+type PossibleItem struct {
 	ItemAmount ItemAmount `json:"item"`
 	Chance     int32      `json:"chance"`
+}
+
+type BlitzballItem struct {
+	PositionID int32
+	PossibleItem
 }
 
 func (b BlitzballItem) ToHashFields() []any {
@@ -45,6 +53,10 @@ func (b BlitzballItem) ToHashFields() []any {
 		b.ItemAmount.ID,
 		b.Chance,
 	}
+}
+
+func (b BlitzballItem) Error() string {
+	return fmt.Sprintf("blitzball item %s, chance %d, position id %d", b.ItemAmount.ItemName, b.Chance, b.PositionID)
 }
 
 func (l *lookup) seedBlitzballItems(db *database.Queries, dbConn *sql.DB) error {
@@ -64,7 +76,7 @@ func (l *lookup) seedBlitzballItems(db *database.Queries, dbConn *sql.DB) error 
 				Slot:     database.BlitzballPositionSlot(position.Slot),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Blitzball Position: %s: %v", createLookupKey(position), err)
+				return getDbErr(position, err, "couldn't create blitzball position")
 			}
 			position.ID = dbPosition.ID
 			key := createLookupKey(position)
@@ -97,7 +109,7 @@ func (l *lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 
 				item.ItemAmount, err = seedObjAssignID(qtx, item.ItemAmount, l.seedItemAmount)
 				if err != nil {
-					return fmt.Errorf("%s: %v", key, err)
+					return getErr(item, err)
 				}
 
 				err = qtx.CreateBlitzballItem(context.Background(), database.CreateBlitzballItemParams{
@@ -107,7 +119,7 @@ func (l *lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 					Chance:       item.Chance,
 				})
 				if err != nil {
-					return fmt.Errorf("%s: couldn't create Blitzball Item: %v", key, err)
+					return getDbErr(item, err, "couldn't create blitzball item")
 				}
 			}
 		}

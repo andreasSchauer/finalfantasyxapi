@@ -35,23 +35,19 @@ func (c AeonCommand) GetID() int32 {
 	return c.ID
 }
 
+func (c AeonCommand) Error() string {
+	return fmt.Sprintf("aeon command %s", c.Name)
+}
+
 type PossibleAbility struct {
 	User		string				`json:"user"`
 	Abilities	[]AbilityReference	`json:"abilities"`
 }
 
-type PossibleAbilityJunction struct {
-	Junction
-	ClassID		int32
+func (pa PossibleAbility) Error() string {
+	return fmt.Sprintf("possible abilities for %s", pa.User)
 }
 
-func (j PossibleAbilityJunction) ToHashFields() []any {
-	return []any{
-		j.ParentID,
-		j.ChildID,
-		j.ClassID,
-	}
-}
 
 
 func (l *lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
@@ -74,7 +70,7 @@ func (l *lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 				Cursor:      	nullTargetType(command.Cursor),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Aeon Command: %s: %v", command.Name, err)
+				return getDbErr(command, err, "couldn't create aeon command")
 			}
 
 			command.ID = dbAeonCommand.ID
@@ -103,18 +99,21 @@ func (l *lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql
 
 			command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, l.getSubmenu)
 			if err != nil {
-				return err
+				return getErr(command, err)
 			}
 
-			qtx.UpdateAeonCommand(context.Background(), database.UpdateAeonCommandParams{
+			err = qtx.UpdateAeonCommand(context.Background(), database.UpdateAeonCommandParams{
 				DataHash:    	generateDataHash(command),
 				SubmenuID: 		getNullInt32(command.SubmenuID),
 				ID: 			command.ID,
 			})
+			if err != nil {
+				return getDbErr(command, err, "couldn't update aeon command")
+			}
 
 			err = l.seedAeonCommandPossibleAbilities(qtx, command)
 			if err != nil {
-				return err
+				return getErr(command, err)
 			}
 		}
 
@@ -127,26 +126,24 @@ func (l *lookup) seedAeonCommandPossibleAbilities(qtx *database.Queries, command
 	for _, possibleAbility := range command.PossibleAbilities {
 		for _, abilityRef := range possibleAbility.Abilities {
 			var err error
-			paJunction := PossibleAbilityJunction{}
-			
-			paJunction.ClassID, err = assignFK(possibleAbility.User, l.getCharacterClass)
+			charClass, err := l.getCharacterClass(possibleAbility.User)
 			if err != nil {
 				return err
 			}
 
-			paJunction.Junction, err = createJunction(command, abilityRef, l.getAbility)
+			threeWay, err := createThreeWayJunction(command, charClass, abilityRef, l.getAbility)
 			if err != nil {
-				return err
+				return getErr(charClass, err)
 			}
 
 			err = qtx.CreateAeonCommandsPossibleAbilitiesJunction(context.Background(), database.CreateAeonCommandsPossibleAbilitiesJunctionParams{
-				DataHash: 			generateDataHash(paJunction),
-				AeonCommandID: 		paJunction.ParentID,
-				AbilityID: 			paJunction.ChildID,
-				CharacterClassID: 	paJunction.ClassID,
+				DataHash: 			generateDataHash(threeWay),
+				AeonCommandID: 		threeWay.GrandparentID,
+				CharacterClassID: 	threeWay.ParentID,
+				AbilityID: 			threeWay.ChildID,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create junction between aeon command %s, ability %s, and character class %s: %v", command.Name, abilityRef.Name, possibleAbility.User, err)
+				return getDbErr(abilityRef, err, "couldn't junction possible ability")
 			}
 		}
 	}

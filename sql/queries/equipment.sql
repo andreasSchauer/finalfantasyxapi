@@ -25,7 +25,7 @@ UPDATE auto_abilities
 SET data_hash = $1,
     grad_rcvry_stat_id = $2,
     on_hit_element_id = $3,
-    added_elem_affinity_id = $4,
+    added_elem_resist_id = $4,
     on_hit_status_id = $5,
     added_property_id = $6,
     cnvrsn_from_mod_id = $7,

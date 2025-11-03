@@ -1900,46 +1900,46 @@ func (ns NullNullifyArmored) Value() (driver.Value, error) {
 	return string(ns.NullifyArmored), nil
 }
 
-type OverdriveType string
+type OverdriveModeType string
 
 const (
-	OverdriveTypeFormula   OverdriveType = "formula"
-	OverdriveTypePerAction OverdriveType = "per-action"
+	OverdriveModeTypeFormula   OverdriveModeType = "formula"
+	OverdriveModeTypePerAction OverdriveModeType = "per-action"
 )
 
-func (e *OverdriveType) Scan(src interface{}) error {
+func (e *OverdriveModeType) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = OverdriveType(s)
+		*e = OverdriveModeType(s)
 	case string:
-		*e = OverdriveType(s)
+		*e = OverdriveModeType(s)
 	default:
-		return fmt.Errorf("unsupported scan type for OverdriveType: %T", src)
+		return fmt.Errorf("unsupported scan type for OverdriveModeType: %T", src)
 	}
 	return nil
 }
 
-type NullOverdriveType struct {
-	OverdriveType OverdriveType
-	Valid         bool // Valid is true if OverdriveType is not NULL
+type NullOverdriveModeType struct {
+	OverdriveModeType OverdriveModeType
+	Valid             bool // Valid is true if OverdriveModeType is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullOverdriveType) Scan(value interface{}) error {
+func (ns *NullOverdriveModeType) Scan(value interface{}) error {
 	if value == nil {
-		ns.OverdriveType, ns.Valid = "", false
+		ns.OverdriveModeType, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.OverdriveType.Scan(value)
+	return ns.OverdriveModeType.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullOverdriveType) Value() (driver.Value, error) {
+func (ns NullOverdriveModeType) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return string(ns.OverdriveType), nil
+	return string(ns.OverdriveModeType), nil
 }
 
 type QuestType string
@@ -2476,7 +2476,7 @@ type AutoAbility struct {
 	RequiredItemAmountID sql.NullInt32
 	GradRcvryStatID      sql.NullInt32
 	OnHitElementID       sql.NullInt32
-	AddedElemAffinityID  sql.NullInt32
+	AddedElemResistID    sql.NullInt32
 	OnHitStatusID        sql.NullInt32
 	AddedPropertyID      sql.NullInt32
 	CnvrsnFromModID      sql.NullInt32
@@ -2601,7 +2601,7 @@ type Element struct {
 	OppositeElementID sql.NullInt32
 }
 
-type ElementalAffinity struct {
+type ElementalResist struct {
 	ID         int32
 	DataHash   string
 	ElementID  int32
@@ -3254,7 +3254,7 @@ type OverdriveMode struct {
 	Name        string
 	Description string
 	Effect      string
-	Type        OverdriveType
+	Type        OverdriveModeType
 	FillRate    interface{}
 }
 

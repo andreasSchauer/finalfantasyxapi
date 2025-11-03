@@ -33,6 +33,10 @@ func (s StatusCondition) GetID() int32 {
 	return s.ID
 }
 
+func (s StatusCondition) Error() string {
+	return fmt.Sprintf("status condition %s", s.Name)
+}
+
 func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/status_conditions.json"
 

@@ -68,7 +68,7 @@ func (l *lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error 
 				Name:        mode.Name,
 				Description: mode.Description,
 				Effect:      mode.Effect,
-				Type:        database.OverdriveType(mode.Type),
+				Type:        database.OverdriveModeType(mode.Type),
 				FillRate:    getNullFloat64(mode.FillRate),
 			})
 			if err != nil {

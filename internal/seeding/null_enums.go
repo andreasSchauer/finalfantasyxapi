@@ -15,18 +15,6 @@ func nullNullifyArmored(s *string) database.NullNullifyArmored {
 }
 
 
-func nullAccuracySource(s *string) database.NullAccuracySource {
-    if s == nil {
-        return database.NullAccuracySource{}
-    }
-    
-    return database.NullAccuracySource{
-        AccuracySource: database.AccuracySource(*s),
-        Valid: true,
-    }
-}
-
-
 func nullCreationsUnlockedCategory(s *string) database.NullCreationsUnlockedCategory {
     if s == nil {
         return database.NullCreationsUnlockedCategory{}

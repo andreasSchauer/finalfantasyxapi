@@ -30,22 +30,30 @@ func (a AgilityTier) ToHashFields() []any {
 	}
 }
 
+func (a AgilityTier) Error() string {
+	return fmt.Sprintf("agility tier with min agility: %d, max agility: %d", a.MinAgility, a.MaxAgility)
+}
+
 type AgilitySubtier struct {
 	//id 			int32
 	//dataHash		string
-	AgilityTierID     int32
-	SubtierMinAgility int32  `json:"subtier_min_agility"`
-	SubtierMaxAgility int32  `json:"subtier_max_agility"`
-	CharacterMinICV   *int32 `json:"character_min_icv"`
+	AgilityTierID     	int32
+	MinAgility 		  	int32  `json:"subtier_min_agility"`
+	MaxAgility 			int32  `json:"subtier_max_agility"`
+	CharacterMinICV   	*int32 `json:"character_min_icv"`
 }
 
 func (a AgilitySubtier) ToHashFields() []any {
 	return []any{
 		a.AgilityTierID,
-		a.SubtierMinAgility,
-		a.SubtierMaxAgility,
+		a.MinAgility,
+		a.MaxAgility,
 		derefOrNil(a.CharacterMinICV),
 	}
+}
+
+func (a AgilitySubtier) Error() string {
+	return fmt.Sprintf("agility subtier with min agility: %d, max agility: %d", a.MinAgility, a.MaxAgility)
 }
 
 func (l *lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
@@ -58,7 +66,7 @@ func (l *lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 	}
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for i, agilityTier := range agilityTiers {
+		for _, agilityTier := range agilityTiers {
 			dbAgilityTier, err := qtx.CreateAgilityTier(context.Background(), database.CreateAgilityTierParams{
 				DataHash:        generateDataHash(agilityTier),
 				MinAgility:      agilityTier.MinAgility,
@@ -69,14 +77,14 @@ func (l *lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 				CharacterMaxIcv: getNullInt32(agilityTier.CharacterMaxICV),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Agility Tier: %d: %v", i, err)
+				return getDbErr(agilityTier, err, "couldn't create agility tier")
 			}
 
 			agilityTier.ID = dbAgilityTier.ID
 
 			err = l.seedAgilitySubtiers(qtx, agilityTier)
 			if err != nil {
-				return err
+				return getErr(agilityTier, err)
 			}
 		}
 		return nil
@@ -84,19 +92,18 @@ func (l *lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *lookup) seedAgilitySubtiers(qtx *database.Queries, agilityTier AgilityTier) error {
-	for i, subtier := range agilityTier.CharacterMinICVs {
+	for _, subtier := range agilityTier.CharacterMinICVs {
 		subtier.AgilityTierID = agilityTier.ID
 
 		err := qtx.CreateAgilitySubtier(context.Background(), database.CreateAgilitySubtierParams{
 			DataHash:          generateDataHash(subtier),
 			AgilityTierID:     subtier.AgilityTierID,
-			SubtierMinAgility: subtier.SubtierMinAgility,
-			SubtierMaxAgility: subtier.SubtierMaxAgility,
+			SubtierMinAgility: subtier.MinAgility,
+			SubtierMaxAgility: subtier.MaxAgility,
 			CharacterMinIcv:   getNullInt32(subtier.CharacterMinICV),
 		})
 		if err != nil {
-			agilityTierIndex := agilityTier.ID - 1
-			return fmt.Errorf("couldn't create Agility Subtier: %d - %d: %v", agilityTierIndex, i, err)
+			return getDbErr(subtier, err, "couldn't create Agility Subtier")
 		}
 	}
 

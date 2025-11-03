@@ -2,6 +2,7 @@ package seeding
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
@@ -26,12 +27,16 @@ func (m ModifierChange) GetID() int32 {
 	return m.ID
 }
 
+func (m ModifierChange) Error() string {
+	return fmt.Sprintf("modifier change with modifier: %s, calc type: %s, value %f", m.ModifierName, m.CalculationType, m.Value)
+}
+
 func (l *lookup) seedModifierChange(qtx *database.Queries, modifierChange ModifierChange) (ModifierChange, error) {
 	var err error
 	
 	modifierChange.ModifierID, err = assignFK(modifierChange.ModifierName, l.getModifier)
 	if err != nil {
-		return ModifierChange{}, err
+		return ModifierChange{}, getErr(modifierChange, err)
 	}
 
 	dbModifierChange, err := qtx.CreateModifierChange(context.Background(), database.CreateModifierChangeParams{
@@ -41,7 +46,7 @@ func (l *lookup) seedModifierChange(qtx *database.Queries, modifierChange Modifi
 		Value:           modifierChange.Value,
 	})
 	if err != nil {
-		return ModifierChange{}, err
+		return ModifierChange{}, getDbErr(modifierChange, err, "couldn't create modifier change")
 	}
 	modifierChange.ID = dbModifierChange.ID
 

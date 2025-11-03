@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TYPE overdrive_type AS ENUM ('formula', 'per-action');
+CREATE TYPE overdrive_mode_type AS ENUM ('formula', 'per-action');
 
 
 CREATE TYPE nullify_armored AS ENUM ('target', 'bearer');
@@ -19,6 +19,14 @@ CREATE TABLE stats (
 );
 
 
+CREATE TABLE base_stats (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    stat_id INTEGER NOT NULL REFERENCES stats(id),
+    value INTEGER NOT NULL
+);
+
+
 CREATE TABLE elements (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -34,7 +42,7 @@ CREATE TABLE affinities (
 );
 
 
-CREATE TABLE elemental_affinities (
+CREATE TABLE elemental_resists (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     element_id INTEGER NOT NULL REFERENCES elements(id),
@@ -71,7 +79,7 @@ CREATE TABLE overdrive_modes (
     name TEXT UNIQUE NOT NULL,
     description TEXT NOT NULL,
     effect TEXT NOT NULL,
-    type overdrive_type NOT NULL,
+    type overdrive_mode_type NOT NULL,
     fill_rate percentage
 );
 
@@ -124,10 +132,11 @@ DROP TABLE IF EXISTS status_conditions;
 DROP TABLE IF EXISTS overdrive_modes;
 DROP TABLE IF EXISTS agility_subtiers;
 DROP TABLE IF EXISTS agility_tiers;
-DROP TABLE IF EXISTS elemental_affinities;
+DROP TABLE IF EXISTS elemental_resists;
 DROP TABLE IF EXISTS affinities;
 DROP TABLE IF EXISTS elements;
+DROP TABLE IF EXISTS base_stats;
 DROP TABLE IF EXISTS stats;
 DROP TYPE IF EXISTS modifier_type;
 DROP TYPE IF EXISTS nullify_armored;
-DROP TYPE IF EXISTS overdrive_type;
+DROP TYPE IF EXISTS overdrive_mode_type;

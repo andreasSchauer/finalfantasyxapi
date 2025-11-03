@@ -13,7 +13,7 @@ WHERE id = $3;
 
 
 -- name: CreateAeonCommandsPossibleAbilitiesJunction :exec
-INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, ability_id, character_class_id)
+INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, character_class_id, ability_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 

@@ -9,33 +9,37 @@ import (
 
 type Ability struct {
 	ID            int32
-	Name          string  `json:"name"`
-	Version       *int32  `json:"version"`
-	Specification *string `json:"specification"`
+	Name          string `json:"name"`
+	Version       *int32 `json:"version"`
 	Type          database.AbilityType
+	Specification *string `json:"specification"`
 	*Attributes
 }
 
-func (t Ability) ToHashFields() []any {
+func (a Ability) ToHashFields() []any {
 	return []any{
-		t.Name,
-		derefOrNil(t.Version),
-		derefOrNil(t.Specification),
-		t.Type,
-		ObjPtrToHashID(t.Attributes),
+		a.Name,
+		derefOrNil(a.Version),
+		derefOrNil(a.Specification),
+		a.Type,
+		ObjPtrToHashID(a.Attributes),
 	}
 }
 
-func (t Ability) ToKeyFields() []any {
+func (a Ability) ToKeyFields() []any {
 	return []any{
-		t.Name,
-		derefOrNil(t.Version),
-		t.Type,
+		a.Name,
+		derefOrNil(a.Version),
+		a.Type,
 	}
 }
 
-func (t Ability) GetID() int32 {
-	return t.ID
+func (a Ability) GetID() int32 {
+	return a.ID
+}
+
+func (a Ability) Error() string {
+	return fmt.Sprintf("ability %s-%v, type %s", a.Name, derefOrNil(a.Version), a.Type)
 }
 
 type AbilityReference struct {
@@ -50,6 +54,10 @@ func (a AbilityReference) ToKeyFields() []any {
 		derefOrNil(a.Version),
 		a.AbilityType,
 	}
+}
+
+func (a AbilityReference) Error() string {
+	return fmt.Sprintf("ability reference %s-%v, type %s", a.Name, derefOrNil(a.Version), a.AbilityType)
 }
 
 type Attributes struct {
@@ -71,13 +79,17 @@ func (a Attributes) GetID() int32 {
 	return a.ID
 }
 
+func (a Attributes) Error() string {
+	return fmt.Sprintf("ability attributes with rank: %v, help bar: %t, copycat: %t", derefOrNil(a.Rank), a.AppearsInHelpBar, a.CanCopycat)
+}
+
 func (l *lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, error) {
 	if ability.Type != database.AbilityTypeOverdriveAbility {
 		var err error
 
 		ability.Attributes, err = seedObjPtrAssignFK(qtx, ability.Attributes, l.seedAbilityAttributes)
 		if err != nil {
-			return Ability{}, fmt.Errorf("couldn't create Ability Attributes: %s-%d, type: %s: %v", ability.Name, derefOrNil(ability.Version), ability.Type, err)
+			return Ability{}, getErr(ability, err)
 		}
 	}
 
@@ -90,7 +102,7 @@ func (l *lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, e
 		Type:          ability.Type,
 	})
 	if err != nil {
-		return Ability{}, fmt.Errorf("couldn't create Ability: %s-%d, type: %s: %v", ability.Name, derefOrNil(ability.Version), ability.Type, err)
+		return Ability{}, getDbErr(ability, err, "couldn't create ability")
 	}
 
 	ability.ID = dbAbility.ID
@@ -108,7 +120,7 @@ func (l *lookup) seedAbilityAttributes(qtx *database.Queries, attributes Attribu
 		CanCopycat:       attributes.CanCopycat,
 	})
 	if err != nil {
-		return Attributes{}, err
+		return Attributes{}, getDbErr(attributes, err, "couldn't create ability attributes")
 	}
 
 	attributes.ID = dbAttributes.ID

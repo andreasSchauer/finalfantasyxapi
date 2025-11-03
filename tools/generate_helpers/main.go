@@ -9,7 +9,6 @@ import (
 func main() {
     nullEnumTypes := []string{
         "NullifyArmored",
-        "AccuracySource",
         "CreationsUnlockedCategory",
         "TopmenuType",
         "EquipType",

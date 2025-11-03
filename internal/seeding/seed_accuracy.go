@@ -28,6 +28,10 @@ func (a Accuracy) GetID() int32 {
 	return a.ID
 }
 
+func (a Accuracy) Error() string {
+	return fmt.Sprintf("accuracy with source: %s, hit chance: %v, modifier: %v", a.AccSource, derefOrNil(a.HitChance), derefOrNil(a.AccModifier))
+}
+
 
 
 func (l *lookup) seedAccuracy(qtx *database.Queries, accuracy Accuracy) (Accuracy, error) {
@@ -38,7 +42,7 @@ func (l *lookup) seedAccuracy(qtx *database.Queries, accuracy Accuracy) (Accurac
 		AccModifier: 	getNullFloat64(accuracy.AccModifier),
 	})
 	if err != nil {
-		return Accuracy{}, fmt.Errorf("couldn't create accuracy: %v", err)
+		return Accuracy{}, getDbErr(accuracy, err, "couldn't create accuracy")
 	}
 
 	accuracy.ID = dbAccuracy.ID
