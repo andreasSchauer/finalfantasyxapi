@@ -3,7 +3,6 @@ package seeding
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
@@ -31,22 +30,32 @@ func (l *lookup) seedDefaultAbilitiesRelationships(db *database.Queries, dbConn 
 				return err
 			}
 
-			for _, abilityRef := range entry.DefaultAbilities {
-				junction, err := createJunction(class, abilityRef, l.getPlayerAbility)
-				if err != nil {
-					return fmt.Errorf("couldn't create junction between character class %s and ability %s: %v", class.Name, createLookupKey(abilityRef), err)
-				}
-
-				err = qtx.CreateDefaultAbility(context.Background(), database.CreateDefaultAbilityParams{
-					DataHash: generateDataHash(junction),
-					ClassID: junction.ParentID,
-					AbilityID: junction.ChildID,
-				})
-				if err != nil {
-					return err
-				}
+			err = l.seedCharClassDefaultAbilities(qtx, class, entry)
+			if err != nil {
+				return getErr(class, err)
 			}
 		}
 		return nil
 	})
+}
+
+
+func (l *lookup) seedCharClassDefaultAbilities(qtx *database.Queries, class CharacterClass, entry DefaultAbilitiesEntry) error {
+	for _, abilityRef := range entry.DefaultAbilities {
+		junction, err := createJunction(class, abilityRef, l.getPlayerAbility)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateDefaultAbility(context.Background(), database.CreateDefaultAbilityParams{
+			DataHash: generateDataHash(junction),
+			ClassID: junction.ParentID,
+			AbilityID: junction.ChildID,
+		})
+		if err != nil {
+			return getDbErr(abilityRef, err, "couldn't junction default ability")
+		}
+	}
+
+	return nil
 }

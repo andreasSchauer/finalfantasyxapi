@@ -31,6 +31,10 @@ func (f FMV) ToHashFields() []any {
 	}
 }
 
+func (f FMV) Error() string {
+	return fmt.Sprintf("fmv %s", f.Name)
+}
+
 
 func (l *lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/fmvs.json"

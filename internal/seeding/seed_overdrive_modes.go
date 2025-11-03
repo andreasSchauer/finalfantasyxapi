@@ -32,6 +32,10 @@ func (o OverdriveMode) GetID() int32 {
 	return o.ID
 }
 
+func (o OverdriveMode) Error() string {
+	return fmt.Sprintf("overdrive mode %s", o.Name)
+}
+
 
 type ActionToLearn struct {
 	ID		int32
@@ -49,6 +53,10 @@ func (a ActionToLearn) ToHashFields() []any {
 
 func (a ActionToLearn) GetID() int32 {
 	return a.ID
+}
+
+func (a ActionToLearn) Error() string {
+	return fmt.Sprintf("action to learn with user: %s, amount: %d", a.User, a.Amount)
 }
 
 

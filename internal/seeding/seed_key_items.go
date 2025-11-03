@@ -29,6 +29,10 @@ func (k KeyItem) GetID() int32 {
 	return k.ID
 }
 
+func (k KeyItem) Error() string {
+	return fmt.Sprintf("key item %s", k.Name)
+}
+
 func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/key_items.json"
 

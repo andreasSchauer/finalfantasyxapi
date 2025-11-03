@@ -32,6 +32,10 @@ func (i MasterItem) GetID() int32 {
 	return i.ID
 }
 
+func (i MasterItem)Error() string {
+	return fmt.Sprintf("master item %s, type %s", i.Name, i.Type)
+}
+
 
 func (l *lookup) seedMasterItem(qtx *database.Queries, masterItem MasterItem) (MasterItem, error) {
 	dbMasterItem, err := qtx.CreateMasterItem(context.Background(), database.CreateMasterItemParams{

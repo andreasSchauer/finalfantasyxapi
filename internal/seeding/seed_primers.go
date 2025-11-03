@@ -25,6 +25,10 @@ func (p Primer) ToHashFields() []any {
 	}
 }
 
+func (p Primer) Error() string {
+	return fmt.Sprintf("primer %s", p.Name)
+}
+
 
 func (l *lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/primers.json"

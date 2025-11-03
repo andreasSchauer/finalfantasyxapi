@@ -49,6 +49,10 @@ func (s Song) GetID() int32 {
 	return s.ID
 }
 
+func (s Song) Error() string {
+	return fmt.Sprintf("song %s", s.Name)
+}
+
 
 
 type SongCredits struct {
@@ -74,6 +78,10 @@ func (sc SongCredits) GetID() int32 {
 	return sc.ID
 }
 
+func (sc SongCredits) Error() string {
+	return fmt.Sprintf("song credits with composer: %v, arranger: %v, performer: %v, lyricist: %v", derefOrNil(sc.Composer), derefOrNil(sc.Arranger), derefOrNil(sc.Performer), derefOrNil(sc.Lyricist))
+}
+
 
 type BackgroundMusic struct {
 	ID						int32
@@ -91,6 +99,10 @@ func (bm BackgroundMusic) ToHashFields() []any {
 
 func (bm BackgroundMusic) GetID() int32 {
 	return bm.ID
+}
+
+func (bm BackgroundMusic) Error() string {
+	return fmt.Sprintf("background music replacing encounter music: %t, condition: %v", bm.ReplacesEncounterMusic, derefOrNil(bm.Condition))
 }
 
 
@@ -130,6 +142,10 @@ func (c Cue) ToHashFields() []any {
 
 func (c Cue) GetID() int32 {
 	return c.ID
+}
+
+func (c Cue) Error() string {
+	return fmt.Sprintf("cue for scene: %s at %v, replaces bg music: %v with end trigger: %v, replaces encounter music: %t", c.SceneDescription, derefOrNil(c.TriggerLocationArea), derefOrNil(c.ReplacesBGMusic), derefOrNil(c.EndTrigger), c.ReplacesEncounterMusic)
 }
 
 
@@ -279,7 +295,8 @@ func (l *lookup) seedCues (qtx *database.Queries, song Song) error {
 
 		for _, locationArea := range cue.IncludedAreas {
 			var err error
-			
+
+			// threeway
 			saJunction := SongAreaJunction{}
 			saJunction.Junction = junction
 			saJunction.AreaID, err = assignFK(locationArea, l.getArea)

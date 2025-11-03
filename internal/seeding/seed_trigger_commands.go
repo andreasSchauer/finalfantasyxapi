@@ -41,6 +41,10 @@ func (t TriggerCommand) GetAbilityRef() AbilityReference {
 	}
 }
 
+func (t TriggerCommand) Error() string {
+	return fmt.Sprintf("trigger command %s, version %v", t.Name, derefOrNil(t.Version))
+}
+
 func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/trigger_commands.json"
 

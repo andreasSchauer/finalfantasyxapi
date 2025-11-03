@@ -34,6 +34,10 @@ func (a OverdriveAbility) GetAbilityRef() AbilityReference {
 	}
 }
 
+func (a OverdriveAbility) Error() string {
+	return fmt.Sprintf("overdrive ability %s, version %v", a.Name, derefOrNil(a.Version))
+}
+
 
 func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_abilities.json"

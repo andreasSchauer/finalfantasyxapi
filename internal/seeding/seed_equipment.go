@@ -52,6 +52,10 @@ func (e EquipmentTable) GetID() int32 {
 	return e.ID
 }
 
+func (e EquipmentTable) Error() string {
+	return fmt.Sprintf("equipment table with type: %s, classification: %s, specific character: %v, version: %v, priority: %v", e.Type, e. Classification, derefOrNil(e.SpecificCharacter), derefOrNil(e.Version), derefOrNil(e.Priority))
+}
+
 
 type EquipmentName struct {
 	ID				int32
@@ -71,6 +75,10 @@ func (e EquipmentName) ToHashFields() []any {
 
 func (e EquipmentName) GetID() int32 {
 	return e.ID
+}
+
+func (e EquipmentName) Error() string {
+	return fmt.Sprintf("equipment name %s, character name: %s", e.Name, e.CharacterName)
 }
 
 

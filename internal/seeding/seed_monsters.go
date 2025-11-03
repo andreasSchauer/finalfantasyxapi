@@ -80,6 +80,10 @@ func (m Monster) GetID() int32 {
 	return m.ID
 }
 
+func (m Monster) Error() string {
+	return fmt.Sprintf("monster %s, version: %v", m.Name, derefOrNil(m.Version))
+}
+
 
 
 func (l *lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {

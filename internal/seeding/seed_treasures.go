@@ -13,6 +13,10 @@ type TreasureList struct {
 	Treasures    []Treasure   `json:"treasures"`
 }
 
+func (tl TreasureList) Error() string {
+	return fmt.Sprintf("treasures at %s", tl.LocationArea)
+}
+
 type Treasure struct {
 	ID				int32
 	Version         int32
@@ -54,7 +58,9 @@ func (t Treasure) GetID() int32 {
 	return t.ID
 }
 
-
+func (t Treasure) Error() string {
+	return fmt.Sprintf("treasure number: %d", t.Version)
+}
 
 
 

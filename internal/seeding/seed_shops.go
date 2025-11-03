@@ -39,6 +39,10 @@ func (s Shop) GetID() int32 {
 	return s.ID
 }
 
+func (s Shop) Error() string {
+	return fmt.Sprintf("shop %s, %v", s.LocationArea, derefOrNil(s.Version))
+}
+
 type SubShop struct {
 	Items		[]ShopItem		`json:"items"`
 	Equipment	[]ShopEquipment	`json:"equipment"`
@@ -72,6 +76,10 @@ func (s ShopItem) GetID() int32 {
 	return s.ID
 }
 
+func (s ShopItem) Error() string {
+	return fmt.Sprintf("shop item %s, price %d", s.Name, s.Price)
+}
+
 
 type ShopEquipment struct {
 	ID					int32
@@ -96,6 +104,10 @@ func (s ShopEquipment) ToKeyFields() []any {
 
 func (s ShopEquipment) GetID() int32 {
 	return s.ID
+}
+
+func (s ShopEquipment) Error() string {
+	return fmt.Sprintf("shop equipment %s, empty slots %d, price %d", s.Name, s.EmptySlotsAmount, s.Price)
 }
 
 

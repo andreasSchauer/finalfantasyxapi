@@ -37,6 +37,10 @@ func (fl FormationLocation) GetID() int32 {
 	return fl.ID
 }
 
+func (fl FormationLocation) Error() string {
+	return fmt.Sprintf("formation location with version: %v, %s", derefOrNil(fl.Version), fl.LocationArea)
+}
+
 type MonsterFormation struct {
 	ID                  int32
 	FormationLocationID int32
@@ -64,6 +68,10 @@ func (mf MonsterFormation) GetID() int32 {
 	return mf.ID
 }
 
+func (mf MonsterFormation) Error() string {
+	return fmt.Sprintf("monster formation with fl id: %d, category: %s, forced ambush: %t, can escape: %t, boss music id: %v, notes: %v", mf.FormationLocationID, mf.Category, mf.IsForcedAmbush, mf.CanEscape, ObjPtrToHashID(mf.BossMusic), derefOrNil(mf.Notes))
+}
+
 
 type FormationBossSong struct {
 	ID               int32
@@ -81,6 +89,10 @@ func (s FormationBossSong) ToHashFields() []any {
 
 func (s FormationBossSong) GetID() int32 {
 	return s.ID
+}
+
+func (s FormationBossSong) Error() string {
+	return fmt.Sprintf("formation boss song %s, celebrate victory: %t", s.Song, s.CelebrateVictory)
 }
 
 func (l *lookup) seedFormationLocations(db *database.Queries, dbConn *sql.DB) error {

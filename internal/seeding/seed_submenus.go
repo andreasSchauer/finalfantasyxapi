@@ -30,6 +30,10 @@ func (s Submenu) GetID() int32 {
 	return s.ID
 }
 
+func (s Submenu) Error() string {
+	return fmt.Sprintf("submenu %s", s.Name)
+}
+
 
 
 func (l *lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {

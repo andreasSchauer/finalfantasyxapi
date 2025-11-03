@@ -29,6 +29,10 @@ func (m Modifier) GetID() int32 {
 	return m.ID
 }
 
+func (m Modifier) Error() string {
+	return fmt.Sprintf("modifier %s", m.Name)
+}
+
 func (l *lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/modifiers.json"
 

@@ -34,6 +34,10 @@ func (q Quest) GetID() int32 {
 	return q.ID
 }
 
+func (q Quest) Error() string {
+	return fmt.Sprintf("quest %s, type %s", q.Name, q.Type)
+}
+
 
 func (l *lookup) seedQuest(qtx *database.Queries, quest Quest) (Quest, error) {
 	dbQuest, err := qtx.CreateQuest(context.Background(), database.CreateQuestParams{

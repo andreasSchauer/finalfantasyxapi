@@ -34,6 +34,10 @@ func (c Character) GetID() int32 {
 	return c.ID
 }
 
+func (c Character) Error() string {
+	return fmt.Sprintf("character %s", c.Name)
+}
+
 func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/characters.json"
 
@@ -50,7 +54,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 
 			character.PlayerUnit, err = seedObjAssignID(qtx, character.PlayerUnit, l.seedPlayerUnit)
 			if err != nil {
-				return err
+				return getErr(character, err)
 			}
 
 			dbCharacter, err := qtx.CreateCharacter(context.Background(), database.CreateCharacterParams{
@@ -63,7 +67,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 				CanFightUnderwater:  character.CanFightUnderwater,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Character: %s: %v", character.Name, err)
+				return getDbErr(character, err, "couldn't create character")
 			}
 
 			character.ID = dbCharacter.ID
@@ -72,7 +76,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 
 			err = l.seedCharacterClasses(qtx, character.PlayerUnit)
 			if err != nil {
-				return err
+				return getErr(character, err)
 			}
 		}
 		return nil
@@ -95,22 +99,33 @@ func (l *lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.D
 				return err
 			}
 
-			for _, baseStat := range character.BaseStats {
-				junction, err := createJunctionSeed(qtx, character, baseStat, l.seedBaseStat)
-				if err != nil {
-					return err
-				}
-
-				err = qtx.CreateCharactersBaseStatsJunction(context.Background(), database.CreateCharactersBaseStatsJunctionParams{
-					DataHash:    generateDataHash(junction),
-					CharacterID: junction.ParentID,
-					BaseStatID:  junction.ChildID,
-				})
-				if err != nil {
-					return err
-				}
+			err = l.seedCharacterBaseStats(qtx, character)
+			if err != nil {
+				return getErr(character, err)
 			}
 		}
+
 		return nil
 	})
+}
+
+
+func (l *lookup) seedCharacterBaseStats(qtx *database.Queries, character Character) error {
+	for _, baseStat := range character.BaseStats {
+		junction, err := createJunctionSeed(qtx, character, baseStat, l.seedBaseStat)
+		if err != nil {
+			return getErr(character, err)
+		}
+
+		err = qtx.CreateCharactersBaseStatsJunction(context.Background(), database.CreateCharactersBaseStatsJunctionParams{
+			DataHash:    generateDataHash(junction),
+			CharacterID: junction.ParentID,
+			BaseStatID:  junction.ChildID,
+		})
+		if err != nil {
+			return getDbErr(baseStat, err, "couldn't junction base stat")
+		}
+	}
+
+	return nil
 }

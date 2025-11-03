@@ -20,6 +20,10 @@ func (l Location) ToHashFields() []any {
 	}
 }
 
+func (l Location) Error() string {
+	return fmt.Sprintf("location %s", l.Name)
+}
+
 type SubLocation struct {
 	ID				int32
 	Name          	string  `json:"sub_location"`
@@ -34,6 +38,10 @@ func (s SubLocation) ToHashFields() []any {
 		s.Name,
 		derefOrNil(s.Specification),
 	}
+}
+
+func (s SubLocation) Error() string {
+	return fmt.Sprintf("sublocation %s", s.Name)
 }
 
 type Area struct {
@@ -68,6 +76,10 @@ func (a Area) GetID() int32 {
 	return a.ID
 }
 
+func (a Area) Error() string {
+	return fmt.Sprintf("area %s, version %v", a.Name, derefOrNil(a.Version))
+}
+
 
 func (a Area) GetLocationArea() LocationArea {
 	return LocationArea{
@@ -100,6 +112,10 @@ func (la LocationArea) GetID() int32 {
 	return la.ID
 }
 
+func (la LocationArea) Error() string {
+	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: %s, version: %v", la.Location, la.SubLocation, la.Area, derefOrNil(la.Version))
+}
+
 
 type AreaConnection struct {
 	ID				int32
@@ -123,6 +139,10 @@ func (ac AreaConnection) ToHashFields() []any {
 
 func (ac AreaConnection) GetID() int32 {
 	return ac.ID
+}
+
+func (ac AreaConnection)Error() string {
+	return fmt.Sprintf("area connection with %s", ac.LocationArea)
 }
 
 

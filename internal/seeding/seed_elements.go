@@ -26,6 +26,10 @@ func (e Element) GetID() int32 {
 	return e.ID
 }
 
+func (e Element) Error() string {
+	return fmt.Sprintf("element %s", e.Name)
+}
+
 func (l *lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elements.json"
 

@@ -60,6 +60,10 @@ func (p PlayerAbility) GetAbilityRef() AbilityReference {
 	}
 }
 
+func (p PlayerAbility) Error() string {
+	return fmt.Sprintf("player ability %s, version %v", p.Name, derefOrNil(p.Version))
+}
+
 func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/player_abilities.json"
 

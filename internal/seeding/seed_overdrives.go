@@ -44,6 +44,10 @@ func (o Overdrive) GetID() int32 {
 	return o.ID
 }
 
+func (o Overdrive) Error() string {
+	return fmt.Sprintf("overdrive %s, version %v", o.Name, derefOrNil(o.Version))
+}
+
 func (l *lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrives.json"
 

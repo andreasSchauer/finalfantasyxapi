@@ -40,6 +40,10 @@ func (i Item) GetID() int32 {
 	return i.ID
 }
 
+func (i Item) Error() string {
+	return fmt.Sprintf("item %s", i.Name)
+}
+
 type ItemAbility struct {
 	ID					int32
 	Ability
@@ -66,6 +70,10 @@ func (a ItemAbility) GetAbilityRef() AbilityReference {
 		Version:     a.Version,
 		AbilityType: string(database.AbilityTypeItemAbility),
 	}
+}
+
+func (a ItemAbility) Error() string {
+	return fmt.Sprintf("item ability %s", a.Name)
 }
 
 

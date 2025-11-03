@@ -29,6 +29,10 @@ func (f FoundEquipment) GetID() int32 {
 	return f.ID
 }
 
+func (f FoundEquipment) Error() string {
+	return fmt.Sprintf("found equipment with name: %s, empty slots: %d", f.Name, f.EmptySlotsAmount)
+}
+
 
 func (l *lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundEquipment) (FoundEquipment, error) {
 	var err error

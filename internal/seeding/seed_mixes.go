@@ -28,6 +28,10 @@ func (m Mix) GetID() int32 {
 	return m.ID
 }
 
+func (m Mix) Error() string {
+	return fmt.Sprintf("mix %s", m.Name)
+}
+
 
 type MixCombination struct {
 	ID				int32
@@ -55,6 +59,11 @@ func (m MixCombination) ToKeyFields() []any {
 func (m MixCombination) GetID() int32 {
 	return m.ID
 }
+
+func (m MixCombination) Error() string {
+	return fmt.Sprintf("mix combination with first item: %s, second item: %s", m.FirstItem, m.SecondItem)
+}
+
 
 type MixComboJunction struct {
 	Junction

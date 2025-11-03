@@ -25,6 +25,10 @@ func (s Sidequest) GetID() int32 {
 	return s.ID
 }
 
+func (s Sidequest) Error() string {
+	return fmt.Sprintf("sidequest %s", s.Name)
+}
+
 type Subquest struct {
 	ID int32
 	Quest
@@ -41,6 +45,10 @@ func (s Subquest) ToHashFields() []any {
 
 func (s Subquest) GetID() int32 {
 	return s.ID
+}
+
+func (s Subquest) Error() string {
+	return fmt.Sprintf("subquest %s", s.Name)
 }
 
 type QuestCompletion struct {
@@ -63,6 +71,10 @@ func (qc QuestCompletion) GetID() int32 {
 	return qc.ID
 }
 
+func (qc QuestCompletion) Error() string {
+	return fmt.Sprintf("quest completion with quest id: %d, reward item: %s, amount: %d, condition: %s", qc.QuestID, qc.Reward.ItemName, qc.Reward.Amount, qc.Condition)
+}
+
 type CompletionLocation struct {
 	CompletionID int32
 	AreaID       int32
@@ -76,6 +88,10 @@ func (cl CompletionLocation) ToHashFields() []any {
 		cl.AreaID,
 		derefOrNil(cl.Notes),
 	}
+}
+
+func (cl CompletionLocation) Error() string {
+	return fmt.Sprintf("completion location %s, with completion id: %d, notes: %v", cl.LocationArea, cl.CompletionID, derefOrNil(cl.Notes))
 }
 
 func (l *lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {

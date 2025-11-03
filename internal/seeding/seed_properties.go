@@ -31,6 +31,10 @@ func (p Property) GetID() int32 {
 	return p.ID
 }
 
+func (p Property) Error() string {
+	return fmt.Sprintf("property %s", p.Name)
+}
+
 func (l *lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
 

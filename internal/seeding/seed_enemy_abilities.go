@@ -35,6 +35,10 @@ func (a EnemyAbility) GetAbilityRef() AbilityReference {
 	}
 }
 
+func (a EnemyAbility) Error() string {
+	return fmt.Sprintf("enemy ability %s, version %v", a.Name, derefOrNil(a.Version))
+}
+
 
 func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/enemy_abilities.json"

@@ -36,6 +36,10 @@ func (oc OverdriveCommand) GetID() int32 {
 	return oc.ID
 }
 
+func (oc OverdriveCommand) Error() string {
+	return fmt.Sprintf("overdrive command %s", oc.Name)
+}
+
 
 
 func (l *lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {

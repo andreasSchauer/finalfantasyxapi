@@ -9,8 +9,6 @@ import (
 )
 
 type MonsterArenaCreation struct {
-	//id 		int32
-	//dataHash	string
 	SubquestID					int32
 	Name                      	string  `json:"name"`
 	Category                  	string  `json:"category"`
@@ -31,6 +29,10 @@ func (m MonsterArenaCreation) ToHashFields() []any {
 		derefOrNil(m.CreationsUnlockedCategory),
 		m.Amount,
 	}
+}
+
+func (m MonsterArenaCreation)Error() string {
+	return fmt.Sprintf("monster arena creation %s", m.Name)
 }
 
 func (l *lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB) error {
