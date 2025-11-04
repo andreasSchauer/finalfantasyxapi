@@ -35,12 +35,12 @@ func (l *lookup) seedElementalResist(qtx *database.Queries, elemResist Elemental
 
 	elemResist.ElementID, err = assignFK(elemResist.Element, l.getElement)
 	if err != nil {
-		return ElementalResist{}, getErr(elemResist, err)
+		return ElementalResist{}, getErr(elemResist.Error(), err)
 	}
 
 	elemResist.AffinityID, err = assignFK(elemResist.Affinity, l.getAffinity)
 	if err != nil {
-		return ElementalResist{}, getErr(elemResist, err)
+		return ElementalResist{}, getErr(elemResist.Error(), err)
 	}
 
 	dbElemAffinity, err := qtx.CreateElementalResist(context.Background(), database.CreateElementalResistParams{
@@ -49,7 +49,7 @@ func (l *lookup) seedElementalResist(qtx *database.Queries, elemResist Elemental
 		AffinityID: elemResist.AffinityID,
 	})
 	if err != nil {
-		return ElementalResist{}, getDbErr(elemResist, err, "couldn't create elemental resist")
+		return ElementalResist{}, getErr(elemResist.Error(), err, "couldn't create elemental resist")
 	}
 
 	elemResist.ID = dbElemAffinity.ID

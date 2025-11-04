@@ -1,15 +1,20 @@
 package seeding
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+import (
+	"fmt"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+)
+	
 
 type HasID interface {
 	GetID() int32
+	error
 }
 
 func assignFK[T any, R HasID](key T, lookup func(T) (R, error)) (int32, error) {
 	result, err := lookup(key)
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("couldn't assign foreign key: %v", err)
 	}
 
 	id := result.GetID()
@@ -23,7 +28,7 @@ func assignFKPtr[T any, R HasID](key *T, lookup func(T) (R, error)) (*int32, err
 
 	result, err := lookup(*key)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("couldn't assign foreign key ptr: %v", err)
 	}
 
 	id := result.GetID()
@@ -36,7 +41,7 @@ func seedObjAssignID[T HasID](qtx *database.Queries, obj T, seed func(*database.
 
 	object, err := seed(qtx, obj)
 	if err != nil {
-		return object, err
+		return object, fmt.Errorf("couldn't seed object and assign id: %v", err)
 	}
 
 	return object, nil
@@ -49,7 +54,7 @@ func seedObjPtrAssignFK[T HasID](qtx *database.Queries, obj *T, seed func(*datab
 
 	object, err := seed(qtx, *obj)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("couldn't seed object pointer and assign id: %v", err)
 	}
 
 	return &object, nil

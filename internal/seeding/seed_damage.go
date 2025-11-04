@@ -71,7 +71,7 @@ func (l *lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error
 
 	damage.ElementID, err = assignFKPtr(damage.Element, l.getElement)
 	if err != nil {
-		return Damage{}, getErr(damage, err)
+		return Damage{}, getErr(damage.Error(), err)
 	}
 
 	dbDamage, err := qtx.CreateDamage(context.Background(), database.CreateDamageParams{
@@ -83,14 +83,14 @@ func (l *lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error
 		ElementID:       getNullInt32(damage.ElementID),
 	})
 	if err != nil {
-		return Damage{}, getDbErr(damage, err, "couldn't create damage")
+		return Damage{}, getErr(damage.Error(), err, "couldn't create damage")
 	}
 
 	damage.ID = dbDamage.ID
 
 	err = l.seedAbilityDamages(qtx, damage)
 	if err != nil {
-		return Damage{}, getErr(damage, err)
+		return Damage{}, getErr(damage.Error(), err)
 	}
 
 	return damage, nil
@@ -107,14 +107,14 @@ func (l *lookup) seedAbilityDamages(qtx *database.Queries, damage Damage) error 
 		}
 
 		err = qtx.CreateDamagesDamageCalcJunction(context.Background(), database.CreateDamagesDamageCalcJunctionParams{
-			DataHash:        		generateDataHash(fourWay),
-			AbilityID:       		fourWay.GreatGrandparentID,
-			BattleInteractionID: 	fourWay.GrandparentID,
-			DamageID:        		fourWay.ParentID,
-			AbilityDamageID: 		fourWay.ChildID,
+			DataHash:            generateDataHash(fourWay),
+			AbilityID:           fourWay.GreatGrandparentID,
+			BattleInteractionID: fourWay.GrandparentID,
+			DamageID:            fourWay.ParentID,
+			AbilityDamageID:     fourWay.ChildID,
 		})
 		if err != nil {
-			return getDbErr(abilityDamage, err, "couldn't junction ability damage")
+			return getErr(abilityDamage.Error(), err, "couldn't junction ability damage")
 		}
 	}
 
@@ -126,7 +126,7 @@ func (l *lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityD
 
 	abilityDamage.StatID, err = assignFK(abilityDamage.TargetStat, l.getStat)
 	if err != nil {
-		return AbilityDamage{}, getErr(abilityDamage, err)
+		return AbilityDamage{}, getErr(abilityDamage.Error(), err)
 	}
 
 	dbAbilityDamage, err := qtx.CreateAbilityDamage(context.Background(), database.CreateAbilityDamageParams{
@@ -139,7 +139,7 @@ func (l *lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityD
 		DamageConstant: abilityDamage.DamageConstant,
 	})
 	if err != nil {
-		return AbilityDamage{}, getDbErr(abilityDamage, err, "couldn't create ability damage")
+		return AbilityDamage{}, getErr(abilityDamage.Error(), err, "couldn't create ability damage")
 	}
 
 	abilityDamage.ID = dbAbilityDamage.ID

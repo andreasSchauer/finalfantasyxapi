@@ -9,10 +9,10 @@ import (
 )
 
 type EnemyAbility struct {
-	ID					int32
+	ID int32
 	Ability
-	Effect 				*string 			`json:"effect"`
-	BattleInteractions  []BattleInteraction `json:"battle_interactions"`
+	Effect             *string             `json:"effect"`
+	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (a EnemyAbility) ToHashFields() []any {
@@ -21,7 +21,6 @@ func (a EnemyAbility) ToHashFields() []any {
 		derefOrNil(a.Effect),
 	}
 }
-
 
 func (a EnemyAbility) GetID() int32 {
 	return a.ID
@@ -38,7 +37,6 @@ func (a EnemyAbility) GetAbilityRef() AbilityReference {
 func (a EnemyAbility) Error() string {
 	return fmt.Sprintf("enemy ability %s, version %v", a.Name, derefOrNil(a.Version))
 }
-
 
 func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/enemy_abilities.json"
@@ -57,7 +55,7 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 
 			enemyAbility.Ability, err = seedObjAssignID(qtx, enemyAbility.Ability, l.seedAbility)
 			if err != nil {
-				return err
+				return getErr(enemyAbility.Error(), err)
 			}
 
 			dbEnemyAbility, err := qtx.CreateEnemyAbility(context.Background(), database.CreateEnemyAbilityParams{
@@ -66,7 +64,7 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 				Effect:    getNullString(enemyAbility.Effect),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Enemy Ability: %s: %v", enemyAbility.Name, err)
+				return getErr(enemyAbility.Error(), err, "couldn't create enemy ability")
 			}
 
 			enemyAbility.ID = dbEnemyAbility.ID
@@ -76,7 +74,6 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 		return nil
 	})
 }
-
 
 func (l *lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/enemy_abilities.json"
@@ -92,16 +89,16 @@ func (l *lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *s
 		for _, jsonAbility := range enemyAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			ability, err := l.getEnemyAbility(abilityRef)
+			enemyAbility, err := l.getEnemyAbility(abilityRef)
 			if err != nil {
 				return err
 			}
 
-			l.currentAbility = ability.Ability
+			l.currentAbility = enemyAbility.Ability
 
-			err = l.seedBattleInteractions(qtx, l.currentAbility, ability.BattleInteractions)
+			err = l.seedBattleInteractions(qtx, l.currentAbility, enemyAbility.BattleInteractions)
 			if err != nil {
-				return err
+				return getErr(enemyAbility.Error(), err)
 			}
 		}
 

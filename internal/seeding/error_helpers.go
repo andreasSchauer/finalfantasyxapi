@@ -1,15 +1,16 @@
 package seeding
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
-func getErr(obj, err error) error {
-	return fmt.Errorf("%v: %v", obj, err)
-}
 
-func getDbErr(obj, err error, msg string) error {
-	return fmt.Errorf("%v: %s: %v", obj, msg, err)
-}
+func getErr(s string, err error, msgs ...string) error {
+	if len(msgs) > 0 {
+		msg := strings.Join(msgs, ": ")
+		return fmt.Errorf("%s: %s: %v", s, msg, err)
+	}
 
-func getStrErr(s string, err error, msg string) error {
-	return fmt.Errorf("%s %s: %v", s, msg, err)
+	return fmt.Errorf("%s: %v", s, err)
 }

@@ -7,11 +7,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type PlayerUnit struct {
-	ID		int32
-	Name 	string 				`json:"name"`
-	Type 	database.UnitType
+	ID   int32
+	Name string `json:"name"`
+	Type database.UnitType
 }
 
 func (pu PlayerUnit) ToHashFields() []any {
@@ -36,7 +35,6 @@ func (pu PlayerUnit) Error() string {
 	return fmt.Sprintf("player unit %s, type %s", pu.Name, pu.Type)
 }
 
-
 func (l *lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (PlayerUnit, error) {
 	dbPlayerUnit, err := qtx.CreatePlayerUnit(context.Background(), database.CreatePlayerUnitParams{
 		DataHash: generateDataHash(playerUnit),
@@ -44,7 +42,7 @@ func (l *lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (P
 		Type:     playerUnit.Type,
 	})
 	if err != nil {
-		return PlayerUnit{}, getDbErr(playerUnit, err, "couldn't create player unit")
+		return PlayerUnit{}, getErr(playerUnit.Error(), err, "couldn't create player unit")
 	}
 
 	playerUnit.ID = dbPlayerUnit.ID

@@ -33,10 +33,10 @@ func (s StatChange) Error() string {
 
 func (l *lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (StatChange, error) {
 	var err error
-	
+
 	statChange.StatID, err = assignFK(statChange.StatName, l.getStat)
 	if err != nil {
-		return StatChange{}, getErr(statChange, err)
+		return StatChange{}, getErr(statChange.Error(), err)
 	}
 
 	dbStatChange, err := qtx.CreateStatChange(context.Background(), database.CreateStatChangeParams{
@@ -46,7 +46,7 @@ func (l *lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (S
 		Value:           statChange.Value,
 	})
 	if err != nil {
-		return StatChange{}, getDbErr(statChange, err, "couldn't create stat change")
+		return StatChange{}, getErr(statChange.Error(), err, "couldn't create stat change")
 	}
 	statChange.ID = dbStatChange.ID
 

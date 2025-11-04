@@ -54,7 +54,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 
 			character.PlayerUnit, err = seedObjAssignID(qtx, character.PlayerUnit, l.seedPlayerUnit)
 			if err != nil {
-				return getErr(character, err)
+				return getErr(character.Error(), err)
 			}
 
 			dbCharacter, err := qtx.CreateCharacter(context.Background(), database.CreateCharacterParams{
@@ -67,7 +67,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 				CanFightUnderwater:  character.CanFightUnderwater,
 			})
 			if err != nil {
-				return getDbErr(character, err, "couldn't create character")
+				return getErr(character.Error(), err, "couldn't create character")
 			}
 
 			character.ID = dbCharacter.ID
@@ -76,7 +76,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 
 			err = l.seedCharacterClasses(qtx, character.PlayerUnit)
 			if err != nil {
-				return getErr(character, err)
+				return getErr(character.Error(), err)
 			}
 		}
 		return nil
@@ -101,7 +101,7 @@ func (l *lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.D
 
 			err = l.seedCharacterBaseStats(qtx, character)
 			if err != nil {
-				return getErr(character, err)
+				return getErr(character.Error(), err)
 			}
 		}
 
@@ -109,12 +109,11 @@ func (l *lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.D
 	})
 }
 
-
 func (l *lookup) seedCharacterBaseStats(qtx *database.Queries, character Character) error {
 	for _, baseStat := range character.BaseStats {
 		junction, err := createJunctionSeed(qtx, character, baseStat, l.seedBaseStat)
 		if err != nil {
-			return getErr(character, err)
+			return getErr(character.Error(), err)
 		}
 
 		err = qtx.CreateCharactersBaseStatsJunction(context.Background(), database.CreateCharactersBaseStatsJunctionParams{
@@ -123,7 +122,7 @@ func (l *lookup) seedCharacterBaseStats(qtx *database.Queries, character Charact
 			BaseStatID:  junction.ChildID,
 		})
 		if err != nil {
-			return getDbErr(baseStat, err, "couldn't junction base stat")
+			return getErr(baseStat.Error(), err, "couldn't junction base stat")
 		}
 	}
 

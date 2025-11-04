@@ -61,12 +61,12 @@ func (l *lookup) seedBattleInteractions(qtx *database.Queries, ability Ability, 
 			BattleInteractionID: junction.ChildID,
 		})
 		if err != nil {
-			return getDbErr(battleInteraction, err, "couldn't junction battle interaction")
+			return getErr(battleInteraction.Error(), err, "couldn't junction battle interaction")
 		}
 
 		err = l.seedBattleInteractionRelationships(qtx, ability, battleInteraction)
 		if err != nil {
-			return getErr(battleInteraction, err)
+			return getErr(battleInteraction.Error(), err)
 		}
 	}
 
@@ -78,7 +78,7 @@ func (l *lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 
 	battleInteraction.Accuracy, err = seedObjAssignID(qtx, battleInteraction.Accuracy, l.seedAccuracy)
 	if err != nil {
-		return BattleInteraction{}, getErr(battleInteraction, err)
+		return BattleInteraction{}, getErr(battleInteraction.Error(), err)
 	}
 
 	dbBattleInteraction, err := qtx.CreateBattleInteraction(context.Background(), database.CreateBattleInteractionParams{
@@ -92,7 +92,7 @@ func (l *lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 		SpecialAction:     nullSpecialActionType(battleInteraction.SpecialAction),
 	})
 	if err != nil {
-		return BattleInteraction{}, getDbErr(battleInteraction, err, "couldn't create battle interaction")
+		return BattleInteraction{}, getErr(battleInteraction.Error(), err, "couldn't create battle interaction")
 	}
 
 	battleInteraction.ID = dbBattleInteraction.ID
@@ -117,7 +117,7 @@ func (l *lookup) seedBattleInteractionRelationships(qtx *database.Queries, abili
 			DamageID:            threeWay.ChildID,
 		})
 		if err != nil {
-			return getDbErr(battleInteraction.Damage, err, "couldn't junction damage")
+			return getErr(battleInteraction.Damage.Error(), err, "couldn't junction damage")
 		}
 	}
 
@@ -142,8 +142,8 @@ func (l *lookup) seedBattleInteractionRelationships(qtx *database.Queries, abili
 }
 
 func (l *lookup) seedBattleIntAffectedBy(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
-	for _, condition := range battleInteraction.AffectedBy {
-		threeWay, err := createThreeWayJunction(ability, battleInteraction, condition, l.getStatusCondition)
+	for _, conditionString := range battleInteraction.AffectedBy {
+		threeWay, err := createThreeWayJunction(ability, battleInteraction, conditionString, l.getStatusCondition)
 		if err != nil {
 			return err
 		}
@@ -155,7 +155,7 @@ func (l *lookup) seedBattleIntAffectedBy(qtx *database.Queries, ability Ability,
 			StatusConditionID:   threeWay.ChildID,
 		})
 		if err != nil {
-			return getStrErr(condition, err, "couldn't junction affected by status")
+			return getErr(conditionString, err, "couldn't junction affected by status")
 		}
 	}
 
@@ -176,7 +176,7 @@ func (l *lookup) seedBattleIntInflictedDelay(qtx *database.Queries, ability Abil
 			InflictedDelayID:    threeWay.ChildID,
 		})
 		if err != nil {
-			return getDbErr(delay, err, "couldn't junction inflicted delay")
+			return getErr(delay.Error(), err, "couldn't junction inflicted delay")
 		}
 	}
 
@@ -197,7 +197,7 @@ func (l *lookup) seedBattleIntInflictedConditions(qtx *database.Queries, ability
 			InflictedStatusID:   threeWay.ChildID,
 		})
 		if err != nil {
-			return getDbErr(condition, err, "couldn't junction inflicted status condition")
+			return getErr(condition.Error(), err, "couldn't junction inflicted status condition")
 		}
 	}
 
@@ -205,8 +205,8 @@ func (l *lookup) seedBattleIntInflictedConditions(qtx *database.Queries, ability
 }
 
 func (l *lookup) seedBattleIntRemovedConditions(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
-	for _, condition := range battleInteraction.RemovedStatusConditions {
-		threeWay, err := createThreeWayJunction(ability, battleInteraction, condition, l.getStatusCondition)
+	for _, conditionString := range battleInteraction.RemovedStatusConditions {
+		threeWay, err := createThreeWayJunction(ability, battleInteraction, conditionString, l.getStatusCondition)
 		if err != nil {
 			return err
 		}
@@ -218,7 +218,7 @@ func (l *lookup) seedBattleIntRemovedConditions(qtx *database.Queries, ability A
 			StatusConditionID:   threeWay.ChildID,
 		})
 		if err != nil {
-			return getStrErr(condition, err, "couldn't junction removed status condition")
+			return getErr(conditionString, err, "couldn't junction removed status condition")
 		}
 	}
 
@@ -239,7 +239,7 @@ func (l *lookup) seedBattleIntCopiedConditions(qtx *database.Queries, ability Ab
 			InflictedStatusID:   threeWay.ChildID,
 		})
 		if err != nil {
-			return getDbErr(condition, err, "couldn't junction copied status condition")
+			return getErr(condition.Error(), err, "couldn't junction copied status condition")
 		}
 	}
 
@@ -260,7 +260,7 @@ func (l *lookup) seedBattleIntStatChanges(qtx *database.Queries, ability Ability
 			StatChangeID:        threeWay.ChildID,
 		})
 		if err != nil {
-			return getDbErr(statChange, err, "couldn't junction stat change")
+			return getErr(statChange.Error(), err, "couldn't junction stat change")
 		}
 	}
 
@@ -281,7 +281,7 @@ func (l *lookup) seedBattleIntModifierChanges(qtx *database.Queries, ability Abi
 			ModifierChangeID:    threeWay.ChildID,
 		})
 		if err != nil {
-			return getDbErr(modifierChange, err, "couldn't junction modifier change")
+			return getErr(modifierChange.Error(), err, "couldn't junction modifier change")
 		}
 	}
 

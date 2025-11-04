@@ -7,13 +7,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
-
 type Accuracy struct {
-	ID					int32
-	AccSource			string		`json:"acc_source"`
-	HitChance			*int32		`json:"hit_chance"`
-	AccModifier			*float32	`json:"acc_modifier"`
+	ID          int32
+	AccSource   string   `json:"acc_source"`
+	HitChance   *int32   `json:"hit_chance"`
+	AccModifier *float32 `json:"acc_modifier"`
 }
 
 func (a Accuracy) ToHashFields() []any {
@@ -32,17 +30,15 @@ func (a Accuracy) Error() string {
 	return fmt.Sprintf("accuracy with source: %s, hit chance: %v, modifier: %v", a.AccSource, derefOrNil(a.HitChance), derefOrNil(a.AccModifier))
 }
 
-
-
 func (l *lookup) seedAccuracy(qtx *database.Queries, accuracy Accuracy) (Accuracy, error) {
 	dbAccuracy, err := qtx.CreateAbilityAccuracy(context.Background(), database.CreateAbilityAccuracyParams{
-		DataHash: 		generateDataHash(accuracy),
-		AccSource: 		database.AccSourceType(accuracy.AccSource),
-		HitChance: 		getNullInt32(accuracy.HitChance),
-		AccModifier: 	getNullFloat64(accuracy.AccModifier),
+		DataHash:    generateDataHash(accuracy),
+		AccSource:   database.AccSourceType(accuracy.AccSource),
+		HitChance:   getNullInt32(accuracy.HitChance),
+		AccModifier: getNullFloat64(accuracy.AccModifier),
 	})
 	if err != nil {
-		return Accuracy{}, getDbErr(accuracy, err, "couldn't create accuracy")
+		return Accuracy{}, getErr(accuracy.Error(), err, "couldn't create accuracy")
 	}
 
 	accuracy.ID = dbAccuracy.ID

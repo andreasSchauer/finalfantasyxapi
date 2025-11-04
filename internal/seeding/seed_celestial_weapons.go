@@ -9,14 +9,14 @@ import (
 )
 
 type CelestialWeapon struct {
-	ID				int32
-	Name        	string	`json:"name"`
-	Character		string	`json:"character"`
-	CharacterID		*int32
-	KeyItemBase 	string	`json:"key_item_base"`
-	Aeon			*string	`json:"aeon"`
-	AeonID			*int32
-	Formula     	string	`json:"formula"`
+	ID          int32
+	Name        string `json:"name"`
+	Character   string `json:"character"`
+	CharacterID *int32
+	KeyItemBase string  `json:"key_item_base"`
+	Aeon        *string `json:"aeon"`
+	AeonID      *int32
+	Formula     string `json:"formula"`
 }
 
 func (cw CelestialWeapon) ToHashFields() []any {
@@ -34,7 +34,6 @@ func (cw CelestialWeapon) GetID() int32 {
 func (cw CelestialWeapon) Error() string {
 	return fmt.Sprintf("celestial weapon %s", cw.Name)
 }
-
 
 func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/celestial_weapons.json"
@@ -54,7 +53,7 @@ func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 				Formula:     database.CelestialFormula(weapon.Formula),
 			})
 			if err != nil {
-				return getDbErr(weapon, err, "couldn't create celestial weapon")
+				return getErr(weapon.Error(), err, "couldn't create celestial weapon")
 			}
 
 			weapon.ID = dbWeapon.ID
@@ -63,8 +62,6 @@ func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 		return nil
 	})
 }
-
-
 
 func (l *lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/celestial_weapons.json"
@@ -84,22 +81,22 @@ func (l *lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn 
 
 			weapon.CharacterID, err = assignFKPtr(&weapon.Character, l.getCharacter)
 			if err != nil {
-				return getErr(weapon, err)
+				return getErr(weapon.Error(), err)
 			}
 
 			weapon.AeonID, err = assignFKPtr(weapon.Aeon, l.getAeon)
 			if err != nil {
-				return getErr(weapon, err)
+				return getErr(weapon.Error(), err)
 			}
 
 			err = qtx.UpdateCelestialWeapon(context.Background(), database.UpdateCelestialWeaponParams{
-				DataHash:    	generateDataHash(weapon),
-				CharacterID: 	getNullInt32(weapon.CharacterID),
-				AeonID: 		getNullInt32(weapon.AeonID),
-				ID:				weapon.ID,
+				DataHash:    generateDataHash(weapon),
+				CharacterID: getNullInt32(weapon.CharacterID),
+				AeonID:      getNullInt32(weapon.AeonID),
+				ID:          weapon.ID,
 			})
 			if err != nil {
-				return getDbErr(weapon, err, "couldn't update celestial weapon")
+				return getErr(weapon.Error(), err, "couldn't update celestial weapon")
 			}
 		}
 

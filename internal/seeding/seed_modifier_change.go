@@ -33,10 +33,10 @@ func (m ModifierChange) Error() string {
 
 func (l *lookup) seedModifierChange(qtx *database.Queries, modifierChange ModifierChange) (ModifierChange, error) {
 	var err error
-	
+
 	modifierChange.ModifierID, err = assignFK(modifierChange.ModifierName, l.getModifier)
 	if err != nil {
-		return ModifierChange{}, getErr(modifierChange, err)
+		return ModifierChange{}, getErr(modifierChange.Error(), err)
 	}
 
 	dbModifierChange, err := qtx.CreateModifierChange(context.Background(), database.CreateModifierChangeParams{
@@ -46,7 +46,7 @@ func (l *lookup) seedModifierChange(qtx *database.Queries, modifierChange Modifi
 		Value:           modifierChange.Value,
 	})
 	if err != nil {
-		return ModifierChange{}, getDbErr(modifierChange, err, "couldn't create modifier change")
+		return ModifierChange{}, getErr(modifierChange.Error(), err, "couldn't create modifier change")
 	}
 	modifierChange.ID = dbModifierChange.ID
 

@@ -76,7 +76,7 @@ func (l *lookup) seedBlitzballItems(db *database.Queries, dbConn *sql.DB) error 
 				Slot:     database.BlitzballPositionSlot(position.Slot),
 			})
 			if err != nil {
-				return getDbErr(position, err, "couldn't create blitzball position")
+				return getErr(position.Error(), err, "couldn't create blitzball position")
 			}
 			position.ID = dbPosition.ID
 			key := createLookupKey(position)
@@ -109,7 +109,7 @@ func (l *lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 
 				item.ItemAmount, err = seedObjAssignID(qtx, item.ItemAmount, l.seedItemAmount)
 				if err != nil {
-					return getErr(item, err)
+					return getErr(item.Error(), err)
 				}
 
 				err = qtx.CreateBlitzballItem(context.Background(), database.CreateBlitzballItemParams{
@@ -119,7 +119,7 @@ func (l *lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 					Chance:       item.Chance,
 				})
 				if err != nil {
-					return getDbErr(item, err, "couldn't create blitzball item")
+					return getErr(item.Error(), err, "couldn't create blitzball item")
 				}
 			}
 		}

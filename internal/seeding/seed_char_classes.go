@@ -52,13 +52,13 @@ func (l *lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit
 
 	err = l.seedUnitCharClass(qtx, character.Name, character.PlayerUnit)
 	if err != nil {
-		return getStrErr(character.Name, err, "character class")
+		return getErr(character.Name, err, "character class")
 	}
 
 	if !character.StoryOnly {
 		err := l.seedUnitCharClass(qtx, "characters", character.PlayerUnit)
 		if err != nil {
-			return getStrErr("characters", err, "character class")
+			return getErr("characters", err, "character class")
 		}
 	}
 
@@ -75,25 +75,25 @@ func (l *lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) err
 
 	err = l.seedUnitCharClass(qtx, aeon.Name, aeon.PlayerUnit)
 	if err != nil {
-		return getStrErr(aeon.Name, err, "character class")
+		return getErr(aeon.Name, err, "character class")
 	}
 
 	err = l.seedUnitCharClass(qtx, "aeons", aeon.PlayerUnit)
 	if err != nil {
-		return getStrErr("aeons", err, "character class")
+		return getErr("aeons", err, "character class")
 	}
 
 	if aeonCategory == "standard-aeons" {
 		err = l.seedUnitCharClass(qtx, "standard-aeons", aeon.PlayerUnit)
 		if err != nil {
-			return getStrErr("standard-aeons", err, "character class")
+			return getErr("standard-aeons", err, "character class")
 		}
 	}
 
 	if aeonCategory == "magus-sisters" {
 		err = l.seedUnitCharClass(qtx, "magus-sisters", aeon.PlayerUnit)
 		if err != nil {
-			return getStrErr("magus-sisters", err, "character class")
+			return getErr("magus-sisters", err, "character class")
 		}
 	}
 
@@ -116,7 +116,7 @@ func (l *lookup) seedUnitCharClass(qtx *database.Queries, className string, unit
 		ClassID:  junction.ChildID,
 	})
 	if err != nil {
-		return getDbErr(unit, err, "couldn't junction player unit")
+		return getErr(unit.Error(), err, "couldn't junction player unit")
 	}
 
 	return nil
@@ -128,7 +128,7 @@ func (l *lookup) seedCharacterClass(qtx *database.Queries, class CharacterClass)
 		Name:     class.Name,
 	})
 	if err != nil {
-		return CharacterClass{}, getDbErr(class, err, "couldn't create character class")
+		return CharacterClass{}, getErr(class.Error(), err, "couldn't create character class")
 	}
 
 	class.ID = dbClass.ID

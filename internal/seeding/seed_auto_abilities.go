@@ -92,7 +92,7 @@ func (l *lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 				Counter:             nullCounterType(autoAbility.Counter),
 			})
 			if err != nil {
-				return getDbErr(autoAbility, err, "couldn't create auto-ability")
+				return getErr(autoAbility.Error(), err, "couldn't create auto-ability")
 			}
 
 			autoAbility.ID = dbAutoAbility.ID
@@ -115,12 +115,12 @@ func (l *lookup) seedAutoAbilitiesRelationships(db *database.Queries, dbConn *sq
 		for _, jsonAutoAbility := range autoAbilities {
 			autoAbility, err := l.getAutoAbility(jsonAutoAbility.Name)
 			if err != nil {
-				return getErr(jsonAutoAbility, err)
+				return err
 			}
 
 			autoAbility, err = l.assignAutoAbilityFKs(qtx, autoAbility)
 			if err != nil {
-				return getErr(autoAbility, err)
+				return getErr(autoAbility.Error(), err)
 			}
 
 			err = qtx.UpdateAutoAbility(context.Background(), database.UpdateAutoAbilityParams{
@@ -135,12 +135,12 @@ func (l *lookup) seedAutoAbilitiesRelationships(db *database.Queries, dbConn *sq
 				ID:                autoAbility.ID,
 			})
 			if err != nil {
-				return getDbErr(autoAbility, err, "couldn't update auto ability")
+				return getErr(autoAbility.Error(), err, "couldn't update auto-ability")
 			}
 
 			err = l.seedAutoAbilityJunctions(qtx, autoAbility)
 			if err != nil {
-				return getErr(autoAbility, err)
+				return getErr(autoAbility.Error(), err)
 			}
 		}
 
@@ -228,7 +228,7 @@ func (l *lookup) seedAutoAbilityRelatedStats(qtx *database.Queries, autoAbility 
 			StatID:        junction.ChildID,
 		})
 		if err != nil {
-			return getStrErr(jsonStat, err, "couldn't junction related stat")
+			return getErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 
@@ -248,7 +248,7 @@ func (l *lookup) seedAutoAbilityLockedOutAbilities(qtx *database.Queries, autoAb
 			ChildAbilityID:  junction.ChildID,
 		})
 		if err != nil {
-			return getStrErr(jsonAbility, err, "couldn't junction locked out ability")
+			return getErr(jsonAbility, err, "couldn't junction locked out ability")
 		}
 	}
 
@@ -268,7 +268,7 @@ func (l *lookup) seedAutoAbilityAutoItemUse(qtx *database.Queries, autoAbility A
 			ItemID:        junction.ChildID,
 		})
 		if err != nil {
-			return getStrErr(jsonItem, err, "couldn't junction auto item use item")
+			return getErr(jsonItem, err, "couldn't junction auto item use item")
 		}
 	}
 
@@ -288,7 +288,7 @@ func (l *lookup) seedAutoAbilityAddedStatusses(qtx *database.Queries, autoAbilit
 			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
-			return getStrErr(jsonStatus, err, "couldn't junction added status")
+			return getErr(jsonStatus, err, "couldn't junction added status")
 		}
 	}
 
@@ -308,7 +308,7 @@ func (l *lookup) seedAutoAbilityAddedStatusResists(qtx *database.Queries, autoAb
 			StatusResistID: junction.ChildID,
 		})
 		if err != nil {
-			return getDbErr(statusResist, err, "couldn't junction status resist")
+			return getErr(statusResist.Error(), err, "couldn't junction status resist")
 		}
 	}
 
@@ -328,7 +328,7 @@ func (l *lookup) seedAutoAbilityStatChanges(qtx *database.Queries, autoAbility A
 			StatChangeID:  junction.ChildID,
 		})
 		if err != nil {
-			return getDbErr(statChange, err, "couldn't junction stat change")
+			return getErr(statChange.Error(), err, "couldn't junction stat change")
 		}
 	}
 
@@ -348,7 +348,7 @@ func (l *lookup) seedAutoAbilityModifierChanges(qtx *database.Queries, autoAbili
 			ModifierChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return getDbErr(modifierChange, err, "couldn't junction modifier change")
+			return getErr(modifierChange.Error(), err, "couldn't junction modifier change")
 		}
 	}
 

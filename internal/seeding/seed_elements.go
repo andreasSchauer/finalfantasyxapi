@@ -46,7 +46,7 @@ func (l *lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 				Name:     element.Name,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Element: %s: %v", element.Name, err)
+				return getErr(element.Error(), err, "couldn't create element")
 			}
 
 			element.ID = dbElement.ID
@@ -72,16 +72,10 @@ func (l *lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB)
 				return err
 			}
 
-			if element.OppositeElement == nil {
-				continue
-			}
-
-			oppositeElement, err := l.getElement(*element.OppositeElement)
+			element.OppositeElementID, err = assignFKPtr(element.OppositeElement, l.getElement)
 			if err != nil {
-				return err
+				return getErr(element.Error(), err)
 			}
-
-			element.OppositeElementID = &oppositeElement.ID
 
 			err = qtx.UpdateElement(context.Background(), database.UpdateElementParams{
 				DataHash:          generateDataHash(element),
@@ -89,7 +83,7 @@ func (l *lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB)
 				ID:                element.ID,
 			})
 			if err != nil {
-				return err
+				return getErr(element.Error(), err, "couldn't update element")
 			}
 
 			l.elements[element.Name] = element

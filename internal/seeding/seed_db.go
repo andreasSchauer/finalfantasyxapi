@@ -46,7 +46,7 @@ func handleDBFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) e
 	for _, seeder := range seeders {
 		err := handleDBFunction(db, dbConn, seeder.seedFunc, seeder.name)
 		if err != nil {
-			return err
+			return getErr(seeder.name, err)
 		}
 	}
 
@@ -59,7 +59,7 @@ func handleDBFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) e
 	for _, seeder := range seeders {
 		err := handleDBFunction(db, dbConn, seeder.relFunc, seeder.name)
 		if err != nil {
-			return err
+			return getErr(seeder.name, err)
 		}
 	}
 

@@ -38,7 +38,7 @@ func (l *lookup) seedInflictedStatus(qtx *database.Queries, inflictedStatus Infl
 
 	inflictedStatus.StatusConditionID, err = assignFK(inflictedStatus.StatusCondition, l.getStatusCondition)
 	if err != nil {
-		return InflictedStatus{}, getErr(inflictedStatus, err)
+		return InflictedStatus{}, getErr(inflictedStatus.Error(), err)
 	}
 
 	dbInflictedStatus, err := qtx.CreateInflictedStatus(context.Background(), database.CreateInflictedStatusParams{
@@ -49,7 +49,7 @@ func (l *lookup) seedInflictedStatus(qtx *database.Queries, inflictedStatus Infl
 		Amount:            getNullInt32(inflictedStatus.Amount),
 	})
 	if err != nil {
-		return InflictedStatus{}, getDbErr(inflictedStatus, err, "couldn't create inflicted status")
+		return InflictedStatus{}, getErr(inflictedStatus.Error(), err, "couldn't create inflicted status")
 	}
 	inflictedStatus.ID = dbInflictedStatus.ID
 
