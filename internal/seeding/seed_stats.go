@@ -58,7 +58,7 @@ func (l *lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 				MaxVal2:  getNullInt32(stat.MaxVal2),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Stat: %s: %v", stat.Name, err)
+				return getErr(stat.Error(), err, "couldn't create stat")
 			}
 
 			stat.ID = dbStat.ID
@@ -86,7 +86,7 @@ func (l *lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 			stat.SphereID, err = assignFKPtr(&jsonStat.Sphere, l.getItem)
 			if err != nil {
-				return err
+				return getErr(stat.Error(), err)
 			}
 
 			err = qtx.UpdateStat(context.Background(), database.UpdateStatParams{
@@ -95,7 +95,7 @@ func (l *lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) er
 				ID:       stat.ID,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't update Stat: %s: %v", stat.Name, err)
+				return getErr(stat.Error(), err, "couldn't update stat")
 			}
 
 			l.stats[stat.Name] = stat

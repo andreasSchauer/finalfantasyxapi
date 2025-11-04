@@ -163,7 +163,7 @@ func (l *lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 				Name:     location.Name,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Location: %s: %v", location.Name, err)
+				return getErr(location.Error(), err, "couldn't create location")
 			}
 			location.ID = dbLocation.ID
 
@@ -189,7 +189,7 @@ func (l *lookup) seedSubLocations(qtx *database.Queries, location Location) erro
 			Specification: getNullString(subLocation.Specification),
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create Sub Location: %s - %s: %v", location.Name, subLocation.Name, err)
+			return getErr(subLocation.Error(), err, "couldn't create sublocation")
 		}
 		subLocation.ID = dbSubLocation.ID
 
@@ -219,7 +219,7 @@ func (l *lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error
 			CanRideChocobo:       area.CanRideChocobo,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create Area: %s - %s - %s: %v", subLocation.Location.Name, subLocation.Name, area.Name, err)
+			return getErr(area.Error(), err, "couldn't create area")
 		}
 
 		area.ID = dbArea.ID
@@ -255,12 +255,12 @@ func (l *lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) er
 					
 					area, err := l.getArea(locationArea)
 					if err != nil {
-						return err
+						return getErr(locationArea.Error(), err)
 					}
 
 					err = l.seedAreaConnections(qtx, area)
 					if err != nil {
-						return fmt.Errorf("area: %s: couldn't create connected area junction: %v", createLookupKey(area.GetLocationArea()), err)
+						return getErr(locationArea.Error(), err)
 					}
 				}
 			}
@@ -275,7 +275,7 @@ func (l *lookup) seedAreaConnections(qtx *database.Queries, area Area) error {
 	for _, connection := range area.ConnectedAreas {
 		junction, err := createJunctionSeed(qtx, area, connection, l.seedAreaConnection)
 		if err != nil {
-			return fmt.Errorf("area: %s: %v", createLookupKey(area.GetLocationArea()), err)
+			return err
 		}
 
 		err = qtx.CreateAreaConnectedAreasJunction(context.Background(), database.CreateAreaConnectedAreasJunctionParams{
@@ -284,7 +284,7 @@ func (l *lookup) seedAreaConnections(qtx *database.Queries, area Area) error {
 			ConnectionID: 	junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("area: %s: couldn't create connected area junction: %v", createLookupKey(area.GetLocationArea()), err)
+			return getErr(connection.Error(), err, "couldn't junction area connection")
 		}
 	}
 
@@ -297,7 +297,7 @@ func (l *lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnec
 
 	connection.AreaID, err = assignFK(connection.LocationArea, l.getArea)
 	if err != nil {
-		return AreaConnection{}, err
+		return AreaConnection{}, getErr(connection.Error(), err)
 	}
 
 	dbConnection, err := qtx.CreateAreaConnection(context.Background(), database.CreateAreaConnectionParams{
@@ -308,7 +308,7 @@ func (l *lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnec
 		Notes: 			getNullString(connection.Notes),
 	})
 	if err != nil {
-		return AreaConnection{}, fmt.Errorf("couldn't create connection: %s: %v", createLookupKey(connection.LocationArea), err)
+		return AreaConnection{}, getErr(connection.Error(), err, "couldn't create connection")
 	}
 	connection.ID = dbConnection.ID
 

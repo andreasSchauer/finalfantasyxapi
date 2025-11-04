@@ -51,13 +51,13 @@ func (l *lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 
 			fmv.SongID, err = assignFKPtr(fmv.SongName, l.getSong)
 			if err != nil {
-				return err
+				return getErr(fmv.Error(), err)
 			}
 
 
 			fmv.AreaID, err = assignFK(fmv.LocationArea, l.getArea)
 			if err != nil {
-				return err
+				return getErr(fmv.Error(), err)
 			}
 
 			err = qtx.CreateFMV(context.Background(), database.CreateFMVParams{
@@ -69,7 +69,7 @@ func (l *lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 				AreaID:              fmv.AreaID,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create FMV: %s: %v", fmv.Name, err)
+				return getErr(fmv.Error(), err, "couldn't create fmv")
 			}
 		}
 		return nil

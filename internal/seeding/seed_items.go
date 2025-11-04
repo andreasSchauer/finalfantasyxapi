@@ -94,7 +94,7 @@ func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 
 			item.MasterItem, err = seedObjAssignID(qtx, item.MasterItem, l.seedMasterItem)
 			if err != nil {
-				return err
+				return getErr(item.Error(), err)
 			}
 
 			item, err = seedObjAssignID(qtx, item, l.seedItem)
@@ -105,7 +105,7 @@ func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 			if len(item.BattleInteractions) > 0 {
 				err = l.seedItemAbility(qtx, item)
 				if err != nil {
-					return err
+					return getErr(item.Error(), err)
 				}
 			}
 		}
@@ -126,7 +126,7 @@ func (l *lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
 		SellValue:             item.SellValue,
 	})
 	if err != nil {
-		return Item{}, fmt.Errorf("couldn't create Item: %s: %v", item.Name, err)
+		return Item{}, getErr(item.Error(), err, "couldn't create item")
 	}
 
 	item.ID = dbItem.ID
@@ -145,7 +145,7 @@ func (l *lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 
 	itemAbility.Ability, err = seedObjAssignID(qtx, itemAbility.Ability, l.seedAbility)
 	if err != nil {
-		return err
+		return getErr(itemAbility.Error(), err)
 	}
 
 	dbItemAbility, err := qtx.CreateItemAbility(context.Background(), database.CreateItemAbilityParams{
@@ -155,7 +155,7 @@ func (l *lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 		Cursor:    database.TargetType(itemAbility.Cursor),
 	})
 	if err != nil {
-		return fmt.Errorf("couldn't create Item Ability: %s: %v", itemAbility.Name, err)
+		return getErr(itemAbility.Error(), err, "couldn't create item ability")
 	}
 
 	itemAbility.ID = dbItemAbility.ID
@@ -186,12 +186,12 @@ func (l *lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 			err = l.seedItemRelatedStats(qtx, item)
 			if err != nil {
-				return fmt.Errorf("item %s: %v", item.Name, err)
+				return getErr(item.Error(), err)
 			}
 
 			err = l.seedItemAvailableMenus(qtx, item)
 			if err != nil {
-				return fmt.Errorf("item %s: %v", item.Name, err)
+				return getErr(item.Error(), err)
 			}
 
 			if len(item.BattleInteractions) > 0 {
@@ -199,7 +199,7 @@ func (l *lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 				err = l.seedBattleInteractions(qtx, l.currentAbility, item.BattleInteractions)
 				if err != nil {
-					return err
+					return getErr(item.Ability.Error(), err)
 				}
 			}
 		}
@@ -222,7 +222,7 @@ func (l *lookup) seedItemRelatedStats(qtx *database.Queries, item Item) error {
 			StatID: 	junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return getErr(jsonStat, err, "couldn't junction base stat")
 		}
 	}
 
@@ -243,7 +243,7 @@ func (l *lookup) seedItemAvailableMenus(qtx *database.Queries, item Item) error 
 			SubmenuID: 	junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return getErr(jsonSubmenu, err, "couldn't junction submenu")
 		}
 	}
 

@@ -44,7 +44,7 @@ func (l *lookup) seedMasterItem(qtx *database.Queries, masterItem MasterItem) (M
 		Type:     masterItem.Type,
 	})
 	if err != nil {
-		return MasterItem{}, fmt.Errorf("couldn't create Master Item: %s: %v", masterItem.Name, err)
+		return MasterItem{}, getErr(masterItem.Error(), err)
 	}
 
 	masterItem.ID = dbMasterItem.ID

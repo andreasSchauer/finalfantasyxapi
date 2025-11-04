@@ -41,7 +41,7 @@ func (l *lookup) seedItemAmount(qtx *database.Queries, itemAmount ItemAmount) (I
 
 	itemAmount.MasterItemID, err = assignFK(itemAmount.ItemName, l.getMasterItem)
 	if err != nil {
-		return ItemAmount{}, err
+		return ItemAmount{}, getErr(itemAmount.Error(), err)
 	}
 
 	dbItemAmount, err := qtx.CreateItemAmount(context.Background(), database.CreateItemAmountParams{
@@ -50,7 +50,7 @@ func (l *lookup) seedItemAmount(qtx *database.Queries, itemAmount ItemAmount) (I
 		Amount:       itemAmount.Amount,
 	})
 	if err != nil {
-		return ItemAmount{}, fmt.Errorf("couldn't create Item Amount: %s - %d: %v", itemAmount.ItemName, itemAmount.Amount, err)
+		return ItemAmount{}, getErr(itemAmount.Error(), err, "couldn't create item amount")
 	}
 
 	itemAmount.ID = dbItemAmount.ID

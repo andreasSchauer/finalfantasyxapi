@@ -39,7 +39,7 @@ func (l *lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundE
 
 	foundEquipment.EquipmentNameID, err = assignFK(foundEquipment.Name, l.getEquipmentName)
 	if err != nil {
-		return FoundEquipment{}, err
+		return FoundEquipment{}, getErr(foundEquipment.Error(), err)
 	}
 
 	dbFoundEquipment, err := qtx.CreateFoundEquipmentPiece(context.Background(), database.CreateFoundEquipmentPieceParams{
@@ -48,14 +48,14 @@ func (l *lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundE
 		EmptySlotsAmount: foundEquipment.EmptySlotsAmount,
 	})
 	if err != nil {
-		return FoundEquipment{}, fmt.Errorf("couldn't create found equipment %s: %v", foundEquipment.Name, err)
+		return FoundEquipment{}, getErr(foundEquipment.Error(), err, "couldn't create found equipment")
 	}
 
 	foundEquipment.ID = dbFoundEquipment.ID
 
 	err = l.seedFoundEquipmentAbilities(qtx, foundEquipment)
 	if err != nil {
-		return FoundEquipment{}, fmt.Errorf("found equipment: %s: %v", foundEquipment.Name, err)
+		return FoundEquipment{}, getErr(foundEquipment.Error(), err)
 	}
 
 	return foundEquipment, nil
@@ -66,7 +66,7 @@ func (l *lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipme
 	for _, autoAbility := range foundEquipment.Abilities {
 		junction, err := createJunction(foundEquipment, autoAbility, l.getAutoAbility)
 		if err != nil {
-			return fmt.Errorf("couldn't create junction with auto ability %s: %v", autoAbility, err)
+			return getErr(autoAbility, err)
 		}
 
 		err = qtx.CreateFoundEquipmentAbilitiesJunction(context.Background(), database.CreateFoundEquipmentAbilitiesJunctionParams{
@@ -75,7 +75,7 @@ func (l *lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipme
 			AutoAbilityID: junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't seed junction with auto ability %s: %v", autoAbility, err)
+			return getErr(autoAbility, err, "couldn't junction auto-ability")
 		}
 	}
 

@@ -56,7 +56,7 @@ func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 				NullifyArmored: nullNullifyArmored(condition.NullifyArmored),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Status Condition: %s: %v", condition.Name, err)
+				return getErr(condition.Error(), err, "couldn't create status condition")
 			}
 
 			condition.ID = dbCondition.ID
@@ -92,7 +92,7 @@ func (l *lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn 
 			for _, function := range relationShipFunctions {
 				err := function(qtx, condition)
 				if err != nil {
-					return fmt.Errorf("status condition: %s: %v", condition.Name, err)
+					return getErr(condition.Error(), err)
 				}
 			}
 		}
@@ -113,7 +113,7 @@ func (l *lookup) seedStatusConditionRelatedStats(qtx *database.Queries, conditio
 			StatID:            junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create related stats: %v", err)
+			return getErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 
@@ -133,7 +133,7 @@ func (l *lookup) seedStatusConditionRemovedConditions(qtx *database.Queries, con
 			ChildConditionID:  junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create removed conditions: %v", err)
+			return getErr(jsonCondition, err, "couldn't junction removed status condition")
 		}
 	}
 
@@ -153,7 +153,7 @@ func (l *lookup) seedStatusConditionStatChanges(qtx *database.Queries, condition
 			StatChangeID:      junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return getErr(statChange.Error(), err, "couldn't junction stat change")
 		}
 	}
 
@@ -173,7 +173,7 @@ func (l *lookup) seedStatusConditionModifierChanges(qtx *database.Queries, condi
 			ModifierChangeID:  junction.ChildID,
 		})
 		if err != nil {
-			return err
+			return getErr(modifierChange.Error(), err, "couldn't junction modifier change")
 		}
 	}
 

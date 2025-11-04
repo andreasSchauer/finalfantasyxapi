@@ -5,7 +5,6 @@ import (
 	"strings"
 )
 
-
 func getErr(s string, err error, msgs ...string) error {
 	if len(msgs) > 0 {
 		msg := strings.Join(msgs, ": ")
@@ -13,4 +12,8 @@ func getErr(s string, err error, msgs ...string) error {
 	}
 
 	return fmt.Errorf("%s: %v", s, err)
+}
+
+func joinSubjects(subjects ...string) string {
+	return strings.Join(subjects, ": ")
 }

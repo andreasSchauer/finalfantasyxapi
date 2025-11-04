@@ -112,6 +112,38 @@ func (q *Queries) CreateAreaConnection(ctx context.Context, arg CreateAreaConnec
 	return i, err
 }
 
+const createEncounterLocation = `-- name: CreateEncounterLocation :one
+INSERT INTO encounter_locations (data_hash, version, area_id, notes)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = encounter_locations.data_hash
+RETURNING id, data_hash, version, area_id, notes
+`
+
+type CreateEncounterLocationParams struct {
+	DataHash string
+	Version  sql.NullInt32
+	AreaID   int32
+	Notes    sql.NullString
+}
+
+func (q *Queries) CreateEncounterLocation(ctx context.Context, arg CreateEncounterLocationParams) (EncounterLocation, error) {
+	row := q.db.QueryRowContext(ctx, createEncounterLocation,
+		arg.DataHash,
+		arg.Version,
+		arg.AreaID,
+		arg.Notes,
+	)
+	var i EncounterLocation
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Version,
+		&i.AreaID,
+		&i.Notes,
+	)
+	return i, err
+}
+
 const createEncounterLocationFormationsJunction = `-- name: CreateEncounterLocationFormationsJunction :exec
 INSERT INTO j_encounter_location_formations (data_hash, encounter_location_id, monster_formation_id)
 VALUES ($1, $2, $3)
@@ -150,38 +182,6 @@ func (q *Queries) CreateFormationBossSong(ctx context.Context, arg CreateFormati
 		&i.DataHash,
 		&i.SongID,
 		&i.CelebrateVictory,
-	)
-	return i, err
-}
-
-const createFormationLocation = `-- name: CreateFormationLocation :one
-INSERT INTO encounter_locations (data_hash, version, area_id, notes)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = encounter_locations.data_hash
-RETURNING id, data_hash, version, area_id, notes
-`
-
-type CreateFormationLocationParams struct {
-	DataHash string
-	Version  sql.NullInt32
-	AreaID   int32
-	Notes    sql.NullString
-}
-
-func (q *Queries) CreateFormationLocation(ctx context.Context, arg CreateFormationLocationParams) (EncounterLocation, error) {
-	row := q.db.QueryRowContext(ctx, createFormationLocation,
-		arg.DataHash,
-		arg.Version,
-		arg.AreaID,
-		arg.Notes,
-	)
-	var i EncounterLocation
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Version,
-		&i.AreaID,
-		&i.Notes,
 	)
 	return i, err
 }

@@ -126,7 +126,7 @@ func (l *lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 				ScanText:             getNullString(monster.ScanText),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Monster: %s-%d: %v", monster.Name, derefOrNil(monster.Version), err)
+				return getErr(monster.Error(), err, "couldn't create monster")
 			}
 			monster.ID = dbMonster.ID
 			key := createLookupKey(monster)

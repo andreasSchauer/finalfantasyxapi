@@ -46,7 +46,7 @@ func (l *lookup) seedQuest(qtx *database.Queries, quest Quest) (Quest, error) {
 		Type:     quest.Type,
 	})
 	if err != nil {
-		return Quest{}, fmt.Errorf("couldn't create Quest: %s: %v", quest.Name, err)
+		return Quest{}, getErr(quest.Error(), err, "couldn't create quest")
 	}
 
 	quest.ID = dbQuest.ID

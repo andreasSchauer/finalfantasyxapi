@@ -45,7 +45,7 @@ func (l *lookup) seedMonsterAmount(qtx *database.Queries, monsterAmount MonsterA
 		Amount:    monsterAmount.Amount,
 	})
 	if err != nil {
-		return MonsterAmount{}, fmt.Errorf("couldn't create monster amount for %s: %v", createLookupKey(monsterAmount), err)
+		return MonsterAmount{}, getErr(monsterAmount.Error(), err, "couldn't create monster amount")
 	}
 	monsterAmount.ID = dbMonsterAmount.ID
 

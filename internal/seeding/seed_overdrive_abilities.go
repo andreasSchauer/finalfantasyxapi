@@ -56,7 +56,7 @@ func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 
 			overdriveAbility.Ability, err = seedObjAssignID(qtx, overdriveAbility.Ability, l.seedAbility)
 			if err != nil {
-				return err
+				return getErr(overdriveAbility.Error(), err)
 			}
 
 			dbOverdriveAbility, err := qtx.CreateOverdriveAbility(context.Background(), database.CreateOverdriveAbilityParams{
@@ -64,7 +64,7 @@ func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 				AbilityID: overdriveAbility.Ability.ID,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Overdrive Ability: %s: %v", overdriveAbility.Name, err)
+				return getErr(overdriveAbility.Error(), err, "couldn't create overdrive ability")
 			}
 
 			overdriveAbility.ID = dbOverdriveAbility.ID
@@ -90,21 +90,21 @@ func (l *lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbCon
 		for _, jsonAbility := range overdriveAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			ability, err := l.getOverdriveAbility(abilityRef)
+			overdriveAbility, err := l.getOverdriveAbility(abilityRef)
 			if err != nil {
-				return err
+				return getErr(abilityRef.Error(), err)
 			}
 
-			err = l.seedOverdriveAbilityRelatedStats(qtx, ability)
+			err = l.seedOverdriveAbilityRelatedStats(qtx, overdriveAbility)
 			if err != nil {
-				return err
+				return getErr(overdriveAbility.Error(), err)
 			}
 
-			l.currentAbility = ability.Ability
+			l.currentAbility = overdriveAbility.Ability
 
-			err = l.seedBattleInteractions(qtx, l.currentAbility, ability.BattleInteractions)
+			err = l.seedBattleInteractions(qtx, l.currentAbility, overdriveAbility.BattleInteractions)
 			if err != nil {
-				return err
+				return getErr(overdriveAbility.Error(), err)
 			}
 		}
 
@@ -127,7 +127,7 @@ func (l *lookup) seedOverdriveAbilityRelatedStats(qtx *database.Queries, ability
 			StatID: 			junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("ability %s: %v", createLookupKey(ability.Ability), err)
+			return getErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 

@@ -52,7 +52,7 @@ func (l *lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 				DefaultValue: getNullFloat64(modifier.DefaultValue),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Modifier: %s: %v", modifier.Name, err)
+				return getErr(modifier.Error(), err, "couldn't create modifier")
 			}
 
 			modifier.ID = dbModifier.ID

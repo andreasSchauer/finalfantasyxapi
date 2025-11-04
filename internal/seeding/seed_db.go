@@ -275,7 +275,7 @@ func (l *lookup) getSeeders() []seeder {
 		},
 		{
 			name:     "monster formations",
-			seedFunc: l.seedFormationLocations,
+			seedFunc: l.seedEncounterLocations,
 			relFunc:  l.seedMonsterFormationsRelationships,
 		},
 		{

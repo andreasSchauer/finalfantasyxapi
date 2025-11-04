@@ -49,7 +49,7 @@ func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 
 			keyItem.MasterItem, err = seedObjAssignID(qtx, keyItem.MasterItem, l.seedMasterItem)
 			if err != nil {
-				return err
+				return getErr(keyItem.Error(), err)
 			}
 
 			dbKeyItem, err := qtx.CreateKeyItem(context.Background(), database.CreateKeyItemParams{
@@ -60,7 +60,7 @@ func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 				Effect:       keyItem.Effect,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Key Item: %s: %v", keyItem.Name, err)
+				return getErr(keyItem.Error(), err, "couldn't create key item")
 			}
 
 			keyItem.ID = dbKeyItem.ID

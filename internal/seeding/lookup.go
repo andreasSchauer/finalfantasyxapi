@@ -1,7 +1,7 @@
 package seeding
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
@@ -16,8 +16,8 @@ func createLookupKey(l Lookupable) string {
 }
 
 type lookup struct {
-	currentAbility     Ability						// currentAbility and currentBI are
-	currentBI		   BattleInteraction			// used for seeding of ability damage
+	currentAbility     Ability           // currentAbility and currentBI are
+	currentBI          BattleInteraction // used for seeding of ability damage
 	abilities          map[string]Ability
 	enemyAbilities     map[string]EnemyAbility
 	overdriveAbilities map[string]OverdriveAbility
@@ -34,7 +34,7 @@ type lookup struct {
 	elements           map[string]Element
 	equipmentNames     map[string]EquipmentName
 	equipmentTables    map[string]EquipmentTable
-	formationLocations map[string]FormationLocation
+	encounterLocations map[string]EncounterLocation
 	items              map[string]Item
 	keyItems           map[string]KeyItem
 	masterItems        map[string]MasterItem
@@ -75,7 +75,7 @@ func lookupInit() lookup {
 		elements:           make(map[string]Element),
 		equipmentNames:     make(map[string]EquipmentName),
 		equipmentTables:    make(map[string]EquipmentTable),
-		formationLocations: make(map[string]FormationLocation),
+		encounterLocations: make(map[string]EncounterLocation),
 		items:              make(map[string]Item),
 		keyItems:           make(map[string]KeyItem),
 		masterItems:        make(map[string]MasterItem),
@@ -99,90 +99,89 @@ func lookupInit() lookup {
 	}
 }
 
-
-func (l *lookup) getAbility(abilityReference AbilityReference) (Ability, error) {
-	key := createLookupKey(abilityReference)
+func (l *lookup) getAbility(abilityRef AbilityReference) (Ability, error) {
+	key := createLookupKey(abilityRef)
 
 	ability, found := l.abilities[key]
 	if !found {
-		return Ability{}, fmt.Errorf("couldn't find Ability %s - %d - %s", ability.Name, derefOrNil(ability.Version), ability.Type)
+		return Ability{}, getErr(abilityRef.Error(), errors.New("couldn't find ability"))
 	}
 
 	return ability, nil
 }
 
-func (l *lookup) getEnemyAbility(abilityReference AbilityReference) (EnemyAbility, error) {
-	key := createLookupKey(abilityReference)
+func (l *lookup) getEnemyAbility(abilityRef AbilityReference) (EnemyAbility, error) {
+	key := createLookupKey(abilityRef)
 
 	ability, found := l.enemyAbilities[key]
 	if !found {
-		return EnemyAbility{}, fmt.Errorf("couldn't find Enemy Ability %s - %d", ability.Name, derefOrNil(ability.Version))
+		return EnemyAbility{}, getErr(abilityRef.Error(), errors.New("couldn't find enemy ability"))
 	}
 
 	return ability, nil
 }
 
-func (l *lookup) getOverdriveAbility(abilityReference AbilityReference) (OverdriveAbility, error) {
-	key := createLookupKey(abilityReference)
+func (l *lookup) getOverdriveAbility(abilityRef AbilityReference) (OverdriveAbility, error) {
+	key := createLookupKey(abilityRef)
 
 	ability, found := l.overdriveAbilities[key]
 	if !found {
-		return OverdriveAbility{}, fmt.Errorf("couldn't find Overdrive Ability %s - %d", ability.Name, derefOrNil(ability.Version))
+		return OverdriveAbility{}, getErr(abilityRef.Error(), errors.New("couldn't find overdrive ability"))
 	}
 
 	return ability, nil
 }
 
-func (l *lookup) getPlayerAbility(abilityReference AbilityReference) (PlayerAbility, error) {
-	key := createLookupKey(abilityReference)
+func (l *lookup) getPlayerAbility(abilityRef AbilityReference) (PlayerAbility, error) {
+	key := createLookupKey(abilityRef)
 
 	ability, found := l.playerAbilities[key]
 	if !found {
-		return PlayerAbility{}, fmt.Errorf("couldn't find Player Ability %s - %d", ability.Name, derefOrNil(ability.Version))
+		return PlayerAbility{}, getErr(abilityRef.Error(), errors.New("couldn't find player ability"))
 	}
 
 	return ability, nil
 }
 
-func (l *lookup) getTriggerCommand(abilityReference AbilityReference) (TriggerCommand, error) {
-	key := createLookupKey(abilityReference)
+func (l *lookup) getTriggerCommand(abilityRef AbilityReference) (TriggerCommand, error) {
+	key := createLookupKey(abilityRef)
 
 	command, found := l.triggerCommands[key]
 	if !found {
-		return TriggerCommand{}, fmt.Errorf("couldn't find Trigger Command %s - %d", command.Name, derefOrNil(command.Version))
+		return TriggerCommand{}, getErr(abilityRef.Error(), errors.New("couldn't find trigger command"))
 	}
 
 	return command, nil
 }
 
-func (l *lookup) getAeon(aeonName string) (Aeon, error) {
+func (l *lookup) getAeon(key string) (Aeon, error) {
 	playerUnit := PlayerUnit{
-		Name: aeonName,
+		Name: key,
 		Type: database.UnitTypeAeon,
 	}
-	key := createLookupKey(playerUnit)
+	lookupKey := createLookupKey(playerUnit)
 
-	aeon, found := l.aeons[key]
+	aeon, found := l.aeons[lookupKey]
 	if !found {
-		return Aeon{}, fmt.Errorf("couldn't find Aeon %s", aeonName)
+		return Aeon{}, getErr(key, errors.New("couldn't find aeon"))
 	}
 
 	return aeon, nil
 }
 
-func (l *lookup) getAeonCommand(commandName string) (AeonCommand, error) {
-	command, found := l.aeonCommands[commandName]
+func (l *lookup) getAeonCommand(key string) (AeonCommand, error) {
+	command, found := l.aeonCommands[key]
 	if !found {
-		return AeonCommand{}, fmt.Errorf("couldn't find Aeon Command %s", commandName)
+		return AeonCommand{}, getErr(key, errors.New("couldn't find aeon command"))
 	}
 
 	return command, nil
 }
 
-func (l *lookup) getAffinity(affinityName string) (Affinity, error) {
-	affinity, found := l.affinities[affinityName]
+func (l *lookup) getAffinity(key string) (Affinity, error) {
+	affinity, found := l.affinities[key]
 	if !found {
-		return Affinity{}, fmt.Errorf("couldn't find Affinity %s", affinityName)
+		return Affinity{}, getErr(key, errors.New("couldn't find affinity"))
 	}
 
 	return affinity, nil
@@ -193,160 +192,160 @@ func (l *lookup) getArea(locationArea LocationArea) (Area, error) {
 
 	area, found := l.areas[key]
 	if !found {
-		return Area{}, fmt.Errorf("couldn't find location area: %s", createLookupKey(locationArea))
+		return Area{}, getErr(locationArea.Error(), errors.New("couldn't find location area"))
 	}
 
 	return area, nil
 }
 
-func (l *lookup) getAutoAbility(abilityName string) (AutoAbility, error) {
-	autoAbility, found := l.autoAbilities[abilityName]
+func (l *lookup) getAutoAbility(key string) (AutoAbility, error) {
+	autoAbility, found := l.autoAbilities[key]
 	if !found {
-		return AutoAbility{}, fmt.Errorf("couldn't find Auto Ability %s", abilityName)
+		return AutoAbility{}, getErr(key, errors.New("couldn't find auto-ability"))
 	}
 
 	return autoAbility, nil
 }
 
-func (l *lookup) getCelestialWeapon(weaponName string) (CelestialWeapon, error) {
-	weapon, found := l.celestialWeapons[weaponName]
+func (l *lookup) getCelestialWeapon(key string) (CelestialWeapon, error) {
+	weapon, found := l.celestialWeapons[key]
 	if !found {
-		return CelestialWeapon{}, fmt.Errorf("couldn't find Celestial Weapon %s", weaponName)
+		return CelestialWeapon{}, getErr(key, errors.New("couldn't find celestial weapon"))
 	}
 
 	return weapon, nil
 }
 
-func (l *lookup) getCharacter(charName string) (Character, error) {
+func (l *lookup) getCharacter(key string) (Character, error) {
 	playerUnit := PlayerUnit{
-		Name: charName,
+		Name: key,
 		Type: database.UnitTypeCharacter,
 	}
-	key := createLookupKey(playerUnit)
+	lookupKey := createLookupKey(playerUnit)
 
-	character, found := l.characters[key]
+	character, found := l.characters[lookupKey]
 	if !found {
-		return Character{}, fmt.Errorf("couldn't find Character %s", charName)
+		return Character{}, getErr(key, errors.New("couldn't find couldn't find character"))
 	}
 
 	return character, nil
 }
 
-func (l *lookup) getCharacterClass(className string) (CharacterClass, error) {
-	class, found := l.charClasses[className]
+func (l *lookup) getCharacterClass(key string) (CharacterClass, error) {
+	class, found := l.charClasses[key]
 	if !found {
-		return CharacterClass{}, fmt.Errorf("couldn't find Character Class %s", className)
+		return CharacterClass{}, getErr(key, errors.New("couldn't find character class"))
 	}
 
 	return class, nil
 }
 
-func (l *lookup) getElement(elementName string) (Element, error) {
-	element, found := l.elements[elementName]
+func (l *lookup) getElement(key string) (Element, error) {
+	element, found := l.elements[key]
 	if !found {
-		return Element{}, fmt.Errorf("couldn't find Element %s", elementName)
+		return Element{}, getErr(key, errors.New("couldn't find element"))
 	}
 
 	return element, nil
 }
 
-func (l *lookup) getEquipmentName(equipmentName string) (EquipmentName, error) {
-	equipment, found := l.equipmentNames[equipmentName]
+func (l *lookup) getEquipmentName(key string) (EquipmentName, error) {
+	equipment, found := l.equipmentNames[key]
 	if !found {
-		return EquipmentName{}, fmt.Errorf("couldn't find Equipment Name %s", equipmentName)
+		return EquipmentName{}, getErr(key, errors.New("couldn't find equipment name"))
 	}
 
 	return equipment, nil
 }
 
-func (l *lookup) getEquipmentTable(tableKey string) (EquipmentTable, error) {
-	equipmentTable, found := l.equipmentTables[tableKey]
+func (l *lookup) getEquipmentTable(key string) (EquipmentTable, error) {
+	equipmentTable, found := l.equipmentTables[key]
 	if !found {
-		return EquipmentTable{}, fmt.Errorf("couldn't find Equipment Table %s", tableKey)
+		return EquipmentTable{}, getErr(key, errors.New("couldn't find equipment table"))
 	}
 
 	return equipmentTable, nil
 }
 
-func (l *lookup) getFormationLocation(formationKey string) (FormationLocation, error) {
-	formationLocation, found := l.formationLocations[formationKey]
+func (l *lookup) getEncounterLocation(key string) (EncounterLocation, error) {
+	encounterLocation, found := l.encounterLocations[key]
 	if !found {
-		return FormationLocation{}, fmt.Errorf("couldn't find Formation Location %s", formationKey)
+		return EncounterLocation{}, getErr(key, errors.New("couldn't find encounter location"))
 	}
 
-	return formationLocation, nil
+	return encounterLocation, nil
 }
 
-func (l *lookup) getItem(itemName string) (Item, error) {
+func (l *lookup) getItem(key string) (Item, error) {
 	masterItem := MasterItem{
-		Name: itemName,
+		Name: key,
 		Type: database.ItemTypeItem,
 	}
-	key := createLookupKey(masterItem)
+	lookupKey := createLookupKey(masterItem)
 
-	item, found := l.items[key]
+	item, found := l.items[lookupKey]
 	if !found {
-		return Item{}, fmt.Errorf("couldn't find Item %s", itemName)
+		return Item{}, getErr(key, errors.New("couldn't find item"))
 	}
 
 	return item, nil
 }
 
-func (l *lookup) getKeyItem(itemName string) (KeyItem, error) {
+func (l *lookup) getKeyItem(key string) (KeyItem, error) {
 	masterItem := MasterItem{
-		Name: itemName,
+		Name: key,
 		Type: database.ItemTypeKeyItem,
 	}
-	key := createLookupKey(masterItem)
+	lookupKey := createLookupKey(masterItem)
 
-	keyItem, found := l.keyItems[key]
+	keyItem, found := l.keyItems[lookupKey]
 	if !found {
-		return KeyItem{}, fmt.Errorf("couldn't find Key Item %s", itemName)
+		return KeyItem{}, getErr(key, errors.New("couldn't find key item"))
 	}
 
 	return keyItem, nil
 }
 
-func (l *lookup) getMasterItem(itemName string) (MasterItem, error) {
-	masterItem, found := l.masterItems[itemName]
+func (l *lookup) getMasterItem(key string) (MasterItem, error) {
+	masterItem, found := l.masterItems[key]
 	if !found {
-		return MasterItem{}, fmt.Errorf("couldn't find Master Item %s", itemName)
+		return MasterItem{}, getErr(key, errors.New("couldn't find master item"))
 	}
 
 	return masterItem, nil
 }
 
-func (l *lookup) getMix(mixName string) (Mix, error) {
-	mix, found := l.mixes[mixName]
+func (l *lookup) getMix(key string) (Mix, error) {
+	mix, found := l.mixes[key]
 	if !found {
-		return Mix{}, fmt.Errorf("couldn't find Mix %s", mixName)
+		return Mix{}, getErr(key, errors.New("couldn't find mix"))
 	}
 
 	return mix, nil
 }
 
-func (l *lookup) getModifier(modifierName string) (Modifier, error) {
-	modifier, found := l.modifiers[modifierName]
+func (l *lookup) getModifier(key string) (Modifier, error) {
+	modifier, found := l.modifiers[key]
 	if !found {
-		return Modifier{}, fmt.Errorf("couldn't find Modifier %s", modifierName)
+		return Modifier{}, getErr(key, errors.New("couldn't find modifier"))
 	}
 
 	return modifier, nil
 }
 
-func (l *lookup) getMonster(monsterKey string) (Monster, error) {
-	monster, found := l.monsters[monsterKey]
+func (l *lookup) getMonster(key string) (Monster, error) {
+	monster, found := l.monsters[key]
 	if !found {
-		return Monster{}, fmt.Errorf("couldn't find Monster %s", monsterKey)
+		return Monster{}, getErr(key, errors.New("couldn't find monster"))
 	}
 
 	return monster, nil
 }
 
-func (l *lookup) getOverdriveCommand(commandName string) (OverdriveCommand, error) {
-	command, found := l.overdriveCommands[commandName]
+func (l *lookup) getOverdriveCommand(key string) (OverdriveCommand, error) {
+	command, found := l.overdriveCommands[key]
 	if !found {
-		return OverdriveCommand{}, fmt.Errorf("couldn't find Overdrive Command %s", commandName)
+		return OverdriveCommand{}, getErr(key, errors.New("couldn't find overdrive command"))
 	}
 
 	return command, nil
@@ -357,52 +356,37 @@ func (l *lookup) getOverdrive(ability Ability) (Overdrive, error) {
 
 	overdrive, found := l.overdrives[key]
 	if !found {
-		return Overdrive{}, fmt.Errorf("couldn't find overdrive: %s - %d", ability.Name, derefOrNil(ability.Version))
+		return Overdrive{}, getErr(key, errors.New("couldn't find overdrive"))
 	}
 
 	return overdrive, nil
 }
 
-func (l *lookup) getOverdriveMode(modeName string) (OverdriveMode, error) {
-	mode, found := l.overdriveModes[modeName]
+func (l *lookup) getOverdriveMode(key string) (OverdriveMode, error) {
+	mode, found := l.overdriveModes[key]
 	if !found {
-		return OverdriveMode{}, fmt.Errorf("couldn't find Overdrive Mode %s", modeName)
+		return OverdriveMode{}, getErr(key, errors.New("couldn't find overdrive mode"))
 	}
 
 	return mode, nil
 }
 
-func (l *lookup) getPosition(positionKey string) (BlitzballPosition, error) {
-	position, found := l.positions[positionKey]
+func (l *lookup) getPosition(key string) (BlitzballPosition, error) {
+	position, found := l.positions[key]
 	if !found {
-		return BlitzballPosition{}, fmt.Errorf("couldn't find Blitzball Position %s", positionKey)
+		return BlitzballPosition{}, getErr(key, errors.New("couldn't find blitzball position"))
 	}
 
 	return position, nil
 }
 
-func (l *lookup) getProperty(propertyName string) (Property, error) {
-	property, found := l.properties[propertyName]
+func (l *lookup) getProperty(key string) (Property, error) {
+	property, found := l.properties[key]
 	if !found {
-		return Property{}, fmt.Errorf("couldn't find Property %s", propertyName)
+		return Property{}, getErr(key, errors.New("couldn't find property"))
 	}
 
 	return property, nil
-}
-
-func (l *lookup) getSidequest(questName string) (Sidequest, error) {
-	quest := Quest{
-		Name: questName,
-		Type: database.QuestTypeSidequest,
-	}
-	key := createLookupKey(quest)
-
-	sidequest, found := l.sidequests[key]
-	if !found {
-		return Sidequest{}, fmt.Errorf("couldn't find Sidequest %s", questName)
-	}
-
-	return sidequest, nil
 }
 
 func (l *lookup) getQuest(quest Quest) (Quest, error) {
@@ -410,76 +394,91 @@ func (l *lookup) getQuest(quest Quest) (Quest, error) {
 
 	quest, found := l.quests[key]
 	if !found {
-		return Quest{}, fmt.Errorf("couldn't find Quest %s", quest.Name)
+		return Quest{}, getErr(quest.Error(), errors.New("couldn't find quest"))
 	}
 
 	return quest, nil
 }
 
-func (l *lookup) getSubquest(questName string) (Subquest, error) {
+func (l *lookup) getSidequest(key string) (Sidequest, error) {
 	quest := Quest{
-		Name: questName,
+		Name: key,
+		Type: database.QuestTypeSidequest,
+	}
+	lookupKey := createLookupKey(quest)
+
+	sidequest, found := l.sidequests[lookupKey]
+	if !found {
+		return Sidequest{}, getErr(key, errors.New("couldn't find sidequest"))
+	}
+
+	return sidequest, nil
+}
+
+func (l *lookup) getSubquest(key string) (Subquest, error) {
+	quest := Quest{
+		Name: key,
 		Type: database.QuestTypeSubquest,
 	}
-	key := createLookupKey(quest)
+	lookupKey := createLookupKey(quest)
 
-	subquest, found := l.subquests[key]
+	subquest, found := l.subquests[lookupKey]
 	if !found {
-		return Subquest{}, fmt.Errorf("couldn't find Subquest %s", questName)
+		return Subquest{}, getErr(key, errors.New("couldn't find subquest"))
 	}
 
 	return subquest, nil
 }
 
-func (l *lookup) getShop(shopKey string) (Shop, error) {
-	shop, found := l.shops[shopKey]
+func (l *lookup) getShop(key string) (Shop, error) {
+	shop, found := l.shops[key]
 	if !found {
-		return Shop{}, fmt.Errorf("couldn't find Shop %s", shopKey)
+		return Shop{}, getErr(key, errors.New("couldn't find shop"))
 	}
 
 	return shop, nil
 }
 
-func (l *lookup) getSong(songName string) (Song, error) {
-	song, found := l.songs[songName]
+func (l *lookup) getSong(key string) (Song, error) {
+	song, found := l.songs[key]
 	if !found {
-		return Song{}, fmt.Errorf("couldn't find Song %s", songName)
+		return Song{}, getErr(key, errors.New("couldn't find song"))
 	}
 
 	return song, nil
 }
 
-func (l *lookup) getStat(statName string) (Stat, error) {
-	stat, found := l.stats[statName]
+func (l *lookup) getStat(key string) (Stat, error) {
+	stat, found := l.stats[key]
 	if !found {
-		return Stat{}, fmt.Errorf("couldn't find Stat %s", statName)
+		return Stat{}, getErr(key, errors.New("couldn't find stat"))
 	}
 
 	return stat, nil
 }
 
-func (l *lookup) getStatusCondition(conditionName string) (StatusCondition, error) {
-	condition, found := l.statusConditions[conditionName]
+func (l *lookup) getStatusCondition(key string) (StatusCondition, error) {
+	condition, found := l.statusConditions[key]
 	if !found {
-		return StatusCondition{}, fmt.Errorf("couldn't find Status Condition %s", conditionName)
+		return StatusCondition{}, getErr(key, errors.New("couldn't find status condition"))
 	}
 
 	return condition, nil
 }
 
-func (l *lookup) getSubmenu(menuName string) (Submenu, error) {
-	submenu, found := l.submenus[menuName]
+func (l *lookup) getSubmenu(key string) (Submenu, error) {
+	submenu, found := l.submenus[key]
 	if !found {
-		return Submenu{}, fmt.Errorf("couldn't find Submenu %s", menuName)
+		return Submenu{}, getErr(key, errors.New("couldn't find submenu"))
 	}
 
 	return submenu, nil
 }
 
-func (l *lookup) getTreasure(treasureKey string) (Treasure, error) {
-	treasure, found := l.treasures[treasureKey]
+func (l *lookup) getTreasure(key string) (Treasure, error) {
+	treasure, found := l.treasures[key]
 	if !found {
-		return Treasure{}, fmt.Errorf("couldn't find Treasure %s", treasureKey)
+		return Treasure{}, getErr(key, errors.New("couldn't find treasure"))
 	}
 
 	return treasure, nil

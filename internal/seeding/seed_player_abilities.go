@@ -81,7 +81,7 @@ func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 
 			playerAbility.Ability, err = seedObjAssignID(qtx, playerAbility.Ability, l.seedAbility)
 			if err != nil {
-				return err
+				return getErr(playerAbility.Error(), err)
 			}
 
 			dbPlayerAbility, err := qtx.CreatePlayerAbility(context.Background(), database.CreatePlayerAbilityParams{
@@ -95,7 +95,7 @@ func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 				Cursor:              nullTargetType(playerAbility.Cursor),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Player Ability: %s: %v", playerAbility.Name, err)
+				return getErr(playerAbility.Error(), err, "couldn't create player ability")
 			}
 
 			playerAbility.ID = dbPlayerAbility.ID
@@ -120,31 +120,31 @@ func (l *lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *
 		for _, jsonAbility := range playerAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			ability, err := l.getPlayerAbility(abilityRef)
+			playerAbility, err := l.getPlayerAbility(abilityRef)
 			if err != nil {
-				return fmt.Errorf("ability %s: %v", createLookupKey(ability.Ability), err)
+				return err
 			}
 
-			err = l.seedPlayerAbilityFKs(qtx, ability)
+			err = l.seedPlayerAbilityFKs(qtx, playerAbility)
 			if err != nil {
-				return fmt.Errorf("ability %s: %v", createLookupKey(ability.Ability), err)
+				return getErr(playerAbility.Error(), err)
 			}
 
-			err = l.seedPlayerAbilityRelatedStats(qtx, ability)
+			err = l.seedPlayerAbilityRelatedStats(qtx, playerAbility)
 			if err != nil {
-				return fmt.Errorf("ability %s: %v", createLookupKey(ability.Ability), err)
+				return getErr(playerAbility.Error(), err)
 			}
 
-			err = l.seedPlayerAbilityLearnedBy(qtx, ability)
+			err = l.seedPlayerAbilityLearnedBy(qtx, playerAbility)
 			if err != nil {
-				return fmt.Errorf("ability %s: %v", createLookupKey(ability.Ability), err)
+				return getErr(playerAbility.Error(), err)
 			}
 
-			l.currentAbility = ability.Ability
+			l.currentAbility = playerAbility.Ability
 
-			err = l.seedBattleInteractions(qtx, l.currentAbility, ability.BattleInteractions)
+			err = l.seedBattleInteractions(qtx, l.currentAbility, playerAbility.BattleInteractions)
 			if err != nil {
-				return fmt.Errorf("ability %s: %v", createLookupKey(ability.Ability), err)
+				return getErr(playerAbility.Error(), err)
 			}
 		}
 
@@ -191,7 +191,7 @@ func (l *lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbili
 		ID: 				ability.ID,
 	})
 	if err != nil {
-		return fmt.Errorf("couldn't update player ability %s: %v", createLookupKey(ability.Ability), err)
+		return getErr("", err, "couldn't update player ability")
 	}
 
 	return nil
@@ -212,7 +212,7 @@ func (l *lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability Pl
 			StatID: 			junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("ability %s: %v", createLookupKey(ability.Ability), err)
+			return getErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 
@@ -233,7 +233,7 @@ func (l *lookup) seedPlayerAbilityLearnedBy(qtx *database.Queries, ability Playe
 			CharacterClassID: 	junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("ability %s: %v", createLookupKey(ability.Ability), err)
+			return getErr(charClass, err, "couldn't junction 'learned by' class")
 		}
 	}
 

@@ -81,7 +81,7 @@ func (l *lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 			locationArea := list.LocationArea
 			list.LocationArea.ID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
-				return fmt.Errorf("monster formations: %v", err)
+				return getErr(list.Error(), err)
 			}
 
 			for j, treasure := range list.Treasures {
@@ -100,7 +100,7 @@ func (l *lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 					GilAmount:       getNullInt32(treasure.GilAmount),
 				})
 				if err != nil {
-					return fmt.Errorf("couldn't create Treasure: %s - treasure version: %d: %v", createLookupKey(locationArea), treasure.Version, err)
+					return getErr(treasure.Error(), err, "couldn't create treasure")
 				}
 
 				treasure.ID = dbTreasure.ID
@@ -126,6 +126,9 @@ func (l *lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, list := range treasureLists {
 			list.LocationArea.ID, err = assignFK(list.LocationArea, l.getArea)
+			if err != nil {
+				return getErr(list.Error(), err)
+			}
 
 			for j, jsonTreasure := range list.Treasures {
 				jsonTreasure.AreaID = list.LocationArea.ID
@@ -139,12 +142,12 @@ func (l *lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 
 				err = l.seedTreasureItemAmounts(qtx, treasure)
 				if err != nil {
-					return fmt.Errorf("treasure: %s: %v", createLookupKey(treasure), err)
+					return getErr(treasure.Error(), err)
 				}
 
 				treasure.Equipment, err = seedObjPtrAssignFK(qtx, treasure.Equipment, l.seedFoundEquipment)
 				if err != nil {
-					return fmt.Errorf("treasure: %s: %v", createLookupKey(treasure), err)
+					return getErr(treasure.Error(), err)
 				}
 
 				err = qtx.UpdateTreasure(context.Background(), database.UpdateTreasureParams{
@@ -153,7 +156,7 @@ func (l *lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 					ID: 				treasure.ID,
 				})
 				if err != nil {
-					return fmt.Errorf("couldn't update Treasure: %s - treasure version: %d: %v", createLookupKey(list.LocationArea), treasure.Version, err)
+					return getErr(treasure.Error(), err, "couldn't update treasure")
 				}
 			}
 		}
@@ -175,7 +178,7 @@ func (l *lookup) seedTreasureItemAmounts(qtx *database.Queries, treasure Treasur
 			ItemAmountID: junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create junction for item Amount: %s: %v", createLookupKey(itemAmount), err)
+			return getErr(itemAmount.Error(), err, "couldn't junction item amount")
 		}
 	}
 

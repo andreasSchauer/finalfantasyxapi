@@ -55,7 +55,7 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = shops.data_hash
 RETURNING *;
 
 
--- name: CreateFormationLocation :one
+-- name: CreateEncounterLocation :one
 INSERT INTO encounter_locations (data_hash, version, area_id, notes)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = encounter_locations.data_hash

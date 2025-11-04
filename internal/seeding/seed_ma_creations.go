@@ -50,7 +50,7 @@ func (l *lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB)
 
 			creation.SubquestID, err = assignFK(creation.Name, l.getSubquest)
 			if err != nil {
-				return err
+				return getErr(creation.Error(), err)
 			}
 
 			err = qtx.CreateMonsterArenaCreation(context.Background(), database.CreateMonsterArenaCreationParams{
@@ -64,7 +64,7 @@ func (l *lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB)
 				Amount:                    creation.Amount,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Monster Arena Creation: %s: %v", creation.Name, err)
+				return getErr(creation.Error(), err, "couldn't create monster arena creation")
 			}
 		}
 		return nil

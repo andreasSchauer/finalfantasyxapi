@@ -61,7 +61,7 @@ func (l *lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 		for _, overdrive := range overdrives {
 			overdrive.Attributes, err = seedObjPtrAssignFK(qtx, overdrive.Attributes, l.seedAbilityAttributes)
 			if err != nil {
-				return fmt.Errorf("couldn't create Ability Attributes: %s-%d, type: %s: %v", overdrive.Name, derefOrNil(overdrive.Version), overdrive.Type, err)
+				return getErr(overdrive.Error(), err)
 			}
 
 			dbOverdrive, err := qtx.CreateOverdrive(context.Background(), database.CreateOverdriveParams{
@@ -77,7 +77,7 @@ func (l *lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 				Cursor:          nullTargetType(overdrive.Cursor),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Overdrive: %s: %v", overdrive.Name, err)
+				return getErr(overdrive.Error(), err, "couldn't create overdrive")
 			}
 
 			overdrive.ID = dbOverdrive.ID
@@ -107,12 +107,12 @@ func (l *lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 
 			overdrive.ODCommandID, err = assignFKPtr(overdrive.OverdriveCommand, l.getOverdriveCommand)
 			if err != nil {
-				return err
+				return getErr(overdrive.Error(), err)
 			}
 
 			overdrive.CharClassID, err = assignFKPtr(&overdrive.User, l.getCharacterClass)
 			if err != nil {
-				return err
+				return getErr(overdrive.Error(), err)
 			}
 
 			err = qtx.UpdateOverdrive(context.Background(), database.UpdateOverdriveParams{
@@ -122,7 +122,7 @@ func (l *lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 				ID:               overdrive.ID,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't update Overdrive: %s: %v", overdrive.Name, err)
+				return getErr(overdrive.Error(), err, "couldn't update overdrive")
 			}
 
 			err = l.seedOverdriveJunctions(qtx, overdrive)
@@ -138,7 +138,7 @@ func (l *lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdri
 	for _, abilityRef := range overdrive.OverdriveAbilities {
 		junction, err := createJunction(overdrive, abilityRef, l.getOverdriveAbility)
 		if err != nil {
-			return fmt.Errorf("couldn't create junction between overdrive %s and ability %s: %v", overdrive.Name, createLookupKey(abilityRef), err)
+			return getErr(overdrive.Error(), err)
 		}
 
 		err = qtx.CreateOverdrivesOverdriveAbilitiesJunction(context.Background(), database.CreateOverdrivesOverdriveAbilitiesJunctionParams{
@@ -147,13 +147,14 @@ func (l *lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdri
 			OverdriveAbilityID: junction.ChildID,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create junction between overdrive %s and ability %s: %v", overdrive.Name, createLookupKey(abilityRef), err)
+			subjects := joinSubjects(overdrive.Error(), abilityRef.Error())
+			return getErr(subjects, err, "couldn't junction overdrive ability")
 		}
 
 		if overdrive.UnlockCondition == nil {
 			err := l.seedDefaultOverdrive(qtx, overdrive, abilityRef)
 			if err != nil {
-				return err
+				return getErr(overdrive.Error(), err)
 			}
 		}
 	}
@@ -167,14 +168,9 @@ func (l *lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive
 		return err
 	}
 
-	ability, err := l.getOverdriveAbility(abilityRef)
-	if err != nil {
-		return err
-	}
-
 	junction, err := createJunction(class, abilityRef, l.getOverdriveAbility)
 	if err != nil {
-		return err
+		return getErr(abilityRef.Error(), err)
 	}
 
 	err = qtx.CreateDefaultOverdriveAbility(context.Background(), database.CreateDefaultOverdriveAbilityParams{
@@ -183,7 +179,7 @@ func (l *lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive
 		AbilityID: junction.ChildID,
 	})
 	if err != nil {
-		return fmt.Errorf("couldn't create junction between character class %s with ID %d and overdrive ability %s with ID %d: %v", overdrive.User, derefOrNil(overdrive.CharClassID), createLookupKey(abilityRef), ability.ID, err)
+		return getErr(abilityRef.Error(), err, "couldn't create default overdrive ability")
 	}
 
 	return nil

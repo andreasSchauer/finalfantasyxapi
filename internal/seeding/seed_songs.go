@@ -177,7 +177,7 @@ func (l *lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 				SpecialUseCase: 		nullMusicUseCase(song.SpecialUseCase),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Song: %s: %v", song.Name, err)
+				return getErr(song.Error(), err, "couldn't create song")
 			}
 
 			song.ID = dbSong.ID
@@ -206,7 +206,7 @@ func (l *lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 			song.Credits, err = seedObjPtrAssignFK(qtx, song.Credits, l.seedCredits)
 			if err != nil {
-				return fmt.Errorf("song %s: %v", song.Name, err)
+				return getErr(song.Error(), err)
 			}
 
 			err = qtx.UpdateSong(context.Background(), database.UpdateSongParams{
@@ -215,17 +215,17 @@ func (l *lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) er
 				ID: song.ID,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't update song %s: %v", song.Name, err)
+				return getErr(song.Error(), err, "couldn't update song")
 			}
 
 			err = l.seedBackgroundMusicEntries(qtx, song)
 			if err != nil {
-				return fmt.Errorf("song %s: %v", song.Name, err)
+				return getErr(song.Error(), err)
 			}
 
 			err = l.seedCues(qtx, song)
 			if err != nil {
-				return fmt.Errorf("song %s: %v", song.Name, err)
+				return getErr(song.Error(), err)
 			}
 		}	
 
@@ -244,7 +244,7 @@ func (l *lookup) seedCredits(qtx *database.Queries, credits SongCredits) (SongCr
 		Lyricist: 	getNullString(credits.Lyricist),
 	})
 	if err != nil {
-		return SongCredits{}, fmt.Errorf("couldn't create credits: %v", err)
+		return SongCredits{}, getErr(credits.Error(), err, "couldn't create song credits")
 	}
 
 	credits.ID = dbSongCredits.ID
@@ -267,7 +267,7 @@ func (l *lookup) seedBackgroundMusicEntries (qtx *database.Queries, song Song) e
 			saJunction.Junction = junction
 			saJunction.AreaID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
-				return err
+				return getErr(bm.Error(), err)
 			}
 			
 			err = qtx.CreateSongsBackgroundMusicJunction(context.Background(), database.CreateSongsBackgroundMusicJunctionParams{
@@ -277,7 +277,7 @@ func (l *lookup) seedBackgroundMusicEntries (qtx *database.Queries, song Song) e
 				AreaID: 	saJunction.AreaID,
 			})
 			if err != nil {
-				return err
+				return getErr(bm.Error(), err, "couldn't junction background music entry")
 			}
 		}
 	}
@@ -296,12 +296,11 @@ func (l *lookup) seedCues (qtx *database.Queries, song Song) error {
 		for _, locationArea := range cue.IncludedAreas {
 			var err error
 
-			// threeway
 			saJunction := SongAreaJunction{}
 			saJunction.Junction = junction
 			saJunction.AreaID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
-				return err
+				return getErr(cue.Error(), err)
 			}
 
 			err = qtx.CreateSongsCuesJunction(context.Background(), database.CreateSongsCuesJunctionParams{
@@ -311,7 +310,7 @@ func (l *lookup) seedCues (qtx *database.Queries, song Song) error {
 				AreaID: 	saJunction.AreaID,
 			})
 			if err != nil {
-				return err
+				return getErr(cue.Error(), err, "couldn't junction cue")
 			}
 		}
 	}
@@ -327,7 +326,7 @@ func (l *lookup) seedBackgroundMusic(qtx *database.Queries, bm BackgroundMusic) 
 		ReplacesEncounterMusic: bm.ReplacesEncounterMusic,
 	})
 	if err != nil {
-		return BackgroundMusic{}, fmt.Errorf("couldn't create background music: %v", err)
+		return BackgroundMusic{}, getErr(bm.Error(), err, "couldn't create background music entry")
 	}
 
 	bm.ID = dbBM.ID
@@ -342,7 +341,7 @@ func (l *lookup) seedCue(qtx *database.Queries, cue Cue) (Cue, error) {
 		
 		cue.TriggerLocationArea.ID, err = assignFK(*cue.TriggerLocationArea, l.getArea)
 		if err != nil {
-			return Cue{}, err
+			return Cue{}, getErr(cue.Error(), err)
 		}
 	}
 
@@ -355,7 +354,7 @@ func (l *lookup) seedCue(qtx *database.Queries, cue Cue) (Cue, error) {
 		ReplacesEncounterMusic: cue.ReplacesEncounterMusic,
 	})
 	if err != nil {
-		return Cue{}, fmt.Errorf("couldn't create cue: %v", err)
+		return Cue{}, getErr(cue.Error(), err, "couldn't create cue")
 	}
 
 	cue.ID = dbCue.ID

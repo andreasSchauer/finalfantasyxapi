@@ -55,7 +55,7 @@ func (l *lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 				Topmenu:     nullTopmenuType(submenu.Topmenu),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Submenu: %s: %v", submenu.Name, err)
+				return getErr(submenu.Error(), err, "couldn't create submenu")
 			}
 			submenu.ID = dbSubmenu.ID
 
@@ -85,7 +85,7 @@ func (l *lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 			for _, jsonCharClass := range jsonSubmenu.Users {
 				junction, err := createJunction(submenu, jsonCharClass, l.getCharacterClass)
 				if err != nil {
-					return err
+					return getErr(submenu.Error(), err)
 				}
 
 				err = qtx.CreateSubmenusUsersJunction(context.Background(), database.CreateSubmenusUsersJunctionParams{
@@ -94,7 +94,8 @@ func (l *lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 					CharacterClassID: 	junction.ChildID,
 				})
 				if err != nil {
-					return err
+					subjects := joinSubjects(submenu.Error(), jsonCharClass)
+					return getErr(subjects, err, "couldn't junction user")
 				}
 			}
 		}

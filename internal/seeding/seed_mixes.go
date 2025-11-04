@@ -90,16 +90,16 @@ func (l *lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, mix := range mixes {
+			var err error
+
 			ability := Ability{
 				Name: mix.Name,
 			}
 
-			overdrive, err := l.getOverdrive(ability)
+			mix.OverdriveID, err = assignFK(ability, l.getOverdrive)
 			if err != nil {
-				return err
+				return getErr(mix.Error(), err)
 			}
-
-			mix.OverdriveID = overdrive.ID
 
 			dbMix, err := qtx.CreateMix(context.Background(), database.CreateMixParams{
 				DataHash:    generateDataHash(mix),
@@ -107,7 +107,7 @@ func (l *lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 				Category:    database.MixCategory(mix.Category),
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Mix: %s: %v", mix.Name, err)
+				return getErr(mix.Error(), err, "couldn't create mix")
 			}
 
 			mix.ID = dbMix.ID
@@ -137,7 +137,7 @@ func (l *lookup) seedMixesRelationships(db *database.Queries, dbConn *sql.DB) er
 
 			err = l.seedMixCombinations(qtx, mix)
 			if err != nil {
-				return err
+				return getErr(mix.Error(), err)
 			}
 		}
 
@@ -170,7 +170,7 @@ func (l *lookup) seedMixCombinations(qtx *database.Queries, mix Mix) error {
 			IsBestCombo: mixJunction.IsBestCombo,
 		})
 		if err != nil {
-			return fmt.Errorf("couldn't create Junction between Mix: %s and Combo %s-%s: %v", mix.Name, combo.FirstItem, combo.SecondItem, err)
+			return getErr(combo.Error(), err, "couldn't junction mix combination")
 		}
 	}
 
@@ -196,12 +196,12 @@ func (l *lookup) seedMixCombination(qtx *database.Queries, combo MixCombination)
 	var err error
 	combo.FirstItemID, err = assignFK(combo.FirstItem, l.getItem)
 	if err != nil {
-		return MixCombination{}, err
+		return MixCombination{}, getErr(combo.Error(), err)
 	}
 
 	combo.SecondItemID, err = assignFK(combo.SecondItem, l.getItem)
 	if err != nil {
-		return MixCombination{}, err
+		return MixCombination{}, getErr(combo.Error(), err)
 	}
 
 	dbCombo, err := qtx.CreateMixCombination(context.Background(), database.CreateMixCombinationParams{
@@ -210,7 +210,7 @@ func (l *lookup) seedMixCombination(qtx *database.Queries, combo MixCombination)
 		SecondItemID: combo.SecondItemID,
 	})
 	if err != nil {
-		return MixCombination{}, fmt.Errorf("couldn't create Mix Combination: %s + %s: %v", combo.FirstItem, combo.SecondItem, err)
+		return MixCombination{}, getErr(combo.Error(), err, "couldn't create mix combination")
 	}
 
 	combo.ID = dbCombo.ID

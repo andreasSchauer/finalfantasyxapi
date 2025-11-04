@@ -45,7 +45,7 @@ func (l *lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 			
 			primer.KeyItemID, err = assignFK(primer.Name, l.getKeyItem)
 			if err != nil {
-				return err
+				return getErr(primer.Error(), err)
 			}
 
 			err = qtx.CreatePrimer(context.Background(), database.CreatePrimerParams{
@@ -55,7 +55,7 @@ func (l *lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 				EnglishLetter: primer.EnglishLetter,
 			})
 			if err != nil {
-				return fmt.Errorf("couldn't create Primer: %s: %v", primer.Name, err)
+				return getErr(primer.Error(), err, "couldn't create primer")
 			}
 		}
 		return nil
