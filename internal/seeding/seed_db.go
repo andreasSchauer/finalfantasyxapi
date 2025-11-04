@@ -181,7 +181,7 @@ func (l *lookup) getSeeders() []seeder {
 		{
 			name:     "monsters",
 			seedFunc: l.seedMonsters,
-			relFunc:  nil,
+			relFunc:  l.seedMonstersRelationships,
 		},
 		{
 			name:     "aeon commands",
