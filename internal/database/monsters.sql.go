@@ -70,6 +70,23 @@ func (q *Queries) CreateAltStateChangesAutoAbilitiesJunction(ctx context.Context
 	return err
 }
 
+const createAltStateChangesBaseStatsJunction = `-- name: CreateAltStateChangesBaseStatsJunction :exec
+INSERT INTO j_alt_state_changes_base_stats (data_hash, alt_state_change_id, base_stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltStateChangesBaseStatsJunctionParams struct {
+	DataHash         string
+	AltStateChangeID int32
+	BaseStatID       int32
+}
+
+func (q *Queries) CreateAltStateChangesBaseStatsJunction(ctx context.Context, arg CreateAltStateChangesBaseStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAltStateChangesBaseStatsJunction, arg.DataHash, arg.AltStateChangeID, arg.BaseStatID)
+	return err
+}
+
 const createAltStateChangesElemResistsJunction = `-- name: CreateAltStateChangesElemResistsJunction :exec
 INSERT INTO j_alt_state_changes_elem_resists (data_hash, alt_state_change_id, elem_resist_id)
 VALUES ($1, $2, $3)
@@ -101,23 +118,6 @@ type CreateAltStateChangesPropertiesJunctionParams struct {
 
 func (q *Queries) CreateAltStateChangesPropertiesJunction(ctx context.Context, arg CreateAltStateChangesPropertiesJunctionParams) error {
 	_, err := q.db.ExecContext(ctx, createAltStateChangesPropertiesJunction, arg.DataHash, arg.AltStateChangeID, arg.PropertyID)
-	return err
-}
-
-const createAltStateChangesStatsJunction = `-- name: CreateAltStateChangesStatsJunction :exec
-INSERT INTO j_alt_state_changes_stats (data_hash, alt_state_change_id, base_stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAltStateChangesStatsJunctionParams struct {
-	DataHash         string
-	AltStateChangeID int32
-	BaseStatID       int32
-}
-
-func (q *Queries) CreateAltStateChangesStatsJunction(ctx context.Context, arg CreateAltStateChangesStatsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAltStateChangesStatsJunction, arg.DataHash, arg.AltStateChangeID, arg.BaseStatID)
 	return err
 }
 
@@ -601,6 +601,23 @@ func (q *Queries) CreateMonstersAutoAbilitiesJunction(ctx context.Context, arg C
 	return err
 }
 
+const createMonstersBaseStatsJunction = `-- name: CreateMonstersBaseStatsJunction :exec
+INSERT INTO j_monsters_base_stats (data_hash, monster_id, base_stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonstersBaseStatsJunctionParams struct {
+	DataHash   string
+	MonsterID  int32
+	BaseStatID int32
+}
+
+func (q *Queries) CreateMonstersBaseStatsJunction(ctx context.Context, arg CreateMonstersBaseStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonstersBaseStatsJunction, arg.DataHash, arg.MonsterID, arg.BaseStatID)
+	return err
+}
+
 const createMonstersElemResistsJunction = `-- name: CreateMonstersElemResistsJunction :exec
 INSERT INTO j_monsters_elem_resists (data_hash, monster_id, elem_resist_id)
 VALUES ($1, $2, $3)
@@ -669,36 +686,19 @@ func (q *Queries) CreateMonstersRonsoRageJunction(ctx context.Context, arg Creat
 	return err
 }
 
-const createMonstersStatsJunction = `-- name: CreateMonstersStatsJunction :exec
-INSERT INTO j_monsters_stats (data_hash, monster_id, base_stat_id)
+const createMonstersStatusResistsJunction = `-- name: CreateMonstersStatusResistsJunction :exec
+INSERT INTO j_monsters_status_resists (data_hash, monster_id, status_resist_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateMonstersStatsJunctionParams struct {
-	DataHash   string
-	MonsterID  int32
-	BaseStatID int32
-}
-
-func (q *Queries) CreateMonstersStatsJunction(ctx context.Context, arg CreateMonstersStatsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createMonstersStatsJunction, arg.DataHash, arg.MonsterID, arg.BaseStatID)
-	return err
-}
-
-const createMonstersStatusResistancesJunction = `-- name: CreateMonstersStatusResistancesJunction :exec
-INSERT INTO j_monsters_status_resistances (data_hash, monster_id, status_resist_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateMonstersStatusResistancesJunctionParams struct {
+type CreateMonstersStatusResistsJunctionParams struct {
 	DataHash       string
 	MonsterID      int32
 	StatusResistID int32
 }
 
-func (q *Queries) CreateMonstersStatusResistancesJunction(ctx context.Context, arg CreateMonstersStatusResistancesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createMonstersStatusResistancesJunction, arg.DataHash, arg.MonsterID, arg.StatusResistID)
+func (q *Queries) CreateMonstersStatusResistsJunction(ctx context.Context, arg CreateMonstersStatusResistsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonstersStatusResistsJunction, arg.DataHash, arg.MonsterID, arg.StatusResistID)
 	return err
 }

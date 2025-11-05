@@ -38,12 +38,12 @@ type Monster struct {
 	MonsterArenaPrice    	*int32   			`json:"monster_arena_price"`
 	SensorText           	string   			`json:"sensor_text"`
 	ScanText             	*string  			`json:"scan_text"`
-	Stats					[]BaseStat			`json:"stats"`
+	BaseStats				[]BaseStat			`json:"base_stats"`
 	Items					*MonsterItems		`json:"items"`
 	Equipment				*MonsterEquipment	`json:"equipment"`
 	ElemResists				[]ElementalResist	`json:"elem_resists"`
 	StatusImmunities		[]string			`json:"status_immunities"`
-	StatusResistances		[]StatusResist		`json:"status_resistances"`
+	StatusResists			[]StatusResist		`json:"status_resists"`
 	AlteredStates			[]AlteredState		`json:"altered_states"`
 	Abilities				[]MonsterAbility	`json:"abilities"`
 }
@@ -275,10 +275,10 @@ type AltStateChange struct {
 	ID					int32
 	AlteredStateID		int32
 	AlterationType		string				`json:"alteration_type"`
+	Distance			*int32				`json:"distance"`
 	Properties			*[]string			`json:"properties"`
 	AutoAbilities		*[]string			`json:"auto_abilities"`
-	Distance			*int32				`json:"distance"`
-	Stats				*[]BaseStat			`json:"stats"`
+	BaseStats			*[]BaseStat			`json:"base_stats"`
 	ElemResists			*[]ElementalResist	`json:"elem_resists"`
 	StatusImmunities	*[]string			`json:"status_immunities"`
 	AddedStatusses		*[]InflictedStatus	`json:"added_statusses"`

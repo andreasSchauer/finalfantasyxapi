@@ -2829,6 +2829,13 @@ type JAltStateChangesAutoAbility struct {
 	AutoAbilityID    int32
 }
 
+type JAltStateChangesBaseStat struct {
+	ID               int32
+	DataHash         string
+	AltStateChangeID int32
+	BaseStatID       int32
+}
+
 type JAltStateChangesElemResist struct {
 	ID               int32
 	DataHash         string
@@ -2841,13 +2848,6 @@ type JAltStateChangesProperty struct {
 	DataHash         string
 	AltStateChangeID int32
 	PropertyID       int32
-}
-
-type JAltStateChangesStat struct {
-	ID               int32
-	DataHash         string
-	AltStateChangeID int32
-	BaseStatID       int32
 }
 
 type JAltStateChangesStatusImmunity struct {
@@ -3096,6 +3096,13 @@ type JMonstersAutoAbility struct {
 	AutoAbilityID int32
 }
 
+type JMonstersBaseStat struct {
+	ID         int32
+	DataHash   string
+	MonsterID  int32
+	BaseStatID int32
+}
+
 type JMonstersElemResist struct {
 	ID           int32
 	DataHash     string
@@ -3124,14 +3131,7 @@ type JMonstersRonsoRage struct {
 	RonsoRageID int32
 }
 
-type JMonstersStat struct {
-	ID         int32
-	DataHash   string
-	MonsterID  int32
-	BaseStatID int32
-}
-
-type JMonstersStatusResistance struct {
+type JMonstersStatusResist struct {
 	ID             int32
 	DataHash       string
 	MonsterID      int32

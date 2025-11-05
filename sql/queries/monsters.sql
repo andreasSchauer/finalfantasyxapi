@@ -86,8 +86,8 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateMonstersStatsJunction :exec
-INSERT INTO j_monsters_stats (data_hash, monster_id, base_stat_id)
+-- name: CreateMonstersBaseStatsJunction :exec
+INSERT INTO j_monsters_base_stats (data_hash, monster_id, base_stat_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -104,8 +104,8 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateMonstersStatusResistancesJunction :exec
-INSERT INTO j_monsters_status_resistances (data_hash, monster_id, status_resist_id)
+-- name: CreateMonstersStatusResistsJunction :exec
+INSERT INTO j_monsters_status_resists (data_hash, monster_id, status_resist_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -146,8 +146,8 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAltStateChangesStatsJunction :exec
-INSERT INTO j_alt_state_changes_stats (data_hash, alt_state_change_id, base_stat_id)
+-- name: CreateAltStateChangesBaseStatsJunction :exec
+INSERT INTO j_alt_state_changes_base_stats (data_hash, alt_state_change_id, base_stat_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
