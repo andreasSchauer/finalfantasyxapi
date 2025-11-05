@@ -7,21 +7,20 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type MonsterItems struct {
-	ID					int32
-	MonsterID			int32
-	DropChance			int32				`json:"drop_chance"`
-	DropCondition		*string				`json:"drop_condition"`
-	OtherItemsCondition	*string				`json:"other_items_condition"`
-	OtherItems			[]PossibleItem		`json:"other_items"`
-	StealCommon			*ItemAmount			`json:"steal_common"`
-	StealRare			*ItemAmount			`json:"steal_rare"`
-	DropCommon			*ItemAmount			`json:"drop_common"`
-	DropRare			*ItemAmount			`json:"drop_rare"`
-	SecondaryDropCommon	*ItemAmount			`json:"secondary_drop_common"`
-	SecondaryDropRare	*ItemAmount			`json:"secondary_drop_rare"`
-	Bribe				*ItemAmount			`json:"bribe"`
+	ID                  int32
+	MonsterID           int32
+	DropChance          int32          `json:"drop_chance"`
+	DropCondition       *string        `json:"drop_condition"`
+	OtherItemsCondition *string        `json:"other_items_condition"`
+	OtherItems          []PossibleItem `json:"other_items"`
+	StealCommon         *ItemAmount    `json:"steal_common"`
+	StealRare           *ItemAmount    `json:"steal_rare"`
+	DropCommon          *ItemAmount    `json:"drop_common"`
+	DropRare            *ItemAmount    `json:"drop_rare"`
+	SecondaryDropCommon *ItemAmount    `json:"secondary_drop_common"`
+	SecondaryDropRare   *ItemAmount    `json:"secondary_drop_rare"`
+	Bribe               *ItemAmount    `json:"bribe"`
 }
 
 func (m MonsterItems) ToHashFields() []any {
@@ -30,13 +29,13 @@ func (m MonsterItems) ToHashFields() []any {
 		m.DropChance,
 		derefOrNil(m.DropCondition),
 		derefOrNil(m.OtherItemsCondition),
-		ObjPtrToHashID(m.StealCommon),
-		ObjPtrToHashID(m.StealRare),
-		ObjPtrToHashID(m.DropCommon),
-		ObjPtrToHashID(m.DropRare),
-		ObjPtrToHashID(m.SecondaryDropCommon),
-		ObjPtrToHashID(m.SecondaryDropRare),
-		ObjPtrToHashID(m.Bribe),
+		ObjPtrToID(m.StealCommon),
+		ObjPtrToID(m.StealRare),
+		ObjPtrToID(m.DropCommon),
+		ObjPtrToID(m.DropRare),
+		ObjPtrToID(m.SecondaryDropCommon),
+		ObjPtrToID(m.SecondaryDropRare),
+		ObjPtrToID(m.Bribe),
 	}
 }
 
@@ -47,7 +46,6 @@ func (m MonsterItems) GetID() int32 {
 func (m MonsterItems) Error() string {
 	return fmt.Sprintf("monster items of monster with id %d", m.MonsterID)
 }
-
 
 func (l *lookup) seedMonsterItems(qtx *database.Queries, monsterItems MonsterItems) (MonsterItems, error) {
 	var err error
@@ -88,18 +86,18 @@ func (l *lookup) seedMonsterItems(qtx *database.Queries, monsterItems MonsterIte
 	}
 
 	dbMonsterItems, err := qtx.CreateMonsterItem(context.Background(), database.CreateMonsterItemParams{
-		DataHash: 				generateDataHash(monsterItems),
-		MonsterID: 				monsterItems.MonsterID,
-		DropChance: 			monsterItems.DropChance,
-		DropCondition: 			getNullString(monsterItems.DropCondition),
-		OtherItemsCondition: 	getNullString(monsterItems.OtherItemsCondition),
-		StealCommonID: 			ObjPtrToNullInt32ID(monsterItems.StealCommon),
-		StealRareID: 			ObjPtrToNullInt32ID(monsterItems.StealRare),
-		DropCommonID: 			ObjPtrToNullInt32ID(monsterItems.DropCommon),
-		DropRareID: 			ObjPtrToNullInt32ID(monsterItems.DropRare),
-		SecondaryDropCommonID: 	ObjPtrToNullInt32ID(monsterItems.SecondaryDropCommon),
-		SecondaryDropRareID: 	ObjPtrToNullInt32ID(monsterItems.SecondaryDropRare),
-		BribeID: 				ObjPtrToNullInt32ID(monsterItems.Bribe),
+		DataHash:              generateDataHash(monsterItems),
+		MonsterID:             monsterItems.MonsterID,
+		DropChance:            monsterItems.DropChance,
+		DropCondition:         getNullString(monsterItems.DropCondition),
+		OtherItemsCondition:   getNullString(monsterItems.OtherItemsCondition),
+		StealCommonID:         ObjPtrToNullInt32ID(monsterItems.StealCommon),
+		StealRareID:           ObjPtrToNullInt32ID(monsterItems.StealRare),
+		DropCommonID:          ObjPtrToNullInt32ID(monsterItems.DropCommon),
+		DropRareID:            ObjPtrToNullInt32ID(monsterItems.DropRare),
+		SecondaryDropCommonID: ObjPtrToNullInt32ID(monsterItems.SecondaryDropCommon),
+		SecondaryDropRareID:   ObjPtrToNullInt32ID(monsterItems.SecondaryDropRare),
+		BribeID:               ObjPtrToNullInt32ID(monsterItems.Bribe),
 	})
 	if err != nil {
 		return MonsterItems{}, getErr(monsterItems.Error(), err, "couldn't create monster items")
@@ -115,7 +113,6 @@ func (l *lookup) seedMonsterItems(qtx *database.Queries, monsterItems MonsterIte
 	return monsterItems, nil
 }
 
-
 func (l *lookup) seedMonsterOtherItems(qtx *database.Queries, monsterItems MonsterItems) error {
 	for _, posItem := range monsterItems.OtherItems {
 		junction, err := createJunctionSeed(qtx, monsterItems, posItem, l.seedPossibleItem)
@@ -124,7 +121,7 @@ func (l *lookup) seedMonsterOtherItems(qtx *database.Queries, monsterItems Monst
 		}
 
 		err = qtx.CreateMonsterItemsOtherItemsJunction(context.Background(), database.CreateMonsterItemsOtherItemsJunctionParams{
-			DataHash: generateDataHash(junction),
+			DataHash:       generateDataHash(junction),
 			MonsterItemsID: junction.ParentID,
 			PossibleItemID: junction.ChildID,
 		})

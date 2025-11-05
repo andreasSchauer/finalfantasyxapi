@@ -18,17 +18,17 @@ func (tl TreasureList) Error() string {
 }
 
 type Treasure struct {
-	ID				int32
+	ID              int32
 	Version         int32
 	AreaID          int32
-	TreasureType    string  		`json:"treasure_type"`
-	LootType        string  		`json:"loot_type"`
-	IsPostAirship   bool    		`json:"is_post_airship"`
-	IsAnimaTreasure bool    		`json:"is_anima_treasure"`
-	Notes           *string 		`json:"notes"`
-	GilAmount       *int32  		`json:"gil_amount"`
-	Items			[]ItemAmount	`json:"items"`
-	Equipment		*FoundEquipment	`json:"equipment"`
+	TreasureType    string          `json:"treasure_type"`
+	LootType        string          `json:"loot_type"`
+	IsPostAirship   bool            `json:"is_post_airship"`
+	IsAnimaTreasure bool            `json:"is_anima_treasure"`
+	Notes           *string         `json:"notes"`
+	GilAmount       *int32          `json:"gil_amount"`
+	Items           []ItemAmount    `json:"items"`
+	Equipment       *FoundEquipment `json:"equipment"`
 }
 
 func (t Treasure) ToHashFields() []any {
@@ -41,10 +41,9 @@ func (t Treasure) ToHashFields() []any {
 		t.IsAnimaTreasure,
 		derefOrNil(t.Notes),
 		derefOrNil(t.GilAmount),
-		ObjPtrToHashID(t.Equipment),
+		ObjPtrToID(t.Equipment),
 	}
 }
-
 
 func (t Treasure) ToKeyFields() []any {
 	return []any{
@@ -53,7 +52,6 @@ func (t Treasure) ToKeyFields() []any {
 	}
 }
 
-
 func (t Treasure) GetID() int32 {
 	return t.ID
 }
@@ -61,9 +59,6 @@ func (t Treasure) GetID() int32 {
 func (t Treasure) Error() string {
 	return fmt.Sprintf("treasure number: %d", t.Version)
 }
-
-
-
 
 func (l *lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/treasures.json"
@@ -113,7 +108,6 @@ func (l *lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-
 func (l *lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/treasures.json"
 
@@ -151,9 +145,9 @@ func (l *lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 				}
 
 				err = qtx.UpdateTreasure(context.Background(), database.UpdateTreasureParams{
-					DataHash:        	generateDataHash(treasure),
-					FoundEquipmentID: 	ObjPtrToNullInt32ID(treasure.Equipment),
-					ID: 				treasure.ID,
+					DataHash:         generateDataHash(treasure),
+					FoundEquipmentID: ObjPtrToNullInt32ID(treasure.Equipment),
+					ID:               treasure.ID,
 				})
 				if err != nil {
 					return getErr(treasure.Error(), err, "couldn't update treasure")
@@ -164,7 +158,6 @@ func (l *lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 	})
 }
 
-
 func (l *lookup) seedTreasureItemAmounts(qtx *database.Queries, treasure Treasure) error {
 	for _, itemAmount := range treasure.Items {
 		junction, err := createJunctionSeed(qtx, treasure, itemAmount, l.seedItemAmount)
@@ -173,8 +166,8 @@ func (l *lookup) seedTreasureItemAmounts(qtx *database.Queries, treasure Treasur
 		}
 
 		err = qtx.CreateTreasuresItemsJunction(context.Background(), database.CreateTreasuresItemsJunctionParams{
-			DataHash: generateDataHash(junction),
-			TreasureID: junction.ParentID,
+			DataHash:     generateDataHash(junction),
+			TreasureID:   junction.ParentID,
 			ItemAmountID: junction.ChildID,
 		})
 		if err != nil {

@@ -20,7 +20,7 @@ func derefOrNil[T any](ptr *T) any {
 }
 
 // used to get the id of objects that can be null and are thus pointers
-func ObjPtrToHashID[T HasID](objPtr *T) any {
+func ObjPtrToID[T HasID](objPtr *T) any {
 	if objPtr == nil {
 		return nil
 	}
@@ -33,7 +33,6 @@ func ObjPtrToHashID[T HasID](objPtr *T) any {
 	}
 	return id
 }
-
 
 func generateDataHash(h Hashable) string {
 	fields := h.ToHashFields()

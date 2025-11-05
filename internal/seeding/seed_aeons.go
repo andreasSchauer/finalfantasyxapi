@@ -36,7 +36,7 @@ func (a Aeon) ToHashFields() []any {
 		derefOrNil(a.PhysAtkDmgConstant),
 		derefOrNil(a.PhysAtkRange),
 		derefOrNil(a.PhysAtkShatterRate),
-		ObjPtrToHashID(a.PhysAtkAccuracy),
+		ObjPtrToID(a.PhysAtkAccuracy),
 	}
 }
 

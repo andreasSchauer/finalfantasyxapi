@@ -31,7 +31,7 @@ func (bi BattleInteraction) ToHashFields() []any {
 		bi.Target,
 		bi.BasedOnPhysAttack,
 		derefOrNil(bi.Range),
-		ObjPtrToHashID(bi.Damage),
+		ObjPtrToID(bi.Damage),
 		derefOrNil(bi.ShatterRate),
 		bi.Accuracy.ID,
 		bi.HitAmount,
@@ -44,7 +44,7 @@ func (bi BattleInteraction) GetID() int32 {
 }
 
 func (bi BattleInteraction) Error() string {
-	return fmt.Sprintf("battle interaction with target: %s, phys attack: %t, range: %v, damage id: %v, shatter rate: %v, accuracy id: %d, hit amount: %d, special action: %v", bi.Target, bi.BasedOnPhysAttack, derefOrNil(bi.Range), ObjPtrToHashID(bi.Damage), derefOrNil(bi.ShatterRate), bi.Accuracy.ID, bi.HitAmount, derefOrNil(bi.SpecialAction))
+	return fmt.Sprintf("battle interaction with target: %s, phys attack: %t, range: %v, damage id: %v, shatter rate: %v, accuracy id: %d, hit amount: %d, special action: %v", bi.Target, bi.BasedOnPhysAttack, derefOrNil(bi.Range), ObjPtrToID(bi.Damage), derefOrNil(bi.ShatterRate), bi.Accuracy.ID, bi.HitAmount, derefOrNil(bi.SpecialAction))
 }
 
 func (l *lookup) seedBattleInteractions(qtx *database.Queries, ability Ability, battleInteractions []BattleInteraction) error {

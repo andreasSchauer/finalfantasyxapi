@@ -22,7 +22,7 @@ func (a Ability) ToHashFields() []any {
 		derefOrNil(a.Version),
 		derefOrNil(a.Specification),
 		a.Type,
-		ObjPtrToHashID(a.Attributes),
+		ObjPtrToID(a.Attributes),
 	}
 }
 

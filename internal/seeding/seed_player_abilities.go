@@ -11,21 +11,21 @@ import (
 type PlayerAbility struct {
 	ID int32
 	Ability
-	SubmenuID			*int32
-	OpenSubmenuID		*int32
-	StandardGridCharID	*int32
-	ExpertGridCharID	*int32
+	SubmenuID           *int32
+	OpenSubmenuID       *int32
+	StandardGridCharID  *int32
+	ExpertGridCharID    *int32
 	Description         *string             `json:"description"`
 	Effect              string              `json:"effect"`
-	RelatedStats		[]string			`json:"related_stats"`
+	RelatedStats        []string            `json:"related_stats"`
 	Topmenu             *string             `json:"topmenu"`
-	Submenu				*string				`json:"submenu"`
-	OpenSubmenu			*string				`json:"open_submenu"`
-	LearnedBy			[]string			`json:"learned_by"`
-	StandardGridPos		*string				`json:"standard_grid_pos"`
-	ExpertGridPos		*string				`json:"expert_grid_pos"`
+	Submenu             *string             `json:"submenu"`
+	OpenSubmenu         *string             `json:"open_submenu"`
+	LearnedBy           []string            `json:"learned_by"`
+	StandardGridPos     *string             `json:"standard_grid_pos"`
+	ExpertGridPos       *string             `json:"expert_grid_pos"`
 	CanUseOutsideBattle bool                `json:"can_use_outside_battle"`
-	AeonLearnItem		*ItemAmount			`json:"aeon_learn_item"`
+	AeonLearnItem       *ItemAmount         `json:"aeon_learn_item"`
 	MPCost              *int32              `json:"mp_cost"`
 	Cursor              *string             `json:"cursor"`
 	BattleInteractions  []BattleInteraction `json:"battle_interactions"`
@@ -44,7 +44,7 @@ func (p PlayerAbility) ToHashFields() []any {
 		derefOrNil(p.OpenSubmenuID),
 		derefOrNil(p.StandardGridCharID),
 		derefOrNil(p.ExpertGridCharID),
-		ObjPtrToHashID(p.AeonLearnItem),
+		ObjPtrToID(p.AeonLearnItem),
 	}
 }
 
@@ -152,7 +152,6 @@ func (l *lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *
 	})
 }
 
-
 func (l *lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbility) error {
 	var err error
 
@@ -182,13 +181,13 @@ func (l *lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbili
 	}
 
 	err = qtx.UpdatePlayerAbility(context.Background(), database.UpdatePlayerAbilityParams{
-		DataHash: 			generateDataHash(ability),
-		SubmenuID: 			getNullInt32(ability.SubmenuID),
-		OpenSubmenuID: 		getNullInt32(ability.OpenSubmenuID),
+		DataHash:           generateDataHash(ability),
+		SubmenuID:          getNullInt32(ability.SubmenuID),
+		OpenSubmenuID:      getNullInt32(ability.OpenSubmenuID),
 		StandardGridCharID: getNullInt32(ability.StandardGridCharID),
-		ExpertGridCharID: 	getNullInt32(ability.ExpertGridCharID),
-		AeonLearnItemID: 	ObjPtrToNullInt32ID(ability.AeonLearnItem),
-		ID: 				ability.ID,
+		ExpertGridCharID:   getNullInt32(ability.ExpertGridCharID),
+		AeonLearnItemID:    ObjPtrToNullInt32ID(ability.AeonLearnItem),
+		ID:                 ability.ID,
 	})
 	if err != nil {
 		return getErr("", err, "couldn't update player ability")
@@ -196,8 +195,6 @@ func (l *lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbili
 
 	return nil
 }
-
-
 
 func (l *lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability PlayerAbility) error {
 	for _, jsonStat := range ability.RelatedStats {
@@ -207,9 +204,9 @@ func (l *lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability Pl
 		}
 
 		err = qtx.CreatePlayerAbilitiesRelatedStatsJunction(context.Background(), database.CreatePlayerAbilitiesRelatedStatsJunctionParams{
-			DataHash: 			generateDataHash(junction),
-			PlayerAbilityID: 	junction.ParentID,
-			StatID: 			junction.ChildID,
+			DataHash:        generateDataHash(junction),
+			PlayerAbilityID: junction.ParentID,
+			StatID:          junction.ChildID,
 		})
 		if err != nil {
 			return getErr(jsonStat, err, "couldn't junction related stat")
@@ -219,7 +216,6 @@ func (l *lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability Pl
 	return nil
 }
 
-
 func (l *lookup) seedPlayerAbilityLearnedBy(qtx *database.Queries, ability PlayerAbility) error {
 	for _, charClass := range ability.LearnedBy {
 		junction, err := createJunction(ability, charClass, l.getCharacterClass)
@@ -228,9 +224,9 @@ func (l *lookup) seedPlayerAbilityLearnedBy(qtx *database.Queries, ability Playe
 		}
 
 		err = qtx.CreatePlayerAbilitiesLearnedByJunction(context.Background(), database.CreatePlayerAbilitiesLearnedByJunctionParams{
-			DataHash: 			generateDataHash(junction),
-			PlayerAbilityID: 	junction.ParentID,
-			CharacterClassID: 	junction.ChildID,
+			DataHash:         generateDataHash(junction),
+			PlayerAbilityID:  junction.ParentID,
+			CharacterClassID: junction.ChildID,
 		})
 		if err != nil {
 			return getErr(charClass, err, "couldn't junction 'learned by' class")

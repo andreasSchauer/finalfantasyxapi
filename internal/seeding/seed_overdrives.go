@@ -33,7 +33,7 @@ func (o Overdrive) ToHashFields() []any {
 		o.Description,
 		o.Effect,
 		derefOrNil(o.Topmenu),
-		ObjPtrToHashID(o.Attributes),
+		ObjPtrToID(o.Attributes),
 		derefOrNil(o.UnlockCondition),
 		derefOrNil(o.CountdownInSec),
 		derefOrNil(o.Cursor),

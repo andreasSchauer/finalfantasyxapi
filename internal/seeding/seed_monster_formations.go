@@ -58,7 +58,7 @@ func (mf MonsterFormation) ToHashFields() []any {
 		mf.Category,
 		mf.IsForcedAmbush,
 		mf.CanEscape,
-		ObjPtrToHashID(mf.BossMusic),
+		ObjPtrToID(mf.BossMusic),
 		derefOrNil(mf.Notes),
 	}
 }
@@ -68,7 +68,7 @@ func (mf MonsterFormation) GetID() int32 {
 }
 
 func (mf MonsterFormation) Error() string {
-	return fmt.Sprintf("monster formation with location id: %d, category: %s, forced ambush: %t, can escape: %t, boss music id: %v, notes: %v", mf.EncounterLocationID, mf.Category, mf.IsForcedAmbush, mf.CanEscape, ObjPtrToHashID(mf.BossMusic), derefOrNil(mf.Notes))
+	return fmt.Sprintf("monster formation with location id: %d, category: %s, forced ambush: %t, can escape: %t, boss music id: %v, notes: %v", mf.EncounterLocationID, mf.Category, mf.IsForcedAmbush, mf.CanEscape, ObjPtrToID(mf.BossMusic), derefOrNil(mf.Notes))
 }
 
 type FormationBossSong struct {
