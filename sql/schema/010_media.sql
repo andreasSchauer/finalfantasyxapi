@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TYPE music_use_case AS ENUM('blitzball-game', 'blitzball-menu', 'boss-battle-default', 'chocobo', 'game-over', 'main-menu', 'random-encounter-default', 'victory');
+CREATE TYPE music_use_case AS ENUM ('blitzball-game', 'blitzball-menu', 'boss-battle-default', 'chocobo', 'game-over', 'main-menu', 'random-encounter-default', 'victory');
 
 
 CREATE TABLE songs (

@@ -3,8 +3,7 @@ CREATE TABLE blitzball_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     position_id INTEGER NOT NULL REFERENCES blitzball_positions(id),
-    item_amount_id INTEGER NOT NULL REFERENCES item_amounts(id),
-    chance percent NOT NULL
+    possible_item_id INTEGER NOT NULL REFERENCES possible_items(id)
 );
 
 

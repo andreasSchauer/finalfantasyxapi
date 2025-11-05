@@ -1,6 +1,0 @@
--- +goose Up
-
-
-
-
--- +goose Down

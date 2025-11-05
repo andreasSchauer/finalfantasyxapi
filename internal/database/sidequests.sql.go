@@ -11,25 +11,19 @@ import (
 )
 
 const createBlitzballItem = `-- name: CreateBlitzballItem :exec
-INSERT INTO blitzball_items (data_hash, position_id, item_amount_id, chance)
-VALUES ($1, $2, $3, $4)
+INSERT INTO blitzball_items (data_hash, position_id, possible_item_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateBlitzballItemParams struct {
-	DataHash     string
-	PositionID   int32
-	ItemAmountID int32
-	Chance       interface{}
+	DataHash       string
+	PositionID     int32
+	PossibleItemID int32
 }
 
 func (q *Queries) CreateBlitzballItem(ctx context.Context, arg CreateBlitzballItemParams) error {
-	_, err := q.db.ExecContext(ctx, createBlitzballItem,
-		arg.DataHash,
-		arg.PositionID,
-		arg.ItemAmountID,
-		arg.Chance,
-	)
+	_, err := q.db.ExecContext(ctx, createBlitzballItem, arg.DataHash, arg.PositionID, arg.PossibleItemID)
 	return err
 }
 

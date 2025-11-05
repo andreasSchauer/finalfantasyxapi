@@ -259,7 +259,7 @@ type CreateEquipmentTableParams struct {
 	Priority            sql.NullInt32
 	Pool1Amt            sql.NullInt32
 	Pool2Amt            sql.NullInt32
-	EmptySlotsAmt       int32
+	EmptySlotsAmt       interface{}
 }
 
 func (q *Queries) CreateEquipmentTable(ctx context.Context, arg CreateEquipmentTableParams) (EquipmentTable, error) {

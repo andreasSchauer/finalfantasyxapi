@@ -29,7 +29,6 @@ CREATE TABLE abilities (
 );
 
 
-
 CREATE TABLE player_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -67,7 +66,6 @@ CREATE TABLE trigger_commands (
     topmenu topmenu_type NOT NULL,
     cursor target_type NOT NULL
 );
-
 
 
 CREATE TABLE overdrives (

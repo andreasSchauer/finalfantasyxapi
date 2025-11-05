@@ -74,7 +74,7 @@ CREATE TABLE found_equipment_pieces (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     equipment_name_id INTEGER NOT NULL REFERENCES equipment_names(id),
-    empty_slots_amount empty_slots NOT NULL
+    empty_slots_amount equipment_slots NOT NULL
 );
 
 

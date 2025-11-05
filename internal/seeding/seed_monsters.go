@@ -86,7 +86,6 @@ func (m Monster) ToKeyFields() []any {
 	}
 }
 
-
 func (m Monster) GetID() int32 {
 	return m.ID
 }
@@ -96,10 +95,14 @@ func (m Monster) Error() string {
 }
 
 
+
 type MonsterItems struct {
+	ID					int32
+	MonsterID			int32
 	DropChance			int32				`json:"drop_chance"`
 	DropCondition		*string				`json:"drop_condition"`
-	OtherItems			*MonsterOtherItems	`json:"other_items"`
+	OtherItemsCondition	*string				`json:"other_items_condition"`
+	OtherItems			[]PossibleItem		`json:"other_items"`
 	StealCommon			*ItemAmount			`json:"steal_common"`
 	StealRare			*ItemAmount			`json:"steal_rare"`
 	DropCommon			*ItemAmount			`json:"drop_common"`
@@ -109,14 +112,35 @@ type MonsterItems struct {
 	Bribe				*ItemAmount			`json:"bribe"`
 }
 
+func (m MonsterItems) ToHashFields() []any {
+	return []any{
+		m.MonsterID,
+		m.DropChance,
+		derefOrNil(m.DropCondition),
+		derefOrNil(m.OtherItemsCondition),
+		ObjPtrToHashID(m.StealCommon),
+		ObjPtrToHashID(m.StealRare),
+		ObjPtrToHashID(m.DropCommon),
+		ObjPtrToHashID(m.DropRare),
+		ObjPtrToHashID(m.SecondaryDropCommon),
+		ObjPtrToHashID(m.SecondaryDropRare),
+		ObjPtrToHashID(m.Bribe),
+	}
+}
 
-type MonsterOtherItems struct {
-	Condition		string			`json:"condition"`
-	Items			[]PossibleItem	`json:"items"`
+func (m MonsterItems) GetID() int32 {
+	return m.ID
+}
+
+func (m MonsterItems) Error() string {
+	return fmt.Sprintf("monster items of monster with id %d", m.MonsterID)
 }
 
 
+
 type MonsterEquipment struct {
+	ID					int32
+	MonsterID			int32
 	DropChance			int32					`json:"drop_chance"`
 	Power				int32					`json:"power"`
 	CriticalPlus		int32					`json:"critical_plus"`
@@ -126,33 +150,130 @@ type MonsterEquipment struct {
 	ArmorAbilities		[]EquipmentDrop			`json:"armor_abilities"`
 }
 
+func (m MonsterEquipment) ToHashFields() []any {
+	return []any{
+		m.MonsterID,
+		m.DropChance,
+		m.Power,
+		m.CriticalPlus,
+		m.AbilitySlots.ID,
+		m.AttachedAbilities.ID,
+	}
+}
+
+func (m MonsterEquipment) GetID() int32 {
+	return m.ID
+}
+
+func (m MonsterEquipment) Error() string {
+	return fmt.Sprintf("monster equipment of monster with id %d", m.MonsterID)
+}
+
+
 
 type MonsterEquipmentSlots struct {
+	ID				int32
 	MinAmount		int32					`json:"min_amount"`
 	MaxAmount		int32					`json:"max_amount"`
 	Chances			[]EquipmentSlotsChance	`json:"chances"`
 }
 
+func (m MonsterEquipmentSlots) ToHashFields() []any {
+	return []any{
+		m.MinAmount,
+		m.MaxAmount,
+	}
+}
+
+func (m MonsterEquipmentSlots) GetID() int32 {
+	return m.ID
+}
+
+func (m MonsterEquipmentSlots) Error() string {
+	return fmt.Sprintf("monster equipment slots with min amount: %d, max amount: %d", m.MinAmount, m.MaxAmount)
+}
+
+
 
 type EquipmentSlotsChance struct {
+	ID			int32
 	Amount		int32	`json:"amount"`
 	Chance		int32	`json:"chance"`
 }
 
+func (e EquipmentSlotsChance) ToHashFields() []any {
+	return []any{
+		e.Amount,
+		e.Chance,
+	}
+}
+
+func (e EquipmentSlotsChance) GetID() int32 {
+	return e.ID
+}
+
+func (e EquipmentSlotsChance) Error() string {
+	return fmt.Sprintf("equipment slots chance with amount: %d, chance: %d", e.Amount, e.Chance)
+}
+
+
+
 type EquipmentDrop struct {
+	ID				int32
+	AutoAbilityID	int32
 	Ability			string		`json:"ability"`
 	Characters		[]string	`json:"characters"`
 	IsForced		bool		`json:"is_forced"`
 	Probability		*int32		`json:"probability"`
 }
 
+func (e EquipmentDrop) ToHashFields() []any {
+	return []any{
+		e.AutoAbilityID,
+		e.IsForced,
+		derefOrNil(e.Probability),
+	}
+}
+
+func (e EquipmentDrop) GetID() int32 {
+	return e.ID
+}
+
+func (e EquipmentDrop) Error() string {
+	return fmt.Sprintf("equipment drop with auto-ability id: %d, is forced: %t, probability: %v", e.AutoAbilityID, e.IsForced, derefOrNil(e.Probability))
+}
+
+
+
 type AlteredState struct {
+	ID				int32
+	MonsterID		int32
 	Condition		string				`json:"condition"`
 	IsTemporary		bool				`json:"is_temporary"`
 	Changes			[]AltStateChange 	`json:"changes"`
 }
 
+func (a AlteredState) ToHashFields() []any {
+	return []any{
+		a.MonsterID,
+		a.Condition,
+		a.IsTemporary,
+	}
+}
+
+func (a AlteredState) GetID() int32 {
+	return a.ID
+}
+
+func (a AlteredState) Error() string {
+	return fmt.Sprintf("altered state with monster id: %d, is temporary: %t, condition: %s", a.MonsterID, a.IsTemporary, a.Condition)
+}
+
+
+
 type AltStateChange struct {
+	ID					int32
+	AlteredStateID		int32
 	AlterationType		string				`json:"alteration_type"`
 	Properties			*[]string			`json:"properties"`
 	AutoAbilities		*[]string			`json:"auto_abilities"`
@@ -163,11 +284,48 @@ type AltStateChange struct {
 	AddedStatusses		*[]InflictedStatus	`json:"added_statusses"`
 }
 
+func (a AltStateChange) ToHashFields() []any {
+	return []any{
+		a.AlteredStateID,
+		a.AlterationType,
+		derefOrNil(a.Distance),
+	}
+}
+
+func (a AltStateChange) GetID() int32 {
+	return a.ID
+}
+
+func (a AltStateChange) Error() string {
+	return fmt.Sprintf("alt stat change with altered state id: %d, alteration type: %s", a.AlteredStateID, a.AlterationType)
+}
+
+
+
 type MonsterAbility struct {
+	ID					int32
+	AbilityID			int32
 	AbilityReference
 	IsForced			bool	`json:"is_forced"`
 	IsUnused			bool	`json:"is_unused"`
 }
+
+func (m MonsterAbility) ToHashFields() []any {
+	return []any{
+		m.AbilityID,
+		m.IsForced,
+		m.IsUnused,
+	}
+}
+
+func (m MonsterAbility) GetID() int32 {
+	return m.ID
+}
+
+func (m MonsterAbility) Error() string {
+	return fmt.Sprintf("monster ability %s-%v, type: %s, is forced: %t, is unused: %t", m.Name, derefOrNil(m.Version), m.AbilityType, m.IsForced, m.IsUnused)
+}
+
 
 
 func (l *lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {

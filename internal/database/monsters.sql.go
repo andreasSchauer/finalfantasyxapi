@@ -10,6 +10,246 @@ import (
 	"database/sql"
 )
 
+const createAltStateChange = `-- name: CreateAltStateChange :one
+INSERT INTO alt_state_changes (data_hash, altered_state_id, distance)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = alt_state_changes.data_hash
+RETURNING id, data_hash, altered_state_id, alteration_type, distance
+`
+
+type CreateAltStateChangeParams struct {
+	DataHash       string
+	AlteredStateID int32
+	Distance       interface{}
+}
+
+func (q *Queries) CreateAltStateChange(ctx context.Context, arg CreateAltStateChangeParams) (AltStateChange, error) {
+	row := q.db.QueryRowContext(ctx, createAltStateChange, arg.DataHash, arg.AlteredStateID, arg.Distance)
+	var i AltStateChange
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AlteredStateID,
+		&i.AlterationType,
+		&i.Distance,
+	)
+	return i, err
+}
+
+const createAltStateChangesAddedStatussesJunction = `-- name: CreateAltStateChangesAddedStatussesJunction :exec
+INSERT INTO j_alt_state_changes_added_statusses (data_hash, alt_state_change_id, inflicted_status_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltStateChangesAddedStatussesJunctionParams struct {
+	DataHash          string
+	AltStateChangeID  int32
+	InflictedStatusID int32
+}
+
+func (q *Queries) CreateAltStateChangesAddedStatussesJunction(ctx context.Context, arg CreateAltStateChangesAddedStatussesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAltStateChangesAddedStatussesJunction, arg.DataHash, arg.AltStateChangeID, arg.InflictedStatusID)
+	return err
+}
+
+const createAltStateChangesAutoAbilitiesJunction = `-- name: CreateAltStateChangesAutoAbilitiesJunction :exec
+INSERT INTO j_alt_state_changes_auto_abilities (data_hash, alt_state_change_id, auto_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltStateChangesAutoAbilitiesJunctionParams struct {
+	DataHash         string
+	AltStateChangeID int32
+	AutoAbilityID    int32
+}
+
+func (q *Queries) CreateAltStateChangesAutoAbilitiesJunction(ctx context.Context, arg CreateAltStateChangesAutoAbilitiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAltStateChangesAutoAbilitiesJunction, arg.DataHash, arg.AltStateChangeID, arg.AutoAbilityID)
+	return err
+}
+
+const createAltStateChangesElemResistsJunction = `-- name: CreateAltStateChangesElemResistsJunction :exec
+INSERT INTO j_alt_state_changes_elem_resists (data_hash, alt_state_change_id, elem_resist_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltStateChangesElemResistsJunctionParams struct {
+	DataHash         string
+	AltStateChangeID int32
+	ElemResistID     int32
+}
+
+func (q *Queries) CreateAltStateChangesElemResistsJunction(ctx context.Context, arg CreateAltStateChangesElemResistsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAltStateChangesElemResistsJunction, arg.DataHash, arg.AltStateChangeID, arg.ElemResistID)
+	return err
+}
+
+const createAltStateChangesPropertiesJunction = `-- name: CreateAltStateChangesPropertiesJunction :exec
+INSERT INTO j_alt_state_changes_properties (data_hash, alt_state_change_id, property_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltStateChangesPropertiesJunctionParams struct {
+	DataHash         string
+	AltStateChangeID int32
+	PropertyID       int32
+}
+
+func (q *Queries) CreateAltStateChangesPropertiesJunction(ctx context.Context, arg CreateAltStateChangesPropertiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAltStateChangesPropertiesJunction, arg.DataHash, arg.AltStateChangeID, arg.PropertyID)
+	return err
+}
+
+const createAltStateChangesStatsJunction = `-- name: CreateAltStateChangesStatsJunction :exec
+INSERT INTO j_alt_state_changes_stats (data_hash, alt_state_change_id, base_stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltStateChangesStatsJunctionParams struct {
+	DataHash         string
+	AltStateChangeID int32
+	BaseStatID       int32
+}
+
+func (q *Queries) CreateAltStateChangesStatsJunction(ctx context.Context, arg CreateAltStateChangesStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAltStateChangesStatsJunction, arg.DataHash, arg.AltStateChangeID, arg.BaseStatID)
+	return err
+}
+
+const createAltStateChangesStatusImmunitiesJunction = `-- name: CreateAltStateChangesStatusImmunitiesJunction :exec
+INSERT INTO j_alt_state_changes_status_immunities (data_hash, alt_state_change_id, status_condition_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltStateChangesStatusImmunitiesJunctionParams struct {
+	DataHash          string
+	AltStateChangeID  int32
+	StatusConditionID int32
+}
+
+func (q *Queries) CreateAltStateChangesStatusImmunitiesJunction(ctx context.Context, arg CreateAltStateChangesStatusImmunitiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAltStateChangesStatusImmunitiesJunction, arg.DataHash, arg.AltStateChangeID, arg.StatusConditionID)
+	return err
+}
+
+const createAlteredState = `-- name: CreateAlteredState :one
+INSERT INTO altered_states (data_hash, monster_id, condition, is_temporary)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = altered_states.data_hash
+RETURNING id, data_hash, monster_id, condition, is_temporary
+`
+
+type CreateAlteredStateParams struct {
+	DataHash    string
+	MonsterID   int32
+	Condition   string
+	IsTemporary bool
+}
+
+func (q *Queries) CreateAlteredState(ctx context.Context, arg CreateAlteredStateParams) (AlteredState, error) {
+	row := q.db.QueryRowContext(ctx, createAlteredState,
+		arg.DataHash,
+		arg.MonsterID,
+		arg.Condition,
+		arg.IsTemporary,
+	)
+	var i AlteredState
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MonsterID,
+		&i.Condition,
+		&i.IsTemporary,
+	)
+	return i, err
+}
+
+const createEquipmentDrop = `-- name: CreateEquipmentDrop :one
+INSERT INTO equipment_drops (data_hash, auto_ability_id, is_forced, probability)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_drops.data_hash
+RETURNING id, data_hash, auto_ability_id, is_forced, probability
+`
+
+type CreateEquipmentDropParams struct {
+	DataHash      string
+	AutoAbilityID int32
+	IsForced      bool
+	Probability   interface{}
+}
+
+func (q *Queries) CreateEquipmentDrop(ctx context.Context, arg CreateEquipmentDropParams) (EquipmentDrop, error) {
+	row := q.db.QueryRowContext(ctx, createEquipmentDrop,
+		arg.DataHash,
+		arg.AutoAbilityID,
+		arg.IsForced,
+		arg.Probability,
+	)
+	var i EquipmentDrop
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AutoAbilityID,
+		&i.IsForced,
+		&i.Probability,
+	)
+	return i, err
+}
+
+const createEquipmentDropsCharactersJunction = `-- name: CreateEquipmentDropsCharactersJunction :exec
+INSERT INTO j_equipment_drops_characters (data_hash, monster_equipment_id, equipment_drop_id, character_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateEquipmentDropsCharactersJunctionParams struct {
+	DataHash           string
+	MonsterEquipmentID int32
+	EquipmentDropID    int32
+	CharacterID        int32
+}
+
+func (q *Queries) CreateEquipmentDropsCharactersJunction(ctx context.Context, arg CreateEquipmentDropsCharactersJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createEquipmentDropsCharactersJunction,
+		arg.DataHash,
+		arg.MonsterEquipmentID,
+		arg.EquipmentDropID,
+		arg.CharacterID,
+	)
+	return err
+}
+
+const createEquipmentSlotsChance = `-- name: CreateEquipmentSlotsChance :one
+INSERT INTO equipment_slots_chances (data_hash, amount, chance)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_slots_chances.data_hash
+RETURNING id, data_hash, amount, chance
+`
+
+type CreateEquipmentSlotsChanceParams struct {
+	DataHash string
+	Amount   interface{}
+	Chance   interface{}
+}
+
+func (q *Queries) CreateEquipmentSlotsChance(ctx context.Context, arg CreateEquipmentSlotsChanceParams) (EquipmentSlotsChance, error) {
+	row := q.db.QueryRowContext(ctx, createEquipmentSlotsChance, arg.DataHash, arg.Amount, arg.Chance)
+	var i EquipmentSlotsChance
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Amount,
+		&i.Chance,
+	)
+	return i, err
+}
+
 const createMonster = `-- name: CreateMonster :one
 INSERT INTO monsters (data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)
@@ -108,6 +348,38 @@ func (q *Queries) CreateMonster(ctx context.Context, arg CreateMonsterParams) (M
 	return i, err
 }
 
+const createMonsterAbility = `-- name: CreateMonsterAbility :one
+INSERT INTO monster_abilities (data_hash, ability_id, is_forced, is_unused)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_abilities.data_hash
+RETURNING id, data_hash, ability_id, is_forced, is_unused
+`
+
+type CreateMonsterAbilityParams struct {
+	DataHash  string
+	AbilityID int32
+	IsForced  bool
+	IsUnused  bool
+}
+
+func (q *Queries) CreateMonsterAbility(ctx context.Context, arg CreateMonsterAbilityParams) (MonsterAbility, error) {
+	row := q.db.QueryRowContext(ctx, createMonsterAbility,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.IsForced,
+		arg.IsUnused,
+	)
+	var i MonsterAbility
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AbilityID,
+		&i.IsForced,
+		&i.IsUnused,
+	)
+	return i, err
+}
+
 const createMonsterAmount = `-- name: CreateMonsterAmount :one
 INSERT INTO monster_amounts (data_hash, monster_id, amount)
 VALUES ($1, $2, $3)
@@ -131,4 +403,302 @@ func (q *Queries) CreateMonsterAmount(ctx context.Context, arg CreateMonsterAmou
 		&i.Amount,
 	)
 	return i, err
+}
+
+const createMonsterEquipment = `-- name: CreateMonsterEquipment :one
+INSERT INTO monster_equipment (data_hash, monster_id, drop_chance, power, critical_plus, ability_slots_id, attached_abilities_id)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_equipment.data_hash
+RETURNING id, data_hash, monster_id, drop_chance, power, critical_plus, ability_slots_id, attached_abilities_id
+`
+
+type CreateMonsterEquipmentParams struct {
+	DataHash            string
+	MonsterID           int32
+	DropChance          interface{}
+	Power               interface{}
+	CriticalPlus        int32
+	AbilitySlotsID      int32
+	AttachedAbilitiesID int32
+}
+
+func (q *Queries) CreateMonsterEquipment(ctx context.Context, arg CreateMonsterEquipmentParams) (MonsterEquipment, error) {
+	row := q.db.QueryRowContext(ctx, createMonsterEquipment,
+		arg.DataHash,
+		arg.MonsterID,
+		arg.DropChance,
+		arg.Power,
+		arg.CriticalPlus,
+		arg.AbilitySlotsID,
+		arg.AttachedAbilitiesID,
+	)
+	var i MonsterEquipment
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MonsterID,
+		&i.DropChance,
+		&i.Power,
+		&i.CriticalPlus,
+		&i.AbilitySlotsID,
+		&i.AttachedAbilitiesID,
+	)
+	return i, err
+}
+
+const createMonsterEquipmentSlots = `-- name: CreateMonsterEquipmentSlots :one
+INSERT INTO monster_equipment_slots (data_hash, min_amount, max_amount)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_equipment_slots.data_hash
+RETURNING id, data_hash, min_amount, max_amount
+`
+
+type CreateMonsterEquipmentSlotsParams struct {
+	DataHash  string
+	MinAmount interface{}
+	MaxAmount interface{}
+}
+
+func (q *Queries) CreateMonsterEquipmentSlots(ctx context.Context, arg CreateMonsterEquipmentSlotsParams) (MonsterEquipmentSlot, error) {
+	row := q.db.QueryRowContext(ctx, createMonsterEquipmentSlots, arg.DataHash, arg.MinAmount, arg.MaxAmount)
+	var i MonsterEquipmentSlot
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MinAmount,
+		&i.MaxAmount,
+	)
+	return i, err
+}
+
+const createMonsterEquipmentSlotsChancesJunction = `-- name: CreateMonsterEquipmentSlotsChancesJunction :exec
+INSERT INTO j_monster_equipment_slots_chances(data_hash, monster_equipment_id, equipment_slots_id, slots_chance_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonsterEquipmentSlotsChancesJunctionParams struct {
+	DataHash           string
+	MonsterEquipmentID int32
+	EquipmentSlotsID   int32
+	SlotsChanceID      int32
+}
+
+func (q *Queries) CreateMonsterEquipmentSlotsChancesJunction(ctx context.Context, arg CreateMonsterEquipmentSlotsChancesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonsterEquipmentSlotsChancesJunction,
+		arg.DataHash,
+		arg.MonsterEquipmentID,
+		arg.EquipmentSlotsID,
+		arg.SlotsChanceID,
+	)
+	return err
+}
+
+const createMonsterItem = `-- name: CreateMonsterItem :one
+INSERT INTO monster_items (data_hash, monster_id, drop_chance, drop_condition, other_items_condition, steal_common_id, steal_rare_id, drop_common_id, drop_rare_id, secondary_drop_common_id, secondary_drop_rare_id, bribe_id)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_items.data_hash
+RETURNING id, data_hash, monster_id, drop_chance, drop_condition, other_items_condition, steal_common_id, steal_rare_id, drop_common_id, drop_rare_id, secondary_drop_common_id, secondary_drop_rare_id, bribe_id
+`
+
+type CreateMonsterItemParams struct {
+	DataHash              string
+	MonsterID             int32
+	DropChance            interface{}
+	DropCondition         sql.NullString
+	OtherItemsCondition   sql.NullString
+	StealCommonID         sql.NullInt32
+	StealRareID           sql.NullInt32
+	DropCommonID          sql.NullInt32
+	DropRareID            sql.NullInt32
+	SecondaryDropCommonID sql.NullInt32
+	SecondaryDropRareID   sql.NullInt32
+	BribeID               sql.NullInt32
+}
+
+func (q *Queries) CreateMonsterItem(ctx context.Context, arg CreateMonsterItemParams) (MonsterItem, error) {
+	row := q.db.QueryRowContext(ctx, createMonsterItem,
+		arg.DataHash,
+		arg.MonsterID,
+		arg.DropChance,
+		arg.DropCondition,
+		arg.OtherItemsCondition,
+		arg.StealCommonID,
+		arg.StealRareID,
+		arg.DropCommonID,
+		arg.DropRareID,
+		arg.SecondaryDropCommonID,
+		arg.SecondaryDropRareID,
+		arg.BribeID,
+	)
+	var i MonsterItem
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MonsterID,
+		&i.DropChance,
+		&i.DropCondition,
+		&i.OtherItemsCondition,
+		&i.StealCommonID,
+		&i.StealRareID,
+		&i.DropCommonID,
+		&i.DropRareID,
+		&i.SecondaryDropCommonID,
+		&i.SecondaryDropRareID,
+		&i.BribeID,
+	)
+	return i, err
+}
+
+const createMonsterItemsOtherItemsJunction = `-- name: CreateMonsterItemsOtherItemsJunction :exec
+INSERT INTO j_monster_items_other_items (data_hash, monster_items_id, possible_item_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonsterItemsOtherItemsJunctionParams struct {
+	DataHash       string
+	MonsterItemsID int32
+	PossibleItemID int32
+}
+
+func (q *Queries) CreateMonsterItemsOtherItemsJunction(ctx context.Context, arg CreateMonsterItemsOtherItemsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonsterItemsOtherItemsJunction, arg.DataHash, arg.MonsterItemsID, arg.PossibleItemID)
+	return err
+}
+
+const createMonstersAbilitiesJunction = `-- name: CreateMonstersAbilitiesJunction :exec
+INSERT INTO j_monsters_abilities (data_hash, monster_id, monster_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonstersAbilitiesJunctionParams struct {
+	DataHash         string
+	MonsterID        int32
+	MonsterAbilityID int32
+}
+
+func (q *Queries) CreateMonstersAbilitiesJunction(ctx context.Context, arg CreateMonstersAbilitiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonstersAbilitiesJunction, arg.DataHash, arg.MonsterID, arg.MonsterAbilityID)
+	return err
+}
+
+const createMonstersAutoAbilitiesJunction = `-- name: CreateMonstersAutoAbilitiesJunction :exec
+INSERT INTO j_monsters_auto_abilities (data_hash, monster_id, auto_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonstersAutoAbilitiesJunctionParams struct {
+	DataHash      string
+	MonsterID     int32
+	AutoAbilityID int32
+}
+
+func (q *Queries) CreateMonstersAutoAbilitiesJunction(ctx context.Context, arg CreateMonstersAutoAbilitiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonstersAutoAbilitiesJunction, arg.DataHash, arg.MonsterID, arg.AutoAbilityID)
+	return err
+}
+
+const createMonstersElemResistsJunction = `-- name: CreateMonstersElemResistsJunction :exec
+INSERT INTO j_monsters_elem_resists (data_hash, monster_id, elem_resist_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonstersElemResistsJunctionParams struct {
+	DataHash     string
+	MonsterID    int32
+	ElemResistID int32
+}
+
+func (q *Queries) CreateMonstersElemResistsJunction(ctx context.Context, arg CreateMonstersElemResistsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonstersElemResistsJunction, arg.DataHash, arg.MonsterID, arg.ElemResistID)
+	return err
+}
+
+const createMonstersImmunitiesJunction = `-- name: CreateMonstersImmunitiesJunction :exec
+INSERT INTO j_monsters_immunities (data_hash, monster_id, status_condition_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonstersImmunitiesJunctionParams struct {
+	DataHash          string
+	MonsterID         int32
+	StatusConditionID int32
+}
+
+func (q *Queries) CreateMonstersImmunitiesJunction(ctx context.Context, arg CreateMonstersImmunitiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonstersImmunitiesJunction, arg.DataHash, arg.MonsterID, arg.StatusConditionID)
+	return err
+}
+
+const createMonstersPropertiesJunction = `-- name: CreateMonstersPropertiesJunction :exec
+INSERT INTO j_monsters_properties (data_hash, monster_id, property_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonstersPropertiesJunctionParams struct {
+	DataHash   string
+	MonsterID  int32
+	PropertyID int32
+}
+
+func (q *Queries) CreateMonstersPropertiesJunction(ctx context.Context, arg CreateMonstersPropertiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonstersPropertiesJunction, arg.DataHash, arg.MonsterID, arg.PropertyID)
+	return err
+}
+
+const createMonstersRonsoRageJunction = `-- name: CreateMonstersRonsoRageJunction :exec
+INSERT INTO j_monsters_ronso_rage (data_hash, monster_id, ronso_rage_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonstersRonsoRageJunctionParams struct {
+	DataHash    string
+	MonsterID   int32
+	RonsoRageID int32
+}
+
+func (q *Queries) CreateMonstersRonsoRageJunction(ctx context.Context, arg CreateMonstersRonsoRageJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonstersRonsoRageJunction, arg.DataHash, arg.MonsterID, arg.RonsoRageID)
+	return err
+}
+
+const createMonstersStatsJunction = `-- name: CreateMonstersStatsJunction :exec
+INSERT INTO j_monsters_stats (data_hash, monster_id, base_stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonstersStatsJunctionParams struct {
+	DataHash   string
+	MonsterID  int32
+	BaseStatID int32
+}
+
+func (q *Queries) CreateMonstersStatsJunction(ctx context.Context, arg CreateMonstersStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonstersStatsJunction, arg.DataHash, arg.MonsterID, arg.BaseStatID)
+	return err
+}
+
+const createMonstersStatusResistancesJunction = `-- name: CreateMonstersStatusResistancesJunction :exec
+INSERT INTO j_monsters_status_resistances (data_hash, monster_id, status_resist_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonstersStatusResistancesJunctionParams struct {
+	DataHash       string
+	MonsterID      int32
+	StatusResistID int32
+}
+
+func (q *Queries) CreateMonstersStatusResistancesJunction(ctx context.Context, arg CreateMonstersStatusResistancesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonstersStatusResistancesJunction, arg.DataHash, arg.MonsterID, arg.StatusResistID)
+	return err
 }

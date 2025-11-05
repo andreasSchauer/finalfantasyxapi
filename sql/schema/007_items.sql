@@ -86,8 +86,18 @@ CREATE TABLE item_amounts (
 
 
 
+CREATE TABLE possible_items (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    item_amount_id INTEGER NOT NULL REFERENCES item_amounts(id),
+    chance percent NOT NULL
+);
+
+
+
 
 -- +goose Down
+DROP TABLE IF EXISTS possible_items;
 DROP TABLE IF EXISTS item_amounts;
 DROP TABLE IF EXISTS mixes;
 DROP TABLE IF EXISTS primers;

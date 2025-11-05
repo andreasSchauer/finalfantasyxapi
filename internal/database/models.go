@@ -183,6 +183,49 @@ func (ns NullAccuracySource) Value() (driver.Value, error) {
 	return string(ns.AccuracySource), nil
 }
 
+type AlterationType string
+
+const (
+	AlterationTypeChange AlterationType = "change"
+	AlterationTypeGain   AlterationType = "gain"
+	AlterationTypeLoss   AlterationType = "loss"
+)
+
+func (e *AlterationType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AlterationType(s)
+	case string:
+		*e = AlterationType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AlterationType: %T", src)
+	}
+	return nil
+}
+
+type NullAlterationType struct {
+	AlterationType AlterationType
+	Valid          bool // Valid is true if AlterationType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAlterationType) Scan(value interface{}) error {
+	if value == nil {
+		ns.AlterationType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AlterationType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAlterationType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AlterationType), nil
+}
+
 type AreaConnectionType string
 
 const (
@@ -2439,6 +2482,22 @@ type AgilityTier struct {
 	CharacterMaxIcv sql.NullInt32
 }
 
+type AltStateChange struct {
+	ID             int32
+	DataHash       string
+	AlteredStateID int32
+	AlterationType AlterationType
+	Distance       interface{}
+}
+
+type AlteredState struct {
+	ID          int32
+	DataHash    string
+	MonsterID   int32
+	Condition   string
+	IsTemporary bool
+}
+
 type Area struct {
 	ID                   int32
 	DataHash             string
@@ -2511,11 +2570,10 @@ type BattleInteraction struct {
 }
 
 type BlitzballItem struct {
-	ID           int32
-	DataHash     string
-	PositionID   int32
-	ItemAmountID int32
-	Chance       interface{}
+	ID             int32
+	DataHash       string
+	PositionID     int32
+	PossibleItemID int32
 }
 
 type BlitzballPosition struct {
@@ -2623,11 +2681,26 @@ type EnemyAbility struct {
 	Effect    sql.NullString
 }
 
+type EquipmentDrop struct {
+	ID            int32
+	DataHash      string
+	AutoAbilityID int32
+	IsForced      bool
+	Probability   interface{}
+}
+
 type EquipmentName struct {
 	ID          int32
 	DataHash    string
 	CharacterID int32
 	Name        string
+}
+
+type EquipmentSlotsChance struct {
+	ID       int32
+	DataHash string
+	Amount   interface{}
+	Chance   interface{}
 }
 
 type EquipmentTable struct {
@@ -2640,7 +2713,7 @@ type EquipmentTable struct {
 	Priority            sql.NullInt32
 	Pool1Amt            sql.NullInt32
 	Pool2Amt            sql.NullInt32
-	EmptySlotsAmt       int32
+	EmptySlotsAmt       interface{}
 }
 
 type Fmv struct {
@@ -2740,6 +2813,48 @@ type JAeonsWeaponArmor struct {
 	DataHash        string
 	AeonID          int32
 	AeonEquipmentID int32
+}
+
+type JAltStateChangesAddedStatuss struct {
+	ID                int32
+	DataHash          string
+	AltStateChangeID  int32
+	InflictedStatusID int32
+}
+
+type JAltStateChangesAutoAbility struct {
+	ID               int32
+	DataHash         string
+	AltStateChangeID int32
+	AutoAbilityID    int32
+}
+
+type JAltStateChangesElemResist struct {
+	ID               int32
+	DataHash         string
+	AltStateChangeID int32
+	ElemResistID     int32
+}
+
+type JAltStateChangesProperty struct {
+	ID               int32
+	DataHash         string
+	AltStateChangeID int32
+	PropertyID       int32
+}
+
+type JAltStateChangesStat struct {
+	ID               int32
+	DataHash         string
+	AltStateChangeID int32
+	BaseStatID       int32
+}
+
+type JAltStateChangesStatusImmunity struct {
+	ID                int32
+	DataHash          string
+	AltStateChangeID  int32
+	StatusConditionID int32
 }
 
 type JAreaConnectedArea struct {
@@ -2885,6 +3000,14 @@ type JEncounterLocationFormation struct {
 	MonsterFormationID  int32
 }
 
+type JEquipmentDropsCharacter struct {
+	ID                 int32
+	DataHash           string
+	MonsterEquipmentID int32
+	EquipmentDropID    int32
+	CharacterID        int32
+}
+
 type JEquipmentTablesAbilityPool struct {
 	ID               int32
 	DataHash         string
@@ -2930,6 +3053,14 @@ type JMixesCombination struct {
 	IsBestCombo bool
 }
 
+type JMonsterEquipmentSlotsChance struct {
+	ID                 int32
+	DataHash           string
+	MonsterEquipmentID int32
+	EquipmentSlotsID   int32
+	SlotsChanceID      int32
+}
+
 type JMonsterFormationsMonster struct {
 	ID                 int32
 	DataHash           string
@@ -2942,6 +3073,69 @@ type JMonsterFormationsTriggerCommand struct {
 	DataHash           string
 	MonsterFormationID int32
 	TriggerCommandID   int32
+}
+
+type JMonsterItemsOtherItem struct {
+	ID             int32
+	DataHash       string
+	MonsterItemsID int32
+	PossibleItemID int32
+}
+
+type JMonstersAbility struct {
+	ID               int32
+	DataHash         string
+	MonsterID        int32
+	MonsterAbilityID int32
+}
+
+type JMonstersAutoAbility struct {
+	ID            int32
+	DataHash      string
+	MonsterID     int32
+	AutoAbilityID int32
+}
+
+type JMonstersElemResist struct {
+	ID           int32
+	DataHash     string
+	MonsterID    int32
+	ElemResistID int32
+}
+
+type JMonstersImmunity struct {
+	ID                int32
+	DataHash          string
+	MonsterID         int32
+	StatusConditionID int32
+}
+
+type JMonstersProperty struct {
+	ID         int32
+	DataHash   string
+	MonsterID  int32
+	PropertyID int32
+}
+
+type JMonstersRonsoRage struct {
+	ID          int32
+	DataHash    string
+	MonsterID   int32
+	RonsoRageID int32
+}
+
+type JMonstersStat struct {
+	ID         int32
+	DataHash   string
+	MonsterID  int32
+	BaseStatID int32
+}
+
+type JMonstersStatusResistance struct {
+	ID             int32
+	DataHash       string
+	MonsterID      int32
+	StatusResistID int32
 }
 
 type JOverdriveAbilitiesRelatedStat struct {
@@ -3178,6 +3372,14 @@ type Monster struct {
 	ScanText             sql.NullString
 }
 
+type MonsterAbility struct {
+	ID        int32
+	DataHash  string
+	AbilityID int32
+	IsForced  bool
+	IsUnused  bool
+}
+
 type MonsterAmount struct {
 	ID        int32
 	DataHash  string
@@ -3197,6 +3399,24 @@ type MonsterArenaCreation struct {
 	Amount                    int32
 }
 
+type MonsterEquipment struct {
+	ID                  int32
+	DataHash            string
+	MonsterID           int32
+	DropChance          interface{}
+	Power               interface{}
+	CriticalPlus        int32
+	AbilitySlotsID      int32
+	AttachedAbilitiesID int32
+}
+
+type MonsterEquipmentSlot struct {
+	ID        int32
+	DataHash  string
+	MinAmount interface{}
+	MaxAmount interface{}
+}
+
 type MonsterFormation struct {
 	ID                  int32
 	DataHash            string
@@ -3206,6 +3426,22 @@ type MonsterFormation struct {
 	CanEscape           bool
 	BossSongID          sql.NullInt32
 	Notes               sql.NullString
+}
+
+type MonsterItem struct {
+	ID                    int32
+	DataHash              string
+	MonsterID             int32
+	DropChance            interface{}
+	DropCondition         sql.NullString
+	OtherItemsCondition   sql.NullString
+	StealCommonID         sql.NullInt32
+	StealRareID           sql.NullInt32
+	DropCommonID          sql.NullInt32
+	DropRareID            sql.NullInt32
+	SecondaryDropCommonID sql.NullInt32
+	SecondaryDropRareID   sql.NullInt32
+	BribeID               sql.NullInt32
 }
 
 type OdModeAction struct {
@@ -3280,6 +3516,13 @@ type PlayerUnit struct {
 	DataHash string
 	Name     string
 	Type     UnitType
+}
+
+type PossibleItem struct {
+	ID           int32
+	DataHash     string
+	ItemAmountID int32
+	Chance       interface{}
 }
 
 type Primer struct {

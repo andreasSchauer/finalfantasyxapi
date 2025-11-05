@@ -6,8 +6,8 @@ RETURNING *;
 
 
 -- name: CreateBlitzballItem :exec
-INSERT INTO blitzball_items (data_hash, position_id, item_amount_id, chance)
-VALUES ($1, $2, $3, $4)
+INSERT INTO blitzball_items (data_hash, position_id, possible_item_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 

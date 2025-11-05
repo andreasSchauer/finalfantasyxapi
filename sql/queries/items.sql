@@ -72,3 +72,10 @@ INSERT INTO item_amounts (data_hash, master_item_id, amount)
 VALUES ( $1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = item_amounts.data_hash
 RETURNING *;
+
+
+-- name: CreatePossibleItem :one
+INSERT INTO possible_items (data_hash, item_amount_id, chance)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = possible_items.data_hash
+RETURNING *;

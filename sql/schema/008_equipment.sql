@@ -53,7 +53,7 @@ CREATE TABLE equipment_tables (
     priority INTEGER,
     pool_1_amt INTEGER,
     pool_2_amt INTEGER,
-    empty_slots_amt INTEGER NOT NULL,
+    empty_slots_amt equipment_slots NOT NULL,
     UNIQUE(type, classification, specific_character_id, version, priority)
 );
 

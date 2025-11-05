@@ -38,8 +38,24 @@ func (b BlitzballPosition) Error() string {
 }
 
 type PossibleItem struct {
-	ItemAmount ItemAmount `json:"item"`
-	Chance     int32      `json:"chance"`
+	ID			int32
+	ItemAmount 	ItemAmount `json:"item"`
+	Chance     	int32      `json:"chance"`
+}
+
+func (i PossibleItem) ToHashFields() []any {
+	return []any{
+		i.ItemAmount.ID,
+		i.Chance,
+	}
+}
+
+func (i PossibleItem) GetID() int32 {
+	return i.ID
+}
+
+func (i PossibleItem) Error() string {
+	return fmt.Sprintf("possible item %s, amount: %d, chance: %d", i.ItemAmount.ItemName, i.ItemAmount.Amount, i.Chance)
 }
 
 type BlitzballItem struct {
@@ -50,8 +66,7 @@ type BlitzballItem struct {
 func (b BlitzballItem) ToHashFields() []any {
 	return []any{
 		b.PositionID,
-		b.ItemAmount.ID,
-		b.Chance,
+		b.PossibleItem.ID,
 	}
 }
 
@@ -107,16 +122,15 @@ func (l *lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 				var err error
 				item.PositionID = position.ID
 
-				item.ItemAmount, err = seedObjAssignID(qtx, item.ItemAmount, l.seedItemAmount)
+				item.PossibleItem, err = seedObjAssignID(qtx, item.PossibleItem, l.seedPossibleItem)
 				if err != nil {
 					return getErr(item.Error(), err)
 				}
 
 				err = qtx.CreateBlitzballItem(context.Background(), database.CreateBlitzballItemParams{
-					DataHash:     generateDataHash(item),
-					PositionID:   item.PositionID,
-					ItemAmountID: item.ItemAmount.ID,
-					Chance:       item.Chance,
+					DataHash:     	generateDataHash(item),
+					PositionID:   	item.PositionID,
+					PossibleItemID: item.PossibleItem.ID,
 				})
 				if err != nil {
 					return getErr(item.Error(), err, "couldn't create blitzball item")
@@ -126,4 +140,27 @@ func (l *lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 
 		return nil
 	})
+}
+
+
+func (l *lookup) seedPossibleItem(qtx *database.Queries, item PossibleItem) (PossibleItem, error) {
+	var err error
+	
+	item.ItemAmount, err = seedObjAssignID(qtx, item.ItemAmount, l.seedItemAmount)
+	if err != nil {
+		return PossibleItem{}, getErr(item.Error(), err)
+	}
+
+	dbPossibleItem, err := qtx.CreatePossibleItem(context.Background(), database.CreatePossibleItemParams{
+		DataHash: 		generateDataHash(item),
+		ItemAmountID: 	item.ItemAmount.ID,
+		Chance: 		item.Chance,
+	})
+	if err != nil {
+		return PossibleItem{}, getErr(item.Error(), err, "couldn't create possible item")
+	}
+
+	item.ID = dbPossibleItem.ID
+
+	return item, nil
 }

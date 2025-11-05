@@ -281,6 +281,31 @@ func (q *Queries) CreateMixesCombinationsJunction(ctx context.Context, arg Creat
 	return err
 }
 
+const createPossibleItem = `-- name: CreatePossibleItem :one
+INSERT INTO possible_items (data_hash, item_amount_id, chance)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = possible_items.data_hash
+RETURNING id, data_hash, item_amount_id, chance
+`
+
+type CreatePossibleItemParams struct {
+	DataHash     string
+	ItemAmountID int32
+	Chance       interface{}
+}
+
+func (q *Queries) CreatePossibleItem(ctx context.Context, arg CreatePossibleItemParams) (PossibleItem, error) {
+	row := q.db.QueryRowContext(ctx, createPossibleItem, arg.DataHash, arg.ItemAmountID, arg.Chance)
+	var i PossibleItem
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.ItemAmountID,
+		&i.Chance,
+	)
+	return i, err
+}
+
 const createPrimer = `-- name: CreatePrimer :exec
 INSERT INTO primers (data_hash, key_item_id, al_bhed_letter, english_letter)
 VALUES ($1, $2, $3, $4)
