@@ -8,7 +8,6 @@ import (
 
 type HasID interface {
 	GetID() int32
-	error
 }
 
 func assignFK[T any, R HasID](key T, lookup func(T) (R, error)) (int32, error) {

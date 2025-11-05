@@ -64,6 +64,8 @@ func (l *lookup) seedBattleInteractions(qtx *database.Queries, ability Ability, 
 			return getErr(battleInteraction.Error(), err, "couldn't junction battle interaction")
 		}
 
+		l.currentBI = battleInteraction
+
 		err = l.seedBattleInteractionRelationships(qtx, ability, battleInteraction)
 		if err != nil {
 			return getErr(battleInteraction.Error(), err)
@@ -101,9 +103,6 @@ func (l *lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 }
 
 func (l *lookup) seedBattleInteractionRelationships(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
-
-	l.currentBI = battleInteraction
-
 	if battleInteraction.Damage != nil {
 		threeWay, err := createThreeWayJunctionSeed(qtx, ability, battleInteraction, *battleInteraction.Damage, l.seedDamage)
 		if err != nil {

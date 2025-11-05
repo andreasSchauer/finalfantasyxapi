@@ -3,10 +3,13 @@ package seeding
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
+
+
 
 type Monster struct {
 	ID					 	int32
@@ -30,7 +33,7 @@ type Monster struct {
 	OverkillDamage       	int32    			`json:"overkill_damage"`
 	Gil                  	int32    			`json:"gil"`
 	StealGil             	*int32   			`json:"steal_gil"`
-	RonsoRange				[]string			`json:"ronso_rage"`
+	RonsoRages				[]string			`json:"ronso_rages"`
 	DoomCountdown       	*int32   			`json:"doom_countdown"`
 	PoisonRate           	*float32 			`json:"poison_rate"`
 	ThreatenChance       	*int32   			`json:"threaten_chance"`
@@ -94,237 +97,6 @@ func (m Monster) Error() string {
 	return fmt.Sprintf("monster %s, version: %v", m.Name, derefOrNil(m.Version))
 }
 
-
-
-type MonsterItems struct {
-	ID					int32
-	MonsterID			int32
-	DropChance			int32				`json:"drop_chance"`
-	DropCondition		*string				`json:"drop_condition"`
-	OtherItemsCondition	*string				`json:"other_items_condition"`
-	OtherItems			[]PossibleItem		`json:"other_items"`
-	StealCommon			*ItemAmount			`json:"steal_common"`
-	StealRare			*ItemAmount			`json:"steal_rare"`
-	DropCommon			*ItemAmount			`json:"drop_common"`
-	DropRare			*ItemAmount			`json:"drop_rare"`
-	SecondaryDropCommon	*ItemAmount			`json:"secondary_drop_common"`
-	SecondaryDropRare	*ItemAmount			`json:"secondary_drop_rare"`
-	Bribe				*ItemAmount			`json:"bribe"`
-}
-
-func (m MonsterItems) ToHashFields() []any {
-	return []any{
-		m.MonsterID,
-		m.DropChance,
-		derefOrNil(m.DropCondition),
-		derefOrNil(m.OtherItemsCondition),
-		ObjPtrToHashID(m.StealCommon),
-		ObjPtrToHashID(m.StealRare),
-		ObjPtrToHashID(m.DropCommon),
-		ObjPtrToHashID(m.DropRare),
-		ObjPtrToHashID(m.SecondaryDropCommon),
-		ObjPtrToHashID(m.SecondaryDropRare),
-		ObjPtrToHashID(m.Bribe),
-	}
-}
-
-func (m MonsterItems) GetID() int32 {
-	return m.ID
-}
-
-func (m MonsterItems) Error() string {
-	return fmt.Sprintf("monster items of monster with id %d", m.MonsterID)
-}
-
-
-
-type MonsterEquipment struct {
-	ID					int32
-	MonsterID			int32
-	DropChance			int32					`json:"drop_chance"`
-	Power				int32					`json:"power"`
-	CriticalPlus		int32					`json:"critical_plus"`
-	AbilitySlots		MonsterEquipmentSlots	`json:"ability_slots"`
-	AttachedAbilities	MonsterEquipmentSlots	`json:"attached_abilities"`
-	WeaponAbilities		[]EquipmentDrop			`json:"weapon_abilities"`
-	ArmorAbilities		[]EquipmentDrop			`json:"armor_abilities"`
-}
-
-func (m MonsterEquipment) ToHashFields() []any {
-	return []any{
-		m.MonsterID,
-		m.DropChance,
-		m.Power,
-		m.CriticalPlus,
-		m.AbilitySlots.ID,
-		m.AttachedAbilities.ID,
-	}
-}
-
-func (m MonsterEquipment) GetID() int32 {
-	return m.ID
-}
-
-func (m MonsterEquipment) Error() string {
-	return fmt.Sprintf("monster equipment of monster with id %d", m.MonsterID)
-}
-
-
-
-type MonsterEquipmentSlots struct {
-	ID				int32
-	MinAmount		int32					`json:"min_amount"`
-	MaxAmount		int32					`json:"max_amount"`
-	Chances			[]EquipmentSlotsChance	`json:"chances"`
-}
-
-func (m MonsterEquipmentSlots) ToHashFields() []any {
-	return []any{
-		m.MinAmount,
-		m.MaxAmount,
-	}
-}
-
-func (m MonsterEquipmentSlots) GetID() int32 {
-	return m.ID
-}
-
-func (m MonsterEquipmentSlots) Error() string {
-	return fmt.Sprintf("monster equipment slots with min amount: %d, max amount: %d", m.MinAmount, m.MaxAmount)
-}
-
-
-
-type EquipmentSlotsChance struct {
-	ID			int32
-	Amount		int32	`json:"amount"`
-	Chance		int32	`json:"chance"`
-}
-
-func (e EquipmentSlotsChance) ToHashFields() []any {
-	return []any{
-		e.Amount,
-		e.Chance,
-	}
-}
-
-func (e EquipmentSlotsChance) GetID() int32 {
-	return e.ID
-}
-
-func (e EquipmentSlotsChance) Error() string {
-	return fmt.Sprintf("equipment slots chance with amount: %d, chance: %d", e.Amount, e.Chance)
-}
-
-
-
-type EquipmentDrop struct {
-	ID				int32
-	AutoAbilityID	int32
-	Ability			string		`json:"ability"`
-	Characters		[]string	`json:"characters"`
-	IsForced		bool		`json:"is_forced"`
-	Probability		*int32		`json:"probability"`
-}
-
-func (e EquipmentDrop) ToHashFields() []any {
-	return []any{
-		e.AutoAbilityID,
-		e.IsForced,
-		derefOrNil(e.Probability),
-	}
-}
-
-func (e EquipmentDrop) GetID() int32 {
-	return e.ID
-}
-
-func (e EquipmentDrop) Error() string {
-	return fmt.Sprintf("equipment drop with auto-ability id: %d, is forced: %t, probability: %v", e.AutoAbilityID, e.IsForced, derefOrNil(e.Probability))
-}
-
-
-
-type AlteredState struct {
-	ID				int32
-	MonsterID		int32
-	Condition		string				`json:"condition"`
-	IsTemporary		bool				`json:"is_temporary"`
-	Changes			[]AltStateChange 	`json:"changes"`
-}
-
-func (a AlteredState) ToHashFields() []any {
-	return []any{
-		a.MonsterID,
-		a.Condition,
-		a.IsTemporary,
-	}
-}
-
-func (a AlteredState) GetID() int32 {
-	return a.ID
-}
-
-func (a AlteredState) Error() string {
-	return fmt.Sprintf("altered state with monster id: %d, is temporary: %t, condition: %s", a.MonsterID, a.IsTemporary, a.Condition)
-}
-
-
-
-type AltStateChange struct {
-	ID					int32
-	AlteredStateID		int32
-	AlterationType		string				`json:"alteration_type"`
-	Distance			*int32				`json:"distance"`
-	Properties			*[]string			`json:"properties"`
-	AutoAbilities		*[]string			`json:"auto_abilities"`
-	BaseStats			*[]BaseStat			`json:"base_stats"`
-	ElemResists			*[]ElementalResist	`json:"elem_resists"`
-	StatusImmunities	*[]string			`json:"status_immunities"`
-	AddedStatusses		*[]InflictedStatus	`json:"added_statusses"`
-}
-
-func (a AltStateChange) ToHashFields() []any {
-	return []any{
-		a.AlteredStateID,
-		a.AlterationType,
-		derefOrNil(a.Distance),
-	}
-}
-
-func (a AltStateChange) GetID() int32 {
-	return a.ID
-}
-
-func (a AltStateChange) Error() string {
-	return fmt.Sprintf("alt stat change with altered state id: %d, alteration type: %s", a.AlteredStateID, a.AlterationType)
-}
-
-
-
-type MonsterAbility struct {
-	ID					int32
-	AbilityID			int32
-	AbilityReference
-	IsForced			bool	`json:"is_forced"`
-	IsUnused			bool	`json:"is_unused"`
-}
-
-func (m MonsterAbility) ToHashFields() []any {
-	return []any{
-		m.AbilityID,
-		m.IsForced,
-		m.IsUnused,
-	}
-}
-
-func (m MonsterAbility) GetID() int32 {
-	return m.ID
-}
-
-func (m MonsterAbility) Error() string {
-	return fmt.Sprintf("monster ability %s-%v, type: %s, is forced: %t, is unused: %t", m.Name, derefOrNil(m.Version), m.AbilityType, m.IsForced, m.IsUnused)
-}
 
 
 
@@ -392,8 +164,250 @@ func (l *lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB)
 	}
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		for _, jsonMonster := range monsters {
+			key := createLookupKey(jsonMonster)
 
+			monster, err := l.getMonster(key)
+			if err != nil {
+				return err
+			}
+
+			err = l.seedMonsterJunctions(qtx, monster)
+			if err != nil {
+				return getErr(monster.Error(), err)
+			}
+
+			if monster.Items != nil {
+				var err error
+				monster.Items.MonsterID = monster.ID
+
+				monster.Items, err = seedObjPtrAssignFK(qtx, monster.Items, l.seedMonsterItems)
+				if err != nil {
+					return getErr(monster.Error(), err)
+				}
+			}
+
+			if monster.Equipment != nil {
+				var err error
+				monster.Equipment.MonsterID = monster.ID
+
+				monster.Equipment, err = seedObjPtrAssignFK(qtx, monster.Equipment, l.seedMonsterEquipment)
+				if err != nil {
+					return getErr(monster.Error(), err)
+				}
+			}
+
+			err = l.seedAlteredStates(qtx, monster)
+			if err != nil {
+				return getErr(monster.Error(), err)
+			}
+		}
 
 		return nil
 	})
+}
+
+
+func (l *lookup) seedMonsterJunctions(qtx *database.Queries, monster Monster) error {
+	functions := []func(*database.Queries, Monster) error {
+		l.seedMonsterProperties,
+		l.seedMonsterAutoAbilities,
+		l.seedMonsterRonsoRages,
+		l.seedMonsterBaseStats,
+		l.seedMonsterElemResists,
+		l.seedMonsterImmunities,
+		l.seedMonsterStatusResists,
+		l.seedMonsterAbilities,
+	}
+
+	for _, function := range functions {
+		err := function(qtx, monster)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+
+
+func (l *lookup) seedMonsterProperties(qtx *database.Queries, monster Monster) error {
+	for _, propertyStr := range monster.Properties {
+		junction, err := createJunction(monster, propertyStr, l.getProperty)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateMonstersPropertiesJunction(context.Background(), database.CreateMonstersPropertiesJunctionParams{
+			DataHash: 		generateDataHash(junction),
+			MonsterID:		junction.ParentID,
+			PropertyID: 	junction.ChildID,
+		})
+		if err != nil {
+			return getErr(propertyStr, err, "couldn't junction property")
+		}
+	}
+
+	return nil
+}
+
+
+func (l *lookup) seedMonsterAutoAbilities(qtx *database.Queries, monster Monster) error {
+	for _, autoAbilityStr := range monster.AutoAbilities {
+		junction, err := createJunction(monster, autoAbilityStr, l.getAutoAbility)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateMonstersAutoAbilitiesJunction(context.Background(), database.CreateMonstersAutoAbilitiesJunctionParams{
+			DataHash: 		generateDataHash(junction),
+			MonsterID:		junction.ParentID,
+			AutoAbilityID: 	junction.ChildID,
+		})
+		if err != nil {
+			return getErr(autoAbilityStr, err, "couldn't junction auto-ability")
+		}
+	}
+
+	return nil
+}
+
+
+func (l *lookup) seedMonsterRonsoRages(qtx *database.Queries, monster Monster) error {
+	for _, rage := range monster.RonsoRages {
+		key := Ability{
+			Name: rage,
+		}
+
+		overdrive, err := l.getOverdrive(key)
+		if err != nil {
+			return err
+		}
+
+		if overdrive.User != "kimahri" {
+			return getErr(rage, errors.New("overdrive has to be a ronso rage"))
+		}
+
+		junction, err := createJunction(monster, key, l.getOverdrive)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateMonstersRonsoRagesJunction(context.Background(), database.CreateMonstersRonsoRagesJunctionParams{
+			DataHash: 		generateDataHash(junction),
+			MonsterID:		junction.ParentID,
+			OverdriveID: 	junction.ChildID,
+		})
+		if err != nil {
+			return getErr(rage, err, "couldn't junction ronso rage")
+		}
+	}
+
+	return nil
+}
+
+
+func (l *lookup) seedMonsterBaseStats(qtx *database.Queries, monster Monster) error {
+	for _, baseStat := range monster.BaseStats {
+		junction, err := createJunctionSeed(qtx, monster, baseStat, l.seedBaseStat)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateMonstersBaseStatsJunction(context.Background(), database.CreateMonstersBaseStatsJunctionParams{
+			DataHash: 		generateDataHash(junction),
+			MonsterID:		junction.ParentID,
+			BaseStatID: 	junction.ChildID,
+		})
+		if err != nil {
+			return getErr(baseStat.Error(), err, "couldn't junction base stat")
+		}
+	}
+
+	return nil
+}
+
+
+func (l *lookup) seedMonsterElemResists(qtx *database.Queries, monster Monster) error {
+	for _, elemResist := range monster.ElemResists {
+		junction, err := createJunctionSeed(qtx, monster, elemResist, l.seedElementalResist)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateMonstersElemResistsJunction(context.Background(), database.CreateMonstersElemResistsJunctionParams{
+			DataHash: 		generateDataHash(junction),
+			MonsterID:		junction.ParentID,
+			ElemResistID: 	junction.ChildID,
+		})
+		if err != nil {
+			return getErr(elemResist.Error(), err, "couldn't junction elemental resist")
+		}
+	}
+
+	return nil
+}
+
+
+func (l *lookup) seedMonsterImmunities(qtx *database.Queries, monster Monster) error {
+	for _, conditionStr := range monster.StatusImmunities {
+		junction, err := createJunction(monster, conditionStr, l.getStatusCondition)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateMonstersImmunitiesJunction(context.Background(), database.CreateMonstersImmunitiesJunctionParams{
+			DataHash: 			generateDataHash(junction),
+			MonsterID:			junction.ParentID,
+			StatusConditionID: 	junction.ChildID,
+		})
+		if err != nil {
+			return getErr(conditionStr, err, "couldn't junction immunity")
+		}
+	}
+
+	return nil
+}
+
+
+func (l *lookup) seedMonsterStatusResists(qtx *database.Queries, monster Monster) error {
+	for _, statusResist := range monster.StatusResists {
+		junction, err := createJunctionSeed(qtx, monster, statusResist, l.seedStatusResist)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateMonstersStatusResistsJunction(context.Background(), database.CreateMonstersStatusResistsJunctionParams{
+			DataHash: 		generateDataHash(junction),
+			MonsterID:		junction.ParentID,
+			StatusResistID: junction.ChildID,
+		})
+		if err != nil {
+			return getErr(statusResist.Error(), err, "couldn't junction status resist")
+		}
+	}
+
+	return nil
+}
+
+
+func (l *lookup) seedMonsterAbilities(qtx *database.Queries, monster Monster) error {
+	for _, ability := range monster.Abilities {
+		junction, err := createJunctionSeed(qtx, monster, ability, l.seedMonsterAbility)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateMonstersAbilitiesJunction(context.Background(), database.CreateMonstersAbilitiesJunctionParams{
+			DataHash: 			generateDataHash(junction),
+			MonsterID:			junction.ParentID,
+			MonsterAbilityID: 	junction.ChildID,
+		})
+		if err != nil {
+			return getErr(ability.Error(), err, "couldn't junction monster ability")
+		}
+	}
+
+	return nil
 }

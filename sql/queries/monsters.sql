@@ -20,15 +20,15 @@ RETURNING *;
 
 
 -- name: CreateMonsterEquipment :one
-INSERT INTO monster_equipment (data_hash, monster_id, drop_chance, power, critical_plus, ability_slots_id, attached_abilities_id)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+INSERT INTO monster_equipment (data_hash, monster_id, drop_chance, power, critical_plus)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_equipment.data_hash
 RETURNING *;
 
 
 -- name: CreateMonsterEquipmentSlots :one
-INSERT INTO monster_equipment_slots (data_hash, min_amount, max_amount)
-VALUES ($1, $2, $3)
+INSERT INTO monster_equipment_slots (data_hash, monster_equipment_id, min_amount, max_amount, type)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_equipment_slots.data_hash
 RETURNING *;
 
@@ -41,8 +41,8 @@ RETURNING *;
 
 
 -- name: CreateEquipmentDrop :one
-INSERT INTO equipment_drops (data_hash, auto_ability_id, is_forced, probability)
-VALUES ($1, $2, $3, $4)
+INSERT INTO equipment_drops (data_hash, auto_ability_id, is_forced, probability, type)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_drops.data_hash
 RETURNING *;
 
@@ -55,8 +55,8 @@ RETURNING *;
 
 
 -- name: CreateAltStateChange :one
-INSERT INTO alt_state_changes (data_hash, altered_state_id, distance)
-VALUES ($1, $2, $3)
+INSERT INTO alt_state_changes (data_hash, altered_state_id, alteration_type, distance)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = alt_state_changes.data_hash
 RETURNING *;
 
@@ -80,8 +80,8 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateMonstersRonsoRageJunction :exec
-INSERT INTO j_monsters_ronso_rage (data_hash, monster_id, ronso_rage_id)
+-- name: CreateMonstersRonsoRagesJunction :exec
+INSERT INTO j_monsters_ronso_rages (data_hash, monster_id, overdrive_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -118,6 +118,12 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 -- name: CreateMonsterItemsOtherItemsJunction :exec
 INSERT INTO j_monster_items_other_items (data_hash, monster_items_id, possible_item_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonsterEquipmentAbilitiesJunction :exec
+INSERT INTO j_monster_equipment_abilities (data_hash, monster_equipment_id, equipment_drop_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

@@ -1,5 +1,6 @@
 -- +goose Up
 CREATE TYPE alteration_type AS ENUM ('change', 'gain', 'loss');
+CREATE TYPE equipment_slots_type AS ENUM ('ability-slots', 'attached-abilities');
 
 
 CREATE TABLE monster_items (
@@ -19,18 +20,10 @@ CREATE TABLE monster_items (
 );
 
 
-CREATE TABLE monster_equipment_slots (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    min_amount equipment_slots NOT NULL,
-    max_amount equipment_slots NOT NULL
-);
-
-
 CREATE TABLE equipment_slots_chances (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    amount equipment_slots NOT NULL,
+    amount equipment_rolls NOT NULL,
     chance percent NOT NULL
 );
 
@@ -41,9 +34,18 @@ CREATE TABLE monster_equipment (
     monster_id INTEGER UNIQUE NOT NULL REFERENCES monsters(id),
     drop_chance uint8 NOT NULL,
     power uint8 NOT NULL,
-    critical_plus INTEGER NOT NULL,
-    ability_slots_id INTEGER NOT NULL REFERENCES monster_equipment_slots(id),
-    attached_abilities_id INTEGER NOT NULL REFERENCES monster_equipment_slots(id)
+    critical_plus INTEGER NOT NULL
+);
+
+
+CREATE TABLE monster_equipment_slots (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    monster_equipment_id INTEGER NOT NULL REFERENCES monster_equipment(id),
+    min_amount equipment_slots NOT NULL,
+    max_amount equipment_slots NOT NULL,
+    type equipment_slots_type NOT NULL,
+    UNIQUE(monster_equipment_id, type)
 );
 
 
@@ -52,7 +54,8 @@ CREATE TABLE equipment_drops (
     data_hash TEXT UNIQUE NOT NULL,
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
     is_forced BOOLEAN NOT NULL,
-    probability auto_ability_probability
+    probability auto_ability_probability,
+    type equip_type NOT NULL
 );
 
 
@@ -101,11 +104,11 @@ CREATE TABLE j_monsters_auto_abilities (
 );
 
 
-CREATE TABLE j_monsters_ronso_rage (
+CREATE TABLE j_monsters_ronso_rages (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     monster_id INTEGER NOT NULL REFERENCES monsters(id),
-    ronso_rage_id INTEGER NOT NULL REFERENCES overdrives(id)
+    overdrive_id INTEGER NOT NULL REFERENCES overdrives(id)
 );
 
 
@@ -155,6 +158,15 @@ CREATE TABLE j_monster_items_other_items (
     monster_items_id INTEGER NOT NULL REFERENCES monster_items(id),
     possible_item_id INTEGER NOT NULL REFERENCES possible_items(id)
 );
+
+
+CREATE TABLE j_monster_equipment_abilities (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    monster_equipment_id INTEGER NOT NULL REFERENCES monster_equipment(id),
+    equipment_drop_id INTEGER NOT NULL REFERENCES equipment_drops(id)
+);
+
 
 
 CREATE TABLE j_monster_equipment_slots_chances (
@@ -233,21 +245,23 @@ DROP TABLE IF EXISTS j_alt_state_changes_auto_abilities;
 DROP TABLE IF EXISTS j_alt_state_changes_properties;
 DROP TABLE IF EXISTS j_equipment_drops_characters;
 DROP TABLE IF EXISTS j_monster_equipment_slots_chances;
+DROP TABLE IF EXISTS j_monster_equipment_abilities;
 DROP TABLE IF EXISTS j_monster_items_other_items;
 DROP TABLE IF EXISTS j_monsters_abilities;
 DROP TABLE IF EXISTS j_monsters_status_resists;
 DROP TABLE IF EXISTS j_monsters_immunities;
 DROP TABLE IF EXISTS j_monsters_elem_resists;
 DROP TABLE IF EXISTS j_monsters_base_stats;
-DROP TABLE IF EXISTS j_monsters_ronso_rage;
+DROP TABLE IF EXISTS j_monsters_ronso_rages;
 DROP TABLE IF EXISTS j_monsters_auto_abilities;
 DROP TABLE IF EXISTS j_monsters_properties;
 DROP TABLE IF EXISTS monster_abilities;
 DROP TABLE IF EXISTS alt_state_changes;
 DROP TABLE IF EXISTS altered_states;
 DROP TABLE IF EXISTS equipment_drops;
+DROP TABLE IF EXISTS monster_equipment_slots;
 DROP TABLE IF EXISTS monster_equipment;
 DROP TABLE IF EXISTS equipment_slots_chances;
-DROP TABLE IF EXISTS monster_equipment_slots;
 DROP TABLE IF EXISTS monster_items;
+DROP TYPE IF EXISTS equipment_slots_type;
 DROP TYPE IF EXISTS alteration_type;

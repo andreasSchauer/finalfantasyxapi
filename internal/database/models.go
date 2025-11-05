@@ -1199,6 +1199,48 @@ func (ns NullEquipType) Value() (driver.Value, error) {
 	return string(ns.EquipType), nil
 }
 
+type EquipmentSlotsType string
+
+const (
+	EquipmentSlotsTypeAbilitySlots      EquipmentSlotsType = "ability-slots"
+	EquipmentSlotsTypeAttachedAbilities EquipmentSlotsType = "attached-abilities"
+)
+
+func (e *EquipmentSlotsType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = EquipmentSlotsType(s)
+	case string:
+		*e = EquipmentSlotsType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for EquipmentSlotsType: %T", src)
+	}
+	return nil
+}
+
+type NullEquipmentSlotsType struct {
+	EquipmentSlotsType EquipmentSlotsType
+	Valid              bool // Valid is true if EquipmentSlotsType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullEquipmentSlotsType) Scan(value interface{}) error {
+	if value == nil {
+		ns.EquipmentSlotsType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.EquipmentSlotsType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullEquipmentSlotsType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.EquipmentSlotsType), nil
+}
+
 type ItemCategory string
 
 const (
@@ -2687,6 +2729,7 @@ type EquipmentDrop struct {
 	AutoAbilityID int32
 	IsForced      bool
 	Probability   interface{}
+	Type          EquipType
 }
 
 type EquipmentName struct {
@@ -3053,6 +3096,13 @@ type JMixesCombination struct {
 	IsBestCombo bool
 }
 
+type JMonsterEquipmentAbility struct {
+	ID                 int32
+	DataHash           string
+	MonsterEquipmentID int32
+	EquipmentDropID    int32
+}
+
 type JMonsterEquipmentSlotsChance struct {
 	ID                 int32
 	DataHash           string
@@ -3128,7 +3178,7 @@ type JMonstersRonsoRage struct {
 	ID          int32
 	DataHash    string
 	MonsterID   int32
-	RonsoRageID int32
+	OverdriveID int32
 }
 
 type JMonstersStatusResist struct {
@@ -3400,21 +3450,21 @@ type MonsterArenaCreation struct {
 }
 
 type MonsterEquipment struct {
-	ID                  int32
-	DataHash            string
-	MonsterID           int32
-	DropChance          interface{}
-	Power               interface{}
-	CriticalPlus        int32
-	AbilitySlotsID      int32
-	AttachedAbilitiesID int32
+	ID           int32
+	DataHash     string
+	MonsterID    int32
+	DropChance   interface{}
+	Power        interface{}
+	CriticalPlus int32
 }
 
 type MonsterEquipmentSlot struct {
-	ID        int32
-	DataHash  string
-	MinAmount interface{}
-	MaxAmount interface{}
+	ID                 int32
+	DataHash           string
+	MonsterEquipmentID int32
+	MinAmount          interface{}
+	MaxAmount          interface{}
+	Type               EquipmentSlotsType
 }
 
 type MonsterFormation struct {

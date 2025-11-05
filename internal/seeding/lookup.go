@@ -18,6 +18,7 @@ func createLookupKey(l Lookupable) string {
 type lookup struct {
 	currentAbility     Ability           // currentAbility and currentBI are
 	currentBI          BattleInteraction // used for seeding of ability damage
+	currentME		   MonsterEquipment		// used for some monster equipment junctions
 	abilities          map[string]Ability
 	enemyAbilities     map[string]EnemyAbility
 	overdriveAbilities map[string]OverdriveAbility

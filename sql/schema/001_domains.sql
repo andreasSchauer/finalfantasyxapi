@@ -23,6 +23,10 @@ CREATE DOMAIN equipment_slots AS INTEGER
     CHECK (VALUE >= 0 AND VALUE <= 4);
 
 
+CREATE DOMAIN equipment_rolls AS INTEGER
+    CHECK (VALUE >= 0 AND VALUE <= 7);
+
+
 CREATE DOMAIN auto_ability_probability AS INTEGER
     CHECK (VALUE >= 1 AND VALUE <= 7);
 
@@ -34,6 +38,7 @@ CREATE DOMAIN zanmato_level AS INTEGER
 -- +goose Down
 DROP DOMAIN IF EXISTS zanmato_level;
 DROP DOMAIN IF EXISTS auto_ability_probability;
+DROP DOMAIN IF EXISTS equipment_rolls;
 DROP DOMAIN IF EXISTS equipment_slots;
 DROP DOMAIN IF EXISTS ost_disc;
 DROP DOMAIN IF EXISTS distance;
