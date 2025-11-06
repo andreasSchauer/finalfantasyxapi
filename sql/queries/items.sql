@@ -55,16 +55,10 @@ RETURNING *;
 
 
 -- name: CreateMixCombination :one
-INSERT INTO mix_combinations (data_hash, first_item_id, second_item_id)
-VALUES ($1, $2, $3)
+INSERT INTO mix_combinations (data_hash, mix_id, first_item_id, second_item_id, is_best_combo)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = mix_combinations.data_hash
 RETURNING *;
-
-
--- name: CreateMixesCombinationsJunction :exec
-INSERT INTO j_mixes_combinations (data_hash, mix_id, combo_id, is_best_combo)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateItemAmount :one

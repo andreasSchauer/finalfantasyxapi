@@ -3088,14 +3088,6 @@ type JItemsRelatedStat struct {
 	StatID   int32
 }
 
-type JMixesCombination struct {
-	ID          int32
-	DataHash    string
-	MixID       int32
-	ComboID     int32
-	IsBestCombo bool
-}
-
 type JMonsterEquipmentAbility struct {
 	ID                 int32
 	DataHash           string
@@ -3371,8 +3363,10 @@ type Mix struct {
 type MixCombination struct {
 	ID           int32
 	DataHash     string
+	MixID        int32
 	FirstItemID  int32
 	SecondItemID int32
+	IsBestCombo  bool
 }
 
 type Modifier struct {

@@ -5,3 +5,4 @@ connection_string.txt
 notes.txt
 testrequests.http
 ./scripts/goose-*.sh
+.vscode/

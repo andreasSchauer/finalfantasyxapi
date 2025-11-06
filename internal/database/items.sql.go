@@ -234,51 +234,38 @@ func (q *Queries) CreateMix(ctx context.Context, arg CreateMixParams) (Mix, erro
 }
 
 const createMixCombination = `-- name: CreateMixCombination :one
-INSERT INTO mix_combinations (data_hash, first_item_id, second_item_id)
-VALUES ($1, $2, $3)
+INSERT INTO mix_combinations (data_hash, mix_id, first_item_id, second_item_id, is_best_combo)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = mix_combinations.data_hash
-RETURNING id, data_hash, first_item_id, second_item_id
+RETURNING id, data_hash, mix_id, first_item_id, second_item_id, is_best_combo
 `
 
 type CreateMixCombinationParams struct {
 	DataHash     string
+	MixID        int32
 	FirstItemID  int32
 	SecondItemID int32
+	IsBestCombo  bool
 }
 
 func (q *Queries) CreateMixCombination(ctx context.Context, arg CreateMixCombinationParams) (MixCombination, error) {
-	row := q.db.QueryRowContext(ctx, createMixCombination, arg.DataHash, arg.FirstItemID, arg.SecondItemID)
+	row := q.db.QueryRowContext(ctx, createMixCombination,
+		arg.DataHash,
+		arg.MixID,
+		arg.FirstItemID,
+		arg.SecondItemID,
+		arg.IsBestCombo,
+	)
 	var i MixCombination
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
+		&i.MixID,
 		&i.FirstItemID,
 		&i.SecondItemID,
+		&i.IsBestCombo,
 	)
 	return i, err
-}
-
-const createMixesCombinationsJunction = `-- name: CreateMixesCombinationsJunction :exec
-INSERT INTO j_mixes_combinations (data_hash, mix_id, combo_id, is_best_combo)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateMixesCombinationsJunctionParams struct {
-	DataHash    string
-	MixID       int32
-	ComboID     int32
-	IsBestCombo bool
-}
-
-func (q *Queries) CreateMixesCombinationsJunction(ctx context.Context, arg CreateMixesCombinationsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createMixesCombinationsJunction,
-		arg.DataHash,
-		arg.MixID,
-		arg.ComboID,
-		arg.IsBestCombo,
-	)
-	return err
 }
 
 const createPossibleItem = `-- name: CreatePossibleItem :one
