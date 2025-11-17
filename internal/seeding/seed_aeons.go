@@ -72,7 +72,7 @@ func (a AeonEquipment) Error() string {
 	return fmt.Sprintf("aeon equipment with auto ability: %s, clstl_wpn: %t, equip type: %s", a.AutoAbility, a.CelestialWeapon, a.EquipType)
 }
 
-func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeons.json"
 
 	var aeons []Aeon
@@ -118,7 +118,7 @@ func (l *lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeons.json"
 
 	var aeons []Aeon
@@ -173,7 +173,7 @@ func (l *lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) er
 	})
 }
 
-func (l *lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon) error {
+func (l *Lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon) error {
 	for _, baseStat := range aeon.BaseStats {
 		junction, err := createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
 		if err != nil {
@@ -193,7 +193,7 @@ func (l *lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon) error {
 	return nil
 }
 
-func (l *lookup) seedAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon, equipType string, abilityList []AeonEquipment) error {
+func (l *Lookup) seedAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon, equipType string, abilityList []AeonEquipment) error {
 	for _, entry := range abilityList {
 		var err error
 		entry.EquipType = equipType
@@ -216,7 +216,7 @@ func (l *lookup) seedAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon
 	return nil
 }
 
-func (l *lookup) seedAeonEquipment(qtx *database.Queries, aeonEquipment AeonEquipment) (AeonEquipment, error) {
+func (l *Lookup) seedAeonEquipment(qtx *database.Queries, aeonEquipment AeonEquipment) (AeonEquipment, error) {
 	var err error
 
 	aeonEquipment.AutoAbilityID, err = assignFK(aeonEquipment.AutoAbility, l.getAutoAbility)

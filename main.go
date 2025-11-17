@@ -15,6 +15,7 @@ import (
 type apiConfig struct {
 	db          *database.Queries
 	dbConn      *sql.DB
+	l			*seeding.Lookup
 	platform    string
 	adminApiKey string
 }
@@ -52,7 +53,7 @@ func main() {
 		adminApiKey: adminApiKey,
 	}
 
-	err = seeding.SeedDatabase(apiCfg.db, apiCfg.dbConn)
+	apiCfg.l, err = seeding.SeedDatabase(apiCfg.db, apiCfg.dbConn)
 	if err != nil {
 		log.Fatal(err)
 	}

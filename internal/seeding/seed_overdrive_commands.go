@@ -10,14 +10,14 @@ import (
 
 type OverdriveCommand struct {
 	ID          int32
-	CharClassID	*int32
-	SubmenuID	*int32
-	Name        string     	`json:"name"`
-	Description string      `json:"description"`
-	User		string		`json:"user"`
-	Rank        int32       `json:"rank"`
-	Topmenu     string     	`json:"topmenu"`
-	OpenSubmenu string     	`json:"open_submenu"`
+	CharClassID *int32
+	SubmenuID   *int32
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	User        string `json:"user"`
+	Rank        int32  `json:"rank"`
+	Topmenu     string `json:"topmenu"`
+	OpenSubmenu string `json:"open_submenu"`
 }
 
 func (oc OverdriveCommand) ToHashFields() []any {
@@ -40,9 +40,7 @@ func (oc OverdriveCommand) Error() string {
 	return fmt.Sprintf("overdrive command %s", oc.Name)
 }
 
-
-
-func (l *lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_commands.json"
 
 	var overdriveCommands []OverdriveCommand
@@ -72,8 +70,7 @@ func (l *lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 	})
 }
 
-
-func (l *lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_commands.json"
 
 	var overdriveCommands []OverdriveCommand
@@ -100,10 +97,10 @@ func (l *lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn
 			}
 
 			err = qtx.UpdateOverdriveCommand(context.Background(), database.UpdateOverdriveCommandParams{
-				DataHash:    		generateDataHash(command),
-				CharacterClassID: 	getNullInt32(command.CharClassID),
-				SubmenuID: 			getNullInt32(command.SubmenuID),
-				ID:					command.ID,
+				DataHash:         generateDataHash(command),
+				CharacterClassID: getNullInt32(command.CharClassID),
+				SubmenuID:        getNullInt32(command.SubmenuID),
+				ID:               command.ID,
 			})
 			if err != nil {
 				return getErr(command.Error(), err, "couldn't update overdrive command")

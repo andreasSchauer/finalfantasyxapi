@@ -7,13 +7,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type MonsterAbility struct {
-	ID					int32
-	AbilityID			int32
+	ID        int32
+	AbilityID int32
 	AbilityReference
-	IsForced			bool	`json:"is_forced"`
-	IsUnused			bool	`json:"is_unused"`
+	IsForced bool `json:"is_forced"`
+	IsUnused bool `json:"is_unused"`
 }
 
 func (m MonsterAbility) ToHashFields() []any {
@@ -32,8 +31,7 @@ func (m MonsterAbility) Error() string {
 	return fmt.Sprintf("monster ability %s-%v, type: %s, is forced: %t, is unused: %t", m.Name, derefOrNil(m.Version), m.AbilityType, m.IsForced, m.IsUnused)
 }
 
-
-func (l *lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility MonsterAbility) (MonsterAbility, error) {
+func (l *Lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility MonsterAbility) (MonsterAbility, error) {
 	var err error
 
 	monsterAbility.AbilityID, err = assignFK(monsterAbility.AbilityReference, l.getAbility)
@@ -42,10 +40,10 @@ func (l *lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility Monste
 	}
 
 	dbMonsterAbility, err := qtx.CreateMonsterAbility(context.Background(), database.CreateMonsterAbilityParams{
-		DataHash: 	generateDataHash(monsterAbility),
-		AbilityID: 	monsterAbility.AbilityID,
-		IsForced: 	monsterAbility.IsForced,
-		IsUnused: 	monsterAbility.IsUnused,
+		DataHash:  generateDataHash(monsterAbility),
+		AbilityID: monsterAbility.AbilityID,
+		IsForced:  monsterAbility.IsForced,
+		IsUnused:  monsterAbility.IsUnused,
 	})
 	if err != nil {
 		return MonsterAbility{}, getErr(monsterAbility.Error(), err, "couldn't create monster ability")
@@ -55,4 +53,3 @@ func (l *lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility Monste
 
 	return monsterAbility, nil
 }
-

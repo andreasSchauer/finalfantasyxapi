@@ -15,14 +15,14 @@ type seeder struct {
 	relFunc  func(*database.Queries, *sql.DB) error
 }
 
-func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
+func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	const migrationsDir = "./sql/schema/"
 
 	start := time.Now()
 
 	err := setupDB(dbConn, migrationsDir)
 	if err != nil {
-		return fmt.Errorf("couldn't setup database: %v", err)
+		return nil, fmt.Errorf("couldn't setup database: %v", err)
 	}
 
 	l := lookupInit()
@@ -30,13 +30,13 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) error {
 
 	err = handleDBFunctions(db, dbConn, seeders)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	totalDuration := time.Since(start)
 	fmt.Printf("database seeding took %.3f seconds\n", totalDuration.Seconds())
 
-	return nil
+	return &l, nil
 }
 
 func handleDBFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) error {
@@ -106,7 +106,7 @@ func setupDB(dbConn *sql.DB, migrationsDir string) error {
 	return nil
 }
 
-func (l *lookup) getSeeders() []seeder {
+func (l *Lookup) getSeeders() []seeder {
 	return []seeder{
 		{
 			name:     "stats",

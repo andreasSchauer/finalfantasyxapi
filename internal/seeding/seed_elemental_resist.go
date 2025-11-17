@@ -30,7 +30,7 @@ func (er ElementalResist) Error() string {
 	return fmt.Sprintf("elemental resist with element: %s, affinity: %s", er.Element, er.Affinity)
 }
 
-func (l *lookup) seedElementalResist(qtx *database.Queries, elemResist ElementalResist) (ElementalResist, error) {
+func (l *Lookup) seedElementalResist(qtx *database.Queries, elemResist ElementalResist) (ElementalResist, error) {
 	var err error
 
 	elemResist.ElementID, err = assignFK(elemResist.Element, l.getElement)

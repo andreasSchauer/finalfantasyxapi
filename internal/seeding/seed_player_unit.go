@@ -35,7 +35,7 @@ func (pu PlayerUnit) Error() string {
 	return fmt.Sprintf("player unit %s, type %s", pu.Name, pu.Type)
 }
 
-func (l *lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (PlayerUnit, error) {
+func (l *Lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (PlayerUnit, error) {
 	dbPlayerUnit, err := qtx.CreatePlayerUnit(context.Background(), database.CreatePlayerUnitParams{
 		DataHash: generateDataHash(playerUnit),
 		Name:     playerUnit.Name,

@@ -33,7 +33,7 @@ func (is InflictedStatus) Error() string {
 	return fmt.Sprintf("inflicted status with condition: %s, probability: %d, duration type: %s, amount: %v", is.StatusCondition, is.Probability, is.DurationType, is.Amount)
 }
 
-func (l *lookup) seedInflictedStatus(qtx *database.Queries, inflictedStatus InflictedStatus) (InflictedStatus, error) {
+func (l *Lookup) seedInflictedStatus(qtx *database.Queries, inflictedStatus InflictedStatus) (InflictedStatus, error) {
 	var err error
 
 	inflictedStatus.StatusConditionID, err = assignFK(inflictedStatus.StatusCondition, l.getStatusCondition)

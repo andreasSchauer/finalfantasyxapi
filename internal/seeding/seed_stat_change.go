@@ -31,7 +31,7 @@ func (s StatChange) Error() string {
 	return fmt.Sprintf("stat change with stat: %s, calc type: %s, value %f", s.StatName, s.CalculationType, s.Value)
 }
 
-func (l *lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (StatChange, error) {
+func (l *Lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (StatChange, error) {
 	var err error
 
 	statChange.StatID, err = assignFK(statChange.StatName, l.getStat)

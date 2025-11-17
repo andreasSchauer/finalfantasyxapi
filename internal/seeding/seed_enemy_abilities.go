@@ -38,7 +38,7 @@ func (a EnemyAbility) Error() string {
 	return fmt.Sprintf("enemy ability %s, version %v", a.Name, derefOrNil(a.Version))
 }
 
-func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/enemy_abilities.json"
 
 	var enemyAbilities []EnemyAbility
@@ -75,7 +75,7 @@ func (l *lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 	})
 }
 
-func (l *lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/enemy_abilities.json"
 
 	var enemyAbilities []EnemyAbility

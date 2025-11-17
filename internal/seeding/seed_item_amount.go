@@ -36,7 +36,7 @@ func (ia ItemAmount) Error() string {
 	return fmt.Sprintf("item amount with item: %s, amount: %d", ia.ItemName, ia.Amount)
 }
 
-func (l *lookup) seedItemAmount(qtx *database.Queries, itemAmount ItemAmount) (ItemAmount, error) {
+func (l *Lookup) seedItemAmount(qtx *database.Queries, itemAmount ItemAmount) (ItemAmount, error) {
 	var err error
 
 	itemAmount.MasterItemID, err = assignFK(itemAmount.ItemName, l.getMasterItem)

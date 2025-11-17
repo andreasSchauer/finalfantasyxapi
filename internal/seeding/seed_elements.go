@@ -30,7 +30,7 @@ func (e Element) Error() string {
 	return fmt.Sprintf("element %s", e.Name)
 }
 
-func (l *lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elements.json"
 
 	var elements []Element
@@ -56,7 +56,7 @@ func (l *lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elements.json"
 
 	var elements []Element

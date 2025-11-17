@@ -38,7 +38,7 @@ func (s Stat) Error() string {
 	return fmt.Sprintf("stat %s", s.Name)
 }
 
-func (l *lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/stats.json"
 
 	var stats []Stat
@@ -68,7 +68,7 @@ func (l *lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/stats.json"
 
 	var stats []Stat

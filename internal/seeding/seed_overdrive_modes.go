@@ -9,13 +9,13 @@ import (
 )
 
 type OverdriveMode struct {
-	ID				int32
-	Name           	string          `json:"name"`
-	Description    	string          `json:"description"`
-	Effect         	string          `json:"effect"`
-	Type           	string          `json:"type"`
-	FillRate       	*float32        `json:"fill_rate"`
-	ActionsToLearn 	[]ActionToLearn `json:"actions_to_learn"`
+	ID             int32
+	Name           string          `json:"name"`
+	Description    string          `json:"description"`
+	Effect         string          `json:"effect"`
+	Type           string          `json:"type"`
+	FillRate       *float32        `json:"fill_rate"`
+	ActionsToLearn []ActionToLearn `json:"actions_to_learn"`
 }
 
 func (o OverdriveMode) ToHashFields() []any {
@@ -36,12 +36,11 @@ func (o OverdriveMode) Error() string {
 	return fmt.Sprintf("overdrive mode %s", o.Name)
 }
 
-
 type ActionToLearn struct {
-	ID		int32
-	UserID 	int32
-	User   	string `json:"user"`
-	Amount 	int32  `json:"amount"`
+	ID     int32
+	UserID int32
+	User   string `json:"user"`
+	Amount int32  `json:"amount"`
 }
 
 func (a ActionToLearn) ToHashFields() []any {
@@ -59,8 +58,7 @@ func (a ActionToLearn) Error() string {
 	return fmt.Sprintf("action to learn with user: %s, amount: %d", a.User, a.Amount)
 }
 
-
-func (l *lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_modes.json"
 
 	var overdriveModes []OverdriveMode
@@ -90,7 +88,7 @@ func (l *lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error 
 	})
 }
 
-func (l *lookup) seedOverdriveModesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedOverdriveModesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_modes.json"
 
 	var overdriveModes []OverdriveMode
@@ -127,8 +125,7 @@ func (l *lookup) seedOverdriveModesRelationships(db *database.Queries, dbConn *s
 	})
 }
 
-
-func (l *lookup) seedODModeAction(qtx *database.Queries, action ActionToLearn) (ActionToLearn, error) {
+func (l *Lookup) seedODModeAction(qtx *database.Queries, action ActionToLearn) (ActionToLearn, error) {
 	var err error
 
 	action.UserID, err = assignFK(action.User, l.getCharacter)
@@ -148,4 +145,4 @@ func (l *lookup) seedODModeAction(qtx *database.Queries, action ActionToLearn) (
 	action.ID = dbAction.ID
 
 	return action, nil
- }
+}

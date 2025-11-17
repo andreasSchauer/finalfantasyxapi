@@ -26,7 +26,7 @@ func (cc CharacterClass) Error() string {
 	return fmt.Sprintf("character class %s", cc.Name)
 }
 
-func (l *lookup) seedCharacterClasses(qtx *database.Queries, unit PlayerUnit) error {
+func (l *Lookup) seedCharacterClasses(qtx *database.Queries, unit PlayerUnit) error {
 	if unit.Type == database.UnitTypeCharacter {
 		err := l.seedCharClassesCharacter(qtx, unit)
 		if err != nil {
@@ -44,7 +44,7 @@ func (l *lookup) seedCharacterClasses(qtx *database.Queries, unit PlayerUnit) er
 	return nil
 }
 
-func (l *lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit) error {
+func (l *Lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit) error {
 	character, err := l.getCharacter(unit.Name)
 	if err != nil {
 		return err
@@ -65,7 +65,7 @@ func (l *lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit
 	return nil
 }
 
-func (l *lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) error {
+func (l *Lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) error {
 	aeon, err := l.getAeon(unit.Name)
 	if err != nil {
 		return err
@@ -100,7 +100,7 @@ func (l *lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) err
 	return nil
 }
 
-func (l *lookup) seedUnitCharClass(qtx *database.Queries, className string, unit PlayerUnit) error {
+func (l *Lookup) seedUnitCharClass(qtx *database.Queries, className string, unit PlayerUnit) error {
 	class := CharacterClass{
 		Name: className,
 	}
@@ -122,7 +122,7 @@ func (l *lookup) seedUnitCharClass(qtx *database.Queries, className string, unit
 	return nil
 }
 
-func (l *lookup) seedCharacterClass(qtx *database.Queries, class CharacterClass) (CharacterClass, error) {
+func (l *Lookup) seedCharacterClass(qtx *database.Queries, class CharacterClass) (CharacterClass, error) {
 	dbClass, err := qtx.CreateCharacterClass(context.Background(), database.CreateCharacterClassParams{
 		DataHash: generateDataHash(class),
 		Name:     class.Name,

@@ -9,10 +9,10 @@ import (
 )
 
 type OverdriveAbility struct {
-	ID					int32
+	ID int32
 	Ability
-	RelatedStats		[]string			`json:"related_stats"`
-	BattleInteractions 	[]BattleInteraction `json:"battle_interactions"`
+	RelatedStats       []string            `json:"related_stats"`
+	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (a OverdriveAbility) ToHashFields() []any {
@@ -24,7 +24,6 @@ func (a OverdriveAbility) ToHashFields() []any {
 func (a OverdriveAbility) GetID() int32 {
 	return a.ID
 }
-
 
 func (a OverdriveAbility) GetAbilityRef() AbilityReference {
 	return AbilityReference{
@@ -38,8 +37,7 @@ func (a OverdriveAbility) Error() string {
 	return fmt.Sprintf("overdrive ability %s, version %v", a.Name, derefOrNil(a.Version))
 }
 
-
-func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_abilities.json"
 
 	var overdriveAbilities []OverdriveAbility
@@ -75,8 +73,7 @@ func (l *lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 	})
 }
 
-
-func (l *lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrive_abilities.json"
 
 	var overdriveAbilities []OverdriveAbility
@@ -112,9 +109,7 @@ func (l *lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbCon
 	})
 }
 
-
-
-func (l *lookup) seedOverdriveAbilityRelatedStats(qtx *database.Queries, ability OverdriveAbility) error {
+func (l *Lookup) seedOverdriveAbilityRelatedStats(qtx *database.Queries, ability OverdriveAbility) error {
 	for _, jsonStat := range ability.RelatedStats {
 		junction, err := createJunction(ability, jsonStat, l.getStat)
 		if err != nil {
@@ -122,9 +117,9 @@ func (l *lookup) seedOverdriveAbilityRelatedStats(qtx *database.Queries, ability
 		}
 
 		err = qtx.CreateOverdriveAbilitiesRelatedStatsJunction(context.Background(), database.CreateOverdriveAbilitiesRelatedStatsJunctionParams{
-			DataHash: 			generateDataHash(junction),
+			DataHash:           generateDataHash(junction),
 			OverdriveAbilityID: junction.ParentID,
-			StatID: 			junction.ChildID,
+			StatID:             junction.ChildID,
 		})
 		if err != nil {
 			return getErr(jsonStat, err, "couldn't junction related stat")

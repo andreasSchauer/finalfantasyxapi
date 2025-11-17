@@ -29,7 +29,7 @@ func (a Affinity) Error() string {
 	return fmt.Sprintf("elemental affinity %s", a.Name)
 }
 
-func (l *lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elemental_affinities.json"
 
 	var affinities []Affinity

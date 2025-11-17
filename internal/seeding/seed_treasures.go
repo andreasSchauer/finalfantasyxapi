@@ -60,7 +60,7 @@ func (t Treasure) Error() string {
 	return fmt.Sprintf("treasure number: %d", t.Version)
 }
 
-func (l *lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/treasures.json"
 
 	var treasureLists []TreasureList
@@ -108,7 +108,7 @@ func (l *lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/treasures.json"
 
 	var treasureLists []TreasureList
@@ -158,7 +158,7 @@ func (l *lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 	})
 }
 
-func (l *lookup) seedTreasureItemAmounts(qtx *database.Queries, treasure Treasure) error {
+func (l *Lookup) seedTreasureItemAmounts(qtx *database.Queries, treasure Treasure) error {
 	for _, itemAmount := range treasure.Items {
 		junction, err := createJunctionSeed(qtx, treasure, itemAmount, l.seedItemAmount)
 		if err != nil {

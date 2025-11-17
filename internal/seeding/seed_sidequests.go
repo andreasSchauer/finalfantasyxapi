@@ -12,7 +12,7 @@ type Sidequest struct {
 	ID int32
 	Quest
 	Completion *QuestCompletion `json:"completion"`
-	Subquests  []Subquest      `json:"subquests"`
+	Subquests  []Subquest       `json:"subquests"`
 }
 
 func (s Sidequest) ToHashFields() []any {
@@ -32,8 +32,8 @@ func (s Sidequest) Error() string {
 type Subquest struct {
 	ID int32
 	Quest
-	SidequestID 	int32
-	Completions  	[]QuestCompletion `json:"completion"`
+	SidequestID int32
+	Completions []QuestCompletion `json:"completion"`
 }
 
 func (s Subquest) ToHashFields() []any {
@@ -94,7 +94,7 @@ func (cl CompletionLocation) Error() string {
 	return fmt.Sprintf("completion location %s, with completion id: %d, notes: %v", cl.LocationArea, cl.CompletionID, derefOrNil(cl.Notes))
 }
 
-func (l *lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/sidequests.json"
 
 	var sidequests []Sidequest
@@ -134,7 +134,7 @@ func (l *lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error {
+func (l *Lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error {
 	for _, subquest := range sidequest.Subquests {
 		var err error
 		subquest.Type = database.QuestTypeSubquest
@@ -162,7 +162,7 @@ func (l *lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 	return nil
 }
 
-func (l *lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/sidequests.json"
 
 	var sidequests []Sidequest
@@ -185,7 +185,6 @@ func (l *lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 				}
 			}
 
-
 			for _, jsonSubquest := range sidequest.Subquests {
 				subquest, err := l.getSubquest(jsonSubquest.Name)
 				if err != nil {
@@ -206,8 +205,7 @@ func (l *lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 	})
 }
 
-
-func (l *lookup) seedQuestCompletionRelationships(qtx *database.Queries, completion QuestCompletion, quest Quest) error {
+func (l *Lookup) seedQuestCompletionRelationships(qtx *database.Queries, completion QuestCompletion, quest Quest) error {
 	var err error
 
 	completion.QuestID, err = assignFK(quest, l.getQuest)
@@ -228,8 +226,7 @@ func (l *lookup) seedQuestCompletionRelationships(qtx *database.Queries, complet
 	return nil
 }
 
-
-func (l *lookup) seedQuestCompletion(qtx *database.Queries, completion QuestCompletion) (QuestCompletion, error) {
+func (l *Lookup) seedQuestCompletion(qtx *database.Queries, completion QuestCompletion) (QuestCompletion, error) {
 	var err error
 
 	completion.Reward, err = seedObjAssignID(qtx, completion.Reward, l.seedItemAmount)
@@ -251,8 +248,7 @@ func (l *lookup) seedQuestCompletion(qtx *database.Queries, completion QuestComp
 	return completion, nil
 }
 
-
-func (l *lookup) seedCompletionLocations(qtx *database.Queries, completion QuestCompletion) error {
+func (l *Lookup) seedCompletionLocations(qtx *database.Queries, completion QuestCompletion) error {
 	for _, location := range completion.Locations {
 		var err error
 

@@ -30,7 +30,7 @@ func (a Accuracy) Error() string {
 	return fmt.Sprintf("accuracy with source: %s, hit chance: %v, modifier: %v", a.AccSource, derefOrNil(a.HitChance), derefOrNil(a.AccModifier))
 }
 
-func (l *lookup) seedAccuracy(qtx *database.Queries, accuracy Accuracy) (Accuracy, error) {
+func (l *Lookup) seedAccuracy(qtx *database.Queries, accuracy Accuracy) (Accuracy, error) {
 	dbAccuracy, err := qtx.CreateAbilityAccuracy(context.Background(), database.CreateAbilityAccuracyParams{
 		DataHash:    generateDataHash(accuracy),
 		AccSource:   database.AccSourceType(accuracy.AccSource),

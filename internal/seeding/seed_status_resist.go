@@ -29,7 +29,7 @@ func (sr StatusResist) Error() string {
 	return fmt.Sprintf("status resist with status %s, resistance %d", sr.StatusCondition, sr.Resistance)
 }
 
-func (l *lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResist) (StatusResist, error) {
+func (l *Lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResist) (StatusResist, error) {
 	var err error
 
 	statusResist.StatusConditionID, err = assignFK(statusResist.StatusCondition, l.getStatusCondition)

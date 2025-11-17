@@ -12,15 +12,15 @@ type Item struct {
 	ID int32
 	MasterItem
 	ItemAbility
-	Description           	string  	`json:"description"`
-	Effect               	string  	`json:"effect"`
-	RelatedStats			[]string	`json:"related_stats"`
-	SphereGridDescription 	*string 	`json:"sphere_grid_description"`
-	Category              	string  	`json:"category"`
-	Usability             	*string 	`json:"usability"`
-	AvailableMenus			[]string	`json:"available_menus"`
-	BasePrice             	*int32  	`json:"base_price"`
-	SellValue             	int32   	`json:"sell_value"`
+	Description           string   `json:"description"`
+	Effect                string   `json:"effect"`
+	RelatedStats          []string `json:"related_stats"`
+	SphereGridDescription *string  `json:"sphere_grid_description"`
+	Category              string   `json:"category"`
+	Usability             *string  `json:"usability"`
+	AvailableMenus        []string `json:"available_menus"`
+	BasePrice             *int32   `json:"base_price"`
+	SellValue             int32    `json:"sell_value"`
 }
 
 func (i Item) ToHashFields() []any {
@@ -45,11 +45,11 @@ func (i Item) Error() string {
 }
 
 type ItemAbility struct {
-	ID					int32
+	ID int32
 	Ability
-	ItemID 				int32
-	Cursor 				string `json:"cursor"`
-	BattleInteractions  []BattleInteraction `json:"battle_interactions"`
+	ItemID             int32
+	Cursor             string              `json:"cursor"`
+	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (a ItemAbility) ToHashFields() []any {
@@ -76,9 +76,7 @@ func (a ItemAbility) Error() string {
 	return fmt.Sprintf("item ability %s", a.Name)
 }
 
-
-
-func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/items.json"
 
 	var items []Item
@@ -113,7 +111,7 @@ func (l *lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
+func (l *Lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
 	dbItem, err := qtx.CreateItem(context.Background(), database.CreateItemParams{
 		DataHash:              generateDataHash(item),
 		MasterItemID:          item.MasterItem.ID,
@@ -136,7 +134,7 @@ func (l *lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
 	return item, nil
 }
 
-func (l *lookup) seedItemAbility(qtx *database.Queries, item Item) error {
+func (l *Lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 	var err error
 	itemAbility := item.ItemAbility
 	itemAbility.Name = item.Name
@@ -167,8 +165,7 @@ func (l *lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 	return nil
 }
 
-
-func (l *lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/items.json"
 
 	var items []Item
@@ -208,8 +205,7 @@ func (l *lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) er
 	})
 }
 
-
-func (l *lookup) seedItemRelatedStats(qtx *database.Queries, item Item) error {
+func (l *Lookup) seedItemRelatedStats(qtx *database.Queries, item Item) error {
 	for _, jsonStat := range item.RelatedStats {
 		junction, err := createJunction(item, jsonStat, l.getStat)
 		if err != nil {
@@ -217,9 +213,9 @@ func (l *lookup) seedItemRelatedStats(qtx *database.Queries, item Item) error {
 		}
 
 		err = qtx.CreateItemsRelatedStatsJunction(context.Background(), database.CreateItemsRelatedStatsJunctionParams{
-			DataHash: 	generateDataHash(junction),
-			ItemID: 	junction.ParentID,
-			StatID: 	junction.ChildID,
+			DataHash: generateDataHash(junction),
+			ItemID:   junction.ParentID,
+			StatID:   junction.ChildID,
 		})
 		if err != nil {
 			return getErr(jsonStat, err, "couldn't junction base stat")
@@ -229,8 +225,7 @@ func (l *lookup) seedItemRelatedStats(qtx *database.Queries, item Item) error {
 	return nil
 }
 
-
-func (l *lookup) seedItemAvailableMenus(qtx *database.Queries, item Item) error {
+func (l *Lookup) seedItemAvailableMenus(qtx *database.Queries, item Item) error {
 	for _, jsonSubmenu := range item.AvailableMenus {
 		junction, err := createJunction(item, jsonSubmenu, l.getSubmenu)
 		if err != nil {
@@ -238,9 +233,9 @@ func (l *lookup) seedItemAvailableMenus(qtx *database.Queries, item Item) error 
 		}
 
 		err = qtx.CreateItemsAvailableMenusJunction(context.Background(), database.CreateItemsAvailableMenusJunctionParams{
-			DataHash: 	generateDataHash(junction),
-			ItemID: 	junction.ParentID,
-			SubmenuID: 	junction.ChildID,
+			DataHash:  generateDataHash(junction),
+			ItemID:    junction.ParentID,
+			SubmenuID: junction.ChildID,
 		})
 		if err != nil {
 			return getErr(jsonSubmenu, err, "couldn't junction submenu")

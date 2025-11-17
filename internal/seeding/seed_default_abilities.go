@@ -12,7 +12,7 @@ type DefaultAbilitiesEntry struct {
 	DefaultAbilities []AbilityReference `json:"default_abilities"`
 }
 
-func (l *lookup) seedDefaultAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedDefaultAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/default_abilities.json"
 
 	var entries []DefaultAbilitiesEntry
@@ -37,7 +37,7 @@ func (l *lookup) seedDefaultAbilitiesRelationships(db *database.Queries, dbConn 
 	})
 }
 
-func (l *lookup) seedCharClassDefaultAbilities(qtx *database.Queries, class CharacterClass, entry DefaultAbilitiesEntry) error {
+func (l *Lookup) seedCharClassDefaultAbilities(qtx *database.Queries, class CharacterClass, entry DefaultAbilitiesEntry) error {
 	for _, abilityRef := range entry.DefaultAbilities {
 		junction, err := createJunction(class, abilityRef, l.getPlayerAbility)
 		if err != nil {

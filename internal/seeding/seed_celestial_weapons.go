@@ -35,7 +35,7 @@ func (cw CelestialWeapon) Error() string {
 	return fmt.Sprintf("celestial weapon %s", cw.Name)
 }
 
-func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/celestial_weapons.json"
 
 	var celestialWeapons []CelestialWeapon
@@ -63,7 +63,7 @@ func (l *lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 	})
 }
 
-func (l *lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/celestial_weapons.json"
 
 	var celestialWeapons []CelestialWeapon

@@ -33,7 +33,7 @@ func (k KeyItem) Error() string {
 	return fmt.Sprintf("key item %s", k.Name)
 }
 
-func (l *lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/key_items.json"
 
 	var keyItems []KeyItem

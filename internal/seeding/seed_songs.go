@@ -141,7 +141,7 @@ func (c Cue) Error() string {
 	return fmt.Sprintf("cue for scene: %s at %v, replaces bg music: %v with end trigger: %v, replaces encounter music: %t", c.SceneDescription, derefOrNil(c.TriggerLocationArea), derefOrNil(c.ReplacesBGMusic), derefOrNil(c.EndTrigger), c.ReplacesEncounterMusic)
 }
 
-func (l *lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/songs.json"
 
 	var songs []Song
@@ -178,7 +178,7 @@ func (l *lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/songs.json"
 
 	var songs []Song
@@ -223,7 +223,7 @@ func (l *lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) er
 	})
 }
 
-func (l *lookup) seedCredits(qtx *database.Queries, credits SongCredits) (SongCredits, error) {
+func (l *Lookup) seedCredits(qtx *database.Queries, credits SongCredits) (SongCredits, error) {
 	dbSongCredits, err := qtx.CreateSongCredit(context.Background(), database.CreateSongCreditParams{
 		DataHash:  generateDataHash(credits),
 		Composer:  getNullString(credits.Composer),
@@ -240,7 +240,7 @@ func (l *lookup) seedCredits(qtx *database.Queries, credits SongCredits) (SongCr
 	return credits, nil
 }
 
-func (l *lookup) seedBackgroundMusicEntries(qtx *database.Queries, song Song) error {
+func (l *Lookup) seedBackgroundMusicEntries(qtx *database.Queries, song Song) error {
 	for _, bm := range song.BackgroundMusic {
 		junction, err := createJunctionSeed(qtx, song, bm, l.seedBackgroundMusic)
 		if err != nil {
@@ -272,7 +272,7 @@ func (l *lookup) seedBackgroundMusicEntries(qtx *database.Queries, song Song) er
 	return nil
 }
 
-func (l *lookup) seedCues(qtx *database.Queries, song Song) error {
+func (l *Lookup) seedCues(qtx *database.Queries, song Song) error {
 	for _, cue := range song.Cues {
 		junction, err := createJunctionSeed(qtx, song, cue, l.seedCue)
 		if err != nil {
@@ -304,7 +304,7 @@ func (l *lookup) seedCues(qtx *database.Queries, song Song) error {
 	return nil
 }
 
-func (l *lookup) seedBackgroundMusic(qtx *database.Queries, bm BackgroundMusic) (BackgroundMusic, error) {
+func (l *Lookup) seedBackgroundMusic(qtx *database.Queries, bm BackgroundMusic) (BackgroundMusic, error) {
 	dbBM, err := qtx.CreateBackgroundMusic(context.Background(), database.CreateBackgroundMusicParams{
 		DataHash:               generateDataHash(bm),
 		Condition:              getNullString(bm.Condition),
@@ -319,7 +319,7 @@ func (l *lookup) seedBackgroundMusic(qtx *database.Queries, bm BackgroundMusic) 
 	return bm, nil
 }
 
-func (l *lookup) seedCue(qtx *database.Queries, cue Cue) (Cue, error) {
+func (l *Lookup) seedCue(qtx *database.Queries, cue Cue) (Cue, error) {
 	if cue.TriggerLocationArea != nil {
 		var err error
 

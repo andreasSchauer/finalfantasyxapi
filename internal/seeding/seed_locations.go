@@ -9,9 +9,9 @@ import (
 )
 
 type Location struct {
-	ID				int32
-	Name         	string        `json:"location"`
-	SubLocations 	[]SubLocation `json:"sub_locations"`
+	ID           int32
+	Name         string        `json:"location"`
+	SubLocations []SubLocation `json:"sub_locations"`
 }
 
 func (l Location) ToHashFields() []any {
@@ -25,11 +25,11 @@ func (l Location) Error() string {
 }
 
 type SubLocation struct {
-	ID				int32
-	Name          	string  `json:"sub_location"`
-	Specification 	*string `json:"specification"`
-	Areas         	[]Area  `json:"areas"`
-	Location		Location
+	ID            int32
+	Name          string  `json:"sub_location"`
+	Specification *string `json:"specification"`
+	Areas         []Area  `json:"areas"`
+	Location      Location
 }
 
 func (s SubLocation) ToHashFields() []any {
@@ -46,16 +46,16 @@ func (s SubLocation) Error() string {
 
 type Area struct {
 	ID                   int32
-	Name                 string  			`json:"area"`
-	Version              *int32  			`json:"version"`
-	Specification        *string 			`json:"specification"`
-	StoryOnly            bool    			`json:"story_only"`
-	HasSaveSphere        bool    			`json:"has_save_sphere"`
-	AirshipDropOff       bool    			`json:"airship_drop_off"`
-	HasCompilationSphere bool    			`json:"has_compilation_sphere"`
-	CanRideChocobo       bool    			`json:"can_ride_chocobo"`
-	ConnectedAreas		 []AreaConnection 	`json:"connected_areas"`
-	SubLocation			 SubLocation
+	Name                 string           `json:"area"`
+	Version              *int32           `json:"version"`
+	Specification        *string          `json:"specification"`
+	StoryOnly            bool             `json:"story_only"`
+	HasSaveSphere        bool             `json:"has_save_sphere"`
+	AirshipDropOff       bool             `json:"airship_drop_off"`
+	HasCompilationSphere bool             `json:"has_compilation_sphere"`
+	CanRideChocobo       bool             `json:"can_ride_chocobo"`
+	ConnectedAreas       []AreaConnection `json:"connected_areas"`
+	SubLocation          SubLocation
 }
 
 func (a Area) ToHashFields() []any {
@@ -80,19 +80,17 @@ func (a Area) Error() string {
 	return fmt.Sprintf("area %s, version %v", a.Name, derefOrNil(a.Version))
 }
 
-
 func (a Area) GetLocationArea() LocationArea {
 	return LocationArea{
-		Location: 		a.SubLocation.Location.Name,
-		SubLocation: 	a.SubLocation.Name,
-		Area: 			a.Name,
-		Version: 		a.Version,
+		Location:    a.SubLocation.Location.Name,
+		SubLocation: a.SubLocation.Name,
+		Area:        a.Name,
+		Version:     a.Version,
 	}
 }
 
-
 type LocationArea struct {
-	ID			int32
+	ID          int32
 	Location    string `json:"location"`
 	SubLocation string `json:"sub_location"`
 	Area        string `json:"area"`
@@ -116,16 +114,14 @@ func (la LocationArea) Error() string {
 	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: %s, version: %v", la.Location, la.SubLocation, la.Area, derefOrNil(la.Version))
 }
 
-
 type AreaConnection struct {
-	ID				int32
-	AreaID			int32
-	LocationArea 	LocationArea	`json:"location_area"`
-	ConnectionType	string			`json:"connection_type"`
-	StoryOnly		bool			`json:"story_only"`
-	Notes			*string			`json:"notes"`
+	ID             int32
+	AreaID         int32
+	LocationArea   LocationArea `json:"location_area"`
+	ConnectionType string       `json:"connection_type"`
+	StoryOnly      bool         `json:"story_only"`
+	Notes          *string      `json:"notes"`
 }
-
 
 func (ac AreaConnection) ToHashFields() []any {
 	return []any{
@@ -136,18 +132,15 @@ func (ac AreaConnection) ToHashFields() []any {
 	}
 }
 
-
 func (ac AreaConnection) GetID() int32 {
 	return ac.ID
 }
 
-func (ac AreaConnection)Error() string {
+func (ac AreaConnection) Error() string {
 	return fmt.Sprintf("area connection with %s", ac.LocationArea)
 }
 
-
-
-func (l *lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/locations.json"
 
 	var locations []Location
@@ -177,8 +170,7 @@ func (l *lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-
-func (l *lookup) seedSubLocations(qtx *database.Queries, location Location) error {
+func (l *Lookup) seedSubLocations(qtx *database.Queries, location Location) error {
 	for _, subLocation := range location.SubLocations {
 		subLocation.Location = location
 
@@ -202,7 +194,7 @@ func (l *lookup) seedSubLocations(qtx *database.Queries, location Location) erro
 	return nil
 }
 
-func (l *lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error {
+func (l *Lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error {
 	for _, area := range subLocation.Areas {
 		area.SubLocation = subLocation
 
@@ -232,8 +224,7 @@ func (l *lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error
 	return nil
 }
 
-
-func (l *lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/locations.json"
 
 	var locations []Location
@@ -247,12 +238,12 @@ func (l *lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) er
 			for _, subLocation := range location.SubLocations {
 				for _, jsonArea := range subLocation.Areas {
 					locationArea := LocationArea{
-						Location: location.Name,
+						Location:    location.Name,
 						SubLocation: subLocation.Name,
-						Area: jsonArea.Name,
-						Version: jsonArea.Version,
+						Area:        jsonArea.Name,
+						Version:     jsonArea.Version,
 					}
-					
+
 					area, err := l.getArea(locationArea)
 					if err != nil {
 						return getErr(locationArea.Error(), err)
@@ -270,8 +261,7 @@ func (l *lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) er
 	})
 }
 
-
-func (l *lookup) seedAreaConnections(qtx *database.Queries, area Area) error {
+func (l *Lookup) seedAreaConnections(qtx *database.Queries, area Area) error {
 	for _, connection := range area.ConnectedAreas {
 		junction, err := createJunctionSeed(qtx, area, connection, l.seedAreaConnection)
 		if err != nil {
@@ -279,9 +269,9 @@ func (l *lookup) seedAreaConnections(qtx *database.Queries, area Area) error {
 		}
 
 		err = qtx.CreateAreaConnectedAreasJunction(context.Background(), database.CreateAreaConnectedAreasJunctionParams{
-			DataHash: 		generateDataHash(junction),
-			AreaID: 		junction.ParentID,
-			ConnectionID: 	junction.ChildID,
+			DataHash:     generateDataHash(junction),
+			AreaID:       junction.ParentID,
+			ConnectionID: junction.ChildID,
 		})
 		if err != nil {
 			return getErr(connection.Error(), err, "couldn't junction area connection")
@@ -291,8 +281,7 @@ func (l *lookup) seedAreaConnections(qtx *database.Queries, area Area) error {
 	return nil
 }
 
-
-func (l *lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnection) (AreaConnection, error) {
+func (l *Lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnection) (AreaConnection, error) {
 	var err error
 
 	connection.AreaID, err = assignFK(connection.LocationArea, l.getArea)
@@ -301,11 +290,11 @@ func (l *lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnec
 	}
 
 	dbConnection, err := qtx.CreateAreaConnection(context.Background(), database.CreateAreaConnectionParams{
-		DataHash: 		generateDataHash(connection),
-		AreaID: 		connection.AreaID,
+		DataHash:       generateDataHash(connection),
+		AreaID:         connection.AreaID,
 		ConnectionType: database.AreaConnectionType(connection.ConnectionType),
-		StoryOnly: 		connection.StoryOnly,
-		Notes: 			getNullString(connection.Notes),
+		StoryOnly:      connection.StoryOnly,
+		Notes:          getNullString(connection.Notes),
 	})
 	if err != nil {
 		return AreaConnection{}, getErr(connection.Error(), err, "couldn't create connection")

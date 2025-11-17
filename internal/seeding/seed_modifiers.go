@@ -33,7 +33,7 @@ func (m Modifier) Error() string {
 	return fmt.Sprintf("modifier %s", m.Name)
 }
 
-func (l *lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/modifiers.json"
 
 	var modifiers []Modifier

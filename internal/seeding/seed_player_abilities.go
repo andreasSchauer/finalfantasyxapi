@@ -64,7 +64,7 @@ func (p PlayerAbility) Error() string {
 	return fmt.Sprintf("player ability %s, version %v", p.Name, derefOrNil(p.Version))
 }
 
-func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/player_abilities.json"
 
 	var playerAbilities []PlayerAbility
@@ -106,7 +106,7 @@ func (l *lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 	})
 }
 
-func (l *lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/player_abilities.json"
 
 	var playerAbilities []PlayerAbility
@@ -152,7 +152,7 @@ func (l *lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *
 	})
 }
 
-func (l *lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbility) error {
+func (l *Lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbility) error {
 	var err error
 
 	ability.SubmenuID, err = assignFKPtr(ability.Submenu, l.getSubmenu)
@@ -196,7 +196,7 @@ func (l *lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbili
 	return nil
 }
 
-func (l *lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability PlayerAbility) error {
+func (l *Lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability PlayerAbility) error {
 	for _, jsonStat := range ability.RelatedStats {
 		junction, err := createJunction(ability, jsonStat, l.getStat)
 		if err != nil {
@@ -216,7 +216,7 @@ func (l *lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability Pl
 	return nil
 }
 
-func (l *lookup) seedPlayerAbilityLearnedBy(qtx *database.Queries, ability PlayerAbility) error {
+func (l *Lookup) seedPlayerAbilityLearnedBy(qtx *database.Queries, ability PlayerAbility) error {
 	for _, charClass := range ability.LearnedBy {
 		junction, err := createJunction(ability, charClass, l.getCharacterClass)
 		if err != nil {

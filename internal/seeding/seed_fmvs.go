@@ -35,8 +35,7 @@ func (f FMV) Error() string {
 	return fmt.Sprintf("fmv %s", f.Name)
 }
 
-
-func (l *lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/fmvs.json"
 
 	var fmvs []FMV
@@ -47,13 +46,12 @@ func (l *lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, fmv := range fmvs {
-			var err error 
+			var err error
 
 			fmv.SongID, err = assignFKPtr(fmv.SongName, l.getSong)
 			if err != nil {
 				return getErr(fmv.Error(), err)
 			}
-
 
 			fmv.AreaID, err = assignFK(fmv.LocationArea, l.getArea)
 			if err != nil {

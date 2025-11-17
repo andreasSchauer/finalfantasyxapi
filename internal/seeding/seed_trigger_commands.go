@@ -9,14 +9,14 @@ import (
 )
 
 type TriggerCommand struct {
-	ID 					int32
+	ID int32
 	Ability
-	Description        	string              `json:"description"`
-	Effect             	string              `json:"effect"`
-	Topmenu            	string              `json:"topmenu"`
-	RelatedStats		[]string			`json:"related_stats"`
-	Cursor             	string              `json:"cursor"`
-	BattleInteractions 	[]BattleInteraction `json:"battle_interactions"`
+	Description        string              `json:"description"`
+	Effect             string              `json:"effect"`
+	Topmenu            string              `json:"topmenu"`
+	RelatedStats       []string            `json:"related_stats"`
+	Cursor             string              `json:"cursor"`
+	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (t TriggerCommand) ToHashFields() []any {
@@ -45,7 +45,7 @@ func (t TriggerCommand) Error() string {
 	return fmt.Sprintf("trigger command %s, version %v", t.Name, derefOrNil(t.Version))
 }
 
-func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/trigger_commands.json"
 
 	var triggerCommands []TriggerCommand
@@ -85,7 +85,7 @@ func (l *lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 	})
 }
 
-func (l *lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/trigger_commands.json"
 
 	var triggerCommands []TriggerCommand
@@ -121,9 +121,7 @@ func (l *lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *
 	})
 }
 
-
-
-func (l *lookup) seedTriggerCommandRelatedStats(qtx *database.Queries, command TriggerCommand) error {
+func (l *Lookup) seedTriggerCommandRelatedStats(qtx *database.Queries, command TriggerCommand) error {
 	for _, jsonStat := range command.RelatedStats {
 		junction, err := createJunction(command, jsonStat, l.getStat)
 		if err != nil {
@@ -131,9 +129,9 @@ func (l *lookup) seedTriggerCommandRelatedStats(qtx *database.Queries, command T
 		}
 
 		err = qtx.CreateTriggerCommandsRelatedStatsJunction(context.Background(), database.CreateTriggerCommandsRelatedStatsJunctionParams{
-			DataHash: 			generateDataHash(junction),
-			TriggerCommandID: 	junction.ParentID,
-			StatID: 			junction.ChildID,
+			DataHash:         generateDataHash(junction),
+			TriggerCommandID: junction.ParentID,
+			StatID:           junction.ChildID,
 		})
 		if err != nil {
 			return getErr(jsonStat, err, "couldn't junction related stat")

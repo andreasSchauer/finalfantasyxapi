@@ -48,7 +48,7 @@ func (o Overdrive) Error() string {
 	return fmt.Sprintf("overdrive %s, version %v", o.Name, derefOrNil(o.Version))
 }
 
-func (l *lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrives.json"
 
 	var overdrives []Overdrive
@@ -89,7 +89,7 @@ func (l *lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrives.json"
 
 	var overdrives []Overdrive
@@ -134,7 +134,7 @@ func (l *lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 	})
 }
 
-func (l *lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdrive) error {
+func (l *Lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdrive) error {
 	for _, abilityRef := range overdrive.OverdriveAbilities {
 		junction, err := createJunction(overdrive, abilityRef, l.getOverdriveAbility)
 		if err != nil {
@@ -162,7 +162,7 @@ func (l *lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdri
 	return nil
 }
 
-func (l *lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive, abilityRef AbilityReference) error {
+func (l *Lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive, abilityRef AbilityReference) error {
 	class, err := l.getCharacterClass(overdrive.User)
 	if err != nil {
 		return err

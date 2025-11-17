@@ -9,12 +9,12 @@ import (
 )
 
 type Submenu struct {
-	ID	 		int32
-	Name        string  	`json:"name"`
-	Description string  	`json:"description"`
-	Effect      string  	`json:"effect"`
-	Topmenu     *string 	`json:"topmenu"`
-	Users		[]string	`json:"users"`
+	ID          int32
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Effect      string   `json:"effect"`
+	Topmenu     *string  `json:"topmenu"`
+	Users       []string `json:"users"`
 }
 
 func (s Submenu) ToHashFields() []any {
@@ -34,9 +34,7 @@ func (s Submenu) Error() string {
 	return fmt.Sprintf("submenu %s", s.Name)
 }
 
-
-
-func (l *lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/submenus.json"
 
 	var submenus []Submenu
@@ -65,8 +63,7 @@ func (l *lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-
-func (l *lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/submenus.json"
 
 	var submenus []Submenu
@@ -89,9 +86,9 @@ func (l *lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 				}
 
 				err = qtx.CreateSubmenusUsersJunction(context.Background(), database.CreateSubmenusUsersJunctionParams{
-					DataHash: generateDataHash(junction),
-					SubmenuID: 			junction.ParentID,
-					CharacterClassID: 	junction.ChildID,
+					DataHash:         generateDataHash(junction),
+					SubmenuID:        junction.ParentID,
+					CharacterClassID: junction.ChildID,
 				})
 				if err != nil {
 					subjects := joinSubjects(submenu.Error(), jsonCharClass)

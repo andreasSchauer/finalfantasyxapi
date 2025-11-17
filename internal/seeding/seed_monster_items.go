@@ -47,7 +47,7 @@ func (m MonsterItems) Error() string {
 	return fmt.Sprintf("monster items of monster with id %d", m.MonsterID)
 }
 
-func (l *lookup) seedMonsterItems(qtx *database.Queries, monsterItems MonsterItems) (MonsterItems, error) {
+func (l *Lookup) seedMonsterItems(qtx *database.Queries, monsterItems MonsterItems) (MonsterItems, error) {
 	var err error
 
 	monsterItems.StealCommon, err = seedObjPtrAssignFK(qtx, monsterItems.StealCommon, l.seedItemAmount)
@@ -113,7 +113,7 @@ func (l *lookup) seedMonsterItems(qtx *database.Queries, monsterItems MonsterIte
 	return monsterItems, nil
 }
 
-func (l *lookup) seedMonsterOtherItems(qtx *database.Queries, monsterItems MonsterItems) error {
+func (l *Lookup) seedMonsterOtherItems(qtx *database.Queries, monsterItems MonsterItems) error {
 	for _, posItem := range monsterItems.OtherItems {
 		junction, err := createJunctionSeed(qtx, monsterItems, posItem, l.seedPossibleItem)
 		if err != nil {

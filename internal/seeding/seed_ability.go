@@ -83,7 +83,7 @@ func (a Attributes) Error() string {
 	return fmt.Sprintf("ability attributes with rank: %v, help bar: %t, copycat: %t", derefOrNil(a.Rank), a.AppearsInHelpBar, a.CanCopycat)
 }
 
-func (l *lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, error) {
+func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, error) {
 	if ability.Type != database.AbilityTypeOverdriveAbility {
 		var err error
 
@@ -112,7 +112,7 @@ func (l *lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, e
 	return ability, nil
 }
 
-func (l *lookup) seedAbilityAttributes(qtx *database.Queries, attributes Attributes) (Attributes, error) {
+func (l *Lookup) seedAbilityAttributes(qtx *database.Queries, attributes Attributes) (Attributes, error) {
 	dbAttributes, err := qtx.CreateAbilityAttributes(context.Background(), database.CreateAbilityAttributesParams{
 		DataHash:         generateDataHash(attributes),
 		Rank:             getNullInt32(attributes.Rank),

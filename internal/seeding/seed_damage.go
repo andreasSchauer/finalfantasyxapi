@@ -66,7 +66,7 @@ func (ad AbilityDamage) Error() string {
 	return fmt.Sprintf("ability damage with attack type: %s, target stat: %s, damage type: %s, formula: %s, damage constant %d, condition: %v", ad.AttackType, ad.TargetStat, ad.DamageType, ad.DamageFormula, ad.DamageConstant, derefOrNil(ad.Condition))
 }
 
-func (l *lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error) {
+func (l *Lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error) {
 	var err error
 
 	damage.ElementID, err = assignFKPtr(damage.Element, l.getElement)
@@ -96,7 +96,7 @@ func (l *lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error
 	return damage, nil
 }
 
-func (l *lookup) seedAbilityDamages(qtx *database.Queries, damage Damage) error {
+func (l *Lookup) seedAbilityDamages(qtx *database.Queries, damage Damage) error {
 	ability := l.currentAbility
 	battleInteraction := l.currentBI
 
@@ -121,7 +121,7 @@ func (l *lookup) seedAbilityDamages(qtx *database.Queries, damage Damage) error 
 	return nil
 }
 
-func (l *lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityDamage) (AbilityDamage, error) {
+func (l *Lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityDamage) (AbilityDamage, error) {
 	var err error
 
 	abilityDamage.StatID, err = assignFK(abilityDamage.TargetStat, l.getStat)

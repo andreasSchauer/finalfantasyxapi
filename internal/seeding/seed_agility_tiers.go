@@ -56,7 +56,7 @@ func (a AgilitySubtier) Error() string {
 	return fmt.Sprintf("agility subtier with min agility: %d, max agility: %d", a.MinAgility, a.MaxAgility)
 }
 
-func (l *lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/agility_tiers.json"
 
 	var agilityTiers []AgilityTier
@@ -91,7 +91,7 @@ func (l *lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedAgilitySubtiers(qtx *database.Queries, agilityTier AgilityTier) error {
+func (l *Lookup) seedAgilitySubtiers(qtx *database.Queries, agilityTier AgilityTier) error {
 	for _, subtier := range agilityTier.CharacterMinICVs {
 		subtier.AgilityTierID = agilityTier.ID
 

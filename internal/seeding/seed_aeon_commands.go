@@ -48,7 +48,7 @@ func (pa PossibleAbility) Error() string {
 	return fmt.Sprintf("possible abilities for %s", pa.User)
 }
 
-func (l *lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeon_commands.json"
 
 	var aeonCommands []AeonCommand
@@ -78,7 +78,7 @@ func (l *lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/aeon_commands.json"
 
 	var aeonCommands []AeonCommand
@@ -118,7 +118,7 @@ func (l *lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql
 	})
 }
 
-func (l *lookup) seedAeonCommandPossibleAbilities(qtx *database.Queries, command AeonCommand) error {
+func (l *Lookup) seedAeonCommandPossibleAbilities(qtx *database.Queries, command AeonCommand) error {
 	for _, possibleAbility := range command.PossibleAbilities {
 		for _, abilityRef := range possibleAbility.Abilities {
 			var err error

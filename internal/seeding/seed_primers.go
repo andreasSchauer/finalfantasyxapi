@@ -29,8 +29,7 @@ func (p Primer) Error() string {
 	return fmt.Sprintf("primer %s", p.Name)
 }
 
-
-func (l *lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/primers.json"
 
 	var primers []Primer
@@ -42,7 +41,7 @@ func (l *lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, primer := range primers {
 			var err error
-			
+
 			primer.KeyItemID, err = assignFK(primer.Name, l.getKeyItem)
 			if err != nil {
 				return getErr(primer.Error(), err)

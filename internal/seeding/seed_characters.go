@@ -38,7 +38,7 @@ func (c Character) Error() string {
 	return fmt.Sprintf("character %s", c.Name)
 }
 
-func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/characters.json"
 
 	var characters []Character
@@ -83,7 +83,7 @@ func (l *lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/characters.json"
 
 	var characters []Character
@@ -109,7 +109,7 @@ func (l *lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.D
 	})
 }
 
-func (l *lookup) seedCharacterBaseStats(qtx *database.Queries, character Character) error {
+func (l *Lookup) seedCharacterBaseStats(qtx *database.Queries, character Character) error {
 	for _, baseStat := range character.BaseStats {
 		junction, err := createJunctionSeed(qtx, character, baseStat, l.seedBaseStat)
 		if err != nil {

@@ -9,14 +9,14 @@ import (
 )
 
 type MonsterArenaCreation struct {
-	SubquestID					int32
-	Name                      	string  `json:"name"`
-	Category                  	string  `json:"category"`
-	RequiredArea              	*string `json:"required_area"`
-	RequiredSpecies           	*string `json:"required_species"`
-	UnderwaterOnly            	bool    `json:"underwater_only"`
-	CreationsUnlockedCategory 	*string `json:"creations_unlocked_category"`
-	Amount                    	int32   `json:"amount"`
+	SubquestID                int32
+	Name                      string  `json:"name"`
+	Category                  string  `json:"category"`
+	RequiredArea              *string `json:"required_area"`
+	RequiredSpecies           *string `json:"required_species"`
+	UnderwaterOnly            bool    `json:"underwater_only"`
+	CreationsUnlockedCategory *string `json:"creations_unlocked_category"`
+	Amount                    int32   `json:"amount"`
 }
 
 func (m MonsterArenaCreation) ToHashFields() []any {
@@ -31,11 +31,11 @@ func (m MonsterArenaCreation) ToHashFields() []any {
 	}
 }
 
-func (m MonsterArenaCreation)Error() string {
+func (m MonsterArenaCreation) Error() string {
 	return fmt.Sprintf("monster arena creation %s", m.Name)
 }
 
-func (l *lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/monster_arena_creations.json"
 
 	var creations []MonsterArenaCreation

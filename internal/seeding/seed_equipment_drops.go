@@ -7,15 +7,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type EquipmentDrop struct {
-	ID				int32
-	AutoAbilityID	int32
-	Ability			string				`json:"ability"`
-	Characters		[]string			`json:"characters"`
-	IsForced		bool				`json:"is_forced"`
-	Probability		*int32				`json:"probability"`
-	Type			database.EquipType
+	ID            int32
+	AutoAbilityID int32
+	Ability       string   `json:"ability"`
+	Characters    []string `json:"characters"`
+	IsForced      bool     `json:"is_forced"`
+	Probability   *int32   `json:"probability"`
+	Type          database.EquipType
 }
 
 func (e EquipmentDrop) ToHashFields() []any {
@@ -35,8 +34,7 @@ func (e EquipmentDrop) Error() string {
 	return fmt.Sprintf("equipment drop with auto-ability id: %d, type: %s, is forced: %t, probability: %v", e.AutoAbilityID, e.Type, e.IsForced, derefOrNil(e.Probability))
 }
 
-
-func (l *lookup) seedEquipmentDrops(qtx *database.Queries, monsterEquipment MonsterEquipment, drops []EquipmentDrop, equipType database.EquipType) error {
+func (l *Lookup) seedEquipmentDrops(qtx *database.Queries, monsterEquipment MonsterEquipment, drops []EquipmentDrop, equipType database.EquipType) error {
 	for _, drop := range drops {
 		var err error
 		drop.Type = equipType
@@ -47,9 +45,9 @@ func (l *lookup) seedEquipmentDrops(qtx *database.Queries, monsterEquipment Mons
 		}
 
 		err = qtx.CreateMonsterEquipmentAbilitiesJunction(context.Background(), database.CreateMonsterEquipmentAbilitiesJunctionParams{
-			DataHash: 			generateDataHash(junction),
+			DataHash:           generateDataHash(junction),
 			MonsterEquipmentID: junction.ParentID,
-			EquipmentDropID: 	junction.ChildID,
+			EquipmentDropID:    junction.ChildID,
 		})
 		if err != nil {
 			return getErr(drop.Error(), err, "couldn't junction equipment drop")
@@ -59,8 +57,7 @@ func (l *lookup) seedEquipmentDrops(qtx *database.Queries, monsterEquipment Mons
 	return nil
 }
 
-
-func (l *lookup) seedEquipmentDrop(qtx *database.Queries, drop EquipmentDrop) (EquipmentDrop, error) {
+func (l *Lookup) seedEquipmentDrop(qtx *database.Queries, drop EquipmentDrop) (EquipmentDrop, error) {
 	var err error
 
 	drop.AutoAbilityID, err = assignFK(drop.Ability, l.getAutoAbility)
@@ -69,11 +66,11 @@ func (l *lookup) seedEquipmentDrop(qtx *database.Queries, drop EquipmentDrop) (E
 	}
 
 	dbEquipmentDrop, err := qtx.CreateEquipmentDrop(context.Background(), database.CreateEquipmentDropParams{
-		DataHash: 		generateDataHash(drop),
-		AutoAbilityID: 	drop.AutoAbilityID,
-		IsForced: 		drop.IsForced,
-		Probability: 	getNullInt32(drop.Probability),
-		Type: 			drop.Type,
+		DataHash:      generateDataHash(drop),
+		AutoAbilityID: drop.AutoAbilityID,
+		IsForced:      drop.IsForced,
+		Probability:   getNullInt32(drop.Probability),
+		Type:          drop.Type,
 	})
 	if err != nil {
 		return EquipmentDrop{}, getErr(drop.Error(), err, "couldn't create equipment drop")
@@ -89,9 +86,7 @@ func (l *lookup) seedEquipmentDrop(qtx *database.Queries, drop EquipmentDrop) (E
 	return drop, nil
 }
 
-
-
-func (l *lookup) seedEquipmentDropCharacters(qtx *database.Queries, drop EquipmentDrop) error {
+func (l *Lookup) seedEquipmentDropCharacters(qtx *database.Queries, drop EquipmentDrop) error {
 	monsterEquipment := l.currentME
 
 	for _, character := range drop.Characters {
@@ -101,10 +96,10 @@ func (l *lookup) seedEquipmentDropCharacters(qtx *database.Queries, drop Equipme
 		}
 
 		err = qtx.CreateEquipmentDropsCharactersJunction(context.Background(), database.CreateEquipmentDropsCharactersJunctionParams{
-			DataHash: generateDataHash(threeWay),
+			DataHash:           generateDataHash(threeWay),
 			MonsterEquipmentID: threeWay.GrandparentID,
-			EquipmentDropID: threeWay.ParentID,
-			CharacterID: threeWay.ChildID,
+			EquipmentDropID:    threeWay.ParentID,
+			CharacterID:        threeWay.ChildID,
 		})
 		if err != nil {
 			return getErr(character, err, "couldn't junction character")

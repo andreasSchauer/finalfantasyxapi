@@ -7,15 +7,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type FoundEquipment struct {
-	ID					int32
-	EquipmentNameID		int32
-	Name				string		`json:"name"`
-	Abilities			[]string	`json:"abilities"`
-	EmptySlotsAmount	int32		`json:"empty_slots_amount"`
+	ID               int32
+	EquipmentNameID  int32
+	Name             string   `json:"name"`
+	Abilities        []string `json:"abilities"`
+	EmptySlotsAmount int32    `json:"empty_slots_amount"`
 }
-
 
 func (f FoundEquipment) ToHashFields() []any {
 	return []any{
@@ -23,7 +21,6 @@ func (f FoundEquipment) ToHashFields() []any {
 		f.EmptySlotsAmount,
 	}
 }
-
 
 func (f FoundEquipment) GetID() int32 {
 	return f.ID
@@ -33,8 +30,7 @@ func (f FoundEquipment) Error() string {
 	return fmt.Sprintf("found equipment with name: %s, empty slots: %d", f.Name, f.EmptySlotsAmount)
 }
 
-
-func (l *lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundEquipment) (FoundEquipment, error) {
+func (l *Lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundEquipment) (FoundEquipment, error) {
 	var err error
 
 	foundEquipment.EquipmentNameID, err = assignFK(foundEquipment.Name, l.getEquipmentName)
@@ -43,8 +39,8 @@ func (l *lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundE
 	}
 
 	dbFoundEquipment, err := qtx.CreateFoundEquipmentPiece(context.Background(), database.CreateFoundEquipmentPieceParams{
-		DataHash: generateDataHash(foundEquipment),
-		EquipmentNameID: foundEquipment.EquipmentNameID,
+		DataHash:         generateDataHash(foundEquipment),
+		EquipmentNameID:  foundEquipment.EquipmentNameID,
 		EmptySlotsAmount: foundEquipment.EmptySlotsAmount,
 	})
 	if err != nil {
@@ -61,8 +57,7 @@ func (l *lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundE
 	return foundEquipment, nil
 }
 
-
-func (l *lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipment FoundEquipment) error {
+func (l *Lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipment FoundEquipment) error {
 	for _, autoAbility := range foundEquipment.Abilities {
 		junction, err := createJunction(foundEquipment, autoAbility, l.getAutoAbility)
 		if err != nil {
@@ -70,9 +65,9 @@ func (l *lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipme
 		}
 
 		err = qtx.CreateFoundEquipmentAbilitiesJunction(context.Background(), database.CreateFoundEquipmentAbilitiesJunctionParams{
-			DataHash: generateDataHash(junction),
+			DataHash:         generateDataHash(junction),
 			FoundEquipmentID: junction.ParentID,
-			AutoAbilityID: junction.ChildID,
+			AutoAbilityID:    junction.ChildID,
 		})
 		if err != nil {
 			return getErr(autoAbility, err, "couldn't junction auto-ability")

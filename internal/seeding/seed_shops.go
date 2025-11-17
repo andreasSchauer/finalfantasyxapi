@@ -9,14 +9,14 @@ import (
 )
 
 type Shop struct {
-	ID				int32
-	Version      	*int32       	`json:"version"`
-	LocationArea 	LocationArea 	`json:"location_area"`
-	AreaID       	int32
-	Notes        	*string 		`json:"notes"`
-	Category     	string  		`json:"category"`
-	PreAirship		*SubShop		`json:"pre_airship"`
-	PostAirship		*SubShop		`json:"post_airship"`
+	ID           int32
+	Version      *int32       `json:"version"`
+	LocationArea LocationArea `json:"location_area"`
+	AreaID       int32
+	Notes        *string  `json:"notes"`
+	Category     string   `json:"category"`
+	PreAirship   *SubShop `json:"pre_airship"`
+	PostAirship  *SubShop `json:"post_airship"`
 }
 
 func (s Shop) ToHashFields() []any {
@@ -44,23 +44,21 @@ func (s Shop) Error() string {
 }
 
 type SubShop struct {
-	Items		[]ShopItem		`json:"items"`
-	Equipment	[]ShopEquipment	`json:"equipment"`
-	Type		database.ShopType
+	Items     []ShopItem      `json:"items"`
+	Equipment []ShopEquipment `json:"equipment"`
+	Type      database.ShopType
 }
 
 func (s SubShop) Error() string {
 	return fmt.Sprintf("subshop type: %s", s.Type)
 }
 
-
 type ShopItem struct {
-	ID		int32
-	ItemID	int32
-	Name	string	`json:"name"`
-	Price	int32	`json:"price"`
+	ID     int32
+	ItemID int32
+	Name   string `json:"name"`
+	Price  int32  `json:"price"`
 }
-
 
 func (s ShopItem) ToHashFields() []any {
 	return []any{
@@ -84,11 +82,10 @@ func (s ShopItem) Error() string {
 	return fmt.Sprintf("shop item %s, price %d", s.Name, s.Price)
 }
 
-
 type ShopEquipment struct {
-	ID					int32
+	ID int32
 	FoundEquipment
-	Price				int32	`json:"price"`
+	Price int32 `json:"price"`
 }
 
 func (s ShopEquipment) ToHashFields() []any {
@@ -114,10 +111,9 @@ func (s ShopEquipment) Error() string {
 	return fmt.Sprintf("shop equipment %s, empty slots %d, price %d", s.Name, s.EmptySlotsAmount, s.Price)
 }
 
-
 type ShopJunction struct {
 	Junction
-	ShopType	database.ShopType
+	ShopType database.ShopType
 }
 
 func (sj ShopJunction) ToHashFields() []any {
@@ -128,8 +124,7 @@ func (sj ShopJunction) ToHashFields() []any {
 	}
 }
 
-
-func (l *lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/shops.json"
 
 	var shops []Shop
@@ -141,7 +136,7 @@ func (l *lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, shop := range shops {
 			var err error
-			
+
 			locationArea := shop.LocationArea
 			shop.AreaID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
@@ -166,9 +161,7 @@ func (l *lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-
-
-func (l *lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/shops.json"
 
 	var shops []Shop
@@ -205,8 +198,7 @@ func (l *lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) er
 	})
 }
 
-
-func (l *lookup) seedSubShop (qtx *database.Queries, shop Shop, subShop *SubShop) error {
+func (l *Lookup) seedSubShop(qtx *database.Queries, shop Shop, subShop *SubShop) error {
 	err := l.seedShopItems(qtx, shop, subShop)
 	if err != nil {
 		return getErr(subShop.Error(), err)
@@ -220,8 +212,7 @@ func (l *lookup) seedSubShop (qtx *database.Queries, shop Shop, subShop *SubShop
 	return nil
 }
 
-
-func (l *lookup) seedShopItems (qtx *database.Queries, shop Shop, subShop *SubShop) error {
+func (l *Lookup) seedShopItems(qtx *database.Queries, shop Shop, subShop *SubShop) error {
 	for _, shopItem := range subShop.Items {
 		junction, err := createJunctionSeed(qtx, shop, shopItem, l.seedShopItem)
 		if err != nil {
@@ -234,10 +225,10 @@ func (l *lookup) seedShopItems (qtx *database.Queries, shop Shop, subShop *SubSh
 		}
 
 		err = qtx.CreateShopsItemsJunction(context.Background(), database.CreateShopsItemsJunctionParams{
-			DataHash: 	generateDataHash(shopJunction),
-			ShopID: 	shopJunction.ParentID,
+			DataHash:   generateDataHash(shopJunction),
+			ShopID:     shopJunction.ParentID,
 			ShopItemID: shopJunction.ChildID,
-			ShopType: 	shopJunction.ShopType,
+			ShopType:   shopJunction.ShopType,
 		})
 		if err != nil {
 			return getErr(shopItem.Error(), err, "couldn't junction shop item")
@@ -247,8 +238,7 @@ func (l *lookup) seedShopItems (qtx *database.Queries, shop Shop, subShop *SubSh
 	return nil
 }
 
-
-func (l *lookup) seedShopItem (qtx *database.Queries, shopItem ShopItem) (ShopItem, error) {
+func (l *Lookup) seedShopItem(qtx *database.Queries, shopItem ShopItem) (ShopItem, error) {
 	var err error
 
 	shopItem.ItemID, err = assignFK(shopItem.Name, l.getItem)
@@ -257,9 +247,9 @@ func (l *lookup) seedShopItem (qtx *database.Queries, shopItem ShopItem) (ShopIt
 	}
 
 	dbShopItem, err := qtx.CreateShopItem(context.Background(), database.CreateShopItemParams{
-		DataHash: 	generateDataHash(shopItem),
-		ItemID: 	shopItem.ItemID,
-		Price: 	shopItem.Price,
+		DataHash: generateDataHash(shopItem),
+		ItemID:   shopItem.ItemID,
+		Price:    shopItem.Price,
 	})
 	if err != nil {
 		return ShopItem{}, getErr(shopItem.Error(), err, "couldn't create shop item")
@@ -270,8 +260,7 @@ func (l *lookup) seedShopItem (qtx *database.Queries, shopItem ShopItem) (ShopIt
 	return shopItem, nil
 }
 
-
-func (l *lookup) seedShopEquipmentPieces (qtx *database.Queries, shop Shop, subShop *SubShop) error {
+func (l *Lookup) seedShopEquipmentPieces(qtx *database.Queries, shop Shop, subShop *SubShop) error {
 	for _, shopEquipment := range subShop.Equipment {
 		junction, err := createJunctionSeed(qtx, shop, shopEquipment, l.seedShopEquipment)
 		if err != nil {
@@ -284,10 +273,10 @@ func (l *lookup) seedShopEquipmentPieces (qtx *database.Queries, shop Shop, subS
 		}
 
 		err = qtx.CreateShopsEquipmentJunction(context.Background(), database.CreateShopsEquipmentJunctionParams{
-			DataHash: 			generateDataHash(shopJunction),
-			ShopID: 			shopJunction.ParentID,
-			ShopEquipmentID: 	shopJunction.ChildID,
-			ShopType: 			shopJunction.ShopType,
+			DataHash:        generateDataHash(shopJunction),
+			ShopID:          shopJunction.ParentID,
+			ShopEquipmentID: shopJunction.ChildID,
+			ShopType:        shopJunction.ShopType,
 		})
 		if err != nil {
 			return getErr(shopEquipment.Error(), err, "couldn't junction shop equipment")
@@ -297,8 +286,7 @@ func (l *lookup) seedShopEquipmentPieces (qtx *database.Queries, shop Shop, subS
 	return nil
 }
 
-
-func (l *lookup) seedShopEquipment (qtx *database.Queries, shopEquipment ShopEquipment) (ShopEquipment, error) {
+func (l *Lookup) seedShopEquipment(qtx *database.Queries, shopEquipment ShopEquipment) (ShopEquipment, error) {
 	var err error
 
 	shopEquipment.FoundEquipment, err = seedObjAssignID(qtx, shopEquipment.FoundEquipment, l.seedFoundEquipment)
@@ -307,9 +295,9 @@ func (l *lookup) seedShopEquipment (qtx *database.Queries, shopEquipment ShopEqu
 	}
 
 	dbShopEquipment, err := qtx.CreateShopEquipmentPiece(context.Background(), database.CreateShopEquipmentPieceParams{
-		DataHash: 			generateDataHash(shopEquipment),
-		FoundEquipmentID: 	shopEquipment.FoundEquipment.ID,
-		Price: 				shopEquipment.Price,
+		DataHash:         generateDataHash(shopEquipment),
+		FoundEquipmentID: shopEquipment.FoundEquipment.ID,
+		Price:            shopEquipment.Price,
 	})
 	if err != nil {
 		return ShopEquipment{}, getErr(shopEquipment.Error(), err, "couldn't create shop equipment")

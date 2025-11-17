@@ -37,7 +37,7 @@ func (s StatusCondition) Error() string {
 	return fmt.Sprintf("status condition %s", s.Name)
 }
 
-func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/status_conditions.json"
 
 	var statusConditions []StatusCondition
@@ -66,7 +66,7 @@ func (l *lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 	})
 }
 
-func (l *lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn *sql.DB) error {
+func (l *Lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/status_conditions.json"
 
 	var statusConditions []StatusCondition
@@ -100,7 +100,7 @@ func (l *lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn 
 	})
 }
 
-func (l *lookup) seedStatusConditionRelatedStats(qtx *database.Queries, condition StatusCondition) error {
+func (l *Lookup) seedStatusConditionRelatedStats(qtx *database.Queries, condition StatusCondition) error {
 	for _, jsonStat := range condition.RelatedStats {
 		junction, err := createJunction(condition, jsonStat, l.getStat)
 		if err != nil {
@@ -120,7 +120,7 @@ func (l *lookup) seedStatusConditionRelatedStats(qtx *database.Queries, conditio
 	return nil
 }
 
-func (l *lookup) seedStatusConditionRemovedConditions(qtx *database.Queries, condition StatusCondition) error {
+func (l *Lookup) seedStatusConditionRemovedConditions(qtx *database.Queries, condition StatusCondition) error {
 	for _, jsonCondition := range condition.RemovedStatusConditions {
 		junction, err := createJunction(condition, jsonCondition, l.getStatusCondition)
 		if err != nil {
@@ -140,7 +140,7 @@ func (l *lookup) seedStatusConditionRemovedConditions(qtx *database.Queries, con
 	return nil
 }
 
-func (l *lookup) seedStatusConditionStatChanges(qtx *database.Queries, condition StatusCondition) error {
+func (l *Lookup) seedStatusConditionStatChanges(qtx *database.Queries, condition StatusCondition) error {
 	for _, statChange := range condition.StatChanges {
 		junction, err := createJunctionSeed(qtx, condition, statChange, l.seedStatChange)
 		if err != nil {
@@ -160,7 +160,7 @@ func (l *lookup) seedStatusConditionStatChanges(qtx *database.Queries, condition
 	return nil
 }
 
-func (l *lookup) seedStatusConditionModifierChanges(qtx *database.Queries, condition StatusCondition) error {
+func (l *Lookup) seedStatusConditionModifierChanges(qtx *database.Queries, condition StatusCondition) error {
 	for _, modifierChange := range condition.ModifierChanges {
 		junction, err := createJunctionSeed(qtx, condition, modifierChange, l.seedModifierChange)
 		if err != nil {

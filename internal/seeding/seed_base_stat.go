@@ -29,7 +29,7 @@ func (bs BaseStat) Error() string {
 	return fmt.Sprintf("base stat %s, value: %d", bs.StatName, bs.Value)
 }
 
-func (l *lookup) seedBaseStat(qtx *database.Queries, baseStat BaseStat) (BaseStat, error) {
+func (l *Lookup) seedBaseStat(qtx *database.Queries, baseStat BaseStat) (BaseStat, error) {
 	var err error
 
 	baseStat.StatID, err = assignFK(baseStat.StatName, l.getStat)
