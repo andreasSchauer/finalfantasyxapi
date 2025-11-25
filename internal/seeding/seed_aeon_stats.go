@@ -40,7 +40,7 @@ func (j AeonBaseStatJunction) ToHashFields() []any {
 
 
 func (l *Lookup) seedAeonStats(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/aeon_stat_growth.json"
+	const srcPath = "./data/aeon_stats.json"
 
 	var aeonStats []AeonStat
 	err := loadJSONFile(string(srcPath), &aeonStats)
