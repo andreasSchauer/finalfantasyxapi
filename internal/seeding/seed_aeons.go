@@ -17,7 +17,6 @@ type Aeon struct {
 	Category            *string         `json:"category"`
 	IsOptional          bool            `json:"is_optional"`
 	BattlesToRegenerate int32           `json:"num_battles_to_regenerate"`
-	BaseStats           []BaseStat      `json:"base_stats"`
 	Weapon              []AeonEquipment `json:"weapon"`
 	Armor               []AeonEquipment `json:"armor"`
 	PhysAtkDmgConstant  *int32          `json:"phys_atk_damage_constant"`
@@ -154,11 +153,6 @@ func (l *Lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) er
 				return getErr(aeon.Error(), err, "couldn't update aeon")
 			}
 
-			err = l.seedAeonBaseStats(qtx, aeon)
-			if err != nil {
-				return getErr(aeon.Error(), err)
-			}
-
 			err = l.seedAeonEquipmentRelationships(qtx, aeon, string(database.EquipTypeWeapon), aeon.Weapon)
 			if err != nil {
 				return getErr(aeon.Error(), err)
@@ -171,26 +165,6 @@ func (l *Lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) er
 		}
 		return nil
 	})
-}
-
-func (l *Lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon) error {
-	for _, baseStat := range aeon.BaseStats {
-		junction, err := createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
-		if err != nil {
-			return err
-		}
-
-		err = qtx.CreateAeonsBaseStatJunction(context.Background(), database.CreateAeonsBaseStatJunctionParams{
-			DataHash:   generateDataHash(junction),
-			AeonID:     junction.ParentID,
-			BaseStatID: junction.ChildID,
-		})
-		if err != nil {
-			return getErr(baseStat.Error(), err, "couldn't junction base stat")
-		}
-	}
-
-	return nil
 }
 
 func (l *Lookup) seedAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon, equipType string, abilityList []AeonEquipment) error {

@@ -5,7 +5,7 @@ CREATE TYPE overdrive_mode_type AS ENUM ('formula', 'per-action');
 CREATE TYPE nullify_armored AS ENUM ('target', 'bearer');
 
 
-CREATE TYPE modifier_type AS ENUM ('battle-dependent', 'factor','fixed-value', 'percentage');
+CREATE TYPE modifier_type AS ENUM ('battle-dependent', 'factor', 'fixed-value', 'percentage');
 
 
 CREATE TABLE stats (

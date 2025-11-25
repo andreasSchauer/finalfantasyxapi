@@ -89,8 +89,8 @@ func (q *Queries) CreateAeonEquipment(ctx context.Context, arg CreateAeonEquipme
 }
 
 const createAeonsBaseStatJunction = `-- name: CreateAeonsBaseStatJunction :exec
-INSERT INTO j_aeons_base_stats (data_hash, aeon_id, base_stat_id)
-VALUES ($1, $2, $3)
+INSERT INTO j_aeons_base_stats (data_hash, aeon_id, base_stat_id, value_type, battles)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
@@ -98,10 +98,18 @@ type CreateAeonsBaseStatJunctionParams struct {
 	DataHash   string
 	AeonID     int32
 	BaseStatID int32
+	ValueType  AeonStatValue
+	Battles    sql.NullInt32
 }
 
 func (q *Queries) CreateAeonsBaseStatJunction(ctx context.Context, arg CreateAeonsBaseStatJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAeonsBaseStatJunction, arg.DataHash, arg.AeonID, arg.BaseStatID)
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatJunction,
+		arg.DataHash,
+		arg.AeonID,
+		arg.BaseStatID,
+		arg.ValueType,
+		arg.Battles,
+	)
 	return err
 }
 

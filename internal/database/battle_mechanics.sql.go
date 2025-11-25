@@ -433,7 +433,7 @@ const createStatusCondition = `-- name: CreateStatusCondition :one
 INSERT INTO status_conditions (data_hash, name, effect, visualization, nullify_armored)
 VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_conditions.data_hash
-RETURNING id, data_hash, name, effect, visualization, nullify_armored
+RETURNING id, data_hash, name, effect, visualization, nullify_armored, added_elem_resist_id
 `
 
 type CreateStatusConditionParams struct {
@@ -460,6 +460,7 @@ func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusCon
 		&i.Effect,
 		&i.Visualization,
 		&i.NullifyArmored,
+		&i.AddedElemResistID,
 	)
 	return i, err
 }
@@ -590,5 +591,23 @@ type UpdateStatParams struct {
 
 func (q *Queries) UpdateStat(ctx context.Context, arg UpdateStatParams) error {
 	_, err := q.db.ExecContext(ctx, updateStat, arg.DataHash, arg.SphereID, arg.ID)
+	return err
+}
+
+const updateStatusCondition = `-- name: UpdateStatusCondition :exec
+UPDATE status_conditions
+SET data_hash = $1,
+    added_elem_resist_id = $2
+WHERE id = $3
+`
+
+type UpdateStatusConditionParams struct {
+	DataHash          string
+	AddedElemResistID sql.NullInt32
+	ID                int32
+}
+
+func (q *Queries) UpdateStatusCondition(ctx context.Context, arg UpdateStatusConditionParams) error {
+	_, err := q.db.ExecContext(ctx, updateStatusCondition, arg.DataHash, arg.AddedElemResistID, arg.ID)
 	return err
 }

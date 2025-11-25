@@ -7,6 +7,10 @@ ALTER TABLE elements
 ADD COLUMN opposite_element_id INTEGER REFERENCES elements(id);
 
 
+ALTER TABLE status_conditions
+ADD COLUMN added_elem_resist_id INTEGER REFERENCES elemental_resists(id);
+
+
 CREATE TABLE od_mode_actions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -98,6 +102,10 @@ DROP TABLE IF EXISTS j_status_conditions_removed_status_conditions;
 DROP TABLE IF EXISTS j_status_conditions_related_stats;
 DROP TABLE IF EXISTS j_overdrive_modes_actions_to_learn;
 DROP TABLE IF EXISTS od_mode_actions;
+
+
+ALTER TABLE status_conditions
+DROP COLUMN IF EXISTS added_elem_resist_id;
 
 
 ALTER TABLE elements

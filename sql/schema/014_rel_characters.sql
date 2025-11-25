@@ -1,4 +1,7 @@
 -- +goose Up
+CREATE TYPE aeon_stat_value AS ENUM ('a', 'b', 'x');
+
+
 CREATE TABLE j_player_units_character_class (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -36,7 +39,9 @@ CREATE TABLE j_aeons_base_stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     aeon_id INTEGER NOT NULL REFERENCES aeons(id),
-    base_stat_id INTEGER NOT NULL REFERENCES base_stats(id)
+    base_stat_id INTEGER NOT NULL REFERENCES base_stats(id),
+    value_type aeon_stat_value NOT NULL,
+    battles INTEGER
 );
 
 
@@ -74,3 +79,5 @@ DROP TABLE IF EXISTS aeon_equipment;
 DROP TABLE IF EXISTS j_aeons_base_stats;
 DROP TABLE IF EXISTS j_characters_base_stats;
 DROP TABLE IF EXISTS j_player_units_character_class;
+
+DROP TYPE IF EXISTS aeon_stat_value;

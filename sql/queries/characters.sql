@@ -66,8 +66,8 @@ RETURNING *;
 
 
 -- name: CreateAeonsBaseStatJunction :exec
-INSERT INTO j_aeons_base_stats (data_hash, aeon_id, base_stat_id)
-VALUES ($1, $2, $3)
+INSERT INTO j_aeons_base_stats (data_hash, aeon_id, base_stat_id, value_type, battles)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO NOTHING;
 
 

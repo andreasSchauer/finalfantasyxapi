@@ -15,6 +15,7 @@ type StatusCondition struct {
 	Visualization           *string          `json:"visualization"`
 	RelatedStats            []string         `json:"related_stats"`
 	RemovedStatusConditions []string         `json:"removed_status_conditions"`
+	AddedElemResist			*ElementalResist `json:"added_elem_resist"`
 	NullifyArmored          *string          `json:"nullify_armored"`
 	StatChanges             []StatChange     `json:"stat_changes"`
 	ModifierChanges         []ModifierChange `json:"modifier_changes"`
@@ -25,6 +26,7 @@ func (s StatusCondition) ToHashFields() []any {
 		s.Name,
 		s.Effect,
 		derefOrNil(s.Visualization),
+		ObjPtrToID(s.AddedElemResist),
 		derefOrNil(s.NullifyArmored),
 	}
 }
@@ -80,6 +82,20 @@ func (l *Lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn 
 			condition, err := l.getStatusCondition(jsonCondition.Name)
 			if err != nil {
 				return err
+			}
+
+			condition.AddedElemResist, err = seedObjPtrAssignFK(qtx, condition.AddedElemResist, l.seedElementalResist)
+			if err != nil {
+				return getErr(condition.Error(), err)
+			}
+
+			err = qtx.UpdateStatusCondition(context.Background(), database.UpdateStatusConditionParams{
+				DataHash: generateDataHash(condition),
+				AddedElemResistID: ObjPtrToNullInt32ID(condition.AddedElemResist),
+				ID: condition.ID,
+			})
+			if err != nil {
+				return getErr(condition.Error(), err, "couldn't update status condition")
 			}
 
 			relationShipFunctions := []func(*database.Queries, StatusCondition) error{

@@ -159,6 +159,11 @@ func (l *Lookup) getSeeders() []seeder {
 			relFunc:  l.seedAeonsRelationships,
 		},
 		{
+			name:     "aeon stats",
+			seedFunc: nil,
+			relFunc:  l.seedAeonStats,
+		},
+		{
 			name:     "default abilities",
 			seedFunc: nil,
 			relFunc:  l.seedDefaultAbilitiesRelationships,

@@ -87,6 +87,13 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_conditions.data_hash
 RETURNING *;
 
 
+-- name: UpdateStatusCondition :exec
+UPDATE status_conditions
+SET data_hash = $1,
+    added_elem_resist_id = $2
+WHERE id = $3;
+
+
 -- name: CreateStatusConditionsRelatedStatsJunction :exec
 INSERT INTO j_status_conditions_related_stats(data_hash, status_condition_id, stat_id)
 VALUES ($1, $2, $3)
