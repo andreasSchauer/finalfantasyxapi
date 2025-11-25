@@ -1,9 +1,9 @@
-package seeding
+package helpers
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
 
 
-func nullNullifyArmored(s *string) database.NullNullifyArmored {
+func NullNullifyArmored(s *string) database.NullNullifyArmored {
     if s == nil {
         return database.NullNullifyArmored{}
     }
@@ -15,7 +15,7 @@ func nullNullifyArmored(s *string) database.NullNullifyArmored {
 }
 
 
-func nullCreationsUnlockedCategory(s *string) database.NullCreationsUnlockedCategory {
+func NullCreationsUnlockedCategory(s *string) database.NullCreationsUnlockedCategory {
     if s == nil {
         return database.NullCreationsUnlockedCategory{}
     }
@@ -27,7 +27,7 @@ func nullCreationsUnlockedCategory(s *string) database.NullCreationsUnlockedCate
 }
 
 
-func nullTopmenuType(s *string) database.NullTopmenuType {
+func NullTopmenuType(s *string) database.NullTopmenuType {
     if s == nil {
         return database.NullTopmenuType{}
     }
@@ -39,7 +39,7 @@ func nullTopmenuType(s *string) database.NullTopmenuType {
 }
 
 
-func nullEquipType(s *string) database.NullEquipType {
+func NullEquipType(s *string) database.NullEquipType {
     if s == nil {
         return database.NullEquipType{}
     }
@@ -51,7 +51,7 @@ func nullEquipType(s *string) database.NullEquipType {
 }
 
 
-func nullAaActivationCondition(s *string) database.NullAaActivationCondition {
+func NullAaActivationCondition(s *string) database.NullAaActivationCondition {
     if s == nil {
         return database.NullAaActivationCondition{}
     }
@@ -63,7 +63,7 @@ func nullAaActivationCondition(s *string) database.NullAaActivationCondition {
 }
 
 
-func nullCounterType(s *string) database.NullCounterType {
+func NullCounterType(s *string) database.NullCounterType {
     if s == nil {
         return database.NullCounterType{}
     }
@@ -75,7 +75,7 @@ func nullCounterType(s *string) database.NullCounterType {
 }
 
 
-func nullMaCreationArea(s *string) database.NullMaCreationArea {
+func NullMaCreationArea(s *string) database.NullMaCreationArea {
     if s == nil {
         return database.NullMaCreationArea{}
     }
@@ -87,7 +87,7 @@ func nullMaCreationArea(s *string) database.NullMaCreationArea {
 }
 
 
-func nullMaCreationSpecies(s *string) database.NullMaCreationSpecies {
+func NullMaCreationSpecies(s *string) database.NullMaCreationSpecies {
     if s == nil {
         return database.NullMaCreationSpecies{}
     }
@@ -99,7 +99,7 @@ func nullMaCreationSpecies(s *string) database.NullMaCreationSpecies {
 }
 
 
-func nullTargetType(s *string) database.NullTargetType {
+func NullTargetType(s *string) database.NullTargetType {
     if s == nil {
         return database.NullTargetType{}
     }
@@ -111,7 +111,7 @@ func nullTargetType(s *string) database.NullTargetType {
 }
 
 
-func nullItemUsability(s *string) database.NullItemUsability {
+func NullItemUsability(s *string) database.NullItemUsability {
     if s == nil {
         return database.NullItemUsability{}
     }
@@ -123,7 +123,7 @@ func nullItemUsability(s *string) database.NullItemUsability {
 }
 
 
-func nullMusicUseCase(s *string) database.NullMusicUseCase {
+func NullMusicUseCase(s *string) database.NullMusicUseCase {
     if s == nil {
         return database.NullMusicUseCase{}
     }
@@ -135,7 +135,7 @@ func nullMusicUseCase(s *string) database.NullMusicUseCase {
 }
 
 
-func nullBgReplacementType(s *string) database.NullBgReplacementType {
+func NullBgReplacementType(s *string) database.NullBgReplacementType {
     if s == nil {
         return database.NullBgReplacementType{}
     }
@@ -147,7 +147,7 @@ func nullBgReplacementType(s *string) database.NullBgReplacementType {
 }
 
 
-func nullSpecialActionType(s *string) database.NullSpecialActionType {
+func NullSpecialActionType(s *string) database.NullSpecialActionType {
     if s == nil {
         return database.NullSpecialActionType{}
     }
@@ -159,7 +159,7 @@ func nullSpecialActionType(s *string) database.NullSpecialActionType {
 }
 
 
-func nullCriticalType(s *string) database.NullCriticalType {
+func NullCriticalType(s *string) database.NullCriticalType {
     if s == nil {
         return database.NullCriticalType{}
     }
@@ -171,7 +171,7 @@ func nullCriticalType(s *string) database.NullCriticalType {
 }
 
 
-func nullBreakDmgLmtType(s *string) database.NullBreakDmgLmtType {
+func NullBreakDmgLmtType(s *string) database.NullBreakDmgLmtType {
     if s == nil {
         return database.NullBreakDmgLmtType{}
     }

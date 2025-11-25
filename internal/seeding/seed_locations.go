@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Location struct {
@@ -36,7 +37,7 @@ func (s SubLocation) ToHashFields() []any {
 	return []any{
 		s.Location.ID,
 		s.Name,
-		derefOrNil(s.Specification),
+		h.DerefOrNil(s.Specification),
 	}
 }
 
@@ -62,8 +63,8 @@ func (a Area) ToHashFields() []any {
 	return []any{
 		a.SubLocation.ID,
 		a.Name,
-		derefOrNil(a.Version),
-		derefOrNil(a.Specification),
+		h.DerefOrNil(a.Version),
+		h.DerefOrNil(a.Specification),
 		a.StoryOnly,
 		a.HasSaveSphere,
 		a.AirshipDropOff,
@@ -77,7 +78,7 @@ func (a Area) GetID() int32 {
 }
 
 func (a Area) Error() string {
-	return fmt.Sprintf("area %s, version %v", a.Name, derefOrNil(a.Version))
+	return fmt.Sprintf("area %s, version %v", a.Name, h.DerefOrNil(a.Version))
 }
 
 func (a Area) GetLocationArea() LocationArea {
@@ -102,7 +103,7 @@ func (la LocationArea) ToKeyFields() []any {
 		la.Location,
 		la.SubLocation,
 		la.Area,
-		derefOrNil(la.Version),
+		h.DerefOrNil(la.Version),
 	}
 }
 
@@ -111,7 +112,7 @@ func (la LocationArea) GetID() int32 {
 }
 
 func (la LocationArea) Error() string {
-	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: %s, version: %v", la.Location, la.SubLocation, la.Area, derefOrNil(la.Version))
+	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: %s, version: %v", la.Location, la.SubLocation, la.Area, h.DerefOrNil(la.Version))
 }
 
 type AreaConnection struct {
@@ -128,7 +129,7 @@ func (ac AreaConnection) ToHashFields() []any {
 		ac.AreaID,
 		ac.ConnectionType,
 		ac.StoryOnly,
-		derefOrNil(ac.Notes),
+		h.DerefOrNil(ac.Notes),
 	}
 }
 
@@ -156,7 +157,7 @@ func (l *Lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 				Name:     location.Name,
 			})
 			if err != nil {
-				return getErr(location.Error(), err, "couldn't create location")
+				return h.GetErr(location.Error(), err, "couldn't create location")
 			}
 			location.ID = dbLocation.ID
 
@@ -178,10 +179,10 @@ func (l *Lookup) seedSubLocations(qtx *database.Queries, location Location) erro
 			DataHash:      generateDataHash(subLocation),
 			LocationID:    subLocation.Location.ID,
 			Name:          subLocation.Name,
-			Specification: getNullString(subLocation.Specification),
+			Specification: h.GetNullString(subLocation.Specification),
 		})
 		if err != nil {
-			return getErr(subLocation.Error(), err, "couldn't create sublocation")
+			return h.GetErr(subLocation.Error(), err, "couldn't create sublocation")
 		}
 		subLocation.ID = dbSubLocation.ID
 
@@ -202,8 +203,8 @@ func (l *Lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error
 			DataHash:             generateDataHash(area),
 			SubLocationID:        area.SubLocation.ID,
 			Name:                 area.Name,
-			Version:              getNullInt32(area.Version),
-			Specification:        getNullString(area.Specification),
+			Version:              h.GetNullInt32(area.Version),
+			Specification:        h.GetNullString(area.Specification),
 			StoryOnly:            area.StoryOnly,
 			HasSaveSphere:        area.HasSaveSphere,
 			AirshipDropOff:       area.AirshipDropOff,
@@ -211,7 +212,7 @@ func (l *Lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error
 			CanRideChocobo:       area.CanRideChocobo,
 		})
 		if err != nil {
-			return getErr(area.Error(), err, "couldn't create area")
+			return h.GetErr(area.Error(), err, "couldn't create area")
 		}
 
 		area.ID = dbArea.ID
@@ -246,12 +247,12 @@ func (l *Lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) er
 
 					area, err := l.getArea(locationArea)
 					if err != nil {
-						return getErr(locationArea.Error(), err)
+						return h.GetErr(locationArea.Error(), err)
 					}
 
 					err = l.seedAreaConnections(qtx, area)
 					if err != nil {
-						return getErr(locationArea.Error(), err)
+						return h.GetErr(locationArea.Error(), err)
 					}
 				}
 			}
@@ -274,7 +275,7 @@ func (l *Lookup) seedAreaConnections(qtx *database.Queries, area Area) error {
 			ConnectionID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(connection.Error(), err, "couldn't junction area connection")
+			return h.GetErr(connection.Error(), err, "couldn't junction area connection")
 		}
 	}
 
@@ -286,7 +287,7 @@ func (l *Lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnec
 
 	connection.AreaID, err = assignFK(connection.LocationArea, l.getArea)
 	if err != nil {
-		return AreaConnection{}, getErr(connection.Error(), err)
+		return AreaConnection{}, h.GetErr(connection.Error(), err)
 	}
 
 	dbConnection, err := qtx.CreateAreaConnection(context.Background(), database.CreateAreaConnectionParams{
@@ -294,10 +295,10 @@ func (l *Lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnec
 		AreaID:         connection.AreaID,
 		ConnectionType: database.AreaConnectionType(connection.ConnectionType),
 		StoryOnly:      connection.StoryOnly,
-		Notes:          getNullString(connection.Notes),
+		Notes:          h.GetNullString(connection.Notes),
 	})
 	if err != nil {
-		return AreaConnection{}, getErr(connection.Error(), err, "couldn't create connection")
+		return AreaConnection{}, h.GetErr(connection.Error(), err, "couldn't create connection")
 	}
 	connection.ID = dbConnection.ID
 

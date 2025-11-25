@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type CharacterClass struct {
@@ -52,13 +53,13 @@ func (l *Lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit
 
 	err = l.seedUnitCharClass(qtx, character.Name, character.PlayerUnit)
 	if err != nil {
-		return getErr(character.Name, err, "character class")
+		return h.GetErr(character.Name, err, "character class")
 	}
 
 	if !character.StoryOnly {
 		err := l.seedUnitCharClass(qtx, "characters", character.PlayerUnit)
 		if err != nil {
-			return getErr("characters", err, "character class")
+			return h.GetErr("characters", err, "character class")
 		}
 	}
 
@@ -71,29 +72,29 @@ func (l *Lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) err
 		return err
 	}
 
-	aeonCategory := stringPtrToString(aeon.Category)
+	aeonCategory := h.StringPtrToString(aeon.Category)
 
 	err = l.seedUnitCharClass(qtx, aeon.Name, aeon.PlayerUnit)
 	if err != nil {
-		return getErr(aeon.Name, err, "character class")
+		return h.GetErr(aeon.Name, err, "character class")
 	}
 
 	err = l.seedUnitCharClass(qtx, "aeons", aeon.PlayerUnit)
 	if err != nil {
-		return getErr("aeons", err, "character class")
+		return h.GetErr("aeons", err, "character class")
 	}
 
 	if aeonCategory == "standard-aeons" {
 		err = l.seedUnitCharClass(qtx, "standard-aeons", aeon.PlayerUnit)
 		if err != nil {
-			return getErr("standard-aeons", err, "character class")
+			return h.GetErr("standard-aeons", err, "character class")
 		}
 	}
 
 	if aeonCategory == "magus-sisters" {
 		err = l.seedUnitCharClass(qtx, "magus-sisters", aeon.PlayerUnit)
 		if err != nil {
-			return getErr("magus-sisters", err, "character class")
+			return h.GetErr("magus-sisters", err, "character class")
 		}
 	}
 
@@ -116,7 +117,7 @@ func (l *Lookup) seedUnitCharClass(qtx *database.Queries, className string, unit
 		ClassID:  junction.ChildID,
 	})
 	if err != nil {
-		return getErr(unit.Error(), err, "couldn't junction player unit")
+		return h.GetErr(unit.Error(), err, "couldn't junction player unit")
 	}
 
 	return nil
@@ -128,7 +129,7 @@ func (l *Lookup) seedCharacterClass(qtx *database.Queries, class CharacterClass)
 		Name:     class.Name,
 	})
 	if err != nil {
-		return CharacterClass{}, getErr(class.Error(), err, "couldn't create character class")
+		return CharacterClass{}, h.GetErr(class.Error(), err, "couldn't create character class")
 	}
 
 	class.ID = dbClass.ID

@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Lookupable interface {
@@ -105,7 +106,7 @@ func (l *Lookup) getAbility(abilityRef AbilityReference) (Ability, error) {
 
 	ability, found := l.abilities[key]
 	if !found {
-		return Ability{}, getErr(abilityRef.Error(), errors.New("couldn't find ability"))
+		return Ability{}, h.GetErr(abilityRef.Error(), errors.New("couldn't find ability"))
 	}
 
 	return ability, nil
@@ -116,7 +117,7 @@ func (l *Lookup) getEnemyAbility(abilityRef AbilityReference) (EnemyAbility, err
 
 	ability, found := l.enemyAbilities[key]
 	if !found {
-		return EnemyAbility{}, getErr(abilityRef.Error(), errors.New("couldn't find enemy ability"))
+		return EnemyAbility{}, h.GetErr(abilityRef.Error(), errors.New("couldn't find enemy ability"))
 	}
 
 	return ability, nil
@@ -127,7 +128,7 @@ func (l *Lookup) getOverdriveAbility(abilityRef AbilityReference) (OverdriveAbil
 
 	ability, found := l.overdriveAbilities[key]
 	if !found {
-		return OverdriveAbility{}, getErr(abilityRef.Error(), errors.New("couldn't find overdrive ability"))
+		return OverdriveAbility{}, h.GetErr(abilityRef.Error(), errors.New("couldn't find overdrive ability"))
 	}
 
 	return ability, nil
@@ -138,7 +139,7 @@ func (l *Lookup) getPlayerAbility(abilityRef AbilityReference) (PlayerAbility, e
 
 	ability, found := l.playerAbilities[key]
 	if !found {
-		return PlayerAbility{}, getErr(abilityRef.Error(), errors.New("couldn't find player ability"))
+		return PlayerAbility{}, h.GetErr(abilityRef.Error(), errors.New("couldn't find player ability"))
 	}
 
 	return ability, nil
@@ -149,7 +150,7 @@ func (l *Lookup) getTriggerCommand(abilityRef AbilityReference) (TriggerCommand,
 
 	command, found := l.triggerCommands[key]
 	if !found {
-		return TriggerCommand{}, getErr(abilityRef.Error(), errors.New("couldn't find trigger command"))
+		return TriggerCommand{}, h.GetErr(abilityRef.Error(), errors.New("couldn't find trigger command"))
 	}
 
 	return command, nil
@@ -164,7 +165,7 @@ func (l *Lookup) getAeon(key string) (Aeon, error) {
 
 	aeon, found := l.aeons[lookupKey]
 	if !found {
-		return Aeon{}, getErr(key, errors.New("couldn't find aeon"))
+		return Aeon{}, h.GetErr(key, errors.New("couldn't find aeon"))
 	}
 
 	return aeon, nil
@@ -173,7 +174,7 @@ func (l *Lookup) getAeon(key string) (Aeon, error) {
 func (l *Lookup) getAeonCommand(key string) (AeonCommand, error) {
 	command, found := l.aeonCommands[key]
 	if !found {
-		return AeonCommand{}, getErr(key, errors.New("couldn't find aeon command"))
+		return AeonCommand{}, h.GetErr(key, errors.New("couldn't find aeon command"))
 	}
 
 	return command, nil
@@ -182,7 +183,7 @@ func (l *Lookup) getAeonCommand(key string) (AeonCommand, error) {
 func (l *Lookup) getAffinity(key string) (Affinity, error) {
 	affinity, found := l.affinities[key]
 	if !found {
-		return Affinity{}, getErr(key, errors.New("couldn't find affinity"))
+		return Affinity{}, h.GetErr(key, errors.New("couldn't find affinity"))
 	}
 
 	return affinity, nil
@@ -193,7 +194,7 @@ func (l *Lookup) getArea(locationArea LocationArea) (Area, error) {
 
 	area, found := l.areas[key]
 	if !found {
-		return Area{}, getErr(locationArea.Error(), errors.New("couldn't find location area"))
+		return Area{}, h.GetErr(locationArea.Error(), errors.New("couldn't find location area"))
 	}
 
 	return area, nil
@@ -202,7 +203,7 @@ func (l *Lookup) getArea(locationArea LocationArea) (Area, error) {
 func (l *Lookup) getAutoAbility(key string) (AutoAbility, error) {
 	autoAbility, found := l.autoAbilities[key]
 	if !found {
-		return AutoAbility{}, getErr(key, errors.New("couldn't find auto-ability"))
+		return AutoAbility{}, h.GetErr(key, errors.New("couldn't find auto-ability"))
 	}
 
 	return autoAbility, nil
@@ -211,7 +212,7 @@ func (l *Lookup) getAutoAbility(key string) (AutoAbility, error) {
 func (l *Lookup) getCelestialWeapon(key string) (CelestialWeapon, error) {
 	weapon, found := l.celestialWeapons[key]
 	if !found {
-		return CelestialWeapon{}, getErr(key, errors.New("couldn't find celestial weapon"))
+		return CelestialWeapon{}, h.GetErr(key, errors.New("couldn't find celestial weapon"))
 	}
 
 	return weapon, nil
@@ -226,7 +227,7 @@ func (l *Lookup) getCharacter(key string) (Character, error) {
 
 	character, found := l.characters[lookupKey]
 	if !found {
-		return Character{}, getErr(key, errors.New("couldn't find couldn't find character"))
+		return Character{}, h.GetErr(key, errors.New("couldn't find couldn't find character"))
 	}
 
 	return character, nil
@@ -235,7 +236,7 @@ func (l *Lookup) getCharacter(key string) (Character, error) {
 func (l *Lookup) getCharacterClass(key string) (CharacterClass, error) {
 	class, found := l.charClasses[key]
 	if !found {
-		return CharacterClass{}, getErr(key, errors.New("couldn't find character class"))
+		return CharacterClass{}, h.GetErr(key, errors.New("couldn't find character class"))
 	}
 
 	return class, nil
@@ -244,7 +245,7 @@ func (l *Lookup) getCharacterClass(key string) (CharacterClass, error) {
 func (l *Lookup) getElement(key string) (Element, error) {
 	element, found := l.elements[key]
 	if !found {
-		return Element{}, getErr(key, errors.New("couldn't find element"))
+		return Element{}, h.GetErr(key, errors.New("couldn't find element"))
 	}
 
 	return element, nil
@@ -253,7 +254,7 @@ func (l *Lookup) getElement(key string) (Element, error) {
 func (l *Lookup) getEquipmentName(key string) (EquipmentName, error) {
 	equipment, found := l.equipmentNames[key]
 	if !found {
-		return EquipmentName{}, getErr(key, errors.New("couldn't find equipment name"))
+		return EquipmentName{}, h.GetErr(key, errors.New("couldn't find equipment name"))
 	}
 
 	return equipment, nil
@@ -262,7 +263,7 @@ func (l *Lookup) getEquipmentName(key string) (EquipmentName, error) {
 func (l *Lookup) getEquipmentTable(key string) (EquipmentTable, error) {
 	equipmentTable, found := l.equipmentTables[key]
 	if !found {
-		return EquipmentTable{}, getErr(key, errors.New("couldn't find equipment table"))
+		return EquipmentTable{}, h.GetErr(key, errors.New("couldn't find equipment table"))
 	}
 
 	return equipmentTable, nil
@@ -271,7 +272,7 @@ func (l *Lookup) getEquipmentTable(key string) (EquipmentTable, error) {
 func (l *Lookup) getEncounterLocation(key string) (EncounterLocation, error) {
 	encounterLocation, found := l.encounterLocations[key]
 	if !found {
-		return EncounterLocation{}, getErr(key, errors.New("couldn't find encounter location"))
+		return EncounterLocation{}, h.GetErr(key, errors.New("couldn't find encounter location"))
 	}
 
 	return encounterLocation, nil
@@ -286,7 +287,7 @@ func (l *Lookup) getItem(key string) (Item, error) {
 
 	item, found := l.items[lookupKey]
 	if !found {
-		return Item{}, getErr(key, errors.New("couldn't find item"))
+		return Item{}, h.GetErr(key, errors.New("couldn't find item"))
 	}
 
 	return item, nil
@@ -301,7 +302,7 @@ func (l *Lookup) getKeyItem(key string) (KeyItem, error) {
 
 	keyItem, found := l.keyItems[lookupKey]
 	if !found {
-		return KeyItem{}, getErr(key, errors.New("couldn't find key item"))
+		return KeyItem{}, h.GetErr(key, errors.New("couldn't find key item"))
 	}
 
 	return keyItem, nil
@@ -310,7 +311,7 @@ func (l *Lookup) getKeyItem(key string) (KeyItem, error) {
 func (l *Lookup) getMasterItem(key string) (MasterItem, error) {
 	masterItem, found := l.masterItems[key]
 	if !found {
-		return MasterItem{}, getErr(key, errors.New("couldn't find master item"))
+		return MasterItem{}, h.GetErr(key, errors.New("couldn't find master item"))
 	}
 
 	return masterItem, nil
@@ -319,7 +320,7 @@ func (l *Lookup) getMasterItem(key string) (MasterItem, error) {
 func (l *Lookup) getMix(key string) (Mix, error) {
 	mix, found := l.mixes[key]
 	if !found {
-		return Mix{}, getErr(key, errors.New("couldn't find mix"))
+		return Mix{}, h.GetErr(key, errors.New("couldn't find mix"))
 	}
 
 	return mix, nil
@@ -328,7 +329,7 @@ func (l *Lookup) getMix(key string) (Mix, error) {
 func (l *Lookup) getModifier(key string) (Modifier, error) {
 	modifier, found := l.modifiers[key]
 	if !found {
-		return Modifier{}, getErr(key, errors.New("couldn't find modifier"))
+		return Modifier{}, h.GetErr(key, errors.New("couldn't find modifier"))
 	}
 
 	return modifier, nil
@@ -337,7 +338,7 @@ func (l *Lookup) getModifier(key string) (Modifier, error) {
 func (l *Lookup) getMonster(key string) (Monster, error) {
 	monster, found := l.monsters[key]
 	if !found {
-		return Monster{}, getErr(key, errors.New("couldn't find monster"))
+		return Monster{}, h.GetErr(key, errors.New("couldn't find monster"))
 	}
 
 	return monster, nil
@@ -346,7 +347,7 @@ func (l *Lookup) getMonster(key string) (Monster, error) {
 func (l *Lookup) getOverdriveCommand(key string) (OverdriveCommand, error) {
 	command, found := l.overdriveCommands[key]
 	if !found {
-		return OverdriveCommand{}, getErr(key, errors.New("couldn't find overdrive command"))
+		return OverdriveCommand{}, h.GetErr(key, errors.New("couldn't find overdrive command"))
 	}
 
 	return command, nil
@@ -357,7 +358,7 @@ func (l *Lookup) getOverdrive(ability Ability) (Overdrive, error) {
 
 	overdrive, found := l.overdrives[key]
 	if !found {
-		return Overdrive{}, getErr(key, errors.New("couldn't find overdrive"))
+		return Overdrive{}, h.GetErr(key, errors.New("couldn't find overdrive"))
 	}
 
 	return overdrive, nil
@@ -366,7 +367,7 @@ func (l *Lookup) getOverdrive(ability Ability) (Overdrive, error) {
 func (l *Lookup) getOverdriveMode(key string) (OverdriveMode, error) {
 	mode, found := l.overdriveModes[key]
 	if !found {
-		return OverdriveMode{}, getErr(key, errors.New("couldn't find overdrive mode"))
+		return OverdriveMode{}, h.GetErr(key, errors.New("couldn't find overdrive mode"))
 	}
 
 	return mode, nil
@@ -375,7 +376,7 @@ func (l *Lookup) getOverdriveMode(key string) (OverdriveMode, error) {
 func (l *Lookup) getPosition(key string) (BlitzballPosition, error) {
 	position, found := l.positions[key]
 	if !found {
-		return BlitzballPosition{}, getErr(key, errors.New("couldn't find blitzball position"))
+		return BlitzballPosition{}, h.GetErr(key, errors.New("couldn't find blitzball position"))
 	}
 
 	return position, nil
@@ -384,7 +385,7 @@ func (l *Lookup) getPosition(key string) (BlitzballPosition, error) {
 func (l *Lookup) getProperty(key string) (Property, error) {
 	property, found := l.properties[key]
 	if !found {
-		return Property{}, getErr(key, errors.New("couldn't find property"))
+		return Property{}, h.GetErr(key, errors.New("couldn't find property"))
 	}
 
 	return property, nil
@@ -395,7 +396,7 @@ func (l *Lookup) getQuest(quest Quest) (Quest, error) {
 
 	quest, found := l.quests[key]
 	if !found {
-		return Quest{}, getErr(quest.Error(), errors.New("couldn't find quest"))
+		return Quest{}, h.GetErr(quest.Error(), errors.New("couldn't find quest"))
 	}
 
 	return quest, nil
@@ -410,7 +411,7 @@ func (l *Lookup) getSidequest(key string) (Sidequest, error) {
 
 	sidequest, found := l.sidequests[lookupKey]
 	if !found {
-		return Sidequest{}, getErr(key, errors.New("couldn't find sidequest"))
+		return Sidequest{}, h.GetErr(key, errors.New("couldn't find sidequest"))
 	}
 
 	return sidequest, nil
@@ -425,7 +426,7 @@ func (l *Lookup) getSubquest(key string) (Subquest, error) {
 
 	subquest, found := l.subquests[lookupKey]
 	if !found {
-		return Subquest{}, getErr(key, errors.New("couldn't find subquest"))
+		return Subquest{}, h.GetErr(key, errors.New("couldn't find subquest"))
 	}
 
 	return subquest, nil
@@ -434,7 +435,7 @@ func (l *Lookup) getSubquest(key string) (Subquest, error) {
 func (l *Lookup) getShop(key string) (Shop, error) {
 	shop, found := l.shops[key]
 	if !found {
-		return Shop{}, getErr(key, errors.New("couldn't find shop"))
+		return Shop{}, h.GetErr(key, errors.New("couldn't find shop"))
 	}
 
 	return shop, nil
@@ -443,7 +444,7 @@ func (l *Lookup) getShop(key string) (Shop, error) {
 func (l *Lookup) getSong(key string) (Song, error) {
 	song, found := l.songs[key]
 	if !found {
-		return Song{}, getErr(key, errors.New("couldn't find song"))
+		return Song{}, h.GetErr(key, errors.New("couldn't find song"))
 	}
 
 	return song, nil
@@ -452,7 +453,7 @@ func (l *Lookup) getSong(key string) (Song, error) {
 func (l *Lookup) getStat(key string) (Stat, error) {
 	stat, found := l.stats[key]
 	if !found {
-		return Stat{}, getErr(key, errors.New("couldn't find stat"))
+		return Stat{}, h.GetErr(key, errors.New("couldn't find stat"))
 	}
 
 	return stat, nil
@@ -461,7 +462,7 @@ func (l *Lookup) getStat(key string) (Stat, error) {
 func (l *Lookup) getStatusCondition(key string) (StatusCondition, error) {
 	condition, found := l.statusConditions[key]
 	if !found {
-		return StatusCondition{}, getErr(key, errors.New("couldn't find status condition"))
+		return StatusCondition{}, h.GetErr(key, errors.New("couldn't find status condition"))
 	}
 
 	return condition, nil
@@ -470,7 +471,7 @@ func (l *Lookup) getStatusCondition(key string) (StatusCondition, error) {
 func (l *Lookup) getSubmenu(key string) (Submenu, error) {
 	submenu, found := l.submenus[key]
 	if !found {
-		return Submenu{}, getErr(key, errors.New("couldn't find submenu"))
+		return Submenu{}, h.GetErr(key, errors.New("couldn't find submenu"))
 	}
 
 	return submenu, nil
@@ -479,7 +480,7 @@ func (l *Lookup) getSubmenu(key string) (Submenu, error) {
 func (l *Lookup) getTreasure(key string) (Treasure, error) {
 	treasure, found := l.treasures[key]
 	if !found {
-		return Treasure{}, getErr(key, errors.New("couldn't find treasure"))
+		return Treasure{}, h.GetErr(key, errors.New("couldn't find treasure"))
 	}
 
 	return treasure, nil

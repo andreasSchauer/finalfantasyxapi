@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Accuracy struct {
@@ -17,8 +18,8 @@ type Accuracy struct {
 func (a Accuracy) ToHashFields() []any {
 	return []any{
 		a.AccSource,
-		derefOrNil(a.HitChance),
-		derefOrNil(a.AccModifier),
+		h.DerefOrNil(a.HitChance),
+		h.DerefOrNil(a.AccModifier),
 	}
 }
 
@@ -27,18 +28,18 @@ func (a Accuracy) GetID() int32 {
 }
 
 func (a Accuracy) Error() string {
-	return fmt.Sprintf("accuracy with source: %s, hit chance: %v, modifier: %v", a.AccSource, derefOrNil(a.HitChance), derefOrNil(a.AccModifier))
+	return fmt.Sprintf("accuracy with source: %s, hit chance: %v, modifier: %v", a.AccSource, h.DerefOrNil(a.HitChance), h.DerefOrNil(a.AccModifier))
 }
 
 func (l *Lookup) seedAccuracy(qtx *database.Queries, accuracy Accuracy) (Accuracy, error) {
 	dbAccuracy, err := qtx.CreateAbilityAccuracy(context.Background(), database.CreateAbilityAccuracyParams{
 		DataHash:    generateDataHash(accuracy),
 		AccSource:   database.AccSourceType(accuracy.AccSource),
-		HitChance:   getNullInt32(accuracy.HitChance),
-		AccModifier: getNullFloat64(accuracy.AccModifier),
+		HitChance:   h.GetNullInt32(accuracy.HitChance),
+		AccModifier: h.GetNullFloat64(accuracy.AccModifier),
 	})
 	if err != nil {
-		return Accuracy{}, getErr(accuracy.Error(), err, "couldn't create accuracy")
+		return Accuracy{}, h.GetErr(accuracy.Error(), err, "couldn't create accuracy")
 	}
 
 	accuracy.ID = dbAccuracy.ID

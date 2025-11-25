@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type MonsterAbility struct {
@@ -28,7 +29,7 @@ func (m MonsterAbility) GetID() int32 {
 }
 
 func (m MonsterAbility) Error() string {
-	return fmt.Sprintf("monster ability %s-%v, type: %s, is forced: %t, is unused: %t", m.Name, derefOrNil(m.Version), m.AbilityType, m.IsForced, m.IsUnused)
+	return fmt.Sprintf("monster ability %s-%v, type: %s, is forced: %t, is unused: %t", m.Name, h.DerefOrNil(m.Version), m.AbilityType, m.IsForced, m.IsUnused)
 }
 
 func (l *Lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility MonsterAbility) (MonsterAbility, error) {
@@ -36,7 +37,7 @@ func (l *Lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility Monste
 
 	monsterAbility.AbilityID, err = assignFK(monsterAbility.AbilityReference, l.getAbility)
 	if err != nil {
-		return MonsterAbility{}, getErr(monsterAbility.Error(), err)
+		return MonsterAbility{}, h.GetErr(monsterAbility.Error(), err)
 	}
 
 	dbMonsterAbility, err := qtx.CreateMonsterAbility(context.Background(), database.CreateMonsterAbilityParams{
@@ -46,7 +47,7 @@ func (l *Lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility Monste
 		IsUnused:  monsterAbility.IsUnused,
 	})
 	if err != nil {
-		return MonsterAbility{}, getErr(monsterAbility.Error(), err, "couldn't create monster ability")
+		return MonsterAbility{}, h.GetErr(monsterAbility.Error(), err, "couldn't create monster ability")
 	}
 
 	monsterAbility.ID = dbMonsterAbility.ID

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type MonsterAmount struct {
@@ -25,7 +26,7 @@ func (ma MonsterAmount) ToHashFields() []any {
 func (ma MonsterAmount) ToKeyFields() []any {
 	return []any{
 		ma.MonsterName,
-		derefOrNil(ma.Version),
+		h.DerefOrNil(ma.Version),
 	}
 }
 
@@ -34,7 +35,7 @@ func (ma MonsterAmount) GetID() int32 {
 }
 
 func (ma MonsterAmount) Error() string {
-	return fmt.Sprintf("monster amount with monster: %s, version: %v, amount: %d", ma.MonsterName, derefOrNil(ma.Version), ma.Amount)
+	return fmt.Sprintf("monster amount with monster: %s, version: %v, amount: %d", ma.MonsterName, h.DerefOrNil(ma.Version), ma.Amount)
 }
 
 func (l *Lookup) seedMonsterAmount(qtx *database.Queries, monsterAmount MonsterAmount) (MonsterAmount, error) {
@@ -44,7 +45,7 @@ func (l *Lookup) seedMonsterAmount(qtx *database.Queries, monsterAmount MonsterA
 		Amount:    monsterAmount.Amount,
 	})
 	if err != nil {
-		return MonsterAmount{}, getErr(monsterAmount.Error(), err, "couldn't create monster amount")
+		return MonsterAmount{}, h.GetErr(monsterAmount.Error(), err, "couldn't create monster amount")
 	}
 	monsterAmount.ID = dbMonsterAmount.ID
 

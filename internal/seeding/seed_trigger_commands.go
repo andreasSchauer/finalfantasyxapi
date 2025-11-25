@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type TriggerCommand struct {
@@ -42,7 +43,7 @@ func (t TriggerCommand) GetAbilityRef() AbilityReference {
 }
 
 func (t TriggerCommand) Error() string {
-	return fmt.Sprintf("trigger command %s, version %v", t.Name, derefOrNil(t.Version))
+	return fmt.Sprintf("trigger command %s, version %v", t.Name, h.DerefOrNil(t.Version))
 }
 
 func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
@@ -62,7 +63,7 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 
 			command.Ability, err = seedObjAssignID(qtx, command.Ability, l.seedAbility)
 			if err != nil {
-				return getErr(command.Error(), err)
+				return h.GetErr(command.Error(), err)
 			}
 
 			dbTriggerCommand, err := qtx.CreateTriggerCommand(context.Background(), database.CreateTriggerCommandParams{
@@ -74,7 +75,7 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 				Cursor:      database.TargetType(command.Cursor),
 			})
 			if err != nil {
-				return getErr(command.Error(), err, "couldn't create trigger command")
+				return h.GetErr(command.Error(), err, "couldn't create trigger command")
 			}
 
 			command.ID = dbTriggerCommand.ID
@@ -106,14 +107,14 @@ func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *
 
 			err = l.seedTriggerCommandRelatedStats(qtx, command)
 			if err != nil {
-				return getErr(command.Error(), err)
+				return h.GetErr(command.Error(), err)
 			}
 
 			l.currentAbility = command.Ability
 
 			err = l.seedBattleInteractions(qtx, l.currentAbility, command.BattleInteractions)
 			if err != nil {
-				return getErr(command.Error(), err)
+				return h.GetErr(command.Error(), err)
 			}
 		}
 
@@ -134,7 +135,7 @@ func (l *Lookup) seedTriggerCommandRelatedStats(qtx *database.Queries, command T
 			StatID:           junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonStat, err, "couldn't junction related stat")
+			return h.GetErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 

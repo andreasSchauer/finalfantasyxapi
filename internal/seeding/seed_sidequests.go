@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Sidequest struct {
@@ -86,12 +87,12 @@ func (cl CompletionLocation) ToHashFields() []any {
 	return []any{
 		cl.CompletionID,
 		cl.AreaID,
-		derefOrNil(cl.Notes),
+		h.DerefOrNil(cl.Notes),
 	}
 }
 
 func (cl CompletionLocation) Error() string {
-	return fmt.Sprintf("completion location %s, with completion id: %d, notes: %v", cl.LocationArea, cl.CompletionID, derefOrNil(cl.Notes))
+	return fmt.Sprintf("completion location %s, with completion id: %d, notes: %v", cl.LocationArea, cl.CompletionID, h.DerefOrNil(cl.Notes))
 }
 
 func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
@@ -110,7 +111,7 @@ func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 
 			sidequest.Quest, err = seedObjAssignID(qtx, sidequest.Quest, l.seedQuest)
 			if err != nil {
-				return getErr(sidequest.Error(), err)
+				return h.GetErr(sidequest.Error(), err)
 			}
 
 			dbSidequest, err := qtx.CreateSidequest(context.Background(), database.CreateSidequestParams{
@@ -118,7 +119,7 @@ func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 				QuestID:  sidequest.Quest.ID,
 			})
 			if err != nil {
-				return getErr(sidequest.Error(), err, "couldn't create sidequest")
+				return h.GetErr(sidequest.Error(), err, "couldn't create sidequest")
 			}
 
 			sidequest.ID = dbSidequest.ID
@@ -127,7 +128,7 @@ func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 
 			err = l.seedSubquests(qtx, sidequest)
 			if err != nil {
-				return getErr(sidequest.Error(), err)
+				return h.GetErr(sidequest.Error(), err)
 			}
 		}
 		return nil
@@ -142,7 +143,7 @@ func (l *Lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 
 		subquest.Quest, err = seedObjAssignID(qtx, subquest.Quest, l.seedQuest)
 		if err != nil {
-			return getErr(subquest.Error(), err)
+			return h.GetErr(subquest.Error(), err)
 		}
 
 		dbSubquest, err := qtx.CreateSubquest(context.Background(), database.CreateSubquestParams{
@@ -151,7 +152,7 @@ func (l *Lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 			ParentSidequestID: subquest.SidequestID,
 		})
 		if err != nil {
-			return getErr(subquest.Error(), err, "couldn't create subquest")
+			return h.GetErr(subquest.Error(), err, "couldn't create subquest")
 		}
 
 		subquest.ID = dbSubquest.ID
@@ -181,21 +182,21 @@ func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 			if sidequest.Completion != nil {
 				err := l.seedQuestCompletionRelationships(qtx, *sidequest.Completion, sidequest.Quest)
 				if err != nil {
-					return getErr(sidequest.Error(), err)
+					return h.GetErr(sidequest.Error(), err)
 				}
 			}
 
 			for _, jsonSubquest := range sidequest.Subquests {
 				subquest, err := l.getSubquest(jsonSubquest.Name)
 				if err != nil {
-					return getErr(sidequest.Error(), err)
+					return h.GetErr(sidequest.Error(), err)
 				}
 
 				for _, completion := range subquest.Completions {
 					err := l.seedQuestCompletionRelationships(qtx, completion, subquest.Quest)
 					if err != nil {
-						subjects := joinSubjects(sidequest.Error(), subquest.Error())
-						return getErr(subjects, err)
+						subjects := h.JoinSubjects(sidequest.Error(), subquest.Error())
+						return h.GetErr(subjects, err)
 					}
 				}
 			}
@@ -210,7 +211,7 @@ func (l *Lookup) seedQuestCompletionRelationships(qtx *database.Queries, complet
 
 	completion.QuestID, err = assignFK(quest, l.getQuest)
 	if err != nil {
-		return getErr(completion.Error(), err)
+		return h.GetErr(completion.Error(), err)
 	}
 
 	completion, err = seedObjAssignID(qtx, completion, l.seedQuestCompletion)
@@ -220,7 +221,7 @@ func (l *Lookup) seedQuestCompletionRelationships(qtx *database.Queries, complet
 
 	err = l.seedCompletionLocations(qtx, completion)
 	if err != nil {
-		return getErr(completion.Error(), err)
+		return h.GetErr(completion.Error(), err)
 	}
 
 	return nil
@@ -231,7 +232,7 @@ func (l *Lookup) seedQuestCompletion(qtx *database.Queries, completion QuestComp
 
 	completion.Reward, err = seedObjAssignID(qtx, completion.Reward, l.seedItemAmount)
 	if err != nil {
-		return QuestCompletion{}, getErr(completion.Error(), err)
+		return QuestCompletion{}, h.GetErr(completion.Error(), err)
 	}
 
 	dbCompletion, err := qtx.CreateQuestCompletion(context.Background(), database.CreateQuestCompletionParams{
@@ -241,7 +242,7 @@ func (l *Lookup) seedQuestCompletion(qtx *database.Queries, completion QuestComp
 		ItemAmountID: completion.Reward.ID,
 	})
 	if err != nil {
-		return QuestCompletion{}, getErr(completion.Error(), err, "couldn't create quest completion")
+		return QuestCompletion{}, h.GetErr(completion.Error(), err, "couldn't create quest completion")
 	}
 	completion.ID = dbCompletion.ID
 
@@ -262,10 +263,10 @@ func (l *Lookup) seedCompletionLocations(qtx *database.Queries, completion Quest
 			DataHash:     generateDataHash(location),
 			CompletionID: location.CompletionID,
 			AreaID:       location.AreaID,
-			Notes:        getNullString(location.Notes),
+			Notes:        h.GetNullString(location.Notes),
 		})
 		if err != nil {
-			return getErr(location.Error(), err, "couldn't create completion location")
+			return h.GetErr(location.Error(), err, "couldn't create completion location")
 		}
 	}
 

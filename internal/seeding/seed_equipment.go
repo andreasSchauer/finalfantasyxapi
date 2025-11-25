@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type EquipmentTable struct {
@@ -29,11 +30,11 @@ func (e EquipmentTable) ToHashFields() []any {
 	return []any{
 		e.Type,
 		e.Classification,
-		derefOrNil(e.SpecificCharacterID),
-		derefOrNil(e.Version),
-		derefOrNil(e.Priority),
-		derefOrNil(e.Pool1Amt),
-		derefOrNil(e.Pool2Amt),
+		h.DerefOrNil(e.SpecificCharacterID),
+		h.DerefOrNil(e.Version),
+		h.DerefOrNil(e.Priority),
+		h.DerefOrNil(e.Pool1Amt),
+		h.DerefOrNil(e.Pool2Amt),
 		e.EmptySlotsAmt,
 	}
 }
@@ -42,9 +43,9 @@ func (e EquipmentTable) ToKeyFields() []any {
 	return []any{
 		e.Type,
 		e.Classification,
-		derefOrNil(e.SpecificCharacter),
-		derefOrNil(e.Version),
-		derefOrNil(e.Priority),
+		h.DerefOrNil(e.SpecificCharacter),
+		h.DerefOrNil(e.Version),
+		h.DerefOrNil(e.Priority),
 	}
 }
 
@@ -53,7 +54,7 @@ func (e EquipmentTable) GetID() int32 {
 }
 
 func (e EquipmentTable) Error() string {
-	return fmt.Sprintf("equipment table with type: %s, classification: %s, specific character: %v, version: %v, priority: %v", e.Type, e.Classification, derefOrNil(e.SpecificCharacter), derefOrNil(e.Version), derefOrNil(e.Priority))
+	return fmt.Sprintf("equipment table with type: %s, classification: %s, specific character: %v, version: %v, priority: %v", e.Type, e.Classification, h.DerefOrNil(e.SpecificCharacter), h.DerefOrNil(e.Version), h.DerefOrNil(e.Priority))
 }
 
 type EquipmentName struct {
@@ -87,7 +88,7 @@ func (j EquipmentTableNameClstlJunction) ToHashFields() []any {
 	return []any{
 		j.ParentID,
 		j.ChildID,
-		derefOrNil(j.CelestialWeaponID),
+		h.DerefOrNil(j.CelestialWeaponID),
 	}
 }
 
@@ -119,7 +120,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 				var err error
 				table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, l.getCharacter)
 				if err != nil {
-					return getErr(table.Error(), err)
+					return h.GetErr(table.Error(), err)
 				}
 			}
 
@@ -127,15 +128,15 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 				DataHash:            generateDataHash(table),
 				Type:                database.EquipType(table.Type),
 				Classification:      database.EquipClass(table.Classification),
-				SpecificCharacterID: getNullInt32(table.SpecificCharacterID),
-				Version:             getNullInt32(table.Version),
-				Priority:            getNullInt32(table.Priority),
-				Pool1Amt:            getNullInt32(table.Pool1Amt),
-				Pool2Amt:            getNullInt32(table.Pool2Amt),
+				SpecificCharacterID: h.GetNullInt32(table.SpecificCharacterID),
+				Version:             h.GetNullInt32(table.Version),
+				Priority:            h.GetNullInt32(table.Priority),
+				Pool1Amt:            h.GetNullInt32(table.Pool1Amt),
+				Pool2Amt:            h.GetNullInt32(table.Pool2Amt),
 				EmptySlotsAmt:       table.EmptySlotsAmt,
 			})
 			if err != nil {
-				return getErr(table.Error(), err, "couldn't create equipment table")
+				return h.GetErr(table.Error(), err, "couldn't create equipment table")
 			}
 
 			table.ID = dbEquipmentTable.ID
@@ -165,22 +166,22 @@ func (l *Lookup) seedEquipmentRelationships(db *database.Queries, dbConn *sql.DB
 
 			err = l.seedEquipmentAutoAbilities(qtx, table, table.RequiredAbilities, string(database.AutoAbilityPoolRequired))
 			if err != nil {
-				return getErr(table.Error(), err)
+				return h.GetErr(table.Error(), err)
 			}
 
 			err = l.seedEquipmentAutoAbilities(qtx, table, table.AbilityPool1, string(database.AutoAbilityPoolOne))
 			if err != nil {
-				return getErr(table.Error(), err)
+				return h.GetErr(table.Error(), err)
 			}
 
 			err = l.seedEquipmentAutoAbilities(qtx, table, table.AbilityPool2, string(database.AutoAbilityPoolTwo))
 			if err != nil {
-				return getErr(table.Error(), err)
+				return h.GetErr(table.Error(), err)
 			}
 
 			err = l.seedEquipmentNames(qtx, table)
 			if err != nil {
-				return getErr(table.Error(), err)
+				return h.GetErr(table.Error(), err)
 			}
 		}
 
@@ -207,7 +208,7 @@ func (l *Lookup) seedEquipmentAutoAbilities(qtx *database.Queries, table Equipme
 			AbilityPool:      database.AutoAbilityPool(eaJunction.AbilityPool),
 		})
 		if err != nil {
-			return getErr(autoAbility, err, "couldn't junction auto ability")
+			return h.GetErr(autoAbility, err, "couldn't junction auto ability")
 		}
 	}
 
@@ -227,7 +228,7 @@ func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 		if table.Classification == string(database.EquipClassCelestialWeapon) {
 			etncJunction.CelestialWeaponID, err = assignFKPtr(&equipmentName.Name, l.getCelestialWeapon)
 			if err != nil {
-				return getErr(equipmentName.Error(), err)
+				return h.GetErr(equipmentName.Error(), err)
 			}
 		}
 
@@ -235,10 +236,10 @@ func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 			DataHash:          generateDataHash(etncJunction),
 			EquipmentTableID:  etncJunction.ParentID,
 			EquipmentNameID:   etncJunction.ChildID,
-			CelestialWeaponID: getNullInt32(etncJunction.CelestialWeaponID),
+			CelestialWeaponID: h.GetNullInt32(etncJunction.CelestialWeaponID),
 		})
 		if err != nil {
-			return getErr(equipmentName.Error(), err, "couldn't junction equipment name")
+			return h.GetErr(equipmentName.Error(), err, "couldn't junction equipment name")
 		}
 
 	}
@@ -251,7 +252,7 @@ func (l *Lookup) seedEquipmentName(qtx *database.Queries, equipmentName Equipmen
 
 	equipmentName.CharacterID, err = assignFK(equipmentName.CharacterName, l.getCharacter)
 	if err != nil {
-		return EquipmentName{}, getErr(equipmentName.Error(), err)
+		return EquipmentName{}, h.GetErr(equipmentName.Error(), err)
 	}
 
 	dbEquipmentName, err := qtx.CreateEquipmentName(context.Background(), database.CreateEquipmentNameParams{
@@ -260,7 +261,7 @@ func (l *Lookup) seedEquipmentName(qtx *database.Queries, equipmentName Equipmen
 		Name:        equipmentName.Name,
 	})
 	if err != nil {
-		return EquipmentName{}, getErr(equipmentName.Error(), err, "couldn't create equipment name")
+		return EquipmentName{}, h.GetErr(equipmentName.Error(), err, "couldn't create equipment name")
 	}
 
 	equipmentName.ID = dbEquipmentName.ID

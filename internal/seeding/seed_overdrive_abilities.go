@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type OverdriveAbility struct {
@@ -34,7 +35,7 @@ func (a OverdriveAbility) GetAbilityRef() AbilityReference {
 }
 
 func (a OverdriveAbility) Error() string {
-	return fmt.Sprintf("overdrive ability %s, version %v", a.Name, derefOrNil(a.Version))
+	return fmt.Sprintf("overdrive ability %s, version %v", a.Name, h.DerefOrNil(a.Version))
 }
 
 func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
@@ -54,7 +55,7 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 
 			overdriveAbility.Ability, err = seedObjAssignID(qtx, overdriveAbility.Ability, l.seedAbility)
 			if err != nil {
-				return getErr(overdriveAbility.Error(), err)
+				return h.GetErr(overdriveAbility.Error(), err)
 			}
 
 			dbOverdriveAbility, err := qtx.CreateOverdriveAbility(context.Background(), database.CreateOverdriveAbilityParams{
@@ -62,7 +63,7 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 				AbilityID: overdriveAbility.Ability.ID,
 			})
 			if err != nil {
-				return getErr(overdriveAbility.Error(), err, "couldn't create overdrive ability")
+				return h.GetErr(overdriveAbility.Error(), err, "couldn't create overdrive ability")
 			}
 
 			overdriveAbility.ID = dbOverdriveAbility.ID
@@ -89,19 +90,19 @@ func (l *Lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbCon
 
 			overdriveAbility, err := l.getOverdriveAbility(abilityRef)
 			if err != nil {
-				return getErr(abilityRef.Error(), err)
+				return h.GetErr(abilityRef.Error(), err)
 			}
 
 			err = l.seedOverdriveAbilityRelatedStats(qtx, overdriveAbility)
 			if err != nil {
-				return getErr(overdriveAbility.Error(), err)
+				return h.GetErr(overdriveAbility.Error(), err)
 			}
 
 			l.currentAbility = overdriveAbility.Ability
 
 			err = l.seedBattleInteractions(qtx, l.currentAbility, overdriveAbility.BattleInteractions)
 			if err != nil {
-				return getErr(overdriveAbility.Error(), err)
+				return h.GetErr(overdriveAbility.Error(), err)
 			}
 		}
 
@@ -122,7 +123,7 @@ func (l *Lookup) seedOverdriveAbilityRelatedStats(qtx *database.Queries, ability
 			StatID:             junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonStat, err, "couldn't junction related stat")
+			return h.GetErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 

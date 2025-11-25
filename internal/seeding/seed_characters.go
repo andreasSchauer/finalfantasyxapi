@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Character struct {
@@ -54,7 +55,7 @@ func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 
 			character.PlayerUnit, err = seedObjAssignID(qtx, character.PlayerUnit, l.seedPlayerUnit)
 			if err != nil {
-				return getErr(character.Error(), err)
+				return h.GetErr(character.Error(), err)
 			}
 
 			dbCharacter, err := qtx.CreateCharacter(context.Background(), database.CreateCharacterParams{
@@ -67,7 +68,7 @@ func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 				CanFightUnderwater:  character.CanFightUnderwater,
 			})
 			if err != nil {
-				return getErr(character.Error(), err, "couldn't create character")
+				return h.GetErr(character.Error(), err, "couldn't create character")
 			}
 
 			character.ID = dbCharacter.ID
@@ -76,7 +77,7 @@ func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 
 			err = l.seedCharacterClasses(qtx, character.PlayerUnit)
 			if err != nil {
-				return getErr(character.Error(), err)
+				return h.GetErr(character.Error(), err)
 			}
 		}
 		return nil
@@ -101,7 +102,7 @@ func (l *Lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.D
 
 			err = l.seedCharacterBaseStats(qtx, character)
 			if err != nil {
-				return getErr(character.Error(), err)
+				return h.GetErr(character.Error(), err)
 			}
 		}
 
@@ -113,7 +114,7 @@ func (l *Lookup) seedCharacterBaseStats(qtx *database.Queries, character Charact
 	for _, baseStat := range character.BaseStats {
 		junction, err := createJunctionSeed(qtx, character, baseStat, l.seedBaseStat)
 		if err != nil {
-			return getErr(character.Error(), err)
+			return h.GetErr(character.Error(), err)
 		}
 
 		err = qtx.CreateCharactersBaseStatsJunction(context.Background(), database.CreateCharactersBaseStatsJunctionParams{
@@ -122,7 +123,7 @@ func (l *Lookup) seedCharacterBaseStats(qtx *database.Queries, character Charact
 			BaseStatID:  junction.ChildID,
 		})
 		if err != nil {
-			return getErr(baseStat.Error(), err, "couldn't junction base stat")
+			return h.GetErr(baseStat.Error(), err, "couldn't junction base stat")
 		}
 	}
 

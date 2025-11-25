@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type DefaultAbilitiesEntry struct {
@@ -30,7 +31,7 @@ func (l *Lookup) seedDefaultAbilitiesRelationships(db *database.Queries, dbConn 
 
 			err = l.seedCharClassDefaultAbilities(qtx, class, entry)
 			if err != nil {
-				return getErr(class.Error(), err)
+				return h.GetErr(class.Error(), err)
 			}
 		}
 		return nil
@@ -50,7 +51,7 @@ func (l *Lookup) seedCharClassDefaultAbilities(qtx *database.Queries, class Char
 			AbilityID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(abilityRef.Error(), err, "couldn't junction default ability")
+			return h.GetErr(abilityRef.Error(), err, "couldn't junction default ability")
 		}
 	}
 

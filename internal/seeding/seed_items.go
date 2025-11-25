@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Item struct {
@@ -28,10 +29,10 @@ func (i Item) ToHashFields() []any {
 		i.MasterItem.ID,
 		i.Description,
 		i.Effect,
-		derefOrNil(i.SphereGridDescription),
+		h.DerefOrNil(i.SphereGridDescription),
 		i.Category,
-		derefOrNil(i.Usability),
-		derefOrNil(i.BasePrice),
+		h.DerefOrNil(i.Usability),
+		h.DerefOrNil(i.BasePrice),
 		i.SellValue,
 	}
 }
@@ -92,7 +93,7 @@ func (l *Lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 
 			item.MasterItem, err = seedObjAssignID(qtx, item.MasterItem, l.seedMasterItem)
 			if err != nil {
-				return getErr(item.Error(), err)
+				return h.GetErr(item.Error(), err)
 			}
 
 			item, err = seedObjAssignID(qtx, item, l.seedItem)
@@ -103,7 +104,7 @@ func (l *Lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 			if len(item.BattleInteractions) > 0 {
 				err = l.seedItemAbility(qtx, item)
 				if err != nil {
-					return getErr(item.Error(), err)
+					return h.GetErr(item.Error(), err)
 				}
 			}
 		}
@@ -117,14 +118,14 @@ func (l *Lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
 		MasterItemID:          item.MasterItem.ID,
 		Description:           item.Description,
 		Effect:                item.Effect,
-		SphereGridDescription: getNullString(item.SphereGridDescription),
+		SphereGridDescription: h.GetNullString(item.SphereGridDescription),
 		Category:              database.ItemCategory(item.Category),
-		Usability:             nullItemUsability(item.Usability),
-		BasePrice:             getNullInt32(item.BasePrice),
+		Usability:             h.NullItemUsability(item.Usability),
+		BasePrice:             h.GetNullInt32(item.BasePrice),
 		SellValue:             item.SellValue,
 	})
 	if err != nil {
-		return Item{}, getErr(item.Error(), err, "couldn't create item")
+		return Item{}, h.GetErr(item.Error(), err, "couldn't create item")
 	}
 
 	item.ID = dbItem.ID
@@ -143,7 +144,7 @@ func (l *Lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 
 	itemAbility.Ability, err = seedObjAssignID(qtx, itemAbility.Ability, l.seedAbility)
 	if err != nil {
-		return getErr(itemAbility.Error(), err)
+		return h.GetErr(itemAbility.Error(), err)
 	}
 
 	dbItemAbility, err := qtx.CreateItemAbility(context.Background(), database.CreateItemAbilityParams{
@@ -153,7 +154,7 @@ func (l *Lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 		Cursor:    database.TargetType(itemAbility.Cursor),
 	})
 	if err != nil {
-		return getErr(itemAbility.Error(), err, "couldn't create item ability")
+		return h.GetErr(itemAbility.Error(), err, "couldn't create item ability")
 	}
 
 	itemAbility.ID = dbItemAbility.ID
@@ -183,12 +184,12 @@ func (l *Lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 			err = l.seedItemRelatedStats(qtx, item)
 			if err != nil {
-				return getErr(item.Error(), err)
+				return h.GetErr(item.Error(), err)
 			}
 
 			err = l.seedItemAvailableMenus(qtx, item)
 			if err != nil {
-				return getErr(item.Error(), err)
+				return h.GetErr(item.Error(), err)
 			}
 
 			if len(item.BattleInteractions) > 0 {
@@ -196,7 +197,7 @@ func (l *Lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 				err = l.seedBattleInteractions(qtx, l.currentAbility, item.BattleInteractions)
 				if err != nil {
-					return getErr(item.Ability.Error(), err)
+					return h.GetErr(item.Ability.Error(), err)
 				}
 			}
 		}
@@ -218,7 +219,7 @@ func (l *Lookup) seedItemRelatedStats(qtx *database.Queries, item Item) error {
 			StatID:   junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonStat, err, "couldn't junction base stat")
+			return h.GetErr(jsonStat, err, "couldn't junction base stat")
 		}
 	}
 
@@ -238,7 +239,7 @@ func (l *Lookup) seedItemAvailableMenus(qtx *database.Queries, item Item) error 
 			SubmenuID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonSubmenu, err, "couldn't junction submenu")
+			return h.GetErr(jsonSubmenu, err, "couldn't junction submenu")
 		}
 	}
 

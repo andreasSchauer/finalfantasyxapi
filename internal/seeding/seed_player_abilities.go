@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type PlayerAbility struct {
@@ -34,17 +35,17 @@ type PlayerAbility struct {
 func (p PlayerAbility) ToHashFields() []any {
 	return []any{
 		p.Ability.ID,
-		derefOrNil(p.Description),
+		h.DerefOrNil(p.Description),
 		p.Effect,
-		derefOrNil(p.Topmenu),
+		h.DerefOrNil(p.Topmenu),
 		p.CanUseOutsideBattle,
-		derefOrNil(p.MPCost),
-		derefOrNil(p.Cursor),
-		derefOrNil(p.SubmenuID),
-		derefOrNil(p.OpenSubmenuID),
-		derefOrNil(p.StandardGridCharID),
-		derefOrNil(p.ExpertGridCharID),
-		ObjPtrToID(p.AeonLearnItem),
+		h.DerefOrNil(p.MPCost),
+		h.DerefOrNil(p.Cursor),
+		h.DerefOrNil(p.SubmenuID),
+		h.DerefOrNil(p.OpenSubmenuID),
+		h.DerefOrNil(p.StandardGridCharID),
+		h.DerefOrNil(p.ExpertGridCharID),
+		h.ObjPtrToID(p.AeonLearnItem),
 	}
 }
 
@@ -61,7 +62,7 @@ func (p PlayerAbility) GetAbilityRef() AbilityReference {
 }
 
 func (p PlayerAbility) Error() string {
-	return fmt.Sprintf("player ability %s, version %v", p.Name, derefOrNil(p.Version))
+	return fmt.Sprintf("player ability %s, version %v", p.Name, h.DerefOrNil(p.Version))
 }
 
 func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error {
@@ -81,21 +82,21 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 
 			playerAbility.Ability, err = seedObjAssignID(qtx, playerAbility.Ability, l.seedAbility)
 			if err != nil {
-				return getErr(playerAbility.Error(), err)
+				return h.GetErr(playerAbility.Error(), err)
 			}
 
 			dbPlayerAbility, err := qtx.CreatePlayerAbility(context.Background(), database.CreatePlayerAbilityParams{
 				DataHash:            generateDataHash(playerAbility),
 				AbilityID:           playerAbility.Ability.ID,
-				Description:         getNullString(playerAbility.Description),
+				Description:         h.GetNullString(playerAbility.Description),
 				Effect:              playerAbility.Effect,
-				Topmenu:             nullTopmenuType(playerAbility.Topmenu),
+				Topmenu:             h.NullTopmenuType(playerAbility.Topmenu),
 				CanUseOutsideBattle: playerAbility.CanUseOutsideBattle,
-				MpCost:              getNullInt32(playerAbility.MPCost),
-				Cursor:              nullTargetType(playerAbility.Cursor),
+				MpCost:              h.GetNullInt32(playerAbility.MPCost),
+				Cursor:              h.NullTargetType(playerAbility.Cursor),
 			})
 			if err != nil {
-				return getErr(playerAbility.Error(), err, "couldn't create player ability")
+				return h.GetErr(playerAbility.Error(), err, "couldn't create player ability")
 			}
 
 			playerAbility.ID = dbPlayerAbility.ID
@@ -127,24 +128,24 @@ func (l *Lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *
 
 			err = l.seedPlayerAbilityFKs(qtx, playerAbility)
 			if err != nil {
-				return getErr(playerAbility.Error(), err)
+				return h.GetErr(playerAbility.Error(), err)
 			}
 
 			err = l.seedPlayerAbilityRelatedStats(qtx, playerAbility)
 			if err != nil {
-				return getErr(playerAbility.Error(), err)
+				return h.GetErr(playerAbility.Error(), err)
 			}
 
 			err = l.seedPlayerAbilityLearnedBy(qtx, playerAbility)
 			if err != nil {
-				return getErr(playerAbility.Error(), err)
+				return h.GetErr(playerAbility.Error(), err)
 			}
 
 			l.currentAbility = playerAbility.Ability
 
 			err = l.seedBattleInteractions(qtx, l.currentAbility, playerAbility.BattleInteractions)
 			if err != nil {
-				return getErr(playerAbility.Error(), err)
+				return h.GetErr(playerAbility.Error(), err)
 			}
 		}
 
@@ -182,15 +183,15 @@ func (l *Lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbili
 
 	err = qtx.UpdatePlayerAbility(context.Background(), database.UpdatePlayerAbilityParams{
 		DataHash:           generateDataHash(ability),
-		SubmenuID:          getNullInt32(ability.SubmenuID),
-		OpenSubmenuID:      getNullInt32(ability.OpenSubmenuID),
-		StandardGridCharID: getNullInt32(ability.StandardGridCharID),
-		ExpertGridCharID:   getNullInt32(ability.ExpertGridCharID),
-		AeonLearnItemID:    ObjPtrToNullInt32ID(ability.AeonLearnItem),
+		SubmenuID:          h.GetNullInt32(ability.SubmenuID),
+		OpenSubmenuID:      h.GetNullInt32(ability.OpenSubmenuID),
+		StandardGridCharID: h.GetNullInt32(ability.StandardGridCharID),
+		ExpertGridCharID:   h.GetNullInt32(ability.ExpertGridCharID),
+		AeonLearnItemID:    h.ObjPtrToNullInt32ID(ability.AeonLearnItem),
 		ID:                 ability.ID,
 	})
 	if err != nil {
-		return getErr("", err, "couldn't update player ability")
+		return h.GetErr("", err, "couldn't update player ability")
 	}
 
 	return nil
@@ -209,7 +210,7 @@ func (l *Lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability Pl
 			StatID:          junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonStat, err, "couldn't junction related stat")
+			return h.GetErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 
@@ -229,7 +230,7 @@ func (l *Lookup) seedPlayerAbilityLearnedBy(qtx *database.Queries, ability Playe
 			CharacterClassID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(charClass, err, "couldn't junction 'learned by' class")
+			return h.GetErr(charClass, err, "couldn't junction 'learned by' class")
 		}
 	}
 

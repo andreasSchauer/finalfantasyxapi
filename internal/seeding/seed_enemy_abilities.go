@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type EnemyAbility struct {
@@ -18,7 +19,7 @@ type EnemyAbility struct {
 func (a EnemyAbility) ToHashFields() []any {
 	return []any{
 		a.Ability.ID,
-		derefOrNil(a.Effect),
+		h.DerefOrNil(a.Effect),
 	}
 }
 
@@ -35,7 +36,7 @@ func (a EnemyAbility) GetAbilityRef() AbilityReference {
 }
 
 func (a EnemyAbility) Error() string {
-	return fmt.Sprintf("enemy ability %s, version %v", a.Name, derefOrNil(a.Version))
+	return fmt.Sprintf("enemy ability %s, version %v", a.Name, h.DerefOrNil(a.Version))
 }
 
 func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error {
@@ -55,16 +56,16 @@ func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 
 			enemyAbility.Ability, err = seedObjAssignID(qtx, enemyAbility.Ability, l.seedAbility)
 			if err != nil {
-				return getErr(enemyAbility.Error(), err)
+				return h.GetErr(enemyAbility.Error(), err)
 			}
 
 			dbEnemyAbility, err := qtx.CreateEnemyAbility(context.Background(), database.CreateEnemyAbilityParams{
 				DataHash:  generateDataHash(enemyAbility),
 				AbilityID: enemyAbility.Ability.ID,
-				Effect:    getNullString(enemyAbility.Effect),
+				Effect:    h.GetNullString(enemyAbility.Effect),
 			})
 			if err != nil {
-				return getErr(enemyAbility.Error(), err, "couldn't create enemy ability")
+				return h.GetErr(enemyAbility.Error(), err, "couldn't create enemy ability")
 			}
 
 			enemyAbility.ID = dbEnemyAbility.ID
@@ -98,7 +99,7 @@ func (l *Lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *s
 
 			err = l.seedBattleInteractions(qtx, l.currentAbility, enemyAbility.BattleInteractions)
 			if err != nil {
-				return getErr(enemyAbility.Error(), err)
+				return h.GetErr(enemyAbility.Error(), err)
 			}
 		}
 

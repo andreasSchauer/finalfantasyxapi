@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type FMV struct {
@@ -23,10 +24,10 @@ type FMV struct {
 func (f FMV) ToHashFields() []any {
 	return []any{
 		f.Name,
-		derefOrNil(f.Translation),
+		h.DerefOrNil(f.Translation),
 		f.CutsceneDescription,
-		derefOrNil(f.SongName),
-		derefOrNil(f.SongID),
+		h.DerefOrNil(f.SongName),
+		h.DerefOrNil(f.SongID),
 		f.AreaID,
 	}
 }
@@ -50,24 +51,24 @@ func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 
 			fmv.SongID, err = assignFKPtr(fmv.SongName, l.getSong)
 			if err != nil {
-				return getErr(fmv.Error(), err)
+				return h.GetErr(fmv.Error(), err)
 			}
 
 			fmv.AreaID, err = assignFK(fmv.LocationArea, l.getArea)
 			if err != nil {
-				return getErr(fmv.Error(), err)
+				return h.GetErr(fmv.Error(), err)
 			}
 
 			err = qtx.CreateFMV(context.Background(), database.CreateFMVParams{
 				DataHash:            generateDataHash(fmv),
 				Name:                fmv.Name,
-				Translation:         getNullString(fmv.Translation),
+				Translation:         h.GetNullString(fmv.Translation),
 				CutsceneDescription: fmv.CutsceneDescription,
-				SongID:              getNullInt32(fmv.SongID),
+				SongID:              h.GetNullInt32(fmv.SongID),
 				AreaID:              fmv.AreaID,
 			})
 			if err != nil {
-				return getErr(fmv.Error(), err, "couldn't create fmv")
+				return h.GetErr(fmv.Error(), err, "couldn't create fmv")
 			}
 		}
 		return nil

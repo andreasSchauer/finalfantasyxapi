@@ -1,25 +1,59 @@
-package seeding
+package helpers
 
 import (
 	"database/sql"
 )
 
+
 // use these for dealing with pointer-fields when inputting values that can be null for a database query
 // can also write functions that do the opposite with the sqlc return values (return pointers)
 
-func getNullString(s *string) sql.NullString {
+func GetNullString(s *string) sql.NullString {
 	if s == nil {
 		return sql.NullString{}
 	}
 	return sql.NullString{String: *s, Valid: true}
 }
 
-func getNullInt32(i *int32) sql.NullInt32 {
+func GetNullInt32(i *int32) sql.NullInt32 {
 	if i == nil {
 		return sql.NullInt32{}
 	}
 	return sql.NullInt32{Int32: *i, Valid: true}
 }
+
+func GetNullFloat64(f *float32) sql.NullFloat64 {
+	if f == nil {
+		return sql.NullFloat64{}
+	}
+	return sql.NullFloat64{Float64: float64(*f), Valid: true}
+}
+
+
+// Use derefOrNil for every field that is a pointer
+
+func DerefOrNil[T any](ptr *T) any {
+	if ptr == nil {
+		return nil
+	}
+	return *ptr
+}
+
+// used to get the id of objects that can be null and are thus pointers
+func ObjPtrToID[T HasID](objPtr *T) any {
+	if objPtr == nil {
+		return nil
+	}
+
+	obj := *objPtr
+	id := obj.GetID()
+
+	if id == 0 {
+		return nil
+	}
+	return id
+}
+
 
 // used to get the id nullable objects for the db query
 func ObjPtrToNullInt32ID[T HasID](objPtr *T) sql.NullInt32 {
@@ -29,7 +63,7 @@ func ObjPtrToNullInt32ID[T HasID](objPtr *T) sql.NullInt32 {
 
 	obj := *objPtr
 	id := obj.GetID()
-	return getNullInt32(&id)
+	return GetNullInt32(&id)
 }
 
 
@@ -44,14 +78,7 @@ func ObjPtrToInt32ID[T HasID](objPtr *T) int32 {
 }
 
 
-func getNullFloat64(f *float32) sql.NullFloat64 {
-	if f == nil {
-		return sql.NullFloat64{}
-	}
-	return sql.NullFloat64{Float64: float64(*f), Valid: true}
-}
-
-func stringPtrToString(s *string) string {
+func StringPtrToString(s *string) string {
 	if s == nil {
 		return ""
 	}

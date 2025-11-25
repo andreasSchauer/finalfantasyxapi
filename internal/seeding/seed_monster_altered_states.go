@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type AlteredState struct {
@@ -48,7 +49,7 @@ func (a AltStateChange) ToHashFields() []any {
 	return []any{
 		a.AlteredStateID,
 		a.AlterationType,
-		derefOrNil(a.Distance),
+		h.DerefOrNil(a.Distance),
 	}
 }
 
@@ -82,14 +83,14 @@ func (l *Lookup) seedAlteredState(qtx *database.Queries, state AlteredState) (Al
 		IsTemporary: state.IsTemporary,
 	})
 	if err != nil {
-		return AlteredState{}, getErr(state.Error(), err, "couldn't create altered state")
+		return AlteredState{}, h.GetErr(state.Error(), err, "couldn't create altered state")
 	}
 
 	state.ID = dbAlteredState.ID
 
 	err = l.seedAltStateChanges(qtx, state)
 	if err != nil {
-		return AlteredState{}, getErr(state.Error(), err)
+		return AlteredState{}, h.GetErr(state.Error(), err)
 	}
 
 	return state, nil
@@ -114,17 +115,17 @@ func (l *Lookup) seedAltStateChange(qtx *database.Queries, change AltStateChange
 		DataHash:       generateDataHash(change),
 		AlteredStateID: change.AlteredStateID,
 		AlterationType: database.AlterationType(change.AlterationType),
-		Distance:       getNullInt32(change.Distance),
+		Distance:       h.GetNullInt32(change.Distance),
 	})
 	if err != nil {
-		return AltStateChange{}, getErr(change.Error(), err, "couldn't create alt state change")
+		return AltStateChange{}, h.GetErr(change.Error(), err, "couldn't create alt state change")
 	}
 
 	change.ID = dbAltStateChange.ID
 
 	err = l.seedAltStateChangeJunctions(qtx, change)
 	if err != nil {
-		return AltStateChange{}, getErr(change.Error(), err)
+		return AltStateChange{}, h.GetErr(change.Error(), err)
 	}
 
 	return change, nil
@@ -167,7 +168,7 @@ func (l *Lookup) seedAltStateChangeProperties(qtx *database.Queries, change AltS
 			PropertyID:       junction.ChildID,
 		})
 		if err != nil {
-			return getErr(propertyStr, err, "couldn't junction property")
+			return h.GetErr(propertyStr, err, "couldn't junction property")
 		}
 	}
 
@@ -191,7 +192,7 @@ func (l *Lookup) seedAltStateChangeAutoAbilities(qtx *database.Queries, change A
 			AutoAbilityID:    junction.ChildID,
 		})
 		if err != nil {
-			return getErr(autoAbilityStr, err, "couldn't junction auto-ability")
+			return h.GetErr(autoAbilityStr, err, "couldn't junction auto-ability")
 		}
 	}
 
@@ -215,7 +216,7 @@ func (l *Lookup) seedAltStateBaseStats(qtx *database.Queries, change AltStateCha
 			BaseStatID:       junction.ChildID,
 		})
 		if err != nil {
-			return getErr(baseStat.Error(), err, "couldn't junction base stat")
+			return h.GetErr(baseStat.Error(), err, "couldn't junction base stat")
 		}
 	}
 
@@ -239,7 +240,7 @@ func (l *Lookup) seedAltStateElemResists(qtx *database.Queries, change AltStateC
 			ElemResistID:     junction.ChildID,
 		})
 		if err != nil {
-			return getErr(elemResist.Error(), err, "couldn't junction elemental resist")
+			return h.GetErr(elemResist.Error(), err, "couldn't junction elemental resist")
 		}
 	}
 
@@ -263,7 +264,7 @@ func (l *Lookup) seedAltStateChangeStatusImmunities(qtx *database.Queries, chang
 			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(conditionStr, err, "couldn't junction status immunity")
+			return h.GetErr(conditionStr, err, "couldn't junction status immunity")
 		}
 	}
 
@@ -287,7 +288,7 @@ func (l *Lookup) seedAltStateAddedStatusses(qtx *database.Queries, change AltSta
 			InflictedStatusID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(inflictedStatus.Error(), err, "couldn't junction added status")
+			return h.GetErr(inflictedStatus.Error(), err, "couldn't junction added status")
 		}
 	}
 

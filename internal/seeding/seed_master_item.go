@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type MasterItem struct {
@@ -42,7 +43,7 @@ func (l *Lookup) seedMasterItem(qtx *database.Queries, masterItem MasterItem) (M
 		Type:     masterItem.Type,
 	})
 	if err != nil {
-		return MasterItem{}, getErr(masterItem.Error(), err)
+		return MasterItem{}, h.GetErr(masterItem.Error(), err)
 	}
 
 	masterItem.ID = dbMasterItem.ID

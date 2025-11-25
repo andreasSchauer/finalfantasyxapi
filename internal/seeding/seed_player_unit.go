@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type PlayerUnit struct {
@@ -42,7 +43,7 @@ func (l *Lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (P
 		Type:     playerUnit.Type,
 	})
 	if err != nil {
-		return PlayerUnit{}, getErr(playerUnit.Error(), err, "couldn't create player unit")
+		return PlayerUnit{}, h.GetErr(playerUnit.Error(), err, "couldn't create player unit")
 	}
 
 	playerUnit.ID = dbPlayerUnit.ID

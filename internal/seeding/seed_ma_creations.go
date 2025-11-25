@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type MonsterArenaCreation struct {
@@ -23,10 +24,10 @@ func (m MonsterArenaCreation) ToHashFields() []any {
 	return []any{
 		m.SubquestID,
 		m.Category,
-		derefOrNil(m.RequiredArea),
-		derefOrNil(m.RequiredSpecies),
+		h.DerefOrNil(m.RequiredArea),
+		h.DerefOrNil(m.RequiredSpecies),
 		m.UnderwaterOnly,
-		derefOrNil(m.CreationsUnlockedCategory),
+		h.DerefOrNil(m.CreationsUnlockedCategory),
 		m.Amount,
 	}
 }
@@ -50,21 +51,21 @@ func (l *Lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB)
 
 			creation.SubquestID, err = assignFK(creation.Name, l.getSubquest)
 			if err != nil {
-				return getErr(creation.Error(), err)
+				return h.GetErr(creation.Error(), err)
 			}
 
 			err = qtx.CreateMonsterArenaCreation(context.Background(), database.CreateMonsterArenaCreationParams{
 				DataHash:                  generateDataHash(creation),
 				SubquestID:                creation.SubquestID,
 				Category:                  database.MaCreationCategory(creation.Category),
-				RequiredArea:              nullMaCreationArea(creation.RequiredArea),
-				RequiredSpecies:           nullMaCreationSpecies(creation.RequiredSpecies),
+				RequiredArea:              h.NullMaCreationArea(creation.RequiredArea),
+				RequiredSpecies:           h.NullMaCreationSpecies(creation.RequiredSpecies),
 				UnderwaterOnly:            creation.UnderwaterOnly,
-				CreationsUnlockedCategory: nullCreationsUnlockedCategory(creation.CreationsUnlockedCategory),
+				CreationsUnlockedCategory: h.NullCreationsUnlockedCategory(creation.CreationsUnlockedCategory),
 				Amount:                    creation.Amount,
 			})
 			if err != nil {
-				return getErr(creation.Error(), err, "couldn't create monster arena creation")
+				return h.GetErr(creation.Error(), err, "couldn't create monster arena creation")
 			}
 		}
 		return nil

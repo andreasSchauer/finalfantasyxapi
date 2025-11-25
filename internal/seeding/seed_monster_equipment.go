@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type MonsterEquipment struct {
@@ -47,7 +48,7 @@ func (l *Lookup) seedMonsterEquipment(qtx *database.Queries, monsterEquipment Mo
 		CriticalPlus: monsterEquipment.CriticalPlus,
 	})
 	if err != nil {
-		return MonsterEquipment{}, getErr(monsterEquipment.Error(), err, "couldn't create monster equipment")
+		return MonsterEquipment{}, h.GetErr(monsterEquipment.Error(), err, "couldn't create monster equipment")
 	}
 
 	monsterEquipment.ID = dbMonsterEquipment.ID
@@ -55,7 +56,7 @@ func (l *Lookup) seedMonsterEquipment(qtx *database.Queries, monsterEquipment Mo
 
 	err = l.seedMonsterEquipmentRelationships(qtx, monsterEquipment)
 	if err != nil {
-		return MonsterEquipment{}, getErr(monsterEquipment.Error(), err)
+		return MonsterEquipment{}, h.GetErr(monsterEquipment.Error(), err)
 	}
 
 	return monsterEquipment, nil
@@ -64,22 +65,22 @@ func (l *Lookup) seedMonsterEquipment(qtx *database.Queries, monsterEquipment Mo
 func (l *Lookup) seedMonsterEquipmentRelationships(qtx *database.Queries, monsterEquipment MonsterEquipment) error {
 	err := l.seedMonsterEquipmentSlotsWrapper(qtx, monsterEquipment, monsterEquipment.AbilitySlots, database.EquipmentSlotsTypeAbilitySlots)
 	if err != nil {
-		return getErr(monsterEquipment.Error(), err)
+		return h.GetErr(monsterEquipment.Error(), err)
 	}
 
 	err = l.seedMonsterEquipmentSlotsWrapper(qtx, monsterEquipment, monsterEquipment.AttachedAbilities, database.EquipmentSlotsTypeAttachedAbilities)
 	if err != nil {
-		return getErr(monsterEquipment.Error(), err)
+		return h.GetErr(monsterEquipment.Error(), err)
 	}
 
 	err = l.seedEquipmentDrops(qtx, monsterEquipment, monsterEquipment.WeaponAbilities, database.EquipTypeWeapon)
 	if err != nil {
-		return getErr(monsterEquipment.Error(), err)
+		return h.GetErr(monsterEquipment.Error(), err)
 	}
 
 	err = l.seedEquipmentDrops(qtx, monsterEquipment, monsterEquipment.ArmorAbilities, database.EquipTypeArmor)
 	if err != nil {
-		return getErr(monsterEquipment.Error(), err)
+		return h.GetErr(monsterEquipment.Error(), err)
 	}
 
 	return nil

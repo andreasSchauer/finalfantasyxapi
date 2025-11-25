@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type ItemAmount struct {
@@ -41,7 +42,7 @@ func (l *Lookup) seedItemAmount(qtx *database.Queries, itemAmount ItemAmount) (I
 
 	itemAmount.MasterItemID, err = assignFK(itemAmount.ItemName, l.getMasterItem)
 	if err != nil {
-		return ItemAmount{}, getErr(itemAmount.Error(), err)
+		return ItemAmount{}, h.GetErr(itemAmount.Error(), err)
 	}
 
 	dbItemAmount, err := qtx.CreateItemAmount(context.Background(), database.CreateItemAmountParams{
@@ -50,7 +51,7 @@ func (l *Lookup) seedItemAmount(qtx *database.Queries, itemAmount ItemAmount) (I
 		Amount:       itemAmount.Amount,
 	})
 	if err != nil {
-		return ItemAmount{}, getErr(itemAmount.Error(), err, "couldn't create item amount")
+		return ItemAmount{}, h.GetErr(itemAmount.Error(), err, "couldn't create item amount")
 	}
 
 	itemAmount.ID = dbItemAmount.ID

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Quest struct {
@@ -42,7 +43,7 @@ func (l *Lookup) seedQuest(qtx *database.Queries, quest Quest) (Quest, error) {
 		Type:     quest.Type,
 	})
 	if err != nil {
-		return Quest{}, getErr(quest.Error(), err, "couldn't create quest")
+		return Quest{}, h.GetErr(quest.Error(), err, "couldn't create quest")
 	}
 
 	quest.ID = dbQuest.ID

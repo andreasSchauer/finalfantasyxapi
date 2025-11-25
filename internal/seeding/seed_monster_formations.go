@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type EncounterLocation struct {
@@ -19,15 +20,15 @@ type EncounterLocation struct {
 
 func (fl EncounterLocation) ToHashFields() []any {
 	return []any{
-		derefOrNil(fl.Version),
+		h.DerefOrNil(fl.Version),
 		fl.AreaID,
-		derefOrNil(fl.Notes),
+		h.DerefOrNil(fl.Notes),
 	}
 }
 
 func (fl EncounterLocation) ToKeyFields() []any {
 	return []any{
-		derefOrNil(fl.Version),
+		h.DerefOrNil(fl.Version),
 		createLookupKey(fl.LocationArea),
 	}
 }
@@ -37,7 +38,7 @@ func (fl EncounterLocation) GetID() int32 {
 }
 
 func (fl EncounterLocation) Error() string {
-	return fmt.Sprintf("encounter location with version: %v, %s", derefOrNil(fl.Version), fl.LocationArea)
+	return fmt.Sprintf("encounter location with version: %v, %s", h.DerefOrNil(fl.Version), fl.LocationArea)
 }
 
 type MonsterFormation struct {
@@ -58,8 +59,8 @@ func (mf MonsterFormation) ToHashFields() []any {
 		mf.Category,
 		mf.IsForcedAmbush,
 		mf.CanEscape,
-		ObjPtrToID(mf.BossMusic),
-		derefOrNil(mf.Notes),
+		h.ObjPtrToID(mf.BossMusic),
+		h.DerefOrNil(mf.Notes),
 	}
 }
 
@@ -68,7 +69,7 @@ func (mf MonsterFormation) GetID() int32 {
 }
 
 func (mf MonsterFormation) Error() string {
-	return fmt.Sprintf("monster formation with location id: %d, category: %s, forced ambush: %t, can escape: %t, boss music id: %v, notes: %v", mf.EncounterLocationID, mf.Category, mf.IsForcedAmbush, mf.CanEscape, ObjPtrToID(mf.BossMusic), derefOrNil(mf.Notes))
+	return fmt.Sprintf("monster formation with location id: %d, category: %s, forced ambush: %t, can escape: %t, boss music id: %v, notes: %v", mf.EncounterLocationID, mf.Category, mf.IsForcedAmbush, mf.CanEscape, h.ObjPtrToID(mf.BossMusic), h.DerefOrNil(mf.Notes))
 }
 
 type FormationBossSong struct {
@@ -108,17 +109,17 @@ func (l *Lookup) seedEncounterLocations(db *database.Queries, dbConn *sql.DB) er
 			locationArea := encounterLocation.LocationArea
 			encounterLocation.AreaID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
-				return getErr(encounterLocation.Error(), err)
+				return h.GetErr(encounterLocation.Error(), err)
 			}
 
 			dbEncounterLocation, err := qtx.CreateEncounterLocation(context.Background(), database.CreateEncounterLocationParams{
 				DataHash: generateDataHash(encounterLocation),
-				Version:  getNullInt32(encounterLocation.Version),
+				Version:  h.GetNullInt32(encounterLocation.Version),
 				AreaID:   encounterLocation.AreaID,
-				Notes:    getNullString(encounterLocation.Notes),
+				Notes:    h.GetNullString(encounterLocation.Notes),
 			})
 			if err != nil {
-				return getErr(encounterLocation.Error(), err, "couldn't create monster encounter location")
+				return h.GetErr(encounterLocation.Error(), err, "couldn't create monster encounter location")
 			}
 
 			encounterLocation.ID = dbEncounterLocation.ID
@@ -149,12 +150,12 @@ func (l *Lookup) seedMonsterFormationsRelationships(db *database.Queries, dbConn
 				var err error
 				monsterFormation.EncounterLocationID, err = assignFK(key, l.getEncounterLocation)
 				if err != nil {
-					return getErr(monsterFormation.Error(), err)
+					return h.GetErr(monsterFormation.Error(), err)
 				}
 
 				junction, err := createJunctionSeed(qtx, encounterLocation, monsterFormation, l.seedMonsterFormation)
 				if err != nil {
-					return getErr(encounterLocation.Error(), err)
+					return h.GetErr(encounterLocation.Error(), err)
 				}
 
 				err = qtx.CreateEncounterLocationFormationsJunction(context.Background(), database.CreateEncounterLocationFormationsJunctionParams{
@@ -163,8 +164,8 @@ func (l *Lookup) seedMonsterFormationsRelationships(db *database.Queries, dbConn
 					MonsterFormationID:  junction.ChildID,
 				})
 				if err != nil {
-					subjects := joinSubjects(encounterLocation.Error(), monsterFormation.Error())
-					return getErr(subjects, err, "couldn't junction encounter location with monster formation")
+					subjects := h.JoinSubjects(encounterLocation.Error(), monsterFormation.Error())
+					return h.GetErr(subjects, err, "couldn't junction encounter location with monster formation")
 				}
 			}
 
@@ -179,7 +180,7 @@ func (l *Lookup) seedMonsterFormation(qtx *database.Queries, formation MonsterFo
 
 	formation.BossMusic, err = seedObjPtrAssignFK(qtx, formation.BossMusic, l.seedFormationBossSong)
 	if err != nil {
-		return MonsterFormation{}, getErr(formation.Error(), err)
+		return MonsterFormation{}, h.GetErr(formation.Error(), err)
 	}
 
 	dbFormation, err := qtx.CreateMonsterFormation(context.Background(), database.CreateMonsterFormationParams{
@@ -188,22 +189,22 @@ func (l *Lookup) seedMonsterFormation(qtx *database.Queries, formation MonsterFo
 		Category:            database.MonsterFormationCategory(formation.Category),
 		IsForcedAmbush:      formation.IsForcedAmbush,
 		CanEscape:           formation.CanEscape,
-		BossSongID:          ObjPtrToNullInt32ID(formation.BossMusic),
-		Notes:               getNullString(formation.Notes),
+		BossSongID:          h.ObjPtrToNullInt32ID(formation.BossMusic),
+		Notes:               h.GetNullString(formation.Notes),
 	})
 	if err != nil {
-		return MonsterFormation{}, getErr(formation.Error(), err, "couldn't create monster formation")
+		return MonsterFormation{}, h.GetErr(formation.Error(), err, "couldn't create monster formation")
 	}
 	formation.ID = dbFormation.ID
 
 	err = l.seedFormationMonsterAmounts(qtx, formation)
 	if err != nil {
-		return MonsterFormation{}, getErr(formation.Error(), err)
+		return MonsterFormation{}, h.GetErr(formation.Error(), err)
 	}
 
 	err = l.seedFormationTriggerCommands(qtx, formation)
 	if err != nil {
-		return MonsterFormation{}, getErr(formation.Error(), err)
+		return MonsterFormation{}, h.GetErr(formation.Error(), err)
 	}
 
 	return formation, nil
@@ -214,7 +215,7 @@ func (l *Lookup) seedFormationBossSong(qtx *database.Queries, bossSong Formation
 
 	bossSong.SongID, err = assignFK(bossSong.Song, l.getSong)
 	if err != nil {
-		return FormationBossSong{}, getErr(bossSong.Error(), err)
+		return FormationBossSong{}, h.GetErr(bossSong.Error(), err)
 	}
 
 	dbBossSong, err := qtx.CreateFormationBossSong(context.Background(), database.CreateFormationBossSongParams{
@@ -223,7 +224,7 @@ func (l *Lookup) seedFormationBossSong(qtx *database.Queries, bossSong Formation
 		CelebrateVictory: bossSong.CelebrateVictory,
 	})
 	if err != nil {
-		return FormationBossSong{}, getErr(bossSong.Error(), err, "couldn't create formation boss song")
+		return FormationBossSong{}, h.GetErr(bossSong.Error(), err, "couldn't create formation boss song")
 	}
 	bossSong.ID = dbBossSong.ID
 
@@ -250,7 +251,7 @@ func (l *Lookup) seedFormationMonsterAmounts(qtx *database.Queries, formation Mo
 			MonsterAmountID:    junction.ChildID,
 		})
 		if err != nil {
-			return getErr(monsterAmount.Error(), err, "couldn't junction monster amount")
+			return h.GetErr(monsterAmount.Error(), err, "couldn't junction monster amount")
 		}
 	}
 
@@ -270,7 +271,7 @@ func (l *Lookup) seedFormationTriggerCommands(qtx *database.Queries, formation M
 			TriggerCommandID:   junction.ChildID,
 		})
 		if err != nil {
-			return getErr(abilityRef.Error(), err, "couldn't junction with trigger command")
+			return h.GetErr(abilityRef.Error(), err, "couldn't junction with trigger command")
 		}
 	}
 

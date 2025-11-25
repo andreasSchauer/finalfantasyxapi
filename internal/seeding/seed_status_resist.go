@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type StatusResist struct {
@@ -34,7 +35,7 @@ func (l *Lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResi
 
 	statusResist.StatusConditionID, err = assignFK(statusResist.StatusCondition, l.getStatusCondition)
 	if err != nil {
-		return StatusResist{}, getErr(statusResist.Error(), err)
+		return StatusResist{}, h.GetErr(statusResist.Error(), err)
 	}
 
 	dbStatusResist, err := qtx.CreateStatusResist(context.Background(), database.CreateStatusResistParams{
@@ -43,7 +44,7 @@ func (l *Lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResi
 		Resistance:        statusResist.Resistance,
 	})
 	if err != nil {
-		return StatusResist{}, getErr(statusResist.Error(), err, "couldn't create status resist")
+		return StatusResist{}, h.GetErr(statusResist.Error(), err, "couldn't create status resist")
 	}
 
 	statusResist.ID = dbStatusResist.ID

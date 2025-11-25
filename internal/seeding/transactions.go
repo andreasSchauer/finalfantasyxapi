@@ -1,11 +1,10 @@
 package seeding
 
-import(
+import (
 	"database/sql"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
-
 
 func queryInTransaction(db *database.Queries, dbConn *sql.DB, f func(*database.Queries) error) error {
 	tx, err := dbConn.Begin()

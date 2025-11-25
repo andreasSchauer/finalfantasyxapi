@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Damage struct {
@@ -20,11 +21,11 @@ type Damage struct {
 
 func (d Damage) ToHashFields() []any {
 	return []any{
-		derefOrNil(d.Critical),
-		derefOrNil(d.CriticalPlusVal),
+		h.DerefOrNil(d.Critical),
+		h.DerefOrNil(d.CriticalPlusVal),
 		d.IsPiercing,
-		derefOrNil(d.BreakDmgLimit),
-		derefOrNil(d.ElementID),
+		h.DerefOrNil(d.BreakDmgLimit),
+		h.DerefOrNil(d.ElementID),
 	}
 }
 
@@ -33,7 +34,7 @@ func (d Damage) GetID() int32 {
 }
 
 func (d Damage) Error() string {
-	return fmt.Sprintf("damage with critical: %v, crit plus: %v, piercing: %t, bdl: %v, element: %v", derefOrNil(d.Critical), derefOrNil(d.CriticalPlusVal), d.IsPiercing, derefOrNil(d.BreakDmgLimit), derefOrNil(d.Element))
+	return fmt.Sprintf("damage with critical: %v, crit plus: %v, piercing: %t, bdl: %v, element: %v", h.DerefOrNil(d.Critical), h.DerefOrNil(d.CriticalPlusVal), d.IsPiercing, h.DerefOrNil(d.BreakDmgLimit), h.DerefOrNil(d.Element))
 }
 
 type AbilityDamage struct {
@@ -49,7 +50,7 @@ type AbilityDamage struct {
 
 func (ad AbilityDamage) ToHashFields() []any {
 	return []any{
-		derefOrNil(ad.Condition),
+		h.DerefOrNil(ad.Condition),
 		ad.AttackType,
 		ad.StatID,
 		ad.DamageType,
@@ -63,7 +64,7 @@ func (ad AbilityDamage) GetID() int32 {
 }
 
 func (ad AbilityDamage) Error() string {
-	return fmt.Sprintf("ability damage with attack type: %s, target stat: %s, damage type: %s, formula: %s, damage constant %d, condition: %v", ad.AttackType, ad.TargetStat, ad.DamageType, ad.DamageFormula, ad.DamageConstant, derefOrNil(ad.Condition))
+	return fmt.Sprintf("ability damage with attack type: %s, target stat: %s, damage type: %s, formula: %s, damage constant %d, condition: %v", ad.AttackType, ad.TargetStat, ad.DamageType, ad.DamageFormula, ad.DamageConstant, h.DerefOrNil(ad.Condition))
 }
 
 func (l *Lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error) {
@@ -71,26 +72,26 @@ func (l *Lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error
 
 	damage.ElementID, err = assignFKPtr(damage.Element, l.getElement)
 	if err != nil {
-		return Damage{}, getErr(damage.Error(), err)
+		return Damage{}, h.GetErr(damage.Error(), err)
 	}
 
 	dbDamage, err := qtx.CreateDamage(context.Background(), database.CreateDamageParams{
 		DataHash:        generateDataHash(damage),
-		Critical:        nullCriticalType(damage.Critical),
-		CriticalPlusVal: getNullInt32(damage.CriticalPlusVal),
+		Critical:        h.NullCriticalType(damage.Critical),
+		CriticalPlusVal: h.GetNullInt32(damage.CriticalPlusVal),
 		IsPiercing:      damage.IsPiercing,
-		BreakDmgLimit:   nullBreakDmgLmtType(damage.BreakDmgLimit),
-		ElementID:       getNullInt32(damage.ElementID),
+		BreakDmgLimit:   h.NullBreakDmgLmtType(damage.BreakDmgLimit),
+		ElementID:       h.GetNullInt32(damage.ElementID),
 	})
 	if err != nil {
-		return Damage{}, getErr(damage.Error(), err, "couldn't create damage")
+		return Damage{}, h.GetErr(damage.Error(), err, "couldn't create damage")
 	}
 
 	damage.ID = dbDamage.ID
 
 	err = l.seedAbilityDamages(qtx, damage)
 	if err != nil {
-		return Damage{}, getErr(damage.Error(), err)
+		return Damage{}, h.GetErr(damage.Error(), err)
 	}
 
 	return damage, nil
@@ -114,7 +115,7 @@ func (l *Lookup) seedAbilityDamages(qtx *database.Queries, damage Damage) error 
 			AbilityDamageID:     fourWay.ChildID,
 		})
 		if err != nil {
-			return getErr(abilityDamage.Error(), err, "couldn't junction ability damage")
+			return h.GetErr(abilityDamage.Error(), err, "couldn't junction ability damage")
 		}
 	}
 
@@ -126,12 +127,12 @@ func (l *Lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityD
 
 	abilityDamage.StatID, err = assignFK(abilityDamage.TargetStat, l.getStat)
 	if err != nil {
-		return AbilityDamage{}, getErr(abilityDamage.Error(), err)
+		return AbilityDamage{}, h.GetErr(abilityDamage.Error(), err)
 	}
 
 	dbAbilityDamage, err := qtx.CreateAbilityDamage(context.Background(), database.CreateAbilityDamageParams{
 		DataHash:       generateDataHash(abilityDamage),
-		Condition:      getNullString(abilityDamage.Condition),
+		Condition:      h.GetNullString(abilityDamage.Condition),
 		AttackType:     database.AttackType(abilityDamage.AttackType),
 		StatID:         abilityDamage.StatID,
 		DamageType:     database.DamageType(abilityDamage.DamageType),
@@ -139,7 +140,7 @@ func (l *Lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityD
 		DamageConstant: abilityDamage.DamageConstant,
 	})
 	if err != nil {
-		return AbilityDamage{}, getErr(abilityDamage.Error(), err, "couldn't create ability damage")
+		return AbilityDamage{}, h.GetErr(abilityDamage.Error(), err, "couldn't create ability damage")
 	}
 
 	abilityDamage.ID = dbAbilityDamage.ID

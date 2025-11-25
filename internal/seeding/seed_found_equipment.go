@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type FoundEquipment struct {
@@ -35,7 +36,7 @@ func (l *Lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundE
 
 	foundEquipment.EquipmentNameID, err = assignFK(foundEquipment.Name, l.getEquipmentName)
 	if err != nil {
-		return FoundEquipment{}, getErr(foundEquipment.Error(), err)
+		return FoundEquipment{}, h.GetErr(foundEquipment.Error(), err)
 	}
 
 	dbFoundEquipment, err := qtx.CreateFoundEquipmentPiece(context.Background(), database.CreateFoundEquipmentPieceParams{
@@ -44,14 +45,14 @@ func (l *Lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundE
 		EmptySlotsAmount: foundEquipment.EmptySlotsAmount,
 	})
 	if err != nil {
-		return FoundEquipment{}, getErr(foundEquipment.Error(), err, "couldn't create found equipment")
+		return FoundEquipment{}, h.GetErr(foundEquipment.Error(), err, "couldn't create found equipment")
 	}
 
 	foundEquipment.ID = dbFoundEquipment.ID
 
 	err = l.seedFoundEquipmentAbilities(qtx, foundEquipment)
 	if err != nil {
-		return FoundEquipment{}, getErr(foundEquipment.Error(), err)
+		return FoundEquipment{}, h.GetErr(foundEquipment.Error(), err)
 	}
 
 	return foundEquipment, nil
@@ -61,7 +62,7 @@ func (l *Lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipme
 	for _, autoAbility := range foundEquipment.Abilities {
 		junction, err := createJunction(foundEquipment, autoAbility, l.getAutoAbility)
 		if err != nil {
-			return getErr(autoAbility, err)
+			return h.GetErr(autoAbility, err)
 		}
 
 		err = qtx.CreateFoundEquipmentAbilitiesJunction(context.Background(), database.CreateFoundEquipmentAbilitiesJunctionParams{
@@ -70,7 +71,7 @@ func (l *Lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipme
 			AutoAbilityID:    junction.ChildID,
 		})
 		if err != nil {
-			return getErr(autoAbility, err, "couldn't junction auto-ability")
+			return h.GetErr(autoAbility, err, "couldn't junction auto-ability")
 		}
 	}
 

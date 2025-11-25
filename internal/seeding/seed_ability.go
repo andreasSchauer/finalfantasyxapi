@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Ability struct {
@@ -19,17 +20,17 @@ type Ability struct {
 func (a Ability) ToHashFields() []any {
 	return []any{
 		a.Name,
-		derefOrNil(a.Version),
-		derefOrNil(a.Specification),
+		h.DerefOrNil(a.Version),
+		h.DerefOrNil(a.Specification),
 		a.Type,
-		ObjPtrToID(a.Attributes),
+		h.ObjPtrToID(a.Attributes),
 	}
 }
 
 func (a Ability) ToKeyFields() []any {
 	return []any{
 		a.Name,
-		derefOrNil(a.Version),
+		h.DerefOrNil(a.Version),
 		a.Type,
 	}
 }
@@ -39,7 +40,7 @@ func (a Ability) GetID() int32 {
 }
 
 func (a Ability) Error() string {
-	return fmt.Sprintf("ability %s-%v, type %s", a.Name, derefOrNil(a.Version), a.Type)
+	return fmt.Sprintf("ability %s-%v, type %s", a.Name, h.DerefOrNil(a.Version), a.Type)
 }
 
 type AbilityReference struct {
@@ -51,13 +52,13 @@ type AbilityReference struct {
 func (a AbilityReference) ToKeyFields() []any {
 	return []any{
 		a.Name,
-		derefOrNil(a.Version),
+		h.DerefOrNil(a.Version),
 		a.AbilityType,
 	}
 }
 
 func (a AbilityReference) Error() string {
-	return fmt.Sprintf("ability reference %s-%v, type %s", a.Name, derefOrNil(a.Version), a.AbilityType)
+	return fmt.Sprintf("ability reference %s-%v, type %s", a.Name, h.DerefOrNil(a.Version), a.AbilityType)
 }
 
 type Attributes struct {
@@ -69,7 +70,7 @@ type Attributes struct {
 
 func (a Attributes) ToHashFields() []any {
 	return []any{
-		derefOrNil(a.Rank),
+		h.DerefOrNil(a.Rank),
 		a.AppearsInHelpBar,
 		a.CanCopycat,
 	}
@@ -80,7 +81,7 @@ func (a Attributes) GetID() int32 {
 }
 
 func (a Attributes) Error() string {
-	return fmt.Sprintf("ability attributes with rank: %v, help bar: %t, copycat: %t", derefOrNil(a.Rank), a.AppearsInHelpBar, a.CanCopycat)
+	return fmt.Sprintf("ability attributes with rank: %v, help bar: %t, copycat: %t", h.DerefOrNil(a.Rank), a.AppearsInHelpBar, a.CanCopycat)
 }
 
 func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, error) {
@@ -89,20 +90,20 @@ func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, e
 
 		ability.Attributes, err = seedObjPtrAssignFK(qtx, ability.Attributes, l.seedAbilityAttributes)
 		if err != nil {
-			return Ability{}, getErr(ability.Error(), err)
+			return Ability{}, h.GetErr(ability.Error(), err)
 		}
 	}
 
 	dbAbility, err := qtx.CreateAbility(context.Background(), database.CreateAbilityParams{
 		DataHash:      generateDataHash(ability),
 		Name:          ability.Name,
-		Version:       getNullInt32(ability.Version),
-		Specification: getNullString(ability.Specification),
-		AttributesID:  ObjPtrToNullInt32ID(ability.Attributes),
+		Version:       h.GetNullInt32(ability.Version),
+		Specification: h.GetNullString(ability.Specification),
+		AttributesID:  h.ObjPtrToNullInt32ID(ability.Attributes),
 		Type:          ability.Type,
 	})
 	if err != nil {
-		return Ability{}, getErr(ability.Error(), err, "couldn't create ability")
+		return Ability{}, h.GetErr(ability.Error(), err, "couldn't create ability")
 	}
 
 	ability.ID = dbAbility.ID
@@ -115,12 +116,12 @@ func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, e
 func (l *Lookup) seedAbilityAttributes(qtx *database.Queries, attributes Attributes) (Attributes, error) {
 	dbAttributes, err := qtx.CreateAbilityAttributes(context.Background(), database.CreateAbilityAttributesParams{
 		DataHash:         generateDataHash(attributes),
-		Rank:             getNullInt32(attributes.Rank),
+		Rank:             h.GetNullInt32(attributes.Rank),
 		AppearsInHelpBar: attributes.AppearsInHelpBar,
 		CanCopycat:       attributes.CanCopycat,
 	})
 	if err != nil {
-		return Attributes{}, getErr(attributes.Error(), err, "couldn't create ability attributes")
+		return Attributes{}, h.GetErr(attributes.Error(), err, "couldn't create ability attributes")
 	}
 
 	attributes.ID = dbAttributes.ID

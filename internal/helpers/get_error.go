@@ -1,11 +1,11 @@
-package seeding
+package helpers
 
 import (
 	"fmt"
 	"strings"
 )
 
-func getErr(s string, err error, msgs ...string) error {
+func GetErr(s string, err error, msgs ...string) error {
 	if len(msgs) > 0 {
 		msg := strings.Join(msgs, ": ")
 		return fmt.Errorf("%s: %s: %v", s, msg, err)
@@ -14,6 +14,6 @@ func getErr(s string, err error, msgs ...string) error {
 	return fmt.Errorf("%s: %v", s, err)
 }
 
-func joinSubjects(subjects ...string) string {
+func JoinSubjects(subjects ...string) string {
 	return strings.Join(subjects, ": ")
 }

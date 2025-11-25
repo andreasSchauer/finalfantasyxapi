@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type CelestialWeapon struct {
@@ -53,7 +54,7 @@ func (l *Lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 				Formula:     database.CelestialFormula(weapon.Formula),
 			})
 			if err != nil {
-				return getErr(weapon.Error(), err, "couldn't create celestial weapon")
+				return h.GetErr(weapon.Error(), err, "couldn't create celestial weapon")
 			}
 
 			weapon.ID = dbWeapon.ID
@@ -81,22 +82,22 @@ func (l *Lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn 
 
 			weapon.CharacterID, err = assignFKPtr(&weapon.Character, l.getCharacter)
 			if err != nil {
-				return getErr(weapon.Error(), err)
+				return h.GetErr(weapon.Error(), err)
 			}
 
 			weapon.AeonID, err = assignFKPtr(weapon.Aeon, l.getAeon)
 			if err != nil {
-				return getErr(weapon.Error(), err)
+				return h.GetErr(weapon.Error(), err)
 			}
 
 			err = qtx.UpdateCelestialWeapon(context.Background(), database.UpdateCelestialWeaponParams{
 				DataHash:    generateDataHash(weapon),
-				CharacterID: getNullInt32(weapon.CharacterID),
-				AeonID:      getNullInt32(weapon.AeonID),
+				CharacterID: h.GetNullInt32(weapon.CharacterID),
+				AeonID:      h.GetNullInt32(weapon.AeonID),
 				ID:          weapon.ID,
 			})
 			if err != nil {
-				return getErr(weapon.Error(), err, "couldn't update celestial weapon")
+				return h.GetErr(weapon.Error(), err, "couldn't update celestial weapon")
 			}
 		}
 

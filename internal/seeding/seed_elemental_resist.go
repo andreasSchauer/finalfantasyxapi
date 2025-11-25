@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type ElementalResist struct {
@@ -35,12 +36,12 @@ func (l *Lookup) seedElementalResist(qtx *database.Queries, elemResist Elemental
 
 	elemResist.ElementID, err = assignFK(elemResist.Element, l.getElement)
 	if err != nil {
-		return ElementalResist{}, getErr(elemResist.Error(), err)
+		return ElementalResist{}, h.GetErr(elemResist.Error(), err)
 	}
 
 	elemResist.AffinityID, err = assignFK(elemResist.Affinity, l.getAffinity)
 	if err != nil {
-		return ElementalResist{}, getErr(elemResist.Error(), err)
+		return ElementalResist{}, h.GetErr(elemResist.Error(), err)
 	}
 
 	dbElemAffinity, err := qtx.CreateElementalResist(context.Background(), database.CreateElementalResistParams{
@@ -49,7 +50,7 @@ func (l *Lookup) seedElementalResist(qtx *database.Queries, elemResist Elemental
 		AffinityID: elemResist.AffinityID,
 	})
 	if err != nil {
-		return ElementalResist{}, getErr(elemResist.Error(), err, "couldn't create elemental resist")
+		return ElementalResist{}, h.GetErr(elemResist.Error(), err, "couldn't create elemental resist")
 	}
 
 	elemResist.ID = dbElemAffinity.ID

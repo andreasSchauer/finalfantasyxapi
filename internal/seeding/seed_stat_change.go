@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type StatChange struct {
@@ -36,7 +37,7 @@ func (l *Lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (S
 
 	statChange.StatID, err = assignFK(statChange.StatName, l.getStat)
 	if err != nil {
-		return StatChange{}, getErr(statChange.Error(), err)
+		return StatChange{}, h.GetErr(statChange.Error(), err)
 	}
 
 	dbStatChange, err := qtx.CreateStatChange(context.Background(), database.CreateStatChangeParams{
@@ -46,7 +47,7 @@ func (l *Lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (S
 		Value:           statChange.Value,
 	})
 	if err != nil {
-		return StatChange{}, getErr(statChange.Error(), err, "couldn't create stat change")
+		return StatChange{}, h.GetErr(statChange.Error(), err, "couldn't create stat change")
 	}
 	statChange.ID = dbStatChange.ID
 

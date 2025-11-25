@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type InflictedStatus struct {
@@ -21,7 +22,7 @@ func (is InflictedStatus) ToHashFields() []any {
 		is.StatusConditionID,
 		is.Probability,
 		is.DurationType,
-		derefOrNil(is.Amount),
+		h.DerefOrNil(is.Amount),
 	}
 }
 
@@ -38,7 +39,7 @@ func (l *Lookup) seedInflictedStatus(qtx *database.Queries, inflictedStatus Infl
 
 	inflictedStatus.StatusConditionID, err = assignFK(inflictedStatus.StatusCondition, l.getStatusCondition)
 	if err != nil {
-		return InflictedStatus{}, getErr(inflictedStatus.Error(), err)
+		return InflictedStatus{}, h.GetErr(inflictedStatus.Error(), err)
 	}
 
 	dbInflictedStatus, err := qtx.CreateInflictedStatus(context.Background(), database.CreateInflictedStatusParams{
@@ -46,10 +47,10 @@ func (l *Lookup) seedInflictedStatus(qtx *database.Queries, inflictedStatus Infl
 		StatusConditionID: inflictedStatus.StatusConditionID,
 		Probability:       inflictedStatus.Probability,
 		DurationType:      database.DurationType(inflictedStatus.DurationType),
-		Amount:            getNullInt32(inflictedStatus.Amount),
+		Amount:            h.GetNullInt32(inflictedStatus.Amount),
 	})
 	if err != nil {
-		return InflictedStatus{}, getErr(inflictedStatus.Error(), err, "couldn't create inflicted status")
+		return InflictedStatus{}, h.GetErr(inflictedStatus.Error(), err, "couldn't create inflicted status")
 	}
 	inflictedStatus.ID = dbInflictedStatus.ID
 

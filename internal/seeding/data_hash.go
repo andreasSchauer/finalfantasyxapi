@@ -10,29 +10,7 @@ type Hashable interface {
 }
 
 // ToHashFields simply puts all values of all fields of an entity into an []any slice (including nil)
-// Use derefOrNil for every field that is a pointer
 
-func derefOrNil[T any](ptr *T) any {
-	if ptr == nil {
-		return nil
-	}
-	return *ptr
-}
-
-// used to get the id of objects that can be null and are thus pointers
-func ObjPtrToID[T HasID](objPtr *T) any {
-	if objPtr == nil {
-		return nil
-	}
-
-	obj := *objPtr
-	id := obj.GetID()
-
-	if id == 0 {
-		return nil
-	}
-	return id
-}
 
 func generateDataHash(h Hashable) string {
 	fields := h.ToHashFields()

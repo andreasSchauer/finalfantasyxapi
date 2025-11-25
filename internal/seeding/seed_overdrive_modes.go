@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type OverdriveMode struct {
@@ -24,7 +25,7 @@ func (o OverdriveMode) ToHashFields() []any {
 		o.Description,
 		o.Effect,
 		o.Type,
-		derefOrNil(o.FillRate),
+		h.DerefOrNil(o.FillRate),
 	}
 }
 
@@ -75,10 +76,10 @@ func (l *Lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error 
 				Description: mode.Description,
 				Effect:      mode.Effect,
 				Type:        database.OverdriveModeType(mode.Type),
-				FillRate:    getNullFloat64(mode.FillRate),
+				FillRate:    h.GetNullFloat64(mode.FillRate),
 			})
 			if err != nil {
-				return getErr(mode.Error(), err, "couldn't create overdrive mode")
+				return h.GetErr(mode.Error(), err, "couldn't create overdrive mode")
 			}
 
 			mode.ID = dbOverdriveMode.ID
@@ -107,7 +108,7 @@ func (l *Lookup) seedOverdriveModesRelationships(db *database.Queries, dbConn *s
 			for _, action := range mode.ActionsToLearn {
 				junction, err := createJunctionSeed(qtx, mode, action, l.seedODModeAction)
 				if err != nil {
-					return getErr(mode.Error(), err)
+					return h.GetErr(mode.Error(), err)
 				}
 
 				err = qtx.CreateOverdriveModesActionsToLearnJunction(context.Background(), database.CreateOverdriveModesActionsToLearnJunctionParams{
@@ -116,8 +117,8 @@ func (l *Lookup) seedOverdriveModesRelationships(db *database.Queries, dbConn *s
 					ActionID:        junction.ChildID,
 				})
 				if err != nil {
-					subjects := joinSubjects(mode.Error(), action.Error())
-					return getErr(subjects, err, "couldn't junction overdrive mode action")
+					subjects := h.JoinSubjects(mode.Error(), action.Error())
+					return h.GetErr(subjects, err, "couldn't junction overdrive mode action")
 				}
 			}
 		}
@@ -130,7 +131,7 @@ func (l *Lookup) seedODModeAction(qtx *database.Queries, action ActionToLearn) (
 
 	action.UserID, err = assignFK(action.User, l.getCharacter)
 	if err != nil {
-		return ActionToLearn{}, getErr(action.Error(), err)
+		return ActionToLearn{}, h.GetErr(action.Error(), err)
 	}
 
 	dbAction, err := qtx.CreateODModeAction(context.Background(), database.CreateODModeActionParams{
@@ -139,7 +140,7 @@ func (l *Lookup) seedODModeAction(qtx *database.Queries, action ActionToLearn) (
 		Amount:   action.Amount,
 	})
 	if err != nil {
-		return ActionToLearn{}, getErr(action.Error(), err, "couldn't create overdrive mode action")
+		return ActionToLearn{}, h.GetErr(action.Error(), err, "couldn't create overdrive mode action")
 	}
 
 	action.ID = dbAction.ID

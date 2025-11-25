@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Song struct {
@@ -30,18 +31,18 @@ type Song struct {
 func (s Song) ToHashFields() []any {
 	return []any{
 		s.Name,
-		derefOrNil(s.StreamingName),
-		derefOrNil(s.InGameName),
-		derefOrNil(s.OSTName),
-		derefOrNil(s.Translation),
-		derefOrNil(s.StreamingTrackNumber),
-		derefOrNil(s.MusicSphereID),
-		derefOrNil(s.OSTDisc),
-		derefOrNil(s.OSTTrackNumber),
+		h.DerefOrNil(s.StreamingName),
+		h.DerefOrNil(s.InGameName),
+		h.DerefOrNil(s.OSTName),
+		h.DerefOrNil(s.Translation),
+		h.DerefOrNil(s.StreamingTrackNumber),
+		h.DerefOrNil(s.MusicSphereID),
+		h.DerefOrNil(s.OSTDisc),
+		h.DerefOrNil(s.OSTTrackNumber),
 		s.DurationInSeconds,
 		s.CanLoop,
-		derefOrNil(s.SpecialUseCase),
-		ObjPtrToID(s.Credits),
+		h.DerefOrNil(s.SpecialUseCase),
+		h.ObjPtrToID(s.Credits),
 	}
 }
 
@@ -63,10 +64,10 @@ type SongCredits struct {
 
 func (sc SongCredits) ToHashFields() []any {
 	return []any{
-		derefOrNil(sc.Composer),
-		derefOrNil(sc.Arranger),
-		derefOrNil(sc.Performer),
-		derefOrNil(sc.Lyricist),
+		h.DerefOrNil(sc.Composer),
+		h.DerefOrNil(sc.Arranger),
+		h.DerefOrNil(sc.Performer),
+		h.DerefOrNil(sc.Lyricist),
 	}
 }
 
@@ -75,7 +76,7 @@ func (sc SongCredits) GetID() int32 {
 }
 
 func (sc SongCredits) Error() string {
-	return fmt.Sprintf("song credits with composer: %v, arranger: %v, performer: %v, lyricist: %v", derefOrNil(sc.Composer), derefOrNil(sc.Arranger), derefOrNil(sc.Performer), derefOrNil(sc.Lyricist))
+	return fmt.Sprintf("song credits with composer: %v, arranger: %v, performer: %v, lyricist: %v", h.DerefOrNil(sc.Composer), h.DerefOrNil(sc.Arranger), h.DerefOrNil(sc.Performer), h.DerefOrNil(sc.Lyricist))
 }
 
 type BackgroundMusic struct {
@@ -87,7 +88,7 @@ type BackgroundMusic struct {
 
 func (bm BackgroundMusic) ToHashFields() []any {
 	return []any{
-		derefOrNil(bm.Condition),
+		h.DerefOrNil(bm.Condition),
 		bm.ReplacesEncounterMusic,
 	}
 }
@@ -97,7 +98,7 @@ func (bm BackgroundMusic) GetID() int32 {
 }
 
 func (bm BackgroundMusic) Error() string {
-	return fmt.Sprintf("background music replacing encounter music: %t, condition: %v", bm.ReplacesEncounterMusic, derefOrNil(bm.Condition))
+	return fmt.Sprintf("background music replacing encounter music: %t, condition: %v", bm.ReplacesEncounterMusic, h.DerefOrNil(bm.Condition))
 }
 
 type SongAreaJunction struct {
@@ -126,9 +127,9 @@ type Cue struct {
 func (c Cue) ToHashFields() []any {
 	return []any{
 		c.SceneDescription,
-		ObjPtrToID(c.TriggerLocationArea),
-		derefOrNil(c.ReplacesBGMusic),
-		derefOrNil(c.EndTrigger),
+		h.ObjPtrToID(c.TriggerLocationArea),
+		h.DerefOrNil(c.ReplacesBGMusic),
+		h.DerefOrNil(c.EndTrigger),
 		c.ReplacesEncounterMusic,
 	}
 }
@@ -138,7 +139,7 @@ func (c Cue) GetID() int32 {
 }
 
 func (c Cue) Error() string {
-	return fmt.Sprintf("cue for scene: %s at %v, replaces bg music: %v with end trigger: %v, replaces encounter music: %t", c.SceneDescription, derefOrNil(c.TriggerLocationArea), derefOrNil(c.ReplacesBGMusic), derefOrNil(c.EndTrigger), c.ReplacesEncounterMusic)
+	return fmt.Sprintf("cue for scene: %s at %v, replaces bg music: %v with end trigger: %v, replaces encounter music: %t", c.SceneDescription, h.DerefOrNil(c.TriggerLocationArea), h.DerefOrNil(c.ReplacesBGMusic), h.DerefOrNil(c.EndTrigger), c.ReplacesEncounterMusic)
 }
 
 func (l *Lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
@@ -155,20 +156,20 @@ func (l *Lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 			dbSong, err := qtx.CreateSong(context.Background(), database.CreateSongParams{
 				DataHash:             generateDataHash(song),
 				Name:                 song.Name,
-				StreamingName:        getNullString(song.StreamingName),
-				InGameName:           getNullString(song.InGameName),
-				OstName:              getNullString(song.OSTName),
-				Translation:          getNullString(song.Translation),
-				StreamingTrackNumber: getNullInt32(song.StreamingTrackNumber),
-				MusicSphereID:        getNullInt32(song.MusicSphereID),
-				OstDisc:              getNullInt32(song.OSTDisc),
-				OstTrackNumber:       getNullInt32(song.OSTTrackNumber),
+				StreamingName:        h.GetNullString(song.StreamingName),
+				InGameName:           h.GetNullString(song.InGameName),
+				OstName:              h.GetNullString(song.OSTName),
+				Translation:          h.GetNullString(song.Translation),
+				StreamingTrackNumber: h.GetNullInt32(song.StreamingTrackNumber),
+				MusicSphereID:        h.GetNullInt32(song.MusicSphereID),
+				OstDisc:              h.GetNullInt32(song.OSTDisc),
+				OstTrackNumber:       h.GetNullInt32(song.OSTTrackNumber),
 				DurationInSeconds:    song.DurationInSeconds,
 				CanLoop:              song.CanLoop,
-				SpecialUseCase:       nullMusicUseCase(song.SpecialUseCase),
+				SpecialUseCase:       h.NullMusicUseCase(song.SpecialUseCase),
 			})
 			if err != nil {
-				return getErr(song.Error(), err, "couldn't create song")
+				return h.GetErr(song.Error(), err, "couldn't create song")
 			}
 
 			song.ID = dbSong.ID
@@ -196,26 +197,26 @@ func (l *Lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 			song.Credits, err = seedObjPtrAssignFK(qtx, song.Credits, l.seedCredits)
 			if err != nil {
-				return getErr(song.Error(), err)
+				return h.GetErr(song.Error(), err)
 			}
 
 			err = qtx.UpdateSong(context.Background(), database.UpdateSongParams{
 				DataHash:  generateDataHash(song),
-				CreditsID: ObjPtrToNullInt32ID(song.Credits),
+				CreditsID: h.ObjPtrToNullInt32ID(song.Credits),
 				ID:        song.ID,
 			})
 			if err != nil {
-				return getErr(song.Error(), err, "couldn't update song")
+				return h.GetErr(song.Error(), err, "couldn't update song")
 			}
 
 			err = l.seedBackgroundMusicEntries(qtx, song)
 			if err != nil {
-				return getErr(song.Error(), err)
+				return h.GetErr(song.Error(), err)
 			}
 
 			err = l.seedCues(qtx, song)
 			if err != nil {
-				return getErr(song.Error(), err)
+				return h.GetErr(song.Error(), err)
 			}
 		}
 
@@ -226,13 +227,13 @@ func (l *Lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) er
 func (l *Lookup) seedCredits(qtx *database.Queries, credits SongCredits) (SongCredits, error) {
 	dbSongCredits, err := qtx.CreateSongCredit(context.Background(), database.CreateSongCreditParams{
 		DataHash:  generateDataHash(credits),
-		Composer:  getNullString(credits.Composer),
-		Arranger:  getNullString(credits.Arranger),
-		Performer: getNullString(credits.Performer),
-		Lyricist:  getNullString(credits.Lyricist),
+		Composer:  h.GetNullString(credits.Composer),
+		Arranger:  h.GetNullString(credits.Arranger),
+		Performer: h.GetNullString(credits.Performer),
+		Lyricist:  h.GetNullString(credits.Lyricist),
 	})
 	if err != nil {
-		return SongCredits{}, getErr(credits.Error(), err, "couldn't create song credits")
+		return SongCredits{}, h.GetErr(credits.Error(), err, "couldn't create song credits")
 	}
 
 	credits.ID = dbSongCredits.ID
@@ -254,7 +255,7 @@ func (l *Lookup) seedBackgroundMusicEntries(qtx *database.Queries, song Song) er
 			saJunction.Junction = junction
 			saJunction.AreaID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
-				return getErr(bm.Error(), err)
+				return h.GetErr(bm.Error(), err)
 			}
 
 			err = qtx.CreateSongsBackgroundMusicJunction(context.Background(), database.CreateSongsBackgroundMusicJunctionParams{
@@ -264,7 +265,7 @@ func (l *Lookup) seedBackgroundMusicEntries(qtx *database.Queries, song Song) er
 				AreaID:   saJunction.AreaID,
 			})
 			if err != nil {
-				return getErr(bm.Error(), err, "couldn't junction background music entry")
+				return h.GetErr(bm.Error(), err, "couldn't junction background music entry")
 			}
 		}
 	}
@@ -286,7 +287,7 @@ func (l *Lookup) seedCues(qtx *database.Queries, song Song) error {
 			saJunction.Junction = junction
 			saJunction.AreaID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
-				return getErr(cue.Error(), err)
+				return h.GetErr(cue.Error(), err)
 			}
 
 			err = qtx.CreateSongsCuesJunction(context.Background(), database.CreateSongsCuesJunctionParams{
@@ -296,7 +297,7 @@ func (l *Lookup) seedCues(qtx *database.Queries, song Song) error {
 				AreaID:   saJunction.AreaID,
 			})
 			if err != nil {
-				return getErr(cue.Error(), err, "couldn't junction cue")
+				return h.GetErr(cue.Error(), err, "couldn't junction cue")
 			}
 		}
 	}
@@ -307,11 +308,11 @@ func (l *Lookup) seedCues(qtx *database.Queries, song Song) error {
 func (l *Lookup) seedBackgroundMusic(qtx *database.Queries, bm BackgroundMusic) (BackgroundMusic, error) {
 	dbBM, err := qtx.CreateBackgroundMusic(context.Background(), database.CreateBackgroundMusicParams{
 		DataHash:               generateDataHash(bm),
-		Condition:              getNullString(bm.Condition),
+		Condition:              h.GetNullString(bm.Condition),
 		ReplacesEncounterMusic: bm.ReplacesEncounterMusic,
 	})
 	if err != nil {
-		return BackgroundMusic{}, getErr(bm.Error(), err, "couldn't create background music entry")
+		return BackgroundMusic{}, h.GetErr(bm.Error(), err, "couldn't create background music entry")
 	}
 
 	bm.ID = dbBM.ID
@@ -325,20 +326,20 @@ func (l *Lookup) seedCue(qtx *database.Queries, cue Cue) (Cue, error) {
 
 		cue.TriggerLocationArea.ID, err = assignFK(*cue.TriggerLocationArea, l.getArea)
 		if err != nil {
-			return Cue{}, getErr(cue.Error(), err)
+			return Cue{}, h.GetErr(cue.Error(), err)
 		}
 	}
 
 	dbCue, err := qtx.CreateCue(context.Background(), database.CreateCueParams{
 		DataHash:               generateDataHash(cue),
 		SceneDescription:       cue.SceneDescription,
-		AreaID:                 ObjPtrToNullInt32ID(cue.TriggerLocationArea),
-		ReplacesBgMusic:        nullBgReplacementType(cue.ReplacesBGMusic),
-		EndTrigger:             getNullString(cue.EndTrigger),
+		AreaID:                 h.ObjPtrToNullInt32ID(cue.TriggerLocationArea),
+		ReplacesBgMusic:        h.NullBgReplacementType(cue.ReplacesBGMusic),
+		EndTrigger:             h.GetNullString(cue.EndTrigger),
 		ReplacesEncounterMusic: cue.ReplacesEncounterMusic,
 	})
 	if err != nil {
-		return Cue{}, getErr(cue.Error(), err, "couldn't create cue")
+		return Cue{}, h.GetErr(cue.Error(), err, "couldn't create cue")
 	}
 
 	cue.ID = dbCue.ID

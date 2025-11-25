@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Monster struct {
@@ -52,13 +53,13 @@ type Monster struct {
 func (m Monster) ToHashFields() []any {
 	return []any{
 		m.Name,
-		derefOrNil(m.Version),
-		derefOrNil(m.Specification),
-		derefOrNil(m.Notes),
+		h.DerefOrNil(m.Version),
+		h.DerefOrNil(m.Specification),
+		h.DerefOrNil(m.Notes),
 		m.Species,
 		m.IsStoryBased,
 		m.CanBeCaptured,
-		derefOrNil(m.AreaConquestLocation),
+		h.DerefOrNil(m.AreaConquestLocation),
 		m.CTBIconType,
 		m.HasOverdrive,
 		m.IsUnderwater,
@@ -68,21 +69,21 @@ func (m Monster) ToHashFields() []any {
 		m.APOverkill,
 		m.OverkillDamage,
 		m.Gil,
-		derefOrNil(m.StealGil),
-		derefOrNil(m.DoomCountdown),
-		derefOrNil(m.PoisonRate),
-		derefOrNil(m.ThreatenChance),
+		h.DerefOrNil(m.StealGil),
+		h.DerefOrNil(m.DoomCountdown),
+		h.DerefOrNil(m.PoisonRate),
+		h.DerefOrNil(m.ThreatenChance),
 		m.ZanmatoLevel,
-		derefOrNil(m.MonsterArenaPrice),
+		h.DerefOrNil(m.MonsterArenaPrice),
 		m.SensorText,
-		derefOrNil(m.ScanText),
+		h.DerefOrNil(m.ScanText),
 	}
 }
 
 func (m Monster) ToKeyFields() []any {
 	return []any{
 		m.Name,
-		derefOrNil(m.Version),
+		h.DerefOrNil(m.Version),
 	}
 }
 
@@ -91,7 +92,7 @@ func (m Monster) GetID() int32 {
 }
 
 func (m Monster) Error() string {
-	return fmt.Sprintf("monster %s, version: %v", m.Name, derefOrNil(m.Version))
+	return fmt.Sprintf("monster %s, version: %v", m.Name, h.DerefOrNil(m.Version))
 }
 
 func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
@@ -108,13 +109,13 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 			dbMonster, err := qtx.CreateMonster(context.Background(), database.CreateMonsterParams{
 				DataHash:             generateDataHash(monster),
 				Name:                 monster.Name,
-				Version:              getNullInt32(monster.Version),
-				Specification:        getNullString(monster.Specification),
-				Notes:                getNullString(monster.Notes),
+				Version:              h.GetNullInt32(monster.Version),
+				Specification:        h.GetNullString(monster.Specification),
+				Notes:                h.GetNullString(monster.Notes),
 				Species:              database.MonsterSpecies(monster.Species),
 				IsStoryBased:         monster.IsStoryBased,
 				CanBeCaptured:        monster.CanBeCaptured,
-				AreaConquestLocation: nullMaCreationArea(monster.AreaConquestLocation),
+				AreaConquestLocation: h.NullMaCreationArea(monster.AreaConquestLocation),
 				CtbIconType:          database.CtbIconType(monster.CTBIconType),
 				HasOverdrive:         monster.HasOverdrive,
 				IsUnderwater:         monster.IsUnderwater,
@@ -124,17 +125,17 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 				ApOverkill:           monster.APOverkill,
 				OverkillDamage:       monster.OverkillDamage,
 				Gil:                  monster.Gil,
-				StealGil:             getNullInt32(monster.StealGil),
-				DoomCountdown:        getNullInt32(monster.DoomCountdown),
-				PoisonRate:           getNullFloat64(monster.PoisonRate),
-				ThreatenChance:       getNullInt32(monster.ThreatenChance),
+				StealGil:             h.GetNullInt32(monster.StealGil),
+				DoomCountdown:        h.GetNullInt32(monster.DoomCountdown),
+				PoisonRate:           h.GetNullFloat64(monster.PoisonRate),
+				ThreatenChance:       h.GetNullInt32(monster.ThreatenChance),
 				ZanmatoLevel:         monster.ZanmatoLevel,
-				MonsterArenaPrice:    getNullInt32(monster.MonsterArenaPrice),
+				MonsterArenaPrice:    h.GetNullInt32(monster.MonsterArenaPrice),
 				SensorText:           monster.SensorText,
-				ScanText:             getNullString(monster.ScanText),
+				ScanText:             h.GetNullString(monster.ScanText),
 			})
 			if err != nil {
-				return getErr(monster.Error(), err, "couldn't create monster")
+				return h.GetErr(monster.Error(), err, "couldn't create monster")
 			}
 
 			monster.ID = dbMonster.ID
@@ -166,7 +167,7 @@ func (l *Lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB)
 
 			err = l.seedMonsterJunctions(qtx, monster)
 			if err != nil {
-				return getErr(monster.Error(), err)
+				return h.GetErr(monster.Error(), err)
 			}
 
 			if monster.Items != nil {
@@ -175,7 +176,7 @@ func (l *Lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB)
 
 				monster.Items, err = seedObjPtrAssignFK(qtx, monster.Items, l.seedMonsterItems)
 				if err != nil {
-					return getErr(monster.Error(), err)
+					return h.GetErr(monster.Error(), err)
 				}
 			}
 
@@ -185,13 +186,13 @@ func (l *Lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB)
 
 				monster.Equipment, err = seedObjPtrAssignFK(qtx, monster.Equipment, l.seedMonsterEquipment)
 				if err != nil {
-					return getErr(monster.Error(), err)
+					return h.GetErr(monster.Error(), err)
 				}
 			}
 
 			err = l.seedAlteredStates(qtx, monster)
 			if err != nil {
-				return getErr(monster.Error(), err)
+				return h.GetErr(monster.Error(), err)
 			}
 		}
 
@@ -234,7 +235,7 @@ func (l *Lookup) seedMonsterProperties(qtx *database.Queries, monster Monster) e
 			PropertyID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(propertyStr, err, "couldn't junction property")
+			return h.GetErr(propertyStr, err, "couldn't junction property")
 		}
 	}
 
@@ -254,7 +255,7 @@ func (l *Lookup) seedMonsterAutoAbilities(qtx *database.Queries, monster Monster
 			AutoAbilityID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(autoAbilityStr, err, "couldn't junction auto-ability")
+			return h.GetErr(autoAbilityStr, err, "couldn't junction auto-ability")
 		}
 	}
 
@@ -273,7 +274,7 @@ func (l *Lookup) seedMonsterRonsoRages(qtx *database.Queries, monster Monster) e
 		}
 
 		if overdrive.User != "kimahri" {
-			return getErr(rage, errors.New("overdrive has to be a ronso rage"))
+			return h.GetErr(rage, errors.New("overdrive has to be a ronso rage"))
 		}
 
 		junction, err := createJunction(monster, key, l.getOverdrive)
@@ -287,7 +288,7 @@ func (l *Lookup) seedMonsterRonsoRages(qtx *database.Queries, monster Monster) e
 			OverdriveID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(rage, err, "couldn't junction ronso rage")
+			return h.GetErr(rage, err, "couldn't junction ronso rage")
 		}
 	}
 
@@ -307,7 +308,7 @@ func (l *Lookup) seedMonsterBaseStats(qtx *database.Queries, monster Monster) er
 			BaseStatID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(baseStat.Error(), err, "couldn't junction base stat")
+			return h.GetErr(baseStat.Error(), err, "couldn't junction base stat")
 		}
 	}
 
@@ -327,7 +328,7 @@ func (l *Lookup) seedMonsterElemResists(qtx *database.Queries, monster Monster) 
 			ElemResistID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(elemResist.Error(), err, "couldn't junction elemental resist")
+			return h.GetErr(elemResist.Error(), err, "couldn't junction elemental resist")
 		}
 	}
 
@@ -347,7 +348,7 @@ func (l *Lookup) seedMonsterImmunities(qtx *database.Queries, monster Monster) e
 			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(conditionStr, err, "couldn't junction immunity")
+			return h.GetErr(conditionStr, err, "couldn't junction immunity")
 		}
 	}
 
@@ -367,7 +368,7 @@ func (l *Lookup) seedMonsterStatusResists(qtx *database.Queries, monster Monster
 			StatusResistID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(statusResist.Error(), err, "couldn't junction status resist")
+			return h.GetErr(statusResist.Error(), err, "couldn't junction status resist")
 		}
 	}
 
@@ -387,7 +388,7 @@ func (l *Lookup) seedMonsterAbilities(qtx *database.Queries, monster Monster) er
 			MonsterAbilityID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(ability.Error(), err, "couldn't junction monster ability")
+			return h.GetErr(ability.Error(), err, "couldn't junction monster ability")
 		}
 	}
 

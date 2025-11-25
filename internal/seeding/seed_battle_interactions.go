@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type BattleInteraction struct {
@@ -30,12 +31,12 @@ func (bi BattleInteraction) ToHashFields() []any {
 	return []any{
 		bi.Target,
 		bi.BasedOnPhysAttack,
-		derefOrNil(bi.Range),
-		ObjPtrToID(bi.Damage),
-		derefOrNil(bi.ShatterRate),
+		h.DerefOrNil(bi.Range),
+		h.ObjPtrToID(bi.Damage),
+		h.DerefOrNil(bi.ShatterRate),
 		bi.Accuracy.ID,
 		bi.HitAmount,
-		derefOrNil(bi.SpecialAction),
+		h.DerefOrNil(bi.SpecialAction),
 	}
 }
 
@@ -44,7 +45,7 @@ func (bi BattleInteraction) GetID() int32 {
 }
 
 func (bi BattleInteraction) Error() string {
-	return fmt.Sprintf("battle interaction with target: %s, phys attack: %t, range: %v, damage id: %v, shatter rate: %v, accuracy id: %d, hit amount: %d, special action: %v", bi.Target, bi.BasedOnPhysAttack, derefOrNil(bi.Range), ObjPtrToID(bi.Damage), derefOrNil(bi.ShatterRate), bi.Accuracy.ID, bi.HitAmount, derefOrNil(bi.SpecialAction))
+	return fmt.Sprintf("battle interaction with target: %s, phys attack: %t, range: %v, damage id: %v, shatter rate: %v, accuracy id: %d, hit amount: %d, special action: %v", bi.Target, bi.BasedOnPhysAttack, h.DerefOrNil(bi.Range), h.ObjPtrToID(bi.Damage), h.DerefOrNil(bi.ShatterRate), bi.Accuracy.ID, bi.HitAmount, h.DerefOrNil(bi.SpecialAction))
 }
 
 func (l *Lookup) seedBattleInteractions(qtx *database.Queries, ability Ability, battleInteractions []BattleInteraction) error {
@@ -61,14 +62,14 @@ func (l *Lookup) seedBattleInteractions(qtx *database.Queries, ability Ability, 
 			BattleInteractionID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(battleInteraction.Error(), err, "couldn't junction battle interaction")
+			return h.GetErr(battleInteraction.Error(), err, "couldn't junction battle interaction")
 		}
 
 		l.currentBI = battleInteraction
 
 		err = l.seedBattleInteractionRelationships(qtx, ability, battleInteraction)
 		if err != nil {
-			return getErr(battleInteraction.Error(), err)
+			return h.GetErr(battleInteraction.Error(), err)
 		}
 	}
 
@@ -80,21 +81,21 @@ func (l *Lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 
 	battleInteraction.Accuracy, err = seedObjAssignID(qtx, battleInteraction.Accuracy, l.seedAccuracy)
 	if err != nil {
-		return BattleInteraction{}, getErr(battleInteraction.Error(), err)
+		return BattleInteraction{}, h.GetErr(battleInteraction.Error(), err)
 	}
 
 	dbBattleInteraction, err := qtx.CreateBattleInteraction(context.Background(), database.CreateBattleInteractionParams{
 		DataHash:          generateDataHash(battleInteraction),
 		Target:            database.TargetType(battleInteraction.Target),
 		BasedOnPhysAttack: battleInteraction.BasedOnPhysAttack,
-		Range:             getNullInt32(battleInteraction.Range),
-		ShatterRate:       getNullInt32(battleInteraction.ShatterRate),
+		Range:             h.GetNullInt32(battleInteraction.Range),
+		ShatterRate:       h.GetNullInt32(battleInteraction.ShatterRate),
 		AccuracyID:        battleInteraction.Accuracy.ID,
 		HitAmount:         battleInteraction.HitAmount,
-		SpecialAction:     nullSpecialActionType(battleInteraction.SpecialAction),
+		SpecialAction:     h.NullSpecialActionType(battleInteraction.SpecialAction),
 	})
 	if err != nil {
-		return BattleInteraction{}, getErr(battleInteraction.Error(), err, "couldn't create battle interaction")
+		return BattleInteraction{}, h.GetErr(battleInteraction.Error(), err, "couldn't create battle interaction")
 	}
 
 	battleInteraction.ID = dbBattleInteraction.ID
@@ -116,7 +117,7 @@ func (l *Lookup) seedBattleInteractionRelationships(qtx *database.Queries, abili
 			DamageID:            threeWay.ChildID,
 		})
 		if err != nil {
-			return getErr(battleInteraction.Damage.Error(), err, "couldn't junction damage")
+			return h.GetErr(battleInteraction.Damage.Error(), err, "couldn't junction damage")
 		}
 	}
 
@@ -154,7 +155,7 @@ func (l *Lookup) seedBattleIntAffectedBy(qtx *database.Queries, ability Ability,
 			StatusConditionID:   threeWay.ChildID,
 		})
 		if err != nil {
-			return getErr(conditionString, err, "couldn't junction affected by status")
+			return h.GetErr(conditionString, err, "couldn't junction affected by status")
 		}
 	}
 
@@ -175,7 +176,7 @@ func (l *Lookup) seedBattleIntInflictedDelay(qtx *database.Queries, ability Abil
 			InflictedDelayID:    threeWay.ChildID,
 		})
 		if err != nil {
-			return getErr(delay.Error(), err, "couldn't junction inflicted delay")
+			return h.GetErr(delay.Error(), err, "couldn't junction inflicted delay")
 		}
 	}
 
@@ -196,7 +197,7 @@ func (l *Lookup) seedBattleIntInflictedConditions(qtx *database.Queries, ability
 			InflictedStatusID:   threeWay.ChildID,
 		})
 		if err != nil {
-			return getErr(condition.Error(), err, "couldn't junction inflicted status condition")
+			return h.GetErr(condition.Error(), err, "couldn't junction inflicted status condition")
 		}
 	}
 
@@ -217,7 +218,7 @@ func (l *Lookup) seedBattleIntRemovedConditions(qtx *database.Queries, ability A
 			StatusConditionID:   threeWay.ChildID,
 		})
 		if err != nil {
-			return getErr(conditionString, err, "couldn't junction removed status condition")
+			return h.GetErr(conditionString, err, "couldn't junction removed status condition")
 		}
 	}
 
@@ -238,7 +239,7 @@ func (l *Lookup) seedBattleIntCopiedConditions(qtx *database.Queries, ability Ab
 			InflictedStatusID:   threeWay.ChildID,
 		})
 		if err != nil {
-			return getErr(condition.Error(), err, "couldn't junction copied status condition")
+			return h.GetErr(condition.Error(), err, "couldn't junction copied status condition")
 		}
 	}
 
@@ -259,7 +260,7 @@ func (l *Lookup) seedBattleIntStatChanges(qtx *database.Queries, ability Ability
 			StatChangeID:        threeWay.ChildID,
 		})
 		if err != nil {
-			return getErr(statChange.Error(), err, "couldn't junction stat change")
+			return h.GetErr(statChange.Error(), err, "couldn't junction stat change")
 		}
 	}
 
@@ -280,7 +281,7 @@ func (l *Lookup) seedBattleIntModifierChanges(qtx *database.Queries, ability Abi
 			ModifierChangeID:    threeWay.ChildID,
 		})
 		if err != nil {
-			return getErr(modifierChange.Error(), err, "couldn't junction modifier change")
+			return h.GetErr(modifierChange.Error(), err, "couldn't junction modifier change")
 		}
 	}
 

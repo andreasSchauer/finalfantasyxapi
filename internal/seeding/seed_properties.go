@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Property struct {
@@ -14,7 +15,7 @@ type Property struct {
 	Effect                  string           `json:"effect"`
 	RelatedStats            []string         `json:"related_stats"`
 	RemovedStatusConditions []string         `json:"removed_status_conditions"`
-	NullifyArmored          *string          `json:"nullify_armored"`
+	NullifyArmored          *string          `json:"h.Nullify_armored"`
 	StatChanges             []StatChange     `json:"stat_changes"`
 	ModifierChanges         []ModifierChange `json:"modifier_changes"`
 }
@@ -23,7 +24,7 @@ func (p Property) ToHashFields() []any {
 	return []any{
 		p.Name,
 		p.Effect,
-		derefOrNil(p.NullifyArmored),
+		h.DerefOrNil(p.NullifyArmored),
 	}
 }
 
@@ -50,10 +51,10 @@ func (l *Lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 				DataHash:       generateDataHash(property),
 				Name:           property.Name,
 				Effect:         property.Effect,
-				NullifyArmored: nullNullifyArmored(property.NullifyArmored),
+				NullifyArmored: h.NullNullifyArmored(property.NullifyArmored),
 			})
 			if err != nil {
-				return getErr(property.Error(), err, "couldn't create property")
+				return h.GetErr(property.Error(), err, "couldn't create property")
 			}
 
 			property.ID = dbProperty.ID
@@ -89,7 +90,7 @@ func (l *Lookup) seedPropertiesRelationships(db *database.Queries, dbConn *sql.D
 			for _, function := range relationShipFunctions {
 				err := function(qtx, property)
 				if err != nil {
-					return getErr(property.Error(), err)
+					return h.GetErr(property.Error(), err)
 				}
 			}
 		}
@@ -112,7 +113,7 @@ func (l *Lookup) seedPropertyRelatedStats(qtx *database.Queries, property Proper
 			StatID:     junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonStat, err, "couldn't junction related stat")
+			return h.GetErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 
@@ -132,7 +133,7 @@ func (l *Lookup) seedPropertyRemovedConditions(qtx *database.Queries, property P
 			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonCondition, err, "couldn't junction removed status condition")
+			return h.GetErr(jsonCondition, err, "couldn't junction removed status condition")
 		}
 	}
 
@@ -152,7 +153,7 @@ func (l *Lookup) seedPropertyStatChanges(qtx *database.Queries, property Propert
 			StatChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(statChange.Error(), err, "couldn't junction stat change")
+			return h.GetErr(statChange.Error(), err, "couldn't junction stat change")
 		}
 	}
 
@@ -172,7 +173,7 @@ func (l *Lookup) seedPropertyModifierChanges(qtx *database.Queries, property Pro
 			ModifierChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(modifierChange.Error(), err, "couldn't junction modifier change")
+			return h.GetErr(modifierChange.Error(), err, "couldn't junction modifier change")
 		}
 	}
 

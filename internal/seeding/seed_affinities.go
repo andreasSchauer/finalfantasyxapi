@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Affinity struct {
@@ -17,7 +18,7 @@ type Affinity struct {
 func (a Affinity) ToHashFields() []any {
 	return []any{
 		a.Name,
-		derefOrNil(a.DamageFactor),
+		h.DerefOrNil(a.DamageFactor),
 	}
 }
 
@@ -43,10 +44,10 @@ func (l *Lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 			dbAffinity, err := qtx.CreateAffinity(context.Background(), database.CreateAffinityParams{
 				DataHash:     generateDataHash(affinity),
 				Name:         affinity.Name,
-				DamageFactor: getNullFloat64(affinity.DamageFactor),
+				DamageFactor: h.GetNullFloat64(affinity.DamageFactor),
 			})
 			if err != nil {
-				return getErr(affinity.Error(), err, "couldn't create elemental affinity")
+				return h.GetErr(affinity.Error(), err, "couldn't create elemental affinity")
 			}
 
 			affinity.ID = dbAffinity.ID

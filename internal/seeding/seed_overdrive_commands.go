@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type OverdriveCommand struct {
@@ -27,8 +28,8 @@ func (oc OverdriveCommand) ToHashFields() []any {
 		oc.Rank,
 		oc.Topmenu,
 		oc.OpenSubmenu,
-		derefOrNil(oc.CharClassID),
-		derefOrNil(oc.SubmenuID),
+		h.DerefOrNil(oc.CharClassID),
+		h.DerefOrNil(oc.SubmenuID),
 	}
 }
 
@@ -59,7 +60,7 @@ func (l *Lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 				Topmenu:     database.TopmenuType(command.Topmenu),
 			})
 			if err != nil {
-				return getErr(command.Error(), err, "couldn't create overdrive command")
+				return h.GetErr(command.Error(), err, "couldn't create overdrive command")
 			}
 
 			command.ID = dbODCommand.ID
@@ -88,22 +89,22 @@ func (l *Lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn
 
 			command.CharClassID, err = assignFKPtr(&command.User, l.getCharacterClass)
 			if err != nil {
-				return getErr(command.Error(), err)
+				return h.GetErr(command.Error(), err)
 			}
 
 			command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, l.getSubmenu)
 			if err != nil {
-				return getErr(command.Error(), err)
+				return h.GetErr(command.Error(), err)
 			}
 
 			err = qtx.UpdateOverdriveCommand(context.Background(), database.UpdateOverdriveCommandParams{
 				DataHash:         generateDataHash(command),
-				CharacterClassID: getNullInt32(command.CharClassID),
-				SubmenuID:        getNullInt32(command.SubmenuID),
+				CharacterClassID: h.GetNullInt32(command.CharClassID),
+				SubmenuID:        h.GetNullInt32(command.SubmenuID),
 				ID:               command.ID,
 			})
 			if err != nil {
-				return getErr(command.Error(), err, "couldn't update overdrive command")
+				return h.GetErr(command.Error(), err, "couldn't update overdrive command")
 			}
 		}
 

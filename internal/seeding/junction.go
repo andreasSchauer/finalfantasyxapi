@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 
@@ -52,7 +53,7 @@ func (j FourWayJunction) ToHashFields() []any {
 }
 
 
-func createJunction[T any, P, C HasID](parent P, childKey T, lookup func(T) (C, error)) (Junction, error) {
+func createJunction[T any, P, C h.HasID](parent P, childKey T, lookup func(T) (C, error)) (Junction, error) {
 	child, err := lookup(childKey)
 	if err != nil {
 		return Junction{}, fmt.Errorf("couldn't create junction: %v", err)
@@ -67,7 +68,7 @@ func createJunction[T any, P, C HasID](parent P, childKey T, lookup func(T) (C, 
 }
 
 
-func createJunctionSeed[P, C HasID](qtx *database.Queries, parent P, child C, seed func(*database.Queries, C) (C, error)) (Junction, error) {
+func createJunctionSeed[P, C h.HasID](qtx *database.Queries, parent P, child C, seed func(*database.Queries, C) (C, error)) (Junction, error) {
 	child, err := seed(qtx, child)
 	if err != nil {
 		return Junction{}, fmt.Errorf("couldn't seed object and create junction: %v", err)
@@ -83,7 +84,7 @@ func createJunctionSeed[P, C HasID](qtx *database.Queries, parent P, child C, se
 
 
 
-func createThreeWayJunction[T any, GP, P, C HasID](grandParent GP, parent P, childKey T, lookup func(T) (C, error)) (ThreeWayJunction, error) {
+func createThreeWayJunction[T any, GP, P, C h.HasID](grandParent GP, parent P, childKey T, lookup func(T) (C, error)) (ThreeWayJunction, error) {
 	junction, err := createJunction(parent, childKey, lookup)
 	if err != nil {
 		return ThreeWayJunction{}, fmt.Errorf("couldn't create three way junction: %v", err)
@@ -98,7 +99,7 @@ func createThreeWayJunction[T any, GP, P, C HasID](grandParent GP, parent P, chi
 }
 
 
-func createThreeWayJunctionSeed[GP, P, C HasID](qtx *database.Queries, grandParent GP, parent P, child C, seed func(*database.Queries, C) (C, error)) (ThreeWayJunction, error) {
+func createThreeWayJunctionSeed[GP, P, C h.HasID](qtx *database.Queries, grandParent GP, parent P, child C, seed func(*database.Queries, C) (C, error)) (ThreeWayJunction, error) {
 	junction, err := createJunctionSeed(qtx, parent, child, seed)
 	if err != nil {
 		return ThreeWayJunction{}, fmt.Errorf("couldn't seed object and create three way junction: %v", err)
@@ -113,7 +114,7 @@ func createThreeWayJunctionSeed[GP, P, C HasID](qtx *database.Queries, grandPare
 }
 
 
-func createFourWayJunctionSeed[GGP, GP, P, C HasID](qtx *database.Queries, greatGrandParent GGP, grandParent GP, parent P, child C, seed func(*database.Queries, C) (C, error)) (FourWayJunction, error) {
+func createFourWayJunctionSeed[GGP, GP, P, C h.HasID](qtx *database.Queries, greatGrandParent GGP, grandParent GP, parent P, child C, seed func(*database.Queries, C) (C, error)) (FourWayJunction, error) {
 	threeWay, err := createThreeWayJunctionSeed(qtx, grandParent, parent, child, seed)
 	if err != nil {
 		return FourWayJunction{}, fmt.Errorf("couldn't seed object and create four way junction: %v", err)

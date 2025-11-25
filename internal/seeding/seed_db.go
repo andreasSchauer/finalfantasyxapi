@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/pressly/goose/v3"
 )
 
@@ -46,7 +47,7 @@ func handleDBFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) e
 	for _, seeder := range seeders {
 		err := handleDBFunction(db, dbConn, seeder.seedFunc, seeder.name)
 		if err != nil {
-			return getErr(seeder.name, err)
+			return h.GetErr(seeder.name, err)
 		}
 	}
 
@@ -59,7 +60,7 @@ func handleDBFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) e
 	for _, seeder := range seeders {
 		err := handleDBFunction(db, dbConn, seeder.relFunc, seeder.name)
 		if err != nil {
-			return getErr(seeder.name, err)
+			return h.GetErr(seeder.name, err)
 		}
 	}
 

@@ -25,13 +25,13 @@ func main() {
         "BreakDmgLmtType",
     }
 
-    filePath := "./internal/seeding/null_enums.go"
+    filePath := "./internal/helpers/null_enums.go"
     
     var output strings.Builder
-    output.WriteString("package seeding\n\nimport \"github.com/andreasSchauer/finalfantasyxapi/internal/database\"\n\n\n")
+    output.WriteString("package helpers\n\nimport \"github.com/andreasSchauer/finalfantasyxapi/internal/database\"\n\n\n")
 
     for _, enumType := range nullEnumTypes {
-        funcName := "null" + enumType
+        funcName := "Null" + enumType
         output.WriteString(fmt.Sprintf(`func %s(s *string) database.Null%s {
     if s == nil {
         return database.Null%s{}

@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type AgilityTier struct {
@@ -24,9 +25,9 @@ func (a AgilityTier) ToHashFields() []any {
 		a.MinAgility,
 		a.MaxAgility,
 		a.TickSpeed,
-		derefOrNil(a.MonsterMinICV),
-		derefOrNil(a.MonsterMaxICV),
-		derefOrNil(a.CharacterMaxICV),
+		h.DerefOrNil(a.MonsterMinICV),
+		h.DerefOrNil(a.MonsterMaxICV),
+		h.DerefOrNil(a.CharacterMaxICV),
 	}
 }
 
@@ -48,7 +49,7 @@ func (a AgilitySubtier) ToHashFields() []any {
 		a.AgilityTierID,
 		a.MinAgility,
 		a.MaxAgility,
-		derefOrNil(a.CharacterMinICV),
+		h.DerefOrNil(a.CharacterMinICV),
 	}
 }
 
@@ -72,19 +73,19 @@ func (l *Lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 				MinAgility:      agilityTier.MinAgility,
 				MaxAgility:      agilityTier.MaxAgility,
 				TickSpeed:       agilityTier.TickSpeed,
-				MonsterMinIcv:   getNullInt32(agilityTier.MonsterMinICV),
-				MonsterMaxIcv:   getNullInt32(agilityTier.MonsterMaxICV),
-				CharacterMaxIcv: getNullInt32(agilityTier.CharacterMaxICV),
+				MonsterMinIcv:   h.GetNullInt32(agilityTier.MonsterMinICV),
+				MonsterMaxIcv:   h.GetNullInt32(agilityTier.MonsterMaxICV),
+				CharacterMaxIcv: h.GetNullInt32(agilityTier.CharacterMaxICV),
 			})
 			if err != nil {
-				return getErr(agilityTier.Error(), err, "couldn't create agility tier")
+				return h.GetErr(agilityTier.Error(), err, "couldn't create agility tier")
 			}
 
 			agilityTier.ID = dbAgilityTier.ID
 
 			err = l.seedAgilitySubtiers(qtx, agilityTier)
 			if err != nil {
-				return getErr(agilityTier.Error(), err)
+				return h.GetErr(agilityTier.Error(), err)
 			}
 		}
 		return nil
@@ -100,10 +101,10 @@ func (l *Lookup) seedAgilitySubtiers(qtx *database.Queries, agilityTier AgilityT
 			AgilityTierID:     subtier.AgilityTierID,
 			SubtierMinAgility: subtier.MinAgility,
 			SubtierMaxAgility: subtier.MaxAgility,
-			CharacterMinIcv:   getNullInt32(subtier.CharacterMinICV),
+			CharacterMinIcv:   h.GetNullInt32(subtier.CharacterMinICV),
 		})
 		if err != nil {
-			return getErr(subtier.Error(), err, "couldn't create agility subtier")
+			return h.GetErr(subtier.Error(), err, "couldn't create agility subtier")
 		}
 	}
 

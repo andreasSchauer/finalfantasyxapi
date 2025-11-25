@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Submenu struct {
@@ -22,7 +23,7 @@ func (s Submenu) ToHashFields() []any {
 		s.Name,
 		s.Description,
 		s.Effect,
-		derefOrNil(s.Topmenu),
+		h.DerefOrNil(s.Topmenu),
 	}
 }
 
@@ -50,10 +51,10 @@ func (l *Lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 				Name:        submenu.Name,
 				Description: submenu.Description,
 				Effect:      submenu.Effect,
-				Topmenu:     nullTopmenuType(submenu.Topmenu),
+				Topmenu:     h.NullTopmenuType(submenu.Topmenu),
 			})
 			if err != nil {
-				return getErr(submenu.Error(), err, "couldn't create submenu")
+				return h.GetErr(submenu.Error(), err, "couldn't create submenu")
 			}
 			submenu.ID = dbSubmenu.ID
 
@@ -82,7 +83,7 @@ func (l *Lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 			for _, jsonCharClass := range jsonSubmenu.Users {
 				junction, err := createJunction(submenu, jsonCharClass, l.getCharacterClass)
 				if err != nil {
-					return getErr(submenu.Error(), err)
+					return h.GetErr(submenu.Error(), err)
 				}
 
 				err = qtx.CreateSubmenusUsersJunction(context.Background(), database.CreateSubmenusUsersJunctionParams{
@@ -91,8 +92,8 @@ func (l *Lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 					CharacterClassID: junction.ChildID,
 				})
 				if err != nil {
-					subjects := joinSubjects(submenu.Error(), jsonCharClass)
-					return getErr(subjects, err, "couldn't junction user")
+					subjects := h.JoinSubjects(submenu.Error(), jsonCharClass)
+					return h.GetErr(subjects, err, "couldn't junction user")
 				}
 			}
 		}

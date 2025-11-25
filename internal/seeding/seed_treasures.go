@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type TreasureList struct {
@@ -39,9 +40,9 @@ func (t Treasure) ToHashFields() []any {
 		t.LootType,
 		t.IsPostAirship,
 		t.IsAnimaTreasure,
-		derefOrNil(t.Notes),
-		derefOrNil(t.GilAmount),
-		ObjPtrToID(t.Equipment),
+		h.DerefOrNil(t.Notes),
+		h.DerefOrNil(t.GilAmount),
+		h.ObjPtrToID(t.Equipment),
 	}
 }
 
@@ -76,7 +77,7 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 			locationArea := list.LocationArea
 			list.LocationArea.ID, err = assignFK(locationArea, l.getArea)
 			if err != nil {
-				return getErr(list.Error(), err)
+				return h.GetErr(list.Error(), err)
 			}
 
 			for j, treasure := range list.Treasures {
@@ -91,11 +92,11 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 					LootType:        database.LootType(treasure.LootType),
 					IsPostAirship:   treasure.IsPostAirship,
 					IsAnimaTreasure: treasure.IsAnimaTreasure,
-					Notes:           getNullString(treasure.Notes),
-					GilAmount:       getNullInt32(treasure.GilAmount),
+					Notes:           h.GetNullString(treasure.Notes),
+					GilAmount:       h.GetNullInt32(treasure.GilAmount),
 				})
 				if err != nil {
-					return getErr(treasure.Error(), err, "couldn't create treasure")
+					return h.GetErr(treasure.Error(), err, "couldn't create treasure")
 				}
 
 				treasure.ID = dbTreasure.ID
@@ -121,7 +122,7 @@ func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 		for _, list := range treasureLists {
 			list.LocationArea.ID, err = assignFK(list.LocationArea, l.getArea)
 			if err != nil {
-				return getErr(list.Error(), err)
+				return h.GetErr(list.Error(), err)
 			}
 
 			for j, jsonTreasure := range list.Treasures {
@@ -136,21 +137,21 @@ func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 
 				err = l.seedTreasureItemAmounts(qtx, treasure)
 				if err != nil {
-					return getErr(treasure.Error(), err)
+					return h.GetErr(treasure.Error(), err)
 				}
 
 				treasure.Equipment, err = seedObjPtrAssignFK(qtx, treasure.Equipment, l.seedFoundEquipment)
 				if err != nil {
-					return getErr(treasure.Error(), err)
+					return h.GetErr(treasure.Error(), err)
 				}
 
 				err = qtx.UpdateTreasure(context.Background(), database.UpdateTreasureParams{
 					DataHash:         generateDataHash(treasure),
-					FoundEquipmentID: ObjPtrToNullInt32ID(treasure.Equipment),
+					FoundEquipmentID: h.ObjPtrToNullInt32ID(treasure.Equipment),
 					ID:               treasure.ID,
 				})
 				if err != nil {
-					return getErr(treasure.Error(), err, "couldn't update treasure")
+					return h.GetErr(treasure.Error(), err, "couldn't update treasure")
 				}
 			}
 		}
@@ -171,7 +172,7 @@ func (l *Lookup) seedTreasureItemAmounts(qtx *database.Queries, treasure Treasur
 			ItemAmountID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(itemAmount.Error(), err, "couldn't junction item amount")
+			return h.GetErr(itemAmount.Error(), err, "couldn't junction item amount")
 		}
 	}
 

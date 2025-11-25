@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Stat struct {
@@ -25,8 +26,8 @@ func (s Stat) ToHashFields() []any {
 		s.Effect,
 		s.MinVal,
 		s.MaxVal,
-		derefOrNil(s.MaxVal2),
-		derefOrNil(s.SphereID),
+		h.DerefOrNil(s.MaxVal2),
+		h.DerefOrNil(s.SphereID),
 	}
 }
 
@@ -55,10 +56,10 @@ func (l *Lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 				Effect:   stat.Effect,
 				MinVal:   stat.MinVal,
 				MaxVal:   stat.MaxVal,
-				MaxVal2:  getNullInt32(stat.MaxVal2),
+				MaxVal2:  h.GetNullInt32(stat.MaxVal2),
 			})
 			if err != nil {
-				return getErr(stat.Error(), err, "couldn't create stat")
+				return h.GetErr(stat.Error(), err, "couldn't create stat")
 			}
 
 			stat.ID = dbStat.ID
@@ -86,16 +87,16 @@ func (l *Lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 			stat.SphereID, err = assignFKPtr(&jsonStat.Sphere, l.getItem)
 			if err != nil {
-				return getErr(stat.Error(), err)
+				return h.GetErr(stat.Error(), err)
 			}
 
 			err = qtx.UpdateStat(context.Background(), database.UpdateStatParams{
 				DataHash: generateDataHash(stat),
-				SphereID: getNullInt32(stat.SphereID),
+				SphereID: h.GetNullInt32(stat.SphereID),
 				ID:       stat.ID,
 			})
 			if err != nil {
-				return getErr(stat.Error(), err, "couldn't update stat")
+				return h.GetErr(stat.Error(), err, "couldn't update stat")
 			}
 
 			l.stats[stat.Name] = stat

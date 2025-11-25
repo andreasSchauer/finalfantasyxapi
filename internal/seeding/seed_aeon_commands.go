@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type AeonCommand struct {
@@ -26,8 +27,8 @@ func (c AeonCommand) ToHashFields() []any {
 		c.Description,
 		c.Effect,
 		c.Topmenu,
-		derefOrNil(c.Cursor),
-		derefOrNil(c.SubmenuID),
+		h.DerefOrNil(c.Cursor),
+		h.DerefOrNil(c.SubmenuID),
 	}
 }
 
@@ -65,10 +66,10 @@ func (l *Lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 				Description: command.Description,
 				Effect:      command.Effect,
 				Topmenu:     database.TopmenuType(command.Topmenu),
-				Cursor:      nullTargetType(command.Cursor),
+				Cursor:      h.NullTargetType(command.Cursor),
 			})
 			if err != nil {
-				return getErr(command.Error(), err, "couldn't create aeon command")
+				return h.GetErr(command.Error(), err, "couldn't create aeon command")
 			}
 
 			command.ID = dbAeonCommand.ID
@@ -96,21 +97,21 @@ func (l *Lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql
 
 			command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, l.getSubmenu)
 			if err != nil {
-				return getErr(command.Error(), err)
+				return h.GetErr(command.Error(), err)
 			}
 
 			err = qtx.UpdateAeonCommand(context.Background(), database.UpdateAeonCommandParams{
 				DataHash:  generateDataHash(command),
-				SubmenuID: getNullInt32(command.SubmenuID),
+				SubmenuID: h.GetNullInt32(command.SubmenuID),
 				ID:        command.ID,
 			})
 			if err != nil {
-				return getErr(command.Error(), err, "couldn't update aeon command")
+				return h.GetErr(command.Error(), err, "couldn't update aeon command")
 			}
 
 			err = l.seedAeonCommandPossibleAbilities(qtx, command)
 			if err != nil {
-				return getErr(command.Error(), err)
+				return h.GetErr(command.Error(), err)
 			}
 		}
 
@@ -129,7 +130,7 @@ func (l *Lookup) seedAeonCommandPossibleAbilities(qtx *database.Queries, command
 
 			threeWay, err := createThreeWayJunction(command, charClass, abilityRef, l.getAbility)
 			if err != nil {
-				return getErr(charClass.Error(), err)
+				return h.GetErr(charClass.Error(), err)
 			}
 
 			err = qtx.CreateAeonCommandsPossibleAbilitiesJunction(context.Background(), database.CreateAeonCommandsPossibleAbilitiesJunctionParams{
@@ -139,7 +140,7 @@ func (l *Lookup) seedAeonCommandPossibleAbilities(qtx *database.Queries, command
 				AbilityID:        threeWay.ChildID,
 			})
 			if err != nil {
-				return getErr(abilityRef.Error(), err, "couldn't junction possible ability")
+				return h.GetErr(abilityRef.Error(), err, "couldn't junction possible ability")
 			}
 		}
 	}

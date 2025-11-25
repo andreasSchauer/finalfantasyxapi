@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type BlitzballPosition struct {
@@ -91,7 +92,7 @@ func (l *Lookup) seedBlitzballItems(db *database.Queries, dbConn *sql.DB) error 
 				Slot:     database.BlitzballPositionSlot(position.Slot),
 			})
 			if err != nil {
-				return getErr(position.Error(), err, "couldn't create blitzball position")
+				return h.GetErr(position.Error(), err, "couldn't create blitzball position")
 			}
 			position.ID = dbPosition.ID
 			key := createLookupKey(position)
@@ -124,7 +125,7 @@ func (l *Lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 
 				item.PossibleItem, err = seedObjAssignID(qtx, item.PossibleItem, l.seedPossibleItem)
 				if err != nil {
-					return getErr(item.Error(), err)
+					return h.GetErr(item.Error(), err)
 				}
 
 				err = qtx.CreateBlitzballItem(context.Background(), database.CreateBlitzballItemParams{
@@ -133,7 +134,7 @@ func (l *Lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 					PossibleItemID: item.PossibleItem.ID,
 				})
 				if err != nil {
-					return getErr(item.Error(), err, "couldn't create blitzball item")
+					return h.GetErr(item.Error(), err, "couldn't create blitzball item")
 				}
 			}
 		}
@@ -147,7 +148,7 @@ func (l *Lookup) seedPossibleItem(qtx *database.Queries, item PossibleItem) (Pos
 
 	item.ItemAmount, err = seedObjAssignID(qtx, item.ItemAmount, l.seedItemAmount)
 	if err != nil {
-		return PossibleItem{}, getErr(item.Error(), err)
+		return PossibleItem{}, h.GetErr(item.Error(), err)
 	}
 
 	dbPossibleItem, err := qtx.CreatePossibleItem(context.Background(), database.CreatePossibleItemParams{
@@ -156,7 +157,7 @@ func (l *Lookup) seedPossibleItem(qtx *database.Queries, item PossibleItem) (Pos
 		Chance:       item.Chance,
 	})
 	if err != nil {
-		return PossibleItem{}, getErr(item.Error(), err, "couldn't create possible item")
+		return PossibleItem{}, h.GetErr(item.Error(), err, "couldn't create possible item")
 	}
 
 	item.ID = dbPossibleItem.ID

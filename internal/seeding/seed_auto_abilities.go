@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type AutoAbility struct {
@@ -43,21 +44,21 @@ type AutoAbility struct {
 func (a AutoAbility) ToHashFields() []any {
 	return []any{
 		a.Name,
-		derefOrNil(a.Description),
+		h.DerefOrNil(a.Description),
 		a.Effect,
-		derefOrNil(a.Type),
+		h.DerefOrNil(a.Type),
 		a.Category,
-		derefOrNil(a.AbilityValue),
-		ObjPtrToID(a.RequiredItem),
-		derefOrNil(a.ActivationCondition),
-		derefOrNil(a.Counter),
-		derefOrNil(a.GradRecoveryStatID),
-		derefOrNil(a.OnHitElementID),
-		ObjPtrToID(a.AddedElemResist),
-		ObjPtrToID(a.OnHitStatus),
-		derefOrNil(a.AddedPropertyID),
-		derefOrNil(a.CnvrsnFromModID),
-		derefOrNil(a.CnvrsnToModID),
+		h.DerefOrNil(a.AbilityValue),
+		h.ObjPtrToID(a.RequiredItem),
+		h.DerefOrNil(a.ActivationCondition),
+		h.DerefOrNil(a.Counter),
+		h.DerefOrNil(a.GradRecoveryStatID),
+		h.DerefOrNil(a.OnHitElementID),
+		h.ObjPtrToID(a.AddedElemResist),
+		h.ObjPtrToID(a.OnHitStatus),
+		h.DerefOrNil(a.AddedPropertyID),
+		h.DerefOrNil(a.CnvrsnFromModID),
+		h.DerefOrNil(a.CnvrsnToModID),
 	}
 }
 
@@ -83,16 +84,16 @@ func (l *Lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 			dbAutoAbility, err := qtx.CreateAutoAbility(context.Background(), database.CreateAutoAbilityParams{
 				DataHash:            generateDataHash(autoAbility),
 				Name:                autoAbility.Name,
-				Description:         getNullString(autoAbility.Description),
+				Description:         h.GetNullString(autoAbility.Description),
 				Effect:              autoAbility.Effect,
-				Type:                nullEquipType(autoAbility.Type),
+				Type:                h.NullEquipType(autoAbility.Type),
 				Category:            database.AutoAbilityCategory(autoAbility.Category),
-				AbilityValue:        getNullInt32(autoAbility.AbilityValue),
-				ActivationCondition: nullAaActivationCondition(autoAbility.ActivationCondition),
-				Counter:             nullCounterType(autoAbility.Counter),
+				AbilityValue:        h.GetNullInt32(autoAbility.AbilityValue),
+				ActivationCondition: h.NullAaActivationCondition(autoAbility.ActivationCondition),
+				Counter:             h.NullCounterType(autoAbility.Counter),
 			})
 			if err != nil {
-				return getErr(autoAbility.Error(), err, "couldn't create auto-ability")
+				return h.GetErr(autoAbility.Error(), err, "couldn't create auto-ability")
 			}
 
 			autoAbility.ID = dbAutoAbility.ID
@@ -120,27 +121,27 @@ func (l *Lookup) seedAutoAbilitiesRelationships(db *database.Queries, dbConn *sq
 
 			autoAbility, err = l.assignAutoAbilityFKs(qtx, autoAbility)
 			if err != nil {
-				return getErr(autoAbility.Error(), err)
+				return h.GetErr(autoAbility.Error(), err)
 			}
 
 			err = qtx.UpdateAutoAbility(context.Background(), database.UpdateAutoAbilityParams{
 				DataHash:          generateDataHash(autoAbility),
-				GradRcvryStatID:   getNullInt32(autoAbility.GradRecoveryStatID),
-				OnHitElementID:    getNullInt32(autoAbility.OnHitElementID),
-				AddedElemResistID: ObjPtrToNullInt32ID(autoAbility.AddedElemResist),
-				OnHitStatusID:     ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
-				AddedPropertyID:   getNullInt32(autoAbility.AddedPropertyID),
-				CnvrsnFromModID:   getNullInt32(autoAbility.CnvrsnFromModID),
-				CnvrsnToModID:     getNullInt32(autoAbility.CnvrsnToModID),
+				GradRcvryStatID:   h.GetNullInt32(autoAbility.GradRecoveryStatID),
+				OnHitElementID:    h.GetNullInt32(autoAbility.OnHitElementID),
+				AddedElemResistID: h.ObjPtrToNullInt32ID(autoAbility.AddedElemResist),
+				OnHitStatusID:     h.ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
+				AddedPropertyID:   h.GetNullInt32(autoAbility.AddedPropertyID),
+				CnvrsnFromModID:   h.GetNullInt32(autoAbility.CnvrsnFromModID),
+				CnvrsnToModID:     h.GetNullInt32(autoAbility.CnvrsnToModID),
 				ID:                autoAbility.ID,
 			})
 			if err != nil {
-				return getErr(autoAbility.Error(), err, "couldn't update auto-ability")
+				return h.GetErr(autoAbility.Error(), err, "couldn't update auto-ability")
 			}
 
 			err = l.seedAutoAbilityJunctions(qtx, autoAbility)
 			if err != nil {
-				return getErr(autoAbility.Error(), err)
+				return h.GetErr(autoAbility.Error(), err)
 			}
 		}
 
@@ -228,7 +229,7 @@ func (l *Lookup) seedAutoAbilityRelatedStats(qtx *database.Queries, autoAbility 
 			StatID:        junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonStat, err, "couldn't junction related stat")
+			return h.GetErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 
@@ -248,7 +249,7 @@ func (l *Lookup) seedAutoAbilityLockedOutAbilities(qtx *database.Queries, autoAb
 			ChildAbilityID:  junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonAbility, err, "couldn't junction locked out ability")
+			return h.GetErr(jsonAbility, err, "couldn't junction locked out ability")
 		}
 	}
 
@@ -268,7 +269,7 @@ func (l *Lookup) seedAutoAbilityAutoItemUse(qtx *database.Queries, autoAbility A
 			ItemID:        junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonItem, err, "couldn't junction auto item use item")
+			return h.GetErr(jsonItem, err, "couldn't junction auto item use item")
 		}
 	}
 
@@ -288,7 +289,7 @@ func (l *Lookup) seedAutoAbilityAddedStatusses(qtx *database.Queries, autoAbilit
 			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(jsonStatus, err, "couldn't junction added status")
+			return h.GetErr(jsonStatus, err, "couldn't junction added status")
 		}
 	}
 
@@ -308,7 +309,7 @@ func (l *Lookup) seedAutoAbilityAddedStatusResists(qtx *database.Queries, autoAb
 			StatusResistID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(statusResist.Error(), err, "couldn't junction status resist")
+			return h.GetErr(statusResist.Error(), err, "couldn't junction status resist")
 		}
 	}
 
@@ -328,7 +329,7 @@ func (l *Lookup) seedAutoAbilityStatChanges(qtx *database.Queries, autoAbility A
 			StatChangeID:  junction.ChildID,
 		})
 		if err != nil {
-			return getErr(statChange.Error(), err, "couldn't junction stat change")
+			return h.GetErr(statChange.Error(), err, "couldn't junction stat change")
 		}
 	}
 
@@ -348,7 +349,7 @@ func (l *Lookup) seedAutoAbilityModifierChanges(qtx *database.Queries, autoAbili
 			ModifierChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(modifierChange.Error(), err, "couldn't junction modifier change")
+			return h.GetErr(modifierChange.Error(), err, "couldn't junction modifier change")
 		}
 	}
 

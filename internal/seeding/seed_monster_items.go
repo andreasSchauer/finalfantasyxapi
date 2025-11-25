@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type MonsterItems struct {
@@ -27,15 +28,15 @@ func (m MonsterItems) ToHashFields() []any {
 	return []any{
 		m.MonsterID,
 		m.DropChance,
-		derefOrNil(m.DropCondition),
-		derefOrNil(m.OtherItemsCondition),
-		ObjPtrToID(m.StealCommon),
-		ObjPtrToID(m.StealRare),
-		ObjPtrToID(m.DropCommon),
-		ObjPtrToID(m.DropRare),
-		ObjPtrToID(m.SecondaryDropCommon),
-		ObjPtrToID(m.SecondaryDropRare),
-		ObjPtrToID(m.Bribe),
+		h.DerefOrNil(m.DropCondition),
+		h.DerefOrNil(m.OtherItemsCondition),
+		h.ObjPtrToID(m.StealCommon),
+		h.ObjPtrToID(m.StealRare),
+		h.ObjPtrToID(m.DropCommon),
+		h.ObjPtrToID(m.DropRare),
+		h.ObjPtrToID(m.SecondaryDropCommon),
+		h.ObjPtrToID(m.SecondaryDropRare),
+		h.ObjPtrToID(m.Bribe),
 	}
 }
 
@@ -52,62 +53,62 @@ func (l *Lookup) seedMonsterItems(qtx *database.Queries, monsterItems MonsterIte
 
 	monsterItems.StealCommon, err = seedObjPtrAssignFK(qtx, monsterItems.StealCommon, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, getErr(monsterItems.Error(), err, "steal common")
+		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "steal common")
 	}
 
 	monsterItems.StealRare, err = seedObjPtrAssignFK(qtx, monsterItems.StealRare, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, getErr(monsterItems.Error(), err, "steal rare")
+		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "steal rare")
 	}
 
 	monsterItems.DropCommon, err = seedObjPtrAssignFK(qtx, monsterItems.DropCommon, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, getErr(monsterItems.Error(), err, "drop common")
+		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "drop common")
 	}
 
 	monsterItems.DropRare, err = seedObjPtrAssignFK(qtx, monsterItems.DropRare, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, getErr(monsterItems.Error(), err, "drop rare")
+		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "drop rare")
 	}
 
 	monsterItems.SecondaryDropCommon, err = seedObjPtrAssignFK(qtx, monsterItems.SecondaryDropCommon, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, getErr(monsterItems.Error(), err, "secondary drop common")
+		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "secondary drop common")
 	}
 
 	monsterItems.SecondaryDropRare, err = seedObjPtrAssignFK(qtx, monsterItems.SecondaryDropRare, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, getErr(monsterItems.Error(), err, "secondary drop rare")
+		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "secondary drop rare")
 	}
 
 	monsterItems.Bribe, err = seedObjPtrAssignFK(qtx, monsterItems.Bribe, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, getErr(monsterItems.Error(), err, "bribe")
+		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "bribe")
 	}
 
 	dbMonsterItems, err := qtx.CreateMonsterItem(context.Background(), database.CreateMonsterItemParams{
 		DataHash:              generateDataHash(monsterItems),
 		MonsterID:             monsterItems.MonsterID,
 		DropChance:            monsterItems.DropChance,
-		DropCondition:         getNullString(monsterItems.DropCondition),
-		OtherItemsCondition:   getNullString(monsterItems.OtherItemsCondition),
-		StealCommonID:         ObjPtrToNullInt32ID(monsterItems.StealCommon),
-		StealRareID:           ObjPtrToNullInt32ID(monsterItems.StealRare),
-		DropCommonID:          ObjPtrToNullInt32ID(monsterItems.DropCommon),
-		DropRareID:            ObjPtrToNullInt32ID(monsterItems.DropRare),
-		SecondaryDropCommonID: ObjPtrToNullInt32ID(monsterItems.SecondaryDropCommon),
-		SecondaryDropRareID:   ObjPtrToNullInt32ID(monsterItems.SecondaryDropRare),
-		BribeID:               ObjPtrToNullInt32ID(monsterItems.Bribe),
+		DropCondition:         h.GetNullString(monsterItems.DropCondition),
+		OtherItemsCondition:   h.GetNullString(monsterItems.OtherItemsCondition),
+		StealCommonID:         h.ObjPtrToNullInt32ID(monsterItems.StealCommon),
+		StealRareID:           h.ObjPtrToNullInt32ID(monsterItems.StealRare),
+		DropCommonID:          h.ObjPtrToNullInt32ID(monsterItems.DropCommon),
+		DropRareID:            h.ObjPtrToNullInt32ID(monsterItems.DropRare),
+		SecondaryDropCommonID: h.ObjPtrToNullInt32ID(monsterItems.SecondaryDropCommon),
+		SecondaryDropRareID:   h.ObjPtrToNullInt32ID(monsterItems.SecondaryDropRare),
+		BribeID:               h.ObjPtrToNullInt32ID(monsterItems.Bribe),
 	})
 	if err != nil {
-		return MonsterItems{}, getErr(monsterItems.Error(), err, "couldn't create monster items")
+		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "couldn't create monster items")
 	}
 
 	monsterItems.ID = dbMonsterItems.ID
 
 	err = l.seedMonsterOtherItems(qtx, monsterItems)
 	if err != nil {
-		return MonsterItems{}, getErr(monsterItems.Error(), err)
+		return MonsterItems{}, h.GetErr(monsterItems.Error(), err)
 	}
 
 	return monsterItems, nil
@@ -126,7 +127,7 @@ func (l *Lookup) seedMonsterOtherItems(qtx *database.Queries, monsterItems Monst
 			PossibleItemID: junction.ChildID,
 		})
 		if err != nil {
-			return getErr(posItem.Error(), err, "couldn't junction other item")
+			return h.GetErr(posItem.Error(), err, "couldn't junction other item")
 		}
 	}
 

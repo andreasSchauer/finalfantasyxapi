@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Mix struct {
@@ -85,7 +86,7 @@ func (l *Lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 
 			mix.OverdriveID, err = assignFK(ability, l.getOverdrive)
 			if err != nil {
-				return getErr(mix.Error(), err)
+				return h.GetErr(mix.Error(), err)
 			}
 
 			dbMix, err := qtx.CreateMix(context.Background(), database.CreateMixParams{
@@ -94,7 +95,7 @@ func (l *Lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 				Category:    database.MixCategory(mix.Category),
 			})
 			if err != nil {
-				return getErr(mix.Error(), err, "couldn't create mix")
+				return h.GetErr(mix.Error(), err, "couldn't create mix")
 			}
 
 			mix.ID = dbMix.ID
@@ -123,7 +124,7 @@ func (l *Lookup) seedMixesRelationships(db *database.Queries, dbConn *sql.DB) er
 
 			err = l.seedMixCombinations(qtx, mix)
 			if err != nil {
-				return getErr(mix.Error(), err)
+				return h.GetErr(mix.Error(), err)
 			}
 		}
 
@@ -168,12 +169,12 @@ func (l *Lookup) seedMixCombination(qtx *database.Queries, combo MixCombination)
 
 	combo.FirstItemID, err = assignFK(combo.FirstItem, l.getItem)
 	if err != nil {
-		return MixCombination{}, getErr(combo.Error(), err)
+		return MixCombination{}, h.GetErr(combo.Error(), err)
 	}
 
 	combo.SecondItemID, err = assignFK(combo.SecondItem, l.getItem)
 	if err != nil {
-		return MixCombination{}, getErr(combo.Error(), err)
+		return MixCombination{}, h.GetErr(combo.Error(), err)
 	}
 
 	if combo.FirstItemID > combo.SecondItemID {
@@ -190,7 +191,7 @@ func (l *Lookup) seedMixCombination(qtx *database.Queries, combo MixCombination)
 		IsBestCombo:  combo.IsBestCombo,
 	})
 	if err != nil {
-		return MixCombination{}, getErr(combo.Error(), err, "couldn't create mix combination")
+		return MixCombination{}, h.GetErr(combo.Error(), err, "couldn't create mix combination")
 	}
 
 	combo.ID = dbCombo.ID

@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Element struct {
@@ -18,7 +19,7 @@ type Element struct {
 func (e Element) ToHashFields() []any {
 	return []any{
 		e.Name,
-		derefOrNil(e.OppositeElementID),
+		h.DerefOrNil(e.OppositeElementID),
 	}
 }
 
@@ -46,7 +47,7 @@ func (l *Lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 				Name:     element.Name,
 			})
 			if err != nil {
-				return getErr(element.Error(), err, "couldn't create element")
+				return h.GetErr(element.Error(), err, "couldn't create element")
 			}
 
 			element.ID = dbElement.ID
@@ -74,16 +75,16 @@ func (l *Lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB)
 
 			element.OppositeElementID, err = assignFKPtr(element.OppositeElement, l.getElement)
 			if err != nil {
-				return getErr(element.Error(), err)
+				return h.GetErr(element.Error(), err)
 			}
 
 			err = qtx.UpdateElement(context.Background(), database.UpdateElementParams{
 				DataHash:          generateDataHash(element),
-				OppositeElementID: getNullInt32(element.OppositeElementID),
+				OppositeElementID: h.GetNullInt32(element.OppositeElementID),
 				ID:                element.ID,
 			})
 			if err != nil {
-				return getErr(element.Error(), err, "couldn't update element")
+				return h.GetErr(element.Error(), err, "couldn't update element")
 			}
 
 			l.elements[element.Name] = element

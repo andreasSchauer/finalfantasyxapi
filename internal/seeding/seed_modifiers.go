@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Modifier struct {
@@ -21,7 +22,7 @@ func (m Modifier) ToHashFields() []any {
 		m.Name,
 		m.Effect,
 		m.Type,
-		derefOrNil(m.DefaultValue),
+		h.DerefOrNil(m.DefaultValue),
 	}
 }
 
@@ -49,10 +50,10 @@ func (l *Lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 				Name:         modifier.Name,
 				Effect:       modifier.Effect,
 				Type:         database.ModifierType(modifier.Type),
-				DefaultValue: getNullFloat64(modifier.DefaultValue),
+				DefaultValue: h.GetNullFloat64(modifier.DefaultValue),
 			})
 			if err != nil {
-				return getErr(modifier.Error(), err, "couldn't create modifier")
+				return h.GetErr(modifier.Error(), err, "couldn't create modifier")
 			}
 
 			modifier.ID = dbModifier.ID
