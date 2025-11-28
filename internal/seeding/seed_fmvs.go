@@ -49,12 +49,12 @@ func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 		for _, fmv := range fmvs {
 			var err error
 
-			fmv.SongID, err = assignFKPtr(fmv.SongName, l.getSong)
+			fmv.SongID, err = assignFKPtr(fmv.SongName, l.songs)
 			if err != nil {
 				return h.GetErr(fmv.Error(), err)
 			}
 
-			fmv.AreaID, err = assignFK(fmv.LocationArea, l.getArea)
+			fmv.AreaID, err = assignFK(fmv.LocationArea, l.areas)
 			if err != nil {
 				return h.GetErr(fmv.Error(), err)
 			}

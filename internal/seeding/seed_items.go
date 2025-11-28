@@ -129,8 +129,7 @@ func (l *Lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
 	}
 
 	item.ID = dbItem.ID
-	key := createLookupKey(item.MasterItem)
-	l.items[key] = item
+	l.items[item.Name] = item
 
 	return item, nil
 }
@@ -160,8 +159,7 @@ func (l *Lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 	itemAbility.ID = dbItemAbility.ID
 
 	item.ItemAbility = itemAbility
-	key := createLookupKey(item.MasterItem)
-	l.items[key] = item
+	l.items[item.Name] = item
 
 	return nil
 }
@@ -177,7 +175,7 @@ func (l *Lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonItem := range items {
-			item, err := l.getItem(jsonItem.Name)
+			item, err := getResource(jsonItem.Name, l.items)
 			if err != nil {
 				return err
 			}
@@ -208,7 +206,7 @@ func (l *Lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 func (l *Lookup) seedItemRelatedStats(qtx *database.Queries, item Item) error {
 	for _, jsonStat := range item.RelatedStats {
-		junction, err := createJunction(item, jsonStat, l.getStat)
+		junction, err := createJunction(item, jsonStat, l.stats)
 		if err != nil {
 			return err
 		}
@@ -228,7 +226,7 @@ func (l *Lookup) seedItemRelatedStats(qtx *database.Queries, item Item) error {
 
 func (l *Lookup) seedItemAvailableMenus(qtx *database.Queries, item Item) error {
 	for _, jsonSubmenu := range item.AvailableMenus {
-		junction, err := createJunction(item, jsonSubmenu, l.getSubmenu)
+		junction, err := createJunction(item, jsonSubmenu, l.submenus)
 		if err != nil {
 			return err
 		}

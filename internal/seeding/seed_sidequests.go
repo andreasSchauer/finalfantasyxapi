@@ -123,8 +123,7 @@ func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			sidequest.ID = dbSidequest.ID
-			key := createLookupKey(sidequest.Quest)
-			l.sidequests[key] = sidequest
+			l.sidequests[sidequest.Name] = sidequest
 
 			err = l.seedSubquests(qtx, sidequest)
 			if err != nil {
@@ -156,8 +155,7 @@ func (l *Lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 		}
 
 		subquest.ID = dbSubquest.ID
-		key := createLookupKey(subquest.Quest)
-		l.subquests[key] = subquest
+		l.subquests[subquest.Name] = subquest
 	}
 
 	return nil
@@ -174,7 +172,7 @@ func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonSidequest := range sidequests {
-			sidequest, err := l.getSidequest(jsonSidequest.Name)
+			sidequest, err := getResource(jsonSidequest.Name, l.sidequests)
 			if err != nil {
 				return err
 			}
@@ -187,7 +185,7 @@ func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 			}
 
 			for _, jsonSubquest := range sidequest.Subquests {
-				subquest, err := l.getSubquest(jsonSubquest.Name)
+				subquest, err := getResource(jsonSubquest.Name, l.subquests)
 				if err != nil {
 					return h.GetErr(sidequest.Error(), err)
 				}
@@ -209,7 +207,7 @@ func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 func (l *Lookup) seedQuestCompletionRelationships(qtx *database.Queries, completion QuestCompletion, quest Quest) error {
 	var err error
 
-	completion.QuestID, err = assignFK(quest, l.getQuest)
+	completion.QuestID, err = assignFK(quest, l.quests)
 	if err != nil {
 		return h.GetErr(completion.Error(), err)
 	}
@@ -253,7 +251,7 @@ func (l *Lookup) seedCompletionLocations(qtx *database.Queries, completion Quest
 	for _, location := range completion.Locations {
 		var err error
 
-		location.AreaID, err = assignFK(location.LocationArea, l.getArea)
+		location.AreaID, err = assignFK(location.LocationArea, l.areas)
 		if err != nil {
 			return err
 		}

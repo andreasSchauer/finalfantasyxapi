@@ -65,8 +65,7 @@ func (l *Lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			keyItem.ID = dbKeyItem.ID
-			key := createLookupKey(keyItem.MasterItem)
-			l.keyItems[key] = keyItem
+			l.keyItems[keyItem.Name] = keyItem
 		}
 		return nil
 	})

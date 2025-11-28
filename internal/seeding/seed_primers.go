@@ -43,7 +43,7 @@ func (l *Lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 		for _, primer := range primers {
 			var err error
 
-			primer.KeyItemID, err = assignFK(primer.Name, l.getKeyItem)
+			primer.KeyItemID, err = assignFK(primer.Name, l.keyItems)
 			if err != nil {
 				return h.GetErr(primer.Error(), err)
 			}

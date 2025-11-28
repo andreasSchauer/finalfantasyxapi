@@ -72,8 +72,7 @@ func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			character.ID = dbCharacter.ID
-			key := createLookupKey(character.PlayerUnit)
-			l.characters[key] = character
+			l.characters[character.Name] = character
 
 			err = l.seedCharacterClasses(qtx, character.PlayerUnit)
 			if err != nil {
@@ -95,7 +94,7 @@ func (l *Lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.D
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonCharacter := range characters {
-			character, err := l.getCharacter(jsonCharacter.Name)
+			character, err := getResource(jsonCharacter.Name, l.characters)
 			if err != nil {
 				return err
 			}

@@ -85,6 +85,7 @@ func (a Attributes) Error() string {
 }
 
 func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, error) {
+	// overdrive abilities inherit attributes from overdrives
 	if ability.Type != database.AbilityTypeOverdriveAbility {
 		var err error
 

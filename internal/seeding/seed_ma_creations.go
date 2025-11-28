@@ -49,7 +49,7 @@ func (l *Lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB)
 		for _, creation := range creations {
 			var err error
 
-			creation.SubquestID, err = assignFK(creation.Name, l.getSubquest)
+			creation.SubquestID, err = assignFK(creation.Name, l.subquests)
 			if err != nil {
 				return h.GetErr(creation.Error(), err)
 			}

@@ -82,17 +82,17 @@ func (l *Lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonCommand := range overdriveCommands {
-			command, err := l.getOverdriveCommand(jsonCommand.Name)
+			command, err := getResource(jsonCommand.Name, l.overdriveCommands)
 			if err != nil {
 				return err
 			}
 
-			command.CharClassID, err = assignFKPtr(&command.User, l.getCharacterClass)
+			command.CharClassID, err = assignFKPtr(&command.User, l.charClasses)
 			if err != nil {
 				return h.GetErr(command.Error(), err)
 			}
 
-			command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, l.getSubmenu)
+			command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, l.submenus)
 			if err != nil {
 				return h.GetErr(command.Error(), err)
 			}

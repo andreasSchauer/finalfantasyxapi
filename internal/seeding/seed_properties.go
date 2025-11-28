@@ -75,7 +75,7 @@ func (l *Lookup) seedPropertiesRelationships(db *database.Queries, dbConn *sql.D
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonProperty := range properties {
-			property, err := l.getProperty(jsonProperty.Name)
+			property, err := getResource(jsonProperty.Name, l.properties)
 			if err != nil {
 				return err
 			}
@@ -102,7 +102,7 @@ func (l *Lookup) seedPropertiesRelationships(db *database.Queries, dbConn *sql.D
 
 func (l *Lookup) seedPropertyRelatedStats(qtx *database.Queries, property Property) error {
 	for _, jsonStat := range property.RelatedStats {
-		junction, err := createJunction(property, jsonStat, l.getStat)
+		junction, err := createJunction(property, jsonStat, l.stats)
 		if err != nil {
 			return err
 		}
@@ -122,7 +122,7 @@ func (l *Lookup) seedPropertyRelatedStats(qtx *database.Queries, property Proper
 
 func (l *Lookup) seedPropertyRemovedConditions(qtx *database.Queries, property Property) error {
 	for _, jsonCondition := range property.RemovedStatusConditions {
-		junction, err := createJunction(property, jsonCondition, l.getStatusCondition)
+		junction, err := createJunction(property, jsonCondition, l.statusConditions)
 		if err != nil {
 			return err
 		}

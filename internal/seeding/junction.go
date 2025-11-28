@@ -7,12 +7,10 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type Junction struct {
-	ParentID 	int32
-	ChildID  	int32
+	ParentID int32
+	ChildID  int32
 }
-
 
 func (j Junction) ToHashFields() []any {
 	return []any{
@@ -21,12 +19,10 @@ func (j Junction) ToHashFields() []any {
 	}
 }
 
-
 type ThreeWayJunction struct {
-	GrandparentID	int32
+	GrandparentID int32
 	Junction
 }
-
 
 func (j ThreeWayJunction) ToHashFields() []any {
 	return []any{
@@ -36,12 +32,10 @@ func (j ThreeWayJunction) ToHashFields() []any {
 	}
 }
 
-
 type FourWayJunction struct {
-	GreatGrandparentID	int32
+	GreatGrandparentID int32
 	ThreeWayJunction
 }
-
 
 func (j FourWayJunction) ToHashFields() []any {
 	return []any{
@@ -53,15 +47,15 @@ func (j FourWayJunction) ToHashFields() []any {
 }
 
 
-func createJunction[T any, P, C h.HasID](parent P, childKey T, lookup func(T) (C, error)) (Junction, error) {
-	child, err := lookup(childKey)
+func createJunction[T any, P, C h.HasID](parent P, childKey T, lookup map[string]C) (Junction, error) {
+	child, err := getResource(childKey, lookup)
 	if err != nil {
 		return Junction{}, fmt.Errorf("couldn't create junction: %v", err)
 	}
 
 	junction := Junction{
-		ParentID: 	parent.GetID(),
-		ChildID: 	child.GetID(),
+		ParentID: parent.GetID(),
+		ChildID:  child.GetID(),
 	}
 
 	return junction, nil
@@ -75,24 +69,23 @@ func createJunctionSeed[P, C h.HasID](qtx *database.Queries, parent P, child C, 
 	}
 
 	junction := Junction{
-		ParentID: 	parent.GetID(),
-		ChildID: 	child.GetID(),
+		ParentID: parent.GetID(),
+		ChildID:  child.GetID(),
 	}
 
 	return junction, nil
 }
 
 
-
-func createThreeWayJunction[T any, GP, P, C h.HasID](grandParent GP, parent P, childKey T, lookup func(T) (C, error)) (ThreeWayJunction, error) {
+func createThreeWayJunction[T any, GP, P, C h.HasID](grandParent GP, parent P, childKey T, lookup map[string]C) (ThreeWayJunction, error) {
 	junction, err := createJunction(parent, childKey, lookup)
 	if err != nil {
 		return ThreeWayJunction{}, fmt.Errorf("couldn't create three way junction: %v", err)
 	}
 
 	threeWay := ThreeWayJunction{
-		GrandparentID:	grandParent.GetID(),
-		Junction: 		junction,	
+		GrandparentID: grandParent.GetID(),
+		Junction:      junction,
 	}
 
 	return threeWay, nil
@@ -106,8 +99,8 @@ func createThreeWayJunctionSeed[GP, P, C h.HasID](qtx *database.Queries, grandPa
 	}
 
 	threeWay := ThreeWayJunction{
-		GrandparentID:	grandParent.GetID(),
-		Junction: 		junction,	
+		GrandparentID: grandParent.GetID(),
+		Junction:      junction,
 	}
 
 	return threeWay, nil
@@ -122,7 +115,7 @@ func createFourWayJunctionSeed[GGP, GP, P, C h.HasID](qtx *database.Queries, gre
 
 	fourWay := FourWayJunction{
 		GreatGrandparentID: greatGrandParent.GetID(),
-		ThreeWayJunction: 	threeWay,
+		ThreeWayJunction:   threeWay,
 	}
 
 	return fourWay, nil

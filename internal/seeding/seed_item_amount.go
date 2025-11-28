@@ -40,7 +40,7 @@ func (ia ItemAmount) Error() string {
 func (l *Lookup) seedItemAmount(qtx *database.Queries, itemAmount ItemAmount) (ItemAmount, error) {
 	var err error
 
-	itemAmount.MasterItemID, err = assignFK(itemAmount.ItemName, l.getMasterItem)
+	itemAmount.MasterItemID, err = assignFK(itemAmount.ItemName, l.masterItems)
 	if err != nil {
 		return ItemAmount{}, h.GetErr(itemAmount.Error(), err)
 	}

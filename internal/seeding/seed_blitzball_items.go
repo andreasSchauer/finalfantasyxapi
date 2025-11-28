@@ -114,7 +114,7 @@ func (l *Lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonPosition := range blitzballPositions {
 			key := createLookupKey(jsonPosition)
-			position, err := l.getPosition(key)
+			position, err := getResource(key, l.positions)
 			if err != nil {
 				return err
 			}

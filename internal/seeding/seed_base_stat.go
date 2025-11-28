@@ -33,7 +33,7 @@ func (bs BaseStat) Error() string {
 func (l *Lookup) seedBaseStat(qtx *database.Queries, baseStat BaseStat) (BaseStat, error) {
 	var err error
 
-	baseStat.StatID, err = assignFK(baseStat.StatName, l.getStat)
+	baseStat.StatID, err = assignFK(baseStat.StatName, l.stats)
 	if err != nil {
 		return BaseStat{}, h.GetErr(baseStat.Error(), err)
 	}

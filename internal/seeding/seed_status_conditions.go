@@ -80,7 +80,7 @@ func (l *Lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn 
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonCondition := range statusConditions {
-			condition, err := l.getStatusCondition(jsonCondition.Name)
+			condition, err := getResource(jsonCondition.Name, l.statusConditions)
 			if err != nil {
 				return err
 			}
@@ -119,7 +119,7 @@ func (l *Lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn 
 
 func (l *Lookup) seedStatusConditionRelatedStats(qtx *database.Queries, condition StatusCondition) error {
 	for _, jsonStat := range condition.RelatedStats {
-		junction, err := createJunction(condition, jsonStat, l.getStat)
+		junction, err := createJunction(condition, jsonStat, l.stats)
 		if err != nil {
 			return err
 		}
@@ -139,7 +139,7 @@ func (l *Lookup) seedStatusConditionRelatedStats(qtx *database.Queries, conditio
 
 func (l *Lookup) seedStatusConditionRemovedConditions(qtx *database.Queries, condition StatusCondition) error {
 	for _, jsonCondition := range condition.RemovedStatusConditions {
-		junction, err := createJunction(condition, jsonCondition, l.getStatusCondition)
+		junction, err := createJunction(condition, jsonCondition, l.statusConditions)
 		if err != nil {
 			return err
 		}

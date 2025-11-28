@@ -121,7 +121,7 @@ func (l *Lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *
 		for _, jsonAbility := range playerAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			playerAbility, err := l.getPlayerAbility(abilityRef)
+			playerAbility, err := getResource(abilityRef, l.playerAbilities)
 			if err != nil {
 				return err
 			}
@@ -156,22 +156,22 @@ func (l *Lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *
 func (l *Lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbility) error {
 	var err error
 
-	ability.SubmenuID, err = assignFKPtr(ability.Submenu, l.getSubmenu)
+	ability.SubmenuID, err = assignFKPtr(ability.Submenu, l.submenus)
 	if err != nil {
 		return err
 	}
 
-	ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, l.getSubmenu)
+	ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, l.submenus)
 	if err != nil {
 		return err
 	}
 
-	ability.StandardGridCharID, err = assignFKPtr(ability.StandardGridPos, l.getCharacter)
+	ability.StandardGridCharID, err = assignFKPtr(ability.StandardGridPos, l.characters)
 	if err != nil {
 		return err
 	}
 
-	ability.ExpertGridCharID, err = assignFKPtr(ability.ExpertGridPos, l.getCharacter)
+	ability.ExpertGridCharID, err = assignFKPtr(ability.ExpertGridPos, l.characters)
 	if err != nil {
 		return err
 	}
@@ -199,7 +199,7 @@ func (l *Lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbili
 
 func (l *Lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability PlayerAbility) error {
 	for _, jsonStat := range ability.RelatedStats {
-		junction, err := createJunction(ability, jsonStat, l.getStat)
+		junction, err := createJunction(ability, jsonStat, l.stats)
 		if err != nil {
 			return err
 		}
@@ -219,7 +219,7 @@ func (l *Lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability Pl
 
 func (l *Lookup) seedPlayerAbilityLearnedBy(qtx *database.Queries, ability PlayerAbility) error {
 	for _, charClass := range ability.LearnedBy {
-		junction, err := createJunction(ability, charClass, l.getCharacterClass)
+		junction, err := createJunction(ability, charClass, l.charClasses)
 		if err != nil {
 			return err
 		}

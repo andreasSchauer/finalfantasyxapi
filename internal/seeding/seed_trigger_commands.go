@@ -100,7 +100,7 @@ func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *
 		for _, jsonCommand := range triggerCommands {
 			abilityRef := jsonCommand.GetAbilityRef()
 
-			command, err := l.getTriggerCommand(abilityRef)
+			command, err := getResource(abilityRef, l.triggerCommands)
 			if err != nil {
 				return err
 			}
@@ -124,7 +124,7 @@ func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *
 
 func (l *Lookup) seedTriggerCommandRelatedStats(qtx *database.Queries, command TriggerCommand) error {
 	for _, jsonStat := range command.RelatedStats {
-		junction, err := createJunction(command, jsonStat, l.getStat)
+		junction, err := createJunction(command, jsonStat, l.stats)
 		if err != nil {
 			return err
 		}

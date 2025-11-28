@@ -101,17 +101,17 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonOverdrive := range overdrives {
-			overdrive, err := l.getOverdrive(jsonOverdrive.Ability)
+			overdrive, err := getResource(jsonOverdrive.Ability, l.overdrives)
 			if err != nil {
 				return err
 			}
 
-			overdrive.ODCommandID, err = assignFKPtr(overdrive.OverdriveCommand, l.getOverdriveCommand)
+			overdrive.ODCommandID, err = assignFKPtr(overdrive.OverdriveCommand, l.overdriveCommands)
 			if err != nil {
 				return h.GetErr(overdrive.Error(), err)
 			}
 
-			overdrive.CharClassID, err = assignFKPtr(&overdrive.User, l.getCharacterClass)
+			overdrive.CharClassID, err = assignFKPtr(&overdrive.User, l.charClasses)
 			if err != nil {
 				return h.GetErr(overdrive.Error(), err)
 			}
@@ -137,7 +137,7 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 
 func (l *Lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdrive) error {
 	for _, abilityRef := range overdrive.OverdriveAbilities {
-		junction, err := createJunction(overdrive, abilityRef, l.getOverdriveAbility)
+		junction, err := createJunction(overdrive, abilityRef, l.overdriveAbilities)
 		if err != nil {
 			return h.GetErr(overdrive.Error(), err)
 		}
@@ -164,12 +164,12 @@ func (l *Lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdri
 }
 
 func (l *Lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive, abilityRef AbilityReference) error {
-	class, err := l.getCharacterClass(overdrive.User)
+	class, err := getResource(overdrive.User, l.charClasses)
 	if err != nil {
 		return err
 	}
 
-	junction, err := createJunction(class, abilityRef, l.getOverdriveAbility)
+	junction, err := createJunction(class, abilityRef, l.overdriveAbilities)
 	if err != nil {
 		return h.GetErr(abilityRef.Error(), err)
 	}

@@ -68,12 +68,12 @@ func (l *Lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB)
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonElement := range elements {
-			element, err := l.getElement(jsonElement.Name)
+			element, err := getResource(jsonElement.Name, l.elements)
 			if err != nil {
 				return err
 			}
 
-			element.OppositeElementID, err = assignFKPtr(element.OppositeElement, l.getElement)
+			element.OppositeElementID, err = assignFKPtr(element.OppositeElement, l.elements)
 			if err != nil {
 				return h.GetErr(element.Error(), err)
 			}

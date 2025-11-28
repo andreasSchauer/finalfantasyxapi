@@ -100,7 +100,7 @@ func (l *Lookup) seedOverdriveModesRelationships(db *database.Queries, dbConn *s
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonMode := range overdriveModes {
-			mode, err := l.getOverdriveMode(jsonMode.Name)
+			mode, err := getResource(jsonMode.Name, l.overdriveModes)
 			if err != nil {
 				return err
 			}
@@ -129,7 +129,7 @@ func (l *Lookup) seedOverdriveModesRelationships(db *database.Queries, dbConn *s
 func (l *Lookup) seedODModeAction(qtx *database.Queries, action ActionToLearn) (ActionToLearn, error) {
 	var err error
 
-	action.UserID, err = assignFK(action.User, l.getCharacter)
+	action.UserID, err = assignFK(action.User, l.characters)
 	if err != nil {
 		return ActionToLearn{}, h.GetErr(action.Error(), err)
 	}

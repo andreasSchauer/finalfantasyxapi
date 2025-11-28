@@ -75,13 +75,13 @@ func (l *Lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonSubmenu := range submenus {
-			submenu, err := l.getSubmenu(jsonSubmenu.Name)
+			submenu, err := getResource(jsonSubmenu.Name, l.submenus)
 			if err != nil {
 				return err
 			}
 
 			for _, jsonCharClass := range jsonSubmenu.Users {
-				junction, err := createJunction(submenu, jsonCharClass, l.getCharacterClass)
+				junction, err := createJunction(submenu, jsonCharClass, l.charClasses)
 				if err != nil {
 					return h.GetErr(submenu.Error(), err)
 				}

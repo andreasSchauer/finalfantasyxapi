@@ -9,6 +9,7 @@ import (
 
 func loadJSONFile[T any](srcPath string, target *T) error {
 	file, err := os.Open(srcPath)
+	
 	if err != nil {
 		return fmt.Errorf("couldn't open file: %v", err)
 	}

@@ -80,12 +80,12 @@ func (l *Lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonStat := range stats {
-			stat, err := l.getStat(jsonStat.Name)
+			stat, err := getResource(jsonStat.Name, l.stats)
 			if err != nil {
 				return err
 			}
 
-			stat.SphereID, err = assignFKPtr(&jsonStat.Sphere, l.getItem)
+			stat.SphereID, err = assignFKPtr(&jsonStat.Sphere, l.items)
 			if err != nil {
 				return h.GetErr(stat.Error(), err)
 			}

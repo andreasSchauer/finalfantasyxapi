@@ -157,7 +157,7 @@ func (l *Lookup) seedAltStateChangeProperties(qtx *database.Queries, change AltS
 	}
 
 	for _, propertyStr := range *change.Properties {
-		junction, err := createJunction(change, propertyStr, l.getProperty)
+		junction, err := createJunction(change, propertyStr, l.properties)
 		if err != nil {
 			return err
 		}
@@ -181,7 +181,7 @@ func (l *Lookup) seedAltStateChangeAutoAbilities(qtx *database.Queries, change A
 	}
 
 	for _, autoAbilityStr := range *change.AutoAbilities {
-		junction, err := createJunction(change, autoAbilityStr, l.getAutoAbility)
+		junction, err := createJunction(change, autoAbilityStr, l.autoAbilities)
 		if err != nil {
 			return err
 		}
@@ -253,7 +253,7 @@ func (l *Lookup) seedAltStateChangeStatusImmunities(qtx *database.Queries, chang
 	}
 
 	for _, conditionStr := range *change.StatusImmunities {
-		junction, err := createJunction(change, conditionStr, l.getStatusCondition)
+		junction, err := createJunction(change, conditionStr, l.statusConditions)
 		if err != nil {
 			return err
 		}

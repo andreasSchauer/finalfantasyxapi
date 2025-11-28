@@ -139,7 +139,7 @@ func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 			var err error
 
 			locationArea := shop.LocationArea
-			shop.AreaID, err = assignFK(locationArea, l.getArea)
+			shop.AreaID, err = assignFK(locationArea, l.areas)
 			if err != nil {
 				return h.GetErr(shop.Error(), err)
 			}
@@ -174,7 +174,7 @@ func (l *Lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) er
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonShop := range shops {
 			key := createLookupKey(jsonShop)
-			shop, err := l.getShop(key)
+			shop, err := getResource(key, l.shops)
 			if err != nil {
 				return err
 			}
@@ -242,7 +242,7 @@ func (l *Lookup) seedShopItems(qtx *database.Queries, shop Shop, subShop *SubSho
 func (l *Lookup) seedShopItem(qtx *database.Queries, shopItem ShopItem) (ShopItem, error) {
 	var err error
 
-	shopItem.ItemID, err = assignFK(shopItem.Name, l.getItem)
+	shopItem.ItemID, err = assignFK(shopItem.Name, l.items)
 	if err != nil {
 		return ShopItem{}, h.GetErr(shopItem.Error(), err)
 	}

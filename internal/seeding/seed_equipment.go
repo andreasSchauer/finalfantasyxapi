@@ -118,7 +118,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 		for _, table := range equipmentTables {
 			if table.SpecificCharacter != nil {
 				var err error
-				table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, l.getCharacter)
+				table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, l.characters)
 				if err != nil {
 					return h.GetErr(table.Error(), err)
 				}
@@ -159,7 +159,7 @@ func (l *Lookup) seedEquipmentRelationships(db *database.Queries, dbConn *sql.DB
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonTable := range equipmentTables {
 			key := createLookupKey(jsonTable)
-			table, err := l.getEquipmentTable(key)
+			table, err := getResource(key, l.equipmentTables)
 			if err != nil {
 				return err
 			}
@@ -194,7 +194,7 @@ func (l *Lookup) seedEquipmentAutoAbilities(qtx *database.Queries, table Equipme
 		var err error
 		eaJunction := EquipmentAutoAbilityJunction{}
 
-		eaJunction.Junction, err = createJunction(table, autoAbility, l.getAutoAbility)
+		eaJunction.Junction, err = createJunction(table, autoAbility, l.autoAbilities)
 		if err != nil {
 			return err
 		}
@@ -226,7 +226,7 @@ func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 		}
 
 		if table.Classification == string(database.EquipClassCelestialWeapon) {
-			etncJunction.CelestialWeaponID, err = assignFKPtr(&equipmentName.Name, l.getCelestialWeapon)
+			etncJunction.CelestialWeaponID, err = assignFKPtr(&equipmentName.Name, l.celestialWeapons)
 			if err != nil {
 				return h.GetErr(equipmentName.Error(), err)
 			}
@@ -250,7 +250,7 @@ func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 func (l *Lookup) seedEquipmentName(qtx *database.Queries, equipmentName EquipmentName) (EquipmentName, error) {
 	var err error
 
-	equipmentName.CharacterID, err = assignFK(equipmentName.CharacterName, l.getCharacter)
+	equipmentName.CharacterID, err = assignFK(equipmentName.CharacterName, l.characters)
 	if err != nil {
 		return EquipmentName{}, h.GetErr(equipmentName.Error(), err)
 	}
