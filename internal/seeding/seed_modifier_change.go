@@ -35,7 +35,7 @@ func (m ModifierChange) Error() string {
 func (l *Lookup) seedModifierChange(qtx *database.Queries, modifierChange ModifierChange) (ModifierChange, error) {
 	var err error
 
-	modifierChange.ModifierID, err = assignFK(modifierChange.ModifierName, l.modifiers)
+	modifierChange.ModifierID, err = assignFK(modifierChange.ModifierName, l.Modifiers)
 	if err != nil {
 		return ModifierChange{}, h.GetErr(modifierChange.Error(), err)
 	}

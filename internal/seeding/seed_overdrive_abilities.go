@@ -68,7 +68,7 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 
 			overdriveAbility.ID = dbOverdriveAbility.ID
 			key := createLookupKey(overdriveAbility.Ability)
-			l.overdriveAbilities[key] = overdriveAbility
+			l.OverdriveAbilities[key] = overdriveAbility
 		}
 		return nil
 	})
@@ -88,7 +88,7 @@ func (l *Lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbCon
 		for _, jsonAbility := range overdriveAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			overdriveAbility, err := getResource(abilityRef, l.overdriveAbilities)
+			overdriveAbility, err := GetResource(abilityRef, l.OverdriveAbilities)
 			if err != nil {
 				return h.GetErr(abilityRef.Error(), err)
 			}
@@ -112,7 +112,7 @@ func (l *Lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbCon
 
 func (l *Lookup) seedOverdriveAbilityRelatedStats(qtx *database.Queries, ability OverdriveAbility) error {
 	for _, jsonStat := range ability.RelatedStats {
-		junction, err := createJunction(ability, jsonStat, l.stats)
+		junction, err := createJunction(ability, jsonStat, l.Stats)
 		if err != nil {
 			return err
 		}

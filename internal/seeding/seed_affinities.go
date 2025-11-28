@@ -51,7 +51,7 @@ func (l *Lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			affinity.ID = dbAffinity.ID
-			l.affinities[affinity.Name] = affinity
+			l.Affinities[affinity.Name] = affinity
 		}
 		return nil
 	})

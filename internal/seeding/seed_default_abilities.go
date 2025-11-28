@@ -24,7 +24,7 @@ func (l *Lookup) seedDefaultAbilitiesRelationships(db *database.Queries, dbConn 
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, entry := range entries {
-			class, err := getResource(entry.Name, l.charClasses)
+			class, err := GetResource(entry.Name, l.CharClasses)
 			if err != nil {
 				return err
 			}
@@ -40,7 +40,7 @@ func (l *Lookup) seedDefaultAbilitiesRelationships(db *database.Queries, dbConn 
 
 func (l *Lookup) seedCharClassDefaultAbilities(qtx *database.Queries, class CharacterClass, entry DefaultAbilitiesEntry) error {
 	for _, abilityRef := range entry.DefaultAbilities {
-		junction, err := createJunction(class, abilityRef, l.playerAbilities)
+		junction, err := createJunction(class, abilityRef, l.PlayerAbilities)
 		if err != nil {
 			return err
 		}

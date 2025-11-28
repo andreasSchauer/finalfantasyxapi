@@ -83,7 +83,7 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 
 			overdrive.ID = dbOverdrive.ID
 			key := createLookupKey(overdrive.Ability)
-			l.overdrives[key] = overdrive
+			l.Overdrives[key] = overdrive
 		}
 
 		return nil
@@ -101,17 +101,17 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonOverdrive := range overdrives {
-			overdrive, err := getResource(jsonOverdrive.Ability, l.overdrives)
+			overdrive, err := GetResource(jsonOverdrive.Ability, l.Overdrives)
 			if err != nil {
 				return err
 			}
 
-			overdrive.ODCommandID, err = assignFKPtr(overdrive.OverdriveCommand, l.overdriveCommands)
+			overdrive.ODCommandID, err = assignFKPtr(overdrive.OverdriveCommand, l.OverdriveCommands)
 			if err != nil {
 				return h.GetErr(overdrive.Error(), err)
 			}
 
-			overdrive.CharClassID, err = assignFKPtr(&overdrive.User, l.charClasses)
+			overdrive.CharClassID, err = assignFKPtr(&overdrive.User, l.CharClasses)
 			if err != nil {
 				return h.GetErr(overdrive.Error(), err)
 			}
@@ -137,7 +137,7 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 
 func (l *Lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdrive) error {
 	for _, abilityRef := range overdrive.OverdriveAbilities {
-		junction, err := createJunction(overdrive, abilityRef, l.overdriveAbilities)
+		junction, err := createJunction(overdrive, abilityRef, l.OverdriveAbilities)
 		if err != nil {
 			return h.GetErr(overdrive.Error(), err)
 		}
@@ -164,12 +164,12 @@ func (l *Lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdri
 }
 
 func (l *Lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive, abilityRef AbilityReference) error {
-	class, err := getResource(overdrive.User, l.charClasses)
+	class, err := GetResource(overdrive.User, l.CharClasses)
 	if err != nil {
 		return err
 	}
 
-	junction, err := createJunction(class, abilityRef, l.overdriveAbilities)
+	junction, err := createJunction(class, abilityRef, l.OverdriveAbilities)
 	if err != nil {
 		return h.GetErr(abilityRef.Error(), err)
 	}

@@ -34,12 +34,12 @@ func (er ElementalResist) Error() string {
 func (l *Lookup) seedElementalResist(qtx *database.Queries, elemResist ElementalResist) (ElementalResist, error) {
 	var err error
 
-	elemResist.ElementID, err = assignFK(elemResist.Element, l.elements)
+	elemResist.ElementID, err = assignFK(elemResist.Element, l.Elements)
 	if err != nil {
 		return ElementalResist{}, h.GetErr(elemResist.Error(), err)
 	}
 
-	elemResist.AffinityID, err = assignFK(elemResist.Affinity, l.affinities)
+	elemResist.AffinityID, err = assignFK(elemResist.Affinity, l.Affinities)
 	if err != nil {
 		return ElementalResist{}, h.GetErr(elemResist.Error(), err)
 	}

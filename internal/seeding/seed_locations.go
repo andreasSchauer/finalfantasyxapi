@@ -219,7 +219,7 @@ func (l *Lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error
 		locationArea := area.GetLocationArea()
 
 		key := createLookupKey(locationArea)
-		l.areas[key] = area
+		l.Areas[key] = area
 	}
 
 	return nil
@@ -245,7 +245,7 @@ func (l *Lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) er
 						Version:     jsonArea.Version,
 					}
 
-					area, err := getResource(locationArea, l.areas)
+					area, err := GetResource(locationArea, l.Areas)
 					if err != nil {
 						return h.GetErr(locationArea.Error(), err)
 					}
@@ -285,7 +285,7 @@ func (l *Lookup) seedAreaConnections(qtx *database.Queries, area Area) error {
 func (l *Lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnection) (AreaConnection, error) {
 	var err error
 
-	connection.AreaID, err = assignFK(connection.LocationArea, l.areas)
+	connection.AreaID, err = assignFK(connection.LocationArea, l.Areas)
 	if err != nil {
 		return AreaConnection{}, h.GetErr(connection.Error(), err)
 	}

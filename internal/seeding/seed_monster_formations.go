@@ -107,7 +107,7 @@ func (l *Lookup) seedEncounterLocations(db *database.Queries, dbConn *sql.DB) er
 			var err error
 
 			locationArea := encounterLocation.LocationArea
-			encounterLocation.AreaID, err = assignFK(locationArea, l.areas)
+			encounterLocation.AreaID, err = assignFK(locationArea, l.Areas)
 			if err != nil {
 				return h.GetErr(encounterLocation.Error(), err)
 			}
@@ -124,7 +124,7 @@ func (l *Lookup) seedEncounterLocations(db *database.Queries, dbConn *sql.DB) er
 
 			encounterLocation.ID = dbEncounterLocation.ID
 			key := createLookupKey(encounterLocation)
-			l.encounterLocations[key] = encounterLocation
+			l.EncounterLocations[key] = encounterLocation
 		}
 		return nil
 	})
@@ -141,14 +141,14 @@ func (l *Lookup) seedMonsterFormationsRelationships(db *database.Queries, dbConn
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonEncounterLocation := range encounterLocations {
 			key := createLookupKey(jsonEncounterLocation)
-			encounterLocation, err := getResource(key, l.encounterLocations)
+			encounterLocation, err := GetResource(key, l.EncounterLocations)
 			if err != nil {
 				return err
 			}
 
 			for _, monsterFormation := range encounterLocation.Formations {
 				var err error
-				monsterFormation.EncounterLocationID, err = assignFK(key, l.encounterLocations)
+				monsterFormation.EncounterLocationID, err = assignFK(key, l.EncounterLocations)
 				if err != nil {
 					return h.GetErr(monsterFormation.Error(), err)
 				}
@@ -213,7 +213,7 @@ func (l *Lookup) seedMonsterFormation(qtx *database.Queries, formation MonsterFo
 func (l *Lookup) seedFormationBossSong(qtx *database.Queries, bossSong FormationBossSong) (FormationBossSong, error) {
 	var err error
 
-	bossSong.SongID, err = assignFK(bossSong.Song, l.songs)
+	bossSong.SongID, err = assignFK(bossSong.Song, l.Songs)
 	if err != nil {
 		return FormationBossSong{}, h.GetErr(bossSong.Error(), err)
 	}
@@ -235,7 +235,7 @@ func (l *Lookup) seedFormationMonsterAmounts(qtx *database.Queries, formation Mo
 	for _, monsterAmount := range formation.Monsters {
 		var err error
 		key := createLookupKey(monsterAmount)
-		monsterAmount.MonsterID, err = assignFK(key, l.monsters)
+		monsterAmount.MonsterID, err = assignFK(key, l.Monsters)
 		if err != nil {
 			return err
 		}
@@ -260,7 +260,7 @@ func (l *Lookup) seedFormationMonsterAmounts(qtx *database.Queries, formation Mo
 
 func (l *Lookup) seedFormationTriggerCommands(qtx *database.Queries, formation MonsterFormation) error {
 	for _, abilityRef := range formation.TriggerCommands {
-		junction, err := createJunction(formation, abilityRef, l.triggerCommands)
+		junction, err := createJunction(formation, abilityRef, l.TriggerCommands)
 		if err != nil {
 			return err
 		}

@@ -47,7 +47,7 @@ func (l *Lookup) seedAeonStats(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, aeonStat := range aeonStats {
-			aeon, err := getResource(aeonStat.Name, l.aeons)
+			aeon, err := GetResource(aeonStat.Name, l.Aeons)
 			if err != nil {
 				return h.GetErr(aeonStat.Name, err)
 			}

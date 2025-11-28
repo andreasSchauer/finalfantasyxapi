@@ -70,7 +70,7 @@ func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 
 			enemyAbility.ID = dbEnemyAbility.ID
 			key := createLookupKey(enemyAbility.Ability)
-			l.enemyAbilities[key] = enemyAbility
+			l.EnemyAbilities[key] = enemyAbility
 		}
 		return nil
 	})
@@ -90,7 +90,7 @@ func (l *Lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *s
 		for _, jsonAbility := range enemyAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			enemyAbility, err := getResource(abilityRef, l.enemyAbilities)
+			enemyAbility, err := GetResource(abilityRef, l.EnemyAbilities)
 			if err != nil {
 				return err
 			}

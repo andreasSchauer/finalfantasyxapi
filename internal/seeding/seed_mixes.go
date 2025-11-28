@@ -84,7 +84,7 @@ func (l *Lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 				Name: mix.Name,
 			}
 
-			mix.OverdriveID, err = assignFK(ability, l.overdrives)
+			mix.OverdriveID, err = assignFK(ability, l.Overdrives)
 			if err != nil {
 				return h.GetErr(mix.Error(), err)
 			}
@@ -99,7 +99,7 @@ func (l *Lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			mix.ID = dbMix.ID
-			l.mixes[mix.Name] = mix
+			l.Mixes[mix.Name] = mix
 		}
 
 		return nil
@@ -117,7 +117,7 @@ func (l *Lookup) seedMixesRelationships(db *database.Queries, dbConn *sql.DB) er
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonMix := range mixes {
-			mix, err := getResource(jsonMix.Name, l.mixes)
+			mix, err := GetResource(jsonMix.Name, l.Mixes)
 			if err != nil {
 				return err
 			}
@@ -167,12 +167,12 @@ func getBestComboMap(mix Mix) map[string]struct{} {
 func (l *Lookup) seedMixCombination(qtx *database.Queries, combo MixCombination) (MixCombination, error) {
 	var err error
 
-	combo.FirstItemID, err = assignFK(combo.FirstItem, l.items)
+	combo.FirstItemID, err = assignFK(combo.FirstItem, l.Items)
 	if err != nil {
 		return MixCombination{}, h.GetErr(combo.Error(), err)
 	}
 
-	combo.SecondItemID, err = assignFK(combo.SecondItem, l.items)
+	combo.SecondItemID, err = assignFK(combo.SecondItem, l.Items)
 	if err != nil {
 		return MixCombination{}, h.GetErr(combo.Error(), err)
 	}

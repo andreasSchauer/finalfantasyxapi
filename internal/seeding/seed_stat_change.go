@@ -35,7 +35,7 @@ func (s StatChange) Error() string {
 func (l *Lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (StatChange, error) {
 	var err error
 
-	statChange.StatID, err = assignFK(statChange.StatName, l.stats)
+	statChange.StatID, err = assignFK(statChange.StatName, l.Stats)
 	if err != nil {
 		return StatChange{}, h.GetErr(statChange.Error(), err)
 	}

@@ -173,7 +173,7 @@ func (l *Lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			song.ID = dbSong.ID
-			l.songs[song.Name] = song
+			l.Songs[song.Name] = song
 		}
 		return nil
 	})
@@ -190,7 +190,7 @@ func (l *Lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonSong := range songs {
-			song, err := getResource(jsonSong.Name, l.songs)
+			song, err := GetResource(jsonSong.Name, l.Songs)
 			if err != nil {
 				return err
 			}
@@ -253,7 +253,7 @@ func (l *Lookup) seedBackgroundMusicEntries(qtx *database.Queries, song Song) er
 
 			saJunction := SongAreaJunction{}
 			saJunction.Junction = junction
-			saJunction.AreaID, err = assignFK(locationArea, l.areas)
+			saJunction.AreaID, err = assignFK(locationArea, l.Areas)
 			if err != nil {
 				return h.GetErr(bm.Error(), err)
 			}
@@ -285,7 +285,7 @@ func (l *Lookup) seedCues(qtx *database.Queries, song Song) error {
 
 			saJunction := SongAreaJunction{}
 			saJunction.Junction = junction
-			saJunction.AreaID, err = assignFK(locationArea, l.areas)
+			saJunction.AreaID, err = assignFK(locationArea, l.Areas)
 			if err != nil {
 				return h.GetErr(cue.Error(), err)
 			}
@@ -324,7 +324,7 @@ func (l *Lookup) seedCue(qtx *database.Queries, cue Cue) (Cue, error) {
 	if cue.TriggerLocationArea != nil {
 		var err error
 
-		cue.TriggerLocationArea.ID, err = assignFK(*cue.TriggerLocationArea, l.areas)
+		cue.TriggerLocationArea.ID, err = assignFK(*cue.TriggerLocationArea, l.Areas)
 		if err != nil {
 			return Cue{}, h.GetErr(cue.Error(), err)
 		}

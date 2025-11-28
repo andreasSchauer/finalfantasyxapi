@@ -35,7 +35,7 @@ func (m MonsterAbility) Error() string {
 func (l *Lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility MonsterAbility) (MonsterAbility, error) {
 	var err error
 
-	monsterAbility.AbilityID, err = assignFK(monsterAbility.AbilityReference, l.abilities)
+	monsterAbility.AbilityID, err = assignFK(monsterAbility.AbilityReference, l.Abilities)
 	if err != nil {
 		return MonsterAbility{}, h.GetErr(monsterAbility.Error(), err)
 	}

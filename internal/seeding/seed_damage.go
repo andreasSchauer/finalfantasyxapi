@@ -70,7 +70,7 @@ func (ad AbilityDamage) Error() string {
 func (l *Lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error) {
 	var err error
 
-	damage.ElementID, err = assignFKPtr(damage.Element, l.elements)
+	damage.ElementID, err = assignFKPtr(damage.Element, l.Elements)
 	if err != nil {
 		return Damage{}, h.GetErr(damage.Error(), err)
 	}
@@ -125,7 +125,7 @@ func (l *Lookup) seedAbilityDamages(qtx *database.Queries, damage Damage) error 
 func (l *Lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityDamage) (AbilityDamage, error) {
 	var err error
 
-	abilityDamage.StatID, err = assignFK(abilityDamage.TargetStat, l.stats)
+	abilityDamage.StatID, err = assignFK(abilityDamage.TargetStat, l.Stats)
 	if err != nil {
 		return AbilityDamage{}, h.GetErr(abilityDamage.Error(), err)
 	}

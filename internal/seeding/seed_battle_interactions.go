@@ -143,7 +143,7 @@ func (l *Lookup) seedBattleInteractionRelationships(qtx *database.Queries, abili
 
 func (l *Lookup) seedBattleIntAffectedBy(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, conditionString := range battleInteraction.AffectedBy {
-		threeWay, err := createThreeWayJunction(ability, battleInteraction, conditionString, l.statusConditions)
+		threeWay, err := createThreeWayJunction(ability, battleInteraction, conditionString, l.StatusConditions)
 		if err != nil {
 			return err
 		}
@@ -206,7 +206,7 @@ func (l *Lookup) seedBattleIntInflictedConditions(qtx *database.Queries, ability
 
 func (l *Lookup) seedBattleIntRemovedConditions(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, conditionString := range battleInteraction.RemovedStatusConditions {
-		threeWay, err := createThreeWayJunction(ability, battleInteraction, conditionString, l.statusConditions)
+		threeWay, err := createThreeWayJunction(ability, battleInteraction, conditionString, l.StatusConditions)
 		if err != nil {
 			return err
 		}

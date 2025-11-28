@@ -118,7 +118,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 		for _, table := range equipmentTables {
 			if table.SpecificCharacter != nil {
 				var err error
-				table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, l.characters)
+				table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, l.Characters)
 				if err != nil {
 					return h.GetErr(table.Error(), err)
 				}
@@ -141,7 +141,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 
 			table.ID = dbEquipmentTable.ID
 			key := createLookupKey(table)
-			l.equipmentTables[key] = table
+			l.EquipmentTables[key] = table
 		}
 		return nil
 	})
@@ -159,7 +159,7 @@ func (l *Lookup) seedEquipmentRelationships(db *database.Queries, dbConn *sql.DB
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonTable := range equipmentTables {
 			key := createLookupKey(jsonTable)
-			table, err := getResource(key, l.equipmentTables)
+			table, err := GetResource(key, l.EquipmentTables)
 			if err != nil {
 				return err
 			}
@@ -194,7 +194,7 @@ func (l *Lookup) seedEquipmentAutoAbilities(qtx *database.Queries, table Equipme
 		var err error
 		eaJunction := EquipmentAutoAbilityJunction{}
 
-		eaJunction.Junction, err = createJunction(table, autoAbility, l.autoAbilities)
+		eaJunction.Junction, err = createJunction(table, autoAbility, l.AutoAbilities)
 		if err != nil {
 			return err
 		}
@@ -226,7 +226,7 @@ func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 		}
 
 		if table.Classification == string(database.EquipClassCelestialWeapon) {
-			etncJunction.CelestialWeaponID, err = assignFKPtr(&equipmentName.Name, l.celestialWeapons)
+			etncJunction.CelestialWeaponID, err = assignFKPtr(&equipmentName.Name, l.CelestialWeapons)
 			if err != nil {
 				return h.GetErr(equipmentName.Error(), err)
 			}
@@ -250,7 +250,7 @@ func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 func (l *Lookup) seedEquipmentName(qtx *database.Queries, equipmentName EquipmentName) (EquipmentName, error) {
 	var err error
 
-	equipmentName.CharacterID, err = assignFK(equipmentName.CharacterName, l.characters)
+	equipmentName.CharacterID, err = assignFK(equipmentName.CharacterName, l.Characters)
 	if err != nil {
 		return EquipmentName{}, h.GetErr(equipmentName.Error(), err)
 	}
@@ -265,7 +265,7 @@ func (l *Lookup) seedEquipmentName(qtx *database.Queries, equipmentName Equipmen
 	}
 
 	equipmentName.ID = dbEquipmentName.ID
-	l.equipmentNames[equipmentName.Name] = equipmentName
+	l.EquipmentNames[equipmentName.Name] = equipmentName
 
 	return equipmentName, nil
 }

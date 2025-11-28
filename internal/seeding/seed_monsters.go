@@ -140,7 +140,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 
 			monster.ID = dbMonster.ID
 			key := createLookupKey(monster)
-			l.monsters[key] = monster
+			l.Monsters[key] = monster
 		}
 
 		return nil
@@ -160,7 +160,7 @@ func (l *Lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB)
 		for _, jsonMonster := range monsters {
 			key := createLookupKey(jsonMonster)
 
-			monster, err := getResource(key, l.monsters)
+			monster, err := GetResource(key, l.Monsters)
 			if err != nil {
 				return err
 			}
@@ -224,7 +224,7 @@ func (l *Lookup) seedMonsterJunctions(qtx *database.Queries, monster Monster) er
 
 func (l *Lookup) seedMonsterProperties(qtx *database.Queries, monster Monster) error {
 	for _, propertyStr := range monster.Properties {
-		junction, err := createJunction(monster, propertyStr, l.properties)
+		junction, err := createJunction(monster, propertyStr, l.Properties)
 		if err != nil {
 			return err
 		}
@@ -244,7 +244,7 @@ func (l *Lookup) seedMonsterProperties(qtx *database.Queries, monster Monster) e
 
 func (l *Lookup) seedMonsterAutoAbilities(qtx *database.Queries, monster Monster) error {
 	for _, autoAbilityStr := range monster.AutoAbilities {
-		junction, err := createJunction(monster, autoAbilityStr, l.autoAbilities)
+		junction, err := createJunction(monster, autoAbilityStr, l.AutoAbilities)
 		if err != nil {
 			return err
 		}
@@ -268,7 +268,7 @@ func (l *Lookup) seedMonsterRonsoRages(qtx *database.Queries, monster Monster) e
 			Name: rage,
 		}
 
-		overdrive, err := getResource(key, l.overdrives)
+		overdrive, err := GetResource(key, l.Overdrives)
 		if err != nil {
 			return err
 		}
@@ -277,7 +277,7 @@ func (l *Lookup) seedMonsterRonsoRages(qtx *database.Queries, monster Monster) e
 			return h.GetErr(rage, errors.New("overdrive has to be a ronso rage"))
 		}
 
-		junction, err := createJunction(monster, key, l.overdrives)
+		junction, err := createJunction(monster, key, l.Overdrives)
 		if err != nil {
 			return err
 		}
@@ -337,7 +337,7 @@ func (l *Lookup) seedMonsterElemResists(qtx *database.Queries, monster Monster) 
 
 func (l *Lookup) seedMonsterImmunities(qtx *database.Queries, monster Monster) error {
 	for _, conditionStr := range monster.StatusImmunities {
-		junction, err := createJunction(monster, conditionStr, l.statusConditions)
+		junction, err := createJunction(monster, conditionStr, l.StatusConditions)
 		if err != nil {
 			return err
 		}

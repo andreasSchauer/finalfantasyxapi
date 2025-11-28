@@ -109,7 +109,7 @@ func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, e
 
 	ability.ID = dbAbility.ID
 	key := createLookupKey(ability)
-	l.abilities[key] = ability
+	l.Abilities[key] = ability
 
 	return ability, nil
 }

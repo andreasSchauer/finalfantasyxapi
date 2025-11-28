@@ -61,7 +61,7 @@ func (l *Lookup) seedEquipmentDrops(qtx *database.Queries, monsterEquipment Mons
 func (l *Lookup) seedEquipmentDrop(qtx *database.Queries, drop EquipmentDrop) (EquipmentDrop, error) {
 	var err error
 
-	drop.AutoAbilityID, err = assignFK(drop.Ability, l.autoAbilities)
+	drop.AutoAbilityID, err = assignFK(drop.Ability, l.AutoAbilities)
 	if err != nil {
 		return EquipmentDrop{}, h.GetErr(drop.Error(), err)
 	}
@@ -91,7 +91,7 @@ func (l *Lookup) seedEquipmentDropCharacters(qtx *database.Queries, drop Equipme
 	monsterEquipment := l.currentME
 
 	for _, character := range drop.Characters {
-		threeWay, err := createThreeWayJunction(monsterEquipment, drop, character, l.characters)
+		threeWay, err := createThreeWayJunction(monsterEquipment, drop, character, l.Characters)
 		if err != nil {
 			return err
 		}

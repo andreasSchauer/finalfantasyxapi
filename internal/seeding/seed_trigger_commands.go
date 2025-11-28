@@ -80,7 +80,7 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 
 			command.ID = dbTriggerCommand.ID
 			key := createLookupKey(command.Ability)
-			l.triggerCommands[key] = command
+			l.TriggerCommands[key] = command
 		}
 		return nil
 	})
@@ -100,7 +100,7 @@ func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *
 		for _, jsonCommand := range triggerCommands {
 			abilityRef := jsonCommand.GetAbilityRef()
 
-			command, err := getResource(abilityRef, l.triggerCommands)
+			command, err := GetResource(abilityRef, l.TriggerCommands)
 			if err != nil {
 				return err
 			}
@@ -124,7 +124,7 @@ func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *
 
 func (l *Lookup) seedTriggerCommandRelatedStats(qtx *database.Queries, command TriggerCommand) error {
 	for _, jsonStat := range command.RelatedStats {
-		junction, err := createJunction(command, jsonStat, l.stats)
+		junction, err := createJunction(command, jsonStat, l.Stats)
 		if err != nil {
 			return err
 		}

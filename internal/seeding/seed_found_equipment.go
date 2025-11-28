@@ -34,7 +34,7 @@ func (f FoundEquipment) Error() string {
 func (l *Lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundEquipment) (FoundEquipment, error) {
 	var err error
 
-	foundEquipment.EquipmentNameID, err = assignFK(foundEquipment.Name, l.equipmentNames)
+	foundEquipment.EquipmentNameID, err = assignFK(foundEquipment.Name, l.EquipmentNames)
 	if err != nil {
 		return FoundEquipment{}, h.GetErr(foundEquipment.Error(), err)
 	}
@@ -60,7 +60,7 @@ func (l *Lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundE
 
 func (l *Lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipment FoundEquipment) error {
 	for _, autoAbility := range foundEquipment.Abilities {
-		junction, err := createJunction(foundEquipment, autoAbility, l.autoAbilities)
+		junction, err := createJunction(foundEquipment, autoAbility, l.AutoAbilities)
 		if err != nil {
 			return h.GetErr(autoAbility, err)
 		}

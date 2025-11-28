@@ -64,7 +64,7 @@ func (l *Lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 			}
 
 			command.ID = dbODCommand.ID
-			l.overdriveCommands[command.Name] = command
+			l.OverdriveCommands[command.Name] = command
 		}
 
 		return nil
@@ -82,17 +82,17 @@ func (l *Lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonCommand := range overdriveCommands {
-			command, err := getResource(jsonCommand.Name, l.overdriveCommands)
+			command, err := GetResource(jsonCommand.Name, l.OverdriveCommands)
 			if err != nil {
 				return err
 			}
 
-			command.CharClassID, err = assignFKPtr(&command.User, l.charClasses)
+			command.CharClassID, err = assignFKPtr(&command.User, l.CharClasses)
 			if err != nil {
 				return h.GetErr(command.Error(), err)
 			}
 
-			command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, l.submenus)
+			command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, l.Submenus)
 			if err != nil {
 				return h.GetErr(command.Error(), err)
 			}

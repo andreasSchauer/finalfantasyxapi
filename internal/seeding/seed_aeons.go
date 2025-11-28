@@ -106,7 +106,7 @@ func (l *Lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			aeon.ID = dbAeon.ID
-			l.aeons[aeon.Name] = aeon
+			l.Aeons[aeon.Name] = aeon
 
 			err = l.seedCharacterClasses(qtx, aeon.PlayerUnit)
 			if err != nil {
@@ -128,12 +128,12 @@ func (l *Lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonAeon := range aeons {
-			aeon, err := getResource(jsonAeon.Name, l.aeons)
+			aeon, err := GetResource(jsonAeon.Name, l.Aeons)
 			if err != nil {
 				return err
 			}
 
-			aeon.AreaID, err = assignFKPtr(&aeon.LocationArea, l.areas)
+			aeon.AreaID, err = assignFKPtr(&aeon.LocationArea, l.Areas)
 			if err != nil {
 				return h.GetErr(aeon.Error(), err)
 			}
@@ -193,7 +193,7 @@ func (l *Lookup) seedAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon
 func (l *Lookup) seedAeonEquipment(qtx *database.Queries, aeonEquipment AeonEquipment) (AeonEquipment, error) {
 	var err error
 
-	aeonEquipment.AutoAbilityID, err = assignFK(aeonEquipment.AutoAbility, l.autoAbilities)
+	aeonEquipment.AutoAbilityID, err = assignFK(aeonEquipment.AutoAbility, l.AutoAbilities)
 	if err != nil {
 		return AeonEquipment{}, h.GetErr(aeonEquipment.Error(), err)
 	}

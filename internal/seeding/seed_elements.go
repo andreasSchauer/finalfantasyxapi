@@ -51,7 +51,7 @@ func (l *Lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			element.ID = dbElement.ID
-			l.elements[element.Name] = element
+			l.Elements[element.Name] = element
 		}
 		return nil
 	})
@@ -68,12 +68,12 @@ func (l *Lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB)
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonElement := range elements {
-			element, err := getResource(jsonElement.Name, l.elements)
+			element, err := GetResource(jsonElement.Name, l.Elements)
 			if err != nil {
 				return err
 			}
 
-			element.OppositeElementID, err = assignFKPtr(element.OppositeElement, l.elements)
+			element.OppositeElementID, err = assignFKPtr(element.OppositeElement, l.Elements)
 			if err != nil {
 				return h.GetErr(element.Error(), err)
 			}
@@ -87,7 +87,7 @@ func (l *Lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB)
 				return h.GetErr(element.Error(), err, "couldn't update element")
 			}
 
-			l.elements[element.Name] = element
+			l.Elements[element.Name] = element
 		}
 		return nil
 	})

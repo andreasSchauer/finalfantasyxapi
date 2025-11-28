@@ -46,7 +46,7 @@ func (l *Lookup) seedCharacterClasses(qtx *database.Queries, unit PlayerUnit) er
 }
 
 func (l *Lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit) error {
-	character, err := getResource(unit.Name, l.characters)
+	character, err := GetResource(unit.Name, l.Characters)
 	if err != nil {
 		return err
 	}
@@ -67,7 +67,7 @@ func (l *Lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit
 }
 
 func (l *Lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) error {
-	aeon, err := getResource(unit.Name, l.aeons)
+	aeon, err := GetResource(unit.Name, l.Aeons)
 	if err != nil {
 		return err
 	}
@@ -133,7 +133,7 @@ func (l *Lookup) seedCharacterClass(qtx *database.Queries, class CharacterClass)
 	}
 
 	class.ID = dbClass.ID
-	l.charClasses[class.Name] = class
+	l.CharClasses[class.Name] = class
 
 	return class, nil
 }

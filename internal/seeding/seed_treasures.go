@@ -75,7 +75,7 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 			var err error
 
 			locationArea := list.LocationArea
-			list.LocationArea.ID, err = assignFK(locationArea, l.areas)
+			list.LocationArea.ID, err = assignFK(locationArea, l.Areas)
 			if err != nil {
 				return h.GetErr(list.Error(), err)
 			}
@@ -101,7 +101,7 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 
 				treasure.ID = dbTreasure.ID
 				key := createLookupKey(treasure)
-				l.treasures[key] = treasure
+				l.Treasures[key] = treasure
 			}
 		}
 
@@ -120,7 +120,7 @@ func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, list := range treasureLists {
-			list.LocationArea.ID, err = assignFK(list.LocationArea, l.areas)
+			list.LocationArea.ID, err = assignFK(list.LocationArea, l.Areas)
 			if err != nil {
 				return h.GetErr(list.Error(), err)
 			}
@@ -130,7 +130,7 @@ func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 				jsonTreasure.Version = int32(j + 1)
 				key := createLookupKey(jsonTreasure)
 
-				treasure, err := getResource(key, l.treasures)
+				treasure, err := GetResource(key, l.Treasures)
 				if err != nil {
 					return err
 				}

@@ -37,7 +37,7 @@ func (is InflictedStatus) Error() string {
 func (l *Lookup) seedInflictedStatus(qtx *database.Queries, inflictedStatus InflictedStatus) (InflictedStatus, error) {
 	var err error
 
-	inflictedStatus.StatusConditionID, err = assignFK(inflictedStatus.StatusCondition, l.statusConditions)
+	inflictedStatus.StatusConditionID, err = assignFK(inflictedStatus.StatusCondition, l.StatusConditions)
 	if err != nil {
 		return InflictedStatus{}, h.GetErr(inflictedStatus.Error(), err)
 	}

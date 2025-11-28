@@ -57,7 +57,7 @@ func (l *Lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			modifier.ID = dbModifier.ID
-			l.modifiers[modifier.Name] = modifier
+			l.Modifiers[modifier.Name] = modifier
 		}
 		return nil
 	})

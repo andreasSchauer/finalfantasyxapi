@@ -123,7 +123,7 @@ func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			sidequest.ID = dbSidequest.ID
-			l.sidequests[sidequest.Name] = sidequest
+			l.Sidequests[sidequest.Name] = sidequest
 
 			err = l.seedSubquests(qtx, sidequest)
 			if err != nil {
@@ -155,7 +155,7 @@ func (l *Lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 		}
 
 		subquest.ID = dbSubquest.ID
-		l.subquests[subquest.Name] = subquest
+		l.Subquests[subquest.Name] = subquest
 	}
 
 	return nil
@@ -172,7 +172,7 @@ func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonSidequest := range sidequests {
-			sidequest, err := getResource(jsonSidequest.Name, l.sidequests)
+			sidequest, err := GetResource(jsonSidequest.Name, l.Sidequests)
 			if err != nil {
 				return err
 			}
@@ -185,7 +185,7 @@ func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 			}
 
 			for _, jsonSubquest := range sidequest.Subquests {
-				subquest, err := getResource(jsonSubquest.Name, l.subquests)
+				subquest, err := GetResource(jsonSubquest.Name, l.Subquests)
 				if err != nil {
 					return h.GetErr(sidequest.Error(), err)
 				}
@@ -207,7 +207,7 @@ func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 func (l *Lookup) seedQuestCompletionRelationships(qtx *database.Queries, completion QuestCompletion, quest Quest) error {
 	var err error
 
-	completion.QuestID, err = assignFK(quest, l.quests)
+	completion.QuestID, err = assignFK(quest, l.Quests)
 	if err != nil {
 		return h.GetErr(completion.Error(), err)
 	}
@@ -251,7 +251,7 @@ func (l *Lookup) seedCompletionLocations(qtx *database.Queries, completion Quest
 	for _, location := range completion.Locations {
 		var err error
 
-		location.AreaID, err = assignFK(location.LocationArea, l.areas)
+		location.AreaID, err = assignFK(location.LocationArea, l.Areas)
 		if err != nil {
 			return err
 		}

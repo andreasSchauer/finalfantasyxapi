@@ -63,7 +63,7 @@ func (l *Lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			stat.ID = dbStat.ID
-			l.stats[stat.Name] = stat
+			l.Stats[stat.Name] = stat
 		}
 		return nil
 	})
@@ -80,12 +80,12 @@ func (l *Lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonStat := range stats {
-			stat, err := getResource(jsonStat.Name, l.stats)
+			stat, err := GetResource(jsonStat.Name, l.Stats)
 			if err != nil {
 				return err
 			}
 
-			stat.SphereID, err = assignFKPtr(&jsonStat.Sphere, l.items)
+			stat.SphereID, err = assignFKPtr(&jsonStat.Sphere, l.Items)
 			if err != nil {
 				return h.GetErr(stat.Error(), err)
 			}
@@ -99,7 +99,7 @@ func (l *Lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) er
 				return h.GetErr(stat.Error(), err, "couldn't update stat")
 			}
 
-			l.stats[stat.Name] = stat
+			l.Stats[stat.Name] = stat
 		}
 		return nil
 	})

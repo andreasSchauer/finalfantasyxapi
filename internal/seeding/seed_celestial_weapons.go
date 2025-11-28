@@ -58,7 +58,7 @@ func (l *Lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 			}
 
 			weapon.ID = dbWeapon.ID
-			l.celestialWeapons[weapon.Name] = weapon
+			l.CelestialWeapons[weapon.Name] = weapon
 		}
 		return nil
 	})
@@ -75,17 +75,17 @@ func (l *Lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn 
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonWeapon := range celestialWeapons {
-			weapon, err := getResource(jsonWeapon.Name, l.celestialWeapons)
+			weapon, err := GetResource(jsonWeapon.Name, l.CelestialWeapons)
 			if err != nil {
 				return err
 			}
 
-			weapon.CharacterID, err = assignFKPtr(&weapon.Character, l.characters)
+			weapon.CharacterID, err = assignFKPtr(&weapon.Character, l.Characters)
 			if err != nil {
 				return h.GetErr(weapon.Error(), err)
 			}
 
-			weapon.AeonID, err = assignFKPtr(weapon.Aeon, l.aeons)
+			weapon.AeonID, err = assignFKPtr(weapon.Aeon, l.Aeons)
 			if err != nil {
 				return h.GetErr(weapon.Error(), err)
 			}

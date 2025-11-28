@@ -7,9 +7,8 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 func assignFK[T any, R h.HasID](key T, lookup map[string]R) (int32, error) {
-	result, err := getResource(key, lookup)
+	result, err := GetResource(key, lookup)
 	if err != nil {
 		return 0, fmt.Errorf("couldn't assign foreign key: %v", err)
 	}
@@ -18,13 +17,12 @@ func assignFK[T any, R h.HasID](key T, lookup map[string]R) (int32, error) {
 	return id, nil
 }
 
-
 func assignFKPtr[T any, R h.HasID](key *T, lookup map[string]R) (*int32, error) {
 	if key == nil {
 		return nil, nil
 	}
 
-	result, err := getResource(*key, lookup)
+	result, err := GetResource(*key, lookup)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't assign foreign key ptr: %v", err)
 	}
@@ -32,7 +30,6 @@ func assignFKPtr[T any, R h.HasID](key *T, lookup map[string]R) (*int32, error) 
 	id := result.GetID()
 	return &id, nil
 }
-
 
 func seedObjAssignID[T h.HasID](qtx *database.Queries, obj T, seed func(*database.Queries, T) (T, error)) (T, error) {
 	var object T
@@ -44,7 +41,6 @@ func seedObjAssignID[T h.HasID](qtx *database.Queries, obj T, seed func(*databas
 
 	return object, nil
 }
-
 
 func seedObjPtrAssignFK[T h.HasID](qtx *database.Queries, obj *T, seed func(*database.Queries, T) (T, error)) (*T, error) {
 	if obj == nil {

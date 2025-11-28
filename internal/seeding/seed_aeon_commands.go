@@ -73,7 +73,7 @@ func (l *Lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			command.ID = dbAeonCommand.ID
-			l.aeonCommands[command.Name] = command
+			l.AeonCommands[command.Name] = command
 		}
 		return nil
 	})
@@ -90,12 +90,12 @@ func (l *Lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonCommand := range aeonCommands {
-			command, err := getResource(jsonCommand.Name, l.aeonCommands)
+			command, err := GetResource(jsonCommand.Name, l.AeonCommands)
 			if err != nil {
 				return err
 			}
 
-			command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, l.submenus)
+			command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, l.Submenus)
 			if err != nil {
 				return h.GetErr(command.Error(), err)
 			}
@@ -123,12 +123,12 @@ func (l *Lookup) seedAeonCommandPossibleAbilities(qtx *database.Queries, command
 	for _, possibleAbility := range command.PossibleAbilities {
 		for _, abilityRef := range possibleAbility.Abilities {
 			var err error
-			charClass, err := getResource(possibleAbility.User, l.charClasses)
+			charClass, err := GetResource(possibleAbility.User, l.CharClasses)
 			if err != nil {
 				return err
 			}
 
-			threeWay, err := createThreeWayJunction(command, charClass, abilityRef, l.abilities)
+			threeWay, err := createThreeWayJunction(command, charClass, abilityRef, l.Abilities)
 			if err != nil {
 				return h.GetErr(charClass.Error(), err)
 			}

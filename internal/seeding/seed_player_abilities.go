@@ -101,7 +101,7 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 
 			playerAbility.ID = dbPlayerAbility.ID
 			key := createLookupKey(playerAbility.Ability)
-			l.playerAbilities[key] = playerAbility
+			l.PlayerAbilities[key] = playerAbility
 		}
 		return nil
 	})
@@ -121,7 +121,7 @@ func (l *Lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *
 		for _, jsonAbility := range playerAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			playerAbility, err := getResource(abilityRef, l.playerAbilities)
+			playerAbility, err := GetResource(abilityRef, l.PlayerAbilities)
 			if err != nil {
 				return err
 			}
@@ -156,22 +156,22 @@ func (l *Lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *
 func (l *Lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbility) error {
 	var err error
 
-	ability.SubmenuID, err = assignFKPtr(ability.Submenu, l.submenus)
+	ability.SubmenuID, err = assignFKPtr(ability.Submenu, l.Submenus)
 	if err != nil {
 		return err
 	}
 
-	ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, l.submenus)
+	ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, l.Submenus)
 	if err != nil {
 		return err
 	}
 
-	ability.StandardGridCharID, err = assignFKPtr(ability.StandardGridPos, l.characters)
+	ability.StandardGridCharID, err = assignFKPtr(ability.StandardGridPos, l.Characters)
 	if err != nil {
 		return err
 	}
 
-	ability.ExpertGridCharID, err = assignFKPtr(ability.ExpertGridPos, l.characters)
+	ability.ExpertGridCharID, err = assignFKPtr(ability.ExpertGridPos, l.Characters)
 	if err != nil {
 		return err
 	}
@@ -199,7 +199,7 @@ func (l *Lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbili
 
 func (l *Lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability PlayerAbility) error {
 	for _, jsonStat := range ability.RelatedStats {
-		junction, err := createJunction(ability, jsonStat, l.stats)
+		junction, err := createJunction(ability, jsonStat, l.Stats)
 		if err != nil {
 			return err
 		}
@@ -219,7 +219,7 @@ func (l *Lookup) seedPlayerAbilityRelatedStats(qtx *database.Queries, ability Pl
 
 func (l *Lookup) seedPlayerAbilityLearnedBy(qtx *database.Queries, ability PlayerAbility) error {
 	for _, charClass := range ability.LearnedBy {
-		junction, err := createJunction(ability, charClass, l.charClasses)
+		junction, err := createJunction(ability, charClass, l.CharClasses)
 		if err != nil {
 			return err
 		}

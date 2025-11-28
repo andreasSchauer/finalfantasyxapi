@@ -33,7 +33,7 @@ func (sr StatusResist) Error() string {
 func (l *Lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResist) (StatusResist, error) {
 	var err error
 
-	statusResist.StatusConditionID, err = assignFK(statusResist.StatusCondition, l.statusConditions)
+	statusResist.StatusConditionID, err = assignFK(statusResist.StatusCondition, l.StatusConditions)
 	if err != nil {
 		return StatusResist{}, h.GetErr(statusResist.Error(), err)
 	}
