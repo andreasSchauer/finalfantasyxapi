@@ -558,6 +558,151 @@ func (q *Queries) CreateStatusResist(ctx context.Context, arg CreateStatusResist
 	return i, err
 }
 
+const getOverdriveMode = `-- name: GetOverdriveMode :one
+SELECT id, data_hash, name, description, effect, type, fill_rate FROM overdrive_modes WHERE id = $1
+`
+
+func (q *Queries) GetOverdriveMode(ctx context.Context, id int32) (OverdriveMode, error) {
+	row := q.db.QueryRowContext(ctx, getOverdriveMode, id)
+	var i OverdriveMode
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Description,
+		&i.Effect,
+		&i.Type,
+		&i.FillRate,
+	)
+	return i, err
+}
+
+const getOverdriveModeActions = `-- name: GetOverdriveModeActions :many
+SELECT
+    om.id AS overdrive_mode_id,
+    om.name AS overdrive_mode,
+    c.id AS character_id,
+    pu.name AS character,
+    a.user_id AS user_id,
+    a.amount AS amount
+FROM od_mode_actions a
+LEFT JOIN characters c ON a.user_id = c.id
+LEFT JOIN player_units pu ON c.unit_id = pu.id
+LEFT JOIN j_overdrive_modes_actions_to_learn j ON j.action_id = a.id
+LEFT JOIN overdrive_modes om ON j.overdrive_mode_id = om.id
+WHERE om.id = $1
+ORDER BY c.id
+`
+
+type GetOverdriveModeActionsRow struct {
+	OverdriveModeID sql.NullInt32
+	OverdriveMode   sql.NullString
+	CharacterID     sql.NullInt32
+	Character       sql.NullString
+	UserID          int32
+	Amount          int32
+}
+
+func (q *Queries) GetOverdriveModeActions(ctx context.Context, id int32) ([]GetOverdriveModeActionsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveModeActions, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetOverdriveModeActionsRow
+	for rows.Next() {
+		var i GetOverdriveModeActionsRow
+		if err := rows.Scan(
+			&i.OverdriveModeID,
+			&i.OverdriveMode,
+			&i.CharacterID,
+			&i.Character,
+			&i.UserID,
+			&i.Amount,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOverdriveModes = `-- name: GetOverdriveModes :many
+SELECT id, data_hash, name, description, effect, type, fill_rate FROM overdrive_modes ORDER BY id
+`
+
+func (q *Queries) GetOverdriveModes(ctx context.Context) ([]OverdriveMode, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveModes)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []OverdriveMode
+	for rows.Next() {
+		var i OverdriveMode
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.Name,
+			&i.Description,
+			&i.Effect,
+			&i.Type,
+			&i.FillRate,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOverdriveModesByType = `-- name: GetOverdriveModesByType :many
+SELECT id, data_hash, name, description, effect, type, fill_rate FROM overdrive_modes WHERE type = $1 ORDER BY id
+`
+
+func (q *Queries) GetOverdriveModesByType(ctx context.Context, type_ OverdriveModeType) ([]OverdriveMode, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveModesByType, type_)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []OverdriveMode
+	for rows.Next() {
+		var i OverdriveMode
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.Name,
+			&i.Description,
+			&i.Effect,
+			&i.Type,
+			&i.FillRate,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateElement = `-- name: UpdateElement :exec
 UPDATE elements
 SET data_hash = $1,

@@ -39,7 +39,7 @@ func DerefOrNil[T any](ptr *T) any {
 	return *ptr
 }
 
-// used to get the id of objects that can be null and are thus pointers
+// used to get the id of nullable objects for DerefOrNil
 func ObjPtrToID[T HasID](objPtr *T) any {
 	if objPtr == nil {
 		return nil
@@ -55,7 +55,7 @@ func ObjPtrToID[T HasID](objPtr *T) any {
 }
 
 
-// used to get the id nullable objects for the db query
+// used to get the id of nullable objects for the db query
 func ObjPtrToNullInt32ID[T HasID](objPtr *T) sql.NullInt32 {
 	if objPtr == nil {
 		return sql.NullInt32{}
