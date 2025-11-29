@@ -5,6 +5,18 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = monsters.data_hash
 RETURNING *;
 
 
+-- name: GetMonster :one
+SELECT * FROM monsters WHERE id = $1;
+
+
+-- name: GetMonstersByName :many
+SELECT * FROM monsters WHERE name = $1;
+
+
+-- name: GetMonsters :many
+SELECT * FROM monsters ORDER BY id;
+
+
 -- name: CreateMonsterAmount :one
 INSERT INTO monster_amounts (data_hash, monster_id, amount)
 VALUES ($1, $2, $3)

@@ -26,6 +26,14 @@ func (cfg *apiConfig) newNamedAPIResource(endpoint string, id int32, name string
 	}
 }
 
+
+func newNamedAPIResourceList(resources []NamedAPIResource) NamedApiResourceList {
+	return NamedApiResourceList{
+		Count:   len(resources),
+		Results: resources,
+	}
+}
+
 func createNamedAPIResources[T any](
 	cfg *apiConfig,
 	items []T,

@@ -74,6 +74,7 @@ SELECT * FROM overdrive_modes WHERE id = $1;
 -- name: GetOverdriveModes :many
 SELECT * FROM overdrive_modes ORDER BY id;
 
+
 -- name: GetOverdriveModesByType :many
 SELECT * FROM overdrive_modes WHERE type = $1 ORDER BY id;
 

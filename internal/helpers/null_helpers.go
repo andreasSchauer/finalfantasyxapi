@@ -86,9 +86,9 @@ func StringPtrToString(s *string) string {
 	return *s
 }
 
-/*
 
-func convertNullString(s sql.NullString) *string {
+
+func ConvertNullString(s sql.NullString) *string {
     if !s.Valid {
         return nil
     }
@@ -98,7 +98,7 @@ func convertNullString(s sql.NullString) *string {
 }
 
 
-func convertNullInt32(i sql.NullInt32) *int32 {
+func ConvertNullInt32(i sql.NullInt32) *int32 {
     if !i.Valid {
         return nil
     }
@@ -107,4 +107,12 @@ func convertNullInt32(i sql.NullInt32) *int32 {
     return &val
 }
 
-*/
+
+func ConvertNullFloat64(f sql.NullFloat64) *float32 {
+    if !f.Valid {
+        return nil
+    }
+
+    val := float32(f.Float64)
+    return &val
+}

@@ -732,3 +732,152 @@ func (q *Queries) CreateMonstersStatusResistsJunction(ctx context.Context, arg C
 	_, err := q.db.ExecContext(ctx, createMonstersStatusResistsJunction, arg.DataHash, arg.MonsterID, arg.StatusResistID)
 	return err
 }
+
+const getMonster = `-- name: GetMonster :one
+SELECT id, data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE id = $1
+`
+
+func (q *Queries) GetMonster(ctx context.Context, id int32) (Monster, error) {
+	row := q.db.QueryRowContext(ctx, getMonster, id)
+	var i Monster
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Version,
+		&i.Specification,
+		&i.Notes,
+		&i.Species,
+		&i.IsStoryBased,
+		&i.CanBeCaptured,
+		&i.AreaConquestLocation,
+		&i.CtbIconType,
+		&i.HasOverdrive,
+		&i.IsUnderwater,
+		&i.IsZombie,
+		&i.Distance,
+		&i.Ap,
+		&i.ApOverkill,
+		&i.OverkillDamage,
+		&i.Gil,
+		&i.StealGil,
+		&i.DoomCountdown,
+		&i.PoisonRate,
+		&i.ThreatenChance,
+		&i.ZanmatoLevel,
+		&i.MonsterArenaPrice,
+		&i.SensorText,
+		&i.ScanText,
+	)
+	return i, err
+}
+
+const getMonsters = `-- name: GetMonsters :many
+SELECT id, data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters ORDER BY id
+`
+
+func (q *Queries) GetMonsters(ctx context.Context) ([]Monster, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsters)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Monster
+	for rows.Next() {
+		var i Monster
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.Name,
+			&i.Version,
+			&i.Specification,
+			&i.Notes,
+			&i.Species,
+			&i.IsStoryBased,
+			&i.CanBeCaptured,
+			&i.AreaConquestLocation,
+			&i.CtbIconType,
+			&i.HasOverdrive,
+			&i.IsUnderwater,
+			&i.IsZombie,
+			&i.Distance,
+			&i.Ap,
+			&i.ApOverkill,
+			&i.OverkillDamage,
+			&i.Gil,
+			&i.StealGil,
+			&i.DoomCountdown,
+			&i.PoisonRate,
+			&i.ThreatenChance,
+			&i.ZanmatoLevel,
+			&i.MonsterArenaPrice,
+			&i.SensorText,
+			&i.ScanText,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonstersByName = `-- name: GetMonstersByName :many
+SELECT id, data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE name = $1
+`
+
+func (q *Queries) GetMonstersByName(ctx context.Context, name string) ([]Monster, error) {
+	rows, err := q.db.QueryContext(ctx, getMonstersByName, name)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Monster
+	for rows.Next() {
+		var i Monster
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.Name,
+			&i.Version,
+			&i.Specification,
+			&i.Notes,
+			&i.Species,
+			&i.IsStoryBased,
+			&i.CanBeCaptured,
+			&i.AreaConquestLocation,
+			&i.CtbIconType,
+			&i.HasOverdrive,
+			&i.IsUnderwater,
+			&i.IsZombie,
+			&i.Distance,
+			&i.Ap,
+			&i.ApOverkill,
+			&i.OverkillDamage,
+			&i.Gil,
+			&i.StealGil,
+			&i.DoomCountdown,
+			&i.PoisonRate,
+			&i.ThreatenChance,
+			&i.ZanmatoLevel,
+			&i.MonsterArenaPrice,
+			&i.SensorText,
+			&i.ScanText,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

@@ -17,6 +17,22 @@ func createLookupKey(l Lookupable) string {
 	return combineFields(fields)
 }
 
+type LookupObject struct {
+	Name	string
+	Version	*int32
+}
+
+func (l LookupObject) ToKeyFields() []any {
+	return []any{
+		l.Name,
+		h.DerefOrNil(l.Version),
+	}
+}
+
+func (l LookupObject) Error() string {
+	return fmt.Sprintf("lookup object name: %s, version %d", l.Name, h.DerefOrNil(l.Version))
+}
+
 type Lookup struct {
 	currentAbility     Ability           // currentAbility and currentBI are
 	currentBI          BattleInteraction // used for seeding of ability damage

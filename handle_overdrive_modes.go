@@ -37,7 +37,12 @@ func (cfg *apiConfig) handleOverdriveModes(w http.ResponseWriter, r *http.Reques
 	case 1:
 		// /api/overdrive-modes/{name or id}
 		segment := segments[0]
-		cfg.handleOverdriveModeGet(w, r, segment)
+		input, err := parseSingleSegmentResource(segment, cfg.l.OverdriveModes)
+		if handleHTTPError(w, err) {
+			return
+		}
+	
+		cfg.handleOverdriveModeGet(w, r, input)
 		return
 	default:
 		respondWithError(w, http.StatusBadRequest, `Wrong format. Usage: /api/overdrive-modes/{name or id}`, nil)
@@ -46,15 +51,10 @@ func (cfg *apiConfig) handleOverdriveModes(w http.ResponseWriter, r *http.Reques
 }
 
 
-func (cfg *apiConfig) handleOverdriveModeGet(w http.ResponseWriter, r *http.Request, segment string) {
-	id, err := parseSingleSegmentResource(segment, cfg.l.OverdriveModes)
-	if handleHTTPError(w, err) {
-		return
-	}
-
-	dbMode, err := cfg.db.GetOverdriveMode(r.Context(), id)
+func (cfg *apiConfig) handleOverdriveModeGet(w http.ResponseWriter, r *http.Request, input parseResponse) {
+	dbMode, err := cfg.db.GetOverdriveMode(r.Context(), input.ID)
 	if err != nil {
-		respondWithError(w, http.StatusNotFound, "Couldn't get Overdrive Mode", err)
+		respondWithError(w, http.StatusNotFound, "Couldn't get Overdrive Mode. Overdrive mode with this ID doesn't exist.", err)
 		return
 	}
 
@@ -103,6 +103,7 @@ func (cfg *apiConfig) handleOverdriveModesRetrieve(w http.ResponseWriter, r *htt
 	var err error
 	modeType := r.URL.Query().Get("type")
 
+	// this can potentially be made generic, but I'm not sure yet
 	if modeType != "" {
 		// need to add type lookup validation
 
@@ -123,10 +124,7 @@ func (cfg *apiConfig) handleOverdriveModesRetrieve(w http.ResponseWriter, r *htt
 		return mode.ID, mode.Name
 	})
 
-	resourceList := NamedApiResourceList{
-		Count:   len(resources),
-		Results: resources,
-	}
+	resourceList := newNamedAPIResourceList(resources)
 
 	// need to add pagination
 

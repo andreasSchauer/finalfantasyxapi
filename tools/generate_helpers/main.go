@@ -31,7 +31,8 @@ func main() {
     output.WriteString("package helpers\n\nimport \"github.com/andreasSchauer/finalfantasyxapi/internal/database\"\n\n\n")
 
     for _, enumType := range nullEnumTypes {
-        funcName := "Null" + enumType
+        nullEnumFuncName := "Null" + enumType
+        convertFuncName := "Convert" + nullEnumFuncName
         output.WriteString(fmt.Sprintf(`func %s(s *string) database.Null%s {
     if s == nil {
         return database.Null%s{}
@@ -43,8 +44,17 @@ func main() {
     }
 }
 
+func %s(ne database.Null%s) *string {
+    if !ne.Valid {
+        return nil
+    }
 
-`, funcName, enumType, enumType, enumType, enumType, enumType))
+    val := string(ne.%s)
+    return &val
+}
+
+
+`, nullEnumFuncName, enumType, enumType, enumType, enumType, enumType, convertFuncName, enumType, enumType))
     }
 
     os.WriteFile(filePath, []byte(output.String()), 0644)

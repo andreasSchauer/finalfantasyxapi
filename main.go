@@ -66,6 +66,7 @@ func main() {
 	mux.HandleFunc("GET /api/healthz", apiCfg.handlerReadiness)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerResetDatabase)
 
+	mux.HandleFunc("GET /api/monsters/", apiCfg.handleMonsters)
 	mux.HandleFunc("GET /api/overdrive-modes/", apiCfg.handleOverdriveModes)
 
 	srv := &http.Server{
