@@ -7,34 +7,32 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 type OverdriveMode struct {
-	ID			int32					`json:"id"`
-	Name		string					`json:"name"`
-	Description	string					`json:"description"`
-	Effect		string					`json:"effect"`
-	Type		string					`json:"type"`
-	FillRate	*float32				`json:"fill_rate,omitempty"`
-	Actions		[]OverdriveModeAction	`json:"actions"`
+	ID          int32                 `json:"id"`
+	Name        string                `json:"name"`
+	Description string                `json:"description"`
+	Effect      string                `json:"effect"`
+	Type        string                `json:"type"`
+	FillRate    *float32              `json:"fill_rate,omitempty"`
+	Actions     []OverdriveModeAction `json:"actions"`
 }
 
 type OverdriveModeAction struct {
-	User		NamedAPIResource	`json:"user"`
-	Amount		int32				`json:"amount"`
-	
+	User   NamedAPIResource `json:"user"`
+	Amount int32            `json:"amount"`
 }
 
 
-func (cfg *apiConfig)handleOverdriveModes(w http.ResponseWriter, r *http.Request) {
+func (cfg *apiConfig) handleOverdriveModes(w http.ResponseWriter, r *http.Request) {
 	path := strings.TrimPrefix(r.URL.Path, "/api/overdrive-modes/")
-    segments := strings.Split(path, "/")
+	segments := strings.Split(path, "/")
 
 	// /api/overdrive-modes
 	if path == "" {
 		cfg.handleOverdriveModesRetrieve(w, r)
 		return
 	}
-	
+
 	switch len(segments) {
 	case 1:
 		// /api/overdrive-modes/{name or id}
@@ -50,11 +48,8 @@ func (cfg *apiConfig)handleOverdriveModes(w http.ResponseWriter, r *http.Request
 
 func (cfg *apiConfig) handleOverdriveModeGet(w http.ResponseWriter, r *http.Request, segment string) {
 	id, err := parseSingleSegmentResource(segment, cfg.l.OverdriveModes)
-	if err != nil {
-		if httpErr, ok := err.(httpError); ok {
-        respondWithError(w, httpErr.code, httpErr.msg, httpErr.err)
+	if handleHTTPError(w, err) {
 		return
-		}
 	}
 
 	dbMode, err := cfg.db.GetOverdriveMode(r.Context(), id)
@@ -64,21 +59,18 @@ func (cfg *apiConfig) handleOverdriveModeGet(w http.ResponseWriter, r *http.Requ
 	}
 
 	actions, err := cfg.getOverdriveModeActions(r, dbMode.ID)
-	if err != nil {
-		if httpErr, ok := err.(httpError); ok {
-			respondWithError(w, httpErr.code, httpErr.msg, httpErr.err)
-			return
-		}
+	if handleHTTPError(w, err) {
+		return
 	}
 
 	response := OverdriveMode{
-		ID: 			dbMode.ID,
-		Name: 			dbMode.Name,
-		Description: 	dbMode.Description,
-		Effect: 		dbMode.Effect,
-		Type: 			string(dbMode.Type),
-		FillRate: 		anyToFloat32Ptr(dbMode.FillRate),
-		Actions: 		actions,
+		ID:          dbMode.ID,
+		Name:        dbMode.Name,
+		Description: dbMode.Description,
+		Effect:      dbMode.Effect,
+		Type:        string(dbMode.Type),
+		FillRate:    anyToFloat32Ptr(dbMode.FillRate),
+		Actions:     actions,
 	}
 
 	respondWithJSON(w, http.StatusOK, response)
@@ -88,19 +80,14 @@ func (cfg *apiConfig) handleOverdriveModeGet(w http.ResponseWriter, r *http.Requ
 func (cfg *apiConfig) getOverdriveModeActions(r *http.Request, id int32) ([]OverdriveModeAction, error) {
 	dbActions, err := cfg.db.GetOverdriveModeActions(r.Context(), id)
 	if err != nil {
-		return nil, NewHTTPError(http.StatusInternalServerError, "Couldn't get Overdrive Mode Actions", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "Couldn't get Overdrive Mode Actions", err)
 	}
 
 	actions := []OverdriveModeAction{}
 
 	for _, dbAction := range dbActions {
-		user := NamedAPIResource{
-			Name: 	dbAction.Character.String,
-			URL: 	cfg.createURL("characters", dbAction.UserID),
-		}
-
 		action := OverdriveModeAction{
-			User: 	user,
+			User:   cfg.newNamedAPIResourceSimple("characters", dbAction.UserID, dbAction.Character.String),
 			Amount: dbAction.Amount,
 		}
 
@@ -132,23 +119,16 @@ func (cfg *apiConfig) handleOverdriveModesRetrieve(w http.ResponseWriter, r *htt
 		}
 	}
 
-	// I swear I can generalize this, if I can find a way to get to the name and id fields
-	// could create an interface, but that is a last resort
-	var resources []NamedAPIResource
-
-	for _, dbMode := range dbODModes {
-		overdriveMode := NamedAPIResource{
-			Name: 	dbMode.Name,
-			URL: 	cfg.createURL("overdrive-modes", dbMode.ID),
-		}
-
-		resources = append(resources, overdriveMode)
-	}
+	resources := createNamedAPIResourcesSimple(cfg, dbODModes, "overdrive-modes", func(mode database.OverdriveMode) (int32, string) {
+		return mode.ID, mode.Name
+	})
 
 	resourceList := NamedApiResourceList{
-		Count: 		len(resources),
-		Results: 	resources,
+		Count:   len(resources),
+		Results: resources,
 	}
+
+	// need to add pagination
 
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
