@@ -13,6 +13,139 @@ SELECT * FROM monsters WHERE id = $1;
 SELECT * FROM monsters WHERE name = $1;
 
 
+-- name: GetMonsterItems :one
+SELECT
+    mi.*,
+
+    i1.id AS steal_common_item_id,
+    mi1.name AS steal_common_item,
+    mi1.type AS steal_common_item_type,
+    ia1.amount AS steal_common_amount,
+
+    i2.id AS steal_rare_item_id,
+    mi2.name AS steal_rare_item,
+    mi2.type AS steal_rare_item_type,
+    ia2.amount AS steal_rare_amount,
+
+    i3.id AS drop_common_item_id,
+    mi3.name AS drop_common_item,
+    mi3.type AS drop_common_item_type,
+    ia3.amount AS drop_common_amount,
+
+    i4.id AS drop_rare_item_id,
+    mi4.name AS drop_rare_item,
+    mi4.type AS drop_rare_item_type,
+    ia4.amount AS drop_rare_amount,
+
+    i5.id AS sec_drop_common_item_id,
+    mi5.name AS sec_drop_common_item,
+    mi5.type AS sec_drop_common_item_type,
+    ia5.amount AS sec_drop_common_amount,
+
+    i6.id AS sec_drop_rare_item_id,
+    mi6.name AS sec_drop_rare_item,
+    mi6.type AS sec_drop_rare_item_type,
+    ia6.amount AS sec_drop_rare_amount,
+
+    i7.id AS bribe_item_id,
+    mi7.name AS bribe_item,
+    mi7.type AS bribe_item_type,
+    ia7.amount AS bribe_amount
+
+FROM monster_items mi
+
+LEFT JOIN item_amounts ia1 ON mi.steal_common_id = ia1.id
+LEFT JOIN master_items mi1 ON ia1.master_item_id = mi1.id
+LEFT JOIN items i1 ON i1.master_item_id = mi1.id
+
+LEFT JOIN item_amounts ia2 ON mi.steal_rare_id = ia2.id
+LEFT JOIN master_items mi2 ON ia2.master_item_id = mi2.id
+LEFT JOIN items i2 ON i2.master_item_id = mi2.id
+
+LEFT JOIN item_amounts ia3 ON mi.drop_common_id = ia3.id
+LEFT JOIN master_items mi3 ON ia3.master_item_id = mi3.id
+LEFT JOIN items i3 ON i3.master_item_id = mi3.id
+
+LEFT JOIN item_amounts ia4 ON mi.drop_rare_id = ia4.id
+LEFT JOIN master_items mi4 ON ia4.master_item_id = mi4.id
+LEFT JOIN items i4 ON i4.master_item_id = mi4.id
+
+LEFT JOIN item_amounts ia5 ON mi.secondary_drop_common_id = ia5.id
+LEFT JOIN master_items mi5 ON ia5.master_item_id = mi5.id
+LEFT JOIN items i5 ON i5.master_item_id = mi5.id
+
+LEFT JOIN item_amounts ia6 ON mi.secondary_drop_rare_id = ia6.id
+LEFT JOIN master_items mi6 ON ia6.master_item_id = mi6.id
+LEFT JOIN items i6 ON i6.master_item_id = mi6.id
+
+LEFT JOIN item_amounts ia7 ON mi.bribe_id = ia7.id
+LEFT JOIN master_items mi7 ON ia7.master_item_id = mi7.id
+LEFT JOIN items i7 ON i7.master_item_id = mi7.id
+
+WHERE mi.monster_id = $1;
+
+
+-- name: GetMonsterOtherItems :many
+SELECT
+    i.id AS item_id,
+    mi.name AS item,
+    mi.type AS item_type,
+    ia.amount AS amount,
+    pi.chance AS chance
+FROM j_monster_items_other_items jmoi
+LEFT JOIN possible_items pi ON jmoi.possible_item_id = pi.id
+LEFT JOIN item_amounts ia ON pi.item_amount_id = ia.id
+LEFT JOIN master_items mi ON ia.master_item_id = mi.id
+LEFT JOIN items i ON i.master_item_id = mi.id
+WHERE jmoi.monster_items_id = $1
+ORDER BY chance DESC;
+
+
+-- name: GetMonsterEquipment :one
+SELECT * FROM monster_equipment WHERE monster_id = $1;
+
+
+-- name: GetMonsterEquipmentSlots :many
+SELECT * FROM monster_equipment_slots
+WHERE monster_equipment_id = $1
+ORDER BY id;
+
+
+-- name: GetMonsterEquipmentSlotsChances :many
+SELECT
+    esc.amount AS amount,
+    esc.chance AS chance
+FROM equipment_slots_chances esc
+LEFT JOIN j_monster_equipment_slots_chances jmesc ON jmesc.slots_chance_id = esc.id
+WHERE jmesc.monster_equipment_id = $1
+AND jmesc.equipment_slots_id = $2;
+
+
+-- name: GetMonsterEquipmentAbilities :many
+SELECT
+    ed.id AS id,
+    aa.name AS auto_ability,
+    aa.id AS auto_ability_id,
+    ed.is_forced AS is_forced,
+    ed.probability AS probability
+FROM j_monster_equipment_abilities jmea
+LEFT JOIN equipment_drops ed ON jmea.equipment_drop_id = ed.id
+LEFT JOIN auto_abilities aa ON ed.auto_ability_id = aa.id
+WHERE jmea.monster_equipment_id = $1
+AND ed.type = $2;
+
+
+-- name: GetEquipmentDropCharacters :many
+SELECT
+    c.id AS character_id,
+    pu.name AS character_name
+FROM j_equipment_drops_characters jedc
+LEFT JOIN characters c ON jedc.character_id = c.id
+LEFT JOIN player_units pu ON c.unit_id = pu.id
+WHERE jedc.monster_equipment_id = $1
+AND jedc.equipment_drop_id = $2;
+
+
 -- name: GetMonsters :many
 SELECT * FROM monsters ORDER BY id;
 

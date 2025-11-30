@@ -3457,7 +3457,7 @@ type Monster struct {
 	ThreatenChance       interface{}
 	ZanmatoLevel         interface{}
 	MonsterArenaPrice    sql.NullInt32
-	SensorText           string
+	SensorText           sql.NullString
 	ScanText             sql.NullString
 }
 

@@ -291,7 +291,7 @@ type CreateMonsterParams struct {
 	ThreatenChance       interface{}
 	ZanmatoLevel         interface{}
 	MonsterArenaPrice    sql.NullInt32
-	SensorText           string
+	SensorText           sql.NullString
 	ScanText             sql.NullString
 }
 
@@ -733,6 +733,50 @@ func (q *Queries) CreateMonstersStatusResistsJunction(ctx context.Context, arg C
 	return err
 }
 
+const getEquipmentDropCharacters = `-- name: GetEquipmentDropCharacters :many
+SELECT
+    c.id AS character_id,
+    pu.name AS character_name
+FROM j_equipment_drops_characters jedc
+LEFT JOIN characters c ON jedc.character_id = c.id
+LEFT JOIN player_units pu ON c.unit_id = pu.id
+WHERE jedc.monster_equipment_id = $1
+AND jedc.equipment_drop_id = $2
+`
+
+type GetEquipmentDropCharactersParams struct {
+	MonsterEquipmentID int32
+	EquipmentDropID    int32
+}
+
+type GetEquipmentDropCharactersRow struct {
+	CharacterID   sql.NullInt32
+	CharacterName sql.NullString
+}
+
+func (q *Queries) GetEquipmentDropCharacters(ctx context.Context, arg GetEquipmentDropCharactersParams) ([]GetEquipmentDropCharactersRow, error) {
+	rows, err := q.db.QueryContext(ctx, getEquipmentDropCharacters, arg.MonsterEquipmentID, arg.EquipmentDropID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetEquipmentDropCharactersRow
+	for rows.Next() {
+		var i GetEquipmentDropCharactersRow
+		if err := rows.Scan(&i.CharacterID, &i.CharacterName); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonster = `-- name: GetMonster :one
 SELECT id, data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE id = $1
 `
@@ -770,6 +814,377 @@ func (q *Queries) GetMonster(ctx context.Context, id int32) (Monster, error) {
 		&i.ScanText,
 	)
 	return i, err
+}
+
+const getMonsterEquipment = `-- name: GetMonsterEquipment :one
+SELECT id, data_hash, monster_id, drop_chance, power, critical_plus FROM monster_equipment WHERE monster_id = $1
+`
+
+func (q *Queries) GetMonsterEquipment(ctx context.Context, monsterID int32) (MonsterEquipment, error) {
+	row := q.db.QueryRowContext(ctx, getMonsterEquipment, monsterID)
+	var i MonsterEquipment
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MonsterID,
+		&i.DropChance,
+		&i.Power,
+		&i.CriticalPlus,
+	)
+	return i, err
+}
+
+const getMonsterEquipmentAbilities = `-- name: GetMonsterEquipmentAbilities :many
+SELECT
+    ed.id AS id,
+    aa.name AS auto_ability,
+    aa.id AS auto_ability_id,
+    ed.is_forced AS is_forced,
+    ed.probability AS probability
+FROM j_monster_equipment_abilities jmea
+LEFT JOIN equipment_drops ed ON jmea.equipment_drop_id = ed.id
+LEFT JOIN auto_abilities aa ON ed.auto_ability_id = aa.id
+WHERE jmea.monster_equipment_id = $1
+AND ed.type = $2
+`
+
+type GetMonsterEquipmentAbilitiesParams struct {
+	MonsterEquipmentID int32
+	Type               EquipType
+}
+
+type GetMonsterEquipmentAbilitiesRow struct {
+	ID            sql.NullInt32
+	AutoAbility   sql.NullString
+	AutoAbilityID sql.NullInt32
+	IsForced      sql.NullBool
+	Probability   interface{}
+}
+
+func (q *Queries) GetMonsterEquipmentAbilities(ctx context.Context, arg GetMonsterEquipmentAbilitiesParams) ([]GetMonsterEquipmentAbilitiesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterEquipmentAbilities, arg.MonsterEquipmentID, arg.Type)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterEquipmentAbilitiesRow
+	for rows.Next() {
+		var i GetMonsterEquipmentAbilitiesRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.AutoAbility,
+			&i.AutoAbilityID,
+			&i.IsForced,
+			&i.Probability,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterEquipmentSlots = `-- name: GetMonsterEquipmentSlots :many
+SELECT id, data_hash, monster_equipment_id, min_amount, max_amount, type FROM monster_equipment_slots
+WHERE monster_equipment_id = $1
+ORDER BY id
+`
+
+func (q *Queries) GetMonsterEquipmentSlots(ctx context.Context, monsterEquipmentID int32) ([]MonsterEquipmentSlot, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterEquipmentSlots, monsterEquipmentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []MonsterEquipmentSlot
+	for rows.Next() {
+		var i MonsterEquipmentSlot
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.MonsterEquipmentID,
+			&i.MinAmount,
+			&i.MaxAmount,
+			&i.Type,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterEquipmentSlotsChances = `-- name: GetMonsterEquipmentSlotsChances :many
+SELECT
+    esc.amount AS amount,
+    esc.chance AS chance
+FROM equipment_slots_chances esc
+LEFT JOIN j_monster_equipment_slots_chances jmesc ON jmesc.slots_chance_id = esc.id
+WHERE jmesc.monster_equipment_id = $1
+AND jmesc.equipment_slots_id = $2
+`
+
+type GetMonsterEquipmentSlotsChancesParams struct {
+	MonsterEquipmentID int32
+	EquipmentSlotsID   int32
+}
+
+type GetMonsterEquipmentSlotsChancesRow struct {
+	Amount interface{}
+	Chance interface{}
+}
+
+func (q *Queries) GetMonsterEquipmentSlotsChances(ctx context.Context, arg GetMonsterEquipmentSlotsChancesParams) ([]GetMonsterEquipmentSlotsChancesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterEquipmentSlotsChances, arg.MonsterEquipmentID, arg.EquipmentSlotsID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterEquipmentSlotsChancesRow
+	for rows.Next() {
+		var i GetMonsterEquipmentSlotsChancesRow
+		if err := rows.Scan(&i.Amount, &i.Chance); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterItems = `-- name: GetMonsterItems :one
+SELECT
+    mi.id, mi.data_hash, mi.monster_id, mi.drop_chance, mi.drop_condition, mi.other_items_condition, mi.steal_common_id, mi.steal_rare_id, mi.drop_common_id, mi.drop_rare_id, mi.secondary_drop_common_id, mi.secondary_drop_rare_id, mi.bribe_id,
+
+    i1.id AS steal_common_item_id,
+    mi1.name AS steal_common_item,
+    mi1.type AS steal_common_item_type,
+    ia1.amount AS steal_common_amount,
+
+    i2.id AS steal_rare_item_id,
+    mi2.name AS steal_rare_item,
+    mi2.type AS steal_rare_item_type,
+    ia2.amount AS steal_rare_amount,
+
+    i3.id AS drop_common_item_id,
+    mi3.name AS drop_common_item,
+    mi3.type AS drop_common_item_type,
+    ia3.amount AS drop_common_amount,
+
+    i4.id AS drop_rare_item_id,
+    mi4.name AS drop_rare_item,
+    mi4.type AS drop_rare_item_type,
+    ia4.amount AS drop_rare_amount,
+
+    i5.id AS sec_drop_common_item_id,
+    mi5.name AS sec_drop_common_item,
+    mi5.type AS sec_drop_common_item_type,
+    ia5.amount AS sec_drop_common_amount,
+
+    i6.id AS sec_drop_rare_item_id,
+    mi6.name AS sec_drop_rare_item,
+    mi6.type AS sec_drop_rare_item_type,
+    ia6.amount AS sec_drop_rare_amount,
+
+    i7.id AS bribe_item_id,
+    mi7.name AS bribe_item,
+    mi7.type AS bribe_item_type,
+    ia7.amount AS bribe_amount
+
+FROM monster_items mi
+
+LEFT JOIN item_amounts ia1 ON mi.steal_common_id = ia1.id
+LEFT JOIN master_items mi1 ON ia1.master_item_id = mi1.id
+LEFT JOIN items i1 ON i1.master_item_id = mi1.id
+
+LEFT JOIN item_amounts ia2 ON mi.steal_rare_id = ia2.id
+LEFT JOIN master_items mi2 ON ia2.master_item_id = mi2.id
+LEFT JOIN items i2 ON i2.master_item_id = mi2.id
+
+LEFT JOIN item_amounts ia3 ON mi.drop_common_id = ia3.id
+LEFT JOIN master_items mi3 ON ia3.master_item_id = mi3.id
+LEFT JOIN items i3 ON i3.master_item_id = mi3.id
+
+LEFT JOIN item_amounts ia4 ON mi.drop_rare_id = ia4.id
+LEFT JOIN master_items mi4 ON ia4.master_item_id = mi4.id
+LEFT JOIN items i4 ON i4.master_item_id = mi4.id
+
+LEFT JOIN item_amounts ia5 ON mi.secondary_drop_common_id = ia5.id
+LEFT JOIN master_items mi5 ON ia5.master_item_id = mi5.id
+LEFT JOIN items i5 ON i5.master_item_id = mi5.id
+
+LEFT JOIN item_amounts ia6 ON mi.secondary_drop_rare_id = ia6.id
+LEFT JOIN master_items mi6 ON ia6.master_item_id = mi6.id
+LEFT JOIN items i6 ON i6.master_item_id = mi6.id
+
+LEFT JOIN item_amounts ia7 ON mi.bribe_id = ia7.id
+LEFT JOIN master_items mi7 ON ia7.master_item_id = mi7.id
+LEFT JOIN items i7 ON i7.master_item_id = mi7.id
+
+WHERE mi.monster_id = $1
+`
+
+type GetMonsterItemsRow struct {
+	ID                    int32
+	DataHash              string
+	MonsterID             int32
+	DropChance            interface{}
+	DropCondition         sql.NullString
+	OtherItemsCondition   sql.NullString
+	StealCommonID         sql.NullInt32
+	StealRareID           sql.NullInt32
+	DropCommonID          sql.NullInt32
+	DropRareID            sql.NullInt32
+	SecondaryDropCommonID sql.NullInt32
+	SecondaryDropRareID   sql.NullInt32
+	BribeID               sql.NullInt32
+	StealCommonItemID     sql.NullInt32
+	StealCommonItem       sql.NullString
+	StealCommonItemType   NullItemType
+	StealCommonAmount     sql.NullInt32
+	StealRareItemID       sql.NullInt32
+	StealRareItem         sql.NullString
+	StealRareItemType     NullItemType
+	StealRareAmount       sql.NullInt32
+	DropCommonItemID      sql.NullInt32
+	DropCommonItem        sql.NullString
+	DropCommonItemType    NullItemType
+	DropCommonAmount      sql.NullInt32
+	DropRareItemID        sql.NullInt32
+	DropRareItem          sql.NullString
+	DropRareItemType      NullItemType
+	DropRareAmount        sql.NullInt32
+	SecDropCommonItemID   sql.NullInt32
+	SecDropCommonItem     sql.NullString
+	SecDropCommonItemType NullItemType
+	SecDropCommonAmount   sql.NullInt32
+	SecDropRareItemID     sql.NullInt32
+	SecDropRareItem       sql.NullString
+	SecDropRareItemType   NullItemType
+	SecDropRareAmount     sql.NullInt32
+	BribeItemID           sql.NullInt32
+	BribeItem             sql.NullString
+	BribeItemType         NullItemType
+	BribeAmount           sql.NullInt32
+}
+
+func (q *Queries) GetMonsterItems(ctx context.Context, monsterID int32) (GetMonsterItemsRow, error) {
+	row := q.db.QueryRowContext(ctx, getMonsterItems, monsterID)
+	var i GetMonsterItemsRow
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MonsterID,
+		&i.DropChance,
+		&i.DropCondition,
+		&i.OtherItemsCondition,
+		&i.StealCommonID,
+		&i.StealRareID,
+		&i.DropCommonID,
+		&i.DropRareID,
+		&i.SecondaryDropCommonID,
+		&i.SecondaryDropRareID,
+		&i.BribeID,
+		&i.StealCommonItemID,
+		&i.StealCommonItem,
+		&i.StealCommonItemType,
+		&i.StealCommonAmount,
+		&i.StealRareItemID,
+		&i.StealRareItem,
+		&i.StealRareItemType,
+		&i.StealRareAmount,
+		&i.DropCommonItemID,
+		&i.DropCommonItem,
+		&i.DropCommonItemType,
+		&i.DropCommonAmount,
+		&i.DropRareItemID,
+		&i.DropRareItem,
+		&i.DropRareItemType,
+		&i.DropRareAmount,
+		&i.SecDropCommonItemID,
+		&i.SecDropCommonItem,
+		&i.SecDropCommonItemType,
+		&i.SecDropCommonAmount,
+		&i.SecDropRareItemID,
+		&i.SecDropRareItem,
+		&i.SecDropRareItemType,
+		&i.SecDropRareAmount,
+		&i.BribeItemID,
+		&i.BribeItem,
+		&i.BribeItemType,
+		&i.BribeAmount,
+	)
+	return i, err
+}
+
+const getMonsterOtherItems = `-- name: GetMonsterOtherItems :many
+SELECT
+    i.id AS item_id,
+    mi.name AS item,
+    mi.type AS item_type,
+    ia.amount AS amount,
+    pi.chance AS chance
+FROM j_monster_items_other_items jmoi
+LEFT JOIN possible_items pi ON jmoi.possible_item_id = pi.id
+LEFT JOIN item_amounts ia ON pi.item_amount_id = ia.id
+LEFT JOIN master_items mi ON ia.master_item_id = mi.id
+LEFT JOIN items i ON i.master_item_id = mi.id
+WHERE jmoi.monster_items_id = $1
+ORDER BY chance DESC
+`
+
+type GetMonsterOtherItemsRow struct {
+	ItemID   sql.NullInt32
+	Item     sql.NullString
+	ItemType NullItemType
+	Amount   sql.NullInt32
+	Chance   interface{}
+}
+
+func (q *Queries) GetMonsterOtherItems(ctx context.Context, monsterItemsID int32) ([]GetMonsterOtherItemsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterOtherItems, monsterItemsID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterOtherItemsRow
+	for rows.Next() {
+		var i GetMonsterOtherItemsRow
+		if err := rows.Scan(
+			&i.ItemID,
+			&i.Item,
+			&i.ItemType,
+			&i.Amount,
+			&i.Chance,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getMonsters = `-- name: GetMonsters :many

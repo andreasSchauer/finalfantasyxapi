@@ -35,6 +35,10 @@ func (cfg *apiConfig) newNamedAPIResourceList(r *http.Request, resources []Named
 
 
 func (cfg *apiConfig) newNamedAPIResource(endpoint string, id int32, name string, version *int32, spec *string) NamedAPIResource {
+	if name == "" {
+		return NamedAPIResource{}
+	}
+
 	return NamedAPIResource{
 		Name: 			name,
 		Version: 		version,
@@ -50,13 +54,15 @@ func createNamedAPIResources[T any](
 	endpoint string,
 	mapper func(T) (id int32, name string, version *int32, spec *string),
 ) []NamedAPIResource {
-	var resources []NamedAPIResource
+	resources := []NamedAPIResource{}
 
 	for _, item := range items {
 		id, name, version, spec := mapper(item)
 		resource := cfg.newNamedAPIResource(endpoint, id, name, version, spec)
 
-		resources = append(resources, resource)
+		if !resource.IsZero() {
+			resources = append(resources, resource)
+		}
 	}
 
 	return resources
@@ -64,10 +70,18 @@ func createNamedAPIResources[T any](
 
 
 func (cfg *apiConfig) newNamedAPIResourceSimple(endpoint string, id int32, name string) NamedAPIResource {
+	if name == "" {
+		return NamedAPIResource{}
+	}
+
 	return NamedAPIResource{
 		Name: 			name,
 		URL: 			cfg.createURL(endpoint, id),
 	}
+}
+
+func (r NamedAPIResource) IsZero() bool {
+	return r.Name == ""
 }
 
 func createNamedAPIResourcesSimple[T any](
@@ -76,13 +90,15 @@ func createNamedAPIResourcesSimple[T any](
 	endpoint string,
 	mapper func(T) (id int32, name string),
 ) []NamedAPIResource {
-	var resources []NamedAPIResource
+	resources := []NamedAPIResource{}
 
 	for _, item := range items {
 		id, name := mapper(item)
 		resource := cfg.newNamedAPIResourceSimple(endpoint, id, name)
-
-		resources = append(resources, resource)
+		
+		if !resource.IsZero() {
+			resources = append(resources, resource)
+		}
 	}
 
 	return resources

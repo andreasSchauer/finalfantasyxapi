@@ -38,7 +38,7 @@ type Monster struct {
 	ThreatenChance       *int32            `json:"threaten_chance"`
 	ZanmatoLevel         int32             `json:"zanmato_level"`
 	MonsterArenaPrice    *int32            `json:"monster_arena_price"`
-	SensorText           string            `json:"sensor_text"`
+	SensorText           *string           `json:"sensor_text"`
 	ScanText             *string           `json:"scan_text"`
 	BaseStats            []BaseStat        `json:"base_stats"`
 	Items                *MonsterItems     `json:"items"`
@@ -75,7 +75,7 @@ func (m Monster) ToHashFields() []any {
 		h.DerefOrNil(m.ThreatenChance),
 		m.ZanmatoLevel,
 		h.DerefOrNil(m.MonsterArenaPrice),
-		m.SensorText,
+		h.DerefOrNil(m.SensorText),
 		h.DerefOrNil(m.ScanText),
 	}
 }
@@ -131,7 +131,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 				ThreatenChance:       h.GetNullInt32(monster.ThreatenChance),
 				ZanmatoLevel:         monster.ZanmatoLevel,
 				MonsterArenaPrice:    h.GetNullInt32(monster.MonsterArenaPrice),
-				SensorText:           monster.SensorText,
+				SensorText:           h.GetNullString(monster.SensorText),
 				ScanText:             h.GetNullString(monster.ScanText),
 			})
 			if err != nil {

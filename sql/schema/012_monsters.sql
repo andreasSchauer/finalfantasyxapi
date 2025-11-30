@@ -31,7 +31,7 @@ CREATE TABLE monsters (
     threaten_chance uint8,
     zanmato_level zanmato_level NOT NULL,
     monster_arena_price INTEGER,
-    sensor_text TEXT NOT NULL,
+    sensor_text TEXT,
     scan_text TEXT,
 
     UNIQUE(name, version)

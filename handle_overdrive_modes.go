@@ -8,20 +8,19 @@ import (
 )
 
 type OverdriveMode struct {
-	ID          int32                 `json:"id"`
-	Name        string                `json:"name"`
-	Description string                `json:"description"`
-	Effect      string                `json:"effect"`
-	Type        string                `json:"type"`
-	FillRate    *float32              `json:"fill_rate,omitempty"`
-	Actions     []OverdriveModeAction `json:"actions"`
+	ID          int32          `json:"id"`
+	Name        string         `json:"name"`
+	Description string         `json:"description"`
+	Effect      string         `json:"effect"`
+	Type        string         `json:"type"`
+	FillRate    *float32       `json:"fill_rate,omitempty"`
+	Actions     []ActionAmount `json:"actions"`
 }
 
-type OverdriveModeAction struct {
+type ActionAmount struct {
 	User   NamedAPIResource `json:"user"`
 	Amount int32            `json:"amount"`
 }
-
 
 func (cfg *apiConfig) handleOverdriveModes(w http.ResponseWriter, r *http.Request) {
 	path := strings.TrimPrefix(r.URL.Path, "/api/overdrive-modes/")
@@ -41,7 +40,7 @@ func (cfg *apiConfig) handleOverdriveModes(w http.ResponseWriter, r *http.Reques
 		if handleHTTPError(w, err) {
 			return
 		}
-	
+
 		cfg.handleOverdriveModeGet(w, r, input)
 		return
 	default:
@@ -49,7 +48,6 @@ func (cfg *apiConfig) handleOverdriveModes(w http.ResponseWriter, r *http.Reques
 		return
 	}
 }
-
 
 func (cfg *apiConfig) handleOverdriveModeGet(w http.ResponseWriter, r *http.Request, input parseResponse) {
 	dbMode, err := cfg.db.GetOverdriveMode(r.Context(), input.ID)
@@ -76,17 +74,16 @@ func (cfg *apiConfig) handleOverdriveModeGet(w http.ResponseWriter, r *http.Requ
 	respondWithJSON(w, http.StatusOK, response)
 }
 
-
-func (cfg *apiConfig) getOverdriveModeActions(r *http.Request, id int32) ([]OverdriveModeAction, error) {
+func (cfg *apiConfig) getOverdriveModeActions(r *http.Request, id int32) ([]ActionAmount, error) {
 	dbActions, err := cfg.db.GetOverdriveModeActions(r.Context(), id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "Couldn't get Overdrive Mode Actions", err)
 	}
 
-	actions := []OverdriveModeAction{}
+	actions := []ActionAmount{}
 
 	for _, dbAction := range dbActions {
-		action := OverdriveModeAction{
+		action := ActionAmount{
 			User:   cfg.newNamedAPIResourceSimple("characters", dbAction.UserID, dbAction.Character.String),
 			Amount: dbAction.Amount,
 		}
@@ -96,7 +93,6 @@ func (cfg *apiConfig) getOverdriveModeActions(r *http.Request, id int32) ([]Over
 
 	return actions, nil
 }
-
 
 func (cfg *apiConfig) handleOverdriveModesRetrieve(w http.ResponseWriter, r *http.Request) {
 	var dbODModes []database.OverdriveMode

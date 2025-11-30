@@ -168,7 +168,6 @@ CREATE TABLE j_monster_equipment_abilities (
 );
 
 
-
 CREATE TABLE j_monster_equipment_slots_chances (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
