@@ -1,10 +1,12 @@
 package main
 
+import (
+	"net/http"
+)
+
 
 type NamedApiResourceList struct {
-	Count		int					`json:"count"`
-	Next		*string				`json:"next"`
-	Previous	*string				`json:"previous"`
+	ListParams
 	Results		[]NamedAPIResource	`json:"results"`
 }
 
@@ -17,6 +19,21 @@ type NamedAPIResource struct {
 }
 
 
+func (cfg *apiConfig) newNamedAPIResourceList(r *http.Request, resources []NamedAPIResource) (NamedApiResourceList, error) {
+	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
+	if err != nil {
+		return NamedApiResourceList{}, err
+	}
+
+	list := NamedApiResourceList{
+		ListParams: listParams,
+		Results: 	shownResources,
+	}
+
+	return list, nil
+}
+
+
 func (cfg *apiConfig) newNamedAPIResource(endpoint string, id int32, name string, version *int32, spec *string) NamedAPIResource {
 	return NamedAPIResource{
 		Name: 			name,
@@ -26,13 +43,6 @@ func (cfg *apiConfig) newNamedAPIResource(endpoint string, id int32, name string
 	}
 }
 
-
-func newNamedAPIResourceList(resources []NamedAPIResource) NamedApiResourceList {
-	return NamedApiResourceList{
-		Count:   len(resources),
-		Results: resources,
-	}
-}
 
 func createNamedAPIResources[T any](
 	cfg *apiConfig,

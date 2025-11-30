@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -24,15 +25,16 @@ func respondWithError(w http.ResponseWriter, code int, msg string, err error) {
 	})
 }
 
-func respondWithJSON(w http.ResponseWriter, code int, payload any) {
+func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")
-
 	dat, err := json.Marshal(payload)
 	if err != nil {
 		log.Printf("Error marshalling JSON: %s", err)
 		w.WriteHeader(500)
 		return
 	}
+
+    dat = bytes.ReplaceAll(dat, []byte(`\u0026`), []byte("&"))
 
 	w.WriteHeader(code)
 	w.Write(dat)

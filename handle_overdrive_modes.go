@@ -124,9 +124,10 @@ func (cfg *apiConfig) handleOverdriveModesRetrieve(w http.ResponseWriter, r *htt
 		return mode.ID, mode.Name
 	})
 
-	resourceList := newNamedAPIResourceList(resources)
-
-	// need to add pagination
+	resourceList, err := cfg.newNamedAPIResourceList(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
 
 	respondWithJSON(w, http.StatusOK, resourceList)
 }

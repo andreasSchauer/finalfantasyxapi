@@ -16,8 +16,8 @@ func anyToFloat32Ptr(value any) *float32 {
 
 func anyToInt32(value any) int32 {
 	switch t := any(value).(type) {
-	case int32:
-		return t
+	case int64:
+		return int32(t)
 	default:
 		return 0
 	}
@@ -26,7 +26,7 @@ func anyToInt32(value any) int32 {
 
 func anyToInt32Ptr(value any) *int32 {
 	switch t := any(value).(type) {
-	case int32:
+	case int64:
 		val := int32(t)
 		return &val
 	default:

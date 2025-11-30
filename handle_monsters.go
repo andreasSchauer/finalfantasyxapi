@@ -114,7 +114,10 @@ func (cfg *apiConfig) handleMonsterGet(w http.ResponseWriter, r *http.Request, i
 			return mon.ID, mon.Name, &mon.Version.Int32, &mon.Specification.String
 		})
 
-		resourceList := newNamedAPIResourceList(resources)
+		resourceList, err := cfg.newNamedAPIResourceList(r, resources)
+		if handleHTTPError(w, err) {
+			return
+		}
 
 		respondWithJSON(w, http.StatusMultipleChoices, resourceList)
 		return
@@ -125,6 +128,8 @@ func (cfg *apiConfig) handleMonsterGet(w http.ResponseWriter, r *http.Request, i
 		respondWithError(w, http.StatusNotFound, "Couldn't get Monster. Monster with this ID doesn't exist.", err)
 		return
 	}
+
+
 
 	response := Monster{
 		ID: 					dbMonster.ID,
@@ -170,7 +175,10 @@ func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Requ
 		return mon.ID, mon.Name, h.ConvertNullInt32(mon.Version), h.ConvertNullString(mon.Specification)
 	})
 
-	resourceList := newNamedAPIResourceList(resources)
+	resourceList, err := cfg.newNamedAPIResourceList(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
 
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
