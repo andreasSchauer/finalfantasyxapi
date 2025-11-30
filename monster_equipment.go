@@ -1,0 +1,159 @@
+package main
+
+import (
+	"database/sql"
+	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+)
+
+
+func (cfg *apiConfig) getMonsterEquipment(r *http.Request, mon database.Monster) (MonsterEquipment, error) {
+	dbEquipment, err := cfg.db.GetMonsterEquipment(r.Context(), mon.ID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return MonsterEquipment{}, nil
+		}
+		return MonsterEquipment{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve Equipment of Monster %s Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+	}
+
+	abilitySlots, attachedAbilities, err := cfg.getMonsterEquipmentSlots(r, mon, dbEquipment)
+	if err != nil {
+		return MonsterEquipment{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve Equipment Slots of Monster %s Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+	}
+	
+	weaponAbilities, err := cfg.getEquipmentDrops(r, mon, dbEquipment, database.EquipTypeWeapon)
+	if err != nil {
+		return MonsterEquipment{}, err
+	}
+	
+	armorAbilities, err := cfg.getEquipmentDrops(r, mon, dbEquipment, database.EquipTypeArmor)
+	if err != nil {
+		return MonsterEquipment{}, err
+	}
+
+	return MonsterEquipment{
+		DropChance: 		anyToInt32(dbEquipment.DropChance),
+		Power: 				anyToInt32(dbEquipment.Power),
+		CriticalPlus: 		dbEquipment.CriticalPlus,
+		AbilitySlots: 		abilitySlots,
+		AttachedAbilities: 	attachedAbilities,
+		WeaponAbilities: 	weaponAbilities,
+		ArmorAbilities: 	armorAbilities,
+	}, nil
+}
+
+
+func (cfg *apiConfig) getMonsterEquipmentSlots(r *http.Request, mon database.Monster, equipment database.MonsterEquipment) (MonsterEquipmentSlots, MonsterEquipmentSlots, error) {
+	dbEquipmentSlots, err := cfg.db.GetMonsterEquipmentSlots(r.Context(), equipment.ID)
+	if err != nil {
+		return MonsterEquipmentSlots{}, MonsterEquipmentSlots{},newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve Equipment Slots of Monster %s Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+	}
+
+	dbAbilitySlots := dbEquipmentSlots[0]
+	dbAttachedAbilities := dbEquipmentSlots[1]
+
+	abilitySlots, err := cfg.assembleMonsterEquipmentSlots(r, mon, equipment, dbAbilitySlots)
+	if err != nil {
+		return MonsterEquipmentSlots{}, MonsterEquipmentSlots{}, err
+	}
+
+	attachedAbilities, err := cfg.assembleMonsterEquipmentSlots(r, mon, equipment, dbAttachedAbilities)
+	if err != nil {
+		return MonsterEquipmentSlots{}, MonsterEquipmentSlots{}, err
+	}
+
+	return abilitySlots, attachedAbilities, nil
+}
+
+
+func (cfg *apiConfig) assembleMonsterEquipmentSlots(r *http.Request,mon database.Monster, equipment database.MonsterEquipment, dbEquipmentSlots database.MonsterEquipmentSlot) (MonsterEquipmentSlots, error) {
+	equipmentSlotsChances, err := cfg.getMonsterEquipmentSlotsChances(r, mon, equipment, dbEquipmentSlots)
+	if err != nil {
+		return MonsterEquipmentSlots{}, err
+	}
+
+	equipmentSlots := MonsterEquipmentSlots{
+		MinAmount: 	anyToInt32(dbEquipmentSlots.MinAmount),
+		MaxAmount: 	anyToInt32(dbEquipmentSlots.MaxAmount),
+		Chances: 	equipmentSlotsChances,
+	}
+
+	return equipmentSlots, nil
+}
+
+
+func (cfg *apiConfig) getMonsterEquipmentSlotsChances(r *http.Request, mon database.Monster, equipment database.MonsterEquipment, slots database.MonsterEquipmentSlot) ([]EquipmentSlotsChance, error) {
+	dbSlotsChances, err := cfg.db.GetMonsterEquipmentSlotsChances(r.Context(), database.GetMonsterEquipmentSlotsChancesParams{
+		MonsterEquipmentID: equipment.ID,
+		EquipmentSlotsID: 	slots.ID,
+	})
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't assemble Equipment Slots of Monster %s Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+	}
+
+	chances := []EquipmentSlotsChance{}
+
+	for _, dbChance := range dbSlotsChances {
+		chance := EquipmentSlotsChance{
+			Amount: anyToInt32(dbChance.Amount),
+			Chance: anyToInt32(dbChance.Chance),
+		}
+
+		chances = append(chances, chance)
+	}
+
+	return chances, nil
+}
+
+
+func (cfg *apiConfig) getEquipmentDrops(r *http.Request, mon database.Monster, equipment database.MonsterEquipment, equipType database.EquipType) ([]EquipmentDrop, error) {
+	dbDrops, err := cfg.db.GetMonsterEquipmentAbilities(r.Context(), database.GetMonsterEquipmentAbilitiesParams{
+		MonsterEquipmentID: equipment.ID,
+		Type: 				equipType,	
+	})
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve dropped %s abilities of Monster %s Version %d", string(equipType), mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+	}
+
+	drops := []EquipmentDrop{}
+
+	for _, dbDrop := range dbDrops {
+		forcedChars, err := cfg.getEquipmentDropForcedChars(r, mon, equipment, dbDrop)
+		if err != nil {
+			return nil, err
+		}
+		autoAbility := cfg.newNamedAPIResourceSimple("auto-abilities", dbDrop.AutoAbilityID.Int32, dbDrop.AutoAbility.String)
+
+		drop := EquipmentDrop{
+			AutoAbility: 	autoAbility,
+			ForcedChars: 	forcedChars,
+			IsForced: 		dbDrop.IsForced.Bool,
+			Probability: 	anyToInt32Ptr(dbDrop.Probability),
+		}
+
+		drops = append(drops, drop)
+	}
+
+	return drops, nil
+}
+
+
+func (cfg *apiConfig) getEquipmentDropForcedChars(r *http.Request, mon database.Monster, equipment database.MonsterEquipment, drop database.GetMonsterEquipmentAbilitiesRow) ([]NamedAPIResource, error) {
+	dbChars, err := cfg.db.GetEquipmentDropCharacters(r.Context(), database.GetEquipmentDropCharactersParams{
+		MonsterEquipmentID: equipment.ID,
+		EquipmentDropID: 	drop.ID.Int32,
+	})
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve characters of auto ability %s dropped by monster %s version %d", drop.AutoAbility.String, mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+	}
+
+	characters := createNamedAPIResourcesSimple(cfg, dbChars, "characters", func(char database.GetEquipmentDropCharactersRow) (int32, string) {
+		return h.NullInt32ToVal(char.CharacterID), h.NullStringToVal(char.CharacterName)
+	})
+
+	return characters, nil
+}
