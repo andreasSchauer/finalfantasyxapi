@@ -35,6 +35,8 @@ func respondWithJSON(w http.ResponseWriter, code int, payload any) {
 	}
 
     dat = bytes.ReplaceAll(dat, []byte(`\u0026`), []byte("&"))
+	dat = bytes.ReplaceAll(dat, []byte(`\u003c`), []byte("<"))
+	dat = bytes.ReplaceAll(dat, []byte(`\u003e`), []byte(">"))
 
 	w.WriteHeader(code)
 	w.Write(dat)

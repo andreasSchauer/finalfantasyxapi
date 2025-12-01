@@ -27,7 +27,7 @@ func newParseResponse (id int32, name string) parseResponse {
 }
 
 
-
+// location area parsing might be a whole different level of annoying
 func parseSingleSegmentResource[T h.HasID](segment string, lookup map[string]T) (parseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {
@@ -44,8 +44,14 @@ func parseSingleSegmentResource[T h.HasID](segment string, lookup map[string]T) 
 		Name: decoded,
 	}
 
-	// check for unique names with dashes
+	// check for unique names with dashes (obj input)
 	resource, err := seeding.GetResource(lookupName, lookup)
+	if err == nil {
+		return newParseResponse(resource.GetID(), ""), nil
+	}
+
+	// check for unique names with dashes (string input)
+	resource, err = seeding.GetResource(lookupName.Name, lookup)
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}
@@ -66,8 +72,14 @@ func parseSingleSegmentResource[T h.HasID](segment string, lookup map[string]T) 
 	lookupName.Name = nameWithSpaces
 	lookupNameVer.Name = nameWithSpaces
 
-	// check for unique names with spaces
+	// check for unique names with spaces (obj input)
 	resource, err = seeding.GetResource(lookupName, lookup)
+	if err == nil {
+		return newParseResponse(resource.GetID(), ""), nil
+	}
+
+	// check for unique names with spaces (str input)
+	resource, err = seeding.GetResource(lookupName.Name, lookup)
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}

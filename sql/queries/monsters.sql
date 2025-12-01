@@ -146,6 +146,100 @@ WHERE jedc.monster_equipment_id = $1
 AND jedc.equipment_drop_id = $2;
 
 
+-- name: GetMonsterProperties :many
+SELECT
+    p.id AS property_id,
+    p.name AS property
+FROM j_monsters_properties jmp
+LEFT JOIN properties p ON jmp.property_id = p.id
+WHERE jmp.monster_id = $1
+ORDER BY p.id;
+
+
+-- name: GetMonsterAutoAbilities :many
+SELECT
+    a.id AS auto_ability_id,
+    a.name AS auto_ability
+FROM j_monsters_auto_abilities jma
+LEFT JOIN auto_abilities a ON jma.auto_ability_id = a.id
+WHERE jma.monster_id = $1
+ORDER BY a.id;
+
+
+-- name: GetMonsterRonsoRages :many
+SELECT
+    o.id AS ronso_rage_id,
+    o.name AS ronso_rage
+FROM j_monsters_ronso_rages jmr
+LEFT JOIN overdrives o ON jmr.overdrive_id = o.id
+WHERE jmr.monster_id = $1
+ORDER BY o.id;
+
+
+-- name: GetMonsterBaseStats :many
+SELECT
+    s.id AS stat_id,
+    s.name AS stat,
+    bs.value AS value
+FROM j_monsters_base_stats jmbs
+LEFT JOIN base_stats bs ON jmbs.base_stat_id = bs.id
+LEFT JOIN stats s ON bs.stat_id = s.id
+WHERE jmbs.monster_id = $1
+ORDER BY s.id;
+
+
+-- name: GetMonsterElemResists :many
+SELECT
+    e.id AS element_id,
+    e.name AS element,
+    a.id AS affinity_id,
+    a.name AS affinity
+FROM j_monsters_elem_resists jmer
+LEFT JOIN elemental_resists er ON jmer.elem_resist_id = er.id
+LEFT JOIN elements e ON er.element_id = e.id
+LEFT JOIN affinities a ON er.affinity_id = a.id
+WHERE jmer.monster_id = $1
+ORDER BY e.id;
+
+
+-- name: GetMonsterStatusResists :many
+SELECT
+    sc.id AS status_id,
+    sc.name AS status,
+    sr.resistance AS resistance
+FROM j_monsters_status_resists jmsr
+LEFT JOIN status_resists sr ON jmsr.status_resist_id = sr.id
+LEFT JOIN status_conditions sc ON sr.status_condition_id = sc.id
+WHERE jmsr.monster_id = $1
+ORDER BY sc.id;
+
+
+-- name: GetMonsterImmunities :many
+SELECT
+    sc.id AS status_id,
+    sc.name AS status
+FROM j_monsters_immunities jmi
+LEFT JOIN status_conditions sc ON jmi.status_condition_id = sc.id
+WHERE jmi.monster_id = $1
+ORDER BY sc.id;
+
+
+-- name: GetMonsterAbilities :many
+SELECT 
+    a.id AS ability_id,
+    a.name AS ability,
+    a.version AS version,
+    a.specification AS specification,
+    a.type AS ability_type,
+    ma.is_forced AS is_forced,
+    ma.is_unused AS is_unused
+FROM j_monsters_abilities jma
+LEFT JOIN monster_abilities ma ON jma.monster_ability_id = ma.id
+LEFT JOIN abilities a ON ma.ability_id = a.id
+WHERE jma.monster_id = $1
+ORDER BY a.id;
+
+
 -- name: GetMonsters :many
 SELECT * FROM monsters ORDER BY id;
 

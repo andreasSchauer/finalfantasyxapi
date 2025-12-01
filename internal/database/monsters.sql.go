@@ -816,6 +816,191 @@ func (q *Queries) GetMonster(ctx context.Context, id int32) (Monster, error) {
 	return i, err
 }
 
+const getMonsterAbilities = `-- name: GetMonsterAbilities :many
+SELECT 
+    a.id AS ability_id,
+    a.name AS ability,
+    a.version AS version,
+    a.specification AS specification,
+    a.type AS ability_type,
+    ma.is_forced AS is_forced,
+    ma.is_unused AS is_unused
+FROM j_monsters_abilities jma
+LEFT JOIN monster_abilities ma ON jma.monster_ability_id = ma.id
+LEFT JOIN abilities a ON ma.ability_id = a.id
+WHERE jma.monster_id = $1
+ORDER BY a.id
+`
+
+type GetMonsterAbilitiesRow struct {
+	AbilityID     sql.NullInt32
+	Ability       sql.NullString
+	Version       sql.NullInt32
+	Specification sql.NullString
+	AbilityType   NullAbilityType
+	IsForced      sql.NullBool
+	IsUnused      sql.NullBool
+}
+
+func (q *Queries) GetMonsterAbilities(ctx context.Context, monsterID int32) ([]GetMonsterAbilitiesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterAbilities, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterAbilitiesRow
+	for rows.Next() {
+		var i GetMonsterAbilitiesRow
+		if err := rows.Scan(
+			&i.AbilityID,
+			&i.Ability,
+			&i.Version,
+			&i.Specification,
+			&i.AbilityType,
+			&i.IsForced,
+			&i.IsUnused,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterAutoAbilities = `-- name: GetMonsterAutoAbilities :many
+SELECT
+    a.id AS auto_ability_id,
+    a.name AS auto_ability
+FROM j_monsters_auto_abilities jma
+LEFT JOIN auto_abilities a ON jma.auto_ability_id = a.id
+WHERE jma.monster_id = $1
+ORDER BY a.id
+`
+
+type GetMonsterAutoAbilitiesRow struct {
+	AutoAbilityID sql.NullInt32
+	AutoAbility   sql.NullString
+}
+
+func (q *Queries) GetMonsterAutoAbilities(ctx context.Context, monsterID int32) ([]GetMonsterAutoAbilitiesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterAutoAbilities, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterAutoAbilitiesRow
+	for rows.Next() {
+		var i GetMonsterAutoAbilitiesRow
+		if err := rows.Scan(&i.AutoAbilityID, &i.AutoAbility); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterBaseStats = `-- name: GetMonsterBaseStats :many
+SELECT
+    s.id AS stat_id,
+    s.name AS stat,
+    bs.value AS value
+FROM j_monsters_base_stats jmbs
+LEFT JOIN base_stats bs ON jmbs.base_stat_id = bs.id
+LEFT JOIN stats s ON bs.stat_id = s.id
+WHERE jmbs.monster_id = $1
+ORDER BY s.id
+`
+
+type GetMonsterBaseStatsRow struct {
+	StatID sql.NullInt32
+	Stat   sql.NullString
+	Value  sql.NullInt32
+}
+
+func (q *Queries) GetMonsterBaseStats(ctx context.Context, monsterID int32) ([]GetMonsterBaseStatsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterBaseStats, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterBaseStatsRow
+	for rows.Next() {
+		var i GetMonsterBaseStatsRow
+		if err := rows.Scan(&i.StatID, &i.Stat, &i.Value); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterElemResists = `-- name: GetMonsterElemResists :many
+SELECT
+    e.id AS element_id,
+    e.name AS element,
+    a.id AS affinity_id,
+    a.name AS affinity
+FROM j_monsters_elem_resists jmer
+LEFT JOIN elemental_resists er ON jmer.elem_resist_id = er.id
+LEFT JOIN elements e ON er.element_id = e.id
+LEFT JOIN affinities a ON er.affinity_id = a.id
+WHERE jmer.monster_id = $1
+ORDER BY e.id
+`
+
+type GetMonsterElemResistsRow struct {
+	ElementID  sql.NullInt32
+	Element    sql.NullString
+	AffinityID sql.NullInt32
+	Affinity   sql.NullString
+}
+
+func (q *Queries) GetMonsterElemResists(ctx context.Context, monsterID int32) ([]GetMonsterElemResistsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterElemResists, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterElemResistsRow
+	for rows.Next() {
+		var i GetMonsterElemResistsRow
+		if err := rows.Scan(
+			&i.ElementID,
+			&i.Element,
+			&i.AffinityID,
+			&i.Affinity,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterEquipment = `-- name: GetMonsterEquipment :one
 SELECT id, data_hash, monster_id, drop_chance, power, critical_plus FROM monster_equipment WHERE monster_id = $1
 `
@@ -956,6 +1141,44 @@ func (q *Queries) GetMonsterEquipmentSlotsChances(ctx context.Context, arg GetMo
 	for rows.Next() {
 		var i GetMonsterEquipmentSlotsChancesRow
 		if err := rows.Scan(&i.Amount, &i.Chance); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterImmunities = `-- name: GetMonsterImmunities :many
+SELECT
+    sc.id AS status_id,
+    sc.name AS status
+FROM j_monsters_immunities jmi
+LEFT JOIN status_conditions sc ON jmi.status_condition_id = sc.id
+WHERE jmi.monster_id = $1
+ORDER BY sc.id
+`
+
+type GetMonsterImmunitiesRow struct {
+	StatusID sql.NullInt32
+	Status   sql.NullString
+}
+
+func (q *Queries) GetMonsterImmunities(ctx context.Context, monsterID int32) ([]GetMonsterImmunitiesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterImmunities, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterImmunitiesRow
+	for rows.Next() {
+		var i GetMonsterImmunitiesRow
+		if err := rows.Scan(&i.StatusID, &i.Status); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -1174,6 +1397,123 @@ func (q *Queries) GetMonsterOtherItems(ctx context.Context, monsterItemsID int32
 			&i.Amount,
 			&i.Chance,
 		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterProperties = `-- name: GetMonsterProperties :many
+SELECT
+    p.id AS property_id,
+    p.name AS property
+FROM j_monsters_properties jmp
+LEFT JOIN properties p ON jmp.property_id = p.id
+WHERE jmp.monster_id = $1
+ORDER BY p.id
+`
+
+type GetMonsterPropertiesRow struct {
+	PropertyID sql.NullInt32
+	Property   sql.NullString
+}
+
+func (q *Queries) GetMonsterProperties(ctx context.Context, monsterID int32) ([]GetMonsterPropertiesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterProperties, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterPropertiesRow
+	for rows.Next() {
+		var i GetMonsterPropertiesRow
+		if err := rows.Scan(&i.PropertyID, &i.Property); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterRonsoRages = `-- name: GetMonsterRonsoRages :many
+SELECT
+    o.id AS ronso_rage_id,
+    o.name AS ronso_rage
+FROM j_monsters_ronso_rages jmr
+LEFT JOIN overdrives o ON jmr.overdrive_id = o.id
+WHERE jmr.monster_id = $1
+ORDER BY o.id
+`
+
+type GetMonsterRonsoRagesRow struct {
+	RonsoRageID sql.NullInt32
+	RonsoRage   sql.NullString
+}
+
+func (q *Queries) GetMonsterRonsoRages(ctx context.Context, monsterID int32) ([]GetMonsterRonsoRagesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterRonsoRages, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterRonsoRagesRow
+	for rows.Next() {
+		var i GetMonsterRonsoRagesRow
+		if err := rows.Scan(&i.RonsoRageID, &i.RonsoRage); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterStatusResists = `-- name: GetMonsterStatusResists :many
+SELECT
+    sc.id AS status_id,
+    sc.name AS status,
+    sr.resistance AS resistance
+FROM j_monsters_status_resists jmsr
+LEFT JOIN status_resists sr ON jmsr.status_resist_id = sr.id
+LEFT JOIN status_conditions sc ON sr.status_condition_id = sc.id
+WHERE jmsr.monster_id = $1
+ORDER BY sc.id
+`
+
+type GetMonsterStatusResistsRow struct {
+	StatusID   sql.NullInt32
+	Status     sql.NullString
+	Resistance interface{}
+}
+
+func (q *Queries) GetMonsterStatusResists(ctx context.Context, monsterID int32) ([]GetMonsterStatusResistsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterStatusResists, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterStatusResistsRow
+	for rows.Next() {
+		var i GetMonsterStatusResistsRow
+		if err := rows.Scan(&i.StatusID, &i.Status, &i.Resistance); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

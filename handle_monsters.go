@@ -24,14 +24,14 @@ type Monster struct {
 	IsUnderwater         bool               `json:"is_underwater"`
 	IsZombie             bool               `json:"is_zombie"`
 	Distance             int32              `json:"distance"`
-	//Properties           []NamedAPIResource `json:"properties"`
-	//AutoAbilities        []NamedAPIResource `json:"auto_abilities"`
+	Properties           []NamedAPIResource `json:"properties"`
+	AutoAbilities        []NamedAPIResource `json:"auto_abilities"`
 	AP                   int32              `json:"ap"`
 	APOverkill           int32              `json:"ap_overkill"`
 	OverkillDamage       int32              `json:"overkill_damage"`
 	Gil                  int32              `json:"gil"`
 	StealGil             *int32             `json:"steal_gil"`
-	//RonsoRages           []NamedAPIResource `json:"ronso_rages"`
+	RonsoRages           []NamedAPIResource `json:"ronso_rages"`
 	DoomCountdown        *int32             `json:"doom_countdown"`
 	PoisonRate           *float32           `json:"poison_rate"`
 	ThreatenChance       *int32             `json:"threaten_chance"`
@@ -39,55 +39,44 @@ type Monster struct {
 	MonsterArenaPrice    *int32             `json:"monster_arena_price,omitempty"`
 	SensorText           *string            `json:"sensor_text"`
 	ScanText             *string            `json:"scan_text"`
-	//BaseStats            []BaseStat         `json:"base_stats"`
+	BaseStats            []BaseStat         `json:"base_stats"`
 	Items                *MonsterItems      `json:"items"`
 	Equipment            *MonsterEquipment  `json:"equipment"`
-	//ElemResists          []ElementalResist `json:"elem_resists"`
-	//StatusImmunities []NamedAPIResource `json:"status_immunities"`
-	//StatusResists        []StatusResist    `json:"status_resists"`
-	//AlteredStates        []AlteredState    `json:"altered_states"`
-	//Abilities            []MonsterAbility  `json:"abilities"`
-}
-
-type BaseStat struct {
-	Stat  NamedAPIResource `json:"stat"`
-	Value int32
+	ElemResists          []ElementalResist  `json:"elem_resists"`
+	StatusImmunities 	 []NamedAPIResource `json:"status_immunities"`
+	StatusResists        []StatusResist     `json:"status_resists"`
+	AlteredStates        []AlteredState     `json:"altered_states"`
+	Abilities            []MonsterAbility   `json:"abilities"`
 }
 
 
-type MonsterEquipment struct {
-	DropChance        int32                 `json:"drop_chance"`
-	Power             int32                 `json:"power"`
-	CriticalPlus      int32                 `json:"critical_plus"`
-	AbilitySlots      MonsterEquipmentSlots `json:"ability_slots"`
-	AttachedAbilities MonsterEquipmentSlots `json:"attached_abilities"`
-	WeaponAbilities   []EquipmentDrop       `json:"weapon_abilities"`
-	ArmorAbilities    []EquipmentDrop       `json:"armor_abilities"`
-}
-
-func (me MonsterEquipment) IsZero() bool {
-	return me.DropChance == 0
+type AlteredState struct {
+	Condition   string           `json:"condition"`
+	IsTemporary bool             `json:"is_temporary"`
+	Changes     []AltStateChange `json:"changes"`
 }
 
 
-type MonsterEquipmentSlots struct {
-	MinAmount int32                  `json:"min_amount"`
-	MaxAmount int32                  `json:"max_amount"`
-	Chances   []EquipmentSlotsChance `json:"chances"`
+type AltStateChange struct {
+	AlterationType   string             	`json:"alteration_type"`
+	Distance         *int32             	`json:"distance"`
+	Properties       *[]NamedAPIResource    `json:"properties"`
+	AutoAbilities    *[]NamedAPIResource    `json:"auto_abilities"`
+	BaseStats        *[]BaseStat        	`json:"base_stats"`
+	ElemResists      *[]ElementalResist 	`json:"elem_resists"`
+	StatusImmunities *[]NamedAPIResource    `json:"status_immunities"`
+	AddedStatusses   *[]InflictedStatus 	`json:"added_statusses"`
 }
 
-type EquipmentSlotsChance struct {
-	Amount int32 `json:"amount"`
-	Chance int32 `json:"chance"`
+
+
+type MonsterAbility struct {
+	Ability		NamedAPIResource	`json:"ability"`
+	IsForced	bool				`json:"is_forced"`
+	IsUnused	bool				`json:"is_unused"`
 }
 
 
-type EquipmentDrop struct {
-	AutoAbility  NamedAPIResource   	`json:"auto_ability"`
-	ForcedChars  []NamedAPIResource 		`json:"forced_characters"`
-	IsForced    bool     				`json:"is_forced"`
-	Probability *int32   				`json:"probability,omitempty"`
-}
 
 func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
 	path := strings.TrimPrefix(r.URL.Path, "/api/monsters/")
@@ -97,7 +86,7 @@ func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
 		cfg.handleMonstersRetrieve(w, r)
 		return
 	}
-
+	// this whole thing can probably be generalized
 	switch len(segments) {
 	case 1:
 		// /api/monsters/{name or id}
@@ -108,65 +97,88 @@ func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		cfg.handleMonsterGet(w, r, input)
+		if input.Name != "" {
+			resources, err := cfg.getMultipleMonsters(r, input.Name)
+			if handleHTTPError(w, err) {
+				return
+			}
+			respondWithJSON(w, http.StatusMultipleChoices, resources)
+			return
+		}
+
+		monster, err := cfg.getMonster(r, input.ID)
+		if handleHTTPError(w, err) {
+			return
+		}
+
+		respondWithJSON(w, http.StatusOK, monster)
 		return
+
 	case 2:
 		// /api/monsters/{name}/{version}
 
 		name := segments[0]
 		versionStr := segments[1]
+		var input parseResponse
+		var err error
 
-		input, err := parseNameVersionResource(name, versionStr, cfg.l.Monsters)
+		// /api/monsters/{name}/
+		if versionStr == "" {
+			input, err = parseSingleSegmentResource(name, cfg.l.Monsters)
+			if handleHTTPError(w, err) {
+				return
+			}
+			if input.Name != "" {
+				resources, err := cfg.getMultipleMonsters(r, input.Name)
+				if handleHTTPError(w, err) {
+					return
+				}
+				respondWithJSON(w, http.StatusMultipleChoices, resources)
+				return
+			}
+		} else {
+			input, err = parseNameVersionResource(name, versionStr, cfg.l.Monsters)
+			if handleHTTPError(w, err) {
+				return
+			}
+		}
+
+		monster, err := cfg.getMonster(r, input.ID)
 		if handleHTTPError(w, err) {
 			return
 		}
 
-		cfg.handleMonsterGet(w, r, input)
+		respondWithJSON(w, http.StatusOK, monster)
 		return
+
 	default:
 		respondWithError(w, http.StatusBadRequest, `Wrong format. Usage: /api/monsters/{name or id}, or /api/monsters/{name}/{version}`, nil)
 		return
 	}
 }
 
-func (cfg *apiConfig) handleMonsterGet(w http.ResponseWriter, r *http.Request, input parseResponse) {
-	if input.Name != "" {
-		dbMons, err := cfg.db.GetMonstersByName(r.Context(), input.Name)
-		if err != nil {
-			respondWithError(w, http.StatusNotFound, "Couldn't get multiple Monsters", err)
-			return
-		}
-
-		resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
-			return mon.ID, mon.Name, &mon.Version.Int32, &mon.Specification.String
-		})
-
-		resourceList, err := cfg.newNamedAPIResourceList(r, resources)
-		if handleHTTPError(w, err) {
-			return
-		}
-
-		respondWithJSON(w, http.StatusMultipleChoices, resourceList)
-		return
-	}
-
-	dbMonster, err := cfg.db.GetMonster(r.Context(), input.ID)
+func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
+	dbMonster, err := cfg.db.GetMonster(r.Context(), id)
 	if err != nil {
-		respondWithError(w, http.StatusNotFound, "Couldn't get Monster. Monster with this ID doesn't exist.", err)
-		return
+		return Monster{}, newHTTPError(http.StatusNotFound, "Couldn't get Monster. Monster with this ID doesn't exist.", err)
 	}
 
 	monsterItems, err := cfg.getMonsterItems(r, dbMonster)
-	if handleHTTPError(w, err) {
-		return
+	if err != nil {
+		return Monster{}, err
 	}
 
 	monsterEquipment, err := cfg.getMonsterEquipment(r, dbMonster)
-	if handleHTTPError(w, err) {
-		return
+	if err != nil {
+		return Monster{}, err
 	}
 
-	response := Monster{
+	rel, err := cfg.getMonsterRelationships(r, dbMonster)
+	if err != nil {
+		return Monster{}, err
+	}
+
+	monster := Monster{
 		ID:                   	dbMonster.ID,
 		Name:                 	dbMonster.Name,
 		Version:              	h.NullInt32ToPtr(dbMonster.Version),
@@ -181,11 +193,14 @@ func (cfg *apiConfig) handleMonsterGet(w http.ResponseWriter, r *http.Request, i
 		IsUnderwater:         	dbMonster.IsUnderwater,
 		IsZombie:             	dbMonster.IsZombie,
 		Distance:             	anyToInt32(dbMonster.Distance),
+		Properties: 			rel.Properties,
+		AutoAbilities: 			rel.AutoAbilities,
 		AP:                   	dbMonster.Ap,
 		APOverkill:           	dbMonster.ApOverkill,
 		OverkillDamage:       	dbMonster.OverkillDamage,
 		Gil:                  	dbMonster.Gil,
 		StealGil:             	h.NullInt32ToPtr(dbMonster.StealGil),
+		RonsoRages: 			rel.RonsoRages,
 		DoomCountdown:       	anyToInt32Ptr(dbMonster.DoomCountdown),
 		PoisonRate:           	anyToFloat32Ptr(dbMonster.PoisonRate),
 		ThreatenChance:       	anyToInt32Ptr(dbMonster.ThreatenChance),
@@ -193,15 +208,38 @@ func (cfg *apiConfig) handleMonsterGet(w http.ResponseWriter, r *http.Request, i
 		MonsterArenaPrice:    	h.NullInt32ToPtr(dbMonster.MonsterArenaPrice),
 		SensorText:           	h.NullStringToPtr(dbMonster.SensorText),
 		ScanText:            	h.NullStringToPtr(dbMonster.ScanText),
+		BaseStats: 				rel.BaseStats,
 		Items: 				  	h.NilOrPtr(monsterItems),
 		Equipment: 				h.NilOrPtr(monsterEquipment),
+		ElemResists: 			rel.ElemResists,
+		StatusImmunities: 		rel.StatusImmunities,
+		StatusResists: 			rel.StatusResists,
+		Abilities: 				rel.Abilities,
 	}
 
-	respondWithJSON(w, http.StatusOK, response)
+	return monster, nil
 }
 
 
 
+
+func (cfg *apiConfig) getMultipleMonsters(r *http.Request, monsterName string) (NamedApiResourceList, error) {
+	dbMons, err := cfg.db.GetMonstersByName(r.Context(), monsterName)
+	if err != nil {
+		return NamedApiResourceList{}, newHTTPError(http.StatusNotFound, "Couldn't get multiple Monsters", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, &mon.Version.Int32, &mon.Specification.String
+	})
+
+	resourceList, err := cfg.newNamedAPIResourceList(r, resources)
+	if err != nil {
+		return NamedApiResourceList{}, err
+	}
+
+	return resourceList, nil
+}
 
 
 func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Request) {
@@ -219,6 +257,8 @@ func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Requ
 	if handleHTTPError(w, err) {
 		return
 	}
+
+	// filtering
 
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
