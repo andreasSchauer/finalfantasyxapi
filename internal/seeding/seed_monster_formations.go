@@ -11,34 +11,34 @@ import (
 
 type EncounterLocation struct {
 	ID           int32
-	Version      *int32       `json:"version"`
-	LocationArea LocationArea `json:"location_area"`
+	Version      *int32       		`json:"version"`
+	LocationArea LocationArea 		`json:"location_area"`
 	AreaID       int32
 	Notes        *string            `json:"notes"`
 	Formations   []MonsterFormation `json:"formations"`
 }
 
-func (fl EncounterLocation) ToHashFields() []any {
+func (el EncounterLocation) ToHashFields() []any {
 	return []any{
-		h.DerefOrNil(fl.Version),
-		fl.AreaID,
-		h.DerefOrNil(fl.Notes),
+		h.DerefOrNil(el.Version),
+		el.AreaID,
+		h.DerefOrNil(el.Notes),
 	}
 }
 
-func (fl EncounterLocation) ToKeyFields() []any {
+func (el EncounterLocation) ToKeyFields() []any {
 	return []any{
-		h.DerefOrNil(fl.Version),
-		createLookupKey(fl.LocationArea),
+		h.DerefOrNil(el.Version),
+		createLookupKey(el.LocationArea),
 	}
 }
 
-func (fl EncounterLocation) GetID() int32 {
-	return fl.ID
+func (el EncounterLocation) GetID() int32 {
+	return el.ID
 }
 
-func (fl EncounterLocation) Error() string {
-	return fmt.Sprintf("encounter location with version: %v, %s", h.DerefOrNil(fl.Version), fl.LocationArea)
+func (el EncounterLocation) Error() string {
+	return fmt.Sprintf("encounter location with version: %v, %s", h.DerefOrNil(el.Version), el.LocationArea)
 }
 
 type MonsterFormation struct {
@@ -185,7 +185,6 @@ func (l *Lookup) seedMonsterFormation(qtx *database.Queries, formation MonsterFo
 
 	dbFormation, err := qtx.CreateMonsterFormation(context.Background(), database.CreateMonsterFormationParams{
 		DataHash:            generateDataHash(formation),
-		EncounterLocationID: formation.EncounterLocationID,
 		Category:            database.MonsterFormationCategory(formation.Category),
 		IsForcedAmbush:      formation.IsForcedAmbush,
 		CanEscape:           formation.CanEscape,

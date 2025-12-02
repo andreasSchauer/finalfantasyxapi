@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"fmt"
 	"net/http"
@@ -9,7 +8,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
-
 
 func (cfg *apiConfig) getMonsterRelationships(r *http.Request, mon database.Monster) (Monster, error) {
 	properties, err := cfg.getMonsterProperties(r, mon)
@@ -47,23 +45,28 @@ func (cfg *apiConfig) getMonsterRelationships(r *http.Request, mon database.Mons
 		return Monster{}, err
 	}
 
+	alteredStates, err := cfg.getMonsterAlteredStates(r, mon)
+	if err != nil {
+		return Monster{}, err
+	}
+
 	abilities, err := cfg.getMonsterAbilities(r, mon)
 	if err != nil {
 		return Monster{}, err
 	}
 
 	return Monster{
-		Properties: 		properties,
-		AutoAbilities: 		autoAbilities,
-		RonsoRages: 		ronsoRages,
-		BaseStats: 			baseStats,
-		ElemResists: 		elemResists,
-		StatusImmunities: 	immunities,
-		StatusResists: 		statusResists,
-		Abilities: 			abilities,
+		Properties:       properties,
+		AutoAbilities:    autoAbilities,
+		RonsoRages:       ronsoRages,
+		BaseStats:        baseStats,
+		ElemResists:      elemResists,
+		StatusImmunities: immunities,
+		StatusResists:    statusResists,
+		AlteredStates:    alteredStates,
+		Abilities:        abilities,
 	}, nil
 }
-
 
 func (cfg *apiConfig) getMonsterProperties(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
 	dbProperties, err := cfg.db.GetMonsterProperties(r.Context(), mon.ID)
@@ -78,7 +81,6 @@ func (cfg *apiConfig) getMonsterProperties(r *http.Request, mon database.Monster
 	return properties, nil
 }
 
-
 func (cfg *apiConfig) getMonsterAutoAbilities(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
 	dbAutoAbilities, err := cfg.db.GetMonsterAutoAbilities(r.Context(), mon.ID)
 	if err != nil {
@@ -92,7 +94,6 @@ func (cfg *apiConfig) getMonsterAutoAbilities(r *http.Request, mon database.Mons
 	return autoAbilities, nil
 }
 
-
 func (cfg *apiConfig) getMonsterRonsoRages(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
 	dbRages, err := cfg.db.GetMonsterRonsoRages(r.Context(), mon.ID)
 	if err != nil {
@@ -105,7 +106,6 @@ func (cfg *apiConfig) getMonsterRonsoRages(r *http.Request, mon database.Monster
 
 	return rages, nil
 }
-
 
 func (cfg *apiConfig) getMonsterBaseStats(r *http.Request, mon database.Monster) ([]BaseStat, error) {
 	dbBaseStats, err := cfg.db.GetMonsterBaseStats(r.Context(), mon.ID)
@@ -124,7 +124,6 @@ func (cfg *apiConfig) getMonsterBaseStats(r *http.Request, mon database.Monster)
 	return baseStats, nil
 }
 
-
 func (cfg *apiConfig) getMonsterElemResists(r *http.Request, mon database.Monster) ([]ElementalResist, error) {
 	dbElemResists, err := cfg.db.GetMonsterElemResists(r.Context(), mon.ID)
 	if err != nil {
@@ -141,7 +140,6 @@ func (cfg *apiConfig) getMonsterElemResists(r *http.Request, mon database.Monste
 
 	return elemResists, nil
 }
-
 
 func (cfg *apiConfig) getMonsterStatusResists(r *http.Request, mon database.Monster) ([]StatusResist, error) {
 	dbStatusResists, err := cfg.db.GetMonsterStatusResists(r.Context(), mon.ID)
@@ -160,7 +158,6 @@ func (cfg *apiConfig) getMonsterStatusResists(r *http.Request, mon database.Mons
 	return statusResists, nil
 }
 
-
 func (cfg *apiConfig) getMonsterImmunities(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
 	dbImmunities, err := cfg.db.GetMonsterImmunities(r.Context(), mon.ID)
 	if err != nil {
@@ -173,7 +170,6 @@ func (cfg *apiConfig) getMonsterImmunities(r *http.Request, mon database.Monster
 
 	return immunities, nil
 }
-
 
 func (cfg *apiConfig) getMonsterAbilities(r *http.Request, mon database.Monster) ([]MonsterAbility, error) {
 	dbMonAbilities, err := cfg.db.GetMonsterAbilities(r.Context(), mon.ID)
@@ -192,9 +188,9 @@ func (cfg *apiConfig) getMonsterAbilities(r *http.Request, mon database.Monster)
 		abilityResource := cfg.newNamedAPIResource(endpoint, id, dbAbility.Ability.String, h.NullInt32ToPtr(dbAbility.Version), h.NullStringToPtr(dbAbility.Specification))
 
 		monAbility := MonsterAbility{
-			Ability: 	abilityResource,
-			IsForced: 	dbAbility.IsForced.Bool,
-			IsUnused: 	dbAbility.IsUnused.Bool,
+			Ability:  abilityResource,
+			IsForced: dbAbility.IsForced.Bool,
+			IsUnused: dbAbility.IsUnused.Bool,
 		}
 
 		monAbilities = append(monAbilities, monAbility)
@@ -203,14 +199,13 @@ func (cfg *apiConfig) getMonsterAbilities(r *http.Request, mon database.Monster)
 	return monAbilities, nil
 }
 
-
 func (cfg *apiConfig) getAbilityID(ability database.GetMonsterAbilitiesRow) (int32, string, error) {
 	ref := seeding.AbilityReference{
-		Name: ability.Ability.String,
-		Version: h.NullInt32ToPtr(ability.Version),
+		Name:        ability.Ability.String,
+		Version:     h.NullInt32ToPtr(ability.Version),
 		AbilityType: string(ability.AbilityType.AbilityType),
 	}
-	
+
 	switch ability.AbilityType.AbilityType {
 	case database.AbilityTypePlayerAbility:
 		abilityLookup, err := seeding.GetResource(ref, cfg.l.PlayerAbilities)

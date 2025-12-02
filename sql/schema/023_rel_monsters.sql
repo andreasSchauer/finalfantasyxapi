@@ -226,7 +226,7 @@ CREATE TABLE j_alt_state_changes_status_immunities (
 );
 
 
-CREATE TABLE j_alt_state_changes_added_statusses (
+CREATE TABLE j_alt_state_changes_statusses (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     alt_state_change_id INTEGER NOT NULL REFERENCES alt_state_changes(id),
@@ -236,7 +236,7 @@ CREATE TABLE j_alt_state_changes_added_statusses (
 
 
 -- +goose Down
-DROP TABLE IF EXISTS j_alt_state_changes_added_statusses;
+DROP TABLE IF EXISTS j_alt_state_changes_statusses;
 DROP TABLE IF EXISTS j_alt_state_changes_status_immunities;
 DROP TABLE IF EXISTS j_alt_state_changes_elem_resists;
 DROP TABLE IF EXISTS j_alt_state_changes_base_stats;

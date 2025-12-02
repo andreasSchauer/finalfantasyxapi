@@ -282,7 +282,7 @@ func (l *Lookup) seedAltStateAddedStatusses(qtx *database.Queries, change AltSta
 			return err
 		}
 
-		err = qtx.CreateAltStateChangesAddedStatussesJunction(context.Background(), database.CreateAltStateChangesAddedStatussesJunctionParams{
+		err = qtx.CreateAltStateChangesStatussesJunction(context.Background(), database.CreateAltStateChangesStatussesJunctionParams{
 			DataHash:          generateDataHash(junction),
 			AltStateChangeID:  junction.ParentID,
 			InflictedStatusID: junction.ChildID,

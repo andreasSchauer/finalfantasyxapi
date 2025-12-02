@@ -37,7 +37,6 @@ CREATE TABLE formation_boss_songs (
 CREATE TABLE monster_formations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    encounter_location_id INTEGER NOT NULL REFERENCES encounter_locations(id),
     category monster_formation_category NOT NULL,
     is_forced_ambush BOOLEAN NOT NULL,
     can_escape BOOLEAN NOT NULL,

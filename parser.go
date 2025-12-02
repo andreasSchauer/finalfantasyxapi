@@ -28,6 +28,7 @@ func newParseResponse (id int32, name string) parseResponse {
 
 
 // location area parsing might be a whole different level of annoying
+// maybe add a switch case LocationArea to GetResource
 func parseSingleSegmentResource[T h.HasID](segment string, lookup map[string]T) (parseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {

@@ -2903,13 +2903,6 @@ type JAeonsWeaponArmor struct {
 	AeonEquipmentID int32
 }
 
-type JAltStateChangesAddedStatuss struct {
-	ID                int32
-	DataHash          string
-	AltStateChangeID  int32
-	InflictedStatusID int32
-}
-
 type JAltStateChangesAutoAbility struct {
 	ID               int32
 	DataHash         string
@@ -2943,6 +2936,13 @@ type JAltStateChangesStatusImmunity struct {
 	DataHash          string
 	AltStateChangeID  int32
 	StatusConditionID int32
+}
+
+type JAltStateChangesStatuss struct {
+	ID                int32
+	DataHash          string
+	AltStateChangeID  int32
+	InflictedStatusID int32
 }
 
 type JAreaConnectedArea struct {
@@ -3507,14 +3507,13 @@ type MonsterEquipmentSlot struct {
 }
 
 type MonsterFormation struct {
-	ID                  int32
-	DataHash            string
-	EncounterLocationID int32
-	Category            MonsterFormationCategory
-	IsForcedAmbush      bool
-	CanEscape           bool
-	BossSongID          sql.NullInt32
-	Notes               sql.NullString
+	ID             int32
+	DataHash       string
+	Category       MonsterFormationCategory
+	IsForcedAmbush bool
+	CanEscape      bool
+	BossSongID     sql.NullInt32
+	Notes          sql.NullString
 }
 
 type MonsterItem struct {

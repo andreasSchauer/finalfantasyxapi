@@ -248,26 +248,24 @@ func (q *Queries) CreateLocation(ctx context.Context, arg CreateLocationParams) 
 }
 
 const createMonsterFormation = `-- name: CreateMonsterFormation :one
-INSERT INTO monster_formations (data_hash, encounter_location_id, category, is_forced_ambush, can_escape, boss_song_id, notes)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+INSERT INTO monster_formations (data_hash, category, is_forced_ambush, can_escape, boss_song_id, notes)
+VALUES ($1, $2, $3, $4, $5, $6)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_formations.data_hash
-RETURNING id, data_hash, encounter_location_id, category, is_forced_ambush, can_escape, boss_song_id, notes
+RETURNING id, data_hash, category, is_forced_ambush, can_escape, boss_song_id, notes
 `
 
 type CreateMonsterFormationParams struct {
-	DataHash            string
-	EncounterLocationID int32
-	Category            MonsterFormationCategory
-	IsForcedAmbush      bool
-	CanEscape           bool
-	BossSongID          sql.NullInt32
-	Notes               sql.NullString
+	DataHash       string
+	Category       MonsterFormationCategory
+	IsForcedAmbush bool
+	CanEscape      bool
+	BossSongID     sql.NullInt32
+	Notes          sql.NullString
 }
 
 func (q *Queries) CreateMonsterFormation(ctx context.Context, arg CreateMonsterFormationParams) (MonsterFormation, error) {
 	row := q.db.QueryRowContext(ctx, createMonsterFormation,
 		arg.DataHash,
-		arg.EncounterLocationID,
 		arg.Category,
 		arg.IsForcedAmbush,
 		arg.CanEscape,
@@ -278,7 +276,6 @@ func (q *Queries) CreateMonsterFormation(ctx context.Context, arg CreateMonsterF
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
-		&i.EncounterLocationID,
 		&i.Category,
 		&i.IsForcedAmbush,
 		&i.CanEscape,

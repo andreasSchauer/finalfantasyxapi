@@ -70,8 +70,8 @@ RETURNING *;
 
 
 -- name: CreateMonsterFormation :one
-INSERT INTO monster_formations (data_hash, encounter_location_id, category, is_forced_ambush, can_escape, boss_song_id, notes)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+INSERT INTO monster_formations (data_hash, category, is_forced_ambush, can_escape, boss_song_id, notes)
+VALUES ($1, $2, $3, $4, $5, $6)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_formations.data_hash
 RETURNING *;
 

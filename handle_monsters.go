@@ -9,6 +9,10 @@ import (
 )
 
 // species and ctb icon type need to be named api resources, because they have a type endpoint
+// optional alt-state-related fields (all omitempty):
+// status condition field (named api resource)
+// default state field
+
 type Monster struct {
 	ID                   int32              `json:"id"`
 	Name                 string             `json:"name"`
@@ -47,25 +51,6 @@ type Monster struct {
 	StatusResists        []StatusResist     `json:"status_resists"`
 	AlteredStates        []AlteredState     `json:"altered_states"`
 	Abilities            []MonsterAbility   `json:"abilities"`
-}
-
-
-type AlteredState struct {
-	Condition   string           `json:"condition"`
-	IsTemporary bool             `json:"is_temporary"`
-	Changes     []AltStateChange `json:"changes"`
-}
-
-
-type AltStateChange struct {
-	AlterationType   string             	`json:"alteration_type"`
-	Distance         *int32             	`json:"distance"`
-	Properties       *[]NamedAPIResource    `json:"properties"`
-	AutoAbilities    *[]NamedAPIResource    `json:"auto_abilities"`
-	BaseStats        *[]BaseStat        	`json:"base_stats"`
-	ElemResists      *[]ElementalResist 	`json:"elem_resists"`
-	StatusImmunities *[]NamedAPIResource    `json:"status_immunities"`
-	AddedStatusses   *[]InflictedStatus 	`json:"added_statusses"`
 }
 
 
@@ -214,6 +199,7 @@ func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
 		ElemResists: 			rel.ElemResists,
 		StatusImmunities: 		rel.StatusImmunities,
 		StatusResists: 			rel.StatusResists,
+		AlteredStates: 			rel.AlteredStates,
 		Abilities: 				rel.Abilities,
 	}
 

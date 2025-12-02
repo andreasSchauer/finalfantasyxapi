@@ -43,9 +43,9 @@ func (cfg *apiConfig) newStatusResist(id, resistance int32, status string) Statu
 
 type InflictedStatus struct {
 	StatusCondition   NamedAPIResource 		`json:"status_condition"`
-	Probability       int32  				`json:"probability"`
-	DurationType      database.DurationType `json:"duration_type"`
-	Amount            *int32 				`json:"amount"`
+	Probability       int32  				`json:"probability,omitempty"`
+	DurationType      database.DurationType `json:"duration_type,omitempty"`
+	Amount            *int32 				`json:"amount,omitempty"`
 }
 
 func (cfg *apiConfig) newInflictedStatus(id, probability int32, status string, amount *int32, durationType database.DurationType) InflictedStatus {
