@@ -95,7 +95,7 @@ func (l *Lookup) seedBlitzballItems(db *database.Queries, dbConn *sql.DB) error 
 				return h.GetErr(position.Error(), err, "couldn't create blitzball position")
 			}
 			position.ID = dbPosition.ID
-			key := createLookupKey(position)
+			key := CreateLookupKey(position)
 			l.Positions[key] = position
 		}
 		return nil
@@ -113,7 +113,7 @@ func (l *Lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonPosition := range blitzballPositions {
-			key := createLookupKey(jsonPosition)
+			key := CreateLookupKey(jsonPosition)
 			position, err := GetResource(key, l.Positions)
 			if err != nil {
 				return err

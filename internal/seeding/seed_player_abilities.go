@@ -100,7 +100,7 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 			}
 
 			playerAbility.ID = dbPlayerAbility.ID
-			key := createLookupKey(playerAbility.Ability)
+			key := CreateLookupKey(playerAbility.Ability)
 			l.PlayerAbilities[key] = playerAbility
 		}
 		return nil

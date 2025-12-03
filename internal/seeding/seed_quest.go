@@ -47,7 +47,7 @@ func (l *Lookup) seedQuest(qtx *database.Queries, quest Quest) (Quest, error) {
 	}
 
 	quest.ID = dbQuest.ID
-	key := createLookupKey(quest)
+	key := CreateLookupKey(quest)
 	l.Quests[key] = quest
 
 	return quest, nil

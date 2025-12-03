@@ -139,7 +139,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			monster.ID = dbMonster.ID
-			key := createLookupKey(monster)
+			key := CreateLookupKey(monster)
 			l.Monsters[key] = monster
 		}
 
@@ -158,7 +158,7 @@ func (l *Lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB)
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonMonster := range monsters {
-			key := createLookupKey(jsonMonster)
+			key := CreateLookupKey(jsonMonster)
 
 			monster, err := GetResource(key, l.Monsters)
 			if err != nil {

@@ -218,7 +218,7 @@ func (l *Lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error
 		area.ID = dbArea.ID
 		locationArea := area.GetLocationArea()
 
-		key := createLookupKey(locationArea)
+		key := CreateLookupKey(locationArea)
 		l.Areas[key] = area
 	}
 

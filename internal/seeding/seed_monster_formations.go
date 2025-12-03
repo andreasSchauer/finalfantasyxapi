@@ -11,8 +11,8 @@ import (
 
 type EncounterLocation struct {
 	ID           int32
-	Version      *int32       		`json:"version"`
-	LocationArea LocationArea 		`json:"location_area"`
+	Version      *int32       `json:"version"`
+	LocationArea LocationArea `json:"location_area"`
 	AreaID       int32
 	Notes        *string            `json:"notes"`
 	Formations   []MonsterFormation `json:"formations"`
@@ -29,7 +29,7 @@ func (el EncounterLocation) ToHashFields() []any {
 func (el EncounterLocation) ToKeyFields() []any {
 	return []any{
 		h.DerefOrNil(el.Version),
-		createLookupKey(el.LocationArea),
+		CreateLookupKey(el.LocationArea),
 	}
 }
 
@@ -123,7 +123,7 @@ func (l *Lookup) seedEncounterLocations(db *database.Queries, dbConn *sql.DB) er
 			}
 
 			encounterLocation.ID = dbEncounterLocation.ID
-			key := createLookupKey(encounterLocation)
+			key := CreateLookupKey(encounterLocation)
 			l.EncounterLocations[key] = encounterLocation
 		}
 		return nil
@@ -140,7 +140,7 @@ func (l *Lookup) seedMonsterFormationsRelationships(db *database.Queries, dbConn
 	}
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonEncounterLocation := range encounterLocations {
-			key := createLookupKey(jsonEncounterLocation)
+			key := CreateLookupKey(jsonEncounterLocation)
 			encounterLocation, err := GetResource(key, l.EncounterLocations)
 			if err != nil {
 				return err
@@ -184,12 +184,12 @@ func (l *Lookup) seedMonsterFormation(qtx *database.Queries, formation MonsterFo
 	}
 
 	dbFormation, err := qtx.CreateMonsterFormation(context.Background(), database.CreateMonsterFormationParams{
-		DataHash:            generateDataHash(formation),
-		Category:            database.MonsterFormationCategory(formation.Category),
-		IsForcedAmbush:      formation.IsForcedAmbush,
-		CanEscape:           formation.CanEscape,
-		BossSongID:          h.ObjPtrToNullInt32ID(formation.BossMusic),
-		Notes:               h.GetNullString(formation.Notes),
+		DataHash:       generateDataHash(formation),
+		Category:       database.MonsterFormationCategory(formation.Category),
+		IsForcedAmbush: formation.IsForcedAmbush,
+		CanEscape:      formation.CanEscape,
+		BossSongID:     h.ObjPtrToNullInt32ID(formation.BossMusic),
+		Notes:          h.GetNullString(formation.Notes),
 	})
 	if err != nil {
 		return MonsterFormation{}, h.GetErr(formation.Error(), err, "couldn't create monster formation")
@@ -233,7 +233,7 @@ func (l *Lookup) seedFormationBossSong(qtx *database.Queries, bossSong Formation
 func (l *Lookup) seedFormationMonsterAmounts(qtx *database.Queries, formation MonsterFormation) error {
 	for _, monsterAmount := range formation.Monsters {
 		var err error
-		key := createLookupKey(monsterAmount)
+		key := CreateLookupKey(monsterAmount)
 		monsterAmount.MonsterID, err = assignFK(key, l.Monsters)
 		if err != nil {
 			return err

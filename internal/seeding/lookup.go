@@ -12,14 +12,14 @@ type Lookupable interface {
 	error
 }
 
-func createLookupKey(l Lookupable) string {
+func CreateLookupKey(l Lookupable) string {
 	fields := l.ToKeyFields()
 	return combineFields(fields)
 }
 
 type LookupObject struct {
-	Name	string
-	Version	*int32
+	Name    string
+	Version *int32
 }
 
 func (l LookupObject) ToKeyFields() []any {
@@ -141,7 +141,7 @@ func getResourceStrKey[T any](key string, lookup map[string]T) (T, error) {
 }
 
 func getResourceObjKey[T any](obj Lookupable, lookup map[string]T) (T, error) {
-	key := createLookupKey(obj)
+	key := CreateLookupKey(obj)
 
 	resource, err := GetResource(key, lookup)
 	if err != nil {

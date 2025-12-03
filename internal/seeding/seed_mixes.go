@@ -139,7 +139,7 @@ func (l *Lookup) seedMixCombinations(qtx *database.Queries, mix Mix) error {
 		var err error
 		combo.MixID = mix.ID
 
-		key := createLookupKey(combo)
+		key := CreateLookupKey(combo)
 		if _, exists := bestComboMap[key]; exists {
 			combo.IsBestCombo = true
 		}
@@ -157,7 +157,7 @@ func getBestComboMap(mix Mix) map[string]struct{} {
 	bestComboMap := make(map[string]struct{})
 
 	for _, combo := range mix.BestCombinations {
-		key := createLookupKey(combo)
+		key := CreateLookupKey(combo)
 		bestComboMap[key] = struct{}{}
 	}
 

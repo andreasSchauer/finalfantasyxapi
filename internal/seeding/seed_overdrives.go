@@ -82,7 +82,7 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			overdrive.ID = dbOverdrive.ID
-			key := createLookupKey(overdrive.Ability)
+			key := CreateLookupKey(overdrive.Ability)
 			l.Overdrives[key] = overdrive
 		}
 

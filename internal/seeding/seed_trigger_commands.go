@@ -79,7 +79,7 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 			}
 
 			command.ID = dbTriggerCommand.ID
-			key := createLookupKey(command.Ability)
+			key := CreateLookupKey(command.Ability)
 			l.TriggerCommands[key] = command
 		}
 		return nil

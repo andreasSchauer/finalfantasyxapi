@@ -31,7 +31,7 @@ func (s Shop) ToHashFields() []any {
 
 func (s Shop) ToKeyFields() []any {
 	return []any{
-		createLookupKey(s.LocationArea),
+		CreateLookupKey(s.LocationArea),
 		h.DerefOrNil(s.Version),
 	}
 }
@@ -155,7 +155,7 @@ func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 				return h.GetErr(shop.Error(), err, "couldn't create shop")
 			}
 			shop.ID = dbShop.ID
-			key := createLookupKey(shop)
+			key := CreateLookupKey(shop)
 			l.Shops[key] = shop
 		}
 		return nil
@@ -173,7 +173,7 @@ func (l *Lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonShop := range shops {
-			key := createLookupKey(jsonShop)
+			key := CreateLookupKey(jsonShop)
 			shop, err := GetResource(key, l.Shops)
 			if err != nil {
 				return err

@@ -8,34 +8,28 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type AlteredState struct {
-	URL			string				`json:"url"`
-	Condition   string           	`json:"condition"`
-	IsTemporary bool             	`json:"is_temporary"`
-	Changes     []AltStateChange 	`json:"changes"`
-}
-
-type DefaultState struct {
-	Condition   string           `json:"applied_state_condition"`
-	IsTemporary bool             `json:"applied_state_is_temporary"`
-	Changes     []AltStateChange `json:"changes_to_default_state"`
+	URL         string           `json:"url"`
+	Condition   string           `json:"condition"`
+	IsTemporary bool             `json:"is_temporary"`
+	Changes     []AltStateChange `json:"changes"`
 }
 
 
-// I might have to add extra fields for applying the default state
-// Removed Status Conditions
-// Gained Status Resistances (when immunity goes away)
 type AltStateChange struct {
-	AlterationType   string             `json:"alteration_type"`
-	Distance         *int32             `json:"distance,omitempty"`
-	Properties       []NamedAPIResource `json:"properties,omitempty"`
-	AutoAbilities    []NamedAPIResource `json:"auto_abilities,omitempty"`
-	BaseStats        []BaseStat         `json:"base_stats,omitempty"`
-	ElemResists      []ElementalResist  `json:"elem_resists,omitempty"`
-	StatusImmunities []NamedAPIResource `json:"status_immunities,omitempty"`
-	Statusses		 []InflictedStatus  `json:"added_statusses,omitempty"`
+	AlterationType    database.AlterationType `json:"alteration_type"`
+	Distance          *int32                  `json:"distance,omitempty"`
+	Properties        []NamedAPIResource      `json:"properties,omitempty"`               // loss
+	AutoAbilities     []NamedAPIResource      `json:"auto_abilities,omitempty"`           // loss
+	BaseStats         []BaseStat              `json:"base_stats,omitempty"`
+	ElemResists       []ElementalResist       `json:"elem_resists,omitempty"`
+	StatusImmunities  []NamedAPIResource      `json:"status_immunities,omitempty"`
+	StatusResistances []StatusResist          `json:"status_resistances,omitempty"`
+	AddedStatusses    []InflictedStatus       `json:"added_status_conditions,omitempty"`
+	RemovedStatus     *NamedAPIResource       `json:"removed_status_condition,omitempty"`
 }
+
+
 
 func (cfg *apiConfig) getMonsterAlteredStates(r *http.Request, mon database.Monster) ([]AlteredState, error) {
 	dbAltStates, err := cfg.db.GetMonsterAlteredStates(r.Context(), mon.ID)
@@ -50,9 +44,9 @@ func (cfg *apiConfig) getMonsterAlteredStates(r *http.Request, mon database.Mons
 		if err != nil {
 			return []AlteredState{}, err
 		}
-		
+
 		alteredState := AlteredState{
-			URL: fmt.Sprintf("http://%s/api/monsters/%d?altered-state=%d", cfg.host, mon.ID, i+1),
+			URL:         fmt.Sprintf("http://%s/api/monsters/%d?altered-state=%d", cfg.host, mon.ID, i+1),
 			Condition:   dbAltState.Condition,
 			IsTemporary: dbAltState.IsTemporary,
 			Changes:     altStateChanges,
@@ -78,7 +72,7 @@ func (cfg *apiConfig) getAltStateChanges(r *http.Request, mon database.Monster, 
 			return []AltStateChange{}, nil
 		}
 
-		altStateChange.AlterationType = string(dbChange.AlterationType)
+		altStateChange.AlterationType = dbChange.AlterationType
 		altStateChange.Distance = anyToInt32Ptr(dbChange.Distance)
 
 		altStateChanges = append(altStateChanges, altStateChange)
@@ -124,7 +118,7 @@ func (cfg *apiConfig) getAltStateChangeRelationships(r *http.Request, mon databa
 		BaseStats:        baseStats,
 		ElemResists:      elemResists,
 		StatusImmunities: immunities,
-		Statusses:   addedStatusses,
+		AddedStatusses:   addedStatusses,
 	}, nil
 }
 

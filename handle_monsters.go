@@ -18,6 +18,7 @@ type Monster struct {
 	Name                 string             `json:"name"`
 	Version              *int32             `json:"version,omitempty"`
 	Specification        *string            `json:"specification,omitempty"`
+	AppliedState         *AppliedState      `json:"applied_state,omitempty"`
 	Notes                *string            `json:"notes,omitempty"`
 	Species              string             `json:"species"`
 	IsStoryBased         bool               `json:"is_story_based"`
@@ -47,21 +48,17 @@ type Monster struct {
 	Items                *MonsterItems      `json:"items"`
 	Equipment            *MonsterEquipment  `json:"equipment"`
 	ElemResists          []ElementalResist  `json:"elem_resists"`
-	StatusImmunities 	 []NamedAPIResource `json:"status_immunities"`
+	StatusImmunities     []NamedAPIResource `json:"status_immunities"`
 	StatusResists        []StatusResist     `json:"status_resists"`
 	AlteredStates        []AlteredState     `json:"altered_states"`
 	Abilities            []MonsterAbility   `json:"abilities"`
 }
 
-
-
 type MonsterAbility struct {
-	Ability		NamedAPIResource	`json:"ability"`
-	IsForced	bool				`json:"is_forced"`
-	IsUnused	bool				`json:"is_unused"`
+	Ability  NamedAPIResource `json:"ability"`
+	IsForced bool             `json:"is_forced"`
+	IsUnused bool             `json:"is_unused"`
 }
-
-
 
 func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
 	path := strings.TrimPrefix(r.URL.Path, "/api/monsters/")
@@ -164,50 +161,52 @@ func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
 	}
 
 	monster := Monster{
-		ID:                   	dbMonster.ID,
-		Name:                 	dbMonster.Name,
-		Version:              	h.NullInt32ToPtr(dbMonster.Version),
-		Specification:        	h.NullStringToPtr(dbMonster.Specification),
-		Notes:                	h.NullStringToPtr(dbMonster.Notes),
-		Species:              	string(dbMonster.Species),
-		IsStoryBased:         	dbMonster.IsStoryBased,
-		CanBeCaptured:        	dbMonster.CanBeCaptured,
-		AreaConquestLocation: 	h.ConvertNullMaCreationArea(dbMonster.AreaConquestLocation),
-		CTBIconType:          	string(dbMonster.CtbIconType),
-		HasOverdrive:         	dbMonster.HasOverdrive,
-		IsUnderwater:         	dbMonster.IsUnderwater,
-		IsZombie:             	dbMonster.IsZombie,
-		Distance:             	anyToInt32(dbMonster.Distance),
-		Properties: 			rel.Properties,
-		AutoAbilities: 			rel.AutoAbilities,
-		AP:                   	dbMonster.Ap,
-		APOverkill:           	dbMonster.ApOverkill,
-		OverkillDamage:       	dbMonster.OverkillDamage,
-		Gil:                  	dbMonster.Gil,
-		StealGil:             	h.NullInt32ToPtr(dbMonster.StealGil),
-		RonsoRages: 			rel.RonsoRages,
-		DoomCountdown:       	anyToInt32Ptr(dbMonster.DoomCountdown),
-		PoisonRate:           	anyToFloat32Ptr(dbMonster.PoisonRate),
-		ThreatenChance:       	anyToInt32Ptr(dbMonster.ThreatenChance),
-		ZanmatoLevel:         	anyToInt32(dbMonster.ZanmatoLevel),
-		MonsterArenaPrice:    	h.NullInt32ToPtr(dbMonster.MonsterArenaPrice),
-		SensorText:           	h.NullStringToPtr(dbMonster.SensorText),
-		ScanText:            	h.NullStringToPtr(dbMonster.ScanText),
-		BaseStats: 				rel.BaseStats,
-		Items: 				  	h.NilOrPtr(monsterItems),
-		Equipment: 				h.NilOrPtr(monsterEquipment),
-		ElemResists: 			rel.ElemResists,
-		StatusImmunities: 		rel.StatusImmunities,
-		StatusResists: 			rel.StatusResists,
-		AlteredStates: 			rel.AlteredStates,
-		Abilities: 				rel.Abilities,
+		ID:                   dbMonster.ID,
+		Name:                 dbMonster.Name,
+		Version:              h.NullInt32ToPtr(dbMonster.Version),
+		Specification:        h.NullStringToPtr(dbMonster.Specification),
+		Notes:                h.NullStringToPtr(dbMonster.Notes),
+		Species:              string(dbMonster.Species),
+		IsStoryBased:         dbMonster.IsStoryBased,
+		CanBeCaptured:        dbMonster.CanBeCaptured,
+		AreaConquestLocation: h.ConvertNullMaCreationArea(dbMonster.AreaConquestLocation),
+		CTBIconType:          string(dbMonster.CtbIconType),
+		HasOverdrive:         dbMonster.HasOverdrive,
+		IsUnderwater:         dbMonster.IsUnderwater,
+		IsZombie:             dbMonster.IsZombie,
+		Distance:             anyToInt32(dbMonster.Distance),
+		Properties:           rel.Properties,
+		AutoAbilities:        rel.AutoAbilities,
+		AP:                   dbMonster.Ap,
+		APOverkill:           dbMonster.ApOverkill,
+		OverkillDamage:       dbMonster.OverkillDamage,
+		Gil:                  dbMonster.Gil,
+		StealGil:             h.NullInt32ToPtr(dbMonster.StealGil),
+		RonsoRages:           rel.RonsoRages,
+		DoomCountdown:        anyToInt32Ptr(dbMonster.DoomCountdown),
+		PoisonRate:           anyToFloat32Ptr(dbMonster.PoisonRate),
+		ThreatenChance:       anyToInt32Ptr(dbMonster.ThreatenChance),
+		ZanmatoLevel:         anyToInt32(dbMonster.ZanmatoLevel),
+		MonsterArenaPrice:    h.NullInt32ToPtr(dbMonster.MonsterArenaPrice),
+		SensorText:           h.NullStringToPtr(dbMonster.SensorText),
+		ScanText:             h.NullStringToPtr(dbMonster.ScanText),
+		BaseStats:            rel.BaseStats,
+		Items:                h.NilOrPtr(monsterItems),
+		Equipment:            h.NilOrPtr(monsterEquipment),
+		ElemResists:          rel.ElemResists,
+		StatusImmunities:     rel.StatusImmunities,
+		StatusResists:        rel.StatusResists,
+		AlteredStates:        rel.AlteredStates,
+		Abilities:            rel.Abilities,
+	}
+
+	monster, err = cfg.applyAlteredState(r, monster)
+	if err != nil {
+		return Monster{}, err
 	}
 
 	return monster, nil
 }
-
-
-
 
 func (cfg *apiConfig) getMultipleMonsters(r *http.Request, monsterName string) (NamedApiResourceList, error) {
 	dbMons, err := cfg.db.GetMonstersByName(r.Context(), monsterName)
@@ -226,7 +225,6 @@ func (cfg *apiConfig) getMultipleMonsters(r *http.Request, monsterName string) (
 
 	return resourceList, nil
 }
-
 
 func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Request) {
 	dbMons, err := cfg.db.GetMonsters(r.Context())

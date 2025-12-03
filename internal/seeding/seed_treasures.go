@@ -100,7 +100,7 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 				}
 
 				treasure.ID = dbTreasure.ID
-				key := createLookupKey(treasure)
+				key := CreateLookupKey(treasure)
 				l.Treasures[key] = treasure
 			}
 		}
@@ -128,7 +128,7 @@ func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 			for j, jsonTreasure := range list.Treasures {
 				jsonTreasure.AreaID = list.LocationArea.ID
 				jsonTreasure.Version = int32(j + 1)
-				key := createLookupKey(jsonTreasure)
+				key := CreateLookupKey(jsonTreasure)
 
 				treasure, err := GetResource(key, l.Treasures)
 				if err != nil {

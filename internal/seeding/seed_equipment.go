@@ -140,7 +140,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			table.ID = dbEquipmentTable.ID
-			key := createLookupKey(table)
+			key := CreateLookupKey(table)
 			l.EquipmentTables[key] = table
 		}
 		return nil
@@ -158,7 +158,7 @@ func (l *Lookup) seedEquipmentRelationships(db *database.Queries, dbConn *sql.DB
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonTable := range equipmentTables {
-			key := createLookupKey(jsonTable)
+			key := CreateLookupKey(jsonTable)
 			table, err := GetResource(key, l.EquipmentTables)
 			if err != nil {
 				return err
