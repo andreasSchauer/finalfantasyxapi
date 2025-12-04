@@ -6,22 +6,44 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func filterResourceSlice[T HasAPIResource, C HasAPIResource](items []T, changeItems []C) ([]T, []T) {
-	changeItemsMap := getResourceMap(changeItems)
-	var filteredItems []T
-	var defaultItems []T
+// input: items [1,2,3,4,5] changeItems [2,4]
+// output: keptItems [1,3,5] removedItems [2,4]
+// due to the interfaces,
+// everything with the same namedAPIResources in it
+// can filter each other
+func sliceRemoveResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
+	removeMap := getResourceMap(itemsToRemove)
+	keptItems := []T{}
+	removedItems := []T{}
 
 	for _, item := range items {
 		key := createAPIResourceKey(item)
-		_, ok := changeItemsMap[key]
+		_, ok := removeMap[key]
 		if !ok {
-			filteredItems = append(filteredItems, item)
+			keptItems = append(keptItems, item)
 			continue
 		}
-		defaultItems = append(defaultItems, item)
+		removedItems = append(removedItems, item)
 	}
 
-	return filteredItems, defaultItems
+	return keptItems, removedItems
+}
+
+
+// s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,5]
+func sliceSharedResources[T HasAPIResource](s1 []T, s2[]T) []T {
+	newSlice := []T{}
+	s2map := getResourceMap(s2)
+
+	for _, item := range s1 {
+		key := createAPIResourceKey(item)
+		_, ok := s2map[key]
+		if ok {
+			newSlice = append(newSlice, item)
+		}
+	}
+
+	return newSlice
 }
 
 func createAPIResourceKey[T HasAPIResource](item T) string {

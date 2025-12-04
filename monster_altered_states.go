@@ -19,8 +19,8 @@ type AlteredState struct {
 type AltStateChange struct {
 	AlterationType    database.AlterationType `json:"alteration_type"`
 	Distance          *int32                  `json:"distance,omitempty"`
-	Properties        []NamedAPIResource      `json:"properties,omitempty"`               // loss
-	AutoAbilities     []NamedAPIResource      `json:"auto_abilities,omitempty"`           // loss
+	Properties        []NamedAPIResource      `json:"properties,omitempty"`
+	AutoAbilities     []NamedAPIResource      `json:"auto_abilities,omitempty"`
 	BaseStats         []BaseStat              `json:"base_stats,omitempty"`
 	ElemResists       []ElementalResist       `json:"elem_resists,omitempty"`
 	StatusImmunities  []NamedAPIResource      `json:"status_immunities,omitempty"`

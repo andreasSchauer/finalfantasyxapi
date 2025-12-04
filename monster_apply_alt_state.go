@@ -46,6 +46,8 @@ func (cfg *apiConfig) applyAlteredState(r *http.Request, mon Monster) (Monster, 
 			mon, appliedState, defaultState = applyAltStateTypeChange(mon, change, appliedState, defaultState)
 		case database.AlterationTypeGain:
 			mon, appliedState, defaultState = applyAltStateTypeGain(mon, change, appliedState, defaultState)
+		case database.AlterationTypeLoss:
+			mon, appliedState, defaultState = applyAltStateTypeLoss(mon, change, appliedState, defaultState)
 		}
 	}
 
@@ -59,6 +61,54 @@ func (cfg *apiConfig) applyAlteredState(r *http.Request, mon Monster) (Monster, 
 
 	return mon, nil
 }
+
+
+func applyAltStateTypeLoss(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
+	defStateChangeGain := AltStateChange{
+		AlterationType: database.AlterationTypeGain,
+	}
+
+	gainChangesExist := false
+
+	if change.Properties != nil {
+		propertiesToRemove := []NamedAPIResource{}
+
+		for _, property := range change.Properties {
+			propertiesToRemove = append(propertiesToRemove, property)
+			defStateChangeGain.Properties = append(defStateChangeGain.Properties, property)
+
+			gainChangesExist = true
+		}
+
+		mon.Properties, _ = sliceRemoveResources(mon.Properties, propertiesToRemove)
+
+		slices.SortStableFunc(mon.Properties, sortAPIResources)
+		slices.SortStableFunc(defStateChangeGain.Properties, sortAPIResources)
+	}
+
+	if change.AutoAbilities != nil {
+		abilitiesToRemove := []NamedAPIResource{}
+
+		for _, ability := range change.AutoAbilities {
+			abilitiesToRemove = append(abilitiesToRemove, ability)
+			defStateChangeGain.AutoAbilities = append(defStateChangeGain.AutoAbilities, ability)
+
+			gainChangesExist = true
+		}
+		
+		mon.AutoAbilities, _ = sliceRemoveResources(mon.AutoAbilities, abilitiesToRemove)
+
+		slices.SortStableFunc(mon.AutoAbilities, sortAPIResources)
+		slices.SortStableFunc(defStateChangeGain.AutoAbilities, sortAPIResources)
+	}
+
+	if gainChangesExist {
+		defaultState.Changes = append(defaultState.Changes, defStateChangeGain)
+	}
+
+	return mon, appliedState, defaultState
+}
+
 
 
 func applyAltStateTypeGain(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
@@ -97,6 +147,8 @@ func applyAltStateTypeGain(mon Monster, change AltStateChange, appliedState Appl
 		slices.SortStableFunc(defStateChangeLoss.AutoAbilities, sortAPIResources)
 	}
 
+	// if a resistance becomes an immunity, the resistance needs to be gained back in the default
+	// while the immunity needs to be lost in the default
 	if change.StatusImmunities != nil {
 		for _, immunity := range change.StatusImmunities {
 			mon.StatusImmunities = append(mon.StatusImmunities, immunity)
@@ -108,9 +160,15 @@ func applyAltStateTypeGain(mon Monster, change AltStateChange, appliedState Appl
 		slices.SortStableFunc(mon.StatusImmunities, sortAPIResources)
 		slices.SortStableFunc(defStateChangeLoss.StatusImmunities, sortAPIResources)
 
-		mon.StatusResists, defStateChangeGain.StatusResistances = filterResourceSlice(mon.StatusResists, change.StatusImmunities)
-		gainChangesExist = true
+		keptItems, removedItems := sliceRemoveResources(mon.StatusResists, change.StatusImmunities)
+		if len(defStateChangeGain.StatusResistances) == 0 {
+			removedItems = nil
+		}
 
+		mon.StatusResists = keptItems
+		defStateChangeGain.StatusResistances = removedItems
+
+		gainChangesExist = true
 	}
 
 	if change.AddedStatusses != nil {
@@ -131,7 +189,7 @@ func applyAltStateTypeGain(mon Monster, change AltStateChange, appliedState Appl
 	return mon, appliedState, defaultState
 }
 
-
+// swap old thing with new thing
 func applyAltStateTypeChange(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
 	defStateChange := AltStateChange{
 		AlterationType: database.AlterationTypeChange,
@@ -173,11 +231,12 @@ func applyAltStateTypeChange(mon Monster, change AltStateChange, appliedState Ap
 }
 
 
-func replaceAltState(states []AlteredState, new AlteredState, i int) []AlteredState {
-	allItems := h.Unshift(states, new)
-	size := len(allItems)
-	s1 := allItems[0:i]
-	s2 := allItems[i+1 : size]
+// put default in first and cut out the currently applied state
+func replaceAltState(states []AlteredState, def AlteredState, i int) []AlteredState {
+	allStates := h.Unshift(states, def)
+	size := len(allStates)
+	s1 := allStates[0:i]
+	s2 := allStates[i+1 : size]
 	return slices.Concat(s1, s2)
 }
 
