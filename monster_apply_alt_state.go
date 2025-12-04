@@ -62,7 +62,6 @@ func (cfg *apiConfig) applyAlteredState(r *http.Request, mon Monster) (Monster, 
 	return mon, nil
 }
 
-
 func applyAltStateTypeLoss(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
 	defStateChangeGain := AltStateChange{
 		AlterationType: database.AlterationTypeGain,
@@ -80,7 +79,7 @@ func applyAltStateTypeLoss(mon Monster, change AltStateChange, appliedState Appl
 			gainChangesExist = true
 		}
 
-		mon.Properties, _ = sliceRemoveResources(mon.Properties, propertiesToRemove)
+		mon.Properties, _ = removeResources(mon.Properties, propertiesToRemove)
 
 		slices.SortStableFunc(mon.Properties, sortAPIResources)
 		slices.SortStableFunc(defStateChangeGain.Properties, sortAPIResources)
@@ -95,8 +94,8 @@ func applyAltStateTypeLoss(mon Monster, change AltStateChange, appliedState Appl
 
 			gainChangesExist = true
 		}
-		
-		mon.AutoAbilities, _ = sliceRemoveResources(mon.AutoAbilities, abilitiesToRemove)
+
+		mon.AutoAbilities, _ = removeResources(mon.AutoAbilities, abilitiesToRemove)
 
 		slices.SortStableFunc(mon.AutoAbilities, sortAPIResources)
 		slices.SortStableFunc(defStateChangeGain.AutoAbilities, sortAPIResources)
@@ -108,8 +107,6 @@ func applyAltStateTypeLoss(mon Monster, change AltStateChange, appliedState Appl
 
 	return mon, appliedState, defaultState
 }
-
-
 
 func applyAltStateTypeGain(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
 	defStateChangeLoss := AltStateChange{
@@ -160,7 +157,7 @@ func applyAltStateTypeGain(mon Monster, change AltStateChange, appliedState Appl
 		slices.SortStableFunc(mon.StatusImmunities, sortAPIResources)
 		slices.SortStableFunc(defStateChangeLoss.StatusImmunities, sortAPIResources)
 
-		keptItems, removedItems := sliceRemoveResources(mon.StatusResists, change.StatusImmunities)
+		keptItems, removedItems := removeResources(mon.StatusResists, change.StatusImmunities)
 		if len(defStateChangeGain.StatusResistances) == 0 {
 			removedItems = nil
 		}
@@ -230,7 +227,6 @@ func applyAltStateTypeChange(mon Monster, change AltStateChange, appliedState Ap
 	return mon, appliedState, defaultState
 }
 
-
 // put default in first and cut out the currently applied state
 func replaceAltState(states []AlteredState, def AlteredState, i int) []AlteredState {
 	allStates := h.Unshift(states, def)
@@ -239,7 +235,6 @@ func replaceAltState(states []AlteredState, def AlteredState, i int) []AlteredSt
 	s2 := allStates[i+1 : size]
 	return slices.Concat(s1, s2)
 }
-
 
 func getAltStateID(r *http.Request, mon Monster) (int, error) {
 	altStateIDStr := r.URL.Query().Get("altered-state")

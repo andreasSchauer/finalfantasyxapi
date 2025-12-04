@@ -46,6 +46,7 @@ type Monster struct {
 	ScanText             *string            `json:"scan_text"`
 	BaseStats            []BaseStat         `json:"base_stats"`
 	Items                *MonsterItems      `json:"items"`
+	BribeChances		 []BribeChance		`json:"bribe_chances,omitempty"`
 	Equipment            *MonsterEquipment  `json:"equipment"`
 	ElemResists          []ElementalResist  `json:"elem_resists"`
 	StatusImmunities     []NamedAPIResource `json:"status_immunities"`
@@ -54,10 +55,38 @@ type Monster struct {
 	Abilities            []MonsterAbility   `json:"abilities"`
 }
 
-type MonsterAbility struct {
-	Ability  NamedAPIResource `json:"ability"`
-	IsForced bool             `json:"is_forced"`
-	IsUnused bool             `json:"is_unused"`
+
+type BribeChance struct {
+	Price		int32	`json:"price"`
+	Chance		int32	`json:"chance"`
+}
+
+// HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
+func (m Monster) getBribeChances() []BribeChance {
+	var hp int32
+
+	for _, stat := range m.BaseStats {
+		if stat.Stat.Name == "hp" {
+			hp = stat.Value
+			break
+		}
+	}
+
+	bribeChances := []BribeChance{}
+	var multiplier int32 = 10
+	var chance int32 = 25
+
+	for multiplier <= 25 {
+		bribeChance := BribeChance{
+			Price: hp * multiplier,
+			Chance: chance,
+		}
+		bribeChances = append(bribeChances, bribeChance)
+		multiplier += 5
+		chance += 25
+	}
+
+	return bribeChances
 }
 
 func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
@@ -203,6 +232,10 @@ func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
 	monster, err = cfg.applyAlteredState(r, monster)
 	if err != nil {
 		return Monster{}, err
+	}
+
+	if !resourcesContain(monster.StatusImmunities, "bribe") {
+		monster.BribeChances = monster.getBribeChances()
 	}
 
 	return monster, nil

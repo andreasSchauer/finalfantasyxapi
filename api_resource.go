@@ -15,6 +15,7 @@ type HasAPIResource interface {
 
 type IsAPIResource interface {
 	getID() int32
+	getName() string
 	seeding.Lookupable
 }
 
@@ -37,6 +38,10 @@ func (r NamedAPIResource) IsZero() bool {
 
 func (r NamedAPIResource) getID() int32 {
 	return r.ID
+}
+
+func (r NamedAPIResource) getName() string {
+	return r.Name
 }
 
 func (r NamedAPIResource) ToKeyFields() []any {

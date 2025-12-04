@@ -9,6 +9,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
+
+type MonsterAbility struct {
+	Ability  NamedAPIResource `json:"ability"`
+	IsForced bool             `json:"is_forced"`
+	IsUnused bool             `json:"is_unused"`
+}
+
+
 func (cfg *apiConfig) getMonsterRelationships(r *http.Request, mon database.Monster) (Monster, error) {
 	properties, err := cfg.getMonsterProperties(r, mon)
 	if err != nil {

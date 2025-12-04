@@ -11,7 +11,7 @@ import (
 // due to the interfaces,
 // everything with the same namedAPIResources in it
 // can filter each other
-func sliceRemoveResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
+func removeResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
 	removeMap := getResourceMap(itemsToRemove)
 	keptItems := []T{}
 	removedItems := []T{}
@@ -29,9 +29,8 @@ func sliceRemoveResources[T HasAPIResource, C HasAPIResource](items []T, itemsTo
 	return keptItems, removedItems
 }
 
-
 // s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,5]
-func sliceSharedResources[T HasAPIResource](s1 []T, s2[]T) []T {
+func getSharedResources[T HasAPIResource](s1 []T, s2 []T) []T {
 	newSlice := []T{}
 	s2map := getResourceMap(s2)
 
@@ -44,6 +43,16 @@ func sliceSharedResources[T HasAPIResource](s1 []T, s2[]T) []T {
 	}
 
 	return newSlice
+}
+
+func resourcesContain[T HasAPIResource](items []T, target string) bool {
+	for _, item := range items {
+		if item.getAPIResource().getName() == target {
+			return true
+		}
+	}
+
+	return false
 }
 
 func createAPIResourceKey[T HasAPIResource](item T) string {
