@@ -240,6 +240,26 @@ WHERE j.monster_id = $1
 ORDER BY a.id;
 
 
+-- name: GetMonsterLocations :many
+SELECT DISTINCT
+    l.id AS location_id,
+	l.name AS location,
+    s.id AS sublocation_id,
+	s.name AS sublocation,
+    a.id AS area_id,
+	a.name AS area,
+	a.version
+FROM locations l
+LEFT JOIN sub_locations s ON s.location_id = l.id
+LEFT JOIN areas a ON a.sub_location_id = s.id
+LEFT JOIN encounter_locations el ON el.area_id = a.id
+LEFT JOIN j_encounter_location_formations jelf ON jelf.encounter_location_id = el.id
+LEFT JOIN monster_formations mf ON jelf.monster_formation_id = mf.id
+LEFT JOIN j_monster_formations_monsters jmfm ON jmfm.monster_formation_id = mf.id
+LEFT JOIN monster_amounts ma ON jmfm.monster_amount_id = ma.id
+WHERE ma.monster_id = $1;
+
+
 -- name: GetMonsterAlteredStates :many
 SELECT * FROM altered_states WHERE monster_id = $1;
 
@@ -316,7 +336,6 @@ LEFT JOIN inflicted_statusses isc ON j.inflicted_status_id = isc.id
 LEFT JOIN status_conditions sc ON isc.status_condition_id = sc.id
 WHERE j.alt_state_change_id = $1
 ORDER BY sc.id;
-
 
 
 -- name: GetMonsters :many

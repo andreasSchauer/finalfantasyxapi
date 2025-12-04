@@ -1678,6 +1678,67 @@ func (q *Queries) GetMonsterItems(ctx context.Context, monsterID int32) (GetMons
 	return i, err
 }
 
+const getMonsterLocations = `-- name: GetMonsterLocations :many
+SELECT DISTINCT
+    l.id AS location_id,
+	l.name AS location,
+    s.id AS sublocation_id,
+	s.name AS sublocation,
+    a.id AS area_id,
+	a.name AS area,
+	a.version
+FROM locations l
+LEFT JOIN sub_locations s ON s.location_id = l.id
+LEFT JOIN areas a ON a.sub_location_id = s.id
+LEFT JOIN encounter_locations el ON el.area_id = a.id
+LEFT JOIN j_encounter_location_formations jelf ON jelf.encounter_location_id = el.id
+LEFT JOIN monster_formations mf ON jelf.monster_formation_id = mf.id
+LEFT JOIN j_monster_formations_monsters jmfm ON jmfm.monster_formation_id = mf.id
+LEFT JOIN monster_amounts ma ON jmfm.monster_amount_id = ma.id
+WHERE ma.monster_id = $1
+`
+
+type GetMonsterLocationsRow struct {
+	LocationID    int32
+	Location      string
+	SublocationID sql.NullInt32
+	Sublocation   sql.NullString
+	AreaID        sql.NullInt32
+	Area          sql.NullString
+	Version       sql.NullInt32
+}
+
+func (q *Queries) GetMonsterLocations(ctx context.Context, monsterID int32) ([]GetMonsterLocationsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterLocations, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterLocationsRow
+	for rows.Next() {
+		var i GetMonsterLocationsRow
+		if err := rows.Scan(
+			&i.LocationID,
+			&i.Location,
+			&i.SublocationID,
+			&i.Sublocation,
+			&i.AreaID,
+			&i.Area,
+			&i.Version,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterOtherItems = `-- name: GetMonsterOtherItems :many
 SELECT
     i.id AS item_id,

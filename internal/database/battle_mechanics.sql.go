@@ -558,6 +558,48 @@ func (q *Queries) CreateStatusResist(ctx context.Context, arg CreateStatusResist
 	return i, err
 }
 
+const getAgilitySubtier = `-- name: GetAgilitySubtier :one
+SELECT id, data_hash, agility_tier_id, subtier_min_agility, subtier_max_agility, character_min_icv FROM agility_subtiers
+WHERE ($1::int) >= subtier_min_agility
+AND ($1::int) <= subtier_max_agility
+`
+
+func (q *Queries) GetAgilitySubtier(ctx context.Context, agility int32) (AgilitySubtier, error) {
+	row := q.db.QueryRowContext(ctx, getAgilitySubtier, agility)
+	var i AgilitySubtier
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AgilityTierID,
+		&i.SubtierMinAgility,
+		&i.SubtierMaxAgility,
+		&i.CharacterMinIcv,
+	)
+	return i, err
+}
+
+const getAgilityTierByAgility = `-- name: GetAgilityTierByAgility :one
+SELECT id, data_hash, min_agility, max_agility, tick_speed, monster_min_icv, monster_max_icv, character_max_icv FROM agility_tiers
+WHERE ($1::int) >= min_agility
+AND ($1::int) <= max_agility
+`
+
+func (q *Queries) GetAgilityTierByAgility(ctx context.Context, agility int32) (AgilityTier, error) {
+	row := q.db.QueryRowContext(ctx, getAgilityTierByAgility, agility)
+	var i AgilityTier
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.MinAgility,
+		&i.MaxAgility,
+		&i.TickSpeed,
+		&i.MonsterMinIcv,
+		&i.MonsterMaxIcv,
+		&i.CharacterMaxIcv,
+	)
+	return i, err
+}
+
 const getOverdriveMode = `-- name: GetOverdriveMode :one
 SELECT id, data_hash, name, description, effect, type, fill_rate FROM overdrive_modes WHERE id = $1
 `

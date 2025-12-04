@@ -156,14 +156,16 @@ func applyAltStateTypeGain(mon Monster, change AltStateChange, appliedState Appl
 
 		slices.SortStableFunc(mon.StatusImmunities, sortAPIResources)
 		slices.SortStableFunc(defStateChangeLoss.StatusImmunities, sortAPIResources)
-
+		
 		keptItems, removedItems := removeResources(mon.StatusResists, change.StatusImmunities)
+		
+		defStateChangeGain.StatusResistances = removedItems
+		
 		if len(defStateChangeGain.StatusResistances) == 0 {
 			removedItems = nil
 		}
 
 		mon.StatusResists = keptItems
-		defStateChangeGain.StatusResistances = removedItems
 
 		gainChangesExist = true
 	}

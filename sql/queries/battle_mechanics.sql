@@ -54,10 +54,22 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = agility_tiers.data_hash
 RETURNING *;
 
 
+-- name: GetAgilityTierByAgility :one
+SELECT * FROM agility_tiers
+WHERE (sqlc.arg(agility)::int) >= min_agility
+AND (sqlc.arg(agility)::int) <= max_agility;
+
+
 -- name: CreateAgilitySubtier :exec
 INSERT INTO agility_subtiers (data_hash, agility_tier_id, subtier_min_agility, subtier_max_agility, character_min_icv)
 VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: GetAgilitySubtier :one
+SELECT * FROM agility_subtiers
+WHERE (sqlc.arg(agility)::int) >= subtier_min_agility
+AND (sqlc.arg(agility)::int) <= subtier_max_agility;
 
 
 -- name: CreateOverdriveMode :one

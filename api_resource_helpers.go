@@ -6,6 +6,17 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
+
+type HasAPIResource interface {
+	getAPIResource() IsAPIResource
+}
+
+type IsAPIResource interface {
+	getID() int32
+	getURL() string
+	seeding.Lookupable
+}
+
 // input: items [1,2,3,4,5] changeItems [2,4]
 // output: keptItems [1,3,5] removedItems [2,4]
 // due to the interfaces,
@@ -45,9 +56,10 @@ func getSharedResources[T HasAPIResource](s1 []T, s2 []T) []T {
 	return newSlice
 }
 
-func resourcesContain[T HasAPIResource](items []T, target string) bool {
+
+func resourcesContain[T HasAPIResource](items []T, target T) bool {
 	for _, item := range items {
-		if item.getAPIResource().getName() == target {
+		if item.getAPIResource() == target.getAPIResource() {
 			return true
 		}
 	}

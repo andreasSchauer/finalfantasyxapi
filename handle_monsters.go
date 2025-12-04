@@ -14,79 +14,48 @@ import (
 // default state field
 
 type Monster struct {
-	ID                   int32              `json:"id"`
-	Name                 string             `json:"name"`
-	Version              *int32             `json:"version,omitempty"`
-	Specification        *string            `json:"specification,omitempty"`
-	AppliedState         *AppliedState      `json:"applied_state,omitempty"`
-	Notes                *string            `json:"notes,omitempty"`
-	Species              string             `json:"species"`
-	IsStoryBased         bool               `json:"is_story_based"`
-	CanBeCaptured        bool               `json:"can_be_captured"`
-	AreaConquestLocation *string            `json:"area_conquest_location,omitempty"`
-	CTBIconType          string             `json:"ctb_icon_type"`
-	HasOverdrive         bool               `json:"has_overdrive"`
-	IsUnderwater         bool               `json:"is_underwater"`
-	IsZombie             bool               `json:"is_zombie"`
-	Distance             int32              `json:"distance"`
-	Properties           []NamedAPIResource `json:"properties"`
-	AutoAbilities        []NamedAPIResource `json:"auto_abilities"`
-	AP                   int32              `json:"ap"`
-	APOverkill           int32              `json:"ap_overkill"`
-	OverkillDamage       int32              `json:"overkill_damage"`
-	Gil                  int32              `json:"gil"`
-	StealGil             *int32             `json:"steal_gil"`
-	RonsoRages           []NamedAPIResource `json:"ronso_rages"`
-	DoomCountdown        *int32             `json:"doom_countdown"`
-	PoisonRate           *float32           `json:"poison_rate"`
-	ThreatenChance       *int32             `json:"threaten_chance"`
-	ZanmatoLevel         int32              `json:"zanmato_level"`
-	MonsterArenaPrice    *int32             `json:"monster_arena_price,omitempty"`
-	SensorText           *string            `json:"sensor_text"`
-	ScanText             *string            `json:"scan_text"`
-	BaseStats            []BaseStat         `json:"base_stats"`
-	Items                *MonsterItems      `json:"items"`
-	BribeChances		 []BribeChance		`json:"bribe_chances,omitempty"`
-	Equipment            *MonsterEquipment  `json:"equipment"`
-	ElemResists          []ElementalResist  `json:"elem_resists"`
-	StatusImmunities     []NamedAPIResource `json:"status_immunities"`
-	StatusResists        []StatusResist     `json:"status_resists"`
-	AlteredStates        []AlteredState     `json:"altered_states"`
-	Abilities            []MonsterAbility   `json:"abilities"`
-}
-
-
-type BribeChance struct {
-	Price		int32	`json:"price"`
-	Chance		int32	`json:"chance"`
-}
-
-// HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
-func (m Monster) getBribeChances() []BribeChance {
-	var hp int32
-
-	for _, stat := range m.BaseStats {
-		if stat.Stat.Name == "hp" {
-			hp = stat.Value
-			break
-		}
-	}
-
-	bribeChances := []BribeChance{}
-	var multiplier int32 = 10
-	var chance int32 = 25
-
-	for multiplier <= 25 {
-		bribeChance := BribeChance{
-			Price: hp * multiplier,
-			Chance: chance,
-		}
-		bribeChances = append(bribeChances, bribeChance)
-		multiplier += 5
-		chance += 25
-	}
-
-	return bribeChances
+	ID                   int32              	`json:"id"`
+	Name                 string             	`json:"name"`
+	Version              *int32             	`json:"version,omitempty"`
+	Specification        *string            	`json:"specification,omitempty"`
+	AppliedState         *AppliedState      	`json:"applied_state,omitempty"`
+	AgilityParameters    AgilityParams      	`json:"agility_parameters"`
+	Notes                *string            	`json:"notes,omitempty"`
+	Species              string             	`json:"species"`
+	IsStoryBased         bool               	`json:"is_story_based"`
+	CanBeCaptured        bool               	`json:"can_be_captured"`
+	AreaConquestLocation *string            	`json:"area_conquest_location,omitempty"`
+	CTBIconType          string             	`json:"ctb_icon_type"`
+	HasOverdrive         bool               	`json:"has_overdrive"`
+	IsUnderwater         bool               	`json:"is_underwater"`
+	IsZombie             bool               	`json:"is_zombie"`
+	Distance             int32              	`json:"distance"`
+	Properties           []NamedAPIResource 	`json:"properties"`
+	AutoAbilities        []NamedAPIResource 	`json:"auto_abilities"`
+	AP                   int32              	`json:"ap"`
+	APOverkill           int32              	`json:"ap_overkill"`
+	OverkillDamage       int32              	`json:"overkill_damage"`
+	Gil                  int32              	`json:"gil"`
+	StealGil             *int32             	`json:"steal_gil"`
+	RonsoRages           []NamedAPIResource 	`json:"ronso_rages"`
+	DoomCountdown        *int32             	`json:"doom_countdown"`
+	PoisonRate           *float32           	`json:"poison_rate"`
+	PoisonDamage         *int32             	`json:"poison_damage,omitempty"`
+	ThreatenChance       *int32             	`json:"threaten_chance"`
+	ZanmatoLevel         int32              	`json:"zanmato_level"`
+	MonsterArenaPrice    *int32             	`json:"monster_arena_price,omitempty"`
+	SensorText           *string            	`json:"sensor_text"`
+	ScanText             *string            	`json:"scan_text"`
+	Locations            []LocationAPIResource	`json:"locations"`
+	BaseStats            []BaseStat         	`json:"base_stats"`
+	Items                *MonsterItems      	`json:"items"`
+	BribeChances         []BribeChance      	`json:"bribe_chances,omitempty"`
+	Equipment            *MonsterEquipment  	`json:"equipment"`
+	ElemResists          []ElementalResist  	`json:"elem_resists"`
+	StatusImmunities     []NamedAPIResource 	`json:"status_immunities"`
+	StatusResists        []StatusResist     	`json:"status_resists"`
+	AlteredStates        []AlteredState     	`json:"altered_states"`
+	Abilities            []MonsterAbility   	`json:"abilities"`
 }
 
 func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
@@ -219,6 +188,7 @@ func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
 		MonsterArenaPrice:    h.NullInt32ToPtr(dbMonster.MonsterArenaPrice),
 		SensorText:           h.NullStringToPtr(dbMonster.SensorText),
 		ScanText:             h.NullStringToPtr(dbMonster.ScanText),
+		Locations: 			  rel.Locations,
 		BaseStats:            rel.BaseStats,
 		Items:                h.NilOrPtr(monsterItems),
 		Equipment:            h.NilOrPtr(monsterEquipment),
@@ -234,8 +204,19 @@ func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
 		return Monster{}, err
 	}
 
-	if !resourcesContain(monster.StatusImmunities, "bribe") {
-		monster.BribeChances = monster.getBribeChances()
+	monster.BribeChances, err = cfg.getMonsterBribeChances(monster)
+	if err != nil {
+		return Monster{}, err
+	}
+
+	monster.PoisonDamage, err = cfg.getMonsterPoisonDamage(monster)
+	if err != nil {
+		return Monster{}, err
+	}
+
+	monster.AgilityParameters, err = cfg.getMonsterAgilityVals(r, monster)
+	if err != nil {
+		return Monster{}, err
 	}
 
 	return monster, nil

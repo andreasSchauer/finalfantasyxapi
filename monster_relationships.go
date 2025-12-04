@@ -33,6 +33,11 @@ func (cfg *apiConfig) getMonsterRelationships(r *http.Request, mon database.Mons
 		return Monster{}, err
 	}
 
+	locations, err := cfg.getMonsterLocations(r, mon)
+	if err != nil {
+		return Monster{}, err
+	}
+
 	baseStats, err := cfg.getMonsterBaseStats(r, mon)
 	if err != nil {
 		return Monster{}, err
@@ -67,6 +72,7 @@ func (cfg *apiConfig) getMonsterRelationships(r *http.Request, mon database.Mons
 		Properties:       properties,
 		AutoAbilities:    autoAbilities,
 		RonsoRages:       ronsoRages,
+		Locations: 		  locations,
 		BaseStats:        baseStats,
 		ElemResists:      elemResists,
 		StatusImmunities: immunities,
@@ -75,6 +81,20 @@ func (cfg *apiConfig) getMonsterRelationships(r *http.Request, mon database.Mons
 		Abilities:        abilities,
 	}, nil
 }
+
+
+type BribeChance struct {
+	Gil			int32	`json:"gil"`
+	Chance		int32	`json:"chance"`
+}
+
+type AgilityParams struct {
+	TickSpeed	int32	`json:"tick_speed"`
+	MinICV		*int32	`json:"min_icv"`
+	MaxICV		*int32	`json:"max_icv"`
+}
+
+
 
 func (cfg *apiConfig) getMonsterProperties(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
 	dbProperties, err := cfg.db.GetMonsterProperties(r.Context(), mon.ID)
@@ -114,6 +134,21 @@ func (cfg *apiConfig) getMonsterRonsoRages(r *http.Request, mon database.Monster
 
 	return rages, nil
 }
+
+
+func (cfg *apiConfig) getMonsterLocations(r *http.Request, mon database.Monster) ([]LocationAPIResource, error) {
+	dbLocations, err := cfg.db.GetMonsterLocations(r.Context(), mon.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get locations of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+	}
+
+	locations := createLocationBasedAPIResources(cfg, dbLocations, func(loc database.GetMonsterLocationsRow)(string, string, string, *int32) {
+		return loc.Location, h.NullStringToVal(loc.Sublocation), h.NullStringToVal(loc.Area), h.NullInt32ToPtr(loc.Version)
+	})
+
+	return locations, nil
+}
+
 
 func (cfg *apiConfig) getMonsterBaseStats(r *http.Request, mon database.Monster) ([]BaseStat, error) {
 	dbBaseStats, err := cfg.db.GetMonsterBaseStats(r.Context(), mon.ID)
@@ -253,4 +288,90 @@ func (cfg *apiConfig) getAbilityID(ability database.GetMonsterAbilitiesRow) (int
 	default:
 		return 0, "", newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find id for monster ability %s, version %d, type %s", ref.Name, h.DerefOrNil(ref.Version), ref.AbilityType), nil)
 	}
+}
+
+
+
+func (cfg *apiConfig) getMonsterStat(mon Monster, stat string) (int32, error) {
+	statLookup, err := seeding.GetResource(stat, cfg.l.Stats)
+	if err != nil {
+		return 0, newHTTPError(http.StatusInternalServerError, err.Error(), err)
+	}
+
+	statMap := getResourceMap(mon.BaseStats)
+	key := cfg.createURL("stats", statLookup.ID)
+
+	return statMap[key].Value, nil
+}
+
+
+func (cfg *apiConfig) getMonsterPoisonDamage(mon Monster) (*int32, error) {
+	if mon.PoisonRate == nil {
+		return nil, nil
+	}
+
+	hp, err := cfg.getMonsterStat(mon, "hp")
+	if err != nil {
+		return nil, err
+	}
+
+	poisonDamageFloat := float32(hp) * *mon.PoisonRate
+	poisonDamage := int32(poisonDamageFloat)
+
+	return &poisonDamage, nil
+}
+
+
+func (cfg *apiConfig) getMonsterAgilityVals(r *http.Request, mon Monster) (AgilityParams, error) {
+	agility, err := cfg.getMonsterStat(mon, "agility")
+	if err != nil {
+		return AgilityParams{}, err
+	}
+
+	dbAgilityTier, err := cfg.db.GetAgilityTierByAgility(r.Context(), agility)
+	if err != nil {
+		return AgilityParams{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't extract agility parameters from Monster %s, Version %d", mon.Name, h.DerefOrNil(mon.Version)), err)
+	}
+
+	return AgilityParams{
+		TickSpeed: dbAgilityTier.TickSpeed,
+		MinICV: h.NullInt32ToPtr(dbAgilityTier.MonsterMinIcv),
+		MaxICV: h.NullInt32ToPtr(dbAgilityTier.MonsterMaxIcv),
+	}, nil
+}
+
+
+
+// HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
+func (cfg *apiConfig) getMonsterBribeChances(mon Monster) ([]BribeChance, error) {
+	bribeLookup, err := seeding.GetResource("bribe", cfg.l.StatusConditions)
+	if err != nil {
+		return nil, err
+	}
+	bribe := cfg.newNamedAPIResourceSimple("status-conditions", bribeLookup.ID, bribeLookup.Name)
+
+	if resourcesContain(mon.StatusImmunities, bribe) {
+		return nil, nil
+	}
+	
+	hp, err := cfg.getMonsterStat(mon, "hp")
+	if err != nil {
+		return nil, err
+	}
+
+	bribeChances := []BribeChance{}
+	var multiplier int32 = 10
+	var chance int32 = 25
+
+	for multiplier <= 25 {
+		bribeChance := BribeChance{
+			Gil: hp * multiplier,
+			Chance: chance,
+		}
+		bribeChances = append(bribeChances, bribeChance)
+		multiplier += 5
+		chance += 25
+	}
+
+	return bribeChances, nil
 }

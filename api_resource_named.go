@@ -5,19 +5,8 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-type HasAPIResource interface {
-	getAPIResource() IsAPIResource
-}
-
-type IsAPIResource interface {
-	getID() int32
-	getName() string
-	seeding.Lookupable
-}
 
 type NamedApiResourceList struct {
 	ListParams
@@ -40,20 +29,18 @@ func (r NamedAPIResource) getID() int32 {
 	return r.ID
 }
 
-func (r NamedAPIResource) getName() string {
-	return r.Name
+func (r NamedAPIResource) getURL() string {
+	return r.URL
 }
 
 func (r NamedAPIResource) ToKeyFields() []any {
 	return []any{
-		r.Name,
-		h.DerefOrNil(r.Version),
-		h.DerefOrNil(r.Specification),
+		r.URL,
 	}
 }
 
 func (r NamedAPIResource) Error() string {
-	return fmt.Sprintf("named api resource %s, version: %v, specification: %v", r.Name, h.DerefOrNil(r.Version), h.DerefOrNil(r.Specification))
+	return fmt.Sprintf("named api resource %s, version: %v, url: %s", r.Name, h.DerefOrNil(r.Version), r.URL)
 }
 
 func (r NamedAPIResource) getAPIResource() IsAPIResource {
@@ -85,6 +72,7 @@ func (cfg *apiConfig) newNamedAPIResourceSimple(endpoint string, id int32, name 
 		URL:  cfg.createURL(endpoint, id),
 	}
 }
+
 
 func createNamedAPIResources[T any](
 	cfg *apiConfig,
