@@ -1739,6 +1739,57 @@ func (q *Queries) GetMonsterLocations(ctx context.Context, monsterID int32) ([]G
 	return items, nil
 }
 
+const getMonsterMonsterFormations = `-- name: GetMonsterMonsterFormations :many
+SELECT
+    mf.id,
+    mf.category,
+    mf.is_forced_ambush,
+    mf.can_escape,
+    mf.notes
+FROM monster_formations mf
+LEFT JOIN j_monster_formations_monsters j ON j.monster_formation_id = mf.id 
+LEFT JOIN monster_amounts ma ON j.monster_amount_id = ma.id
+WHERE ma.monster_id = $1
+ORDER BY mf.id
+`
+
+type GetMonsterMonsterFormationsRow struct {
+	ID             int32
+	Category       MonsterFormationCategory
+	IsForcedAmbush bool
+	CanEscape      bool
+	Notes          sql.NullString
+}
+
+func (q *Queries) GetMonsterMonsterFormations(ctx context.Context, monsterID int32) ([]GetMonsterMonsterFormationsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterMonsterFormations, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterMonsterFormationsRow
+	for rows.Next() {
+		var i GetMonsterMonsterFormationsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Category,
+			&i.IsForcedAmbush,
+			&i.CanEscape,
+			&i.Notes,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterOtherItems = `-- name: GetMonsterOtherItems :many
 SELECT
     i.id AS item_id,

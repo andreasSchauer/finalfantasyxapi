@@ -38,6 +38,11 @@ func (cfg *apiConfig) getMonsterRelationships(r *http.Request, mon database.Mons
 		return Monster{}, err
 	}
 
+	formations, err := cfg.getMonsterMonsterFormations(r, mon)
+	if err != nil {
+		return Monster{}, err
+	}
+
 	baseStats, err := cfg.getMonsterBaseStats(r, mon)
 	if err != nil {
 		return Monster{}, err
@@ -73,6 +78,7 @@ func (cfg *apiConfig) getMonsterRelationships(r *http.Request, mon database.Mons
 		AutoAbilities:    autoAbilities,
 		RonsoRages:       ronsoRages,
 		Locations: 		  locations,
+		Formations: 	  formations,
 		BaseStats:        baseStats,
 		ElemResists:      elemResists,
 		StatusImmunities: immunities,
@@ -147,6 +153,20 @@ func (cfg *apiConfig) getMonsterLocations(r *http.Request, mon database.Monster)
 	})
 
 	return locations, nil
+}
+
+
+func (cfg *apiConfig) getMonsterMonsterFormations(r *http.Request, mon database.Monster) ([]UnnamedAPIResource, error) {
+	dbFormations, err := cfg.db.GetMonsterMonsterFormations(r.Context(), mon.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get formations of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+	}
+
+	formations := createUnnamedAPIResources(cfg, dbFormations, "monster-formations", func(formation database.GetMonsterMonsterFormationsRow)(int32) {
+		return formation.ID
+	})
+
+	return formations, nil
 }
 
 

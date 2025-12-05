@@ -47,6 +47,7 @@ type Monster struct {
 	SensorText           *string            	`json:"sensor_text"`
 	ScanText             *string            	`json:"scan_text"`
 	Locations            []LocationAPIResource	`json:"locations"`
+	Formations			 []UnnamedAPIResource	`json:"formations"`
 	BaseStats            []BaseStat         	`json:"base_stats"`
 	Items                *MonsterItems      	`json:"items"`
 	BribeChances         []BribeChance      	`json:"bribe_chances,omitempty"`
@@ -189,6 +190,7 @@ func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
 		SensorText:           h.NullStringToPtr(dbMonster.SensorText),
 		ScanText:             h.NullStringToPtr(dbMonster.ScanText),
 		Locations: 			  rel.Locations,
+		Formations: 		  rel.Formations,
 		BaseStats:            rel.BaseStats,
 		Items:                h.NilOrPtr(monsterItems),
 		Equipment:            h.NilOrPtr(monsterEquipment),

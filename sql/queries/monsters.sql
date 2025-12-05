@@ -260,6 +260,20 @@ LEFT JOIN monster_amounts ma ON jmfm.monster_amount_id = ma.id
 WHERE ma.monster_id = $1;
 
 
+-- name: GetMonsterMonsterFormations :many
+SELECT
+    mf.id,
+    mf.category,
+    mf.is_forced_ambush,
+    mf.can_escape,
+    mf.notes
+FROM monster_formations mf
+LEFT JOIN j_monster_formations_monsters j ON j.monster_formation_id = mf.id 
+LEFT JOIN monster_amounts ma ON j.monster_amount_id = ma.id
+WHERE ma.monster_id = $1
+ORDER BY mf.id;
+
+
 -- name: GetMonsterAlteredStates :many
 SELECT * FROM altered_states WHERE monster_id = $1;
 

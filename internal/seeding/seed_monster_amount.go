@@ -30,6 +30,14 @@ func (ma MonsterAmount) ToKeyFields() []any {
 	}
 }
 
+func (ma MonsterAmount) ToFormationHashFields() []any {
+	return []any{
+		ma.MonsterName,
+		h.DerefOrNil(ma.Version),
+		ma.Amount,
+	}
+}
+
 func (ma MonsterAmount) GetID() int32 {
 	return ma.ID
 }

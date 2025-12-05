@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"slices"
+	"sort"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -54,14 +56,25 @@ type MonsterFormation struct {
 }
 
 func (mf MonsterFormation) ToHashFields() []any {
-	return []any{
-		mf.EncounterLocationID,
+	ownFields := []any{
 		mf.Category,
 		mf.IsForcedAmbush,
 		mf.CanEscape,
 		h.ObjPtrToID(mf.BossMusic),
 		h.DerefOrNil(mf.Notes),
 	}
+
+	monsters := mf.Monsters
+
+	sort.SliceStable(monsters, func(i, j int) bool { return monsters[i].MonsterID < monsters[j].MonsterID })
+	monsterKeys := []any{}
+
+	for _, mon := range mf.Monsters {
+		key := combineFields(mon.ToFormationHashFields())
+		monsterKeys = append(monsterKeys, key)
+	}
+
+	return slices.Concat(ownFields, monsterKeys)
 }
 
 func (mf MonsterFormation) GetID() int32 {
