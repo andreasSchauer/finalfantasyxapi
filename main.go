@@ -16,6 +16,7 @@ type apiConfig struct {
 	db          *database.Queries
 	dbConn      *sql.DB
 	l           *seeding.Lookup
+	t			*TypeLookup
 	platform    string
 	adminApiKey string
 	host        string
@@ -60,6 +61,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	typeLookup := TypeLookupInit()
+	apiCfg.t = &typeLookup
 
 	mux := http.NewServeMux()
 

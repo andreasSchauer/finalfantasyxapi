@@ -1,0 +1,229 @@
+package main
+
+import (
+	"fmt"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+)
+
+// TypesLookup holds all the enum types for the application
+type TypeLookup struct {
+	CTBIconType    map[string]TypedAPIResource
+	MonsterSpecies map[string]TypedAPIResource
+}
+
+func TypeLookupInit() TypeLookup {
+	t := TypeLookup{}
+
+	t.initCTBIconType()
+	t.initMonsterSpecies()
+
+	return t
+}
+
+func GetEnumType(key string, lookup map[string]TypedAPIResource) (TypedAPIResource, error) {
+	enumType, found := lookup[key]
+	if !found {
+		return TypedAPIResource{}, fmt.Errorf("value %s is not valid in this enum", key)
+	}
+
+	return enumType, nil
+}
+
+func (t *TypeLookup) initCTBIconType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name:        string(database.CtbIconTypeMonster),
+			Description: "Used for regular monsters",
+		},
+		{
+			Name:        string(database.CtbIconTypeBoss),
+			Description: "Used for bosses",
+		},
+		{
+			Name:        string(database.CtbIconTypeBossNumbered),
+			Description: "Used for multiple bosses, or subparts of a boss",
+		},
+		{
+			Name:        string(database.CtbIconTypeSummon),
+			Description: "Used for aeons, except dark aeons",
+		},
+	}
+
+	t.CTBIconType = typeSliceToMap(typeSlice)
+}
+
+func (t *TypeLookup) initMonsterSpecies() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: string(database.MonsterSpeciesAdamantoise),
+		},
+		{
+			Name: string(database.MonsterSpeciesAeon),
+		},
+		{
+			Name: string(database.MonsterSpeciesArmor),
+		},
+		{
+			Name: string(database.MonsterSpeciesBasilisk),
+		},
+		{
+			Name: string(database.MonsterSpeciesBlade),
+		},
+		{
+			Name: string(database.MonsterSpeciesBehemoth),
+		},
+		{
+			Name: string(database.MonsterSpeciesBird),
+		},
+		{
+			Name: string(database.MonsterSpeciesBomb),
+		},
+		{
+			Name: string(database.MonsterSpeciesCactuar),
+		},
+		{
+			Name: string(database.MonsterSpeciesCephalopod),
+		},
+		{
+			Name: string(database.MonsterSpeciesChest),
+		},
+		{
+			Name: string(database.MonsterSpeciesChimera),
+		},
+		{
+			Name: string(database.MonsterSpeciesCoeurl),
+		},
+		{
+			Name: string(database.MonsterSpeciesDefender),
+		},
+		{
+			Name: string(database.MonsterSpeciesDinofish),
+		},
+		{
+			Name: string(database.MonsterSpeciesDoomstone),
+		},
+		{
+			Name: string(database.MonsterSpeciesDrake),
+		},
+		{
+			Name: string(database.MonsterSpeciesEater),
+		},
+		{
+			Name: string(database.MonsterSpeciesElemental),
+		},
+		{
+			Name: string(database.MonsterSpeciesEvilEye),
+		},
+		{
+			Name: string(database.MonsterSpeciesFlan),
+		},
+		{
+			Name: string(database.MonsterSpeciesFungus),
+		},
+		{
+			Name: string(database.MonsterSpeciesGel),
+		},
+		{
+			Name: string(database.MonsterSpeciesGeo),
+		},
+		{
+			Name: string(database.MonsterSpeciesHaizhe),
+		},
+		{
+			Name: string(database.MonsterSpeciesHelm),
+		},
+		{
+			Name: string(database.MonsterSpeciesHermit),
+		},
+		{
+			Name: string(database.MonsterSpeciesHumanoid),
+		},
+		{
+			Name: string(database.MonsterSpeciesImp),
+		},
+		{
+			Name: string(database.MonsterSpeciesIronGiant),
+		},
+		{
+			Name: string(database.MonsterSpeciesLarva),
+		},
+		{
+			Name: string(database.MonsterSpeciesLupine),
+		},
+		{
+			Name: string(database.MonsterSpeciesMachina),
+		},
+		{
+			Name: string(database.MonsterSpeciesMalboro),
+		},
+		{
+			Name: string(database.MonsterSpeciesMech),
+		},
+		{
+			Name: string(database.MonsterSpeciesMimic),
+		},
+		{
+			Name: string(database.MonsterSpeciesOchu),
+		},
+		{
+			Name: string(database.MonsterSpeciesOgre),
+		},
+		{
+			Name: string(database.MonsterSpeciesPhantom),
+		},
+		{
+			Name: string(database.MonsterSpeciesPiranha),
+		},
+		{
+			Name: string(database.MonsterSpeciesPlant),
+		},
+		{
+			Name: string(database.MonsterSpeciesReptile),
+		},
+		{
+			Name: string(database.MonsterSpeciesRoc),
+		},
+		{
+			Name: string(database.MonsterSpeciesRuminant),
+		},
+		{
+			Name: string(database.MonsterSpeciesSacredBeast),
+		},
+		{
+			Name: string(database.MonsterSpeciesSahagin),
+		},
+		{
+			Name: string(database.MonsterSpeciesSin),
+		},
+		{
+			Name: string(database.MonsterSpeciesSinspawn),
+		},
+		{
+			Name: string(database.MonsterSpeciesSpellspinner),
+		},
+		{
+			Name: string(database.MonsterSpeciesSpiritBeast),
+		},
+		{
+			Name: string(database.MonsterSpeciesTonberry),
+		},
+		{
+			Name: string(database.MonsterSpeciesUnspecified),
+		},
+		{
+			Name: string(database.MonsterSpeciesWasp),
+		},
+		{
+			Name: string(database.MonsterSpeciesWeapon),
+		},
+		{
+			Name: string(database.MonsterSpeciesWorm),
+		},
+		{
+			Name: string(database.MonsterSpeciesWyrm),
+		},
+	}
+
+	t.MonsterSpecies = typeSliceToMap(typeSlice)
+}

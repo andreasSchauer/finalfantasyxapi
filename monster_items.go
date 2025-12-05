@@ -12,7 +12,7 @@ import (
 
 type MonsterItems struct {
 	DropChance          int32          `json:"drop_chance"`
-	DropCondition       *string        `json:"drop_condition"`
+	DropCondition       *string        `json:"drop_condition,omitempty"`
 	StealCommon         *ItemAmount    `json:"steal_common"`
 	StealRare           *ItemAmount    `json:"steal_rare"`
 	DropCommon          *ItemAmount    `json:"drop_common"`
@@ -20,7 +20,7 @@ type MonsterItems struct {
 	SecondaryDropCommon *ItemAmount    `json:"secondary_drop_common"`
 	SecondaryDropRare   *ItemAmount    `json:"secondary_drop_rare"`
 	Bribe               *ItemAmount    `json:"bribe"`
-	OtherItemsCondition *string        `json:"other_items_condition"`
+	OtherItemsCondition *string        `json:"other_items_condition,omitempty"`
 	OtherItems          []PossibleItem `json:"other_items"`
 }
 

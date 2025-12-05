@@ -9,9 +9,6 @@ import (
 )
 
 // species and ctb icon type need to be named api resources, because they have a type endpoint
-// optional alt-state-related fields (all omitempty):
-// status condition field (named api resource)
-// default state field
 
 type Monster struct {
 	ID                   int32              	`json:"id"`
@@ -21,11 +18,11 @@ type Monster struct {
 	AppliedState         *AppliedState      	`json:"applied_state,omitempty"`
 	AgilityParameters    AgilityParams      	`json:"agility_parameters"`
 	Notes                *string            	`json:"notes,omitempty"`
-	Species              string             	`json:"species"`
+	Species              NamedAPIResource       `json:"species"`
 	IsStoryBased         bool               	`json:"is_story_based"`
 	CanBeCaptured        bool               	`json:"can_be_captured"`
 	AreaConquestLocation *string            	`json:"area_conquest_location,omitempty"`
-	CTBIconType          string             	`json:"ctb_icon_type"`
+	CTBIconType          NamedAPIResource       `json:"ctb_icon_type"`
 	HasOverdrive         bool               	`json:"has_overdrive"`
 	IsUnderwater         bool               	`json:"is_underwater"`
 	IsZombie             bool               	`json:"is_zombie"`
@@ -159,17 +156,27 @@ func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
 		return Monster{}, err
 	}
 
+	species, err := cfg.newNamedAPIResourceFromType("monster-species", string(dbMonster.Species), cfg.t.MonsterSpecies)
+	if err != nil {
+		return Monster{}, err
+	}
+
+	ctbIconType, err := cfg.newNamedAPIResourceFromType("ctb-icon-type", string(dbMonster.CtbIconType), cfg.t.CTBIconType)
+	if err != nil {
+		return Monster{}, err
+	}
+
 	monster := Monster{
 		ID:                   dbMonster.ID,
 		Name:                 dbMonster.Name,
 		Version:              h.NullInt32ToPtr(dbMonster.Version),
 		Specification:        h.NullStringToPtr(dbMonster.Specification),
 		Notes:                h.NullStringToPtr(dbMonster.Notes),
-		Species:              string(dbMonster.Species),
+		Species:              species,
 		IsStoryBased:         dbMonster.IsStoryBased,
 		CanBeCaptured:        dbMonster.CanBeCaptured,
 		AreaConquestLocation: h.ConvertNullMaCreationArea(dbMonster.AreaConquestLocation),
-		CTBIconType:          string(dbMonster.CtbIconType),
+		CTBIconType:          ctbIconType,
 		HasOverdrive:         dbMonster.HasOverdrive,
 		IsUnderwater:         dbMonster.IsUnderwater,
 		IsZombie:             dbMonster.IsZombie,

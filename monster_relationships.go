@@ -129,13 +129,14 @@ func (cfg *apiConfig) getMonsterAutoAbilities(r *http.Request, mon database.Mons
 }
 
 func (cfg *apiConfig) getMonsterRonsoRages(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
+	const ronsoRageOffset int32 = 35
 	dbRages, err := cfg.db.GetMonsterRonsoRages(r.Context(), mon.ID)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get ronso rages of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	rages := createNamedAPIResourcesSimple(cfg, dbRages, "overdrives", func(rage database.GetMonsterRonsoRagesRow) (int32, string) {
-		return h.NullInt32ToVal(rage.RonsoRageID), h.NullStringToVal(rage.RonsoRage)
+	rages := createNamedAPIResourcesSimple(cfg, dbRages, "ronso-rages", func(rage database.GetMonsterRonsoRagesRow) (int32, string) {
+		return h.NullInt32ToVal(rage.RonsoRageID) - ronsoRageOffset, h.NullStringToVal(rage.RonsoRage)
 	})
 
 	return rages, nil
