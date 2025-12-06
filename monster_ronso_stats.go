@@ -46,7 +46,7 @@ func (cfg *apiConfig) getKimahriStats(query string) (map[string]int32, error) {
 	statMap := make(map[string]int32)
 	
 	statKeyValuePairs := strings.SplitSeq(query, ",")
-	fmt.Println()
+
 	for pair := range statKeyValuePairs {
 		parts := strings.Split(pair, "-")
 		if len(parts) != 2 {
@@ -76,52 +76,46 @@ func (cfg *apiConfig) getKimahriStats(query string) (map[string]int32, error) {
 			return nil, err
 		}
 
-		fmt.Printf("stat: %s, value: %d\n", stat, validatedVal)
 		statMap[stat] = validatedVal
 	}
 
+	statMap = getKimahriDefaultStats(statMap)
+	
 	return statMap, nil
 }
 
 
-
-
 func validateKimahriStat(key string, val int32) (int32, error) {
-	var hpDefault int32 = 644
-	var strDefault int32 = 16
-	var magDefault int32 = 17
-	var agilDefault int32 = 6
 	var maxHP int32 = 99999
 	var maxStatVal int32 = 255
 
 	switch key {
 	case "hp":
-		if val < hpDefault {
-			return hpDefault, nil
-		}
 		if val > maxHP {
 			return 0, newHTTPError(http.StatusBadRequest, "kimahri's HP can't be higher than 99999", nil)
 		}
-		return val, nil
-	case "strength":
-		if val < strDefault {
-			return strDefault, nil
+	case "strength", "magic", "agility":
+		if val > maxStatVal {
+			return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("kimahri's %s can't be higher than 255", key), nil)
 		}
-	case "magic":
-		if val < magDefault {
-			return magDefault, nil
-		}
-	case "agility":
-		if val < agilDefault {
-			return agilDefault, nil
-		}
-	}
-
-	if val > maxStatVal {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("kimahri's %s can't be higher than 255", key), nil)
 	}
 
 	return val, nil
+}
+
+
+func getKimahriDefaultStats(kimahriStats map[string]int32) map[string]int32 {
+	var hpDefault int32 = 644
+	var strDefault int32 = 16
+	var magDefault int32 = 17
+	var agilDefault int32 = 6
+
+	kimahriStats["hp"] = max(kimahriStats["hp"], hpDefault)
+	kimahriStats["strength"] = max(kimahriStats["strength"], strDefault)
+	kimahriStats["magic"] = max(kimahriStats["magic"], magDefault)
+	kimahriStats["agility"] = max(kimahriStats["agility"], agilDefault)
+
+	return kimahriStats
 }
 
 
@@ -138,10 +132,8 @@ func getRonsoStats(mon Monster, kimahriStats map[string]int32) map[string]int32 
 
 
 func getRonsoHP(mon Monster, kimahriStats map[string]int32) int32 {
-	var strDefault int32 = 16
-	var magDefault int32 = 17
-	kimahriStr := max(kimahriStats["strength"], strDefault)
-	kimahriMag := max(kimahriStats["magic"], magDefault)
+	kimahriStr := kimahriStats["strength"]
+	kimahriMag := kimahriStats["magic"]
 
 	v1 := float64(h.PowInt(kimahriStr, 3))
 	v2 := float64(h.PowInt(kimahriMag, 3))
@@ -162,8 +154,7 @@ func getRonsoHP(mon Monster, kimahriStats map[string]int32) int32 {
 
 
 func getRonsoStrength(mon Monster, kimahriStats map[string]int32) int32 {
-	var hpDefault int32 = 644
-	kimahriHP := max(kimahriStats["hp"], hpDefault)
+	kimahriHP := kimahriStats["hp"]
 	strengthVals := []int32{11, 12, 13, 15, 17, 19, 21, 22, 23, 24, 25, 27}
 
 	powerMod := min((kimahriHP - 644) / 200, 11)
@@ -179,8 +170,7 @@ func getRonsoStrength(mon Monster, kimahriStats map[string]int32) int32 {
 
 
 func getRonsoMagic(mon Monster, kimahriStats map[string]int32) int32 {
-	var hpDefault int32 = 644
-	kimahriHP := max(kimahriStats["hp"], hpDefault)
+	kimahriHP := kimahriStats["hp"]
 	magicVals := []int32{8, 8, 9, 10, 12, 14, 16, 17, 19, 20, 21, 22}
 
 	powerMod := min((kimahriHP - 644) / 200, 11)
@@ -196,8 +186,7 @@ func getRonsoMagic(mon Monster, kimahriStats map[string]int32) int32 {
 
 func getRonsoAgility(mon Monster, kimahriStats map[string]int32) int32 {
 	var agility int32
-	var agilDefault int32 = 6
-	kimahriAgility := max(kimahriStats["agility"], agilDefault)
+	kimahriAgility := kimahriStats["agility"]
 
 	if mon.Name == "biran ronso" {
 		agility = max(kimahriAgility - 4, 1)
