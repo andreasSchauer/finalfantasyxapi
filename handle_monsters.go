@@ -8,7 +8,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-// species and ctb icon type need to be named api resources, because they have a type endpoint
+
 
 type Monster struct {
 	ID                   int32              	`json:"id"`
@@ -135,6 +135,8 @@ func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+
+
 func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
 	dbMonster, err := cfg.db.GetMonster(r.Context(), id)
 	if err != nil {
@@ -228,8 +230,15 @@ func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
 		return Monster{}, err
 	}
 
+	monster.BaseStats, err = cfg.applyRonsoStats(r, monster)
+	if err != nil {
+		return Monster{}, err
+	}
+
 	return monster, nil
 }
+
+
 
 func (cfg *apiConfig) getMultipleMonsters(r *http.Request, monsterName string) (NamedApiResourceList, error) {
 	dbMons, err := cfg.db.GetMonstersByName(r.Context(), monsterName)
@@ -248,6 +257,8 @@ func (cfg *apiConfig) getMultipleMonsters(r *http.Request, monsterName string) (
 
 	return resourceList, nil
 }
+
+
 
 func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Request) {
 	dbMons, err := cfg.db.GetMonsters(r.Context())
