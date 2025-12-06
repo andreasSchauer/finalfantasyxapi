@@ -71,12 +71,12 @@ func (cfg *apiConfig) getKimahriStats(query string) (map[string]int32, error) {
 			return nil, newHTTPError(http.StatusBadRequest, "stat value needs to be a positive integer", err)
 		}
 
-		validatedVal, err := validateKimahriStat(stat, int32(value))
+		err = validateKimahriStat(stat, value)
 		if err != nil {
 			return nil, err
 		}
 
-		statMap[stat] = validatedVal
+		statMap[stat] = int32(value)
 	}
 
 	statMap = getKimahriDefaultStats(statMap)
@@ -85,22 +85,22 @@ func (cfg *apiConfig) getKimahriStats(query string) (map[string]int32, error) {
 }
 
 
-func validateKimahriStat(key string, val int32) (int32, error) {
-	var maxHP int32 = 99999
-	var maxStatVal int32 = 255
+func validateKimahriStat(key string, val int) error {
+	maxHP := 99999
+	maxStatVal := 255
 
 	switch key {
 	case "hp":
 		if val > maxHP {
-			return 0, newHTTPError(http.StatusBadRequest, "kimahri's HP can't be higher than 99999", nil)
+			return newHTTPError(http.StatusBadRequest, "kimahri's HP can't be higher than 99999", nil)
 		}
 	case "strength", "magic", "agility":
 		if val > maxStatVal {
-			return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("kimahri's %s can't be higher than 255", key), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("kimahri's %s can't be higher than 255", key), nil)
 		}
 	}
 
-	return val, nil
+	return nil
 }
 
 
