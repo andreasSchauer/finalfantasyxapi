@@ -8,6 +8,8 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/lib/pq"
 )
 
 const createAltStateChange = `-- name: CreateAltStateChange :one
@@ -2015,12 +2017,161 @@ func (q *Queries) GetMonsters(ctx context.Context) ([]Monster, error) {
 	return items, nil
 }
 
+const getMonstersByElemResistIDs = `-- name: GetMonstersByElemResistIDs :many
+SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+FROM monsters m
+JOIN j_monsters_elem_resists jmer ON jmer.monster_id = m.id
+WHERE jmer.elem_resist_id = ANY($1::int[])
+GROUP BY m.id
+HAVING COUNT(DISTINCT jmer.elem_resist_id)
+       = array_length($1::int[], 1)
+ORDER BY m.id
+`
+
+func (q *Queries) GetMonstersByElemResistIDs(ctx context.Context, elemResistIds []int32) ([]Monster, error) {
+	rows, err := q.db.QueryContext(ctx, getMonstersByElemResistIDs, pq.Array(elemResistIds))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Monster
+	for rows.Next() {
+		var i Monster
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.Name,
+			&i.Version,
+			&i.Specification,
+			&i.Notes,
+			&i.Species,
+			&i.IsStoryBased,
+			&i.CanBeCaptured,
+			&i.AreaConquestLocation,
+			&i.CtbIconType,
+			&i.HasOverdrive,
+			&i.IsUnderwater,
+			&i.IsZombie,
+			&i.Distance,
+			&i.Ap,
+			&i.ApOverkill,
+			&i.OverkillDamage,
+			&i.Gil,
+			&i.StealGil,
+			&i.DoomCountdown,
+			&i.PoisonRate,
+			&i.ThreatenChance,
+			&i.ZanmatoLevel,
+			&i.MonsterArenaPrice,
+			&i.SensorText,
+			&i.ScanText,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonstersByName = `-- name: GetMonstersByName :many
 SELECT id, data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE name = $1
 `
 
 func (q *Queries) GetMonstersByName(ctx context.Context, name string) ([]Monster, error) {
 	rows, err := q.db.QueryContext(ctx, getMonstersByName, name)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Monster
+	for rows.Next() {
+		var i Monster
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.Name,
+			&i.Version,
+			&i.Specification,
+			&i.Notes,
+			&i.Species,
+			&i.IsStoryBased,
+			&i.CanBeCaptured,
+			&i.AreaConquestLocation,
+			&i.CtbIconType,
+			&i.HasOverdrive,
+			&i.IsUnderwater,
+			&i.IsZombie,
+			&i.Distance,
+			&i.Ap,
+			&i.ApOverkill,
+			&i.OverkillDamage,
+			&i.Gil,
+			&i.StealGil,
+			&i.DoomCountdown,
+			&i.PoisonRate,
+			&i.ThreatenChance,
+			&i.ZanmatoLevel,
+			&i.MonsterArenaPrice,
+			&i.SensorText,
+			&i.ScanText,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonstersByStatusResists = `-- name: GetMonstersByStatusResists :many
+WITH wanted_statuses AS (
+    SELECT unnest($1::int[]) AS status_condition_id
+),
+monster_status_match AS (
+    SELECT
+        m.id                           AS monster_id,
+        ws.status_condition_id         AS status_condition_id
+    FROM monsters m
+    JOIN wanted_statuses ws ON TRUE
+    LEFT JOIN j_monsters_immunities jmi
+        ON jmi.monster_id = m.id
+       AND jmi.status_condition_id = ws.status_condition_id
+    LEFT JOIN j_monsters_status_resists jmsr
+        ON jmsr.monster_id = m.id
+    LEFT JOIN status_resists sr
+        ON sr.id = jmsr.status_resist_id
+       AND sr.status_condition_id = ws.status_condition_id
+    WHERE
+        jmi.status_condition_id IS NOT NULL
+        OR (sr.status_condition_id IS NOT NULL AND sr.resistance >= $2)
+)
+SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+FROM monsters m
+JOIN monster_status_match msm ON msm.monster_id = m.id
+GROUP BY m.id
+HAVING COUNT(DISTINCT msm.status_condition_id)
+       = array_length($1::int[], 1)
+ORDER BY m.id
+`
+
+type GetMonstersByStatusResistsParams struct {
+	StatusConditionIds []int32
+	MinResistance      interface{}
+}
+
+func (q *Queries) GetMonstersByStatusResists(ctx context.Context, arg GetMonstersByStatusResistsParams) ([]Monster, error) {
+	rows, err := q.db.QueryContext(ctx, getMonstersByStatusResists, pq.Array(arg.StatusConditionIds), arg.MinResistance)
 	if err != nil {
 		return nil, err
 	}

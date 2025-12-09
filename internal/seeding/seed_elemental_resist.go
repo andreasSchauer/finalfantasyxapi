@@ -23,6 +23,13 @@ func (er ElementalResist) ToHashFields() []any {
 	}
 }
 
+func (er ElementalResist) ToKeyFields() []any {
+	return []any{
+		er.Element,
+		er.Affinity,
+	}
+}
+
 func (er ElementalResist) GetID() int32 {
 	return er.ID
 }
@@ -44,7 +51,7 @@ func (l *Lookup) seedElementalResist(qtx *database.Queries, elemResist Elemental
 		return ElementalResist{}, h.GetErr(elemResist.Error(), err)
 	}
 
-	dbElemAffinity, err := qtx.CreateElementalResist(context.Background(), database.CreateElementalResistParams{
+	dbElemResist, err := qtx.CreateElementalResist(context.Background(), database.CreateElementalResistParams{
 		DataHash:   generateDataHash(elemResist),
 		ElementID:  elemResist.ElementID,
 		AffinityID: elemResist.AffinityID,
@@ -53,7 +60,9 @@ func (l *Lookup) seedElementalResist(qtx *database.Queries, elemResist Elemental
 		return ElementalResist{}, h.GetErr(elemResist.Error(), err, "couldn't create elemental resist")
 	}
 
-	elemResist.ID = dbElemAffinity.ID
+	elemResist.ID = dbElemResist.ID
+	key := CreateLookupKey(elemResist)
+	l.ElementalResists[key] = elemResist
 
 	return elemResist, nil
 }

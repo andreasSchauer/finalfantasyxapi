@@ -51,6 +51,7 @@ type Lookup struct {
 	Characters         map[string]Character
 	CharClasses        map[string]CharacterClass
 	Elements           map[string]Element
+	ElementalResists   map[string]ElementalResist
 	EquipmentNames     map[string]EquipmentName
 	EquipmentTables    map[string]EquipmentTable
 	EncounterLocations map[string]EncounterLocation
@@ -92,6 +93,7 @@ func lookupInit() Lookup {
 		Characters:         make(map[string]Character),
 		CharClasses:        make(map[string]CharacterClass),
 		Elements:           make(map[string]Element),
+		ElementalResists: 	make(map[string]ElementalResist),
 		EquipmentNames:     make(map[string]EquipmentName),
 		EquipmentTables:    make(map[string]EquipmentTable),
 		EncounterLocations: make(map[string]EncounterLocation),

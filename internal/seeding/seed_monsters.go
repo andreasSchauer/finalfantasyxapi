@@ -316,6 +316,24 @@ func (l *Lookup) seedMonsterBaseStats(qtx *database.Queries, monster Monster) er
 }
 
 func (l *Lookup) seedMonsterElemResists(qtx *database.Queries, monster Monster) error {
+	elements := []string{"fire", "lightning", "water", "ice", "holy"}
+	elemResistLookup := make(map[string]string)
+
+	for _, elemResist := range monster.ElemResists {
+		elemResistLookup[elemResist.Element] = elemResist.Affinity
+	}
+
+	for _, element := range elements {
+		_, found := elemResistLookup[element]
+		if !found {
+			elemResist := ElementalResist{
+				Element: 	element,
+				Affinity: 	"neutral",
+			}
+			monster.ElemResists = append(monster.ElemResists, elemResist)
+		}
+	}
+
 	for _, elemResist := range monster.ElemResists {
 		junction, err := createJunctionSeed(qtx, monster, elemResist, l.seedElementalResist)
 		if err != nil {

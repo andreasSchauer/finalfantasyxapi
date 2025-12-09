@@ -1,11 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 
@@ -271,12 +274,133 @@ func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Requ
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
+	resources, err = cfg.getMonstersElemResist(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersStatusResist(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
 	resourceList, err := cfg.newNamedAPIResourceList(r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	// filtering
-
 	respondWithJSON(w, http.StatusOK, resourceList)
+}
+
+
+func (cfg *apiConfig) getMonstersElemResist(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("elemental-affinities")
+	
+	if query == "" {
+		return inputMons, nil
+	}
+
+	eaPairs := strings.Split(query, ",")
+	var ids []int32
+
+	for _, pair := range eaPairs {
+		parts := strings.Split(pair, "-")
+		if len(parts) != 2 {
+			return nil, newHTTPError(http.StatusBadRequest, "invalid input. usage: elemental-affinities={element}-{affinity},{element}-{affinity}", nil)
+		}
+
+		element, err := seeding.GetResource(parts[0], cfg.l.Elements)
+		if err != nil {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid element: %s. element doesn't exist", parts[0]), err)
+		}
+
+		affinity, err := seeding.GetResource(parts[1], cfg.l.Affinities)
+		if err != nil {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid affinity: %s. affinity doesn't exist", parts[1]), err)
+		}
+
+		elemResist := seeding.ElementalResist{
+			Element: element.Name,
+			Affinity: affinity.Name,
+		}
+
+		elemResistLookup, err := seeding.GetResource(elemResist, cfg.l.ElementalResists)
+		if err != nil {
+			return []NamedAPIResource{}, nil
+		}
+
+		ids = append(ids, elemResistLookup.ID)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByElemResistIDs(r.Context(), ids)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by elemental affinities", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersStatusResist(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	queryStatusses := r.URL.Query().Get("status-resists")
+	queryResistance := r.URL.Query().Get("resistance")
+	defaultResistance := 1
+	var resistance int
+
+	if queryStatusses == "" && queryResistance != "" {
+		return nil, newHTTPError(http.StatusBadRequest, "invalid input. resistance parameter must be paired with status-resists parameter. usage: status-resists={status},{status},...&resistance={int from 1-254}", nil)
+	}
+	
+	if queryStatusses == "" {
+		return inputMons, nil
+	}
+
+	statusses := strings.Split(queryStatusses, ",")
+
+	if queryResistance == "" {
+		resistance = defaultResistance
+	} else {
+		var err error
+		resistance, err = strconv.Atoi(queryResistance)
+		if err != nil {
+			return nil, newHTTPError(http.StatusBadRequest, "invalid resistance", err)
+		}
+	}
+	
+	if resistance > 254 || resistance <= 0 {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resistance. resistance must be a positive integer between 1 or 254, with %d being the default value, if no resistance was provided.", defaultResistance), nil)
+	}
+
+	var ids []int32
+
+	for _, qStatus := range statusses {
+		status, err := seeding.GetResource(qStatus, cfg.l.StatusConditions)
+		if err != nil {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid status condition: %s. status condition doesn't exist", qStatus), err)
+		}
+
+		ids = append(ids, status.ID)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByStatusResists(r.Context(), database.GetMonstersByStatusResistsParams{
+		StatusConditionIds: ids,
+		MinResistance: 		resistance,
+	})
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by status conditions", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
 }

@@ -356,6 +356,48 @@ ORDER BY sc.id;
 SELECT * FROM monsters ORDER BY id;
 
 
+-- name: GetMonstersByElemResistIDs :many
+SELECT m.*
+FROM monsters m
+JOIN j_monsters_elem_resists jmer ON jmer.monster_id = m.id
+WHERE jmer.elem_resist_id = ANY(sqlc.arg(elem_resist_ids)::int[])
+GROUP BY m.id
+HAVING COUNT(DISTINCT jmer.elem_resist_id)
+       = array_length(sqlc.arg(elem_resist_ids)::int[], 1)
+ORDER BY m.id;
+
+
+-- name: GetMonstersByStatusResists :many
+WITH wanted_statuses AS (
+    SELECT unnest(sqlc.arg(status_condition_ids)::int[]) AS status_condition_id
+),
+monster_status_match AS (
+    SELECT
+        m.id                           AS monster_id,
+        ws.status_condition_id         AS status_condition_id
+    FROM monsters m
+    JOIN wanted_statuses ws ON TRUE
+    LEFT JOIN j_monsters_immunities jmi
+        ON jmi.monster_id = m.id
+       AND jmi.status_condition_id = ws.status_condition_id
+    LEFT JOIN j_monsters_status_resists jmsr
+        ON jmsr.monster_id = m.id
+    LEFT JOIN status_resists sr
+        ON sr.id = jmsr.status_resist_id
+       AND sr.status_condition_id = ws.status_condition_id
+    WHERE
+        jmi.status_condition_id IS NOT NULL
+        OR (sr.status_condition_id IS NOT NULL AND sr.resistance >= sqlc.arg(min_resistance))
+)
+SELECT m.*
+FROM monsters m
+JOIN monster_status_match msm ON msm.monster_id = m.id
+GROUP BY m.id
+HAVING COUNT(DISTINCT msm.status_condition_id)
+       = array_length(sqlc.arg(status_condition_ids)::int[], 1)
+ORDER BY m.id;
+
+
 -- name: CreateMonsterAmount :one
 INSERT INTO monster_amounts (data_hash, monster_id, amount)
 VALUES ($1, $2, $3)

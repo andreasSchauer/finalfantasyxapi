@@ -1,8 +1,9 @@
 package main
 
-import(
+import (
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 
@@ -31,8 +32,17 @@ func createPaginatedList[T any](cfg *apiConfig, r *http.Request, resources []T) 
 		limit = defaultLimit
 	}
 
-	path := r.URL.Path
 	size := len(resources)
+
+	listParams := ListParams{
+		Count:   	size,
+		Next: 		cfg.createNextURL(r, offset, limit, len(resources)),
+		Previous: 	cfg.createPreviousURL(r, offset, limit),
+	}
+
+	if size == 0 {
+		return listParams, []T{}, nil
+	}
 	
 	if offset >= size {
 		return ListParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("offset must be smaller than number of resources (%d)", size), err)
@@ -41,29 +51,28 @@ func createPaginatedList[T any](cfg *apiConfig, r *http.Request, resources []T) 
 	upperLimit := min(offset + limit, size)
 	shownResources := resources[offset:upperLimit]
 
-	listParams := ListParams{
-		Count:   	size,
-		Next: 		cfg.createNextURL(path, offset, limit, len(resources)),
-		Previous: 	cfg.createPreviousURL(path, offset, limit),
-	}
-
 	return listParams, shownResources, nil
 }
 
 
-func (cfg *apiConfig) createNextURL(path string, offset, limit, size int) *string {
+func (cfg *apiConfig) createNextURL(r *http.Request, offset, limit, size int) *string {
 	nextOffset := offset + limit
 
 	if nextOffset >= size {
 		return nil
 	}
 
-	nextURL := fmt.Sprintf("http://%s%s?offset=%d&limit=%d", cfg.host, path, nextOffset, limit)
+	path := r.URL.Path
+	q := r.URL.Query()
+	q.Set("limit", strconv.Itoa(limit))
+	q.Set("offset", strconv.Itoa(nextOffset))
+
+	nextURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
 	return &nextURL
 }
 
 
-func (cfg *apiConfig) createPreviousURL(path string, offset, limit int) *string {
+func (cfg *apiConfig) createPreviousURL(r *http.Request, offset, limit int) *string {
 	if offset == 0 {
 		return nil
 	}
@@ -74,6 +83,11 @@ func (cfg *apiConfig) createPreviousURL(path string, offset, limit int) *string 
 		limit = offset
 	}
 
-	previousURL := fmt.Sprintf("http://%s%s?offset=%d&limit=%d", cfg.host, path, previousOffset, limit)
+	path := r.URL.Path
+	q := r.URL.Query()
+	q.Set("limit", strconv.Itoa(limit))
+	q.Set("offset", strconv.Itoa(previousOffset))
+
+	previousURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
 	return &previousURL
 }
