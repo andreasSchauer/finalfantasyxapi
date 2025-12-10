@@ -264,7 +264,7 @@ func (l *Lookup) seedMonsterAutoAbilities(qtx *database.Queries, monster Monster
 
 func (l *Lookup) seedMonsterRonsoRages(qtx *database.Queries, monster Monster) error {
 	for _, rage := range monster.RonsoRages {
-		key := Ability{
+		key := LookupObject{
 			Name: rage,
 		}
 

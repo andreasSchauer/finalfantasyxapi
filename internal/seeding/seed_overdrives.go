@@ -82,7 +82,12 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			overdrive.ID = dbOverdrive.ID
-			key := CreateLookupKey(overdrive.Ability)
+			lookupObj := LookupObject{
+				Name: overdrive.Name,
+				Version: overdrive.Version,
+			}
+
+			key := CreateLookupKey(lookupObj)
 			l.Overdrives[key] = overdrive
 		}
 
@@ -101,7 +106,11 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonOverdrive := range overdrives {
-			overdrive, err := GetResource(jsonOverdrive.Ability, l.Overdrives)
+			key := LookupObject{
+				Name: jsonOverdrive.Name,
+				Version: jsonOverdrive.Version,
+			}
+			overdrive, err := GetResource(key, l.Overdrives)
 			if err != nil {
 				return err
 			}

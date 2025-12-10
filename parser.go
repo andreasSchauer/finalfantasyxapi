@@ -70,6 +70,7 @@ func parseSingleSegmentResource[T h.HasID](segment string, lookup map[string]T) 
 	}
 
 	nameWithSpaces := strings.ReplaceAll(decoded, "-", " ")
+	nameWithSpaces = strings.ReplaceAll(nameWithSpaces, " >", "->")
 	lookupName.Name = nameWithSpaces
 	lookupNameVer.Name = nameWithSpaces
 
@@ -96,33 +97,41 @@ func parseSingleSegmentResource[T h.HasID](segment string, lookup map[string]T) 
 
 
 func parseNameVersionResource[T h.HasID](name, versionStr string, lookup map[string]T) (parseResponse, error) {
-	version, err := (strconv.Atoi(versionStr))
-	if err != nil {
-		return parseResponse{}, newHTTPError(http.StatusBadRequest, "Invalid version number", err)
+	var versionPtr *int32
+
+	switch versionStr {
+	case "":
+		versionPtr = nil
+	default:
+		version, err := strconv.Atoi(versionStr)
+		if err != nil {
+			return parseResponse{}, newHTTPError(http.StatusBadRequest, "Invalid version number", err)
+		}
+		versionInt32 := int32(version)
+		versionPtr = &versionInt32
 	}
-	versionInt32 := int32(version)
 
 	nameDecoded, err := url.PathUnescape(name)
 	if err != nil {
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, "Invalid URL encoding", err)
 	}
 
-	lookupObj := seeding.LookupObject{
+	key := seeding.LookupObject{
 		Name: 		nameDecoded,
-		Version: 	&versionInt32,
+		Version: 	versionPtr,
 	}
 
 	// check for names with dashes
-	resource, err := seeding.GetResource(lookupObj, lookup)
+	resource, err := seeding.GetResource(key, lookup)
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}
 
 	nameWithSpaces := strings.ReplaceAll(name, "-", " ")
-	lookupObj.Name = nameWithSpaces
+	key.Name = nameWithSpaces
 
 	// check for names with spaces
-	resource, err = seeding.GetResource(lookupObj, lookup)
+	resource, err = seeding.GetResource(key, lookup)
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}

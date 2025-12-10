@@ -25,8 +25,8 @@ func (er ElementalResist) ToHashFields() []any {
 
 func (er ElementalResist) ToKeyFields() []any {
 	return []any{
-		er.Element,
-		er.Affinity,
+		er.ElementID,
+		er.AffinityID,
 	}
 }
 

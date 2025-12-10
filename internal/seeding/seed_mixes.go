@@ -80,11 +80,11 @@ func (l *Lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 		for _, mix := range mixes {
 			var err error
 
-			ability := Ability{
+			key := LookupObject{
 				Name: mix.Name,
 			}
 
-			mix.OverdriveID, err = assignFK(ability, l.Overdrives)
+			mix.OverdriveID, err = assignFK(key, l.Overdrives)
 			if err != nil {
 				return h.GetErr(mix.Error(), err)
 			}

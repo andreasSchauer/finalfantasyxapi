@@ -470,6 +470,27 @@ WHERE ia.master_item_id = sqlc.arg(item_id)
 ORDER BY m.id;
 
 
+-- name: GetMonstersByAutoAbilityIDs :many
+SELECT m.*
+FROM monsters m
+LEFT JOIN monster_equipment me ON me.monster_id = m.id
+LEFT JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
+LEFT JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
+WHERE ed.auto_ability_id = ANY(sqlc.arg(auto_ability_ids)::int[])
+GROUP BY m.id
+HAVING COUNT(DISTINCT ed.auto_ability_id) >= 1
+ORDER BY m.id;
+
+
+-- name: GetMonstersByRonsoRageID :many
+SELECT
+    m.*
+FROM monsters m
+LEFT JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
+WHERE j.overdrive_id = $1
+ORDER BY m.id;
+
+
 -- name: CreateMonsterAmount :one
 INSERT INTO monster_amounts (data_hash, monster_id, amount)
 VALUES ($1, $2, $3)

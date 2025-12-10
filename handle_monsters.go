@@ -289,6 +289,16 @@ func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	resources, err = cfg.getMonstersAutoAbility(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersRonsoRage(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
 	resourceList, err := cfg.newNamedAPIResourceList(r, resources)
 	if handleHTTPError(w, err) {
 		return
@@ -325,8 +335,8 @@ func (cfg *apiConfig) getMonstersElemResist(r *http.Request, inputMons []NamedAP
 		}
 
 		elemResist := seeding.ElementalResist{
-			Element: element.Name,
-			Affinity: affinity.Name,
+			ElementID: element.ID,
+			AffinityID: affinity.ID,
 		}
 
 		elemResistLookup, err := seeding.GetResource(elemResist, cfg.l.ElementalResists)
@@ -460,6 +470,82 @@ func (cfg *apiConfig) getMonstersItem(r *http.Request, inputMons []NamedAPIResou
 		}
 	default:
 		return nil, newHTTPError(http.StatusBadRequest, "invalid method. allowed methods: steal, drop, bribe, other.", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersAutoAbility(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("auto-abilities")
+	
+	if query == "" {
+		return inputMons, nil
+	}
+	
+	abilities := strings.Split(query, ",")
+	var ids []int32
+
+	for _, ability := range abilities {
+		autoAbility, err := parseSingleSegmentResource(ability, cfg.l.AutoAbilities)
+		if err != nil {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid auto ability: %s. auto ability doesn't exist", ability), err)
+		}
+
+		ids = append(ids, autoAbility.ID)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByAutoAbilityIDs(r.Context(), ids)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by auto ability", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersRonsoRage(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	const ronsoRageOffset int = 35
+	query := r.URL.Query().Get("ronso-rage")
+	var ronsoRageID int32
+	
+	if query == "" {
+		return inputMons, nil
+	}
+
+	id, err := strconv.Atoi(query)
+	if err == nil {
+		id += ronsoRageOffset
+		ronsoRageID = int32(id)
+	}
+
+	if ronsoRageID == 0 {
+		ronsoRage, err := parseNameVersionResource(query, "", cfg.l.Overdrives)
+		if err != nil {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid ronso rage: %s. ronso rage doesn't exist", query), err)
+		}
+		ronsoRageID = ronsoRage.ID
+	}
+
+	if ronsoRageID > 47 || ronsoRageID <= 35 {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid ronso rage id: %d. provided id must be between 1 and 12", ronsoRageID-35), err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByRonsoRageID(r.Context(), ronsoRageID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by ronso rage", err)
 	}
 
 	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {

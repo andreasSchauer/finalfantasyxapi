@@ -2017,6 +2017,69 @@ func (q *Queries) GetMonsters(ctx context.Context) ([]Monster, error) {
 	return items, nil
 }
 
+const getMonstersByAutoAbilityIDs = `-- name: GetMonstersByAutoAbilityIDs :many
+SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+FROM monsters m
+LEFT JOIN monster_equipment me ON me.monster_id = m.id
+LEFT JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
+LEFT JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
+WHERE ed.auto_ability_id = ANY($1::int[])
+GROUP BY m.id
+HAVING COUNT(DISTINCT ed.auto_ability_id) >= 1
+ORDER BY m.id
+`
+
+func (q *Queries) GetMonstersByAutoAbilityIDs(ctx context.Context, autoAbilityIds []int32) ([]Monster, error) {
+	rows, err := q.db.QueryContext(ctx, getMonstersByAutoAbilityIDs, pq.Array(autoAbilityIds))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Monster
+	for rows.Next() {
+		var i Monster
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.Name,
+			&i.Version,
+			&i.Specification,
+			&i.Notes,
+			&i.Species,
+			&i.IsStoryBased,
+			&i.CanBeCaptured,
+			&i.AreaConquestLocation,
+			&i.CtbIconType,
+			&i.HasOverdrive,
+			&i.IsUnderwater,
+			&i.IsZombie,
+			&i.Distance,
+			&i.Ap,
+			&i.ApOverkill,
+			&i.OverkillDamage,
+			&i.Gil,
+			&i.StealGil,
+			&i.DoomCountdown,
+			&i.PoisonRate,
+			&i.ThreatenChance,
+			&i.ZanmatoLevel,
+			&i.MonsterArenaPrice,
+			&i.SensorText,
+			&i.ScanText,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonstersByElemResistIDs = `-- name: GetMonstersByElemResistIDs :many
 SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
@@ -2412,6 +2475,66 @@ SELECT id, data_hash, name, version, specification, notes, species, is_story_bas
 
 func (q *Queries) GetMonstersByName(ctx context.Context, name string) ([]Monster, error) {
 	rows, err := q.db.QueryContext(ctx, getMonstersByName, name)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Monster
+	for rows.Next() {
+		var i Monster
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.Name,
+			&i.Version,
+			&i.Specification,
+			&i.Notes,
+			&i.Species,
+			&i.IsStoryBased,
+			&i.CanBeCaptured,
+			&i.AreaConquestLocation,
+			&i.CtbIconType,
+			&i.HasOverdrive,
+			&i.IsUnderwater,
+			&i.IsZombie,
+			&i.Distance,
+			&i.Ap,
+			&i.ApOverkill,
+			&i.OverkillDamage,
+			&i.Gil,
+			&i.StealGil,
+			&i.DoomCountdown,
+			&i.PoisonRate,
+			&i.ThreatenChance,
+			&i.ZanmatoLevel,
+			&i.MonsterArenaPrice,
+			&i.SensorText,
+			&i.ScanText,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonstersByRonsoRageID = `-- name: GetMonstersByRonsoRageID :many
+SELECT
+    m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+FROM monsters m
+LEFT JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
+WHERE j.overdrive_id = $1
+ORDER BY m.id
+`
+
+func (q *Queries) GetMonstersByRonsoRageID(ctx context.Context, overdriveID int32) ([]Monster, error) {
+	rows, err := q.db.QueryContext(ctx, getMonstersByRonsoRageID, overdriveID)
 	if err != nil {
 		return nil, err
 	}
