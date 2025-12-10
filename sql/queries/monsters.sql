@@ -398,6 +398,78 @@ HAVING COUNT(DISTINCT msm.status_condition_id)
 ORDER BY m.id;
 
 
+-- name: GetMonstersByItem :many
+SELECT DISTINCT m.*
+FROM monsters m
+JOIN monster_items mi ON mi.monster_id = m.id
+LEFT JOIN j_monster_items_other_items jmio
+  ON jmio.monster_items_id = mi.id
+LEFT JOIN possible_items pi
+  ON pi.id = jmio.possible_item_id
+JOIN item_amounts ia
+  ON ia.id IN (
+      mi.steal_common_id,
+      mi.steal_rare_id,
+      mi.drop_common_id,
+      mi.drop_rare_id,
+      mi.secondary_drop_common_id,
+      mi.secondary_drop_rare_id,
+      mi.bribe_id,
+      pi.item_amount_id
+  )
+WHERE ia.master_item_id = sqlc.arg(item_id)
+ORDER BY m.id;
+
+
+-- name: GetMonstersByItemSteal :many
+SELECT DISTINCT m.*
+FROM monsters m
+JOIN monster_items mi ON mi.monster_id = m.id
+JOIN item_amounts ia
+  ON ia.id = mi.steal_common_id
+  OR ia.id = mi.steal_rare_id
+WHERE ia.master_item_id = sqlc.arg(item_id)
+ORDER BY m.id;
+
+
+-- name: GetMonstersByItemDrop :many
+SELECT DISTINCT m.*
+FROM monsters m
+JOIN monster_items mi ON mi.monster_id = m.id
+JOIN item_amounts ia
+  ON ia.id IN (
+      mi.drop_common_id,
+      mi.drop_rare_id,
+      mi.secondary_drop_common_id,
+      mi.secondary_drop_rare_id
+  )
+WHERE ia.master_item_id = sqlc.arg(item_id)
+ORDER BY m.id;
+
+
+-- name: GetMonstersByItemBribe :many
+SELECT DISTINCT m.*
+FROM monsters m
+JOIN monster_items mi ON mi.monster_id = m.id
+JOIN item_amounts ia ON ia.id = mi.bribe_id
+WHERE ia.master_item_id = sqlc.arg(item_id)
+ORDER BY m.id;
+
+
+-- name: GetMonstersByItemOther :many
+SELECT DISTINCT m.*
+FROM monsters m
+JOIN monster_items mi ON mi.monster_id = m.id
+JOIN j_monster_items_other_items jmio
+  ON jmio.monster_items_id = mi.id
+JOIN possible_items pi
+  ON pi.id = jmio.possible_item_id
+JOIN item_amounts ia
+  ON ia.id = pi.item_amount_id
+WHERE ia.master_item_id = sqlc.arg(item_id)
+ORDER BY m.id;
+
+
 -- name: CreateMonsterAmount :one
 INSERT INTO monster_amounts (data_hash, monster_id, amount)
 VALUES ($1, $2, $3)
