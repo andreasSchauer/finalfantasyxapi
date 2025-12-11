@@ -61,6 +61,11 @@ func (is InflictedStatus) getAPIResource() IsAPIResource {
 	return is.StatusCondition
 }
 
+
+func (is InflictedStatus) IsZero() bool {
+	return is.StatusCondition.Name == ""
+}
+
 func (cfg *apiConfig) newInflictedStatus(id, probability int32, status string, amount *int32, durationType database.DurationType) InflictedStatus {
 	return InflictedStatus{
 		StatusCondition: cfg.newNamedAPIResourceSimple("status-conditions", id, status),

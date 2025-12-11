@@ -42,7 +42,7 @@ type AltStateChange struct {
 	BaseStats        *[]BaseStat        `json:"base_stats"`
 	ElemResists      *[]ElementalResist `json:"elem_resists"`
 	StatusImmunities *[]string          `json:"status_immunities"`
-	AddedStatusses   *[]InflictedStatus `json:"added_statusses"`
+	AddedStatus   	 *InflictedStatus 	`json:"added_status"`
 }
 
 func (a AltStateChange) ToHashFields() []any {
@@ -50,6 +50,7 @@ func (a AltStateChange) ToHashFields() []any {
 		a.AlteredStateID,
 		a.AlterationType,
 		h.DerefOrNil(a.Distance),
+		h.ObjPtrToID(a.AddedStatus),
 	}
 }
 
@@ -111,11 +112,18 @@ func (l *Lookup) seedAltStateChanges(qtx *database.Queries, state AlteredState) 
 }
 
 func (l *Lookup) seedAltStateChange(qtx *database.Queries, change AltStateChange) (AltStateChange, error) {
+	var err error
+	change.AddedStatus, err = seedObjPtrAssignFK(qtx, change.AddedStatus, l.seedInflictedStatus)
+	if err != nil {
+		return AltStateChange{}, h.GetErr(change.Error(), err)
+	}
+
 	dbAltStateChange, err := qtx.CreateAltStateChange(context.Background(), database.CreateAltStateChangeParams{
 		DataHash:       generateDataHash(change),
 		AlteredStateID: change.AlteredStateID,
 		AlterationType: database.AlterationType(change.AlterationType),
 		Distance:       h.GetNullInt32(change.Distance),
+		AddedStatusID: 	h.ObjPtrToNullInt32ID(change.AddedStatus),
 	})
 	if err != nil {
 		return AltStateChange{}, h.GetErr(change.Error(), err, "couldn't create alt state change")
@@ -138,7 +146,6 @@ func (l *Lookup) seedAltStateChangeJunctions(qtx *database.Queries, change AltSt
 		l.seedAltStateBaseStats,
 		l.seedAltStateElemResists,
 		l.seedAltStateChangeStatusImmunities,
-		l.seedAltStateAddedStatusses,
 	}
 
 	for _, function := range functions {
@@ -265,30 +272,6 @@ func (l *Lookup) seedAltStateChangeStatusImmunities(qtx *database.Queries, chang
 		})
 		if err != nil {
 			return h.GetErr(conditionStr, err, "couldn't junction status immunity")
-		}
-	}
-
-	return nil
-}
-
-func (l *Lookup) seedAltStateAddedStatusses(qtx *database.Queries, change AltStateChange) error {
-	if change.AddedStatusses == nil {
-		return nil
-	}
-
-	for _, inflictedStatus := range *change.AddedStatusses {
-		junction, err := createJunctionSeed(qtx, change, inflictedStatus, l.seedInflictedStatus)
-		if err != nil {
-			return err
-		}
-
-		err = qtx.CreateAltStateChangesStatussesJunction(context.Background(), database.CreateAltStateChangesStatussesJunctionParams{
-			DataHash:          generateDataHash(junction),
-			AltStateChangeID:  junction.ParentID,
-			InflictedStatusID: junction.ChildID,
-		})
-		if err != nil {
-			return h.GetErr(inflictedStatus.Error(), err, "couldn't junction added status")
 		}
 	}
 

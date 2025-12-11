@@ -18,6 +18,7 @@ type Monster struct {
 	Notes                *string           `json:"notes"`
 	Species              string            `json:"species"`
 	IsStoryBased         bool              `json:"is_story_based"`
+	IsRepeatable		 bool			   `json:"is_repeatable"`
 	CanBeCaptured        bool              `json:"can_be_captured"`
 	AreaConquestLocation *string           `json:"area_conquest_location"`
 	CTBIconType          string            `json:"ctb_icon_type"`
@@ -58,6 +59,7 @@ func (m Monster) ToHashFields() []any {
 		h.DerefOrNil(m.Notes),
 		m.Species,
 		m.IsStoryBased,
+		m.IsRepeatable,
 		m.CanBeCaptured,
 		h.DerefOrNil(m.AreaConquestLocation),
 		m.CTBIconType,
@@ -114,6 +116,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 				Notes:                h.GetNullString(monster.Notes),
 				Species:              database.MonsterSpecies(monster.Species),
 				IsStoryBased:         monster.IsStoryBased,
+				IsRepeatable: 		  monster.IsRepeatable,
 				CanBeCaptured:        monster.CanBeCaptured,
 				AreaConquestLocation: h.NullMaCreationArea(monster.AreaConquestLocation),
 				CtbIconType:          database.CtbIconType(monster.CTBIconType),

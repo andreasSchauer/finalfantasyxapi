@@ -13,10 +13,10 @@ import (
 )
 
 const createAltStateChange = `-- name: CreateAltStateChange :one
-INSERT INTO alt_state_changes (data_hash, altered_state_id, alteration_type, distance)
-VALUES ($1, $2, $3, $4)
+INSERT INTO alt_state_changes (data_hash, altered_state_id, alteration_type, distance, added_status_id)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = alt_state_changes.data_hash
-RETURNING id, data_hash, altered_state_id, alteration_type, distance
+RETURNING id, data_hash, altered_state_id, alteration_type, distance, added_status_id
 `
 
 type CreateAltStateChangeParams struct {
@@ -24,6 +24,7 @@ type CreateAltStateChangeParams struct {
 	AlteredStateID int32
 	AlterationType AlterationType
 	Distance       interface{}
+	AddedStatusID  sql.NullInt32
 }
 
 func (q *Queries) CreateAltStateChange(ctx context.Context, arg CreateAltStateChangeParams) (AltStateChange, error) {
@@ -32,6 +33,7 @@ func (q *Queries) CreateAltStateChange(ctx context.Context, arg CreateAltStateCh
 		arg.AlteredStateID,
 		arg.AlterationType,
 		arg.Distance,
+		arg.AddedStatusID,
 	)
 	var i AltStateChange
 	err := row.Scan(
@@ -40,6 +42,7 @@ func (q *Queries) CreateAltStateChange(ctx context.Context, arg CreateAltStateCh
 		&i.AlteredStateID,
 		&i.AlterationType,
 		&i.Distance,
+		&i.AddedStatusID,
 	)
 	return i, err
 }
@@ -126,23 +129,6 @@ type CreateAltStateChangesStatusImmunitiesJunctionParams struct {
 
 func (q *Queries) CreateAltStateChangesStatusImmunitiesJunction(ctx context.Context, arg CreateAltStateChangesStatusImmunitiesJunctionParams) error {
 	_, err := q.db.ExecContext(ctx, createAltStateChangesStatusImmunitiesJunction, arg.DataHash, arg.AltStateChangeID, arg.StatusConditionID)
-	return err
-}
-
-const createAltStateChangesStatussesJunction = `-- name: CreateAltStateChangesStatussesJunction :exec
-INSERT INTO j_alt_state_changes_statusses (data_hash, alt_state_change_id, inflicted_status_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAltStateChangesStatussesJunctionParams struct {
-	DataHash          string
-	AltStateChangeID  int32
-	InflictedStatusID int32
-}
-
-func (q *Queries) CreateAltStateChangesStatussesJunction(ctx context.Context, arg CreateAltStateChangesStatussesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAltStateChangesStatussesJunction, arg.DataHash, arg.AltStateChangeID, arg.InflictedStatusID)
 	return err
 }
 
@@ -262,10 +248,10 @@ func (q *Queries) CreateEquipmentSlotsChance(ctx context.Context, arg CreateEqui
 }
 
 const createMonster = `-- name: CreateMonster :one
-INSERT INTO monsters (data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)
+INSERT INTO monsters (data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = monsters.data_hash
-RETURNING id, data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text
+RETURNING id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text
 `
 
 type CreateMonsterParams struct {
@@ -276,6 +262,7 @@ type CreateMonsterParams struct {
 	Notes                sql.NullString
 	Species              MonsterSpecies
 	IsStoryBased         bool
+	IsRepeatable         bool
 	CanBeCaptured        bool
 	AreaConquestLocation NullMaCreationArea
 	CtbIconType          CtbIconType
@@ -306,6 +293,7 @@ func (q *Queries) CreateMonster(ctx context.Context, arg CreateMonsterParams) (M
 		arg.Notes,
 		arg.Species,
 		arg.IsStoryBased,
+		arg.IsRepeatable,
 		arg.CanBeCaptured,
 		arg.AreaConquestLocation,
 		arg.CtbIconType,
@@ -336,6 +324,7 @@ func (q *Queries) CreateMonster(ctx context.Context, arg CreateMonsterParams) (M
 		&i.Notes,
 		&i.Species,
 		&i.IsStoryBased,
+		&i.IsRepeatable,
 		&i.CanBeCaptured,
 		&i.AreaConquestLocation,
 		&i.CtbIconType,
@@ -815,7 +804,7 @@ func (q *Queries) GetAltStateBaseStats(ctx context.Context, altStateChangeID int
 }
 
 const getAltStateChanges = `-- name: GetAltStateChanges :many
-SELECT id, data_hash, altered_state_id, alteration_type, distance FROM alt_state_changes WHERE altered_state_id = $1
+SELECT id, data_hash, altered_state_id, alteration_type, distance, added_status_id FROM alt_state_changes WHERE altered_state_id = $1
 `
 
 func (q *Queries) GetAltStateChanges(ctx context.Context, alteredStateID int32) ([]AltStateChange, error) {
@@ -833,6 +822,7 @@ func (q *Queries) GetAltStateChanges(ctx context.Context, alteredStateID int32) 
 			&i.AlteredStateID,
 			&i.AlterationType,
 			&i.Distance,
+			&i.AddedStatusID,
 		); err != nil {
 			return nil, err
 		}
@@ -972,17 +962,17 @@ func (q *Queries) GetAltStateProperties(ctx context.Context, altStateChangeID in
 	return items, nil
 }
 
-const getAltStateStatusses = `-- name: GetAltStateStatusses :many
+const getAltStateStatusses = `-- name: GetAltStateStatusses :one
 SELECT
     sc.id AS status_id,
     sc.name AS status,
     isc.probability AS probability,
     isc.duration_type AS duration_type,
     isc.amount AS amount
-FROM j_alt_state_changes_statusses j
-LEFT JOIN inflicted_statusses isc ON j.inflicted_status_id = isc.id
+FROM alt_state_changes astc
+LEFT JOIN inflicted_statusses isc ON astc.added_status_id = isc.id
 LEFT JOIN status_conditions sc ON isc.status_condition_id = sc.id
-WHERE j.alt_state_change_id = $1
+WHERE astc.id = $1
 ORDER BY sc.id
 `
 
@@ -994,33 +984,17 @@ type GetAltStateStatussesRow struct {
 	Amount       sql.NullInt32
 }
 
-func (q *Queries) GetAltStateStatusses(ctx context.Context, altStateChangeID int32) ([]GetAltStateStatussesRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAltStateStatusses, altStateChangeID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetAltStateStatussesRow
-	for rows.Next() {
-		var i GetAltStateStatussesRow
-		if err := rows.Scan(
-			&i.StatusID,
-			&i.Status,
-			&i.Probability,
-			&i.DurationType,
-			&i.Amount,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+func (q *Queries) GetAltStateStatusses(ctx context.Context, id int32) (GetAltStateStatussesRow, error) {
+	row := q.db.QueryRowContext(ctx, getAltStateStatusses, id)
+	var i GetAltStateStatussesRow
+	err := row.Scan(
+		&i.StatusID,
+		&i.Status,
+		&i.Probability,
+		&i.DurationType,
+		&i.Amount,
+	)
+	return i, err
 }
 
 const getEquipmentDropCharacters = `-- name: GetEquipmentDropCharacters :many
@@ -1068,7 +1042,7 @@ func (q *Queries) GetEquipmentDropCharacters(ctx context.Context, arg GetEquipme
 }
 
 const getMonster = `-- name: GetMonster :one
-SELECT id, data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE id = $1
+SELECT id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE id = $1
 `
 
 func (q *Queries) GetMonster(ctx context.Context, id int32) (Monster, error) {
@@ -1083,6 +1057,7 @@ func (q *Queries) GetMonster(ctx context.Context, id int32) (Monster, error) {
 		&i.Notes,
 		&i.Species,
 		&i.IsStoryBased,
+		&i.IsRepeatable,
 		&i.CanBeCaptured,
 		&i.AreaConquestLocation,
 		&i.CtbIconType,
@@ -1963,7 +1938,7 @@ func (q *Queries) GetMonsterStatusResists(ctx context.Context, monsterID int32) 
 }
 
 const getMonsters = `-- name: GetMonsters :many
-SELECT id, data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters ORDER BY id
+SELECT id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters ORDER BY id
 `
 
 func (q *Queries) GetMonsters(ctx context.Context) ([]Monster, error) {
@@ -1984,6 +1959,7 @@ func (q *Queries) GetMonsters(ctx context.Context) ([]Monster, error) {
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,
@@ -2018,7 +1994,7 @@ func (q *Queries) GetMonsters(ctx context.Context) ([]Monster, error) {
 }
 
 const getMonstersByAutoAbilityIDs = `-- name: GetMonstersByAutoAbilityIDs :many
-SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 LEFT JOIN monster_equipment me ON me.monster_id = m.id
 LEFT JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
@@ -2047,6 +2023,7 @@ func (q *Queries) GetMonstersByAutoAbilityIDs(ctx context.Context, autoAbilityId
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,
@@ -2081,7 +2058,7 @@ func (q *Queries) GetMonstersByAutoAbilityIDs(ctx context.Context, autoAbilityId
 }
 
 const getMonstersByElemResistIDs = `-- name: GetMonstersByElemResistIDs :many
-SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 JOIN j_monsters_elem_resists jmer ON jmer.monster_id = m.id
 WHERE jmer.elem_resist_id = ANY($1::int[])
@@ -2109,6 +2086,7 @@ func (q *Queries) GetMonstersByElemResistIDs(ctx context.Context, elemResistIds 
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,
@@ -2143,7 +2121,7 @@ func (q *Queries) GetMonstersByElemResistIDs(ctx context.Context, elemResistIds 
 }
 
 const getMonstersByItem = `-- name: GetMonstersByItem :many
-SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 LEFT JOIN j_monster_items_other_items jmio
@@ -2183,6 +2161,7 @@ func (q *Queries) GetMonstersByItem(ctx context.Context, itemID int32) ([]Monste
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,
@@ -2217,7 +2196,7 @@ func (q *Queries) GetMonstersByItem(ctx context.Context, itemID int32) ([]Monste
 }
 
 const getMonstersByItemBribe = `-- name: GetMonstersByItemBribe :many
-SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON ia.id = mi.bribe_id
@@ -2243,6 +2222,7 @@ func (q *Queries) GetMonstersByItemBribe(ctx context.Context, itemID int32) ([]M
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,
@@ -2277,7 +2257,7 @@ func (q *Queries) GetMonstersByItemBribe(ctx context.Context, itemID int32) ([]M
 }
 
 const getMonstersByItemDrop = `-- name: GetMonstersByItemDrop :many
-SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia
@@ -2309,6 +2289,7 @@ func (q *Queries) GetMonstersByItemDrop(ctx context.Context, itemID int32) ([]Mo
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,
@@ -2343,7 +2324,7 @@ func (q *Queries) GetMonstersByItemDrop(ctx context.Context, itemID int32) ([]Mo
 }
 
 const getMonstersByItemOther = `-- name: GetMonstersByItemOther :many
-SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN j_monster_items_other_items jmio
@@ -2374,6 +2355,7 @@ func (q *Queries) GetMonstersByItemOther(ctx context.Context, itemID int32) ([]M
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,
@@ -2408,7 +2390,7 @@ func (q *Queries) GetMonstersByItemOther(ctx context.Context, itemID int32) ([]M
 }
 
 const getMonstersByItemSteal = `-- name: GetMonstersByItemSteal :many
-SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia
@@ -2436,6 +2418,7 @@ func (q *Queries) GetMonstersByItemSteal(ctx context.Context, itemID int32) ([]M
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,
@@ -2470,7 +2453,7 @@ func (q *Queries) GetMonstersByItemSteal(ctx context.Context, itemID int32) ([]M
 }
 
 const getMonstersByName = `-- name: GetMonstersByName :many
-SELECT id, data_hash, name, version, specification, notes, species, is_story_based, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE name = $1
+SELECT id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE name = $1
 `
 
 func (q *Queries) GetMonstersByName(ctx context.Context, name string) ([]Monster, error) {
@@ -2491,6 +2474,7 @@ func (q *Queries) GetMonstersByName(ctx context.Context, name string) ([]Monster
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,
@@ -2526,7 +2510,7 @@ func (q *Queries) GetMonstersByName(ctx context.Context, name string) ([]Monster
 
 const getMonstersByRonsoRageID = `-- name: GetMonstersByRonsoRageID :many
 SELECT
-    m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+    m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 LEFT JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
 WHERE j.overdrive_id = $1
@@ -2551,6 +2535,7 @@ func (q *Queries) GetMonstersByRonsoRageID(ctx context.Context, overdriveID int3
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,
@@ -2606,7 +2591,7 @@ monster_status_match AS (
         jmi.status_condition_id IS NOT NULL
         OR (sr.status_condition_id IS NOT NULL AND sr.resistance >= $2)
 )
-SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
+SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 JOIN monster_status_match msm ON msm.monster_id = m.id
 GROUP BY m.id
@@ -2638,6 +2623,7 @@ func (q *Queries) GetMonstersByStatusResists(ctx context.Context, arg GetMonster
 			&i.Notes,
 			&i.Species,
 			&i.IsStoryBased,
+			&i.IsRepeatable,
 			&i.CanBeCaptured,
 			&i.AreaConquestLocation,
 			&i.CtbIconType,

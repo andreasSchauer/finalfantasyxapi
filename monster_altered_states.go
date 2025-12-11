@@ -15,7 +15,6 @@ type AlteredState struct {
 	Changes     []AltStateChange `json:"changes"`
 }
 
-
 type AltStateChange struct {
 	AlterationType    database.AlterationType `json:"alteration_type"`
 	Distance          *int32                  `json:"distance,omitempty"`
@@ -25,11 +24,9 @@ type AltStateChange struct {
 	ElemResists       []ElementalResist       `json:"elem_resists,omitempty"`
 	StatusImmunities  []NamedAPIResource      `json:"status_immunities,omitempty"`
 	StatusResistances []StatusResist          `json:"status_resistances,omitempty"`
-	AddedStatusses    []InflictedStatus       `json:"added_status_conditions,omitempty"`
+	AddedStatus       *InflictedStatus        `json:"added_status_condition,omitempty"`
 	RemovedStatus     *NamedAPIResource       `json:"removed_status_condition,omitempty"`
 }
-
-
 
 func (cfg *apiConfig) getMonsterAlteredStates(r *http.Request, mon database.Monster) ([]AlteredState, error) {
 	dbAltStates, err := cfg.db.GetMonsterAlteredStates(r.Context(), mon.ID)
@@ -69,7 +66,7 @@ func (cfg *apiConfig) getAltStateChanges(r *http.Request, mon database.Monster, 
 	for _, dbChange := range dbAltStateChanges {
 		altStateChange, err := cfg.getAltStateChangeRelationships(r, mon, dbChange)
 		if err != nil {
-			return []AltStateChange{}, nil
+			return []AltStateChange{}, err
 		}
 
 		altStateChange.AlterationType = dbChange.AlterationType
@@ -118,7 +115,7 @@ func (cfg *apiConfig) getAltStateChangeRelationships(r *http.Request, mon databa
 		BaseStats:        baseStats,
 		ElemResists:      elemResists,
 		StatusImmunities: immunities,
-		AddedStatusses:   addedStatusses,
+		AddedStatus:      addedStatusses,
 	}, nil
 }
 
@@ -207,19 +204,17 @@ func (cfg *apiConfig) getAltStateImmunities(r *http.Request, mon database.Monste
 	return immunities, nil
 }
 
-func (cfg *apiConfig) getAltStateStatusses(r *http.Request, mon database.Monster, asc database.AltStateChange) ([]InflictedStatus, error) {
-	dbAddedStatusses, err := cfg.db.GetAltStateStatusses(r.Context(), asc.ID)
+func (cfg *apiConfig) getAltStateStatusses(r *http.Request, mon database.Monster, asc database.AltStateChange) (*InflictedStatus, error) {
+	dbStatus, err := cfg.db.GetAltStateStatusses(r.Context(), asc.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state added statusses of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state added status of Monster %s, Version %d", mon.Name, h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	var addedStatusses []InflictedStatus
+	addedStatus := cfg.newInflictedStatus(dbStatus.StatusID.Int32, anyToInt32(dbStatus.Probability), dbStatus.Status.String, h.NullInt32ToPtr(dbStatus.Amount), dbStatus.DurationType.DurationType)
 
-	for _, dbStatus := range dbAddedStatusses {
-		addedStatus := cfg.newInflictedStatus(dbStatus.StatusID.Int32, anyToInt32(dbStatus.Probability), dbStatus.Status.String, h.NullInt32ToPtr(dbStatus.Amount), dbStatus.DurationType.DurationType)
-
-		addedStatusses = append(addedStatusses, addedStatus)
+	if addedStatus.IsZero() {
+		return nil, nil
 	}
 
-	return addedStatusses, nil
+	return &addedStatus, nil
 }

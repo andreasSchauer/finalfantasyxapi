@@ -23,6 +23,7 @@ type Monster struct {
 	Notes                *string            	`json:"notes,omitempty"`
 	Species              NamedAPIResource       `json:"species"`
 	IsStoryBased         bool               	`json:"is_story_based"`
+	IsRepeatable			 bool					`json:"is_repeatable"`
 	CanBeCaptured        bool               	`json:"can_be_captured"`
 	AreaConquestLocation *string            	`json:"area_conquest_location,omitempty"`
 	CTBIconType          NamedAPIResource       `json:"ctb_icon_type"`
@@ -179,6 +180,7 @@ func (cfg *apiConfig) getMonster(r *http.Request, id int32) (Monster, error) {
 		Notes:                h.NullStringToPtr(dbMonster.Notes),
 		Species:              species,
 		IsStoryBased:         dbMonster.IsStoryBased,
+		IsRepeatable: 		  dbMonster.IsRepeatable,
 		CanBeCaptured:        dbMonster.CanBeCaptured,
 		AreaConquestLocation: h.ConvertNullMaCreationArea(dbMonster.AreaConquestLocation),
 		CTBIconType:          ctbIconType,

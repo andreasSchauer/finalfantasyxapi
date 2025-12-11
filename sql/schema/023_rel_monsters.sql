@@ -75,6 +75,7 @@ CREATE TABLE alt_state_changes (
     altered_state_id INTEGER NOT NULL REFERENCES altered_states(id),
     alteration_type alteration_type NOT NULL,
     distance distance,
+    added_status_id INTEGER REFERENCES inflicted_statusses(id),
     UNIQUE(altered_state_id, alteration_type)
 );
 
@@ -226,17 +227,8 @@ CREATE TABLE j_alt_state_changes_status_immunities (
 );
 
 
-CREATE TABLE j_alt_state_changes_statusses (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    alt_state_change_id INTEGER NOT NULL REFERENCES alt_state_changes(id),
-    inflicted_status_id INTEGER NOT NULL REFERENCES inflicted_statusses(id)
-);
-
-
 
 -- +goose Down
-DROP TABLE IF EXISTS j_alt_state_changes_statusses;
 DROP TABLE IF EXISTS j_alt_state_changes_status_immunities;
 DROP TABLE IF EXISTS j_alt_state_changes_elem_resists;
 DROP TABLE IF EXISTS j_alt_state_changes_base_stats;

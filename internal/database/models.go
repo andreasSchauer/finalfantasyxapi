@@ -2573,6 +2573,7 @@ type AltStateChange struct {
 	AlteredStateID int32
 	AlterationType AlterationType
 	Distance       interface{}
+	AddedStatusID  sql.NullInt32
 }
 
 type AlteredState struct {
@@ -2936,13 +2937,6 @@ type JAltStateChangesStatusImmunity struct {
 	DataHash          string
 	AltStateChangeID  int32
 	StatusConditionID int32
-}
-
-type JAltStateChangesStatuss struct {
-	ID                int32
-	DataHash          string
-	AltStateChangeID  int32
-	InflictedStatusID int32
 }
 
 type JAreaConnectedArea struct {
@@ -3440,6 +3434,7 @@ type Monster struct {
 	Notes                sql.NullString
 	Species              MonsterSpecies
 	IsStoryBased         bool
+	IsRepeatable         bool
 	CanBeCaptured        bool
 	AreaConquestLocation NullMaCreationArea
 	CtbIconType          CtbIconType

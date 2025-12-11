@@ -14,6 +14,7 @@ CREATE TABLE monsters (
     notes TEXT,
     species monster_species NOT NULL,
     is_story_based BOOLEAN NOT NULL,
+    is_repeatable BOOLEAN NOT NULL,
     can_be_captured BOOLEAN NOT NULL,
     area_conquest_location ma_creation_area,
     ctb_icon_type ctb_icon_type NOT NULL,
