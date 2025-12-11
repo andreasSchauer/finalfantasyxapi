@@ -301,6 +301,41 @@ func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	resources, err = cfg.getMonstersDistance(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersStoryBased(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersRepeatable(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersCanBeCaptured(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersHasOverdrive(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersUnderwater(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersZombie(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
 	resourceList, err := cfg.newNamedAPIResourceList(r, resources)
 	if handleHTTPError(w, err) {
 		return
@@ -548,6 +583,195 @@ func (cfg *apiConfig) getMonstersRonsoRage(r *http.Request, inputMons []NamedAPI
 	dbMons, err := cfg.db.GetMonstersByRonsoRageID(r.Context(), ronsoRageID)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by ronso rage", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersDistance(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("distance")
+
+	if query == "" {
+		return inputMons, nil
+	}
+
+	distance, err := strconv.Atoi(query)
+	if err != nil || distance > 4 || distance <= 0 {
+		return nil, newHTTPError(http.StatusBadRequest, "invalid value. usage: distance={int from 1-4}", err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByDistance(r.Context(), distance)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by distance", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersStoryBased(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("is-story-based")
+
+	if query == "" {
+		return inputMons, nil
+	}
+
+	b, err := strconv.ParseBool(query)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, "invalid value. usage: is-story-based={boolean}", err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByIsStoryBased(r.Context(), b)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve story-based monsters", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersRepeatable(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("is-repeatable")
+
+	if query == "" {
+		return inputMons, nil
+	}
+
+	b, err := strconv.ParseBool(query)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, "invalid value. usage: is-repeatable={boolean}", err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByIsRepeatable(r.Context(), b)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve repeatable monsters", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersCanBeCaptured(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("can-capture")
+
+	if query == "" {
+		return inputMons, nil
+	}
+
+	b, err := strconv.ParseBool(query)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, "invalid value. usage: can-capture={boolean}", err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByCanBeCaptured(r.Context(), b)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters that can be captured", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersHasOverdrive(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("has-overdrive")
+
+	if query == "" {
+		return inputMons, nil
+	}
+
+	b, err := strconv.ParseBool(query)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, "invalid value. usage: has-overdrive={boolean}", err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByHasOverdrive(r.Context(), b)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters with overdrive gauge", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersUnderwater(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("is-underwater")
+
+	if query == "" {
+		return inputMons, nil
+	}
+
+	b, err := strconv.ParseBool(query)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, "invalid value. usage: is-underwater={boolean}", err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByIsUnderwater(r.Context(), b)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve underwater monsters", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersZombie(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("is-zombie")
+
+	if query == "" {
+		return inputMons, nil
+	}
+
+	b, err := strconv.ParseBool(query)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, "invalid value. usage: is-zombie={boolean}", err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByIsZombie(r.Context(), b)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve zombie monsters", err)
 	}
 
 	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {

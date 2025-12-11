@@ -491,6 +491,34 @@ WHERE j.overdrive_id = $1
 ORDER BY m.id;
 
 
+-- name: GetMonstersByDistance :many
+SELECT * FROM monsters WHERE distance = $1;
+
+
+-- name: GetMonstersByIsStoryBased :many
+SELECT * FROM monsters WHERE is_story_based = $1;
+
+
+-- name: GetMonstersByIsRepeatable :many
+SELECT * FROM monsters WHERE is_repeatable = $1;
+
+
+-- name: GetMonstersByCanBeCaptured :many
+SELECT * FROM monsters WHERE can_be_captured = $1;
+
+
+-- name: GetMonstersByHasOverdrive :many
+SELECT * FROM monsters WHERE has_overdrive = $1;
+
+
+-- name: GetMonstersByIsUnderwater :many
+SELECT * FROM monsters WHERE is_underwater = $1;
+
+
+-- name: GetMonstersByIsZombie :many
+SELECT * FROM monsters WHERE is_zombie = $1;
+
+
 -- name: CreateMonsterAmount :one
 INSERT INTO monster_amounts (data_hash, monster_id, amount)
 VALUES ($1, $2, $3)

@@ -8,14 +8,16 @@ import (
 
 // TypesLookup holds all the enum types for the application
 type TypeLookup struct {
-	CTBIconType    map[string]TypedAPIResource
-	MonsterSpecies map[string]TypedAPIResource
+	CTBIconType   	map[string]TypedAPIResource
+	MaCreationArea	map[string]TypedAPIResource
+	MonsterSpecies 	map[string]TypedAPIResource
 }
 
 func TypeLookupInit() TypeLookup {
 	t := TypeLookup{}
 
 	t.initCTBIconType()
+	t.initMaCreationArea()
 	t.initMonsterSpecies()
 
 	return t
@@ -51,6 +53,52 @@ func (t *TypeLookup) initCTBIconType() {
 	}
 
 	t.CTBIconType = typeSliceToMap(typeSlice)
+}
+
+func (t *TypeLookup) initMaCreationArea() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: string(database.MaCreationAreaBesaid),
+		},
+		{
+			Name: string(database.MaCreationAreaKilika),
+		},
+		{
+			Name: string(database.MaCreationAreaMiihenHighroad),
+		},
+		{
+			Name: string(database.MaCreationAreaMushroomRockRoad),
+		},
+		{
+			Name: string(database.MaCreationAreaDjose),
+		},
+		{
+			Name: string(database.MaCreationAreaThunderPlains),
+		},
+		{
+			Name: string(database.MaCreationAreaMacalania),
+		},
+		{
+			Name: string(database.MaCreationAreaBikanel),
+		},
+		{
+			Name: string(database.MaCreationAreaCalmLands),
+		},
+		{
+			Name: string(database.MaCreationAreaCavernOfTheStolenFayth),
+		},
+		{
+			Name: string(database.MaCreationAreaMountGagazet),
+		},
+		{
+			Name: string(database.MaCreationAreaSin),
+		},
+		{
+			Name: string(database.MaCreationAreaOmegaRuins),
+		},
+	}
+
+	t.MaCreationArea = typeSliceToMap(typeSlice)
 }
 
 func (t *TypeLookup) initMonsterSpecies() {
