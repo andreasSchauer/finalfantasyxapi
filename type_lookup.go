@@ -23,6 +23,7 @@ func TypeLookupInit() TypeLookup {
 	return t
 }
 
+
 func GetEnumType(key string, lookup map[string]TypedAPIResource) (TypedAPIResource, error) {
 	enumType, found := lookup[key]
 	if !found {

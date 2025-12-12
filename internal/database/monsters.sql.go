@@ -2119,124 +2119,68 @@ func (q *Queries) GetMonstersByAutoAbilityIDs(ctx context.Context, autoAbilityId
 	return items, nil
 }
 
+const getMonstersByCTBIconType = `-- name: GetMonstersByCTBIconType :many
+SELECT id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE ctb_icon_type = $1
+`
+
+func (q *Queries) GetMonstersByCTBIconType(ctx context.Context, ctbIconType CtbIconType) ([]Monster, error) {
+	rows, err := q.db.QueryContext(ctx, getMonstersByCTBIconType, ctbIconType)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Monster
+	for rows.Next() {
+		var i Monster
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.Name,
+			&i.Version,
+			&i.Specification,
+			&i.Notes,
+			&i.Species,
+			&i.IsStoryBased,
+			&i.IsRepeatable,
+			&i.CanBeCaptured,
+			&i.AreaConquestLocation,
+			&i.CtbIconType,
+			&i.HasOverdrive,
+			&i.IsUnderwater,
+			&i.IsZombie,
+			&i.Distance,
+			&i.Ap,
+			&i.ApOverkill,
+			&i.OverkillDamage,
+			&i.Gil,
+			&i.StealGil,
+			&i.DoomCountdown,
+			&i.PoisonRate,
+			&i.ThreatenChance,
+			&i.ZanmatoLevel,
+			&i.MonsterArenaPrice,
+			&i.SensorText,
+			&i.ScanText,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonstersByCTBIconTypeBoss = `-- name: GetMonstersByCTBIconTypeBoss :many
 SELECT id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE ctb_icon_type = 'boss' OR ctb_icon_type = 'boss-numbered'
 `
 
 func (q *Queries) GetMonstersByCTBIconTypeBoss(ctx context.Context) ([]Monster, error) {
 	rows, err := q.db.QueryContext(ctx, getMonstersByCTBIconTypeBoss)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Monster
-	for rows.Next() {
-		var i Monster
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.Version,
-			&i.Specification,
-			&i.Notes,
-			&i.Species,
-			&i.IsStoryBased,
-			&i.IsRepeatable,
-			&i.CanBeCaptured,
-			&i.AreaConquestLocation,
-			&i.CtbIconType,
-			&i.HasOverdrive,
-			&i.IsUnderwater,
-			&i.IsZombie,
-			&i.Distance,
-			&i.Ap,
-			&i.ApOverkill,
-			&i.OverkillDamage,
-			&i.Gil,
-			&i.StealGil,
-			&i.DoomCountdown,
-			&i.PoisonRate,
-			&i.ThreatenChance,
-			&i.ZanmatoLevel,
-			&i.MonsterArenaPrice,
-			&i.SensorText,
-			&i.ScanText,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMonstersByCTBIconTypeMonster = `-- name: GetMonstersByCTBIconTypeMonster :many
-SELECT id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE ctb_icon_type = 'monster'
-`
-
-func (q *Queries) GetMonstersByCTBIconTypeMonster(ctx context.Context) ([]Monster, error) {
-	rows, err := q.db.QueryContext(ctx, getMonstersByCTBIconTypeMonster)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Monster
-	for rows.Next() {
-		var i Monster
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.Version,
-			&i.Specification,
-			&i.Notes,
-			&i.Species,
-			&i.IsStoryBased,
-			&i.IsRepeatable,
-			&i.CanBeCaptured,
-			&i.AreaConquestLocation,
-			&i.CtbIconType,
-			&i.HasOverdrive,
-			&i.IsUnderwater,
-			&i.IsZombie,
-			&i.Distance,
-			&i.Ap,
-			&i.ApOverkill,
-			&i.OverkillDamage,
-			&i.Gil,
-			&i.StealGil,
-			&i.DoomCountdown,
-			&i.PoisonRate,
-			&i.ThreatenChance,
-			&i.ZanmatoLevel,
-			&i.MonsterArenaPrice,
-			&i.SensorText,
-			&i.ScanText,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMonstersByCTBIconTypeSummon = `-- name: GetMonstersByCTBIconTypeSummon :many
-SELECT id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE ctb_icon_type = 'summon'
-`
-
-func (q *Queries) GetMonstersByCTBIconTypeSummon(ctx context.Context) ([]Monster, error) {
-	rows, err := q.db.QueryContext(ctx, getMonstersByCTBIconTypeSummon)
 	if err != nil {
 		return nil, err
 	}

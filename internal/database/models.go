@@ -932,6 +932,7 @@ const (
 	CtbIconTypeBoss         CtbIconType = "boss"
 	CtbIconTypeBossNumbered CtbIconType = "boss-numbered"
 	CtbIconTypeSummon       CtbIconType = "summon"
+	CtbIconTypeCid          CtbIconType = "cid"
 )
 
 func (e *CtbIconType) Scan(src interface{}) error {

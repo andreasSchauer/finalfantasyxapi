@@ -536,12 +536,8 @@ SELECT * FROM monsters WHERE species = $1;
 SELECT * FROM monsters WHERE area_conquest_location = $1;
 
 
--- name: GetMonstersByCTBIconTypeMonster :many
-SELECT * FROM monsters WHERE ctb_icon_type = 'monster';
-
-
--- name: GetMonstersByCTBIconTypeSummon :many
-SELECT * FROM monsters WHERE ctb_icon_type = 'summon';
+-- name: GetMonstersByCTBIconType :many
+SELECT * FROM monsters WHERE ctb_icon_type = $1;
 
 
 -- name: GetMonstersByCTBIconTypeBoss :many
