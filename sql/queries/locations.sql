@@ -1,3 +1,7 @@
+-- name: GetLocationAreaByAreaName :one
+SELECT l.name, s.name, a.name, a.version FROM locations l LEFT JOIN sub_locations s ON s.location_id = l.id LEFT JOIN areas a ON a.sub_location_id = a.id
+WHERE l.id = $1 AND s.id = $2 AND a.name = $3 AND a.version = $4;
+
 -- name: CreateLocation :one
 INSERT INTO locations (data_hash, name)
 VALUES ($1, $2)

@@ -58,7 +58,7 @@ func (cfg *apiConfig) getKimahriStats(query string) (map[string]int32, error) {
 
 		statLookup, err := seeding.GetResource(stat, cfg.l.Stats)
 		if err != nil {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: %s. stat doesn't exist", stat), err)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: %s. stat doesn't exist. use /api/stats to see existing stats.", stat), err)
 		}
 
 		switch statLookup.ID {

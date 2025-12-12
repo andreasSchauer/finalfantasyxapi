@@ -301,7 +301,37 @@ func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	resources, err = cfg.getMonstersLocation(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersSubLocation(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersArea(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
 	resources, err = cfg.getMonstersDistance(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersSpecies(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersCreationArea(r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err = cfg.getMonstersType(r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -363,12 +393,12 @@ func (cfg *apiConfig) getMonstersElemResist(r *http.Request, inputMons []NamedAP
 
 		element, err := parseSingleSegmentResource(parts[0], cfg.l.Elements)
 		if err != nil {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid element: %s. element doesn't exist", parts[0]), err)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid element: %s. element doesn't exist. use /api/elements to see existing elements.", parts[0]), err)
 		}
 
 		affinity, err := parseSingleSegmentResource(parts[1], cfg.l.Affinities)
 		if err != nil {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid affinity: %s. affinity doesn't exist", parts[1]), err)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid affinity: %s. affinity doesn't exist. use /api/affinities to see existing affinities.", parts[1]), err)
 		}
 
 		elemResist := seeding.ElementalResist{
@@ -436,7 +466,7 @@ func (cfg *apiConfig) getMonstersStatusResist(r *http.Request, inputMons []Named
 	for _, qStatus := range statusses {
 		status, err := parseSingleSegmentResource(qStatus, cfg.l.StatusConditions)
 		if err != nil {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid status condition: %s. status condition doesn't exist", qStatus), err)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid status condition: %s. status condition doesn't exist. use /api/status-conditions to see existing status conditions.", qStatus), err)
 		}
 
 		ids = append(ids, status.ID)
@@ -474,7 +504,7 @@ func (cfg *apiConfig) getMonstersItem(r *http.Request, inputMons []NamedAPIResou
 
 	item, err := parseSingleSegmentResource(queryItem, cfg.l.MasterItems)
 	if err != nil {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid item: %s. item doesn't exist", queryItem), err)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid item: %s. item doesn't exist. use /api/items to see existing items.", queryItem), err)
 	}
 
 	var dbMons []database.Monster
@@ -532,7 +562,7 @@ func (cfg *apiConfig) getMonstersAutoAbility(r *http.Request, inputMons []NamedA
 	for _, ability := range abilities {
 		autoAbility, err := parseSingleSegmentResource(ability, cfg.l.AutoAbilities)
 		if err != nil {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid auto ability: %s. auto ability doesn't exist", ability), err)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid auto ability: %s. auto ability doesn't exist. use /api/auto-abilities to see existing auto-abilities.", ability), err)
 		}
 
 		ids = append(ids, autoAbility.ID)
@@ -571,7 +601,7 @@ func (cfg *apiConfig) getMonstersRonsoRage(r *http.Request, inputMons []NamedAPI
 	if ronsoRageID == 0 {
 		ronsoRage, err := parseNameVersionResource(query, "", cfg.l.Overdrives)
 		if err != nil {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid ronso rage: %s. ronso rage doesn't exist", query), err)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid ronso rage: %s. ronso rage doesn't exist. use /api/ronso-rages to see existing ronso-rages.", query), err)
 		}
 		ronsoRageID = ronsoRage.ID
 	}
@@ -584,6 +614,135 @@ func (cfg *apiConfig) getMonstersRonsoRage(r *http.Request, inputMons []NamedAPI
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by ronso rage", err)
 	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersLocation(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("location")
+	
+	if query == "" {
+		return inputMons, nil
+	}
+
+	location, err := parseSingleSegmentResource(query, cfg.l.Locations)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid location: %s. location doesn't exist. use /api/locations to see existing locations", query), err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByLocation(r.Context(), location.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by location", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersSubLocation(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("sublocation")
+	
+	if query == "" {
+		return inputMons, nil
+	}
+
+	sublocation, err := parseSingleSegmentResource(query, cfg.l.SubLocations)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid sublocation: %s. sublocation doesn't exist. use /api/sublocations to see existing sublocations.", query), err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersBySubLocation(r.Context(), sublocation.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by sublocation", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersArea(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	queryArea := r.URL.Query().Get("area")
+	
+	if queryArea == "" {
+		return inputMons, nil
+	}
+
+	area_id, err := strconv.Atoi(queryArea)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, "invalid area id", err)
+	}
+
+	dbMons, err := cfg.db.GetMonstersByArea(r.Context(), int32(area_id))
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by location", err)
+	}
+
+	/* don't have the functionality to parse the area yet
+	if err == nil for atoi, I can directly call the query
+	dbMons needs to be declared in advance
+	else {
+		queryLocation := r.URL.Query().Get("location")
+		querySubLocation := r.URL.Query().Get("sublocation")
+		queryVersion := r.URL.Query().Get("version")
+		var version int
+		var versionPtr *int32
+	
+		if queryLocation == "" || querySubLocation == "" {
+			return nil, newHTTPError(http.StatusBadRequest, "area either needs a valid id, or be paired with a location, sublocation and a version, like this: location={name or id}&sublocation={name or id}&area={name}&version={id (optional)}", nil)
+		}
+
+		locationParsed, err := parseSingleSegmentResource(queryLocation, cfg.l.Locations)
+		if err != nil {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid location: %s. location doesn't exist. use /api/locations to see existing locations.", queryArea), err)
+		}
+
+		sublocationParsed, err := parseSingleSegmentResource(querySubLocation, cfg.l.SubLocations)
+		if err != nil {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid sublocation: %s. sublocation doesn't exist. use /api/sublocations to see existing sublocations.", queryArea), err)
+		}
+
+		if queryVersion == "" {
+			versionPtr = nil
+		} else {
+			version, err = strconv.Atoi(queryVersion)
+			if err != nil {
+				return nil, newHTTPError(http.StatusBadRequest, "invalid version. version must be an integer", err)
+			}
+
+			versionInt32 := int32(version)
+			versionPtr = &versionInt32
+		}
+
+		areaParsed, err := parseNameVersionResource()
+
+		dbLocationArea, err := cfg.db.GetLocationAreaByAreaName(r.Context(), database.GetLocationAreaByAreaNameParams{
+			ID: locationParsed.ID,
+			ID_2: sublocationParsed.ID,
+			Name: ,
+		})
+
+
+	}
+	*/
 
 	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
@@ -772,6 +931,108 @@ func (cfg *apiConfig) getMonstersZombie(r *http.Request, inputMons []NamedAPIRes
 	dbMons, err := cfg.db.GetMonstersByIsZombie(r.Context(), b)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve zombie monsters", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersSpecies(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("species")
+
+	if query == "" {
+		return inputMons, nil
+	}
+
+	enum, err := GetEnumType(query, cfg.t.MonsterSpecies)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value: %s, use /api/monster-species to see valid values", query), err)
+	}
+
+	species := database.MonsterSpecies(enum.Name)
+
+	dbMons, err := cfg.db.GetMonstersBySpecies(r.Context(), species)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by species", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+
+func (cfg *apiConfig) getMonstersCreationArea(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("creation-area")
+
+	if query == "" {
+		return inputMons, nil
+	}
+
+	enum, err := GetEnumType(query, cfg.t.MaCreationArea)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value: %s, use /api/creation-areas to see valid values", query), err)
+	}
+
+	area := h.NullMaCreationArea(&enum.Name)
+
+	dbMons, err := cfg.db.GetMonstersByMaCreationArea(r.Context(), area)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by creation area", err)
+	}
+
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	sharedResources := getSharedResources(inputMons, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getMonstersType(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	query := r.URL.Query().Get("type")
+
+	if query == "" {
+		return inputMons, nil
+	}
+
+	enum, err := GetEnumType(query, cfg.t.CTBIconType)
+	if err != nil {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value: %s, use /api/ctb-icon-type to see valid values. 'boss' and 'boss-numbered' will both yield all boss monsters.", query), err)
+	}
+
+	species := database.CtbIconType(enum.Name)
+	var dbMons []database.Monster
+
+	switch species {
+	case database.CtbIconTypeMonster:
+		dbMons, err = cfg.db.GetMonstersByCTBIconTypeMonster(r.Context())
+		if err != nil {
+			return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by type", err)
+		}
+	case database.CtbIconTypeSummon:
+		dbMons, err = cfg.db.GetMonstersByCTBIconTypeSummon(r.Context())
+		if err != nil {
+			return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by type", err)
+		}
+	case database.CtbIconTypeBoss, database.CtbIconTypeBossNumbered:
+		dbMons, err = cfg.db.GetMonstersByCTBIconTypeBoss(r.Context())
+		if err != nil {
+			return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by type", err)
+		}
 	}
 
 	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {

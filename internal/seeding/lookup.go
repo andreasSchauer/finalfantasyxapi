@@ -45,6 +45,8 @@ type Lookup struct {
 	Aeons              map[string]Aeon
 	AeonCommands       map[string]AeonCommand
 	Affinities         map[string]Affinity
+	Locations		   map[string]Location
+	SubLocations	   map[string]SubLocation
 	Areas              map[string]Area
 	AutoAbilities      map[string]AutoAbility
 	CelestialWeapons   map[string]CelestialWeapon
@@ -87,6 +89,8 @@ func lookupInit() Lookup {
 		Aeons:              make(map[string]Aeon),
 		AeonCommands:       make(map[string]AeonCommand),
 		Affinities:         make(map[string]Affinity),
+		Locations: 			make(map[string]Location),
+		SubLocations: 		make(map[string]SubLocation),
 		Areas:              make(map[string]Area),
 		AutoAbilities:      make(map[string]AutoAbility),
 		CelestialWeapons:   make(map[string]CelestialWeapon),

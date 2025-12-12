@@ -547,6 +547,42 @@ func (q *Queries) CreateTreasuresItemsJunction(ctx context.Context, arg CreateTr
 	return err
 }
 
+const getLocationAreaByAreaName = `-- name: GetLocationAreaByAreaName :one
+SELECT l.name, s.name, a.name, a.version FROM locations l LEFT JOIN sub_locations s ON s.location_id = l.id LEFT JOIN areas a ON a.sub_location_id = a.id
+WHERE l.id = $1 AND s.id = $2 AND a.name = $3 AND a.version = $4
+`
+
+type GetLocationAreaByAreaNameParams struct {
+	ID      int32
+	ID_2    int32
+	Name    string
+	Version sql.NullInt32
+}
+
+type GetLocationAreaByAreaNameRow struct {
+	Name    string
+	Name_2  sql.NullString
+	Name_3  sql.NullString
+	Version sql.NullInt32
+}
+
+func (q *Queries) GetLocationAreaByAreaName(ctx context.Context, arg GetLocationAreaByAreaNameParams) (GetLocationAreaByAreaNameRow, error) {
+	row := q.db.QueryRowContext(ctx, getLocationAreaByAreaName,
+		arg.ID,
+		arg.ID_2,
+		arg.Name,
+		arg.Version,
+	)
+	var i GetLocationAreaByAreaNameRow
+	err := row.Scan(
+		&i.Name,
+		&i.Name_2,
+		&i.Name_3,
+		&i.Version,
+	)
+	return i, err
+}
+
 const updateTreasure = `-- name: UpdateTreasure :exec
 UPDATE treasures
 SET data_hash = $1,

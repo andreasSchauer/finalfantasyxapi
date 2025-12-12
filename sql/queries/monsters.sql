@@ -491,8 +491,61 @@ WHERE j.overdrive_id = $1
 ORDER BY m.id;
 
 
+-- name: GetMonstersByLocation :many
+SELECT DISTINCT m.* FROM monsters m
+LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
+LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
+LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
+LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
+LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
+LEFT JOIN areas a ON el.area_id = a.id
+LEFT JOIN sub_locations s ON a.sub_location_id = s.id
+WHERE s.location_id = $1;
+
+
+-- name: GetMonstersBySubLocation :many
+SELECT DISTINCT m.* FROM monsters m
+LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
+LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
+LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
+LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
+LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
+LEFT JOIN areas a ON el.area_id = a.id
+WHERE a.sub_location_id = $1;
+
+
+-- name: GetMonstersByArea :many
+SELECT DISTINCT m.* FROM monsters m
+LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
+LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
+LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
+LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
+LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
+WHERE el.area_id = $1;
+
+
 -- name: GetMonstersByDistance :many
 SELECT * FROM monsters WHERE distance = $1;
+
+
+-- name: GetMonstersBySpecies :many
+SELECT * FROM monsters WHERE species = $1;
+
+
+-- name: GetMonstersByMaCreationArea :many
+SELECT * FROM monsters WHERE area_conquest_location = $1;
+
+
+-- name: GetMonstersByCTBIconTypeMonster :many
+SELECT * FROM monsters WHERE ctb_icon_type = 'monster';
+
+
+-- name: GetMonstersByCTBIconTypeSummon :many
+SELECT * FROM monsters WHERE ctb_icon_type = 'summon';
+
+
+-- name: GetMonstersByCTBIconTypeBoss :many
+SELECT * FROM monsters WHERE ctb_icon_type = 'boss' OR ctb_icon_type = 'boss-numbered';
 
 
 -- name: GetMonstersByIsStoryBased :many

@@ -21,6 +21,10 @@ func (l Location) ToHashFields() []any {
 	}
 }
 
+func (l Location) GetID() int32 {
+	return l.ID
+}
+
 func (l Location) Error() string {
 	return fmt.Sprintf("location %s", l.Name)
 }
@@ -39,6 +43,10 @@ func (s SubLocation) ToHashFields() []any {
 		s.Name,
 		h.DerefOrNil(s.Specification),
 	}
+}
+
+func (s SubLocation) GetID() int32 {
+	return s.ID
 }
 
 func (s SubLocation) Error() string {
@@ -160,6 +168,7 @@ func (l *Lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 				return h.GetErr(location.Error(), err, "couldn't create location")
 			}
 			location.ID = dbLocation.ID
+			l.Locations[location.Name] = location
 
 			err = l.seedSubLocations(qtx, location)
 			if err != nil {
@@ -185,6 +194,7 @@ func (l *Lookup) seedSubLocations(qtx *database.Queries, location Location) erro
 			return h.GetErr(subLocation.Error(), err, "couldn't create sublocation")
 		}
 		subLocation.ID = dbSubLocation.ID
+		l.SubLocations[subLocation.Name] = subLocation
 
 		err = l.seedAreas(qtx, subLocation)
 		if err != nil {
