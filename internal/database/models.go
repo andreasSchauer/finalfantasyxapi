@@ -2588,7 +2588,7 @@ type AlteredState struct {
 type Area struct {
 	ID                   int32
 	DataHash             string
-	SubLocationID        int32
+	SublocationID        int32
 	Name                 string
 	Version              sql.NullInt32
 	Specification        sql.NullString
@@ -3732,7 +3732,7 @@ type StatusResist struct {
 	Resistance        interface{}
 }
 
-type SubLocation struct {
+type Sublocation struct {
 	ID            int32
 	DataHash      string
 	LocationID    int32

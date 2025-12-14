@@ -12,7 +12,7 @@ import (
 type Location struct {
 	ID           int32
 	Name         string        `json:"location"`
-	SubLocations []SubLocation `json:"sub_locations"`
+	SubLocations []SubLocation `json:"sublocations"`
 }
 
 func (l Location) ToHashFields() []any {
@@ -211,7 +211,7 @@ func (l *Lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error
 
 		dbArea, err := qtx.CreateArea(context.Background(), database.CreateAreaParams{
 			DataHash:             generateDataHash(area),
-			SubLocationID:        area.SubLocation.ID,
+			SublocationID:        area.SubLocation.ID,
 			Name:                 area.Name,
 			Version:              h.GetNullInt32(area.Version),
 			Specification:        h.GetNullString(area.Specification),

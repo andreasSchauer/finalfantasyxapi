@@ -16,7 +16,7 @@ type apiConfig struct {
 	db          *database.Queries
 	dbConn      *sql.DB
 	l           *seeding.Lookup
-	t			*TypeLookup
+	t           *TypeLookup
 	platform    string
 	adminApiKey string
 	host        string
@@ -70,6 +70,9 @@ func main() {
 	mux.HandleFunc("GET /api/healthz", apiCfg.handlerReadiness)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerResetDatabase)
 
+	mux.HandleFunc("GET /api/locations/", apiCfg.handleLocations)
+	mux.HandleFunc("GET /api/sublocations/", apiCfg.handleSublocations)
+	mux.HandleFunc("GET /api/areas/", apiCfg.handleAreas)
 	mux.HandleFunc("GET /api/monsters/", apiCfg.handleMonsters)
 	mux.HandleFunc("GET /api/overdrive-modes/", apiCfg.handleOverdriveModes)
 

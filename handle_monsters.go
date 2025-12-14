@@ -2,12 +2,10 @@ package main
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
-
 
 
 type Monster struct {
@@ -57,16 +55,20 @@ type Monster struct {
 	Abilities            []MonsterAbility   	`json:"abilities"`
 }
 
-func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
-	path := strings.TrimPrefix(r.URL.Path, "/api/monsters/")
-	segments := strings.Split(path, "/")
 
-	if path == "" {
-		cfg.handleMonstersRetrieve(w, r)
-		return
-	}
+func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
+	segments := getPathSegments(r.URL.Path, "monsters")
+
 	// this whole thing can probably be generalized
 	switch len(segments) {
+	case 0:
+		// api/monsters
+		resourceList, err := cfg.retrieveMonsters(r)
+		if handleHTTPError(w, err) {
+			return
+		}
+		respondWithJSON(w, http.StatusOK, resourceList)
+		return
 	case 1:
 		// /api/monsters/{name or id}
 		segment := segments[0]
@@ -95,31 +97,12 @@ func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
 
 	case 2:
 		// /api/monsters/{name}/{version}
-
 		name := segments[0]
 		versionStr := segments[1]
-		var input parseResponse
-		var err error
 
-		// /api/monsters/{name}/
-		if versionStr == "" {
-			input, err = parseSingleSegmentResource(name, cfg.l.Monsters)
-			if handleHTTPError(w, err) {
-				return
-			}
-			if input.Name != "" {
-				resources, err := cfg.getMultipleMonsters(r, input.Name)
-				if handleHTTPError(w, err) {
-					return
-				}
-				respondWithJSON(w, http.StatusMultipleChoices, resources)
-				return
-			}
-		} else {
-			input, err = parseNameVersionResource(name, versionStr, cfg.l.Monsters)
-			if handleHTTPError(w, err) {
-				return
-			}
+		input, err := parseNameVersionResource(name, versionStr, cfg.l.Monsters)
+		if handleHTTPError(w, err) {
+			return
 		}
 
 		monster, err := cfg.getMonster(r, input.ID)
@@ -262,11 +245,10 @@ func (cfg *apiConfig) getMultipleMonsters(r *http.Request, monsterName string) (
 
 
 
-func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Request) {
+func (cfg *apiConfig) retrieveMonsters(r *http.Request) (NamedApiResourceList, error) {
 	dbMons, err := cfg.db.GetMonsters(r.Context())
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "Couldn't retrieve monsters", err)
-		return
+		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve monsters", err)
 	}
 
 	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
@@ -296,15 +278,15 @@ func (cfg *apiConfig) handleMonstersRetrieve(w http.ResponseWriter, r *http.Requ
 
 	for _, function := range filterFuncs {
 		resources, err = function(r, resources)
-			if handleHTTPError(w, err) {
-			return
+		if err != nil {
+			return NamedApiResourceList{}, err
 		}
 	}
 
 	resourceList, err := cfg.newNamedAPIResourceList(r, resources)
-	if handleHTTPError(w, err) {
-		return
+	if err != nil {
+		return NamedApiResourceList{}, err
 	}
 
-	respondWithJSON(w, http.StatusOK, resourceList)
+	return resourceList, nil
 }

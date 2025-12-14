@@ -15,21 +15,19 @@ CREATE TABLE locations (
 );
 
 
-CREATE TABLE sub_locations (
+CREATE TABLE sublocations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     location_id INTEGER NOT NULL REFERENCES locations(id),
-    name TEXT NOT NULL,
-    specification TEXT,
-
-    UNIQUE(location_id, name)
+    name TEXT UNIQUE NOT NULL,
+    specification TEXT
 );
 
 
 CREATE TABLE areas (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    sub_location_id INTEGER NOT NULL REFERENCES sub_locations(id),
+    sublocation_id INTEGER NOT NULL REFERENCES sublocations(id),
     name TEXT NOT NULL,
     version INTEGER,
     specification TEXT,
@@ -39,7 +37,7 @@ CREATE TABLE areas (
     has_compilation_sphere BOOLEAN NOT NULL,
     can_ride_chocobo BOOLEAN NOT NULL,
     
-    UNIQUE(sub_location_id, name, version)
+    UNIQUE(sublocation_id, name, version)
 );
 
 
@@ -87,7 +85,7 @@ DROP TABLE IF EXISTS encounter_locations;
 DROP TABLE IF EXISTS shops;
 DROP TABLE IF EXISTS treasures;
 DROP TABLE IF EXISTS areas;
-DROP TABLE IF EXISTS sub_locations;
+DROP TABLE IF EXISTS sublocations;
 DROP TABLE IF EXISTS locations;
 DROP TYPE IF EXISTS shop_category;
 DROP TYPE IF EXISTS treasure_type;

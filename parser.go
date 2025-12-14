@@ -41,55 +41,55 @@ func parseSingleSegmentResource[T h.HasID](segment string, lookup map[string]T) 
 		return newParseResponse(int32(parsedID), ""), nil
 	}
 
-	lookupName := seeding.LookupObject{
+	lookupObj := seeding.LookupObject{
 		Name: decoded,
 	}
 
 	// check for unique names with dashes (obj input)
-	resource, err := seeding.GetResource(lookupName, lookup)
+	resource, err := seeding.GetResource(lookupObj, lookup)
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}
 
 	// check for unique names with dashes (string input)
-	resource, err = seeding.GetResource(lookupName.Name, lookup)
+	resource, err = seeding.GetResource(lookupObj.Name, lookup)
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}
 
 	var testVersion int32 = 1
-	lookupNameVer := seeding.LookupObject{
+	lookupObjVer := seeding.LookupObject{
 		Name: decoded,
 		Version: &testVersion,
 	}
 	
 	// check for multi-versioned names with dashes
-	_, err = seeding.GetResource(lookupNameVer, lookup)
+	_, err = seeding.GetResource(lookupObjVer, lookup)
 	if err == nil {
-		return newParseResponse(0, lookupName.Name), nil
+		return newParseResponse(0, lookupObj.Name), nil
 	}
 
 	nameWithSpaces := strings.ReplaceAll(decoded, "-", " ")
 	nameWithSpaces = strings.ReplaceAll(nameWithSpaces, " >", "->")
-	lookupName.Name = nameWithSpaces
-	lookupNameVer.Name = nameWithSpaces
+	lookupObj.Name = nameWithSpaces
+	lookupObjVer.Name = nameWithSpaces
 
 	// check for unique names with spaces (obj input)
-	resource, err = seeding.GetResource(lookupName, lookup)
+	resource, err = seeding.GetResource(lookupObj, lookup)
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}
 
 	// check for unique names with spaces (str input)
-	resource, err = seeding.GetResource(lookupName.Name, lookup)
+	resource, err = seeding.GetResource(lookupObj.Name, lookup)
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}
 
 	// check for multi-versioned names with spaces
-	_, err = seeding.GetResource(lookupNameVer, lookup)
+	_, err = seeding.GetResource(lookupObjVer, lookup)
 	if err == nil {
-		return newParseResponse(0, lookupNameVer.Name), nil
+		return newParseResponse(0, lookupObjVer.Name), nil
 	}
 
 	return parseResponse{}, newHTTPError(http.StatusNotFound, "Resource not found", err)

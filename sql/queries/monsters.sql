@@ -250,8 +250,8 @@ SELECT DISTINCT
 	a.name AS area,
 	a.version
 FROM locations l
-LEFT JOIN sub_locations s ON s.location_id = l.id
-LEFT JOIN areas a ON a.sub_location_id = s.id
+LEFT JOIN sublocations s ON s.location_id = l.id
+LEFT JOIN areas a ON a.sublocation_id = s.id
 LEFT JOIN encounter_locations el ON el.area_id = a.id
 LEFT JOIN j_encounter_location_formations jelf ON jelf.encounter_location_id = el.id
 LEFT JOIN monster_formations mf ON jelf.monster_formation_id = mf.id
@@ -499,7 +499,7 @@ LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
 LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
 LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
 LEFT JOIN areas a ON el.area_id = a.id
-LEFT JOIN sub_locations s ON a.sub_location_id = s.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
 WHERE s.location_id = $1;
 
 
@@ -511,7 +511,7 @@ LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
 LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
 LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
 LEFT JOIN areas a ON el.area_id = a.id
-WHERE a.sub_location_id = $1;
+WHERE a.sublocation_id = $1;
 
 
 -- name: GetMonstersByArea :many

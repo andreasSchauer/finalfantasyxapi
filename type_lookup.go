@@ -8,9 +8,10 @@ import (
 
 // TypesLookup holds all the enum types for the application
 type TypeLookup struct {
-	CTBIconType   	map[string]TypedAPIResource
-	MaCreationArea	map[string]TypedAPIResource
-	MonsterSpecies 	map[string]TypedAPIResource
+	CTBIconType   		map[string]TypedAPIResource
+	MaCreationArea		map[string]TypedAPIResource
+	MonsterSpecies 		map[string]TypedAPIResource
+	OverdriveModeType	map[string]TypedAPIResource
 }
 
 func TypeLookupInit() TypeLookup {
@@ -19,6 +20,7 @@ func TypeLookupInit() TypeLookup {
 	t.initCTBIconType()
 	t.initMaCreationArea()
 	t.initMonsterSpecies()
+	t.initOverdriveModeType()
 
 	return t
 }
@@ -275,4 +277,20 @@ func (t *TypeLookup) initMonsterSpecies() {
 	}
 
 	t.MonsterSpecies = typeSliceToMap(typeSlice)
+}
+
+
+func (t *TypeLookup) initOverdriveModeType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name:        string(database.OverdriveModeTypeFormula),
+			Description: "The fill-amount of the overdrive gauge is determined by a formula.",
+		},
+		{
+			Name:        string(database.OverdriveModeTypePerAction),
+			Description: "The overdrive gauge fills by a fixed amount every time the specified action is performed.",
+		},
+	}
+
+	t.OverdriveModeType = typeSliceToMap(typeSlice)
 }
