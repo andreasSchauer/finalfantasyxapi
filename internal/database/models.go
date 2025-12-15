@@ -2708,8 +2708,9 @@ type CompletionLocation struct {
 type Cue struct {
 	ID                     int32
 	DataHash               string
+	SongID                 int32
 	SceneDescription       string
-	AreaID                 sql.NullInt32
+	TriggerAreaID          sql.NullInt32
 	ReplacesBgMusic        NullBgReplacementType
 	EndTrigger             sql.NullString
 	ReplacesEncounterMusic bool
@@ -3315,11 +3316,10 @@ type JSongsBackgroundMusic struct {
 }
 
 type JSongsCue struct {
-	ID       int32
-	DataHash string
-	SongID   int32
-	CueID    int32
-	AreaID   int32
+	ID             int32
+	DataHash       string
+	CueID          int32
+	IncludedAreaID int32
 }
 
 type JStatusConditionsModifierChange struct {

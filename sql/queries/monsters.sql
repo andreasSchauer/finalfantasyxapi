@@ -491,39 +491,6 @@ WHERE j.overdrive_id = $1
 ORDER BY m.id;
 
 
--- name: GetMonstersByLocation :many
-SELECT DISTINCT m.* FROM monsters m
-LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
-LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
-LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
-LEFT JOIN areas a ON el.area_id = a.id
-LEFT JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.location_id = $1;
-
-
--- name: GetMonstersBySubLocation :many
-SELECT DISTINCT m.* FROM monsters m
-LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
-LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
-LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
-LEFT JOIN areas a ON el.area_id = a.id
-WHERE a.sublocation_id = $1;
-
-
--- name: GetMonstersByArea :many
-SELECT DISTINCT m.* FROM monsters m
-LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
-LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
-LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
-WHERE el.area_id = $1;
-
-
 -- name: GetMonstersByDistance :many
 SELECT * FROM monsters WHERE distance = $1;
 

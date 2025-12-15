@@ -33,15 +33,15 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateCue :one
-INSERT INTO cues (data_hash, scene_description, area_id, replaces_bg_music, end_trigger, replaces_encounter_music)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO cues (data_hash, song_id, scene_description, trigger_area_id, replaces_bg_music, end_trigger, replaces_encounter_music)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = cues.data_hash
 RETURNING *;
 
 
 -- name: CreateSongsCuesJunction :exec
-INSERT INTO j_songs_cues (data_hash, song_id, cue_id, area_id)
-VALUES ($1, $2, $3, $4)
+INSERT INTO j_songs_cues (data_hash, cue_id, included_area_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 

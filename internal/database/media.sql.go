@@ -36,16 +36,17 @@ func (q *Queries) CreateBackgroundMusic(ctx context.Context, arg CreateBackgroun
 }
 
 const createCue = `-- name: CreateCue :one
-INSERT INTO cues (data_hash, scene_description, area_id, replaces_bg_music, end_trigger, replaces_encounter_music)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO cues (data_hash, song_id, scene_description, trigger_area_id, replaces_bg_music, end_trigger, replaces_encounter_music)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = cues.data_hash
-RETURNING id, data_hash, scene_description, area_id, replaces_bg_music, end_trigger, replaces_encounter_music
+RETURNING id, data_hash, song_id, scene_description, trigger_area_id, replaces_bg_music, end_trigger, replaces_encounter_music
 `
 
 type CreateCueParams struct {
 	DataHash               string
+	SongID                 int32
 	SceneDescription       string
-	AreaID                 sql.NullInt32
+	TriggerAreaID          sql.NullInt32
 	ReplacesBgMusic        NullBgReplacementType
 	EndTrigger             sql.NullString
 	ReplacesEncounterMusic bool
@@ -54,8 +55,9 @@ type CreateCueParams struct {
 func (q *Queries) CreateCue(ctx context.Context, arg CreateCueParams) (Cue, error) {
 	row := q.db.QueryRowContext(ctx, createCue,
 		arg.DataHash,
+		arg.SongID,
 		arg.SceneDescription,
-		arg.AreaID,
+		arg.TriggerAreaID,
 		arg.ReplacesBgMusic,
 		arg.EndTrigger,
 		arg.ReplacesEncounterMusic,
@@ -64,8 +66,9 @@ func (q *Queries) CreateCue(ctx context.Context, arg CreateCueParams) (Cue, erro
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
+		&i.SongID,
 		&i.SceneDescription,
-		&i.AreaID,
+		&i.TriggerAreaID,
 		&i.ReplacesBgMusic,
 		&i.EndTrigger,
 		&i.ReplacesEncounterMusic,
@@ -219,25 +222,19 @@ func (q *Queries) CreateSongsBackgroundMusicJunction(ctx context.Context, arg Cr
 }
 
 const createSongsCuesJunction = `-- name: CreateSongsCuesJunction :exec
-INSERT INTO j_songs_cues (data_hash, song_id, cue_id, area_id)
-VALUES ($1, $2, $3, $4)
+INSERT INTO j_songs_cues (data_hash, cue_id, included_area_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
 type CreateSongsCuesJunctionParams struct {
-	DataHash string
-	SongID   int32
-	CueID    int32
-	AreaID   int32
+	DataHash       string
+	CueID          int32
+	IncludedAreaID int32
 }
 
 func (q *Queries) CreateSongsCuesJunction(ctx context.Context, arg CreateSongsCuesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createSongsCuesJunction,
-		arg.DataHash,
-		arg.SongID,
-		arg.CueID,
-		arg.AreaID,
-	)
+	_, err := q.db.ExecContext(ctx, createSongsCuesJunction, arg.DataHash, arg.CueID, arg.IncludedAreaID)
 	return err
 }
 

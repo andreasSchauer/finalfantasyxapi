@@ -1,8 +1,6 @@
 package main
 
 import (
-	"database/sql"
-	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -25,6 +23,12 @@ type Area struct {
 	HasCompSphere		bool					`json:"has_comp_sphere"`
 	CanRideChocobo		bool					`json:"can_ride_chocobo"`
 	ConnectedAreas		[]AreaConnection		`json:"connected_areas"`
+	Shops				[]UnnamedAPIResource	`json:"shops"`
+	Treasures			[]UnnamedAPIResource	`json:"treasures"`
+	Monsters			[]NamedAPIResource		`json:"monsters"`
+	Formations			[]UnnamedAPIResource	`json:"formations"`
+	Music				Music					`json:"music"`
+	FMVs				[]NamedAPIResource		`json:"fmvs"`
 }
 
 
@@ -33,6 +37,14 @@ type AreaConnection struct {
 	ConnectionType	NamedAPIResource			`json:"connection_type"`
 	StoryOnly		bool						`json:"story_only"`
 	Notes			*string						`json:"notes,omitempty"`
+}
+
+
+type Music struct {
+	BackgroundMusic		[]NamedAPIResource		`json:"background_music"`
+	Cues				[]NamedAPIResource		`json:"cues"`
+	FMVs				[]NamedAPIResource		`json:"fmvs"`
+	BossFights			[]NamedAPIResource		`json:"boss_fights"`
 }
 
 
@@ -111,7 +123,39 @@ func (cfg *apiConfig) getArea(r *http.Request, id int32) (Area, error) {
 		return Area{}, newHTTPError(http.StatusNotFound, "Couldn't get Area. Area with this ID doesn't exist.", err)
 	}
 
-	connections, err := cfg.getConnectedAreas(r, dbArea)
+	locArea := newLocationArea(h.NullStringToVal(dbArea.Location), h.NullStringToVal(dbArea.Sublocation), dbArea.Name, h.NullInt32ToPtr(dbArea.Version))
+
+	connections, err := cfg.getAreaConnectedAreas(r, dbArea, locArea)
+	if err != nil {
+		return Area{}, err
+	}
+
+	shops, err := cfg.getAreaShops(r, dbArea, locArea)
+	if err != nil {
+		return Area{}, err
+	}
+
+	treasures, err := cfg.getAreaTreasures(r, dbArea, locArea)
+	if err != nil {
+		return Area{}, err
+	}
+
+	monsters, err := cfg.getAreaMonsters(r, dbArea, locArea)
+	if err != nil {
+		return Area{}, err
+	}
+
+	formations, err := cfg.getAreaFormations(r, dbArea, locArea)
+	if err != nil {
+		return Area{}, err
+	}
+
+	music, err := cfg.getAreaMusic(r, dbArea, locArea)
+	if err != nil {
+		return Area{}, err
+	}
+
+	fmvs, err := cfg.getAreaFMVs(r, dbArea, locArea)
 	if err != nil {
 		return Area{}, err
 	}
@@ -133,20 +177,140 @@ func (cfg *apiConfig) getArea(r *http.Request, id int32) (Area, error) {
 		HasCompSphere: 		dbArea.HasCompilationSphere,
 		CanRideChocobo: 	dbArea.CanRideChocobo,
 		ConnectedAreas: 	connections,
+		Shops: 				shops,
+		Treasures: 			treasures,
+		Monsters: 			monsters,
+		Formations: 		formations,
+		Music: 				music,
+		FMVs: 				fmvs,
 	}
 
 	return area, nil
 }
 
 
-func (cfg *apiConfig) getConnectedAreas(r *http.Request, area database.GetAreaRow) ([]AreaConnection, error) {
-	locArea := newLocationArea(h.NullStringToVal(area.Location), h.NullStringToVal(area.Sublocation), area.Name, h.NullInt32ToPtr(area.Version))
+func (cfg *apiConfig) getAreaFMVs(r *http.Request, area database.GetAreaRow, locArea LocationArea) ([]NamedAPIResource, error) {
+	dbFMVs, err := cfg.db.GetAreaFMVs(r.Context(), area.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get FMVs of %s", locArea.Error()), err)
+	}
+
+	fmvs := createNamedAPIResourcesSimple(cfg, dbFMVs, "fmvs", func(fmv database.GetAreaFMVsRow) (int32, string) {
+		return fmv.ID, fmv.Name
+	})
+
+	return fmvs, nil
+}
+
+
+func (cfg *apiConfig) getAreaMusic(r *http.Request, area database.GetAreaRow, locArea LocationArea) (Music, error) {
+	dbSongsCues, err := cfg.db.GetAreaCues(r.Context(), area.ID)
+	if err != nil {
+		return Music{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get cues of %s", locArea.Error()), err)
+	}
+
+	songsCues := createNamedAPIResourcesSimple(cfg, dbSongsCues, "songs", func(song database.GetAreaCuesRow) (int32, string) {
+		return h.NullInt32ToVal(song.ID), h.NullStringToVal(song.Name)
+	})
+
+	dbSongsBM, err := cfg.db.GetAreaBackgroundMusic(r.Context(), area.ID)
+	if err != nil {
+		return Music{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get background music of %s", locArea.Error()), err)
+	}
+
+	songsBM := createNamedAPIResourcesSimple(cfg, dbSongsBM, "songs", func(song database.GetAreaBackgroundMusicRow) (int32, string) {
+		return h.NullInt32ToVal(song.ID), h.NullStringToVal(song.Name)
+	})
+
+	dbSongsFMVs, err := cfg.db.GetAreaFMVSongs(r.Context(), area.ID)
+	if err != nil {
+		return Music{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get fmv music of %s", locArea.Error()), err)
+	}
+
+	songsFMVs := createNamedAPIResourcesSimple(cfg, dbSongsFMVs, "songs", func(song database.GetAreaFMVSongsRow) (int32, string) {
+		return song.ID, song.Name
+	})
+
+	dbSongsBossFights, err := cfg.db.GetAreaBossSongs(r.Context(), area.ID)
+	if err != nil {
+		return Music{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get boss fight songs of %s", locArea.Error()), err)
+	}
+
+	songsBossFights := createNamedAPIResourcesSimple(cfg, dbSongsBossFights, "songs", func(song database.GetAreaBossSongsRow) (int32, string) {
+		return song.ID, song.Name
+	})
+
+	music := Music{
+		Cues: 				songsCues,
+		BackgroundMusic: 	songsBM,
+		FMVs: 				songsFMVs,
+		BossFights: 		songsBossFights,
+	}
+
+	return music, nil
+}
+
+
+func (cfg *apiConfig) getAreaFormations(r *http.Request, area database.GetAreaRow, locArea LocationArea) ([]UnnamedAPIResource, error) {
+	dbFormations, err := cfg.db.GetAreaMonsterFormations(r.Context(), area.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get monster formations of %s", locArea.Error()), err)
+	}
+
+	formations := createUnnamedAPIResources(cfg, dbFormations, "monster-formations", func(formation database.GetAreaMonsterFormationsRow)(int32) {
+		return formation.ID
+	})
+
+	return formations, err
+}
+
+
+func (cfg *apiConfig) getAreaMonsters(r *http.Request, area database.GetAreaRow, locArea LocationArea) ([]NamedAPIResource, error) {
+	dbMons, err := cfg.db.GetAreaMonsters(r.Context(), area.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get monsters of %s", locArea.Error()), err)
+	}
+
+	mons := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.GetAreaMonstersRow) (int32, string, *int32, *string) {
+		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
+	})
+
+	return mons, nil
+}
+
+
+func (cfg *apiConfig) getAreaShops(r *http.Request, area database.GetAreaRow, locArea LocationArea) ([]UnnamedAPIResource, error) {
+	dbShops, err := cfg.db.GetAreaShops(r.Context(), area.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get shops of %s", locArea.Error()), err)
+	}
+
+	shops := createUnnamedAPIResources(cfg, dbShops, "shops", func(shop database.Shop)(int32) {
+		return shop.ID
+	})
+
+	return shops, nil
+}
+
+
+func (cfg *apiConfig) getAreaTreasures(r *http.Request, area database.GetAreaRow, locArea LocationArea) ([]UnnamedAPIResource, error) {
+	dbTreasures, err := cfg.db.GetAreaTreasures(r.Context(), area.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get treasures of %s", locArea.Error()), err)
+	}
+
+	treasures := createUnnamedAPIResources(cfg, dbTreasures, "treasures", func(treasure database.Treasure)(int32) {
+		return treasure.ID
+	})
+
+	return treasures, nil
+}
+
+
+func (cfg *apiConfig) getAreaConnectedAreas(r *http.Request, area database.GetAreaRow, locArea LocationArea) ([]AreaConnection, error) {
 	dbConnAreas, err := cfg.db.GetAreaConnections(r.Context(), area.ID)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
-		}
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve connected areas of %s", locArea.Error()), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get connected areas of %s", locArea.Error()), err)
 	}
 
 	connectedAreas := []AreaConnection{}

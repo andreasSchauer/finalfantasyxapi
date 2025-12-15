@@ -274,12 +274,12 @@ func (cfg *apiConfig) getMonstersLocation(r *http.Request, inputMons []NamedAPIR
 		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid location: %s. location doesn't exist. use /api/locations to see existing locations", query), err)
 	}
 
-	dbMons, err := cfg.db.GetMonstersByLocation(r.Context(), location.ID)
+	dbMons, err := cfg.db.GetLocationMonsters(r.Context(), location.ID)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by location", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.GetLocationMonstersRow) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -301,12 +301,12 @@ func (cfg *apiConfig) getMonstersSubLocation(r *http.Request, inputMons []NamedA
 		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid sublocation: %s. sublocation doesn't exist. use /api/sublocations to see existing sublocations.", query), err)
 	}
 
-	dbMons, err := cfg.db.GetMonstersBySubLocation(r.Context(), sublocation.ID)
+	dbMons, err := cfg.db.GetSublocationMonsters(r.Context(), sublocation.ID)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by sublocation", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.GetSublocationMonstersRow) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -333,12 +333,12 @@ func (cfg *apiConfig) getMonstersArea(r *http.Request, inputMons []NamedAPIResou
 		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid area: %d. area doesn't exist. use /api/areas to see existing sublocations.", area_id), err)
 	}
 
-	dbMons, err := cfg.db.GetMonstersByArea(r.Context(), int32(area_id))
+	dbMons, err := cfg.db.GetAreaMonsters(r.Context(), int32(area_id))
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by area", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.GetAreaMonstersRow) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 

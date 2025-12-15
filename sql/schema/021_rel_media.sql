@@ -22,8 +22,9 @@ CREATE TABLE j_songs_background_music (
 CREATE TABLE cues (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
+    song_id INTEGER NOT NULL REFERENCES songs(id),
     scene_description TEXT NOT NULL,
-    area_id INTEGER REFERENCES areas(id),
+    trigger_area_id INTEGER REFERENCES areas(id),
     replaces_bg_music bg_replacement_type,
     end_trigger TEXT,
     replaces_encounter_music bool NOT NULL
@@ -33,9 +34,8 @@ CREATE TABLE cues (
 CREATE TABLE j_songs_cues (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    song_id INTEGER NOT NULL REFERENCES songs(id),
     cue_id INTEGER NOT NULL REFERENCES cues(id),
-    area_id INTEGER NOT NULL REFERENCES areas(id)
+    included_area_id INTEGER NOT NULL REFERENCES areas(id)
 );
 
 

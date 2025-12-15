@@ -116,6 +116,7 @@ func (j SongAreaJunction) ToHashFields() []any {
 
 type Cue struct {
 	ID                     int32
+	SongID				   int32
 	SceneDescription       string         `json:"scene_description"`
 	TriggerLocationArea    *LocationArea  `json:"trigger_location_area"`
 	IncludedAreas          []LocationArea `json:"included_areas"`
@@ -127,6 +128,7 @@ type Cue struct {
 func (c Cue) ToHashFields() []any {
 	return []any{
 		c.SceneDescription,
+		c.SongID,
 		h.ObjPtrToID(c.TriggerLocationArea),
 		h.DerefOrNil(c.ReplacesBGMusic),
 		h.DerefOrNil(c.EndTrigger),
@@ -139,7 +141,7 @@ func (c Cue) GetID() int32 {
 }
 
 func (c Cue) Error() string {
-	return fmt.Sprintf("cue for scene: %s at %v, replaces bg music: %v with end trigger: %v, replaces encounter music: %t", c.SceneDescription, h.DerefOrNil(c.TriggerLocationArea), h.DerefOrNil(c.ReplacesBGMusic), h.DerefOrNil(c.EndTrigger), c.ReplacesEncounterMusic)
+	return fmt.Sprintf("cue for scene: %s at %v, with song id: %d", c.SceneDescription, h.DerefOrNil(c.TriggerLocationArea), c.SongID)
 }
 
 func (l *Lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
@@ -275,26 +277,24 @@ func (l *Lookup) seedBackgroundMusicEntries(qtx *database.Queries, song Song) er
 
 func (l *Lookup) seedCues(qtx *database.Queries, song Song) error {
 	for _, cue := range song.Cues {
-		junction, err := createJunctionSeed(qtx, song, cue, l.seedCue)
+		cue.SongID = song.ID
+		cue, err := l.seedCue(qtx, cue)
 		if err != nil {
-			return err
+			return h.GetErr(cue.Error(), err)
 		}
 
 		for _, locationArea := range cue.IncludedAreas {
 			var err error
 
-			saJunction := SongAreaJunction{}
-			saJunction.Junction = junction
-			saJunction.AreaID, err = assignFK(locationArea, l.Areas)
+			junction, err := createJunction(cue, locationArea, l.Areas)
 			if err != nil {
-				return h.GetErr(cue.Error(), err)
+				return err
 			}
 
 			err = qtx.CreateSongsCuesJunction(context.Background(), database.CreateSongsCuesJunctionParams{
-				DataHash: generateDataHash(saJunction),
-				SongID:   saJunction.ParentID,
-				CueID:    saJunction.ChildID,
-				AreaID:   saJunction.AreaID,
+				DataHash: generateDataHash(junction),
+				CueID:   			junction.ParentID,
+				IncludedAreaID:    	junction.ChildID,
 			})
 			if err != nil {
 				return h.GetErr(cue.Error(), err, "couldn't junction cue")
@@ -332,8 +332,9 @@ func (l *Lookup) seedCue(qtx *database.Queries, cue Cue) (Cue, error) {
 
 	dbCue, err := qtx.CreateCue(context.Background(), database.CreateCueParams{
 		DataHash:               generateDataHash(cue),
+		SongID: 				cue.SongID,
 		SceneDescription:       cue.SceneDescription,
-		AreaID:                 h.ObjPtrToNullInt32ID(cue.TriggerLocationArea),
+		TriggerAreaID:          h.ObjPtrToNullInt32ID(cue.TriggerLocationArea),
 		ReplacesBgMusic:        h.NullBgReplacementType(cue.ReplacesBGMusic),
 		EndTrigger:             h.GetNullString(cue.EndTrigger),
 		ReplacesEncounterMusic: cue.ReplacesEncounterMusic,

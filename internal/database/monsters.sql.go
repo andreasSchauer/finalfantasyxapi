@@ -1993,68 +1993,6 @@ func (q *Queries) GetMonsters(ctx context.Context) ([]Monster, error) {
 	return items, nil
 }
 
-const getMonstersByArea = `-- name: GetMonstersByArea :many
-SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text FROM monsters m
-LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
-LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
-LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
-WHERE el.area_id = $1
-`
-
-func (q *Queries) GetMonstersByArea(ctx context.Context, areaID int32) ([]Monster, error) {
-	rows, err := q.db.QueryContext(ctx, getMonstersByArea, areaID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Monster
-	for rows.Next() {
-		var i Monster
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.Version,
-			&i.Specification,
-			&i.Notes,
-			&i.Species,
-			&i.IsStoryBased,
-			&i.IsRepeatable,
-			&i.CanBeCaptured,
-			&i.AreaConquestLocation,
-			&i.CtbIconType,
-			&i.HasOverdrive,
-			&i.IsUnderwater,
-			&i.IsZombie,
-			&i.Distance,
-			&i.Ap,
-			&i.ApOverkill,
-			&i.OverkillDamage,
-			&i.Gil,
-			&i.StealGil,
-			&i.DoomCountdown,
-			&i.PoisonRate,
-			&i.ThreatenChance,
-			&i.ZanmatoLevel,
-			&i.MonsterArenaPrice,
-			&i.SensorText,
-			&i.ScanText,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getMonstersByAutoAbilityIDs = `-- name: GetMonstersByAutoAbilityIDs :many
 SELECT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
@@ -3018,70 +2956,6 @@ func (q *Queries) GetMonstersByItemSteal(ctx context.Context, itemID int32) ([]M
 	return items, nil
 }
 
-const getMonstersByLocation = `-- name: GetMonstersByLocation :many
-SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text FROM monsters m
-LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
-LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
-LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
-LEFT JOIN areas a ON el.area_id = a.id
-LEFT JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.location_id = $1
-`
-
-func (q *Queries) GetMonstersByLocation(ctx context.Context, locationID int32) ([]Monster, error) {
-	rows, err := q.db.QueryContext(ctx, getMonstersByLocation, locationID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Monster
-	for rows.Next() {
-		var i Monster
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.Version,
-			&i.Specification,
-			&i.Notes,
-			&i.Species,
-			&i.IsStoryBased,
-			&i.IsRepeatable,
-			&i.CanBeCaptured,
-			&i.AreaConquestLocation,
-			&i.CtbIconType,
-			&i.HasOverdrive,
-			&i.IsUnderwater,
-			&i.IsZombie,
-			&i.Distance,
-			&i.Ap,
-			&i.ApOverkill,
-			&i.OverkillDamage,
-			&i.Gil,
-			&i.StealGil,
-			&i.DoomCountdown,
-			&i.PoisonRate,
-			&i.ThreatenChance,
-			&i.ZanmatoLevel,
-			&i.MonsterArenaPrice,
-			&i.SensorText,
-			&i.ScanText,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getMonstersByMaCreationArea = `-- name: GetMonstersByMaCreationArea :many
 SELECT id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE area_conquest_location = $1
 `
@@ -3349,69 +3223,6 @@ type GetMonstersByStatusResistsParams struct {
 
 func (q *Queries) GetMonstersByStatusResists(ctx context.Context, arg GetMonstersByStatusResistsParams) ([]Monster, error) {
 	rows, err := q.db.QueryContext(ctx, getMonstersByStatusResists, pq.Array(arg.StatusConditionIds), arg.MinResistance)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Monster
-	for rows.Next() {
-		var i Monster
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.Version,
-			&i.Specification,
-			&i.Notes,
-			&i.Species,
-			&i.IsStoryBased,
-			&i.IsRepeatable,
-			&i.CanBeCaptured,
-			&i.AreaConquestLocation,
-			&i.CtbIconType,
-			&i.HasOverdrive,
-			&i.IsUnderwater,
-			&i.IsZombie,
-			&i.Distance,
-			&i.Ap,
-			&i.ApOverkill,
-			&i.OverkillDamage,
-			&i.Gil,
-			&i.StealGil,
-			&i.DoomCountdown,
-			&i.PoisonRate,
-			&i.ThreatenChance,
-			&i.ZanmatoLevel,
-			&i.MonsterArenaPrice,
-			&i.SensorText,
-			&i.ScanText,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMonstersBySubLocation = `-- name: GetMonstersBySubLocation :many
-SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text FROM monsters m
-LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
-LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
-LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
-LEFT JOIN areas a ON el.area_id = a.id
-WHERE a.sublocation_id = $1
-`
-
-func (q *Queries) GetMonstersBySubLocation(ctx context.Context, sublocationID int32) ([]Monster, error) {
-	rows, err := q.db.QueryContext(ctx, getMonstersBySubLocation, sublocationID)
 	if err != nil {
 		return nil, err
 	}
