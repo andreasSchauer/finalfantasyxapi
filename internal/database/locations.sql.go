@@ -597,9 +597,85 @@ func (q *Queries) GetArea(ctx context.Context, id int32) (GetAreaRow, error) {
 	return i, err
 }
 
+const getAreaAeons = `-- name: GetAreaAeons :many
+SELECT
+    ae.id, ae.data_hash, ae.unit_id, ae.unlock_condition, ae.is_optional, ae.battles_to_regenerate, ae.phys_atk_damage_constant, ae.phys_atk_range, ae.phys_atk_shatter_rate, ae.area_id, ae.accuracy_id,
+    pu.name,
+    l.name AS location,
+    s.name AS sublocation,
+    a.name AS area, a.version AS area_version
+FROM player_units pu
+LEFT JOIN aeons ae ON ae.unit_id = pu.id
+LEFT JOIN areas a ON ae.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+WHERE a.id = $1
+ORDER BY ae.id
+`
+
+type GetAreaAeonsRow struct {
+	ID                    sql.NullInt32
+	DataHash              sql.NullString
+	UnitID                sql.NullInt32
+	UnlockCondition       sql.NullString
+	IsOptional            sql.NullBool
+	BattlesToRegenerate   sql.NullInt32
+	PhysAtkDamageConstant sql.NullInt32
+	PhysAtkRange          interface{}
+	PhysAtkShatterRate    interface{}
+	AreaID                sql.NullInt32
+	AccuracyID            sql.NullInt32
+	Name                  string
+	Location              sql.NullString
+	Sublocation           sql.NullString
+	Area                  sql.NullString
+	AreaVersion           sql.NullInt32
+}
+
+func (q *Queries) GetAreaAeons(ctx context.Context, id int32) ([]GetAreaAeonsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaAeons, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAreaAeonsRow
+	for rows.Next() {
+		var i GetAreaAeonsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.UnitID,
+			&i.UnlockCondition,
+			&i.IsOptional,
+			&i.BattlesToRegenerate,
+			&i.PhysAtkDamageConstant,
+			&i.PhysAtkRange,
+			&i.PhysAtkShatterRate,
+			&i.AreaID,
+			&i.AccuracyID,
+			&i.Name,
+			&i.Location,
+			&i.Sublocation,
+			&i.Area,
+			&i.AreaVersion,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAreaBackgroundMusic = `-- name: GetAreaBackgroundMusic :many
 SELECT
     so.id, so.data_hash, so.name, so.streaming_name, so.in_game_name, so.ost_name, so.translation, so.streaming_track_number, so.music_sphere_id, so.ost_disc, so.ost_track_number, so.duration_in_seconds, so.can_loop, so.special_use_case, so.credits_id,
+    bm.replaces_encounter_music,
     l.name AS location,
     s.name As sublocation,
     a.name AS area,
@@ -615,25 +691,26 @@ ORDER BY so.id
 `
 
 type GetAreaBackgroundMusicRow struct {
-	ID                   sql.NullInt32
-	DataHash             sql.NullString
-	Name                 sql.NullString
-	StreamingName        sql.NullString
-	InGameName           sql.NullString
-	OstName              sql.NullString
-	Translation          sql.NullString
-	StreamingTrackNumber sql.NullInt32
-	MusicSphereID        sql.NullInt32
-	OstDisc              interface{}
-	OstTrackNumber       sql.NullInt32
-	DurationInSeconds    sql.NullInt32
-	CanLoop              sql.NullBool
-	SpecialUseCase       NullMusicUseCase
-	CreditsID            sql.NullInt32
-	Location             sql.NullString
-	Sublocation          sql.NullString
-	Area                 sql.NullString
-	AreaVersion          sql.NullInt32
+	ID                     sql.NullInt32
+	DataHash               sql.NullString
+	Name                   sql.NullString
+	StreamingName          sql.NullString
+	InGameName             sql.NullString
+	OstName                sql.NullString
+	Translation            sql.NullString
+	StreamingTrackNumber   sql.NullInt32
+	MusicSphereID          sql.NullInt32
+	OstDisc                interface{}
+	OstTrackNumber         sql.NullInt32
+	DurationInSeconds      sql.NullInt32
+	CanLoop                sql.NullBool
+	SpecialUseCase         NullMusicUseCase
+	CreditsID              sql.NullInt32
+	ReplacesEncounterMusic bool
+	Location               sql.NullString
+	Sublocation            sql.NullString
+	Area                   sql.NullString
+	AreaVersion            sql.NullInt32
 }
 
 func (q *Queries) GetAreaBackgroundMusic(ctx context.Context, areaID int32) ([]GetAreaBackgroundMusicRow, error) {
@@ -661,6 +738,7 @@ func (q *Queries) GetAreaBackgroundMusic(ctx context.Context, areaID int32) ([]G
 			&i.CanLoop,
 			&i.SpecialUseCase,
 			&i.CreditsID,
+			&i.ReplacesEncounterMusic,
 			&i.Location,
 			&i.Sublocation,
 			&i.Area,
@@ -763,6 +841,77 @@ func (q *Queries) GetAreaBossSongs(ctx context.Context, areaID int32) ([]GetArea
 	return items, nil
 }
 
+const getAreaCharacters = `-- name: GetAreaCharacters :many
+SELECT
+    c.id, c.data_hash, c.unit_id, c.story_only, c.weapon_type, c.armor_type, c.physical_attack_range, c.can_fight_underwater, c.area_id,
+    pu.name,
+    l.name AS location,
+    s.name AS sublocation,
+    a.name AS area, a.version AS area_version
+FROM player_units pu
+LEFT JOIN characters c ON c.unit_id = pu.id
+LEFT JOIN areas a ON c.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+WHERE a.id = $1
+ORDER BY c.id
+`
+
+type GetAreaCharactersRow struct {
+	ID                  sql.NullInt32
+	DataHash            sql.NullString
+	UnitID              sql.NullInt32
+	StoryOnly           sql.NullBool
+	WeaponType          NullWeaponType
+	ArmorType           NullArmorType
+	PhysicalAttackRange interface{}
+	CanFightUnderwater  sql.NullBool
+	AreaID              sql.NullInt32
+	Name                string
+	Location            sql.NullString
+	Sublocation         sql.NullString
+	Area                sql.NullString
+	AreaVersion         sql.NullInt32
+}
+
+func (q *Queries) GetAreaCharacters(ctx context.Context, id int32) ([]GetAreaCharactersRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaCharacters, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAreaCharactersRow
+	for rows.Next() {
+		var i GetAreaCharactersRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.UnitID,
+			&i.StoryOnly,
+			&i.WeaponType,
+			&i.ArmorType,
+			&i.PhysicalAttackRange,
+			&i.CanFightUnderwater,
+			&i.AreaID,
+			&i.Name,
+			&i.Location,
+			&i.Sublocation,
+			&i.Area,
+			&i.AreaVersion,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAreaConnections = `-- name: GetAreaConnections :many
 SELECT
     ac.id, ac.data_hash, ac.area_id, ac.connection_type, ac.story_only, ac.notes,
@@ -843,6 +992,7 @@ func (q *Queries) GetAreaCount(ctx context.Context) (int64, error) {
 const getAreaCues = `-- name: GetAreaCues :many
 SELECT DISTINCT
     so.id, so.data_hash, so.name, so.streaming_name, so.in_game_name, so.ost_name, so.translation, so.streaming_track_number, so.music_sphere_id, so.ost_disc, so.ost_track_number, so.duration_in_seconds, so.can_loop, so.special_use_case, so.credits_id,
+    c.replaces_encounter_music,
     l.name AS location,
     s.name AS sublocation,
     a.name AS area,
@@ -858,25 +1008,26 @@ ORDER BY so.id
 `
 
 type GetAreaCuesRow struct {
-	ID                   sql.NullInt32
-	DataHash             sql.NullString
-	Name                 sql.NullString
-	StreamingName        sql.NullString
-	InGameName           sql.NullString
-	OstName              sql.NullString
-	Translation          sql.NullString
-	StreamingTrackNumber sql.NullInt32
-	MusicSphereID        sql.NullInt32
-	OstDisc              interface{}
-	OstTrackNumber       sql.NullInt32
-	DurationInSeconds    sql.NullInt32
-	CanLoop              sql.NullBool
-	SpecialUseCase       NullMusicUseCase
-	CreditsID            sql.NullInt32
-	Location             sql.NullString
-	Sublocation          sql.NullString
-	Area                 sql.NullString
-	AreaVersion          sql.NullInt32
+	ID                     sql.NullInt32
+	DataHash               sql.NullString
+	Name                   sql.NullString
+	StreamingName          sql.NullString
+	InGameName             sql.NullString
+	OstName                sql.NullString
+	Translation            sql.NullString
+	StreamingTrackNumber   sql.NullInt32
+	MusicSphereID          sql.NullInt32
+	OstDisc                interface{}
+	OstTrackNumber         sql.NullInt32
+	DurationInSeconds      sql.NullInt32
+	CanLoop                sql.NullBool
+	SpecialUseCase         NullMusicUseCase
+	CreditsID              sql.NullInt32
+	ReplacesEncounterMusic bool
+	Location               sql.NullString
+	Sublocation            sql.NullString
+	Area                   sql.NullString
+	AreaVersion            sql.NullInt32
 }
 
 func (q *Queries) GetAreaCues(ctx context.Context, includedAreaID int32) ([]GetAreaCuesRow, error) {
@@ -904,6 +1055,7 @@ func (q *Queries) GetAreaCues(ctx context.Context, includedAreaID int32) ([]GetA
 			&i.CanLoop,
 			&i.SpecialUseCase,
 			&i.CreditsID,
+			&i.ReplacesEncounterMusic,
 			&i.Location,
 			&i.Sublocation,
 			&i.Area,
@@ -1226,6 +1378,66 @@ func (q *Queries) GetAreaMonsters(ctx context.Context, areaID int32) ([]GetAreaM
 			&i.MonsterArenaPrice,
 			&i.SensorText,
 			&i.ScanText,
+			&i.Location,
+			&i.Sublocation,
+			&i.Area,
+			&i.AreaVersion,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaQuests = `-- name: GetAreaQuests :many
+SELECT DISTINCT
+    q.id, q.data_hash, q.name, q.type,
+    l.name AS location,
+    s.name AS sublocation,
+    a.name AS area,
+    a.version AS area_version
+FROM completion_locations cl
+LEFT JOIN quest_completions qc ON cl.completion_id = qc.id
+LEFT JOIN quests q ON qc.quest_id = q.id
+LEFT JOIN areas a ON cl.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+WHERE cl.area_id = $1
+ORDER BY q.id
+`
+
+type GetAreaQuestsRow struct {
+	ID          sql.NullInt32
+	DataHash    sql.NullString
+	Name        sql.NullString
+	Type        NullQuestType
+	Location    sql.NullString
+	Sublocation sql.NullString
+	Area        sql.NullString
+	AreaVersion sql.NullInt32
+}
+
+func (q *Queries) GetAreaQuests(ctx context.Context, areaID int32) ([]GetAreaQuestsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaQuests, areaID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAreaQuestsRow
+	for rows.Next() {
+		var i GetAreaQuestsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.Name,
+			&i.Type,
 			&i.Location,
 			&i.Sublocation,
 			&i.Area,

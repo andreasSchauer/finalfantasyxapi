@@ -12,17 +12,20 @@ import (
 type Character struct {
 	ID int32
 	PlayerUnit
-	StoryOnly          bool       `json:"story_only"`
-	WeaponType         string     `json:"weapon_type"`
-	ArmorType          string     `json:"armor_type"`
-	PhysAtkRange       int32      `json:"physical_attack_range"`
-	CanFightUnderwater bool       `json:"can_fight_underwater"`
-	BaseStats          []BaseStat `json:"base_stats"`
+	LocationArea		LocationArea	`json:"location_area"`
+	AreaID              *int32
+	StoryOnly          	bool       		`json:"story_only"`
+	WeaponType         	string     		`json:"weapon_type"`
+	ArmorType          	string     		`json:"armor_type"`
+	PhysAtkRange       	int32      		`json:"physical_attack_range"`
+	CanFightUnderwater 	bool       		`json:"can_fight_underwater"`
+	BaseStats          	[]BaseStat 		`json:"base_stats"`
 }
 
 func (c Character) ToHashFields() []any {
 	return []any{
 		c.PlayerUnit.ID,
+		h.DerefOrNil(c.AreaID),
 		c.StoryOnly,
 		c.WeaponType,
 		c.ArmorType,
@@ -97,6 +100,20 @@ func (l *Lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.D
 			character, err := GetResource(jsonCharacter.Name, l.Characters)
 			if err != nil {
 				return err
+			}
+
+			character.AreaID, err = assignFKPtr(&character.LocationArea, l.Areas)
+			if err != nil {
+				return h.GetErr(character.Error(), err)
+			}
+
+			err = qtx.UpdateCharacter(context.Background(), database.UpdateCharacterParams{
+				DataHash:   generateDataHash(character),
+				AreaID:     h.GetNullInt32(character.AreaID),
+				ID:         character.ID,
+			})
+			if err != nil {
+				return h.GetErr(character.Error(), err, "couldn't update character")
 			}
 
 			err = l.seedCharacterBaseStats(qtx, character)

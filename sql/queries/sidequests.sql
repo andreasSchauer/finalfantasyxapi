@@ -26,10 +26,18 @@ RETURNING *;
 
 
 -- name: CreateSubquest :one
-INSERT INTO subquests (data_hash, quest_id, parent_sidequest_id)
+INSERT INTO subquests (data_hash, quest_id, sidequest_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = subquests.data_hash
 RETURNING *;
+
+
+-- name: GetParentSidequest :one
+SELECT q.*
+FROM subquests su
+LEFT JOIN sidequests si ON su.sidequest_id = si.id
+LEFT JOIN quests q ON si.quest_id = q.id
+WHERE su.id = $1;
 
 
 -- name: CreateQuestCompletion :one

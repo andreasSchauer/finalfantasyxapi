@@ -134,7 +134,7 @@ const createCharacter = `-- name: CreateCharacter :one
 INSERT INTO characters (data_hash, unit_id, story_only, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = characters.data_hash
-RETURNING id, data_hash, unit_id, story_only, weapon_type, armor_type, physical_attack_range, can_fight_underwater
+RETURNING id, data_hash, unit_id, story_only, weapon_type, armor_type, physical_attack_range, can_fight_underwater, area_id
 `
 
 type CreateCharacterParams struct {
@@ -167,6 +167,7 @@ func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams
 		&i.ArmorType,
 		&i.PhysicalAttackRange,
 		&i.CanFightUnderwater,
+		&i.AreaID,
 	)
 	return i, err
 }
@@ -305,5 +306,23 @@ func (q *Queries) UpdateAeon(ctx context.Context, arg UpdateAeonParams) error {
 		arg.AccuracyID,
 		arg.ID,
 	)
+	return err
+}
+
+const updateCharacter = `-- name: UpdateCharacter :exec
+UPDATE characters
+SET data_hash = $1,
+    area_id = $2
+WHERE id = $3
+`
+
+type UpdateCharacterParams struct {
+	DataHash string
+	AreaID   sql.NullInt32
+	ID       int32
+}
+
+func (q *Queries) UpdateCharacter(ctx context.Context, arg UpdateCharacterParams) error {
+	_, err := q.db.ExecContext(ctx, updateCharacter, arg.DataHash, arg.AreaID, arg.ID)
 	return err
 }

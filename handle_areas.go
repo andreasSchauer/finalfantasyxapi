@@ -1,12 +1,15 @@
 package main
 
 import (
+	//"database/sql"
+	//"errors"
 	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 
@@ -23,11 +26,14 @@ type Area struct {
 	HasCompSphere		bool					`json:"has_comp_sphere"`
 	CanRideChocobo		bool					`json:"can_ride_chocobo"`
 	ConnectedAreas		[]AreaConnection		`json:"connected_areas"`
+	Characters			[]NamedAPIResource		`json:"characters"`
+	Aeons				[]NamedAPIResource		`json:"aeons"`
 	Shops				[]UnnamedAPIResource	`json:"shops"`
 	Treasures			[]UnnamedAPIResource	`json:"treasures"`
 	Monsters			[]NamedAPIResource		`json:"monsters"`
 	Formations			[]UnnamedAPIResource	`json:"formations"`
-	Music				Music					`json:"music"`
+	Sidequest			*NamedAPIResource		`json:"sidequest"`
+	Music				*Music					`json:"music"`
 	FMVs				[]NamedAPIResource		`json:"fmvs"`
 }
 
@@ -41,10 +47,22 @@ type AreaConnection struct {
 
 
 type Music struct {
-	BackgroundMusic		[]NamedAPIResource		`json:"background_music"`
-	Cues				[]NamedAPIResource		`json:"cues"`
+	BackgroundMusic		[]LocationSong			`json:"background_music"`
+	Cues				[]LocationSong			`json:"cues"`
 	FMVs				[]NamedAPIResource		`json:"fmvs"`
 	BossFights			[]NamedAPIResource		`json:"boss_fights"`
+}
+
+func (m Music) IsZero() bool {
+	return 	len(m.BackgroundMusic) == 0 &&
+			len(m.Cues) == 0 &&
+			len(m.FMVs) == 0 &&
+			len(m.BossFights) == 0
+}
+
+type LocationSong struct {
+	Song					NamedAPIResource	`json:"song"`
+	ReplacesEncounterMusic 	bool				`json:"replaces_encounter_music"`
 }
 
 
@@ -130,6 +148,16 @@ func (cfg *apiConfig) getArea(r *http.Request, id int32) (Area, error) {
 		return Area{}, err
 	}
 
+	characters, err := cfg.getAreaCharacters(r, dbArea, locArea)
+	if err != nil {
+		return Area{}, err
+	}
+
+	aeons, err := cfg.getAreaAeons(r, dbArea, locArea)
+	if err != nil {
+		return Area{}, err
+	}
+
 	shops, err := cfg.getAreaShops(r, dbArea, locArea)
 	if err != nil {
 		return Area{}, err
@@ -146,6 +174,11 @@ func (cfg *apiConfig) getArea(r *http.Request, id int32) (Area, error) {
 	}
 
 	formations, err := cfg.getAreaFormations(r, dbArea, locArea)
+	if err != nil {
+		return Area{}, err
+	}
+
+	sidequest, err := cfg.getAreaSidequest(r, dbArea, locArea)
 	if err != nil {
 		return Area{}, err
 	}
@@ -177,15 +210,46 @@ func (cfg *apiConfig) getArea(r *http.Request, id int32) (Area, error) {
 		HasCompSphere: 		dbArea.HasCompilationSphere,
 		CanRideChocobo: 	dbArea.CanRideChocobo,
 		ConnectedAreas: 	connections,
+		Characters: 		characters,
+		Aeons: 				aeons,
 		Shops: 				shops,
 		Treasures: 			treasures,
 		Monsters: 			monsters,
 		Formations: 		formations,
-		Music: 				music,
+		Sidequest: 			h.NilOrPtr(sidequest),
+		Music: 				h.NilOrPtr(music),
 		FMVs: 				fmvs,
 	}
 
 	return area, nil
+}
+
+
+func (cfg *apiConfig) getAreaCharacters(r *http.Request, area database.GetAreaRow, locArea LocationArea) ([]NamedAPIResource, error) {
+	dbChars, err := cfg.db.GetAreaCharacters(r.Context(), area.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get Aeons of %s", locArea.Error()), err)
+	}
+
+	chars := createNamedAPIResourcesSimple(cfg, dbChars, "characters", func(char database.GetAreaCharactersRow) (int32, string) {
+		return h.NullInt32ToVal(char.ID), char.Name
+	})
+
+	return chars, nil
+}
+
+
+func (cfg *apiConfig) getAreaAeons(r *http.Request, area database.GetAreaRow, locArea LocationArea) ([]NamedAPIResource, error) {
+	dbAeons, err := cfg.db.GetAreaAeons(r.Context(), area.ID)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get Aeons of %s", locArea.Error()), err)
+	}
+
+	aeons := createNamedAPIResourcesSimple(cfg, dbAeons, "aeons", func(aeon database.GetAreaAeonsRow) (int32, string) {
+		return h.NullInt32ToVal(aeon.ID), aeon.Name
+	})
+
+	return aeons, nil
 }
 
 
@@ -204,24 +268,44 @@ func (cfg *apiConfig) getAreaFMVs(r *http.Request, area database.GetAreaRow, loc
 
 
 func (cfg *apiConfig) getAreaMusic(r *http.Request, area database.GetAreaRow, locArea LocationArea) (Music, error) {
-	dbSongsCues, err := cfg.db.GetAreaCues(r.Context(), area.ID)
+	dbCues, err := cfg.db.GetAreaCues(r.Context(), area.ID)
 	if err != nil {
 		return Music{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get cues of %s", locArea.Error()), err)
 	}
 
-	songsCues := createNamedAPIResourcesSimple(cfg, dbSongsCues, "songs", func(song database.GetAreaCuesRow) (int32, string) {
-		return h.NullInt32ToVal(song.ID), h.NullStringToVal(song.Name)
-	})
+	songsCues := []LocationSong{}
 
-	dbSongsBM, err := cfg.db.GetAreaBackgroundMusic(r.Context(), area.ID)
+	for _, cue := range dbCues {
+		song := cfg.newNamedAPIResourceSimple("songs", h.NullInt32ToVal(cue.ID), h.NullStringToVal(cue.Name))
+
+		locationSong := LocationSong{
+			Song: 					song,
+			ReplacesEncounterMusic: cue.ReplacesEncounterMusic,
+		}
+
+		songsCues = append(songsCues, locationSong)
+	}
+
+
+	dbBm, err := cfg.db.GetAreaBackgroundMusic(r.Context(), area.ID)
 	if err != nil {
 		return Music{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get background music of %s", locArea.Error()), err)
 	}
 
-	songsBM := createNamedAPIResourcesSimple(cfg, dbSongsBM, "songs", func(song database.GetAreaBackgroundMusicRow) (int32, string) {
-		return h.NullInt32ToVal(song.ID), h.NullStringToVal(song.Name)
-	})
+	songsBM := []LocationSong{}
 
+	for _, bm := range dbBm {
+		song := cfg.newNamedAPIResourceSimple("songs", h.NullInt32ToVal(bm.ID), h.NullStringToVal(bm.Name))
+
+		locationSong := LocationSong{
+			Song: 					song,
+			ReplacesEncounterMusic: bm.ReplacesEncounterMusic,
+		}
+
+		songsBM = append(songsBM, locationSong)
+	}
+
+	
 	dbSongsFMVs, err := cfg.db.GetAreaFMVSongs(r.Context(), area.ID)
 	if err != nil {
 		return Music{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get fmv music of %s", locArea.Error()), err)
@@ -230,6 +314,7 @@ func (cfg *apiConfig) getAreaMusic(r *http.Request, area database.GetAreaRow, lo
 	songsFMVs := createNamedAPIResourcesSimple(cfg, dbSongsFMVs, "songs", func(song database.GetAreaFMVSongsRow) (int32, string) {
 		return song.ID, song.Name
 	})
+
 
 	dbSongsBossFights, err := cfg.db.GetAreaBossSongs(r.Context(), area.ID)
 	if err != nil {
@@ -240,6 +325,7 @@ func (cfg *apiConfig) getAreaMusic(r *http.Request, area database.GetAreaRow, lo
 		return song.ID, song.Name
 	})
 
+
 	music := Music{
 		Cues: 				songsCues,
 		BackgroundMusic: 	songsBM,
@@ -248,6 +334,44 @@ func (cfg *apiConfig) getAreaMusic(r *http.Request, area database.GetAreaRow, lo
 	}
 
 	return music, nil
+}
+
+
+func (cfg *apiConfig) getAreaSidequest(r *http.Request, area database.GetAreaRow, locArea LocationArea) (NamedAPIResource, error) {
+	dbQuests, err := cfg.db.GetAreaQuests(r.Context(), area.ID)
+	if err != nil {
+		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get quests of %s", locArea.Error()), err)
+	}
+	if len(dbQuests) == 0 {
+		return NamedAPIResource{}, nil
+	}
+
+	potentialSidequest := dbQuests[0]
+	questName := h.NullStringToVal(potentialSidequest.Name)
+
+	if potentialSidequest.Type.QuestType != database.QuestTypeSidequest {
+		subquestName := questName
+		subquest, err := seeding.GetResource(subquestName, cfg.l.Subquests)
+		if err != nil {
+			return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
+		}
+
+		dbSidequest, err := cfg.db.GetParentSidequest(r.Context(), subquest.ID)
+		if err != nil {
+			return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get parent sidequest of %s", h.NullStringToVal(potentialSidequest.Name)), err)
+		}
+
+		questName = h.NullStringToVal(dbSidequest.Name)
+	} 
+
+	sidequest, err := seeding.GetResource(questName, cfg.l.Sidequests)
+	if err != nil {
+		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
+	}
+
+	resource := cfg.newNamedAPIResourceSimple("sidequests", sidequest.ID, sidequest.Name)
+
+	return resource, nil
 }
 
 

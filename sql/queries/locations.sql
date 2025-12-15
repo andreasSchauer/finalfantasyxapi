@@ -78,6 +78,38 @@ WHERE j.area_id = $1
 ORDER BY ac.id;
 
 
+-- name: GetAreaCharacters :many
+SELECT
+    c.*,
+    pu.name,
+    l.name AS location,
+    s.name AS sublocation,
+    a.name AS area, a.version AS area_version
+FROM player_units pu
+LEFT JOIN characters c ON c.unit_id = pu.id
+LEFT JOIN areas a ON c.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+WHERE a.id = $1
+ORDER BY c.id;
+
+
+-- name: GetAreaAeons :many
+SELECT
+    ae.*,
+    pu.name,
+    l.name AS location,
+    s.name AS sublocation,
+    a.name AS area, a.version AS area_version
+FROM player_units pu
+LEFT JOIN aeons ae ON ae.unit_id = pu.id
+LEFT JOIN areas a ON ae.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+WHERE a.id = $1
+ORDER BY ae.id;
+
+
 -- name: GetAreaShops :many
 SELECT * FROM shops WHERE area_id = $1 ORDER BY id;
 
@@ -145,6 +177,7 @@ ORDER BY so.id;
 -- name: GetAreaCues :many
 SELECT DISTINCT
     so.*,
+    c.replaces_encounter_music,
     l.name AS location,
     s.name AS sublocation,
     a.name AS area,
@@ -162,6 +195,7 @@ ORDER BY so.id;
 -- name: GetAreaBackgroundMusic :many
 SELECT
     so.*,
+    bm.replaces_encounter_music,
     l.name AS location,
     s.name As sublocation,
     a.name AS area,
@@ -205,6 +239,23 @@ LEFT JOIN sublocations s ON a.sublocation_id = s.id
 LEFT JOIN locations l ON s.location_id = l.id
 WHERE f.area_id = $1
 ORDER BY f.id;
+
+
+-- name: GetAreaQuests :many
+SELECT DISTINCT
+    q.*,
+    l.name AS location,
+    s.name AS sublocation,
+    a.name AS area,
+    a.version AS area_version
+FROM completion_locations cl
+LEFT JOIN quest_completions qc ON cl.completion_id = qc.id
+LEFT JOIN quests q ON qc.quest_id = q.id
+LEFT JOIN areas a ON cl.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+WHERE cl.area_id = $1
+ORDER BY q.id;
 
 
 -- name: GetSublocationShops :many

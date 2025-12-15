@@ -49,8 +49,8 @@ CREATE TABLE subquests (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     quest_id INTEGER NOT NULL REFERENCES quests(id),
-    parent_sidequest_id INTEGER NOT NULL REFERENCES sidequests(id),
-    UNIQUE(quest_id, parent_sidequest_id)
+    sidequest_id INTEGER NOT NULL REFERENCES sidequests(id),
+    UNIQUE(quest_id, sidequest_id)
 );
 
 

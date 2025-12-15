@@ -183,26 +183,53 @@ func (q *Queries) CreateSidequest(ctx context.Context, arg CreateSidequestParams
 }
 
 const createSubquest = `-- name: CreateSubquest :one
-INSERT INTO subquests (data_hash, quest_id, parent_sidequest_id)
+INSERT INTO subquests (data_hash, quest_id, sidequest_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = subquests.data_hash
-RETURNING id, data_hash, quest_id, parent_sidequest_id
+RETURNING id, data_hash, quest_id, sidequest_id
 `
 
 type CreateSubquestParams struct {
-	DataHash          string
-	QuestID           int32
-	ParentSidequestID int32
+	DataHash    string
+	QuestID     int32
+	SidequestID int32
 }
 
 func (q *Queries) CreateSubquest(ctx context.Context, arg CreateSubquestParams) (Subquest, error) {
-	row := q.db.QueryRowContext(ctx, createSubquest, arg.DataHash, arg.QuestID, arg.ParentSidequestID)
+	row := q.db.QueryRowContext(ctx, createSubquest, arg.DataHash, arg.QuestID, arg.SidequestID)
 	var i Subquest
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
 		&i.QuestID,
-		&i.ParentSidequestID,
+		&i.SidequestID,
+	)
+	return i, err
+}
+
+const getParentSidequest = `-- name: GetParentSidequest :one
+SELECT q.id, q.data_hash, q.name, q.type
+FROM subquests su
+LEFT JOIN sidequests si ON su.sidequest_id = si.id
+LEFT JOIN quests q ON si.quest_id = q.id
+WHERE su.id = $1
+`
+
+type GetParentSidequestRow struct {
+	ID       sql.NullInt32
+	DataHash sql.NullString
+	Name     sql.NullString
+	Type     NullQuestType
+}
+
+func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSidequestRow, error) {
+	row := q.db.QueryRowContext(ctx, getParentSidequest, id)
+	var i GetParentSidequestRow
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Type,
 	)
 	return i, err
 }

@@ -12,6 +12,13 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = characters.data_hash
 RETURNING *;
 
 
+-- name: UpdateCharacter :exec
+UPDATE characters
+SET data_hash = $1,
+    area_id = $2
+WHERE id = $3;
+
+
 -- name: CreateCharactersBaseStatsJunction :exec
 INSERT INTO j_characters_base_stats (data_hash, character_id, base_stat_id)
 VALUES ($1, $2, $3)

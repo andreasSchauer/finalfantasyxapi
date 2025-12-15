@@ -148,7 +148,7 @@ func (l *Lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 		dbSubquest, err := qtx.CreateSubquest(context.Background(), database.CreateSubquestParams{
 			DataHash:          generateDataHash(subquest),
 			QuestID:           subquest.Quest.ID,
-			ParentSidequestID: subquest.SidequestID,
+			SidequestID: 	   subquest.SidequestID,
 		})
 		if err != nil {
 			return h.GetErr(subquest.Error(), err, "couldn't create subquest")

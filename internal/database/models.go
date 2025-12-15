@@ -2689,6 +2689,7 @@ type Character struct {
 	ArmorType           ArmorType
 	PhysicalAttackRange interface{}
 	CanFightUnderwater  bool
+	AreaID              sql.NullInt32
 }
 
 type CharacterClass struct {
@@ -3750,10 +3751,10 @@ type Submenu struct {
 }
 
 type Subquest struct {
-	ID                int32
-	DataHash          string
-	QuestID           int32
-	ParentSidequestID int32
+	ID          int32
+	DataHash    string
+	QuestID     int32
+	SidequestID int32
 }
 
 type Treasure struct {

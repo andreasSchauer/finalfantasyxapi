@@ -66,8 +66,14 @@ ADD COLUMN area_id INTEGER REFERENCES areas(id),
 ADD COLUMN accuracy_id INTEGER REFERENCES ability_accuracies(id);
 
 
+ALTER TABLE characters
+ADD COLUMN area_id INTEGER REFERENCES areas(id);
+
 
 -- +goose Down
+ALTER TABLE characters
+DROP COLUMN IF EXISTS area_id;
+
 ALTER TABLE aeons
 DROP COLUMN IF EXISTS accuracy_id,
 DROP COLUMN IF EXISTS area_id;
