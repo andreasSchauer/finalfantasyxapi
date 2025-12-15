@@ -243,7 +243,7 @@ func (cfg *apiConfig) getMonstersRonsoRage(r *http.Request, inputMons []NamedAPI
 		ronsoRageID = ronsoRage.ID
 	}
 
-	if ronsoRageID > 47 || ronsoRageID <= 35 {
+	if int(ronsoRageID) > ronsoRageOffset + 12 || int(ronsoRageID) <= ronsoRageOffset {
 		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid ronso rage id: %d. provided id must be between 1 and 12", ronsoRageID-35), err)
 	}
 
@@ -318,6 +318,7 @@ func (cfg *apiConfig) getMonstersSubLocation(r *http.Request, inputMons []NamedA
 
 func (cfg *apiConfig) getMonstersArea(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryArea := r.URL.Query().Get("area")
+	areaCount, _ := cfg.db.GetAreaCount(r.Context())
 	
 	if queryArea == "" {
 		return inputMons, nil
@@ -326,6 +327,10 @@ func (cfg *apiConfig) getMonstersArea(r *http.Request, inputMons []NamedAPIResou
 	area_id, err := strconv.Atoi(queryArea)
 	if err != nil {
 		return nil, newHTTPError(http.StatusBadRequest, "invalid area id", err)
+	}
+
+	if area_id < 0 || area_id > int(areaCount) {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid area: %d. area doesn't exist. use /api/areas to see existing sublocations.", area_id), err)
 	}
 
 	dbMons, err := cfg.db.GetMonstersByArea(r.Context(), int32(area_id))
@@ -352,7 +357,7 @@ func (cfg *apiConfig) getMonstersDistance(r *http.Request, inputMons []NamedAPIR
 
 	distance, err := strconv.Atoi(query)
 	if err != nil || distance > 4 || distance <= 0 {
-		return nil, newHTTPError(http.StatusBadRequest, "invalid value. usage: distance={int from 1-4}", err)
+		return nil, newHTTPError(http.StatusBadRequest, "invalid value. distance must be an integer from 1 to 4.", err)
 	}
 
 	dbMons, err := cfg.db.GetMonstersByDistance(r.Context(), distance)

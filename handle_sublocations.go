@@ -34,21 +34,21 @@ func (cfg *apiConfig) handleSublocations(w http.ResponseWriter, r *http.Request)
 			fmt.Println(segments)
 			fmt.Println("this should trigger /api/sublocations/{name or id}/areas")
 			return
-		case "treasures":
+		case "monsters":
 			fmt.Println(segments)
-			fmt.Println("this should trigger /api/sublocations/{name or id}/treasures")
-			return
-		case "shops":
-			fmt.Println(segments)
-			fmt.Println("this should trigger /api/sublocations/{name or id}/shops")
+			fmt.Println("this should trigger /api/sublocations/{name or id}/monsters")
 			return
 		case "monster-formations":
 			fmt.Println(segments)
 			fmt.Println("this should trigger /api/sublocations/{name or id}/monster-formations")
 			return
-		case "monsters":
+		case "shops":
 			fmt.Println(segments)
-			fmt.Println("this should trigger /api/sublocations/{name or id}/monsters")
+			fmt.Println("this should trigger /api/sublocations/{name or id}/shops")
+			return
+		case "treasures":
+			fmt.Println(segments)
+			fmt.Println("this should trigger /api/sublocations/{name or id}/treasures")
 			return
 		default:
 			fmt.Println(segments)

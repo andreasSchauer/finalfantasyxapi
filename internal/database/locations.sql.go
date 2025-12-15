@@ -547,6 +547,201 @@ func (q *Queries) CreateTreasuresItemsJunction(ctx context.Context, arg CreateTr
 	return err
 }
 
+const getArea = `-- name: GetArea :one
+SELECT
+    l.id AS location_id,
+    l.name AS location,
+    s.name AS sublocation,
+    a.id, a.data_hash, a.sublocation_id, a.name, a.version, a.specification, a.story_only, a.has_save_sphere, a.airship_drop_off, a.has_compilation_sphere, a.can_ride_chocobo FROM areas a
+LEFT JOIN sublocations s ON a.sublocation_id = s.id 
+LEFT JOIN locations l ON s.location_id = l.id
+WHERE a.id = $1
+`
+
+type GetAreaRow struct {
+	LocationID           sql.NullInt32
+	Location             sql.NullString
+	Sublocation          sql.NullString
+	ID                   int32
+	DataHash             string
+	SublocationID        int32
+	Name                 string
+	Version              sql.NullInt32
+	Specification        sql.NullString
+	StoryOnly            bool
+	HasSaveSphere        bool
+	AirshipDropOff       bool
+	HasCompilationSphere bool
+	CanRideChocobo       bool
+}
+
+func (q *Queries) GetArea(ctx context.Context, id int32) (GetAreaRow, error) {
+	row := q.db.QueryRowContext(ctx, getArea, id)
+	var i GetAreaRow
+	err := row.Scan(
+		&i.LocationID,
+		&i.Location,
+		&i.Sublocation,
+		&i.ID,
+		&i.DataHash,
+		&i.SublocationID,
+		&i.Name,
+		&i.Version,
+		&i.Specification,
+		&i.StoryOnly,
+		&i.HasSaveSphere,
+		&i.AirshipDropOff,
+		&i.HasCompilationSphere,
+		&i.CanRideChocobo,
+	)
+	return i, err
+}
+
+const getAreaConnections = `-- name: GetAreaConnections :many
+SELECT
+    ac.id, ac.data_hash, ac.area_id, ac.connection_type, ac.story_only, ac.notes,
+    l.name AS location,
+    s.name AS sublocation,
+    a.name AS area,
+    a.version AS version,
+    a.specification AS specification
+FROM area_connections ac
+LEFT JOIN j_area_connected_areas j ON j.connection_id = ac.id
+LEFT JOIN areas a ON ac.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+WHERE j.area_id = $1
+ORDER BY ac.id
+`
+
+type GetAreaConnectionsRow struct {
+	ID             int32
+	DataHash       string
+	AreaID         int32
+	ConnectionType AreaConnectionType
+	StoryOnly      bool
+	Notes          sql.NullString
+	Location       sql.NullString
+	Sublocation    sql.NullString
+	Area           sql.NullString
+	Version        sql.NullInt32
+	Specification  sql.NullString
+}
+
+func (q *Queries) GetAreaConnections(ctx context.Context, areaID int32) ([]GetAreaConnectionsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaConnections, areaID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAreaConnectionsRow
+	for rows.Next() {
+		var i GetAreaConnectionsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.AreaID,
+			&i.ConnectionType,
+			&i.StoryOnly,
+			&i.Notes,
+			&i.Location,
+			&i.Sublocation,
+			&i.Area,
+			&i.Version,
+			&i.Specification,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaCount = `-- name: GetAreaCount :one
+SELECT COUNT(id) FROM areas
+`
+
+func (q *Queries) GetAreaCount(ctx context.Context) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getAreaCount)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const getAreas = `-- name: GetAreas :many
+SELECT
+    l.id AS location_id,
+    l.name AS location,
+    s.id AS sublocation_id,
+    s.name AS sublocation,
+    a.id, a.data_hash, a.sublocation_id, a.name, a.version, a.specification, a.story_only, a.has_save_sphere, a.airship_drop_off, a.has_compilation_sphere, a.can_ride_chocobo FROM areas a
+LEFT JOIN sublocations s ON a.sublocation_id = s.id 
+LEFT JOIN locations l ON s.location_id = l.id
+`
+
+type GetAreasRow struct {
+	LocationID           sql.NullInt32
+	Location             sql.NullString
+	SublocationID        sql.NullInt32
+	Sublocation          sql.NullString
+	ID                   int32
+	DataHash             string
+	SublocationID_2      int32
+	Name                 string
+	Version              sql.NullInt32
+	Specification        sql.NullString
+	StoryOnly            bool
+	HasSaveSphere        bool
+	AirshipDropOff       bool
+	HasCompilationSphere bool
+	CanRideChocobo       bool
+}
+
+func (q *Queries) GetAreas(ctx context.Context) ([]GetAreasRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAreas)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAreasRow
+	for rows.Next() {
+		var i GetAreasRow
+		if err := rows.Scan(
+			&i.LocationID,
+			&i.Location,
+			&i.SublocationID,
+			&i.Sublocation,
+			&i.ID,
+			&i.DataHash,
+			&i.SublocationID_2,
+			&i.Name,
+			&i.Version,
+			&i.Specification,
+			&i.StoryOnly,
+			&i.HasSaveSphere,
+			&i.AirshipDropOff,
+			&i.HasCompilationSphere,
+			&i.CanRideChocobo,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getLocationAreaByAreaName = `-- name: GetLocationAreaByAreaName :one
 SELECT l.name, s.name, a.name, a.version FROM locations l LEFT JOIN sublocations s ON s.location_id = l.id LEFT JOIN areas a ON a.sublocation_id = a.id
 WHERE l.id = $1 AND s.id = $2 AND a.name = $3 AND a.version = $4

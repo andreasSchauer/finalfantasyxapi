@@ -30,7 +30,7 @@ CREATE TABLE cues (
 );
 
 
-CREATE TABLE j_songs_cues(
+CREATE TABLE j_songs_cues (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     song_id INTEGER NOT NULL REFERENCES songs(id),

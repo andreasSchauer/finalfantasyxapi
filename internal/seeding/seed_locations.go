@@ -31,7 +31,7 @@ func (l Location) Error() string {
 
 type SubLocation struct {
 	ID            int32
-	Name          string  `json:"sub_location"`
+	Name          string  `json:"sublocation"`
 	Specification *string `json:"specification"`
 	Areas         []Area  `json:"areas"`
 	Location      Location
@@ -101,7 +101,7 @@ func (a Area) GetLocationArea() LocationArea {
 type LocationArea struct {
 	ID          int32
 	Location    string `json:"location"`
-	SubLocation string `json:"sub_location"`
+	SubLocation string `json:"sublocation"`
 	Area        string `json:"area"`
 	Version     *int32 `json:"version"`
 }

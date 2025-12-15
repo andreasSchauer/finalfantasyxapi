@@ -35,6 +35,48 @@ INSERT INTO j_area_connected_areas (data_hash, area_id, connection_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
+-- name: GetAreaCount :one
+SELECT COUNT(id) FROM areas;
+
+
+-- name: GetAreas :many
+SELECT
+    l.id AS location_id,
+    l.name AS location,
+    s.id AS sublocation_id,
+    s.name AS sublocation,
+    a.* FROM areas a
+LEFT JOIN sublocations s ON a.sublocation_id = s.id 
+LEFT JOIN locations l ON s.location_id = l.id;
+
+
+-- name: GetArea :one
+SELECT
+    l.id AS location_id,
+    l.name AS location,
+    s.name AS sublocation,
+    a.* FROM areas a
+LEFT JOIN sublocations s ON a.sublocation_id = s.id 
+LEFT JOIN locations l ON s.location_id = l.id
+WHERE a.id = $1;
+
+
+-- name: GetAreaConnections :many
+SELECT
+    ac.*,
+    l.name AS location,
+    s.name AS sublocation,
+    a.name AS area,
+    a.version AS version,
+    a.specification AS specification
+FROM area_connections ac
+LEFT JOIN j_area_connected_areas j ON j.connection_id = ac.id
+LEFT JOIN areas a ON ac.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+WHERE j.area_id = $1
+ORDER BY ac.id;
+
 
 -- name: CreateTreasure :one
 INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)

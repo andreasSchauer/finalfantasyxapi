@@ -8,6 +8,7 @@ import (
 
 // TypesLookup holds all the enum types for the application
 type TypeLookup struct {
+	AreaConnectionType	map[string]TypedAPIResource
 	CTBIconType   		map[string]TypedAPIResource
 	MaCreationArea		map[string]TypedAPIResource
 	MonsterSpecies 		map[string]TypedAPIResource
@@ -17,6 +18,7 @@ type TypeLookup struct {
 func TypeLookupInit() TypeLookup {
 	t := TypeLookup{}
 
+	t.initAreaConnectionType()
 	t.initCTBIconType()
 	t.initMaCreationArea()
 	t.initMonsterSpecies()
@@ -33,6 +35,25 @@ func GetEnumType(key string, lookup map[string]TypedAPIResource) (TypedAPIResour
 	}
 
 	return enumType, nil
+}
+
+func (t *TypeLookup) initAreaConnectionType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name:        string(database.AreaConnectionTypeBothDirections),
+			Description: "The edges of two areas are directly connected with each other, and you can freely zone between those areas.",
+		},
+		{
+			Name:        string(database.AreaConnectionTypeOneDirection),
+			Description: "The edges of two areas are directly connected with each other, but you can only zone from area A to area B, and not vice versa.",
+		},
+		{
+			Name:        string(database.AreaConnectionTypeWarp),
+			Description: "A connection of two areas that doesn't require crossing their edges. Most of the time, their edges are not directly connected, but you can reach area B through other means. That might be due to a teleporter (like in Gagazet), or due to a story-based warp.",
+		},
+	}
+
+	t.AreaConnectionType = typeSliceToMap(typeSlice)
 }
 
 func (t *TypeLookup) initCTBIconType() {

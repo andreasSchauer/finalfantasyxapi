@@ -2,10 +2,16 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
+
+type LocationdApiResourceList struct {
+	ListParams
+	Results []LocationAPIResource `json:"results"`
+}
 
 type LocationAPIResource struct {
 	AreaID int32 `json:"-"`
@@ -42,7 +48,7 @@ func (r LocationAPIResource) getAPIResource() IsAPIResource {
 
 type LocationArea struct {
 	Location    string `json:"location"`
-	SubLocation string `json:"sub_location"`
+	SubLocation string `json:"sublocation"`
 	Area        string `json:"area"`
 	Version     *int32 `json:"version,omitempty"`
 }
@@ -98,4 +104,19 @@ func createLocationBasedAPIResources[T any](
 	}
 
 	return resources
+}
+
+
+func (cfg *apiConfig) newLocationAPIResourceList(r *http.Request, resources []LocationAPIResource) (LocationdApiResourceList, error) {
+	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
+	if err != nil {
+		return LocationdApiResourceList{}, err
+	}
+
+	list := LocationdApiResourceList{
+		ListParams: listParams,
+		Results: 	shownResources,
+	}
+
+	return list, nil
 }
