@@ -73,7 +73,7 @@ func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
 		// /api/monsters/{name or id}
 		segment := segments[0]
 
-		input, err := parseSingleSegmentResource(segment, cfg.l.Monsters)
+		input, err := parseSingleSegmentResource("monster", segment, cfg.l.Monsters)
 		if handleHTTPError(w, err) {
 			return
 		}
@@ -100,7 +100,7 @@ func (cfg *apiConfig) handleMonsters(w http.ResponseWriter, r *http.Request) {
 		name := segments[0]
 		versionStr := segments[1]
 
-		input, err := parseNameVersionResource(name, versionStr, cfg.l.Monsters)
+		input, err := parseNameVersionResource("monster", name, versionStr, cfg.l.Monsters)
 		if handleHTTPError(w, err) {
 			return
 		}

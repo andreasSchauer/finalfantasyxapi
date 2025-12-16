@@ -35,7 +35,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	}
 
 	totalDuration := time.Since(start)
-	fmt.Printf("database seeding took %.3f seconds\n", totalDuration.Seconds())
+	fmt.Printf("database seeding took %.3f seconds\n\n", totalDuration.Seconds())
 
 	return &l, nil
 }
@@ -52,10 +52,9 @@ func handleDBFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) e
 	}
 
 	seedingDuration := time.Since(seedingStart)
-	fmt.Printf("\ninitial seeding took %.3f seconds\n\n", seedingDuration.Seconds())
 
 	relationshipsStart := time.Now()
-	fmt.Printf("seeding relationships...\n\n")
+	fmt.Printf("\nseeding relationships...\n\n")
 
 	for _, seeder := range seeders {
 		err := handleDBFunction(db, dbConn, seeder.relFunc, seeder.name)
@@ -65,7 +64,10 @@ func handleDBFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) e
 	}
 
 	relationshipsDuration := time.Since(relationshipsStart)
-	fmt.Printf("\nseeding relationships took %.3f seconds\n\n", relationshipsDuration.Seconds())
+
+	fmt.Printf("\n\ninitial seeding took %.3f seconds\n", seedingDuration.Seconds())
+
+	fmt.Printf("seeding relationships took %.3f seconds\n", relationshipsDuration.Seconds())
 
 	return nil
 }

@@ -17,63 +17,63 @@ type MonsterAbility struct {
 }
 
 
-func (cfg *apiConfig) getMonsterRelationships(r *http.Request, mon database.Monster) (Monster, error) {
-	properties, err := cfg.getMonsterProperties(r, mon)
+func (cfg *apiConfig) getMonsterRelationships(r *http.Request, dbMon database.Monster) (Monster, error) {
+	properties, err := cfg.getMonsterProperties(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	autoAbilities, err := cfg.getMonsterAutoAbilities(r, mon)
+	autoAbilities, err := cfg.getMonsterAutoAbilities(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	ronsoRages, err := cfg.getMonsterRonsoRages(r, mon)
+	ronsoRages, err := cfg.getMonsterRonsoRages(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	locations, err := cfg.getMonsterLocations(r, mon)
+	locations, err := cfg.getMonsterLocations(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	formations, err := cfg.getMonsterMonsterFormations(r, mon)
+	formations, err := cfg.getMonsterMonsterFormations(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	baseStats, err := cfg.getMonsterBaseStats(r, mon)
+	baseStats, err := cfg.getMonsterBaseStats(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	elemResists, err := cfg.getMonsterElemResists(r, mon)
+	elemResists, err := cfg.getMonsterElemResists(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	statusResists, err := cfg.getMonsterStatusResists(r, mon)
+	statusResists, err := cfg.getMonsterStatusResists(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	immunities, err := cfg.getMonsterImmunities(r, mon)
+	immunities, err := cfg.getMonsterImmunities(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	alteredStates, err := cfg.getMonsterAlteredStates(r, mon)
+	alteredStates, err := cfg.getMonsterAlteredStates(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	abilities, err := cfg.getMonsterAbilities(r, mon)
+	abilities, err := cfg.getMonsterAbilities(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	return Monster{
+	monster := Monster{
 		Properties:       properties,
 		AutoAbilities:    autoAbilities,
 		RonsoRages:       ronsoRages,
@@ -85,7 +85,9 @@ func (cfg *apiConfig) getMonsterRelationships(r *http.Request, mon database.Mons
 		StatusResists:    statusResists,
 		AlteredStates:    alteredStates,
 		Abilities:        abilities,
-	}, nil
+	}
+	
+	return monster, nil
 }
 
 

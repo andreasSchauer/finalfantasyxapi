@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -29,7 +30,7 @@ func newParseResponse (id int32, name string) parseResponse {
 
 // location area parsing might be a whole different level of annoying
 // maybe add a switch case LocationArea to GetResource
-func parseSingleSegmentResource[T h.HasID](segment string, lookup map[string]T) (parseResponse, error) {
+func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup map[string]T) (parseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, "Invalid URL encoding", err)
@@ -38,6 +39,9 @@ func parseSingleSegmentResource[T h.HasID](segment string, lookup map[string]T) 
 	// check, if the segment is an id
 	parsedID, err := strconv.Atoi(decoded)
 	if err == nil {
+		if parsedID > len(lookup) {
+			return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("provided %s ID is out of range. Max ID: %d", resourceType, len(lookup)), err)
+		}
 		return newParseResponse(int32(parsedID), ""), nil
 	}
 
@@ -92,13 +96,14 @@ func parseSingleSegmentResource[T h.HasID](segment string, lookup map[string]T) 
 		return newParseResponse(0, lookupObjVer.Name), nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, "Resource not found", err)
+	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s.", resourceType, segment), err)
 }
 
 
-func parseNameVersionResource[T h.HasID](name, versionStr string, lookup map[string]T) (parseResponse, error) {
+func parseNameVersionResource[T h.HasID](resourceType, name, versionStr string, lookup map[string]T) (parseResponse, error) {
 	var versionPtr *int32
 
+	// parse the version (int or null)
 	switch versionStr {
 	case "":
 		versionPtr = nil
@@ -136,5 +141,5 @@ func parseNameVersionResource[T h.HasID](name, versionStr string, lookup map[str
 		return newParseResponse(resource.GetID(), ""), nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, "Resource not found", err)
+	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s, version %s", resourceType, name, versionStr), err)
 }

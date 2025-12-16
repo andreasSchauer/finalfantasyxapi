@@ -74,7 +74,8 @@ LEFT JOIN j_area_connected_areas j ON j.connection_id = ac.id
 LEFT JOIN areas a ON ac.area_id = a.id
 LEFT JOIN sublocations s ON a.sublocation_id = s.id
 LEFT JOIN locations l ON s.location_id = l.id
-WHERE j.area_id = $1
+LEFT JOIN areas a2 ON j.area_id = a2.id
+WHERE a2.id = $1
 ORDER BY ac.id;
 
 
@@ -134,7 +135,7 @@ LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
 LEFT JOIN areas a ON el.area_id = a.id
 LEFT JOIN sublocations s ON a.sublocation_id = s.id
 LEFT JOIN locations l ON s.location_id = l.id
-WHERE area_id = $1
+WHERE a.id = $1
 ORDER BY m.id;
 
 
@@ -151,7 +152,7 @@ LEFT JOIN encounter_locations el ON j.encounter_location_id = el.id
 LEFT JOIN areas a ON el.area_id = a.id
 LEFT JOIN sublocations s ON a.sublocation_id = s.id
 LEFT JOIN locations l ON s.location_id = l.id
-WHERE area_id = $1
+WHERE a.id = $1
 ORDER BY mf.id;
 
 
@@ -170,7 +171,7 @@ LEFT JOIN encounter_locations el ON j.encounter_location_id = el.id
 LEFT JOIN areas a ON el.area_id = a.id
 LEFT JOIN sublocations s ON a.sublocation_id = s.id
 LEFT JOIN locations l ON s.location_id = l.id
-WHERE area_id = $1
+WHERE a.id = $1
 ORDER BY so.id;
 
 
@@ -206,7 +207,7 @@ LEFT JOIN songs so ON j.song_id = so.id
 LEFT JOIN areas a ON j.area_id = a.id
 LEFT JOIN sublocations s ON a.sublocation_id = s.id
 LEFT JOIN locations l ON s.location_id = l.id
-WHERE j.area_id = $1
+WHERE a.id = $1
 ORDER BY so.id;
 
 
@@ -222,7 +223,7 @@ LEFT JOIN fmvs f ON f.song_id = so.id
 LEFT JOIN areas a ON f.area_id = a.id
 LEFT JOIN sublocations s ON a.sublocation_id = s.id
 LEFT JOIN locations l ON s.location_id = l.id
-WHERE f.area_id = $1
+WHERE a.id = $1
 ORDER BY so.id;
 
 
@@ -237,7 +238,7 @@ FROM fmvs f
 LEFT JOIN areas a ON f.area_id = a.id
 LEFT JOIN sublocations s ON a.sublocation_id = s.id
 LEFT JOIN locations l ON s.location_id = l.id
-WHERE f.area_id = $1
+WHERE a.id = $1
 ORDER BY f.id;
 
 
@@ -254,8 +255,104 @@ LEFT JOIN quests q ON qc.quest_id = q.id
 LEFT JOIN areas a ON cl.area_id = a.id
 LEFT JOIN sublocations s ON a.sublocation_id = s.id
 LEFT JOIN locations l ON s.location_id = l.id
-WHERE cl.area_id = $1
+WHERE a.id = $1
 ORDER BY q.id;
+
+
+-- name: GetAreasWithSaveSphere :many
+SELECT
+    l.name AS location, 
+    s.name AS sublocation,
+    a.name AS area,
+    a.version
+FROM locations l
+LEFT JOIN sublocations s ON s.location_id = l.id
+LEFT JOIN areas a ON a.sublocation_id = s.id
+WHERE a.has_save_sphere = $1
+ORDER BY a.id;
+
+
+-- name: GetAreasWithCompSphere :many
+SELECT
+    l.name AS location, 
+    s.name AS sublocation,
+    a.name AS area,
+    a.version
+FROM locations l
+LEFT JOIN sublocations s ON s.location_id = l.id
+LEFT JOIN areas a ON a.sublocation_id = s.id
+WHERE a.has_compilation_sphere = $1
+ORDER BY a.id;
+
+
+-- name: GetAreasWithDropOff :many
+SELECT
+    l.name AS location, 
+    s.name AS sublocation,
+    a.name AS area,
+    a.version
+FROM locations l
+LEFT JOIN sublocations s ON s.location_id = l.id
+LEFT JOIN areas a ON a.sublocation_id = s.id
+WHERE a.airship_drop_off = $1
+ORDER BY a.id;
+
+
+-- name: GetAreasWithChocobo :many
+SELECT
+    l.name AS location, 
+    s.name AS sublocation,
+    a.name AS area,
+    a.version
+FROM locations l
+LEFT JOIN sublocations s ON s.location_id = l.id
+LEFT JOIN areas a ON a.sublocation_id = s.id
+WHERE a.can_ride_chocobo = $1
+ORDER BY a.id;
+
+
+-- name: GetAreasStoryOnly :many
+SELECT
+    l.name AS location, 
+    s.name AS sublocation,
+    a.name AS area,
+    a.version
+FROM locations l
+LEFT JOIN sublocations s ON s.location_id = l.id
+LEFT JOIN areas a ON a.sublocation_id = s.id
+WHERE a.story_only = $1
+ORDER BY a.id;
+
+
+-- name: GetSublocationAreas :many
+SELECT
+    l.name AS location, 
+    s.name AS sublocation,
+    a.name AS area,
+    a.version
+FROM locations l
+LEFT JOIN sublocations s ON s.location_id = l.id
+LEFT JOIN areas a ON a.sublocation_id = s.id
+WHERE s.id = $1
+ORDER BY a.id;
+
+
+-- name: GetAreasWithBosses :many
+SELECT DISTINCT
+    a.id,
+    l.name AS location,
+    s.name AS sublocation,
+    a.name AS area,
+    a.version
+FROM songs so
+LEFT JOIN formation_boss_songs bs ON bs.song_id = so.id
+LEFT JOIN monster_formations mf ON mf.boss_song_id = bs.id
+LEFT JOIN j_encounter_location_formations j ON j.monster_formation_id = mf.id
+LEFT JOIN encounter_locations el ON j.encounter_location_id = el.id
+LEFT JOIN areas a ON el.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+ORDER BY a.id;
 
 
 -- name: GetSublocationShops :many
@@ -325,6 +422,35 @@ WHERE sublocation_id = $1
 ORDER BY mf.id;
 
 
+-- name: GetSublocationsWithBosses :many
+SELECT DISTINCT
+    s.id,
+    l.name AS location,
+    s.name AS sublocation
+FROM songs so
+INNER JOIN formation_boss_songs bs ON bs.song_id = so.id
+LEFT JOIN monster_formations mf ON mf.boss_song_id = bs.id
+LEFT JOIN j_encounter_location_formations j ON j.monster_formation_id = mf.id
+LEFT JOIN encounter_locations el ON j.encounter_location_id = el.id
+LEFT JOIN areas a ON el.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+ORDER BY s.id;
+
+
+-- name: GetLocationAreas :many
+SELECT
+    l.name AS location, 
+    s.name AS sublocation,
+    a.name AS area,
+    a.version
+FROM locations l
+LEFT JOIN sublocations s ON s.location_id = l.id
+LEFT JOIN areas a ON a.sublocation_id = s.id
+WHERE l.id = $1
+ORDER BY a.id;
+
+
 -- name: GetLocationShops :many
 SELECT
     sh.*,
@@ -392,6 +518,21 @@ WHERE location_id = $1
 ORDER BY mf.id;
 
 
+-- name: GetLocationsWithBosses :many
+SELECT DISTINCT
+    l.id,
+    l.name AS location
+FROM songs so
+INNER JOIN formation_boss_songs bs ON bs.song_id = so.id
+LEFT JOIN monster_formations mf ON mf.boss_song_id = bs.id
+LEFT JOIN j_encounter_location_formations j ON j.monster_formation_id = mf.id
+LEFT JOIN encounter_locations el ON j.encounter_location_id = el.id
+LEFT JOIN areas a ON el.area_id = a.id
+LEFT JOIN sublocations s ON a.sublocation_id = s.id
+LEFT JOIN locations l ON s.location_id = l.id
+ORDER BY l.id;
+
+
 -- name: CreateTreasure :one
 INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
@@ -404,8 +545,6 @@ UPDATE treasures
 SET data_hash = $1,
     found_equipment_id = $2
 WHERE id = $3;
-
-
 
 
 -- name: CreateShop :one

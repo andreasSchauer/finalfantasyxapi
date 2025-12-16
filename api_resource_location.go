@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type LocationdApiResourceList struct {
+type LocationApiResourceList struct {
 	ListParams
 	Results []LocationAPIResource `json:"results"`
 }
@@ -106,16 +106,15 @@ func createLocationBasedAPIResources[T any](
 	return resources
 }
 
-
-func (cfg *apiConfig) newLocationAPIResourceList(r *http.Request, resources []LocationAPIResource) (LocationdApiResourceList, error) {
+func (cfg *apiConfig) newLocationAPIResourceList(r *http.Request, resources []LocationAPIResource) (LocationApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {
-		return LocationdApiResourceList{}, err
+		return LocationApiResourceList{}, err
 	}
 
-	list := LocationdApiResourceList{
+	list := LocationApiResourceList{
 		ListParams: listParams,
-		Results: 	shownResources,
+		Results:    shownResources,
 	}
 
 	return list, nil
