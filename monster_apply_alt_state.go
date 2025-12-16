@@ -79,7 +79,7 @@ func applyAltStateTypeLoss(mon Monster, change AltStateChange, appliedState Appl
 			gainChangesExist = true
 		}
 
-		mon.Properties, _ = removeResources(mon.Properties, propertiesToRemove)
+		mon.Properties = removeResources(mon.Properties, propertiesToRemove)
 
 		slices.SortStableFunc(mon.Properties, sortAPIResources)
 		slices.SortStableFunc(defStateChangeGain.Properties, sortAPIResources)
@@ -95,7 +95,7 @@ func applyAltStateTypeLoss(mon Monster, change AltStateChange, appliedState Appl
 			gainChangesExist = true
 		}
 
-		mon.AutoAbilities, _ = removeResources(mon.AutoAbilities, abilitiesToRemove)
+		mon.AutoAbilities = removeResources(mon.AutoAbilities, abilitiesToRemove)
 
 		slices.SortStableFunc(mon.AutoAbilities, sortAPIResources)
 		slices.SortStableFunc(defStateChangeGain.AutoAbilities, sortAPIResources)
@@ -157,7 +157,7 @@ func applyAltStateTypeGain(mon Monster, change AltStateChange, appliedState Appl
 		slices.SortStableFunc(mon.StatusImmunities, sortAPIResources)
 		slices.SortStableFunc(defStateChangeLoss.StatusImmunities, sortAPIResources)
 
-		keptItems, removedItems := removeResources(mon.StatusResists, change.StatusImmunities)
+		keptItems, removedItems := separateResources(mon.StatusResists, change.StatusImmunities)
 
 		defStateChangeGain.StatusResistances = removedItems
 

@@ -16,25 +16,29 @@ type IsAPIResource interface {
 	seeding.Lookupable
 }
 
-
-
 // input: items [1,2,3,4,5] changeItems [2,4] => output: keptItems [1,3,5] removedItems [2,4]
-func removeResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
+func separateResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
 	removeMap := getResourceMap(itemsToRemove)
-	keptItems := []T{}
-	removedItems := []T{}
+	kept := []T{}
+	removed := []T{}
 
 	for _, item := range items {
 		key := createAPIResourceKey(item)
 		_, ok := removeMap[key]
 		if !ok {
-			keptItems = append(keptItems, item)
+			kept = append(kept, item)
 			continue
 		}
-		removedItems = append(removedItems, item)
+		removed = append(removed, item)
 	}
 
-	return keptItems, removedItems
+	return kept, removed
+}
+
+// input: items [1,2,3,4,5] changeItems [2,4] => output: keptItems [1,3,5]
+func removeResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) []T {
+	keptItems, _ := separateResources(items, itemsToRemove)
+	return keptItems
 }
 
 // s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,5]

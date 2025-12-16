@@ -64,9 +64,8 @@ func parseUniqueNameQuery[T h.HasID](r *http.Request, queryParam string, lookup 
 }
 
 
-func parseIDBasedQuery[T h.HasID](r *http.Request, queryParam string, lookup map[string]T) (int32, bool, error) {
+func parseIDBasedQuery(r *http.Request, queryParam string, maxID int) (int32, bool, error) {
 	query := r.URL.Query().Get(queryParam)
-	count := len(lookup)
 	isEmpty := false
 
 	if query == "" {
@@ -79,8 +78,8 @@ func parseIDBasedQuery[T h.HasID](r *http.Request, queryParam string, lookup map
 		return 0, false, newHTTPError(http.StatusBadRequest, "invalid id", err)
 	}
 
-	if id > int(count) {
-		return 0, false, newHTTPError(http.StatusNotFound, fmt.Sprintf("provided %s ID is out of range. Max ID: %d", query, len(lookup)), err)
+	if id > maxID {
+		return 0, false, newHTTPError(http.StatusNotFound, fmt.Sprintf("provided %s ID is out of range. Max ID: %d", query, maxID), err)
 	}
 
 	return int32(id), isEmpty, nil

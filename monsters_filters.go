@@ -237,7 +237,7 @@ func (cfg *apiConfig) getMonstersRonsoRage(r *http.Request, inputMons []NamedAPI
 	}
 
 	if ronsoRageID > ronsoRageLimit || ronsoRageID <= ronsoRageOffset {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid ronso rage id: %d. Max ID: 12", id), err)
+		return nil, newHTTPError(http.StatusNotFound, fmt.Sprintf("provided ronso rage ID is out of range: %d. Max ID: 12", id), err)
 	}
 
 	dbMons, err := cfg.db.GetMonstersByRonsoRageID(r.Context(), ronsoRageID)
@@ -305,7 +305,7 @@ func (cfg *apiConfig) getMonstersSubLocation(r *http.Request, inputMons []NamedA
 
 func (cfg *apiConfig) getMonstersArea(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := "area"
-	areaID, isEmpty, err := parseIDBasedQuery(r, queryParam, cfg.l.Areas)
+	areaID, isEmpty, err := parseIDBasedQuery(r, queryParam, len(cfg.l.Areas))
 	if err != nil {
 		return nil, err
 	}

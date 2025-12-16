@@ -195,7 +195,7 @@ func (cfg *apiConfig) getAreasBosses(r *http.Request, inputAreas []LocationAPIRe
 	})
 
 	if !b {
-		resources, _ = removeResources(inputAreas, resources)
+		resources = removeResources(inputAreas, resources)
 	}
 
 	sharedResources := getSharedResources(inputAreas, resources)
