@@ -2831,12 +2831,9 @@ const getMonstersByItemOther = `-- name: GetMonstersByItemOther :many
 SELECT DISTINCT m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
-JOIN j_monster_items_other_items jmio
-  ON jmio.monster_items_id = mi.id
-JOIN possible_items pi
-  ON pi.id = jmio.possible_item_id
-JOIN item_amounts ia
-  ON ia.id = pi.item_amount_id
+JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
+JOIN possible_items pi ON pi.id = jmio.possible_item_id
+JOIN item_amounts ia ON ia.id = pi.item_amount_id
 WHERE ia.master_item_id = $1
 ORDER BY m.id
 `

@@ -129,7 +129,7 @@ func (cfg *Config) getMonstersItem(r *http.Request, inputMons []NamedAPIResource
 
 	if queryItem == "" {
 		if queryMethod != "" {
-			return nil, newHTTPError(http.StatusBadRequest, "invalid input. method parameter must be paired with item parameter. usage: item={item},&method={steal/drop/bribe/other}", nil)
+			return nil, newHTTPError(http.StatusBadRequest, "invalid input. method parameter must be paired with item parameter. usage: item={item}&method={steal/drop/bribe/other}", nil)
 		}
 		return inputMons, nil
 	}
@@ -168,7 +168,7 @@ func (cfg *Config) getMonstersItem(r *http.Request, inputMons []NamedAPIResource
 			return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by other items", err)
 		}
 	default:
-		return nil, newHTTPError(http.StatusBadRequest, "invalid method. allowed methods: steal, drop, bribe, other.", err)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid method value: %s. allowed methods: steal, drop, bribe, other.", queryMethod), err)
 	}
 
 	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {

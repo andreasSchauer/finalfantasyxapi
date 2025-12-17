@@ -155,6 +155,8 @@ func (cfg *Config) retrieveAreas(r *http.Request) (LocationApiResourceList, erro
 	filterFuncs := []func(*http.Request, []LocationAPIResource) ([]LocationAPIResource, error){
 		cfg.getAreasLocation,
 		cfg.getAreasSublocation,
+		cfg.getAreasItem,
+		cfg.getAreasKeyItem,
 		cfg.getAreasStoryBased,
 		cfg.getAreasSaveSphere,
 		cfg.getAreasCompSphere,

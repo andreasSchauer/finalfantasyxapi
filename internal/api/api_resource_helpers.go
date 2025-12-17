@@ -16,6 +16,22 @@ type IsAPIResource interface {
 	seeding.Lookupable
 }
 
+
+func combineResources[T HasAPIResource](s1, s2 []T) []T {
+	s1Map := getResourceMap(s1)
+
+	for _, item := range s2 {
+		key := createAPIResourceKey(item)
+		_, ok := s1Map[key]
+		if !ok {
+			s1Map[key] = item
+		}
+	}
+
+	return resourceMapToSlice(s1Map)
+}
+
+
 // input: items [1,2,3,4,5] changeItems [2,4] => output: keptItems [1,3,5] removedItems [2,4]
 func separateResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
 	removeMap := getResourceMap(itemsToRemove)
@@ -42,7 +58,7 @@ func removeResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemov
 }
 
 // s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,5]
-func getSharedResources[T HasAPIResource](s1 []T, s2 []T) []T {
+func getSharedResources[T HasAPIResource](s1, s2 []T) []T {
 	sharedItems := []T{}
 	s2map := getResourceMap(s2)
 

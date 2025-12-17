@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -54,6 +55,82 @@ func (cfg *Config) getAreasSublocation(r *http.Request, inputAreas []LocationAPI
 
 	return sharedResources, nil
 }
+
+
+func (cfg *Config) getAreasItem(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
+	queryItem := "item"
+	queryMethod := r.URL.Query().Get("method")
+
+	item, itemIsEmpty, err := parseUniqueNameQuery(r, queryItem, cfg.l.Items)
+	if err != nil {
+		return nil, err
+	}
+	if itemIsEmpty {
+		if queryMethod != "" {
+			return nil, newHTTPError(http.StatusBadRequest, "invalid input. method parameter must be paired with item or key-item parameter. usage: item={item}&method={monster/treasure/shop/quest}; or item={item}&method={treasure/quest}", nil)
+		}
+		return inputAreas, nil
+	}
+
+	var resources []LocationAPIResource
+
+	switch queryMethod {
+	case "":
+		resources, err = cfg.getAreasByItem(r, item.ID)
+		if err != nil {
+			return nil, err
+		}
+	case "monster":
+		resources, err = cfg.getAreasByItemMonster(r, item.ID)
+		if err != nil {
+			return nil, err
+		}
+	case "treasure":
+		resources, err = cfg.getAreasByItemTreasure(r, item.ID)
+		if err != nil {
+			return nil, err
+		}
+	case "shop":
+		resources, err = cfg.getAreasByItemShop(r, item.ID)
+		if err != nil {
+			return nil, err
+		}
+	case "quest":
+		resources, err = cfg.getAreasByItemQuest(r, item.ID)
+		if err != nil {
+			return nil, err
+		}
+	default:
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid method value: %s. allowed methods: monster, treasure, shop, quest.", queryMethod), err)
+	}
+
+	sharedResources := getSharedResources(inputAreas, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *Config) getAreasKeyItem(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
+	queryKeyItem := "key-item"
+
+	item, isEmpty, err := parseUniqueNameQuery(r, queryKeyItem, cfg.l.KeyItems)
+	if err != nil {
+		return nil, err
+	}
+	if isEmpty {
+		return inputAreas, nil
+	}
+
+	resources, err := cfg.getAreasByKeyItem(r, item.ID)
+	if err != nil {
+		return nil, err
+	}
+	
+	sharedResources := getSharedResources(inputAreas, resources)
+
+	return sharedResources, nil
+}
+
 
 func (cfg *Config) getAreasStoryBased(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
 	queryParam := "story-based"
