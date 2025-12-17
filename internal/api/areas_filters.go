@@ -111,9 +111,9 @@ func (cfg *Config) getAreasItem(r *http.Request, inputAreas []LocationAPIResourc
 
 
 func (cfg *Config) getAreasKeyItem(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryKeyItem := "key-item"
+	queryParam := "key-item"
 
-	item, isEmpty, err := parseUniqueNameQuery(r, queryKeyItem, cfg.l.KeyItems)
+	item, isEmpty, err := parseUniqueNameQuery(r, queryParam, cfg.l.KeyItems)
 	if err != nil {
 		return nil, err
 	}

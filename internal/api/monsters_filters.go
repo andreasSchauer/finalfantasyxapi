@@ -68,6 +68,7 @@ func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPI
 	queryStatusses := r.URL.Query().Get("status-resists")
 	queryResistance := r.URL.Query().Get("resistance")
 	defaultResistance := 1
+	maxResistance := 254
 	var resistance int
 
 	if queryStatusses == "" {
@@ -81,7 +82,7 @@ func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPI
 	case "":
 		resistance = defaultResistance
 	case "immune":
-		resistance = 254
+		resistance = maxResistance
 	default:
 		var err error
 		resistance, err = strconv.Atoi(queryResistance)
@@ -90,8 +91,8 @@ func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPI
 		}
 	}
 
-	if resistance > 254 || resistance <= 0 {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resistance. resistance must be a positive integer between 1 or 254, with %d being the default value, if no resistance was provided.", defaultResistance), nil)
+	if resistance > maxResistance || resistance <= 0 {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resistance: %s. resistance must be a positive integer between %d or %d, with %d being the default value, if no resistance was provided.", queryResistance, defaultResistance, maxResistance, defaultResistance), nil)
 	}
 
 	statusses := strings.Split(queryStatusses, ",")
@@ -124,19 +125,18 @@ func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPI
 }
 
 func (cfg *Config) getMonstersItem(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
-	queryItem := r.URL.Query().Get("item")
+	queryItem := "item"
 	queryMethod := r.URL.Query().Get("method")
 
-	if queryItem == "" {
+	item, itemIsEmpty, err := parseUniqueNameQuery(r, queryItem, cfg.l.Items)
+	if err != nil {
+		return nil, err
+	}
+	if itemIsEmpty {
 		if queryMethod != "" {
 			return nil, newHTTPError(http.StatusBadRequest, "invalid input. method parameter must be paired with item parameter. usage: item={item}&method={steal/drop/bribe/other}", nil)
 		}
 		return inputMons, nil
-	}
-
-	item, err := parseSingleSegmentResource("item", queryItem, cfg.l.MasterItems)
-	if err != nil {
-		return nil, err
 	}
 
 	var dbMons []database.Monster
@@ -181,6 +181,8 @@ func (cfg *Config) getMonstersItem(r *http.Request, inputMons []NamedAPIResource
 }
 
 func (cfg *Config) getMonstersAutoAbility(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
+	// could turn this into a parseQuery helper?
+	// multiple unique name/id inputs to []id
 	query := r.URL.Query().Get("auto-abilities")
 
 	if query == "" {
