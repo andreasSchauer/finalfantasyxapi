@@ -19,7 +19,7 @@ type AreaConnection struct {
 
 
 func (cfg *apiConfig) getAreaRelationships(r *http.Request, dbArea database.GetAreaRow) (Area, error) {
-	locArea := newLocationArea(h.NullStringToVal(dbArea.Location), h.NullStringToVal(dbArea.Sublocation), dbArea.Name, h.NullInt32ToPtr(dbArea.Version))
+	locArea := newLocationArea(dbArea.Location, dbArea.Sublocation, dbArea.Name, h.NullInt32ToPtr(dbArea.Version))
 
 	connections, err := cfg.getAreaConnectedAreas(r, dbArea, locArea)
 	if err != nil {
@@ -97,7 +97,7 @@ func (cfg *apiConfig) getAreaConnectedAreas(r *http.Request, area database.GetAr
 	connectedAreas := []AreaConnection{}
 
 	for _, dbConnArea := range dbConnAreas {
-		locArea := newLocationArea(h.NullStringToVal(dbConnArea.Location), h.NullStringToVal(dbConnArea.Sublocation), h.NullStringToVal(dbConnArea.Area), h.NullInt32ToPtr(dbConnArea.Version))
+		locArea := newLocationArea(dbConnArea.Location, dbConnArea.Sublocation, dbConnArea.Area, h.NullInt32ToPtr(dbConnArea.Version))
 
 		connType, err := cfg.newNamedAPIResourceFromType("connection-type", string(dbConnArea.ConnectionType), cfg.t.AreaConnectionType)
 		if err != nil {
@@ -125,7 +125,7 @@ func (cfg *apiConfig) getAreaCharacters(r *http.Request, area database.GetAreaRo
 	}
 
 	chars := createNamedAPIResourcesSimple(cfg, dbChars, "characters", func(char database.GetAreaCharactersRow) (int32, string) {
-		return h.NullInt32ToVal(char.ID), char.Name
+		return char.ID, char.Name
 	})
 
 	return chars, nil
@@ -139,7 +139,7 @@ func (cfg *apiConfig) getAreaAeons(r *http.Request, area database.GetAreaRow, lo
 	}
 
 	aeons := createNamedAPIResourcesSimple(cfg, dbAeons, "aeons", func(aeon database.GetAreaAeonsRow) (int32, string) {
-		return h.NullInt32ToVal(aeon.ID), aeon.Name
+		return aeon.ID, aeon.Name
 	})
 
 	return aeons, nil
@@ -213,9 +213,9 @@ func (cfg *apiConfig) getAreaSidequest(r *http.Request, area database.GetAreaRow
 	}
 
 	potentialSidequest := dbQuests[0]
-	questName := h.NullStringToVal(potentialSidequest.Name)
+	questName := potentialSidequest.Name
 
-	if potentialSidequest.Type.QuestType != database.QuestTypeSidequest {
+	if potentialSidequest.Type != database.QuestTypeSidequest {
 		subquestName := questName
 		subquest, err := seeding.GetResource(subquestName, cfg.l.Subquests)
 		if err != nil {
@@ -224,7 +224,7 @@ func (cfg *apiConfig) getAreaSidequest(r *http.Request, area database.GetAreaRow
 
 		dbSidequest, err := cfg.db.GetParentSidequest(r.Context(), subquest.ID)
 		if err != nil {
-			return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get parent sidequest of %s", h.NullStringToVal(potentialSidequest.Name)), err)
+			return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get parent sidequest of %s", potentialSidequest.Name), err)
 		}
 
 		questName = h.NullStringToVal(dbSidequest.Name)

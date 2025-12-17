@@ -3,7 +3,6 @@ package main
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type LocationMusic struct {
@@ -30,7 +29,7 @@ func (cfg *apiConfig) getAreaCues(dbCues []database.GetAreaCuesRow) []LocationSo
 	songsCues := []LocationSong{}
 
 	for _, cue := range dbCues {
-		song := cfg.newNamedAPIResourceSimple("songs", h.NullInt32ToVal(cue.ID), h.NullStringToVal(cue.Name))
+		song := cfg.newNamedAPIResourceSimple("songs", cue.ID, cue.Name)
 
 		locationSong := LocationSong{
 			Song: 					song,
@@ -48,7 +47,7 @@ func (cfg *apiConfig) getAreaBM(dbBm []database.GetAreaBackgroundMusicRow) []Loc
 	songsBM := []LocationSong{}
 
 	for _, bm := range dbBm {
-		song := cfg.newNamedAPIResourceSimple("songs", h.NullInt32ToVal(bm.ID), h.NullStringToVal(bm.Name))
+		song := cfg.newNamedAPIResourceSimple("songs", bm.ID, bm.Name)
 
 		locationSong := LocationSong{
 			Song: 					song,

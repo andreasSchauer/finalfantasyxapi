@@ -23,7 +23,7 @@ func (cfg *apiConfig) getAreasLocation(r *http.Request, inputAreas []LocationAPI
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetLocationAreasRow) (string, string, string, *int32) {
-		return area.Location, h.NullStringToVal(area.Sublocation), h.NullStringToVal(area.Area), h.NullInt32ToPtr(area.Version)
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
 	})
 
 	sharedResources := getSharedResources(inputAreas, resources)
@@ -47,7 +47,7 @@ func (cfg *apiConfig) getAreasSublocation(r *http.Request, inputAreas []Location
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetSublocationAreasRow) (string, string, string, *int32) {
-		return area.Location, h.NullStringToVal(area.Sublocation), h.NullStringToVal(area.Area), h.NullInt32ToPtr(area.Version)
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
 	})
 
 	sharedResources := getSharedResources(inputAreas, resources)
@@ -71,7 +71,7 @@ func (cfg *apiConfig) getAreasStoryBased(r *http.Request, inputAreas []LocationA
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasStoryOnlyRow) (string, string, string, *int32) {
-		return area.Location, h.NullStringToVal(area.Sublocation), h.NullStringToVal(area.Area), h.NullInt32ToPtr(area.Version)
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
 	})
 
 	sharedResources := getSharedResources(inputAreas, resources)
@@ -95,7 +95,7 @@ func (cfg *apiConfig) getAreasSaveSphere(r *http.Request, inputAreas []LocationA
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithSaveSphereRow) (string, string, string, *int32) {
-		return area.Location, h.NullStringToVal(area.Sublocation), h.NullStringToVal(area.Area), h.NullInt32ToPtr(area.Version)
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
 	})
 
 	sharedResources := getSharedResources(inputAreas, resources)
@@ -119,7 +119,7 @@ func (cfg *apiConfig) getAreasCompSphere(r *http.Request, inputAreas []LocationA
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithCompSphereRow) (string, string, string, *int32) {
-		return area.Location, h.NullStringToVal(area.Sublocation), h.NullStringToVal(area.Area), h.NullInt32ToPtr(area.Version)
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
 	})
 
 	sharedResources := getSharedResources(inputAreas, resources)
@@ -143,7 +143,7 @@ func (cfg *apiConfig) getAreasDropOff(r *http.Request, inputAreas []LocationAPIR
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithDropOffRow) (string, string, string, *int32) {
-		return area.Location, h.NullStringToVal(area.Sublocation), h.NullStringToVal(area.Area), h.NullInt32ToPtr(area.Version)
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
 	})
 
 	sharedResources := getSharedResources(inputAreas, resources)
@@ -167,13 +167,102 @@ func (cfg *apiConfig) getAreasChocobo(r *http.Request, inputAreas []LocationAPIR
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithChocoboRow) (string, string, string, *int32) {
-		return area.Location, h.NullStringToVal(area.Sublocation), h.NullStringToVal(area.Area), h.NullInt32ToPtr(area.Version)
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
 	})
 
 	sharedResources := getSharedResources(inputAreas, resources)
 
 	return sharedResources, nil
 }
+
+
+
+func (cfg *apiConfig) getAreasCharacters(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
+	queryParam := "characters"
+	b, isEmpty, err := parseBooleanQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+	if isEmpty {
+		return inputAreas, nil
+	}
+
+	dbAreas, err := cfg.db.GetAreasWithCharacters(r.Context())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas with characters", err)
+	}
+
+	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithCharactersRow) (string, string, string, *int32) {
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
+	})
+
+	if !b {
+		resources = removeResources(inputAreas, resources)
+	}
+
+	sharedResources := getSharedResources(inputAreas, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getAreasAeons(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
+	queryParam := "aeons"
+	b, isEmpty, err := parseBooleanQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+	if isEmpty {
+		return inputAreas, nil
+	}
+
+	dbAreas, err := cfg.db.GetAreasWithAeons(r.Context())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas with aeons", err)
+	}
+
+	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithAeonsRow) (string, string, string, *int32) {
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
+	})
+
+	if !b {
+		resources = removeResources(inputAreas, resources)
+	}
+
+	sharedResources := getSharedResources(inputAreas, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getAreasMonsters(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
+	queryParam := "monsters"
+	b, isEmpty, err := parseBooleanQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+	if isEmpty {
+		return inputAreas, nil
+	}
+
+	dbAreas, err := cfg.db.GetAreasWithMonsters(r.Context())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas with monsters", err)
+	}
+
+	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithMonstersRow) (string, string, string, *int32) {
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
+	})
+
+	if !b {
+		resources = removeResources(inputAreas, resources)
+	}
+
+	sharedResources := getSharedResources(inputAreas, resources)
+
+	return sharedResources, nil
+}
+
 
 func (cfg *apiConfig) getAreasBosses(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
 	queryParam := "boss-fights"
@@ -187,11 +276,127 @@ func (cfg *apiConfig) getAreasBosses(r *http.Request, inputAreas []LocationAPIRe
 
 	dbAreas, err := cfg.db.GetAreasWithBosses(r.Context())
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas where you can ride a chocobo", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas with bosses", err)
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithBossesRow) (string, string, string, *int32) {
-		return h.NullStringToVal(area.Location), h.NullStringToVal(area.Sublocation), h.NullStringToVal(area.Area), h.NullInt32ToPtr(area.Version)
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
+	})
+
+	if !b {
+		resources = removeResources(inputAreas, resources)
+	}
+
+	sharedResources := getSharedResources(inputAreas, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getAreasShops(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
+	queryParam := "shops"
+	b, isEmpty, err := parseBooleanQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+	if isEmpty {
+		return inputAreas, nil
+	}
+
+	dbAreas, err := cfg.db.GetAreasWithShops(r.Context())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas with shops", err)
+	}
+
+	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithShopsRow) (string, string, string, *int32) {
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
+	})
+
+	if !b {
+		resources = removeResources(inputAreas, resources)
+	}
+
+	sharedResources := getSharedResources(inputAreas, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getAreasTreasures(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
+	queryParam := "treasures"
+	b, isEmpty, err := parseBooleanQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+	if isEmpty {
+		return inputAreas, nil
+	}
+
+	dbAreas, err := cfg.db.GetAreasWithTreasures(r.Context())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas with treasures", err)
+	}
+
+	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithTreasuresRow) (string, string, string, *int32) {
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
+	})
+
+	if !b {
+		resources = removeResources(inputAreas, resources)
+	}
+
+	sharedResources := getSharedResources(inputAreas, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getAreasSidequests(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
+	queryParam := "sidequests"
+	b, isEmpty, err := parseBooleanQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+	if isEmpty {
+		return inputAreas, nil
+	}
+
+	dbAreas, err := cfg.db.GetAreasWithSidequests(r.Context())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas with sidequests", err)
+	}
+
+	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithSidequestsRow) (string, string, string, *int32) {
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
+	})
+
+	if !b {
+		resources = removeResources(inputAreas, resources)
+	}
+
+	sharedResources := getSharedResources(inputAreas, resources)
+
+	return sharedResources, nil
+}
+
+
+func (cfg *apiConfig) getAreasFMVs(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
+	queryParam := "fmvs"
+	b, isEmpty, err := parseBooleanQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+	if isEmpty {
+		return inputAreas, nil
+	}
+
+	dbAreas, err := cfg.db.GetAreasWithFMVs(r.Context())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas with FMVs", err)
+	}
+
+	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithFMVsRow) (string, string, string, *int32) {
+		return area.Location, area.Sublocation, area.Area, h.NullInt32ToPtr(area.Version)
 	})
 
 	if !b {

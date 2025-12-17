@@ -112,8 +112,8 @@ func (cfg *apiConfig) getArea(r *http.Request, id int32) (Area, error) {
 		return Area{}, err
 	}
 
-	location := cfg.newNamedAPIResourceSimple("locations", h.NullInt32ToVal(dbArea.LocationID), h.NullStringToVal(dbArea.Location))
-	sublocation := cfg.newNamedAPIResourceSimple("sublocations", dbArea.SublocationID, h.NullStringToVal(dbArea.Sublocation))
+	location := cfg.newNamedAPIResourceSimple("locations", dbArea.LocationID, dbArea.Location)
+	sublocation := cfg.newNamedAPIResourceSimple("sublocations", dbArea.SublocationID, dbArea.Sublocation)
 
 	area := Area{
 		ID:                dbArea.ID,
@@ -149,7 +149,7 @@ func (cfg *apiConfig) retrieveAreas(r *http.Request) (LocationApiResourceList, e
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasRow) (string, string, string, *int32) {
-		return h.NullStringToVal(area.Location), h.NullStringToVal(area.Sublocation), area.Name, h.NullInt32ToPtr(area.Version)
+		return area.Location, area.Sublocation, area.Name, h.NullInt32ToPtr(area.Version)
 	})
 
 	filterFuncs := []func(*http.Request, []LocationAPIResource) ([]LocationAPIResource, error){
@@ -160,7 +160,14 @@ func (cfg *apiConfig) retrieveAreas(r *http.Request) (LocationApiResourceList, e
 		cfg.getAreasCompSphere,
 		cfg.getAreasDropOff,
 		cfg.getAreasChocobo,
+		cfg.getAreasCharacters,
+		cfg.getAreasAeons,
+		cfg.getAreasMonsters,
 		cfg.getAreasBosses,
+		cfg.getAreasShops,
+		cfg.getAreasTreasures,
+		cfg.getAreasSidequests,
+		cfg.getAreasFMVs,
 	}
 
 	for _, function := range filterFuncs {

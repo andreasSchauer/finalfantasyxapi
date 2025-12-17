@@ -1,69 +1,20 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
-	"os"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
-	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
 )
 
-type apiConfig struct {
-	db          *database.Queries
-	dbConn      *sql.DB
-	l           *seeding.Lookup
-	t           *TypeLookup
-	platform    string
-	adminApiKey string
-	host        string
-}
+
 
 func main() {
 	//const filepathRoot = "."
 	const port = "8080"
-	const domain = "localhost:8080"
 
-	godotenv.Load()
-	dbURL := os.Getenv("DB_URL")
-	if dbURL == "" {
-		log.Fatal("DB_URL must be set")
-	}
-
-	platform := os.Getenv("PLATFORM")
-	if platform == "" {
-		log.Fatal("PLATFORM must be set")
-	}
-
-	adminApiKey := os.Getenv("ADMIN_API_KEY")
-	if adminApiKey == "" {
-		log.Fatal("ADMIN_API_KEY must be set")
-	}
-
-	dbConn, err := sql.Open("postgres", dbURL)
-	if err != nil {
-		log.Fatalf("Error opening database: %s", err)
-	}
-	dbQueries := database.New(dbConn)
-
-	apiCfg := apiConfig{
-		db:          dbQueries,
-		dbConn:      dbConn,
-		platform:    platform,
-		adminApiKey: adminApiKey,
-		host:        domain,
-	}
-
-	apiCfg.l, err = seeding.SeedDatabase(apiCfg.db, apiCfg.dbConn)
+	apiCfg, err := apiConfigInit()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	typeLookup := TypeLookupInit()
-	apiCfg.t = &typeLookup
 
 	mux := http.NewServeMux()
 
