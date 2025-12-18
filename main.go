@@ -3,8 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 )
 
 
@@ -13,7 +11,7 @@ func main() {
 	//const filepathRoot = "."
 	const port = "8080"
 
-	apiCfg, err := api.ConfigInit()
+	apiCfg, err := ConfigInit()
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -916,7 +916,9 @@ func (q *Queries) GetAreaCharacters(ctx context.Context, id int32) ([]GetAreaCha
 const getAreaConnections = `-- name: GetAreaConnections :many
 SELECT
     ac.id, ac.data_hash, ac.area_id, ac.connection_type, ac.story_only, ac.notes,
+    l.id AS location_id,
     l.name AS location,
+    s.id AS sublocation_id,
     s.name AS sublocation,
     a.name AS area,
     a.version AS version,
@@ -938,7 +940,9 @@ type GetAreaConnectionsRow struct {
 	ConnectionType AreaConnectionType
 	StoryOnly      bool
 	Notes          sql.NullString
+	LocationID     int32
 	Location       string
+	SublocationID  int32
 	Sublocation    string
 	Area           string
 	Version        sql.NullInt32
@@ -961,7 +965,9 @@ func (q *Queries) GetAreaConnections(ctx context.Context, id int32) ([]GetAreaCo
 			&i.ConnectionType,
 			&i.StoryOnly,
 			&i.Notes,
+			&i.LocationID,
 			&i.Location,
+			&i.SublocationID,
 			&i.Sublocation,
 			&i.Area,
 			&i.Version,
@@ -2688,6 +2694,81 @@ func (q *Queries) GetLocationAreas(ctx context.Context, id int32) ([]GetLocation
 	return items, nil
 }
 
+const getLocationConnections = `-- name: GetLocationConnections :many
+SELECT
+    ac.id, ac.data_hash, ac.area_id, ac.connection_type, ac.story_only, ac.notes,
+    l.id AS location_id,
+    l.name AS location,
+    s.id AS sublocation_id,
+    s.name AS sublocation,
+    a.name AS area,
+    a.version AS version,
+    a.specification AS specification
+FROM area_connections ac
+JOIN j_area_connected_areas j ON j.connection_id = ac.id
+JOIN areas a ON ac.area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+JOIN areas a2 ON j.area_id = a2.id
+JOIN sublocations s2 ON a2.sublocation_id = s2.id
+JOIN locations l2 ON s2.location_id = l2.id
+WHERE l2.id = $1 AND l2.id != l.id
+ORDER BY ac.id
+`
+
+type GetLocationConnectionsRow struct {
+	ID             int32
+	DataHash       string
+	AreaID         int32
+	ConnectionType AreaConnectionType
+	StoryOnly      bool
+	Notes          sql.NullString
+	LocationID     int32
+	Location       string
+	SublocationID  int32
+	Sublocation    string
+	Area           string
+	Version        sql.NullInt32
+	Specification  sql.NullString
+}
+
+func (q *Queries) GetLocationConnections(ctx context.Context, id int32) ([]GetLocationConnectionsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationConnections, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetLocationConnectionsRow
+	for rows.Next() {
+		var i GetLocationConnectionsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.AreaID,
+			&i.ConnectionType,
+			&i.StoryOnly,
+			&i.Notes,
+			&i.LocationID,
+			&i.Location,
+			&i.SublocationID,
+			&i.Sublocation,
+			&i.Area,
+			&i.Version,
+			&i.Specification,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getLocationMonsters = `-- name: GetLocationMonsters :many
 SELECT DISTINCT
     m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text,
@@ -2833,6 +2914,80 @@ func (q *Queries) GetSublocationAreas(ctx context.Context, id int32) ([]GetSublo
 			&i.Sublocation,
 			&i.Area,
 			&i.Version,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSublocationConnections = `-- name: GetSublocationConnections :many
+SELECT
+    ac.id, ac.data_hash, ac.area_id, ac.connection_type, ac.story_only, ac.notes,
+    l.id AS location_id,
+    l.name AS location,
+    s.id AS sublocation_id,
+    s.name AS sublocation,
+    a.name AS area,
+    a.version AS version,
+    a.specification AS specification
+FROM area_connections ac
+JOIN j_area_connected_areas j ON j.connection_id = ac.id
+JOIN areas a ON ac.area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+JOIN areas a2 ON j.area_id = a2.id
+JOIN sublocations s2 ON a2.sublocation_id = s2.id
+WHERE s2.id = $1 AND s2.id != s.id
+ORDER BY ac.id
+`
+
+type GetSublocationConnectionsRow struct {
+	ID             int32
+	DataHash       string
+	AreaID         int32
+	ConnectionType AreaConnectionType
+	StoryOnly      bool
+	Notes          sql.NullString
+	LocationID     int32
+	Location       string
+	SublocationID  int32
+	Sublocation    string
+	Area           string
+	Version        sql.NullInt32
+	Specification  sql.NullString
+}
+
+func (q *Queries) GetSublocationConnections(ctx context.Context, id int32) ([]GetSublocationConnectionsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationConnections, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetSublocationConnectionsRow
+	for rows.Next() {
+		var i GetSublocationConnectionsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.DataHash,
+			&i.AreaID,
+			&i.ConnectionType,
+			&i.StoryOnly,
+			&i.Notes,
+			&i.LocationID,
+			&i.Location,
+			&i.SublocationID,
+			&i.Sublocation,
+			&i.Area,
+			&i.Version,
+			&i.Specification,
 		); err != nil {
 			return nil, err
 		}
