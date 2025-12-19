@@ -40,6 +40,7 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	switch len(segments) {
 	case 0:
 		// /api/areas
+		fmt.Println(r.URL)
 		resourceList, err := cfg.retrieveAreas(r)
 		if handleHTTPError(w, err) {
 			return
@@ -68,6 +69,8 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 		// /api/areas/{id}/{subSection}
 		// areaID := segments[0]
 		subSection := segments[1]
+
+		// to generalize the switch cases, I could use a map[string]WhateverList and trigger its function or return the error, if the key is not in there
 		switch subSection {
 		case "connected":
 			fmt.Println(segments)

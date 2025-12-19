@@ -12,14 +12,10 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		panic(err)
 	}
+
 	testCfg = &cfg
 
 	code := m.Run()
-
-	// cleanup
-	if testCfg != nil && testCfg.dbConn != nil {
-		_ = testCfg.dbConn.Close()
-	}
-
+	_ = testCfg.dbConn.Close()
 	os.Exit(code)
 }

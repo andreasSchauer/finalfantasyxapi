@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 type ListParams struct {
@@ -61,7 +62,7 @@ func (cfg *Config) createNextURL(r *http.Request, offset, limit, size int) *stri
 		return nil
 	}
 
-	path := r.URL.Path
+	path := strings.TrimSuffix(r.URL.Path, "/")
 	q := r.URL.Query()
 	q.Set("limit", strconv.Itoa(limit))
 	q.Set("offset", strconv.Itoa(nextOffset))
@@ -81,7 +82,7 @@ func (cfg *Config) createPreviousURL(r *http.Request, offset, limit int) *string
 		limit = offset
 	}
 
-	path := r.URL.Path
+	path := strings.TrimSuffix(r.URL.Path, "/")
 	q := r.URL.Query()
 	q.Set("limit", strconv.Itoa(limit))
 	q.Set("offset", strconv.Itoa(previousOffset))

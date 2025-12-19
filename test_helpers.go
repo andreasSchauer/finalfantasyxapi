@@ -1,6 +1,14 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
+
+
+func getTestName(name, requestURL string, caseNum int) string {
+	return fmt.Sprintf("%s: %d, requestURL: %s", name, caseNum, requestURL)
+}
 
 
 func testResponseChecks(t *testing.T, testCfg *Config, testCase string, checks []testCheck, lenMap map[string]int) {
@@ -33,6 +41,22 @@ func toIface[T HasAPIResource](in []T) []HasAPIResource {
 }
 
 
+
+func containsAllResources[T HasAPIResource](cfg *Config, resources []T, expectedPaths []string) bool {
+	resourceMap := getResourceMap(resources)
+
+	for _, path := range expectedPaths {
+		url := cfg.completeURL(path)
+		_, ok := resourceMap[url]
+		if !ok {
+			return false
+		}
+	}
+
+	return true
+}
+
+
 func hasExpectedLength[T HasAPIResource](resources []T, expected int) bool {
 	return len(resources) == expected
 }
@@ -61,25 +85,14 @@ func resourcePtrsMatch[T HasAPIResource](cfg *Config, resourcePtr *T, expectedPa
 }
 
 
-func containsAllResources[T HasAPIResource](cfg *Config, resources []T, expectedPaths []string) bool {
-	resourceMap := getResourceMap(resources)
-
-	for _, path := range expectedPaths {
-		url := cfg.completeURL(path)
-		_, ok := resourceMap[url]
-		if !ok {
-			return false
-		}
+func paginationURLsMatch(cfg *Config, gotURLPtr, expectedPathPtr *string) bool {
+	if gotURLPtr == nil {
+		return expectedPathPtr == nil
 	}
 
-	return true
-}
+	gotURL := *gotURLPtr
+	expectedPath := *expectedPathPtr
+	expectedURL := cfg.completeURL(expectedPath)
 
-
-func derefResourcePtr[T IsAPIResource](resourcePtr *T) T {
-	if resourcePtr == nil {
-		var zeroType T
-		return zeroType
-	}
-	return *resourcePtr
+	return gotURL == expectedURL
 }

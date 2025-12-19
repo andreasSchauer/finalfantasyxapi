@@ -7,3 +7,11 @@ func GetInt32Ptr(i int32) *int32 {
 func GetStrPtr(s string) *string {
 	return &s
 }
+
+func StringPtrToString(s *string) string {
+	if s == nil {
+		return ""
+	}
+
+	return *s
+}

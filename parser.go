@@ -37,7 +37,7 @@ func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup 
 	// check, if the segment is an id
 	parsedID, err := strconv.Atoi(decoded)
 	if err == nil {
-		if parsedID > len(lookup) {
+		if parsedID > len(lookup) || parsedID <= 0 {
 			return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("provided %s ID is out of range. Max ID: %d", resourceType, len(lookup)), err)
 		}
 		return newParseResponse(int32(parsedID), ""), nil

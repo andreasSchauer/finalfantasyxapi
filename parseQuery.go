@@ -73,7 +73,7 @@ func parseIDBasedQuery(r *http.Request, queryParam string, maxID int) (int32, bo
 		return 0, false, newHTTPError(http.StatusBadRequest, "invalid id", err)
 	}
 
-	if id > maxID {
+	if id > maxID || id >= 0 {
 		return 0, false, newHTTPError(http.StatusNotFound, fmt.Sprintf("provided %s ID is out of range. Max ID: %d", query, maxID), err)
 	}
 

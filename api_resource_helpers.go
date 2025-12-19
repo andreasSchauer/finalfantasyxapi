@@ -121,3 +121,12 @@ func sortAPIResources[T HasAPIResource](a, b T) int {
 
 	return 0
 }
+
+
+func derefResourcePtr[T IsAPIResource](resourcePtr *T) T {
+	if resourcePtr == nil {
+		var zeroType T
+		return zeroType
+	}
+	return *resourcePtr
+}

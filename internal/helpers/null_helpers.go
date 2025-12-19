@@ -84,14 +84,6 @@ func ObjPtrToInt32ID[T HasID](objPtr *T) int32 {
 	return obj.GetID()
 }
 
-func StringPtrToString(s *string) string {
-	if s == nil {
-		return ""
-	}
-
-	return *s
-}
-
 func NullStringToPtr(s sql.NullString) *string {
 	if !s.Valid {
 		return nil
