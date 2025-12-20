@@ -1,44 +1,53 @@
 package main
 
 type testInOut struct {
-	requestURL     string
-	expectedStatus int
-	expectedErr    string
+	requestURL     	string
+	expectedStatus 	int
+	expectedErr    	string
+	dontCheck 		map[string]bool
 }
 
-type expectedNameVer struct {
+type expNameVer struct {
 	id      int32
 	name    string
 	version *int32
 	lenMap  map[string]int
 }
 
-type expectedUnique struct {
+type expUnique struct {
 	id     int32
 	name   string
 	lenMap map[string]int
 }
 
-type expectedList struct {
+type expList struct {
 	count    int
 	next     *string
 	previous *string
 	results  []string
 }
 
-type testCheck struct {
-	name     string
-	got      []HasAPIResource
-	expected []string
+type resListTest struct {
+	name 		string
+	exp  		[]string
+	got  		[]HasAPIResource
+}
+
+func newResListTest[T HasAPIResource](fieldName string, exp []string, got []T) resListTest {
+	return resListTest{
+		name: fieldName,
+		exp:  exp,
+		got:  toHasAPIResSlice(got),
+	}
 }
 
 type expResAreas struct {
 	parentLocation    string
 	parentSublocation string
-	locBasedExpect
+	expLocBased
 }
 
-type locBasedExpect struct {
+type expLocBased struct {
 	sidequest      *string
 	connectedAreas []string
 	characters     []string
@@ -55,9 +64,9 @@ type locBasedExpect struct {
 }
 
 type expResOverdriveModes struct {
-	description		string
-	effect			string
-	modeType		string
-	fillRate		*float32
-	actionsAmount	map[string]int32
+	description   string
+	effect        string
+	modeType      string
+	fillRate      *float32
+	actionsAmount map[string]int32
 }

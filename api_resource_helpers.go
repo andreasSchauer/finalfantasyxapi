@@ -100,6 +100,17 @@ func resourceMapToSlice[T HasAPIResource](lookup map[string]T) []T {
 	return s
 }
 
+func getResourceAmountMap[T ResourceAmount](items []T) map[string]int32 {
+	amountMap := make(map[string]int32)
+
+	for _, item := range items {
+		key := item.GetName()
+		amountMap[key] = item.GetVal()
+	}
+
+	return amountMap
+}
+
 func sortAPIResources[T HasAPIResource](a, b T) int {
 	if a.getAPIResource().getID() < b.getAPIResource().getID() {
 		return -1

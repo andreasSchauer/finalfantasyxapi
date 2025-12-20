@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -10,117 +13,122 @@ func getTestName(name, requestURL string, caseNum int) string {
 	return fmt.Sprintf("%s: %d, requestURL: %s", name, caseNum, requestURL)
 }
 
+// makes the http request for the test and returns the responseRecorder needed to decode the json
+func setupTest(t *testing.T, tc testInOut, testFunc string, testNum int, handlerFunc func(http.ResponseWriter, *http.Request)) (*httptest.ResponseRecorder, string, bool) {
+	t.Helper()
+	testName := getTestName(testFunc, tc.requestURL, testNum)
+	caughtErr := false
 
-// can also convert into a testing function
-func containsAllResources[T HasAPIResource](cfg *Config, resources []T, expectedPaths []string) bool {
-	resourceMap := getResourceMap(resources)
+	req := httptest.NewRequest(http.MethodGet, tc.requestURL, nil)
+	rr := httptest.NewRecorder()
 
-	for _, path := range expectedPaths {
-		url := cfg.completeURL(path)
-		_, ok := resourceMap[url]
+	handler := http.HandlerFunc(handlerFunc)
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != tc.expectedStatus {
+		t.Fatalf("%s: expected %d, got %d, body=%s", testName, tc.expectedStatus, rr.Code, rr.Body.String())
+	}
+
+	if tc.expectedErr != "" {
+		raw := rr.Body.String()
+		if !strings.Contains(raw, tc.expectedErr) {
+			t.Fatalf("%s: expected error message to contain %s, got %q", testName, tc.expectedErr, raw)
+		}
+		caughtErr = true
+		return nil, "", caughtErr
+	}
+
+	return rr, testName, caughtErr
+}
+
+// checks, if all basic fields of a resource with a unique name are equal
+func testExpectedUnique(t *testing.T, testName string, tc expUnique, gotID int32, gotName string) {
+	t.Helper()
+	compare(t, testName, "id", tc.id, gotID, nil)
+	compare(t, testName, "name", tc.name, gotName, nil)
+}
+
+// checks, if all basic fields of a resource that uses a name/version pattern are equal
+func testExpectedNameVer(t *testing.T, testName string, tc expNameVer, gotID int32, gotName string, gotVer *int32) {
+	t.Helper()
+	compare(t, testName, "id", tc.id, gotID, nil)
+	compare(t, testName, "name", tc.name, gotName, nil)
+	compare(t, testName, "version", tc.version, gotVer, nil)
+}
+
+// checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resources
+func testAPIResourceList[T IsAPIResourceList](t *testing.T, testCfg *Config, testName string, expList expList, gotList T, dontCheck map[string]bool) {
+	t.Helper()
+	got := gotList.getListParams()
+	compare(t, testName, "count", expList.count, got.Count, nil)
+
+	comparePaginationURL(t, testCfg, testName, "previous", expList.previous, got.Previous, dontCheck)
+	comparePaginationURL(t, testCfg, testName, "next", expList.next, got.Next, dontCheck)
+
+	listTest := resListTest{
+		name: "results",
+		exp:  expList.results,
+		got:  gotList.getResults(),
+	}
+
+	testResourceList(t, testCfg, testName, listTest, nil)
+}
+
+// checks if all provided slices of resources contains all stated resources and also checks for their length, if stated
+func testResourceLists(t *testing.T, testCfg *Config, testName string, checks []resListTest, lenMap map[string]int) {
+	t.Helper()
+
+	for _, c := range checks {
+		testResourceList(t, testCfg, testName, c, lenMap)
+	}
+}
+
+// checks if the provided slice of resources contains all stated resources and also checks for its length, if stated
+func testResourceList(t *testing.T, testCfg *Config, testName string, expList resListTest, lenMap map[string]int) {
+	t.Helper()
+
+	if len(expList.exp) == 0 {
+		return
+	}
+	checkResourcesInSlice(t, testCfg, testName, expList.name, expList.exp, expList.got)
+
+	expLen, ok := lenMap[expList.name]
+	if !ok {
+		return
+	}
+
+	compare(t, testName, expList.name+" length", expLen, len(expList.got), nil)
+}
+
+
+// checks if stated resources are in resource slice
+func checkResourcesInSlice[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName string, expectedPaths []string, gotRes []T) {
+	gotMap := getResourceMap(gotRes)
+
+	for _, expPath := range expectedPaths {
+		expURL := cfg.completeURL(expPath)
+		_, ok := gotMap[expURL]
 		if !ok {
-			return false
+			t.Fatalf("%s: %s doesn't contain all wanted resources. missing %s", testName, fieldName, expURL)
 		}
 	}
-
-	return true
 }
 
-func getResourceAmountMap[T ResourceAmount](items []T) map[string]int32 {
-	amountMap := make(map[string]int32)
-
-	for _, item := range items {
-		key := item.GetName()
-		amountMap[key] = item.GetVal()
+// checks if stated ResourceAmount entries are in slices (used for baseStats, itemAmounts, monsterAmounts)
+func checkResAmtsInSlice[T ResourceAmount](t *testing.T, testName, fieldName string, expAmounts map[string]int32, gotAmounts []T, lenMap map[string]int) {
+	expLen, ok := lenMap[fieldName]
+	if !ok {
+		return
 	}
+	compare(t, testName, fieldName+" length", expLen, len(gotAmounts), nil)
 
-	return amountMap
-}
+	gotMap := getResourceAmountMap(gotAmounts)
 
-func hasExpectedLength[T HasAPIResource](resources []T, expected int) bool {
-	return len(resources) == expected
-}
-
-
-func testResourceAmount[T ResourceAmount](t *testing.T, testName, resName string, resSlice []T, expAmounts map[string]int32) {
-	gotResAmount := getResourceAmountMap(resSlice)
 	for key, exp := range expAmounts {
-		got, ok := gotResAmount[key]
+		got, ok := gotMap[key]
 		if !ok {
-			t.Fatalf("%s: %s doesn't contain resource %s", testName, resName, key)
+			t.Fatalf("%s: %s doesn't contain resource %s", testName, fieldName, key)
 		}
-		testInt32(t, testName, key, exp, got)
+		compare(t, testName, key, exp, got, nil)
 	}
-}
-
-func testResourceMatch[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName, expPath string, gotRes T) {
-	gotURL := gotRes.getAPIResource().getURL()
-	expURL := cfg.completeURL(expPath)
-
-	if expURL != gotURL {
-		t.Fatalf("%s: expected %s %s, got %s", testName, fieldName, expURL, gotURL)
-	}
-}
-
-func testResourcePtrMatch[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName string, expPathPtr *string, gotResPtr *T) {
-	if expPathPtr == nil {
-		if gotResPtr == nil {
-			return
-		}
-		res := *gotResPtr
-		gotURL := res.getAPIResource().getURL()
-		t.Fatalf("%s: expected nil for %s, but got %s", testName, fieldName, gotURL)
-	}
-
-	gotRes := *gotResPtr
-	expPath := *expPathPtr
-
-	testResourceMatch(t, cfg, testName, fieldName, expPath, gotRes)
-}
-
-func testInt32(t *testing.T, testName, fieldName string, expInt, gotInt int32) {
-	if expInt != gotInt {
-		t.Fatalf("%s: expected %s %d, got %d", testName, fieldName, expInt, gotInt)
-	}
-}
-
-func testFloat32(t *testing.T, testName, fieldName string, expFloat, gotFloat float32) {
-	if expFloat != gotFloat {
-		t.Fatalf("%s: expected %s %.2f, got %.2f", testName, fieldName, expFloat, gotFloat)
-	}
-}
-
-func testFloat32Ptr(t *testing.T, testName, fieldName string, expFloatPtr, gotFloatPtr *float32) {
-	if expFloatPtr == nil {
-		if gotFloatPtr == nil {
-			return
-		}
-		t.Fatalf("%s: expected nil for %s, but got %.2f", testName, fieldName, *gotFloatPtr)
-	}
-
-	testFloat32(t, testName, fieldName, *expFloatPtr, *gotFloatPtr)
-}
-
-func testString(t *testing.T, testName, fieldName, expStr, gotStr string) {
-	if expStr != "" && expStr != gotStr {
-		t.Fatalf("%s: expected %s %s, got %s", testName, fieldName, expStr, gotStr)
-	}
-}
-
-
-
-func testPaginationURLs(t *testing.T, cfg *Config, testName, fieldName string, gotURLPtr, expPathPtr *string) {
-	if expPathPtr == nil {
-		if gotURLPtr == nil {
-			return
-		}
-		gotURL := *gotURLPtr
-		t.Fatalf("%s: expected nil for %s, but got %s", testName, fieldName, gotURL)
-	}
-
-	gotURL := *gotURLPtr
-	expPath := *expPathPtr
-	expURL := cfg.completeURL(expPath)
-
-	testString(t, testName, fieldName, expURL, gotURL)
 }

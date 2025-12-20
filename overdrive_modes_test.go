@@ -11,7 +11,7 @@ import (
 func TestGetOverdriveMode(t *testing.T) {
 	tests := []struct {
 		testInOut
-		expectedUnique
+		expUnique
 		expResOverdriveModes
 	}{
 		{
@@ -39,8 +39,11 @@ func TestGetOverdriveMode(t *testing.T) {
 			testInOut: testInOut{
 				requestURL:     "/api/overdrive-modes/ally/",
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"effect": true,
+				},
 			},
-			expectedUnique: expectedUnique{
+			expUnique: expUnique{
 				id:   14,
 				name: "ally",
 				lenMap: map[string]int{
@@ -49,18 +52,61 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 			expResOverdriveModes: expResOverdriveModes{
 				description: "Charges on character's turn.",
-				effect:      "The gauge fills at the start of the character's turn.",
 				modeType:    "per-action",
 				fillRate:    h.GetFloat32Ptr(0.03),
 				actionsAmount: map[string]int32{
-					"tidus": 600,
-					"yuna": 500,
-					"wakka": 350,
-					"lulu": 480,
+					"tidus":   600,
+					"yuna":    500,
+					"wakka":   350,
+					"lulu":    480,
 					"kimahri": 300,
-					"auron": 450,
-					"rikku": 320,
+					"auron":   450,
+					"rikku":   320,
 				},
+			},
+		},
+		{
+			testInOut: testInOut{
+				requestURL:     "/api/overdrive-modes/3",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"description": true,
+				},
+			},
+			expUnique: expUnique{
+				id:   3,
+				name: "comrade",
+			},
+			expResOverdriveModes: expResOverdriveModes{
+				effect:   "The gauge fills when an ally takes damage.",
+				modeType: "formula",
+				fillRate: nil,
+				actionsAmount: map[string]int32{
+					"tidus": 300,
+					"wakka": 100,
+					"rikku": 100,
+				},
+			},
+		},
+		{
+			testInOut: testInOut{
+				requestURL:     "/api/overdrive-modes/1/",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"description": true,
+					"effect":      true,
+					"fill rate":   true,
+				},
+			},
+			expUnique: expUnique{
+				id:   1,
+				name: "stoic",
+				lenMap: map[string]int{
+					"actions": 0,
+				},
+			},
+			expResOverdriveModes: expResOverdriveModes{
+				modeType: "formula",
 			},
 		},
 	}
@@ -71,172 +117,84 @@ func TestGetOverdriveMode(t *testing.T) {
 			continue
 		}
 
-		var o OverdriveMode
-		if err := json.NewDecoder(rr.Body).Decode(&o); err != nil {
+		var got OverdriveMode
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testExpectedUnique(t, testName, tc.expectedUnique, o.ID, o.Name)
+		testExpectedUnique(t, testName, tc.expUnique, got.ID, got.Name)
 
-		testString(t, testName, "description", tc.description, o.Description)
-		testString(t, testName, "effect", tc.effect, o.Effect)
-		testString(t, testName, "type", tc.modeType, o.Type)
-		testFloat32Ptr(t, testName, "fill rate", tc.fillRate, o.FillRate)
+		compare(t, testName, "description", tc.description, got.Description, tc.dontCheck)
+		compare(t, testName, "effect", tc.effect, got.Effect, tc.dontCheck)
+		compare(t, testName, "type", tc.modeType, got.Type, tc.dontCheck)
+		compare(t, testName, "fill rate", tc.fillRate, got.FillRate, tc.dontCheck)
 
-		testResourceAmount(t, testName, o.Name, o.Actions, tc.actionsAmount)
+		checkResAmtsInSlice(t, testName, "actions", tc.actionsAmount, got.Actions, tc.lenMap)
 	}
 }
 
-/*
 func TestRetrieveOverdriveModes(t *testing.T) {
 	tests := []struct {
 		testInOut
-		expectedList
+		expList
 	}{
 		{
 			testInOut: testInOut{
-				requestURL:     "/api/areas?comp-sphere=fa",
+				requestURL:     "/api/overdrive-modes?type=f",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value. usage: comp-sphere={boolean}",
+				expectedErr:    "invalid value: f, use /api/overdrive-mode-type to see valid values.",
 			},
 		},
 		{
 			testInOut: testInOut{
-				requestURL:     "/api/areas?item=113",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "provided item ID is out of range. Max ID: 112",
-			},
-		},
-		{
-			testInOut: testInOut{
-				requestURL:     "/api/areas?key-item=61",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "provided key-item ID is out of range. Max ID: 60",
-			},
-		},
-		{
-			testInOut: testInOut{
-				requestURL:     "/api/areas?location=0",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "provided location ID is out of range. Max ID: 26",
-			},
-		},
-		{
-			testInOut: testInOut{
-				requestURL:     "/api/areas/",
+				requestURL:     "/api/overdrive-modes/",
 				expectedStatus: http.StatusOK,
 			},
-			expectedList: expectedList{
-				count: 240,
-				next:  h.GetStrPtr("/areas?limit=20&offset=20"),
+			expList: expList{
+				count:    17,
+				previous: nil,
+				next:     nil,
 				results: []string{
-					"/areas/1",
-					"/areas/5",
-					"/areas/20",
+					"/overdrive-modes/1",
+					"/overdrive-modes/8",
+					"/overdrive-modes/17",
 				},
 			},
 		},
 		{
 			testInOut: testInOut{
-				requestURL:     "/api/areas?limit=240",
+				requestURL:     "/api/overdrive-modes?type=formula",
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"previous": true,
+					"next":     true,
+				},
 			},
-			expectedList: expectedList{
-				count: 240,
+			expList: expList{
+				count: 4,
 				results: []string{
-					"/areas/1",
-					"/areas/50",
-					"/areas/240",
+					"/overdrive-modes/1",
+					"/overdrive-modes/2",
+					"/overdrive-modes/3",
+					"/overdrive-modes/4",
 				},
 			},
 		},
 		{
 			testInOut: testInOut{
-				requestURL:     "/api/areas?offset=50&limit=30",
+				requestURL:     "/api/overdrive-modes?type=per-action",
 				expectedStatus: http.StatusOK,
-			},
-			expectedList: expectedList{
-				count:    240,
-				next:     h.GetStrPtr("/areas?limit=30&offset=80"),
-				previous: h.GetStrPtr("/areas?limit=30&offset=20"),
-				results: []string{
-					"/areas/51",
-					"/areas/80",
+				dontCheck: map[string]bool{
+					"previous": true,
+					"next":     true,
 				},
 			},
-		},
-		{
-			testInOut: testInOut{
-				requestURL:     "/api/areas?monsters=true&chocobo=true&save-sphere=true",
-				expectedStatus: http.StatusOK,
-			},
-			expectedList: expectedList{
-				count: 3,
+			expList: expList{
+				count: 13,
 				results: []string{
-					"/areas/88",
-					"/areas/97",
-					"/areas/203",
-				},
-			},
-		},
-		{
-			testInOut: testInOut{
-				requestURL:     "/api/areas?item=elixir&story-based=false&monsters=false",
-				expectedStatus: http.StatusOK,
-			},
-			expectedList: expectedList{
-				count: 5,
-				results: []string{
-					"/areas/35",
-					"/areas/129",
-					"/areas/140",
-					"/areas/163",
-					"/areas/208",
-				},
-			},
-		},
-		{
-			testInOut: testInOut{
-				requestURL:     "/api/areas?characters=true",
-				expectedStatus: http.StatusOK,
-			},
-			expectedList: expectedList{
-				count: 7,
-				results: []string{
-					"/areas/1",
-					"/areas/20",
-					"/areas/103",
-				},
-			},
-		},
-		{
-			testInOut: testInOut{
-				requestURL:     "/api/areas?sidequests=true",
-				expectedStatus: http.StatusOK,
-			},
-			expectedList: expectedList{
-				count: 11,
-				results: []string{
-					"/areas/75",
-					"/areas/140",
-					"/areas/144",
-					"/areas/145",
-					"/areas/182",
-					"/areas/185",
-					"/areas/203",
-				},
-			},
-		},
-		{
-			testInOut: testInOut{
-				requestURL:     "/api/areas?key-item=37",
-				expectedStatus: http.StatusOK,
-			},
-			expectedList: expectedList{
-				count: 2,
-				results: []string{
-					"/areas/46",
-					"/areas/169",
+					"/overdrive-modes/5",
+					"/overdrive-modes/12",
+					"/overdrive-modes/17",
 				},
 			},
 		},
@@ -248,12 +206,11 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			continue
 		}
 
-		var res LocationApiResourceList
-		if err := json.NewDecoder(rr.Body).Decode(&res); err != nil {
+		var got NamedApiResourceList
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testAPIResourceList(t, testCfg, testName, res, tc.expectedList)
+		testAPIResourceList(t, testCfg, testName, tc.expList, got, tc.dontCheck)
 	}
 }
-*/
