@@ -8,13 +8,26 @@ import (
 	"testing"
 )
 
+type resListTest struct {
+	name string
+	exp  []string
+	got  []HasAPIResource
+}
+
+func newResListTest[T HasAPIResource](fieldName string, exp []string, got []T) resListTest {
+	return resListTest{
+		name: fieldName,
+		exp:  exp,
+		got:  toHasAPIResSlice(got),
+	}
+}
 
 func getTestName(name, requestURL string, caseNum int) string {
 	return fmt.Sprintf("%s: %d, requestURL: %s", name, caseNum, requestURL)
 }
 
 // makes the http request for the test and returns the responseRecorder needed to decode the json
-func setupTest(t *testing.T, tc testInOut, testFunc string, testNum int, handlerFunc func(http.ResponseWriter, *http.Request)) (*httptest.ResponseRecorder, string, bool) {
+func setupTest(t *testing.T, tc testGeneral, testFunc string, testNum int, handlerFunc func(http.ResponseWriter, *http.Request)) (*httptest.ResponseRecorder, string, bool) {
 	t.Helper()
 	testName := getTestName(testFunc, tc.requestURL, testNum)
 	caughtErr := false
@@ -75,16 +88,16 @@ func testAPIResourceList[T IsAPIResourceList](t *testing.T, testCfg *Config, tes
 }
 
 // checks if all provided slices of resources contains all stated resources and also checks for their length, if stated
-func testResourceLists(t *testing.T, testCfg *Config, testName string, checks []resListTest, lenMap map[string]int) {
+func testResourceLists(t *testing.T, testCfg *Config, testName string, checks []resListTest, expLengths map[string]int) {
 	t.Helper()
 
 	for _, c := range checks {
-		testResourceList(t, testCfg, testName, c, lenMap)
+		testResourceList(t, testCfg, testName, c, expLengths)
 	}
 }
 
 // checks if the provided slice of resources contains all stated resources and also checks for its length, if stated
-func testResourceList(t *testing.T, testCfg *Config, testName string, expList resListTest, lenMap map[string]int) {
+func testResourceList(t *testing.T, testCfg *Config, testName string, expList resListTest, expLengths map[string]int) {
 	t.Helper()
 
 	if len(expList.exp) == 0 {
@@ -92,14 +105,13 @@ func testResourceList(t *testing.T, testCfg *Config, testName string, expList re
 	}
 	checkResourcesInSlice(t, testCfg, testName, expList.name, expList.exp, expList.got)
 
-	expLen, ok := lenMap[expList.name]
+	expLen, ok := expLengths[expList.name]
 	if !ok {
 		return
 	}
 
 	compare(t, testName, expList.name+" length", expLen, len(expList.got), nil)
 }
-
 
 // checks if stated resources are in resource slice
 func checkResourcesInSlice[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName string, expectedPaths []string, gotRes []T) {
@@ -114,9 +126,10 @@ func checkResourcesInSlice[T HasAPIResource](t *testing.T, cfg *Config, testName
 	}
 }
 
-// checks if stated ResourceAmount entries are in slices (used for baseStats, itemAmounts, monsterAmounts)
-func checkResAmtsInSlice[T ResourceAmount](t *testing.T, testName, fieldName string, expAmounts map[string]int32, gotAmounts []T, lenMap map[string]int) {
-	expLen, ok := lenMap[fieldName]
+// will need to use name-version pattern in GetName() for monsterAmount
+// checks if stated ResourceAmount entries are in slices (used for baseStats, itemAmounts, monsterAmounts) and if their amount values match
+func checkResAmtsInSlice[T ResourceAmount](t *testing.T, testName, fieldName string, expAmounts map[string]int32, gotAmounts []T, expLengths map[string]int) {
+	expLen, ok := expLengths[fieldName]
 	if !ok {
 		return
 	}

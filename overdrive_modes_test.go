@@ -10,47 +10,47 @@ import (
 
 func TestGetOverdriveMode(t *testing.T) {
 	tests := []struct {
-		testInOut
+		testGeneral
 		expUnique
-		expResOverdriveModes
+		expOverdriveModes
 	}{
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/ally/2",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    `Wrong format. Usage: /api/overdrive-modes/{name or id}`,
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/18",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "provided overdrive-mode ID is out of range. Max ID: 17",
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/a",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "overdrive-mode not found: a.",
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/ally/",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"effect": true,
 				},
+				expLengths: map[string]int{
+					"actions": 7,
+				},
 			},
 			expUnique: expUnique{
 				id:   14,
 				name: "ally",
-				lenMap: map[string]int{
-					"actions": 7,
-				},
 			},
-			expResOverdriveModes: expResOverdriveModes{
+			expOverdriveModes: expOverdriveModes{
 				description: "Charges on character's turn.",
 				modeType:    "per-action",
 				fillRate:    h.GetFloat32Ptr(0.03),
@@ -66,7 +66,7 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/3",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -77,7 +77,7 @@ func TestGetOverdriveMode(t *testing.T) {
 				id:   3,
 				name: "comrade",
 			},
-			expResOverdriveModes: expResOverdriveModes{
+			expOverdriveModes: expOverdriveModes{
 				effect:   "The gauge fills when an ally takes damage.",
 				modeType: "formula",
 				fillRate: nil,
@@ -89,7 +89,7 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/1/",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -97,22 +97,22 @@ func TestGetOverdriveMode(t *testing.T) {
 					"effect":      true,
 					"fill rate":   true,
 				},
+				expLengths: map[string]int{
+					"actions": 0,
+				},
 			},
 			expUnique: expUnique{
 				id:   1,
 				name: "stoic",
-				lenMap: map[string]int{
-					"actions": 0,
-				},
 			},
-			expResOverdriveModes: expResOverdriveModes{
+			expOverdriveModes: expOverdriveModes{
 				modeType: "formula",
 			},
 		},
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testInOut, "GetOverdriveMode", i+1, testCfg.HandleOverdriveModes)
+		rr, testName, correctErr := setupTest(t, tc.testGeneral, "GetOverdriveMode", i+1, testCfg.HandleOverdriveModes)
 		if correctErr {
 			continue
 		}
@@ -129,24 +129,24 @@ func TestGetOverdriveMode(t *testing.T) {
 		compare(t, testName, "type", tc.modeType, got.Type, tc.dontCheck)
 		compare(t, testName, "fill rate", tc.fillRate, got.FillRate, tc.dontCheck)
 
-		checkResAmtsInSlice(t, testName, "actions", tc.actionsAmount, got.Actions, tc.lenMap)
+		checkResAmtsInSlice(t, testName, "actions", tc.actionsAmount, got.Actions, tc.expLengths)
 	}
 }
 
 func TestRetrieveOverdriveModes(t *testing.T) {
 	tests := []struct {
-		testInOut
+		testGeneral
 		expList
 	}{
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=f",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value: f, use /api/overdrive-mode-type to see valid values.",
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/",
 				expectedStatus: http.StatusOK,
 			},
@@ -162,7 +162,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=formula",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -181,7 +181,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=per-action",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -201,7 +201,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testInOut, "RetrieveOverdriveModes", i+1, testCfg.HandleOverdriveModes)
+		rr, testName, correctErr := setupTest(t, tc.testGeneral, "RetrieveOverdriveModes", i+1, testCfg.HandleOverdriveModes)
 		if correctErr {
 			continue
 		}

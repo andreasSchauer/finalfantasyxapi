@@ -13,6 +13,10 @@ func (ia ItemAmount) IsZero() bool {
 	return ia.Item.Name == ""
 }
 
+func (ia ItemAmount) getAPIResource() IsAPIResource {
+	return ia.Item
+}
+
 func (cfg *Config) newItemAmount(itemType database.ItemType, itemName string, itemID, amount int32) ItemAmount {
 	if itemName == "" {
 		return ItemAmount{}
@@ -34,6 +38,10 @@ func (cfg *Config) newItemAmount(itemType database.ItemType, itemName string, it
 type PossibleItem struct {
 	ItemAmount
 	Chance int32 `json:"chance"`
+}
+
+func (ps PossibleItem) getAPIResource() IsAPIResource {
+	return ps.Item.getAPIResource()
 }
 
 func (cfg *Config) newPossibleItem(itemType database.ItemType, itemName string, itemID, amount, chance int32) PossibleItem {

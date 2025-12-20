@@ -1,23 +1,22 @@
 package main
 
-type testInOut struct {
-	requestURL     	string
-	expectedStatus 	int
-	expectedErr    	string
-	dontCheck 		map[string]bool
+type testGeneral struct {
+	requestURL     string
+	expectedStatus int
+	expectedErr    string
+	dontCheck      map[string]bool
+	expLengths     map[string]int
 }
 
 type expNameVer struct {
 	id      int32
 	name    string
 	version *int32
-	lenMap  map[string]int
 }
 
 type expUnique struct {
-	id     int32
-	name   string
-	lenMap map[string]int
+	id   int32
+	name string
 }
 
 type expList struct {
@@ -27,21 +26,7 @@ type expList struct {
 	results  []string
 }
 
-type resListTest struct {
-	name 		string
-	exp  		[]string
-	got  		[]HasAPIResource
-}
-
-func newResListTest[T HasAPIResource](fieldName string, exp []string, got []T) resListTest {
-	return resListTest{
-		name: fieldName,
-		exp:  exp,
-		got:  toHasAPIResSlice(got),
-	}
-}
-
-type expResAreas struct {
+type expAreas struct {
 	parentLocation    string
 	parentSublocation string
 	expLocBased
@@ -63,10 +48,56 @@ type expLocBased struct {
 	fmvs           []string
 }
 
-type expResOverdriveModes struct {
+type expOverdriveModes struct {
 	description   string
 	effect        string
 	modeType      string
 	fillRate      *float32
 	actionsAmount map[string]int32
 }
+
+type expMonsters struct {
+	appliedState		*testAppliedState
+	agility				*AgilityParams
+	species				string
+	ctbIconType			string
+	distance			int32
+	properties			[]string
+	autoAbilities		[]string
+	ronsoRages			[]string
+	locations			[]string
+	formations			[]string
+	baseStats			map[string]int32
+	items 				*testItems
+	equipment 			*testEquipment
+	elemResists			[]testElemResist
+	statusImmunities	[]string
+	statusResists		map[string]int32
+	alteredStates		[]string
+	abilities			[]string
+}
+
+type testAppliedState struct {
+	condition		string
+	isTemporary		bool
+	appliedStatus	*string
+}
+
+type testElemResist struct {
+	element 	string
+	affinity 	string
+}
+
+type testItems struct {
+	itemDropChance	int32
+	items			map[string]*string
+	otherItems		[]string
+}
+
+type testEquipment struct {
+	abilitySlots 		MonsterEquipmentSlots
+	attachedAbilities	MonsterEquipmentSlots
+	weaponAbilities		[]string
+	armorAbilities		[]string
+}
+

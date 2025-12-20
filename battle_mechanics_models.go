@@ -18,6 +18,14 @@ func (cfg *Config) newBaseStat(id, value int32, name string) BaseStat {
 	}
 }
 
+func (bs BaseStat) GetName() string {
+	return bs.Stat.Name
+}
+
+func (bs BaseStat) GetVal() int32 {
+	return bs.Value
+}
+
 type ElementalResist struct {
 	Element  NamedAPIResource `json:"element"`
 	Affinity NamedAPIResource `json:"affinity"`
@@ -48,6 +56,14 @@ func (cfg *Config) newStatusResist(id, resistance int32, status string) StatusRe
 		StatusCondition: cfg.newNamedAPIResourceSimple("status-conditions", id, status),
 		Resistance:      resistance,
 	}
+}
+
+func (sr StatusResist) GetName() string {
+	return sr.StatusCondition.Name
+}
+
+func (sr StatusResist) GetVal() int32 {
+	return sr.Resistance
 }
 
 type InflictedStatus struct {

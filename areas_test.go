@@ -11,47 +11,47 @@ import (
 
 func TestGetArea(t *testing.T) {
 	tests := []struct {
-		testInOut
+		testGeneral
 		expNameVer
-		expResAreas
+		expAreas
 	}{
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/0",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "Couldn't get Area. Area with this ID doesn't exist.",
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/241",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "Couldn't get Area. Area with this ID doesn't exist.",
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/a",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "Wrong format.",
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/145/",
 				expectedStatus: http.StatusOK,
-			},
-			expNameVer: expNameVer{
-				id:      145,
-				name:    "north",
-				version: h.GetInt32Ptr(1),
-				lenMap: map[string]int{
+				expLengths: map[string]int{
 					"connected areas": 2,
 					"monsters":        6,
 					"formations":      6,
 				},
 			},
-			expResAreas: expResAreas{
+			expNameVer: expNameVer{
+				id:      145,
+				name:    "north",
+				version: h.GetInt32Ptr(1),
+			},
+			expAreas: expAreas{
 				parentLocation:    "/locations/15",
 				parentSublocation: "/sublocations/25",
 				expLocBased: expLocBased{
@@ -73,25 +73,25 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/36",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"sidequests": true,
 				},
-			},
-			expNameVer: expNameVer{
-				id:      36,
-				name:    "besaid village",
-				version: nil,
-				lenMap: map[string]int{
+				expLengths: map[string]int{
 					"connected areas": 7,
 					"monsters":        0,
 					"characters":      2,
 					"treasures":       6,
 				},
 			},
-			expResAreas: expResAreas{
+			expNameVer: expNameVer{
+				id:      36,
+				name:    "besaid village",
+				version: nil,
+			},
+			expAreas: expAreas{
 				parentLocation:    "/locations/4",
 				parentSublocation: "/sublocations/7",
 				expLocBased: expLocBased{
@@ -115,25 +115,25 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/69",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"sidequests": true,
 				},
-			},
-			expNameVer: expNameVer{
-				id:      69,
-				name:    "main gate",
-				version: nil,
-				lenMap: map[string]int{
+				expLengths: map[string]int{
 					"connected areas": 6,
 					"shops":           1,
 					"bg music":        2,
 					"cues music":      1,
 				},
 			},
-			expResAreas: expResAreas{
+			expNameVer: expNameVer{
+				id:      69,
+				name:    "main gate",
+				version: nil,
+			},
+			expAreas: expAreas{
 				parentLocation:    "/locations/8",
 				parentSublocation: "/sublocations/13",
 				expLocBased: expLocBased{
@@ -151,7 +151,7 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/140",
 				expectedStatus: http.StatusOK,
 			},
@@ -160,7 +160,7 @@ func TestGetArea(t *testing.T) {
 				name:    "agency front",
 				version: nil,
 			},
-			expResAreas: expResAreas{
+			expAreas: expAreas{
 				parentLocation:    "/locations/14",
 				parentSublocation: "/sublocations/24",
 				expLocBased: expLocBased{
@@ -169,18 +169,10 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/42",
 				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
-					"sidequests": true,
-				},
-			},
-			expNameVer: expNameVer{
-				id:      42,
-				name:    "deck",
-				version: nil,
-				lenMap: map[string]int{
+				expLengths: map[string]int{
 					"characters": 1,
 					"formations": 1,
 					"monsters":   2,
@@ -189,7 +181,12 @@ func TestGetArea(t *testing.T) {
 					"fmvs":       5,
 				},
 			},
-			expResAreas: expResAreas{
+			expNameVer: expNameVer{
+				id:      42,
+				name:    "deck",
+				version: nil,
+			},
+			expAreas: expAreas{
 				parentLocation:    "/locations/5",
 				parentSublocation: "/sublocations/8",
 				expLocBased: expLocBased{
@@ -218,7 +215,7 @@ func TestGetArea(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testInOut, "GetArea", i+1, testCfg.HandleAreas)
+		rr, testName, correctErr := setupTest(t, tc.testGeneral, "GetArea", i+1, testCfg.HandleAreas)
 		if correctErr {
 			continue
 		}
@@ -256,45 +253,45 @@ func TestGetArea(t *testing.T) {
 			checks = slices.Concat(checks, musicChecks)
 		}
 
-		testResourceLists(t, testCfg, testName, checks, tc.lenMap)
+		testResourceLists(t, testCfg, testName, checks, tc.expLengths)
 	}
 }
 
 func TestRetrieveAreas(t *testing.T) {
 	tests := []struct {
-		testInOut
+		testGeneral
 		expList
 	}{
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?comp-sphere=fa",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value. usage: comp-sphere={boolean}",
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?item=113",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "provided item ID is out of range. Max ID: 112",
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?key-item=61",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "provided key-item ID is out of range. Max ID: 60",
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?location=0",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "provided location ID is out of range. Max ID: 26",
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/",
 				expectedStatus: http.StatusOK,
 			},
@@ -309,7 +306,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?limit=240",
 				expectedStatus: http.StatusOK,
 			},
@@ -323,7 +320,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?offset=50&limit=30",
 				expectedStatus: http.StatusOK,
 			},
@@ -338,7 +335,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?monsters=true&chocobo=true&save-sphere=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -352,7 +349,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?item=elixir&story-based=false&monsters=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -368,7 +365,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?characters=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -382,7 +379,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?sidequests=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -400,7 +397,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 		},
 		{
-			testInOut: testInOut{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas?key-item=37",
 				expectedStatus: http.StatusOK,
 			},
@@ -415,7 +412,7 @@ func TestRetrieveAreas(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testInOut, "RetrieveAreas", i+1, testCfg.HandleAreas)
+		rr, testName, correctErr := setupTest(t, tc.testGeneral, "RetrieveAreas", i+1, testCfg.HandleAreas)
 		if correctErr {
 			continue
 		}

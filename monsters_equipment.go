@@ -42,6 +42,10 @@ type EquipmentDrop struct {
 	Probability *int32             `json:"probability,omitempty"`
 }
 
+func (ed EquipmentDrop) getAPIResource() IsAPIResource {
+	return ed.AutoAbility.getAPIResource()
+}
+
 func (cfg *Config) getMonsterEquipment(r *http.Request, mon database.Monster) (MonsterEquipment, error) {
 	dbEquipment, err := cfg.db.GetMonsterEquipment(r.Context(), mon.ID)
 	if err != nil {

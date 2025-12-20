@@ -1,6 +1,7 @@
 package main
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -113,10 +114,29 @@ func testPtr[T any](t *testing.T, testName, fieldName string, exp, got *T, compF
 	case exp != nil && got == nil:
 		t.Fatalf("%s: expected %s %v, got nil", testName, fieldName, *exp)
 	default:
-		compFunc(t, testName, fieldName, *exp, *got)
+		if compFunc != nil {
+			compFunc(t, testName, fieldName, *exp, *got)
+		}
 	}
 }
 
+func compStructs[T any](t *testing.T, testName, fieldName string, exp, got T) {
+	t.Helper()
+
+	if !reflect.DeepEqual(exp, got) {
+		t.Fatalf("%s: expected %s %v, got %v", testName, fieldName, exp, got)
+	}
+}
+
+func compStructPtrs[T any](t *testing.T, testName, fieldName string, exp, got *T, dontCheck map[string]bool) {
+	t.Helper()
+
+	if dontCheck != nil && dontCheck[fieldName] {
+		return
+	}
+
+	testPtr(t, testName, fieldName, exp, got, compStructs)
+}
 
 // checks if two not-nullable apiResources are equal
 func compareResources[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName, expPath string, gotRes T, dontCheck map[string]bool) {

@@ -88,6 +88,10 @@ func (cfg *Config) getMonsterRelationships(r *http.Request, dbMon database.Monst
 	return monster, nil
 }
 
+func (ma MonsterAbility) getAPIResource() IsAPIResource {
+	return ma.Ability
+}
+
 type BribeChance struct {
 	Gil    int32 `json:"gil"`
 	Chance int32 `json:"chance"`
