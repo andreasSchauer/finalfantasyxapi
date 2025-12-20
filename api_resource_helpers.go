@@ -6,16 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type HasAPIResource interface {
-	getAPIResource() IsAPIResource
-}
-
-type IsAPIResource interface {
-	getID() int32
-	getURL() string
-	seeding.Lookupable
-}
-
 // s1 [1,2,3] s2 [2,3,4,5] => [1,2,3,4,5]
 func combineResources[T HasAPIResource](s1, s2 []T) []T {
 	s1Map := getResourceMap(s1)
@@ -123,10 +113,10 @@ func sortAPIResources[T HasAPIResource](a, b T) int {
 }
 
 
-func derefResourcePtr[T IsAPIResource](resourcePtr *T) T {
-	if resourcePtr == nil {
-		var zeroType T
-		return zeroType
+func toHasAPIResSlice[T HasAPIResource](in []T) []HasAPIResource {
+	out := make([]HasAPIResource, len(in))
+	for i, v := range in {
+		out[i] = v
 	}
-	return *resourcePtr
+	return out
 }

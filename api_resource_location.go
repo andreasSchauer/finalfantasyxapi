@@ -12,6 +12,14 @@ type LocationApiResourceList struct {
 	Results []LocationAPIResource `json:"results"`
 }
 
+func (l LocationApiResourceList) getListParams() ListParams {
+	return l.ListParams
+}
+
+func (l LocationApiResourceList) getResults() []HasAPIResource {
+	return toHasAPIResSlice(l.Results)
+}
+
 type LocationAPIResource struct {
 	AreaID int32 `json:"-"`
 	LocationArea

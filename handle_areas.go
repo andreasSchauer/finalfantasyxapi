@@ -40,7 +40,6 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	switch len(segments) {
 	case 0:
 		// /api/areas
-		fmt.Println(r.URL)
 		resourceList, err := cfg.retrieveAreas(r)
 		if handleHTTPError(w, err) {
 			return

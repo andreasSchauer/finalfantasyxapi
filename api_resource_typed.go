@@ -11,6 +11,14 @@ type TypedApiResourceList struct {
 	Results []TypedAPIResource `json:"results"`
 }
 
+func (l TypedApiResourceList) getListParams() ListParams {
+	return l.ListParams
+}
+
+func (l TypedApiResourceList) getResults() []HasAPIResource {
+	return toHasAPIResSlice(l.Results)
+}
+
 type TypedAPIResource struct {
 	ID          int32  `json:"id"`
 	Name        string `json:"name"`

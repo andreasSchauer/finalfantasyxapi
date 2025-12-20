@@ -11,37 +11,7 @@ func getTestName(name, requestURL string, caseNum int) string {
 }
 
 
-func testResponseChecks(t *testing.T, testCfg *Config, testCase string, checks []testCheck, lenMap map[string]int) {
-	for _, c := range checks {
-		if len(c.expected) == 0 {
-			continue
-		}
-		if !containsAllResources(testCfg, c.got, c.expected) {
-		 	t.Fatalf("%s: %s doesn't contain all wanted resources of %v", testCase, c.name, c.expected)
-		}
-
-		expLen, ok := lenMap[c.name]
-		if !ok {
-			continue
-		}
-
-		if !hasExpectedLength(c.got, expLen) {
-			t.Fatalf("%s: %s expected length: %d, got: %d", testCase, c.name, expLen, len(c.got))
-		}
-	}
-}
-
-
-func toIface[T HasAPIResource](in []T) []HasAPIResource {
-	out := make([]HasAPIResource, len(in))
-	for i, v := range in {
-		out[i] = v
-	}
-	return out
-}
-
-
-
+// can also convert into a testing function
 func containsAllResources[T HasAPIResource](cfg *Config, resources []T, expectedPaths []string) bool {
 	resourceMap := getResourceMap(resources)
 
@@ -56,43 +26,101 @@ func containsAllResources[T HasAPIResource](cfg *Config, resources []T, expected
 	return true
 }
 
+func getResourceAmountMap[T ResourceAmount](items []T) map[string]int32 {
+	amountMap := make(map[string]int32)
+
+	for _, item := range items {
+		key := item.GetName()
+		amountMap[key] = item.GetVal()
+	}
+
+	return amountMap
+}
 
 func hasExpectedLength[T HasAPIResource](resources []T, expected int) bool {
 	return len(resources) == expected
 }
 
 
-func resourcesMatch[T HasAPIResource](cfg *Config, resource T, expectedPath string) bool {
-	resourceURL := resource.getAPIResource().getURL()
-	expectedURL := cfg.completeURL(expectedPath)
-	
-	return resourceURL == expectedURL
+func testResourceAmount[T ResourceAmount](t *testing.T, testName, resName string, resSlice []T, expAmounts map[string]int32) {
+	gotResAmount := getResourceAmountMap(resSlice)
+	for key, exp := range expAmounts {
+		got, ok := gotResAmount[key]
+		if !ok {
+			t.Fatalf("%s: %s doesn't contain resource %s", testName, resName, key)
+		}
+		testInt32(t, testName, key, exp, got)
+	}
 }
 
+func testResourceMatch[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName, expPath string, gotRes T) {
+	gotURL := gotRes.getAPIResource().getURL()
+	expURL := cfg.completeURL(expPath)
 
-func resourcePtrsMatch[T HasAPIResource](cfg *Config, resourcePtr *T, expectedPathPtr *string) bool {
-	if resourcePtr == nil {
-		return expectedPathPtr == nil
+	if expURL != gotURL {
+		t.Fatalf("%s: expected %s %s, got %s", testName, fieldName, expURL, gotURL)
+	}
+}
+
+func testResourcePtrMatch[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName string, expPathPtr *string, gotResPtr *T) {
+	if expPathPtr == nil {
+		if gotResPtr == nil {
+			return
+		}
+		res := *gotResPtr
+		gotURL := res.getAPIResource().getURL()
+		t.Fatalf("%s: expected nil for %s, but got %s", testName, fieldName, gotURL)
 	}
 
-	resource := *resourcePtr
-	expectedPath := *expectedPathPtr
+	gotRes := *gotResPtr
+	expPath := *expPathPtr
 
-	resourceURL := resource.getAPIResource().getURL()
-	expectedURL := cfg.completeURL(expectedPath)
+	testResourceMatch(t, cfg, testName, fieldName, expPath, gotRes)
+}
 
-	return resourceURL == expectedURL
+func testInt32(t *testing.T, testName, fieldName string, expInt, gotInt int32) {
+	if expInt != gotInt {
+		t.Fatalf("%s: expected %s %d, got %d", testName, fieldName, expInt, gotInt)
+	}
+}
+
+func testFloat32(t *testing.T, testName, fieldName string, expFloat, gotFloat float32) {
+	if expFloat != gotFloat {
+		t.Fatalf("%s: expected %s %.2f, got %.2f", testName, fieldName, expFloat, gotFloat)
+	}
+}
+
+func testFloat32Ptr(t *testing.T, testName, fieldName string, expFloatPtr, gotFloatPtr *float32) {
+	if expFloatPtr == nil {
+		if gotFloatPtr == nil {
+			return
+		}
+		t.Fatalf("%s: expected nil for %s, but got %.2f", testName, fieldName, *gotFloatPtr)
+	}
+
+	testFloat32(t, testName, fieldName, *expFloatPtr, *gotFloatPtr)
+}
+
+func testString(t *testing.T, testName, fieldName, expStr, gotStr string) {
+	if expStr != "" && expStr != gotStr {
+		t.Fatalf("%s: expected %s %s, got %s", testName, fieldName, expStr, gotStr)
+	}
 }
 
 
-func paginationURLsMatch(cfg *Config, gotURLPtr, expectedPathPtr *string) bool {
-	if gotURLPtr == nil {
-		return expectedPathPtr == nil
+
+func testPaginationURLs(t *testing.T, cfg *Config, testName, fieldName string, gotURLPtr, expPathPtr *string) {
+	if expPathPtr == nil {
+		if gotURLPtr == nil {
+			return
+		}
+		gotURL := *gotURLPtr
+		t.Fatalf("%s: expected nil for %s, but got %s", testName, fieldName, gotURL)
 	}
 
 	gotURL := *gotURLPtr
-	expectedPath := *expectedPathPtr
-	expectedURL := cfg.completeURL(expectedPath)
+	expPath := *expPathPtr
+	expURL := cfg.completeURL(expPath)
 
-	return gotURL == expectedURL
+	testString(t, testName, fieldName, expURL, gotURL)
 }

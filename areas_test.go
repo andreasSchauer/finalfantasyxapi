@@ -3,9 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
-	"net/http/httptest"
 	"slices"
-	"strings"
 	"testing"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -14,28 +12,28 @@ import (
 func TestGetArea(t *testing.T) {
 	tests := []struct {
 		testInOut
-		expectedSingle
+		expectedNameVer
 		expResAreas
 	}{
 		{
 			testInOut: testInOut{
 				requestURL:     "/api/areas/0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr: 	"Couldn't get Area. Area with this ID doesn't exist.",
+				expectedErr:    "Couldn't get Area. Area with this ID doesn't exist.",
 			},
 		},
 		{
 			testInOut: testInOut{
 				requestURL:     "/api/areas/241",
 				expectedStatus: http.StatusNotFound,
-				expectedErr: 	"Couldn't get Area. Area with this ID doesn't exist.",
+				expectedErr:    "Couldn't get Area. Area with this ID doesn't exist.",
 			},
 		},
 		{
 			testInOut: testInOut{
 				requestURL:     "/api/areas/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: 	"Wrong format.",
+				expectedErr:    "Wrong format.",
 			},
 		},
 		{
@@ -43,11 +41,11 @@ func TestGetArea(t *testing.T) {
 				requestURL:     "/api/areas/145/",
 				expectedStatus: http.StatusOK,
 			},
-			expectedSingle: expectedSingle{
-				id:     	145,
-				name:    	"north",
-				version: 	h.GetInt32Ptr(1),
-				lenMap: 	map[string]int{
+			expectedNameVer: expectedNameVer{
+				id:      145,
+				name:    "north",
+				version: h.GetInt32Ptr(1),
+				lenMap: map[string]int{
 					"connected areas": 2,
 					"monsters":        6,
 					"formations":      6,
@@ -79,15 +77,15 @@ func TestGetArea(t *testing.T) {
 				requestURL:     "/api/areas/36",
 				expectedStatus: http.StatusOK,
 			},
-			expectedSingle: expectedSingle{
+			expectedNameVer: expectedNameVer{
 				id:      36,
 				name:    "besaid village",
 				version: nil,
 				lenMap: map[string]int{
-					"connected areas": 	7,
-					"monsters":        	0,
-					"characters":      	2,
-					"treasures":		6,
+					"connected areas": 7,
+					"monsters":        0,
+					"characters":      2,
+					"treasures":       6,
 				},
 			},
 			expResAreas: expResAreas{
@@ -118,15 +116,15 @@ func TestGetArea(t *testing.T) {
 				requestURL:     "/api/areas/69",
 				expectedStatus: http.StatusOK,
 			},
-			expectedSingle: expectedSingle{
+			expectedNameVer: expectedNameVer{
 				id:      69,
 				name:    "main gate",
 				version: nil,
 				lenMap: map[string]int{
-					"connected areas": 	6,
-					"shops":        	1,
-					"bg music":      	2,
-					"cues music":		1,
+					"connected areas": 6,
+					"shops":           1,
+					"bg music":        2,
+					"cues music":      1,
 				},
 			},
 			expResAreas: expResAreas{
@@ -151,7 +149,7 @@ func TestGetArea(t *testing.T) {
 				requestURL:     "/api/areas/140",
 				expectedStatus: http.StatusOK,
 			},
-			expectedSingle: expectedSingle{
+			expectedNameVer: expectedNameVer{
 				id:      140,
 				name:    "agency front",
 				version: nil,
@@ -169,17 +167,17 @@ func TestGetArea(t *testing.T) {
 				requestURL:     "/api/areas/42",
 				expectedStatus: http.StatusOK,
 			},
-			expectedSingle: expectedSingle{
+			expectedNameVer: expectedNameVer{
 				id:      42,
 				name:    "deck",
 				version: nil,
 				lenMap: map[string]int{
-					"characters":		1,
-					"formations":		1,
-					"monsters":			2,
-					"fmvs music":		1,
-					"boss music":		1,
-					"fmvs":				5,
+					"characters": 1,
+					"formations": 1,
+					"monsters":   2,
+					"fmvs music": 1,
+					"boss music": 1,
+					"fmvs":       5,
 				},
 			},
 			expResAreas: expResAreas{
@@ -211,23 +209,8 @@ func TestGetArea(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		testName := getTestName("GetArea", tc.requestURL, i+1)
-
-		req := httptest.NewRequest(http.MethodGet, tc.requestURL, nil)
-		rr := httptest.NewRecorder()
-
-		handler := http.HandlerFunc(testCfg.HandleAreas)
-		handler.ServeHTTP(rr, req)
-
-		if rr.Code != tc.expectedStatus {
-			t.Fatalf("%s: expected %d, got %d, body=%s", testName, tc.expectedStatus, rr.Code, rr.Body.String())
-		}
-
-		if tc.expectedErr != "" {
-			raw := rr.Body.String()
-			if !strings.Contains(raw, tc.expectedErr) {
-				t.Fatalf("%s: expected error message to contain %s, got %q", testName, tc.expectedErr, raw)
-			}
+		rr, testName, correctErr := setupTest(t, tc.testInOut, "GetArea", i+1, testCfg.HandleAreas)
+		if correctErr {
 			continue
 		}
 
@@ -236,47 +219,29 @@ func TestGetArea(t *testing.T) {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		if a.ID != tc.id {
-			t.Fatalf("%s: expected id %d, got %d", testName, tc.id, a.ID)
-		}
+		testExpectedNameVer(t, testName, tc.expectedNameVer, a.ID, a.Name, a.Version)
 
-		if a.Name != tc.name {
-			t.Fatalf("%s: expected name %s, got %s", testName, tc.name, a.Name)
-		}
-
-		if h.DerefOrNil(a.Version) != h.DerefOrNil(tc.version) {
-			t.Fatalf("%s: expected version %d, got %d", testName, h.DerefOrNil(tc.version), h.DerefOrNil(a.Version))
-		}
-
-		if !resourcesMatch(testCfg, a.ParentLocation, tc.parentLocation) {
-			t.Fatalf("%s: expected location %s, got %s", testName, tc.parentLocation, a.ParentLocation.URL)
-		}
-
-		if !resourcesMatch(testCfg, a.ParentSublocation, tc.parentSublocation) {
-			t.Fatalf("%s: expected sublocation %s, got %s", testName, tc.parentSublocation, a.ParentSublocation)
-		}
-
-		if !resourcePtrsMatch(testCfg, a.Sidequest, tc.sidequest) {
-			t.Fatalf("%s: expected sidequest %s, got %s", testName, h.DerefOrNil(tc.sidequest), derefResourcePtr(a.Sidequest).ToKeyFields())
-		}
+		testResourceMatch(t, testCfg, testName, "location", tc.parentLocation, a.ParentLocation)
+		testResourceMatch(t, testCfg, testName, "sublocation", tc.parentSublocation, a.ParentSublocation)
+		testResourcePtrMatch(t, testCfg, testName, "sidequest", tc.sidequest, a.Sidequest)
 
 		checks := []testCheck{
-			{name: "connected areas", got: toIface(a.ConnectedAreas), expected: tc.connectedAreas},
-			{name: "characters", got: toIface(a.Characters), expected: tc.characters},
-			{name: "aeons", got: toIface(a.Aeons), expected: tc.aeons},
-			{name: "shops", got: toIface(a.Shops), expected: tc.shops},
-			{name: "treasures", got: toIface(a.Treasures), expected: tc.treasures},
-			{name: "monsters", got: toIface(a.Monsters), expected: tc.monsters},
-			{name: "formations", got: toIface(a.Formations), expected: tc.formations},
-			{name: "fmvs", got: toIface(a.FMVs), expected: tc.fmvs},
+			{name: "connected areas", got: toHasAPIResSlice(a.ConnectedAreas), expected: tc.connectedAreas},
+			{name: "characters", got: toHasAPIResSlice(a.Characters), expected: tc.characters},
+			{name: "aeons", got: toHasAPIResSlice(a.Aeons), expected: tc.aeons},
+			{name: "shops", got: toHasAPIResSlice(a.Shops), expected: tc.shops},
+			{name: "treasures", got: toHasAPIResSlice(a.Treasures), expected: tc.treasures},
+			{name: "monsters", got: toHasAPIResSlice(a.Monsters), expected: tc.monsters},
+			{name: "formations", got: toHasAPIResSlice(a.Formations), expected: tc.formations},
+			{name: "fmvs", got: toHasAPIResSlice(a.FMVs), expected: tc.fmvs},
 		}
 
 		if a.Music != nil {
 			musicChecks := []testCheck{
-				{name: "bg music", got: toIface(a.Music.BackgroundMusic), expected: tc.bgMusic},
-				{name: "cues music", got: toIface(a.Music.Cues), expected: tc.cuesMusic},
-				{name: "fmvs music", got: toIface(a.Music.FMVs), expected: tc.fmvsMusic},
-				{name: "boss music", got: toIface(a.Music.BossFights), expected: tc.bossMusic},
+				{name: "bg music", got: toHasAPIResSlice(a.Music.BackgroundMusic), expected: tc.bgMusic},
+				{name: "cues music", got: toHasAPIResSlice(a.Music.Cues), expected: tc.cuesMusic},
+				{name: "fmvs music", got: toHasAPIResSlice(a.Music.FMVs), expected: tc.fmvsMusic},
+				{name: "boss music", got: toHasAPIResSlice(a.Music.BossFights), expected: tc.bossMusic},
 			}
 
 			checks = slices.Concat(checks, musicChecks)
@@ -285,7 +250,6 @@ func TestGetArea(t *testing.T) {
 		testResponseChecks(t, testCfg, testName, checks, tc.lenMap)
 	}
 }
-
 
 func TestRetrieveAreas(t *testing.T) {
 	tests := []struct {
@@ -296,28 +260,28 @@ func TestRetrieveAreas(t *testing.T) {
 			testInOut: testInOut{
 				requestURL:     "/api/areas?comp-sphere=fa",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: "invalid value. usage: comp-sphere={boolean}",
+				expectedErr:    "invalid value. usage: comp-sphere={boolean}",
 			},
 		},
 		{
 			testInOut: testInOut{
 				requestURL:     "/api/areas?item=113",
 				expectedStatus: http.StatusNotFound,
-				expectedErr: "provided item ID is out of range. Max ID: 112",
+				expectedErr:    "provided item ID is out of range. Max ID: 112",
 			},
 		},
 		{
 			testInOut: testInOut{
 				requestURL:     "/api/areas?key-item=61",
 				expectedStatus: http.StatusNotFound,
-				expectedErr: "provided key-item ID is out of range. Max ID: 60",
+				expectedErr:    "provided key-item ID is out of range. Max ID: 60",
 			},
 		},
 		{
 			testInOut: testInOut{
 				requestURL:     "/api/areas?location=0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr: "provided location ID is out of range. Max ID: 26",
+				expectedErr:    "provided location ID is out of range. Max ID: 26",
 			},
 		},
 		{
@@ -326,9 +290,9 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expectedList: expectedList{
-				count: 		240,
-				next: 		h.GetStrPtr("/areas?limit=20&offset=20"),
-				results: 	[]string{
+				count: 240,
+				next:  h.GetStrPtr("/areas?limit=20&offset=20"),
+				results: []string{
 					"/areas/1",
 					"/areas/5",
 					"/areas/20",
@@ -341,8 +305,8 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expectedList: expectedList{
-				count:		240,
-				results: 	[]string{
+				count: 240,
+				results: []string{
 					"/areas/1",
 					"/areas/50",
 					"/areas/240",
@@ -355,10 +319,10 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expectedList: expectedList{
-				count: 		240,
-				next: 		h.GetStrPtr("/areas?limit=30&offset=80"),
-				previous: 	h.GetStrPtr("/areas?limit=30&offset=20"),
-				results: 	[]string{
+				count:    240,
+				next:     h.GetStrPtr("/areas?limit=30&offset=80"),
+				previous: h.GetStrPtr("/areas?limit=30&offset=20"),
+				results: []string{
 					"/areas/51",
 					"/areas/80",
 				},
@@ -370,8 +334,8 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expectedList: expectedList{
-				count: 		3,
-				results: 	[]string{
+				count: 3,
+				results: []string{
 					"/areas/88",
 					"/areas/97",
 					"/areas/203",
@@ -384,8 +348,8 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expectedList: expectedList{
-				count: 		5,
-				results: 	[]string{
+				count: 5,
+				results: []string{
 					"/areas/35",
 					"/areas/129",
 					"/areas/140",
@@ -400,8 +364,8 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expectedList: expectedList{
-				count: 		7,
-				results: 	[]string{
+				count: 7,
+				results: []string{
 					"/areas/1",
 					"/areas/20",
 					"/areas/103",
@@ -414,8 +378,8 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expectedList: expectedList{
-				count: 		11,
-				results: 	[]string{
+				count: 11,
+				results: []string{
 					"/areas/75",
 					"/areas/140",
 					"/areas/144",
@@ -432,8 +396,8 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expectedList: expectedList{
-				count: 		2,
-				results: 	[]string{
+				count: 2,
+				results: []string{
 					"/areas/46",
 					"/areas/169",
 				},
@@ -442,23 +406,8 @@ func TestRetrieveAreas(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		testName := getTestName("RetrieveAreas", tc.requestURL, i+1)
-
-		req := httptest.NewRequest(http.MethodGet, tc.requestURL, nil)
-		rr := httptest.NewRecorder()
-
-		handler := http.HandlerFunc(testCfg.HandleAreas)
-		handler.ServeHTTP(rr, req)
-
-		if rr.Code != tc.expectedStatus {
-			t.Fatalf("%s: expected %d, got %d, body=%s", testName, tc.expectedStatus, rr.Code, rr.Body.String())
-		}
-
-		if tc.expectedErr != "" {
-			raw := rr.Body.String()
-			if !strings.Contains(raw, tc.expectedErr) {
-				t.Fatalf("%s: expected error message to contain %s, got %q", testName, tc.expectedErr, raw)
-			}
+		rr, testName, correctErr := setupTest(t, tc.testInOut, "RetrieveAreas", i+1, testCfg.HandleAreas)
+		if correctErr {
 			continue
 		}
 
@@ -467,26 +416,6 @@ func TestRetrieveAreas(t *testing.T) {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		if res.Count != tc.count {
-			t.Fatalf("%s: expected count %d, got %d", testName, tc.count, res.Count)
-		}
-
-		if !paginationURLsMatch(testCfg, res.Previous, tc.previous) {
-			t.Fatalf("%s: expected previous url %s, got %s", testName, h.DerefOrNil(tc.previous), h.DerefOrNil(res.Previous))
-		}
-
-		if !paginationURLsMatch(testCfg, res.Next, tc.next) {
-			t.Fatalf("%s: expected next url %s, got %s", testName, h.DerefOrNil(tc.next), h.DerefOrNil(res.Next))
-		}
-
-		checks := []testCheck{
-			{
-				name: "results",
-				got: toIface(res.Results),
-				expected: tc.results,
-			},
-		}
-
-		testResponseChecks(t, testCfg, testName, checks, nil)
+		testAPIResourceList(t, testCfg, testName, res, tc.expectedList)
 	}
 }

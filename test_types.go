@@ -6,18 +6,24 @@ type testInOut struct {
 	expectedErr    string
 }
 
-type expectedSingle struct {
+type expectedNameVer struct {
 	id      int32
 	name    string
 	version *int32
 	lenMap  map[string]int
 }
 
+type expectedUnique struct {
+	id     int32
+	name   string
+	lenMap map[string]int
+}
+
 type expectedList struct {
-	count   	int
-	next		*string
-	previous 	*string
-	results 	[]string
+	count    int
+	next     *string
+	previous *string
+	results  []string
 }
 
 type testCheck struct {
@@ -46,4 +52,12 @@ type locBasedExpect struct {
 	fmvsMusic      []string
 	bossMusic      []string
 	fmvs           []string
+}
+
+type expResOverdriveModes struct {
+	description		string
+	effect			string
+	modeType		string
+	fillRate		*float32
+	actionsAmount	map[string]int32
 }

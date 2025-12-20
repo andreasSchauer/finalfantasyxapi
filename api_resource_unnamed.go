@@ -10,6 +10,14 @@ type UnnamedApiResourceList struct {
 	Results []UnnamedAPIResource `json:"results"`
 }
 
+func (l UnnamedApiResourceList) getListParams() ListParams {
+	return l.ListParams
+}
+
+func (l UnnamedApiResourceList) getResults() []HasAPIResource {
+	return toHasAPIResSlice(l.Results)
+}
+
 type UnnamedAPIResource struct {
 	ID  int32  `json:"id"`
 	URL string `json:"url"`

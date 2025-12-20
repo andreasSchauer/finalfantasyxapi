@@ -22,6 +22,18 @@ type ActionAmount struct {
 	Amount int32            `json:"amount"`
 }
 
+func (a ActionAmount) getAPIResource() IsAPIResource {
+	return a.User
+}
+
+func (a ActionAmount) GetName() string {
+	return a.User.Name
+}
+
+func (a ActionAmount) GetVal() int32 {
+	return a.Amount
+}
+
 func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) {
 	segments := getPathSegments(r.URL.Path, "overdrive-modes")
 
