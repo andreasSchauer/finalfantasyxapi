@@ -222,7 +222,7 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (NamedApiResourceList, error) {
 	dbMons, err := cfg.db.GetMonstersByName(r.Context(), monsterName)
 	if err != nil {
-		return NamedApiResourceList{}, newHTTPError(http.StatusNotFound, "Couldn't get multiple Monsters", err)
+		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't get multiple Monsters", err)
 	}
 
 	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {

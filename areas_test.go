@@ -271,22 +271,22 @@ func TestRetrieveAreas(t *testing.T) {
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?item=113",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "provided item ID is out of range. Max ID: 112",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "provided item ID 113 is out of range in item. Max ID: 112",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?key-item=61",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "provided key-item ID is out of range. Max ID: 60",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "provided key-item ID 61 is out of range in key-item. Max ID: 60",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?location=0",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "provided location ID is out of range. Max ID: 26",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "provided location ID 0 is out of range in location. Max ID: 26",
 			},
 		},
 		{

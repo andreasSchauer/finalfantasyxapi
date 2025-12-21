@@ -97,6 +97,8 @@ func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup 
 	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s.", resourceType, segment), err)
 }
 
+
+
 func parseNameVersionResource[T h.HasID](resourceType, name, versionStr string, lookup map[string]T) (parseResponse, error) {
 	var versionPtr *int32
 

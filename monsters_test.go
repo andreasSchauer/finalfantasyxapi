@@ -662,41 +662,73 @@ func TestGetMonster(t *testing.T) {
 
 
 
-// TestGetMultipleMonsters for 300 responses
-
-/*
-func TestRetrieveMonsters(t *testing.T) {
+func TestGetMultipleMonsters(t *testing.T) {
 	tests := []struct {
 		testGeneral
 		expList
 	}{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes?type=f",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value: f, use /api/overdrive-mode-type to see valid values.",
+				requestURL:     "/api/monsters/guado-guardian",
+				expectedStatus: http.StatusMultipleChoices,
+			},
+			expList: expList{
+				count:    3,
+				results: []string{
+					"/monsters/94",
+					"/monsters/96",
+					"/monsters/113",
+				},
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/",
-				expectedStatus: http.StatusOK,
+				requestURL:     "/api/monsters/yojimbo",
+				expectedStatus: http.StatusMultipleChoices,
 			},
 			expList: expList{
-				count:    17,
-				previous: nil,
-				next:     nil,
+				count:    3,
 				results: []string{
-					"/overdrive-modes/1",
-					"/overdrive-modes/8",
-					"/overdrive-modes/17",
+					"/monsters/165",
+					"/monsters/222",
+					"/monsters/234",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/mimic",
+				expectedStatus: http.StatusMultipleChoices,
+			},
+			expList: expList{
+				count:    4,
+				results: []string{
+					"/monsters/249",
+					"/monsters/250",
+					"/monsters/251",
+					"/monsters/252",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/%3F%3F%3F",
+				expectedStatus: http.StatusMultipleChoices,
+			},
+			expList: expList{
+				count:    4,
+				results: []string{
+					"/monsters/68",
+					"/monsters/69",
+					"/monsters/108",
+					"/monsters/253",
 				},
 			},
 		},
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "RetrieveOverdriveModes", i+1, testCfg.HandleOverdriveModes)
+		rr, testName, correctErr := setupTest(t, tc.testGeneral, "GetMultipleMonsters", i+1, testCfg.HandleMonsters)
 		if correctErr {
 			continue
 		}
@@ -709,4 +741,277 @@ func TestRetrieveMonsters(t *testing.T) {
 		testAPIResourceList(t, testCfg, testName, tc.expList, got, tc.dontCheck)
 	}
 }
-*/
+
+
+
+func TestRetrieveMonsters(t *testing.T) {
+	tests := []struct {
+		testGeneral
+		expList
+	}{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?elemental-affinities=weak",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid input. usage: elemental-affinities={element}-{affinity},{element}-{affinity}",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?elemental-affinities=weak-fire",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "unknown element 'weak' in elemental-affinities.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?resistance=50",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid input. resistance parameter must be paired with status-resists parameter. usage: status-resists={status},{status},...&resistance={1-254 or immune}",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?method=steal",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid input. method parameter must be paired with item parameter. usage: item={item}&method={steal/drop/bribe/other}",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?item=asf&method=drop",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "unknown item 'asf' in item.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?ronso-rage=13",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "provided ronso rage ID 13 in ronso-rage is out of range. Max ID: 12",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?species=wywrm",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid value: 'wywrm', use /api/species to see valid values",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?limit=307",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    307,
+				previous: nil,
+				next:     nil,
+				results: []string{
+					"/monsters/1",
+					"/monsters/175",
+					"/monsters/238",
+					"/monsters/307",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?elemental-affinities=fire-weak,water-neutral",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"next": true,
+				},
+			},
+			expList: expList{
+				count:    22,
+				results: []string{
+					"/monsters/11",
+					"/monsters/23",
+					"/monsters/64",
+					"/monsters/148",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?limit=307&status-resists=darkness,poison,berserk&resistance=50",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    150,
+				results: []string{
+					"/monsters/3",
+					"/monsters/128",
+					"/monsters/188",
+					"/monsters/227",
+					"/monsters/249",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?item=elixir&method=drop",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    2,
+				results: []string{
+					"/monsters/32",
+					"/monsters/91",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?auto-abilities=sos-haste,auto-haste",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    5,
+				results: []string{
+					"/monsters/97",
+					"/monsters/146",
+					"/monsters/172",
+					"/monsters/211",
+					"/monsters/304",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?ronso-rage=nova",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    2,
+				results: []string{
+					"/monsters/255",
+					"/monsters/292",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?location=macalania",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    19,
+				results: []string{
+					"/monsters/80",
+					"/monsters/90",
+					"/monsters/297",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?sublocation=macalania-woods",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    7,
+				results: []string{
+					"/monsters/80",
+					"/monsters/86",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?area=90",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    6,
+				results: []string{
+					"/monsters/38",
+					"/monsters/45",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?distance=2&story-based=false",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    2,
+				results: []string{
+					"/monsters/191",
+					"/monsters/289",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?repeatable=true&capture=false&has-overdrive=true",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    11,
+				results: []string{
+					"/monsters/229",
+					"/monsters/236",
+					"/monsters/299",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?underwater=true&type=boss",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    6,
+				results: []string{
+					"/monsters/5",
+					"/monsters/71",
+					"/monsters/291",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?zombie=true&species=wyrm",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    1,
+				results: []string{
+					"/monsters/134",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?creation-area=djose",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    7,
+				results: []string{
+					"/monsters/60",
+					"/monsters/63",
+					"/monsters/67",
+				},
+			},
+		},
+	}
+
+	for i, tc := range tests {
+		rr, testName, correctErr := setupTest(t, tc.testGeneral, "RetrieveMonsters", i+1, testCfg.HandleMonsters)
+		if correctErr {
+			continue
+		}
+
+		var got NamedApiResourceList
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+			t.Fatalf("%s: failed to decode: %v", testName, err)
+		}
+
+		testAPIResourceList(t, testCfg, testName, tc.expList, got, tc.dontCheck)
+	}
+}
+
