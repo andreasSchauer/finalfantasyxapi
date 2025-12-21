@@ -16,6 +16,10 @@ func testMonsterElemResists(t *testing.T, testCfg *Config, testName string, exp 
 
 
 func testMonsterItems(t *testing.T, testCfg *Config, testName string, expItems *testItems, gotItems *MonsterItems, checks *[]resListTest, dontCheck map[string]bool) {
+	if dontCheck != nil && dontCheck["items"] {
+		return
+	}
+
 	if !bothPtrsPresent(t, testName, "monster items", expItems, gotItems) {
 		return
 	}
@@ -36,6 +40,10 @@ func testMonsterItems(t *testing.T, testCfg *Config, testName string, expItems *
 }
 
 func testMonsterEquipment(t *testing.T, testName string, expEquipment *testEquipment, gotEquipment *MonsterEquipment, checks *[]resListTest, dontCheck map[string]bool) {
+	if dontCheck != nil && dontCheck["equipment"] {
+		return
+	}
+
 	if !bothPtrsPresent(t, testName, "monster equipment", expEquipment, gotEquipment) {
 		return
 	}

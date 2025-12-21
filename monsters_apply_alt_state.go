@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"slices"
 	"strconv"
@@ -246,6 +247,10 @@ func getAltStateID(r *http.Request, mon Monster) (int, error) {
 	altStateID, err := strconv.Atoi(altStateIDStr)
 	if err != nil {
 		return 0, newHTTPError(http.StatusBadRequest, "invalid alt state id", err)
+	}
+
+	if len(mon.AlteredStates) == 0 {
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("Monster %s, Version %d has no altered states", mon.Name, h.DerefOrNil(mon.Version)), err)
 	}
 
 	if altStateID > len(mon.AlteredStates) || altStateID <= 0 {

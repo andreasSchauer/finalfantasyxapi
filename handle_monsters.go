@@ -206,12 +206,12 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 		return Monster{}, err
 	}
 
-	monster.AgilityParameters, err = cfg.getMonsterAgilityVals(r, monster)
+	monster.BaseStats, err = cfg.applyRonsoStats(r, monster)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	monster.BaseStats, err = cfg.applyRonsoStats(r, monster)
+	monster.AgilityParameters, err = cfg.getMonsterAgilityVals(r, monster)
 	if err != nil {
 		return Monster{}, err
 	}

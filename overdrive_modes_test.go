@@ -123,12 +123,10 @@ func TestGetOverdriveMode(t *testing.T) {
 		}
 
 		testExpectedUnique(t, testName, tc.expUnique, got.ID, got.Name)
-
 		compare(t, testName, "description", tc.description, got.Description, tc.dontCheck)
 		compare(t, testName, "effect", tc.effect, got.Effect, tc.dontCheck)
 		compare(t, testName, "type", tc.modeType, got.Type, tc.dontCheck)
 		compare(t, testName, "fill rate", tc.fillRate, got.FillRate, tc.dontCheck)
-
 		checkResAmtsInSlice(t, testName, "actions", tc.actionsAmount, got.Actions, tc.expLengths)
 	}
 }

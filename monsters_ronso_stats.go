@@ -13,14 +13,14 @@ import (
 func (cfg *Config) applyRonsoStats(r *http.Request, mon Monster) ([]BaseStat, error) {
 	baseStats := mon.BaseStats
 
-	if mon.Name != "biran ronso" && mon.Name != "yenke ronso" {
-		return mon.BaseStats, nil
-	}
-
 	query := r.URL.Query().Get("kimahri-stats")
 
 	if query == "" {
 		return mon.BaseStats, nil
+	}
+
+	if mon.Name != "biran ronso" && mon.Name != "yenke ronso" {
+		return nil, newHTTPError(http.StatusBadRequest, "invalid usage. kimahri-stats can only be used on biran ronso (id: 167), or yenke ronso (id: 168)", nil)
 	}
 
 	kimahriStats, err := cfg.getKimahriStats(query)
