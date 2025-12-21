@@ -139,7 +139,7 @@ func compStructPtrs[T any](t *testing.T, testName, fieldName string, exp, got *T
 }
 
 // checks if two not-nullable apiResources are equal
-func compareResources[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName, expPath string, gotRes T, dontCheck map[string]bool) {
+func compAPIResources[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName, expPath string, gotRes T, dontCheck map[string]bool) {
 	t.Helper()
 
 	if dontCheck != nil && dontCheck[fieldName] {
@@ -153,7 +153,7 @@ func compareResources[T HasAPIResource](t *testing.T, cfg *Config, testName, fie
 }
 
 // checks if two optional apiResources are equal
-func compareResourcePtrs[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName string, expPathPtr *string, gotResPtr *T, dontCheck map[string]bool) {
+func compResourcePtrs[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName string, expPathPtr *string, gotResPtr *T, dontCheck map[string]bool) {
 	t.Helper()
 
 	if dontCheck != nil && dontCheck[fieldName] {
@@ -173,11 +173,11 @@ func compareResourcePtrs[T HasAPIResource](t *testing.T, cfg *Config, testName, 
 		gotRes := *gotResPtr
 		expPath := *expPathPtr
 
-		compareResources(t, cfg, testName, fieldName, expPath, gotRes, dontCheck)
+		compAPIResources(t, cfg, testName, fieldName, expPath, gotRes, dontCheck)
 	}
 }
 
-func comparePaginationURL(t *testing.T, cfg *Config, testName, fieldName string, expPathPtr, gotURLPtr *string, dontCheck map[string]bool) {
+func compPageURL(t *testing.T, cfg *Config, testName, fieldName string, expPathPtr, gotURLPtr *string, dontCheck map[string]bool) {
 	if dontCheck != nil && dontCheck[fieldName] {
 		return
 	}

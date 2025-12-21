@@ -75,8 +75,8 @@ func testAPIResourceList[T IsAPIResourceList](t *testing.T, testCfg *Config, tes
 	got := gotList.getListParams()
 	compare(t, testName, "count", expList.count, got.Count, nil)
 
-	comparePaginationURL(t, testCfg, testName, "previous", expList.previous, got.Previous, dontCheck)
-	comparePaginationURL(t, testCfg, testName, "next", expList.next, got.Next, dontCheck)
+	compPageURL(t, testCfg, testName, "previous", expList.previous, got.Previous, dontCheck)
+	compPageURL(t, testCfg, testName, "next", expList.next, got.Next, dontCheck)
 
 	listTest := resListTest{
 		name: "results",

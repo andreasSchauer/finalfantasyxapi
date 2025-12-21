@@ -368,8 +368,7 @@ func (cfg *Config) getMonsterBribeChances(mon Monster) ([]BribeChance, error) {
 		return nil, err
 	}
 	bribe := cfg.newNamedAPIResourceSimple("status-conditions", bribeLookup.ID, bribeLookup.Name)
-
-	if resourcesContain(mon.StatusImmunities, bribe) {
+	if resourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
 	}
 

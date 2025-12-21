@@ -227,9 +227,9 @@ func TestGetArea(t *testing.T) {
 
 		testExpectedNameVer(t, testName, tc.expNameVer, got.ID, got.Name, got.Version)
 
-		compareResources(t, testCfg, testName, "location", tc.parentLocation, got.ParentLocation, tc.dontCheck)
-		compareResources(t, testCfg, testName, "sublocation", tc.parentSublocation, got.ParentSublocation, tc.dontCheck)
-		compareResourcePtrs(t, testCfg, testName, "sidequest", tc.sidequest, got.Sidequest, tc.dontCheck)
+		compAPIResources(t, testCfg, testName, "location", tc.parentLocation, got.ParentLocation, tc.dontCheck)
+		compAPIResources(t, testCfg, testName, "sublocation", tc.parentSublocation, got.ParentSublocation, tc.dontCheck)
+		compResourcePtrs(t, testCfg, testName, "sidequest", tc.sidequest, got.Sidequest, tc.dontCheck)
 
 		checks := []resListTest{
 			newResListTest("connected areas", tc.connectedAreas, got.ConnectedAreas),

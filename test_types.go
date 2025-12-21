@@ -69,6 +69,7 @@ type expMonsters struct {
 	formations			[]string
 	baseStats			map[string]int32
 	items 				*testItems
+	bribeChances		[]BribeChance
 	equipment 			*testEquipment
 	elemResists			[]testElemResist
 	statusImmunities	[]string
