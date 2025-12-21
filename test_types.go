@@ -1,5 +1,23 @@
 package main
 
+/*
+fields that need to be explicitly ignored with dontCheck:
+- standard types and pointers (through compare),
+- direct apiResource references or pointers
+- structs and pointers to structs that are borrowed from the result
+- basically anything that isn't a slice or a map and doesn't have nil checks in the test function body
+
+
+fields that can be explicitly ignored with dontCheck:
+- any field that is referenced explicitly as part of dont check in the function body
+
+
+fields that are implicitly ignored by leaving them blank:
+- slices of api resource references
+- resourceAmount map references
+- slices, structs, pointers to structs of some kind that have nil checks in the function body
+*/
+
 type testGeneral struct {
 	requestURL     string
 	expectedStatus int

@@ -94,29 +94,61 @@ func compString(t *testing.T, testName, fieldName, exp, got string) {
 }
 
 func compInt32Ptr(t *testing.T, testName, fieldName string, exp, got *int32) {
-	testPtr(t, testName, fieldName, exp, got, compInt32)
+	compPtr(t, testName, fieldName, exp, got, compInt32)
 }
 
 func compFloat32Ptr(t *testing.T, testName, fieldName string, exp, got *float32) {
-	testPtr(t, testName, fieldName, exp, got, compFloat32)
+	compPtr(t, testName, fieldName, exp, got, compFloat32)
 }
 
 func compStringPtr(t *testing.T, testName, fieldName string, exp, got *string) {
-	testPtr(t, testName, fieldName, exp, got, compString)
+	compPtr(t, testName, fieldName, exp, got, compString)
 }
 
-func testPtr[T any](t *testing.T, testName, fieldName string, exp, got *T, compFunc func(*testing.T, string, string, T, T)) {
+func bothPtrsPresent[T, U any](t *testing.T, testName, fieldName string, exp *T, got *U) bool {
+	switch {
+	case exp == nil && got == nil:
+		return false
+	case exp == nil && got != nil:
+		t.Fatalf("%s: expected %s nil, got %v", testName, fieldName, *got)
+		return false
+	case exp != nil && got == nil:
+		t.Fatalf("%s: expected %s %v, got nil", testName, fieldName, *exp)
+		return false
+	default:
+		return true
+	}
+}
+
+func compPtr[T any](t *testing.T, testName, fieldName string, exp, got *T, compFunc func(*testing.T, string, string, T, T)) {
+	if !bothPtrsPresent(t, testName, fieldName, exp, got) {
+		return
+	}
+	compFunc(t, testName, fieldName, *exp, *got)
+}
+
+func testStructSlices[T any](t *testing.T, testName, fieldName string, exp, got []T) {
 	switch {
 	case exp == nil && got == nil:
 		return
 	case exp == nil && got != nil:
-		t.Fatalf("%s: expected %s nil, got %v", testName, fieldName, *got)
+		t.Fatalf("%s: expected %s nil, got %v", testName, fieldName, got)
 	case exp != nil && got == nil:
-		t.Fatalf("%s: expected %s %v, got nil", testName, fieldName, *exp)
-	default:
-		if compFunc != nil {
-			compFunc(t, testName, fieldName, *exp, *got)
-		}
+		t.Fatalf("%s: expected %s %v, got nil", testName, fieldName, exp)
+	}
+}
+
+func compStructSlices[T any](t *testing.T, testName, fieldName string, expItems, gotItems []T, expLengths map[string]int) {
+	expLen, ok := expLengths[fieldName]
+	if !ok {
+		return
+	}
+	compare(t, testName, fieldName+" length", expLen, len(gotItems), nil)
+
+	testStructSlices(t, testName, fieldName, expItems, gotItems)
+
+	for i, item := range expItems {
+		compStructs(t, testName, "bribe chances", item, gotItems[i])
 	}
 }
 
@@ -135,7 +167,7 @@ func compStructPtrs[T any](t *testing.T, testName, fieldName string, exp, got *T
 		return
 	}
 
-	testPtr(t, testName, fieldName, exp, got, compStructs)
+	compPtr(t, testName, fieldName, exp, got, compStructs)
 }
 
 // checks if two not-nullable apiResources are equal
@@ -152,6 +184,7 @@ func compAPIResources[T HasAPIResource](t *testing.T, cfg *Config, testName, fie
 	compare(t, testName, fieldName, expURL, gotURL, nil)
 }
 
+// don't know if I really need this function to have its own switch
 // checks if two optional apiResources are equal
 func compResourcePtrs[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName string, expPathPtr *string, gotResPtr *T, dontCheck map[string]bool) {
 	t.Helper()

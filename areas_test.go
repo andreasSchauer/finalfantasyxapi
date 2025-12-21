@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"slices"
 	"testing"
@@ -219,6 +220,7 @@ func TestGetArea(t *testing.T) {
 		if correctErr {
 			continue
 		}
+		fmt.Println(testName)
 
 		var got Area
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {

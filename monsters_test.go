@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"net/http"
-	"slices"
 	"testing"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -195,21 +194,10 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/magic-urn/1",
 				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{
-					"agility parameters": true,
-					"species": true,
+				dontCheck: map[string]bool{
+					"species":       true,
 					"ctb icon type": true,
-					"distance": true,
-					"properties": true,
-					"locations": true,
-					"formations": true,
-					"base stats": true,
-					"weapon abilities": true,
-					"armor abilities": true,
-					"elem resists": true,
-					"status immunities": true,
-					"status resists": true,
-					"abilities": true,
+					"distance":      true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -223,7 +211,7 @@ func TestGetMonster(t *testing.T) {
 					itemDropChance: 0,
 					items: map[string]*string{
 						"steal common": h.GetStrPtr("/items/1"),
-						"steal rare": h.GetStrPtr("/items/1"),
+						"steal rare":   h.GetStrPtr("/items/1"),
 					},
 					otherItems: []string{
 						"/items/9",
@@ -255,37 +243,9 @@ func TestGetMonster(t *testing.T) {
 		checkResAmtsInSlice(t, testName, "base stats", tc.baseStats, got.BaseStats, tc.expLengths)
 		checkResAmtsInSlice(t, testName, "status resists", tc.statusResists, got.StatusResists, tc.expLengths)
 		compStructPtrs(t, testName, "agility parameters", tc.agility, got.AgilityParameters, tc.dontCheck)
-
-		if tc.bribeChances == nil && got.BribeChances != nil {
-			t.Fatalf("%s: expected bribe chances to be nil, but got %v", testName, got.BribeChances)
-		}
-
-		if tc.bribeChances != nil && got.BribeChances == nil {
-			t.Fatalf("%s: expected bribe chances %v, but got nil", testName, h.tc.BribeChances)
-		}
-
-		for i, bribeChance := range tc.bribeChances {
-			compStructs(t, testName, "bribe chances", bribeChance, got.BribeChances[i])
-		}
-
-		for i, resist := range tc.elemResists {
-			compAPIResources(t, testCfg, testName, "elem resists", resist.element, got.ElemResists[i].Element, tc.dontCheck)
-			compAPIResources(t, testCfg, testName, "elem resists", resist.affinity, got.ElemResists[i].Affinity, tc.dontCheck)
-		}
-
-		if tc.appliedState == nil && got.AppliedState != nil {
-			t.Fatalf("%s: expected applied state to be nil, but got %v", testName, h.DerefOrNil(got.Items))
-		}
-
-		if got.AppliedState != nil {
-			compare(t, testName, "applied state condition", tc.appliedState.condition, got.AppliedState.Condition, tc.dontCheck)
-
-			compResourcePtrs(t, testCfg, testName, "applied status", tc.appliedState.appliedStatus, got.AppliedState.AppliedStatus, tc.dontCheck)
-
-			if got.AlteredStates[0].Condition != "default" {
-				t.Fatalf("%s: first altered state must be default when another is applied, got: %s", testName, got.AlteredStates[0].Condition)
-			}
-		}
+		compStructSlices(t, testName, "bribe chances", tc.bribeChances, got.BribeChances, tc.expLengths)
+		testMonsterElemResists(t, testCfg, testName, tc.elemResists, got.ElemResists, tc.dontCheck)
+		testMonsterAltStates(t, testCfg, testName, tc.appliedState, got.AppliedState, got.AlteredStates)
 
 		checks := []resListTest{
 			newResListTest("properties", tc.properties, got.Properties),
@@ -297,53 +257,16 @@ func TestGetMonster(t *testing.T) {
 			newResListTest("abilities", tc.abilities, got.Abilities),
 		}
 
-		if tc.items == nil && got.Items != nil {
-			t.Fatalf("%s: expected items to be nil, but got %v", testName, h.DerefOrNil(got.Items))
-		}
-
-		if got.Items != nil {
-			expItems := *tc.items
-			gotItems := *got.Items
-			checks = append(checks, newResListTest("other items", expItems.otherItems, gotItems.OtherItems))
-
-			compare(t, testName, "item drop chance", expItems.itemDropChance, gotItems.DropChance, tc.dontCheck)
-			itemMap := expItems.items
-			compResourcePtrs(t, testCfg, testName, "steal common", itemMap["steal common"], gotItems.StealCommon, tc.dontCheck)
-			compResourcePtrs(t, testCfg, testName, "steal rare", itemMap["steal rare"], gotItems.StealRare, tc.dontCheck)
-			compResourcePtrs(t, testCfg, testName, "drop common", itemMap["drop common"], gotItems.DropCommon, tc.dontCheck)
-			compResourcePtrs(t, testCfg, testName, "drop rare", itemMap["drop rare"], gotItems.DropRare, tc.dontCheck)
-			compResourcePtrs(t, testCfg, testName, "sec drop common", itemMap["sec drop common"], gotItems.SecondaryDropCommon, tc.dontCheck)
-			compResourcePtrs(t, testCfg, testName, "sec drop rare", itemMap["sec drop rare"], gotItems.SecondaryDropRare, tc.dontCheck)
-			compResourcePtrs(t, testCfg, testName, "bribe", itemMap["bribe"], gotItems.Bribe, tc.dontCheck)
-		}
-
-		if tc.equipment == nil && got.Equipment != nil {
-			t.Fatalf("%s: expected equipment to be nil, but got %v", testName, h.DerefOrNil(got.Equipment))
-		}
-
-		if got.Equipment != nil {
-			expEquipment := *tc.equipment
-			gotEquipment := *got.Equipment
-
-			if !tc.dontCheck["ability slots"] {
-				compStructs(t, testName, "ability slots", expEquipment.abilitySlots, gotEquipment.AbilitySlots)
-			}
-
-			if !tc.dontCheck["attached abilities"] {
-				compStructs(t, testName, "attached abilities", expEquipment.attachedAbilities, gotEquipment.AttachedAbilities)
-			}
-
-			equipChecks := []resListTest{
-				newResListTest("weapon abilities", expEquipment.weaponAbilities, gotEquipment.WeaponAbilities),
-				newResListTest("armor abilities", expEquipment.armorAbilities, gotEquipment.ArmorAbilities),
-			}
-
-			checks = slices.Concat(checks, equipChecks)
-		}
-
+		testMonsterItems(t, testCfg, testName, tc.items, got.Items, &checks, tc.dontCheck)
+		testMonsterEquipment(t, testName, tc.equipment, got.Equipment, &checks, tc.dontCheck)
 		testResourceLists(t, testCfg, testName, checks, tc.expLengths)
 	}
 }
+
+
+
+
+// TestGetMonsterMultiple for 300 responses
 
 /*
 func TestRetrieveMonsters(t *testing.T) {
