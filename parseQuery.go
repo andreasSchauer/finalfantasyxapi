@@ -13,6 +13,7 @@ import (
 
 
 // maaaaaybe could trim down the logic into helper functions (also for the other funcs in parser.go)
+// I can also simply check in the OG function, if queryParam is "" and if not, return the badRequest error
 func parseSingleSegmentResourceQuery[T h.HasID](resourceType, segment, queryParam string, lookup map[string]T) (parseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {

@@ -51,6 +51,27 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/210?omnis-elements=iifii",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "Invalid usage. omnis-elements can only be used on Seymour Omnis",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/211?omnis-elements=iifii",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "Invalid input. omnis-elements must contain a combination of exactly four letters. Valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/211?omnis-elements=iftw",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "Invalid letter t for omnis-elements. Use any four letter combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/169?kimahri-stats=hp-1000",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid usage. kimahri-stats can only be used on biran ronso (id: 167), or yenke ronso (id: 168)",
@@ -508,6 +529,138 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/211?omnis-elements=ilfw",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"agility params": true,
+					"species":        true,
+					"ctb icon type":  true,
+					"distance":       true,
+					"items": 		  true,
+					"equipment": 	  true,
+				},
+				expLengths: map[string]int{},
+			},
+			expNameVer: expNameVer{
+				id:      211,
+				name:    "seymour omnis",
+				version: nil,
+			},
+			expMonsters: expMonsters{
+				elemResists: []testElemResist{
+					{
+						element:  "/elements/1",
+						affinity: "/affinities/3",
+					},
+					{
+						element:  "/elements/2",
+						affinity: "/affinities/3",
+					},
+					{
+						element:  "/elements/3",
+						affinity: "/affinities/3",
+					},
+					{
+						element:  "/elements/4",
+						affinity: "/affinities/3",
+					},
+					{
+						element:  "/elements/5",
+						affinity: "/affinities/1",
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/211?omnis-elements=iiff",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"agility params": true,
+					"species":        true,
+					"ctb icon type":  true,
+					"distance":       true,
+					"items": 		  true,
+					"equipment": 	  true,
+				},
+				expLengths: map[string]int{},
+			},
+			expNameVer: expNameVer{
+				id:      211,
+				name:    "seymour omnis",
+				version: nil,
+			},
+			expMonsters: expMonsters{
+				elemResists: []testElemResist{
+					{
+						element:  "/elements/1",
+						affinity: "/affinities/4",
+					},
+					{
+						element:  "/elements/2",
+						affinity: "/affinities/1",
+					},
+					{
+						element:  "/elements/3",
+						affinity: "/affinities/1",
+					},
+					{
+						element:  "/elements/4",
+						affinity: "/affinities/4",
+					},
+					{
+						element:  "/elements/5",
+						affinity: "/affinities/1",
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/211?omnis-elements=iiii",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"agility params": true,
+					"species":        true,
+					"ctb icon type":  true,
+					"distance":       true,
+					"items": 		  true,
+					"equipment": 	  true,
+				},
+				expLengths: map[string]int{},
+			},
+			expNameVer: expNameVer{
+				id:      211,
+				name:    "seymour omnis",
+				version: nil,
+			},
+			expMonsters: expMonsters{
+				elemResists: []testElemResist{
+					{
+						element:  "/elements/1",
+						affinity: "/affinities/2",
+					},
+					{
+						element:  "/elements/2",
+						affinity: "/affinities/1",
+					},
+					{
+						element:  "/elements/3",
+						affinity: "/affinities/1",
+					},
+					{
+						element:  "/elements/4",
+						affinity: "/affinities/5",
+					},
+					{
+						element:  "/elements/5",
+						affinity: "/affinities/1",
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/biran-ronso?kimahri-stats=hp-1000,strength-255,magic-255,agility-255",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -658,7 +811,6 @@ func TestGetMonster(t *testing.T) {
 		testResourceLists(t, testCfg, testName, checks, tc.expLengths)
 	}
 }
-
 
 
 

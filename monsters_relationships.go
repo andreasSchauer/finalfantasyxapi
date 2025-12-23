@@ -203,6 +203,25 @@ func (cfg *Config) getMonsterElemResists(r *http.Request, mon database.Monster) 
 	return elemResists, nil
 }
 
+
+
+func (cfg *Config) changeElemResist(element NamedAPIResource, newAffinityName string) (ElementalResist, error) {
+	newAffinity, err := seeding.GetResource(newAffinityName, cfg.l.Affinities)
+	if err != nil {
+		return ElementalResist{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get affinity %s", newAffinityName), err)
+	}
+
+	newResist := cfg.newElemResist(
+		element.ID,
+		newAffinity.ID,
+		element.Name,
+		newAffinity.Name,
+	)
+
+	return newResist, nil
+}
+
+
 func (cfg *Config) getMonsterStatusResists(r *http.Request, mon database.Monster) ([]StatusResist, error) {
 	dbStatusResists, err := cfg.db.GetMonsterStatusResists(r.Context(), mon.ID)
 	if err != nil {

@@ -216,6 +216,11 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 		return Monster{}, err
 	}
 
+	monster.ElemResists, err = cfg.getOmnisElemResists(r, monster)
+	if err != nil {
+		return Monster{}, err
+	}
+
 	return monster, nil
 }
 
