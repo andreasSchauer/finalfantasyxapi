@@ -92,11 +92,11 @@ SELECT
     mi.type AS item_type,
     ia.amount AS amount,
     pi.chance AS chance
-FROM j_monster_items_other_items j
-LEFT JOIN possible_items pi ON j.possible_item_id = pi.id
-LEFT JOIN item_amounts ia ON pi.item_amount_id = ia.id
-LEFT JOIN master_items mi ON ia.master_item_id = mi.id
-LEFT JOIN items i ON i.master_item_id = mi.id
+FROM possible_items pi
+JOIN j_monster_items_other_items j ON j.possible_item_id = pi.id
+JOIN item_amounts ia ON pi.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
+JOIN items i ON i.master_item_id = mi.id
 WHERE j.monster_items_id = $1
 ORDER BY chance DESC;
 
@@ -116,7 +116,7 @@ SELECT
     esc.amount AS amount,
     esc.chance AS chance
 FROM equipment_slots_chances esc
-LEFT JOIN j_monster_equipment_slots_chances j ON j.slots_chance_id = esc.id
+JOIN j_monster_equipment_slots_chances j ON j.slots_chance_id = esc.id
 WHERE j.monster_equipment_id = $1
 AND j.equipment_slots_id = $2;
 
@@ -128,9 +128,9 @@ SELECT
     aa.id AS auto_ability_id,
     ed.is_forced AS is_forced,
     ed.probability AS probability
-FROM j_monster_equipment_abilities j
-LEFT JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
-LEFT JOIN auto_abilities aa ON ed.auto_ability_id = aa.id
+FROM auto_abilities aa
+JOIN equipment_drops ed ON ed.auto_ability_id = aa.id
+JOIN j_monster_equipment_abilities j ON j.equipment_drop_id = ed.id
 WHERE j.monster_equipment_id = $1
 AND ed.type = $2;
 
@@ -139,9 +139,9 @@ AND ed.type = $2;
 SELECT
     c.id AS character_id,
     pu.name AS character_name
-FROM j_equipment_drops_characters j
-LEFT JOIN characters c ON j.character_id = c.id
-LEFT JOIN player_units pu ON c.unit_id = pu.id
+FROM characters c
+JOIN j_equipment_drops_characters j ON j.character_id = c.id
+JOIN player_units pu ON c.unit_id = pu.id
 WHERE j.monster_equipment_id = $1
 AND j.equipment_drop_id = $2;
 
@@ -150,8 +150,8 @@ AND j.equipment_drop_id = $2;
 SELECT
     p.id AS property_id,
     p.name AS property
-FROM j_monsters_properties j
-LEFT JOIN properties p ON j.property_id = p.id
+FROM properties p
+JOIN j_monsters_properties j ON j.property_id = p.id
 WHERE j.monster_id = $1
 ORDER BY p.id;
 
@@ -160,8 +160,8 @@ ORDER BY p.id;
 SELECT
     a.id AS auto_ability_id,
     a.name AS auto_ability
-FROM j_monsters_auto_abilities j
-LEFT JOIN auto_abilities a ON j.auto_ability_id = a.id
+FROM auto_abilities a
+JOIN j_monsters_auto_abilities j ON j.auto_ability_id = a.id
 WHERE j.monster_id = $1
 ORDER BY a.id;
 
@@ -170,8 +170,8 @@ ORDER BY a.id;
 SELECT
     o.id AS ronso_rage_id,
     o.name AS ronso_rage
-FROM j_monsters_ronso_rages j
-LEFT JOIN overdrives o ON j.overdrive_id = o.id
+FROM overdrives o
+JOIN j_monsters_ronso_rages j ON j.overdrive_id = o.id
 WHERE j.monster_id = $1
 ORDER BY o.id;
 
@@ -181,9 +181,9 @@ SELECT
     s.id AS stat_id,
     s.name AS stat,
     bs.value AS value
-FROM j_monsters_base_stats j
-LEFT JOIN base_stats bs ON j.base_stat_id = bs.id
-LEFT JOIN stats s ON bs.stat_id = s.id
+FROM base_stats bs
+JOIN j_monsters_base_stats j ON j.base_stat_id = bs.id
+JOIN stats s ON bs.stat_id = s.id
 WHERE j.monster_id = $1
 ORDER BY s.id;
 
@@ -194,10 +194,10 @@ SELECT
     e.name AS element,
     a.id AS affinity_id,
     a.name AS affinity
-FROM j_monsters_elem_resists j
-LEFT JOIN elemental_resists er ON j.elem_resist_id = er.id
-LEFT JOIN elements e ON er.element_id = e.id
-LEFT JOIN affinities a ON er.affinity_id = a.id
+FROM elemental_resists er
+JOIN j_monsters_elem_resists j ON j.elem_resist_id = er.id
+JOIN elements e ON er.element_id = e.id
+JOIN affinities a ON er.affinity_id = a.id
 WHERE j.monster_id = $1
 ORDER BY e.id;
 
@@ -207,9 +207,9 @@ SELECT
     sc.id AS status_id,
     sc.name AS status,
     sr.resistance AS resistance
-FROM j_monsters_status_resists j
-LEFT JOIN status_resists sr ON j.status_resist_id = sr.id
-LEFT JOIN status_conditions sc ON sr.status_condition_id = sc.id
+FROM status_resists sr
+JOIN j_monsters_status_resists j ON j.status_resist_id = sr.id
+JOIN status_conditions sc ON sr.status_condition_id = sc.id
 WHERE j.monster_id = $1
 ORDER BY sc.id;
 
@@ -218,8 +218,8 @@ ORDER BY sc.id;
 SELECT
     sc.id AS status_id,
     sc.name AS status
-FROM j_monsters_immunities j
-LEFT JOIN status_conditions sc ON j.status_condition_id = sc.id
+FROM status_conditions sc
+JOIN j_monsters_immunities j ON j.status_condition_id = sc.id
 WHERE j.monster_id = $1
 ORDER BY sc.id;
 
@@ -233,9 +233,9 @@ SELECT
     a.type AS ability_type,
     ma.is_forced AS is_forced,
     ma.is_unused AS is_unused
-FROM j_monsters_abilities j
-LEFT JOIN monster_abilities ma ON j.monster_ability_id = ma.id
-LEFT JOIN abilities a ON ma.ability_id = a.id
+FROM abilities a
+JOIN monster_abilities ma ON ma.ability_id = a.id
+JOIN j_monsters_abilities j ON j.monster_ability_id = ma.id
 WHERE j.monster_id = $1
 ORDER BY a.id;
 
@@ -250,13 +250,13 @@ SELECT DISTINCT
 	a.name AS area,
 	a.version
 FROM locations l
-LEFT JOIN sublocations s ON s.location_id = l.id
-LEFT JOIN areas a ON a.sublocation_id = s.id
-LEFT JOIN encounter_locations el ON el.area_id = a.id
-LEFT JOIN j_encounter_location_formations jelf ON jelf.encounter_location_id = el.id
-LEFT JOIN monster_formations mf ON jelf.monster_formation_id = mf.id
-LEFT JOIN j_monster_formations_monsters jmfm ON jmfm.monster_formation_id = mf.id
-LEFT JOIN monster_amounts ma ON jmfm.monster_amount_id = ma.id
+JOIN sublocations s ON s.location_id = l.id
+JOIN areas a ON a.sublocation_id = s.id
+JOIN encounter_locations el ON el.area_id = a.id
+JOIN j_encounter_location_formations jelf ON jelf.encounter_location_id = el.id
+JOIN monster_formations mf ON jelf.monster_formation_id = mf.id
+JOIN j_monster_formations_monsters jmfm ON jmfm.monster_formation_id = mf.id
+JOIN monster_amounts ma ON jmfm.monster_amount_id = ma.id
 WHERE ma.monster_id = $1;
 
 
@@ -268,8 +268,8 @@ SELECT
     mf.can_escape,
     mf.notes
 FROM monster_formations mf
-LEFT JOIN j_monster_formations_monsters j ON j.monster_formation_id = mf.id 
-LEFT JOIN monster_amounts ma ON j.monster_amount_id = ma.id
+JOIN j_monster_formations_monsters j ON j.monster_formation_id = mf.id 
+JOIN monster_amounts ma ON j.monster_amount_id = ma.id
 WHERE ma.monster_id = $1
 ORDER BY mf.id;
 
@@ -286,8 +286,8 @@ SELECT * FROM alt_state_changes WHERE altered_state_id = $1;
 SELECT
     p.name AS property,
     p.id AS property_id
-FROM j_alt_state_changes_properties j
-LEFT JOIN properties p ON j.property_id = p.id
+FROM properties p
+JOIN j_alt_state_changes_properties j ON j.property_id = p.id
 WHERE j.alt_state_change_id = $1
 ORDER BY p.id;
 
@@ -296,8 +296,8 @@ ORDER BY p.id;
 SELECT
     a.name AS auto_ability,
     a.id AS auto_ability_id
-FROM j_alt_state_changes_auto_abilities j
-LEFT JOIN auto_abilities a ON j.auto_ability_id = a.id
+FROM auto_abilities a
+JOIN j_alt_state_changes_auto_abilities j ON j.auto_ability_id = a.id
 WHERE j.alt_state_change_id = $1
 ORDER BY a.id;
 
@@ -307,9 +307,9 @@ SELECT
     s.name AS stat,
     s.id AS stat_id,
     bs.value AS value
-FROM j_alt_state_changes_base_stats j
-LEFT JOIN base_stats bs ON j.base_stat_id = bs.id
-LEFT JOIN stats s ON bs.stat_id = s.id
+FROM base_stats bs
+JOIN j_alt_state_changes_base_stats j ON j.base_stat_id = bs.id
+JOIN stats s ON bs.stat_id = s.id
 WHERE j.alt_state_change_id = $1
 ORDER BY s.id;
 
@@ -320,10 +320,10 @@ SELECT
     e.name AS element,
     a.id AS affinity_id,
     a.name AS affinity
-FROM j_alt_state_changes_elem_resists j
-LEFT JOIN elemental_resists er ON j.elem_resist_id = er.id
-LEFT JOIN elements e ON er.element_id = e.id
-LEFT JOIN affinities a ON er.affinity_id = a.id
+FROM elemental_resists er
+JOIN j_alt_state_changes_elem_resists j ON j.elem_resist_id = er.id
+JOIN elements e ON er.element_id = e.id
+JOIN affinities a ON er.affinity_id = a.id
 WHERE j.alt_state_change_id = $1
 ORDER BY e.id;
 
@@ -332,24 +332,23 @@ ORDER BY e.id;
 SELECT
     sc.id AS status_id,
     sc.name AS status
-FROM j_alt_state_changes_status_immunities j
-LEFT JOIN status_conditions sc ON j.status_condition_id = sc.id
+FROM status_conditions sc
+JOIN j_alt_state_changes_status_immunities j ON j.status_condition_id = sc.id
 WHERE j.alt_state_change_id = $1
 ORDER BY sc.id;
 
 
--- name: GetAltStateStatusses :one
+-- name: GetAltStateStatus :one
 SELECT
     sc.id AS status_id,
     sc.name AS status,
     isc.probability AS probability,
     isc.duration_type AS duration_type,
     isc.amount AS amount
-FROM alt_state_changes astc
-LEFT JOIN inflicted_statusses isc ON astc.added_status_id = isc.id
-LEFT JOIN status_conditions sc ON isc.status_condition_id = sc.id
-WHERE astc.id = $1
-ORDER BY sc.id;
+FROM inflicted_statusses isc
+JOIN alt_state_changes astc ON astc.added_status_id = isc.id
+JOIN status_conditions sc ON isc.status_condition_id = sc.id
+WHERE astc.id = $1;
 
 
 -- name: GetMonsters :many
@@ -401,12 +400,12 @@ ORDER BY m.id;
 -- name: GetMonstersByItem :many
 SELECT DISTINCT m.*
 FROM monsters m
-LEFT JOIN monster_items mi ON mi.monster_id = m.id
+JOIN monster_items mi ON mi.monster_id = m.id
 LEFT JOIN j_monster_items_other_items jmio
   ON jmio.monster_items_id = mi.id
 LEFT JOIN possible_items pi
   ON pi.id = jmio.possible_item_id
-LEFT JOIN item_amounts ia
+JOIN item_amounts ia
   ON ia.id IN (
       mi.steal_common_id,
       mi.steal_rare_id,
@@ -470,9 +469,9 @@ ORDER BY m.id;
 -- name: GetMonstersByAutoAbilityIDs :many
 SELECT m.*
 FROM monsters m
-LEFT JOIN monster_equipment me ON me.monster_id = m.id
-LEFT JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
-LEFT JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
+JOIN monster_equipment me ON me.monster_id = m.id
+JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
+JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
 WHERE ed.auto_ability_id = ANY(sqlc.arg(auto_ability_ids)::int[])
 GROUP BY m.id
 HAVING COUNT(DISTINCT ed.auto_ability_id) >= 1
@@ -483,7 +482,7 @@ ORDER BY m.id;
 SELECT
     m.*
 FROM monsters m
-LEFT JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
+JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
 WHERE j.overdrive_id = $1
 ORDER BY m.id;
 

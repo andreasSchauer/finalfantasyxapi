@@ -110,7 +110,7 @@ func (cfg *Config) getMonsterProperties(r *http.Request, mon database.Monster) (
 	}
 
 	properties := createNamedAPIResourcesSimple(cfg, dbProperties, "properties", func(prop database.GetMonsterPropertiesRow) (int32, string) {
-		return h.NullInt32ToVal(prop.PropertyID), h.NullStringToVal(prop.Property)
+		return prop.PropertyID, prop.Property
 	})
 
 	return properties, nil
@@ -123,7 +123,7 @@ func (cfg *Config) getMonsterAutoAbilities(r *http.Request, mon database.Monster
 	}
 
 	autoAbilities := createNamedAPIResourcesSimple(cfg, dbAutoAbilities, "auto-abilities", func(autoAbility database.GetMonsterAutoAbilitiesRow) (int32, string) {
-		return h.NullInt32ToVal(autoAbility.AutoAbilityID), h.NullStringToVal(autoAbility.AutoAbility)
+		return autoAbility.AutoAbilityID, autoAbility.AutoAbility
 	})
 
 	return autoAbilities, nil
@@ -137,7 +137,7 @@ func (cfg *Config) getMonsterRonsoRages(r *http.Request, mon database.Monster) (
 	}
 
 	rages := createNamedAPIResourcesSimple(cfg, dbRages, "ronso-rages", func(rage database.GetMonsterRonsoRagesRow) (int32, string) {
-		return h.NullInt32ToVal(rage.RonsoRageID) - ronsoRageOffset, h.NullStringToVal(rage.RonsoRage)
+		return rage.RonsoRageID - ronsoRageOffset, rage.RonsoRage
 	})
 
 	return rages, nil
@@ -150,7 +150,7 @@ func (cfg *Config) getMonsterLocations(r *http.Request, mon database.Monster) ([
 	}
 
 	locations := createLocationBasedAPIResources(cfg, dbLocations, func(loc database.GetMonsterLocationsRow) (string, string, string, *int32) {
-		return loc.Location, h.NullStringToVal(loc.Sublocation), h.NullStringToVal(loc.Area), h.NullInt32ToPtr(loc.Version)
+		return loc.Location, loc.Sublocation, loc.Area, h.NullInt32ToPtr(loc.Version)
 	})
 
 	return locations, nil
@@ -178,7 +178,7 @@ func (cfg *Config) getMonsterBaseStats(r *http.Request, mon database.Monster) ([
 	baseStats := []BaseStat{}
 
 	for _, dbStat := range dbBaseStats {
-		baseStat := cfg.newBaseStat(dbStat.StatID.Int32, dbStat.Value.Int32, dbStat.Stat.String)
+		baseStat := cfg.newBaseStat(dbStat.StatID, dbStat.Value, dbStat.Stat)
 
 		baseStats = append(baseStats, baseStat)
 	}
@@ -195,7 +195,7 @@ func (cfg *Config) getMonsterElemResists(r *http.Request, mon database.Monster) 
 	elemResists := []ElementalResist{}
 
 	for _, dbResist := range dbElemResists {
-		elemResist := cfg.newElemResist(dbResist.ElementID.Int32, dbResist.AffinityID.Int32, dbResist.Element.String, dbResist.Affinity.String)
+		elemResist := cfg.newElemResist(dbResist.ElementID, dbResist.AffinityID, dbResist.Element, dbResist.Affinity)
 
 		elemResists = append(elemResists, elemResist)
 	}
@@ -231,7 +231,7 @@ func (cfg *Config) getMonsterStatusResists(r *http.Request, mon database.Monster
 	statusResists := []StatusResist{}
 
 	for _, dbResist := range dbStatusResists {
-		statusResist := cfg.newStatusResist(dbResist.StatusID.Int32, anyToInt32(dbResist.Resistance), dbResist.Status.String)
+		statusResist := cfg.newStatusResist(dbResist.StatusID, anyToInt32(dbResist.Resistance), dbResist.Status)
 
 		statusResists = append(statusResists, statusResist)
 	}
@@ -246,7 +246,7 @@ func (cfg *Config) getMonsterImmunities(r *http.Request, mon database.Monster) (
 	}
 
 	immunities := createNamedAPIResourcesSimple(cfg, dbImmunities, "status-conditions", func(immunity database.GetMonsterImmunitiesRow) (int32, string) {
-		return h.NullInt32ToVal(immunity.StatusID), h.NullStringToVal(immunity.Status)
+		return immunity.StatusID, immunity.Status
 	})
 
 	return immunities, nil
@@ -266,12 +266,12 @@ func (cfg *Config) getMonsterAbilities(r *http.Request, mon database.Monster) ([
 			return nil, err
 		}
 
-		abilityResource := cfg.newNamedAPIResource(endpoint, id, dbAbility.Ability.String, h.NullInt32ToPtr(dbAbility.Version), h.NullStringToPtr(dbAbility.Specification))
+		abilityResource := cfg.newNamedAPIResource(endpoint, id, dbAbility.Ability, h.NullInt32ToPtr(dbAbility.Version), h.NullStringToPtr(dbAbility.Specification))
 
 		monAbility := MonsterAbility{
 			Ability:  abilityResource,
-			IsForced: dbAbility.IsForced.Bool,
-			IsUnused: dbAbility.IsUnused.Bool,
+			IsForced: dbAbility.IsForced,
+			IsUnused: dbAbility.IsUnused,
 		}
 
 		monAbilities = append(monAbilities, monAbility)
@@ -282,12 +282,12 @@ func (cfg *Config) getMonsterAbilities(r *http.Request, mon database.Monster) ([
 
 func (cfg *Config) getAbilityID(ability database.GetMonsterAbilitiesRow) (int32, string, error) {
 	ref := seeding.AbilityReference{
-		Name:        ability.Ability.String,
+		Name:        ability.Ability,
 		Version:     h.NullInt32ToPtr(ability.Version),
-		AbilityType: string(ability.AbilityType.AbilityType),
+		AbilityType: string(ability.AbilityType),
 	}
 
-	switch ability.AbilityType.AbilityType {
+	switch ability.AbilityType {
 	case database.AbilityTypePlayerAbility:
 		abilityLookup, err := seeding.GetResource(ref, cfg.l.PlayerAbilities)
 		if err != nil {
@@ -310,7 +310,7 @@ func (cfg *Config) getAbilityID(ability database.GetMonsterAbilitiesRow) (int32,
 		return abilityLookup.ID, "overdrive-abilities", nil
 
 	case database.AbilityTypeItemAbility:
-		abilityLookup, err := seeding.GetResource(ability.Ability.String, cfg.l.Items)
+		abilityLookup, err := seeding.GetResource(ability.Ability, cfg.l.Items)
 		if err != nil {
 			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
 		}

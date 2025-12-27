@@ -28,12 +28,12 @@ func (cfg *Config) getMonstersElemResist(r *http.Request, inputMons []NamedAPIRe
 			return nil, newHTTPError(http.StatusBadRequest, "invalid input. usage: elemental-affinities={element}-{affinity},{element}-{affinity}", nil)
 		}
 
-		element, err := parseSingleSegmentResourceQuery("element", parts[0], queryParam, cfg.l.Elements)
+		element, err := parseSingleSegmentResource("element", parts[0], queryParam, cfg.l.Elements)
 		if err != nil {
 			return nil, err
 		}
 
-		affinity, err := parseSingleSegmentResourceQuery("affinity", parts[1], queryParam, cfg.l.Affinities)
+		affinity, err := parseSingleSegmentResource("affinity", parts[1], queryParam, cfg.l.Affinities)
 		if err != nil {
 			return nil, err
 		}
@@ -100,7 +100,7 @@ func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPI
 	var ids []int32
 
 	for _, qStatus := range statusses {
-		status, err := parseSingleSegmentResourceQuery("status-condition", qStatus, queryParam1, cfg.l.StatusConditions)
+		status, err := parseSingleSegmentResource("status-condition", qStatus, queryParam1, cfg.l.StatusConditions)
 		if err != nil {
 			return nil, err
 		}
@@ -191,7 +191,7 @@ func (cfg *Config) getMonstersAutoAbility(r *http.Request, inputMons []NamedAPIR
 	var ids []int32
 
 	for _, ability := range abilities {
-		autoAbility, err := parseSingleSegmentResourceQuery("auto-ability", ability, queryParam, cfg.l.AutoAbilities)
+		autoAbility, err := parseSingleSegmentResource("auto-ability", ability, queryParam, cfg.l.AutoAbilities)
 		if err != nil {
 			return nil, err
 		}
@@ -228,7 +228,7 @@ func (cfg *Config) getMonstersRonsoRage(r *http.Request, inputMons []NamedAPIRes
 	}
 
 	if ronsoRageID == 0 {
-		ronsoRage, err := parseNameVersionResourceQuery("ronso-rage", query, "", queryParam, cfg.l.Overdrives)
+		ronsoRage, err := parseNameVersionResource("ronso-rage", query, "", queryParam, cfg.l.Overdrives)
 		if err != nil {
 			return nil, err
 		}

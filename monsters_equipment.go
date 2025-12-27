@@ -157,12 +157,12 @@ func (cfg *Config) getEquipmentDrops(r *http.Request, mon database.Monster, equi
 		if err != nil {
 			return nil, err
 		}
-		autoAbility := cfg.newNamedAPIResourceSimple("auto-abilities", dbDrop.AutoAbilityID.Int32, dbDrop.AutoAbility.String)
+		autoAbility := cfg.newNamedAPIResourceSimple("auto-abilities", dbDrop.AutoAbilityID, dbDrop.AutoAbility)
 
 		drop := EquipmentDrop{
 			AutoAbility: autoAbility,
 			ForcedChars: forcedChars,
-			IsForced:    dbDrop.IsForced.Bool,
+			IsForced:    dbDrop.IsForced,
 			Probability: anyToInt32Ptr(dbDrop.Probability),
 		}
 
@@ -175,14 +175,14 @@ func (cfg *Config) getEquipmentDrops(r *http.Request, mon database.Monster, equi
 func (cfg *Config) getEquipmentDropForcedChars(r *http.Request, mon database.Monster, equipment database.MonsterEquipment, drop database.GetMonsterEquipmentAbilitiesRow) ([]NamedAPIResource, error) {
 	dbChars, err := cfg.db.GetEquipmentDropCharacters(r.Context(), database.GetEquipmentDropCharactersParams{
 		MonsterEquipmentID: equipment.ID,
-		EquipmentDropID:    drop.ID.Int32,
+		EquipmentDropID:    drop.ID,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve characters of auto ability %s dropped by Monster %s, Version %d", drop.AutoAbility.String, mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve characters of auto ability %s dropped by Monster %s, Version %d", drop.AutoAbility, mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
 	characters := createNamedAPIResourcesSimple(cfg, dbChars, "characters", func(char database.GetEquipmentDropCharactersRow) (int32, string) {
-		return h.NullInt32ToVal(char.CharacterID), h.NullStringToVal(char.CharacterName)
+		return char.CharacterID, char.CharacterName
 	})
 
 	return characters, nil

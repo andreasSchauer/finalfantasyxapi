@@ -88,6 +88,7 @@ func TestGetMonster(t *testing.T) {
 					"locations":         1,
 					"formations":        3,
 					"base stats":        10,
+					"other items":		 0,
 					"weapon abilities":  3,
 					"armor abilities":   1,
 					"status immunities": 7,
@@ -235,7 +236,9 @@ func TestGetMonster(t *testing.T) {
 					"ctb icon type": true,
 					"distance":      true,
 				},
-				expLengths: map[string]int{},
+				expLengths: map[string]int{
+					"other items": 3,
+				},
 			},
 			expNameVer: expNameVer{
 				id:      156,
@@ -273,6 +276,7 @@ func TestGetMonster(t *testing.T) {
 					"locations":         1,
 					"formations":        1,
 					"base stats":        10,
+					"other items":		 0,
 					"weapon abilities":  5,
 					"armor abilities":   4,
 					"status immunities": 16,
@@ -998,6 +1002,23 @@ func TestRetrieveMonsters(t *testing.T) {
 					"/monsters/188",
 					"/monsters/227",
 					"/monsters/249",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?limit=307&item=elixir",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    22,
+				results: []string{
+					"/monsters/32",
+					"/monsters/91",
+					"/monsters/156",
+					"/monsters/192",
+					"/monsters/295",
+					"/monsters/305",
 				},
 			},
 		},

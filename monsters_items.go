@@ -115,7 +115,7 @@ func (cfg *Config) getMonsterOtherItems(r *http.Request, mon database.Monster, m
 	otherItems := []PossibleItem{}
 
 	for _, item := range dbOtherItems {
-		possibleItem := cfg.newPossibleItem(item.ItemType.ItemType, item.Item.String, item.ItemID.Int32, item.Amount.Int32, anyToInt32(item.Chance))
+		possibleItem := cfg.newPossibleItem(item.ItemType, item.Item, item.ItemID, item.Amount, anyToInt32(item.Chance))
 
 		otherItems = append(otherItems, possibleItem)
 	}

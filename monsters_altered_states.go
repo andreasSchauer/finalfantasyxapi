@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -104,7 +106,7 @@ func (cfg *Config) getAltStateChangeRelationships(r *http.Request, mon database.
 		return AltStateChange{}, err
 	}
 
-	addedStatusses, err := cfg.getAltStateStatusses(r, mon, asc)
+	addedStatusses, err := cfg.getAltStateStatus(r, mon, asc)
 	if err != nil {
 		return AltStateChange{}, err
 	}
@@ -126,7 +128,7 @@ func (cfg *Config) getAltStateProperties(r *http.Request, mon database.Monster, 
 	}
 
 	properties := createNamedAPIResourcesSimple(cfg, dbProperties, "properties", func(prop database.GetAltStatePropertiesRow) (int32, string) {
-		return h.NullInt32ToVal(prop.PropertyID), h.NullStringToVal(prop.Property)
+		return prop.PropertyID, prop.Property
 	})
 
 	if len(properties) == 0 {
@@ -143,7 +145,7 @@ func (cfg *Config) getAltStateAutoAbilities(r *http.Request, mon database.Monste
 	}
 
 	autoAbilities := createNamedAPIResourcesSimple(cfg, dbAutoAbilities, "auto-abilities", func(autoAbility database.GetAltStateAutoAbilitiesRow) (int32, string) {
-		return h.NullInt32ToVal(autoAbility.AutoAbilityID), h.NullStringToVal(autoAbility.AutoAbility)
+		return autoAbility.AutoAbilityID, autoAbility.AutoAbility
 	})
 
 	if len(autoAbilities) == 0 {
@@ -162,7 +164,7 @@ func (cfg *Config) getAltStateBaseStats(r *http.Request, mon database.Monster, a
 	var baseStats []BaseStat
 
 	for _, dbStat := range dbBaseStats {
-		baseStat := cfg.newBaseStat(dbStat.StatID.Int32, dbStat.Value.Int32, dbStat.Stat.String)
+		baseStat := cfg.newBaseStat(dbStat.StatID, dbStat.Value, dbStat.Stat)
 
 		baseStats = append(baseStats, baseStat)
 	}
@@ -179,7 +181,7 @@ func (cfg *Config) getAltStateElemResists(r *http.Request, mon database.Monster,
 	var elemResists []ElementalResist
 
 	for _, dbResist := range dbElemResists {
-		elemResist := cfg.newElemResist(dbResist.ElementID.Int32, dbResist.AffinityID.Int32, dbResist.Element.String, dbResist.Affinity.String)
+		elemResist := cfg.newElemResist(dbResist.ElementID, dbResist.AffinityID, dbResist.Element, dbResist.Affinity)
 
 		elemResists = append(elemResists, elemResist)
 	}
@@ -194,7 +196,7 @@ func (cfg *Config) getAltStateImmunities(r *http.Request, mon database.Monster, 
 	}
 
 	immunities := createNamedAPIResourcesSimple(cfg, dbImmunities, "status-conditions", func(immunity database.GetAltStateImmunitiesRow) (int32, string) {
-		return h.NullInt32ToVal(immunity.StatusID), h.NullStringToVal(immunity.Status)
+		return immunity.StatusID, immunity.Status
 	})
 
 	if len(immunities) == 0 {
@@ -204,13 +206,16 @@ func (cfg *Config) getAltStateImmunities(r *http.Request, mon database.Monster, 
 	return immunities, nil
 }
 
-func (cfg *Config) getAltStateStatusses(r *http.Request, mon database.Monster, asc database.AltStateChange) (*InflictedStatus, error) {
-	dbStatus, err := cfg.db.GetAltStateStatusses(r.Context(), asc.ID)
+func (cfg *Config) getAltStateStatus(r *http.Request, mon database.Monster, asc database.AltStateChange) (*InflictedStatus, error) {
+	dbStatus, err := cfg.db.GetAltStateStatus(r.Context(), asc.ID)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state added status of Monster %s, Version %d", mon.Name, h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	addedStatus := cfg.newInflictedStatus(dbStatus.StatusID.Int32, anyToInt32(dbStatus.Probability), dbStatus.Status.String, h.NullInt32ToPtr(dbStatus.Amount), dbStatus.DurationType.DurationType)
+	addedStatus := cfg.newInflictedStatus(dbStatus.StatusID, anyToInt32(dbStatus.Probability), dbStatus.Status, h.NullInt32ToPtr(dbStatus.Amount), dbStatus.DurationType)
 
 	if addedStatus.IsZero() {
 		return nil, nil

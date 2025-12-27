@@ -11,8 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-// deals with a single segment path that is either a name or an id and returns the id
-// when I have the complete function, everything that returns a 404 returns nil and just at the end, when I've tried everything else will I return a 404
+
 
 type parseResponse struct {
 	ID   int32
@@ -26,9 +25,8 @@ func newParseResponse(id int32, name string) parseResponse {
 	}
 }
 
-// location area parsing might be a whole different level of annoying
-// maybe add a switch case LocationArea to GetResource
-func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup map[string]T) (parseResponse, error) {
+// deals with a single segment path that is either a name or an id and returns a parseResponse with the id, if a single match is found, or a name, if multiple matches with that name were found. If queryParam == "", if nothing is found, errors will be 404s. If queryParam != "", errors will be 400s.
+func parseSingleSegmentResource[T h.HasID](resourceType, segment, queryParam string, lookup map[string]T) (parseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, "Invalid URL encoding", err)
@@ -38,7 +36,10 @@ func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup 
 	parsedID, err := strconv.Atoi(decoded)
 	if err == nil {
 		if parsedID > len(lookup) || parsedID <= 0 {
-			return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("provided %s ID is out of range. Max ID: %d", resourceType, len(lookup)), err)
+			if queryParam == "" {
+				return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("provided %s ID is out of range. Max ID: %d", resourceType, len(lookup)), err)
+			}
+			return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided %s ID %d is out of range in %s. Max ID: %d", resourceType, parsedID, queryParam, len(lookup)), err)
 		}
 		return newParseResponse(int32(parsedID), ""), nil
 	}
@@ -94,12 +95,16 @@ func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup 
 		return newParseResponse(0, lookupObjVer.Name), nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s.", resourceType, segment), err)
+	if queryParam == "" {
+		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s.", resourceType, segment), err)
+	}
+
+	return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s' in %s.", resourceType, segment, queryParam), err)
 }
 
 
 
-func parseNameVersionResource[T h.HasID](resourceType, name, versionStr string, lookup map[string]T) (parseResponse, error) {
+func parseNameVersionResource[T h.HasID](resourceType, name, versionStr, queryParam string, lookup map[string]T) (parseResponse, error) {
 	var versionPtr *int32
 
 	// parse the version (int or null)
@@ -140,5 +145,8 @@ func parseNameVersionResource[T h.HasID](resourceType, name, versionStr string, 
 		return newParseResponse(resource.GetID(), ""), nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s, version %s", resourceType, name, versionStr), err)
+	if queryParam == "" {
+		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s, version %s", resourceType, name, versionStr), err)
+	}
+	return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s', version %s in %s.", resourceType, name, versionStr, queryParam), err)
 }

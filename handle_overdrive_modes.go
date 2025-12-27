@@ -50,7 +50,8 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 	case 1:
 		// /api/overdrive-modes/{name or id}
 		segment := segments[0]
-		input, err := parseSingleSegmentResource("overdrive-mode", segment, cfg.l.OverdriveModes)
+		
+		input, err := parseSingleSegmentResource("overdrive-mode", segment, "", cfg.l.OverdriveModes)
 		if handleHTTPError(w, err) {
 			return
 		}
