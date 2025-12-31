@@ -140,7 +140,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=f",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value: f, use /api/overdrive-mode-type to see valid values.",
+				expectedErr:    "invalid value: 'f', use /api/type to see valid values",
 			},
 		},
 		{

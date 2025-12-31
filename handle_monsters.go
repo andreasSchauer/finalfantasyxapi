@@ -71,6 +71,8 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 		// /api/monsters/{name or id}
 		segment := segments[0]
 
+		// if segment == "parameters" => do the parameters logic
+
 		input, err := parseSingleSegmentResource("monster", segment, "", cfg.l.Monsters)
 		if handleHTTPError(w, err) {
 			return

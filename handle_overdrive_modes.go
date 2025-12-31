@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -147,15 +146,13 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList
 }
 
 func (cfg *Config) getOverdriveModesType(r *http.Request, inputModes []NamedAPIResource) ([]NamedAPIResource, error) {
-	query := r.URL.Query().Get("type")
-
-	if query == "" {
-		return inputModes, nil
-	}
-
-	enum, err := GetEnumType(query, cfg.t.OverdriveModeType)
+	queryParam := cfg.q.overdriveModes["type"]
+	enum, isEmpty, err := parseTypeQuery(r, queryParam, cfg.t.OverdriveModeType)
 	if err != nil {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value: %s, use /api/overdrive-mode-type to see valid values.", query), err)
+		return nil, err
+	}
+	if isEmpty {
+		return inputModes, nil
 	}
 
 	modeType := database.OverdriveModeType(enum.Name)
