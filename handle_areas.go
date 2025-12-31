@@ -104,6 +104,11 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
+	err := verifyQueryParams(r, "areas", &id, cfg.q.areas)
+	if err != nil {
+		return Area{}, err
+	}
+
 	dbArea, err := cfg.db.GetArea(r.Context(), id)
 	if err != nil {
 		return Area{}, newHTTPError(http.StatusNotFound, "Couldn't get Area. Area with this ID doesn't exist.", err)
@@ -145,6 +150,11 @@ func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
 }
 
 func (cfg *Config) retrieveAreas(r *http.Request) (LocationApiResourceList, error) {
+	err := verifyQueryParams(r, "areas", nil, cfg.q.areas)
+	if err != nil {
+		return LocationApiResourceList{}, err
+	}
+
 	dbAreas, err := cfg.db.GetAreas(r.Context())
 	if err != nil {
 		return LocationApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve areas", err)

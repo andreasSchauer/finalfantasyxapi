@@ -12,8 +12,8 @@ import (
 )
 
 func (cfg *Config) getMonstersElemResist(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
-	queryParam := "elemental-affinities"
-	query := r.URL.Query().Get(queryParam)
+	queryParam := cfg.q.monsters["elemental-affinities"]
+	query := r.URL.Query().Get(queryParam.Name)
 
 	if query == "" {
 		return inputMons, nil
@@ -28,12 +28,12 @@ func (cfg *Config) getMonstersElemResist(r *http.Request, inputMons []NamedAPIRe
 			return nil, newHTTPError(http.StatusBadRequest, "invalid input. usage: elemental-affinities={element}-{affinity},{element}-{affinity}", nil)
 		}
 
-		element, err := parseSingleSegmentResource("element", parts[0], queryParam, cfg.l.Elements)
+		element, err := parseSingleSegmentResource("element", parts[0], queryParam.Name, cfg.l.Elements)
 		if err != nil {
 			return nil, err
 		}
 
-		affinity, err := parseSingleSegmentResource("affinity", parts[1], queryParam, cfg.l.Affinities)
+		affinity, err := parseSingleSegmentResource("affinity", parts[1], queryParam.Name, cfg.l.Affinities)
 		if err != nil {
 			return nil, err
 		}

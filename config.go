@@ -17,6 +17,7 @@ type Config struct {
 	dbConn      *sql.DB
 	l           *seeding.Lookup
 	t           *TypeLookup
+	q			*QueryLookup
 	platform    string
 	adminApiKey string
 	host        string
@@ -63,6 +64,9 @@ func ConfigInit() (Config, error) {
 
 	typeLookup := TypeLookupInit()
 	apiCfg.t = &typeLookup
+
+	queryLookup := QueryLookupInit()
+	apiCfg.q = &queryLookup
 
 	return apiCfg, nil
 }

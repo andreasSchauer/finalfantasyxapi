@@ -116,6 +116,9 @@ func testResourceList(t *testing.T, testCfg *Config, testName string, expList re
 // checks if stated resources are in resource slice
 func checkResourcesInSlice[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName string, expectedPaths []string, gotRes []T) {
 	gotMap := getResourceMap(gotRes)
+	if len(gotMap) != len(gotRes) {
+		t.Fatalf("%s: there appear to be duplicates in %s", testName, fieldName)
+	}
 
 	for _, expPath := range expectedPaths {
 		expURL := cfg.completeURL(expPath)

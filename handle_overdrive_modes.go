@@ -70,6 +70,11 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 }
 
 func (cfg *Config) getOverdriveMode(r *http.Request, id int32) (OverdriveMode, error) {
+	err := verifyQueryParams(r, "overdrive-modes", &id, cfg.q.overdriveModes)
+	if err != nil {
+		return OverdriveMode{}, err
+	}
+
 	dbMode, err := cfg.db.GetOverdriveMode(r.Context(), id)
 	if err != nil {
 		return OverdriveMode{}, newHTTPError(http.StatusNotFound, "Couldn't get Overdrive Mode. Overdrive mode with this ID doesn't exist.", err)
@@ -114,6 +119,11 @@ func (cfg *Config) getOverdriveModeActions(r *http.Request, id int32) ([]ActionA
 }
 
 func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList, error) {
+	err := verifyQueryParams(r, "overdrive-modes", nil, cfg.q.overdriveModes)
+	if err != nil {
+		return NamedApiResourceList{}, err
+	}
+
 	dbODModes, err := cfg.db.GetOverdriveModes(r.Context())
 	if err != nil {
 		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve overdrive modes", err)

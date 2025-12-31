@@ -118,6 +118,11 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
+	err := verifyQueryParams(r, "monsters", &id, cfg.q.monsters)
+	if err != nil {
+		return Monster{}, err
+	}
+
 	dbMonster, err := cfg.db.GetMonster(r.Context(), id)
 	if err != nil {
 		return Monster{}, newHTTPError(http.StatusNotFound, "Couldn't get Monster. Monster with this ID doesn't exist.", err)
@@ -243,6 +248,11 @@ func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (Nam
 }
 
 func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, error) {
+	err := verifyQueryParams(r, "monsters", nil, cfg.q.monsters)
+	if err != nil {
+		return NamedApiResourceList{}, err
+	}
+
 	dbMons, err := cfg.db.GetMonsters(r.Context())
 	if err != nil {
 		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve monsters", err)

@@ -28,6 +28,7 @@ func TestGetMonster(t *testing.T) {
 				expectedErr:    "monster not found: a.",
 			},
 		},
+		
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2",
@@ -44,6 +45,13 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/211?has-overdrive=true",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "Invalid usage of parameter has-overdrive. Parameter has-overdrive can only be used with list-endpoints.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/1?altered-state=1",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "Monster sinscale, Version 1 has no altered states",
@@ -53,7 +61,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/210?omnis-elements=iifii",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Invalid usage. omnis-elements can only be used on Seymour Omnis",
+				expectedErr:    "Invalid id 210. Parameter omnis-elements can only be used with ids 211.",
 			},
 		},
 		{
@@ -74,7 +82,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/169?kimahri-stats=hp-1000",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage. kimahri-stats can only be used on biran ronso (id: 167), or yenke ronso (id: 168)",
+				expectedErr:    "Invalid id 169. Parameter kimahri-stats can only be used with ids 167, 168.",
 			},
 		},
 		{
@@ -914,6 +922,13 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/?omnis-elements=ffff",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "Invalid usage of parameter omnis-elements. Parameter omnis-elements can only be used with single-resource-endpoints.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental-affinities=weak-fire",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "unknown element 'weak' in elemental-affinities.",
@@ -923,14 +938,14 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?resistance=50",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input. resistance parameter must be paired with status-resists parameter. usage: status-resists={status},{status},...&resistance={1-254 or immune}",
+				expectedErr:    "Invalid usage of parameter resistance. Parameter resistance can only be used in combination with parameter(s): status-resists.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?method=steal",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input. method parameter must be paired with item parameter. usage: item={item}&method={steal/drop/bribe/other}",
+				expectedErr:    "Invalid usage of parameter method. Parameter method can only be used in combination with parameter(s): item.",
 			},
 		},
 		{

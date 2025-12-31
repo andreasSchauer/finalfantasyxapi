@@ -62,7 +62,7 @@ func (cfg *Config) getAreasItem(r *http.Request, inputAreas []LocationAPIResourc
 	}
 	if itemIsEmpty {
 		if queryMethod != "" {
-			return nil, newHTTPError(http.StatusBadRequest, "invalid input. method parameter must be paired with item or key-item parameter. usage: item={item}&method={monster/treasure/shop/quest}; or item={item}&method={treasure/quest}", nil)
+			return nil, newHTTPError(http.StatusBadRequest, "invalid input. method parameter must be paired with item parameter. usage: item={item}&method={monster/treasure/shop/quest}", nil)
 		}
 		return inputAreas, nil
 	}
