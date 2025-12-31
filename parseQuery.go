@@ -9,8 +9,8 @@ import (
 )
 
 
-func parseBooleanQuery(r *http.Request, queryParam string) (bool, bool, error) {
-	query := r.URL.Query().Get(queryParam)
+func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, bool, error) {
+	query := r.URL.Query().Get(queryParam.Name)
 	isEmpty := false
 
 	if query == "" {
@@ -20,14 +20,14 @@ func parseBooleanQuery(r *http.Request, queryParam string) (bool, bool, error) {
 
 	b, err := strconv.ParseBool(query)
 	if err != nil {
-		return false, false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value. usage: %s={boolean}", queryParam), err)
+		return false, false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value. usage: %s", queryParam.Usage), err)
 	}
 
 	return b, isEmpty, nil
 }
 
-func parseTypeQuery(r *http.Request, queryParam string, lookup map[string]TypedAPIResource) (TypedAPIResource, bool, error) {
-	query := r.URL.Query().Get(queryParam)
+func parseTypeQuery(r *http.Request, queryParam QueryType, lookup map[string]TypedAPIResource) (TypedAPIResource, bool, error) {
+	query := r.URL.Query().Get(queryParam.Name)
 	isEmpty := false
 
 	if query == "" {
@@ -37,14 +37,14 @@ func parseTypeQuery(r *http.Request, queryParam string, lookup map[string]TypedA
 
 	enum, err := GetEnumType(query, lookup)
 	if err != nil {
-		return TypedAPIResource{}, false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value: '%s', use /api/%s to see valid values", query, queryParam), err)
+		return TypedAPIResource{}, false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value: '%s', use /api/%s to see valid values", query, queryParam.Name), err)
 	}
 
 	return enum, isEmpty, nil
 }
 
-func parseUniqueNameQuery[T h.HasID](r *http.Request, queryParam string, lookup map[string]T) (parseResponse, bool, error) {
-	query := r.URL.Query().Get(queryParam)
+func parseUniqueNameQuery[T h.HasID](r *http.Request, queryParam QueryType, lookup map[string]T) (parseResponse, bool, error) {
+	query := r.URL.Query().Get(queryParam.Name)
 	isEmpty := false
 
 	if query == "" {
@@ -52,7 +52,7 @@ func parseUniqueNameQuery[T h.HasID](r *http.Request, queryParam string, lookup 
 		return parseResponse{}, isEmpty, nil
 	}
 
-	resource, err := parseSingleSegmentResource(queryParam, query, queryParam, lookup)
+	resource, err := parseSingleSegmentResource(queryParam.Name, query, queryParam.Name, lookup)
 	if err != nil {
 		return parseResponse{}, false, err
 	}
@@ -60,8 +60,8 @@ func parseUniqueNameQuery[T h.HasID](r *http.Request, queryParam string, lookup 
 	return resource, isEmpty, nil
 }
 
-func parseIDBasedQuery(r *http.Request, queryParam string, maxID int) (int32, bool, error) {
-	query := r.URL.Query().Get(queryParam)
+func parseIDBasedQuery(r *http.Request, queryParam QueryType, maxID int) (int32, bool, error) {
+	query := r.URL.Query().Get(queryParam.Name)
 	isEmpty := false
 
 	if query == "" {
@@ -75,7 +75,7 @@ func parseIDBasedQuery(r *http.Request, queryParam string, maxID int) (int32, bo
 	}
 
 	if id > maxID || id <= 0 {
-		return 0, false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided %s ID %d is out of range. Max ID: %d", queryParam, id, maxID), err)
+		return 0, false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided %s ID %d is out of range. Max ID: %d", queryParam.Name, id, maxID), err)
 	}
 
 	return int32(id), isEmpty, nil

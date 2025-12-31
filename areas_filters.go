@@ -9,7 +9,7 @@ import (
 )
 
 func (cfg *Config) getAreasLocation(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "location"
+	queryParam := cfg.q.areas["location"]
 	location, isEmpty, err := parseUniqueNameQuery(r, queryParam, cfg.l.Locations)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (cfg *Config) getAreasLocation(r *http.Request, inputAreas []LocationAPIRes
 }
 
 func (cfg *Config) getAreasSublocation(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "sublocation"
+	queryParam := cfg.q.areas["sublocation"]
 	sublocation, isEmpty, err := parseUniqueNameQuery(r, queryParam, cfg.l.SubLocations)
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (cfg *Config) getAreasSublocation(r *http.Request, inputAreas []LocationAPI
 }
 
 func (cfg *Config) getAreasItem(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryItem := "item"
+	queryItem := cfg.q.areas["item"]
 	queryMethod := r.URL.Query().Get("method")
 
 	item, itemIsEmpty, err := parseUniqueNameQuery(r, queryItem, cfg.l.Items)
@@ -103,7 +103,7 @@ func (cfg *Config) getAreasItem(r *http.Request, inputAreas []LocationAPIResourc
 }
 
 func (cfg *Config) getAreasKeyItem(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "key-item"
+	queryParam := cfg.q.areas["key-item"]
 
 	item, isEmpty, err := parseUniqueNameQuery(r, queryParam, cfg.l.KeyItems)
 	if err != nil {
@@ -122,7 +122,7 @@ func (cfg *Config) getAreasKeyItem(r *http.Request, inputAreas []LocationAPIReso
 }
 
 func (cfg *Config) getAreasStoryBased(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "story-based"
+	queryParam := cfg.q.areas["story-based"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -144,7 +144,7 @@ func (cfg *Config) getAreasStoryBased(r *http.Request, inputAreas []LocationAPIR
 }
 
 func (cfg *Config) getAreasSaveSphere(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "save-sphere"
+	queryParam := cfg.q.areas["save-sphere"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -166,7 +166,7 @@ func (cfg *Config) getAreasSaveSphere(r *http.Request, inputAreas []LocationAPIR
 }
 
 func (cfg *Config) getAreasCompSphere(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "comp-sphere"
+	queryParam := cfg.q.areas["comp-sphere"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -188,7 +188,7 @@ func (cfg *Config) getAreasCompSphere(r *http.Request, inputAreas []LocationAPIR
 }
 
 func (cfg *Config) getAreasDropOff(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "airship"
+	queryParam := cfg.q.areas["airship"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -210,7 +210,7 @@ func (cfg *Config) getAreasDropOff(r *http.Request, inputAreas []LocationAPIReso
 }
 
 func (cfg *Config) getAreasChocobo(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "chocobo"
+	queryParam := cfg.q.areas["chocobo"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -232,7 +232,7 @@ func (cfg *Config) getAreasChocobo(r *http.Request, inputAreas []LocationAPIReso
 }
 
 func (cfg *Config) getAreasCharacters(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "characters"
+	queryParam := cfg.q.areas["characters"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -258,7 +258,7 @@ func (cfg *Config) getAreasCharacters(r *http.Request, inputAreas []LocationAPIR
 }
 
 func (cfg *Config) getAreasAeons(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "aeons"
+	queryParam := cfg.q.areas["aeons"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -284,7 +284,7 @@ func (cfg *Config) getAreasAeons(r *http.Request, inputAreas []LocationAPIResour
 }
 
 func (cfg *Config) getAreasMonsters(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "monsters"
+	queryParam := cfg.q.areas["monsters"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -310,7 +310,7 @@ func (cfg *Config) getAreasMonsters(r *http.Request, inputAreas []LocationAPIRes
 }
 
 func (cfg *Config) getAreasBosses(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "boss-fights"
+	queryParam := cfg.q.areas["boss-fights"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -336,7 +336,7 @@ func (cfg *Config) getAreasBosses(r *http.Request, inputAreas []LocationAPIResou
 }
 
 func (cfg *Config) getAreasShops(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "shops"
+	queryParam := cfg.q.areas["shops"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -362,7 +362,7 @@ func (cfg *Config) getAreasShops(r *http.Request, inputAreas []LocationAPIResour
 }
 
 func (cfg *Config) getAreasTreasures(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "treasures"
+	queryParam := cfg.q.areas["treasures"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -388,7 +388,7 @@ func (cfg *Config) getAreasTreasures(r *http.Request, inputAreas []LocationAPIRe
 }
 
 func (cfg *Config) getAreasSidequests(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "sidequests"
+	queryParam := cfg.q.areas["sidequests"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -414,7 +414,7 @@ func (cfg *Config) getAreasSidequests(r *http.Request, inputAreas []LocationAPIR
 }
 
 func (cfg *Config) getAreasFMVs(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
-	queryParam := "fmvs"
+	queryParam := cfg.q.areas["fmvs"]
 	b, isEmpty, err := parseBooleanQuery(r, queryParam)
 	if err != nil {
 		return nil, err

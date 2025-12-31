@@ -917,7 +917,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental-affinities=weak",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input. usage: elemental-affinities={element}-{affinity},{element}-{affinity}",
+				expectedErr:    "invalid input. usage: ?elemental-affinities={element_name/id}-{affinity_name/id},{element_name/id}-{affinity_name/id},...",
 			},
 		},
 		{
@@ -936,6 +936,20 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?status-resists=darkness&resistance=350",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid resistance: 350. resistance must be an integer ranging from 1 to 254, with 1 being the default value, if no resistance was provided.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?status-resists=darkness&resistance=frank",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid resistance: frank. resistance must be an integer ranging from 1 to 254.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?resistance=50",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "Invalid usage of parameter resistance. Parameter resistance can only be used in combination with parameter(s): status-resists.",
@@ -950,9 +964,23 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?item=22&method=steals",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid method value: steals. allowed values: steal, drop, bribe, other.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?item=asf&method=drop",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "unknown item 'asf' in item.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?distance=frank",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid value: frank. distance must be an integer ranging from 1 to 4.",
 			},
 		},
 		{

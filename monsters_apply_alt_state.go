@@ -21,7 +21,7 @@ func (as AppliedState) IsZero() bool {
 }
 
 func (cfg *Config) applyAlteredState(r *http.Request, mon Monster) (Monster, error) {
-	altStateID, err := getAltStateID(r, mon)
+	altStateID, err := cfg.getAltStateID(r, mon)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -238,8 +238,9 @@ func replaceAltState(states []AlteredState, def AlteredState, i int) []AlteredSt
 	return slices.Concat(s1, s2)
 }
 
-func getAltStateID(r *http.Request, mon Monster) (int, error) {
-	altStateIDStr := r.URL.Query().Get("altered-state")
+func (cfg *Config) getAltStateID(r *http.Request, mon Monster) (int, error) {
+	queryParam := cfg.q.monsters["altered-state"]
+	altStateIDStr := r.URL.Query().Get(queryParam.Name)
 	if altStateIDStr == "" {
 		return 0, nil
 	}

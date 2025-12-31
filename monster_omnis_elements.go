@@ -17,7 +17,7 @@ func (cfg *Config) getOmnisElemResists(r *http.Request, mon Monster) ([]Elementa
 		4: "absorb",
 	}
 
-	counts, isEmpty, err := cfg.verifyOmnisQuery(r, mon)
+	counts, isEmpty, err := cfg.verifyOmnisQuery(r)
 	if err != nil {
 		return nil, err
 	}
@@ -61,8 +61,8 @@ func (cfg *Config) getOmnisElemResists(r *http.Request, mon Monster) ([]Elementa
 }
 
 
-func (cfg *Config) verifyOmnisQuery(r *http.Request, mon Monster) (map[string]int, bool, error) {
-	queryParam := "omnis-elements"
+func (cfg *Config) verifyOmnisQuery(r *http.Request) (map[string]int, bool, error) {
+	queryParam := cfg.q.monsters["omnis-elements"]
 	elements := map[rune]string{
 		'f': "fire",
 		'i': "ice",
@@ -72,22 +72,10 @@ func (cfg *Config) verifyOmnisQuery(r *http.Request, mon Monster) (map[string]in
 	counts := make(map[string]int)
 	isEmpty := false
 
-	key := seeding.LookupObject{
-		Name: "seymour omnis",
-	}
-	omnis, err := seeding.GetResource(key, cfg.l.Monsters)
-	if err != nil {
-		return nil, false, newHTTPError(http.StatusInternalServerError, "couldn't get seymour omnis data", err)
-	}
-
-	query := r.URL.Query().Get(queryParam)
+	query := r.URL.Query().Get(queryParam.Name)
 	if query == "" {
 		isEmpty = true
 		return nil, isEmpty, nil
-	}
-
-	if query != "" && mon.ID != omnis.ID {
-		return nil, false, newHTTPError(http.StatusBadRequest, "Invalid usage. omnis-elements can only be used on Seymour Omnis", nil)
 	}
 
 	if len(query) != 4 {

@@ -265,7 +265,7 @@ func TestRetrieveAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?comp-sphere=fa",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value. usage: comp-sphere={boolean}",
+				expectedErr:    "invalid value. usage: ?comp-sphere={boolean}",
 			},
 		},
 		{
