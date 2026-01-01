@@ -48,9 +48,19 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 		return
 	case 1:
 		// /api/areas/{id}
-		idStr := segments[0]
+		segment := segments[0]
 
-		id, err := strconv.Atoi(idStr)
+		if segment == "parameters" {
+			parameterList, err := cfg.getQueryParamList(r, cfg.q.areas)
+			if handleHTTPError(w, err) {
+				return
+			}
+
+			respondWithJSON(w, http.StatusOK, parameterList)
+			return
+		}
+
+		id, err := strconv.Atoi(segment)
 		if err != nil {
 			respondWithError(w, http.StatusBadRequest, "Wrong format. Usage: /api/areas/{id}.", err)
 			return

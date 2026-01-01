@@ -49,6 +49,16 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 	case 1:
 		// /api/overdrive-modes/{name or id}
 		segment := segments[0]
+
+		if segment == "parameters" {
+			parameterList, err := cfg.getQueryParamList(r, cfg.q.overdriveModes)
+			if handleHTTPError(w, err) {
+				return
+			}
+
+			respondWithJSON(w, http.StatusOK, parameterList)
+			return
+		}
 		
 		input, err := parseSingleSegmentResource("overdrive-mode", segment, "", cfg.l.OverdriveModes)
 		if handleHTTPError(w, err) {
