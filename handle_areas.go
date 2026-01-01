@@ -51,7 +51,7 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 		segment := segments[0]
 
 		if segment == "parameters" {
-			parameterList, err := cfg.getQueryParamList(r, cfg.q.areas)
+			parameterList, err := cfg.getQueryParamList(r, cfg.q.areas, "areas")
 			if handleHTTPError(w, err) {
 				return
 			}

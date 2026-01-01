@@ -51,7 +51,7 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 		segment := segments[0]
 
 		if segment == "parameters" {
-			parameterList, err := cfg.getQueryParamList(r, cfg.q.overdriveModes)
+			parameterList, err := cfg.getQueryParamList(r, cfg.q.overdriveModes, "overdrive-modes")
 			if handleHTTPError(w, err) {
 				return
 			}

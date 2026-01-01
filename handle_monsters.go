@@ -72,7 +72,7 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 		segment := segments[0]
 
 		if segment == "parameters" {
-			parameterList, err := cfg.getQueryParamList(r, cfg.q.monsters)
+			parameterList, err := cfg.getQueryParamList(r, cfg.q.monsters, "monsters")
 			if handleHTTPError(w, err) {
 				return
 			}

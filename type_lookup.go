@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
@@ -28,6 +29,15 @@ func TypeLookupInit() TypeLookup {
 }
 
 func GetEnumType(key string, lookup map[string]TypedAPIResource) (TypedAPIResource, error) {
+	id, err := strconv.Atoi(key)
+	if err == nil {
+		for _, enumType := range lookup {
+			if int32(id) == enumType.ID {
+				return enumType, nil
+			}
+		}
+	}
+	
 	enumType, found := lookup[key]
 	if !found {
 		return TypedAPIResource{}, fmt.Errorf("value %s is not valid in this enum", key)
