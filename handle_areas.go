@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type Area struct {
@@ -34,45 +34,26 @@ type Area struct {
 }
 
 func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
-	segments := getPathSegments(r.URL.Path, "areas")
+	handlerInput := handlerInput[seeding.Area, Area, LocationApiResourceList]{
+		endpoint: 			"areas",
+		resourceType: 		"area",
+		objLookup: 			cfg.l.Areas,
+		queryLookup: 		cfg.q.areas,
+		getSingleFunc: 		cfg.getArea,
+		getMultipleFunc: 	nil,
+		retrieveFunc: 		cfg.retrieveAreas,
+	}
 
-	// this whole thing can probably be generalized
+	segments := getPathSegments(r.URL.Path, handlerInput.endpoint)
+
 	switch len(segments) {
 	case 0:
 		// /api/areas
-		resourceList, err := cfg.retrieveAreas(r)
-		if handleHTTPError(w, err) {
-			return
-		}
-		respondWithJSON(w, http.StatusOK, resourceList)
-		return
+		handleEndpointList(w, r, handlerInput)
+
 	case 1:
 		// /api/areas/{id}
-		segment := segments[0]
-
-		if segment == "parameters" {
-			parameterList, err := cfg.getQueryParamList(r, cfg.q.areas, "areas")
-			if handleHTTPError(w, err) {
-				return
-			}
-
-			respondWithJSON(w, http.StatusOK, parameterList)
-			return
-		}
-
-		id, err := strconv.Atoi(segment)
-		if err != nil {
-			respondWithError(w, http.StatusBadRequest, "Wrong format. Usage: /api/areas/{id}.", err)
-			return
-		}
-
-		area, err := cfg.getArea(r, int32(id))
-		if handleHTTPError(w, err) {
-			return
-		}
-
-		respondWithJSON(w, http.StatusOK, area)
-		return
+		handleEndpointIDOnly(cfg, w, r, handlerInput, segments)
 
 	case 2:
 		// /api/areas/{id}/{subSection}
@@ -113,8 +94,8 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
-	err := verifyQueryParams(r, "areas", &id, cfg.q.areas)
+func (cfg *Config) getArea(r *http.Request, endpoint string, id int32) (Area, error) {
+	err := verifyQueryParams(r, endpoint, &id, cfg.q.areas)
 	if err != nil {
 		return Area{}, err
 	}
@@ -159,8 +140,8 @@ func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
 	return area, nil
 }
 
-func (cfg *Config) retrieveAreas(r *http.Request) (LocationApiResourceList, error) {
-	err := verifyQueryParams(r, "areas", nil, cfg.q.areas)
+func (cfg *Config) retrieveAreas(r *http.Request, endpoint string) (LocationApiResourceList, error) {
+	err := verifyQueryParams(r, endpoint, nil, cfg.q.areas)
 	if err != nil {
 		return LocationApiResourceList{}, err
 	}

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type OverdriveMode struct {
@@ -34,43 +35,26 @@ func (a ActionAmount) GetVal() int32 {
 }
 
 func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) {
-	segments := getPathSegments(r.URL.Path, "overdrive-modes")
+	handlerInput := handlerInput[seeding.OverdriveMode, OverdriveMode, NamedApiResourceList]{
+		endpoint: 			"overdrive-modes",
+		resourceType: 		"overdrive-mode",
+		objLookup: 			cfg.l.OverdriveModes,
+		queryLookup: 		cfg.q.overdriveModes,
+		getSingleFunc: 		cfg.getOverdriveMode,
+		getMultipleFunc: 	nil,
+		retrieveFunc: 		cfg.retrieveOverdriveModes,
+	}
+
+	segments := getPathSegments(r.URL.Path, handlerInput.endpoint)
 
 	switch len(segments) {
 	case 0:
 		// /api/overdrive-modes
-		resourceList, err := cfg.retrieveOverdriveModes(r)
-		if handleHTTPError(w, err) {
-			return
-		}
-		respondWithJSON(w, http.StatusOK, resourceList)
-		return
+		handleEndpointList(w, r, handlerInput)
 
 	case 1:
 		// /api/overdrive-modes/{name or id}
-		segment := segments[0]
-
-		if segment == "parameters" {
-			parameterList, err := cfg.getQueryParamList(r, cfg.q.overdriveModes, "overdrive-modes")
-			if handleHTTPError(w, err) {
-				return
-			}
-
-			respondWithJSON(w, http.StatusOK, parameterList)
-			return
-		}
-		
-		input, err := parseSingleSegmentResource("overdrive-mode", segment, "", cfg.l.OverdriveModes)
-		if handleHTTPError(w, err) {
-			return
-		}
-
-		overdriveMode, err := cfg.getOverdriveMode(r, input.ID)
-		if handleHTTPError(w, err) {
-			return
-		}
-		respondWithJSON(w, http.StatusOK, overdriveMode)
-		return
+		handleEndpointNameOrID(cfg, w, r, handlerInput, segments)
 
 	default:
 		respondWithError(w, http.StatusBadRequest, `Wrong format. Usage: /api/overdrive-modes/{name or id}`, nil)
@@ -78,8 +62,8 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-func (cfg *Config) getOverdriveMode(r *http.Request, id int32) (OverdriveMode, error) {
-	err := verifyQueryParams(r, "overdrive-modes", &id, cfg.q.overdriveModes)
+func (cfg *Config) getOverdriveMode(r *http.Request, endpoint string, id int32) (OverdriveMode, error) {
+	err := verifyQueryParams(r, endpoint, &id, cfg.q.overdriveModes)
 	if err != nil {
 		return OverdriveMode{}, err
 	}
@@ -127,8 +111,8 @@ func (cfg *Config) getOverdriveModeActions(r *http.Request, id int32) ([]ActionA
 	return actions, nil
 }
 
-func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList, error) {
-	err := verifyQueryParams(r, "overdrive-modes", nil, cfg.q.overdriveModes)
+func (cfg *Config) retrieveOverdriveModes(r *http.Request, endpoint string) (NamedApiResourceList, error) {
+	err := verifyQueryParams(r, endpoint, nil, cfg.q.overdriveModes)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
@@ -138,11 +122,11 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList
 		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve overdrive modes", err)
 	}
 
-	resources := createNamedAPIResourcesSimple(cfg, dbODModes, "overdrive-modes", func(mode database.OverdriveMode) (int32, string) {
+	resources := createNamedAPIResourcesSimple(cfg, dbODModes, endpoint, func(mode database.OverdriveMode) (int32, string) {
 		return mode.ID, mode.Name
 	})
 
-	resources, err = cfg.getOverdriveModesType(r, resources)
+	resources, err = cfg.getOverdriveModesType(r, endpoint, resources)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
@@ -155,7 +139,7 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList
 	return resourceList, nil
 }
 
-func (cfg *Config) getOverdriveModesType(r *http.Request, inputModes []NamedAPIResource) ([]NamedAPIResource, error) {
+func (cfg *Config) getOverdriveModesType(r *http.Request, endpoint string, inputModes []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.overdriveModes["type"]
 	enum, isEmpty, err := parseTypeQuery(r, queryParam, cfg.t.OverdriveModeType)
 	if err != nil {
@@ -172,7 +156,7 @@ func (cfg *Config) getOverdriveModesType(r *http.Request, inputModes []NamedAPIR
 		return nil, newHTTPError(http.StatusBadRequest, "No valid overdrive mode type provided. See /api/overdrive-modes for valid values", err)
 	}
 
-	resources := createNamedAPIResourcesSimple(cfg, dbODModes, "overdrive-modes", func(mode database.OverdriveMode) (int32, string) {
+	resources := createNamedAPIResourcesSimple(cfg, dbODModes, endpoint, func(mode database.OverdriveMode) (int32, string) {
 		return mode.ID, mode.Name
 	})
 

@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type Monster struct {
@@ -55,71 +56,30 @@ type Monster struct {
 }
 
 func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
-	segments := getPathSegments(r.URL.Path, "monsters")
+	handlerInput := handlerInput[seeding.Monster, Monster, NamedApiResourceList]{
+		endpoint: 			"monsters",
+		resourceType: 		"monster",
+		objLookup: 			cfg.l.Monsters,
+		queryLookup: 		cfg.q.monsters,
+		getSingleFunc: 		cfg.getMonster,
+		getMultipleFunc: 	cfg.getMultipleMonsters,
+		retrieveFunc: 		cfg.retrieveMonsters,
+	}
 
-	// this whole thing can probably be generalized
+	segments := getPathSegments(r.URL.Path, handlerInput.endpoint)
+
 	switch len(segments) {
 	case 0:
 		// api/monsters
-		resourceList, err := cfg.retrieveMonsters(r)
-		if handleHTTPError(w, err) {
-			return
-		}
-		respondWithJSON(w, http.StatusOK, resourceList)
-		return
+		handleEndpointList(w, r, handlerInput)
+
 	case 1:
 		// /api/monsters/{name or id}
-		segment := segments[0]
-
-		if segment == "parameters" {
-			parameterList, err := cfg.getQueryParamList(r, cfg.q.monsters, "monsters")
-			if handleHTTPError(w, err) {
-				return
-			}
-
-			respondWithJSON(w, http.StatusOK, parameterList)
-			return
-		}
-
-		input, err := parseSingleSegmentResource("monster", segment, "", cfg.l.Monsters)
-		if handleHTTPError(w, err) {
-			return
-		}
-
-		if input.Name != "" {
-			resources, err := cfg.getMultipleMonsters(r, input.Name)
-			if handleHTTPError(w, err) {
-				return
-			}
-			respondWithJSON(w, http.StatusMultipleChoices, resources)
-			return
-		}
-
-		monster, err := cfg.getMonster(r, input.ID)
-		if handleHTTPError(w, err) {
-			return
-		}
-
-		respondWithJSON(w, http.StatusOK, monster)
-		return
+		handleEndpointNameOrID(cfg, w, r, handlerInput, segments)
 
 	case 2:
 		// /api/monsters/{name}/{version}
-		name := segments[0]
-		versionStr := segments[1]
-
-		input, err := parseNameVersionResource("monster", name, versionStr, "", cfg.l.Monsters)
-		if handleHTTPError(w, err) {
-			return
-		}
-
-		monster, err := cfg.getMonster(r, input.ID)
-		if handleHTTPError(w, err) {
-			return
-		}
-
-		respondWithJSON(w, http.StatusOK, monster)
-		return
+		handleEndpointNameVersion(w, r, handlerInput, segments)
 
 	default:
 		respondWithError(w, http.StatusBadRequest, `Wrong format. Usage: /api/monsters/{name or id}, or /api/monsters/{name}/{version}`, nil)
@@ -127,8 +87,8 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
-	err := verifyQueryParams(r, "monsters", &id, cfg.q.monsters)
+func (cfg *Config) getMonster(r *http.Request, endpoint string, id int32) (Monster, error) {
+	err := verifyQueryParams(r, endpoint, &id, cfg.q.monsters)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -239,13 +199,13 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 	return monster, nil
 }
 
-func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (NamedApiResourceList, error) {
+func (cfg *Config) getMultipleMonsters(r *http.Request, endpoint, monsterName string) (NamedApiResourceList, error) {
 	dbMons, err := cfg.db.GetMonstersByName(r.Context(), monsterName)
 	if err != nil {
 		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't get multiple Monsters", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, &mon.Version.Int32, &mon.Specification.String
 	})
 
@@ -257,8 +217,8 @@ func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (Nam
 	return resourceList, nil
 }
 
-func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, error) {
-	err := verifyQueryParams(r, "monsters", nil, cfg.q.monsters)
+func (cfg *Config) retrieveMonsters(r *http.Request, endpoint string) (NamedApiResourceList, error) {
+	err := verifyQueryParams(r, endpoint, nil, cfg.q.monsters)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
@@ -268,7 +228,7 @@ func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, erro
 		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve monsters", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
