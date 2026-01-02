@@ -19,14 +19,14 @@ func TestGetArea(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Couldn't get Area. Area with this ID doesn't exist.",
+				expectedErr:    "Area with ID 0 doesn't exist. Max ID: 240",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/241",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Couldn't get Area. Area with this ID doesn't exist.",
+				expectedErr:    "Area with ID 241 doesn't exist. Max ID: 240",
 			},
 		},
 		{
