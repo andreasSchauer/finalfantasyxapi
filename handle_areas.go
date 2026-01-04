@@ -99,43 +99,40 @@ func (l AreaFormationsList) getResults() []HasAPIResource {
 }
 
 func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
-	handlerInput := handlerInput[seeding.Area, Area, LocationApiResourceList]{
-		endpoint:        "areas",
-		resourceType:    "area",
-		objLookup:       cfg.l.Areas,
-		queryLookup:     cfg.q.areas,
-		getSingleFunc:   cfg.getArea,
-		getMultipleFunc: nil,
-		retrieveFunc:    cfg.retrieveAreas,
-		subSections: map[string]func(string) (IsAPIResourceList, error){
-			"treasures": cfg.getAreaTreasuresMid,
-			"shops":     cfg.getAreaShopsMid,
-			"monsters":  cfg.getAreaMonstersMid,
+	i := handlerInput[seeding.Area, Area, LocationApiResourceList]{
+		endpoint:          "areas",
+		resourceType:      "area",
+		objLookup:         cfg.l.Areas,
+		queryLookup:       cfg.q.areas,
+		getSingleFunc:     cfg.getArea,
+		getMultipleFunc:   nil,
+		retrieveFunc:      cfg.retrieveAreas,
+		subsections: map[string]func(string) (IsAPIResourceList, error){
+			"treasures":          cfg.getAreaTreasuresMid,
+			"shops":              cfg.getAreaShopsMid,
+			"monsters":           cfg.getAreaMonstersMid,
 			"monster-formations": cfg.getAreaFormationsMid,
-			"connected": cfg.getAreaConnectionsMid,
+			"connected":          cfg.getAreaConnectionsMid,
 		},
 	}
 
-	segments := getPathSegments(r.URL.Path, handlerInput.endpoint)
+	segments := getPathSegments(r.URL.Path, i.endpoint)
 
 	switch len(segments) {
 	case 0:
-		// /api/areas
-		handleEndpointList(w, r, handlerInput)
+		handleEndpointList(w, r, i)
+		return
 
 	case 1:
-		// /api/areas/{id}
-		handleEndpointIDOnly(cfg, w, r, handlerInput, segments)
+		handleEndpointIDOnly(cfg, w, r, i, segments)
+		return
 
 	case 2:
-		// /api/areas/{id}/{subSection}
-		// areaID := segments[0]
-		subSection := segments[1]
-
-		handleHierarchicalEndpoints(subSection, handlerInput)
+		handleEndpointSubsections(w, i, segments)
+		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, `Wrong format. Usage: /api/areas/{id}, or /api/areas/{id}/{sub-section}. Supported sub-sections: connected, monsters, monster-formations, shops, treasures.`, nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("Wrong format. Usage: /api/%s/{id}, or /api/%s/{id}/{subsection}. Supported subsections: %s.", i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
 }

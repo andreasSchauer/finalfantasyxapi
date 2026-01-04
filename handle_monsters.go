@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -55,34 +56,57 @@ type Monster struct {
 	Abilities            []MonsterAbility      `json:"abilities"`
 }
 
+type MonsterAbilitiesList struct {
+	ListParams
+	Results []NamedAPIResource
+}
+
+func (l MonsterAbilitiesList) getListParams() ListParams {
+	return l.ListParams
+}
+
+func (l MonsterAbilitiesList) getResults() []HasAPIResource {
+	return toHasAPIResSlice(l.Results)
+}
+
+func (cfg *Config) getMonsterAbilitiesMid(subsection string) (IsAPIResourceList, error) {
+	fmt.Printf("this should trigger /api/monsters/{id}/%s\n", subsection)
+	return MonsterAbilitiesList{}, nil
+}
+
 func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
-	handlerInput := handlerInput[seeding.Monster, Monster, NamedApiResourceList]{
-		endpoint: 			"monsters",
-		resourceType: 		"monster",
-		objLookup: 			cfg.l.Monsters,
-		queryLookup: 		cfg.q.monsters,
-		getSingleFunc: 		cfg.getMonster,
-		getMultipleFunc: 	cfg.getMultipleMonsters,
-		retrieveFunc: 		cfg.retrieveMonsters,
+	i := handlerInput[seeding.Monster, Monster, NamedApiResourceList]{
+		endpoint:          "monsters",
+		resourceType:      "monster",
+		objLookup:         cfg.l.Monsters,
+		queryLookup:       cfg.q.monsters,
+		getSingleFunc:     cfg.getMonster,
+		getMultipleFunc:   cfg.getMultipleMonsters,
+		retrieveFunc:      cfg.retrieveMonsters,
+		subsections: map[string]func(string) (IsAPIResourceList, error){
+			"abilities": cfg.getMonsterAbilitiesMid,
+		},
 	}
 
-	segments := getPathSegments(r.URL.Path, handlerInput.endpoint)
+	segments := getPathSegments(r.URL.Path, i.endpoint)
 
 	switch len(segments) {
 	case 0:
 		// api/monsters
-		handleEndpointList(w, r, handlerInput)
+		handleEndpointList(w, r, i)
+		return
 
 	case 1:
 		// /api/monsters/{name or id}
-		handleEndpointNameOrID(cfg, w, r, handlerInput, segments)
+		handleEndpointNameOrID(cfg, w, r, i, segments)
+		return
 
 	case 2:
-		// /api/monsters/{name}/{version}
-		handleEndpointNameVersion(w, r, handlerInput, segments)
+		handleEndpointSubOrNameVer(w, r, i, segments)
+		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, `Wrong format. Usage: /api/monsters/{name or id}, or /api/monsters/{name}/{version}`, nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("Wrong format. Usage: /api/%s/{name or id}, /api/%s/{name}/{version}, or  /api/%s/{id}/{subsection}. Available subsections: %s", i.endpoint, i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
 }

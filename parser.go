@@ -114,7 +114,7 @@ func parseNameVersionResource[T h.HasID](resourceType, name, versionStr, queryPa
 	default:
 		version, err := strconv.Atoi(versionStr)
 		if err != nil {
-			return parseResponse{}, newHTTPError(http.StatusBadRequest, "Invalid version number", err)
+			return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid version number: %s", versionStr), err)
 		}
 		versionInt32 := int32(version)
 		versionPtr = &versionInt32
@@ -149,4 +149,10 @@ func parseNameVersionResource[T h.HasID](resourceType, name, versionStr, queryPa
 		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s, version %s", resourceType, name, versionStr), err)
 	}
 	return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s', version %s in %s.", resourceType, name, versionStr, queryParam), err)
+}
+
+
+func isValidInt(idStr string) bool {
+	_, err := strconv.Atoi(idStr)
+	return err == nil
 }
