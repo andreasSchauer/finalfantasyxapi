@@ -52,7 +52,7 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 			expOverdriveModes: expOverdriveModes{
 				description: "Charges on character's turn.",
-				modeType:    "per-action",
+				modeType:    "/overdrive-mode-type/2",
 				fillRate:    h.GetFloat32Ptr(0.03),
 				actionsAmount: map[string]int32{
 					"tidus":   600,
@@ -79,7 +79,7 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 			expOverdriveModes: expOverdriveModes{
 				effect:   "The gauge fills when an ally takes damage.",
-				modeType: "formula",
+				modeType: "/overdrive-mode-type/1",
 				fillRate: nil,
 				actionsAmount: map[string]int32{
 					"tidus": 300,
@@ -106,7 +106,7 @@ func TestGetOverdriveMode(t *testing.T) {
 				name: "stoic",
 			},
 			expOverdriveModes: expOverdriveModes{
-				modeType: "formula",
+				modeType: "/overdrive-mode-type/1",
 			},
 		},
 	}
@@ -125,7 +125,7 @@ func TestGetOverdriveMode(t *testing.T) {
 		testExpectedUnique(t, testName, tc.expUnique, got.ID, got.Name)
 		compare(t, testName, "description", tc.description, got.Description, tc.dontCheck)
 		compare(t, testName, "effect", tc.effect, got.Effect, tc.dontCheck)
-		compare(t, testName, "type", tc.modeType, got.Type, tc.dontCheck)
+		compAPIResources(t, testCfg, testName, "type", tc.modeType, got.Type, tc.dontCheck)
 		compare(t, testName, "fill rate", tc.fillRate, got.FillRate, tc.dontCheck)
 		checkResAmtsInSlice(t, testName, "actions", tc.actionsAmount, got.Actions, tc.expLengths)
 	}

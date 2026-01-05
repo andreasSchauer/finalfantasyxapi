@@ -5,12 +5,12 @@ import (
 )
 
 type HasAPIResource interface {
-	getAPIResource() IsAPIResource
+	GetAPIResource() IsAPIResource
 }
 
 type IsAPIResource interface {
-	getID() int32
-	getURL() string
+	GetID() int32
+	GetURL() string
 	seeding.Lookupable
 }
 

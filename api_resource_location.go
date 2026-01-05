@@ -31,11 +31,11 @@ func (r LocationAPIResource) IsZero() bool {
 	return r.Area == ""
 }
 
-func (r LocationAPIResource) getID() int32 {
+func (r LocationAPIResource) GetID() int32 {
 	return r.AreaID
 }
 
-func (r LocationAPIResource) getURL() string {
+func (r LocationAPIResource) GetURL() string {
 	return r.URL
 }
 
@@ -49,7 +49,7 @@ func (r LocationAPIResource) Error() string {
 	return fmt.Sprintf("location based api resource: %s, url: %s", r.LocationArea.Error(), r.URL)
 }
 
-func (r LocationAPIResource) getAPIResource() IsAPIResource {
+func (r LocationAPIResource) GetAPIResource() IsAPIResource {
 	return r
 }
 
@@ -60,7 +60,7 @@ func (cfg *Config) newLocationBasedAPIResource(area LocationArea) LocationAPIRes
 		AreaID:        areaLookup.ID,
 		LocationArea:  area,
 		Specification: areaLookup.Specification,
-		URL:           cfg.createURL("areas", areaLookup.ID),
+		URL:           cfg.createResourceURL(cfg.e.areas.endpoint, areaLookup.ID),
 	}
 }
 

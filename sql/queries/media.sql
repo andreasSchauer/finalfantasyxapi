@@ -45,7 +45,8 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateFMV :exec
+-- name: CreateFMV :one
 INSERT INTO fmvs (data_hash, name, translation, cutscene_description, song_id, area_id)
 VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO NOTHING;
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = fmvs.data_hash
+RETURNING *;

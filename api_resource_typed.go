@@ -30,11 +30,11 @@ func (r TypedAPIResource) IsZero() bool {
 	return r.ID == 0
 }
 
-func (r TypedAPIResource) getID() int32 {
+func (r TypedAPIResource) GetID() int32 {
 	return r.ID
 }
 
-func (r TypedAPIResource) getURL() string {
+func (r TypedAPIResource) GetURL() string {
 	return r.URL
 }
 
@@ -48,7 +48,7 @@ func (r TypedAPIResource) Error() string {
 	return fmt.Sprintf("Typed api resource with url: %s", r.URL)
 }
 
-func (r TypedAPIResource) getAPIResource() IsAPIResource {
+func (r TypedAPIResource) GetAPIResource() IsAPIResource {
 	return r
 }
 
@@ -83,7 +83,7 @@ func (cfg *Config) createTypeResourceSlice(endpoint string, lookup map[string]Ty
 	resources := []TypedAPIResource{}
 
 	for _, resource := range lookup {
-		resource.URL = cfg.createURL(endpoint, resource.ID)
+		resource.URL = cfg.createResourceURL(endpoint, resource.ID)
 		resources = append(resources, resource)
 	}
 

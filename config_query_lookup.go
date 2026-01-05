@@ -4,9 +4,7 @@ import (
 	"maps"
 )
 
-// might add some functionality for sections/subsections
-// just a slice of sections/subsections and a (global?) parameter that filters them out when called
-// global parameters will have them empty, meaning they are available from everywhere
+
 
 type QueryType struct {
 	ID					int				`json:"-"`
@@ -25,8 +23,9 @@ type QueryType struct {
 	AllowedIntRange		[]int			`json:"allowed_int_range,omitempty"`
 }
 
-
+// QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
+	defaultParams	map[string]QueryType
 	areas			map[string]QueryType
 	monsters		map[string]QueryType
 	overdriveModes	map[string]QueryType
@@ -35,7 +34,7 @@ type QueryLookup struct {
 
 func (cfg *Config) QueryLookupInit() {
 	cfg.q = &QueryLookup{}
-	defaultParams := map[string]QueryType{
+	cfg.q.defaultParams = map[string]QueryType{
 		"limit": {
 			ID: -3,
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20.",
@@ -64,7 +63,6 @@ func (cfg *Config) QueryLookupInit() {
 			ForSections: []string{},
 		},
 	}
-	cfg.defaultParams = defaultParams
 
 	cfg.initAreasParams()
 	cfg.initMonstersParams()
@@ -72,7 +70,7 @@ func (cfg *Config) QueryLookupInit() {
 }
 
 func (cfg *Config) completeQueryTypeInit(params map[string]QueryType) map[string]QueryType {
-	maps.Copy(params, cfg.defaultParams)
+	maps.Copy(params, cfg.q.defaultParams)
 
 	for key, entry := range params {
 		entry.Name = key

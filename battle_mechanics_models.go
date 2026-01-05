@@ -7,13 +7,13 @@ type BaseStat struct {
 	Value int32            `json:"value"`
 }
 
-func (bs BaseStat) getAPIResource() IsAPIResource {
+func (bs BaseStat) GetAPIResource() IsAPIResource {
 	return bs.Stat
 }
 
 func (cfg *Config) newBaseStat(id, value int32, name string) BaseStat {
 	return BaseStat{
-		Stat:  cfg.newNamedAPIResourceSimple("stats", id, name),
+		Stat:  cfg.newNamedAPIResourceSimple(cfg.e.stats.endpoint, id, name),
 		Value: value,
 	}
 }
@@ -31,14 +31,14 @@ type ElementalResist struct {
 	Affinity NamedAPIResource `json:"affinity"`
 }
 
-func (er ElementalResist) getAPIResource() IsAPIResource {
+func (er ElementalResist) GetAPIResource() IsAPIResource {
 	return er.Element
 }
 
 func (cfg *Config) newElemResist(elem_id, affinity_id int32, element, affinity string) ElementalResist {
 	return ElementalResist{
-		Element:  cfg.newNamedAPIResourceSimple("elements", elem_id, element),
-		Affinity: cfg.newNamedAPIResourceSimple("affinities", affinity_id, affinity),
+		Element:  cfg.newNamedAPIResourceSimple(cfg.e.elements.endpoint, elem_id, element),
+		Affinity: cfg.newNamedAPIResourceSimple(cfg.e.affinities.endpoint, affinity_id, affinity),
 	}
 }
 
@@ -47,13 +47,13 @@ type StatusResist struct {
 	Resistance      int32            `json:"resistance"`
 }
 
-func (sr StatusResist) getAPIResource() IsAPIResource {
+func (sr StatusResist) GetAPIResource() IsAPIResource {
 	return sr.StatusCondition
 }
 
 func (cfg *Config) newStatusResist(id, resistance int32, status string) StatusResist {
 	return StatusResist{
-		StatusCondition: cfg.newNamedAPIResourceSimple("status-conditions", id, status),
+		StatusCondition: cfg.newNamedAPIResourceSimple(cfg.e.statusConditions.endpoint, id, status),
 		Resistance:      resistance,
 	}
 }
@@ -73,7 +73,7 @@ type InflictedStatus struct {
 	Amount          *int32                `json:"amount,omitempty"`
 }
 
-func (is InflictedStatus) getAPIResource() IsAPIResource {
+func (is InflictedStatus) GetAPIResource() IsAPIResource {
 	return is.StatusCondition
 }
 
@@ -83,7 +83,7 @@ func (is InflictedStatus) IsZero() bool {
 
 func (cfg *Config) newInflictedStatus(id, probability int32, status string, amount *int32, durationType database.DurationType) InflictedStatus {
 	return InflictedStatus{
-		StatusCondition: cfg.newNamedAPIResourceSimple("status-conditions", id, status),
+		StatusCondition: cfg.newNamedAPIResourceSimple(cfg.e.statusConditions.endpoint, id, status),
 		Probability:     probability,
 		DurationType:    durationType,
 		Amount:          amount,

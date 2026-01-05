@@ -16,7 +16,7 @@ type AreaConnection struct {
 	Notes          *string             `json:"notes,omitempty"`
 }
 
-func (ac AreaConnection) getAPIResource() IsAPIResource {
+func (ac AreaConnection) GetAPIResource() IsAPIResource {
 	return ac.Area
 }
 
@@ -100,7 +100,7 @@ func (cfg *Config) getAreaConnectedAreas(r *http.Request, area database.GetAreaR
 	for _, dbConnArea := range dbConnAreas {
 		locArea := newLocationArea(dbConnArea.Location, dbConnArea.Sublocation, dbConnArea.Area, h.NullInt32ToPtr(dbConnArea.Version))
 
-		connType, err := cfg.newNamedAPIResourceFromType("connection-type", string(dbConnArea.ConnectionType), cfg.t.AreaConnectionType)
+		connType, err := cfg.newNamedAPIResourceFromType(cfg.e.connectionType.endpoint, string(dbConnArea.ConnectionType), cfg.t.AreaConnectionType)
 		if err != nil {
 			return nil, err
 		}
@@ -124,7 +124,7 @@ func (cfg *Config) getAreaCharacters(r *http.Request, area database.GetAreaRow, 
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get Aeons of %s", locArea.Error()), err)
 	}
 
-	chars := createNamedAPIResourcesSimple(cfg, dbChars, "characters", func(char database.GetAreaCharactersRow) (int32, string) {
+	chars := createNamedAPIResourcesSimple(cfg, dbChars, cfg.e.characters.endpoint, func(char database.GetAreaCharactersRow) (int32, string) {
 		return char.ID, char.Name
 	})
 
@@ -137,7 +137,7 @@ func (cfg *Config) getAreaAeons(r *http.Request, area database.GetAreaRow, locAr
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get Aeons of %s", locArea.Error()), err)
 	}
 
-	aeons := createNamedAPIResourcesSimple(cfg, dbAeons, "aeons", func(aeon database.GetAreaAeonsRow) (int32, string) {
+	aeons := createNamedAPIResourcesSimple(cfg, dbAeons, cfg.e.aeons.endpoint, func(aeon database.GetAreaAeonsRow) (int32, string) {
 		return aeon.ID, aeon.Name
 	})
 
@@ -150,7 +150,7 @@ func (cfg *Config) getAreaShops(r *http.Request, area database.GetAreaRow, locAr
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get shops of %s", locArea.Error()), err)
 	}
 
-	shops := createUnnamedAPIResources(cfg, dbShops, "shops", func(shop database.Shop) int32 {
+	shops := createUnnamedAPIResources(cfg, dbShops, cfg.e.shops.endpoint, func(shop database.Shop) int32 {
 		return shop.ID
 	})
 
@@ -163,7 +163,7 @@ func (cfg *Config) getAreaTreasures(r *http.Request, area database.GetAreaRow, l
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get treasures of %s", locArea.Error()), err)
 	}
 
-	treasures := createUnnamedAPIResources(cfg, dbTreasures, "treasures", func(treasure database.Treasure) int32 {
+	treasures := createUnnamedAPIResources(cfg, dbTreasures, cfg.e.treasures.endpoint, func(treasure database.Treasure) int32 {
 		return treasure.ID
 	})
 
@@ -176,7 +176,7 @@ func (cfg *Config) getAreaMonsters(r *http.Request, area database.GetAreaRow, lo
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get monsters of %s", locArea.Error()), err)
 	}
 
-	mons := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.GetAreaMonstersRow) (int32, string, *int32, *string) {
+	mons := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.GetAreaMonstersRow) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -189,7 +189,7 @@ func (cfg *Config) getAreaFormations(r *http.Request, area database.GetAreaRow, 
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get monster formations of %s", locArea.Error()), err)
 	}
 
-	formations := createUnnamedAPIResources(cfg, dbFormations, "monster-formations", func(formation database.GetAreaMonsterFormationsRow) int32 {
+	formations := createUnnamedAPIResources(cfg, dbFormations, cfg.e.monsterFormations.endpoint, func(formation database.GetAreaMonsterFormationsRow) int32 {
 		return formation.ID
 	})
 
@@ -228,7 +228,7 @@ func (cfg *Config) getAreaSidequest(r *http.Request, area database.GetAreaRow, l
 		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
 	}
 
-	resource := cfg.newNamedAPIResourceSimple("sidequests", sidequest.ID, sidequest.Name)
+	resource := cfg.newNamedAPIResourceSimple(cfg.e.sidequests.endpoint, sidequest.ID, sidequest.Name)
 
 	return resource, nil
 }
@@ -257,11 +257,11 @@ func (cfg *Config) getAreaMusic(r *http.Request, area database.GetAreaRow, locAr
 	songsCues := cfg.getAreaCues(dbCues)
 	songsBM := cfg.getAreaBM(dbBm)
 
-	songsFMVs := createNamedAPIResourcesSimple(cfg, dbSongsFMVs, "songs", func(song database.GetAreaFMVSongsRow) (int32, string) {
+	songsFMVs := createNamedAPIResourcesSimple(cfg, dbSongsFMVs, cfg.e.songs.endpoint, func(song database.GetAreaFMVSongsRow) (int32, string) {
 		return song.ID, song.Name
 	})
 
-	songsBossFights := createNamedAPIResourcesSimple(cfg, dbSongsBossFights, "songs", func(song database.GetAreaBossSongsRow) (int32, string) {
+	songsBossFights := createNamedAPIResourcesSimple(cfg, dbSongsBossFights, cfg.e.songs.endpoint, func(song database.GetAreaBossSongsRow) (int32, string) {
 		return song.ID, song.Name
 	})
 
@@ -281,7 +281,7 @@ func (cfg *Config) getAreaFMVs(r *http.Request, area database.GetAreaRow, locAre
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't get FMVs of %s", locArea.Error()), err)
 	}
 
-	fmvs := createNamedAPIResourcesSimple(cfg, dbFMVs, "fmvs", func(fmv database.GetAreaFMVsRow) (int32, string) {
+	fmvs := createNamedAPIResourcesSimple(cfg, dbFMVs, cfg.e.fmvs.endpoint, func(fmv database.GetAreaFMVsRow) (int32, string) {
 		return fmv.ID, fmv.Name
 	})
 

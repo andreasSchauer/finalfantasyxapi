@@ -32,11 +32,11 @@ func (r NamedAPIResource) IsZero() bool {
 	return r.Name == ""
 }
 
-func (r NamedAPIResource) getID() int32 {
+func (r NamedAPIResource) GetID() int32 {
 	return r.ID
 }
 
-func (r NamedAPIResource) getURL() string {
+func (r NamedAPIResource) GetURL() string {
 	return r.URL
 }
 
@@ -50,7 +50,7 @@ func (r NamedAPIResource) Error() string {
 	return fmt.Sprintf("named api resource %s, version: %v, url: %s", r.Name, h.DerefOrNil(r.Version), r.URL)
 }
 
-func (r NamedAPIResource) getAPIResource() IsAPIResource {
+func (r NamedAPIResource) GetAPIResource() IsAPIResource {
 	return r
 }
 
@@ -64,7 +64,7 @@ func (cfg *Config) newNamedAPIResource(endpoint string, id int32, name string, v
 		Name:          name,
 		Version:       version,
 		Specification: spec,
-		URL:           cfg.createURL(endpoint, id),
+		URL:           cfg.createResourceURL(endpoint, id),
 	}
 }
 
@@ -76,7 +76,7 @@ func (cfg *Config) newNamedAPIResourceSimple(endpoint string, id int32, name str
 	return NamedAPIResource{
 		ID:   id,
 		Name: name,
-		URL:  cfg.createURL(endpoint, id),
+		URL:  cfg.createResourceURL(endpoint, id),
 	}
 }
 

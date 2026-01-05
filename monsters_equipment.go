@@ -42,8 +42,8 @@ type EquipmentDrop struct {
 	Probability *int32             `json:"probability,omitempty"`
 }
 
-func (ed EquipmentDrop) getAPIResource() IsAPIResource {
-	return ed.AutoAbility.getAPIResource()
+func (ed EquipmentDrop) GetAPIResource() IsAPIResource {
+	return ed.AutoAbility.GetAPIResource()
 }
 
 func (cfg *Config) getMonsterEquipment(r *http.Request, mon database.Monster) (MonsterEquipment, error) {
@@ -157,7 +157,7 @@ func (cfg *Config) getEquipmentDrops(r *http.Request, mon database.Monster, equi
 		if err != nil {
 			return nil, err
 		}
-		autoAbility := cfg.newNamedAPIResourceSimple("auto-abilities", dbDrop.AutoAbilityID, dbDrop.AutoAbility)
+		autoAbility := cfg.newNamedAPIResourceSimple(cfg.e.autoAbilities.endpoint, dbDrop.AutoAbilityID, dbDrop.AutoAbility)
 
 		drop := EquipmentDrop{
 			AutoAbility: autoAbility,
@@ -181,7 +181,7 @@ func (cfg *Config) getEquipmentDropForcedChars(r *http.Request, mon database.Mon
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve characters of auto ability %s dropped by Monster %s, Version %d", drop.AutoAbility, mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	characters := createNamedAPIResourcesSimple(cfg, dbChars, "characters", func(char database.GetEquipmentDropCharactersRow) (int32, string) {
+	characters := createNamedAPIResourcesSimple(cfg, dbChars, cfg.e.characters.endpoint, func(char database.GetEquipmentDropCharactersRow) (int32, string) {
 		return char.CharacterID, char.CharacterName
 	})
 

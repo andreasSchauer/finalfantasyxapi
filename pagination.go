@@ -90,3 +90,5 @@ func (cfg *Config) createPreviousURL(r *http.Request, offset, limit int) *string
 	previousURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
 	return &previousURL
 }
+
+

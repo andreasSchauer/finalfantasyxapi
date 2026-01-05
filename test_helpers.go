@@ -113,7 +113,7 @@ func testResourceList(t *testing.T, testCfg *Config, testName string, expList re
 	compare(t, testName, expList.name+" length", expLen, len(expList.got), nil)
 }
 
-// checks if stated resources are in resource slice
+// checks if the provided slice of resources contains all stated resources
 func checkResourcesInSlice[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName string, expectedPaths []string, gotRes []T) {
 	gotMap := getResourceMap(gotRes)
 	if len(gotMap) != len(gotRes) {
@@ -121,7 +121,7 @@ func checkResourcesInSlice[T HasAPIResource](t *testing.T, cfg *Config, testName
 	}
 
 	for _, expPath := range expectedPaths {
-		expURL := cfg.completeURL(expPath)
+		expURL := cfg.completeTestURL(expPath)
 		_, ok := gotMap[expURL]
 		if !ok {
 			t.Fatalf("%s: %s doesn't contain all wanted resources. missing %s", testName, fieldName, expURL)
@@ -129,7 +129,7 @@ func checkResourcesInSlice[T HasAPIResource](t *testing.T, cfg *Config, testName
 	}
 }
 
-// will need to use name-version pattern in GetName() for monsterAmount
+// will need to use name-version pattern in monsterAmount's GetName() method for getResourceAmountMap() to work
 // checks if stated ResourceAmount entries are in slices (used for baseStats, itemAmounts, monsterAmounts) and if their amount values match
 func checkResAmtsInSlice[T ResourceAmount](t *testing.T, testName, fieldName string, expAmounts map[string]int32, gotAmounts []T, expLengths map[string]int) {
 	expLen, ok := expLengths[fieldName]

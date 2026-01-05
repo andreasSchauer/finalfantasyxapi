@@ -27,11 +27,11 @@ func (r UnnamedAPIResource) IsZero() bool {
 	return r.ID == 0
 }
 
-func (r UnnamedAPIResource) getID() int32 {
+func (r UnnamedAPIResource) GetID() int32 {
 	return r.ID
 }
 
-func (r UnnamedAPIResource) getURL() string {
+func (r UnnamedAPIResource) GetURL() string {
 	return r.URL
 }
 
@@ -45,7 +45,7 @@ func (r UnnamedAPIResource) Error() string {
 	return fmt.Sprintf("unnamed api resource with url: %s", r.URL)
 }
 
-func (r UnnamedAPIResource) getAPIResource() IsAPIResource {
+func (r UnnamedAPIResource) GetAPIResource() IsAPIResource {
 	return r
 }
 
@@ -56,7 +56,7 @@ func (cfg *Config) newUnnamedAPIResource(endpoint string, id int32) UnnamedAPIRe
 
 	return UnnamedAPIResource{
 		ID:  id,
-		URL: cfg.createURL(endpoint, id),
+		URL: cfg.createResourceURL(endpoint, id),
 	}
 }
 

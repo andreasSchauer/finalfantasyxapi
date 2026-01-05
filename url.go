@@ -1,15 +1,23 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/url"
+)
 
-func (cfg *Config) createURL(endpoint string, id int32) string {
+func (cfg *Config) createResourceURL(endpoint string, id int32) string {
 	return fmt.Sprintf("http://%s/api/%s/%d", cfg.host, endpoint, id)
+}
+
+func (cfg *Config) createResourceURLQuery(endpoint string, id int32, q url.Values) string {
+	url := cfg.createResourceURL(endpoint, id)
+	return fmt.Sprintf("%s?%s", url, q.Encode())
 }
 
 func (cfg *Config) createListURL(endpoint string) string {
 	return fmt.Sprintf("http://%s/api/%s", cfg.host, endpoint)
 }
 
-func (cfg *Config) completeURL(path string) string {
+func (cfg *Config) completeTestURL(path string) string {
 	return fmt.Sprintf("http://%s/api%s", cfg.host, path)
 }

@@ -64,7 +64,7 @@ func getSharedResources[T HasAPIResource](s1, s2 []T) []T {
 
 func resourcesContain[T HasAPIResource](items []T, target T) bool {
 	for _, item := range items {
-		if item.getAPIResource() == target.getAPIResource() {
+		if item.GetAPIResource() == target.GetAPIResource() {
 			return true
 		}
 	}
@@ -72,7 +72,7 @@ func resourcesContain[T HasAPIResource](items []T, target T) bool {
 }
 
 func createAPIResourceKey[T HasAPIResource](item T) string {
-	resource := item.getAPIResource()
+	resource := item.GetAPIResource()
 	key := seeding.CreateLookupKey(resource)
 	return key
 }
@@ -112,17 +112,16 @@ func getResourceAmountMap[T ResourceAmount](items []T) map[string]int32 {
 }
 
 func sortAPIResources[T HasAPIResource](a, b T) int {
-	if a.getAPIResource().getID() < b.getAPIResource().getID() {
+	if a.GetAPIResource().GetID() < b.GetAPIResource().GetID() {
 		return -1
 	}
 
-	if a.getAPIResource().getID() > b.getAPIResource().getID() {
+	if a.GetAPIResource().GetID() > b.GetAPIResource().GetID() {
 		return 1
 	}
 
 	return 0
 }
-
 
 func toHasAPIResSlice[T HasAPIResource](in []T) []HasAPIResource {
 	out := make([]HasAPIResource, len(in))

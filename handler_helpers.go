@@ -8,20 +8,9 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type handlerInput[T h.HasID, R any, L IsAPIResourceList] struct {
-	endpoint          string
-	resourceType      string
-	objLookup         map[string]T
-	queryLookup       map[string]QueryType
-	getSingleFunc     func(*http.Request, string, int32) (R, error)
-	getMultipleFunc   func(*http.Request, string, string) (L, error)
-	retrieveFunc      func(*http.Request, string) (L, error)
-	subsections       map[string]func(string) (IsAPIResourceList, error)
-}
-
 
 func handleEndpointList[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
-	resourceList, err := i.retrieveFunc(r, i.endpoint)
+	resourceList, err := i.retrieveFunc(r)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -48,7 +37,7 @@ func handleEndpointIDOnly[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w 
 		return
 	}
 
-	resource, err := i.getSingleFunc(r, i.endpoint, int32(id))
+	resource, err := i.getSingleFunc(r, int32(id))
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -71,7 +60,7 @@ func handleEndpointNameOrID[T h.HasID, R any, L IsAPIResourceList](cfg *Config, 
 	}
 
 	if i.getMultipleFunc != nil && parseRes.Name != "" {
-		resources, err := i.getMultipleFunc(r, i.endpoint, parseRes.Name)
+		resources, err := i.getMultipleFunc(r, parseRes.Name)
 		if handleHTTPError(w, err) {
 			return
 		}
@@ -79,7 +68,7 @@ func handleEndpointNameOrID[T h.HasID, R any, L IsAPIResourceList](cfg *Config, 
 		return
 	}
 
-	resource, err := i.getSingleFunc(r, i.endpoint, parseRes.ID)
+	resource, err := i.getSingleFunc(r, parseRes.ID)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -97,7 +86,7 @@ func handleEndpointNameVersion[T h.HasID, R any, L IsAPIResourceList](w http.Res
 		return
 	}
 
-	resource, err := i.getSingleFunc(r, i.endpoint, parseRes.ID)
+	resource, err := i.getSingleFunc(r, parseRes.ID)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -139,7 +128,6 @@ func handleEndpointSubOrNameVer[T h.HasID, R any, L IsAPIResourceList](w http.Re
 		return
 
 	case !isValidID && isValidVersion:
-		// /api/monsters/{name}/{version}
 		handleEndpointNameVersion(w, r, i, segments)
 		return
 

@@ -10,8 +10,7 @@ import (
 )
 
 type FMV struct {
-	//id 			int32
-	//dataHash		string
+	ID 					int32
 	Name                string       `json:"name"`
 	Translation         *string      `json:"translation"`
 	CutsceneDescription string       `json:"cutscene_description"`
@@ -30,6 +29,10 @@ func (f FMV) ToHashFields() []any {
 		h.DerefOrNil(f.SongID),
 		f.AreaID,
 	}
+}
+
+func (f FMV) GetID() int32 {
+	return f.ID
 }
 
 func (f FMV) Error() string {
@@ -59,7 +62,7 @@ func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 				return h.GetErr(fmv.Error(), err)
 			}
 
-			err = qtx.CreateFMV(context.Background(), database.CreateFMVParams{
+			dbFMV, err := qtx.CreateFMV(context.Background(), database.CreateFMVParams{
 				DataHash:            generateDataHash(fmv),
 				Name:                fmv.Name,
 				Translation:         h.GetNullString(fmv.Translation),
@@ -70,6 +73,9 @@ func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return h.GetErr(fmv.Error(), err, "couldn't create fmv")
 			}
+
+			fmv.ID = dbFMV.ID
+			l.FMVs[fmv.Name] = fmv
 		}
 		return nil
 	})

@@ -178,8 +178,8 @@ func compAPIResources[T HasAPIResource](t *testing.T, cfg *Config, testName, fie
 		return
 	}
 
-	expURL := cfg.completeURL(expPath)
-	gotURL := gotRes.getAPIResource().getURL()
+	expURL := cfg.completeTestURL(expPath)
+	gotURL := gotRes.GetAPIResource().GetURL()
 
 	compare(t, testName, fieldName, expURL, gotURL, nil)
 }
@@ -198,7 +198,7 @@ func compResourcePtrs[T HasAPIResource](t *testing.T, cfg *Config, testName, fie
 		return
 	case expPathPtr == nil && gotResPtr != nil:
 		res := *gotResPtr
-		gotURL := res.getAPIResource().getURL()
+		gotURL := res.GetAPIResource().GetURL()
 		t.Fatalf("%s: expected nil for %s, but got %s", testName, fieldName, gotURL)
 	case expPathPtr != nil && gotResPtr == nil:
 		t.Fatalf("%s: expected %s %v, got nil", testName, fieldName, *expPathPtr)
@@ -219,7 +219,7 @@ func compPageURL(t *testing.T, cfg *Config, testName, fieldName string, expPathP
 
 	if expPathPtr != nil {
 		expPath := *expPathPtr
-		expURL := cfg.completeURL(expPath)
+		expURL := cfg.completeTestURL(expPath)
 		expURLPtr = &expURL
 	}
 

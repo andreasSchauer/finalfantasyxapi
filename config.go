@@ -18,7 +18,7 @@ type Config struct {
 	l           	*seeding.Lookup
 	t           	*TypeLookup
 	q				*QueryLookup
-	defaultParams	map[string]QueryType
+	e				*endpoints
 	platform   		string
 	adminApiKey 	string
 	host        	string
@@ -63,10 +63,9 @@ func ConfigInit() (Config, error) {
 		return Config{}, err
 	}
 
-	typeLookup := TypeLookupInit()
-	apiCfg.t = &typeLookup
-
+	apiCfg.TypeLookupInit()
 	apiCfg.QueryLookupInit()
+	apiCfg.EndpointsInit()
 
 	return apiCfg, nil
 }

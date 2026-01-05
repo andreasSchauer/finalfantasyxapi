@@ -23,7 +23,7 @@ type LocationSong struct {
 	ReplacesEncounterMusic bool             `json:"replaces_encounter_music"`
 }
 
-func (ls LocationSong) getAPIResource() IsAPIResource {
+func (ls LocationSong) GetAPIResource() IsAPIResource {
 	return ls.Song
 }
 
@@ -31,7 +31,7 @@ func (cfg *Config) getAreaCues(dbCues []database.GetAreaCuesRow) []LocationSong 
 	songsCues := []LocationSong{}
 
 	for _, cue := range dbCues {
-		song := cfg.newNamedAPIResourceSimple("songs", cue.ID, cue.Name)
+		song := cfg.newNamedAPIResourceSimple(cfg.e.songs.endpoint, cue.ID, cue.Name)
 
 		locationSong := LocationSong{
 			Song:                   song,
@@ -48,7 +48,7 @@ func (cfg *Config) getAreaBM(dbBm []database.GetAreaBackgroundMusicRow) []Locati
 	songsBM := []LocationSong{}
 
 	for _, bm := range dbBm {
-		song := cfg.newNamedAPIResourceSimple("songs", bm.ID, bm.Name)
+		song := cfg.newNamedAPIResourceSimple(cfg.e.songs.endpoint, bm.ID, bm.Name)
 
 		locationSong := LocationSong{
 			Song:                   song,

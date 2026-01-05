@@ -56,7 +56,7 @@ func (cfg *Config) getMonstersElemResist(r *http.Request, inputMons []NamedAPIRe
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by elemental affinities", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -113,7 +113,7 @@ func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPI
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by status conditions", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -165,7 +165,7 @@ func (cfg *Config) getMonstersItem(r *http.Request, inputMons []NamedAPIResource
 		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid method value: %s. allowed values: %s.", queryMethod, strings.Join(queryParamMethod.AllowedValues, ", ")), err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -199,7 +199,7 @@ func (cfg *Config) getMonstersAutoAbility(r *http.Request, inputMons []NamedAPIR
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by auto ability", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -239,7 +239,7 @@ func (cfg *Config) getMonstersRonsoRage(r *http.Request, inputMons []NamedAPIRes
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by ronso rage", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -261,7 +261,7 @@ func (cfg *Config) getMonstersLocation(r *http.Request, inputMons []NamedAPIReso
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by location", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.GetLocationMonstersRow) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.GetLocationMonstersRow) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -283,7 +283,7 @@ func (cfg *Config) getMonstersSubLocation(r *http.Request, inputMons []NamedAPIR
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by sublocation", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.GetSublocationMonstersRow) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.GetSublocationMonstersRow) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -305,7 +305,7 @@ func (cfg *Config) getMonstersArea(r *http.Request, inputMons []NamedAPIResource
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by area", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.GetAreaMonstersRow) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.GetAreaMonstersRow) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -332,7 +332,7 @@ func (cfg *Config) getMonstersDistance(r *http.Request, inputMons []NamedAPIReso
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by distance", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -354,7 +354,7 @@ func (cfg *Config) getMonstersStoryBased(r *http.Request, inputMons []NamedAPIRe
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve story-based monsters", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -376,7 +376,7 @@ func (cfg *Config) getMonstersRepeatable(r *http.Request, inputMons []NamedAPIRe
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve repeatable monsters", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -398,7 +398,7 @@ func (cfg *Config) getMonstersCanBeCaptured(r *http.Request, inputMons []NamedAP
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters that can be captured", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -420,7 +420,7 @@ func (cfg *Config) getMonstersHasOverdrive(r *http.Request, inputMons []NamedAPI
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters with overdrive gauge", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -442,7 +442,7 @@ func (cfg *Config) getMonstersUnderwater(r *http.Request, inputMons []NamedAPIRe
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve underwater monsters", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -464,7 +464,7 @@ func (cfg *Config) getMonstersZombie(r *http.Request, inputMons []NamedAPIResour
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve zombie monsters", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -488,7 +488,7 @@ func (cfg *Config) getMonstersSpecies(r *http.Request, inputMons []NamedAPIResou
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by species", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -512,7 +512,7 @@ func (cfg *Config) getMonstersCreationArea(r *http.Request, inputMons []NamedAPI
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by creation area", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -545,7 +545,7 @@ func (cfg *Config) getMonstersType(r *http.Request, inputMons []NamedAPIResource
 		}
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, "monsters", func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 

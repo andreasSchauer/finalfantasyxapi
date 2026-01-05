@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-// TypesLookup holds all the enum types for the application
+// TypeLookup holds all the enum types for the application
 type TypeLookup struct {
 	AreaConnectionType map[string]TypedAPIResource
 	CTBIconType        map[string]TypedAPIResource
@@ -16,16 +16,14 @@ type TypeLookup struct {
 	OverdriveModeType  map[string]TypedAPIResource
 }
 
-func TypeLookupInit() TypeLookup {
-	t := TypeLookup{}
+func (cfg *Config) TypeLookupInit() {
+	cfg.t = &TypeLookup{}
 
-	t.initAreaConnectionType()
-	t.initCTBIconType()
-	t.initMaCreationArea()
-	t.initMonsterSpecies()
-	t.initOverdriveModeType()
-
-	return t
+	cfg.t.initAreaConnectionType()
+	cfg.t.initCTBIconType()
+	cfg.t.initMaCreationArea()
+	cfg.t.initMonsterSpecies()
+	cfg.t.initOverdriveModeType()
 }
 
 func GetEnumType(key string, lookup map[string]TypedAPIResource) (TypedAPIResource, error) {

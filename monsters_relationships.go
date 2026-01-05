@@ -88,7 +88,7 @@ func (cfg *Config) getMonsterRelationships(r *http.Request, dbMon database.Monst
 	return monster, nil
 }
 
-func (ma MonsterAbility) getAPIResource() IsAPIResource {
+func (ma MonsterAbility) GetAPIResource() IsAPIResource {
 	return ma.Ability
 }
 
@@ -109,7 +109,7 @@ func (cfg *Config) getMonsterProperties(r *http.Request, mon database.Monster) (
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get properties of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	properties := createNamedAPIResourcesSimple(cfg, dbProperties, "properties", func(prop database.GetMonsterPropertiesRow) (int32, string) {
+	properties := createNamedAPIResourcesSimple(cfg, dbProperties, cfg.e.properties.endpoint, func(prop database.GetMonsterPropertiesRow) (int32, string) {
 		return prop.PropertyID, prop.Property
 	})
 
@@ -122,7 +122,7 @@ func (cfg *Config) getMonsterAutoAbilities(r *http.Request, mon database.Monster
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get auto abilities of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	autoAbilities := createNamedAPIResourcesSimple(cfg, dbAutoAbilities, "auto-abilities", func(autoAbility database.GetMonsterAutoAbilitiesRow) (int32, string) {
+	autoAbilities := createNamedAPIResourcesSimple(cfg, dbAutoAbilities, cfg.e.autoAbilities.endpoint, func(autoAbility database.GetMonsterAutoAbilitiesRow) (int32, string) {
 		return autoAbility.AutoAbilityID, autoAbility.AutoAbility
 	})
 
@@ -136,7 +136,7 @@ func (cfg *Config) getMonsterRonsoRages(r *http.Request, mon database.Monster) (
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get ronso rages of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	rages := createNamedAPIResourcesSimple(cfg, dbRages, "ronso-rages", func(rage database.GetMonsterRonsoRagesRow) (int32, string) {
+	rages := createNamedAPIResourcesSimple(cfg, dbRages, cfg.e.ronsoRages.endpoint, func(rage database.GetMonsterRonsoRagesRow) (int32, string) {
 		return rage.RonsoRageID - ronsoRageOffset, rage.RonsoRage
 	})
 
@@ -162,7 +162,7 @@ func (cfg *Config) getMonsterMonsterFormations(r *http.Request, mon database.Mon
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get formations of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	formations := createUnnamedAPIResources(cfg, dbFormations, "monster-formations", func(formation database.GetMonsterMonsterFormationsRow) int32 {
+	formations := createUnnamedAPIResources(cfg, dbFormations, cfg.e.monsterFormations.endpoint, func(formation database.GetMonsterMonsterFormationsRow) int32 {
 		return formation.ID
 	})
 
@@ -203,8 +203,6 @@ func (cfg *Config) getMonsterElemResists(r *http.Request, mon database.Monster) 
 	return elemResists, nil
 }
 
-
-
 func (cfg *Config) changeElemResist(element NamedAPIResource, newAffinityName string) (ElementalResist, error) {
 	newAffinity, err := seeding.GetResource(newAffinityName, cfg.l.Affinities)
 	if err != nil {
@@ -220,7 +218,6 @@ func (cfg *Config) changeElemResist(element NamedAPIResource, newAffinityName st
 
 	return newResist, nil
 }
-
 
 func (cfg *Config) getMonsterStatusResists(r *http.Request, mon database.Monster) ([]StatusResist, error) {
 	dbStatusResists, err := cfg.db.GetMonsterStatusResists(r.Context(), mon.ID)
@@ -245,7 +242,7 @@ func (cfg *Config) getMonsterImmunities(r *http.Request, mon database.Monster) (
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get status immunities of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	immunities := createNamedAPIResourcesSimple(cfg, dbImmunities, "status-conditions", func(immunity database.GetMonsterImmunitiesRow) (int32, string) {
+	immunities := createNamedAPIResourcesSimple(cfg, dbImmunities, cfg.e.statusConditions.endpoint, func(immunity database.GetMonsterImmunitiesRow) (int32, string) {
 		return immunity.StatusID, immunity.Status
 	})
 
@@ -293,35 +290,35 @@ func (cfg *Config) getAbilityID(ability database.GetMonsterAbilitiesRow) (int32,
 		if err != nil {
 			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
 		}
-		return abilityLookup.ID, "player-abilities", nil
+		return abilityLookup.ID, cfg.e.playerAbilities.endpoint, nil
 
 	case database.AbilityTypeEnemyAbility:
 		abilityLookup, err := seeding.GetResource(ref, cfg.l.EnemyAbilities)
 		if err != nil {
 			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
 		}
-		return abilityLookup.ID, "enemy-abilities", nil
+		return abilityLookup.ID, cfg.e.enemyAbilities.endpoint, nil
 
 	case database.AbilityTypeOverdriveAbility:
 		abilityLookup, err := seeding.GetResource(ref, cfg.l.OverdriveAbilities)
 		if err != nil {
 			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
 		}
-		return abilityLookup.ID, "overdrive-abilities", nil
+		return abilityLookup.ID, cfg.e.overdriveAbilities.endpoint, nil
 
 	case database.AbilityTypeItemAbility:
 		abilityLookup, err := seeding.GetResource(ability.Ability, cfg.l.Items)
 		if err != nil {
 			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
 		}
-		return abilityLookup.ID, "item-abilities", nil
+		return abilityLookup.ID, cfg.e.itemAbilities.endpoint, nil
 
 	case database.AbilityTypeTriggerCommand:
 		abilityLookup, err := seeding.GetResource(ref, cfg.l.TriggerCommands)
 		if err != nil {
 			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
 		}
-		return abilityLookup.ID, "trigger-commands", nil
+		return abilityLookup.ID, cfg.e.triggerCommands.endpoint, nil
 
 	default:
 		return 0, "", newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find id for monster ability %s, version %d, type %s", ref.Name, h.DerefOrNil(ref.Version), ref.AbilityType), nil)
@@ -335,7 +332,7 @@ func (cfg *Config) getMonsterStat(mon Monster, stat string) (int32, error) {
 	}
 
 	statMap := getResourceMap(mon.BaseStats)
-	key := cfg.createURL("stats", statLookup.ID)
+	key := cfg.createResourceURL(cfg.e.stats.endpoint, statLookup.ID)
 
 	return statMap[key].Value, nil
 }

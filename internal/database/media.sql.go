@@ -76,10 +76,11 @@ func (q *Queries) CreateCue(ctx context.Context, arg CreateCueParams) (Cue, erro
 	return i, err
 }
 
-const createFMV = `-- name: CreateFMV :exec
+const createFMV = `-- name: CreateFMV :one
 INSERT INTO fmvs (data_hash, name, translation, cutscene_description, song_id, area_id)
 VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = fmvs.data_hash
+RETURNING id, data_hash, name, translation, cutscene_description, song_id, area_id
 `
 
 type CreateFMVParams struct {
@@ -91,8 +92,8 @@ type CreateFMVParams struct {
 	AreaID              int32
 }
 
-func (q *Queries) CreateFMV(ctx context.Context, arg CreateFMVParams) error {
-	_, err := q.db.ExecContext(ctx, createFMV,
+func (q *Queries) CreateFMV(ctx context.Context, arg CreateFMVParams) (Fmv, error) {
+	row := q.db.QueryRowContext(ctx, createFMV,
 		arg.DataHash,
 		arg.Name,
 		arg.Translation,
@@ -100,7 +101,17 @@ func (q *Queries) CreateFMV(ctx context.Context, arg CreateFMVParams) error {
 		arg.SongID,
 		arg.AreaID,
 	)
-	return err
+	var i Fmv
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Translation,
+		&i.CutsceneDescription,
+		&i.SongID,
+		&i.AreaID,
+	)
+	return i, err
 }
 
 const createSong = `-- name: CreateSong :one

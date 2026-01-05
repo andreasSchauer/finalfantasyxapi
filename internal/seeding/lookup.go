@@ -57,6 +57,7 @@ type Lookup struct {
 	EquipmentNames     map[string]EquipmentName
 	EquipmentTables    map[string]EquipmentTable
 	EncounterLocations map[string]EncounterLocation
+	FMVs			   map[string]FMV
 	Items              map[string]Item
 	KeyItems           map[string]KeyItem
 	MasterItems        map[string]MasterItem
@@ -101,6 +102,7 @@ func lookupInit() Lookup {
 		EquipmentNames:     make(map[string]EquipmentName),
 		EquipmentTables:    make(map[string]EquipmentTable),
 		EncounterLocations: make(map[string]EncounterLocation),
+		FMVs:				make(map[string]FMV),
 		Items:              make(map[string]Item),
 		KeyItems:           make(map[string]KeyItem),
 		MasterItems:        make(map[string]MasterItem),

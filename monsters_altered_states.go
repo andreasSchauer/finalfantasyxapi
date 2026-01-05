@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -43,9 +44,11 @@ func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon database.Monster
 		if err != nil {
 			return []AlteredState{}, err
 		}
+		q := r.URL.Query()
+		q.Set("altered-state", strconv.Itoa(i+1))
 
 		alteredState := AlteredState{
-			URL:         fmt.Sprintf("http://%s/api/monsters/%d?altered-state=%d", cfg.host, mon.ID, i+1),
+			URL:         cfg.createResourceURLQuery(cfg.e.monsters.endpoint, mon.ID, q),
 			Condition:   dbAltState.Condition,
 			IsTemporary: dbAltState.IsTemporary,
 			Changes:     altStateChanges,
@@ -127,7 +130,7 @@ func (cfg *Config) getAltStateProperties(r *http.Request, mon database.Monster, 
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state properties of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	properties := createNamedAPIResourcesSimple(cfg, dbProperties, "properties", func(prop database.GetAltStatePropertiesRow) (int32, string) {
+	properties := createNamedAPIResourcesSimple(cfg, dbProperties, cfg.e.properties.endpoint, func(prop database.GetAltStatePropertiesRow) (int32, string) {
 		return prop.PropertyID, prop.Property
 	})
 
@@ -144,7 +147,7 @@ func (cfg *Config) getAltStateAutoAbilities(r *http.Request, mon database.Monste
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state auto abilities of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	autoAbilities := createNamedAPIResourcesSimple(cfg, dbAutoAbilities, "auto-abilities", func(autoAbility database.GetAltStateAutoAbilitiesRow) (int32, string) {
+	autoAbilities := createNamedAPIResourcesSimple(cfg, dbAutoAbilities, cfg.e.autoAbilities.endpoint, func(autoAbility database.GetAltStateAutoAbilitiesRow) (int32, string) {
 		return autoAbility.AutoAbilityID, autoAbility.AutoAbility
 	})
 
@@ -195,7 +198,7 @@ func (cfg *Config) getAltStateImmunities(r *http.Request, mon database.Monster, 
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state status immunities of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
-	immunities := createNamedAPIResourcesSimple(cfg, dbImmunities, "status-conditions", func(immunity database.GetAltStateImmunitiesRow) (int32, string) {
+	immunities := createNamedAPIResourcesSimple(cfg, dbImmunities, cfg.e.statusConditions.endpoint, func(immunity database.GetAltStateImmunitiesRow) (int32, string) {
 		return immunity.StatusID, immunity.Status
 	})
 

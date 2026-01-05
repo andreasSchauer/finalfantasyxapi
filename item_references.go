@@ -13,7 +13,7 @@ func (ia ItemAmount) IsZero() bool {
 	return ia.Item.Name == ""
 }
 
-func (ia ItemAmount) getAPIResource() IsAPIResource {
+func (ia ItemAmount) GetAPIResource() IsAPIResource {
 	return ia.Item
 }
 
@@ -21,10 +21,13 @@ func (cfg *Config) newItemAmount(itemType database.ItemType, itemName string, it
 	if itemName == "" {
 		return ItemAmount{}
 	}
-	endpoint := "items"
+	var endpoint string
 
-	if itemType == database.ItemTypeKeyItem {
-		endpoint = "key-items"
+	switch itemType {
+	case database.ItemTypeItem:
+		endpoint = cfg.e.items.endpoint
+	case database.ItemTypeKeyItem:
+		endpoint = cfg.e.keyItems.endpoint
 	}
 
 	itemResource := cfg.newNamedAPIResourceSimple(endpoint, itemID, itemName)
@@ -40,8 +43,8 @@ type PossibleItem struct {
 	Chance int32 `json:"chance"`
 }
 
-func (ps PossibleItem) getAPIResource() IsAPIResource {
-	return ps.Item.getAPIResource()
+func (ps PossibleItem) GetAPIResource() IsAPIResource {
+	return ps.Item.GetAPIResource()
 }
 
 func (cfg *Config) newPossibleItem(itemType database.ItemType, itemName string, itemID, amount, chance int32) PossibleItem {

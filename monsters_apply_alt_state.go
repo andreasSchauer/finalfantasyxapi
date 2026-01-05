@@ -36,7 +36,7 @@ func (cfg *Config) applyAlteredState(r *http.Request, mon Monster) (Monster, err
 	}
 
 	defaultState := AlteredState{
-		URL:         cfg.createURL("monsters", mon.ID),
+		URL:         cfg.createResourceURL(cfg.e.monsters.endpoint, mon.ID),
 		Condition:   "default",
 		IsTemporary: false,
 	}
