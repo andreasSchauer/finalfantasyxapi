@@ -52,7 +52,7 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 			expOverdriveModes: expOverdriveModes{
 				description: "Charges on character's turn.",
-				modeType:    "/overdrive-mode-type/2",
+				modeType:    2,
 				fillRate:    h.GetFloat32Ptr(0.03),
 				actionsAmount: map[string]int32{
 					"tidus":   600,
@@ -79,7 +79,7 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 			expOverdriveModes: expOverdriveModes{
 				effect:   "The gauge fills when an ally takes damage.",
-				modeType: "/overdrive-mode-type/1",
+				modeType: 1,
 				fillRate: nil,
 				actionsAmount: map[string]int32{
 					"tidus": 300,
@@ -106,7 +106,7 @@ func TestGetOverdriveMode(t *testing.T) {
 				name: "stoic",
 			},
 			expOverdriveModes: expOverdriveModes{
-				modeType: "/overdrive-mode-type/1",
+				modeType: 1,
 			},
 		},
 	}
@@ -117,17 +117,25 @@ func TestGetOverdriveMode(t *testing.T) {
 			continue
 		}
 
+		test := test{
+			t: t,
+			cfg: testCfg,
+			name: testName,
+			expLengths: tc.expLengths,
+			dontCheck: tc.dontCheck,
+		}
+
 		var got OverdriveMode
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testExpectedUnique(t, testName, tc.expUnique, got.ID, got.Name)
-		compare(t, testName, "description", tc.description, got.Description, tc.dontCheck)
-		compare(t, testName, "effect", tc.effect, got.Effect, tc.dontCheck)
-		compAPIResources(t, testCfg, testName, "type", tc.modeType, got.Type, tc.dontCheck)
-		compare(t, testName, "fill rate", tc.fillRate, got.FillRate, tc.dontCheck)
-		checkResAmtsInSlice(t, testName, "actions", tc.actionsAmount, got.Actions, tc.expLengths)
+		testExpectedUnique(test, tc.expUnique, got.ID, got.Name)
+		compare(test, "description", tc.description, got.Description)
+		compare(test, "effect", tc.effect, got.Effect)
+		compAPIResourcesFromID(test, "type", testCfg.e.overdriveModeType.endpoint, tc.modeType, got.Type)
+		compare(test, "fill rate", tc.fillRate, got.FillRate)
+		checkResAmtsInSlice(test, "actions", tc.actionsAmount, got.Actions)
 	}
 }
 
@@ -204,11 +212,19 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			continue
 		}
 
+		test := test{
+			t: t,
+			cfg: testCfg,
+			name: testName,
+			expLengths: tc.expLengths,
+			dontCheck: tc.dontCheck,
+		}
+
 		var got NamedApiResourceList
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testAPIResourceList(t, testCfg, testName, tc.expList, got, tc.dontCheck)
+		testAPIResourceList(test, tc.expList, got)
 	}
 }

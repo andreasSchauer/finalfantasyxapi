@@ -2,83 +2,84 @@ package main
 
 import (
 	"slices"
-	"testing"
 )
 
-func testMonsterElemResists(t *testing.T, testCfg *Config, testName string, exp []testElemResist, got []ElementalResist, dontCheck map[string]bool) {
-	compare(t, testName, "elemental resists length", 5, len(got), dontCheck)
+func testMonsterElemResists(test test, exp []testElemResist, got []ElementalResist) {
+	compare(test, "elemental resists length", 5, len(got))
 
 	for i, resist := range exp {
-		compAPIResources(t, testCfg, testName, "elements", resist.element, got[i].Element, dontCheck)
-		compAPIResources(t, testCfg, testName, "affinities", resist.affinity, got[i].Affinity, dontCheck)
+		elemEndpoint := test.cfg.e.elements.endpoint
+		affinityEndpoint := test.cfg.e.affinities.endpoint
+
+		compAPIResourcesFromID(test, "elements", elemEndpoint, resist.element, got[i].Element)
+		compAPIResourcesFromID(test, "affinities", affinityEndpoint, resist.affinity, got[i].Affinity)
 	}
 }
 
-
-func testMonsterItems(t *testing.T, testCfg *Config, testName string, expItems *testItems, gotItems *MonsterItems, checks *[]resListTest, dontCheck map[string]bool) {
-	if dontCheck != nil && dontCheck["items"] {
+func testMonsterItems(test test, expItems *testItems, gotItems *MonsterItems, checks *[]resListTest) {
+	if test.dontCheck != nil && test.dontCheck["items"] {
 		return
 	}
 
-	if !bothPtrsPresent(t, testName, "monster items", expItems, gotItems) {
+	if !bothPtrsPresent(test, "monster items", expItems, gotItems) {
 		return
 	}
 
 	exp := *expItems
 	got := *gotItems
-	*checks = append(*checks, newResListTest("other items", exp.otherItems, got.OtherItems))
+	endpoint := test.cfg.e.items.endpoint
+	*checks = append(*checks, newResListTestFromIDs("other items", endpoint, exp.otherItems, got.OtherItems))
 	itemMap := exp.items
 
-	compare(t, testName, "item drop chance", exp.itemDropChance, got.DropChance, dontCheck)
-	compResourcePtrs(t, testCfg, testName, "steal common", itemMap["steal common"], got.StealCommon, dontCheck)
-	compResourcePtrs(t, testCfg, testName, "steal rare", itemMap["steal rare"], got.StealRare, dontCheck)
-	compResourcePtrs(t, testCfg, testName, "drop common", itemMap["drop common"], got.DropCommon, dontCheck)
-	compResourcePtrs(t, testCfg, testName, "drop rare", itemMap["drop rare"], got.DropRare, dontCheck)
-	compResourcePtrs(t, testCfg, testName, "sec drop common", itemMap["sec drop common"], got.SecondaryDropCommon, dontCheck)
-	compResourcePtrs(t, testCfg, testName, "sec drop rare", itemMap["sec drop rare"], got.SecondaryDropRare, dontCheck)
-	compResourcePtrs(t, testCfg, testName, "bribe", itemMap["bribe"], got.Bribe, dontCheck)
+	compare(test, "item drop chance", exp.itemDropChance, got.DropChance)
+	compResPtrsFromID(test, endpoint, "steal common", itemMap["steal common"], got.StealCommon)
+	compResPtrsFromID(test, endpoint, "steal rare", itemMap["steal rare"], got.StealRare)
+	compResPtrsFromID(test, endpoint, "drop common", itemMap["drop common"], got.DropCommon)
+	compResPtrsFromID(test, endpoint, "drop rare", itemMap["drop rare"], got.DropRare)
+	compResPtrsFromID(test, endpoint, "sec drop common", itemMap["sec drop common"], got.SecondaryDropCommon)
+	compResPtrsFromID(test, endpoint, "sec drop rare", itemMap["sec drop rare"], got.SecondaryDropRare)
+	compResPtrsFromID(test, endpoint, "bribe", itemMap["bribe"], got.Bribe)
 }
 
-func testMonsterEquipment(t *testing.T, testName string, expEquipment *testEquipment, gotEquipment *MonsterEquipment, checks *[]resListTest, dontCheck map[string]bool) {
-	if dontCheck != nil && dontCheck["equipment"] {
+func testMonsterEquipment(test test, expEquipment *testEquipment, gotEquipment *MonsterEquipment, checks *[]resListTest) {
+	if test.dontCheck != nil && test.dontCheck["equipment"] {
 		return
 	}
 
-	if !bothPtrsPresent(t, testName, "monster equipment", expEquipment, gotEquipment) {
+	if !bothPtrsPresent(test, "monster equipment", expEquipment, gotEquipment) {
 		return
 	}
 
 	exp := *expEquipment
 	got := *gotEquipment
 
-	if !dontCheck["ability slots"] {
-		compStructs(t, testName, "ability slots", exp.abilitySlots, got.AbilitySlots)
+	if !test.dontCheck["ability slots"] {
+		compStructs(test, "ability slots", exp.abilitySlots, got.AbilitySlots)
 	}
 
-	if !dontCheck["attached abilities"] {
-		compStructs(t, testName, "attached abilities", exp.attachedAbilities, got.AttachedAbilities)
+	if !test.dontCheck["attached abilities"] {
+		compStructs(test, "attached abilities", exp.attachedAbilities, got.AttachedAbilities)
 	}
 
 	equipChecks := []resListTest{
-		newResListTest("weapon abilities", exp.weaponAbilities, got.WeaponAbilities),
-		newResListTest("armor abilities", exp.armorAbilities, got.ArmorAbilities),
+		newResListTestFromIDs("weapon abilities", test.cfg.e.autoAbilities.endpoint, exp.weaponAbilities, got.WeaponAbilities),
+		newResListTestFromIDs("armor abilities", test.cfg.e.autoAbilities.endpoint, exp.armorAbilities, got.ArmorAbilities),
 	}
 
 	*checks = slices.Concat(*checks, equipChecks)
 }
 
-
-func testMonsterAltStates(t *testing.T, testCfg *Config, testName string, expState *testAppliedState, gotState *AppliedState, gotAltStates []AlteredState) {
-	if !bothPtrsPresent(t, testName, "altered states", expState, gotState) {
+func testMonsterAltStates(test test, expState *testAppliedState, gotState *AppliedState, gotAltStates []AlteredState) {
+	if !bothPtrsPresent(test, "altered states", expState, gotState) {
 		return
 	}
 
-	compare(t, testName, "applied state condition", expState.condition, gotState.Condition, nil)
+	compare(test, "applied state condition", expState.condition, gotState.Condition)
 
-	compResourcePtrs(t, testCfg, testName, "applied status", expState.appliedStatus, gotState.AppliedStatus, nil)
+	compResPtrsFromID(test, test.cfg.e.statusConditions.endpoint, "applied status", expState.appliedStatus, gotState.AppliedStatus)
 
 	if gotAltStates[0].Condition != "default" {
-		t.Fatalf("%s: first altered state must be default when another is applied, got: %s", testName, gotAltStates[0].Condition)
+		test.t.Fatalf("%s: first altered state must be default when another is applied, got: %s", test.name, gotAltStates[0].Condition)
 	}
 
 }

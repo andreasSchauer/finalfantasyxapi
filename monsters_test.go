@@ -116,18 +116,12 @@ func TestGetMonster(t *testing.T) {
 					MinICV:    h.GetInt32Ptr(48),
 					MaxICV:    h.GetInt32Ptr(53),
 				},
-				species:     "/monster-species/19",
-				ctbIconType: "/ctb-icon-type/1",
+				species:     19,
+				ctbIconType: 1,
 				distance:    1,
-				properties: []string{
-					"/properties/2",
-				},
-				locations: []string{
-					"/areas/54",
-				},
-				formations: []string{
-					"/monster-formations/42",
-				},
+				properties: []int32{2},
+				locations: []int32{54},
+				formations: []int32{42},
 				baseStats: map[string]int32{
 					"hp":      300,
 					"defense": 120,
@@ -136,12 +130,12 @@ func TestGetMonster(t *testing.T) {
 				},
 				items: &testItems{
 					itemDropChance: 255,
-					items: map[string]*string{
-						"steal common": h.GetStrPtr("/items/27"),
-						"steal rare":   h.GetStrPtr("/items/28"),
-						"drop common":  h.GetStrPtr("/items/71"),
-						"drop rare":    h.GetStrPtr("/items/71"),
-						"bribe":        h.GetStrPtr("/items/28"),
+					items: map[string]*int32{
+						"steal common": h.GetInt32Ptr(27),
+						"steal rare":   h.GetInt32Ptr(28),
+						"drop common":  h.GetInt32Ptr(71),
+						"drop rare":    h.GetInt32Ptr(71),
+						"bribe":        h.GetInt32Ptr(28),
 					},
 				},
 				bribeChances: []BribeChance{
@@ -191,42 +185,17 @@ func TestGetMonster(t *testing.T) {
 							},
 						},
 					},
-					weaponAbilities: []string{
-						"/auto-abilities/2",
-						"/auto-abilities/6",
-						"/auto-abilities/26",
-					},
-					armorAbilities: []string{
-						"/auto-abilities/58",
-					},
+					weaponAbilities: []int32{2, 6, 26},
+					armorAbilities: []int32{58},
 				},
 				elemResists: []testElemResist{
-					{
-						element:  "/elements/1",
-						affinity: "/affinities/3",
-					},
-					{
-						element:  "/elements/2",
-						affinity: "/affinities/5",
-					},
-					{
-						element:  "/elements/3",
-						affinity: "/affinities/2",
-					},
-					{
-						element:  "/elements/4",
-						affinity: "/affinities/3",
-					},
-					{
-						element:  "/elements/5",
-						affinity: "/affinities/1",
-					},
+					{ element:  1, affinity: 3 },
+					{ element:  2, affinity: 5 },
+					{ element:  3, affinity: 2 },
+					{ element:  4, affinity: 3 },
+					{ element:  5, affinity: 1 },
 				},
-				statusImmunities: []string{
-					"/status-conditions/1",
-					"/status-conditions/4",
-					"/status-conditions/14",
-				},
+				statusImmunities: []int32{1, 4, 14},
 				statusResists: map[string]int32{
 					"silence": 20,
 				},
@@ -257,15 +226,11 @@ func TestGetMonster(t *testing.T) {
 				agility: nil,
 				items: &testItems{
 					itemDropChance: 0,
-					items: map[string]*string{
-						"steal common": h.GetStrPtr("/items/1"),
-						"steal rare":   h.GetStrPtr("/items/1"),
+					items: map[string]*int32{
+						"steal common": h.GetInt32Ptr(1),
+						"steal rare":   h.GetInt32Ptr(1),
 					},
-					otherItems: []string{
-						"/items/9",
-						"/items/64",
-						"/items/7",
-					},
+					otherItems: []int32{9, 64, 7},
 				},
 			},
 		},
@@ -308,22 +273,16 @@ func TestGetMonster(t *testing.T) {
 					condition: "Fire-elemental.",
 					isTemporary: false,
 				},
-				properties: []string{
-					"/properties/1",
-				},
-				locations: []string{
-					"/areas/150",
-				},
-				formations: []string{
-					"/monster-formations/221",
-				},
+				properties: []int32{1},
+				locations: []int32{150},
+				formations: []int32{221},
 				items: &testItems{
 					itemDropChance: 255,
-					items: map[string]*string{
-						"steal common": h.GetStrPtr("/items/5"),
-						"steal rare":   h.GetStrPtr("/items/6"),
-						"drop common":  h.GetStrPtr("/items/82"),
-						"drop rare":    h.GetStrPtr("/items/82"),
+					items: map[string]*int32{
+						"steal common": h.GetInt32Ptr(5),
+						"steal rare":   h.GetInt32Ptr(6),
+						"drop common":  h.GetInt32Ptr(82),
+						"drop rare":    h.GetInt32Ptr(82),
 						"bribe":        nil,
 					},
 				},
@@ -357,50 +316,32 @@ func TestGetMonster(t *testing.T) {
 							},
 						},
 					},
-					weaponAbilities: []string{
-						"/auto-abilities/2",
-						"/auto-abilities/5",
-						"/auto-abilities/6",
-					},
-					armorAbilities: []string{
-						"/auto-abilities/55",
-						"/auto-abilities/58",
-						"/auto-abilities/61",
-						"/auto-abilities/64",
-					},
+					weaponAbilities: []int32{2, 5, 6},
+					armorAbilities: []int32{55, 58, 61, 64},
 				},
 				elemResists: []testElemResist{
 					{
-						element:  "/elements/1",
-						affinity: "/affinities/5",
+						element:  1,
+						affinity: 5,
 					},
 					{
-						element:  "/elements/2",
-						affinity: "/affinities/5",
+						element:  2,
+						affinity: 5,
 					},
 					{
-						element:  "/elements/3",
-						affinity: "/affinities/5",
+						element:  3,
+						affinity: 5,
 					},
 					{
-						element:  "/elements/4",
-						affinity: "/affinities/2",
+						element:  4,
+						affinity: 2,
 					},
 					{
-						element:  "/elements/5",
-						affinity: "/affinities/5",
+						element:  5,
+						affinity: 5,
 					},
 				},
-				statusImmunities: []string{
-					"/status-conditions/2",
-					"/status-conditions/6",
-					"/status-conditions/8",
-					"/status-conditions/13",
-					"/status-conditions/15",
-					"/status-conditions/33",
-					"/status-conditions/43",
-					"/status-conditions/46",
-				},
+				statusImmunities: []int32{2, 6, 8, 13, 15, 33, 43, 46},
 				statusResists: map[string]int32{
 					"poison": 90,
 				},
@@ -448,14 +389,7 @@ func TestGetMonster(t *testing.T) {
 					isTemporary: true,
 				},
 				bribeChances: nil,
-				statusImmunities: []string{
-					"/status-conditions/1",
-					"/status-conditions/2",
-					"/status-conditions/5",
-					"/status-conditions/10",
-					"/status-conditions/14",
-					"/status-conditions/33",
-				},
+				statusImmunities: []int32{1, 2, 5, 10, 14, 33},
 				statusResists: map[string]int32{
 					"darkness": 50,
 					"power break": 50,
@@ -490,13 +424,8 @@ func TestGetMonster(t *testing.T) {
 					condition: "While hidden in its shell.",
 					isTemporary: true,
 				},
-				properties: []string{
-					"/properties/6",
-					"/properties/8",
-				},
-				autoAbilities: []string{
-					"/auto-abilities/102",
-				},
+				properties: []int32{6, 8},
+				autoAbilities: []int32{102},
 			},
 		},
 		{
@@ -531,9 +460,7 @@ func TestGetMonster(t *testing.T) {
 					MinICV: h.GetInt32Ptr(12),
 					MaxICV: h.GetInt32Ptr(13),
 				},
-				properties: []string{
-					"/properties/8",
-				},
+				properties: []int32{8},
 				baseStats: map[string]int32{
 					"agility": 120,
 				},
@@ -561,24 +488,24 @@ func TestGetMonster(t *testing.T) {
 			expMonsters: expMonsters{
 				elemResists: []testElemResist{
 					{
-						element:  "/elements/1",
-						affinity: "/affinities/3",
+						element:  1,
+						affinity: 3,
 					},
 					{
-						element:  "/elements/2",
-						affinity: "/affinities/3",
+						element:  2,
+						affinity: 3,
 					},
 					{
-						element:  "/elements/3",
-						affinity: "/affinities/3",
+						element:  3,
+						affinity: 3,
 					},
 					{
-						element:  "/elements/4",
-						affinity: "/affinities/3",
+						element:  4,
+						affinity: 3,
 					},
 					{
-						element:  "/elements/5",
-						affinity: "/affinities/1",
+						element:  5,
+						affinity: 1,
 					},
 				},
 			},
@@ -605,24 +532,24 @@ func TestGetMonster(t *testing.T) {
 			expMonsters: expMonsters{
 				elemResists: []testElemResist{
 					{
-						element:  "/elements/1",
-						affinity: "/affinities/4",
+						element:  1,
+						affinity: 4,
 					},
 					{
-						element:  "/elements/2",
-						affinity: "/affinities/1",
+						element:  2,
+						affinity: 1,
 					},
 					{
-						element:  "/elements/3",
-						affinity: "/affinities/1",
+						element:  3,
+						affinity: 1,
 					},
 					{
-						element:  "/elements/4",
-						affinity: "/affinities/4",
+						element:  4,
+						affinity: 4,
 					},
 					{
-						element:  "/elements/5",
-						affinity: "/affinities/1",
+						element:  5,
+						affinity: 1,
 					},
 				},
 			},
@@ -649,24 +576,24 @@ func TestGetMonster(t *testing.T) {
 			expMonsters: expMonsters{
 				elemResists: []testElemResist{
 					{
-						element:  "/elements/1",
-						affinity: "/affinities/2",
+						element:  1,
+						affinity: 2,
 					},
 					{
-						element:  "/elements/2",
-						affinity: "/affinities/1",
+						element:  2,
+						affinity: 1,
 					},
 					{
-						element:  "/elements/3",
-						affinity: "/affinities/1",
+						element:  3,
+						affinity: 1,
 					},
 					{
-						element:  "/elements/4",
-						affinity: "/affinities/5",
+						element:  4,
+						affinity: 5,
 					},
 					{
-						element:  "/elements/5",
-						affinity: "/affinities/1",
+						element:  5,
+						affinity: 1,
 					},
 				},
 			},
@@ -697,12 +624,7 @@ func TestGetMonster(t *testing.T) {
 					MinICV: h.GetInt32Ptr(9),
 					MaxICV: h.GetInt32Ptr(10),
 				},
-				ronsoRages: []string{
-					"/ronso-rages/4",
-					"/ronso-rages/5",
-					"/ronso-rages/8",
-					"/ronso-rages/11",
-				},
+				ronsoRages: []int32{4, 5, 8, 11},
 				baseStats: map[string]int32{
 					"hp": 3549664,
 					"strength": 12,
@@ -737,12 +659,7 @@ func TestGetMonster(t *testing.T) {
 					MinICV: h.GetInt32Ptr(30),
 					MaxICV: h.GetInt32Ptr(33),
 				},
-				ronsoRages: []string{
-					"/ronso-rages/2",
-					"/ronso-rages/6",
-					"/ronso-rages/7",
-					"/ronso-rages/9",
-				},
+				ronsoRages: []int32{2, 6, 7, 9},
 				baseStats: map[string]int32{
 					"hp": 10902,
 					"strength": 13,
@@ -791,36 +708,44 @@ func TestGetMonster(t *testing.T) {
 			continue
 		}
 
+		test := test{
+			t: t,
+			cfg: testCfg,
+			name: testName,
+			expLengths: tc.expLengths,
+			dontCheck: tc.dontCheck,
+		}
+
 		var got Monster
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testExpectedNameVer(t, testName, tc.expNameVer, got.ID, got.Name, got.Version)
+		testExpectedNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
 
-		compAPIResources(t, testCfg, testName, "species", tc.species, got.Species, tc.dontCheck)
-		compAPIResources(t, testCfg, testName, "ctb icon type", tc.ctbIconType, got.CTBIconType, tc.dontCheck)
-		compare(t, testName, "distance", tc.distance, got.Distance, tc.dontCheck)
-		checkResAmtsInSlice(t, testName, "base stats", tc.baseStats, got.BaseStats, tc.expLengths)
-		checkResAmtsInSlice(t, testName, "status resists", tc.statusResists, got.StatusResists, tc.expLengths)
-		compStructPtrs(t, testName, "agility params", tc.agility, got.AgilityParameters, tc.dontCheck)
-		compStructSlices(t, testName, "bribe chances", tc.bribeChances, got.BribeChances, tc.expLengths)
-		testMonsterElemResists(t, testCfg, testName, tc.elemResists, got.ElemResists, tc.dontCheck)
-		testMonsterAltStates(t, testCfg, testName, tc.appliedState, got.AppliedState, got.AlteredStates)
+		compAPIResourcesFromID(test, "species", testCfg.e.monsterSpecies.endpoint, tc.species, got.Species)
+		compAPIResourcesFromID(test, "ctb icon type", testCfg.e.ctbIconType.endpoint, tc.ctbIconType, got.CTBIconType)
+		compare(test, "distance", tc.distance, got.Distance)
+		checkResAmtsInSlice(test, "base stats", tc.baseStats, got.BaseStats)
+		checkResAmtsInSlice(test, "status resists", tc.statusResists, got.StatusResists)
+		compStructPtrs(test, "agility params", tc.agility, got.AgilityParameters)
+		compStructSlices(test, "bribe chances", tc.bribeChances, got.BribeChances)
+		testMonsterElemResists(test, tc.elemResists, got.ElemResists)
+		testMonsterAltStates(test, tc.appliedState, got.AppliedState, got.AlteredStates)
 
 		checks := []resListTest{
-			newResListTest("properties", tc.properties, got.Properties),
-			newResListTest("auto-abilities", tc.autoAbilities, got.AutoAbilities),
-			newResListTest("ronso rages", tc.ronsoRages, got.RonsoRages),
-			newResListTest("locations", tc.locations, got.Locations),
-			newResListTest("formations", tc.formations, got.Formations),
-			newResListTest("status immunities", tc.statusImmunities, got.StatusImmunities),
+			newResListTestFromIDs("properties", testCfg.e.properties.endpoint, tc.properties, got.Properties),
+			newResListTestFromIDs("auto-abilities", testCfg.e.autoAbilities.endpoint, tc.autoAbilities, got.AutoAbilities),
+			newResListTestFromIDs("ronso rages", testCfg.e.ronsoRages.endpoint, tc.ronsoRages, got.RonsoRages),
+			newResListTestFromIDs("locations", testCfg.e.areas.endpoint, tc.locations, got.Locations),
+			newResListTestFromIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
+			newResListTestFromIDs("status immunities", testCfg.e.statusConditions.endpoint, tc.statusImmunities, got.StatusImmunities),
 			newResListTest("abilities", tc.abilities, got.Abilities),
 		}
 
-		testMonsterItems(t, testCfg, testName, tc.items, got.Items, &checks, tc.dontCheck)
-		testMonsterEquipment(t, testName, tc.equipment, got.Equipment, &checks, tc.dontCheck)
-		testResourceLists(t, testCfg, testName, checks, tc.expLengths)
+		testMonsterItems(test, tc.items, got.Items, &checks)
+		testMonsterEquipment(test, tc.equipment, got.Equipment, &checks)
+		testResourceLists(test, checks)
 	}
 }
 
@@ -897,12 +822,20 @@ func TestGetMultipleMonsters(t *testing.T) {
 			continue
 		}
 
+		test := test{
+			t: t,
+			cfg: testCfg,
+			name: testName,
+			expLengths: tc.expLengths,
+			dontCheck: tc.dontCheck,
+		}
+
 		var got NamedApiResourceList
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testAPIResourceList(t, testCfg, testName, tc.expList, got, tc.dontCheck)
+		testAPIResourceList(test, tc.expList, got)
 	}
 }
 
@@ -1222,12 +1155,20 @@ func TestRetrieveMonsters(t *testing.T) {
 			continue
 		}
 
+		test := test{
+			t: t,
+			cfg: testCfg,
+			name: testName,
+			expLengths: tc.expLengths,
+			dontCheck: tc.dontCheck,
+		}
+
 		var got NamedApiResourceList
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testAPIResourceList(t, testCfg, testName, tc.expList, got, tc.dontCheck)
+		testAPIResourceList(test, tc.expList, got)
 	}
 }
 

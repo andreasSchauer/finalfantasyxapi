@@ -52,23 +52,13 @@ func TestGetArea(t *testing.T) {
 				version: h.GetInt32Ptr(1),
 			},
 			expAreas: expAreas{
-				parentLocation:    "/locations/15",
-				parentSublocation: "/sublocations/25",
+				parentLocation:    15,
+				parentSublocation: 25,
 				expLocBased: expLocBased{
-					sidequest: h.GetStrPtr("/sidequests/6"),
-					connectedAreas: []string{
-						"/areas/144",
-						"/areas/149",
-					},
-					monsters: []string{
-						"/monsters/81",
-						"/monsters/84",
-						"/monsters/85",
-					},
-					formations: []string{
-						"/monster-formations/204",
-						"/monster-formations/208",
-					},
+					sidequest: h.GetInt32Ptr(6),
+					connectedAreas: []int32{144, 149},
+					monsters: []int32{81, 84, 85},
+					formations: []int32{204, 208},
 				},
 			},
 		},
@@ -92,25 +82,13 @@ func TestGetArea(t *testing.T) {
 				version: nil,
 			},
 			expAreas: expAreas{
-				parentLocation:    "/locations/4",
-				parentSublocation: "/sublocations/7",
+				parentLocation:    4,
+				parentSublocation: 7,
 				expLocBased: expLocBased{
-					connectedAreas: []string{
-						"/areas/26",
-						"/areas/37",
-						"/areas/41",
-					},
-					characters: []string{
-						"/characters/2",
-						"/characters/4",
-					},
-					treasures: []string{
-						"/treasures/33",
-						"/treasures/37",
-					},
-					bgMusic: []string{
-						"/songs/19",
-					},
+					connectedAreas: []int32{26, 37, 41},
+					characters: []int32{2, 4},
+					treasures: []int32{33, 37},
+					bgMusic: []int32{19},
 				},
 			},
 		},
@@ -134,19 +112,12 @@ func TestGetArea(t *testing.T) {
 				version: nil,
 			},
 			expAreas: expAreas{
-				parentLocation:    "/locations/8",
-				parentSublocation: "/sublocations/13",
+				parentLocation:    8,
+				parentSublocation: 13,
 				expLocBased: expLocBased{
-					shops: []string{
-						"/shops/5",
-					},
-					cuesMusic: []string{
-						"/songs/35",
-					},
-					bgMusic: []string{
-						"/songs/32",
-						"/songs/34",
-					},
+					shops: []int32{5},
+					cuesMusic: []int32{35},
+					bgMusic: []int32{32, 34},
 				},
 			},
 		},
@@ -161,10 +132,10 @@ func TestGetArea(t *testing.T) {
 				version: nil,
 			},
 			expAreas: expAreas{
-				parentLocation:    "/locations/14",
-				parentSublocation: "/sublocations/24",
+				parentLocation:    14,
+				parentSublocation: 24,
 				expLocBased: expLocBased{
-					sidequest: h.GetStrPtr("/sidequests/7"),
+					sidequest: h.GetInt32Ptr(7),
 				},
 			},
 		},
@@ -187,28 +158,15 @@ func TestGetArea(t *testing.T) {
 				version: nil,
 			},
 			expAreas: expAreas{
-				parentLocation:    "/locations/5",
-				parentSublocation: "/sublocations/8",
+				parentLocation:    5,
+				parentSublocation: 8,
 				expLocBased: expLocBased{
-					characters: []string{
-						"/characters/5",
-					},
-					monsters: []string{
-						"/monsters/19",
-					},
-					formations: []string{
-						"/monster-formations/37",
-					},
-					fmvsMusic: []string{
-						"/songs/16",
-					},
-					bossMusic: []string{
-						"/songs/16",
-					},
-					fmvs: []string{
-						"/fmvs/9",
-						"/fmvs/13",
-					},
+					characters: []int32{5},
+					monsters: []int32{19},
+					formations: []int32{37},
+					fmvsMusic: []int32{16},
+					bossMusic: []int32{16},
+					fmvs: []int32{9, 13},
 				},
 			},
 		},
@@ -220,39 +178,47 @@ func TestGetArea(t *testing.T) {
 			continue
 		}
 
+		test := test{
+			t: t,
+			cfg: testCfg,
+			name: testName,
+			expLengths: tc.expLengths,
+			dontCheck: tc.dontCheck,
+		}
+
 		var got Area
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testExpectedNameVer(t, testName, tc.expNameVer, got.ID, got.Name, got.Version)
-		compAPIResources(t, testCfg, testName, "location", tc.parentLocation, got.ParentLocation, tc.dontCheck)
-		compAPIResources(t, testCfg, testName, "sublocation", tc.parentSublocation, got.ParentSublocation, tc.dontCheck)
-		compResourcePtrs(t, testCfg, testName, "sidequest", tc.sidequest, got.Sidequest, tc.dontCheck)
+		testExpectedNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
+		compAPIResourcesFromID(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
+		compAPIResourcesFromID(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
+		compResPtrsFromID(test, testCfg.e.sidequests.endpoint, "sidequest", tc.sidequest, got.Sidequest)
 
 		checks := []resListTest{
-			newResListTest("connected areas", tc.connectedAreas, got.ConnectedAreas),
-			newResListTest("characters", tc.characters, got.Characters),
-			newResListTest("aeons", tc.aeons, got.Aeons),
-			newResListTest("shops", tc.shops, got.Shops),
-			newResListTest("treasures", tc.treasures, got.Treasures),
-			newResListTest("monsters", tc.monsters, got.Monsters),
-			newResListTest("formations", tc.formations, got.Formations),
-			newResListTest("fmvs", tc.fmvs, got.FMVs),
+			newResListTestFromIDs("connected areas", testCfg.e.areas.endpoint, tc.connectedAreas, got.ConnectedAreas),
+			newResListTestFromIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
+			newResListTestFromIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
+			newResListTestFromIDs("shops", testCfg.e.shops.endpoint, tc.shops, got.Shops),
+			newResListTestFromIDs("treasures", testCfg.e.treasures.endpoint, tc.treasures, got.Treasures),
+			newResListTestFromIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
+			newResListTestFromIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
+			newResListTestFromIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
 		}
 
 		if got.Music != nil {
 			musicChecks := []resListTest{
-				newResListTest("bg music", tc.bgMusic, got.Music.BackgroundMusic),
-				newResListTest("cues music", tc.cuesMusic, got.Music.Cues),
-				newResListTest("fmvs music", tc.fmvsMusic, got.Music.FMVs),
-				newResListTest("boss music", tc.bossMusic, got.Music.BossFights),
+				newResListTestFromIDs("bg music", testCfg.e.songs.endpoint, tc.bgMusic, got.Music.BackgroundMusic),
+				newResListTestFromIDs("cues music", testCfg.e.songs.endpoint, tc.cuesMusic, got.Music.Cues),
+				newResListTestFromIDs("fmvs music", testCfg.e.songs.endpoint, tc.fmvsMusic, got.Music.FMVs),
+				newResListTestFromIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossFights),
 			}
 
 			checks = slices.Concat(checks, musicChecks)
 		}
 
-		testResourceLists(t, testCfg, testName, checks, tc.expLengths)
+		testResourceLists(test, checks)
 	}
 }
 
@@ -416,11 +382,19 @@ func TestRetrieveAreas(t *testing.T) {
 			continue
 		}
 
+		test := test{
+			t: t,
+			cfg: testCfg,
+			name: testName,
+			expLengths: tc.expLengths,
+			dontCheck: tc.dontCheck,
+		}
+
 		var got LocationApiResourceList
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testAPIResourceList(t, testCfg, testName, tc.expList, got, tc.dontCheck)
+		testAPIResourceList(test, tc.expList, got)
 	}
 }

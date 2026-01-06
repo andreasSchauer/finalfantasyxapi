@@ -63,12 +63,10 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 
 	switch len(segments) {
 	case 0:
-		// api/monsters
 		handleEndpointList(w, r, i)
 		return
 
 	case 1:
-		// /api/monsters/{name or id}
 		handleEndpointNameOrID(cfg, w, r, i, segments)
 		return
 

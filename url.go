@@ -21,3 +21,7 @@ func (cfg *Config) createListURL(endpoint string) string {
 func (cfg *Config) completeTestURL(path string) string {
 	return fmt.Sprintf("http://%s/api%s", cfg.host, path)
 }
+
+func completeTestPath(endpoint string, id int32) string {
+	return fmt.Sprintf("/%s/%d", endpoint, id)
+}

@@ -8,10 +8,29 @@ import (
 	"testing"
 )
 
+type test struct {
+	t *testing.T
+	cfg *Config
+	name string
+	expLengths map[string]int
+	dontCheck map[string]bool
+}
+
 type resListTest struct {
 	name string
 	exp  []string
 	got  []HasAPIResource
+}
+
+func newResListTestFromIDs[T HasAPIResource](fieldName, endpoint string, expIDs []int32, got []T) resListTest {
+	exp := []string{}
+
+	for _, id := range expIDs {
+		path := completeTestPath(endpoint, id)
+		exp = append(exp, path)
+	}
+
+	return newResListTest(fieldName, exp, got)
 }
 
 func newResListTest[T HasAPIResource](fieldName string, exp []string, got []T) resListTest {
@@ -55,28 +74,28 @@ func setupTest(t *testing.T, tc testGeneral, testFunc string, testNum int, handl
 }
 
 // checks, if all basic fields of a resource with a unique name are equal
-func testExpectedUnique(t *testing.T, testName string, tc expUnique, gotID int32, gotName string) {
-	t.Helper()
-	compare(t, testName, "id", tc.id, gotID, nil)
-	compare(t, testName, "name", tc.name, gotName, nil)
+func testExpectedUnique(test test, tc expUnique, gotID int32, gotName string) {
+	test.t.Helper()
+	compare(test, "id", tc.id, gotID)
+	compare(test, "name", tc.name, gotName)
 }
 
 // checks, if all basic fields of a resource that uses a name/version pattern are equal
-func testExpectedNameVer(t *testing.T, testName string, tc expNameVer, gotID int32, gotName string, gotVer *int32) {
-	t.Helper()
-	compare(t, testName, "id", tc.id, gotID, nil)
-	compare(t, testName, "name", tc.name, gotName, nil)
-	compare(t, testName, "version", tc.version, gotVer, nil)
+func testExpectedNameVer(test test, tc expNameVer, gotID int32, gotName string, gotVer *int32) {
+	test.t.Helper()
+	compare(test, "id", tc.id, gotID)
+	compare(test, "name", tc.name, gotName)
+	compare(test, "version", tc.version, gotVer)
 }
 
 // checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resources
-func testAPIResourceList[T IsAPIResourceList](t *testing.T, testCfg *Config, testName string, expList expList, gotList T, dontCheck map[string]bool) {
-	t.Helper()
+func testAPIResourceList[T IsAPIResourceList](test test, expList expList, gotList T) {
+	test.t.Helper()
 	got := gotList.getListParams()
-	compare(t, testName, "count", expList.count, got.Count, nil)
+	compare(test, "count", expList.count, got.Count)
 
-	compPageURL(t, testCfg, testName, "previous", expList.previous, got.Previous, dontCheck)
-	compPageURL(t, testCfg, testName, "next", expList.next, got.Next, dontCheck)
+	compPageURL(test, "previous", expList.previous, got.Previous)
+	compPageURL(test, "next", expList.next, got.Next)
 
 	listTest := resListTest{
 		name: "results",
@@ -84,67 +103,67 @@ func testAPIResourceList[T IsAPIResourceList](t *testing.T, testCfg *Config, tes
 		got:  gotList.getResults(),
 	}
 
-	testResourceList(t, testCfg, testName, listTest, nil)
+	testResourceList(test, listTest)
 }
 
 // checks if all provided slices of resources contains all stated resources and also checks for their length, if stated
-func testResourceLists(t *testing.T, testCfg *Config, testName string, checks []resListTest, expLengths map[string]int) {
-	t.Helper()
+func testResourceLists(test test, checks []resListTest) {
+	test.t.Helper()
 
 	for _, c := range checks {
-		testResourceList(t, testCfg, testName, c, expLengths)
+		testResourceList(test, c)
 	}
 }
 
 // checks if the provided slice of resources contains all stated resources and also checks for its length, if stated
-func testResourceList(t *testing.T, testCfg *Config, testName string, expList resListTest, expLengths map[string]int) {
-	t.Helper()
+func testResourceList(test test, expList resListTest) {
+	test.t.Helper()
 
 	if len(expList.exp) == 0 {
 		return
 	}
-	checkResourcesInSlice(t, testCfg, testName, expList.name, expList.exp, expList.got)
+	checkResourcesInSlice(test, expList.name, expList.exp, expList.got)
 
-	expLen, ok := expLengths[expList.name]
+	expLen, ok := test.expLengths[expList.name]
 	if !ok {
 		return
 	}
 
-	compare(t, testName, expList.name+" length", expLen, len(expList.got), nil)
+	compare(test, expList.name+" length", expLen, len(expList.got))
 }
 
 // checks if the provided slice of resources contains all stated resources
-func checkResourcesInSlice[T HasAPIResource](t *testing.T, cfg *Config, testName, fieldName string, expectedPaths []string, gotRes []T) {
+func checkResourcesInSlice[T HasAPIResource](test test, fieldName string, expectedPaths []string, gotRes []T) {
 	gotMap := getResourceMap(gotRes)
 	if len(gotMap) != len(gotRes) {
-		t.Fatalf("%s: there appear to be duplicates in %s", testName, fieldName)
+		test.t.Fatalf("%s: there appear to be duplicates in %s", test.name, fieldName)
 	}
 
 	for _, expPath := range expectedPaths {
-		expURL := cfg.completeTestURL(expPath)
+		expURL := test.cfg.completeTestURL(expPath)
 		_, ok := gotMap[expURL]
 		if !ok {
-			t.Fatalf("%s: %s doesn't contain all wanted resources. missing %s", testName, fieldName, expURL)
+			test.t.Fatalf("%s: %s doesn't contain all wanted resources. missing %s", test.name, fieldName, expURL)
 		}
 	}
 }
 
 // will need to use name-version pattern in monsterAmount's GetName() method for getResourceAmountMap() to work
 // checks if stated ResourceAmount entries are in slices (used for baseStats, itemAmounts, monsterAmounts) and if their amount values match
-func checkResAmtsInSlice[T ResourceAmount](t *testing.T, testName, fieldName string, expAmounts map[string]int32, gotAmounts []T, expLengths map[string]int) {
-	expLen, ok := expLengths[fieldName]
+func checkResAmtsInSlice[T ResourceAmount](test test, fieldName string, expAmounts map[string]int32, gotAmounts []T) {
+	expLen, ok := test.expLengths[fieldName]
 	if !ok {
 		return
 	}
-	compare(t, testName, fieldName+" length", expLen, len(gotAmounts), nil)
+	compare(test, fieldName+" length", expLen, len(gotAmounts))
 
 	gotMap := getResourceAmountMap(gotAmounts)
 
 	for key, exp := range expAmounts {
 		got, ok := gotMap[key]
 		if !ok {
-			t.Fatalf("%s: %s doesn't contain resource %s", testName, fieldName, key)
+			test.t.Fatalf("%s: %s doesn't contain resource %s", test.name, fieldName, key)
 		}
-		compare(t, testName, key, exp, got, nil)
+		compare(test, key, exp, got)
 	}
 }

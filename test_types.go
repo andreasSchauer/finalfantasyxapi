@@ -45,31 +45,31 @@ type expList struct {
 }
 
 type expAreas struct {
-	parentLocation    string
-	parentSublocation string
+	parentLocation    int32
+	parentSublocation int32
 	expLocBased
 }
 
 type expLocBased struct {
-	sidequest      *string
-	connectedAreas []string
-	characters     []string
-	aeons          []string
-	shops          []string
-	treasures      []string
-	monsters       []string
-	formations     []string
-	bgMusic        []string
-	cuesMusic      []string
-	fmvsMusic      []string
-	bossMusic      []string
-	fmvs           []string
+	sidequest      *int32
+	connectedAreas []int32
+	characters     []int32
+	aeons          []int32
+	shops          []int32
+	treasures      []int32
+	monsters       []int32
+	formations     []int32
+	bgMusic        []int32
+	cuesMusic      []int32
+	fmvsMusic      []int32
+	bossMusic      []int32
+	fmvs           []int32
 }
 
 type expOverdriveModes struct {
 	description   string
 	effect        string
-	modeType      string
+	modeType      int32
 	fillRate      *float32
 	actionsAmount map[string]int32
 }
@@ -77,20 +77,20 @@ type expOverdriveModes struct {
 type expMonsters struct {
 	appliedState		*testAppliedState
 	agility				*AgilityParams
-	species				string
-	ctbIconType			string
+	species				int32
+	ctbIconType			int32
 	distance			int32
-	properties			[]string
-	autoAbilities		[]string
-	ronsoRages			[]string
-	locations			[]string
-	formations			[]string
+	properties			[]int32
+	autoAbilities		[]int32
+	ronsoRages			[]int32
+	locations			[]int32
+	formations			[]int32
 	baseStats			map[string]int32
 	items 				*testItems
 	bribeChances		[]BribeChance
 	equipment 			*testEquipment
 	elemResists			[]testElemResist
-	statusImmunities	[]string
+	statusImmunities	[]int32
 	statusResists		map[string]int32
 	alteredStates		[]string
 	abilities			[]string
@@ -99,24 +99,24 @@ type expMonsters struct {
 type testAppliedState struct {
 	condition		string
 	isTemporary		bool
-	appliedStatus	*string
+	appliedStatus	*int32
 }
 
 type testElemResist struct {
-	element 	string
-	affinity 	string
+	element 	int32
+	affinity 	int32
 }
 
 type testItems struct {
 	itemDropChance	int32
-	items			map[string]*string
-	otherItems		[]string
+	items			map[string]*int32
+	otherItems		[]int32
 }
 
 type testEquipment struct {
 	abilitySlots 		MonsterEquipmentSlots
 	attachedAbilities	MonsterEquipmentSlots
-	weaponAbilities		[]string
-	armorAbilities		[]string
+	weaponAbilities		[]int32
+	armorAbilities		[]int32
 }
 
