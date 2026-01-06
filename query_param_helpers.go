@@ -62,8 +62,9 @@ func verifyQueryParams(r *http.Request, endpoint string, id *int32, lookup map[s
 
 
 func (cfg *Config) getQueryParamList (r *http.Request, lookup map[string]QueryType, endpoint string) (QueryParameterList, error) {
+	section := r.URL.Query().Get("section")
 	queryParams := queryMapToSlice(lookup)
-	queryParams, err := filterParamsOnSection(r, queryParams, endpoint)
+	queryParams, err := filterParamsOnSection(queryParams, section, endpoint)
 	if err != nil {
 		return QueryParameterList{}, err
 	}
@@ -73,6 +74,14 @@ func (cfg *Config) getQueryParamList (r *http.Request, lookup map[string]QueryTy
 		return QueryParameterList{}, err
 	}
 
+	listPath := endpoint
+	if section != "" {
+		listPath = listPath + "/" + section
+	}
+
+	endpointURL := cfg.createListURL(listPath)
+	listParams.ParentEndpoint = &endpointURL
+
 	list := QueryParameterList{
 		ListParams: listParams,
 		Results: shownResources,
@@ -81,9 +90,7 @@ func (cfg *Config) getQueryParamList (r *http.Request, lookup map[string]QueryTy
 	return list, nil
 }
 
-func filterParamsOnSection(r *http.Request, params []QueryType, endpoint string) ([]QueryType, error) {
-	section := r.URL.Query().Get("section")
-
+func filterParamsOnSection(params []QueryType, section, endpoint string) ([]QueryType, error) {
 	if section == "" {
 		return params, nil
 	}

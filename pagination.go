@@ -8,9 +8,12 @@ import (
 )
 
 type ListParams struct {
-	Count    int     `json:"count"`
-	Next     *string `json:"next"`
-	Previous *string `json:"previous"`
+	Count               int             `json:"count"`
+	Next                *string         `json:"next"`
+	Previous            *string         `json:"previous"`
+	ParentResource      IsAPIResource   `json:"parent_resource,omitempty"`
+	ReferencedResources []IsAPIResource `json:"referenced_resources,omitempty"`
+	ParentEndpoint      *string         `json:"parent_endpoint,omitempty"`
 }
 
 func createPaginatedList[T any](cfg *Config, r *http.Request, resources []T) (ListParams, []T, error) {
@@ -19,12 +22,12 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, resources []T) (Li
 	queryOffset := r.URL.Query().Get("offset")
 	queryLimit := r.URL.Query().Get("limit")
 
-	offset, err := queryStrToInt(queryOffset, defaultOffset)
+	offset, err := queryStrToIntVal(queryOffset, defaultOffset)
 	if err != nil {
 		return ListParams{}, nil, newHTTPError(http.StatusBadRequest, "invalid offset provided", err)
 	}
 
-	limit, err := queryStrToInt(queryLimit, defaultLimit)
+	limit, err := queryStrToIntVal(queryLimit, defaultLimit)
 	if err != nil {
 		return ListParams{}, nil, newHTTPError(http.StatusBadRequest, "invalid limit provided", err)
 	}
@@ -90,5 +93,3 @@ func (cfg *Config) createPreviousURL(r *http.Request, offset, limit int) *string
 	previousURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
 	return &previousURL
 }
-
-

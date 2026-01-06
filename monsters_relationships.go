@@ -258,12 +258,16 @@ func (cfg *Config) getMonsterAbilities(r *http.Request, mon database.Monster) ([
 	monAbilities := []MonsterAbility{}
 
 	for _, dbAbility := range dbMonAbilities {
-		id, endpoint, err := cfg.getAbilityID(dbAbility)
+		ref := seeding.AbilityReference{
+			Name:        dbAbility.Ability,
+			Version:     h.NullInt32ToPtr(dbAbility.Version),
+			AbilityType: string(dbAbility.AbilityType),
+		}
+
+		abilityResource, err := cfg.getAbilityResource(ref, h.NullStringToPtr(dbAbility.Specification))
 		if err != nil {
 			return nil, err
 		}
-
-		abilityResource := cfg.newNamedAPIResource(endpoint, id, dbAbility.Ability, h.NullInt32ToPtr(dbAbility.Version), h.NullStringToPtr(dbAbility.Specification))
 
 		monAbility := MonsterAbility{
 			Ability:  abilityResource,
@@ -277,53 +281,57 @@ func (cfg *Config) getMonsterAbilities(r *http.Request, mon database.Monster) ([
 	return monAbilities, nil
 }
 
-func (cfg *Config) getAbilityID(ability database.GetMonsterAbilitiesRow) (int32, string, error) {
-	ref := seeding.AbilityReference{
-		Name:        ability.Ability,
-		Version:     h.NullInt32ToPtr(ability.Version),
-		AbilityType: string(ability.AbilityType),
+
+// can be used for various other functions related to abilities
+func (cfg *Config) getAbilityResource(ref seeding.AbilityReference, specification *string) (NamedAPIResource, error) {
+	i, err := cfg.getAbilityInput(database.AbilityType(ref.AbilityType))
+	if err != nil {
+		return NamedAPIResource{}, err
 	}
 
-	switch ability.AbilityType {
+	abilityLookup, err := seeding.GetResource(ref, i.ObjLookup())
+	if err != nil {
+		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
+	}
+
+	abilityResource := cfg.newNamedAPIResource(i.Endpoint(), abilityLookup.GetID(), ref.Name, ref.Version, specification)
+
+	return abilityResource, nil
+}
+
+
+// can be used for various other functions related to abilities
+func (cfg *Config) getAbilityInput(abilityType database.AbilityType) (handlerView, error) {
+	var i handlerView
+	var err error
+
+	switch abilityType {
 	case database.AbilityTypePlayerAbility:
-		abilityLookup, err := seeding.GetResource(ref, cfg.l.PlayerAbilities)
-		if err != nil {
-			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
-		}
-		return abilityLookup.ID, cfg.e.playerAbilities.endpoint, nil
+		i = cfg.e.playerAbilities
 
 	case database.AbilityTypeEnemyAbility:
-		abilityLookup, err := seeding.GetResource(ref, cfg.l.EnemyAbilities)
-		if err != nil {
-			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
-		}
-		return abilityLookup.ID, cfg.e.enemyAbilities.endpoint, nil
+		i = cfg.e.enemyAbilities
 
 	case database.AbilityTypeOverdriveAbility:
-		abilityLookup, err := seeding.GetResource(ref, cfg.l.OverdriveAbilities)
-		if err != nil {
-			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
-		}
-		return abilityLookup.ID, cfg.e.overdriveAbilities.endpoint, nil
+		i = cfg.e.overdriveAbilities
 
 	case database.AbilityTypeItemAbility:
-		abilityLookup, err := seeding.GetResource(ability.Ability, cfg.l.Items)
-		if err != nil {
-			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
-		}
-		return abilityLookup.ID, cfg.e.itemAbilities.endpoint, nil
+		i = cfg.e.itemAbilities
 
 	case database.AbilityTypeTriggerCommand:
-		abilityLookup, err := seeding.GetResource(ref, cfg.l.TriggerCommands)
-		if err != nil {
-			return 0, "", newHTTPError(http.StatusInternalServerError, err.Error(), err)
-		}
-		return abilityLookup.ID, cfg.e.triggerCommands.endpoint, nil
+		i = cfg.e.triggerCommands
 
 	default:
-		return 0, "", newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find id for monster ability %s, version %d, type %s", ref.Name, h.DerefOrNil(ref.Version), ref.AbilityType), nil)
+		err = newHTTPError(http.StatusInternalServerError, fmt.Sprintf("ability of type %s does not exist", abilityType), nil)
 	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return i, nil
 }
+
 
 func (cfg *Config) getMonsterStat(mon Monster, stat string) (int32, error) {
 	statLookup, err := seeding.GetResource(stat, cfg.l.Stats)

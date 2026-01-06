@@ -10,9 +10,9 @@ import (
 )
 
 type Overdrive struct {
-	ID          int32
-	ODCommandID *int32
-	CharClassID *int32
+	ID          	   int32
+	ODCommandID 	   *int32
+	CharClassID 	   *int32
 	Ability
 	Description        string             `json:"description"`
 	Effect             string             `json:"effect"`

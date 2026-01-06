@@ -1,23 +1,8 @@
 package main
 
 import (
-	"net/http"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
-
-
-type handlerInput[T h.HasID, R any, L IsAPIResourceList] struct {
-	endpoint          string
-	resourceType      string
-	objLookup         map[string]T
-	queryLookup       map[string]QueryType
-	getSingleFunc     func(*http.Request, int32) (R, error)
-	getMultipleFunc   func(*http.Request, string) (L, error)
-	retrieveFunc      func(*http.Request) (L, error)
-	subsections       map[string]func(string) (IsAPIResourceList, error)
-}
 
 
 type endpoints struct{

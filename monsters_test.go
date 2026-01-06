@@ -878,7 +878,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?status-resists=darkness&resistance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid resistance: frank. resistance must be an integer ranging from 1 to 254.",
+				expectedErr:    "invalid resistance: frank. resistance must be an integer ranging from 1 to 254, with 1 being the default value, if no resistance was provided.",
 			},
 		},
 		{

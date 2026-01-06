@@ -103,7 +103,7 @@ func parseSingleSegmentResource[T h.HasID](resourceType, segment, queryParam str
 }
 
 
-
+// deals with a name/version path and returns a parseResponse with the id, if a match is found. If queryParam == "", if nothing is found, errors will be 404s. If queryParam != "", errors will be 400s.
 func parseNameVersionResource[T h.HasID](resourceType, name, versionStr, queryParam string, lookup map[string]T) (parseResponse, error) {
 	var versionPtr *int32
 
@@ -149,10 +149,4 @@ func parseNameVersionResource[T h.HasID](resourceType, name, versionStr, queryPa
 		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s, version %s", resourceType, name, versionStr), err)
 	}
 	return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s', version %s in %s.", resourceType, name, versionStr, queryParam), err)
-}
-
-
-func isValidInt(idStr string) bool {
-	_, err := strconv.Atoi(idStr)
-	return err == nil
 }

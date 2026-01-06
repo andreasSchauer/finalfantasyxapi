@@ -160,3 +160,10 @@ func handleSubsection[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWrit
 	}
 	respondWithJSON(w, http.StatusOK, list)
 }
+
+
+
+func isValidInt(idStr string) bool {
+	_, err := strconv.Atoi(idStr)
+	return err == nil
+}

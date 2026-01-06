@@ -26,6 +26,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initOverdriveModeType()
 }
 
+// finds a typed enum based on its value or an id (string, mostly from queries)
 func GetEnumType(key string, lookup map[string]TypedAPIResource) (TypedAPIResource, error) {
 	id, err := strconv.Atoi(key)
 	if err == nil {

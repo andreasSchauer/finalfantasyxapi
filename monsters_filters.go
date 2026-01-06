@@ -64,40 +64,23 @@ func (cfg *Config) getMonstersElemResist(r *http.Request, inputMons []NamedAPIRe
 }
 
 func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
-	queryParam1 := cfg.q.monsters["status-resists"]
-	queryParam2 := cfg.q.monsters["resistance"]
-	queryStatusses := r.URL.Query().Get(queryParam1.Name)
-	queryResistance := r.URL.Query().Get(queryParam2.Name)
-	defaultResistance := queryParam2.AllowedIntRange[0]
-	maxResistance := queryParam2.AllowedIntRange[1]
-	var resistance int
+	queryParamStatusResists := cfg.q.monsters["status-resists"]
+	queryStatusses := r.URL.Query().Get(queryParamStatusResists.Name)
 
 	if queryStatusses == "" {
 		return inputMons, nil
 	}
 
-	switch queryResistance {
-	case "":
-		resistance = defaultResistance
-	case "immune":
-		resistance = maxResistance
-	default:
-		var err error
-		resistance, err = strconv.Atoi(queryResistance)
-		if err != nil {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resistance: %s. resistance must be an integer ranging from %d to %d.", queryResistance, defaultResistance, maxResistance), err)
-		}
-	}
-
-	if resistance > maxResistance || resistance <= 0 {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resistance: %s. resistance must be an integer ranging from %d to %d, with %d being the default value, if no resistance was provided.", queryResistance, defaultResistance, maxResistance, defaultResistance), nil)
+	resistance, err := cfg.verifyMonsterResistance(r)
+	if err != nil {
+		return nil, err
 	}
 
 	statusses := strings.Split(queryStatusses, ",")
 	var ids []int32
 
 	for _, qStatus := range statusses {
-		status, err := parseSingleSegmentResource("status-condition", qStatus, queryParam1.Name, cfg.l.StatusConditions)
+		status, err := parseSingleSegmentResource("status-condition", qStatus, queryParamStatusResists.Name, cfg.l.StatusConditions)
 		if err != nil {
 			return nil, err
 		}
@@ -118,6 +101,28 @@ func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPI
 	})
 
 	return resources, nil
+}
+
+func (cfg *Config) verifyMonsterResistance(r *http.Request) (int, error) {
+	queryParam := cfg.q.monsters["resistance"]
+	query := r.URL.Query().Get(queryParam.Name)
+	minResistance := queryParam.AllowedIntRange[0]
+	maxResistance := queryParam.AllowedIntRange[1]
+	var resistance int
+
+	switch query {
+	case "":
+		resistance = minResistance
+	case "immune":
+		resistance = maxResistance
+	default:
+		resistance, err := strconv.Atoi(query)
+		if err != nil || resistance > maxResistance || resistance < minResistance {
+			return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resistance: %s. resistance must be an integer ranging from %d to %d, with %d being the default value, if no resistance was provided.", query, minResistance, maxResistance, minResistance), nil)
+		}
+	}
+
+	return resistance, nil
 }
 
 func (cfg *Config) getMonstersItem(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
@@ -206,6 +211,7 @@ func (cfg *Config) getMonstersAutoAbility(r *http.Request, inputMons []NamedAPIR
 	return resources, nil
 }
 
+// this might be more straight forward if I had a ronso rage lookup
 func (cfg *Config) getMonstersRonsoRage(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["ronso-rage"]
 	const ronsoRageOffset int32 = 35
@@ -292,7 +298,7 @@ func (cfg *Config) getMonstersSubLocation(r *http.Request, inputMons []NamedAPIR
 
 func (cfg *Config) getMonstersArea(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["area"]
-	areaID, isEmpty, err := parseIDBasedQuery(r, queryParam, len(cfg.l.Areas))
+	areaID, isEmpty, err := parseIDOnlyQuery(r, queryParam, len(cfg.l.Areas))
 	if err != nil {
 		return nil, err
 	}
@@ -312,6 +318,7 @@ func (cfg *Config) getMonstersArea(r *http.Request, inputMons []NamedAPIResource
 	return resources, nil
 }
 
+// maybe a parser for ranged int values?
 func (cfg *Config) getMonstersDistance(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["distance"]
 	query := r.URL.Query().Get(queryParam.Name)
@@ -322,6 +329,7 @@ func (cfg *Config) getMonstersDistance(r *http.Request, inputMons []NamedAPIReso
 		return inputMons, nil
 	}
 
+	// here
 	distance, err := strconv.Atoi(query)
 	if err != nil || distance > maxDistance || distance < minDistance {
 		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value: %s. distance must be an integer ranging from %d to %d.", query, minDistance, maxDistance), err)
@@ -471,6 +479,7 @@ func (cfg *Config) getMonstersZombie(r *http.Request, inputMons []NamedAPIResour
 	return resources, nil
 }
 
+// convert TypedAPIResource to NamedAPIResource (maybe even in parseTypeQuery?)
 func (cfg *Config) getMonstersSpecies(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["species"]
 	enum, isEmpty, err := parseTypeQuery(r, queryParam, cfg.t.MonsterSpecies)
@@ -495,6 +504,7 @@ func (cfg *Config) getMonstersSpecies(r *http.Request, inputMons []NamedAPIResou
 	return resources, nil
 }
 
+// should I make an endpoint for this, since I'm referencing it? I don't need descriptions, or just use a copy/paste one
 func (cfg *Config) getMonstersCreationArea(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["creation-area"]
 	enum, isEmpty, err := parseTypeQuery(r, queryParam, cfg.t.MaCreationArea)
