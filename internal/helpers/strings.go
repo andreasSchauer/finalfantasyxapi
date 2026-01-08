@@ -27,3 +27,10 @@ func GetMapKeyStr[T any](itemMap map[string]T) string {
 
 	return strings.Join(keys, ", ")
 }
+
+
+
+func GetNameWithSpaces(name string) string {
+	nameWithSpaces := strings.ReplaceAll(name, "-", " ")
+	return strings.ReplaceAll(nameWithSpaces, " >", "->")
+}

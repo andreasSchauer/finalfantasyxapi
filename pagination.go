@@ -22,12 +22,12 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, resources []T) (Li
 	queryOffset := r.URL.Query().Get("offset")
 	queryLimit := r.URL.Query().Get("limit")
 
-	offset, err := queryStrToIntVal(queryOffset, defaultOffset)
+	offset, err := AtoiOrDefault(queryOffset, defaultOffset)
 	if err != nil {
 		return ListParams{}, nil, newHTTPError(http.StatusBadRequest, "invalid offset provided", err)
 	}
 
-	limit, err := queryStrToIntVal(queryLimit, defaultLimit)
+	limit, err := AtoiOrDefault(queryLimit, defaultLimit)
 	if err != nil {
 		return ListParams{}, nil, newHTTPError(http.StatusBadRequest, "invalid limit provided", err)
 	}

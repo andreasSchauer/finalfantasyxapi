@@ -54,7 +54,7 @@ func handleEndpointNameOrID[T h.HasID, R any, L IsAPIResourceList](cfg *Config, 
 		return
 	}
 
-	parseRes, err := parseSingleSegmentResource(i.resourceType, segment, "", i.objLookup)
+	parseRes, err := parseSingleSegmentResource(i.resourceType, segment, i.objLookup)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -81,7 +81,7 @@ func handleEndpointNameVersion[T h.HasID, R any, L IsAPIResourceList](w http.Res
 	name := segments[0]
 	versionStr := segments[1]
 
-	parseRes, err := parseNameVersionResource(i.resourceType, name, versionStr, "", i.objLookup)
+	parseRes, err := parseNameVersionResource(i.resourceType, name, versionStr, i.objLookup)
 	if handleHTTPError(w, err) {
 		return
 	}

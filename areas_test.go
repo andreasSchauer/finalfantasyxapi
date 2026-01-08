@@ -231,28 +231,28 @@ func TestRetrieveAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?comp-sphere=fa",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value. usage: ?comp-sphere={boolean}",
+				expectedErr:    "invalid boolean value. usage: ?comp-sphere={boolean}",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?item=113",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided item ID 113 is out of range in item. Max ID: 112",
+				expectedErr:    "provided ID 113 in 'item' is out of range. Max ID: 112",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?key-item=61",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided key-item ID 61 is out of range in key-item. Max ID: 60",
+				expectedErr:    "provided ID 61 in 'key-item' is out of range. Max ID: 60",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?location=0",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided location ID 0 is out of range in location. Max ID: 26",
+				expectedErr:    "provided ID 0 in 'location' is out of range. Max ID: 26",
 			},
 		},
 		{
@@ -315,7 +315,7 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?item=elixir&story-based=false&monsters=false",
+				requestURL:     "/api/areas?item=7&story-based=false&monsters=false",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{

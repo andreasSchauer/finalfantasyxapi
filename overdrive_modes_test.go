@@ -188,7 +188,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes?type=per-action",
+				requestURL:     "/api/overdrive-modes?type=2",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"previous": true,

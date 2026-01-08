@@ -864,7 +864,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental-affinities=weak-fire",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "unknown element 'weak' in elemental-affinities.",
+				expectedErr:    "unknown element 'weak' in 'elemental-affinities'.",
 			},
 		},
 		{
@@ -906,7 +906,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?item=asf&method=drop",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "unknown item 'asf' in item.",
+				expectedErr:    "invalid id 'asf' used for parameter 'item'",
 			},
 		},
 		{
@@ -920,7 +920,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?ronso-rage=13",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided ronso rage ID 13 in ronso-rage is out of range. Max ID: 12",
+				expectedErr:    "provided ID 13 in 'ronso-rage' is out of range. Max ID: 12",
 			},
 		},
 		{
@@ -967,11 +967,11 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?limit=307&status-resists=darkness,poison,berserk&resistance=50",
+				requestURL:     "/api/monsters?limit=307&status-resists=1,4,11&resistance=50",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    150,
+				count:    159,
 				results: []string{
 					"/monsters/3",
 					"/monsters/128",
@@ -983,7 +983,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?limit=307&item=elixir",
+				requestURL:     "/api/monsters?limit=307&item=7",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
@@ -1000,7 +1000,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?item=elixir&method=drop",
+				requestURL:     "/api/monsters?item=7&method=drop",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
@@ -1013,7 +1013,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?auto-abilities=sos-haste,auto-haste",
+				requestURL:     "/api/monsters?auto-abilities=96,101",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
@@ -1029,7 +1029,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?ronso-rage=nova",
+				requestURL:     "/api/monsters?ronso-rage=12",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
@@ -1042,7 +1042,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?location=macalania",
+				requestURL:     "/api/monsters?location=15",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
@@ -1056,7 +1056,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?sublocation=macalania-woods",
+				requestURL:     "/api/monsters?sublocation=25",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
