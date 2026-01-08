@@ -263,11 +263,7 @@ func TestRetrieveAreas(t *testing.T) {
 			expList: expList{
 				count: 240,
 				next:  h.GetStrPtr("/areas?limit=20&offset=20"),
-				results: []string{
-					"/areas/1",
-					"/areas/5",
-					"/areas/20",
-				},
+				results: []int32{1, 5, 20},
 			},
 		},
 		{
@@ -277,11 +273,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 			expList: expList{
 				count: 240,
-				results: []string{
-					"/areas/1",
-					"/areas/50",
-					"/areas/240",
-				},
+				results: []int32{1, 50, 240},
 			},
 		},
 		{
@@ -291,12 +283,9 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 			expList: expList{
 				count:    240,
-				next:     h.GetStrPtr("/areas?limit=30&offset=80"),
 				previous: h.GetStrPtr("/areas?limit=30&offset=20"),
-				results: []string{
-					"/areas/51",
-					"/areas/80",
-				},
+				next:     h.GetStrPtr("/areas?limit=30&offset=80"),
+				results: []int32{51, 80},
 			},
 		},
 		{
@@ -306,11 +295,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 			expList: expList{
 				count: 3,
-				results: []string{
-					"/areas/88",
-					"/areas/97",
-					"/areas/203",
-				},
+				results: []int32{88, 97, 203},
 			},
 		},
 		{
@@ -320,13 +305,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 			expList: expList{
 				count: 5,
-				results: []string{
-					"/areas/35",
-					"/areas/129",
-					"/areas/140",
-					"/areas/163",
-					"/areas/208",
-				},
+				results: []int32{35, 129, 140, 163, 208},
 			},
 		},
 		{
@@ -336,11 +315,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 			expList: expList{
 				count: 7,
-				results: []string{
-					"/areas/1",
-					"/areas/20",
-					"/areas/103",
-				},
+				results: []int32{1, 20, 103},
 			},
 		},
 		{
@@ -350,15 +325,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 			expList: expList{
 				count: 11,
-				results: []string{
-					"/areas/75",
-					"/areas/140",
-					"/areas/144",
-					"/areas/145",
-					"/areas/182",
-					"/areas/185",
-					"/areas/203",
-				},
+				results: []int32{75, 140, 144, 145, 182, 185, 203},
 			},
 		},
 		{
@@ -368,10 +335,7 @@ func TestRetrieveAreas(t *testing.T) {
 			},
 			expList: expList{
 				count: 2,
-				results: []string{
-					"/areas/46",
-					"/areas/169",
-				},
+				results: []int32{46, 169},
 			},
 		},
 	}
@@ -395,6 +359,6 @@ func TestRetrieveAreas(t *testing.T) {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testAPIResourceList(test, tc.expList, got)
+		testAPIResourceList(test, testCfg.e.areas.endpoint, tc.expList, got)
 	}
 }

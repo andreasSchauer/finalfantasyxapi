@@ -9,11 +9,9 @@ import (
 
 type ListParams struct {
 	Count               int             `json:"count"`
-	Next                *string         `json:"next"`
 	Previous            *string         `json:"previous"`
+	Next                *string         `json:"next"`
 	ParentResource      IsAPIResource   `json:"parent_resource,omitempty"`
-	ReferencedResources []IsAPIResource `json:"referenced_resources,omitempty"`
-	ParentEndpoint      *string         `json:"parent_endpoint,omitempty"`
 }
 
 func createPaginatedList[T any](cfg *Config, r *http.Request, resources []T) (ListParams, []T, error) {
@@ -40,8 +38,8 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, resources []T) (Li
 
 	listParams := ListParams{
 		Count:    size,
-		Next:     cfg.createNextURL(r, offset, limit, len(resources)),
 		Previous: cfg.createPreviousURL(r, offset, limit),
+		Next:     cfg.createNextURL(r, offset, limit, len(resources)),
 	}
 
 	if size == 0 {
@@ -56,22 +54,6 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, resources []T) (Li
 	shownResources := resources[offset:upperLimit]
 
 	return listParams, shownResources, nil
-}
-
-func (cfg *Config) createNextURL(r *http.Request, offset, limit, size int) *string {
-	nextOffset := offset + limit
-
-	if nextOffset >= size {
-		return nil
-	}
-
-	path := strings.TrimSuffix(r.URL.Path, "/")
-	q := r.URL.Query()
-	q.Set("limit", strconv.Itoa(limit))
-	q.Set("offset", strconv.Itoa(nextOffset))
-
-	nextURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
-	return &nextURL
 }
 
 func (cfg *Config) createPreviousURL(r *http.Request, offset, limit int) *string {
@@ -92,4 +74,20 @@ func (cfg *Config) createPreviousURL(r *http.Request, offset, limit int) *string
 
 	previousURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
 	return &previousURL
+}
+
+func (cfg *Config) createNextURL(r *http.Request, offset, limit, size int) *string {
+	nextOffset := offset + limit
+
+	if nextOffset >= size {
+		return nil
+	}
+
+	path := strings.TrimSuffix(r.URL.Path, "/")
+	q := r.URL.Query()
+	q.Set("limit", strconv.Itoa(limit))
+	q.Set("offset", strconv.Itoa(nextOffset))
+
+	nextURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
+	return &nextURL
 }

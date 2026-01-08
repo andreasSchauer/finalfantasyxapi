@@ -39,9 +39,9 @@ type expUnique struct {
 
 type expList struct {
 	count    int
-	next     *string
 	previous *string
-	results  []string
+	next     *string
+	results  []int32
 }
 
 type expAreas struct {

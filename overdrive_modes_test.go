@@ -160,11 +160,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 				count:    17,
 				previous: nil,
 				next:     nil,
-				results: []string{
-					"/overdrive-modes/1",
-					"/overdrive-modes/8",
-					"/overdrive-modes/17",
-				},
+				results: []int32{1, 8, 17},
 			},
 		},
 		{
@@ -178,12 +174,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			},
 			expList: expList{
 				count: 4,
-				results: []string{
-					"/overdrive-modes/1",
-					"/overdrive-modes/2",
-					"/overdrive-modes/3",
-					"/overdrive-modes/4",
-				},
+				results: []int32{1, 2, 3, 4},
 			},
 		},
 		{
@@ -197,11 +188,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			},
 			expList: expList{
 				count: 13,
-				results: []string{
-					"/overdrive-modes/5",
-					"/overdrive-modes/12",
-					"/overdrive-modes/17",
-				},
+				results: []int32{5, 12, 17},
 			},
 		},
 	}
@@ -225,6 +212,6 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testAPIResourceList(test, tc.expList, got)
+		testAPIResourceList(test, testCfg.e.overdriveModes.endpoint, tc.expList, got)
 	}
 }

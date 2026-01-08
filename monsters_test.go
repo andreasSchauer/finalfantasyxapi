@@ -763,11 +763,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    3,
-				results: []string{
-					"/monsters/94",
-					"/monsters/96",
-					"/monsters/113",
-				},
+				results: []int32{94, 96, 113},
 			},
 		},
 		{
@@ -777,11 +773,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    3,
-				results: []string{
-					"/monsters/165",
-					"/monsters/222",
-					"/monsters/234",
-				},
+				results: []int32{165, 222, 234},
 			},
 		},
 		{
@@ -791,12 +783,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    4,
-				results: []string{
-					"/monsters/249",
-					"/monsters/250",
-					"/monsters/251",
-					"/monsters/252",
-				},
+				results: []int32{249, 250, 251, 252},
 			},
 		},
 		{
@@ -806,12 +793,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    4,
-				results: []string{
-					"/monsters/68",
-					"/monsters/69",
-					"/monsters/108",
-					"/monsters/253",
-				},
+				results: []int32{68, 69, 108, 253},
 			},
 		},
 	}
@@ -835,7 +817,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testAPIResourceList(test, tc.expList, got)
+		testAPIResourceList(test, testCfg.e.monsters.endpoint, tc.expList, got)
 	}
 }
 
@@ -939,12 +921,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				count:    307,
 				previous: nil,
 				next:     nil,
-				results: []string{
-					"/monsters/1",
-					"/monsters/175",
-					"/monsters/238",
-					"/monsters/307",
-				},
+				results: []int32{1, 175, 238, 307},
 			},
 		},
 		{
@@ -957,12 +934,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    22,
-				results: []string{
-					"/monsters/11",
-					"/monsters/23",
-					"/monsters/64",
-					"/monsters/148",
-				},
+				results: []int32{11, 23, 64, 148},
 			},
 		},
 		{
@@ -972,13 +944,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    159,
-				results: []string{
-					"/monsters/3",
-					"/monsters/128",
-					"/monsters/188",
-					"/monsters/227",
-					"/monsters/249",
-				},
+				results: []int32{3, 128, 188, 227, 249},
 			},
 		},
 		{
@@ -988,14 +954,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    22,
-				results: []string{
-					"/monsters/32",
-					"/monsters/91",
-					"/monsters/156",
-					"/monsters/192",
-					"/monsters/295",
-					"/monsters/305",
-				},
+				results: []int32{32, 91, 156, 192, 295, 305},
 			},
 		},
 		{
@@ -1005,10 +964,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    2,
-				results: []string{
-					"/monsters/32",
-					"/monsters/91",
-				},
+				results: []int32{32, 91},
 			},
 		},
 		{
@@ -1018,13 +974,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    5,
-				results: []string{
-					"/monsters/97",
-					"/monsters/146",
-					"/monsters/172",
-					"/monsters/211",
-					"/monsters/304",
-				},
+				results: []int32{97, 146, 172, 211, 304},
 			},
 		},
 		{
@@ -1034,10 +984,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    2,
-				results: []string{
-					"/monsters/255",
-					"/monsters/292",
-				},
+				results: []int32{255, 292},
 			},
 		},
 		{
@@ -1047,11 +994,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    19,
-				results: []string{
-					"/monsters/80",
-					"/monsters/90",
-					"/monsters/297",
-				},
+				results: []int32{80, 90, 297},
 			},
 		},
 		{
@@ -1061,10 +1004,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    7,
-				results: []string{
-					"/monsters/80",
-					"/monsters/86",
-				},
+				results: []int32{80, 86},
 			},
 		},
 		{
@@ -1074,10 +1014,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    6,
-				results: []string{
-					"/monsters/38",
-					"/monsters/45",
-				},
+				results: []int32{38, 45},
 			},
 		},
 		{
@@ -1087,10 +1024,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    2,
-				results: []string{
-					"/monsters/191",
-					"/monsters/289",
-				},
+				results: []int32{191, 289},
 			},
 		},
 		{
@@ -1100,11 +1034,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    11,
-				results: []string{
-					"/monsters/229",
-					"/monsters/236",
-					"/monsters/299",
-				},
+				results: []int32{229, 236, 299},
 			},
 		},
 		{
@@ -1114,11 +1044,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    6,
-				results: []string{
-					"/monsters/5",
-					"/monsters/71",
-					"/monsters/291",
-				},
+				results: []int32{5, 71, 291},
 			},
 		},
 		{
@@ -1128,9 +1054,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    1,
-				results: []string{
-					"/monsters/134",
-				},
+				results: []int32{134},
 			},
 		},
 		{
@@ -1140,11 +1064,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			expList: expList{
 				count:    7,
-				results: []string{
-					"/monsters/60",
-					"/monsters/63",
-					"/monsters/67",
-				},
+				results: []int32{60, 63, 67},
 			},
 		},
 	}
@@ -1168,7 +1088,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testAPIResourceList(test, tc.expList, got)
+		testAPIResourceList(test, testCfg.e.monsters.endpoint, tc.expList, got)
 	}
 }
 

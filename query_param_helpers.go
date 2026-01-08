@@ -74,14 +74,6 @@ func (cfg *Config) getQueryParamList (r *http.Request, lookup map[string]QueryTy
 		return QueryParameterList{}, err
 	}
 
-	listPath := endpoint
-	if section != "" {
-		listPath = listPath + "/" + section
-	}
-
-	endpointURL := cfg.createListURL(listPath)
-	listParams.ParentEndpoint = &endpointURL
-
 	list := QueryParameterList{
 		ListParams: listParams,
 		Results: shownResources,
