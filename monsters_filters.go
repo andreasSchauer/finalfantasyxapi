@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-// can put the elemental affinity id for loop into its own function
+
 func (cfg *Config) getMonstersElemResist(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["elemental-affinities"]
 	query := r.URL.Query().Get(queryParam.Name)
@@ -40,6 +40,7 @@ func (cfg *Config) getMonstersElemResist(r *http.Request, inputMons []NamedAPIRe
 func (cfg *Config) getElementalAffinityIDs(query string, queryParam QueryType) ([]int32, error) {
 	eaPairs := strings.Split(query, ",")
 	var ids []int32
+	elemMap := make(map[int32]bool)
 
 	for _, pair := range eaPairs {
 		parts := strings.Split(pair, "-")
@@ -51,6 +52,10 @@ func (cfg *Config) getElementalAffinityIDs(query string, queryParam QueryType) (
 		if err != nil {
 			return nil, err
 		}
+		if elemMap[elementID] {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id %d in %s. each element can only be used once.", elementID, queryParam.Name), nil)
+		}
+		elemMap[elementID] = true
 
 		affinityID, err := parseQueryNamedVal(parts[1], cfg.e.affinities.resourceType, queryParam, cfg.l.Affinities)
 		if err != nil {
@@ -70,29 +75,25 @@ func (cfg *Config) getElementalAffinityIDs(query string, queryParam QueryType) (
 		ids = append(ids, elemResistLookup.ID)
 	}
 
-	ids = removeDuplicateIDs(ids)
-
 	return ids, nil
 }
 
 func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["status-resists"]
-	query := r.URL.Query().Get(queryParam.Name)
-
-	if query == "" {
+	
+	ids, err := parseIdListQuery(r, queryParam, len(cfg.l.AutoAbilities))
+	if errors.Is(err, errEmptyQuery) {
 		return inputMons, nil
 	}
-
+	if err != nil {
+		return nil, err
+	}
+	
 	resistance, err := cfg.verifyMonsterResistance(r)
 	if err != nil {
 		return nil, err
 	}
-
-	ids, err := queryIDsToSlice(query, queryParam, len(cfg.l.StatusConditions))
-	if err != nil {
-		return nil, err
-	}
-
+	
 	dbMons, err := cfg.db.GetMonstersByStatusResists(r.Context(), database.GetMonstersByStatusResistsParams{
 		StatusConditionIds: ids,
 		MinResistance:      resistance,
@@ -110,9 +111,8 @@ func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPI
 
 func (cfg *Config) verifyMonsterResistance(r *http.Request) (int, error) {
 	queryParam := cfg.q.monsters["resistance"]
-	query := r.URL.Query().Get(queryParam.Name)
 
-	resistance, err := parseIntQuery(queryParam, query)
+	resistance, err := parseIntQuery(r, queryParam)
 	if err != nil {
 		return 0, err
 	}
@@ -172,16 +172,13 @@ func (cfg *Config) getMonstersItem(r *http.Request, inputMons []NamedAPIResource
 	return resources, nil
 }
 
-
 func (cfg *Config) getMonstersAutoAbility(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["auto-abilities"]
-	query := r.URL.Query().Get(queryParam.Name)
-
-	if query == "" {
+	
+	ids, err := parseIdListQuery(r, queryParam, len(cfg.l.AutoAbilities))
+	if errors.Is(err, errEmptyQuery) {
 		return inputMons, nil
 	}
-
-	ids, err := queryIDsToSlice(query, queryParam, len(cfg.l.AutoAbilities))
 	if err != nil {
 		return nil, err
 	}
@@ -299,14 +296,11 @@ func (cfg *Config) getMonstersArea(r *http.Request, inputMons []NamedAPIResource
 
 func (cfg *Config) getMonstersDistance(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["distance"]
-	query := r.URL.Query().Get(queryParam.Name)
 
-	if query == "" {
+	distance, err := parseIntQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
 		return inputMons, nil
 	}
-
-	// here
-	distance, err := parseIntQuery(queryParam, query)
 	if err != nil {
 		return nil, err
 	}

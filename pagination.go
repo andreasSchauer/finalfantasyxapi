@@ -19,15 +19,13 @@ type ListParams struct {
 func createPaginatedList[T h.HasID, R any, L IsAPIResourceList, I any](cfg *Config, r *http.Request, i handlerInput[T, R, L], items []I) (ListParams, []I, error) {
 	queryParamOffset := i.queryLookup["offset"]
 	queryParamLimit := i.queryLookup["limit"]
-	queryOffset := r.URL.Query().Get(queryParamOffset.Name)
-	queryLimit := r.URL.Query().Get(queryParamLimit.Name)
 
-	offset, err := parseIntQuery(queryParamOffset, queryOffset)
+	offset, err := parseIntQuery(r, queryParamOffset)
 	if err != nil {
 		return ListParams{}, nil, err
 	}
 
-	limit, err := parseIntQuery(queryParamLimit, queryLimit)
+	limit, err := parseIntQuery(r, queryParamLimit)
 	if err != nil {
 		return ListParams{}, nil, err
 	}

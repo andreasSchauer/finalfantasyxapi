@@ -54,28 +54,12 @@ func checkQueryIDVal(idStr string, queryParam QueryType, maxID int) (int32, erro
 	return int32(id), nil
 }
 
-// checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored.
-func parseIntQuery(queryParam QueryType, s string) (int, error) {
-	defaultVal, err := checkDefaultVal(queryParam, s)
-	if !errors.Is(err, errNoDefaultVal) {
-		return defaultVal, nil
-	}
-
-	specialVal, err := checkQuerySpecialVals(queryParam, s)
-	if !errors.Is(err, errNoSpecialInput) {
-		return specialVal, nil
-	}
-
-	val, err := checkQueryIntRange(queryParam, s)
-	if err != nil && !errors.Is(err, errNoIntRange) {
-		return 0, err
-	}
-
-	return val, nil
-}
 
 func checkDefaultVal(queryParam QueryType, s string) (int, error) {
 	if queryParam.DefaultVal == nil {
+		if s == "" {
+			return 0, errEmptyQuery
+		}
 		return 0, errNoDefaultVal
 	}
 

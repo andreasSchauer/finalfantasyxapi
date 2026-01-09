@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -52,4 +53,47 @@ func parseTypeQuery(r *http.Request, queryParam QueryType, lookup map[string]Typ
 	}
 
 	return enum, nil
+}
+
+
+// checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored.
+func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
+	query := r.URL.Query().Get(queryParam.Name)
+	
+	defaultVal, err := checkDefaultVal(queryParam, query)
+	if errors.Is(err, errEmptyQuery) {
+		return 0, errEmptyQuery
+	}
+	if !errors.Is(err, errNoDefaultVal) {
+		return defaultVal, nil
+	}
+
+	specialVal, err := checkQuerySpecialVals(queryParam, query)
+	if !errors.Is(err, errNoSpecialInput) {
+		return specialVal, nil
+	}
+
+	val, err := checkQueryIntRange(queryParam, query)
+	if err != nil && !errors.Is(err, errNoIntRange) {
+		return 0, err
+	}
+
+	return val, nil
+}
+
+
+// converts a list of ids into a slice and checks every id's validity
+func parseIdListQuery(r *http.Request, queryParam QueryType, maxID int) ([]int32, error) {
+	query := r.URL.Query().Get(queryParam.Name)
+
+	if query == "" {
+		return nil, errEmptyQuery
+	}
+
+	ids, err := queryIDsToSlice(query, queryParam, maxID)
+	if err != nil {
+		return nil, err
+	}
+
+	return ids, nil
 }
