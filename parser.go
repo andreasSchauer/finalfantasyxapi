@@ -9,7 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 // deals with a single segment path that is either a name or an id and returns a parseResponse with the id, if a single match is found, or a name, if multiple matches with that name were found.
 func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup map[string]T) (parseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
@@ -17,7 +16,7 @@ func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup 
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, "Invalid URL encoding", err)
 	}
 
-	response, err := parseID(decoded, resourceType, len(lookup))
+	response, err := checkID(decoded, resourceType, len(lookup))
 	if err == nil {
 		return response, nil
 	}
@@ -25,7 +24,7 @@ func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup 
 		return parseResponse{}, err
 	}
 
-	response, err = parseUniqueName(decoded, lookup)
+	response, err = checkUniqueName(decoded, lookup)
 	if err == nil {
 		return response, nil
 	}
@@ -35,10 +34,8 @@ func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup 
 		return response, nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s.", resourceType, segment), err)
+	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s.", h.Capitalize(resourceType), segment), err)
 }
-
-
 
 // deals with a name/version path and returns a parseResponse with the id, if a match is found.
 func parseNameVersionResource[T h.HasID](resourceType, name, versionStr string, lookup map[string]T) (parseResponse, error) {
@@ -46,7 +43,7 @@ func parseNameVersionResource[T h.HasID](resourceType, name, versionStr string, 
 	if err != nil {
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, "Invalid URL encoding", err)
 	}
-	
+
 	versionPtr, err := parseVersionStr(versionStr)
 	if err != nil {
 		return parseResponse{}, err
@@ -57,7 +54,5 @@ func parseNameVersionResource[T h.HasID](resourceType, name, versionStr string, 
 		return response, nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s, version %s", resourceType, name, versionStr), err)
+	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s, version %s", h.Capitalize(resourceType), name, versionStr), err)
 }
-
-

@@ -25,14 +25,14 @@ func TestGetOverdriveMode(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/18",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "provided overdrive-mode ID is out of range. Max ID: 17",
+				expectedErr:    "Overdrive mode with provided ID 18 doesn't exist. Max ID: 17",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "overdrive-mode not found: a.",
+				expectedErr:    "Overdrive mode not found: a.",
 			},
 		},
 		{

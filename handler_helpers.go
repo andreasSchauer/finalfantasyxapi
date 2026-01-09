@@ -18,6 +18,7 @@ func handleEndpointList[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWr
 }
 
 
+// can reuse the logic of checkID to create parseID, like how I do it with queries
 func handleEndpointIDOnly[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
 	segment := segments[0]
 
@@ -26,18 +27,12 @@ func handleEndpointIDOnly[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w 
 		return
 	}
 
-	id, err := strconv.Atoi(segment)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("Wrong format. Usage: /api/%s/{id}.", i.endpoint), err)
+	parseRes, err := parseID(segment, i.resourceType, len(i.objLookup))
+	if handleHTTPError(w, err) {
 		return
 	}
 
-	if id < 1 || id > len(i.objLookup) {
-		respondWithError(w, http.StatusNotFound, fmt.Sprintf("%s with ID %d doesn't exist. Max ID: %d", h.Capitalize(i.resourceType), id, len(i.objLookup)), nil)
-		return
-	}
-
-	resource, err := i.getSingleFunc(r, int32(id))
+	resource, err := i.getSingleFunc(r, parseRes.ID)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -96,7 +91,7 @@ func handleEndpointNameVersion[T h.HasID, R any, L IsAPIResourceList](w http.Res
 
 
 func handleParameters[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
-	parameterList, err := cfg.getQueryParamList(r, i.queryLookup, i.endpoint)
+	parameterList, err := getQueryParamList(cfg, r, i)
 	if handleHTTPError(w, err) {
 		return
 	}

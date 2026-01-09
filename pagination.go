@@ -5,45 +5,46 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type ListParams struct {
-	Count               int             `json:"count"`
-	Previous            *string         `json:"previous"`
-	Next                *string         `json:"next"`
-	ParentResource      IsAPIResource   `json:"parent_resource,omitempty"`
+	Count          int           `json:"count"`
+	Previous       *string       `json:"previous"`
+	Next           *string       `json:"next"`
+	ParentResource IsAPIResource `json:"parent_resource,omitempty"`
 }
 
-func createPaginatedList[T any](cfg *Config, r *http.Request, resources []T) (ListParams, []T, error) {
-	const defaultOffset = 0
-	const defaultLimit = 20
-	queryOffset := r.URL.Query().Get("offset")
-	queryLimit := r.URL.Query().Get("limit")
+func createPaginatedList[T h.HasID, R any, L IsAPIResourceList, I any](cfg *Config, r *http.Request, i handlerInput[T, R, L], items []I) (ListParams, []I, error) {
+	queryParamOffset := i.queryLookup["offset"]
+	queryParamLimit := i.queryLookup["limit"]
+	queryOffset := r.URL.Query().Get(queryParamOffset.Name)
+	queryLimit := r.URL.Query().Get(queryParamLimit.Name)
 
-	offset, err := AtoiOrDefault(queryOffset, defaultOffset)
+	offset, err := parseIntQuery(queryParamOffset, queryOffset)
 	if err != nil {
-		return ListParams{}, nil, newHTTPError(http.StatusBadRequest, "invalid offset provided", err)
+		return ListParams{}, nil, err
 	}
 
-	limit, err := AtoiOrDefault(queryLimit, defaultLimit)
+	limit, err := parseIntQuery(queryParamLimit, queryLimit)
 	if err != nil {
-		return ListParams{}, nil, newHTTPError(http.StatusBadRequest, "invalid limit provided", err)
+		return ListParams{}, nil, err
 	}
-
 	if limit == 0 {
-		limit = defaultLimit
+		limit = *queryParamLimit.DefaultVal
 	}
 
-	size := len(resources)
+	size := len(items)
 
 	listParams := ListParams{
 		Count:    size,
 		Previous: cfg.createPreviousURL(r, offset, limit),
-		Next:     cfg.createNextURL(r, offset, limit, len(resources)),
+		Next:     cfg.createNextURL(r, offset, limit, len(items)),
 	}
 
 	if size == 0 {
-		return listParams, []T{}, nil
+		return listParams, []I{}, nil
 	}
 
 	if offset >= size {
@@ -51,7 +52,7 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, resources []T) (Li
 	}
 
 	upperLimit := min(offset+limit, size)
-	shownResources := resources[offset:upperLimit]
+	shownResources := items[offset:upperLimit]
 
 	return listParams, shownResources, nil
 }

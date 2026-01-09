@@ -18,14 +18,14 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/308",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "provided monster ID is out of range. Max ID: 307",
+				expectedErr:    "Monster with provided ID 308 doesn't exist. Max ID: 307",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "monster not found: a.",
+				expectedErr:    "Monster not found: a.",
 			},
 		},
 		
@@ -33,7 +33,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "monster not found: a, version 2",
+				expectedErr:    "Monster not found: a, version 2",
 			},
 		},
 		{
@@ -851,16 +851,16 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?status-resists=darkness&resistance=350",
+				requestURL:     "/api/monsters?status-resists=4&resistance=350",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid resistance: 350. resistance must be an integer ranging from 1 to 254, with 1 being the default value, if no resistance was provided.",
+				expectedErr:    "invalid value: 350. resistance must be an integer ranging from 1 to 254.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?status-resists=darkness&resistance=frank",
+				requestURL:     "/api/monsters?status-resists=4&resistance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid resistance: frank. resistance must be an integer ranging from 1 to 254, with 1 being the default value, if no resistance was provided.",
+				expectedErr:    "invalid value 'frank' for parameter resistance. Usage: status-resists={status_condition_name/id},{status_condition_name/id},...&resistance={1-254 or immune}",
 			},
 		},
 		{
@@ -895,7 +895,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?distance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value: frank. distance must be an integer ranging from 1 to 4.",
+				expectedErr:    "invalid value 'frank' for parameter distance. Usage: ?distance={value}",
 			},
 		},
 		{
@@ -914,7 +914,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?limit=307",
+				requestURL:     "/api/monsters?limit=max",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
@@ -939,17 +939,17 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?limit=307&status-resists=1,4,11&resistance=50",
+				requestURL:     "/api/monsters?limit=max&status-resists=1,4,11&resistance=50",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    159,
+				count:    150,
 				results: []int32{3, 128, 188, 227, 249},
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?limit=307&item=7",
+				requestURL:     "/api/monsters?limit=max&item=7",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{

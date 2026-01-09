@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -21,29 +22,42 @@ func newParseResponse(id int32, name string) parseResponse {
 	}
 }
 
+
 func parseID(idStr, resourceType string, maxID int) (parseResponse, error) {
-	parsedID, err := strconv.Atoi(idStr)
+	response, err := checkID(idStr, resourceType, maxID)
+	if errors.Is(err, errNotAnID) {
+		return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s'", idStr), err)
+	}
+	if err != nil {
+		return parseResponse{}, err
+	}
+
+	return response, nil
+}
+
+
+func checkID(idStr, resourceType string, maxID int) (parseResponse, error) {
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		return parseResponse{}, errNotAnID
 	}
 
-	if parsedID > maxID || parsedID <= 0 {
-		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("provided %s ID is out of range. Max ID: %d", resourceType, maxID), err)
+	if id > maxID || id <= 0 {
+		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with provided ID %d doesn't exist. Max ID: %d", h.Capitalize(resourceType), id, maxID), err)
 	}
 
-	return newParseResponse(int32(parsedID), ""), nil
+	return newParseResponse(int32(id), ""), nil
 }
 
-
-func parseUniqueName[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
-	response, err := checkUniqueName(name, lookup)
+func checkUniqueName[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
+	response, err := checkNameSpelling(name, lookup)
 	if err == nil {
 		return response, nil
 	}
 
 	nameWithSpaces := h.GetNameWithSpaces(name)
 
-	response, err = checkUniqueName(nameWithSpaces, lookup)
+	response, err = checkNameSpelling(nameWithSpaces, lookup)
 	if err == nil {
 		return response, nil
 	}
@@ -51,7 +65,7 @@ func parseUniqueName[T h.HasID](name string, lookup map[string]T) (parseResponse
 	return parseResponse{}, errNoResource
 }
 
-func checkUniqueName[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
+func checkNameSpelling[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
 	lookupObj := seeding.LookupObject{
 		Name: name,
 	}
@@ -135,4 +149,3 @@ func parseVersionStr(versionStr string) (*int32, error) {
 
 	return versionPtr, nil
 }
-

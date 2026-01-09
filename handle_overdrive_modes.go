@@ -111,9 +111,9 @@ func (cfg *Config) getOverdriveModeActions(r *http.Request, id int32) ([]ActionA
 }
 
 func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList, error) {
-	endpoint := cfg.e.overdriveModes.endpoint
+	i := cfg.e.overdriveModes
 
-	err := verifyQueryParams(r, endpoint, nil, cfg.q.overdriveModes)
+	err := verifyQueryParams(r, i.endpoint, nil, cfg.q.overdriveModes)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
@@ -123,16 +123,16 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList
 		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve overdrive modes", err)
 	}
 
-	resources := createNamedAPIResourcesSimple(cfg, dbODModes, endpoint, func(mode database.OverdriveMode) (int32, string) {
+	resources := createNamedAPIResourcesSimple(cfg, dbODModes, i.endpoint, func(mode database.OverdriveMode) (int32, string) {
 		return mode.ID, mode.Name
 	})
 
-	resources, err = cfg.getOverdriveModesType(r, endpoint, resources)
+	resources, err = cfg.getOverdriveModesType(r, i.endpoint, resources)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	resourceList, err := cfg.newNamedAPIResourceList(r, resources)
+	resourceList, err := newNamedAPIResourceList(cfg, r, i, resources)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}

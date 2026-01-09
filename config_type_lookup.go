@@ -11,7 +11,7 @@ import (
 type TypeLookup struct {
 	AreaConnectionType map[string]TypedAPIResource
 	CTBIconType        map[string]TypedAPIResource
-	MaCreationArea     map[string]TypedAPIResource
+	CreationArea       map[string]TypedAPIResource
 	MonsterSpecies     map[string]TypedAPIResource
 	OverdriveModeType  map[string]TypedAPIResource
 }
@@ -21,7 +21,7 @@ func (cfg *Config) TypeLookupInit() {
 
 	cfg.t.initAreaConnectionType()
 	cfg.t.initCTBIconType()
-	cfg.t.initMaCreationArea()
+	cfg.t.initCreationArea()
 	cfg.t.initMonsterSpecies()
 	cfg.t.initOverdriveModeType()
 }
@@ -36,7 +36,7 @@ func GetEnumType(key string, lookup map[string]TypedAPIResource) (TypedAPIResour
 			}
 		}
 	}
-	
+
 	enumType, found := lookup[key]
 	if !found {
 		return TypedAPIResource{}, fmt.Errorf("value %s is not valid in this enum", key)
@@ -87,7 +87,7 @@ func (t *TypeLookup) initCTBIconType() {
 	t.CTBIconType = typeSliceToMap(typeSlice)
 }
 
-func (t *TypeLookup) initMaCreationArea() {
+func (t *TypeLookup) initCreationArea() {
 	typeSlice := []TypedAPIResource{
 		{
 			Name: string(database.MaCreationAreaBesaid),
@@ -130,7 +130,7 @@ func (t *TypeLookup) initMaCreationArea() {
 		},
 	}
 
-	t.MaCreationArea = typeSliceToMap(typeSlice)
+	t.CreationArea = typeSliceToMap(typeSlice)
 }
 
 func (t *TypeLookup) initMonsterSpecies() {

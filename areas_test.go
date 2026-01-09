@@ -19,21 +19,21 @@ func TestGetArea(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Area with ID 0 doesn't exist. Max ID: 240",
+				expectedErr:    "Area with provided ID 0 doesn't exist. Max ID: 240",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/241",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Area with ID 241 doesn't exist. Max ID: 240",
+				expectedErr:    "Area with provided ID 241 doesn't exist. Max ID: 240",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Wrong format.",
+				expectedErr:    "invalid id 'a'",
 			},
 		},
 		{
@@ -268,7 +268,7 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?limit=240",
+				requestURL:     "/api/areas?limit=max",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{

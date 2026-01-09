@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type UnnamedApiResourceList struct {
@@ -80,8 +82,8 @@ func createUnnamedAPIResources[T any](
 	return resources
 }
 
-func (cfg *Config) newUnnamedAPIResourceList(r *http.Request, resources []UnnamedAPIResource) (UnnamedApiResourceList, error) {
-	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
+func newUnnamedAPIResourceListT [T h.HasID, R any, L IsAPIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], resources []UnnamedAPIResource)(UnnamedApiResourceList, error) {
+	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
 	if err != nil {
 		return UnnamedApiResourceList{}, err
 	}

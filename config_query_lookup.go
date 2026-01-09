@@ -21,6 +21,13 @@ type QueryType struct {
 	AllowedResources	[]IsAPIResource `json:"allowed_resources,omitempty"`
     AllowedValues 		[]string		`json:"allowed_values,omitempty"`
 	AllowedIntRange		[]int			`json:"allowed_int_range,omitempty"`
+	DefaultVal			*int			`json:"default_value,omitempty"`
+	SpecialInputs		[]SpecialInput	`json:"special_inputs,omitempty"`
+}
+
+type SpecialInput struct {
+	Key string	`json:"key"`
+	Val int		`json:"value"`
 }
 
 // QueryLookup holds all the Query Parameters for the application
@@ -33,7 +40,10 @@ type QueryLookup struct {
 
 
 func (cfg *Config) QueryLookupInit() {
+	defaultLimit := 20
+	defaultOffset := 0
 	cfg.q = &QueryLookup{}
+
 	cfg.q.defaultParams = map[string]QueryType{
 		"limit": {
 			ID: -3,
@@ -43,6 +53,13 @@ func (cfg *Config) QueryLookupInit() {
 			ForList: true,
 			ForSingle: false,
 			ForSections: []string{},
+			SpecialInputs: []SpecialInput{
+				{
+					Key: "max",
+					Val: 9999,
+				},
+			},
+			DefaultVal: &defaultLimit,
 		},
 		"offset": {
 			ID: -2,
@@ -52,6 +69,7 @@ func (cfg *Config) QueryLookupInit() {
 			ForList: true,
 			ForSingle: false,
 			ForSections: []string{},
+			DefaultVal: &defaultOffset,
 		},
 		"section": {
 			ID: -1,
@@ -258,6 +276,8 @@ func (cfg *Config) initAreasParams() {
 
 
 func (cfg *Config) initMonstersParams() {
+	defaultResistance := 1
+
 	params := map[string]QueryType{
 		"kimahri-stats": {
 			ID: 1,
@@ -327,6 +347,13 @@ func (cfg *Config) initMonstersParams() {
 			RequiredWith: []string{"status-resists"},
 			AllowedValues: []string{"immune"},
 			AllowedIntRange: []int{1, 254},
+			SpecialInputs: []SpecialInput{
+				{
+					Key: "immune",
+					Val: 254,
+				},
+			},
+			DefaultVal: &defaultResistance,
 		},
 		"item": {
 			ID: 7,

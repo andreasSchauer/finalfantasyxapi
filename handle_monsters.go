@@ -195,18 +195,18 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 }
 
 func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (NamedApiResourceList, error) {
-	endpoint := cfg.e.monsters.endpoint
+	i := cfg.e.monsters
 
 	dbMons, err := cfg.db.GetMonstersByName(r.Context(), monsterName)
 	if err != nil {
 		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't get multiple Monsters", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, i.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, &mon.Version.Int32, &mon.Specification.String
 	})
 
-	resourceList, err := cfg.newNamedAPIResourceList(r, resources)
+	resourceList, err := newNamedAPIResourceList(cfg, r, i, resources)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
@@ -215,9 +215,9 @@ func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (Nam
 }
 
 func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, error) {
-	endpoint := cfg.e.monsters.endpoint
+	i := cfg.e.monsters
 
-	err := verifyQueryParams(r, endpoint, nil, cfg.q.monsters)
+	err := verifyQueryParams(r, i.endpoint, nil, cfg.q.monsters)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
@@ -227,7 +227,7 @@ func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, erro
 		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve monsters", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
+	resources := createNamedAPIResources(cfg, dbMons, i.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
 		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
 	})
 
@@ -261,7 +261,7 @@ func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, erro
 		resources = getSharedResources(resources, filteredResources)
 	}
 
-	resourceList, err := cfg.newNamedAPIResourceList(r, resources)
+	resourceList, err := newNamedAPIResourceList(cfg, r, i, resources)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}

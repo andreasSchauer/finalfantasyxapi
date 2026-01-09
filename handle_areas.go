@@ -108,9 +108,9 @@ func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
 
 
 func (cfg *Config) retrieveAreas(r *http.Request) (LocationApiResourceList, error) {
-	endpoint := cfg.e.areas.endpoint
+	i := cfg.e.areas
 	
-	err := verifyQueryParams(r, endpoint, nil, cfg.q.areas)
+	err := verifyQueryParams(r, i.endpoint, nil, cfg.q.areas)
 	if err != nil {
 		return LocationApiResourceList{}, err
 	}
@@ -153,7 +153,7 @@ func (cfg *Config) retrieveAreas(r *http.Request) (LocationApiResourceList, erro
 		resources = getSharedResources(resources, filteredResources)
 	}
 
-	resourceList, err := cfg.newLocationAPIResourceList(r, resources)
+	resourceList, err := newLocationAPIResourceList(cfg, r, i, resources)
 	if err != nil {
 		return LocationApiResourceList{}, err
 	}

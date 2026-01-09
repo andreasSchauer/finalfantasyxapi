@@ -14,14 +14,13 @@ func parseIDOnlyQuery(r *http.Request, queryParam QueryType, maxID int) (int32, 
 		return 0, errEmptyQuery
 	}
 
-	id, err := parseQueryIdValStrict(query, queryParam, maxID)
+	id, err := parseQueryIdVal(query, queryParam, maxID)
 	if err != nil {
 		return 0, err
 	}
 
 	return int32(id), nil
 }
-
 
 // used for boolean queryParams
 func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, error) {
@@ -38,7 +37,6 @@ func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, error) {
 
 	return b, nil
 }
-
 
 // used, if a queryParam is looking up an enum entry
 func parseTypeQuery(r *http.Request, queryParam QueryType, lookup map[string]TypedAPIResource) (TypedAPIResource, error) {
