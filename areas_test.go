@@ -19,21 +19,21 @@ func TestGetArea(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Area with provided ID 0 doesn't exist. Max ID: 240",
+				expectedErr:    "area with provided id '0' doesn't exist. max id: 240.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/241",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Area with provided ID 241 doesn't exist. Max ID: 240",
+				expectedErr:    "area with provided id '241' doesn't exist. max id: 240.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'",
+				expectedErr:    "invalid id 'a'.",
 			},
 		},
 		{
@@ -58,7 +58,7 @@ func TestGetArea(t *testing.T) {
 					sidequest: h.GetInt32Ptr(6),
 					connectedAreas: []int32{144, 149},
 					monsters: []int32{81, 84, 85},
-					formations: []int32{204, 208},
+					formations: []int32{203, 207},
 				},
 			},
 		},
@@ -163,7 +163,7 @@ func TestGetArea(t *testing.T) {
 				expLocBased: expLocBased{
 					characters: []int32{5},
 					monsters: []int32{19},
-					formations: []int32{37},
+					formations: []int32{36},
 					fmvsMusic: []int32{16},
 					bossMusic: []int32{16},
 					fmvs: []int32{9, 13},
@@ -231,28 +231,28 @@ func TestRetrieveAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?comp-sphere=fa",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid boolean value. usage: ?comp-sphere={boolean}",
+				expectedErr:    "invalid boolean value 'fa'. usage: '?comp-sphere={boolean}'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?item=113",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided ID 113 in 'item' is out of range. Max ID: 112",
+				expectedErr:    "provided id '113' in 'item' is out of range. max id: 112.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?key-item=61",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided ID 61 in 'key-item' is out of range. Max ID: 60",
+				expectedErr:    "provided id '61' in 'key-item' is out of range. max id: 60.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?location=0",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided ID 0 in 'location' is out of range. Max ID: 26",
+				expectedErr:    "provided id '0' in 'location' is out of range. max id: 26.",
 			},
 		},
 		{
@@ -360,5 +360,122 @@ func TestRetrieveAreas(t *testing.T) {
 		}
 
 		testAPIResourceList(test, testCfg.e.areas.endpoint, tc.expList, got)
+	}
+}
+
+
+func TestAreasParameters(t *testing.T) {
+	tests := []struct {
+		testGeneral
+		expListParams
+	}{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/parameters?section=asd",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr: "subsection 'asd' is not available for endpoint /areas.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/parameters?limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			expListParams: expListParams{
+				count: 21,
+				results: []string{"limit", "offset", "item", "save-sphere", "sublocation"},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/parameters?limit=max&section=self",
+				expectedStatus: http.StatusOK,
+			},
+			expListParams: expListParams{
+				count: 21,
+				results: []string{"limit", "offset", "item", "save-sphere", "sublocation"},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/parameters?limit=max&section=treasures",
+				expectedStatus: http.StatusOK,
+			},
+			expListParams: expListParams{
+				count: 3,
+				results: []string{"limit", "offset", "section"},
+			},
+		},
+	}
+
+	for i, tc := range tests {
+		rr, testName, correctErr := setupTest(t, tc.testGeneral, "AreasParameters", i+1, testCfg.HandleAreas)
+		if correctErr {
+			continue
+		}
+
+		test := test{
+			t: t,
+			cfg: testCfg,
+			name: testName,
+			expLengths: tc.expLengths,
+			dontCheck: tc.dontCheck,
+		}
+
+		var got QueryParameterList
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+			t.Fatalf("%s: failed to decode: %v", testName, err)
+		}
+
+		nameListTest := newNameListTestParams("results", tc.results, got.Results)
+		testNameList(test, nameListTest)
+	}
+}
+
+
+func TestAreasSections(t *testing.T) {
+	tests := []struct {
+		testGeneral
+		expListParams
+	}{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/sections",
+				expectedStatus: http.StatusOK,
+			},
+			expListParams: expListParams{
+				count: 5,
+				results: []string{
+					"connected",
+					"monster-formations",
+					"monsters",
+					"shops",
+					"treasures",
+				},
+			},
+		},
+	}
+
+	for i, tc := range tests {
+		rr, testName, correctErr := setupTest(t, tc.testGeneral, "AreasSections", i+1, testCfg.HandleAreas)
+		if correctErr {
+			continue
+		}
+
+		test := test{
+			t: t,
+			cfg: testCfg,
+			name: testName,
+			expLengths: tc.expLengths,
+			dontCheck: tc.dontCheck,
+		}
+
+		var got SectionList
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+			t.Fatalf("%s: failed to decode: %v", testName, err)
+		}
+
+		nameListTest := newNameListTestSections(test.cfg, "results", test.cfg.e.areas.endpoint, tc.results, got.Results)
+		testNameList(test, nameListTest)
 	}
 }

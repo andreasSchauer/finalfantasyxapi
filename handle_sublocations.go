@@ -56,7 +56,7 @@ func (cfg *Config) HandleSublocations(w http.ResponseWriter, r *http.Request) {
 		}
 
 	default:
-		respondWithError(w, http.StatusBadRequest, `Wrong format. Usage: /api/sublocations/{name or id}, or /api/sublocations/{name or id}/{sub-section}. Supported sub-sections: areas, monsters, monster-formations, shops, treasures.`, nil)
+		respondWithError(w, http.StatusBadRequest, `wrong format. usage: '/api/sublocations/{name or id}', or '/api/sublocations/{name or id}/{sub-section}'. supported sub-sections: areas, monsters, monster-formations, shops, treasures.`, nil)
 		return
 	}
 }

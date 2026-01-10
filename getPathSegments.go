@@ -7,7 +7,8 @@ import (
 
 func getPathSegments(path, endpoint string) []string {
 	prefix := fmt.Sprintf("/api/%s", endpoint)
-	pathTrimmed := strings.TrimPrefix(path, prefix)
+	pathLower := strings.ToLower(path)
+	pathTrimmed := strings.TrimPrefix(pathLower, prefix)
 	pathTrimmed = strings.TrimPrefix(pathTrimmed, "/")
 	pathTrimmed = strings.TrimSuffix(pathTrimmed, "/")
 	segments := []string{}

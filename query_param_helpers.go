@@ -49,10 +49,22 @@ func checkDuplicateIDs(queryParam QueryType, ids []int32) error {
 
 	for _, id := range ids {
 		if idMap[id] {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id %d in %s. each id can only be used once.", id, queryParam.Name), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id '%d' in '%s'. each id can only be used once.", id, queryParam.Name), nil)
 		}
 		idMap[id] = true
 	}
 
 	return nil
+}
+
+func allowedValsString(queryParam QueryType) string {
+	allowedVals := queryParam.AllowedValues
+	formattedVals := []string{}
+
+	for _, s := range allowedVals {
+		formatted := fmt.Sprintf("'%s'", s)
+		formattedVals = append(formattedVals, formatted)
+	}
+
+	return strings.Join(formattedVals, ", ")
 }

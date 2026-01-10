@@ -48,6 +48,7 @@ type Lookup struct {
 	Locations		   map[string]Location
 	SubLocations	   map[string]SubLocation
 	Areas              map[string]Area
+	AreasID			   map[int32]Area
 	AutoAbilities      map[string]AutoAbility
 	CelestialWeapons   map[string]CelestialWeapon
 	Characters         map[string]Character
@@ -70,6 +71,7 @@ type Lookup struct {
 	Positions          map[string]BlitzballPosition
 	Properties         map[string]Property
 	Quests             map[string]Quest
+	RonsoRages		   map[string]RonsoRage
 	Sidequests         map[string]Sidequest
 	Subquests          map[string]Subquest
 	Shops              map[string]Shop
@@ -93,6 +95,7 @@ func lookupInit() Lookup {
 		Locations: 			make(map[string]Location),
 		SubLocations: 		make(map[string]SubLocation),
 		Areas:              make(map[string]Area),
+		AreasID: 			make(map[int32]Area),
 		AutoAbilities:      make(map[string]AutoAbility),
 		CelestialWeapons:   make(map[string]CelestialWeapon),
 		Characters:         make(map[string]Character),
@@ -115,6 +118,7 @@ func lookupInit() Lookup {
 		Positions:          make(map[string]BlitzballPosition),
 		Properties:         make(map[string]Property),
 		Quests:             make(map[string]Quest),
+		RonsoRages: 		make(map[string]RonsoRage),
 		Sidequests:         make(map[string]Sidequest),
 		Subquests:          make(map[string]Subquest),
 		Shops:              make(map[string]Shop),
@@ -138,11 +142,25 @@ func GetResource[T any, K any](key K, lookup map[string]T) (T, error) {
 	}
 }
 
+// maybe make one for all id-only endpoints
+// might also make one for some complex resources like abilities, since it will reduce the amount of queries needed
+// I could also do that for monsters tbh
+// But that is a can of worms I won't be opening now
+func GetResourceByID[T any](key int32, lookup map[int32]T) (T, error) {
+	resource, found := lookup[key]
+	if !found {
+		var zeroType T
+		return zeroType, fmt.Errorf("couldn't find %s with id '%d'.", getTypeName[T](), key)
+	}
+
+	return resource, nil
+}
+
 func getResourceStrKey[T any](key string, lookup map[string]T) (T, error) {
 	resource, found := lookup[key]
 	if !found {
 		var zeroType T
-		return zeroType, h.GetErr(key, fmt.Errorf("couldn't find %s", getTypeName[T]()))
+		return zeroType, h.GetErr(key, fmt.Errorf("couldn't find %s '%s'.", getTypeName[T](), key))
 	}
 
 	return resource, nil
@@ -154,7 +172,7 @@ func getResourceObjKey[T any](obj Lookupable, lookup map[string]T) (T, error) {
 	resource, err := GetResource(key, lookup)
 	if err != nil {
 		var zeroType T
-		return zeroType, h.GetErr(obj.Error(), fmt.Errorf("couldn't find %s", getTypeName[T]()))
+		return zeroType, h.GetErr(obj.Error(), fmt.Errorf("couldn't find %s.", getTypeName[T]()))
 	}
 
 	return resource, nil

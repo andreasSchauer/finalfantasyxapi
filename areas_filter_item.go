@@ -1,11 +1,53 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
+
+func (cfg *Config) queryAreasByItemMethod(r *http.Request, id int32) ([]LocationAPIResource, error) {
+	queryParam := cfg.q.areas["method"]
+	query := r.URL.Query().Get(queryParam.Name)
+
+	var resources []LocationAPIResource
+	var err error
+
+	switch query {
+	case "":
+		resources, err = cfg.getAreasByItem(r, id)
+		if err != nil {
+			return nil, err
+		}
+	case "monster":
+		resources, err = cfg.getAreasByItemMonster(r, id)
+		if err != nil {
+			return nil, err
+		}
+	case "treasure":
+		resources, err = cfg.getAreasByItemTreasure(r, id)
+		if err != nil {
+			return nil, err
+		}
+	case "shop":
+		resources, err = cfg.getAreasByItemShop(r, id)
+		if err != nil {
+			return nil, err
+		}
+	case "quest":
+		resources, err = cfg.getAreasByItemQuest(r, id)
+		if err != nil {
+			return nil, err
+		}
+	default:
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid method value '%s'. allowed values: %s.", query, allowedValsString(queryParam)), err)
+	}
+
+	return resources, nil
+}
+
 
 func (cfg *Config) getAreasByItem(r *http.Request, itemID int32) ([]LocationAPIResource, error) {
 	filterFuncs := []func(*http.Request, int32) ([]LocationAPIResource, error){
@@ -32,7 +74,7 @@ func (cfg *Config) getAreasByItem(r *http.Request, itemID int32) ([]LocationAPIR
 func (cfg *Config) getAreasByItemMonster(r *http.Request, itemID int32) ([]LocationAPIResource, error) {
 	dbAreas, err := cfg.db.GetAreasWithItemMonster(r.Context(), itemID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by monster item", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by monster-item.", err)
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithItemMonsterRow) (string, string, string, *int32) {
@@ -45,7 +87,7 @@ func (cfg *Config) getAreasByItemMonster(r *http.Request, itemID int32) ([]Locat
 func (cfg *Config) getAreasByItemTreasure(r *http.Request, itemID int32) ([]LocationAPIResource, error) {
 	dbAreas, err := cfg.db.GetAreasWithItemTreasure(r.Context(), itemID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by treasure item", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by treasure-item.", err)
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithItemTreasureRow) (string, string, string, *int32) {
@@ -58,7 +100,7 @@ func (cfg *Config) getAreasByItemTreasure(r *http.Request, itemID int32) ([]Loca
 func (cfg *Config) getAreasByItemShop(r *http.Request, itemID int32) ([]LocationAPIResource, error) {
 	dbAreas, err := cfg.db.GetAreasWithItemShop(r.Context(), itemID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by shop item", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by shop-item.", err)
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithItemShopRow) (string, string, string, *int32) {
@@ -71,7 +113,7 @@ func (cfg *Config) getAreasByItemShop(r *http.Request, itemID int32) ([]Location
 func (cfg *Config) getAreasByItemQuest(r *http.Request, itemID int32) ([]LocationAPIResource, error) {
 	dbAreas, err := cfg.db.GetAreasWithItemQuest(r.Context(), itemID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by quest item", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by quest-item.", err)
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithItemQuestRow) (string, string, string, *int32) {
@@ -104,7 +146,7 @@ func (cfg *Config) getAreasByKeyItem(r *http.Request, itemID int32) ([]LocationA
 func (cfg *Config) getAreasByKeyItemTreasure(r *http.Request, itemID int32) ([]LocationAPIResource, error) {
 	dbAreas, err := cfg.db.GetAreasWithKeyItemTreasure(r.Context(), itemID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by treasure key item", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by treasure-key-item.", err)
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithKeyItemTreasureRow) (string, string, string, *int32) {
@@ -117,7 +159,7 @@ func (cfg *Config) getAreasByKeyItemTreasure(r *http.Request, itemID int32) ([]L
 func (cfg *Config) getAreasByKeyItemQuest(r *http.Request, itemID int32) ([]LocationAPIResource, error) {
 	dbAreas, err := cfg.db.GetAreasWithKeyItemQuest(r.Context(), itemID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by quest key item", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas by quest-key-item", err)
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasWithKeyItemQuestRow) (string, string, string, *int32) {

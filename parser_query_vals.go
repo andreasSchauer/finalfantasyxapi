@@ -31,7 +31,7 @@ func parseQueryNamedVal[T h.HasID](query, resourceType string, queryParam QueryT
 func parseQueryIdVal(idStr string, queryParam QueryType, maxID int) (int32, error) {
 	id, err := checkQueryIDVal(idStr, queryParam, maxID)
 	if errors.Is(err, errNotAnID) {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s' used for parameter '%s'", idStr, queryParam.Name), err)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s' used for parameter '%s'.", idStr, queryParam.Name), err)
 	}
 	if err != nil {
 		return 0, err
@@ -48,14 +48,13 @@ func checkQueryIDVal(idStr string, queryParam QueryType, maxID int) (int32, erro
 	}
 
 	if id > maxID || id <= 0 {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided ID %d in '%s' is out of range. Max ID: %d", id, queryParam.Name, maxID), err)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%d' in '%s' is out of range. max id: %d.", id, queryParam.Name, maxID), err)
 	}
 
 	return int32(id), nil
 }
 
-
-func checkDefaultVal(queryParam QueryType, s string) (int, error) {
+func checkQueryIntDefaultVal(queryParam QueryType, s string) (int, error) {
 	if queryParam.DefaultVal == nil {
 		if s == "" {
 			return 0, errEmptyQuery
@@ -70,7 +69,7 @@ func checkDefaultVal(queryParam QueryType, s string) (int, error) {
 	return 0, errNoDefaultVal
 }
 
-func checkQuerySpecialVals(queryParam QueryType, s string) (int, error) {
+func checkQueryIntSpecialVals(queryParam QueryType, s string) (int, error) {
 	if queryParam.SpecialInputs == nil {
 		return 0, errNoSpecialInput
 	}
@@ -87,9 +86,9 @@ func checkQuerySpecialVals(queryParam QueryType, s string) (int, error) {
 func checkQueryIntRange(queryParam QueryType, s string) (int, error) {
 	val, err := strconv.Atoi(s)
 	if err != nil {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' for parameter %s. Usage: %s", s, queryParam.Name, queryParam.Usage), err)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' for parameter '%s'. usage: '%s'.", s, queryParam.Name, queryParam.Usage), err)
 	}
-	
+
 	intRange := queryParam.AllowedIntRange
 	if intRange == nil {
 		return val, errNoIntRange
@@ -99,7 +98,7 @@ func checkQueryIntRange(queryParam QueryType, s string) (int, error) {
 	max := intRange[1]
 
 	if val > max || val < min {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value: %d. %s must be an integer ranging from %d to %d.", val, queryParam.Name, min, max), nil)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d'. '%s' must be an integer ranging from %d to %d.", val, queryParam.Name, min, max), nil)
 	}
 
 	return val, nil

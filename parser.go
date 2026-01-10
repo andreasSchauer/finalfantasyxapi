@@ -13,7 +13,7 @@ import (
 func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup map[string]T) (parseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {
-		return parseResponse{}, newHTTPError(http.StatusBadRequest, "Invalid URL encoding", err)
+		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)
 	}
 
 	response, err := checkID(decoded, resourceType, len(lookup))
@@ -34,14 +34,14 @@ func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup 
 		return response, nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s.", h.Capitalize(resourceType), segment), err)
+	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s'.", resourceType, segment), err)
 }
 
 // deals with a name/version path and returns a parseResponse with the id, if a match is found.
 func parseNameVersionResource[T h.HasID](resourceType, name, versionStr string, lookup map[string]T) (parseResponse, error) {
 	nameDecoded, err := url.PathUnescape(name)
 	if err != nil {
-		return parseResponse{}, newHTTPError(http.StatusBadRequest, "Invalid URL encoding", err)
+		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)
 	}
 
 	versionPtr, err := parseVersionStr(versionStr)
@@ -54,5 +54,5 @@ func parseNameVersionResource[T h.HasID](resourceType, name, versionStr string, 
 		return response, nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: %s, version %s", h.Capitalize(resourceType), name, versionStr), err)
+	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s', version '%s'", resourceType, name, versionStr), err)
 }

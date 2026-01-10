@@ -22,6 +22,12 @@ type resListTest struct {
 	got  []HasAPIResource
 }
 
+type nameListTest struct {
+	name string
+	exp  []string
+	got  []string
+}
+
 func newResListTestFromIDs[T HasAPIResource](fieldName, endpoint string, expIDs []int32, got []T) resListTest {
 	exp := []string{}
 
@@ -38,6 +44,35 @@ func newResListTest[T HasAPIResource](fieldName string, exp []string, got []T) r
 		name: fieldName,
 		exp:  exp,
 		got:  toHasAPIResSlice(got),
+	}
+}
+
+func newNameListTestParams(fieldName string, exp []string, got []QueryType) nameListTest {
+	gotNames := []string{}
+
+	for _, param := range got {
+		gotNames = append(gotNames, param.Name)
+	}
+
+	return nameListTest{
+		name: fieldName,
+		exp:  exp,
+		got:  gotNames,
+	}
+}
+
+func newNameListTestSections(cfg *Config, fieldName, endpoint string, exp, got []string) nameListTest {
+	expURLs := []string{}
+
+	for _, section := range exp {
+		url := cfg.createSectionURL(endpoint, section)
+		expURLs = append(expURLs, url)
+	}
+
+	return nameListTest{
+		name: fieldName,
+		exp:  expURLs,
+		got:  got,
 	}
 }
 
@@ -101,7 +136,7 @@ func testAPIResourceList[T IsAPIResourceList](test test, endpoint string, expLis
 	testResourceList(test, listTest)
 }
 
-// checks if all provided slices of resources contains all stated resources and also checks for their length, if stated
+// checks if all provided slices of resources contains all stated resources and also checks their length, if stated
 func testResourceLists(test test, checks []resListTest) {
 	test.t.Helper()
 
@@ -110,7 +145,7 @@ func testResourceLists(test test, checks []resListTest) {
 	}
 }
 
-// checks if the provided slice of resources contains all stated resources and also checks for its length, if stated
+// checks if the provided slice of resources contains all stated resources and also checks its length, if stated
 func testResourceList(test test, expList resListTest) {
 	test.t.Helper()
 
@@ -127,24 +162,26 @@ func testResourceList(test test, expList resListTest) {
 	compare(test, expList.name+" length", expLen, len(expList.got))
 }
 
+
 // checks if the provided slice of resources contains all stated resources
 func checkResourcesInSlice[T HasAPIResource](test test, fieldName string, expectedPaths []string, gotRes []T) {
 	gotMap := getResourceMap(gotRes)
 	if len(gotMap) != len(gotRes) {
-		test.t.Fatalf("%s: there appear to be duplicates in %s", test.name, fieldName)
+		test.t.Fatalf("%s: there appear to be duplicates in '%s'.", test.name, fieldName)
 	}
 
 	for _, expPath := range expectedPaths {
 		expURL := test.cfg.completeTestURL(expPath)
 		_, ok := gotMap[expURL]
 		if !ok {
-			test.t.Fatalf("%s: %s doesn't contain all wanted resources. missing %s", test.name, fieldName, expURL)
+			test.t.Fatalf("%s: '%s' doesn't contain all wanted resources. missing '%s'.", test.name, fieldName, expURL)
 		}
 	}
 }
 
 // will need to use name-version pattern in monsterAmount's GetName() method for getResourceAmountMap() to work
 // checks if stated ResourceAmount entries are in slices (used for baseStats, itemAmounts, monsterAmounts) and if their amount values match
+// maybe could use the error function I made
 func checkResAmtsInSlice[T ResourceAmount](test test, fieldName string, expAmounts map[string]int32, gotAmounts []T) {
 	expLen, ok := test.expLengths[fieldName]
 	if !ok {
@@ -160,5 +197,42 @@ func checkResAmtsInSlice[T ResourceAmount](test test, fieldName string, expAmoun
 			test.t.Fatalf("%s: %s doesn't contain resource %s", test.name, fieldName, key)
 		}
 		compare(test, key, exp, got)
+	}
+}
+
+// checks if the provided slice of names contains all stated names and also checks its length, if stated
+func testNameList(test test, nameTest nameListTest) {
+	test.t.Helper()
+
+	if len(nameTest.exp) == 0 {
+		return
+	}
+
+	checkNamesInSlice(test, nameTest)
+
+	expLen, ok := test.expLengths[nameTest.name]
+	if !ok {
+		return
+	}
+
+	compare(test, nameTest.name+" length", expLen, len(nameTest.got))
+}
+
+// checks if the provided slice of names contains all stated names
+func checkNamesInSlice(test test, nameTest nameListTest) {
+	gotMap := make(map[string]bool)
+	for _, gotName := range nameTest.got {
+		gotMap[gotName] = true
+	}
+
+	if len(gotMap) != len(nameTest.got) {
+		test.t.Fatalf("%s: there appear to be duplicates in '%s'", test.name, nameTest.name)
+	}
+	
+	for _, expName := range nameTest.exp {
+		_, ok := gotMap[expName]
+		if !ok {
+			test.t.Fatalf("%s: %s doesn't contain all wanted names. missing '%s'.", test.name, nameTest.name, expName)
+		}
 	}
 }

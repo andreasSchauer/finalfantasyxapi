@@ -27,7 +27,7 @@ type IsLocationArea interface {
 }
 
 func (la LocationArea) Error() string {
-	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: %s, version: %v", la.Location, la.SubLocation, la.Area, h.DerefOrNil(la.Version))
+	return fmt.Sprintf("location area with location: '%s', sublocation: '%s', area: '%s', version: '%v'", la.Location, la.SubLocation, la.Area, h.DerefOrNil(la.Version))
 }
 
 func newLocationArea(location, sublocation, area string, version *int32) LocationArea {

@@ -6,13 +6,6 @@ import (
     "strings"
 )
 
-func Capitalize(s string) string {
-    if s == "" {
-        return s
-    }
-    return strings.ToUpper(s[:1]) + s[1:]
-}
-
 
 func GetMapKeyStr[T any](itemMap map[string]T) string {
 	keys := []string{}

@@ -3212,7 +3212,7 @@ type JMonstersRonsoRage struct {
 	ID          int32
 	DataHash    string
 	MonsterID   int32
-	OverdriveID int32
+	RonsoRageID int32
 }
 
 type JMonstersStatusResist struct {
@@ -3639,6 +3639,12 @@ type QuestCompletion struct {
 	QuestID      int32
 	Condition    string
 	ItemAmountID int32
+}
+
+type RonsoRage struct {
+	ID          int32
+	DataHash    string
+	OverdriveID int32
 }
 
 type Shop struct {

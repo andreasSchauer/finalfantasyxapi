@@ -18,21 +18,21 @@ func TestGetOverdriveMode(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/ally/2",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    `Wrong format. Usage: /api/overdrive-modes/{name or id}`,
+				expectedErr:    "wrong format. usage: '/api/overdrive-modes/{name or id}'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/18",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Overdrive mode with provided ID 18 doesn't exist. Max ID: 17",
+				expectedErr:    "overdrive mode with provided id '18' doesn't exist. max id: 17.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Overdrive mode not found: a.",
+				expectedErr:    "overdrive mode not found: 'a'.",
 			},
 		},
 		{
@@ -148,7 +148,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=f",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value: 'f', use /api/type to see valid values",
+				expectedErr:    "invalid enum value: 'f'. use /api/type to see valid values.",
 			},
 		},
 		{
@@ -213,5 +213,46 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 		}
 
 		testAPIResourceList(test, testCfg.e.overdriveModes.endpoint, tc.expList, got)
+	}
+}
+
+
+func TestOverdriveModesSections(t *testing.T) {
+	tests := []struct {
+		testGeneral
+		expListParams
+	}{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/overdrive-modes/sections",
+				expectedStatus: http.StatusOK,
+			},
+			expListParams: expListParams{
+				count: 0,
+			},
+		},
+	}
+
+	for i, tc := range tests {
+		rr, testName, correctErr := setupTest(t, tc.testGeneral, "OverdriveModeSections", i+1, testCfg.HandleOverdriveModes)
+		if correctErr {
+			continue
+		}
+
+		test := test{
+			t: t,
+			cfg: testCfg,
+			name: testName,
+			expLengths: tc.expLengths,
+			dontCheck: tc.dontCheck,
+		}
+
+		var got SectionList
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+			t.Fatalf("%s: failed to decode: %v", testName, err)
+		}
+
+		nameListTest := newNameListTestSections(test.cfg, "results", test.cfg.e.overdriveModes.endpoint, tc.results, got.Results)
+		testNameList(test, nameListTest)
 	}
 }

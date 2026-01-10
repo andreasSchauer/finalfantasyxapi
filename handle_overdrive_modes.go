@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -49,7 +50,7 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, `Wrong format. Usage: /api/overdrive-modes/{name or id}`, nil)
+		respondWithError(w, http.StatusBadRequest, `wrong format. usage: '/api/overdrive-modes/{name or id}'.`, nil)
 		return
 	}
 }
@@ -64,7 +65,7 @@ func (cfg *Config) getOverdriveMode(r *http.Request, id int32) (OverdriveMode, e
 
 	dbMode, err := cfg.db.GetOverdriveMode(r.Context(), id)
 	if err != nil {
-		return OverdriveMode{}, newHTTPError(http.StatusNotFound, "Couldn't get Overdrive Mode. Overdrive mode with this ID doesn't exist.", err)
+		return OverdriveMode{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("overdrive mode with id '%d' doesn't exist.", id), err)
 	}
 
 	modeType, err := cfg.newNamedAPIResourceFromType(cfg.e.overdriveModeType.endpoint, string(dbMode.Type), cfg.t.OverdriveModeType)
@@ -93,7 +94,7 @@ func (cfg *Config) getOverdriveMode(r *http.Request, id int32) (OverdriveMode, e
 func (cfg *Config) getOverdriveModeActions(r *http.Request, id int32) ([]ActionAmount, error) {
 	dbActions, err := cfg.db.GetOverdriveModeActions(r.Context(), id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "Couldn't get Overdrive Mode Actions", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get overdrive mode actions.", err)
 	}
 
 	actions := []ActionAmount{}
@@ -120,7 +121,7 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList
 
 	dbODModes, err := cfg.db.GetOverdriveModes(r.Context())
 	if err != nil {
-		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve overdrive modes", err)
+		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "couldn't retrieve overdrive modes.", err)
 	}
 
 	resources := createNamedAPIResourcesSimple(cfg, dbODModes, i.endpoint, func(mode database.OverdriveMode) (int32, string) {
@@ -154,7 +155,7 @@ func (cfg *Config) getOverdriveModesType(r *http.Request, endpoint string, input
 
 	dbODModes, err := cfg.db.GetOverdriveModesByType(r.Context(), modeType)
 	if err != nil {
-		return nil, newHTTPError(http.StatusBadRequest, "No valid overdrive mode type provided. See /api/overdrive-modes for valid values", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get overdrive modes by type.", err)
 	}
 
 	resources := createNamedAPIResourcesSimple(cfg, dbODModes, endpoint, func(mode database.OverdriveMode) (int32, string) {

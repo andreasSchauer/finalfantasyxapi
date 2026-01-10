@@ -34,7 +34,7 @@ func (cfg *Config) getMonsterItems(r *http.Request, mon database.Monster) (Monst
 		if errors.Is(err, sql.ErrNoRows) {
 			return MonsterItems{}, nil
 		}
-		return MonsterItems{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve items of Monster %s Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return MonsterItems{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve items of %s.", getMonsterName(mon)), err)
 	}
 
 	stealCommon := cfg.newItemAmount(
@@ -109,7 +109,7 @@ func (cfg *Config) getMonsterItems(r *http.Request, mon database.Monster) (Monst
 func (cfg *Config) getMonsterOtherItems(r *http.Request, mon database.Monster, monItemsID int32) ([]PossibleItem, error) {
 	dbOtherItems, err := cfg.db.GetMonsterOtherItems(r.Context(), monItemsID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve other items of Monster %s Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve other items of monster '%s' version '%d'.", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
 	}
 
 	otherItems := []PossibleItem{}

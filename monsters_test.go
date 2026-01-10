@@ -18,14 +18,14 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/308",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Monster with provided ID 308 doesn't exist. Max ID: 307",
+				expectedErr:    "monster with provided id '308' doesn't exist. max id: 307.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Monster not found: a.",
+				expectedErr:    "monster not found: 'a'.",
 			},
 		},
 		
@@ -33,56 +33,77 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "Monster not found: a, version 2",
+				expectedErr:    "monster not found: 'a', version '2'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2/3",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Wrong format. Usage: /api/monsters/{name or id}, /api/monsters/{name}/{version}, or  /api/monsters/{id}/{subsection}. Available subsections: abilities",
+				expectedErr:    "wrong format. usage: '/api/monsters/{name or id}', '/api/monsters/{name}/{version}', or  '/api/monsters/{id}/{subsection}'. available subsections: abilities.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/211?has-overdrive=true",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Invalid usage of parameter has-overdrive. Parameter has-overdrive can only be used with list-endpoints.",
+				expectedErr:    "invalid usage of parameter 'has-overdrive'. parameter 'has-overdrive' can only be used with list-endpoints.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/1?altered-state=1",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Monster sinscale, Version 1 has no altered states",
+				expectedErr:    "monster 'sinscale', version '1' has no altered states",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/105?altered-state=5",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "provided id '5' in 'altered-state' is out of range. max id: 1.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/210?omnis-elements=iifii",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Invalid id 210. Parameter omnis-elements can only be used with ids 211.",
+				expectedErr:    "invalid id '210'. parameter 'omnis-elements' can only be used with ids: 211.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/211?omnis-elements=iifii",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Invalid input. omnis-elements must contain a combination of exactly four letters. Valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).",
+				expectedErr:    "invalid input. omnis-elements must contain a combination of exactly four letters. valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/211?omnis-elements=iftw",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Invalid letter t for omnis-elements. Use any four letter combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).",
+				expectedErr:    "invalid letter 't' for omnis-elements. use any four-letter-combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/169?kimahri-stats=hp-1000",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Invalid id 169. Parameter kimahri-stats can only be used with ids 167, 168.",
+				expectedErr:    "invalid id '169'. parameter 'kimahri-stats' can only be used with ids: 167, 168.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/168?kimahri-stats=hp-100000",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "kimahri's hp can't be higher than 99999.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/167?kimahri-stats=defense-5",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid stat 'defense' in 'kimahri-stats'. 'kimahri-stats' only uses 'hp', 'strength', 'magic', 'agility'.",
 			},
 		},
 		{
@@ -206,7 +227,7 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/magic-urn/1",
+				requestURL:     "/api/monsters/magIc-urn/1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"species":       true,
@@ -236,7 +257,7 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/spherimorph?altered-state=1",
+				requestURL:     "/api/monsters/sphErimorph?altered-state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"species":       true,
@@ -275,7 +296,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				properties: []int32{1},
 				locations: []int32{150},
-				formations: []int32{221},
+				formations: []int32{220},
 				items: &testItems{
 					itemDropChance: 255,
 					items: map[string]*int32{
@@ -468,7 +489,7 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/211?omnis-elements=ilfw",
+				requestURL:     "/api/monsters/211?omnis-elements=iLfw",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"agility params": true,
@@ -600,7 +621,7 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/biran-ronso?kimahri-stats=hp-1000,strength-255,magic-255,agility-255",
+				requestURL:     "/api/monsters/biran-ronso?kimahri-stats=hP-1000,strEngth-255,mAgic-255,agIlity-255",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"species":        true,
@@ -698,6 +719,33 @@ func TestGetMonster(t *testing.T) {
 					"magic": 12,
 					"agility": 1,
 				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/seymour",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"species":        true,
+					"ctb icon type":  true,
+					"distance":       true,
+					"items":		  true,
+					"equipment": 	  true,
+				},
+				expLengths: map[string]int{},
+			},
+			expNameVer: expNameVer{
+				id:      93,
+				name:    "seymour",
+				version: nil,
+			},
+			expMonsters: expMonsters{
+				agility: &AgilityParams{
+					TickSpeed: 10,
+					MinICV: h.GetInt32Ptr(-1),
+					MaxICV: h.GetInt32Ptr(-1),
+				},
+				autoAbilities: []int32{3},
 			},
 		},
 	}
@@ -830,16 +878,23 @@ func TestRetrieveMonsters(t *testing.T) {
 	}{
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?limit=asd",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid value 'asd' for parameter 'limit'. usage: '?limit{integer or 'max'}'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental-affinities=weak",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input. usage: ?elemental-affinities={element_name/id}-{affinity_name/id},{element_name/id}-{affinity_name/id},...",
+				expectedErr:    "invalid input. usage: '?elemental-affinities={element_name/id}-{affinity_name/id},{element_name/id}-{affinity_name/id},...'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/?omnis-elements=ffff",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Invalid usage of parameter omnis-elements. Parameter omnis-elements can only be used with single-resource-endpoints.",
+				expectedErr:    "invalid usage of parameter 'omnis-elements'. parameter 'omnis-elements' can only be used with single-resource-endpoints.",
 			},
 		},
 		{
@@ -851,65 +906,86 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?elemental-affinities=fire-weak,fire-neutral",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "duplicate use of id '1' in 'elemental-affinities'. each element can only be used once.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?status-resists=4&resistance=350",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value: 350. resistance must be an integer ranging from 1 to 254.",
+				expectedErr:    "invalid value '350'. 'resistance' must be an integer ranging from 1 to 254.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?status-resists=4&resistance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'frank' for parameter resistance. Usage: status-resists={status_condition_name/id},{status_condition_name/id},...&resistance={1-254 or immune}",
+				expectedErr:    "invalid value 'frank' for parameter 'resistance'. usage: 'status-resists={status_condition_id},{status_condition_id},...&resistance={1-254 or 'immune'}'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?resistance=50",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Invalid usage of parameter resistance. Parameter resistance can only be used in combination with parameter(s): status-resists.",
+				expectedErr:    "invalid usage of parameter 'resistance'. parameter 'resistance' can only be used in combination with parameter(s): status-resists.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?method=steal",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "Invalid usage of parameter method. Parameter method can only be used in combination with parameter(s): item.",
+				expectedErr:    "invalid usage of parameter 'method'. parameter 'method' can only be used in combination with parameter(s): item.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?item=22&method=steals",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid method value: steals. allowed values: steal, drop, bribe, other.",
+				expectedErr:    "invalid method value: 'steals'. allowed values: 'steal', 'drop', 'bribe', 'other'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?item=asf&method=drop",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'asf' used for parameter 'item'",
+				expectedErr:    "invalid id 'asf' used for parameter 'item'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?auto-abilities=1,4,4,1,3,3,4",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "duplicate use of id '4' in 'auto-abilities'. each id can only be used once.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?distance=5",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid value '5'. 'distance' must be an integer ranging from 1 to 4.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?distance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'frank' for parameter distance. Usage: ?distance={value}",
+				expectedErr:    "invalid value 'frank' for parameter 'distance'. usage: '?distance={value}'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?ronso-rage=13",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided ID 13 in 'ronso-rage' is out of range. Max ID: 12",
+				expectedErr:    "provided id '13' in 'ronso-rage' is out of range. max id: 12.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?species=wywrm",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value: 'wywrm', use /api/species to see valid values",
+				expectedErr:    "invalid enum value: 'wywrm'. use /api/species to see valid values.",
 			},
 		},
 		{
@@ -926,7 +1002,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?elemental-affinities=fire-weak,water-neutral",
+				requestURL:     "/api/monsters?elemental-affinities=FIre-weAk,water-neutral",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"next": true,
@@ -939,12 +1015,32 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?limit=max&status-resists=38",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    43,
+				results: []int32{32, 127, 211, 233, 295},
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?limit=max&status-resists=1,4,11&resistance=50",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
 				count:    150,
 				results: []int32{3, 128, 188, 227, 249},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?limit=max&status-resists=4&resistance=immune",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:    163,
+				results: []int32{5, 67, 100, 151, 258},
 			},
 		},
 		{
@@ -1039,7 +1135,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?underwater=true&type=boss",
+				requestURL:     "/api/monsters?underwater=true&type=bOss",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
@@ -1049,7 +1145,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?zombie=true&species=wyrm",
+				requestURL:     "/api/monsters?zombie=true&species=wyRm",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
@@ -1059,7 +1155,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?creation-area=djose",
+				requestURL:     "/api/monsters?creation-area=DJose",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{

@@ -36,6 +36,6 @@ func handleHTTPError(w http.ResponseWriter, err error) bool {
 		return true
 	}
 
-	respondWithError(w, http.StatusInternalServerError, "An unexpected error occurred", err)
+	respondWithError(w, http.StatusInternalServerError, "an unexpected error occurred.", err)
 	return true
 }

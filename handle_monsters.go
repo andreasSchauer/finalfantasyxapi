@@ -55,6 +55,24 @@ type Monster struct {
 	Abilities            []MonsterAbility      `json:"abilities"`
 }
 
+func (m *Monster) Error() string {
+	msg := fmt.Sprintf("monster '%s'", m.Name)
+
+	if m.Version != nil {
+		msg += fmt.Sprintf(", version '%d'", *m.Version)
+	}
+
+	return msg
+}
+
+func getMonsterName(mon database.Monster) string {
+	monster := Monster{
+		Name: mon.Name,
+		Version: h.NullInt32ToPtr(mon.Version),
+	}
+
+	return monster.Error()
+}
 
 func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 	i := cfg.e.monsters
@@ -75,7 +93,7 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("Wrong format. Usage: /api/%s/{name or id}, /api/%s/{name}/{version}, or  /api/%s/{id}/{subsection}. Available subsections: %s", i.endpoint, i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{name or id}', '/api/%s/{name}/{version}', or  '/api/%s/{id}/{subsection}'. available subsections: %s.", i.endpoint, i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
 }
@@ -90,7 +108,7 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 
 	dbMonster, err := cfg.db.GetMonster(r.Context(), id)
 	if err != nil {
-		return Monster{}, newHTTPError(http.StatusNotFound, "Couldn't get Monster. Monster with this ID doesn't exist.", err)
+		return Monster{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("monster with id '%d' doesn't exist.", id), err)
 	}
 
 	monsterItems, err := cfg.getMonsterItems(r, dbMonster)
@@ -166,6 +184,16 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 		return Monster{}, err
 	}
 
+	monster.BaseStats, err = cfg.applyRonsoStats(r, monster)
+	if err != nil {
+		return Monster{}, err
+	}
+
+	monster.ElemResists, err = cfg.applyOmnisElemResists(r, monster)
+	if err != nil {
+		return Monster{}, err
+	}
+
 	monster.BribeChances, err = cfg.getMonsterBribeChances(monster)
 	if err != nil {
 		return Monster{}, err
@@ -176,20 +204,12 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 		return Monster{}, err
 	}
 
-	monster.BaseStats, err = cfg.applyRonsoStats(r, monster)
-	if err != nil {
-		return Monster{}, err
-	}
-
 	monster.AgilityParameters, err = cfg.getMonsterAgilityVals(r, monster)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	monster.ElemResists, err = cfg.getOmnisElemResists(r, monster)
-	if err != nil {
-		return Monster{}, err
-	}
+	
 
 	return monster, nil
 }
@@ -199,7 +219,7 @@ func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (Nam
 
 	dbMons, err := cfg.db.GetMonstersByName(r.Context(), monsterName)
 	if err != nil {
-		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't get multiple Monsters", err)
+		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple monsters with name '%s'.", monsterName), err)
 	}
 
 	resources := createNamedAPIResources(cfg, dbMons, i.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
@@ -224,7 +244,7 @@ func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, erro
 
 	dbMons, err := cfg.db.GetMonsters(r.Context())
 	if err != nil {
-		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve monsters", err)
+		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters.", err)
 	}
 
 	resources := createNamedAPIResources(cfg, dbMons, i.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {

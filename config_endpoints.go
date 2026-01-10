@@ -29,7 +29,7 @@ type endpoints struct {
 	overdriveAbilities handlerInput[seeding.OverdriveAbility, any, NamedApiResourceList]
 	triggerCommands    handlerInput[seeding.TriggerCommand, any, NamedApiResourceList]
 	properties         handlerInput[seeding.Property, any, NamedApiResourceList]
-	ronsoRages         handlerInput[seeding.Overdrive, any, NamedApiResourceList]
+	ronsoRages         handlerInput[seeding.RonsoRage, any, NamedApiResourceList]
 	shops              handlerInput[seeding.Shop, any, UnnamedApiResourceList]
 	sidequests         handlerInput[seeding.Sidequest, any, NamedApiResourceList]
 	songs              handlerInput[seeding.Song, any, NamedApiResourceList]
@@ -208,10 +208,10 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Properties,
 	}
 
-	e.ronsoRages = handlerInput[seeding.Overdrive, any, NamedApiResourceList]{
+	e.ronsoRages = handlerInput[seeding.RonsoRage, any, NamedApiResourceList]{
 		endpoint:     "ronso-rages",
 		resourceType: "ronso rage",
-		objLookup:    cfg.l.Overdrives,
+		objLookup:    cfg.l.RonsoRages,
 	}
 
 	e.shops = handlerInput[seeding.Shop, any, UnnamedApiResourceList]{

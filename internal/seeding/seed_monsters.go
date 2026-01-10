@@ -3,7 +3,6 @@ package seeding
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -266,21 +265,8 @@ func (l *Lookup) seedMonsterAutoAbilities(qtx *database.Queries, monster Monster
 }
 
 func (l *Lookup) seedMonsterRonsoRages(qtx *database.Queries, monster Monster) error {
-	for _, rage := range monster.RonsoRages {
-		key := LookupObject{
-			Name: rage,
-		}
-
-		overdrive, err := GetResource(key, l.Overdrives)
-		if err != nil {
-			return err
-		}
-
-		if overdrive.User != "kimahri" {
-			return h.GetErr(rage, errors.New("overdrive has to be a ronso rage"))
-		}
-
-		junction, err := createJunction(monster, key, l.Overdrives)
+	for _, ronsoRageStr := range monster.RonsoRages {
+		junction, err := createJunction(monster, ronsoRageStr, l.RonsoRages)
 		if err != nil {
 			return err
 		}
@@ -288,10 +274,10 @@ func (l *Lookup) seedMonsterRonsoRages(qtx *database.Queries, monster Monster) e
 		err = qtx.CreateMonstersRonsoRagesJunction(context.Background(), database.CreateMonstersRonsoRagesJunctionParams{
 			DataHash:    generateDataHash(junction),
 			MonsterID:   junction.ParentID,
-			OverdriveID: junction.ChildID,
+			RonsoRageID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(rage, err, "couldn't junction ronso rage")
+			return h.GetErr(ronsoRageStr, err, "couldn't junction ronso rage")
 		}
 	}
 

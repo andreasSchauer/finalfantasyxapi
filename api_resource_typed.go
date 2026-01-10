@@ -57,7 +57,7 @@ func (r TypedAPIResource) GetAPIResource() IsAPIResource {
 func (cfg *Config) newNamedAPIResourceFromType(endpoint, key string, lookup map[string]TypedAPIResource) (NamedAPIResource, error) {
 	enumType, err := GetEnumType(key, lookup)
 	if err != nil {
-		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get enum %s for %s", key, endpoint), fmt.Errorf("%s: %v", endpoint, err))
+		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get enum '%s' for '%s'.", key, endpoint), fmt.Errorf("%s: %v", endpoint, err))
 	}
 
 	resource := cfg.newNamedAPIResourceSimple(endpoint, enumType.ID, enumType.Name)

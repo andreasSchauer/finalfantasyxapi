@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -26,7 +27,7 @@ func newParseResponse(id int32, name string) parseResponse {
 func parseID(idStr, resourceType string, maxID int) (parseResponse, error) {
 	response, err := checkID(idStr, resourceType, maxID)
 	if errors.Is(err, errNotAnID) {
-		return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s'", idStr), err)
+		return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s'.", idStr), err)
 	}
 	if err != nil {
 		return parseResponse{}, err
@@ -43,7 +44,7 @@ func checkID(idStr, resourceType string, maxID int) (parseResponse, error) {
 	}
 
 	if id > maxID || id <= 0 {
-		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with provided ID %d doesn't exist. Max ID: %d", h.Capitalize(resourceType), id, maxID), err)
+		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with provided id '%d' doesn't exist. max id: %d.", resourceType, id, maxID), err)
 	}
 
 	return newParseResponse(int32(id), ""), nil
@@ -66,8 +67,9 @@ func checkUniqueName[T h.HasID](name string, lookup map[string]T) (parseResponse
 }
 
 func checkNameSpelling[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
+	nameLower := strings.ToLower(name)
 	lookupObj := seeding.LookupObject{
-		Name: name,
+		Name: nameLower,
 	}
 
 	// check name/version resources with version = null
@@ -77,7 +79,7 @@ func checkNameSpelling[T h.HasID](name string, lookup map[string]T) (parseRespon
 	}
 
 	// check for unique names
-	response, err = seeding.GetResource(name, lookup)
+	response, err = seeding.GetResource(nameLower, lookup)
 	if err == nil {
 		return newParseResponse(response.GetID(), ""), nil
 	}
@@ -86,9 +88,10 @@ func checkNameSpelling[T h.HasID](name string, lookup map[string]T) (parseRespon
 }
 
 func checkNameMultiple[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
+	nameLower := strings.ToLower(name)
 	var testVersion int32 = 1
 	lookupObj := seeding.LookupObject{
-		Name:    name,
+		Name:    nameLower,
 		Version: &testVersion,
 	}
 
@@ -98,7 +101,7 @@ func checkNameMultiple[T h.HasID](name string, lookup map[string]T) (parseRespon
 		return newParseResponse(0, lookupObj.Name), nil
 	}
 
-	lookupObj.Name = h.GetNameWithSpaces(name)
+	lookupObj.Name = h.GetNameWithSpaces(nameLower)
 
 	// check for multi-versioned names with spaces
 	_, err = seeding.GetResource(lookupObj, lookup)
@@ -110,8 +113,10 @@ func checkNameMultiple[T h.HasID](name string, lookup map[string]T) (parseRespon
 }
 
 func checkNameVersion[T h.HasID](name string, version *int32, lookup map[string]T) (parseResponse, error) {
+	nameLower := strings.ToLower(name)
+
 	key := seeding.LookupObject{
-		Name:    name,
+		Name:    nameLower,
 		Version: version,
 	}
 
@@ -121,7 +126,7 @@ func checkNameVersion[T h.HasID](name string, version *int32, lookup map[string]
 		return newParseResponse(resource.GetID(), ""), nil
 	}
 
-	nameWithSpaces := h.GetNameWithSpaces(name)
+	nameWithSpaces := h.GetNameWithSpaces(nameLower)
 	key.Name = nameWithSpaces
 
 	// check for names with spaces
@@ -142,7 +147,7 @@ func parseVersionStr(versionStr string) (*int32, error) {
 
 	version, err := strconv.Atoi(versionStr)
 	if err != nil {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid version number: %s", versionStr), err)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid version number: '%s'.", versionStr), err)
 	}
 	versionInt32 := int32(version)
 	versionPtr = &versionInt32

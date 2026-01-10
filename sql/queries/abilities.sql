@@ -90,6 +90,13 @@ SET data_hash = $1,
 WHERE id = $4;
 
 
+-- name: CreateRonsoRage :one
+INSERT INTO ronso_rages (data_hash, overdrive_id)
+VALUES ($1, $2)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = ronso_rages.data_hash
+RETURNING *;
+
+
 -- name: CreateOverdrivesOverdriveAbilitiesJunction :exec
 INSERT INTO j_overdrives_overdrive_abilities (data_hash, overdrive_id, overdrive_ability_id)
 VALUES($1, $2, $3)

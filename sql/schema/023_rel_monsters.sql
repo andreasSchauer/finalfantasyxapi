@@ -109,7 +109,7 @@ CREATE TABLE j_monsters_ronso_rages (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     monster_id INTEGER NOT NULL REFERENCES monsters(id),
-    overdrive_id INTEGER NOT NULL REFERENCES overdrives(id)
+    ronso_rage_id INTEGER NOT NULL REFERENCES ronso_rages(id)
 );
 
 

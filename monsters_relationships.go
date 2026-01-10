@@ -106,7 +106,7 @@ type AgilityParams struct {
 func (cfg *Config) getMonsterProperties(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
 	dbProperties, err := cfg.db.GetMonsterProperties(r.Context(), mon.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get properties of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get properties of %s.", getMonsterName(mon)), err)
 	}
 
 	properties := createNamedAPIResourcesSimple(cfg, dbProperties, cfg.e.properties.endpoint, func(prop database.GetMonsterPropertiesRow) (int32, string) {
@@ -119,7 +119,7 @@ func (cfg *Config) getMonsterProperties(r *http.Request, mon database.Monster) (
 func (cfg *Config) getMonsterAutoAbilities(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
 	dbAutoAbilities, err := cfg.db.GetMonsterAutoAbilities(r.Context(), mon.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get auto abilities of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get auto-abilities of %s.", getMonsterName(mon)), err)
 	}
 
 	autoAbilities := createNamedAPIResourcesSimple(cfg, dbAutoAbilities, cfg.e.autoAbilities.endpoint, func(autoAbility database.GetMonsterAutoAbilitiesRow) (int32, string) {
@@ -130,14 +130,13 @@ func (cfg *Config) getMonsterAutoAbilities(r *http.Request, mon database.Monster
 }
 
 func (cfg *Config) getMonsterRonsoRages(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
-	const ronsoRageOffset int32 = 35
 	dbRages, err := cfg.db.GetMonsterRonsoRages(r.Context(), mon.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get ronso rages of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get ronso rages of %s.", getMonsterName(mon)), err)
 	}
 
 	rages := createNamedAPIResourcesSimple(cfg, dbRages, cfg.e.ronsoRages.endpoint, func(rage database.GetMonsterRonsoRagesRow) (int32, string) {
-		return rage.RonsoRageID - ronsoRageOffset, rage.RonsoRage
+		return rage.RonsoRageID, rage.RonsoRage
 	})
 
 	return rages, nil
@@ -146,7 +145,7 @@ func (cfg *Config) getMonsterRonsoRages(r *http.Request, mon database.Monster) (
 func (cfg *Config) getMonsterLocations(r *http.Request, mon database.Monster) ([]LocationAPIResource, error) {
 	dbLocations, err := cfg.db.GetMonsterLocations(r.Context(), mon.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get locations of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get locations of %s.", getMonsterName(mon)), err)
 	}
 
 	locations := createLocationBasedAPIResources(cfg, dbLocations, func(loc database.GetMonsterLocationsRow) (string, string, string, *int32) {
@@ -159,7 +158,7 @@ func (cfg *Config) getMonsterLocations(r *http.Request, mon database.Monster) ([
 func (cfg *Config) getMonsterMonsterFormations(r *http.Request, mon database.Monster) ([]UnnamedAPIResource, error) {
 	dbFormations, err := cfg.db.GetMonsterMonsterFormations(r.Context(), mon.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get formations of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get monster formations of %s.", getMonsterName(mon)), err)
 	}
 
 	formations := createUnnamedAPIResources(cfg, dbFormations, cfg.e.monsterFormations.endpoint, func(formation database.GetMonsterMonsterFormationsRow) int32 {
@@ -172,7 +171,7 @@ func (cfg *Config) getMonsterMonsterFormations(r *http.Request, mon database.Mon
 func (cfg *Config) getMonsterBaseStats(r *http.Request, mon database.Monster) ([]BaseStat, error) {
 	dbBaseStats, err := cfg.db.GetMonsterBaseStats(r.Context(), mon.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get base stats of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get base stats of %s.", getMonsterName(mon)), err)
 	}
 
 	baseStats := []BaseStat{}
@@ -189,7 +188,7 @@ func (cfg *Config) getMonsterBaseStats(r *http.Request, mon database.Monster) ([
 func (cfg *Config) getMonsterElemResists(r *http.Request, mon database.Monster) ([]ElementalResist, error) {
 	dbElemResists, err := cfg.db.GetMonsterElemResists(r.Context(), mon.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get elemental resists of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get elemental resists of %s.", getMonsterName(mon)), err)
 	}
 
 	elemResists := []ElementalResist{}
@@ -206,7 +205,7 @@ func (cfg *Config) getMonsterElemResists(r *http.Request, mon database.Monster) 
 func (cfg *Config) changeElemResist(element NamedAPIResource, newAffinityName string) (ElementalResist, error) {
 	newAffinity, err := seeding.GetResource(newAffinityName, cfg.l.Affinities)
 	if err != nil {
-		return ElementalResist{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get affinity %s", newAffinityName), err)
+		return ElementalResist{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get affinity '%s'.", newAffinityName), err)
 	}
 
 	newResist := cfg.newElemResist(
@@ -222,7 +221,7 @@ func (cfg *Config) changeElemResist(element NamedAPIResource, newAffinityName st
 func (cfg *Config) getMonsterStatusResists(r *http.Request, mon database.Monster) ([]StatusResist, error) {
 	dbStatusResists, err := cfg.db.GetMonsterStatusResists(r.Context(), mon.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get status resists of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get status resists of %s.", getMonsterName(mon)), err)
 	}
 
 	statusResists := []StatusResist{}
@@ -239,7 +238,7 @@ func (cfg *Config) getMonsterStatusResists(r *http.Request, mon database.Monster
 func (cfg *Config) getMonsterImmunities(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
 	dbImmunities, err := cfg.db.GetMonsterImmunities(r.Context(), mon.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get status immunities of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get status immunities of %s.", getMonsterName(mon)), err)
 	}
 
 	immunities := createNamedAPIResourcesSimple(cfg, dbImmunities, cfg.e.statusConditions.endpoint, func(immunity database.GetMonsterImmunitiesRow) (int32, string) {
@@ -252,19 +251,13 @@ func (cfg *Config) getMonsterImmunities(r *http.Request, mon database.Monster) (
 func (cfg *Config) getMonsterAbilities(r *http.Request, mon database.Monster) ([]MonsterAbility, error) {
 	dbMonAbilities, err := cfg.db.GetMonsterAbilities(r.Context(), mon.ID)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get abilities of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get abilities of %s.", getMonsterName(mon)), err)
 	}
 
 	monAbilities := []MonsterAbility{}
 
 	for _, dbAbility := range dbMonAbilities {
-		ref := seeding.AbilityReference{
-			Name:        dbAbility.Ability,
-			Version:     h.NullInt32ToPtr(dbAbility.Version),
-			AbilityType: string(dbAbility.AbilityType),
-		}
-
-		abilityResource, err := cfg.getAbilityResource(ref, h.NullStringToPtr(dbAbility.Specification))
+		abilityResource, err := cfg.getAbilityResource(dbAbility.Ability, h.NullInt32ToPtr(dbAbility.Version), string(dbAbility.AbilityType), h.NullStringToPtr(dbAbility.Specification))
 		if err != nil {
 			return nil, err
 		}
@@ -283,10 +276,16 @@ func (cfg *Config) getMonsterAbilities(r *http.Request, mon database.Monster) ([
 
 
 // can be used for various other functions related to abilities
-func (cfg *Config) getAbilityResource(ref seeding.AbilityReference, specification *string) (NamedAPIResource, error) {
-	i, err := cfg.getAbilityInput(database.AbilityType(ref.AbilityType))
+func (cfg *Config) getAbilityResource(name string, version *int32, abilityType string, specification *string) (NamedAPIResource, error) {
+	i, err := cfg.getAbilityInput(database.AbilityType(abilityType))
 	if err != nil {
 		return NamedAPIResource{}, err
+	}
+
+	ref := seeding.AbilityReference{
+		Name:        name,
+		Version:     version,
+		AbilityType: abilityType,
 	}
 
 	abilityLookup, err := seeding.GetResource(ref, i.ObjLookup())
@@ -294,7 +293,7 @@ func (cfg *Config) getAbilityResource(ref seeding.AbilityReference, specificatio
 		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
 	}
 
-	abilityResource := cfg.newNamedAPIResource(i.Endpoint(), abilityLookup.GetID(), ref.Name, ref.Version, specification)
+	abilityResource := cfg.newNamedAPIResource(i.Endpoint(), abilityLookup.GetID(), name, version, specification)
 
 	return abilityResource, nil
 }
@@ -322,7 +321,7 @@ func (cfg *Config) getAbilityInput(abilityType database.AbilityType) (handlerVie
 		i = cfg.e.triggerCommands
 
 	default:
-		err = newHTTPError(http.StatusInternalServerError, fmt.Sprintf("ability of type %s does not exist", abilityType), nil)
+		err = newHTTPError(http.StatusInternalServerError, fmt.Sprintf("ability of type '%s' does not exist.", abilityType), nil)
 	}
 
 	if err != nil {
@@ -373,13 +372,25 @@ func (cfg *Config) getMonsterAgilityVals(r *http.Request, mon Monster) (*Agility
 
 	dbAgilityTier, err := cfg.db.GetAgilityTierByAgility(r.Context(), agility)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't extract agility parameters from Monster %s, Version %d", mon.Name, h.DerefOrNil(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't extract agility parameters from %s.", mon.Error()), err)
 	}
 
 	agilityParams := AgilityParams{
 		TickSpeed: dbAgilityTier.TickSpeed,
 		MinICV:    h.NullInt32ToPtr(dbAgilityTier.MonsterMinIcv),
 		MaxICV:    h.NullInt32ToPtr(dbAgilityTier.MonsterMaxIcv),
+	}
+
+	fsLookup, err := seeding.GetResource("first strike", cfg.l.AutoAbilities)
+	if err != nil {
+		return nil, err
+	}
+	fs := cfg.newNamedAPIResourceSimple(cfg.e.autoAbilities.endpoint, fsLookup.ID, fsLookup.Name)
+
+	if resourcesContain(mon.AutoAbilities, fs) {
+		var fsICV int32 = -1
+		agilityParams.MinICV = &fsICV
+		agilityParams.MaxICV = &fsICV
 	}
 
 	return &agilityParams, nil
@@ -391,7 +402,7 @@ func (cfg *Config) getMonsterBribeChances(mon Monster) ([]BribeChance, error) {
 	if err != nil {
 		return nil, err
 	}
-	bribe := cfg.newNamedAPIResourceSimple("status-conditions", bribeLookup.ID, bribeLookup.Name)
+	bribe := cfg.newNamedAPIResourceSimple(cfg.e.statusConditions.endpoint, bribeLookup.ID, bribeLookup.Name)
 	if resourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
 	}

@@ -168,10 +168,11 @@ ORDER BY a.id;
 
 -- name: GetMonsterRonsoRages :many
 SELECT
-    o.id AS ronso_rage_id,
+    r.id AS ronso_rage_id,
     o.name AS ronso_rage
-FROM overdrives o
-JOIN j_monsters_ronso_rages j ON j.overdrive_id = o.id
+FROM ronso_rages r
+JOIN overdrives o ON r.overdrive_id = o.id
+JOIN j_monsters_ronso_rages j ON j.ronso_rage_id = r.id
 WHERE j.monster_id = $1
 ORDER BY o.id;
 
@@ -483,7 +484,7 @@ SELECT
     m.*
 FROM monsters m
 JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
-WHERE j.overdrive_id = $1
+WHERE j.ronso_rage_id = $1
 ORDER BY m.id;
 
 
@@ -607,7 +608,7 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateMonstersRonsoRagesJunction :exec
-INSERT INTO j_monsters_ronso_rages (data_hash, monster_id, overdrive_id)
+INSERT INTO j_monsters_ronso_rages (data_hash, monster_id, ronso_rage_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

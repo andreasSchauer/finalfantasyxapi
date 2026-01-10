@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type MonsterEquipment struct {
@@ -52,12 +51,12 @@ func (cfg *Config) getMonsterEquipment(r *http.Request, mon database.Monster) (M
 		if errors.Is(err, sql.ErrNoRows) {
 			return MonsterEquipment{}, nil
 		}
-		return MonsterEquipment{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve Equipment of Monster %s Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return MonsterEquipment{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve equipment of %s.", getMonsterName(mon)), err)
 	}
 
 	abilitySlots, attachedAbilities, err := cfg.getMonsterEquipmentSlots(r, mon, dbEquipment)
 	if err != nil {
-		return MonsterEquipment{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve Equipment Slots of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return MonsterEquipment{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve equipment slots of %s.", getMonsterName(mon)), err)
 	}
 
 	weaponAbilities, err := cfg.getEquipmentDrops(r, mon, dbEquipment, database.EquipTypeWeapon)
@@ -84,7 +83,7 @@ func (cfg *Config) getMonsterEquipment(r *http.Request, mon database.Monster) (M
 func (cfg *Config) getMonsterEquipmentSlots(r *http.Request, mon database.Monster, equipment database.MonsterEquipment) (MonsterEquipmentSlots, MonsterEquipmentSlots, error) {
 	dbEquipmentSlots, err := cfg.db.GetMonsterEquipmentSlots(r.Context(), equipment.ID)
 	if err != nil {
-		return MonsterEquipmentSlots{}, MonsterEquipmentSlots{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve Equipment Slots of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return MonsterEquipmentSlots{}, MonsterEquipmentSlots{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve equipment slots of %s.", getMonsterName(mon)), err)
 	}
 
 	dbAbilitySlots := dbEquipmentSlots[0]
@@ -124,7 +123,7 @@ func (cfg *Config) getMonsterEquipmentSlotsChances(r *http.Request, mon database
 		EquipmentSlotsID:   slots.ID,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't assemble Equipment Slots of Monster %s, Version %d", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't assemble equipment slots of %s.", getMonsterName(mon)), err)
 	}
 
 	chances := []EquipmentSlotsChance{}
@@ -147,7 +146,7 @@ func (cfg *Config) getEquipmentDrops(r *http.Request, mon database.Monster, equi
 		Type:               equipType,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve dropped %s abilities of Monster %s, Version %d", string(equipType), mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve dropped %s abilities of %s.", string(equipType), getMonsterName(mon)), err)
 	}
 
 	drops := []EquipmentDrop{}
@@ -178,7 +177,7 @@ func (cfg *Config) getEquipmentDropForcedChars(r *http.Request, mon database.Mon
 		EquipmentDropID:    drop.ID,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("Couldn't retrieve characters of auto ability %s dropped by Monster %s, Version %d", drop.AutoAbility, mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve characters of auto-ability '%s' dropped by %s.", drop.AutoAbility, getMonsterName(mon)), err)
 	}
 
 	characters := createNamedAPIResourcesSimple(cfg, dbChars, cfg.e.characters.endpoint, func(char database.GetEquipmentDropCharactersRow) (int32, string) {

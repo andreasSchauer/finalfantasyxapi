@@ -18,6 +18,11 @@ func (cfg *Config) createListURL(endpoint string) string {
 	return fmt.Sprintf("http://%s/api/%s", cfg.host, endpoint)
 }
 
+func (cfg *Config) createSectionURL(endpoint, section string) string {
+	url := cfg.createListURL(endpoint)
+	return fmt.Sprintf("%s/%s", url, section)
+}
+
 func (cfg *Config) completeTestURL(path string) string {
 	return fmt.Sprintf("http://%s/api%s", cfg.host, path)
 }

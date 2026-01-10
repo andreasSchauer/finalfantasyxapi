@@ -52,7 +52,7 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("Wrong format. Usage: /api/%s/{id}, or /api/%s/{id}/{subsection}. Supported subsections: %s.", i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}', or '/api/%s/{id}/{subsection}'. supported subsections: %s.", i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
 }
@@ -68,7 +68,7 @@ func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
 
 	dbArea, err := cfg.db.GetArea(r.Context(), id)
 	if err != nil {
-		return Area{}, newHTTPError(http.StatusNotFound, "Couldn't get Area. Area with this ID doesn't exist.", err)
+		return Area{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("area with id '%d' doesn't exist.", id), err)
 	}
 
 	rel, err := cfg.getAreaRelationships(r, dbArea)
@@ -117,7 +117,7 @@ func (cfg *Config) retrieveAreas(r *http.Request) (LocationApiResourceList, erro
 
 	dbAreas, err := cfg.db.GetAreas(r.Context())
 	if err != nil {
-		return LocationApiResourceList{}, newHTTPError(http.StatusInternalServerError, "Couldn't retrieve areas", err)
+		return LocationApiResourceList{}, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas.", err)
 	}
 
 	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasRow) (string, string, string, *int32) {

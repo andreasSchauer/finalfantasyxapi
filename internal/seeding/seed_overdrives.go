@@ -49,6 +49,25 @@ func (o Overdrive) Error() string {
 	return fmt.Sprintf("overdrive %s, version %v", o.Name, h.DerefOrNil(o.Version))
 }
 
+type RonsoRage struct {
+	ID			int32
+	Overdrive
+}
+
+func (r RonsoRage) ToHashFields() []any {
+	return []any{
+		r.Overdrive.ID,
+	}
+}
+
+func (r RonsoRage) GetID() int32 {
+	return r.ID
+}
+
+func (r RonsoRage) Error() string {
+	return fmt.Sprintf("ronso rage %s", r.Overdrive.Name)
+}
+
 func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrives.json"
 
@@ -82,6 +101,14 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			overdrive.ID = dbOverdrive.ID
+
+			if overdrive.User == "kimahri" {
+				err = l.seedRonsoRage(qtx, overdrive)
+				if err != nil {
+					return err
+				}
+			}
+
 			lookupObj := LookupObject{
 				Name: overdrive.Name,
 				Version: overdrive.Version,
@@ -93,6 +120,25 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 
 		return nil
 	})
+}
+
+func (l *Lookup) seedRonsoRage(qtx *database.Queries, overdrive Overdrive) error {
+	ronsoRage := RonsoRage{
+		Overdrive: overdrive,
+	}
+
+	dbRonsoRage, err := qtx.CreateRonsoRage(context.Background(), database.CreateRonsoRageParams{
+		DataHash: generateDataHash(ronsoRage),
+		OverdriveID: ronsoRage.Overdrive.ID,
+	})
+	if err != nil {
+		return h.GetErr(ronsoRage.Error(), err, "couldn't create ronso rage")
+	}
+	
+	ronsoRage.ID = dbRonsoRage.ID
+	l.RonsoRages[ronsoRage.Overdrive.Name] = ronsoRage
+	
+	return nil
 }
 
 func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.DB) error {

@@ -310,6 +310,25 @@ func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbili
 	return i, err
 }
 
+const createRonsoRage = `-- name: CreateRonsoRage :one
+INSERT INTO ronso_rages (data_hash, overdrive_id)
+VALUES ($1, $2)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = ronso_rages.data_hash
+RETURNING id, data_hash, overdrive_id
+`
+
+type CreateRonsoRageParams struct {
+	DataHash    string
+	OverdriveID int32
+}
+
+func (q *Queries) CreateRonsoRage(ctx context.Context, arg CreateRonsoRageParams) (RonsoRage, error) {
+	row := q.db.QueryRowContext(ctx, createRonsoRage, arg.DataHash, arg.OverdriveID)
+	var i RonsoRage
+	err := row.Scan(&i.ID, &i.DataHash, &i.OverdriveID)
+	return i, err
+}
+
 const createTriggerCommand = `-- name: CreateTriggerCommand :one
 INSERT INTO trigger_commands (data_hash, ability_id, description, effect, topmenu, cursor)
 VALUES ($1, $2, $3, $4, $5, $6)

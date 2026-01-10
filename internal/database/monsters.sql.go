@@ -691,7 +691,7 @@ func (q *Queries) CreateMonstersPropertiesJunction(ctx context.Context, arg Crea
 }
 
 const createMonstersRonsoRagesJunction = `-- name: CreateMonstersRonsoRagesJunction :exec
-INSERT INTO j_monsters_ronso_rages (data_hash, monster_id, overdrive_id)
+INSERT INTO j_monsters_ronso_rages (data_hash, monster_id, ronso_rage_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
@@ -699,11 +699,11 @@ ON CONFLICT(data_hash) DO NOTHING
 type CreateMonstersRonsoRagesJunctionParams struct {
 	DataHash    string
 	MonsterID   int32
-	OverdriveID int32
+	RonsoRageID int32
 }
 
 func (q *Queries) CreateMonstersRonsoRagesJunction(ctx context.Context, arg CreateMonstersRonsoRagesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createMonstersRonsoRagesJunction, arg.DataHash, arg.MonsterID, arg.OverdriveID)
+	_, err := q.db.ExecContext(ctx, createMonstersRonsoRagesJunction, arg.DataHash, arg.MonsterID, arg.RonsoRageID)
 	return err
 }
 
@@ -1859,10 +1859,11 @@ func (q *Queries) GetMonsterProperties(ctx context.Context, monsterID int32) ([]
 
 const getMonsterRonsoRages = `-- name: GetMonsterRonsoRages :many
 SELECT
-    o.id AS ronso_rage_id,
+    r.id AS ronso_rage_id,
     o.name AS ronso_rage
-FROM overdrives o
-JOIN j_monsters_ronso_rages j ON j.overdrive_id = o.id
+FROM ronso_rages r
+JOIN overdrives o ON r.overdrive_id = o.id
+JOIN j_monsters_ronso_rages j ON j.ronso_rage_id = r.id
 WHERE j.monster_id = $1
 ORDER BY o.id
 `
@@ -3069,12 +3070,12 @@ SELECT
     m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text
 FROM monsters m
 JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
-WHERE j.overdrive_id = $1
+WHERE j.ronso_rage_id = $1
 ORDER BY m.id
 `
 
-func (q *Queries) GetMonstersByRonsoRageID(ctx context.Context, overdriveID int32) ([]Monster, error) {
-	rows, err := q.db.QueryContext(ctx, getMonstersByRonsoRageID, overdriveID)
+func (q *Queries) GetMonstersByRonsoRageID(ctx context.Context, ronsoRageID int32) ([]Monster, error) {
+	rows, err := q.db.QueryContext(ctx, getMonstersByRonsoRageID, ronsoRageID)
 	if err != nil {
 		return nil, err
 	}

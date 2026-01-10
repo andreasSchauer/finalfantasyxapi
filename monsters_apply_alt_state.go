@@ -1,10 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"slices"
-	"strconv"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -22,11 +22,11 @@ func (as AppliedState) IsZero() bool {
 
 func (cfg *Config) applyAlteredState(r *http.Request, mon Monster) (Monster, error) {
 	altStateID, err := cfg.getAltStateID(r, mon)
+	if errors.Is(err, errEmptyQuery) {
+		return mon, nil
+	}
 	if err != nil {
 		return Monster{}, err
-	}
-	if altStateID == 0 {
-		return mon, nil
 	}
 
 	altState := mon.AlteredStates[altStateID-1]
@@ -240,23 +240,20 @@ func replaceAltState(states []AlteredState, def AlteredState, i int) []AlteredSt
 
 func (cfg *Config) getAltStateID(r *http.Request, mon Monster) (int, error) {
 	queryParam := cfg.q.monsters["altered-state"]
-	altStateIDStr := r.URL.Query().Get(queryParam.Name)
-	if altStateIDStr == "" {
-		return 0, nil
-	}
+	query := r.URL.Query().Get(queryParam.Name)
 
-	altStateID, err := strconv.Atoi(altStateIDStr)
-	if err != nil {
-		return 0, newHTTPError(http.StatusBadRequest, "invalid alt state id", err)
+	if query == "" {
+		return 0, errEmptyQuery
 	}
-
+	
 	if len(mon.AlteredStates) == 0 {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("Monster %s, Version %d has no altered states", mon.Name, h.DerefOrNil(mon.Version)), err)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states", mon.Error()), nil)
 	}
 
-	if altStateID > len(mon.AlteredStates) || altStateID <= 0 {
-		return 0, newHTTPError(http.StatusBadRequest, "provided alt state id does not exist", err)
+	id, err := parseQueryIdVal(query, queryParam, len(mon.AlteredStates))
+	if err != nil {
+		return 0, err
 	}
 
-	return altStateID, nil
+	return int(id), nil
 }

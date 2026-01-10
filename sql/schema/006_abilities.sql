@@ -85,8 +85,16 @@ CREATE TABLE overdrives (
 );
 
 
+CREATE TABLE ronso_rages (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    overdrive_id INTEGER UNIQUE NOT NULL REFERENCES overdrives(id)
+);
+
+
 
 -- +goose Down
+DROP TABLE IF EXISTS ronso_rages;
 DROP TABLE IF EXISTS overdrives;
 DROP TABLE IF EXISTS trigger_commands;
 DROP TABLE IF EXISTS overdrive_abilities;

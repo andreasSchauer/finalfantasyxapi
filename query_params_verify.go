@@ -13,7 +13,7 @@ func verifyQueryParams(r *http.Request, endpoint string, id *int32, lookup map[s
 	for param := range q {
 		queryType, ok := lookup[param]
 		if !ok {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("Parameter %s does not exist for endpoint %s.", param, endpoint), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s.", param, endpoint), nil)
 		}
 
 		err := verifyRequiredParams(q, queryType, param)
@@ -31,14 +31,14 @@ func verifyQueryParams(r *http.Request, endpoint string, id *int32, lookup map[s
 }
 
 func verifyRequiredParams(q url.Values, queryType QueryType, param string) error {
-	if queryType.RequiredWith == nil {
+	if queryType.RequiredParams == nil {
 		return nil
 	}
 
-	for _, reqParam := range queryType.RequiredWith {
+	for _, reqParam := range queryType.RequiredParams {
 		reqParamVal := q.Get(reqParam)
 		if reqParamVal == "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid usage of parameter %s. Parameter %s can only be used in combination with parameter(s): %s.", param, param, strings.Join(queryType.RequiredWith, ", ")), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in combination with parameter(s): %s.", param, param, strings.Join(queryType.RequiredParams, ", ")), nil)
 		}
 	}
 
@@ -48,7 +48,7 @@ func verifyRequiredParams(q url.Values, queryType QueryType, param string) error
 func verifyQueryUsage(queryType QueryType, param string, id *int32) error {
 	if queryType.ForSingle {
 		if id == nil {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid usage of parameter %s. Parameter %s can only be used with single-resource-endpoints.", param, param), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used with single-resource-endpoints.", param, param), nil)
 		}
 
 		err := verifyAllowedIDs(queryType, param, *id)
@@ -58,7 +58,7 @@ func verifyQueryUsage(queryType QueryType, param string, id *int32) error {
 	}
 
 	if queryType.ForList && id != nil {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid usage of parameter %s. Parameter %s can only be used with list-endpoints.", param, param), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used with list-endpoints.", param, param), nil)
 	}
 
 	return nil
@@ -78,7 +78,7 @@ func verifyAllowedIDs(queryType QueryType, param string, id int32) error {
 	}
 	if !allowedIDPresent {
 		idsString := getIDsString(queryType.AllowedIDs)
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid id %d. Parameter %s can only be used with ids %s.", id, param, idsString), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%d'. parameter '%s' can only be used with ids: %s.", id, param, idsString), nil)
 	}
 
 	return nil

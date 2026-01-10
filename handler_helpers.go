@@ -27,6 +27,11 @@ func handleEndpointIDOnly[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w 
 		return
 	}
 
+	if segment == "sections" {
+		handleSections(cfg, w, r, i)
+		return
+	}
+
 	parseRes, err := parseID(segment, i.resourceType, len(i.objLookup))
 	if handleHTTPError(w, err) {
 		return
@@ -46,6 +51,11 @@ func handleEndpointNameOrID[T h.HasID, R any, L IsAPIResourceList](cfg *Config, 
 
 	if segment == "parameters" {
 		handleParameters(cfg, w, r, i)
+		return
+	}
+
+	if segment == "sections" {
+		handleSections(cfg, w, r, i)
 		return
 	}
 
@@ -98,6 +108,14 @@ func handleParameters[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w http
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
+func handleSections[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
+	sectionList, err := getSectionList(cfg, r, i)
+	if handleHTTPError(w, err) {
+		return
+	}
+	respondWithJSON(w, http.StatusOK, sectionList)
+}
+
 
 func handleEndpointSubsections[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWriter, i handlerInput[T, R, L], segments []string) {
 	posIDStr := segments[0]
@@ -107,27 +125,27 @@ func handleEndpointSubsections[T h.HasID, R any, L IsAPIResourceList](w http.Res
 		handleSubsection(w, i, segments)
 		return
 	}
-	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid ID: %s", posIDStr), nil)
+	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid id: '%s'.", posIDStr), nil)
 }
 
 
 func handleEndpointSubOrNameVer[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
 	posIDStr := segments[0]
 	posVerStr := segments[1]
-	isValidID := isValidInt(posIDStr)
-	isValidVersion := isValidInt(posVerStr)
+	idIsInt := isValidInt(posIDStr)
+	versionIsInt := isValidInt(posVerStr)
 
 	switch {
-	case isValidID:
+	case idIsInt:
 		handleSubsection(w, i, segments)
 		return
 
-	case !isValidID && isValidVersion:
+	case !idIsInt && versionIsInt:
 		handleEndpointNameVersion(w, r, i, segments)
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("Wrong format. Usage for two segments: /api/%s/{name}/{version}, or /api/%s/{id}/{subsection}. Available subsections: %s", i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage for two segments: /api/%s/{name}/{version}, or /api/%s/{id}/{subsection}. available subsections: %s.", i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
 }
@@ -139,13 +157,13 @@ func handleSubsection[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWrit
 
 	id, _ := strconv.Atoi(idStr)
 	if id < 1 || id > len(i.objLookup) {
-		respondWithError(w, http.StatusNotFound, fmt.Sprintf("%s with ID %d doesn't exist. Max ID: %d", h.Capitalize(i.resourceType), id, len(i.objLookup)), nil)
+		respondWithError(w, http.StatusNotFound, fmt.Sprintf("%s with id '%d' doesn't exist. max id: %d.", i.resourceType, id, len(i.objLookup)), nil)
 		return
 	}
 
 	fn, ok := i.subsections[subsection]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("Subsection '%s' is not supported. Supported subsections: %s.", subsection, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' is not supported. supported subsections: %s.", subsection, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
 

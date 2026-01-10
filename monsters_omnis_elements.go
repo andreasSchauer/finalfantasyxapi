@@ -1,14 +1,15 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-func (cfg *Config) getOmnisElemResists(r *http.Request, mon Monster) ([]ElementalResist, error) {
+func (cfg *Config) applyOmnisElemResists(r *http.Request, mon Monster) ([]ElementalResist, error) {
 	countToAffinity := map[int]string{
 		0: "neutral",
 		1: "halved",
@@ -17,12 +18,12 @@ func (cfg *Config) getOmnisElemResists(r *http.Request, mon Monster) ([]Elementa
 		4: "absorb",
 	}
 
-	counts, isEmpty, err := cfg.verifyOmnisQuery(r)
+	counts, err := cfg.verifyOmnisQuery(r)
+	if errors.Is(err, errEmptyQuery) {
+		return mon.ElemResists, nil
+	}
 	if err != nil {
 		return nil, err
-	}
-	if isEmpty {
-		return mon.ElemResists, nil
 	}
 
 	for i, elemResist := range mon.ElemResists {
@@ -34,7 +35,7 @@ func (cfg *Config) getOmnisElemResists(r *http.Request, mon Monster) ([]Elementa
 
 		elementLookup, err := seeding.GetResource(element.Name, cfg.l.Elements)
 		if err != nil {
-			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element %s", element.Name), err)
+			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element '%s'.", element.Name), err)
 		}
 		oppositeName := *elementLookup.OppositeElement
 
@@ -60,8 +61,7 @@ func (cfg *Config) getOmnisElemResists(r *http.Request, mon Monster) ([]Elementa
 	return mon.ElemResists, nil
 }
 
-
-func (cfg *Config) verifyOmnisQuery(r *http.Request) (map[string]int, bool, error) {
+func (cfg *Config) verifyOmnisQuery(r *http.Request) (map[string]int, error) {
 	queryParam := cfg.q.monsters["omnis-elements"]
 	elements := map[rune]string{
 		'f': "fire",
@@ -70,26 +70,26 @@ func (cfg *Config) verifyOmnisQuery(r *http.Request) (map[string]int, bool, erro
 		'w': "water",
 	}
 	counts := make(map[string]int)
-	isEmpty := false
 
 	query := r.URL.Query().Get(queryParam.Name)
 	if query == "" {
-		isEmpty = true
-		return nil, isEmpty, nil
+		return nil, errEmptyQuery
 	}
 
 	if len(query) != 4 {
-		return nil, false, newHTTPError(http.StatusBadRequest, "Invalid input. omnis-elements must contain a combination of exactly four letters. Valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).", nil)
+		return nil, newHTTPError(http.StatusBadRequest, "invalid input. omnis-elements must contain a combination of exactly four letters. valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).", nil)
 	}
 
-	for _, char := range query {
+	queryLower := strings.ToLower(query)
+
+	for _, char := range queryLower {
 		element, ok := elements[char]
 		if !ok {
-			return nil, false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid letter %c for omnis-elements. Use any four letter combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).", char), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid letter '%c' for omnis-elements. use any four-letter-combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).", char), nil)
 		}
 
 		counts[element]++
 	}
 
-	return counts, false, nil
+	return counts, nil
 }

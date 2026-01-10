@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 // used, if a queryParam only takes existing ids and returns a valid id
@@ -33,7 +34,7 @@ func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, error) {
 
 	b, err := strconv.ParseBool(query)
 	if err != nil {
-		return false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid boolean value. usage: %s", queryParam.Usage), err)
+		return false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid boolean value '%s'. usage: '%s'.", query, queryParam.Usage), err)
 	}
 
 	return b, nil
@@ -47,20 +48,20 @@ func parseTypeQuery(r *http.Request, queryParam QueryType, lookup map[string]Typ
 		return TypedAPIResource{}, errEmptyQuery
 	}
 
-	enum, err := GetEnumType(query, lookup)
+	queryLower := strings.ToLower(query)
+	enum, err := GetEnumType(queryLower, lookup)
 	if err != nil {
-		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value: '%s', use /api/%s to see valid values", query, queryParam.Name), err)
+		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value: '%s'. use /api/%s to see valid values.", query, queryParam.Name), err)
 	}
 
 	return enum, nil
 }
 
-
 // checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored.
 func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
 	query := r.URL.Query().Get(queryParam.Name)
-	
-	defaultVal, err := checkDefaultVal(queryParam, query)
+
+	defaultVal, err := checkQueryIntDefaultVal(queryParam, query)
 	if errors.Is(err, errEmptyQuery) {
 		return 0, errEmptyQuery
 	}
@@ -68,7 +69,7 @@ func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
 		return defaultVal, nil
 	}
 
-	specialVal, err := checkQuerySpecialVals(queryParam, query)
+	specialVal, err := checkQueryIntSpecialVals(queryParam, query)
 	if !errors.Is(err, errNoSpecialInput) {
 		return specialVal, nil
 	}
@@ -80,7 +81,6 @@ func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
 
 	return val, nil
 }
-
 
 // converts a list of ids into a slice and checks every id's validity
 func parseIdListQuery(r *http.Request, queryParam QueryType, maxID int) ([]int32, error) {

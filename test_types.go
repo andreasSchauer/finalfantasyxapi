@@ -44,6 +44,13 @@ type expList struct {
 	results  []int32
 }
 
+type expListParams struct {
+	count    int
+	previous *string
+	next     *string
+	results  []string
+}
+
 type expAreas struct {
 	parentLocation    int32
 	parentSublocation int32

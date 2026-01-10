@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -17,7 +18,7 @@ type QueryParameterList struct {
 func getQueryParamList[T h.HasID, R any, L IsAPIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L]) (QueryParameterList, error) {
 	section := r.URL.Query().Get("section")
 	queryParams := queryMapToSlice(i.queryLookup)
-	queryParams, err := filterParamsOnSection(queryParams, section, i.endpoint)
+	queryParams, err := filterParamsOnSection(queryParams, section, i)
 	if err != nil {
 		return QueryParameterList{}, err
 	}
@@ -35,9 +36,13 @@ func getQueryParamList[T h.HasID, R any, L IsAPIResourceList](cfg *Config, r *ht
 	return list, nil
 }
 
-func filterParamsOnSection(params []QueryType, section, endpoint string) ([]QueryType, error) {
-	if section == "" {
+func filterParamsOnSection[T h.HasID, R any, L IsAPIResourceList](params []QueryType, section string, i handlerInput[T, R, L]) ([]QueryType, error) {
+	section, err := verifySectionParam(section, i.endpoint, i.subsections)
+	if errors.Is(err, errEmptyQuery) {
 		return params, nil
+	}
+	if err != nil {
+		return nil, err
 	}
 
 	filteredParams := []QueryType{}
@@ -54,9 +59,22 @@ func filterParamsOnSection(params []QueryType, section, endpoint string) ([]Quer
 		}
 	}
 
-	if len(filteredParams) == 0 {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("section %s does not exist for endpoint %s.", section, endpoint), nil)
+	return filteredParams, nil
+}
+
+func verifySectionParam(section, endpoint string, sectionMap map[string]func(string) (IsAPIResourceList, error)) (string, error) {
+	if section == "" {
+		return "", errEmptyQuery
 	}
 
-	return filteredParams, nil
+	if section == "self" {
+		return endpoint, nil
+	} 
+
+	_, ok := sectionMap[section]
+	if !ok {
+		return "nil", newHTTPError(http.StatusBadRequest, fmt.Sprintf("subsection '%s' is not available for endpoint /%s.", section, endpoint), nil)
+	}
+
+	return section, nil
 }
