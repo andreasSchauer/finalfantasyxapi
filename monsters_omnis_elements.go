@@ -18,7 +18,7 @@ func (cfg *Config) applyOmnisElemResists(r *http.Request, mon Monster) ([]Elemen
 		4: "absorb",
 	}
 
-	counts, err := cfg.verifyOmnisQuery(r)
+	counts, err := cfg.parseOmnisQuery(r)
 	if errors.Is(err, errEmptyQuery) {
 		return mon.ElemResists, nil
 	}
@@ -42,6 +42,7 @@ func (cfg *Config) applyOmnisElemResists(r *http.Request, mon Monster) ([]Elemen
 		count := counts[element.Name]
 		countOpposite := counts[oppositeName]
 
+		// if the opposite element has 4 circles, seymour omnis is weak to this element
 		if countOpposite == 4 {
 			newAffinity, err := cfg.changeElemResist(element, "weak")
 			if err != nil {
@@ -51,6 +52,7 @@ func (cfg *Config) applyOmnisElemResists(r *http.Request, mon Monster) ([]Elemen
 			continue
 		}
 
+		// else, change the affinity based on the count of the circles
 		newAffinity, err := cfg.changeElemResist(element, countToAffinity[count])
 		if err != nil {
 			return nil, err
@@ -61,7 +63,8 @@ func (cfg *Config) applyOmnisElemResists(r *http.Request, mon Monster) ([]Elemen
 	return mon.ElemResists, nil
 }
 
-func (cfg *Config) verifyOmnisQuery(r *http.Request) (map[string]int, error) {
+// verifies the input and counts the amounts of circles pointing to each element
+func (cfg *Config) parseOmnisQuery(r *http.Request) (map[string]int, error) {
 	queryParam := cfg.q.monsters["omnis-elements"]
 	elements := map[rune]string{
 		'f': "fire",
@@ -92,4 +95,21 @@ func (cfg *Config) verifyOmnisQuery(r *http.Request) (map[string]int, error) {
 	}
 
 	return counts, nil
+}
+
+
+func (cfg *Config) changeElemResist(element NamedAPIResource, newAffinityName string) (ElementalResist, error) {
+	newAffinity, err := seeding.GetResource(newAffinityName, cfg.l.Affinities)
+	if err != nil {
+		return ElementalResist{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get affinity '%s'.", newAffinityName), err)
+	}
+
+	newResist := cfg.newElemResist(
+		element.ID,
+		newAffinity.ID,
+		element.Name,
+		newAffinity.Name,
+	)
+
+	return newResist, nil
 }
