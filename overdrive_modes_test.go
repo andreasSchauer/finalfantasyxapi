@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"testing"
 
@@ -112,8 +113,8 @@ func TestGetOverdriveMode(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "GetOverdriveMode", i+1, testCfg.HandleOverdriveModes)
-		if correctErr {
+		rr, testName, err := setupTest(t, tc.testGeneral, "GetOverdriveMode", i+1, testCfg.HandleOverdriveModes)
+		if errors.Is(err, errCorrect) {
 			continue
 		}
 
@@ -194,8 +195,8 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "RetrieveOverdriveModes", i+1, testCfg.HandleOverdriveModes)
-		if correctErr {
+		rr, testName, err := setupTest(t, tc.testGeneral, "RetrieveOverdriveModes", i+1, testCfg.HandleOverdriveModes)
+		if errors.Is(err, errCorrect) {
 			continue
 		}
 
@@ -234,8 +235,8 @@ func TestOverdriveModesSections(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "OverdriveModeSections", i+1, testCfg.HandleOverdriveModes)
-		if correctErr {
+		rr, testName, err := setupTest(t, tc.testGeneral, "OverdriveModeSections", i+1, testCfg.HandleOverdriveModes)
+		if errors.Is(err, errCorrect) {
 			continue
 		}
 

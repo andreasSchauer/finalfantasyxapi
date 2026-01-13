@@ -121,6 +121,11 @@ func applyAltStateGain(mon Monster, change AltStateChange, appliedState AppliedS
 
 	mon, defStateGain, defStateLoss, appliedState = modifyGainedImmunities(mon, change, defStateGain, defStateLoss, appliedState)
 
+	if change.AddedStatus != nil {
+		appliedState.AppliedStatus = change.AddedStatus
+		defStateLoss.RemovedStatus = &change.AddedStatus.StatusCondition
+	}
+
 	if !defStateLoss.IsZero() {
 		defaultState.Changes = append(defaultState.Changes, defStateLoss)
 	}

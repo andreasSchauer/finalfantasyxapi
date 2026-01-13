@@ -19,28 +19,28 @@ type AlteredState struct {
 }
 
 type AltStateChange struct {
-	AlterationType    database.AlterationType `json:"alteration_type"`
-	Distance          *int32                  `json:"distance,omitempty"`
-	Properties        []NamedAPIResource      `json:"properties,omitempty"`
-	AutoAbilities     []NamedAPIResource      `json:"auto_abilities,omitempty"`
-	BaseStats         []BaseStat              `json:"base_stats,omitempty"`
-	ElemResists       []ElementalResist       `json:"elem_resists,omitempty"`
-	StatusImmunities  []NamedAPIResource      `json:"status_immunities,omitempty"`
-	StatusResistances []StatusResist          `json:"status_resistances,omitempty"`
-	AddedStatus       *InflictedStatus        `json:"added_status_condition,omitempty"`
-	RemovedStatus     *NamedAPIResource       `json:"removed_status_condition,omitempty"`
+	AlterationType   database.AlterationType `json:"alteration_type"`
+	Distance         *int32                  `json:"distance,omitempty"`
+	Properties       []NamedAPIResource      `json:"properties,omitempty"`
+	AutoAbilities    []NamedAPIResource      `json:"auto_abilities,omitempty"`
+	BaseStats        []BaseStat              `json:"base_stats,omitempty"`
+	ElemResists      []ElementalResist       `json:"elem_resists,omitempty"`
+	StatusImmunities []NamedAPIResource      `json:"status_immunities,omitempty"`
+	StatusResists    []StatusResist          `json:"status_resists,omitempty"`
+	AddedStatus      *InflictedStatus        `json:"added_status_condition,omitempty"`
+	RemovedStatus    *NamedAPIResource       `json:"removed_status_condition,omitempty"`
 }
 
 func (c *AltStateChange) IsZero() bool {
-	return 	c.Distance == nil &&
-			c.Properties == nil &&
-			c.AutoAbilities == nil &&
-			c.BaseStats == nil &&
-			c.ElemResists == nil &&
-			c.StatusImmunities == nil &&
-			c.StatusResistances == nil &&
-			c.AddedStatus == nil &&
-			c.RemovedStatus == nil
+	return c.Distance == nil &&
+		c.Properties == nil &&
+		c.AutoAbilities == nil &&
+		c.BaseStats == nil &&
+		c.ElemResists == nil &&
+		c.StatusImmunities == nil &&
+		c.StatusResists == nil &&
+		c.AddedStatus == nil &&
+		c.RemovedStatus == nil
 }
 
 func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon database.Monster) ([]AlteredState, error) {

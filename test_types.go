@@ -82,48 +82,65 @@ type expOverdriveModes struct {
 }
 
 type expMonsters struct {
-	appliedState		*testAppliedState
-	agility				*AgilityParams
-	species				int32
-	ctbIconType			int32
-	distance			int32
-	properties			[]int32
-	autoAbilities		[]int32
-	ronsoRages			[]int32
-	locations			[]int32
-	formations			[]int32
-	baseStats			map[string]int32
-	items 				*testItems
-	bribeChances		[]BribeChance
-	equipment 			*testEquipment
-	elemResists			[]testElemResist
-	statusImmunities	[]int32
-	statusResists		map[string]int32
-	alteredStates		[]string
-	abilities			[]string
+	appliedState     *testAppliedState
+	agility          *AgilityParams
+	species          int32
+	ctbIconType      int32
+	distance         int32
+	properties       []int32
+	autoAbilities    []int32
+	ronsoRages       []int32
+	locations        []int32
+	formations       []int32
+	baseStats        map[string]int32
+	items            *testItems
+	bribeChances     []BribeChance
+	equipment        *testEquipment
+	elemResists      []testElemResist
+	statusImmunities []int32
+	statusResists    map[string]int32
+	defaultState     *testDefaultState
+	abilities        []string
 }
 
 type testAppliedState struct {
-	condition		string
-	isTemporary		bool
-	appliedStatus	*int32
+	condition     string
+	isTemporary   bool
+	appliedStatus *int32
+}
+
+type testDefaultState struct {
+	IsTemporary bool                 `json:"is_temporary"`
+	Changes     []testAltStateChange `json:"changes"`
+}
+
+type testAltStateChange struct {
+	AlterationType   string
+	Distance         *int32
+	Properties       []int32
+	AutoAbilities    []int32
+	BaseStats        map[string]int32
+	ElemResists      []testElemResist
+	StatusImmunities []int32
+	StatusResists    map[string]int32
+	AddedStatus      *InflictedStatus
+	RemovedStatus    *int32
 }
 
 type testElemResist struct {
-	element 	int32
-	affinity 	int32
+	element  int32
+	affinity int32
 }
 
 type testItems struct {
-	itemDropChance	int32
-	items			map[string]*int32
-	otherItems		[]int32
+	itemDropChance int32
+	items          map[string]*int32
+	otherItems     []int32
 }
 
 type testEquipment struct {
-	abilitySlots 		MonsterEquipmentSlots
-	attachedAbilities	MonsterEquipmentSlots
-	weaponAbilities		[]int32
-	armorAbilities		[]int32
+	abilitySlots      MonsterEquipmentSlots
+	attachedAbilities MonsterEquipmentSlots
+	weaponAbilities   []int32
+	armorAbilities    []int32
 }
-

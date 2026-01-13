@@ -9,11 +9,11 @@ import (
 )
 
 type test struct {
-	t *testing.T
-	cfg *Config
-	name string
+	t          *testing.T
+	cfg        *Config
+	name       string
 	expLengths map[string]int
-	dontCheck map[string]bool
+	dontCheck  map[string]bool
 }
 
 type resListTest struct {
@@ -81,10 +81,9 @@ func getTestName(name, requestURL string, caseNum int) string {
 }
 
 // makes the http request for the test and returns the responseRecorder needed to decode the json
-func setupTest(t *testing.T, tc testGeneral, testFunc string, testNum int, handlerFunc func(http.ResponseWriter, *http.Request)) (*httptest.ResponseRecorder, string, bool) {
+func setupTest(t *testing.T, tc testGeneral, testFunc string, testNum int, handlerFunc func(http.ResponseWriter, *http.Request)) (*httptest.ResponseRecorder, string, error) {
 	t.Helper()
 	testName := getTestName(testFunc, tc.requestURL, testNum)
-	caughtErr := false
 
 	req := httptest.NewRequest(http.MethodGet, tc.requestURL, nil)
 	rr := httptest.NewRecorder()
@@ -101,11 +100,10 @@ func setupTest(t *testing.T, tc testGeneral, testFunc string, testNum int, handl
 		if !strings.Contains(rawErr, tc.expectedErr) {
 			t.Fatalf("%s: expected error message to contain %s, got %q", testName, tc.expectedErr, rawErr)
 		}
-		caughtErr = true
-		return nil, "", caughtErr
+		return nil, "", errCorrect
 	}
 
-	return rr, testName, caughtErr
+	return rr, testName, nil
 }
 
 // checks, if all basic fields of a resource with a unique name are equal
@@ -161,7 +159,6 @@ func testResourceList(test test, expList resListTest) {
 
 	compare(test, expList.name+" length", expLen, len(expList.got))
 }
-
 
 // checks if the provided slice of resources contains all stated resources
 func checkResourcesInSlice[T HasAPIResource](test test, fieldName string, expectedPaths []string, gotRes []T) {
@@ -228,7 +225,7 @@ func checkNamesInSlice(test test, nameTest nameListTest) {
 	if len(gotMap) != len(nameTest.got) {
 		test.t.Fatalf("%s: there appear to be duplicates in '%s'", test.name, nameTest.name)
 	}
-	
+
 	for _, expName := range nameTest.exp {
 		_, ok := gotMap[expName]
 		if !ok {

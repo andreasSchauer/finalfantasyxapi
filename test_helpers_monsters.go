@@ -1,11 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"slices"
 )
 
 func testMonsterElemResists(test test, exp []testElemResist, got []ElementalResist) {
 	compare(test, "elemental resists length", 5, len(got))
+	compareMonsterElemResists(test, "elemental resists", exp, got)
+}
+
+func compareMonsterElemResists(test test, fieldName string, exp []testElemResist, got []ElementalResist) {
+	dontCheck := test.dontCheck
+	if dontCheck != nil && dontCheck[fieldName] {
+		return
+	}
 
 	for i, resist := range exp {
 		elemEndpoint := test.cfg.e.elements.endpoint
@@ -32,13 +41,13 @@ func testMonsterItems(test test, expItems *testItems, gotItems *MonsterItems, ch
 	itemMap := exp.items
 
 	compare(test, "item drop chance", exp.itemDropChance, got.DropChance)
-	compResPtrsFromID(test, endpoint, "steal common", itemMap["steal common"], got.StealCommon)
-	compResPtrsFromID(test, endpoint, "steal rare", itemMap["steal rare"], got.StealRare)
-	compResPtrsFromID(test, endpoint, "drop common", itemMap["drop common"], got.DropCommon)
-	compResPtrsFromID(test, endpoint, "drop rare", itemMap["drop rare"], got.DropRare)
-	compResPtrsFromID(test, endpoint, "sec drop common", itemMap["sec drop common"], got.SecondaryDropCommon)
-	compResPtrsFromID(test, endpoint, "sec drop rare", itemMap["sec drop rare"], got.SecondaryDropRare)
-	compResPtrsFromID(test, endpoint, "bribe", itemMap["bribe"], got.Bribe)
+	compResPtrsFromID(test, "steal common", endpoint, itemMap["steal common"], got.StealCommon)
+	compResPtrsFromID(test, "steal rare", endpoint, itemMap["steal rare"], got.StealRare)
+	compResPtrsFromID(test, "drop common", endpoint, itemMap["drop common"], got.DropCommon)
+	compResPtrsFromID(test, "drop rare", endpoint, itemMap["drop rare"], got.DropRare)
+	compResPtrsFromID(test, "sec drop common", endpoint, itemMap["sec drop common"], got.SecondaryDropCommon)
+	compResPtrsFromID(test, "sec drop rare", endpoint, itemMap["sec drop rare"], got.SecondaryDropRare)
+	compResPtrsFromID(test, "bribe", endpoint, itemMap["bribe"], got.Bribe)
 }
 
 func testMonsterEquipment(test test, expEquipment *testEquipment, gotEquipment *MonsterEquipment, checks *[]resListTest) {
@@ -69,17 +78,59 @@ func testMonsterEquipment(test test, expEquipment *testEquipment, gotEquipment *
 	*checks = slices.Concat(*checks, equipChecks)
 }
 
-func testMonsterAltStates(test test, expState *testAppliedState, gotState *AppliedState, gotAltStates []AlteredState) {
-	if !bothPtrsPresent(test, "altered states", expState, gotState) {
+func testMonsterAppliedState(test test, exp *testAppliedState, got *AppliedState) {
+	if !bothPtrsPresent(test, "applied state", exp, got) {
 		return
 	}
 
-	compare(test, "applied state condition", expState.condition, gotState.Condition)
+	compare(test, "applied state condition", exp.condition, got.Condition)
+	compare(test, "applied state isTemporary", exp.isTemporary, got.IsTemporary)
+	compResPtrsFromID(test, "applied status", test.cfg.e.statusConditions.endpoint, exp.appliedStatus, got.AppliedStatus)
+}
 
-	compResPtrsFromID(test, test.cfg.e.statusConditions.endpoint, "applied status", expState.appliedStatus, gotState.AppliedStatus)
-
-	if gotAltStates[0].Condition != "default" {
-		test.t.Fatalf("%s: first altered state must be default when another is applied, got: %s", test.name, gotAltStates[0].Condition)
+func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []AlteredState) {
+	if test.dontCheck != nil && test.dontCheck["default state"] {
+		return
 	}
 
+	if exp == nil && len(gotStates) == 0 {
+		return
+	}
+	if exp == nil && len(gotStates) != 0 {
+		test.t.Fatalf("%s: expected default state to be nil, but got alt states", test.name)
+	}
+	if exp != nil && len(gotStates) == 0 {
+		test.t.Fatalf("%s: expected default state to be not nil, but got no alt states", test.name)
+	}
+
+	compare(test, "altered states length", test.expLengths["altered states"], len(gotStates))
+
+	got := gotStates[0]
+	if got.Condition != "default" {
+		test.t.Fatalf("%s: first altered state must be default when another is applied, got: %s", test.name, got.Condition)
+	}
+
+	compare(test, "default state isTemporary", exp.IsTemporary, got.IsTemporary)
+	compare(test, "def state changes length", len(exp.Changes), len(got.Changes))
+
+	for i, expChange := range exp.Changes {
+		desc := fmt.Sprintf("def state change: %s ", expChange.AlterationType)
+		gotChange := got.Changes[i]
+
+		compare(test, desc+"type", expChange.AlterationType, string(gotChange.AlterationType))
+		compare(test, desc+"distance", expChange.Distance, gotChange.Distance)
+		checkResAmtsInSlice(test, desc+"base stats", expChange.BaseStats, gotChange.BaseStats)
+		checkResAmtsInSlice(test, desc+"status resists", expChange.StatusResists, gotChange.StatusResists)
+		compStructPtrs(test, desc+"added status", expChange.AddedStatus, gotChange.AddedStatus)
+		compResPtrsFromID(test, desc+"removed status", test.cfg.e.statusConditions.endpoint, expChange.RemovedStatus, gotChange.RemovedStatus)
+		compareMonsterElemResists(test, desc+"elemental resists", expChange.ElemResists, gotChange.ElemResists)
+
+		checks := []resListTest{
+			newResListTestFromIDs(desc+"properties", test.cfg.e.properties.endpoint, expChange.Properties, gotChange.Properties),
+			newResListTestFromIDs(desc+"auto-abilities", test.cfg.e.autoAbilities.endpoint, expChange.AutoAbilities, gotChange.AutoAbilities),
+			newResListTestFromIDs(desc+"status immunities", test.cfg.e.statusConditions.endpoint, expChange.StatusImmunities, gotChange.StatusImmunities),
+		}
+
+		testResourceLists(test, checks)
+	}
 }

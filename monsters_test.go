@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"testing"
 
@@ -28,7 +29,7 @@ func TestGetMonster(t *testing.T) {
 				expectedErr:    "monster not found: 'a'.",
 			},
 		},
-		
+
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2",
@@ -113,11 +114,11 @@ func TestGetMonster(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
 					"properties":        1,
-					"auto-abilities":	 0,
+					"auto-abilities":    0,
 					"locations":         1,
 					"formations":        3,
 					"base stats":        10,
-					"other items":		 0,
+					"other items":       0,
 					"weapon abilities":  3,
 					"armor abilities":   1,
 					"status immunities": 7,
@@ -140,9 +141,9 @@ func TestGetMonster(t *testing.T) {
 				species:     19,
 				ctbIconType: 1,
 				distance:    1,
-				properties: []int32{2},
-				locations: []int32{54},
-				formations: []int32{42},
+				properties:  []int32{2},
+				locations:   []int32{54},
+				formations:  []int32{42},
 				baseStats: map[string]int32{
 					"hp":      300,
 					"defense": 120,
@@ -207,14 +208,14 @@ func TestGetMonster(t *testing.T) {
 						},
 					},
 					weaponAbilities: []int32{2, 6, 26},
-					armorAbilities: []int32{58},
+					armorAbilities:  []int32{58},
 				},
 				elemResists: []testElemResist{
-					{ element:  1, affinity: 3 },
-					{ element:  2, affinity: 5 },
-					{ element:  3, affinity: 2 },
-					{ element:  4, affinity: 3 },
-					{ element:  5, affinity: 1 },
+					{element: 1, affinity: 3},
+					{element: 2, affinity: 5},
+					{element: 3, affinity: 2},
+					{element: 4, affinity: 3},
+					{element: 5, affinity: 1},
 				},
 				statusImmunities: []int32{1, 4, 14},
 				statusResists: map[string]int32{
@@ -266,11 +267,11 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{
 					"properties":        1,
-					"auto-abilities": 	 0,
+					"auto-abilities":    0,
 					"locations":         1,
 					"formations":        1,
 					"base stats":        10,
-					"other items":		 0,
+					"other items":       0,
 					"weapon abilities":  5,
 					"armor abilities":   4,
 					"status immunities": 16,
@@ -291,11 +292,11 @@ func TestGetMonster(t *testing.T) {
 					MaxICV:    h.GetInt32Ptr(40),
 				},
 				appliedState: &testAppliedState{
-					condition: "Fire-elemental.",
+					condition:   "Fire-elemental.",
 					isTemporary: false,
 				},
 				properties: []int32{1},
-				locations: []int32{150},
+				locations:  []int32{150},
 				formations: []int32{220},
 				items: &testItems{
 					itemDropChance: 255,
@@ -338,29 +339,14 @@ func TestGetMonster(t *testing.T) {
 						},
 					},
 					weaponAbilities: []int32{2, 5, 6},
-					armorAbilities: []int32{55, 58, 61, 64},
+					armorAbilities:  []int32{55, 58, 61, 64},
 				},
 				elemResists: []testElemResist{
-					{
-						element:  1,
-						affinity: 5,
-					},
-					{
-						element:  2,
-						affinity: 5,
-					},
-					{
-						element:  3,
-						affinity: 5,
-					},
-					{
-						element:  4,
-						affinity: 2,
-					},
-					{
-						element:  5,
-						affinity: 5,
-					},
+					{ element:  1, affinity: 5 },
+					{ element:  2, affinity: 5 },
+					{ element:  3, affinity: 5 },
+					{ element:  4, affinity: 2 },
+					{ element:  5, affinity: 5 },
 				},
 				statusImmunities: []int32{2, 6, 8, 13, 15, 33, 43, 46},
 				statusResists: map[string]int32{
@@ -379,6 +365,20 @@ func TestGetMonster(t *testing.T) {
 					"/enemy-abilities/214",
 					"/enemy-abilities/215",
 				},
+				defaultState: &testDefaultState{
+					IsTemporary: false,
+					Changes: 	 []testAltStateChange{
+						{
+							AlterationType: "change",
+							ElemResists: []testElemResist{
+								{ element:  1, affinity: 6 },
+								{ element:  2, affinity: 6 },
+								{ element:  3, affinity: 6 },
+								{ element:  4, affinity: 6 },
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -390,8 +390,8 @@ func TestGetMonster(t *testing.T) {
 					"species":        true,
 					"ctb icon type":  true,
 					"distance":       true,
-					"items":		  true,
-					"equipment": 	  true,
+					"items":          true,
+					"equipment":      true,
 				},
 				expLengths: map[string]int{
 					"status immunities": 10,
@@ -406,14 +406,29 @@ func TestGetMonster(t *testing.T) {
 			},
 			expMonsters: expMonsters{
 				appliedState: &testAppliedState{
-					condition: "While 'Readying Quake'.",
+					condition:   "While 'Readying Quake'.",
 					isTemporary: true,
 				},
-				bribeChances: nil,
+				bribeChances:     nil,
 				statusImmunities: []int32{1, 2, 5, 10, 14, 33},
 				statusResists: map[string]int32{
-					"darkness": 50,
+					"darkness":    50,
 					"power break": 50,
+				},
+				defaultState: &testDefaultState{
+					IsTemporary: false,
+					Changes: 	 []testAltStateChange{
+						{
+							AlterationType: "loss",
+							StatusImmunities: []int32{14, 33},
+						},
+						{
+							AlterationType: "gain",
+							StatusResists: map[string]int32{
+								"sleep": 80,
+							},
+						},
+					},
 				},
 			},
 		},
@@ -426,13 +441,13 @@ func TestGetMonster(t *testing.T) {
 					"species":        true,
 					"ctb icon type":  true,
 					"distance":       true,
-					"items":		  true,
-					"equipment": 	  true,
+					"items":          true,
+					"equipment":      true,
 				},
 				expLengths: map[string]int{
-					"properties": 		 2,
-					"auto-abilities":    1,
-					"altered states":    2,
+					"properties":     2,
+					"auto-abilities": 1,
+					"altered states": 2,
 				},
 			},
 			expNameVer: expNameVer{
@@ -442,11 +457,21 @@ func TestGetMonster(t *testing.T) {
 			},
 			expMonsters: expMonsters{
 				appliedState: &testAppliedState{
-					condition: "While hidden in its shell.",
+					condition:   "While hidden in its shell.",
 					isTemporary: true,
 				},
-				properties: []int32{6, 8},
+				properties:    []int32{6, 8},
 				autoAbilities: []int32{102},
+				defaultState: &testDefaultState{
+					IsTemporary: false,
+					Changes: 	 []testAltStateChange{
+						{
+							AlterationType: "loss",
+							Properties: []int32{6},
+							AutoAbilities: []int32{102},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -454,16 +479,16 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/neslug?altered-state=2",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":        true,
-					"ctb icon type":  true,
-					"distance":       true,
-					"items":		  true,
-					"equipment": 	  true,
+					"species":       true,
+					"ctb icon type": true,
+					"distance":      true,
+					"items":         true,
+					"equipment":     true,
 				},
 				expLengths: map[string]int{
-					"properties": 		 1,
-					"auto-abilities":    0,
-					"altered states":    2,
+					"properties":     1,
+					"auto-abilities": 0,
+					"altered states": 2,
 				},
 			},
 			expNameVer: expNameVer{
@@ -473,17 +498,107 @@ func TestGetMonster(t *testing.T) {
 			},
 			expMonsters: expMonsters{
 				appliedState: &testAppliedState{
-					condition: "Without its shell.",
+					condition:   "Without its shell.",
 					isTemporary: false,
 				},
 				agility: &AgilityParams{
 					TickSpeed: 4,
-					MinICV: h.GetInt32Ptr(12),
-					MaxICV: h.GetInt32Ptr(13),
+					MinICV:    h.GetInt32Ptr(12),
+					MaxICV:    h.GetInt32Ptr(13),
 				},
 				properties: []int32{8},
 				baseStats: map[string]int32{
 					"agility": 120,
+				},
+				defaultState: &testDefaultState{
+					IsTemporary: false,
+					Changes: 	 []testAltStateChange{
+						{
+							AlterationType: "change",
+							BaseStats: map[string]int32{
+								"agility": 43,
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/evrae?altered-state=1",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"agility params": true,
+					"species":        true,
+					"ctb icon type":  true,
+					"items":          true,
+					"equipment":      true,
+				},
+				expLengths: map[string]int{
+					"altered states": 1,
+				},
+			},
+			expNameVer: expNameVer{
+				id:      114,
+				name:    "evrae",
+				version: nil,
+			},
+			expMonsters: expMonsters{
+				appliedState: &testAppliedState{
+					condition:   "When the Airship is far away.",
+					isTemporary: false,
+				},
+				distance: 4,
+				defaultState: &testDefaultState{
+					IsTemporary: false,
+					Changes: 	 []testAltStateChange{
+						{
+							AlterationType: "change",
+							Distance: h.GetInt32Ptr(1),
+						},
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/penance?altered-state=1",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"agility params": true,
+					"species":        true,
+					"ctb icon type":  true,
+					"distance":		  true,
+					"items":          true,
+					"equipment":      true,
+				},
+				expLengths: map[string]int{
+					"altered states": 1,
+				},
+			},
+			expNameVer: expNameVer{
+				id:      305,
+				name:    "penance",
+				version: nil,
+			},
+			expMonsters: expMonsters{
+				appliedState: &testAppliedState{
+					condition:   "When HP falls below 9000000.",
+					isTemporary: false,
+					appliedStatus: h.GetInt32Ptr(22),
+				},
+				defaultState: &testDefaultState{
+					IsTemporary: false,
+					Changes: 	 []testAltStateChange{
+						{
+							AlterationType: "gain",
+							AutoAbilities: []int32{99},
+						},
+						{
+							AlterationType: "loss",
+							RemovedStatus: h.GetInt32Ptr(22),
+						},
+					},
 				},
 			},
 		},
@@ -496,8 +611,9 @@ func TestGetMonster(t *testing.T) {
 					"species":        true,
 					"ctb icon type":  true,
 					"distance":       true,
-					"items": 		  true,
-					"equipment": 	  true,
+					"items":          true,
+					"equipment":      true,
+					"default state":  true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -540,8 +656,9 @@ func TestGetMonster(t *testing.T) {
 					"species":        true,
 					"ctb icon type":  true,
 					"distance":       true,
-					"items": 		  true,
-					"equipment": 	  true,
+					"items":          true,
+					"equipment":      true,
+					"default state":  true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -584,8 +701,9 @@ func TestGetMonster(t *testing.T) {
 					"species":        true,
 					"ctb icon type":  true,
 					"distance":       true,
-					"items": 		  true,
-					"equipment": 	  true,
+					"items":          true,
+					"equipment":      true,
+					"default state":  true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -624,11 +742,12 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/biran-ronso?kimahri-stats=hP-1000,strEngth-255,mAgic-255,agIlity-255",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":        true,
-					"ctb icon type":  true,
-					"distance":       true,
-					"items":		  true,
-					"equipment": 	  true,
+					"species":       true,
+					"ctb icon type": true,
+					"distance":      true,
+					"items":         true,
+					"equipment":     true,
+					"default state":  true,
 				},
 				expLengths: map[string]int{
 					"ronso rages": 4,
@@ -642,15 +761,15 @@ func TestGetMonster(t *testing.T) {
 			expMonsters: expMonsters{
 				agility: &AgilityParams{
 					TickSpeed: 3,
-					MinICV: h.GetInt32Ptr(9),
-					MaxICV: h.GetInt32Ptr(10),
+					MinICV:    h.GetInt32Ptr(9),
+					MaxICV:    h.GetInt32Ptr(10),
 				},
 				ronsoRages: []int32{4, 5, 8, 11},
 				baseStats: map[string]int32{
-					"hp": 3549664,
+					"hp":       3549664,
 					"strength": 12,
-					"magic": 4,
-					"agility": 251,
+					"magic":    4,
+					"agility":  251,
 				},
 			},
 		},
@@ -659,11 +778,12 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/yenke-ronso?kimahri-stats=hp-3500,strength-35,magic-45,agility-28",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":        true,
-					"ctb icon type":  true,
-					"distance":       true,
-					"items":		  true,
-					"equipment": 	  true,
+					"species":       true,
+					"ctb icon type": true,
+					"distance":      true,
+					"items":         true,
+					"equipment":     true,
+					"default state":  true,
 				},
 				expLengths: map[string]int{
 					"ronso rages": 4,
@@ -677,15 +797,15 @@ func TestGetMonster(t *testing.T) {
 			expMonsters: expMonsters{
 				agility: &AgilityParams{
 					TickSpeed: 10,
-					MinICV: h.GetInt32Ptr(30),
-					MaxICV: h.GetInt32Ptr(33),
+					MinICV:    h.GetInt32Ptr(30),
+					MaxICV:    h.GetInt32Ptr(33),
 				},
 				ronsoRages: []int32{2, 6, 7, 9},
 				baseStats: map[string]int32{
-					"hp": 10902,
+					"hp":       10902,
 					"strength": 13,
-					"magic": 22,
-					"agility": 22,
+					"magic":    22,
+					"agility":  22,
 				},
 			},
 		},
@@ -694,11 +814,12 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/yenke-ronso?kimahri-stats=hp-1500",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":        true,
-					"ctb icon type":  true,
-					"distance":       true,
-					"items":		  true,
-					"equipment": 	  true,
+					"species":       true,
+					"ctb icon type": true,
+					"distance":      true,
+					"items":         true,
+					"equipment":     true,
+					"default state":  true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -710,14 +831,14 @@ func TestGetMonster(t *testing.T) {
 			expMonsters: expMonsters{
 				agility: &AgilityParams{
 					TickSpeed: 26,
-					MinICV: h.GetInt32Ptr(84),
-					MaxICV: h.GetInt32Ptr(93),
+					MinICV:    h.GetInt32Ptr(84),
+					MaxICV:    h.GetInt32Ptr(93),
 				},
 				baseStats: map[string]int32{
-					"hp": 870,
+					"hp":       870,
 					"strength": 8,
-					"magic": 12,
-					"agility": 1,
+					"magic":    12,
+					"agility":  1,
 				},
 			},
 		},
@@ -726,11 +847,12 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/seymour",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":        true,
-					"ctb icon type":  true,
-					"distance":       true,
-					"items":		  true,
-					"equipment": 	  true,
+					"species":       true,
+					"ctb icon type": true,
+					"distance":      true,
+					"items":         true,
+					"equipment":     true,
+					"default state":  true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -742,8 +864,8 @@ func TestGetMonster(t *testing.T) {
 			expMonsters: expMonsters{
 				agility: &AgilityParams{
 					TickSpeed: 10,
-					MinICV: h.GetInt32Ptr(-1),
-					MaxICV: h.GetInt32Ptr(-1),
+					MinICV:    h.GetInt32Ptr(-1),
+					MaxICV:    h.GetInt32Ptr(-1),
 				},
 				autoAbilities: []int32{3},
 			},
@@ -751,17 +873,17 @@ func TestGetMonster(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "GetMonster", i+1, testCfg.HandleMonsters)
-		if correctErr {
+		rr, testName, err := setupTest(t, tc.testGeneral, "GetMonster", i+1, testCfg.HandleMonsters)
+		if errors.Is(err, errCorrect) {
 			continue
 		}
 
 		test := test{
-			t: t,
-			cfg: testCfg,
-			name: testName,
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
 			expLengths: tc.expLengths,
-			dontCheck: tc.dontCheck,
+			dontCheck:  tc.dontCheck,
 		}
 
 		var got Monster
@@ -779,7 +901,8 @@ func TestGetMonster(t *testing.T) {
 		compStructPtrs(test, "agility params", tc.agility, got.AgilityParameters)
 		compStructSlices(test, "bribe chances", tc.bribeChances, got.BribeChances)
 		testMonsterElemResists(test, tc.elemResists, got.ElemResists)
-		testMonsterAltStates(test, tc.appliedState, got.AppliedState, got.AlteredStates)
+		testMonsterAppliedState(test, tc.appliedState, got.AppliedState)
+		testMonsterDefaultState(test, tc.defaultState, got.AlteredStates)
 
 		checks := []resListTest{
 			newResListTestFromIDs("properties", testCfg.e.properties.endpoint, tc.properties, got.Properties),
@@ -797,8 +920,6 @@ func TestGetMonster(t *testing.T) {
 	}
 }
 
-
-
 func TestGetMultipleMonsters(t *testing.T) {
 	tests := []struct {
 		testGeneral
@@ -810,7 +931,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 				expectedStatus: http.StatusMultipleChoices,
 			},
 			expList: expList{
-				count:    3,
+				count:   3,
 				results: []int32{94, 96, 113},
 			},
 		},
@@ -820,7 +941,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 				expectedStatus: http.StatusMultipleChoices,
 			},
 			expList: expList{
-				count:    3,
+				count:   3,
 				results: []int32{165, 222, 234},
 			},
 		},
@@ -830,7 +951,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 				expectedStatus: http.StatusMultipleChoices,
 			},
 			expList: expList{
-				count:    4,
+				count:   4,
 				results: []int32{249, 250, 251, 252},
 			},
 		},
@@ -840,24 +961,24 @@ func TestGetMultipleMonsters(t *testing.T) {
 				expectedStatus: http.StatusMultipleChoices,
 			},
 			expList: expList{
-				count:    4,
+				count:   4,
 				results: []int32{68, 69, 108, 253},
 			},
 		},
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "GetMultipleMonsters", i+1, testCfg.HandleMonsters)
-		if correctErr {
+		rr, testName, err := setupTest(t, tc.testGeneral, "GetMultipleMonsters", i+1, testCfg.HandleMonsters)
+		if errors.Is(err, errCorrect) {
 			continue
 		}
 
 		test := test{
-			t: t,
-			cfg: testCfg,
-			name: testName,
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
 			expLengths: tc.expLengths,
-			dontCheck: tc.dontCheck,
+			dontCheck:  tc.dontCheck,
 		}
 
 		var got NamedApiResourceList
@@ -868,8 +989,6 @@ func TestGetMultipleMonsters(t *testing.T) {
 		testAPIResourceList(test, testCfg.e.monsters.endpoint, tc.expList, got)
 	}
 }
-
-
 
 func TestRetrieveMonsters(t *testing.T) {
 	tests := []struct {
@@ -997,7 +1116,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				count:    307,
 				previous: nil,
 				next:     nil,
-				results: []int32{1, 175, 238, 307},
+				results:  []int32{1, 175, 238, 307},
 			},
 		},
 		{
@@ -1009,7 +1128,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				},
 			},
 			expList: expList{
-				count:    22,
+				count:   22,
 				results: []int32{11, 23, 64, 148},
 			},
 		},
@@ -1019,7 +1138,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    43,
+				count:   43,
 				results: []int32{32, 127, 211, 233, 295},
 			},
 		},
@@ -1029,7 +1148,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    150,
+				count:   150,
 				results: []int32{3, 128, 188, 227, 249},
 			},
 		},
@@ -1039,7 +1158,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    163,
+				count:   163,
 				results: []int32{5, 67, 100, 151, 258},
 			},
 		},
@@ -1049,7 +1168,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    22,
+				count:   22,
 				results: []int32{32, 91, 156, 192, 295, 305},
 			},
 		},
@@ -1059,7 +1178,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    2,
+				count:   2,
 				results: []int32{32, 91},
 			},
 		},
@@ -1069,7 +1188,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    5,
+				count:   5,
 				results: []int32{97, 146, 172, 211, 304},
 			},
 		},
@@ -1079,7 +1198,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    2,
+				count:   2,
 				results: []int32{255, 292},
 			},
 		},
@@ -1089,7 +1208,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    19,
+				count:   19,
 				results: []int32{80, 90, 297},
 			},
 		},
@@ -1099,7 +1218,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    7,
+				count:   7,
 				results: []int32{80, 86},
 			},
 		},
@@ -1109,7 +1228,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    6,
+				count:   6,
 				results: []int32{38, 45},
 			},
 		},
@@ -1119,7 +1238,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    2,
+				count:   2,
 				results: []int32{191, 289},
 			},
 		},
@@ -1129,7 +1248,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    11,
+				count:   11,
 				results: []int32{229, 236, 299},
 			},
 		},
@@ -1139,7 +1258,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    6,
+				count:   6,
 				results: []int32{5, 71, 291},
 			},
 		},
@@ -1149,7 +1268,7 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    1,
+				count:   1,
 				results: []int32{134},
 			},
 		},
@@ -1159,24 +1278,24 @@ func TestRetrieveMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:    7,
+				count:   7,
 				results: []int32{60, 63, 67},
 			},
 		},
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "RetrieveMonsters", i+1, testCfg.HandleMonsters)
-		if correctErr {
+		rr, testName, err := setupTest(t, tc.testGeneral, "RetrieveMonsters", i+1, testCfg.HandleMonsters)
+		if errors.Is(err, errCorrect) {
 			continue
 		}
 
 		test := test{
-			t: t,
-			cfg: testCfg,
-			name: testName,
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
 			expLengths: tc.expLengths,
-			dontCheck: tc.dontCheck,
+			dontCheck:  tc.dontCheck,
 		}
 
 		var got NamedApiResourceList
@@ -1187,4 +1306,3 @@ func TestRetrieveMonsters(t *testing.T) {
 		testAPIResourceList(test, testCfg.e.monsters.endpoint, tc.expList, got)
 	}
 }
-

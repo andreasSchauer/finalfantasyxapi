@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"slices"
 	"testing"
@@ -173,8 +174,8 @@ func TestGetArea(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "GetArea", i+1, testCfg.HandleAreas)
-		if correctErr {
+		rr, testName, err := setupTest(t, tc.testGeneral, "GetArea", i+1, testCfg.HandleAreas)
+		if errors.Is(err, errCorrect) {
 			continue
 		}
 
@@ -194,7 +195,7 @@ func TestGetArea(t *testing.T) {
 		testExpectedNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
 		compAPIResourcesFromID(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
 		compAPIResourcesFromID(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
-		compResPtrsFromID(test, testCfg.e.sidequests.endpoint, "sidequest", tc.sidequest, got.Sidequest)
+		compResPtrsFromID(test, "sidequest", testCfg.e.sidequests.endpoint, tc.sidequest, got.Sidequest)
 
 		checks := []resListTest{
 			newResListTestFromIDs("connected areas", testCfg.e.areas.endpoint, tc.connectedAreas, got.ConnectedAreas),
@@ -341,8 +342,8 @@ func TestRetrieveAreas(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "RetrieveAreas", i+1, testCfg.HandleAreas)
-		if correctErr {
+		rr, testName, err := setupTest(t, tc.testGeneral, "RetrieveAreas", i+1, testCfg.HandleAreas)
+		if errors.Is(err, errCorrect) {
 			continue
 		}
 
@@ -409,8 +410,8 @@ func TestAreasParameters(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "AreasParameters", i+1, testCfg.HandleAreas)
-		if correctErr {
+		rr, testName, err := setupTest(t, tc.testGeneral, "AreasParameters", i+1, testCfg.HandleAreas)
+		if errors.Is(err, errCorrect) {
 			continue
 		}
 
@@ -457,8 +458,8 @@ func TestAreasSections(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		rr, testName, correctErr := setupTest(t, tc.testGeneral, "AreasSections", i+1, testCfg.HandleAreas)
-		if correctErr {
+		rr, testName, err := setupTest(t, tc.testGeneral, "AreasSections", i+1, testCfg.HandleAreas)
+		if errors.Is(err, errCorrect) {
 			continue
 		}
 

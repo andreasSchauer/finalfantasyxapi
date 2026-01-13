@@ -45,6 +45,13 @@ func compare(test test, fieldName string, exp, got any) {
 		}
 		compString(test, fieldName, e, g)
 
+	case bool:
+		g, ok := got.(bool)
+		if !ok {
+			t.Fatalf("%s: %s type mismatch: expected bool, got %T", testName, fieldName, got)
+		}
+		compBool(test, fieldName, e, g)
+
 	case *int32:
 		g, ok := got.(*int32)
 		if !ok {
@@ -92,6 +99,12 @@ func compFloat32(test test, fieldName string, exp, got float32) {
 func compString(test test, fieldName, exp, got string) {
 	if exp != "" && exp != got {
 		test.t.Fatalf("%s: expected %s %s, got %s", test.name, fieldName, exp, got)
+	}
+}
+
+func compBool(test test, fieldName string, exp, got bool) {
+	if exp != got {
+		test.t.Fatalf("%s: expected %s %t, got %t", test.name, fieldName, exp, got)
 	}
 }
 
@@ -217,7 +230,7 @@ func compResourcePtrs[T HasAPIResource](test test, fieldName string, expPathPtr 
 	}
 }
 
-func compResPtrsFromID[T HasAPIResource](test test, endpoint, fieldName string, expIDPtr *int32, gotResPtr *T) {
+func compResPtrsFromID[T HasAPIResource](test test, fieldName, endpoint string, expIDPtr *int32, gotResPtr *T) {
 	var expPathPtr *string
 
 	if expIDPtr == nil {

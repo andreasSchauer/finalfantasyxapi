@@ -4,7 +4,6 @@ import (
 	"slices"
 )
 
-
 // remove lost items and put them into defStateGain
 func modifyResourcesLoss[T HasAPIResource](items, changeItems []T) ([]T, []T) {
 	if changeItems == nil {
@@ -23,10 +22,9 @@ func modifyResourcesLoss[T HasAPIResource](items, changeItems []T) ([]T, []T) {
 
 	slices.SortStableFunc(items, sortAPIResources)
 	slices.SortStableFunc(defStateGainItems, sortAPIResources)
-	
+
 	return items, defStateGainItems
 }
-
 
 // add gained items, but also put them into defStateLoss
 func modifyResourcesGain[T HasAPIResource](items, changeItems []T) ([]T, []T) {
@@ -35,7 +33,7 @@ func modifyResourcesGain[T HasAPIResource](items, changeItems []T) ([]T, []T) {
 	}
 
 	defStateLossItems := []T{}
-	
+
 	for _, item := range changeItems {
 		items = append(items, item)
 		defStateLossItems = append(defStateLossItems, item)
@@ -52,7 +50,7 @@ func modifyResourcesChange[T HasAPIResource](items, changeItems []T) ([]T, []T) 
 	if changeItems == nil {
 		return items, changeItems
 	}
-	
+
 	defStateChangeItems := []T{}
 	replaceMap := getResourceMap(changeItems)
 
@@ -68,10 +66,9 @@ func modifyResourcesChange[T HasAPIResource](items, changeItems []T) ([]T, []T) 
 	return items, defStateChangeItems
 }
 
-
 // if a resistance becomes an immunity, the resistance needs to be added to defStateGain
 // while the immunity needs to be added to defStateLoss
-func modifyGainedImmunities(mon Monster, change, defStateGain, defStateLoss AltStateChange, appliedState AppliedState) (Monster, AltStateChange, AltStateChange, AppliedState){
+func modifyGainedImmunities(mon Monster, change, defStateGain, defStateLoss AltStateChange, appliedState AppliedState) (Monster, AltStateChange, AltStateChange, AppliedState) {
 	if change.StatusImmunities == nil {
 		return mon, defStateGain, defStateLoss, appliedState
 	}
@@ -79,14 +76,13 @@ func modifyGainedImmunities(mon Monster, change, defStateGain, defStateLoss AltS
 	mon.StatusImmunities, defStateLoss.StatusImmunities = modifyResourcesGain(mon.StatusImmunities, change.StatusImmunities)
 
 	keptItems, removedItems := separateResources(mon.StatusResists, change.StatusImmunities)
-	
+
 	if len(removedItems) == 0 {
 		removedItems = nil
 	}
-	
-	defStateGain.StatusResistances = removedItems
+
+	defStateGain.StatusResists = removedItems
 	mon.StatusResists = keptItems
-	
 
 	if change.AddedStatus != nil {
 		status := change.AddedStatus
