@@ -54,7 +54,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/1?altered-state=1",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "monster 'sinscale', version '1' has no altered states",
+				expectedErr:    "monster 'sinscale', version '1' has no altered states.",
 			},
 		},
 		{

@@ -31,6 +31,18 @@ type AltStateChange struct {
 	RemovedStatus     *NamedAPIResource       `json:"removed_status_condition,omitempty"`
 }
 
+func (c *AltStateChange) IsZero() bool {
+	return 	c.Distance == nil &&
+			c.Properties == nil &&
+			c.AutoAbilities == nil &&
+			c.BaseStats == nil &&
+			c.ElemResists == nil &&
+			c.StatusImmunities == nil &&
+			c.StatusResistances == nil &&
+			c.AddedStatus == nil &&
+			c.RemovedStatus == nil
+}
+
 func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon database.Monster) ([]AlteredState, error) {
 	dbAltStates, err := cfg.db.GetMonsterAlteredStates(r.Context(), mon.ID)
 	if err != nil {

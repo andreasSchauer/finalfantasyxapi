@@ -4,6 +4,7 @@
 Things I plan on adding:
 - images
 - pretty much everything regarding blitzball
+- monster ai
 - html responses
 - a front-end
 
@@ -17,3 +18,4 @@ Things that are currently unclear/unknown:
     - the road at macalania temple that connects the antechamber with the chamber of the fayth (area 167). In the German version it has the same name as the road that leads to the temple
     - which fayth areas are called 'chamber of the fayth' and which are called 'fayth'? (areas 14, 35, 63, 117, 168, 210, 212, 228)
 - What is the critical plus value of monsters? (not equipment drops, but for their own abilities) Is it the same?
+- The attributes of Lulu's Thundara spell during the first Zu encounter at Bikanel

@@ -62,6 +62,7 @@ func getSharedResources[T HasAPIResource](s1, s2 []T) []T {
 	return sharedItems
 }
 
+
 func resourcesContain[T HasAPIResource](items []T, target T) bool {
 	for _, item := range items {
 		if item.GetAPIResource() == target.GetAPIResource() {

@@ -97,9 +97,9 @@ func setupTest(t *testing.T, tc testGeneral, testFunc string, testNum int, handl
 	}
 
 	if tc.expectedErr != "" {
-		raw := rr.Body.String()
-		if !strings.Contains(raw, tc.expectedErr) {
-			t.Fatalf("%s: expected error message to contain %s, got %q", testName, tc.expectedErr, raw)
+		rawErr := rr.Body.String()
+		if !strings.Contains(rawErr, tc.expectedErr) {
+			t.Fatalf("%s: expected error message to contain %s, got %q", testName, tc.expectedErr, rawErr)
 		}
 		caughtErr = true
 		return nil, "", caughtErr
