@@ -8,7 +8,6 @@ import (
 	"strings"
 )
 
-
 func queryMapToSlice(lookup map[string]QueryType) []QueryType {
 	queryParams := []QueryType{}
 
@@ -55,16 +54,4 @@ func checkDuplicateIDs(queryParam QueryType, ids []int32) error {
 	}
 
 	return nil
-}
-
-func allowedValsString(queryParam QueryType) string {
-	allowedVals := queryParam.AllowedValues
-	formattedVals := []string{}
-
-	for _, s := range allowedVals {
-		formatted := fmt.Sprintf("'%s'", s)
-		formattedVals = append(formattedVals, formatted)
-	}
-
-	return strings.Join(formattedVals, ", ")
 }

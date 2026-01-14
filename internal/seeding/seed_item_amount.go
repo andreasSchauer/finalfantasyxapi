@@ -42,7 +42,7 @@ func (l *Lookup) seedItemAmount(qtx *database.Queries, itemAmount ItemAmount) (I
 
 	itemAmount.MasterItemID, err = assignFK(itemAmount.ItemName, l.MasterItems)
 	if err != nil {
-		return ItemAmount{}, h.GetErr(itemAmount.Error(), err)
+		return ItemAmount{}, h.NewErr(itemAmount.Error(), err)
 	}
 
 	dbItemAmount, err := qtx.CreateItemAmount(context.Background(), database.CreateItemAmountParams{
@@ -51,7 +51,7 @@ func (l *Lookup) seedItemAmount(qtx *database.Queries, itemAmount ItemAmount) (I
 		Amount:       itemAmount.Amount,
 	})
 	if err != nil {
-		return ItemAmount{}, h.GetErr(itemAmount.Error(), err, "couldn't create item amount")
+		return ItemAmount{}, h.NewErr(itemAmount.Error(), err, "couldn't create item amount")
 	}
 
 	itemAmount.ID = dbItemAmount.ID

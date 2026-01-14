@@ -53,13 +53,13 @@ func (l *Lookup) seedCharClassesCharacter(qtx *database.Queries, unit PlayerUnit
 
 	err = l.seedUnitCharClass(qtx, character.Name, character.PlayerUnit)
 	if err != nil {
-		return h.GetErr(character.Name, err, "character class")
+		return h.NewErr(character.Name, err, "character class")
 	}
 
 	if !character.StoryOnly {
 		err := l.seedUnitCharClass(qtx, "characters", character.PlayerUnit)
 		if err != nil {
-			return h.GetErr("characters", err, "character class")
+			return h.NewErr("characters", err, "character class")
 		}
 	}
 
@@ -76,25 +76,25 @@ func (l *Lookup) seedCharClassesAeon(qtx *database.Queries, unit PlayerUnit) err
 
 	err = l.seedUnitCharClass(qtx, aeon.Name, aeon.PlayerUnit)
 	if err != nil {
-		return h.GetErr(aeon.Name, err, "character class")
+		return h.NewErr(aeon.Name, err, "character class")
 	}
 
 	err = l.seedUnitCharClass(qtx, "aeons", aeon.PlayerUnit)
 	if err != nil {
-		return h.GetErr("aeons", err, "character class")
+		return h.NewErr("aeons", err, "character class")
 	}
 
 	if aeonCategory == "standard-aeons" {
 		err = l.seedUnitCharClass(qtx, "standard-aeons", aeon.PlayerUnit)
 		if err != nil {
-			return h.GetErr("standard-aeons", err, "character class")
+			return h.NewErr("standard-aeons", err, "character class")
 		}
 	}
 
 	if aeonCategory == "magus-sisters" {
 		err = l.seedUnitCharClass(qtx, "magus-sisters", aeon.PlayerUnit)
 		if err != nil {
-			return h.GetErr("magus-sisters", err, "character class")
+			return h.NewErr("magus-sisters", err, "character class")
 		}
 	}
 
@@ -117,7 +117,7 @@ func (l *Lookup) seedUnitCharClass(qtx *database.Queries, className string, unit
 		ClassID:  junction.ChildID,
 	})
 	if err != nil {
-		return h.GetErr(unit.Error(), err, "couldn't junction player unit")
+		return h.NewErr(unit.Error(), err, "couldn't junction player unit")
 	}
 
 	return nil
@@ -129,7 +129,7 @@ func (l *Lookup) seedCharacterClass(qtx *database.Queries, class CharacterClass)
 		Name:     class.Name,
 	})
 	if err != nil {
-		return CharacterClass{}, h.GetErr(class.Error(), err, "couldn't create character class")
+		return CharacterClass{}, h.NewErr(class.Error(), err, "couldn't create character class")
 	}
 
 	class.ID = dbClass.ID

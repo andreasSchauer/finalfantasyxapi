@@ -42,7 +42,6 @@ func (ma MonsterAmount) GetID() int32 {
 	return ma.ID
 }
 
-
 func (ma MonsterAmount) Error() string {
 	return fmt.Sprintf("monster amount with monster: %s, version: %v, amount: %d", ma.MonsterName, h.DerefOrNil(ma.Version), ma.Amount)
 }
@@ -54,7 +53,7 @@ func (l *Lookup) seedMonsterAmount(qtx *database.Queries, monsterAmount MonsterA
 		Amount:    monsterAmount.Amount,
 	})
 	if err != nil {
-		return MonsterAmount{}, h.GetErr(monsterAmount.Error(), err, "couldn't create monster amount")
+		return MonsterAmount{}, h.NewErr(monsterAmount.Error(), err, "couldn't create monster amount")
 	}
 	monsterAmount.ID = dbMonsterAmount.ID
 

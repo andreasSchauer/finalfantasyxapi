@@ -8,7 +8,7 @@ import (
 
 type LocationArea struct {
 	Location    string `json:"location"`
-	SubLocation string `json:"sublocation"`
+	Sublocation string `json:"sublocation"`
 	Area        string `json:"area"`
 	Version     *int32 `json:"version,omitempty"`
 }
@@ -16,7 +16,7 @@ type LocationArea struct {
 func (la LocationArea) ToKeyFields() []any {
 	return []any{
 		la.Location,
-		la.SubLocation,
+		la.Sublocation,
 		la.Area,
 		h.DerefOrNil(la.Version),
 	}
@@ -27,13 +27,13 @@ type IsLocationArea interface {
 }
 
 func (la LocationArea) Error() string {
-	return fmt.Sprintf("location area with location: '%s', sublocation: '%s', area: '%s', version: '%v'", la.Location, la.SubLocation, la.Area, h.DerefOrNil(la.Version))
+	return fmt.Sprintf("location area with location: '%s', sublocation: '%s', area: '%s', version: '%v'", la.Location, la.Sublocation, la.Area, h.DerefOrNil(la.Version))
 }
 
 func newLocationArea(location, sublocation, area string, version *int32) LocationArea {
 	return LocationArea{
 		Location:    location,
-		SubLocation: sublocation,
+		Sublocation: sublocation,
 		Area:        area,
 		Version:     version,
 	}

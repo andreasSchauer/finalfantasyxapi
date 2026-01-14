@@ -43,7 +43,7 @@ func (l *Lookup) seedMasterItem(qtx *database.Queries, masterItem MasterItem) (M
 		Type:     masterItem.Type,
 	})
 	if err != nil {
-		return MasterItem{}, h.GetErr(masterItem.Error(), err)
+		return MasterItem{}, h.NewErr(masterItem.Error(), err)
 	}
 
 	masterItem.ID = dbMasterItem.ID

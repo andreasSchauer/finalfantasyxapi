@@ -47,7 +47,7 @@ func (l *Lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
 				DamageFactor: h.GetNullFloat64(affinity.DamageFactor),
 			})
 			if err != nil {
-				return h.GetErr(affinity.Error(), err, "couldn't create elemental affinity")
+				return h.NewErr(affinity.Error(), err, "couldn't create elemental affinity")
 			}
 
 			affinity.ID = dbAffinity.ID

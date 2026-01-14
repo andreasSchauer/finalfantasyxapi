@@ -58,11 +58,12 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:        "areas",
 		resourceType:    "area",
 		objLookup:       cfg.l.Areas,
+		objLookupID:     cfg.l.AreasID,
 		queryLookup:     cfg.q.areas,
 		getSingleFunc:   cfg.getArea,
 		getMultipleFunc: nil,
 		retrieveFunc:    cfg.retrieveAreas,
-		subsections: map[string]func(string) (IsAPIResourceList, error){
+		subsections: map[string]func(string) (APIResourceList, error){
 			"treasures":          cfg.getAreaTreasuresMid,
 			"shops":              cfg.getAreaShopsMid,
 			"monsters":           cfg.getAreaMonstersMid,
@@ -139,7 +140,7 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc:   cfg.getMonster,
 		getMultipleFunc: cfg.getMultipleMonsters,
 		retrieveFunc:    cfg.retrieveMonsters,
-		subsections: map[string]func(string) (IsAPIResourceList, error){
+		subsections: map[string]func(string) (APIResourceList, error){
 			"abilities": cfg.getMonsterAbilitiesMid,
 		},
 	}
@@ -160,6 +161,7 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:        "overdrive-modes",
 		resourceType:    "overdrive mode",
 		objLookup:       cfg.l.OverdriveModes,
+		objLookupID:     cfg.l.OverdriveModesID,
 		queryLookup:     cfg.q.overdriveModes,
 		getSingleFunc:   cfg.getOverdriveMode,
 		getMultipleFunc: nil,

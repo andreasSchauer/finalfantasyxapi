@@ -42,7 +42,7 @@ type AltStateChange struct {
 	BaseStats        *[]BaseStat        `json:"base_stats"`
 	ElemResists      *[]ElementalResist `json:"elem_resists"`
 	StatusImmunities *[]string          `json:"status_immunities"`
-	AddedStatus   	 *InflictedStatus 	`json:"added_status"`
+	AddedStatus      *InflictedStatus   `json:"added_status"`
 }
 
 func (a AltStateChange) ToHashFields() []any {
@@ -84,14 +84,14 @@ func (l *Lookup) seedAlteredState(qtx *database.Queries, state AlteredState) (Al
 		IsTemporary: state.IsTemporary,
 	})
 	if err != nil {
-		return AlteredState{}, h.GetErr(state.Error(), err, "couldn't create altered state")
+		return AlteredState{}, h.NewErr(state.Error(), err, "couldn't create altered state")
 	}
 
 	state.ID = dbAlteredState.ID
 
 	err = l.seedAltStateChanges(qtx, state)
 	if err != nil {
-		return AlteredState{}, h.GetErr(state.Error(), err)
+		return AlteredState{}, h.NewErr(state.Error(), err)
 	}
 
 	return state, nil
@@ -115,7 +115,7 @@ func (l *Lookup) seedAltStateChange(qtx *database.Queries, change AltStateChange
 	var err error
 	change.AddedStatus, err = seedObjPtrAssignFK(qtx, change.AddedStatus, l.seedInflictedStatus)
 	if err != nil {
-		return AltStateChange{}, h.GetErr(change.Error(), err)
+		return AltStateChange{}, h.NewErr(change.Error(), err)
 	}
 
 	dbAltStateChange, err := qtx.CreateAltStateChange(context.Background(), database.CreateAltStateChangeParams{
@@ -123,17 +123,17 @@ func (l *Lookup) seedAltStateChange(qtx *database.Queries, change AltStateChange
 		AlteredStateID: change.AlteredStateID,
 		AlterationType: database.AlterationType(change.AlterationType),
 		Distance:       h.GetNullInt32(change.Distance),
-		AddedStatusID: 	h.ObjPtrToNullInt32ID(change.AddedStatus),
+		AddedStatusID:  h.ObjPtrToNullInt32ID(change.AddedStatus),
 	})
 	if err != nil {
-		return AltStateChange{}, h.GetErr(change.Error(), err, "couldn't create alt state change")
+		return AltStateChange{}, h.NewErr(change.Error(), err, "couldn't create alt state change")
 	}
 
 	change.ID = dbAltStateChange.ID
 
 	err = l.seedAltStateChangeJunctions(qtx, change)
 	if err != nil {
-		return AltStateChange{}, h.GetErr(change.Error(), err)
+		return AltStateChange{}, h.NewErr(change.Error(), err)
 	}
 
 	return change, nil
@@ -175,7 +175,7 @@ func (l *Lookup) seedAltStateChangeProperties(qtx *database.Queries, change AltS
 			PropertyID:       junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(propertyStr, err, "couldn't junction property")
+			return h.NewErr(propertyStr, err, "couldn't junction property")
 		}
 	}
 
@@ -199,7 +199,7 @@ func (l *Lookup) seedAltStateChangeAutoAbilities(qtx *database.Queries, change A
 			AutoAbilityID:    junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(autoAbilityStr, err, "couldn't junction auto-ability")
+			return h.NewErr(autoAbilityStr, err, "couldn't junction auto-ability")
 		}
 	}
 
@@ -223,7 +223,7 @@ func (l *Lookup) seedAltStateBaseStats(qtx *database.Queries, change AltStateCha
 			BaseStatID:       junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(baseStat.Error(), err, "couldn't junction base stat")
+			return h.NewErr(baseStat.Error(), err, "couldn't junction base stat")
 		}
 	}
 
@@ -247,7 +247,7 @@ func (l *Lookup) seedAltStateElemResists(qtx *database.Queries, change AltStateC
 			ElemResistID:     junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(elemResist.Error(), err, "couldn't junction elemental resist")
+			return h.NewErr(elemResist.Error(), err, "couldn't junction elemental resist")
 		}
 	}
 
@@ -271,7 +271,7 @@ func (l *Lookup) seedAltStateChangeStatusImmunities(qtx *database.Queries, chang
 			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(conditionStr, err, "couldn't junction status immunity")
+			return h.NewErr(conditionStr, err, "couldn't junction status immunity")
 		}
 	}
 

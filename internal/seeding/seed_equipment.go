@@ -120,7 +120,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 				var err error
 				table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, l.Characters)
 				if err != nil {
-					return h.GetErr(table.Error(), err)
+					return h.NewErr(table.Error(), err)
 				}
 			}
 
@@ -136,7 +136,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 				EmptySlotsAmt:       table.EmptySlotsAmt,
 			})
 			if err != nil {
-				return h.GetErr(table.Error(), err, "couldn't create equipment table")
+				return h.NewErr(table.Error(), err, "couldn't create equipment table")
 			}
 
 			table.ID = dbEquipmentTable.ID
@@ -166,22 +166,22 @@ func (l *Lookup) seedEquipmentRelationships(db *database.Queries, dbConn *sql.DB
 
 			err = l.seedEquipmentAutoAbilities(qtx, table, table.RequiredAbilities, string(database.AutoAbilityPoolRequired))
 			if err != nil {
-				return h.GetErr(table.Error(), err)
+				return h.NewErr(table.Error(), err)
 			}
 
 			err = l.seedEquipmentAutoAbilities(qtx, table, table.AbilityPool1, string(database.AutoAbilityPoolOne))
 			if err != nil {
-				return h.GetErr(table.Error(), err)
+				return h.NewErr(table.Error(), err)
 			}
 
 			err = l.seedEquipmentAutoAbilities(qtx, table, table.AbilityPool2, string(database.AutoAbilityPoolTwo))
 			if err != nil {
-				return h.GetErr(table.Error(), err)
+				return h.NewErr(table.Error(), err)
 			}
 
 			err = l.seedEquipmentNames(qtx, table)
 			if err != nil {
-				return h.GetErr(table.Error(), err)
+				return h.NewErr(table.Error(), err)
 			}
 		}
 
@@ -208,7 +208,7 @@ func (l *Lookup) seedEquipmentAutoAbilities(qtx *database.Queries, table Equipme
 			AbilityPool:      database.AutoAbilityPool(eaJunction.AbilityPool),
 		})
 		if err != nil {
-			return h.GetErr(autoAbility, err, "couldn't junction auto ability")
+			return h.NewErr(autoAbility, err, "couldn't junction auto ability")
 		}
 	}
 
@@ -228,7 +228,7 @@ func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 		if table.Classification == string(database.EquipClassCelestialWeapon) {
 			etncJunction.CelestialWeaponID, err = assignFKPtr(&equipmentName.Name, l.CelestialWeapons)
 			if err != nil {
-				return h.GetErr(equipmentName.Error(), err)
+				return h.NewErr(equipmentName.Error(), err)
 			}
 		}
 
@@ -239,7 +239,7 @@ func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 			CelestialWeaponID: h.GetNullInt32(etncJunction.CelestialWeaponID),
 		})
 		if err != nil {
-			return h.GetErr(equipmentName.Error(), err, "couldn't junction equipment name")
+			return h.NewErr(equipmentName.Error(), err, "couldn't junction equipment name")
 		}
 
 	}
@@ -252,7 +252,7 @@ func (l *Lookup) seedEquipmentName(qtx *database.Queries, equipmentName Equipmen
 
 	equipmentName.CharacterID, err = assignFK(equipmentName.CharacterName, l.Characters)
 	if err != nil {
-		return EquipmentName{}, h.GetErr(equipmentName.Error(), err)
+		return EquipmentName{}, h.NewErr(equipmentName.Error(), err)
 	}
 
 	dbEquipmentName, err := qtx.CreateEquipmentName(context.Background(), database.CreateEquipmentNameParams{
@@ -261,7 +261,7 @@ func (l *Lookup) seedEquipmentName(qtx *database.Queries, equipmentName Equipmen
 		Name:        equipmentName.Name,
 	})
 	if err != nil {
-		return EquipmentName{}, h.GetErr(equipmentName.Error(), err, "couldn't create equipment name")
+		return EquipmentName{}, h.NewErr(equipmentName.Error(), err, "couldn't create equipment name")
 	}
 
 	equipmentName.ID = dbEquipmentName.ID

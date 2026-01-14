@@ -37,7 +37,7 @@ func (l *Lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility Monste
 
 	monsterAbility.AbilityID, err = assignFK(monsterAbility.AbilityReference, l.Abilities)
 	if err != nil {
-		return MonsterAbility{}, h.GetErr(monsterAbility.Error(), err)
+		return MonsterAbility{}, h.NewErr(monsterAbility.Error(), err)
 	}
 
 	dbMonsterAbility, err := qtx.CreateMonsterAbility(context.Background(), database.CreateMonsterAbilityParams{
@@ -47,7 +47,7 @@ func (l *Lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility Monste
 		IsUnused:  monsterAbility.IsUnused,
 	})
 	if err != nil {
-		return MonsterAbility{}, h.GetErr(monsterAbility.Error(), err, "couldn't create monster ability")
+		return MonsterAbility{}, h.NewErr(monsterAbility.Error(), err, "couldn't create monster ability")
 	}
 
 	monsterAbility.ID = dbMonsterAbility.ID

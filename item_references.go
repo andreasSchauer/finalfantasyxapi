@@ -13,7 +13,7 @@ func (ia ItemAmount) IsZero() bool {
 	return ia.Item.Name == ""
 }
 
-func (ia ItemAmount) GetAPIResource() IsAPIResource {
+func (ia ItemAmount) GetAPIResource() APIResource {
 	return ia.Item
 }
 
@@ -43,7 +43,7 @@ type PossibleItem struct {
 	Chance int32 `json:"chance"`
 }
 
-func (ps PossibleItem) GetAPIResource() IsAPIResource {
+func (ps PossibleItem) GetAPIResource() APIResource {
 	return ps.Item.GetAPIResource()
 }
 

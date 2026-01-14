@@ -23,7 +23,7 @@ type LocationSong struct {
 	ReplacesEncounterMusic bool             `json:"replaces_encounter_music"`
 }
 
-func (ls LocationSong) GetAPIResource() IsAPIResource {
+func (ls LocationSong) GetAPIResource() APIResource {
 	return ls.Song
 }
 

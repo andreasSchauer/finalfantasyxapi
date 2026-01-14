@@ -60,7 +60,7 @@ func (l *Lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 				Topmenu:     database.TopmenuType(command.Topmenu),
 			})
 			if err != nil {
-				return h.GetErr(command.Error(), err, "couldn't create overdrive command")
+				return h.NewErr(command.Error(), err, "couldn't create overdrive command")
 			}
 
 			command.ID = dbODCommand.ID
@@ -89,12 +89,12 @@ func (l *Lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn
 
 			command.CharClassID, err = assignFKPtr(&command.User, l.CharClasses)
 			if err != nil {
-				return h.GetErr(command.Error(), err)
+				return h.NewErr(command.Error(), err)
 			}
 
 			command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, l.Submenus)
 			if err != nil {
-				return h.GetErr(command.Error(), err)
+				return h.NewErr(command.Error(), err)
 			}
 
 			err = qtx.UpdateOverdriveCommand(context.Background(), database.UpdateOverdriveCommandParams{
@@ -104,7 +104,7 @@ func (l *Lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn
 				ID:               command.ID,
 			})
 			if err != nil {
-				return h.GetErr(command.Error(), err, "couldn't update overdrive command")
+				return h.NewErr(command.Error(), err, "couldn't update overdrive command")
 			}
 		}
 

@@ -47,7 +47,7 @@ func (l *Lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 				Name:     element.Name,
 			})
 			if err != nil {
-				return h.GetErr(element.Error(), err, "couldn't create element")
+				return h.NewErr(element.Error(), err, "couldn't create element")
 			}
 
 			element.ID = dbElement.ID
@@ -75,7 +75,7 @@ func (l *Lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB)
 
 			element.OppositeElementID, err = assignFKPtr(element.OppositeElement, l.Elements)
 			if err != nil {
-				return h.GetErr(element.Error(), err)
+				return h.NewErr(element.Error(), err)
 			}
 
 			err = qtx.UpdateElement(context.Background(), database.UpdateElementParams{
@@ -84,7 +84,7 @@ func (l *Lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB)
 				ID:                element.ID,
 			})
 			if err != nil {
-				return h.GetErr(element.Error(), err, "couldn't update element")
+				return h.NewErr(element.Error(), err, "couldn't update element")
 			}
 
 			l.Elements[element.Name] = element

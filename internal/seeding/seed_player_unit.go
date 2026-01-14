@@ -43,7 +43,7 @@ func (l *Lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (P
 		Type:     playerUnit.Type,
 	})
 	if err != nil {
-		return PlayerUnit{}, h.GetErr(playerUnit.Error(), err, "couldn't create player unit")
+		return PlayerUnit{}, h.NewErr(playerUnit.Error(), err, "couldn't create player unit")
 	}
 
 	playerUnit.ID = dbPlayerUnit.ID

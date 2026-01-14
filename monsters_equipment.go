@@ -41,7 +41,7 @@ type EquipmentDrop struct {
 	Probability *int32             `json:"probability,omitempty"`
 }
 
-func (ed EquipmentDrop) GetAPIResource() IsAPIResource {
+func (ed EquipmentDrop) GetAPIResource() APIResource {
 	return ed.AutoAbility.GetAPIResource()
 }
 

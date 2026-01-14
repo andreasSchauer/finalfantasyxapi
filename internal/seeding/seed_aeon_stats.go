@@ -49,24 +49,24 @@ func (l *Lookup) seedAeonStats(db *database.Queries, dbConn *sql.DB) error {
 		for _, aeonStat := range aeonStats {
 			aeon, err := GetResource(aeonStat.Name, l.Aeons)
 			if err != nil {
-				return h.GetErr(aeonStat.Name, err)
+				return h.NewErr(aeonStat.Name, err)
 			}
 
 			err = l.seedAeonBaseStats(qtx, aeon, aeonStat.AVals, database.AeonStatValueA, nil)
 			if err != nil {
-				return h.GetErr(aeonStat.Name, err)
+				return h.NewErr(aeonStat.Name, err)
 			}
 
 			err = l.seedAeonBaseStats(qtx, aeon, aeonStat.BVals, database.AeonStatValueB, nil)
 			if err != nil {
-				return h.GetErr(aeonStat.Name, err)
+				return h.NewErr(aeonStat.Name, err)
 			}
 
 			for _, xVal := range aeonStat.XVals {
 				err := l.seedAeonBaseStats(qtx, aeon, xVal.BaseStats, database.AeonStatValueX, &xVal.Battles)
 				if err != nil {
 					subjects := h.JoinSubjects(aeonStat.Name, string(xVal.Battles))
-					return h.GetErr(subjects, err)
+					return h.NewErr(subjects, err)
 				}
 			}
 		}
@@ -82,7 +82,7 @@ func (l *Lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon, baseStats [
 
 		asJunction.Junction, err = createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
 		if err != nil {
-			return h.GetErr(baseStat.Error(), err)
+			return h.NewErr(baseStat.Error(), err)
 		}
 
 		asJunction.ValueType = valType
@@ -96,7 +96,7 @@ func (l *Lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon, baseStats [
 			Battles:    h.GetNullInt32(asJunction.Battles),
 		})
 		if err != nil {
-			return h.GetErr(baseStat.Error(), err, "couldn't junction base stat")
+			return h.NewErr(baseStat.Error(), err, "couldn't junction base stat")
 		}
 	}
 

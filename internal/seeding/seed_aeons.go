@@ -12,8 +12,8 @@ import (
 type Aeon struct {
 	ID int32
 	PlayerUnit
-	UnlockCondition     string       	`json:"unlock_condition"`
-	LocationArea        LocationArea 	`json:"location_area"`
+	UnlockCondition     string       `json:"unlock_condition"`
+	LocationArea        LocationArea `json:"location_area"`
 	AreaID              *int32
 	Category            *string         `json:"category"`
 	IsOptional          bool            `json:"is_optional"`
@@ -88,7 +88,7 @@ func (l *Lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 
 			aeon.PlayerUnit, err = seedObjAssignID(qtx, aeon.PlayerUnit, l.seedPlayerUnit)
 			if err != nil {
-				return h.GetErr(aeon.Error(), err)
+				return h.NewErr(aeon.Error(), err)
 			}
 
 			dbAeon, err := qtx.CreateAeon(context.Background(), database.CreateAeonParams{
@@ -102,7 +102,7 @@ func (l *Lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 				PhysAtkShatterRate:    h.GetNullInt32(aeon.PhysAtkShatterRate),
 			})
 			if err != nil {
-				return h.GetErr(aeon.Error(), err, "couldn't create aeon")
+				return h.NewErr(aeon.Error(), err, "couldn't create aeon")
 			}
 
 			aeon.ID = dbAeon.ID
@@ -110,7 +110,7 @@ func (l *Lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 
 			err = l.seedCharacterClasses(qtx, aeon.PlayerUnit)
 			if err != nil {
-				return h.GetErr(aeon.Error(), err)
+				return h.NewErr(aeon.Error(), err)
 			}
 		}
 		return nil
@@ -135,12 +135,12 @@ func (l *Lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 			aeon.AreaID, err = assignFKPtr(&aeon.LocationArea, l.Areas)
 			if err != nil {
-				return h.GetErr(aeon.Error(), err)
+				return h.NewErr(aeon.Error(), err)
 			}
 
 			aeon.PhysAtkAccuracy, err = seedObjPtrAssignFK(qtx, aeon.PhysAtkAccuracy, l.seedAccuracy)
 			if err != nil {
-				return h.GetErr(aeon.Error(), err)
+				return h.NewErr(aeon.Error(), err)
 			}
 
 			err = qtx.UpdateAeon(context.Background(), database.UpdateAeonParams{
@@ -150,17 +150,17 @@ func (l *Lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) er
 				ID:         aeon.ID,
 			})
 			if err != nil {
-				return h.GetErr(aeon.Error(), err, "couldn't update aeon")
+				return h.NewErr(aeon.Error(), err, "couldn't update aeon")
 			}
 
 			err = l.seedAeonEquipmentRelationships(qtx, aeon, string(database.EquipTypeWeapon), aeon.Weapon)
 			if err != nil {
-				return h.GetErr(aeon.Error(), err)
+				return h.NewErr(aeon.Error(), err)
 			}
 
 			err = l.seedAeonEquipmentRelationships(qtx, aeon, string(database.EquipTypeArmor), aeon.Armor)
 			if err != nil {
-				return h.GetErr(aeon.Error(), err)
+				return h.NewErr(aeon.Error(), err)
 			}
 		}
 		return nil
@@ -183,7 +183,7 @@ func (l *Lookup) seedAeonEquipmentRelationships(qtx *database.Queries, aeon Aeon
 			AeonEquipmentID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(entry.Error(), err, "couldn't junction aeon equipment")
+			return h.NewErr(entry.Error(), err, "couldn't junction aeon equipment")
 		}
 	}
 
@@ -195,7 +195,7 @@ func (l *Lookup) seedAeonEquipment(qtx *database.Queries, aeonEquipment AeonEqui
 
 	aeonEquipment.AutoAbilityID, err = assignFK(aeonEquipment.AutoAbility, l.AutoAbilities)
 	if err != nil {
-		return AeonEquipment{}, h.GetErr(aeonEquipment.Error(), err)
+		return AeonEquipment{}, h.NewErr(aeonEquipment.Error(), err)
 	}
 
 	dbAeonEquipment, err := qtx.CreateAeonEquipment(context.Background(), database.CreateAeonEquipmentParams{
@@ -205,7 +205,7 @@ func (l *Lookup) seedAeonEquipment(qtx *database.Queries, aeonEquipment AeonEqui
 		EquipType:     database.EquipType(aeonEquipment.EquipType),
 	})
 	if err != nil {
-		return AeonEquipment{}, h.GetErr(aeonEquipment.Error(), err, "couldn't create aeon equipment")
+		return AeonEquipment{}, h.NewErr(aeonEquipment.Error(), err, "couldn't create aeon equipment")
 	}
 	aeonEquipment.ID = dbAeonEquipment.ID
 

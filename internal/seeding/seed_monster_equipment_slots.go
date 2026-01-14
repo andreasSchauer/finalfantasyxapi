@@ -63,7 +63,7 @@ func (l *Lookup) seedMonsterEquipmentSlotsWrapper(qtx *database.Queries, monster
 
 	mes, err = seedObjAssignID(qtx, mes, l.seedMonsterEquipmentSlots)
 	if err != nil {
-		return h.GetErr(monsterEquipment.Error(), err)
+		return h.NewErr(monsterEquipment.Error(), err)
 	}
 
 	return nil
@@ -78,13 +78,13 @@ func (l *Lookup) seedMonsterEquipmentSlots(qtx *database.Queries, mes MonsterEqu
 		Type:               mes.Type,
 	})
 	if err != nil {
-		return MonsterEquipmentSlots{}, h.GetErr(mes.Error(), err, "couldn't create monster equipment slots")
+		return MonsterEquipmentSlots{}, h.NewErr(mes.Error(), err, "couldn't create monster equipment slots")
 	}
 	mes.ID = dbMes.ID
 
 	err = l.seedMonsterEquipmentSlotsChances(qtx, mes)
 	if err != nil {
-		return MonsterEquipmentSlots{}, h.GetErr(mes.Error(), err)
+		return MonsterEquipmentSlots{}, h.NewErr(mes.Error(), err)
 	}
 
 	return mes, nil
@@ -106,7 +106,7 @@ func (l *Lookup) seedMonsterEquipmentSlotsChances(qtx *database.Queries, mes Mon
 			SlotsChanceID:      threeWay.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(chance.Error(), err, "couldn't junction chance")
+			return h.NewErr(chance.Error(), err, "couldn't junction chance")
 		}
 	}
 
@@ -120,7 +120,7 @@ func (l *Lookup) seedEquipmentSlotsChance(qtx *database.Queries, esc EquipmentSl
 		Chance:   esc.Chance,
 	})
 	if err != nil {
-		return EquipmentSlotsChance{}, h.GetErr(esc.Error(), err, "couldn't create equipment slots chance")
+		return EquipmentSlotsChance{}, h.NewErr(esc.Error(), err, "couldn't create equipment slots chance")
 	}
 
 	esc.ID = dbEsc.ID

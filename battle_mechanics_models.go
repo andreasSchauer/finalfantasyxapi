@@ -7,7 +7,7 @@ type BaseStat struct {
 	Value int32            `json:"value"`
 }
 
-func (bs BaseStat) GetAPIResource() IsAPIResource {
+func (bs BaseStat) GetAPIResource() APIResource {
 	return bs.Stat
 }
 
@@ -31,7 +31,7 @@ type ElementalResist struct {
 	Affinity NamedAPIResource `json:"affinity"`
 }
 
-func (er ElementalResist) GetAPIResource() IsAPIResource {
+func (er ElementalResist) GetAPIResource() APIResource {
 	return er.Element
 }
 
@@ -47,7 +47,7 @@ type StatusResist struct {
 	Resistance      int32            `json:"resistance"`
 }
 
-func (sr StatusResist) GetAPIResource() IsAPIResource {
+func (sr StatusResist) GetAPIResource() APIResource {
 	return sr.StatusCondition
 }
 
@@ -73,7 +73,7 @@ type InflictedStatus struct {
 	Amount          *int32                `json:"amount,omitempty"`
 }
 
-func (is InflictedStatus) GetAPIResource() IsAPIResource {
+func (is InflictedStatus) GetAPIResource() APIResource {
 	return is.StatusCondition
 }
 

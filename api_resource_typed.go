@@ -50,7 +50,7 @@ func (r TypedAPIResource) Error() string {
 	return fmt.Sprintf("Typed api resource with url: %s", r.URL)
 }
 
-func (r TypedAPIResource) GetAPIResource() IsAPIResource {
+func (r TypedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
@@ -65,7 +65,7 @@ func (cfg *Config) newNamedAPIResourceFromType(endpoint, key string, lookup map[
 	return resource, nil
 }
 
-func newTypedAPIResourceList[T h.HasID, R any, L IsAPIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], lookup map[string]TypedAPIResource) (TypedApiResourceList, error) {
+func newTypedAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], lookup map[string]TypedAPIResource) (TypedApiResourceList, error) {
 	resources := cfg.createTypeResourceSlice(i.endpoint, lookup)
 
 	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)

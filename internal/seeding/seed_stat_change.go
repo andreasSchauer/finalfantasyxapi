@@ -37,7 +37,7 @@ func (l *Lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (S
 
 	statChange.StatID, err = assignFK(statChange.StatName, l.Stats)
 	if err != nil {
-		return StatChange{}, h.GetErr(statChange.Error(), err)
+		return StatChange{}, h.NewErr(statChange.Error(), err)
 	}
 
 	dbStatChange, err := qtx.CreateStatChange(context.Background(), database.CreateStatChangeParams{
@@ -47,7 +47,7 @@ func (l *Lookup) seedStatChange(qtx *database.Queries, statChange StatChange) (S
 		Value:           statChange.Value,
 	})
 	if err != nil {
-		return StatChange{}, h.GetErr(statChange.Error(), err, "couldn't create stat change")
+		return StatChange{}, h.NewErr(statChange.Error(), err, "couldn't create stat change")
 	}
 	statChange.ID = dbStatChange.ID
 

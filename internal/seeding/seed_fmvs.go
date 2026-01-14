@@ -10,7 +10,7 @@ import (
 )
 
 type FMV struct {
-	ID 					int32
+	ID                  int32
 	Name                string       `json:"name"`
 	Translation         *string      `json:"translation"`
 	CutsceneDescription string       `json:"cutscene_description"`
@@ -54,12 +54,12 @@ func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 
 			fmv.SongID, err = assignFKPtr(fmv.SongName, l.Songs)
 			if err != nil {
-				return h.GetErr(fmv.Error(), err)
+				return h.NewErr(fmv.Error(), err)
 			}
 
 			fmv.AreaID, err = assignFK(fmv.LocationArea, l.Areas)
 			if err != nil {
-				return h.GetErr(fmv.Error(), err)
+				return h.NewErr(fmv.Error(), err)
 			}
 
 			dbFMV, err := qtx.CreateFMV(context.Background(), database.CreateFMVParams{
@@ -71,7 +71,7 @@ func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 				AreaID:              fmv.AreaID,
 			})
 			if err != nil {
-				return h.GetErr(fmv.Error(), err, "couldn't create fmv")
+				return h.NewErr(fmv.Error(), err, "couldn't create fmv")
 			}
 
 			fmv.ID = dbFMV.ID

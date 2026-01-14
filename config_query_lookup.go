@@ -5,22 +5,22 @@ import (
 )
 
 type QueryType struct {
-	ID               int             `json:"-"`
-	Name             string          `json:"name"`
-	Description      string          `json:"description"`
-	Usage            string          `json:"usage"`
-	ExampleUses      []string        `json:"example_uses"`
-	ForList          bool            `json:"for_list"`
-	ForSingle        bool            `json:"for_single"`
-	ForSections      []string        `json:"for_sections"`
-	RequiredParams   []string        `json:"required_params,omitempty"`
-	References       []string        `json:"references,omitempty"`
-	AllowedIDs       []int32         `json:"-"`
-	AllowedResources []IsAPIResource `json:"allowed_resources,omitempty"`
-	AllowedValues    []string        `json:"allowed_values,omitempty"`
-	AllowedIntRange  []int           `json:"allowed_int_range,omitempty"`
-	DefaultVal       *int            `json:"default_value,omitempty"`
-	SpecialInputs    []SpecialInput  `json:"special_inputs,omitempty"`
+	ID               int            `json:"-"`
+	Name             string         `json:"name"`
+	Description      string         `json:"description"`
+	Usage            string         `json:"usage"`
+	ExampleUses      []string       `json:"example_uses"`
+	ForList          bool           `json:"for_list"`
+	ForSingle        bool           `json:"for_single"`
+	ForSections      []string       `json:"for_sections"`
+	RequiredParams   []string       `json:"required_params,omitempty"`
+	References       []string       `json:"references,omitempty"`
+	AllowedIDs       []int32        `json:"-"`
+	AllowedResources []APIResource  `json:"allowed_resources,omitempty"`
+	AllowedValues    []string       `json:"allowed_values,omitempty"`
+	AllowedIntRange  []int          `json:"allowed_int_range,omitempty"`
+	DefaultVal       *int           `json:"default_value,omitempty"`
+	SpecialInputs    []SpecialInput `json:"special_inputs,omitempty"`
 }
 
 type SpecialInput struct {
@@ -284,7 +284,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   true,
 			ForSections: []string{"monsters"},
 			AllowedIDs:  []int32{167, 168},
-			AllowedResources: []IsAPIResource{
+			AllowedResources: []APIResource{
 				cfg.newNamedAPIResourceSimple("monsters", 167, "biran ronso"),
 				cfg.newNamedAPIResourceSimple("monsters", 168, "yenke ronso"),
 			},
@@ -307,7 +307,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   true,
 			ForSections: []string{"monsters"},
 			AllowedIDs:  []int32{211},
-			AllowedResources: []IsAPIResource{
+			AllowedResources: []APIResource{
 				cfg.newNamedAPIResourceSimple("monsters", 211, "seymour omnis"),
 			},
 			AllowedValues: []string{"f", "l", "w", "i"},

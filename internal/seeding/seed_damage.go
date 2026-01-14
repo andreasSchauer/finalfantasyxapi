@@ -72,7 +72,7 @@ func (l *Lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error
 
 	damage.ElementID, err = assignFKPtr(damage.Element, l.Elements)
 	if err != nil {
-		return Damage{}, h.GetErr(damage.Error(), err)
+		return Damage{}, h.NewErr(damage.Error(), err)
 	}
 
 	dbDamage, err := qtx.CreateDamage(context.Background(), database.CreateDamageParams{
@@ -84,14 +84,14 @@ func (l *Lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error
 		ElementID:       h.GetNullInt32(damage.ElementID),
 	})
 	if err != nil {
-		return Damage{}, h.GetErr(damage.Error(), err, "couldn't create damage")
+		return Damage{}, h.NewErr(damage.Error(), err, "couldn't create damage")
 	}
 
 	damage.ID = dbDamage.ID
 
 	err = l.seedAbilityDamages(qtx, damage)
 	if err != nil {
-		return Damage{}, h.GetErr(damage.Error(), err)
+		return Damage{}, h.NewErr(damage.Error(), err)
 	}
 
 	return damage, nil
@@ -115,7 +115,7 @@ func (l *Lookup) seedAbilityDamages(qtx *database.Queries, damage Damage) error 
 			AbilityDamageID:     fourWay.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(abilityDamage.Error(), err, "couldn't junction ability damage")
+			return h.NewErr(abilityDamage.Error(), err, "couldn't junction ability damage")
 		}
 	}
 
@@ -127,7 +127,7 @@ func (l *Lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityD
 
 	abilityDamage.StatID, err = assignFK(abilityDamage.TargetStat, l.Stats)
 	if err != nil {
-		return AbilityDamage{}, h.GetErr(abilityDamage.Error(), err)
+		return AbilityDamage{}, h.NewErr(abilityDamage.Error(), err)
 	}
 
 	dbAbilityDamage, err := qtx.CreateAbilityDamage(context.Background(), database.CreateAbilityDamageParams{
@@ -140,7 +140,7 @@ func (l *Lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityD
 		DamageConstant: abilityDamage.DamageConstant,
 	})
 	if err != nil {
-		return AbilityDamage{}, h.GetErr(abilityDamage.Error(), err, "couldn't create ability damage")
+		return AbilityDamage{}, h.NewErr(abilityDamage.Error(), err, "couldn't create ability damage")
 	}
 
 	abilityDamage.ID = dbAbilityDamage.ID

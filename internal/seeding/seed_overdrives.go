@@ -10,9 +10,9 @@ import (
 )
 
 type Overdrive struct {
-	ID          	   int32
-	ODCommandID 	   *int32
-	CharClassID 	   *int32
+	ID          int32
+	ODCommandID *int32
+	CharClassID *int32
 	Ability
 	Description        string             `json:"description"`
 	Effect             string             `json:"effect"`
@@ -50,7 +50,7 @@ func (o Overdrive) Error() string {
 }
 
 type RonsoRage struct {
-	ID			int32
+	ID int32
 	Overdrive
 }
 
@@ -81,7 +81,7 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 		for _, overdrive := range overdrives {
 			overdrive.Attributes, err = seedObjPtrAssignFK(qtx, overdrive.Attributes, l.seedAbilityAttributes)
 			if err != nil {
-				return h.GetErr(overdrive.Error(), err)
+				return h.NewErr(overdrive.Error(), err)
 			}
 
 			dbOverdrive, err := qtx.CreateOverdrive(context.Background(), database.CreateOverdriveParams{
@@ -97,7 +97,7 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 				Cursor:          h.NullTargetType(overdrive.Cursor),
 			})
 			if err != nil {
-				return h.GetErr(overdrive.Error(), err, "couldn't create overdrive")
+				return h.NewErr(overdrive.Error(), err, "couldn't create overdrive")
 			}
 
 			overdrive.ID = dbOverdrive.ID
@@ -110,7 +110,7 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			lookupObj := LookupObject{
-				Name: overdrive.Name,
+				Name:    overdrive.Name,
 				Version: overdrive.Version,
 			}
 
@@ -128,16 +128,16 @@ func (l *Lookup) seedRonsoRage(qtx *database.Queries, overdrive Overdrive) error
 	}
 
 	dbRonsoRage, err := qtx.CreateRonsoRage(context.Background(), database.CreateRonsoRageParams{
-		DataHash: generateDataHash(ronsoRage),
+		DataHash:    generateDataHash(ronsoRage),
 		OverdriveID: ronsoRage.Overdrive.ID,
 	})
 	if err != nil {
-		return h.GetErr(ronsoRage.Error(), err, "couldn't create ronso rage")
+		return h.NewErr(ronsoRage.Error(), err, "couldn't create ronso rage")
 	}
-	
+
 	ronsoRage.ID = dbRonsoRage.ID
 	l.RonsoRages[ronsoRage.Overdrive.Name] = ronsoRage
-	
+
 	return nil
 }
 
@@ -153,7 +153,7 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonOverdrive := range overdrives {
 			key := LookupObject{
-				Name: jsonOverdrive.Name,
+				Name:    jsonOverdrive.Name,
 				Version: jsonOverdrive.Version,
 			}
 			overdrive, err := GetResource(key, l.Overdrives)
@@ -163,12 +163,12 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 
 			overdrive.ODCommandID, err = assignFKPtr(overdrive.OverdriveCommand, l.OverdriveCommands)
 			if err != nil {
-				return h.GetErr(overdrive.Error(), err)
+				return h.NewErr(overdrive.Error(), err)
 			}
 
 			overdrive.CharClassID, err = assignFKPtr(&overdrive.User, l.CharClasses)
 			if err != nil {
-				return h.GetErr(overdrive.Error(), err)
+				return h.NewErr(overdrive.Error(), err)
 			}
 
 			err = qtx.UpdateOverdrive(context.Background(), database.UpdateOverdriveParams{
@@ -178,7 +178,7 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 				ID:               overdrive.ID,
 			})
 			if err != nil {
-				return h.GetErr(overdrive.Error(), err, "couldn't update overdrive")
+				return h.NewErr(overdrive.Error(), err, "couldn't update overdrive")
 			}
 
 			err = l.seedOverdriveJunctions(qtx, overdrive)
@@ -194,7 +194,7 @@ func (l *Lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdri
 	for _, abilityRef := range overdrive.OverdriveAbilities {
 		junction, err := createJunction(overdrive, abilityRef, l.OverdriveAbilities)
 		if err != nil {
-			return h.GetErr(overdrive.Error(), err)
+			return h.NewErr(overdrive.Error(), err)
 		}
 
 		err = qtx.CreateOverdrivesOverdriveAbilitiesJunction(context.Background(), database.CreateOverdrivesOverdriveAbilitiesJunctionParams{
@@ -204,13 +204,13 @@ func (l *Lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdri
 		})
 		if err != nil {
 			subjects := h.JoinSubjects(overdrive.Error(), abilityRef.Error())
-			return h.GetErr(subjects, err, "couldn't junction overdrive ability")
+			return h.NewErr(subjects, err, "couldn't junction overdrive ability")
 		}
 
 		if overdrive.UnlockCondition == nil {
 			err := l.seedDefaultOverdrive(qtx, overdrive, abilityRef)
 			if err != nil {
-				return h.GetErr(overdrive.Error(), err)
+				return h.NewErr(overdrive.Error(), err)
 			}
 		}
 	}
@@ -226,7 +226,7 @@ func (l *Lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive
 
 	junction, err := createJunction(class, abilityRef, l.OverdriveAbilities)
 	if err != nil {
-		return h.GetErr(abilityRef.Error(), err)
+		return h.NewErr(abilityRef.Error(), err)
 	}
 
 	err = qtx.CreateDefaultOverdriveAbility(context.Background(), database.CreateDefaultOverdriveAbilityParams{
@@ -235,7 +235,7 @@ func (l *Lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive
 		AbilityID: junction.ChildID,
 	})
 	if err != nil {
-		return h.GetErr(abilityRef.Error(), err, "couldn't create default overdrive ability")
+		return h.NewErr(abilityRef.Error(), err, "couldn't create default overdrive ability")
 	}
 
 	return nil

@@ -63,7 +63,7 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 
 			command.Ability, err = seedObjAssignID(qtx, command.Ability, l.seedAbility)
 			if err != nil {
-				return h.GetErr(command.Error(), err)
+				return h.NewErr(command.Error(), err)
 			}
 
 			dbTriggerCommand, err := qtx.CreateTriggerCommand(context.Background(), database.CreateTriggerCommandParams{
@@ -75,7 +75,7 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 				Cursor:      database.TargetType(command.Cursor),
 			})
 			if err != nil {
-				return h.GetErr(command.Error(), err, "couldn't create trigger command")
+				return h.NewErr(command.Error(), err, "couldn't create trigger command")
 			}
 
 			command.ID = dbTriggerCommand.ID
@@ -107,14 +107,14 @@ func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *
 
 			err = l.seedTriggerCommandRelatedStats(qtx, command)
 			if err != nil {
-				return h.GetErr(command.Error(), err)
+				return h.NewErr(command.Error(), err)
 			}
 
 			l.currentAbility = command.Ability
 
 			err = l.seedBattleInteractions(qtx, l.currentAbility, command.BattleInteractions)
 			if err != nil {
-				return h.GetErr(command.Error(), err)
+				return h.NewErr(command.Error(), err)
 			}
 		}
 
@@ -135,7 +135,7 @@ func (l *Lookup) seedTriggerCommandRelatedStats(qtx *database.Queries, command T
 			StatID:           junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(jsonStat, err, "couldn't junction related stat")
+			return h.NewErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 

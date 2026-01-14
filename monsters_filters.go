@@ -11,7 +11,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 func (cfg *Config) getMonstersElemResist(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["elemental-affinities"]
 	query := r.URL.Query().Get(queryParam.Name)
@@ -80,7 +79,7 @@ func (cfg *Config) getElementalAffinityIDs(query string, queryParam QueryType) (
 
 func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["status-resists"]
-	
+
 	ids, err := parseIdListQuery(r, queryParam, len(cfg.l.AutoAbilities))
 	if errors.Is(err, errEmptyQuery) {
 		return inputMons, nil
@@ -88,12 +87,12 @@ func (cfg *Config) getMonstersStatusResist(r *http.Request, inputMons []NamedAPI
 	if err != nil {
 		return nil, err
 	}
-	
+
 	resistance, err := cfg.verifyMonsterResistance(r)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	dbMons, err := cfg.db.GetMonstersByStatusResists(r.Context(), database.GetMonstersByStatusResistsParams{
 		StatusConditionIds: ids,
 		MinResistance:      resistance,
@@ -176,7 +175,7 @@ func (cfg *Config) queryMonstersByItemMethod(r *http.Request, id int32) ([]datab
 			return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by other items.", err)
 		}
 	default:
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid method value: '%s'. allowed values: %s.", query, allowedValsString(queryParam)), err)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid method value: '%s'. allowed values: %s.", query, h.FormatStringSlice(queryParam.AllowedValues)), err)
 	}
 
 	return dbMons, nil
@@ -184,7 +183,7 @@ func (cfg *Config) queryMonstersByItemMethod(r *http.Request, id int32) ([]datab
 
 func (cfg *Config) getMonstersAutoAbility(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["auto-abilities"]
-	
+
 	ids, err := parseIdListQuery(r, queryParam, len(cfg.l.AutoAbilities))
 	if errors.Is(err, errEmptyQuery) {
 		return inputMons, nil
@@ -207,7 +206,7 @@ func (cfg *Config) getMonstersAutoAbility(r *http.Request, inputMons []NamedAPIR
 
 func (cfg *Config) getMonstersRonsoRage(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["ronso-rage"]
-	
+
 	id, err := parseIDOnlyQuery(r, queryParam, len(cfg.l.RonsoRages))
 	if errors.Is(err, errEmptyQuery) {
 		return inputMons, nil
@@ -322,7 +321,7 @@ func (cfg *Config) getMonstersDistance(r *http.Request, inputMons []NamedAPIReso
 
 func (cfg *Config) getMonstersStoryBased(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["story-based"]
-	
+
 	b, err := parseBooleanQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
 		return inputMons, nil

@@ -69,7 +69,7 @@ func (l *Lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 				Cursor:      h.NullTargetType(command.Cursor),
 			})
 			if err != nil {
-				return h.GetErr(command.Error(), err, "couldn't create aeon command")
+				return h.NewErr(command.Error(), err, "couldn't create aeon command")
 			}
 
 			command.ID = dbAeonCommand.ID
@@ -97,7 +97,7 @@ func (l *Lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql
 
 			command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, l.Submenus)
 			if err != nil {
-				return h.GetErr(command.Error(), err)
+				return h.NewErr(command.Error(), err)
 			}
 
 			err = qtx.UpdateAeonCommand(context.Background(), database.UpdateAeonCommandParams{
@@ -106,12 +106,12 @@ func (l *Lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql
 				ID:        command.ID,
 			})
 			if err != nil {
-				return h.GetErr(command.Error(), err, "couldn't update aeon command")
+				return h.NewErr(command.Error(), err, "couldn't update aeon command")
 			}
 
 			err = l.seedAeonCommandPossibleAbilities(qtx, command)
 			if err != nil {
-				return h.GetErr(command.Error(), err)
+				return h.NewErr(command.Error(), err)
 			}
 		}
 
@@ -130,7 +130,7 @@ func (l *Lookup) seedAeonCommandPossibleAbilities(qtx *database.Queries, command
 
 			threeWay, err := createThreeWayJunction(command, charClass, abilityRef, l.Abilities)
 			if err != nil {
-				return h.GetErr(charClass.Error(), err)
+				return h.NewErr(charClass.Error(), err)
 			}
 
 			err = qtx.CreateAeonCommandsPossibleAbilitiesJunction(context.Background(), database.CreateAeonCommandsPossibleAbilitiesJunctionParams{
@@ -140,7 +140,7 @@ func (l *Lookup) seedAeonCommandPossibleAbilities(qtx *database.Queries, command
 				AbilityID:        threeWay.ChildID,
 			})
 			if err != nil {
-				return h.GetErr(abilityRef.Error(), err, "couldn't junction possible ability")
+				return h.NewErr(abilityRef.Error(), err, "couldn't junction possible ability")
 			}
 		}
 	}

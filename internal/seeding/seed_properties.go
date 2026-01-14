@@ -54,7 +54,7 @@ func (l *Lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 				NullifyArmored: h.NullNullifyArmored(property.NullifyArmored),
 			})
 			if err != nil {
-				return h.GetErr(property.Error(), err, "couldn't create property")
+				return h.NewErr(property.Error(), err, "couldn't create property")
 			}
 
 			property.ID = dbProperty.ID
@@ -90,7 +90,7 @@ func (l *Lookup) seedPropertiesRelationships(db *database.Queries, dbConn *sql.D
 			for _, function := range relationShipFunctions {
 				err := function(qtx, property)
 				if err != nil {
-					return h.GetErr(property.Error(), err)
+					return h.NewErr(property.Error(), err)
 				}
 			}
 		}
@@ -113,7 +113,7 @@ func (l *Lookup) seedPropertyRelatedStats(qtx *database.Queries, property Proper
 			StatID:     junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(jsonStat, err, "couldn't junction related stat")
+			return h.NewErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 
@@ -133,7 +133,7 @@ func (l *Lookup) seedPropertyRemovedConditions(qtx *database.Queries, property P
 			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(jsonCondition, err, "couldn't junction removed status condition")
+			return h.NewErr(jsonCondition, err, "couldn't junction removed status condition")
 		}
 	}
 
@@ -153,7 +153,7 @@ func (l *Lookup) seedPropertyStatChanges(qtx *database.Queries, property Propert
 			StatChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(statChange.Error(), err, "couldn't junction stat change")
+			return h.NewErr(statChange.Error(), err, "couldn't junction stat change")
 		}
 	}
 
@@ -173,7 +173,7 @@ func (l *Lookup) seedPropertyModifierChanges(qtx *database.Queries, property Pro
 			ModifierChangeID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(modifierChange.Error(), err, "couldn't junction modifier change")
+			return h.NewErr(modifierChange.Error(), err, "couldn't junction modifier change")
 		}
 	}
 

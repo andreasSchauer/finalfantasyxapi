@@ -53,37 +53,37 @@ func (l *Lookup) seedMonsterItems(qtx *database.Queries, monsterItems MonsterIte
 
 	monsterItems.StealCommon, err = seedObjPtrAssignFK(qtx, monsterItems.StealCommon, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "steal common")
+		return MonsterItems{}, h.NewErr(monsterItems.Error(), err, "steal common")
 	}
 
 	monsterItems.StealRare, err = seedObjPtrAssignFK(qtx, monsterItems.StealRare, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "steal rare")
+		return MonsterItems{}, h.NewErr(monsterItems.Error(), err, "steal rare")
 	}
 
 	monsterItems.DropCommon, err = seedObjPtrAssignFK(qtx, monsterItems.DropCommon, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "drop common")
+		return MonsterItems{}, h.NewErr(monsterItems.Error(), err, "drop common")
 	}
 
 	monsterItems.DropRare, err = seedObjPtrAssignFK(qtx, monsterItems.DropRare, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "drop rare")
+		return MonsterItems{}, h.NewErr(monsterItems.Error(), err, "drop rare")
 	}
 
 	monsterItems.SecondaryDropCommon, err = seedObjPtrAssignFK(qtx, monsterItems.SecondaryDropCommon, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "secondary drop common")
+		return MonsterItems{}, h.NewErr(monsterItems.Error(), err, "secondary drop common")
 	}
 
 	monsterItems.SecondaryDropRare, err = seedObjPtrAssignFK(qtx, monsterItems.SecondaryDropRare, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "secondary drop rare")
+		return MonsterItems{}, h.NewErr(monsterItems.Error(), err, "secondary drop rare")
 	}
 
 	monsterItems.Bribe, err = seedObjPtrAssignFK(qtx, monsterItems.Bribe, l.seedItemAmount)
 	if err != nil {
-		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "bribe")
+		return MonsterItems{}, h.NewErr(monsterItems.Error(), err, "bribe")
 	}
 
 	dbMonsterItems, err := qtx.CreateMonsterItem(context.Background(), database.CreateMonsterItemParams{
@@ -101,14 +101,14 @@ func (l *Lookup) seedMonsterItems(qtx *database.Queries, monsterItems MonsterIte
 		BribeID:               h.ObjPtrToNullInt32ID(monsterItems.Bribe),
 	})
 	if err != nil {
-		return MonsterItems{}, h.GetErr(monsterItems.Error(), err, "couldn't create monster items")
+		return MonsterItems{}, h.NewErr(monsterItems.Error(), err, "couldn't create monster items")
 	}
 
 	monsterItems.ID = dbMonsterItems.ID
 
 	err = l.seedMonsterOtherItems(qtx, monsterItems)
 	if err != nil {
-		return MonsterItems{}, h.GetErr(monsterItems.Error(), err)
+		return MonsterItems{}, h.NewErr(monsterItems.Error(), err)
 	}
 
 	return monsterItems, nil
@@ -127,7 +127,7 @@ func (l *Lookup) seedMonsterOtherItems(qtx *database.Queries, monsterItems Monst
 			PossibleItemID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(posItem.Error(), err, "couldn't junction other item")
+			return h.NewErr(posItem.Error(), err, "couldn't junction other item")
 		}
 	}
 

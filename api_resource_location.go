@@ -50,7 +50,7 @@ func (r LocationAPIResource) Error() string {
 	return fmt.Sprintf("location based api resource: %s, url: %s", r.LocationArea.Error(), r.URL)
 }
 
-func (r LocationAPIResource) GetAPIResource() IsAPIResource {
+func (r LocationAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
@@ -85,7 +85,7 @@ func createLocationBasedAPIResources[T any](
 	return resources
 }
 
-func newLocationAPIResourceList[T h.HasID, R any, L IsAPIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], resources []LocationAPIResource) (LocationApiResourceList, error) {
+func newLocationAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], resources []LocationAPIResource) (LocationApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
 	if err != nil {
 		return LocationApiResourceList{}, err

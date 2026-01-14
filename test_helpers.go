@@ -122,7 +122,7 @@ func testExpectedNameVer(test test, tc expNameVer, gotID int32, gotName string, 
 }
 
 // checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resources
-func testAPIResourceList[T IsAPIResourceList](test test, endpoint string, expList expList, gotList T) {
+func testAPIResourceList[T APIResourceList](test test, endpoint string, expList expList, gotList T) {
 	test.t.Helper()
 	got := gotList.getListParams()
 	compare(test, "count", expList.count, got.Count)

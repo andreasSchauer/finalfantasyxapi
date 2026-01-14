@@ -78,14 +78,14 @@ func (l *Lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 				CharacterMaxIcv: h.GetNullInt32(agilityTier.CharacterMaxICV),
 			})
 			if err != nil {
-				return h.GetErr(agilityTier.Error(), err, "couldn't create agility tier")
+				return h.NewErr(agilityTier.Error(), err, "couldn't create agility tier")
 			}
 
 			agilityTier.ID = dbAgilityTier.ID
 
 			err = l.seedAgilitySubtiers(qtx, agilityTier)
 			if err != nil {
-				return h.GetErr(agilityTier.Error(), err)
+				return h.NewErr(agilityTier.Error(), err)
 			}
 		}
 		return nil
@@ -104,7 +104,7 @@ func (l *Lookup) seedAgilitySubtiers(qtx *database.Queries, agilityTier AgilityT
 			CharacterMinIcv:   h.GetNullInt32(subtier.CharacterMinICV),
 		})
 		if err != nil {
-			return h.GetErr(subtier.Error(), err, "couldn't create agility subtier")
+			return h.NewErr(subtier.Error(), err, "couldn't create agility subtier")
 		}
 	}
 

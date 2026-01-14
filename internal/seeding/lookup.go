@@ -45,20 +45,21 @@ type Lookup struct {
 	Aeons              map[string]Aeon
 	AeonCommands       map[string]AeonCommand
 	Affinities         map[string]Affinity
-	Locations		   map[string]Location
-	SubLocations	   map[string]SubLocation
+	Locations          map[string]Location
+	SubLocations       map[string]SubLocation
 	Areas              map[string]Area
-	AreasID			   map[int32]Area
+	AreasID            map[int32]Area
 	AutoAbilities      map[string]AutoAbility
 	CelestialWeapons   map[string]CelestialWeapon
 	Characters         map[string]Character
+	CharactersID	   map[int32]Character
 	CharClasses        map[string]CharacterClass
 	Elements           map[string]Element
 	ElementalResists   map[string]ElementalResist
 	EquipmentNames     map[string]EquipmentName
 	EquipmentTables    map[string]EquipmentTable
 	EncounterLocations map[string]EncounterLocation
-	FMVs			   map[string]FMV
+	FMVs               map[string]FMV
 	Items              map[string]Item
 	KeyItems           map[string]KeyItem
 	MasterItems        map[string]MasterItem
@@ -66,12 +67,13 @@ type Lookup struct {
 	Modifiers          map[string]Modifier
 	Monsters           map[string]Monster
 	OverdriveModes     map[string]OverdriveMode
+	OverdriveModesID   map[int32]OverdriveMode
 	OverdriveCommands  map[string]OverdriveCommand
 	Overdrives         map[string]Overdrive
 	Positions          map[string]BlitzballPosition
 	Properties         map[string]Property
 	Quests             map[string]Quest
-	RonsoRages		   map[string]RonsoRage
+	RonsoRages         map[string]RonsoRage
 	Sidequests         map[string]Sidequest
 	Subquests          map[string]Subquest
 	Shops              map[string]Shop
@@ -92,20 +94,21 @@ func lookupInit() Lookup {
 		Aeons:              make(map[string]Aeon),
 		AeonCommands:       make(map[string]AeonCommand),
 		Affinities:         make(map[string]Affinity),
-		Locations: 			make(map[string]Location),
-		SubLocations: 		make(map[string]SubLocation),
+		Locations:          make(map[string]Location),
+		SubLocations:       make(map[string]SubLocation),
 		Areas:              make(map[string]Area),
-		AreasID: 			make(map[int32]Area),
+		AreasID:            make(map[int32]Area),
 		AutoAbilities:      make(map[string]AutoAbility),
 		CelestialWeapons:   make(map[string]CelestialWeapon),
 		Characters:         make(map[string]Character),
+		CharactersID: 		make(map[int32]Character),
 		CharClasses:        make(map[string]CharacterClass),
 		Elements:           make(map[string]Element),
-		ElementalResists: 	make(map[string]ElementalResist),
+		ElementalResists:   make(map[string]ElementalResist),
 		EquipmentNames:     make(map[string]EquipmentName),
 		EquipmentTables:    make(map[string]EquipmentTable),
 		EncounterLocations: make(map[string]EncounterLocation),
-		FMVs:				make(map[string]FMV),
+		FMVs:               make(map[string]FMV),
 		Items:              make(map[string]Item),
 		KeyItems:           make(map[string]KeyItem),
 		MasterItems:        make(map[string]MasterItem),
@@ -113,12 +116,13 @@ func lookupInit() Lookup {
 		Modifiers:          make(map[string]Modifier),
 		Monsters:           make(map[string]Monster),
 		OverdriveModes:     make(map[string]OverdriveMode),
+		OverdriveModesID:   make(map[int32]OverdriveMode),
 		OverdriveCommands:  make(map[string]OverdriveCommand),
 		Overdrives:         make(map[string]Overdrive),
 		Positions:          make(map[string]BlitzballPosition),
 		Properties:         make(map[string]Property),
 		Quests:             make(map[string]Quest),
-		RonsoRages: 		make(map[string]RonsoRage),
+		RonsoRages:         make(map[string]RonsoRage),
 		Sidequests:         make(map[string]Sidequest),
 		Subquests:          make(map[string]Subquest),
 		Shops:              make(map[string]Shop),
@@ -146,11 +150,11 @@ func GetResource[T any, K any](key K, lookup map[string]T) (T, error) {
 // might also make one for some complex resources like abilities, since it will reduce the amount of queries needed
 // I could also do that for monsters tbh
 // But that is a can of worms I won't be opening now
-func GetResourceByID[T any](key int32, lookup map[int32]T) (T, error) {
-	resource, found := lookup[key]
+func GetResourceByID[T any](id int32, lookup map[int32]T) (T, error) {
+	resource, found := lookup[id]
 	if !found {
 		var zeroType T
-		return zeroType, fmt.Errorf("couldn't find %s with id '%d'.", getTypeName[T](), key)
+		return zeroType, fmt.Errorf("couldn't find %s with id '%d'.", getTypeName[T](), id)
 	}
 
 	return resource, nil
@@ -160,7 +164,7 @@ func getResourceStrKey[T any](key string, lookup map[string]T) (T, error) {
 	resource, found := lookup[key]
 	if !found {
 		var zeroType T
-		return zeroType, h.GetErr(key, fmt.Errorf("couldn't find %s '%s'.", getTypeName[T](), key))
+		return zeroType, h.NewErr(key, fmt.Errorf("couldn't find %s '%s'.", getTypeName[T](), key))
 	}
 
 	return resource, nil
@@ -172,7 +176,7 @@ func getResourceObjKey[T any](obj Lookupable, lookup map[string]T) (T, error) {
 	resource, err := GetResource(key, lookup)
 	if err != nil {
 		var zeroType T
-		return zeroType, h.GetErr(obj.Error(), fmt.Errorf("couldn't find %s.", getTypeName[T]()))
+		return zeroType, h.NewErr(obj.Error(), fmt.Errorf("couldn't find %s.", getTypeName[T]()))
 	}
 
 	return resource, nil

@@ -17,7 +17,7 @@ type Monster struct {
 	Notes                *string           `json:"notes"`
 	Species              string            `json:"species"`
 	IsStoryBased         bool              `json:"is_story_based"`
-	IsRepeatable		 bool			   `json:"is_repeatable"`
+	IsRepeatable         bool              `json:"is_repeatable"`
 	CanBeCaptured        bool              `json:"can_be_captured"`
 	AreaConquestLocation *string           `json:"area_conquest_location"`
 	CTBIconType          string            `json:"ctb_icon_type"`
@@ -115,7 +115,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 				Notes:                h.GetNullString(monster.Notes),
 				Species:              database.MonsterSpecies(monster.Species),
 				IsStoryBased:         monster.IsStoryBased,
-				IsRepeatable: 		  monster.IsRepeatable,
+				IsRepeatable:         monster.IsRepeatable,
 				CanBeCaptured:        monster.CanBeCaptured,
 				AreaConquestLocation: h.NullMaCreationArea(monster.AreaConquestLocation),
 				CtbIconType:          database.CtbIconType(monster.CTBIconType),
@@ -137,7 +137,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 				ScanText:             h.GetNullString(monster.ScanText),
 			})
 			if err != nil {
-				return h.GetErr(monster.Error(), err, "couldn't create monster")
+				return h.NewErr(monster.Error(), err, "couldn't create monster")
 			}
 
 			monster.ID = dbMonster.ID
@@ -169,7 +169,7 @@ func (l *Lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB)
 
 			err = l.seedMonsterJunctions(qtx, monster)
 			if err != nil {
-				return h.GetErr(monster.Error(), err)
+				return h.NewErr(monster.Error(), err)
 			}
 
 			if monster.Items != nil {
@@ -178,7 +178,7 @@ func (l *Lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB)
 
 				monster.Items, err = seedObjPtrAssignFK(qtx, monster.Items, l.seedMonsterItems)
 				if err != nil {
-					return h.GetErr(monster.Error(), err)
+					return h.NewErr(monster.Error(), err)
 				}
 			}
 
@@ -188,13 +188,13 @@ func (l *Lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB)
 
 				monster.Equipment, err = seedObjPtrAssignFK(qtx, monster.Equipment, l.seedMonsterEquipment)
 				if err != nil {
-					return h.GetErr(monster.Error(), err)
+					return h.NewErr(monster.Error(), err)
 				}
 			}
 
 			err = l.seedAlteredStates(qtx, monster)
 			if err != nil {
-				return h.GetErr(monster.Error(), err)
+				return h.NewErr(monster.Error(), err)
 			}
 		}
 
@@ -237,7 +237,7 @@ func (l *Lookup) seedMonsterProperties(qtx *database.Queries, monster Monster) e
 			PropertyID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(propertyStr, err, "couldn't junction property")
+			return h.NewErr(propertyStr, err, "couldn't junction property")
 		}
 	}
 
@@ -257,7 +257,7 @@ func (l *Lookup) seedMonsterAutoAbilities(qtx *database.Queries, monster Monster
 			AutoAbilityID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(autoAbilityStr, err, "couldn't junction auto-ability")
+			return h.NewErr(autoAbilityStr, err, "couldn't junction auto-ability")
 		}
 	}
 
@@ -277,7 +277,7 @@ func (l *Lookup) seedMonsterRonsoRages(qtx *database.Queries, monster Monster) e
 			RonsoRageID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(ronsoRageStr, err, "couldn't junction ronso rage")
+			return h.NewErr(ronsoRageStr, err, "couldn't junction ronso rage")
 		}
 	}
 
@@ -297,7 +297,7 @@ func (l *Lookup) seedMonsterBaseStats(qtx *database.Queries, monster Monster) er
 			BaseStatID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(baseStat.Error(), err, "couldn't junction base stat")
+			return h.NewErr(baseStat.Error(), err, "couldn't junction base stat")
 		}
 	}
 
@@ -316,8 +316,8 @@ func (l *Lookup) seedMonsterElemResists(qtx *database.Queries, monster Monster) 
 		_, found := elemResistLookup[element]
 		if !found {
 			elemResist := ElementalResist{
-				Element: 	element,
-				Affinity: 	"neutral",
+				Element:  element,
+				Affinity: "neutral",
 			}
 			monster.ElemResists = append(monster.ElemResists, elemResist)
 		}
@@ -335,7 +335,7 @@ func (l *Lookup) seedMonsterElemResists(qtx *database.Queries, monster Monster) 
 			ElemResistID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(elemResist.Error(), err, "couldn't junction elemental resist")
+			return h.NewErr(elemResist.Error(), err, "couldn't junction elemental resist")
 		}
 	}
 
@@ -355,7 +355,7 @@ func (l *Lookup) seedMonsterImmunities(qtx *database.Queries, monster Monster) e
 			StatusConditionID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(conditionStr, err, "couldn't junction immunity")
+			return h.NewErr(conditionStr, err, "couldn't junction immunity")
 		}
 	}
 
@@ -375,7 +375,7 @@ func (l *Lookup) seedMonsterStatusResists(qtx *database.Queries, monster Monster
 			StatusResistID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(statusResist.Error(), err, "couldn't junction status resist")
+			return h.NewErr(statusResist.Error(), err, "couldn't junction status resist")
 		}
 	}
 
@@ -395,7 +395,7 @@ func (l *Lookup) seedMonsterAbilities(qtx *database.Queries, monster Monster) er
 			MonsterAbilityID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(ability.Error(), err, "couldn't junction monster ability")
+			return h.NewErr(ability.Error(), err, "couldn't junction monster ability")
 		}
 	}
 

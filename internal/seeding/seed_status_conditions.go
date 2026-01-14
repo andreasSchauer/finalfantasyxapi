@@ -59,7 +59,7 @@ func (l *Lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 				NullifyArmored: h.NullNullifyArmored(condition.NullifyArmored),
 			})
 			if err != nil {
-				return h.GetErr(condition.Error(), err, "couldn't create status condition")
+				return h.NewErr(condition.Error(), err, "couldn't create status condition")
 			}
 
 			condition.ID = dbCondition.ID
@@ -87,7 +87,7 @@ func (l *Lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn 
 
 			condition.AddedElemResist, err = seedObjPtrAssignFK(qtx, condition.AddedElemResist, l.seedElementalResist)
 			if err != nil {
-				return h.GetErr(condition.Error(), err)
+				return h.NewErr(condition.Error(), err)
 			}
 
 			err = qtx.UpdateStatusCondition(context.Background(), database.UpdateStatusConditionParams{
@@ -96,7 +96,7 @@ func (l *Lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn 
 				ID:                condition.ID,
 			})
 			if err != nil {
-				return h.GetErr(condition.Error(), err, "couldn't update status condition")
+				return h.NewErr(condition.Error(), err, "couldn't update status condition")
 			}
 
 			relationShipFunctions := []func(*database.Queries, StatusCondition) error{
@@ -109,7 +109,7 @@ func (l *Lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn 
 			for _, function := range relationShipFunctions {
 				err := function(qtx, condition)
 				if err != nil {
-					return h.GetErr(condition.Error(), err)
+					return h.NewErr(condition.Error(), err)
 				}
 			}
 		}
@@ -130,7 +130,7 @@ func (l *Lookup) seedStatusConditionRelatedStats(qtx *database.Queries, conditio
 			StatID:            junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(jsonStat, err, "couldn't junction related stat")
+			return h.NewErr(jsonStat, err, "couldn't junction related stat")
 		}
 	}
 
@@ -150,7 +150,7 @@ func (l *Lookup) seedStatusConditionRemovedConditions(qtx *database.Queries, con
 			ChildConditionID:  junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(jsonCondition, err, "couldn't junction removed status condition")
+			return h.NewErr(jsonCondition, err, "couldn't junction removed status condition")
 		}
 	}
 
@@ -170,7 +170,7 @@ func (l *Lookup) seedStatusConditionStatChanges(qtx *database.Queries, condition
 			StatChangeID:      junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(statChange.Error(), err, "couldn't junction stat change")
+			return h.NewErr(statChange.Error(), err, "couldn't junction stat change")
 		}
 	}
 
@@ -190,7 +190,7 @@ func (l *Lookup) seedStatusConditionModifierChanges(qtx *database.Queries, condi
 			ModifierChangeID:  junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(modifierChange.Error(), err, "couldn't junction modifier change")
+			return h.NewErr(modifierChange.Error(), err, "couldn't junction modifier change")
 		}
 	}
 

@@ -54,7 +54,7 @@ func (l *Lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 				Formula:     database.CelestialFormula(weapon.Formula),
 			})
 			if err != nil {
-				return h.GetErr(weapon.Error(), err, "couldn't create celestial weapon")
+				return h.NewErr(weapon.Error(), err, "couldn't create celestial weapon")
 			}
 
 			weapon.ID = dbWeapon.ID
@@ -82,12 +82,12 @@ func (l *Lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn 
 
 			weapon.CharacterID, err = assignFKPtr(&weapon.Character, l.Characters)
 			if err != nil {
-				return h.GetErr(weapon.Error(), err)
+				return h.NewErr(weapon.Error(), err)
 			}
 
 			weapon.AeonID, err = assignFKPtr(weapon.Aeon, l.Aeons)
 			if err != nil {
-				return h.GetErr(weapon.Error(), err)
+				return h.NewErr(weapon.Error(), err)
 			}
 
 			err = qtx.UpdateCelestialWeapon(context.Background(), database.UpdateCelestialWeaponParams{
@@ -97,7 +97,7 @@ func (l *Lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn 
 				ID:          weapon.ID,
 			})
 			if err != nil {
-				return h.GetErr(weapon.Error(), err, "couldn't update celestial weapon")
+				return h.NewErr(weapon.Error(), err, "couldn't update celestial weapon")
 			}
 		}
 

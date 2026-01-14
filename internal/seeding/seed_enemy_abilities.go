@@ -56,7 +56,7 @@ func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 
 			enemyAbility.Ability, err = seedObjAssignID(qtx, enemyAbility.Ability, l.seedAbility)
 			if err != nil {
-				return h.GetErr(enemyAbility.Error(), err)
+				return h.NewErr(enemyAbility.Error(), err)
 			}
 
 			dbEnemyAbility, err := qtx.CreateEnemyAbility(context.Background(), database.CreateEnemyAbilityParams{
@@ -65,7 +65,7 @@ func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 				Effect:    h.GetNullString(enemyAbility.Effect),
 			})
 			if err != nil {
-				return h.GetErr(enemyAbility.Error(), err, "couldn't create enemy ability")
+				return h.NewErr(enemyAbility.Error(), err, "couldn't create enemy ability")
 			}
 
 			enemyAbility.ID = dbEnemyAbility.ID
@@ -99,7 +99,7 @@ func (l *Lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *s
 
 			err = l.seedBattleInteractions(qtx, l.currentAbility, enemyAbility.BattleInteractions)
 			if err != nil {
-				return h.GetErr(enemyAbility.Error(), err)
+				return h.NewErr(enemyAbility.Error(), err)
 			}
 		}
 

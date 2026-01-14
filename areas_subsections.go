@@ -69,29 +69,27 @@ func (l AreaFormationsList) getResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
-
-
-func (cfg *Config) getAreaTreasuresMid(subsection string) (IsAPIResourceList, error) {
+func (cfg *Config) getAreaTreasuresMid(subsection string) (APIResourceList, error) {
 	fmt.Printf("this should trigger /api/areas/{id}/%s\n", subsection)
 	return AreaTreasuresList{}, nil
 }
 
-func (cfg *Config) getAreaShopsMid(subsection string) (IsAPIResourceList, error) {
+func (cfg *Config) getAreaShopsMid(subsection string) (APIResourceList, error) {
 	fmt.Printf("this should trigger /api/areas/{id}/%s\n", subsection)
 	return AreaShopsList{}, nil
 }
 
-func (cfg *Config) getAreaMonstersMid(subsection string) (IsAPIResourceList, error) {
+func (cfg *Config) getAreaMonstersMid(subsection string) (APIResourceList, error) {
 	fmt.Printf("this should trigger /api/areas/{id}/%s\n", subsection)
 	return AreaMonstersList{}, nil
 }
 
-func (cfg *Config) getAreaConnectionsMid(subsection string) (IsAPIResourceList, error) {
+func (cfg *Config) getAreaConnectionsMid(subsection string) (APIResourceList, error) {
 	fmt.Printf("this should trigger /api/areas/{id}/%s\n", subsection)
 	return AreaConnectionsList{}, nil
 }
 
-func (cfg *Config) getAreaFormationsMid(subsection string) (IsAPIResourceList, error) {
+func (cfg *Config) getAreaFormationsMid(subsection string) (APIResourceList, error) {
 	fmt.Printf("this should trigger /api/areas/{id}/%s\n", subsection)
 	return AreaConnectionsList{}, nil
 }

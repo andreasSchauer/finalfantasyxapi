@@ -77,7 +77,7 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 			locationArea := list.LocationArea
 			list.LocationArea.ID, err = assignFK(locationArea, l.Areas)
 			if err != nil {
-				return h.GetErr(list.Error(), err)
+				return h.NewErr(list.Error(), err)
 			}
 
 			for j, treasure := range list.Treasures {
@@ -96,7 +96,7 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 					GilAmount:       h.GetNullInt32(treasure.GilAmount),
 				})
 				if err != nil {
-					return h.GetErr(treasure.Error(), err, "couldn't create treasure")
+					return h.NewErr(treasure.Error(), err, "couldn't create treasure")
 				}
 
 				treasure.ID = dbTreasure.ID
@@ -122,7 +122,7 @@ func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 		for _, list := range treasureLists {
 			list.LocationArea.ID, err = assignFK(list.LocationArea, l.Areas)
 			if err != nil {
-				return h.GetErr(list.Error(), err)
+				return h.NewErr(list.Error(), err)
 			}
 
 			for j, jsonTreasure := range list.Treasures {
@@ -137,12 +137,12 @@ func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 
 				err = l.seedTreasureItemAmounts(qtx, treasure)
 				if err != nil {
-					return h.GetErr(treasure.Error(), err)
+					return h.NewErr(treasure.Error(), err)
 				}
 
 				treasure.Equipment, err = seedObjPtrAssignFK(qtx, treasure.Equipment, l.seedFoundEquipment)
 				if err != nil {
-					return h.GetErr(treasure.Error(), err)
+					return h.NewErr(treasure.Error(), err)
 				}
 
 				err = qtx.UpdateTreasure(context.Background(), database.UpdateTreasureParams{
@@ -151,7 +151,7 @@ func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 					ID:               treasure.ID,
 				})
 				if err != nil {
-					return h.GetErr(treasure.Error(), err, "couldn't update treasure")
+					return h.NewErr(treasure.Error(), err, "couldn't update treasure")
 				}
 			}
 		}
@@ -172,7 +172,7 @@ func (l *Lookup) seedTreasureItemAmounts(qtx *database.Queries, treasure Treasur
 			ItemAmountID: junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(itemAmount.Error(), err, "couldn't junction item amount")
+			return h.NewErr(itemAmount.Error(), err, "couldn't junction item amount")
 		}
 	}
 

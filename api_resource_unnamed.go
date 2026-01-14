@@ -47,7 +47,7 @@ func (r UnnamedAPIResource) Error() string {
 	return fmt.Sprintf("unnamed api resource with url: %s", r.URL)
 }
 
-func (r UnnamedAPIResource) GetAPIResource() IsAPIResource {
+func (r UnnamedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
@@ -82,7 +82,7 @@ func createUnnamedAPIResources[T any](
 	return resources
 }
 
-func newUnnamedAPIResourceListT [T h.HasID, R any, L IsAPIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], resources []UnnamedAPIResource)(UnnamedApiResourceList, error) {
+func newUnnamedAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], resources []UnnamedAPIResource) (UnnamedApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
 	if err != nil {
 		return UnnamedApiResourceList{}, err

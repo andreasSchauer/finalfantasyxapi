@@ -12,14 +12,14 @@ import (
 type Character struct {
 	ID int32
 	PlayerUnit
-	LocationArea		LocationArea	`json:"location_area"`
-	AreaID              *int32
-	StoryOnly          	bool       		`json:"story_only"`
-	WeaponType         	string     		`json:"weapon_type"`
-	ArmorType          	string     		`json:"armor_type"`
-	PhysAtkRange       	int32      		`json:"physical_attack_range"`
-	CanFightUnderwater 	bool       		`json:"can_fight_underwater"`
-	BaseStats          	[]BaseStat 		`json:"base_stats"`
+	LocationArea       LocationArea `json:"location_area"`
+	AreaID             *int32
+	StoryOnly          bool       `json:"story_only"`
+	WeaponType         string     `json:"weapon_type"`
+	ArmorType          string     `json:"armor_type"`
+	PhysAtkRange       int32      `json:"physical_attack_range"`
+	CanFightUnderwater bool       `json:"can_fight_underwater"`
+	BaseStats          []BaseStat `json:"base_stats"`
 }
 
 func (c Character) ToHashFields() []any {
@@ -36,6 +36,13 @@ func (c Character) ToHashFields() []any {
 
 func (c Character) GetID() int32 {
 	return c.ID
+}
+
+func (c Character) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: c.ID,
+		Name: c.Name,
+	}
 }
 
 func (c Character) Error() string {
@@ -58,7 +65,7 @@ func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 
 			character.PlayerUnit, err = seedObjAssignID(qtx, character.PlayerUnit, l.seedPlayerUnit)
 			if err != nil {
-				return h.GetErr(character.Error(), err)
+				return h.NewErr(character.Error(), err)
 			}
 
 			dbCharacter, err := qtx.CreateCharacter(context.Background(), database.CreateCharacterParams{
@@ -71,15 +78,16 @@ func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 				CanFightUnderwater:  character.CanFightUnderwater,
 			})
 			if err != nil {
-				return h.GetErr(character.Error(), err, "couldn't create character")
+				return h.NewErr(character.Error(), err, "couldn't create character")
 			}
 
 			character.ID = dbCharacter.ID
 			l.Characters[character.Name] = character
+			l.CharactersID[character.ID] = character
 
 			err = l.seedCharacterClasses(qtx, character.PlayerUnit)
 			if err != nil {
-				return h.GetErr(character.Error(), err)
+				return h.NewErr(character.Error(), err)
 			}
 		}
 		return nil
@@ -104,21 +112,21 @@ func (l *Lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.D
 
 			character.AreaID, err = assignFKPtr(&character.LocationArea, l.Areas)
 			if err != nil {
-				return h.GetErr(character.Error(), err)
+				return h.NewErr(character.Error(), err)
 			}
 
 			err = qtx.UpdateCharacter(context.Background(), database.UpdateCharacterParams{
-				DataHash:   generateDataHash(character),
-				AreaID:     h.GetNullInt32(character.AreaID),
-				ID:         character.ID,
+				DataHash: generateDataHash(character),
+				AreaID:   h.GetNullInt32(character.AreaID),
+				ID:       character.ID,
 			})
 			if err != nil {
-				return h.GetErr(character.Error(), err, "couldn't update character")
+				return h.NewErr(character.Error(), err, "couldn't update character")
 			}
 
 			err = l.seedCharacterBaseStats(qtx, character)
 			if err != nil {
-				return h.GetErr(character.Error(), err)
+				return h.NewErr(character.Error(), err)
 			}
 		}
 
@@ -130,7 +138,7 @@ func (l *Lookup) seedCharacterBaseStats(qtx *database.Queries, character Charact
 	for _, baseStat := range character.BaseStats {
 		junction, err := createJunctionSeed(qtx, character, baseStat, l.seedBaseStat)
 		if err != nil {
-			return h.GetErr(character.Error(), err)
+			return h.NewErr(character.Error(), err)
 		}
 
 		err = qtx.CreateCharactersBaseStatsJunction(context.Background(), database.CreateCharactersBaseStatsJunctionParams{
@@ -139,7 +147,7 @@ func (l *Lookup) seedCharacterBaseStats(qtx *database.Queries, character Charact
 			BaseStatID:  junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(baseStat.Error(), err, "couldn't junction base stat")
+			return h.NewErr(baseStat.Error(), err, "couldn't junction base stat")
 		}
 	}
 

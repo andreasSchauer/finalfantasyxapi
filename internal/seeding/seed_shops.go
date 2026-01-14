@@ -141,7 +141,7 @@ func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 			locationArea := shop.LocationArea
 			shop.AreaID, err = assignFK(locationArea, l.Areas)
 			if err != nil {
-				return h.GetErr(shop.Error(), err)
+				return h.NewErr(shop.Error(), err)
 			}
 
 			dbShop, err := qtx.CreateShop(context.Background(), database.CreateShopParams{
@@ -152,7 +152,7 @@ func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 				Category: database.ShopCategory(shop.Category),
 			})
 			if err != nil {
-				return h.GetErr(shop.Error(), err, "couldn't create shop")
+				return h.NewErr(shop.Error(), err, "couldn't create shop")
 			}
 			shop.ID = dbShop.ID
 			key := CreateLookupKey(shop)
@@ -183,7 +183,7 @@ func (l *Lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) er
 				shop.PreAirship.Type = database.ShopTypePreAirship
 				err := l.seedSubShop(qtx, shop, shop.PreAirship)
 				if err != nil {
-					return h.GetErr(shop.Error(), err)
+					return h.NewErr(shop.Error(), err)
 				}
 			}
 
@@ -191,7 +191,7 @@ func (l *Lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) er
 				shop.PostAirship.Type = database.ShopTypePostAirship
 				err := l.seedSubShop(qtx, shop, shop.PostAirship)
 				if err != nil {
-					return h.GetErr(shop.Error(), err)
+					return h.NewErr(shop.Error(), err)
 				}
 			}
 		}
@@ -202,12 +202,12 @@ func (l *Lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) er
 func (l *Lookup) seedSubShop(qtx *database.Queries, shop Shop, subShop *SubShop) error {
 	err := l.seedShopItems(qtx, shop, subShop)
 	if err != nil {
-		return h.GetErr(subShop.Error(), err)
+		return h.NewErr(subShop.Error(), err)
 	}
 
 	err = l.seedShopEquipmentPieces(qtx, shop, subShop)
 	if err != nil {
-		return h.GetErr(subShop.Error(), err)
+		return h.NewErr(subShop.Error(), err)
 	}
 
 	return nil
@@ -232,7 +232,7 @@ func (l *Lookup) seedShopItems(qtx *database.Queries, shop Shop, subShop *SubSho
 			ShopType:   shopJunction.ShopType,
 		})
 		if err != nil {
-			return h.GetErr(shopItem.Error(), err, "couldn't junction shop item")
+			return h.NewErr(shopItem.Error(), err, "couldn't junction shop item")
 		}
 	}
 
@@ -244,7 +244,7 @@ func (l *Lookup) seedShopItem(qtx *database.Queries, shopItem ShopItem) (ShopIte
 
 	shopItem.ItemID, err = assignFK(shopItem.Name, l.Items)
 	if err != nil {
-		return ShopItem{}, h.GetErr(shopItem.Error(), err)
+		return ShopItem{}, h.NewErr(shopItem.Error(), err)
 	}
 
 	dbShopItem, err := qtx.CreateShopItem(context.Background(), database.CreateShopItemParams{
@@ -253,7 +253,7 @@ func (l *Lookup) seedShopItem(qtx *database.Queries, shopItem ShopItem) (ShopIte
 		Price:    shopItem.Price,
 	})
 	if err != nil {
-		return ShopItem{}, h.GetErr(shopItem.Error(), err, "couldn't create shop item")
+		return ShopItem{}, h.NewErr(shopItem.Error(), err, "couldn't create shop item")
 	}
 
 	shopItem.ID = dbShopItem.ID
@@ -280,7 +280,7 @@ func (l *Lookup) seedShopEquipmentPieces(qtx *database.Queries, shop Shop, subSh
 			ShopType:        shopJunction.ShopType,
 		})
 		if err != nil {
-			return h.GetErr(shopEquipment.Error(), err, "couldn't junction shop equipment")
+			return h.NewErr(shopEquipment.Error(), err, "couldn't junction shop equipment")
 		}
 	}
 
@@ -292,7 +292,7 @@ func (l *Lookup) seedShopEquipment(qtx *database.Queries, shopEquipment ShopEqui
 
 	shopEquipment.FoundEquipment, err = seedObjAssignID(qtx, shopEquipment.FoundEquipment, l.seedFoundEquipment)
 	if err != nil {
-		return ShopEquipment{}, h.GetErr(shopEquipment.Error(), err)
+		return ShopEquipment{}, h.NewErr(shopEquipment.Error(), err)
 	}
 
 	dbShopEquipment, err := qtx.CreateShopEquipmentPiece(context.Background(), database.CreateShopEquipmentPieceParams{
@@ -301,7 +301,7 @@ func (l *Lookup) seedShopEquipment(qtx *database.Queries, shopEquipment ShopEqui
 		Price:            shopEquipment.Price,
 	})
 	if err != nil {
-		return ShopEquipment{}, h.GetErr(shopEquipment.Error(), err, "couldn't create shop equipment")
+		return ShopEquipment{}, h.NewErr(shopEquipment.Error(), err, "couldn't create shop equipment")
 	}
 
 	shopEquipment.ID = dbShopEquipment.ID

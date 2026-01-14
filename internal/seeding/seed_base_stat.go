@@ -35,7 +35,7 @@ func (l *Lookup) seedBaseStat(qtx *database.Queries, baseStat BaseStat) (BaseSta
 
 	baseStat.StatID, err = assignFK(baseStat.StatName, l.Stats)
 	if err != nil {
-		return BaseStat{}, h.GetErr(baseStat.Error(), err)
+		return BaseStat{}, h.NewErr(baseStat.Error(), err)
 	}
 
 	dbBaseStat, err := qtx.CreateBaseStat(context.Background(), database.CreateBaseStatParams{
@@ -44,7 +44,7 @@ func (l *Lookup) seedBaseStat(qtx *database.Queries, baseStat BaseStat) (BaseSta
 		Value:    baseStat.Value,
 	})
 	if err != nil {
-		return BaseStat{}, h.GetErr(baseStat.Error(), err, "couldn't create base stat")
+		return BaseStat{}, h.NewErr(baseStat.Error(), err, "couldn't create base stat")
 	}
 
 	baseStat.ID = dbBaseStat.ID

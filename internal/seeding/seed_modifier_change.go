@@ -37,7 +37,7 @@ func (l *Lookup) seedModifierChange(qtx *database.Queries, modifierChange Modifi
 
 	modifierChange.ModifierID, err = assignFK(modifierChange.ModifierName, l.Modifiers)
 	if err != nil {
-		return ModifierChange{}, h.GetErr(modifierChange.Error(), err)
+		return ModifierChange{}, h.NewErr(modifierChange.Error(), err)
 	}
 
 	dbModifierChange, err := qtx.CreateModifierChange(context.Background(), database.CreateModifierChangeParams{
@@ -47,7 +47,7 @@ func (l *Lookup) seedModifierChange(qtx *database.Queries, modifierChange Modifi
 		Value:           modifierChange.Value,
 	})
 	if err != nil {
-		return ModifierChange{}, h.GetErr(modifierChange.Error(), err, "couldn't create modifier change")
+		return ModifierChange{}, h.NewErr(modifierChange.Error(), err, "couldn't create modifier change")
 	}
 	modifierChange.ID = dbModifierChange.ID
 

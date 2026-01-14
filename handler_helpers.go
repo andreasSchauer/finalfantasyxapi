@@ -9,7 +9,7 @@ import (
 )
 
 
-func handleEndpointList[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
+func handleEndpointList[T h.HasID, R any, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
 	resourceList, err := i.retrieveFunc(r)
 	if handleHTTPError(w, err) {
 		return
@@ -19,7 +19,7 @@ func handleEndpointList[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWr
 
 
 // can reuse the logic of checkID to create parseID, like how I do it with queries
-func handleEndpointIDOnly[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
+func handleEndpointIDOnly[T h.HasID, R any, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
 	segment := segments[0]
 
 	if segment == "parameters" {
@@ -46,7 +46,7 @@ func handleEndpointIDOnly[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w 
 }
 
 
-func handleEndpointNameOrID[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
+func handleEndpointNameOrID[T h.HasID, R any, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
 	segment := segments[0]
 
 	if segment == "parameters" {
@@ -82,7 +82,7 @@ func handleEndpointNameOrID[T h.HasID, R any, L IsAPIResourceList](cfg *Config, 
 }
 
 
-func handleEndpointNameVersion[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
+func handleEndpointNameVersion[T h.HasID, R any, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
 	name := segments[0]
 	versionStr := segments[1]
 
@@ -100,7 +100,7 @@ func handleEndpointNameVersion[T h.HasID, R any, L IsAPIResourceList](w http.Res
 }
 
 
-func handleParameters[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
+func handleParameters[T h.HasID, R any, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
 	parameterList, err := getQueryParamList(cfg, r, i)
 	if handleHTTPError(w, err) {
 		return
@@ -108,7 +108,7 @@ func handleParameters[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w http
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-func handleSections[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
+func handleSections[T h.HasID, R any, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
 	sectionList, err := getSectionList(cfg, r, i)
 	if handleHTTPError(w, err) {
 		return
@@ -117,7 +117,7 @@ func handleSections[T h.HasID, R any, L IsAPIResourceList](cfg *Config, w http.R
 }
 
 
-func handleEndpointSubsections[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWriter, i handlerInput[T, R, L], segments []string) {
+func handleEndpointSubsections[T h.HasID, R any, L APIResourceList](w http.ResponseWriter, i handlerInput[T, R, L], segments []string) {
 	posIDStr := segments[0]
 	isValidID := isValidInt(posIDStr)
 
@@ -129,7 +129,7 @@ func handleEndpointSubsections[T h.HasID, R any, L IsAPIResourceList](w http.Res
 }
 
 
-func handleEndpointSubOrNameVer[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
+func handleEndpointSubOrNameVer[T h.HasID, R any, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
 	posIDStr := segments[0]
 	posVerStr := segments[1]
 	idIsInt := isValidInt(posIDStr)
@@ -151,7 +151,7 @@ func handleEndpointSubOrNameVer[T h.HasID, R any, L IsAPIResourceList](w http.Re
 }
 
 
-func handleSubsection[T h.HasID, R any, L IsAPIResourceList](w http.ResponseWriter, i handlerInput[T, R, L], segments []string) {
+func handleSubsection[T h.HasID, R any, L APIResourceList](w http.ResponseWriter, i handlerInput[T, R, L], segments []string) {
 	idStr := segments[0]
 	subsection := segments[1]
 

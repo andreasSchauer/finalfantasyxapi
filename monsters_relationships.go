@@ -88,7 +88,7 @@ func (cfg *Config) getMonsterRelationships(r *http.Request, dbMon database.Monst
 	return monster, nil
 }
 
-func (ma MonsterAbility) GetAPIResource() IsAPIResource {
+func (ma MonsterAbility) GetAPIResource() APIResource {
 	return ma.Ability
 }
 
@@ -178,7 +178,6 @@ func (cfg *Config) getMonsterBaseStats(r *http.Request, mon database.Monster) ([
 
 	for _, dbStat := range dbBaseStats {
 		baseStat := cfg.newBaseStat(dbStat.StatID, dbStat.Value, dbStat.Stat)
-
 		baseStats = append(baseStats, baseStat)
 	}
 
@@ -195,7 +194,6 @@ func (cfg *Config) getMonsterElemResists(r *http.Request, mon database.Monster) 
 
 	for _, dbResist := range dbElemResists {
 		elemResist := cfg.newElemResist(dbResist.ElementID, dbResist.AffinityID, dbResist.Element, dbResist.Affinity)
-
 		elemResists = append(elemResists, elemResist)
 	}
 
@@ -212,7 +210,6 @@ func (cfg *Config) getMonsterStatusResists(r *http.Request, mon database.Monster
 
 	for _, dbResist := range dbStatusResists {
 		statusResist := cfg.newStatusResist(dbResist.StatusID, anyToInt32(dbResist.Resistance), dbResist.Status)
-
 		statusResists = append(statusResists, statusResist)
 	}
 
@@ -258,7 +255,6 @@ func (cfg *Config) getMonsterAbilities(r *http.Request, mon database.Monster) ([
 	return monAbilities, nil
 }
 
-
 // can be used for various other functions related to abilities
 func (cfg *Config) getAbilityResource(name string, version *int32, abilityType string, specification *string) (NamedAPIResource, error) {
 	i, err := cfg.getAbilityInput(database.AbilityType(abilityType))
@@ -281,7 +277,6 @@ func (cfg *Config) getAbilityResource(name string, version *int32, abilityType s
 
 	return abilityResource, nil
 }
-
 
 // can be used for various other functions related to abilities
 func (cfg *Config) getAbilityInput(abilityType database.AbilityType) (handlerView, error) {
@@ -314,7 +309,6 @@ func (cfg *Config) getAbilityInput(abilityType database.AbilityType) (handlerVie
 
 	return i, nil
 }
-
 
 func (cfg *Config) getMonsterStat(mon Monster, stat string) (int32, error) {
 	statLookup, err := seeding.GetResource(stat, cfg.l.Stats)

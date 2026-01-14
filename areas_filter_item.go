@@ -42,12 +42,11 @@ func (cfg *Config) queryAreasByItemMethod(r *http.Request, id int32) ([]Location
 			return nil, err
 		}
 	default:
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid method value '%s'. allowed values: %s.", query, allowedValsString(queryParam)), err)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid method value '%s'. allowed values: %s.", query, h.FormatStringSlice(queryParam.AllowedValues)), err)
 	}
 
 	return resources, nil
 }
-
 
 func (cfg *Config) getAreasByItem(r *http.Request, itemID int32) ([]LocationAPIResource, error) {
 	filterFuncs := []func(*http.Request, int32) ([]LocationAPIResource, error){

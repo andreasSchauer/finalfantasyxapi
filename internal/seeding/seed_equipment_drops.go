@@ -51,7 +51,7 @@ func (l *Lookup) seedEquipmentDrops(qtx *database.Queries, monsterEquipment Mons
 			EquipmentDropID:    junction.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(drop.Error(), err, "couldn't junction equipment drop")
+			return h.NewErr(drop.Error(), err, "couldn't junction equipment drop")
 		}
 	}
 
@@ -63,7 +63,7 @@ func (l *Lookup) seedEquipmentDrop(qtx *database.Queries, drop EquipmentDrop) (E
 
 	drop.AutoAbilityID, err = assignFK(drop.Ability, l.AutoAbilities)
 	if err != nil {
-		return EquipmentDrop{}, h.GetErr(drop.Error(), err)
+		return EquipmentDrop{}, h.NewErr(drop.Error(), err)
 	}
 
 	dbEquipmentDrop, err := qtx.CreateEquipmentDrop(context.Background(), database.CreateEquipmentDropParams{
@@ -74,14 +74,14 @@ func (l *Lookup) seedEquipmentDrop(qtx *database.Queries, drop EquipmentDrop) (E
 		Type:          drop.Type,
 	})
 	if err != nil {
-		return EquipmentDrop{}, h.GetErr(drop.Error(), err, "couldn't create equipment drop")
+		return EquipmentDrop{}, h.NewErr(drop.Error(), err, "couldn't create equipment drop")
 	}
 
 	drop.ID = dbEquipmentDrop.ID
 
 	err = l.seedEquipmentDropCharacters(qtx, drop)
 	if err != nil {
-		return EquipmentDrop{}, h.GetErr(drop.Error(), err)
+		return EquipmentDrop{}, h.NewErr(drop.Error(), err)
 	}
 
 	return drop, nil
@@ -103,7 +103,7 @@ func (l *Lookup) seedEquipmentDropCharacters(qtx *database.Queries, drop Equipme
 			CharacterID:        threeWay.ChildID,
 		})
 		if err != nil {
-			return h.GetErr(character, err, "couldn't junction character")
+			return h.NewErr(character, err, "couldn't junction character")
 		}
 	}
 

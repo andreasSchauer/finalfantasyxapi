@@ -91,7 +91,7 @@ func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, e
 
 		ability.Attributes, err = seedObjPtrAssignFK(qtx, ability.Attributes, l.seedAbilityAttributes)
 		if err != nil {
-			return Ability{}, h.GetErr(ability.Error(), err)
+			return Ability{}, h.NewErr(ability.Error(), err)
 		}
 	}
 
@@ -104,7 +104,7 @@ func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, e
 		Type:          ability.Type,
 	})
 	if err != nil {
-		return Ability{}, h.GetErr(ability.Error(), err, "couldn't create ability")
+		return Ability{}, h.NewErr(ability.Error(), err, "couldn't create ability")
 	}
 
 	ability.ID = dbAbility.ID
@@ -122,7 +122,7 @@ func (l *Lookup) seedAbilityAttributes(qtx *database.Queries, attributes Attribu
 		CanCopycat:       attributes.CanCopycat,
 	})
 	if err != nil {
-		return Attributes{}, h.GetErr(attributes.Error(), err, "couldn't create ability attributes")
+		return Attributes{}, h.NewErr(attributes.Error(), err, "couldn't create ability attributes")
 	}
 
 	attributes.ID = dbAttributes.ID

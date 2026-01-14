@@ -10,13 +10,13 @@ import (
 )
 
 type ListParams struct {
-	Count          int           `json:"count"`
-	Previous       *string       `json:"previous"`
-	Next           *string       `json:"next"`
-	ParentResource IsAPIResource `json:"parent_resource,omitempty"`
+	Count          int         `json:"count"`
+	Previous       *string     `json:"previous"`
+	Next           *string     `json:"next"`
+	ParentResource APIResource `json:"parent_resource,omitempty"`
 }
 
-func createPaginatedList[T h.HasID, R any, L IsAPIResourceList, I any](cfg *Config, r *http.Request, i handlerInput[T, R, L], items []I) (ListParams, []I, error) {
+func createPaginatedList[T h.HasID, R any, L APIResourceList, I any](cfg *Config, r *http.Request, i handlerInput[T, R, L], items []I) (ListParams, []I, error) {
 	queryParamOffset := i.queryLookup["offset"]
 	queryParamLimit := i.queryLookup["limit"]
 

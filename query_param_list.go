@@ -8,14 +8,12 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type QueryParameterList struct {
 	ListParams
 	Results []QueryType `json:"results"`
 }
 
-
-func getQueryParamList[T h.HasID, R any, L IsAPIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L]) (QueryParameterList, error) {
+func getQueryParamList[T h.HasID, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L]) (QueryParameterList, error) {
 	section := r.URL.Query().Get("section")
 	queryParams := queryMapToSlice(i.queryLookup)
 	queryParams, err := filterParamsOnSection(queryParams, section, i)
@@ -36,7 +34,7 @@ func getQueryParamList[T h.HasID, R any, L IsAPIResourceList](cfg *Config, r *ht
 	return list, nil
 }
 
-func filterParamsOnSection[T h.HasID, R any, L IsAPIResourceList](params []QueryType, section string, i handlerInput[T, R, L]) ([]QueryType, error) {
+func filterParamsOnSection[T h.HasID, R any, L APIResourceList](params []QueryType, section string, i handlerInput[T, R, L]) ([]QueryType, error) {
 	section, err := verifySectionParam(section, i.endpoint, i.subsections)
 	if errors.Is(err, errEmptyQuery) {
 		return params, nil
@@ -62,14 +60,14 @@ func filterParamsOnSection[T h.HasID, R any, L IsAPIResourceList](params []Query
 	return filteredParams, nil
 }
 
-func verifySectionParam(section, endpoint string, sectionMap map[string]func(string) (IsAPIResourceList, error)) (string, error) {
+func verifySectionParam(section, endpoint string, sectionMap map[string]func(string) (APIResourceList, error)) (string, error) {
 	if section == "" {
 		return "", errEmptyQuery
 	}
 
 	if section == "self" {
 		return endpoint, nil
-	} 
+	}
 
 	_, ok := sectionMap[section]
 	if !ok {

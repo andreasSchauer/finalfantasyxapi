@@ -675,6 +675,60 @@ func (q *Queries) GetOverdriveModeActions(ctx context.Context, id int32) ([]GetO
 	return items, nil
 }
 
+const getOverdriveModeIDs = `-- name: GetOverdriveModeIDs :many
+SELECT id FROM overdrive_modes ORDER BY id
+`
+
+func (q *Queries) GetOverdriveModeIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveModeIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOverdriveModeIDsByType = `-- name: GetOverdriveModeIDsByType :many
+SELECT id FROM overdrive_modes WHERE type = $1 ORDER BY id
+`
+
+func (q *Queries) GetOverdriveModeIDsByType(ctx context.Context, type_ OverdriveModeType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveModeIDsByType, type_)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getOverdriveModes = `-- name: GetOverdriveModes :many
 SELECT id, data_hash, name, description, effect, type, fill_rate FROM overdrive_modes ORDER BY id
 `

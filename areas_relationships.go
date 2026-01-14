@@ -16,7 +16,7 @@ type AreaConnection struct {
 	Notes          *string             `json:"notes,omitempty"`
 }
 
-func (ac AreaConnection) GetAPIResource() IsAPIResource {
+func (ac AreaConnection) GetAPIResource() APIResource {
 	return ac.Area
 }
 

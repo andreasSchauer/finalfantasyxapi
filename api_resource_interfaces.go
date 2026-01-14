@@ -5,16 +5,16 @@ import (
 )
 
 type HasAPIResource interface {
-	GetAPIResource() IsAPIResource
+	GetAPIResource() APIResource
 }
 
-type IsAPIResource interface {
+type APIResource interface {
 	GetID() int32
 	GetURL() string
 	seeding.Lookupable
 }
 
-type IsAPIResourceList interface {
+type APIResourceList interface {
 	getListParams() ListParams
 	getResults() []HasAPIResource
 }

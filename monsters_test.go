@@ -69,7 +69,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/210?omnis-elements=iifii",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id '210'. parameter 'omnis-elements' can only be used with ids: 211.",
+				expectedErr:    "invalid id '210'. parameter 'omnis-elements' can only be used with ids: '211'.",
 			},
 		},
 		{
@@ -90,7 +90,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/169?kimahri-stats=hp-1000",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id '169'. parameter 'kimahri-stats' can only be used with ids: 167, 168.",
+				expectedErr:    "invalid id '169'. parameter 'kimahri-stats' can only be used with ids: '167', '168'.",
 			},
 		},
 		{
@@ -1048,14 +1048,14 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?resistance=50",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'resistance'. parameter 'resistance' can only be used in combination with parameter(s): status-resists.",
+				expectedErr:    "invalid usage of parameter 'resistance'. parameter 'resistance' can only be used in combination with parameter(s): 'status-resists'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?method=steal",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'method'. parameter 'method' can only be used in combination with parameter(s): item.",
+				expectedErr:    "invalid usage of parameter 'method'. parameter 'method' can only be used in combination with parameter(s): 'item'.",
 			},
 		},
 		{

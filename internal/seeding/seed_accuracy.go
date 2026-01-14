@@ -39,7 +39,7 @@ func (l *Lookup) seedAccuracy(qtx *database.Queries, accuracy Accuracy) (Accurac
 		AccModifier: h.GetNullFloat64(accuracy.AccModifier),
 	})
 	if err != nil {
-		return Accuracy{}, h.GetErr(accuracy.Error(), err, "couldn't create accuracy")
+		return Accuracy{}, h.NewErr(accuracy.Error(), err, "couldn't create accuracy")
 	}
 
 	accuracy.ID = dbAccuracy.ID

@@ -42,7 +42,7 @@ func (l *Lookup) seedInflictedDelay(qtx *database.Queries, delay InflictedDelay)
 		DamageConstant: delay.DamageConstant,
 	})
 	if err != nil {
-		return InflictedDelay{}, h.GetErr(delay.Error(), err, "couldn't create inflicted delay")
+		return InflictedDelay{}, h.NewErr(delay.Error(), err, "couldn't create inflicted delay")
 	}
 
 	delay.ID = dbDelay.ID

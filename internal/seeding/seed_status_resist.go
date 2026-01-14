@@ -35,7 +35,7 @@ func (l *Lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResi
 
 	statusResist.StatusConditionID, err = assignFK(statusResist.StatusCondition, l.StatusConditions)
 	if err != nil {
-		return StatusResist{}, h.GetErr(statusResist.Error(), err)
+		return StatusResist{}, h.NewErr(statusResist.Error(), err)
 	}
 
 	dbStatusResist, err := qtx.CreateStatusResist(context.Background(), database.CreateStatusResistParams{
@@ -44,7 +44,7 @@ func (l *Lookup) seedStatusResist(qtx *database.Queries, statusResist StatusResi
 		Resistance:        statusResist.Resistance,
 	})
 	if err != nil {
-		return StatusResist{}, h.GetErr(statusResist.Error(), err, "couldn't create status resist")
+		return StatusResist{}, h.NewErr(statusResist.Error(), err, "couldn't create status resist")
 	}
 
 	statusResist.ID = dbStatusResist.ID
