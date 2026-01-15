@@ -45,6 +45,7 @@ func (ed EquipmentDrop) GetAPIResource() APIResource {
 	return ed.AutoAbility.GetAPIResource()
 }
 
+// much of the logic here can be left out or replaced, as I don't need to assemble the struct from scratch
 func (cfg *Config) getMonsterEquipment(r *http.Request, mon database.Monster) (MonsterEquipment, error) {
 	dbEquipment, err := cfg.db.GetMonsterEquipment(r.Context(), mon.ID)
 	if err != nil {

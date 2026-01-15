@@ -82,6 +82,7 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:     "characters",
 		resourceType: "character",
 		objLookup:    cfg.l.Characters,
+		objLookupID:  cfg.l.CharactersID,
 	}
 
 	e.connectionType = handlerInput[TypedAPIResource, TypedAPIResource, TypedApiResourceList]{

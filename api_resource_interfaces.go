@@ -1,17 +1,18 @@
 package main
 
 import (
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type HasAPIResource interface {
-	GetAPIResource() APIResource
+type APIResource interface {
+	h.HasID
+	seeding.Lookupable
+	GetURL() string
 }
 
-type APIResource interface {
-	GetID() int32
-	GetURL() string
-	seeding.Lookupable
+type HasAPIResource interface {
+	GetAPIResource() APIResource
 }
 
 type APIResourceList interface {

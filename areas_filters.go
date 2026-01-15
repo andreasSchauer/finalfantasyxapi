@@ -8,6 +8,8 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+// all boolean queries can be generalized
+// if a filter isn't tied to a second parameter, these functions can be generalized
 func (cfg *Config) getAreasLocation(r *http.Request, inputAreas []LocationAPIResource) ([]LocationAPIResource, error) {
 	queryParam := cfg.q.areas["location"]
 

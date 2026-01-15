@@ -103,6 +103,10 @@ type AgilityParams struct {
 	MaxICV    *int32 `json:"max_icv"`
 }
 
+// most of these can be generalized with ids
+// baseStats and statusResists are resourceAmounts, so I can write a general function for those cases
+// elemResists is a bit different than the rest
+// abilities are a more complicated case, where I must first look into type checking for general resource constructors
 func (cfg *Config) getMonsterProperties(r *http.Request, mon database.Monster) ([]NamedAPIResource, error) {
 	dbProperties, err := cfg.db.GetMonsterProperties(r.Context(), mon.ID)
 	if err != nil {
@@ -310,6 +314,7 @@ func (cfg *Config) getAbilityInput(abilityType database.AbilityType) (handlerVie
 	return i, nil
 }
 
+// doesn't need the error, as the evaluation already happened during seeding
 func (cfg *Config) getMonsterStat(mon Monster, stat string) (int32, error) {
 	statLookup, err := seeding.GetResource(stat, cfg.l.Stats)
 	if err != nil {

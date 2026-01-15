@@ -32,15 +32,15 @@ type AltStateChange struct {
 }
 
 func (c *AltStateChange) IsZero() bool {
-	return c.Distance == nil &&
-		c.Properties == nil &&
-		c.AutoAbilities == nil &&
-		c.BaseStats == nil &&
-		c.ElemResists == nil &&
-		c.StatusImmunities == nil &&
-		c.StatusResists == nil &&
-		c.AddedStatus == nil &&
-		c.RemovedStatus == nil
+	return c.Distance 		== nil &&
+		c.Properties 		== nil &&
+		c.AutoAbilities 	== nil &&
+		c.BaseStats 		== nil &&
+		c.ElemResists 		== nil &&
+		c.StatusImmunities 	== nil &&
+		c.StatusResists 	== nil &&
+		c.AddedStatus 		== nil &&
+		c.RemovedStatus 	== nil
 }
 
 func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon database.Monster) ([]AlteredState, error) {

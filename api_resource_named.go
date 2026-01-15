@@ -55,7 +55,8 @@ func (r NamedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-// I can't tell yet, whether this function will be useful in the future.
+
+// I can't tell yet, whether these two functions will be useful in the future.
 // Good, if both id and name are already known
 func (cfg *Config) newNamedAPIResource(endpoint string, id int32, name string, version *int32, spec *string) NamedAPIResource {
 	if name == "" {
@@ -71,8 +72,6 @@ func (cfg *Config) newNamedAPIResource(endpoint string, id int32, name string, v
 	}
 }
 
-// I can't tell yet, whether this function will be useful in the future.
-// Good, if both id and name are already known
 func (cfg *Config) newNamedAPIResourceSimple(endpoint string, id int32, name string) NamedAPIResource {
 	if name == "" {
 		return NamedAPIResource{}
@@ -85,7 +84,8 @@ func (cfg *Config) newNamedAPIResourceSimple(endpoint string, id int32, name str
 	}
 }
 
-// will be replaced by idsToNamedAPIResources
+
+// these two functions will be replaced by idsToNamedAPIResources
 func createNamedAPIResources[T any](
 	cfg *Config,
 	items []T,
@@ -106,7 +106,6 @@ func createNamedAPIResources[T any](
 	return resources
 }
 
-// will be replaced by idsToNamedAPIResources
 func createNamedAPIResourcesSimple[T any](
 	cfg *Config,
 	items []T,
@@ -141,11 +140,13 @@ func newNamedAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config, r
 	return list, nil
 }
 
+
+
 // id and lookup based stuff
 
 // good for db returns and if other funcs need to create a NamedAPIResource
-func idToNamedAPIResource[T h.IsNamed](cfg *Config, endpoint string, id int32, lookup map[int32]T) NamedAPIResource {
-	res, _ := seeding.GetResourceByID(id, lookup) // no error needed, because everything was verified through seeding
+func idToNamedAPIResource[T h.IsNamed, R any, L APIResourceList](cfg *Config, i handlerInput[T, R, L], id int32) NamedAPIResource {
+	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
 
 	params := res.GetResParamsNamed()
 
@@ -154,12 +155,13 @@ func idToNamedAPIResource[T h.IsNamed](cfg *Config, endpoint string, id int32, l
 		Name:          params.Name,
 		Version:       params.Version,
 		Specification: params.Specification,
-		URL:           cfg.createResourceURL(endpoint, params.ID),
+		URL:           cfg.createResourceURL(i.endpoint, params.ID),
 	}
 }
 
+
 // essentially parses name or name/version like a handler and then converts the id to a NamedAPIResource
-func nameToNamedAPIResource[T h.IsNamed](cfg *Config, endpoint, name string, version *int32, lookup map[string]T, idLookup map[int32]T) NamedAPIResource {
+func nameToNamedAPIResource[T h.IsNamed, R any, L APIResourceList](cfg *Config, i handlerInput[T, R, L], name string, version *int32) NamedAPIResource {
 	if name == "" {
 		return NamedAPIResource{}
 	}
@@ -167,27 +169,29 @@ func nameToNamedAPIResource[T h.IsNamed](cfg *Config, endpoint, name string, ver
 	var parseResp parseResponse
 	switch version {
 	case nil:
-		parseResp, _ = checkUniqueName(name, lookup)
+		parseResp, _ = checkUniqueName(name, i.objLookup)
 	default:
-		parseResp, _ = checkNameVersion(name, version, lookup)
+		parseResp, _ = checkNameVersion(name, version, i.objLookup)
 	}
 
-	return idToNamedAPIResource(cfg, endpoint, parseResp.ID, idLookup)
+	return idToNamedAPIResource(cfg, i, parseResp.ID)
 }
+
 
 // converts inputs to a resourceAmount of any kind by calling the given constructor func
 // still need a method of type assertion for itemAmount that is done before calling this function
-func nameToResourceAmount[R ResourceAmount, T h.IsNamed](cfg *Config, endpoint, name string, version *int32, amount int32, lookup map[string]T, lookupID map[int32]T, fn func(NamedAPIResource, int32) R) R {
-	resource := nameToNamedAPIResource(cfg, endpoint, name, version, lookup, lookupID)
+func nameToResourceAmount[RA ResourceAmount, T h.IsNamed, R any, L APIResourceList](cfg *Config, i handlerInput[T, R, L], name string, version *int32, amount int32, fn func(NamedAPIResource, int32) RA) RA {
+	resource := nameToNamedAPIResource(cfg, i, name, version)
 	return fn(resource, amount)
 }
 
+
 // takes a slice of ids (e.g. from a db list query) and creates a []NamedAPIResource
-func idsToNamedAPIResources[T h.IsNamed](cfg *Config, endpoint string, IDs []int32, lookup map[int32]T) []NamedAPIResource {
+func idsToNamedAPIResources[T h.IsNamed, R any, L APIResourceList](cfg *Config, i handlerInput[T, R, L], IDs []int32) []NamedAPIResource {
 	resources := []NamedAPIResource{}
 
 	for _, id := range IDs {
-		resource := idToNamedAPIResource(cfg, endpoint, id, lookup)
+		resource := idToNamedAPIResource(cfg, i, id)
 		resources = append(resources, resource)
 	}
 

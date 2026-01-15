@@ -12,10 +12,10 @@ type LocationMusic struct {
 }
 
 func (m LocationMusic) IsZero() bool {
-	return len(m.BackgroundMusic) == 0 &&
-		len(m.Cues) == 0 &&
-		len(m.FMVs) == 0 &&
-		len(m.BossFights) == 0
+	return 	len(m.BackgroundMusic) 	== 0 &&
+			len(m.Cues) 			== 0 &&
+			len(m.FMVs) 			== 0 &&
+			len(m.BossFights) 		== 0
 }
 
 type LocationSong struct {
@@ -27,6 +27,7 @@ func (ls LocationSong) GetAPIResource() APIResource {
 	return ls.Song
 }
 
+// these two functions can be generalized with ids
 func (cfg *Config) getAreaCues(dbCues []database.GetAreaCuesRow) []LocationSong {
 	songsCues := []LocationSong{}
 

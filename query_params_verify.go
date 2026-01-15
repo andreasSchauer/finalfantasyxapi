@@ -8,13 +8,13 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func verifyQueryParams(r *http.Request, endpoint string, id *int32, lookup map[string]QueryType) error {
+func verifyQueryParams[T h.HasID, R any, L APIResourceList](r *http.Request, i handlerInput[T, R, L], id *int32) error {
 	q := r.URL.Query()
 
 	for query := range q {
-		queryParam, ok := lookup[query]
+		queryParam, ok := i.queryLookup[query]
 		if !ok {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s.", query, endpoint), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s.", query, i.endpoint), nil)
 		}
 
 		err := verifyRequiredParams(q, queryParam, query)

@@ -99,9 +99,9 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
-	endpoint := cfg.e.monsters.endpoint
+	i := cfg.e.monsters
 
-	err := verifyQueryParams(r, endpoint, &id, cfg.q.monsters)
+	err := verifyQueryParams(r, i, &id)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -237,7 +237,7 @@ func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (Nam
 func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, error) {
 	i := cfg.e.monsters
 
-	err := verifyQueryParams(r, i.endpoint, nil, cfg.q.monsters)
+	err := verifyQueryParams(r, i, nil)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}

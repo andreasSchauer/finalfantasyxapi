@@ -11,6 +11,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
+// all boolean queries can be generalized
+// all type based queries can be generalized. monster type is special, as it groups two types together
+// if a filter isn't tied to a second parameter, these functions can be generalized
+// if more of them appear, I can generalize basic id-list queries (without second parameters) like auto-abilities
 func (cfg *Config) getMonstersElemResist(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["elemental-affinities"]
 	query := r.URL.Query().Get(queryParam.Name)

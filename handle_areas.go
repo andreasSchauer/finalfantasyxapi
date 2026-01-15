@@ -59,9 +59,9 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 
 
 func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
-	endpoint := cfg.e.areas.endpoint
+	i := cfg.e.areas
 
-	err := verifyQueryParams(r, endpoint, &id, cfg.q.areas)
+	err := verifyQueryParams(r, i, &id)
 	if err != nil {
 		return Area{}, err
 	}
@@ -110,7 +110,7 @@ func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
 func (cfg *Config) retrieveAreas(r *http.Request) (LocationApiResourceList, error) {
 	i := cfg.e.areas
 	
-	err := verifyQueryParams(r, i.endpoint, nil, cfg.q.areas)
+	err := verifyQueryParams(r, i, nil)
 	if err != nil {
 		return LocationApiResourceList{}, err
 	}

@@ -118,6 +118,9 @@ func (cfg *Config) getAreaConnectedAreas(r *http.Request, area database.GetAreaR
 	return connectedAreas, nil
 }
 
+// all of these can be generalized
+// they are essentially: get ids, create resources
+// exceptions within areas: sidequest and music
 func (cfg *Config) getAreaCharacters(r *http.Request, area database.GetAreaRow, locArea LocationArea) ([]NamedAPIResource, error) {
 	dbChars, err := cfg.db.GetAreaCharacters(r.Context(), area.ID)
 	if err != nil {
@@ -205,6 +208,7 @@ func (cfg *Config) getAreaSidequest(r *http.Request, area database.GetAreaRow, l
 		return NamedAPIResource{}, nil
 	}
 
+	// turn this block into a helper function
 	potentialSidequest := dbQuests[0]
 	questName := potentialSidequest.Name
 
@@ -254,6 +258,8 @@ func (cfg *Config) getAreaMusic(r *http.Request, area database.GetAreaRow, locAr
 		return LocationMusic{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get boss fight songs of %s.", locArea.Error()), err)
 	}
 
+	// these two can be generalized
+	// also put the entire assembly into a helper function and into location_music.go
 	songsCues := cfg.getAreaCues(dbCues)
 	songsBM := cfg.getAreaBM(dbBm)
 
