@@ -98,3 +98,43 @@ func newLocationAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config
 
 	return list, nil
 }
+
+
+
+func idToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationApiResourceList], id int32) LocationAPIResource {
+	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
+	return areaToLocationResource(cfg, i, res)
+}
+
+func locAreaToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationApiResourceList], area seeding.LocationArea) LocationAPIResource {
+	res, _ := seeding.GetResource(area, i.objLookup)
+	return areaToLocationResource(cfg, i, res)
+}
+
+
+func areaToLocationResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationApiResourceList], area seeding.Area) LocationAPIResource {
+	params := area.GetResParamsLocation()
+
+	return LocationAPIResource{
+		AreaID:            	params.AreaID,
+		LocationArea: LocationArea{
+			Location: 		params.Location,
+			Sublocation: 	params.Sublocation,
+			Area: 			params.Area,
+			Version: 		params.Version,
+		},
+		Specification: 		params.Specification,
+		URL:           		cfg.createResourceURL(i.endpoint, params.AreaID),
+	}
+}
+
+func idsToLocationAPIResources(cfg *Config, i handlerInput[seeding.Area, Area, LocationApiResourceList], IDs []int32) []LocationAPIResource {
+	resources := []LocationAPIResource{}
+
+	for _, id := range IDs {
+		resource := idToLocationAPIResource(cfg, i, id)
+		resources = append(resources, resource)
+	}
+
+	return resources
+}

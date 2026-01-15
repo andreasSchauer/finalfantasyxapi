@@ -97,6 +97,7 @@ func (l *Lookup) seedBlitzballItems(db *database.Queries, dbConn *sql.DB) error 
 			position.ID = dbPosition.ID
 			key := CreateLookupKey(position)
 			l.Positions[key] = position
+			l.PositionsID[position.ID] = position
 		}
 		return nil
 	})

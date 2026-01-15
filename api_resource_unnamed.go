@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type UnnamedApiResourceList struct {
@@ -94,4 +95,28 @@ func newUnnamedAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config,
 	}
 
 	return list, nil
+}
+
+
+
+func idToUnnamedAPIResource[T h.IsUnnamed, R any, L APIResourceList](cfg *Config, i handlerInput[T, R, L], id int32) UnnamedAPIResource {
+	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
+	params := res.GetResParamsUnnamed()
+
+	return UnnamedAPIResource{
+		ID:            params.ID,
+		URL:           cfg.createResourceURL(i.endpoint, params.ID),
+	}
+}
+
+
+func idsToUnnamedAPIResources[T h.IsUnnamed, R any, L APIResourceList](cfg *Config, i handlerInput[T, R, L], IDs []int32) []UnnamedAPIResource {
+	resources := []UnnamedAPIResource{}
+
+	for _, id := range IDs {
+		resource := idToUnnamedAPIResource(cfg, i, id)
+		resources = append(resources, resource)
+	}
+
+	return resources
 }

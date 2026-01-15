@@ -100,6 +100,7 @@ func (l *Lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 
 			mix.ID = dbMix.ID
 			l.Mixes[mix.Name] = mix
+			l.MixesID[mix.ID] = mix
 		}
 
 		return nil

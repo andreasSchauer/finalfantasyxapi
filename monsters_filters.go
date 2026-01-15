@@ -257,7 +257,7 @@ func (cfg *Config) getMonstersLocation(r *http.Request, inputMons []NamedAPIReso
 func (cfg *Config) getMonstersSubLocation(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["sublocation"]
 
-	id, err := parseIDOnlyQuery(r, queryParam, len(cfg.l.SubLocations))
+	id, err := parseIDOnlyQuery(r, queryParam, len(cfg.l.Sublocations))
 	if errors.Is(err, errEmptyQuery) {
 		return inputMons, nil
 	}
@@ -288,14 +288,12 @@ func (cfg *Config) getMonstersArea(r *http.Request, inputMons []NamedAPIResource
 		return nil, err
 	}
 
-	dbMons, err := cfg.db.GetAreaMonsters(r.Context(), areaID)
+	dbMons, err := cfg.db.GetAreaMonsterIDs(r.Context(), areaID)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by area.", err)
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, cfg.e.monsters.endpoint, func(mon database.GetAreaMonstersRow) (int32, string, *int32, *string) {
-		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
-	})
+	resources := idsToNamedAPIResources(cfg, cfg.e.monsters, dbMons)
 
 	return resources, nil
 }

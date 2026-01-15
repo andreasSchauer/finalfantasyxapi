@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -67,14 +66,9 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 func (cfg *Config) getOverdriveMode(r *http.Request, id int32) (OverdriveMode, error) {
 	i := cfg.e.overdriveModes
 
-	err := verifyQueryParams(r, i, &id)
+	mode, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return OverdriveMode{}, err
-	}
-
-	mode, err := seeding.GetResourceByID(id, i.objLookupID)
-	if err != nil {
-		return OverdriveMode{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("overdrive mode with id '%d' doesn't exist.", id), err)
 	}
 
 	modeType, err := cfg.newNamedAPIResourceFromType(cfg.e.overdriveModeType.endpoint, mode.Type, cfg.t.OverdriveModeType)
@@ -108,34 +102,19 @@ func (cfg *Config) getOverdriveModeActions(mode seeding.OverdriveMode) []ActionA
 }
 
 
-// this can potentially be generalized, if I use a loop for the filter funcs
-// and all of the funcs keep the signature of (*http.Request, []APIResource, handlerInput) ([]APIResource, error)
 func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList, error) {
 	i := cfg.e.overdriveModes
 
-	err := verifyQueryParams(r, i, nil)
+	resources, err := retrieveNamedAPIResources(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	dbIDs, err := cfg.db.GetOverdriveModeIDs(r.Context())
-	if err != nil {
-		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "couldn't retrieve overdrive modes.", err)
+	filteredLists := []filteredResList[NamedAPIResource]{
+		frl(cfg.getOverdriveModesType(r, resources, i)),
 	}
 
-	resources := idsToNamedAPIResources(cfg, i, dbIDs)
-
-	resources, err = cfg.getOverdriveModesType(r, resources, i)
-	if err != nil {
-		return NamedApiResourceList{}, err
-	}
-
-	resourceList, err := newNamedAPIResourceList(cfg, r, i, resources)
-	if err != nil {
-		return NamedApiResourceList{}, err
-	}
-
-	return resourceList, nil
+	return filterNamedAPIResources(cfg, r, i, resources, filteredLists)
 }
 
 
@@ -143,7 +122,7 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList
 // the extra things I need to pass are the db func, a conversion func, the query param name, the typeLookup, and maybe the err msg
 // though I can also return a predefined error from errors.go and write the message under the function call
 // need a fourth type, next to handlerInput types, called enumType, or E
-// query func signature: func (context.Context, E) ([]int32, error)
+// query func signature: func (context.Context, E) ([]int32, error) (put actually maybe I can define them in config_type_lookup.go)
 // conversion func signature: func (enumName string) E
 // sharedResources is exclusive to this function as it's the only one for this endpoint
 // normally, they return after creating the resources

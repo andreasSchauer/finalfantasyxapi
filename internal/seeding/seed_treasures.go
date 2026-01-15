@@ -61,6 +61,12 @@ func (t Treasure) Error() string {
 	return fmt.Sprintf("treasure number: %d", t.Version)
 }
 
+func (t Treasure) GetResParamsUnnamed() h.ResParamsUnnamed {
+	return h.ResParamsUnnamed{
+		ID: t.ID,
+	}
+}
+
 func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/treasures.json"
 
@@ -102,6 +108,7 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 				treasure.ID = dbTreasure.ID
 				key := CreateLookupKey(treasure)
 				l.Treasures[key] = treasure
+				l.TreasuresID[treasure.ID] = treasure
 			}
 		}
 

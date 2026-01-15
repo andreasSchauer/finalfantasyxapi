@@ -98,6 +98,7 @@ func (l *Lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 
 			autoAbility.ID = dbAutoAbility.ID
 			l.AutoAbilities[autoAbility.Name] = autoAbility
+			l.AutoAbilitiesID[autoAbility.ID] = autoAbility
 		}
 		return nil
 	})

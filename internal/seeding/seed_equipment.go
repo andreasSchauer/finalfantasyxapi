@@ -142,6 +142,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 			table.ID = dbEquipmentTable.ID
 			key := CreateLookupKey(table)
 			l.EquipmentTables[key] = table
+			l.EquipmentTablesID[table.ID] = table
 		}
 		return nil
 	})
@@ -266,6 +267,7 @@ func (l *Lookup) seedEquipmentName(qtx *database.Queries, equipmentName Equipmen
 
 	equipmentName.ID = dbEquipmentName.ID
 	l.EquipmentNames[equipmentName.Name] = equipmentName
+	l.EquipmentNamesID[equipmentName.ID] = equipmentName
 
 	return equipmentName, nil
 }

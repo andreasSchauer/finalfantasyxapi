@@ -134,6 +134,7 @@ func (l *Lookup) seedCharacterClass(qtx *database.Queries, class CharacterClass)
 
 	class.ID = dbClass.ID
 	l.CharClasses[class.Name] = class
+	l.CharClassesID[class.ID] = class
 
 	return class, nil
 }

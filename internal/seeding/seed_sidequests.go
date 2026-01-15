@@ -124,6 +124,7 @@ func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 
 			sidequest.ID = dbSidequest.ID
 			l.Sidequests[sidequest.Name] = sidequest
+			l.SidequestsID[sidequest.ID] = sidequest
 
 			err = l.seedSubquests(qtx, sidequest)
 			if err != nil {
@@ -156,6 +157,7 @@ func (l *Lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 
 		subquest.ID = dbSubquest.ID
 		l.Subquests[subquest.Name] = subquest
+		l.SubquestsID[subquest.ID] = subquest
 	}
 
 	return nil

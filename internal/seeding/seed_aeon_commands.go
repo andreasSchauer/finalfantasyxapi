@@ -74,6 +74,7 @@ func (l *Lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 
 			command.ID = dbAeonCommand.ID
 			l.AeonCommands[command.Name] = command
+			l.AeonCommandsID[command.ID] = command
 		}
 		return nil
 	})

@@ -71,6 +71,7 @@ func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 			enemyAbility.ID = dbEnemyAbility.ID
 			key := CreateLookupKey(enemyAbility.Ability)
 			l.EnemyAbilities[key] = enemyAbility
+			l.EnemyAbilitiesID[enemyAbility.ID] = enemyAbility
 		}
 		return nil
 	})

@@ -598,13 +598,8 @@ func (q *Queries) GetArea(ctx context.Context, id int32) (GetAreaRow, error) {
 	return i, err
 }
 
-const getAreaAeons = `-- name: GetAreaAeons :many
-SELECT
-    ae.id, ae.data_hash, ae.unit_id, ae.unlock_condition, ae.is_optional, ae.battles_to_regenerate, ae.phys_atk_damage_constant, ae.phys_atk_range, ae.phys_atk_shatter_rate, ae.area_id, ae.accuracy_id,
-    pu.name,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area, a.version AS area_version
+const getAreaAeonIDs = `-- name: GetAreaAeonIDs :many
+SELECT ae.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -614,55 +609,19 @@ WHERE a.id = $1
 ORDER BY ae.id
 `
 
-type GetAreaAeonsRow struct {
-	ID                    int32
-	DataHash              string
-	UnitID                int32
-	UnlockCondition       string
-	IsOptional            bool
-	BattlesToRegenerate   int32
-	PhysAtkDamageConstant sql.NullInt32
-	PhysAtkRange          interface{}
-	PhysAtkShatterRate    interface{}
-	AreaID                sql.NullInt32
-	AccuracyID            sql.NullInt32
-	Name                  string
-	Location              string
-	Sublocation           string
-	Area                  string
-	AreaVersion           sql.NullInt32
-}
-
-func (q *Queries) GetAreaAeons(ctx context.Context, id int32) ([]GetAreaAeonsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaAeons, id)
+func (q *Queries) GetAreaAeonIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaAeonIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreaAeonsRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreaAeonsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.UnitID,
-			&i.UnlockCondition,
-			&i.IsOptional,
-			&i.BattlesToRegenerate,
-			&i.PhysAtkDamageConstant,
-			&i.PhysAtkRange,
-			&i.PhysAtkShatterRate,
-			&i.AreaID,
-			&i.AccuracyID,
-			&i.Name,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.AreaVersion,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -674,13 +633,7 @@ func (q *Queries) GetAreaAeons(ctx context.Context, id int32) ([]GetAreaAeonsRow
 }
 
 const getAreaBackgroundMusic = `-- name: GetAreaBackgroundMusic :many
-SELECT
-    so.id, so.data_hash, so.name, so.streaming_name, so.in_game_name, so.ost_name, so.translation, so.streaming_track_number, so.music_sphere_id, so.ost_disc, so.ost_track_number, so.duration_in_seconds, so.can_loop, so.special_use_case, so.credits_id,
-    bm.replaces_encounter_music,
-    l.name AS location,
-    s.name As sublocation,
-    a.name AS area,
-    a.version AS area_version
+SELECT so.id, bm.replaces_encounter_music
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -693,25 +646,7 @@ ORDER BY so.id
 
 type GetAreaBackgroundMusicRow struct {
 	ID                     int32
-	DataHash               string
-	Name                   string
-	StreamingName          sql.NullString
-	InGameName             sql.NullString
-	OstName                sql.NullString
-	Translation            sql.NullString
-	StreamingTrackNumber   sql.NullInt32
-	MusicSphereID          sql.NullInt32
-	OstDisc                interface{}
-	OstTrackNumber         sql.NullInt32
-	DurationInSeconds      int32
-	CanLoop                bool
-	SpecialUseCase         NullMusicUseCase
-	CreditsID              sql.NullInt32
 	ReplacesEncounterMusic bool
-	Location               string
-	Sublocation            string
-	Area                   string
-	AreaVersion            sql.NullInt32
 }
 
 func (q *Queries) GetAreaBackgroundMusic(ctx context.Context, id int32) ([]GetAreaBackgroundMusicRow, error) {
@@ -723,28 +658,7 @@ func (q *Queries) GetAreaBackgroundMusic(ctx context.Context, id int32) ([]GetAr
 	var items []GetAreaBackgroundMusicRow
 	for rows.Next() {
 		var i GetAreaBackgroundMusicRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.StreamingName,
-			&i.InGameName,
-			&i.OstName,
-			&i.Translation,
-			&i.StreamingTrackNumber,
-			&i.MusicSphereID,
-			&i.OstDisc,
-			&i.OstTrackNumber,
-			&i.DurationInSeconds,
-			&i.CanLoop,
-			&i.SpecialUseCase,
-			&i.CreditsID,
-			&i.ReplacesEncounterMusic,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.AreaVersion,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.ReplacesEncounterMusic); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -758,13 +672,8 @@ func (q *Queries) GetAreaBackgroundMusic(ctx context.Context, id int32) ([]GetAr
 	return items, nil
 }
 
-const getAreaBossSongs = `-- name: GetAreaBossSongs :many
-SELECT DISTINCT
-    so.id, so.data_hash, so.name, so.streaming_name, so.in_game_name, so.ost_name, so.translation, so.streaming_track_number, so.music_sphere_id, so.ost_disc, so.ost_track_number, so.duration_in_seconds, so.can_loop, so.special_use_case, so.credits_id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS area_version
+const getAreaBossSongIDs = `-- name: GetAreaBossSongIDs :many
+SELECT DISTINCT so.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -777,61 +686,19 @@ WHERE a.id = $1
 ORDER BY so.id
 `
 
-type GetAreaBossSongsRow struct {
-	ID                   int32
-	DataHash             string
-	Name                 string
-	StreamingName        sql.NullString
-	InGameName           sql.NullString
-	OstName              sql.NullString
-	Translation          sql.NullString
-	StreamingTrackNumber sql.NullInt32
-	MusicSphereID        sql.NullInt32
-	OstDisc              interface{}
-	OstTrackNumber       sql.NullInt32
-	DurationInSeconds    int32
-	CanLoop              bool
-	SpecialUseCase       NullMusicUseCase
-	CreditsID            sql.NullInt32
-	Location             string
-	Sublocation          string
-	Area                 string
-	AreaVersion          sql.NullInt32
-}
-
-func (q *Queries) GetAreaBossSongs(ctx context.Context, id int32) ([]GetAreaBossSongsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaBossSongs, id)
+func (q *Queries) GetAreaBossSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaBossSongIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreaBossSongsRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreaBossSongsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.StreamingName,
-			&i.InGameName,
-			&i.OstName,
-			&i.Translation,
-			&i.StreamingTrackNumber,
-			&i.MusicSphereID,
-			&i.OstDisc,
-			&i.OstTrackNumber,
-			&i.DurationInSeconds,
-			&i.CanLoop,
-			&i.SpecialUseCase,
-			&i.CreditsID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.AreaVersion,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -842,13 +709,8 @@ func (q *Queries) GetAreaBossSongs(ctx context.Context, id int32) ([]GetAreaBoss
 	return items, nil
 }
 
-const getAreaCharacters = `-- name: GetAreaCharacters :many
-SELECT
-    c.id, c.data_hash, c.unit_id, c.story_only, c.weapon_type, c.armor_type, c.physical_attack_range, c.can_fight_underwater, c.area_id,
-    pu.name,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area, a.version AS area_version
+const getAreaCharacterIDs = `-- name: GetAreaCharacterIDs :many
+SELECT c.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -858,51 +720,19 @@ WHERE a.id = $1
 ORDER BY c.id
 `
 
-type GetAreaCharactersRow struct {
-	ID                  int32
-	DataHash            string
-	UnitID              int32
-	StoryOnly           bool
-	WeaponType          WeaponType
-	ArmorType           ArmorType
-	PhysicalAttackRange interface{}
-	CanFightUnderwater  bool
-	AreaID              sql.NullInt32
-	Name                string
-	Location            string
-	Sublocation         string
-	Area                string
-	AreaVersion         sql.NullInt32
-}
-
-func (q *Queries) GetAreaCharacters(ctx context.Context, id int32) ([]GetAreaCharactersRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaCharacters, id)
+func (q *Queries) GetAreaCharacterIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaCharacterIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreaCharactersRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreaCharactersRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.UnitID,
-			&i.StoryOnly,
-			&i.WeaponType,
-			&i.ArmorType,
-			&i.PhysicalAttackRange,
-			&i.CanFightUnderwater,
-			&i.AreaID,
-			&i.Name,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.AreaVersion,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -987,13 +817,7 @@ func (q *Queries) GetAreaConnections(ctx context.Context, id int32) ([]GetAreaCo
 }
 
 const getAreaCues = `-- name: GetAreaCues :many
-SELECT DISTINCT
-    so.id, so.data_hash, so.name, so.streaming_name, so.in_game_name, so.ost_name, so.translation, so.streaming_track_number, so.music_sphere_id, so.ost_disc, so.ost_track_number, so.duration_in_seconds, so.can_loop, so.special_use_case, so.credits_id,
-    c.replaces_encounter_music,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS area_version
+SELECT DISTINCT so.id, c.replaces_encounter_music
 FROM cues c
 JOIN songs so ON c.song_id = so.id
 JOIN j_songs_cues j ON j.cue_id = c.id
@@ -1006,25 +830,7 @@ ORDER BY so.id
 
 type GetAreaCuesRow struct {
 	ID                     int32
-	DataHash               string
-	Name                   string
-	StreamingName          sql.NullString
-	InGameName             sql.NullString
-	OstName                sql.NullString
-	Translation            sql.NullString
-	StreamingTrackNumber   sql.NullInt32
-	MusicSphereID          sql.NullInt32
-	OstDisc                interface{}
-	OstTrackNumber         sql.NullInt32
-	DurationInSeconds      int32
-	CanLoop                bool
-	SpecialUseCase         NullMusicUseCase
-	CreditsID              sql.NullInt32
 	ReplacesEncounterMusic bool
-	Location               string
-	Sublocation            string
-	Area                   string
-	AreaVersion            sql.NullInt32
 }
 
 func (q *Queries) GetAreaCues(ctx context.Context, includedAreaID int32) ([]GetAreaCuesRow, error) {
@@ -1036,28 +842,7 @@ func (q *Queries) GetAreaCues(ctx context.Context, includedAreaID int32) ([]GetA
 	var items []GetAreaCuesRow
 	for rows.Next() {
 		var i GetAreaCuesRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.StreamingName,
-			&i.InGameName,
-			&i.OstName,
-			&i.Translation,
-			&i.StreamingTrackNumber,
-			&i.MusicSphereID,
-			&i.OstDisc,
-			&i.OstTrackNumber,
-			&i.DurationInSeconds,
-			&i.CanLoop,
-			&i.SpecialUseCase,
-			&i.CreditsID,
-			&i.ReplacesEncounterMusic,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.AreaVersion,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.ReplacesEncounterMusic); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -1071,13 +856,8 @@ func (q *Queries) GetAreaCues(ctx context.Context, includedAreaID int32) ([]GetA
 	return items, nil
 }
 
-const getAreaFMVSongs = `-- name: GetAreaFMVSongs :many
-SELECT DISTINCT
-    so.id, so.data_hash, so.name, so.streaming_name, so.in_game_name, so.ost_name, so.translation, so.streaming_track_number, so.music_sphere_id, so.ost_disc, so.ost_track_number, so.duration_in_seconds, so.can_loop, so.special_use_case, so.credits_id,
-    l.name AS location,
-    s.name As sublocation,
-    a.name AS area,
-    a.version AS area_version
+const getAreaFMVSongIDs = `-- name: GetAreaFMVSongIDs :many
+SELECT DISTINCT so.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -1087,61 +867,19 @@ WHERE a.id = $1
 ORDER BY so.id
 `
 
-type GetAreaFMVSongsRow struct {
-	ID                   int32
-	DataHash             string
-	Name                 string
-	StreamingName        sql.NullString
-	InGameName           sql.NullString
-	OstName              sql.NullString
-	Translation          sql.NullString
-	StreamingTrackNumber sql.NullInt32
-	MusicSphereID        sql.NullInt32
-	OstDisc              interface{}
-	OstTrackNumber       sql.NullInt32
-	DurationInSeconds    int32
-	CanLoop              bool
-	SpecialUseCase       NullMusicUseCase
-	CreditsID            sql.NullInt32
-	Location             string
-	Sublocation          string
-	Area                 string
-	AreaVersion          sql.NullInt32
-}
-
-func (q *Queries) GetAreaFMVSongs(ctx context.Context, id int32) ([]GetAreaFMVSongsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaFMVSongs, id)
+func (q *Queries) GetAreaFMVSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaFMVSongIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreaFMVSongsRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreaFMVSongsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.StreamingName,
-			&i.InGameName,
-			&i.OstName,
-			&i.Translation,
-			&i.StreamingTrackNumber,
-			&i.MusicSphereID,
-			&i.OstDisc,
-			&i.OstTrackNumber,
-			&i.DurationInSeconds,
-			&i.CanLoop,
-			&i.SpecialUseCase,
-			&i.CreditsID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.AreaVersion,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1152,13 +890,8 @@ func (q *Queries) GetAreaFMVSongs(ctx context.Context, id int32) ([]GetAreaFMVSo
 	return items, nil
 }
 
-const getAreaFMVs = `-- name: GetAreaFMVs :many
-SELECT
-    f.id, f.data_hash, f.name, f.translation, f.cutscene_description, f.song_id, f.area_id,
-    l.name AS location,
-    s.name As sublocation,
-    a.name AS area,
-    a.version AS area_version
+const getAreaFmvIDs = `-- name: GetAreaFmvIDs :many
+SELECT f.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -1167,45 +900,19 @@ WHERE a.id = $1
 ORDER BY f.id
 `
 
-type GetAreaFMVsRow struct {
-	ID                  int32
-	DataHash            string
-	Name                string
-	Translation         sql.NullString
-	CutsceneDescription string
-	SongID              sql.NullInt32
-	AreaID              int32
-	Location            string
-	Sublocation         string
-	Area                string
-	AreaVersion         sql.NullInt32
-}
-
-func (q *Queries) GetAreaFMVs(ctx context.Context, id int32) ([]GetAreaFMVsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaFMVs, id)
+func (q *Queries) GetAreaFmvIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaFmvIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreaFMVsRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreaFMVsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.Translation,
-			&i.CutsceneDescription,
-			&i.SongID,
-			&i.AreaID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.AreaVersion,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1216,440 +923,8 @@ func (q *Queries) GetAreaFMVs(ctx context.Context, id int32) ([]GetAreaFMVsRow, 
 	return items, nil
 }
 
-const getAreaMonsterFormations = `-- name: GetAreaMonsterFormations :many
-SELECT DISTINCT
-    mf.id, mf.data_hash, mf.category, mf.is_forced_ambush, mf.can_escape, mf.boss_song_id, mf.notes,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS area_version
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j ON j.encounter_location_id = el.id
-JOIN monster_formations mf ON j.monster_formation_id = mf.id
-WHERE a.id = $1
-ORDER BY mf.id
-`
-
-type GetAreaMonsterFormationsRow struct {
-	ID             int32
-	DataHash       string
-	Category       MonsterFormationCategory
-	IsForcedAmbush bool
-	CanEscape      bool
-	BossSongID     sql.NullInt32
-	Notes          sql.NullString
-	Location       string
-	Sublocation    string
-	Area           string
-	AreaVersion    sql.NullInt32
-}
-
-func (q *Queries) GetAreaMonsterFormations(ctx context.Context, id int32) ([]GetAreaMonsterFormationsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaMonsterFormations, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetAreaMonsterFormationsRow
-	for rows.Next() {
-		var i GetAreaMonsterFormationsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Category,
-			&i.IsForcedAmbush,
-			&i.CanEscape,
-			&i.BossSongID,
-			&i.Notes,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.AreaVersion,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaMonsters = `-- name: GetAreaMonsters :many
-SELECT DISTINCT
-    m.id, m.data_hash, m.name, m.version, m.specification, m.notes, m.species, m.is_story_based, m.is_repeatable, m.can_be_captured, m.area_conquest_location, m.ctb_icon_type, m.has_overdrive, m.is_underwater, m.is_zombie, m.distance, m.ap, m.ap_overkill, m.overkill_damage, m.gil, m.steal_gil, m.doom_countdown, m.poison_rate, m.threaten_chance, m.zanmato_level, m.monster_arena_price, m.sensor_text, m.scan_text,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS area_version
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
-JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN j_monster_formations_monsters j2 ON j2.monster_formation_id = mf.id
-JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
-JOIN monsters m ON ma.monster_id = m.id
-WHERE a.id = $1
-ORDER BY m.id
-`
-
-type GetAreaMonstersRow struct {
-	ID                   int32
-	DataHash             string
-	Name                 string
-	Version              sql.NullInt32
-	Specification        sql.NullString
-	Notes                sql.NullString
-	Species              MonsterSpecies
-	IsStoryBased         bool
-	IsRepeatable         bool
-	CanBeCaptured        bool
-	AreaConquestLocation NullMaCreationArea
-	CtbIconType          CtbIconType
-	HasOverdrive         bool
-	IsUnderwater         bool
-	IsZombie             bool
-	Distance             interface{}
-	Ap                   int32
-	ApOverkill           int32
-	OverkillDamage       int32
-	Gil                  int32
-	StealGil             sql.NullInt32
-	DoomCountdown        interface{}
-	PoisonRate           interface{}
-	ThreatenChance       interface{}
-	ZanmatoLevel         interface{}
-	MonsterArenaPrice    sql.NullInt32
-	SensorText           sql.NullString
-	ScanText             sql.NullString
-	Location             string
-	Sublocation          string
-	Area                 string
-	AreaVersion          sql.NullInt32
-}
-
-func (q *Queries) GetAreaMonsters(ctx context.Context, id int32) ([]GetAreaMonstersRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaMonsters, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetAreaMonstersRow
-	for rows.Next() {
-		var i GetAreaMonstersRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.Version,
-			&i.Specification,
-			&i.Notes,
-			&i.Species,
-			&i.IsStoryBased,
-			&i.IsRepeatable,
-			&i.CanBeCaptured,
-			&i.AreaConquestLocation,
-			&i.CtbIconType,
-			&i.HasOverdrive,
-			&i.IsUnderwater,
-			&i.IsZombie,
-			&i.Distance,
-			&i.Ap,
-			&i.ApOverkill,
-			&i.OverkillDamage,
-			&i.Gil,
-			&i.StealGil,
-			&i.DoomCountdown,
-			&i.PoisonRate,
-			&i.ThreatenChance,
-			&i.ZanmatoLevel,
-			&i.MonsterArenaPrice,
-			&i.SensorText,
-			&i.ScanText,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.AreaVersion,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaQuests = `-- name: GetAreaQuests :many
-SELECT DISTINCT
-    q.id, q.data_hash, q.name, q.type,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS area_version
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-JOIN completion_locations cl ON cl.area_id = a.id
-JOIN quest_completions qc ON cl.completion_id = qc.id
-JOIN quests q ON qc.quest_id = q.id
-WHERE a.id = $1
-ORDER BY q.id
-`
-
-type GetAreaQuestsRow struct {
-	ID          int32
-	DataHash    string
-	Name        string
-	Type        QuestType
-	Location    string
-	Sublocation string
-	Area        string
-	AreaVersion sql.NullInt32
-}
-
-func (q *Queries) GetAreaQuests(ctx context.Context, id int32) ([]GetAreaQuestsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaQuests, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetAreaQuestsRow
-	for rows.Next() {
-		var i GetAreaQuestsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.Type,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.AreaVersion,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaShops = `-- name: GetAreaShops :many
-SELECT id, data_hash, version, area_id, notes, category FROM shops WHERE area_id = $1 ORDER BY id
-`
-
-func (q *Queries) GetAreaShops(ctx context.Context, areaID int32) ([]Shop, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaShops, areaID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Shop
-	for rows.Next() {
-		var i Shop
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Version,
-			&i.AreaID,
-			&i.Notes,
-			&i.Category,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaTreasures = `-- name: GetAreaTreasures :many
-SELECT id, data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount, found_equipment_id FROM treasures WHERE area_id = $1 ORDER BY id
-`
-
-func (q *Queries) GetAreaTreasures(ctx context.Context, areaID int32) ([]Treasure, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaTreasures, areaID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Treasure
-	for rows.Next() {
-		var i Treasure
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.AreaID,
-			&i.Version,
-			&i.TreasureType,
-			&i.LootType,
-			&i.IsPostAirship,
-			&i.IsAnimaTreasure,
-			&i.Notes,
-			&i.GilAmount,
-			&i.FoundEquipmentID,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreas = `-- name: GetAreas :many
-SELECT
-    l.id AS location_id,
-    l.name AS location,
-    s.id AS sublocation_id,
-    s.name AS sublocation,
-    a.id, a.data_hash, a.sublocation_id, a.name, a.version, a.specification, a.story_only, a.has_save_sphere, a.airship_drop_off, a.has_compilation_sphere, a.can_ride_chocobo
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id 
-JOIN locations l ON s.location_id = l.id
-`
-
-type GetAreasRow struct {
-	LocationID           int32
-	Location             string
-	SublocationID        int32
-	Sublocation          string
-	ID                   int32
-	DataHash             string
-	SublocationID_2      int32
-	Name                 string
-	Version              sql.NullInt32
-	Specification        sql.NullString
-	StoryOnly            bool
-	HasSaveSphere        bool
-	AirshipDropOff       bool
-	HasCompilationSphere bool
-	CanRideChocobo       bool
-}
-
-func (q *Queries) GetAreas(ctx context.Context) ([]GetAreasRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreas)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetAreasRow
-	for rows.Next() {
-		var i GetAreasRow
-		if err := rows.Scan(
-			&i.LocationID,
-			&i.Location,
-			&i.SublocationID,
-			&i.Sublocation,
-			&i.ID,
-			&i.DataHash,
-			&i.SublocationID_2,
-			&i.Name,
-			&i.Version,
-			&i.Specification,
-			&i.StoryOnly,
-			&i.HasSaveSphere,
-			&i.AirshipDropOff,
-			&i.HasCompilationSphere,
-			&i.CanRideChocobo,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreasStoryOnly = `-- name: GetAreasStoryOnly :many
-SELECT
-    l.name AS location, 
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE a.story_only = $1
-ORDER BY a.id
-`
-
-type GetAreasStoryOnlyRow struct {
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasStoryOnly(ctx context.Context, storyOnly bool) ([]GetAreasStoryOnlyRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasStoryOnly, storyOnly)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetAreasStoryOnlyRow
-	for rows.Next() {
-		var i GetAreasStoryOnlyRow
-		if err := rows.Scan(
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreasWithAeons = `-- name: GetAreasWithAeons :many
-SELECT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsAeons = `-- name: GetAreaIDsAeons :many
+SELECT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -1658,33 +933,19 @@ JOIN player_units pu ON ae.unit_id = pu.id
 ORDER BY a.id
 `
 
-type GetAreasWithAeonsRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithAeons(ctx context.Context) ([]GetAreasWithAeonsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithAeons)
+func (q *Queries) GetAreaIDsAeons(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsAeons)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithAeonsRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithAeonsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1695,13 +956,8 @@ func (q *Queries) GetAreasWithAeons(ctx context.Context) ([]GetAreasWithAeonsRow
 	return items, nil
 }
 
-const getAreasWithBosses = `-- name: GetAreasWithBosses :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsBosses = `-- name: GetAreaIDsBosses :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -1713,33 +969,19 @@ JOIN songs so ON bs.song_id = so.id
 ORDER BY a.id
 `
 
-type GetAreasWithBossesRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithBosses(ctx context.Context) ([]GetAreasWithBossesRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithBosses)
+func (q *Queries) GetAreaIDsBosses(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsBosses)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithBossesRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithBossesRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1750,13 +992,8 @@ func (q *Queries) GetAreasWithBosses(ctx context.Context) ([]GetAreasWithBossesR
 	return items, nil
 }
 
-const getAreasWithCharacters = `-- name: GetAreasWithCharacters :many
-SELECT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsCharacters = `-- name: GetAreaIDsCharacters :many
+SELECT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -1765,33 +1002,19 @@ JOIN player_units pu ON c.unit_id = pu.id
 ORDER BY a.id
 `
 
-type GetAreasWithCharactersRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithCharacters(ctx context.Context) ([]GetAreasWithCharactersRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithCharacters)
+func (q *Queries) GetAreaIDsCharacters(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsCharacters)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithCharactersRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithCharactersRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1802,12 +1025,8 @@ func (q *Queries) GetAreasWithCharacters(ctx context.Context) ([]GetAreasWithCha
 	return items, nil
 }
 
-const getAreasWithChocobo = `-- name: GetAreasWithChocobo :many
-SELECT
-    l.name AS location, 
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsChocobo = `-- name: GetAreaIDsChocobo :many
+SELECT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -1815,31 +1034,19 @@ WHERE a.can_ride_chocobo = $1
 ORDER BY a.id
 `
 
-type GetAreasWithChocoboRow struct {
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithChocobo(ctx context.Context, canRideChocobo bool) ([]GetAreasWithChocoboRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithChocobo, canRideChocobo)
+func (q *Queries) GetAreaIDsChocobo(ctx context.Context, canRideChocobo bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsChocobo, canRideChocobo)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithChocoboRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithChocoboRow
-		if err := rows.Scan(
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1850,109 +1057,8 @@ func (q *Queries) GetAreasWithChocobo(ctx context.Context, canRideChocobo bool) 
 	return items, nil
 }
 
-const getAreasWithCompSphere = `-- name: GetAreasWithCompSphere :many
-SELECT
-    l.name AS location, 
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE a.has_compilation_sphere = $1
-ORDER BY a.id
-`
-
-type GetAreasWithCompSphereRow struct {
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithCompSphere(ctx context.Context, hasCompilationSphere bool) ([]GetAreasWithCompSphereRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithCompSphere, hasCompilationSphere)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetAreasWithCompSphereRow
-	for rows.Next() {
-		var i GetAreasWithCompSphereRow
-		if err := rows.Scan(
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreasWithDropOff = `-- name: GetAreasWithDropOff :many
-SELECT
-    l.name AS location, 
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE a.airship_drop_off = $1
-ORDER BY a.id
-`
-
-type GetAreasWithDropOffRow struct {
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithDropOff(ctx context.Context, airshipDropOff bool) ([]GetAreasWithDropOffRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithDropOff, airshipDropOff)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetAreasWithDropOffRow
-	for rows.Next() {
-		var i GetAreasWithDropOffRow
-		if err := rows.Scan(
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreasWithFMVs = `-- name: GetAreasWithFMVs :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name As sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsFMVs = `-- name: GetAreaIDsFMVs :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -1960,33 +1066,19 @@ JOIN fmvs f ON f.area_id = a.id
 ORDER BY a.id
 `
 
-type GetAreasWithFMVsRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithFMVs(ctx context.Context) ([]GetAreasWithFMVsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithFMVs)
+func (q *Queries) GetAreaIDsFMVs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsFMVs)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithFMVsRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithFMVsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1997,13 +1089,8 @@ func (q *Queries) GetAreasWithFMVs(ctx context.Context) ([]GetAreasWithFMVsRow, 
 	return items, nil
 }
 
-const getAreasWithItemMonster = `-- name: GetAreasWithItemMonster :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsItemMonster = `-- name: GetAreaIDsItemMonster :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2035,33 +1122,19 @@ WHERE i.id = $1
 ORDER BY a.id
 `
 
-type GetAreasWithItemMonsterRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithItemMonster(ctx context.Context, id int32) ([]GetAreasWithItemMonsterRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithItemMonster, id)
+func (q *Queries) GetAreaIDsItemMonster(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsItemMonster, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithItemMonsterRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithItemMonsterRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2072,13 +1145,8 @@ func (q *Queries) GetAreasWithItemMonster(ctx context.Context, id int32) ([]GetA
 	return items, nil
 }
 
-const getAreasWithItemQuest = `-- name: GetAreasWithItemQuest :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsItemQuest = `-- name: GetAreaIDsItemQuest :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2091,33 +1159,19 @@ WHERE i.id = $1
 ORDER BY a.id
 `
 
-type GetAreasWithItemQuestRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithItemQuest(ctx context.Context, id int32) ([]GetAreasWithItemQuestRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithItemQuest, id)
+func (q *Queries) GetAreaIDsItemQuest(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsItemQuest, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithItemQuestRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithItemQuestRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2128,13 +1182,8 @@ func (q *Queries) GetAreasWithItemQuest(ctx context.Context, id int32) ([]GetAre
 	return items, nil
 }
 
-const getAreasWithItemShop = `-- name: GetAreasWithItemShop :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsItemShop = `-- name: GetAreaIDsItemShop :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2146,33 +1195,19 @@ WHERE i.id = $1
 ORDER BY a.id
 `
 
-type GetAreasWithItemShopRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithItemShop(ctx context.Context, id int32) ([]GetAreasWithItemShopRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithItemShop, id)
+func (q *Queries) GetAreaIDsItemShop(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsItemShop, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithItemShopRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithItemShopRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2183,13 +1218,8 @@ func (q *Queries) GetAreasWithItemShop(ctx context.Context, id int32) ([]GetArea
 	return items, nil
 }
 
-const getAreasWithItemTreasure = `-- name: GetAreasWithItemTreasure :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsItemTreasure = `-- name: GetAreaIDsItemTreasure :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2202,33 +1232,19 @@ WHERE i.id = $1
 ORDER BY a.id
 `
 
-type GetAreasWithItemTreasureRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithItemTreasure(ctx context.Context, id int32) ([]GetAreasWithItemTreasureRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithItemTreasure, id)
+func (q *Queries) GetAreaIDsItemTreasure(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsItemTreasure, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithItemTreasureRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithItemTreasureRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2239,13 +1255,8 @@ func (q *Queries) GetAreasWithItemTreasure(ctx context.Context, id int32) ([]Get
 	return items, nil
 }
 
-const getAreasWithKeyItemQuest = `-- name: GetAreasWithKeyItemQuest :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsKeyItemQuest = `-- name: GetAreaIDsKeyItemQuest :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2258,33 +1269,19 @@ WHERE ki.id = $1
 ORDER BY a.id
 `
 
-type GetAreasWithKeyItemQuestRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithKeyItemQuest(ctx context.Context, id int32) ([]GetAreasWithKeyItemQuestRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithKeyItemQuest, id)
+func (q *Queries) GetAreaIDsKeyItemQuest(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsKeyItemQuest, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithKeyItemQuestRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithKeyItemQuestRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2295,13 +1292,8 @@ func (q *Queries) GetAreasWithKeyItemQuest(ctx context.Context, id int32) ([]Get
 	return items, nil
 }
 
-const getAreasWithKeyItemTreasure = `-- name: GetAreasWithKeyItemTreasure :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsKeyItemTreasure = `-- name: GetAreaIDsKeyItemTreasure :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN treasures t ON t.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
@@ -2314,33 +1306,19 @@ WHERE ki.id = $1
 ORDER BY a.id
 `
 
-type GetAreasWithKeyItemTreasureRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithKeyItemTreasure(ctx context.Context, id int32) ([]GetAreasWithKeyItemTreasureRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithKeyItemTreasure, id)
+func (q *Queries) GetAreaIDsKeyItemTreasure(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsKeyItemTreasure, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithKeyItemTreasureRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithKeyItemTreasureRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2351,13 +1329,8 @@ func (q *Queries) GetAreasWithKeyItemTreasure(ctx context.Context, id int32) ([]
 	return items, nil
 }
 
-const getAreasWithMonsters = `-- name: GetAreasWithMonsters :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsMonsters = `-- name: GetAreaIDsMonsters :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2370,33 +1343,19 @@ JOIN monsters m ON ma.monster_id = m.id
 ORDER BY a.id
 `
 
-type GetAreasWithMonstersRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithMonsters(ctx context.Context) ([]GetAreasWithMonstersRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithMonsters)
+func (q *Queries) GetAreaIDsMonsters(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsMonsters)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithMonstersRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithMonstersRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2407,61 +1366,8 @@ func (q *Queries) GetAreasWithMonsters(ctx context.Context) ([]GetAreasWithMonst
 	return items, nil
 }
 
-const getAreasWithSaveSphere = `-- name: GetAreasWithSaveSphere :many
-SELECT
-    l.name AS location, 
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE a.has_save_sphere = $1
-ORDER BY a.id
-`
-
-type GetAreasWithSaveSphereRow struct {
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithSaveSphere(ctx context.Context, hasSaveSphere bool) ([]GetAreasWithSaveSphereRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithSaveSphere, hasSaveSphere)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetAreasWithSaveSphereRow
-	for rows.Next() {
-		var i GetAreasWithSaveSphereRow
-		if err := rows.Scan(
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreasWithShops = `-- name: GetAreasWithShops :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsShops = `-- name: GetAreaIDsShops :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2469,33 +1375,19 @@ JOIN shops sh ON sh.area_id = a.id
 ORDER BY a.id
 `
 
-type GetAreasWithShopsRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithShops(ctx context.Context) ([]GetAreasWithShopsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithShops)
+func (q *Queries) GetAreaIDsShops(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsShops)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithShopsRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithShopsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2506,13 +1398,8 @@ func (q *Queries) GetAreasWithShops(ctx context.Context) ([]GetAreasWithShopsRow
 	return items, nil
 }
 
-const getAreasWithSidequests = `-- name: GetAreasWithSidequests :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsSidequests = `-- name: GetAreaIDsSidequests :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2522,33 +1409,19 @@ JOIN quests q ON qc.quest_id = q.id
 ORDER BY a.id
 `
 
-type GetAreasWithSidequestsRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithSidequests(ctx context.Context) ([]GetAreasWithSidequestsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithSidequests)
+func (q *Queries) GetAreaIDsSidequests(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsSidequests)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithSidequestsRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithSidequestsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2559,13 +1432,40 @@ func (q *Queries) GetAreasWithSidequests(ctx context.Context) ([]GetAreasWithSid
 	return items, nil
 }
 
-const getAreasWithTreasures = `-- name: GetAreasWithTreasures :many
-SELECT DISTINCT
-    a.id,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getAreaIDsStoryOnly = `-- name: GetAreaIDsStoryOnly :many
+SELECT a.id
+FROM areas a
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+WHERE a.story_only = $1
+ORDER BY a.id
+`
+
+func (q *Queries) GetAreaIDsStoryOnly(ctx context.Context, storyOnly bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsStoryOnly, storyOnly)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaIDsTreasures = `-- name: GetAreaIDsTreasures :many
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2573,33 +1473,307 @@ JOIN treasures t ON t.area_id = a.id
 ORDER BY a.id
 `
 
-type GetAreasWithTreasuresRow struct {
-	ID          int32
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetAreasWithTreasures(ctx context.Context) ([]GetAreasWithTreasuresRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreasWithTreasures)
+func (q *Queries) GetAreaIDsTreasures(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsTreasures)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreasWithTreasuresRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreasWithTreasuresRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaIDsWithCompSphere = `-- name: GetAreaIDsWithCompSphere :many
+SELECT a.id
+FROM areas a
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+WHERE a.has_compilation_sphere = $1
+ORDER BY a.id
+`
+
+func (q *Queries) GetAreaIDsWithCompSphere(ctx context.Context, hasCompilationSphere bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsWithCompSphere, hasCompilationSphere)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaIDsWithDropOff = `-- name: GetAreaIDsWithDropOff :many
+SELECT a.id
+FROM areas a
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+WHERE a.airship_drop_off = $1
+ORDER BY a.id
+`
+
+func (q *Queries) GetAreaIDsWithDropOff(ctx context.Context, airshipDropOff bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsWithDropOff, airshipDropOff)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaIDsWithSaveSphere = `-- name: GetAreaIDsWithSaveSphere :many
+SELECT a.id
+FROM areas a
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+WHERE a.has_save_sphere = $1
+ORDER BY a.id
+`
+
+func (q *Queries) GetAreaIDsWithSaveSphere(ctx context.Context, hasSaveSphere bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsWithSaveSphere, hasSaveSphere)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaMonsterFormationIDs = `-- name: GetAreaMonsterFormationIDs :many
+SELECT DISTINCT mf.id
+FROM areas a
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+JOIN encounter_locations el ON el.area_id = a.id
+JOIN j_encounter_location_formations j ON j.encounter_location_id = el.id
+JOIN monster_formations mf ON j.monster_formation_id = mf.id
+WHERE a.id = $1
+ORDER BY mf.id
+`
+
+func (q *Queries) GetAreaMonsterFormationIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaMonsterFormationIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaMonsterIDs = `-- name: GetAreaMonsterIDs :many
+SELECT DISTINCT m.id
+FROM areas a
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+JOIN encounter_locations el ON el.area_id = a.id
+JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
+JOIN monster_formations mf ON j1.monster_formation_id = mf.id
+JOIN j_monster_formations_monsters j2 ON j2.monster_formation_id = mf.id
+JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
+JOIN monsters m ON ma.monster_id = m.id
+WHERE a.id = $1
+ORDER BY m.id
+`
+
+func (q *Queries) GetAreaMonsterIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaMonsterIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaQuestIDs = `-- name: GetAreaQuestIDs :many
+SELECT DISTINCT q.id
+FROM areas a
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+JOIN completion_locations cl ON cl.area_id = a.id
+JOIN quest_completions qc ON cl.completion_id = qc.id
+JOIN quests q ON qc.quest_id = q.id
+WHERE a.id = $1
+ORDER BY q.id
+`
+
+func (q *Queries) GetAreaQuestIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaQuestIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaShopIDs = `-- name: GetAreaShopIDs :many
+SELECT id FROM shops WHERE area_id = $1 ORDER BY id
+`
+
+func (q *Queries) GetAreaShopIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaShopIDs, areaID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaTreasureIDs = `-- name: GetAreaTreasureIDs :many
+SELECT id FROM treasures WHERE area_id = $1 ORDER BY id
+`
+
+func (q *Queries) GetAreaTreasureIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaTreasureIDs, areaID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreas = `-- name: GetAreas :many
+SELECT a.id
+FROM areas a
+JOIN sublocations s ON a.sublocation_id = s.id 
+JOIN locations l ON s.location_id = l.id
+`
+
+func (q *Queries) GetAreas(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreas)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2646,12 +1820,8 @@ func (q *Queries) GetLocationAreaByAreaName(ctx context.Context, arg GetLocation
 	return i, err
 }
 
-const getLocationAreas = `-- name: GetLocationAreas :many
-SELECT
-    l.name AS location, 
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getLocationAreaIDs = `-- name: GetLocationAreaIDs :many
+SELECT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id 
 JOIN locations l ON s.location_id = l.id
@@ -2659,31 +1829,19 @@ WHERE l.id = $1
 ORDER BY a.id
 `
 
-type GetLocationAreasRow struct {
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetLocationAreas(ctx context.Context, id int32) ([]GetLocationAreasRow, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationAreas, id)
+func (q *Queries) GetLocationAreaIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationAreaIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetLocationAreasRow
+	var items []int32
 	for rows.Next() {
-		var i GetLocationAreasRow
-		if err := rows.Scan(
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2880,12 +2038,8 @@ func (q *Queries) GetLocationMonsters(ctx context.Context, locationID int32) ([]
 	return items, nil
 }
 
-const getSublocationAreas = `-- name: GetSublocationAreas :many
-SELECT
-    l.name AS location, 
-    s.name AS sublocation,
-    a.name AS area,
-    a.version
+const getSublocationAreaIDs = `-- name: GetSublocationAreaIDs :many
+SELECT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id 
 JOIN locations l ON s.location_id = l.id
@@ -2893,31 +2047,19 @@ WHERE s.id = $1
 ORDER BY a.id
 `
 
-type GetSublocationAreasRow struct {
-	Location    string
-	Sublocation string
-	Area        string
-	Version     sql.NullInt32
-}
-
-func (q *Queries) GetSublocationAreas(ctx context.Context, id int32) ([]GetSublocationAreasRow, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationAreas, id)
+func (q *Queries) GetSublocationAreaIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationAreaIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetSublocationAreasRow
+	var items []int32
 	for rows.Next() {
-		var i GetSublocationAreasRow
-		if err := rows.Scan(
-			&i.Location,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

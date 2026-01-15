@@ -59,6 +59,7 @@ func (l *Lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 
 			property.ID = dbProperty.ID
 			l.Properties[property.Name] = property
+			l.PropertiesID[property.ID] = property
 		}
 		return nil
 	})

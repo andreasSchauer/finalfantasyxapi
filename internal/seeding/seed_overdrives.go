@@ -116,6 +116,7 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 
 			key := CreateLookupKey(lookupObj)
 			l.Overdrives[key] = overdrive
+			l.OverdrivesID[overdrive.ID] = overdrive
 		}
 
 		return nil
@@ -137,6 +138,7 @@ func (l *Lookup) seedRonsoRage(qtx *database.Queries, overdrive Overdrive) error
 
 	ronsoRage.ID = dbRonsoRage.ID
 	l.RonsoRages[ronsoRage.Overdrive.Name] = ronsoRage
+	l.RonsoRagesID[ronsoRage.ID] = ronsoRage
 
 	return nil
 }

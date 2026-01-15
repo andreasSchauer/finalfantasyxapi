@@ -64,6 +64,7 @@ func (l *Lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 
 			stat.ID = dbStat.ID
 			l.Stats[stat.Name] = stat
+			l.StatsID[stat.ID] = stat
 		}
 		return nil
 	})

@@ -85,6 +85,12 @@ func (mf MonsterFormation) Error() string {
 	return fmt.Sprintf("monster formation with location id: %d, category: %s, forced ambush: %t, can escape: %t, boss music id: %v, notes: %v", mf.EncounterLocationID, mf.Category, mf.IsForcedAmbush, mf.CanEscape, h.ObjPtrToID(mf.BossMusic), h.DerefOrNil(mf.Notes))
 }
 
+func (mf MonsterFormation) GetResParamsUnnamed() h.ResParamsUnnamed {
+	return h.ResParamsUnnamed{
+		ID: mf.ID,
+	}
+}
+
 type FormationBossSong struct {
 	ID               int32
 	SongID           int32
@@ -208,6 +214,7 @@ func (l *Lookup) seedMonsterFormation(qtx *database.Queries, formation MonsterFo
 		return MonsterFormation{}, h.NewErr(formation.Error(), err, "couldn't create monster formation")
 	}
 	formation.ID = dbFormation.ID
+	l.MonsterFormationsID[formation.ID] = formation
 
 	err = l.seedFormationMonsterAmounts(qtx, formation)
 	if err != nil {

@@ -59,6 +59,7 @@ func (l *Lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 
 			weapon.ID = dbWeapon.ID
 			l.CelestialWeapons[weapon.Name] = weapon
+			l.CelestialWeaponsID[weapon.ID] = weapon
 		}
 		return nil
 	})

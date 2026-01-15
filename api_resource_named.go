@@ -147,7 +147,6 @@ func newNamedAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config, r
 // good for db returns and if other funcs need to create a NamedAPIResource
 func idToNamedAPIResource[T h.IsNamed, R any, L APIResourceList](cfg *Config, i handlerInput[T, R, L], id int32) NamedAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
-
 	params := res.GetResParamsNamed()
 
 	return NamedAPIResource{
@@ -162,10 +161,6 @@ func idToNamedAPIResource[T h.IsNamed, R any, L APIResourceList](cfg *Config, i 
 
 // essentially parses name or name/version like a handler and then converts the id to a NamedAPIResource
 func nameToNamedAPIResource[T h.IsNamed, R any, L APIResourceList](cfg *Config, i handlerInput[T, R, L], name string, version *int32) NamedAPIResource {
-	if name == "" {
-		return NamedAPIResource{}
-	}
-
 	var parseResp parseResponse
 	switch version {
 	case nil:

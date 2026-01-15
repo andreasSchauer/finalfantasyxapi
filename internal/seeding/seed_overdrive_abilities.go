@@ -69,6 +69,7 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 			overdriveAbility.ID = dbOverdriveAbility.ID
 			key := CreateLookupKey(overdriveAbility.Ability)
 			l.OverdriveAbilities[key] = overdriveAbility
+			l.OverdriveAbilitiesID[overdriveAbility.ID] = overdriveAbility
 		}
 		return nil
 	})

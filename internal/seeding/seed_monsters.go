@@ -96,6 +96,15 @@ func (m Monster) Error() string {
 	return fmt.Sprintf("monster %s, version: %v", m.Name, h.DerefOrNil(m.Version))
 }
 
+func (m Monster) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 			m.ID,
+		Name: 			m.Name,
+		Version: 		m.Version,
+		Specification:	m.Specification,
+	}
+}
+
 func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/monsters.json"
 
@@ -143,6 +152,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 			monster.ID = dbMonster.ID
 			key := CreateLookupKey(monster)
 			l.Monsters[key] = monster
+			l.MonstersID[monster.ID] = monster
 		}
 
 		return nil

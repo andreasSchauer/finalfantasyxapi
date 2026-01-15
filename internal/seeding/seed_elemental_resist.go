@@ -63,6 +63,7 @@ func (l *Lookup) seedElementalResist(qtx *database.Queries, elemResist Elemental
 	elemResist.ID = dbElemResist.ID
 	key := CreateLookupKey(elemResist)
 	l.ElementalResists[key] = elemResist
+	l.ElementalResistsID[elemResist.ID] = elemResist
 
 	return elemResist, nil
 }

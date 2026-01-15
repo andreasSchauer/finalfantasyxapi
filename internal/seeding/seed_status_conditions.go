@@ -64,6 +64,7 @@ func (l *Lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 
 			condition.ID = dbCondition.ID
 			l.StatusConditions[condition.Name] = condition
+			l.StatusConditionsID[condition.ID] = condition
 		}
 		return nil
 	})

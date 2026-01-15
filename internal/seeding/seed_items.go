@@ -130,6 +130,7 @@ func (l *Lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
 
 	item.ID = dbItem.ID
 	l.Items[item.Name] = item
+	l.ItemsID[item.ID] = item
 
 	return item, nil
 }

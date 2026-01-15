@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -12,6 +13,7 @@ type handlerInput[T h.HasID, R any, L APIResourceList] struct {
 	objLookup       map[string]T
 	objLookupID     map[int32]T
 	queryLookup     map[string]QueryType
+	retrieveQuery	func(context.Context) ([]int32, error)
 	getSingleFunc   func(*http.Request, int32) (R, error)
 	getMultipleFunc func(*http.Request, string) (L, error)
 	retrieveFunc    func(*http.Request) (L, error)

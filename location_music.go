@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type LocationMusic struct {
@@ -27,29 +28,29 @@ func (ls LocationSong) GetAPIResource() APIResource {
 	return ls.Song
 }
 
-// these two functions can be generalized with ids
-func (cfg *Config) getAreaCues(dbCues []database.GetAreaCuesRow) []LocationSong {
-	songsCues := []LocationSong{}
 
-	for _, cue := range dbCues {
-		song := cfg.newNamedAPIResourceSimple(cfg.e.songs.endpoint, cue.ID, cue.Name)
+func getAreaCues(cfg *Config, i handlerInput[seeding.Song, any, NamedApiResourceList], dbCues []database.GetAreaCuesRow) []LocationSong {
+	songs := []LocationSong{}
+
+	for _, cue := range dbCues {		
+		song := idToNamedAPIResource(cfg, i, cue.ID)
 
 		locationSong := LocationSong{
 			Song:                   song,
 			ReplacesEncounterMusic: cue.ReplacesEncounterMusic,
 		}
 
-		songsCues = append(songsCues, locationSong)
+		songs = append(songs, locationSong)
 	}
 
-	return songsCues
+	return songs
 }
 
-func (cfg *Config) getAreaBM(dbBm []database.GetAreaBackgroundMusicRow) []LocationSong {
+func getAreaBM(cfg *Config, i handlerInput[seeding.Song, any, NamedApiResourceList], dbBm []database.GetAreaBackgroundMusicRow) []LocationSong {
 	songsBM := []LocationSong{}
 
 	for _, bm := range dbBm {
-		song := cfg.newNamedAPIResourceSimple(cfg.e.songs.endpoint, bm.ID, bm.Name)
+		song := idToNamedAPIResource(cfg, i, bm.ID)
 
 		locationSong := LocationSong{
 			Song:                   song,

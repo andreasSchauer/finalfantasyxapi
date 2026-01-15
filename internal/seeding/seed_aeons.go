@@ -48,6 +48,13 @@ func (a Aeon) Error() string {
 	return fmt.Sprintf("aeon %s", a.Name)
 }
 
+func (a Aeon) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: a.ID,
+		Name: a.Name,
+	}
+}
+
 type AeonEquipment struct {
 	ID              int32
 	AutoAbilityID   int32
@@ -107,6 +114,7 @@ func (l *Lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 
 			aeon.ID = dbAeon.ID
 			l.Aeons[aeon.Name] = aeon
+			l.AeonsID[aeon.ID] = aeon
 
 			err = l.seedCharacterClasses(qtx, aeon.PlayerUnit)
 			if err != nil {

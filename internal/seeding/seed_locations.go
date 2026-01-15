@@ -29,6 +29,13 @@ func (l Location) Error() string {
 	return fmt.Sprintf("location %s", l.Name)
 }
 
+func (l Location) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID:   l.ID,
+		Name: l.Name,
+	}
+}
+
 type SubLocation struct {
 	ID            int32
 	Name          string  `json:"sublocation"`
@@ -51,6 +58,13 @@ func (s SubLocation) GetID() int32 {
 
 func (s SubLocation) Error() string {
 	return fmt.Sprintf("sublocation %s", s.Name)
+}
+
+func (s SubLocation) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID:   s.ID,
+		Name: s.Name,
+	}
 }
 
 type Area struct {
@@ -92,16 +106,27 @@ func (a Area) Error() string {
 func (a Area) GetLocationArea() LocationArea {
 	return LocationArea{
 		Location:    a.SubLocation.Location.Name,
-		SubLocation: a.SubLocation.Name,
+		Sublocation: a.SubLocation.Name,
 		Area:        a.Name,
 		Version:     a.Version,
+	}
+}
+
+func (a Area) GetResParamsLocation() h.ResParamsLocation {
+	return h.ResParamsLocation{
+		AreaID:        a.ID,
+		Location:      a.SubLocation.Location.Name,
+		Sublocation:   a.SubLocation.Name,
+		Area:          a.Name,
+		Version:       a.Version,
+		Specification: a.Specification,
 	}
 }
 
 type LocationArea struct {
 	ID          int32
 	Location    string `json:"location"`
-	SubLocation string `json:"sublocation"`
+	Sublocation string `json:"sublocation"`
 	Area        string `json:"area"`
 	Version     *int32 `json:"version"`
 }
@@ -109,7 +134,7 @@ type LocationArea struct {
 func (la LocationArea) ToKeyFields() []any {
 	return []any{
 		la.Location,
-		la.SubLocation,
+		la.Sublocation,
 		la.Area,
 		h.DerefOrNil(la.Version),
 	}
@@ -120,7 +145,7 @@ func (la LocationArea) GetID() int32 {
 }
 
 func (la LocationArea) Error() string {
-	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: %s, version: %v", la.Location, la.SubLocation, la.Area, h.DerefOrNil(la.Version))
+	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: %s, version: %v", la.Location, la.Sublocation, la.Area, h.DerefOrNil(la.Version))
 }
 
 type AreaConnection struct {
@@ -169,6 +194,7 @@ func (l *Lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 			}
 			location.ID = dbLocation.ID
 			l.Locations[location.Name] = location
+			l.LocationsID[location.ID] = location
 
 			err = l.seedSubLocations(qtx, location)
 			if err != nil {
@@ -194,7 +220,8 @@ func (l *Lookup) seedSubLocations(qtx *database.Queries, location Location) erro
 			return h.NewErr(subLocation.Error(), err, "couldn't create sublocation")
 		}
 		subLocation.ID = dbSubLocation.ID
-		l.SubLocations[subLocation.Name] = subLocation
+		l.Sublocations[subLocation.Name] = subLocation
+		l.SublocationsID[subLocation.ID] = subLocation
 
 		err = l.seedAreas(qtx, subLocation)
 		if err != nil {
@@ -230,6 +257,7 @@ func (l *Lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error
 
 		key := CreateLookupKey(locationArea)
 		l.Areas[key] = area
+		l.AreasID[area.ID] = area
 	}
 
 	return nil
@@ -250,7 +278,7 @@ func (l *Lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) er
 				for _, jsonArea := range subLocation.Areas {
 					locationArea := LocationArea{
 						Location:    location.Name,
-						SubLocation: subLocation.Name,
+						Sublocation: subLocation.Name,
 						Area:        jsonArea.Name,
 						Version:     jsonArea.Version,
 					}

@@ -56,9 +56,10 @@ func (l *Lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return h.NewErr(submenu.Error(), err, "couldn't create submenu")
 			}
+			
 			submenu.ID = dbSubmenu.ID
-
 			l.Submenus[submenu.Name] = submenu
+			l.SubmenusID[submenu.ID] = submenu
 		}
 		return nil
 	})

@@ -65,6 +65,7 @@ func (l *Lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 
 			command.ID = dbODCommand.ID
 			l.OverdriveCommands[command.Name] = command
+			l.OverdriveCommandsID[command.ID] = command
 		}
 
 		return nil

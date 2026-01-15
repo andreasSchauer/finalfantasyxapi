@@ -16,6 +16,12 @@ type TypeLookup struct {
 	OverdriveModeType  map[string]TypedAPIResource
 }
 
+// replace Typed logic and lookup with this struct
+type EnumType[T any] struct {
+	resource TypedAPIResource
+	conversionFunc func (string) T
+}
+
 func (cfg *Config) TypeLookupInit() {
 	cfg.t = &TypeLookup{}
 

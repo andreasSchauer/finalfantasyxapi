@@ -52,6 +52,7 @@ func (l *Lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 
 			element.ID = dbElement.ID
 			l.Elements[element.Name] = element
+			l.ElementsID[element.ID] = element
 		}
 		return nil
 	})

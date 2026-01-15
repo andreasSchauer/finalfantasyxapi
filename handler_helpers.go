@@ -18,7 +18,7 @@ func handleEndpointList[T h.HasID, R any, L APIResourceList](w http.ResponseWrit
 }
 
 
-// can reuse the logic of checkID to create parseID, like how I do it with queries
+
 func handleEndpointIDOnly[T h.HasID, R any, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
 	segment := segments[0]
 

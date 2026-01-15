@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -32,7 +31,6 @@ type Area struct {
 	FMVs              []NamedAPIResource   `json:"fmvs"`
 }
 
-
 func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	i := cfg.e.areas
 
@@ -57,40 +55,31 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
 func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
 	i := cfg.e.areas
 
-	err := verifyQueryParams(r, i, &id)
+	area, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Area{}, err
 	}
 
-	dbArea, err := cfg.db.GetArea(r.Context(), id)
-	if err != nil {
-		return Area{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("area with id '%d' doesn't exist.", id), err)
-	}
-
-	rel, err := cfg.getAreaRelationships(r, dbArea)
+	rel, err := cfg.getAreaRelationships(r, area)
 	if err != nil {
 		return Area{}, err
 	}
 
-	location := cfg.newNamedAPIResourceSimple("locations", dbArea.LocationID, dbArea.Location)
-	sublocation := cfg.newNamedAPIResourceSimple("sublocations", dbArea.SublocationID, dbArea.Sublocation)
-
-	area := Area{
-		ID:                dbArea.ID,
-		Name:              dbArea.Name,
-		Version:           h.NullInt32ToPtr(dbArea.Version),
-		Specification:     h.NullStringToPtr(dbArea.Specification),
-		ParentLocation:    location,
-		ParentSublocation: sublocation,
-		StoryOnly:         dbArea.StoryOnly,
-		HasSaveSphere:     dbArea.HasSaveSphere,
-		AirshipDropOff:    dbArea.AirshipDropOff,
-		HasCompSphere:     dbArea.HasCompilationSphere,
-		CanRideChocobo:    dbArea.CanRideChocobo,
+	response := Area{
+		ID:                area.ID,
+		Name:              area.Name,
+		Version:           area.Version,
+		Specification:     area.Specification,
+		ParentLocation:    nameToNamedAPIResource(cfg, cfg.e.locations, area.SubLocation.Location.Name, nil),
+		ParentSublocation: nameToNamedAPIResource(cfg, cfg.e.sublocations, area.SubLocation.Name, nil),
+		StoryOnly:         area.StoryOnly,
+		HasSaveSphere:     area.HasSaveSphere,
+		AirshipDropOff:    area.AirshipDropOff,
+		HasCompSphere:     area.HasCompilationSphere,
+		CanRideChocobo:    area.CanRideChocobo,
 		ConnectedAreas:    rel.ConnectedAreas,
 		Characters:        rel.Characters,
 		Aeons:             rel.Aeons,
@@ -103,60 +92,36 @@ func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
 		FMVs:              rel.FMVs,
 	}
 
-	return area, nil
+	return response, nil
 }
-
 
 func (cfg *Config) retrieveAreas(r *http.Request) (LocationApiResourceList, error) {
 	i := cfg.e.areas
-	
-	err := verifyQueryParams(r, i, nil)
+
+	resources, err := retrieveLocationAPIResources(cfg, r, i)
 	if err != nil {
 		return LocationApiResourceList{}, err
 	}
 
-	dbAreas, err := cfg.db.GetAreas(r.Context())
-	if err != nil {
-		return LocationApiResourceList{}, newHTTPError(http.StatusInternalServerError, "couldn't retrieve areas.", err)
+	filteredLists := []filteredResList[LocationAPIResource]{
+		frl(idQueryLocBased(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationAreaIDs)),
+		frl(idQueryLocBased(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationAreaIDs)),
+		frl(idQueryWrapperLocBased(r, i, resources, "item", len(cfg.l.Items), cfg.queryAreasByItemMethod)),
+		frl(idQueryWrapperLocBased(r, i, resources, "key-item", len(cfg.l.KeyItems), cfg.getAreasByKeyItem)),
+		frl(boolQueryLocBased(cfg, r, i, resources, "story-based", cfg.db.GetAreaIDsStoryOnly)),
+		frl(boolQueryLocBased(cfg, r, i, resources, "save-sphere", cfg.db.GetAreaIDsWithSaveSphere)),
+		frl(boolQueryLocBased(cfg, r, i, resources, "comp-sphere", cfg.db.GetAreaIDsWithCompSphere)),
+		frl(boolQueryLocBased(cfg, r, i, resources, "airship", cfg.db.GetAreaIDsWithDropOff)),
+		frl(boolQueryLocBased(cfg, r, i, resources, "chocobo", cfg.db.GetAreaIDsChocobo)),
+		frl(boolAccumulatorLocBased(cfg, r, i, resources, "characters", cfg.db.GetAreaIDsCharacters)),
+		frl(boolAccumulatorLocBased(cfg, r, i, resources, "aeons", cfg.db.GetAreaIDsAeons)),
+		frl(boolAccumulatorLocBased(cfg, r, i, resources, "monsters", cfg.db.GetAreaIDsMonsters)),
+		frl(boolAccumulatorLocBased(cfg, r, i, resources, "boss-fights", cfg.db.GetAreaIDsBosses)),
+		frl(boolAccumulatorLocBased(cfg, r, i, resources, "shops", cfg.db.GetAreaIDsShops)),
+		frl(boolAccumulatorLocBased(cfg, r, i, resources, "treasures", cfg.db.GetAreaIDsTreasures)),
+		frl(boolAccumulatorLocBased(cfg, r, i, resources, "sidequests", cfg.db.GetAreaIDsSidequests)),
+		frl(boolAccumulatorLocBased(cfg, r, i, resources, "fmvs", cfg.db.GetAreaIDsFMVs)),
 	}
 
-	resources := createLocationBasedAPIResources(cfg, dbAreas, func(area database.GetAreasRow) (string, string, string, *int32) {
-		return area.Location, area.Sublocation, area.Name, h.NullInt32ToPtr(area.Version)
-	})
-
-	filterFuncs := []func(*http.Request, []LocationAPIResource) ([]LocationAPIResource, error){
-		cfg.getAreasLocation,
-		cfg.getAreasSublocation,
-		cfg.getAreasItem,
-		cfg.getAreasKeyItem,
-		cfg.getAreasStoryBased,
-		cfg.getAreasSaveSphere,
-		cfg.getAreasCompSphere,
-		cfg.getAreasDropOff,
-		cfg.getAreasChocobo,
-		cfg.getAreasCharacters,
-		cfg.getAreasAeons,
-		cfg.getAreasMonsters,
-		cfg.getAreasBosses,
-		cfg.getAreasShops,
-		cfg.getAreasTreasures,
-		cfg.getAreasSidequests,
-		cfg.getAreasFMVs,
-	}
-
-	for _, function := range filterFuncs {
-		filteredResources, err := function(r, resources)
-		if err != nil {
-			return LocationApiResourceList{}, err
-		}
-
-		resources = getSharedResources(resources, filteredResources)
-	}
-
-	resourceList, err := newLocationAPIResourceList(cfg, r, i, resources)
-	if err != nil {
-		return LocationApiResourceList{}, err
-	}
-
-	return resourceList, nil
+	return filterLocationAPIResources(cfg, r, i, resources, filteredLists)
 }

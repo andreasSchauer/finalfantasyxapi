@@ -81,6 +81,7 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 			command.ID = dbTriggerCommand.ID
 			key := CreateLookupKey(command.Ability)
 			l.TriggerCommands[key] = command
+			l.TriggerCommandsID[command.ID] = command
 		}
 		return nil
 	})

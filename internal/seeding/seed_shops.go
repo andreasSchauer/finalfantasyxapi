@@ -44,6 +44,12 @@ func (s Shop) Error() string {
 	return fmt.Sprintf("shop %s, %v", s.LocationArea, h.DerefOrNil(s.Version))
 }
 
+func (s Shop) GetResParamsUnnamed() h.ResParamsUnnamed {
+	return h.ResParamsUnnamed{
+		ID: s.ID,
+	}
+}
+
 type SubShop struct {
 	Items     []ShopItem      `json:"items"`
 	Equipment []ShopEquipment `json:"equipment"`
@@ -157,6 +163,7 @@ func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 			shop.ID = dbShop.ID
 			key := CreateLookupKey(shop)
 			l.Shops[key] = shop
+			l.ShopsID[shop.ID] = shop
 		}
 		return nil
 	})

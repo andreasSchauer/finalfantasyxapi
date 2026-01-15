@@ -54,6 +54,13 @@ func (s Song) Error() string {
 	return fmt.Sprintf("song %s", s.Name)
 }
 
+func (s Song) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 	s.ID,
+		Name: 	s.Name,
+	}
+}
+
 type SongCredits struct {
 	ID        int32
 	Composer  *string `json:"composer"`
@@ -176,6 +183,7 @@ func (l *Lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 
 			song.ID = dbSong.ID
 			l.Songs[song.Name] = song
+			l.SongsID[song.ID] = song
 		}
 		return nil
 	})

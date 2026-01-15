@@ -39,6 +39,13 @@ func (f FMV) Error() string {
 	return fmt.Sprintf("fmv %s", f.Name)
 }
 
+func (f FMV) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: f.ID,
+		Name: f.Name,
+	}
+}
+
 func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/fmvs.json"
 
@@ -76,6 +83,7 @@ func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
 
 			fmv.ID = dbFMV.ID
 			l.FMVs[fmv.Name] = fmv
+			l.FMVsID[fmv.ID] = fmv
 		}
 		return nil
 	})
