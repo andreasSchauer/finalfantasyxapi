@@ -65,7 +65,7 @@ func (cfg *Config) newNamedAPIResourceFromType(endpoint, key string, lookup map[
 	return resource, nil
 }
 
-func newTypedAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], lookup map[string]TypedAPIResource) (TypedApiResourceList, error) {
+func newTypedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], lookup map[string]TypedAPIResource) (TypedApiResourceList, error) {
 	resources := cfg.createTypeResourceSlice(i.endpoint, lookup)
 
 	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)

@@ -7,13 +7,15 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type handlerInput[T h.HasID, R any, L APIResourceList] struct {
+type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 	endpoint        string
 	resourceType    string
 	objLookup       map[string]T
 	objLookupID     map[int32]T
 	queryLookup     map[string]QueryType
-	retrieveQuery	func(context.Context) ([]int32, error)
+	retrieveQuery   func(context.Context) ([]int32, error)
+	idToResFunc     func(*Config, handlerInput[T, R, A, L], int32) A
+	resToListFunc	func(*Config, *http.Request, handlerInput[T, R, A, L], []A) (L, error)
 	getSingleFunc   func(*http.Request, int32) (R, error)
 	getMultipleFunc func(*http.Request, string) (L, error)
 	retrieveFunc    func(*http.Request) (L, error)
@@ -33,15 +35,15 @@ type handlerView interface {
 	Subsections() map[string]func(string) (APIResourceList, error)
 }
 
-func (i handlerInput[T, R, L]) Endpoint() string {
+func (i handlerInput[T, R, A, L]) Endpoint() string {
 	return i.endpoint
 }
 
-func (i handlerInput[T, R, L]) ResourceType() string {
+func (i handlerInput[T, R, A, L]) ResourceType() string {
 	return i.resourceType
 }
 
-func (i handlerInput[T, R, L]) ObjLookup() map[string]h.HasID {
+func (i handlerInput[T, R, A, L]) ObjLookup() map[string]h.HasID {
 	out := make(map[string]h.HasID, len(i.objLookup))
 
 	for k, v := range i.objLookup {
@@ -51,7 +53,7 @@ func (i handlerInput[T, R, L]) ObjLookup() map[string]h.HasID {
 	return out
 }
 
-func (i handlerInput[T, R, L]) ObjLookupID() map[int32]h.HasID {
+func (i handlerInput[T, R, A, L]) ObjLookupID() map[int32]h.HasID {
 	out := make(map[int32]h.HasID, len(i.objLookup))
 
 	for k, v := range i.objLookupID {
@@ -61,11 +63,11 @@ func (i handlerInput[T, R, L]) ObjLookupID() map[int32]h.HasID {
 	return out
 }
 
-func (i handlerInput[T, R, L]) QueryLookup() map[string]QueryType {
+func (i handlerInput[T, R, A, L]) QueryLookup() map[string]QueryType {
 	return i.queryLookup
 }
 
-func (i handlerInput[T, R, L]) GetSingleFunc() func(*http.Request, int32) (any, error) {
+func (i handlerInput[T, R, A, L]) GetSingleFunc() func(*http.Request, int32) (any, error) {
 	if i.getSingleFunc == nil {
 		return nil
 	}
@@ -74,7 +76,7 @@ func (i handlerInput[T, R, L]) GetSingleFunc() func(*http.Request, int32) (any, 
 	}
 }
 
-func (i handlerInput[T, R, L]) GetMultipleFunc() func(*http.Request, string) (APIResourceList, error) {
+func (i handlerInput[T, R, A, L]) GetMultipleFunc() func(*http.Request, string) (APIResourceList, error) {
 	if i.retrieveFunc == nil {
 		return nil
 	}
@@ -83,7 +85,7 @@ func (i handlerInput[T, R, L]) GetMultipleFunc() func(*http.Request, string) (AP
 	}
 }
 
-func (i handlerInput[T, R, L]) RetrieveFunc() func(*http.Request) (APIResourceList, error) {
+func (i handlerInput[T, R, A, L]) RetrieveFunc() func(*http.Request) (APIResourceList, error) {
 	if i.getMultipleFunc == nil {
 		return nil
 	}
@@ -92,6 +94,6 @@ func (i handlerInput[T, R, L]) RetrieveFunc() func(*http.Request) (APIResourceLi
 	}
 }
 
-func (i handlerInput[T, R, L]) Subsections() map[string]func(string) (APIResourceList, error) {
+func (i handlerInput[T, R, A, L]) Subsections() map[string]func(string) (APIResourceList, error) {
 	return i.subsections
 }

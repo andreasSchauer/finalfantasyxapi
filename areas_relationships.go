@@ -26,32 +26,32 @@ func (cfg *Config) getAreaRelationships(r *http.Request, areaLookup seeding.Area
 		return Area{}, err
 	}
 
-	characters, err := getNamedResources(cfg, r, cfg.e.characters, areaLookup, cfg.db.GetAreaCharacterIDs)
+	characters, err := getResourcesDB(cfg, r, cfg.e.characters, areaLookup, cfg.db.GetAreaCharacterIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	aeons, err := getNamedResources(cfg, r, cfg.e.aeons, areaLookup, cfg.db.GetAreaAeonIDs)
+	aeons, err := getResourcesDB(cfg, r, cfg.e.aeons, areaLookup, cfg.db.GetAreaAeonIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	shops, err := getUnnamedResources(cfg, r, cfg.e.shops, areaLookup, cfg.db.GetAreaShopIDs)
+	shops, err := getResourcesDB(cfg, r, cfg.e.shops, areaLookup, cfg.db.GetAreaShopIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	treasures, err := getUnnamedResources(cfg, r, cfg.e.treasures, areaLookup, cfg.db.GetAreaTreasureIDs)
+	treasures, err := getResourcesDB(cfg, r, cfg.e.treasures, areaLookup, cfg.db.GetAreaTreasureIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	monsters, err := getNamedResources(cfg, r, cfg.e.monsters, areaLookup, cfg.db.GetAreaMonsterIDs)
+	monsters, err := getResourcesDB(cfg, r, cfg.e.monsters, areaLookup, cfg.db.GetAreaMonsterIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	formations, err := getUnnamedResources(cfg, r, cfg.e.monsterFormations, areaLookup, cfg.db.GetAreaMonsterFormationIDs)
+	formations, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, areaLookup, cfg.db.GetAreaMonsterFormationIDs)
 	if err != nil {
 		return Area{}, err
 	}
@@ -66,7 +66,7 @@ func (cfg *Config) getAreaRelationships(r *http.Request, areaLookup seeding.Area
 		return Area{}, err
 	}
 
-	fmvs, err := getNamedResources(cfg, r, cfg.e.fmvs, areaLookup, cfg.db.GetAreaFmvIDs)
+	fmvs, err := getResourcesDB(cfg, r, cfg.e.fmvs, areaLookup, cfg.db.GetAreaFmvIDs)
 	if err != nil {
 		return Area{}, err
 	}
@@ -112,8 +112,6 @@ func (cfg *Config) getAreaConnectedAreas(area seeding.Area) ([]AreaConnection, e
 	return connectedAreas, nil
 }
 
-
-
 func (cfg *Config) getAreaSidequest(r *http.Request, area seeding.Area) (NamedAPIResource, error) {
 	dbQuestIDs, err := cfg.db.GetAreaQuestIDs(r.Context(), area.ID)
 	if err != nil {
@@ -128,12 +126,13 @@ func (cfg *Config) getAreaSidequest(r *http.Request, area seeding.Area) (NamedAP
 		return NamedAPIResource{}, err
 	}
 
-	resource := cfg.newNamedAPIResourceSimple(cfg.e.sidequests.endpoint, sidequest.ID, sidequest.Name)
+	resource := cfg.e.sidequests.idToResFunc(cfg, cfg.e.sidequests, sidequest.ID)
 
 	return resource, nil
 }
 
 // this is kind of scuffed for now. I will probably find a better way, once I've managed to implement proper parent type assertions
+// then on the other hand, what else should I do here? it kind of is a special case, since these are not two equal types, but parent and child being categorized by the same master-type
 func findSidequest(cfg *Config, potentialSidequestID int32) (seeding.Sidequest, error) {
 	potentialSidequest, _ := seeding.GetResourceByID(potentialSidequestID, cfg.l.QuestsID)
 	sidequestID := potentialSidequestID
@@ -155,7 +154,6 @@ func findSidequest(cfg *Config, potentialSidequestID int32) (seeding.Sidequest, 
 
 	return sidequest, nil
 }
-
 
 func (cfg *Config) getAreaMusic(r *http.Request, item seeding.LookupableID) (LocationMusic, error) {
 	i := cfg.e.songs
@@ -183,8 +181,8 @@ func (cfg *Config) getAreaMusic(r *http.Request, item seeding.LookupableID) (Loc
 	music := LocationMusic{
 		Cues:            getAreaCues(cfg, i, dbCues),
 		BackgroundMusic: getAreaBM(cfg, i, dbBm),
-		FMVs:            idsToNamedAPIResources(cfg, i, dbFMVSongIDs),
-		BossFights:      idsToNamedAPIResources(cfg, i, dbBossSongIDs),
+		FMVs:            idsToAPIResources(cfg, i, dbFMVSongIDs),
+		BossFights:      idsToAPIResources(cfg, i, dbBossSongIDs),
 	}
 
 	return music, nil

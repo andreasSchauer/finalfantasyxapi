@@ -45,6 +45,13 @@ func (i Item) Error() string {
 	return fmt.Sprintf("item %s", i.Name)
 }
 
+func (i Item) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: i.ID,
+		Name: i.Name,
+	}
+}
+
 type ItemAbility struct {
 	ID int32
 	Ability

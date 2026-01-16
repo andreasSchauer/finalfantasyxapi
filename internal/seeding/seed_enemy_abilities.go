@@ -16,27 +16,36 @@ type EnemyAbility struct {
 	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
-func (a EnemyAbility) ToHashFields() []any {
+func (e EnemyAbility) ToHashFields() []any {
 	return []any{
-		a.Ability.ID,
-		h.DerefOrNil(a.Effect),
+		e.Ability.ID,
+		h.DerefOrNil(e.Effect),
 	}
 }
 
-func (a EnemyAbility) GetID() int32 {
-	return a.ID
+func (e EnemyAbility) GetID() int32 {
+	return e.ID
 }
 
-func (a EnemyAbility) GetAbilityRef() AbilityReference {
+func (e EnemyAbility) GetAbilityRef() AbilityReference {
 	return AbilityReference{
-		Name:        a.Name,
-		Version:     a.Version,
+		Name:        e.Name,
+		Version:     e.Version,
 		AbilityType: string(database.AbilityTypeEnemyAbility),
 	}
 }
 
-func (a EnemyAbility) Error() string {
-	return fmt.Sprintf("enemy ability %s, version %v", a.Name, h.DerefOrNil(a.Version))
+func (e EnemyAbility) Error() string {
+	return fmt.Sprintf("enemy ability %s, version %v", e.Name, h.DerefOrNil(e.Version))
+}
+
+func (e EnemyAbility) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: e.ID,
+		Name: e.Name,
+		Version: e.Version,
+		Specification: e.Specification,
+	}
 }
 
 func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error {

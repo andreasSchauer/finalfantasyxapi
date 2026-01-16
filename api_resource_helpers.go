@@ -131,3 +131,17 @@ func toHasAPIResSlice[T HasAPIResource](in []T) []HasAPIResource {
 	}
 	return out
 }
+
+func combineFilteredAPIResources[A APIResource](filteredLists []filteredResList[A]) ([]A, error) {
+	resources := []A{}
+
+	for _, filtered := range filteredLists {
+		if filtered.err != nil {
+			return nil, filtered.err
+		}
+		
+		resources = combineResources(resources, filtered.resources)
+	}
+
+	return resources, nil
+}

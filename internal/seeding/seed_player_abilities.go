@@ -65,6 +65,15 @@ func (p PlayerAbility) Error() string {
 	return fmt.Sprintf("player ability %s, version %v", p.Name, h.DerefOrNil(p.Version))
 }
 
+func (p PlayerAbility) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: p.ID,
+		Name: p.Name,
+		Version: p.Version,
+		Specification: p.Specification,
+	}
+}
+
 func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/player_abilities.json"
 

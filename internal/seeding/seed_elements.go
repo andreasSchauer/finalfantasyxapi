@@ -31,6 +31,13 @@ func (e Element) Error() string {
 	return fmt.Sprintf("element %s", e.Name)
 }
 
+func (e Element) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: e.ID,
+		Name: e.Name,
+	}
+}
+
 func (l *Lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/elements.json"
 

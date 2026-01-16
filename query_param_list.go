@@ -13,7 +13,7 @@ type QueryParameterList struct {
 	Results []QueryType `json:"results"`
 }
 
-func getQueryParamList[T h.HasID, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L]) (QueryParameterList, error) {
+func getQueryParamList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (QueryParameterList, error) {
 	section := r.URL.Query().Get("section")
 	queryParams := queryMapToSlice(i.queryLookup)
 	queryParams, err := filterParamsOnSection(queryParams, section, i)
@@ -34,7 +34,7 @@ func getQueryParamList[T h.HasID, R any, L APIResourceList](cfg *Config, r *http
 	return list, nil
 }
 
-func filterParamsOnSection[T h.HasID, R any, L APIResourceList](params []QueryType, section string, i handlerInput[T, R, L]) ([]QueryType, error) {
+func filterParamsOnSection[T h.HasID, R any, A APIResource, L APIResourceList](params []QueryType, section string, i handlerInput[T, R, A, L]) ([]QueryType, error) {
 	section, err := verifySectionParam(section, i.endpoint, i.subsections)
 	if errors.Is(err, errEmptyQuery) {
 		return params, nil

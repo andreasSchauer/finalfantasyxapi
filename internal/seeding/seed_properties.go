@@ -36,6 +36,13 @@ func (p Property) Error() string {
 	return fmt.Sprintf("property %s", p.Name)
 }
 
+func (p Property) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: p.ID,
+		Name: p.Name,
+	}
+}
+
 func (l *Lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/properties.json"
 

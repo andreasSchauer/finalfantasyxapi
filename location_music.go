@@ -29,11 +29,11 @@ func (ls LocationSong) GetAPIResource() APIResource {
 }
 
 
-func getAreaCues(cfg *Config, i handlerInput[seeding.Song, any, NamedApiResourceList], dbCues []database.GetAreaCuesRow) []LocationSong {
+func getAreaCues(cfg *Config, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], dbCues []database.GetAreaCuesRow) []LocationSong {
 	songs := []LocationSong{}
 
 	for _, cue := range dbCues {		
-		song := idToNamedAPIResource(cfg, i, cue.ID)
+		song := i.idToResFunc(cfg, i, cue.ID)
 
 		locationSong := LocationSong{
 			Song:                   song,
@@ -46,11 +46,11 @@ func getAreaCues(cfg *Config, i handlerInput[seeding.Song, any, NamedApiResource
 	return songs
 }
 
-func getAreaBM(cfg *Config, i handlerInput[seeding.Song, any, NamedApiResourceList], dbBm []database.GetAreaBackgroundMusicRow) []LocationSong {
+func getAreaBM(cfg *Config, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], dbBm []database.GetAreaBackgroundMusicRow) []LocationSong {
 	songsBM := []LocationSong{}
 
 	for _, bm := range dbBm {
-		song := idToNamedAPIResource(cfg, i, bm.ID)
+		song := i.idToResFunc(cfg, i, bm.ID)
 
 		locationSong := LocationSong{
 			Song:                   song,

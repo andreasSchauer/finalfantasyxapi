@@ -70,6 +70,13 @@ func (a AutoAbility) Error() string {
 	return fmt.Sprintf("auto ability %s", a.Name)
 }
 
+func (a AutoAbility) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: a.ID,
+		Name: a.Name,
+	}
+}
+
 func (l *Lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/auto_abilities.json"
 

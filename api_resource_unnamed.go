@@ -83,7 +83,7 @@ func createUnnamedAPIResources[T any](
 	return resources
 }
 
-func newUnnamedAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], resources []UnnamedAPIResource) (UnnamedApiResourceList, error) {
+func newUnnamedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []UnnamedAPIResource) (UnnamedApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
 	if err != nil {
 		return UnnamedApiResourceList{}, err
@@ -98,8 +98,7 @@ func newUnnamedAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config,
 }
 
 
-
-func idToUnnamedAPIResource[T h.IsUnnamed, R any, L APIResourceList](cfg *Config, i handlerInput[T, R, L], id int32) UnnamedAPIResource {
+func idToUnnamedAPIResource[T h.IsUnnamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) UnnamedAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
 	params := res.GetResParamsUnnamed()
 
@@ -107,16 +106,4 @@ func idToUnnamedAPIResource[T h.IsUnnamed, R any, L APIResourceList](cfg *Config
 		ID:            params.ID,
 		URL:           cfg.createResourceURL(i.endpoint, params.ID),
 	}
-}
-
-
-func idsToUnnamedAPIResources[T h.IsUnnamed, R any, L APIResourceList](cfg *Config, i handlerInput[T, R, L], IDs []int32) []UnnamedAPIResource {
-	resources := []UnnamedAPIResource{}
-
-	for _, id := range IDs {
-		resource := idToUnnamedAPIResource(cfg, i, id)
-		resources = append(resources, resource)
-	}
-
-	return resources
 }

@@ -30,6 +30,13 @@ func (s Sidequest) Error() string {
 	return fmt.Sprintf("sidequest %s", s.Name)
 }
 
+func (s Sidequest) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: s.ID,
+		Name: s.Name,
+	}
+}
+
 type Subquest struct {
 	ID int32
 	Quest

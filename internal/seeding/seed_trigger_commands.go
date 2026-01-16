@@ -46,6 +46,15 @@ func (t TriggerCommand) Error() string {
 	return fmt.Sprintf("trigger command %s, version %v", t.Name, h.DerefOrNil(t.Version))
 }
 
+func (t TriggerCommand) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: t.ID,
+		Name: t.Name,
+		Version: t.Version,
+		Specification: t.Specification,
+	}
+}
+
 func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/trigger_commands.json"
 

@@ -40,6 +40,13 @@ func (s StatusCondition) Error() string {
 	return fmt.Sprintf("status condition %s", s.Name)
 }
 
+func (s StatusCondition) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: s.ID,
+		Name: s.Name,
+	}
+}
+
 func (l *Lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/status_conditions.json"
 

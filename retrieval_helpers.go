@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
@@ -10,25 +9,7 @@ import (
 )
 
 
-func retrieveNamedAPIResources[T h.IsNamed, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L]) ([]NamedAPIResource, error) {
-	dbIDs, err := verifyParamsAndRetrieve(r, i)
-	if err != nil {
-		return nil, err
-	}
-
-	return idsToNamedAPIResources(cfg, i, dbIDs), nil
-}
-
-func retrieveLocationAPIResources(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, LocationApiResourceList]) ([]LocationAPIResource, error) {
-	dbIDs, err := verifyParamsAndRetrieve(r, i)
-	if err != nil {
-		return nil, err
-	}
-
-	return idsToLocationAPIResources(cfg, i, dbIDs), nil
-}
-
-func verifyParamsAndGet[T h.HasID, R any, L APIResourceList](r *http.Request, i handlerInput[T, R, L], id int32) (T, error) {
+func verifyParamsAndGet[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], id int32) (T, error) {
 	var zeroType T
 
 	err := verifyQueryParams(r, i, nil)
@@ -44,7 +25,18 @@ func verifyParamsAndGet[T h.HasID, R any, L APIResourceList](r *http.Request, i 
 	return resource, nil
 }
 
-func verifyParamsAndRetrieve[T h.HasID, R any, L APIResourceList](r *http.Request, i handlerInput[T, R, L]) ([]int32, error) {
+
+func retrieveAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]A, error) {
+	dbIDs, err := verifyParamsAndRetrieve(r, i)
+	if err != nil {
+		return nil, err
+	}
+
+	return idsToAPIResources(cfg, i, dbIDs), nil
+}
+
+
+func verifyParamsAndRetrieve[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L]) ([]int32, error) {
 	err := verifyQueryParams(r, i, nil)
 	if err != nil {
 		return nil, err
@@ -59,59 +51,21 @@ func verifyParamsAndRetrieve[T h.HasID, R any, L APIResourceList](r *http.Reques
 }
 
 
-
-func filterNamedAPIResources[T h.IsNamed, R any, L APIResourceList](cfg *Config, r *http.Request,i handlerInput[T, R, L], resources []NamedAPIResource, filteredLists []filteredResList[NamedAPIResource]) (NamedApiResourceList, error) {
+func filterAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A, filteredLists []filteredResList[A]) (L, error) {
+	var zeroType L
+	
 	for _, filtered := range filteredLists {
 		if filtered.err != nil {
-			return NamedApiResourceList{}, filtered.err
+			return zeroType, filtered.err
 		}
 		resources = getSharedResources(resources, filtered.resources)
 	}
 
-	resourceList, err := newNamedAPIResourceList(cfg, r, i, resources)
+	resourceList, err := i.resToListFunc(cfg, r, i, resources)
 	if err != nil {
-		return NamedApiResourceList{}, err
+		return zeroType, err
 	}
 
 	return resourceList, nil
 }
 
-
-func filterLocationAPIResources(cfg *Config, r *http.Request,i handlerInput[seeding.Area, Area, LocationApiResourceList], resources []LocationAPIResource, filteredLists []filteredResList[LocationAPIResource]) (LocationApiResourceList, error) {
-	for _, filtered := range filteredLists {
-		if filtered.err != nil {
-			return LocationApiResourceList{}, filtered.err
-		}
-		resources = getSharedResources(resources, filtered.resources)
-	}
-
-	resourceList, err := newLocationAPIResourceList(cfg, r, i, resources)
-	if err != nil {
-		return LocationApiResourceList{}, err
-	}
-
-	return resourceList, nil
-}
-
-
-// used to convert dbQuery Outputs into resources. Should maybe be in their own file
-func getNamedResources[T h.IsNamed, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], item seeding.LookupableID, dbQuery func (context.Context, int32) ([]int32, error)) ([]NamedAPIResource, error) {
-	dbIds, err := dbQuery(r.Context(), item.GetID())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s", i.resourceType, item), err)
-	}
-
-	resources := idsToNamedAPIResources(cfg, i, dbIds)
-	return resources, nil
-}
-
-
-func getUnnamedResources[T h.IsUnnamed, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], item seeding.LookupableID, dbQuery func (context.Context, int32) ([]int32, error)) ([]UnnamedAPIResource, error) {
-	dbIds, err := dbQuery(r.Context(), item.GetID())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s", i.resourceType, item), err)
-	}
-
-	resources := idsToUnnamedAPIResources(cfg, i, dbIds)
-	return resources, nil
-}

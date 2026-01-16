@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -85,7 +84,8 @@ func createLocationBasedAPIResources[T any](
 	return resources
 }
 
-func newLocationAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, L], resources []LocationAPIResource) (LocationApiResourceList, error) {
+
+func newLocationAPIResourceList(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], resources []LocationAPIResource) (LocationApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
 	if err != nil {
 		return LocationApiResourceList{}, err
@@ -100,19 +100,17 @@ func newLocationAPIResourceList[T h.HasID, R any, L APIResourceList](cfg *Config
 }
 
 
-
-func idToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationApiResourceList], id int32) LocationAPIResource {
+func idToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], id int32) LocationAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
 	return areaToLocationResource(cfg, i, res)
 }
 
-func locAreaToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationApiResourceList], area seeding.LocationArea) LocationAPIResource {
+func locAreaToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], area seeding.LocationArea) LocationAPIResource {
 	res, _ := seeding.GetResource(area, i.objLookup)
 	return areaToLocationResource(cfg, i, res)
 }
 
-
-func areaToLocationResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationApiResourceList], area seeding.Area) LocationAPIResource {
+func areaToLocationResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], area seeding.Area) LocationAPIResource {
 	params := area.GetResParamsLocation()
 
 	return LocationAPIResource{
@@ -126,15 +124,4 @@ func areaToLocationResource(cfg *Config, i handlerInput[seeding.Area, Area, Loca
 		Specification: 		params.Specification,
 		URL:           		cfg.createResourceURL(i.endpoint, params.AreaID),
 	}
-}
-
-func idsToLocationAPIResources(cfg *Config, i handlerInput[seeding.Area, Area, LocationApiResourceList], IDs []int32) []LocationAPIResource {
-	resources := []LocationAPIResource{}
-
-	for _, id := range IDs {
-		resource := idToLocationAPIResource(cfg, i, id)
-		resources = append(resources, resource)
-	}
-
-	return resources
 }

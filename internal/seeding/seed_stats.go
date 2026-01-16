@@ -39,6 +39,13 @@ func (s Stat) Error() string {
 	return fmt.Sprintf("stat %s", s.Name)
 }
 
+func (s Stat) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: s.ID,
+		Name: s.Name,
+	}
+}
+
 func (l *Lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/stats.json"
 

@@ -68,6 +68,13 @@ func (r RonsoRage) Error() string {
 	return fmt.Sprintf("ronso rage %s", r.Overdrive.Name)
 }
 
+func (r RonsoRage) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: r.ID,
+		Name: r.Name,
+	}
+}
+
 func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/overdrives.json"
 

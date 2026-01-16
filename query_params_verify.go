@@ -8,7 +8,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func verifyQueryParams[T h.HasID, R any, L APIResourceList](r *http.Request, i handlerInput[T, R, L], id *int32) error {
+func verifyQueryParams[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], id *int32) error {
 	q := r.URL.Query()
 
 	for query := range q {

@@ -16,7 +16,7 @@ type ListParams struct {
 	ParentResource APIResource `json:"parent_resource,omitempty"`
 }
 
-func createPaginatedList[T h.HasID, R any, L APIResourceList, I any](cfg *Config, r *http.Request, i handlerInput[T, R, L], items []I) (ListParams, []I, error) {
+func createPaginatedList[T h.HasID, R any, A APIResource, L APIResourceList, I any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], items []I) (ListParams, []I, error) {
 	queryParamOffset := i.queryLookup["offset"]
 	queryParamLimit := i.queryLookup["limit"]
 

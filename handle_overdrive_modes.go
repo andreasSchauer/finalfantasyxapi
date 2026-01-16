@@ -105,7 +105,7 @@ func (cfg *Config) getOverdriveModeActions(mode seeding.OverdriveMode) []ActionA
 func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList, error) {
 	i := cfg.e.overdriveModes
 
-	resources, err := retrieveNamedAPIResources(cfg, r, i)
+	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
@@ -114,7 +114,7 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList
 		frl(cfg.getOverdriveModesType(r, resources, i)),
 	}
 
-	return filterNamedAPIResources(cfg, r, i, resources, filteredLists)
+	return filterAPIResources(cfg, r, i, resources, filteredLists)
 }
 
 
@@ -126,7 +126,7 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList
 // conversion func signature: func (enumName string) E
 // sharedResources is exclusive to this function as it's the only one for this endpoint
 // normally, they return after creating the resources
-func (cfg *Config) getOverdriveModesType(r *http.Request, inputModes []NamedAPIResource, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedApiResourceList]) ([]NamedAPIResource, error) {
+func (cfg *Config) getOverdriveModesType(r *http.Request, inputModes []NamedAPIResource, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]) ([]NamedAPIResource, error) {
 	queryParam := i.queryLookup["type"]
 	enum, err := parseTypeQuery(r, queryParam, cfg.t.OverdriveModeType)
 	if errors.Is(err, errEmptyQuery) {
@@ -143,7 +143,7 @@ func (cfg *Config) getOverdriveModesType(r *http.Request, inputModes []NamedAPIR
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get overdrive modes by type.", err)
 	}
 
-	resources := idsToNamedAPIResources(cfg, i, dbIDs)
+	resources := idsToAPIResources(cfg, i, dbIDs)
 	sharedResources := getSharedResources(inputModes, resources)
 
 	return sharedResources, nil

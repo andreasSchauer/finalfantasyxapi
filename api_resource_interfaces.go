@@ -6,6 +6,7 @@ import (
 )
 
 type APIResource interface {
+	HasAPIResource
 	h.HasID
 	seeding.Lookupable
 	GetURL() string

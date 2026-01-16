@@ -6,16 +6,15 @@ import (
 	"fmt"
 	"net/http"
 
-	//h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type filteredResList[T APIResource] struct {
+type filteredResList[T HasAPIResource] struct {
 	resources []T
 	err       error
 }
 
-func frl[T APIResource](res []T, err error) filteredResList[T] {
+func frl[T HasAPIResource](res []T, err error) filteredResList[T] {
 	return filteredResList[T]{
 		resources: res,
 		err:       err,
@@ -25,12 +24,15 @@ func frl[T APIResource](res []T, err error) filteredResList[T] {
 // not the biggest fan of these function names
 // will split into multiple files once other resource types get added
 
-func idQueryLocBased(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, LocationApiResourceList], inputAreas []LocationAPIResource, queryName string, maxID int, dbQuery func(context.Context, int32) ([]int32, error)) ([]LocationAPIResource, error) {
+// In each function I can put the general logic into its own function.
+// Then I make a wrapper that converts into the needed resource like I did with the retrieval helpers
+
+func idOnlyQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseIDOnlyQuery(r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
-		return inputAreas, nil
+		return inputRes, nil
 	}
 	if err != nil {
 		return nil, err
@@ -41,23 +43,23 @@ func idQueryLocBased(cfg *Config, r *http.Request, i handlerInput[seeding.Area, 
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
 	}
 
-	resources := idsToLocationAPIResources(cfg, i, dbIDs)
+	resources := idsToAPIResources(cfg, i, dbIDs)
 
 	return resources, nil
 }
 
-func idQueryWrapperLocBased(r *http.Request, i handlerInput[seeding.Area, Area, LocationApiResourceList], inputAreas []LocationAPIResource, queryName string, maxID int, dbQuery func(*http.Request, int32) ([]LocationAPIResource, error)) ([]LocationAPIResource, error) {
+func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*http.Request, int32) ([]A, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseIDOnlyQuery(r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
-		return inputAreas, nil
+		return inputRes, nil
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	resources, err := dbQuery(r, id)
+	resources, err := wrapperFn(r, id)
 	if err != nil {
 		return nil, err
 	}
@@ -65,12 +67,12 @@ func idQueryWrapperLocBased(r *http.Request, i handlerInput[seeding.Area, Area, 
 	return resources, nil
 }
 
-func boolQueryLocBased(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, LocationApiResourceList], inputAreas []LocationAPIResource, queryName string, dbQuery func(context.Context, bool) ([]int32, error)) ([]LocationAPIResource, error) {
+func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, bool) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
-		return inputAreas, nil
+		return inputRes, nil
 	}
 	if err != nil {
 		return nil, err
@@ -81,17 +83,17 @@ func boolQueryLocBased(cfg *Config, r *http.Request, i handlerInput[seeding.Area
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
 	}
 
-	resources := idsToLocationAPIResources(cfg, i, dbIDs)
+	resources := idsToAPIResources(cfg, i, dbIDs)
 
 	return resources, nil
 }
 
-func boolAccumulatorLocBased(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, LocationApiResourceList], inputAreas []LocationAPIResource, queryName string, dbQuery func(context.Context) ([]int32, error)) ([]LocationAPIResource, error) {
+func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
-		return inputAreas, nil
+		return inputRes, nil
 	}
 	if err != nil {
 		return nil, err
@@ -102,10 +104,10 @@ func boolAccumulatorLocBased(cfg *Config, r *http.Request, i handlerInput[seedin
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
 	}
 
-	resources := idsToLocationAPIResources(cfg, i, dbIDs)
+	resources := idsToAPIResources(cfg, i, dbIDs)
 
 	if !b {
-		resources = removeResources(inputAreas, resources)
+		resources = removeResources(inputRes, resources)
 	}
 
 	return resources, nil

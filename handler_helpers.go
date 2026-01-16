@@ -8,8 +8,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
-func handleEndpointList[T h.HasID, R any, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
+func handleEndpointList[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	resourceList, err := i.retrieveFunc(r)
 	if handleHTTPError(w, err) {
 		return
@@ -17,9 +16,7 @@ func handleEndpointList[T h.HasID, R any, L APIResourceList](w http.ResponseWrit
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
 
-
-
-func handleEndpointIDOnly[T h.HasID, R any, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
+func handleEndpointIDOnly[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	segment := segments[0]
 
 	if segment == "parameters" {
@@ -45,8 +42,7 @@ func handleEndpointIDOnly[T h.HasID, R any, L APIResourceList](cfg *Config, w ht
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-
-func handleEndpointNameOrID[T h.HasID, R any, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
+func handleEndpointNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	segment := segments[0]
 
 	if segment == "parameters" {
@@ -81,8 +77,7 @@ func handleEndpointNameOrID[T h.HasID, R any, L APIResourceList](cfg *Config, w 
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-
-func handleEndpointNameVersion[T h.HasID, R any, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
+func handleEndpointNameVersion[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	name := segments[0]
 	versionStr := segments[1]
 
@@ -99,8 +94,7 @@ func handleEndpointNameVersion[T h.HasID, R any, L APIResourceList](w http.Respo
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-
-func handleParameters[T h.HasID, R any, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
+func handleParameters[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	parameterList, err := getQueryParamList(cfg, r, i)
 	if handleHTTPError(w, err) {
 		return
@@ -108,7 +102,7 @@ func handleParameters[T h.HasID, R any, L APIResourceList](cfg *Config, w http.R
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-func handleSections[T h.HasID, R any, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L]) {
+func handleSections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	sectionList, err := getSectionList(cfg, r, i)
 	if handleHTTPError(w, err) {
 		return
@@ -116,8 +110,7 @@ func handleSections[T h.HasID, R any, L APIResourceList](cfg *Config, w http.Res
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
 
-
-func handleEndpointSubsections[T h.HasID, R any, L APIResourceList](w http.ResponseWriter, i handlerInput[T, R, L], segments []string) {
+func handleEndpointSubsections[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, i handlerInput[T, R, A, L], segments []string) {
 	posIDStr := segments[0]
 	isValidID := isValidInt(posIDStr)
 
@@ -128,8 +121,7 @@ func handleEndpointSubsections[T h.HasID, R any, L APIResourceList](w http.Respo
 	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid id: '%s'.", posIDStr), nil)
 }
 
-
-func handleEndpointSubOrNameVer[T h.HasID, R any, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, L], segments []string) {
+func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	posIDStr := segments[0]
 	posVerStr := segments[1]
 	idIsInt := isValidInt(posIDStr)
@@ -150,8 +142,7 @@ func handleEndpointSubOrNameVer[T h.HasID, R any, L APIResourceList](w http.Resp
 	}
 }
 
-
-func handleSubsection[T h.HasID, R any, L APIResourceList](w http.ResponseWriter, i handlerInput[T, R, L], segments []string) {
+func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, i handlerInput[T, R, A, L], segments []string) {
 	idStr := segments[0]
 	subsection := segments[1]
 
@@ -173,8 +164,6 @@ func handleSubsection[T h.HasID, R any, L APIResourceList](w http.ResponseWriter
 	}
 	respondWithJSON(w, http.StatusOK, list)
 }
-
-
 
 func isValidInt(idStr string) bool {
 	_, err := strconv.Atoi(idStr)

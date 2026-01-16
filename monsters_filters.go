@@ -293,7 +293,7 @@ func (cfg *Config) getMonstersArea(r *http.Request, inputMons []NamedAPIResource
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by area.", err)
 	}
 
-	resources := idsToNamedAPIResources(cfg, cfg.e.monsters, dbMons)
+	resources := idsToAPIResources(cfg, cfg.e.monsters, dbMons)
 
 	return resources, nil
 }

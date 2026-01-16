@@ -16,26 +16,35 @@ type OverdriveAbility struct {
 	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
-func (a OverdriveAbility) ToHashFields() []any {
+func (o OverdriveAbility) ToHashFields() []any {
 	return []any{
-		a.Ability.ID,
+		o.Ability.ID,
 	}
 }
 
-func (a OverdriveAbility) GetID() int32 {
-	return a.ID
+func (o OverdriveAbility) GetID() int32 {
+	return o.ID
 }
 
-func (a OverdriveAbility) GetAbilityRef() AbilityReference {
+func (o OverdriveAbility) GetAbilityRef() AbilityReference {
 	return AbilityReference{
-		Name:        a.Name,
-		Version:     a.Version,
+		Name:        o.Name,
+		Version:     o.Version,
 		AbilityType: string(database.AbilityTypeOverdriveAbility),
 	}
 }
 
-func (a OverdriveAbility) Error() string {
-	return fmt.Sprintf("overdrive ability %s, version %v", a.Name, h.DerefOrNil(a.Version))
+func (o OverdriveAbility) Error() string {
+	return fmt.Sprintf("overdrive ability %s, version %v", o.Name, h.DerefOrNil(o.Version))
+}
+
+func (o OverdriveAbility) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: o.ID,
+		Name: o.Name,
+		Version: o.Version,
+		Specification: o.Specification,
+	}
 }
 
 func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
