@@ -94,7 +94,7 @@ func (cfg *Config) getAreaConnectedAreas(area seeding.Area) ([]AreaConnection, e
 	for _, connArea := range area.ConnectedAreas {
 		locArea := connArea.LocationArea
 
-		connType, err := cfg.newNamedAPIResourceFromType(cfg.e.connectionType.endpoint, string(connArea.ConnectionType), cfg.t.AreaConnectionType)
+		connType, err := newNamedAPIResourceFromType(cfg, cfg.e.connectionType.endpoint, connArea.ConnectionType, cfg.t.AreaConnectionType)
 		if err != nil {
 			return nil, err
 		}

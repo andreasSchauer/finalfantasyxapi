@@ -1,25 +1,32 @@
 package main
 
 import (
-	"fmt"
-	"strconv"
-
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 // TypeLookup holds all the enum types for the application
 type TypeLookup struct {
-	AreaConnectionType map[string]TypedAPIResource
-	CTBIconType        map[string]TypedAPIResource
-	CreationArea       map[string]TypedAPIResource
-	MonsterSpecies     map[string]TypedAPIResource
-	OverdriveModeType  map[string]TypedAPIResource
+	AreaConnectionType EnumType[database.AreaConnectionType]
+	CTBIconType        EnumType[database.CtbIconType]
+	CreationArea       EnumType[database.MaCreationArea]
+	MonsterSpecies     EnumType[database.MonsterSpecies]
+	OverdriveModeType  EnumType[database.OverdriveModeType]
 }
 
 // replace Typed logic and lookup with this struct
 type EnumType[T any] struct {
-	resource TypedAPIResource
-	conversionFunc func (string) T
+	name 		string
+	lookup   	map[string]TypedAPIResource
+	convFunc 	func(string) T
+}
+
+
+func newEnumType[T any](name string, typeSlice []TypedAPIResource, convFunc func(string) T) EnumType[T] {
+	return EnumType[T]{
+		name: 		name,
+		lookup: 	typeSliceToMap(typeSlice),
+		convFunc: 	convFunc,
+	}
 }
 
 func (cfg *Config) TypeLookupInit() {
@@ -32,24 +39,6 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initOverdriveModeType()
 }
 
-// finds a typed enum based on its value or an id (string, mostly from queries)
-func GetEnumType(key string, lookup map[string]TypedAPIResource) (TypedAPIResource, error) {
-	id, err := strconv.Atoi(key)
-	if err == nil {
-		for _, enumType := range lookup {
-			if int32(id) == enumType.ID {
-				return enumType, nil
-			}
-		}
-	}
-
-	enumType, found := lookup[key]
-	if !found {
-		return TypedAPIResource{}, fmt.Errorf("value %s is not valid in this enum", key)
-	}
-
-	return enumType, nil
-}
 
 func (t *TypeLookup) initAreaConnectionType() {
 	typeSlice := []TypedAPIResource{
@@ -67,10 +56,14 @@ func (t *TypeLookup) initAreaConnectionType() {
 		},
 	}
 
-	t.AreaConnectionType = typeSliceToMap(typeSlice)
+	t.AreaConnectionType = newEnumType("connection type", typeSlice, func(s string) database.AreaConnectionType {
+		return database.AreaConnectionType(s)
+	})
 }
 
 func (t *TypeLookup) initCTBIconType() {
+	
+
 	typeSlice := []TypedAPIResource{
 		{
 			Name:        string(database.CtbIconTypeMonster),
@@ -90,7 +83,9 @@ func (t *TypeLookup) initCTBIconType() {
 		},
 	}
 
-	t.CTBIconType = typeSliceToMap(typeSlice)
+	t.CTBIconType = newEnumType("ctb icon type", typeSlice, func(s string) database.CtbIconType {
+		return database.CtbIconType(s)
+	})
 }
 
 func (t *TypeLookup) initCreationArea() {
@@ -136,7 +131,9 @@ func (t *TypeLookup) initCreationArea() {
 		},
 	}
 
-	t.CreationArea = typeSliceToMap(typeSlice)
+	t.CreationArea = newEnumType("creation area", typeSlice, func(s string) database.MaCreationArea {
+		return database.MaCreationArea(s)
+	})
 }
 
 func (t *TypeLookup) initMonsterSpecies() {
@@ -311,7 +308,9 @@ func (t *TypeLookup) initMonsterSpecies() {
 		},
 	}
 
-	t.MonsterSpecies = typeSliceToMap(typeSlice)
+	t.MonsterSpecies = newEnumType("monster species", typeSlice, func(s string) database.MonsterSpecies {
+		return database.MonsterSpecies(s)
+	})
 }
 
 func (t *TypeLookup) initOverdriveModeType() {
@@ -326,5 +325,8 @@ func (t *TypeLookup) initOverdriveModeType() {
 		},
 	}
 
-	t.OverdriveModeType = typeSliceToMap(typeSlice)
+	t.OverdriveModeType = newEnumType("overdrive mode type", typeSlice, func(s string) database.OverdriveModeType {
+		return database.OverdriveModeType(s)
+	})
 }
+

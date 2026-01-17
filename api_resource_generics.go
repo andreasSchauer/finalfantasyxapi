@@ -20,6 +20,19 @@ func idsToAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 	return resources
 }
 
+func idsToAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], dbIDs []int32) (L, error) {
+	var zeroType L
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+	
+	resourceList, err := i.resToListFunc(cfg, r, i, resources)
+	if err != nil {
+		return zeroType, err
+	}
+
+	return resourceList, nil
+}
+
 // get relationship resources of item. handlerInput = endpoint of fetched resources
 func getResourcesDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item seeding.LookupableID, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
 	dbIds, err := dbQuery(r.Context(), item.GetID())

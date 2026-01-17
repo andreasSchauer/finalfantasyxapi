@@ -10,10 +10,9 @@ import (
 
 // used, if a queryParam only takes existing ids and returns a valid id
 func parseIDOnlyQuery(r *http.Request, queryParam QueryType, maxID int) (int32, error) {
-	query := r.URL.Query().Get(queryParam.Name)
-
-	if query == "" {
-		return 0, errEmptyQuery
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return 0, err
 	}
 
 	id, err := parseQueryIdVal(query, queryParam, maxID)
@@ -26,10 +25,9 @@ func parseIDOnlyQuery(r *http.Request, queryParam QueryType, maxID int) (int32, 
 
 // used for boolean queryParams
 func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, error) {
-	query := r.URL.Query().Get(queryParam.Name)
-
-	if query == "" {
-		return false, errEmptyQuery
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return false, err
 	}
 
 	b, err := strconv.ParseBool(query)
@@ -41,15 +39,14 @@ func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, error) {
 }
 
 // used, if a queryParam is looking up an enum entry
-func parseTypeQuery(r *http.Request, queryParam QueryType, lookup map[string]TypedAPIResource) (TypedAPIResource, error) {
-	query := r.URL.Query().Get(queryParam.Name)
-
-	if query == "" {
-		return TypedAPIResource{}, errEmptyQuery
+func parseTypeQuery[T any](r *http.Request, queryParam QueryType, et EnumType[T]) (TypedAPIResource, error) {
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return TypedAPIResource{}, err
 	}
 
 	queryLower := strings.ToLower(query)
-	enum, err := GetEnumType(queryLower, lookup)
+	enum, err := GetTypedAPIResource(queryLower, et)
 	if err != nil {
 		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value: '%s'. use /api/%s to see valid values.", query, queryParam.Name), err)
 	}
@@ -84,10 +81,9 @@ func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
 
 // converts a list of ids into a slice and checks every id's validity
 func parseIdListQuery(r *http.Request, queryParam QueryType, maxID int) ([]int32, error) {
-	query := r.URL.Query().Get(queryParam.Name)
-
-	if query == "" {
-		return nil, errEmptyQuery
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return nil, err
 	}
 
 	ids, err := queryIDsToSlice(query, queryParam, maxID)
@@ -96,4 +92,14 @@ func parseIdListQuery(r *http.Request, queryParam QueryType, maxID int) ([]int32
 	}
 
 	return ids, nil
+}
+
+
+func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {
+	query := r.URL.Query().Get(queryParam.Name)
+	if query == "" {
+		return "", errEmptyQuery
+	}
+
+	return query, nil
 }

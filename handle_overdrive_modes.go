@@ -1,10 +1,8 @@
 package main
 
 import (
-	"errors"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -71,7 +69,7 @@ func (cfg *Config) getOverdriveMode(r *http.Request, id int32) (OverdriveMode, e
 		return OverdriveMode{}, err
 	}
 
-	modeType, err := cfg.newNamedAPIResourceFromType(cfg.e.overdriveModeType.endpoint, mode.Type, cfg.t.OverdriveModeType)
+	modeType, err := newNamedAPIResourceFromType(cfg, cfg.e.overdriveModeType.endpoint, mode.Type, cfg.t.OverdriveModeType)
 	if err != nil {
 		return OverdriveMode{}, err
 	}
@@ -111,38 +109,8 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList
 	}
 
 	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(cfg.getOverdriveModesType(r, resources, i)),
+		frl(typeQuery(cfg, r, i, cfg.t.OverdriveModeType, resources, "type", cfg.db.GetOverdriveModeIDsByType)),
 	}
 
 	return filterAPIResources(cfg, r, i, resources, filteredLists)
-}
-
-
-// can be generalized, now that I use id lookups
-// the extra things I need to pass are the db func, a conversion func, the query param name, the typeLookup, and maybe the err msg
-// though I can also return a predefined error from errors.go and write the message under the function call
-// need a fourth type, next to handlerInput types, called enumType, or E
-// query func signature: func (context.Context, E) ([]int32, error) (put actually maybe I can define them in config_type_lookup.go)
-// conversion func signature: func (enumName string) E
-// sharedResources is exclusive to this function as it's the only one for this endpoint
-// normally, they return after creating the resources
-func (cfg *Config) getOverdriveModesType(r *http.Request, inputModes []NamedAPIResource, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]) ([]NamedAPIResource, error) {
-	queryParam := i.queryLookup["type"]
-	enum, err := parseTypeQuery(r, queryParam, cfg.t.OverdriveModeType)
-	if errors.Is(err, errEmptyQuery) {
-		return inputModes, nil
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	modeType := database.OverdriveModeType(enum.Name)
-
-	dbIDs, err := cfg.db.GetOverdriveModeIDsByType(r.Context(), modeType)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get overdrive modes by type.", err)
-	}
-
-	resources := idsToAPIResources(cfg, i, dbIDs)
-	return resources, nil
 }

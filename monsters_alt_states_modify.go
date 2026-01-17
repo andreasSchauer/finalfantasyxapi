@@ -55,7 +55,7 @@ func modifyResourcesChange[T HasAPIResource](items, changeItems []T) ([]T, []T) 
 	replaceMap := getResourceMap(changeItems)
 
 	for i, item := range items {
-		key := createAPIResourceKey(item)
+		key := getAPIResourceID(item)
 		_, ok := replaceMap[key]
 		if ok {
 			defStateChangeItems = append(defStateChangeItems, item)

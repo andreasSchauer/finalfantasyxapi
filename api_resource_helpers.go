@@ -2,8 +2,6 @@ package main
 
 import (
 	"slices"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 // s1 [1,2,3] s2 [2,3,4,5] => [1,2,3,4,5]
@@ -11,7 +9,7 @@ func combineResources[T HasAPIResource](s1, s2 []T) []T {
 	s1Map := getResourceMap(s1)
 
 	for _, item := range s2 {
-		key := createAPIResourceKey(item)
+		key := getAPIResourceID(item)
 		_, ok := s1Map[key]
 		if !ok {
 			s1Map[key] = item
@@ -28,8 +26,8 @@ func separateResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRem
 	removed := []T{}
 
 	for _, item := range items {
-		key := createAPIResourceKey(item)
-		_, ok := removeMap[key]
+		id := getAPIResourceID(item)
+		_, ok := removeMap[id]
 		if !ok {
 			kept = append(kept, item)
 			continue
@@ -52,8 +50,8 @@ func getSharedResources[T HasAPIResource](s1, s2 []T) []T {
 	s2map := getResourceMap(s2)
 
 	for _, item := range s1 {
-		key := createAPIResourceKey(item)
-		_, ok := s2map[key]
+		id := getAPIResourceID(item)
+		_, ok := s2map[id]
 		if ok {
 			sharedItems = append(sharedItems, item)
 		}
@@ -61,7 +59,6 @@ func getSharedResources[T HasAPIResource](s1, s2 []T) []T {
 
 	return sharedItems
 }
-
 
 func resourcesContain[T HasAPIResource](items []T, target T) bool {
 	for _, item := range items {
@@ -72,28 +69,38 @@ func resourcesContain[T HasAPIResource](items []T, target T) bool {
 	return false
 }
 
-func createAPIResourceKey[T HasAPIResource](item T) string {
+func getAPIResourceID[T HasAPIResource](item T) int32 {
 	resource := item.GetAPIResource()
-	key := seeding.CreateLookupKey(resource)
-	return key
+	return resource.GetID()
 }
 
-func getResourceMap[T HasAPIResource](items []T) map[string]T {
-	resourceMap := make(map[string]T)
+func getResourceMap[T HasAPIResource](items []T) map[int32]T {
+	resourceMap := make(map[int32]T)
 
 	for _, item := range items {
-		key := createAPIResourceKey(item)
-		resourceMap[key] = item
+		id := getAPIResourceID(item)
+		resourceMap[id] = item
 	}
 
 	return resourceMap
 }
 
-func resourceMapToSlice[T HasAPIResource](lookup map[string]T) []T {
+func getResourceURLMap[T HasAPIResource](items []T) map[string]T {
+	resourceMap := make(map[string]T)
+
+	for _, item := range items {
+		url := item.GetAPIResource().GetURL()
+		resourceMap[url] = item
+	}
+
+	return resourceMap
+}
+
+func resourceMapToSlice[T HasAPIResource](lookup map[int32]T) []T {
 	s := []T{}
 
-	for key := range lookup {
-		s = append(s, lookup[key])
+	for id := range lookup {
+		s = append(s, lookup[id])
 	}
 
 	slices.SortStableFunc(s, sortAPIResources)
@@ -113,11 +120,11 @@ func getResourceAmountMap[T ResourceAmount](items []T) map[string]int32 {
 }
 
 func sortAPIResources[T HasAPIResource](a, b T) int {
-	if a.GetAPIResource().GetID() < b.GetAPIResource().GetID() {
+	if getAPIResourceID(a) < getAPIResourceID(b) {
 		return -1
 	}
 
-	if a.GetAPIResource().GetID() > b.GetAPIResource().GetID() {
+	if getAPIResourceID(a) > getAPIResourceID(b) {
 		return 1
 	}
 

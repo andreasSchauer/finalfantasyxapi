@@ -1451,6 +1451,60 @@ func (q *Queries) GetMonsterEquipmentSlotsChances(ctx context.Context, arg GetMo
 	return items, nil
 }
 
+const getMonsterIDs = `-- name: GetMonsterIDs :many
+SELECT id FROM monsters ORDER BY id
+`
+
+func (q *Queries) GetMonsterIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterIDsByName = `-- name: GetMonsterIDsByName :many
+SELECT id FROM monsters WHERE name = $1
+`
+
+func (q *Queries) GetMonsterIDsByName(ctx context.Context, name string) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByName, name)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterImmunities = `-- name: GetMonsterImmunities :many
 SELECT
     sc.id AS status_id,
@@ -1924,62 +1978,6 @@ func (q *Queries) GetMonsterStatusResists(ctx context.Context, monsterID int32) 
 	for rows.Next() {
 		var i GetMonsterStatusResistsRow
 		if err := rows.Scan(&i.StatusID, &i.Status, &i.Resistance); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMonsters = `-- name: GetMonsters :many
-SELECT id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters ORDER BY id
-`
-
-func (q *Queries) GetMonsters(ctx context.Context) ([]Monster, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsters)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Monster
-	for rows.Next() {
-		var i Monster
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.Version,
-			&i.Specification,
-			&i.Notes,
-			&i.Species,
-			&i.IsStoryBased,
-			&i.IsRepeatable,
-			&i.CanBeCaptured,
-			&i.AreaConquestLocation,
-			&i.CtbIconType,
-			&i.HasOverdrive,
-			&i.IsUnderwater,
-			&i.IsZombie,
-			&i.Distance,
-			&i.Ap,
-			&i.ApOverkill,
-			&i.OverkillDamage,
-			&i.Gil,
-			&i.StealGil,
-			&i.DoomCountdown,
-			&i.PoisonRate,
-			&i.ThreatenChance,
-			&i.ZanmatoLevel,
-			&i.MonsterArenaPrice,
-			&i.SensorText,
-			&i.ScanText,
-		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -2959,62 +2957,6 @@ SELECT id, data_hash, name, version, specification, notes, species, is_story_bas
 
 func (q *Queries) GetMonstersByMaCreationArea(ctx context.Context, areaConquestLocation NullMaCreationArea) ([]Monster, error) {
 	rows, err := q.db.QueryContext(ctx, getMonstersByMaCreationArea, areaConquestLocation)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Monster
-	for rows.Next() {
-		var i Monster
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.Name,
-			&i.Version,
-			&i.Specification,
-			&i.Notes,
-			&i.Species,
-			&i.IsStoryBased,
-			&i.IsRepeatable,
-			&i.CanBeCaptured,
-			&i.AreaConquestLocation,
-			&i.CtbIconType,
-			&i.HasOverdrive,
-			&i.IsUnderwater,
-			&i.IsZombie,
-			&i.Distance,
-			&i.Ap,
-			&i.ApOverkill,
-			&i.OverkillDamage,
-			&i.Gil,
-			&i.StealGil,
-			&i.DoomCountdown,
-			&i.PoisonRate,
-			&i.ThreatenChance,
-			&i.ZanmatoLevel,
-			&i.MonsterArenaPrice,
-			&i.SensorText,
-			&i.ScanText,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMonstersByName = `-- name: GetMonstersByName :many
-SELECT id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text FROM monsters WHERE name = $1
-`
-
-func (q *Queries) GetMonstersByName(ctx context.Context, name string) ([]Monster, error) {
-	rows, err := q.db.QueryContext(ctx, getMonstersByName, name)
 	if err != nil {
 		return nil, err
 	}

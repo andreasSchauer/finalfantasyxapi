@@ -126,12 +126,12 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 		return Monster{}, err
 	}
 
-	species, err := cfg.newNamedAPIResourceFromType(cfg.e.monsterSpecies.endpoint, string(dbMonster.Species), cfg.t.MonsterSpecies)
+	species, err := newNamedAPIResourceFromType(cfg, cfg.e.monsterSpecies.endpoint, string(dbMonster.Species), cfg.t.MonsterSpecies)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	ctbIconType, err := cfg.newNamedAPIResourceFromType(cfg.e.ctbIconType.endpoint, string(dbMonster.CtbIconType), cfg.t.CTBIconType)
+	ctbIconType, err := newNamedAPIResourceFromType(cfg, cfg.e.ctbIconType.endpoint, string(dbMonster.CtbIconType), cfg.t.CTBIconType)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -214,77 +214,41 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 	return monster, nil
 }
 
+
 func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (NamedApiResourceList, error) {
 	i := cfg.e.monsters
-
-	dbMons, err := cfg.db.GetMonstersByName(r.Context(), monsterName)
-	if err != nil {
-		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple monsters with name '%s'.", monsterName), err)
-	}
-
-	resources := createNamedAPIResources(cfg, dbMons, i.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
-		return mon.ID, mon.Name, &mon.Version.Int32, &mon.Specification.String
-	})
-
-	resourceList, err := newNamedAPIResourceList(cfg, r, i, resources)
-	if err != nil {
-		return NamedApiResourceList{}, err
-	}
-
-	return resourceList, nil
+	return getMultipleAPIResources(cfg, r, i, monsterName)
 }
+
 
 func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, error) {
 	i := cfg.e.monsters
 
-	err := verifyQueryParams(r, i, nil)
+	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	dbMons, err := cfg.db.GetMonsters(r.Context())
-	if err != nil {
-		return NamedApiResourceList{}, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters.", err)
+	filteredLists := []filteredResList[NamedAPIResource]{
+		frl(cfg.getMonstersElemResist(r, resources)),
+		frl(cfg.getMonstersStatusResist(r, resources)),
+		frl(cfg.getMonstersItem(r, resources)),
+		frl(cfg.getMonstersAutoAbility(r, resources)),
+		frl(cfg.getMonstersRonsoRage(r, resources)),
+		frl(cfg.getMonstersLocation(r, resources)),
+		frl(cfg.getMonstersSubLocation(r, resources)),
+		frl(cfg.getMonstersArea(r, resources)),
+		frl(cfg.getMonstersDistance(r, resources)),
+		frl(cfg.getMonstersSpecies(r, resources)),
+		frl(cfg.getMonstersCreationArea(r, resources)),
+		frl(cfg.getMonstersType(r, resources)),
+		frl(cfg.getMonstersStoryBased(r, resources)),
+		frl(cfg.getMonstersRepeatable(r, resources)),
+		frl(cfg.getMonstersCanBeCaptured(r, resources)),
+		frl(cfg.getMonstersHasOverdrive(r, resources)),
+		frl(cfg.getMonstersUnderwater(r, resources)),
+		frl(cfg.getMonstersZombie(r, resources)),
 	}
 
-	resources := createNamedAPIResources(cfg, dbMons, i.endpoint, func(mon database.Monster) (int32, string, *int32, *string) {
-		return mon.ID, mon.Name, h.NullInt32ToPtr(mon.Version), h.NullStringToPtr(mon.Specification)
-	})
-
-	filterFuncs := []func(*http.Request, []NamedAPIResource) ([]NamedAPIResource, error){
-		cfg.getMonstersElemResist,
-		cfg.getMonstersStatusResist,
-		cfg.getMonstersItem,
-		cfg.getMonstersAutoAbility,
-		cfg.getMonstersRonsoRage,
-		cfg.getMonstersLocation,
-		cfg.getMonstersSubLocation,
-		cfg.getMonstersArea,
-		cfg.getMonstersDistance,
-		cfg.getMonstersSpecies,
-		cfg.getMonstersCreationArea,
-		cfg.getMonstersType,
-		cfg.getMonstersStoryBased,
-		cfg.getMonstersRepeatable,
-		cfg.getMonstersCanBeCaptured,
-		cfg.getMonstersHasOverdrive,
-		cfg.getMonstersUnderwater,
-		cfg.getMonstersZombie,
-	}
-
-	for _, function := range filterFuncs {
-		filteredResources, err := function(r, resources)
-		if err != nil {
-			return NamedApiResourceList{}, err
-		}
-
-		resources = getSharedResources(resources, filteredResources)
-	}
-
-	resourceList, err := newNamedAPIResourceList(cfg, r, i, resources)
-	if err != nil {
-		return NamedApiResourceList{}, err
-	}
-
-	return resourceList, nil
+	return filterAPIResources(cfg, r, i, resources, filteredLists)
 }

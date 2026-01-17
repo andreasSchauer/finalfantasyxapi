@@ -1,14 +1,12 @@
 package main
 
 import (
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type APIResource interface {
 	HasAPIResource
-	h.HasID
-	seeding.Lookupable
+	seeding.LookupableID
 	GetURL() string
 }
 

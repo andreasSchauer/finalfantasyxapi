@@ -103,19 +103,22 @@ func (cfg *Config) EndpointsInit() {
 	e.connectionType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
 		endpoint:     "connection-type",
 		resourceType: "connection type",
-		objLookup:    cfg.t.AreaConnectionType,
+		objLookup:    cfg.t.AreaConnectionType.lookup,
+		resToListFunc: newTypedAPIResourceList[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList],
 	}
 
 	e.creationArea = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
 		endpoint:     "creation-area",
 		resourceType: "creation area",
-		objLookup:    cfg.t.CreationArea,
+		objLookup:    cfg.t.CreationArea.lookup,
+		resToListFunc: newTypedAPIResourceList[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList],
 	}
 
 	e.ctbIconType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
 		endpoint:     "ctb-icon-type",
 		resourceType: "ctb icon type",
-		objLookup:    cfg.t.CTBIconType,
+		objLookup:    cfg.t.CTBIconType.lookup,
+		resToListFunc: newTypedAPIResourceList[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList],
 	}
 
 	e.elements = handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]{
@@ -164,17 +167,19 @@ func (cfg *Config) EndpointsInit() {
 	}
 
 	e.monsters = handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]{
-		endpoint:        "monsters",
-		resourceType:    "monster",
-		objLookup:       cfg.l.Monsters,
-		objLookupID:     cfg.l.MonstersID,
-		queryLookup:     cfg.q.monsters,
-		idToResFunc:     idToNamedAPIResource[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
-		getSingleFunc:   cfg.getMonster,
-		getMultipleFunc: cfg.getMultipleMonsters,
-		retrieveFunc:    cfg.retrieveMonsters,
-		subsections: map[string]func(string) (APIResourceList, error){
+		endpoint:        	"monsters",
+		resourceType:    	"monster",
+		objLookup:       	cfg.l.Monsters,
+		objLookupID:     	cfg.l.MonstersID,
+		queryLookup:     	cfg.q.monsters,
+		idToResFunc:     	idToNamedAPIResource[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	 	newNamedAPIResourceList[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
+		getMultipleQuery: 	cfg.db.GetMonsterIDsByName,
+		retrieveQuery:	 	cfg.db.GetMonsterIDs,
+		getSingleFunc:   	cfg.getMonster,
+		getMultipleFunc: 	cfg.getMultipleMonsters,
+		retrieveFunc:    	cfg.retrieveMonsters,
+		subsections: 		map[string]func(string) (APIResourceList, error){
 			"abilities": cfg.getMonsterAbilitiesMid,
 		},
 	}
@@ -190,7 +195,8 @@ func (cfg *Config) EndpointsInit() {
 	e.monsterSpecies = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
 		endpoint:     "monster-species",
 		resourceType: "monster species",
-		objLookup:    cfg.t.MonsterSpecies,
+		objLookup:    cfg.t.MonsterSpecies.lookup,
+		resToListFunc: newTypedAPIResourceList[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList],
 	}
 
 	e.overdriveModes = handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]{
@@ -210,7 +216,8 @@ func (cfg *Config) EndpointsInit() {
 	e.overdriveModeType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
 		endpoint:     "overdrive-mode-type",
 		resourceType: "overdrive mode type",
-		objLookup:    cfg.t.OverdriveModeType,
+		objLookup:    cfg.t.OverdriveModeType.lookup,
+		resToListFunc: newTypedAPIResourceList[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList],
 	}
 
 	e.playerAbilities = handlerInput[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList]{

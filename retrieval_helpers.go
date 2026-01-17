@@ -12,7 +12,7 @@ import (
 func verifyParamsAndGet[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], id int32) (T, error) {
 	var zeroType T
 
-	err := verifyQueryParams(r, i, nil)
+	err := verifyQueryParams(r, i, &id)
 	if err != nil {
 		return zeroType, err
 	}
@@ -23,6 +23,18 @@ func verifyParamsAndGet[T h.HasID, R any, A APIResource, L APIResourceList](r *h
 	}
 
 	return resource, nil
+}
+
+
+func getMultipleAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], name string) (L, error) {
+	var zeroType L
+
+	dbIDs, err := i.getMultipleQuery(r.Context(), name)
+	if err != nil {
+		return zeroType, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'.", i.resourceType, name), err)
+	}
+
+	return idsToAPIResourceList(cfg, r, i, dbIDs)
 }
 
 
@@ -68,4 +80,5 @@ func filterAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg 
 
 	return resourceList, nil
 }
+
 

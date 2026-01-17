@@ -322,9 +322,8 @@ func (cfg *Config) getMonsterStat(mon Monster, stat string) (int32, error) {
 	}
 
 	statMap := getResourceMap(mon.BaseStats)
-	key := cfg.createResourceURL(cfg.e.stats.endpoint, statLookup.ID)
 
-	return statMap[key].Value, nil
+	return statMap[statLookup.ID].Value, nil
 }
 
 func (cfg *Config) getMonsterPoisonDamage(mon Monster) (*int32, error) {

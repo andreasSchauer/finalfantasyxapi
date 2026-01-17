@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+	"strconv"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -54,10 +55,10 @@ func (r TypedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func (cfg *Config) newNamedAPIResourceFromType(endpoint, key string, lookup map[string]TypedAPIResource) (NamedAPIResource, error) {
-	enumType, err := GetEnumType(key, lookup)
+func newNamedAPIResourceFromType[T any](cfg *Config, endpoint, key string, et EnumType[T]) (NamedAPIResource, error) {
+	enumType, err := GetTypedAPIResource(key, et)
 	if err != nil {
-		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get enum '%s' for '%s'.", key, endpoint), fmt.Errorf("%s: %v", endpoint, err))
+		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, err.Error(), fmt.Errorf("%s: %v", endpoint, err))
 	}
 
 	resource := cfg.newNamedAPIResourceSimple(endpoint, enumType.ID, enumType.Name)
@@ -65,9 +66,27 @@ func (cfg *Config) newNamedAPIResourceFromType(endpoint, key string, lookup map[
 	return resource, nil
 }
 
-func newTypedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], lookup map[string]TypedAPIResource) (TypedApiResourceList, error) {
-	resources := cfg.createTypeResourceSlice(i.endpoint, lookup)
 
+// Searches a TypedAPIResource based on its value or an idString (mostly from queries)
+func GetTypedAPIResource[T any](key string, et EnumType[T]) (TypedAPIResource, error) {
+	id, err := strconv.Atoi(key)
+	if err == nil {
+		for _, res := range et.lookup {
+			if int32(id) == res.ID {
+				return res, nil
+			}
+		}
+	}
+
+	res, found := et.lookup[key]
+	if !found {
+		return TypedAPIResource{}, fmt.Errorf("value '%s' is not valid in enum '%s'.", key, et.name)
+	}
+
+	return res, nil
+}
+
+func newTypedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []TypedAPIResource) (TypedApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
 	if err != nil {
 		return TypedApiResourceList{}, err

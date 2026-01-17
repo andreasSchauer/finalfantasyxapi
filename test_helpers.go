@@ -162,7 +162,7 @@ func testResourceList(test test, expList resListTest) {
 
 // checks if the provided slice of resources contains all stated resources
 func checkResourcesInSlice[T HasAPIResource](test test, fieldName string, expectedPaths []string, gotRes []T) {
-	gotMap := getResourceMap(gotRes)
+	gotMap := getResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
 		test.t.Fatalf("%s: there appear to be duplicates in '%s'.", test.name, fieldName)
 	}

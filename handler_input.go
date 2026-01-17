@@ -8,18 +8,19 @@ import (
 )
 
 type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
-	endpoint        string
-	resourceType    string
-	objLookup       map[string]T
-	objLookupID     map[int32]T
-	queryLookup     map[string]QueryType
-	retrieveQuery   func(context.Context) ([]int32, error)
-	idToResFunc     func(*Config, handlerInput[T, R, A, L], int32) A
-	resToListFunc	func(*Config, *http.Request, handlerInput[T, R, A, L], []A) (L, error)
-	getSingleFunc   func(*http.Request, int32) (R, error)
-	getMultipleFunc func(*http.Request, string) (L, error)
-	retrieveFunc    func(*http.Request) (L, error)
-	subsections     map[string]func(string) (APIResourceList, error)
+	endpoint        	string
+	resourceType    	string
+	objLookup       	map[string]T
+	objLookupID     	map[int32]T
+	queryLookup     	map[string]QueryType
+	getMultipleQuery 	func(context.Context, string) ([]int32, error)
+	retrieveQuery   	func(context.Context) ([]int32, error)
+	idToResFunc     	func(*Config, handlerInput[T, R, A, L], int32) A
+	resToListFunc		func(*Config, *http.Request, handlerInput[T, R, A, L], []A) (L, error)
+	getSingleFunc   	func(*http.Request, int32) (R, error)
+	getMultipleFunc 	func(*http.Request, string) (L, error)
+	retrieveFunc    	func(*http.Request) (L, error)
+	subsections     	map[string]func(string) (APIResourceList, error)
 }
 
 // use handlerView, if the type of the handlerInput must be determined first (like with abilities)

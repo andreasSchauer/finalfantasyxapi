@@ -9,8 +9,8 @@ RETURNING *;
 SELECT * FROM monsters WHERE id = $1;
 
 
--- name: GetMonstersByName :many
-SELECT * FROM monsters WHERE name = $1;
+-- name: GetMonsterIDsByName :many
+SELECT id FROM monsters WHERE name = $1;
 
 
 -- name: GetMonsterItems :one
@@ -352,8 +352,8 @@ JOIN status_conditions sc ON isc.status_condition_id = sc.id
 WHERE astc.id = $1;
 
 
--- name: GetMonsters :many
-SELECT * FROM monsters ORDER BY id;
+-- name: GetMonsterIDs :many
+SELECT id FROM monsters ORDER BY id;
 
 
 -- name: GetMonstersByElemResistIDs :many

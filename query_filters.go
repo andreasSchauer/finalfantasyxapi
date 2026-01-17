@@ -63,7 +63,7 @@ func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](r *h
 	return resources, nil
 }
 
-// boolean is used in the query to search for in the database
+// db query searches for resources with matching boolean db column value
 func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, bool) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
@@ -85,7 +85,7 @@ func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, 
 	return resources, nil
 }
 
-// db query accumulates all resources of a certain condition. a false boolean flips these results
+// db query accumulates all resources that fulfill a certain condition (mostly if it has resources of a specific type). a false boolean flips these results
 func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
@@ -108,6 +108,28 @@ func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 		resources = removeResources(inputRes, resources)
 	}
 
+	return resources, nil
+}
+
+// query uses an enum type (id or string possible) that needs to be checked for validity and then returns all resources matching that type
+func typeQuery[T h.HasID, R any, A APIResource, L APIResourceList, ET any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[ET], inputRes []A, queryName string, dbQuery func(context.Context, ET) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+	enum, err := parseTypeQuery(r, queryParam, et)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	modeType := et.convFunc(enum.Name)
+
+	dbIDs, err := dbQuery(r.Context(), modeType)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
 	return resources, nil
 }
 

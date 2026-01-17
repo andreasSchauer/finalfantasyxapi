@@ -14,12 +14,13 @@ import (
 // all boolean queries can be generalized
 // all type based queries can be generalized. monster type is special, as it groups two types together
 // if a filter isn't tied to a second parameter, these functions can be generalized
+// distance can be generalized into an int-based query
 // if more of them appear, I can generalize basic id-list queries (without second parameters) like auto-abilities
+// I could also do basic query wrappers for the most complex queries, to at least don't have the query param, empty check, and resource creation logics repeated
 func (cfg *Config) getMonstersElemResist(r *http.Request, inputMons []NamedAPIResource) ([]NamedAPIResource, error) {
 	queryParam := cfg.q.monsters["elemental-affinities"]
-	query := r.URL.Query().Get(queryParam.Name)
-
-	if query == "" {
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
 		return inputMons, nil
 	}
 
