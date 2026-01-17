@@ -10,8 +10,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-// if a filter isn't tied to a second parameter, these functions can be generalized
-// if more of them appear, I can generalize basic id-list queries (without second parameters) like auto-abilities
 
 func (cfg *Config) getMonstersByElemResists(r *http.Request, query string, queryParam QueryType) ([]int32, error) {
 	ids, err := cfg.getElemResistIDs(query, queryParam)
@@ -86,6 +84,7 @@ func (cfg *Config) getMonstersByStatusResists(r *http.Request, ids []int32) ([]i
 	return dbIDs, nil
 }
 
+
 func (cfg *Config) verifyMonsterResistance(r *http.Request) (int, error) {
 	queryParam := cfg.q.monsters["resistance"]
 
@@ -96,6 +95,7 @@ func (cfg *Config) verifyMonsterResistance(r *http.Request) (int, error) {
 
 	return resistance, nil
 }
+
 
 func (cfg *Config) getMonstersByItem(r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.monsters
@@ -138,6 +138,7 @@ func (cfg *Config) getMonstersByItem(r *http.Request, id int32) ([]NamedAPIResou
 
 	return resources, nil
 }
+
 
 func (cfg *Config) queryCTBIconType(r *http.Request, iconType database.CtbIconType) ([]int32, error) {
 	var ids []int32

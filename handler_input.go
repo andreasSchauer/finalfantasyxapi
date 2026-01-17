@@ -24,16 +24,20 @@ type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 }
 
 // use handlerView, if the type of the handlerInput must be determined first (like with abilities)
-type handlerView interface {
-	Endpoint() string
-	ResourceType() string
-	ObjLookup() map[string]h.HasID
-	ObjLookupID() map[int32]h.HasID
-	QueryLookup() map[string]QueryType
-	GetSingleFunc() func(*http.Request, int32) (any, error)
-	GetMultipleFunc() func(*http.Request, string) (APIResourceList, error)
-	RetrieveFunc() func(*http.Request) (APIResourceList, error)
-	Subsections() map[string]func(string) (APIResourceList, error)
+type handlerView[T h.HasID, R any, A APIResource, L APIResourceList] interface {
+	Endpoint() 			string
+	ResourceType() 		string
+	ObjLookup() 		map[string]h.HasID
+	ObjLookupID() 		map[int32]h.HasID
+	QueryLookup() 		map[string]QueryType
+	GetMultipleQuery() 	func(context.Context, string) ([]int32, error)
+	RetrieveQuery()   	func(context.Context) ([]int32, error)
+	IdToResFunc()     	func(*Config, handlerInput[T, R, A, L], int32) A
+	ResToListFunc()		func(*Config, *http.Request, handlerInput[T, R, A, L], []A) (L, error)
+	GetSingleFunc() 	func(*http.Request, int32) (any, error)
+	GetMultipleFunc() 	func(*http.Request, string) (APIResourceList, error)
+	RetrieveFunc() 		func(*http.Request) (APIResourceList, error)
+	Subsections() 		map[string]func(string) (APIResourceList, error)
 }
 
 func (i handlerInput[T, R, A, L]) Endpoint() string {
@@ -66,6 +70,42 @@ func (i handlerInput[T, R, A, L]) ObjLookupID() map[int32]h.HasID {
 
 func (i handlerInput[T, R, A, L]) QueryLookup() map[string]QueryType {
 	return i.queryLookup
+}
+
+func (i handlerInput[T, R, A, L]) GetMultipleQuery() func(context.Context, string) ([]int32, error) {
+	if i.getMultipleQuery == nil {
+		return nil
+	}
+	return func(c context.Context, name string) ([]int32, error) {
+		return i.getMultipleQuery(c, name)
+	}
+}
+
+func (i handlerInput[T, R, A, L]) RetrieveQuery() func(context.Context) ([]int32, error) {
+	if i.retrieveQuery == nil {
+		return nil
+	}
+	return func(c context.Context) ([]int32, error) {
+		return i.retrieveQuery(c)
+	}
+}
+
+func (i handlerInput[T, R, A, L]) IdToResFunc() func(*Config, handlerInput[T, R, A, L], int32) A {
+	if i.idToResFunc == nil {
+		return nil
+	}
+	return func(cfg *Config, i handlerInput[T, R, A, L], id int32) A {
+		return i.idToResFunc(cfg, i, id)
+	}
+}
+
+func (i handlerInput[T, R, A, L]) ResToListFunc() func(*Config, *http.Request, handlerInput[T, R, A, L], []A) (L, error) {
+	if i.resToListFunc == nil {
+		return nil
+	}
+	return func(cfg *Config, r *http.Request, i handlerInput[T, R, A, L], res []A) (L, error) {
+		return i.resToListFunc(cfg, r, i, res)
+	}
 }
 
 func (i handlerInput[T, R, A, L]) GetSingleFunc() func(*http.Request, int32) (any, error) {

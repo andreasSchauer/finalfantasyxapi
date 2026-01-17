@@ -101,10 +101,11 @@ func newLocationAPIResourceList(cfg *Config, r *http.Request, i handlerInput[see
 
 
 func idToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], id int32) LocationAPIResource {
-	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
+	res, _ := seeding.GetResourceByID(id, i.objLookupID)
 	return areaToLocationResource(cfg, i, res)
 }
 
+// useful for id-less locationArea slices retrieved from lookup
 func locAreaToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], area seeding.LocationArea) LocationAPIResource {
 	res, _ := seeding.GetResource(area, i.objLookup)
 	return areaToLocationResource(cfg, i, res)

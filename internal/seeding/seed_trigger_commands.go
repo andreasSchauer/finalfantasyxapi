@@ -30,6 +30,13 @@ func (t TriggerCommand) ToHashFields() []any {
 	}
 }
 
+func (t TriggerCommand) ToKeyFields() []any {
+	return []any{
+		t.Ability.Name,
+		h.DerefOrNil(t.Ability.Version),
+	}
+}
+
 func (t TriggerCommand) GetID() int32 {
 	return t.ID
 }
@@ -88,7 +95,7 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 			}
 
 			command.ID = dbTriggerCommand.ID
-			key := CreateLookupKey(command.Ability)
+			key := CreateLookupKey(command)
 			l.TriggerCommands[key] = command
 			l.TriggerCommandsID[command.ID] = command
 		}
@@ -110,7 +117,7 @@ func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *
 		for _, jsonCommand := range triggerCommands {
 			abilityRef := jsonCommand.GetAbilityRef()
 
-			command, err := GetResource(abilityRef, l.TriggerCommands)
+			command, err := GetResource(abilityRef.Untyped(), l.TriggerCommands)
 			if err != nil {
 				return err
 			}

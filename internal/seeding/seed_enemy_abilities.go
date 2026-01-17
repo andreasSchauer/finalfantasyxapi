@@ -23,6 +23,13 @@ func (e EnemyAbility) ToHashFields() []any {
 	}
 }
 
+func (e EnemyAbility) ToKeyFields() []any {
+	return []any{
+		e.Ability.Name,
+		h.DerefOrNil(e.Ability.Version),
+	}
+}
+
 func (e EnemyAbility) GetID() int32 {
 	return e.ID
 }
@@ -78,7 +85,7 @@ func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 			}
 
 			enemyAbility.ID = dbEnemyAbility.ID
-			key := CreateLookupKey(enemyAbility.Ability)
+			key := CreateLookupKey(enemyAbility)
 			l.EnemyAbilities[key] = enemyAbility
 			l.EnemyAbilitiesID[enemyAbility.ID] = enemyAbility
 		}
@@ -100,7 +107,7 @@ func (l *Lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *s
 		for _, jsonAbility := range enemyAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			enemyAbility, err := GetResource(abilityRef, l.EnemyAbilities)
+			enemyAbility, err := GetResource(abilityRef.Untyped(), l.EnemyAbilities)
 			if err != nil {
 				return err
 			}

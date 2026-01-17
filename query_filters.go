@@ -21,7 +21,8 @@ func frl[T HasAPIResource](res []T, err error) filteredResList[T] {
 	}
 }
 
-func generalQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*http.Request, string, QueryType) ([]int32, error)) ([]A, error) {
+// a query filter that can't really be generalized. this one simply checks, if it's empty and converts the ids to apiResources at the end.
+func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*http.Request, string, QueryType) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
@@ -59,7 +60,7 @@ func idOnlyQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 	return resources, nil
 }
 
-// query uses an id of another resource type to filter resources but uses more specialized logic in between (found in wrapperFn)
+// like idOnlyQuery, but with more specialized logic in between (wrapperFn)
 func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*http.Request, int32) ([]A, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
@@ -79,6 +80,7 @@ func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](r *h
 	return resources, nil
 }
 
+// query uses a list of ids as database input to filter for resources
 func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, []int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
@@ -100,6 +102,7 @@ func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 	return resources, nil
 }
 
+// like idListQuery, but with more specialized logic in between (wrapperFn)
 func idListQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*http.Request, []int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
@@ -191,7 +194,6 @@ func typeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg
 	return resources, nil
 }
 
-
 // like a type query, but with the database expecting a nullEnumType as input
 func nullTypeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery func(context.Context, N) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
@@ -214,6 +216,7 @@ func nullTypeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any]
 	return resources, nil
 }
 
+// like type query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
 func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*http.Request, E) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	enum, err := parseTypeQuery(r, queryParam, cfg.t.CTBIconType)
@@ -234,22 +237,8 @@ func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N a
 	return resources, nil
 }
 
-// used for method queries for example as a combination of all of them (see areas 'item' parameter)
-func combineFilteredAPIResources[A APIResource](filteredLists []filteredResList[A]) ([]A, error) {
-	resources := []A{}
 
-	for _, filtered := range filteredLists {
-		if filtered.err != nil {
-			return nil, filtered.err
-		}
-		
-		resources = combineResources(resources, filtered.resources)
-	}
-
-	return resources, nil
-}
-
-
+// query uses an integer value as input. dbQuery input is any, because of domains being converted to any. parseIntQuery evaluates, whether the given value really is an int, so there's no type-safety concerns.
 func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, any) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	integer, err := parseIntQuery(r, queryParam)
@@ -266,6 +255,22 @@ func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
+}
+
+
+// used for method queries for example as a combination of all of them (see areas 'item' parameter)
+func combineFilteredAPIResources[A APIResource](filteredLists []filteredResList[A]) ([]A, error) {
+	resources := []A{}
+
+	for _, filtered := range filteredLists {
+		if filtered.err != nil {
+			return nil, filtered.err
+		}
+
+		resources = combineResources(resources, filtered.resources)
+	}
 
 	return resources, nil
 }

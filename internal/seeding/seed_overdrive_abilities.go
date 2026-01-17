@@ -22,6 +22,13 @@ func (o OverdriveAbility) ToHashFields() []any {
 	}
 }
 
+func (o OverdriveAbility) ToKeyFields() []any {
+	return []any{
+		o.Ability.Name,
+		h.DerefOrNil(o.Ability.Version),
+	}
+}
+
 func (o OverdriveAbility) GetID() int32 {
 	return o.ID
 }
@@ -76,7 +83,7 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 			}
 
 			overdriveAbility.ID = dbOverdriveAbility.ID
-			key := CreateLookupKey(overdriveAbility.Ability)
+			key := CreateLookupKey(overdriveAbility)
 			l.OverdriveAbilities[key] = overdriveAbility
 			l.OverdriveAbilitiesID[overdriveAbility.ID] = overdriveAbility
 		}
@@ -98,7 +105,7 @@ func (l *Lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbCon
 		for _, jsonAbility := range overdriveAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			overdriveAbility, err := GetResource(abilityRef, l.OverdriveAbilities)
+			overdriveAbility, err := GetResource(abilityRef.Untyped(), l.OverdriveAbilities)
 			if err != nil {
 				return h.NewErr(abilityRef.Error(), err)
 			}

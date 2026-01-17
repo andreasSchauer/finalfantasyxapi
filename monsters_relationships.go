@@ -31,7 +31,7 @@ func (cfg *Config) getMonsterRelationships(r *http.Request, dbMon database.Monst
 		return Monster{}, err
 	}
 
-	locations, err := cfg.getMonsterLocations(r, dbMon)
+	locations, err := cfg.getMonsterAreas(r, dbMon)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -146,7 +146,7 @@ func (cfg *Config) getMonsterRonsoRages(r *http.Request, mon database.Monster) (
 	return rages, nil
 }
 
-func (cfg *Config) getMonsterLocations(r *http.Request, mon database.Monster) ([]LocationAPIResource, error) {
+func (cfg *Config) getMonsterAreas(r *http.Request, mon database.Monster) ([]LocationAPIResource, error) {
 	dbLocations, err := cfg.db.GetMonsterLocations(r.Context(), mon.ID)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get locations of %s.", getMonsterName(mon)), err)
@@ -242,7 +242,7 @@ func (cfg *Config) getMonsterAbilities(r *http.Request, mon database.Monster) ([
 	monAbilities := []MonsterAbility{}
 
 	for _, dbAbility := range dbMonAbilities {
-		abilityResource, err := cfg.getAbilityResource(dbAbility.Ability, h.NullInt32ToPtr(dbAbility.Version), string(dbAbility.AbilityType), h.NullStringToPtr(dbAbility.Specification))
+		abilityResource, err := cfg.createAbilityResource(dbAbility.Ability, h.NullInt32ToPtr(dbAbility.Version), dbAbility.AbilityType)
 		if err != nil {
 			return nil, err
 		}
@@ -259,59 +259,39 @@ func (cfg *Config) getMonsterAbilities(r *http.Request, mon database.Monster) ([
 	return monAbilities, nil
 }
 
-// can be used for various other functions related to abilities
-func (cfg *Config) getAbilityResource(name string, version *int32, abilityType string, specification *string) (NamedAPIResource, error) {
-	i, err := cfg.getAbilityInput(database.AbilityType(abilityType))
-	if err != nil {
-		return NamedAPIResource{}, err
-	}
 
-	ref := seeding.AbilityReference{
-		Name:        name,
-		Version:     version,
-		AbilityType: abilityType,
-	}
 
-	abilityLookup, err := seeding.GetResource(ref, i.ObjLookup())
-	if err != nil {
-		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
-	}
-
-	abilityResource := cfg.newNamedAPIResource(i.Endpoint(), abilityLookup.GetID(), name, version, specification)
-
-	return abilityResource, nil
-}
 
 // can be used for various other functions related to abilities
-func (cfg *Config) getAbilityInput(abilityType database.AbilityType) (handlerView, error) {
-	var i handlerView
+func (cfg *Config) createAbilityResource(name string, version *int32, abilityType database.AbilityType) (NamedAPIResource, error) {
+	var res NamedAPIResource
 	var err error
 
 	switch abilityType {
 	case database.AbilityTypePlayerAbility:
-		i = cfg.e.playerAbilities
+		res = nameToNamedAPIResource(cfg, cfg.e.playerAbilities, name, version)
 
 	case database.AbilityTypeEnemyAbility:
-		i = cfg.e.enemyAbilities
+		res = nameToNamedAPIResource(cfg, cfg.e.enemyAbilities, name, version)
 
 	case database.AbilityTypeOverdriveAbility:
-		i = cfg.e.overdriveAbilities
+		res = nameToNamedAPIResource(cfg, cfg.e.overdriveAbilities, name, version)
 
 	case database.AbilityTypeItemAbility:
-		i = cfg.e.itemAbilities
+		res = nameToNamedAPIResource(cfg, cfg.e.itemAbilities, name, version)
 
 	case database.AbilityTypeTriggerCommand:
-		i = cfg.e.triggerCommands
+		res = nameToNamedAPIResource(cfg, cfg.e.triggerCommands, name, version)
 
 	default:
 		err = newHTTPError(http.StatusInternalServerError, fmt.Sprintf("ability of type '%s' does not exist.", abilityType), nil)
 	}
 
 	if err != nil {
-		return nil, err
+		return NamedAPIResource{}, err
 	}
 
-	return i, nil
+	return res, nil
 }
 
 // doesn't need the error, as the evaluation already happened during seeding

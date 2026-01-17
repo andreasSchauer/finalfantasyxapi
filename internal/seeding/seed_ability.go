@@ -61,6 +61,29 @@ func (a AbilityReference) Error() string {
 	return fmt.Sprintf("ability reference %s-%v, type %s", a.Name, h.DerefOrNil(a.Version), a.AbilityType)
 }
 
+func (a AbilityReference) Untyped() UntypedAbilityRef {
+	return UntypedAbilityRef{
+		Name: a.Name,
+		Version: a.Version,
+	}
+}
+
+type UntypedAbilityRef struct {
+	Name        string
+	Version     *int32
+}
+
+func (a UntypedAbilityRef) ToKeyFields() []any {
+	return []any{
+		a.Name,
+		h.DerefOrNil(a.Version),
+	}
+}
+
+func (a UntypedAbilityRef) Error() string {
+	return fmt.Sprintf("untyped ability reference %s-%v", a.Name, h.DerefOrNil(a.Version))
+}
+
 type Attributes struct {
 	ID               int32
 	Rank             *int32 `json:"rank"`

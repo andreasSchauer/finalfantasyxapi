@@ -201,7 +201,7 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 
 func (l *Lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdrive) error {
 	for _, abilityRef := range overdrive.OverdriveAbilities {
-		junction, err := createJunction(overdrive, abilityRef, l.OverdriveAbilities)
+		junction, err := createJunction(overdrive, abilityRef.Untyped(), l.OverdriveAbilities)
 		if err != nil {
 			return h.NewErr(overdrive.Error(), err)
 		}
@@ -233,7 +233,7 @@ func (l *Lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive
 		return err
 	}
 
-	junction, err := createJunction(class, abilityRef, l.OverdriveAbilities)
+	junction, err := createJunction(class, abilityRef.Untyped(), l.OverdriveAbilities)
 	if err != nil {
 		return h.NewErr(abilityRef.Error(), err)
 	}

@@ -136,6 +136,7 @@ func (cfg *Config) getAltStateChangeRelationships(r *http.Request, mon database.
 	}, nil
 }
 
+// => GetResourcesDbOrNil
 func (cfg *Config) getAltStateProperties(r *http.Request, mon database.Monster, asc database.AltStateChange) ([]NamedAPIResource, error) {
 	dbProperties, err := cfg.db.GetAltStateProperties(r.Context(), asc.ID)
 	if err != nil {

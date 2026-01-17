@@ -279,7 +279,7 @@ func (l *Lookup) seedFormationMonsterAmounts(qtx *database.Queries, formation Mo
 
 func (l *Lookup) seedFormationTriggerCommands(qtx *database.Queries, formation MonsterFormation) error {
 	for _, abilityRef := range formation.TriggerCommands {
-		junction, err := createJunction(formation, abilityRef, l.TriggerCommands)
+		junction, err := createJunction(formation, abilityRef.Untyped(), l.TriggerCommands)
 		if err != nil {
 			return err
 		}

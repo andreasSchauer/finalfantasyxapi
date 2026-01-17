@@ -37,49 +37,49 @@ func (cfg *Config) getMonsterItems(r *http.Request, mon database.Monster) (Monst
 		return MonsterItems{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve items of %s.", getMonsterName(mon)), err)
 	}
 
-	stealCommon := cfg.newItemAmount(
+	stealCommon := cfg.newItemAmountOld(
 		dbItems.StealCommonItemType.ItemType,
 		dbItems.StealCommonItem.String,
 		dbItems.StealCommonItemID.Int32,
 		dbItems.StealCommonAmount.Int32,
 	)
 
-	stealRare := cfg.newItemAmount(
+	stealRare := cfg.newItemAmountOld(
 		dbItems.StealRareItemType.ItemType,
 		dbItems.StealRareItem.String,
 		dbItems.StealRareItemID.Int32,
 		dbItems.StealRareAmount.Int32,
 	)
 
-	dropCommon := cfg.newItemAmount(
+	dropCommon := cfg.newItemAmountOld(
 		dbItems.DropCommonItemType.ItemType,
 		dbItems.DropCommonItem.String,
 		dbItems.DropCommonItemID.Int32,
 		dbItems.DropCommonAmount.Int32,
 	)
 
-	dropRare := cfg.newItemAmount(
+	dropRare := cfg.newItemAmountOld(
 		dbItems.DropRareItemType.ItemType,
 		dbItems.DropRareItem.String,
 		dbItems.DropRareItemID.Int32,
 		dbItems.DropRareAmount.Int32,
 	)
 
-	secDropCommon := cfg.newItemAmount(
+	secDropCommon := cfg.newItemAmountOld(
 		dbItems.SecDropCommonItemType.ItemType,
 		dbItems.SecDropCommonItem.String,
 		dbItems.SecDropCommonItemID.Int32,
 		dbItems.SecDropCommonAmount.Int32,
 	)
 
-	secDropRare := cfg.newItemAmount(
+	secDropRare := cfg.newItemAmountOld(
 		dbItems.SecDropRareItemType.ItemType,
 		dbItems.SecDropRareItem.String,
 		dbItems.SecDropRareItemID.Int32,
 		dbItems.SecDropRareAmount.Int32,
 	)
 
-	bribe := cfg.newItemAmount(
+	bribe := cfg.newItemAmountOld(
 		dbItems.BribeItemType.ItemType,
 		dbItems.BribeItem.String,
 		dbItems.BribeItemID.Int32,

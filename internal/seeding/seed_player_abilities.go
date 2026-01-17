@@ -49,6 +49,13 @@ func (p PlayerAbility) ToHashFields() []any {
 	}
 }
 
+func (p PlayerAbility) ToKeyFields() []any {
+	return []any{
+		p.Ability.Name,
+		h.DerefOrNil(p.Ability.Version),
+	}
+}
+
 func (p PlayerAbility) GetID() int32 {
 	return p.ID
 }
@@ -109,7 +116,7 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 			}
 
 			playerAbility.ID = dbPlayerAbility.ID
-			key := CreateLookupKey(playerAbility.Ability)
+			key := CreateLookupKey(playerAbility)
 			l.PlayerAbilities[key] = playerAbility
 			l.PlayerAbilitiesID[playerAbility.ID] = playerAbility
 		}
@@ -131,7 +138,7 @@ func (l *Lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *
 		for _, jsonAbility := range playerAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			playerAbility, err := GetResource(abilityRef, l.PlayerAbilities)
+			playerAbility, err := GetResource(abilityRef.Untyped(), l.PlayerAbilities)
 			if err != nil {
 				return err
 			}

@@ -55,21 +55,7 @@ func (r NamedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-// I can't tell yet, whether these two functions will be useful in the future.
-// Good, if both id and name are already known
-func (cfg *Config) newNamedAPIResource(endpoint string, id int32, name string, version *int32, spec *string) NamedAPIResource {
-	if name == "" {
-		return NamedAPIResource{}
-	}
 
-	return NamedAPIResource{
-		ID:            id,
-		Name:          name,
-		Version:       version,
-		Specification: spec,
-		URL:           cfg.createResourceURL(endpoint, id),
-	}
-}
 
 func (cfg *Config) newNamedAPIResourceSimple(endpoint string, id int32, name string) NamedAPIResource {
 	if name == "" {
@@ -83,26 +69,6 @@ func (cfg *Config) newNamedAPIResourceSimple(endpoint string, id int32, name str
 	}
 }
 
-// these two functions will be replaced by idsToAPIResources
-func createNamedAPIResources[T any](
-	cfg *Config,
-	items []T,
-	endpoint string,
-	mapper func(T) (id int32, name string, version *int32, spec *string),
-) []NamedAPIResource {
-	resources := []NamedAPIResource{}
-
-	for _, item := range items {
-		id, name, version, spec := mapper(item)
-		resource := cfg.newNamedAPIResource(endpoint, id, name, version, spec)
-
-		if !resource.IsZero() {
-			resources = append(resources, resource)
-		}
-	}
-
-	return resources
-}
 
 func createNamedAPIResourcesSimple[T any](
 	cfg *Config,
@@ -137,8 +103,6 @@ func newNamedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList]
 
 	return list, nil
 }
-
-// id and lookup based stuff
 
 
 

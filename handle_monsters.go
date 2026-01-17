@@ -226,18 +226,21 @@ func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, erro
 	}
 
 	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(generalQueryWrapper(cfg, r, i, resources, "elemental-resists", cfg.getMonstersByElemResists)),
+		frl(basicQueryWrapper(cfg, r, i, resources, "elemental-resists", cfg.getMonstersByElemResists)),
 		frl(idListQueryWrapper(cfg, r, i, resources, "status-resists", len(cfg.l.StatusConditions), cfg.getMonstersByStatusResists)),
-		frl(idOnlyQueryWrapper(r, i, resources, "item", len(cfg.l.Items), cfg.getMonstersByItem)),
 		frl(idListQuery(cfg, r, i, resources, "auto-abilities", len(cfg.l.AutoAbilities), cfg.db.GetMonsterIDsByAutoAbilityIDs)),
+		
+		frl(idOnlyQueryWrapper(r, i, resources, "item", len(cfg.l.Items), cfg.getMonstersByItem)),
 		frl(idOnlyQuery(cfg, r, i, resources, "ronso-rage", len(cfg.l.RonsoRages), cfg.db.GetMonsterIDsByRonsoRage)),
 		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationMonsterIDs)),
 		frl(idOnlyQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationMonsterIDs)),
 		frl(idOnlyQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetAreaMonsterIDs)),
+
 		frl(intQuery(cfg, r, i, resources, "distance", cfg.db.GetMonsterIDsByDistance)),
 		frl(typeQueryWrapper(cfg, r, i, cfg.t.CTBIconType, resources, "type", cfg.queryCTBIconType)),
 		frl(typeQuery(cfg, r, i, cfg.t.MonsterSpecies, resources, "species", cfg.db.GetMonsterIDsBySpecies)),
 		frl(nullTypeQuery(cfg, r, i, cfg.t.CreationArea, resources, "creation-area", cfg.db.GetMonsterIDsByMaCreationArea)),
+
 		frl(boolQuery(cfg, r, i, resources, "story-based", cfg.db.GetMonsterIDsByIsStoryBased)),
 		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetMonsterIDsByIsRepeatable)),
 		frl(boolQuery(cfg, r, i, resources, "capture", cfg.db.GetMonsterIDsByCanBeCaptured)),
