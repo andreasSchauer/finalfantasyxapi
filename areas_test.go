@@ -56,10 +56,10 @@ func TestGetArea(t *testing.T) {
 				parentLocation:    15,
 				parentSublocation: 25,
 				expLocBased: expLocBased{
-					sidequest: h.GetInt32Ptr(6),
+					sidequest:      h.GetInt32Ptr(6),
 					connectedAreas: []int32{144, 149},
-					monsters: []int32{81, 84, 85},
-					formations: []int32{203, 207},
+					monsters:       []int32{81, 84, 85},
+					formations:     []int32{203, 207},
 				},
 			},
 		},
@@ -87,9 +87,9 @@ func TestGetArea(t *testing.T) {
 				parentSublocation: 7,
 				expLocBased: expLocBased{
 					connectedAreas: []int32{26, 37, 41},
-					characters: []int32{2, 4},
-					treasures: []int32{33, 37},
-					bgMusic: []int32{19},
+					characters:     []int32{2, 4},
+					treasures:      []int32{33, 37},
+					bgMusic:        []int32{19},
 				},
 			},
 		},
@@ -116,9 +116,9 @@ func TestGetArea(t *testing.T) {
 				parentLocation:    8,
 				parentSublocation: 13,
 				expLocBased: expLocBased{
-					shops: []int32{5},
+					shops:     []int32{5},
 					cuesMusic: []int32{35},
-					bgMusic: []int32{32, 34},
+					bgMusic:   []int32{32, 34},
 				},
 			},
 		},
@@ -163,11 +163,11 @@ func TestGetArea(t *testing.T) {
 				parentSublocation: 8,
 				expLocBased: expLocBased{
 					characters: []int32{5},
-					monsters: []int32{19},
+					monsters:   []int32{19},
 					formations: []int32{36},
-					fmvsMusic: []int32{16},
-					bossMusic: []int32{16},
-					fmvs: []int32{9, 13},
+					fmvsMusic:  []int32{16},
+					bossMusic:  []int32{16},
+					fmvs:       []int32{9, 13},
 				},
 			},
 		},
@@ -180,11 +180,11 @@ func TestGetArea(t *testing.T) {
 		}
 
 		test := test{
-			t: t,
-			cfg: testCfg,
-			name: testName,
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
 			expLengths: tc.expLengths,
-			dontCheck: tc.dontCheck,
+			dontCheck:  tc.dontCheck,
 		}
 
 		var got Area
@@ -213,7 +213,7 @@ func TestGetArea(t *testing.T) {
 				newResListTestFromIDs("bg music", testCfg.e.songs.endpoint, tc.bgMusic, got.Music.BackgroundMusic),
 				newResListTestFromIDs("cues music", testCfg.e.songs.endpoint, tc.cuesMusic, got.Music.Cues),
 				newResListTestFromIDs("fmvs music", testCfg.e.songs.endpoint, tc.fmvsMusic, got.Music.FMVs),
-				newResListTestFromIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossFights),
+				newResListTestFromIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossMusic),
 			}
 
 			checks = slices.Concat(checks, musicChecks)
@@ -262,8 +262,8 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count: 240,
-				next:  h.GetStrPtr("/areas?limit=20&offset=20"),
+				count:   240,
+				next:    h.GetStrPtr("/areas?limit=20&offset=20"),
 				results: []int32{1, 5, 20},
 			},
 		},
@@ -273,7 +273,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count: 240,
+				count:   240,
 				results: []int32{1, 50, 240},
 			},
 		},
@@ -286,7 +286,7 @@ func TestRetrieveAreas(t *testing.T) {
 				count:    240,
 				previous: h.GetStrPtr("/areas?limit=30&offset=20"),
 				next:     h.GetStrPtr("/areas?limit=30&offset=80"),
-				results: []int32{51, 80},
+				results:  []int32{51, 80},
 			},
 		},
 		{
@@ -295,7 +295,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count: 3,
+				count:   3,
 				results: []int32{88, 97, 203},
 			},
 		},
@@ -305,7 +305,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count: 5,
+				count:   5,
 				results: []int32{35, 129, 140, 163, 208},
 			},
 		},
@@ -315,7 +315,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count: 7,
+				count:   7,
 				results: []int32{1, 20, 103},
 			},
 		},
@@ -325,7 +325,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count: 11,
+				count:   11,
 				results: []int32{75, 140, 144, 145, 182, 185, 203},
 			},
 		},
@@ -335,7 +335,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count: 2,
+				count:   2,
 				results: []int32{46, 169},
 			},
 		},
@@ -348,11 +348,11 @@ func TestRetrieveAreas(t *testing.T) {
 		}
 
 		test := test{
-			t: t,
-			cfg: testCfg,
-			name: testName,
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
 			expLengths: tc.expLengths,
-			dontCheck: tc.dontCheck,
+			dontCheck:  tc.dontCheck,
 		}
 
 		var got LocationApiResourceList
@@ -364,7 +364,6 @@ func TestRetrieveAreas(t *testing.T) {
 	}
 }
 
-
 func TestAreasParameters(t *testing.T) {
 	tests := []struct {
 		testGeneral
@@ -374,7 +373,7 @@ func TestAreasParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?section=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: "subsection 'asd' is not available for endpoint /areas.",
+				expectedErr:    "subsection 'asd' is not available for endpoint /areas.",
 			},
 		},
 		{
@@ -383,7 +382,7 @@ func TestAreasParameters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expListParams: expListParams{
-				count: 21,
+				count:   21,
 				results: []string{"limit", "offset", "item", "save-sphere", "sublocation"},
 			},
 		},
@@ -393,7 +392,7 @@ func TestAreasParameters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expListParams: expListParams{
-				count: 21,
+				count:   21,
 				results: []string{"limit", "offset", "item", "save-sphere", "sublocation"},
 			},
 		},
@@ -403,7 +402,7 @@ func TestAreasParameters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expListParams: expListParams{
-				count: 3,
+				count:   3,
 				results: []string{"limit", "offset", "section"},
 			},
 		},
@@ -416,11 +415,11 @@ func TestAreasParameters(t *testing.T) {
 		}
 
 		test := test{
-			t: t,
-			cfg: testCfg,
-			name: testName,
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
 			expLengths: tc.expLengths,
-			dontCheck: tc.dontCheck,
+			dontCheck:  tc.dontCheck,
 		}
 
 		var got QueryParameterList
@@ -432,7 +431,6 @@ func TestAreasParameters(t *testing.T) {
 		testNameList(test, nameListTest)
 	}
 }
-
 
 func TestAreasSections(t *testing.T) {
 	tests := []struct {
@@ -464,11 +462,11 @@ func TestAreasSections(t *testing.T) {
 		}
 
 		test := test{
-			t: t,
-			cfg: testCfg,
-			name: testName,
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
 			expLengths: tc.expLengths,
-			dontCheck: tc.dontCheck,
+			dontCheck:  tc.dontCheck,
 		}
 
 		var got SectionList

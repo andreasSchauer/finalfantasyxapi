@@ -144,7 +144,5 @@ func (cfg *Config) getOverdriveModesType(r *http.Request, inputModes []NamedAPIR
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
-	sharedResources := getSharedResources(inputModes, resources)
-
-	return sharedResources, nil
+	return resources, nil
 }

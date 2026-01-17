@@ -9,6 +9,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+
 type Song struct {
 	ID                   int32
 	Name                 string            `json:"name"`
@@ -324,6 +325,7 @@ func (l *Lookup) seedBackgroundMusic(qtx *database.Queries, bm BackgroundMusic) 
 	}
 
 	bm.ID = dbBM.ID
+	l.BackgroundMusicID[bm.ID] = bm
 
 	return bm, nil
 }
@@ -352,6 +354,7 @@ func (l *Lookup) seedCue(qtx *database.Queries, cue Cue) (Cue, error) {
 	}
 
 	cue.ID = dbCue.ID
+	l.CuesID[cue.ID] = cue
 
 	return cue, nil
 }

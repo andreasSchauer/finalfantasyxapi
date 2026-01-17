@@ -21,12 +21,7 @@ func frl[T HasAPIResource](res []T, err error) filteredResList[T] {
 	}
 }
 
-// not the biggest fan of these function names
-// will split into multiple files once other resource types get added
-
-// In each function I can put the general logic into its own function.
-// Then I make a wrapper that converts into the needed resource like I did with the retrieval helpers
-
+// query uses an id of another resource type to filter resources
 func idOnlyQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
@@ -48,6 +43,7 @@ func idOnlyQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 	return resources, nil
 }
 
+// query uses an id of another resource type to filter resources but uses more specialized logic in between (found in wrapperFn)
 func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*http.Request, int32) ([]A, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
@@ -67,6 +63,7 @@ func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](r *h
 	return resources, nil
 }
 
+// boolean is used in the query to search for in the database
 func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, bool) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
@@ -88,6 +85,7 @@ func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, 
 	return resources, nil
 }
 
+// db query accumulates all resources of a certain condition. a false boolean flips these results
 func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
@@ -108,6 +106,21 @@ func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 
 	if !b {
 		resources = removeResources(inputRes, resources)
+	}
+
+	return resources, nil
+}
+
+// used for method queries for example as a combination of all of them (see areas 'item' parameter)
+func combineFilteredAPIResources[A APIResource](filteredLists []filteredResList[A]) ([]A, error) {
+	resources := []A{}
+
+	for _, filtered := range filteredLists {
+		if filtered.err != nil {
+			return nil, filtered.err
+		}
+		
+		resources = combineResources(resources, filtered.resources)
 	}
 
 	return resources, nil
