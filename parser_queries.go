@@ -39,7 +39,7 @@ func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, error) {
 }
 
 // used, if a queryParam is looking up an enum entry
-func parseTypeQuery[T any](r *http.Request, queryParam QueryType, et EnumType[T]) (TypedAPIResource, error) {
+func parseTypeQuery[T, N any](r *http.Request, queryParam QueryType, et EnumType[T, N]) (TypedAPIResource, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return TypedAPIResource{}, err

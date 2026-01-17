@@ -67,7 +67,7 @@ func (m *Monster) Error() string {
 
 func getMonsterName(mon database.Monster) string {
 	monster := Monster{
-		Name: mon.Name,
+		Name:    mon.Name,
 		Version: h.NullInt32ToPtr(mon.Version),
 	}
 
@@ -209,17 +209,13 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 		return Monster{}, err
 	}
 
-	
-
 	return monster, nil
 }
-
 
 func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (NamedApiResourceList, error) {
 	i := cfg.e.monsters
 	return getMultipleAPIResources(cfg, r, i, monsterName)
 }
-
 
 func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, error) {
 	i := cfg.e.monsters
@@ -230,24 +226,24 @@ func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, erro
 	}
 
 	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(cfg.getMonstersElemResist(r, resources)),
-		frl(cfg.getMonstersStatusResist(r, resources)),
-		frl(cfg.getMonstersItem(r, resources)),
-		frl(cfg.getMonstersAutoAbility(r, resources)),
-		frl(cfg.getMonstersRonsoRage(r, resources)),
-		frl(cfg.getMonstersLocation(r, resources)),
-		frl(cfg.getMonstersSubLocation(r, resources)),
-		frl(cfg.getMonstersArea(r, resources)),
-		frl(cfg.getMonstersDistance(r, resources)),
-		frl(cfg.getMonstersSpecies(r, resources)),
-		frl(cfg.getMonstersCreationArea(r, resources)),
-		frl(cfg.getMonstersType(r, resources)),
-		frl(cfg.getMonstersStoryBased(r, resources)),
-		frl(cfg.getMonstersRepeatable(r, resources)),
-		frl(cfg.getMonstersCanBeCaptured(r, resources)),
-		frl(cfg.getMonstersHasOverdrive(r, resources)),
-		frl(cfg.getMonstersUnderwater(r, resources)),
-		frl(cfg.getMonstersZombie(r, resources)),
+		frl(generalQueryWrapper(cfg, r, i, resources, "elemental-resists", cfg.getMonstersByElemResists)),
+		frl(idListQueryWrapper(cfg, r, i, resources, "status-resists", len(cfg.l.StatusConditions), cfg.getMonstersByStatusResists)),
+		frl(idOnlyQueryWrapper(r, i, resources, "item", len(cfg.l.Items), cfg.getMonstersByItem)),
+		frl(idListQuery(cfg, r, i, resources, "auto-abilities", len(cfg.l.AutoAbilities), cfg.db.GetMonsterIDsByAutoAbilityIDs)),
+		frl(idOnlyQuery(cfg, r, i, resources, "ronso-rage", len(cfg.l.RonsoRages), cfg.db.GetMonsterIDsByRonsoRage)),
+		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationMonsterIDs)),
+		frl(idOnlyQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationMonsterIDs)),
+		frl(idOnlyQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetAreaMonsterIDs)),
+		frl(intQuery(cfg, r, i, resources, "distance", cfg.db.GetMonsterIDsByDistance)),
+		frl(typeQueryWrapper(cfg, r, i, cfg.t.CTBIconType, resources, "type", cfg.queryCTBIconType)),
+		frl(typeQuery(cfg, r, i, cfg.t.MonsterSpecies, resources, "species", cfg.db.GetMonsterIDsBySpecies)),
+		frl(nullTypeQuery(cfg, r, i, cfg.t.CreationArea, resources, "creation-area", cfg.db.GetMonsterIDsByMaCreationArea)),
+		frl(boolQuery(cfg, r, i, resources, "story-based", cfg.db.GetMonsterIDsByIsStoryBased)),
+		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetMonsterIDsByIsRepeatable)),
+		frl(boolQuery(cfg, r, i, resources, "capture", cfg.db.GetMonsterIDsByCanBeCaptured)),
+		frl(boolQuery(cfg, r, i, resources, "has-overdrive", cfg.db.GetMonsterIDsByHasOverdrive)),
+		frl(boolQuery(cfg, r, i, resources, "underwater", cfg.db.GetMonsterIDsByIsUnderwater)),
+		frl(boolQuery(cfg, r, i, resources, "zombie", cfg.db.GetMonsterIDsByIsZombie)),
 	}
 
 	return filterAPIResources(cfg, r, i, resources, filteredLists)

@@ -489,13 +489,8 @@ WHERE l.id = $1
 ORDER BY a.id;
 
 
--- name: GetLocationMonsters :many
-SELECT DISTINCT
-    m.*,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS area_version
+-- name: GetLocationMonsterIDs :many
+SELECT DISTINCT m.id
 FROM monsters m
 LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
 LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
@@ -518,13 +513,8 @@ WHERE s.id = $1
 ORDER BY a.id;
 
 
--- name: GetSublocationMonsters :many
-SELECT DISTINCT
-    m.*,
-    l.name AS location,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS area_version
+-- name: GetSublocationMonsterIDs :many
+SELECT DISTINCT m.id
 FROM monsters m
 LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
 LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id

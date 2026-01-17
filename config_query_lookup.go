@@ -312,11 +312,11 @@ func (cfg *Config) initMonstersParams() {
 			},
 			AllowedValues: []string{"f", "l", "w", "i"},
 		},
-		"elemental-affinities": {
+		"elemental-resists": {
 			ID:          4,
 			Description: "Searches for monsters that have the specified elemental affinity/affinities.",
-			Usage:       "?elemental-affinities={element_name/id}-{affinity_name/id},{element_name/id}-{affinity_name/id},...",
-			ExampleUses: []string{"?elemental-affinities={fire}-{weak},{water}-{absorb}", "?elemental-affinities={lightning}-{neutral}"},
+			Usage:       "?elemental-resists={element_name/id}-{affinity_name/id},{element_name/id}-{affinity_name/id},...",
+			ExampleUses: []string{"?elemental-resists={fire}-{weak},{water}-{absorb}", "?elemental-resists={lightning}-{neutral}"},
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},

@@ -21,6 +21,22 @@ func frl[T HasAPIResource](res []T, err error) filteredResList[T] {
 	}
 }
 
+func generalQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*http.Request, string, QueryType) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return inputRes, nil
+	}
+
+	dbIDs, err := wrapperFn(r, query, queryParam)
+	if err != nil {
+		return nil, err
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+	return resources, nil
+}
+
 // query uses an id of another resource type to filter resources
 func idOnlyQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
@@ -59,6 +75,48 @@ func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](r *h
 	if err != nil {
 		return nil, err
 	}
+
+	return resources, nil
+}
+
+func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, []int32) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+
+	queryIDs, err := parseIdListQuery(r, queryParam, maxID)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := dbQuery(r.Context(), queryIDs)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by auto-ability.", err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
+}
+
+func idListQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*http.Request, []int32) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+
+	queryIDs, err := parseIdListQuery(r, queryParam, maxID)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := wrapperFn(r, queryIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
 
 	return resources, nil
 }
@@ -112,7 +170,7 @@ func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 }
 
 // query uses an enum type (id or string possible) that needs to be checked for validity and then returns all resources matching that type
-func typeQuery[T h.HasID, R any, A APIResource, L APIResourceList, ET any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[ET], inputRes []A, queryName string, dbQuery func(context.Context, ET) ([]int32, error)) ([]A, error) {
+func typeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery func(context.Context, E) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	enum, err := parseTypeQuery(r, queryParam, et)
 	if errors.Is(err, errEmptyQuery) {
@@ -122,11 +180,54 @@ func typeQuery[T h.HasID, R any, A APIResource, L APIResourceList, ET any](cfg *
 		return nil, err
 	}
 
-	modeType := et.convFunc(enum.Name)
+	typedStr := et.convFunc(enum.Name)
 
-	dbIDs, err := dbQuery(r.Context(), modeType)
+	dbIDs, err := dbQuery(r.Context(), typedStr)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+	return resources, nil
+}
+
+
+// like a type query, but with the database expecting a nullEnumType as input
+func nullTypeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery func(context.Context, N) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+	enum, err := parseTypeQuery(r, queryParam, et)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	typedStr := et.nullConvFunc(&enum.Name)
+
+	dbIDs, err := dbQuery(r.Context(), typedStr)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+	return resources, nil
+}
+
+func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*http.Request, E) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+	enum, err := parseTypeQuery(r, queryParam, cfg.t.CTBIconType)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	typedStr := et.convFunc(enum.Name)
+	dbIDs, err := wrapperFn(r, typedStr)
+	if err != nil {
+		return nil, err
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -144,6 +245,27 @@ func combineFilteredAPIResources[A APIResource](filteredLists []filteredResList[
 		
 		resources = combineResources(resources, filtered.resources)
 	}
+
+	return resources, nil
+}
+
+
+func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, any) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+	integer, err := parseIntQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := dbQuery(r.Context(), integer)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
 
 	return resources, nil
 }

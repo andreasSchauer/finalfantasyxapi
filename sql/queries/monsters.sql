@@ -356,8 +356,8 @@ WHERE astc.id = $1;
 SELECT id FROM monsters ORDER BY id;
 
 
--- name: GetMonstersByElemResistIDs :many
-SELECT m.*
+-- name: GetMonsterIDsByElemResistIDs :many
+SELECT m.id
 FROM monsters m
 JOIN j_monsters_elem_resists jmer ON jmer.monster_id = m.id
 WHERE jmer.elem_resist_id = ANY(sqlc.arg(elem_resist_ids)::int[])
@@ -367,7 +367,7 @@ HAVING COUNT(DISTINCT jmer.elem_resist_id)
 ORDER BY m.id;
 
 
--- name: GetMonstersByStatusResists :many
+-- name: GetMonsterIDsByStatusResists :many
 WITH wanted_statuses AS (
     SELECT unnest(sqlc.arg(status_condition_ids)::int[]) AS status_condition_id
 ),
@@ -389,7 +389,7 @@ monster_status_match AS (
         jmi.status_condition_id IS NOT NULL
         OR (sr.status_condition_id IS NOT NULL AND sr.resistance >= sqlc.arg(min_resistance))
 )
-SELECT m.*
+SELECT m.id
 FROM monsters m
 JOIN monster_status_match msm ON msm.monster_id = m.id
 GROUP BY m.id
@@ -398,8 +398,8 @@ HAVING COUNT(DISTINCT msm.status_condition_id)
 ORDER BY m.id;
 
 
--- name: GetMonstersByItem :many
-SELECT DISTINCT m.*
+-- name: GetMonsterIDsByItem :many
+SELECT DISTINCT m.id
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 LEFT JOIN j_monster_items_other_items jmio
@@ -421,8 +421,8 @@ WHERE ia.master_item_id = sqlc.arg(item_id)
 ORDER BY m.id;
 
 
--- name: GetMonstersByItemSteal :many
-SELECT DISTINCT m.*
+-- name: GetMonsterIDsByItemSteal :many
+SELECT DISTINCT m.id
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia
@@ -432,8 +432,8 @@ WHERE ia.master_item_id = sqlc.arg(item_id)
 ORDER BY m.id;
 
 
--- name: GetMonstersByItemDrop :many
-SELECT DISTINCT m.*
+-- name: GetMonsterIDsByItemDrop :many
+SELECT DISTINCT m.id
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia
@@ -447,8 +447,8 @@ WHERE ia.master_item_id = sqlc.arg(item_id)
 ORDER BY m.id;
 
 
--- name: GetMonstersByItemBribe :many
-SELECT DISTINCT m.*
+-- name: GetMonsterIDsByItemBribe :many
+SELECT DISTINCT m.id
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON ia.id = mi.bribe_id
@@ -456,8 +456,8 @@ WHERE ia.master_item_id = sqlc.arg(item_id)
 ORDER BY m.id;
 
 
--- name: GetMonstersByItemOther :many
-SELECT DISTINCT m.*
+-- name: GetMonsterIDsByItemOther :many
+SELECT DISTINCT m.id
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
@@ -467,8 +467,8 @@ WHERE ia.master_item_id = sqlc.arg(item_id)
 ORDER BY m.id;
 
 
--- name: GetMonstersByAutoAbilityIDs :many
-SELECT m.*
+-- name: GetMonsterIDsByAutoAbilityIDs :many
+SELECT m.id
 FROM monsters m
 JOIN monster_equipment me ON me.monster_id = m.id
 JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
@@ -479,57 +479,56 @@ HAVING COUNT(DISTINCT ed.auto_ability_id) >= 1
 ORDER BY m.id;
 
 
--- name: GetMonstersByRonsoRageID :many
-SELECT
-    m.*
+-- name: GetMonsterIDsByRonsoRage :many
+SELECT m.id
 FROM monsters m
 JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
 WHERE j.ronso_rage_id = $1
 ORDER BY m.id;
 
 
--- name: GetMonstersByDistance :many
-SELECT * FROM monsters WHERE distance = $1;
+-- name: GetMonsterIDsByDistance :many
+SELECT id FROM monsters WHERE distance = $1;
 
 
--- name: GetMonstersBySpecies :many
-SELECT * FROM monsters WHERE species = $1;
+-- name: GetMonsterIDsBySpecies :many
+SELECT id FROM monsters WHERE species = $1;
 
 
--- name: GetMonstersByMaCreationArea :many
-SELECT * FROM monsters WHERE area_conquest_location = $1;
+-- name: GetMonsterIDsByMaCreationArea :many
+SELECT id FROM monsters WHERE area_conquest_location = $1;
 
 
--- name: GetMonstersByCTBIconType :many
-SELECT * FROM monsters WHERE ctb_icon_type = $1;
+-- name: GetMonsterIDsByCTBIconType :many
+SELECT id FROM monsters WHERE ctb_icon_type = $1;
 
 
--- name: GetMonstersByCTBIconTypeBoss :many
-SELECT * FROM monsters WHERE ctb_icon_type = 'boss' OR ctb_icon_type = 'boss-numbered';
+-- name: GetMonsterIDsByCTBIconTypeBoss :many
+SELECT id FROM monsters WHERE ctb_icon_type = 'boss' OR ctb_icon_type = 'boss-numbered';
 
 
--- name: GetMonstersByIsStoryBased :many
-SELECT * FROM monsters WHERE is_story_based = $1;
+-- name: GetMonsterIDsByIsStoryBased :many
+SELECT id FROM monsters WHERE is_story_based = $1;
 
 
--- name: GetMonstersByIsRepeatable :many
-SELECT * FROM monsters WHERE is_repeatable = $1;
+-- name: GetMonsterIDsByIsRepeatable :many
+SELECT id FROM monsters WHERE is_repeatable = $1;
 
 
--- name: GetMonstersByCanBeCaptured :many
-SELECT * FROM monsters WHERE can_be_captured = $1;
+-- name: GetMonsterIDsByCanBeCaptured :many
+SELECT id FROM monsters WHERE can_be_captured = $1;
 
 
--- name: GetMonstersByHasOverdrive :many
-SELECT * FROM monsters WHERE has_overdrive = $1;
+-- name: GetMonsterIDsByHasOverdrive :many
+SELECT id FROM monsters WHERE has_overdrive = $1;
 
 
--- name: GetMonstersByIsUnderwater :many
-SELECT * FROM monsters WHERE is_underwater = $1;
+-- name: GetMonsterIDsByIsUnderwater :many
+SELECT id FROM monsters WHERE is_underwater = $1;
 
 
--- name: GetMonstersByIsZombie :many
-SELECT * FROM monsters WHERE is_zombie = $1;
+-- name: GetMonsterIDsByIsZombie :many
+SELECT id FROM monsters WHERE is_zombie = $1;
 
 
 -- name: CreateMonsterAmount :one

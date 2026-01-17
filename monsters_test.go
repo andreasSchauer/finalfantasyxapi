@@ -342,11 +342,11 @@ func TestGetMonster(t *testing.T) {
 					armorAbilities:  []int32{55, 58, 61, 64},
 				},
 				elemResists: []testElemResist{
-					{ element:  1, affinity: 5 },
-					{ element:  2, affinity: 5 },
-					{ element:  3, affinity: 5 },
-					{ element:  4, affinity: 2 },
-					{ element:  5, affinity: 5 },
+					{element: 1, affinity: 5},
+					{element: 2, affinity: 5},
+					{element: 3, affinity: 5},
+					{element: 4, affinity: 2},
+					{element: 5, affinity: 5},
 				},
 				statusImmunities: []int32{2, 6, 8, 13, 15, 33, 43, 46},
 				statusResists: map[string]int32{
@@ -367,14 +367,14 @@ func TestGetMonster(t *testing.T) {
 				},
 				defaultState: &testDefaultState{
 					IsTemporary: false,
-					Changes: 	 []testAltStateChange{
+					Changes: []testAltStateChange{
 						{
 							AlterationType: "change",
 							ElemResists: []testElemResist{
-								{ element:  1, affinity: 6 },
-								{ element:  2, affinity: 6 },
-								{ element:  3, affinity: 6 },
-								{ element:  4, affinity: 6 },
+								{element: 1, affinity: 6},
+								{element: 2, affinity: 6},
+								{element: 3, affinity: 6},
+								{element: 4, affinity: 6},
 							},
 						},
 					},
@@ -417,9 +417,9 @@ func TestGetMonster(t *testing.T) {
 				},
 				defaultState: &testDefaultState{
 					IsTemporary: false,
-					Changes: 	 []testAltStateChange{
+					Changes: []testAltStateChange{
 						{
-							AlterationType: "loss",
+							AlterationType:   "loss",
 							StatusImmunities: []int32{14, 33},
 						},
 						{
@@ -464,11 +464,11 @@ func TestGetMonster(t *testing.T) {
 				autoAbilities: []int32{102},
 				defaultState: &testDefaultState{
 					IsTemporary: false,
-					Changes: 	 []testAltStateChange{
+					Changes: []testAltStateChange{
 						{
 							AlterationType: "loss",
-							Properties: []int32{6},
-							AutoAbilities: []int32{102},
+							Properties:     []int32{6},
+							AutoAbilities:  []int32{102},
 						},
 					},
 				},
@@ -512,7 +512,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				defaultState: &testDefaultState{
 					IsTemporary: false,
-					Changes: 	 []testAltStateChange{
+					Changes: []testAltStateChange{
 						{
 							AlterationType: "change",
 							BaseStats: map[string]int32{
@@ -551,10 +551,10 @@ func TestGetMonster(t *testing.T) {
 				distance: 4,
 				defaultState: &testDefaultState{
 					IsTemporary: false,
-					Changes: 	 []testAltStateChange{
+					Changes: []testAltStateChange{
 						{
 							AlterationType: "change",
-							Distance: h.GetInt32Ptr(1),
+							Distance:       h.GetInt32Ptr(1),
 						},
 					},
 				},
@@ -568,7 +568,7 @@ func TestGetMonster(t *testing.T) {
 					"agility params": true,
 					"species":        true,
 					"ctb icon type":  true,
-					"distance":		  true,
+					"distance":       true,
 					"items":          true,
 					"equipment":      true,
 				},
@@ -583,20 +583,20 @@ func TestGetMonster(t *testing.T) {
 			},
 			expMonsters: expMonsters{
 				appliedState: &testAppliedState{
-					condition:   "When HP falls below 9000000.",
-					isTemporary: false,
+					condition:     "When HP falls below 9000000.",
+					isTemporary:   false,
 					appliedStatus: h.GetInt32Ptr(22),
 				},
 				defaultState: &testDefaultState{
 					IsTemporary: false,
-					Changes: 	 []testAltStateChange{
+					Changes: []testAltStateChange{
 						{
 							AlterationType: "gain",
-							AutoAbilities: []int32{99},
+							AutoAbilities:  []int32{99},
 						},
 						{
 							AlterationType: "loss",
-							RemovedStatus: h.GetInt32Ptr(22),
+							RemovedStatus:  h.GetInt32Ptr(22),
 						},
 					},
 				},
@@ -747,7 +747,7 @@ func TestGetMonster(t *testing.T) {
 					"distance":      true,
 					"items":         true,
 					"equipment":     true,
-					"default state":  true,
+					"default state": true,
 				},
 				expLengths: map[string]int{
 					"ronso rages": 4,
@@ -783,7 +783,7 @@ func TestGetMonster(t *testing.T) {
 					"distance":      true,
 					"items":         true,
 					"equipment":     true,
-					"default state":  true,
+					"default state": true,
 				},
 				expLengths: map[string]int{
 					"ronso rages": 4,
@@ -819,7 +819,7 @@ func TestGetMonster(t *testing.T) {
 					"distance":      true,
 					"items":         true,
 					"equipment":     true,
-					"default state":  true,
+					"default state": true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -852,7 +852,7 @@ func TestGetMonster(t *testing.T) {
 					"distance":      true,
 					"items":         true,
 					"equipment":     true,
-					"default state":  true,
+					"default state": true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -1004,9 +1004,9 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?elemental-affinities=weak",
+				requestURL:     "/api/monsters?elemental-resists=weak",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input. usage: '?elemental-affinities={element_name/id}-{affinity_name/id},{element_name/id}-{affinity_name/id},...'.",
+				expectedErr:    "invalid input. usage: '?elemental-resists={element_name/id}-{affinity_name/id},{element_name/id}-{affinity_name/id},...'.",
 			},
 		},
 		{
@@ -1018,16 +1018,16 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?elemental-affinities=weak-fire",
+				requestURL:     "/api/monsters?elemental-resists=weak-fire",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "unknown element 'weak' in 'elemental-affinities'.",
+				expectedErr:    "unknown element 'weak' in 'elemental-resists'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?elemental-affinities=fire-weak,fire-neutral",
+				requestURL:     "/api/monsters?elemental-resists=fire-weak,fire-neutral",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "duplicate use of id '1' in 'elemental-affinities'. each element can only be used once.",
+				expectedErr:    "duplicate use of id '1' in 'elemental-resists'. each element can only be used once.",
 			},
 		},
 		{
@@ -1121,7 +1121,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?elemental-affinities=FIre-weAk,water-neutral",
+				requestURL:     "/api/monsters?elemental-resists=FIre-weAk,water-neutral",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"next": true,
