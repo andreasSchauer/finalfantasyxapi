@@ -2,116 +2,105 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
-	"strconv"
-	"strings"
 
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 func (cfg *Config) applyRonsoStats(r *http.Request, mon Monster) ([]BaseStat, error) {
+	allowedStatIDs := []int32{1, 3, 5, 7}
 	baseStats := mon.BaseStats
-	queryParam := cfg.q.monsters["kimahri-stats"]
+	queryParam := cfg.q.monsters["kimahri_stats"]
 
-	kimahriStats, err := cfg.getKimahriStats(r, queryParam)
+	kimahri, _ := seeding.GetResource("kimahri", cfg.l.Characters)
+	kimahriBS := namesToResourceAmounts(cfg, cfg.e.stats, kimahri.BaseStats, cfg.newBaseStat)
+
+	kimahriStatMap, err := cfg.parseStatQuery(r, queryParam, kimahriBS, allowedStatIDs)
 	if errors.Is(err, errEmptyQuery) {
-		return mon.BaseStats, nil
+		return baseStats, nil
 	}
 	if err != nil {
 		return nil, err
 	}
-	ronsoStats := getRonsoStats(mon, kimahriStats)
 
-	for i, baseStat := range baseStats {
-		ronsoStatVal, ok := ronsoStats[baseStat.Stat.Name]
-		if ok {
-			baseStats[i].Value = ronsoStatVal
-		}
-	}
+	ronsoStats := getRonsoStats(mon, kimahriStatMap)
 
-	return baseStats, nil
+	return ronsoStats, nil
 }
 
+func getRonsoStats(mon Monster, kimahriStatMap map[string]int32) []BaseStat {
+	ronsoStatMap := make(map[string]int32)
+	ronsoStatMap["hp"] = getRonsoHP(mon, kimahriStatMap)
+	ronsoStatMap["strength"] = getRonsoStrength(mon, kimahriStatMap)
+	ronsoStatMap["magic"] = getRonsoMagic(mon, kimahriStatMap)
+	ronsoStatMap["agility"] = getRonsoAgility(mon, kimahriStatMap)
 
-func (cfg *Config) getKimahriStats(r *http.Request, queryParam QueryType) (map[string]int32, error) {
-	statMap := make(map[string]int32)
-	query := r.URL.Query().Get(queryParam.Name)
-	queryLower := strings.ToLower(query)
-
-	if query == "" {
-		return nil, errEmptyQuery
-	}
-
-	statKeyValuePairs := strings.SplitSeq(queryLower, ",")
-
-	for pair := range statKeyValuePairs {
-		parts := strings.Split(pair, "-")
-		if len(parts) != 2 {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input. usage: '%s'.", queryParam.Usage), nil)
-		}
-
-		stat := parts[0]
-		valueStr := parts[1]
-
-		statLookup, err := seeding.GetResource(stat, cfg.l.Stats)
-		if err != nil {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: '%s' in '%s'. stat doesn't exist. use '/api/stats' to see existing stats.", stat, queryParam.Name), err)
-		}
-
-		switch statLookup.ID {
-		case 2, 4, 6, 8, 9, 10:
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat '%s' in '%s'. '%s' only uses 'hp', 'strength', 'magic', 'agility'.", stat, queryParam.Name, queryParam.Name), nil)
-		}
-
-		value, err := strconv.Atoi(valueStr)
-		if err != nil {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat value '%s' in '%s'. stat value needs to be a positive integer.", valueStr, queryParam.Name), err)
-		}
-
-		err = validateKimahriStat(stat, value)
-		if err != nil {
-			return nil, err
-		}
-
-		statMap[stat] = int32(value)
-	}
-
-	statMap = getKimahriDefaultStats(statMap)
-
-	return statMap, nil
+	return replaceBaseStats(mon.BaseStats, ronsoStatMap)
 }
 
+func getRonsoHP(mon Monster, kimahriStatMap map[string]int32) int32 {
+	kimahriStr := kimahriStatMap["strength"]
+	kimahriMag := kimahriStatMap["magic"]
 
-func validateKimahriStat(key string, val int) error {
-	maxHP := 99999
-	maxStatVal := 255
+	v1 := float64(h.PowInt(kimahriStr, 3))
+	v2 := float64(h.PowInt(kimahriMag, 3))
+	v3 := (v1 + v2) / 2 * 16 / 15
 
-	switch key {
-	case "hp":
-		if val > maxHP {
-			return newHTTPError(http.StatusBadRequest, "kimahri's hp can't be higher than 99999.", nil)
-		}
-	case "strength", "magic", "agility":
-		if val > maxStatVal {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("kimahri's %s can't be higher than 255.", key), nil)
-		}
+	hpMod := ((int32(v3)/32)+30)*586/730 + 1
+
+	if mon.Name == "biran ronso" {
+		return int32(hpMod) * 8
 	}
 
-	return nil
+	if mon.Name == "yenke ronso" {
+		return int32(hpMod) * 6
+	}
+
+	return 0
 }
 
+func getRonsoStrength(mon Monster, kimahriStatMap map[string]int32) int32 {
+	kimahriHP := kimahriStatMap["hp"]
+	strengthVals := []int32{11, 12, 13, 15, 17, 19, 21, 22, 23, 24, 25, 27}
 
-func getKimahriDefaultStats(kimahriStats map[string]int32) map[string]int32 {
-	var hpDefault int32 = 644
-	var strDefault int32 = 16
-	var magDefault int32 = 17
-	var agilDefault int32 = 6
+	powerMod := min((kimahriHP-644)/200, 11)
 
-	kimahriStats["hp"] = max(kimahriStats["hp"], hpDefault)
-	kimahriStats["strength"] = max(kimahriStats["strength"], strDefault)
-	kimahriStats["magic"] = max(kimahriStats["magic"], magDefault)
-	kimahriStats["agility"] = max(kimahriStats["agility"], agilDefault)
+	strength := strengthVals[powerMod]
 
-	return kimahriStats
+	if mon.Name == "yenke ronso" {
+		strength /= 2
+	}
+
+	return strength
+}
+
+func getRonsoMagic(mon Monster, kimahriStatMap map[string]int32) int32 {
+	kimahriHP := kimahriStatMap["hp"]
+	magicVals := []int32{8, 8, 9, 10, 12, 14, 16, 17, 19, 20, 21, 22}
+
+	powerMod := min((kimahriHP-644)/200, 11)
+
+	magic := magicVals[powerMod]
+
+	if mon.Name == "biran ronso" {
+		magic /= 2
+	}
+
+	return magic
+}
+
+func getRonsoAgility(mon Monster, kimahriStatMap map[string]int32) int32 {
+	var agility int32
+	kimahriAgility := kimahriStatMap["agility"]
+
+	if mon.Name == "biran ronso" {
+		agility = max(kimahriAgility-4, 1)
+	}
+
+	if mon.Name == "yenke ronso" {
+		agility = max(kimahriAgility-6, 1)
+	}
+
+	return agility
 }

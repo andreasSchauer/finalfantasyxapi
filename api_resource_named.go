@@ -128,8 +128,7 @@ func newNamedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList]
 }
 
 
-// only used to define allowed resources in query parameters
-// and for newNamedAPIResourceFromType, since the newer function won't work with that
+// only used for newNamedAPIResourceFromType, since the newer function won't work with that
 func (cfg *Config) newNamedAPIResourceSimple(endpoint string, id int32, name string) NamedAPIResource {
 	if name == "" {
 		return NamedAPIResource{}

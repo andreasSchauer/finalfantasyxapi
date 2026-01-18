@@ -230,9 +230,9 @@ func TestRetrieveAreas(t *testing.T) {
 	}{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?comp-sphere=fa",
+				requestURL:     "/api/areas?comp_sphere=fa",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid boolean value 'fa'. usage: '?comp-sphere={boolean}'.",
+				expectedErr:    "invalid boolean value 'fa'. usage: '?comp_sphere={boolean}'.",
 			},
 		},
 		{
@@ -291,7 +291,7 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?monsters=true&chocobo=true&save-sphere=true",
+				requestURL:     "/api/areas?monsters=true&chocobo=true&save_sphere=true",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
@@ -301,7 +301,7 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?item=7&story-based=false&monsters=false",
+				requestURL:     "/api/areas?item=7&story_based=false&monsters=false",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
@@ -383,7 +383,7 @@ func TestAreasParameters(t *testing.T) {
 			},
 			expListParams: expListParams{
 				count:   21,
-				results: []string{"limit", "offset", "item", "save-sphere", "sublocation"},
+				results: []string{"limit", "offset", "item", "save_sphere", "sublocation"},
 			},
 		},
 		{
@@ -393,7 +393,7 @@ func TestAreasParameters(t *testing.T) {
 			},
 			expListParams: expListParams{
 				count:   21,
-				results: []string{"limit", "offset", "item", "save-sphere", "sublocation"},
+				results: []string{"limit", "offset", "item", "save_sphere", "sublocation"},
 			},
 		},
 		{

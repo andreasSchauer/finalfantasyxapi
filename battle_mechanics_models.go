@@ -41,6 +41,18 @@ func (cfg *Config) getBaseStat(stat string, baseStats []BaseStat) BaseStat {
 	return statMap[statLookup.ID]
 }
 
+
+func replaceBaseStats(baseStats []BaseStat, statMap map[string]int32) []BaseStat {
+	for i, baseStat := range baseStats {
+		newVal, ok := statMap[baseStat.Stat.Name]
+		if ok {
+			baseStats[i].Value = newVal
+		}
+	}
+
+	return baseStats
+}
+
 type ElementalResist struct {
 	Element  NamedAPIResource `json:"element"`
 	Affinity NamedAPIResource `json:"affinity"`

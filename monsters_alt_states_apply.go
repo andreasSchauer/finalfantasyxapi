@@ -20,7 +20,6 @@ func (as AppliedState) IsZero() bool {
 	return as.Condition == ""
 }
 
-
 func (cfg *Config) applyAlteredState(r *http.Request, mon Monster) (Monster, error) {
 	altStateID, err := cfg.getAltStateID(r, mon)
 	if errors.Is(err, errEmptyQuery) {
@@ -66,15 +65,14 @@ func (cfg *Config) applyAlteredState(r *http.Request, mon Monster) (Monster, err
 	return mon, nil
 }
 
-
 func (cfg *Config) getAltStateID(r *http.Request, mon Monster) (int, error) {
-	queryParam := cfg.q.monsters["altered-state"]
+	queryParam := cfg.q.monsters["altered_state"]
 	query := r.URL.Query().Get(queryParam.Name)
 
 	if query == "" {
 		return 0, errEmptyQuery
 	}
-	
+
 	if len(mon.AlteredStates) == 0 {
 		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states.", mon.Error()), nil)
 	}
@@ -86,7 +84,6 @@ func (cfg *Config) getAltStateID(r *http.Request, mon Monster) (int, error) {
 
 	return int(id), nil
 }
-
 
 func applyAltStateChange(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
 	defStateChange := AltStateChange{
@@ -106,7 +103,6 @@ func applyAltStateChange(mon Monster, change AltStateChange, appliedState Applie
 
 	return mon, appliedState, defaultState
 }
-
 
 func applyAltStateGain(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
 	defStateLoss := AltStateChange{
@@ -137,7 +133,6 @@ func applyAltStateGain(mon Monster, change AltStateChange, appliedState AppliedS
 	return mon, appliedState, defaultState
 }
 
-
 func applyAltStateLoss(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
 	defStateGain := AltStateChange{
 		AlterationType: database.AlterationTypeGain,
@@ -152,7 +147,6 @@ func applyAltStateLoss(mon Monster, change AltStateChange, appliedState AppliedS
 
 	return mon, appliedState, defaultState
 }
-
 
 // put default in first and cut out the currently applied state
 func replaceAltState(states []AlteredState, def AlteredState, i int) []AlteredState {

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -50,26 +49,12 @@ func checkID(idStr, resourceType string, maxID int) (parseResponse, error) {
 	return newParseResponse(int32(id), ""), nil
 }
 
-func checkUniqueName[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
-	response, err := checkNameSpelling(name, lookup)
-	if err == nil {
-		return response, nil
-	}
 
+func checkUniqueName[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
 	nameWithSpaces := h.GetNameWithSpaces(name)
 
-	response, err = checkNameSpelling(nameWithSpaces, lookup)
-	if err == nil {
-		return response, nil
-	}
-
-	return parseResponse{}, errNoResource
-}
-
-func checkNameSpelling[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
-	nameLower := strings.ToLower(name)
 	lookupObj := seeding.LookupObject{
-		Name: nameLower,
+		Name: nameWithSpaces,
 	}
 
 	// check name/version resources with version = null
@@ -79,7 +64,7 @@ func checkNameSpelling[T h.HasID](name string, lookup map[string]T) (parseRespon
 	}
 
 	// check for unique names
-	response, err = seeding.GetResource(nameLower, lookup)
+	response, err = seeding.GetResource(nameWithSpaces, lookup)
 	if err == nil {
 		return newParseResponse(response.GetID(), ""), nil
 	}
@@ -87,56 +72,39 @@ func checkNameSpelling[T h.HasID](name string, lookup map[string]T) (parseRespon
 	return parseResponse{}, errNoResource
 }
 
+
 func checkNameMultiple[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
-	nameLower := strings.ToLower(name)
+	nameWithSpaces := h.GetNameWithSpaces(name)
 	var testVersion int32 = 1
+
 	lookupObj := seeding.LookupObject{
-		Name:    nameLower,
+		Name:    nameWithSpaces,
 		Version: &testVersion,
 	}
-
-	// check for multi-versioned names with dashes
+	
 	_, err := seeding.GetResource(lookupObj, lookup)
 	if err == nil {
 		return newParseResponse(0, lookupObj.Name), nil
 	}
-
-	lookupObj.Name = h.GetNameWithSpaces(nameLower)
-
-	// check for multi-versioned names with spaces
-	_, err = seeding.GetResource(lookupObj, lookup)
-	if err == nil {
-		return newParseResponse(0, lookupObj.Name), nil
-	}
-
 	return parseResponse{}, errNoResource
 }
 
+
 func checkNameVersion[T h.HasID](name string, version *int32, lookup map[string]T) (parseResponse, error) {
-	nameLower := strings.ToLower(name)
+	nameWithSpaces := h.GetNameWithSpaces(name)
 
 	key := seeding.LookupObject{
-		Name:    nameLower,
+		Name:    nameWithSpaces,
 		Version: version,
 	}
 
-	// check for names with dashes
 	resource, err := seeding.GetResource(key, lookup)
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}
-
-	nameWithSpaces := h.GetNameWithSpaces(nameLower)
-	key.Name = nameWithSpaces
-
-	// check for names with spaces
-	resource, err = seeding.GetResource(key, lookup)
-	if err == nil {
-		return newParseResponse(resource.GetID(), ""), nil
-	}
-
 	return parseResponse{}, errNoResource
 }
+
 
 func parseVersionStr(versionStr string) (*int32, error) {
 	var versionPtr *int32

@@ -24,8 +24,8 @@ func GetMapKeyStr[T any](itemMap map[string]T) string {
 
 
 func GetNameWithSpaces(name string) string {
-	nameWithSpaces := strings.ReplaceAll(name, "-", " ")
-	return strings.ReplaceAll(nameWithSpaces, " >", "->")
+	nameLower := strings.ToLower(name)
+	return strings.ReplaceAll(nameLower, "_", " ")
 }
 
 

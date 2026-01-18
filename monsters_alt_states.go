@@ -30,24 +30,23 @@ type AltStateChange struct {
 }
 
 func (c *AltStateChange) IsZero() bool {
-	return c.Distance 		== nil &&
-		c.Properties 		== nil &&
-		c.AutoAbilities 	== nil &&
-		c.BaseStats 		== nil &&
-		c.ElemResists 		== nil &&
-		c.StatusImmunities 	== nil &&
-		c.StatusResists 	== nil &&
-		c.AddedStatus 		== nil &&
-		c.RemovedStatus 	== nil
+	return c.Distance == nil &&
+		c.Properties == nil &&
+		c.AutoAbilities == nil &&
+		c.BaseStats == nil &&
+		c.ElemResists == nil &&
+		c.StatusImmunities == nil &&
+		c.StatusResists == nil &&
+		c.AddedStatus == nil &&
+		c.RemovedStatus == nil
 }
-
 
 func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon seeding.Monster) []AlteredState {
 	alteredStates := []AlteredState{}
 
 	for i, altState := range mon.AlteredStates {
 		q := r.URL.Query()
-		q.Set("altered-state", strconv.Itoa(i+1))
+		q.Set("altered_state", strconv.Itoa(i+1))
 
 		alteredState := AlteredState{
 			URL:         cfg.createResourceURLQuery(cfg.e.monsters.endpoint, mon.ID, q),
@@ -62,7 +61,6 @@ func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon seeding.Monster)
 	return alteredStates
 }
 
-
 func (cfg *Config) getAltStateChanges(as seeding.AlteredState) []AltStateChange {
 	altStateChanges := []AltStateChange{}
 
@@ -75,7 +73,6 @@ func (cfg *Config) getAltStateChanges(as seeding.AlteredState) []AltStateChange 
 
 	return altStateChanges
 }
-
 
 func (cfg *Config) getChangeRelationships(asc seeding.AltStateChange) AltStateChange {
 	var change AltStateChange

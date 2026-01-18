@@ -45,8 +45,7 @@ func parseTypeQuery[T, N any](r *http.Request, queryParam QueryType, et EnumType
 		return TypedAPIResource{}, err
 	}
 
-	queryLower := strings.ToLower(query)
-	enum, err := GetTypedAPIResource(queryLower, et)
+	enum, err := GetTypedAPIResource(query, et)
 	if err != nil {
 		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value: '%s'. use /api/%s to see valid values.", query, queryParam.Name), err)
 	}
@@ -101,5 +100,5 @@ func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {
 		return "", errEmptyQuery
 	}
 
-	return query, nil
+	return strings.ToLower(query), nil
 }
