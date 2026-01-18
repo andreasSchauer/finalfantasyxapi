@@ -1,14 +1,12 @@
 package main
 
 import (
-	"database/sql"
-	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type AlteredState struct {
@@ -43,199 +41,74 @@ func (c *AltStateChange) IsZero() bool {
 		c.RemovedStatus 	== nil
 }
 
-func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon database.Monster) ([]AlteredState, error) {
-	dbAltStates, err := cfg.db.GetMonsterAlteredStates(r.Context(), mon.ID)
-	if err != nil {
-		return []AlteredState{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get altered states of %s.", getMonsterName(mon)), err)
-	}
 
+func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon seeding.Monster) []AlteredState {
 	alteredStates := []AlteredState{}
 
-	for i, dbAltState := range dbAltStates {
-		altStateChanges, err := cfg.getAltStateChanges(r, mon, dbAltState)
-		if err != nil {
-			return []AlteredState{}, err
-		}
+	for i, altState := range mon.AlteredStates {
 		q := r.URL.Query()
 		q.Set("altered-state", strconv.Itoa(i+1))
 
 		alteredState := AlteredState{
 			URL:         cfg.createResourceURLQuery(cfg.e.monsters.endpoint, mon.ID, q),
-			Condition:   dbAltState.Condition,
-			IsTemporary: dbAltState.IsTemporary,
-			Changes:     altStateChanges,
+			Condition:   altState.Condition,
+			IsTemporary: altState.IsTemporary,
+			Changes:     cfg.getAltStateChanges(altState),
 		}
 
 		alteredStates = append(alteredStates, alteredState)
 	}
 
-	return alteredStates, nil
+	return alteredStates
 }
 
-func (cfg *Config) getAltStateChanges(r *http.Request, mon database.Monster, as database.AlteredState) ([]AltStateChange, error) {
+
+func (cfg *Config) getAltStateChanges(as seeding.AlteredState) []AltStateChange {
 	altStateChanges := []AltStateChange{}
 
-	dbAltStateChanges, err := cfg.db.GetAltStateChanges(r.Context(), as.ID)
-	if err != nil {
-		return []AltStateChange{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state relationships of %s.", getMonsterName(mon)), err)
-	}
-
-	for _, dbChange := range dbAltStateChanges {
-		altStateChange, err := cfg.getAltStateChangeRelationships(r, mon, dbChange)
-		if err != nil {
-			return []AltStateChange{}, err
-		}
-
-		altStateChange.AlterationType = dbChange.AlterationType
-		altStateChange.Distance = anyToInt32Ptr(dbChange.Distance)
-
+	for _, change := range as.Changes {
+		altStateChange := cfg.getChangeRelationships(change)
+		altStateChange.AlterationType = database.AlterationType(change.AlterationType)
+		altStateChange.Distance = change.Distance
 		altStateChanges = append(altStateChanges, altStateChange)
 	}
 
-	return altStateChanges, nil
+	return altStateChanges
 }
 
-func (cfg *Config) getAltStateChangeRelationships(r *http.Request, mon database.Monster, asc database.AltStateChange) (AltStateChange, error) {
-	properties, err := cfg.getAltStateProperties(r, mon, asc)
-	if err != nil {
-		return AltStateChange{}, err
+
+func (cfg *Config) getChangeRelationships(asc seeding.AltStateChange) AltStateChange {
+	var change AltStateChange
+
+	if asc.Properties != nil {
+		properties := namesToNamedAPIResources(cfg, cfg.e.properties, *asc.Properties)
+		change.Properties = h.SliceOrNil(properties)
 	}
 
-	autoAbilities, err := cfg.getAltStateAutoAbilities(r, mon, asc)
-	if err != nil {
-		return AltStateChange{}, err
+	if asc.AutoAbilities != nil {
+		autoAbilities := namesToNamedAPIResources(cfg, cfg.e.autoAbilities, *asc.AutoAbilities)
+		change.AutoAbilities = h.SliceOrNil(autoAbilities)
 	}
 
-	baseStats, err := cfg.getAltStateBaseStats(r, mon, asc)
-	if err != nil {
-		return AltStateChange{}, err
+	if asc.BaseStats != nil {
+		baseStats := namesToResourceAmounts(cfg, cfg.e.stats, *asc.BaseStats, cfg.newBaseStat)
+		change.BaseStats = h.SliceOrNil(baseStats)
 	}
 
-	elemResists, err := cfg.getAltStateElemResists(r, mon, asc)
-	if err != nil {
-		return AltStateChange{}, err
+	if asc.ElemResists != nil {
+		elemResists := cfg.namesToElemResists(*asc.ElemResists)
+		change.ElemResists = h.SliceOrNil(elemResists)
 	}
 
-	immunities, err := cfg.getAltStateImmunities(r, mon, asc)
-	if err != nil {
-		return AltStateChange{}, err
+	if asc.StatusImmunities != nil {
+		immunities := namesToNamedAPIResources(cfg, cfg.e.statusConditions, *asc.StatusImmunities)
+		change.StatusImmunities = h.SliceOrNil(immunities)
 	}
 
-	addedStatusses, err := cfg.getAltStateStatus(r, mon, asc)
-	if err != nil {
-		return AltStateChange{}, err
+	if asc.AddedStatus != nil {
+		addedStatus := cfg.newInflictedStatus(*asc.AddedStatus)
+		change.AddedStatus = &addedStatus
 	}
 
-	return AltStateChange{
-		Properties:       properties,
-		AutoAbilities:    autoAbilities,
-		BaseStats:        baseStats,
-		ElemResists:      elemResists,
-		StatusImmunities: immunities,
-		AddedStatus:      addedStatusses,
-	}, nil
-}
-
-// => GetResourcesDbOrNil
-func (cfg *Config) getAltStateProperties(r *http.Request, mon database.Monster, asc database.AltStateChange) ([]NamedAPIResource, error) {
-	dbProperties, err := cfg.db.GetAltStateProperties(r.Context(), asc.ID)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state properties of %s.", getMonsterName(mon)), err)
-	}
-
-	properties := createNamedAPIResourcesSimple(cfg, dbProperties, cfg.e.properties.endpoint, func(prop database.GetAltStatePropertiesRow) (int32, string) {
-		return prop.PropertyID, prop.Property
-	})
-
-	if len(properties) == 0 {
-		return nil, nil
-	}
-
-	return properties, nil
-}
-
-func (cfg *Config) getAltStateAutoAbilities(r *http.Request, mon database.Monster, asc database.AltStateChange) ([]NamedAPIResource, error) {
-	dbAutoAbilities, err := cfg.db.GetAltStateAutoAbilities(r.Context(), asc.ID)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state auto-abilities of %s.", getMonsterName(mon)), err)
-	}
-
-	autoAbilities := createNamedAPIResourcesSimple(cfg, dbAutoAbilities, cfg.e.autoAbilities.endpoint, func(autoAbility database.GetAltStateAutoAbilitiesRow) (int32, string) {
-		return autoAbility.AutoAbilityID, autoAbility.AutoAbility
-	})
-
-	if len(autoAbilities) == 0 {
-		return nil, nil
-	}
-
-	return autoAbilities, nil
-}
-
-func (cfg *Config) getAltStateBaseStats(r *http.Request, mon database.Monster, asc database.AltStateChange) ([]BaseStat, error) {
-	dbBaseStats, err := cfg.db.GetAltStateBaseStats(r.Context(), asc.ID)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state base stats of %s.", getMonsterName(mon)), err)
-	}
-
-	var baseStats []BaseStat
-
-	for _, dbStat := range dbBaseStats {
-		baseStat := cfg.newBaseStat(dbStat.StatID, dbStat.Value, dbStat.Stat)
-
-		baseStats = append(baseStats, baseStat)
-	}
-
-	return baseStats, nil
-}
-
-func (cfg *Config) getAltStateElemResists(r *http.Request, mon database.Monster, asc database.AltStateChange) ([]ElementalResist, error) {
-	dbElemResists, err := cfg.db.GetAltStateElemResists(r.Context(), asc.ID)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state elemental resists of %s.", getMonsterName(mon)), err)
-	}
-
-	var elemResists []ElementalResist
-
-	for _, dbResist := range dbElemResists {
-		elemResist := cfg.newElemResist(dbResist.ElementID, dbResist.AffinityID, dbResist.Element, dbResist.Affinity)
-
-		elemResists = append(elemResists, elemResist)
-	}
-
-	return elemResists, nil
-}
-
-func (cfg *Config) getAltStateImmunities(r *http.Request, mon database.Monster, asc database.AltStateChange) ([]NamedAPIResource, error) {
-	dbImmunities, err := cfg.db.GetAltStateImmunities(r.Context(), asc.ID)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state status immunities of %s.", getMonsterName(mon)), err)
-	}
-
-	immunities := createNamedAPIResourcesSimple(cfg, dbImmunities, cfg.e.statusConditions.endpoint, func(immunity database.GetAltStateImmunitiesRow) (int32, string) {
-		return immunity.StatusID, immunity.Status
-	})
-
-	if len(immunities) == 0 {
-		return nil, nil
-	}
-
-	return immunities, nil
-}
-
-func (cfg *Config) getAltStateStatus(r *http.Request, mon database.Monster, asc database.AltStateChange) (*InflictedStatus, error) {
-	dbStatus, err := cfg.db.GetAltStateStatus(r.Context(), asc.ID)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
-		}
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get alt state added status of %s.", getMonsterName(mon)), err)
-	}
-
-	addedStatus := cfg.newInflictedStatus(dbStatus.StatusID, anyToInt32(dbStatus.Probability), dbStatus.Status, h.NullInt32ToPtr(dbStatus.Amount), dbStatus.DurationType)
-
-	if addedStatus.IsZero() {
-		return nil, nil
-	}
-
-	return &addedStatus, nil
+	return change
 }

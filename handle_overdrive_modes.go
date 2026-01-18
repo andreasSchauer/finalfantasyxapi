@@ -36,6 +36,10 @@ func (a ActionAmount) GetName() string {
 	return a.User.Name
 }
 
+func (a ActionAmount) GetVersion() *int32 {
+	return nil
+}
+
 func (a ActionAmount) GetVal() int32 {
 	return a.Amount
 }
@@ -92,7 +96,7 @@ func (cfg *Config) getOverdriveModeActions(mode seeding.OverdriveMode) []ActionA
 	actions := []ActionAmount{}
 
 	for _, a := range mode.ActionsToLearn {
-		actionAmount := nameToResourceAmount(cfg, cfg.e.characters, a.User, nil, a.Amount, newActionAmount)
+		actionAmount := nameToResourceAmount(cfg, cfg.e.characters, a, newActionAmount)
 		actions = append(actions, actionAmount)
 	}
 

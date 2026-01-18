@@ -33,6 +33,18 @@ func (ia ItemAmount) GetID() int32 {
 	return ia.ID
 }
 
+func (ia ItemAmount) GetName() string {
+	return ia.ItemName
+}
+
+func (ia ItemAmount) GetVersion() *int32 {
+	return nil
+}
+
+func (ia ItemAmount) GetVal() int32 {
+	return ia.Amount
+}
+
 func (ia ItemAmount) Error() string {
 	return fmt.Sprintf("item amount with item: %s, amount: %d", ia.ItemName, ia.Amount)
 }

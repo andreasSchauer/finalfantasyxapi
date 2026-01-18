@@ -26,6 +26,18 @@ func (bs BaseStat) GetID() int32 {
 	return bs.ID
 }
 
+func (bs BaseStat) GetName() string {
+	return bs.StatName
+}
+
+func (bs BaseStat) GetVersion() *int32 {
+	return nil
+}
+
+func (bs BaseStat) GetVal() int32 {
+	return bs.Value
+}
+
 func (bs BaseStat) Error() string {
 	return fmt.Sprintf("base stat %s, value: %d", bs.StatName, bs.Value)
 }

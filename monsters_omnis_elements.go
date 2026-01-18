@@ -104,12 +104,7 @@ func (cfg *Config) changeElemResist(element NamedAPIResource, newAffinityName st
 		return ElementalResist{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get affinity '%s'.", newAffinityName), err)
 	}
 
-	newResist := cfg.newElemResist(
-		element.ID,
-		newAffinity.ID,
-		element.Name,
-		newAffinity.Name,
-	)
+	newResist := cfg.newElemResist(element.Name, newAffinity.Name)
 
 	return newResist, nil
 }

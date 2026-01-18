@@ -1,8 +1,29 @@
 package main
 
 import (
+	"context"
+	"net/http"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
+
+
+type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
+	endpoint        	string
+	resourceType    	string
+	objLookup       	map[string]T
+	objLookupID     	map[int32]T
+	queryLookup     	map[string]QueryType
+	getMultipleQuery 	func(context.Context, string) ([]int32, error)
+	retrieveQuery   	func(context.Context) ([]int32, error)
+	idToResFunc     	func(*Config, handlerInput[T, R, A, L], int32) A
+	resToListFunc		func(*Config, *http.Request, handlerInput[T, R, A, L], []A) (L, error)
+	getSingleFunc   	func(*http.Request, int32) (R, error)
+	getMultipleFunc 	func(*http.Request, string) (L, error)
+	retrieveFunc    	func(*http.Request) (L, error)
+	subsections     	map[string]func(string) (APIResourceList, error)
+}
 
 type endpoints struct {
 	aeons              handlerInput[seeding.Aeon, any, NamedAPIResource, NamedApiResourceList]
@@ -174,6 +195,7 @@ func (cfg *Config) EndpointsInit() {
 		queryLookup:     	cfg.q.monsters,
 		idToResFunc:     	idToNamedAPIResource[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: 	 	newNamedAPIResourceList[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
+		
 		getMultipleQuery: 	cfg.db.GetMonsterIDsByName,
 		retrieveQuery:	 	cfg.db.GetMonsterIDs,
 		getSingleFunc:   	cfg.getMonster,

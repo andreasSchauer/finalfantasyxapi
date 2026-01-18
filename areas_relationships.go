@@ -20,58 +20,58 @@ func (ac AreaConnection) GetAPIResource() APIResource {
 	return ac.Area
 }
 
-func (cfg *Config) getAreaRelationships(r *http.Request, areaLookup seeding.Area) (Area, error) {
-	connections, err := cfg.getAreaConnectedAreas(areaLookup)
+func (cfg *Config) getAreaRelationships(r *http.Request, area seeding.Area) (Area, error) {
+	connections, err := cfg.getAreaConnectedAreas(area)
 	if err != nil {
 		return Area{}, err
 	}
 
-	characters, err := getResourcesDB(cfg, r, cfg.e.characters, areaLookup, cfg.db.GetAreaCharacterIDs)
+	characters, err := getResourcesDB(cfg, r, cfg.e.characters, area, cfg.db.GetAreaCharacterIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	aeons, err := getResourcesDB(cfg, r, cfg.e.aeons, areaLookup, cfg.db.GetAreaAeonIDs)
+	aeons, err := getResourcesDB(cfg, r, cfg.e.aeons, area, cfg.db.GetAreaAeonIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	shops, err := getResourcesDB(cfg, r, cfg.e.shops, areaLookup, cfg.db.GetAreaShopIDs)
+	shops, err := getResourcesDB(cfg, r, cfg.e.shops, area, cfg.db.GetAreaShopIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	treasures, err := getResourcesDB(cfg, r, cfg.e.treasures, areaLookup, cfg.db.GetAreaTreasureIDs)
+	treasures, err := getResourcesDB(cfg, r, cfg.e.treasures, area, cfg.db.GetAreaTreasureIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	monsters, err := getResourcesDB(cfg, r, cfg.e.monsters, areaLookup, cfg.db.GetAreaMonsterIDs)
+	monsters, err := getResourcesDB(cfg, r, cfg.e.monsters, area, cfg.db.GetAreaMonsterIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	formations, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, areaLookup, cfg.db.GetAreaMonsterFormationIDs)
+	formations, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, area, cfg.db.GetAreaMonsterFormationIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	sidequest, err := cfg.getAreaSidequest(r, areaLookup)
+	sidequest, err := cfg.getAreaSidequest(r, area)
 	if err != nil {
 		return Area{}, err
 	}
 
-	music, err := cfg.getAreaMusic(r, areaLookup)
+	music, err := cfg.getAreaMusic(r, area)
 	if err != nil {
 		return Area{}, err
 	}
 
-	fmvs, err := getResourcesDB(cfg, r, cfg.e.fmvs, areaLookup, cfg.db.GetAreaFmvIDs)
+	fmvs, err := getResourcesDB(cfg, r, cfg.e.fmvs, area, cfg.db.GetAreaFmvIDs)
 	if err != nil {
 		return Area{}, err
 	}
 
-	area := Area{
+	rel := Area{
 		ConnectedAreas: connections,
 		Characters:     characters,
 		Aeons:          aeons,
@@ -79,12 +79,12 @@ func (cfg *Config) getAreaRelationships(r *http.Request, areaLookup seeding.Area
 		Treasures:      treasures,
 		Monsters:       monsters,
 		Formations:     formations,
-		Sidequest:      h.NilOrPtr(sidequest),
-		Music:          h.NilOrPtr(music),
+		Sidequest:      h.ObjPtrOrNil(sidequest),
+		Music:          h.ObjPtrOrNil(music),
 		FMVs:           fmvs,
 	}
 
-	return area, nil
+	return rel, nil
 }
 
 func (cfg *Config) getAreaConnectedAreas(area seeding.Area) ([]AreaConnection, error) {
@@ -92,15 +92,13 @@ func (cfg *Config) getAreaConnectedAreas(area seeding.Area) ([]AreaConnection, e
 	connectedAreas := []AreaConnection{}
 
 	for _, connArea := range area.ConnectedAreas {
-		locArea := connArea.LocationArea
-
 		connType, err := newNamedAPIResourceFromType(cfg, cfg.e.connectionType.endpoint, connArea.ConnectionType, cfg.t.AreaConnectionType)
 		if err != nil {
 			return nil, err
 		}
 
 		connection := AreaConnection{
-			Area:           locAreaToLocationAPIResource(cfg, i, locArea),
+			Area:           locAreaToLocationAPIResource(cfg, i, connArea.LocationArea),
 			ConnectionType: connType,
 			StoryOnly:      connArea.StoryOnly,
 			Notes:          connArea.Notes,
@@ -133,6 +131,7 @@ func (cfg *Config) getAreaSidequest(r *http.Request, area seeding.Area) (NamedAP
 
 // this is kind of scuffed for now. I will probably find a better way, once I've managed to implement proper parent type assertions
 // then on the other hand, what else should I do here? it kind of is a special case, since these are not two equal types, but parent and child being categorized by the same master-type
+// at least it's reusable
 func findSidequest(cfg *Config, potentialSidequestID int32) (seeding.Sidequest, error) {
 	potentialSidequest, _ := seeding.GetResourceByID(potentialSidequestID, cfg.l.QuestsID)
 	sidequestID := potentialSidequestID

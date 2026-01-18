@@ -19,8 +19,13 @@ type APIResourceList interface {
 	getResults() []HasAPIResource
 }
 
+type NameAmount interface {
+	GetName() string
+	GetVersion() *int32
+	GetVal() int32
+}
+
 type ResourceAmount interface {
 	HasAPIResource
-	GetName() string
-	GetVal() int32
+	NameAmount
 }

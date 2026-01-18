@@ -1,13 +1,7 @@
 package main
 
 import (
-	"database/sql"
-	"errors"
-	"fmt"
-	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type MonsterItems struct {
@@ -28,97 +22,63 @@ func (mi MonsterItems) IsZero() bool {
 	return mi.DropChance == 0 && mi.OtherItemsCondition == nil
 }
 
-func (cfg *Config) getMonsterItems(r *http.Request, mon database.Monster) (MonsterItems, error) {
-	dbItems, err := cfg.db.GetMonsterItems(r.Context(), mon.ID)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return MonsterItems{}, nil
-		}
-		return MonsterItems{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve items of %s.", getMonsterName(mon)), err)
+func (cfg *Config) getMonsterItems(items *seeding.MonsterItems) *MonsterItems {
+	if items == nil {
+		return nil
+	}
+	monItems := MonsterItems{
+		DropChance:          items.DropChance,
+		DropCondition:       items.DropCondition,
+		OtherItemsCondition: items.OtherItemsCondition,
+		OtherItems:          cfg.getMonsterOtherItems(items.OtherItems),
 	}
 
-	stealCommon := cfg.newItemAmountOld(
-		dbItems.StealCommonItemType.ItemType,
-		dbItems.StealCommonItem.String,
-		dbItems.StealCommonItemID.Int32,
-		dbItems.StealCommonAmount.Int32,
-	)
-
-	stealRare := cfg.newItemAmountOld(
-		dbItems.StealRareItemType.ItemType,
-		dbItems.StealRareItem.String,
-		dbItems.StealRareItemID.Int32,
-		dbItems.StealRareAmount.Int32,
-	)
-
-	dropCommon := cfg.newItemAmountOld(
-		dbItems.DropCommonItemType.ItemType,
-		dbItems.DropCommonItem.String,
-		dbItems.DropCommonItemID.Int32,
-		dbItems.DropCommonAmount.Int32,
-	)
-
-	dropRare := cfg.newItemAmountOld(
-		dbItems.DropRareItemType.ItemType,
-		dbItems.DropRareItem.String,
-		dbItems.DropRareItemID.Int32,
-		dbItems.DropRareAmount.Int32,
-	)
-
-	secDropCommon := cfg.newItemAmountOld(
-		dbItems.SecDropCommonItemType.ItemType,
-		dbItems.SecDropCommonItem.String,
-		dbItems.SecDropCommonItemID.Int32,
-		dbItems.SecDropCommonAmount.Int32,
-	)
-
-	secDropRare := cfg.newItemAmountOld(
-		dbItems.SecDropRareItemType.ItemType,
-		dbItems.SecDropRareItem.String,
-		dbItems.SecDropRareItemID.Int32,
-		dbItems.SecDropRareAmount.Int32,
-	)
-
-	bribe := cfg.newItemAmountOld(
-		dbItems.BribeItemType.ItemType,
-		dbItems.BribeItem.String,
-		dbItems.BribeItemID.Int32,
-		dbItems.BribeAmount.Int32,
-	)
-
-	otherItems, err := cfg.getMonsterOtherItems(r, mon, dbItems.ID)
-	if err != nil {
-		return MonsterItems{}, err
+	if items.StealCommon != nil {
+		stealCommon := cfg.createItemAmount(*items.StealCommon)
+		monItems.StealCommon = &stealCommon
 	}
 
-	return MonsterItems{
-		DropChance:          anyToInt32(dbItems.DropChance),
-		DropCondition:       h.NullStringToPtr(dbItems.DropCondition),
-		StealCommon:         h.NilOrPtr(stealCommon),
-		StealRare:           h.NilOrPtr(stealRare),
-		DropCommon:          h.NilOrPtr(dropCommon),
-		DropRare:            h.NilOrPtr(dropRare),
-		SecondaryDropCommon: h.NilOrPtr(secDropCommon),
-		SecondaryDropRare:   h.NilOrPtr(secDropRare),
-		Bribe:               h.NilOrPtr(bribe),
-		OtherItemsCondition: h.NullStringToPtr(dbItems.OtherItemsCondition),
-		OtherItems:          otherItems,
-	}, nil
+	if items.StealRare != nil {
+		stealRare := cfg.createItemAmount(*items.StealRare)
+		monItems.StealRare = &stealRare
+	}
+
+	if items.DropCommon != nil {
+		dropCommon := cfg.createItemAmount(*items.DropCommon)
+		monItems.DropCommon = &dropCommon
+	}
+
+	if items.DropRare != nil {
+		dropRare := cfg.createItemAmount(*items.DropRare)
+		monItems.DropRare = &dropRare
+	}
+
+	if items.SecondaryDropCommon != nil {
+		secDropCommon := cfg.createItemAmount(*items.SecondaryDropCommon)
+		monItems.SecondaryDropCommon = &secDropCommon
+	}
+
+	if items.SecondaryDropRare != nil {
+		secDropRare := cfg.createItemAmount(*items.SecondaryDropRare)
+		monItems.SecondaryDropRare = &secDropRare
+	}
+
+	if items.Bribe != nil {
+		bribe := cfg.createItemAmount(*items.Bribe)
+		monItems.Bribe = &bribe
+	}
+
+	return &monItems
 }
 
-func (cfg *Config) getMonsterOtherItems(r *http.Request, mon database.Monster, monItemsID int32) ([]PossibleItem, error) {
-	dbOtherItems, err := cfg.db.GetMonsterOtherItems(r.Context(), monItemsID)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve other items of monster '%s' version '%d'.", mon.Name, *h.NullInt32ToPtr(mon.Version)), err)
-	}
 
+func (cfg *Config) getMonsterOtherItems(seedItems []seeding.PossibleItem) []PossibleItem {
 	otherItems := []PossibleItem{}
 
-	for _, item := range dbOtherItems {
-		possibleItem := cfg.newPossibleItem(item.ItemType, item.Item, item.ItemID, item.Amount, anyToInt32(item.Chance))
-
+	for _, item := range seedItems {
+		possibleItem := cfg.newPossibleItem(item.ItemAmount, item.Chance)
 		otherItems = append(otherItems, possibleItem)
 	}
 
-	return otherItems, nil
+	return otherItems
 }

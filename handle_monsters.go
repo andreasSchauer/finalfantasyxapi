@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -51,8 +50,8 @@ type Monster struct {
 	ElemResists          []ElementalResist     `json:"elem_resists"`
 	StatusImmunities     []NamedAPIResource    `json:"status_immunities"`
 	StatusResists        []StatusResist        `json:"status_resists"`
-	AlteredStates        []AlteredState        `json:"altered_states"`
 	Abilities            []MonsterAbility      `json:"abilities"`
+	AlteredStates        []AlteredState        `json:"altered_states"`
 }
 
 func (m *Monster) Error() string {
@@ -65,14 +64,6 @@ func (m *Monster) Error() string {
 	return msg
 }
 
-func getMonsterName(mon database.Monster) string {
-	monster := Monster{
-		Name:    mon.Name,
-		Version: h.NullInt32ToPtr(mon.Version),
-	}
-
-	return monster.Error()
-}
 
 func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 	i := cfg.e.monsters
@@ -106,72 +97,62 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 		return Monster{}, err
 	}
 
-	dbMonster, err := cfg.db.GetMonster(r.Context(), id)
-	if err != nil {
-		return Monster{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("monster with id '%d' doesn't exist.", id), err)
-	}
-
-	monsterItems, err := cfg.getMonsterItems(r, dbMonster)
+	monster, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	monsterEquipment, err := cfg.getMonsterEquipment(r, dbMonster)
+	rel, err := cfg.getMonsterRelationships(r, monster)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	rel, err := cfg.getMonsterRelationships(r, dbMonster)
+	species, err := newNamedAPIResourceFromType(cfg, cfg.e.monsterSpecies.endpoint, monster.Species, cfg.t.MonsterSpecies)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	species, err := newNamedAPIResourceFromType(cfg, cfg.e.monsterSpecies.endpoint, string(dbMonster.Species), cfg.t.MonsterSpecies)
+	ctbIconType, err := newNamedAPIResourceFromType(cfg, cfg.e.ctbIconType.endpoint, monster.CTBIconType, cfg.t.CTBIconType)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	ctbIconType, err := newNamedAPIResourceFromType(cfg, cfg.e.ctbIconType.endpoint, string(dbMonster.CtbIconType), cfg.t.CTBIconType)
-	if err != nil {
-		return Monster{}, err
-	}
-
-	monster := Monster{
-		ID:                   dbMonster.ID,
-		Name:                 dbMonster.Name,
-		Version:              h.NullInt32ToPtr(dbMonster.Version),
-		Specification:        h.NullStringToPtr(dbMonster.Specification),
-		Notes:                h.NullStringToPtr(dbMonster.Notes),
+	response := Monster{
+		ID:                   monster.ID,
+		Name:                 monster.Name,
+		Version:              monster.Version,
+		Specification:        monster.Specification,
+		Notes:                monster.Notes,
 		Species:              species,
-		IsStoryBased:         dbMonster.IsStoryBased,
-		IsRepeatable:         dbMonster.IsRepeatable,
-		CanBeCaptured:        dbMonster.CanBeCaptured,
-		AreaConquestLocation: h.ConvertNullMaCreationArea(dbMonster.AreaConquestLocation),
+		IsStoryBased:         monster.IsStoryBased,
+		IsRepeatable:         monster.IsRepeatable,
+		CanBeCaptured:        monster.CanBeCaptured,
+		AreaConquestLocation: monster.AreaConquestLocation,
 		CTBIconType:          ctbIconType,
-		HasOverdrive:         dbMonster.HasOverdrive,
-		IsUnderwater:         dbMonster.IsUnderwater,
-		IsZombie:             dbMonster.IsZombie,
-		Distance:             anyToInt32(dbMonster.Distance),
+		HasOverdrive:         monster.HasOverdrive,
+		IsUnderwater:         monster.IsUnderwater,
+		IsZombie:             monster.IsZombie,
+		Distance:             monster.Distance,
 		Properties:           rel.Properties,
 		AutoAbilities:        rel.AutoAbilities,
-		AP:                   dbMonster.Ap,
-		APOverkill:           dbMonster.ApOverkill,
-		OverkillDamage:       dbMonster.OverkillDamage,
-		Gil:                  dbMonster.Gil,
-		StealGil:             h.NullInt32ToPtr(dbMonster.StealGil),
+		AP:                   monster.AP,
+		APOverkill:           monster.APOverkill,
+		OverkillDamage:       monster.OverkillDamage,
+		Gil:                  monster.Gil,
+		StealGil:             monster.StealGil,
 		RonsoRages:           rel.RonsoRages,
-		DoomCountdown:        anyToInt32Ptr(dbMonster.DoomCountdown),
-		PoisonRate:           anyToFloat32Ptr(dbMonster.PoisonRate),
-		ThreatenChance:       anyToInt32Ptr(dbMonster.ThreatenChance),
-		ZanmatoLevel:         anyToInt32(dbMonster.ZanmatoLevel),
-		MonsterArenaPrice:    h.NullInt32ToPtr(dbMonster.MonsterArenaPrice),
-		SensorText:           h.NullStringToPtr(dbMonster.SensorText),
-		ScanText:             h.NullStringToPtr(dbMonster.ScanText),
+		DoomCountdown:        monster.DoomCountdown,
+		PoisonRate:           monster.PoisonRate,
+		ThreatenChance:       monster.ThreatenChance,
+		ZanmatoLevel:         monster.ZanmatoLevel,
+		MonsterArenaPrice:    monster.MonsterArenaPrice,
+		SensorText:           monster.SensorText,
+		ScanText:             monster.ScanText,
 		Locations:            rel.Locations,
 		Formations:           rel.Formations,
 		BaseStats:            rel.BaseStats,
-		Items:                h.NilOrPtr(monsterItems),
-		Equipment:            h.NilOrPtr(monsterEquipment),
+		Items:                cfg.getMonsterItems(monster.Items),
+		Equipment:            cfg.getMonsterEquipment(monster.Equipment),
 		ElemResists:          rel.ElemResists,
 		StatusImmunities:     rel.StatusImmunities,
 		StatusResists:        rel.StatusResists,
@@ -179,37 +160,37 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 		Abilities:            rel.Abilities,
 	}
 
-	monster, err = cfg.applyAlteredState(r, monster)
+	response, err = cfg.applyAlteredState(r, response)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	monster.BaseStats, err = cfg.applyRonsoStats(r, monster)
+	response.BaseStats, err = cfg.applyRonsoStats(r, response)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	monster.ElemResists, err = cfg.applyOmnisElemResists(r, monster)
+	response.ElemResists, err = cfg.applyOmnisElemResists(r, response)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	monster.BribeChances, err = cfg.getMonsterBribeChances(monster)
+	response.BribeChances, err = cfg.getMonsterBribeChances(response)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	monster.PoisonDamage, err = cfg.getMonsterPoisonDamage(monster)
+	response.PoisonDamage, err = cfg.getMonsterPoisonDamage(response)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	monster.AgilityParameters, err = cfg.getMonsterAgilityVals(r, monster)
+	response.AgilityParameters, err = cfg.getMonsterAgilityParams(r, response)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	return monster, nil
+	return response, nil
 }
 
 func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (NamedApiResourceList, error) {

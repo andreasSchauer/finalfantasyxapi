@@ -62,6 +62,18 @@ func (a ActionToLearn) GetID() int32 {
 	return a.ID
 }
 
+func (a ActionToLearn) GetName() string {
+	return a.User
+}
+
+func (a ActionToLearn) GetVersion() *int32 {
+	return nil
+}
+
+func (a ActionToLearn) GetVal() int32 {
+	return a.Amount
+}
+
 func (a ActionToLearn) Error() string {
 	return fmt.Sprintf("action to learn with user: %s, amount: %d", a.User, a.Amount)
 }

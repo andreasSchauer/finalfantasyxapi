@@ -56,56 +56,6 @@ func (r NamedAPIResource) GetAPIResource() APIResource {
 }
 
 
-
-func (cfg *Config) newNamedAPIResourceSimple(endpoint string, id int32, name string) NamedAPIResource {
-	if name == "" {
-		return NamedAPIResource{}
-	}
-
-	return NamedAPIResource{
-		ID:   id,
-		Name: name,
-		URL:  cfg.createResourceURL(endpoint, id),
-	}
-}
-
-
-func createNamedAPIResourcesSimple[T any](
-	cfg *Config,
-	items []T,
-	endpoint string,
-	mapper func(T) (id int32, name string),
-) []NamedAPIResource {
-	resources := []NamedAPIResource{}
-
-	for _, item := range items {
-		id, name := mapper(item)
-		resource := cfg.newNamedAPIResourceSimple(endpoint, id, name)
-
-		if !resource.IsZero() {
-			resources = append(resources, resource)
-		}
-	}
-
-	return resources
-}
-
-func newNamedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []NamedAPIResource) (NamedApiResourceList, error) {
-	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
-	if err != nil {
-		return NamedApiResourceList{}, err
-	}
-
-	list := NamedApiResourceList{
-		ListParams: listParams,
-		Results:    shownResources,
-	}
-
-	return list, nil
-}
-
-
-
 func idToNamedAPIResource[T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) NamedAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
 	params := res.GetResParamsNamed()
@@ -132,10 +82,62 @@ func nameToNamedAPIResource[T h.IsNamed, R any, A APIResource, L APIResourceList
 	return idToNamedAPIResource(cfg, i, parseResp.ID)
 }
 
-// converts inputs to a resourceAmount of any kind by calling the given constructor func
-// still need a method of type assertion for itemAmount that is done before calling this function
-func nameToResourceAmount[RA ResourceAmount, T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], name string, version *int32, amount int32, fn func(NamedAPIResource, int32) RA) RA {
-	resource := nameToNamedAPIResource(cfg, i, name, version)
-	return fn(resource, amount)
+func namesToNamedAPIResources[T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], names []string) []NamedAPIResource {
+	resources := []NamedAPIResource{}
+
+	for _, name := range names {
+		resource := nameToNamedAPIResource(cfg, i, name, nil)
+		resources = append(resources, resource)
+	}
+
+	return resources
 }
 
+
+// converts inputs to a resourceAmount of any kind by calling the given constructor func
+func nameToResourceAmount[NA NameAmount, RA ResourceAmount, T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], item NA, fn func(NamedAPIResource, int32) RA) RA {
+	resource := nameToNamedAPIResource(cfg, i, item.GetName(), item.GetVersion())
+	return fn(resource, item.GetVal())
+}
+
+
+func namesToResourceAmounts[NA NameAmount, RA ResourceAmount, T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], items []NA, fn func(NamedAPIResource, int32) RA) []RA {
+	results := []RA{}
+
+	for _, item := range items {
+		ra := nameToResourceAmount(cfg, i, item, fn)
+		results = append(results, ra)
+	}
+
+	return results
+}
+
+
+func newNamedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []NamedAPIResource) (NamedApiResourceList, error) {
+	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
+	if err != nil {
+		return NamedApiResourceList{}, err
+	}
+
+	list := NamedApiResourceList{
+		ListParams: listParams,
+		Results:    shownResources,
+	}
+
+	return list, nil
+}
+
+
+// only used to define allowed resources in query parameters
+// and for newNamedAPIResourceFromType, since the newer function won't work with that
+func (cfg *Config) newNamedAPIResourceSimple(endpoint string, id int32, name string) NamedAPIResource {
+	if name == "" {
+		return NamedAPIResource{}
+	}
+
+	return NamedAPIResource{
+		ID:   id,
+		Name: name,
+		URL:  cfg.createResourceURL(endpoint, id),
+	}
+}

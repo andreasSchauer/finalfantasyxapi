@@ -5,8 +5,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = monsters.data_hash
 RETURNING *;
 
 
--- name: GetMonster :one
-SELECT * FROM monsters WHERE id = $1;
+-- name: GetMonsterID :one
+SELECT id FROM monsters WHERE id = $1;
 
 
 -- name: GetMonsterIDsByName :many
@@ -241,15 +241,8 @@ WHERE j.monster_id = $1
 ORDER BY a.id;
 
 
--- name: GetMonsterLocations :many
-SELECT DISTINCT
-    l.id AS location_id,
-	l.name AS location,
-    s.id AS sublocation_id,
-	s.name AS sublocation,
-    a.id AS area_id,
-	a.name AS area,
-	a.version
+-- name: GetMonsterAreaIDs :many
+SELECT DISTINCT a.id
 FROM locations l
 JOIN sublocations s ON s.location_id = l.id
 JOIN areas a ON a.sublocation_id = s.id
@@ -258,16 +251,12 @@ JOIN j_encounter_location_formations jelf ON jelf.encounter_location_id = el.id
 JOIN monster_formations mf ON jelf.monster_formation_id = mf.id
 JOIN j_monster_formations_monsters jmfm ON jmfm.monster_formation_id = mf.id
 JOIN monster_amounts ma ON jmfm.monster_amount_id = ma.id
-WHERE ma.monster_id = $1;
+WHERE ma.monster_id = $1
+ORDER BY a.id;
 
 
--- name: GetMonsterMonsterFormations :many
-SELECT
-    mf.id,
-    mf.category,
-    mf.is_forced_ambush,
-    mf.can_escape,
-    mf.notes
+-- name: GetMonsterMonsterFormationIDs :many
+SELECT mf.id
 FROM monster_formations mf
 JOIN j_monster_formations_monsters j ON j.monster_formation_id = mf.id 
 JOIN monster_amounts ma ON j.monster_amount_id = ma.id

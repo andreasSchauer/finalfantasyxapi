@@ -1,6 +1,9 @@
 package main
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+)
 
 type BaseStat struct {
 	Stat  NamedAPIResource `json:"stat"`
@@ -11,9 +14,9 @@ func (bs BaseStat) GetAPIResource() APIResource {
 	return bs.Stat
 }
 
-func (cfg *Config) newBaseStat(id, value int32, name string) BaseStat {
+func (cfg *Config) newBaseStat(res NamedAPIResource, value int32) BaseStat {
 	return BaseStat{
-		Stat:  cfg.newNamedAPIResourceSimple(cfg.e.stats.endpoint, id, name),
+		Stat:  res,
 		Value: value,
 	}
 }
@@ -22,8 +25,20 @@ func (bs BaseStat) GetName() string {
 	return bs.Stat.Name
 }
 
+func (bs BaseStat) GetVersion() *int32 {
+	return nil
+}
+
 func (bs BaseStat) GetVal() int32 {
 	return bs.Value
+}
+
+
+func (cfg *Config) getBaseStat(stat string, baseStats []BaseStat) BaseStat {
+	statLookup, _ := seeding.GetResource(stat, cfg.l.Stats)
+	statMap := getResourceMap(baseStats)
+
+	return statMap[statLookup.ID]
 }
 
 type ElementalResist struct {
@@ -35,11 +50,22 @@ func (er ElementalResist) GetAPIResource() APIResource {
 	return er.Element
 }
 
-func (cfg *Config) newElemResist(elem_id, affinity_id int32, element, affinity string) ElementalResist {
+func (cfg *Config) newElemResist(element, affinity string) ElementalResist {
 	return ElementalResist{
-		Element:  cfg.newNamedAPIResourceSimple(cfg.e.elements.endpoint, elem_id, element),
-		Affinity: cfg.newNamedAPIResourceSimple(cfg.e.affinities.endpoint, affinity_id, affinity),
+		Element:  nameToNamedAPIResource(cfg, cfg.e.elements, element, nil),
+		Affinity: nameToNamedAPIResource(cfg, cfg.e.affinities, affinity, nil),
 	}
+}
+
+func (cfg *Config) namesToElemResists(resists []seeding.ElementalResist) []ElementalResist {
+	elemResists := []ElementalResist{}
+
+	for _, seedResist := range resists {
+		elemResist := cfg.newElemResist(seedResist.Element, seedResist.Affinity)
+		elemResists = append(elemResists, elemResist)
+	}
+
+	return elemResists
 }
 
 type StatusResist struct {
@@ -51,15 +77,19 @@ func (sr StatusResist) GetAPIResource() APIResource {
 	return sr.StatusCondition
 }
 
-func (cfg *Config) newStatusResist(id, resistance int32, status string) StatusResist {
+func (cfg *Config) newStatusResist(res NamedAPIResource, resistance int32) StatusResist {
 	return StatusResist{
-		StatusCondition: cfg.newNamedAPIResourceSimple(cfg.e.statusConditions.endpoint, id, status),
+		StatusCondition: res,
 		Resistance:      resistance,
 	}
 }
 
 func (sr StatusResist) GetName() string {
 	return sr.StatusCondition.Name
+}
+
+func (sr StatusResist) GetVersion() *int32 {
+	return nil
 }
 
 func (sr StatusResist) GetVal() int32 {
@@ -81,11 +111,11 @@ func (is InflictedStatus) IsZero() bool {
 	return is.StatusCondition.Name == ""
 }
 
-func (cfg *Config) newInflictedStatus(id, probability int32, status string, amount *int32, durationType database.DurationType) InflictedStatus {
+func (cfg *Config) newInflictedStatus(status seeding.InflictedStatus) InflictedStatus {
 	return InflictedStatus{
-		StatusCondition: cfg.newNamedAPIResourceSimple(cfg.e.statusConditions.endpoint, id, status),
-		Probability:     probability,
-		DurationType:    durationType,
-		Amount:          amount,
+		StatusCondition: nameToNamedAPIResource(cfg, cfg.e.statusConditions, status.StatusCondition, nil),
+		Probability:     status.Probability,
+		DurationType:    database.DurationType(status.DurationType),
+		Amount:          status.Amount,
 	}
 }

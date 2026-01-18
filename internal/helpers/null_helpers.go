@@ -8,11 +8,26 @@ type Zeroable interface {
 	IsZero() bool
 }
 
-func NilOrPtr[T Zeroable](v T) *T {
+// Use derefOrNil for every field that is a pointer
+func DerefOrNil[T any](ptr *T) any {
+	if ptr == nil {
+		return nil
+	}
+	return *ptr
+}
+
+func ObjPtrOrNil[T Zeroable](v T) *T {
 	if v.IsZero() {
 		return nil
 	}
 	return &v
+}
+
+func SliceOrNil[T any](s []T) []T {
+	if len(s) == 0 {
+		return nil
+	}
+	return s
 }
 
 // use these for dealing with pointer-fields when inputting values that can be null for a database query
@@ -37,15 +52,6 @@ func GetNullFloat64(f *float32) sql.NullFloat64 {
 		return sql.NullFloat64{}
 	}
 	return sql.NullFloat64{Float64: float64(*f), Valid: true}
-}
-
-// Use derefOrNil for every field that is a pointer
-
-func DerefOrNil[T any](ptr *T) any {
-	if ptr == nil {
-		return nil
-	}
-	return *ptr
 }
 
 // used to get the id of nullable objects for DerefOrNil
@@ -84,6 +90,7 @@ func ObjPtrToInt32ID[T HasID](objPtr *T) int32 {
 	return obj.GetID()
 }
 
+// these functions are all used to convert a nullable db value into a normal value or pointer
 func NullStringToPtr(s sql.NullString) *string {
 	if !s.Valid {
 		return nil

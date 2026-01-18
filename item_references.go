@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type ItemAmount struct {
@@ -24,6 +21,10 @@ func (ia ItemAmount) GetName() string {
 	return ia.Item.Name
 }
 
+func (ia ItemAmount) GetVersion() *int32 {
+	return nil
+}
+
 func (ia ItemAmount) GetVal() int32 {
 	return ia.Amount
 }
@@ -35,47 +36,26 @@ func newItemAmount(res NamedAPIResource, amount int32) ItemAmount {
 	}
 }
 
-func (cfg *Config) createItemAmount(name string, amount int32) (ItemAmount, error) {
+func (cfg *Config) createItemAmount(input seeding.ItemAmount) ItemAmount {
 	iItems := cfg.e.items
 	iKeyItems := cfg.e.keyItems
 	var ia ItemAmount
 
-	_, ok := iItems.objLookup[name]
+	_, ok := iItems.objLookup[input.ItemName]
 	if ok {
-		ia = nameToResourceAmount(cfg, iItems, name, nil, amount, newItemAmount)
-		return ia, nil
+		ia = nameToResourceAmount(cfg, iItems, input, newItemAmount)
+		return ia
 	}
 
-	_, ok = iKeyItems.objLookup[name]
+	_, ok = iKeyItems.objLookup[input.ItemName]
 	if ok {
-		ia = nameToResourceAmount(cfg, iKeyItems, name, nil, amount, newItemAmount)
-		return ia, nil
+		ia = nameToResourceAmount(cfg, iKeyItems, input, newItemAmount)
+		return ia
 	}
 
-	return ItemAmount{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("item '%s' does not exist.", name), nil)
+	return ItemAmount{}
 }
 
-
-func (cfg *Config) newItemAmountOld(itemType database.ItemType, itemName string, itemID, amount int32) ItemAmount {
-	if itemName == "" {
-		return ItemAmount{}
-	}
-	var endpoint string
-
-	switch itemType {
-	case database.ItemTypeItem:
-		endpoint = cfg.e.items.endpoint
-	case database.ItemTypeKeyItem:
-		endpoint = cfg.e.keyItems.endpoint
-	}
-
-	itemResource := cfg.newNamedAPIResourceSimple(endpoint, itemID, itemName)
-
-	return ItemAmount{
-		Item:   itemResource,
-		Amount: amount,
-	}
-}
 
 type PossibleItem struct {
 	ItemAmount
@@ -86,11 +66,9 @@ func (ps PossibleItem) GetAPIResource() APIResource {
 	return ps.Item.GetAPIResource()
 }
 
-func (cfg *Config) newPossibleItem(itemType database.ItemType, itemName string, itemID, amount, chance int32) PossibleItem {
-	itemAmount := cfg.newItemAmountOld(itemType, itemName, itemID, amount)
-
+func (cfg *Config) newPossibleItem(item seeding.ItemAmount, chance int32) PossibleItem {
 	return PossibleItem{
-		ItemAmount: itemAmount,
+		ItemAmount: cfg.createItemAmount(item),
 		Chance:     chance,
 	}
 }
