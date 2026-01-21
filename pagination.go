@@ -5,20 +5,17 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type ListParams struct {
 	Count          int         `json:"count"`
 	Previous       *string     `json:"previous"`
 	Next           *string     `json:"next"`
-	ParentResource APIResource `json:"parent_resource,omitempty"`
 }
 
-func createPaginatedList[T h.HasID, R any, A APIResource, L APIResourceList, I any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], items []I) (ListParams, []I, error) {
-	queryParamOffset := i.queryLookup["offset"]
-	queryParamLimit := i.queryLookup["limit"]
+func createPaginatedList[T any](cfg *Config, r *http.Request, items []T) (ListParams, []T, error) {
+	queryParamOffset := cfg.q.defaultParams["offset"]
+	queryParamLimit := cfg.q.defaultParams["limit"]
 
 	offset, err := parseIntQuery(r, queryParamOffset)
 	if err != nil {
@@ -42,7 +39,7 @@ func createPaginatedList[T h.HasID, R any, A APIResource, L APIResourceList, I a
 	}
 
 	if size == 0 {
-		return listParams, []I{}, nil
+		return listParams, []T{}, nil
 	}
 
 	if offset >= size {

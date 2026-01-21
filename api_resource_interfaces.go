@@ -16,7 +16,7 @@ type HasAPIResource interface {
 
 type APIResourceList interface {
 	getListParams() ListParams
-	getResults() []HasAPIResource
+	getResults() 	[]HasAPIResource
 }
 
 type NameAmount interface {

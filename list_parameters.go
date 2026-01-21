@@ -23,7 +23,7 @@ func getQueryParamList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 
 	queryParams = getAllowedResources(cfg, i, queryParams)
 
-	listParams, shownResources, err := createPaginatedList(cfg, r, i, queryParams)
+	listParams, shownResources, err := createPaginatedList(cfg, r, queryParams)
 	if err != nil {
 		return QueryParameterList{}, err
 	}
@@ -74,7 +74,7 @@ func filterParamsOnSection[T h.HasID, R any, A APIResource, L APIResourceList](p
 	return filteredParams, nil
 }
 
-func verifySectionParam(section, endpoint string, sectionMap map[string]func(string) (APIResourceList, error)) (string, error) {
+func verifySectionParam(section, endpoint string, sectionMap map[string]SubSectionFns) (string, error) {
 	if section == "" {
 		return "", errEmptyQuery
 	}

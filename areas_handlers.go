@@ -47,7 +47,7 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case 2:
-		handleEndpointSubsections(w, i, segments)
+		handleEndpointSubsections(cfg, w, r, i, segments)
 		return
 
 	default:

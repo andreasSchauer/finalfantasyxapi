@@ -9,8 +9,8 @@ import (
 )
 
 type ItemAmount struct {
-	ID           int32
-	MasterItemID int32
+	ID           int32	`json:"-"`
+	MasterItemID int32	`json:"-"`
 	ItemName     string `json:"name"`
 	Amount       int32  `json:"amount"`
 }

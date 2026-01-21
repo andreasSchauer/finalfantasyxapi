@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) applyOmnisElemResists(r *http.Request, mon Monster) ([]ElementalResist, error) {
+func (cfg *Config) applyOmnisElements(r *http.Request, mon Monster, queryName string) ([]ElementalResist, error) {
 	circlesAffinity := map[int]string{
 		0: "neutral",
 		1: "halved",
@@ -17,7 +17,7 @@ func (cfg *Config) applyOmnisElemResists(r *http.Request, mon Monster) ([]Elemen
 		4: "absorb",
 	}
 
-	circleCounts, err := cfg.parseOmnisQuery(r)
+	circleCounts, err := cfg.parseOmnisQuery(r, queryName)
 	if errors.Is(err, errEmptyQuery) {
 		return mon.ElemResists, nil
 	}
@@ -56,8 +56,8 @@ func (cfg *Config) applyOmnisElemResists(r *http.Request, mon Monster) ([]Elemen
 }
 
 // verifies the input and counts the amounts of circles pointing to each element
-func (cfg *Config) parseOmnisQuery(r *http.Request) (map[string]int, error) {
-	queryParam := cfg.q.monsters["omnis_elements"]
+func (cfg *Config) parseOmnisQuery(r *http.Request, queryName string) (map[string]int, error) {
+	queryParam := cfg.q.monsters[queryName]
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err

@@ -20,8 +20,8 @@ func (as AppliedState) IsZero() bool {
 	return as.Condition == ""
 }
 
-func (cfg *Config) applyAlteredState(r *http.Request, mon Monster) (Monster, error) {
-	altStateID, err := cfg.getAltStateID(r, mon)
+func (cfg *Config) applyAlteredState(r *http.Request, mon Monster, queryName string) (Monster, error) {
+	altStateID, err := cfg.getAltStateID(r, mon, queryName)
 	if errors.Is(err, errEmptyQuery) {
 		return mon, nil
 	}
@@ -65,8 +65,8 @@ func (cfg *Config) applyAlteredState(r *http.Request, mon Monster) (Monster, err
 	return mon, nil
 }
 
-func (cfg *Config) getAltStateID(r *http.Request, mon Monster) (int, error) {
-	queryParam := cfg.q.monsters["altered_state"]
+func (cfg *Config) getAltStateID(r *http.Request, mon Monster, queryName string) (int, error) {
+	queryParam := cfg.q.monsters[queryName]
 	query := r.URL.Query().Get(queryParam.Name)
 
 	if query == "" {

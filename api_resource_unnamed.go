@@ -64,8 +64,8 @@ func idToUnnamedAPIResource[T h.IsUnnamed, R any, A APIResource, L APIResourceLi
 }
 
 
-func newUnnamedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []UnnamedAPIResource) (UnnamedApiResourceList, error) {
-	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
+func newUnnamedAPIResourceList(cfg *Config, r *http.Request, resources []UnnamedAPIResource) (UnnamedApiResourceList, error) {
+	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {
 		return UnnamedApiResourceList{}, err
 	}

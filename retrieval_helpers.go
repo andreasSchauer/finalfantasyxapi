@@ -73,7 +73,7 @@ func filterAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg 
 		resources = getSharedResources(resources, filtered.resources)
 	}
 
-	resourceList, err := i.resToListFunc(cfg, r, i, resources)
+	resourceList, err := i.resToListFunc(cfg, r, resources)
 	if err != nil {
 		return zeroType, err
 	}

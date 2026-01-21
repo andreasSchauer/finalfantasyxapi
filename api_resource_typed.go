@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"slices"
 	"strconv"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type TypedApiResourceList struct {
@@ -86,8 +84,8 @@ func GetTypedAPIResource[T, N any](key string, et EnumType[T, N]) (TypedAPIResou
 	return res, nil
 }
 
-func newTypedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []TypedAPIResource) (TypedApiResourceList, error) {
-	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
+func newTypedAPIResourceList(cfg *Config, r *http.Request, resources []TypedAPIResource) (TypedApiResourceList, error) {
+	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {
 		return TypedApiResourceList{}, err
 	}

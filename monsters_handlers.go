@@ -80,7 +80,7 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case 2:
-		handleEndpointSubOrNameVer(w, r, i, segments)
+		handleEndpointSubOrNameVer(cfg, w, r, i, segments)
 		return
 
 	default:
@@ -158,22 +158,22 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		Abilities:            rel.Abilities,
 	}
 
-	response, err = cfg.applyAlteredState(r, response)
+	response, err = cfg.applyAlteredState(r, response, "altered_state")
 	if err != nil {
 		return Monster{}, err
 	}
 
-	response.BaseStats, err = cfg.applyAeonStats(r, response)
+	response.BaseStats, err = cfg.applyAeonStats(r, response, "aeon_stats")
 	if err != nil {
 		return Monster{}, err
 	}
 
-	response.BaseStats, err = cfg.applyRonsoStats(r, response)
+	response.BaseStats, err = cfg.applyRonsoStats(r, response, "kimahri_stats")
 	if err != nil {
 		return Monster{}, err
 	}
 
-	response.ElemResists, err = cfg.applyOmnisElemResists(r, response)
+	response.ElemResists, err = cfg.applyOmnisElements(r, response, "omnis_elements")
 	if err != nil {
 		return Monster{}, err
 	}
@@ -195,8 +195,6 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

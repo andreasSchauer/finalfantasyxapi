@@ -25,7 +25,7 @@ func idsToAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cf
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
 	
-	resourceList, err := i.resToListFunc(cfg, r, i, resources)
+	resourceList, err := i.resToListFunc(cfg, r, resources)
 	if err != nil {
 		return zeroType, err
 	}

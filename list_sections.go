@@ -22,7 +22,7 @@ func getSectionList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 	}
 	slices.Sort(sectionURLs)
 
-	listParams, sections, err := createPaginatedList(cfg, r, i, sectionURLs)
+	listParams, sections, err := createPaginatedList(cfg, r, sectionURLs)
 	if err != nil {
 		return SectionList{}, err
 	}

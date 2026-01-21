@@ -84,8 +84,8 @@ func areaToLocationResource(cfg *Config, i handlerInput[seeding.Area, Area, Loca
 }
 
 
-func newLocationAPIResourceList(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], resources []LocationAPIResource) (LocationApiResourceList, error) {
-	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
+func newLocationAPIResourceList(cfg *Config, r *http.Request, resources []LocationAPIResource) (LocationApiResourceList, error) {
+	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {
 		return LocationApiResourceList{}, err
 	}

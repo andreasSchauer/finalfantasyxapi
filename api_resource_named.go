@@ -113,8 +113,8 @@ func namesToResourceAmounts[NA NameAmount, RA ResourceAmount, T h.IsNamed, R any
 }
 
 
-func newNamedAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []NamedAPIResource) (NamedApiResourceList, error) {
-	listParams, shownResources, err := createPaginatedList(cfg, r, i, resources)
+func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIResource) (NamedApiResourceList, error) {
+	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}

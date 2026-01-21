@@ -110,18 +110,18 @@ func handleSections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
 
-func handleEndpointSubsections[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, i handlerInput[T, R, A, L], segments []string) {
+func handleEndpointSubsections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	posIDStr := segments[0]
 	isValidID := isValidInt(posIDStr)
 
 	if isValidID {
-		handleSubsection(w, i, segments)
+		handleSubsection(cfg, w, r, i, segments)
 		return
 	}
 	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid id: '%s'.", posIDStr), nil)
 }
 
-func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	posIDStr := segments[0]
 	posVerStr := segments[1]
 	idIsInt := isValidInt(posIDStr)
@@ -129,7 +129,7 @@ func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceLi
 
 	switch {
 	case idIsInt:
-		handleSubsection(w, i, segments)
+		handleSubsection(cfg, w, r, i, segments)
 		return
 
 	case !idIsInt && versionIsInt:
@@ -142,22 +142,22 @@ func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceLi
 	}
 }
 
-func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, i handlerInput[T, R, A, L], segments []string) {
+func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	idStr := segments[0]
 	subsection := segments[1]
 
-	_, err := parseID(idStr, i.resourceType, len(i.objLookup))
+	parseRes, err := parseID(idStr, i.resourceType, len(i.objLookup))
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	fn, ok := i.subsections[subsection]
+	fns, ok := i.subsections[subsection]
 	if !ok {
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' is not supported. supported subsections: %s.", subsection, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
 
-	list, err := fn(subsection)
+	list, err := newSubResourceList(cfg, r, i, parseRes.ID, subsection, fns)
 	if handleHTTPError(w, err) {
 		return
 	}

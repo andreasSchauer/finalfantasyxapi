@@ -44,6 +44,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.q.defaultParams = map[string]QueryType{
 		"limit": {
 			ID:          -3,
+			Name: 		 "limit",
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20. The value 'max' can also be used to forgo pagination of lists entirely.",
 			Usage:       "?limit{integer or 'max'}",
 			ExampleUses: []string{"?limit=50"},
@@ -60,6 +61,7 @@ func (cfg *Config) QueryLookupInit() {
 		},
 		"offset": {
 			ID:          -2,
+			Name: 		 "offset",
 			Description: "Sets the offset from where to start the displayed entries in a list response. If not set manually, the default is 0.",
 			Usage:       "?offset{integer}",
 			ExampleUses: []string{"?offset=30"},
@@ -70,6 +72,7 @@ func (cfg *Config) QueryLookupInit() {
 		},
 		"section": {
 			ID:          -1,
+			Name: 		 "section",
 			Description: "Filters query parameters by the section they can be used in within their endpoint. 'self' can be used to display only parameters specific to their own endpoint.",
 			Usage:       "/parameters?section={section_name or 'self'}",
 			ExampleUses: []string{"/parameters?section=monsters", "/parameters?section=self"},

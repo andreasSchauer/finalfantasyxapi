@@ -18,10 +18,15 @@ type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 	getMultipleQuery 	func(context.Context, string) ([]int32, error)
 	retrieveQuery   	func(context.Context) ([]int32, error)
 	idToResFunc     	func(*Config, handlerInput[T, R, A, L], int32) A
-	resToListFunc		func(*Config, *http.Request, handlerInput[T, R, A, L], []A) (L, error)
+	resToListFunc		func(*Config, *http.Request, []A) (L, error)
 	getSingleFunc   	func(*http.Request, handlerInput[T, R, A, L], int32) (R, error)
 	retrieveFunc    	func(*http.Request, handlerInput[T, R, A, L]) (L, error)
-	subsections     	map[string]func(string) (APIResourceList, error)
+	subsections     	map[string]SubSectionFns
+}
+
+type SubSectionFns struct {
+	dbQuery			func(context.Context, int32) ([]int32, error)
+	getResultsFn	func(*Config, []int32) []SubResource
 }
 
 type endpoints struct {
@@ -69,7 +74,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Aeons,
 		objLookupID:  cfg.l.AeonsID,
 		idToResFunc:  idToNamedAPIResource[seeding.Aeon, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Aeon, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.affinities = handlerInput[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList]{
@@ -78,7 +83,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    	cfg.l.Affinities,
 		objLookupID:  	cfg.l.AffinitiesID,
 		idToResFunc:  	idToNamedAPIResource[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: 	newNamedAPIResourceList[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
 	}
 
 	e.areas = handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList]{
@@ -92,12 +97,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: 	 cfg.db.GetAreas,
 		getSingleFunc:   cfg.getArea,
 		retrieveFunc:    cfg.retrieveAreas,
-		subsections: map[string]func(string) (APIResourceList, error){
-			"treasures":          cfg.getAreaTreasuresMid,
-			"shops":              cfg.getAreaShopsMid,
-			"monsters":           cfg.getAreaMonstersMid,
-			"monster-formations": cfg.getAreaFormationsMid,
-			"connected":          cfg.getAreaConnectionsMid,
+		subsections: 	 map[string]SubSectionFns{
+			"monsters": {
+				dbQuery: cfg.db.GetAreaMonsterIDs,
+				getResultsFn: getSubMonsters,
+			},
 		},
 	}
 
@@ -107,7 +111,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.AutoAbilities,
 		objLookupID:  cfg.l.AutoAbilitiesID,
 		idToResFunc:  idToNamedAPIResource[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.characters = handlerInput[seeding.Character, any, NamedAPIResource, NamedApiResourceList]{
@@ -116,28 +120,28 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Characters,
 		objLookupID:  cfg.l.CharactersID,
 		idToResFunc:  idToNamedAPIResource[seeding.Character, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Character, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.connectionType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
 		endpoint:     "connection-type",
 		resourceType: "connection type",
 		objLookup:    cfg.t.AreaConnectionType.lookup,
-		resToListFunc: newTypedAPIResourceList[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList],
+		resToListFunc: newTypedAPIResourceList,
 	}
 
 	e.creationArea = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
 		endpoint:     "creation-area",
 		resourceType: "creation area",
 		objLookup:    cfg.t.CreationArea.lookup,
-		resToListFunc: newTypedAPIResourceList[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList],
+		resToListFunc: newTypedAPIResourceList,
 	}
 
 	e.ctbIconType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
 		endpoint:     "ctb-icon-type",
 		resourceType: "ctb icon type",
 		objLookup:    cfg.t.CTBIconType.lookup,
-		resToListFunc: newTypedAPIResourceList[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList],
+		resToListFunc: newTypedAPIResourceList,
 	}
 
 	e.elements = handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]{
@@ -146,7 +150,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Elements,
 		objLookupID:  cfg.l.ElementsID,
 		idToResFunc:  idToNamedAPIResource[seeding.Element, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Element, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.fmvs = handlerInput[seeding.FMV, any, NamedAPIResource, NamedApiResourceList]{
@@ -155,7 +159,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.FMVs,
 		objLookupID:  cfg.l.FMVsID,
 		idToResFunc:  idToNamedAPIResource[seeding.FMV, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.FMV, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.items = handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]{
@@ -164,7 +168,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Items,
 		objLookupID:  cfg.l.ItemsID,
 		idToResFunc:  idToNamedAPIResource[seeding.Item, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Item, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.keyItems = handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]{
@@ -173,7 +177,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.KeyItems,
 		objLookupID:  cfg.l.KeyItemsID,
 		idToResFunc:  idToNamedAPIResource[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.locations = handlerInput[seeding.Location, any, NamedAPIResource, NamedApiResourceList]{
@@ -182,7 +186,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Locations,
 		objLookupID:  cfg.l.LocationsID,
 		idToResFunc:  idToNamedAPIResource[seeding.Location, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Location, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.monsters = handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]{
@@ -192,14 +196,12 @@ func (cfg *Config) EndpointsInit() {
 		objLookupID:     	cfg.l.MonstersID,
 		queryLookup:     	cfg.q.monsters,
 		idToResFunc:     	idToNamedAPIResource[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: 	 	newNamedAPIResourceList[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	 	newNamedAPIResourceList,
 		getMultipleQuery: 	cfg.db.GetMonsterIDsByName,
 		retrieveQuery:	 	cfg.db.GetMonsterIDs,
 		getSingleFunc:   	cfg.getMonster,
 		retrieveFunc:    	cfg.retrieveMonsters,
-		subsections: 		map[string]func(string) (APIResourceList, error){
-			"abilities": cfg.getMonsterAbilitiesMid,
-		},
+		
 	}
 
 	e.monsterFormations = handlerInput[seeding.MonsterFormation, any, UnnamedAPIResource, UnnamedApiResourceList]{
@@ -207,14 +209,14 @@ func (cfg *Config) EndpointsInit() {
 		resourceType: "monster formation",
 		objLookupID:  cfg.l.MonsterFormationsID,
 		idToResFunc:  idToUnnamedAPIResource[seeding.MonsterFormation, any, UnnamedAPIResource, UnnamedApiResourceList],
-		resToListFunc: newUnnamedAPIResourceList[seeding.MonsterFormation, any, UnnamedAPIResource, UnnamedApiResourceList],
+		resToListFunc: newUnnamedAPIResourceList,
 	}
 
 	e.monsterSpecies = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
 		endpoint:     "monster-species",
 		resourceType: "monster species",
 		objLookup:    cfg.t.MonsterSpecies.lookup,
-		resToListFunc: newTypedAPIResourceList[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList],
+		resToListFunc: newTypedAPIResourceList,
 	}
 
 	e.overdriveModes = handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]{
@@ -224,7 +226,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookupID:     cfg.l.OverdriveModesID,
 		queryLookup:     cfg.q.overdriveModes,
 		idToResFunc:  	 idToNamedAPIResource[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery:   cfg.db.GetOverdriveModeIDs,
 		getSingleFunc:   cfg.getOverdriveMode,
 		retrieveFunc:    cfg.retrieveOverdriveModes,
@@ -234,7 +236,7 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:     "overdrive-mode-type",
 		resourceType: "overdrive mode type",
 		objLookup:    cfg.t.OverdriveModeType.lookup,
-		resToListFunc: newTypedAPIResourceList[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList],
+		resToListFunc: newTypedAPIResourceList,
 	}
 
 	e.playerAbilities = handlerInput[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList]{
@@ -243,7 +245,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.PlayerAbilities,
 		objLookupID:  cfg.l.PlayerAbilitiesID,
 		idToResFunc:  idToNamedAPIResource[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.enemyAbilities = handlerInput[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList]{
@@ -252,7 +254,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.EnemyAbilities,
 		objLookupID:  cfg.l.EnemyAbilitiesID,
 		idToResFunc:  idToNamedAPIResource[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.itemAbilities = handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]{
@@ -261,7 +263,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Items,
 		objLookupID:  cfg.l.ItemsID,
 		idToResFunc:  idToNamedAPIResource[seeding.Item, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Item, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.overdriveAbilities = handlerInput[seeding.OverdriveAbility, any, NamedAPIResource, NamedApiResourceList]{
@@ -270,7 +272,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.OverdriveAbilities,
 		objLookupID:  cfg.l.OverdriveAbilitiesID,
 		idToResFunc:  idToNamedAPIResource[seeding.OverdriveAbility, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.OverdriveAbility, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.triggerCommands = handlerInput[seeding.TriggerCommand, any, NamedAPIResource, NamedApiResourceList]{
@@ -279,7 +281,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.TriggerCommands,
 		objLookupID:  cfg.l.TriggerCommandsID,
 		idToResFunc:  idToNamedAPIResource[seeding.TriggerCommand, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.TriggerCommand, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.properties = handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]{
@@ -288,7 +290,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Properties,
 		objLookupID:  cfg.l.PropertiesID,
 		idToResFunc:  idToNamedAPIResource[seeding.Property, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Property, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.ronsoRages = handlerInput[seeding.RonsoRage, any, NamedAPIResource, NamedApiResourceList]{
@@ -297,7 +299,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.RonsoRages,
 		objLookupID:  cfg.l.RonsoRagesID,
 		idToResFunc:  idToNamedAPIResource[seeding.RonsoRage, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.RonsoRage, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.shops = handlerInput[seeding.Shop, any, UnnamedAPIResource, UnnamedApiResourceList]{
@@ -306,7 +308,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Shops,
 		objLookupID:  cfg.l.ShopsID,
 		idToResFunc:  idToUnnamedAPIResource[seeding.Shop, any, UnnamedAPIResource, UnnamedApiResourceList],
-		resToListFunc: newUnnamedAPIResourceList[seeding.Shop, any, UnnamedAPIResource, UnnamedApiResourceList],
+		resToListFunc: newUnnamedAPIResourceList,
 	}
 
 	e.sidequests = handlerInput[seeding.Sidequest, any, NamedAPIResource, NamedApiResourceList]{
@@ -315,7 +317,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Sidequests,
 		objLookupID:  cfg.l.SidequestsID,
 		idToResFunc:  idToNamedAPIResource[seeding.Sidequest, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Sidequest, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.songs = handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList]{
@@ -324,7 +326,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Songs,
 		objLookupID:  cfg.l.SongsID,
 		idToResFunc:  idToNamedAPIResource[seeding.Song, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Song, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.stats = handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]{
@@ -333,7 +335,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Stats,
 		objLookupID:  cfg.l.StatsID,
 		idToResFunc:  idToNamedAPIResource[seeding.Stat, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.Stat, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.statusConditions = handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]{
@@ -342,7 +344,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.StatusConditions,
 		objLookupID:  cfg.l.StatusConditionsID,
 		idToResFunc:  idToNamedAPIResource[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.sublocations = handlerInput[seeding.SubLocation, any, NamedAPIResource, NamedApiResourceList]{
@@ -351,7 +353,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Sublocations,
 		objLookupID:  cfg.l.SublocationsID,
 		idToResFunc:  idToNamedAPIResource[seeding.SubLocation, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList[seeding.SubLocation, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.treasures = handlerInput[seeding.Treasure, any, UnnamedAPIResource, UnnamedApiResourceList]{
@@ -360,7 +362,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:    cfg.l.Treasures,
 		objLookupID:  cfg.l.TreasuresID,
 		idToResFunc:  idToUnnamedAPIResource[seeding.Treasure, any, UnnamedAPIResource, UnnamedApiResourceList],
-		resToListFunc: newUnnamedAPIResourceList[seeding.Treasure, any, UnnamedAPIResource, UnnamedApiResourceList],
+		resToListFunc: newUnnamedAPIResourceList,
 	}
 
 	cfg.e = &e
