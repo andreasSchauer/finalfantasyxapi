@@ -29,21 +29,25 @@ func (m MonsterSub) GetSectionName() string {
 	return "monsters"
 }
 
+// actually need another itemAmount + logic that determines, if an item is a key item or not, even if this won't be relevant for monsters
+// can use the master item lookup and its type for this. or simply the same as I did earlier with the itemAmount constructor
 type MonsterItemsSub struct {
-	StealCommon         	*seeding.ItemAmount   	`json:"steal_common"`
-	StealRare           	*seeding.ItemAmount   	`json:"steal_rare"`
-	DropCommon          	*seeding.ItemAmount   	`json:"drop_common"`
-	DropRare            	*seeding.ItemAmount   	`json:"drop_rare"`
-	SecondaryDropCommon 	*seeding.ItemAmount   	`json:"secondary_drop_common"`
-	SecondaryDropRare   	*seeding.ItemAmount   	`json:"secondary_drop_rare"`
-	Bribe               	*seeding.ItemAmount   	`json:"bribe"`
-	OtherItems				[]seeding.ItemAmount	`json:"other_items"`
+	StealCommon         	*ItemAmountSub   	`json:"steal_common"`
+	StealRare           	*ItemAmountSub   	`json:"steal_rare"`
+	DropCommon          	*ItemAmountSub   	`json:"drop_common"`
+	DropRare            	*ItemAmountSub   	`json:"drop_rare"`
+	SecondaryDropCommon 	*ItemAmountSub   	`json:"secondary_drop_common"`
+	SecondaryDropRare   	*ItemAmountSub   	`json:"secondary_drop_rare"`
+	Bribe               	*ItemAmountSub   	`json:"bribe"`
+	OtherItems				[]ItemAmountSub		`json:"other_items"`
 }
 
 type MonsterEquipmentSub struct {
 	WeaponAbilities			[]string				`json:"weapon_abilities"`
 	ArmorAbilities			[]string				`json:"armor_abilities"`
 }
+
+
 
 
 func getSubMonsters(cfg *Config, dbIDs []int32) []SubResource {
@@ -67,7 +71,7 @@ func getSubMonsters(cfg *Config, dbIDs []int32) []SubResource {
 			Gil: mon.Gil,
 			MaxBribeAmount: getMonsterSubBribeAmount(mon, monHP),
 			RonsoRages: mon.RonsoRages,
-			Items: getMonsterSubItems(mon),
+			Items: cfg.getMonsterSubItems(mon),
 			Equipment: getMonsterSubEquipment(mon),
 		}
 
@@ -97,28 +101,29 @@ func getMonsterSubBribeAmount(mon seeding.Monster, hp int32) *int32 {
 	return &bribeAmount
 }
 
-func getMonsterSubItems(mon seeding.Monster) *MonsterItemsSub {
+func (cfg *Config) getMonsterSubItems(mon seeding.Monster) *MonsterItemsSub {
 	if mon.Items == nil {
 		return nil
 	}
 
 	return &MonsterItemsSub{
-		StealCommon: mon.Items.StealCommon,
-		StealRare: mon.Items.StealRare,
-		DropCommon: mon.Items.DropCommon,
-		DropRare: mon.Items.DropRare,
-		SecondaryDropCommon: mon.Items.SecondaryDropCommon,
-		SecondaryDropRare: mon.Items.SecondaryDropRare,
-		Bribe: mon.Items.Bribe,
-		OtherItems: getMonsterSubOtherItems(mon.Items.OtherItems),
+		StealCommon: cfg.createSubItemAmountPtr(mon.Items.StealCommon),
+		StealRare: cfg.createSubItemAmountPtr(mon.Items.StealRare),
+		DropCommon: cfg.createSubItemAmountPtr(mon.Items.DropCommon),
+		DropRare: cfg.createSubItemAmountPtr(mon.Items.DropRare),
+		SecondaryDropCommon: cfg.createSubItemAmountPtr(mon.Items.SecondaryDropCommon),
+		SecondaryDropRare: cfg.createSubItemAmountPtr(mon.Items.SecondaryDropRare),
+		Bribe: cfg.createSubItemAmountPtr(mon.Items.Bribe),
+		OtherItems: cfg.getMonsterSubOtherItems(mon.Items.OtherItems),
 	}
 }
 
-func getMonsterSubOtherItems(items []seeding.PossibleItem) []seeding.ItemAmount {
-	otherItems := []seeding.ItemAmount{}
+
+func (cfg *Config) getMonsterSubOtherItems(items []seeding.PossibleItem) []ItemAmountSub {
+	otherItems := []ItemAmountSub{}
 
 	for _, item := range items {
-		otherItem := item.ItemAmount
+		otherItem := cfg.createSubItemAmount(item.ItemAmount)
 		otherItems = append(otherItems, otherItem)
 	}
 
