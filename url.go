@@ -5,25 +5,25 @@ import (
 	"net/url"
 )
 
-func (cfg *Config) createResourceURL(endpoint string, id int32) string {
+func createResourceURL(cfg *Config, endpoint string, id int32) string {
 	return fmt.Sprintf("http://%s/api/%s/%d", cfg.host, endpoint, id)
 }
 
-func (cfg *Config) createResourceURLQuery(endpoint string, id int32, q url.Values) string {
-	url := cfg.createResourceURL(endpoint, id)
+func createResourceURLQuery(cfg *Config, endpoint string, id int32, q url.Values) string {
+	url := createResourceURL(cfg, endpoint, id)
 	return fmt.Sprintf("%s?%s", url, q.Encode())
 }
 
-func (cfg *Config) createListURL(endpoint string) string {
+func createListURL(cfg *Config, endpoint string) string {
 	return fmt.Sprintf("http://%s/api/%s", cfg.host, endpoint)
 }
 
-func (cfg *Config) createSectionURL(endpoint, section string) string {
-	url := cfg.createListURL(endpoint)
+func createSectionURL(cfg *Config, endpoint, section string) string {
+	url := createListURL(cfg, endpoint)
 	return fmt.Sprintf("%s/%s", url, section)
 }
 
-func (cfg *Config) completeTestURL(path string) string {
+func completeTestURL(cfg *Config, path string) string {
 	return fmt.Sprintf("http://%s/api%s", cfg.host, path)
 }
 

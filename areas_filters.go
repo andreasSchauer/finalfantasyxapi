@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getAreasByItem(r *http.Request, id int32) ([]LocationAPIResource, error) {
+func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]LocationAPIResource, error) {
 	i := cfg.e.areas
 	resourceType := cfg.e.items.resourceType
 	queryParam := i.queryLookup["method"]
@@ -19,7 +19,7 @@ func (cfg *Config) getAreasByItem(r *http.Request, id int32) ([]LocationAPIResou
 
 	switch query {
 	case "":
-		resources, err = cfg.getAreasByItemAllMethods(r, i, id, resourceType)
+		resources, err = getAreasByItemAllMethods(cfg, r, i, id, resourceType)
 		if err != nil {
 			return nil, err
 		}
@@ -51,7 +51,7 @@ func (cfg *Config) getAreasByItem(r *http.Request, id int32) ([]LocationAPIResou
 }
 
 // same pattern as retrieve endpoint
-func (cfg *Config) getAreasByItemAllMethods(r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], id int32, resourceType string) ([]LocationAPIResource, error) {
+func getAreasByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], id int32, resourceType string) ([]LocationAPIResource, error) {
 	filteredLists := []filteredResList[LocationAPIResource]{
 		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsItemMonster)),
 		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsItemTreasure)),
@@ -67,7 +67,7 @@ func (cfg *Config) getAreasByItemAllMethods(r *http.Request, i handlerInput[seed
 	return resources, nil
 }
 
-func (cfg *Config) getAreasByKeyItem(r *http.Request, id int32) ([]LocationAPIResource, error) {
+func getAreasByKeyItem(cfg *Config, r *http.Request, id int32) ([]LocationAPIResource, error) {
 	i := cfg.e.areas
 	resourceType := cfg.e.keyItems.resourceType
 

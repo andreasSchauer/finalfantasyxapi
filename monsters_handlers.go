@@ -100,7 +100,7 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		return Monster{}, err
 	}
 
-	rel, err := cfg.getMonsterRelationships(r, monster)
+	rel, err := getMonsterRelationships(cfg, r, monster)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -149,8 +149,8 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		Locations:            rel.Locations,
 		Formations:           rel.Formations,
 		BaseStats:            rel.BaseStats,
-		Items:                cfg.getMonsterItems(monster.Items),
-		Equipment:            cfg.getMonsterEquipment(monster.Equipment),
+		Items:                getMonsterItems(cfg, monster.Items),
+		Equipment:            getMonsterEquipment(cfg, monster.Equipment),
 		ElemResists:          rel.ElemResists,
 		StatusImmunities:     rel.StatusImmunities,
 		StatusResists:        rel.StatusResists,
@@ -158,37 +158,37 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		Abilities:            rel.Abilities,
 	}
 
-	response, err = cfg.applyAlteredState(r, response, "altered_state")
+	response, err = applyAlteredState(cfg, r, response, "altered_state")
 	if err != nil {
 		return Monster{}, err
 	}
 
-	response.BaseStats, err = cfg.applyAeonStats(r, response, "aeon_stats")
+	response.BaseStats, err = applyAeonStats(cfg, r, response, "aeon_stats")
 	if err != nil {
 		return Monster{}, err
 	}
 
-	response.BaseStats, err = cfg.applyRonsoStats(r, response, "kimahri_stats")
+	response.BaseStats, err = applyRonsoStats(cfg, r, response, "kimahri_stats")
 	if err != nil {
 		return Monster{}, err
 	}
 
-	response.ElemResists, err = cfg.applyOmnisElements(r, response, "omnis_elements")
+	response.ElemResists, err = applyOmnisElements(cfg, r, response, "omnis_elements")
 	if err != nil {
 		return Monster{}, err
 	}
 
-	response.BribeChances, err = cfg.getMonsterBribeChances(response)
+	response.BribeChances, err = getMonsterBribeChances(cfg, response)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	response.PoisonDamage, err = cfg.getMonsterPoisonDamage(response)
+	response.PoisonDamage, err = getMonsterPoisonDamage(cfg, response)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	response.AgilityParameters, err = cfg.getMonsterAgilityParams(r, response)
+	response.AgilityParameters, err = getMonsterAgilityParams(cfg, r, response)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -203,18 +203,18 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 	}
 
 	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(basicQueryWrapper(cfg, r, i, resources, "elemental_resists", cfg.getMonstersByElemResists)),
-		frl(idListQueryWrapper(cfg, r, i, resources, "status_resists", len(cfg.l.StatusConditions), cfg.getMonstersByStatusResists)),
+		frl(basicQueryWrapper(cfg, r, i, resources, "elemental_resists", getMonstersByElemResists)),
+		frl(idListQueryWrapper(cfg, r, i, resources, "status_resists", len(cfg.l.StatusConditions), getMonstersByStatusResists)),
 		frl(idListQuery(cfg, r, i, resources, "auto_abilities", len(cfg.l.AutoAbilities), cfg.db.GetMonsterIDsByAutoAbilityIDs)),
 
-		frl(idOnlyQueryWrapper(r, i, resources, "item", len(cfg.l.Items), cfg.getMonstersByItem)),
+		frl(idOnlyQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getMonstersByItem)),
 		frl(idOnlyQuery(cfg, r, i, resources, "ronso_rage", len(cfg.l.RonsoRages), cfg.db.GetMonsterIDsByRonsoRage)),
 		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationMonsterIDs)),
 		frl(idOnlyQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationMonsterIDs)),
 		frl(idOnlyQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetAreaMonsterIDs)),
 
 		frl(intQuery(cfg, r, i, resources, "distance", cfg.db.GetMonsterIDsByDistance)),
-		frl(typeQueryWrapper(cfg, r, i, cfg.t.CTBIconType, resources, "type", cfg.queryCTBIconType)),
+		frl(typeQueryWrapper(cfg, r, i, cfg.t.CTBIconType, resources, "type", queryCTBIconType)),
 		frl(typeQuery(cfg, r, i, cfg.t.MonsterSpecies, resources, "species", cfg.db.GetMonsterIDsBySpecies)),
 		frl(nullTypeQuery(cfg, r, i, cfg.t.CreationArea, resources, "creation_area", cfg.db.GetMonsterIDsByMaCreationArea)),
 

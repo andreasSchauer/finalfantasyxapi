@@ -17,7 +17,7 @@ func getSectionList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 	sectionURLs := []string{}
 
 	for section := range sectionMap {
-		url := cfg.createSectionURL(i.endpoint, section)
+		url := createSectionURL(cfg, i.endpoint, section)
 		sectionURLs = append(sectionURLs, url)
 	}
 	slices.Sort(sectionURLs)

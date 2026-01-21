@@ -9,7 +9,7 @@ import (
 
 // can be used for various other functions related to abilities
 // put into own file
-func (cfg *Config) createAbilityResource(name string, version *int32, abilityType database.AbilityType) (NamedAPIResource, error) {
+func createAbilityResource(cfg *Config, name string, version *int32, abilityType database.AbilityType) (NamedAPIResource, error) {
 	var res NamedAPIResource
 	var err error
 

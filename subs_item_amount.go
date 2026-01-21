@@ -10,16 +10,16 @@ type ItemAmountSub struct {
 	ItemType			database.ItemType	`json:"item_type"`
 }
 
-func (cfg *Config) createSubItemAmountPtr(ia *seeding.ItemAmount) *ItemAmountSub {
+func createSubItemAmountPtr(cfg *Config, ia *seeding.ItemAmount) *ItemAmountSub {
 	if ia == nil {
 		return nil
 	}
 
-	itemAmountSub := cfg.createSubItemAmount(*ia)
+	itemAmountSub := createSubItemAmount(cfg, *ia)
 	return &itemAmountSub
 }
 
-func (cfg *Config) createSubItemAmount(ia seeding.ItemAmount) ItemAmountSub {
+func createSubItemAmount(cfg *Config, ia seeding.ItemAmount) ItemAmountSub {
 	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.MasterItems)
 
 	return ItemAmountSub{

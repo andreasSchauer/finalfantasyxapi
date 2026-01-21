@@ -65,7 +65,7 @@ func idToNamedAPIResource[T h.IsNamed, R any, A APIResource, L APIResourceList](
 		Name:          params.Name,
 		Version:       params.Version,
 		Specification: params.Specification,
-		URL:           cfg.createResourceURL(i.endpoint, params.ID),
+		URL:           createResourceURL(cfg, i.endpoint, params.ID),
 	}
 }
 
@@ -129,7 +129,7 @@ func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIR
 
 
 // only used for newNamedAPIResourceFromType, since the newer function won't work with that
-func (cfg *Config) newNamedAPIResourceSimple(endpoint string, id int32, name string) NamedAPIResource {
+func newNamedAPIResourceSimple(cfg *Config, endpoint string, id int32, name string) NamedAPIResource {
 	if name == "" {
 		return NamedAPIResource{}
 	}
@@ -137,6 +137,6 @@ func (cfg *Config) newNamedAPIResourceSimple(endpoint string, id int32, name str
 	return NamedAPIResource{
 		ID:   id,
 		Name: name,
-		URL:  cfg.createResourceURL(endpoint, id),
+		URL:  createResourceURL(cfg, endpoint, id),
 	}
 }

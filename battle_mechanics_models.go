@@ -14,7 +14,7 @@ func (bs BaseStat) GetAPIResource() APIResource {
 	return bs.Stat
 }
 
-func (cfg *Config) newBaseStat(res NamedAPIResource, value int32) BaseStat {
+func newBaseStat(res NamedAPIResource, value int32) BaseStat {
 	return BaseStat{
 		Stat:  res,
 		Value: value,
@@ -34,7 +34,7 @@ func (bs BaseStat) GetVal() int32 {
 }
 
 
-func (cfg *Config) getBaseStat(stat string, baseStats []BaseStat) BaseStat {
+func getBaseStat(cfg *Config, stat string, baseStats []BaseStat) BaseStat {
 	statLookup, _ := seeding.GetResource(stat, cfg.l.Stats)
 	statMap := getResourceMap(baseStats)
 
@@ -62,18 +62,18 @@ func (er ElementalResist) GetAPIResource() APIResource {
 	return er.Element
 }
 
-func (cfg *Config) newElemResist(element, affinity string) ElementalResist {
+func newElemResist(cfg *Config, element, affinity string) ElementalResist {
 	return ElementalResist{
 		Element:  nameToNamedAPIResource(cfg, cfg.e.elements, element, nil),
 		Affinity: nameToNamedAPIResource(cfg, cfg.e.affinities, affinity, nil),
 	}
 }
 
-func (cfg *Config) namesToElemResists(resists []seeding.ElementalResist) []ElementalResist {
+func namesToElemResists(cfg *Config, resists []seeding.ElementalResist) []ElementalResist {
 	elemResists := []ElementalResist{}
 
 	for _, seedResist := range resists {
-		elemResist := cfg.newElemResist(seedResist.Element, seedResist.Affinity)
+		elemResist := newElemResist(cfg, seedResist.Element, seedResist.Affinity)
 		elemResists = append(elemResists, elemResist)
 	}
 
@@ -89,7 +89,7 @@ func (sr StatusResist) GetAPIResource() APIResource {
 	return sr.StatusCondition
 }
 
-func (cfg *Config) newStatusResist(res NamedAPIResource, resistance int32) StatusResist {
+func newStatusResist(res NamedAPIResource, resistance int32) StatusResist {
 	return StatusResist{
 		StatusCondition: res,
 		Resistance:      resistance,
@@ -123,7 +123,7 @@ func (is InflictedStatus) IsZero() bool {
 	return is.StatusCondition.Name == ""
 }
 
-func (cfg *Config) newInflictedStatus(status seeding.InflictedStatus) InflictedStatus {
+func newInflictedStatus(cfg *Config, status seeding.InflictedStatus) InflictedStatus {
 	return InflictedStatus{
 		StatusCondition: nameToNamedAPIResource(cfg, cfg.e.statusConditions, status.StatusCondition, nil),
 		Probability:     status.Probability,

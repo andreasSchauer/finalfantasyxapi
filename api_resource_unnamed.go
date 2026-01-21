@@ -52,17 +52,15 @@ func (r UnnamedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-
 func idToUnnamedAPIResource[T h.IsUnnamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) UnnamedAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
 	params := res.GetResParamsUnnamed()
 
 	return UnnamedAPIResource{
-		ID:            params.ID,
-		URL:           cfg.createResourceURL(i.endpoint, params.ID),
+		ID:  params.ID,
+		URL: createResourceURL(cfg, i.endpoint, params.ID),
 	}
 }
-
 
 func newUnnamedAPIResourceList(cfg *Config, r *http.Request, resources []UnnamedAPIResource) (UnnamedApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)

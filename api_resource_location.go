@@ -79,7 +79,7 @@ func areaToLocationResource(cfg *Config, i handlerInput[seeding.Area, Area, Loca
 			Version: 		params.Version,
 		},
 		Specification: 		params.Specification,
-		URL:           		cfg.createResourceURL(i.endpoint, params.AreaID),
+		URL:           		createResourceURL(cfg, i.endpoint, params.AreaID),
 	}
 }
 

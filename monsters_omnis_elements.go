@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) applyOmnisElements(r *http.Request, mon Monster, queryName string) ([]ElementalResist, error) {
+func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName string) ([]ElementalResist, error) {
 	circlesAffinity := map[int]string{
 		0: "neutral",
 		1: "halved",
@@ -17,7 +17,7 @@ func (cfg *Config) applyOmnisElements(r *http.Request, mon Monster, queryName st
 		4: "absorb",
 	}
 
-	circleCounts, err := cfg.parseOmnisQuery(r, queryName)
+	circleCounts, err := parseOmnisQuery(cfg, r, queryName)
 	if errors.Is(err, errEmptyQuery) {
 		return mon.ElemResists, nil
 	}
@@ -44,19 +44,19 @@ func (cfg *Config) applyOmnisElements(r *http.Request, mon Monster, queryName st
 
 		// if the opposite element has 4 circles, seymour omnis is weak to this element
 		if circleCountOpposite == 4 {
-			mon.ElemResists[i] = cfg.newElemResist(elementName, "weak")
+			mon.ElemResists[i] = newElemResist(cfg, elementName, "weak")
 			continue
 		}
 
 		// else, change the affinity based on the count of the circles
-		mon.ElemResists[i] = cfg.newElemResist(elementName, circlesAffinity[circleCount])
+		mon.ElemResists[i] = newElemResist(cfg, elementName, circlesAffinity[circleCount])
 	}
 
 	return mon.ElemResists, nil
 }
 
 // verifies the input and counts the amounts of circles pointing to each element
-func (cfg *Config) parseOmnisQuery(r *http.Request, queryName string) (map[string]int, error) {
+func parseOmnisQuery(cfg *Config, r *http.Request, queryName string) (map[string]int, error) {
 	queryParam := cfg.q.monsters[queryName]
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {

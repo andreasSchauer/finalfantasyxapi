@@ -59,7 +59,7 @@ func newNamedAPIResourceFromType[T, N any](cfg *Config, endpoint, key string, et
 		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, err.Error(), fmt.Errorf("%s: %v", endpoint, err))
 	}
 
-	resource := cfg.newNamedAPIResourceSimple(endpoint, enumType.ID, enumType.Name)
+	resource := newNamedAPIResourceSimple(cfg, endpoint, enumType.ID, enumType.Name)
 
 	return resource, nil
 }
@@ -98,11 +98,11 @@ func newTypedAPIResourceList(cfg *Config, r *http.Request, resources []TypedAPIR
 	return list, nil
 }
 
-func (cfg *Config) createTypeResourceSlice(endpoint string, lookup map[string]TypedAPIResource) []TypedAPIResource {
+func createTypeResourceSlice(cfg *Config, endpoint string, lookup map[string]TypedAPIResource) []TypedAPIResource {
 	resources := []TypedAPIResource{}
 
 	for _, resource := range lookup {
-		resource.URL = cfg.createResourceURL(endpoint, resource.ID)
+		resource.URL = createResourceURL(cfg, endpoint, resource.ID)
 		resources = append(resources, resource)
 	}
 

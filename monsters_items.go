@@ -22,7 +22,7 @@ func (mi MonsterItems) IsZero() bool {
 	return mi.DropChance == 0 && mi.OtherItemsCondition == nil
 }
 
-func (cfg *Config) getMonsterItems(items *seeding.MonsterItems) *MonsterItems {
+func getMonsterItems(cfg *Config, items *seeding.MonsterItems) *MonsterItems {
 	if items == nil {
 		return nil
 	}
@@ -30,53 +30,52 @@ func (cfg *Config) getMonsterItems(items *seeding.MonsterItems) *MonsterItems {
 		DropChance:          items.DropChance,
 		DropCondition:       items.DropCondition,
 		OtherItemsCondition: items.OtherItemsCondition,
-		OtherItems:          cfg.getMonsterOtherItems(items.OtherItems),
+		OtherItems:          getMonsterOtherItems(cfg, items.OtherItems),
 	}
 
 	if items.StealCommon != nil {
-		stealCommon := cfg.createItemAmount(*items.StealCommon)
+		stealCommon := createItemAmount(cfg, *items.StealCommon)
 		monItems.StealCommon = &stealCommon
 	}
 
 	if items.StealRare != nil {
-		stealRare := cfg.createItemAmount(*items.StealRare)
+		stealRare := createItemAmount(cfg, *items.StealRare)
 		monItems.StealRare = &stealRare
 	}
 
 	if items.DropCommon != nil {
-		dropCommon := cfg.createItemAmount(*items.DropCommon)
+		dropCommon := createItemAmount(cfg, *items.DropCommon)
 		monItems.DropCommon = &dropCommon
 	}
 
 	if items.DropRare != nil {
-		dropRare := cfg.createItemAmount(*items.DropRare)
+		dropRare := createItemAmount(cfg, *items.DropRare)
 		monItems.DropRare = &dropRare
 	}
 
 	if items.SecondaryDropCommon != nil {
-		secDropCommon := cfg.createItemAmount(*items.SecondaryDropCommon)
+		secDropCommon := createItemAmount(cfg, *items.SecondaryDropCommon)
 		monItems.SecondaryDropCommon = &secDropCommon
 	}
 
 	if items.SecondaryDropRare != nil {
-		secDropRare := cfg.createItemAmount(*items.SecondaryDropRare)
+		secDropRare := createItemAmount(cfg, *items.SecondaryDropRare)
 		monItems.SecondaryDropRare = &secDropRare
 	}
 
 	if items.Bribe != nil {
-		bribe := cfg.createItemAmount(*items.Bribe)
+		bribe := createItemAmount(cfg, *items.Bribe)
 		monItems.Bribe = &bribe
 	}
 
 	return &monItems
 }
 
-
-func (cfg *Config) getMonsterOtherItems(seedItems []seeding.PossibleItem) []PossibleItem {
+func getMonsterOtherItems(cfg *Config, seedItems []seeding.PossibleItem) []PossibleItem {
 	otherItems := []PossibleItem{}
 
 	for _, item := range seedItems {
-		possibleItem := cfg.newPossibleItem(item.ItemAmount, item.Chance)
+		possibleItem := newPossibleItem(cfg, item.ItemAmount, item.Chance)
 		otherItems = append(otherItems, possibleItem)
 	}
 

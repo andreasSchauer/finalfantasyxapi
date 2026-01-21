@@ -40,8 +40,7 @@ func (ed EquipmentDrop) GetAPIResource() APIResource {
 	return ed.AutoAbility.GetAPIResource()
 }
 
-
-func (cfg *Config) getMonsterEquipment(equipment *seeding.MonsterEquipment) *MonsterEquipment {
+func getMonsterEquipment(cfg *Config, equipment *seeding.MonsterEquipment) *MonsterEquipment {
 	if equipment == nil {
 		return nil
 	}
@@ -50,17 +49,16 @@ func (cfg *Config) getMonsterEquipment(equipment *seeding.MonsterEquipment) *Mon
 		DropChance:        equipment.DropChance,
 		Power:             equipment.Power,
 		CriticalPlus:      equipment.CriticalPlus,
-		AbilitySlots:      cfg.getMonsterEquipmentSlots(equipment.AbilitySlots),
-		AttachedAbilities: cfg.getMonsterEquipmentSlots(equipment.AttachedAbilities),
-		WeaponAbilities:   cfg.getEquipmentDrops(equipment.WeaponAbilities),
-		ArmorAbilities:    cfg.getEquipmentDrops(equipment.ArmorAbilities),
+		AbilitySlots:      getMonsterEquipmentSlots(equipment.AbilitySlots),
+		AttachedAbilities: getMonsterEquipmentSlots(equipment.AttachedAbilities),
+		WeaponAbilities:   getEquipmentDrops(cfg, equipment.WeaponAbilities),
+		ArmorAbilities:    getEquipmentDrops(cfg, equipment.ArmorAbilities),
 	}
 
 	return &monEquipment
 }
 
-
-func (cfg *Config) getMonsterEquipmentSlots(seedSlots seeding.MonsterEquipmentSlots) MonsterEquipmentSlots {
+func getMonsterEquipmentSlots(seedSlots seeding.MonsterEquipmentSlots) MonsterEquipmentSlots {
 	equipmentSlots := MonsterEquipmentSlots{
 		MinAmount: seedSlots.MinAmount,
 		MaxAmount: seedSlots.MaxAmount,
@@ -84,7 +82,7 @@ func getMonsterEquipmentSlotsChances(seedChances []seeding.EquipmentSlotsChance)
 	return chances
 }
 
-func (cfg *Config) getEquipmentDrops(seedDrops []seeding.EquipmentDrop) []EquipmentDrop {
+func getEquipmentDrops(cfg *Config, seedDrops []seeding.EquipmentDrop) []EquipmentDrop {
 	drops := []EquipmentDrop{}
 
 	for _, seedDrop := range seedDrops {

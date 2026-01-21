@@ -41,7 +41,7 @@ func (c *AltStateChange) IsZero() bool {
 		c.RemovedStatus == nil
 }
 
-func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon seeding.Monster) []AlteredState {
+func getMonsterAlteredStates(cfg *Config, r *http.Request, mon seeding.Monster) []AlteredState {
 	alteredStates := []AlteredState{}
 
 	for i, altState := range mon.AlteredStates {
@@ -49,10 +49,10 @@ func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon seeding.Monster)
 		q.Set("altered_state", strconv.Itoa(i+1))
 
 		alteredState := AlteredState{
-			URL:         cfg.createResourceURLQuery(cfg.e.monsters.endpoint, mon.ID, q),
+			URL:         createResourceURLQuery(cfg, cfg.e.monsters.endpoint, mon.ID, q),
 			Condition:   altState.Condition,
 			IsTemporary: altState.IsTemporary,
-			Changes:     cfg.getAltStateChanges(altState),
+			Changes:     getAltStateChanges(cfg, altState),
 		}
 
 		alteredStates = append(alteredStates, alteredState)
@@ -61,11 +61,11 @@ func (cfg *Config) getMonsterAlteredStates(r *http.Request, mon seeding.Monster)
 	return alteredStates
 }
 
-func (cfg *Config) getAltStateChanges(as seeding.AlteredState) []AltStateChange {
+func getAltStateChanges(cfg *Config, as seeding.AlteredState) []AltStateChange {
 	altStateChanges := []AltStateChange{}
 
 	for _, change := range as.Changes {
-		altStateChange := cfg.getChangeRelationships(change)
+		altStateChange := getChangeRelationships(cfg, change)
 		altStateChange.AlterationType = database.AlterationType(change.AlterationType)
 		altStateChange.Distance = change.Distance
 		altStateChanges = append(altStateChanges, altStateChange)
@@ -74,7 +74,7 @@ func (cfg *Config) getAltStateChanges(as seeding.AlteredState) []AltStateChange 
 	return altStateChanges
 }
 
-func (cfg *Config) getChangeRelationships(asc seeding.AltStateChange) AltStateChange {
+func getChangeRelationships(cfg *Config, asc seeding.AltStateChange) AltStateChange {
 	var change AltStateChange
 
 	if asc.Properties != nil {
@@ -88,12 +88,12 @@ func (cfg *Config) getChangeRelationships(asc seeding.AltStateChange) AltStateCh
 	}
 
 	if asc.BaseStats != nil {
-		baseStats := namesToResourceAmounts(cfg, cfg.e.stats, *asc.BaseStats, cfg.newBaseStat)
+		baseStats := namesToResourceAmounts(cfg, cfg.e.stats, *asc.BaseStats, newBaseStat)
 		change.BaseStats = h.SliceOrNil(baseStats)
 	}
 
 	if asc.ElemResists != nil {
-		elemResists := cfg.namesToElemResists(*asc.ElemResists)
+		elemResists := namesToElemResists(cfg, *asc.ElemResists)
 		change.ElemResists = h.SliceOrNil(elemResists)
 	}
 
@@ -103,7 +103,7 @@ func (cfg *Config) getChangeRelationships(asc seeding.AltStateChange) AltStateCh
 	}
 
 	if asc.AddedStatus != nil {
-		addedStatus := cfg.newInflictedStatus(*asc.AddedStatus)
+		addedStatus := newInflictedStatus(cfg, *asc.AddedStatus)
 		change.AddedStatus = &addedStatus
 	}
 

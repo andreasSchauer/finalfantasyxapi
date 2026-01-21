@@ -20,8 +20,8 @@ func (as AppliedState) IsZero() bool {
 	return as.Condition == ""
 }
 
-func (cfg *Config) applyAlteredState(r *http.Request, mon Monster, queryName string) (Monster, error) {
-	altStateID, err := cfg.getAltStateID(r, mon, queryName)
+func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName string) (Monster, error) {
+	altStateID, err := getAltStateID(cfg, r, mon, queryName)
 	if errors.Is(err, errEmptyQuery) {
 		return mon, nil
 	}
@@ -36,7 +36,7 @@ func (cfg *Config) applyAlteredState(r *http.Request, mon Monster, queryName str
 	}
 
 	defaultState := AlteredState{
-		URL:         cfg.createResourceURL(cfg.e.monsters.endpoint, mon.ID),
+		URL:         createResourceURL(cfg, cfg.e.monsters.endpoint, mon.ID),
 		Condition:   "default",
 		IsTemporary: false,
 	}
@@ -65,7 +65,7 @@ func (cfg *Config) applyAlteredState(r *http.Request, mon Monster, queryName str
 	return mon, nil
 }
 
-func (cfg *Config) getAltStateID(r *http.Request, mon Monster, queryName string) (int, error) {
+func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName string) (int, error) {
 	queryParam := cfg.q.monsters[queryName]
 	query := r.URL.Query().Get(queryParam.Name)
 

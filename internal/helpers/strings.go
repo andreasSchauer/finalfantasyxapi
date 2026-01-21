@@ -29,6 +29,10 @@ func GetNameWithSpaces(name string) string {
 	return strings.ReplaceAll(nameLower, "_", " ")
 }
 
+func StringSliceToListString(s []string) string {
+	return strings.Join(s, ", ")
+}
+
 
 func FormatStringSlice(items []string) string {
 	formattedVals := []string{}

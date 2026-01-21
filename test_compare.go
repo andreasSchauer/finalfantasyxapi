@@ -193,7 +193,7 @@ func compAPIResources[T HasAPIResource](test test, fieldName, expPath string, go
 		return
 	}
 
-	expURL := test.cfg.completeTestURL(expPath)
+	expURL := completeTestURL(test.cfg, expPath)
 	gotURL := gotRes.GetAPIResource().GetURL()
 
 	compare(test, fieldName, expURL, gotURL)
@@ -252,7 +252,7 @@ func compPageURL(test test, fieldName string, expPathPtr, gotURLPtr *string) {
 
 	if expPathPtr != nil {
 		expPath := *expPathPtr
-		expURL := test.cfg.completeTestURL(expPath)
+		expURL := completeTestURL(test.cfg, expPath)
 		expURLPtr = &expURL
 	}
 

@@ -83,14 +83,14 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 		Effect:      mode.Effect,
 		Type:        modeType,
 		FillRate:    mode.FillRate,
-		Actions:     cfg.getOverdriveModeActions(mode),
+		Actions:     getOverdriveModeActions(cfg, mode),
 	}
 
 	return response, nil
 }
 
 
-func (cfg *Config) getOverdriveModeActions(mode seeding.OverdriveMode) []ActionAmount {
+func getOverdriveModeActions(cfg *Config, mode seeding.OverdriveMode) []ActionAmount {
 	actions := []ActionAmount{}
 
 	for _, a := range mode.ActionsToLearn {

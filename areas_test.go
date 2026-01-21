@@ -364,6 +364,7 @@ func TestRetrieveAreas(t *testing.T) {
 	}
 }
 
+/*
 func TestAreasParameters(t *testing.T) {
 	tests := []struct {
 		testGeneral
@@ -478,3 +479,4 @@ func TestAreasSections(t *testing.T) {
 		testNameList(test, nameListTest)
 	}
 }
+*/

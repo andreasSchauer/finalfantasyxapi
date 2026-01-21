@@ -20,8 +20,8 @@ func (ac AreaConnection) GetAPIResource() APIResource {
 	return ac.Area
 }
 
-func (cfg *Config) getAreaRelationships(r *http.Request, area seeding.Area) (Area, error) {
-	connections, err := cfg.getAreaConnectedAreas(area)
+func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (Area, error) {
+	connections, err := getAreaConnectedAreas(cfg, area)
 	if err != nil {
 		return Area{}, err
 	}
@@ -56,12 +56,12 @@ func (cfg *Config) getAreaRelationships(r *http.Request, area seeding.Area) (Are
 		return Area{}, err
 	}
 
-	sidequest, err := cfg.getAreaSidequest(r, area)
+	sidequest, err := getAreaSidequest(cfg, r, area)
 	if err != nil {
 		return Area{}, err
 	}
 
-	music, err := cfg.getAreaMusic(r, area)
+	music, err := getAreaMusic(cfg, r, area)
 	if err != nil {
 		return Area{}, err
 	}
@@ -87,7 +87,7 @@ func (cfg *Config) getAreaRelationships(r *http.Request, area seeding.Area) (Are
 	return rel, nil
 }
 
-func (cfg *Config) getAreaConnectedAreas(area seeding.Area) ([]AreaConnection, error) {
+func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, error) {
 	i := cfg.e.areas
 	connectedAreas := []AreaConnection{}
 
@@ -110,7 +110,7 @@ func (cfg *Config) getAreaConnectedAreas(area seeding.Area) ([]AreaConnection, e
 	return connectedAreas, nil
 }
 
-func (cfg *Config) getAreaSidequest(r *http.Request, area seeding.Area) (NamedAPIResource, error) {
+func getAreaSidequest(cfg *Config, r *http.Request, area seeding.Area) (NamedAPIResource, error) {
 	dbQuestIDs, err := cfg.db.GetAreaQuestIDs(r.Context(), area.ID)
 	if err != nil {
 		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get quests of %s.", area), err)
@@ -154,20 +154,20 @@ func findSidequest(cfg *Config, potentialSidequestID int32) (seeding.Sidequest, 
 	return sidequest, nil
 }
 
-func (cfg *Config) getAreaMusic(r *http.Request, item seeding.LookupableID) (LocationMusic, error) {
+func getAreaMusic(cfg *Config, r *http.Request, item seeding.LookupableID) (LocationMusic, error) {
 	i := cfg.e.songs
 
-	cueSongs, err := cfg.getAreaCueSongs(r, i, item)
+	cueSongs, err := getAreaCueSongs(cfg, r, i, item)
 	if err != nil {
 		return LocationMusic{}, err
 	}
 
-	bmSongs, err := cfg.getAreaBMSongs(r, i, item)
+	bmSongs, err := getAreaBMSongs(cfg, r, i, item)
 	if err != nil {
 		return LocationMusic{}, err
 	}
 
-	music, err := cfg.completeLocationMusic(r, i, item, cueSongs, bmSongs, LocationMusicQueries{
+	music, err := completeLocationMusic(cfg, r, i, item, cueSongs, bmSongs, LocationMusicQueries{
 		FMVSongs:  cfg.db.GetAreaFMVSongIDs,
 		BossMusic: cfg.db.GetAreaBossSongIDs,
 	})
@@ -178,7 +178,7 @@ func (cfg *Config) getAreaMusic(r *http.Request, item seeding.LookupableID) (Loc
 	return music, nil
 }
 
-func (cfg *Config) getAreaCueSongs(r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID) ([]LocationSong, error) {
+func getAreaCueSongs(cfg *Config, r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID) ([]LocationSong, error) {
 	dbCueSongs, err := cfg.db.GetAreaCues(r.Context(), item.GetID())
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get cues of %s", item), err)
@@ -186,13 +186,13 @@ func (cfg *Config) getAreaCueSongs(r *http.Request, i handlerInput[seeding.Song,
 
 	var cueSongs []LocationSong
 	for _, song := range dbCueSongs {
-		cueSongs = append(cueSongs, cfg.newLocationSong(i, song.ID, song.ReplacesEncounterMusic))
+		cueSongs = append(cueSongs, newLocationSong(cfg, i, song.ID, song.ReplacesEncounterMusic))
 	}
 
 	return cueSongs, nil
 }
 
-func (cfg *Config) getAreaBMSongs(r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID) ([]LocationSong, error) {
+func getAreaBMSongs(cfg *Config, r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID) ([]LocationSong, error) {
 	dbBMSongs, err := cfg.db.GetAreaBackgroundMusic(r.Context(), item.GetID())
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get cues of %s", item), err)
@@ -200,7 +200,7 @@ func (cfg *Config) getAreaBMSongs(r *http.Request, i handlerInput[seeding.Song, 
 
 	var bmSongs []LocationSong
 	for _, song := range dbBMSongs {
-		bmSongs = append(bmSongs, cfg.newLocationSong(i, song.ID, song.ReplacesEncounterMusic))
+		bmSongs = append(bmSongs, newLocationSong(cfg, i, song.ID, song.ReplacesEncounterMusic))
 	}
 
 	return bmSongs, nil

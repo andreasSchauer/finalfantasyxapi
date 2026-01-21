@@ -22,14 +22,14 @@ func frl[T HasAPIResource](res []T, err error) filteredResList[T] {
 }
 
 // a query filter that can't really be generalized. this one simply checks, if it's empty and converts the ids to apiResources at the end.
-func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*http.Request, string, QueryType) ([]int32, error)) ([]A, error) {
+func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, string, QueryType) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return inputRes, nil
 	}
 
-	dbIDs, err := wrapperFn(r, query, queryParam)
+	dbIDs, err := wrapperFn(cfg, r, query, queryParam)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func idOnlyQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 }
 
 // like idOnlyQuery, but with more specialized logic in between (wrapperFn)
-func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*http.Request, int32) ([]A, error)) ([]A, error) {
+func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, int32) ([]A, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseIDOnlyQuery(r, queryParam, maxID)
@@ -72,7 +72,7 @@ func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](r *h
 		return nil, err
 	}
 
-	resources, err := wrapperFn(r, id)
+	resources, err := wrapperFn(cfg, r, id)
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 }
 
 // like idListQuery, but with more specialized logic in between (wrapperFn)
-func idListQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*http.Request, []int32) ([]int32, error)) ([]A, error) {
+func idListQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, []int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	queryIDs, err := parseIdListQuery(r, queryParam, maxID)
@@ -114,7 +114,7 @@ func idListQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg 
 		return nil, err
 	}
 
-	dbIDs, err := wrapperFn(r, queryIDs)
+	dbIDs, err := wrapperFn(cfg, r, queryIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -217,7 +217,7 @@ func nullTypeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any]
 }
 
 // like type query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
-func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*http.Request, E) ([]int32, error)) ([]A, error) {
+func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, E) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	enum, err := parseTypeQuery(r, queryParam, cfg.t.CTBIconType)
 	if errors.Is(err, errEmptyQuery) {
@@ -228,7 +228,7 @@ func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N a
 	}
 
 	typedStr := et.convFunc(enum.Name)
-	dbIDs, err := wrapperFn(r, typedStr)
+	dbIDs, err := wrapperFn(cfg, r, typedStr)
 	if err != nil {
 		return nil, err
 	}

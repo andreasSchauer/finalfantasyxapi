@@ -65,7 +65,7 @@ func newNameListTestSections(cfg *Config, fieldName, endpoint string, exp, got [
 	expURLs := []string{}
 
 	for _, section := range exp {
-		url := cfg.createSectionURL(endpoint, section)
+		url := createSectionURL(cfg, endpoint, section)
 		expURLs = append(expURLs, url)
 	}
 
@@ -168,7 +168,7 @@ func checkResourcesInSlice[T HasAPIResource](test test, fieldName string, expect
 	}
 
 	for _, expPath := range expectedPaths {
-		expURL := test.cfg.completeTestURL(expPath)
+		expURL := completeTestURL(test.cfg, expPath)
 		_, ok := gotMap[expURL]
 		if !ok {
 			test.t.Fatalf("%s: '%s' doesn't contain all wanted resources. missing '%s'.", test.name, fieldName, expURL)

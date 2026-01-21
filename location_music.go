@@ -35,7 +35,7 @@ func (ls LocationSong) GetAPIResource() APIResource {
 	return ls.Song
 }
 
-func (cfg *Config) newLocationSong(i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], songID int32, replEncMusic bool) LocationSong {
+func newLocationSong(cfg *Config, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], songID int32, replEncMusic bool) LocationSong {
 	return LocationSong{
 		Song:                   i.idToResFunc(cfg, i, songID),
 		ReplacesEncounterMusic: replEncMusic,
@@ -43,7 +43,7 @@ func (cfg *Config) newLocationSong(i handlerInput[seeding.Song, any, NamedAPIRes
 }
 
 // can be used by areas, locations, and sublocations respectively. This is the closed to generic I can get with my DB setup
-func (cfg *Config) completeLocationMusic(r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID, cueSongs, bmSongs []LocationSong, queries LocationMusicQueries) (LocationMusic, error) {
+func completeLocationMusic(cfg *Config, r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID, cueSongs, bmSongs []LocationSong, queries LocationMusicQueries) (LocationMusic, error) {
 	fmvSongs, err := getResourcesDB(cfg, r, i, item, queries.FMVSongs)
 	if err != nil {
 		return LocationMusic{}, err

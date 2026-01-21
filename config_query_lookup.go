@@ -44,7 +44,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.q.defaultParams = map[string]QueryType{
 		"limit": {
 			ID:          -3,
-			Name: 		 "limit",
+			Name:        "limit",
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20. The value 'max' can also be used to forgo pagination of lists entirely.",
 			Usage:       "?limit{integer or 'max'}",
 			ExampleUses: []string{"?limit=50"},
@@ -61,7 +61,7 @@ func (cfg *Config) QueryLookupInit() {
 		},
 		"offset": {
 			ID:          -2,
-			Name: 		 "offset",
+			Name:        "offset",
 			Description: "Sets the offset from where to start the displayed entries in a list response. If not set manually, the default is 0.",
 			Usage:       "?offset{integer}",
 			ExampleUses: []string{"?offset=30"},
@@ -72,7 +72,7 @@ func (cfg *Config) QueryLookupInit() {
 		},
 		"section": {
 			ID:          -1,
-			Name: 		 "section",
+			Name:        "section",
 			Description: "Filters query parameters by the section they can be used in within their endpoint. 'self' can be used to display only parameters specific to their own endpoint.",
 			Usage:       "/parameters?section={section_name or 'self'}",
 			ExampleUses: []string{"/parameters?section=monsters", "/parameters?section=self"},
@@ -108,7 +108,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"areas"},
-			References:  []string{cfg.createListURL("locations")},
+			References:  []string{createListURL(cfg, "locations")},
 		},
 		"sublocation": {
 			ID:          2,
@@ -118,7 +118,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"areas"},
-			References:  []string{cfg.createListURL("sublocations")},
+			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		"item": {
 			ID:          3,
@@ -128,7 +128,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"areas"},
-			References:  []string{cfg.createListURL("items")},
+			References:  []string{createListURL(cfg, "items")},
 		},
 		"method": {
 			ID:             4,
@@ -149,7 +149,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"areas"},
-			References:  []string{cfg.createListURL("key-items")},
+			References:  []string{createListURL(cfg, "key-items")},
 		},
 		"story_based": {
 			ID:          6,
@@ -326,7 +326,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},
-			References:  []string{cfg.createListURL("elements"), cfg.createListURL("affinities")},
+			References:  []string{createListURL(cfg, "elements"), createListURL(cfg, "affinities")},
 		},
 		"status_resists": {
 			ID:          6,
@@ -336,7 +336,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},
-			References:  []string{cfg.createListURL("status-conditions")},
+			References:  []string{createListURL(cfg, "status-conditions")},
 		},
 		"resistance": {
 			ID:              7,
@@ -364,7 +364,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},
-			References:  []string{cfg.createListURL("item")},
+			References:  []string{createListURL(cfg, "item")},
 		},
 		"method": {
 			ID:             9,
@@ -385,7 +385,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},
-			References:  []string{cfg.createListURL("auto_abilities")},
+			References:  []string{createListURL(cfg, "auto_abilities")},
 		},
 		"ronso_rage": {
 			ID:          11,
@@ -395,7 +395,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},
-			References:  []string{cfg.createListURL("ronso_rages")},
+			References:  []string{createListURL(cfg, "ronso_rages")},
 		},
 		"location": {
 			ID:          12,
@@ -405,7 +405,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},
-			References:  []string{cfg.createListURL("locations")},
+			References:  []string{createListURL(cfg, "locations")},
 		},
 		"sublocation": {
 			ID:          13,
@@ -415,7 +415,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},
-			References:  []string{cfg.createListURL("sublocations")},
+			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		"area": {
 			ID:          14,
@@ -425,7 +425,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},
-			References:  []string{cfg.createListURL("areas")},
+			References:  []string{createListURL(cfg, "areas")},
 		},
 		"distance": {
 			ID:              15,
@@ -499,7 +499,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},
-			References:  []string{cfg.createListURL("monster-species")},
+			References:  []string{createListURL(cfg, "monster-species")},
 		},
 		"creation_area": {
 			ID:          23,
@@ -518,7 +518,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"monsters"},
-			References:  []string{cfg.createListURL("ctb-icon-type")},
+			References:  []string{createListURL(cfg, "ctb-icon-type")},
 		},
 	}
 
@@ -536,7 +536,7 @@ func (cfg *Config) initOverdriveModesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ForSections: []string{"overdrive-modes"},
-			References:  []string{cfg.createListURL("overdrive-mode-type")},
+			References:  []string{createListURL(cfg, "overdrive-mode-type")},
 		},
 	}
 

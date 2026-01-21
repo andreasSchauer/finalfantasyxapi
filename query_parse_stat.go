@@ -9,7 +9,7 @@ import (
 )
 
 
-func (cfg *Config) parseStatQuery(r *http.Request, queryParam QueryType, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
+func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryType, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -19,7 +19,7 @@ func (cfg *Config) parseStatQuery(r *http.Request, queryParam QueryType, baseSta
 	statKeyValuePairs := strings.SplitSeq(query, ",")
 
 	for pair := range statKeyValuePairs {
-		stat, value, err := cfg.parseStatPair(pair, queryParam, allowedStatIDs)
+		stat, value, err := parseStatPair(cfg, pair, queryParam, allowedStatIDs)
 		if err != nil {
 			return nil, err
 		}
@@ -34,7 +34,7 @@ func (cfg *Config) parseStatQuery(r *http.Request, queryParam QueryType, baseSta
 
 
 
-func (cfg *Config) parseStatPair(pair string, queryParam QueryType, allowedStatIDs []int32) (string, int, error) {
+func parseStatPair(cfg *Config, pair string, queryParam QueryType, allowedStatIDs []int32) (string, int, error) {
 	parts := strings.Split(pair, "-")
 	if len(parts) != 2 {
 		return "", 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input. usage: '%s'.", queryParam.Usage), nil)
@@ -43,7 +43,7 @@ func (cfg *Config) parseStatPair(pair string, queryParam QueryType, allowedStatI
 	stat := parts[0]
 	valueStr := parts[1]
 
-	err := cfg.validateQueryStatName(stat, allowedStatIDs, queryParam)
+	err := validateQueryStatName(cfg, stat, allowedStatIDs, queryParam)
 	if err != nil {
 		return "", 0, err
 	}
@@ -69,14 +69,14 @@ func getDefaultStats(statMap map[string]int32, baseStats []BaseStat) map[string]
 	return statMap
 }
 
-func (cfg *Config) validateQueryStatName(stat string, allowedStatIDs []int32, queryParam QueryType) error {
+func validateQueryStatName(cfg *Config, stat string, allowedStatIDs []int32, queryParam QueryType) error {
 	parseResp, err := checkUniqueName(stat, cfg.l.Stats)
 	if err != nil {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: '%s' in '%s'. stat doesn't exist. use '/api/stats' to see existing stats.", stat, queryParam.Name), err)
 	}
 
 	if !slices.Contains(allowedStatIDs, parseResp.ID) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat '%s' in '%s'. '%s' only uses %s.", stat, queryParam.Name, queryParam.Name, cfg.getAllowedStatString(allowedStatIDs)), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat '%s' in '%s'. '%s' only uses %s.", stat, queryParam.Name, queryParam.Name, getAllowedStatString(cfg, allowedStatIDs)), nil)
 	}
 
 	return nil
@@ -108,7 +108,7 @@ func validateQueryStatVal(statName string, valStr string, queryParam QueryType) 
 }
 
 
-func (cfg *Config) getAllowedStatString(allowedStatIDs []int32) string {
+func getAllowedStatString(cfg *Config, allowedStatIDs []int32) string {
 	stats := []string{}
 
 	for _, id := range allowedStatIDs {

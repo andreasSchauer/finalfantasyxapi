@@ -31,12 +31,12 @@ func (ia ItemAmount) GetVal() int32 {
 
 func newItemAmount(res NamedAPIResource, amount int32) ItemAmount {
 	return ItemAmount{
-		Item: res,
+		Item:   res,
 		Amount: amount,
 	}
 }
 
-func (cfg *Config) createItemAmount(input seeding.ItemAmount) ItemAmount {
+func createItemAmount(cfg *Config, input seeding.ItemAmount) ItemAmount {
 	iItems := cfg.e.items
 	iKeyItems := cfg.e.keyItems
 	var ia ItemAmount
@@ -56,7 +56,6 @@ func (cfg *Config) createItemAmount(input seeding.ItemAmount) ItemAmount {
 	return ItemAmount{}
 }
 
-
 type PossibleItem struct {
 	ItemAmount
 	Chance int32 `json:"chance"`
@@ -66,9 +65,9 @@ func (ps PossibleItem) GetAPIResource() APIResource {
 	return ps.Item.GetAPIResource()
 }
 
-func (cfg *Config) newPossibleItem(item seeding.ItemAmount, chance int32) PossibleItem {
+func newPossibleItem(cfg *Config, item seeding.ItemAmount, chance int32) PossibleItem {
 	return PossibleItem{
-		ItemAmount: cfg.createItemAmount(item),
+		ItemAmount: createItemAmount(cfg, item),
 		Chance:     chance,
 	}
 }

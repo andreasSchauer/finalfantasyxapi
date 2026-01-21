@@ -62,7 +62,7 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, L
 		return Area{}, err
 	}
 
-	rel, err := cfg.getAreaRelationships(r, area)
+	rel, err := getAreaRelationships(cfg, r, area)
 	if err != nil {
 		return Area{}, err
 	}
@@ -103,8 +103,8 @@ func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, A
 	filteredLists := []filteredResList[LocationAPIResource]{
 		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationAreaIDs)),
 		frl(idOnlyQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationAreaIDs)),
-		frl(idOnlyQueryWrapper(r, i, resources, "item", len(cfg.l.Items), cfg.getAreasByItem)),
-		frl(idOnlyQueryWrapper(r, i, resources, "key-item", len(cfg.l.KeyItems), cfg.getAreasByKeyItem)),
+		frl(idOnlyQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getAreasByItem)),
+		frl(idOnlyQueryWrapper(cfg, r, i, resources, "key-item", len(cfg.l.KeyItems), getAreasByKeyItem)),
 		frl(boolQuery(cfg, r, i, resources, "story_based", cfg.db.GetAreaIDsStoryOnly)),
 		frl(boolQuery(cfg, r, i, resources, "save_sphere", cfg.db.GetAreaIDsWithSaveSphere)),
 		frl(boolQuery(cfg, r, i, resources, "comp_sphere", cfg.db.GetAreaIDsWithCompSphere)),

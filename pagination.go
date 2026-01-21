@@ -34,8 +34,8 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, items []T) (ListPa
 
 	listParams := ListParams{
 		Count:    size,
-		Previous: cfg.createPreviousURL(r, offset, limit),
-		Next:     cfg.createNextURL(r, offset, limit, len(items)),
+		Previous: createPreviousURL(cfg, r, offset, limit),
+		Next:     createNextURL(cfg, r, offset, limit, len(items)),
 	}
 
 	if size == 0 {
@@ -52,7 +52,7 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, items []T) (ListPa
 	return listParams, shownResources, nil
 }
 
-func (cfg *Config) createPreviousURL(r *http.Request, offset, limit int) *string {
+func createPreviousURL(cfg *Config, r *http.Request, offset, limit int) *string {
 	if offset == 0 {
 		return nil
 	}
@@ -72,7 +72,7 @@ func (cfg *Config) createPreviousURL(r *http.Request, offset, limit int) *string
 	return &previousURL
 }
 
-func (cfg *Config) createNextURL(r *http.Request, offset, limit, size int) *string {
+func createNextURL(cfg *Config, r *http.Request, offset, limit, size int) *string {
 	nextOffset := offset + limit
 
 	if nextOffset >= size {

@@ -11,8 +11,8 @@ import (
 )
 
 
-func (cfg *Config) getMonstersByElemResists(r *http.Request, query string, queryParam QueryType) ([]int32, error) {
-	ids, err := cfg.getElemResistIDs(query, queryParam)
+func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryParam QueryType) ([]int32, error) {
+	ids, err := getElemResistIDs(cfg, query, queryParam)
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +25,7 @@ func (cfg *Config) getMonstersByElemResists(r *http.Request, query string, query
 	return dbIDs, nil
 }
 
-func (cfg *Config) getElemResistIDs(query string, queryParam QueryType) ([]int32, error) {
+func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32, error) {
 	eaPairs := strings.Split(query, ",")
 	var ids []int32
 	elemMap := make(map[int32]bool)
@@ -67,8 +67,8 @@ func (cfg *Config) getElemResistIDs(query string, queryParam QueryType) ([]int32
 }
 
 
-func (cfg *Config) getMonstersByStatusResists(r *http.Request, ids []int32) ([]int32, error) {
-	resistance, err := cfg.verifyMonsterResistance(r)
+func getMonstersByStatusResists(cfg *Config, r *http.Request, ids []int32) ([]int32, error) {
+	resistance, err := verifyMonsterResistance(cfg, r)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func (cfg *Config) getMonstersByStatusResists(r *http.Request, ids []int32) ([]i
 }
 
 
-func (cfg *Config) verifyMonsterResistance(r *http.Request) (int, error) {
+func verifyMonsterResistance(cfg *Config, r *http.Request) (int, error) {
 	queryParam := cfg.q.monsters["resistance"]
 
 	resistance, err := parseIntQuery(r, queryParam)
@@ -97,7 +97,7 @@ func (cfg *Config) verifyMonsterResistance(r *http.Request) (int, error) {
 }
 
 
-func (cfg *Config) getMonstersByItem(r *http.Request, id int32) ([]NamedAPIResource, error) {
+func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.monsters
 	resourceType := i.resourceType
 	queryParam := i.queryLookup["method"]
@@ -140,7 +140,7 @@ func (cfg *Config) getMonstersByItem(r *http.Request, id int32) ([]NamedAPIResou
 }
 
 
-func (cfg *Config) queryCTBIconType(r *http.Request, iconType database.CtbIconType) ([]int32, error) {
+func queryCTBIconType(cfg *Config, r *http.Request, iconType database.CtbIconType) ([]int32, error) {
 	var ids []int32
 	var err error
 

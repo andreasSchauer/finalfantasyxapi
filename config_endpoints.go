@@ -99,8 +99,8 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:    cfg.retrieveAreas,
 		subsections: 	 map[string]SubSectionFns{
 			"monsters": {
-				dbQuery: cfg.db.GetAreaMonsterIDs,
-				getResultsFn: getSubMonsters,
+				dbQuery: 		cfg.db.GetAreaMonsterIDs,
+				getResultsFn: 	getSubMonsters,
 			},
 		},
 	}

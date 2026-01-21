@@ -40,8 +40,6 @@ func newSubResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg 
 }
 
 
-
-
 func toSubResourceSlice[T SubResource](s []T) []SubResource {
 	out := make([]SubResource, len(s))
 	for i, v := range s {

@@ -30,7 +30,7 @@ type AgilityParams struct {
 	MaxICV    *int32 `json:"max_icv"`
 }
 
-func (cfg *Config) getMonsterRelationships(r *http.Request, mon seeding.Monster) (Monster, error) {
+func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) (Monster, error) {
 	areas, err := getResourcesDB(cfg, r, cfg.e.areas, mon, cfg.db.GetMonsterAreaIDs)
 	if err != nil {
 		return Monster{}, err
@@ -41,7 +41,7 @@ func (cfg *Config) getMonsterRelationships(r *http.Request, mon seeding.Monster)
 		return Monster{}, err
 	}
 
-	abilities, err := cfg.getMonsterAbilities(mon)
+	abilities, err := getMonsterAbilities(cfg, mon)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -52,27 +52,27 @@ func (cfg *Config) getMonsterRelationships(r *http.Request, mon seeding.Monster)
 		RonsoRages:       namesToNamedAPIResources(cfg, cfg.e.ronsoRages, mon.RonsoRages),
 		Locations:        areas,
 		Formations:       formations,
-		BaseStats:        namesToResourceAmounts(cfg, cfg.e.stats, mon.BaseStats, cfg.newBaseStat),
-		ElemResists:      cfg.getMonsterElemResists(mon.ElemResists),
+		BaseStats:        namesToResourceAmounts(cfg, cfg.e.stats, mon.BaseStats, newBaseStat),
+		ElemResists:      getMonsterElemResists(cfg, mon.ElemResists),
 		StatusImmunities: namesToNamedAPIResources(cfg, cfg.e.statusConditions, mon.StatusImmunities),
-		StatusResists:    namesToResourceAmounts(cfg, cfg.e.statusConditions, mon.StatusResists, cfg.newStatusResist),
+		StatusResists:    namesToResourceAmounts(cfg, cfg.e.statusConditions, mon.StatusResists, newStatusResist),
 		Abilities:        abilities,
-		AlteredStates:    cfg.getMonsterAlteredStates(r, mon),
+		AlteredStates:    getMonsterAlteredStates(cfg, r, mon),
 	}
 
 	return monster, nil
 }
 
 
-func (cfg *Config) getMonsterElemResists(resists []seeding.ElementalResist) []ElementalResist {
-	elemResists := cfg.namesToElemResists(resists)
+func getMonsterElemResists(cfg *Config, resists []seeding.ElementalResist) []ElementalResist {
+	elemResists := namesToElemResists(cfg, resists)
 	elemResistMap := getResourceMap(elemResists)
 
 	for key := range cfg.l.ElementsID {
 		_, ok := elemResistMap[key]
 		if !ok {
 			element := cfg.l.ElementsID[key]
-			elemResistMap[element.ID] = cfg.newElemResist(element.Name, "neutral")
+			elemResistMap[element.ID] = newElemResist(cfg, element.Name, "neutral")
 		}
 	}
 
@@ -80,11 +80,11 @@ func (cfg *Config) getMonsterElemResists(resists []seeding.ElementalResist) []El
 }
 
 
-func (cfg *Config) getMonsterAbilities(mon seeding.Monster) ([]MonsterAbility, error) {
+func getMonsterAbilities(cfg *Config, mon seeding.Monster) ([]MonsterAbility, error) {
 	monAbilities := []MonsterAbility{}
 
 	for _, seedAbility := range mon.Abilities {
-		abilityResource, err := cfg.createAbilityResource(seedAbility.Name, seedAbility.Version, database.AbilityType(seedAbility.AbilityType))
+		abilityResource, err := createAbilityResource(cfg, seedAbility.Name, seedAbility.Version, database.AbilityType(seedAbility.AbilityType))
 		if err != nil {
 			return nil, err
 		}
@@ -102,12 +102,12 @@ func (cfg *Config) getMonsterAbilities(mon seeding.Monster) ([]MonsterAbility, e
 }
 
 
-func (cfg *Config) getMonsterPoisonDamage(mon Monster) (*int32, error) {
+func getMonsterPoisonDamage(cfg *Config, mon Monster) (*int32, error) {
 	if mon.PoisonRate == nil {
 		return nil, nil
 	}
 
-	hpStat := cfg.getBaseStat("hp", mon.BaseStats)
+	hpStat := getBaseStat(cfg, "hp", mon.BaseStats)
 
 	poisonDamageFloat := float32(hpStat.Value) * *mon.PoisonRate
 	poisonDamage := int32(poisonDamageFloat)
@@ -116,8 +116,8 @@ func (cfg *Config) getMonsterPoisonDamage(mon Monster) (*int32, error) {
 }
 
 
-func (cfg *Config) getMonsterAgilityParams(r *http.Request, mon Monster) (*AgilityParams, error) {
-	agilityStat := cfg.getBaseStat("agility", mon.BaseStats)
+func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*AgilityParams, error) {
+	agilityStat := getBaseStat(cfg, "agility", mon.BaseStats)
 	agility := agilityStat.Value
 	if agility == 0 {
 		return nil, nil
@@ -146,13 +146,13 @@ func (cfg *Config) getMonsterAgilityParams(r *http.Request, mon Monster) (*Agili
 
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
-func (cfg *Config) getMonsterBribeChances(mon Monster) ([]BribeChance, error) {
+func getMonsterBribeChances(cfg *Config, mon Monster) ([]BribeChance, error) {
 	bribe := nameToNamedAPIResource(cfg, cfg.e.statusConditions, "bribe", nil)
 	if resourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
 	}
 
-	hpStat := cfg.getBaseStat("hp", mon.BaseStats)
+	hpStat := getBaseStat(cfg, "hp", mon.BaseStats)
 	hp := hpStat.Value
 
 	bribeChances := []BribeChance{}

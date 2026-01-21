@@ -8,15 +8,15 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) applyRonsoStats(r *http.Request, mon Monster, queryName string) ([]BaseStat, error) {
+func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName string) ([]BaseStat, error) {
 	allowedStatIDs := []int32{1, 3, 5, 7}
 	baseStats := mon.BaseStats
 	queryParam := cfg.q.monsters[queryName]
 
 	kimahri, _ := seeding.GetResource("kimahri", cfg.l.Characters)
-	kimahriBS := namesToResourceAmounts(cfg, cfg.e.stats, kimahri.BaseStats, cfg.newBaseStat)
+	kimahriBS := namesToResourceAmounts(cfg, cfg.e.stats, kimahri.BaseStats, newBaseStat)
 
-	kimahriStatMap, err := cfg.parseStatQuery(r, queryParam, kimahriBS, allowedStatIDs)
+	kimahriStatMap, err := parseStatQuery(cfg, r, queryParam, kimahriBS, allowedStatIDs)
 	if errors.Is(err, errEmptyQuery) {
 		return baseStats, nil
 	}
