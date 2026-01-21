@@ -65,9 +65,7 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 }
 
 
-func (cfg *Config) getOverdriveMode(r *http.Request, id int32) (OverdriveMode, error) {
-	i := cfg.e.overdriveModes
-
+func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList], id int32) (OverdriveMode, error) {
 	mode, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return OverdriveMode{}, err
@@ -104,9 +102,7 @@ func (cfg *Config) getOverdriveModeActions(mode seeding.OverdriveMode) []ActionA
 }
 
 
-func (cfg *Config) retrieveOverdriveModes(r *http.Request) (NamedApiResourceList, error) {
-	i := cfg.e.overdriveModes
-
+func (cfg *Config) retrieveOverdriveModes(r *http.Request, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err

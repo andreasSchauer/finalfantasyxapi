@@ -12,7 +12,8 @@ func GetMapKeyStr[T any](itemMap map[string]T) string {
 	keys := []string{}
 
 	for key := range itemMap {
-		keys = append(keys, key)
+		keyFormatted := fmt.Sprintf("'%s'", key)
+		keys = append(keys, keyFormatted)
 	}
 
 	slices.SortStableFunc(keys, func(a, b string) int {

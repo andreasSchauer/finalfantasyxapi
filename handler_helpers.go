@@ -9,7 +9,7 @@ import (
 )
 
 func handleEndpointList[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
-	resourceList, err := i.retrieveFunc(r)
+	resourceList, err := i.retrieveFunc(r, i)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -34,7 +34,7 @@ func handleEndpointIDOnly[T h.HasID, R any, A APIResource, L APIResourceList](cf
 		return
 	}
 
-	resource, err := i.getSingleFunc(r, parseRes.ID)
+	resource, err := i.getSingleFunc(r, i, parseRes.ID)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -60,8 +60,8 @@ func handleEndpointNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](
 		return
 	}
 
-	if i.getMultipleFunc != nil && parseRes.Name != "" {
-		resources, err := i.getMultipleFunc(r, parseRes.Name)
+	if i.getMultipleQuery != nil && parseRes.Name != "" {
+		resources, err := getMultipleAPIResources(cfg, r, i, parseRes.Name)
 		if handleHTTPError(w, err) {
 			return
 		}
@@ -69,7 +69,7 @@ func handleEndpointNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](
 		return
 	}
 
-	resource, err := i.getSingleFunc(r, parseRes.ID)
+	resource, err := i.getSingleFunc(r, i, parseRes.ID)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -86,7 +86,7 @@ func handleEndpointNameVersion[T h.HasID, R any, A APIResource, L APIResourceLis
 		return
 	}
 
-	resource, err := i.getSingleFunc(r, parseRes.ID)
+	resource, err := i.getSingleFunc(r, i, parseRes.ID)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -146,9 +146,8 @@ func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](w http
 	idStr := segments[0]
 	subsection := segments[1]
 
-	id, _ := strconv.Atoi(idStr)
-	if id < 1 || id > len(i.objLookup) {
-		respondWithError(w, http.StatusNotFound, fmt.Sprintf("%s with id '%d' doesn't exist. max id: %d.", i.resourceType, id, len(i.objLookup)), nil)
+	_, err := parseID(idStr, i.resourceType, len(i.objLookup))
+	if handleHTTPError(w, err) {
 		return
 	}
 

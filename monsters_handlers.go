@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type Monster struct {
@@ -88,9 +89,7 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
-	i := cfg.e.monsters
-
+func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList], id int32) (Monster, error) {
 	err := verifyQueryParams(r, i, &id)
 	if err != nil {
 		return Monster{}, err
@@ -197,14 +196,9 @@ func (cfg *Config) getMonster(r *http.Request, id int32) (Monster, error) {
 	return response, nil
 }
 
-func (cfg *Config) getMultipleMonsters(r *http.Request, monsterName string) (NamedApiResourceList, error) {
-	i := cfg.e.monsters
-	return getMultipleAPIResources(cfg, r, i, monsterName)
-}
 
-func (cfg *Config) retrieveMonsters(r *http.Request) (NamedApiResourceList, error) {
-	i := cfg.e.monsters
 
+func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err

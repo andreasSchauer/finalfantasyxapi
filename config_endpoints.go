@@ -19,9 +19,8 @@ type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 	retrieveQuery   	func(context.Context) ([]int32, error)
 	idToResFunc     	func(*Config, handlerInput[T, R, A, L], int32) A
 	resToListFunc		func(*Config, *http.Request, handlerInput[T, R, A, L], []A) (L, error)
-	getSingleFunc   	func(*http.Request, int32) (R, error)
-	getMultipleFunc 	func(*http.Request, string) (L, error)
-	retrieveFunc    	func(*http.Request) (L, error)
+	getSingleFunc   	func(*http.Request, handlerInput[T, R, A, L], int32) (R, error)
+	retrieveFunc    	func(*http.Request, handlerInput[T, R, A, L]) (L, error)
 	subsections     	map[string]func(string) (APIResourceList, error)
 }
 
@@ -92,7 +91,6 @@ func (cfg *Config) EndpointsInit() {
 		queryLookup:     cfg.q.areas,
 		retrieveQuery: 	 cfg.db.GetAreas,
 		getSingleFunc:   cfg.getArea,
-		getMultipleFunc: nil,
 		retrieveFunc:    cfg.retrieveAreas,
 		subsections: map[string]func(string) (APIResourceList, error){
 			"treasures":          cfg.getAreaTreasuresMid,
@@ -195,11 +193,9 @@ func (cfg *Config) EndpointsInit() {
 		queryLookup:     	cfg.q.monsters,
 		idToResFunc:     	idToNamedAPIResource[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: 	 	newNamedAPIResourceList[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
-		
 		getMultipleQuery: 	cfg.db.GetMonsterIDsByName,
 		retrieveQuery:	 	cfg.db.GetMonsterIDs,
 		getSingleFunc:   	cfg.getMonster,
-		getMultipleFunc: 	cfg.getMultipleMonsters,
 		retrieveFunc:    	cfg.retrieveMonsters,
 		subsections: 		map[string]func(string) (APIResourceList, error){
 			"abilities": cfg.getMonsterAbilitiesMid,
@@ -231,7 +227,6 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList],
 		retrieveQuery:   cfg.db.GetOverdriveModeIDs,
 		getSingleFunc:   cfg.getOverdriveMode,
-		getMultipleFunc: nil,
 		retrieveFunc:    cfg.retrieveOverdriveModes,
 	}
 

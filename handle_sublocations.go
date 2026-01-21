@@ -3,9 +3,14 @@ package main
 import (
 	"fmt"
 	"net/http"
+	
 	//"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	//h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
+
+// a lot of fields can be embedded from areas (make a shared struct)
+// maybe make sidequest a slice, even for areas to keep the structure consistent, since they're so similar
+// for booleans, if one of the areas is true, the boolean is true
 
 func (cfg *Config) HandleSublocations(w http.ResponseWriter, r *http.Request) {
 	segments := getPathSegments(r.URL.Path, "sublocations")

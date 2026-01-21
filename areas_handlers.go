@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type Area struct {
@@ -55,9 +56,7 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
-	i := cfg.e.areas
-
+func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], id int32) (Area, error) {
 	area, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Area{}, err
@@ -95,9 +94,7 @@ func (cfg *Config) getArea(r *http.Request, id int32) (Area, error) {
 	return response, nil
 }
 
-func (cfg *Config) retrieveAreas(r *http.Request) (LocationApiResourceList, error) {
-	i := cfg.e.areas
-
+func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList]) (LocationApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return LocationApiResourceList{}, err

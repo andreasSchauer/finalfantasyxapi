@@ -41,7 +41,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2/3",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. usage: '/api/monsters/{name or id}', '/api/monsters/{name}/{version}', or  '/api/monsters/{id}/{subsection}'. available subsections: abilities.",
+				expectedErr:    "wrong format. usage: '/api/monsters/{name or id}', '/api/monsters/{name}/{version}', or  '/api/monsters/{id}/{subsection}'. available subsections: 'abilities'.",
 			},
 		},
 		{
