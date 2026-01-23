@@ -364,6 +364,168 @@ func TestRetrieveAreas(t *testing.T) {
 	}
 }
 
+func TestAreasConnected(t *testing.T) {
+	tests := []struct {
+		testGeneral
+		expList
+	}{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/overdrive-modes/1/areas",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "endpoint 'overdrive-modes' doesn't have any subsections.",
+				httpHandler: 	testCfg.HandleOverdriveModes,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/36/connected/",
+				expectedStatus: http.StatusOK,
+				httpHandler: 	testCfg.HandleAreas,
+			},
+			expList: expList{
+				count:   7,
+				parentResource: h.GetStrPtr("/areas/36"),
+				results: []int32{26, 30, 37, 38, 39, 40, 41},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/211/connected/",
+				expectedStatus: http.StatusOK,
+				httpHandler: 	testCfg.HandleAreas,
+			},
+			expList: expList{
+				count:   2,
+				parentResource: h.GetStrPtr("/areas/211"),
+				results: []int32{207, 212},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/9/connected/",
+				expectedStatus: http.StatusOK,
+				httpHandler: 	testCfg.HandleAreas,
+			},
+			expList: expList{
+				count:   4,
+				parentResource: h.GetStrPtr("/areas/9"),
+				results: []int32{8, 10, 11, 15},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/238/connected/",
+				expectedStatus: http.StatusOK,
+				httpHandler: 	testCfg.HandleAreas,
+			},
+			expList: expList{
+				count:   0,
+				parentResource: h.GetStrPtr("/areas/238"),
+				results: []int32{},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/151/connected/",
+				expectedStatus: http.StatusOK,
+				httpHandler: 	testCfg.HandleAreas,
+			},
+			expList: expList{
+				count:   3,
+				parentResource: h.GetStrPtr("/areas/151"),
+				results: []int32{143, 152, 201},
+			},
+		},
+	}
+
+	for i, tc := range tests {
+		rr, testName, err := setupTest(t, tc.testGeneral, "SubsectionAreasConnected", i+1, tc.httpHandler)
+		if errors.Is(err, errCorrect) {
+			continue
+		}
+
+		test := test{
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
+			expLengths: tc.expLengths,
+			dontCheck:  tc.dontCheck,
+		}
+
+		var got SubResourceListTest[LocationAPIResource, AreaSub]
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+			t.Fatalf("%s: failed to decode: %v", testName, err)
+		}
+
+		testSubResourceList(test, testCfg.e.areas.endpoint, tc.expList, got)
+	}
+}
+
+func TestAreasMonsters(t *testing.T) {
+	tests := []struct {
+		testGeneral
+		expList
+	}{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/90/monsters/",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:   6,
+				parentResource: h.GetStrPtr("/areas/90"),
+				results: []int32{38, 39, 40, 42, 43, 45},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/23/monsters/",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:   4,
+				parentResource: h.GetStrPtr("/areas/23"),
+				results: []int32{15, 16, 17, 18},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/239/monsters/",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:   21,
+				next: h.GetStrPtr("/areas/239/monsters?limit=20&offset=20"),
+				parentResource: h.GetStrPtr("/areas/239"),
+				results: []int32{190, 201, 210, 239, 245, 249, 253},
+			},
+		},
+	}
+
+	for i, tc := range tests {
+		rr, testName, err := setupTest(t, tc.testGeneral, "SubsectionAreasMonsters", i+1, testCfg.HandleAreas)
+		if errors.Is(err, errCorrect) {
+			continue
+		}
+
+		test := test{
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
+			expLengths: tc.expLengths,
+			dontCheck:  tc.dontCheck,
+		}
+
+		var got SubResourceListTest[NamedAPIResource, MonsterSub]
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+			t.Fatalf("%s: failed to decode: %v", testName, err)
+		}
+
+		testSubResourceList(test, testCfg.e.monsters.endpoint, tc.expList, got)
+	}
+}
+
 /*
 func TestAreasParameters(t *testing.T) {
 	tests := []struct {

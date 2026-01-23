@@ -9,12 +9,21 @@ import (
 
 type SubResource interface {
 	GetSectionName() string
+	GetURL() string
 }
 
 type SubResourceList struct {
 	ListParams
 	ParentResource 	APIResource 	`json:"parent_resource,omitempty"`
 	Results			[]SubResource	`json:"results"`
+}
+
+func (l SubResourceList) getListParams() ListParams {
+	return l.ListParams
+}
+
+func (l SubResourceList) getResults() []SubResource {
+	return l.Results
 }
 
 

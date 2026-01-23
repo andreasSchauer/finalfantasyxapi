@@ -113,6 +113,15 @@ func handleSections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 func handleEndpointSubsections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	posIDStr := segments[0]
 	isValidID := isValidInt(posIDStr)
+	
+	if i.subsections == nil {
+		if isValidID {
+			respondWithError(w, http.StatusBadRequest, fmt.Sprintf("endpoint '%s' doesn't have any subsections.", i.endpoint), nil)
+			return
+		}
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf(`wrong format. usage: '/api/%s/{name or id}'.`, i.endpoint), nil)
+		return
+	}
 
 	if isValidID {
 		handleSubsection(cfg, w, r, i, segments)

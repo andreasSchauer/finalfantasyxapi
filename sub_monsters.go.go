@@ -32,6 +32,10 @@ func (m MonsterSub) GetSectionName() string {
 	return "monsters"
 }
 
+func (m MonsterSub) GetURL() string {
+	return m.URL
+}
+
 type MonsterItemsSub struct {
 	StealCommon         *ItemAmountSub  `json:"steal_common"`
 	StealRare           *ItemAmountSub  `json:"steal_rare"`

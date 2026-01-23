@@ -58,6 +58,10 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 		handleEndpointNameOrID(cfg, w, r, i, segments)
 		return
 
+	case 2:
+		handleEndpointSubsections(cfg, w, r, i, segments)
+		return
+
 	default:
 		respondWithError(w, http.StatusBadRequest, `wrong format. usage: '/api/overdrive-modes/{name or id}'.`, nil)
 		return

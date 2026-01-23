@@ -28,6 +28,8 @@ type nameListTest struct {
 	got  []string
 }
 
+
+
 func newResListTestFromIDs[T HasAPIResource](fieldName, endpoint string, expIDs []int32, got []T) resListTest {
 	exp := []string{}
 
@@ -47,19 +49,6 @@ func newResListTest[T HasAPIResource](fieldName string, exp []string, got []T) r
 	}
 }
 
-func newNameListTestParams(fieldName string, exp []string, got []QueryType) nameListTest {
-	gotNames := []string{}
-
-	for _, param := range got {
-		gotNames = append(gotNames, param.Name)
-	}
-
-	return nameListTest{
-		name: fieldName,
-		exp:  exp,
-		got:  gotNames,
-	}
-}
 
 func newNameListTestSections(cfg *Config, fieldName, endpoint string, exp, got []string) nameListTest {
 	expURLs := []string{}
@@ -134,6 +123,7 @@ func testAPIResourceList[T APIResourceList](test test, endpoint string, expList 
 	testResourceList(test, listTest)
 }
 
+
 // checks if all provided slices of resources contains all stated resources and also checks their length, if stated
 func testResourceLists(test test, checks []resListTest) {
 	test.t.Helper()
@@ -160,6 +150,7 @@ func testResourceList(test test, expList resListTest) {
 	compare(test, expList.name+" length", expLen, len(expList.got))
 }
 
+
 // checks if the provided slice of resources contains all stated resources
 func checkResourcesInSlice[T HasAPIResource](test test, fieldName string, expectedPaths []string, gotRes []T) {
 	gotMap := getResourceURLMap(gotRes)
@@ -175,6 +166,7 @@ func checkResourcesInSlice[T HasAPIResource](test test, fieldName string, expect
 		}
 	}
 }
+
 
 // will need to use name-version pattern in monsterAmount's GetName() method for getResourceAmountMap() to work
 // checks if stated ResourceAmount entries are in slices (used for baseStats, itemAmounts, monsterAmounts) and if their amount values match

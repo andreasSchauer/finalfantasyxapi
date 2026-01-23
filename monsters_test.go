@@ -41,7 +41,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2/3",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. usage: '/api/monsters/{name or id}', '/api/monsters/{name}/{version}', or  '/api/monsters/{id}/{subsection}'. available subsections: .",
+				expectedErr:    "wrong format. usage: '/api/monsters/{name or id}', '/api/monsters/{name}/{version}', or  '/api/monsters/{id}/{subsection}'. available subsections: 'areas'.",
 			},
 		},
 		{
@@ -1371,5 +1371,72 @@ func TestRetrieveMonsters(t *testing.T) {
 		}
 
 		testAPIResourceList(test, testCfg.e.monsters.endpoint, tc.expList, got)
+	}
+}
+
+
+func TestMonstersAreas(t *testing.T) {
+	tests := []struct {
+		testGeneral
+		expList
+	}{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/45/areas/",
+				expectedStatus: http.StatusOK,
+				httpHandler: 	testCfg.HandleMonsters,
+			},
+			expList: expList{
+				count:   5,
+				parentResource: h.GetStrPtr("/monsters/45"),
+				results: []int32{88, 89, 90, 93, 94},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/140/areas/",
+				expectedStatus: http.StatusOK,
+				httpHandler: 	testCfg.HandleMonsters,
+			},
+			expList: expList{
+				count:   4,
+				parentResource: h.GetStrPtr("/monsters/140"),
+				results: []int32{202, 203, 204, 211},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/66/areas/",
+				expectedStatus: http.StatusOK,
+				httpHandler: 	testCfg.HandleMonsters,
+			},
+			expList: expList{
+				count:   1,
+				parentResource: h.GetStrPtr("/monsters/66"),
+				results: []int32{127},
+			},
+		},
+	}
+
+	for i, tc := range tests {
+		rr, testName, err := setupTest(t, tc.testGeneral, "SubsectionMonstersAreas", i+1, testCfg.HandleMonsters)
+		if errors.Is(err, errCorrect) {
+			continue
+		}
+
+		test := test{
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
+			expLengths: tc.expLengths,
+			dontCheck:  tc.dontCheck,
+		}
+
+		var got SubResourceListTest[LocationAPIResource, AreaSub]
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+			t.Fatalf("%s: failed to decode: %v", testName, err)
+		}
+
+		testSubResourceList(test, testCfg.e.areas.endpoint, tc.expList, got)
 	}
 }

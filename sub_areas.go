@@ -10,13 +10,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-// still need to assemble Treasures
 
 type AreaSub struct {
 	ID                	int32           	`json:"id"`
 	URL					string				`json:"url"`
-	ParentLocation		SubName				`json:"parent_location"`
-	ParentSublocation	SubName				`json:"parent_sublocation"`
+	ParentLocation		string				`json:"parent_location"`
+	ParentSublocation	string				`json:"parent_sublocation"`
 	Name              	string          	`json:"name"`
 	Version           	*int32          	`json:"version,omitempty"`
 	Specification     	*string         	`json:"specification,omitempty"`
@@ -29,16 +28,18 @@ func (a AreaSub) GetSectionName() string {
 	return "areas"
 }
 
+func (a AreaSub) GetURL() string {
+	return a.URL
+}
+
 type SubName struct {
-	ID				int32 	`json:"id"`
 	Name			string	`json:"name"`
 	Version			*int32	`json:"version,omitempty"`
 	Specification	*string	`json:"specification,omitempty"`
 }
 
-func createSubName(id int32, name string, version *int32, spec *string) SubName {
+func createSubName(name string, version *int32, spec *string) SubName {
 	return SubName{
-		ID: 			id,
 		Name: 			name,
 		Version: 		version,
 		Specification: 	spec,
@@ -47,11 +48,11 @@ func createSubName(id int32, name string, version *int32, spec *string) SubName 
 
 type ShopLocSub struct {
 	Category		database.ShopCategory	`json:"category"`
-	PreAirship		*ShopSubSummary			`json:"pre_airship"`
-	PostAirship		*ShopSubSummary			`json:"post_airship"`
+	PreAirship		*ShopSummarySub			`json:"pre_airship"`
+	PostAirship		*ShopSummarySub			`json:"post_airship"`
 }
 
-type ShopSubSummary struct {
+type ShopSummarySub struct {
 	HasItems		bool	`json:"has_items"`
 	HasEquipment	bool	`json:"has_equipment"`
 }
@@ -94,8 +95,8 @@ func getSubAreas(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, er
 		areaSub := AreaSub{
 			ID: area.ID,
 			URL: createResourceURL(cfg, i.endpoint, areaID),
-			ParentLocation: createSubName(area.SubLocation.Location.ID, area.SubLocation.Location.Name, nil, nil),
-			ParentSublocation: createSubName(area.SubLocation.ID, area.SubLocation.Name, nil, nil),
+			ParentLocation: area.SubLocation.Location.Name,
+			ParentSublocation: area.SubLocation.Name,
 			Name: area.Name,
 			Version: area.Version,
 			Specification: area.Specification,
@@ -159,6 +160,7 @@ func populateSubAreaTreasures(cfg *Config, treasureIDs []int32) TreasuresLocSub 
 	return treasures
 }
 
+
 func sortNamesByID[T h.HasID](s []string, lookup map[string]T) []string {
 	slices.SortStableFunc(s, func (a, b string) int{
 		A, _ := seeding.GetResource(a, lookup)
@@ -177,7 +179,6 @@ func sortNamesByID[T h.HasID](s []string, lookup map[string]T) []string {
 
 	return s
 }
-
 
 func getSubAreaShops(cfg *Config, r *http.Request, areaID int32) ([]ShopLocSub, error) {
 	shops := []ShopLocSub{}
@@ -200,11 +201,11 @@ func getSubAreaShops(cfg *Config, r *http.Request, areaID int32) ([]ShopLocSub, 
 	return shops, nil
 }
 
-func createShopLocSub(shop *seeding.SubShop) *ShopSubSummary {
+func createShopLocSub(shop *seeding.SubShop) *ShopSummarySub {
 	if shop == nil {
 		return nil
 	}
-	shopLoc := ShopSubSummary{}
+	shopLoc := ShopSummarySub{}
 
 	if len(shop.Items) != 0 {
 		shopLoc.HasItems = true
@@ -228,7 +229,7 @@ func getSubAreaMonsters(cfg *Config, r *http.Request, areaID int32) ([]SubName, 
 
 	for _, monID := range monIDs {
 		mon, _ := seeding.GetResourceByID(monID, cfg.l.MonstersID)
-		subName := createSubName(mon.ID, mon.Name, mon.Version, mon.Specification)
+		subName := createSubName(mon.Name, mon.Version, mon.Specification)
 		monsters = append(monsters, subName)
 	}
 

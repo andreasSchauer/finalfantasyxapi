@@ -1,5 +1,7 @@
 package main
 
+import "net/http"
+
 /*
 fields that need to be explicitly ignored with dontCheck:
 - standard types and pointers (through compare),
@@ -24,6 +26,7 @@ type testGeneral struct {
 	expectedErr    string
 	dontCheck      map[string]bool
 	expLengths     map[string]int
+	httpHandler	   func (http.ResponseWriter, *http.Request)
 }
 
 type expNameVer struct {
@@ -38,10 +41,11 @@ type expUnique struct {
 }
 
 type expList struct {
-	count    int
-	previous *string
-	next     *string
-	results  []int32
+	count    		int
+	previous 		*string
+	next     		*string
+	parentResource	*string
+	results  		[]int32
 }
 
 type expListParams struct {

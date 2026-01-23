@@ -12,7 +12,6 @@ type QueryType struct {
 	ExampleUses      []string       `json:"example_uses"`
 	ForList          bool           `json:"for_list"`
 	ForSingle        bool           `json:"for_single"`
-	ForSections      []string       `json:"for_sections"`
 	RequiredParams   []string       `json:"required_params,omitempty"`
 	References       []string       `json:"references,omitempty"`
 	AllowedIDs       []int32        `json:"-"`
@@ -43,14 +42,13 @@ func (cfg *Config) QueryLookupInit() {
 
 	cfg.q.defaultParams = map[string]QueryType{
 		"limit": {
-			ID:          -3,
+			ID:          -2,
 			Name:        "limit",
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20. The value 'max' can also be used to forgo pagination of lists entirely.",
 			Usage:       "?limit{integer or 'max'}",
 			ExampleUses: []string{"?limit=50"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{},
 			SpecialInputs: []SpecialInput{
 				{
 					Key: "max",
@@ -60,25 +58,14 @@ func (cfg *Config) QueryLookupInit() {
 			DefaultVal: &defaultLimit,
 		},
 		"offset": {
-			ID:          -2,
+			ID:          -1,
 			Name:        "offset",
 			Description: "Sets the offset from where to start the displayed entries in a list response. If not set manually, the default is 0.",
 			Usage:       "?offset{integer}",
 			ExampleUses: []string{"?offset=30"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{},
 			DefaultVal:  &defaultOffset,
-		},
-		"section": {
-			ID:          -1,
-			Name:        "section",
-			Description: "Filters query parameters by the section they can be used in within their endpoint. 'self' can be used to display only parameters specific to their own endpoint.",
-			Usage:       "/parameters?section={section_name or 'self'}",
-			ExampleUses: []string{"/parameters?section=monsters", "/parameters?section=self"},
-			ForList:     true,
-			ForSingle:   false,
-			ForSections: []string{},
 		},
 	}
 
@@ -107,7 +94,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?location=17"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		"sublocation": {
@@ -117,7 +103,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?sublocation=13"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		"item": {
@@ -127,7 +112,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?item=45"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 			References:  []string{createListURL(cfg, "items")},
 		},
 		"method": {
@@ -137,7 +121,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses:    []string{"?item=45&method=treasure"},
 			ForList:        true,
 			ForSingle:      false,
-			ForSections:    []string{"areas"},
 			RequiredParams: []string{"item"},
 			AllowedValues:  []string{"monster", "treasure", "shop", "quest"},
 		},
@@ -148,7 +131,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?key-item=22"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 			References:  []string{createListURL(cfg, "key-items")},
 		},
 		"story_based": {
@@ -158,7 +140,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?story_based=true", "?story_based=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"save_sphere": {
 			ID:          7,
@@ -167,7 +148,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?save_sphere=true", "?save_sphere=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"comp_sphere": {
 			ID:          8,
@@ -176,7 +156,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?comp_sphere=true", "?comp_sphere=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"airship": {
 			ID:          9,
@@ -185,7 +164,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?airship=true", "?airship=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"chocobo": {
 			ID:          10,
@@ -194,7 +172,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?chocobo=true", "?chocobo=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"characters": {
 			ID:          11,
@@ -203,7 +180,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?characters=true", "?characters=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"aeons": {
 			ID:          12,
@@ -212,7 +188,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?aeons=true", "?aeons=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"monsters": {
 			ID:          13,
@@ -221,7 +196,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?monsters=true", "?monsters=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"boss_fights": {
 			ID:          14,
@@ -230,7 +204,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?boss_fights=true", "?boss_fights=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"shops": {
 			ID:          15,
@@ -239,7 +212,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?shops=true", "?shops=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"treasures": {
 			ID:          16,
@@ -248,7 +220,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?treasures=true", "?treasures=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"sidequests": {
 			ID:          17,
@@ -257,7 +228,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?sidequests=true", "?sidequests=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 		"fmvs": {
 			ID:          18,
@@ -266,7 +236,6 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"areas"},
 		},
 	}
 
@@ -285,7 +254,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?kimahri_stats=hp-3000,strength-25,magic-30,agility-40", "?kimahri_stats=hp15000,agility-255"},
 			ForList:     false,
 			ForSingle:   true,
-			ForSections: []string{"monsters"},
 			AllowedIDs:  []int32{167, 168},
 		},
 		"aeon_stats": {
@@ -295,7 +263,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?aeon_stats=hp-3000,strength-75,defense-50,magic-30,agility-20", "?aeon_stats=accuracy-150,magic_defense-255"},
 			ForList:     false,
 			ForSingle:   true,
-			ForSections: []string{"monsters"},
 			AllowedIDs:  []int32{216, 217, 218, 219, 220, 221, 222, 223, 224, 225},
 		},
 		"altered_state": {
@@ -305,7 +272,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?altered_state=1"},
 			ForList:     false,
 			ForSingle:   true,
-			ForSections: []string{"monsters"},
 		},
 		"omnis_elements": {
 			ID:            4,
@@ -314,7 +280,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses:   []string{"?omnis_elements=ifil", "?omnis_elements=llll", "?omnis_elements=wfwf"},
 			ForList:       false,
 			ForSingle:     true,
-			ForSections:   []string{"monsters"},
 			AllowedIDs:    []int32{211},
 			AllowedValues: []string{"f", "l", "w", "i"},
 		},
@@ -325,7 +290,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?elemental_resists={fire}-{weak},{water}-{absorb}", "?elemental_resists={lightning}-{neutral}"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 			References:  []string{createListURL(cfg, "elements"), createListURL(cfg, "affinities")},
 		},
 		"status_resists": {
@@ -335,7 +299,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"status_resists=1,4"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
 		"resistance": {
@@ -345,7 +308,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses:     []string{"status_resists=13&resistance=50", "status_resists=4,17&resistance=30", "status_resists=sleep&resistance=immune"},
 			ForList:         true,
 			ForSingle:       false,
-			ForSections:     []string{"monsters"},
 			RequiredParams:  []string{"status_resists"},
 			AllowedIntRange: []int{1, 254},
 			SpecialInputs: []SpecialInput{
@@ -363,7 +325,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?item=45"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 			References:  []string{createListURL(cfg, "item")},
 		},
 		"method": {
@@ -373,7 +334,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses:    []string{"?item=45&method=steal"},
 			ForList:        true,
 			ForSingle:      false,
-			ForSections:    []string{"monsters"},
 			RequiredParams: []string{"item"},
 			AllowedValues:  []string{"steal", "drop", "bribe", "other"},
 		},
@@ -384,7 +344,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?auto_abilities=16", "?auto_abilities=99,100"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 			References:  []string{createListURL(cfg, "auto_abilities")},
 		},
 		"ronso_rage": {
@@ -394,7 +353,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?ronso_rage=5"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 			References:  []string{createListURL(cfg, "ronso_rages")},
 		},
 		"location": {
@@ -404,7 +362,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?location=17"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		"sublocation": {
@@ -414,7 +371,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?sublocation=13"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		"area": {
@@ -424,7 +380,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?area=13", "?area=240"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 			References:  []string{createListURL(cfg, "areas")},
 		},
 		"distance": {
@@ -434,7 +389,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses:     []string{"?distance=3"},
 			ForList:         true,
 			ForSingle:       false,
-			ForSections:     []string{"monsters"},
 			AllowedIntRange: []int{1, 4},
 		},
 		"story_based": {
@@ -444,7 +398,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?story_based=true", "?story_based=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 		},
 		"repeatable": {
 			ID:          17,
@@ -453,7 +406,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 		},
 		"capture": {
 			ID:          18,
@@ -462,7 +414,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?capture=true", "?capture=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 		},
 		"has_overdrive": {
 			ID:          19,
@@ -471,7 +422,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?has_overdrive=true", "?has_overdrive=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 		},
 		"underwater": {
 			ID:          20,
@@ -480,7 +430,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?underwater=true", "?underwater=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 		},
 		"zombie": {
 			ID:          21,
@@ -489,7 +438,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?zombie=true", "?zombie=false"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 		},
 		"species": {
 			ID:          22,
@@ -498,7 +446,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?species=wyrm", "?species=5"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 			References:  []string{createListURL(cfg, "monster-species")},
 		},
 		"creation_area": {
@@ -508,7 +455,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?creation_area=thunder-plains", "?creation_area=5"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 		},
 		"type": {
 			ID:          24,
@@ -517,7 +463,6 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?type=boss", "?type=2"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"monsters"},
 			References:  []string{createListURL(cfg, "ctb-icon-type")},
 		},
 	}
@@ -535,7 +480,6 @@ func (cfg *Config) initOverdriveModesParams() {
 			ExampleUses: []string{"?type=per-action", "?type=2"},
 			ForList:     true,
 			ForSingle:   false,
-			ForSections: []string{"overdrive-modes"},
 			References:  []string{createListURL(cfg, "overdrive-mode-type")},
 		},
 	}

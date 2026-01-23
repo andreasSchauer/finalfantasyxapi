@@ -96,6 +96,17 @@ func getResourceURLMap[T HasAPIResource](items []T) map[string]T {
 	return resourceMap
 }
 
+func getSubResourceURLMap[T SubResource](items []T) map[string]T {
+	resourceMap := make(map[string]T)
+
+	for _, item := range items {
+		url := item.GetURL()
+		resourceMap[url] = item
+	}
+
+	return resourceMap
+}
+
 func resourceMapToSlice[T HasAPIResource](lookup map[int32]T) []T {
 	s := []T{}
 
