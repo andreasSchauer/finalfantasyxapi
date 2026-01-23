@@ -24,22 +24,22 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]LocationAPIResour
 			return nil, err
 		}
 	case "monster":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsItemMonster)
+		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromMonster)
 		if err != nil {
 			return nil, err
 		}
 	case "treasure":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsItemTreasure)
+		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromTreasure)
 		if err != nil {
 			return nil, err
 		}
 	case "shop":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsItemShop)
+		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromShop)
 		if err != nil {
 			return nil, err
 		}
 	case "quest":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsItemQuest)
+		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromQuest)
 		if err != nil {
 			return nil, err
 		}
@@ -53,10 +53,10 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]LocationAPIResour
 // same pattern as retrieve endpoint
 func getAreasByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], id int32, resourceType string) ([]LocationAPIResource, error) {
 	filteredLists := []filteredResList[LocationAPIResource]{
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsItemMonster)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsItemTreasure)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsItemShop)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsItemQuest)),
+		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromMonster)),
+		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromTreasure)),
+		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromShop)),
+		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromQuest)),
 	}
 
 	resources, err := combineFilteredAPIResources(filteredLists)
@@ -72,8 +72,8 @@ func getAreasByKeyItem(cfg *Config, r *http.Request, id int32) ([]LocationAPIRes
 	resourceType := cfg.e.keyItems.resourceType
 
 	filteredLists := []filteredResList[LocationAPIResource]{
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsKeyItemTreasure)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsKeyItemQuest)),
+		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithKeyItemFromTreasure)),
+		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithKeyItemFromQuest)),
 	}
 
 	resources, err := combineFilteredAPIResources(filteredLists)

@@ -19,3 +19,4 @@ Things that are currently unclear/unknown:
     - which fayth areas are called 'chamber of the fayth' and which are called 'fayth'? (areas 14, 35, 63, 117, 168, 210, 212, 228)
 - What is the critical plus value of monsters? (not equipment drops, but for their own abilities) Is it the same?
 - The attributes of Lulu's Thundara spell during the first Zu encounter at Bikanel
+- From which areas in the calm lands can you start and complete the 'chocobo training' sidequest?

@@ -1,10 +1,5 @@
-
 -- name: GetAreaIDs :many
-SELECT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id 
-JOIN locations l ON s.location_id = l.id;
-
+SELECT id FROM areas ORDER BY id;
 
 
 -- name: GetAreaConnectionIDs :many
@@ -12,61 +7,14 @@ SELECT a.id
 FROM area_connections ac
 JOIN j_area_connected_areas j ON j.connection_id = ac.id
 JOIN areas a ON ac.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN areas a2 ON j.area_id = a2.id
 WHERE a2.id = $1
 ORDER BY a.id;
 
 
--- name: GetLocationConnections :many
-SELECT
-    ac.*,
-    l.id AS location_id,
-    l.name AS location,
-    s.id AS sublocation_id,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS version,
-    a.specification AS specification
-FROM area_connections ac
-JOIN j_area_connected_areas j ON j.connection_id = ac.id
-JOIN areas a ON ac.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-JOIN areas a2 ON j.area_id = a2.id
-JOIN sublocations s2 ON a2.sublocation_id = s2.id
-JOIN locations l2 ON s2.location_id = l2.id
-WHERE l2.id = $1 AND l2.id != l.id
-ORDER BY ac.id;
-
-
--- name: GetSublocationConnections :many
-SELECT
-    ac.*,
-    l.id AS location_id,
-    l.name AS location,
-    s.id AS sublocation_id,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS version,
-    a.specification AS specification
-FROM area_connections ac
-JOIN j_area_connected_areas j ON j.connection_id = ac.id
-JOIN areas a ON ac.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-JOIN areas a2 ON j.area_id = a2.id
-JOIN sublocations s2 ON a2.sublocation_id = s2.id
-WHERE s2.id = $1 AND s2.id != s.id
-ORDER BY ac.id;
-
-
 -- name: GetAreaCharacterIDs :many
 SELECT c.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN characters c ON c.area_id = a.id
 JOIN player_units pu ON c.unit_id = pu.id
 WHERE a.id = $1
@@ -76,8 +24,6 @@ ORDER BY c.id;
 -- name: GetAreaAeonIDs :many
 SELECT ae.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN aeons ae ON ae.area_id = a.id
 JOIN player_units pu ON ae.unit_id = pu.id
 WHERE a.id = $1
@@ -95,8 +41,6 @@ SELECT id FROM treasures WHERE area_id = $1 ORDER BY id;
 -- name: GetAreaMonsterIDs :many
 SELECT DISTINCT m.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN encounter_locations el ON el.area_id = a.id
 JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
@@ -110,8 +54,6 @@ ORDER BY m.id;
 -- name: GetAreaMonsterFormationIDs :many
 SELECT DISTINCT mf.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN encounter_locations el ON el.area_id = a.id
 JOIN j_encounter_location_formations j ON j.encounter_location_id = el.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
@@ -122,8 +64,6 @@ ORDER BY mf.id;
 -- name: GetAreaBossSongIDs :many
 SELECT DISTINCT so.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN encounter_locations el ON el.area_id = a.id
 JOIN j_encounter_location_formations j ON j.encounter_location_id = el.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
@@ -139,8 +79,6 @@ FROM cues c
 JOIN songs so ON c.song_id = so.id
 JOIN j_songs_cues j ON j.cue_id = c.id
 JOIN areas a ON COALESCE(c.trigger_area_id, j.included_area_id) = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 WHERE j.included_area_id = $1 OR c.trigger_area_id = $1
 ORDER BY so.id;
 
@@ -148,8 +86,6 @@ ORDER BY so.id;
 -- name: GetAreaBackgroundMusic :many
 SELECT so.id, bm.replaces_encounter_music
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN j_songs_background_music j ON j.area_id = a.id 
 JOIN background_music bm ON j.bm_id = bm.id
 JOIN songs so ON j.song_id = so.id
@@ -160,8 +96,6 @@ ORDER BY so.id;
 -- name: GetAreaFMVSongIDs :many
 SELECT DISTINCT so.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN fmvs f ON f.area_id = a.id
 JOIN songs so ON f.song_id = so.id
 WHERE a.id = $1
@@ -171,8 +105,6 @@ ORDER BY so.id;
 -- name: GetAreaFmvIDs :many
 SELECT f.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN fmvs f ON f.area_id = a.id
 WHERE a.id = $1
 ORDER BY f.id;
@@ -181,8 +113,6 @@ ORDER BY f.id;
 -- name: GetAreaQuestIDs :many
 SELECT DISTINCT q.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN completion_locations cl ON cl.area_id = a.id
 JOIN quest_completions qc ON cl.completion_id = qc.id
 JOIN quests q ON qc.quest_id = q.id
@@ -191,75 +121,44 @@ ORDER BY q.id;
 
 
 -- name: GetAreaIDsWithSaveSphere :many
-SELECT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE a.has_save_sphere = $1
-ORDER BY a.id;
+SELECT id FROM areas WHERE has_save_sphere = $1 ORDER BY id;
 
 
 -- name: GetAreaIDsWithCompSphere :many
-SELECT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE a.has_compilation_sphere = $1
-ORDER BY a.id;
+SELECT id FROM areas WHERE has_compilation_sphere = $1 ORDER BY id;
 
 
 -- name: GetAreaIDsWithDropOff :many
-SELECT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE a.airship_drop_off = $1
-ORDER BY a.id;
+SELECT id FROM areas WHERE airship_drop_off = $1 ORDER BY id;
 
 
 -- name: GetAreaIDsChocobo :many
-SELECT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE a.can_ride_chocobo = $1
-ORDER BY a.id;
+SELECT id FROM areas WHERE can_ride_chocobo = $1 ORDER BY id;
 
 
 -- name: GetAreaIDsStoryOnly :many
-SELECT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE a.story_only = $1
-ORDER BY a.id;
+SELECT id FROM areas WHERE story_only = $1 ORDER BY id;
 
 
--- name: GetAreaIDsCharacters :many
+-- name: GetAreaIDsWithCharacters :many
 SELECT a.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN characters c ON c.area_id = a.id
 JOIN player_units pu ON c.unit_id = pu.id
 ORDER BY a.id;
 
 
--- name: GetAreaIDsAeons :many
+-- name: GetAreaIDsWithAeons :many
 SELECT a.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN aeons ae ON ae.area_id = a.id
 JOIN player_units pu ON ae.unit_id = pu.id
 ORDER BY a.id;
 
 
--- name: GetAreaIDsMonsters :many
+-- name: GetAreaIDsWithMonsters :many
 SELECT DISTINCT a.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN encounter_locations el ON el.area_id = a.id
 JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
@@ -269,11 +168,34 @@ JOIN monsters m ON ma.monster_id = m.id
 ORDER BY a.id;
 
 
--- name: GetAreaIDsItemMonster :many
+-- name: GetAreaIDsWithBosses :many
 SELECT DISTINCT a.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
+JOIN encounter_locations el ON el.area_id = a.id
+JOIN j_encounter_location_formations j ON j.encounter_location_id = el.id
+JOIN monster_formations mf ON j.monster_formation_id = mf.id
+JOIN formation_boss_songs bs ON mf.boss_song_id = bs.id
+JOIN songs so ON bs.song_id = so.id
+ORDER BY a.id;
+
+
+-- name: GetAreaIDsWithShops :many
+SELECT DISTINCT a.id
+FROM areas a
+JOIN shops sh ON sh.area_id = a.id
+ORDER BY a.id;
+
+
+-- name: GetAreaIDsWithTreasures :many
+SELECT DISTINCT a.id
+FROM areas a
+JOIN treasures t ON t.area_id = a.id
+ORDER BY a.id;
+
+
+-- name: GetAreaIDsWithItemFromMonster :many
+SELECT DISTINCT a.id
+FROM areas a
 JOIN encounter_locations el ON el.area_id = a.id
 JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
@@ -302,33 +224,9 @@ WHERE i.id = $1
 ORDER BY a.id;
 
 
--- name: GetAreaIDsBosses :many
+-- name: GetAreaIDsWithItemFromShop :many
 SELECT DISTINCT a.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j ON j.encounter_location_id = el.id
-JOIN monster_formations mf ON j.monster_formation_id = mf.id
-JOIN formation_boss_songs bs ON mf.boss_song_id = bs.id
-JOIN songs so ON bs.song_id = so.id
-ORDER BY a.id;
-
-
--- name: GetAreaIDsShops :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-JOIN shops sh ON sh.area_id = a.id
-ORDER BY a.id;
-
-
--- name: GetAreaIDsItemShop :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN shops sh ON sh.area_id = a.id
 JOIN j_shops_items j ON j.shop_id = sh.id
 JOIN shop_items si ON j.shop_item_id = si.id
@@ -337,20 +235,9 @@ WHERE i.id = $1
 ORDER BY a.id;
 
 
--- name: GetAreaIDsTreasures :many
+-- name: GetAreaIDsWithItemFromTreasure :many
 SELECT DISTINCT a.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-JOIN treasures t ON t.area_id = a.id
-ORDER BY a.id;
-
-
--- name: GetAreaIDsItemTreasure :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN treasures t ON t.area_id = a.id
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
@@ -360,12 +247,22 @@ WHERE i.id = $1
 ORDER BY a.id;
 
 
--- name: GetAreaIDsKeyItemTreasure :many
+-- name: GetAreaIDsWithItemFromQuest :many
+SELECT DISTINCT a.id
+FROM areas a
+JOIN completion_locations cl ON cl.area_id = a.id
+JOIN quest_completions qc ON cl.completion_id = qc.id
+JOIN item_amounts ia ON qc.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
+JOIN items i ON i.master_item_id = mi.id
+WHERE i.id = $1
+ORDER BY a.id;
+
+
+-- name: GetAreaIDsWithKeyItemFromTreasure :many
 SELECT DISTINCT a.id
 FROM areas a
 JOIN treasures t ON t.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
 JOIN master_items mi ON ia.master_item_id = mi.id
@@ -374,99 +271,119 @@ WHERE ki.id = $1
 ORDER BY a.id;
 
 
--- name: GetAreaIDsSidequests :many
+-- name: GetAreaIDsWithKeyItemFromQuest :many
 SELECT DISTINCT a.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
+JOIN completion_locations cl ON cl.area_id = a.id
+JOIN quest_completions qc ON cl.completion_id = qc.id
+JOIN item_amounts ia ON qc.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
+JOIN key_items ki ON ki.master_item_id = mi.id
+WHERE ki.id = $1
+ORDER BY a.id;
+
+
+-- name: GetAreaIDsWithSidequests :many
+SELECT DISTINCT a.id
+FROM areas a
 JOIN completion_locations cl ON cl.area_id = a.id
 JOIN quest_completions qc ON cl.completion_id = qc.id
 JOIN quests q ON qc.quest_id = q.id
 ORDER BY a.id;
 
 
--- name: GetAreaIDsItemQuest :many
+-- name: GetAreaIDsWithFMVs :many
 SELECT DISTINCT a.id
 FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-JOIN completion_locations cl ON cl.area_id = a.id
-JOIN quest_completions qc ON cl.completion_id = qc.id
-JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
-WHERE i.id = $1
-ORDER BY a.id;
-
-
--- name: GetAreaIDsKeyItemQuest :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-JOIN completion_locations cl ON cl.area_id = a.id
-JOIN quest_completions qc ON cl.completion_id = qc.id
-JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
-WHERE ki.id = $1
-ORDER BY a.id;
-
-
--- name: GetAreaIDsFMVs :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
 JOIN fmvs f ON f.area_id = a.id
 ORDER BY a.id;
 
 
 
 
--- name: GetLocationAreaIDs :many
-SELECT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id 
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
-ORDER BY a.id;
 
 
--- name: GetLocationMonsterIDs :many
-SELECT DISTINCT m.id
-FROM monsters m
-LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
-LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
-LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
-LEFT JOIN areas a ON el.area_id = a.id
-LEFT JOIN sublocations s ON a.sublocation_id = s.id
-LEFT JOIN locations l ON s.location_id = l.id
-WHERE location_id = $1
-ORDER BY m.id;
+
+
 
 
 -- name: GetSublocationAreaIDs :many
 SELECT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id 
-JOIN locations l ON s.location_id = l.id
+FROM sublocations s
+JOIN areas a ON a.sublocation_id = s.id
 WHERE s.id = $1
 ORDER BY a.id;
 
 
+-- name: GetSublocationConnectionIDs :many
+SELECT DISTINCT s.id, s.name
+FROM area_connections ac
+JOIN j_area_connected_areas j ON j.connection_id = ac.id
+JOIN areas a ON ac.area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+JOIN areas a2 ON j.area_id = a2.id
+JOIN sublocations s2 ON a2.sublocation_id = s2.id
+WHERE s2.id = $1 AND s2.id != s.id
+ORDER BY s.id;
+
+
 -- name: GetSublocationMonsterIDs :many
 SELECT DISTINCT m.id
-FROM monsters m
-LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
-LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
-LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
-LEFT JOIN areas a ON el.area_id = a.id
-LEFT JOIN sublocations s ON a.sublocation_id = s.id
-LEFT JOIN locations l ON s.location_id = l.id
-WHERE sublocation_id = $1
+FROM sublocations s
+JOIN areas a ON a.sublocation_id = s.id
+JOIN encounter_locations el ON el.area_id = a.id
+JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
+JOIN monster_formations mf ON j1.monster_formation_id = mf.id
+JOIN j_monster_formations_monsters j2 ON j2.monster_formation_id = mf.id
+JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
+JOIN monsters m ON ma.monster_id = m.id
+WHERE s.id = $1
+ORDER BY m.id;
+
+
+
+
+
+
+
+
+
+
+
+-- name: GetLocationAreaIDs :many
+SELECT a.id
+FROM locations l
+JOIN sublocations s ON s.location_id = l.id
+JOIN areas a ON a.sublocation_id = s.id 
+WHERE l.id = $1
+ORDER BY a.id;
+
+
+-- name: GetLocationConnectionIDs :many
+SELECT DISTINCT l.id
+FROM area_connections ac
+JOIN j_area_connected_areas j ON j.connection_id = ac.id
+JOIN areas a ON ac.area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+JOIN areas a2 ON j.area_id = a2.id
+JOIN sublocations s2 ON a2.sublocation_id = s2.id
+JOIN locations l2 ON s2.location_id = l2.id
+WHERE l2.id = $1 AND l2.id != l.id
+ORDER BY l.id;
+
+
+-- name: GetLocationMonsterIDs :many
+SELECT DISTINCT m.id
+FROM locations l
+JOIN sublocations s ON s.location_id = l.id
+JOIN areas a ON a.sublocation_id = s.id
+JOIN encounter_locations el ON el.area_id = a.id
+JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
+JOIN monster_formations mf ON j1.monster_formation_id = mf.id
+JOIN j_monster_formations_monsters j2 ON j2.monster_formation_id = mf.id
+JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
+JOIN monsters m ON ma.monster_id = m.id
+WHERE l.id = $1
 ORDER BY m.id;

@@ -19,6 +19,7 @@ type AreaSub struct {
 	Name              	string          	`json:"name"`
 	Version           	*int32          	`json:"version,omitempty"`
 	Specification     	*string         	`json:"specification,omitempty"`
+	HasSaveSphere		bool				`json:"has_save_sphere"`
 	Shops				[]ShopLocSub		`json:"shops"`
 	Treasures			*TreasuresLocSub	`json:"treasures"`
 	Monsters			[]SubName			`json:"monsters"`
@@ -93,16 +94,17 @@ func getSubAreas(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, er
 		}
 
 		areaSub := AreaSub{
-			ID: area.ID,
-			URL: createResourceURL(cfg, i.endpoint, areaID),
-			ParentLocation: area.SubLocation.Location.Name,
-			ParentSublocation: area.SubLocation.Name,
-			Name: area.Name,
-			Version: area.Version,
-			Specification: area.Specification,
-			Shops: shops,
-			Treasures: treasures,
-			Monsters: monsters,
+			ID: 				area.ID,
+			URL: 				createResourceURL(cfg, i.endpoint, areaID),
+			ParentLocation: 	area.SubLocation.Location.Name,
+			ParentSublocation: 	area.SubLocation.Name,
+			Name: 				area.Name,
+			Version: 			area.Version,
+			Specification: 		area.Specification,
+			HasSaveSphere: 		area.HasSaveSphere,
+			Shops: 				shops,
+			Treasures: 			treasures,
+			Monsters: 			monsters,
 		}
 
 		areas = append(areas, areaSub)

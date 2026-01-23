@@ -5,9 +5,7 @@ SELECT id FROM monsters WHERE name = $1;
 
 -- name: GetMonsterAreaIDs :many
 SELECT DISTINCT a.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
-JOIN areas a ON a.sublocation_id = s.id
+FROM areas a
 JOIN encounter_locations el ON el.area_id = a.id
 JOIN j_encounter_location_formations jelf ON jelf.encounter_location_id = el.id
 JOIN monster_formations mf ON jelf.monster_formation_id = mf.id

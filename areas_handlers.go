@@ -110,14 +110,14 @@ func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, A
 		frl(boolQuery(cfg, r, i, resources, "comp_sphere", cfg.db.GetAreaIDsWithCompSphere)),
 		frl(boolQuery(cfg, r, i, resources, "airship", cfg.db.GetAreaIDsWithDropOff)),
 		frl(boolQuery(cfg, r, i, resources, "chocobo", cfg.db.GetAreaIDsChocobo)),
-		frl(boolQuery2(cfg, r, i, resources, "characters", cfg.db.GetAreaIDsCharacters)),
-		frl(boolQuery2(cfg, r, i, resources, "aeons", cfg.db.GetAreaIDsAeons)),
-		frl(boolQuery2(cfg, r, i, resources, "monsters", cfg.db.GetAreaIDsMonsters)),
-		frl(boolQuery2(cfg, r, i, resources, "boss_fights", cfg.db.GetAreaIDsBosses)),
-		frl(boolQuery2(cfg, r, i, resources, "shops", cfg.db.GetAreaIDsShops)),
-		frl(boolQuery2(cfg, r, i, resources, "treasures", cfg.db.GetAreaIDsTreasures)),
-		frl(boolQuery2(cfg, r, i, resources, "sidequests", cfg.db.GetAreaIDsSidequests)),
-		frl(boolQuery2(cfg, r, i, resources, "fmvs", cfg.db.GetAreaIDsFMVs)),
+		frl(boolQuery2(cfg, r, i, resources, "characters", cfg.db.GetAreaIDsWithCharacters)),
+		frl(boolQuery2(cfg, r, i, resources, "aeons", cfg.db.GetAreaIDsWithAeons)),
+		frl(boolQuery2(cfg, r, i, resources, "monsters", cfg.db.GetAreaIDsWithMonsters)),
+		frl(boolQuery2(cfg, r, i, resources, "boss_fights", cfg.db.GetAreaIDsWithBosses)),
+		frl(boolQuery2(cfg, r, i, resources, "shops", cfg.db.GetAreaIDsWithShops)),
+		frl(boolQuery2(cfg, r, i, resources, "treasures", cfg.db.GetAreaIDsWithTreasures)),
+		frl(boolQuery2(cfg, r, i, resources, "sidequests", cfg.db.GetAreaIDsWithSidequests)),
+		frl(boolQuery2(cfg, r, i, resources, "fmvs", cfg.db.GetAreaIDsWithFMVs)),
 	}
 
 	return filterAPIResources(cfg, r, i, resources, filteredLists)
