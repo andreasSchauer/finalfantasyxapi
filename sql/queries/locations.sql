@@ -55,16 +55,8 @@ JOIN locations l ON s.location_id = l.id
 WHERE a.id = $1;
 
 
--- name: GetAreaConnections :many
-SELECT
-    ac.*,
-    l.id AS location_id,
-    l.name AS location,
-    s.id AS sublocation_id,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS version,
-    a.specification AS specification
+-- name: GetAreaConnectionIDs :many
+SELECT a.id
 FROM area_connections ac
 JOIN j_area_connected_areas j ON j.connection_id = ac.id
 JOIN areas a ON ac.area_id = a.id
@@ -72,7 +64,7 @@ JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
 JOIN areas a2 ON j.area_id = a2.id
 WHERE a2.id = $1
-ORDER BY ac.id;
+ORDER BY a.id;
 
 
 -- name: GetLocationConnections :many

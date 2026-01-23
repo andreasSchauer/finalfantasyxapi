@@ -26,7 +26,7 @@ type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 
 type SubSectionFns struct {
 	dbQuery			func(context.Context, int32) ([]int32, error)
-	getResultsFn	func(*Config, []int32) []SubResource
+	getResultsFn	func(*Config, *http.Request, []int32) ([]SubResource, error)
 }
 
 type endpoints struct {
@@ -98,6 +98,10 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc:   cfg.getArea,
 		retrieveFunc:    cfg.retrieveAreas,
 		subsections: 	 map[string]SubSectionFns{
+			"connected": {
+				dbQuery: 		cfg.db.GetAreaConnectionIDs,
+				getResultsFn: 	getSubAreas,
+			},
 			"monsters": {
 				dbQuery: 		cfg.db.GetAreaMonsterIDs,
 				getResultsFn: 	getSubMonsters,
@@ -201,7 +205,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:	 	cfg.db.GetMonsterIDs,
 		getSingleFunc:   	cfg.getMonster,
 		retrieveFunc:    	cfg.retrieveMonsters,
-		
+		subsections: 	 	map[string]SubSectionFns{
+			"areas": {
+				dbQuery: 		cfg.db.GetMonsterAreaIDs,
+				getResultsFn: 	getSubAreas,
+			},
+		},
 	}
 
 	e.monsterFormations = handlerInput[seeding.MonsterFormation, any, UnnamedAPIResource, UnnamedApiResourceList]{

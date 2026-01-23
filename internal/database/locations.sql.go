@@ -743,16 +743,8 @@ func (q *Queries) GetAreaCharacterIDs(ctx context.Context, id int32) ([]int32, e
 	return items, nil
 }
 
-const getAreaConnections = `-- name: GetAreaConnections :many
-SELECT
-    ac.id, ac.data_hash, ac.area_id, ac.connection_type, ac.story_only, ac.notes,
-    l.id AS location_id,
-    l.name AS location,
-    s.id AS sublocation_id,
-    s.name AS sublocation,
-    a.name AS area,
-    a.version AS version,
-    a.specification AS specification
+const getAreaConnectionIDs = `-- name: GetAreaConnectionIDs :many
+SELECT a.id
 FROM area_connections ac
 JOIN j_area_connected_areas j ON j.connection_id = ac.id
 JOIN areas a ON ac.area_id = a.id
@@ -760,52 +752,22 @@ JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
 JOIN areas a2 ON j.area_id = a2.id
 WHERE a2.id = $1
-ORDER BY ac.id
+ORDER BY a.id
 `
 
-type GetAreaConnectionsRow struct {
-	ID             int32
-	DataHash       string
-	AreaID         int32
-	ConnectionType AreaConnectionType
-	StoryOnly      bool
-	Notes          sql.NullString
-	LocationID     int32
-	Location       string
-	SublocationID  int32
-	Sublocation    string
-	Area           string
-	Version        sql.NullInt32
-	Specification  sql.NullString
-}
-
-func (q *Queries) GetAreaConnections(ctx context.Context, id int32) ([]GetAreaConnectionsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaConnections, id)
+func (q *Queries) GetAreaConnectionIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaConnectionIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreaConnectionsRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreaConnectionsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DataHash,
-			&i.AreaID,
-			&i.ConnectionType,
-			&i.StoryOnly,
-			&i.Notes,
-			&i.LocationID,
-			&i.Location,
-			&i.SublocationID,
-			&i.Sublocation,
-			&i.Area,
-			&i.Version,
-			&i.Specification,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

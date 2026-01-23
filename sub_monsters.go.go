@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -19,6 +20,9 @@ type MonsterSub struct {
 	APOverkill     int32                `json:"ap_overkill"`
 	Gil            int32                `json:"gil"`
 	MaxBribeAmount *int32               `json:"max_bribe_amount"`
+	IsStoryBased   bool                 `json:"is_story_based"`
+	IsRepeatable   bool                 `json:"is_repeatable"`
+	CanBeCaptured  bool                 `json:"can_be_captured"`
 	RonsoRages     []string             `json:"ronso_rages"`
 	Items          *MonsterItemsSub     `json:"items"`
 	Equipment      *MonsterEquipmentSub `json:"equipment"`
@@ -44,7 +48,7 @@ type MonsterEquipmentSub struct {
 	ArmorAbilities  []string `json:"armor_abilities"`
 }
 
-func getSubMonsters(cfg *Config, dbIDs []int32) []SubResource {
+func getSubMonsters(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.monsters
 	monsters := []MonsterSub{}
 
@@ -64,6 +68,9 @@ func getSubMonsters(cfg *Config, dbIDs []int32) []SubResource {
 			APOverkill:     mon.APOverkill,
 			Gil:            mon.Gil,
 			MaxBribeAmount: getMonsterSubBribeAmount(mon, monHP),
+			IsStoryBased: 	mon.IsStoryBased,
+			IsRepeatable: 	mon.IsRepeatable,
+			CanBeCaptured: 	mon.CanBeCaptured,
 			RonsoRages:     mon.RonsoRages,
 			Items:          getMonsterSubItems(cfg, mon),
 			Equipment:      getMonsterSubEquipment(mon),
@@ -72,7 +79,7 @@ func getSubMonsters(cfg *Config, dbIDs []int32) []SubResource {
 		monsters = append(monsters, monSub)
 	}
 
-	return toSubResourceSlice(monsters)
+	return toSubResourceSlice(monsters), nil
 }
 
 func getMonsterSubHP(mon seeding.Monster) int32 {

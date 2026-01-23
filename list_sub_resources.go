@@ -24,7 +24,11 @@ func newSubResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg 
 		return SubResourceList{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, iParent.resourceType, id), err)
 	}
 
-	results := fns.getResultsFn(cfg, dbIDs)
+	results, err := fns.getResultsFn(cfg, r, dbIDs)
+	if err != nil {
+		return SubResourceList{}, err
+	}
+
 	listParams, shownResults, err := createPaginatedList(cfg, r, results)
 	if err != nil {
 		return SubResourceList{}, err
