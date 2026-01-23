@@ -94,7 +94,7 @@ func (cfg *Config) EndpointsInit() {
 		idToResFunc:  	 idToLocationAPIResource,
 		resToListFunc: 	 newLocationAPIResourceList,
 		queryLookup:     cfg.q.areas,
-		retrieveQuery: 	 cfg.db.GetAreas,
+		retrieveQuery: 	 cfg.db.GetAreaIDs,
 		getSingleFunc:   cfg.getArea,
 		retrieveFunc:    cfg.retrieveAreas,
 		subsections: 	 map[string]SubSectionFns{

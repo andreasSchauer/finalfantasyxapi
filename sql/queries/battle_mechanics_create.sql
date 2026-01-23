@@ -54,22 +54,12 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = agility_tiers.data_hash
 RETURNING *;
 
 
--- name: GetAgilityTierByAgility :one
-SELECT * FROM agility_tiers
-WHERE (sqlc.arg(agility)::int) >= min_agility
-AND (sqlc.arg(agility)::int) <= max_agility;
-
-
 -- name: CreateAgilitySubtier :exec
 INSERT INTO agility_subtiers (data_hash, agility_tier_id, subtier_min_agility, subtier_max_agility, character_min_icv)
 VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: GetAgilitySubtier :one
-SELECT * FROM agility_subtiers
-WHERE (sqlc.arg(agility)::int) >= subtier_min_agility
-AND (sqlc.arg(agility)::int) <= subtier_max_agility;
 
 
 -- name: CreateOverdriveMode :one
@@ -77,26 +67,6 @@ INSERT INTO overdrive_modes (data_hash, name, description, effect, type, fill_ra
 VALUES ($1, $2, $3, $4, $5, $6)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_modes.data_hash
 RETURNING *;
-
-
--- name: GetOverdriveMode :one
-SELECT * FROM overdrive_modes WHERE id = $1;
-
-
--- name: GetOverdriveModes :many
-SELECT * FROM overdrive_modes ORDER BY id;
-
-
--- name: GetOverdriveModeIDs :many
-SELECT id FROM overdrive_modes ORDER BY id;
-
-
--- name: GetOverdriveModesByType :many
-SELECT * FROM overdrive_modes WHERE type = $1 ORDER BY id;
-
-
--- name: GetOverdriveModeIDsByType :many
-SELECT id FROM overdrive_modes WHERE type = $1 ORDER BY id;
 
 
 -- name: CreateODModeAction :one
@@ -112,21 +82,6 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: GetOverdriveModeActions :many
-SELECT
-    om.id AS overdrive_mode_id,
-    om.name AS overdrive_mode,
-    c.id AS character_id,
-    pu.name AS character,
-    a.user_id AS user_id,
-    a.amount AS amount
-FROM od_mode_actions a
-LEFT JOIN characters c ON a.user_id = c.id
-LEFT JOIN player_units pu ON c.unit_id = pu.id
-LEFT JOIN j_overdrive_modes_actions_to_learn j ON j.action_id = a.id
-LEFT JOIN overdrive_modes om ON j.overdrive_mode_id = om.id
-WHERE om.id = $1
-ORDER BY c.id;
 
 
 -- name: CreateStatusCondition :one
