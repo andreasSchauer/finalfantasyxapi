@@ -129,9 +129,7 @@ func getAreaSidequest(cfg *Config, r *http.Request, area seeding.Area) (NamedAPI
 	return resource, nil
 }
 
-// this is kind of scuffed for now. I will probably find a better way, once I've managed to implement proper parent type assertions
-// then on the other hand, what else should I do here? it kind of is a special case, since these are not two equal types, but parent and child being categorized by the same master-type
-// at least it's reusable
+
 func findSidequest(cfg *Config, potentialSidequestID int32) (seeding.Sidequest, error) {
 	potentialSidequest, _ := seeding.GetResourceByID(potentialSidequestID, cfg.l.QuestsID)
 	sidequestID := potentialSidequestID
