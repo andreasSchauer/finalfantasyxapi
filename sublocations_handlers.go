@@ -3,65 +3,91 @@ package main
 import (
 	"fmt"
 	"net/http"
-	
+
 	//"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	//h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-// a lot of fields can be embedded from areas (make a shared struct)
-// maybe make sidequest a slice, even for areas to keep the structure consistent, since they're so similar
-// for booleans, if one of the areas is true, the boolean is true
+
+type Sublocation struct {
+	ID                	int32                	`json:"id"`
+	Name              	string               	`json:"name"`
+	ParentLocation   	NamedAPIResource     	`json:"parent_location"`
+	Areas				[]LocationAPIResource	`json:"areas"`
+	LocRel
+}
+
 
 func (cfg *Config) HandleSublocations(w http.ResponseWriter, r *http.Request) {
-	segments := getPathSegments(r.URL.Path, "sublocations")
+	i := cfg.e.sublocations
+	segments := getPathSegments(r.URL.Path, i.endpoint)
 
-	// this whole thing can probably be generalized
 	switch len(segments) {
 	case 0:
-		// /api/sublocations
-		fmt.Println(segments)
-		fmt.Println("this should trigger /api/sublocations")
+		handleEndpointList(w, r, i)
 		return
+
 	case 1:
-		// /api/sublocations/{name or id}
-		fmt.Println(segments)
-		fmt.Println("this should trigger /api/sublocations/{name or id}")
+		handleEndpointNameOrID(cfg, w, r, i, segments)
 		return
 
 	case 2:
-		// /api/sublocations/{id}/{subSection}
-
-		// sublocationID := segments[0]
-		subSection := segments[1]
-		switch subSection {
-		case "areas":
-			fmt.Println(segments)
-			fmt.Println("this should trigger /api/sublocations/{name or id}/areas")
-			return
-		case "monsters":
-			fmt.Println(segments)
-			fmt.Println("this should trigger /api/sublocations/{name or id}/monsters")
-			return
-		case "monster-formations":
-			fmt.Println(segments)
-			fmt.Println("this should trigger /api/sublocations/{name or id}/monster-formations")
-			return
-		case "shops":
-			fmt.Println(segments)
-			fmt.Println("this should trigger /api/sublocations/{name or id}/shops")
-			return
-		case "treasures":
-			fmt.Println(segments)
-			fmt.Println("this should trigger /api/sublocations/{name or id}/treasures")
-			return
-		default:
-			fmt.Println(segments)
-			fmt.Println("this should trigger an error: this sub section is not supported. Supported sub-sections: areas, monsters, monster-formations, shops, treasures.")
-			return
-		}
+		handleEndpointSubsections(cfg, w, r, i, segments)
+		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, `wrong format. usage: '/api/sublocations/{name or id}', or '/api/sublocations/{name or id}/{sub-section}'. supported sub-sections: areas, monsters, monster-formations, shops, treasures.`, nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}', or '/api/%s/{id}/{subsection}'. supported subsections: %s.", i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
+}
+
+
+func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32) (Sublocation, error) {
+	sublocation, err := verifyParamsAndGet(r, i, id)
+	if err != nil {
+		return Sublocation{}, err
+	}
+
+	areas, err := getResourcesDB(cfg, r, cfg.e.areas, sublocation, cfg.db.GetSublocationAreaIDs)
+	if err != nil {
+		return Sublocation{}, err
+	}
+
+	rel, err := getSublocationRelationships(cfg, r, sublocation)
+	if err != nil {
+		return Sublocation{}, err
+	}
+
+	response := Sublocation{
+		ID:                	sublocation.ID,
+		Name:              	sublocation.Name,
+		ParentLocation:    	nameToNamedAPIResource(cfg, cfg.e.locations, sublocation.Location.Name, nil),
+		Areas: 				areas,
+		LocRel: 			rel,
+	}
+
+	return response, nil
+}
+
+
+func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+	resources, err := retrieveAPIResources(cfg, r, i)
+	if err != nil {
+		return NamedApiResourceList{}, err
+	}
+
+	filteredLists := []filteredResList[NamedAPIResource]{
+		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationSublocationIDs)),
+		frl(boolQuery2(cfg, r, i, resources, "characters", cfg.db.GetSublocationIDsWithCharacters)),
+		frl(boolQuery2(cfg, r, i, resources, "aeons", cfg.db.GetSublocationIDsWithAeons)),
+		frl(boolQuery2(cfg, r, i, resources, "monsters", cfg.db.GetSublocationIDsWithMonsters)),
+		frl(boolQuery2(cfg, r, i, resources, "boss_fights", cfg.db.GetSublocationIDsWithBosses)),
+		frl(boolQuery2(cfg, r, i, resources, "shops", cfg.db.GetSublocationIDsWithShops)),
+		frl(boolQuery2(cfg, r, i, resources, "treasures", cfg.db.GetSublocationIDsWithTreasures)),
+		frl(boolQuery2(cfg, r, i, resources, "sidequests", cfg.db.GetSublocationIDsWithSidequests)),
+		frl(boolQuery2(cfg, r, i, resources, "fmvs", cfg.db.GetSublocationIDsWithFMVs)),
+	}
+
+	return filterAPIResources(cfg, r, i, resources, filteredLists)
 }

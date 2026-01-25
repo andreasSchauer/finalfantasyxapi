@@ -52,7 +52,7 @@ type MonsterEquipmentSub struct {
 	ArmorAbilities  []string `json:"armor_abilities"`
 }
 
-func getSubMonsters(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
+func handleMonstersSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.monsters
 	monsters := []MonsterSub{}
 
@@ -72,9 +72,9 @@ func getSubMonsters(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource,
 			APOverkill:     mon.APOverkill,
 			Gil:            mon.Gil,
 			MaxBribeAmount: getMonsterSubBribeAmount(mon, monHP),
-			IsStoryBased: 	mon.IsStoryBased,
-			IsRepeatable: 	mon.IsRepeatable,
-			CanBeCaptured: 	mon.CanBeCaptured,
+			IsStoryBased:   mon.IsStoryBased,
+			IsRepeatable:   mon.IsRepeatable,
+			CanBeCaptured:  mon.CanBeCaptured,
 			RonsoRages:     mon.RonsoRages,
 			Items:          getMonsterSubItems(cfg, mon),
 			Equipment:      getMonsterSubEquipment(mon),

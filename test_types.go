@@ -26,7 +26,7 @@ type testGeneral struct {
 	expectedErr    string
 	dontCheck      map[string]bool
 	expLengths     map[string]int
-	httpHandler	   func (http.ResponseWriter, *http.Request)
+	httpHandler    func(http.ResponseWriter, *http.Request)
 }
 
 type expNameVer struct {
@@ -41,11 +41,11 @@ type expUnique struct {
 }
 
 type expList struct {
-	count    		int
-	previous 		*string
-	next     		*string
-	parentResource	*string
-	results  		[]int32
+	count          int
+	previous       *string
+	next           *string
+	parentResource *string
+	results        []int32
 }
 
 type expListParams struct {
@@ -62,7 +62,7 @@ type expAreas struct {
 }
 
 type expLocBased struct {
-	sidequest      *int32
+	sidequests     []int32
 	connectedAreas []int32
 	characters     []int32
 	aeons          []int32

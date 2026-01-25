@@ -21,13 +21,17 @@ type Area struct {
 	HasCompSphere     bool                 `json:"has_comp_sphere"`
 	CanRideChocobo    bool                 `json:"can_ride_chocobo"`
 	ConnectedAreas    []AreaConnection     `json:"connected_areas"`
+	LocRel
+}
+
+type LocRel struct {
 	Characters        []NamedAPIResource   `json:"characters"`
 	Aeons             []NamedAPIResource   `json:"aeons"`
 	Shops             []UnnamedAPIResource `json:"shops"`
 	Treasures         []UnnamedAPIResource `json:"treasures"`
 	Monsters          []NamedAPIResource   `json:"monsters"`
 	Formations        []UnnamedAPIResource `json:"formations"`
-	Sidequest         *NamedAPIResource    `json:"sidequest"`
+	Sidequests        []NamedAPIResource   `json:"sidequests"`
 	Music             *LocationMusic       `json:"music"`
 	FMVs              []NamedAPIResource   `json:"fmvs"`
 }
@@ -62,6 +66,11 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, L
 		return Area{}, err
 	}
 
+	connections, err := getAreaConnectedAreas(cfg, area)
+	if err != nil {
+		return Area{}, err
+	}
+
 	rel, err := getAreaRelationships(cfg, r, area)
 	if err != nil {
 		return Area{}, err
@@ -79,16 +88,8 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, L
 		AirshipDropOff:    area.AirshipDropOff,
 		HasCompSphere:     area.HasCompilationSphere,
 		CanRideChocobo:    area.CanRideChocobo,
-		ConnectedAreas:    rel.ConnectedAreas,
-		Characters:        rel.Characters,
-		Aeons:             rel.Aeons,
-		Shops:             rel.Shops,
-		Treasures:         rel.Treasures,
-		Monsters:          rel.Monsters,
-		Formations:        rel.Formations,
-		Sidequest:         rel.Sidequest,
-		Music:             rel.Music,
-		FMVs:              rel.FMVs,
+		ConnectedAreas:    connections,
+		LocRel: 		   rel,
 	}
 
 	return response, nil

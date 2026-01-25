@@ -56,7 +56,7 @@ func TestGetArea(t *testing.T) {
 				parentLocation:    15,
 				parentSublocation: 25,
 				expLocBased: expLocBased{
-					sidequest:      h.GetInt32Ptr(6),
+					sidequests:     []int32{6},
 					connectedAreas: []int32{144, 149},
 					monsters:       []int32{81, 84, 85},
 					formations:     []int32{203, 207},
@@ -136,7 +136,7 @@ func TestGetArea(t *testing.T) {
 				parentLocation:    14,
 				parentSublocation: 24,
 				expLocBased: expLocBased{
-					sidequest: h.GetInt32Ptr(7),
+					sidequests: []int32{7},
 				},
 			},
 		},
@@ -195,9 +195,9 @@ func TestGetArea(t *testing.T) {
 		testExpectedNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
 		compAPIResourcesFromID(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
 		compAPIResourcesFromID(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
-		compResPtrsFromID(test, "sidequest", testCfg.e.sidequests.endpoint, tc.sidequest, got.Sidequest)
 
 		checks := []resListTest{
+			newResListTestFromIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
 			newResListTestFromIDs("connected areas", testCfg.e.areas.endpoint, tc.connectedAreas, got.ConnectedAreas),
 			newResListTestFromIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
 			newResListTestFromIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
@@ -374,67 +374,67 @@ func TestAreasConnected(t *testing.T) {
 				requestURL:     "/api/overdrive-modes/1/areas",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "endpoint 'overdrive-modes' doesn't have any subsections.",
-				httpHandler: 	testCfg.HandleOverdriveModes,
+				httpHandler:    testCfg.HandleOverdriveModes,
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/36/connected/",
 				expectedStatus: http.StatusOK,
-				httpHandler: 	testCfg.HandleAreas,
+				httpHandler:    testCfg.HandleAreas,
 			},
 			expList: expList{
-				count:   7,
+				count:          7,
 				parentResource: h.GetStrPtr("/areas/36"),
-				results: []int32{26, 30, 37, 38, 39, 40, 41},
+				results:        []int32{26, 30, 37, 38, 39, 40, 41},
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/211/connected/",
 				expectedStatus: http.StatusOK,
-				httpHandler: 	testCfg.HandleAreas,
+				httpHandler:    testCfg.HandleAreas,
 			},
 			expList: expList{
-				count:   2,
+				count:          2,
 				parentResource: h.GetStrPtr("/areas/211"),
-				results: []int32{207, 212},
+				results:        []int32{207, 212},
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/9/connected/",
 				expectedStatus: http.StatusOK,
-				httpHandler: 	testCfg.HandleAreas,
+				httpHandler:    testCfg.HandleAreas,
 			},
 			expList: expList{
-				count:   4,
+				count:          4,
 				parentResource: h.GetStrPtr("/areas/9"),
-				results: []int32{8, 10, 11, 15},
+				results:        []int32{8, 10, 11, 15},
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/238/connected/",
 				expectedStatus: http.StatusOK,
-				httpHandler: 	testCfg.HandleAreas,
+				httpHandler:    testCfg.HandleAreas,
 			},
 			expList: expList{
-				count:   0,
+				count:          0,
 				parentResource: h.GetStrPtr("/areas/238"),
-				results: []int32{},
+				results:        []int32{},
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/151/connected/",
 				expectedStatus: http.StatusOK,
-				httpHandler: 	testCfg.HandleAreas,
+				httpHandler:    testCfg.HandleAreas,
 			},
 			expList: expList{
-				count:   3,
+				count:          3,
 				parentResource: h.GetStrPtr("/areas/151"),
-				results: []int32{143, 152, 201},
+				results:        []int32{143, 152, 201},
 			},
 		},
 	}
@@ -473,9 +473,9 @@ func TestAreasMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:   6,
+				count:          6,
 				parentResource: h.GetStrPtr("/areas/90"),
-				results: []int32{38, 39, 40, 42, 43, 45},
+				results:        []int32{38, 39, 40, 42, 43, 45},
 			},
 		},
 		{
@@ -484,9 +484,9 @@ func TestAreasMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:   4,
+				count:          4,
 				parentResource: h.GetStrPtr("/areas/23"),
-				results: []int32{15, 16, 17, 18},
+				results:        []int32{15, 16, 17, 18},
 			},
 		},
 		{
@@ -495,10 +495,10 @@ func TestAreasMonsters(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
-				count:   21,
-				next: h.GetStrPtr("/areas/239/monsters?limit=20&offset=20"),
+				count:          21,
+				next:           h.GetStrPtr("/areas/239/monsters?limit=20&offset=20"),
 				parentResource: h.GetStrPtr("/areas/239"),
-				results: []int32{190, 201, 210, 239, 245, 249, 253},
+				results:        []int32{190, 201, 210, 239, 245, 249, 253},
 			},
 		},
 	}

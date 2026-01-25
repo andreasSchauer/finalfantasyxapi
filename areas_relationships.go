@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
@@ -20,66 +19,60 @@ func (ac AreaConnection) GetAPIResource() APIResource {
 	return ac.Area
 }
 
-func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (Area, error) {
-	connections, err := getAreaConnectedAreas(cfg, area)
-	if err != nil {
-		return Area{}, err
-	}
-
+func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocRel, error) {
 	characters, err := getResourcesDB(cfg, r, cfg.e.characters, area, cfg.db.GetAreaCharacterIDs)
 	if err != nil {
-		return Area{}, err
+		return LocRel{}, err
 	}
 
 	aeons, err := getResourcesDB(cfg, r, cfg.e.aeons, area, cfg.db.GetAreaAeonIDs)
 	if err != nil {
-		return Area{}, err
+		return LocRel{}, err
 	}
 
 	shops, err := getResourcesDB(cfg, r, cfg.e.shops, area, cfg.db.GetAreaShopIDs)
 	if err != nil {
-		return Area{}, err
+		return LocRel{}, err
 	}
 
 	treasures, err := getResourcesDB(cfg, r, cfg.e.treasures, area, cfg.db.GetAreaTreasureIDs)
 	if err != nil {
-		return Area{}, err
+		return LocRel{}, err
 	}
 
 	monsters, err := getResourcesDB(cfg, r, cfg.e.monsters, area, cfg.db.GetAreaMonsterIDs)
 	if err != nil {
-		return Area{}, err
+		return LocRel{}, err
 	}
 
 	formations, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, area, cfg.db.GetAreaMonsterFormationIDs)
 	if err != nil {
-		return Area{}, err
+		return LocRel{}, err
 	}
 
-	sidequest, err := getAreaSidequest(cfg, r, area)
+	sidequests, err := getLocBasedSidequests(cfg, r, area, cfg.db.GetAreaQuestIDs)
 	if err != nil {
-		return Area{}, err
+		return LocRel{}, err
 	}
 
 	music, err := getAreaMusic(cfg, r, area)
 	if err != nil {
-		return Area{}, err
+		return LocRel{}, err
 	}
 
 	fmvs, err := getResourcesDB(cfg, r, cfg.e.fmvs, area, cfg.db.GetAreaFmvIDs)
 	if err != nil {
-		return Area{}, err
+		return LocRel{}, err
 	}
 
-	rel := Area{
-		ConnectedAreas: connections,
+	rel := LocRel{
 		Characters:     characters,
 		Aeons:          aeons,
 		Shops:          shops,
 		Treasures:      treasures,
 		Monsters:       monsters,
 		Formations:     formations,
-		Sidequest:      h.ObjPtrOrNil(sidequest),
+		Sidequests:     sidequests,
 		Music:          h.ObjPtrOrNil(music),
 		FMVs:           fmvs,
 	}
@@ -110,47 +103,6 @@ func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, er
 	return connectedAreas, nil
 }
 
-func getAreaSidequest(cfg *Config, r *http.Request, area seeding.Area) (NamedAPIResource, error) {
-	dbQuestIDs, err := cfg.db.GetAreaQuestIDs(r.Context(), area.ID)
-	if err != nil {
-		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get quests of %s.", area), err)
-	}
-	if len(dbQuestIDs) == 0 {
-		return NamedAPIResource{}, nil
-	}
-
-	sidequest, err := findSidequest(cfg, dbQuestIDs[0])
-	if err != nil {
-		return NamedAPIResource{}, err
-	}
-
-	resource := cfg.e.sidequests.idToResFunc(cfg, cfg.e.sidequests, sidequest.ID)
-
-	return resource, nil
-}
-
-
-func findSidequest(cfg *Config, potentialSidequestID int32) (seeding.Sidequest, error) {
-	potentialSidequest, _ := seeding.GetResourceByID(potentialSidequestID, cfg.l.QuestsID)
-	sidequestID := potentialSidequestID
-
-	if potentialSidequest.Type != database.QuestTypeSidequest {
-		subquestName := potentialSidequest.Name
-		subquest, err := seeding.GetResource(subquestName, cfg.l.Subquests)
-		if err != nil {
-			return seeding.Sidequest{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
-		}
-
-		sidequestID = subquest.SidequestID
-	}
-
-	sidequest, err := seeding.GetResourceByID(sidequestID, cfg.l.SidequestsID)
-	if err != nil {
-		return seeding.Sidequest{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
-	}
-
-	return sidequest, nil
-}
 
 func getAreaMusic(cfg *Config, r *http.Request, item seeding.LookupableID) (LocationMusic, error) {
 	i := cfg.e.songs
@@ -182,7 +134,7 @@ func getAreaCueSongs(cfg *Config, r *http.Request, i handlerInput[seeding.Song, 
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get cues of %s", item), err)
 	}
 
-	var cueSongs []LocationSong
+	cueSongs := []LocationSong{}
 	for _, song := range dbCueSongs {
 		cueSongs = append(cueSongs, newLocationSong(cfg, i, song.ID, song.ReplacesEncounterMusic))
 	}
@@ -196,7 +148,7 @@ func getAreaBMSongs(cfg *Config, r *http.Request, i handlerInput[seeding.Song, a
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get cues of %s", item), err)
 	}
 
-	var bmSongs []LocationSong
+	bmSongs := []LocationSong{}
 	for _, song := range dbBMSongs {
 		bmSongs = append(bmSongs, newLocationSong(cfg, i, song.ID, song.ReplacesEncounterMusic))
 	}

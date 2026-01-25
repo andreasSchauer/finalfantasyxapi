@@ -302,6 +302,9 @@ ORDER BY a.id;
 
 
 
+-- name: GetSublocationIDs :many
+SELECT id FROM sublocations ORDER BY id;
+
 
 -- name: GetSublocationAreaIDs :many
 SELECT a.id
@@ -311,7 +314,7 @@ WHERE s.id = $1
 ORDER BY a.id;
 
 
--- name: GetSublocationConnectionIDs :many
+-- name: GetConnectedSublocationIDs :many
 SELECT DISTINCT cs.id
 FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
@@ -626,6 +629,14 @@ ORDER BY s.id;
 
 
 
+-- name: GetLocationSublocationIDs :many
+SELECT s.id
+FROM sublocations s
+JOIN locations l ON s.location_id = l.id
+WHERE l.id = $1
+ORDER BY s.id;
+
+
 -- name: GetLocationAreaIDs :many
 SELECT a.id
 FROM areas a
@@ -635,7 +646,7 @@ WHERE l.id = $1
 ORDER BY a.id;
 
 
--- name: GetLocationConnectionIDs :many
+-- name: GetConnectedLocationIDs :many
 SELECT DISTINCT cl.id, cl.name
 FROM locations l
 JOIN sublocations s ON s.location_id = l.id
