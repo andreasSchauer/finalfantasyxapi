@@ -126,14 +126,14 @@ func (cfg *Config) initAreasParams() {
 			RequiredParams: []string{"item"},
 			AllowedValues:  []string{"monster", "treasure", "shop", "quest"},
 		},
-		"key-item": {
+		"key_item": {
 			ID:          5,
 			Description: "Searches for areas where the specified key item can be acquired.",
-			Usage:       "?key-item={key_item_id}",
-			ExampleUses: []string{"?key-item=22"},
+			Usage:       "?key_item={key_item_id}",
+			ExampleUses: []string{"?key_item=22"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "key-items")},
+			References:  []string{createListURL(cfg, "key_items")},
 		},
 		"story_based": {
 			ID:          6,
@@ -520,14 +520,14 @@ func (cfg *Config) initSublocationsParams() {
 			RequiredParams: []string{"item"},
 			AllowedValues:  []string{"monster", "treasure", "shop", "quest"},
 		},
-		"key-item": {
+		"key_item": {
 			ID:          5,
 			Description: "Searches for sublocations where the specified key item can be acquired.",
-			Usage:       "?key-item={key_item_id}",
-			ExampleUses: []string{"?key-item=22"},
+			Usage:       "?key_item={key_item_id}",
+			ExampleUses: []string{"?key_item=22"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "key-items")},
+			References:  []string{createListURL(cfg, "key_items")},
 		},
 		"characters": {
 			ID:          11,

@@ -9,31 +9,31 @@ import (
 )
 
 type Area struct {
-	ID                int32                `json:"id"`
-	Name              string               `json:"name"`
-	Version           *int32               `json:"version,omitempty"`
-	Specification     *string              `json:"specification,omitempty"`
-	ParentLocation    NamedAPIResource     `json:"parent_location"`
-	ParentSublocation NamedAPIResource     `json:"parent_sublocation"`
-	StoryOnly         bool                 `json:"story_only"`
-	HasSaveSphere     bool                 `json:"has_save_sphere"`
-	AirshipDropOff    bool                 `json:"airship_drop_off"`
-	HasCompSphere     bool                 `json:"has_comp_sphere"`
-	CanRideChocobo    bool                 `json:"can_ride_chocobo"`
-	ConnectedAreas    []AreaConnection     `json:"connected_areas"`
+	ID                int32            `json:"id"`
+	Name              string           `json:"name"`
+	Version           *int32           `json:"version,omitempty"`
+	Specification     *string          `json:"specification,omitempty"`
+	ParentLocation    NamedAPIResource `json:"parent_location"`
+	ParentSublocation NamedAPIResource `json:"parent_sublocation"`
+	StoryOnly         bool             `json:"story_only"`
+	HasSaveSphere     bool             `json:"has_save_sphere"`
+	AirshipDropOff    bool             `json:"airship_drop_off"`
+	HasCompSphere     bool             `json:"has_comp_sphere"`
+	CanRideChocobo    bool             `json:"can_ride_chocobo"`
+	ConnectedAreas    []AreaConnection `json:"connected_areas"`
 	LocRel
 }
 
 type LocRel struct {
-	Characters        []NamedAPIResource   `json:"characters"`
-	Aeons             []NamedAPIResource   `json:"aeons"`
-	Shops             []UnnamedAPIResource `json:"shops"`
-	Treasures         []UnnamedAPIResource `json:"treasures"`
-	Monsters          []NamedAPIResource   `json:"monsters"`
-	Formations        []UnnamedAPIResource `json:"formations"`
-	Sidequests        []NamedAPIResource   `json:"sidequests"`
-	Music             *LocationMusic       `json:"music"`
-	FMVs              []NamedAPIResource   `json:"fmvs"`
+	Characters []NamedAPIResource   `json:"characters"`
+	Aeons      []NamedAPIResource   `json:"aeons"`
+	Shops      []UnnamedAPIResource `json:"shops"`
+	Treasures  []UnnamedAPIResource `json:"treasures"`
+	Monsters   []NamedAPIResource   `json:"monsters"`
+	Formations []UnnamedAPIResource `json:"formations"`
+	Sidequests []NamedAPIResource   `json:"sidequests"`
+	Music      *LocationMusic       `json:"music"`
+	FMVs       []NamedAPIResource   `json:"fmvs"`
 }
 
 func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
@@ -89,7 +89,7 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, L
 		HasCompSphere:     area.HasCompilationSphere,
 		CanRideChocobo:    area.CanRideChocobo,
 		ConnectedAreas:    connections,
-		LocRel: 		   rel,
+		LocRel:            rel,
 	}
 
 	return response, nil
@@ -105,7 +105,7 @@ func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, A
 		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationAreaIDs)),
 		frl(idOnlyQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationAreaIDs)),
 		frl(idOnlyQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getAreasByItem)),
-		frl(idOnlyQueryWrapper(cfg, r, i, resources, "key-item", len(cfg.l.KeyItems), getAreasByKeyItem)),
+		frl(idOnlyQueryWrapper(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), getAreasByKeyItem)),
 		frl(boolQuery(cfg, r, i, resources, "story_based", cfg.db.GetAreaIDsStoryOnly)),
 		frl(boolQuery(cfg, r, i, resources, "save_sphere", cfg.db.GetAreaIDsWithSaveSphere)),
 		frl(boolQuery(cfg, r, i, resources, "comp_sphere", cfg.db.GetAreaIDsWithCompSphere)),

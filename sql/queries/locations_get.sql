@@ -307,7 +307,7 @@ SELECT id FROM sublocations ORDER BY id;
 
 
 -- name: GetSublocationAreaIDs :many
-SELECT a.id
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 WHERE s.id = $1
@@ -638,7 +638,7 @@ ORDER BY s.id;
 
 
 -- name: GetLocationAreaIDs :many
-SELECT a.id
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id

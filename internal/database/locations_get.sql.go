@@ -1186,7 +1186,7 @@ func (q *Queries) GetLocationAeonIDs(ctx context.Context, id int32) ([]int32, er
 }
 
 const getLocationAreaIDs = `-- name: GetLocationAreaIDs :many
-SELECT a.id
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2179,7 +2179,7 @@ func (q *Queries) GetSublocationAeonIDs(ctx context.Context, id int32) ([]int32,
 }
 
 const getSublocationAreaIDs = `-- name: GetSublocationAreaIDs :many
-SELECT a.id
+SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 WHERE s.id = $1

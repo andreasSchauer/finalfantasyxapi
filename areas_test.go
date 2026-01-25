@@ -244,9 +244,9 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?key-item=61",
+				requestURL:     "/api/areas?key_item=61",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '61' in 'key-item' is out of range. max id: 60.",
+				expectedErr:    "provided id '61' in 'key_item' is out of range. max id: 60.",
 			},
 		},
 		{
@@ -331,7 +331,7 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?key-item=37",
+				requestURL:     "/api/areas?key_item=37",
 				expectedStatus: http.StatusOK,
 			},
 			expList: expList{
