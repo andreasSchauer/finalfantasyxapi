@@ -356,15 +356,30 @@ func (cfg *Config) EndpointsInit() {
 	}
 
 	e.sublocations = handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "sublocations",
-		resourceType:  "sublocation",
-		objLookup:     cfg.l.Sublocations,
-		objLookupID:   cfg.l.SublocationsID,
-		idToResFunc:   idToNamedAPIResource[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
-		retrieveQuery: cfg.db.GetSublocationIDs,
-		getSingleFunc: cfg.getSublocation,
-		retrieveFunc:  cfg.retrieveSublocations,
+		endpoint:      	"sublocations",
+		resourceType:  	"sublocation",
+		objLookup:     	cfg.l.Sublocations,
+		objLookupID:   	cfg.l.SublocationsID,
+		idToResFunc:   	idToNamedAPIResource[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
+		queryLookup: 	cfg.q.sublocations,
+		retrieveQuery: 	cfg.db.GetSublocationIDs,
+		getSingleFunc: 	cfg.getSublocation,
+		retrieveFunc:  	cfg.retrieveSublocations,
+		subsections: map[string]SubSectionFns{
+			"connected": {
+				dbQuery:      cfg.db.GetConnectedSublocationIDs,
+				getResultsFn: handleSublocationsSection,
+			},
+			"areas": {
+				dbQuery: 	  cfg.db.GetSublocationAreaIDs,
+				getResultsFn: handleAreasSection,
+			},
+			"monsters": {
+				dbQuery:      cfg.db.GetSublocationMonsterIDs,
+				getResultsFn: handleMonstersSection,
+			},
+		},
 	}
 
 	e.treasures = handlerInput[seeding.Treasure, any, UnnamedAPIResource, UnnamedApiResourceList]{

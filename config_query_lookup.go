@@ -33,6 +33,7 @@ type QueryLookup struct {
 	areas          map[string]QueryType
 	monsters       map[string]QueryType
 	overdriveModes map[string]QueryType
+	sublocations   map[string]QueryType
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -72,6 +73,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initAreasParams()
 	cfg.initMonstersParams()
 	cfg.initOverdriveModesParams()
+	cfg.initSublocationsParams()
 }
 
 func (cfg *Config) completeQueryTypeInit(params map[string]QueryType) map[string]QueryType {
@@ -486,4 +488,113 @@ func (cfg *Config) initOverdriveModesParams() {
 
 	params = cfg.completeQueryTypeInit(params)
 	cfg.q.overdriveModes = params
+}
+
+func (cfg *Config) initSublocationsParams() {
+	params := map[string]QueryType{
+		"location": {
+			ID:          1,
+			Description: "Searches for sublocations that are located within the specified location.",
+			Usage:       "?location={location_id}",
+			ExampleUses: []string{"?location=17"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "locations")},
+		},
+		"item": {
+			ID:          3,
+			Description: "Searches for sublocations where the specified item can be acquired. Can be specified further with the 'method' parameter.",
+			Usage:       "?item={item_id}",
+			ExampleUses: []string{"?item=45"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "items")},
+		},
+		"method": {
+			ID:             4,
+			Description:    "Specifies the method of acquisition for the item parameter.",
+			Usage:          "?item={item_id}&method={value}",
+			ExampleUses:    []string{"?item=45&method=treasure"},
+			ForList:        true,
+			ForSingle:      false,
+			RequiredParams: []string{"item"},
+			AllowedValues:  []string{"monster", "treasure", "shop", "quest"},
+		},
+		"key-item": {
+			ID:          5,
+			Description: "Searches for sublocations where the specified key item can be acquired.",
+			Usage:       "?key-item={key_item_id}",
+			ExampleUses: []string{"?key-item=22"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "key-items")},
+		},
+		"characters": {
+			ID:          11,
+			Description: "Searches for sublocations where a character permanently joins the party.",
+			Usage:       "?characters={boolean}",
+			ExampleUses: []string{"?characters=true", "?characters=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"aeons": {
+			ID:          12,
+			Description: "Searches for sublocations where a new aeon is acquired.",
+			Usage:       "?aeons={boolean}",
+			ExampleUses: []string{"?aeons=true", "?aeons=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"monsters": {
+			ID:          13,
+			Description: "Searches for sublocations that have monsters.",
+			Usage:       "?monsters={boolean}",
+			ExampleUses: []string{"?monsters=true", "?monsters=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"boss_fights": {
+			ID:          14,
+			Description: "Searches for sublocations that have bosses.",
+			Usage:       "?boss_fights={boolean}",
+			ExampleUses: []string{"?boss_fights=true", "?boss_fights=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"shops": {
+			ID:          15,
+			Description: "Searches for sublocations that have shops.",
+			Usage:       "?shops={boolean}",
+			ExampleUses: []string{"?shops=true", "?shops=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"treasures": {
+			ID:          16,
+			Description: "Searches for sublocations that have treasures.",
+			Usage:       "?treasures={boolean}",
+			ExampleUses: []string{"?treasures=true", "?treasures=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"sidequests": {
+			ID:          17,
+			Description: "Searchces for sublocations that feature sidequests.",
+			Usage:       "?sidequests={boolean}",
+			ExampleUses: []string{"?sidequests=true", "?sidequests=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"fmvs": {
+			ID:          18,
+			Description: "Searches for sublocations that feature fmv sequences.",
+			Usage:       "?fmvs={boolean}",
+			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.sublocations = params
 }
