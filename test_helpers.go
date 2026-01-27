@@ -65,6 +65,20 @@ func newNameListTestSections(cfg *Config, fieldName, endpoint string, exp, got [
 	}
 }
 
+func newNameListTestParams(fieldName string, exp []string, got []QueryType) nameListTest {
+	gotNames := []string{}
+
+	for _, param := range got {
+		gotNames = append(gotNames, param.Name)
+	}
+
+	return nameListTest{
+		name: fieldName,
+		exp:  exp,
+		got:  gotNames,
+	}
+}
+
 func getTestName(name, requestURL string, caseNum int) string {
 	return fmt.Sprintf("%s: %d, requestURL: %s", name, caseNum, requestURL)
 }

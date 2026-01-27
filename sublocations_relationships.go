@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -44,7 +42,12 @@ func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seedi
 		return LocRel{}, err
 	}
 
-	music, err := getSublocationMusic(cfg, r, sublocation)
+	music, err := getMusicLocBased(cfg, r, sublocation, LocBasedMusicQueries{
+		CueSongs:  cfg.db.GetSublocationCueSongIDs,
+		BmSongs:   cfg.db.GetSublocationBackgroundMusicSongIDs,
+		FMVSongs:  cfg.db.GetSublocationFMVSongIDs,
+		BossMusic: cfg.db.GetSublocationBossSongIDs,
+	})
 	if err != nil {
 		return LocRel{}, err
 	}
@@ -55,70 +58,16 @@ func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seedi
 	}
 
 	rel := LocRel{
-		Characters:     characters,
-		Aeons:          aeons,
-		Shops:          shops,
-		Treasures:      treasures,
-		Monsters:       monsters,
-		Formations:     formations,
-		Sidequests:     sidequests,
-		Music:          h.ObjPtrOrNil(music),
-		FMVs:           fmvs,
+		Characters: characters,
+		Aeons:      aeons,
+		Shops:      shops,
+		Treasures:  treasures,
+		Monsters:   monsters,
+		Formations: formations,
+		Sidequests: sidequests,
+		Music:      music,
+		FMVs:       fmvs,
 	}
 
 	return rel, nil
-}
-
-
-
-func getSublocationMusic(cfg *Config, r *http.Request, item seeding.LookupableID) (LocationMusic, error) {
-	i := cfg.e.songs
-
-	cueSongs, err := getSublocationCueSongs(cfg, r, i, item)
-	if err != nil {
-		return LocationMusic{}, err
-	}
-
-	bmSongs, err := getSublocationBMSongs(cfg, r, i, item)
-	if err != nil {
-		return LocationMusic{}, err
-	}
-
-	music, err := completeLocationMusic(cfg, r, i, item, cueSongs, bmSongs, LocationMusicQueries{
-		FMVSongs:  cfg.db.GetSublocationFMVSongIDs,
-		BossMusic: cfg.db.GetSublocationBossSongIDs,
-	})
-	if err != nil {
-		return LocationMusic{}, err
-	}
-
-	return music, nil
-}
-
-func getSublocationCueSongs(cfg *Config, r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID) ([]LocationSong, error) {
-	dbCueSongs, err := cfg.db.GetSublocationCues(r.Context(), item.GetID())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get cues of %s", item), err)
-	}
-
-	cueSongs := []LocationSong{}
-	for _, song := range dbCueSongs {
-		cueSongs = append(cueSongs, newLocationSong(cfg, i, song.ID, song.ReplacesEncounterMusic))
-	}
-
-	return cueSongs, nil
-}
-
-func getSublocationBMSongs(cfg *Config, r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID) ([]LocationSong, error) {
-	dbBMSongs, err := cfg.db.GetSublocationBackgroundMusic(r.Context(), item.GetID())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get cues of %s", item), err)
-	}
-
-	bmSongs := []LocationSong{}
-	for _, song := range dbBMSongs {
-		bmSongs = append(bmSongs, newLocationSong(cfg, i, song.ID, song.ReplacesEncounterMusic))
-	}
-
-	return bmSongs, nil
 }

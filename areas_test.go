@@ -59,7 +59,7 @@ func TestGetArea(t *testing.T) {
 					sidequests:     []int32{6},
 					connectedAreas: []int32{144, 149},
 					monsters:       []int32{81, 84, 85},
-					formations:     []int32{203, 207},
+					formations:     []int32{214, 219},
 				},
 			},
 		},
@@ -526,19 +526,12 @@ func TestAreasMonsters(t *testing.T) {
 	}
 }
 
-/*
+
 func TestAreasParameters(t *testing.T) {
 	tests := []struct {
 		testGeneral
 		expListParams
 	}{
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/parameters?section=asd",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "subsection 'asd' is not available for endpoint /areas.",
-			},
-		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?limit=max",
@@ -547,26 +540,6 @@ func TestAreasParameters(t *testing.T) {
 			expListParams: expListParams{
 				count:   21,
 				results: []string{"limit", "offset", "item", "save_sphere", "sublocation"},
-			},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/parameters?limit=max&section=self",
-				expectedStatus: http.StatusOK,
-			},
-			expListParams: expListParams{
-				count:   21,
-				results: []string{"limit", "offset", "item", "save_sphere", "sublocation"},
-			},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/parameters?limit=max&section=treasures",
-				expectedStatus: http.StatusOK,
-			},
-			expListParams: expListParams{
-				count:   3,
-				results: []string{"limit", "offset", "section"},
 			},
 		},
 	}
@@ -606,13 +579,10 @@ func TestAreasSections(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expListParams: expListParams{
-				count: 5,
+				count: 2,
 				results: []string{
 					"connected",
-					"monster-formations",
 					"monsters",
-					"shops",
-					"treasures",
 				},
 			},
 		},
@@ -641,4 +611,4 @@ func TestAreasSections(t *testing.T) {
 		testNameList(test, nameListTest)
 	}
 }
-*/
+

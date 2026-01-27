@@ -38,7 +38,7 @@ type endpoints struct {
 	fmvs               handlerInput[seeding.FMV, any, NamedAPIResource, NamedApiResourceList]
 	items              handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]
 	keyItems           handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]
-	locations          handlerInput[seeding.Location, any, NamedAPIResource, NamedApiResourceList]
+	locations          handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
 	monsters           handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
 	monsterFormations  handlerInput[seeding.MonsterFormation, any, UnnamedAPIResource, UnnamedApiResourceList]
 	overdriveModes     handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
@@ -183,13 +183,35 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.locations = handlerInput[seeding.Location, any, NamedAPIResource, NamedApiResourceList]{
+	e.locations = handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "locations",
 		resourceType:  "location",
 		objLookup:     cfg.l.Locations,
 		objLookupID:   cfg.l.LocationsID,
-		idToResFunc:   idToNamedAPIResource[seeding.Location, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.Location, Location, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		queryLookup: cfg.q.locations,
+		retrieveQuery: cfg.db.GetLocationIDs,
+		getSingleFunc: cfg.getLocation,
+		retrieveFunc: cfg.retrieveLocations,
+		subsections: map[string]SubSectionFns{
+			"connected": {
+				dbQuery:      cfg.db.GetConnectedLocationIDs,
+				getResultsFn: handleLocationsSection,
+			},
+			"sublocations": {
+				dbQuery:      cfg.db.GetLocationSublocationIDs,
+				getResultsFn: handleSublocationsSection,
+			},
+			"areas": {
+				dbQuery: 	  cfg.db.GetLocationAreaIDs,
+				getResultsFn: handleAreasSection,
+			},
+			"monsters": {
+				dbQuery:      cfg.db.GetLocationMonsterIDs,
+				getResultsFn: handleMonstersSection,
+			},
+		},
 	}
 
 	e.monsters = handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]{

@@ -62,6 +62,7 @@ func (mf MonsterFormation) ToHashFields() []any {
 		mf.CanEscape,
 		h.ObjPtrToID(mf.BossMusic),
 		h.DerefOrNil(mf.Notes),
+		mf.EncounterLocationID,
 	}
 
 	monsters := mf.Monsters

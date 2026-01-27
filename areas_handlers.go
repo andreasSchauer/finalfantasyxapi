@@ -32,7 +32,7 @@ type LocRel struct {
 	Monsters   []NamedAPIResource   `json:"monsters"`
 	Formations []UnnamedAPIResource `json:"formations"`
 	Sidequests []NamedAPIResource   `json:"sidequests"`
-	Music      *LocationMusic       `json:"music"`
+	Music      *LocBasedMusic       `json:"music"`
 	FMVs       []NamedAPIResource   `json:"fmvs"`
 }
 

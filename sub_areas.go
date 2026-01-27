@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
@@ -9,15 +11,16 @@ import (
 type AreaSub struct {
 	ID                int32            `json:"id"`
 	URL               string           `json:"url"`
-	ParentLocation    SubName          `json:"parent_location"`
-	ParentSublocation SubName          `json:"parent_sublocation"`
+	ParentLocation    SubRef           `json:"parent_location"`
+	ParentSublocation SubRef           `json:"parent_sublocation"`
 	Name              string           `json:"name"`
 	Version           *int32           `json:"version,omitempty"`
 	Specification     *string          `json:"specification,omitempty"`
 	HasSaveSphere     bool             `json:"has_save_sphere"`
+	StoryOnly         bool             `json:"story_only"`
 	Shops             []ShopLocSub     `json:"shops"`
 	Treasures         *TreasuresLocSub `json:"treasures"`
-	Monsters          []SubName        `json:"monsters"`
+	Monsters          []string         `json:"monsters"`
 }
 
 func (a AreaSub) GetSectionName() string {
@@ -28,20 +31,34 @@ func (a AreaSub) GetURL() string {
 	return a.URL
 }
 
-type SubName struct {
+type SubRef struct {
 	ID            int32   `json:"id,omitempty"`
 	Name          string  `json:"name"`
 	Version       *int32  `json:"version,omitempty"`
 	Specification *string `json:"specification,omitempty"`
 }
 
-func createSubName(id int32, name string, version *int32, spec *string) SubName {
-	return SubName{
-		ID:            id,
-		Name:          name,
-		Version:       version,
-		Specification: spec,
+func createSubReference(id int32, name string) SubRef {
+	return SubRef{
+		ID:   id,
+		Name: name,
 	}
+}
+
+func nameVersionToString(name string, version *int32, spec *string) string {
+	var verStr string
+	var specStr string
+
+	if version != nil {
+		intVer := int(*version)
+		verStr = fmt.Sprintf(" %s", strconv.Itoa(intVer))
+	}
+
+	if spec != nil {
+		specStr = fmt.Sprintf(" (%s)", *spec)
+	}
+
+	return name + verStr + specStr
 }
 
 func handleAreasSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
@@ -68,12 +85,13 @@ func handleAreasSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResou
 		areaSub := AreaSub{
 			ID:                area.ID,
 			URL:               createResourceURL(cfg, i.endpoint, areaID),
-			ParentLocation:    createSubName(area.SubLocation.Location.ID, area.SubLocation.Location.Name, nil, nil),
-			ParentSublocation: createSubName(area.SubLocation.ID, area.SubLocation.Name, nil, nil),
+			ParentLocation:    createSubReference(area.SubLocation.Location.ID, area.SubLocation.Location.Name),
+			ParentSublocation: createSubReference(area.SubLocation.ID, area.SubLocation.Name),
 			Name:              area.Name,
 			Version:           area.Version,
 			Specification:     area.Specification,
 			HasSaveSphere:     area.HasSaveSphere,
+			StoryOnly:         area.StoryOnly,
 			Shops:             shops,
 			Treasures:         treasures,
 			Monsters:          monsters,

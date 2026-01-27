@@ -171,7 +171,7 @@ func TestGetMonster(t *testing.T) {
 				distance:    1,
 				properties:  []int32{2},
 				locations:   []int32{54},
-				formations:  []int32{42},
+				formations:  []int32{40, 41, 42},
 				baseStats: map[string]int32{
 					"hp":      300,
 					"defense": 120,

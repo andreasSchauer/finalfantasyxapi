@@ -71,8 +71,8 @@ WHERE a.id = $1
 ORDER BY so.id;
 
 
--- name: GetAreaCues :many
-SELECT DISTINCT so.id, c.replaces_encounter_music
+-- name: GetAreaCueSongIDs :many
+SELECT DISTINCT so.id
 FROM cues c
 JOIN songs so ON c.song_id = so.id
 JOIN j_songs_cues j ON j.cue_id = c.id
@@ -81,8 +81,8 @@ WHERE j.included_area_id = $1 OR c.trigger_area_id = $1
 ORDER BY so.id;
 
 
--- name: GetAreaBackgroundMusic :many
-SELECT DISTINCT so.id, bm.replaces_encounter_music
+-- name: GetAreaBackgroundMusicSongIDs :many
+SELECT DISTINCT so.id
 FROM songs so
 JOIN j_songs_background_music j ON j.song_id = so.id
 JOIN background_music bm ON j.bm_id = bm.id
@@ -400,8 +400,8 @@ WHERE s.id = $1
 ORDER BY so.id;
 
 
--- name: GetSublocationCues :many
-SELECT DISTINCT so.id, c.replaces_encounter_music
+-- name: GetSublocationCueSongIDs :many
+SELECT DISTINCT so.id
 FROM cues c
 JOIN songs so ON c.song_id = so.id
 JOIN j_songs_cues j ON j.cue_id = c.id
@@ -411,8 +411,8 @@ WHERE s.id = $1
 ORDER BY so.id;
 
 
--- name: GetSublocationBackgroundMusic :many
-SELECT DISTINCT so.id, bm.replaces_encounter_music
+-- name: GetSublocationBackgroundMusicSongIDs :many
+SELECT DISTINCT so.id
 FROM songs so
 JOIN j_songs_background_music j ON j.song_id = so.id
 JOIN background_music bm ON j.bm_id = bm.id
@@ -627,6 +627,8 @@ ORDER BY s.id;
 
 
 
+-- name: GetLocationIDs :many
+SELECT id FROM locations ORDER BY id;
 
 
 -- name: GetLocationSublocationIDs :many
@@ -647,14 +649,14 @@ ORDER BY a.id;
 
 
 -- name: GetConnectedLocationIDs :many
-SELECT DISTINCT cl.id, cl.name
+SELECT DISTINCT cl.id
 FROM locations l
 JOIN sublocations s ON s.location_id = l.id
 JOIN areas a ON a.sublocation_id = s.id
 JOIN j_area_connected_areas j ON j.area_id = a.id
 JOIN area_connections ac ON j.connection_id = ac.id
 JOIN areas ca ON ac.area_id = ca.id
-JOIN sublocations cs ON a2.sublocation_id = cs.id
+JOIN sublocations cs ON ca.sublocation_id = cs.id
 JOIN locations cl ON cs.location_id = cl.id
 WHERE l.id = $1 AND l.id != cl.id
 ORDER BY cl.id;
@@ -741,8 +743,8 @@ WHERE l.id = $1
 ORDER BY so.id;
 
 
--- name: GetLocationCues :many
-SELECT DISTINCT so.id, c.replaces_encounter_music
+-- name: GetLocationCueSongIDs :many
+SELECT DISTINCT so.id
 FROM cues c
 JOIN songs so ON c.song_id = so.id
 JOIN j_songs_cues j ON j.cue_id = c.id
@@ -753,8 +755,8 @@ WHERE l.id = $1
 ORDER BY so.id;
 
 
--- name: GetLocationBackgroundMusic :many
-SELECT DISTINCT so.id, bm.replaces_encounter_music
+-- name: GetLocationBackgroundMusicSongIDs :many
+SELECT DISTINCT so.id
 FROM songs so
 JOIN j_songs_background_music j ON j.song_id = so.id
 JOIN background_music bm ON j.bm_id = bm.id

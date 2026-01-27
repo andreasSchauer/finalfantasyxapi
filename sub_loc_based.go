@@ -11,36 +11,31 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
-
 type ShopLocSub struct {
-	Category		database.ShopCategory	`json:"category"`
-	PreAirship		*ShopSummarySub			`json:"pre_airship"`
-	PostAirship		*ShopSummarySub			`json:"post_airship"`
+	Category    database.ShopCategory `json:"category"`
+	PreAirship  *ShopSummarySub       `json:"pre_airship"`
+	PostAirship *ShopSummarySub       `json:"post_airship"`
 }
 
 type ShopSummarySub struct {
-	HasItems		bool	`json:"has_items"`
-	HasEquipment	bool	`json:"has_equipment"`
+	HasItems     bool `json:"has_items"`
+	HasEquipment bool `json:"has_equipment"`
 }
 
 type TreasuresLocSub struct {
-	TreasureCount	int				`json:"treasure_count"`
-	TotalGil		int32			`json:"total_gil"`
-	Items			[]ItemAmountSub	`json:"items"`
-	Equipment		[]EquipmentSub	`json:"equipment"`
+	TreasureCount int             `json:"treasure_count"`
+	TotalGil      int32           `json:"total_gil"`
+	Items         []ItemAmountSub `json:"items"`
+	Equipment     []EquipmentSub  `json:"equipment"`
 }
 
 type EquipmentSub struct {
-	Name				string		`json:"name"`
-	AutoAbilities		[]string	`json:"auto_abilities"`
-	EmptySlotsAmount	int32		`json:"empty_slots_amount"`
+	Name             string   `json:"name"`
+	AutoAbilities    []string `json:"auto_abilities"`
+	EmptySlotsAmount int32    `json:"empty_slots_amount"`
 }
 
-
-
-func getTreasuresLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32)([]int32, error)) (*TreasuresLocSub, error) {
+func getTreasuresLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) (*TreasuresLocSub, error) {
 	treasureIDs, err := dbQuery(r.Context(), id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve treasures of %s with id '%d'", resourceType, id), err)
@@ -54,11 +49,10 @@ func getTreasuresLocSub(cfg *Config, r *http.Request, resourceType string, id in
 	return &treasures, nil
 }
 
-
 func populateTreasuresLocSub(cfg *Config, treasureIDs []int32) TreasuresLocSub {
 	treasures := TreasuresLocSub{
-		TreasureCount: 	len(treasureIDs),
-		Items: 			[]ItemAmountSub{},
+		TreasureCount: len(treasureIDs),
+		Items:         []ItemAmountSub{},
 	}
 
 	for _, treasureID := range treasureIDs {
@@ -77,9 +71,9 @@ func populateTreasuresLocSub(cfg *Config, treasureIDs []int32) TreasuresLocSub {
 		case string(database.LootTypeEquipment):
 			equipment := treasure.Equipment
 			es := EquipmentSub{
-				Name: 				equipment.Name,
-				AutoAbilities: 		sortNamesByID(equipment.Abilities, cfg.l.AutoAbilities),
-				EmptySlotsAmount: 	equipment.EmptySlotsAmount,
+				Name:             equipment.Name,
+				AutoAbilities:    sortNamesByID(equipment.Abilities, cfg.l.AutoAbilities),
+				EmptySlotsAmount: equipment.EmptySlotsAmount,
 			}
 			treasures.Equipment = append(treasures.Equipment, es)
 		}
@@ -89,9 +83,8 @@ func populateTreasuresLocSub(cfg *Config, treasureIDs []int32) TreasuresLocSub {
 	return treasures
 }
 
-
 func sortNamesByID[T h.HasID](s []string, lookup map[string]T) []string {
-	slices.SortStableFunc(s, func (a, b string) int{
+	slices.SortStableFunc(s, func(a, b string) int {
 		A, _ := seeding.GetResource(a, lookup)
 		B, _ := seeding.GetResource(b, lookup)
 
@@ -109,7 +102,7 @@ func sortNamesByID[T h.HasID](s []string, lookup map[string]T) []string {
 	return s
 }
 
-func getShopsLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32)([]int32, error)) ([]ShopLocSub, error) {
+func getShopsLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) ([]ShopLocSub, error) {
 	shops := []ShopLocSub{}
 
 	shopIDs, err := dbQuery(r.Context(), id)
@@ -120,9 +113,9 @@ func getShopsLocSub(cfg *Config, r *http.Request, resourceType string, id int32,
 	for _, shopID := range shopIDs {
 		shopLookup, _ := seeding.GetResourceByID(shopID, cfg.l.ShopsID)
 		shop := ShopLocSub{
-			Category: 		database.ShopCategory(shopLookup.Category),
-			PreAirship: 	createShopLocSub(shopLookup.PreAirship),
-			PostAirship: 	createShopLocSub(shopLookup.PostAirship),
+			Category:    database.ShopCategory(shopLookup.Category),
+			PreAirship:  createShopLocSub(shopLookup.PreAirship),
+			PostAirship: createShopLocSub(shopLookup.PostAirship),
 		}
 		shops = append(shops, shop)
 	}
@@ -147,10 +140,9 @@ func createShopLocSub(shop *seeding.SubShop) *ShopSummarySub {
 	return &shopLoc
 }
 
+func getMonstersLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) ([]string, error) {
+	monsters := []string{}
 
-func getMonstersLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32)([]int32, error)) ([]SubName, error) {
-	monsters := []SubName{}
-	
 	monIDs, err := dbQuery(r.Context(), id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve monsters of %s with id '%d'", resourceType, id), err)
@@ -158,8 +150,8 @@ func getMonstersLocSub(cfg *Config, r *http.Request, resourceType string, id int
 
 	for _, monID := range monIDs {
 		mon, _ := seeding.GetResourceByID(monID, cfg.l.MonstersID)
-		subName := createSubName(0, mon.Name, mon.Version, mon.Specification)
-		monsters = append(monsters, subName)
+		monStr := nameVersionToString(mon.Name, mon.Version, mon.Specification)
+		monsters = append(monsters, monStr)
 	}
 
 	return monsters, nil

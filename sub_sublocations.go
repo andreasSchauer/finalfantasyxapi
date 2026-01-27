@@ -7,23 +7,22 @@ import (
 )
 
 type SublocationSub struct {
-	ID                	int32           	`json:"id"`
-	URL					string				`json:"url"`
-	ParentLocation		SubName				`json:"parent_location"`
-	Name              	string          	`json:"name"`
-	Shops				[]ShopLocSub		`json:"shops"`
-	Treasures			*TreasuresLocSub	`json:"treasures"`
-	Monsters			[]SubName			`json:"monsters"`
+	ID             int32            `json:"id"`
+	URL            string           `json:"url"`
+	ParentLocation SubRef           `json:"parent_location"`
+	Name           string           `json:"name"`
+	Shops          []ShopLocSub     `json:"shops"`
+	Treasures      *TreasuresLocSub `json:"treasures"`
+	Monsters       []string         `json:"monsters"`
 }
 
 func (s SublocationSub) GetSectionName() string {
-	return "areas"
+	return "sublocations"
 }
 
 func (s SublocationSub) GetURL() string {
 	return s.URL
 }
-
 
 func handleSublocationsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.sublocations
@@ -47,13 +46,13 @@ func handleSublocationsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]S
 		}
 
 		sublocationSub := SublocationSub{
-			ID: 				sublocation.ID,
-			URL: 				createResourceURL(cfg, i.endpoint, subLocID),
-			ParentLocation: 	createSubName(sublocation.Location.ID, sublocation.Location.Name, nil, nil),
-			Name: 				sublocation.Name,
-			Shops: 				shops,
-			Treasures: 			treasures,
-			Monsters: 			monsters,
+			ID:             sublocation.ID,
+			URL:            createResourceURL(cfg, i.endpoint, subLocID),
+			ParentLocation: createSubReference(sublocation.Location.ID, sublocation.Location.Name),
+			Name:           sublocation.Name,
+			Shops:          shops,
+			Treasures:      treasures,
+			Monsters:       monsters,
 		}
 
 		sublocations = append(sublocations, sublocationSub)

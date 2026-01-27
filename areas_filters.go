@@ -50,7 +50,7 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]LocationAPIResour
 	return resources, nil
 }
 
-// same pattern as retrieve endpoint
+
 func getAreasByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], id int32, resourceType string) ([]LocationAPIResource, error) {
 	filteredLists := []filteredResList[LocationAPIResource]{
 		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromMonster)),

@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -55,7 +53,12 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 		return LocRel{}, err
 	}
 
-	music, err := getAreaMusic(cfg, r, area)
+	music, err := getMusicLocBased(cfg, r, area, LocBasedMusicQueries{
+		CueSongs:  cfg.db.GetAreaCueSongIDs,
+		BmSongs:   cfg.db.GetAreaBackgroundMusicSongIDs,
+		FMVSongs:  cfg.db.GetAreaFMVSongIDs,
+		BossMusic: cfg.db.GetAreaBossSongIDs,
+	})
 	if err != nil {
 		return LocRel{}, err
 	}
@@ -66,15 +69,15 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 	}
 
 	rel := LocRel{
-		Characters:     characters,
-		Aeons:          aeons,
-		Shops:          shops,
-		Treasures:      treasures,
-		Monsters:       monsters,
-		Formations:     formations,
-		Sidequests:     sidequests,
-		Music:          h.ObjPtrOrNil(music),
-		FMVs:           fmvs,
+		Characters: characters,
+		Aeons:      aeons,
+		Shops:      shops,
+		Treasures:  treasures,
+		Monsters:   monsters,
+		Formations: formations,
+		Sidequests: sidequests,
+		Music:      music,
+		FMVs:       fmvs,
 	}
 
 	return rel, nil
@@ -101,57 +104,4 @@ func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, er
 	}
 
 	return connectedAreas, nil
-}
-
-
-func getAreaMusic(cfg *Config, r *http.Request, item seeding.LookupableID) (LocationMusic, error) {
-	i := cfg.e.songs
-
-	cueSongs, err := getAreaCueSongs(cfg, r, i, item)
-	if err != nil {
-		return LocationMusic{}, err
-	}
-
-	bmSongs, err := getAreaBMSongs(cfg, r, i, item)
-	if err != nil {
-		return LocationMusic{}, err
-	}
-
-	music, err := completeLocationMusic(cfg, r, i, item, cueSongs, bmSongs, LocationMusicQueries{
-		FMVSongs:  cfg.db.GetAreaFMVSongIDs,
-		BossMusic: cfg.db.GetAreaBossSongIDs,
-	})
-	if err != nil {
-		return LocationMusic{}, err
-	}
-
-	return music, nil
-}
-
-func getAreaCueSongs(cfg *Config, r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID) ([]LocationSong, error) {
-	dbCueSongs, err := cfg.db.GetAreaCues(r.Context(), item.GetID())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get cues of %s", item), err)
-	}
-
-	cueSongs := []LocationSong{}
-	for _, song := range dbCueSongs {
-		cueSongs = append(cueSongs, newLocationSong(cfg, i, song.ID, song.ReplacesEncounterMusic))
-	}
-
-	return cueSongs, nil
-}
-
-func getAreaBMSongs(cfg *Config, r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID) ([]LocationSong, error) {
-	dbBMSongs, err := cfg.db.GetAreaBackgroundMusic(r.Context(), item.GetID())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get cues of %s", item), err)
-	}
-
-	bmSongs := []LocationSong{}
-	for _, song := range dbBMSongs {
-		bmSongs = append(bmSongs, newLocationSong(cfg, i, song.ID, song.ReplacesEncounterMusic))
-	}
-
-	return bmSongs, nil
 }

@@ -40,8 +40,8 @@ func (q *Queries) GetAreaAeonIDs(ctx context.Context, id int32) ([]int32, error)
 	return items, nil
 }
 
-const getAreaBackgroundMusic = `-- name: GetAreaBackgroundMusic :many
-SELECT DISTINCT so.id, bm.replaces_encounter_music
+const getAreaBackgroundMusicSongIDs = `-- name: GetAreaBackgroundMusicSongIDs :many
+SELECT DISTINCT so.id
 FROM songs so
 JOIN j_songs_background_music j ON j.song_id = so.id
 JOIN background_music bm ON j.bm_id = bm.id
@@ -50,24 +50,19 @@ WHERE a.id = $1
 ORDER BY so.id
 `
 
-type GetAreaBackgroundMusicRow struct {
-	ID                     int32
-	ReplacesEncounterMusic bool
-}
-
-func (q *Queries) GetAreaBackgroundMusic(ctx context.Context, id int32) ([]GetAreaBackgroundMusicRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaBackgroundMusic, id)
+func (q *Queries) GetAreaBackgroundMusicSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaBackgroundMusicSongIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreaBackgroundMusicRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreaBackgroundMusicRow
-		if err := rows.Scan(&i.ID, &i.ReplacesEncounterMusic); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -177,8 +172,8 @@ func (q *Queries) GetAreaConnectionIDs(ctx context.Context, id int32) ([]int32, 
 	return items, nil
 }
 
-const getAreaCues = `-- name: GetAreaCues :many
-SELECT DISTINCT so.id, c.replaces_encounter_music
+const getAreaCueSongIDs = `-- name: GetAreaCueSongIDs :many
+SELECT DISTINCT so.id
 FROM cues c
 JOIN songs so ON c.song_id = so.id
 JOIN j_songs_cues j ON j.cue_id = c.id
@@ -187,24 +182,19 @@ WHERE j.included_area_id = $1 OR c.trigger_area_id = $1
 ORDER BY so.id
 `
 
-type GetAreaCuesRow struct {
-	ID                     int32
-	ReplacesEncounterMusic bool
-}
-
-func (q *Queries) GetAreaCues(ctx context.Context, includedAreaID int32) ([]GetAreaCuesRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaCues, includedAreaID)
+func (q *Queries) GetAreaCueSongIDs(ctx context.Context, includedAreaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaCueSongIDs, includedAreaID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAreaCuesRow
+	var items []int32
 	for rows.Next() {
-		var i GetAreaCuesRow
-		if err := rows.Scan(&i.ID, &i.ReplacesEncounterMusic); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1076,37 +1066,32 @@ func (q *Queries) GetAreaTreasureIDs(ctx context.Context, areaID int32) ([]int32
 }
 
 const getConnectedLocationIDs = `-- name: GetConnectedLocationIDs :many
-SELECT DISTINCT cl.id, cl.name
+SELECT DISTINCT cl.id
 FROM locations l
 JOIN sublocations s ON s.location_id = l.id
 JOIN areas a ON a.sublocation_id = s.id
 JOIN j_area_connected_areas j ON j.area_id = a.id
 JOIN area_connections ac ON j.connection_id = ac.id
 JOIN areas ca ON ac.area_id = ca.id
-JOIN sublocations cs ON a2.sublocation_id = cs.id
+JOIN sublocations cs ON ca.sublocation_id = cs.id
 JOIN locations cl ON cs.location_id = cl.id
 WHERE l.id = $1 AND l.id != cl.id
 ORDER BY cl.id
 `
 
-type GetConnectedLocationIDsRow struct {
-	ID   int32
-	Name string
-}
-
-func (q *Queries) GetConnectedLocationIDs(ctx context.Context, id int32) ([]GetConnectedLocationIDsRow, error) {
+func (q *Queries) GetConnectedLocationIDs(ctx context.Context, id int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getConnectedLocationIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetConnectedLocationIDsRow
+	var items []int32
 	for rows.Next() {
-		var i GetConnectedLocationIDsRow
-		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1217,8 +1202,8 @@ func (q *Queries) GetLocationAreaIDs(ctx context.Context, id int32) ([]int32, er
 	return items, nil
 }
 
-const getLocationBackgroundMusic = `-- name: GetLocationBackgroundMusic :many
-SELECT DISTINCT so.id, bm.replaces_encounter_music
+const getLocationBackgroundMusicSongIDs = `-- name: GetLocationBackgroundMusicSongIDs :many
+SELECT DISTINCT so.id
 FROM songs so
 JOIN j_songs_background_music j ON j.song_id = so.id
 JOIN background_music bm ON j.bm_id = bm.id
@@ -1229,24 +1214,19 @@ WHERE l.id = $1
 ORDER BY so.id
 `
 
-type GetLocationBackgroundMusicRow struct {
-	ID                     int32
-	ReplacesEncounterMusic bool
-}
-
-func (q *Queries) GetLocationBackgroundMusic(ctx context.Context, id int32) ([]GetLocationBackgroundMusicRow, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationBackgroundMusic, id)
+func (q *Queries) GetLocationBackgroundMusicSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationBackgroundMusicSongIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetLocationBackgroundMusicRow
+	var items []int32
 	for rows.Next() {
-		var i GetLocationBackgroundMusicRow
-		if err := rows.Scan(&i.ID, &i.ReplacesEncounterMusic); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1327,8 +1307,8 @@ func (q *Queries) GetLocationCharacterIDs(ctx context.Context, id int32) ([]int3
 	return items, nil
 }
 
-const getLocationCues = `-- name: GetLocationCues :many
-SELECT DISTINCT so.id, c.replaces_encounter_music
+const getLocationCueSongIDs = `-- name: GetLocationCueSongIDs :many
+SELECT DISTINCT so.id
 FROM cues c
 JOIN songs so ON c.song_id = so.id
 JOIN j_songs_cues j ON j.cue_id = c.id
@@ -1339,24 +1319,19 @@ WHERE l.id = $1
 ORDER BY so.id
 `
 
-type GetLocationCuesRow struct {
-	ID                     int32
-	ReplacesEncounterMusic bool
-}
-
-func (q *Queries) GetLocationCues(ctx context.Context, id int32) ([]GetLocationCuesRow, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationCues, id)
+func (q *Queries) GetLocationCueSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationCueSongIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetLocationCuesRow
+	var items []int32
 	for rows.Next() {
-		var i GetLocationCuesRow
-		if err := rows.Scan(&i.ID, &i.ReplacesEncounterMusic); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1413,6 +1388,33 @@ ORDER BY f.id
 
 func (q *Queries) GetLocationFmvIDs(ctx context.Context, id int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getLocationFmvIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLocationIDs = `-- name: GetLocationIDs :many
+SELECT id FROM locations ORDER BY id
+`
+
+func (q *Queries) GetLocationIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -2209,8 +2211,8 @@ func (q *Queries) GetSublocationAreaIDs(ctx context.Context, id int32) ([]int32,
 	return items, nil
 }
 
-const getSublocationBackgroundMusic = `-- name: GetSublocationBackgroundMusic :many
-SELECT DISTINCT so.id, bm.replaces_encounter_music
+const getSublocationBackgroundMusicSongIDs = `-- name: GetSublocationBackgroundMusicSongIDs :many
+SELECT DISTINCT so.id
 FROM songs so
 JOIN j_songs_background_music j ON j.song_id = so.id
 JOIN background_music bm ON j.bm_id = bm.id
@@ -2220,24 +2222,19 @@ WHERE s.id = $1
 ORDER BY so.id
 `
 
-type GetSublocationBackgroundMusicRow struct {
-	ID                     int32
-	ReplacesEncounterMusic bool
-}
-
-func (q *Queries) GetSublocationBackgroundMusic(ctx context.Context, id int32) ([]GetSublocationBackgroundMusicRow, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationBackgroundMusic, id)
+func (q *Queries) GetSublocationBackgroundMusicSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationBackgroundMusicSongIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetSublocationBackgroundMusicRow
+	var items []int32
 	for rows.Next() {
-		var i GetSublocationBackgroundMusicRow
-		if err := rows.Scan(&i.ID, &i.ReplacesEncounterMusic); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2316,8 +2313,8 @@ func (q *Queries) GetSublocationCharacterIDs(ctx context.Context, id int32) ([]i
 	return items, nil
 }
 
-const getSublocationCues = `-- name: GetSublocationCues :many
-SELECT DISTINCT so.id, c.replaces_encounter_music
+const getSublocationCueSongIDs = `-- name: GetSublocationCueSongIDs :many
+SELECT DISTINCT so.id
 FROM cues c
 JOIN songs so ON c.song_id = so.id
 JOIN j_songs_cues j ON j.cue_id = c.id
@@ -2327,24 +2324,19 @@ WHERE s.id = $1
 ORDER BY so.id
 `
 
-type GetSublocationCuesRow struct {
-	ID                     int32
-	ReplacesEncounterMusic bool
-}
-
-func (q *Queries) GetSublocationCues(ctx context.Context, id int32) ([]GetSublocationCuesRow, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationCues, id)
+func (q *Queries) GetSublocationCueSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationCueSongIDs, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetSublocationCuesRow
+	var items []int32
 	for rows.Next() {
-		var i GetSublocationCuesRow
-		if err := rows.Scan(&i.ID, &i.ReplacesEncounterMusic); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

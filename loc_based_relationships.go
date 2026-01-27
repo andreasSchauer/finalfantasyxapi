@@ -17,68 +17,63 @@ type LocationArea struct {
 	Version     *int32 `json:"version,omitempty"`
 }
 
-
 func (la LocationArea) Error() string {
 	return fmt.Sprintf("location area with location: '%s', sublocation: '%s', area: '%s', version: '%v'", la.Location, la.Sublocation, la.Area, h.DerefOrNil(la.Version))
 }
 
-type LocationMusic struct {
-	BackgroundMusic []LocationSong     `json:"background_music"`
-	Cues            []LocationSong     `json:"cues"`
+type LocBasedMusic struct {
+	BackgroundMusic []NamedAPIResource `json:"background_music"`
+	Cues            []NamedAPIResource `json:"cues"`
 	FMVs            []NamedAPIResource `json:"fmvs"`
 	BossMusic       []NamedAPIResource `json:"boss_fights"`
 }
 
-func (m LocationMusic) IsZero() bool {
+func (m LocBasedMusic) IsZero() bool {
 	return len(m.BackgroundMusic) == 0 &&
 		len(m.Cues) == 0 &&
 		len(m.FMVs) == 0 &&
 		len(m.BossMusic) == 0
 }
 
-type LocationMusicQueries struct {
+type LocBasedMusicQueries struct {
+	CueSongs  func(context.Context, int32) ([]int32, error)
+	BmSongs   func(context.Context, int32) ([]int32, error)
 	FMVSongs  func(context.Context, int32) ([]int32, error)
 	BossMusic func(context.Context, int32) ([]int32, error)
 }
 
-type LocationSong struct {
-	Song                   NamedAPIResource `json:"song"`
-	ReplacesEncounterMusic bool             `json:"replaces_encounter_music"`
-}
+func getMusicLocBased(cfg *Config, r *http.Request, item seeding.LookupableID, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
+	i := cfg.e.songs
 
-func (ls LocationSong) GetAPIResource() APIResource {
-	return ls.Song
-}
-
-func newLocationSong(cfg *Config, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], songID int32, replEncMusic bool) LocationSong {
-	return LocationSong{
-		Song:                   i.idToResFunc(cfg, i, songID),
-		ReplacesEncounterMusic: replEncMusic,
+	cueSongs, err := getResourcesDB(cfg, r, i, item, queries.CueSongs)
+	if err != nil {
+		return nil, err
 	}
-}
 
+	bmSongs, err := getResourcesDB(cfg, r, i, item, queries.BmSongs)
+	if err != nil {
+		return nil, err
+	}
 
-func completeLocationMusic(cfg *Config, r *http.Request, i handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList], item seeding.LookupableID, cueSongs, bmSongs []LocationSong, queries LocationMusicQueries) (LocationMusic, error) {
 	fmvSongs, err := getResourcesDB(cfg, r, i, item, queries.FMVSongs)
 	if err != nil {
-		return LocationMusic{}, err
+		return nil, err
 	}
 
 	bossSongs, err := getResourcesDB(cfg, r, i, item, queries.BossMusic)
 	if err != nil {
-		return LocationMusic{}, err
+		return nil, err
 	}
 
-	music := LocationMusic{
+	music := LocBasedMusic{
 		Cues:            cueSongs,
 		BackgroundMusic: bmSongs,
 		FMVs:            fmvSongs,
 		BossMusic:       bossSongs,
 	}
 
-	return music, nil
+	return &music, nil
 }
-
 
 func getLocBasedSidequests(cfg *Config, r *http.Request, item seeding.LookupableID, dbQuery func(context.Context, int32) ([]int32, error)) ([]NamedAPIResource, error) {
 	resources := []NamedAPIResource{}

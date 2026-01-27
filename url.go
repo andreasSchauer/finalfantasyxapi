@@ -20,7 +20,7 @@ func createListURL(cfg *Config, endpoint string) string {
 
 func createSectionURL(cfg *Config, endpoint, section string) string {
 	url := createListURL(cfg, endpoint)
-	return fmt.Sprintf("%s/%s", url, section)
+	return fmt.Sprintf("%s/{id}/%s", url, section)
 }
 
 func completeTestURL(cfg *Config, path string) string {
