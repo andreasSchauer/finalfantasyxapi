@@ -103,21 +103,25 @@ func getLocBasedSidequests(cfg *Config, r *http.Request, item seeding.Lookupable
 	return resources, nil
 }
 
-func findSidequest(cfg *Config, potentialSidequestID int32) (seeding.Sidequest, error) {
-	potentialSidequest, _ := seeding.GetResourceByID(potentialSidequestID, cfg.l.QuestsID)
-	sidequestID := potentialSidequestID
 
-	if potentialSidequest.Type != database.QuestTypeSidequest {
-		subquestName := potentialSidequest.Name
-		subquest, err := seeding.GetResource(subquestName, cfg.l.Subquests)
+func findSidequest(cfg *Config, questID int32) (seeding.Sidequest, error) {
+	questLookup, _ := seeding.GetResourceByID(questID, cfg.l.QuestsID)
+
+	if questLookup.Type == database.QuestTypeSidequest {
+		sidequest, err := seeding.GetResource(questLookup.Name, cfg.l.Sidequests)
 		if err != nil {
 			return seeding.Sidequest{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
 		}
 
-		sidequestID = subquest.SidequestID
+		return sidequest, nil
 	}
 
-	sidequest, err := seeding.GetResourceByID(sidequestID, cfg.l.SidequestsID)
+	subquest, err := seeding.GetResource(questLookup.Name, cfg.l.Subquests)
+	if err != nil {
+		return seeding.Sidequest{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
+	}
+
+	sidequest, err := seeding.GetResourceByID(subquest.SidequestID, cfg.l.SidequestsID)
 	if err != nil {
 		return seeding.Sidequest{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
 	}
