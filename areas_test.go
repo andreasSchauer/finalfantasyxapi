@@ -55,11 +55,11 @@ func TestGetArea(t *testing.T) {
 			expAreas: expAreas{
 				parentLocation:    15,
 				parentSublocation: 25,
-				expLocBased: expLocBased{
-					sidequests:     []int32{6},
-					connectedAreas: []int32{144, 149},
-					monsters:       []int32{81, 84, 85},
-					formations:     []int32{214, 219},
+				connectedAreas:    []int32{144, 149},
+				expLocRel: expLocRel{
+					sidequests: []int32{6},
+					monsters:   []int32{81, 84, 85},
+					formations: []int32{125, 130},
 				},
 			},
 		},
@@ -85,11 +85,11 @@ func TestGetArea(t *testing.T) {
 			expAreas: expAreas{
 				parentLocation:    4,
 				parentSublocation: 7,
-				expLocBased: expLocBased{
-					connectedAreas: []int32{26, 37, 41},
-					characters:     []int32{2, 4},
-					treasures:      []int32{33, 37},
-					bgMusic:        []int32{19},
+				connectedAreas:    []int32{26, 37, 41},
+				expLocRel: expLocRel{
+					characters: []int32{2, 4},
+					treasures:  []int32{33, 37},
+					bgMusic:    []int32{19},
 				},
 			},
 		},
@@ -115,7 +115,7 @@ func TestGetArea(t *testing.T) {
 			expAreas: expAreas{
 				parentLocation:    8,
 				parentSublocation: 13,
-				expLocBased: expLocBased{
+				expLocRel: expLocRel{
 					shops:     []int32{5},
 					cuesMusic: []int32{35},
 					bgMusic:   []int32{32, 34},
@@ -135,7 +135,7 @@ func TestGetArea(t *testing.T) {
 			expAreas: expAreas{
 				parentLocation:    14,
 				parentSublocation: 24,
-				expLocBased: expLocBased{
+				expLocRel: expLocRel{
 					sidequests: []int32{7},
 				},
 			},
@@ -161,10 +161,10 @@ func TestGetArea(t *testing.T) {
 			expAreas: expAreas{
 				parentLocation:    5,
 				parentSublocation: 8,
-				expLocBased: expLocBased{
+				expLocRel: expLocRel{
 					characters: []int32{5},
 					monsters:   []int32{19},
-					formations: []int32{36},
+					formations: []int32{29},
 					fmvsMusic:  []int32{16},
 					bossMusic:  []int32{16},
 					fmvs:       []int32{9, 13},
@@ -526,7 +526,6 @@ func TestAreasMonsters(t *testing.T) {
 	}
 }
 
-
 func TestAreasParameters(t *testing.T) {
 	tests := []struct {
 		testGeneral
@@ -611,4 +610,3 @@ func TestAreasSections(t *testing.T) {
 		testNameList(test, nameListTest)
 	}
 }
-

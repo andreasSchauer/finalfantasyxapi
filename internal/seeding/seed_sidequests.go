@@ -32,7 +32,7 @@ func (s Sidequest) Error() string {
 
 func (s Sidequest) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: s.ID,
+		ID:   s.ID,
 		Name: s.Name,
 	}
 }
@@ -202,7 +202,7 @@ func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 				for _, completion := range subquest.Completions {
 					err := l.seedQuestCompletionRelationships(qtx, completion, subquest.Quest)
 					if err != nil {
-						subjects := h.JoinSubjects(sidequest.Error(), subquest.Error())
+						subjects := h.JoinErrSubjects(sidequest.Error(), subquest.Error())
 						return h.NewErr(subjects, err)
 					}
 				}

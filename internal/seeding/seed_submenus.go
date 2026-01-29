@@ -56,7 +56,7 @@ func (l *Lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return h.NewErr(submenu.Error(), err, "couldn't create submenu")
 			}
-			
+
 			submenu.ID = dbSubmenu.ID
 			l.Submenus[submenu.Name] = submenu
 			l.SubmenusID[submenu.ID] = submenu
@@ -93,7 +93,7 @@ func (l *Lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 					CharacterClassID: junction.ChildID,
 				})
 				if err != nil {
-					subjects := h.JoinSubjects(submenu.Error(), jsonCharClass)
+					subjects := h.JoinErrSubjects(submenu.Error(), jsonCharClass)
 					return h.NewErr(subjects, err, "couldn't junction user")
 				}
 			}

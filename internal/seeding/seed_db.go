@@ -29,7 +29,13 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	l := lookupInit()
 	seeders := l.getSeeders()
 
+
 	err = handleDBFunctions(db, dbConn, seeders)
+	if err != nil {
+		return nil, err
+	}
+
+	err = l.reformatMonsterFormations()
 	if err != nil {
 		return nil, err
 	}

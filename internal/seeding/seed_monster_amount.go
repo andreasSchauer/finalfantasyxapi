@@ -9,8 +9,8 @@ import (
 )
 
 type MonsterAmount struct {
-	ID          int32
-	MonsterID   int32
+	ID          int32	`json:"-"`
+	MonsterID   int32	`json:"-"`
 	MonsterName string `json:"monster_name"`
 	Version     *int32 `json:"version"`
 	Amount      int32  `json:"amount"`

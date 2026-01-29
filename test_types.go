@@ -58,23 +58,23 @@ type expListParams struct {
 type expAreas struct {
 	parentLocation    int32
 	parentSublocation int32
-	expLocBased
+	connectedAreas    []int32
+	expLocRel
 }
 
-type expLocBased struct {
-	sidequests     []int32
-	connectedAreas []int32
-	characters     []int32
-	aeons          []int32
-	shops          []int32
-	treasures      []int32
-	monsters       []int32
-	formations     []int32
-	bgMusic        []int32
-	cuesMusic      []int32
-	fmvsMusic      []int32
-	bossMusic      []int32
-	fmvs           []int32
+type expLocRel struct {
+	sidequests []int32
+	characters []int32
+	aeons      []int32
+	shops      []int32
+	treasures  []int32
+	monsters   []int32
+	formations []int32
+	bgMusic    []int32
+	cuesMusic  []int32
+	fmvsMusic  []int32
+	bossMusic  []int32
+	fmvs       []int32
 }
 
 type expOverdriveModes struct {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -8,7 +9,8 @@ import (
 )
 
 type ItemAmountSub struct {
-	seeding.ItemAmount
+	ia					seeding.ItemAmount	`json:"-"`
+	ItemAmountStr		string				`json:"item"`
 	ItemType			database.ItemType	`json:"item_type"`
 }
 
@@ -23,10 +25,12 @@ func createSubItemAmountPtr(cfg *Config, ia *seeding.ItemAmount) *ItemAmountSub 
 
 func createSubItemAmount(cfg *Config, ia seeding.ItemAmount) ItemAmountSub {
 	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.MasterItems)
+	itemStr := fmt.Sprintf("%s x%d", ia.ItemName, ia.Amount)
 
 	return ItemAmountSub{
-		ItemAmount: ia,
-		ItemType: 	itemLookup.Type,
+		ia: 			ia,
+		ItemAmountStr: 	itemStr,
+		ItemType: 		itemLookup.Type,
 	}
 }
 
@@ -51,10 +55,10 @@ func sortItemAmountSubsByID(cfg *Config, s []ItemAmountSub) []ItemAmountSub {
 
 func getMasterItemID(cfg *Config, ia ItemAmountSub) int32 {
 	if ia.ItemType == database.ItemTypeItem {
-		itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.Items)
+		itemLookup, _ := seeding.GetResource(ia.ia.ItemName, cfg.l.Items)
 		return itemLookup.MasterItem.ID
 	}
 
-	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.KeyItems)
+	itemLookup, _ := seeding.GetResource(ia.ia.ItemName, cfg.l.KeyItems)
 	return itemLookup.MasterItem.ID
 }

@@ -70,7 +70,7 @@ func (r RonsoRage) Error() string {
 
 func (r RonsoRage) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: r.ID,
+		ID:   r.ID,
 		Name: r.Name,
 	}
 }
@@ -212,7 +212,7 @@ func (l *Lookup) seedOverdriveJunctions(qtx *database.Queries, overdrive Overdri
 			OverdriveAbilityID: junction.ChildID,
 		})
 		if err != nil {
-			subjects := h.JoinSubjects(overdrive.Error(), abilityRef.Error())
+			subjects := h.JoinErrSubjects(overdrive.Error(), abilityRef.Error())
 			return h.NewErr(subjects, err, "couldn't junction overdrive ability")
 		}
 

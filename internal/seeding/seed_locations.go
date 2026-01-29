@@ -124,7 +124,7 @@ func (a Area) GetResParamsLocation() h.ResParamsLocation {
 }
 
 type LocationArea struct {
-	ID          int32
+	ID          int32	`json:"-"`
 	Location    string `json:"location"`
 	Sublocation string `json:"sublocation"`
 	Area        string `json:"area"`

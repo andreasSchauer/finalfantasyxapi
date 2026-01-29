@@ -96,6 +96,7 @@ type Lookup struct {
 	ModifiersID				map[int32]Modifier
 	Monsters             	map[string]Monster
 	MonstersID				map[int32]Monster
+	MonsterFormations		map[string]MonsterFormation
 	MonsterFormationsID  	map[int32]MonsterFormation
 	OverdriveModes       	map[string]OverdriveMode
 	OverdriveModesID     	map[int32]OverdriveMode
@@ -187,6 +188,7 @@ func lookupInit() Lookup {
 		ModifiersID: 			make(map[int32]Modifier),
 		Monsters:            	make(map[string]Monster),
 		MonstersID: 			make(map[int32]Monster),
+		MonsterFormations: 		make(map[string]MonsterFormation),
 		MonsterFormationsID: 	make(map[int32]MonsterFormation),
 		OverdriveModes:      	make(map[string]OverdriveMode),
 		OverdriveModesID:    	make(map[int32]OverdriveMode),

@@ -10,10 +10,11 @@ import (
 )
 
 type Sublocation struct {
-	ID             int32                 `json:"id"`
-	Name           string                `json:"name"`
-	ParentLocation NamedAPIResource      `json:"parent_location"`
-	Areas          []LocationAPIResource `json:"areas"`
+	ID             			int32                 	`json:"id"`
+	Name           			string                	`json:"name"`
+	ParentLocation 			NamedAPIResource      	`json:"parent_location"`
+	ConnectedSublocations	[]NamedAPIResource		`json:"connected_sublocations"`
+	Areas          			[]LocationAPIResource 	`json:"areas"`
 	LocRel
 }
 
@@ -46,6 +47,11 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.SubLoc
 		return Sublocation{}, err
 	}
 
+	connectedSublocations, err := getResourcesDB(cfg, r, cfg.e.sublocations, sublocation, cfg.db.GetConnectedSublocationIDs)
+	if err != nil {
+		return Sublocation{}, err
+	}
+
 	areas, err := getResourcesDB(cfg, r, cfg.e.areas, sublocation, cfg.db.GetSublocationAreaIDs)
 	if err != nil {
 		return Sublocation{}, err
@@ -57,11 +63,12 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.SubLoc
 	}
 
 	response := Sublocation{
-		ID:             sublocation.ID,
-		Name:           sublocation.Name,
-		ParentLocation: nameToNamedAPIResource(cfg, cfg.e.locations, sublocation.Location.Name, nil),
-		Areas:          areas,
-		LocRel:         rel,
+		ID:             		sublocation.ID,
+		Name:           		sublocation.Name,
+		ParentLocation: 		nameToNamedAPIResource(cfg, cfg.e.locations, sublocation.Location.Name, nil),
+		ConnectedSublocations: 	connectedSublocations,
+		Areas:          		areas,
+		LocRel:         		rel,
 	}
 
 	return response, nil

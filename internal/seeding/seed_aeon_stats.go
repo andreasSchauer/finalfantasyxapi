@@ -65,7 +65,7 @@ func (l *Lookup) seedAeonStats(db *database.Queries, dbConn *sql.DB) error {
 			for _, xVal := range aeonStat.XVals {
 				err := l.seedAeonBaseStats(qtx, aeon, xVal.BaseStats, database.AeonStatValueX, &xVal.Battles)
 				if err != nil {
-					subjects := h.JoinSubjects(aeonStat.Name, string(xVal.Battles))
+					subjects := h.JoinErrSubjects(aeonStat.Name, string(xVal.Battles))
 					return h.NewErr(subjects, err)
 				}
 			}

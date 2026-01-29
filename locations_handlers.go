@@ -10,9 +10,10 @@ import (
 )
 
 type Location struct {
-	ID             	int32                 	`json:"id"`
-	Name           	string                	`json:"name"`
-	Sublocations	[]NamedAPIResource		`json:"sublocations"`
+	ID             		int32                 	`json:"id"`
+	Name           		string                	`json:"name"`
+	ConnectedLocations	[]NamedAPIResource		`json:"connected_locations"`
+	Sublocations		[]NamedAPIResource		`json:"sublocations"`
 	LocRel
 }
 
@@ -45,6 +46,11 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 		return Location{}, err
 	}
 
+	connectedLocations, err := getResourcesDB(cfg, r, cfg.e.locations, location, cfg.db.GetConnectedLocationIDs)
+	if err != nil {
+		return Location{}, err
+	}
+
 	sublocations, err := getResourcesDB(cfg, r, cfg.e.sublocations, location, cfg.db.GetLocationSublocationIDs)
 	if err != nil {
 		return Location{}, err
@@ -56,10 +62,11 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 	}
 
 	response := Location{
-		ID:             location.ID,
-		Name:           location.Name,
-		Sublocations: 	sublocations,
-		LocRel:         rel,
+		ID:             	location.ID,
+		Name:           	location.Name,
+		ConnectedLocations: connectedLocations,
+		Sublocations: 		sublocations,
+		LocRel:         	rel,
 	}
 
 	return response, nil

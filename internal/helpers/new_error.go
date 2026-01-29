@@ -14,6 +14,6 @@ func NewErr(s string, err error, msgs ...string) error {
 	return fmt.Errorf("%s: %v", s, err)
 }
 
-func JoinSubjects(subjects ...string) string {
+func JoinErrSubjects(subjects ...string) string {
 	return strings.Join(subjects, ": ")
 }

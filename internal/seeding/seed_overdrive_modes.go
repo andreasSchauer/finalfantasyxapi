@@ -137,7 +137,7 @@ func (l *Lookup) seedOverdriveModesRelationships(db *database.Queries, dbConn *s
 					ActionID:        junction.ChildID,
 				})
 				if err != nil {
-					subjects := h.JoinSubjects(mode.Error(), action.Error())
+					subjects := h.JoinErrSubjects(mode.Error(), action.Error())
 					return h.NewErr(subjects, err, "couldn't junction overdrive mode action")
 				}
 			}

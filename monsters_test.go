@@ -171,7 +171,7 @@ func TestGetMonster(t *testing.T) {
 				distance:    1,
 				properties:  []int32{2},
 				locations:   []int32{54},
-				formations:  []int32{40, 41, 42},
+				formations:  []int32{34, 38, 39},
 				baseStats: map[string]int32{
 					"hp":      300,
 					"defense": 120,
@@ -325,7 +325,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				properties: []int32{1},
 				locations:  []int32{150},
-				formations: []int32{220},
+				formations: []int32{131},
 				items: &testItems{
 					itemDropChance: 255,
 					items: map[string]*int32{
