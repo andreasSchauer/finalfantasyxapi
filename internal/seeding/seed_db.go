@@ -29,7 +29,6 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	l := lookupInit()
 	seeders := l.getSeeders()
 
-
 	err = handleDBFunctions(db, dbConn, seeders)
 	if err != nil {
 		return nil, err
@@ -283,11 +282,6 @@ func (l *Lookup) getSeeders() []seeder {
 			relFunc:  l.seedShopsRelationships,
 		},
 		{
-			name:     "monster formations",
-			seedFunc: l.seedEncounterLocations,
-			relFunc:  l.seedMonsterFormationsRelationships,
-		},
-		{
 			name:     "songs",
 			seedFunc: l.seedSongs,
 			relFunc:  l.seedSongsRelationships,
@@ -296,6 +290,11 @@ func (l *Lookup) getSeeders() []seeder {
 			name:     "fmvs",
 			seedFunc: l.seedFMVs,
 			relFunc:  nil,
+		},
+		{
+			name:     "monster formations",
+			seedFunc: l.seedMonsterFormations,
+			relFunc:  l.seedMonsterFormationsRelationships,
 		},
 	}
 }

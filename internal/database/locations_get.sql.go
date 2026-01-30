@@ -77,8 +77,9 @@ const getAreaBossSongIDs = `-- name: GetAreaBossSongIDs :many
 SELECT DISTINCT so.id
 FROM songs so
 JOIN formation_boss_songs bs ON bs.song_id = so.id
+JOIN formation_data fd ON fd.boss_song_id = bs.id
 JOIN monster_formations mf ON mf.boss_song_id = bs.id
-JOIN j_encounter_location_formations j ON j.monster_formation_id = mf.id
+JOIN j_monster_formations_encounter_locations j ON mf.formation_data_id = fd.id
 JOIN encounter_locations el ON j.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
 WHERE a.id = $1
@@ -383,7 +384,7 @@ const getAreaIDsWithBosses = `-- name: GetAreaIDsWithBosses :many
 SELECT DISTINCT a.id
 FROM areas a
 JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j ON j.encounter_location_id = el.id
+JOIN j_monster_formations_encounter_locations j ON j.encounter_location_id = el.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
 JOIN formation_boss_songs bs ON mf.boss_song_id = bs.id
 JOIN songs so ON bs.song_id = so.id
@@ -531,9 +532,10 @@ const getAreaIDsWithItemFromMonster = `-- name: GetAreaIDsWithItemFromMonster :m
 SELECT DISTINCT a.id
 FROM areas a
 JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
+JOIN j_monster_formations_encounter_locations j1 ON j1.encounter_location_id = el.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN j_monster_formations_monsters j2 ON j2.monster_formation_id = mf.id
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
 JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
 JOIN monsters m ON ma.monster_id = m.id
 JOIN monster_items mi ON mi.monster_id = m.id
@@ -759,9 +761,10 @@ const getAreaIDsWithMonsters = `-- name: GetAreaIDsWithMonsters :many
 SELECT DISTINCT a.id
 FROM areas a
 JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
+JOIN j_monster_formations_encounter_locations j1 ON j1.encounter_location_id = el.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN j_monster_formations_monsters j2 ON j2.monster_formation_id = mf.id
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
 JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
 JOIN monsters m ON ma.monster_id = m.id
 ORDER BY a.id
@@ -912,7 +915,7 @@ func (q *Queries) GetAreaIDsWithTreasures(ctx context.Context) ([]int32, error) 
 const getAreaMonsterFormationIDs = `-- name: GetAreaMonsterFormationIDs :many
 SELECT DISTINCT mf.id
 FROM monster_formations mf
-JOIN j_encounter_location_formations j ON j.monster_formation_id = mf.id
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
 JOIN encounter_locations el ON j.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
 WHERE a.id = $1
@@ -946,9 +949,10 @@ const getAreaMonsterIDs = `-- name: GetAreaMonsterIDs :many
 SELECT DISTINCT m.id
 FROM monsters m
 JOIN monster_amounts ma ON ma.monster_id = m.id
-JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
+JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
+JOIN monster_selections ms ON j1.monster_selection_id = ms.id
+JOIN monster_formations mf ON mf.monster_selection_id = ms.id
+JOIN j_monster_formations_encounter_locations j2 ON j2.monster_formation_id = mf.id
 JOIN encounter_locations el ON j2.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
 WHERE a.id = $1
@@ -1242,7 +1246,7 @@ SELECT DISTINCT so.id
 FROM songs so
 JOIN formation_boss_songs bs ON bs.song_id = so.id
 JOIN monster_formations mf ON mf.boss_song_id = bs.id
-JOIN j_encounter_location_formations j ON j.monster_formation_id = mf.id
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
 JOIN encounter_locations el ON j.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
@@ -1474,7 +1478,7 @@ FROM locations l
 JOIN sublocations s ON s.location_id = l.id
 JOIN areas a ON a.sublocation_id = s.id
 JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j ON j.encounter_location_id = el.id
+JOIN j_monster_formations_encounter_locations j ON j.encounter_location_id = el.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
 JOIN formation_boss_songs bs ON mf.boss_song_id = bs.id
 JOIN songs so ON bs.song_id = so.id
@@ -1574,9 +1578,10 @@ FROM locations l
 JOIN sublocations s ON s.location_id = l.id
 JOIN areas a ON a.sublocation_id = s.id
 JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
+JOIN j_monster_formations_encounter_locations j1 ON j1.encounter_location_id = el.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN j_monster_formations_monsters j2 ON j2.monster_formation_id = mf.id
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
 JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
 JOIN monsters m ON ma.monster_id = m.id
 JOIN monster_items mi ON mi.monster_id = m.id
@@ -1814,9 +1819,10 @@ FROM locations l
 JOIN sublocations s ON s.location_id = l.id
 JOIN areas a ON a.sublocation_id = s.id
 JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
+JOIN j_monster_formations_encounter_locations j1 ON j1.encounter_location_id = el.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN j_monster_formations_monsters j2 ON j2.monster_formation_id = mf.id
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
 JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
 JOIN monsters m ON ma.monster_id = m.id
 ORDER BY l.id
@@ -1946,7 +1952,7 @@ func (q *Queries) GetLocationIDsWithTreasures(ctx context.Context) ([]int32, err
 const getLocationMonsterFormationIDs = `-- name: GetLocationMonsterFormationIDs :many
 SELECT DISTINCT mf.id
 FROM monster_formations mf
-JOIN j_encounter_location_formations j ON j.monster_formation_id = mf.id
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
 JOIN encounter_locations el ON j.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
@@ -1981,14 +1987,15 @@ func (q *Queries) GetLocationMonsterFormationIDs(ctx context.Context, id int32) 
 const getLocationMonsterIDs = `-- name: GetLocationMonsterIDs :many
 SELECT DISTINCT m.id
 FROM monsters m
-LEFT JOIN monster_amounts ma ON ma.monster_id = m.id
-LEFT JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-LEFT JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-LEFT JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
-LEFT JOIN encounter_locations el ON j2.encounter_location_id = el.id
-LEFT JOIN areas a ON el.area_id = a.id
-LEFT JOIN sublocations s ON a.sublocation_id = s.id
-LEFT JOIN locations l ON s.location_id = l.id
+JOIN monster_amounts ma ON ma.monster_id = m.id
+JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
+JOIN monster_selections ms ON j1.monster_selection_id = ms.id
+JOIN monster_formations mf ON mf.monster_selection_id = ms.id
+JOIN j_monster_formations_encounter_locations j2 ON j2.monster_formation_id = mf.id
+JOIN encounter_locations el ON j2.encounter_location_id = el.id
+JOIN areas a ON el.area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
 WHERE location_id = $1
 ORDER BY m.id
 `
@@ -2250,7 +2257,7 @@ SELECT DISTINCT so.id
 FROM songs so
 JOIN formation_boss_songs bs ON bs.song_id = so.id
 JOIN monster_formations mf ON mf.boss_song_id = bs.id
-JOIN j_encounter_location_formations j ON j.monster_formation_id = mf.id
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
 JOIN encounter_locations el ON j.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
@@ -2475,7 +2482,7 @@ SELECT DISTINCT s.id
 FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j ON j.encounter_location_id = el.id
+JOIN j_monster_formations_encounter_locations j ON j.encounter_location_id = el.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
 JOIN formation_boss_songs bs ON mf.boss_song_id = bs.id
 JOIN songs so ON bs.song_id = so.id
@@ -2572,9 +2579,10 @@ SELECT DISTINCT s.id
 FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
+JOIN j_monster_formations_encounter_locations j1 ON j1.encounter_location_id = el.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN j_monster_formations_monsters j2 ON j2.monster_formation_id = mf.id
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
 JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
 JOIN monsters m ON ma.monster_id = m.id
 JOIN monster_items mi ON mi.monster_id = m.id
@@ -2806,9 +2814,10 @@ SELECT DISTINCT s.id
 FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations j1 ON j1.encounter_location_id = el.id
+JOIN j_monster_formations_encounter_locations j1 ON j1.encounter_location_id = el.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN j_monster_formations_monsters j2 ON j2.monster_formation_id = mf.id
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
 JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
 JOIN monsters m ON ma.monster_id = m.id
 ORDER BY s.id
@@ -2935,7 +2944,7 @@ func (q *Queries) GetSublocationIDsWithTreasures(ctx context.Context) ([]int32, 
 const getSublocationMonsterFormationIDs = `-- name: GetSublocationMonsterFormationIDs :many
 SELECT DISTINCT mf.id
 FROM monster_formations mf
-JOIN j_encounter_location_formations j ON j.monster_formation_id = mf.id
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
 JOIN encounter_locations el ON j.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
@@ -2970,9 +2979,10 @@ const getSublocationMonsterIDs = `-- name: GetSublocationMonsterIDs :many
 SELECT DISTINCT m.id
 FROM monsters m
 JOIN monster_amounts ma ON ma.monster_id = m.id
-JOIN j_monster_formations_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN j_encounter_location_formations j2 ON j2.monster_formation_id = mf.id
+JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
+JOIN monster_selections ms ON j1.monster_selection_id = ms.id
+JOIN monster_formations mf ON mf.monster_selection_id = ms.id
+JOIN j_monster_formations_encounter_locations j2 ON j2.monster_formation_id = mf.id
 JOIN encounter_locations el ON j2.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id

@@ -2756,11 +2756,10 @@ type ElementalResist struct {
 }
 
 type EncounterLocation struct {
-	ID       int32
-	DataHash string
-	Version  sql.NullInt32
-	AreaID   int32
-	Notes    sql.NullString
+	ID            int32
+	DataHash      string
+	AreaID        int32
+	Specification sql.NullString
 }
 
 type EnemyAbility struct {
@@ -2821,6 +2820,24 @@ type FormationBossSong struct {
 	DataHash         string
 	SongID           int32
 	CelebrateVictory bool
+}
+
+type FormationDatum struct {
+	ID             int32
+	DataHash       string
+	Category       MonsterFormationCategory
+	IsForcedAmbush bool
+	CanEscape      bool
+	BossSongID     sql.NullInt32
+	Notes          sql.NullString
+}
+
+type FormationTriggerCommand struct {
+	ID               int32
+	DataHash         string
+	TriggerCommandID int32
+	Condition        sql.NullString
+	UseAmount        sql.NullInt32
 }
 
 type FoundEquipmentPiece struct {
@@ -3078,13 +3095,6 @@ type JDamagesDamageCalc struct {
 	AbilityDamageID     int32
 }
 
-type JEncounterLocationFormation struct {
-	ID                  int32
-	DataHash            string
-	EncounterLocationID int32
-	MonsterFormationID  int32
-}
-
 type JEquipmentDropsCharacter struct {
 	ID                 int32
 	DataHash           string
@@ -3107,6 +3117,13 @@ type JEquipmentTablesName struct {
 	EquipmentTableID  int32
 	EquipmentNameID   int32
 	CelestialWeaponID sql.NullInt32
+}
+
+type JFormationTriggerCommandsUser struct {
+	ID               int32
+	DataHash         string
+	TriggerCommandID int32
+	CharacterClassID int32
 }
 
 type JFoundEquipmentAbility struct {
@@ -3145,11 +3162,11 @@ type JMonsterEquipmentSlotsChance struct {
 	SlotsChanceID      int32
 }
 
-type JMonsterFormationsMonster struct {
-	ID                 int32
-	DataHash           string
-	MonsterFormationID int32
-	MonsterAmountID    int32
+type JMonsterFormationsEncounterLocation struct {
+	ID                  int32
+	DataHash            string
+	MonsterFormationID  int32
+	EncounterLocationID int32
 }
 
 type JMonsterFormationsTriggerCommand struct {
@@ -3164,6 +3181,13 @@ type JMonsterItemsOtherItem struct {
 	DataHash       string
 	MonsterItemsID int32
 	PossibleItemID int32
+}
+
+type JMonsterSelectionsMonster struct {
+	ID                 int32
+	DataHash           string
+	MonsterSelectionID int32
+	MonsterAmountID    int32
 }
 
 type JMonstersAbility struct {
@@ -3504,13 +3528,11 @@ type MonsterEquipmentSlot struct {
 }
 
 type MonsterFormation struct {
-	ID             int32
-	DataHash       string
-	Category       MonsterFormationCategory
-	IsForcedAmbush bool
-	CanEscape      bool
-	BossSongID     sql.NullInt32
-	Notes          sql.NullString
+	ID                 int32
+	DataHash           string
+	Version            sql.NullInt32
+	MonsterSelectionID int32
+	FormationDataID    int32
 }
 
 type MonsterItem struct {
@@ -3527,6 +3549,11 @@ type MonsterItem struct {
 	SecondaryDropCommonID sql.NullInt32
 	SecondaryDropRareID   sql.NullInt32
 	BribeID               sql.NullInt32
+}
+
+type MonsterSelection struct {
+	ID       int32
+	DataHash string
 }
 
 type OdModeAction struct {

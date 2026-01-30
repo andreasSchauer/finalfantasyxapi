@@ -53,45 +53,6 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = shops.data_hash
 RETURNING *;
 
 
--- name: CreateEncounterLocation :one
-INSERT INTO encounter_locations (data_hash, version, area_id, notes)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = encounter_locations.data_hash
-RETURNING *;
-
-
--- name: CreateFormationBossSong :one
-INSERT INTO formation_boss_songs (data_hash, song_id, celebrate_victory)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_boss_songs.data_hash
-RETURNING *;
-
-
--- name: CreateMonsterFormation :one
-INSERT INTO monster_formations (data_hash, category, is_forced_ambush, can_escape, boss_song_id, notes)
-VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_formations.data_hash
-RETURNING *;
-
-
--- name: CreateEncounterLocationFormationsJunction :exec
-INSERT INTO j_encounter_location_formations (data_hash, encounter_location_id, monster_formation_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateMonsterFormationsMonstersJunction :exec
-INSERT INTO j_monster_formations_monsters (data_hash, monster_formation_id, monster_amount_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateMonsterFormationsTriggerCommandsJunction :exec
-INSERT INTO j_monster_formations_trigger_commands (data_hash, monster_formation_id, trigger_command_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
 -- name: CreateFoundEquipmentPiece :one
 INSERT INTO found_equipment_pieces (data_hash, equipment_name_id, empty_slots_amount)
 VALUES ($1, $2, $3)

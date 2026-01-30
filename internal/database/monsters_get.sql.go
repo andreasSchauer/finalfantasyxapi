@@ -15,10 +15,11 @@ const getMonsterAreaIDs = `-- name: GetMonsterAreaIDs :many
 SELECT DISTINCT a.id
 FROM areas a
 JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_encounter_location_formations jelf ON jelf.encounter_location_id = el.id
-JOIN monster_formations mf ON jelf.monster_formation_id = mf.id
-JOIN j_monster_formations_monsters jmfm ON jmfm.monster_formation_id = mf.id
-JOIN monster_amounts ma ON jmfm.monster_amount_id = ma.id
+JOIN j_monster_formations_encounter_locations j1 ON j1.encounter_location_id = el.id
+JOIN monster_formations mf ON j1.monster_formation_id = mf.id
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
+JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
 WHERE ma.monster_id = $1
 ORDER BY a.id
 `
@@ -743,7 +744,8 @@ func (q *Queries) GetMonsterIDsByStatusResists(ctx context.Context, arg GetMonst
 const getMonsterMonsterFormationIDs = `-- name: GetMonsterMonsterFormationIDs :many
 SELECT mf.id
 FROM monster_formations mf
-JOIN j_monster_formations_monsters j ON j.monster_formation_id = mf.id 
+JOIN monster_selections ON mf.monster_selection_id = ms.id 
+JOIN j_monster_selections_monsters j ON j.monster_selection_id = ms.id 
 JOIN monster_amounts ma ON j.monster_amount_id = ma.id
 WHERE ma.monster_id = $1
 ORDER BY mf.id

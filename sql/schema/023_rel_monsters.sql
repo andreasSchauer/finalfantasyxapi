@@ -227,7 +227,7 @@ CREATE TABLE j_alt_state_changes_status_immunities (
 );
 
 
-CREATE TABLE j_monster_formation_encounter_locations (
+CREATE TABLE j_monster_formations_encounter_locations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     monster_formation_id INTEGER NOT NULL REFERENCES monster_formations(id),
@@ -264,7 +264,7 @@ CREATE TABLE j_formation_trigger_commands_users (
 DROP TABLE IF EXISTS j_formation_trigger_commands_users;
 DROP TABLE IF EXISTS j_monster_formations_trigger_commands;
 DROP TABLE IF EXISTS j_monster_selections_monsters;
-DROP TABLE IF EXISTS j_monster_formation_encounter_locations;
+DROP TABLE IF EXISTS j_monster_formations_encounter_locations;
 DROP TABLE IF EXISTS j_alt_state_changes_status_immunities;
 DROP TABLE IF EXISTS j_alt_state_changes_elem_resists;
 DROP TABLE IF EXISTS j_alt_state_changes_base_stats;

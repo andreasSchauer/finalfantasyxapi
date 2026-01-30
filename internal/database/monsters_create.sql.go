@@ -162,6 +162,31 @@ func (q *Queries) CreateAlteredState(ctx context.Context, arg CreateAlteredState
 	return i, err
 }
 
+const createEncounterLocation = `-- name: CreateEncounterLocation :one
+INSERT INTO encounter_locations (data_hash, area_id, specification)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = encounter_locations.data_hash
+RETURNING id, data_hash, area_id, specification
+`
+
+type CreateEncounterLocationParams struct {
+	DataHash      string
+	AreaID        int32
+	Specification sql.NullString
+}
+
+func (q *Queries) CreateEncounterLocation(ctx context.Context, arg CreateEncounterLocationParams) (EncounterLocation, error) {
+	row := q.db.QueryRowContext(ctx, createEncounterLocation, arg.DataHash, arg.AreaID, arg.Specification)
+	var i EncounterLocation
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AreaID,
+		&i.Specification,
+	)
+	return i, err
+}
+
 const createEquipmentDrop = `-- name: CreateEquipmentDrop :one
 INSERT INTO equipment_drops (data_hash, auto_ability_id, is_forced, probability, type)
 VALUES ($1, $2, $3, $4, $5)
@@ -243,6 +268,118 @@ func (q *Queries) CreateEquipmentSlotsChance(ctx context.Context, arg CreateEqui
 		&i.Chance,
 	)
 	return i, err
+}
+
+const createFormationBossSong = `-- name: CreateFormationBossSong :one
+INSERT INTO formation_boss_songs (data_hash, song_id, celebrate_victory)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_boss_songs.data_hash
+RETURNING id, data_hash, song_id, celebrate_victory
+`
+
+type CreateFormationBossSongParams struct {
+	DataHash         string
+	SongID           int32
+	CelebrateVictory bool
+}
+
+func (q *Queries) CreateFormationBossSong(ctx context.Context, arg CreateFormationBossSongParams) (FormationBossSong, error) {
+	row := q.db.QueryRowContext(ctx, createFormationBossSong, arg.DataHash, arg.SongID, arg.CelebrateVictory)
+	var i FormationBossSong
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.SongID,
+		&i.CelebrateVictory,
+	)
+	return i, err
+}
+
+const createFormationData = `-- name: CreateFormationData :one
+INSERT INTO formation_data (data_hash, category, is_forced_ambush, can_escape, boss_song_id, notes)
+VALUES ($1, $2, $3, $4, $5, $6)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_data.data_hash
+RETURNING id, data_hash, category, is_forced_ambush, can_escape, boss_song_id, notes
+`
+
+type CreateFormationDataParams struct {
+	DataHash       string
+	Category       MonsterFormationCategory
+	IsForcedAmbush bool
+	CanEscape      bool
+	BossSongID     sql.NullInt32
+	Notes          sql.NullString
+}
+
+func (q *Queries) CreateFormationData(ctx context.Context, arg CreateFormationDataParams) (FormationDatum, error) {
+	row := q.db.QueryRowContext(ctx, createFormationData,
+		arg.DataHash,
+		arg.Category,
+		arg.IsForcedAmbush,
+		arg.CanEscape,
+		arg.BossSongID,
+		arg.Notes,
+	)
+	var i FormationDatum
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Category,
+		&i.IsForcedAmbush,
+		&i.CanEscape,
+		&i.BossSongID,
+		&i.Notes,
+	)
+	return i, err
+}
+
+const createFormationTriggerCommand = `-- name: CreateFormationTriggerCommand :one
+INSERT INTO formation_trigger_commands (data_hash, trigger_command_id, condition, use_amount)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_trigger_commands.data_hash
+RETURNING id, data_hash, trigger_command_id, condition, use_amount
+`
+
+type CreateFormationTriggerCommandParams struct {
+	DataHash         string
+	TriggerCommandID int32
+	Condition        sql.NullString
+	UseAmount        sql.NullInt32
+}
+
+func (q *Queries) CreateFormationTriggerCommand(ctx context.Context, arg CreateFormationTriggerCommandParams) (FormationTriggerCommand, error) {
+	row := q.db.QueryRowContext(ctx, createFormationTriggerCommand,
+		arg.DataHash,
+		arg.TriggerCommandID,
+		arg.Condition,
+		arg.UseAmount,
+	)
+	var i FormationTriggerCommand
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.TriggerCommandID,
+		&i.Condition,
+		&i.UseAmount,
+	)
+	return i, err
+}
+
+const createFormationTriggerCommandsUsersJunction = `-- name: CreateFormationTriggerCommandsUsersJunction :exec
+INSERT INTO j_formation_trigger_commands_users (data_hash, trigger_command_id, character_class_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateFormationTriggerCommandsUsersJunctionParams struct {
+	DataHash         string
+	TriggerCommandID int32
+	CharacterClassID int32
+}
+
+func (q *Queries) CreateFormationTriggerCommandsUsersJunction(ctx context.Context, arg CreateFormationTriggerCommandsUsersJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createFormationTriggerCommandsUsersJunction, arg.DataHash, arg.TriggerCommandID, arg.CharacterClassID)
+	return err
 }
 
 const createMonster = `-- name: CreateMonster :one
@@ -513,6 +650,72 @@ func (q *Queries) CreateMonsterEquipmentSlotsChancesJunction(ctx context.Context
 	return err
 }
 
+const createMonsterFormation = `-- name: CreateMonsterFormation :one
+INSERT INTO monster_formations (data_hash, version, monster_selection_id, formation_data_id)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_formations.data_hash
+RETURNING id, data_hash, version, monster_selection_id, formation_data_id
+`
+
+type CreateMonsterFormationParams struct {
+	DataHash           string
+	Version            sql.NullInt32
+	MonsterSelectionID int32
+	FormationDataID    int32
+}
+
+func (q *Queries) CreateMonsterFormation(ctx context.Context, arg CreateMonsterFormationParams) (MonsterFormation, error) {
+	row := q.db.QueryRowContext(ctx, createMonsterFormation,
+		arg.DataHash,
+		arg.Version,
+		arg.MonsterSelectionID,
+		arg.FormationDataID,
+	)
+	var i MonsterFormation
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Version,
+		&i.MonsterSelectionID,
+		&i.FormationDataID,
+	)
+	return i, err
+}
+
+const createMonsterFormationsEncounterLocationsJunction = `-- name: CreateMonsterFormationsEncounterLocationsJunction :exec
+INSERT INTO j_monster_formations_encounter_locations (data_hash, monster_formation_id, encounter_location_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonsterFormationsEncounterLocationsJunctionParams struct {
+	DataHash            string
+	MonsterFormationID  int32
+	EncounterLocationID int32
+}
+
+func (q *Queries) CreateMonsterFormationsEncounterLocationsJunction(ctx context.Context, arg CreateMonsterFormationsEncounterLocationsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonsterFormationsEncounterLocationsJunction, arg.DataHash, arg.MonsterFormationID, arg.EncounterLocationID)
+	return err
+}
+
+const createMonsterFormationsTriggerCommandsJunction = `-- name: CreateMonsterFormationsTriggerCommandsJunction :exec
+INSERT INTO j_monster_formations_trigger_commands (data_hash, monster_formation_id, trigger_command_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonsterFormationsTriggerCommandsJunctionParams struct {
+	DataHash           string
+	MonsterFormationID int32
+	TriggerCommandID   int32
+}
+
+func (q *Queries) CreateMonsterFormationsTriggerCommandsJunction(ctx context.Context, arg CreateMonsterFormationsTriggerCommandsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonsterFormationsTriggerCommandsJunction, arg.DataHash, arg.MonsterFormationID, arg.TriggerCommandID)
+	return err
+}
+
 const createMonsterItem = `-- name: CreateMonsterItem :one
 INSERT INTO monster_items (data_hash, monster_id, drop_chance, drop_condition, other_items_condition, steal_common_id, steal_rare_id, drop_common_id, drop_rare_id, secondary_drop_common_id, secondary_drop_rare_id, bribe_id)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
@@ -583,6 +786,37 @@ type CreateMonsterItemsOtherItemsJunctionParams struct {
 
 func (q *Queries) CreateMonsterItemsOtherItemsJunction(ctx context.Context, arg CreateMonsterItemsOtherItemsJunctionParams) error {
 	_, err := q.db.ExecContext(ctx, createMonsterItemsOtherItemsJunction, arg.DataHash, arg.MonsterItemsID, arg.PossibleItemID)
+	return err
+}
+
+const createMonsterSelection = `-- name: CreateMonsterSelection :one
+INSERT INTO monster_selections (data_hash)
+VALUES ($1)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_selections.data_hash
+RETURNING id, data_hash
+`
+
+func (q *Queries) CreateMonsterSelection(ctx context.Context, dataHash string) (MonsterSelection, error) {
+	row := q.db.QueryRowContext(ctx, createMonsterSelection, dataHash)
+	var i MonsterSelection
+	err := row.Scan(&i.ID, &i.DataHash)
+	return i, err
+}
+
+const createMonsterSelectionsMonstersJunction = `-- name: CreateMonsterSelectionsMonstersJunction :exec
+INSERT INTO j_monster_selections_monsters (data_hash, monster_selection_id, monster_amount_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMonsterSelectionsMonstersJunctionParams struct {
+	DataHash           string
+	MonsterSelectionID int32
+	MonsterAmountID    int32
+}
+
+func (q *Queries) CreateMonsterSelectionsMonstersJunction(ctx context.Context, arg CreateMonsterSelectionsMonstersJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonsterSelectionsMonstersJunction, arg.DataHash, arg.MonsterSelectionID, arg.MonsterAmountID)
 	return err
 }
 
