@@ -2,8 +2,6 @@
 CREATE TYPE area_connection_type AS ENUM('both-directions', 'one-direction', 'warp');
 
 
-CREATE TYPE monster_formation_category AS ENUM ('boss-fight', 'on-demand-fight', 'random-encounter', 'static-encounter', 'story-fight', 'tutorial');
-
 
 CREATE TYPE shop_type AS ENUM ('pre-airship', 'post-airship');
 
@@ -23,49 +21,6 @@ CREATE TABLE j_area_connected_areas (
     data_hash TEXT UNIQUE NOT NULL,
     area_id INTEGER NOT NULL REFERENCES areas(id),
     connection_id INTEGER NOT NULL REFERENCES area_connections(id)
-);
-
-
-CREATE TABLE formation_boss_songs (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    song_id INTEGER NOT NULL REFERENCES songs(id),
-    celebrate_victory BOOLEAN NOT NULL
-);
-
-
-CREATE TABLE monster_formations (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    category monster_formation_category NOT NULL,
-    is_forced_ambush BOOLEAN NOT NULL,
-    can_escape BOOLEAN NOT NULL,
-    boss_song_id INTEGER REFERENCES formation_boss_songs(id),
-    notes TEXT
-);
-
-
-CREATE TABLE j_encounter_location_formations (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    encounter_location_id INTEGER NOT NULL REFERENCES encounter_locations(id),
-    monster_formation_id INTEGER NOT NULL REFERENCES monster_formations(id)
-);
-
-
-CREATE TABLE j_monster_formations_monsters (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    monster_formation_id INTEGER NOT NULL REFERENCES monster_formations(id),
-    monster_amount_id INTEGER NOT NULL REFERENCES monster_amounts(id)
-);
-
-
-CREATE TABLE j_monster_formations_trigger_commands (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    monster_formation_id INTEGER NOT NULL REFERENCES monster_formations(id),
-    trigger_command_id INTEGER NOT NULL REFERENCES trigger_commands(id)
 );
 
 
@@ -144,13 +99,7 @@ DROP TABLE IF EXISTS shop_items;
 DROP TABLE IF EXISTS j_treasures_items;
 DROP TABLE IF EXISTS j_found_equipment_abilities;
 DROP TABLE IF EXISTS found_equipment_pieces;
-DROP TABLE IF EXISTS j_monster_formations_trigger_commands;
-DROP TABLE IF EXISTS j_monster_formations_monsters;
-DROP TABLE IF EXISTS j_encounter_location_formations;
-DROP TABLE IF EXISTS monster_formations;
-DROP TABLE IF EXISTS formation_boss_songs;
 DROP TABLE IF EXISTS j_area_connected_areas;
 DROP TABLE IF EXISTS area_connections;
 DROP TYPE IF EXISTS shop_type;
-DROP TYPE IF EXISTS monster_formation_category;
 DROP TYPE IF EXISTS area_connection_type;

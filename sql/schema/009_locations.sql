@@ -69,19 +69,7 @@ CREATE TABLE shops (
 );
 
 
-CREATE TABLE encounter_locations (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    version INTEGER,
-    area_id INTEGER NOT NULL REFERENCES areas(id),
-    notes TEXT,
-
-    UNIQUE(area_id, version)
-);
-
-
 -- +goose Down
-DROP TABLE IF EXISTS encounter_locations;
 DROP TABLE IF EXISTS shops;
 DROP TABLE IF EXISTS treasures;
 DROP TABLE IF EXISTS areas;

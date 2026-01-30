@@ -35,11 +35,6 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
-	err = l.reformatMonsterFormations()
-	if err != nil {
-		return nil, err
-	}
-
 	totalDuration := time.Since(start)
 	fmt.Printf("database seeding took %.3f seconds\n\n", totalDuration.Seconds())
 
