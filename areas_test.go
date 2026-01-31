@@ -59,7 +59,7 @@ func TestGetArea(t *testing.T) {
 				expLocRel: expLocRel{
 					sidequests: []int32{6},
 					monsters:   []int32{81, 84, 85},
-					formations: []int32{125, 130},
+					formations: []int32{120, 122, 125},
 				},
 			},
 		},
@@ -164,7 +164,7 @@ func TestGetArea(t *testing.T) {
 				expLocRel: expLocRel{
 					characters: []int32{5},
 					monsters:   []int32{19},
-					formations: []int32{29},
+					formations: []int32{26},
 					fmvsMusic:  []int32{16},
 					bossMusic:  []int32{16},
 					fmvs:       []int32{9, 13},

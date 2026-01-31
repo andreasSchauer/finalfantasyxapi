@@ -19,7 +19,7 @@ ORDER BY a.id;
 -- name: GetMonsterMonsterFormationIDs :many
 SELECT mf.id
 FROM monster_formations mf
-JOIN monster_selections ON mf.monster_selection_id = ms.id 
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id 
 JOIN j_monster_selections_monsters j ON j.monster_selection_id = ms.id 
 JOIN monster_amounts ma ON j.monster_amount_id = ma.id
 WHERE ma.monster_id = $1

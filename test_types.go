@@ -62,6 +62,19 @@ type expAreas struct {
 	expLocRel
 }
 
+type expLocations struct {
+	connectedLocations 	[]int32
+	sublocations		[]int32
+	expLocRel
+}
+
+type expSublocations struct {
+	parentLocation			int32
+	connectedSublocations 	[]int32
+	areas					[]int32
+	expLocRel
+}
+
 type expLocRel struct {
 	sidequests []int32
 	characters []int32

@@ -78,8 +78,8 @@ SELECT DISTINCT so.id
 FROM songs so
 JOIN formation_boss_songs bs ON bs.song_id = so.id
 JOIN formation_data fd ON fd.boss_song_id = bs.id
-JOIN monster_formations mf ON mf.boss_song_id = bs.id
-JOIN j_monster_formations_encounter_locations j ON mf.formation_data_id = fd.id
+JOIN monster_formations mf ON mf.formation_data_id = fd.id
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
 JOIN encounter_locations el ON j.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
 WHERE a.id = $1
@@ -386,7 +386,8 @@ FROM areas a
 JOIN encounter_locations el ON el.area_id = a.id
 JOIN j_monster_formations_encounter_locations j ON j.encounter_location_id = el.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
-JOIN formation_boss_songs bs ON mf.boss_song_id = bs.id
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+JOIN formation_boss_songs bs ON fd.boss_song_id = bs.id
 JOIN songs so ON bs.song_id = so.id
 ORDER BY a.id
 `
@@ -1245,7 +1246,8 @@ const getLocationBossSongIDs = `-- name: GetLocationBossSongIDs :many
 SELECT DISTINCT so.id
 FROM songs so
 JOIN formation_boss_songs bs ON bs.song_id = so.id
-JOIN monster_formations mf ON mf.boss_song_id = bs.id
+JOIN formation_data fd ON fd.boss_song_id = bs.id
+JOIN monster_formations mf ON mf.formation_data_id = fd.id
 JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
 JOIN encounter_locations el ON j.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
@@ -1480,7 +1482,8 @@ JOIN areas a ON a.sublocation_id = s.id
 JOIN encounter_locations el ON el.area_id = a.id
 JOIN j_monster_formations_encounter_locations j ON j.encounter_location_id = el.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
-JOIN formation_boss_songs bs ON mf.boss_song_id = bs.id
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+JOIN formation_boss_songs bs ON fd.boss_song_id = bs.id
 JOIN songs so ON bs.song_id = so.id
 ORDER BY l.id
 `
@@ -2129,7 +2132,7 @@ JOIN areas a ON t.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
 WHERE l.id = $1
-ORDER BY s.id
+ORDER BY t.id
 `
 
 func (q *Queries) GetLocationTreasureIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -2256,7 +2259,8 @@ const getSublocationBossSongIDs = `-- name: GetSublocationBossSongIDs :many
 SELECT DISTINCT so.id
 FROM songs so
 JOIN formation_boss_songs bs ON bs.song_id = so.id
-JOIN monster_formations mf ON mf.boss_song_id = bs.id
+JOIN formation_data fd ON fd.boss_song_id = bs.id
+JOIN monster_formations mf ON mf.formation_data_id = fd.id
 JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
 JOIN encounter_locations el ON j.encounter_location_id = el.id
 JOIN areas a ON el.area_id = a.id
@@ -2484,7 +2488,8 @@ JOIN areas a ON a.sublocation_id = s.id
 JOIN encounter_locations el ON el.area_id = a.id
 JOIN j_monster_formations_encounter_locations j ON j.encounter_location_id = el.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
-JOIN formation_boss_songs bs ON mf.boss_song_id = bs.id
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+JOIN formation_boss_songs bs ON fd.boss_song_id = bs.id
 JOIN songs so ON bs.song_id = so.id
 ORDER BY s.id
 `
@@ -3085,7 +3090,7 @@ FROM treasures t
 JOIN areas a ON t.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
 WHERE s.id = $1
-ORDER BY s.id
+ORDER BY t.id
 `
 
 func (q *Queries) GetSublocationTreasureIDs(ctx context.Context, id int32) ([]int32, error) {

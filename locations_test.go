@@ -10,169 +10,116 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+
 func TestGetLocation(t *testing.T) {
 	tests := []struct {
 		testGeneral
-		expNameVer
-		expAreas
+		expUnique
+		expLocations
 	}{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/0",
+				requestURL:     "/api/locations/0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "area with provided id '0' doesn't exist. max id: 240.",
+				expectedErr:    "location with provided id '0' doesn't exist. max id: 26.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/241",
+				requestURL:     "/api/locations/27",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "area with provided id '241' doesn't exist. max id: 240.",
+				expectedErr:    "location with provided id '27' doesn't exist. max id: 26.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'.",
+				requestURL:     "/api/locations/a",
+				expectedStatus: http.StatusNotFound,
+				expectedErr:    "location not found: 'a'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/145/",
+				requestURL:     "/api/locations/15/",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
-					"connected areas": 2,
-					"monsters":        6,
-					"formations":      6,
+					"connected locations": 	4,
+					"sublocations": 		3,
+					"characters": 			0,
+					"aeons": 				1,
+					"shops": 				6,
+					"treasures": 			28,
+					"monsters":        		19,
+					"formations":      		18,
+					"sidequests": 			1,
+					"bg music": 			11,
+					"cues music": 			3,
+					"fmvs music": 			1,
+					"boss music": 			3,
+					"fmvs": 				2,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      145,
-				name:    "north",
-				version: h.GetInt32Ptr(1),
+			expUnique: expUnique{
+				id:      15,
+				name:    "macalania",
 			},
-			expAreas: expAreas{
-				parentLocation:    15,
-				parentSublocation: 25,
+			expLocations: expLocations{
+				connectedLocations: 	[]int32{14, 16, 19, 20},
+				sublocations: 			[]int32{25, 26, 27},
 				expLocRel: expLocRel{
+					aeons: 		[]int32{4},
+					shops:		[]int32{22, 25, 36},
+					treasures: 	[]int32{187, 193, 199, 209, 214},
+					monsters:   []int32{80, 83, 87, 93, 94, 97, 297},
+					formations: []int32{120, 125, 129, 135, 137},
 					sidequests: []int32{6},
-					monsters:   []int32{81, 84, 85},
-					formations: []int32{214, 219},
+					bgMusic: 	[]int32{12, 22, 30, 43, 52, 55, 56},
+					cuesMusic: 	[]int32{4, 57, 59},
+					fmvsMusic: 	[]int32{70},
+					bossMusic: 	[]int32{16, 55, 57},
+					fmvs: 		[]int32{27, 36},
 				},
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/36",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
-					"sidequests": true,
-				},
-				expLengths: map[string]int{
-					"connected areas": 7,
-					"monsters":        0,
-					"characters":      2,
-					"treasures":       6,
-				},
-			},
-			expNameVer: expNameVer{
-				id:      36,
-				name:    "besaid village",
-				version: nil,
-			},
-			expAreas: expAreas{
-				parentLocation:    4,
-				parentSublocation: 7,
-				expLocRel: expLocRel{
-					characters: []int32{2, 4},
-					treasures:  []int32{33, 37},
-					bgMusic:    []int32{19},
-				},
-			},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/69",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
-					"sidequests": true,
-				},
-				expLengths: map[string]int{
-					"connected areas": 6,
-					"shops":           1,
-					"bg music":        2,
-					"cues music":      1,
-				},
-			},
-			expNameVer: expNameVer{
-				id:      69,
-				name:    "main gate",
-				version: nil,
-			},
-			expAreas: expAreas{
-				parentLocation:    8,
-				parentSublocation: 13,
-				expLocRel: expLocRel{
-					shops:     []int32{5},
-					cuesMusic: []int32{35},
-					bgMusic:   []int32{32, 34},
-				},
-			},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/140",
-				expectedStatus: http.StatusOK,
-			},
-			expNameVer: expNameVer{
-				id:      140,
-				name:    "agency front",
-				version: nil,
-			},
-			expAreas: expAreas{
-				parentLocation:    14,
-				parentSublocation: 24,
-				expLocRel: expLocRel{
-					sidequests: []int32{7},
-				},
-			},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/42",
+				requestURL:     "/api/locations/OmeGa_rUInS",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
-					"characters": 1,
-					"formations": 1,
-					"monsters":   2,
-					"fmvs music": 1,
-					"boss music": 1,
-					"fmvs":       5,
+					"connected locations": 	0,
+					"sublocations": 		1,
+					"characters": 			0,
+					"aeons": 				0,
+					"shops": 				0,
+					"treasures": 			16,
+					"monsters":        		24,
+					"formations":      		22,
+					"sidequests": 			0,
+					"bg music": 			2,
+					"cues music": 			0,
+					"fmvs music": 			0,
+					"boss music": 			2,
+					"fmvs": 				0,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      42,
-				name:    "deck",
-				version: nil,
+			expUnique: expUnique{
+				id:      26,
+				name:    "omega ruins",
 			},
-			expAreas: expAreas{
-				parentLocation:    5,
-				parentSublocation: 8,
+			expLocations: expLocations{
 				expLocRel: expLocRel{
-					characters: []int32{5},
-					monsters:   []int32{19},
-					formations: []int32{36},
-					fmvsMusic:  []int32{16},
-					bossMusic:  []int32{16},
-					fmvs:       []int32{9, 13},
+					treasures: 	[]int32{328, 332, 337, 343},
+					monsters:   []int32{190, 201, 210, 239, 245, 250, 255},
+					formations: []int32{258, 262, 265, 283, 289, 296},
+					bgMusic: 	[]int32{81, 82},
+					bossMusic: 	[]int32{16, 80},
 				},
 			},
 		},
 	}
 
 	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "GetArea", i+1, testCfg.HandleAreas)
+		rr, testName, err := setupTest(t, tc.testGeneral, "GetLocation", i+1, testCfg.HandleLocations)
 		if errors.Is(err, errCorrect) {
 			continue
 		}
@@ -185,24 +132,23 @@ func TestGetLocation(t *testing.T) {
 			dontCheck:  tc.dontCheck,
 		}
 
-		var got Area
+		var got Location
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
-		testExpectedNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
-		compAPIResourcesFromID(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
-		compAPIResourcesFromID(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
+		testExpectedUnique(test, tc.expUnique, got.ID, got.Name)
 
 		checks := []resListTest{
-			newResListTestFromIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
-			newResListTestFromIDs("connected areas", testCfg.e.areas.endpoint, tc.connectedAreas, got.ConnectedAreas),
+			newResListTestFromIDs("connected locations", testCfg.e.locations.endpoint, tc.connectedLocations, got.ConnectedLocations),
+			newResListTestFromIDs("sublocations", testCfg.e.sublocations.endpoint, tc.sublocations, got.Sublocations),
 			newResListTestFromIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
 			newResListTestFromIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
 			newResListTestFromIDs("shops", testCfg.e.shops.endpoint, tc.shops, got.Shops),
 			newResListTestFromIDs("treasures", testCfg.e.treasures.endpoint, tc.treasures, got.Treasures),
 			newResListTestFromIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
 			newResListTestFromIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
+			newResListTestFromIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
 			newResListTestFromIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
 		}
 
@@ -218,5 +164,150 @@ func TestGetLocation(t *testing.T) {
 		}
 
 		testResourceLists(test, checks)
+	}
+}
+
+
+func TestRetrieveLocations(t *testing.T) {
+	tests := []struct {
+		testGeneral
+		expList
+	}{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:   26,
+				results: []int32{1, 6, 18, 26},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?monsters=false",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:   2,
+				results: []int32{7, 13},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?characters=true",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:   6,
+				results: []int32{1, 4, 5, 8, 10, 12},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?aeons=true",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:   8,
+				results: []int32{2, 4, 6, 11, 15, 19, 21, 22},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?item=45&method=monster",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:   4,
+				results: []int32{18, 20, 25, 26},
+			},
+		},
+	}
+
+	for i, tc := range tests {
+		rr, testName, err := setupTest(t, tc.testGeneral, "RetrieveLocations", i+1, testCfg.HandleLocations)
+		if errors.Is(err, errCorrect) {
+			continue
+		}
+
+		test := test{
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
+			expLengths: tc.expLengths,
+			dontCheck:  tc.dontCheck,
+		}
+
+		var got LocationApiResourceList
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+			t.Fatalf("%s: failed to decode: %v", testName, err)
+		}
+
+		testAPIResourceList(test, testCfg.e.locations.endpoint, tc.expList, got)
+	}
+}
+
+
+func TestLocationsConnected(t *testing.T) {
+	tests := []struct {
+		testGeneral
+		expList
+	}{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations/5/connected/",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:          2,
+				parentResource: h.GetStrPtr("/locations/5"),
+				results:        []int32{4, 6},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations/11/connected/",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:          2,
+				parentResource: h.GetStrPtr("/locations/11"),
+				results:        []int32{10, 12},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations/20/connected/",
+				expectedStatus: http.StatusOK,
+			},
+			expList: expList{
+				count:          4,
+				parentResource: h.GetStrPtr("/locations/20"),
+				results:        []int32{15, 21, 22, 23},
+			},
+		},
+	}
+
+	for i, tc := range tests {
+		rr, testName, err := setupTest(t, tc.testGeneral, "SubsectionLocationsConnected", i+1, testCfg.HandleLocations)
+		if errors.Is(err, errCorrect) {
+			continue
+		}
+
+		test := test{
+			t:          t,
+			cfg:        testCfg,
+			name:       testName,
+			expLengths: tc.expLengths,
+			dontCheck:  tc.dontCheck,
+		}
+
+		var got SubResourceListTest[NamedAPIResource, LocationSub]
+		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+			t.Fatalf("%s: failed to decode: %v", testName, err)
+		}
+
+		testSubResourceList(test, testCfg.e.locations.endpoint, tc.expList, got)
 	}
 }
