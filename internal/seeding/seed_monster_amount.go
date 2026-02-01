@@ -42,6 +42,18 @@ func (ma MonsterAmount) GetID() int32 {
 	return ma.ID
 }
 
+func (ma MonsterAmount) GetName() string {
+	return ma.MonsterName
+}
+
+func (ma MonsterAmount) GetVersion() *int32 {
+	return ma.Version
+}
+
+func (ma MonsterAmount) GetVal() int32 {
+	return ma.Amount
+}
+
 func (ma MonsterAmount) Error() string {
 	return fmt.Sprintf("monster amount with monster: %s, version: %v, amount: %d", ma.MonsterName, h.DerefOrNil(ma.Version), ma.Amount)
 }

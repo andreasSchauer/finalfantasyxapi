@@ -203,3 +203,84 @@ SELECT id FROM monsters WHERE is_underwater = $1;
 
 -- name: GetMonsterIDsByIsZombie :many
 SELECT id FROM monsters WHERE is_zombie = $1;
+
+
+
+
+
+
+
+
+-- name: GetMonsterFormationIDs :many
+SELECT id FROM monster_formations ORDER BY id;
+
+
+-- name: GetMonsterFormationIDsByCategory :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+WHERE fd.category = $1
+ORDER BY mf.id;
+
+
+-- name: GetMonsterFormationIDsByForcedAmbush :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+WHERE fd.is_forced_ambush = $1
+ORDER BY mf.id;
+
+
+-- name: GetMonsterFormationIDsByMonster :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j ON j.monster_selection_id = ms.id
+JOIN monster_amounts ma ON j.monster_amount_id = ma.id
+JOIN monsters m ON ma.monster_id = m.id
+WHERE m.id = $1
+ORDER BY mf.id;
+
+
+-- name: GetMonsterFormationIDsByArea :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
+JOIN encounter_locations el ON j.encounter_location_id = el.id
+JOIN areas a ON el.area_id = a.id
+WHERE a.id = $1
+ORDER BY mf.id;
+
+
+-- name: GetMonsterFormationIDsBySublocation :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
+JOIN encounter_locations el ON j.encounter_location_id = el.id
+JOIN areas a ON el.area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+WHERE s.id = $1
+ORDER BY mf.id;
+
+
+-- name: GetMonsterFormationIDsByLocation :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
+JOIN encounter_locations el ON j.encounter_location_id = el.id
+JOIN areas a ON el.area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+WHERE l.id = $1
+ORDER BY mf.id;
+
+
+-- name: GetMonsterFormationMonsterIDs :many
+SELECT m.id
+FROM monsters m
+JOIN monster_amounts ma ON ma.monster_id = m.id
+JOIN j_monster_selections_monsters j ON j.monster_amount_id = ma.id
+JOIN monster_selections ms ON j.monster_selection_id = ms.id
+JOIN monster_formations mf ON mf.monster_selection_id = ms.id
+WHERE mf.id = $1
+ORDER BY m.id;

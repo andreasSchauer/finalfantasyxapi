@@ -29,12 +29,13 @@ type SpecialInput struct {
 
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
-	defaultParams  map[string]QueryType
-	areas          map[string]QueryType
-	locations	   map[string]QueryType
-	monsters       map[string]QueryType
-	overdriveModes map[string]QueryType
-	sublocations   map[string]QueryType
+	defaultParams  		map[string]QueryType
+	areas          		map[string]QueryType
+	locations	   		map[string]QueryType
+	monsters       		map[string]QueryType
+	monsterFormations	map[string]QueryType
+	overdriveModes 		map[string]QueryType
+	sublocations   		map[string]QueryType
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -73,6 +74,7 @@ func (cfg *Config) QueryLookupInit() {
 
 	cfg.initAreasParams()
 	cfg.initMonstersParams()
+	cfg.initMonsterFormationsParams()
 	cfg.initOverdriveModesParams()
 	cfg.initSublocationsParams()
 	cfg.initLocationsParams()
@@ -473,6 +475,67 @@ func (cfg *Config) initMonstersParams() {
 
 	params = cfg.completeQueryTypeInit(params)
 	cfg.q.monsters = params
+}
+
+func (cfg *Config) initMonsterFormationsParams() {
+	params := map[string]QueryType{
+		"monster": {
+			ID:          1,
+			Description: "Searches for monster formations that feature the specified monster.",
+			Usage:       "?monster={monster_id}",
+			ExampleUses: []string{"?monster=17"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "monster")},
+		},
+		"location": {
+			ID:          2,
+			Description: "Searches for monster formations that appear within the specified location.",
+			Usage:       "?location={location_id}",
+			ExampleUses: []string{"?location=17"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "locations")},
+		},
+		"sublocation": {
+			ID:          3,
+			Description: "Searches for monster formations that appear within the specified sublocation.",
+			Usage:       "?sublocation={sublocation_id}",
+			ExampleUses: []string{"?sublocation=13"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "sublocations")},
+		},
+		"area": {
+			ID:          4,
+			Description: "Searches for monster formations that appear within the specified area.",
+			Usage:       "?area={area_id}",
+			ExampleUses: []string{"?area=13", "?area=240"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "areas")},
+		},
+		"ambush": {
+			ID:          5,
+			Description: "Searches for monster formations that are forced ambushes.",
+			Usage:       "?ambush={boolean}",
+			ExampleUses: []string{"?ambush=true", "?ambush=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"category": {
+			ID:          6,
+			Description: "Searches for monster formations that are of the specified monster-formation-category.",
+			Usage:       "?category={category_name/id}",
+			ExampleUses: []string{"?category=boss-fight", "?category=2"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "monster-formation-category")},
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.monsterFormations = params
 }
 
 func (cfg *Config) initOverdriveModesParams() {

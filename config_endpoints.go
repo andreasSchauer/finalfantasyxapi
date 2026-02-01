@@ -34,13 +34,14 @@ type endpoints struct {
 	areas              handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList]
 	autoAbilities      handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
 	characters         handlerInput[seeding.Character, any, NamedAPIResource, NamedApiResourceList]
+	characterClasses   handlerInput[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList]
 	elements           handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
 	fmvs               handlerInput[seeding.FMV, any, NamedAPIResource, NamedApiResourceList]
 	items              handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]
 	keyItems           handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]
 	locations          handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
 	monsters           handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
-	monsterFormations  handlerInput[seeding.MonsterFormation, any, UnnamedAPIResource, UnnamedApiResourceList]
+	monsterFormations  handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
 	overdriveModes     handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
 	playerAbilities    handlerInput[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList]
 	enemyAbilities     handlerInput[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList]
@@ -57,11 +58,12 @@ type endpoints struct {
 	sublocations       handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList]
 	treasures          handlerInput[seeding.Treasure, any, UnnamedAPIResource, UnnamedApiResourceList]
 
-	connectionType    handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	creationArea      handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	ctbIconType       handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	monsterSpecies    handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	overdriveModeType handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	connectionType    			handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	creationArea      			handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	ctbIconType       			handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	monsterFormationCategory 	handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	monsterSpecies    			handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	overdriveModeType 			handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -98,12 +100,16 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveAreas,
 		subsections: map[string]SubSectionFns{
 			"connected": {
-				dbQuery:      cfg.db.GetAreaConnectionIDs,
-				getResultsFn: handleAreasSection,
+				dbQuery:      	cfg.db.GetAreaConnectionIDs,
+				getResultsFn: 	handleAreasSection,
+			},
+			"monster-formations": {
+				dbQuery: 		cfg.db.GetAreaMonsterFormationIDs,
+				getResultsFn: 	handleMonsterFormationsSection,
 			},
 			"monsters": {
-				dbQuery:      cfg.db.GetAreaMonsterIDs,
-				getResultsFn: handleMonstersSection,
+				dbQuery:     	cfg.db.GetAreaMonsterIDs,
+				getResultsFn: 	handleMonstersSection,
 			},
 		},
 	}
@@ -124,6 +130,15 @@ func (cfg *Config) EndpointsInit() {
 		objLookupID:   cfg.l.CharactersID,
 		idToResFunc:   idToNamedAPIResource[seeding.Character, any, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+	}
+
+	e.characterClasses = handlerInput[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint: 		"character-classes",
+		resourceType: 	"character class",
+		objLookup: 		cfg.l.CharClasses,
+		objLookupID: 	cfg.l.CharClassesID,
+		idToResFunc: 	idToNamedAPIResource[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
 	}
 
 	e.connectionType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
@@ -196,20 +211,24 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc: cfg.retrieveLocations,
 		subsections: map[string]SubSectionFns{
 			"connected": {
-				dbQuery:      cfg.db.GetConnectedLocationIDs,
-				getResultsFn: handleLocationsSection,
+				dbQuery:      	cfg.db.GetConnectedLocationIDs,
+				getResultsFn: 	handleLocationsSection,
 			},
 			"sublocations": {
-				dbQuery:      cfg.db.GetLocationSublocationIDs,
-				getResultsFn: handleSublocationsSection,
+				dbQuery:      	cfg.db.GetLocationSublocationIDs,
+				getResultsFn: 	handleSublocationsSection,
 			},
 			"areas": {
-				dbQuery: 	  cfg.db.GetLocationAreaIDs,
-				getResultsFn: handleAreasSection,
+				dbQuery: 	  	cfg.db.GetLocationAreaIDs,
+				getResultsFn: 	handleAreasSection,
+			},
+			"monster-formations": {
+				dbQuery: 		cfg.db.GetLocationMonsterFormationIDs,
+				getResultsFn:	handleMonsterFormationsSection,
 			},
 			"monsters": {
-				dbQuery:      cfg.db.GetLocationMonsterIDs,
-				getResultsFn: handleMonstersSection,
+				dbQuery:      	cfg.db.GetLocationMonsterIDs,
+				getResultsFn: 	handleMonstersSection,
 			},
 		},
 	}
@@ -231,15 +250,37 @@ func (cfg *Config) EndpointsInit() {
 				dbQuery:      cfg.db.GetMonsterAreaIDs,
 				getResultsFn: handleAreasSection,
 			},
+			"monster-formations": {
+				dbQuery:      cfg.db.GetMonsterMonsterFormationIDs,
+				getResultsFn: handleMonsterFormationsSection,
+			},
 		},
 	}
 
-	e.monsterFormations = handlerInput[seeding.MonsterFormation, any, UnnamedAPIResource, UnnamedApiResourceList]{
-		endpoint:      "monster-formations",
-		resourceType:  "monster formation",
-		objLookupID:   cfg.l.MonsterFormationsID,
-		idToResFunc:   idToUnnamedAPIResource[seeding.MonsterFormation, any, UnnamedAPIResource, UnnamedApiResourceList],
-		resToListFunc: newUnnamedAPIResourceList,
+	e.monsterFormations = handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]{
+		endpoint:      	"monster-formations",
+		resourceType:  	"monster formation",
+		objLookup: 		cfg.l.MonsterFormations,
+		objLookupID:   	cfg.l.MonsterFormationsID,
+		queryLookup: 	cfg.q.monsterFormations,
+		idToResFunc:   	idToUnnamedAPIResource[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList],
+		resToListFunc: 	newUnnamedAPIResourceList,
+		retrieveQuery: 	cfg.db.GetMonsterFormationIDs,
+		getSingleFunc: 	cfg.getMonsterFormation,
+		retrieveFunc:	cfg.retrieveMonsterFormations,
+		subsections: map[string]SubSectionFns{
+			"monsters": {
+				dbQuery:      cfg.db.GetMonsterFormationMonsterIDs,
+				getResultsFn: handleMonstersSection,
+			},
+		},
+	}
+
+	e.monsterFormationCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "monster-formation-category",
+		resourceType:  "monster formation category",
+		objLookup:     cfg.t.MonsterFormationCategory.lookup,
+		resToListFunc: newTypedAPIResourceList,
 	}
 
 	e.monsterSpecies = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
@@ -390,16 +431,20 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  	cfg.retrieveSublocations,
 		subsections: map[string]SubSectionFns{
 			"connected": {
-				dbQuery:      cfg.db.GetConnectedSublocationIDs,
-				getResultsFn: handleSublocationsSection,
+				dbQuery:      	cfg.db.GetConnectedSublocationIDs,
+				getResultsFn: 	handleSublocationsSection,
 			},
 			"areas": {
-				dbQuery: 	  cfg.db.GetSublocationAreaIDs,
-				getResultsFn: handleAreasSection,
+				dbQuery: 	  	cfg.db.GetSublocationAreaIDs,
+				getResultsFn: 	handleAreasSection,
+			},
+			"monster-formations": {
+				dbQuery: 		cfg.db.GetSublocationMonsterFormationIDs,
+				getResultsFn: 	handleMonsterFormationsSection,
 			},
 			"monsters": {
-				dbQuery:      cfg.db.GetSublocationMonsterIDs,
-				getResultsFn: handleMonstersSection,
+				dbQuery:      	cfg.db.GetSublocationMonsterIDs,
+				getResultsFn: 	handleMonstersSection,
 			},
 		},
 	}

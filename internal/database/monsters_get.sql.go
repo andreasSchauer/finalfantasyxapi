@@ -47,6 +47,265 @@ func (q *Queries) GetMonsterAreaIDs(ctx context.Context, monsterID int32) ([]int
 	return items, nil
 }
 
+const getMonsterFormationIDs = `-- name: GetMonsterFormationIDs :many
+SELECT id FROM monster_formations ORDER BY id
+`
+
+func (q *Queries) GetMonsterFormationIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterFormationIDsByArea = `-- name: GetMonsterFormationIDsByArea :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
+JOIN encounter_locations el ON j.encounter_location_id = el.id
+JOIN areas a ON el.area_id = a.id
+WHERE a.id = $1
+ORDER BY mf.id
+`
+
+func (q *Queries) GetMonsterFormationIDsByArea(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByArea, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterFormationIDsByCategory = `-- name: GetMonsterFormationIDsByCategory :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+WHERE fd.category = $1
+ORDER BY mf.id
+`
+
+func (q *Queries) GetMonsterFormationIDsByCategory(ctx context.Context, category MonsterFormationCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByCategory, category)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterFormationIDsByForcedAmbush = `-- name: GetMonsterFormationIDsByForcedAmbush :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+WHERE fd.is_forced_ambush = $1
+ORDER BY mf.id
+`
+
+func (q *Queries) GetMonsterFormationIDsByForcedAmbush(ctx context.Context, isForcedAmbush bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByForcedAmbush, isForcedAmbush)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterFormationIDsByLocation = `-- name: GetMonsterFormationIDsByLocation :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
+JOIN encounter_locations el ON j.encounter_location_id = el.id
+JOIN areas a ON el.area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+JOIN locations l ON s.location_id = l.id
+WHERE l.id = $1
+ORDER BY mf.id
+`
+
+func (q *Queries) GetMonsterFormationIDsByLocation(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByLocation, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterFormationIDsByMonster = `-- name: GetMonsterFormationIDsByMonster :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j ON j.monster_selection_id = ms.id
+JOIN monster_amounts ma ON j.monster_amount_id = ma.id
+JOIN monsters m ON ma.monster_id = m.id
+WHERE m.id = $1
+ORDER BY mf.id
+`
+
+func (q *Queries) GetMonsterFormationIDsByMonster(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByMonster, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterFormationIDsBySublocation = `-- name: GetMonsterFormationIDsBySublocation :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
+JOIN encounter_locations el ON j.encounter_location_id = el.id
+JOIN areas a ON el.area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+WHERE s.id = $1
+ORDER BY mf.id
+`
+
+func (q *Queries) GetMonsterFormationIDsBySublocation(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsBySublocation, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterFormationMonsterIDs = `-- name: GetMonsterFormationMonsterIDs :many
+SELECT m.id
+FROM monsters m
+JOIN monster_amounts ma ON ma.monster_id = m.id
+JOIN j_monster_selections_monsters j ON j.monster_amount_id = ma.id
+JOIN monster_selections ms ON j.monster_selection_id = ms.id
+JOIN monster_formations mf ON mf.monster_selection_id = ms.id
+WHERE mf.id = $1
+ORDER BY m.id
+`
+
+func (q *Queries) GetMonsterFormationMonsterIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationMonsterIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterIDs = `-- name: GetMonsterIDs :many
 SELECT id FROM monsters ORDER BY id
 `

@@ -24,17 +24,6 @@ type Area struct {
 	LocRel
 }
 
-type LocRel struct {
-	Characters []NamedAPIResource   `json:"characters"`
-	Aeons      []NamedAPIResource   `json:"aeons"`
-	Shops      []UnnamedAPIResource `json:"shops"`
-	Treasures  []UnnamedAPIResource `json:"treasures"`
-	Monsters   []NamedAPIResource   `json:"monsters"`
-	Formations []UnnamedAPIResource `json:"formations"`
-	Sidequests []NamedAPIResource   `json:"sidequests"`
-	Music      *LocBasedMusic       `json:"music"`
-	FMVs       []NamedAPIResource   `json:"fmvs"`
-}
 
 func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	i := cfg.e.areas

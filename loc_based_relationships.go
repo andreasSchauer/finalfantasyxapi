@@ -10,6 +10,19 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
+
+type LocRel struct {
+	Characters []NamedAPIResource   `json:"characters"`
+	Aeons      []NamedAPIResource   `json:"aeons"`
+	Shops      []UnnamedAPIResource `json:"shops"`
+	Treasures  []UnnamedAPIResource `json:"treasures"`
+	Monsters   []NamedAPIResource   `json:"monsters"`
+	Formations []UnnamedAPIResource `json:"formations"`
+	Sidequests []NamedAPIResource   `json:"sidequests"`
+	Music      *LocBasedMusic       `json:"music"`
+	FMVs       []NamedAPIResource   `json:"fmvs"`
+}
+
 type LocationArea struct {
 	Location    string `json:"location"`
 	Sublocation string `json:"sublocation"`

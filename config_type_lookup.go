@@ -7,11 +7,12 @@ import (
 
 // TypeLookup holds all the enum types for the application
 type TypeLookup struct {
-	AreaConnectionType EnumType[database.AreaConnectionType, any]
-	CTBIconType        EnumType[database.CtbIconType, any]
-	CreationArea       EnumType[database.MaCreationArea, database.NullMaCreationArea]
-	MonsterSpecies     EnumType[database.MonsterSpecies, any]
-	OverdriveModeType  EnumType[database.OverdriveModeType, any]
+	AreaConnectionType 			EnumType[database.AreaConnectionType, any]
+	CTBIconType        			EnumType[database.CtbIconType, any]
+	CreationArea       			EnumType[database.MaCreationArea, database.NullMaCreationArea]
+	MonsterFormationCategory	EnumType[database.MonsterFormationCategory, any]
+	MonsterSpecies     			EnumType[database.MonsterSpecies, any]
+	OverdriveModeType 			EnumType[database.OverdriveModeType, any]
 }
 
 // replace Typed logic and lookup with this struct
@@ -38,6 +39,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initAreaConnectionType()
 	cfg.t.initCTBIconType()
 	cfg.t.initCreationArea()
+	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
 	cfg.t.initOverdriveModeType()
 }
@@ -137,6 +139,39 @@ func (t *TypeLookup) initCreationArea() {
 	t.CreationArea = newEnumType("creation area", typeSlice, func(s string) database.MaCreationArea {
 		return database.MaCreationArea(s)
 	}, h.NullMaCreationArea)
+}
+
+func (t *TypeLookup) initMonsterFormationCategory() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name:        string(database.MonsterFormationCategoryRandomEncounter),
+			Description: "A typical random encounter which can effectively be triggered indefinitely.",
+		},
+		{
+			Name:        string(database.MonsterFormationCategoryBossFight),
+			Description: "A boss encounter. Can only be triggered once, usually during the events of the story.",
+		},
+		{
+			Name:        string(database.MonsterFormationCategoryStoryFight),
+			Description: "A story-based, non-boss-encounter. Is triggered during the events of the story. Usually once, unless stated otherwise.",
+		},
+		{
+			Name:        string(database.MonsterFormationCategoryStaticEncounter),
+			Description: "A non-boss-encounter that is triggered by interacting with it. This only applies to the Sandragoras in Bikanel.",
+		},
+		{
+			Name:        string(database.MonsterFormationCategoryTutorial),
+			Description: "A unique tutorial fight. Can only be triggered once.",
+		},
+		{
+			Name:        string(database.MonsterFormationCategoryOnDemandFight),
+			Description: "An encounter that can be triggered indefinitely via the Monster Arena.",
+		},
+	}
+
+	t.MonsterFormationCategory = newEnumType[database.MonsterFormationCategory, any]("monster formation category", typeSlice, func(s string) database.MonsterFormationCategory {
+		return database.MonsterFormationCategory(s)
+	}, nil)
 }
 
 func (t *TypeLookup) initMonsterSpecies() {

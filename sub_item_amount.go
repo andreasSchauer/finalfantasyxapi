@@ -25,7 +25,7 @@ func createSubItemAmountPtr(cfg *Config, ia *seeding.ItemAmount) *ItemAmountSub 
 
 func createSubItemAmount(cfg *Config, ia seeding.ItemAmount) ItemAmountSub {
 	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.MasterItems)
-	itemStr := fmt.Sprintf("%s x%d", ia.ItemName, ia.Amount)
+	itemStr := nameAmountString(ia.ItemName, ia.Amount)
 
 	return ItemAmountSub{
 		ia: 			ia,
@@ -33,6 +33,11 @@ func createSubItemAmount(cfg *Config, ia seeding.ItemAmount) ItemAmountSub {
 		ItemType: 		itemLookup.Type,
 	}
 }
+
+func nameAmountString(name string, amount int32) string {
+	return fmt.Sprintf("%s x%d", name, amount)
+}
+
 
 func sortItemAmountSubsByID(cfg *Config, s []ItemAmountSub) []ItemAmountSub {
 	slices.SortStableFunc(s, func (a, b ItemAmountSub) int{

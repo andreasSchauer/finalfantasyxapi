@@ -27,6 +27,15 @@ func (cc CharacterClass) Error() string {
 	return fmt.Sprintf("character class %s", cc.Name)
 }
 
+func (cc CharacterClass) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 			cc.ID,
+		Name: 			cc.Name,
+		Version: 		nil,
+		Specification: 	nil,
+	}
+}
+
 func (l *Lookup) seedCharacterClasses(qtx *database.Queries, unit PlayerUnit) error {
 	if unit.Type == database.UnitTypeCharacter {
 		err := l.seedCharClassesCharacter(qtx, unit)

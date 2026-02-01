@@ -29,6 +29,7 @@ func handleLocationsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubR
 
 	for _, locID := range dbIDs {
 		location, _ := seeding.GetResourceByID(locID, i.objLookupID)
+		
 		monsters, err := getMonstersLocSub(cfg, r, i.resourceType, locID, cfg.db.GetLocationMonsterIDs)
 		if err != nil {
 			return nil, err
