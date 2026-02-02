@@ -36,6 +36,17 @@ func newItemAmount(res NamedAPIResource, amount int32) ItemAmount {
 	}
 }
 
+func createItemAmounts(cfg *Config, items []seeding.ItemAmount) []ItemAmount {
+	var itemAmounts []ItemAmount
+
+	for _, item := range items {
+		ia := createItemAmount(cfg, item)
+		itemAmounts = append(itemAmounts, ia)
+	}
+
+	return itemAmounts
+}
+
 func createItemAmount(cfg *Config, input seeding.ItemAmount) ItemAmount {
 	iItems := cfg.e.items
 	iKeyItems := cfg.e.keyItems

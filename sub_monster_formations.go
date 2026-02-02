@@ -19,11 +19,17 @@ type MonsterFormationSub struct {
 
 
 func (m MonsterFormationSub) GetSectionName() string {
-	return "locations"
+	return "monster-formations"
 }
 
 func (m MonsterFormationSub) GetURL() string {
 	return m.URL
+}
+
+func idToLocAreaString(cfg *Config, areaID int32) string {
+	area, _ := seeding.GetResourceByID(areaID, cfg.l.AreasID)
+	areaString := nameVersionToString(area.Name, area.Version, area.Specification)
+	return fmt.Sprintf("%s - %s - %s", area.SubLocation.Location.Name, area.SubLocation.Name, areaString)
 }
 
 func locAreaString(cfg *Config, locArea seeding.LocationArea) string {

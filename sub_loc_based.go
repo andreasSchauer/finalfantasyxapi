@@ -35,6 +35,23 @@ type EquipmentSub struct {
 	EmptySlotsAmount int32    `json:"empty_slots_amount"`
 }
 
+func createEquipmentSub(cfg *Config, equipment seeding.FoundEquipment) EquipmentSub {
+	return EquipmentSub{
+		Name:             equipment.Name,
+		AutoAbilities:    sortNamesByID(equipment.Abilities, cfg.l.AutoAbilities),
+		EmptySlotsAmount: equipment.EmptySlotsAmount,
+	}
+}
+
+func createEquipmentSubPtr(cfg *Config, ptr *seeding.FoundEquipment) *EquipmentSub {
+	if ptr == nil {
+		return nil
+	}
+
+	es := createEquipmentSub(cfg, *ptr)
+	return &es
+}
+
 func getTreasuresLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) (*TreasuresLocSub, error) {
 	treasureIDs, err := dbQuery(r.Context(), id)
 	if err != nil {
@@ -70,11 +87,7 @@ func populateTreasuresLocSub(cfg *Config, treasureIDs []int32) TreasuresLocSub {
 
 		case string(database.LootTypeEquipment):
 			equipment := treasure.Equipment
-			es := EquipmentSub{
-				Name:             equipment.Name,
-				AutoAbilities:    sortNamesByID(equipment.Abilities, cfg.l.AutoAbilities),
-				EmptySlotsAmount: equipment.EmptySlotsAmount,
-			}
+			es := createEquipmentSub(cfg, *equipment)
 			treasures.Equipment = append(treasures.Equipment, es)
 		}
 	}
@@ -82,6 +95,8 @@ func populateTreasuresLocSub(cfg *Config, treasureIDs []int32) TreasuresLocSub {
 	treasures.Items = sortItemAmountSubsByID(cfg, treasures.Items)
 	return treasures
 }
+
+
 
 func sortNamesByID[T h.HasID](s []string, lookup map[string]T) []string {
 	slices.SortStableFunc(s, func(a, b string) int {

@@ -34,6 +34,17 @@ func createSubItemAmount(cfg *Config, ia seeding.ItemAmount) ItemAmountSub {
 	}
 }
 
+func createSubItemAmountsNullable(cfg *Config, items []seeding.ItemAmount) []ItemAmountSub {
+	var ias []ItemAmountSub
+
+	for _, item := range items {
+		ia := createSubItemAmount(cfg, item)
+		ias = append(ias, ia)
+	}
+
+	return ias
+}
+
 func nameAmountString(name string, amount int32) string {
 	return fmt.Sprintf("%s x%d", name, amount)
 }

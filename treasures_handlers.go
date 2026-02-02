@@ -10,13 +10,12 @@ import (
 
 type Treasure struct {
 	ID              int32
-	Version         int32				`json:"-"`
 	Area          	LocationAPIResource	`json:"area"`
 	TreasureType    NamedAPIResource    `json:"treasure_type"`
 	LootType        NamedAPIResource    `json:"loot_type"`
 	IsPostAirship   bool            	`json:"is_post_airship"`
 	IsAnimaTreasure bool            	`json:"is_anima_treasure"`
-	Notes           *string         	`json:"notes"`
+	Notes           *string         	`json:"notes,omitempty"`
 	GilAmount       *int32          	`json:"gil_amount,omitempty"`
 	Items           []ItemAmount    	`json:"items,omitempty"`
 	Equipment       *FoundEquipment 	`json:"equipment,omitempty"`
@@ -26,6 +25,25 @@ type FoundEquipment struct {
 	EquipmentName    NamedAPIResource   `json:"name"`
 	Abilities        []NamedAPIResource `json:"abilities"`
 	EmptySlotsAmount int32    			`json:"empty_slots_amount"`
+}
+
+func createFoundEquipmentPtr(cfg *Config, ptr *seeding.FoundEquipment) *FoundEquipment {
+	if ptr == nil {
+		return nil
+	}
+
+	fe := createFoundEquipment(cfg, *ptr)
+
+	return &fe
+}
+
+
+func createFoundEquipment(cfg *Config, fe seeding.FoundEquipment) FoundEquipment {
+	return FoundEquipment{
+		EquipmentName:		nameToNamedAPIResource(cfg, cfg.e.equipment, fe.Name, nil),
+		Abilities: 			namesToNamedAPIResources(cfg, cfg.e.autoAbilities, fe.Abilities),
+		EmptySlotsAmount: 	fe.EmptySlotsAmount,
+	}
 }
 
 func (cfg *Config) HandleTreasures(w http.ResponseWriter, r *http.Request) {
@@ -54,9 +72,20 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 		return Treasure{}, err
 	}
 
+	treasureType, _ := newNamedAPIResourceFromType(cfg, cfg.e.treasureType.endpoint, treasure.TreasureType, cfg.t.TreasureType)
+	lootType, _ := newNamedAPIResourceFromType(cfg, cfg.e.lootType.endpoint, treasure.LootType, cfg.t.LootType)
+
 	response := Treasure{
 		ID:                	treasure.ID,
-		
+		Area: 				idToLocationAPIResource(cfg, cfg.e.areas, treasure.AreaID),
+		TreasureType: 		treasureType,
+		LootType: 			lootType,
+		IsPostAirship: 		treasure.IsPostAirship,
+		IsAnimaTreasure:	treasure.IsAnimaTreasure,
+		Notes: 				treasure.Notes,
+		GilAmount: 			treasure.GilAmount,
+		Items: 				createItemAmounts(cfg, treasure.Items),
+		Equipment: 			createFoundEquipmentPtr(cfg, treasure.Equipment),
 	}
 
 	return response, nil

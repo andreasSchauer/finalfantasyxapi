@@ -36,6 +36,7 @@ type endpoints struct {
 	characters         handlerInput[seeding.Character, any, NamedAPIResource, NamedApiResourceList]
 	characterClasses   handlerInput[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList]
 	elements           handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
+	equipment		   handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
 	fmvs               handlerInput[seeding.FMV, any, NamedAPIResource, NamedApiResourceList]
 	items              handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]
 	keyItems           handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]
@@ -113,6 +114,10 @@ func (cfg *Config) EndpointsInit() {
 				dbQuery:     	cfg.db.GetAreaMonsterIDs,
 				getResultsFn: 	handleMonstersSection,
 			},
+			"treasures": {
+				dbQuery:     	cfg.db.GetAreaTreasureIDs,
+				getResultsFn: 	handleTreasuresSection,
+			},
 		},
 	}
 
@@ -170,6 +175,15 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:     cfg.l.Elements,
 		objLookupID:   cfg.l.ElementsID,
 		idToResFunc:   idToNamedAPIResource[seeding.Element, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
+	}
+
+	e.equipment = handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      "equipment",
+		resourceType:  "equipment",
+		objLookup:     cfg.l.EquipmentNames,
+		objLookupID:   cfg.l.EquipmentNamesID,
+		idToResFunc:   idToNamedAPIResource[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
@@ -231,6 +245,10 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:      	cfg.db.GetLocationMonsterIDs,
 				getResultsFn: 	handleMonstersSection,
+			},
+			"treasures": {
+				dbQuery:     	cfg.db.GetLocationTreasureIDs,
+				getResultsFn: 	handleTreasuresSection,
 			},
 		},
 	}
@@ -454,6 +472,10 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:      	cfg.db.GetSublocationMonsterIDs,
 				getResultsFn: 	handleMonstersSection,
+			},
+			"treasures": {
+				dbQuery:     	cfg.db.GetSublocationTreasureIDs,
+				getResultsFn: 	handleTreasuresSection,
 			},
 		},
 	}

@@ -79,6 +79,13 @@ func (e EquipmentName) Error() string {
 	return fmt.Sprintf("equipment name %s, character name: %s", e.Name, e.CharacterName)
 }
 
+func (e EquipmentName) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: e.ID,
+		Name: e.Name,
+	}
+}
+
 type EquipmentTableNameClstlJunction struct {
 	Junction
 	CelestialWeaponID *int32
@@ -254,6 +261,11 @@ func (l *Lookup) seedEquipmentName(qtx *database.Queries, equipmentName Equipmen
 	equipmentName.CharacterID, err = assignFK(equipmentName.CharacterName, l.Characters)
 	if err != nil {
 		return EquipmentName{}, h.NewErr(equipmentName.Error(), err)
+	}
+
+	equipmentNameLookup, ok := l.EquipmentNames[equipmentName.Name]
+	if ok {
+		return equipmentNameLookup, nil
 	}
 
 	dbEquipmentName, err := qtx.CreateEquipmentName(context.Background(), database.CreateEquipmentNameParams{
