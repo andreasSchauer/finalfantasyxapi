@@ -10,9 +10,11 @@ type TypeLookup struct {
 	AreaConnectionType 			EnumType[database.AreaConnectionType, any]
 	CTBIconType        			EnumType[database.CtbIconType, any]
 	CreationArea       			EnumType[database.MaCreationArea, database.NullMaCreationArea]
+	LootType					EnumType[database.LootType, any]
 	MonsterFormationCategory	EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies     			EnumType[database.MonsterSpecies, any]
 	OverdriveModeType 			EnumType[database.OverdriveModeType, any]
+	TreasureType				EnumType[database.TreasureType, any]
 }
 
 // replace Typed logic and lookup with this struct
@@ -39,9 +41,11 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initAreaConnectionType()
 	cfg.t.initCTBIconType()
 	cfg.t.initCreationArea()
+	cfg.t.initLootType()
 	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
 	cfg.t.initOverdriveModeType()
+	cfg.t.initTreasureType()
 }
 
 
@@ -139,6 +143,29 @@ func (t *TypeLookup) initCreationArea() {
 	t.CreationArea = newEnumType("creation area", typeSlice, func(s string) database.MaCreationArea {
 		return database.MaCreationArea(s)
 	}, h.NullMaCreationArea)
+}
+
+func (t *TypeLookup) initLootType() {
+	
+
+	typeSlice := []TypedAPIResource{
+		{
+			Name:        string(database.LootTypeItem),
+			Description: "A treasure containing an item.",
+		},
+		{
+			Name:        string(database.LootTypeEquipment),
+			Description: "A treasure containing equipment.",
+		},
+		{
+			Name:        string(database.LootTypeGil),
+			Description: "A treasure containing gil.",
+		},
+	}
+
+	t.LootType = newEnumType[database.LootType, any]("loot type", typeSlice, func(s string) database.LootType {
+		return database.LootType(s)
+	}, nil)
 }
 
 func (t *TypeLookup) initMonsterFormationCategory() {
@@ -365,6 +392,30 @@ func (t *TypeLookup) initOverdriveModeType() {
 
 	t.OverdriveModeType = newEnumType[database.OverdriveModeType, any]("overdrive mode type", typeSlice, func(s string) database.OverdriveModeType {
 		return database.OverdriveModeType(s)
+	}, nil)
+}
+
+
+func (t *TypeLookup) initTreasureType() {
+	
+
+	typeSlice := []TypedAPIResource{
+		{
+			Name:        string(database.TreasureTypeChest),
+			Description: "The treasure is found in a chest.",
+		},
+		{
+			Name:        string(database.TreasureTypeGift),
+			Description: "The treasure is a gift from an NPC.",
+		},
+		{
+			Name:        string(database.TreasureTypeObject),
+			Description: "The treasure is found by interacting with an in-game object. Most of the time, the treasure is the object itself (Jecht Spheres, Al Bhed Primers), other times it's not.",
+		},
+	}
+
+	t.TreasureType = newEnumType[database.TreasureType, any]("treasure type", typeSlice, func(s string) database.TreasureType {
+		return database.TreasureType(s)
 	}, nil)
 }
 

@@ -9,19 +9,17 @@ import (
 )
 
 type MonsterFormation struct {
-	ID              int32            	`json:"id"`
-	Version         *int32           	`json:"version,omitempty"`
-	Category       	string             	`json:"category"`
-	IsForcedAmbush 	bool               	`json:"is_forced_ambush"`
-	CanEscape      	bool               	`json:"can_escape"`
-	Notes          	*string            	`json:"notes"`
-	BossMusic      	*FormationBossSong 	`json:"boss_music"`
-	Monsters		[]MonsterAmount		`json:"monsters"`
-	Areas			[]EncounterLocation	`json:"areas"`
+	ID              int32            			`json:"id"`
+	Version         *int32           			`json:"version,omitempty"`
+	Category       	string             			`json:"category"`
+	IsForcedAmbush 	bool               			`json:"is_forced_ambush"`
+	CanEscape      	bool               			`json:"can_escape"`
+	Notes          	*string            			`json:"notes,omitempty"`
+	BossMusic      	*FormationBossSong 			`json:"boss_music,omitempty"`
+	Monsters		[]MonsterAmount				`json:"monsters"`
+	Areas			[]EncounterLocation			`json:"areas"`
 	TriggerCommands	[]FormationTriggerCommand	`json:"trigger_commands"`
 }
-
-
 
 
 type EncounterLocation struct {

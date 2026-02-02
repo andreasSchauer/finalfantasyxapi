@@ -3115,3 +3115,138 @@ func (q *Queries) GetSublocationTreasureIDs(ctx context.Context, id int32) ([]in
 	}
 	return items, nil
 }
+
+const getTreasureIDs = `-- name: GetTreasureIDs :many
+SELECT id FROM treasures ORDER BY id
+`
+
+func (q *Queries) GetTreasureIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTreasureIDsByIsAnimaTreasure = `-- name: GetTreasureIDsByIsAnimaTreasure :many
+SELECT id FROM treasures WHERE is_anima_treasure = $1 ORDER BY id
+`
+
+func (q *Queries) GetTreasureIDsByIsAnimaTreasure(ctx context.Context, isAnimaTreasure bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDsByIsAnimaTreasure, isAnimaTreasure)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTreasureIDsByIsPostAirship = `-- name: GetTreasureIDsByIsPostAirship :many
+SELECT id FROM treasures WHERE is_post_airship = $1 ORDER BY id
+`
+
+func (q *Queries) GetTreasureIDsByIsPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDsByIsPostAirship, isPostAirship)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTreasureIDsByLootType = `-- name: GetTreasureIDsByLootType :many
+SELECT id FROM treasures WHERE loot_type = $1 ORDER BY id
+`
+
+func (q *Queries) GetTreasureIDsByLootType(ctx context.Context, lootType LootType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDsByLootType, lootType)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTreasureIDsByTreasureType = `-- name: GetTreasureIDsByTreasureType :many
+SELECT id FROM treasures WHERE treasure_type = $1 ORDER BY id
+`
+
+func (q *Queries) GetTreasureIDsByTreasureType(ctx context.Context, treasureType TreasureType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDsByTreasureType, treasureType)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

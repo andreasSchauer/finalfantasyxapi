@@ -56,14 +56,16 @@ type endpoints struct {
 	stats              handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
 	statusConditions   handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
 	sublocations       handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList]
-	treasures          handlerInput[seeding.Treasure, any, UnnamedAPIResource, UnnamedApiResourceList]
+	treasures          handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
 
 	connectionType    			handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	creationArea      			handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	ctbIconType       			handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	lootType					handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	monsterFormationCategory 	handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	monsterSpecies    			handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	overdriveModeType 			handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	treasureType				handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -231,6 +233,13 @@ func (cfg *Config) EndpointsInit() {
 				getResultsFn: 	handleMonstersSection,
 			},
 		},
+	}
+
+	e.lootType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "loot-type",
+		resourceType:  "loot type",
+		objLookup:     cfg.t.LootType.lookup,
+		resToListFunc: newTypedAPIResourceList,
 	}
 
 	e.monsters = handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]{
@@ -449,13 +458,24 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.treasures = handlerInput[seeding.Treasure, any, UnnamedAPIResource, UnnamedApiResourceList]{
-		endpoint:      "treasures",
-		resourceType:  "treasure",
-		objLookup:     cfg.l.Treasures,
-		objLookupID:   cfg.l.TreasuresID,
-		idToResFunc:   idToUnnamedAPIResource[seeding.Treasure, any, UnnamedAPIResource, UnnamedApiResourceList],
-		resToListFunc: newUnnamedAPIResourceList,
+	e.treasures = handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]{
+		endpoint:      	"treasures",
+		resourceType:  	"treasure",
+		objLookup:     	cfg.l.Treasures,
+		objLookupID:   	cfg.l.TreasuresID,
+		idToResFunc:   	idToUnnamedAPIResource[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList],
+		resToListFunc: 	newUnnamedAPIResourceList,
+		queryLookup: 	cfg.q.treasures,
+		retrieveQuery: 	cfg.db.GetTreasureIDs,
+		getSingleFunc: 	cfg.getTreasure,
+		retrieveFunc: 	cfg.retrieveTreasures,
+	}
+
+	e.treasureType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "treasure-type",
+		resourceType:  "treasure type",
+		objLookup:     cfg.t.TreasureType.lookup,
+		resToListFunc: newTypedAPIResourceList,
 	}
 
 	cfg.e = &e

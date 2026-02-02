@@ -998,3 +998,23 @@ JOIN sublocations s ON s.location_id = l.id
 JOIN areas a ON a.sublocation_id = s.id
 JOIN fmvs f ON f.area_id = a.id
 ORDER BY l.id;
+
+
+-- name: GetTreasureIDs :many
+SELECT id FROM treasures ORDER BY id;
+
+
+-- name: GetTreasureIDsByLootType :many
+SELECT id FROM treasures WHERE loot_type = $1 ORDER BY id;
+
+
+-- name: GetTreasureIDsByTreasureType :many
+SELECT id FROM treasures WHERE treasure_type = $1 ORDER BY id;
+
+
+-- name: GetTreasureIDsByIsAnimaTreasure :many
+SELECT id FROM treasures WHERE is_anima_treasure = $1 ORDER BY id;
+
+
+-- name: GetTreasureIDsByIsPostAirship :many
+SELECT id FROM treasures WHERE is_post_airship = $1 ORDER BY id;

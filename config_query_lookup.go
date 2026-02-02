@@ -36,6 +36,7 @@ type QueryLookup struct {
 	monsterFormations	map[string]QueryType
 	overdriveModes 		map[string]QueryType
 	sublocations   		map[string]QueryType
+	treasures			map[string]QueryType
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -78,6 +79,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initOverdriveModesParams()
 	cfg.initSublocationsParams()
 	cfg.initLocationsParams()
+	cfg.initTreasuresParams()
 }
 
 func (cfg *Config) completeQueryTypeInit(params map[string]QueryType) map[string]QueryType {
@@ -137,7 +139,7 @@ func (cfg *Config) initAreasParams() {
 			ExampleUses: []string{"?key_item=22"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "key_items")},
+			References:  []string{createListURL(cfg, "key-items")},
 		},
 		"story_based": {
 			ID:          6,
@@ -486,7 +488,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ExampleUses: []string{"?monster=17"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "monster")},
+			References:  []string{createListURL(cfg, "monsters")},
 		},
 		"location": {
 			ID:          2,
@@ -525,7 +527,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		},
 		"category": {
 			ID:          6,
-			Description: "Searches for monster formations that are of the specified monster-formation-category.",
+			Description: "Searches for monster formations with the specified monster-formation-category.",
 			Usage:       "?category={category_name/id}",
 			ExampleUses: []string{"?category=boss-fight", "?category=2"},
 			ForList:     true,
@@ -592,7 +594,7 @@ func (cfg *Config) initSublocationsParams() {
 			ExampleUses: []string{"?key_item=22"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "key_items")},
+			References:  []string{createListURL(cfg, "key-items")},
 		},
 		"characters": {
 			ID:          5,
@@ -692,7 +694,7 @@ func (cfg *Config) initLocationsParams() {
 			ExampleUses: []string{"?key_item=22"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "key_items")},
+			References:  []string{createListURL(cfg, "key-items")},
 		},
 		"characters": {
 			ID:          4,
@@ -762,4 +764,73 @@ func (cfg *Config) initLocationsParams() {
 
 	params = cfg.completeQueryTypeInit(params)
 	cfg.q.locations = params
+}
+
+func (cfg *Config) initTreasuresParams() {
+	params := map[string]QueryType{
+		"location": {
+			ID:          1,
+			Description: "Searches for treasures that appear within the specified location.",
+			Usage:       "?location={location_id}",
+			ExampleUses: []string{"?location=17"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "locations")},
+		},
+		"sublocation": {
+			ID:          2,
+			Description: "Searches for treasures that appear within the specified sublocation.",
+			Usage:       "?sublocation={sublocation_id}",
+			ExampleUses: []string{"?sublocation=13"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "sublocations")},
+		},
+		"area": {
+			ID:          3,
+			Description: "Searches for treasures that appear within the specified area.",
+			Usage:       "?area={area_id}",
+			ExampleUses: []string{"?area=13", "?area=240"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "areas")},
+		},
+		"loot_type": {
+			ID:          4,
+			Description: "Searches for treasures with the specified loot type.",
+			Usage:       "?loot_type={loot_type_name/id}",
+			ExampleUses: []string{"?loot_type=item", "?loot_type=2"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "loot-type")},
+		},
+		"treasure_type": {
+			ID:          5,
+			Description: "Searches for treasures with the specified treasure type.",
+			Usage:       "?treasure_type={treasure_type_name/id}",
+			ExampleUses: []string{"?treasure_type=chest", "?treasure_type=2"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "treasure-type")},
+		},
+		"anima": {
+			ID:          6,
+			Description: "Searches for treasures that are necessary for getting Anima.",
+			Usage:       "?anima={boolean}",
+			ExampleUses: []string{"?anima=true", "?anima=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"airship": {
+			ID:          7,
+			Description: "Searches for treasures that are only available after acquiring the airship.",
+			Usage:       "?airship={boolean}",
+			ExampleUses: []string{"?airship=true", "?airship=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.treasures = params
 }
