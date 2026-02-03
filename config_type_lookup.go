@@ -14,6 +14,8 @@ type TypeLookup struct {
 	MonsterFormationCategory	EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies     			EnumType[database.MonsterSpecies, any]
 	OverdriveModeType 			EnumType[database.OverdriveModeType, any]
+	ShopCategory				EnumType[database.ShopCategory, any]
+	ShopType					EnumType[database.ShopType, any]
 	TreasureType				EnumType[database.TreasureType, any]
 }
 
@@ -45,6 +47,8 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
 	cfg.t.initOverdriveModeType()
+	cfg.t.initShopCategory()
+	cfg.t.initShopType()
 	cfg.t.initTreasureType()
 }
 
@@ -395,6 +399,41 @@ func (t *TypeLookup) initOverdriveModeType() {
 	}, nil)
 }
 
+func (t *TypeLookup) initShopCategory() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: string(database.ShopCategoryStandard),
+		},
+		{
+			Name: string(database.ShopCategoryOaka),
+		},
+		{
+			Name: string(database.ShopCategoryTravelAgency),
+		},
+		{
+			Name: string(database.ShopCategoryWantz),
+		},
+	}
+
+	t.ShopCategory = newEnumType[database.ShopCategory, any]("shop category", typeSlice, func(s string) database.ShopCategory {
+		return database.ShopCategory(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initShopType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: string(database.ShopTypePreAirship),
+		},
+		{
+			Name: string(database.ShopTypePostAirship),
+		},
+	}
+
+	t.ShopType = newEnumType[database.ShopType, any]("shop type", typeSlice, func(s string) database.ShopType {
+		return database.ShopType(s)
+	}, nil)
+}
 
 func (t *TypeLookup) initTreasureType() {
 	

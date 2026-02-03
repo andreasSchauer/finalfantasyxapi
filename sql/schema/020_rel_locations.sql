@@ -61,7 +61,6 @@ CREATE TABLE shop_equipment_pieces (
 );
 
 
-
 CREATE TABLE j_shops_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

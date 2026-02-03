@@ -1022,3 +1022,65 @@ SELECT id FROM treasures WHERE is_anima_treasure = $1 ORDER BY id;
 
 -- name: GetTreasureIDsByIsPostAirship :many
 SELECT id FROM treasures WHERE is_post_airship = $1 ORDER BY id;
+
+
+
+
+
+
+-- name: GetShopIDs :many
+SELECT id FROM shops ORDER BY id;
+
+
+-- name: GetShopIDsByCategory :many
+SELECT id FROM shops WHERE category = $1 ORDER BY id;
+
+
+-- name: GetShopIDsWithItems :many
+SELECT DISTINCT s.id
+FROM shops s
+JOIN j_shops_items j ON j.shop_id = s.id
+ORDER BY s.id;
+
+
+-- name: GetShopIDsWithEquipment :many
+SELECT DISTINCT s.id
+FROM shops s
+JOIN j_shops_equipment j ON j.shop_id = s.id
+ORDER BY s.id;
+
+
+-- name: GetShopIDsPreAirship :many
+SELECT DISTINCT s.id
+FROM shops s
+WHERE EXISTS (
+    SELECT 1
+    FROM j_shops_equipment je
+    WHERE je.shop_id = s.id
+      AND je.shop_type = 'pre-airship'
+)
+OR EXISTS (
+    SELECT 1
+    FROM j_shops_items ji
+    WHERE ji.shop_id = s.id
+      AND ji.shop_type = 'pre-airship'
+)
+ORDER BY s.id;
+
+
+-- name: GetShopIDsPostAirship :many
+SELECT DISTINCT s.id
+FROM shops s
+WHERE EXISTS (
+    SELECT 1
+    FROM j_shops_equipment je
+    WHERE je.shop_id = s.id
+      AND je.shop_type = 'post-airship'
+)
+OR EXISTS (
+    SELECT 1
+    FROM j_shops_items ji
+    WHERE ji.shop_id = s.id
+      AND ji.shop_type = 'post-airship'
+)
+ORDER BY s.id;

@@ -27,6 +27,7 @@ func main() {
 	mux.HandleFunc("GET /api/monsters/", apiCfg.HandleMonsters)
 	mux.HandleFunc("GET /api/monster-formations/", apiCfg.HandleMonsterFormations)
 	mux.HandleFunc("GET /api/overdrive-modes/", apiCfg.HandleOverdriveModes)
+	mux.HandleFunc("GET /api/shops/", apiCfg.HandleShops)
 	mux.HandleFunc("GET /api/treasures/", apiCfg.HandleTreasures)
 
 	srv := &http.Server{

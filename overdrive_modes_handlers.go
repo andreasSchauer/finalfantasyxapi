@@ -79,6 +79,7 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 	if err != nil {
 		return OverdriveMode{}, err
 	}
+	actions := namesToResourceAmounts(cfg, cfg.e.characters, mode.ActionsToLearn, convertActionAmount)
 
 	response := OverdriveMode{
 		ID:          mode.ID,
@@ -87,7 +88,7 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 		Effect:      mode.Effect,
 		Type:        modeType,
 		FillRate:    mode.FillRate,
-		Actions:     namesToResourceAmounts(cfg, i, mode.ActionsToLearn, convertActionAmount),
+		Actions:     actions,
 	}
 
 	return response, nil

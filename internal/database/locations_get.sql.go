@@ -2158,6 +2158,202 @@ func (q *Queries) GetLocationTreasureIDs(ctx context.Context, id int32) ([]int32
 	return items, nil
 }
 
+const getShopIDs = `-- name: GetShopIDs :many
+SELECT id FROM shops ORDER BY id
+`
+
+func (q *Queries) GetShopIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getShopIDsByCategory = `-- name: GetShopIDsByCategory :many
+SELECT id FROM shops WHERE category = $1 ORDER BY id
+`
+
+func (q *Queries) GetShopIDsByCategory(ctx context.Context, category ShopCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsByCategory, category)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getShopIDsPostAirship = `-- name: GetShopIDsPostAirship :many
+SELECT DISTINCT s.id
+FROM shops s
+WHERE EXISTS (
+    SELECT 1
+    FROM j_shops_equipment je
+    WHERE je.shop_id = s.id
+      AND je.shop_type = 'post-airship'
+)
+OR EXISTS (
+    SELECT 1
+    FROM j_shops_items ji
+    WHERE ji.shop_id = s.id
+      AND ji.shop_type = 'post-airship'
+)
+ORDER BY s.id
+`
+
+func (q *Queries) GetShopIDsPostAirship(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsPostAirship)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getShopIDsPreAirship = `-- name: GetShopIDsPreAirship :many
+SELECT DISTINCT s.id
+FROM shops s
+WHERE EXISTS (
+    SELECT 1
+    FROM j_shops_equipment je
+    WHERE je.shop_id = s.id
+      AND je.shop_type = 'pre-airship'
+)
+OR EXISTS (
+    SELECT 1
+    FROM j_shops_items ji
+    WHERE ji.shop_id = s.id
+      AND ji.shop_type = 'pre-airship'
+)
+ORDER BY s.id
+`
+
+func (q *Queries) GetShopIDsPreAirship(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsPreAirship)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getShopIDsWithEquipment = `-- name: GetShopIDsWithEquipment :many
+SELECT DISTINCT s.id
+FROM shops s
+JOIN j_shops_equipment j ON j.shop_id = s.id
+ORDER BY s.id
+`
+
+func (q *Queries) GetShopIDsWithEquipment(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsWithEquipment)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getShopIDsWithItems = `-- name: GetShopIDsWithItems :many
+SELECT DISTINCT s.id
+FROM shops s
+JOIN j_shops_items j ON j.shop_id = s.id
+ORDER BY s.id
+`
+
+func (q *Queries) GetShopIDsWithItems(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsWithItems)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getSublocationAeonIDs = `-- name: GetSublocationAeonIDs :many
 SELECT ae.id
 FROM aeons ae

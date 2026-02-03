@@ -35,6 +35,7 @@ type QueryLookup struct {
 	monsters       		map[string]QueryType
 	monsterFormations	map[string]QueryType
 	overdriveModes 		map[string]QueryType
+	shops		   		map[string]QueryType
 	sublocations   		map[string]QueryType
 	treasures			map[string]QueryType
 }
@@ -79,6 +80,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initOverdriveModesParams()
 	cfg.initSublocationsParams()
 	cfg.initLocationsParams()
+	cfg.initShopsParams()
 	cfg.initTreasuresParams()
 }
 
@@ -764,6 +766,72 @@ func (cfg *Config) initLocationsParams() {
 
 	params = cfg.completeQueryTypeInit(params)
 	cfg.q.locations = params
+}
+
+func (cfg *Config) initShopsParams() {
+	params := map[string]QueryType{
+		"location": {
+			ID:          1,
+			Description: "Searches for shops that appear within the specified location.",
+			Usage:       "?location={location_id}",
+			ExampleUses: []string{"?location=17"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "locations")},
+		},
+		"sublocation": {
+			ID:          2,
+			Description: "Searches for shops that appear within the specified sublocation.",
+			Usage:       "?sublocation={sublocation_id}",
+			ExampleUses: []string{"?sublocation=13"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "sublocations")},
+		},
+		"category": {
+			ID:          3,
+			Description: "Searches for shops with the specified shop category.",
+			Usage:       "?category={category_name/id}",
+			ExampleUses: []string{"?category=oaka", "?category=4"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"items": {
+			ID:          4,
+			Description: "Searches for shops that offer items.",
+			Usage:       "?items={boolean}",
+			ExampleUses: []string{"?items=true", "?items=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"equipment": {
+			ID:          5,
+			Description: "Searches for shops that offer equipment.",
+			Usage:       "?equipment={boolean}",
+			ExampleUses: []string{"?equipment=true", "?equipment=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"pre_airship": {
+			ID:          6,
+			Description: "Searches for shops that are available before acquiring the airship.",
+			Usage:       "?pre_airship={boolean}",
+			ExampleUses: []string{"?pre_airship=true", "?pre_airship=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"post_airship": {
+			ID:          7,
+			Description: "Searches for shops that are available after acquiring the airship.",
+			Usage:       "?post_airship={boolean}",
+			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.shops = params
 }
 
 func (cfg *Config) initTreasuresParams() {

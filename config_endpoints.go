@@ -51,7 +51,7 @@ type endpoints struct {
 	triggerCommands    handlerInput[seeding.TriggerCommand, any, NamedAPIResource, NamedApiResourceList]
 	properties         handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]
 	ronsoRages         handlerInput[seeding.RonsoRage, any, NamedAPIResource, NamedApiResourceList]
-	shops              handlerInput[seeding.Shop, any, UnnamedAPIResource, UnnamedApiResourceList]
+	shops              handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
 	sidequests         handlerInput[seeding.Sidequest, any, NamedAPIResource, NamedApiResourceList]
 	songs              handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList]
 	stats              handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
@@ -400,13 +400,17 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.shops = handlerInput[seeding.Shop, any, UnnamedAPIResource, UnnamedApiResourceList]{
-		endpoint:      "shops",
-		resourceType:  "shop",
-		objLookup:     cfg.l.Shops,
-		objLookupID:   cfg.l.ShopsID,
-		idToResFunc:   idToUnnamedAPIResource[seeding.Shop, any, UnnamedAPIResource, UnnamedApiResourceList],
-		resToListFunc: newUnnamedAPIResourceList,
+	e.shops = handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]{
+		endpoint:      	"shops",
+		resourceType:  	"shop",
+		objLookup:     	cfg.l.Shops,
+		objLookupID:   	cfg.l.ShopsID,
+		idToResFunc:   	idToUnnamedAPIResource[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList],
+		resToListFunc: 	newUnnamedAPIResourceList,
+		queryLookup: 	cfg.q.shops,
+		retrieveQuery: 	cfg.db.GetShopIDs,
+		getSingleFunc: 	cfg.getShop,
+		retrieveFunc: 	cfg.retrieveShops,
 	}
 
 	e.sidequests = handlerInput[seeding.Sidequest, any, NamedAPIResource, NamedApiResourceList]{
