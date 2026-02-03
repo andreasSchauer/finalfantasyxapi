@@ -1,8 +1,5 @@
 -- +goose Up
 CREATE TYPE area_connection_type AS ENUM('both-directions', 'one-direction', 'warp');
-
-
-
 CREATE TYPE shop_type AS ENUM ('pre-airship', 'post-airship');
 
 

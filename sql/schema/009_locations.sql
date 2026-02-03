@@ -1,10 +1,6 @@
 -- +goose Up
 CREATE TYPE treasure_type AS ENUM ('chest', 'gift', 'object');
-
-
 CREATE TYPE loot_type AS ENUM ('item', 'equipment', 'gil');
-
-
 CREATE TYPE shop_category AS ENUM ('standard', 'oaka', 'travel-agency', 'wantz');
 
 

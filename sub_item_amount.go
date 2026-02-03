@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -9,49 +8,28 @@ import (
 )
 
 type ItemAmountSub struct {
-	ia					seeding.ItemAmount	`json:"-"`
-	ItemAmountStr		string				`json:"item"`
-	ItemType			database.ItemType	`json:"item_type"`
+	ia            seeding.ItemAmount `json:"-"`
+	ItemAmountStr string             `json:"item"`
+	ItemType      database.ItemType  `json:"item_type"`
 }
 
-func createSubItemAmountPtr(cfg *Config, ia *seeding.ItemAmount) *ItemAmountSub {
-	if ia == nil {
-		return nil
-	}
-
-	itemAmountSub := createSubItemAmount(cfg, *ia)
-	return &itemAmountSub
-}
-
-func createSubItemAmount(cfg *Config, ia seeding.ItemAmount) ItemAmountSub {
+func convertSubItemAmount(cfg *Config, ia seeding.ItemAmount) ItemAmountSub {
 	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.MasterItems)
 	itemStr := nameAmountString(ia.ItemName, ia.Amount)
 
 	return ItemAmountSub{
-		ia: 			ia,
-		ItemAmountStr: 	itemStr,
-		ItemType: 		itemLookup.Type,
+		ia:            ia,
+		ItemAmountStr: itemStr,
+		ItemType:      itemLookup.Type,
 	}
 }
 
-func createSubItemAmountsNullable(cfg *Config, items []seeding.ItemAmount) []ItemAmountSub {
-	var ias []ItemAmountSub
-
-	for _, item := range items {
-		ia := createSubItemAmount(cfg, item)
-		ias = append(ias, ia)
-	}
-
-	return ias
+func posItemToItemAmtSub(cfg *Config, posItem seeding.PossibleItem) ItemAmountSub {
+	return convertSubItemAmount(cfg, posItem.ItemAmount)
 }
-
-func nameAmountString(name string, amount int32) string {
-	return fmt.Sprintf("%s x%d", name, amount)
-}
-
 
 func sortItemAmountSubsByID(cfg *Config, s []ItemAmountSub) []ItemAmountSub {
-	slices.SortStableFunc(s, func (a, b ItemAmountSub) int{
+	slices.SortStableFunc(s, func(a, b ItemAmountSub) int {
 		A := getMasterItemID(cfg, a)
 		B := getMasterItemID(cfg, b)
 

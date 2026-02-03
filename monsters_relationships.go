@@ -15,9 +15,18 @@ type MonsterAbility struct {
 	IsUnused bool             `json:"is_unused"`
 }
 
+func convertMonsterAbility(cfg *Config, ability seeding.MonsterAbility) MonsterAbility {
+	return MonsterAbility{
+		Ability:  createAbilityResource(cfg, ability.Name, ability.Version, database.AbilityType(ability.AbilityType)),
+		IsForced: ability.IsForced,
+		IsUnused: ability.IsUnused,
+	}
+}
+
 func (ma MonsterAbility) GetAPIResource() APIResource {
 	return ma.Ability
 }
+
 
 type BribeChance struct {
 	Gil    int32 `json:"gil"`
@@ -41,11 +50,6 @@ func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) 
 		return Monster{}, err
 	}
 
-	abilities, err := getMonsterAbilities(cfg, mon)
-	if err != nil {
-		return Monster{}, err
-	}
-
 	monster := Monster{
 		Properties:       namesToNamedAPIResources(cfg, cfg.e.properties, mon.Properties),
 		AutoAbilities:    namesToNamedAPIResources(cfg, cfg.e.autoAbilities, mon.AutoAbilities),
@@ -56,13 +60,12 @@ func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) 
 		ElemResists:      getMonsterElemResists(cfg, mon.ElemResists),
 		StatusImmunities: namesToNamedAPIResources(cfg, cfg.e.statusConditions, mon.StatusImmunities),
 		StatusResists:    namesToResourceAmounts(cfg, cfg.e.statusConditions, mon.StatusResists, newStatusResist),
-		Abilities:        abilities,
+		Abilities:        convertObjSlice(cfg, mon.Abilities, convertMonsterAbility),
 		AlteredStates:    getMonsterAlteredStates(cfg, r, mon),
 	}
 
 	return monster, nil
 }
-
 
 func getMonsterElemResists(cfg *Config, resists []seeding.ElementalResist) []ElementalResist {
 	elemResists := namesToElemResists(cfg, resists)
@@ -79,29 +82,6 @@ func getMonsterElemResists(cfg *Config, resists []seeding.ElementalResist) []Ele
 	return resourceMapToSlice(elemResistMap)
 }
 
-
-func getMonsterAbilities(cfg *Config, mon seeding.Monster) ([]MonsterAbility, error) {
-	monAbilities := []MonsterAbility{}
-
-	for _, seedAbility := range mon.Abilities {
-		abilityResource, err := createAbilityResource(cfg, seedAbility.Name, seedAbility.Version, database.AbilityType(seedAbility.AbilityType))
-		if err != nil {
-			return nil, err
-		}
-
-		monAbility := MonsterAbility{
-			Ability:  abilityResource,
-			IsForced: seedAbility.IsForced,
-			IsUnused: seedAbility.IsUnused,
-		}
-
-		monAbilities = append(monAbilities, monAbility)
-	}
-
-	return monAbilities, nil
-}
-
-
 func getMonsterPoisonDamage(cfg *Config, mon Monster) (*int32, error) {
 	if mon.PoisonRate == nil {
 		return nil, nil
@@ -114,7 +94,6 @@ func getMonsterPoisonDamage(cfg *Config, mon Monster) (*int32, error) {
 
 	return &poisonDamage, nil
 }
-
 
 func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*AgilityParams, error) {
 	agilityStat := getBaseStat(cfg, "agility", mon.BaseStats)
@@ -143,7 +122,6 @@ func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*Agilit
 
 	return &agilityParams, nil
 }
-
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
 func getMonsterBribeChances(cfg *Config, mon Monster) ([]BribeChance, error) {

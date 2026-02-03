@@ -1000,6 +1000,10 @@ JOIN fmvs f ON f.area_id = a.id
 ORDER BY l.id;
 
 
+
+
+
+
 -- name: GetTreasureIDs :many
 SELECT id FROM treasures ORDER BY id;
 

@@ -47,9 +47,29 @@ type MonsterItemsSub struct {
 	OtherItems          []ItemAmountSub `json:"other_items"`
 }
 
+func convertMonsterSubItems(cfg *Config, items seeding.MonsterItems) MonsterItemsSub {
+	return MonsterItemsSub{
+		StealCommon:         convertObjPtr(cfg, items.StealCommon, convertSubItemAmount),
+		StealRare:           convertObjPtr(cfg, items.StealRare, convertSubItemAmount),
+		DropCommon:          convertObjPtr(cfg, items.DropCommon, convertSubItemAmount),
+		DropRare:            convertObjPtr(cfg, items.DropRare, convertSubItemAmount),
+		SecondaryDropCommon: convertObjPtr(cfg, items.SecondaryDropCommon, convertSubItemAmount),
+		SecondaryDropRare:   convertObjPtr(cfg, items.SecondaryDropRare, convertSubItemAmount),
+		Bribe:               convertObjPtr(cfg, items.Bribe, convertSubItemAmount),
+		OtherItems:          convertObjSlice(cfg, items.OtherItems, posItemToItemAmtSub),
+	}
+}
+
 type MonsterEquipmentSub struct {
 	WeaponAbilities []string `json:"weapon_abilities"`
 	ArmorAbilities  []string `json:"armor_abilities"`
+}
+
+func convertMonsterSubEquipment(_ *Config, equipment seeding.MonsterEquipment) MonsterEquipmentSub {
+	return MonsterEquipmentSub{
+		WeaponAbilities: getMonsterSubAutoAbilities(equipment.WeaponAbilities),
+		ArmorAbilities:  getMonsterSubAutoAbilities(equipment.ArmorAbilities),
+	}
 }
 
 func handleMonstersSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
@@ -76,8 +96,8 @@ func handleMonstersSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubRe
 			IsRepeatable:   mon.IsRepeatable,
 			CanBeCaptured:  mon.CanBeCaptured,
 			RonsoRages:     mon.RonsoRages,
-			Items:          getMonsterSubItems(cfg, mon),
-			Equipment:      getMonsterSubEquipment(mon),
+			Items:          convertObjPtr(cfg, mon.Items, convertMonsterSubItems),
+			Equipment:      convertObjPtr(cfg, mon.Equipment, convertMonsterSubEquipment),
 		}
 
 		monsters = append(monsters, monSub)
@@ -103,45 +123,6 @@ func getMonsterSubBribeAmount(mon seeding.Monster, hp int32) *int32 {
 
 	bribeAmount := hp * 25
 	return &bribeAmount
-}
-
-func getMonsterSubItems(cfg *Config, mon seeding.Monster) *MonsterItemsSub {
-	if mon.Items == nil {
-		return nil
-	}
-
-	return &MonsterItemsSub{
-		StealCommon:         createSubItemAmountPtr(cfg, mon.Items.StealCommon),
-		StealRare:           createSubItemAmountPtr(cfg, mon.Items.StealRare),
-		DropCommon:          createSubItemAmountPtr(cfg, mon.Items.DropCommon),
-		DropRare:            createSubItemAmountPtr(cfg, mon.Items.DropRare),
-		SecondaryDropCommon: createSubItemAmountPtr(cfg, mon.Items.SecondaryDropCommon),
-		SecondaryDropRare:   createSubItemAmountPtr(cfg, mon.Items.SecondaryDropRare),
-		Bribe:               createSubItemAmountPtr(cfg, mon.Items.Bribe),
-		OtherItems:          getMonsterSubOtherItems(cfg, mon.Items.OtherItems),
-	}
-}
-
-func getMonsterSubOtherItems(cfg *Config, items []seeding.PossibleItem) []ItemAmountSub {
-	otherItems := []ItemAmountSub{}
-
-	for _, item := range items {
-		otherItem := createSubItemAmount(cfg, item.ItemAmount)
-		otherItems = append(otherItems, otherItem)
-	}
-
-	return otherItems
-}
-
-func getMonsterSubEquipment(mon seeding.Monster) *MonsterEquipmentSub {
-	if mon.Equipment == nil {
-		return nil
-	}
-
-	return &MonsterEquipmentSub{
-		WeaponAbilities: getMonsterSubAutoAbilities(mon.Equipment.WeaponAbilities),
-		ArmorAbilities:  getMonsterSubAutoAbilities(mon.Equipment.ArmorAbilities),
-	}
 }
 
 func getMonsterSubAutoAbilities(drops []seeding.EquipmentDrop) []string {

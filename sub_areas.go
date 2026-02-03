@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
@@ -31,35 +29,6 @@ func (a AreaSub) GetURL() string {
 	return a.URL
 }
 
-type SubRef struct {
-	ID            int32   `json:"id,omitempty"`
-	Name          string  `json:"name"`
-	Version       *int32  `json:"version,omitempty"`
-	Specification *string `json:"specification,omitempty"`
-}
-
-func createSubReference(id int32, name string) SubRef {
-	return SubRef{
-		ID:   id,
-		Name: name,
-	}
-}
-
-func nameVersionToString(name string, version *int32, spec *string) string {
-	var verStr string
-	var specStr string
-
-	if version != nil {
-		intVer := int(*version)
-		verStr = fmt.Sprintf(" %s", strconv.Itoa(intVer))
-	}
-
-	if spec != nil {
-		specStr = fmt.Sprintf(" (%s)", *spec)
-	}
-
-	return name + verStr + specStr
-}
 
 func handleAreasSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.areas

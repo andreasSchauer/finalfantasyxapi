@@ -65,7 +65,7 @@ func getAltStateChanges(cfg *Config, as seeding.AlteredState) []AltStateChange {
 	altStateChanges := []AltStateChange{}
 
 	for _, change := range as.Changes {
-		altStateChange := getChangeRelationships(cfg, change)
+		altStateChange := convertAltStateChange(cfg, change)
 		altStateChange.AlterationType = database.AlterationType(change.AlterationType)
 		altStateChange.Distance = change.Distance
 		altStateChanges = append(altStateChanges, altStateChange)
@@ -74,7 +74,7 @@ func getAltStateChanges(cfg *Config, as seeding.AlteredState) []AltStateChange {
 	return altStateChanges
 }
 
-func getChangeRelationships(cfg *Config, asc seeding.AltStateChange) AltStateChange {
+func convertAltStateChange(cfg *Config, asc seeding.AltStateChange) AltStateChange {
 	var change AltStateChange
 
 	if asc.Properties != nil {

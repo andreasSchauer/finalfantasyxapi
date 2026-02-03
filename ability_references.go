@@ -1,17 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 // can be used for various other functions related to abilities
 // put into own file
-func createAbilityResource(cfg *Config, name string, version *int32, abilityType database.AbilityType) (NamedAPIResource, error) {
+func createAbilityResource(cfg *Config, name string, version *int32, abilityType database.AbilityType) NamedAPIResource {
 	var res NamedAPIResource
-	var err error
 
 	switch abilityType {
 	case database.AbilityTypePlayerAbility:
@@ -29,13 +25,6 @@ func createAbilityResource(cfg *Config, name string, version *int32, abilityType
 	case database.AbilityTypeTriggerCommand:
 		res = nameToNamedAPIResource(cfg, cfg.e.triggerCommands, name, version)
 
-	default:
-		err = newHTTPError(http.StatusInternalServerError, fmt.Sprintf("ability of type '%s' does not exist.", abilityType), nil)
-	}
-
-	if err != nil {
-		return NamedAPIResource{}, err
-	}
-
-	return res, nil
+	}	
+	return res
 }

@@ -9,85 +9,57 @@ import (
 )
 
 type MonsterFormation struct {
-	ID              int32            			`json:"id"`
-	Version         *int32           			`json:"version,omitempty"`
-	Category       	string             			`json:"category"`
-	IsForcedAmbush 	bool               			`json:"is_forced_ambush"`
-	CanEscape      	bool               			`json:"can_escape"`
-	Notes          	*string            			`json:"notes,omitempty"`
-	BossMusic      	*FormationBossSong 			`json:"boss_music,omitempty"`
-	Monsters		[]MonsterAmount				`json:"monsters"`
-	Areas			[]EncounterLocation			`json:"areas"`
-	TriggerCommands	[]FormationTriggerCommand	`json:"trigger_commands"`
+	ID              int32                     `json:"id"`
+	Version         *int32                    `json:"version,omitempty"`
+	Category        string                    `json:"category"`
+	IsForcedAmbush  bool                      `json:"is_forced_ambush"`
+	CanEscape       bool                      `json:"can_escape"`
+	Notes           *string                   `json:"notes,omitempty"`
+	BossMusic       *FormationBossSong        `json:"boss_music,omitempty"`
+	Monsters        []MonsterAmount           `json:"monsters"`
+	Areas           []EncounterLocation       `json:"areas"`
+	TriggerCommands []FormationTriggerCommand `json:"trigger_commands"`
 }
-
 
 type EncounterLocation struct {
-	Area  			LocationAPIResource `json:"area"`
-	Specification 	*string 			`json:"specification"`
+	Area          LocationAPIResource `json:"area"`
+	Specification *string             `json:"specification"`
 }
 
-func createEncounterLocations(cfg *Config, items []seeding.EncounterLocation) []EncounterLocation {
-	els := []EncounterLocation{}
-
-	for _, item := range items {
-		el := EncounterLocation{
-			Area: 			locAreaToLocationAPIResource(cfg, cfg.e.areas, item.LocationArea),
-			Specification: 	item.Specification,
-		}
-		els = append(els, el)
+func convertEncounterLocation(cfg *Config, el seeding.EncounterLocation) EncounterLocation {
+	return EncounterLocation{
+		Area:          locAreaToLocationAPIResource(cfg, cfg.e.areas, el.LocationArea),
+		Specification: el.Specification,
 	}
-
-	return els
 }
 
 type FormationTriggerCommand struct {
-	Ability			NamedAPIResource	`json:"ability"`
-	Condition       *string  			`json:"condition"`
-	UseAmount       *int32   			`json:"use_amount"`
-	Users           []NamedAPIResource 	`json:"users"`
+	Ability   NamedAPIResource   `json:"ability"`
+	Condition *string            `json:"condition"`
+	UseAmount *int32             `json:"use_amount"`
+	Users     []NamedAPIResource `json:"users"`
 }
 
-
-func createFormationTriggerCommands (cfg *Config, items []seeding.FormationTriggerCommand) []FormationTriggerCommand {
-	triggerCommands := []FormationTriggerCommand{}
-
-	for _, item := range items {
-		tc := FormationTriggerCommand{
-			Ability: 	nameToNamedAPIResource(cfg, cfg.e.triggerCommands, item.Name, item.Version),
-			Condition: 	item.Condition,
-			UseAmount: 	item.UseAmount,
-			Users: 		namesToNamedAPIResources(cfg, cfg.e.characterClasses, item.Users),
-		}
-		triggerCommands = append(triggerCommands, tc)
+func convertFormationTriggerCommand(cfg *Config, tc seeding.FormationTriggerCommand) FormationTriggerCommand {
+	return FormationTriggerCommand{
+		Ability:   nameToNamedAPIResource(cfg, cfg.e.triggerCommands, tc.Name, tc.Version),
+		Condition: tc.Condition,
+		UseAmount: tc.UseAmount,
+		Users:     namesToNamedAPIResources(cfg, cfg.e.characterClasses, tc.Users),
 	}
-
-	return triggerCommands
 }
-
-
-
 
 type FormationBossSong struct {
-	Song             NamedAPIResource 	`json:"song"`
-	CelebrateVictory bool   			`json:"celebrate_victory"`
+	Song             NamedAPIResource `json:"song"`
+	CelebrateVictory bool             `json:"celebrate_victory"`
 }
 
-
-func getFormationBossMusic(cfg *Config, bossMusic *seeding.FormationBossSong) *FormationBossSong {
-	if bossMusic == nil {
-		return nil
-	}
-
-	bossSong := FormationBossSong{
-		Song: nameToNamedAPIResource(cfg, cfg.e.songs, bossMusic.Song, nil),
+func convertFormationBossSong(cfg *Config, bossMusic seeding.FormationBossSong) FormationBossSong {
+	return FormationBossSong{
+		Song:             nameToNamedAPIResource(cfg, cfg.e.songs, bossMusic.Song, nil),
 		CelebrateVictory: bossMusic.CelebrateVictory,
 	}
-
-	return &bossSong
 }
-
-
 
 func (cfg *Config) HandleMonsterFormations(w http.ResponseWriter, r *http.Request) {
 	i := cfg.e.monsterFormations
@@ -120,21 +92,20 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 	}
 
 	response := MonsterFormation{
-		ID:                	formation.ID,
-		Version: 			formation.Version,
-		Category: 			formation.FormationData.Category,
-		IsForcedAmbush: 	formation.FormationData.IsForcedAmbush,
-		CanEscape: 			formation.FormationData.CanEscape,
-		Notes: 				formation.FormationData.Notes,
-		BossMusic: 			getFormationBossMusic(cfg, formation.FormationData.BossMusic),
-		Monsters: 			createMonsterAmounts(cfg, formation.Monsters),
-		Areas: 				createEncounterLocations(cfg, formation.EncounterLocations),
-		TriggerCommands: 	createFormationTriggerCommands(cfg, formation.TriggerCommands),
+		ID:              formation.ID,
+		Version:         formation.Version,
+		Category:        formation.FormationData.Category,
+		IsForcedAmbush:  formation.FormationData.IsForcedAmbush,
+		CanEscape:       formation.FormationData.CanEscape,
+		Notes:           formation.FormationData.Notes,
+		BossMusic:       convertObjPtr(cfg, formation.FormationData.BossMusic, convertFormationBossSong),
+		Monsters:        convertObjSlice(cfg, formation.Monsters, convertMonsterAmount),
+		Areas:           convertObjSlice(cfg, formation.EncounterLocations, convertEncounterLocation),
+		TriggerCommands: convertObjSlice(cfg, formation.TriggerCommands, convertFormationTriggerCommand),
 	}
 
 	return response, nil
 }
-
 
 func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]) (UnnamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

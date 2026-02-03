@@ -7,42 +7,30 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 type Treasure struct {
 	ID              int32
-	Area          	LocationAPIResource	`json:"area"`
+	Area            LocationAPIResource `json:"area"`
 	TreasureType    NamedAPIResource    `json:"treasure_type"`
 	LootType        NamedAPIResource    `json:"loot_type"`
-	IsPostAirship   bool            	`json:"is_post_airship"`
-	IsAnimaTreasure bool            	`json:"is_anima_treasure"`
-	Notes           *string         	`json:"notes,omitempty"`
-	GilAmount       *int32          	`json:"gil_amount,omitempty"`
-	Items           []ItemAmount    	`json:"items,omitempty"`
-	Equipment       *FoundEquipment 	`json:"equipment,omitempty"`
+	IsPostAirship   bool                `json:"is_post_airship"`
+	IsAnimaTreasure bool                `json:"is_anima_treasure"`
+	Notes           *string             `json:"notes,omitempty"`
+	GilAmount       *int32              `json:"gil_amount,omitempty"`
+	Items           []ItemAmount        `json:"items,omitempty"`
+	Equipment       *FoundEquipment     `json:"equipment,omitempty"`
 }
 
 type FoundEquipment struct {
 	EquipmentName    NamedAPIResource   `json:"name"`
 	Abilities        []NamedAPIResource `json:"abilities"`
-	EmptySlotsAmount int32    			`json:"empty_slots_amount"`
+	EmptySlotsAmount int32              `json:"empty_slots_amount"`
 }
 
-func createFoundEquipmentPtr(cfg *Config, ptr *seeding.FoundEquipment) *FoundEquipment {
-	if ptr == nil {
-		return nil
-	}
-
-	fe := createFoundEquipment(cfg, *ptr)
-
-	return &fe
-}
-
-
-func createFoundEquipment(cfg *Config, fe seeding.FoundEquipment) FoundEquipment {
+func convertFoundEquipment(cfg *Config, fe seeding.FoundEquipment) FoundEquipment {
 	return FoundEquipment{
-		EquipmentName:		nameToNamedAPIResource(cfg, cfg.e.equipment, fe.Name, nil),
-		Abilities: 			namesToNamedAPIResources(cfg, cfg.e.autoAbilities, fe.Abilities),
-		EmptySlotsAmount: 	fe.EmptySlotsAmount,
+		EquipmentName:    nameToNamedAPIResource(cfg, cfg.e.equipment, fe.Name, nil),
+		Abilities:        namesToNamedAPIResources(cfg, cfg.e.autoAbilities, fe.Abilities),
+		EmptySlotsAmount: fe.EmptySlotsAmount,
 	}
 }
 
@@ -76,21 +64,20 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 	lootType, _ := newNamedAPIResourceFromType(cfg, cfg.e.lootType.endpoint, treasure.LootType, cfg.t.LootType)
 
 	response := Treasure{
-		ID:                	treasure.ID,
-		Area: 				idToLocationAPIResource(cfg, cfg.e.areas, treasure.AreaID),
-		TreasureType: 		treasureType,
-		LootType: 			lootType,
-		IsPostAirship: 		treasure.IsPostAirship,
-		IsAnimaTreasure:	treasure.IsAnimaTreasure,
-		Notes: 				treasure.Notes,
-		GilAmount: 			treasure.GilAmount,
-		Items: 				createItemAmounts(cfg, treasure.Items),
-		Equipment: 			createFoundEquipmentPtr(cfg, treasure.Equipment),
+		ID:              treasure.ID,
+		Area:            idToLocationAPIResource(cfg, cfg.e.areas, treasure.AreaID),
+		TreasureType:    treasureType,
+		LootType:        lootType,
+		IsPostAirship:   treasure.IsPostAirship,
+		IsAnimaTreasure: treasure.IsAnimaTreasure,
+		Notes:           treasure.Notes,
+		GilAmount:       treasure.GilAmount,
+		Items:           convertObjSlice(cfg, treasure.Items, convertItemAmount),
+		Equipment:       convertObjPtr(cfg, treasure.Equipment, convertFoundEquipment),
 	}
 
 	return response, nil
 }
-
 
 func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]) (UnnamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

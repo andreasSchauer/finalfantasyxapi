@@ -36,18 +36,7 @@ func newItemAmount(res NamedAPIResource, amount int32) ItemAmount {
 	}
 }
 
-func createItemAmounts(cfg *Config, items []seeding.ItemAmount) []ItemAmount {
-	var itemAmounts []ItemAmount
-
-	for _, item := range items {
-		ia := createItemAmount(cfg, item)
-		itemAmounts = append(itemAmounts, ia)
-	}
-
-	return itemAmounts
-}
-
-func createItemAmount(cfg *Config, input seeding.ItemAmount) ItemAmount {
+func convertItemAmount(cfg *Config, input seeding.ItemAmount) ItemAmount {
 	iItems := cfg.e.items
 	iKeyItems := cfg.e.keyItems
 	var ia ItemAmount
@@ -78,7 +67,11 @@ func (ps PossibleItem) GetAPIResource() APIResource {
 
 func newPossibleItem(cfg *Config, item seeding.ItemAmount, chance int32) PossibleItem {
 	return PossibleItem{
-		ItemAmount: createItemAmount(cfg, item),
+		ItemAmount: convertItemAmount(cfg, item),
 		Chance:     chance,
 	}
+}
+
+func convertPossibleItem(cfg *Config, item seeding.PossibleItem) PossibleItem {
+	return newPossibleItem(cfg, item.ItemAmount, item.Chance)
 }

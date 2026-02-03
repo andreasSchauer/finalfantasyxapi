@@ -21,7 +21,7 @@ type ActionAmount struct {
 	Amount int32            `json:"amount"`
 }
 
-func newActionAmount(res NamedAPIResource, amount int32) ActionAmount {
+func convertActionAmount(res NamedAPIResource, amount int32) ActionAmount {
 	return ActionAmount{
 		User:   res,
 		Amount: amount,
@@ -87,22 +87,10 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 		Effect:      mode.Effect,
 		Type:        modeType,
 		FillRate:    mode.FillRate,
-		Actions:     getOverdriveModeActions(cfg, mode),
+		Actions:     namesToResourceAmounts(cfg, i, mode.ActionsToLearn, convertActionAmount),
 	}
 
 	return response, nil
-}
-
-
-func getOverdriveModeActions(cfg *Config, mode seeding.OverdriveMode) []ActionAmount {
-	actions := []ActionAmount{}
-
-	for _, a := range mode.ActionsToLearn {
-		actionAmount := nameToResourceAmount(cfg, cfg.e.characters, a, newActionAmount)
-		actions = append(actions, actionAmount)
-	}
-
-	return actions
 }
 
 

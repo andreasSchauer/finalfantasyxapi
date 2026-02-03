@@ -4,10 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -35,21 +33,12 @@ type EquipmentSub struct {
 	EmptySlotsAmount int32    `json:"empty_slots_amount"`
 }
 
-func createEquipmentSub(cfg *Config, equipment seeding.FoundEquipment) EquipmentSub {
+func convertEquipmentSub(cfg *Config, equipment seeding.FoundEquipment) EquipmentSub {
 	return EquipmentSub{
 		Name:             equipment.Name,
 		AutoAbilities:    sortNamesByID(equipment.Abilities, cfg.l.AutoAbilities),
 		EmptySlotsAmount: equipment.EmptySlotsAmount,
 	}
-}
-
-func createEquipmentSubPtr(cfg *Config, ptr *seeding.FoundEquipment) *EquipmentSub {
-	if ptr == nil {
-		return nil
-	}
-
-	es := createEquipmentSub(cfg, *ptr)
-	return &es
 }
 
 func getTreasuresLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) (*TreasuresLocSub, error) {
@@ -81,40 +70,19 @@ func populateTreasuresLocSub(cfg *Config, treasureIDs []int32) TreasuresLocSub {
 
 		case string(database.LootTypeItem):
 			for _, itemAmount := range treasure.Items {
-				ia := createSubItemAmount(cfg, itemAmount)
+				ia := convertSubItemAmount(cfg, itemAmount)
 				treasures.Items = append(treasures.Items, ia)
 			}
 
 		case string(database.LootTypeEquipment):
 			equipment := treasure.Equipment
-			es := createEquipmentSub(cfg, *equipment)
+			es := convertEquipmentSub(cfg, *equipment)
 			treasures.Equipment = append(treasures.Equipment, es)
 		}
 	}
 
 	treasures.Items = sortItemAmountSubsByID(cfg, treasures.Items)
 	return treasures
-}
-
-
-
-func sortNamesByID[T h.HasID](s []string, lookup map[string]T) []string {
-	slices.SortStableFunc(s, func(a, b string) int {
-		A, _ := seeding.GetResource(a, lookup)
-		B, _ := seeding.GetResource(b, lookup)
-
-		if A.GetID() < B.GetID() {
-			return -1
-		}
-
-		if A.GetID() > B.GetID() {
-			return -1
-		}
-
-		return 0
-	})
-
-	return s
 }
 
 func getShopsLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) ([]ShopLocSub, error) {
@@ -129,8 +97,8 @@ func getShopsLocSub(cfg *Config, r *http.Request, resourceType string, id int32,
 		shopLookup, _ := seeding.GetResourceByID(shopID, cfg.l.ShopsID)
 		shop := ShopLocSub{
 			Category:    database.ShopCategory(shopLookup.Category),
-			PreAirship:  createShopLocSub(shopLookup.PreAirship),
-			PostAirship: createShopLocSub(shopLookup.PostAirship),
+			PreAirship:  convertObjPtr(cfg, shopLookup.PreAirship, convertShopLocSub),
+			PostAirship: convertObjPtr(cfg, shopLookup.PostAirship, convertShopLocSub),
 		}
 		shops = append(shops, shop)
 	}
@@ -138,10 +106,7 @@ func getShopsLocSub(cfg *Config, r *http.Request, resourceType string, id int32,
 	return shops, nil
 }
 
-func createShopLocSub(shop *seeding.SubShop) *ShopSummarySub {
-	if shop == nil {
-		return nil
-	}
+func convertShopLocSub(_ *Config, shop seeding.SubShop) ShopSummarySub {
 	shopLoc := ShopSummarySub{}
 
 	if len(shop.Items) != 0 {
@@ -152,7 +117,7 @@ func createShopLocSub(shop *seeding.SubShop) *ShopSummarySub {
 		shopLoc.HasEquipment = true
 	}
 
-	return &shopLoc
+	return shopLoc
 }
 
 func getMonstersLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) ([]string, error) {
