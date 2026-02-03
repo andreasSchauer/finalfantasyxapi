@@ -10,8 +10,8 @@ import (
 type Shop struct {
 	ID          int32					`json:"id"`
 	Area		LocationAPIResource		`json:"area"`
-	Notes		*string					`json:"notes,omitempty"`
 	Category	string					`json:"category"`
+	Notes		*string					`json:"notes,omitempty"`
 	PreAirship	*SubShop				`json:"pre_airship"`
 	PostAirship	*SubShop				`json:"post_airship"`
 }

@@ -36,12 +36,12 @@ func handleAreasSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResou
 
 	for _, areaID := range dbIDs {
 		area, _ := seeding.GetResourceByID(areaID, i.objLookupID)
-		monsters, err := getMonstersLocSub(cfg, r, i.resourceType, areaID, cfg.db.GetAreaMonsterIDs)
+		monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, areaID, cfg.db.GetAreaMonsterIDs, idToMonsterSubString)
 		if err != nil {
 			return nil, err
 		}
 
-		shops, err := getShopsLocSub(cfg, r, i.resourceType, areaID, cfg.db.GetAreaShopIDs)
+		shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, areaID, cfg.db.GetLocationShopIDs, idToShopLocSub)
 		if err != nil {
 			return nil, err
 		}
@@ -54,8 +54,8 @@ func handleAreasSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResou
 		areaSub := AreaSub{
 			ID:                area.ID,
 			URL:               createResourceURL(cfg, i.endpoint, areaID),
-			ParentLocation:    createSubReference(area.SubLocation.Location.ID, area.SubLocation.Location.Name),
-			ParentSublocation: createSubReference(area.SubLocation.ID, area.SubLocation.Name),
+			ParentLocation:    createSubReference(area.SubLocation.Location.ID, area.SubLocation.Location.Name, nil, nil),
+			ParentSublocation: createSubReference(area.SubLocation.ID, area.SubLocation.Name, nil, nil),
 			Name:              area.Name,
 			Version:           area.Version,
 			Specification:     area.Specification,

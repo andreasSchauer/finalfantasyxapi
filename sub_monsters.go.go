@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -36,6 +34,7 @@ func (m MonsterSub) GetURL() string {
 	return m.URL
 }
 
+
 type MonsterItemsSub struct {
 	StealCommon         *ItemAmountSub  `json:"steal_common"`
 	StealRare           *ItemAmountSub  `json:"steal_rare"`
@@ -65,10 +64,10 @@ type MonsterEquipmentSub struct {
 	ArmorAbilities  []string `json:"armor_abilities"`
 }
 
-func convertMonsterSubEquipment(_ *Config, equipment seeding.MonsterEquipment) MonsterEquipmentSub {
+func convertMonsterSubEquipment(cfg *Config, equipment seeding.MonsterEquipment) MonsterEquipmentSub {
 	return MonsterEquipmentSub{
-		WeaponAbilities: getMonsterSubAutoAbilities(equipment.WeaponAbilities),
-		ArmorAbilities:  getMonsterSubAutoAbilities(equipment.ArmorAbilities),
+		WeaponAbilities: convertObjSlice(cfg, equipment.WeaponAbilities, monsterAutoAbilityString),
+		ArmorAbilities:  convertObjSlice(cfg, equipment.ArmorAbilities, monsterAutoAbilityString),
 	}
 }
 
@@ -86,7 +85,7 @@ func handleMonstersSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubRe
 			Name:           mon.Name,
 			Version:        mon.Version,
 			Specification:  mon.Specification,
-			HP:             monHP,
+			HP:             getMonsterSubHP(mon),
 			OverkillDamage: mon.OverkillDamage,
 			AP:             mon.AP,
 			APOverkill:     mon.APOverkill,
@@ -123,24 +122,4 @@ func getMonsterSubBribeAmount(mon seeding.Monster, hp int32) *int32 {
 
 	bribeAmount := hp * 25
 	return &bribeAmount
-}
-
-func getMonsterSubAutoAbilities(drops []seeding.EquipmentDrop) []string {
-	autoAbilities := []string{}
-
-	for _, drop := range drops {
-		autoAbility := formatMonsterAutoAbility(drop)
-		autoAbilities = append(autoAbilities, autoAbility)
-	}
-
-	return autoAbilities
-}
-
-func formatMonsterAutoAbility(drop seeding.EquipmentDrop) string {
-	if len(drop.Characters) == 0 {
-		return drop.Ability
-	}
-
-	formattedChars := h.StringSliceToListString(drop.Characters)
-	return fmt.Sprintf("%s (%s)", drop.Ability, formattedChars)
 }

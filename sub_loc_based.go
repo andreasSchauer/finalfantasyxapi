@@ -20,25 +20,35 @@ type ShopSummarySub struct {
 	HasEquipment bool `json:"has_equipment"`
 }
 
+func idToShopLocSub(cfg *Config, shopID int32) ShopLocSub {
+	shopLookup, _ := seeding.GetResourceByID(shopID, cfg.l.ShopsID)
+	return ShopLocSub{
+		Category:    database.ShopCategory(shopLookup.Category),
+		PreAirship:  convertObjPtr(cfg, shopLookup.PreAirship, convertShopSummarySub),
+		PostAirship: convertObjPtr(cfg, shopLookup.PostAirship, convertShopSummarySub),
+	}
+}
+
+func convertShopSummarySub(_ *Config, shop seeding.SubShop) ShopSummarySub {
+	shopLoc := ShopSummarySub{}
+
+	if len(shop.Items) != 0 {
+		shopLoc.HasItems = true
+	}
+
+	if len(shop.Equipment) != 0 {
+		shopLoc.HasEquipment = true
+	}
+
+	return shopLoc
+}
+
+
 type TreasuresLocSub struct {
 	TreasureCount int             `json:"treasure_count"`
 	TotalGil      int32           `json:"total_gil"`
 	Items         []ItemAmountSub `json:"items"`
 	Equipment     []EquipmentSub  `json:"equipment"`
-}
-
-type EquipmentSub struct {
-	Name             string   `json:"name"`
-	AutoAbilities    []string `json:"auto_abilities"`
-	EmptySlotsAmount int32    `json:"empty_slots_amount"`
-}
-
-func convertEquipmentSub(cfg *Config, equipment seeding.FoundEquipment) EquipmentSub {
-	return EquipmentSub{
-		Name:             equipment.Name,
-		AutoAbilities:    sortNamesByID(equipment.Abilities, cfg.l.AutoAbilities),
-		EmptySlotsAmount: equipment.EmptySlotsAmount,
-	}
 }
 
 func getTreasuresLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) (*TreasuresLocSub, error) {
@@ -85,54 +95,17 @@ func populateTreasuresLocSub(cfg *Config, treasureIDs []int32) TreasuresLocSub {
 	return treasures
 }
 
-func getShopsLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) ([]ShopLocSub, error) {
-	shops := []ShopLocSub{}
 
-	shopIDs, err := dbQuery(r.Context(), id)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve shops of %s with id '%d'", resourceType, id), err)
-	}
-
-	for _, shopID := range shopIDs {
-		shopLookup, _ := seeding.GetResourceByID(shopID, cfg.l.ShopsID)
-		shop := ShopLocSub{
-			Category:    database.ShopCategory(shopLookup.Category),
-			PreAirship:  convertObjPtr(cfg, shopLookup.PreAirship, convertShopLocSub),
-			PostAirship: convertObjPtr(cfg, shopLookup.PostAirship, convertShopLocSub),
-		}
-		shops = append(shops, shop)
-	}
-
-	return shops, nil
+type EquipmentSub struct {
+	Name             string   `json:"name"`
+	AutoAbilities    []string `json:"auto_abilities"`
+	EmptySlotsAmount int32    `json:"empty_slots_amount"`
 }
 
-func convertShopLocSub(_ *Config, shop seeding.SubShop) ShopSummarySub {
-	shopLoc := ShopSummarySub{}
-
-	if len(shop.Items) != 0 {
-		shopLoc.HasItems = true
+func convertEquipmentSub(cfg *Config, equipment seeding.FoundEquipment) EquipmentSub {
+	return EquipmentSub{
+		Name:             equipment.Name,
+		AutoAbilities:    sortNamesByID(equipment.Abilities, cfg.l.AutoAbilities),
+		EmptySlotsAmount: equipment.EmptySlotsAmount,
 	}
-
-	if len(shop.Equipment) != 0 {
-		shopLoc.HasEquipment = true
-	}
-
-	return shopLoc
-}
-
-func getMonstersLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) ([]string, error) {
-	monsters := []string{}
-
-	monIDs, err := dbQuery(r.Context(), id)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve monsters of %s with id '%d'", resourceType, id), err)
-	}
-
-	for _, monID := range monIDs {
-		mon, _ := seeding.GetResourceByID(monID, cfg.l.MonstersID)
-		monStr := nameVersionToString(mon.Name, mon.Version, mon.Specification)
-		monsters = append(monsters, monStr)
-	}
-
-	return monsters, nil
 }

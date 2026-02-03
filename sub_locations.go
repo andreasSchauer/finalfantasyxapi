@@ -29,13 +29,13 @@ func handleLocationsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubR
 
 	for _, locID := range dbIDs {
 		location, _ := seeding.GetResourceByID(locID, i.objLookupID)
-		
-		monsters, err := getMonstersLocSub(cfg, r, i.resourceType, locID, cfg.db.GetLocationMonsterIDs)
+
+		monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, locID, cfg.db.GetLocationMonsterIDs, idToMonsterSubString)
 		if err != nil {
 			return nil, err
 		}
 
-		shops, err := getShopsLocSub(cfg, r, i.resourceType, locID, cfg.db.GetLocationShopIDs)
+		shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, locID, cfg.db.GetLocationShopIDs, idToShopLocSub)
 		if err != nil {
 			return nil, err
 		}

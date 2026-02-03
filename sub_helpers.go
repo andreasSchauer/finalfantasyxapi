@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"slices"
-	"strconv"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -16,33 +14,14 @@ type SubRef struct {
 	Specification *string `json:"specification,omitempty"`
 }
 
-func createSubReference(id int32, name string) SubRef {
+func createSubReference(id int32, name string, version *int32, spec *string) SubRef {
 	return SubRef{
-		ID:   id,
-		Name: name,
+		ID:   			id,
+		Name: 			name,
+		Version: 		version,
+		Specification: 	spec,
 	}
 }
-
-func nameVersionToString(name string, version *int32, spec *string) string {
-	var verStr string
-	var specStr string
-
-	if version != nil {
-		intVer := int(*version)
-		verStr = fmt.Sprintf(" %s", strconv.Itoa(intVer))
-	}
-
-	if spec != nil {
-		specStr = fmt.Sprintf(" (%s)", *spec)
-	}
-
-	return name + verStr + specStr
-}
-
-func nameAmountString(name string, amount int32) string {
-	return fmt.Sprintf("%s x%d", name, amount)
-}
-
 
 func sortNamesByID[T h.HasID](s []string, lookup map[string]T) []string {
 	slices.SortStableFunc(s, func(a, b string) int {

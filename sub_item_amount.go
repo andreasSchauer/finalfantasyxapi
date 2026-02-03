@@ -15,7 +15,7 @@ type ItemAmountSub struct {
 
 func convertSubItemAmount(cfg *Config, ia seeding.ItemAmount) ItemAmountSub {
 	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.MasterItems)
-	itemStr := nameAmountString(ia.ItemName, ia.Amount)
+	itemStr := nameAmountString(ia.ItemName, nil, nil, ia.Amount)
 
 	return ItemAmountSub{
 		ia:            ia,

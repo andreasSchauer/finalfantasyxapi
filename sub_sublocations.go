@@ -30,12 +30,13 @@ func handleSublocationsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]S
 
 	for _, subLocID := range dbIDs {
 		sublocation, _ := seeding.GetResourceByID(subLocID, i.objLookupID)
-		monsters, err := getMonstersLocSub(cfg, r, i.resourceType, subLocID, cfg.db.GetSublocationMonsterIDs)
+
+		monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, subLocID, cfg.db.GetLocationMonsterIDs, idToMonsterSubString)
 		if err != nil {
 			return nil, err
 		}
 
-		shops, err := getShopsLocSub(cfg, r, i.resourceType, subLocID, cfg.db.GetSublocationShopIDs)
+		shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, subLocID, cfg.db.GetLocationShopIDs, idToShopLocSub)
 		if err != nil {
 			return nil, err
 		}
@@ -48,7 +49,7 @@ func handleSublocationsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]S
 		sublocationSub := SublocationSub{
 			ID:             sublocation.ID,
 			URL:            createResourceURL(cfg, i.endpoint, subLocID),
-			ParentLocation: createSubReference(sublocation.Location.ID, sublocation.Location.Name),
+			ParentLocation: createSubReference(sublocation.Location.ID, sublocation.Location.Name, nil, nil),
 			Name:           sublocation.Name,
 			Shops:          shops,
 			Treasures:      treasures,
