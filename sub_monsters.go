@@ -71,7 +71,7 @@ func convertMonsterSubEquipment(cfg *Config, equipment seeding.MonsterEquipment)
 	}
 }
 
-func handleMonstersSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
+func handleMonstersSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.monsters
 	monsters := []MonsterSub{}
 

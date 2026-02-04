@@ -246,6 +246,10 @@ func (cfg *Config) EndpointsInit() {
 				dbQuery:      	cfg.db.GetLocationMonsterIDs,
 				getResultsFn: 	handleMonstersSection,
 			},
+			"shops": {
+				dbQuery:     	cfg.db.GetLocationShopIDs,
+				getResultsFn: 	handleShopsSection,
+			},
 			"treasures": {
 				dbQuery:     	cfg.db.GetLocationTreasureIDs,
 				getResultsFn: 	handleTreasuresSection,
@@ -476,6 +480,10 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:      	cfg.db.GetSublocationMonsterIDs,
 				getResultsFn: 	handleMonstersSection,
+			},
+			"shops": {
+				dbQuery:     	cfg.db.GetSublocationShopIDs,
+				getResultsFn: 	handleShopsSection,
 			},
 			"treasures": {
 				dbQuery:     	cfg.db.GetSublocationTreasureIDs,

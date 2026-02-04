@@ -25,7 +25,7 @@ func (m MonsterFormationSub) GetURL() string {
 
 
 
-func handleMonsterFormationsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
+func handleMonsterFormationsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.monsterFormations
 	formations := []MonsterFormationSub{}
 

@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -25,11 +27,56 @@ func (s ShopSub) GetURL() string {
 }
 
 type SubShopSub struct {
-	Items     []string  `json:"items"`
-	Equipment []string 	`json:"equipment"`
+	Items     []string  			`json:"items"`
+	Equipment []ShopEquipmentSub 	`json:"equipment"`
 }
 
-func handleShopsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
+func convertSubShopSub(cfg *Config, ss seeding.SubShop) SubShopSub {
+	return SubShopSub{
+		Items: convertObjSlice(cfg, ss.Items, shopItemNameString),
+		Equipment: convertObjSlice(cfg, ss.Equipment, convertShopEquipmentSub),
+	}
+}
+
+type ShopEquipmentSub struct {
+	EquipmentName	string		`json:"equipment_name"`
+	Abilities		*string		`json:"abilities"` // needs to be pointer
+}
+
+func convertShopEquipmentSub(cfg *Config, se seeding.ShopEquipment) ShopEquipmentSub {
+	return ShopEquipmentSub{
+		EquipmentName: 	shopEquipmentNameString(cfg, se),
+		Abilities: 		foundEquipmentAbilitiesStringPtr(se.FoundEquipment),
+	}
+}
+
+func shopItemNameString(_ *Config, si seeding.ShopItem) string {
+	return fmt.Sprintf("%s (%d Gil)", si.Name, si.Price) 
+}
+
+func shopEquipmentNameString(_ *Config, se seeding.ShopEquipment) string {
+	return fmt.Sprintf("%s (%d Gil)", se.Name, se.Price)
+}
+
+func foundEquipmentAbilitiesStringPtr(fe seeding.FoundEquipment) *string {
+	var slotsStr string
+
+	if fe.EmptySlotsAmount > 0 {
+		slotsStr = fmt.Sprintf(", (%d)", fe.EmptySlotsAmount)
+	}
+
+	abilitiesStr := h.StringSliceToListString(fe.Abilities)
+
+	s := abilitiesStr + slotsStr
+
+	if s == "" {
+		return nil
+	}
+
+	return &s
+}
+
+func handleShopsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.shops
 	shops := []ShopSub{}
 
@@ -37,11 +84,13 @@ func handleShopsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResou
 		shop, _ := seeding.GetResourceByID(shopID, i.objLookupID)
 
 		shopSub := ShopSub{
-			ID:            shop.ID,
-			URL:           createResourceURL(cfg, i.endpoint, shopID),
-			Area:          idToLocAreaString(cfg, shop.AreaID),
-			Notes:         shop.Notes,
-			
+			ID:            	shop.ID,
+			URL:           	createResourceURL(cfg, i.endpoint, shopID),
+			Area:          	idToLocAreaString(cfg, shop.AreaID),
+			Category: 		shop.Category,
+			Notes:         	shop.Notes,
+			PreAirship: 	convertObjPtr(cfg, shop.PreAirship, convertSubShopSub),
+			PostAirship: 	convertObjPtr(cfg, shop.PostAirship, convertSubShopSub),
 		}
 
 		shops = append(shops, shopSub)

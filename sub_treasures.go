@@ -27,7 +27,7 @@ func (t TreasureSub) GetURL() string {
 	return t.URL
 }
 
-func handleTreasuresSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
+func handleTreasuresSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.treasures
 	treasures := []TreasureSub{}
 
