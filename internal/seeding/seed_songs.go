@@ -238,8 +238,8 @@ func (l *Lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) er
 func (l *Lookup) seedCredits(qtx *database.Queries, credits SongCredits) (SongCredits, error) {
 	dbSongCredits, err := qtx.CreateSongCredit(context.Background(), database.CreateSongCreditParams{
 		DataHash:  generateDataHash(credits),
-		Composer:  h.GetNullString(credits.Composer),
-		Arranger:  h.GetNullString(credits.Arranger),
+		Composer:  h.NullComposer(credits.Composer),
+		Arranger:  h.NullArranger(credits.Arranger),
 		Performer: h.GetNullString(credits.Performer),
 		Lyricist:  h.GetNullString(credits.Lyricist),
 	})

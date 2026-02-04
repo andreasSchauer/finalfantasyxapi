@@ -1,5 +1,7 @@
 -- +goose Up
 CREATE TYPE bg_replacement_type AS ENUM ('until-trigger', 'until-zone-change');
+CREATE TYPE composer AS ENUM ('nobuo uematsu', 'junya nakano', 'masashi hamauzu');
+CREATE TYPE arranger AS ENUM ('nobuo uematsu', 'junya nakano', 'masashi hamauzu', 'shiro hamaguchi');
 
 
 CREATE TABLE background_music (
@@ -42,8 +44,8 @@ CREATE TABLE j_songs_cues (
 CREATE TABLE song_credits (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    composer TEXT,
-    arranger TEXT,
+    composer composer,
+    arranger arranger,
     performer TEXT,
     lyricist TEXT,
 

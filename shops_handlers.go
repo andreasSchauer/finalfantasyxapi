@@ -99,8 +99,8 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 	}
 
 	filteredLists := []filteredResList[UnnamedAPIResource]{
-		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationTreasureIDs)),
-		frl(idOnlyQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationTreasureIDs)),
+		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationShopIDs)),
+		frl(idOnlyQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationShopIDs)),
 		frl(boolQuery2(cfg, r, i, resources, "items", cfg.db.GetShopIDsWithItems)),
 		frl(boolQuery2(cfg, r, i, resources, "equipment", cfg.db.GetShopIDsWithEquipment)),
 		frl(boolQuery2(cfg, r, i, resources, "pre_airship", cfg.db.GetShopIDsPreAirship)),

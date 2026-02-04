@@ -318,3 +318,45 @@ func ConvertNullBreakDmgLmtType(ne database.NullBreakDmgLmtType) *string {
 }
 
 
+func NullComposer(s *string) database.NullComposer {
+    if s == nil {
+        return database.NullComposer{}
+    }
+    
+    return database.NullComposer{
+        Composer: database.Composer(*s),
+        Valid: true,
+    }
+}
+
+func ConvertNullComposer(ne database.NullComposer) *string {
+    if !ne.Valid {
+        return nil
+    }
+
+    val := string(ne.Composer)
+    return &val
+}
+
+
+func NullArranger(s *string) database.NullArranger {
+    if s == nil {
+        return database.NullArranger{}
+    }
+    
+    return database.NullArranger{
+        Arranger: database.Arranger(*s),
+        Valid: true,
+    }
+}
+
+func ConvertNullArranger(ne database.NullArranger) *string {
+    if !ne.Valid {
+        return nil
+    }
+
+    val := string(ne.Arranger)
+    return &val
+}
+
+

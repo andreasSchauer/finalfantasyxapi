@@ -8,8 +8,10 @@ import (
 // TypeLookup holds all the enum types for the application
 type TypeLookup struct {
 	AreaConnectionType 			EnumType[database.AreaConnectionType, any]
-	CTBIconType        			EnumType[database.CtbIconType, any]
+	Arranger					EnumType[database.Arranger, database.NullArranger]
+	Composer					EnumType[database.Composer, database.NullComposer]
 	CreationArea       			EnumType[database.MaCreationArea, database.NullMaCreationArea]
+	CTBIconType        			EnumType[database.CtbIconType, any]
 	LootType					EnumType[database.LootType, any]
 	MonsterFormationCategory	EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies     			EnumType[database.MonsterSpecies, any]
@@ -41,6 +43,8 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t = &TypeLookup{}
 
 	cfg.t.initAreaConnectionType()
+	cfg.t.initArranger()
+	cfg.t.initComposer()
 	cfg.t.initCTBIconType()
 	cfg.t.initCreationArea()
 	cfg.t.initLootType()
@@ -52,6 +56,44 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initTreasureType()
 }
 
+func (t *TypeLookup) initArranger() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: string(database.ArrangerNobuouematsu),
+		},
+		{
+			Name: string(database.ArrangerJunyanakano),
+		},
+		{
+			Name: string(database.ArrangerMasashihamauzu),
+		},
+		{
+			Name: string(database.ArrangerShirohamaguchi),
+		},
+	}
+
+	t.Arranger = newEnumType("arranger", typeSlice, func(s string) database.Arranger {
+		return database.Arranger(s)
+	}, h.NullArranger)
+}
+
+func (t *TypeLookup) initComposer() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: string(database.ComposerNobuouematsu),
+		},
+		{
+			Name: string(database.ComposerJunyanakano),
+		},
+		{
+			Name: string(database.ComposerMasashihamauzu),
+		},
+	}
+
+	t.Composer = newEnumType("composer", typeSlice, func(s string) database.Composer {
+		return database.Composer(s)
+	}, h.NullComposer)
+}
 
 func (t *TypeLookup) initAreaConnectionType() {
 	typeSlice := []TypedAPIResource{

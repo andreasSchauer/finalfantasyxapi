@@ -183,8 +183,8 @@ RETURNING id, data_hash, composer, arranger, performer, lyricist
 
 type CreateSongCreditParams struct {
 	DataHash  string
-	Composer  sql.NullString
-	Arranger  sql.NullString
+	Composer  NullComposer
+	Arranger  NullArranger
 	Performer sql.NullString
 	Lyricist  sql.NullString
 }

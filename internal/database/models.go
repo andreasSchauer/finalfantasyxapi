@@ -360,6 +360,50 @@ func (ns NullArmorType) Value() (driver.Value, error) {
 	return string(ns.ArmorType), nil
 }
 
+type Arranger string
+
+const (
+	ArrangerNobuouematsu   Arranger = "nobuo uematsu"
+	ArrangerJunyanakano    Arranger = "junya nakano"
+	ArrangerMasashihamauzu Arranger = "masashi hamauzu"
+	ArrangerShirohamaguchi Arranger = "shiro hamaguchi"
+)
+
+func (e *Arranger) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Arranger(s)
+	case string:
+		*e = Arranger(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Arranger: %T", src)
+	}
+	return nil
+}
+
+type NullArranger struct {
+	Arranger Arranger
+	Valid    bool // Valid is true if Arranger is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullArranger) Scan(value interface{}) error {
+	if value == nil {
+		ns.Arranger, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Arranger.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullArranger) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Arranger), nil
+}
+
 type AttackType string
 
 const (
@@ -754,6 +798,49 @@ func (ns NullCelestialFormula) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.CelestialFormula), nil
+}
+
+type Composer string
+
+const (
+	ComposerNobuouematsu   Composer = "nobuo uematsu"
+	ComposerJunyanakano    Composer = "junya nakano"
+	ComposerMasashihamauzu Composer = "masashi hamauzu"
+)
+
+func (e *Composer) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Composer(s)
+	case string:
+		*e = Composer(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Composer: %T", src)
+	}
+	return nil
+}
+
+type NullComposer struct {
+	Composer Composer
+	Valid    bool // Valid is true if Composer is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullComposer) Scan(value interface{}) error {
+	if value == nil {
+		ns.Composer, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Composer.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullComposer) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Composer), nil
 }
 
 type CounterType string
@@ -3724,8 +3811,8 @@ type Song struct {
 type SongCredit struct {
 	ID        int32
 	DataHash  string
-	Composer  sql.NullString
-	Arranger  sql.NullString
+	Composer  NullComposer
+	Arranger  NullArranger
 	Performer sql.NullString
 	Lyricist  sql.NullString
 }

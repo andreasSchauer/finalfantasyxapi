@@ -23,6 +23,8 @@ func main() {
         "SpecialActionType",
         "CriticalType",
         "BreakDmgLmtType",
+        "Composer",
+        "Arranger",
     }
 
     filePath := "./internal/helpers/null_enums.go"
