@@ -75,10 +75,11 @@ func (q *Queries) CreateCompletionLocation(ctx context.Context, arg CreateComple
 	return err
 }
 
-const createMonsterArenaCreation = `-- name: CreateMonsterArenaCreation :exec
+const createMonsterArenaCreation = `-- name: CreateMonsterArenaCreation :one
 INSERT INTO monster_arena_creations (data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO Update SET data_hash = monster_arena_creations.data_hash
+RETURNING id, data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount, monster_id
 `
 
 type CreateMonsterArenaCreationParams struct {
@@ -92,8 +93,8 @@ type CreateMonsterArenaCreationParams struct {
 	Amount                    int32
 }
 
-func (q *Queries) CreateMonsterArenaCreation(ctx context.Context, arg CreateMonsterArenaCreationParams) error {
-	_, err := q.db.ExecContext(ctx, createMonsterArenaCreation,
+func (q *Queries) CreateMonsterArenaCreation(ctx context.Context, arg CreateMonsterArenaCreationParams) (MonsterArenaCreation, error) {
+	row := q.db.QueryRowContext(ctx, createMonsterArenaCreation,
 		arg.DataHash,
 		arg.SubquestID,
 		arg.Category,
@@ -103,7 +104,20 @@ func (q *Queries) CreateMonsterArenaCreation(ctx context.Context, arg CreateMons
 		arg.CreationsUnlockedCategory,
 		arg.Amount,
 	)
-	return err
+	var i MonsterArenaCreation
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.SubquestID,
+		&i.Category,
+		&i.RequiredArea,
+		&i.RequiredSpecies,
+		&i.UnderwaterOnly,
+		&i.CreationsUnlockedCategory,
+		&i.Amount,
+		&i.MonsterID,
+	)
+	return i, err
 }
 
 const createQuest = `-- name: CreateQuest :one
@@ -205,4 +219,22 @@ func (q *Queries) CreateSubquest(ctx context.Context, arg CreateSubquestParams) 
 		&i.SidequestID,
 	)
 	return i, err
+}
+
+const updateMonsterArenaCreation = `-- name: UpdateMonsterArenaCreation :exec
+UPDATE monster_arena_creations
+SET data_hash = $1,
+    monster_id = $2
+WHERE id = $3
+`
+
+type UpdateMonsterArenaCreationParams struct {
+	DataHash  string
+	MonsterID sql.NullInt32
+	ID        int32
+}
+
+func (q *Queries) UpdateMonsterArenaCreation(ctx context.Context, arg UpdateMonsterArenaCreationParams) error {
+	_, err := q.db.ExecContext(ctx, updateMonsterArenaCreation, arg.DataHash, arg.MonsterID, arg.ID)
+	return err
 }

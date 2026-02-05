@@ -183,8 +183,8 @@ func (l *Lookup) getSeeders() []seeder {
 		},
 		{
 			name:     "monster arena creations",
-			seedFunc: l.seedMonsterArenaCreations,
-			relFunc:  nil,
+			seedFunc: l.seedArenaCreations,
+			relFunc:  l.seedArenaCreationsRelationships,
 		},
 		{
 			name:     "monsters",

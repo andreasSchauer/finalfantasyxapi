@@ -30,6 +30,7 @@ type SpecialInput struct {
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
 	defaultParams  		map[string]QueryType
+	arenaCreations		map[string]QueryType
 	areas          		map[string]QueryType
 	fmvs				map[string]QueryType
 	locations	   		map[string]QueryType
@@ -79,6 +80,7 @@ func (cfg *Config) QueryLookupInit() {
 	}
 
 	cfg.initAreasParams()
+	cfg.initArenaCreationsParams()
 	cfg.initFMVsParams()
 	cfg.initMonstersParams()
 	cfg.initMonsterFormationsParams()
@@ -264,6 +266,23 @@ func (cfg *Config) initAreasParams() {
 
 	params = cfg.completeQueryTypeInit(params)
 	cfg.q.areas = params
+}
+
+func (cfg *Config) initArenaCreationsParams() {
+	params := map[string]QueryType{
+		"category": {
+			ID:          1,
+			Description: "Searches for monster formations with the specified arena-creation-category.",
+			Usage:       "?category={category_name/id}",
+			ExampleUses: []string{"?category=species", "?category=3"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "arena-creation-category")},
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.arenaCreations = params
 }
 
 func (cfg *Config) initFMVsParams() {

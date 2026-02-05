@@ -16,3 +16,11 @@ SELECT id FROM subquests WHERE sidequest_id = $1 ORDER BY id;
 
 -- name: GetSubquestIDs :many
 SELECT id FROM subquests ORDER BY id;
+
+
+-- name: GetArenaCreationIDs :many
+SELECT id FROM monster_arena_creations ORDER BY id;
+
+
+-- name: GetArenaCreationIDsByCategory :many
+SELECT id FROM monster_arena_creations WHERE category = $1 ORDER BY id;

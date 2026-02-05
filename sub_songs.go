@@ -4,20 +4,19 @@ import (
 	"context"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type SongSub struct {
-	ID          			int32         		  	`json:"id"`
-	URL						string					`json:"url"`
-	Name        			string        		  	`json:"name"`
-	Composer  				*string 				`json:"composer,omitempty"`
-	Arranger  				*string 				`json:"arranger,omitempty"`
-	Performer 				*string 				`json:"performer,omitempty"`
-	Lyricist  				*string 				`json:"lyricist,omitempty"`
-	DurationInSeconds    	int32        		   	`json:"duration_in_seconds"`
-	CanLoop              	bool         		   	`json:"can_loop"`
+	ID                int32   `json:"id"`
+	URL               string  `json:"url"`
+	Name              string  `json:"name"`
+	Composer          *string `json:"composer,omitempty"`
+	Arranger          *string `json:"arranger,omitempty"`
+	Performer         *string `json:"performer,omitempty"`
+	Lyricist          *string `json:"lyricist,omitempty"`
+	DurationInSeconds int32   `json:"duration_in_seconds"`
+	CanLoop           bool    `json:"can_loop"`
 }
 
 func (s SongSub) GetSectionName() string {
@@ -28,7 +27,6 @@ func (s SongSub) GetURL() string {
 	return s.URL
 }
 
-
 func handleSongsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.songs
 	songs := []SongSub{}
@@ -37,11 +35,11 @@ func handleSongsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResou
 		song, _ := seeding.GetResourceByID(songID, i.objLookupID)
 
 		songSub := SongSub{
-			ID: song.ID,
-			URL: createResourceURL(cfg, i.endpoint, songID),
-			Name: song.Name,
+			ID:                song.ID,
+			URL:               createResourceURL(cfg, i.endpoint, songID),
+			Name:              song.Name,
 			DurationInSeconds: song.DurationInSeconds,
-			CanLoop: song.CanLoop,
+			CanLoop:           song.CanLoop,
 		}
 
 		if song.Credits != nil {
@@ -56,7 +54,6 @@ func handleSongsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResou
 
 	return toSubResourceSlice(songs), nil
 }
-
 
 func (cfg *Config) getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := cfg.db.GetLocationBackgroundMusicSongIDs(ctx, id)
@@ -79,10 +76,9 @@ func (cfg *Config) getLocationSongIDs(ctx context.Context, id int32) ([]int32, e
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of location with id '%d'.", err)
 	}
 
-	ids := h.CombineIdSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
+	ids := combineIdSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
 	return ids, nil
 }
-
 
 func (cfg *Config) getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := cfg.db.GetSublocationBackgroundMusicSongIDs(ctx, id)
@@ -105,10 +101,9 @@ func (cfg *Config) getSublocationSongIDs(ctx context.Context, id int32) ([]int32
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of sublocation with id '%d'.", err)
 	}
 
-	ids := h.CombineIdSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
+	ids := combineIdSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
 	return ids, nil
 }
-
 
 func (cfg *Config) getAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := cfg.db.GetAreaBackgroundMusicSongIDs(ctx, id)
@@ -131,6 +126,6 @@ func (cfg *Config) getAreaSongIDs(ctx context.Context, id int32) ([]int32, error
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of area with id '%d'.", err)
 	}
 
-	ids := h.CombineIdSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
+	ids := combineIdSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
 	return ids, nil
 }

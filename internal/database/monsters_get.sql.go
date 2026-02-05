@@ -11,6 +11,87 @@ import (
 	"github.com/lib/pq"
 )
 
+const getCaptureMonsterIDsByIsUnderwater = `-- name: GetCaptureMonsterIDsByIsUnderwater :many
+SELECT id FROM monsters WHERE is_underwater = true AND can_be_captured = true
+`
+
+func (q *Queries) GetCaptureMonsterIDsByIsUnderwater(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCaptureMonsterIDsByIsUnderwater)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getCaptureMonsterIDsByMaCreationArea = `-- name: GetCaptureMonsterIDsByMaCreationArea :many
+SELECT id FROM monsters WHERE area_conquest_location = $1 AND can_be_captured = true
+`
+
+func (q *Queries) GetCaptureMonsterIDsByMaCreationArea(ctx context.Context, areaConquestLocation NullMaCreationArea) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCaptureMonsterIDsByMaCreationArea, areaConquestLocation)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getCaptureMonsterIDsBySpecies = `-- name: GetCaptureMonsterIDsBySpecies :many
+SELECT id FROM monsters WHERE species = $1 AND can_be_captured = true
+`
+
+func (q *Queries) GetCaptureMonsterIDsBySpecies(ctx context.Context, species MonsterSpecies) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCaptureMonsterIDsBySpecies, species)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterAreaIDs = `-- name: GetMonsterAreaIDs :many
 SELECT DISTINCT a.id
 FROM areas a

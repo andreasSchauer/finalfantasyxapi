@@ -108,6 +108,7 @@ func (l *Lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) er
 			}
 
 			l.Stats[stat.Name] = stat
+			l.StatsID[stat.ID] = stat
 		}
 		return nil
 	})

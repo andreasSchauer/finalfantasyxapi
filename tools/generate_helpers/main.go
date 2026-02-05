@@ -15,6 +15,7 @@ func main() {
         "AaActivationCondition",
         "CounterType",
         "MaCreationArea",
+        "MaCreationCategory",
         "MaCreationSpecies",
         "TargetType",
         "ItemUsability",

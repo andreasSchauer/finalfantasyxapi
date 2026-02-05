@@ -9,8 +9,10 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type MonsterArenaCreation struct {
+type ArenaCreation struct {
+	ID                        int32
 	SubquestID                int32
+	MonsterID				  *int32
 	Name                      string  `json:"name"`
 	Category                  string  `json:"category"`
 	RequiredArea              *string `json:"required_area"`
@@ -20,26 +22,38 @@ type MonsterArenaCreation struct {
 	Amount                    int32   `json:"amount"`
 }
 
-func (m MonsterArenaCreation) ToHashFields() []any {
+func (a ArenaCreation) ToHashFields() []any {
 	return []any{
-		m.SubquestID,
-		m.Category,
-		h.DerefOrNil(m.RequiredArea),
-		h.DerefOrNil(m.RequiredSpecies),
-		m.UnderwaterOnly,
-		h.DerefOrNil(m.CreationsUnlockedCategory),
-		m.Amount,
+		a.SubquestID,
+		h.DerefOrNil(a.MonsterID),
+		a.Category,
+		h.DerefOrNil(a.RequiredArea),
+		h.DerefOrNil(a.RequiredSpecies),
+		a.UnderwaterOnly,
+		h.DerefOrNil(a.CreationsUnlockedCategory),
+		a.Amount,
 	}
 }
 
-func (m MonsterArenaCreation) Error() string {
-	return fmt.Sprintf("monster arena creation %s", m.Name)
+func (a ArenaCreation) GetID() int32 {
+	return a.ID
 }
 
-func (l *Lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB) error {
+func (a ArenaCreation) Error() string {
+	return fmt.Sprintf("monster arena creation %s", a.Name)
+}
+
+func (a ArenaCreation) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: a.ID,
+		Name: a.Name,
+	}
+}
+
+func (l *Lookup) seedArenaCreations(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/monster_arena_creations.json"
 
-	var creations []MonsterArenaCreation
+	var creations []ArenaCreation
 	err := loadJSONFile(string(srcPath), &creations)
 	if err != nil {
 		return err
@@ -54,7 +68,7 @@ func (l *Lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB)
 				return h.NewErr(creation.Error(), err)
 			}
 
-			err = qtx.CreateMonsterArenaCreation(context.Background(), database.CreateMonsterArenaCreationParams{
+			dbCreation, err := qtx.CreateMonsterArenaCreation(context.Background(), database.CreateMonsterArenaCreationParams{
 				DataHash:                  generateDataHash(creation),
 				SubquestID:                creation.SubquestID,
 				Category:                  database.MaCreationCategory(creation.Category),
@@ -67,6 +81,51 @@ func (l *Lookup) seedMonsterArenaCreations(db *database.Queries, dbConn *sql.DB)
 			if err != nil {
 				return h.NewErr(creation.Error(), err, "couldn't create monster arena creation")
 			}
+			creation.ID = dbCreation.ID
+			l.ArenaCreations[creation.Name] = creation
+			l.ArenaCreationsID[creation.ID] = creation
+
+		}
+		return nil
+	})
+}
+
+
+func (l *Lookup) seedArenaCreationsRelationships(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "./data/monster_arena_creations.json"
+
+	var creations []ArenaCreation
+	err := loadJSONFile(string(srcPath), &creations)
+	if err != nil {
+		return err
+	}
+
+	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		for _, jsonCreation := range creations {
+			obj := LookupObject{
+				Name: jsonCreation.Name,
+			}
+			creation, err := GetResource(jsonCreation.Name, l.ArenaCreations)
+			if err != nil {
+				return err
+			}
+
+			creation.MonsterID, err = assignFKPtr(&obj, l.Monsters)
+			if err != nil {
+				return h.NewErr(creation.Error(), err)
+			}
+
+			err = qtx.UpdateMonsterArenaCreation(context.Background(), database.UpdateMonsterArenaCreationParams{
+				DataHash: generateDataHash(creation),
+				MonsterID: h.GetNullInt32(creation.MonsterID),
+				ID:       creation.ID,
+			})
+			if err != nil {
+				return h.NewErr(creation.Error(), err, "couldn't update stat")
+			}
+
+			l.ArenaCreations[creation.Name] = creation
+			l.ArenaCreationsID[creation.ID] = creation
 		}
 		return nil
 	})

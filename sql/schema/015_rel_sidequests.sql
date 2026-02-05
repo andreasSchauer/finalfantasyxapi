@@ -1,4 +1,7 @@
 -- +goose Up
+ALTER TABLE monster_arena_creations
+ADD COLUMN monster_id INTEGER REFERENCES monsters(id);
+
 CREATE TABLE blitzball_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -29,3 +32,6 @@ CREATE TABLE completion_locations (
 DROP TABLE IF EXISTS completion_locations;
 DROP TABLE IF EXISTS quest_completions;
 DROP TABLE IF EXISTS blitzball_items;
+
+ALTER TABLE monster_arena_creations
+DROP COLUMN IF EXISTS monster_id;

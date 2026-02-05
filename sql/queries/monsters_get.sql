@@ -169,8 +169,16 @@ SELECT id FROM monsters WHERE distance = $1;
 SELECT id FROM monsters WHERE species = $1;
 
 
+-- name: GetCaptureMonsterIDsBySpecies :many
+SELECT id FROM monsters WHERE species = $1 AND can_be_captured = true;
+
+
 -- name: GetMonsterIDsByMaCreationArea :many
 SELECT id FROM monsters WHERE area_conquest_location = $1;
+
+
+-- name: GetCaptureMonsterIDsByMaCreationArea :many
+SELECT id FROM monsters WHERE area_conquest_location = $1 AND can_be_captured = true;
 
 
 -- name: GetMonsterIDsByCTBIconType :many
@@ -199,6 +207,10 @@ SELECT id FROM monsters WHERE has_overdrive = $1;
 
 -- name: GetMonsterIDsByIsUnderwater :many
 SELECT id FROM monsters WHERE is_underwater = $1;
+
+
+-- name: GetCaptureMonsterIDsByIsUnderwater :many
+SELECT id FROM monsters WHERE is_underwater = true AND can_be_captured = true;
 
 
 -- name: GetMonsterIDsByIsZombie :many

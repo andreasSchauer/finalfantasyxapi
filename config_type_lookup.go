@@ -8,6 +8,7 @@ import (
 // TypeLookup holds all the enum types for the application
 type TypeLookup struct {
 	AreaConnectionType 			EnumType[database.AreaConnectionType, any]
+	ArenaCreationCategory		EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger					EnumType[database.Arranger, database.NullArranger]
 	Composer					EnumType[database.Composer, database.NullComposer]
 	CreationArea       			EnumType[database.MaCreationArea, database.NullMaCreationArea]
@@ -43,6 +44,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t = &TypeLookup{}
 
 	cfg.t.initAreaConnectionType()
+	cfg.t.initArenaCreationCategory()
 	cfg.t.initArranger()
 	cfg.t.initComposer()
 	cfg.t.initCTBIconType()
@@ -54,6 +56,45 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initShopCategory()
 	cfg.t.initShopType()
 	cfg.t.initTreasureType()
+}
+
+func (t *TypeLookup) initAreaConnectionType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name:        string(database.AreaConnectionTypeBothDirections),
+			Description: "The edges of two areas are directly connected with each other, and you can freely zone between those areas.",
+		},
+		{
+			Name:        string(database.AreaConnectionTypeOneDirection),
+			Description: "The edges of two areas are directly connected with each other, but you can only zone from area A to area B, and not vice versa.",
+		},
+		{
+			Name:        string(database.AreaConnectionTypeWarp),
+			Description: "A connection of two areas that doesn't require crossing their edges. Most of the time, their edges are not directly connected, but you can reach area B through other means. That might be due to a teleporter (like in Gagazet), or due to a story-based warp.",
+		},
+	}
+
+	t.AreaConnectionType = newEnumType[database.AreaConnectionType, any]("connection type", typeSlice, func(s string) database.AreaConnectionType {
+		return database.AreaConnectionType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initArenaCreationCategory() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: string(database.MaCreationCategoryArea),
+		},
+		{
+			Name: string(database.MaCreationCategorySpecies),
+		},
+		{
+			Name: string(database.MaCreationCategoryOriginal),
+		},
+	}
+
+	t.ArenaCreationCategory = newEnumType("arena creation category", typeSlice, func(s string) database.MaCreationCategory {
+		return database.MaCreationCategory(s)
+	}, h.NullMaCreationCategory)
 }
 
 func (t *TypeLookup) initArranger() {
@@ -93,27 +134,6 @@ func (t *TypeLookup) initComposer() {
 	t.Composer = newEnumType("composer", typeSlice, func(s string) database.Composer {
 		return database.Composer(s)
 	}, h.NullComposer)
-}
-
-func (t *TypeLookup) initAreaConnectionType() {
-	typeSlice := []TypedAPIResource{
-		{
-			Name:        string(database.AreaConnectionTypeBothDirections),
-			Description: "The edges of two areas are directly connected with each other, and you can freely zone between those areas.",
-		},
-		{
-			Name:        string(database.AreaConnectionTypeOneDirection),
-			Description: "The edges of two areas are directly connected with each other, but you can only zone from area A to area B, and not vice versa.",
-		},
-		{
-			Name:        string(database.AreaConnectionTypeWarp),
-			Description: "A connection of two areas that doesn't require crossing their edges. Most of the time, their edges are not directly connected, but you can reach area B through other means. That might be due to a teleporter (like in Gagazet), or due to a story-based warp.",
-		},
-	}
-
-	t.AreaConnectionType = newEnumType[database.AreaConnectionType, any]("connection type", typeSlice, func(s string) database.AreaConnectionType {
-		return database.AreaConnectionType(s)
-	}, nil)
 }
 
 func (t *TypeLookup) initCTBIconType() {

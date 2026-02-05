@@ -3594,6 +3594,7 @@ type MonsterArenaCreation struct {
 	UnderwaterOnly            bool
 	CreationsUnlockedCategory NullCreationsUnlockedCategory
 	Amount                    int32
+	MonsterID                 sql.NullInt32
 }
 
 type MonsterEquipment struct {

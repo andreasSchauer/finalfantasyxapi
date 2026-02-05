@@ -150,6 +150,27 @@ func ConvertNullMaCreationArea(ne database.NullMaCreationArea) *string {
 }
 
 
+func NullMaCreationCategory(s *string) database.NullMaCreationCategory {
+    if s == nil {
+        return database.NullMaCreationCategory{}
+    }
+    
+    return database.NullMaCreationCategory{
+        MaCreationCategory: database.MaCreationCategory(*s),
+        Valid: true,
+    }
+}
+
+func ConvertNullMaCreationCategory(ne database.NullMaCreationCategory) *string {
+    if !ne.Valid {
+        return nil
+    }
+
+    val := string(ne.MaCreationCategory)
+    return &val
+}
+
+
 func NullMaCreationSpecies(s *string) database.NullMaCreationSpecies {
     if s == nil {
         return database.NullMaCreationSpecies{}

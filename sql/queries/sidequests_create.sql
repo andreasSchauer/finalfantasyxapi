@@ -45,7 +45,15 @@ VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateMonsterArenaCreation :exec
+-- name: CreateMonsterArenaCreation :one
 INSERT INTO monster_arena_creations (data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-ON CONFLICT(data_hash) DO NOTHING;
+ON CONFLICT(data_hash) DO Update SET data_hash = monster_arena_creations.data_hash
+RETURNING *;
+
+
+-- name: UpdateMonsterArenaCreation :exec
+UPDATE monster_arena_creations
+SET data_hash = $1,
+    monster_id = $2
+WHERE id = $3;
