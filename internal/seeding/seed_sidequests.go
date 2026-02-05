@@ -41,7 +41,7 @@ type Subquest struct {
 	ID int32
 	Quest
 	SidequestID int32
-	Completions []QuestCompletion `json:"completion"`
+	Completions []QuestCompletion `json:"completions"`
 }
 
 func (s Subquest) ToHashFields() []any {
@@ -57,6 +57,13 @@ func (s Subquest) GetID() int32 {
 
 func (s Subquest) Error() string {
 	return fmt.Sprintf("subquest %s", s.Name)
+}
+
+func (s Subquest) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID:   s.ID,
+		Name: s.Name,
+	}
 }
 
 type QuestCompletion struct {
@@ -101,6 +108,11 @@ func (cl CompletionLocation) ToHashFields() []any {
 func (cl CompletionLocation) Error() string {
 	return fmt.Sprintf("completion location %s, with completion id: %d, notes: %v", cl.LocationArea, cl.CompletionID, h.DerefOrNil(cl.Notes))
 }
+
+func (cl CompletionLocation) GetLocationArea() LocationArea {
+	return cl.LocationArea
+}
+
 
 func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/sidequests.json"

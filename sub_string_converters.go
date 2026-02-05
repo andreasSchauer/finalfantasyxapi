@@ -45,11 +45,11 @@ func locAreaString(cfg *Config, locArea seeding.LocationArea) string {
 	return fmt.Sprintf("%s - %s - %s", locArea.Location, locArea.Sublocation, areaString)
 }
 
-func encounterLocationsStrings(cfg *Config, items []seeding.EncounterLocation) []string {
+func locAreaStrings[T seeding.HasLocArea](cfg *Config, items []T) []string {
 	strings := []string{}
 
 	for _, item := range items {
-		s := locAreaString(cfg, item.LocationArea)
+		s := locAreaString(cfg, item.GetLocationArea())
 
 		if !slices.Contains(strings, s) {
 			strings = append(strings, s)

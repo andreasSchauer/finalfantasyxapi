@@ -31,6 +31,8 @@ func main() {
 	mux.HandleFunc("GET /api/overdrive-modes/", apiCfg.HandleOverdriveModes)
 	mux.HandleFunc("GET /api/shops/", apiCfg.HandleShops)
 	mux.HandleFunc("GET /api/songs/", apiCfg.HandleSongs)
+	mux.HandleFunc("GET /api/sidequests/", apiCfg.HandleSidequests)
+	mux.HandleFunc("GET /api/subquests/", apiCfg.HandleSubquests)
 	mux.HandleFunc("GET /api/treasures/", apiCfg.HandleTreasures)
 
 	srv := &http.Server{

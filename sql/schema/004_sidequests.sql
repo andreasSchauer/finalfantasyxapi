@@ -1,22 +1,10 @@
 -- +goose Up
 CREATE TYPE blitzball_tournament_category AS ENUM ('league', 'tournament');
-
-
 CREATE TYPE blitzball_position_slot AS ENUM ('1st', '2nd', '3rd', 'top-scorer');
-
-
 CREATE TYPE quest_type AS ENUM ('sidequest', 'subquest');
-
-
 CREATE TYPE ma_creation_category AS ENUM ('area', 'species', 'original');
-
-
 CREATE TYPE ma_creation_area AS ENUM ('besaid', 'kilika', 'mi''ihen-highroad', 'mushroom-rock-road', 'djose', 'thunder-plains', 'macalania', 'bikanel', 'calm-lands', 'cavern-of-the-stolen-fayth', 'mount-gagazet', 'sin', 'omega-ruins');
-
-
 CREATE TYPE ma_creation_species AS ENUM ('bird', 'bomb', 'drake', 'elemental', 'evil-eye', 'flan', 'fungus', 'helm', 'imp', 'iron-giant', 'lupine', 'reptile', 'ruminant', 'wasp');
-
-
 CREATE TYPE creations_unlocked_category AS ENUM ('area', 'species');
 
 

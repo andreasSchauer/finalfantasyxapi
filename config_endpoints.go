@@ -52,7 +52,8 @@ type endpoints struct {
 	properties         handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]
 	ronsoRages         handlerInput[seeding.RonsoRage, any, NamedAPIResource, NamedApiResourceList]
 	shops              handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
-	sidequests         handlerInput[seeding.Sidequest, any, NamedAPIResource, NamedApiResourceList]
+	sidequests         handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList]
+	subquests          handlerInput[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList]
 	songs              handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
 	stats              handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
 	statusConditions   handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
@@ -429,13 +430,36 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc: 	cfg.retrieveShops,
 	}
 
-	e.sidequests = handlerInput[seeding.Sidequest, any, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "sidequests",
-		resourceType:  "sidequest",
-		objLookup:     cfg.l.Sidequests,
-		objLookupID:   cfg.l.SidequestsID,
-		idToResFunc:   idToNamedAPIResource[seeding.Sidequest, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+	e.sidequests = handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      	"sidequests",
+		resourceType:  	"sidequest",
+		objLookup:     	cfg.l.Sidequests,
+		objLookupID:   	cfg.l.SidequestsID,
+		queryLookup: 	cfg.q.sidequests,
+		retrieveQuery: 	cfg.db.GetSidequestIDs,
+		idToResFunc:   	idToNamedAPIResource[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
+		getSingleFunc: 	cfg.getSidequest,
+		retrieveFunc: 	cfg.retrieveSidequests,
+		subsections: map[string]SubSectionFns{
+			"subquests": {
+				dbQuery:      cfg.db.GetSidequestSubquestIDs,
+				getResultsFn: handleSubquestsSection,
+			},
+		},
+	}
+
+	e.subquests = handlerInput[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      	"subquests",
+		resourceType:  	"subquest",
+		objLookup:     	cfg.l.Subquests,
+		objLookupID:   	cfg.l.SubquestsID,
+		queryLookup: 	cfg.q.subquests,
+		retrieveQuery: 	cfg.db.GetSubquestIDs,
+		idToResFunc:   	idToNamedAPIResource[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
+		getSingleFunc: 	cfg.getSubquest,
+		retrieveFunc: 	cfg.retrieveSubquests,
 	}
 
 	e.songs = handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]{

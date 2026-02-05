@@ -36,3 +36,84 @@ func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSi
 	)
 	return i, err
 }
+
+const getSidequestIDs = `-- name: GetSidequestIDs :many
+SELECT id FROM sidequests ORDER BY id
+`
+
+func (q *Queries) GetSidequestIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSidequestIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSidequestSubquestIDs = `-- name: GetSidequestSubquestIDs :many
+SELECT id FROM subquests WHERE sidequest_id = $1 ORDER BY id
+`
+
+func (q *Queries) GetSidequestSubquestIDs(ctx context.Context, sidequestID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSidequestSubquestIDs, sidequestID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSubquestIDs = `-- name: GetSubquestIDs :many
+SELECT id FROM subquests ORDER BY id
+`
+
+func (q *Queries) GetSubquestIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSubquestIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

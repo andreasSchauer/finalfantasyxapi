@@ -1,7 +1,18 @@
-
 -- name: GetParentSidequest :one
 SELECT q.*
 FROM subquests su
 LEFT JOIN sidequests si ON su.sidequest_id = si.id
 LEFT JOIN quests q ON si.quest_id = q.id
 WHERE su.id = $1;
+
+
+-- name: GetSidequestIDs :many
+SELECT id FROM sidequests ORDER BY id;
+
+
+-- name: GetSidequestSubquestIDs :many
+SELECT id FROM subquests WHERE sidequest_id = $1 ORDER BY id;
+
+
+-- name: GetSubquestIDs :many
+SELECT id FROM subquests ORDER BY id;

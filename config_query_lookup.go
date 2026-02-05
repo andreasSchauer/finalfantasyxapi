@@ -38,6 +38,8 @@ type QueryLookup struct {
 	overdriveModes 		map[string]QueryType
 	shops		   		map[string]QueryType
 	songs				map[string]QueryType
+	sidequests			map[string]QueryType
+	subquests			map[string]QueryType
 	sublocations   		map[string]QueryType
 	treasures			map[string]QueryType
 }
@@ -45,7 +47,6 @@ type QueryLookup struct {
 func (cfg *Config) QueryLookupInit() {
 	defaultLimit := 20
 	defaultOffset := 0
-	// emptyMap := make(map[string]QueryType)
 	cfg.q = &QueryLookup{}
 
 	cfg.q.defaultParams = map[string]QueryType{
@@ -87,6 +88,13 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initShopsParams()
 	cfg.initSongsParams()
 	cfg.initTreasuresParams()
+
+	cfg.q.sidequests = createEmptyQueryMap()
+	cfg.q.subquests = cfg.completeQueryTypeInit(createEmptyQueryMap())
+}
+
+func createEmptyQueryMap() map[string]QueryType {
+	return make(map[string]QueryType)
 }
 
 func (cfg *Config) completeQueryTypeInit(params map[string]QueryType) map[string]QueryType {

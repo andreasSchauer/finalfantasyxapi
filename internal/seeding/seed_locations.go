@@ -148,6 +148,10 @@ func (la LocationArea) Error() string {
 	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: %s, version: %v", la.Location, la.Sublocation, la.Area, h.DerefOrNil(la.Version))
 }
 
+func (la LocationArea) GetLocationArea() LocationArea {
+	return la
+}
+
 type AreaConnection struct {
 	ID             int32
 	AreaID         int32

@@ -38,7 +38,7 @@ func handleMonsterFormationsSection(cfg *Config, _ *http.Request, dbIDs []int32)
 			Category:       formation.FormationData.Category,
 			IsForcedAmbush: formation.FormationData.IsForcedAmbush,
 			Monsters:       convertObjSlice(cfg, formation.Monsters, monsterAmountString),
-			Areas:          encounterLocationsStrings(cfg, formation.EncounterLocations),
+			Areas:          locAreaStrings(cfg, formation.EncounterLocations),
 		}
 
 		formations = append(formations, formationSub)

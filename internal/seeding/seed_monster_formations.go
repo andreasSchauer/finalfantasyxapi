@@ -139,6 +139,10 @@ func (el EncounterLocation) Error() string {
 	return fmt.Sprintf("encounter location with %s, specification: %s", el.LocationArea, h.DerefOrNil(el.Specification))
 }
 
+func (el EncounterLocation) GetLocationArea() LocationArea {
+	return el.LocationArea
+}
+
 type FormationTriggerCommand struct {
 	ID int32
 	AbilityReference
