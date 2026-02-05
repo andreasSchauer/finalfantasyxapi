@@ -15,6 +15,7 @@ type ArenaCreation struct {
 	Category                  string             `json:"category"`
 	Monster                   NamedAPIResource   `json:"monster"`
 	ParentSubquest            NamedAPIResource   `json:"parent_subquest"`
+	Reward					  ItemAmount		 `json:"reward"`
 	RequiredCatchAmount       int32              `json:"required_catch_amount"`
 	RequiredMonsters          []NamedAPIResource `json:"required_monsters,omitempty"`
 }
@@ -73,19 +74,23 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 		return ArenaCreation{}, err
 	}
 
+	subquest, _ := seeding.GetResourceByID(creation.SubquestID, cfg.l.SubquestsID)
+	ia := subquest.Completions[0].Reward
+
 	monsters, err := getArenaCreationMonsters(cfg, r, creation)
 	if err != nil {
 		return ArenaCreation{}, err
 	}
 
 	response := ArenaCreation{
-		ID:                        	creation.ID,
-		Name:                      	creation.Name,
-		Category:                  	creation.Category,
-		Monster:                   	idToNamedAPIResource(cfg, cfg.e.monsters, *creation.MonsterID),
-		ParentSubquest:            	idToNamedAPIResource(cfg, cfg.e.subquests, creation.SubquestID),
-		RequiredCatchAmount:       	creation.Amount,
-		RequiredMonsters: 			monsters,
+		ID:                     creation.ID,
+		Name:                   creation.Name,
+		Category:               creation.Category,
+		Monster:                idToNamedAPIResource(cfg, cfg.e.monsters, *creation.MonsterID),
+		ParentSubquest:         idToNamedAPIResource(cfg, cfg.e.subquests, creation.SubquestID),
+		Reward: 				convertItemAmount(cfg, ia),
+		RequiredCatchAmount:    creation.Amount,
+		RequiredMonsters: 		monsters,
 	}
 
 	
