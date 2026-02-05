@@ -53,7 +53,7 @@ type endpoints struct {
 	ronsoRages         handlerInput[seeding.RonsoRage, any, NamedAPIResource, NamedApiResourceList]
 	shops              handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
 	sidequests         handlerInput[seeding.Sidequest, any, NamedAPIResource, NamedApiResourceList]
-	songs              handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList]
+	songs              handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
 	stats              handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
 	statusConditions   handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
 	sublocations       handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList]
@@ -113,6 +113,10 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:     	cfg.db.GetAreaMonsterIDs,
 				getResultsFn: 	handleMonstersSection,
+			},
+			"songs": {
+				dbQuery:     	cfg.getAreaSongIDs,
+				getResultsFn: 	handleSongsSection,
 			},
 			"treasures": {
 				dbQuery:     	cfg.db.GetAreaTreasureIDs,
@@ -249,6 +253,10 @@ func (cfg *Config) EndpointsInit() {
 			"shops": {
 				dbQuery:     	cfg.db.GetLocationShopIDs,
 				getResultsFn: 	handleShopsSection,
+			},
+			"songs": {
+				dbQuery:     	cfg.getLocationSongIDs,
+				getResultsFn: 	handleSongsSection,
 			},
 			"treasures": {
 				dbQuery:     	cfg.db.GetLocationTreasureIDs,
@@ -426,13 +434,17 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.songs = handlerInput[seeding.Song, any, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "songs",
-		resourceType:  "song",
-		objLookup:     cfg.l.Songs,
-		objLookupID:   cfg.l.SongsID,
-		idToResFunc:   idToNamedAPIResource[seeding.Song, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+	e.songs = handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      	"songs",
+		resourceType:  	"song",
+		objLookup:     	cfg.l.Songs,
+		objLookupID:   	cfg.l.SongsID,
+		queryLookup: 	cfg.q.songs,
+		idToResFunc:   	idToNamedAPIResource[seeding.Song, Song, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
+		retrieveQuery: 	cfg.db.GetSongIDs,
+		getSingleFunc: 	cfg.getSong,
+		retrieveFunc: 	cfg.retrieveSongs,
 	}
 
 	e.stats = handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]{
@@ -484,6 +496,10 @@ func (cfg *Config) EndpointsInit() {
 			"shops": {
 				dbQuery:     	cfg.db.GetSublocationShopIDs,
 				getResultsFn: 	handleShopsSection,
+			},
+			"songs": {
+				dbQuery:     	cfg.getSublocationSongIDs,
+				getResultsFn: 	handleSongsSection,
 			},
 			"treasures": {
 				dbQuery:     	cfg.db.GetSublocationTreasureIDs,

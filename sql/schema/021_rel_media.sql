@@ -67,4 +67,6 @@ DROP TABLE IF EXISTS j_songs_cues;
 DROP TABLE IF EXISTS cues;
 DROP TABLE IF EXISTS j_songs_background_music;
 DROP TABLE IF EXISTS background_music;
+DROP TYPE IF EXISTS arranger;
+DROP TYPE IF EXISTS composer;
 DROP TYPE IF EXISTS bg_replacement_type;

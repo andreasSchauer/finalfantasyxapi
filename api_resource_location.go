@@ -65,6 +65,17 @@ func locAreaToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area
 	return areaToLocationResource(cfg, i, res)
 }
 
+func locAreasToLocationAPIResources(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], areas []seeding.LocationArea) []LocationAPIResource {
+	resources := []LocationAPIResource{}
+
+	for _, area := range areas {
+		res := locAreaToLocationAPIResource(cfg, i, area)
+		resources = append(resources, res)
+	}
+
+	return resources
+}
+
 
 // shared logic. not indended to be called directly
 func areaToLocationResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], area seeding.Area) LocationAPIResource {

@@ -160,7 +160,7 @@ func (q *Queries) GetSongIDsWithFMVs(ctx context.Context) ([]int32, error) {
 }
 
 const getSongIDsWithSpecialUseCase = `-- name: GetSongIDsWithSpecialUseCase :many
-SELECT id FROM songs WHERE special_use_case != NULL
+SELECT id FROM songs WHERE special_use_case IS NOT NULL
 `
 
 func (q *Queries) GetSongIDsWithSpecialUseCase(ctx context.Context) ([]int32, error) {

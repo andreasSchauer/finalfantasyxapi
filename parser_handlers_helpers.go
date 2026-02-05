@@ -51,7 +51,7 @@ func checkID(idStr, resourceType string, maxID int) (parseResponse, error) {
 
 
 func checkUniqueName[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
-	nameWithSpaces := h.GetNameWithSpaces(name)
+	nameWithSpaces := h.GetNameWithSpaces(name, "_")
 
 	lookupObj := seeding.LookupObject{
 		Name: nameWithSpaces,
@@ -74,7 +74,7 @@ func checkUniqueName[T h.HasID](name string, lookup map[string]T) (parseResponse
 
 
 func checkNameMultiple[T h.HasID](name string, lookup map[string]T) (parseResponse, error) {
-	nameWithSpaces := h.GetNameWithSpaces(name)
+	nameWithSpaces := h.GetNameWithSpaces(name, "_")
 	var testVersion int32 = 1
 
 	lookupObj := seeding.LookupObject{
@@ -91,7 +91,7 @@ func checkNameMultiple[T h.HasID](name string, lookup map[string]T) (parseRespon
 
 
 func checkNameVersion[T h.HasID](name string, version *int32, lookup map[string]T) (parseResponse, error) {
-	nameWithSpaces := h.GetNameWithSpaces(name)
+	nameWithSpaces := h.GetNameWithSpaces(name, "_")
 
 	key := seeding.LookupObject{
 		Name:    nameWithSpaces,

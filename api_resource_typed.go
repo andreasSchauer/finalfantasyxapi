@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"slices"
 	"strconv"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type TypedApiResourceList struct {
@@ -77,11 +79,17 @@ func GetTypedAPIResource[T, N any](key string, et EnumType[T, N]) (TypedAPIResou
 	}
 
 	res, found := et.lookup[key]
-	if !found {
-		return TypedAPIResource{}, fmt.Errorf("value '%s' is not valid in enum '%s'.", key, et.name)
+	if found {
+		return res, nil
 	}
 
-	return res, nil
+	keyWithSpaces := h.GetNameWithSpaces(key, "-")
+	res, found = et.lookup[keyWithSpaces]
+	if found {
+		return res, nil
+	}
+
+	return TypedAPIResource{}, fmt.Errorf("value '%s' is not valid in enum '%s'.", key, et.name)
 }
 
 func newTypedAPIResourceList(cfg *Config, r *http.Request, resources []TypedAPIResource) (TypedApiResourceList, error) {

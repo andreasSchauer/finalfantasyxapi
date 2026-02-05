@@ -24,9 +24,9 @@ func GetMapKeyStr[T any](itemMap map[string]T) string {
 }
 
 
-func GetNameWithSpaces(name string) string {
+func GetNameWithSpaces(name, separator string) string {
 	nameLower := strings.ToLower(name)
-	return strings.ReplaceAll(nameLower, "_", " ")
+	return strings.ReplaceAll(nameLower, separator, " ")
 }
 
 func StringSliceToListString(s []string) string {

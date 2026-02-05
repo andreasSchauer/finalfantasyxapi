@@ -36,6 +36,7 @@ type QueryLookup struct {
 	monsterFormations	map[string]QueryType
 	overdriveModes 		map[string]QueryType
 	shops		   		map[string]QueryType
+	songs				map[string]QueryType
 	sublocations   		map[string]QueryType
 	treasures			map[string]QueryType
 }
@@ -81,6 +82,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initSublocationsParams()
 	cfg.initLocationsParams()
 	cfg.initShopsParams()
+	cfg.initSongsParams()
 	cfg.initTreasuresParams()
 }
 
@@ -832,6 +834,73 @@ func (cfg *Config) initShopsParams() {
 
 	params = cfg.completeQueryTypeInit(params)
 	cfg.q.shops = params
+}
+
+func (cfg *Config) initSongsParams() {
+	params := map[string]QueryType{
+		"location": {
+			ID:          1,
+			Description: "Searches for songs that are played within the specified location. Songs with special use cases are not included.",
+			Usage:       "?location={location_id}",
+			ExampleUses: []string{"?location=17"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "locations")},
+		},
+		"sublocation": {
+			ID:          2,
+			Description: "Searches for songs that are played within the specified sublocation. Songs with special use cases are not included.",
+			Usage:       "?sublocation={sublocation_id}",
+			ExampleUses: []string{"?sublocation=13"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "sublocations")},
+		},
+		"area": {
+			ID:          3,
+			Description: "Searches for songs that are played within the specified area. Songs with special use cases are not included.",
+			Usage:       "?area={area_id}",
+			ExampleUses: []string{"?area=13", "?area=240"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "areas")},
+		},
+		"fmvs": {
+			ID:          4,
+			Description: "Searches for songs that are played in fmvs.",
+			Usage:       "?fmvs={boolean}",
+			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"special_use": {
+			ID:          5,
+			Description: "Searches for songs with a special use case.",
+			Usage:       "?special_use={boolean}",
+			ExampleUses: []string{"?special_use=true", "?special_use=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"composer": {
+			ID:          6,
+			Description: "Searches for songs that were composed by target composer.",
+			Usage:       "?composer={composer_name/id}",
+			ExampleUses: []string{"?composer=nobuo-uematsu", "?composer=2"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"arranger": {
+			ID:          7,
+			Description: "Searches for songs that were arranged by target arranger.",
+			Usage:       "?arranger={arranger_name/id}",
+			ExampleUses: []string{"?arranger=nobuo-uematsu", "?arranger=2"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.songs = params
 }
 
 func (cfg *Config) initTreasuresParams() {

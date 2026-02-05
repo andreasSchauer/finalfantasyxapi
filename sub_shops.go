@@ -33,8 +33,8 @@ type SubShopSub struct {
 
 func convertSubShopSub(cfg *Config, ss seeding.SubShop) SubShopSub {
 	return SubShopSub{
-		Items: convertObjSlice(cfg, ss.Items, shopItemNameString),
-		Equipment: convertObjSlice(cfg, ss.Equipment, convertShopEquipmentSub),
+		Items: 		convertObjSlice(cfg, ss.Items, shopItemNameString),
+		Equipment: 	convertObjSlice(cfg, ss.Equipment, convertShopEquipmentSub),
 	}
 }
 

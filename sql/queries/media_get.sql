@@ -28,7 +28,7 @@ ORDER BY s.id;
 
 
 -- name: GetSongIDsWithSpecialUseCase :many
-SELECT id FROM songs WHERE special_use_case != NULL;
+SELECT id FROM songs WHERE special_use_case IS NOT NULL;
 
 
 -- name: GetSongIDsByComposer :many
