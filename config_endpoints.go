@@ -37,7 +37,7 @@ type endpoints struct {
 	characterClasses   handlerInput[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList]
 	elements           handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
 	equipment		   handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
-	fmvs               handlerInput[seeding.FMV, any, NamedAPIResource, NamedApiResourceList]
+	fmvs               handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
 	items              handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]
 	keyItems           handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]
 	locations          handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
@@ -95,10 +95,10 @@ func (cfg *Config) EndpointsInit() {
 		resourceType:  "area",
 		objLookup:     cfg.l.Areas,
 		objLookupID:   cfg.l.AreasID,
-		idToResFunc:   idToLocationAPIResource,
-		resToListFunc: newLocationAPIResourceList,
 		queryLookup:   cfg.q.areas,
+		idToResFunc:   idToLocationAPIResource,
 		retrieveQuery: cfg.db.GetAreaIDs,
+		resToListFunc: newLocationAPIResourceList,
 		getSingleFunc: cfg.getArea,
 		retrieveFunc:  cfg.retrieveAreas,
 		subsections: map[string]SubSectionFns{
@@ -191,13 +191,17 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.fmvs = handlerInput[seeding.FMV, any, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "fmvs",
-		resourceType:  "FMV",
-		objLookup:     cfg.l.FMVs,
-		objLookupID:   cfg.l.FMVsID,
-		idToResFunc:   idToNamedAPIResource[seeding.FMV, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+	e.fmvs = handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      	"fmvs",
+		resourceType:  	"fmv",
+		objLookup:     	cfg.l.FMVs,
+		objLookupID:   	cfg.l.FMVsID,
+		queryLookup: 	cfg.q.fmvs,
+		idToResFunc:   	idToNamedAPIResource[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
+		retrieveQuery: 	cfg.db.GetFmvIDs,
+		getSingleFunc: 	cfg.getFMV,
+		retrieveFunc: 	cfg.retrieveFMVs,
 	}
 
 	e.items = handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]{
@@ -219,17 +223,17 @@ func (cfg *Config) EndpointsInit() {
 	}
 
 	e.locations = handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "locations",
-		resourceType:  "location",
-		objLookup:     cfg.l.Locations,
-		objLookupID:   cfg.l.LocationsID,
-		idToResFunc:   idToNamedAPIResource[seeding.Location, Location, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
-		queryLookup: cfg.q.locations,
-		retrieveQuery: cfg.db.GetLocationIDs,
-		getSingleFunc: cfg.getLocation,
-		retrieveFunc: cfg.retrieveLocations,
-		subsections: map[string]SubSectionFns{
+		endpoint:      	"locations",
+		resourceType:  	"location",
+		objLookup:     	cfg.l.Locations,
+		objLookupID:   	cfg.l.LocationsID,
+		queryLookup: 	cfg.q.locations,
+		retrieveQuery: 	cfg.db.GetLocationIDs,
+		idToResFunc:   	idToNamedAPIResource[seeding.Location, Location, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
+		getSingleFunc: 	cfg.getLocation,
+		retrieveFunc: 	cfg.retrieveLocations,
+		subsections: 	map[string]SubSectionFns{
 			"connected": {
 				dbQuery:      	cfg.db.GetConnectedLocationIDs,
 				getResultsFn: 	handleLocationsSection,

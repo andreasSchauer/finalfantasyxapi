@@ -31,6 +31,7 @@ type SpecialInput struct {
 type QueryLookup struct {
 	defaultParams  		map[string]QueryType
 	areas          		map[string]QueryType
+	fmvs				map[string]QueryType
 	locations	   		map[string]QueryType
 	monsters       		map[string]QueryType
 	monsterFormations	map[string]QueryType
@@ -44,6 +45,7 @@ type QueryLookup struct {
 func (cfg *Config) QueryLookupInit() {
 	defaultLimit := 20
 	defaultOffset := 0
+	// emptyMap := make(map[string]QueryType)
 	cfg.q = &QueryLookup{}
 
 	cfg.q.defaultParams = map[string]QueryType{
@@ -76,6 +78,7 @@ func (cfg *Config) QueryLookupInit() {
 	}
 
 	cfg.initAreasParams()
+	cfg.initFMVsParams()
 	cfg.initMonstersParams()
 	cfg.initMonsterFormationsParams()
 	cfg.initOverdriveModesParams()
@@ -253,6 +256,23 @@ func (cfg *Config) initAreasParams() {
 
 	params = cfg.completeQueryTypeInit(params)
 	cfg.q.areas = params
+}
+
+func (cfg *Config) initFMVsParams() {
+	params := map[string]QueryType{
+		"location": {
+			ID:          1,
+			Description: "Searches for fmvs that are played within the specified location.",
+			Usage:       "?location={location_id}",
+			ExampleUses: []string{"?location=17"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "locations")},
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.fmvs = params
 }
 
 func (cfg *Config) initMonstersParams() {

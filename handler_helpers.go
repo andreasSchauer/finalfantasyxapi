@@ -162,7 +162,7 @@ func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 
 	fns, ok := i.subsections[subsection]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' is not supported. supported subsections: %s.", subsection, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' is not supported for endpoint '%s'. supported subsections: %s.", subsection, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
 

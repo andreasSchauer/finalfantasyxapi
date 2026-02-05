@@ -21,9 +21,11 @@ func main() {
 	mux.HandleFunc("GET /api/healthz", apiCfg.HandlerReadiness)
 	mux.HandleFunc("POST /admin/reset", apiCfg.HandlerResetDatabase)
 
-	mux.HandleFunc("GET /api/locations/", apiCfg.HandleLocations)
-	mux.HandleFunc("GET /api/sublocations/", apiCfg.HandleSublocations)
 	mux.HandleFunc("GET /api/areas/", apiCfg.HandleAreas)
+	mux.HandleFunc("GET /api/sublocations/", apiCfg.HandleSublocations)
+	mux.HandleFunc("GET /api/locations/", apiCfg.HandleLocations)
+	
+	mux.HandleFunc("GET /api/fmvs/", apiCfg.HandleFMVs)
 	mux.HandleFunc("GET /api/monsters/", apiCfg.HandleMonsters)
 	mux.HandleFunc("GET /api/monster-formations/", apiCfg.HandleMonsterFormations)
 	mux.HandleFunc("GET /api/overdrive-modes/", apiCfg.HandleOverdriveModes)

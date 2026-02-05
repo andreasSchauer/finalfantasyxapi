@@ -82,6 +82,15 @@ func nameToNamedAPIResource[T h.IsNamed, R any, A APIResource, L APIResourceList
 	return idToNamedAPIResource(cfg, i, parseResp.ID)
 }
 
+func namePtrToNamedAPIResPtr[T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], namePtr *string, version *int32) *NamedAPIResource {
+	if namePtr == nil {
+		return nil
+	}
+
+	res := nameToNamedAPIResource(cfg, i, *namePtr, version)
+	return &res
+}
+
 func namesToNamedAPIResources[T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], names []string) []NamedAPIResource {
 	resources := []NamedAPIResource{}
 

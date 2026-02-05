@@ -45,3 +45,7 @@ FROM songs s
 JOIN song_credits c ON s.credits_id = c.id
 WHERE c.arranger = $1
 ORDER BY s.id;
+
+
+-- name: GetFmvIDs :many
+SELECT id FROM fmvs ORDER BY id;

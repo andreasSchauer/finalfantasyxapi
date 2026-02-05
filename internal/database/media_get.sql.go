@@ -9,6 +9,33 @@ import (
 	"context"
 )
 
+const getFmvIDs = `-- name: GetFmvIDs :many
+SELECT id FROM fmvs ORDER BY id
+`
+
+func (q *Queries) GetFmvIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getFmvIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getSongFmvIDs = `-- name: GetSongFmvIDs :many
 SELECT DISTINCT f.id
 FROM fmvs f

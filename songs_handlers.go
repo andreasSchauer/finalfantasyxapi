@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -87,8 +88,12 @@ func (cfg *Config) HandleSongs(w http.ResponseWriter, r *http.Request) {
 		handleEndpointNameOrID(cfg, w, r, i, segments)
 		return
 
+	case 2:
+		handleEndpointSubsections(cfg, w, r, i, segments)
+		return
+		
 	default:
-		respondWithError(w, http.StatusBadRequest, `wrong format. usage: '/api/overdrive-modes/{name or id}'.`, nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
 		return
 	}
 }
