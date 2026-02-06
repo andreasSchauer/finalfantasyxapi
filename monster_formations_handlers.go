@@ -10,7 +10,6 @@ import (
 
 type MonsterFormation struct {
 	ID              int32                     `json:"id"`
-	Version         *int32                    `json:"version,omitempty"`
 	Category        string                    `json:"category"`
 	IsForcedAmbush  bool                      `json:"is_forced_ambush"`
 	CanEscape       bool                      `json:"can_escape"`
@@ -24,6 +23,10 @@ type MonsterFormation struct {
 type EncounterLocation struct {
 	Area          AreaAPIResource `json:"area"`
 	Specification *string         `json:"specification"`
+}
+
+func (ec EncounterLocation) GetAPIResource() APIResource {
+	return ec.Area
 }
 
 func convertEncounterLocation(cfg *Config, el seeding.EncounterLocation) EncounterLocation {
@@ -40,6 +43,10 @@ type FormationTriggerCommand struct {
 	Users     []NamedAPIResource `json:"users"`
 }
 
+func (tc FormationTriggerCommand) GetAPIResource() APIResource {
+	return tc.Ability
+}
+
 func convertFormationTriggerCommand(cfg *Config, tc seeding.FormationTriggerCommand) FormationTriggerCommand {
 	return FormationTriggerCommand{
 		Ability:   nameToNamedAPIResource(cfg, cfg.e.triggerCommands, tc.Name, tc.Version),
@@ -52,6 +59,10 @@ func convertFormationTriggerCommand(cfg *Config, tc seeding.FormationTriggerComm
 type FormationBossSong struct {
 	Song             NamedAPIResource `json:"song"`
 	CelebrateVictory bool             `json:"celebrate_victory"`
+}
+
+func (bs FormationBossSong) GetAPIResource() APIResource {
+	return bs.Song
 }
 
 func convertFormationBossSong(cfg *Config, bossMusic seeding.FormationBossSong) FormationBossSong {
@@ -93,7 +104,6 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 
 	response := MonsterFormation{
 		ID:              formation.ID,
-		Version:         formation.Version,
 		Category:        formation.FormationData.Category,
 		IsForcedAmbush:  formation.FormationData.IsForcedAmbush,
 		CanEscape:       formation.FormationData.CanEscape,

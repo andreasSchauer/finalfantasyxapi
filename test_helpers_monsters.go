@@ -5,27 +5,7 @@ import (
 	"slices"
 )
 
-func testMonsterElemResists(test test, exp []testElemResist, got []ElementalResist) {
-	compare(test, "elemental resists length", 5, len(got))
-	compareMonsterElemResists(test, "elemental resists", exp, got)
-}
-
-func compareMonsterElemResists(test test, fieldName string, exp []testElemResist, got []ElementalResist) {
-	dontCheck := test.dontCheck
-	if dontCheck != nil && dontCheck[fieldName] {
-		return
-	}
-
-	for i, resist := range exp {
-		elemEndpoint := test.cfg.e.elements.endpoint
-		affinityEndpoint := test.cfg.e.affinities.endpoint
-
-		compAPIResourcesFromID(test, "elements", elemEndpoint, resist.element, got[i].Element)
-		compAPIResourcesFromID(test, "affinities", affinityEndpoint, resist.affinity, got[i].Affinity)
-	}
-}
-
-func testMonsterItems(test test, expItems *testItems, gotItems *MonsterItems, checks *[]resListTest) {
+func testMonsterItems(test test, expItems *testMonItems, gotItems *MonsterItems, checks *[]resListTest) {
 	if test.dontCheck != nil && test.dontCheck["items"] {
 		return
 	}
@@ -50,7 +30,7 @@ func testMonsterItems(test test, expItems *testItems, gotItems *MonsterItems, ch
 	compResPtrsFromID(test, "bribe", endpoint, itemMap["bribe"], got.Bribe)
 }
 
-func testMonsterEquipment(test test, expEquipment *testEquipment, gotEquipment *MonsterEquipment, checks *[]resListTest) {
+func testMonsterEquipment(test test, expEquipment *testMonEquipment, gotEquipment *MonsterEquipment, checks *[]resListTest) {
 	if test.dontCheck != nil && test.dontCheck["equipment"] {
 		return
 	}
@@ -123,7 +103,7 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []Alter
 		checkResAmtsInSlice(test, desc+"status resists", expChange.StatusResists, gotChange.StatusResists)
 		compStructPtrs(test, desc+"added status", expChange.AddedStatus, gotChange.AddedStatus)
 		compResPtrsFromID(test, desc+"removed status", test.cfg.e.statusConditions.endpoint, expChange.RemovedStatus, gotChange.RemovedStatus)
-		compareMonsterElemResists(test, desc+"elemental resists", expChange.ElemResists, gotChange.ElemResists)
+		compareCustomObjSlices(test, desc+"elemental resists", expChange.ElemResists, gotChange.ElemResists, compareMonsterElemResists)
 
 		checks := []resListTest{
 			newResListTestFromIDs(desc+"properties", test.cfg.e.properties.endpoint, expChange.Properties, gotChange.Properties),

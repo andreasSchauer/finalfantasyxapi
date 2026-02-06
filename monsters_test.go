@@ -143,7 +143,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{
 					"properties":        1,
 					"auto-abilities":    0,
-					"areas":         	 1,
+					"areas":             1,
 					"formations":        3,
 					"base stats":        10,
 					"other items":       0,
@@ -178,7 +178,7 @@ func TestGetMonster(t *testing.T) {
 					"magic":   18,
 					"evasion": 0,
 				},
-				items: &testItems{
+				items: &testMonItems{
 					itemDropChance: 255,
 					items: map[string]*int32{
 						"steal common": h.GetInt32Ptr(27),
@@ -206,7 +206,7 @@ func TestGetMonster(t *testing.T) {
 						Chance: 100,
 					},
 				},
-				equipment: &testEquipment{
+				equipment: &testMonEquipment{
 					abilitySlots: MonsterEquipmentSlots{
 						MinAmount: 1,
 						MaxAmount: 2,
@@ -274,7 +274,7 @@ func TestGetMonster(t *testing.T) {
 			},
 			expMonsters: expMonsters{
 				agility: nil,
-				items: &testItems{
+				items: &testMonItems{
 					itemDropChance: 0,
 					items: map[string]*int32{
 						"steal common": h.GetInt32Ptr(1),
@@ -296,7 +296,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{
 					"properties":        1,
 					"auto-abilities":    0,
-					"areas":   		     1,
+					"areas":             1,
 					"formations":        1,
 					"base stats":        10,
 					"other items":       0,
@@ -326,7 +326,7 @@ func TestGetMonster(t *testing.T) {
 				properties: []int32{1},
 				areas:      []int32{150},
 				formations: []int32{126},
-				items: &testItems{
+				items: &testMonItems{
 					itemDropChance: 255,
 					items: map[string]*int32{
 						"steal common": h.GetInt32Ptr(5),
@@ -337,7 +337,7 @@ func TestGetMonster(t *testing.T) {
 					},
 				},
 				bribeChances: nil,
-				equipment: &testEquipment{
+				equipment: &testMonEquipment{
 					abilitySlots: MonsterEquipmentSlots{
 						MinAmount: 2,
 						MaxAmount: 3,
@@ -967,7 +967,7 @@ func TestGetMonster(t *testing.T) {
 		checkResAmtsInSlice(test, "status resists", tc.statusResists, got.StatusResists)
 		compStructPtrs(test, "agility params", tc.agility, got.AgilityParameters)
 		compStructSlices(test, "bribe chances", tc.bribeChances, got.BribeChances)
-		testMonsterElemResists(test, tc.elemResists, got.ElemResists)
+		compareCustomObjSlices(test, "elemental resists", tc.elemResists, got.ElemResists, compareMonsterElemResists)
 		testMonsterAppliedState(test, tc.appliedState, got.AppliedState)
 		testMonsterDefaultState(test, tc.defaultState, got.AlteredStates)
 

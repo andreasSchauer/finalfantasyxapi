@@ -16,7 +16,7 @@ func (ma MonsterAmount) GetAPIResource() APIResource {
 }
 
 func (ma MonsterAmount) GetName() string {
-	return ma.Monster.Name
+	return nameToString(ma.Monster.Name, ma.Monster.Version, nil)
 }
 
 func (ma MonsterAmount) GetVersion() *int32 {

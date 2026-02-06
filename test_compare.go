@@ -258,3 +258,21 @@ func compPageURL(test test, fieldName string, expPathPtr, gotURLPtr *string) {
 
 	compare(test, fieldName, expURLPtr, gotURLPtr)
 }
+
+
+func compareCustomObjSlices[E, G any](test test, fieldName string, exp []E, got []G, compFn func(test, E, G)) {
+	if exp == nil {
+		return
+	}
+
+	compare(test, fieldName+" length", len(exp), len(got))
+
+	dontCheck := test.dontCheck
+	if dontCheck != nil && dontCheck[fieldName] {
+		return
+	}
+
+	for i := range exp {
+		compFn(test, exp[i], got[i])
+	}
+}

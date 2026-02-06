@@ -40,6 +40,10 @@ type expUnique struct {
 	name string
 }
 
+type expIdOnly struct {
+	id int32
+}
+
 type expList struct {
 	count          int
 	previous       *string
@@ -90,6 +94,29 @@ type expLocRel struct {
 	fmvs       []int32
 }
 
+type expMonsterFormations struct {
+	category		string
+	isForcedAmbush	bool
+	canEscape		bool
+	bossMusic		*int32
+	monsters		map[string]int32
+	areas			[]int32
+	triggerCommands	[]testFormationTC
+}
+
+type testFormationTC struct {
+	Ability	int32
+	Users	[]int32
+}
+
+func compareFormationTCs(test test, exp testFormationTC, got FormationTriggerCommand) {
+	tcEndpoint := test.cfg.e.triggerCommands.endpoint
+	charClassesEndpoint := test.cfg.e.characterClasses.endpoint
+
+	compAPIResourcesFromID(test, "tc ability", tcEndpoint, exp.Ability, got.Ability)
+	testResourceList(test, newResListTestFromIDs("tc users", charClassesEndpoint, exp.Users, got.Users))
+}
+
 type expOverdriveModes struct {
 	description   string
 	effect        string
@@ -110,9 +137,9 @@ type expMonsters struct {
 	areas            []int32
 	formations       []int32
 	baseStats        map[string]int32
-	items            *testItems
+	items            *testMonItems
 	bribeChances     []BribeChance
-	equipment        *testEquipment
+	equipment        *testMonEquipment
 	elemResists      []testElemResist
 	statusImmunities []int32
 	statusResists    map[string]int32
@@ -149,13 +176,21 @@ type testElemResist struct {
 	affinity int32
 }
 
-type testItems struct {
+func compareMonsterElemResists(test test, exp testElemResist, got ElementalResist) {
+	elemEndpoint := test.cfg.e.elements.endpoint
+	affinityEndpoint := test.cfg.e.affinities.endpoint
+
+	compAPIResourcesFromID(test, "elements", elemEndpoint, exp.element, got.Element)
+	compAPIResourcesFromID(test, "affinities", affinityEndpoint, exp.affinity, got.Affinity)
+}
+
+type testMonItems struct {
 	itemDropChance int32
 	items          map[string]*int32
 	otherItems     []int32
 }
 
-type testEquipment struct {
+type testMonEquipment struct {
 	abilitySlots      MonsterEquipmentSlots
 	attachedAbilities MonsterEquipmentSlots
 	weaponAbilities   []int32

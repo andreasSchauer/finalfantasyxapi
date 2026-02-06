@@ -109,6 +109,12 @@ func setupTest(t *testing.T, tc testGeneral, testFunc string, testNum int, handl
 	return rr, testName, nil
 }
 
+// checks, if all basic fields of an unnamed resource are equal
+func testExpectedIdOnly(test test, tc expIdOnly, gotID int32) {
+	test.t.Helper()
+	compare(test, "id", tc.id, gotID)
+}
+
 // checks, if all basic fields of a resource with a unique name are equal
 func testExpectedUnique(test test, tc expUnique, gotID int32, gotName string) {
 	test.t.Helper()
@@ -182,7 +188,7 @@ func checkResourcesInSlice[T HasAPIResource](test test, fieldName string, expect
 }
 
 
-// will need to use name-version pattern in monsterAmount's GetName() method for getResourceAmountMap() to work
+
 // checks if stated ResourceAmount entries are in slices (used for baseStats, itemAmounts, monsterAmounts) and if their amount values match
 // maybe could use the error function I made
 func checkResAmtsInSlice[T ResourceAmount](test test, fieldName string, expAmounts map[string]int32, gotAmounts []T) {
