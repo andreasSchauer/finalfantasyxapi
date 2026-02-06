@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seeding.SubLocation) (LocRel, error) {
+func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seeding.Sublocation) (LocRel, error) {
 	characters, err := getResourcesDB(cfg, r, cfg.e.characters, sublocation, cfg.db.GetSublocationCharacterIDs)
 	if err != nil {
 		return LocRel{}, err

@@ -50,8 +50,7 @@ func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIRe
 	return resources, nil
 }
 
-
-func getSublocationsByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32, resourceType string) ([]NamedAPIResource, error) {
+func getSublocationsByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32, resourceType string) ([]NamedAPIResource, error) {
 	filteredLists := []filteredResList[NamedAPIResource]{
 		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromMonster)),
 		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromTreasure)),

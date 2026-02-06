@@ -10,6 +10,7 @@ type TypeLookup struct {
 	AreaConnectionType 			EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory		EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger					EnumType[database.Arranger, database.NullArranger]
+	BlitzballTournamentCategory	EnumType[database.BlitzballTournamentCategory, any]
 	Composer					EnumType[database.Composer, database.NullComposer]
 	CreationArea       			EnumType[database.MaCreationArea, database.NullMaCreationArea]
 	CTBIconType        			EnumType[database.CtbIconType, any]
@@ -46,6 +47,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initAreaConnectionType()
 	cfg.t.initArenaCreationCategory()
 	cfg.t.initArranger()
+	cfg.t.initBlitzballTournamentCategory()
 	cfg.t.initComposer()
 	cfg.t.initCTBIconType()
 	cfg.t.initCreationArea()
@@ -116,6 +118,21 @@ func (t *TypeLookup) initArranger() {
 	t.Arranger = newEnumType("arranger", typeSlice, func(s string) database.Arranger {
 		return database.Arranger(s)
 	}, h.NullArranger)
+}
+
+func (t *TypeLookup) initBlitzballTournamentCategory() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: string(database.BlitzballTournamentCategoryLeague),
+		},
+		{
+			Name: string(database.BlitzballTournamentCategoryTournament),
+		},
+	}
+
+	t.BlitzballTournamentCategory = newEnumType[database.BlitzballTournamentCategory, any]("blitzball tournament category", typeSlice, func(s string) database.BlitzballTournamentCategory {
+		return database.BlitzballTournamentCategory(s)
+	}, nil)
 }
 
 func (t *TypeLookup) initComposer() {

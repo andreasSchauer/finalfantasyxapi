@@ -29,7 +29,6 @@ func (a AreaSub) GetURL() string {
 	return a.URL
 }
 
-
 func handleAreasSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.areas
 	areas := []AreaSub{}
@@ -54,8 +53,8 @@ func handleAreasSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResou
 		areaSub := AreaSub{
 			ID:                area.ID,
 			URL:               createResourceURL(cfg, i.endpoint, areaID),
-			ParentLocation:    createSubReference(area.SubLocation.Location.ID, area.SubLocation.Location.Name, nil, nil),
-			ParentSublocation: createSubReference(area.SubLocation.ID, area.SubLocation.Name, nil, nil),
+			ParentLocation:    createSubReference(area.Sublocation.Location.ID, area.Sublocation.Location.Name, nil, nil),
+			ParentSublocation: createSubReference(area.Sublocation.ID, area.Sublocation.Name, nil, nil),
 			Name:              area.Name,
 			Version:           area.Version,
 			Specification:     area.Specification,

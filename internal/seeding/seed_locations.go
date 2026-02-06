@@ -12,7 +12,7 @@ import (
 type Location struct {
 	ID           int32
 	Name         string        `json:"location"`
-	SubLocations []SubLocation `json:"sublocations"`
+	Sublocations []Sublocation `json:"sublocations"`
 }
 
 func (l Location) ToHashFields() []any {
@@ -36,7 +36,7 @@ func (l Location) GetResParamsNamed() h.ResParamsNamed {
 	}
 }
 
-type SubLocation struct {
+type Sublocation struct {
 	ID            int32
 	Name          string  `json:"sublocation"`
 	Specification *string `json:"specification"`
@@ -44,7 +44,7 @@ type SubLocation struct {
 	Location      Location
 }
 
-func (s SubLocation) ToHashFields() []any {
+func (s Sublocation) ToHashFields() []any {
 	return []any{
 		s.Location.ID,
 		s.Name,
@@ -52,15 +52,15 @@ func (s SubLocation) ToHashFields() []any {
 	}
 }
 
-func (s SubLocation) GetID() int32 {
+func (s Sublocation) GetID() int32 {
 	return s.ID
 }
 
-func (s SubLocation) Error() string {
+func (s Sublocation) Error() string {
 	return fmt.Sprintf("sublocation %s", s.Name)
 }
 
-func (s SubLocation) GetResParamsNamed() h.ResParamsNamed {
+func (s Sublocation) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
 		ID:   s.ID,
 		Name: s.Name,
@@ -78,12 +78,12 @@ type Area struct {
 	HasCompilationSphere bool             `json:"has_compilation_sphere"`
 	CanRideChocobo       bool             `json:"can_ride_chocobo"`
 	ConnectedAreas       []AreaConnection `json:"connected_areas"`
-	SubLocation          SubLocation
+	Sublocation          Sublocation
 }
 
 func (a Area) ToHashFields() []any {
 	return []any{
-		a.SubLocation.ID,
+		a.Sublocation.ID,
 		a.Name,
 		h.DerefOrNil(a.Version),
 		h.DerefOrNil(a.Specification),
@@ -105,8 +105,8 @@ func (a Area) Error() string {
 
 func (a Area) GetLocationArea() LocationArea {
 	return LocationArea{
-		Location:    a.SubLocation.Location.Name,
-		Sublocation: a.SubLocation.Name,
+		Location:    a.Sublocation.Location.Name,
+		Sublocation: a.Sublocation.Name,
 		Area:        a.Name,
 		Version:     a.Version,
 	}
@@ -115,8 +115,8 @@ func (a Area) GetLocationArea() LocationArea {
 func (a Area) GetResParamsLocation() h.ResParamsLocation {
 	return h.ResParamsLocation{
 		AreaID:        a.ID,
-		Location:      a.SubLocation.Location.Name,
-		Sublocation:   a.SubLocation.Name,
+		Location:      a.Sublocation.Location.Name,
+		Sublocation:   a.Sublocation.Name,
 		Area:          a.Name,
 		Version:       a.Version,
 		Specification: a.Specification,
@@ -124,7 +124,7 @@ func (a Area) GetResParamsLocation() h.ResParamsLocation {
 }
 
 type LocationArea struct {
-	ID          int32	`json:"-"`
+	ID          int32  `json:"-"`
 	Location    string `json:"location"`
 	Sublocation string `json:"sublocation"`
 	Area        string `json:"area"`
@@ -200,7 +200,7 @@ func (l *Lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 			l.Locations[location.Name] = location
 			l.LocationsID[location.ID] = location
 
-			err = l.seedSubLocations(qtx, location)
+			err = l.seedSublocations(qtx, location)
 			if err != nil {
 				return err
 			}
@@ -210,24 +210,24 @@ func (l *Lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-func (l *Lookup) seedSubLocations(qtx *database.Queries, location Location) error {
-	for _, subLocation := range location.SubLocations {
-		subLocation.Location = location
+func (l *Lookup) seedSublocations(qtx *database.Queries, location Location) error {
+	for _, sublocation := range location.Sublocations {
+		sublocation.Location = location
 
-		dbSubLocation, err := qtx.CreateSubLocation(context.Background(), database.CreateSubLocationParams{
-			DataHash:      generateDataHash(subLocation),
-			LocationID:    subLocation.Location.ID,
-			Name:          subLocation.Name,
-			Specification: h.GetNullString(subLocation.Specification),
+		dbSublocation, err := qtx.CreateSublocation(context.Background(), database.CreateSublocationParams{
+			DataHash:      generateDataHash(sublocation),
+			LocationID:    sublocation.Location.ID,
+			Name:          sublocation.Name,
+			Specification: h.GetNullString(sublocation.Specification),
 		})
 		if err != nil {
-			return h.NewErr(subLocation.Error(), err, "couldn't create sublocation")
+			return h.NewErr(sublocation.Error(), err, "couldn't create sublocation")
 		}
-		subLocation.ID = dbSubLocation.ID
-		l.Sublocations[subLocation.Name] = subLocation
-		l.SublocationsID[subLocation.ID] = subLocation
+		sublocation.ID = dbSublocation.ID
+		l.Sublocations[sublocation.Name] = sublocation
+		l.SublocationsID[sublocation.ID] = sublocation
 
-		err = l.seedAreas(qtx, subLocation)
+		err = l.seedAreas(qtx, sublocation)
 		if err != nil {
 			return err
 		}
@@ -236,13 +236,13 @@ func (l *Lookup) seedSubLocations(qtx *database.Queries, location Location) erro
 	return nil
 }
 
-func (l *Lookup) seedAreas(qtx *database.Queries, subLocation SubLocation) error {
-	for _, area := range subLocation.Areas {
-		area.SubLocation = subLocation
+func (l *Lookup) seedAreas(qtx *database.Queries, sublocation Sublocation) error {
+	for _, area := range sublocation.Areas {
+		area.Sublocation = sublocation
 
 		dbArea, err := qtx.CreateArea(context.Background(), database.CreateAreaParams{
 			DataHash:             generateDataHash(area),
-			SublocationID:        area.SubLocation.ID,
+			SublocationID:        area.Sublocation.ID,
 			Name:                 area.Name,
 			Version:              h.GetNullInt32(area.Version),
 			Specification:        h.GetNullString(area.Specification),
@@ -278,11 +278,11 @@ func (l *Lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) er
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, location := range locations {
-			for _, subLocation := range location.SubLocations {
-				for _, jsonArea := range subLocation.Areas {
+			for _, sublocation := range location.Sublocations {
+				for _, jsonArea := range sublocation.Areas {
 					locationArea := LocationArea{
 						Location:    location.Name,
-						Sublocation: subLocation.Name,
+						Sublocation: sublocation.Name,
 						Area:        jsonArea.Name,
 						Version:     jsonArea.Version,
 					}

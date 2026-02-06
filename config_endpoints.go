@@ -34,6 +34,7 @@ type endpoints struct {
 	arenaCreations     handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
 	areas              handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList]
 	autoAbilities      handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
+	blitzballPrizes    handlerInput[seeding.BlitzballPosition, BlitzballPosition, UnnamedAPIResource, UnnamedApiResourceList]
 	characters         handlerInput[seeding.Character, any, NamedAPIResource, NamedApiResourceList]
 	characterClasses   handlerInput[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList]
 	elements           handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
@@ -58,7 +59,7 @@ type endpoints struct {
 	songs              handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
 	stats              handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
 	statusConditions   handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
-	sublocations       handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList]
+	sublocations       handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
 	treasures          handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
 
 	connectionType           handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
@@ -147,6 +148,19 @@ func (cfg *Config) EndpointsInit() {
 		objLookupID:   cfg.l.AutoAbilitiesID,
 		idToResFunc:   idToNamedAPIResource[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+	}
+
+	e.blitzballPrizes = handlerInput[seeding.BlitzballPosition, BlitzballPosition, UnnamedAPIResource, UnnamedApiResourceList]{
+		endpoint:      "blitzball-prizes",
+		resourceType:  "blitzball prize table",
+		objLookup:     cfg.l.Positions,
+		objLookupID:   cfg.l.PositionsID,
+		queryLookup:   cfg.q.blitzballPrizes,
+		idToResFunc:   idToUnnamedAPIResource[seeding.BlitzballPosition, BlitzballPosition, UnnamedAPIResource, UnnamedApiResourceList],
+		resToListFunc: newUnnamedAPIResourceList,
+		retrieveQuery: cfg.db.GetBlitzballPrizeIDs,
+		getSingleFunc: cfg.getBlitzballPrize,
+		retrieveFunc:  cfg.retrieveBlitzballPrizes,
 	}
 
 	e.characters = handlerInput[seeding.Character, any, NamedAPIResource, NamedApiResourceList]{
@@ -507,12 +521,12 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.sublocations = handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList]{
+	e.sublocations = handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "sublocations",
 		resourceType:  "sublocation",
 		objLookup:     cfg.l.Sublocations,
 		objLookupID:   cfg.l.SublocationsID,
-		idToResFunc:   idToNamedAPIResource[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		queryLookup:   cfg.q.sublocations,
 		retrieveQuery: cfg.db.GetSublocationIDs,

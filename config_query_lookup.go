@@ -32,6 +32,7 @@ type QueryLookup struct {
 	defaultParams  		map[string]QueryType
 	arenaCreations		map[string]QueryType
 	areas          		map[string]QueryType
+	blitzballPrizes		map[string]QueryType
 	fmvs				map[string]QueryType
 	locations	   		map[string]QueryType
 	monsters       		map[string]QueryType
@@ -81,6 +82,7 @@ func (cfg *Config) QueryLookupInit() {
 
 	cfg.initAreasParams()
 	cfg.initArenaCreationsParams()
+	cfg.initBlitzballPrizesParams()
 	cfg.initFMVsParams()
 	cfg.initMonstersParams()
 	cfg.initMonsterFormationsParams()
@@ -91,8 +93,12 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initSongsParams()
 	cfg.initTreasuresParams()
 
-	cfg.q.sidequests = createEmptyQueryMap()
-	cfg.q.subquests = cfg.completeQueryTypeInit(createEmptyQueryMap())
+	cfg.q.sidequests = cfg.assignDefaultParams()
+	cfg.q.subquests = cfg.assignDefaultParams()
+}
+
+func (cfg *Config) assignDefaultParams() map[string]QueryType {
+	return cfg.completeQueryTypeInit(createEmptyQueryMap())
 }
 
 func createEmptyQueryMap() map[string]QueryType {
@@ -283,6 +289,23 @@ func (cfg *Config) initArenaCreationsParams() {
 
 	params = cfg.completeQueryTypeInit(params)
 	cfg.q.arenaCreations = params
+}
+
+func (cfg *Config) initBlitzballPrizesParams() {
+	params := map[string]QueryType{
+		"category": {
+			ID:          1,
+			Description: "Searches for blitzball prize tables with the specified blitzball-tournament-category.",
+			Usage:       "?category={category_name/id}",
+			ExampleUses: []string{"?category=league", "?category=2"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "blitzball-tournament-category")},
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.blitzballPrizes = params
 }
 
 func (cfg *Config) initFMVsParams() {

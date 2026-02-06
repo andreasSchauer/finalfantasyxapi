@@ -10,11 +10,11 @@ import (
 )
 
 type Sublocation struct {
-	ID             			int32                 	`json:"id"`
-	Name           			string                	`json:"name"`
-	ParentLocation 			NamedAPIResource      	`json:"parent_location"`
-	ConnectedSublocations	[]NamedAPIResource		`json:"connected_sublocations"`
-	Areas          			[]LocationAPIResource 	`json:"areas"`
+	ID                    int32                 `json:"id"`
+	Name                  string                `json:"name"`
+	ParentLocation        NamedAPIResource      `json:"parent_location"`
+	ConnectedSublocations []NamedAPIResource    `json:"connected_sublocations"`
+	Areas                 []LocationAPIResource `json:"areas"`
 	LocRel
 }
 
@@ -41,7 +41,7 @@ func (cfg *Config) HandleSublocations(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32) (Sublocation, error) {
+func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32) (Sublocation, error) {
 	sublocation, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Sublocation{}, err
@@ -63,18 +63,18 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.SubLoc
 	}
 
 	response := Sublocation{
-		ID:             		sublocation.ID,
-		Name:           		sublocation.Name,
-		ParentLocation: 		nameToNamedAPIResource(cfg, cfg.e.locations, sublocation.Location.Name, nil),
-		ConnectedSublocations: 	connectedSublocations,
-		Areas:          		areas,
-		LocRel:         		rel,
+		ID:                    sublocation.ID,
+		Name:                  sublocation.Name,
+		ParentLocation:        nameToNamedAPIResource(cfg, cfg.e.locations, sublocation.Location.Name, nil),
+		ConnectedSublocations: connectedSublocations,
+		Areas:                 areas,
+		LocRel:                rel,
 	}
 
 	return response, nil
 }
 
-func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.SubLocation, Sublocation, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err

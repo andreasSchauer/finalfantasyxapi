@@ -62,8 +62,8 @@ type Lookup struct {
 	ArenaCreationsID     map[int32]ArenaCreation
 	Locations            map[string]Location
 	LocationsID          map[int32]Location
-	Sublocations         map[string]SubLocation
-	SublocationsID       map[int32]SubLocation
+	Sublocations         map[string]Sublocation
+	SublocationsID       map[int32]Sublocation
 	Areas                map[string]Area
 	AreasID              map[int32]Area
 	AutoAbilities        map[string]AutoAbility
@@ -156,8 +156,8 @@ func lookupInit() Lookup {
 		ArenaCreationsID:     make(map[int32]ArenaCreation),
 		Locations:            make(map[string]Location),
 		LocationsID:          make(map[int32]Location),
-		Sublocations:         make(map[string]SubLocation),
-		SublocationsID:       make(map[int32]SubLocation),
+		Sublocations:         make(map[string]Sublocation),
+		SublocationsID:       make(map[int32]Sublocation),
 		Areas:                make(map[string]Area),
 		AreasID:              make(map[int32]Area),
 		AutoAbilities:        make(map[string]AutoAbility),

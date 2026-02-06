@@ -9,8 +9,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func nameToString(name string, version *int32, spec *string) string {
 	var verStr string
 	var specStr string
@@ -29,14 +27,30 @@ func nameToString(name string, version *int32, spec *string) string {
 
 func nameAmountString(name string, version *int32, spec *string, amount int32) string {
 	nameStr := nameToString(name, version, spec)
+
+	if amount == 1 {
+		return nameStr
+	}
+	
 	return fmt.Sprintf("%s x%d", nameStr, amount)
 }
 
-
 func idToLocAreaString(cfg *Config, areaID int32) string {
 	area, _ := seeding.GetResourceByID(areaID, cfg.l.AreasID)
-	areaString := nameToString(area.Name, area.Version, area.Specification)
-	return fmt.Sprintf("%s - %s - %s", area.SubLocation.Location.Name, area.SubLocation.Name, areaString)
+	sublocationName := area.Sublocation.Name
+	locationName := area.Sublocation.Location.Name
+
+	locAreaString := nameToString(area.Name, area.Version, area.Specification)
+
+	if area.Name != sublocationName {
+		locAreaString = fmt.Sprintf("%s - %s", sublocationName, locAreaString)
+	}
+
+	if sublocationName != locationName {
+		locAreaString = fmt.Sprintf("%s - %s", locationName, locAreaString)
+	}
+
+	return locAreaString
 }
 
 func locAreaString(cfg *Config, locArea seeding.LocationArea) string {

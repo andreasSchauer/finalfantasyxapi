@@ -24,7 +24,6 @@ type Area struct {
 	LocRel
 }
 
-
 func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	i := cfg.e.areas
 
@@ -70,8 +69,8 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, L
 		Name:              area.Name,
 		Version:           area.Version,
 		Specification:     area.Specification,
-		ParentLocation:    nameToNamedAPIResource(cfg, cfg.e.locations, area.SubLocation.Location.Name, nil),
-		ParentSublocation: nameToNamedAPIResource(cfg, cfg.e.sublocations, area.SubLocation.Name, nil),
+		ParentLocation:    nameToNamedAPIResource(cfg, cfg.e.locations, area.Sublocation.Location.Name, nil),
+		ParentSublocation: nameToNamedAPIResource(cfg, cfg.e.sublocations, area.Sublocation.Name, nil),
 		StoryOnly:         area.StoryOnly,
 		HasSaveSphere:     area.HasSaveSphere,
 		AirshipDropOff:    area.AirshipDropOff,

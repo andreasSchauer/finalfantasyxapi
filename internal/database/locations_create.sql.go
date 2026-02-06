@@ -304,22 +304,22 @@ func (q *Queries) CreateShopsItemsJunction(ctx context.Context, arg CreateShopsI
 	return err
 }
 
-const createSubLocation = `-- name: CreateSubLocation :one
+const createSublocation = `-- name: CreateSublocation :one
 INSERT INTO sublocations (data_hash, location_id, name, specification)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = sublocations.data_hash
 RETURNING id, data_hash, location_id, name, specification
 `
 
-type CreateSubLocationParams struct {
+type CreateSublocationParams struct {
 	DataHash      string
 	LocationID    int32
 	Name          string
 	Specification sql.NullString
 }
 
-func (q *Queries) CreateSubLocation(ctx context.Context, arg CreateSubLocationParams) (Sublocation, error) {
-	row := q.db.QueryRowContext(ctx, createSubLocation,
+func (q *Queries) CreateSublocation(ctx context.Context, arg CreateSublocationParams) (Sublocation, error) {
+	row := q.db.QueryRowContext(ctx, createSublocation,
 		arg.DataHash,
 		arg.LocationID,
 		arg.Name,

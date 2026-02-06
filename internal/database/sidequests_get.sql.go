@@ -64,6 +64,60 @@ func (q *Queries) GetArenaCreationIDsByCategory(ctx context.Context, category Ma
 	return items, nil
 }
 
+const getBlitzballPrizeIDs = `-- name: GetBlitzballPrizeIDs :many
+SELECT id FROM blitzball_positions ORDER BY id
+`
+
+func (q *Queries) GetBlitzballPrizeIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getBlitzballPrizeIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getBlitzballPrizeIDsByCategory = `-- name: GetBlitzballPrizeIDsByCategory :many
+SELECT id FROM blitzball_positions WHERE category = $1 ORDER BY id
+`
+
+func (q *Queries) GetBlitzballPrizeIDsByCategory(ctx context.Context, category BlitzballTournamentCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getBlitzballPrizeIDsByCategory, category)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getParentSidequest = `-- name: GetParentSidequest :one
 SELECT q.id, q.data_hash, q.name, q.type
 FROM subquests su

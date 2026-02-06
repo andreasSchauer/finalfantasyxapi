@@ -38,6 +38,12 @@ func (b BlitzballPosition) Error() string {
 	return fmt.Sprintf("blitzball position %s in %s", b.Slot, b.Category)
 }
 
+func (b BlitzballPosition) GetResParamsUnnamed() h.ResParamsUnnamed {
+	return h.ResParamsUnnamed{
+		ID: b.ID,
+	}
+}
+
 type PossibleItem struct {
 	ID         int32
 	ItemAmount ItemAmount `json:"item"`

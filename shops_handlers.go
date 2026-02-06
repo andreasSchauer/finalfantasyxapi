@@ -28,7 +28,7 @@ func convertSubShop(cfg *Config, ss seeding.SubShop) SubShop {
 	}
 }
 
-// resourceAmount
+
 type ShopItem struct {
 	Item		NamedAPIResource	`json:"item"`
 	Price		int32				`json:"price"`

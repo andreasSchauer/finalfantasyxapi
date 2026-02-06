@@ -26,6 +26,7 @@ func main() {
 	mux.HandleFunc("GET /api/locations/", apiCfg.HandleLocations)
 	
 	mux.HandleFunc("GET /api/arena-creations/", apiCfg.HandleArenaCreations)
+	mux.HandleFunc("GET /api/blitzball-prizes/", apiCfg.HandleBlitzballPrizes)
 	mux.HandleFunc("GET /api/fmvs/", apiCfg.HandleFMVs)
 	mux.HandleFunc("GET /api/monsters/", apiCfg.HandleMonsters)
 	mux.HandleFunc("GET /api/monster-formations/", apiCfg.HandleMonsterFormations)

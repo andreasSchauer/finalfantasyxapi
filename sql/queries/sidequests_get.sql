@@ -24,3 +24,11 @@ SELECT id FROM monster_arena_creations ORDER BY id;
 
 -- name: GetArenaCreationIDsByCategory :many
 SELECT id FROM monster_arena_creations WHERE category = $1 ORDER BY id;
+
+
+-- name: GetBlitzballPrizeIDs :many
+SELECT id FROM blitzball_positions ORDER BY id;
+
+
+-- name: GetBlitzballPrizeIDsByCategory :many
+SELECT id FROM blitzball_positions WHERE category = $1 ORDER BY id;
