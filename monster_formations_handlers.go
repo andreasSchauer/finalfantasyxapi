@@ -22,13 +22,13 @@ type MonsterFormation struct {
 }
 
 type EncounterLocation struct {
-	Area          LocationAPIResource `json:"area"`
-	Specification *string             `json:"specification"`
+	Area          AreaAPIResource `json:"area"`
+	Specification *string         `json:"specification"`
 }
 
 func convertEncounterLocation(cfg *Config, el seeding.EncounterLocation) EncounterLocation {
 	return EncounterLocation{
-		Area:          locAreaToLocationAPIResource(cfg, cfg.e.areas, el.LocationArea),
+		Area:          locAreaToAreaAPIResource(cfg, cfg.e.areas, el.LocationArea),
 		Specification: el.Specification,
 	}
 }

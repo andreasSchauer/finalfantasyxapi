@@ -355,7 +355,7 @@ func TestRetrieveAreas(t *testing.T) {
 			dontCheck:  tc.dontCheck,
 		}
 
-		var got LocationApiResourceList
+		var got AreaApiResourceList
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
@@ -453,7 +453,7 @@ func TestAreasConnected(t *testing.T) {
 			dontCheck:  tc.dontCheck,
 		}
 
-		var got SubResourceListTest[LocationAPIResource, AreaSub]
+		var got SubResourceListTest[AreaAPIResource, AreaSub]
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}

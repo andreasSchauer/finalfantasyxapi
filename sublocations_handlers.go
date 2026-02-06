@@ -10,11 +10,11 @@ import (
 )
 
 type Sublocation struct {
-	ID                    int32                 `json:"id"`
-	Name                  string                `json:"name"`
-	ParentLocation        NamedAPIResource      `json:"parent_location"`
-	ConnectedSublocations []NamedAPIResource    `json:"connected_sublocations"`
-	Areas                 []LocationAPIResource `json:"areas"`
+	ID                    int32              `json:"id"`
+	Name                  string             `json:"name"`
+	ParentLocation        NamedAPIResource   `json:"parent_location"`
+	ConnectedSublocations []NamedAPIResource `json:"connected_sublocations"`
+	Areas                 []AreaAPIResource  `json:"areas"`
 	LocRel
 }
 

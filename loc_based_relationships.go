@@ -17,7 +17,7 @@ type LocRel struct {
 	Shops      []UnnamedAPIResource `json:"shops"`
 	Treasures  []UnnamedAPIResource `json:"treasures"`
 	Monsters   []NamedAPIResource   `json:"monsters"`
-	Formations []UnnamedAPIResource `json:"formations"`
+	Formations []UnnamedAPIResource `json:"monster_formations"`
 	Sidequests []NamedAPIResource   `json:"sidequests"`
 	Music      *LocBasedMusic       `json:"music"`
 	FMVs       []NamedAPIResource   `json:"fmvs"`

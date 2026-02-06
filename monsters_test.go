@@ -143,7 +143,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{
 					"properties":        1,
 					"auto-abilities":    0,
-					"locations":         1,
+					"areas":         	 1,
 					"formations":        3,
 					"base stats":        10,
 					"other items":       0,
@@ -170,7 +170,7 @@ func TestGetMonster(t *testing.T) {
 				ctbIconType: 1,
 				distance:    1,
 				properties:  []int32{2},
-				locations:   []int32{54},
+				areas:       []int32{54},
 				formations:  []int32{30, 31, 32},
 				baseStats: map[string]int32{
 					"hp":      300,
@@ -296,7 +296,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{
 					"properties":        1,
 					"auto-abilities":    0,
-					"locations":         1,
+					"areas":   		     1,
 					"formations":        1,
 					"base stats":        10,
 					"other items":       0,
@@ -324,7 +324,7 @@ func TestGetMonster(t *testing.T) {
 					isTemporary: false,
 				},
 				properties: []int32{1},
-				locations:  []int32{150},
+				areas:      []int32{150},
 				formations: []int32{126},
 				items: &testItems{
 					itemDropChance: 255,
@@ -896,16 +896,16 @@ func TestGetMonster(t *testing.T) {
 					MaxICV:    h.GetInt32Ptr(-1),
 				},
 				baseStats: map[string]int32{
-					"hp":       		725,
-					"mp":				1,
-					"strength": 		235,
-					"defense":			46,
-					"magic":    		188,
-					"magic defense": 	23,
-					"agility":  		68,
-					"luck": 			1,
-					"evasion": 			19,
-					"accuracy": 		150,
+					"hp":            725,
+					"mp":            1,
+					"strength":      235,
+					"defense":       46,
+					"magic":         188,
+					"magic defense": 23,
+					"agility":       68,
+					"luck":          1,
+					"evasion":       19,
+					"accuracy":      150,
 				},
 			},
 		},
@@ -975,7 +975,7 @@ func TestGetMonster(t *testing.T) {
 			newResListTestFromIDs("properties", testCfg.e.properties.endpoint, tc.properties, got.Properties),
 			newResListTestFromIDs("auto-abilities", testCfg.e.autoAbilities.endpoint, tc.autoAbilities, got.AutoAbilities),
 			newResListTestFromIDs("ronso rages", testCfg.e.ronsoRages.endpoint, tc.ronsoRages, got.RonsoRages),
-			newResListTestFromIDs("locations", testCfg.e.areas.endpoint, tc.locations, got.Locations),
+			newResListTestFromIDs("areas", testCfg.e.areas.endpoint, tc.areas, got.Areas),
 			newResListTestFromIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
 			newResListTestFromIDs("status immunities", testCfg.e.statusConditions.endpoint, tc.statusImmunities, got.StatusImmunities),
 			newResListTest("abilities", tc.abilities, got.Abilities),
@@ -1374,7 +1374,6 @@ func TestRetrieveMonsters(t *testing.T) {
 	}
 }
 
-
 func TestMonstersAreas(t *testing.T) {
 	tests := []struct {
 		testGeneral
@@ -1384,36 +1383,36 @@ func TestMonstersAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/45/areas/",
 				expectedStatus: http.StatusOK,
-				httpHandler: 	testCfg.HandleMonsters,
+				httpHandler:    testCfg.HandleMonsters,
 			},
 			expList: expList{
-				count:   5,
+				count:          5,
 				parentResource: h.GetStrPtr("/monsters/45"),
-				results: []int32{88, 89, 90, 93, 94},
+				results:        []int32{88, 89, 90, 93, 94},
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/140/areas/",
 				expectedStatus: http.StatusOK,
-				httpHandler: 	testCfg.HandleMonsters,
+				httpHandler:    testCfg.HandleMonsters,
 			},
 			expList: expList{
-				count:   4,
+				count:          4,
 				parentResource: h.GetStrPtr("/monsters/140"),
-				results: []int32{202, 203, 204, 211},
+				results:        []int32{202, 203, 204, 211},
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/66/areas/",
 				expectedStatus: http.StatusOK,
-				httpHandler: 	testCfg.HandleMonsters,
+				httpHandler:    testCfg.HandleMonsters,
 			},
 			expList: expList{
-				count:   1,
+				count:          1,
 				parentResource: h.GetStrPtr("/monsters/66"),
-				results: []int32{127},
+				results:        []int32{127},
 			},
 		},
 	}
@@ -1432,7 +1431,7 @@ func TestMonstersAreas(t *testing.T) {
 			dontCheck:  tc.dontCheck,
 		}
 
-		var got SubResourceListTest[LocationAPIResource, AreaSub]
+		var got SubResourceListTest[AreaAPIResource, AreaSub]
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}

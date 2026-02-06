@@ -8,12 +8,12 @@ import (
 )
 
 type Shop struct {
-	ID          int32					`json:"id"`
-	Area		LocationAPIResource		`json:"area"`
-	Category	string					`json:"category"`
-	Notes		*string					`json:"notes,omitempty"`
-	PreAirship	*SubShop				`json:"pre_airship"`
-	PostAirship	*SubShop				`json:"post_airship"`
+	ID          int32           `json:"id"`
+	Area        AreaAPIResource `json:"area"`
+	Category    string          `json:"category"`
+	Notes       *string         `json:"notes,omitempty"`
+	PreAirship  *SubShop        `json:"pre_airship"`
+	PostAirship *SubShop        `json:"post_airship"`
 }
 
 type SubShop struct {
@@ -23,36 +23,34 @@ type SubShop struct {
 
 func convertSubShop(cfg *Config, ss seeding.SubShop) SubShop {
 	return SubShop{
-		Items: 		convertObjSlice(cfg, ss.Items, convertShopItem),
-		Equipment: 	convertObjSlice(cfg, ss.Equipment, convertShopEquipment),
+		Items:     convertObjSlice(cfg, ss.Items, convertShopItem),
+		Equipment: convertObjSlice(cfg, ss.Equipment, convertShopEquipment),
 	}
 }
 
-
 type ShopItem struct {
-	Item		NamedAPIResource	`json:"item"`
-	Price		int32				`json:"price"`
+	Item  NamedAPIResource `json:"item"`
+	Price int32            `json:"price"`
 }
 
 func convertShopItem(cfg *Config, si seeding.ShopItem) ShopItem {
 	return ShopItem{
-		Item: 	nameToNamedAPIResource(cfg, cfg.e.items, si.Name, nil),
-		Price: 	si.Price,
+		Item:  nameToNamedAPIResource(cfg, cfg.e.items, si.Name, nil),
+		Price: si.Price,
 	}
 }
 
 type ShopEquipment struct {
-	Equipment	FoundEquipment	`json:"equipment"`
-	Price		int32			`json:"price"`
+	Equipment FoundEquipment `json:"equipment"`
+	Price     int32          `json:"price"`
 }
 
 func convertShopEquipment(cfg *Config, se seeding.ShopEquipment) ShopEquipment {
 	return ShopEquipment{
-		Equipment: 	convertFoundEquipment(cfg, se.FoundEquipment),
-		Price: 		se.Price,
+		Equipment: convertFoundEquipment(cfg, se.FoundEquipment),
+		Price:     se.Price,
 	}
 }
-
 
 func (cfg *Config) HandleShops(w http.ResponseWriter, r *http.Request) {
 	i := cfg.e.shops
@@ -67,11 +65,11 @@ func (cfg *Config) HandleShops(w http.ResponseWriter, r *http.Request) {
 	case 1:
 		handleEndpointIDOnly(cfg, w, r, i, segments)
 		return
-	
+
 	case 2:
 		handleEndpointSubsections(cfg, w, r, i, segments)
 		return
-		
+
 	default:
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
 		return
@@ -85,12 +83,12 @@ func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, U
 	}
 
 	response := Shop{
-		ID:             shop.ID,
-		Area:           idToLocationAPIResource(cfg, cfg.e.areas, shop.AreaID),
-		Notes: 			shop.Notes,
-		Category: 		shop.Category,
-		PreAirship: 	convertObjPtr(cfg, shop.PreAirship, convertSubShop),
-		PostAirship: 	convertObjPtr(cfg, shop.PostAirship, convertSubShop),
+		ID:          shop.ID,
+		Area:        idToAreaAPIResource(cfg, cfg.e.areas, shop.AreaID),
+		Notes:       shop.Notes,
+		Category:    shop.Category,
+		PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShop),
+		PostAirship: convertObjPtr(cfg, shop.PostAirship, convertSubShop),
 	}
 
 	return response, nil

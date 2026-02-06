@@ -7,101 +7,98 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type LocationApiResourceList struct {
+type AreaApiResourceList struct {
 	ListParams
-	Results []LocationAPIResource `json:"results"`
+	Results []AreaAPIResource `json:"results"`
 }
 
-func (l LocationApiResourceList) getListParams() ListParams {
+func (l AreaApiResourceList) getListParams() ListParams {
 	return l.ListParams
 }
 
-func (l LocationApiResourceList) getResults() []HasAPIResource {
+func (l AreaApiResourceList) getResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
-type LocationAPIResource struct {
+type AreaAPIResource struct {
 	AreaID int32 `json:"-"`
 	LocationArea
 	Specification *string `json:"specification,omitempty"`
 	URL           string  `json:"url"`
 }
 
-func (r LocationAPIResource) IsZero() bool {
+func (r AreaAPIResource) IsZero() bool {
 	return r.Area == ""
 }
 
-func (r LocationAPIResource) GetID() int32 {
+func (r AreaAPIResource) GetID() int32 {
 	return r.AreaID
 }
 
-func (r LocationAPIResource) GetURL() string {
+func (r AreaAPIResource) GetURL() string {
 	return r.URL
 }
 
-func (r LocationAPIResource) ToKeyFields() []any {
+func (r AreaAPIResource) ToKeyFields() []any {
 	return []any{
 		r.URL,
 	}
 }
 
-func (r LocationAPIResource) Error() string {
-	return fmt.Sprintf("location based api resource: %s, url: %s", r.LocationArea, r.URL)
+func (r AreaAPIResource) Error() string {
+	return fmt.Sprintf("area api resource: %s, url: %s", r.LocationArea, r.URL)
 }
 
-func (r LocationAPIResource) GetAPIResource() APIResource {
+func (r AreaAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-
-func idToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], id int32) LocationAPIResource {
+func idToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], id int32) AreaAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID)
-	return areaToLocationResource(cfg, i, res)
+	return areaToAreaAPIResource(cfg, i, res)
 }
 
 // useful for id-less locationArea slices retrieved from lookup
-func locAreaToLocationAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], area seeding.LocationArea) LocationAPIResource {
+func locAreaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], area seeding.LocationArea) AreaAPIResource {
 	res, _ := seeding.GetResource(area, i.objLookup)
-	return areaToLocationResource(cfg, i, res)
+	return areaToAreaAPIResource(cfg, i, res)
 }
 
-func locAreasToLocationAPIResources(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], areas []seeding.LocationArea) []LocationAPIResource {
-	resources := []LocationAPIResource{}
+func locAreasToAreaAPIResources(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], areas []seeding.LocationArea) []AreaAPIResource {
+	resources := []AreaAPIResource{}
 
 	for _, area := range areas {
-		res := locAreaToLocationAPIResource(cfg, i, area)
+		res := locAreaToAreaAPIResource(cfg, i, area)
 		resources = append(resources, res)
 	}
 
 	return resources
 }
 
-
 // shared logic. not indended to be called directly
-func areaToLocationResource(cfg *Config, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], area seeding.Area) LocationAPIResource {
+func areaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], area seeding.Area) AreaAPIResource {
 	params := area.GetResParamsLocation()
 
-	return LocationAPIResource{
-		AreaID:            	params.AreaID,
+	return AreaAPIResource{
+		AreaID: params.AreaID,
 		LocationArea: LocationArea{
-			Location: 		params.Location,
-			Sublocation: 	params.Sublocation,
-			Area: 			params.Area,
-			Version: 		params.Version,
+			Location:    params.Location,
+			Sublocation: params.Sublocation,
+			Area:        params.Area,
+			Version:     params.Version,
 		},
-		Specification: 		params.Specification,
-		URL:           		createResourceURL(cfg, i.endpoint, params.AreaID),
+		Specification: params.Specification,
+		URL:           createResourceURL(cfg, i.endpoint, params.AreaID),
 	}
 }
 
-
-func newLocationAPIResourceList(cfg *Config, r *http.Request, resources []LocationAPIResource) (LocationApiResourceList, error) {
+func newAreaAPIResourceList(cfg *Config, r *http.Request, resources []AreaAPIResource) (AreaApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {
-		return LocationApiResourceList{}, err
+		return AreaApiResourceList{}, err
 	}
 
-	list := LocationApiResourceList{
+	list := AreaApiResourceList{
 		ListParams: listParams,
 		Results:    shownResources,
 	}

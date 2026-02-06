@@ -32,7 +32,7 @@ type endpoints struct {
 	aeons              handlerInput[seeding.Aeon, any, NamedAPIResource, NamedApiResourceList]
 	affinities         handlerInput[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList]
 	arenaCreations     handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
-	areas              handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList]
+	areas              handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
 	autoAbilities      handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
 	blitzballPrizes    handlerInput[seeding.BlitzballPosition, BlitzballPosition, UnnamedAPIResource, UnnamedApiResourceList]
 	characters         handlerInput[seeding.Character, any, NamedAPIResource, NamedApiResourceList]
@@ -106,15 +106,15 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveArenaCreations,
 	}
 
-	e.areas = handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList]{
+	e.areas = handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]{
 		endpoint:      "areas",
 		resourceType:  "area",
 		objLookup:     cfg.l.Areas,
 		objLookupID:   cfg.l.AreasID,
 		queryLookup:   cfg.q.areas,
-		idToResFunc:   idToLocationAPIResource,
+		idToResFunc:   idToAreaAPIResource,
 		retrieveQuery: cfg.db.GetAreaIDs,
-		resToListFunc: newLocationAPIResourceList,
+		resToListFunc: newAreaAPIResourceList,
 		getSingleFunc: cfg.getArea,
 		retrieveFunc:  cfg.retrieveAreas,
 		subsections: map[string]SubSectionFns{

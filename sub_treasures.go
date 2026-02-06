@@ -10,10 +10,10 @@ type TreasureSub struct {
 	ID            int32           `json:"id"`
 	URL           string          `json:"url"`
 	Area          string          `json:"area"`
-	TreasureType  string          `json:"treasure_type"`
-	LootType      string          `json:"loot_type"`
 	IsPostAirship bool            `json:"is_post_airship"`
 	Notes         *string         `json:"notes,omitempty"`
+	TreasureType  string          `json:"treasure_type"`
+	LootType      string          `json:"loot_type"`
 	GilAmount     *int32          `json:"gil_amount,omitempty"`
 	Items         []ItemAmountSub `json:"items,omitempty"`
 	Equipment     *EquipmentSub   `json:"equipment,omitempty"`
@@ -38,10 +38,10 @@ func handleTreasuresSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubR
 			ID:            treasure.ID,
 			URL:           createResourceURL(cfg, i.endpoint, treasureID),
 			Area:          idToLocAreaString(cfg, treasure.AreaID),
-			TreasureType:  treasure.TreasureType,
-			LootType:      treasure.LootType,
 			IsPostAirship: treasure.IsPostAirship,
 			Notes:         treasure.Notes,
+			TreasureType:  treasure.TreasureType,
+			LootType:      treasure.LootType,
 			GilAmount:     treasure.GilAmount,
 			Items:         convertObjSliceNullable(cfg, treasure.Items, convertSubItemAmount),
 			Equipment:     convertObjPtr(cfg, treasure.Equipment, convertEquipmentSub),

@@ -8,34 +8,33 @@ import (
 )
 
 type Sidequest struct {
-	ID          		int32         		`json:"id"`
-	Name        		string        		`json:"name"`
-	Completion			*QuestCompletion	`json:"completion"`
-	Subquests			[]NamedAPIResource	`json:"subquests"`
+	ID         int32              `json:"id"`
+	Name       string             `json:"name"`
+	Completion *QuestCompletion   `json:"completion"`
+	Subquests  []NamedAPIResource `json:"subquests"`
 }
 
-
 type QuestCompletion struct {
-	Areas	[]CompletionLocation	`json:"areas"`
-	Reward	ItemAmount				`json:"reward"`
+	Areas  []CompletionLocation `json:"areas"`
+	Reward ItemAmount           `json:"reward"`
 }
 
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
-		Areas: 	convertObjSlice(cfg, qc.Locations, convertCompletionLocation),
+		Areas:  convertObjSlice(cfg, qc.Locations, convertCompletionLocation),
 		Reward: convertItemAmount(cfg, qc.Reward),
 	}
 }
 
 type CompletionLocation struct {
-	Area	LocationAPIResource `json:"area"`
-	Notes	*string				`json:"notes,omitempty"`
+	Area  AreaAPIResource `json:"area"`
+	Notes *string         `json:"notes,omitempty"`
 }
 
 func convertCompletionLocation(cfg *Config, cl seeding.CompletionLocation) CompletionLocation {
 	return CompletionLocation{
-		Area: 	locAreaToLocationAPIResource(cfg, cfg.e.areas, cl.LocationArea),
-		Notes: 	cl.Notes,
+		Area:  locAreaToAreaAPIResource(cfg, cfg.e.areas, cl.LocationArea),
+		Notes: cl.Notes,
 	}
 }
 
@@ -56,13 +55,12 @@ func (cfg *Config) HandleSidequests(w http.ResponseWriter, r *http.Request) {
 	case 2:
 		handleEndpointSubsections(cfg, w, r, i, segments)
 		return
-		
+
 	default:
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
 		return
 	}
 }
-
 
 func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList], id int32) (Sidequest, error) {
 	sidequest, err := verifyParamsAndGet(r, i, id)
@@ -79,12 +77,11 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 		ID:         sidequest.ID,
 		Name:       sidequest.Name,
 		Completion: convertObjPtr(cfg, sidequest.Completion, convertQuestCompletion),
-		Subquests: 	subquests,
+		Subquests:  subquests,
 	}
 
 	return response, nil
 }
-
 
 func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

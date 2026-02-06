@@ -8,14 +8,13 @@ import (
 )
 
 type FMV struct {
-	ID          		int32         		`json:"id"`
-	Name        		string        		`json:"name"`
-	Translation         *string      		`json:"translation,omitempty"`
-	CutsceneDescription string       		`json:"cutscene_description"`
-	Area				LocationAPIResource	`json:"area"`
-	Song				*NamedAPIResource	`json:"song"`
+	ID                  int32             `json:"id"`
+	Name                string            `json:"name"`
+	Translation         *string           `json:"translation,omitempty"`
+	CutsceneDescription string            `json:"cutscene_description"`
+	Area                AreaAPIResource   `json:"area"`
+	Song                *NamedAPIResource `json:"song"`
 }
-
 
 func (cfg *Config) HandleFMVs(w http.ResponseWriter, r *http.Request) {
 	i := cfg.e.fmvs
@@ -34,13 +33,12 @@ func (cfg *Config) HandleFMVs(w http.ResponseWriter, r *http.Request) {
 	case 2:
 		handleEndpointSubsections(cfg, w, r, i, segments)
 		return
-		
+
 	default:
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
 		return
 	}
 }
-
 
 func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList], id int32) (FMV, error) {
 	fmv, err := verifyParamsAndGet(r, i, id)
@@ -49,17 +47,16 @@ func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, Name
 	}
 
 	response := FMV{
-		ID:          			fmv.ID,
-		Name:        			fmv.Name,
-		Translation: fmv.Translation,
+		ID:                  fmv.ID,
+		Name:                fmv.Name,
+		Translation:         fmv.Translation,
 		CutsceneDescription: fmv.CutsceneDescription,
-		Area: locAreaToLocationAPIResource(cfg, cfg.e.areas, fmv.LocationArea),
-		Song: namePtrToNamedAPIResPtr(cfg, cfg.e.songs, fmv.SongName, nil),
+		Area:                locAreaToAreaAPIResource(cfg, cfg.e.areas, fmv.LocationArea),
+		Song:                namePtrToNamedAPIResPtr(cfg, cfg.e.songs, fmv.SongName, nil),
 	}
 
 	return response, nil
 }
-
 
 func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

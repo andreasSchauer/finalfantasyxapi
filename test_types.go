@@ -63,15 +63,15 @@ type expAreas struct {
 }
 
 type expLocations struct {
-	connectedLocations 	[]int32
-	sublocations		[]int32
+	connectedLocations []int32
+	sublocations       []int32
 	expLocRel
 }
 
 type expSublocations struct {
-	parentLocation			int32
-	connectedSublocations 	[]int32
-	areas					[]int32
+	parentLocation        int32
+	connectedSublocations []int32
+	areas                 []int32
 	expLocRel
 }
 
@@ -107,7 +107,7 @@ type expMonsters struct {
 	properties       []int32
 	autoAbilities    []int32
 	ronsoRages       []int32
-	locations        []int32
+	areas            []int32
 	formations       []int32
 	baseStats        map[string]int32
 	items            *testItems

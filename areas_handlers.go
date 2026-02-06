@@ -13,6 +13,7 @@ type Area struct {
 	Name              string           `json:"name"`
 	Version           *int32           `json:"version,omitempty"`
 	Specification     *string          `json:"specification,omitempty"`
+	DisplayName       string           `json:"display_name"`
 	ParentLocation    NamedAPIResource `json:"parent_location"`
 	ParentSublocation NamedAPIResource `json:"parent_sublocation"`
 	StoryOnly         bool             `json:"story_only"`
@@ -48,7 +49,7 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], id int32) (Area, error) {
+func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], id int32) (Area, error) {
 	area, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Area{}, err
@@ -69,6 +70,7 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, L
 		Name:              area.Name,
 		Version:           area.Version,
 		Specification:     area.Specification,
+		DisplayName:       getAreaDisplayName(area),
 		ParentLocation:    nameToNamedAPIResource(cfg, cfg.e.locations, area.Sublocation.Location.Name, nil),
 		ParentSublocation: nameToNamedAPIResource(cfg, cfg.e.sublocations, area.Sublocation.Name, nil),
 		StoryOnly:         area.StoryOnly,
@@ -83,13 +85,13 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, L
 	return response, nil
 }
 
-func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList]) (LocationApiResourceList, error) {
+func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]) (AreaApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
-		return LocationApiResourceList{}, err
+		return AreaApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[LocationAPIResource]{
+	filteredLists := []filteredResList[AreaAPIResource]{
 		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationAreaIDs)),
 		frl(idOnlyQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationAreaIDs)),
 		frl(idOnlyQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getAreasByItem)),

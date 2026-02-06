@@ -59,21 +59,25 @@ func shopEquipmentNameString(_ *Config, se seeding.ShopEquipment) string {
 }
 
 func foundEquipmentAbilitiesStringPtr(fe seeding.FoundEquipment) *string {
-	var slotsStr string
-
-	if fe.EmptySlotsAmount > 0 {
-		slotsStr = fmt.Sprintf(", (%d)", fe.EmptySlotsAmount)
-	}
-
+	zeroAbilities := len(fe.Abilities) == 0
+	zeroSlots := fe.EmptySlotsAmount == 0
+	slotsStr := fmt.Sprintf("(%d)", fe.EmptySlotsAmount)
 	abilitiesStr := h.StringSliceToListString(fe.Abilities)
 
-	s := abilitiesStr + slotsStr
-
-	if s == "" {
+	switch {
+	case zeroAbilities && zeroSlots:
 		return nil
-	}
 
-	return &s
+	case zeroAbilities:
+		return &slotsStr
+
+	case zeroSlots:
+		return &abilitiesStr
+
+	default:
+		s := fmt.Sprintf("%s, %s", abilitiesStr, slotsStr)
+		return &s
+	}
 }
 
 func handleShopsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {

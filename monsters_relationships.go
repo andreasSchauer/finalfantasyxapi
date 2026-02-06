@@ -27,7 +27,6 @@ func (ma MonsterAbility) GetAPIResource() APIResource {
 	return ma.Ability
 }
 
-
 type BribeChance struct {
 	Gil    int32 `json:"gil"`
 	Chance int32 `json:"chance"`
@@ -54,7 +53,7 @@ func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) 
 		Properties:       namesToNamedAPIResources(cfg, cfg.e.properties, mon.Properties),
 		AutoAbilities:    namesToNamedAPIResources(cfg, cfg.e.autoAbilities, mon.AutoAbilities),
 		RonsoRages:       namesToNamedAPIResources(cfg, cfg.e.ronsoRages, mon.RonsoRages),
-		Locations:        areas,
+		Areas:            areas,
 		Formations:       formations,
 		BaseStats:        namesToResourceAmounts(cfg, cfg.e.stats, mon.BaseStats, newBaseStat),
 		ElemResists:      getMonsterElemResists(cfg, mon.ElemResists),

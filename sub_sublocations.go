@@ -31,12 +31,12 @@ func handleSublocationsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]S
 	for _, subLocID := range dbIDs {
 		sublocation, _ := seeding.GetResourceByID(subLocID, i.objLookupID)
 
-		monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, subLocID, cfg.db.GetLocationMonsterIDs, idToMonsterSubString)
+		monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, subLocID, cfg.db.GetSublocationMonsterIDs, idToMonsterSubString)
 		if err != nil {
 			return nil, err
 		}
 
-		shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, subLocID, cfg.db.GetLocationShopIDs, idToShopLocSub)
+		shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, subLocID, cfg.db.GetSublocationShopIDs, idToShopLocSub)
 		if err != nil {
 			return nil, err
 		}

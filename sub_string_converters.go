@@ -15,7 +15,7 @@ func nameToString(name string, version *int32, spec *string) string {
 
 	if version != nil {
 		intVer := int(*version)
-		verStr = fmt.Sprintf(" %s", strconv.Itoa(intVer))
+		verStr = fmt.Sprintf(" - %s", strconv.Itoa(intVer))
 	}
 
 	if spec != nil {
@@ -37,26 +37,27 @@ func nameAmountString(name string, version *int32, spec *string, amount int32) s
 
 func idToLocAreaString(cfg *Config, areaID int32) string {
 	area, _ := seeding.GetResourceByID(areaID, cfg.l.AreasID)
-	sublocationName := area.Sublocation.Name
-	locationName := area.Sublocation.Location.Name
-
-	locAreaString := nameToString(area.Name, area.Version, area.Specification)
-
-	if area.Name != sublocationName {
-		locAreaString = fmt.Sprintf("%s - %s", sublocationName, locAreaString)
-	}
-
-	if sublocationName != locationName {
-		locAreaString = fmt.Sprintf("%s - %s", locationName, locAreaString)
-	}
-
-	return locAreaString
+	return areaToLocAreaString(area)
 }
 
 func locAreaString(cfg *Config, locArea seeding.LocationArea) string {
 	area, _ := seeding.GetResource(locArea, cfg.l.Areas)
-	areaString := nameToString(area.Name, area.Version, area.Specification)
-	return fmt.Sprintf("%s - %s - %s", locArea.Location, locArea.Sublocation, areaString)
+	return areaToLocAreaString(area)
+}
+
+func areaToLocAreaString(area seeding.Area) string {
+	locArea := area.GetLocationArea()
+	locAreaString := nameToString(area.Name, area.Version, area.Specification)
+
+	if area.Name != locArea.Sublocation {
+		locAreaString = fmt.Sprintf("%s - %s", locArea.Sublocation, locAreaString)
+	}
+
+	if locArea.Sublocation != locArea.Location {
+		locAreaString = fmt.Sprintf("%s - %s", locArea.Location, locAreaString)
+	}
+
+	return locAreaString
 }
 
 func locAreaStrings[T seeding.HasLocArea](cfg *Config, items []T) []string {

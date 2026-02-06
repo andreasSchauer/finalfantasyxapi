@@ -9,15 +9,15 @@ import (
 
 type Treasure struct {
 	ID              int32
-	Area            LocationAPIResource `json:"area"`
-	TreasureType    NamedAPIResource    `json:"treasure_type"`
-	LootType        NamedAPIResource    `json:"loot_type"`
-	IsPostAirship   bool                `json:"is_post_airship"`
-	IsAnimaTreasure bool                `json:"is_anima_treasure"`
-	Notes           *string             `json:"notes,omitempty"`
-	GilAmount       *int32              `json:"gil_amount,omitempty"`
-	Items           []ItemAmount        `json:"items,omitempty"`
-	Equipment       *FoundEquipment     `json:"equipment,omitempty"`
+	Area            AreaAPIResource  `json:"area"`
+	IsPostAirship   bool             `json:"is_post_airship"`
+	IsAnimaTreasure bool             `json:"is_anima_treasure"`
+	Notes           *string          `json:"notes,omitempty"`
+	TreasureType    NamedAPIResource `json:"treasure_type"`
+	LootType        NamedAPIResource `json:"loot_type"`
+	GilAmount       *int32           `json:"gil_amount,omitempty"`
+	Items           []ItemAmount     `json:"items,omitempty"`
+	Equipment       *FoundEquipment  `json:"equipment,omitempty"`
 }
 
 type FoundEquipment struct {
@@ -51,7 +51,7 @@ func (cfg *Config) HandleTreasures(w http.ResponseWriter, r *http.Request) {
 	case 2:
 		handleEndpointSubsections(cfg, w, r, i, segments)
 		return
-		
+
 	default:
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
 		return
@@ -69,12 +69,12 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 
 	response := Treasure{
 		ID:              treasure.ID,
-		Area:            idToLocationAPIResource(cfg, cfg.e.areas, treasure.AreaID),
-		TreasureType:    treasureType,
-		LootType:        lootType,
+		Area:            idToAreaAPIResource(cfg, cfg.e.areas, treasure.AreaID),
 		IsPostAirship:   treasure.IsPostAirship,
 		IsAnimaTreasure: treasure.IsAnimaTreasure,
 		Notes:           treasure.Notes,
+		TreasureType:    treasureType,
+		LootType:        lootType,
 		GilAmount:       treasure.GilAmount,
 		Items:           convertObjSlice(cfg, treasure.Items, convertItemAmount),
 		Equipment:       convertObjPtr(cfg, treasure.Equipment, convertFoundEquipment),

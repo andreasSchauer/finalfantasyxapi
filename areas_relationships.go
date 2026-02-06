@@ -1,16 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type AreaConnection struct {
-	Area           LocationAPIResource `json:"area"`
-	ConnectionType NamedAPIResource    `json:"connection_type"`
-	StoryOnly      bool                `json:"story_only"`
-	Notes          *string             `json:"notes,omitempty"`
+	Area           AreaAPIResource  `json:"area"`
+	ConnectionType NamedAPIResource `json:"connection_type"`
+	StoryOnly      bool             `json:"story_only"`
+	Notes          *string          `json:"notes,omitempty"`
 }
 
 func (ac AreaConnection) GetAPIResource() APIResource {
@@ -94,7 +95,7 @@ func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, er
 		}
 
 		connection := AreaConnection{
-			Area:           locAreaToLocationAPIResource(cfg, i, connArea.LocationArea),
+			Area:           locAreaToAreaAPIResource(cfg, i, connArea.LocationArea),
 			ConnectionType: connType,
 			StoryOnly:      connArea.StoryOnly,
 			Notes:          connArea.Notes,
@@ -104,4 +105,14 @@ func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, er
 	}
 
 	return connectedAreas, nil
+}
+
+func getAreaDisplayName(area seeding.Area) string {
+	sublocName := area.Sublocation.Name
+
+	if sublocName == area.Name {
+		return area.Name
+	}
+
+	return fmt.Sprintf("%s - %s", sublocName, area.Name)
 }

@@ -1,5 +1,9 @@
 package helpers
 
+func GetIntPtr(i int) *int {
+	return &i
+}
+
 func GetInt32Ptr(i int32) *int32 {
 	return &i
 }

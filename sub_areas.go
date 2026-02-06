@@ -40,7 +40,7 @@ func handleAreasSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResou
 			return nil, err
 		}
 
-		shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, areaID, cfg.db.GetLocationShopIDs, idToShopLocSub)
+		shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, areaID, cfg.db.GetAreaShopIDs, idToShopLocSub)
 		if err != nil {
 			return nil, err
 		}

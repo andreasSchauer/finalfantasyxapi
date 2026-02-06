@@ -2,6 +2,8 @@ package main
 
 import (
 	"maps"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type QueryType struct {
@@ -47,8 +49,6 @@ type QueryLookup struct {
 }
 
 func (cfg *Config) QueryLookupInit() {
-	defaultLimit := 20
-	defaultOffset := 0
 	cfg.q = &QueryLookup{}
 
 	cfg.q.defaultParams = map[string]QueryType{
@@ -66,7 +66,7 @@ func (cfg *Config) QueryLookupInit() {
 					Val: 9999,
 				},
 			},
-			DefaultVal: &defaultLimit,
+			DefaultVal: h.GetIntPtr(20),
 		},
 		"offset": {
 			ID:          -1,
@@ -76,7 +76,7 @@ func (cfg *Config) QueryLookupInit() {
 			ExampleUses: []string{"?offset=30"},
 			ForList:     true,
 			ForSingle:   false,
-			DefaultVal:  &defaultOffset,
+			DefaultVal:  h.GetIntPtr(0),
 		},
 	}
 
@@ -326,8 +326,6 @@ func (cfg *Config) initFMVsParams() {
 }
 
 func (cfg *Config) initMonstersParams() {
-	defaultResistance := 1
-
 	params := map[string]QueryType{
 		"kimahri_stats": {
 			ID:          1,
@@ -398,7 +396,7 @@ func (cfg *Config) initMonstersParams() {
 					Val: 254,
 				},
 			},
-			DefaultVal: &defaultResistance,
+			DefaultVal: h.GetIntPtr(1),
 		},
 		"item": {
 			ID:          8,

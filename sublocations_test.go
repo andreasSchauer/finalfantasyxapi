@@ -10,7 +10,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 func TestGetSublocation(t *testing.T) {
 	tests := []struct {
 		testGeneral
@@ -43,38 +42,38 @@ func TestGetSublocation(t *testing.T) {
 				requestURL:     "/api/sublocations/34/",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
-					"connected sublocations": 	4,
-					"areas": 					6,
-					"characters": 				0,
-					"aeons": 					0,
-					"shops": 					3,
-					"treasures": 				9,
-					"monsters":        			51,
-					"formations":      			50,
-					"sidequests": 				2,
-					"bg music": 				2,
-					"cues music": 				0,
-					"fmvs music": 				0,
-					"boss music": 				1,
-					"fmvs": 					0,
+					"connected sublocations": 4,
+					"areas":                  6,
+					"characters":             0,
+					"aeons":                  0,
+					"shops":                  3,
+					"treasures":              9,
+					"monsters":               51,
+					"formations":             50,
+					"sidequests":             2,
+					"bg music":               2,
+					"cues music":             0,
+					"fmvs music":             0,
+					"boss music":             1,
+					"fmvs":                   0,
 				},
 			},
 			expUnique: expUnique{
-				id:      34,
-				name:    "calm lands",
+				id:   34,
+				name: "calm lands",
 			},
 			expSublocations: expSublocations{
-				parentLocation: 		20,
-				connectedSublocations: 	[]int32{25, 35, 36, 37},
-				areas: 					[]int32{202, 203, 204, 205, 206, 207},
+				parentLocation:        20,
+				connectedSublocations: []int32{25, 35, 36, 37},
+				areas:                 []int32{202, 203, 204, 205, 206, 207},
 				expLocRel: expLocRel{
-					shops:		[]int32{31, 32, 33},
-					treasures: 	[]int32{265, 268, 270, 273},
+					shops:      []int32{31, 32, 33},
+					treasures:  []int32{265, 268, 270, 273},
 					monsters:   []int32{138, 142, 149, 259, 270, 282, 292},
 					formations: []int32{193, 198, 205, 306, 312, 320, 331},
 					sidequests: []int32{1, 4},
-					bgMusic: 	[]int32{71, 73},
-					bossMusic: 	[]int32{16},
+					bgMusic:    []int32{71, 73},
+					bossMusic:  []int32{16},
 				},
 			},
 		},
@@ -83,41 +82,41 @@ func TestGetSublocation(t *testing.T) {
 				requestURL:     "/api/sublocations/beSaiD",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
-					"connected sublocations": 	2,
-					"areas": 					16,
-					"characters": 				1,
-					"aeons": 					1,
-					"shops": 					0,
-					"treasures": 				23,
-					"monsters":        			12,
-					"formations":      			14,
-					"sidequests": 				0,
-					"bg music": 				5,
-					"cues music": 				1,
-					"fmvs music": 				3,
-					"boss music": 				2,
-					"fmvs": 					3,
+					"connected sublocations": 2,
+					"areas":                  16,
+					"characters":             1,
+					"aeons":                  1,
+					"shops":                  0,
+					"treasures":              23,
+					"monsters":               12,
+					"formations":             14,
+					"sidequests":             0,
+					"bg music":               5,
+					"cues music":             1,
+					"fmvs music":             3,
+					"boss music":             2,
+					"fmvs":                   3,
 				},
 			},
 			expUnique: expUnique{
-				id:      6,
-				name:    "besaid",
+				id:   6,
+				name: "besaid",
 			},
 			expSublocations: expSublocations{
-				parentLocation: 		4,
-				connectedSublocations: 	[]int32{7, 8},
-				areas: 					[]int32{20, 24, 29, 31, 35,},
+				parentLocation:        4,
+				connectedSublocations: []int32{7, 8},
+				areas:                 []int32{20, 24, 29, 31, 35},
 				expLocRel: expLocRel{
 					characters: []int32{3},
-					aeons: 		[]int32{1},
-					treasures: 	[]int32{15, 18, 24, 40, 44},
+					aeons:      []int32{1},
+					treasures:  []int32{15, 18, 24, 40, 44},
 					monsters:   []int32{7, 11, 14, 18, 293},
 					formations: []int32{9, 13, 17, 22, 25},
-					bgMusic: 	[]int32{18, 20, 22, 23, 27},
-					cuesMusic: 	[]int32{17},
-					fmvsMusic: 	[]int32{17, 23, 34},
-					bossMusic: 	[]int32{9, 34},
-					fmvs:	 	[]int32{5, 6, 8},
+					bgMusic:    []int32{18, 20, 22, 23, 27},
+					cuesMusic:  []int32{17},
+					fmvsMusic:  []int32{17, 23, 34},
+					bossMusic:  []int32{9, 34},
+					fmvs:       []int32{5, 6, 8},
 				},
 			},
 		},
@@ -172,7 +171,6 @@ func TestGetSublocation(t *testing.T) {
 		testResourceLists(test, checks)
 	}
 }
-
 
 func TestRetrieveSublocations(t *testing.T) {
 	tests := []struct {
@@ -245,7 +243,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			dontCheck:  tc.dontCheck,
 		}
 
-		var got LocationApiResourceList
+		var got AreaApiResourceList
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}

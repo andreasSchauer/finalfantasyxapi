@@ -97,15 +97,13 @@ func populateTreasuresLocSub(cfg *Config, treasureIDs []int32) TreasuresLocSub {
 
 
 type EquipmentSub struct {
-	Name             string   `json:"name"`
-	AutoAbilities    []string `json:"auto_abilities"`
-	EmptySlotsAmount int32    `json:"empty_slots_amount"`
+	Name             string   	`json:"name"`
+	AutoAbilities    *string 	`json:"auto_abilities"`
 }
 
-func convertEquipmentSub(cfg *Config, equipment seeding.FoundEquipment) EquipmentSub {
+func convertEquipmentSub(_ *Config, equipment seeding.FoundEquipment) EquipmentSub {
 	return EquipmentSub{
 		Name:             equipment.Name,
-		AutoAbilities:    sortNamesByID(equipment.Abilities, cfg.l.AutoAbilities),
-		EmptySlotsAmount: equipment.EmptySlotsAmount,
+		AutoAbilities: 	  foundEquipmentAbilitiesStringPtr(equipment),
 	}
 }

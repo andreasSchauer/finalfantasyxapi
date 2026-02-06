@@ -8,13 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]LocationAPIResource, error) {
+func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, error) {
 	i := cfg.e.areas
 	resourceType := cfg.e.items.resourceType
 	queryParam := i.queryLookup["method"]
 	query := r.URL.Query().Get(queryParam.Name)
 
-	var resources []LocationAPIResource
+	var resources []AreaAPIResource
 	var err error
 
 	switch query {
@@ -50,9 +50,8 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]LocationAPIResour
 	return resources, nil
 }
 
-
-func getAreasByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, LocationAPIResource, LocationApiResourceList], id int32, resourceType string) ([]LocationAPIResource, error) {
-	filteredLists := []filteredResList[LocationAPIResource]{
+func getAreasByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], id int32, resourceType string) ([]AreaAPIResource, error) {
+	filteredLists := []filteredResList[AreaAPIResource]{
 		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromMonster)),
 		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromTreasure)),
 		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromShop)),
@@ -67,11 +66,11 @@ func getAreasByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seedi
 	return resources, nil
 }
 
-func getAreasByKeyItem(cfg *Config, r *http.Request, id int32) ([]LocationAPIResource, error) {
+func getAreasByKeyItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, error) {
 	i := cfg.e.areas
 	resourceType := cfg.e.keyItems.resourceType
 
-	filteredLists := []filteredResList[LocationAPIResource]{
+	filteredLists := []filteredResList[AreaAPIResource]{
 		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithKeyItemFromTreasure)),
 		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithKeyItemFromQuest)),
 	}
