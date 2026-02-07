@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"testing"
@@ -9,12 +8,33 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+type expMonsterFormations struct {
+	testGeneral
+	expIdOnly
+	category        string
+	isForcedAmbush  bool
+	canEscape       bool
+	bossMusic       *int32
+	monsters        map[string]int32
+	areas           []int32
+	triggerCommands []testFormationTC
+}
+
+type testFormationTC struct {
+	Ability int32
+	Users   []int32
+}
+
+func compareFormationTCs(test test, exp testFormationTC, got FormationTriggerCommand) {
+	tcEndpoint := test.cfg.e.triggerCommands.endpoint
+	charClassesEndpoint := test.cfg.e.characterClasses.endpoint
+
+	compAPIResourcesFromID(test, "tc ability", tcEndpoint, exp.Ability, got.Ability)
+	compareResListTest(test, rltIDs("tc users", charClassesEndpoint, exp.Users, got.Users))
+}
+
 func TestGetMonsterFormation(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expIdOnly
-		expMonsterFormations
-	}{
+	tests := []expMonsterFormations{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/332",
@@ -36,18 +56,16 @@ func TestGetMonsterFormation(t *testing.T) {
 			expIdOnly: expIdOnly{
 				id: 27,
 			},
-			expMonsterFormations: expMonsterFormations{
-				category:       "boss-fight",
-				isForcedAmbush: false,
-				canEscape:      false,
-				bossMusic:      h.GetInt32Ptr(16),
-				monsters: map[string]int32{
-					"sinspawn echuilles": 1,
-					"sinscale - 3": 4,
-				},
-				areas: []int32{47},
-				triggerCommands: []testFormationTC{},
+			category:       "boss-fight",
+			isForcedAmbush: false,
+			canEscape:      false,
+			bossMusic:      h.GetInt32Ptr(16),
+			monsters: map[string]int32{
+				"sinspawn echuilles": 1,
+				"sinscale - 3":       4,
 			},
+			areas:           []int32{47},
+			triggerCommands: []testFormationTC{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -63,15 +81,13 @@ func TestGetMonsterFormation(t *testing.T) {
 			expIdOnly: expIdOnly{
 				id: 77,
 			},
-			expMonsterFormations: expMonsterFormations{
-				category:       "random-encounter",
-				isForcedAmbush: false,
-				canEscape:      true,
-				monsters: map[string]int32{
-					"garuda - 3": 1,
-				},
-				areas: []int32{100, 101, 107},
+			category:       "random-encounter",
+			isForcedAmbush: false,
+			canEscape:      true,
+			monsters: map[string]int32{
+				"garuda - 3": 1,
 			},
+			areas: []int32{100, 101, 107},
 		},
 		{
 			testGeneral: testGeneral{
@@ -87,26 +103,24 @@ func TestGetMonsterFormation(t *testing.T) {
 			expIdOnly: expIdOnly{
 				id: 137,
 			},
-			expMonsterFormations: expMonsterFormations{
-				category:       "boss-fight",
-				isForcedAmbush: false,
-				canEscape:      false,
-				bossMusic:      h.GetInt32Ptr(55),
-				monsters: map[string]int32{
-					"seymour": 1,
-					"anima - 1": 1,
-					"guado guardian - 1": 2,
+			category:       "boss-fight",
+			isForcedAmbush: false,
+			canEscape:      false,
+			bossMusic:      h.GetInt32Ptr(55),
+			monsters: map[string]int32{
+				"seymour":            1,
+				"anima - 1":          1,
+				"guado guardian - 1": 2,
+			},
+			areas: []int32{166},
+			triggerCommands: []testFormationTC{
+				{
+					Ability: 4,
+					Users:   []int32{1},
 				},
-				areas: []int32{166},
-				triggerCommands: []testFormationTC{
-					{
-						Ability: 4,
-						Users:   []int32{1},
-					},
-					{
-						Ability: 5,
-						Users:   []int32{3, 5},
-					},
+				{
+					Ability: 5,
+					Users:   []int32{3, 5},
 				},
 			},
 		},
@@ -124,35 +138,20 @@ func TestGetMonsterFormation(t *testing.T) {
 			expIdOnly: expIdOnly{
 				id: 265,
 			},
-			expMonsterFormations: expMonsterFormations{
-				category:       "random-encounter",
-				isForcedAmbush: true,
-				canEscape:      true,
-				monsters: map[string]int32{
-					"great malboro": 1,
-				},
-				areas: []int32{236, 239, 240},
+			category:       "random-encounter",
+			isForcedAmbush: true,
+			canEscape:      true,
+			monsters: map[string]int32{
+				"great malboro": 1,
 			},
+			areas: []int32{236, 239, 240},
 		},
 	}
 
 	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "GetMonsterFormation", i+1, testCfg.HandleMonsterFormations)
+		test, got, err := setupTest[MonsterFormation](t, tc.testGeneral, "GetMonsterFormation", i+1, testCfg.HandleMonsterFormations)
 		if errors.Is(err, errCorrect) {
 			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got MonsterFormation
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
 		testExpectedIdOnly(test, tc.expIdOnly, got.ID)
@@ -165,19 +164,15 @@ func TestGetMonsterFormation(t *testing.T) {
 		compareCustomObjSlices(test, "trigger commands", tc.triggerCommands, got.TriggerCommands, compareFormationTCs)
 
 		checks := []resListTest{
-			newResListTestFromIDs("areas", testCfg.e.areas.endpoint, tc.areas, got.Areas),
+			rltIDs("areas", testCfg.e.areas.endpoint, tc.areas, got.Areas),
 		}
 
-		testResourceLists(test, checks)
+		compareResListTests(test, checks)
 	}
 }
 
-
 func TestRetrieveMonsterFormations(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expList
-	}{
+	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?limit=asd",
@@ -190,106 +185,58 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 				requestURL:     "/api/monster-formations?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:    331,
-				previous: nil,
-				next:     nil,
-				results:  []int32{1, 175, 238, 307, 331},
-			},
+			count:   331,
+			results: []int32{1, 175, 238, 307, 331},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?monster=44",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:    5,
-				previous: nil,
-				next:     nil,
-				results:  []int32{63, 64, 67, 68, 69},
-			},
+			count:   5,
+			results: []int32{63, 64, 67, 68, 69},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?location=12",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:    12,
-				previous: nil,
-				next:     nil,
-				results:  []int32{90, 93, 98, 102, 105},
-			},
+			count:   12,
+			results: []int32{90, 93, 98, 102, 105},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?sublocation=6",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:    14,
-				previous: nil,
-				next:     nil,
-				results:  []int32{9, 15, 19, 24, 25},
-			},
+			count:   14,
+			results: []int32{9, 15, 19, 24, 25},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?area=234",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:    8,
-				previous: nil,
-				next:     nil,
-				results:  []int32{257, 258, 262, 266},
-			},
+			count:   8,
+			results: []int32{257, 258, 262, 266},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?ambush=true",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:    3,
-				previous: nil,
-				next:     nil,
-				results:  []int32{226, 265, 298},
-			},
+			count:   3,
+			results: []int32{226, 265, 298},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?category=boss-fight&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:    63,
-				previous: nil,
-				next:     nil,
-				results:  []int32{3, 36, 83, 137, 189, 204, 245, 272, 296},
-			},
+			count:   63,
+			results: []int32{3, 36, 83, 137, 189, 204, 245, 272, 296},
 		},
 	}
 
-	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "RetrieveMonsterFormations", i+1, testCfg.HandleMonsterFormations)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got UnnamedApiResourceList
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
-		}
-
-		testAPIResourceList(test, testCfg.e.monsterFormations.endpoint, tc.expList, got)
-	}
+	testIdList(t, tests, testCfg.e.monsterFormations.endpoint, "RetrieveMonsterFormations", testCfg.HandleMonsterFormations, compareAPIResourceLists[UnnamedApiResourceList])
 }

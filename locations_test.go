@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"slices"
@@ -10,12 +9,16 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+type expLocations struct {
+	testGeneral
+	expUnique
+	connectedLocations []int32
+	sublocations       []int32
+	expLocRel
+}
+
 func TestGetLocation(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expUnique
-		expLocations
-	}{
+	tests := []expLocations{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/0",
@@ -62,22 +65,20 @@ func TestGetLocation(t *testing.T) {
 				id:   15,
 				name: "macalania",
 			},
-			expLocations: expLocations{
-				connectedLocations: []int32{14, 16, 19, 20},
-				sublocations:       []int32{25, 26, 27},
-				expLocRel: expLocRel{
-					aeons:      []int32{4},
-					shops:      []int32{22, 25, 36},
-					treasures:  []int32{187, 193, 199, 209, 214},
-					monsters:   []int32{80, 83, 87, 93, 94, 97, 297},
-					formations: []int32{120, 125, 129, 135, 137},
-					sidequests: []int32{6},
-					bgMusic:    []int32{12, 22, 30, 43, 52, 55, 56},
-					cuesMusic:  []int32{4, 57, 59},
-					fmvsMusic:  []int32{70},
-					bossMusic:  []int32{16, 55, 57},
-					fmvs:       []int32{27, 36},
-				},
+			connectedLocations: []int32{14, 16, 19, 20},
+			sublocations:       []int32{25, 26, 27},
+			expLocRel: expLocRel{
+				aeons:      []int32{4},
+				shops:      []int32{22, 25, 36},
+				treasures:  []int32{187, 193, 199, 209, 214},
+				monsters:   []int32{80, 83, 87, 93, 94, 97, 297},
+				formations: []int32{120, 125, 129, 135, 137},
+				sidequests: []int32{6},
+				bgMusic:    []int32{12, 22, 30, 43, 52, 55, 56},
+				cuesMusic:  []int32{4, 57, 59},
+				fmvsMusic:  []int32{70},
+				bossMusic:  []int32{16, 55, 57},
+				fmvs:       []int32{27, 36},
 			},
 		},
 		{
@@ -105,206 +106,129 @@ func TestGetLocation(t *testing.T) {
 				id:   26,
 				name: "omega ruins",
 			},
-			expLocations: expLocations{
-				expLocRel: expLocRel{
-					treasures:  []int32{328, 332, 337, 343},
-					monsters:   []int32{190, 201, 210, 239, 245, 250, 255},
-					formations: []int32{258, 262, 265, 283, 289, 296},
-					bgMusic:    []int32{81, 82},
-					bossMusic:  []int32{16, 80},
-				},
+			expLocRel: expLocRel{
+				treasures:  []int32{328, 332, 337, 343},
+				monsters:   []int32{190, 201, 210, 239, 245, 250, 255},
+				formations: []int32{258, 262, 265, 283, 289, 296},
+				bgMusic:    []int32{81, 82},
+				bossMusic:  []int32{16, 80},
 			},
 		},
 	}
 
 	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "GetLocation", i+1, testCfg.HandleLocations)
+		test, got, err := setupTest[Location](t, tc.testGeneral, "GetLocation", i+1, testCfg.HandleLocations)
 		if errors.Is(err, errCorrect) {
 			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got Location
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
 		testExpectedUnique(test, tc.expUnique, got.ID, got.Name)
 
 		checks := []resListTest{
-			newResListTestFromIDs("connected locations", testCfg.e.locations.endpoint, tc.connectedLocations, got.ConnectedLocations),
-			newResListTestFromIDs("sublocations", testCfg.e.sublocations.endpoint, tc.sublocations, got.Sublocations),
-			newResListTestFromIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
-			newResListTestFromIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
-			newResListTestFromIDs("shops", testCfg.e.shops.endpoint, tc.shops, got.Shops),
-			newResListTestFromIDs("treasures", testCfg.e.treasures.endpoint, tc.treasures, got.Treasures),
-			newResListTestFromIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
-			newResListTestFromIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
-			newResListTestFromIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
-			newResListTestFromIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
+			rltIDs("connected locations", testCfg.e.locations.endpoint, tc.connectedLocations, got.ConnectedLocations),
+			rltIDs("sublocations", testCfg.e.sublocations.endpoint, tc.sublocations, got.Sublocations),
+			rltIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
+			rltIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
+			rltIDs("shops", testCfg.e.shops.endpoint, tc.shops, got.Shops),
+			rltIDs("treasures", testCfg.e.treasures.endpoint, tc.treasures, got.Treasures),
+			rltIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
+			rltIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
+			rltIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
+			rltIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
 		}
 
 		if got.Music != nil {
 			musicChecks := []resListTest{
-				newResListTestFromIDs("bg music", testCfg.e.songs.endpoint, tc.bgMusic, got.Music.BackgroundMusic),
-				newResListTestFromIDs("cues music", testCfg.e.songs.endpoint, tc.cuesMusic, got.Music.Cues),
-				newResListTestFromIDs("fmvs music", testCfg.e.songs.endpoint, tc.fmvsMusic, got.Music.FMVs),
-				newResListTestFromIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossMusic),
+				rltIDs("bg music", testCfg.e.songs.endpoint, tc.bgMusic, got.Music.BackgroundMusic),
+				rltIDs("cues music", testCfg.e.songs.endpoint, tc.cuesMusic, got.Music.Cues),
+				rltIDs("fmvs music", testCfg.e.songs.endpoint, tc.fmvsMusic, got.Music.FMVs),
+				rltIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossMusic),
 			}
 
 			checks = slices.Concat(checks, musicChecks)
 		}
 
-		testResourceLists(test, checks)
+		compareResListTests(test, checks)
 	}
 }
 
 func TestRetrieveLocations(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expList
-	}{
+	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   26,
-				results: []int32{1, 6, 18, 26},
-			},
+			count:   26,
+			results: []int32{1, 6, 18, 26},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations?monsters=false",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   2,
-				results: []int32{7, 13},
-			},
+			count:   2,
+			results: []int32{7, 13},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations?characters=true",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   6,
-				results: []int32{1, 4, 5, 8, 10, 12},
-			},
+			count:   6,
+			results: []int32{1, 4, 5, 8, 10, 12},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations?aeons=true",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   8,
-				results: []int32{2, 4, 6, 11, 15, 19, 21, 22},
-			},
+			count:   8,
+			results: []int32{2, 4, 6, 11, 15, 19, 21, 22},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations?item=45&method=monster",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   4,
-				results: []int32{18, 20, 25, 26},
-			},
+			count:   4,
+			results: []int32{18, 20, 25, 26},
 		},
 	}
 
-	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "RetrieveLocations", i+1, testCfg.HandleLocations)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got AreaApiResourceList
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
-		}
-
-		testAPIResourceList(test, testCfg.e.locations.endpoint, tc.expList, got)
-	}
+	testIdList(t, tests, testCfg.e.locations.endpoint, "RetrieveLocations", testCfg.HandleLocations, compareAPIResourceLists[NamedApiResourceList])
 }
 
 func TestLocationsConnected(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expList
-	}{
+	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/5/connected/",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:          2,
-				parentResource: h.GetStrPtr("/locations/5"),
-				results:        []int32{4, 6},
-			},
+			count:          2,
+			parentResource: h.GetStrPtr("/locations/5"),
+			results:        []int32{4, 6},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/11/connected/",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:          2,
-				parentResource: h.GetStrPtr("/locations/11"),
-				results:        []int32{10, 12},
-			},
+			count:          2,
+			parentResource: h.GetStrPtr("/locations/11"),
+			results:        []int32{10, 12},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/20/connected/",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:          4,
-				parentResource: h.GetStrPtr("/locations/20"),
-				results:        []int32{15, 21, 22, 23},
-			},
+			count:          4,
+			parentResource: h.GetStrPtr("/locations/20"),
+			results:        []int32{15, 21, 22, 23},
 		},
 	}
 
-	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "SubsectionLocationsConnected", i+1, testCfg.HandleLocations)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got SubResourceListTest[NamedAPIResource, LocationSub]
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
-		}
-
-		testSubResourceList(test, testCfg.e.locations.endpoint, tc.expList, got)
-	}
+	testIdList(t, tests, testCfg.e.locations.endpoint, "SubsectionLocationsConnected", testCfg.HandleLocations, compareSubResourceLists[NamedAPIResource, LocationSub])
 }

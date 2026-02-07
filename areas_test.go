@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"slices"
@@ -10,12 +9,17 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+type expAreas struct {
+	testGeneral
+	expNameVer
+	parentLocation    int32
+	parentSublocation int32
+	connectedAreas    []int32
+	expLocRel
+}
+
 func TestGetArea(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expNameVer
-		expAreas
-	}{
+	tests := []expAreas{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/0",
@@ -52,15 +56,13 @@ func TestGetArea(t *testing.T) {
 				name:    "north",
 				version: h.GetInt32Ptr(1),
 			},
-			expAreas: expAreas{
-				parentLocation:    15,
-				parentSublocation: 25,
-				connectedAreas:    []int32{144, 149},
-				expLocRel: expLocRel{
-					sidequests: []int32{6},
-					monsters:   []int32{81, 84, 85},
-					formations: []int32{120, 122, 125},
-				},
+			parentLocation:    15,
+			parentSublocation: 25,
+			connectedAreas:    []int32{144, 149},
+			expLocRel: expLocRel{
+				sidequests: []int32{6},
+				monsters:   []int32{81, 84, 85},
+				formations: []int32{120, 122, 125},
 			},
 		},
 		{
@@ -82,15 +84,13 @@ func TestGetArea(t *testing.T) {
 				name:    "besaid village",
 				version: nil,
 			},
-			expAreas: expAreas{
-				parentLocation:    4,
-				parentSublocation: 7,
-				connectedAreas:    []int32{26, 37, 41},
-				expLocRel: expLocRel{
-					characters: []int32{2, 4},
-					treasures:  []int32{33, 37},
-					bgMusic:    []int32{19},
-				},
+			parentLocation:    4,
+			parentSublocation: 7,
+			connectedAreas:    []int32{26, 37, 41},
+			expLocRel: expLocRel{
+				characters: []int32{2, 4},
+				treasures:  []int32{33, 37},
+				bgMusic:    []int32{19},
 			},
 		},
 		{
@@ -112,14 +112,12 @@ func TestGetArea(t *testing.T) {
 				name:    "main gate",
 				version: nil,
 			},
-			expAreas: expAreas{
-				parentLocation:    8,
-				parentSublocation: 13,
-				expLocRel: expLocRel{
-					shops:     []int32{5},
-					cuesMusic: []int32{35},
-					bgMusic:   []int32{32, 34},
-				},
+			parentLocation:    8,
+			parentSublocation: 13,
+			expLocRel: expLocRel{
+				shops:     []int32{5},
+				cuesMusic: []int32{35},
+				bgMusic:   []int32{32, 34},
 			},
 		},
 		{
@@ -132,12 +130,10 @@ func TestGetArea(t *testing.T) {
 				name:    "agency front",
 				version: nil,
 			},
-			expAreas: expAreas{
-				parentLocation:    14,
-				parentSublocation: 24,
-				expLocRel: expLocRel{
-					sidequests: []int32{7},
-				},
+			parentLocation:    14,
+			parentSublocation: 24,
+			expLocRel: expLocRel{
+				sidequests: []int32{7},
 			},
 		},
 		{
@@ -158,38 +154,23 @@ func TestGetArea(t *testing.T) {
 				name:    "deck",
 				version: nil,
 			},
-			expAreas: expAreas{
-				parentLocation:    5,
-				parentSublocation: 8,
-				expLocRel: expLocRel{
-					characters: []int32{5},
-					monsters:   []int32{19},
-					formations: []int32{26},
-					fmvsMusic:  []int32{16},
-					bossMusic:  []int32{16},
-					fmvs:       []int32{9, 13},
-				},
+			parentLocation:    5,
+			parentSublocation: 8,
+			expLocRel: expLocRel{
+				characters: []int32{5},
+				monsters:   []int32{19},
+				formations: []int32{26},
+				fmvsMusic:  []int32{16},
+				bossMusic:  []int32{16},
+				fmvs:       []int32{9, 13},
 			},
 		},
 	}
 
 	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "GetArea", i+1, testCfg.HandleAreas)
+		test, got, err := setupTest[Area](t, tc.testGeneral, "GetArea", i+1, testCfg.HandleAreas)
 		if errors.Is(err, errCorrect) {
 			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got Area
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
 		testExpectedNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
@@ -197,37 +178,34 @@ func TestGetArea(t *testing.T) {
 		compAPIResourcesFromID(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
 
 		checks := []resListTest{
-			newResListTestFromIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
-			newResListTestFromIDs("connected areas", testCfg.e.areas.endpoint, tc.connectedAreas, got.ConnectedAreas),
-			newResListTestFromIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
-			newResListTestFromIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
-			newResListTestFromIDs("shops", testCfg.e.shops.endpoint, tc.shops, got.Shops),
-			newResListTestFromIDs("treasures", testCfg.e.treasures.endpoint, tc.treasures, got.Treasures),
-			newResListTestFromIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
-			newResListTestFromIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
-			newResListTestFromIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
+			rltIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
+			rltIDs("connected areas", testCfg.e.areas.endpoint, tc.connectedAreas, got.ConnectedAreas),
+			rltIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
+			rltIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
+			rltIDs("shops", testCfg.e.shops.endpoint, tc.shops, got.Shops),
+			rltIDs("treasures", testCfg.e.treasures.endpoint, tc.treasures, got.Treasures),
+			rltIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
+			rltIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
+			rltIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
 		}
 
 		if got.Music != nil {
 			musicChecks := []resListTest{
-				newResListTestFromIDs("bg music", testCfg.e.songs.endpoint, tc.bgMusic, got.Music.BackgroundMusic),
-				newResListTestFromIDs("cues music", testCfg.e.songs.endpoint, tc.cuesMusic, got.Music.Cues),
-				newResListTestFromIDs("fmvs music", testCfg.e.songs.endpoint, tc.fmvsMusic, got.Music.FMVs),
-				newResListTestFromIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossMusic),
+				rltIDs("bg music", testCfg.e.songs.endpoint, tc.bgMusic, got.Music.BackgroundMusic),
+				rltIDs("cues music", testCfg.e.songs.endpoint, tc.cuesMusic, got.Music.Cues),
+				rltIDs("fmvs music", testCfg.e.songs.endpoint, tc.fmvsMusic, got.Music.FMVs),
+				rltIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossMusic),
 			}
 
 			checks = slices.Concat(checks, musicChecks)
 		}
 
-		testResourceLists(test, checks)
+		compareResListTests(test, checks)
 	}
 }
 
 func TestRetrieveAreas(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expList
-	}{
+	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?comp_sphere=fa",
@@ -261,352 +239,189 @@ func TestRetrieveAreas(t *testing.T) {
 				requestURL:     "/api/areas/",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   240,
-				next:    h.GetStrPtr("/areas?limit=20&offset=20"),
-				results: []int32{1, 5, 20},
-			},
+			count:   240,
+			next:    h.GetStrPtr("/areas?limit=20&offset=20"),
+			results: []int32{1, 5, 20},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   240,
-				results: []int32{1, 50, 240},
-			},
+			count:   240,
+			results: []int32{1, 50, 240},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?offset=50&limit=30",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:    240,
-				previous: h.GetStrPtr("/areas?limit=30&offset=20"),
-				next:     h.GetStrPtr("/areas?limit=30&offset=80"),
-				results:  []int32{51, 80},
-			},
+			count:    240,
+			previous: h.GetStrPtr("/areas?limit=30&offset=20"),
+			next:     h.GetStrPtr("/areas?limit=30&offset=80"),
+			results:  []int32{51, 80},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?monsters=true&chocobo=true&save_sphere=true",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   3,
-				results: []int32{88, 97, 203},
-			},
+			count:   3,
+			results: []int32{88, 97, 203},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?item=7&story_based=false&monsters=false",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   5,
-				results: []int32{35, 129, 140, 163, 208},
-			},
+			count:   5,
+			results: []int32{35, 129, 140, 163, 208},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?characters=true",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   7,
-				results: []int32{1, 20, 103},
-			},
+			count:   7,
+			results: []int32{1, 20, 103},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?sidequests=true",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   11,
-				results: []int32{75, 140, 144, 145, 182, 185, 203},
-			},
+			count:   11,
+			results: []int32{75, 140, 144, 145, 182, 185, 203},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?key_item=37",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:   2,
-				results: []int32{46, 169},
-			},
+			count:   2,
+			results: []int32{46, 169},
 		},
 	}
 
-	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "RetrieveAreas", i+1, testCfg.HandleAreas)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got AreaApiResourceList
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
-		}
-
-		testAPIResourceList(test, testCfg.e.areas.endpoint, tc.expList, got)
-	}
+	testIdList(t, tests, testCfg.e.areas.endpoint, "RetrieveAreas", testCfg.HandleAreas, compareAPIResourceLists[AreaApiResourceList])
 }
 
 func TestAreasConnected(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expList
-	}{
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/1/areas",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "endpoint 'overdrive-modes' doesn't have any subsections.",
-				httpHandler:    testCfg.HandleOverdriveModes,
-			},
-		},
+	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/36/connected/",
 				expectedStatus: http.StatusOK,
-				httpHandler:    testCfg.HandleAreas,
 			},
-			expList: expList{
-				count:          7,
-				parentResource: h.GetStrPtr("/areas/36"),
-				results:        []int32{26, 30, 37, 38, 39, 40, 41},
-			},
+			count:          7,
+			parentResource: h.GetStrPtr("/areas/36"),
+			results:        []int32{26, 30, 37, 38, 39, 40, 41},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/211/connected/",
 				expectedStatus: http.StatusOK,
-				httpHandler:    testCfg.HandleAreas,
 			},
-			expList: expList{
-				count:          2,
-				parentResource: h.GetStrPtr("/areas/211"),
-				results:        []int32{207, 212},
-			},
+			count:          2,
+			parentResource: h.GetStrPtr("/areas/211"),
+			results:        []int32{207, 212},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/9/connected/",
 				expectedStatus: http.StatusOK,
-				httpHandler:    testCfg.HandleAreas,
 			},
-			expList: expList{
-				count:          4,
-				parentResource: h.GetStrPtr("/areas/9"),
-				results:        []int32{8, 10, 11, 15},
-			},
+			count:          4,
+			parentResource: h.GetStrPtr("/areas/9"),
+			results:        []int32{8, 10, 11, 15},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/238/connected/",
 				expectedStatus: http.StatusOK,
-				httpHandler:    testCfg.HandleAreas,
 			},
-			expList: expList{
-				count:          0,
-				parentResource: h.GetStrPtr("/areas/238"),
-				results:        []int32{},
-			},
+			count:          0,
+			parentResource: h.GetStrPtr("/areas/238"),
+			results:        []int32{},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/151/connected/",
 				expectedStatus: http.StatusOK,
-				httpHandler:    testCfg.HandleAreas,
 			},
-			expList: expList{
-				count:          3,
-				parentResource: h.GetStrPtr("/areas/151"),
-				results:        []int32{143, 152, 201},
-			},
+			count:          3,
+			parentResource: h.GetStrPtr("/areas/151"),
+			results:        []int32{143, 152, 201},
 		},
 	}
 
-	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "SubsectionAreasConnected", i+1, tc.httpHandler)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got SubResourceListTest[AreaAPIResource, AreaSub]
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
-		}
-
-		testSubResourceList(test, testCfg.e.areas.endpoint, tc.expList, got)
-	}
+	testIdList(t, tests, testCfg.e.areas.endpoint, "SubsectionAreasConnected", testCfg.HandleAreas, compareSubResourceLists[AreaAPIResource, AreaSub])
 }
 
 func TestAreasMonsters(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expList
-	}{
+	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/90/monsters/",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:          6,
-				parentResource: h.GetStrPtr("/areas/90"),
-				results:        []int32{38, 39, 40, 42, 43, 45},
-			},
+			count:          6,
+			parentResource: h.GetStrPtr("/areas/90"),
+			results:        []int32{38, 39, 40, 42, 43, 45},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/23/monsters/",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:          4,
-				parentResource: h.GetStrPtr("/areas/23"),
-				results:        []int32{15, 16, 17, 18},
-			},
+			count:          4,
+			parentResource: h.GetStrPtr("/areas/23"),
+			results:        []int32{15, 16, 17, 18},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/239/monsters/",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:          21,
-				next:           h.GetStrPtr("/areas/239/monsters?limit=20&offset=20"),
-				parentResource: h.GetStrPtr("/areas/239"),
-				results:        []int32{190, 201, 210, 239, 245, 249, 253},
-			},
+			count:          21,
+			next:           h.GetStrPtr("/areas/239/monsters?limit=20&offset=20"),
+			parentResource: h.GetStrPtr("/areas/239"),
+			results:        []int32{190, 201, 210, 239, 245, 249, 253},
 		},
 	}
 
-	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "SubsectionAreasMonsters", i+1, testCfg.HandleAreas)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got SubResourceListTest[NamedAPIResource, MonsterSub]
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
-		}
-
-		testSubResourceList(test, testCfg.e.monsters.endpoint, tc.expList, got)
-	}
+	testIdList(t, tests, testCfg.e.monsters.endpoint, "SubsectionAreasMonsters", testCfg.HandleAreas, compareSubResourceLists[NamedAPIResource, MonsterSub])
 }
 
 func TestAreasParameters(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expListParams
-	}{
+	tests := []expListNames{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			expListParams: expListParams{
-				count:   21,
-				results: []string{"limit", "offset", "item", "save_sphere", "sublocation"},
-			},
+			count:   21,
+			results: []string{"limit", "offset", "item", "save_sphere", "sublocation"},
 		},
 	}
 
-	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "AreasParameters", i+1, testCfg.HandleAreas)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got QueryParameterList
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
-		}
-
-		nameListTest := newNameListTestParams("results", tc.results, got.Results)
-		testNameList(test, nameListTest)
-	}
+	testNameList(t, tests, "", "AreasParameters", testCfg.HandleAreas, compareParameterLists)
 }
 
 func TestAreasSections(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expListParams
-	}{
+	tests := []expListNames{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/sections",
 				expectedStatus: http.StatusOK,
 			},
-			expListParams: expListParams{
-				count: 2,
-				results: []string{
-					"connected",
-					"monsters",
-				},
+			count: 2,
+			results: []string{
+				"connected",
+				"monsters",
 			},
 		},
 	}
 
-	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "AreasSections", i+1, testCfg.HandleAreas)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		test := test{
-			t:          t,
-			cfg:        testCfg,
-			name:       testName,
-			expLengths: tc.expLengths,
-			dontCheck:  tc.dontCheck,
-		}
-
-		var got SectionList
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
-		}
-
-		nameListTest := newNameListTestSections(test.cfg, "results", test.cfg.e.areas.endpoint, tc.results, got.Results)
-		testNameList(test, nameListTest)
-	}
+	testNameList(t, tests, testCfg.e.areas.endpoint, "AreasSections", testCfg.HandleAreas, compareSectionLists)
 }

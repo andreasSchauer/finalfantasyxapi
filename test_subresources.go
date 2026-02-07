@@ -1,10 +1,9 @@
 package main
 
-
 type SubResourceListTest[T APIResource, S SubResource] struct {
 	ListParams
-	ParentResource 	T 	`json:"parent_resource,omitempty"`
-	Results			[]S	`json:"results"`
+	ParentResource T   `json:"parent_resource,omitempty"`
+	Results        []S `json:"results"`
 }
 
 func (l SubResourceListTest[T, S]) getListParams() ListParams {
@@ -16,9 +15,9 @@ func (l SubResourceListTest[T, S]) getResults() []S {
 }
 
 type subResListTest struct {
-	name 	string
-	exp		[]string
-	got		[]SubResource
+	name string
+	exp  []string
+	got  []SubResource
 }
 
 func newSubResListTestFromIDs[T SubResource](fieldName, endpoint string, expIDs []int32, got []T) subResListTest {
@@ -36,7 +35,7 @@ func newSubResListTestFromIDs[T SubResource](fieldName, endpoint string, expIDs 
 	}
 }
 
-func testSubResourceList[T APIResource, S SubResource](test test, endpoint string, expList expList, gotList SubResourceListTest[T, S]) {
+func compareSubResourceLists[T APIResource, S SubResource](test test, endpoint string, expList expListIDs, gotList SubResourceListTest[T, S]) {
 	test.t.Helper()
 	got := gotList.getListParams()
 	compare(test, "count", expList.count, got.Count)
@@ -50,7 +49,6 @@ func testSubResourceList[T APIResource, S SubResource](test test, endpoint strin
 	listTest := newSubResListTestFromIDs("results", endpoint, expList.results, gotList.getResults())
 	testSubResourceListResults(test, listTest)
 }
-
 
 func testSubResourceListResults(test test, expList subResListTest) {
 	test.t.Helper()

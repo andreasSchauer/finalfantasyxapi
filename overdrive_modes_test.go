@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"testing"
@@ -9,12 +8,18 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+type expOverdriveModes struct {
+	testGeneral
+	expUnique
+	description   string
+	effect        string
+	modeType      int32
+	fillRate      *float32
+	actionsAmount map[string]int32
+}
+
 func TestGetOverdriveMode(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expUnique
-		expOverdriveModes
-	}{
+	tests := []expOverdriveModes{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/ally/2",
@@ -51,19 +56,17 @@ func TestGetOverdriveMode(t *testing.T) {
 				id:   14,
 				name: "ally",
 			},
-			expOverdriveModes: expOverdriveModes{
-				description: "Charges on character's turn.",
-				modeType:    2,
-				fillRate:    h.GetFloat32Ptr(0.03),
-				actionsAmount: map[string]int32{
-					"tidus":   600,
-					"yuna":    500,
-					"wakka":   350,
-					"lulu":    480,
-					"kimahri": 300,
-					"auron":   450,
-					"rikku":   320,
-				},
+			description: "Charges on character's turn.",
+			modeType:    2,
+			fillRate:    h.GetFloat32Ptr(0.03),
+			actionsAmount: map[string]int32{
+				"tidus":   600,
+				"yuna":    500,
+				"wakka":   350,
+				"lulu":    480,
+				"kimahri": 300,
+				"auron":   450,
+				"rikku":   320,
 			},
 		},
 		{
@@ -78,15 +81,13 @@ func TestGetOverdriveMode(t *testing.T) {
 				id:   3,
 				name: "comrade",
 			},
-			expOverdriveModes: expOverdriveModes{
-				effect:   "The gauge fills when an ally takes damage.",
-				modeType: 1,
-				fillRate: nil,
-				actionsAmount: map[string]int32{
-					"tidus": 300,
-					"wakka": 100,
-					"rikku": 100,
-				},
+			effect:   "The gauge fills when an ally takes damage.",
+			modeType: 1,
+			fillRate: nil,
+			actionsAmount: map[string]int32{
+				"tidus": 300,
+				"wakka": 100,
+				"rikku": 100,
 			},
 		},
 		{
@@ -106,29 +107,14 @@ func TestGetOverdriveMode(t *testing.T) {
 				id:   1,
 				name: "stoic",
 			},
-			expOverdriveModes: expOverdriveModes{
-				modeType: 1,
-			},
+			modeType: 1,
 		},
 	}
 
 	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "GetOverdriveMode", i+1, testCfg.HandleOverdriveModes)
+		test, got, err := setupTest[OverdriveMode](t, tc.testGeneral, "GetOverdriveMode", i+1, testCfg.HandleOverdriveModes)
 		if errors.Is(err, errCorrect) {
 			continue
-		}
-
-		test := test{
-			t: t,
-			cfg: testCfg,
-			name: testName,
-			expLengths: tc.expLengths,
-			dontCheck: tc.dontCheck,
-		}
-
-		var got OverdriveMode
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
 		}
 
 		testExpectedUnique(test, tc.expUnique, got.ID, got.Name)
@@ -141,10 +127,7 @@ func TestGetOverdriveMode(t *testing.T) {
 }
 
 func TestRetrieveOverdriveModes(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expList
-	}{
+	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=f",
@@ -157,12 +140,10 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 				requestURL:     "/api/overdrive-modes/",
 				expectedStatus: http.StatusOK,
 			},
-			expList: expList{
-				count:    17,
-				previous: nil,
-				next:     nil,
-				results: []int32{1, 8, 17},
-			},
+			count:    17,
+			previous: nil,
+			next:     nil,
+			results:  []int32{1, 8, 17},
 		},
 		{
 			testGeneral: testGeneral{
@@ -173,10 +154,8 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 					"next":     true,
 				},
 			},
-			expList: expList{
-				count: 4,
-				results: []int32{1, 2, 3, 4},
-			},
+			count:   4,
+			results: []int32{1, 2, 3, 4},
 		},
 		{
 			testGeneral: testGeneral{
@@ -187,73 +166,24 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 					"next":     true,
 				},
 			},
-			expList: expList{
-				count: 13,
-				results: []int32{5, 12, 17},
-			},
+			count:   13,
+			results: []int32{5, 12, 17},
 		},
 	}
 
-	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "RetrieveOverdriveModes", i+1, testCfg.HandleOverdriveModes)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		test := test{
-			t: t,
-			cfg: testCfg,
-			name: testName,
-			expLengths: tc.expLengths,
-			dontCheck: tc.dontCheck,
-		}
-
-		var got NamedApiResourceList
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
-		}
-
-		testAPIResourceList(test, testCfg.e.overdriveModes.endpoint, tc.expList, got)
-	}
+	testIdList(t, tests, testCfg.e.overdriveModes.endpoint, "RetrieveOverdriveModes", testCfg.HandleOverdriveModes, compareAPIResourceLists[NamedApiResourceList])
 }
 
-
 func TestOverdriveModesSections(t *testing.T) {
-	tests := []struct {
-		testGeneral
-		expListParams
-	}{
+	tests := []expListNames{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/sections",
 				expectedStatus: http.StatusOK,
 			},
-			expListParams: expListParams{
-				count: 0,
-			},
+			count: 0,
 		},
 	}
 
-	for i, tc := range tests {
-		rr, testName, err := setupTest(t, tc.testGeneral, "OverdriveModeSections", i+1, testCfg.HandleOverdriveModes)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		test := test{
-			t: t,
-			cfg: testCfg,
-			name: testName,
-			expLengths: tc.expLengths,
-			dontCheck: tc.dontCheck,
-		}
-
-		var got SectionList
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-			t.Fatalf("%s: failed to decode: %v", testName, err)
-		}
-
-		nameListTest := newNameListTestSections(test.cfg, "results", test.cfg.e.overdriveModes.endpoint, tc.results, got.Results)
-		testNameList(test, nameListTest)
-	}
+	testNameList(t, tests, testCfg.e.overdriveModes.endpoint, "OverdriveModeSections", testCfg.HandleOverdriveModes, compareSectionLists)
 }

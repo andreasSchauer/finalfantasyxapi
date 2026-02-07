@@ -5,6 +5,56 @@ import (
 	"slices"
 )
 
+type testAppliedState struct {
+	condition     string
+	isTemporary   bool
+	appliedStatus *int32
+}
+
+type testDefaultState struct {
+	IsTemporary bool                 `json:"is_temporary"`
+	Changes     []testAltStateChange `json:"changes"`
+}
+
+type testAltStateChange struct {
+	AlterationType   string
+	Distance         *int32
+	Properties       []int32
+	AutoAbilities    []int32
+	BaseStats        map[string]int32
+	ElemResists      []testElemResist
+	StatusImmunities []int32
+	StatusResists    map[string]int32
+	AddedStatus      *InflictedStatus
+	RemovedStatus    *int32
+}
+
+type testElemResist struct {
+	element  int32
+	affinity int32
+}
+
+func compareMonsterElemResists(test test, exp testElemResist, got ElementalResist) {
+	elemEndpoint := test.cfg.e.elements.endpoint
+	affinityEndpoint := test.cfg.e.affinities.endpoint
+
+	compAPIResourcesFromID(test, "elements", elemEndpoint, exp.element, got.Element)
+	compAPIResourcesFromID(test, "affinities", affinityEndpoint, exp.affinity, got.Affinity)
+}
+
+type testMonItems struct {
+	itemDropChance int32
+	items          map[string]*int32
+	otherItems     []int32
+}
+
+type testMonEquipment struct {
+	abilitySlots      MonsterEquipmentSlots
+	attachedAbilities MonsterEquipmentSlots
+	weaponAbilities   []int32
+	armorAbilities    []int32
+}
+
 func testMonsterItems(test test, expItems *testMonItems, gotItems *MonsterItems, checks *[]resListTest) {
 	if test.dontCheck != nil && test.dontCheck["items"] {
 		return
@@ -17,7 +67,7 @@ func testMonsterItems(test test, expItems *testMonItems, gotItems *MonsterItems,
 	exp := *expItems
 	got := *gotItems
 	endpoint := test.cfg.e.items.endpoint
-	*checks = append(*checks, newResListTestFromIDs("other items", endpoint, exp.otherItems, got.OtherItems))
+	*checks = append(*checks, rltIDs("other items", endpoint, exp.otherItems, got.OtherItems))
 	itemMap := exp.items
 
 	compare(test, "item drop chance", exp.itemDropChance, got.DropChance)
@@ -51,8 +101,8 @@ func testMonsterEquipment(test test, expEquipment *testMonEquipment, gotEquipmen
 	}
 
 	equipChecks := []resListTest{
-		newResListTestFromIDs("weapon abilities", test.cfg.e.autoAbilities.endpoint, exp.weaponAbilities, got.WeaponAbilities),
-		newResListTestFromIDs("armor abilities", test.cfg.e.autoAbilities.endpoint, exp.armorAbilities, got.ArmorAbilities),
+		rltIDs("weapon abilities", test.cfg.e.autoAbilities.endpoint, exp.weaponAbilities, got.WeaponAbilities),
+		rltIDs("armor abilities", test.cfg.e.autoAbilities.endpoint, exp.armorAbilities, got.ArmorAbilities),
 	}
 
 	*checks = slices.Concat(*checks, equipChecks)
@@ -106,11 +156,11 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []Alter
 		compareCustomObjSlices(test, desc+"elemental resists", expChange.ElemResists, gotChange.ElemResists, compareMonsterElemResists)
 
 		checks := []resListTest{
-			newResListTestFromIDs(desc+"properties", test.cfg.e.properties.endpoint, expChange.Properties, gotChange.Properties),
-			newResListTestFromIDs(desc+"auto-abilities", test.cfg.e.autoAbilities.endpoint, expChange.AutoAbilities, gotChange.AutoAbilities),
-			newResListTestFromIDs(desc+"status immunities", test.cfg.e.statusConditions.endpoint, expChange.StatusImmunities, gotChange.StatusImmunities),
+			rltIDs(desc+"properties", test.cfg.e.properties.endpoint, expChange.Properties, gotChange.Properties),
+			rltIDs(desc+"auto-abilities", test.cfg.e.autoAbilities.endpoint, expChange.AutoAbilities, gotChange.AutoAbilities),
+			rltIDs(desc+"status immunities", test.cfg.e.statusConditions.endpoint, expChange.StatusImmunities, gotChange.StatusImmunities),
 		}
 
-		testResourceLists(test, checks)
+		compareResListTests(test, checks)
 	}
 }
