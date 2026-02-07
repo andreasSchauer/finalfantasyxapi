@@ -129,7 +129,7 @@ func TestGetSublocation(t *testing.T) {
 		}
 
 		testExpectedUnique(test, tc.expUnique, got.ID, got.Name)
-		compAPIResourcesFromID(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
+		compIdApiResource(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
 
 		checks := []resListTest{
 			rltIDs("connected sublocations", testCfg.e.sublocations.endpoint, tc.connectedSublocations, got.ConnectedSublocations),

@@ -25,14 +25,11 @@ func rlt[T HasAPIResource](fieldName string, exp []string, got []T) resListTest 
 	}
 }
 
+
 // checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resources
 func compareAPIResourceLists[T APIResourceList](test test, endpoint string, expList expListIDs, gotList T) {
 	test.t.Helper()
-	got := gotList.getListParams()
-	compare(test, "count", expList.count, got.Count)
-
-	compPageURL(test, "previous", expList.previous, got.Previous)
-	compPageURL(test, "next", expList.next, got.Next)
+	compareListParams(test, expList.getListParams(), gotList.getListParams())
 
 	listTest := rltIDs("results", endpoint, expList.results, gotList.getResults())
 	compareResListTest(test, listTest)

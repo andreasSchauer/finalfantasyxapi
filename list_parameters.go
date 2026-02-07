@@ -11,6 +11,10 @@ type QueryParameterList struct {
 	Results []QueryType `json:"results"`
 }
 
+func (l QueryParameterList) getListParams() ListParams {
+	return l.ListParams
+}
+
 func getQueryParamList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (QueryParameterList, error) {
 	queryParams := queryMapToSlice(i.queryLookup)
 	queryParams = getAllowedResources(cfg, i, queryParams)

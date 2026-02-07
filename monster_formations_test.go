@@ -29,7 +29,7 @@ func compareFormationTCs(test test, exp testFormationTC, got FormationTriggerCom
 	tcEndpoint := test.cfg.e.triggerCommands.endpoint
 	charClassesEndpoint := test.cfg.e.characterClasses.endpoint
 
-	compAPIResourcesFromID(test, "tc ability", tcEndpoint, exp.Ability, got.Ability)
+	compIdApiResource(test, "tc ability", tcEndpoint, exp.Ability, got.Ability)
 	compareResListTest(test, rltIDs("tc users", charClassesEndpoint, exp.Users, got.Users))
 }
 
@@ -71,7 +71,9 @@ func TestGetMonsterFormation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/77",
 				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+				dontCheck: map[string]bool{
+					"trigger commands": true,
+				},
 				expLengths: map[string]int{
 					"monsters":         1,
 					"areas":            3,
@@ -144,7 +146,8 @@ func TestGetMonsterFormation(t *testing.T) {
 			monsters: map[string]int32{
 				"great malboro": 1,
 			},
-			areas: []int32{236, 239, 240},
+			areas:           []int32{236, 239, 240},
+			triggerCommands: []testFormationTC{},
 		},
 	}
 
@@ -159,9 +162,9 @@ func TestGetMonsterFormation(t *testing.T) {
 		compare(test, "category", tc.category, got.Category)
 		compare(test, "is forced ambush", tc.isForcedAmbush, got.IsForcedAmbush)
 		compare(test, "can escape", tc.canEscape, got.CanEscape)
-		compResPtrsFromID(test, "boss song", testCfg.e.songs.endpoint, tc.bossMusic, got.BossMusic)
+		compIdApiResourcePtrs(test, "boss song", testCfg.e.songs.endpoint, tc.bossMusic, got.BossMusic)
 		checkResAmtsInSlice(test, "monsters", tc.monsters, got.Monsters)
-		compareCustomObjSlices(test, "trigger commands", tc.triggerCommands, got.TriggerCommands, compareFormationTCs)
+		compTestStructSlices(test, "trigger commands", tc.triggerCommands, got.TriggerCommands, compareFormationTCs)
 
 		checks := []resListTest{
 			rltIDs("areas", testCfg.e.areas.endpoint, tc.areas, got.Areas),

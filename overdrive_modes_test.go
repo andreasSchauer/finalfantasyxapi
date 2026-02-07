@@ -120,7 +120,7 @@ func TestGetOverdriveMode(t *testing.T) {
 		testExpectedUnique(test, tc.expUnique, got.ID, got.Name)
 		compare(test, "description", tc.description, got.Description)
 		compare(test, "effect", tc.effect, got.Effect)
-		compAPIResourcesFromID(test, "type", testCfg.e.overdriveModeType.endpoint, tc.modeType, got.Type)
+		compIdApiResource(test, "type", testCfg.e.overdriveModeType.endpoint, tc.modeType, got.Type)
 		compare(test, "fill rate", tc.fillRate, got.FillRate)
 		checkResAmtsInSlice(test, "actions", tc.actionsAmount, got.Actions)
 	}

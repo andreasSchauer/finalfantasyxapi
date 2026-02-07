@@ -174,8 +174,8 @@ func TestGetArea(t *testing.T) {
 		}
 
 		testExpectedNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
-		compAPIResourcesFromID(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
-		compAPIResourcesFromID(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
+		compIdApiResource(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
+		compIdApiResource(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
 
 		checks := []resListTest{
 			rltIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
@@ -400,7 +400,7 @@ func TestAreasParameters(t *testing.T) {
 				requestURL:     "/api/areas/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   21,
+			count:   20,
 			results: []string{"limit", "offset", "item", "save_sphere", "sublocation"},
 		},
 	}
@@ -415,10 +415,13 @@ func TestAreasSections(t *testing.T) {
 				requestURL:     "/api/areas/sections",
 				expectedStatus: http.StatusOK,
 			},
-			count: 2,
+			count: 5,
 			results: []string{
 				"connected",
 				"monsters",
+				"monster-formations",
+				"songs",
+				"treasures",
 			},
 		},
 	}

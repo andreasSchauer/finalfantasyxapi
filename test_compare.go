@@ -4,7 +4,7 @@ import (
 	"reflect"
 )
 
-// checks if two values of a field are equal
+// checks if two standard-type values or pointers of a field are equal
 func compare(test test, fieldName string, exp, got any) {
 	t := test.t
 	testName := test.name
@@ -20,7 +20,7 @@ func compare(test test, fieldName string, exp, got any) {
 	case int:
 		g, ok := got.(int)
 		if !ok {
-			t.Fatalf("%s: %s type mismatch: expected int32, got %T", testName, fieldName, got)
+			t.Fatalf("%s: %s type mismatch: expected int, got %T", testName, fieldName, got)
 		}
 		compInt(test, fieldName, e, g)
 
@@ -78,6 +78,14 @@ func compare(test test, fieldName string, exp, got any) {
 	}
 }
 
+// can be used for any direct pointer comparisons
+func compPtr[T any](test test, fieldName string, exp, got *T, compFunc func(test, string, T, T)) {
+	if !bothPtrsPresent(test, fieldName, exp, got) {
+		return
+	}
+	compFunc(test, fieldName, *exp, *got)
+}
+
 func compInt(test test, fieldName string, exp, got int) {
 	if exp != got {
 		test.t.Fatalf("%s: expected %s %d, got %d", test.name, fieldName, exp, got)
@@ -120,53 +128,15 @@ func compStringPtr(test test, fieldName string, exp, got *string) {
 	compPtr(test, fieldName, exp, got, compString)
 }
 
-func bothPtrsPresent[T, U any](test test, fieldName string, exp *T, got *U) bool {
-	switch {
-	case exp == nil && got == nil:
-		return false
-	case exp == nil && got != nil:
-		test.t.Fatalf("%s: expected %s nil, got %v", test.name, fieldName, *got)
-		return false
-	case exp != nil && got == nil:
-		test.t.Fatalf("%s: expected %s %v, got nil", test.name, fieldName, *exp)
-		return false
-	default:
-		return true
-	}
-}
-
-func compPtr[T any](test test, fieldName string, exp, got *T, compFunc func(test, string, T, T)) {
-	if !bothPtrsPresent(test, fieldName, exp, got) {
-		return
-	}
-	compFunc(test, fieldName, *exp, *got)
-}
-
-func testStructSlices[T any](test test, fieldName string, exp, got []T) {
-	switch {
-	case exp == nil && got == nil:
-		return
-	case exp == nil && got != nil:
-		test.t.Fatalf("%s: expected %s nil, got %v", test.name, fieldName, got)
-	case exp != nil && got == nil:
-		test.t.Fatalf("%s: expected %s %v, got nil", test.name, fieldName, exp)
-	}
-}
-
-func compStructSlices[T any](test test, fieldName string, expItems, gotItems []T) {
+func compLength(test test, fieldName string, gotLen int) {
 	expLen, ok := test.expLengths[fieldName]
-	if !ok {
-		return
-	}
-	compare(test, fieldName + " length", expLen, len(gotItems))
-
-	testStructSlices(test, fieldName, expItems, gotItems)
-
-	for i, item := range expItems {
-		compStructs(test, "bribe chances", item, gotItems[i])
+	if ok {
+		compare(test, fieldName+" length", expLen, gotLen)
 	}
 }
 
+// checks if two structs with the same type are equal.
+// itemAmount == itemAmount
 func compStructs[T any](test test, fieldName string, exp, got T) {
 	test.t.Helper()
 
@@ -175,6 +145,8 @@ func compStructs[T any](test test, fieldName string, exp, got T) {
 	}
 }
 
+// checks if two struct pointers with the same type are equal.
+// itemAmount == itemAmount (both ptrs)
 func compStructPtrs[T any](test test, fieldName string, exp, got *T) {
 	test.t.Helper()
 
@@ -185,8 +157,43 @@ func compStructPtrs[T any](test test, fieldName string, exp, got *T) {
 	compPtr(test, fieldName, exp, got, compStructs)
 }
 
-// checks if two not-nullable apiResources are equal
-func compAPIResources[T HasAPIResource](test test, fieldName, expPath string, gotRes T) {
+
+// checks if two same-typed struct slices are equal. if the slice is not nullable, it needs to be explicitely ignored.
+// []itemAmount == []itemAmount
+func compStructSlices[T any](test test, fieldName string, exp, got []T) {
+	checkStructSlices(test, fieldName, exp, got)
+
+	for i := range exp {
+		compStructs(test, fieldName, exp[i], got[i])
+	}
+}
+
+// checks if a slice of test structs is equal to the slice of original structs. uses a compare function. if the slice is not nullable, it needs to be explicitely ignored.
+// []testItemAmount == []itemAmount
+func compTestStructSlices[E, G any](test test, fieldName string, exp []E, got []G, compFn func(test, E, G)) {
+	checkStructSlices(test, fieldName, exp, got)
+
+	for i := range exp {
+		compFn(test, exp[i], got[i])
+	}
+}
+
+func checkStructSlices[E, G any](test test, fieldName string, exp []E, got []G) {
+	compLength(test, fieldName, len(got))
+
+	dontCheck := test.dontCheck
+	if dontCheck != nil && dontCheck[fieldName] {
+		return
+	}
+
+	if !bothStructSlicesPresent(test, fieldName, exp, got) {
+		return
+	}
+}
+
+// takes an expected path and checks, if it matches the URL of target struct's API Resource.
+// /endpoint/23 == struct with api resource linking to host/api/endpoint/23
+func compPathApiResource[T HasAPIResource](test test, fieldName, expPath string, gotRes T) {
 	test.t.Helper()
 
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
@@ -199,38 +206,34 @@ func compAPIResources[T HasAPIResource](test test, fieldName, expPath string, go
 	compare(test, fieldName, expURL, gotURL)
 }
 
-func compAPIResourcesFromID[T HasAPIResource](test test, fieldName, endpoint string, expID int32, gotRes T) {
-	expPath := completeTestPath(endpoint, expID)
-	compAPIResources(test, fieldName, expPath, gotRes)
-}
-
-// don't know if I really need this function to have its own switch
-// checks if two optional apiResources are equal
-func compResourcePtrs[T HasAPIResource](test test, fieldName string, expPathPtr *string, gotResPtr *T) {
+// takes an expected path ptr and checks, if it matches the URL of target struct ptr's API Resource.
+// /endpoint/23 == struct with api resource linking to host/api/endpoint/23 (both ptrs)
+func compPathApiResourcePtrs[T HasAPIResource](test test, fieldName string, expPathPtr *string, gotResPtr *T) {
 	test.t.Helper()
 
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
 		return
 	}
 
-	switch {
-	case expPathPtr == nil && gotResPtr == nil:
+	if !bothResourcePtrsPresent(test, fieldName, expPathPtr, gotResPtr) {
 		return
-	case expPathPtr == nil && gotResPtr != nil:
-		res := *gotResPtr
-		gotURL := res.GetAPIResource().GetURL()
-		test.t.Fatalf("%s: expected nil for %s, but got %s", test.name, fieldName, gotURL)
-	case expPathPtr != nil && gotResPtr == nil:
-		test.t.Fatalf("%s: expected %s %v, got nil", test.name, fieldName, *expPathPtr)
-	default:
-		gotRes := *gotResPtr
-		expPath := *expPathPtr
-
-		compAPIResources(test, fieldName, expPath, gotRes)
 	}
+
+	compPathApiResource(test, fieldName, *expPathPtr, *gotResPtr)
 }
 
-func compResPtrsFromID[T HasAPIResource](test test, fieldName, endpoint string, expIDPtr *int32, gotResPtr *T) {
+// takes an id, assembles the url, and checks, if it matches the URL of target struct's API Resource.
+// 23 == struct with api resource linking to host/api/endpoint/23
+func compIdApiResource[T HasAPIResource](test test, fieldName, endpoint string, expID int32, gotRes T) {
+	expPath := completeTestPath(endpoint, expID)
+	compPathApiResource(test, fieldName, expPath, gotRes)
+}
+
+// takes an id ptr, assembles the url, and checks, if it matches the URL of target struct ptr's API Resource.
+// 23 == struct with api resource linking to host/api/endpoint/23 (both ptrs)
+func compIdApiResourcePtrs[T HasAPIResource](test test, fieldName, endpoint string, expIDPtr *int32, gotResPtr *T) {
+	test.t.Helper()
+
 	var expPathPtr *string
 
 	if expIDPtr == nil {
@@ -240,9 +243,10 @@ func compResPtrsFromID[T HasAPIResource](test test, fieldName, endpoint string, 
 		expPathPtr = &expPath
 	}
 
-	compResourcePtrs(test, fieldName, expPathPtr, gotResPtr)
+	compPathApiResourcePtrs(test, fieldName, expPathPtr, gotResPtr)
 }
 
+// compares the expected pagination path with the got url
 func compPageURL(test test, fieldName string, expPathPtr, gotURLPtr *string) {
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
 		return
@@ -257,22 +261,4 @@ func compPageURL(test test, fieldName string, expPathPtr, gotURLPtr *string) {
 	}
 
 	compare(test, fieldName, expURLPtr, gotURLPtr)
-}
-
-
-func compareCustomObjSlices[E, G any](test test, fieldName string, exp []E, got []G, compFn func(test, E, G)) {
-	if exp == nil {
-		return
-	}
-
-	compare(test, fieldName+" length", len(exp), len(got))
-
-	dontCheck := test.dontCheck
-	if dontCheck != nil && dontCheck[fieldName] {
-		return
-	}
-
-	for i := range exp {
-		compFn(test, exp[i], got[i])
-	}
 }

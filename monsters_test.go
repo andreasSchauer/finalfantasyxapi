@@ -276,9 +276,10 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/magIc_urn/1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":       true,
-					"ctb icon type": true,
-					"distance":      true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{
 					"other items": 3,
@@ -350,7 +351,7 @@ func TestGetMonster(t *testing.T) {
 					"bribe":        nil,
 				},
 			},
-			bribeChances: nil,
+
 			equipment: &testMonEquipment{
 				abilitySlots: MonsterEquipmentSlots{
 					MinAmount: 2,
@@ -427,12 +428,13 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/105?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"agility params": true,
-					"species":        true,
-					"ctb icon type":  true,
-					"distance":       true,
-					"items":          true,
-					"equipment":      true,
+					"agility params":    true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"equipment":         true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{
 					"status immunities": 10,
@@ -476,12 +478,13 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/neslug?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"agility params": true,
-					"species":        true,
-					"ctb icon type":  true,
-					"distance":       true,
-					"items":          true,
-					"equipment":      true,
+					"agility params":    true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"equipment":         true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{
 					"properties":     2,
@@ -516,11 +519,12 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/neslug?altered_state=2",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":       true,
-					"ctb icon type": true,
-					"distance":      true,
-					"items":         true,
-					"equipment":     true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"equipment":         true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{
 					"properties":     1,
@@ -563,11 +567,12 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/evrae?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"agility params": true,
-					"species":        true,
-					"ctb icon type":  true,
-					"items":          true,
-					"equipment":      true,
+					"agility params":    true,
+					"species":           true,
+					"ctb icon type":     true,
+					"items":             true,
+					"equipment":         true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{
 					"altered states": 1,
@@ -598,12 +603,13 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/penance?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"agility params": true,
-					"species":        true,
-					"ctb icon type":  true,
-					"distance":       true,
-					"items":          true,
-					"equipment":      true,
+					"agility params":    true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"equipment":         true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{
 					"altered states": 1,
@@ -767,12 +773,13 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/biran_ronso?kimahri_stats=hP-1000,strEngth-255,mAgic-255,agIlity-255",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":       true,
-					"ctb icon type": true,
-					"distance":      true,
-					"items":         true,
-					"equipment":     true,
-					"default state": true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"equipment":         true,
+					"default state":     true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{
 					"ronso rages": 4,
@@ -801,12 +808,13 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp-3500,strength-35,magic-45,agility-28",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":       true,
-					"ctb icon type": true,
-					"distance":      true,
-					"items":         true,
-					"equipment":     true,
-					"default state": true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"equipment":         true,
+					"default state":     true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{
 					"ronso rages": 4,
@@ -835,12 +843,13 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp-1500",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":       true,
-					"ctb icon type": true,
-					"distance":      true,
-					"items":         true,
-					"equipment":     true,
-					"default state": true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"equipment":         true,
+					"default state":     true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -866,12 +875,13 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/216?aeon_stats=hp-200,strength-235,agility-68,evasion-2,accuracy-150,defense-46,magic-188,magic_defense-2",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":       true,
-					"ctb icon type": true,
-					"distance":      true,
-					"items":         true,
-					"equipment":     true,
-					"default state": true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"equipment":         true,
+					"default state":     true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -903,12 +913,13 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/seymour",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"species":       true,
-					"ctb icon type": true,
-					"distance":      true,
-					"items":         true,
-					"equipment":     true,
-					"default state": true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"equipment":         true,
+					"default state":     true,
+					"elemental resists": true,
 				},
 				expLengths: map[string]int{},
 			},
@@ -934,14 +945,14 @@ func TestGetMonster(t *testing.T) {
 
 		testExpectedNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
 
-		compAPIResourcesFromID(test, "species", testCfg.e.monsterSpecies.endpoint, tc.species, got.Species)
-		compAPIResourcesFromID(test, "ctb icon type", testCfg.e.ctbIconType.endpoint, tc.ctbIconType, got.CTBIconType)
+		compIdApiResource(test, "species", testCfg.e.monsterSpecies.endpoint, tc.species, got.Species)
+		compIdApiResource(test, "ctb icon type", testCfg.e.ctbIconType.endpoint, tc.ctbIconType, got.CTBIconType)
 		compare(test, "distance", tc.distance, got.Distance)
 		checkResAmtsInSlice(test, "base stats", tc.baseStats, got.BaseStats)
 		checkResAmtsInSlice(test, "status resists", tc.statusResists, got.StatusResists)
 		compStructPtrs(test, "agility params", tc.agility, got.AgilityParameters)
 		compStructSlices(test, "bribe chances", tc.bribeChances, got.BribeChances)
-		compareCustomObjSlices(test, "elemental resists", tc.elemResists, got.ElemResists, compareMonsterElemResists)
+		compTestStructSlices(test, "elemental resists", tc.elemResists, got.ElemResists, compareMonsterElemResists)
 		testMonsterAppliedState(test, tc.appliedState, got.AppliedState)
 		testMonsterDefaultState(test, tc.defaultState, got.AlteredStates)
 

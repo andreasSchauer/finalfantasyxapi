@@ -6,7 +6,27 @@ type nameListTest struct {
 	got  []string
 }
 
+func compareParameterLists(test test, _ string, exp expListNames, got QueryParameterList) {
+	test.t.Helper()
+	compareListParams(test, exp.getListParams(), got.getListParams())
+	gotNames := []string{}
+
+	for _, param := range got.Results {
+		gotNames = append(gotNames, param.Name)
+	}
+
+	nameListTest := nameListTest{
+		name: "results",
+		exp:  exp.results,
+		got:  gotNames,
+	}
+
+	compareNameLists(test, nameListTest)
+}
+
 func compareSectionLists(test test, endpoint string, exp expListNames, got SectionList) {
+	test.t.Helper()
+	compareListParams(test, exp.getListParams(), got.getListParams())
 	expURLs := []string{}
 
 	for _, section := range exp.results {
@@ -18,22 +38,6 @@ func compareSectionLists(test test, endpoint string, exp expListNames, got Secti
 		name: "results",
 		exp:  expURLs,
 		got:  got.Results,
-	}
-
-	compareNameLists(test, nameListTest)
-}
-
-func compareParameterLists(test test, _ string, exp expListNames, got QueryParameterList) {
-	gotNames := []string{}
-
-	for _, param := range got.Results {
-		gotNames = append(gotNames, param.Name)
-	}
-
-	nameListTest := nameListTest{
-		name: "results",
-		exp:  exp.results,
-		got:  gotNames,
 	}
 
 	compareNameLists(test, nameListTest)

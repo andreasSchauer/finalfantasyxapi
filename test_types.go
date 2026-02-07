@@ -80,12 +80,34 @@ type expListIDs struct {
 	results        []int32
 }
 
+func (l expListIDs) getListParams() ListParams {
+	return ListParams{
+		Count: l.count,
+		Previous: l.previous,
+		Next: l.next,
+	}
+}
+
 type expListNames struct {
 	testGeneral
 	count    int
 	previous *string
 	next     *string
 	results  []string
+}
+
+func (l expListNames) getListParams() ListParams {
+	return ListParams{
+		Count: l.count,
+		Previous: l.previous,
+		Next: l.next,
+	}
+}
+
+func compareListParams(test test, exp, got ListParams) {
+	compare(test, "count", exp.Count, got.Count)
+	compPageURL(test, "previous", exp.Previous, got.Previous)
+	compPageURL(test, "next", exp.Next, got.Next)
 }
 
 

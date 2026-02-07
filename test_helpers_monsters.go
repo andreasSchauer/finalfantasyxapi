@@ -38,8 +38,8 @@ func compareMonsterElemResists(test test, exp testElemResist, got ElementalResis
 	elemEndpoint := test.cfg.e.elements.endpoint
 	affinityEndpoint := test.cfg.e.affinities.endpoint
 
-	compAPIResourcesFromID(test, "elements", elemEndpoint, exp.element, got.Element)
-	compAPIResourcesFromID(test, "affinities", affinityEndpoint, exp.affinity, got.Affinity)
+	compIdApiResource(test, "elements", elemEndpoint, exp.element, got.Element)
+	compIdApiResource(test, "affinities", affinityEndpoint, exp.affinity, got.Affinity)
 }
 
 type testMonItems struct {
@@ -71,13 +71,13 @@ func testMonsterItems(test test, expItems *testMonItems, gotItems *MonsterItems,
 	itemMap := exp.items
 
 	compare(test, "item drop chance", exp.itemDropChance, got.DropChance)
-	compResPtrsFromID(test, "steal common", endpoint, itemMap["steal common"], got.StealCommon)
-	compResPtrsFromID(test, "steal rare", endpoint, itemMap["steal rare"], got.StealRare)
-	compResPtrsFromID(test, "drop common", endpoint, itemMap["drop common"], got.DropCommon)
-	compResPtrsFromID(test, "drop rare", endpoint, itemMap["drop rare"], got.DropRare)
-	compResPtrsFromID(test, "sec drop common", endpoint, itemMap["sec drop common"], got.SecondaryDropCommon)
-	compResPtrsFromID(test, "sec drop rare", endpoint, itemMap["sec drop rare"], got.SecondaryDropRare)
-	compResPtrsFromID(test, "bribe", endpoint, itemMap["bribe"], got.Bribe)
+	compIdApiResourcePtrs(test, "steal common", endpoint, itemMap["steal common"], got.StealCommon)
+	compIdApiResourcePtrs(test, "steal rare", endpoint, itemMap["steal rare"], got.StealRare)
+	compIdApiResourcePtrs(test, "drop common", endpoint, itemMap["drop common"], got.DropCommon)
+	compIdApiResourcePtrs(test, "drop rare", endpoint, itemMap["drop rare"], got.DropRare)
+	compIdApiResourcePtrs(test, "sec drop common", endpoint, itemMap["sec drop common"], got.SecondaryDropCommon)
+	compIdApiResourcePtrs(test, "sec drop rare", endpoint, itemMap["sec drop rare"], got.SecondaryDropRare)
+	compIdApiResourcePtrs(test, "bribe", endpoint, itemMap["bribe"], got.Bribe)
 }
 
 func testMonsterEquipment(test test, expEquipment *testMonEquipment, gotEquipment *MonsterEquipment, checks *[]resListTest) {
@@ -115,7 +115,7 @@ func testMonsterAppliedState(test test, exp *testAppliedState, got *AppliedState
 
 	compare(test, "applied state condition", exp.condition, got.Condition)
 	compare(test, "applied state isTemporary", exp.isTemporary, got.IsTemporary)
-	compResPtrsFromID(test, "applied status", test.cfg.e.statusConditions.endpoint, exp.appliedStatus, got.AppliedStatus)
+	compIdApiResourcePtrs(test, "applied status", test.cfg.e.statusConditions.endpoint, exp.appliedStatus, got.AppliedStatus)
 }
 
 func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []AlteredState) {
@@ -152,8 +152,8 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []Alter
 		checkResAmtsInSlice(test, desc+"base stats", expChange.BaseStats, gotChange.BaseStats)
 		checkResAmtsInSlice(test, desc+"status resists", expChange.StatusResists, gotChange.StatusResists)
 		compStructPtrs(test, desc+"added status", expChange.AddedStatus, gotChange.AddedStatus)
-		compResPtrsFromID(test, desc+"removed status", test.cfg.e.statusConditions.endpoint, expChange.RemovedStatus, gotChange.RemovedStatus)
-		compareCustomObjSlices(test, desc+"elemental resists", expChange.ElemResists, gotChange.ElemResists, compareMonsterElemResists)
+		compIdApiResourcePtrs(test, desc+"removed status", test.cfg.e.statusConditions.endpoint, expChange.RemovedStatus, gotChange.RemovedStatus)
+		compTestStructSlices(test, desc+"elemental resists", expChange.ElemResists, gotChange.ElemResists, compareMonsterElemResists)
 
 		checks := []resListTest{
 			rltIDs(desc+"properties", test.cfg.e.properties.endpoint, expChange.Properties, gotChange.Properties),

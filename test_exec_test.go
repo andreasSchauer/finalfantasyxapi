@@ -54,7 +54,8 @@ func setupTest[T any](t *testing.T, tc testGeneral, testFunc string, testNum int
 	return test, got, nil
 }
 
-
+// compareAPIResourceLists for normal API Resources
+// compareSubResourceLists for Subsections
 func testIdList[T any](t *testing.T, tests []expListIDs, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListIDs, T)) {
 	for i, tc := range tests {
 		test, got, err := setupTest[T](t, tc.testGeneral, testFuncName, i+1, handlerFunc)
@@ -66,7 +67,8 @@ func testIdList[T any](t *testing.T, tests []expListIDs, endpoint, testFuncName 
 	}
 }
 
-
+// compareParameterLists for /parameters lists
+// compareSectionLists for /sections lists
 func testNameList[T any](t *testing.T, tests []expListNames, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListNames, T)) {
 	for i, tc := range tests {
 		test, got, err := setupTest[T](t, tc.testGeneral, testFuncName, i+1, handlerFunc)

@@ -1,16 +1,16 @@
 package main
 
-type SubResourceListTest[T APIResource, S SubResource] struct {
+type gotSubResourceList[T APIResource, S SubResource] struct {
 	ListParams
 	ParentResource T   `json:"parent_resource,omitempty"`
 	Results        []S `json:"results"`
 }
 
-func (l SubResourceListTest[T, S]) getListParams() ListParams {
+func (l gotSubResourceList[T, S]) getListParams() ListParams {
 	return l.ListParams
 }
 
-func (l SubResourceListTest[T, S]) getResults() []S {
+func (l gotSubResourceList[T, S]) getResults() []S {
 	return l.Results
 }
 
@@ -20,7 +20,7 @@ type subResListTest struct {
 	got  []SubResource
 }
 
-func newSubResListTestFromIDs[T SubResource](fieldName, endpoint string, expIDs []int32, got []T) subResListTest {
+func srltIDs[T SubResource](fieldName, endpoint string, expIDs []int32, got []T) subResListTest {
 	exp := []string{}
 
 	for _, id := range expIDs {
@@ -28,6 +28,10 @@ func newSubResListTestFromIDs[T SubResource](fieldName, endpoint string, expIDs 
 		exp = append(exp, path)
 	}
 
+	return srlt(fieldName, exp, got)
+}
+
+func srlt[T SubResource](fieldName string, exp []string, got []T) subResListTest {
 	return subResListTest{
 		name: fieldName,
 		exp:  exp,
@@ -35,18 +39,14 @@ func newSubResListTestFromIDs[T SubResource](fieldName, endpoint string, expIDs 
 	}
 }
 
-func compareSubResourceLists[T APIResource, S SubResource](test test, endpoint string, expList expListIDs, gotList SubResourceListTest[T, S]) {
+func compareSubResourceLists[T APIResource, S SubResource](test test, endpoint string, expList expListIDs, gotList gotSubResourceList[T, S]) {
 	test.t.Helper()
-	got := gotList.getListParams()
-	compare(test, "count", expList.count, got.Count)
-
-	compPageURL(test, "previous", expList.previous, got.Previous)
-	compPageURL(test, "next", expList.next, got.Next)
+	compareListParams(test, expList.getListParams(), gotList.getListParams())
 
 	gotParentURL := gotList.ParentResource.GetURL()
 	compPageURL(test, "parent resource", expList.parentResource, &gotParentURL)
 
-	listTest := newSubResListTestFromIDs("results", endpoint, expList.results, gotList.getResults())
+	listTest := srltIDs("results", endpoint, expList.results, gotList.getResults())
 	testSubResourceListResults(test, listTest)
 }
 

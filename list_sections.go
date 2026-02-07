@@ -12,6 +12,10 @@ type SectionList struct {
 	Results []string `json:"results"`
 }
 
+func (l SectionList) getListParams() ListParams {
+	return l.ListParams
+}
+
 func getSectionList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (SectionList, error) {
 	sectionMap := i.subsections
 	sectionURLs := []string{}

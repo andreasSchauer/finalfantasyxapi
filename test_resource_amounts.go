@@ -2,7 +2,8 @@ package main
 
 
 // checks if stated ResourceAmount entries are in slices (used for baseStats, itemAmounts, monsterAmounts) and if their amount values match
-// maybe could use the error function I made
+// currently bases the key for the map on GetName() method.
+// a simple solution might be to do a resourceAmountTestMap function that either uses GetURL() or a GetRaMapKey() method instead of relying on GetName()
 func checkResAmtsInSlice[T ResourceAmount](test test, fieldName string, expAmounts map[string]int32, gotAmounts []T) {
 	expLen, ok := test.expLengths[fieldName]
 	if !ok {
