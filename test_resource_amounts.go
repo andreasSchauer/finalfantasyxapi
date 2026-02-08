@@ -2,22 +2,29 @@ package main
 
 
 // checks if stated ResourceAmount entries are in slices (used for baseStats, itemAmounts, monsterAmounts) and if their amount values match
-// currently bases the key for the map on GetName() method.
-// a simple solution might be to do a resourceAmountTestMap function that either uses GetURL() or a GetRaMapKey() method instead of relying on GetName()
-func checkResAmtsInSlice[T ResourceAmount](test test, fieldName string, expAmounts map[string]int32, gotAmounts []T) {
-	expLen, ok := test.expLengths[fieldName]
-	if !ok {
-		return
-	}
-	compare(test, fieldName+" length", expLen, len(gotAmounts))
+func checkResAmtsInSlice[T ResourceAmount](test test, fieldName string, exp map[string]int32, got []T) {
+	compLength(test, fieldName, len(got))
 
-	gotMap := getResourceAmountMap(gotAmounts)
+	gotMap := getResourceAmountTestMap(got)
 
-	for key, exp := range expAmounts {
+	for path, exp := range exp {
+		key := completeTestURL(test.cfg, path)
 		got, ok := gotMap[key]
 		if !ok {
 			test.t.Fatalf("%s: %s doesn't contain resource %s", test.name, fieldName, key)
 		}
 		compare(test, key, exp, got)
 	}
+}
+
+
+func getResourceAmountTestMap[T ResourceAmount](items []T) map[string]int32 {
+	amountMap := make(map[string]int32)
+
+	for _, item := range items {
+		key := item.GetAPIResource().GetURL()
+		amountMap[key] = item.GetVal()
+	}
+
+	return amountMap
 }

@@ -60,13 +60,13 @@ func TestGetOverdriveMode(t *testing.T) {
 			modeType:    2,
 			fillRate:    h.GetFloat32Ptr(0.03),
 			actionsAmount: map[string]int32{
-				"tidus":   600,
-				"yuna":    500,
-				"wakka":   350,
-				"lulu":    480,
-				"kimahri": 300,
-				"auron":   450,
-				"rikku":   320,
+				"/characters/1":   	600,
+				"/characters/2":    500,
+				"/characters/3":   	350,
+				"/characters/4":    480,
+				"/characters/5": 	300,
+				"/characters/6":   	450,
+				"/characters/7":   	320,
 			},
 		},
 		{
@@ -85,9 +85,9 @@ func TestGetOverdriveMode(t *testing.T) {
 			modeType: 1,
 			fillRate: nil,
 			actionsAmount: map[string]int32{
-				"tidus": 300,
-				"wakka": 100,
-				"rikku": 100,
+				"/characters/1": 300,
+				"/characters/3": 100,
+				"/characters/7": 100,
 			},
 		},
 		{

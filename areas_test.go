@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"net/http"
-	"slices"
 	"testing"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -177,7 +176,7 @@ func TestGetArea(t *testing.T) {
 		compIdApiResource(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
 		compIdApiResource(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
 
-		checks := []resListTest{
+		compareResListTests(test, []resListTest{
 			rltIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
 			rltIDs("connected areas", testCfg.e.areas.endpoint, tc.connectedAreas, got.ConnectedAreas),
 			rltIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
@@ -187,20 +186,16 @@ func TestGetArea(t *testing.T) {
 			rltIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
 			rltIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
 			rltIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
-		}
+		})
 
 		if got.Music != nil {
-			musicChecks := []resListTest{
+			compareResListTests(test, []resListTest{
 				rltIDs("bg music", testCfg.e.songs.endpoint, tc.bgMusic, got.Music.BackgroundMusic),
 				rltIDs("cues music", testCfg.e.songs.endpoint, tc.cuesMusic, got.Music.Cues),
 				rltIDs("fmvs music", testCfg.e.songs.endpoint, tc.fmvsMusic, got.Music.FMVs),
 				rltIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossMusic),
-			}
-
-			checks = slices.Concat(checks, musicChecks)
+			})
 		}
-
-		compareResListTests(test, checks)
 	}
 }
 

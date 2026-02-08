@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"slices"
 )
 
 type testAppliedState struct {
@@ -34,7 +33,7 @@ type testElemResist struct {
 	affinity int32
 }
 
-func compareMonsterElemResists(test test, exp testElemResist, got ElementalResist) {
+func compareMonsterElemResist(test test, exp testElemResist, got ElementalResist) {
 	elemEndpoint := test.cfg.e.elements.endpoint
 	affinityEndpoint := test.cfg.e.affinities.endpoint
 
@@ -55,7 +54,7 @@ type testMonEquipment struct {
 	armorAbilities    []int32
 }
 
-func testMonsterItems(test test, expItems *testMonItems, gotItems *MonsterItems, checks *[]resListTest) {
+func compareMonsterItems(test test, expItems *testMonItems, gotItems *MonsterItems) {
 	if test.dontCheck != nil && test.dontCheck["items"] {
 		return
 	}
@@ -67,9 +66,9 @@ func testMonsterItems(test test, expItems *testMonItems, gotItems *MonsterItems,
 	exp := *expItems
 	got := *gotItems
 	endpoint := test.cfg.e.items.endpoint
-	*checks = append(*checks, rltIDs("other items", endpoint, exp.otherItems, got.OtherItems))
 	itemMap := exp.items
 
+	compareResListTest(test, rltIDs("other items", endpoint, exp.otherItems, got.OtherItems))
 	compare(test, "item drop chance", exp.itemDropChance, got.DropChance)
 	compIdApiResourcePtrs(test, "steal common", endpoint, itemMap["steal common"], got.StealCommon)
 	compIdApiResourcePtrs(test, "steal rare", endpoint, itemMap["steal rare"], got.StealRare)
@@ -80,7 +79,7 @@ func testMonsterItems(test test, expItems *testMonItems, gotItems *MonsterItems,
 	compIdApiResourcePtrs(test, "bribe", endpoint, itemMap["bribe"], got.Bribe)
 }
 
-func testMonsterEquipment(test test, expEquipment *testMonEquipment, gotEquipment *MonsterEquipment, checks *[]resListTest) {
+func compareMonsterEquipment(test test, expEquipment *testMonEquipment, gotEquipment *MonsterEquipment) {
 	if test.dontCheck != nil && test.dontCheck["equipment"] {
 		return
 	}
@@ -100,15 +99,13 @@ func testMonsterEquipment(test test, expEquipment *testMonEquipment, gotEquipmen
 		compStructs(test, "attached abilities", exp.attachedAbilities, got.AttachedAbilities)
 	}
 
-	equipChecks := []resListTest{
+	compareResListTests(test, []resListTest{
 		rltIDs("weapon abilities", test.cfg.e.autoAbilities.endpoint, exp.weaponAbilities, got.WeaponAbilities),
 		rltIDs("armor abilities", test.cfg.e.autoAbilities.endpoint, exp.armorAbilities, got.ArmorAbilities),
-	}
-
-	*checks = slices.Concat(*checks, equipChecks)
+	})
 }
 
-func testMonsterAppliedState(test test, exp *testAppliedState, got *AppliedState) {
+func compareMonsterAppliedState(test test, exp *testAppliedState, got *AppliedState) {
 	if !bothPtrsPresent(test, "applied state", exp, got) {
 		return
 	}
@@ -123,17 +120,11 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []Alter
 		return
 	}
 
-	if exp == nil && len(gotStates) == 0 {
+	if !defaultAndAltStatesPresent(test, exp, gotStates) {
 		return
 	}
-	if exp == nil && len(gotStates) != 0 {
-		test.t.Fatalf("%s: expected default state to be nil, but got alt states", test.name)
-	}
-	if exp != nil && len(gotStates) == 0 {
-		test.t.Fatalf("%s: expected default state to be not nil, but got no alt states", test.name)
-	}
 
-	compare(test, "altered states length", test.expLengths["altered states"], len(gotStates))
+	compLength(test, "altered states", len(gotStates))
 
 	got := gotStates[0]
 	if got.Condition != "default" {
@@ -142,25 +133,23 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []Alter
 
 	compare(test, "default state isTemporary", exp.IsTemporary, got.IsTemporary)
 	compare(test, "def state changes length", len(exp.Changes), len(got.Changes))
+	compTestStructSlices(test, "alt state changes", exp.Changes, got.Changes, compareMonsterAltStateChange)
+}
 
-	for i, expChange := range exp.Changes {
-		desc := fmt.Sprintf("def state change: %s ", expChange.AlterationType)
-		gotChange := got.Changes[i]
+func compareMonsterAltStateChange(test test, exp testAltStateChange, got AltStateChange) {
+	desc := fmt.Sprintf("def state change: %s ", exp.AlterationType)
 
-		compare(test, desc+"type", expChange.AlterationType, string(gotChange.AlterationType))
-		compare(test, desc+"distance", expChange.Distance, gotChange.Distance)
-		checkResAmtsInSlice(test, desc+"base stats", expChange.BaseStats, gotChange.BaseStats)
-		checkResAmtsInSlice(test, desc+"status resists", expChange.StatusResists, gotChange.StatusResists)
-		compStructPtrs(test, desc+"added status", expChange.AddedStatus, gotChange.AddedStatus)
-		compIdApiResourcePtrs(test, desc+"removed status", test.cfg.e.statusConditions.endpoint, expChange.RemovedStatus, gotChange.RemovedStatus)
-		compTestStructSlices(test, desc+"elemental resists", expChange.ElemResists, gotChange.ElemResists, compareMonsterElemResists)
+	compare(test, desc+"type", exp.AlterationType, string(got.AlterationType))
+	compare(test, desc+"distance", exp.Distance, got.Distance)
+	checkResAmtsInSlice(test, desc+"base stats", exp.BaseStats, got.BaseStats)
+	checkResAmtsInSlice(test, desc+"status resists", exp.StatusResists, got.StatusResists)
+	compStructPtrs(test, desc+"added status", exp.AddedStatus, got.AddedStatus)
+	compIdApiResourcePtrs(test, desc+"removed status", test.cfg.e.statusConditions.endpoint, exp.RemovedStatus, got.RemovedStatus)
+	compTestStructSlices(test, desc+"elemental resists", exp.ElemResists, got.ElemResists, compareMonsterElemResist)
 
-		checks := []resListTest{
-			rltIDs(desc+"properties", test.cfg.e.properties.endpoint, expChange.Properties, gotChange.Properties),
-			rltIDs(desc+"auto-abilities", test.cfg.e.autoAbilities.endpoint, expChange.AutoAbilities, gotChange.AutoAbilities),
-			rltIDs(desc+"status immunities", test.cfg.e.statusConditions.endpoint, expChange.StatusImmunities, gotChange.StatusImmunities),
-		}
-
-		compareResListTests(test, checks)
-	}
+	compareResListTests(test, []resListTest{
+		rltIDs(desc+"properties", test.cfg.e.properties.endpoint, exp.Properties, got.Properties),
+		rltIDs(desc+"auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.AutoAbilities, got.AutoAbilities),
+		rltIDs(desc+"status immunities", test.cfg.e.statusConditions.endpoint, exp.StatusImmunities, got.StatusImmunities),
+	})
 }

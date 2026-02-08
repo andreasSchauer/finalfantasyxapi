@@ -48,17 +48,8 @@ func compareResListTests(test test, checks []resListTest) {
 func compareResListTest(test test, expList resListTest) {
 	test.t.Helper()
 
-	if len(expList.exp) == 0 {
-		return
-	}
+	compLength(test, expList.name, len(expList.got))
 	checkResourcesInSlice(test, expList.name, expList.exp, expList.got)
-
-	expLen, ok := test.expLengths[expList.name]
-	if !ok {
-		return
-	}
-
-	compare(test, expList.name+" length", expLen, len(expList.got))
 }
 
 // checks if the provided slice of resources contains all stated resources

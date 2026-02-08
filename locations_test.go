@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"net/http"
-	"slices"
 	"testing"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -124,7 +123,7 @@ func TestGetLocation(t *testing.T) {
 
 		testExpectedUnique(test, tc.expUnique, got.ID, got.Name)
 
-		checks := []resListTest{
+		compareResListTests(test, []resListTest{
 			rltIDs("connected locations", testCfg.e.locations.endpoint, tc.connectedLocations, got.ConnectedLocations),
 			rltIDs("sublocations", testCfg.e.sublocations.endpoint, tc.sublocations, got.Sublocations),
 			rltIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
@@ -135,20 +134,16 @@ func TestGetLocation(t *testing.T) {
 			rltIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
 			rltIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
 			rltIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
-		}
+		})
 
 		if got.Music != nil {
-			musicChecks := []resListTest{
+			compareResListTests(test, []resListTest{
 				rltIDs("bg music", testCfg.e.songs.endpoint, tc.bgMusic, got.Music.BackgroundMusic),
 				rltIDs("cues music", testCfg.e.songs.endpoint, tc.cuesMusic, got.Music.Cues),
 				rltIDs("fmvs music", testCfg.e.songs.endpoint, tc.fmvsMusic, got.Music.FMVs),
 				rltIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossMusic),
-			}
-
-			checks = slices.Concat(checks, musicChecks)
+			})
 		}
-
-		compareResListTests(test, checks)
 	}
 }
 

@@ -47,18 +47,8 @@ func compareSectionLists(test test, endpoint string, exp expListNames, got Secti
 func compareNameLists(test test, nameTest nameListTest) {
 	test.t.Helper()
 
-	if len(nameTest.exp) == 0 {
-		return
-	}
-
+	compLength(test, nameTest.name, len(nameTest.got))
 	checkNamesInSlice(test, nameTest)
-
-	expLen, ok := test.expLengths[nameTest.name]
-	if !ok {
-		return
-	}
-
-	compare(test, nameTest.name+" length", expLen, len(nameTest.got))
 }
 
 // checks if the provided slice of names contains all stated names

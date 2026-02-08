@@ -25,7 +25,7 @@ type testFormationTC struct {
 	Users   []int32
 }
 
-func compareFormationTCs(test test, exp testFormationTC, got FormationTriggerCommand) {
+func compareFormationTC(test test, exp testFormationTC, got FormationTriggerCommand) {
 	tcEndpoint := test.cfg.e.triggerCommands.endpoint
 	charClassesEndpoint := test.cfg.e.characterClasses.endpoint
 
@@ -61,8 +61,8 @@ func TestGetMonsterFormation(t *testing.T) {
 			canEscape:      false,
 			bossMusic:      h.GetInt32Ptr(16),
 			monsters: map[string]int32{
-				"sinspawn echuilles": 1,
-				"sinscale - 3":       4,
+				"/monsters/21": 1,
+				"/monsters/22": 4,
 			},
 			areas:           []int32{47},
 			triggerCommands: []testFormationTC{},
@@ -87,7 +87,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			isForcedAmbush: false,
 			canEscape:      true,
 			monsters: map[string]int32{
-				"garuda - 3": 1,
+				"/monsters/50": 1,
 			},
 			areas: []int32{100, 101, 107},
 		},
@@ -110,9 +110,9 @@ func TestGetMonsterFormation(t *testing.T) {
 			canEscape:      false,
 			bossMusic:      h.GetInt32Ptr(55),
 			monsters: map[string]int32{
-				"seymour":            1,
-				"anima - 1":          1,
-				"guado guardian - 1": 2,
+				"/monsters/93":		1,
+				"/monsters/95":  	1,
+				"/monsters/94": 	2,
 			},
 			areas: []int32{166},
 			triggerCommands: []testFormationTC{
@@ -144,7 +144,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			isForcedAmbush: true,
 			canEscape:      true,
 			monsters: map[string]int32{
-				"great malboro": 1,
+				"/monsters/208": 1,
 			},
 			areas:           []int32{236, 239, 240},
 			triggerCommands: []testFormationTC{},
@@ -164,13 +164,8 @@ func TestGetMonsterFormation(t *testing.T) {
 		compare(test, "can escape", tc.canEscape, got.CanEscape)
 		compIdApiResourcePtrs(test, "boss song", testCfg.e.songs.endpoint, tc.bossMusic, got.BossMusic)
 		checkResAmtsInSlice(test, "monsters", tc.monsters, got.Monsters)
-		compTestStructSlices(test, "trigger commands", tc.triggerCommands, got.TriggerCommands, compareFormationTCs)
-
-		checks := []resListTest{
-			rltIDs("areas", testCfg.e.areas.endpoint, tc.areas, got.Areas),
-		}
-
-		compareResListTests(test, checks)
+		compTestStructSlices(test, "trigger commands", tc.triggerCommands, got.TriggerCommands, compareFormationTC)
+		compareResListTest(test, rltIDs("areas", testCfg.e.areas.endpoint, tc.areas, got.Areas))
 	}
 }
 

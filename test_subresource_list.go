@@ -53,17 +53,8 @@ func compareSubResourceLists[T APIResource, S SubResource](test test, endpoint s
 func testSubResourceListResults(test test, expList subResListTest) {
 	test.t.Helper()
 
-	if len(expList.exp) == 0 {
-		return
-	}
+	compLength(test, expList.name, len(expList.got))
 	checkSubResourcesInSlice(test, expList.name, expList.exp, expList.got)
-
-	expLen, ok := test.expLengths[expList.name]
-	if !ok {
-		return
-	}
-
-	compare(test, expList.name+" length", expLen, len(expList.got))
 }
 
 func checkSubResourcesInSlice[T SubResource](test test, fieldName string, expectedPaths []string, gotRes []T) {

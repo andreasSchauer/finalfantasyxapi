@@ -57,13 +57,11 @@ func parseStatPair(cfg *Config, pair string, queryParam QueryType, allowedStatID
 }
 
 
-func getDefaultStats(statMap map[string]int32, baseStats []BaseStat) map[string]int32 {
+func getDefaultStats(queryStatMap map[string]int32, baseStats []BaseStat) map[string]int32 {
+	statMap := make(map[string]int32)
 	for _, baseStat := range baseStats {
 		statName := baseStat.GetName()
-		_, ok := statMap[statName]
-		if ok {
-			statMap[statName] = max(statMap[statName], baseStat.Value)
-		}
+		statMap[statName] = max(queryStatMap[statName], baseStat.Value)
 	}
 
 	return statMap

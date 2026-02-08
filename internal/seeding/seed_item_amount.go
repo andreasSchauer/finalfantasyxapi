@@ -10,14 +10,14 @@ import (
 
 type ItemAmount struct {
 	ID           int32	`json:"-"`
-	MasterItemID int32	`json:"-"`
+	MasterItem
 	ItemName     string `json:"name"`
 	Amount       int32  `json:"amount"`
 }
 
 func (ia ItemAmount) ToHashFields() []any {
 	return []any{
-		ia.MasterItemID,
+		ia.MasterItem.ID,
 		ia.Amount,
 	}
 }
@@ -52,14 +52,16 @@ func (ia ItemAmount) Error() string {
 func (l *Lookup) seedItemAmount(qtx *database.Queries, itemAmount ItemAmount) (ItemAmount, error) {
 	var err error
 
-	itemAmount.MasterItemID, err = assignFK(itemAmount.ItemName, l.MasterItems)
+	masterItem, err := GetResource(itemAmount.ItemName, l.MasterItems)
 	if err != nil {
 		return ItemAmount{}, h.NewErr(itemAmount.Error(), err)
 	}
 
+	itemAmount.MasterItem = masterItem
+
 	dbItemAmount, err := qtx.CreateItemAmount(context.Background(), database.CreateItemAmountParams{
 		DataHash:     generateDataHash(itemAmount),
-		MasterItemID: itemAmount.MasterItemID,
+		MasterItemID: itemAmount.MasterItem.ID,
 		Amount:       itemAmount.Amount,
 	})
 	if err != nil {
