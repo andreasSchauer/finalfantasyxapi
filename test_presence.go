@@ -41,7 +41,7 @@ func bothResourcePtrsPresent[T HasAPIResource](test test, fieldName string, expP
 	}
 }
 
-// checks presence of two equally typed slices
+// checks presence of two struct slices
 func bothStructSlicesPresent[E, G any](test test, fieldName string, exp []E, got []G) bool {
 	switch {
 	case exp == nil && got == nil:

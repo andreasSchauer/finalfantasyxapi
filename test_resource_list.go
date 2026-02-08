@@ -14,6 +14,10 @@ func rltIDs[T HasAPIResource](fieldName, endpoint string, expIDs []int32, got []
 		exp = append(exp, path)
 	}
 
+	if expIDs == nil {
+		exp = nil
+	}
+
 	return rlt(fieldName, exp, got)
 }
 
@@ -45,13 +49,20 @@ func compareResListTests(test test, checks []resListTest) {
 // checks if the provided slice of resources contains all stated resources and also checks its length, if stated
 func compareResListTest(test test, expList resListTest) {
 	test.t.Helper()
-
 	compLength(test, expList.name, len(expList.got))
+
+	dontCheck := test.dontCheck
+	if dontCheck != nil && dontCheck[expList.name] {
+		return
+	}
+
 	checkResourcesInSlice(test, expList.name, expList.exp, expList.got)
 }
 
 // checks if the provided slice of resources contains all stated resources
 func checkResourcesInSlice[T HasAPIResource](test test, fieldName string, expectedPaths []string, gotRes []T) {
+	bothStructSlicesPresent(test, fieldName, expectedPaths, gotRes)
+
 	gotMap := getResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
 		test.t.Fatalf("%s: there appear to be duplicates in '%s'.", test.name, fieldName)

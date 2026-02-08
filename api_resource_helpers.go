@@ -143,6 +143,10 @@ func sortAPIResources[T HasAPIResource](a, b T) int {
 }
 
 func toHasAPIResSlice[T HasAPIResource](s []T) []HasAPIResource {
+	if s == nil {
+		return nil
+	}
+	
 	out := make([]HasAPIResource, len(s))
 	for i, v := range s {
 		out[i] = v

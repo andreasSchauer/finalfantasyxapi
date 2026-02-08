@@ -134,10 +134,10 @@ func compStringPtr(test test, fieldName string, exp, got *string) {
 }
 
 
-func compLength(test test, fieldName string, gotLen int) {
-	expLen, ok := test.expLengths[fieldName]
+func compLength(test test, fieldName string, got int) {
+	exp, ok := test.expLengths[fieldName]
 	if ok {
-		compare(test, fieldName+" length", expLen, gotLen)
+		compare(test, fieldName + " length", exp, got)
 	}
 }
 

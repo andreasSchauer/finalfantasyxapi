@@ -66,6 +66,13 @@ func TestGetSublocation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/34/",
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"characters": 	true,
+					"aeons": 		true,
+					"cues music":	true,
+					"fmvs music":	true,
+					"fmvs":			true,
+				},
 				expLengths: map[string]int{
 					"connected sublocations": 4,
 					"areas":                  6,
@@ -106,6 +113,10 @@ func TestGetSublocation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/beSaiD",
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"shops": true,
+					"sidequests": true,
+				},
 				expLengths: map[string]int{
 					"connected sublocations": 2,
 					"areas":                  16,

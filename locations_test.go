@@ -88,6 +88,7 @@ func TestGetLocation(t *testing.T) {
 			connectedLocations: []int32{14, 16, 19, 20},
 			sublocations:       []int32{25, 26, 27},
 			expLocRel: expLocRel{
+				characters: []int32{},
 				aeons:      []int32{4},
 				shops:      []int32{22, 25, 36},
 				treasures:  []int32{187, 193, 199, 209, 214},
@@ -107,6 +108,16 @@ func TestGetLocation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/OmeGa_rUInS",
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"connected locations": true,
+					"characters": true,
+					"aeons": true,
+					"shops": true,
+					"sidequests": true,
+					"cues music": true,
+					"fmvs music": true,
+					"fmvs": true,
+				},
 				expLengths: map[string]int{
 					"connected locations": 0,
 					"sublocations":        1,
@@ -128,6 +139,7 @@ func TestGetLocation(t *testing.T) {
 				id:   26,
 				name: "omega ruins",
 			},
+			sublocations: []int32{41},
 			expLocRel: expLocRel{
 				treasures:  []int32{328, 332, 337, 343},
 				monsters:   []int32{190, 201, 210, 239, 245, 250, 255},

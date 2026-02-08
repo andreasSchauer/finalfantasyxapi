@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"reflect"
 )
 
@@ -14,7 +15,7 @@ func compStructs[T any](test test, fieldName string, exp, got T) {
 	}
 }
 
-// checks if two struct pointers with the same type are equal.
+// checks if two struct pointers with the same type are equal. ptr presence is checked via compPtr
 // itemAmount == itemAmount (both ptrs)
 func compStructPtrs[T any](test test, fieldName string, exp, got *T) {
 	test.t.Helper()
@@ -24,17 +25,6 @@ func compStructPtrs[T any](test test, fieldName string, exp, got *T) {
 	}
 
 	compPtr(test, fieldName, exp, got, compStructs)
-}
-
-// checks if two same-typed struct slices are equal. if the slice is not nullable, it needs to be explicitely ignored.
-// []itemAmount == []itemAmount
-func compStructSlices[T any](test test, fieldName string, exp, got []T) {
-	test.t.Helper()
-	checkStructSlices(test, fieldName, exp, got)
-
-	for i := range exp {
-		compStructs(test, fieldName, exp[i], got[i])
-	}
 }
 
 // checks if a pointer to a test struct is equal to a pointer to the original struct. uses a compare function.
@@ -53,27 +43,42 @@ func compTestStructPtrs[E, G any](test test, fieldName string, exp *E, got *G, c
 	compFn(test, *exp, *got)
 }
 
+// checks if two same-typed struct slices are equal. if the slice is not nullable, it needs to be explicitely ignored.
+// []itemAmount == []itemAmount
+func compStructSlices[T any](test test, fieldName string, exp, got []T) {
+	test.t.Helper()
+	err := checkStructSlices(test, fieldName, exp, got)
+	if errors.Is(err, errIgnoredField) {
+		return
+	}
+
+	for i := range exp {
+		compStructs(test, fieldName, exp[i], got[i])
+	}
+}
+
 // checks if a slice of test structs is equal to the slice of original structs. uses a compare function. if the slice is not nullable, it needs to be explicitely ignored.
 // []testItemAmount == []itemAmount
 func compTestStructSlices[E, G any](test test, fieldName string, exp []E, got []G, compFn func(test, E, G)) {
 	test.t.Helper()
-	checkStructSlices(test, fieldName, exp, got)
+	err := checkStructSlices(test, fieldName, exp, got)
+	if errors.Is(err, errIgnoredField) {
+		return
+	}
 
 	for i := range exp {
 		compFn(test, exp[i], got[i])
 	}
 }
 
-func checkStructSlices[E, G any](test test, fieldName string, exp []E, got []G) {
-	test.t.Helper()
+func checkStructSlices[E, G any](test test, fieldName string, exp []E, got []G) error {
 	compLength(test, fieldName, len(got))
 
 	dontCheck := test.dontCheck
 	if dontCheck != nil && dontCheck[fieldName] {
-		return
+		return errIgnoredField
 	}
 
-	if !bothStructSlicesPresent(test, fieldName, exp, got) {
-		return
-	}
+	bothStructSlicesPresent(test, fieldName, exp, got)
+	return nil
 }
