@@ -7,18 +7,16 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type BlitzballPosition struct {
-	ID          int32			`json:"id"`
-	Category	string			`json:"category"`
-	Slot		string			`json:"slot"`
-	Items		[]PossibleItem	`json:"items"`
+type BlitzballPrize struct {
+	ID       int32          `json:"id"`
+	Category string         `json:"category"`
+	Slot     string         `json:"slot"`
+	Items    []PossibleItem `json:"items"`
 }
-
 
 func convertBlitzballItem(cfg *Config, bi seeding.BlitzballItem) PossibleItem {
 	return convertPossibleItem(cfg, bi.PossibleItem)
 }
-
 
 func (cfg *Config) HandleBlitzballPrizes(w http.ResponseWriter, r *http.Request) {
 	i := cfg.e.blitzballPrizes
@@ -33,34 +31,34 @@ func (cfg *Config) HandleBlitzballPrizes(w http.ResponseWriter, r *http.Request)
 	case 1:
 		handleEndpointIDOnly(cfg, w, r, i, segments)
 		return
-	
+
 	case 2:
 		handleEndpointSubsections(cfg, w, r, i, segments)
 		return
-		
+
 	default:
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
 		return
 	}
 }
 
-func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPosition, UnnamedAPIResource, UnnamedApiResourceList], id int32) (BlitzballPosition, error) {
+func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList], id int32) (BlitzballPrize, error) {
 	bbPos, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
-		return BlitzballPosition{}, err
+		return BlitzballPrize{}, err
 	}
 
-	response := BlitzballPosition{
-		ID:         bbPos.ID,
-		Category: 	bbPos.Category,
-		Slot: 		bbPos.Slot,
-		Items: 		convertObjSlice(cfg, bbPos.Items, convertBlitzballItem),
+	response := BlitzballPrize{
+		ID:       bbPos.ID,
+		Category: bbPos.Category,
+		Slot:     bbPos.Slot,
+		Items:    convertObjSlice(cfg, bbPos.Items, convertBlitzballItem),
 	}
 
 	return response, nil
 }
 
-func (cfg *Config) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPosition, UnnamedAPIResource, UnnamedApiResourceList]) (UnnamedApiResourceList, error) {
+func (cfg *Config) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList]) (UnnamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return UnnamedApiResourceList{}, err

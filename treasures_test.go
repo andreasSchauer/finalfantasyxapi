@@ -23,16 +23,16 @@ func (e expTreasure) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTreasures(test test, tc expTreasure, got Treasure) {
-	compareExpIdOnly(test, tc.expIdOnly, got.ID)
-	compIdApiResource(test, "area", testCfg.e.areas.endpoint, tc.area, got.Area)
-	compare(test, "is post airship", tc.isPostAirship, got.IsPostAirship)
-	compare(test, "is anima treasure", tc.isAnimaTreasure, got.IsAnimaTreasure)
-	compIdApiResource(test, "treasure type", testCfg.e.treasureType.endpoint, tc.treasureType, got.TreasureType)
-	compIdApiResource(test, "loot type", testCfg.e.lootType.endpoint, tc.lootType, got.LootType)
-	compare(test, "gil amount", tc.gilAmount, got.GilAmount)
-	compTestStructSlices(test, "items", tc.items, got.Items, compareItemAmounts)
-	compTestStructPtrs(test, "equipment", tc.equipment, got.Equipment, compareFoundEquipment)
+func compareTreasures(test test, exp expTreasure, got Treasure) {
+	compareExpIdOnly(test, exp.expIdOnly, got.ID)
+	compIdApiResource(test, "area", testCfg.e.areas.endpoint, exp.area, got.Area)
+	compare(test, "is post airship", exp.isPostAirship, got.IsPostAirship)
+	compare(test, "is anima treasure", exp.isAnimaTreasure, got.IsAnimaTreasure)
+	compIdApiResource(test, "treasure type", testCfg.e.treasureType.endpoint, exp.treasureType, got.TreasureType)
+	compIdApiResource(test, "loot type", testCfg.e.lootType.endpoint, exp.lootType, got.LootType)
+	compare(test, "gil amount", exp.gilAmount, got.GilAmount)
+	compTestStructSlices(test, "items", exp.items, got.Items, compareItemAmounts)
+	compTestStructPtrs(test, "equipment", exp.equipment, got.Equipment, compareFoundEquipment)
 }
 
 type testFoundEquipment struct {

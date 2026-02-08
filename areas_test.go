@@ -20,22 +20,22 @@ func (e expArea) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAreas(test test, tc expArea, got Area) {
-	compareExpNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
-	compIdApiResource(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
-	compIdApiResource(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
-	compTestStructPtrs(test, "music", tc.music, got.Music, compareLocMusic)
+func compareAreas(test test, exp expArea, got Area) {
+	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
+	compIdApiResource(test, "location", testCfg.e.locations.endpoint, exp.parentLocation, got.ParentLocation)
+	compIdApiResource(test, "sublocation", testCfg.e.sublocations.endpoint, exp.parentSublocation, got.ParentSublocation)
+	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
 
 	compareResListTests(test, []resListTest{
-		rltIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
-		rltIDs("connected areas", testCfg.e.areas.endpoint, tc.connectedAreas, got.ConnectedAreas),
-		rltIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
-		rltIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
-		rltIDs("shops", testCfg.e.shops.endpoint, tc.shops, got.Shops),
-		rltIDs("treasures", testCfg.e.treasures.endpoint, tc.treasures, got.Treasures),
-		rltIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
-		rltIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
-		rltIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
+		rltIDs("sidequests", testCfg.e.sidequests.endpoint, exp.sidequests, got.Sidequests),
+		rltIDs("connected areas", testCfg.e.areas.endpoint, exp.connectedAreas, got.ConnectedAreas),
+		rltIDs("characters", testCfg.e.characters.endpoint, exp.characters, got.Characters),
+		rltIDs("aeons", testCfg.e.aeons.endpoint, exp.aeons, got.Aeons),
+		rltIDs("shops", testCfg.e.shops.endpoint, exp.shops, got.Shops),
+		rltIDs("treasures", testCfg.e.treasures.endpoint, exp.treasures, got.Treasures),
+		rltIDs("monsters", testCfg.e.monsters.endpoint, exp.monsters, got.Monsters),
+		rltIDs("formations", testCfg.e.monsterFormations.endpoint, exp.formations, got.Formations),
+		rltIDs("fmvs", testCfg.e.fmvs.endpoint, exp.fmvs, got.FMVs),
 	})
 }
 

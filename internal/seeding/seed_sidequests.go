@@ -69,9 +69,9 @@ func (s Subquest) GetResParamsNamed() h.ResParamsNamed {
 type QuestCompletion struct {
 	ID        int32
 	QuestID   int32
-	Condition string               `json:"condition"`
-	Locations []CompletionLocation `json:"locations"`
-	Reward    ItemAmount           `json:"reward"`
+	Condition string           `json:"condition"`
+	Locations []CompletionArea `json:"locations"`
+	Reward    ItemAmount       `json:"reward"`
 }
 
 func (qc QuestCompletion) ToHashFields() []any {
@@ -90,14 +90,14 @@ func (qc QuestCompletion) Error() string {
 	return fmt.Sprintf("quest completion with quest id: %d, reward item: %s, amount: %d, condition: %s", qc.QuestID, qc.Reward.ItemName, qc.Reward.Amount, qc.Condition)
 }
 
-type CompletionLocation struct {
+type CompletionArea struct {
 	CompletionID int32
 	AreaID       int32
 	LocationArea LocationArea `json:"location_area"`
 	Notes        *string      `json:"notes"`
 }
 
-func (cl CompletionLocation) ToHashFields() []any {
+func (cl CompletionArea) ToHashFields() []any {
 	return []any{
 		cl.CompletionID,
 		cl.AreaID,
@@ -105,14 +105,13 @@ func (cl CompletionLocation) ToHashFields() []any {
 	}
 }
 
-func (cl CompletionLocation) Error() string {
+func (cl CompletionArea) Error() string {
 	return fmt.Sprintf("completion location %s, with completion id: %d, notes: %v", cl.LocationArea, cl.CompletionID, h.DerefOrNil(cl.Notes))
 }
 
-func (cl CompletionLocation) GetLocationArea() LocationArea {
+func (cl CompletionArea) GetLocationArea() LocationArea {
 	return cl.LocationArea
 }
-
 
 func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "./data/sidequests.json"

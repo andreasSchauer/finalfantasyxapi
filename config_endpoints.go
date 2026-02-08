@@ -34,7 +34,7 @@ type endpoints struct {
 	arenaCreations     handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
 	areas              handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
 	autoAbilities      handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
-	blitzballPrizes    handlerInput[seeding.BlitzballPosition, BlitzballPosition, UnnamedAPIResource, UnnamedApiResourceList]
+	blitzballPrizes    handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList]
 	characters         handlerInput[seeding.Character, any, NamedAPIResource, NamedApiResourceList]
 	characterClasses   handlerInput[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList]
 	elements           handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
@@ -150,13 +150,13 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.blitzballPrizes = handlerInput[seeding.BlitzballPosition, BlitzballPosition, UnnamedAPIResource, UnnamedApiResourceList]{
+	e.blitzballPrizes = handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      "blitzball-prizes",
 		resourceType:  "blitzball prize table",
 		objLookup:     cfg.l.Positions,
 		objLookupID:   cfg.l.PositionsID,
 		queryLookup:   cfg.q.blitzballPrizes,
-		idToResFunc:   idToUnnamedAPIResource[seeding.BlitzballPosition, BlitzballPosition, UnnamedAPIResource, UnnamedApiResourceList],
+		idToResFunc:   idToUnnamedAPIResource[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList],
 		resToListFunc: newUnnamedAPIResourceList,
 		retrieveQuery: cfg.db.GetBlitzballPrizeIDs,
 		getSingleFunc: cfg.getBlitzballPrize,

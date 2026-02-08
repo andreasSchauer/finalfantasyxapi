@@ -44,11 +44,11 @@ type expNameVer struct {
 	version *int32
 }
 
-func compareExpNameVer(test test, tc expNameVer, gotID int32, gotName string, gotVer *int32) {
+func compareExpNameVer(test test, exp expNameVer, gotID int32, gotName string, gotVer *int32) {
 	test.t.Helper()
-	compare(test, "id", tc.id, gotID)
-	compare(test, "name", tc.name, gotName)
-	compare(test, "version", tc.version, gotVer)
+	compare(test, "id", exp.id, gotID)
+	compare(test, "name", exp.name, gotName)
+	compare(test, "version", exp.version, gotVer)
 }
 
 type expUnique struct {
@@ -56,19 +56,19 @@ type expUnique struct {
 	name string
 }
 
-func compareExpUnique(test test, tc expUnique, gotID int32, gotName string) {
+func compareExpUnique(test test, exp expUnique, gotID int32, gotName string) {
 	test.t.Helper()
-	compare(test, "id", tc.id, gotID)
-	compare(test, "name", tc.name, gotName)
+	compare(test, "id", exp.id, gotID)
+	compare(test, "name", exp.name, gotName)
 }
 
 type expIdOnly struct {
 	id int32
 }
 
-func compareExpIdOnly(test test, tc expIdOnly, gotID int32) {
+func compareExpIdOnly(test test, exp expIdOnly, gotID int32) {
 	test.t.Helper()
-	compare(test, "id", tc.id, gotID)
+	compare(test, "id", exp.id, gotID)
 }
 
 type expListIDs struct {

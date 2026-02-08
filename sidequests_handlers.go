@@ -15,24 +15,28 @@ type Sidequest struct {
 }
 
 type QuestCompletion struct {
-	Areas  []CompletionLocation `json:"areas"`
-	Reward ItemAmount           `json:"reward"`
+	Areas  []CompletionArea `json:"areas"`
+	Reward ItemAmount       `json:"reward"`
 }
 
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
-		Areas:  convertObjSlice(cfg, qc.Locations, convertCompletionLocation),
+		Areas:  convertObjSlice(cfg, qc.Locations, convertCompletionArea),
 		Reward: convertItemAmount(cfg, qc.Reward),
 	}
 }
 
-type CompletionLocation struct {
+type CompletionArea struct {
 	Area  AreaAPIResource `json:"area"`
 	Notes *string         `json:"notes,omitempty"`
 }
 
-func convertCompletionLocation(cfg *Config, cl seeding.CompletionLocation) CompletionLocation {
-	return CompletionLocation{
+func (ca CompletionArea) GetAPIResource() APIResource {
+	return ca.Area
+}
+
+func convertCompletionArea(cfg *Config, cl seeding.CompletionArea) CompletionArea {
+	return CompletionArea{
 		Area:  locAreaToAreaAPIResource(cfg, cfg.e.areas, cl.LocationArea),
 		Notes: cl.Notes,
 	}
