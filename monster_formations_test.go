@@ -1,14 +1,13 @@
 package main
 
 import (
-	"errors"
 	"net/http"
 	"testing"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type expMonsterFormations struct {
+type expMonsterFormation struct {
 	testGeneral
 	expIdOnly
 	category        string
@@ -20,12 +19,27 @@ type expMonsterFormations struct {
 	triggerCommands []testFormationTC
 }
 
+func (e expMonsterFormation) GetTestGeneral() testGeneral {
+	return e.testGeneral
+}
+
+func compareMonsterFormations(test test, exp expMonsterFormation, got MonsterFormation) {
+	compareExpIdOnly(test, exp.expIdOnly, got.ID)
+	compare(test, "category", exp.category, got.Category)
+	compare(test, "is forced ambush", exp.isForcedAmbush, got.IsForcedAmbush)
+	compare(test, "can escape", exp.canEscape, got.CanEscape)
+	compIdApiResourcePtrs(test, "boss song", testCfg.e.songs.endpoint, exp.bossMusic, got.BossMusic)
+	checkResAmtsNameVals(test, "monsters", exp.monsters, got.Monsters)
+	compTestStructSlices(test, "trigger commands", exp.triggerCommands, got.TriggerCommands, compareFormationTCs)
+	compareResListTest(test, rltIDs("areas", testCfg.e.areas.endpoint, exp.areas, got.Areas))
+}
+
 type testFormationTC struct {
 	Ability int32
 	Users   []int32
 }
 
-func compareFormationTC(test test, exp testFormationTC, got FormationTriggerCommand) {
+func compareFormationTCs(test test, exp testFormationTC, got FormationTriggerCommand) {
 	tcEndpoint := test.cfg.e.triggerCommands.endpoint
 	charClassesEndpoint := test.cfg.e.characterClasses.endpoint
 
@@ -34,7 +48,7 @@ func compareFormationTC(test test, exp testFormationTC, got FormationTriggerComm
 }
 
 func TestGetMonsterFormation(t *testing.T) {
-	tests := []expMonsterFormations{
+	tests := []expMonsterFormation{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/332",
@@ -61,8 +75,8 @@ func TestGetMonsterFormation(t *testing.T) {
 			canEscape:      false,
 			bossMusic:      h.GetInt32Ptr(16),
 			monsters: map[string]int32{
-				"/monsters/21": 1,
-				"/monsters/22": 4,
+				"sinspawn echuilles": 1,
+				"sinscale - 3":       4,
 			},
 			areas:           []int32{47},
 			triggerCommands: []testFormationTC{},
@@ -87,7 +101,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			isForcedAmbush: false,
 			canEscape:      true,
 			monsters: map[string]int32{
-				"/monsters/50": 1,
+				"garuda - 3": 1,
 			},
 			areas: []int32{100, 101, 107},
 		},
@@ -110,9 +124,9 @@ func TestGetMonsterFormation(t *testing.T) {
 			canEscape:      false,
 			bossMusic:      h.GetInt32Ptr(55),
 			monsters: map[string]int32{
-				"/monsters/93":		1,
-				"/monsters/95":  	1,
-				"/monsters/94": 	2,
+				"seymour":            1,
+				"anima - 1":          1,
+				"guado guardian - 1": 2,
 			},
 			areas: []int32{166},
 			triggerCommands: []testFormationTC{
@@ -144,29 +158,14 @@ func TestGetMonsterFormation(t *testing.T) {
 			isForcedAmbush: true,
 			canEscape:      true,
 			monsters: map[string]int32{
-				"/monsters/208": 1,
+				"great malboro": 1,
 			},
 			areas:           []int32{236, 239, 240},
 			triggerCommands: []testFormationTC{},
 		},
 	}
 
-	for i, tc := range tests {
-		test, got, err := setupTest[MonsterFormation](t, tc.testGeneral, "GetMonsterFormation", i+1, testCfg.HandleMonsterFormations)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		testExpectedIdOnly(test, tc.expIdOnly, got.ID)
-
-		compare(test, "category", tc.category, got.Category)
-		compare(test, "is forced ambush", tc.isForcedAmbush, got.IsForcedAmbush)
-		compare(test, "can escape", tc.canEscape, got.CanEscape)
-		compIdApiResourcePtrs(test, "boss song", testCfg.e.songs.endpoint, tc.bossMusic, got.BossMusic)
-		checkResAmtsInSlice(test, "monsters", tc.monsters, got.Monsters)
-		compTestStructSlices(test, "trigger commands", tc.triggerCommands, got.TriggerCommands, compareFormationTC)
-		compareResListTest(test, rltIDs("areas", testCfg.e.areas.endpoint, tc.areas, got.Areas))
-	}
+	testSingleResources(t, tests, "GetMonsterFormation", testCfg.HandleMonsterFormations, compareMonsterFormations)
 }
 
 func TestRetrieveMonsterFormations(t *testing.T) {

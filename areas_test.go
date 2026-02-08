@@ -1,14 +1,13 @@
 package main
 
 import (
-	"errors"
 	"net/http"
 	"testing"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type expAreas struct {
+type expArea struct {
 	testGeneral
 	expNameVer
 	parentLocation    int32
@@ -17,8 +16,31 @@ type expAreas struct {
 	expLocRel
 }
 
+func (e expArea) GetTestGeneral() testGeneral {
+	return e.testGeneral
+}
+
+func compareAreas(test test, tc expArea, got Area) {
+	compareExpNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
+	compIdApiResource(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
+	compIdApiResource(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
+	compTestStructPtrs(test, "music", tc.music, got.Music, compareLocMusic)
+
+	compareResListTests(test, []resListTest{
+		rltIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
+		rltIDs("connected areas", testCfg.e.areas.endpoint, tc.connectedAreas, got.ConnectedAreas),
+		rltIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
+		rltIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
+		rltIDs("shops", testCfg.e.shops.endpoint, tc.shops, got.Shops),
+		rltIDs("treasures", testCfg.e.treasures.endpoint, tc.treasures, got.Treasures),
+		rltIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
+		rltIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
+		rltIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
+	})
+}
+
 func TestGetArea(t *testing.T) {
-	tests := []expAreas{
+	tests := []expArea{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/0",
@@ -44,6 +66,9 @@ func TestGetArea(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/145/",
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"music": true,
+				},
 				expLengths: map[string]int{
 					"connected areas": 2,
 					"monsters":        6,
@@ -89,7 +114,9 @@ func TestGetArea(t *testing.T) {
 			expLocRel: expLocRel{
 				characters: []int32{2, 4},
 				treasures:  []int32{33, 37},
-				bgMusic:    []int32{19},
+				music: h.GetStructPtr(testLocMusic{
+					bgMusic:    []int32{19},
+				}),
 			},
 		},
 		{
@@ -115,14 +142,19 @@ func TestGetArea(t *testing.T) {
 			parentSublocation: 13,
 			expLocRel: expLocRel{
 				shops:     []int32{5},
-				cuesMusic: []int32{35},
-				bgMusic:   []int32{32, 34},
+				music: h.GetStructPtr(testLocMusic{
+					cuesMusic: []int32{35},
+					bgMusic:   []int32{32, 34},
+				}),
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/140",
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"music": true,
+				},
 			},
 			expNameVer: expNameVer{
 				id:      140,
@@ -159,44 +191,16 @@ func TestGetArea(t *testing.T) {
 				characters: []int32{5},
 				monsters:   []int32{19},
 				formations: []int32{26},
-				fmvsMusic:  []int32{16},
-				bossMusic:  []int32{16},
 				fmvs:       []int32{9, 13},
+				music: h.GetStructPtr(testLocMusic{
+					fmvsMusic:  []int32{16},
+					bossMusic:  []int32{16},
+				}),
 			},
 		},
 	}
 
-	for i, tc := range tests {
-		test, got, err := setupTest[Area](t, tc.testGeneral, "GetArea", i+1, testCfg.HandleAreas)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		testExpectedNameVer(test, tc.expNameVer, got.ID, got.Name, got.Version)
-		compIdApiResource(test, "location", testCfg.e.locations.endpoint, tc.parentLocation, got.ParentLocation)
-		compIdApiResource(test, "sublocation", testCfg.e.sublocations.endpoint, tc.parentSublocation, got.ParentSublocation)
-
-		compareResListTests(test, []resListTest{
-			rltIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
-			rltIDs("connected areas", testCfg.e.areas.endpoint, tc.connectedAreas, got.ConnectedAreas),
-			rltIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
-			rltIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
-			rltIDs("shops", testCfg.e.shops.endpoint, tc.shops, got.Shops),
-			rltIDs("treasures", testCfg.e.treasures.endpoint, tc.treasures, got.Treasures),
-			rltIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
-			rltIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
-			rltIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
-		})
-
-		if got.Music != nil {
-			compareResListTests(test, []resListTest{
-				rltIDs("bg music", testCfg.e.songs.endpoint, tc.bgMusic, got.Music.BackgroundMusic),
-				rltIDs("cues music", testCfg.e.songs.endpoint, tc.cuesMusic, got.Music.Cues),
-				rltIDs("fmvs music", testCfg.e.songs.endpoint, tc.fmvsMusic, got.Music.FMVs),
-				rltIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossMusic),
-			})
-		}
-	}
+	testSingleResources(t, tests, "GetArea", testCfg.HandleAreas, compareAreas)
 }
 
 func TestRetrieveAreas(t *testing.T) {

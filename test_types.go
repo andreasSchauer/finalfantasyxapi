@@ -44,7 +44,7 @@ type expNameVer struct {
 	version *int32
 }
 
-func testExpectedNameVer(test test, tc expNameVer, gotID int32, gotName string, gotVer *int32) {
+func compareExpNameVer(test test, tc expNameVer, gotID int32, gotName string, gotVer *int32) {
 	test.t.Helper()
 	compare(test, "id", tc.id, gotID)
 	compare(test, "name", tc.name, gotName)
@@ -56,7 +56,7 @@ type expUnique struct {
 	name string
 }
 
-func testExpectedUnique(test test, tc expUnique, gotID int32, gotName string) {
+func compareExpUnique(test test, tc expUnique, gotID int32, gotName string) {
 	test.t.Helper()
 	compare(test, "id", tc.id, gotID)
 	compare(test, "name", tc.name, gotName)
@@ -66,7 +66,7 @@ type expIdOnly struct {
 	id int32
 }
 
-func testExpectedIdOnly(test test, tc expIdOnly, gotID int32) {
+func compareExpIdOnly(test test, tc expIdOnly, gotID int32) {
 	test.t.Helper()
 	compare(test, "id", tc.id, gotID)
 }
@@ -82,9 +82,9 @@ type expListIDs struct {
 
 func (l expListIDs) getListParams() ListParams {
 	return ListParams{
-		Count: l.count,
+		Count:    l.count,
 		Previous: l.previous,
-		Next: l.next,
+		Next:     l.next,
 	}
 }
 
@@ -98,9 +98,9 @@ type expListNames struct {
 
 func (l expListNames) getListParams() ListParams {
 	return ListParams{
-		Count: l.count,
+		Count:    l.count,
 		Previous: l.previous,
-		Next: l.next,
+		Next:     l.next,
 	}
 }
 
@@ -110,18 +110,33 @@ func compareListParams(test test, exp, got ListParams) {
 	compPageURL(test, "next", exp.Next, got.Next)
 }
 
-
 type expLocRel struct {
-	sidequests []int32
-	characters []int32
-	aeons      []int32
-	shops      []int32
-	treasures  []int32
-	monsters   []int32
-	formations []int32
+	sidequests 	[]int32
+	characters 	[]int32
+	aeons      	[]int32
+	shops      	[]int32
+	treasures  	[]int32
+	monsters   	[]int32
+	formations 	[]int32
+	fmvs       	[]int32
+	music		*testLocMusic
+}
+
+type testLocMusic struct {
 	bgMusic    []int32
 	cuesMusic  []int32
 	fmvsMusic  []int32
 	bossMusic  []int32
-	fmvs       []int32
+}
+
+
+func compareLocMusic(test test, exp testLocMusic, got LocBasedMusic) {
+	songsEndpoint := test.cfg.e.songs.endpoint
+
+	compareResListTests(test, []resListTest{
+		rltIDs("bg music", songsEndpoint, exp.bgMusic, got.BackgroundMusic),
+		rltIDs("cues music", songsEndpoint, exp.cuesMusic, got.Cues),
+		rltIDs("fmvs music", songsEndpoint, exp.fmvsMusic, got.FMVs),
+		rltIDs("boss music", songsEndpoint, exp.bossMusic, got.BossMusic),
+	})
 }

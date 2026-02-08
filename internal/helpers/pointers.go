@@ -16,6 +16,10 @@ func GetStrPtr(s string) *string {
 	return &s
 }
 
+func GetStructPtr[T any](obj T) *T {
+	return &obj
+}
+
 func StringPtrToString(s *string) string {
 	if s == nil {
 		return ""

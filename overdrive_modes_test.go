@@ -1,14 +1,13 @@
 package main
 
 import (
-	"errors"
 	"net/http"
 	"testing"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type expOverdriveModes struct {
+type expOverdriveMode struct {
 	testGeneral
 	expUnique
 	description   string
@@ -18,8 +17,21 @@ type expOverdriveModes struct {
 	actionsAmount map[string]int32
 }
 
+func (e expOverdriveMode) GetTestGeneral() testGeneral {
+	return e.testGeneral
+}
+
+func compareOverdriveModes(test test, exp expOverdriveMode, got OverdriveMode) {
+	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
+	compare(test, "description", exp.description, got.Description)
+	compare(test, "effect", exp.effect, got.Effect)
+	compIdApiResource(test, "type", testCfg.e.overdriveModeType.endpoint, exp.modeType, got.Type)
+	compare(test, "fill rate", exp.fillRate, got.FillRate)
+	checkResAmtsNameVals(test, "actions", exp.actionsAmount, got.Actions)
+}
+
 func TestGetOverdriveMode(t *testing.T) {
-	tests := []expOverdriveModes{
+	tests := []expOverdriveMode{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/ally/2",
@@ -60,13 +72,13 @@ func TestGetOverdriveMode(t *testing.T) {
 			modeType:    2,
 			fillRate:    h.GetFloat32Ptr(0.03),
 			actionsAmount: map[string]int32{
-				"/characters/1":   	600,
-				"/characters/2":    500,
-				"/characters/3":   	350,
-				"/characters/4":    480,
-				"/characters/5": 	300,
-				"/characters/6":   	450,
-				"/characters/7":   	320,
+				"tidus":   600,
+				"yuna":    500,
+				"wakka":   350,
+				"lulu":    480,
+				"kimahri": 300,
+				"auron":   450,
+				"rikku":   320,
 			},
 		},
 		{
@@ -85,9 +97,9 @@ func TestGetOverdriveMode(t *testing.T) {
 			modeType: 1,
 			fillRate: nil,
 			actionsAmount: map[string]int32{
-				"/characters/1": 300,
-				"/characters/3": 100,
-				"/characters/7": 100,
+				"tidus": 300,
+				"wakka": 100,
+				"rikku": 100,
 			},
 		},
 		{
@@ -111,19 +123,7 @@ func TestGetOverdriveMode(t *testing.T) {
 		},
 	}
 
-	for i, tc := range tests {
-		test, got, err := setupTest[OverdriveMode](t, tc.testGeneral, "GetOverdriveMode", i+1, testCfg.HandleOverdriveModes)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		testExpectedUnique(test, tc.expUnique, got.ID, got.Name)
-		compare(test, "description", tc.description, got.Description)
-		compare(test, "effect", tc.effect, got.Effect)
-		compIdApiResource(test, "type", testCfg.e.overdriveModeType.endpoint, tc.modeType, got.Type)
-		compare(test, "fill rate", tc.fillRate, got.FillRate)
-		checkResAmtsInSlice(test, "actions", tc.actionsAmount, got.Actions)
-	}
+	testSingleResources(t, tests, "GetOverdriveMode", testCfg.HandleOverdriveModes, compareOverdriveModes)
 }
 
 func TestRetrieveOverdriveModes(t *testing.T) {

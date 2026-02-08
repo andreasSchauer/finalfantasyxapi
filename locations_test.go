@@ -1,14 +1,13 @@
 package main
 
 import (
-	"errors"
 	"net/http"
 	"testing"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type expLocations struct {
+type expLocation struct {
 	testGeneral
 	expUnique
 	connectedLocations []int32
@@ -16,8 +15,30 @@ type expLocations struct {
 	expLocRel
 }
 
+func (e expLocation) GetTestGeneral() testGeneral {
+	return e.testGeneral
+}
+
+func compareLocations(test test, exp expLocation, got Location) {
+	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
+	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
+
+	compareResListTests(test, []resListTest{
+		rltIDs("connected locations", testCfg.e.locations.endpoint, exp.connectedLocations, got.ConnectedLocations),
+		rltIDs("sublocations", testCfg.e.sublocations.endpoint, exp.sublocations, got.Sublocations),
+		rltIDs("characters", testCfg.e.characters.endpoint, exp.characters, got.Characters),
+		rltIDs("aeons", testCfg.e.aeons.endpoint, exp.aeons, got.Aeons),
+		rltIDs("shops", testCfg.e.shops.endpoint, exp.shops, got.Shops),
+		rltIDs("treasures", testCfg.e.treasures.endpoint, exp.treasures, got.Treasures),
+		rltIDs("monsters", testCfg.e.monsters.endpoint, exp.monsters, got.Monsters),
+		rltIDs("formations", testCfg.e.monsterFormations.endpoint, exp.formations, got.Formations),
+		rltIDs("sidequests", testCfg.e.sidequests.endpoint, exp.sidequests, got.Sidequests),
+		rltIDs("fmvs", testCfg.e.fmvs.endpoint, exp.fmvs, got.FMVs),
+	})
+}
+
 func TestGetLocation(t *testing.T) {
-	tests := []expLocations{
+	tests := []expLocation{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/0",
@@ -73,11 +94,13 @@ func TestGetLocation(t *testing.T) {
 				monsters:   []int32{80, 83, 87, 93, 94, 97, 297},
 				formations: []int32{120, 125, 129, 135, 137},
 				sidequests: []int32{6},
-				bgMusic:    []int32{12, 22, 30, 43, 52, 55, 56},
-				cuesMusic:  []int32{4, 57, 59},
-				fmvsMusic:  []int32{70},
-				bossMusic:  []int32{16, 55, 57},
 				fmvs:       []int32{27, 36},
+				music: h.GetStructPtr(testLocMusic{
+					bgMusic:    []int32{12, 22, 30, 43, 52, 55, 56},
+					cuesMusic:  []int32{4, 57, 59},
+					fmvsMusic:  []int32{70},
+					bossMusic:  []int32{16, 55, 57},
+				}),
 			},
 		},
 		{
@@ -109,42 +132,15 @@ func TestGetLocation(t *testing.T) {
 				treasures:  []int32{328, 332, 337, 343},
 				monsters:   []int32{190, 201, 210, 239, 245, 250, 255},
 				formations: []int32{258, 262, 265, 283, 289, 296},
-				bgMusic:    []int32{81, 82},
-				bossMusic:  []int32{16, 80},
+				music: h.GetStructPtr(testLocMusic{
+					bgMusic:    []int32{81, 82},
+					bossMusic:  []int32{16, 80},
+				}),
 			},
 		},
 	}
 
-	for i, tc := range tests {
-		test, got, err := setupTest[Location](t, tc.testGeneral, "GetLocation", i+1, testCfg.HandleLocations)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		testExpectedUnique(test, tc.expUnique, got.ID, got.Name)
-
-		compareResListTests(test, []resListTest{
-			rltIDs("connected locations", testCfg.e.locations.endpoint, tc.connectedLocations, got.ConnectedLocations),
-			rltIDs("sublocations", testCfg.e.sublocations.endpoint, tc.sublocations, got.Sublocations),
-			rltIDs("characters", testCfg.e.characters.endpoint, tc.characters, got.Characters),
-			rltIDs("aeons", testCfg.e.aeons.endpoint, tc.aeons, got.Aeons),
-			rltIDs("shops", testCfg.e.shops.endpoint, tc.shops, got.Shops),
-			rltIDs("treasures", testCfg.e.treasures.endpoint, tc.treasures, got.Treasures),
-			rltIDs("monsters", testCfg.e.monsters.endpoint, tc.monsters, got.Monsters),
-			rltIDs("formations", testCfg.e.monsterFormations.endpoint, tc.formations, got.Formations),
-			rltIDs("sidequests", testCfg.e.sidequests.endpoint, tc.sidequests, got.Sidequests),
-			rltIDs("fmvs", testCfg.e.fmvs.endpoint, tc.fmvs, got.FMVs),
-		})
-
-		if got.Music != nil {
-			compareResListTests(test, []resListTest{
-				rltIDs("bg music", testCfg.e.songs.endpoint, tc.bgMusic, got.Music.BackgroundMusic),
-				rltIDs("cues music", testCfg.e.songs.endpoint, tc.cuesMusic, got.Music.Cues),
-				rltIDs("fmvs music", testCfg.e.songs.endpoint, tc.fmvsMusic, got.Music.FMVs),
-				rltIDs("boss music", testCfg.e.songs.endpoint, tc.bossMusic, got.Music.BossMusic),
-			})
-		}
-	}
+	testSingleResources(t, tests, "GetLocation", testCfg.HandleLocations, compareLocations)
 }
 
 func TestRetrieveLocations(t *testing.T) {

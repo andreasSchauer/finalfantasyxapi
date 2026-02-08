@@ -33,7 +33,7 @@ type testElemResist struct {
 	affinity int32
 }
 
-func compareMonsterElemResist(test test, exp testElemResist, got ElementalResist) {
+func compareMonsterElemResists(test test, exp testElemResist, got ElementalResist) {
 	elemEndpoint := test.cfg.e.elements.endpoint
 	affinityEndpoint := test.cfg.e.affinities.endpoint
 
@@ -43,8 +43,28 @@ func compareMonsterElemResist(test test, exp testElemResist, got ElementalResist
 
 type testMonItems struct {
 	itemDropChance int32
-	items          map[string]*int32
-	otherItems     []int32
+	items          map[string]*testItemAmount
+	otherItems     []testPossibleItem
+}
+
+type testItemAmount struct {
+	item   string
+	amount int32
+}
+
+func compareItemAmounts(test test, exp testItemAmount, got ItemAmount) {
+	compPathApiResource(test, "item amount - item", exp.item, got)
+	compare(test, "item amount - amount", exp.amount, got.Amount)
+}
+
+type testPossibleItem struct {
+	testItemAmount
+	chance int32
+}
+
+func comparePossibleItems(test test, exp testPossibleItem, got PossibleItem) {
+	compareItemAmounts(test, exp.testItemAmount, got.ItemAmount)
+	compare(test, "possible item - chance", exp.chance, got.Chance)
 }
 
 type testMonEquipment struct {
@@ -65,18 +85,17 @@ func compareMonsterItems(test test, expItems *testMonItems, gotItems *MonsterIte
 
 	exp := *expItems
 	got := *gotItems
-	endpoint := test.cfg.e.items.endpoint
 	itemMap := exp.items
 
-	compareResListTest(test, rltIDs("other items", endpoint, exp.otherItems, got.OtherItems))
 	compare(test, "item drop chance", exp.itemDropChance, got.DropChance)
-	compIdApiResourcePtrs(test, "steal common", endpoint, itemMap["steal common"], got.StealCommon)
-	compIdApiResourcePtrs(test, "steal rare", endpoint, itemMap["steal rare"], got.StealRare)
-	compIdApiResourcePtrs(test, "drop common", endpoint, itemMap["drop common"], got.DropCommon)
-	compIdApiResourcePtrs(test, "drop rare", endpoint, itemMap["drop rare"], got.DropRare)
-	compIdApiResourcePtrs(test, "sec drop common", endpoint, itemMap["sec drop common"], got.SecondaryDropCommon)
-	compIdApiResourcePtrs(test, "sec drop rare", endpoint, itemMap["sec drop rare"], got.SecondaryDropRare)
-	compIdApiResourcePtrs(test, "bribe", endpoint, itemMap["bribe"], got.Bribe)
+	compTestStructPtrs(test, "steal common", itemMap["steal common"], got.StealCommon, compareItemAmounts)
+	compTestStructPtrs(test, "steal rare", itemMap["steal rare"], got.StealRare, compareItemAmounts)
+	compTestStructPtrs(test, "drop common", itemMap["drop common"], got.DropCommon, compareItemAmounts)
+	compTestStructPtrs(test, "drop rare", itemMap["drop rare"], got.DropRare, compareItemAmounts)
+	compTestStructPtrs(test, "sec drop common", itemMap["sec drop common"], got.SecondaryDropCommon, compareItemAmounts)
+	compTestStructPtrs(test, "sec drop rare", itemMap["sec drop rare"], got.SecondaryDropRare, compareItemAmounts)
+	compTestStructPtrs(test, "bribe", itemMap["bribe"], got.Bribe, compareItemAmounts)
+	compTestStructSlices(test, "other items", exp.otherItems, got.OtherItems, comparePossibleItems)
 }
 
 func compareMonsterEquipment(test test, expEquipment *testMonEquipment, gotEquipment *MonsterEquipment) {
@@ -105,7 +124,7 @@ func compareMonsterEquipment(test test, expEquipment *testMonEquipment, gotEquip
 	})
 }
 
-func compareMonsterAppliedState(test test, exp *testAppliedState, got *AppliedState) {
+func compareMonsterAppliedStates(test test, exp *testAppliedState, got *AppliedState) {
 	if !bothPtrsPresent(test, "applied state", exp, got) {
 		return
 	}
@@ -133,19 +152,19 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []Alter
 
 	compare(test, "default state isTemporary", exp.IsTemporary, got.IsTemporary)
 	compare(test, "def state changes length", len(exp.Changes), len(got.Changes))
-	compTestStructSlices(test, "alt state changes", exp.Changes, got.Changes, compareMonsterAltStateChange)
+	compTestStructSlices(test, "alt state changes", exp.Changes, got.Changes, compareMonsterAltStateChanges)
 }
 
-func compareMonsterAltStateChange(test test, exp testAltStateChange, got AltStateChange) {
+func compareMonsterAltStateChanges(test test, exp testAltStateChange, got AltStateChange) {
 	desc := fmt.Sprintf("def state change: %s ", exp.AlterationType)
 
 	compare(test, desc+"type", exp.AlterationType, string(got.AlterationType))
 	compare(test, desc+"distance", exp.Distance, got.Distance)
-	checkResAmtsInSlice(test, desc+"base stats", exp.BaseStats, got.BaseStats)
-	checkResAmtsInSlice(test, desc+"status resists", exp.StatusResists, got.StatusResists)
+	checkResAmtsNameVals(test, desc+"base stats", exp.BaseStats, got.BaseStats)
+	checkResAmtsNameVals(test, desc+"status resists", exp.StatusResists, got.StatusResists)
 	compStructPtrs(test, desc+"added status", exp.AddedStatus, got.AddedStatus)
 	compIdApiResourcePtrs(test, desc+"removed status", test.cfg.e.statusConditions.endpoint, exp.RemovedStatus, got.RemovedStatus)
-	compTestStructSlices(test, desc+"elemental resists", exp.ElemResists, got.ElemResists, compareMonsterElemResist)
+	compTestStructSlices(test, desc+"elemental resists", exp.ElemResists, got.ElemResists, compareMonsterElemResists)
 
 	compareResListTests(test, []resListTest{
 		rltIDs(desc+"properties", test.cfg.e.properties.endpoint, exp.Properties, got.Properties),

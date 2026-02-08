@@ -29,6 +29,7 @@ func compStructPtrs[T any](test test, fieldName string, exp, got *T) {
 // checks if two same-typed struct slices are equal. if the slice is not nullable, it needs to be explicitely ignored.
 // []itemAmount == []itemAmount
 func compStructSlices[T any](test test, fieldName string, exp, got []T) {
+	test.t.Helper()
 	checkStructSlices(test, fieldName, exp, got)
 
 	for i := range exp {
@@ -36,9 +37,26 @@ func compStructSlices[T any](test test, fieldName string, exp, got []T) {
 	}
 }
 
+// checks if a pointer to a test struct is equal to a pointer to the original struct. uses a compare function.
+// testItemAmount == itemAmount (both Ptrs)
+func compTestStructPtrs[E, G any](test test, fieldName string, exp *E, got *G, compFn func(test, E, G)) {
+	test.t.Helper()
+	
+	if test.dontCheck != nil && test.dontCheck[fieldName] {
+		return
+	}
+	
+	if !bothPtrsPresent(test, fieldName, exp, got) {
+		return
+	}
+
+	compFn(test, *exp, *got)
+}
+
 // checks if a slice of test structs is equal to the slice of original structs. uses a compare function. if the slice is not nullable, it needs to be explicitely ignored.
 // []testItemAmount == []itemAmount
 func compTestStructSlices[E, G any](test test, fieldName string, exp []E, got []G, compFn func(test, E, G)) {
+	test.t.Helper()
 	checkStructSlices(test, fieldName, exp, got)
 
 	for i := range exp {
@@ -47,6 +65,7 @@ func compTestStructSlices[E, G any](test test, fieldName string, exp []E, got []
 }
 
 func checkStructSlices[E, G any](test test, fieldName string, exp []E, got []G) {
+	test.t.Helper()
 	compLength(test, fieldName, len(got))
 
 	dontCheck := test.dontCheck

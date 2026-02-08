@@ -10,9 +10,52 @@ import (
 	"testing"
 )
 
+type testCase interface {
+	GetTestGeneral() testGeneral
+}
+
 func getTestName(name, requestURL string, caseNum int) string {
 	return fmt.Sprintf("%s: %d, requestURL: %s", name, caseNum, requestURL)
 }
+
+
+func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
+	for i, exp := range tests {
+		test, got, err := setupTest[G](t, exp.GetTestGeneral(), testFuncName, i+1, handlerFunc)
+		if errors.Is(err, errCorrect) {
+			continue
+		}
+
+		compFunc(test, exp, got)
+	}
+}
+
+// compareAPIResourceLists for normal API Resources
+// compareSubResourceLists for Subsections
+func testIdList[T any](t *testing.T, tests []expListIDs, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListIDs, T)) {
+	for i, tc := range tests {
+		test, got, err := setupTest[T](t, tc.testGeneral, testFuncName, i+1, handlerFunc)
+		if errors.Is(err, errCorrect) {
+			continue
+		}
+
+		compFunc(test, endpoint, tc, got)
+	}
+}
+
+// compareParameterLists for /parameters lists
+// compareSectionLists for /sections lists
+func testNameList[T any](t *testing.T, tests []expListNames, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListNames, T)) {
+	for i, tc := range tests {
+		test, got, err := setupTest[T](t, tc.testGeneral, testFuncName, i+1, handlerFunc)
+		if errors.Is(err, errCorrect) {
+			continue
+		}
+
+		compFunc(test, endpoint, tc, got)
+	}
+}
+
 
 // makes the http request for the test and returns the result, as well as a test struct
 func setupTest[T any](t *testing.T, tc testGeneral, testFunc string, testNum int, handlerFunc func(http.ResponseWriter, *http.Request)) (test, T, error) {
@@ -52,30 +95,4 @@ func setupTest[T any](t *testing.T, tc testGeneral, testFunc string, testNum int
 	}
 
 	return test, got, nil
-}
-
-// compareAPIResourceLists for normal API Resources
-// compareSubResourceLists for Subsections
-func testIdList[T any](t *testing.T, tests []expListIDs, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListIDs, T)) {
-	for i, tc := range tests {
-		test, got, err := setupTest[T](t, tc.testGeneral, testFuncName, i+1, handlerFunc)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		compFunc(test, endpoint, tc, got)
-	}
-}
-
-// compareParameterLists for /parameters lists
-// compareSectionLists for /sections lists
-func testNameList[T any](t *testing.T, tests []expListNames, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListNames, T)) {
-	for i, tc := range tests {
-		test, got, err := setupTest[T](t, tc.testGeneral, testFuncName, i+1, handlerFunc)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		compFunc(test, endpoint, tc, got)
-	}
 }

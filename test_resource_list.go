@@ -30,9 +30,7 @@ func rlt[T HasAPIResource](fieldName string, exp []string, got []T) resListTest 
 func compareAPIResourceLists[T APIResourceList](test test, endpoint string, expList expListIDs, gotList T) {
 	test.t.Helper()
 	compareListParams(test, expList.getListParams(), gotList.getListParams())
-
-	listTest := rltIDs("results", endpoint, expList.results, gotList.getResults())
-	compareResListTest(test, listTest)
+	compareResListTest(test, rltIDs("results", endpoint, expList.results, gotList.getResults()))
 }
 
 // checks if all provided slices of resources contains all stated resources and also checks their length, if stated
