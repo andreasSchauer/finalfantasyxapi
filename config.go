@@ -8,7 +8,6 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -26,8 +25,6 @@ type Config struct {
 
 func ConfigInit() (Config, error) {
 	const domain = "localhost:8080"
-
-	_ = godotenv.Load()
 
 	dbURL := os.Getenv("DB_URL")
 	if dbURL == "" {

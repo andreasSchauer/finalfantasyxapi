@@ -42,14 +42,16 @@ func projectRoot() (string, error) {
 	}
 
 	for {
-		fp := filepath.Join(wd, "go.mod")
-		if _, err := os.Stat(fp); err == nil {
+		_, err := os.Stat(filepath.Join(wd, "go.mod"))
+		if err == nil {
 			return wd, nil
 		}
+
 		parent := filepath.Dir(wd)
 		if wd == parent {
 			return "", fmt.Errorf("project root not found from %s", wd)
 		}
+		
 		wd = parent
 	}
 }

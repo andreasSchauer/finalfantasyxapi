@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+
+	"github.com/joho/godotenv"
 )
 
 
@@ -10,6 +12,8 @@ import (
 func main() {
 	//const filepathRoot = "."
 	const port = "8080"
+
+	_ = godotenv.Load()
 
 	apiCfg, err := ConfigInit()
 	if err != nil {
