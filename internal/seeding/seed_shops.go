@@ -132,7 +132,7 @@ func (sj ShopJunction) ToHashFields() []any {
 }
 
 func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/shops.json"
+	const srcPath = "data/shops.json"
 
 	var shops []Shop
 	err := loadJSONFile(string(srcPath), &shops)
@@ -170,7 +170,7 @@ func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/shops.json"
+	const srcPath = "data/shops.json"
 
 	var shops []Shop
 	err := loadJSONFile(string(srcPath), &shops)

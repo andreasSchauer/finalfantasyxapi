@@ -82,7 +82,7 @@ func (b BlitzballItem) Error() string {
 }
 
 func (l *Lookup) seedBlitzballItems(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/blitzball_items.json"
+	const srcPath = "data/blitzball_items.json"
 
 	var blitzballPositions []BlitzballPosition
 	err := loadJSONFile(string(srcPath), &blitzballPositions)
@@ -110,7 +110,7 @@ func (l *Lookup) seedBlitzballItems(db *database.Queries, dbConn *sql.DB) error 
 }
 
 func (l *Lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/blitzball_items.json"
+	const srcPath = "data/blitzball_items.json"
 
 	var blitzballPositions []BlitzballPosition
 	err := loadJSONFile(string(srcPath), &blitzballPositions)

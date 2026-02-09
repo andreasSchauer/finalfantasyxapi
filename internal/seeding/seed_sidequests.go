@@ -114,7 +114,7 @@ func (cl CompletionArea) GetLocationArea() LocationArea {
 }
 
 func (l *Lookup) seedSidequests(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/sidequests.json"
+	const srcPath = "data/sidequests.json"
 
 	var sidequests []Sidequest
 	err := loadJSONFile(string(srcPath), &sidequests)
@@ -182,7 +182,7 @@ func (l *Lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 }
 
 func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/sidequests.json"
+	const srcPath = "data/sidequests.json"
 
 	var sidequests []Sidequest
 	err := loadJSONFile(string(srcPath), &sidequests)

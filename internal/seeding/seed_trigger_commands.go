@@ -55,15 +55,15 @@ func (t TriggerCommand) Error() string {
 
 func (t TriggerCommand) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: t.ID,
-		Name: t.Name,
-		Version: t.Version,
+		ID:            t.ID,
+		Name:          t.Name,
+		Version:       t.Version,
 		Specification: t.Specification,
 	}
 }
 
 func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/trigger_commands.json"
+	const srcPath = "data/trigger_commands.json"
 
 	var triggerCommands []TriggerCommand
 
@@ -104,7 +104,7 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 }
 
 func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/trigger_commands.json"
+	const srcPath = "data/trigger_commands.json"
 
 	var triggerCommands []TriggerCommand
 

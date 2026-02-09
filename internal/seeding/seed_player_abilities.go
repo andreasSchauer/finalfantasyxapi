@@ -74,15 +74,15 @@ func (p PlayerAbility) Error() string {
 
 func (p PlayerAbility) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: p.ID,
-		Name: p.Name,
-		Version: p.Version,
+		ID:            p.ID,
+		Name:          p.Name,
+		Version:       p.Version,
 		Specification: p.Specification,
 	}
 }
 
 func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/player_abilities.json"
+	const srcPath = "data/player_abilities.json"
 
 	var playerAbilities []PlayerAbility
 
@@ -125,7 +125,7 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 }
 
 func (l *Lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/player_abilities.json"
+	const srcPath = "data/player_abilities.json"
 
 	var playerAbilities []PlayerAbility
 

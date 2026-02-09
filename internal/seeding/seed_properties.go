@@ -38,13 +38,13 @@ func (p Property) Error() string {
 
 func (p Property) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: p.ID,
+		ID:   p.ID,
 		Name: p.Name,
 	}
 }
 
 func (l *Lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/properties.json"
+	const srcPath = "data/properties.json"
 
 	var properties []Property
 	err := loadJSONFile(string(srcPath), &properties)
@@ -73,7 +73,7 @@ func (l *Lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedPropertiesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/properties.json"
+	const srcPath = "data/properties.json"
 
 	var properties []Property
 	err := loadJSONFile(string(srcPath), &properties)

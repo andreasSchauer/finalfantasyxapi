@@ -40,7 +40,7 @@ func (c Character) GetID() int32 {
 
 func (c Character) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: c.ID,
+		ID:   c.ID,
 		Name: c.Name,
 	}
 }
@@ -50,7 +50,7 @@ func (c Character) Error() string {
 }
 
 func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/characters.json"
+	const srcPath = "data/characters.json"
 
 	var characters []Character
 	err := loadJSONFile(string(srcPath), &characters)
@@ -95,7 +95,7 @@ func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedCharactersRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/characters.json"
+	const srcPath = "data/characters.json"
 
 	var characters []Character
 	err := loadJSONFile(string(srcPath), &characters)

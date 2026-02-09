@@ -9,7 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type Song struct {
 	ID                   int32
 	Name                 string            `json:"name"`
@@ -57,8 +56,8 @@ func (s Song) Error() string {
 
 func (s Song) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: 	s.ID,
-		Name: 	s.Name,
+		ID:   s.ID,
+		Name: s.Name,
 	}
 }
 
@@ -153,7 +152,7 @@ func (c Cue) Error() string {
 }
 
 func (l *Lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/songs.json"
+	const srcPath = "data/songs.json"
 
 	var songs []Song
 	err := loadJSONFile(string(srcPath), &songs)
@@ -191,7 +190,7 @@ func (l *Lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/songs.json"
+	const srcPath = "data/songs.json"
 
 	var songs []Song
 	err := loadJSONFile(string(srcPath), &songs)

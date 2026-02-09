@@ -47,7 +47,7 @@ func (i Item) Error() string {
 
 func (i Item) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: i.ID,
+		ID:   i.ID,
 		Name: i.Name,
 	}
 }
@@ -85,7 +85,7 @@ func (a ItemAbility) Error() string {
 }
 
 func (l *Lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/items.json"
+	const srcPath = "data/items.json"
 
 	var items []Item
 	err := loadJSONFile(string(srcPath), &items)
@@ -173,7 +173,7 @@ func (l *Lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 }
 
 func (l *Lookup) seedItemsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/items.json"
+	const srcPath = "data/items.json"
 
 	var items []Item
 	err := loadJSONFile(string(srcPath), &items)

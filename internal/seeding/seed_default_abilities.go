@@ -14,7 +14,7 @@ type DefaultAbilitiesEntry struct {
 }
 
 func (l *Lookup) seedDefaultAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/default_abilities.json"
+	const srcPath = "data/default_abilities.json"
 
 	var entries []DefaultAbilitiesEntry
 	err := loadJSONFile(string(srcPath), &entries)

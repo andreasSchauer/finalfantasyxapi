@@ -41,13 +41,13 @@ func (f FMV) Error() string {
 
 func (f FMV) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: f.ID,
+		ID:   f.ID,
 		Name: f.Name,
 	}
 }
 
 func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/fmvs.json"
+	const srcPath = "data/fmvs.json"
 
 	var fmvs []FMV
 	err := loadJSONFile(string(srcPath), &fmvs)

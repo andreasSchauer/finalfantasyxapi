@@ -50,7 +50,7 @@ func (pa PossibleAbility) Error() string {
 }
 
 func (l *Lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/aeon_commands.json"
+	const srcPath = "data/aeon_commands.json"
 
 	var aeonCommands []AeonCommand
 	err := loadJSONFile(string(srcPath), &aeonCommands)
@@ -81,7 +81,7 @@ func (l *Lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/aeon_commands.json"
+	const srcPath = "data/aeon_commands.json"
 
 	var aeonCommands []AeonCommand
 	err := loadJSONFile(string(srcPath), &aeonCommands)

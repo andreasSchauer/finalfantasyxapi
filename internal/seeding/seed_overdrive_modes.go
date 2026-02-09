@@ -79,7 +79,7 @@ func (a ActionToLearn) Error() string {
 }
 
 func (l *Lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/overdrive_modes.json"
+	const srcPath = "data/overdrive_modes.json"
 
 	var overdriveModes []OverdriveMode
 	err := loadJSONFile(string(srcPath), &overdriveModes)
@@ -110,7 +110,7 @@ func (l *Lookup) seedOverdriveModes(db *database.Queries, dbConn *sql.DB) error 
 }
 
 func (l *Lookup) seedOverdriveModesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/overdrive_modes.json"
+	const srcPath = "data/overdrive_modes.json"
 
 	var overdriveModes []OverdriveMode
 	err := loadJSONFile(string(srcPath), &overdriveModes)

@@ -35,7 +35,7 @@ func (m Modifier) Error() string {
 }
 
 func (l *Lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/modifiers.json"
+	const srcPath = "data/modifiers.json"
 
 	var modifiers []Modifier
 	err := loadJSONFile(string(srcPath), &modifiers)

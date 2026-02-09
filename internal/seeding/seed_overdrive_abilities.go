@@ -47,15 +47,15 @@ func (o OverdriveAbility) Error() string {
 
 func (o OverdriveAbility) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: o.ID,
-		Name: o.Name,
-		Version: o.Version,
+		ID:            o.ID,
+		Name:          o.Name,
+		Version:       o.Version,
 		Specification: o.Specification,
 	}
 }
 
 func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/overdrive_abilities.json"
+	const srcPath = "data/overdrive_abilities.json"
 
 	var overdriveAbilities []OverdriveAbility
 
@@ -92,7 +92,7 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 }
 
 func (l *Lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/overdrive_abilities.json"
+	const srcPath = "data/overdrive_abilities.json"
 
 	var overdriveAbilities []OverdriveAbility
 

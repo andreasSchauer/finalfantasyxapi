@@ -72,13 +72,13 @@ func (a AutoAbility) Error() string {
 
 func (a AutoAbility) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: a.ID,
+		ID:   a.ID,
 		Name: a.Name,
 	}
 }
 
 func (l *Lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/auto_abilities.json"
+	const srcPath = "data/auto_abilities.json"
 
 	var autoAbilities []AutoAbility
 	err := loadJSONFile(string(srcPath), &autoAbilities)
@@ -112,7 +112,7 @@ func (l *Lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedAutoAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/auto_abilities.json"
+	const srcPath = "data/auto_abilities.json"
 
 	var autoAbilities []AutoAbility
 	err := loadJSONFile(string(srcPath), &autoAbilities)

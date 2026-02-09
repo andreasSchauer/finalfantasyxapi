@@ -98,15 +98,15 @@ func (m Monster) Error() string {
 
 func (m Monster) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: 			m.ID,
-		Name: 			m.Name,
-		Version: 		m.Version,
-		Specification:	m.Specification,
+		ID:            m.ID,
+		Name:          m.Name,
+		Version:       m.Version,
+		Specification: m.Specification,
 	}
 }
 
 func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/monsters.json"
+	const srcPath = "data/monsters.json"
 
 	var monsters []Monster
 	err := loadJSONFile(string(srcPath), &monsters)
@@ -160,7 +160,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/monsters.json"
+	const srcPath = "data/monsters.json"
 
 	var monsters []Monster
 	err := loadJSONFile(string(srcPath), &monsters)

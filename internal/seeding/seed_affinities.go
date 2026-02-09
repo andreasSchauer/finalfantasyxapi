@@ -32,13 +32,13 @@ func (a Affinity) Error() string {
 
 func (a Affinity) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: a.ID,
+		ID:   a.ID,
 		Name: a.Name,
 	}
 }
 
 func (l *Lookup) seedAffinities(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/elemental_affinities.json"
+	const srcPath = "data/elemental_affinities.json"
 
 	var affinities []Affinity
 	err := loadJSONFile(string(srcPath), &affinities)

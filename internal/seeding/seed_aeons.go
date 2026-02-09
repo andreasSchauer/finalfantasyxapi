@@ -50,7 +50,7 @@ func (a Aeon) Error() string {
 
 func (a Aeon) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: a.ID,
+		ID:   a.ID,
 		Name: a.Name,
 	}
 }
@@ -80,7 +80,7 @@ func (a AeonEquipment) Error() string {
 }
 
 func (l *Lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/aeons.json"
+	const srcPath = "data/aeons.json"
 
 	var aeons []Aeon
 	err := loadJSONFile(string(srcPath), &aeons)
@@ -126,7 +126,7 @@ func (l *Lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedAeonsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/aeons.json"
+	const srcPath = "data/aeons.json"
 
 	var aeons []Aeon
 	err := loadJSONFile(string(srcPath), &aeons)

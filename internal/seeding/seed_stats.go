@@ -41,13 +41,13 @@ func (s Stat) Error() string {
 
 func (s Stat) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: s.ID,
+		ID:   s.ID,
 		Name: s.Name,
 	}
 }
 
 func (l *Lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/stats.json"
+	const srcPath = "data/stats.json"
 
 	var stats []Stat
 	err := loadJSONFile(string(srcPath), &stats)
@@ -78,7 +78,7 @@ func (l *Lookup) seedStats(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/stats.json"
+	const srcPath = "data/stats.json"
 
 	var stats []Stat
 	err := loadJSONFile(string(srcPath), &stats)

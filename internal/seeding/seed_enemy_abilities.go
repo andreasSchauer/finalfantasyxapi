@@ -48,15 +48,15 @@ func (e EnemyAbility) Error() string {
 
 func (e EnemyAbility) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: e.ID,
-		Name: e.Name,
-		Version: e.Version,
+		ID:            e.ID,
+		Name:          e.Name,
+		Version:       e.Version,
 		Specification: e.Specification,
 	}
 }
 
 func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/enemy_abilities.json"
+	const srcPath = "data/enemy_abilities.json"
 
 	var enemyAbilities []EnemyAbility
 
@@ -94,7 +94,7 @@ func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 }
 
 func (l *Lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/enemy_abilities.json"
+	const srcPath = "data/enemy_abilities.json"
 
 	var enemyAbilities []EnemyAbility
 

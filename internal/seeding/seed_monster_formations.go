@@ -191,7 +191,7 @@ func (s FormationBossSong) Error() string {
 }
 
 func (l *Lookup) seedMonsterFormations(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/monster_formations.json"
+	const srcPath = "data/monster_formations.json"
 
 	var monsterFormations []MonsterFormation
 	err := loadJSONFile(string(srcPath), &monsterFormations)
@@ -258,7 +258,7 @@ func (l *Lookup) seedEncounterLocation(qtx *database.Queries, encounterLocation 
 }
 
 func (l *Lookup) seedMonsterFormationsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/monster_formations.json"
+	const srcPath = "data/monster_formations.json"
 
 	var monsterFormations []MonsterFormation
 	err := loadJSONFile(string(srcPath), &monsterFormations)

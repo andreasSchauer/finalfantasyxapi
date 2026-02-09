@@ -36,13 +36,13 @@ func (k KeyItem) Error() string {
 
 func (k KeyItem) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: k.ID,
+		ID:   k.ID,
 		Name: k.Name,
 	}
 }
 
 func (l *Lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/key_items.json"
+	const srcPath = "data/key_items.json"
 
 	var keyItems []KeyItem
 	err := loadJSONFile(string(srcPath), &keyItems)

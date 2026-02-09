@@ -58,7 +58,7 @@ func (a AgilitySubtier) Error() string {
 }
 
 func (l *Lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/agility_tiers.json"
+	const srcPath = "data/agility_tiers.json"
 
 	var agilityTiers []AgilityTier
 	err := loadJSONFile(string(srcPath), &agilityTiers)

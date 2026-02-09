@@ -76,7 +76,7 @@ func (r RonsoRage) GetResParamsNamed() h.ResParamsNamed {
 }
 
 func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/overdrives.json"
+	const srcPath = "data/overdrives.json"
 
 	var overdrives []Overdrive
 	err := loadJSONFile(string(srcPath), &overdrives)
@@ -151,7 +151,7 @@ func (l *Lookup) seedRonsoRage(qtx *database.Queries, overdrive Overdrive) error
 }
 
 func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/overdrives.json"
+	const srcPath = "data/overdrives.json"
 
 	var overdrives []Overdrive
 	err := loadJSONFile(string(srcPath), &overdrives)

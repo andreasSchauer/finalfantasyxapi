@@ -68,7 +68,7 @@ func (m MixCombination) Error() string {
 }
 
 func (l *Lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/mixes.json"
+	const srcPath = "data/mixes.json"
 
 	var mixes []Mix
 	err := loadJSONFile(string(srcPath), &mixes)
@@ -108,7 +108,7 @@ func (l *Lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedMixesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/mixes.json"
+	const srcPath = "data/mixes.json"
 
 	var mixes []Mix
 	err := loadJSONFile(string(srcPath), &mixes)

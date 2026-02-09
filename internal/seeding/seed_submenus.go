@@ -36,7 +36,7 @@ func (s Submenu) Error() string {
 }
 
 func (l *Lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/submenus.json"
+	const srcPath = "data/submenus.json"
 
 	var submenus []Submenu
 	err := loadJSONFile(string(srcPath), &submenus)
@@ -66,7 +66,7 @@ func (l *Lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/submenus.json"
+	const srcPath = "data/submenus.json"
 
 	var submenus []Submenu
 	err := loadJSONFile(string(srcPath), &submenus)

@@ -81,7 +81,7 @@ func (e EquipmentName) Error() string {
 
 func (e EquipmentName) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: e.ID,
+		ID:   e.ID,
 		Name: e.Name,
 	}
 }
@@ -113,7 +113,7 @@ func (j EquipmentAutoAbilityJunction) ToHashFields() []any {
 }
 
 func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/equipment.json"
+	const srcPath = "data/equipment.json"
 
 	var equipmentTables []EquipmentTable
 	err := loadJSONFile(string(srcPath), &equipmentTables)
@@ -156,7 +156,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedEquipmentRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/equipment.json"
+	const srcPath = "data/equipment.json"
 
 	var equipmentTables []EquipmentTable
 	err := loadJSONFile(string(srcPath), &equipmentTables)

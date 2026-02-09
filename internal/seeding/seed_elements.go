@@ -33,13 +33,13 @@ func (e Element) Error() string {
 
 func (e Element) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: e.ID,
+		ID:   e.ID,
 		Name: e.Name,
 	}
 }
 
 func (l *Lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/elements.json"
+	const srcPath = "data/elements.json"
 
 	var elements []Element
 	err := loadJSONFile(string(srcPath), &elements)
@@ -66,7 +66,7 @@ func (l *Lookup) seedElements(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedElementsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/elements.json"
+	const srcPath = "data/elements.json"
 
 	var elements []Element
 	err := loadJSONFile(string(srcPath), &elements)

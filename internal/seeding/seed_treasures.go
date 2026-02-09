@@ -68,7 +68,7 @@ func (t Treasure) GetResParamsUnnamed() h.ResParamsUnnamed {
 }
 
 func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/treasures.json"
+	const srcPath = "data/treasures.json"
 
 	var treasureLists []TreasureList
 	err := loadJSONFile(string(srcPath), &treasureLists)
@@ -117,7 +117,7 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 }
 
 func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/treasures.json"
+	const srcPath = "data/treasures.json"
 
 	var treasureLists []TreasureList
 	err := loadJSONFile(string(srcPath), &treasureLists)

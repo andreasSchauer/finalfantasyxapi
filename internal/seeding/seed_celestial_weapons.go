@@ -37,7 +37,7 @@ func (cw CelestialWeapon) Error() string {
 }
 
 func (l *Lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/celestial_weapons.json"
+	const srcPath = "data/celestial_weapons.json"
 
 	var celestialWeapons []CelestialWeapon
 	err := loadJSONFile(string(srcPath), &celestialWeapons)
@@ -66,7 +66,7 @@ func (l *Lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) erro
 }
 
 func (l *Lookup) seedCelestialWeaponsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/celestial_weapons.json"
+	const srcPath = "data/celestial_weapons.json"
 
 	var celestialWeapons []CelestialWeapon
 	err := loadJSONFile(string(srcPath), &celestialWeapons)

@@ -42,7 +42,7 @@ func (oc OverdriveCommand) Error() string {
 }
 
 func (l *Lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/overdrive_commands.json"
+	const srcPath = "data/overdrive_commands.json"
 
 	var overdriveCommands []OverdriveCommand
 	err := loadJSONFile(string(srcPath), &overdriveCommands)
@@ -73,7 +73,7 @@ func (l *Lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 }
 
 func (l *Lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/overdrive_commands.json"
+	const srcPath = "data/overdrive_commands.json"
 
 	var overdriveCommands []OverdriveCommand
 	err := loadJSONFile(string(srcPath), &overdriveCommands)

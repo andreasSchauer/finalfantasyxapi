@@ -31,7 +31,7 @@ func (p Primer) Error() string {
 }
 
 func (l *Lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/primers.json"
+	const srcPath = "data/primers.json"
 
 	var primers []Primer
 	err := loadJSONFile(string(srcPath), &primers)

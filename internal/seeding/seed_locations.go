@@ -179,7 +179,7 @@ func (ac AreaConnection) Error() string {
 }
 
 func (l *Lookup) seedLocations(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/locations.json"
+	const srcPath = "data/locations.json"
 
 	var locations []Location
 	err := loadJSONFile(string(srcPath), &locations)
@@ -268,7 +268,7 @@ func (l *Lookup) seedAreas(qtx *database.Queries, sublocation Sublocation) error
 }
 
 func (l *Lookup) seedAreasRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/locations.json"
+	const srcPath = "data/locations.json"
 
 	var locations []Location
 	err := loadJSONFile(string(srcPath), &locations)

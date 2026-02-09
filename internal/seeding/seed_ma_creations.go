@@ -12,7 +12,7 @@ import (
 type ArenaCreation struct {
 	ID                        int32
 	SubquestID                int32
-	MonsterID				  *int32
+	MonsterID                 *int32
 	Name                      string  `json:"name"`
 	Category                  string  `json:"category"`
 	RequiredArea              *string `json:"required_area"`
@@ -45,13 +45,13 @@ func (a ArenaCreation) Error() string {
 
 func (a ArenaCreation) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: a.ID,
+		ID:   a.ID,
 		Name: a.Name,
 	}
 }
 
 func (l *Lookup) seedArenaCreations(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/monster_arena_creations.json"
+	const srcPath = "data/monster_arena_creations.json"
 
 	var creations []ArenaCreation
 	err := loadJSONFile(string(srcPath), &creations)
@@ -90,9 +90,8 @@ func (l *Lookup) seedArenaCreations(db *database.Queries, dbConn *sql.DB) error 
 	})
 }
 
-
 func (l *Lookup) seedArenaCreationsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/monster_arena_creations.json"
+	const srcPath = "data/monster_arena_creations.json"
 
 	var creations []ArenaCreation
 	err := loadJSONFile(string(srcPath), &creations)
@@ -116,9 +115,9 @@ func (l *Lookup) seedArenaCreationsRelationships(db *database.Queries, dbConn *s
 			}
 
 			err = qtx.UpdateMonsterArenaCreation(context.Background(), database.UpdateMonsterArenaCreationParams{
-				DataHash: generateDataHash(creation),
+				DataHash:  generateDataHash(creation),
 				MonsterID: h.GetNullInt32(creation.MonsterID),
-				ID:       creation.ID,
+				ID:        creation.ID,
 			})
 			if err != nil {
 				return h.NewErr(creation.Error(), err, "couldn't update stat")

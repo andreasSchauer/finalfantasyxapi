@@ -42,13 +42,13 @@ func (s StatusCondition) Error() string {
 
 func (s StatusCondition) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: s.ID,
+		ID:   s.ID,
 		Name: s.Name,
 	}
 }
 
 func (l *Lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/status_conditions.json"
+	const srcPath = "data/status_conditions.json"
 
 	var statusConditions []StatusCondition
 	err := loadJSONFile(string(srcPath), &statusConditions)
@@ -78,7 +78,7 @@ func (l *Lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 }
 
 func (l *Lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "./data/status_conditions.json"
+	const srcPath = "data/status_conditions.json"
 
 	var statusConditions []StatusCondition
 	err := loadJSONFile(string(srcPath), &statusConditions)
