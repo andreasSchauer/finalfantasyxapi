@@ -14,20 +14,41 @@ func TestGetFMV(t *testing.T) {
 		{
 			testGeneral: testGeneral{
 				requestURL: "/api/fmvs/a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr: "",
+				expectedStatus: http.StatusNotFound,
+				expectedErr: "fmv not found: 'a'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL: 	"/api/fmvs/0",
-				expectedStatus: http.StatusOK,
-				dontCheck: 		map[string]bool{},
-				expLengths: 	map[string]int{},
+				requestURL: "/api/fmvs/53",
+				expectedStatus: http.StatusNotFound,
+				expectedErr: "fmv with provided id '53' doesn't exist. max id: 52.",
 			},
-			expUnique: newExpUnique(0, ""),
-			area: 0,
-			song: h.GetInt32Ptr(0),
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL: "/api/fmvs/2/2",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr: "endpoint 'fmvs' doesn't have any subsections.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL: 	"/api/fmvs/9",
+				expectedStatus: http.StatusOK,
+			},
+			expUnique: newExpUnique(9, "fear on the sea"),
+			area: 42,
+			song: h.GetInt32Ptr(16),
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL: 	"/api/fmvs/38",
+				expectedStatus: http.StatusOK,
+			},
+			expUnique: newExpUnique(38, "the last chapter"),
+			area: 220,
+			song: h.GetInt32Ptr(77),
 		},
 	}
 
@@ -41,8 +62,24 @@ func TestRetrieveFMVs(t *testing.T) {
 				requestURL:     "/api/fmvs?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   0,
-			results: []int32{},
+			count:   52,
+			results: []int32{1, 13, 27, 34, 45, 46, 52},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/fmvs?location=15",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{27, 36},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/fmvs?location=5",
+				expectedStatus: http.StatusOK,
+			},
+			count:   6,
+			results: []int32{9, 10, 11, 12, 13, 14},
 		},
 	}
 

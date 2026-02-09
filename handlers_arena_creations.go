@@ -10,14 +10,15 @@ import (
 )
 
 type ArenaCreation struct {
-	ID                        int32              `json:"id"`
-	Name                      string             `json:"name"`
-	Category                  string             `json:"category"`
-	Monster                   NamedAPIResource   `json:"monster"`
-	ParentSubquest            NamedAPIResource   `json:"parent_subquest"`
-	Reward					  ItemAmount		 `json:"reward"`
-	RequiredCatchAmount       int32              `json:"required_catch_amount"`
-	RequiredMonsters          []NamedAPIResource `json:"required_monsters,omitempty"`
+	ID                        	int32              	`json:"id"`
+	Name                      	string             	`json:"name"`
+	Category                  	string             	`json:"category"`
+	Monster                   	NamedAPIResource   	`json:"monster"`
+	ParentSubquest            	NamedAPIResource  	`json:"parent_subquest"`
+	Reward					  	ItemAmount		 	`json:"reward"`
+	RequiredCatchAmount       	int32              	`json:"required_catch_amount"`
+	UnlockedCreationsCategory	*string				`json:"unlocked_creations_category,omitempty"`
+	RequiredMonsters          	[]NamedAPIResource 	`json:"required_monsters,omitempty"`
 }
 
 type MonsterFilter struct {
@@ -83,14 +84,15 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 	}
 
 	response := ArenaCreation{
-		ID:                     creation.ID,
-		Name:                   creation.Name,
-		Category:               creation.Category,
-		Monster:                idToNamedAPIResource(cfg, cfg.e.monsters, *creation.MonsterID),
-		ParentSubquest:         idToNamedAPIResource(cfg, cfg.e.subquests, creation.SubquestID),
-		Reward: 				convertItemAmount(cfg, ia),
-		RequiredCatchAmount:    creation.Amount,
-		RequiredMonsters: 		monsters,
+		ID:                     	creation.ID,
+		Name:                   	creation.Name,
+		Category:               	creation.Category,
+		Monster:                	idToNamedAPIResource(cfg, cfg.e.monsters, *creation.MonsterID),
+		ParentSubquest:         	idToNamedAPIResource(cfg, cfg.e.subquests, creation.SubquestID),
+		Reward: 					convertItemAmount(cfg, ia),
+		RequiredCatchAmount:    	creation.Amount,
+		UnlockedCreationsCategory: 	creation.CreationsUnlockedCategory,
+		RequiredMonsters: 			monsters,
 	}
 
 	

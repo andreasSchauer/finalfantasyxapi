@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 // used, if a queryParam only takes existing ids and returns a valid id
@@ -47,7 +49,7 @@ func parseTypeQuery[T, N any](r *http.Request, queryParam QueryType, et EnumType
 
 	enum, err := GetTypedAPIResource(query, et)
 	if err != nil {
-		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value: '%s'. use /api/%s to see valid values.", query, queryParam.Name), err)
+		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value: '%s'. use /api/%s to see valid values.", query, h.GetNameWithDashes(et.name, " ")), err)
 	}
 
 	return enum, nil

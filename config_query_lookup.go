@@ -865,6 +865,7 @@ func (cfg *Config) initShopsParams() {
 			ExampleUses: []string{"?category=oaka", "?category=4"},
 			ForList:     true,
 			ForSingle:   false,
+			References:  []string{createListURL(cfg, "shop-category")},
 		},
 		"items": {
 			ID:          4,

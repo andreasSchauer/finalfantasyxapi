@@ -29,6 +29,11 @@ func GetNameWithSpaces(name, separator string) string {
 	return strings.ReplaceAll(nameLower, separator, " ")
 }
 
+func GetNameWithDashes(name, separator string) string {
+	nameLower := strings.ToLower(name)
+	return strings.ReplaceAll(nameLower, separator, "-")
+}
+
 func StringSliceToListString(s []string) string {
 	return strings.Join(s, ", ")
 }
