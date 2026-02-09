@@ -32,8 +32,8 @@ func compareSongs(test test, exp expSong, got Song) {
 	compare(test, "can loop", exp.canLoop, got.CanLoop)
 	compTestStructSlices(test, "background music", exp.backgroundMusic, got.BackgroundMusic, compareBackgroundMusic)
 	compTestStructSlices(test, "cues", exp.cues, got.Cues, compareCues)
-	compareResListTest(test, rltIDs("boss fights", test.cfg.e.monsterFormations.endpoint, exp.bossFights, got.BossFights))
-	compareResListTest(test, rltIDs("fmvs", test.cfg.e.fmvs.endpoint, exp.fmvs, got.FMVs))
+	checkResIDsInSlice(test, "boss fights", test.cfg.e.monsterFormations.endpoint, exp.bossFights, got.BossFights)
+	checkResIDsInSlice(test, "fmvs", test.cfg.e.fmvs.endpoint, exp.fmvs, got.FMVs)
 }
 
 type testBackgroundMusic struct {
@@ -48,7 +48,7 @@ func (t testBackgroundMusic) GetIndex() int {
 
 func compareBackgroundMusic(test test, exp testBackgroundMusic, got BackgroundMusic) {
 	compare(test, "bg music - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
-	compareResListTest(test, rltIDs("bg music - areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas))
+	checkResIDsInSlice(test, "bg music - areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)
 }
 
 type testCue struct {
@@ -65,7 +65,7 @@ func (t testCue) GetIndex() int {
 
 func compareCues(test test, exp testCue, got Cue) {
 	compIdApiResourcePtrs(test, "cue - trigger area", test.cfg.e.areas.endpoint, exp.triggerArea, got.TriggerArea)
-	compareResListTest(test, rltIDs("cue - included areas", test.cfg.e.areas.endpoint, exp.includedAreas, got.IncludedAreas))
+	checkResIDsInSlice(test, "cue - included areas", test.cfg.e.areas.endpoint, exp.includedAreas, got.IncludedAreas)
 	compare(test, "cue - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
 	compare(test, "cue - replaces bg music", exp.replacesBGMusic, got.ReplacesBGMusic)
 }

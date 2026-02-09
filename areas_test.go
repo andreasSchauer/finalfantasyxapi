@@ -24,7 +24,7 @@ func compareAreas(test test, exp expArea, got Area) {
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compIdApiResource(test, "location", testCfg.e.locations.endpoint, exp.parentLocation, got.ParentLocation)
 	compIdApiResource(test, "sublocation", testCfg.e.sublocations.endpoint, exp.parentSublocation, got.ParentSublocation)
-	compareResListTest(test, rltIDs("connected areas", testCfg.e.areas.endpoint, exp.connectedAreas, got.ConnectedAreas))
+	checkResIDsInSlice(test, "connected areas", testCfg.e.areas.endpoint, exp.connectedAreas, got.ConnectedAreas)
 	compareLocRel(test, exp.expLocRel, got.LocRel)
 }
 

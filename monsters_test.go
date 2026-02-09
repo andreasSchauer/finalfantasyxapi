@@ -50,15 +50,13 @@ func compareMonsters(test test, exp expMonster, got Monster) {
 	compareMonsterItems(test, exp.items, got.Items)
 	compareMonsterEquipment(test, exp.equipment, got.Equipment)
 
-	compareResListTests(test, []resListTest{
-		rltIDs("properties", testCfg.e.properties.endpoint, exp.properties, got.Properties),
-		rltIDs("auto-abilities", testCfg.e.autoAbilities.endpoint, exp.autoAbilities, got.AutoAbilities),
-		rltIDs("ronso rages", testCfg.e.ronsoRages.endpoint, exp.ronsoRages, got.RonsoRages),
-		rltIDs("areas", testCfg.e.areas.endpoint, exp.areas, got.Areas),
-		rltIDs("formations", testCfg.e.monsterFormations.endpoint, exp.formations, got.Formations),
-		rltIDs("status immunities", testCfg.e.statusConditions.endpoint, exp.statusImmunities, got.StatusImmunities),
-		rlt("abilities", exp.abilities, got.Abilities),
-	})
+	checkResIDsInSlice(test, "properties", testCfg.e.properties.endpoint, exp.properties, got.Properties)
+	checkResIDsInSlice(test, "auto-abilities", testCfg.e.autoAbilities.endpoint, exp.autoAbilities, got.AutoAbilities)
+	checkResIDsInSlice(test, "ronso rages", testCfg.e.ronsoRages.endpoint, exp.ronsoRages, got.RonsoRages)
+	checkResIDsInSlice(test, "areas", testCfg.e.areas.endpoint, exp.areas, got.Areas)
+	checkResIDsInSlice(test, "formations", testCfg.e.monsterFormations.endpoint, exp.formations, got.Formations)
+	checkResIDsInSlice(test, "status immunities", testCfg.e.statusConditions.endpoint, exp.statusImmunities, got.StatusImmunities)
+	checkResPathsInSlice(test, "abilities", exp.abilities, got.Abilities)
 }
 
 func TestGetMonster(t *testing.T) {

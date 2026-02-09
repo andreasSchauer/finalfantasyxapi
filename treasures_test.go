@@ -51,7 +51,7 @@ func compareFoundEquipment(test test, exp testFoundEquipment, got FoundEquipment
 	aaEndpoint := test.cfg.e.autoAbilities.endpoint
 
 	compIdApiResource(test, "found equipment - equipment name", enEndpoint, exp.equipmentName, got.EquipmentName)
-	compareResListTest(test, rltIDs("found equipment - abilities", aaEndpoint, exp.abilities, got.Abilities))
+	checkResIDsInSlice(test, "found equipment - abilities", aaEndpoint, exp.abilities, got.Abilities)
 	compare(test, "found equipment - empty slots amount", exp.emptySlotsAmount, got.EmptySlotsAmount)
 }
 

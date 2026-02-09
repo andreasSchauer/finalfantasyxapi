@@ -118,10 +118,8 @@ func compareMonsterEquipment(test test, expEquipment *testMonEquipment, gotEquip
 		compStructs(test, "attached abilities", exp.attachedAbilities, got.AttachedAbilities)
 	}
 
-	compareResListTests(test, []resListTest{
-		rltIDs("weapon abilities", test.cfg.e.autoAbilities.endpoint, exp.weaponAbilities, got.WeaponAbilities),
-		rltIDs("armor abilities", test.cfg.e.autoAbilities.endpoint, exp.armorAbilities, got.ArmorAbilities),
-	})
+	checkResIDsInSlice(test, "weapon abilities", test.cfg.e.autoAbilities.endpoint, exp.weaponAbilities, got.WeaponAbilities)
+	checkResIDsInSlice(test, "armor abilities", test.cfg.e.autoAbilities.endpoint, exp.armorAbilities, got.ArmorAbilities)
 }
 
 func compareMonsterAppliedStates(test test, exp *testAppliedState, got *AppliedState) {
@@ -166,9 +164,7 @@ func compareMonsterAltStateChanges(test test, exp testAltStateChange, got AltSta
 	compIdApiResourcePtrs(test, desc+"removed status", test.cfg.e.statusConditions.endpoint, exp.RemovedStatus, got.RemovedStatus)
 	compTestStructSlices(test, desc+"elemental resists", exp.ElemResists, got.ElemResists, compareMonsterElemResists)
 
-	compareResListTests(test, []resListTest{
-		rltIDs(desc+"properties", test.cfg.e.properties.endpoint, exp.Properties, got.Properties),
-		rltIDs(desc+"auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.AutoAbilities, got.AutoAbilities),
-		rltIDs(desc+"status immunities", test.cfg.e.statusConditions.endpoint, exp.StatusImmunities, got.StatusImmunities),
-	})
+	checkResIDsInSlice(test, desc+"properties", test.cfg.e.properties.endpoint, exp.Properties, got.Properties)
+	checkResIDsInSlice(test, desc+"auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.AutoAbilities, got.AutoAbilities)
+	checkResIDsInSlice(test, desc+"status immunities", test.cfg.e.statusConditions.endpoint, exp.StatusImmunities, got.StatusImmunities)
 }

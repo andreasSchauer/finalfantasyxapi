@@ -22,10 +22,8 @@ func (e expLocation) GetTestGeneral() testGeneral {
 func compareLocations(test test, exp expLocation, got Location) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
-	compareResListTests(test, []resListTest{
-		rltIDs("connected locations", testCfg.e.locations.endpoint, exp.connectedLocations, got.ConnectedLocations),
-		rltIDs("sublocations", testCfg.e.sublocations.endpoint, exp.sublocations, got.Sublocations),
-	})
+	checkResIDsInSlice(test, "connected locations", testCfg.e.locations.endpoint, exp.connectedLocations, got.ConnectedLocations)
+	checkResIDsInSlice(test, "sublocations", testCfg.e.sublocations.endpoint, exp.sublocations, got.Sublocations)
 	compareLocRel(test, exp.expLocRel, got.LocRel)
 }
 

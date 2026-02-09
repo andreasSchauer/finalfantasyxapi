@@ -1,6 +1,5 @@
 package main
 
-
 // checks presence of two pointers
 func bothPtrsPresent[E, G any](test test, fieldName string, exp *E, got *G) bool {
 	switch {
@@ -42,7 +41,7 @@ func bothResourcePtrsPresent[T HasAPIResource](test test, fieldName string, expP
 }
 
 // checks presence of two struct slices
-func bothStructSlicesPresent[E, G any](test test, fieldName string, exp []E, got []G) bool {
+func bothSlicesPresent[E, G any](test test, fieldName string, exp []E, got []G) bool {
 	switch {
 	case exp == nil && got == nil:
 		return false
@@ -60,21 +59,19 @@ func bothStructSlicesPresent[E, G any](test test, fieldName string, exp []E, got
 	}
 }
 
-
 func defaultAndAltStatesPresent(test test, exp *testDefaultState, gotStates []AlteredState) bool {
 	switch {
 	case exp == nil && len(gotStates) == 0:
 		return false
-		
-		
+
 	case exp == nil && len(gotStates) != 0:
 		test.t.Fatalf("%s: expected default state to be nil, but got alt states", test.name)
 		return false
-	
+
 	case exp != nil && len(gotStates) == 0:
 		test.t.Fatalf("%s: expected default state to be not nil, but got no alt states", test.name)
 		return false
-		
+
 	default:
 		return true
 	}

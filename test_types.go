@@ -128,16 +128,14 @@ type expLocRel struct {
 
 func compareLocRel(test test, exp expLocRel, got LocRel) {
 	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
-	compareResListTests(test, []resListTest{
-		rltIDs("characters", test.cfg.e.characters.endpoint, exp.characters, got.Characters),
-		rltIDs("aeons", test.cfg.e.aeons.endpoint, exp.aeons, got.Aeons),
-		rltIDs("shops", test.cfg.e.shops.endpoint, exp.shops, got.Shops),
-		rltIDs("treasures", test.cfg.e.treasures.endpoint, exp.treasures, got.Treasures),
-		rltIDs("monsters", test.cfg.e.monsters.endpoint, exp.monsters, got.Monsters),
-		rltIDs("formations", test.cfg.e.monsterFormations.endpoint, exp.formations, got.Formations),
-		rltIDs("sidequests", test.cfg.e.sidequests.endpoint, exp.sidequests, got.Sidequests),
-		rltIDs("fmvs", test.cfg.e.fmvs.endpoint, exp.fmvs, got.FMVs),
-	})
+	checkResIDsInSlice(test, "characters", test.cfg.e.characters.endpoint, exp.characters, got.Characters)
+	checkResIDsInSlice(test, "aeons", test.cfg.e.aeons.endpoint, exp.aeons, got.Aeons)
+	checkResIDsInSlice(test, "shops", test.cfg.e.shops.endpoint, exp.shops, got.Shops)
+	checkResIDsInSlice(test, "treasures", test.cfg.e.treasures.endpoint, exp.treasures, got.Treasures)
+	checkResIDsInSlice(test, "monsters", test.cfg.e.monsters.endpoint, exp.monsters, got.Monsters)
+	checkResIDsInSlice(test, "formations", test.cfg.e.monsterFormations.endpoint, exp.formations, got.Formations)
+	checkResIDsInSlice(test, "sidequests", test.cfg.e.sidequests.endpoint, exp.sidequests, got.Sidequests)
+	checkResIDsInSlice(test, "fmvs", test.cfg.e.fmvs.endpoint, exp.fmvs, got.FMVs)
 }
 
 type testLocMusic struct {
@@ -150,10 +148,8 @@ type testLocMusic struct {
 func compareLocMusic(test test, exp testLocMusic, got LocBasedMusic) {
 	songsEndpoint := test.cfg.e.songs.endpoint
 
-	compareResListTests(test, []resListTest{
-		rltIDs("bg music", songsEndpoint, exp.bgMusic, got.BackgroundMusic),
-		rltIDs("cues music", songsEndpoint, exp.cuesMusic, got.Cues),
-		rltIDs("fmvs music", songsEndpoint, exp.fmvsMusic, got.FMVs),
-		rltIDs("boss music", songsEndpoint, exp.bossMusic, got.BossMusic),
-	})
+	checkResIDsInSlice(test, "bg music", songsEndpoint, exp.bgMusic, got.BackgroundMusic)
+	checkResIDsInSlice(test, "cues music", songsEndpoint, exp.cuesMusic, got.Cues)
+	checkResIDsInSlice(test, "fmvs music", songsEndpoint, exp.fmvsMusic, got.FMVs)
+	checkResIDsInSlice(test, "boss music", songsEndpoint, exp.bossMusic, got.BossMusic)
 }

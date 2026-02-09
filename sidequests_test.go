@@ -20,7 +20,7 @@ func (e expSidequest) GetTestGeneral() testGeneral {
 func compareSidequests(test test, exp expSidequest, got Sidequest) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compTestStructPtrs(test, "completion", exp.completion, got.Completion, compareQuestCompletions)
-	compareResListTest(test, rltIDs("subquests", test.cfg.e.subquests.endpoint, exp.subquests, got.Subquests))
+	checkResIDsInSlice(test, "subquests", test.cfg.e.subquests.endpoint, exp.subquests, got.Subquests)
 }
 
 type testQuestCompletion struct {
@@ -34,7 +34,7 @@ func (t testQuestCompletion) GetIndex() int {
 }
 
 func compareQuestCompletions(test test, exp testQuestCompletion, got QuestCompletion) {
-	compareResListTest(test, rltIDs("quest completion - areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas))
+	checkResIDsInSlice(test, "quest completion - areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)
 	compareItemAmounts(test, exp.reward, got.Reward)
 }
 

@@ -46,8 +46,7 @@ func compareSubResourceLists[T APIResource, S SubResource](test test, endpoint s
 	gotParentURL := gotList.ParentResource.GetURL()
 	compPageURL(test, "parent resource", expList.parentResource, &gotParentURL)
 
-	listTest := srltIDs("results", endpoint, expList.results, gotList.getResults())
-	testSubResourceListResults(test, listTest)
+	testSubResourceListResults(test, srltIDs("results", endpoint, expList.results, gotList.getResults()))
 }
 
 func testSubResourceListResults(test test, expList subResListTest) {

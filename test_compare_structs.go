@@ -31,11 +31,11 @@ func compStructPtrs[T any](test test, fieldName string, exp, got *T) {
 // testItemAmount == itemAmount (both Ptrs)
 func compTestStructPtrs[E, G any](test test, fieldName string, exp *E, got *G, compFn func(test, E, G)) {
 	test.t.Helper()
-	
+
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
 		return
 	}
-	
+
 	if !bothPtrsPresent(test, fieldName, exp, got) {
 		return
 	}
@@ -47,7 +47,7 @@ func compTestStructPtrs[E, G any](test test, fieldName string, exp *E, got *G, c
 // []itemAmount == []itemAmount
 func compStructSlices[T any](test test, fieldName string, exp, got []T) {
 	test.t.Helper()
-	err := checkStructSlices(test, fieldName, exp, got)
+	err := sliceBasicChecks(test, fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
 	}
@@ -61,7 +61,7 @@ func compStructSlices[T any](test test, fieldName string, exp, got []T) {
 // []testItemAmount == []itemAmount
 func compTestStructSlices[E, G any](test test, fieldName string, exp []E, got []G, compFn func(test, E, G)) {
 	test.t.Helper()
-	err := checkStructSlices(test, fieldName, exp, got)
+	err := sliceBasicChecks(test, fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
 	}
@@ -71,11 +71,10 @@ func compTestStructSlices[E, G any](test test, fieldName string, exp []E, got []
 	}
 }
 
-
-// checks if all stated testStructs with index are present in the gotStruct slice by using a testStruct's targetIndex. 
+// checks if all stated testStructs with index are present in the gotStruct slice by using a testStruct's targetIndex.
 func checkTestStructsInSlice[E testStructIdx, G any](test test, fieldName string, exp []E, got []G, compFn func(test, E, G)) {
 	test.t.Helper()
-	err := checkStructSlices(test, fieldName, exp, got)
+	err := sliceBasicChecks(test, fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
 	}
@@ -86,7 +85,8 @@ func checkTestStructsInSlice[E testStructIdx, G any](test test, fieldName string
 	}
 }
 
-func checkStructSlices[E, G any](test test, fieldName string, exp []E, got []G) error {
+// checks the length of a slice, whether it should be ignored (returns errIgnoredField in that case), and if the exp and got slice are present
+func sliceBasicChecks[E, G any](test test, fieldName string, exp []E, got []G) error {
 	compLength(test, fieldName, len(got))
 
 	dontCheck := test.dontCheck
@@ -94,6 +94,6 @@ func checkStructSlices[E, G any](test test, fieldName string, exp []E, got []G) 
 		return errIgnoredField
 	}
 
-	bothStructSlicesPresent(test, fieldName, exp, got)
+	bothSlicesPresent(test, fieldName, exp, got)
 	return nil
 }

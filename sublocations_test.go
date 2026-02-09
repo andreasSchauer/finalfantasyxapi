@@ -24,10 +24,8 @@ func compareSublocations(test test, exp expSublocation, got Sublocation) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "location", testCfg.e.locations.endpoint, exp.parentLocation, got.ParentLocation)
 	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
-	compareResListTests(test, []resListTest{
-		rltIDs("connected sublocations", testCfg.e.sublocations.endpoint, exp.connectedSublocations, got.ConnectedSublocations),
-		rltIDs("areas", testCfg.e.areas.endpoint, exp.areas, got.Areas),
-	})
+	checkResIDsInSlice(test, "connected sublocations", testCfg.e.sublocations.endpoint, exp.connectedSublocations, got.ConnectedSublocations)
+	checkResIDsInSlice(test, "areas", testCfg.e.areas.endpoint, exp.areas, got.Areas)
 	compareLocRel(test, exp.expLocRel, got.LocRel)
 }
 

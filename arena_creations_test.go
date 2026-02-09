@@ -28,7 +28,7 @@ func compareArenaCreations(test test, exp expArenaCreation, got ArenaCreation) {
 	compIdApiResource(test, "parent subquest", test.cfg.e.subquests.endpoint, exp.parentSubquest, got.ParentSubquest)
 	compareItemAmounts(test, exp.reward, got.Reward)
 	compare(test, "required catch amount", exp.requiredCatchAmount, got.RequiredCatchAmount)
-	compareResListTest(test, rltIDs("required monsters", test.cfg.e.monsters.endpoint, exp.requiredMonsters, got.RequiredMonsters))
+	checkResIDsInSlice(test, "required monsters", test.cfg.e.monsters.endpoint, exp.requiredMonsters, got.RequiredMonsters)
 }
 
 func TestGetArenaCreation(t *testing.T) {

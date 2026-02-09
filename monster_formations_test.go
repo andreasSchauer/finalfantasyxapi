@@ -31,7 +31,7 @@ func compareMonsterFormations(test test, exp expMonsterFormation, got MonsterFor
 	compIdApiResourcePtrs(test, "boss song", testCfg.e.songs.endpoint, exp.bossMusic, got.BossMusic)
 	checkResAmtsNameVals(test, "monsters", exp.monsters, got.Monsters)
 	compTestStructSlices(test, "trigger commands", exp.triggerCommands, got.TriggerCommands, compareFormationTCs)
-	compareResListTest(test, rltIDs("areas", testCfg.e.areas.endpoint, exp.areas, got.Areas))
+	checkResIDsInSlice(test, "areas", testCfg.e.areas.endpoint, exp.areas, got.Areas)
 }
 
 type testFormationTC struct {
@@ -44,7 +44,7 @@ func compareFormationTCs(test test, exp testFormationTC, got FormationTriggerCom
 	charClassesEndpoint := test.cfg.e.characterClasses.endpoint
 
 	compIdApiResource(test, "tc ability", tcEndpoint, exp.Ability, got.Ability)
-	compareResListTest(test, rltIDs("tc users", charClassesEndpoint, exp.Users, got.Users))
+	checkResIDsInSlice(test, "tc users", charClassesEndpoint, exp.Users, got.Users)
 }
 
 func TestGetMonsterFormation(t *testing.T) {

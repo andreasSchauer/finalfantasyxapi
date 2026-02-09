@@ -134,6 +134,7 @@ func compStringPtr(test test, fieldName string, exp, got *string) {
 }
 
 
+// compares the length of the gotSlice with the length found in expLengths[fieldName], if given
 func compLength(test test, fieldName string, got int) {
 	exp, ok := test.expLengths[fieldName]
 	if ok {
