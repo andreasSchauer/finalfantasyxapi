@@ -7,25 +7,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type expLocation struct {
-	testGeneral
-	expUnique
-	connectedLocations []int32
-	sublocations       []int32
-	expLocRel
-}
-
-func (e expLocation) GetTestGeneral() testGeneral {
-	return e.testGeneral
-}
-
-func compareLocations(test test, exp expLocation, got Location) {
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
-	checkResIDsInSlice(test, "connected locations", testCfg.e.locations.endpoint, exp.connectedLocations, got.ConnectedLocations)
-	checkResIDsInSlice(test, "sublocations", testCfg.e.sublocations.endpoint, exp.sublocations, got.Sublocations)
-	compareLocRel(test, exp.expLocRel, got.LocRel)
-}
 
 func TestGetLocation(t *testing.T) {
 	tests := []expLocation{

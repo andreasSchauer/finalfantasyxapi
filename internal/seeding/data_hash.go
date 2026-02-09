@@ -5,11 +5,10 @@ import (
 	"fmt"
 )
 
+// ToHashFields simply puts all values of all fields of an entity into an []any slice (including nil)
 type Hashable interface {
 	ToHashFields() []any
 }
-
-// ToHashFields simply puts all values of all fields of an entity into an []any slice (including nil)
 
 
 func generateDataHash(h Hashable) string {

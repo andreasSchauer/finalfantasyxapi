@@ -23,27 +23,27 @@ type Config struct {
 	host        	string
 }
 
-func ConfigInit() (Config, error) {
+func ConfigInit() (*Config, error) {
 	const domain = "localhost:8080"
 
 	dbURL := os.Getenv("DB_URL")
 	if dbURL == "" {
-		return Config{}, errors.New("DB_URL must be set")
+		return nil, errors.New("DB_URL must be set")
 	}
 
 	platform := os.Getenv("PLATFORM")
 	if platform == "" {
-		return Config{}, errors.New("PLATFORM must be set")
+		return nil, errors.New("PLATFORM must be set")
 	}
 
 	adminApiKey := os.Getenv("ADMIN_API_KEY")
 	if adminApiKey == "" {
-		return Config{}, errors.New("ADMIN_API_KEY must be set")
+		return nil, errors.New("ADMIN_API_KEY must be set")
 	}
 
 	dbConn, err := sql.Open("postgres", dbURL)
 	if err != nil {
-		return Config{}, fmt.Errorf("Error opening database: %v", err)
+		return nil, fmt.Errorf("Error opening database: %v", err)
 	}
 	dbQueries := database.New(dbConn)
 
@@ -57,12 +57,12 @@ func ConfigInit() (Config, error) {
 
 	apiCfg.l, err = seeding.SeedDatabase(apiCfg.db, apiCfg.dbConn)
 	if err != nil {
-		return Config{}, err
+		return nil, err
 	}
 
 	apiCfg.TypeLookupInit()
 	apiCfg.QueryLookupInit()
 	apiCfg.EndpointsInit()
 
-	return apiCfg, nil
+	return &apiCfg, nil
 }

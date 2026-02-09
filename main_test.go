@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 		panic(err)
 	}
 
-	testCfg = &cfg
+	testCfg = cfg
 
 	code := m.Run()
 	_ = testCfg.dbConn.Close()
