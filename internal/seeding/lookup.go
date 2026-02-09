@@ -7,20 +7,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type Lookupable interface {
-	ToKeyFields() []any
-	error
-}
-
-type LookupableID interface {
-	h.HasID
-	error
-}
-
-func CreateLookupKey(l Lookupable) string {
-	fields := l.ToKeyFields()
-	return combineFields(fields)
-}
 
 type LookupObject struct {
 	Name    string

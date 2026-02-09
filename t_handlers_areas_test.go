@@ -61,11 +61,7 @@ func TestGetArea(t *testing.T) {
 					"fmvs": 			0,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      145,
-				name:    "north",
-				version: h.GetInt32Ptr(1),
-			},
+			expNameVer: newExpNameVer(145, "north", 1),
 			parentLocation:    15,
 			parentSublocation: 25,
 			connectedAreas:    []int32{144, 149},
@@ -74,9 +70,9 @@ func TestGetArea(t *testing.T) {
 				monsters:   []int32{81, 84, 85},
 				formations: []int32{120, 122, 125},
 				sidequests: []int32{6},
-				music: h.GetStructPtr(testLocMusic{
+				music: &testLocMusic{
 					bgMusic: []int32{30},
-				}),
+				},
 			},
 		},
 		{
@@ -109,20 +105,16 @@ func TestGetArea(t *testing.T) {
 					"fmvs": 			0,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      36,
-				name:    "besaid village",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(36, "besaid village", 0),
 			parentLocation:    4,
 			parentSublocation: 7,
 			connectedAreas:    []int32{26, 37, 41},
 			expLocRel: expLocRel{
 				characters: []int32{2, 4},
 				treasures:  []int32{33, 37},
-				music: h.GetStructPtr(testLocMusic{
+				music: &testLocMusic{
 					bgMusic:    []int32{19},
-				}),
+				},
 			},
 		},
 		{
@@ -157,19 +149,15 @@ func TestGetArea(t *testing.T) {
 					"fmvs": 			0,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      69,
-				name:    "main gate",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(69, "main gate", 0),
 			parentLocation:    8,
 			parentSublocation: 13,
 			expLocRel: expLocRel{
 				shops:     []int32{5},
-				music: h.GetStructPtr(testLocMusic{
+				music: &testLocMusic{
 					cuesMusic: []int32{35},
 					bgMusic:   []int32{32, 34},
-				}),
+				},
 			},
 		},
 		{
@@ -188,11 +176,7 @@ func TestGetArea(t *testing.T) {
 					"fmvs": 			true,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      140,
-				name:    "agency front",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(140, "agency front", 0),
 			parentLocation:    14,
 			parentSublocation: 24,
 			expLocRel: expLocRel{
@@ -224,11 +208,7 @@ func TestGetArea(t *testing.T) {
 					"fmvs":       	5,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      42,
-				name:    "deck",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(42, "deck", 0),
 			parentLocation:    5,
 			parentSublocation: 8,
 			expLocRel: expLocRel{
@@ -237,12 +217,12 @@ func TestGetArea(t *testing.T) {
 				monsters:   []int32{19, 20},
 				formations: []int32{26},
 				fmvs:       []int32{9, 12, 13},
-				music: h.GetStructPtr(testLocMusic{
+				music: &testLocMusic{
 					bgMusic: 	[]int32{28},
 					cuesMusic: 	[]int32{},
 					fmvsMusic:  []int32{16},
 					bossMusic:  []int32{16},
-				}),
+				},
 			},
 		},
 	}

@@ -2,6 +2,8 @@ package main
 
 import (
 	"testing"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 /*
@@ -48,6 +50,19 @@ type expNameVer struct {
 	version *int32
 }
 
+func newExpNameVer(id int32, name string, version int32) expNameVer {
+	vPtr := h.GetInt32Ptr(version)
+	if version == 0 {
+		vPtr = nil
+	}
+	
+	return expNameVer{
+		id: 		id,
+		name: 		name,
+		version: 	vPtr,
+	}
+}
+
 func compareExpNameVer(test test, exp expNameVer, gotID int32, gotName string, gotVer *int32) {
 	test.t.Helper()
 	compare(test, "id", exp.id, gotID)
@@ -60,6 +75,13 @@ type expUnique struct {
 	name string
 }
 
+func newExpUnique(id int32, name string) expUnique {
+	return expUnique{
+		id: 	id,
+		name: 	name,
+	}
+}
+
 func compareExpUnique(test test, exp expUnique, gotID int32, gotName string) {
 	test.t.Helper()
 	compare(test, "id", exp.id, gotID)
@@ -68,6 +90,12 @@ func compareExpUnique(test test, exp expUnique, gotID int32, gotName string) {
 
 type expIdOnly struct {
 	id int32
+}
+
+func newExpIdOnly(id int32) expIdOnly {
+	return expIdOnly{
+		id: id,
+	}
 }
 
 func compareExpIdOnly(test test, exp expIdOnly, gotID int32) {

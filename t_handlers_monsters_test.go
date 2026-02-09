@@ -152,11 +152,7 @@ func TestGetMonster(t *testing.T) {
 					"abilities":         1,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      27,
-				name:    "yellow element",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(27, "yellow element", 0),
 			agility: &AgilityParams{
 				TickSpeed: 16,
 				MinICV:    h.GetInt32Ptr(48),
@@ -178,26 +174,11 @@ func TestGetMonster(t *testing.T) {
 			items: &testMonItems{
 				itemDropChance: 255,
 				items: map[string]*testItemAmount{
-					"steal common": h.GetStructPtr(testItemAmount{
-						item:   "/items/27",
-						amount: 1,
-					}),
-					"steal rare": h.GetStructPtr(testItemAmount{
-						item:   "/items/28",
-						amount: 1,
-					}),
-					"drop common": h.GetStructPtr(testItemAmount{
-						item:   "/items/71",
-						amount: 1,
-					}),
-					"drop rare": h.GetStructPtr(testItemAmount{
-						item:   "/items/71",
-						amount: 1,
-					}),
-					"bribe": h.GetStructPtr(testItemAmount{
-						item:   "/items/28",
-						amount: 6,
-					}),
+					"steal common": h.GetStructPtr(newTestItemAmount("/items/27", 1)),
+					"steal rare": 	h.GetStructPtr(newTestItemAmount("/items/28", 1)),
+					"drop common": 	h.GetStructPtr(newTestItemAmount("/items/71", 1)),
+					"drop rare": 	h.GetStructPtr(newTestItemAmount("/items/71", 1)),
+					"bribe": 		h.GetStructPtr(newTestItemAmount("/items/28", 6)),
 				},
 			},
 			bribeChances: []BribeChance{
@@ -286,46 +267,18 @@ func TestGetMonster(t *testing.T) {
 					"other items": 3,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      156,
-				name:    "magic urn",
-				version: h.GetInt32Ptr(1),
-			},
+			expNameVer: newExpNameVer(156, "magic urn", 1),
 			agility: nil,
 			items: &testMonItems{
 				itemDropChance: 0,
 				items: map[string]*testItemAmount{
-					"steal common": h.GetStructPtr(testItemAmount{
-						item:   "/items/1",
-						amount: 1,
-					}),
-					"steal rare": h.GetStructPtr(testItemAmount{
-						item:   "/items/1",
-						amount: 1,
-					}),
+					"steal common": h.GetStructPtr(newTestItemAmount("/items/1", 1)),
+					"steal rare": 	h.GetStructPtr(newTestItemAmount("/items/1", 1)),
 				},
 				otherItems: []testPossibleItem{
-					{
-						testItemAmount: testItemAmount{
-							item:   "/items/9",
-							amount: 1,
-						},
-						chance: 60,
-					},
-					{
-						testItemAmount: testItemAmount{
-							item:   "/items/64",
-							amount: 1,
-						},
-						chance: 20,
-					},
-					{
-						testItemAmount: testItemAmount{
-							item:   "/items/7",
-							amount: 1,
-						},
-						chance: 20,
-					},
+					newTestPossibleItem(0, "items/9", 1, 60),
+					newTestPossibleItem(1, "items/64", 1, 20),
+					newTestPossibleItem(2, "items/7", 1, 20),
 				},
 			},
 		},
@@ -356,11 +309,7 @@ func TestGetMonster(t *testing.T) {
 					"abilities":         11,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      86,
-				name:    "spherimorph",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(86, "spherimorph", 0),
 			agility: &AgilityParams{
 				TickSpeed: 12,
 				MinICV:    h.GetInt32Ptr(36),
@@ -376,22 +325,10 @@ func TestGetMonster(t *testing.T) {
 			items: &testMonItems{
 				itemDropChance: 255,
 				items: map[string]*testItemAmount{
-					"steal common": h.GetStructPtr(testItemAmount{
-						item:   "/items/5",
-						amount: 1,
-					}),
-					"steal rare": h.GetStructPtr(testItemAmount{
-						item:   "/items/6",
-						amount: 1,
-					}),
-					"drop common": h.GetStructPtr(testItemAmount{
-						item:   "/items/82",
-						amount: 1,
-					}),
-					"drop rare": h.GetStructPtr(testItemAmount{
-						item:   "/items/82",
-						amount: 1,
-					}),
+					"steal common": h.GetStructPtr(newTestItemAmount("/items/5", 1)),
+					"steal rare": 	h.GetStructPtr(newTestItemAmount("/items/6", 1)),
+					"drop common": 	h.GetStructPtr(newTestItemAmount("/items/82", 1)),
+					"drop rare": 	h.GetStructPtr(newTestItemAmount("/items/82", 1)),
 					"bribe": nil,
 				},
 			},
@@ -492,11 +429,7 @@ func TestGetMonster(t *testing.T) {
 					"altered states":    1,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      105,
-				name:    "sand worm",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(105, "sand worm", 0),
 			appliedState: &testAppliedState{
 				condition:   "While 'Readying Quake'.",
 				isTemporary: true,
@@ -548,11 +481,7 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 2,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      287,
-				name:    "neslug",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(287, "neslug", 0),
 			appliedState: &testAppliedState{
 				condition:   "While hidden in its shell.",
 				isTemporary: true,
@@ -594,11 +523,7 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 2,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      287,
-				name:    "neslug",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(287, "neslug", 0),
 			appliedState: &testAppliedState{
 				condition:   "Without its shell.",
 				isTemporary: false,
@@ -649,11 +574,7 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 1,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      114,
-				name:    "evrae",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(114, "evrae", 0),
 			appliedState: &testAppliedState{
 				condition:   "When the Airship is far away.",
 				isTemporary: false,
@@ -694,11 +615,7 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 1,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      305,
-				name:    "penance",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(305, "penance", 0),
 			appliedState: &testAppliedState{
 				condition:     "When HP falls below 9000000.",
 				isTemporary:   false,
@@ -741,11 +658,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: expNameVer{
-				id:      211,
-				name:    "seymour omnis",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(211, "seymour omnis", 0),
 			elemResists: []testElemResist{
 				{
 					element:  1,
@@ -792,11 +705,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: expNameVer{
-				id:      211,
-				name:    "seymour omnis",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(211, "seymour omnis", 0),
 			elemResists: []testElemResist{
 				{
 					element:  1,
@@ -843,11 +752,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: expNameVer{
-				id:      211,
-				name:    "seymour omnis",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(211, "seymour omnis", 0),
 			elemResists: []testElemResist{
 				{
 					element:  1,
@@ -895,11 +800,7 @@ func TestGetMonster(t *testing.T) {
 					"ronso rages": 4,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      167,
-				name:    "biran ronso",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(167, "biran ronso", 0),
 			agility: &AgilityParams{
 				TickSpeed: 3,
 				MinICV:    h.GetInt32Ptr(9),
@@ -937,11 +838,7 @@ func TestGetMonster(t *testing.T) {
 					"ronso rages": 4,
 				},
 			},
-			expNameVer: expNameVer{
-				id:      168,
-				name:    "yenke ronso",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(168, "yenke ronso", 0),
 			agility: &AgilityParams{
 				TickSpeed: 10,
 				MinICV:    h.GetInt32Ptr(30),
@@ -978,11 +875,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: expNameVer{
-				id:      168,
-				name:    "yenke ronso",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(168, "yenke ronso", 0),
 			agility: &AgilityParams{
 				TickSpeed: 26,
 				MinICV:    h.GetInt32Ptr(84),
@@ -1018,11 +911,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: expNameVer{
-				id:      216,
-				name:    "valefor",
-				version: h.GetInt32Ptr(1),
-			},
+			expNameVer: newExpNameVer(216, "valefor", 1),
 			agility: &AgilityParams{
 				TickSpeed: 5,
 				MinICV:    h.GetInt32Ptr(-1),
@@ -1064,11 +953,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: expNameVer{
-				id:      93,
-				name:    "seymour",
-				version: nil,
-			},
+			expNameVer: newExpNameVer(93, "seymour", 0),
 			agility: &AgilityParams{
 				TickSpeed: 10,
 				MinICV:    h.GetInt32Ptr(-1),

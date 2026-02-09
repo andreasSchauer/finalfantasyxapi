@@ -23,15 +23,13 @@ func TestGetMonsterFormation(t *testing.T) {
 				requestURL:     "/api/monster-formations/27",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+				expLengths: 	map[string]int{
 					"monsters":         2,
 					"areas":            1,
 					"trigger commands": 0,
 				},
 			},
-			expIdOnly: expIdOnly{
-				id: 27,
-			},
+			expIdOnly: newExpIdOnly(27),
 			category:       "boss-fight",
 			isForcedAmbush: false,
 			canEscape:      false,
@@ -56,9 +54,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			expIdOnly: expIdOnly{
-				id: 77,
-			},
+			expIdOnly: newExpIdOnly(77),
 			category:       "random-encounter",
 			isForcedAmbush: false,
 			canEscape:      true,
@@ -78,9 +74,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 2,
 				},
 			},
-			expIdOnly: expIdOnly{
-				id: 137,
-			},
+			expIdOnly: newExpIdOnly(137),
 			category:       "boss-fight",
 			isForcedAmbush: false,
 			canEscape:      false,
@@ -113,9 +107,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			expIdOnly: expIdOnly{
-				id: 265,
-			},
+			expIdOnly: newExpIdOnly(265),
 			category:       "random-encounter",
 			isForcedAmbush: true,
 			canEscape:      true,

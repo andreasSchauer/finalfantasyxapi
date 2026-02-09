@@ -47,30 +47,7 @@ type testMonItems struct {
 	otherItems     []testPossibleItem
 }
 
-type testItemAmount struct {
-	item   string
-	amount int32
-}
 
-func compareItemAmounts(test test, exp testItemAmount, got ItemAmount) {
-	compPathApiResource(test, "item amount - item", exp.item, got)
-	compare(test, "item amount - amount", exp.amount, got.Amount)
-}
-
-type testPossibleItem struct {
-	index			int
-	testItemAmount
-	chance 			int32
-}
-
-func (t testPossibleItem) GetIndex() int {
-	return t.index
-}
-
-func comparePossibleItems(test test, exp testPossibleItem, got PossibleItem) {
-	compareItemAmounts(test, exp.testItemAmount, got.ItemAmount)
-	compare(test, "possible item - chance", exp.chance, got.Chance)
-}
 
 type testMonEquipment struct {
 	abilitySlots      MonsterEquipmentSlots

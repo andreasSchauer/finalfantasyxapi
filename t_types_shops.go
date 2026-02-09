@@ -42,6 +42,14 @@ func (t testShopItem) GetIndex() int {
 	return t.index
 }
 
+func newTestShopItem(idx int, itemID, price int32) testShopItem {
+	return testShopItem{
+		index: 	idx,
+		item: 	itemID,
+		price: 	price,
+	}
+}
+
 func compareShopItems(test test, exp testShopItem, got ShopItem) {
 	compIdApiResource(test, "shop item - item", test.cfg.e.shops.endpoint, exp.item, got.Item)
 	compare(test, "shop item - price", exp.price, got.Price)

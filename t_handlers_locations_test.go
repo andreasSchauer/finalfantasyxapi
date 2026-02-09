@@ -52,10 +52,7 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                2,
 				},
 			},
-			expUnique: expUnique{
-				id:   15,
-				name: "macalania",
-			},
+			expUnique: newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
 			sublocations:       []int32{25, 26, 27},
 			expLocRel: expLocRel{
@@ -67,12 +64,12 @@ func TestGetLocation(t *testing.T) {
 				formations: []int32{120, 125, 129, 135, 137},
 				sidequests: []int32{6},
 				fmvs:       []int32{27, 36},
-				music: h.GetStructPtr(testLocMusic{
+				music: &testLocMusic{
 					bgMusic:    []int32{12, 22, 30, 43, 52, 55, 56},
 					cuesMusic:  []int32{4, 57, 59},
 					fmvsMusic:  []int32{70},
 					bossMusic:  []int32{16, 55, 57},
-				}),
+				},
 			},
 		},
 		{
@@ -106,19 +103,16 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                0,
 				},
 			},
-			expUnique: expUnique{
-				id:   26,
-				name: "omega ruins",
-			},
+			expUnique: newExpUnique(26, "omega ruins"),
 			sublocations: []int32{41},
 			expLocRel: expLocRel{
 				treasures:  []int32{328, 332, 337, 343},
 				monsters:   []int32{190, 201, 210, 239, 245, 250, 255},
 				formations: []int32{258, 262, 265, 283, 289, 296},
-				music: h.GetStructPtr(testLocMusic{
+				music: &testLocMusic{
 					bgMusic:    []int32{81, 82},
 					bossMusic:  []int32{16, 80},
-				}),
+				},
 			},
 		},
 	}

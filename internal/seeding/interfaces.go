@@ -3,13 +3,34 @@ package seeding
 import (
 	"crypto/sha256"
 	"fmt"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-// ToHashFields simply puts all values of all fields of an entity into an []any slice (including nil)
+type HasLocArea interface {
+	GetLocationArea() LocationArea
+}
+
+
+type LookupableID interface {
+	h.HasID
+	error
+}
+
+type Lookupable interface {
+	ToKeyFields() []any
+	error
+}
+
+func CreateLookupKey(l Lookupable) string {
+	fields := l.ToKeyFields()
+	return combineFields(fields)
+}
+
+
 type Hashable interface {
 	ToHashFields() []any
 }
-
 
 func generateDataHash(h Hashable) string {
 	fields := h.ToHashFields()
@@ -17,6 +38,7 @@ func generateDataHash(h Hashable) string {
 	hash := sha256.Sum256([]byte(combined))
 	return fmt.Sprintf("%x", hash)
 }
+
 
 func combineFields(fields []any) string {
 	var combined string

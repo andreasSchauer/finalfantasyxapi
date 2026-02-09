@@ -59,10 +59,7 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   0,
 				},
 			},
-			expUnique: expUnique{
-				id:   34,
-				name: "calm lands",
-			},
+			expUnique: newExpUnique(34, "calm lands"),
 			parentLocation:        20,
 			connectedSublocations: []int32{25, 35, 36, 37},
 			areas:                 []int32{202, 203, 204, 205, 206, 207},
@@ -72,10 +69,10 @@ func TestGetSublocation(t *testing.T) {
 				monsters:   []int32{138, 142, 149, 259, 270, 282, 292},
 				formations: []int32{193, 198, 205, 306, 312, 320, 331},
 				sidequests: []int32{1, 4},
-				music: h.GetStructPtr(testLocMusic{
+				music: &testLocMusic{
 					bgMusic:    []int32{71, 73},
 					bossMusic:  []int32{16},
-				}),
+				},
 			},
 		},
 		{
@@ -103,10 +100,7 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   3,
 				},
 			},
-			expUnique: expUnique{
-				id:   6,
-				name: "besaid",
-			},
+			expUnique: newExpUnique(6, "besaid"),
 			parentLocation:        4,
 			connectedSublocations: []int32{7, 8},
 			areas:                 []int32{20, 24, 29, 31, 35},
@@ -117,12 +111,12 @@ func TestGetSublocation(t *testing.T) {
 				monsters:   []int32{7, 11, 14, 18, 293},
 				formations: []int32{9, 13, 17, 22, 25},
 				fmvs:       []int32{5, 6, 8},
-				music: h.GetStructPtr(testLocMusic{
+				music: &testLocMusic{
 					bgMusic:    []int32{18, 20, 22, 23, 27},
 					cuesMusic:  []int32{17},
 					fmvsMusic:  []int32{17, 23, 34},
 					bossMusic:  []int32{9, 34},
-				}),
+				},
 			},
 		},
 	}
