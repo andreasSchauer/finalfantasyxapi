@@ -18,10 +18,6 @@ type ShopSub struct {
 	PostAirship	*SubShopSub	`json:"post_airship"`
 }
 
-func (s ShopSub) GetSectionName() string {
-	return "shops"
-}
-
 func (s ShopSub) GetURL() string {
 	return s.URL
 }

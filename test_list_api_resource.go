@@ -5,20 +5,21 @@ package main
 func compareAPIResourceLists[T APIResourceList](test test, endpoint string, expList expListIDs, gotList T) {
 	test.t.Helper()
 	compareListParams(test, expList.getListParams(), gotList.getListParams())
+
 	checkResIDsInSlice(test, "results", endpoint, expList.results, gotList.getResults())
 }
 
 
 // checks if both slices are present and if the provided slice of resources contains all stated resources
-func checkResPathsInSlice[T HasAPIResource](test test, fieldName string, expectedPaths []string, gotRes []T) {
-	sliceBasicChecks(test, fieldName, expectedPaths, gotRes)
+func checkResPathsInSlice[T HasAPIResource](test test, fieldName string, expPaths []string, gotRes []T) {
+	sliceBasicChecks(test, fieldName, expPaths, gotRes)
 
 	gotMap := getResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
 		test.t.Fatalf("%s: there appear to be duplicates in '%s'.", test.name, fieldName)
 	}
 
-	for _, expPath := range expectedPaths {
+	for _, expPath := range expPaths {
 		expURL := completeTestURL(test.cfg, expPath)
 		_, ok := gotMap[expURL]
 		if !ok {
@@ -28,15 +29,15 @@ func checkResPathsInSlice[T HasAPIResource](test test, fieldName string, expecte
 }
 
 
-func checkResIDsInSlice[T HasAPIResource](test test, fieldName, endpoint string, expectedIDs []int32, gotRes []T) {
-	sliceBasicChecks(test, fieldName, expectedIDs, gotRes)
+func checkResIDsInSlice[T HasAPIResource](test test, fieldName, endpoint string, expIDs []int32, gotRes []T) {
+	sliceBasicChecks(test, fieldName, expIDs, gotRes)
 
 	gotMap := getResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
 		test.t.Fatalf("%s: there appear to be duplicates in '%s'.", test.name, fieldName)
 	}
 
-	for _, expID := range expectedIDs {
+	for _, expID := range expIDs {
 		expURL := createResourceURL(test.cfg, endpoint, expID)
 		_, ok := gotMap[expURL]
 		if !ok {

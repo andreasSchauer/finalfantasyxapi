@@ -15,10 +15,6 @@ type MonsterFormationSub struct {
 	Areas          []string `json:"areas"`
 }
 
-func (m MonsterFormationSub) GetSectionName() string {
-	return "monster-formations"
-}
-
 func (m MonsterFormationSub) GetURL() string {
 	return m.URL
 }

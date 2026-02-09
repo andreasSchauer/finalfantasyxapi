@@ -20,7 +20,7 @@ func (e expSubquest) GetTestGeneral() testGeneral {
 func compareSubquests(test test, exp expSubquest, got Subquest) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "parent sidequest", testCfg.e.sidequests.endpoint, exp.parentSidequest, got.ParentSidequest)
-	compTestStructSlices(test, "completions", exp.completions, got.Completions, compareQuestCompletions)
+	checkTestStructsInSlice(test, "completions", exp.completions, got.Completions, compareQuestCompletions)
 }
 
 func TestGetSubquest(t *testing.T) {

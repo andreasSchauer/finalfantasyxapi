@@ -14,10 +14,6 @@ type SubquestSub struct {
 	Completions	[]QuestCompletionSub 	`json:"completions"`
 }
 
-func (s SubquestSub) GetSectionName() string {
-	return "monster-formations"
-}
-
 func (s SubquestSub) GetURL() string {
 	return s.URL
 }

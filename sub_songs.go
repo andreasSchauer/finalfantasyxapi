@@ -19,10 +19,6 @@ type SongSub struct {
 	CanLoop           bool    `json:"can_loop"`
 }
 
-func (s SongSub) GetSectionName() string {
-	return "songs"
-}
-
 func (s SongSub) GetURL() string {
 	return s.URL
 }

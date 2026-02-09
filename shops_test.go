@@ -33,8 +33,8 @@ type testSubShop struct {
 }
 
 func compareSubShops(test test, exp testSubShop, got SubShop) {
-	compTestStructSlices(test, "sub shop - items", exp.items, got.Items, compareShopItems)
-	compTestStructSlices(test, "sub shop - equipment", exp.equipment, got.Equipment, compareShopEquipment)
+	checkTestStructsInSlice(test, "sub shop - items", exp.items, got.Items, compareShopItems)
+	checkTestStructsInSlice(test, "sub shop - equipment", exp.equipment, got.Equipment, compareShopEquipment)
 }
 
 type testShopItem struct {

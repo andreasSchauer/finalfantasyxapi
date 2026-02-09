@@ -30,8 +30,8 @@ func compareSongs(test test, exp expSong, got Song) {
 	compare(test, "arranger", exp.arranger, got.Arranger)
 	compare(test, "duration in seconds", exp.durationInSeconds, got.DurationInSeconds)
 	compare(test, "can loop", exp.canLoop, got.CanLoop)
-	compTestStructSlices(test, "background music", exp.backgroundMusic, got.BackgroundMusic, compareBackgroundMusic)
-	compTestStructSlices(test, "cues", exp.cues, got.Cues, compareCues)
+	checkTestStructsInSlice(test, "background music", exp.backgroundMusic, got.BackgroundMusic, compareBackgroundMusic)
+	checkTestStructsInSlice(test, "cues", exp.cues, got.Cues, compareCues)
 	checkResIDsInSlice(test, "boss fights", test.cfg.e.monsterFormations.endpoint, exp.bossFights, got.BossFights)
 	checkResIDsInSlice(test, "fmvs", test.cfg.e.fmvs.endpoint, exp.fmvs, got.FMVs)
 }

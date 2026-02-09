@@ -15,10 +15,6 @@ type LocationSub struct {
 	Monsters  []string         `json:"monsters"`
 }
 
-func (l LocationSub) GetSectionName() string {
-	return "locations"
-}
-
 func (l LocationSub) GetURL() string {
 	return l.URL
 }

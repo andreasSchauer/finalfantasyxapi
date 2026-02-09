@@ -7,10 +7,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type SubResource interface {
-	GetSectionName() string
-	GetURL() string
-}
 
 type SubResourceList struct {
 	ListParams

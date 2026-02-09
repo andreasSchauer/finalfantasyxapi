@@ -19,10 +19,6 @@ type TreasureSub struct {
 	Equipment     *EquipmentSub   `json:"equipment,omitempty"`
 }
 
-func (t TreasureSub) GetSectionName() string {
-	return "treasures"
-}
-
 func (t TreasureSub) GetURL() string {
 	return t.URL
 }

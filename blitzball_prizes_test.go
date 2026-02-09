@@ -22,7 +22,7 @@ func compareBlitzballPositions(test test, exp expBlitzballPosition, got Blitzbal
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compare(test, "category", exp.category, got.Category)
 	compare(test, "slot", exp.slot, got.Slot)
-	compTestStructSlices(test, "items", exp.items, got.Items, comparePossibleItems)
+	checkTestStructsInSlice(test, "items", exp.items, got.Items, comparePossibleItems)
 }
 
 func TestGetBlitzballPosition(t *testing.T) {

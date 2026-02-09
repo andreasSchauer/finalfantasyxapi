@@ -58,8 +58,13 @@ func compareItemAmounts(test test, exp testItemAmount, got ItemAmount) {
 }
 
 type testPossibleItem struct {
+	index			int
 	testItemAmount
-	chance int32
+	chance 			int32
+}
+
+func (t testPossibleItem) GetIndex() int {
+	return t.index
 }
 
 func comparePossibleItems(test test, exp testPossibleItem, got PossibleItem) {

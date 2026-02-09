@@ -26,10 +26,6 @@ type MonsterSub struct {
 	Equipment      *MonsterEquipmentSub `json:"equipment"`
 }
 
-func (m MonsterSub) GetSectionName() string {
-	return "monsters"
-}
-
 func (m MonsterSub) GetURL() string {
 	return m.URL
 }

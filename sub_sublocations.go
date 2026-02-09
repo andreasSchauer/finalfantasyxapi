@@ -16,10 +16,6 @@ type SublocationSub struct {
 	Monsters       []string         `json:"monsters"`
 }
 
-func (s SublocationSub) GetSectionName() string {
-	return "sublocations"
-}
-
 func (s SublocationSub) GetURL() string {
 	return s.URL
 }

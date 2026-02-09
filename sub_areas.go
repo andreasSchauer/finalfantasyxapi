@@ -21,10 +21,6 @@ type AreaSub struct {
 	Monsters          []string         `json:"monsters"`
 }
 
-func (a AreaSub) GetSectionName() string {
-	return "areas"
-}
-
 func (a AreaSub) GetURL() string {
 	return a.URL
 }
