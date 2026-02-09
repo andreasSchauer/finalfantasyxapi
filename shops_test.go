@@ -38,8 +38,13 @@ func compareSubShops(test test, exp testSubShop, got SubShop) {
 }
 
 type testShopItem struct {
+	index	int
 	item	int32
 	price	int32
+}
+
+func (t testShopItem) GetIndex() int {
+	return t.index
 }
 
 func compareShopItems(test test, exp testShopItem, got ShopItem) {
@@ -48,8 +53,13 @@ func compareShopItems(test test, exp testShopItem, got ShopItem) {
 }
 
 type testShopEquipment struct {
+	index		int
 	equipment 	testFoundEquipment
 	price		int32
+}
+
+func (t testShopEquipment) GetIndex() int {
+	return t.index
 }
 
 func compareShopEquipment(test test, exp testShopEquipment, got ShopEquipment) {

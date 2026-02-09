@@ -24,8 +24,13 @@ func compareSidequests(test test, exp expSidequest, got Sidequest) {
 }
 
 type testQuestCompletion struct {
+	index	int
 	areas	[]int32
 	reward	testItemAmount
+}
+
+func (t testQuestCompletion) GetIndex() int {
+	return t.index
 }
 
 func compareQuestCompletions(test test, exp testQuestCompletion, got QuestCompletion) {

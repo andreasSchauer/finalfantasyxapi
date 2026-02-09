@@ -37,8 +37,13 @@ func compareSongs(test test, exp expSong, got Song) {
 }
 
 type testBackgroundMusic struct {
+	index					int
 	replacesEncounterMusic	bool
 	areas					[]int32
+}
+
+func (t testBackgroundMusic) GetIndex() int {
+	return t.index
 }
 
 func compareBackgroundMusic(test test, exp testBackgroundMusic, got BackgroundMusic) {
@@ -47,10 +52,15 @@ func compareBackgroundMusic(test test, exp testBackgroundMusic, got BackgroundMu
 }
 
 type testCue struct {
+	index					int
 	triggerArea				*int32
 	includedAreas			[]int32
 	replacesEncounterMusic	bool
 	replacesBGMusic			*string
+}
+
+func (t testCue) GetIndex() int {
+	return t.index
 }
 
 func compareCues(test test, exp testCue, got Cue) {

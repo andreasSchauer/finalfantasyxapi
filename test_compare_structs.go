@@ -57,7 +57,7 @@ func compStructSlices[T any](test test, fieldName string, exp, got []T) {
 	}
 }
 
-// checks if a slice of test structs is equal to the slice of original structs. uses a compare function. if the slice is not nullable, it needs to be explicitely ignored.
+// checks if a slice of test structs is equal to the slice of original structs, meaning it contains every entry of the original struct in the correct order. uses a compare function. if the slice is not nullable, it needs to be explicitely ignored.
 // []testItemAmount == []itemAmount
 func compTestStructSlices[E, G any](test test, fieldName string, exp []E, got []G, compFn func(test, E, G)) {
 	test.t.Helper()
@@ -68,6 +68,21 @@ func compTestStructSlices[E, G any](test test, fieldName string, exp []E, got []
 
 	for i := range exp {
 		compFn(test, exp[i], got[i])
+	}
+}
+
+
+// checks if all stated testStructs with index are present in the gotStruct slice by using a testStruct's targetIndex. 
+func checkTestStructsInSlice[E testStructIdx, G any](test test, fieldName string, exp []E, got []G, compFn func(test, E, G)) {
+	test.t.Helper()
+	err := checkStructSlices(test, fieldName, exp, got)
+	if errors.Is(err, errIgnoredField) {
+		return
+	}
+
+	for _, item := range exp {
+		i := item.GetIndex()
+		compFn(test, item, got[i])
 	}
 }
 

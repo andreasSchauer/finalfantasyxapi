@@ -59,7 +59,8 @@ func compareResListTest(test test, expList resListTest) {
 	checkResourcesInSlice(test, expList.name, expList.exp, expList.got)
 }
 
-// checks if the provided slice of resources contains all stated resources
+// I barely need to change this function. can also make one that is based on ids
+// checks if both slices are present and if the provided slice of resources contains all stated resources
 func checkResourcesInSlice[T HasAPIResource](test test, fieldName string, expectedPaths []string, gotRes []T) {
 	bothStructSlicesPresent(test, fieldName, expectedPaths, gotRes)
 

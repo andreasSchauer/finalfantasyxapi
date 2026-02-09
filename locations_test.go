@@ -22,19 +22,11 @@ func (e expLocation) GetTestGeneral() testGeneral {
 func compareLocations(test test, exp expLocation, got Location) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
-
 	compareResListTests(test, []resListTest{
 		rltIDs("connected locations", testCfg.e.locations.endpoint, exp.connectedLocations, got.ConnectedLocations),
 		rltIDs("sublocations", testCfg.e.sublocations.endpoint, exp.sublocations, got.Sublocations),
-		rltIDs("characters", testCfg.e.characters.endpoint, exp.characters, got.Characters),
-		rltIDs("aeons", testCfg.e.aeons.endpoint, exp.aeons, got.Aeons),
-		rltIDs("shops", testCfg.e.shops.endpoint, exp.shops, got.Shops),
-		rltIDs("treasures", testCfg.e.treasures.endpoint, exp.treasures, got.Treasures),
-		rltIDs("monsters", testCfg.e.monsters.endpoint, exp.monsters, got.Monsters),
-		rltIDs("formations", testCfg.e.monsterFormations.endpoint, exp.formations, got.Formations),
-		rltIDs("sidequests", testCfg.e.sidequests.endpoint, exp.sidequests, got.Sidequests),
-		rltIDs("fmvs", testCfg.e.fmvs.endpoint, exp.fmvs, got.FMVs),
 	})
+	compareLocRel(test, exp.expLocRel, got.LocRel)
 }
 
 func TestGetLocation(t *testing.T) {

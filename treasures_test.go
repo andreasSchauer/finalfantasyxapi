@@ -36,9 +36,14 @@ func compareTreasures(test test, exp expTreasure, got Treasure) {
 }
 
 type testFoundEquipment struct {
-	equipmentName    int32
-	abilities        []int32
-	emptySlotsAmount int32
+	index				int
+	equipmentName    	int32
+	abilities        	[]int32
+	emptySlotsAmount 	int32
+}
+
+func (t testFoundEquipment) GetIndex() int {
+	return t.index
 }
 
 func compareFoundEquipment(test test, exp testFoundEquipment, got FoundEquipment) {

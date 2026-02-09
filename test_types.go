@@ -22,6 +22,10 @@ fields that are implicitly ignored by leaving them blank:
 - slices, structs, pointers to structs of some kind that have nil checks in the function body
 */
 
+type testStructIdx interface {
+	GetIndex() int
+}
+
 type test struct {
 	t          *testing.T
 	cfg        *Config
@@ -111,15 +115,29 @@ func compareListParams(test test, exp, got ListParams) {
 }
 
 type expLocRel struct {
-	sidequests 	[]int32
 	characters 	[]int32
 	aeons      	[]int32
 	shops      	[]int32
 	treasures  	[]int32
 	monsters   	[]int32
 	formations 	[]int32
+	sidequests 	[]int32
 	fmvs       	[]int32
 	music		*testLocMusic
+}
+
+func compareLocRel(test test, exp expLocRel, got LocRel) {
+	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
+	compareResListTests(test, []resListTest{
+		rltIDs("characters", test.cfg.e.characters.endpoint, exp.characters, got.Characters),
+		rltIDs("aeons", test.cfg.e.aeons.endpoint, exp.aeons, got.Aeons),
+		rltIDs("shops", test.cfg.e.shops.endpoint, exp.shops, got.Shops),
+		rltIDs("treasures", test.cfg.e.treasures.endpoint, exp.treasures, got.Treasures),
+		rltIDs("monsters", test.cfg.e.monsters.endpoint, exp.monsters, got.Monsters),
+		rltIDs("formations", test.cfg.e.monsterFormations.endpoint, exp.formations, got.Formations),
+		rltIDs("sidequests", test.cfg.e.sidequests.endpoint, exp.sidequests, got.Sidequests),
+		rltIDs("fmvs", test.cfg.e.fmvs.endpoint, exp.fmvs, got.FMVs),
+	})
 }
 
 type testLocMusic struct {
@@ -128,7 +146,6 @@ type testLocMusic struct {
 	fmvsMusic  []int32
 	bossMusic  []int32
 }
-
 
 func compareLocMusic(test test, exp testLocMusic, got LocBasedMusic) {
 	songsEndpoint := test.cfg.e.songs.endpoint
