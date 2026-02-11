@@ -149,9 +149,9 @@ func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, S
 	}
 
 	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(idOnlyQueryWrapper(cfg, r, i, resources, "location", len(cfg.l.Locations), getSongsLocation)),
-		frl(idOnlyQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), getSongsSublocation)),
-		frl(idOnlyQueryWrapper(cfg, r, i, resources, "area", len(cfg.l.Areas), getSongsArea)),
+		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.l.Locations), getSongsLocation)),
+		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), getSongsSublocation)),
+		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.l.Areas), getSongsArea)),
 		frl(boolQuery2(cfg, r, i, resources, "special_use", cfg.db.GetSongIDsWithSpecialUseCase)),
 		frl(boolQuery2(cfg, r, i, resources, "fmvs", cfg.db.GetSongIDsWithFMVs)),
 		frl(nullTypeQuery(cfg, r, i, cfg.t.Composer, resources, "composer", cfg.db.GetSongIDsByComposer)),

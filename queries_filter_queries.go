@@ -39,7 +39,7 @@ func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 }
 
 // query uses an id of another resource type to filter resources
-func idOnlyQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
+func idQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseIDOnlyQuery(r, queryParam, maxID)
@@ -61,7 +61,7 @@ func idOnlyQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 }
 
 // like idOnlyQuery, but with more specialized logic in between (wrapperFn)
-func idOnlyQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, int32) ([]A, error)) ([]A, error) {
+func idQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, int32) ([]A, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseIDOnlyQuery(r, queryParam, maxID)
@@ -237,7 +237,6 @@ func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N a
 	return resources, nil
 }
 
-
 // query uses an integer value as input. dbQuery input is any, because of domains being converted to any. parseIntQuery evaluates, whether the given value really is an int, so there's no type-safety concerns.
 func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, any) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
@@ -255,22 +254,6 @@ func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	return resources, nil
-}
-
-
-// used for method queries for example as a combination of all of them (see areas 'item' parameter)
-func combineFilteredAPIResources[A APIResource](filteredLists []filteredResList[A]) ([]A, error) {
-	resources := []A{}
-
-	for _, filtered := range filteredLists {
-		if filtered.err != nil {
-			return nil, filtered.err
-		}
-
-		resources = combineResources(resources, filtered.resources)
-	}
 
 	return resources, nil
 }

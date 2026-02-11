@@ -92,10 +92,10 @@ func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, A
 	}
 
 	filteredLists := []filteredResList[AreaAPIResource]{
-		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationAreaIDs)),
-		frl(idOnlyQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationAreaIDs)),
-		frl(idOnlyQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getAreasByItem)),
-		frl(idOnlyQueryWrapper(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), getAreasByKeyItem)),
+		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationAreaIDs)),
+		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationAreaIDs)),
+		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getAreasByItem)),
+		frl(idQueryWrapper(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), getAreasByKeyItem)),
 		frl(boolQuery(cfg, r, i, resources, "story_based", cfg.db.GetAreaIDsStoryOnly)),
 		frl(boolQuery(cfg, r, i, resources, "save_sphere", cfg.db.GetAreaIDsWithSaveSphere)),
 		frl(boolQuery(cfg, r, i, resources, "comp_sphere", cfg.db.GetAreaIDsWithCompSphere)),

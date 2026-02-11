@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 	"testing"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 
@@ -10,9 +12,9 @@ func TestGetTreasure(t *testing.T) {
 	tests := []expTreasure{
 		{
 			testGeneral: testGeneral{
-				requestURL: "/api/treasures/a",
+				requestURL: 	"/api/treasures/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: "",
+				expectedErr: 	"",
 			},
 		},
 		{
@@ -28,12 +30,11 @@ func TestGetTreasure(t *testing.T) {
 			isAnimaTreasure: 	false,
 			treasureType: 		0,
 			lootType: 			0,
-			gilAmount: 			nil,
+			gilAmount: 			h.GetInt32Ptr(0),
 			items: []testItemAmount{
 				newTestItemAmount("/items/0", 0),
 			},
 			equipment: &testFoundEquipment{
-				index: 				0,
 				equipmentName: 		0,
 				abilities: 			[]int32{},
 				emptySlotsAmount: 	0,

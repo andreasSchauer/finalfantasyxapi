@@ -10,10 +10,10 @@ import (
 )
 
 type Location struct {
-	ID             		int32                 	`json:"id"`
-	Name           		string                	`json:"name"`
-	ConnectedLocations	[]NamedAPIResource		`json:"connected_locations"`
-	Sublocations		[]NamedAPIResource		`json:"sublocations"`
+	ID                 int32              `json:"id"`
+	Name               string             `json:"name"`
+	ConnectedLocations []NamedAPIResource `json:"connected_locations"`
+	Sublocations       []NamedAPIResource `json:"sublocations"`
 	LocRel
 }
 
@@ -62,11 +62,11 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 	}
 
 	response := Location{
-		ID:             	location.ID,
-		Name:           	location.Name,
+		ID:                 location.ID,
+		Name:               location.Name,
 		ConnectedLocations: connectedLocations,
-		Sublocations: 		sublocations,
-		LocRel:         	rel,
+		Sublocations:       sublocations,
+		LocRel:             rel,
 	}
 
 	return response, nil
@@ -79,8 +79,8 @@ func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Loc
 	}
 
 	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(idOnlyQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getLocationsByItem)),
-		frl(idOnlyQueryWrapper(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), getLocationsByKeyItem)),
+		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getLocationsByItem)),
+		frl(idQueryWrapper(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), getLocationsByKeyItem)),
 		frl(boolQuery2(cfg, r, i, resources, "characters", cfg.db.GetLocationIDsWithCharacters)),
 		frl(boolQuery2(cfg, r, i, resources, "aeons", cfg.db.GetLocationIDsWithAeons)),
 		frl(boolQuery2(cfg, r, i, resources, "monsters", cfg.db.GetLocationIDsWithMonsters)),

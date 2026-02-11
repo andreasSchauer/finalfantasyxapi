@@ -80,10 +80,10 @@ func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.
 		return NamedApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationSublocationIDs)),
-		frl(idOnlyQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getSublocationsByItem)),
-		frl(idOnlyQueryWrapper(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), getSublocationsByKeyItem)),
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
+		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationSublocationIDs)),
+		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getSublocationsByItem)),
+		frl(idQueryWrapper(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), getSublocationsByKeyItem)),
 		frl(boolQuery2(cfg, r, i, resources, "characters", cfg.db.GetSublocationIDsWithCharacters)),
 		frl(boolQuery2(cfg, r, i, resources, "aeons", cfg.db.GetSublocationIDsWithAeons)),
 		frl(boolQuery2(cfg, r, i, resources, "monsters", cfg.db.GetSublocationIDsWithMonsters)),
@@ -92,7 +92,5 @@ func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.
 		frl(boolQuery2(cfg, r, i, resources, "treasures", cfg.db.GetSublocationIDsWithTreasures)),
 		frl(boolQuery2(cfg, r, i, resources, "sidequests", cfg.db.GetSublocationIDsWithSidequests)),
 		frl(boolQuery2(cfg, r, i, resources, "fmvs", cfg.db.GetSublocationIDsWithFMVs)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }

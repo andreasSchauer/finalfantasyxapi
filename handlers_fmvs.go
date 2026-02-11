@@ -65,7 +65,7 @@ func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seeding.FMV, FMV
 	}
 
 	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(idOnlyQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationFmvIDs)),
+		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationFmvIDs)),
 	}
 
 	return filterAPIResources(cfg, r, i, resources, filteredLists)

@@ -39,7 +39,7 @@ func (t testBackgroundMusic) GetIndex() int {
 	return t.index
 }
 
-func compareBackgroundMusic(test test, exp testBackgroundMusic, got BackgroundMusic) {
+func compareBackgroundMusic(test test, _ string, exp testBackgroundMusic, got BackgroundMusic) {
 	compare(test, "bg music - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
 	checkResIDsInSlice(test, "bg music - areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)
 }
@@ -56,9 +56,9 @@ func (t testCue) GetIndex() int {
 	return t.index
 }
 
-func compareCues(test test, exp testCue, got Cue) {
-	compIdApiResourcePtrs(test, "cue - trigger area", test.cfg.e.areas.endpoint, exp.triggerArea, got.TriggerArea)
-	checkResIDsInSlice(test, "cue - included areas", test.cfg.e.areas.endpoint, exp.includedAreas, got.IncludedAreas)
-	compare(test, "cue - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
-	compare(test, "cue - replaces bg music", exp.replacesBGMusic, got.ReplacesBGMusic)
+func compareCues(test test, fieldName string, exp testCue, got Cue) {
+	compIdApiResourcePtrs(test, fieldName + " - trigger area", test.cfg.e.areas.endpoint, exp.triggerArea, got.TriggerArea)
+	checkResIDsInSlice(test, fieldName + " - included areas", test.cfg.e.areas.endpoint, exp.includedAreas, got.IncludedAreas)
+	compare(test, fieldName + " - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
+	compare(test, fieldName + " - replaces bg music", exp.replacesBGMusic, got.ReplacesBGMusic)
 }

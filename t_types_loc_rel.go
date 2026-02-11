@@ -32,7 +32,7 @@ type testLocMusic struct {
 	bossMusic  []int32
 }
 
-func compareLocMusic(test test, exp testLocMusic, got LocBasedMusic) {
+func compareLocMusic(test test, _ string, exp testLocMusic, got LocBasedMusic) {
 	songsEndpoint := test.cfg.e.songs.endpoint
 
 	checkResIDsInSlice(test, "bg music", songsEndpoint, exp.bgMusic, got.BackgroundMusic)

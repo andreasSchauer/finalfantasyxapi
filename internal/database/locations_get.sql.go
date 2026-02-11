@@ -175,16 +175,15 @@ func (q *Queries) GetAreaConnectionIDs(ctx context.Context, id int32) ([]int32, 
 
 const getAreaCueSongIDs = `-- name: GetAreaCueSongIDs :many
 SELECT DISTINCT so.id
-FROM cues c
-JOIN songs so ON c.song_id = so.id
-JOIN j_songs_cues j ON j.cue_id = c.id
-JOIN areas a ON COALESCE(c.trigger_area_id, j.included_area_id) = a.id
-WHERE j.included_area_id = $1 OR c.trigger_area_id = $1
-ORDER BY so.id
+FROM songs so
+JOIN cues c ON c.song_id = so.id
+LEFT JOIN j_songs_cues j ON j.cue_id = c.id
+JOIN areas a ON c.trigger_area_id = a.id
+WHERE a.id = $1 OR j.included_area_id = $1 ORDER BY so.id
 `
 
-func (q *Queries) GetAreaCueSongIDs(ctx context.Context, includedAreaID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaCueSongIDs, includedAreaID)
+func (q *Queries) GetAreaCueSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaCueSongIDs, id)
 	if err != nil {
 		return nil, err
 	}
@@ -1315,10 +1314,10 @@ func (q *Queries) GetLocationCharacterIDs(ctx context.Context, id int32) ([]int3
 
 const getLocationCueSongIDs = `-- name: GetLocationCueSongIDs :many
 SELECT DISTINCT so.id
-FROM cues c
-JOIN songs so ON c.song_id = so.id
-JOIN j_songs_cues j ON j.cue_id = c.id
-JOIN areas a ON COALESCE(c.trigger_area_id, j.included_area_id) = a.id
+FROM songs so
+JOIN cues c ON c.song_id = so.id
+LEFT JOIN j_songs_cues j ON j.cue_id = c.id
+JOIN areas a ON c.trigger_area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
 WHERE l.id = $1
@@ -2185,6 +2184,41 @@ func (q *Queries) GetShopIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getShopIDsByAutoAbility = `-- name: GetShopIDsByAutoAbility :many
+SELECT DISTINCT sh.id
+FROM shops sh
+JOIN j_shops_equipment j1 ON j1.shop_id = sh.id
+JOIN shop_equipment_pieces ep ON j1.shop_equipment_id = ep.id
+JOIN found_equipment_pieces fe ON ep.found_equipment_id = fe.id
+JOIN j_found_equipment_abilities j2 ON j2.found_equipment_id = fe.id
+JOIN auto_abilities aa ON j2.auto_ability_id = aa.id
+WHERE aa.id = $1
+ORDER BY sh.id
+`
+
+func (q *Queries) GetShopIDsByAutoAbility(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsByAutoAbility, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getShopIDsByCategory = `-- name: GetShopIDsByCategory :many
 SELECT id FROM shops WHERE category = $1 ORDER BY id
 `
@@ -2522,10 +2556,10 @@ func (q *Queries) GetSublocationCharacterIDs(ctx context.Context, id int32) ([]i
 
 const getSublocationCueSongIDs = `-- name: GetSublocationCueSongIDs :many
 SELECT DISTINCT so.id
-FROM cues c
-JOIN songs so ON c.song_id = so.id
-JOIN j_songs_cues j ON j.cue_id = c.id
-JOIN areas a ON COALESCE(c.trigger_area_id, j.included_area_id) = a.id
+FROM songs so
+JOIN cues c ON c.song_id = so.id
+LEFT JOIN j_songs_cues j ON j.cue_id = c.id
+JOIN areas a ON c.trigger_area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
 WHERE s.id = $1
 ORDER BY so.id

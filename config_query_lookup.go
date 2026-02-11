@@ -858,8 +858,17 @@ func (cfg *Config) initShopsParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
-		"category": {
+		"auto_ability": {
 			ID:          3,
+			Description: "Searches for shops that offer equipment with the specified auto-ability.",
+			Usage:       "?auto_ability={id}",
+			ExampleUses: []string{"?auto_ability=7"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "auto-abilities")},
+		},
+		"category": {
+			ID:          4,
 			Description: "Searches for shops with the specified shop category.",
 			Usage:       "?category={category_name/id}",
 			ExampleUses: []string{"?category=oaka", "?category=4"},
@@ -868,7 +877,7 @@ func (cfg *Config) initShopsParams() {
 			References:  []string{createListURL(cfg, "shop-category")},
 		},
 		"items": {
-			ID:          4,
+			ID:          5,
 			Description: "Searches for shops that offer items.",
 			Usage:       "?items={boolean}",
 			ExampleUses: []string{"?items=true", "?items=false"},
@@ -876,7 +885,7 @@ func (cfg *Config) initShopsParams() {
 			ForSingle:   false,
 		},
 		"equipment": {
-			ID:          5,
+			ID:          6,
 			Description: "Searches for shops that offer equipment.",
 			Usage:       "?equipment={boolean}",
 			ExampleUses: []string{"?equipment=true", "?equipment=false"},
@@ -884,7 +893,7 @@ func (cfg *Config) initShopsParams() {
 			ForSingle:   false,
 		},
 		"pre_airship": {
-			ID:          6,
+			ID:          7,
 			Description: "Searches for shops that are available before acquiring the airship.",
 			Usage:       "?pre_airship={boolean}",
 			ExampleUses: []string{"?pre_airship=true", "?pre_airship=false"},
@@ -892,7 +901,7 @@ func (cfg *Config) initShopsParams() {
 			ForSingle:   false,
 		},
 		"post_airship": {
-			ID:          7,
+			ID:          8,
 			Description: "Searches for shops that are available after acquiring the airship.",
 			Usage:       "?post_airship={boolean}",
 			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
@@ -952,7 +961,7 @@ func (cfg *Config) initSongsParams() {
 		},
 		"composer": {
 			ID:          6,
-			Description: "Searches for songs that were composed by target composer.",
+			Description: "Searches for songs that were composed by the stated composer.",
 			Usage:       "?composer={composer_name/id}",
 			ExampleUses: []string{"?composer=nobuo-uematsu", "?composer=2"},
 			ForList:     true,
@@ -960,7 +969,7 @@ func (cfg *Config) initSongsParams() {
 		},
 		"arranger": {
 			ID:          7,
-			Description: "Searches for songs that were arranged by target arranger.",
+			Description: "Searches for songs that were arranged by the stated arranger.",
 			Usage:       "?arranger={arranger_name/id}",
 			ExampleUses: []string{"?arranger=nobuo-uematsu", "?arranger=2"},
 			ForList:     true,

@@ -276,9 +276,9 @@ func TestGetMonster(t *testing.T) {
 					"steal rare": 	h.GetStructPtr(newTestItemAmount("/items/1", 1)),
 				},
 				otherItems: []testPossibleItem{
-					newTestPossibleItem(0, "items/9", 1, 60),
-					newTestPossibleItem(1, "items/64", 1, 20),
-					newTestPossibleItem(2, "items/7", 1, 20),
+					newTestPossibleItem(0, "/items/9", 1, 60),
+					newTestPossibleItem(1, "/items/64", 1, 20),
+					newTestPossibleItem(2, "/items/7", 1, 20),
 				},
 			},
 		},

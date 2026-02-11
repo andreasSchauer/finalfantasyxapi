@@ -27,9 +27,9 @@ type testSubShop struct {
 	equipment	[]testShopEquipment
 }
 
-func compareSubShops(test test, exp testSubShop, got SubShop) {
-	checkTestStructsInSlice(test, "sub shop - items", exp.items, got.Items, compareShopItems)
-	checkTestStructsInSlice(test, "sub shop - equipment", exp.equipment, got.Equipment, compareShopEquipment)
+func compareSubShops(test test, fieldName string, exp testSubShop, got SubShop) {
+	checkTestStructsInSlice(test, fieldName + " - items", exp.items, got.Items, compareShopItems)
+	checkTestStructsInSlice(test, fieldName + " - equipment", exp.equipment, got.Equipment, compareShopEquipment)
 }
 
 type testShopItem struct {
@@ -50,9 +50,9 @@ func newTestShopItem(idx int, itemID, price int32) testShopItem {
 	}
 }
 
-func compareShopItems(test test, exp testShopItem, got ShopItem) {
-	compIdApiResource(test, "shop item - item", test.cfg.e.shops.endpoint, exp.item, got.Item)
-	compare(test, "shop item - price", exp.price, got.Price)
+func compareShopItems(test test, fieldName string, exp testShopItem, got ShopItem) {
+	compIdApiResource(test, fieldName + " - item", test.cfg.e.items.endpoint, exp.item, got.Item)
+	compare(test, fieldName + " - price", exp.price, got.Price)
 }
 
 type testShopEquipment struct {
@@ -65,7 +65,7 @@ func (t testShopEquipment) GetIndex() int {
 	return t.index
 }
 
-func compareShopEquipment(test test, exp testShopEquipment, got ShopEquipment) {
-	compareFoundEquipment(test, exp.equipment, got.Equipment)
-	compare(test, "shop equipment - price", exp.price, got.Price)
+func compareShopEquipment(test test, fieldName string, exp testShopEquipment, got ShopEquipment) {
+	compareFoundEquipment(test, fieldName + " - found equipment", exp.equipment, got.Equipment)
+	compare(test, fieldName + " - price", exp.price, got.Price)
 }

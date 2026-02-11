@@ -44,7 +44,7 @@ func (t testQuestCompletion) GetIndex() int {
 	return t.index
 }
 
-func compareQuestCompletions(test test, exp testQuestCompletion, got QuestCompletion) {
-	checkResIDsInSlice(test, "quest completion - areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)
-	compareItemAmounts(test, exp.reward, got.Reward)
+func compareQuestCompletions(test test, fieldName string, exp testQuestCompletion, got QuestCompletion) {
+	checkResIDsInSlice(test, fieldName + " - areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)
+	compareItemAmounts(test, fieldName + " - rewards", exp.reward, got.Reward)
 }

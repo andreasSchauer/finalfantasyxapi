@@ -31,21 +31,16 @@ func compareTreasures(test test, exp expTreasure, got Treasure) {
 }
 
 type testFoundEquipment struct {
-	index				int
 	equipmentName    	int32
 	abilities        	[]int32
 	emptySlotsAmount 	int32
 }
 
-func (t testFoundEquipment) GetIndex() int {
-	return t.index
-}
-
-func compareFoundEquipment(test test, exp testFoundEquipment, got FoundEquipment) {
+func compareFoundEquipment(test test, fieldName string, exp testFoundEquipment, got FoundEquipment) {
 	enEndpoint := test.cfg.e.equipment.endpoint
 	aaEndpoint := test.cfg.e.autoAbilities.endpoint
 
-	compIdApiResource(test, "found equipment - equipment name", enEndpoint, exp.equipmentName, got.EquipmentName)
-	checkResIDsInSlice(test, "found equipment - abilities", aaEndpoint, exp.abilities, got.Abilities)
-	compare(test, "found equipment - empty slots amount", exp.emptySlotsAmount, got.EmptySlotsAmount)
+	compIdApiResource(test, fieldName + " - equipment name", enEndpoint, exp.equipmentName, got.EquipmentName)
+	checkResIDsInSlice(test, fieldName + " - abilities", aaEndpoint, exp.abilities, got.Abilities)
+	compare(test, fieldName + " - empty slots amount", exp.emptySlotsAmount, got.EmptySlotsAmount)
 }

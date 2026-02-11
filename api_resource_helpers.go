@@ -153,3 +153,18 @@ func toHasAPIResSlice[T HasAPIResource](s []T) []HasAPIResource {
 	}
 	return out
 }
+
+// used for method queries to combine multiple filtered lists. for example as a combination of all of them (see areas 'item' parameter)
+func combineFilteredAPIResources[A APIResource](filteredLists []filteredResList[A]) ([]A, error) {
+	resources := []A{}
+
+	for _, filtered := range filteredLists {
+		if filtered.err != nil {
+			return nil, filtered.err
+		}
+
+		resources = combineResources(resources, filtered.resources)
+	}
+
+	return resources, nil
+}

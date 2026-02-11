@@ -32,10 +32,10 @@ type testFormationTC struct {
 	Users   []int32
 }
 
-func compareFormationTCs(test test, exp testFormationTC, got FormationTriggerCommand) {
+func compareFormationTCs(test test, fieldName string, exp testFormationTC, got FormationTriggerCommand) {
 	tcEndpoint := test.cfg.e.triggerCommands.endpoint
 	charClassesEndpoint := test.cfg.e.characterClasses.endpoint
 
-	compIdApiResource(test, "tc ability", tcEndpoint, exp.Ability, got.Ability)
-	checkResIDsInSlice(test, "tc users", charClassesEndpoint, exp.Users, got.Users)
+	compIdApiResource(test, fieldName + " - tc ability", tcEndpoint, exp.Ability, got.Ability)
+	checkResIDsInSlice(test, fieldName + " - tc users", charClassesEndpoint, exp.Users, got.Users)
 }
