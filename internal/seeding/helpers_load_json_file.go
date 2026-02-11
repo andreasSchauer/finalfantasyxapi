@@ -6,10 +6,12 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func loadJSONFile[T any](path string, target *T) error {
-	root, err := projectRoot()
+	root, err := h.ProjectRoot()
 	if err != nil {
 		return err
 	}
@@ -32,26 +34,4 @@ func loadJSONFile[T any](path string, target *T) error {
 	}
 
 	return nil
-}
-
-
-func projectRoot() (string, error) {
-	wd, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-
-	for {
-		_, err := os.Stat(filepath.Join(wd, "go.mod"))
-		if err == nil {
-			return wd, nil
-		}
-
-		parent := filepath.Dir(wd)
-		if wd == parent {
-			return "", fmt.Errorf("project root not found from %s", wd)
-		}
-		
-		wd = parent
-	}
 }

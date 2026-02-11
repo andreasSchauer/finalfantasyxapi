@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/joho/godotenv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 )
 
 var testCfg *Config
@@ -13,7 +13,10 @@ var testCfg *Config
 func TestMain(m *testing.M) {
 	// will be used once the file is in ./internal/api
 	// _ = godotenv.Load(filepath.Join("..", "..", ".env"))
-	_ = godotenv.Load()
+	err := api.LoadEnvFromRoot()
+	if err != nil {
+		panic(err)
+	}
 
 	cfg, err := ConfigInit()
 	if err != nil {

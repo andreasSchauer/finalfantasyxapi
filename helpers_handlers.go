@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strconv"
-	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -102,42 +100,53 @@ func handleEndpointNameVersion[T h.HasID, R any, A APIResource, L APIResourceLis
 
 func handleEndpointSubsections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	posIDStr := segments[0]
-	isValidID := isValidInt(posIDStr)
-	
-	if i.subsections == nil {
-		if isValidID {
-			respondWithError(w, http.StatusBadRequest, fmt.Sprintf("endpoint '%s' doesn't have any subsections.", i.endpoint), nil)
-			return
-		}
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf(`wrong format. usage: '/api/%s/{name or id}'.`, i.endpoint), nil)
-		return
-	}
+	idIsValid := isValidInt(posIDStr)
+	posSection := segments[1]
+	sectionIsInt := isValidInt(posSection)
 
-	if isValidID {
+	
+	switch {
+	// /ep/a/2 + /ep/a/a
+	case !idIsValid:
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
+		return
+
+	// /ep/2/2
+	case sectionIsInt:
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid subsection '%s'. subsection can't be an integer. use /api/%s/sections for valid subsections.", posSection, i.endpoint), nil)
+		return
+
+	// /ep/2/a (no subsections)
+	case i.subsections == nil:
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("endpoint /%s doesn't have any subsections.", i.endpoint), nil)
+		return
+
+	// /ep/2/a (subsections)
+	case i.subsections != nil:
 		handleSubsection(cfg, w, r, i, segments)
 		return
 	}
-	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid id: '%s'.", posIDStr), nil)
 }
 
 
 func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
-	posIDStr := segments[0]
-	posVerStr := segments[1]
-	idIsInt := isValidInt(posIDStr)
-	versionIsInt := isValidInt(posVerStr)
+	isSubsection, isNameVersion, subsectionIsInt := getSegmentCases(segments)
 
 	switch {
-	case idIsInt:
+	case isSubsection:
 		handleSubsection(cfg, w, r, i, segments)
 		return
 
-	case !idIsInt && versionIsInt:
+	case isNameVersion:
 		handleEndpointNameVersion(w, r, i, segments)
 		return
 
+	case subsectionIsInt:
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid subsection '%s'. subsection can't be an integer. use /api/%s/sections for available subsections.", segments[1], i.endpoint), nil)
+		return
+
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage for two segments: /api/%s/{name}/{version}, or /api/%s/{id}/{subsection}. available subsections: %s.", i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -154,7 +163,7 @@ func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 
 	fns, ok := i.subsections[subsection]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' is not supported for endpoint '%s'. supported subsections: %s.", subsection, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s.", subsection, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
 
@@ -181,26 +190,4 @@ func handleSections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 		return
 	}
 	respondWithJSON(w, http.StatusOK, sectionList)
-}
-
-
-func getPathSegments(path, endpoint string) []string {
-	prefix := fmt.Sprintf("/api/%s", endpoint)
-	pathLower := strings.ToLower(path)
-	pathTrimmed := strings.TrimPrefix(pathLower, prefix)
-	pathTrimmed = strings.TrimPrefix(pathTrimmed, "/")
-	pathTrimmed = strings.TrimSuffix(pathTrimmed, "/")
-	segments := []string{}
-
-	if pathTrimmed != "" {
-		segments = strings.Split(pathTrimmed, "/")
-	}
-
-	return segments
-}
-
-
-func isValidInt(idStr string) bool {
-	_, err := strconv.Atoi(idStr)
-	return err == nil
 }

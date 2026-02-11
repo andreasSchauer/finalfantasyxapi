@@ -14,7 +14,7 @@ func verifyQueryParams[T h.HasID, R any, A APIResource, L APIResourceList](r *ht
 	for query := range q {
 		queryParam, ok := i.queryLookup[query]
 		if !ok {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s.", query, i.endpoint), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s. use /api/%s/parameters for available parameters.", query, i.endpoint, i.endpoint), nil)
 		}
 
 		err := verifyRequiredParams(q, queryParam, query)

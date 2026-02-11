@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/joho/godotenv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 )
 
 
@@ -13,7 +13,10 @@ func main() {
 	//const filepathRoot = "."
 	const port = "8080"
 
-	_ = godotenv.Load()
+	err := api.LoadEnvFromRoot()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	apiCfg, err := ConfigInit()
 	if err != nil {
