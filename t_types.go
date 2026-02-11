@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"testing"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -37,11 +38,13 @@ type test struct {
 }
 
 type testGeneral struct {
-	requestURL     string
-	expectedStatus int
-	expectedErr    string
-	dontCheck      map[string]bool
-	expLengths     map[string]int
+	requestURL     	string
+	expectedStatus 	int
+	expectedErr    	string
+	dontCheck      	map[string]bool
+	expLengths     	map[string]int
+	endpoint		string
+	handler			func(http.ResponseWriter, *http.Request)
 }
 
 type expNameVer struct {

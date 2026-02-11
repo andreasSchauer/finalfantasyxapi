@@ -7,7 +7,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type LookupObject struct {
 	Name    string
 	Version *int32
@@ -68,8 +67,8 @@ type Lookup struct {
 	EquipmentNamesID     map[int32]EquipmentName
 	EquipmentTables      map[string]EquipmentTable
 	EquipmentTablesID    map[int32]EquipmentTable
-	EncounterLocations   map[string]EncounterLocation
-	EncounterLocationsID map[int32]EncounterLocation
+	EncounterAreas       map[string]EncounterArea
+	EncounterAreasID 	 map[int32]EncounterArea
 	FMVs                 map[string]FMV
 	FMVsID               map[int32]FMV
 	Items                map[string]Item
@@ -162,8 +161,8 @@ func lookupInit() Lookup {
 		EquipmentNamesID:     make(map[int32]EquipmentName),
 		EquipmentTables:      make(map[string]EquipmentTable),
 		EquipmentTablesID:    make(map[int32]EquipmentTable),
-		EncounterLocations:   make(map[string]EncounterLocation),
-		EncounterLocationsID: make(map[int32]EncounterLocation),
+		EncounterAreas:       make(map[string]EncounterArea),
+		EncounterAreasID: make(map[int32]EncounterArea),
 		FMVs:                 make(map[string]FMV),
 		FMVsID:               make(map[int32]FMV),
 		Items:                make(map[string]Item),

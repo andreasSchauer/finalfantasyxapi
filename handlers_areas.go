@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -44,7 +43,7 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}', or '/api/%s/{id}/{subsection}'. supported subsections: %s.", i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -91,7 +90,7 @@ func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, A
 		return AreaApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[AreaAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[AreaAPIResource]{
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationAreaIDs)),
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationAreaIDs)),
 		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getAreasByItem)),
@@ -109,7 +108,5 @@ func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, A
 		frl(boolQuery2(cfg, r, i, resources, "treasures", cfg.db.GetAreaIDsWithTreasures)),
 		frl(boolQuery2(cfg, r, i, resources, "sidequests", cfg.db.GetAreaIDsWithSidequests)),
 		frl(boolQuery2(cfg, r, i, resources, "fmvs", cfg.db.GetAreaIDsWithFMVs)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }

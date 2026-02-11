@@ -229,3 +229,41 @@ func TestRetrieveSongs(t *testing.T) {
 
 	testIdList(t, tests, testCfg.e.songs.endpoint, "RetrieveSongs", testCfg.HandleSongs, compareAPIResourceLists[NamedApiResourceList])
 }
+
+
+func TestSubsectionSongs(t *testing.T) {
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations/25/songs",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleLocations,
+			},
+			count:          11,
+			parentResource: h.GetStrPtr("/locations/25"),
+			results:        []int32{5, 44, 57, 60, 78, 79, 84, 85, 87, 88, 89},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations/30/songs",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleSublocations,
+			},
+			count:          4,
+			parentResource: h.GetStrPtr("/sublocations/30"),
+			results:        []int32{2, 27, 59, 60},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/150/songs",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleAreas,
+			},
+			count:          4,
+			parentResource: h.GetStrPtr("/areas/150"),
+			results:        []int32{4, 16, 30, 51},
+		},
+	}
+
+	testIdList(t, tests, testCfg.e.songs.endpoint, "SubsectionSongs", nil, compareSubResourceLists[NamedAPIResource, SongSub])
+}

@@ -35,7 +35,7 @@ func (cfg *Config) HandleFMVs(w http.ResponseWriter, r *http.Request) {
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -64,9 +64,7 @@ func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seeding.FMV, FMV
 		return NamedApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[NamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationFmvIDs)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }

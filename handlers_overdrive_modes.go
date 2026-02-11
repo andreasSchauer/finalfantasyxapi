@@ -64,7 +64,7 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 		return
 		
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{name or id}'.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -102,9 +102,7 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request, i handlerInput[seedin
 		return NamedApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[NamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(typeQuery(cfg, r, i, cfg.t.OverdriveModeType, resources, "type", cfg.db.GetOverdriveModeIDsByType)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }

@@ -19,8 +19,6 @@ func (m MonsterFormationSub) GetURL() string {
 	return m.URL
 }
 
-
-
 func handleMonsterFormationsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
 	i := cfg.e.monsterFormations
 	formations := []MonsterFormationSub{}
@@ -34,7 +32,7 @@ func handleMonsterFormationsSection(cfg *Config, _ *http.Request, dbIDs []int32)
 			Category:       formation.FormationData.Category,
 			IsForcedAmbush: formation.FormationData.IsForcedAmbush,
 			Monsters:       convertObjSlice(cfg, formation.Monsters, monsterAmountString),
-			Areas:          locAreaStrings(cfg, formation.EncounterLocations),
+			Areas:          locAreaStrings(cfg, formation.EncounterAreas),
 		}
 
 		formations = append(formations, formationSub)

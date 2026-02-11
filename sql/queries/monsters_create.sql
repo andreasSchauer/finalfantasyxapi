@@ -26,10 +26,10 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = monster_selections.data_hash
 RETURNING *;
 
 
--- name: CreateEncounterLocation :one
-INSERT INTO encounter_locations (data_hash, area_id, specification)
+-- name: CreateEncounterArea :one
+INSERT INTO encounter_areas (data_hash, area_id, specification)
 VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = encounter_locations.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = encounter_areas.data_hash
 RETURNING *;
 
 
@@ -54,8 +54,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_trigger_commands.data
 RETURNING *;
 
 
--- name: CreateMonsterFormationsEncounterLocationsJunction :exec
-INSERT INTO j_monster_formations_encounter_locations (data_hash, monster_formation_id, encounter_location_id)
+-- name: CreateMonsterFormationsEncounterAreasJunction :exec
+INSERT INTO j_monster_formations_encounter_areas (data_hash, monster_formation_id, encounter_area_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

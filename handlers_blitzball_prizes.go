@@ -37,7 +37,7 @@ func (cfg *Config) HandleBlitzballPrizes(w http.ResponseWriter, r *http.Request)
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -64,9 +64,7 @@ func (cfg *Config) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seedi
 		return UnnamedApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[UnnamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
 		frl(typeQuery(cfg, r, i, cfg.t.BlitzballTournamentCategory, resources, "category", cfg.db.GetBlitzballPrizeIDsByCategory)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }

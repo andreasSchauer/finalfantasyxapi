@@ -53,7 +53,7 @@ func TestGetSublocation(t *testing.T) {
 					"formations":             50,
 					"sidequests":             2,
 					"bg music":               2,
-					"cues music":             0,
+					"cues music":             1,
 					"fmvs music":             0,
 					"boss music":             1,
 					"fmvs":                   0,
@@ -94,7 +94,7 @@ func TestGetSublocation(t *testing.T) {
 					"formations":             14,
 					"sidequests":             0,
 					"bg music":               5,
-					"cues music":             1,
+					"cues music":             3,
 					"fmvs music":             3,
 					"boss music":             2,
 					"fmvs":                   3,
@@ -171,12 +171,13 @@ func TestRetrieveSublocations(t *testing.T) {
 	testIdList(t, tests, testCfg.e.sublocations.endpoint, "RetrieveSublocations", testCfg.HandleSublocations, compareAPIResourceLists[NamedApiResourceList])
 }
 
-func TestSublocationsConnected(t *testing.T) {
+func TestSubsectionSublocations(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/4/connected/",
 				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleSublocations,
 			},
 			count:          2,
 			parentResource: h.GetStrPtr("/sublocations/4"),
@@ -186,6 +187,7 @@ func TestSublocationsConnected(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/11/connected/",
 				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleSublocations,
 			},
 			count:          1,
 			parentResource: h.GetStrPtr("/sublocations/11"),
@@ -195,6 +197,7 @@ func TestSublocationsConnected(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/26/connected/",
 				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleSublocations,
 			},
 			count:          3,
 			parentResource: h.GetStrPtr("/sublocations/26"),
@@ -204,12 +207,33 @@ func TestSublocationsConnected(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/34/connected/",
 				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleSublocations,
 			},
 			count:          4,
 			parentResource: h.GetStrPtr("/sublocations/34"),
 			results:        []int32{25, 35, 36, 37},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations/15/sublocations/",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleLocations,
+			},
+			count:          3,
+			parentResource: h.GetStrPtr("/locations/15"),
+			results:        []int32{25, 26, 27},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations/8/sublocations/",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleLocations,
+			},
+			count:          2,
+			parentResource: h.GetStrPtr("/locations/8"),
+			results:        []int32{13, 14},
+		},
 	}
 
-	testIdList(t, tests, testCfg.e.sublocations.endpoint, "SubsectionSublocationsConnected", testCfg.HandleSublocations, compareSubResourceLists[NamedAPIResource, SublocationSub])
+	testIdList(t, tests, testCfg.e.sublocations.endpoint, "SubsectionSublocations", nil, compareSubResourceLists[NamedAPIResource, SublocationSub])
 }

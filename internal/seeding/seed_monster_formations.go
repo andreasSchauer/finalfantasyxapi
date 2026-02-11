@@ -15,9 +15,9 @@ type MonsterFormation struct {
 	ID      int32  `json:"-"`
 	Version *int32 `json:"version"`
 	MonsterSelection
-	FormationData      FormationData             `json:"formation_data"`
-	TriggerCommands    []FormationTriggerCommand `json:"trigger_commands"`
-	EncounterLocations []EncounterLocation       `json:"encounter_locations"`
+	FormationData   FormationData             `json:"formation_data"`
+	TriggerCommands []FormationTriggerCommand `json:"trigger_commands"`
+	EncounterAreas  []EncounterArea           `json:"encounter_areas"`
 }
 
 func (mf MonsterFormation) ToHashFields() []any {
@@ -110,36 +110,36 @@ func (fd FormationData) Error() string {
 	return fmt.Sprintf("formation data with category: %s, forced ambush: %t, can escape: %t, boss music id: %v, notes: %v", fd.Category, fd.IsForcedAmbush, fd.CanEscape, h.ObjPtrToID(fd.BossMusic), h.DerefOrNil(fd.Notes))
 }
 
-type EncounterLocation struct {
+type EncounterArea struct {
 	ID            int32
 	LocationArea  LocationArea `json:"location_area"`
 	AreaID        int32
 	Specification *string `json:"specification"`
 }
 
-func (el EncounterLocation) ToHashFields() []any {
+func (el EncounterArea) ToHashFields() []any {
 	return []any{
 		el.AreaID,
 		h.DerefOrNil(el.Specification),
 	}
 }
 
-func (el EncounterLocation) ToKeyFields() []any {
+func (el EncounterArea) ToKeyFields() []any {
 	return []any{
 		CreateLookupKey(el.LocationArea),
 		el.Specification,
 	}
 }
 
-func (el EncounterLocation) GetID() int32 {
+func (el EncounterArea) GetID() int32 {
 	return el.ID
 }
 
-func (el EncounterLocation) Error() string {
+func (el EncounterArea) Error() string {
 	return fmt.Sprintf("encounter location with %s, specification: %s", el.LocationArea, h.DerefOrNil(el.Specification))
 }
 
-func (el EncounterLocation) GetLocationArea() LocationArea {
+func (el EncounterArea) GetLocationArea() LocationArea {
 	return el.LocationArea
 }
 
@@ -232,29 +232,29 @@ func (l *Lookup) seedMonsterFormations(db *database.Queries, dbConn *sql.DB) err
 	})
 }
 
-func (l *Lookup) seedEncounterLocation(qtx *database.Queries, encounterLocation EncounterLocation) (EncounterLocation, error) {
+func (l *Lookup) seedEncounterArea(qtx *database.Queries, encounterArea EncounterArea) (EncounterArea, error) {
 	var err error
 
-	locationArea := encounterLocation.LocationArea
-	encounterLocation.AreaID, err = assignFK(locationArea, l.Areas)
+	locationArea := encounterArea.LocationArea
+	encounterArea.AreaID, err = assignFK(locationArea, l.Areas)
 	if err != nil {
-		return EncounterLocation{}, h.NewErr(encounterLocation.Error(), err)
+		return EncounterArea{}, h.NewErr(encounterArea.Error(), err)
 	}
 
-	dbEncounterLocation, err := qtx.CreateEncounterLocation(context.Background(), database.CreateEncounterLocationParams{
-		DataHash:      generateDataHash(encounterLocation),
-		AreaID:        encounterLocation.AreaID,
-		Specification: h.GetNullString(encounterLocation.Specification),
+	dbEncounterArea, err := qtx.CreateEncounterArea(context.Background(), database.CreateEncounterAreaParams{
+		DataHash:      generateDataHash(encounterArea),
+		AreaID:        encounterArea.AreaID,
+		Specification: h.GetNullString(encounterArea.Specification),
 	})
 	if err != nil {
-		return EncounterLocation{}, h.NewErr(encounterLocation.Error(), err, "couldn't create monster encounter location")
+		return EncounterArea{}, h.NewErr(encounterArea.Error(), err, "couldn't create monster encounter location")
 	}
 
-	encounterLocation.ID = dbEncounterLocation.ID
-	key := CreateLookupKey(encounterLocation)
-	l.EncounterLocations[key] = encounterLocation
+	encounterArea.ID = dbEncounterArea.ID
+	key := CreateLookupKey(encounterArea)
+	l.EncounterAreas[key] = encounterArea
 
-	return encounterLocation, nil
+	return encounterArea, nil
 }
 
 func (l *Lookup) seedMonsterFormationsRelationships(db *database.Queries, dbConn *sql.DB) error {
@@ -273,7 +273,7 @@ func (l *Lookup) seedMonsterFormationsRelationships(db *database.Queries, dbConn
 				return err
 			}
 
-			err = l.seedFormationEncounterLocations(qtx, formation)
+			err = l.seedFormationEncounterAreas(qtx, formation)
 			if err != nil {
 				return err
 			}
@@ -376,20 +376,20 @@ func (l *Lookup) seedSelectionMonsterAmounts(qtx *database.Queries, selection Mo
 	return nil
 }
 
-func (l *Lookup) seedFormationEncounterLocations(qtx *database.Queries, formation MonsterFormation) error {
-	for _, encounterLocation := range formation.EncounterLocations {
-		junction, err := createJunctionSeed(qtx, formation, encounterLocation, l.seedEncounterLocation)
+func (l *Lookup) seedFormationEncounterAreas(qtx *database.Queries, formation MonsterFormation) error {
+	for _, encounterArea := range formation.EncounterAreas {
+		junction, err := createJunctionSeed(qtx, formation, encounterArea, l.seedEncounterArea)
 		if err != nil {
 			return h.NewErr(formation.Error(), err)
 		}
 
-		err = qtx.CreateMonsterFormationsEncounterLocationsJunction(context.Background(), database.CreateMonsterFormationsEncounterLocationsJunctionParams{
+		err = qtx.CreateMonsterFormationsEncounterAreasJunction(context.Background(), database.CreateMonsterFormationsEncounterAreasJunctionParams{
 			DataHash:            generateDataHash(junction),
 			MonsterFormationID:  junction.ParentID,
-			EncounterLocationID: junction.ChildID,
+			EncounterAreaID: 	 junction.ChildID,
 		})
 		if err != nil {
-			subjects := h.JoinErrSubjects(formation.Error(), encounterLocation.Error())
+			subjects := h.JoinErrSubjects(formation.Error(), encounterArea.Error())
 			return h.NewErr(subjects, err, "couldn't junction monster formation with encounter location")
 		}
 	}

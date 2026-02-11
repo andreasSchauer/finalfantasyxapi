@@ -19,7 +19,7 @@ CREATE TABLE quest_completions (
 );
 
 
-CREATE TABLE completion_locations (
+CREATE TABLE completion_areas (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     completion_id INTEGER NOT NULL REFERENCES quest_completions(id),
@@ -29,7 +29,7 @@ CREATE TABLE completion_locations (
 
 
 -- +goose Down
-DROP TABLE IF EXISTS completion_locations;
+DROP TABLE IF EXISTS completion_areas;
 DROP TABLE IF EXISTS quest_completions;
 DROP TABLE IF EXISTS blitzball_items;
 

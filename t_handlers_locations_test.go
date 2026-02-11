@@ -46,7 +46,7 @@ func TestGetLocation(t *testing.T) {
 					"formations":          18,
 					"sidequests":          1,
 					"bg music":            11,
-					"cues music":          3,
+					"cues music":          10,
 					"fmvs music":          1,
 					"boss music":          3,
 					"fmvs":                2,
@@ -167,7 +167,7 @@ func TestRetrieveLocations(t *testing.T) {
 	testIdList(t, tests, testCfg.e.locations.endpoint, "RetrieveLocations", testCfg.HandleLocations, compareAPIResourceLists[NamedApiResourceList])
 }
 
-func TestLocationsConnected(t *testing.T) {
+func TestSubsectionLocations(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -198,5 +198,5 @@ func TestLocationsConnected(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.e.locations.endpoint, "SubsectionLocationsConnected", testCfg.HandleLocations, compareSubResourceLists[NamedAPIResource, LocationSub])
+	testIdList(t, tests, testCfg.e.locations.endpoint, "SubsectionLocations", testCfg.HandleLocations, compareSubResourceLists[NamedAPIResource, LocationSub])
 }

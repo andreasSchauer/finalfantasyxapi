@@ -14,10 +14,11 @@ type QueryType struct {
 	ExampleUses      []string       `json:"example_uses"`
 	ForList          bool           `json:"for_list"`
 	ForSingle        bool           `json:"for_single"`
+	IsRequired		 bool			`json:"is_required"`
 	RequiredParams   []string       `json:"required_params,omitempty"`
 	References       []string       `json:"references,omitempty"`
 	AllowedIDs       []int32        `json:"-"`
-	AllowedResources []APIResource  `json:"allowed_resources,omitempty"`
+	AllowedResources []string  		`json:"allowed_resources,omitempty"`
 	AllowedValues    []string       `json:"allowed_values,omitempty"`
 	AllowedIntRange  []int          `json:"allowed_int_range,omitempty"`
 	DefaultVal       *int           `json:"default_value,omitempty"`
@@ -56,8 +57,8 @@ func (cfg *Config) QueryLookupInit() {
 			ID:          -2,
 			Name:        "limit",
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20. The value 'max' can also be used to forgo pagination of lists entirely.",
-			Usage:       "?limit{integer or 'max'}",
-			ExampleUses: []string{"?limit=50"},
+			Usage:       "?limit{int|'max'}",
+			ExampleUses: []string{"?limit=50", "?limit=max"},
 			ForList:     true,
 			ForSingle:   false,
 			SpecialInputs: []SpecialInput{
@@ -72,7 +73,7 @@ func (cfg *Config) QueryLookupInit() {
 			ID:          -1,
 			Name:        "offset",
 			Description: "Sets the offset from where to start the displayed entries in a list response. If not set manually, the default is 0.",
-			Usage:       "?offset{integer}",
+			Usage:       "?offset{int}",
 			ExampleUses: []string{"?offset=30"},
 			ForList:     true,
 			ForSingle:   false,
@@ -121,7 +122,7 @@ func (cfg *Config) initAreasParams() {
 		"location": {
 			ID:          1,
 			Description: "Searches for areas that are located within the specified location.",
-			Usage:       "?location={location_id}",
+			Usage:       "?location={id}",
 			ExampleUses: []string{"?location=17"},
 			ForList:     true,
 			ForSingle:   false,
@@ -130,7 +131,7 @@ func (cfg *Config) initAreasParams() {
 		"sublocation": {
 			ID:          2,
 			Description: "Searches for areas that are located within the specified sublocation.",
-			Usage:       "?sublocation={sublocation_id}",
+			Usage:       "?sublocation={id}",
 			ExampleUses: []string{"?sublocation=13"},
 			ForList:     true,
 			ForSingle:   false,
@@ -139,7 +140,7 @@ func (cfg *Config) initAreasParams() {
 		"item": {
 			ID:          3,
 			Description: "Searches for areas where the specified item can be acquired. Can be specified further with the 'method' parameter.",
-			Usage:       "?item={item_id}",
+			Usage:       "?item={id}",
 			ExampleUses: []string{"?item=45"},
 			ForList:     true,
 			ForSingle:   false,
@@ -148,7 +149,7 @@ func (cfg *Config) initAreasParams() {
 		"method": {
 			ID:             4,
 			Description:    "Specifies the method of acquisition for the item parameter.",
-			Usage:          "?item={item_id}&method={value}",
+			Usage:          "?item={id}&method={method_name}",
 			ExampleUses:    []string{"?item=45&method=treasure"},
 			ForList:        true,
 			ForSingle:      false,
@@ -158,7 +159,7 @@ func (cfg *Config) initAreasParams() {
 		"key_item": {
 			ID:          5,
 			Description: "Searches for areas where the specified key item can be acquired.",
-			Usage:       "?key_item={key_item_id}",
+			Usage:       "?key_item={id}",
 			ExampleUses: []string{"?key_item=22"},
 			ForList:     true,
 			ForSingle:   false,
@@ -167,7 +168,7 @@ func (cfg *Config) initAreasParams() {
 		"story_based": {
 			ID:          6,
 			Description: "Searches for areas that can only be visited during story events.",
-			Usage:       "?story_based={boolean}",
+			Usage:       "?story_based={bool}",
 			ExampleUses: []string{"?story_based=true", "?story_based=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -175,7 +176,7 @@ func (cfg *Config) initAreasParams() {
 		"save_sphere": {
 			ID:          7,
 			Description: "Searches for areas that have a save sphere.",
-			Usage:       "?save_sphere={boolean}",
+			Usage:       "?save_sphere={bool}",
 			ExampleUses: []string{"?save_sphere=true", "?save_sphere=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -183,7 +184,7 @@ func (cfg *Config) initAreasParams() {
 		"comp_sphere": {
 			ID:          8,
 			Description: "Searches for areas that contain an al bhed compilation sphere.",
-			Usage:       "?comp_sphere={boolean}",
+			Usage:       "?comp_sphere={bool}",
 			ExampleUses: []string{"?comp_sphere=true", "?comp_sphere=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -191,7 +192,7 @@ func (cfg *Config) initAreasParams() {
 		"airship": {
 			ID:          9,
 			Description: "Searches for areas where you get dropped off when visiting with the airship.",
-			Usage:       "?airship={boolean}",
+			Usage:       "?airship={bool}",
 			ExampleUses: []string{"?airship=true", "?airship=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -199,7 +200,7 @@ func (cfg *Config) initAreasParams() {
 		"chocobo": {
 			ID:          10,
 			Description: "Searches for areas where you can ride a chocobo.",
-			Usage:       "?chocobo={boolean}",
+			Usage:       "?chocobo={bool}",
 			ExampleUses: []string{"?chocobo=true", "?chocobo=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -207,7 +208,7 @@ func (cfg *Config) initAreasParams() {
 		"characters": {
 			ID:          11,
 			Description: "Searches for areas where a character permanently joins the party.",
-			Usage:       "?characters={boolean}",
+			Usage:       "?characters={bool}",
 			ExampleUses: []string{"?characters=true", "?characters=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -215,7 +216,7 @@ func (cfg *Config) initAreasParams() {
 		"aeons": {
 			ID:          12,
 			Description: "Searches for areas where a new aeon is acquired.",
-			Usage:       "?aeons={boolean}",
+			Usage:       "?aeons={bool}",
 			ExampleUses: []string{"?aeons=true", "?aeons=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -223,7 +224,7 @@ func (cfg *Config) initAreasParams() {
 		"monsters": {
 			ID:          13,
 			Description: "Searches for areas that have monsters.",
-			Usage:       "?monsters={boolean}",
+			Usage:       "?monsters={bool}",
 			ExampleUses: []string{"?monsters=true", "?monsters=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -231,7 +232,7 @@ func (cfg *Config) initAreasParams() {
 		"boss_fights": {
 			ID:          14,
 			Description: "Searches for areas that have bosses.",
-			Usage:       "?boss_fights={boolean}",
+			Usage:       "?boss_fights={bool}",
 			ExampleUses: []string{"?boss_fights=true", "?boss_fights=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -239,7 +240,7 @@ func (cfg *Config) initAreasParams() {
 		"shops": {
 			ID:          15,
 			Description: "Searches for areas that have shops.",
-			Usage:       "?shops={boolean}",
+			Usage:       "?shops={bool}",
 			ExampleUses: []string{"?shops=true", "?shops=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -247,7 +248,7 @@ func (cfg *Config) initAreasParams() {
 		"treasures": {
 			ID:          16,
 			Description: "Searches for areas that have treasures.",
-			Usage:       "?treasures={boolean}",
+			Usage:       "?treasures={bool}",
 			ExampleUses: []string{"?treasures=true", "?treasures=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -255,7 +256,7 @@ func (cfg *Config) initAreasParams() {
 		"sidequests": {
 			ID:          17,
 			Description: "Searchces for areas that feature sidequests.",
-			Usage:       "?sidequests={boolean}",
+			Usage:       "?sidequests={bool}",
 			ExampleUses: []string{"?sidequests=true", "?sidequests=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -263,7 +264,7 @@ func (cfg *Config) initAreasParams() {
 		"fmvs": {
 			ID:          18,
 			Description: "Searches for areas that feature fmv sequences.",
-			Usage:       "?fmvs={boolean}",
+			Usage:       "?fmvs={bool}",
 			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -279,7 +280,7 @@ func (cfg *Config) initArenaCreationsParams() {
 		"category": {
 			ID:          1,
 			Description: "Searches for monster formations with the specified arena-creation-category.",
-			Usage:       "?category={category_name/id}",
+			Usage:       "?category={name|id}",
 			ExampleUses: []string{"?category=species", "?category=3"},
 			ForList:     true,
 			ForSingle:   false,
@@ -296,7 +297,7 @@ func (cfg *Config) initBlitzballPrizesParams() {
 		"category": {
 			ID:          1,
 			Description: "Searches for blitzball prize tables with the specified blitzball-tournament-category.",
-			Usage:       "?category={category_name/id}",
+			Usage:       "?category={name|id}",
 			ExampleUses: []string{"?category=league", "?category=2"},
 			ForList:     true,
 			ForSingle:   false,
@@ -313,7 +314,7 @@ func (cfg *Config) initFMVsParams() {
 		"location": {
 			ID:          1,
 			Description: "Searches for fmvs that are played within the specified location.",
-			Usage:       "?location={location_id}",
+			Usage:       "?location={id}",
 			ExampleUses: []string{"?location=17"},
 			ForList:     true,
 			ForSingle:   false,
@@ -330,7 +331,7 @@ func (cfg *Config) initMonstersParams() {
 		"kimahri_stats": {
 			ID:          1,
 			Description: "Calculate the stats of Biran and Yenke Ronso that are based on Kimahri's stats. These are: HP, strength, magic, agility. If unused, their stats are based on Kimahri's base stats.",
-			Usage:       "?kimahri_stats={stat}-{value},{stat}-{value}",
+			Usage:       "?kimahri_stats={stat}-{int},...",
 			ExampleUses: []string{"?kimahri_stats=hp-3000,strength-25,magic-30,agility-40", "?kimahri_stats=hp15000,agility-255"},
 			ForList:     false,
 			ForSingle:   true,
@@ -339,7 +340,7 @@ func (cfg *Config) initMonstersParams() {
 		"aeon_stats": {
 			ID:          2,
 			Description: "Replace the stats of Possessed Aeons with your own. All stats are replaceable, except for MP and luck. If unused, their stats are based on your own Aeon's base stats.",
-			Usage:       "?aeon_stats={stat}-{value},{stat}-{value}",
+			Usage:       "?aeon_stats={stat}-{int},...",
 			ExampleUses: []string{"?aeon_stats=hp-3000,strength-75,defense-50,magic-30,agility-20", "?aeon_stats=accuracy-150,magic_defense-255"},
 			ForList:     false,
 			ForSingle:   true,
@@ -348,7 +349,7 @@ func (cfg *Config) initMonstersParams() {
 		"altered_state": {
 			ID:          3,
 			Description: "If a monster has altered states, apply the changes of an altered state to that monster. The default state will show up as the first altered state in the new entry.",
-			Usage:       "?altered_state={alt_state_id}",
+			Usage:       "?altered_state={id}",
 			ExampleUses: []string{"?altered_state=1"},
 			ForList:     false,
 			ForSingle:   true,
@@ -356,7 +357,7 @@ func (cfg *Config) initMonstersParams() {
 		"omnis_elements": {
 			ID:            4,
 			Description:   "Calculate the elemental affinities of Seymour Omnis by using exactly four of the letters 'f' (fire), 'l' (lightning), 'w' (water) and 'i' (ice). The letters represent the Mortiphasms pointing at Omnis. 0 of a color = 'neutral', 1 = 'halved', 2 = 'immune', 3 = 'absorb', 4 = 'absorb' + 'weak' to opposing element. The order of the letters doesn't matter.",
-			Usage:         "?omnis_elements={letter}x4",
+			Usage:         "?omnis_elements={4xf|l|w|i}",
 			ExampleUses:   []string{"?omnis_elements=ifil", "?omnis_elements=llll", "?omnis_elements=wfwf"},
 			ForList:       false,
 			ForSingle:     true,
@@ -365,9 +366,9 @@ func (cfg *Config) initMonstersParams() {
 		},
 		"elemental_resists": {
 			ID:          5,
-			Description: "Searches for monsters that have the specified elemental affinity/affinities.",
-			Usage:       "?elemental_resists={element_name/id}-{affinity_name/id},{element_name/id}-{affinity_name/id},...",
-			ExampleUses: []string{"?elemental_resists={fire}-{weak},{water}-{absorb}", "?elemental_resists={lightning}-{neutral}"},
+			Description: "Searches for monsters that have the specified elemental affinities.",
+			Usage:       "?elemental_resists={element|id}-{affinity|id},...",
+			ExampleUses: []string{"?elemental_resists=fire-weak,water-absorb", "?elemental_resists=1-3,2-4"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements"), createListURL(cfg, "affinities")},
@@ -375,7 +376,7 @@ func (cfg *Config) initMonstersParams() {
 		"status_resists": {
 			ID:          6,
 			Description: "Searches for monsters that resist or are immune to the specified status condition(s). You can optionally use the 'resistance' parameter to specify the minimum resistance. By default, the minimum resistance is 1.",
-			Usage:       "?status_resists={status_condition_id},{status_condition_id},...",
+			Usage:       "?status_resists={id},...",
 			ExampleUses: []string{"status_resists=1,4"},
 			ForList:     true,
 			ForSingle:   false,
@@ -384,7 +385,7 @@ func (cfg *Config) initMonstersParams() {
 		"resistance": {
 			ID:              7,
 			Description:     "Specifies the minimum resistance for the status_resists parameter. Resistance is an integer ranging from 1 to 254 (immune). The value 'immune' can also be used, which counts as 254.",
-			Usage:           "status_resists={status_condition_id},{status_condition_id},...&resistance={1-254 or 'immune'}",
+			Usage:           "status_resists={id},...&resistance={int|'immune'}",
 			ExampleUses:     []string{"status_resists=13&resistance=50", "status_resists=4,17&resistance=30", "status_resists=sleep&resistance=immune"},
 			ForList:         true,
 			ForSingle:       false,
@@ -401,7 +402,7 @@ func (cfg *Config) initMonstersParams() {
 		"item": {
 			ID:          8,
 			Description: "Searches for monsters that have the specified item as loot. Can be specified further with the 'method' parameter.",
-			Usage:       "?item={item_id}",
+			Usage:       "?item={id}",
 			ExampleUses: []string{"?item=45"},
 			ForList:     true,
 			ForSingle:   false,
@@ -410,7 +411,7 @@ func (cfg *Config) initMonstersParams() {
 		"method": {
 			ID:             9,
 			Description:    "Specifies the method of acquisition for the item parameter.",
-			Usage:          "?item={item_id}&method={value}",
+			Usage:          "?item={id}&method={method_name}",
 			ExampleUses:    []string{"?item=45&method=steal"},
 			ForList:        true,
 			ForSingle:      false,
@@ -420,7 +421,7 @@ func (cfg *Config) initMonstersParams() {
 		"auto_abilities": {
 			ID:          10,
 			Description: "Searches for monsters that drop one of the specified auto_abilities.",
-			Usage:       "?auto_abilities={auto_ability_id},{auto_ability_id},...",
+			Usage:       "?auto_abilities={id},...",
 			ExampleUses: []string{"?auto_abilities=16", "?auto_abilities=99,100"},
 			ForList:     true,
 			ForSingle:   false,
@@ -429,7 +430,7 @@ func (cfg *Config) initMonstersParams() {
 		"ronso_rage": {
 			ID:          11,
 			Description: "Searches for monsters that can teach the specified ronso rage to Kimahri.",
-			Usage:       "?ronso_rage={ronso_rage_id}",
+			Usage:       "?ronso_rage={id}",
 			ExampleUses: []string{"?ronso_rage=5"},
 			ForList:     true,
 			ForSingle:   false,
@@ -438,7 +439,7 @@ func (cfg *Config) initMonstersParams() {
 		"location": {
 			ID:          12,
 			Description: "Searches for monsters that appear within the specified location.",
-			Usage:       "?location={location_id}",
+			Usage:       "?location={id}",
 			ExampleUses: []string{"?location=17"},
 			ForList:     true,
 			ForSingle:   false,
@@ -447,7 +448,7 @@ func (cfg *Config) initMonstersParams() {
 		"sublocation": {
 			ID:          13,
 			Description: "Searches for monsters that appear within the specified sublocation.",
-			Usage:       "?sublocation={sublocation_id}",
+			Usage:       "?sublocation={id}",
 			ExampleUses: []string{"?sublocation=13"},
 			ForList:     true,
 			ForSingle:   false,
@@ -456,7 +457,7 @@ func (cfg *Config) initMonstersParams() {
 		"area": {
 			ID:          14,
 			Description: "Searches for monsters that appear within the specified area.",
-			Usage:       "?area={area_id}",
+			Usage:       "?area={id}",
 			ExampleUses: []string{"?area=13", "?area=240"},
 			ForList:     true,
 			ForSingle:   false,
@@ -465,7 +466,7 @@ func (cfg *Config) initMonstersParams() {
 		"distance": {
 			ID:              15,
 			Description:     "Searches for monsters with the specified distance. Distance is an integer ranging from 1 (close) to 4 (very far/infinite).",
-			Usage:           "?distance={value}",
+			Usage:           "?distance={int}",
 			ExampleUses:     []string{"?distance=3"},
 			ForList:         true,
 			ForSingle:       false,
@@ -474,7 +475,7 @@ func (cfg *Config) initMonstersParams() {
 		"story_based": {
 			ID:          16,
 			Description: "Searches for monsters that only appear during story events.",
-			Usage:       "?story_based={boolean}",
+			Usage:       "?story_based={bool}",
 			ExampleUses: []string{"?story_based=true", "?story_based=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -482,7 +483,7 @@ func (cfg *Config) initMonstersParams() {
 		"repeatable": {
 			ID:          17,
 			Description: "Searches for monsters that can be farmed.",
-			Usage:       "?repeatable={boolean}",
+			Usage:       "?repeatable={bool}",
 			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -490,7 +491,7 @@ func (cfg *Config) initMonstersParams() {
 		"capture": {
 			ID:          18,
 			Description: "Searches for monsters that can be captured.",
-			Usage:       "?capture={boolean}",
+			Usage:       "?capture={bool}",
 			ExampleUses: []string{"?capture=true", "?capture=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -498,7 +499,7 @@ func (cfg *Config) initMonstersParams() {
 		"has_overdrive": {
 			ID:          19,
 			Description: "Searches for monsters that have an overdrive gauge.",
-			Usage:       "?has_overdrive={boolean}",
+			Usage:       "?has_overdrive={bool}",
 			ExampleUses: []string{"?has_overdrive=true", "?has_overdrive=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -506,7 +507,7 @@ func (cfg *Config) initMonstersParams() {
 		"underwater": {
 			ID:          20,
 			Description: "Searches for monsters that are fought underwater.",
-			Usage:       "?underwater={boolean}",
+			Usage:       "?underwater={bool}",
 			ExampleUses: []string{"?underwater=true", "?underwater=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -514,7 +515,7 @@ func (cfg *Config) initMonstersParams() {
 		"zombie": {
 			ID:          21,
 			Description: "Searches for monsters that are zombies.",
-			Usage:       "?zombie={boolean}",
+			Usage:       "?zombie={bool}",
 			ExampleUses: []string{"?zombie=true", "?zombie=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -522,7 +523,7 @@ func (cfg *Config) initMonstersParams() {
 		"species": {
 			ID:          22,
 			Description: "Searches for monsters of the specified species.",
-			Usage:       "?species={species_name/id}",
+			Usage:       "?species={name|id}",
 			ExampleUses: []string{"?species=wyrm", "?species=5"},
 			ForList:     true,
 			ForSingle:   false,
@@ -531,7 +532,7 @@ func (cfg *Config) initMonstersParams() {
 		"creation_area": {
 			ID:          23,
 			Description: "Searches for monsters that need to be captured in the specified area to create its area creation.",
-			Usage:       "?creation_area={creation_area_name/id}",
+			Usage:       "?creation_area={name|id}",
 			ExampleUses: []string{"?creation_area=thunder-plains", "?creation_area=5"},
 			ForList:     true,
 			ForSingle:   false,
@@ -539,7 +540,7 @@ func (cfg *Config) initMonstersParams() {
 		"type": {
 			ID:          24,
 			Description: "Searches for monsters that are of the specified ctb-icon-type. 'boss' and 'boss-numbered' are combined and will yield the same results.",
-			Usage:       "?type={ctb_icon_type_name/id}",
+			Usage:       "?type={name|id}",
 			ExampleUses: []string{"?type=boss", "?type=2"},
 			ForList:     true,
 			ForSingle:   false,
@@ -556,7 +557,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		"monster": {
 			ID:          1,
 			Description: "Searches for monster formations that feature the specified monster.",
-			Usage:       "?monster={monster_id}",
+			Usage:       "?monster={id}",
 			ExampleUses: []string{"?monster=17"},
 			ForList:     true,
 			ForSingle:   false,
@@ -565,7 +566,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		"location": {
 			ID:          2,
 			Description: "Searches for monster formations that appear within the specified location.",
-			Usage:       "?location={location_id}",
+			Usage:       "?location={id}",
 			ExampleUses: []string{"?location=17"},
 			ForList:     true,
 			ForSingle:   false,
@@ -574,7 +575,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		"sublocation": {
 			ID:          3,
 			Description: "Searches for monster formations that appear within the specified sublocation.",
-			Usage:       "?sublocation={sublocation_id}",
+			Usage:       "?sublocation={id}",
 			ExampleUses: []string{"?sublocation=13"},
 			ForList:     true,
 			ForSingle:   false,
@@ -583,7 +584,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		"area": {
 			ID:          4,
 			Description: "Searches for monster formations that appear within the specified area.",
-			Usage:       "?area={area_id}",
+			Usage:       "?area={id}",
 			ExampleUses: []string{"?area=13", "?area=240"},
 			ForList:     true,
 			ForSingle:   false,
@@ -592,7 +593,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		"ambush": {
 			ID:          5,
 			Description: "Searches for monster formations that are forced ambushes.",
-			Usage:       "?ambush={boolean}",
+			Usage:       "?ambush={bool}",
 			ExampleUses: []string{"?ambush=true", "?ambush=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -600,7 +601,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		"category": {
 			ID:          6,
 			Description: "Searches for monster formations with the specified monster-formation-category.",
-			Usage:       "?category={category_name/id}",
+			Usage:       "?category={name|id}",
 			ExampleUses: []string{"?category=boss-fight", "?category=2"},
 			ForList:     true,
 			ForSingle:   false,
@@ -617,7 +618,7 @@ func (cfg *Config) initOverdriveModesParams() {
 		"type": {
 			ID:          1,
 			Description: "Searches for overdrive-modes that are of the specified overdrive-mode-type.",
-			Usage:       "?type={overdrive_mode_type_name/id}",
+			Usage:       "?type={name|id}",
 			ExampleUses: []string{"?type=per-action", "?type=2"},
 			ForList:     true,
 			ForSingle:   false,
@@ -634,7 +635,7 @@ func (cfg *Config) initSublocationsParams() {
 		"location": {
 			ID:          1,
 			Description: "Searches for sublocations that are located within the specified location.",
-			Usage:       "?location={location_id}",
+			Usage:       "?location={id}",
 			ExampleUses: []string{"?location=17"},
 			ForList:     true,
 			ForSingle:   false,
@@ -643,7 +644,7 @@ func (cfg *Config) initSublocationsParams() {
 		"item": {
 			ID:          2,
 			Description: "Searches for sublocations where the specified item can be acquired. Can be specified further with the 'method' parameter.",
-			Usage:       "?item={item_id}",
+			Usage:       "?item={id}",
 			ExampleUses: []string{"?item=45"},
 			ForList:     true,
 			ForSingle:   false,
@@ -652,7 +653,7 @@ func (cfg *Config) initSublocationsParams() {
 		"method": {
 			ID:             3,
 			Description:    "Specifies the method of acquisition for the item parameter.",
-			Usage:          "?item={item_id}&method={value}",
+			Usage:          "?item={id}&method={method_name}",
 			ExampleUses:    []string{"?item=45&method=treasure"},
 			ForList:        true,
 			ForSingle:      false,
@@ -662,7 +663,7 @@ func (cfg *Config) initSublocationsParams() {
 		"key_item": {
 			ID:          4,
 			Description: "Searches for sublocations where the specified key item can be acquired.",
-			Usage:       "?key_item={key_item_id}",
+			Usage:       "?key_item={id}",
 			ExampleUses: []string{"?key_item=22"},
 			ForList:     true,
 			ForSingle:   false,
@@ -671,7 +672,7 @@ func (cfg *Config) initSublocationsParams() {
 		"characters": {
 			ID:          5,
 			Description: "Searches for sublocations where a character permanently joins the party.",
-			Usage:       "?characters={boolean}",
+			Usage:       "?characters={bool}",
 			ExampleUses: []string{"?characters=true", "?characters=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -679,7 +680,7 @@ func (cfg *Config) initSublocationsParams() {
 		"aeons": {
 			ID:          6,
 			Description: "Searches for sublocations where a new aeon is acquired.",
-			Usage:       "?aeons={boolean}",
+			Usage:       "?aeons={bool}",
 			ExampleUses: []string{"?aeons=true", "?aeons=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -687,7 +688,7 @@ func (cfg *Config) initSublocationsParams() {
 		"monsters": {
 			ID:          7,
 			Description: "Searches for sublocations that have monsters.",
-			Usage:       "?monsters={boolean}",
+			Usage:       "?monsters={bool}",
 			ExampleUses: []string{"?monsters=true", "?monsters=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -695,7 +696,7 @@ func (cfg *Config) initSublocationsParams() {
 		"boss_fights": {
 			ID:          8,
 			Description: "Searches for sublocations that have bosses.",
-			Usage:       "?boss_fights={boolean}",
+			Usage:       "?boss_fights={bool}",
 			ExampleUses: []string{"?boss_fights=true", "?boss_fights=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -703,7 +704,7 @@ func (cfg *Config) initSublocationsParams() {
 		"shops": {
 			ID:          9,
 			Description: "Searches for sublocations that have shops.",
-			Usage:       "?shops={boolean}",
+			Usage:       "?shops={bool}",
 			ExampleUses: []string{"?shops=true", "?shops=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -711,7 +712,7 @@ func (cfg *Config) initSublocationsParams() {
 		"treasures": {
 			ID:          10,
 			Description: "Searches for sublocations that have treasures.",
-			Usage:       "?treasures={boolean}",
+			Usage:       "?treasures={bool}",
 			ExampleUses: []string{"?treasures=true", "?treasures=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -719,7 +720,7 @@ func (cfg *Config) initSublocationsParams() {
 		"sidequests": {
 			ID:          11,
 			Description: "Searchces for sublocations that feature sidequests.",
-			Usage:       "?sidequests={boolean}",
+			Usage:       "?sidequests={bool}",
 			ExampleUses: []string{"?sidequests=true", "?sidequests=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -727,7 +728,7 @@ func (cfg *Config) initSublocationsParams() {
 		"fmvs": {
 			ID:          12,
 			Description: "Searches for sublocations that feature fmv sequences.",
-			Usage:       "?fmvs={boolean}",
+			Usage:       "?fmvs={bool}",
 			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -743,7 +744,7 @@ func (cfg *Config) initLocationsParams() {
 		"item": {
 			ID:          1,
 			Description: "Searches for locations where the specified item can be acquired. Can be specified further with the 'method' parameter.",
-			Usage:       "?item={item_id}",
+			Usage:       "?item={id}",
 			ExampleUses: []string{"?item=45"},
 			ForList:     true,
 			ForSingle:   false,
@@ -752,7 +753,7 @@ func (cfg *Config) initLocationsParams() {
 		"method": {
 			ID:             2,
 			Description:    "Specifies the method of acquisition for the item parameter.",
-			Usage:          "?item={item_id}&method={value}",
+			Usage:          "?item={id}&method={method_name}",
 			ExampleUses:    []string{"?item=45&method=treasure"},
 			ForList:        true,
 			ForSingle:      false,
@@ -762,7 +763,7 @@ func (cfg *Config) initLocationsParams() {
 		"key_item": {
 			ID:          3,
 			Description: "Searches for locations where the specified key item can be acquired.",
-			Usage:       "?key_item={key_item_id}",
+			Usage:       "?key_item={id}",
 			ExampleUses: []string{"?key_item=22"},
 			ForList:     true,
 			ForSingle:   false,
@@ -771,7 +772,7 @@ func (cfg *Config) initLocationsParams() {
 		"characters": {
 			ID:          4,
 			Description: "Searches for locations where a character permanently joins the party.",
-			Usage:       "?characters={boolean}",
+			Usage:       "?characters={bool}",
 			ExampleUses: []string{"?characters=true", "?characters=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -779,7 +780,7 @@ func (cfg *Config) initLocationsParams() {
 		"aeons": {
 			ID:          5,
 			Description: "Searches for locations where a new aeon is acquired.",
-			Usage:       "?aeons={boolean}",
+			Usage:       "?aeons={bool}",
 			ExampleUses: []string{"?aeons=true", "?aeons=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -787,7 +788,7 @@ func (cfg *Config) initLocationsParams() {
 		"monsters": {
 			ID:          6,
 			Description: "Searches for locations that have monsters.",
-			Usage:       "?monsters={boolean}",
+			Usage:       "?monsters={bool}",
 			ExampleUses: []string{"?monsters=true", "?monsters=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -795,7 +796,7 @@ func (cfg *Config) initLocationsParams() {
 		"boss_fights": {
 			ID:          7,
 			Description: "Searches for locations that have bosses.",
-			Usage:       "?boss_fights={boolean}",
+			Usage:       "?boss_fights={bool}",
 			ExampleUses: []string{"?boss_fights=true", "?boss_fights=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -803,7 +804,7 @@ func (cfg *Config) initLocationsParams() {
 		"shops": {
 			ID:          8,
 			Description: "Searches for locations that have shops.",
-			Usage:       "?shops={boolean}",
+			Usage:       "?shops={bool}",
 			ExampleUses: []string{"?shops=true", "?shops=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -811,7 +812,7 @@ func (cfg *Config) initLocationsParams() {
 		"treasures": {
 			ID:          9,
 			Description: "Searches for locations that have treasures.",
-			Usage:       "?treasures={boolean}",
+			Usage:       "?treasures={bool}",
 			ExampleUses: []string{"?treasures=true", "?treasures=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -819,7 +820,7 @@ func (cfg *Config) initLocationsParams() {
 		"sidequests": {
 			ID:          10,
 			Description: "Searchces for locations that feature sidequests.",
-			Usage:       "?sidequests={boolean}",
+			Usage:       "?sidequests={bool}",
 			ExampleUses: []string{"?sidequests=true", "?sidequests=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -827,7 +828,7 @@ func (cfg *Config) initLocationsParams() {
 		"fmvs": {
 			ID:          11,
 			Description: "Searches for locations that feature fmv sequences.",
-			Usage:       "?fmvs={boolean}",
+			Usage:       "?fmvs={bool}",
 			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -843,7 +844,7 @@ func (cfg *Config) initShopsParams() {
 		"location": {
 			ID:          1,
 			Description: "Searches for shops that appear within the specified location.",
-			Usage:       "?location={location_id}",
+			Usage:       "?location={id}",
 			ExampleUses: []string{"?location=17"},
 			ForList:     true,
 			ForSingle:   false,
@@ -852,7 +853,7 @@ func (cfg *Config) initShopsParams() {
 		"sublocation": {
 			ID:          2,
 			Description: "Searches for shops that appear within the specified sublocation.",
-			Usage:       "?sublocation={sublocation_id}",
+			Usage:       "?sublocation={id}",
 			ExampleUses: []string{"?sublocation=13"},
 			ForList:     true,
 			ForSingle:   false,
@@ -870,7 +871,7 @@ func (cfg *Config) initShopsParams() {
 		"category": {
 			ID:          4,
 			Description: "Searches for shops with the specified shop category.",
-			Usage:       "?category={category_name/id}",
+			Usage:       "?category={name|id}",
 			ExampleUses: []string{"?category=oaka", "?category=4"},
 			ForList:     true,
 			ForSingle:   false,
@@ -879,7 +880,7 @@ func (cfg *Config) initShopsParams() {
 		"items": {
 			ID:          5,
 			Description: "Searches for shops that offer items.",
-			Usage:       "?items={boolean}",
+			Usage:       "?items={bool}",
 			ExampleUses: []string{"?items=true", "?items=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -887,7 +888,7 @@ func (cfg *Config) initShopsParams() {
 		"equipment": {
 			ID:          6,
 			Description: "Searches for shops that offer equipment.",
-			Usage:       "?equipment={boolean}",
+			Usage:       "?equipment={bool}",
 			ExampleUses: []string{"?equipment=true", "?equipment=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -895,7 +896,7 @@ func (cfg *Config) initShopsParams() {
 		"pre_airship": {
 			ID:          7,
 			Description: "Searches for shops that are available before acquiring the airship.",
-			Usage:       "?pre_airship={boolean}",
+			Usage:       "?pre_airship={bool}",
 			ExampleUses: []string{"?pre_airship=true", "?pre_airship=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -903,7 +904,7 @@ func (cfg *Config) initShopsParams() {
 		"post_airship": {
 			ID:          8,
 			Description: "Searches for shops that are available after acquiring the airship.",
-			Usage:       "?post_airship={boolean}",
+			Usage:       "?post_airship={bool}",
 			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -919,7 +920,7 @@ func (cfg *Config) initSongsParams() {
 		"location": {
 			ID:          1,
 			Description: "Searches for songs that are played within the specified location. Songs with special use cases are not included.",
-			Usage:       "?location={location_id}",
+			Usage:       "?location={id}",
 			ExampleUses: []string{"?location=17"},
 			ForList:     true,
 			ForSingle:   false,
@@ -928,7 +929,7 @@ func (cfg *Config) initSongsParams() {
 		"sublocation": {
 			ID:          2,
 			Description: "Searches for songs that are played within the specified sublocation. Songs with special use cases are not included.",
-			Usage:       "?sublocation={sublocation_id}",
+			Usage:       "?sublocation={id}",
 			ExampleUses: []string{"?sublocation=13"},
 			ForList:     true,
 			ForSingle:   false,
@@ -937,7 +938,7 @@ func (cfg *Config) initSongsParams() {
 		"area": {
 			ID:          3,
 			Description: "Searches for songs that are played within the specified area. Songs with special use cases are not included.",
-			Usage:       "?area={area_id}",
+			Usage:       "?area={id}",
 			ExampleUses: []string{"?area=13", "?area=240"},
 			ForList:     true,
 			ForSingle:   false,
@@ -946,7 +947,7 @@ func (cfg *Config) initSongsParams() {
 		"fmvs": {
 			ID:          4,
 			Description: "Searches for songs that are played in fmvs.",
-			Usage:       "?fmvs={boolean}",
+			Usage:       "?fmvs={bool}",
 			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -954,7 +955,7 @@ func (cfg *Config) initSongsParams() {
 		"special_use": {
 			ID:          5,
 			Description: "Searches for songs with a special use case.",
-			Usage:       "?special_use={boolean}",
+			Usage:       "?special_use={bool}",
 			ExampleUses: []string{"?special_use=true", "?special_use=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -962,7 +963,7 @@ func (cfg *Config) initSongsParams() {
 		"composer": {
 			ID:          6,
 			Description: "Searches for songs that were composed by the stated composer.",
-			Usage:       "?composer={composer_name/id}",
+			Usage:       "?composer={name|id}",
 			ExampleUses: []string{"?composer=nobuo-uematsu", "?composer=2"},
 			ForList:     true,
 			ForSingle:   false,
@@ -970,7 +971,7 @@ func (cfg *Config) initSongsParams() {
 		"arranger": {
 			ID:          7,
 			Description: "Searches for songs that were arranged by the stated arranger.",
-			Usage:       "?arranger={arranger_name/id}",
+			Usage:       "?arranger={name|id}",
 			ExampleUses: []string{"?arranger=nobuo-uematsu", "?arranger=2"},
 			ForList:     true,
 			ForSingle:   false,
@@ -986,7 +987,7 @@ func (cfg *Config) initTreasuresParams() {
 		"location": {
 			ID:          1,
 			Description: "Searches for treasures that appear within the specified location.",
-			Usage:       "?location={location_id}",
+			Usage:       "?location={id}",
 			ExampleUses: []string{"?location=17"},
 			ForList:     true,
 			ForSingle:   false,
@@ -995,7 +996,7 @@ func (cfg *Config) initTreasuresParams() {
 		"sublocation": {
 			ID:          2,
 			Description: "Searches for treasures that appear within the specified sublocation.",
-			Usage:       "?sublocation={sublocation_id}",
+			Usage:       "?sublocation={id}",
 			ExampleUses: []string{"?sublocation=13"},
 			ForList:     true,
 			ForSingle:   false,
@@ -1004,7 +1005,7 @@ func (cfg *Config) initTreasuresParams() {
 		"area": {
 			ID:          3,
 			Description: "Searches for treasures that appear within the specified area.",
-			Usage:       "?area={area_id}",
+			Usage:       "?area={id}",
 			ExampleUses: []string{"?area=13", "?area=240"},
 			ForList:     true,
 			ForSingle:   false,
@@ -1013,7 +1014,7 @@ func (cfg *Config) initTreasuresParams() {
 		"loot_type": {
 			ID:          4,
 			Description: "Searches for treasures with the specified loot type.",
-			Usage:       "?loot_type={loot_type_name/id}",
+			Usage:       "?loot_type={name|id}",
 			ExampleUses: []string{"?loot_type=item", "?loot_type=2"},
 			ForList:     true,
 			ForSingle:   false,
@@ -1022,7 +1023,7 @@ func (cfg *Config) initTreasuresParams() {
 		"treasure_type": {
 			ID:          5,
 			Description: "Searches for treasures with the specified treasure type.",
-			Usage:       "?treasure_type={treasure_type_name/id}",
+			Usage:       "?treasure_type={name|id}",
 			ExampleUses: []string{"?treasure_type=chest", "?treasure_type=2"},
 			ForList:     true,
 			ForSingle:   false,
@@ -1031,7 +1032,7 @@ func (cfg *Config) initTreasuresParams() {
 		"anima": {
 			ID:          6,
 			Description: "Searches for treasures that are necessary for getting Anima.",
-			Usage:       "?anima={boolean}",
+			Usage:       "?anima={bool}",
 			ExampleUses: []string{"?anima=true", "?anima=false"},
 			ForList:     true,
 			ForSingle:   false,
@@ -1039,7 +1040,7 @@ func (cfg *Config) initTreasuresParams() {
 		"airship": {
 			ID:          7,
 			Description: "Searches for treasures that are only available after acquiring the airship.",
-			Usage:       "?airship={boolean}",
+			Usage:       "?airship={bool}",
 			ExampleUses: []string{"?airship=true", "?airship=false"},
 			ForList:     true,
 			ForSingle:   false,

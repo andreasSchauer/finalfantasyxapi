@@ -64,7 +64,7 @@ func (cfg *Config) HandleArenaCreations(w http.ResponseWriter, r *http.Request) 
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -107,11 +107,9 @@ func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seedin
 		return NamedApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[NamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(typeQuery(cfg, r, i, cfg.t.ArenaCreationCategory, resources, "category", cfg.db.GetArenaCreationIDsByCategory)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }
 
 

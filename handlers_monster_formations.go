@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -16,21 +15,21 @@ type MonsterFormation struct {
 	Notes           *string                   `json:"notes,omitempty"`
 	BossMusic       *FormationBossSong        `json:"boss_music,omitempty"`
 	Monsters        []MonsterAmount           `json:"monsters"`
-	Areas           []EncounterLocation       `json:"areas"`
+	Areas           []EncounterArea           `json:"areas"`
 	TriggerCommands []FormationTriggerCommand `json:"trigger_commands"`
 }
 
-type EncounterLocation struct {
+type EncounterArea struct {
 	Area          AreaAPIResource `json:"area"`
 	Specification *string         `json:"specification"`
 }
 
-func (ec EncounterLocation) GetAPIResource() APIResource {
+func (ec EncounterArea) GetAPIResource() APIResource {
 	return ec.Area
 }
 
-func convertEncounterLocation(cfg *Config, el seeding.EncounterLocation) EncounterLocation {
-	return EncounterLocation{
+func convertEncounterArea(cfg *Config, el seeding.EncounterArea) EncounterArea {
+	return EncounterArea{
 		Area:          locAreaToAreaAPIResource(cfg, cfg.e.areas, el.LocationArea),
 		Specification: el.Specification,
 	}
@@ -91,7 +90,7 @@ func (cfg *Config) HandleMonsterFormations(w http.ResponseWriter, r *http.Reques
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}', or '/api/%s/{id}/{subsection}'. supported subsections: %s.", i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -110,7 +109,7 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 		Notes:           formation.FormationData.Notes,
 		BossMusic:       convertObjPtr(cfg, formation.FormationData.BossMusic, convertFormationBossSong),
 		Monsters:        convertObjSlice(cfg, formation.Monsters, convertMonsterAmount),
-		Areas:           convertObjSlice(cfg, formation.EncounterLocations, convertEncounterLocation),
+		Areas:           convertObjSlice(cfg, formation.EncounterAreas, convertEncounterArea),
 		TriggerCommands: convertObjSlice(cfg, formation.TriggerCommands, convertFormationTriggerCommand),
 	}
 

@@ -85,7 +85,7 @@ CREATE TABLE monster_formations (
 );
 
 
-CREATE TABLE encounter_locations (
+CREATE TABLE encounter_areas (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     area_id INTEGER NOT NULL REFERENCES areas(id),
@@ -104,7 +104,7 @@ CREATE TABLE formation_trigger_commands (
 
 -- +goose Down
 DROP TABLE IF EXISTS formation_trigger_commands;
-DROP TABLE IF EXISTS encounter_locations;
+DROP TABLE IF EXISTS encounter_areas;
 DROP TABLE IF EXISTS monster_formations;
 DROP TABLE IF EXISTS formation_data;
 DROP TABLE IF EXISTS formation_boss_songs;

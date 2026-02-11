@@ -71,7 +71,7 @@ func (cfg *Config) HandleShops(w http.ResponseWriter, r *http.Request) {
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -100,7 +100,7 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 		return UnnamedApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[UnnamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationShopIDs)),
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationShopIDs)),
 		frl(idQuery(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), cfg.db.GetShopIDsByAutoAbility)),
@@ -109,7 +109,5 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 		frl(boolQuery2(cfg, r, i, resources, "pre_airship", cfg.db.GetShopIDsPreAirship)),
 		frl(boolQuery2(cfg, r, i, resources, "post_airship", cfg.db.GetShopIDsPostAirship)),
 		frl(typeQuery(cfg, r, i, cfg.t.ShopCategory, resources, "category", cfg.db.GetShopIDsByCategory)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }

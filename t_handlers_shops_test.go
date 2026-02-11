@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 	"testing"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 
@@ -299,4 +301,32 @@ func TestRetrieveShops(t *testing.T) {
 	}
 
 	testIdList(t, tests, testCfg.e.shops.endpoint, "RetrieveShops", testCfg.HandleShops, compareAPIResourceLists[UnnamedApiResourceList])
+}
+
+
+func TestSubsectionShops(t *testing.T) {
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations/8/shops/",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleLocations,
+			},
+			count:          3,
+			parentResource: h.GetStrPtr("/locations/8"),
+			results:        []int32{4, 5, 6},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations/25/shops/",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleSublocations,
+			},
+			count:          2,
+			parentResource: h.GetStrPtr("/sublocations/25"),
+			results:        []int32{22, 36},
+		},
+	}
+
+	testIdList(t, tests, testCfg.e.shops.endpoint, "SubsectionShops", nil, compareSubResourceLists[UnnamedAPIResource, ShopSub])
 }

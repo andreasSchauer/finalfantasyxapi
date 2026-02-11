@@ -35,7 +35,7 @@ func getQueryParamList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 func getAllowedResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], params []QueryType) []QueryType {
 	for idx, param := range params {
 		for _, id := range param.AllowedIDs {
-			allowedRes := i.idToResFunc(cfg, i, id)
+			allowedRes := createResourceURL(cfg, i.endpoint, id)
 			param.AllowedResources = append(param.AllowedResources, allowedRes)
 		}
 		params[idx] = param

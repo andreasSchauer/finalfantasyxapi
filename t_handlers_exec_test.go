@@ -33,26 +33,41 @@ func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncNam
 // compareAPIResourceLists for normal API Resources
 // compareSubResourceLists for Subsections
 func testIdList[T any](t *testing.T, tests []expListIDs, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListIDs, T)) {
-	for i, tc := range tests {
-		test, got, err := setupTest[T](t, tc.testGeneral, testFuncName, i+1, handlerFunc)
+	for i, exp := range tests {
+		expHandler := handlerFunc
+		if handlerFunc == nil {
+			expHandler = exp.handler
+		}
+
+		test, got, err := setupTest[T](t, exp.testGeneral, testFuncName, i+1, expHandler)
 		if errors.Is(err, errCorrect) {
 			continue
 		}
 
-		compFunc(test, endpoint, tc, got)
+		compFunc(test, endpoint, exp, got)
 	}
 }
 
 // compareParameterLists for /parameters lists
 // compareSectionLists for /sections lists
 func testNameList[T any](t *testing.T, tests []expListNames, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListNames, T)) {
-	for i, tc := range tests {
-		test, got, err := setupTest[T](t, tc.testGeneral, testFuncName, i+1, handlerFunc)
+	for i, exp := range tests {
+		expHandler := handlerFunc
+		if handlerFunc == nil {
+			expHandler = exp.handler
+		}
+
+		expEndpoint := endpoint
+		if endpoint == "" {
+			expEndpoint = exp.endpoint
+		}
+
+		test, got, err := setupTest[T](t, exp.testGeneral, testFuncName, i+1, expHandler)
 		if errors.Is(err, errCorrect) {
 			continue
 		}
 
-		compFunc(test, endpoint, tc, got)
+		compFunc(test, expEndpoint, exp, got)
 	}
 }
 

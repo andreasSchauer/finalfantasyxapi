@@ -3,7 +3,8 @@ package main
 import (
 	"net/http"
 	"testing"
-	//h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 
@@ -115,4 +116,48 @@ func TestRetrieveSubquests(t *testing.T) {
 	}
 
 	testIdList(t, tests, testCfg.e.subquests.endpoint, "RetrieveSubquests", testCfg.HandleSubquests, compareAPIResourceLists[NamedApiResourceList])
+}
+
+
+func TestSubsectionSubquests(t *testing.T) {
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sidequests/1/subquests?limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:          36,
+			parentResource: h.GetStrPtr("/sidequests/1"),
+			results:        []int32{1, 8, 12, 14, 18, 23, 31, 36},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sidequests/2/subquests",
+				expectedStatus: http.StatusOK,
+			},
+			count:          8,
+			parentResource: h.GetStrPtr("/sidequests/2"),
+			results:        []int32{37, 40, 41, 43, 44},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sidequests/4/subquests",
+				expectedStatus: http.StatusOK,
+			},
+			count:          4,
+			parentResource: h.GetStrPtr("/sidequests/4"),
+			results:        []int32{46, 47, 48, 49},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sidequests/9/subquests",
+				expectedStatus: http.StatusOK,
+			},
+			count:          0,
+			parentResource: h.GetStrPtr("/sidequests/9"),
+			results:        []int32{},
+		},
+	}
+
+	testIdList(t, tests, testCfg.e.subquests.endpoint, "SubsectionSubquests", testCfg.HandleSidequests, compareSubResourceLists[NamedAPIResource, SubquestSub])
 }

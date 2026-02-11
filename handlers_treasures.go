@@ -53,7 +53,7 @@ func (cfg *Config) HandleTreasures(w http.ResponseWriter, r *http.Request) {
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -89,7 +89,7 @@ func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Tre
 		return UnnamedApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[UnnamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationTreasureIDs)),
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationTreasureIDs)),
 		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetAreaTreasureIDs)),
@@ -97,7 +97,5 @@ func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Tre
 		frl(boolQuery(cfg, r, i, resources, "airship", cfg.db.GetTreasureIDsByIsPostAirship)),
 		frl(typeQuery(cfg, r, i, cfg.t.LootType, resources, "loot_type", cfg.db.GetTreasureIDsByLootType)),
 		frl(typeQuery(cfg, r, i, cfg.t.TreasureType, resources, "treasure_type", cfg.db.GetTreasureIDsByTreasureType)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }

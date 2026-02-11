@@ -6,8 +6,8 @@ SELECT id FROM monsters WHERE name = $1;
 -- name: GetMonsterAreaIDs :many
 SELECT DISTINCT a.id
 FROM areas a
-JOIN encounter_locations el ON el.area_id = a.id
-JOIN j_monster_formations_encounter_locations j1 ON j1.encounter_location_id = el.id
+JOIN encounter_areas ea ON ea.area_id = a.id
+JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
 JOIN monster_selections ms ON mf.monster_selection_id = ms.id
 JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
@@ -257,9 +257,9 @@ ORDER BY mf.id;
 -- name: GetMonsterFormationIDsByArea :many
 SELECT mf.id
 FROM monster_formations mf
-JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
-JOIN encounter_locations el ON j.encounter_location_id = el.id
-JOIN areas a ON el.area_id = a.id
+JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
+JOIN encounter_areas ea ON j.encounter_area_id = ea.id
+JOIN areas a ON ea.area_id = a.id
 WHERE a.id = $1
 ORDER BY mf.id;
 
@@ -267,9 +267,9 @@ ORDER BY mf.id;
 -- name: GetMonsterFormationIDsBySublocation :many
 SELECT mf.id
 FROM monster_formations mf
-JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
-JOIN encounter_locations el ON j.encounter_location_id = el.id
-JOIN areas a ON el.area_id = a.id
+JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
+JOIN encounter_areas ea ON j.encounter_area_id = ea.id
+JOIN areas a ON ea.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
 WHERE s.id = $1
 ORDER BY mf.id;
@@ -278,9 +278,9 @@ ORDER BY mf.id;
 -- name: GetMonsterFormationIDsByLocation :many
 SELECT mf.id
 FROM monster_formations mf
-JOIN j_monster_formations_encounter_locations j ON j.monster_formation_id = mf.id
-JOIN encounter_locations el ON j.encounter_location_id = el.id
-JOIN areas a ON el.area_id = a.id
+JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
+JOIN encounter_areas ea ON j.encounter_area_id = ea.id
+JOIN areas a ON ea.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
 WHERE l.id = $1

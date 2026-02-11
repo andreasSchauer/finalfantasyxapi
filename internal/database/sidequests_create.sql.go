@@ -52,21 +52,21 @@ func (q *Queries) CreateBlitzballPosition(ctx context.Context, arg CreateBlitzba
 	return i, err
 }
 
-const createCompletionLocation = `-- name: CreateCompletionLocation :exec
-INSERT INTO completion_locations (data_hash, completion_id, area_id, notes)
+const createCompletionArea = `-- name: CreateCompletionArea :exec
+INSERT INTO completion_areas (data_hash, completion_id, area_id, notes)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateCompletionLocationParams struct {
+type CreateCompletionAreaParams struct {
 	DataHash     string
 	CompletionID int32
 	AreaID       int32
 	Notes        sql.NullString
 }
 
-func (q *Queries) CreateCompletionLocation(ctx context.Context, arg CreateCompletionLocationParams) error {
-	_, err := q.db.ExecContext(ctx, createCompletionLocation,
+func (q *Queries) CreateCompletionArea(ctx context.Context, arg CreateCompletionAreaParams) error {
+	_, err := q.db.ExecContext(ctx, createCompletionArea,
 		arg.DataHash,
 		arg.CompletionID,
 		arg.AreaID,

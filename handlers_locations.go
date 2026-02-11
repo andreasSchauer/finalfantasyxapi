@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	//"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -35,7 +33,7 @@ func (cfg *Config) HandleLocations(w http.ResponseWriter, r *http.Request) {
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}', or '/api/%s/{id}/{subsection}'. supported subsections: %s.", i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -78,7 +76,7 @@ func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Loc
 		return NamedApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[NamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getLocationsByItem)),
 		frl(idQueryWrapper(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), getLocationsByKeyItem)),
 		frl(boolQuery2(cfg, r, i, resources, "characters", cfg.db.GetLocationIDsWithCharacters)),
@@ -89,7 +87,5 @@ func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Loc
 		frl(boolQuery2(cfg, r, i, resources, "treasures", cfg.db.GetLocationIDsWithTreasures)),
 		frl(boolQuery2(cfg, r, i, resources, "sidequests", cfg.db.GetLocationIDsWithSidequests)),
 		frl(boolQuery2(cfg, r, i, resources, "fmvs", cfg.db.GetLocationIDsWithFMVs)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }

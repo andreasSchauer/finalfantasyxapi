@@ -21,7 +21,7 @@ type QuestCompletion struct {
 
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
-		Areas:  convertObjSlice(cfg, qc.Locations, convertCompletionArea),
+		Areas:  convertObjSlice(cfg, qc.Areas, convertCompletionArea),
 		Reward: convertItemAmount(cfg, qc.Reward),
 	}
 }
@@ -61,7 +61,7 @@ func (cfg *Config) HandleSidequests(w http.ResponseWriter, r *http.Request) {
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }

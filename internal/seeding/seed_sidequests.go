@@ -70,7 +70,7 @@ type QuestCompletion struct {
 	ID        int32
 	QuestID   int32
 	Condition string           `json:"condition"`
-	Locations []CompletionArea `json:"locations"`
+	Areas     []CompletionArea `json:"areas"`
 	Reward    ItemAmount       `json:"reward"`
 }
 
@@ -237,7 +237,7 @@ func (l *Lookup) seedQuestCompletionRelationships(qtx *database.Queries, complet
 		return err
 	}
 
-	err = l.seedCompletionLocations(qtx, completion)
+	err = l.seedCompletionAreas(qtx, completion)
 	if err != nil {
 		return h.NewErr(completion.Error(), err)
 	}
@@ -267,8 +267,8 @@ func (l *Lookup) seedQuestCompletion(qtx *database.Queries, completion QuestComp
 	return completion, nil
 }
 
-func (l *Lookup) seedCompletionLocations(qtx *database.Queries, completion QuestCompletion) error {
-	for _, location := range completion.Locations {
+func (l *Lookup) seedCompletionAreas(qtx *database.Queries, completion QuestCompletion) error {
+	for _, location := range completion.Areas {
 		var err error
 
 		location.AreaID, err = assignFK(location.LocationArea, l.Areas)
@@ -277,7 +277,7 @@ func (l *Lookup) seedCompletionLocations(qtx *database.Queries, completion Quest
 		}
 		location.CompletionID = completion.ID
 
-		err = qtx.CreateCompletionLocation(context.Background(), database.CreateCompletionLocationParams{
+		err = qtx.CreateCompletionArea(context.Background(), database.CreateCompletionAreaParams{
 			DataHash:     generateDataHash(location),
 			CompletionID: location.CompletionID,
 			AreaID:       location.AreaID,

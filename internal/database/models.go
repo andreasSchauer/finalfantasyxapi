@@ -2785,7 +2785,7 @@ type CharacterClass struct {
 	Name     string
 }
 
-type CompletionLocation struct {
+type CompletionArea struct {
 	ID           int32
 	DataHash     string
 	CompletionID int32
@@ -2842,7 +2842,7 @@ type ElementalResist struct {
 	AffinityID int32
 }
 
-type EncounterLocation struct {
+type EncounterArea struct {
 	ID            int32
 	DataHash      string
 	AreaID        int32
@@ -3249,11 +3249,11 @@ type JMonsterEquipmentSlotsChance struct {
 	SlotsChanceID      int32
 }
 
-type JMonsterFormationsEncounterLocation struct {
-	ID                  int32
-	DataHash            string
-	MonsterFormationID  int32
-	EncounterLocationID int32
+type JMonsterFormationsEncounterArea struct {
+	ID                 int32
+	DataHash           string
+	MonsterFormationID int32
+	EncounterAreaID    int32
 }
 
 type JMonsterFormationsTriggerCommand struct {

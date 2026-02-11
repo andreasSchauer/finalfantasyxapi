@@ -162,22 +162,22 @@ func (q *Queries) CreateAlteredState(ctx context.Context, arg CreateAlteredState
 	return i, err
 }
 
-const createEncounterLocation = `-- name: CreateEncounterLocation :one
-INSERT INTO encounter_locations (data_hash, area_id, specification)
+const createEncounterArea = `-- name: CreateEncounterArea :one
+INSERT INTO encounter_areas (data_hash, area_id, specification)
 VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = encounter_locations.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = encounter_areas.data_hash
 RETURNING id, data_hash, area_id, specification
 `
 
-type CreateEncounterLocationParams struct {
+type CreateEncounterAreaParams struct {
 	DataHash      string
 	AreaID        int32
 	Specification sql.NullString
 }
 
-func (q *Queries) CreateEncounterLocation(ctx context.Context, arg CreateEncounterLocationParams) (EncounterLocation, error) {
-	row := q.db.QueryRowContext(ctx, createEncounterLocation, arg.DataHash, arg.AreaID, arg.Specification)
-	var i EncounterLocation
+func (q *Queries) CreateEncounterArea(ctx context.Context, arg CreateEncounterAreaParams) (EncounterArea, error) {
+	row := q.db.QueryRowContext(ctx, createEncounterArea, arg.DataHash, arg.AreaID, arg.Specification)
+	var i EncounterArea
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
@@ -682,20 +682,20 @@ func (q *Queries) CreateMonsterFormation(ctx context.Context, arg CreateMonsterF
 	return i, err
 }
 
-const createMonsterFormationsEncounterLocationsJunction = `-- name: CreateMonsterFormationsEncounterLocationsJunction :exec
-INSERT INTO j_monster_formations_encounter_locations (data_hash, monster_formation_id, encounter_location_id)
+const createMonsterFormationsEncounterAreasJunction = `-- name: CreateMonsterFormationsEncounterAreasJunction :exec
+INSERT INTO j_monster_formations_encounter_areas (data_hash, monster_formation_id, encounter_area_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateMonsterFormationsEncounterLocationsJunctionParams struct {
-	DataHash            string
-	MonsterFormationID  int32
-	EncounterLocationID int32
+type CreateMonsterFormationsEncounterAreasJunctionParams struct {
+	DataHash           string
+	MonsterFormationID int32
+	EncounterAreaID    int32
 }
 
-func (q *Queries) CreateMonsterFormationsEncounterLocationsJunction(ctx context.Context, arg CreateMonsterFormationsEncounterLocationsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createMonsterFormationsEncounterLocationsJunction, arg.DataHash, arg.MonsterFormationID, arg.EncounterLocationID)
+func (q *Queries) CreateMonsterFormationsEncounterAreasJunction(ctx context.Context, arg CreateMonsterFormationsEncounterAreasJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createMonsterFormationsEncounterAreasJunction, arg.DataHash, arg.MonsterFormationID, arg.EncounterAreaID)
 	return err
 }
 

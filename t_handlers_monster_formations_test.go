@@ -8,7 +8,6 @@ import (
 )
 
 
-
 func TestGetMonsterFormation(t *testing.T) {
 	tests := []expMonsterFormation{
 		{
@@ -128,7 +127,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?limit=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'asd' for parameter 'limit'. usage: '?limit{integer or 'max'}'.",
+				expectedErr:    "invalid value 'asd' for parameter 'limit'. usage: '?limit{int|'max'}'.",
 			},
 		},
 		{
@@ -190,4 +189,72 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 	}
 
 	testIdList(t, tests, testCfg.e.monsterFormations.endpoint, "RetrieveMonsterFormations", testCfg.HandleMonsterFormations, compareAPIResourceLists[UnnamedApiResourceList])
+}
+
+
+func TestSubsectionMonsterFormations(t *testing.T) {
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations/23/monster-formations",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleLocations,
+			},
+			count:          18,
+			parentResource: h.GetStrPtr("/locations/23"),
+			results:        []int32{228, 231, 235, 237, 240, 244, 245},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations/4/monster-formations",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleLocations,
+			},
+			count:          14,
+			parentResource: h.GetStrPtr("/locations/4"),
+			results:        []int32{9, 13, 15, 18, 21, 23, 25},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations/36/monster-formations",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleSublocations,
+			},
+			count:          14,
+			parentResource: h.GetStrPtr("/sublocations/36"),
+			results:        []int32{198, 202, 216, 217, 221, 224, 227},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations/17/monster-formations",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleSublocations,
+			},
+			count:          10,
+			parentResource: h.GetStrPtr("/sublocations/17"),
+			results:        []int32{86, 89, 90, 93, 95},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/89/monster-formations",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleAreas,
+			},
+			count:          10,
+			parentResource: h.GetStrPtr("/areas/89"),
+			results:        []int32{46, 49, 54, 57, 58, 59},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/172/monster-formations",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleAreas,
+			},
+			count:          12,
+			parentResource: h.GetStrPtr("/areas/172"),
+			results:        []int32{140, 144, 149, 150, 153, 155},
+		},
+	}
+
+	testIdList(t, tests, testCfg.e.monsterFormations.endpoint, "SubsectionMonsterFormations", nil, compareSubResourceLists[UnnamedAPIResource, MonsterFormationSub])
 }

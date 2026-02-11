@@ -39,8 +39,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
 RETURNING *;
 
 
--- name: CreateCompletionLocation :exec
-INSERT INTO completion_locations (data_hash, completion_id, area_id, notes)
+-- name: CreateCompletionArea :exec
+INSERT INTO completion_areas (data_hash, completion_id, area_id, notes)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 

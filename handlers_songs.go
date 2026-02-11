@@ -91,7 +91,7 @@ func (cfg *Config) HandleSongs(w http.ResponseWriter, r *http.Request) {
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -148,7 +148,7 @@ func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, S
 		return NamedApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[NamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.l.Locations), getSongsLocation)),
 		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), getSongsSublocation)),
 		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.l.Areas), getSongsArea)),
@@ -156,10 +156,9 @@ func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, S
 		frl(boolQuery2(cfg, r, i, resources, "fmvs", cfg.db.GetSongIDsWithFMVs)),
 		frl(nullTypeQuery(cfg, r, i, cfg.t.Composer, resources, "composer", cfg.db.GetSongIDsByComposer)),
 		frl(nullTypeQuery(cfg, r, i, cfg.t.Arranger, resources, "arranger", cfg.db.GetSongIDsByArranger)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }
+
 
 func getSongsLocation(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	location, _ := seeding.GetResourceByID(id, cfg.l.LocationsID)

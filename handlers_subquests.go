@@ -35,7 +35,7 @@ func (cfg *Config) HandleSubquests(w http.ResponseWriter, r *http.Request) {
 		return
 		
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{id}'.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -46,8 +46,6 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 	if err != nil {
 		return Subquest{}, err
 	}
-
-	
 
 	response := Subquest{
 		ID:         		subquest.ID,

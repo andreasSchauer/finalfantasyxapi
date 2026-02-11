@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -84,7 +83,7 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: '/api/%s/{name or id}', '/api/%s/{name}/{version}', or  '/api/%s/{id}/{subsection}'. available subsections: %s.", i.endpoint, i.endpoint, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
 		return
 	}
 }
@@ -202,7 +201,7 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 		return NamedApiResourceList{}, err
 	}
 
-	filteredLists := []filteredResList[NamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(basicQueryWrapper(cfg, r, i, resources, "elemental_resists", getMonstersByElemResists)),
 		frl(idListQueryWrapper(cfg, r, i, resources, "status_resists", len(cfg.l.StatusConditions), getMonstersByStatusResists)),
 		frl(idListQuery(cfg, r, i, resources, "auto_abilities", len(cfg.l.AutoAbilities), cfg.db.GetMonsterIDsByAutoAbilityIDs)),
@@ -224,7 +223,5 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 		frl(boolQuery(cfg, r, i, resources, "has_overdrive", cfg.db.GetMonsterIDsByHasOverdrive)),
 		frl(boolQuery(cfg, r, i, resources, "underwater", cfg.db.GetMonsterIDsByIsUnderwater)),
 		frl(boolQuery(cfg, r, i, resources, "zombie", cfg.db.GetMonsterIDsByIsZombie)),
-	}
-
-	return filterAPIResources(cfg, r, i, resources, filteredLists)
+	})
 }

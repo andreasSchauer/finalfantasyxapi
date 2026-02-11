@@ -35,7 +35,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2/3",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. usage: '/api/monsters/{name or id}', '/api/monsters/{name}/{version}', or  '/api/monsters/{id}/{subsection}'. available subsections: 'areas', 'monster-formations'.",
+				expectedErr:    "wrong format. usage: '/api/monsters', '/api/monsters/{id}', '/api/monsters/{name}', '/api/monsters/{name}/{version}', '/api/monsters/id/{subsection}'. supported subsections: 'areas', 'monster-formations'.",
 			},
 		},
 		{
@@ -1011,14 +1011,14 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?limit=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'asd' for parameter 'limit'. usage: '?limit{integer or 'max'}'.",
+				expectedErr:    "invalid value 'asd' for parameter 'limit'. usage: '?limit{int|'max'}'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental_resists=weak",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input. usage: '?elemental_resists={element_name/id}-{affinity_name/id},{element_name/id}-{affinity_name/id},...'.",
+				expectedErr:    "invalid input. usage: '?elemental_resists={element|id}-{affinity|id},...'.",
 			},
 		},
 		{
@@ -1053,7 +1053,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?status_resists=4&resistance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'frank' for parameter 'resistance'. usage: 'status_resists={status_condition_id},{status_condition_id},...&resistance={1-254 or 'immune'}'.",
+				expectedErr:    "invalid value 'frank' for parameter 'resistance'. usage: 'status_resists={id},...&resistance={int|'immune'}'.",
 			},
 		},
 		{
@@ -1102,7 +1102,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?distance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'frank' for parameter 'distance'. usage: '?distance={value}'.",
+				expectedErr:    "invalid value 'frank' for parameter 'distance'. usage: '?distance={int}'.",
 			},
 		},
 		{
@@ -1116,7 +1116,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?species=wywrm",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value: 'wywrm'. use /api/species to see valid values.",
+				expectedErr:    "invalid enum value: 'wywrm'. use /api/monster-species to see valid values.",
 			},
 		},
 		{
@@ -1265,36 +1265,60 @@ func TestRetrieveMonsters(t *testing.T) {
 	testIdList(t, tests, testCfg.e.monsters.endpoint, "RetrieveMonsters", testCfg.HandleMonsters, compareAPIResourceLists[NamedApiResourceList])
 }
 
-func TestMonstersAreas(t *testing.T) {
+func TestSubsectionMonsters(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/45/areas/",
+				requestURL:     "/api/areas/90/monsters/",
 				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleAreas,
 			},
-			count:          5,
-			parentResource: h.GetStrPtr("/monsters/45"),
-			results:        []int32{88, 89, 90, 93, 94},
+			count:          6,
+			parentResource: h.GetStrPtr("/areas/90"),
+			results:        []int32{38, 39, 40, 42, 43, 45},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/140/areas/",
+				requestURL:     "/api/areas/23/monsters/",
 				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleAreas,
 			},
 			count:          4,
-			parentResource: h.GetStrPtr("/monsters/140"),
-			results:        []int32{202, 203, 204, 211},
+			parentResource: h.GetStrPtr("/areas/23"),
+			results:        []int32{15, 16, 17, 18},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/66/areas/",
+				requestURL:     "/api/areas/239/monsters/",
 				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleAreas,
 			},
-			count:          1,
-			parentResource: h.GetStrPtr("/monsters/66"),
-			results:        []int32{127},
+			count:          21,
+			next:           h.GetStrPtr("/areas/239/monsters?limit=20&offset=20"),
+			parentResource: h.GetStrPtr("/areas/239"),
+			results:        []int32{190, 201, 210, 239, 245, 249, 253},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations/193/monsters/",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleMonsterFormations,
+			},
+			count:          3,
+			parentResource: h.GetStrPtr("/monster-formations/193"),
+			results:        []int32{143, 145, 148},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations/140/monsters/",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleMonsterFormations,
+			},
+			count:          3,
+			parentResource: h.GetStrPtr("/monster-formations/140"),
+			results:        []int32{104, 99, 103},
 		},
 	}
 
-	testIdList(t, tests, testCfg.e.areas.endpoint, "SubsectionMonstersAreas", testCfg.HandleMonsters, compareSubResourceLists[AreaAPIResource, AreaSub])
+	testIdList(t, tests, testCfg.e.monsters.endpoint, "SubsectionMonsters", nil, compareSubResourceLists[NamedAPIResource, MonsterSub])
 }
