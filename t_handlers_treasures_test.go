@@ -28,14 +28,21 @@ func TestGetTreasure(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL: 	"/api/treasures/3/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: 	"endpoint 'treasures' doesn't have any subsections.",
+				expectedErr: 	"endpoint /treasures doesn't have any subsections.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL: 	"/api/treasures/a/3",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: 	"wrong format. usage: '/api/treasures/{name or id}'.",
+				expectedErr: 	"wrong format. usage: '/api/treasures', '/api/treasures/{id}'",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL: 	"/api/treasures/2/2",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr: 	"invalid subsection '2'. subsection can't be an integer. use /api/treasures/sections for valid subsections.",
 			},
 		},
 		{

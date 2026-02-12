@@ -48,7 +48,7 @@ func checkDuplicateIDs(queryParam QueryType, ids []int32) error {
 
 	for _, id := range ids {
 		if idMap[id] {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id '%d' in '%s'. each id can only be used once.", id, queryParam.Name), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id '%d' for parameter '%s'. each id can only be used once.", id, queryParam.Name), nil)
 		}
 		idMap[id] = true
 	}

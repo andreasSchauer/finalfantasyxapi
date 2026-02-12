@@ -56,7 +56,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/105?altered_state=5",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '5' in 'altered_state' is out of range. max id: 1.",
+				expectedErr:    "provided id '5' used for parameter 'altered_state' is out of range. max id: 1.",
 			},
 		},
 		{
@@ -1011,14 +1011,14 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?limit=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'asd' for parameter 'limit'. usage: '?limit{int|'max'}'.",
+				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit{int|'max'}'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental_resists=weak",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input. usage: '?elemental_resists={element|id}-{affinity|id},...'.",
+				expectedErr:    "invalid input for parameter 'elemental_resists'. usage: '?elemental_resists={element|id}-{affinity|id},...'.",
 			},
 		},
 		{
@@ -1032,28 +1032,28 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental_resists=weak-fire",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "unknown element 'weak' in 'elemental_resists'.",
+				expectedErr:    "unknown element 'weak' used for parameter 'elemental_resists'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental_resists=fire-weak,fire-neutral",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "duplicate use of id '1' in 'elemental_resists'. each element can only be used once.",
+				expectedErr:    "duplicate use of id '1' for parameter 'elemental_resists'. each element can only be used once.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?status_resists=4&resistance=350",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value '350'. 'resistance' must be an integer ranging from 1 to 254.",
+				expectedErr:    "invalid value '350' used for parameter 'resistance'. value must be an integer ranging from 1 to 254.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?status_resists=4&resistance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'frank' for parameter 'resistance'. usage: 'status_resists={id},...&resistance={int|'immune'}'.",
+				expectedErr:    "invalid value 'frank' used for parameter 'resistance'. usage: 'status_resists={id},...&resistance={int|'immune'}'.",
 			},
 		},
 		{
@@ -1074,7 +1074,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?item=22&method=steals",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid method value: 'steals'. allowed values: 'steal', 'drop', 'bribe', 'other'.",
+				expectedErr:    "invalid value 'steals' used for 'method'. allowed values: 'steal', 'drop', 'bribe', 'other'.",
 			},
 		},
 		{
@@ -1088,35 +1088,35 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?auto_abilities=1,4,4,1,3,3,4",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "duplicate use of id '4' in 'auto_abilities'. each id can only be used once.",
+				expectedErr:    "duplicate use of id '4' for parameter 'auto_abilities'. each id can only be used once.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?distance=5",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value '5'. 'distance' must be an integer ranging from 1 to 4.",
+				expectedErr:    "invalid value '5' used for parameter 'distance'. value must be an integer ranging from 1 to 4.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?distance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'frank' for parameter 'distance'. usage: '?distance={int}'.",
+				expectedErr:    "invalid value 'frank' used for parameter 'distance'. usage: '?distance={int}'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?ronso_rage=13",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '13' in 'ronso_rage' is out of range. max id: 12.",
+				expectedErr:    "provided id '13' used for parameter 'ronso_rage' is out of range. max id: 12.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?species=wywrm",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value: 'wywrm'. use /api/monster-species to see valid values.",
+				expectedErr:    "invalid enum value 'wywrm' used for parameter 'species'. use /api/monsters/parameters to see allowed values.",
 			},
 		},
 		{

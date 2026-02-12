@@ -127,7 +127,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?limit=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'asd' for parameter 'limit'. usage: '?limit{int|'max'}'.",
+				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit{int|'max'}'.",
 			},
 		},
 		{
@@ -253,6 +253,26 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			count:          12,
 			parentResource: h.GetStrPtr("/areas/172"),
 			results:        []int32{140, 144, 149, 150, 153, 155},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/200/monster-formations",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleMonsters,
+			},
+			count:          1,
+			parentResource: h.GetStrPtr("/monsters/200"),
+			results:        []int32{170},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/155/monster-formations",
+				expectedStatus: http.StatusOK,
+				handler: 		testCfg.HandleMonsters,
+			},
+			count:          2,
+			parentResource: h.GetStrPtr("/monsters/155"),
+			results:        []int32{216, 232},
 		},
 	}
 

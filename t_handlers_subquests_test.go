@@ -21,7 +21,7 @@ func TestGetSubquest(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL: 	"/api/subquests/10/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: 	"endpoint 'subquests' doesn't have any subsections.",
+				expectedErr: 	"endpoint /subquests doesn't have any subsections.",
 			},
 		},
 		{

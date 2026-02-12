@@ -28,7 +28,7 @@ func TestGetArenaCreation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL: "/api/arena-creations/a/2",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: "wrong format. usage: '/api/arena-creations/{name or id}'.",
+				expectedErr: "wrong format. usage: '/api/arena-creations', '/api/arena-creations/{id}', '/api/arena-creations/{name}'",
 			},
 		},
 		{
@@ -94,7 +94,7 @@ func TestRetrieveArenaCreations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations?category=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: 	"invalid enum value: 'asd'. use /api/arena-creation-category to see valid values.",
+				expectedErr: 	"invalid enum value 'asd' used for parameter 'category'. use /api/arena-creations/parameters to see allowed values.",
 			},
 		},
 		{

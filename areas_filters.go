@@ -44,7 +44,7 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, 
 			return nil, err
 		}
 	default:
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid method value '%s'. allowed values: %s.", query, h.FormatStringSlice(queryParam.AllowedValues)), err)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for 'method'. allowed values: %s.", query, h.FormatStringSlice(queryParam.AllowedValues)), err)
 	}
 
 	return resources, nil

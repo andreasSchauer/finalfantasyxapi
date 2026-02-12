@@ -24,7 +24,7 @@ func parseQueryNamedVal[T h.HasID](query, resourceType string, queryParam QueryT
 		return resource.ID, nil
 	}
 
-	return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s' in '%s'.", resourceType, query, queryParam.Name), err)
+	return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s' used for parameter '%s'.", resourceType, query, queryParam.Name), err)
 }
 
 // checks if query ID is valid and within range. if it's invalid, it will return an httpError

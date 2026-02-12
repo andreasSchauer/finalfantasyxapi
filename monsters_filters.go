@@ -32,7 +32,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32,
 	for _, pair := range eaPairs {
 		parts := strings.Split(pair, "-")
 		if len(parts) != 2 {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input. usage: '%s'.", queryParam.Usage), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s'. usage: '%s'.", queryParam.Name, queryParam.Usage), nil)
 		}
 
 		elementID, err := parseQueryNamedVal(parts[0], cfg.e.elements.resourceType, queryParam, cfg.l.Elements)
@@ -40,7 +40,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32,
 			return nil, err
 		}
 		if elemMap[elementID] {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id '%d' in '%s'. each element can only be used once.", elementID, queryParam.Name), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id '%d' for parameter '%s'. each element can only be used once.", elementID, queryParam.Name), nil)
 		}
 		elemMap[elementID] = true
 
@@ -129,7 +129,7 @@ func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResour
 			return nil, err
 		}
 	default:
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid method value: '%s'. allowed values: %s.", query, h.FormatStringSlice(queryParam.AllowedValues)), err)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for 'method'. allowed values: %s.", query, h.FormatStringSlice(queryParam.AllowedValues)), err)
 	}
 
 	return resources, nil

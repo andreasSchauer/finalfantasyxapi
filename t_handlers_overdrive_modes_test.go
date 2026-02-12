@@ -14,7 +14,7 @@ func TestGetOverdriveMode(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/ally/2",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. usage: '/api/overdrive-modes/{name or id}'.",
+				expectedErr:    "wrong format. usage: '/api/overdrive-modes', '/api/overdrive-modes/{id}', '/api/overdrive-modes/{name}'",
 			},
 		},
 		{
@@ -101,7 +101,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=f",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value: 'f'. use /api/overdrive-mode-type to see valid values.",
+				expectedErr:    "invalid enum value 'f' used for parameter 'type'. use /api/overdrive-modes/parameters to see allowed values.",
 			},
 		},
 		{
@@ -141,18 +141,4 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 	}
 
 	testIdList(t, tests, testCfg.e.overdriveModes.endpoint, "RetrieveOverdriveModes", testCfg.HandleOverdriveModes, compareAPIResourceLists[NamedApiResourceList])
-}
-
-func TestOverdriveModesSections(t *testing.T) {
-	tests := []expListNames{
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/sections",
-				expectedStatus: http.StatusOK,
-			},
-			count: 0,
-		},
-	}
-
-	testNameList(t, tests, testCfg.e.overdriveModes.endpoint, "OverdriveModeSections", testCfg.HandleOverdriveModes, compareSectionLists)
 }

@@ -29,7 +29,7 @@ func TestGetFMV(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL: "/api/fmvs/2/2",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: "endpoint 'fmvs' doesn't have any subsections.",
+				expectedErr: "invalid subsection '2'. subsection can't be an integer. use /api/fmvs/sections for valid subsections.",
 			},
 		},
 		{

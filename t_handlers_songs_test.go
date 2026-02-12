@@ -21,14 +21,14 @@ func TestGetSong(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL: 	"/api/songs/a/2",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: 	"wrong format. usage: '/api/songs/{name or id}'.",
+				expectedErr: 	"wrong format. usage: '/api/songs', '/api/songs/{id}', '/api/songs/{name}'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL: 	"/api/songs/2/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: 	"endpoint 'songs' doesn't have any subsections.",
+				expectedErr: 	"endpoint /songs doesn't have any subsections.",
 			},
 		},
 		{

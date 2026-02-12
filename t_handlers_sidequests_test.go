@@ -34,7 +34,7 @@ func TestGetSidequest(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL: 	"/api/sidequests/9/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: 	"subsection 'a' is not supported for endpoint 'sidequests'. supported subsections: 'subquests'.",
+				expectedErr: 	"subsection 'a' does not exist for endpoint /sidequests. supported subsections: 'subquests'.",
 			},
 		},
 		{

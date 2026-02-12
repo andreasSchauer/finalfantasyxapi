@@ -47,7 +47,7 @@ func parseTypeQuery[T, N any](r *http.Request, endpoint string, queryParam Query
 
 	enum, err := GetTypedAPIResource(query, et)
 	if err != nil {
-		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value: '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", query, queryParam.Name, endpoint), err)
+		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", query, queryParam.Name, endpoint), err)
 	}
 
 	return enum, nil
