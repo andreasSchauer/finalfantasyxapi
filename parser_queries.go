@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 // used, if a queryParam only takes existing ids and returns a valid id
@@ -34,14 +32,14 @@ func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, error) {
 
 	b, err := strconv.ParseBool(query)
 	if err != nil {
-		return false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid boolean value '%s'. usage: '%s'.", query, queryParam.Usage), err)
+		return false, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid boolean value '%s' used for parameter '%s'. usage: '%s'.", query, queryParam.Name, queryParam.Usage), err)
 	}
 
 	return b, nil
 }
 
 // used, if a queryParam is looking up an enum entry
-func parseTypeQuery[T, N any](r *http.Request, queryParam QueryType, et EnumType[T, N]) (TypedAPIResource, error) {
+func parseTypeQuery[T, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[T, N]) (TypedAPIResource, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return TypedAPIResource{}, err
@@ -49,7 +47,7 @@ func parseTypeQuery[T, N any](r *http.Request, queryParam QueryType, et EnumType
 
 	enum, err := GetTypedAPIResource(query, et)
 	if err != nil {
-		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value: '%s'. use /api/%s to see valid values.", query, h.GetNameWithDashes(et.name, " ")), err)
+		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value: '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", query, queryParam.Name, endpoint), err)
 	}
 
 	return enum, nil

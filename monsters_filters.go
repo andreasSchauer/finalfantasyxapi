@@ -10,7 +10,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryParam QueryType) ([]int32, error) {
 	ids, err := getElemResistIDs(cfg, query, queryParam)
 	if err != nil {
@@ -66,7 +65,6 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32,
 	return ids, nil
 }
 
-
 func getMonstersByStatusResists(cfg *Config, r *http.Request, ids []int32) ([]int32, error) {
 	resistance, err := verifyMonsterResistance(cfg, r)
 	if err != nil {
@@ -84,7 +82,6 @@ func getMonstersByStatusResists(cfg *Config, r *http.Request, ids []int32) ([]in
 	return dbIDs, nil
 }
 
-
 func verifyMonsterResistance(cfg *Config, r *http.Request) (int, error) {
 	queryParam := cfg.q.monsters["resistance"]
 
@@ -95,7 +92,6 @@ func verifyMonsterResistance(cfg *Config, r *http.Request) (int, error) {
 
 	return resistance, nil
 }
-
 
 func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.monsters
@@ -139,8 +135,7 @@ func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResour
 	return resources, nil
 }
 
-
-func queryCTBIconType(cfg *Config, r *http.Request, iconType database.CtbIconType) ([]int32, error) {
+func getMonstersByType(cfg *Config, r *http.Request, iconType database.CtbIconType) ([]int32, error) {
 	var ids []int32
 	var err error
 

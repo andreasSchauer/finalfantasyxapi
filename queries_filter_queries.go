@@ -175,7 +175,7 @@ func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 // query uses an enum type (id or string possible) that needs to be checked for validity and then returns all resources matching that type
 func typeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery func(context.Context, E) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
-	enum, err := parseTypeQuery(r, queryParam, et)
+	enum, err := parseTypeQuery(r, i.endpoint, queryParam, et)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}
@@ -197,7 +197,7 @@ func typeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg
 // like a type query, but with the database expecting a nullEnumType as input
 func nullTypeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery func(context.Context, N) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
-	enum, err := parseTypeQuery(r, queryParam, et)
+	enum, err := parseTypeQuery(r, i.endpoint, queryParam, et)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}
@@ -219,7 +219,7 @@ func nullTypeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any]
 // like type query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
 func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, E) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
-	enum, err := parseTypeQuery(r, queryParam, cfg.t.CTBIconType)
+	enum, err := parseTypeQuery(r, i.endpoint, queryParam, et)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}

@@ -17,28 +17,11 @@ type TypeLookup struct {
 	LootType					EnumType[database.LootType, any]
 	MonsterFormationCategory	EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies     			EnumType[database.MonsterSpecies, any]
+	MonsterType        			EnumType[database.CtbIconType, any]
 	OverdriveModeType 			EnumType[database.OverdriveModeType, any]
 	ShopCategory				EnumType[database.ShopCategory, any]
 	ShopType					EnumType[database.ShopType, any]
 	TreasureType				EnumType[database.TreasureType, any]
-}
-
-// replace Typed logic and lookup with this struct
-type EnumType[T, N any] struct {
-	name 			string
-	lookup   		map[string]TypedAPIResource
-	convFunc 		func(string) T
-	nullConvFunc	func(*string) N
-}
-
-
-func newEnumType[T, N any](name string, typeSlice []TypedAPIResource, convFunc func(string) T, nullConvFunc func(*string) N) EnumType[T, N] {
-	return EnumType[T, N]{
-		name: 		name,
-		lookup: 	typeSliceToMap(typeSlice),
-		convFunc: 	convFunc,
-		nullConvFunc: nullConvFunc,
-	}
 }
 
 func (cfg *Config) TypeLookupInit() {
@@ -54,10 +37,31 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initLootType()
 	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
+	cfg.t.initMonsterType()
 	cfg.t.initOverdriveModeType()
 	cfg.t.initShopCategory()
 	cfg.t.initShopType()
 	cfg.t.initTreasureType()
+}
+
+// replace Typed logic and lookup with this struct
+type EnumType[T, N any] struct {
+	name 			string
+	isEndpoint		bool
+	lookup   		map[string]TypedAPIResource
+	convFunc 		func(string) T
+	nullConvFunc	func(*string) N
+}
+
+
+func newEnumType[T, N any](name string, isEndpoint bool, typeSlice []TypedAPIResource, convFunc func(string) T, nullConvFunc func(*string) N) EnumType[T, N] {
+	return EnumType[T, N]{
+		name: 			name,
+		isEndpoint: 	isEndpoint,
+		lookup: 		typeSliceToMap(typeSlice),
+		convFunc: 		convFunc,
+		nullConvFunc: 	nullConvFunc,
+	}
 }
 
 func (t *TypeLookup) initAreaConnectionType() {
@@ -76,7 +80,7 @@ func (t *TypeLookup) initAreaConnectionType() {
 		},
 	}
 
-	t.AreaConnectionType = newEnumType[database.AreaConnectionType, any]("connection type", typeSlice, func(s string) database.AreaConnectionType {
+	t.AreaConnectionType = newEnumType[database.AreaConnectionType, any]("area connection type", true, typeSlice, func(s string) database.AreaConnectionType {
 		return database.AreaConnectionType(s)
 	}, nil)
 }
@@ -94,7 +98,7 @@ func (t *TypeLookup) initArenaCreationCategory() {
 		},
 	}
 
-	t.ArenaCreationCategory = newEnumType("arena creation category", typeSlice, func(s string) database.MaCreationCategory {
+	t.ArenaCreationCategory = newEnumType("arena creation category", false, typeSlice, func(s string) database.MaCreationCategory {
 		return database.MaCreationCategory(s)
 	}, h.NullMaCreationCategory)
 }
@@ -115,7 +119,7 @@ func (t *TypeLookup) initArranger() {
 		},
 	}
 
-	t.Arranger = newEnumType("arranger", typeSlice, func(s string) database.Arranger {
+	t.Arranger = newEnumType("arranger", false, typeSlice, func(s string) database.Arranger {
 		return database.Arranger(s)
 	}, h.NullArranger)
 }
@@ -130,7 +134,7 @@ func (t *TypeLookup) initBlitzballTournamentCategory() {
 		},
 	}
 
-	t.BlitzballTournamentCategory = newEnumType[database.BlitzballTournamentCategory, any]("blitzball tournament category", typeSlice, func(s string) database.BlitzballTournamentCategory {
+	t.BlitzballTournamentCategory = newEnumType[database.BlitzballTournamentCategory, any]("blitzball tournament category", false, typeSlice, func(s string) database.BlitzballTournamentCategory {
 		return database.BlitzballTournamentCategory(s)
 	}, nil)
 }
@@ -148,7 +152,7 @@ func (t *TypeLookup) initComposer() {
 		},
 	}
 
-	t.Composer = newEnumType("composer", typeSlice, func(s string) database.Composer {
+	t.Composer = newEnumType("composer", false, typeSlice, func(s string) database.Composer {
 		return database.Composer(s)
 	}, h.NullComposer)
 }
@@ -175,7 +179,7 @@ func (t *TypeLookup) initCTBIconType() {
 		},
 	}
 
-	t.CTBIconType = newEnumType[database.CtbIconType, any]("ctb icon type", typeSlice, func(s string) database.CtbIconType {
+	t.CTBIconType = newEnumType[database.CtbIconType, any]("ctb icon type", true, typeSlice, func(s string) database.CtbIconType {
 		return database.CtbIconType(s)
 	}, nil)
 }
@@ -223,7 +227,7 @@ func (t *TypeLookup) initCreationArea() {
 		},
 	}
 
-	t.CreationArea = newEnumType("creation area", typeSlice, func(s string) database.MaCreationArea {
+	t.CreationArea = newEnumType("creation area", false, typeSlice, func(s string) database.MaCreationArea {
 		return database.MaCreationArea(s)
 	}, h.NullMaCreationArea)
 }
@@ -233,20 +237,17 @@ func (t *TypeLookup) initLootType() {
 
 	typeSlice := []TypedAPIResource{
 		{
-			Name:        string(database.LootTypeItem),
-			Description: "A treasure containing an item.",
+			Name: string(database.LootTypeItem),
 		},
 		{
-			Name:        string(database.LootTypeEquipment),
-			Description: "A treasure containing equipment.",
+			Name: string(database.LootTypeEquipment),
 		},
 		{
-			Name:        string(database.LootTypeGil),
-			Description: "A treasure containing gil.",
+			Name: string(database.LootTypeGil),
 		},
 	}
 
-	t.LootType = newEnumType[database.LootType, any]("loot type", typeSlice, func(s string) database.LootType {
+	t.LootType = newEnumType[database.LootType, any]("loot type", false, typeSlice, func(s string) database.LootType {
 		return database.LootType(s)
 	}, nil)
 }
@@ -279,7 +280,7 @@ func (t *TypeLookup) initMonsterFormationCategory() {
 		},
 	}
 
-	t.MonsterFormationCategory = newEnumType[database.MonsterFormationCategory, any]("monster formation category", typeSlice, func(s string) database.MonsterFormationCategory {
+	t.MonsterFormationCategory = newEnumType[database.MonsterFormationCategory, any]("monster formation category", true, typeSlice, func(s string) database.MonsterFormationCategory {
 		return database.MonsterFormationCategory(s)
 	}, nil)
 }
@@ -456,8 +457,28 @@ func (t *TypeLookup) initMonsterSpecies() {
 		},
 	}
 
-	t.MonsterSpecies = newEnumType[database.MonsterSpecies, any]("monster species", typeSlice, func(s string) database.MonsterSpecies {
+	t.MonsterSpecies = newEnumType[database.MonsterSpecies, any]("monster species", false, typeSlice, func(s string) database.MonsterSpecies {
 		return database.MonsterSpecies(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initMonsterType() {
+	
+
+	typeSlice := []TypedAPIResource{
+		{
+			Name:        string(database.CtbIconTypeMonster),
+		},
+		{
+			Name:        string(database.CtbIconTypeBoss),
+		},
+		{
+			Name:        string(database.CtbIconTypeSummon),
+		},
+	}
+
+	t.MonsterType = newEnumType[database.CtbIconType, any]("monster type", false, typeSlice, func(s string) database.CtbIconType {
+		return database.CtbIconType(s)
 	}, nil)
 }
 
@@ -473,7 +494,7 @@ func (t *TypeLookup) initOverdriveModeType() {
 		},
 	}
 
-	t.OverdriveModeType = newEnumType[database.OverdriveModeType, any]("overdrive mode type", typeSlice, func(s string) database.OverdriveModeType {
+	t.OverdriveModeType = newEnumType[database.OverdriveModeType, any]("overdrive mode type", true, typeSlice, func(s string) database.OverdriveModeType {
 		return database.OverdriveModeType(s)
 	}, nil)
 }
@@ -494,7 +515,7 @@ func (t *TypeLookup) initShopCategory() {
 		},
 	}
 
-	t.ShopCategory = newEnumType[database.ShopCategory, any]("shop category", typeSlice, func(s string) database.ShopCategory {
+	t.ShopCategory = newEnumType[database.ShopCategory, any]("shop category", false, typeSlice, func(s string) database.ShopCategory {
 		return database.ShopCategory(s)
 	}, nil)
 }
@@ -509,7 +530,7 @@ func (t *TypeLookup) initShopType() {
 		},
 	}
 
-	t.ShopType = newEnumType[database.ShopType, any]("shop type", typeSlice, func(s string) database.ShopType {
+	t.ShopType = newEnumType[database.ShopType, any]("shop type", false, typeSlice, func(s string) database.ShopType {
 		return database.ShopType(s)
 	}, nil)
 }
@@ -532,7 +553,7 @@ func (t *TypeLookup) initTreasureType() {
 		},
 	}
 
-	t.TreasureType = newEnumType[database.TreasureType, any]("treasure type", typeSlice, func(s string) database.TreasureType {
+	t.TreasureType = newEnumType[database.TreasureType, any]("treasure type", true, typeSlice, func(s string) database.TreasureType {
 		return database.TreasureType(s)
 	}, nil)
 }

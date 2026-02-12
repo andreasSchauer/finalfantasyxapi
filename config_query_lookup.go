@@ -7,22 +7,23 @@ import (
 )
 
 type QueryType struct {
-	ID               int            `json:"-"`
-	Name             string         `json:"name"`
-	Description      string         `json:"description"`
-	Usage            string         `json:"usage"`
-	ExampleUses      []string       `json:"example_uses"`
-	ForList          bool           `json:"for_list"`
-	ForSingle        bool           `json:"for_single"`
-	IsRequired		 bool			`json:"is_required"`
-	RequiredParams   []string       `json:"required_params,omitempty"`
-	References       []string       `json:"references,omitempty"`
-	AllowedIDs       []int32        `json:"-"`
-	AllowedResources []string  		`json:"allowed_resources,omitempty"`
-	AllowedValues    []string       `json:"allowed_values,omitempty"`
-	AllowedIntRange  []int          `json:"allowed_int_range,omitempty"`
-	DefaultVal       *int           `json:"default_value,omitempty"`
-	SpecialInputs    []SpecialInput `json:"special_inputs,omitempty"`
+	ID               int            				`json:"-"`
+	Name             string         				`json:"name"`
+	Description      string         				`json:"description"`
+	Usage            string         				`json:"usage"`
+	ExampleUses      []string       				`json:"example_uses"`
+	ForList          bool           				`json:"for_list"`
+	ForSingle        bool           				`json:"for_single"`
+	IsRequired		 bool							`json:"is_required"`
+	TypeLookup		 map[string]TypedAPIResource	`json:"-"`
+	RequiredParams   []string       				`json:"required_params,omitempty"`
+	References       []string       				`json:"references,omitempty"`
+	AllowedIDs       []int32        				`json:"-"`
+	AllowedResources []string  						`json:"allowed_resources,omitempty"`
+	AllowedValues    []string       				`json:"allowed_values,omitempty"`
+	AllowedIntRange  []int          				`json:"allowed_int_range,omitempty"`
+	DefaultVal       *int           				`json:"default_value,omitempty"`
+	SpecialInputs    []SpecialInput 				`json:"special_inputs,omitempty"`
 }
 
 type SpecialInput struct {
@@ -284,7 +285,7 @@ func (cfg *Config) initArenaCreationsParams() {
 			ExampleUses: []string{"?category=species", "?category=3"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "arena-creation-category")},
+			TypeLookup:  cfg.t.ArenaCreationCategory.lookup,
 		},
 	}
 
@@ -301,7 +302,7 @@ func (cfg *Config) initBlitzballPrizesParams() {
 			ExampleUses: []string{"?category=league", "?category=2"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "blitzball-tournament-category")},
+			TypeLookup:  cfg.t.BlitzballTournamentCategory.lookup,
 		},
 	}
 
@@ -406,7 +407,7 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?item=45"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "item")},
+			References:  []string{createListURL(cfg, "items")},
 		},
 		"method": {
 			ID:             9,
@@ -425,7 +426,7 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?auto_abilities=16", "?auto_abilities=99,100"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "auto_abilities")},
+			References:  []string{createListURL(cfg, "auto-abilities")},
 		},
 		"ronso_rage": {
 			ID:          11,
@@ -434,7 +435,7 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?ronso_rage=5"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "ronso_rages")},
+			References:  []string{createListURL(cfg, "ronso-rages")},
 		},
 		"location": {
 			ID:          12,
@@ -527,7 +528,7 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?species=wyrm", "?species=5"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "monster-species")},
+			TypeLookup:  cfg.t.MonsterSpecies.lookup,
 		},
 		"creation_area": {
 			ID:          23,
@@ -536,15 +537,16 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?creation_area=thunder-plains", "?creation_area=5"},
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.CreationArea.lookup,
 		},
 		"type": {
 			ID:          24,
-			Description: "Searches for monsters that are of the specified ctb-icon-type. 'boss' and 'boss-numbered' are combined and will yield the same results.",
+			Description: "Searches for monsters that are of the specified monster-type.",
 			Usage:       "?type={name|id}",
 			ExampleUses: []string{"?type=boss", "?type=2"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "ctb-icon-type")},
+			TypeLookup:  cfg.t.MonsterType.lookup,
 		},
 	}
 
@@ -605,6 +607,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ExampleUses: []string{"?category=boss-fight", "?category=2"},
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.MonsterFormationCategory.lookup,
 			References:  []string{createListURL(cfg, "monster-formation-category")},
 		},
 	}
@@ -622,6 +625,7 @@ func (cfg *Config) initOverdriveModesParams() {
 			ExampleUses: []string{"?type=per-action", "?type=2"},
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.OverdriveModeType.lookup,
 			References:  []string{createListURL(cfg, "overdrive-mode-type")},
 		},
 	}
@@ -875,7 +879,7 @@ func (cfg *Config) initShopsParams() {
 			ExampleUses: []string{"?category=oaka", "?category=4"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "shop-category")},
+			TypeLookup:  cfg.t.ShopCategory.lookup,
 		},
 		"items": {
 			ID:          5,
@@ -967,6 +971,7 @@ func (cfg *Config) initSongsParams() {
 			ExampleUses: []string{"?composer=nobuo-uematsu", "?composer=2"},
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.Composer.lookup,
 		},
 		"arranger": {
 			ID:          7,
@@ -975,6 +980,7 @@ func (cfg *Config) initSongsParams() {
 			ExampleUses: []string{"?arranger=nobuo-uematsu", "?arranger=2"},
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.Arranger.lookup,
 		},
 	}
 
@@ -1018,7 +1024,7 @@ func (cfg *Config) initTreasuresParams() {
 			ExampleUses: []string{"?loot_type=item", "?loot_type=2"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "loot-type")},
+			TypeLookup:  cfg.t.LootType.lookup,
 		},
 		"treasure_type": {
 			ID:          5,
@@ -1027,6 +1033,7 @@ func (cfg *Config) initTreasuresParams() {
 			ExampleUses: []string{"?treasure_type=chest", "?treasure_type=2"},
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.TreasureType.lookup,
 			References:  []string{createListURL(cfg, "treasure-type")},
 		},
 		"anima": {
