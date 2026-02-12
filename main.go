@@ -10,7 +10,6 @@ import (
 
 
 func main() {
-	//const filepathRoot = "."
 	const port = "8080"
 
 	err := api.LoadEnvFromRoot()
@@ -18,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	apiCfg, err := ConfigInit()
+	apiCfg, err := api.ConfigInit()
 	if err != nil {
 		log.Fatal(err)
 	}

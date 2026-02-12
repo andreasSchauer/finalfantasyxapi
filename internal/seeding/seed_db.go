@@ -2,6 +2,7 @@ package seeding
 
 import (
 	"database/sql"
+	"path/filepath"
 	"fmt"
 	"time"
 
@@ -17,11 +18,18 @@ type seeder struct {
 }
 
 func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
-	const migrationsDir = "./sql/schema/"
+	root, err := h.ProjectRoot()
+	if err != nil {
+		return nil, err
+	}
+	
+	const migrationsDir = "sql/schema/"
+	fullPath := filepath.Join(root, migrationsDir)
+
 
 	start := time.Now()
 
-	err := setupDB(dbConn, migrationsDir)
+	err = setupDB(dbConn, fullPath)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't setup database: %v", err)
 	}
