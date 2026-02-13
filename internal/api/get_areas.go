@@ -6,23 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type Area struct {
-	ID                int32            `json:"id"`
-	Name              string           `json:"name"`
-	Version           *int32           `json:"version,omitempty"`
-	Specification     *string          `json:"specification,omitempty"`
-	DisplayName       string           `json:"display_name"`
-	ParentLocation    NamedAPIResource `json:"parent_location"`
-	ParentSublocation NamedAPIResource `json:"parent_sublocation"`
-	StoryOnly         bool             `json:"story_only"`
-	HasSaveSphere     bool             `json:"has_save_sphere"`
-	AirshipDropOff    bool             `json:"airship_drop_off"`
-	HasCompSphere     bool             `json:"has_comp_sphere"`
-	CanRideChocobo    bool             `json:"can_ride_chocobo"`
-	ConnectedAreas    []AreaConnection `json:"connected_areas"`
-	LocRel
-}
-
 func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], id int32) (Area, error) {
 	area, err := verifyParamsAndGet(r, i, id)
 	if err != nil {

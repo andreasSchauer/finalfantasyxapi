@@ -6,16 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type BlitzballPrize struct {
-	ID       int32          `json:"id"`
-	Category string         `json:"category"`
-	Slot     string         `json:"slot"`
-	Items    []PossibleItem `json:"items"`
-}
-
-func convertBlitzballItem(cfg *Config, bi seeding.BlitzballItem) PossibleItem {
-	return convertPossibleItem(cfg, bi.PossibleItem)
-}
 
 func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList], id int32) (BlitzballPrize, error) {
 	bbPos, err := verifyParamsAndGet(r, i, id)

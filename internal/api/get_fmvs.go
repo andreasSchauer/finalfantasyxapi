@@ -6,15 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type FMV struct {
-	ID                  int32             `json:"id"`
-	Name                string            `json:"name"`
-	Translation         *string           `json:"translation,omitempty"`
-	CutsceneDescription string            `json:"cutscene_description"`
-	Area                AreaAPIResource   `json:"area"`
-	Song                *NamedAPIResource `json:"song"`
-}
-
 func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList], id int32) (FMV, error) {
 	fmv, err := verifyParamsAndGet(r, i, id)
 	if err != nil {

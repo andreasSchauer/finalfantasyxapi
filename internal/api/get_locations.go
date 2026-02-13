@@ -6,14 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type Location struct {
-	ID                 int32              `json:"id"`
-	Name               string             `json:"name"`
-	ConnectedLocations []NamedAPIResource `json:"connected_locations"`
-	Sublocations       []NamedAPIResource `json:"sublocations"`
-	LocRel
-}
-
 func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList], id int32) (Location, error) {
 	location, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
@@ -45,6 +37,8 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 
 	return response, nil
 }
+
+
 
 func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

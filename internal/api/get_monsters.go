@@ -1,75 +1,14 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type Monster struct {
-	ID                   int32                `json:"id"`
-	Name                 string               `json:"name"`
-	Version              *int32               `json:"version,omitempty"`
-	Specification        *string              `json:"specification,omitempty"`
-	AppliedState         *AppliedState        `json:"applied_state,omitempty"`
-	AgilityParameters    *AgilityParams       `json:"agility_parameters"`
-	Notes                *string              `json:"notes,omitempty"`
-	Species              NamedAPIResource     `json:"species"`
-	IsStoryBased         bool                 `json:"is_story_based"`
-	IsRepeatable         bool                 `json:"is_repeatable"`
-	CanBeCaptured        bool                 `json:"can_be_captured"`
-	AreaConquestLocation *string              `json:"area_conquest_location,omitempty"`
-	CTBIconType          NamedAPIResource     `json:"ctb_icon_type"`
-	HasOverdrive         bool                 `json:"has_overdrive"`
-	IsUnderwater         bool                 `json:"is_underwater"`
-	IsZombie             bool                 `json:"is_zombie"`
-	Distance             int32                `json:"distance"`
-	Properties           []NamedAPIResource   `json:"properties"`
-	AutoAbilities        []NamedAPIResource   `json:"auto_abilities"`
-	AP                   int32                `json:"ap"`
-	APOverkill           int32                `json:"ap_overkill"`
-	OverkillDamage       int32                `json:"overkill_damage"`
-	Gil                  int32                `json:"gil"`
-	StealGil             *int32               `json:"steal_gil"`
-	RonsoRages           []NamedAPIResource   `json:"ronso_rages"`
-	DoomCountdown        *int32               `json:"doom_countdown"`
-	PoisonRate           *float32             `json:"poison_rate"`
-	PoisonDamage         *int32               `json:"poison_damage,omitempty"`
-	ThreatenChance       *int32               `json:"threaten_chance"`
-	ZanmatoLevel         int32                `json:"zanmato_level"`
-	MonsterArenaPrice    *int32               `json:"monster_arena_price,omitempty"`
-	SensorText           *string              `json:"sensor_text"`
-	ScanText             *string              `json:"scan_text"`
-	Areas                []AreaAPIResource    `json:"areas"`
-	Formations           []UnnamedAPIResource `json:"monster_formations"`
-	BaseStats            []BaseStat           `json:"base_stats"`
-	Items                *MonsterItems        `json:"items"`
-	BribeChances         []BribeChance        `json:"bribe_chances,omitempty"`
-	Equipment            *MonsterEquipment    `json:"equipment"`
-	ElemResists          []ElementalResist    `json:"elem_resists"`
-	StatusImmunities     []NamedAPIResource   `json:"status_immunities"`
-	StatusResists        []StatusResist       `json:"status_resists"`
-	Abilities            []MonsterAbility     `json:"abilities"`
-	AlteredStates        []AlteredState       `json:"altered_states"`
-}
 
-func (m *Monster) Error() string {
-	msg := fmt.Sprintf("monster '%s'", m.Name)
-
-	if m.Version != nil {
-		msg += fmt.Sprintf(", version '%d'", *m.Version)
-	}
-
-	return msg
-}
 
 func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList], id int32) (Monster, error) {
-	err := verifyQueryParams(r, i, &id)
-	if err != nil {
-		return Monster{}, err
-	}
-
 	monster, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Monster{}, err
@@ -133,43 +72,9 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		Abilities:            rel.Abilities,
 	}
 
-	response, err = applyAlteredState(cfg, r, response, "altered_state")
-	if err != nil {
-		return Monster{}, err
-	}
-
-	response.BaseStats, err = applyAeonStats(cfg, r, response, "aeon_stats")
-	if err != nil {
-		return Monster{}, err
-	}
-
-	response.BaseStats, err = applyRonsoStats(cfg, r, response, "kimahri_stats")
-	if err != nil {
-		return Monster{}, err
-	}
-
-	response.ElemResists, err = applyOmnisElements(cfg, r, response, "omnis_elements")
-	if err != nil {
-		return Monster{}, err
-	}
-
-	response.BribeChances, err = getMonsterBribeChances(cfg, response)
-	if err != nil {
-		return Monster{}, err
-	}
-
-	response.PoisonDamage, err = getMonsterPoisonDamage(cfg, response)
-	if err != nil {
-		return Monster{}, err
-	}
-
-	response.AgilityParameters, err = getMonsterAgilityParams(cfg, r, response)
-	if err != nil {
-		return Monster{}, err
-	}
-
-	return response, nil
+	return completeMonsterResponse(cfg, r, response)
 }
+
 
 func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

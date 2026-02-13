@@ -6,32 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type Treasure struct {
-	ID              int32
-	Area            AreaAPIResource  `json:"area"`
-	IsPostAirship   bool             `json:"is_post_airship"`
-	IsAnimaTreasure bool             `json:"is_anima_treasure"`
-	Notes           *string          `json:"notes,omitempty"`
-	TreasureType    NamedAPIResource `json:"treasure_type"`
-	LootType        NamedAPIResource `json:"loot_type"`
-	GilAmount       *int32           `json:"gil_amount,omitempty"`
-	Items           []ItemAmount     `json:"items,omitempty"`
-	Equipment       *FoundEquipment  `json:"equipment,omitempty"`
-}
 
-type FoundEquipment struct {
-	EquipmentName    NamedAPIResource   `json:"name"`
-	Abilities        []NamedAPIResource `json:"abilities"`
-	EmptySlotsAmount int32              `json:"empty_slots_amount"`
-}
-
-func convertFoundEquipment(cfg *Config, fe seeding.FoundEquipment) FoundEquipment {
-	return FoundEquipment{
-		EquipmentName:    nameToNamedAPIResource(cfg, cfg.e.equipment, fe.Name, nil),
-		Abilities:        namesToNamedAPIResources(cfg, cfg.e.autoAbilities, fe.Abilities),
-		EmptySlotsAmount: fe.EmptySlotsAmount,
-	}
-}
 
 func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList], id int32) (Treasure, error) {
 	treasure, err := verifyParamsAndGet(r, i, id)

@@ -56,6 +56,8 @@ func convertItemAmount(cfg *Config, input seeding.ItemAmount) ItemAmount {
 	return ItemAmount{}
 }
 
+
+
 type PossibleItem struct {
 	ItemAmount
 	Chance int32 `json:"chance"`

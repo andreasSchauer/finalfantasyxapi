@@ -6,14 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type Sublocation struct {
-	ID                    int32              `json:"id"`
-	Name                  string             `json:"name"`
-	ParentLocation        NamedAPIResource   `json:"parent_location"`
-	ConnectedSublocations []NamedAPIResource `json:"connected_sublocations"`
-	Areas                 []AreaAPIResource  `json:"areas"`
-	LocRel
-}
 
 func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32) (Sublocation, error) {
 	sublocation, err := verifyParamsAndGet(r, i, id)
@@ -47,6 +39,8 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Subloc
 
 	return response, nil
 }
+
+
 
 func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
