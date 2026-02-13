@@ -19,24 +19,18 @@ func (m MonsterFormationSub) GetURL() string {
 	return m.URL
 }
 
-func handleMonsterFormationsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
+func createMonsterFormationSub(cfg *Config, _ *http.Request, id int32) (SubResource, error) {
 	i := cfg.e.monsterFormations
-	formations := []MonsterFormationSub{}
+	formation, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	for _, formationID := range dbIDs {
-		formation, _ := seeding.GetResourceByID(formationID, i.objLookupID)
-
-		formationSub := MonsterFormationSub{
-			ID:             formation.ID,
-			URL:            createResourceURL(cfg, i.endpoint, formationID),
-			Category:       formation.FormationData.Category,
-			IsForcedAmbush: formation.FormationData.IsForcedAmbush,
-			Monsters:       convertObjSlice(cfg, formation.Monsters, monsterAmountString),
-			Areas:          locAreaStrings(cfg, formation.EncounterAreas),
-		}
-
-		formations = append(formations, formationSub)
+	formationSub := MonsterFormationSub{
+		ID:             formation.ID,
+		URL:            createResourceURL(cfg, i.endpoint, id),
+		Category:       formation.FormationData.Category,
+		IsForcedAmbush: formation.FormationData.IsForcedAmbush,
+		Monsters:       convertObjSlice(cfg, formation.Monsters, monsterAmountString),
+		Areas:          locAreaStrings(cfg, formation.EncounterAreas),
 	}
 
-	return toSubResourceSlice(formations), nil
+	return formationSub, nil
 }

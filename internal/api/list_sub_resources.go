@@ -21,13 +21,13 @@ func (l SubResourceList) getResults() []SubResource {
 	return l.Results
 }
 
-func newSubResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, iParent handlerInput[T, R, A, L], id int32, sectionName string, fns SubSectionFns) (SubResourceList, error) {
+func newSubResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, sectionName string, fns SubSectionFns) (SubResourceList, error) {
 	dbIDs, err := fns.dbQuery(r.Context(), id)
 	if err != nil {
-		return SubResourceList{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, iParent.resourceType, id), err)
+		return SubResourceList{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, i.resourceType, id), err)
 	}
 
-	results, err := fns.getResultsFn(cfg, r, dbIDs)
+	results, err := createSubResources(cfg, r, dbIDs, fns.createSubFn)
 	if err != nil {
 		return SubResourceList{}, err
 	}
@@ -39,17 +39,26 @@ func newSubResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg 
 
 	subResList := SubResourceList{
 		ListParams:     listParams,
-		ParentResource: iParent.idToResFunc(cfg, iParent, id),
+		ParentResource: i.idToResFunc(cfg, i, id),
 		Results:        shownResults,
 	}
 
 	return subResList, nil
 }
 
-func toSubResourceSlice[T SubResource](s []T) []SubResource {
-	out := make([]SubResource, len(s))
-	for i, v := range s {
-		out[i] = v
+
+
+func createSubResources(cfg *Config, r *http.Request, dbIDs []int32, createFn func(*Config, *http.Request, int32) (SubResource, error)) ([]SubResource, error) {
+	subs := []SubResource{}
+	
+	for _, id := range dbIDs {
+		subRes, err := createFn(cfg, r, id)
+		if err != nil {
+			return nil, err
+		}
+
+		subs = append(subs, subRes)
 	}
-	return out
+
+	return subs, nil
 }

@@ -19,39 +19,34 @@ func (l LocationSub) GetURL() string {
 	return l.URL
 }
 
-func handleLocationsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
+
+func createLocationSub(cfg *Config, r *http.Request, id int32) (SubResource, error) {
 	i := cfg.e.locations
-	locations := []LocationSub{}
+	location, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	for _, locID := range dbIDs {
-		location, _ := seeding.GetResourceByID(locID, i.objLookupID)
-
-		monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, locID, cfg.db.GetLocationMonsterIDs, idToMonsterSubString)
-		if err != nil {
-			return nil, err
-		}
-
-		shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, locID, cfg.db.GetLocationShopIDs, idToShopLocSub)
-		if err != nil {
-			return nil, err
-		}
-
-		treasures, err := getTreasuresLocSub(cfg, r, i.resourceType, locID, cfg.db.GetLocationTreasureIDs)
-		if err != nil {
-			return nil, err
-		}
-
-		locationSub := LocationSub{
-			ID:        location.ID,
-			URL:       createResourceURL(cfg, i.endpoint, locID),
-			Name:      location.Name,
-			Shops:     shops,
-			Treasures: treasures,
-			Monsters:  monsters,
-		}
-
-		locations = append(locations, locationSub)
+	monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetLocationMonsterIDs, idToMonsterSubString)
+	if err != nil {
+		return LocationSub{}, err
 	}
 
-	return toSubResourceSlice(locations), nil
+	shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetLocationShopIDs, idToShopLocSub)
+	if err != nil {
+		return LocationSub{}, err
+	}
+
+	treasures, err := getTreasuresLocSub(cfg, r, i.resourceType, id, cfg.db.GetLocationTreasureIDs)
+	if err != nil {
+		return LocationSub{}, err
+	}
+
+	locationSub := LocationSub{
+		ID:        location.ID,
+		URL:       createResourceURL(cfg, i.endpoint, id),
+		Name:      location.Name,
+		Shops:     shops,
+		Treasures: treasures,
+		Monsters:  monsters,
+	}
+
+	return locationSub, nil
 }

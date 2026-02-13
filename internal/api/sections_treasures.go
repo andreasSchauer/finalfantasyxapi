@@ -23,28 +23,22 @@ func (t TreasureSub) GetURL() string {
 	return t.URL
 }
 
-func handleTreasuresSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
+func createTreasureSub(cfg *Config, _ *http.Request, id int32) (SubResource, error) {
 	i := cfg.e.treasures
-	treasures := []TreasureSub{}
+	treasure, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	for _, treasureID := range dbIDs {
-		treasure, _ := seeding.GetResourceByID(treasureID, i.objLookupID)
-
-		treasureSub := TreasureSub{
-			ID:            treasure.ID,
-			URL:           createResourceURL(cfg, i.endpoint, treasureID),
-			Area:          idToLocAreaString(cfg, treasure.AreaID),
-			IsPostAirship: treasure.IsPostAirship,
-			Notes:         treasure.Notes,
-			TreasureType:  treasure.TreasureType,
-			LootType:      treasure.LootType,
-			GilAmount:     treasure.GilAmount,
-			Items:         convertObjSliceNullable(cfg, treasure.Items, convertSubItemAmount),
-			Equipment:     convertObjPtr(cfg, treasure.Equipment, convertEquipmentSub),
-		}
-
-		treasures = append(treasures, treasureSub)
+	treasureSub := TreasureSub{
+		ID:            treasure.ID,
+		URL:           createResourceURL(cfg, i.endpoint, id),
+		Area:          idToLocAreaString(cfg, treasure.AreaID),
+		IsPostAirship: treasure.IsPostAirship,
+		Notes:         treasure.Notes,
+		TreasureType:  treasure.TreasureType,
+		LootType:      treasure.LootType,
+		GilAmount:     treasure.GilAmount,
+		Items:         convertObjSliceNullable(cfg, treasure.Items, convertSubItemAmount),
+		Equipment:     convertObjPtr(cfg, treasure.Equipment, convertEquipmentSub),
 	}
 
-	return toSubResourceSlice(treasures), nil
+	return treasureSub, nil
 }

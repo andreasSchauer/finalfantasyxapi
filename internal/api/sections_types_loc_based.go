@@ -10,6 +10,7 @@ import (
 )
 
 type ShopLocSub struct {
+	ID			int32				  `json:"id"`
 	Category    database.ShopCategory `json:"category"`
 	PreAirship  *ShopSummarySub       `json:"pre_airship"`
 	PostAirship *ShopSummarySub       `json:"post_airship"`
@@ -23,6 +24,7 @@ type ShopSummarySub struct {
 func idToShopLocSub(cfg *Config, shopID int32) ShopLocSub {
 	shopLookup, _ := seeding.GetResourceByID(shopID, cfg.l.ShopsID)
 	return ShopLocSub{
+		ID: 		 shopID,
 		Category:    database.ShopCategory(shopLookup.Category),
 		PreAirship:  convertObjPtr(cfg, shopLookup.PreAirship, convertShopSummarySub),
 		PostAirship: convertObjPtr(cfg, shopLookup.PostAirship, convertShopSummarySub),

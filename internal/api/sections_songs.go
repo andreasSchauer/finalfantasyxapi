@@ -23,32 +23,26 @@ func (s SongSub) GetURL() string {
 	return s.URL
 }
 
-func handleSongsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
+func createSongSub(cfg *Config, _ *http.Request, id int32) (SubResource, error) {
 	i := cfg.e.songs
-	songs := []SongSub{}
+	song, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	for _, songID := range dbIDs {
-		song, _ := seeding.GetResourceByID(songID, i.objLookupID)
-
-		songSub := SongSub{
-			ID:                song.ID,
-			URL:               createResourceURL(cfg, i.endpoint, songID),
-			Name:              song.Name,
-			DurationInSeconds: song.DurationInSeconds,
-			CanLoop:           song.CanLoop,
-		}
-
-		if song.Credits != nil {
-			songSub.Composer = song.Credits.Composer
-			songSub.Arranger = song.Credits.Arranger
-			songSub.Performer = song.Credits.Performer
-			songSub.Lyricist = song.Credits.Lyricist
-		}
-
-		songs = append(songs, songSub)
+	songSub := SongSub{
+		ID:                song.ID,
+		URL:               createResourceURL(cfg, i.endpoint, id),
+		Name:              song.Name,
+		DurationInSeconds: song.DurationInSeconds,
+		CanLoop:           song.CanLoop,
 	}
 
-	return toSubResourceSlice(songs), nil
+	if song.Credits != nil {
+		songSub.Composer = song.Credits.Composer
+		songSub.Arranger = song.Credits.Arranger
+		songSub.Performer = song.Credits.Performer
+		songSub.Lyricist = song.Credits.Lyricist
+	}
+
+	return songSub, nil
 }
 
 func (cfg *Config) getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {

@@ -31,22 +31,16 @@ func convertQuestCompletionSub(cfg *Config, qc seeding.QuestCompletion) QuestCom
 	}
 }
 
-func handleSubquestsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
+func createSubquestSub(cfg *Config, _ *http.Request, id int32) (SubResource, error) {
 	i := cfg.e.subquests
-	subquests := []SubquestSub{}
+	subquest, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	for _, subquestID := range dbIDs {
-		subquest, _ := seeding.GetResourceByID(subquestID, i.objLookupID)
-
-		subquestSub := SubquestSub{
-			ID:          subquest.ID,
-			URL:         createResourceURL(cfg, i.endpoint, subquestID),
-			Name:        subquest.Name,
-			Completions: convertObjSlice(cfg, subquest.Completions, convertQuestCompletionSub),
-		}
-
-		subquests = append(subquests, subquestSub)
+	subquestSub := SubquestSub{
+		ID:          subquest.ID,
+		URL:         createResourceURL(cfg, i.endpoint, id),
+		Name:        subquest.Name,
+		Completions: convertObjSlice(cfg, subquest.Completions, convertQuestCompletionSub),
 	}
 
-	return toSubResourceSlice(subquests), nil
+	return subquestSub, nil
 }

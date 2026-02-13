@@ -25,8 +25,8 @@ type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 }
 
 type SubSectionFns struct {
-	dbQuery      func(context.Context, int32) ([]int32, error)
-	getResultsFn func(*Config, *http.Request, []int32) ([]SubResource, error)
+	dbQuery     func(context.Context, int32) ([]int32, error)
+	createSubFn func(*Config, *http.Request, int32) (SubResource, error)
 }
 
 type endpoints struct {
@@ -119,25 +119,28 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc: cfg.getArea,
 		retrieveFunc:  cfg.retrieveAreas,
 		subsections: map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createAreaSub,
+			},
 			"connected": {
-				dbQuery:      cfg.db.GetAreaConnectionIDs,
-				getResultsFn: handleAreasSection,
+				dbQuery:     cfg.db.GetAreaConnectionIDs,
+				createSubFn: createAreaSub,
 			},
 			"monster-formations": {
-				dbQuery:      cfg.db.GetAreaMonsterFormationIDs,
-				getResultsFn: handleMonsterFormationsSection,
+				dbQuery:     cfg.db.GetAreaMonsterFormationIDs,
+				createSubFn: createMonsterFormationSub,
 			},
 			"monsters": {
-				dbQuery:      cfg.db.GetAreaMonsterIDs,
-				getResultsFn: handleMonstersSection,
+				dbQuery:     cfg.db.GetAreaMonsterIDs,
+				createSubFn: createMonsterSub,
 			},
 			"songs": {
-				dbQuery:      cfg.getAreaSongIDs,
-				getResultsFn: handleSongsSection,
+				dbQuery:     cfg.getAreaSongIDs,
+				createSubFn: createSongSub,
 			},
 			"treasures": {
-				dbQuery:      cfg.db.GetAreaTreasureIDs,
-				getResultsFn: handleTreasuresSection,
+				dbQuery:     cfg.db.GetAreaTreasureIDs,
+				createSubFn: createTreasureSub,
 			},
 		},
 	}
@@ -264,37 +267,40 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc: cfg.getLocation,
 		retrieveFunc:  cfg.retrieveLocations,
 		subsections: map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createLocationSub,
+			},
 			"connected": {
-				dbQuery:      cfg.db.GetConnectedLocationIDs,
-				getResultsFn: handleLocationsSection,
+				dbQuery:     cfg.db.GetConnectedLocationIDs,
+				createSubFn: createLocationSub,
 			},
 			"sublocations": {
-				dbQuery:      cfg.db.GetLocationSublocationIDs,
-				getResultsFn: handleSublocationsSection,
+				dbQuery:     cfg.db.GetLocationSublocationIDs,
+				createSubFn: createSublocationSub,
 			},
 			"areas": {
-				dbQuery:      cfg.db.GetLocationAreaIDs,
-				getResultsFn: handleAreasSection,
+				dbQuery:     cfg.db.GetLocationAreaIDs,
+				createSubFn: createAreaSub,
 			},
 			"monster-formations": {
-				dbQuery:      cfg.db.GetLocationMonsterFormationIDs,
-				getResultsFn: handleMonsterFormationsSection,
+				dbQuery:     cfg.db.GetLocationMonsterFormationIDs,
+				createSubFn: createMonsterFormationSub,
 			},
 			"monsters": {
-				dbQuery:      cfg.db.GetLocationMonsterIDs,
-				getResultsFn: handleMonstersSection,
+				dbQuery:     cfg.db.GetLocationMonsterIDs,
+				createSubFn: createMonsterSub,
 			},
 			"shops": {
-				dbQuery:      cfg.db.GetLocationShopIDs,
-				getResultsFn: handleShopsSection,
+				dbQuery:     cfg.db.GetLocationShopIDs,
+				createSubFn: createShopSub,
 			},
 			"songs": {
-				dbQuery:      cfg.getLocationSongIDs,
-				getResultsFn: handleSongsSection,
+				dbQuery:     cfg.getLocationSongIDs,
+				createSubFn: createSongSub,
 			},
 			"treasures": {
-				dbQuery:      cfg.db.GetLocationTreasureIDs,
-				getResultsFn: handleTreasuresSection,
+				dbQuery:     cfg.db.GetLocationTreasureIDs,
+				createSubFn: createTreasureSub,
 			},
 		},
 	}
@@ -319,13 +325,16 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc:    cfg.getMonster,
 		retrieveFunc:     cfg.retrieveMonsters,
 		subsections: map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createMonsterSub,
+			},
 			"areas": {
-				dbQuery:      cfg.db.GetMonsterAreaIDs,
-				getResultsFn: handleAreasSection,
+				dbQuery:     cfg.db.GetMonsterAreaIDs,
+				createSubFn: createAreaSub,
 			},
 			"monster-formations": {
-				dbQuery:      cfg.db.GetMonsterMonsterFormationIDs,
-				getResultsFn: handleMonsterFormationsSection,
+				dbQuery:     cfg.db.GetMonsterMonsterFormationIDs,
+				createSubFn: createMonsterFormationSub,
 			},
 		},
 	}
@@ -342,9 +351,12 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc: cfg.getMonsterFormation,
 		retrieveFunc:  cfg.retrieveMonsterFormations,
 		subsections: map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createMonsterFormationSub,
+			},
 			"monsters": {
-				dbQuery:      cfg.db.GetMonsterFormationMonsterIDs,
-				getResultsFn: handleMonstersSection,
+				dbQuery:     cfg.db.GetMonsterFormationMonsterIDs,
+				createSubFn: createMonsterSub,
 			},
 		},
 	}
@@ -457,6 +469,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetShopIDs,
 		getSingleFunc: cfg.getShop,
 		retrieveFunc:  cfg.retrieveShops,
+		subsections: map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createShopSub,
+			},
+		},
 	}
 
 	e.sidequests = handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList]{
@@ -472,8 +489,8 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveSidequests,
 		subsections: map[string]SubSectionFns{
 			"subquests": {
-				dbQuery:      cfg.db.GetSidequestSubquestIDs,
-				getResultsFn: handleSubquestsSection,
+				dbQuery:     cfg.db.GetSidequestSubquestIDs,
+				createSubFn: createSubquestSub,
 			},
 		},
 	}
@@ -534,33 +551,36 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc: cfg.getSublocation,
 		retrieveFunc:  cfg.retrieveSublocations,
 		subsections: map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createSublocationSub,
+			},
 			"connected": {
-				dbQuery:      cfg.db.GetConnectedSublocationIDs,
-				getResultsFn: handleSublocationsSection,
+				dbQuery:     cfg.db.GetConnectedSublocationIDs,
+				createSubFn: createSublocationSub,
 			},
 			"areas": {
-				dbQuery:      cfg.db.GetSublocationAreaIDs,
-				getResultsFn: handleAreasSection,
+				dbQuery:     cfg.db.GetSublocationAreaIDs,
+				createSubFn: createAreaSub,
 			},
 			"monster-formations": {
-				dbQuery:      cfg.db.GetSublocationMonsterFormationIDs,
-				getResultsFn: handleMonsterFormationsSection,
+				dbQuery:     cfg.db.GetSublocationMonsterFormationIDs,
+				createSubFn: createMonsterFormationSub,
 			},
 			"monsters": {
-				dbQuery:      cfg.db.GetSublocationMonsterIDs,
-				getResultsFn: handleMonstersSection,
+				dbQuery:     cfg.db.GetSublocationMonsterIDs,
+				createSubFn: createMonsterSub,
 			},
 			"shops": {
-				dbQuery:      cfg.db.GetSublocationShopIDs,
-				getResultsFn: handleShopsSection,
+				dbQuery:     cfg.db.GetSublocationShopIDs,
+				createSubFn: createShopSub,
 			},
 			"songs": {
-				dbQuery:      cfg.getSublocationSongIDs,
-				getResultsFn: handleSongsSection,
+				dbQuery:     cfg.getSublocationSongIDs,
+				createSubFn: createSongSub,
 			},
 			"treasures": {
-				dbQuery:      cfg.db.GetSublocationTreasureIDs,
-				getResultsFn: handleTreasuresSection,
+				dbQuery:     cfg.db.GetSublocationTreasureIDs,
+				createSubFn: createTreasureSub,
 			},
 		},
 	}

@@ -20,40 +20,35 @@ func (s SublocationSub) GetURL() string {
 	return s.URL
 }
 
-func handleSublocationsSection(cfg *Config, r *http.Request, dbIDs []int32) ([]SubResource, error) {
+
+func createSublocationSub(cfg *Config, r *http.Request, id int32) (SubResource, error) {
 	i := cfg.e.sublocations
-	sublocations := []SublocationSub{}
+	sublocation, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	for _, subLocID := range dbIDs {
-		sublocation, _ := seeding.GetResourceByID(subLocID, i.objLookupID)
-
-		monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, subLocID, cfg.db.GetSublocationMonsterIDs, idToMonsterSubString)
-		if err != nil {
-			return nil, err
-		}
-
-		shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, subLocID, cfg.db.GetSublocationShopIDs, idToShopLocSub)
-		if err != nil {
-			return nil, err
-		}
-
-		treasures, err := getTreasuresLocSub(cfg, r, i.resourceType, subLocID, cfg.db.GetSublocationTreasureIDs)
-		if err != nil {
-			return nil, err
-		}
-
-		sublocationSub := SublocationSub{
-			ID:             sublocation.ID,
-			URL:            createResourceURL(cfg, i.endpoint, subLocID),
-			ParentLocation: createSubReference(sublocation.Location.ID, sublocation.Location.Name, nil, nil),
-			Name:           sublocation.Name,
-			Shops:          shops,
-			Treasures:      treasures,
-			Monsters:       monsters,
-		}
-
-		sublocations = append(sublocations, sublocationSub)
+	monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetSublocationMonsterIDs, idToMonsterSubString)
+	if err != nil {
+		return SublocationSub{}, err
 	}
 
-	return toSubResourceSlice(sublocations), nil
+	shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetSublocationShopIDs, idToShopLocSub)
+	if err != nil {
+		return SublocationSub{}, err
+	}
+
+	treasures, err := getTreasuresLocSub(cfg, r, i.resourceType, id, cfg.db.GetSublocationTreasureIDs)
+	if err != nil {
+		return SublocationSub{}, err
+	}
+
+	sublocationSub := SublocationSub{
+		ID:             sublocation.ID,
+		URL:            createResourceURL(cfg, i.endpoint, id),
+		ParentLocation: createSubReference(sublocation.Location.ID, sublocation.Location.Name, nil, nil),
+		Name:           sublocation.Name,
+		Shops:          shops,
+		Treasures:      treasures,
+		Monsters:       monsters,
+	}
+
+	return sublocationSub, nil
 }

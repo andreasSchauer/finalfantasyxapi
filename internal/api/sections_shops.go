@@ -47,11 +47,11 @@ func convertShopEquipmentSub(cfg *Config, se seeding.ShopEquipment) ShopEquipmen
 }
 
 func shopItemNameString(_ *Config, si seeding.ShopItem) string {
-	return fmt.Sprintf("%s (%d Gil)", si.Name, si.Price)
+	return fmt.Sprintf("%s - %d Gil", si.Name, si.Price)
 }
 
 func shopEquipmentNameString(_ *Config, se seeding.ShopEquipment) string {
-	return fmt.Sprintf("%s (%d Gil)", se.Name, se.Price)
+	return fmt.Sprintf("%s - %d Gil", se.Name, se.Price)
 }
 
 func foundEquipmentAbilitiesStringPtr(fe seeding.FoundEquipment) *string {
@@ -76,25 +76,19 @@ func foundEquipmentAbilitiesStringPtr(fe seeding.FoundEquipment) *string {
 	}
 }
 
-func handleShopsSection(cfg *Config, _ *http.Request, dbIDs []int32) ([]SubResource, error) {
+func createShopSub(cfg *Config, _ *http.Request, id int32) (SubResource, error) {
 	i := cfg.e.shops
-	shops := []ShopSub{}
+	shop, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	for _, shopID := range dbIDs {
-		shop, _ := seeding.GetResourceByID(shopID, i.objLookupID)
-
-		shopSub := ShopSub{
-			ID:          shop.ID,
-			URL:         createResourceURL(cfg, i.endpoint, shopID),
-			Area:        idToLocAreaString(cfg, shop.AreaID),
-			Category:    shop.Category,
-			Notes:       shop.Notes,
-			PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShopSub),
-			PostAirship: convertObjPtr(cfg, shop.PostAirship, convertSubShopSub),
-		}
-
-		shops = append(shops, shopSub)
+	shopSub := ShopSub{
+		ID:          shop.ID,
+		URL:         createResourceURL(cfg, i.endpoint, id),
+		Area:        idToLocAreaString(cfg, shop.AreaID),
+		Category:    shop.Category,
+		Notes:       shop.Notes,
+		PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShopSub),
+		PostAirship: convertObjPtr(cfg, shop.PostAirship, convertSubShopSub),
 	}
 
-	return toSubResourceSlice(shops), nil
+	return shopSub, nil
 }

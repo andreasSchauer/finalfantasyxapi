@@ -171,6 +171,15 @@ func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 		return
 	}
 
+	if subsection == "simple" {
+		simpleRes, err := fns.createSubFn(cfg, r, parseRes.ID)
+		if handleHTTPError(w, err) {
+			return
+		}
+		respondWithJSON(w, http.StatusOK, simpleRes)
+		return
+	}
+
 	list, err := newSubResourceList(cfg, r, i, parseRes.ID, subsection, fns)
 	if handleHTTPError(w, err) {
 		return
