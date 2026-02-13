@@ -9,6 +9,7 @@ import (
 
 
 func routerIdOnly[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+	i.usage = []string{"/{id}"}
 	segments := getPathSegments(r.URL.Path, i.endpoint)
 
 	switch len(segments) {
@@ -32,6 +33,7 @@ func routerIdOnly[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Confi
 
 
 func routerNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+	i.usage = []string{"/{id}", "/{name}"}
 	segments := getPathSegments(r.URL.Path, i.endpoint)
 
 	switch len(segments) {
@@ -55,6 +57,7 @@ func routerNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 
 
 func routerNameVersion[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+	i.usage = []string{"/{id}", "/{name}", "/{name}/{version}"}
 	segments := getPathSegments(r.URL.Path, i.endpoint)
 
 	switch len(segments) {

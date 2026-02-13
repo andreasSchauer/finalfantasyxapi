@@ -97,13 +97,12 @@ func (cfg *Config) EndpointsInit() {
 	e.arenaCreations = handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "arena-creations",
 		resourceType:  "arena creation",
-		usage:         []string{"/{id}", "/{name}"},
 		objLookup:     cfg.l.ArenaCreations,
 		objLookupID:   cfg.l.ArenaCreationsID,
 		queryLookup:   cfg.q.arenaCreations,
 		idToResFunc:   idToNamedAPIResource[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList],
-		retrieveQuery: cfg.db.GetArenaCreationIDs,
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetArenaCreationIDs,
 		getSingleFunc: cfg.getArenaCreation,
 		retrieveFunc:  cfg.retrieveArenaCreations,
 	}
@@ -111,13 +110,12 @@ func (cfg *Config) EndpointsInit() {
 	e.areas = handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]{
 		endpoint:      "areas",
 		resourceType:  "area",
-		usage:         []string{"/{id}"},
 		objLookup:     cfg.l.Areas,
 		objLookupID:   cfg.l.AreasID,
 		queryLookup:   cfg.q.areas,
 		idToResFunc:   idToAreaAPIResource,
-		retrieveQuery: cfg.db.GetAreaIDs,
 		resToListFunc: newAreaAPIResourceList,
+		retrieveQuery: cfg.db.GetAreaIDs,
 		getSingleFunc: cfg.getArea,
 		retrieveFunc:  cfg.retrieveAreas,
 		subsections: map[string]SubSectionFns{
@@ -156,7 +154,6 @@ func (cfg *Config) EndpointsInit() {
 	e.blitzballPrizes = handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      "blitzball-prizes",
 		resourceType:  "blitzball prize table",
-		usage:         []string{"/{id}"},
 		objLookup:     cfg.l.Positions,
 		objLookupID:   cfg.l.PositionsID,
 		queryLookup:   cfg.q.blitzballPrizes,
@@ -227,7 +224,6 @@ func (cfg *Config) EndpointsInit() {
 	e.fmvs = handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "fmvs",
 		resourceType:  "fmv",
-		usage:         []string{"/{id}", "/{name}"},
 		objLookup:     cfg.l.FMVs,
 		objLookupID:   cfg.l.FMVsID,
 		queryLookup:   cfg.q.fmvs,
@@ -259,13 +255,12 @@ func (cfg *Config) EndpointsInit() {
 	e.locations = handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "locations",
 		resourceType:  "location",
-		usage:         []string{"/{id}", "/{name}"},
 		objLookup:     cfg.l.Locations,
 		objLookupID:   cfg.l.LocationsID,
 		queryLookup:   cfg.q.locations,
-		retrieveQuery: cfg.db.GetLocationIDs,
 		idToResFunc:   idToNamedAPIResource[seeding.Location, Location, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetLocationIDs,
 		getSingleFunc: cfg.getLocation,
 		retrieveFunc:  cfg.retrieveLocations,
 		subsections: map[string]SubSectionFns{
@@ -314,7 +309,6 @@ func (cfg *Config) EndpointsInit() {
 	e.monsters = handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]{
 		endpoint:         "monsters",
 		resourceType:     "monster",
-		usage:            []string{"/{id}", "/{name}", "/{name}/{version}"},
 		objLookup:        cfg.l.Monsters,
 		objLookupID:      cfg.l.MonstersID,
 		queryLookup:      cfg.q.monsters,
@@ -339,7 +333,6 @@ func (cfg *Config) EndpointsInit() {
 	e.monsterFormations = handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      "monster-formations",
 		resourceType:  "monster formation",
-		usage:         []string{"/{id}"},
 		objLookup:     cfg.l.MonsterFormations,
 		objLookupID:   cfg.l.MonsterFormationsID,
 		queryLookup:   cfg.q.monsterFormations,
@@ -373,7 +366,6 @@ func (cfg *Config) EndpointsInit() {
 	e.overdriveModes = handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "overdrive-modes",
 		resourceType:  "overdrive mode",
-		usage:         []string{"/{id}", "/{name}"},
 		objLookup:     cfg.l.OverdriveModes,
 		objLookupID:   cfg.l.OverdriveModesID,
 		queryLookup:   cfg.q.overdriveModes,
@@ -457,12 +449,11 @@ func (cfg *Config) EndpointsInit() {
 	e.shops = handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      "shops",
 		resourceType:  "shop",
-		usage:         []string{"/{id}"},
 		objLookup:     cfg.l.Shops,
 		objLookupID:   cfg.l.ShopsID,
+		queryLookup:   cfg.q.shops,
 		idToResFunc:   idToUnnamedAPIResource[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList],
 		resToListFunc: newUnnamedAPIResourceList,
-		queryLookup:   cfg.q.shops,
 		retrieveQuery: cfg.db.GetShopIDs,
 		getSingleFunc: cfg.getShop,
 		retrieveFunc:  cfg.retrieveShops,
@@ -471,13 +462,12 @@ func (cfg *Config) EndpointsInit() {
 	e.sidequests = handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "sidequests",
 		resourceType:  "sidequest",
-		usage:         []string{"/{id}", "/{name}"},
 		objLookup:     cfg.l.Sidequests,
 		objLookupID:   cfg.l.SidequestsID,
 		queryLookup:   cfg.q.sidequests,
-		retrieveQuery: cfg.db.GetSidequestIDs,
 		idToResFunc:   idToNamedAPIResource[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetSidequestIDs,
 		getSingleFunc: cfg.getSidequest,
 		retrieveFunc:  cfg.retrieveSidequests,
 		subsections: map[string]SubSectionFns{
@@ -491,13 +481,12 @@ func (cfg *Config) EndpointsInit() {
 	e.subquests = handlerInput[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "subquests",
 		resourceType:  "subquest",
-		usage:         []string{"/{id}"},
 		objLookup:     cfg.l.Subquests,
 		objLookupID:   cfg.l.SubquestsID,
 		queryLookup:   cfg.q.subquests,
-		retrieveQuery: cfg.db.GetSubquestIDs,
 		idToResFunc:   idToNamedAPIResource[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetSubquestIDs,
 		getSingleFunc: cfg.getSubquest,
 		retrieveFunc:  cfg.retrieveSubquests,
 	}
@@ -505,7 +494,6 @@ func (cfg *Config) EndpointsInit() {
 	e.songs = handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "songs",
 		resourceType:  "song",
-		usage:         []string{"/{id}", "/{name}"},
 		objLookup:     cfg.l.Songs,
 		objLookupID:   cfg.l.SongsID,
 		queryLookup:   cfg.q.songs,
@@ -537,12 +525,11 @@ func (cfg *Config) EndpointsInit() {
 	e.sublocations = handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "sublocations",
 		resourceType:  "sublocation",
-		usage:         []string{"/{id}", "/{name}"},
 		objLookup:     cfg.l.Sublocations,
 		objLookupID:   cfg.l.SublocationsID,
+		queryLookup:   cfg.q.sublocations,
 		idToResFunc:   idToNamedAPIResource[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
-		queryLookup:   cfg.q.sublocations,
 		retrieveQuery: cfg.db.GetSublocationIDs,
 		getSingleFunc: cfg.getSublocation,
 		retrieveFunc:  cfg.retrieveSublocations,
@@ -581,12 +568,11 @@ func (cfg *Config) EndpointsInit() {
 	e.treasures = handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      "treasures",
 		resourceType:  "treasure",
-		usage:         []string{"/{id}"},
 		objLookup:     cfg.l.Treasures,
 		objLookupID:   cfg.l.TreasuresID,
+		queryLookup:   cfg.q.treasures,
 		idToResFunc:   idToUnnamedAPIResource[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList],
 		resToListFunc: newUnnamedAPIResourceList,
-		queryLookup:   cfg.q.treasures,
 		retrieveQuery: cfg.db.GetTreasureIDs,
 		getSingleFunc: cfg.getTreasure,
 		retrieveFunc:  cfg.retrieveTreasures,
