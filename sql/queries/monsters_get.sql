@@ -141,15 +141,14 @@ WHERE ia.master_item_id = sqlc.arg(item_id)
 ORDER BY m.id;
 
 
--- name: GetMonsterIDsByAutoAbilityIDs :many
+-- name: GetMonsterIDsByAutoAbility :many
 SELECT m.id
 FROM monsters m
 JOIN monster_equipment me ON me.monster_id = m.id
 JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
 JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
-WHERE ed.auto_ability_id = ANY(sqlc.arg(auto_ability_ids)::int[])
-GROUP BY m.id
-HAVING COUNT(DISTINCT ed.auto_ability_id) >= 1
+JOIN auto_abilities aa ON ed.auto_ability_id = aa.id
+WHERE aa.id = $1
 ORDER BY m.id;
 
 

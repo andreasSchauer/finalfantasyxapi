@@ -419,11 +419,11 @@ func (cfg *Config) initMonstersParams() {
 			RequiredParams: []string{"item"},
 			AllowedValues:  []string{"steal", "drop", "bribe", "other"},
 		},
-		"auto_abilities": {
+		"auto_ability": {
 			ID:          10,
-			Description: "Searches for monsters that drop one of the specified auto_abilities.",
-			Usage:       "?auto_abilities={id},...",
-			ExampleUses: []string{"?auto_abilities=16", "?auto_abilities=99,100"},
+			Description: "Searches for monsters that drop the specified auto-ability.",
+			Usage:       "?auto_ability={id}",
+			ExampleUses: []string{"?auto_ability=16"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "auto-abilities")},

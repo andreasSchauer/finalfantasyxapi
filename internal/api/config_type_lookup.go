@@ -175,6 +175,10 @@ func (t *TypeLookup) initCTBIconType() {
 			Name:        string(database.CtbIconTypeSummon),
 			Description: "Used for aeons, except dark aeons",
 		},
+		{
+			Name:        string(database.CtbIconTypeCid),
+			Description: "Used for Cid during the Evrae fight",
+		},
 	}
 
 	t.CTBIconType = newEnumType[database.CtbIconType, any]("ctb icon type", true, typeSlice, func(s string) database.CtbIconType {

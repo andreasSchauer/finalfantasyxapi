@@ -1085,13 +1085,6 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?auto_abilities=1,4,4,1,3,3,4",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "duplicate use of id '4' for parameter 'auto_abilities'. each id can only be used once.",
-			},
-		},
-		{
-			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?distance=5",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value '5' used for parameter 'distance'. value must be an integer ranging from 1 to 4.",
@@ -1181,11 +1174,11 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?auto_abilities=96,101",
+				requestURL:     "/api/monsters?auto_ability=24",
 				expectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{97, 146, 172, 211, 304},
+			count:   11,
+			results: []int32{199, 200, 209, 244, 257, 279, 285},
 		},
 		{
 			testGeneral: testGeneral{
