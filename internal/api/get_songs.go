@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -69,30 +68,6 @@ func convertCue(cfg *Config, cue seeding.Cue) Cue {
 		ReplacesEncounterMusic: cue.ReplacesEncounterMusic,
 		ReplacesBGMusic:        cue.ReplacesBGMusic,
 		EndTrigger:             cue.EndTrigger,
-	}
-}
-
-func (cfg *Config) HandleSongs(w http.ResponseWriter, r *http.Request) {
-	i := cfg.e.songs
-
-	segments := getPathSegments(r.URL.Path, i.endpoint)
-
-	switch len(segments) {
-	case 0:
-		handleEndpointList(w, r, i)
-		return
-
-	case 1:
-		handleEndpointNameOrID(cfg, w, r, i, segments)
-		return
-
-	case 2:
-		handleEndpointSubsections(cfg, w, r, i, segments)
-		return
-
-	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
-		return
 	}
 }
 

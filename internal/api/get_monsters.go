@@ -64,30 +64,6 @@ func (m *Monster) Error() string {
 	return msg
 }
 
-func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
-	i := cfg.e.monsters
-
-	segments := getPathSegments(r.URL.Path, i.endpoint)
-
-	switch len(segments) {
-	case 0:
-		handleEndpointList(w, r, i)
-		return
-
-	case 1:
-		handleEndpointNameOrID(cfg, w, r, i, segments)
-		return
-
-	case 2:
-		handleEndpointSubOrNameVer(cfg, w, r, i, segments)
-		return
-
-	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
-		return
-	}
-}
-
 func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList], id int32) (Monster, error) {
 	err := verifyQueryParams(r, i, &id)
 	if err != nil {

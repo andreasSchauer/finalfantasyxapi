@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -49,30 +48,6 @@ func convertShopEquipment(cfg *Config, se seeding.ShopEquipment) ShopEquipment {
 	return ShopEquipment{
 		Equipment: convertFoundEquipment(cfg, se.FoundEquipment),
 		Price:     se.Price,
-	}
-}
-
-func (cfg *Config) HandleShops(w http.ResponseWriter, r *http.Request) {
-	i := cfg.e.shops
-
-	segments := getPathSegments(r.URL.Path, i.endpoint)
-
-	switch len(segments) {
-	case 0:
-		handleEndpointList(w, r, i)
-		return
-
-	case 1:
-		handleEndpointIDOnly(cfg, w, r, i, segments)
-		return
-
-	case 2:
-		handleEndpointSubsections(cfg, w, r, i, segments)
-		return
-
-	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
-		return
 	}
 }
 

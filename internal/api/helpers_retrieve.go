@@ -24,6 +24,20 @@ func verifyParamsAndGet[T h.HasID, R any, A APIResource, L APIResourceList](r *h
 	return resource, nil
 }
 
+func verifyParamsAndRetrieve[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L]) ([]int32, error) {
+	err := verifyQueryParams(r, i, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := i.retrieveQuery(r.Context())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss.", i.resourceType), err)
+	}
+
+	return dbIDs, nil
+}
+
 func getMultipleAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], name string) (L, error) {
 	var zeroType L
 
@@ -42,20 +56,6 @@ func retrieveAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cf
 	}
 
 	return idsToAPIResources(cfg, i, dbIDs), nil
-}
-
-func verifyParamsAndRetrieve[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L]) ([]int32, error) {
-	err := verifyQueryParams(r, i, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	dbIDs, err := i.retrieveQuery(r.Context())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss.", i.resourceType), err)
-	}
-
-	return dbIDs, nil
 }
 
 func filterAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A, filteredLists []filteredResList[A]) (L, error) {

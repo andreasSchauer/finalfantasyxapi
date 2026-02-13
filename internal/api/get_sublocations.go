@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -14,29 +13,6 @@ type Sublocation struct {
 	ConnectedSublocations []NamedAPIResource `json:"connected_sublocations"`
 	Areas                 []AreaAPIResource  `json:"areas"`
 	LocRel
-}
-
-func (cfg *Config) HandleSublocations(w http.ResponseWriter, r *http.Request) {
-	i := cfg.e.sublocations
-	segments := getPathSegments(r.URL.Path, i.endpoint)
-
-	switch len(segments) {
-	case 0:
-		handleEndpointList(w, r, i)
-		return
-
-	case 1:
-		handleEndpointNameOrID(cfg, w, r, i, segments)
-		return
-
-	case 2:
-		handleEndpointSubsections(cfg, w, r, i, segments)
-		return
-
-	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
-		return
-	}
 }
 
 func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32) (Sublocation, error) {
