@@ -47,7 +47,7 @@ func getRonsoHP(mon Monster, kimahriStatMap map[string]int32) int32 {
 	v2 := float64(h.PowInt(kimahriMag, 3))
 	v3 := (v1 + v2) / 2 * 16 / 15
 
-	hpMod := ((int32(v3)/32)+30)*586/730 + 1
+	hpMod := ((int32(v3)/32)+30)*586/730
 
 	if mon.Name == "biran ronso" {
 		return int32(hpMod) * 8
