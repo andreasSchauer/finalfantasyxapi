@@ -22,6 +22,7 @@ type expSubquest struct {
 	expUnique
 	parentSidequest int32
 	completions     []testQuestCompletion
+	arenaCreation	*int32
 }
 
 func (e expSubquest) GetTestGeneral() testGeneral {
@@ -32,6 +33,7 @@ func compareSubquests(test test, exp expSubquest, got Subquest) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "parent sidequest", test.cfg.e.sidequests.endpoint, exp.parentSidequest, got.ParentSidequest)
 	checkTestStructsInSlice(test, "completions", exp.completions, got.Completions, compareQuestCompletions)
+	compIdApiResourcePtrs(test, "arena creation", test.cfg.e.arenaCreations.endpoint, exp.arenaCreation, got.ArenaCreation)
 }
 
 type testQuestCompletion struct {

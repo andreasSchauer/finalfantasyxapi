@@ -12,23 +12,26 @@ type Sidequest struct {
 
 
 type Subquest struct {
-	ID              int32             `json:"id"`
-	Name            string            `json:"name"`
-	ParentSidequest NamedAPIResource  `json:"parent_sidequest"`
-	Completions     []QuestCompletion `json:"completions"`
+	ID              int32             	`json:"id"`
+	Name            string            	`json:"name"`
+	ParentSidequest NamedAPIResource  	`json:"parent_sidequest"`
+	Completions     []QuestCompletion 	`json:"completions"`
+	ArenaCreation	*NamedAPIResource	`json:"arena_creation,omitempty"`
 }
 
 
 
 type QuestCompletion struct {
-	Areas  []CompletionArea `json:"areas"`
-	Reward ItemAmount       `json:"reward"`
+	Condition	string				`json:"condition"`
+	Areas  		[]CompletionArea 	`json:"areas"`
+	Reward 		ItemAmount       	`json:"reward"`
 }
 
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
-		Areas:  convertObjSlice(cfg, qc.Areas, convertCompletionArea),
-		Reward: convertItemAmount(cfg, qc.Reward),
+		Condition: 	qc.Condition,
+		Areas:  	convertObjSlice(cfg, qc.Areas, convertCompletionArea),
+		Reward: 	convertItemAmount(cfg, qc.Reward),
 	}
 }
 

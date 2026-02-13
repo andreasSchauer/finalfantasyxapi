@@ -15,6 +15,8 @@ func handleEndpointList[T h.HasID, R any, A APIResource, L APIResourceList](w ht
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
 
+
+
 func handleEndpointIDOnly[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	segment := segments[0]
 
@@ -40,6 +42,8 @@ func handleEndpointIDOnly[T h.HasID, R any, A APIResource, L APIResourceList](cf
 
 	respondWithJSON(w, http.StatusOK, resource)
 }
+
+
 
 func handleEndpointNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	segment := segments[0]
@@ -76,6 +80,8 @@ func handleEndpointNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
+
+
 func handleEndpointNameVersion[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	name := segments[0]
 	versionStr := segments[1]
@@ -92,6 +98,8 @@ func handleEndpointNameVersion[T h.HasID, R any, A APIResource, L APIResourceLis
 
 	respondWithJSON(w, http.StatusOK, resource)
 }
+
+
 
 func handleEndpointSubsections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	posIDStr := segments[0]
@@ -122,6 +130,8 @@ func handleEndpointSubsections[T h.HasID, R any, A APIResource, L APIResourceLis
 	}
 }
 
+
+
 func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	isSubsection, isNameVersion, subsectionIsInt := getSegmentCases(segments)
 
@@ -143,6 +153,8 @@ func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceLi
 		return
 	}
 }
+
+
 
 func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	idStr := segments[0]
@@ -166,6 +178,8 @@ func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 	respondWithJSON(w, http.StatusOK, list)
 }
 
+
+
 func handleParameters[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	parameterList, err := getQueryParamList(cfg, r, i)
 	if handleHTTPError(w, err) {
@@ -173,6 +187,8 @@ func handleParameters[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 	}
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
+
+
 
 func handleSections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	sectionList, err := getSectionList(cfg, r, i)

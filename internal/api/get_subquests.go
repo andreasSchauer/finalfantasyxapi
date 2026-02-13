@@ -21,6 +21,10 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 		Completions:     convertObjSlice(cfg, subquest.Completions, convertQuestCompletion),
 	}
 
+	if response.ParentSidequest.Name == "monster arena" {
+		response.ArenaCreation = namePtrToNamedAPIResPtr(cfg, cfg.e.arenaCreations, &subquest.Name, nil)
+	}
+
 	return response, nil
 }
 

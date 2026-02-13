@@ -15,6 +15,8 @@ var errNoIntRange = errors.New("query parameter doesn't have integer range.")
 var errCorrect = errors.New("test got the expected error.")
 var errIgnoredField = errors.New("this field of the test struct is ignored")
 
+
+
 type httpError struct {
 	code int
 	msg  string

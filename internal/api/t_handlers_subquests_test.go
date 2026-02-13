@@ -48,6 +48,7 @@ func TestGetSubquest(t *testing.T) {
 					reward: newTestItemAmount("/items/50", 99),
 				},
 			},
+			arenaCreation: h.GetInt32Ptr(5),
 		},
 		{
 			testGeneral: testGeneral{
@@ -72,6 +73,7 @@ func TestGetSubquest(t *testing.T) {
 					reward: newTestItemAmount("/items/70", 8),
 				},
 			},
+			arenaCreation: nil,
 		},
 		{
 			testGeneral: testGeneral{
@@ -96,6 +98,7 @@ func TestGetSubquest(t *testing.T) {
 					reward: newTestItemAmount("/key-items/18", 1),
 				},
 			},
+			arenaCreation: nil,
 		},
 	}
 
