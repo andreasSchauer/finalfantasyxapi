@@ -448,6 +448,45 @@ func (q *Queries) GetMonsterIDsByAutoAbility(ctx context.Context, id int32) ([]i
 	return items, nil
 }
 
+const getMonsterIDsByAutoAbilityIsForced = `-- name: GetMonsterIDsByAutoAbilityIsForced :many
+SELECT m.id
+FROM monsters m
+JOIN monster_equipment me ON me.monster_id = m.id
+JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
+JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
+JOIN auto_abilities aa ON ed.auto_ability_id = aa.id
+WHERE aa.id = $1 AND ed.is_forced = $2
+ORDER BY m.id
+`
+
+type GetMonsterIDsByAutoAbilityIsForcedParams struct {
+	ID       int32
+	IsForced bool
+}
+
+func (q *Queries) GetMonsterIDsByAutoAbilityIsForced(ctx context.Context, arg GetMonsterIDsByAutoAbilityIsForcedParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByAutoAbilityIsForced, arg.ID, arg.IsForced)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterIDsByCTBIconType = `-- name: GetMonsterIDsByCTBIconType :many
 SELECT id FROM monsters WHERE ctb_icon_type = $1
 `

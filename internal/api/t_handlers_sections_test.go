@@ -14,8 +14,9 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.areas.endpoint,
 				handler:        testCfg.HandleAreas,
 			},
-			count: 5,
+			count: 6,
 			results: []string{
+				"simple",
 				"connected",
 				"monsters",
 				"monster-formations",
@@ -30,8 +31,9 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.sublocations.endpoint,
 				handler:        testCfg.HandleSublocations,
 			},
-			count: 7,
+			count: 8,
 			results: []string{
+				"simple",
 				"areas",
 				"connected",
 				"monsters",
@@ -48,8 +50,9 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.locations.endpoint,
 				handler:        testCfg.HandleLocations,
 			},
-			count: 8,
+			count: 9,
 			results: []string{
+				"simple",
 				"areas",
 				"connected",
 				"monsters",
@@ -94,8 +97,9 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.monsters.endpoint,
 				handler:        testCfg.HandleMonsters,
 			},
-			count: 2,
+			count: 3,
 			results: []string{
+				"simple",
 				"areas",
 				"monster-formations",
 			},
@@ -107,8 +111,9 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.monsterFormations.endpoint,
 				handler:        testCfg.HandleMonsterFormations,
 			},
-			count: 1,
+			count: 2,
 			results: []string{
+				"simple",
 				"monsters",
 			},
 		},
@@ -128,7 +133,10 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.shops.endpoint,
 				handler:        testCfg.HandleShops,
 			},
-			count: 0,
+			count: 1,
+			results: []string{
+				"simple",
+			},
 		},
 		{
 			testGeneral: testGeneral{

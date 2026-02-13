@@ -39,6 +39,46 @@ func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) 
 }
 
 
+func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster, error) {
+	mon, err := applyAlteredState(cfg, r, mon, "altered_state")
+	if err != nil {
+		return Monster{}, err
+	}
+
+	mon.BaseStats, err = applyAeonStats(cfg, r, mon, "aeon_stats")
+	if err != nil {
+		return Monster{}, err
+	}
+
+	mon.BaseStats, err = applyRonsoStats(cfg, r, mon, "kimahri_stats")
+	if err != nil {
+		return Monster{}, err
+	}
+
+	mon.ElemResists, err = applyOmnisElements(cfg, r, mon, "omnis_elements")
+	if err != nil {
+		return Monster{}, err
+	}
+
+	mon.BribeChances, err = getMonsterBribeChances(cfg, mon)
+	if err != nil {
+		return Monster{}, err
+	}
+
+	mon.PoisonDamage, err = getMonsterPoisonDamage(cfg, mon)
+	if err != nil {
+		return Monster{}, err
+	}
+
+	mon.AgilityParameters, err = getMonsterAgilityParams(cfg, r, mon)
+	if err != nil {
+		return Monster{}, err
+	}
+
+	return mon, nil
+}
+
+
 func getMonsterElemResists(cfg *Config, resists []seeding.ElementalResist) []ElementalResist {
 	elemResists := namesToElemResists(cfg, resists)
 	elemResistMap := getResourceMap(elemResists)
@@ -123,44 +163,4 @@ func getMonsterBribeChances(cfg *Config, mon Monster) ([]BribeChance, error) {
 	}
 
 	return bribeChances, nil
-}
-
-
-func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster, error) {
-	mon, err := applyAlteredState(cfg, r, mon, "altered_state")
-	if err != nil {
-		return Monster{}, err
-	}
-
-	mon.BaseStats, err = applyAeonStats(cfg, r, mon, "aeon_stats")
-	if err != nil {
-		return Monster{}, err
-	}
-
-	mon.BaseStats, err = applyRonsoStats(cfg, r, mon, "kimahri_stats")
-	if err != nil {
-		return Monster{}, err
-	}
-
-	mon.ElemResists, err = applyOmnisElements(cfg, r, mon, "omnis_elements")
-	if err != nil {
-		return Monster{}, err
-	}
-
-	mon.BribeChances, err = getMonsterBribeChances(cfg, mon)
-	if err != nil {
-		return Monster{}, err
-	}
-
-	mon.PoisonDamage, err = getMonsterPoisonDamage(cfg, mon)
-	if err != nil {
-		return Monster{}, err
-	}
-
-	mon.AgilityParameters, err = getMonsterAgilityParams(cfg, r, mon)
-	if err != nil {
-		return Monster{}, err
-	}
-
-	return mon, nil
 }

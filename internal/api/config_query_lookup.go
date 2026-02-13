@@ -428,8 +428,17 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "auto-abilities")},
 		},
+		"is_forced": {
+			ID:             11,
+			Description:    "Specifies whether the auto-ability a monster drops is forced or not when using the auto_ability parameter.",
+			Usage:          "?auto_ability={id}&is_forced={bool}",
+			ExampleUses:    []string{"?auto_ability=45&is_forced=false"},
+			ForList:        true,
+			ForSingle:      false,
+			RequiredParams: []string{"auto_ability"},
+		},
 		"ronso_rage": {
-			ID:          11,
+			ID:          12,
 			Description: "Searches for monsters that can teach the specified ronso rage to Kimahri.",
 			Usage:       "?ronso_rage={id}",
 			ExampleUses: []string{"?ronso_rage=5"},
@@ -438,7 +447,7 @@ func (cfg *Config) initMonstersParams() {
 			References:  []string{createListURL(cfg, "ronso-rages")},
 		},
 		"location": {
-			ID:          12,
+			ID:          13,
 			Description: "Searches for monsters that appear within the specified location.",
 			Usage:       "?location={id}",
 			ExampleUses: []string{"?location=17"},
@@ -447,7 +456,7 @@ func (cfg *Config) initMonstersParams() {
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		"sublocation": {
-			ID:          13,
+			ID:          14,
 			Description: "Searches for monsters that appear within the specified sublocation.",
 			Usage:       "?sublocation={id}",
 			ExampleUses: []string{"?sublocation=13"},
@@ -456,7 +465,7 @@ func (cfg *Config) initMonstersParams() {
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		"area": {
-			ID:          14,
+			ID:          15,
 			Description: "Searches for monsters that appear within the specified area.",
 			Usage:       "?area={id}",
 			ExampleUses: []string{"?area=13", "?area=240"},
@@ -465,7 +474,7 @@ func (cfg *Config) initMonstersParams() {
 			References:  []string{createListURL(cfg, "areas")},
 		},
 		"distance": {
-			ID:              15,
+			ID:              16,
 			Description:     "Searches for monsters with the specified distance. Distance is an integer ranging from 1 (close) to 4 (very far/infinite).",
 			Usage:           "?distance={int}",
 			ExampleUses:     []string{"?distance=3"},
@@ -474,7 +483,7 @@ func (cfg *Config) initMonstersParams() {
 			AllowedIntRange: []int{1, 4},
 		},
 		"story_based": {
-			ID:          16,
+			ID:          17,
 			Description: "Searches for monsters that only appear during story events.",
 			Usage:       "?story_based={bool}",
 			ExampleUses: []string{"?story_based=true", "?story_based=false"},
@@ -482,7 +491,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"repeatable": {
-			ID:          17,
+			ID:          18,
 			Description: "Searches for monsters that can be farmed.",
 			Usage:       "?repeatable={bool}",
 			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
@@ -490,7 +499,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"capture": {
-			ID:          18,
+			ID:          19,
 			Description: "Searches for monsters that can be captured.",
 			Usage:       "?capture={bool}",
 			ExampleUses: []string{"?capture=true", "?capture=false"},
@@ -498,7 +507,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"has_overdrive": {
-			ID:          19,
+			ID:          20,
 			Description: "Searches for monsters that have an overdrive gauge.",
 			Usage:       "?has_overdrive={bool}",
 			ExampleUses: []string{"?has_overdrive=true", "?has_overdrive=false"},
@@ -506,7 +515,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"underwater": {
-			ID:          20,
+			ID:          21,
 			Description: "Searches for monsters that are fought underwater.",
 			Usage:       "?underwater={bool}",
 			ExampleUses: []string{"?underwater=true", "?underwater=false"},
@@ -514,7 +523,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"zombie": {
-			ID:          21,
+			ID:          22,
 			Description: "Searches for monsters that are zombies.",
 			Usage:       "?zombie={bool}",
 			ExampleUses: []string{"?zombie=true", "?zombie=false"},
@@ -522,7 +531,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"species": {
-			ID:          22,
+			ID:          23,
 			Description: "Searches for monsters of the specified species.",
 			Usage:       "?species={name|id}",
 			ExampleUses: []string{"?species=wyrm", "?species=5"},
@@ -531,7 +540,7 @@ func (cfg *Config) initMonstersParams() {
 			TypeLookup:  cfg.t.MonsterSpecies.lookup,
 		},
 		"creation_area": {
-			ID:          23,
+			ID:          24,
 			Description: "Searches for monsters that need to be captured in the specified area to create its area creation.",
 			Usage:       "?creation_area={name|id}",
 			ExampleUses: []string{"?creation_area=thunder-plains", "?creation_area=5"},
@@ -540,7 +549,7 @@ func (cfg *Config) initMonstersParams() {
 			TypeLookup:  cfg.t.CreationArea.lookup,
 		},
 		"type": {
-			ID:          24,
+			ID:          25,
 			Description: "Searches for monsters that are of the specified monster-type.",
 			Usage:       "?type={name|id}",
 			ExampleUses: []string{"?type=boss", "?type=2"},

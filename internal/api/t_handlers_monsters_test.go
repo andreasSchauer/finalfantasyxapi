@@ -34,7 +34,7 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2/3",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. usage: '/api/monsters', '/api/monsters/{id}', '/api/monsters/{name}', '/api/monsters/{name}/{version}', '/api/monsters/id/{subsection}'. supported subsections: 'areas', 'monster-formations'.",
+				expectedErr:    "wrong format. usage: '/api/monsters', '/api/monsters/{id}', '/api/monsters/{name}', '/api/monsters/{name}/{version}', '/api/monsters/id/{subsection}'. supported subsections: 'areas', 'monster-formations', 'simple'.",
 			},
 		},
 		{
@@ -807,7 +807,7 @@ func TestGetMonster(t *testing.T) {
 			},
 			ronsoRages: []int32{4, 5, 8, 11},
 			baseStats: map[string]int32{
-				"hp":       3549664,
+				"hp":       3549656,
 				"strength": 12,
 				"magic":    4,
 				"agility":  251,
@@ -845,7 +845,7 @@ func TestGetMonster(t *testing.T) {
 			},
 			ronsoRages: []int32{2, 6, 7, 9},
 			baseStats: map[string]int32{
-				"hp":       10902,
+				"hp":       10896,
 				"strength": 13,
 				"magic":    22,
 				"agility":  22,
@@ -881,7 +881,7 @@ func TestGetMonster(t *testing.T) {
 				MaxICV:    h.GetInt32Ptr(93),
 			},
 			baseStats: map[string]int32{
-				"hp":       870,
+				"hp":       864,
 				"strength": 8,
 				"magic":    12,
 				"agility":  1,
@@ -1179,6 +1179,14 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			count:   11,
 			results: []int32{199, 200, 209, 244, 257, 279, 285},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?auto_ability=2&is_forced=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{167, 168, 202},
 		},
 		{
 			testGeneral: testGeneral{

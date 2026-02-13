@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -92,6 +93,30 @@ func verifyMonsterResistance(cfg *Config, r *http.Request) (int, error) {
 
 	return resistance, nil
 }
+
+
+func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+	i := cfg.e.monsters
+	resourceType := i.resourceType
+	queryParam := i.queryLookup["is_forced"]
+	
+	query, err := parseBooleanQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
+		return filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByAutoAbility)
+	}
+
+	dbIds, err := cfg.db.GetMonsterIDsByAutoAbilityIsForced(r.Context(), database.GetMonsterIDsByAutoAbilityIsForcedParams{
+		ID: id,
+		IsForced: query,
+	})
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by auto-ability id '%d'.", i.resourceType, id), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIds)
+	return resources, nil
+}
+
 
 func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.monsters

@@ -20,7 +20,7 @@ func TestGetShop(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/shops/34/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "endpoint /shops doesn't have any subsections.",
+				expectedErr:    "subsection 'a' does not exist for endpoint /shops. supported subsections: 'simple'.",
 			},
 		},
 		{
