@@ -18,6 +18,10 @@ func (cfg *Config) HandleBlitzballPrizes(w http.ResponseWriter, r *http.Request)
 	routerIdOnly(cfg, w, r, cfg.e.blitzballPrizes)
 }
 
+func (cfg *Config) HandleCharacters(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.characters)
+}
+
 
 func (cfg *Config) HandleFMVs(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.fmvs)

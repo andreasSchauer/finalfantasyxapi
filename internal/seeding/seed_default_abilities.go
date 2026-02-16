@@ -40,7 +40,7 @@ func (l *Lookup) seedDefaultAbilitiesRelationships(db *database.Queries, dbConn 
 
 func (l *Lookup) seedCharClassDefaultAbilities(qtx *database.Queries, class CharacterClass, entry DefaultAbilitiesEntry) error {
 	for _, abilityRef := range entry.DefaultAbilities {
-		junction, err := createJunction(class, abilityRef.Untyped(), l.PlayerAbilities)
+		junction, err := createJunction(class, abilityRef, l.Abilities)
 		if err != nil {
 			return err
 		}

@@ -75,7 +75,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsters.endpoint,
 				handler:        testCfg.HandleMonsters,
 			},
-			count:   27,
+			count:   28,
 			results: []string{"kimahri_stats", "aeon_stats", "altered_state", "omnis_elements", "status_resists", "auto_ability", "area", "distance", "underwater", "species"},
 		},
 		{

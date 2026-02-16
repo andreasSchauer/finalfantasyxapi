@@ -242,7 +242,7 @@ func TestGetMonster(t *testing.T) {
 				"silence": 20,
 			},
 			abilities: []string{
-				"/player-abilities/76",
+				"/player-abilities/70",
 			},
 		},
 		{
@@ -375,10 +375,10 @@ func TestGetMonster(t *testing.T) {
 				"poison": 90,
 			},
 			abilities: []string{
-				"/player-abilities/75",
-				"/player-abilities/76",
-				"/player-abilities/77",
-				"/player-abilities/78",
+				"/player-abilities/69",
+				"/player-abilities/70",
+				"/player-abilities/71",
+				"/player-abilities/72",
 				"/enemy-abilities/2",
 				"/enemy-abilities/210",
 				"/enemy-abilities/211",
@@ -1187,6 +1187,14 @@ func TestRetrieveMonsters(t *testing.T) {
 			},
 			count:   3,
 			results: []int32{167, 168, 202},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?empty_slots=3",
+				expectedStatus: http.StatusOK,
+			},
+			count:   8,
+			results: []int32{74, 80, 118, 119, 161, 201, 244, 247},
 		},
 		{
 			testGeneral: testGeneral{

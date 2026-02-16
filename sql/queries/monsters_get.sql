@@ -152,6 +152,18 @@ WHERE aa.id = $1
 ORDER BY m.id;
 
 
+-- name: GetMonsterIDsByEmptySlots :many
+SELECT m.id
+FROM monsters m
+JOIN monster_equipment me ON me.monster_id = m.id
+JOIN monster_equipment_slots asl ON asl.monster_equipment_id = me.id AND asl.type = 'ability-slots'
+JOIN monster_equipment_slots aa ON aa.monster_equipment_id = me.id AND aa.type = 'attached-abilities'
+JOIN j_monster_equipment_slots_chances j ON j.monster_equipment_id = me.id AND j.equipment_slots_id = aa.id
+JOIN equipment_slots_chances esc ON j.slots_chance_id = esc.id
+WHERE esc.amount = 0 AND (asl.min_amount = $1 OR asl.max_amount = $1)
+ORDER BY m.id;
+
+
 -- name: GetMonsterIDsByAutoAbilityIsForced :many
 SELECT m.id
 FROM monsters m

@@ -92,6 +92,7 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetAreaMonsterIDs)),
 		frl(idQueryWrapper(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), getMonstersByAutoAbility)),
 
+		frl(intQuery(cfg, r, i, resources, "empty_slots", cfg.db.GetMonsterIDsByEmptySlots)),
 		frl(intQuery(cfg, r, i, resources, "distance", cfg.db.GetMonsterIDsByDistance)),
 		frl(typeQueryWrapper(cfg, r, i, cfg.t.MonsterType, resources, "type", getMonstersByType)),
 		frl(typeQuery(cfg, r, i, cfg.t.MonsterSpecies, resources, "species", cfg.db.GetMonsterIDsBySpecies)),

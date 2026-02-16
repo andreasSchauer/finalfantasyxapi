@@ -629,6 +629,41 @@ func (q *Queries) GetMonsterIDsByElemResistIDs(ctx context.Context, elemResistId
 	return items, nil
 }
 
+const getMonsterIDsByEmptySlots = `-- name: GetMonsterIDsByEmptySlots :many
+SELECT m.id
+FROM monsters m
+JOIN monster_equipment me ON me.monster_id = m.id
+JOIN monster_equipment_slots asl ON asl.monster_equipment_id = me.id AND asl.type = 'ability-slots'
+JOIN monster_equipment_slots aa ON aa.monster_equipment_id = me.id AND aa.type = 'attached-abilities'
+JOIN j_monster_equipment_slots_chances j ON j.monster_equipment_id = me.id AND j.equipment_slots_id = aa.id
+JOIN equipment_slots_chances esc ON j.slots_chance_id = esc.id
+WHERE esc.amount = 0 AND (asl.min_amount = $1 OR asl.max_amount = $1)
+ORDER BY m.id
+`
+
+func (q *Queries) GetMonsterIDsByEmptySlots(ctx context.Context, minAmount interface{}) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByEmptySlots, minAmount)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterIDsByHasOverdrive = `-- name: GetMonsterIDsByHasOverdrive :many
 SELECT id FROM monsters WHERE has_overdrive = $1
 `

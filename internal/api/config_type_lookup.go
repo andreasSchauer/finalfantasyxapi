@@ -5,7 +5,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-// TypeLookup holds all the enum types for the application
+// TypeLookup holds all the enum types for the application that are either used as endpoint or query param
 type TypeLookup struct {
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]

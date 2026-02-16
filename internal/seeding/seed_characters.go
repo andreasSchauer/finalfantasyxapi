@@ -10,7 +10,7 @@ import (
 )
 
 type Character struct {
-	ID int32
+	ID 				   int32
 	PlayerUnit
 	LocationArea       LocationArea `json:"location_area"`
 	AreaID             *int32

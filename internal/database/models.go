@@ -57,6 +57,7 @@ func (ns NullAaActivationCondition) Value() (driver.Value, error) {
 type AbilityType string
 
 const (
+	AbilityTypeGenericAbility   AbilityType = "generic-ability"
 	AbilityTypePlayerAbility    AbilityType = "player-ability"
 	AbilityTypeEnemyAbility     AbilityType = "enemy-ability"
 	AbilityTypeOverdriveAbility AbilityType = "overdrive-ability"
@@ -2934,6 +2935,18 @@ type FoundEquipmentPiece struct {
 	EmptySlotsAmount interface{}
 }
 
+type GenericAbility struct {
+	ID            int32
+	DataHash      string
+	AbilityID     int32
+	Description   sql.NullString
+	Effect        string
+	Topmenu       NullTopmenuType
+	Cursor        NullTargetType
+	SubmenuID     sql.NullInt32
+	OpenSubmenuID sql.NullInt32
+}
+
 type InflictedDelay struct {
 	ID             int32
 	DataHash       string
@@ -3218,6 +3231,20 @@ type JFoundEquipmentAbility struct {
 	DataHash         string
 	FoundEquipmentID int32
 	AutoAbilityID    int32
+}
+
+type JGenericAbilitiesLearnedBy struct {
+	ID               int32
+	DataHash         string
+	GenericAbilityID int32
+	CharacterClassID int32
+}
+
+type JGenericAbilitiesRelatedStat struct {
+	ID               int32
+	DataHash         string
+	GenericAbilityID int32
+	StatID           int32
 }
 
 type JItemsAvailableMenu struct {

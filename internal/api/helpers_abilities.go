@@ -10,6 +10,9 @@ func createAbilityResource(cfg *Config, name string, version *int32, abilityType
 	var res NamedAPIResource
 
 	switch abilityType {
+	case database.AbilityTypeGenericAbility:
+		res = nameToNamedAPIResource(cfg, cfg.e.genericAbilities, name, version)
+		
 	case database.AbilityTypePlayerAbility:
 		res = nameToNamedAPIResource(cfg, cfg.e.playerAbilities, name, version)
 

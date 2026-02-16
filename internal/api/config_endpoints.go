@@ -12,7 +12,8 @@ type endpoints struct {
 	areas              handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
 	autoAbilities      handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
 	blitzballPrizes    handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList]
-	characters         handlerInput[seeding.Character, any, NamedAPIResource, NamedApiResourceList]
+	celestialWeapons   handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]
+	characters         handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]
 	characterClasses   handlerInput[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList]
 	elements           handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
 	equipment          handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
@@ -22,7 +23,9 @@ type endpoints struct {
 	locations          handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
 	monsters           handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
 	monsterFormations  handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
+	overdriveCommands  handlerInput[seeding.OverdriveCommand, any, NamedAPIResource, NamedApiResourceList]
 	overdriveModes     handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
+	genericAbilities   handlerInput[seeding.GenericAbility, any, NamedAPIResource, NamedApiResourceList]
 	playerAbilities    handlerInput[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList]
 	enemyAbilities     handlerInput[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList]
 	itemAbilities      handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]
@@ -143,13 +146,26 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveBlitzballPrizes,
 	}
 
-	e.characters = handlerInput[seeding.Character, any, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "characters",
-		resourceType:  "character",
-		objLookup:     cfg.l.Characters,
-		objLookupID:   cfg.l.CharactersID,
-		idToResFunc:   idToNamedAPIResource[seeding.Character, any, NamedAPIResource, NamedApiResourceList],
+	e.celestialWeapons = handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      "character-classes",
+		resourceType:  "character class",
+		objLookup:     cfg.l.CelestialWeapons,
+		objLookupID:   cfg.l.CelestialWeaponsID,
+		idToResFunc:   idToNamedAPIResource[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+	}
+
+	e.characters = handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      	"characters",
+		resourceType:  	"character",
+		objLookup:     	cfg.l.Characters,
+		objLookupID:   	cfg.l.CharactersID,
+		queryLookup: 	cfg.q.characters,
+		idToResFunc:   	idToNamedAPIResource[seeding.Character, Character, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
+		retrieveQuery: 	cfg.db.GetCharacterIDs,
+		getSingleFunc: 	cfg.getCharacter,
+		retrieveFunc: 	cfg.retrieveCharacters,
 	}
 
 	e.characterClasses = handlerInput[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList]{
@@ -351,6 +367,15 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newTypedAPIResourceList,
 	}
 
+	e.overdriveCommands = handlerInput[seeding.OverdriveCommand, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint: 		"overdrive-commands",
+		resourceType: 	"overdrive command",
+		objLookup: 		cfg.l.OverdriveCommands,
+		objLookupID: 	cfg.l.OverdriveCommandsID,
+		idToResFunc: 	idToNamedAPIResource[seeding.OverdriveCommand, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
+	}
+
 	e.overdriveModes = handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "overdrive-modes",
 		resourceType:  "overdrive mode",
@@ -369,6 +394,15 @@ func (cfg *Config) EndpointsInit() {
 		resourceType:  "overdrive mode type",
 		objLookup:     cfg.t.OverdriveModeType.lookup,
 		resToListFunc: newTypedAPIResourceList,
+	}
+
+	e.genericAbilities = handlerInput[seeding.GenericAbility, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      "generic-abilities",
+		resourceType:  "generic ability",
+		objLookup:     cfg.l.GenericAbilities,
+		objLookupID:   cfg.l.GenericAbilitiesID,
+		idToResFunc:   idToNamedAPIResource[seeding.GenericAbility, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.playerAbilities = handlerInput[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList]{

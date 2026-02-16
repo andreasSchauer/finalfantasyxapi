@@ -36,6 +36,13 @@ func (cw CelestialWeapon) Error() string {
 	return fmt.Sprintf("celestial weapon %s", cw.Name)
 }
 
+func (cw CelestialWeapon) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 	cw.ID,
+		Name: 	cw.Name,
+	}
+}
+
 func (l *Lookup) seedCelestialWeapons(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "data/celestial_weapons.json"
 

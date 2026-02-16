@@ -2,6 +2,8 @@ package api
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -42,6 +44,19 @@ func getResourcesDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 
 	resources := idsToAPIResources(cfg, i, dbIds)
 	return resources, nil
+}
+
+func getResPtrDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item seeding.LookupableID, dbQuery func(context.Context, int32) (int32, error)) (*A, error) {
+	dbID, err := dbQuery(r.Context(), item.GetID())
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", i.resourceType, item), err)
+	}
+
+	res := i.idToResFunc(cfg, i, dbID)
+	return &res, nil
 }
 
 // filter resources by item id. handlerInput = endpoint of resources

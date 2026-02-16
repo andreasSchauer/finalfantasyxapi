@@ -41,6 +41,13 @@ func (oc OverdriveCommand) Error() string {
 	return fmt.Sprintf("overdrive command %s", oc.Name)
 }
 
+func (o OverdriveCommand) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID:   o.ID,
+		Name: o.Name,
+	}
+}
+
 func (l *Lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "data/overdrive_commands.json"
 

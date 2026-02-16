@@ -49,7 +49,7 @@ CREATE TABLE default_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     class_id INTEGER NOT NULL REFERENCES character_classes(id),
-    ability_id INTEGER NOT NULL REFERENCES player_abilities(id)
+    ability_id INTEGER NOT NULL REFERENCES abilities(id)
 );
 
 

@@ -58,6 +58,15 @@ func idToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPI
 	return areaToAreaAPIResource(cfg, i, res)
 }
 
+func idPtrToAreaAPIResPtr(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], idPtr *int32) *AreaAPIResource {
+	if idPtr == nil {
+		return nil
+	}
+
+	res := idToAreaAPIResource(cfg, i, *idPtr)
+	return &res
+}
+
 // useful for id-less locationArea slices retrieved from lookup
 func locAreaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], area seeding.LocationArea) AreaAPIResource {
 	res, _ := seeding.GetResource(area, i.objLookup)

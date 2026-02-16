@@ -122,6 +122,80 @@ func (q *Queries) CreateEnemyAbility(ctx context.Context, arg CreateEnemyAbility
 	return i, err
 }
 
+const createGenericAbilitiesLearnedByJunction = `-- name: CreateGenericAbilitiesLearnedByJunction :exec
+INSERT INTO j_generic_abilities_learned_by (data_hash, generic_ability_id, character_class_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateGenericAbilitiesLearnedByJunctionParams struct {
+	DataHash         string
+	GenericAbilityID int32
+	CharacterClassID int32
+}
+
+func (q *Queries) CreateGenericAbilitiesLearnedByJunction(ctx context.Context, arg CreateGenericAbilitiesLearnedByJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createGenericAbilitiesLearnedByJunction, arg.DataHash, arg.GenericAbilityID, arg.CharacterClassID)
+	return err
+}
+
+const createGenericAbilitiesRelatedStatsJunction = `-- name: CreateGenericAbilitiesRelatedStatsJunction :exec
+INSERT INTO j_generic_abilities_related_stats (data_hash, generic_ability_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateGenericAbilitiesRelatedStatsJunctionParams struct {
+	DataHash         string
+	GenericAbilityID int32
+	StatID           int32
+}
+
+func (q *Queries) CreateGenericAbilitiesRelatedStatsJunction(ctx context.Context, arg CreateGenericAbilitiesRelatedStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createGenericAbilitiesRelatedStatsJunction, arg.DataHash, arg.GenericAbilityID, arg.StatID)
+	return err
+}
+
+const createGenericAbility = `-- name: CreateGenericAbility :one
+INSERT INTO generic_abilities (data_hash, ability_id, description, effect, topmenu, cursor)
+VALUES ($1, $2, $3, $4, $5, $6)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = generic_abilities.data_hash
+RETURNING id, data_hash, ability_id, description, effect, topmenu, cursor, submenu_id, open_submenu_id
+`
+
+type CreateGenericAbilityParams struct {
+	DataHash    string
+	AbilityID   int32
+	Description sql.NullString
+	Effect      string
+	Topmenu     NullTopmenuType
+	Cursor      NullTargetType
+}
+
+func (q *Queries) CreateGenericAbility(ctx context.Context, arg CreateGenericAbilityParams) (GenericAbility, error) {
+	row := q.db.QueryRowContext(ctx, createGenericAbility,
+		arg.DataHash,
+		arg.AbilityID,
+		arg.Description,
+		arg.Effect,
+		arg.Topmenu,
+		arg.Cursor,
+	)
+	var i GenericAbility
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.AbilityID,
+		&i.Description,
+		&i.Effect,
+		&i.Topmenu,
+		&i.Cursor,
+		&i.SubmenuID,
+		&i.OpenSubmenuID,
+	)
+	return i, err
+}
+
 const createOverdrive = `-- name: CreateOverdrive :one
 INSERT INTO overdrives (data_hash, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
@@ -381,6 +455,31 @@ type CreateTriggerCommandsRelatedStatsJunctionParams struct {
 
 func (q *Queries) CreateTriggerCommandsRelatedStatsJunction(ctx context.Context, arg CreateTriggerCommandsRelatedStatsJunctionParams) error {
 	_, err := q.db.ExecContext(ctx, createTriggerCommandsRelatedStatsJunction, arg.DataHash, arg.TriggerCommandID, arg.StatID)
+	return err
+}
+
+const updateGenericAbility = `-- name: UpdateGenericAbility :exec
+UPDATE generic_abilities
+SET data_hash = $1,
+    submenu_id = $2,
+    open_submenu_id = $3
+WHERE id = $4
+`
+
+type UpdateGenericAbilityParams struct {
+	DataHash      string
+	SubmenuID     sql.NullInt32
+	OpenSubmenuID sql.NullInt32
+	ID            int32
+}
+
+func (q *Queries) UpdateGenericAbility(ctx context.Context, arg UpdateGenericAbilityParams) error {
+	_, err := q.db.ExecContext(ctx, updateGenericAbility,
+		arg.DataHash,
+		arg.SubmenuID,
+		arg.OpenSubmenuID,
+		arg.ID,
+	)
 	return err
 }
 

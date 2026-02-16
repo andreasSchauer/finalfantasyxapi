@@ -39,3 +39,32 @@ func (a ActionAmount) GetVersion() *int32 {
 func (a ActionAmount) GetVal() int32 {
 	return a.Amount
 }
+
+
+type ModeAmount struct {
+	OverdriveMode	NamedAPIResource	`json:"overdrive_mode"`
+	Amount			int32				`json:"amount"`
+}
+
+func convertModeAmount(res NamedAPIResource, amount int32) ModeAmount {
+	return ModeAmount{
+		OverdriveMode:  res,
+		Amount: 		amount,
+	}
+}
+
+func (m ModeAmount) GetAPIResource() APIResource {
+	return m.OverdriveMode
+}
+
+func (m ModeAmount) GetName() string {
+	return m.OverdriveMode.Name
+}
+
+func (m ModeAmount) GetVersion() *int32 {
+	return nil
+}
+
+func (m ModeAmount) GetVal() int32 {
+	return m.Amount
+}

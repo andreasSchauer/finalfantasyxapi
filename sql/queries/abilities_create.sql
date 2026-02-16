@@ -12,6 +12,21 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_attributes.data_hash
 RETURNING *;
 
 
+-- name: CreateGenericAbility :one
+INSERT INTO generic_abilities (data_hash, ability_id, description, effect, topmenu, cursor)
+VALUES ($1, $2, $3, $4, $5, $6)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = generic_abilities.data_hash
+RETURNING *;
+
+
+-- name: UpdateGenericAbility :exec
+UPDATE generic_abilities
+SET data_hash = $1,
+    submenu_id = $2,
+    open_submenu_id = $3
+WHERE id = $4;
+
+
 -- name: CreatePlayerAbility :one
 INSERT INTO player_abilities (data_hash, ability_id, description, effect, topmenu, can_use_outside_battle, mp_cost, cursor)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -28,6 +43,18 @@ SET data_hash = $1,
     expert_grid_char_id = $5,
     aeon_learn_item_id = $6
 WHERE id = $7;
+
+
+-- name: CreateGenericAbilitiesRelatedStatsJunction :exec
+INSERT INTO j_generic_abilities_related_stats (data_hash, generic_ability_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateGenericAbilitiesLearnedByJunction :exec
+INSERT INTO j_generic_abilities_learned_by (data_hash, generic_ability_id, character_class_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreatePlayerAbilitiesRelatedStatsJunction :exec

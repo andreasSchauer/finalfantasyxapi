@@ -7,6 +7,22 @@ CREATE TABLE j_abilities_battle_interactions (
 );
 
 
+CREATE TABLE j_generic_abilities_related_stats (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    generic_ability_id INTEGER NOT NULL REFERENCES generic_abilities(id),
+    stat_id INTEGER NOT NULL REFERENCES stats(id)
+);
+
+
+CREATE TABLE j_generic_abilities_learned_by (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    generic_ability_id INTEGER NOT NULL REFERENCES generic_abilities(id),
+    character_class_id INTEGER NOT NULL REFERENCES character_classes(id)
+);
+
+
 CREATE TABLE j_player_abilities_related_stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -46,6 +62,12 @@ CREATE TABLE j_overdrives_overdrive_abilities (
     overdrive_ability_id INTEGER NOT NULL REFERENCES overdrive_abilities(id)
 );
 
+
+ALTER TABLE generic_abilities
+ADD COLUMN submenu_id INTEGER REFERENCES submenus(id),
+ADD COLUMN open_submenu_id INTEGER REFERENCES submenus(id);
+
+
 ALTER TABLE player_abilities
 ADD COLUMN submenu_id INTEGER REFERENCES submenus(id),
 ADD COLUMN open_submenu_id INTEGER REFERENCES submenus(id),
@@ -73,9 +95,16 @@ DROP COLUMN IF EXISTS open_submenu_id,
 DROP COLUMN IF EXISTS submenu_id;
 
 
+ALTER TABLE generic_abilities
+DROP COLUMN IF EXISTS open_submenu_id,
+DROP COLUMN IF EXISTS submenu_id;
+
+
 DROP TABLE IF EXISTS j_overdrives_overdrive_abilities;
 DROP TABLE IF EXISTS j_trigger_commands_related_stats;
 DROP TABLE IF EXISTS j_overdrive_abilities_related_stats;
 DROP TABLE IF EXISTS j_player_abilities_learned_by;
 DROP TABLE IF EXISTS j_player_abilities_related_stats;
+DROP TABLE IF EXISTS j_generic_abilities_learned_by;
+DROP TABLE IF EXISTS j_generic_abilities_related_stats;
 DROP TABLE IF EXISTS j_abilities_battle_interactions;
