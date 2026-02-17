@@ -72,9 +72,21 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_equipment.data_hash
 RETURNING *;
 
 
--- name: CreateAeonsBaseStatJunction :exec
-INSERT INTO j_aeons_base_stats (data_hash, aeon_id, base_stat_id, value_type, battles)
-VALUES ($1, $2, $3, $4, $5)
+-- name: CreateAeonsBaseStatAJunction :exec
+INSERT INTO j_aeons_base_stats_a (data_hash, aeon_id, base_stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAeonsBaseStatBJunction :exec
+INSERT INTO j_aeons_base_stats_b (data_hash, aeon_id, base_stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAeonsBaseStatXJunction :exec
+INSERT INTO j_aeons_base_stats_x (data_hash, aeon_id, base_stat_id, battles)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 

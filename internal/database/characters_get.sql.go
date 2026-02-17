@@ -9,6 +9,211 @@ import (
 	"context"
 )
 
+const getAeonAeonCommandIDs = `-- name: GetAeonAeonCommandIDs :many
+SELECT DISTINCT ac.id
+FROM aeon_commands ac
+JOIN j_aeon_commands_possible_abilities j1 ON j1.aeon_command_id = ac.id
+JOIN character_classes cc ON j1.character_class_id = cc.id
+JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
+JOIN player_units pu ON j2.unit_id = pu.id
+JOIN aeons a ON a.unit_id = pu.id
+WHERE a.id = $1
+ORDER BY ac.id
+`
+
+func (q *Queries) GetAeonAeonCommandIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAeonAeonCommandIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAeonCelestialWeaponID = `-- name: GetAeonCelestialWeaponID :one
+SELECT cw.id
+FROM celestial_weapons cw
+JOIN aeons a ON cw.aeon_id = a.id
+WHERE a.id = $1
+`
+
+func (q *Queries) GetAeonCelestialWeaponID(ctx context.Context, id int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getAeonCelestialWeaponID, id)
+	err := row.Scan(&id)
+	return id, err
+}
+
+const getAeonCharClassIDs = `-- name: GetAeonCharClassIDs :many
+SELECT cc.id
+FROM character_classes cc
+JOIN j_character_class_player_units j ON j.class_id = cc.id
+JOIN player_units pu ON j.unit_id = pu.id
+JOIN aeons a ON a.unit_id = pu.id
+WHERE a.id = $1
+ORDER BY cc.id
+`
+
+func (q *Queries) GetAeonCharClassIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAeonCharClassIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAeonDefaultAbilityIDs = `-- name: GetAeonDefaultAbilityIDs :many
+SELECT pl.id
+FROM player_abilities pl
+JOIN abilities a ON pl.ability_id = a.id
+JOIN default_abilities da ON da.ability_id = a.id
+JOIN character_classes cc ON da.class_id = cc.id
+JOIN j_character_class_player_units j ON j.class_id = cc.id
+JOIN player_units pu ON j.unit_id = pu.id
+JOIN aeons ae ON ae.unit_id = pu.id
+WHERE a.type = 'player-ability' AND ae.id = $1
+ORDER BY pl.id
+`
+
+func (q *Queries) GetAeonDefaultAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAeonDefaultAbilityIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAeonIDs = `-- name: GetAeonIDs :many
+SELECT id FROM aeons ORDER BY id
+`
+
+func (q *Queries) GetAeonIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAeonIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAeonIDsOptional = `-- name: GetAeonIDsOptional :many
+SELECT id FROM aeons WHERE is_optional = $1 ORDER BY id
+`
+
+func (q *Queries) GetAeonIDsOptional(ctx context.Context, isOptional bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAeonIDsOptional, isOptional)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAeonOverdriveIDs = `-- name: GetAeonOverdriveIDs :many
+SELECT o.id
+FROM overdrives o
+JOIN character_classes cc ON o.character_class_id = cc.id
+JOIN j_character_class_player_units j ON j.class_id = cc.id
+JOIN player_units pu ON j.unit_id = pu.id
+JOIN aeons a ON a.unit_id = pu.id
+WHERE a.id = $1
+ORDER BY o.id
+`
+
+func (q *Queries) GetAeonOverdriveIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAeonOverdriveIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getCharacterCelestialWeaponID = `-- name: GetCharacterCelestialWeaponID :one
 SELECT cw.id
 FROM celestial_weapons cw

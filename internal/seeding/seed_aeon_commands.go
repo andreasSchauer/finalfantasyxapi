@@ -40,6 +40,13 @@ func (c AeonCommand) Error() string {
 	return fmt.Sprintf("aeon command %s", c.Name)
 }
 
+func (c AeonCommand) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 	c.ID,
+		Name: 	c.Name,
+	}
+}
+
 type PossibleAbility struct {
 	User      string             `json:"user"`
 	Abilities []AbilityReference `json:"abilities"`

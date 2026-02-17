@@ -3,6 +3,10 @@ package api
 import "net/http"
 
 
+func (cfg *Config) HandleAeons(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.aeons)
+}
+
 
 func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	routerIdOnly(cfg, w, r, cfg.e.areas)

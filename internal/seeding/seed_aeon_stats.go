@@ -21,18 +21,16 @@ type XVal struct {
 	BaseStats []BaseStat `json:"base_stats"`
 }
 
-type AeonBaseStatJunction struct {
+type AeonXStatJunction struct {
 	Junction
-	ValueType database.AeonStatValue
-	Battles   *int32
+	Battles   int32
 }
 
-func (j AeonBaseStatJunction) ToHashFields() []any {
+func (j AeonXStatJunction) ToHashFields() []any {
 	return []any{
 		j.ParentID,
 		j.ChildID,
-		j.ValueType,
-		h.DerefOrNil(j.Battles),
+		j.Battles,
 	}
 }
 
@@ -52,51 +50,93 @@ func (l *Lookup) seedAeonStats(db *database.Queries, dbConn *sql.DB) error {
 				return h.NewErr(aeonStat.Name, err)
 			}
 
-			err = l.seedAeonBaseStats(qtx, aeon, aeonStat.AVals, database.AeonStatValueA, nil)
+			err = l.seedAeonBaseStatsA(qtx, aeon, aeonStat.AVals)
 			if err != nil {
 				return h.NewErr(aeonStat.Name, err)
 			}
 
-			err = l.seedAeonBaseStats(qtx, aeon, aeonStat.BVals, database.AeonStatValueB, nil)
+			err = l.seedAeonBaseStatsB(qtx, aeon, aeonStat.BVals)
 			if err != nil {
 				return h.NewErr(aeonStat.Name, err)
 			}
 
-			for _, xVal := range aeonStat.XVals {
-				err := l.seedAeonBaseStats(qtx, aeon, xVal.BaseStats, database.AeonStatValueX, &xVal.Battles)
-				if err != nil {
-					subjects := h.JoinErrSubjects(aeonStat.Name, string(xVal.Battles))
-					return h.NewErr(subjects, err)
-				}
+			err = l.seedAeonBaseStatsX(qtx, aeon, aeonStat.XVals)
+			if err != nil {
+				return h.NewErr(aeonStat.Name, err)
 			}
+
+			aeon.BaseStats = aeonStat
+			l.Aeons[aeon.Name] = aeon
+			l.AeonsID[aeon.ID] = aeon
 		}
 
 		return nil
 	})
 }
 
-func (l *Lookup) seedAeonBaseStats(qtx *database.Queries, aeon Aeon, baseStats []BaseStat, valType database.AeonStatValue, battles *int32) error {
-	for _, baseStat := range baseStats {
-		var err error
-		asJunction := AeonBaseStatJunction{}
 
-		asJunction.Junction, err = createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
+func (l *Lookup) seedAeonBaseStatsA(qtx *database.Queries, aeon Aeon, baseStats []BaseStat) error {
+	for _, baseStat := range baseStats {
+		junction, err := createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
 		if err != nil {
 			return h.NewErr(baseStat.Error(), err)
 		}
 
-		asJunction.ValueType = valType
-		asJunction.Battles = battles
-
-		err = qtx.CreateAeonsBaseStatJunction(context.Background(), database.CreateAeonsBaseStatJunctionParams{
-			DataHash:   generateDataHash(asJunction),
-			AeonID:     asJunction.ParentID,
-			BaseStatID: asJunction.ChildID,
-			ValueType:  asJunction.ValueType,
-			Battles:    h.GetNullInt32(asJunction.Battles),
+		err = qtx.CreateAeonsBaseStatAJunction(context.Background(), database.CreateAeonsBaseStatAJunctionParams{
+			DataHash:   generateDataHash(junction),
+			AeonID:     junction.ParentID,
+			BaseStatID: junction.ChildID,
 		})
 		if err != nil {
-			return h.NewErr(baseStat.Error(), err, "couldn't junction base stat")
+			return h.NewErr(baseStat.Error(), err, "couldn't junction base stat a")
+		}
+	}
+	return nil
+}
+
+
+func (l *Lookup) seedAeonBaseStatsB(qtx *database.Queries, aeon Aeon, baseStats []BaseStat) error {
+	for _, baseStat := range baseStats {
+		junction, err := createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
+		if err != nil {
+			return h.NewErr(baseStat.Error(), err)
+		}
+
+		err = qtx.CreateAeonsBaseStatBJunction(context.Background(), database.CreateAeonsBaseStatBJunctionParams{
+			DataHash:   generateDataHash(junction),
+			AeonID:     junction.ParentID,
+			BaseStatID: junction.ChildID,
+		})
+		if err != nil {
+			return h.NewErr(baseStat.Error(), err, "couldn't junction base stat b")
+		}
+	}
+	return nil
+}
+
+
+func (l *Lookup) seedAeonBaseStatsX(qtx *database.Queries, aeon Aeon, xVals []XVal) error {
+	for _, xVal := range xVals {
+		for _, baseStat := range xVal.BaseStats {
+			var err error
+			asJunction := AeonXStatJunction{}
+	
+			asJunction.Junction, err = createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
+			if err != nil {
+				return h.NewErr(baseStat.Error(), err)
+			}
+	
+			asJunction.Battles = xVal.Battles
+	
+			err = qtx.CreateAeonsBaseStatXJunction(context.Background(), database.CreateAeonsBaseStatXJunctionParams{
+				DataHash:   generateDataHash(asJunction),
+				AeonID:     asJunction.ParentID,
+				BaseStatID: asJunction.ChildID,
+				Battles:    asJunction.Battles,
+			})
+			if err != nil {
+				return h.NewErr(baseStat.Error(), err, "couldn't junction base stat x")
+			}
 		}
 	}
 

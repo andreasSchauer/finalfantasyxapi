@@ -88,26 +88,58 @@ func (q *Queries) CreateAeonEquipment(ctx context.Context, arg CreateAeonEquipme
 	return i, err
 }
 
-const createAeonsBaseStatJunction = `-- name: CreateAeonsBaseStatJunction :exec
-INSERT INTO j_aeons_base_stats (data_hash, aeon_id, base_stat_id, value_type, battles)
-VALUES ($1, $2, $3, $4, $5)
+const createAeonsBaseStatAJunction = `-- name: CreateAeonsBaseStatAJunction :exec
+INSERT INTO j_aeons_base_stats_a (data_hash, aeon_id, base_stat_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateAeonsBaseStatJunctionParams struct {
+type CreateAeonsBaseStatAJunctionParams struct {
 	DataHash   string
 	AeonID     int32
 	BaseStatID int32
-	ValueType  AeonStatValue
-	Battles    sql.NullInt32
 }
 
-func (q *Queries) CreateAeonsBaseStatJunction(ctx context.Context, arg CreateAeonsBaseStatJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAeonsBaseStatJunction,
+func (q *Queries) CreateAeonsBaseStatAJunction(ctx context.Context, arg CreateAeonsBaseStatAJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatAJunction, arg.DataHash, arg.AeonID, arg.BaseStatID)
+	return err
+}
+
+const createAeonsBaseStatBJunction = `-- name: CreateAeonsBaseStatBJunction :exec
+INSERT INTO j_aeons_base_stats_b (data_hash, aeon_id, base_stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsBaseStatBJunctionParams struct {
+	DataHash   string
+	AeonID     int32
+	BaseStatID int32
+}
+
+func (q *Queries) CreateAeonsBaseStatBJunction(ctx context.Context, arg CreateAeonsBaseStatBJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatBJunction, arg.DataHash, arg.AeonID, arg.BaseStatID)
+	return err
+}
+
+const createAeonsBaseStatXJunction = `-- name: CreateAeonsBaseStatXJunction :exec
+INSERT INTO j_aeons_base_stats_x (data_hash, aeon_id, base_stat_id, battles)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsBaseStatXJunctionParams struct {
+	DataHash   string
+	AeonID     int32
+	BaseStatID int32
+	Battles    int32
+}
+
+func (q *Queries) CreateAeonsBaseStatXJunction(ctx context.Context, arg CreateAeonsBaseStatXJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatXJunction,
 		arg.DataHash,
 		arg.AeonID,
 		arg.BaseStatID,
-		arg.ValueType,
 		arg.Battles,
 	)
 	return err

@@ -22,12 +22,8 @@ func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) 
 	}
 
 	monster := Monster{
-		
-		
 		Areas:            areas,
 		Formations:       formations,
-
-		
 	}
 
 	return monster, nil

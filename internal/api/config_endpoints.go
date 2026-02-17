@@ -6,7 +6,8 @@ import (
 
 
 type endpoints struct {
-	aeons              handlerInput[seeding.Aeon, any, NamedAPIResource, NamedApiResourceList]
+	aeonCommands	   handlerInput[seeding.AeonCommand, any, NamedAPIResource, NamedApiResourceList]
+	aeons              handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]
 	affinities         handlerInput[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList]
 	arenaCreations     handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
 	areas              handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
@@ -25,6 +26,7 @@ type endpoints struct {
 	monsterFormations  handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
 	overdriveCommands  handlerInput[seeding.OverdriveCommand, any, NamedAPIResource, NamedApiResourceList]
 	overdriveModes     handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
+	overdrives		   handlerInput[seeding.Overdrive, any, NamedAPIResource, NamedApiResourceList]
 	genericAbilities   handlerInput[seeding.GenericAbility, any, NamedAPIResource, NamedApiResourceList]
 	playerAbilities    handlerInput[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList]
 	enemyAbilities     handlerInput[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList]
@@ -55,13 +57,26 @@ type endpoints struct {
 func (cfg *Config) EndpointsInit() {
 	e := endpoints{}
 
-	e.aeons = handlerInput[seeding.Aeon, any, NamedAPIResource, NamedApiResourceList]{
+	e.aeonCommands = handlerInput[seeding.AeonCommand, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      "aeon-commands",
+		resourceType:  "aeon command",
+		objLookup:     cfg.l.AeonCommands,
+		objLookupID:   cfg.l.AeonCommandsID,
+		idToResFunc:   idToNamedAPIResource[seeding.AeonCommand, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
+	}
+
+	e.aeons = handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "aeons",
 		resourceType:  "aeon",
 		objLookup:     cfg.l.Aeons,
 		objLookupID:   cfg.l.AeonsID,
-		idToResFunc:   idToNamedAPIResource[seeding.Aeon, any, NamedAPIResource, NamedApiResourceList],
+		queryLookup:   cfg.q.aeons,
+		idToResFunc:   idToNamedAPIResource[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetAeonIDs,
+		getSingleFunc: cfg.getAeon,
+		retrieveFunc:  cfg.retrieveAeons,
 	}
 
 	e.affinities = handlerInput[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList]{
@@ -387,6 +402,15 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetOverdriveModeIDs,
 		getSingleFunc: cfg.getOverdriveMode,
 		retrieveFunc:  cfg.retrieveOverdriveModes,
+	}
+
+	e.overdrives = handlerInput[seeding.Overdrive, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint: 		"overdrives",
+		resourceType: 	"overdrive",
+		objLookup: 		cfg.l.Overdrives,
+		objLookupID: 	cfg.l.OverdrivesID,
+		idToResFunc: 	idToNamedAPIResource[seeding.Overdrive, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
 	}
 
 	e.overdriveModeType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{

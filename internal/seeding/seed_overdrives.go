@@ -49,6 +49,14 @@ func (o Overdrive) Error() string {
 	return fmt.Sprintf("overdrive %s, version %v", o.Name, h.DerefOrNil(o.Version))
 }
 
+func (o Overdrive) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 		o.ID,
+		Name: 		o.Name,
+		Version: 	o.Version,
+	}
+}
+
 type RonsoRage struct {
 	ID int32
 	Overdrive

@@ -34,6 +34,7 @@ type SpecialInput struct {
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
 	defaultParams     map[string]QueryType
+	aeons			  map[string]QueryType
 	arenaCreations    map[string]QueryType
 	areas             map[string]QueryType
 	blitzballPrizes   map[string]QueryType
@@ -83,6 +84,7 @@ func (cfg *Config) QueryLookupInit() {
 		},
 	}
 
+	cfg.initAeonsParams()
 	cfg.initAreasParams()
 	cfg.initArenaCreationsParams()
 	cfg.initBlitzballPrizesParams()
@@ -118,6 +120,32 @@ func (cfg *Config) completeQueryTypeInit(params map[string]QueryType) map[string
 	}
 
 	return params
+}
+
+func (cfg *Config) initAeonsParams() {
+	params := map[string]QueryType{
+		"battles": {
+			ID:              1,
+			Description:     "Specifies the amount of battles the player has taken part in and takes them into account when calculating the aeon's stats. Can be used in combination with the 'yuna_stats' parameter. Needs to be an integer from 0 to 600.",
+			Usage:           "?battles={int}",
+			ExampleUses:     []string{"?battles=300"},
+			ForList:         false,
+			ForSingle:       true,
+			AllowedIntRange: []int{0, 600},
+			DefaultVal: 	 h.GetIntPtr(0),
+		},
+		"optional": {
+			ID:          2,
+			Description: "Searches for aeons that are not mandatory to complete the main story.",
+			Usage:       "?optional={bool}",
+			ExampleUses: []string{"?optional=true", "?optional=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.aeons = params
 }
 
 func (cfg *Config) initAreasParams() {

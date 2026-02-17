@@ -184,49 +184,6 @@ func (ns NullAccuracySource) Value() (driver.Value, error) {
 	return string(ns.AccuracySource), nil
 }
 
-type AeonStatValue string
-
-const (
-	AeonStatValueA AeonStatValue = "a"
-	AeonStatValueB AeonStatValue = "b"
-	AeonStatValueX AeonStatValue = "x"
-)
-
-func (e *AeonStatValue) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = AeonStatValue(s)
-	case string:
-		*e = AeonStatValue(s)
-	default:
-		return fmt.Errorf("unsupported scan type for AeonStatValue: %T", src)
-	}
-	return nil
-}
-
-type NullAeonStatValue struct {
-	AeonStatValue AeonStatValue
-	Valid         bool // Valid is true if AeonStatValue is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullAeonStatValue) Scan(value interface{}) error {
-	if value == nil {
-		ns.AeonStatValue, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.AeonStatValue.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullAeonStatValue) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.AeonStatValue), nil
-}
-
 type AlterationType string
 
 const (
@@ -3008,13 +2965,26 @@ type JAeonCommandsPossibleAbility struct {
 	CharacterClassID int32
 }
 
-type JAeonsBaseStat struct {
+type JAeonsBaseStatsA struct {
 	ID         int32
 	DataHash   string
 	AeonID     int32
 	BaseStatID int32
-	ValueType  AeonStatValue
-	Battles    sql.NullInt32
+}
+
+type JAeonsBaseStatsB struct {
+	ID         int32
+	DataHash   string
+	AeonID     int32
+	BaseStatID int32
+}
+
+type JAeonsBaseStatsX struct {
+	ID         int32
+	DataHash   string
+	AeonID     int32
+	BaseStatID int32
+	Battles    int32
 }
 
 type JAeonsWeaponArmor struct {

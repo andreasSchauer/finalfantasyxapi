@@ -12,8 +12,8 @@ import (
 type Aeon struct {
 	ID int32
 	PlayerUnit
-	UnlockCondition     string       `json:"unlock_condition"`
-	LocationArea        LocationArea `json:"location_area"`
+	UnlockCondition     string       	`json:"unlock_condition"`
+	LocationArea        LocationArea 	`json:"location_area"`
 	AreaID              *int32
 	Category            *string         `json:"category"`
 	IsOptional          bool            `json:"is_optional"`
@@ -24,6 +24,7 @@ type Aeon struct {
 	PhysAtkRange        *int32          `json:"phys_atk_range"`
 	PhysAtkShatterRate  *int32          `json:"phys_atk_shatter_rate"`
 	PhysAtkAccuracy     *Accuracy       `json:"phys_atk_accuracy"`
+	BaseStats			AeonStat
 }
 
 func (a Aeon) ToHashFields() []any {
