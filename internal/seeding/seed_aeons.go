@@ -115,12 +115,8 @@ func (l *Lookup) seedAeons(db *database.Queries, dbConn *sql.DB) error {
 			aeon.ID = dbAeon.ID
 			l.Aeons[aeon.Name] = aeon
 			l.AeonsID[aeon.ID] = aeon
-
-			err = l.seedCharacterClasses(qtx, aeon.PlayerUnit)
-			if err != nil {
-				return h.NewErr(aeon.Error(), err)
-			}
 		}
+		
 		return nil
 	})
 }

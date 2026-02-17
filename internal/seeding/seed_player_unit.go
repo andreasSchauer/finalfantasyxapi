@@ -47,6 +47,8 @@ func (l *Lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (P
 	}
 
 	playerUnit.ID = dbPlayerUnit.ID
+	l.PlayerUnits[playerUnit.Name] = playerUnit
+	l.PlayerUnitsID[playerUnit.ID] = playerUnit
 
 	return playerUnit, nil
 }

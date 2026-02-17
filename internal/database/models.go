@@ -3179,6 +3179,13 @@ type JBattleInteractionsStatChange struct {
 	StatChangeID        int32
 }
 
+type JCharacterClassPlayerUnit struct {
+	ID       int32
+	DataHash string
+	ClassID  int32
+	UnitID   int32
+}
+
 type JCharactersBaseStat struct {
 	ID          int32
 	DataHash    string
@@ -3393,13 +3400,6 @@ type JPlayerAbilitiesRelatedStat struct {
 	DataHash        string
 	PlayerAbilityID int32
 	StatID          int32
-}
-
-type JPlayerUnitsCharacterClass struct {
-	ID       int32
-	DataHash string
-	UnitID   int32
-	ClassID  int32
 }
 
 type JPropertiesModifierChange struct {

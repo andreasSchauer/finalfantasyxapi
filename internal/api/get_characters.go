@@ -39,6 +39,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 	return response, nil
 }
 
+
 func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {

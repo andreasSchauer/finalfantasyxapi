@@ -47,8 +47,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = character_classes.data_hash
 RETURNING *;
 
 
--- name: CreatePlayerUnitsCharacterClassJunction :exec
-INSERT INTO j_player_units_character_class (data_hash, unit_id, class_id)
+-- name: CreateCharacterClassPlayerUnitsJunction :exec
+INSERT INTO j_character_class_player_units (data_hash, class_id, unit_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

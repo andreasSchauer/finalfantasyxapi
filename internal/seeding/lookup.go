@@ -39,6 +39,8 @@ type Lookup struct {
 	PlayerAbilitiesID    map[int32]PlayerAbility
 	TriggerCommands      map[string]TriggerCommand
 	TriggerCommandsID    map[int32]TriggerCommand
+	PlayerUnits			 map[string]PlayerUnit
+	PlayerUnitsID		 map[int32]PlayerUnit
 	Aeons                map[string]Aeon
 	AeonsID              map[int32]Aeon
 	AeonCommands         map[string]AeonCommand
@@ -135,6 +137,8 @@ func lookupInit() Lookup {
 		PlayerAbilitiesID:    make(map[int32]PlayerAbility),
 		TriggerCommands:      make(map[string]TriggerCommand),
 		TriggerCommandsID:    make(map[int32]TriggerCommand),
+		PlayerUnits:		  make(map[string]PlayerUnit),
+		PlayerUnitsID: 		  make(map[int32]PlayerUnit),
 		Aeons:                make(map[string]Aeon),
 		AeonsID:              make(map[int32]Aeon),
 		AeonCommands:         make(map[string]AeonCommand),

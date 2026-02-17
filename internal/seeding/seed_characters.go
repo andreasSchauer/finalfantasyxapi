@@ -84,12 +84,8 @@ func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 			character.ID = dbCharacter.ID
 			l.Characters[character.Name] = character
 			l.CharactersID[character.ID] = character
-
-			err = l.seedCharacterClasses(qtx, character.PlayerUnit)
-			if err != nil {
-				return h.NewErr(character.Error(), err)
-			}
 		}
+		
 		return nil
 	})
 }

@@ -25,7 +25,7 @@ func (q *Queries) GetCharacterCelestialWeaponID(ctx context.Context, id int32) (
 const getCharacterCharClassIDs = `-- name: GetCharacterCharClassIDs :many
 SELECT cc.id
 FROM character_classes cc
-JOIN j_player_units_character_class j ON j.class_id = cc.id
+JOIN j_character_class_player_units j ON j.class_id = cc.id
 JOIN player_units pu ON j.unit_id = pu.id
 JOIN characters c ON c.unit_id = pu.id
 WHERE c.id = $1
@@ -61,7 +61,7 @@ FROM player_abilities pl
 JOIN abilities a ON pl.ability_id = a.id
 JOIN default_abilities da ON da.ability_id = a.id
 JOIN character_classes cc ON da.class_id = cc.id
-JOIN j_player_units_character_class j ON j.class_id = cc.id
+JOIN j_character_class_player_units j ON j.class_id = cc.id
 JOIN player_units pu ON j.unit_id = pu.id
 JOIN characters c ON c.unit_id = pu.id
 WHERE a.type = 'player-ability' AND c.id = $1
@@ -180,7 +180,7 @@ const getCharacterOverdriveCommandID = `-- name: GetCharacterOverdriveCommandID 
 SELECT oc.id
 FROM overdrive_commands oc
 JOIN character_classes cc ON oc.character_class_id = cc.id
-JOIN j_player_units_character_class j ON j.class_id = cc.id
+JOIN j_character_class_player_units j ON j.class_id = cc.id
 JOIN player_units pu ON j.unit_id = pu.id
 JOIN characters c ON c.unit_id = pu.id
 WHERE c.id = $1

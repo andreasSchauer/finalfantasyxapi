@@ -191,6 +191,23 @@ func (q *Queries) CreateCharacterClass(ctx context.Context, arg CreateCharacterC
 	return i, err
 }
 
+const createCharacterClassPlayerUnitsJunction = `-- name: CreateCharacterClassPlayerUnitsJunction :exec
+INSERT INTO j_character_class_player_units (data_hash, class_id, unit_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCharacterClassPlayerUnitsJunctionParams struct {
+	DataHash string
+	ClassID  int32
+	UnitID   int32
+}
+
+func (q *Queries) CreateCharacterClassPlayerUnitsJunction(ctx context.Context, arg CreateCharacterClassPlayerUnitsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createCharacterClassPlayerUnitsJunction, arg.DataHash, arg.ClassID, arg.UnitID)
+	return err
+}
+
 const createCharactersBaseStatsJunction = `-- name: CreateCharactersBaseStatsJunction :exec
 INSERT INTO j_characters_base_stats (data_hash, character_id, base_stat_id)
 VALUES ($1, $2, $3)
@@ -265,23 +282,6 @@ func (q *Queries) CreatePlayerUnit(ctx context.Context, arg CreatePlayerUnitPara
 		&i.Type,
 	)
 	return i, err
-}
-
-const createPlayerUnitsCharacterClassJunction = `-- name: CreatePlayerUnitsCharacterClassJunction :exec
-INSERT INTO j_player_units_character_class (data_hash, unit_id, class_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreatePlayerUnitsCharacterClassJunctionParams struct {
-	DataHash string
-	UnitID   int32
-	ClassID  int32
-}
-
-func (q *Queries) CreatePlayerUnitsCharacterClassJunction(ctx context.Context, arg CreatePlayerUnitsCharacterClassJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createPlayerUnitsCharacterClassJunction, arg.DataHash, arg.UnitID, arg.ClassID)
-	return err
 }
 
 const updateAeon = `-- name: UpdateAeon :exec
