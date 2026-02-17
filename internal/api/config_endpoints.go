@@ -147,8 +147,8 @@ func (cfg *Config) EndpointsInit() {
 	}
 
 	e.celestialWeapons = handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "character-classes",
-		resourceType:  "character class",
+		endpoint:      "celestial-weapons",
+		resourceType:  "celestial weapon",
 		objLookup:     cfg.l.CelestialWeapons,
 		objLookupID:   cfg.l.CelestialWeaponsID,
 		idToResFunc:   idToNamedAPIResource[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList],

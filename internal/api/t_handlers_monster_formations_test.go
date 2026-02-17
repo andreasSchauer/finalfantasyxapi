@@ -90,7 +90,7 @@ func TestGetMonsterFormation(t *testing.T) {
 				},
 				{
 					Ability: 5,
-					Users:   []int32{3, 5},
+					Users:   []int32{2, 3},
 				},
 			},
 		},

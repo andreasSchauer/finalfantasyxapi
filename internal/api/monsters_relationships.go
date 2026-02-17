@@ -22,17 +22,12 @@ func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) 
 	}
 
 	monster := Monster{
-		Properties:       namesToNamedAPIResources(cfg, cfg.e.properties, mon.Properties),
-		AutoAbilities:    namesToNamedAPIResources(cfg, cfg.e.autoAbilities, mon.AutoAbilities),
-		RonsoRages:       namesToNamedAPIResources(cfg, cfg.e.ronsoRages, mon.RonsoRages),
+		
+		
 		Areas:            areas,
 		Formations:       formations,
-		BaseStats:        namesToResourceAmounts(cfg, cfg.e.stats, mon.BaseStats, newBaseStat),
-		ElemResists:      getMonsterElemResists(cfg, mon.ElemResists),
-		StatusImmunities: namesToNamedAPIResources(cfg, cfg.e.statusConditions, mon.StatusImmunities),
-		StatusResists:    namesToResourceAmounts(cfg, cfg.e.statusConditions, mon.StatusResists, newStatusResist),
-		Abilities:        convertObjSlice(cfg, mon.Abilities, convertMonsterAbility),
-		AlteredStates:    getMonsterAlteredStates(cfg, r, mon),
+
+		
 	}
 
 	return monster, nil
