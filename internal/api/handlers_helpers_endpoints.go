@@ -171,7 +171,7 @@ func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 		return
 	}
 
-	if subsection == "simple" {
+	if fns.dbQuery == nil {
 		simpleRes, err := fns.createSubFn(cfg, r, parseRes.ID)
 		if handleHTTPError(w, err) {
 			return

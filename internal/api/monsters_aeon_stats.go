@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func applyAeonStats(cfg *Config, r *http.Request, mon Monster, queryName string) ([]BaseStat, error) {
+func applyAeonStatsMonsters(cfg *Config, r *http.Request, mon Monster, queryName string) ([]BaseStat, error) {
 	allowedStatIDs := []int32{1, 3, 4, 5, 6, 7, 9, 10}
 	aeonBaseStats := mon.BaseStats
 	queryParam := cfg.q.monsters[queryName]

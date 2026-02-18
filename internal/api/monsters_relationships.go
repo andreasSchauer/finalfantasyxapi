@@ -36,7 +36,7 @@ func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster
 		return Monster{}, err
 	}
 
-	mon.BaseStats, err = applyAeonStats(cfg, r, mon, "aeon_stats")
+	mon.BaseStats, err = applyAeonStatsMonsters(cfg, r, mon, "aeon_stats")
 	if err != nil {
 		return Monster{}, err
 	}

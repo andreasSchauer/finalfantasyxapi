@@ -6,6 +6,8 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryType, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
@@ -23,6 +25,7 @@ func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryType, baseStat
 			return nil, err
 		}
 
+		stat = h.GetNameWithSpaces(stat, "_")
 		statMap[stat] = int32(value)
 	}
 

@@ -40,7 +40,7 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 		ArmorAbilities:      convertObjSlice(cfg, aeon.Armor, convertAeonEquipment),
 	}
 
-	response.BaseStats, err = applyAeonStatsBattles(cfg, r, response, "battles")
+	response, err = applyAeonStats(cfg, r, response)
 	if err != nil {
 		return Aeon{}, err
 	}

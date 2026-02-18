@@ -2,7 +2,7 @@
 
 
 Things I plan on adding:
-- images (are the ones on the wiki free to use?)
+- images (are the ones on the wiki free use?)
 - pretty much everything regarding blitzball
 - monster ai
 - html responses

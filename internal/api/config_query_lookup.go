@@ -126,16 +126,24 @@ func (cfg *Config) initAeonsParams() {
 	params := map[string]QueryType{
 		"battles": {
 			ID:              1,
-			Description:     "Specifies the amount of battles the player has taken part in and takes them into account when calculating the aeon's stats. Can be used in combination with the 'yuna_stats' parameter. Needs to be an integer from 0 to 600.",
+			Description:     "Specifies the amount of battles the player has taken part in and takes them into account when calculating the aeon's stats. An aeon's stats increase for the first time after 60 battles and then every 30 additional battles with the final increase being at 600. Can be used in combination with the 'yuna_stats' parameter.",
 			Usage:           "?battles={int}",
-			ExampleUses:     []string{"?battles=300"},
+			ExampleUses:     []string{"?battles=123"},
 			ForList:         false,
 			ForSingle:       true,
 			AllowedIntRange: []int{0, 600},
 			DefaultVal: 	 h.GetIntPtr(0),
 		},
-		"optional": {
+		"yuna_stats": {
 			ID:          2,
+			Description: "Calculate an aeon's stats based on Yuna's stats. If a stat is not given, Yuna's respective default stat is used instead. Every stat instead of luck is available, since an aeon simply copies Yuna's luck stat. Can be used in combination with the 'battles' parameter.",
+			Usage:       "?yuna_stats={stat}-{int},...",
+			ExampleUses: []string{"?yuna_stats=hp-3000,strength-75,defense-50,magic-30,agility-20", "?yuna_stats=accuracy-150,magic_defense-255"},
+			ForList:     false,
+			ForSingle:   true,
+		},
+		"optional": {
+			ID:          3,
 			Description: "Searches for aeons that are not mandatory to complete the main story.",
 			Usage:       "?optional={bool}",
 			ExampleUses: []string{"?optional=true", "?optional=false"},

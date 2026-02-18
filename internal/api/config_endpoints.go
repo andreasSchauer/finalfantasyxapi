@@ -77,6 +77,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAeonIDs,
 		getSingleFunc: cfg.getAeon,
 		retrieveFunc:  cfg.retrieveAeons,
+		subsections: map[string]SubSectionFns{
+			"stats": {
+				createSubFn: createAeonStatSub,
+			},
+		},
 	}
 
 	e.affinities = handlerInput[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList]{

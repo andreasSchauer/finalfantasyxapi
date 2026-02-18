@@ -50,11 +50,11 @@ func getRonsoHP(mon Monster, kimahriStatMap map[string]int32) int32 {
 	hpMod := ((int32(v3)/32)+30)*586/730
 
 	if mon.Name == "biran ronso" {
-		return int32(hpMod) * 8
+		return hpMod * 8
 	}
 
 	if mon.Name == "yenke ronso" {
-		return int32(hpMod) * 6
+		return hpMod * 6
 	}
 
 	return 0
