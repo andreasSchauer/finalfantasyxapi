@@ -197,5 +197,5 @@ func TestSubsectionLocations(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.e.locations.endpoint, "SubsectionLocations", testCfg.HandleLocations, compareSubResourceLists[NamedAPIResource, LocationSub])
+	testIdList(t, tests, testCfg.e.locations.endpoint, "SubsectionLocations", testCfg.HandleLocations, compareSimpleResourceLists[NamedAPIResource, LocationSimple])
 }

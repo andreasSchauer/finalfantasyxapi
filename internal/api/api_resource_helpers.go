@@ -38,11 +38,36 @@ func separateResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRem
 	return kept, removed
 }
 
+func separateResourcesURL[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
+	removeMap := getResourceURLMap(itemsToRemove)
+	kept := []T{}
+	removed := []T{}
+
+	for _, item := range items {
+		url := item.GetAPIResource().GetURL()
+		_, ok := removeMap[url]
+		if !ok {
+			kept = append(kept, item)
+			continue
+		}
+		removed = append(removed, item)
+	}
+
+	return kept, removed
+}
+
 // items [1,2,3,4,5] changeItems [2,4] => [1,3,5]
 func removeResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) []T {
 	keptItems, _ := separateResources(items, itemsToRemove)
 	return keptItems
 }
+
+
+func removeResourcesURL[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) []T {
+	keptItems, _ := separateResourcesURL(items, itemsToRemove)
+	return keptItems
+}
+
 
 // s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,4,5]
 func getSharedResources[T HasAPIResource](s1, s2 []T) []T {
@@ -96,7 +121,7 @@ func getResourceURLMap[T HasAPIResource](items []T) map[string]T {
 	return resourceMap
 }
 
-func getSubResourceURLMap[T SubResource](items []T) map[string]T {
+func getSimpleResourceURLMap[T SimpleResource](items []T) map[string]T {
 	resourceMap := make(map[string]T)
 
 	for _, item := range items {

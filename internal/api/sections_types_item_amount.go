@@ -7,29 +7,29 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type ItemAmountSub struct {
+type ItemAmountSimple struct {
 	ia            seeding.ItemAmount `json:"-"`
 	ItemAmountStr string             `json:"item"`
 	ItemType      database.ItemType  `json:"item_type"`
 }
 
-func convertSubItemAmount(cfg *Config, ia seeding.ItemAmount) ItemAmountSub {
+func convertItemAmountSimple(cfg *Config, ia seeding.ItemAmount) ItemAmountSimple {
 	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.MasterItems)
 	itemStr := nameAmountString(ia.ItemName, nil, nil, ia.Amount)
 
-	return ItemAmountSub{
+	return ItemAmountSimple{
 		ia:            ia,
 		ItemAmountStr: itemStr,
 		ItemType:      itemLookup.Type,
 	}
 }
 
-func posItemToItemAmtSub(cfg *Config, posItem seeding.PossibleItem) ItemAmountSub {
-	return convertSubItemAmount(cfg, posItem.ItemAmount)
+func posItemToItemAmtSimple(cfg *Config, posItem seeding.PossibleItem) ItemAmountSimple {
+	return convertItemAmountSimple(cfg, posItem.ItemAmount)
 }
 
-func sortItemAmountSubsByID(cfg *Config, s []ItemAmountSub) []ItemAmountSub {
-	slices.SortStableFunc(s, func(a, b ItemAmountSub) int {
+func sortSimpleItemAmountsByID(cfg *Config, s []ItemAmountSimple) []ItemAmountSimple {
+	slices.SortStableFunc(s, func(a, b ItemAmountSimple) int {
 		A := getMasterItemID(cfg, a)
 		B := getMasterItemID(cfg, b)
 
@@ -47,7 +47,7 @@ func sortItemAmountSubsByID(cfg *Config, s []ItemAmountSub) []ItemAmountSub {
 	return s
 }
 
-func getMasterItemID(cfg *Config, ia ItemAmountSub) int32 {
+func getMasterItemID(cfg *Config, ia ItemAmountSimple) int32 {
 	if ia.ItemType == database.ItemTypeItem {
 		itemLookup, _ := seeding.GetResource(ia.ia.ItemName, cfg.l.Items)
 		return itemLookup.MasterItem.ID

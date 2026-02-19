@@ -1,20 +1,20 @@
 package api
 
-type gotSubResourceList[T APIResource, S SubResource] struct {
+type gotSimpleResourceList[T APIResource, S SimpleResource] struct {
 	ListParams
 	ParentResource T   `json:"parent_resource,omitempty"`
 	Results        []S `json:"results"`
 }
 
-func (l gotSubResourceList[T, S]) getListParams() ListParams {
+func (l gotSimpleResourceList[T, S]) getListParams() ListParams {
 	return l.ListParams
 }
 
-func (l gotSubResourceList[T, S]) getResults() []S {
+func (l gotSimpleResourceList[T, S]) getResults() []S {
 	return l.Results
 }
 
-func compareSubResourceLists[T APIResource, S SubResource](test test, endpoint string, expList expListIDs, gotList gotSubResourceList[T, S]) {
+func compareSimpleResourceLists[T APIResource, S SimpleResource](test test, endpoint string, expList expListIDs, gotList gotSimpleResourceList[T, S]) {
 	test.t.Helper()
 	compareListParams(test, expList.getListParams(), gotList.getListParams())
 
@@ -24,10 +24,10 @@ func compareSubResourceLists[T APIResource, S SubResource](test test, endpoint s
 	checkSubResIDsInSlice(test, "results", endpoint, expList.results, gotList.getResults())
 }
 
-func checkSubResIDsInSlice[T SubResource](test test, fieldName, endpoint string, expIDs []int32, gotRes []T) {
+func checkSubResIDsInSlice[T SimpleResource](test test, fieldName, endpoint string, expIDs []int32, gotRes []T) {
 	sliceBasicChecks(test, fieldName, expIDs, gotRes)
 
-	gotMap := getSubResourceURLMap(gotRes)
+	gotMap := getSimpleResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
 		test.t.Fatalf("%s: there appear to be duplicates in '%s'.", test.name, fieldName)
 	}

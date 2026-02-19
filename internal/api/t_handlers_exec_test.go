@@ -30,7 +30,7 @@ func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncNam
 }
 
 // compareAPIResourceLists for normal API Resources
-// compareSubResourceLists for Subsections
+// compareSimpleResourceLists for Subsections
 func testIdList[T any](t *testing.T, tests []expListIDs, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListIDs, T)) {
 	for i, exp := range tests {
 		expHandler := handlerFunc

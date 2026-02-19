@@ -20,7 +20,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 	response := Character{
 		ID: 					character.ID,
 		Name: 					character.Name,
-		Area: 					idPtrToAreaAPIResPtr(cfg, cfg.e.areas, character.AreaID),
+		Area: 					locAreaToAreaAPIResource(cfg, cfg.e.areas, character.LocationArea),
 		StoryOnly: 				character.StoryOnly,
 		CanFightUnderwater: 	character.CanFightUnderwater,
 		PhysAtkRange: 			character.PhysAtkRange,

@@ -23,7 +23,7 @@ type APIResourceList interface {
 	getResults() []HasAPIResource
 }
 
-type SubResource interface {
+type SimpleResource interface {
 	HasURL
 }
 

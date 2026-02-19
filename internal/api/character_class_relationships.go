@@ -77,7 +77,7 @@ func getClassLearnableAbilities(cfg *Config, r *http.Request, class seeding.Char
 		return nil, err
 	}
 
-	learnableAbilities := removeResources(allAbilities, defaultAbilities)
+	learnableAbilities := removeResourcesURL(allAbilities, defaultAbilities)
 	return learnableAbilities, nil
 }
 

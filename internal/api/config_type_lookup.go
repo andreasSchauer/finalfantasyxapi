@@ -143,13 +143,13 @@ func (t *TypeLookup) initBlitzballTournamentCategory() {
 func (t *TypeLookup) initCharacterClassCategory() {
 	typeSlice := []TypedAPIResource{
 		{
+			Name: string(database.CharacterClassCategoryGroup),
+		},
+		{
 			Name: string(database.CharacterClassCategoryCharacter),
 		},
 		{
 			Name: string(database.CharacterClassCategoryAeon),
-		},
-		{
-			Name: string(database.CharacterClassCategoryGroup),
 		},
 	}
 

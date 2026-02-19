@@ -6,49 +6,48 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type SublocationSub struct {
-	ID             int32            `json:"id"`
-	URL            string           `json:"url"`
-	ParentLocation SubRef           `json:"parent_location"`
-	Name           string           `json:"name"`
-	Shops          []ShopLocSub     `json:"shops"`
-	Treasures      *TreasuresLocSub `json:"treasures"`
-	Monsters       []string         `json:"monsters"`
+type SublocationSimple struct {
+	ID             int32               `json:"id"`
+	URL            string              `json:"url"`
+	ParentLocation SimpleRef           `json:"parent_location"`
+	Name           string              `json:"name"`
+	Shops          []ShopLocSimple     `json:"shops"`
+	Treasures      *TreasuresLocSimple `json:"treasures"`
+	Monsters       []string            `json:"monsters"`
 }
 
-func (s SublocationSub) GetURL() string {
+func (s SublocationSimple) GetURL() string {
 	return s.URL
 }
 
-
-func createSublocationSub(cfg *Config, r *http.Request, id int32) (SubResource, error) {
+func createSublocationSimple(cfg *Config, r *http.Request, id int32) (SimpleResource, error) {
 	i := cfg.e.sublocations
 	sublocation, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetSublocationMonsterIDs, idToMonsterSubString)
+	monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetSublocationMonsterIDs, idToMonsterSimpleString)
 	if err != nil {
-		return SublocationSub{}, err
+		return SublocationSimple{}, err
 	}
 
-	shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetSublocationShopIDs, idToShopLocSub)
+	shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetSublocationShopIDs, idToShopLocSimple)
 	if err != nil {
-		return SublocationSub{}, err
+		return SublocationSimple{}, err
 	}
 
-	treasures, err := getTreasuresLocSub(cfg, r, i.resourceType, id, cfg.db.GetSublocationTreasureIDs)
+	treasures, err := getTreasuresLocSimple(cfg, r, i.resourceType, id, cfg.db.GetSublocationTreasureIDs)
 	if err != nil {
-		return SublocationSub{}, err
+		return SublocationSimple{}, err
 	}
 
-	sublocationSub := SublocationSub{
+	sublocationSimple := SublocationSimple{
 		ID:             sublocation.ID,
 		URL:            createResourceURL(cfg, i.endpoint, id),
-		ParentLocation: createSubReference(sublocation.Location.ID, sublocation.Location.Name, nil, nil),
+		ParentLocation: createSimpleRef(sublocation.Location.ID, sublocation.Location.Name, nil, nil),
 		Name:           sublocation.Name,
 		Shops:          shops,
 		Treasures:      treasures,
 		Monsters:       monsters,
 	}
 
-	return sublocationSub, nil
+	return sublocationSimple, nil
 }

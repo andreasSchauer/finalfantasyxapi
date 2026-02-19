@@ -9,30 +9,30 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type ShopLocSub struct {
-	ID			int32				  `json:"id"`
+type ShopLocSimple struct {
+	ID          int32                 `json:"id"`
 	Category    database.ShopCategory `json:"category"`
-	PreAirship  *ShopSummarySub       `json:"pre_airship"`
-	PostAirship *ShopSummarySub       `json:"post_airship"`
+	PreAirship  *ShopSummarySimple    `json:"pre_airship"`
+	PostAirship *ShopSummarySimple    `json:"post_airship"`
 }
 
-type ShopSummarySub struct {
+type ShopSummarySimple struct {
 	HasItems     bool `json:"has_items"`
 	HasEquipment bool `json:"has_equipment"`
 }
 
-func idToShopLocSub(cfg *Config, shopID int32) ShopLocSub {
+func idToShopLocSimple(cfg *Config, shopID int32) ShopLocSimple {
 	shopLookup, _ := seeding.GetResourceByID(shopID, cfg.l.ShopsID)
-	return ShopLocSub{
-		ID: 		 shopID,
+	return ShopLocSimple{
+		ID:          shopID,
 		Category:    database.ShopCategory(shopLookup.Category),
-		PreAirship:  convertObjPtr(cfg, shopLookup.PreAirship, convertShopSummarySub),
-		PostAirship: convertObjPtr(cfg, shopLookup.PostAirship, convertShopSummarySub),
+		PreAirship:  convertObjPtr(cfg, shopLookup.PreAirship, convertShopSummarySimple),
+		PostAirship: convertObjPtr(cfg, shopLookup.PostAirship, convertShopSummarySimple),
 	}
 }
 
-func convertShopSummarySub(_ *Config, shop seeding.SubShop) ShopSummarySub {
-	shopLoc := ShopSummarySub{}
+func convertShopSummarySimple(_ *Config, shop seeding.SubShop) ShopSummarySimple {
+	shopLoc := ShopSummarySimple{}
 
 	if len(shop.Items) != 0 {
 		shopLoc.HasItems = true
@@ -45,14 +45,14 @@ func convertShopSummarySub(_ *Config, shop seeding.SubShop) ShopSummarySub {
 	return shopLoc
 }
 
-type TreasuresLocSub struct {
-	TreasureCount int             `json:"treasure_count"`
-	TotalGil      int32           `json:"total_gil"`
-	Items         []ItemAmountSub `json:"items"`
-	Equipment     []EquipmentSub  `json:"equipment"`
+type TreasuresLocSimple struct {
+	TreasureCount int                `json:"treasure_count"`
+	TotalGil      int32              `json:"total_gil"`
+	Items         []ItemAmountSimple `json:"items"`
+	Equipment     []EquipmentSimple  `json:"equipment"`
 }
 
-func getTreasuresLocSub(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) (*TreasuresLocSub, error) {
+func getTreasuresLocSimple(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) (*TreasuresLocSimple, error) {
 	treasureIDs, err := dbQuery(r.Context(), id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve treasures of %s with id '%d'", resourceType, id), err)
@@ -62,14 +62,14 @@ func getTreasuresLocSub(cfg *Config, r *http.Request, resourceType string, id in
 		return nil, nil
 	}
 
-	treasures := populateTreasuresLocSub(cfg, treasureIDs)
+	treasures := populateTreasuresLocSimple(cfg, treasureIDs)
 	return &treasures, nil
 }
 
-func populateTreasuresLocSub(cfg *Config, treasureIDs []int32) TreasuresLocSub {
-	treasures := TreasuresLocSub{
+func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSimple {
+	treasures := TreasuresLocSimple{
 		TreasureCount: len(treasureIDs),
-		Items:         []ItemAmountSub{},
+		Items:         []ItemAmountSimple{},
 	}
 
 	for _, treasureID := range treasureIDs {
@@ -81,28 +81,28 @@ func populateTreasuresLocSub(cfg *Config, treasureIDs []int32) TreasuresLocSub {
 
 		case string(database.LootTypeItem):
 			for _, itemAmount := range treasure.Items {
-				ia := convertSubItemAmount(cfg, itemAmount)
+				ia := convertItemAmountSimple(cfg, itemAmount)
 				treasures.Items = append(treasures.Items, ia)
 			}
 
 		case string(database.LootTypeEquipment):
 			equipment := treasure.Equipment
-			es := convertEquipmentSub(cfg, *equipment)
+			es := convertEquipmentSimple(cfg, *equipment)
 			treasures.Equipment = append(treasures.Equipment, es)
 		}
 	}
 
-	treasures.Items = sortItemAmountSubsByID(cfg, treasures.Items)
+	treasures.Items = sortSimpleItemAmountsByID(cfg, treasures.Items)
 	return treasures
 }
 
-type EquipmentSub struct {
+type EquipmentSimple struct {
 	Name          string  `json:"name"`
 	AutoAbilities *string `json:"auto_abilities"`
 }
 
-func convertEquipmentSub(_ *Config, equipment seeding.FoundEquipment) EquipmentSub {
-	return EquipmentSub{
+func convertEquipmentSimple(_ *Config, equipment seeding.FoundEquipment) EquipmentSimple {
+	return EquipmentSimple{
 		Name:          equipment.Name,
 		AutoAbilities: foundEquipmentAbilitiesStringPtr(equipment),
 	}

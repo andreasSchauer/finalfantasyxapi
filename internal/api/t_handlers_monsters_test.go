@@ -1328,5 +1328,5 @@ func TestSubsectionMonsters(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.e.monsters.endpoint, "SubsectionMonsters", nil, compareSubResourceLists[NamedAPIResource, MonsterSub])
+	testIdList(t, tests, testCfg.e.monsters.endpoint, "SubsectionMonsters", nil, compareSimpleResourceLists[NamedAPIResource, MonsterSimple])
 }

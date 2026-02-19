@@ -6,41 +6,41 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type SubquestSub struct {
-	ID          int32                `json:"id"`
-	URL         string               `json:"url"`
-	Name        string               `json:"name"`
-	Completions []QuestCompletionSub `json:"completions"`
+type SubquestSimple struct {
+	ID          int32                   `json:"id"`
+	URL         string                  `json:"url"`
+	Name        string                  `json:"name"`
+	Completions []QuestCompletionSimple `json:"completions"`
 }
 
-func (s SubquestSub) GetURL() string {
+func (s SubquestSimple) GetURL() string {
 	return s.URL
 }
 
-type QuestCompletionSub struct {
-	Condition string        `json:"condition"`
-	Areas     []string      `json:"areas"`
-	Reward    ItemAmountSub `json:"reward"`
+type QuestCompletionSimple struct {
+	Condition string           `json:"condition"`
+	Areas     []string         `json:"areas"`
+	Reward    ItemAmountSimple `json:"reward"`
 }
 
-func convertQuestCompletionSub(cfg *Config, qc seeding.QuestCompletion) QuestCompletionSub {
-	return QuestCompletionSub{
+func convertQuestCompletionSimple(cfg *Config, qc seeding.QuestCompletion) QuestCompletionSimple {
+	return QuestCompletionSimple{
 		Condition: qc.Condition,
 		Areas:     locAreaStrings(cfg, qc.Areas),
-		Reward:    convertSubItemAmount(cfg, qc.Reward),
+		Reward:    convertItemAmountSimple(cfg, qc.Reward),
 	}
 }
 
-func createSubquestSub(cfg *Config, _ *http.Request, id int32) (SubResource, error) {
+func createSubquestSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
 	i := cfg.e.subquests
 	subquest, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	subquestSub := SubquestSub{
+	subquestSimple := SubquestSimple{
 		ID:          subquest.ID,
 		URL:         createResourceURL(cfg, i.endpoint, id),
 		Name:        subquest.Name,
-		Completions: convertObjSlice(cfg, subquest.Completions, convertQuestCompletionSub),
+		Completions: convertObjSlice(cfg, subquest.Completions, convertQuestCompletionSimple),
 	}
 
-	return subquestSub, nil
+	return subquestSimple, nil
 }

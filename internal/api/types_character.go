@@ -3,7 +3,7 @@ package api
 type Character struct {
 	ID						int32				`json:"id"`
 	Name					string				`json:"name"`
-	Area					*AreaAPIResource	`json:"area"`
+	Area					AreaAPIResource		`json:"area"`
 	StoryOnly				bool				`json:"story_only"`
 	CanFightUnderwater		bool				`json:"can_fight_underwater"`
 	PhysAtkRange			int32				`json:"physical_attack_range"`

@@ -101,6 +101,8 @@ func getMonsterPoisonDamage(cfg *Config, mon Monster) (*int32, error) {
 
 
 func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*AgilityParams, error) {
+	// first two parts are generic for agility params
+	// maybe change from returning a pointer to the actual struct
 	agilityStat := getBaseStat(cfg, "agility", mon.BaseStats)
 	agility := agilityStat.Value
 	if agility == 0 {
@@ -112,12 +114,14 @@ func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*Agilit
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't extract agility parameters from %s.", mon.Error()), err)
 	}
 
+	// this is unique to monsters (characters have their own icvs)
 	agilityParams := AgilityParams{
 		TickSpeed: dbAgilityTier.TickSpeed,
 		MinICV:    h.NullInt32ToPtr(dbAgilityTier.MonsterMinIcv),
 		MaxICV:    h.NullInt32ToPtr(dbAgilityTier.MonsterMaxIcv),
 	}
 
+	// this is unique to monsters (characters' icvs become 0)
 	fs := nameToNamedAPIResource(cfg, cfg.e.autoAbilities, "first strike", nil)
 	if resourcesContain(mon.AutoAbilities, fs) {
 		var fsICV int32 = -1

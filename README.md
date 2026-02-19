@@ -21,6 +21,7 @@ Things that are currently unclear/unknown:
 - The attributes of Lulu's Thundara spell during the first Zu encounter at Bikanel
 - How exactly does Lulu's magic affect the amount of spells she casts with her overdrives?
 - From which areas in the calm lands can you start and complete the 'chocobo training' sidequest?
+- What exactly is Wakka's Power Shot? When is it triggered? Which ability is triggered with two Aurochs Symbols on Aurochs Reels? Currently I treat Power Shot as the shot that is performed when you get no matching symbol at any Aurochs Reels. For a two-symbol Aurochs Shot, I didn't find any evidence of existence in my data, so I just assumed it worked like the other Slots Overdrives where a variant of the three-symbol version that hits a single random enemy is performed. 
 - Monster equipment drops:
     - if a monster only can get 0 ability rolls (like with octopus), will it only ever drop equipment with 1 empty slot, or just piercing for kimahri and auron, and ignore its auto-ability table completely?
     - is the forced auto-ability (piercing in most cases) taken into account with the amount of attached abilities, or is it seen as extra?

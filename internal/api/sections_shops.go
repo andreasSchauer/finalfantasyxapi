@@ -8,39 +8,39 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type ShopSub struct {
-	ID          int32       `json:"id"`
-	URL         string      `json:"url"`
-	Area        string      `json:"area"`
-	Category    string      `json:"category"`
-	Notes       *string     `json:"notes,omitempty"`
-	PreAirship  *SubShopSub `json:"pre_airship"`
-	PostAirship *SubShopSub `json:"post_airship"`
+type ShopSimple struct {
+	ID          int32          `json:"id"`
+	URL         string         `json:"url"`
+	Area        string         `json:"area"`
+	Category    string         `json:"category"`
+	Notes       *string        `json:"notes,omitempty"`
+	PreAirship  *SubShopSimple `json:"pre_airship"`
+	PostAirship *SubShopSimple `json:"post_airship"`
 }
 
-func (s ShopSub) GetURL() string {
+func (s ShopSimple) GetURL() string {
 	return s.URL
 }
 
-type SubShopSub struct {
-	Items     []string           `json:"items"`
-	Equipment []ShopEquipmentSub `json:"equipment"`
+type SubShopSimple struct {
+	Items     []string              `json:"items"`
+	Equipment []ShopEquipmentSimple `json:"equipment"`
 }
 
-func convertSubShopSub(cfg *Config, ss seeding.SubShop) SubShopSub {
-	return SubShopSub{
+func convertSubShopSimple(cfg *Config, ss seeding.SubShop) SubShopSimple {
+	return SubShopSimple{
 		Items:     convertObjSlice(cfg, ss.Items, shopItemNameString),
-		Equipment: convertObjSlice(cfg, ss.Equipment, convertShopEquipmentSub),
+		Equipment: convertObjSlice(cfg, ss.Equipment, convertShopEquipmentSimple),
 	}
 }
 
-type ShopEquipmentSub struct {
+type ShopEquipmentSimple struct {
 	EquipmentName string  `json:"equipment_name"`
-	Abilities     *string `json:"abilities"` // needs to be pointer
+	Abilities     *string `json:"abilities"`
 }
 
-func convertShopEquipmentSub(cfg *Config, se seeding.ShopEquipment) ShopEquipmentSub {
-	return ShopEquipmentSub{
+func convertShopEquipmentSimple(cfg *Config, se seeding.ShopEquipment) ShopEquipmentSimple {
+	return ShopEquipmentSimple{
 		EquipmentName: shopEquipmentNameString(cfg, se),
 		Abilities:     foundEquipmentAbilitiesStringPtr(se.FoundEquipment),
 	}
@@ -76,19 +76,19 @@ func foundEquipmentAbilitiesStringPtr(fe seeding.FoundEquipment) *string {
 	}
 }
 
-func createShopSub(cfg *Config, _ *http.Request, id int32) (SubResource, error) {
+func createShopSub(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
 	i := cfg.e.shops
 	shop, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	shopSub := ShopSub{
+	shopSimple := ShopSimple{
 		ID:          shop.ID,
 		URL:         createResourceURL(cfg, i.endpoint, id),
 		Area:        idToLocAreaString(cfg, shop.AreaID),
 		Category:    shop.Category,
 		Notes:       shop.Notes,
-		PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShopSub),
-		PostAirship: convertObjPtr(cfg, shop.PostAirship, convertSubShopSub),
+		PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShopSimple),
+		PostAirship: convertObjPtr(cfg, shop.PostAirship, convertSubShopSimple),
 	}
 
-	return shopSub, nil
+	return shopSimple, nil
 }

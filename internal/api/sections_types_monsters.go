@@ -2,37 +2,37 @@ package api
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
-type MonsterItemsSub struct {
-	StealCommon         *ItemAmountSub  `json:"steal_common"`
-	StealRare           *ItemAmountSub  `json:"steal_rare"`
-	DropCommon          *ItemAmountSub  `json:"drop_common"`
-	DropRare            *ItemAmountSub  `json:"drop_rare"`
-	SecondaryDropCommon *ItemAmountSub  `json:"secondary_drop_common"`
-	SecondaryDropRare   *ItemAmountSub  `json:"secondary_drop_rare"`
-	Bribe               *ItemAmountSub  `json:"bribe"`
-	OtherItems          []ItemAmountSub `json:"other_items"`
+type MonsterItemsSimple struct {
+	StealCommon         *ItemAmountSimple  `json:"steal_common"`
+	StealRare           *ItemAmountSimple  `json:"steal_rare"`
+	DropCommon          *ItemAmountSimple  `json:"drop_common"`
+	DropRare            *ItemAmountSimple  `json:"drop_rare"`
+	SecondaryDropCommon *ItemAmountSimple  `json:"secondary_drop_common"`
+	SecondaryDropRare   *ItemAmountSimple  `json:"secondary_drop_rare"`
+	Bribe               *ItemAmountSimple  `json:"bribe"`
+	OtherItems          []ItemAmountSimple `json:"other_items"`
 }
 
-func convertMonsterSubItems(cfg *Config, items seeding.MonsterItems) MonsterItemsSub {
-	return MonsterItemsSub{
-		StealCommon:         convertObjPtr(cfg, items.StealCommon, convertSubItemAmount),
-		StealRare:           convertObjPtr(cfg, items.StealRare, convertSubItemAmount),
-		DropCommon:          convertObjPtr(cfg, items.DropCommon, convertSubItemAmount),
-		DropRare:            convertObjPtr(cfg, items.DropRare, convertSubItemAmount),
-		SecondaryDropCommon: convertObjPtr(cfg, items.SecondaryDropCommon, convertSubItemAmount),
-		SecondaryDropRare:   convertObjPtr(cfg, items.SecondaryDropRare, convertSubItemAmount),
-		Bribe:               convertObjPtr(cfg, items.Bribe, convertSubItemAmount),
-		OtherItems:          convertObjSlice(cfg, items.OtherItems, posItemToItemAmtSub),
+func convertMonsterItemsSimple(cfg *Config, items seeding.MonsterItems) MonsterItemsSimple {
+	return MonsterItemsSimple{
+		StealCommon:         convertObjPtr(cfg, items.StealCommon, convertItemAmountSimple),
+		StealRare:           convertObjPtr(cfg, items.StealRare, convertItemAmountSimple),
+		DropCommon:          convertObjPtr(cfg, items.DropCommon, convertItemAmountSimple),
+		DropRare:            convertObjPtr(cfg, items.DropRare, convertItemAmountSimple),
+		SecondaryDropCommon: convertObjPtr(cfg, items.SecondaryDropCommon, convertItemAmountSimple),
+		SecondaryDropRare:   convertObjPtr(cfg, items.SecondaryDropRare, convertItemAmountSimple),
+		Bribe:               convertObjPtr(cfg, items.Bribe, convertItemAmountSimple),
+		OtherItems:          convertObjSlice(cfg, items.OtherItems, posItemToItemAmtSimple),
 	}
 }
 
-type MonsterEquipmentSub struct {
+type MonsterEquipmentSimple struct {
 	WeaponAbilities []string `json:"weapon_abilities"`
 	ArmorAbilities  []string `json:"armor_abilities"`
 }
 
-func convertMonsterSubEquipment(cfg *Config, equipment seeding.MonsterEquipment) MonsterEquipmentSub {
-	return MonsterEquipmentSub{
+func convertMonsterEquipmentSimple(cfg *Config, equipment seeding.MonsterEquipment) MonsterEquipmentSimple {
+	return MonsterEquipmentSimple{
 		WeaponAbilities: convertObjSlice(cfg, equipment.WeaponAbilities, monsterAutoAbilityString),
 		ArmorAbilities:  convertObjSlice(cfg, equipment.ArmorAbilities, monsterAutoAbilityString),
 	}

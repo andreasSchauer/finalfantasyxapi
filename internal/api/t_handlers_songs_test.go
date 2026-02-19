@@ -263,5 +263,5 @@ func TestSubsectionSongs(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.e.songs.endpoint, "SubsectionSongs", nil, compareSubResourceLists[NamedAPIResource, SongSub])
+	testIdList(t, tests, testCfg.e.songs.endpoint, "SubsectionSongs", nil, compareSimpleResourceLists[NamedAPIResource, SongSimple])
 }

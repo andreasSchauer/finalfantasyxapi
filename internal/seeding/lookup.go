@@ -234,10 +234,7 @@ func GetResource[T any, K any](key K, lookup map[string]T) (T, error) {
 	}
 }
 
-// maybe make one for all id-only endpoints
-// might also make one for some complex resources like abilities, since it will reduce the amount of queries needed
-// I could also do that for monsters tbh
-// But that is a can of worms I won't be opening now
+
 func GetResourceByID[T h.HasID](id int32, lookup map[int32]T) (T, error) {
 	resource, found := lookup[id]
 	if !found {

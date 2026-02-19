@@ -325,5 +325,5 @@ func TestSubsectionShops(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.e.shops.endpoint, "SubsectionShops", nil, compareSubResourceLists[UnnamedAPIResource, ShopSub])
+	testIdList(t, tests, testCfg.e.shops.endpoint, "SubsectionShops", nil, compareSimpleResourceLists[UnnamedAPIResource, ShopSimple])
 }

@@ -233,5 +233,5 @@ func TestSubsectionTreasures(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.e.treasures.endpoint, "SubsectionTreasures", nil, compareSubResourceLists[UnnamedAPIResource, TreasureSub])
+	testIdList(t, tests, testCfg.e.treasures.endpoint, "SubsectionTreasures", nil, compareSimpleResourceLists[UnnamedAPIResource, TreasureSimple])
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type MonsterFormationSub struct {
+type MonsterFormationSimple struct {
 	ID             int32    `json:"id"`
 	URL            string   `json:"url"`
 	Category       string   `json:"category"`
@@ -15,15 +15,15 @@ type MonsterFormationSub struct {
 	Areas          []string `json:"areas"`
 }
 
-func (m MonsterFormationSub) GetURL() string {
+func (m MonsterFormationSimple) GetURL() string {
 	return m.URL
 }
 
-func createMonsterFormationSub(cfg *Config, _ *http.Request, id int32) (SubResource, error) {
+func createMonsterFormationSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
 	i := cfg.e.monsterFormations
 	formation, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	formationSub := MonsterFormationSub{
+	formationSub := MonsterFormationSimple{
 		ID:             formation.ID,
 		URL:            createResourceURL(cfg, i.endpoint, id),
 		Category:       formation.FormationData.Category,

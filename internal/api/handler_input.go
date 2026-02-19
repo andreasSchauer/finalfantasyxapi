@@ -7,7 +7,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 	endpoint         string
 	resourceType     string
@@ -26,5 +25,5 @@ type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 
 type SubSectionFns struct {
 	dbQuery     func(context.Context, int32) ([]int32, error)
-	createSubFn func(*Config, *http.Request, int32) (SubResource, error)
+	createSubFn func(*Config, *http.Request, int32) (SimpleResource, error)
 }

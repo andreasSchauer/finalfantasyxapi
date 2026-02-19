@@ -86,11 +86,11 @@ func TestGetMonsterFormation(t *testing.T) {
 			triggerCommands: []testFormationTC{
 				{
 					Ability: 4,
-					Users:   []int32{1},
+					Users:   []int32{5},
 				},
 				{
 					Ability: 5,
-					Users:   []int32{2, 3},
+					Users:   []int32{6, 7},
 				},
 			},
 		},
@@ -274,5 +274,5 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.e.monsterFormations.endpoint, "SubsectionMonsterFormations", nil, compareSubResourceLists[UnnamedAPIResource, MonsterFormationSub])
+	testIdList(t, tests, testCfg.e.monsterFormations.endpoint, "SubsectionMonsterFormations", nil, compareSimpleResourceLists[UnnamedAPIResource, MonsterFormationSimple])
 }

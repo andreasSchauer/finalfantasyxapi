@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type SongSub struct {
+type SongSimple struct {
 	ID                int32   `json:"id"`
 	URL               string  `json:"url"`
 	Name              string  `json:"name"`
@@ -19,15 +19,15 @@ type SongSub struct {
 	CanLoop           bool    `json:"can_loop"`
 }
 
-func (s SongSub) GetURL() string {
+func (s SongSimple) GetURL() string {
 	return s.URL
 }
 
-func createSongSub(cfg *Config, _ *http.Request, id int32) (SubResource, error) {
+func createSongSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
 	i := cfg.e.songs
 	song, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	songSub := SongSub{
+	songSimple := SongSimple{
 		ID:                song.ID,
 		URL:               createResourceURL(cfg, i.endpoint, id),
 		Name:              song.Name,
@@ -36,13 +36,13 @@ func createSongSub(cfg *Config, _ *http.Request, id int32) (SubResource, error) 
 	}
 
 	if song.Credits != nil {
-		songSub.Composer = song.Credits.Composer
-		songSub.Arranger = song.Credits.Arranger
-		songSub.Performer = song.Credits.Performer
-		songSub.Lyricist = song.Credits.Lyricist
+		songSimple.Composer = song.Credits.Composer
+		songSimple.Arranger = song.Credits.Arranger
+		songSimple.Performer = song.Credits.Performer
+		songSimple.Lyricist = song.Credits.Lyricist
 	}
 
-	return songSub, nil
+	return songSimple, nil
 }
 
 func (cfg *Config) getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {

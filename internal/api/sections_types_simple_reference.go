@@ -1,14 +1,14 @@
 package api
 
-type SubRef struct {
+type SimpleRef struct {
 	ID            int32   `json:"id,omitempty"`
 	Name          string  `json:"name"`
 	Version       *int32  `json:"version,omitempty"`
 	Specification *string `json:"specification,omitempty"`
 }
 
-func createSubReference(id int32, name string, version *int32, spec *string) SubRef {
-	return SubRef{
+func createSimpleRef(id int32, name string, version *int32, spec *string) SimpleRef {
+	return SimpleRef{
 		ID:            id,
 		Name:          name,
 		Version:       version,

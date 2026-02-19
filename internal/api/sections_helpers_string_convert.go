@@ -83,7 +83,7 @@ func monsterAmountString(cfg *Config, ma seeding.MonsterAmount) string {
 	return nameAmountString(mon.Name, mon.Version, mon.Specification, ma.Amount)
 }
 
-func idToMonsterSubString(cfg *Config, monID int32) string {
+func idToMonsterSimpleString(cfg *Config, monID int32) string {
 	mon, _ := seeding.GetResourceByID(monID, cfg.l.MonstersID)
 	return nameToString(mon.Name, mon.Version, mon.Specification)
 }

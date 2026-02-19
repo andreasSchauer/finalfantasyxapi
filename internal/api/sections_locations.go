@@ -6,40 +6,39 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type LocationSub struct {
-	ID        int32            `json:"id"`
-	URL       string           `json:"url"`
-	Name      string           `json:"name"`
-	Shops     []ShopLocSub     `json:"shops"`
-	Treasures *TreasuresLocSub `json:"treasures"`
-	Monsters  []string         `json:"monsters"`
+type LocationSimple struct {
+	ID        int32               `json:"id"`
+	URL       string              `json:"url"`
+	Name      string              `json:"name"`
+	Shops     []ShopLocSimple     `json:"shops"`
+	Treasures *TreasuresLocSimple `json:"treasures"`
+	Monsters  []string            `json:"monsters"`
 }
 
-func (l LocationSub) GetURL() string {
+func (l LocationSimple) GetURL() string {
 	return l.URL
 }
 
-
-func createLocationSub(cfg *Config, r *http.Request, id int32) (SubResource, error) {
+func createLocationSimple(cfg *Config, r *http.Request, id int32) (SimpleResource, error) {
 	i := cfg.e.locations
 	location, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetLocationMonsterIDs, idToMonsterSubString)
+	monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetLocationMonsterIDs, idToMonsterSimpleString)
 	if err != nil {
-		return LocationSub{}, err
+		return LocationSimple{}, err
 	}
 
-	shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetLocationShopIDs, idToShopLocSub)
+	shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetLocationShopIDs, idToShopLocSimple)
 	if err != nil {
-		return LocationSub{}, err
+		return LocationSimple{}, err
 	}
 
-	treasures, err := getTreasuresLocSub(cfg, r, i.resourceType, id, cfg.db.GetLocationTreasureIDs)
+	treasures, err := getTreasuresLocSimple(cfg, r, i.resourceType, id, cfg.db.GetLocationTreasureIDs)
 	if err != nil {
-		return LocationSub{}, err
+		return LocationSimple{}, err
 	}
 
-	locationSub := LocationSub{
+	locationSimple := LocationSimple{
 		ID:        location.ID,
 		URL:       createResourceURL(cfg, i.endpoint, id),
 		Name:      location.Name,
@@ -48,5 +47,5 @@ func createLocationSub(cfg *Config, r *http.Request, id int32) (SubResource, err
 		Monsters:  monsters,
 	}
 
-	return locationSub, nil
+	return locationSimple, nil
 }
