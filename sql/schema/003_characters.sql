@@ -10,6 +10,8 @@ CREATE TYPE armor_type AS ENUM ('shield', 'ring', 'armguard', 'bangle', 'armlet'
 
 CREATE TYPE accuracy_source AS ENUM ('accuracy', 'rate');
 
+CREATE TYPE character_class_category AS ENUM ('character', 'aeon', 'group');
+
 
 CREATE TABLE player_units (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -47,7 +49,8 @@ CREATE TABLE aeons (
 CREATE TABLE character_classes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    name TEXT UNIQUE NOT NULL
+    name TEXT UNIQUE NOT NULL,
+    category character_class_category NOT NULL
 );
 
 
@@ -57,6 +60,7 @@ DROP TABLE IF EXISTS character_classes;
 DROP TABLE IF EXISTS aeons;
 DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS player_units;
+DROP TYPE IF EXISTS character_class_category;
 DROP TYPE IF EXISTS accuracy_source;
 DROP TYPE IF EXISTS weapon_type;
 DROP TYPE IF EXISTS armor_type;

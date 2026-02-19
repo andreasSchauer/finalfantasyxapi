@@ -10,9 +10,10 @@ import (
 )
 
 type CharacterClass struct {
-	ID   	int32
-	Name 	string		`json:"name"`
-	Units	[]string	`json:"units"`
+	ID   		int32
+	Name 		string		`json:"name"`
+	Category	string		`json:"category"`
+	Units		[]string	`json:"units"`
 }
 
 func (cc CharacterClass) ToHashFields() []any {
@@ -50,6 +51,7 @@ func (l *Lookup) seedCharacterClasses(db *database.Queries, dbConn *sql.DB) erro
 			dbClass, err := qtx.CreateCharacterClass(context.Background(), database.CreateCharacterClassParams{
 				DataHash: generateDataHash(class),
 				Name:     class.Name,
+				Category: database.CharacterClassCategory(class.Category),
 			})
 			if err != nil {
 				return h.NewErr(class.Error(), err, "couldn't create character class")

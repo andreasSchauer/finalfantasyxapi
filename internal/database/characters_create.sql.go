@@ -205,21 +205,27 @@ func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams
 }
 
 const createCharacterClass = `-- name: CreateCharacterClass :one
-INSERT INTO character_classes (data_hash, name)
-VALUES ($1, $2)
+INSERT INTO character_classes (data_hash, name, category)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = character_classes.data_hash
-RETURNING id, data_hash, name
+RETURNING id, data_hash, name, category
 `
 
 type CreateCharacterClassParams struct {
 	DataHash string
 	Name     string
+	Category CharacterClassCategory
 }
 
 func (q *Queries) CreateCharacterClass(ctx context.Context, arg CreateCharacterClassParams) (CharacterClass, error) {
-	row := q.db.QueryRowContext(ctx, createCharacterClass, arg.DataHash, arg.Name)
+	row := q.db.QueryRowContext(ctx, createCharacterClass, arg.DataHash, arg.Name, arg.Category)
 	var i CharacterClass
-	err := row.Scan(&i.ID, &i.DataHash, &i.Name)
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Name,
+		&i.Category,
+	)
 	return i, err
 }
 

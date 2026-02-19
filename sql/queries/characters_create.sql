@@ -41,8 +41,8 @@ WHERE id = $4;
 
 
 -- name: CreateCharacterClass :one
-INSERT INTO character_classes (data_hash, name)
-VALUES ($1, $2)
+INSERT INTO character_classes (data_hash, name, category)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = character_classes.data_hash
 RETURNING *;
 

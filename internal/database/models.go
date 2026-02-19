@@ -758,6 +758,49 @@ func (ns NullCelestialFormula) Value() (driver.Value, error) {
 	return string(ns.CelestialFormula), nil
 }
 
+type CharacterClassCategory string
+
+const (
+	CharacterClassCategoryCharacter CharacterClassCategory = "character"
+	CharacterClassCategoryAeon      CharacterClassCategory = "aeon"
+	CharacterClassCategoryGroup     CharacterClassCategory = "group"
+)
+
+func (e *CharacterClassCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = CharacterClassCategory(s)
+	case string:
+		*e = CharacterClassCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for CharacterClassCategory: %T", src)
+	}
+	return nil
+}
+
+type NullCharacterClassCategory struct {
+	CharacterClassCategory CharacterClassCategory
+	Valid                  bool // Valid is true if CharacterClassCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullCharacterClassCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.CharacterClassCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.CharacterClassCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullCharacterClassCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.CharacterClassCategory), nil
+}
+
 type Composer string
 
 const (
@@ -2741,6 +2784,7 @@ type CharacterClass struct {
 	ID       int32
 	DataHash string
 	Name     string
+	Category CharacterClassCategory
 }
 
 type CompletionArea struct {

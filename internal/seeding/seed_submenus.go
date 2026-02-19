@@ -35,6 +35,13 @@ func (s Submenu) Error() string {
 	return fmt.Sprintf("submenu %s", s.Name)
 }
 
+func (s Submenu) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: s.ID,
+		Name: s.Name,
+	}
+}
+
 func (l *Lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "data/submenus.json"
 

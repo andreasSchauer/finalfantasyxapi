@@ -5,7 +5,6 @@ import (
 )
 
 // can be used for various other functions related to abilities
-// put into own file
 func createAbilityResource(cfg *Config, name string, version *int32, abilityType database.AbilityType) NamedAPIResource {
 	var res NamedAPIResource
 

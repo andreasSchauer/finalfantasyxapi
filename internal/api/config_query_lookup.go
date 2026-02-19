@@ -39,6 +39,7 @@ type QueryLookup struct {
 	areas             map[string]QueryType
 	blitzballPrizes   map[string]QueryType
 	characters		  map[string]QueryType
+	characterClasses  map[string]QueryType
 	fmvs              map[string]QueryType
 	locations         map[string]QueryType
 	monsters          map[string]QueryType
@@ -88,6 +89,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initAreasParams()
 	cfg.initArenaCreationsParams()
 	cfg.initBlitzballPrizesParams()
+	cfg.initCharacterClassesParams()
 	cfg.initCharactersParams()
 	cfg.initFMVsParams()
 	cfg.initMonstersParams()
@@ -362,6 +364,23 @@ func (cfg *Config) initCharactersParams() {
 
 	params = cfg.completeQueryTypeInit(params)
 	cfg.q.characters = params
+}
+
+func (cfg *Config) initCharacterClassesParams() {
+	params := map[string]QueryType{
+		"category": {
+			ID:          1,
+			Description: "Searches for character classes with the specified category.",
+			Usage:       "?category={name|id}",
+			ExampleUses: []string{"?category=group", "?category=2"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.CharacterClassCategory.lookup,
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.characterClasses = params
 }
 
 func (cfg *Config) initFMVsParams() {

@@ -15,7 +15,7 @@ type endpoints struct {
 	blitzballPrizes    handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList]
 	celestialWeapons   handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]
 	characters         handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]
-	characterClasses   handlerInput[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList]
+	characterClasses   handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]
 	elements           handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
 	equipment          handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
 	fmvs               handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
@@ -42,6 +42,7 @@ type endpoints struct {
 	stats              handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
 	statusConditions   handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
 	sublocations       handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
+	submenus		   handlerInput[seeding.Submenu, any, NamedAPIResource, NamedApiResourceList]
 	treasures          handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
 
 	connectionType           handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
@@ -188,13 +189,17 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc: 	cfg.retrieveCharacters,
 	}
 
-	e.characterClasses = handlerInput[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "character-classes",
-		resourceType:  "character class",
-		objLookup:     cfg.l.CharClasses,
-		objLookupID:   cfg.l.CharClassesID,
-		idToResFunc:   idToNamedAPIResource[seeding.CharacterClass, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+	e.characterClasses = handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      	"character-classes",
+		resourceType:  	"character class",
+		objLookup:     	cfg.l.CharClasses,
+		objLookupID:   	cfg.l.CharClassesID,
+		queryLookup: 	cfg.q.characterClasses,
+		idToResFunc:   	idToNamedAPIResource[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
+		retrieveQuery: 	cfg.db.GetCharacterClassesIDs,
+		getSingleFunc: 	cfg.getCharacterClass,
+		retrieveFunc: 	cfg.retrieveCharacterClasses,
 	}
 
 	e.connectionType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
@@ -622,6 +627,15 @@ func (cfg *Config) EndpointsInit() {
 				createSubFn: createTreasureSub,
 			},
 		},
+	}
+
+	e.submenus = handlerInput[seeding.Submenu, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint: 		"submenus",
+		resourceType: 	"submenu",
+		objLookup: 		cfg.l.Submenus,
+		objLookupID: 	cfg.l.SubmenusID,
+		idToResFunc: 	idToNamedAPIResource[seeding.Submenu, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
 	}
 
 	e.treasures = handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]{

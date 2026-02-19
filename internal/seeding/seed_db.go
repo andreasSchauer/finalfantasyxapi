@@ -215,14 +215,14 @@ func (l *Lookup) getSeeders() []seeder {
 			relFunc:  l.seedSubmenusRelationships,
 		},
 		{
-			name:     "generic abilities",
-			seedFunc: l.seedGenericAbilities,
-			relFunc:  l.seedGenericAbilitiesRelationships,
-		},
-		{
 			name:     "player abilities",
 			seedFunc: l.seedPlayerAbilities,
 			relFunc:  l.seedPlayerAbilitiesRelationships,
+		},
+		{
+			name:     "generic abilities",
+			seedFunc: l.seedGenericAbilities,
+			relFunc:  l.seedGenericAbilitiesRelationships,
 		},
 		{
 			name:     "enemy abilities",
