@@ -6,6 +6,7 @@ type expAeon struct {
 	expUnique
 	area				int32
 	battlesToRegen		int32
+	agility				AgilityParams
 	celestialWeapon		*int32
 	characterClasses	[]int32
 	baseStats			map[string]int32
@@ -24,6 +25,7 @@ func compareAeons(test test, exp expAeon, got Aeon) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
 	compare(test, "battles to regenerate", exp.battlesToRegen, got.BattlesToRegenerate)
+	compStructs(test, "agility params", exp.agility, got.AgilityParameters)
 	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.e.celestialWeapons.endpoint, exp.celestialWeapon, got.CelestialWeapon)
 	checkResIDsInSlice(test, "character classes", test.cfg.e.characterClasses.endpoint, exp.characterClasses, got.CharacterClasses)
 	checkResAmtsNameVals(test, "base stats", exp.baseStats, got.BaseStats)

@@ -36,6 +36,11 @@ func TestGetAeon(t *testing.T) {
 			},
 			area: 				115,
 			battlesToRegen: 	20,
+			agility: AgilityParams{
+				TickSpeed: 	15,
+				MinICV: 	h.GetInt32Ptr(43),
+				MaxICV: 	h.GetInt32Ptr(45),
+			},
 			celestialWeapon: 	h.GetInt32Ptr(5),
 			characterClasses: 	[]int32{2, 3, 15},
 			baseStats: map[string]int32{
@@ -109,6 +114,11 @@ func TestGetAeon(t *testing.T) {
 			},
 			area: 				210,
 			battlesToRegen: 	30,
+			agility: AgilityParams{
+				TickSpeed: 	10,
+				MinICV: 	h.GetInt32Ptr(26),
+				MaxICV: 	h.GetInt32Ptr(30),
+			},
 			celestialWeapon: 	nil,
 			characterClasses: 	[]int32{2, 4, 21},
 			baseStats: map[string]int32{
@@ -148,6 +158,11 @@ func TestGetAeon(t *testing.T) {
 			},
 			area: 				33,
 			battlesToRegen: 	8,
+			agility: AgilityParams{
+				TickSpeed: 	7,
+				MinICV: 	h.GetInt32Ptr(20),
+				MaxICV: 	h.GetInt32Ptr(21),
+			},
 			celestialWeapon: 	h.GetInt32Ptr(2),
 			characterClasses: 	[]int32{2, 3, 13},
 			baseStats: map[string]int32{
@@ -186,6 +201,11 @@ func TestGetAeon(t *testing.T) {
 			expUnique: expUnique{
 				id:		1,
 				name: 	"valefor",
+			},
+			agility: AgilityParams{
+				TickSpeed: 	7,
+				MinICV: 	h.GetInt32Ptr(20),
+				MaxICV: 	h.GetInt32Ptr(21),
 			},
 			baseStats: map[string]int32{
 				"hp": 				2225,

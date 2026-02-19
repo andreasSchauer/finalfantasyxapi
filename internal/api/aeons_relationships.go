@@ -58,6 +58,11 @@ func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon) (Aeon, error) {
 		return Aeon{}, err
 	}
 
+	aeon.AgilityParameters, err = getAeonAgilityParams(cfg, r, aeon)
+	if err != nil {
+		return Aeon{}, err
+	}
+
 	return aeon, nil
 }
 
@@ -182,4 +187,33 @@ func yStatCalc(stat string, yParameter float64, aVals, bVals, yuna map[string]fl
 		yStat = int32(yFloat)
 		return min(yStat, 255)
 	}
+}
+
+
+
+
+func getAeonAgilityParams(cfg *Config, r *http.Request, aeon Aeon) (AgilityParams, error) {
+	agilityTier, err := getAgilityTier(cfg, r, aeon.BaseStats)
+	if err != nil {
+		return AgilityParams{}, err
+	}
+	agilityStat := getBaseStat(cfg, "agility", aeon.BaseStats)
+	agility := agilityStat.Value
+
+	var minICV *int32
+
+	for _, subTier := range agilityTier.CharacterMinICVs {
+		if agility >= subTier.MinAgility && agility <= subTier.MaxAgility {
+			minICV = subTier.CharacterMinICV
+			break
+		}
+	}
+
+	agilityParams := AgilityParams{
+		TickSpeed: agilityTier.TickSpeed,
+		MinICV:    minICV,
+		MaxICV:    agilityTier.CharacterMaxICV,
+	}
+
+	return agilityParams, nil
 }

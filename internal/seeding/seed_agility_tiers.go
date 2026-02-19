@@ -31,6 +31,10 @@ func (a AgilityTier) ToHashFields() []any {
 	}
 }
 
+func (a AgilityTier) GetID() int32 {
+	return a.ID
+}
+
 func (a AgilityTier) Error() string {
 	return fmt.Sprintf("agility tier with min agility: %d, max agility: %d", a.MinAgility, a.MaxAgility)
 }
@@ -82,6 +86,7 @@ func (l *Lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			agilityTier.ID = dbAgilityTier.ID
+			l.AgilityTiersID[agilityTier.ID] = agilityTier
 
 			err = l.seedAgilitySubtiers(qtx, agilityTier)
 			if err != nil {

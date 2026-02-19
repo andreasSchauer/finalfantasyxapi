@@ -47,6 +47,7 @@ type Lookup struct {
 	AeonCommandsID       map[int32]AeonCommand
 	Affinities           map[string]Affinity
 	AffinitiesID         map[int32]Affinity
+	AgilityTiersID		 map[int32]AgilityTier
 	ArenaCreations       map[string]ArenaCreation
 	ArenaCreationsID     map[int32]ArenaCreation
 	Locations            map[string]Location
@@ -145,6 +146,7 @@ func lookupInit() Lookup {
 		AeonCommandsID:       make(map[int32]AeonCommand),
 		Affinities:           make(map[string]Affinity),
 		AffinitiesID:         make(map[int32]Affinity),
+		AgilityTiersID: 	  make(map[int32]AgilityTier),
 		ArenaCreations:       make(map[string]ArenaCreation),
 		ArenaCreationsID:     make(map[int32]ArenaCreation),
 		Locations:            make(map[string]Location),

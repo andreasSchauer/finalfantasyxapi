@@ -14,6 +14,7 @@ type Aeon struct {
 	PhysAtkRange        *int32          	`json:"phys_atk_range"`
 	PhysAtkShatterRate  *int32          	`json:"phys_atk_shatter_rate"`
 	PhysAtkAccuracy     *Accuracy       	`json:"phys_atk_accuracy"`
+	AgilityParameters	AgilityParams		`json:"agility_parameters"`
 	CelestialWeapon		*NamedAPIResource	`json:"celestial_weapon"`
 	CharacterClasses	[]NamedAPIResource	`json:"character_classes"`
 	BaseStats			[]BaseStat			`json:"base_stats"`

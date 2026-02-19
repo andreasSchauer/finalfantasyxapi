@@ -90,8 +90,3 @@ type BribeChance struct {
 	Chance int32 `json:"chance"`
 }
 
-type AgilityParams struct {
-	TickSpeed int32  `json:"tick_speed"`
-	MinICV    *int32 `json:"min_icv"`
-	MaxICV    *int32 `json:"max_icv"`
-}

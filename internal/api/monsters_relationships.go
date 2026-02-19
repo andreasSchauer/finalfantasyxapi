@@ -1,10 +1,8 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -101,27 +99,20 @@ func getMonsterPoisonDamage(cfg *Config, mon Monster) (*int32, error) {
 
 
 func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*AgilityParams, error) {
-	// first two parts are generic for agility params
-	// maybe change from returning a pointer to the actual struct
-	agilityStat := getBaseStat(cfg, "agility", mon.BaseStats)
-	agility := agilityStat.Value
-	if agility == 0 {
+	agilityTier, err := getAgilityTier(cfg, r, mon.BaseStats)
+	if err != nil {
+		return nil, err
+	}
+	if agilityTier.MinAgility == 0 {
 		return nil, nil
 	}
 
-	dbAgilityTier, err := cfg.db.GetAgilityTierByAgility(r.Context(), agility)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't extract agility parameters from %s.", mon.Error()), err)
-	}
-
-	// this is unique to monsters (characters have their own icvs)
 	agilityParams := AgilityParams{
-		TickSpeed: dbAgilityTier.TickSpeed,
-		MinICV:    h.NullInt32ToPtr(dbAgilityTier.MonsterMinIcv),
-		MaxICV:    h.NullInt32ToPtr(dbAgilityTier.MonsterMaxIcv),
+		TickSpeed: agilityTier.TickSpeed,
+		MinICV:    agilityTier.MonsterMinICV,
+		MaxICV:    agilityTier.MonsterMaxICV,
 	}
 
-	// this is unique to monsters (characters' icvs become 0)
 	fs := nameToNamedAPIResource(cfg, cfg.e.autoAbilities, "first strike", nil)
 	if resourcesContain(mon.AutoAbilities, fs) {
 		var fsICV int32 = -1
