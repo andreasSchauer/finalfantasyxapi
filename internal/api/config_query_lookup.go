@@ -360,6 +360,14 @@ func (cfg *Config) initCharactersParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
+		"underwater": {
+			ID:          2,
+			Description: "Searches for characters that can fight underwater.",
+			Usage:       "?underwater={bool}",
+			ExampleUses: []string{"?underwater=true", "?underwater=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
 	}
 
 	params = cfg.completeQueryTypeInit(params)

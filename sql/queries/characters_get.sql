@@ -62,6 +62,9 @@ SELECT id FROM characters ORDER BY id;
 SELECT id FROM characters WHERE story_only = $1 ORDER BY id;
 
 
+-- name: GetCharacterIDsCanFightUnderwater :many
+SELECT id FROM characters WHERE can_fight_underwater = $1 ORDER BY id;
+
 
 
 

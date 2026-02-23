@@ -601,6 +601,33 @@ func (q *Queries) GetCharacterIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getCharacterIDsCanFightUnderwater = `-- name: GetCharacterIDsCanFightUnderwater :many
+SELECT id FROM characters WHERE can_fight_underwater = $1 ORDER BY id
+`
+
+func (q *Queries) GetCharacterIDsCanFightUnderwater(ctx context.Context, canFightUnderwater bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterIDsCanFightUnderwater, canFightUnderwater)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getCharacterIDsStoryOnly = `-- name: GetCharacterIDsStoryOnly :many
 SELECT id FROM characters WHERE story_only = $1 ORDER BY id
 `

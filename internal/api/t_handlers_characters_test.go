@@ -209,6 +209,14 @@ func TestRetrieveCharacters(t *testing.T) {
 			count:   1,
 			results: []int32{8},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/characters?underwater=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{1, 3, 7},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.characters.endpoint, "RetrieveCharacters", testCfg.HandleCharacters, compareAPIResourceLists[NamedApiResourceList])

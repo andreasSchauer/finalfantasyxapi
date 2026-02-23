@@ -48,5 +48,6 @@ func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Ch
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(boolQuery(cfg, r, i, resources, "story_based", cfg.db.GetCharacterIDsStoryOnly)),
+		frl(boolQuery(cfg, r, i, resources, "underwater", cfg.db.GetCharacterIDsCanFightUnderwater)),
 	})
 }
