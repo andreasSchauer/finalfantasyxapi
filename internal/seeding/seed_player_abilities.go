@@ -19,6 +19,7 @@ type PlayerAbility struct {
 	Description         *string             `json:"description"`
 	Effect              string              `json:"effect"`
 	RelatedStats        []string            `json:"related_stats"`
+	Category			string				`json:"category"`
 	Topmenu             *string             `json:"topmenu"`
 	Submenu             *string             `json:"submenu"`
 	OpenSubmenu         *string             `json:"open_submenu"`
@@ -37,6 +38,7 @@ func (p PlayerAbility) ToHashFields() []any {
 		p.Ability.ID,
 		h.DerefOrNil(p.Description),
 		p.Effect,
+		p.Category,
 		h.DerefOrNil(p.Topmenu),
 		p.CanUseOutsideBattle,
 		h.DerefOrNil(p.MPCost),
@@ -106,6 +108,7 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 				AbilityID:           playerAbility.Ability.ID,
 				Description:         h.GetNullString(playerAbility.Description),
 				Effect:              playerAbility.Effect,
+				Category: 			 database.PlayerAbilityCategory(playerAbility.Category),
 				Topmenu:             h.NullTopmenuType(playerAbility.Topmenu),
 				CanUseOutsideBattle: playerAbility.CanUseOutsideBattle,
 				MpCost:              h.GetNullInt32(playerAbility.MPCost),

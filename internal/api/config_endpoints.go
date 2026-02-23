@@ -26,7 +26,7 @@ type endpoints struct {
 	overdriveCommands  handlerInput[seeding.OverdriveCommand, any, NamedAPIResource, NamedApiResourceList]
 	overdriveModes     handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
 	overdrives         handlerInput[seeding.Overdrive, any, NamedAPIResource, NamedApiResourceList]
-	genericAbilities   handlerInput[seeding.GenericAbility, any, NamedAPIResource, NamedApiResourceList]
+	otherAbilities     handlerInput[seeding.OtherAbility, any, NamedAPIResource, NamedApiResourceList]
 	playerAbilities    handlerInput[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList]
 	enemyAbilities     handlerInput[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList]
 	itemAbilities      handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]
@@ -429,12 +429,12 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newTypedAPIResourceList,
 	}
 
-	e.genericAbilities = handlerInput[seeding.GenericAbility, any, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "generic-abilities",
+	e.otherAbilities = handlerInput[seeding.OtherAbility, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      "other-abilities",
 		resourceType:  "generic ability",
-		objLookup:     cfg.l.GenericAbilities,
-		objLookupID:   cfg.l.GenericAbilitiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.GenericAbility, any, NamedAPIResource, NamedApiResourceList],
+		objLookup:     cfg.l.OtherAbilities,
+		objLookupID:   cfg.l.OtherAbilitiesID,
+		idToResFunc:   idToNamedAPIResource[seeding.OtherAbility, any, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 

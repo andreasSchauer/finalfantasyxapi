@@ -2,8 +2,8 @@ package seeding
 
 import (
 	"database/sql"
-	"path/filepath"
 	"fmt"
+	"path/filepath"
 	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -22,10 +22,9 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	const migrationsDir = "sql/schema/"
 	fullPath := filepath.Join(root, migrationsDir)
-
 
 	start := time.Now()
 
@@ -221,8 +220,8 @@ func (l *Lookup) getSeeders() []seeder {
 		},
 		{
 			name:     "generic abilities",
-			seedFunc: l.seedGenericAbilities,
-			relFunc:  l.seedGenericAbilitiesRelationships,
+			seedFunc: l.seedotherAbilities,
+			relFunc:  l.seedotherAbilitiesRelationships,
 		},
 		{
 			name:     "enemy abilities",

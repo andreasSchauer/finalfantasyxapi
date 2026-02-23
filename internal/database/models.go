@@ -57,7 +57,7 @@ func (ns NullAaActivationCondition) Value() (driver.Value, error) {
 type AbilityType string
 
 const (
-	AbilityTypeGenericAbility   AbilityType = "generic-ability"
+	AbilityTypeOtherAbility     AbilityType = "other-ability"
 	AbilityTypePlayerAbility    AbilityType = "player-ability"
 	AbilityTypeEnemyAbility     AbilityType = "enemy-ability"
 	AbilityTypeOverdriveAbility AbilityType = "overdrive-ability"
@@ -2159,6 +2159,51 @@ func (ns NullOverdriveModeType) Value() (driver.Value, error) {
 	return string(ns.OverdriveModeType), nil
 }
 
+type PlayerAbilityCategory string
+
+const (
+	PlayerAbilityCategorySkill      PlayerAbilityCategory = "skill"
+	PlayerAbilityCategorySpecial    PlayerAbilityCategory = "special"
+	PlayerAbilityCategoryWhiteMagic PlayerAbilityCategory = "white-magic"
+	PlayerAbilityCategoryBlackMagic PlayerAbilityCategory = "black-magic"
+	PlayerAbilityCategoryAeon       PlayerAbilityCategory = "aeon"
+)
+
+func (e *PlayerAbilityCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = PlayerAbilityCategory(s)
+	case string:
+		*e = PlayerAbilityCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for PlayerAbilityCategory: %T", src)
+	}
+	return nil
+}
+
+type NullPlayerAbilityCategory struct {
+	PlayerAbilityCategory PlayerAbilityCategory
+	Valid                 bool // Valid is true if PlayerAbilityCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullPlayerAbilityCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.PlayerAbilityCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.PlayerAbilityCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullPlayerAbilityCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.PlayerAbilityCategory), nil
+}
+
 type QuestType string
 
 const (
@@ -2936,18 +2981,6 @@ type FoundEquipmentPiece struct {
 	EmptySlotsAmount interface{}
 }
 
-type GenericAbility struct {
-	ID            int32
-	DataHash      string
-	AbilityID     int32
-	Description   sql.NullString
-	Effect        string
-	Topmenu       NullTopmenuType
-	Cursor        NullTargetType
-	SubmenuID     sql.NullInt32
-	OpenSubmenuID sql.NullInt32
-}
-
 type InflictedDelay struct {
 	ID             int32
 	DataHash       string
@@ -3254,20 +3287,6 @@ type JFoundEquipmentAbility struct {
 	AutoAbilityID    int32
 }
 
-type JGenericAbilitiesLearnedBy struct {
-	ID               int32
-	DataHash         string
-	GenericAbilityID int32
-	CharacterClassID int32
-}
-
-type JGenericAbilitiesRelatedStat struct {
-	ID               int32
-	DataHash         string
-	GenericAbilityID int32
-	StatID           int32
-}
-
 type JItemsAvailableMenu struct {
 	ID        int32
 	DataHash  string
@@ -3379,6 +3398,20 @@ type JMonstersStatusResist struct {
 	DataHash       string
 	MonsterID      int32
 	StatusResistID int32
+}
+
+type JOtherAbilitiesLearnedBy struct {
+	ID               int32
+	DataHash         string
+	OtherAbilityID   int32
+	CharacterClassID int32
+}
+
+type JOtherAbilitiesRelatedStat struct {
+	ID             int32
+	DataHash       string
+	OtherAbilityID int32
+	StatID         int32
 }
 
 type JOverdriveAbilitiesRelatedStat struct {
@@ -3692,6 +3725,18 @@ type OdModeAction struct {
 	Amount   int32
 }
 
+type OtherAbility struct {
+	ID            int32
+	DataHash      string
+	AbilityID     int32
+	Description   sql.NullString
+	Effect        string
+	Topmenu       NullTopmenuType
+	Cursor        NullTargetType
+	SubmenuID     sql.NullInt32
+	OpenSubmenuID sql.NullInt32
+}
+
 type Overdrife struct {
 	ID               int32
 	DataHash         string
@@ -3741,6 +3786,7 @@ type PlayerAbility struct {
 	AbilityID           int32
 	Description         sql.NullString
 	Effect              string
+	Category            PlayerAbilityCategory
 	Topmenu             NullTopmenuType
 	CanUseOutsideBattle bool
 	MpCost              sql.NullInt32

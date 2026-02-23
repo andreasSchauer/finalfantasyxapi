@@ -122,48 +122,14 @@ func (q *Queries) CreateEnemyAbility(ctx context.Context, arg CreateEnemyAbility
 	return i, err
 }
 
-const createGenericAbilitiesLearnedByJunction = `-- name: CreateGenericAbilitiesLearnedByJunction :exec
-INSERT INTO j_generic_abilities_learned_by (data_hash, generic_ability_id, character_class_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateGenericAbilitiesLearnedByJunctionParams struct {
-	DataHash         string
-	GenericAbilityID int32
-	CharacterClassID int32
-}
-
-func (q *Queries) CreateGenericAbilitiesLearnedByJunction(ctx context.Context, arg CreateGenericAbilitiesLearnedByJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createGenericAbilitiesLearnedByJunction, arg.DataHash, arg.GenericAbilityID, arg.CharacterClassID)
-	return err
-}
-
-const createGenericAbilitiesRelatedStatsJunction = `-- name: CreateGenericAbilitiesRelatedStatsJunction :exec
-INSERT INTO j_generic_abilities_related_stats (data_hash, generic_ability_id, stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateGenericAbilitiesRelatedStatsJunctionParams struct {
-	DataHash         string
-	GenericAbilityID int32
-	StatID           int32
-}
-
-func (q *Queries) CreateGenericAbilitiesRelatedStatsJunction(ctx context.Context, arg CreateGenericAbilitiesRelatedStatsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createGenericAbilitiesRelatedStatsJunction, arg.DataHash, arg.GenericAbilityID, arg.StatID)
-	return err
-}
-
-const createGenericAbility = `-- name: CreateGenericAbility :one
-INSERT INTO generic_abilities (data_hash, ability_id, description, effect, topmenu, cursor)
+const createOtherAbility = `-- name: CreateOtherAbility :one
+INSERT INTO other_abilities (data_hash, ability_id, description, effect, topmenu, cursor)
 VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = generic_abilities.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = other_abilities.data_hash
 RETURNING id, data_hash, ability_id, description, effect, topmenu, cursor, submenu_id, open_submenu_id
 `
 
-type CreateGenericAbilityParams struct {
+type CreateOtherAbilityParams struct {
 	DataHash    string
 	AbilityID   int32
 	Description sql.NullString
@@ -172,8 +138,8 @@ type CreateGenericAbilityParams struct {
 	Cursor      NullTargetType
 }
 
-func (q *Queries) CreateGenericAbility(ctx context.Context, arg CreateGenericAbilityParams) (GenericAbility, error) {
-	row := q.db.QueryRowContext(ctx, createGenericAbility,
+func (q *Queries) CreateOtherAbility(ctx context.Context, arg CreateOtherAbilityParams) (OtherAbility, error) {
+	row := q.db.QueryRowContext(ctx, createOtherAbility,
 		arg.DataHash,
 		arg.AbilityID,
 		arg.Description,
@@ -181,7 +147,7 @@ func (q *Queries) CreateGenericAbility(ctx context.Context, arg CreateGenericAbi
 		arg.Topmenu,
 		arg.Cursor,
 	)
-	var i GenericAbility
+	var i OtherAbility
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
@@ -336,10 +302,10 @@ func (q *Queries) CreatePlayerAbilitiesRelatedStatsJunction(ctx context.Context,
 }
 
 const createPlayerAbility = `-- name: CreatePlayerAbility :one
-INSERT INTO player_abilities (data_hash, ability_id, description, effect, topmenu, can_use_outside_battle, mp_cost, cursor)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, topmenu, can_use_outside_battle, mp_cost, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = player_abilities.data_hash
-RETURNING id, data_hash, ability_id, description, effect, topmenu, can_use_outside_battle, mp_cost, cursor, submenu_id, open_submenu_id, standard_grid_char_id, expert_grid_char_id, aeon_learn_item_id
+RETURNING id, data_hash, ability_id, description, effect, category, topmenu, can_use_outside_battle, mp_cost, cursor, submenu_id, open_submenu_id, standard_grid_char_id, expert_grid_char_id, aeon_learn_item_id
 `
 
 type CreatePlayerAbilityParams struct {
@@ -347,6 +313,7 @@ type CreatePlayerAbilityParams struct {
 	AbilityID           int32
 	Description         sql.NullString
 	Effect              string
+	Category            PlayerAbilityCategory
 	Topmenu             NullTopmenuType
 	CanUseOutsideBattle bool
 	MpCost              sql.NullInt32
@@ -359,6 +326,7 @@ func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbili
 		arg.AbilityID,
 		arg.Description,
 		arg.Effect,
+		arg.Category,
 		arg.Topmenu,
 		arg.CanUseOutsideBattle,
 		arg.MpCost,
@@ -371,6 +339,7 @@ func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbili
 		&i.AbilityID,
 		&i.Description,
 		&i.Effect,
+		&i.Category,
 		&i.Topmenu,
 		&i.CanUseOutsideBattle,
 		&i.MpCost,
@@ -458,23 +427,57 @@ func (q *Queries) CreateTriggerCommandsRelatedStatsJunction(ctx context.Context,
 	return err
 }
 
-const updateGenericAbility = `-- name: UpdateGenericAbility :exec
-UPDATE generic_abilities
+const createotherAbilitiesLearnedByJunction = `-- name: CreateotherAbilitiesLearnedByJunction :exec
+INSERT INTO j_other_abilities_learned_by (data_hash, other_ability_id, character_class_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateotherAbilitiesLearnedByJunctionParams struct {
+	DataHash         string
+	OtherAbilityID   int32
+	CharacterClassID int32
+}
+
+func (q *Queries) CreateotherAbilitiesLearnedByJunction(ctx context.Context, arg CreateotherAbilitiesLearnedByJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createotherAbilitiesLearnedByJunction, arg.DataHash, arg.OtherAbilityID, arg.CharacterClassID)
+	return err
+}
+
+const createotherAbilitiesRelatedStatsJunction = `-- name: CreateotherAbilitiesRelatedStatsJunction :exec
+INSERT INTO j_other_abilities_related_stats (data_hash, other_ability_id, stat_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateotherAbilitiesRelatedStatsJunctionParams struct {
+	DataHash       string
+	OtherAbilityID int32
+	StatID         int32
+}
+
+func (q *Queries) CreateotherAbilitiesRelatedStatsJunction(ctx context.Context, arg CreateotherAbilitiesRelatedStatsJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createotherAbilitiesRelatedStatsJunction, arg.DataHash, arg.OtherAbilityID, arg.StatID)
+	return err
+}
+
+const updateOtherAbility = `-- name: UpdateOtherAbility :exec
+UPDATE other_abilities
 SET data_hash = $1,
     submenu_id = $2,
     open_submenu_id = $3
 WHERE id = $4
 `
 
-type UpdateGenericAbilityParams struct {
+type UpdateOtherAbilityParams struct {
 	DataHash      string
 	SubmenuID     sql.NullInt32
 	OpenSubmenuID sql.NullInt32
 	ID            int32
 }
 
-func (q *Queries) UpdateGenericAbility(ctx context.Context, arg UpdateGenericAbilityParams) error {
-	_, err := q.db.ExecContext(ctx, updateGenericAbility,
+func (q *Queries) UpdateOtherAbility(ctx context.Context, arg UpdateOtherAbilityParams) error {
+	_, err := q.db.ExecContext(ctx, updateOtherAbility,
 		arg.DataHash,
 		arg.SubmenuID,
 		arg.OpenSubmenuID,

@@ -12,15 +12,15 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_attributes.data_hash
 RETURNING *;
 
 
--- name: CreateGenericAbility :one
-INSERT INTO generic_abilities (data_hash, ability_id, description, effect, topmenu, cursor)
+-- name: CreateOtherAbility :one
+INSERT INTO other_abilities (data_hash, ability_id, description, effect, topmenu, cursor)
 VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = generic_abilities.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = other_abilities.data_hash
 RETURNING *;
 
 
--- name: UpdateGenericAbility :exec
-UPDATE generic_abilities
+-- name: UpdateOtherAbility :exec
+UPDATE other_abilities
 SET data_hash = $1,
     submenu_id = $2,
     open_submenu_id = $3
@@ -28,8 +28,8 @@ WHERE id = $4;
 
 
 -- name: CreatePlayerAbility :one
-INSERT INTO player_abilities (data_hash, ability_id, description, effect, topmenu, can_use_outside_battle, mp_cost, cursor)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, topmenu, can_use_outside_battle, mp_cost, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = player_abilities.data_hash
 RETURNING *;
 
@@ -45,14 +45,14 @@ SET data_hash = $1,
 WHERE id = $7;
 
 
--- name: CreateGenericAbilitiesRelatedStatsJunction :exec
-INSERT INTO j_generic_abilities_related_stats (data_hash, generic_ability_id, stat_id)
+-- name: CreateotherAbilitiesRelatedStatsJunction :exec
+INSERT INTO j_other_abilities_related_stats (data_hash, other_ability_id, stat_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateGenericAbilitiesLearnedByJunction :exec
-INSERT INTO j_generic_abilities_learned_by (data_hash, generic_ability_id, character_class_id)
+-- name: CreateotherAbilitiesLearnedByJunction :exec
+INSERT INTO j_other_abilities_learned_by (data_hash, other_ability_id, character_class_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

@@ -1,5 +1,8 @@
 -- +goose Up
-CREATE TYPE ability_type AS ENUM ('generic-ability', 'player-ability', 'enemy-ability', 'overdrive-ability', 'trigger-command', 'item-ability');
+CREATE TYPE ability_type AS ENUM ('other-ability', 'player-ability', 'enemy-ability', 'overdrive-ability', 'trigger-command', 'item-ability');
+
+
+CREATE TYPE player_ability_category AS ENUM ('skill', 'special', 'white-magic', 'black-magic', 'aeon');
 
 
 CREATE TABLE ability_attributes (
@@ -29,7 +32,7 @@ CREATE TABLE abilities (
 );
 
 
-CREATE TABLE generic_abilities (
+CREATE TABLE other_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     ability_id INTEGER UNIQUE NOT NULL REFERENCES abilities(id),
@@ -46,6 +49,7 @@ CREATE TABLE player_abilities (
     ability_id INTEGER UNIQUE NOT NULL REFERENCES abilities(id),
     description TEXT,
     effect TEXT NOT NULL,
+    category player_ability_category NOT NULL,
     topmenu topmenu_type,
     can_use_outside_battle BOOLEAN NOT NULL,
     mp_cost INTEGER,
@@ -111,7 +115,8 @@ DROP TABLE IF EXISTS trigger_commands;
 DROP TABLE IF EXISTS overdrive_abilities;
 DROP TABLE IF EXISTS enemy_abilities;
 DROP TABLE IF EXISTS player_abilities;
-DROP TABLE IF EXISTS generic_abilities;
+DROP TABLE IF EXISTS other_abilities;
 DROP TABLE IF EXISTS abilities;
 DROP TABLE IF EXISTS ability_attributes;
+DROP TYPE IF EXISTS player_ability_category;
 DROP TYPE IF EXISTS ability_type;

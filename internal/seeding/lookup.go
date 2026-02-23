@@ -31,23 +31,23 @@ type Lookup struct {
 	AbilitiesID          map[int32]Ability
 	EnemyAbilities       map[string]EnemyAbility
 	EnemyAbilitiesID     map[int32]EnemyAbility
-	GenericAbilities	 map[string]GenericAbility
-	GenericAbilitiesID	 map[int32]GenericAbility
+	OtherAbilities       map[string]OtherAbility
+	OtherAbilitiesID     map[int32]OtherAbility
 	OverdriveAbilities   map[string]OverdriveAbility
 	OverdriveAbilitiesID map[int32]OverdriveAbility
 	PlayerAbilities      map[string]PlayerAbility
 	PlayerAbilitiesID    map[int32]PlayerAbility
 	TriggerCommands      map[string]TriggerCommand
 	TriggerCommandsID    map[int32]TriggerCommand
-	PlayerUnits			 map[string]PlayerUnit
-	PlayerUnitsID		 map[int32]PlayerUnit
+	PlayerUnits          map[string]PlayerUnit
+	PlayerUnitsID        map[int32]PlayerUnit
 	Aeons                map[string]Aeon
 	AeonsID              map[int32]Aeon
 	AeonCommands         map[string]AeonCommand
 	AeonCommandsID       map[int32]AeonCommand
 	Affinities           map[string]Affinity
 	AffinitiesID         map[int32]Affinity
-	AgilityTiersID		 map[int32]AgilityTier
+	AgilityTiersID       map[int32]AgilityTier
 	ArenaCreations       map[string]ArenaCreation
 	ArenaCreationsID     map[int32]ArenaCreation
 	Locations            map[string]Location
@@ -73,7 +73,7 @@ type Lookup struct {
 	EquipmentTables      map[string]EquipmentTable
 	EquipmentTablesID    map[int32]EquipmentTable
 	EncounterAreas       map[string]EncounterArea
-	EncounterAreasID 	 map[int32]EncounterArea
+	EncounterAreasID     map[int32]EncounterArea
 	FMVs                 map[string]FMV
 	FMVsID               map[int32]FMV
 	Items                map[string]Item
@@ -128,8 +128,8 @@ func lookupInit() Lookup {
 	return Lookup{
 		Abilities:            make(map[string]Ability),
 		AbilitiesID:          make(map[int32]Ability),
-		GenericAbilities: 	  make(map[string]GenericAbility),
-		GenericAbilitiesID:   make(map[int32]GenericAbility),
+		OtherAbilities:       make(map[string]OtherAbility),
+		OtherAbilitiesID:     make(map[int32]OtherAbility),
 		EnemyAbilities:       make(map[string]EnemyAbility),
 		EnemyAbilitiesID:     make(map[int32]EnemyAbility),
 		OverdriveAbilities:   make(map[string]OverdriveAbility),
@@ -138,15 +138,15 @@ func lookupInit() Lookup {
 		PlayerAbilitiesID:    make(map[int32]PlayerAbility),
 		TriggerCommands:      make(map[string]TriggerCommand),
 		TriggerCommandsID:    make(map[int32]TriggerCommand),
-		PlayerUnits:		  make(map[string]PlayerUnit),
-		PlayerUnitsID: 		  make(map[int32]PlayerUnit),
+		PlayerUnits:          make(map[string]PlayerUnit),
+		PlayerUnitsID:        make(map[int32]PlayerUnit),
 		Aeons:                make(map[string]Aeon),
 		AeonsID:              make(map[int32]Aeon),
 		AeonCommands:         make(map[string]AeonCommand),
 		AeonCommandsID:       make(map[int32]AeonCommand),
 		Affinities:           make(map[string]Affinity),
 		AffinitiesID:         make(map[int32]Affinity),
-		AgilityTiersID: 	  make(map[int32]AgilityTier),
+		AgilityTiersID:       make(map[int32]AgilityTier),
 		ArenaCreations:       make(map[string]ArenaCreation),
 		ArenaCreationsID:     make(map[int32]ArenaCreation),
 		Locations:            make(map[string]Location),
@@ -172,7 +172,7 @@ func lookupInit() Lookup {
 		EquipmentTables:      make(map[string]EquipmentTable),
 		EquipmentTablesID:    make(map[int32]EquipmentTable),
 		EncounterAreas:       make(map[string]EncounterArea),
-		EncounterAreasID: make(map[int32]EncounterArea),
+		EncounterAreasID:     make(map[int32]EncounterArea),
 		FMVs:                 make(map[string]FMV),
 		FMVsID:               make(map[int32]FMV),
 		Items:                make(map[string]Item),
@@ -235,7 +235,6 @@ func GetResource[T any, K any](key K, lookup map[string]T) (T, error) {
 		return zeroType, fmt.Errorf("key must be either string or Lookupable, got %T", key)
 	}
 }
-
 
 func GetResourceByID[T h.HasID](id int32, lookup map[int32]T) (T, error) {
 	resource, found := lookup[id]
