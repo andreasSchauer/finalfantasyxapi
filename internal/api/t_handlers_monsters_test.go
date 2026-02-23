@@ -81,49 +81,56 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/169?kimahri_stats=hp-1000",
+				requestURL:     "/api/monsters/169?kimahri_stats=hp=1000",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id '169'. parameter 'kimahri_stats' can only be used with ids: '167', '168'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/168?kimahri_stats=hp-100000",
+				requestURL:     "/api/monsters/168?kimahri_stats=hp=100000",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "hp in 'kimahri_stats' can't be higher than 99999.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/167?kimahri_stats=defense-5",
+				requestURL:     "/api/monsters/168?kimahri_stats=hp-3000,strength=255",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid input for parameter 'kimahri_stats': 'hp-3000' . usage: '?kimahri_stats={stat}={int},...'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/167?kimahri_stats=defense=5",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid stat 'defense' in 'kimahri_stats'. 'kimahri_stats' only uses 'hp', 'strength', 'magic', 'agility'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/1?aeon_stats=hp-200",
+				requestURL:     "/api/monsters/1?aeon_stats=hp=200",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id '1'. parameter 'aeon_stats' can only be used with ids: '216', '217', '218', '219', '220', '221', '222', '223', '224', '225'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/216?aeon_stats=mp-300",
+				requestURL:     "/api/monsters/216?aeon_stats=mp=300",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid stat 'mp' in 'aeon_stats'. 'aeon_stats' only uses 'hp', 'strength', 'defense', 'magic', 'magic defense', 'agility', 'evasion', 'accuracy'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/216?aeon_stats=hp-999999",
+				requestURL:     "/api/monsters/216?aeon_stats=hp=999999",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "hp in 'aeon_stats' can't be higher than 99999.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/216?aeon_stats=evasion-999999",
+				requestURL:     "/api/monsters/216?aeon_stats=evasion=999999",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "evasion in 'aeon_stats' can't be higher than 255.",
 			},
@@ -777,7 +784,7 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/biran_ronso?kimahri_stats=hP-1000,strEngth-255,mAgic-255,agIlity-255",
+				requestURL:     "/api/monsters/biran_ronso?kimahri_stats=hP=1000,strEngth=255,mAgic=255,agIlity=255",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"species":           true,
@@ -815,7 +822,7 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp-3500,strength-35,magic-45,agility-28",
+				requestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp=3500,strength=35,magic=45,agility=28",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"species":           true,
@@ -853,7 +860,7 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp-1500",
+				requestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp=1500",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"species":           true,
@@ -889,7 +896,7 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/216?aeon_stats=hp-200,strength-235,agility-68,evasion-2,accuracy-150,defense-46,magic-188,magic_defense-2",
+				requestURL:     "/api/monsters/216?aeon_stats=hp=200,strength=235,agility=68,evasion=2,accuracy=150,defense=46,magic=188,magic_defense=2",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"species":           true,
@@ -1017,7 +1024,14 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental_resists=weak",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input for parameter 'elemental_resists'. usage: '?elemental_resists={element|id}-{affinity|id},...'.",
+				expectedErr:    "invalid input for parameter 'elemental_resists': 'weak'. usage: '?elemental_resists={element|id}={affinity|id},...'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?elemental_resists=fire-weak,water=absorb",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid input for parameter 'elemental_resists': 'fire-weak'. usage: '?elemental_resists={element|id}={affinity|id},...'.",
 			},
 		},
 		{
@@ -1029,14 +1043,14 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?elemental_resists=weak-fire",
+				requestURL:     "/api/monsters?elemental_resists=weak=fire",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "unknown element 'weak' used for parameter 'elemental_resists'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?elemental_resists=fire-weak,fire-neutral",
+				requestURL:     "/api/monsters?elemental_resists=fire=weak,fire=neutral",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "duplicate use of id '1' for parameter 'elemental_resists'. each element can only be used once.",
 			},
@@ -1123,7 +1137,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?elemental_resists=FIre-weAk,water-neutral",
+				requestURL:     "/api/monsters?elemental_resists=FIre=weAk,water=neutral",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"next": true,

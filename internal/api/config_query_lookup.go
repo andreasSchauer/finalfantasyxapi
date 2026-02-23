@@ -139,8 +139,8 @@ func (cfg *Config) initAeonsParams() {
 		"yuna_stats": {
 			ID:          2,
 			Description: "Calculate an aeon's stats based on Yuna's stats. If a stat is not given, Yuna's respective default stat is used instead. Every stat instead of luck is available, since an aeon simply copies Yuna's luck stat. Can be used in combination with the 'battles' parameter.",
-			Usage:       "?yuna_stats={stat}-{int},...",
-			ExampleUses: []string{"?yuna_stats=hp-3000,strength-75,defense-50,magic-30,agility-20", "?yuna_stats=accuracy-150,magic_defense-255"},
+			Usage:       "?yuna_stats={stat}={int},...",
+			ExampleUses: []string{"?yuna_stats=hp=3000,strength=75,defense=50,magic=30,agility=20", "?yuna_stats=accuracy=150,magic_defense=255"},
 			ForList:     false,
 			ForSingle:   true,
 		},
@@ -413,8 +413,8 @@ func (cfg *Config) initMonstersParams() {
 		"kimahri_stats": {
 			ID:          1,
 			Description: "Calculate the stats of Biran and Yenke Ronso that are based on Kimahri's stats. These are: HP, strength, magic, agility. If unused, their stats are based on Kimahri's base stats.",
-			Usage:       "?kimahri_stats={stat}-{int},...",
-			ExampleUses: []string{"?kimahri_stats=hp-3000,strength-25,magic-30,agility-40", "?kimahri_stats=hp15000,agility-255"},
+			Usage:       "?kimahri_stats={stat}={int},...",
+			ExampleUses: []string{"?kimahri_stats=hp=3000,strength=25,magic=30,agility=40", "?kimahri_stats=hp=15000,agility=255"},
 			ForList:     false,
 			ForSingle:   true,
 			AllowedIDs:  []int32{167, 168},
@@ -422,8 +422,8 @@ func (cfg *Config) initMonstersParams() {
 		"aeon_stats": {
 			ID:          2,
 			Description: "Replace the stats of Possessed Aeons with your own. All stats are replaceable, except for MP and luck. If unused, their stats are based on your own Aeon's base stats.",
-			Usage:       "?aeon_stats={stat}-{int},...",
-			ExampleUses: []string{"?aeon_stats=hp-3000,strength-75,defense-50,magic-30,agility-20", "?aeon_stats=accuracy-150,magic_defense-255"},
+			Usage:       "?aeon_stats={stat}={int},...",
+			ExampleUses: []string{"?aeon_stats=hp=3000,strength=75,defense=50,magic=30,agility=20", "?aeon_stats=accuracy=150,magic_defense=255"},
 			ForList:     false,
 			ForSingle:   true,
 			AllowedIDs:  []int32{216, 217, 218, 219, 220, 221, 222, 223, 224, 225},
@@ -449,8 +449,8 @@ func (cfg *Config) initMonstersParams() {
 		"elemental_resists": {
 			ID:          5,
 			Description: "Searches for monsters that have the specified elemental affinities.",
-			Usage:       "?elemental_resists={element|id}-{affinity|id},...",
-			ExampleUses: []string{"?elemental_resists=fire-weak,water-absorb", "?elemental_resists=1-3,2-4"},
+			Usage:       "?elemental_resists={element|id}={affinity|id},...",
+			ExampleUses: []string{"?elemental_resists=fire=weak,water=absorb", "?elemental_resists=1=3,2=4"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements"), createListURL(cfg, "affinities")},

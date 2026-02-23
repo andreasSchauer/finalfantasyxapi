@@ -31,12 +31,12 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32,
 	elemMap := make(map[int32]bool)
 
 	for _, pair := range eaPairs {
-		parts := strings.Split(pair, "-")
-		if len(parts) != 2 {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s'. usage: '%s'.", queryParam.Name, queryParam.Usage), nil)
+		element, affinity, found := strings.Cut(pair, "=")
+		if !found {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, element, queryParam.Usage), nil)
 		}
 
-		elementID, err := parseQueryNamedVal(parts[0], cfg.e.elements.resourceType, queryParam, cfg.l.Elements)
+		elementID, err := parseQueryNamedVal(element, cfg.e.elements.resourceType, queryParam, cfg.l.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -45,7 +45,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32,
 		}
 		elemMap[elementID] = true
 
-		affinityID, err := parseQueryNamedVal(parts[1], cfg.e.affinities.resourceType, queryParam, cfg.l.Affinities)
+		affinityID, err := parseQueryNamedVal(affinity, cfg.e.affinities.resourceType, queryParam, cfg.l.Affinities)
 		if err != nil {
 			return nil, err
 		}

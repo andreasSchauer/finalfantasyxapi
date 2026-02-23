@@ -93,7 +93,7 @@ func TestGetAeon(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/9?battles=347&yuna_stats=strength-24",
+				requestURL:     "/api/aeons/9?battles=347&yuna_stats=strength=24",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{
 					"weapon abilities": true,
@@ -139,7 +139,7 @@ func TestGetAeon(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/1?yuna_stats=hp-2000,mp-250,strength-10,defense-28,magic-72,magic_defense-50,agility-41,luck-25,evasion-30,accuracy-15",
+				requestURL:     "/api/aeons/1?yuna_stats=hp=2000,mp=250,strength=10,defense=28,magic=72,magic_defense=50,agility=41,luck=25,evasion=30,accuracy=15",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{
 					"weapon abilities": true,
@@ -183,7 +183,7 @@ func TestGetAeon(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/1?yuna_stats=hp-2000,mp-250,strength-10,defense-28,magic-72,magic_defense-50,agility-41,luck-25,evasion-30,accuracy-15&battles=600",
+				requestURL:     "/api/aeons/1?yuna_stats=hp=2000,mp=250,strength=10,defense=28,magic=72,magic_defense=50,agility=41,luck=25,evasion=30,accuracy=15&battles=600",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{
 					"area": 					true,

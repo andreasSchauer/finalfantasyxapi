@@ -35,13 +35,10 @@ func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryType, baseStat
 }
 
 func parseStatPair(cfg *Config, pair string, queryParam QueryType, allowedStatIDs []int32) (string, int, error) {
-	parts := strings.Split(pair, "-")
-	if len(parts) != 2 {
-		return "", 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input. usage: '%s'.", queryParam.Usage), nil)
+	stat, valueStr, found := strings.Cut(pair, "=")
+	if !found {
+		return "", 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s' . usage: '%s'.", queryParam.Name, stat, queryParam.Usage), nil)
 	}
-
-	stat := parts[0]
-	valueStr := parts[1]
 
 	err := validateQueryStatName(cfg, stat, allowedStatIDs, queryParam)
 	if err != nil {
