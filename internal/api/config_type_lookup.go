@@ -20,9 +20,22 @@ type TypeLookup struct {
 	MonsterSpecies              EnumType[database.MonsterSpecies, any]
 	MonsterType                 EnumType[database.CtbIconType, any]
 	OverdriveModeType           EnumType[database.OverdriveModeType, any]
+	PlayerAbilityCategory		EnumType[database.PlayerAbilityCategory, any]
 	ShopCategory                EnumType[database.ShopCategory, any]
 	ShopType                    EnumType[database.ShopType, any]
 	TreasureType                EnumType[database.TreasureType, any]
+
+	AccSourceType				EnumType[database.AccSourceType, any]
+	AttackType					EnumType[database.AttackType, any]
+	BreakDmgLimitType			EnumType[database.BreakDmgLmtType, database.NullBreakDmgLmtType]
+	CalculationType				EnumType[database.CalculationType, any]
+	CriticalType				EnumType[database.CriticalType, database.NullCriticalType]
+	CtbAttackType				EnumType[database.CtbAttackType, any]
+	DamageFormula				EnumType[database.DamageFormula, any]
+	DamageType					EnumType[database.DamageType, any]
+	DelayType					EnumType[database.DelayType, any]
+	DurationType				EnumType[database.DurationType, any]
+	TargetType					EnumType[database.TargetType, database.NullTargetType]
 }
 
 func (cfg *Config) TypeLookupInit() {
@@ -41,8 +54,10 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initMonsterSpecies()
 	cfg.t.initMonsterType()
 	cfg.t.initOverdriveModeType()
+	cfg.t.initPlayerAbilityCategory()
 	cfg.t.initShopCategory()
 	cfg.t.initShopType()
+	cfg.t.initTargetType()
 	cfg.t.initTreasureType()
 }
 
@@ -519,6 +534,30 @@ func (t *TypeLookup) initOverdriveModeType() {
 	}, nil)
 }
 
+func (t *TypeLookup) initPlayerAbilityCategory() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: string(database.PlayerAbilityCategorySkill),
+		},
+		{
+			Name: string(database.PlayerAbilityCategorySpecial),
+		},
+		{
+			Name: string(database.PlayerAbilityCategoryWhiteMagic),
+		},
+		{
+			Name: string(database.PlayerAbilityCategoryBlackMagic),
+		},
+		{
+			Name: string(database.PlayerAbilityCategoryAeon),
+		},
+	}
+
+	t.PlayerAbilityCategory = newEnumType[database.PlayerAbilityCategory, any]("player ability category", false, typeSlice, func(s string) database.PlayerAbilityCategory {
+		return database.PlayerAbilityCategory(s)
+	}, nil)
+}
+
 func (t *TypeLookup) initShopCategory() {
 	typeSlice := []TypedAPIResource{
 		{
@@ -556,7 +595,6 @@ func (t *TypeLookup) initShopType() {
 }
 
 func (t *TypeLookup) initTreasureType() {
-
 	typeSlice := []TypedAPIResource{
 		{
 			Name:        string(database.TreasureTypeChest),
@@ -575,4 +613,74 @@ func (t *TypeLookup) initTreasureType() {
 	t.TreasureType = newEnumType[database.TreasureType, any]("treasure type", true, typeSlice, func(s string) database.TreasureType {
 		return database.TreasureType(s)
 	}, nil)
+}
+
+func (t *TypeLookup) initAccSourceType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.AccSourceTypeAccuracy),
+			Description:	"The accuracy of the ability is calculated via the user's accuracy stat.",
+		},
+		{
+			Name: 			string(database.AccSourceTypeRate),
+			Description:	"The ability has its own accuracy.",
+		},
+	}
+
+	t.AccSourceType = newEnumType[database.AccSourceType, any]("accuracy source type", true, typeSlice, func(s string) database.AccSourceType {
+		return database.AccSourceType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initTargetType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.TargetTypeSelf),
+			Description:	"The action targets its user.",
+		},
+		{
+			Name: 			string(database.TargetTypeSingleCharacter),
+			Description:	"The action targets one unit of the user's party.",
+		},
+		{
+			Name: 			string(database.TargetTypeSingleEnemy),
+			Description:	"The action targets one unit of the user's opposing party.",
+		},
+		{
+			Name: 			string(database.TargetTypeSingleTarget),
+			Description:	"The action targets the selected unit.",
+		},
+		{
+			Name: 			string(database.TargetTypeRandomCharacter),
+			Description:	"The action targets a random unit of the user's party.",
+		},
+		{
+			Name: 			string(database.TargetTypeRandomEnemy),
+			Description:	"The action targets a random unit of the user's opposing party.",
+		},
+		{
+			Name: 			string(database.TargetTypeAllCharacters),
+			Description:	"The action targets all units of the user's party.",
+		},
+		{
+			Name: 			string(database.TargetTypeAllEnemies),
+			Description:	"The action targets all units of the user's opposing party.",
+		},
+		{
+			Name: 			string(database.TargetTypeTargetParty),
+			Description:	"The action targets all units of the selected party.",
+		},
+		{
+			Name: 			string(database.TargetTypeNTargets),
+			Description:	"The action targets N amount of units (N is stated via the ability's hit_amount). The action can also target KO'd characters and inanimate objects. Only Seymour Natus' multi-spells and Spectral Keeper's counter attack, as well as its glyph mine activation use this target type.",
+		},
+		{
+			Name: 			string(database.TargetTypeEveryone),
+			Description:	"The action targets every unit on the field.",
+		},
+	}
+
+	t.TargetType = newEnumType("target type", true, typeSlice, func(s string) database.TargetType {
+		return database.TargetType(s)
+	}, h.NullTargetType)
 }

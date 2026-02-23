@@ -45,6 +45,7 @@ type QueryLookup struct {
 	monsters          map[string]QueryType
 	monsterFormations map[string]QueryType
 	overdriveModes    map[string]QueryType
+	playerAbilities	  map[string]QueryType
 	shops             map[string]QueryType
 	songs             map[string]QueryType
 	sidequests        map[string]QueryType
@@ -95,6 +96,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initMonstersParams()
 	cfg.initMonsterFormationsParams()
 	cfg.initOverdriveModesParams()
+	cfg.initPlayerAbilitiesParams()
 	cfg.initSublocationsParams()
 	cfg.initLocationsParams()
 	cfg.initShopsParams()
@@ -726,6 +728,31 @@ func (cfg *Config) initOverdriveModesParams() {
 			ForSingle:   false,
 			TypeLookup:  cfg.t.OverdriveModeType.lookup,
 			References:  []string{createListURL(cfg, "overdrive-mode-type")},
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.overdriveModes = params
+}
+
+func (cfg *Config) initPlayerAbilitiesParams() {
+	params := map[string]QueryType{
+		"user": {
+			ID:          1,
+			Description: "If a player ability is a physical attack, this parameter modifies the ability's accuracy, range and power based on the given user. User can be a character or an aeon.",
+			Usage:       "?user={type}:{name|id}",
+			ExampleUses: []string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
+			ForList:     false,
+			ForSingle:   true,
+		},
+		"category": {
+			ID:          2,
+			Description: "Searches for player abilities that are of the specified player ability category.",
+			Usage:       "?category={name|id}",
+			ExampleUses: []string{"?type=black-magic", "?type=2"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.PlayerAbilityCategory.lookup,
 		},
 	}
 

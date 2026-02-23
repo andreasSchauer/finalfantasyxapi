@@ -328,8 +328,8 @@ SELECT a.id
 FROM abilities a
 LEFT JOIN player_abilities pa ON pa.ability_id = a.id
 LEFT JOIN j_player_abilities_learned_by j1 ON j1.player_ability_id = pa.id
-LEFT JOIN other_abilities ga ON ga.ability_id = a.id
-LEFT JOIN j_other_abilities_learned_by j2 ON j2.other_ability_id = ga.id
+LEFT JOIN other_abilities oa ON oa.ability_id = a.id
+LEFT JOIN j_other_abilities_learned_by j2 ON j2.other_ability_id = oa.id
 LEFT JOIN character_classes cc ON j1.character_class_id = cc.id OR j2.character_class_id = cc.id
 WHERE cc.id = $1
 ORDER BY a.id
