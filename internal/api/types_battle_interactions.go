@@ -1,6 +1,9 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+)
 
 
 
@@ -15,7 +18,7 @@ type BattleInteraction struct {
 	Silenceable       			bool				`json:"silenceable"`
 	Reflectable       			bool				`json:"reflectable"`
 	HitAmount         			int32				`json:"hit_amount"`
-	SpecialAction     			*string				`json:"special_action"`
+	SpecialAction     			*string				`json:"special_action,omitempty"`
 	InflictedDelay            	[]InflictedDelay  	`json:"inflicted_delay"`
 	InflictedStatusConditions 	[]InflictedStatus 	`json:"inflicted_status_conditions"`
 	RemovedStatusConditions		[]NamedAPIResource	`json:"removed_status_conditions"`
@@ -63,7 +66,7 @@ func convertBattleInteraction(cfg *Config, ba seeding.BattleInteraction) BattleI
 type Damage struct {
 	DamageCalc      []AbilityDamage 	`json:"damage_calc"`
 	Critical        *string         	`json:"critical"`
-	CriticalPlusVal *int32          	`json:"critical_plus_val"`
+	CriticalPlusVal *int32          	`json:"critical_plus_val,omitempty"`
 	IsPiercing      bool            	`json:"is_piercing"`
 	BreakDmgLimit   *string         	`json:"break_dmg_lmt"`
 	Element         *NamedAPIResource 	`json:"element"`		
@@ -84,7 +87,7 @@ func convertDamage(cfg *Config, d seeding.Damage) Damage {
 
 
 type AbilityDamage struct {
-	Condition      *string 				`json:"condition"`
+	Condition      *string 				`json:"condition,omitempty"`
 	AttackType     NamedAPIResource  	`json:"attack_type"`
 	TargetStat     NamedAPIResource 	`json:"target_stat"`
 	DamageType     NamedAPIResource 	`json:"damage_type"`
@@ -112,8 +115,8 @@ func convertAbilityDamage(cfg *Config, ad seeding.AbilityDamage) AbilityDamage {
 
 type Accuracy struct {
 	AccSource   string   `json:"acc_source"`
-	HitChance   *int32   `json:"hit_chance"`
-	AccModifier *float32 `json:"acc_modifier"`
+	HitChance   *int32   `json:"hit_chance,omitempty"`
+	AccModifier *float32 `json:"acc_modifier,omitempty"`
 }
 
 func convertAccuracy(_ *Config, a seeding.Accuracy) Accuracy {
@@ -128,10 +131,11 @@ func convertAccuracy(_ *Config, a seeding.Accuracy) Accuracy {
 
 
 type InflictedDelay struct {
-	Condition      *string `json:"condition"`
-	CTBAttackType  string  `json:"ctb_attack_type"`
-	DelayType      string  `json:"delay_type"`
-	DamageConstant int32   `json:"damage_constant"`
+	Condition      	*string `json:"condition,omitempty"`
+	CTBAttackType  	string  `json:"ctb_attack_type"`
+	DelayType      	string  `json:"delay_type"`
+	DamageConstant 	int32   `json:"damage_constant"`
+	DelayStrength	string	`json:"delay_strength"`
 }
 
 func convertInflictedDelay(_ *Config, id seeding.InflictedDelay) InflictedDelay {
@@ -140,16 +144,40 @@ func convertInflictedDelay(_ *Config, id seeding.InflictedDelay) InflictedDelay 
 		CTBAttackType: 	id.CTBAttackType,
 		DelayType: 		id.DelayType,
 		DamageConstant: id.DamageConstant,
+		DelayStrength: 	getDelayStrength(id),
 	}
 }
 
 
+func getDelayStrength(id seeding.InflictedDelay) string {
+	switch id.DelayType {
+	case string(database.DelayTypeCtbBased):
+		if id.DamageConstant == 16 {
+			return "strong"
+		}
+
+		if id.DamageConstant == 8 {
+			return "weak"
+		}
+
+	case string(database.DelayTypeTickSpeedBased):
+		if id.DamageConstant == 48 {
+			return "strong"
+		}
+
+		if id.DamageConstant == 24 {
+			return "weak"
+		}
+	}
+
+	return ""
+}
 
 
 type InflictedStatus struct {
 	StatusCondition NamedAPIResource `json:"status_condition"`
-	Probability     int32            `json:"probability,omitempty"`
-	DurationType    string           `json:"duration_type,omitempty"`
+	Probability     int32            `json:"probability"`
+	DurationType    string           `json:"duration_type"`
 	Amount          *int32           `json:"amount,omitempty"`
 }
 

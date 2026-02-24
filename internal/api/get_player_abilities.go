@@ -56,6 +56,10 @@ func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seedi
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		
+		frl(typeQuery(cfg, r, i, cfg.t.PlayerAbilityCategory, resources, "category", cfg.db.GetPlayerAbilityIDsByCategory)),
+		frl(boolQuery(cfg, r, i, resources, "phys_atk", cfg.db.GetPlayerAbilityIDsBasedOnPhysAttack)),
+		frl(boolQuery2(cfg, r, i, resources, "darkable", cfg.db.GetPlayerAbilityIDsDarkable)),
+		frl(idQuery(cfg, r, i, resources, "element", len(cfg.l.Elements), cfg.db.GetPlayerAbilityIDsByElement)),
+		frl(typeQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetPlayerAbilityIDsByDamageType)),
 	})
 }

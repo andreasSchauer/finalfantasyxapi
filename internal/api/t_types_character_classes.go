@@ -1,16 +1,15 @@
 package api
 
-
 type expCharacterClass struct {
 	testGeneral
 	expUnique
-	category			string
-	units				[]string
-	defaultAbilities	[]string
-	learnableAbilities	[]string
-	defaultOverdrives	[]int32
-	learnableOverdrives	[]int32
-	submenus			[]int32
+	category            string
+	members             []string
+	defaultAbilities    []string
+	learnableAbilities  []string
+	defaultOverdrives   []int32
+	learnableOverdrives []int32
+	submenus            []int32
 }
 
 func (e expCharacterClass) GetTestGeneral() testGeneral {
@@ -20,7 +19,7 @@ func (e expCharacterClass) GetTestGeneral() testGeneral {
 func compareCharacterClasses(test test, exp expCharacterClass, got CharacterClass) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "category", exp.category, got.Category)
-	checkResPathsInSlice(test, "units", exp.units, got.Units)
+	checkResPathsInSlice(test, "members", exp.members, got.Members)
 	checkResPathsInSlice(test, "default abilities", exp.defaultAbilities, got.DefaultAbilities)
 	checkResPathsInSlice(test, "learnable abilities", exp.learnableAbilities, got.LearnableAbilities)
 	checkResIDsInSlice(test, "default overdrives", test.cfg.e.overdrives.endpoint, exp.defaultOverdrives, got.DefaultOverdrives)

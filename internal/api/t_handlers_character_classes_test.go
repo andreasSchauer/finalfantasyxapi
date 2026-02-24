@@ -20,7 +20,7 @@ func TestGetCharacterClass(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"units":                7,
+					"members":              7,
 					"default abilities":    5,
 					"learnable abilities":  85,
 					"default overdrives":   0,
@@ -33,7 +33,7 @@ func TestGetCharacterClass(t *testing.T) {
 				name: "characters",
 			},
 			category: "group",
-			units: []string{
+			members: []string{
 				"/characters/1",
 				"/characters/2",
 				"/characters/3",
@@ -69,7 +69,7 @@ func TestGetCharacterClass(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"units":                6,
+					"members":              6,
 					"default abilities":    3,
 					"learnable abilities":  67,
 					"default overdrives":   0,
@@ -82,7 +82,7 @@ func TestGetCharacterClass(t *testing.T) {
 				name: "standard-aeons",
 			},
 			category: "group",
-			units: []string{
+			members: []string{
 				"/aeons/1",
 				"/aeons/2",
 				"/aeons/3",
@@ -115,7 +115,7 @@ func TestGetCharacterClass(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"units":                3,
+					"members":              3,
 					"default abilities":    2,
 					"learnable abilities":  0,
 					"default overdrives":   1,
@@ -128,7 +128,7 @@ func TestGetCharacterClass(t *testing.T) {
 				name: "magus-sisters",
 			},
 			category: "group",
-			units: []string{
+			members: []string{
 				"/aeons/8",
 				"/aeons/9",
 				"/aeons/10",
@@ -148,7 +148,7 @@ func TestGetCharacterClass(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"units":                1,
+					"members":              1,
 					"default abilities":    9,
 					"learnable abilities":  7,
 					"default overdrives":   1,
@@ -161,7 +161,7 @@ func TestGetCharacterClass(t *testing.T) {
 				name: "yuna",
 			},
 			category: "character",
-			units: []string{
+			members: []string{
 				"/characters/2",
 			},
 			defaultAbilities: []string{
@@ -194,7 +194,7 @@ func TestGetCharacterClass(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"units":                1,
+					"members":              1,
 					"default abilities":    10,
 					"learnable abilities":  0,
 					"default overdrives":   4,
@@ -207,7 +207,7 @@ func TestGetCharacterClass(t *testing.T) {
 				name: "lulu",
 			},
 			category: "character",
-			units: []string{
+			members: []string{
 				"/characters/4",
 			},
 			defaultAbilities: []string{
@@ -233,7 +233,7 @@ func TestGetCharacterClass(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"units":                1,
+					"members":              1,
 					"default abilities":    5,
 					"learnable abilities":  0,
 					"default overdrives":   0,
@@ -246,7 +246,7 @@ func TestGetCharacterClass(t *testing.T) {
 				name: "yojimbo",
 			},
 			category: "aeon",
-			units: []string{
+			members: []string{
 				"/aeons/7",
 			},
 			defaultAbilities: []string{

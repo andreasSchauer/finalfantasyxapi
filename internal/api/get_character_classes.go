@@ -18,20 +18,19 @@ func (cfg *Config) getCharacterClass(r *http.Request, i handlerInput[seeding.Cha
 	}
 
 	response := CharacterClass{
-		ID: 					class.ID,
-		Name: 					class.Name,
-		Category: 				class.Category,
-		Units: 					rel.Units,
-		DefaultAbilities: 		rel.DefaultAbilities,
-		DefaultOverdrives: 		rel.DefaultOverdrives,
-		LearnableAbilities: 	rel.LearnableAbilities,
-		LearnableOverdrives: 	rel.LearnableOverdrives,
-		Submenus:				rel.Submenus,
+		ID:                  class.ID,
+		Name:                class.Name,
+		Category:            class.Category,
+		Members:             rel.Members,
+		DefaultAbilities:    rel.DefaultAbilities,
+		DefaultOverdrives:   rel.DefaultOverdrives,
+		LearnableAbilities:  rel.LearnableAbilities,
+		LearnableOverdrives: rel.LearnableOverdrives,
+		Submenus:            rel.Submenus,
 	}
 
 	return response, nil
 }
-
 
 func (cfg *Config) retrieveCharacterClasses(r *http.Request, i handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

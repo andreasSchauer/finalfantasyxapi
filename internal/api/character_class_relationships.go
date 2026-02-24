@@ -40,18 +40,16 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.Chara
 	}
 
 	charClass := CharacterClass{
-		Units: 				units,
-		DefaultAbilities: 	defaultAbilities,
-		LearnableAbilities: learnableAbilities,
-		DefaultOverdrives: defaultOverdrives,
+		Members:             units,
+		DefaultAbilities:    defaultAbilities,
+		LearnableAbilities:  learnableAbilities,
+		DefaultOverdrives:   defaultOverdrives,
 		LearnableOverdrives: learnableOverdrives,
-		Submenus:			submenus,
+		Submenus:            submenus,
 	}
 
 	return charClass, nil
 }
-
-
 
 func getClassUnits(cfg *Config, r *http.Request, class seeding.CharacterClass) ([]NamedAPIResource, error) {
 	unitIDs, err := cfg.db.GetCharacterClassUnitIDs(r.Context(), class.ID)
@@ -70,7 +68,6 @@ func getClassUnits(cfg *Config, r *http.Request, class seeding.CharacterClass) (
 	return resources, nil
 }
 
-
 func getClassLearnableAbilities(cfg *Config, r *http.Request, class seeding.CharacterClass, defaultAbilities []NamedAPIResource) ([]NamedAPIResource, error) {
 	allAbilities, err := createAbilityResourceSlice(cfg, r, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
@@ -81,9 +78,7 @@ func getClassLearnableAbilities(cfg *Config, r *http.Request, class seeding.Char
 	return learnableAbilities, nil
 }
 
-
-
-func createAbilityResourceSlice[T seeding.LookupableID](cfg *Config, r *http.Request, item T, dbQuery func (context.Context, int32) ([]int32, error)) ([]NamedAPIResource, error) {
+func createAbilityResourceSlice[T seeding.LookupableID](cfg *Config, r *http.Request, item T, dbQuery func(context.Context, int32) ([]int32, error)) ([]NamedAPIResource, error) {
 	abilityIDs, err := dbQuery(r.Context(), item.GetID())
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get abilities of '%s'", item), err)

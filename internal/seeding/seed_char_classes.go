@@ -13,7 +13,7 @@ type CharacterClass struct {
 	ID   		int32
 	Name 		string		`json:"name"`
 	Category	string		`json:"category"`
-	Units		[]string	`json:"units"`
+	Members		[]string	`json:"members"`
 }
 
 func (cc CharacterClass) ToHashFields() []any {
@@ -82,7 +82,7 @@ func (l *Lookup) seedCharacterClassesRelationships(db *database.Queries, dbConn 
 				return err
 			}
 
-			for _, jsonUnit := range class.Units {
+			for _, jsonUnit := range class.Members {
 				junction, err := createJunction(class, jsonUnit, l.PlayerUnits)
 				if err != nil {
 					return err

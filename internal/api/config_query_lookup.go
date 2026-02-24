@@ -756,6 +756,41 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			TypeLookup:  cfg.t.PlayerAbilityCategory.lookup,
 			References:  []string{createListURL(cfg, "player-ability-category")},
 		},
+		"phys_atk": {
+			ID:          3,
+			Description: "",
+			Usage:       "?phys_atk={bool}",
+			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"darkable": {
+			ID:          4,
+			Description: "",
+			Usage:       "?darkable={bool}",
+			ExampleUses: []string{"?darkable=true", "?darkable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"element": {
+			ID:          5,
+			Description: "",
+			Usage:       "?element={id}",
+			ExampleUses: []string{"?element=3"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "elements")},
+		},
+		"damage_type": {
+			ID:          6,
+			Description: "",
+			Usage:       "?damage_type={id}",
+			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:	 cfg.t.DamageType.lookup,
+			References:  []string{createListURL(cfg, "damage-type")},
+		},
 	}
 
 	params = cfg.completeQueryTypeInit(params)
