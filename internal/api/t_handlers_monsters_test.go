@@ -165,7 +165,7 @@ func TestGetMonster(t *testing.T) {
 				MaxICV:    h.GetInt32Ptr(53),
 			},
 			species:       19,
-			ctbIconType:   1,
+			ctbIconType:   "monster",
 			distance:      1,
 			properties:    []int32{2},
 			autoAbilities: []int32{},

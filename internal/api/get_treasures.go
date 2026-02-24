@@ -14,7 +14,6 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 		return Treasure{}, err
 	}
 
-	treasureType, _ := newNamedAPIResourceFromType(cfg, cfg.e.treasureType.endpoint, treasure.TreasureType, cfg.t.TreasureType)
 	lootType, _ := newNamedAPIResourceFromType(cfg, cfg.e.lootType.endpoint, treasure.LootType, cfg.t.LootType)
 
 	response := Treasure{
@@ -23,7 +22,7 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 		IsPostAirship:   treasure.IsPostAirship,
 		IsAnimaTreasure: treasure.IsAnimaTreasure,
 		Notes:           treasure.Notes,
-		TreasureType:    treasureType,
+		TreasureType:    treasure.TreasureType,
 		LootType:        lootType,
 		GilAmount:       treasure.GilAmount,
 		Items:           convertObjSlice(cfg, treasure.Items, convertItemAmount),

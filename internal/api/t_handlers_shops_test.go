@@ -44,7 +44,7 @@ func TestGetShop(t *testing.T) {
 			},
 			expIdOnly: newExpIdOnly(2),
 			area:      48,
-			category:  "standard",
+			category:  1,
 			preAirship: &testSubShop{
 				items: []testShopItem{},
 				equipment: []testShopEquipment{
@@ -124,7 +124,7 @@ func TestGetShop(t *testing.T) {
 			},
 			expIdOnly: newExpIdOnly(16),
 			area:      122,
-			category:  "standard",
+			category:  1,
 			preAirship: &testSubShop{
 				items: []testShopItem{
 					newTestShopItem(0, 1, 100),
@@ -195,7 +195,7 @@ func TestGetShop(t *testing.T) {
 			},
 			expIdOnly: newExpIdOnly(31),
 			area:      202,
-			category:  "travel-agency",
+			category:  3,
 			preAirship: &testSubShop{
 				items: []testShopItem{
 					newTestShopItem(1, 2, 500),

@@ -487,33 +487,6 @@ func (q *Queries) GetMonsterIDsByAutoAbilityIsForced(ctx context.Context, arg Ge
 	return items, nil
 }
 
-const getMonsterIDsByCTBIconType = `-- name: GetMonsterIDsByCTBIconType :many
-SELECT id FROM monsters WHERE ctb_icon_type = $1
-`
-
-func (q *Queries) GetMonsterIDsByCTBIconType(ctx context.Context, ctbIconType CtbIconType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByCTBIconType, ctbIconType)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getMonsterIDsByCTBIconTypeBoss = `-- name: GetMonsterIDsByCTBIconTypeBoss :many
 SELECT id FROM monsters WHERE ctb_icon_type = 'boss' OR ctb_icon_type = 'boss-numbered'
 `
@@ -547,6 +520,33 @@ SELECT id FROM monsters WHERE can_be_captured = $1
 
 func (q *Queries) GetMonsterIDsByCanBeCaptured(ctx context.Context, canBeCaptured bool) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getMonsterIDsByCanBeCaptured, canBeCaptured)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterIDsByCategory = `-- name: GetMonsterIDsByCategory :many
+SELECT id FROM monsters WHERE category = $1
+`
+
+func (q *Queries) GetMonsterIDsByCategory(ctx context.Context, category MonsterCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByCategory, category)
 	if err != nil {
 		return nil, err
 	}

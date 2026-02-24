@@ -6,7 +6,7 @@ type expMonster struct {
 	appliedState     *testAppliedState
 	agility          *AgilityParams
 	species          int32
-	ctbIconType      int32
+	ctbIconType      string
 	distance         int32
 	properties       []int32
 	autoAbilities    []int32
@@ -31,7 +31,7 @@ func (e expMonster) GetTestGeneral() testGeneral {
 func compareMonsters(test test, exp expMonster, got Monster) {
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compIdApiResource(test, "species", test.cfg.e.monsterSpecies.endpoint, exp.species, got.Species)
-	compIdApiResource(test, "ctb icon type", test.cfg.e.ctbIconType.endpoint, exp.ctbIconType, got.CTBIconType)
+	compare(test, "ctb icon type", exp.ctbIconType, got.CTBIconType)
 	compare(test, "distance", exp.distance, got.Distance)
 	checkResAmtsNameVals(test, "base stats", exp.baseStats, got.BaseStats)
 	checkResAmtsNameVals(test, "status resists", exp.statusResists, got.StatusResists)

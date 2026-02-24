@@ -1,7 +1,6 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -51,6 +50,9 @@ func replaceBaseStats(baseStats []BaseStat, statMap map[string]int32) []BaseStat
 	return baseStats
 }
 
+
+
+
 type ElementalResist struct {
 	Element  NamedAPIResource `json:"element"`
 	Affinity NamedAPIResource `json:"affinity"`
@@ -77,6 +79,9 @@ func namesToElemResists(cfg *Config, resists []seeding.ElementalResist) []Elemen
 
 	return elemResists
 }
+
+
+
 
 type StatusResist struct {
 	StatusCondition NamedAPIResource `json:"status_condition"`
@@ -106,26 +111,3 @@ func (sr StatusResist) GetVal() int32 {
 	return sr.Resistance
 }
 
-type InflictedStatus struct {
-	StatusCondition NamedAPIResource      `json:"status_condition"`
-	Probability     int32                 `json:"probability,omitempty"`
-	DurationType    database.DurationType `json:"duration_type,omitempty"`
-	Amount          *int32                `json:"amount,omitempty"`
-}
-
-func (is InflictedStatus) GetAPIResource() APIResource {
-	return is.StatusCondition
-}
-
-func (is InflictedStatus) IsZero() bool {
-	return is.StatusCondition.Name == ""
-}
-
-func newInflictedStatus(cfg *Config, status seeding.InflictedStatus) InflictedStatus {
-	return InflictedStatus{
-		StatusCondition: nameToNamedAPIResource(cfg, cfg.e.statusConditions, status.StatusCondition, nil),
-		Probability:     status.Probability,
-		DurationType:    database.DurationType(status.DurationType),
-		Amount:          status.Amount,
-	}
-}

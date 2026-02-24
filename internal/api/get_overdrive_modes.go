@@ -13,10 +13,6 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 		return OverdriveMode{}, err
 	}
 
-	modeType, err := newNamedAPIResourceFromType(cfg, cfg.e.overdriveModeType.endpoint, mode.Type, cfg.t.OverdriveModeType)
-	if err != nil {
-		return OverdriveMode{}, err
-	}
 	actions := namesToResourceAmounts(cfg, cfg.e.characters, mode.ActionsToLearn, convertActionAmount)
 
 	response := OverdriveMode{
@@ -24,7 +20,7 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 		Name:        mode.Name,
 		Description: mode.Description,
 		Effect:      mode.Effect,
-		Type:        modeType,
+		Type:        mode.Type,
 		FillRate:    mode.FillRate,
 		Actions:     actions,
 	}

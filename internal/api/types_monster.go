@@ -20,7 +20,8 @@ type Monster struct {
 	IsRepeatable         bool                 `json:"is_repeatable"`
 	CanBeCaptured        bool                 `json:"can_be_captured"`
 	AreaConquestLocation *string              `json:"area_conquest_location,omitempty"`
-	CTBIconType          NamedAPIResource     `json:"ctb_icon_type"`
+	Category			 NamedAPIResource	  `json:"category"`
+	CTBIconType          string    			  `json:"ctb_icon_type"`
 	HasOverdrive         bool                 `json:"has_overdrive"`
 	IsUnderwater         bool                 `json:"is_underwater"`
 	IsZombie             bool                 `json:"is_zombie"`

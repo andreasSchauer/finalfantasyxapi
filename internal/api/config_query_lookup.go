@@ -630,6 +630,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.MonsterSpecies.lookup,
+			References:  []string{createListURL(cfg, "monster-species")},
 		},
 		"creation_area": {
 			ID:          25,
@@ -647,7 +648,8 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?type=boss", "?type=2"},
 			ForList:     true,
 			ForSingle:   false,
-			TypeLookup:  cfg.t.MonsterType.lookup,
+			TypeLookup:  cfg.t.MonsterCategory.lookup,
+			References:  []string{createListURL(cfg, "monster-type")},
 		},
 	}
 
@@ -727,7 +729,6 @@ func (cfg *Config) initOverdriveModesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.OverdriveModeType.lookup,
-			References:  []string{createListURL(cfg, "overdrive-mode-type")},
 		},
 	}
 
@@ -753,11 +754,12 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.PlayerAbilityCategory.lookup,
+			References:  []string{createListURL(cfg, "player-ability-category")},
 		},
 	}
 
 	params = cfg.completeQueryTypeInit(params)
-	cfg.q.overdriveModes = params
+	cfg.q.playerAbilities = params
 }
 
 func (cfg *Config) initSublocationsParams() {
@@ -1006,6 +1008,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.ShopCategory.lookup,
+			References:  []string{createListURL(cfg, "shop-category")},
 		},
 		"items": {
 			ID:          5,
@@ -1151,6 +1154,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.LootType.lookup,
+			References:  []string{createListURL(cfg, "loot-type")},
 		},
 		"treasure_type": {
 			ID:          5,
@@ -1160,7 +1164,6 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.TreasureType.lookup,
-			References:  []string{createListURL(cfg, "treasure-type")},
 		},
 		"anima": {
 			ID:          6,

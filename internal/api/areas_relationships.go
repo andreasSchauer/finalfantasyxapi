@@ -9,7 +9,7 @@ import (
 
 type AreaConnection struct {
 	Area           AreaAPIResource  `json:"area"`
-	ConnectionType NamedAPIResource `json:"connection_type"`
+	ConnectionType string 			`json:"connection_type"`
 	StoryOnly      bool             `json:"story_only"`
 	Notes          *string          `json:"notes,omitempty"`
 }
@@ -89,14 +89,9 @@ func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, er
 	connectedAreas := []AreaConnection{}
 
 	for _, connArea := range area.ConnectedAreas {
-		connType, err := newNamedAPIResourceFromType(cfg, cfg.e.connectionType.endpoint, connArea.ConnectionType, cfg.t.AreaConnectionType)
-		if err != nil {
-			return nil, err
-		}
-
 		connection := AreaConnection{
 			Area:           locAreaToAreaAPIResource(cfg, i, connArea.LocationArea),
-			ConnectionType: connType,
+			ConnectionType: connArea.ConnectionType,
 			StoryOnly:      connArea.StoryOnly,
 			Notes:          connArea.Notes,
 		}

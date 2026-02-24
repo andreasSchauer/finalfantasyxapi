@@ -159,23 +159,3 @@ func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResour
 
 	return resources, nil
 }
-
-func getMonstersByType(cfg *Config, r *http.Request, iconType database.CtbIconType) ([]int32, error) {
-	var ids []int32
-	var err error
-
-	switch iconType {
-	case database.CtbIconTypeBoss, database.CtbIconTypeBossNumbered:
-		ids, err = cfg.db.GetMonsterIDsByCTBIconTypeBoss(r.Context())
-		if err != nil {
-			return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters of type 'boss'.", err)
-		}
-	default:
-		ids, err = cfg.db.GetMonsterIDsByCTBIconType(r.Context(), iconType)
-		if err != nil {
-			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve monsters of type '%s'.", iconType), err)
-		}
-	}
-
-	return ids, nil
-}

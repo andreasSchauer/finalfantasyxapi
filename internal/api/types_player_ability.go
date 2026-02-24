@@ -1,43 +1,31 @@
 package api
 
-
 import (
 
 )
 
 type PlayerAbility struct {
-	ID						int32
-	Name					string
-	Version					*int32
-	Specification			*string
-	Description				*string
-	Effect					string
-	Rank					*int32
-	AppearsInHelpBar		bool
-	CanCopycat				bool
-	CanUseOutsideBattle		bool
-	MpCost					*int32
-	Category				string
-	AeonLearnItem			*ItemAmount
-	RelatedStats			[]NamedAPIResource
-	LearnedBy				[]NamedAPIResource
-	StandardGridCharacter	*NamedAPIResource
-	ExpertGridCharacter		*NamedAPIResource
-	Topmenu					*NamedAPIResource
-	Submenu					*NamedAPIResource
-	OpenSubmenu				*NamedAPIResource
-	Cursor					*NamedAPIResource
+	ID                    	int32					`json:"id"`
+	Name                  	string					`json:"name"`
+	Version               	*int32					`json:"version"`
+	Specification         	*string					`json:"specification"`
+	Description           	*string					`json:"description"`
+	Effect                	string					`json:"effect"`
+	Rank                  	*int32					`json:"rank"`
+	AppearsInHelpBar      	bool					`json:"appears_in_help_bar"`
+	CanCopycat            	bool					`json:"can_copycat"`
+	CanUseOutsideBattle   	bool					`json:"can_use_outside_battle"`
+	MpCost                	*int32					`json:"mp_cost"`
+	Category              	NamedAPIResource		`json:"category"`
+	AeonLearnItem         	*ItemAmount				`json:"aeon_learn_item"`
+	LearnedBy             	[]NamedAPIResource		`json:"learned_by"`
+	RelatedStats          	[]NamedAPIResource		`json:"related_stats"`
+	StandardGridCharacter 	*NamedAPIResource		`json:"standard_grid_character"`
+	ExpertGridCharacter   	*NamedAPIResource		`json:"expert_grid_character"`
+	Topmenu               	*NamedAPIResource		`json:"topmenu"`
+	Submenu               	*NamedAPIResource		`json:"submenu"`
+	OpenSubmenu           	*NamedAPIResource		`json:"open_submenu"`
+	Cursor                	*string					`json:"cursor"`
+	BattleInteractions		[]BattleInteraction		`json:"battle_interactions"`
 }
 
-
-type BattleInteraction struct {
-	Target				NamedAPIResource
-	BasedOnPhysAttack	bool
-	Range				*int32
-	ShatterRate			*int32
-	Darkable			bool
-	Silenceable			bool
-	Reflectable			bool
-	HitAmount			int32
-	SpecialAction		*string
-}

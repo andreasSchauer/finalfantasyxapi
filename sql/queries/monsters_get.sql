@@ -203,12 +203,8 @@ SELECT id FROM monsters WHERE area_conquest_location = $1;
 SELECT id FROM monsters WHERE area_conquest_location = $1 AND can_be_captured = true;
 
 
--- name: GetMonsterIDsByCTBIconType :many
-SELECT id FROM monsters WHERE ctb_icon_type = $1;
-
-
--- name: GetMonsterIDsByCTBIconTypeBoss :many
-SELECT id FROM monsters WHERE ctb_icon_type = 'boss' OR ctb_icon_type = 'boss-numbered';
+-- name: GetMonsterIDsByCategory :many
+SELECT id FROM monsters WHERE category = $1;
 
 
 -- name: GetMonsterIDsByIsStoryBased :many

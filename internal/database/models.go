@@ -678,6 +678,7 @@ const (
 	CalculationTypeMultiply        CalculationType = "multiply"
 	CalculationTypeMultiplyHighest CalculationType = "multiply-highest"
 	CalculationTypeSetValue        CalculationType = "set-value"
+	CalculationTypeSetMinValue     CalculationType = "set-min-value"
 )
 
 func (e *CalculationType) Scan(src interface{}) error {
@@ -1203,12 +1204,12 @@ func (ns NullDelayType) Value() (driver.Value, error) {
 type DurationType string
 
 const (
-	DurationTypeBlocks    DurationType = "blocks"
-	DurationTypeEndless   DurationType = "endless"
-	DurationTypeInstant   DurationType = "instant"
-	DurationTypeTurns     DurationType = "turns"
-	DurationTypeUserTurns DurationType = "user-turns"
-	DurationTypeAuto      DurationType = "auto"
+	DurationTypeBlocks            DurationType = "blocks"
+	DurationTypeEndless           DurationType = "endless"
+	DurationTypeInstant           DurationType = "instant"
+	DurationTypeTurns             DurationType = "turns"
+	DurationTypeInflictorNextTurn DurationType = "inflictor-next-turn"
+	DurationTypeAuto              DurationType = "auto"
 )
 
 func (e *DurationType) Scan(src interface{}) error {
@@ -1883,6 +1884,49 @@ func (ns NullModifierType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.ModifierType), nil
+}
+
+type MonsterCategory string
+
+const (
+	MonsterCategoryMonster MonsterCategory = "monster"
+	MonsterCategoryBoss    MonsterCategory = "boss"
+	MonsterCategorySummon  MonsterCategory = "summon"
+)
+
+func (e *MonsterCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = MonsterCategory(s)
+	case string:
+		*e = MonsterCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for MonsterCategory: %T", src)
+	}
+	return nil
+}
+
+type NullMonsterCategory struct {
+	MonsterCategory MonsterCategory
+	Valid           bool // Valid is true if MonsterCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullMonsterCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.MonsterCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.MonsterCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullMonsterCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.MonsterCategory), nil
 }
 
 type MonsterFormationCategory string
@@ -3624,6 +3668,7 @@ type Monster struct {
 	IsRepeatable         bool
 	CanBeCaptured        bool
 	AreaConquestLocation NullMaCreationArea
+	Category             MonsterCategory
 	CtbIconType          CtbIconType
 	HasOverdrive         bool
 	IsUnderwater         bool

@@ -34,6 +34,13 @@ func (m Modifier) Error() string {
 	return fmt.Sprintf("modifier %s", m.Name)
 }
 
+func (m Modifier) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 	m.ID,
+		Name: 	m.Name,
+	}
+}
+
 func (l *Lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "data/modifiers.json"
 

@@ -18,15 +18,8 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		return Monster{}, err
 	}
 
-	species, err := newNamedAPIResourceFromType(cfg, cfg.e.monsterSpecies.endpoint, monster.Species, cfg.t.MonsterSpecies)
-	if err != nil {
-		return Monster{}, err
-	}
-
-	ctbIconType, err := newNamedAPIResourceFromType(cfg, cfg.e.ctbIconType.endpoint, monster.CTBIconType, cfg.t.CTBIconType)
-	if err != nil {
-		return Monster{}, err
-	}
+	category, _ := newNamedAPIResourceFromType(cfg, cfg.e.monsterCategory.endpoint, monster.Category, cfg.t.MonsterCategory)
+	species, _ := newNamedAPIResourceFromType(cfg, cfg.e.monsterSpecies.endpoint, monster.Species, cfg.t.MonsterSpecies)
 
 	response := Monster{
 		ID:                   monster.ID,
@@ -39,7 +32,8 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		IsRepeatable:         monster.IsRepeatable,
 		CanBeCaptured:        monster.CanBeCaptured,
 		AreaConquestLocation: monster.AreaConquestLocation,
-		CTBIconType:          ctbIconType,
+		Category: 			  category,
+		CTBIconType:          monster.CTBIconType,
 		HasOverdrive:         monster.HasOverdrive,
 		IsUnderwater:         monster.IsUnderwater,
 		IsZombie:             monster.IsZombie,
@@ -94,7 +88,7 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 
 		frl(intQuery(cfg, r, i, resources, "empty_slots", cfg.db.GetMonsterIDsByEmptySlots)),
 		frl(intQuery(cfg, r, i, resources, "distance", cfg.db.GetMonsterIDsByDistance)),
-		frl(typeQueryWrapper(cfg, r, i, cfg.t.MonsterType, resources, "type", getMonstersByType)),
+		frl(typeQuery(cfg, r, i, cfg.t.MonsterCategory, resources, "type", cfg.db.GetMonsterIDsByCategory)),
 		frl(typeQuery(cfg, r, i, cfg.t.MonsterSpecies, resources, "species", cfg.db.GetMonsterIDsBySpecies)),
 		frl(nullTypeQuery(cfg, r, i, cfg.t.CreationArea, resources, "creation_area", cfg.db.GetMonsterIDsByMaCreationArea)),
 

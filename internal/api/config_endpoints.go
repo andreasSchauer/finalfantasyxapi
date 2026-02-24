@@ -21,6 +21,7 @@ type endpoints struct {
 	items              handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]
 	keyItems           handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]
 	locations          handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
+	modifiers		   handlerInput[seeding.Modifier, any, NamedAPIResource, NamedApiResourceList]
 	monsters           handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
 	monsterFormations  handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
 	overdriveCommands  handlerInput[seeding.OverdriveCommand, any, NamedAPIResource, NamedApiResourceList]
@@ -44,14 +45,17 @@ type endpoints struct {
 	submenus           handlerInput[seeding.Submenu, any, NamedAPIResource, NamedApiResourceList]
 	treasures          handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
 
-	connectionType           handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	creationArea             handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	ctbIconType              handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+
+
+	attackType				 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	damageFormula			 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	damageType				 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	monsterCategory          handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	lootType                 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	monsterFormationCategory handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	monsterSpecies           handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	overdriveModeType        handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	treasureType             handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	playerAbilityCategory	 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	shopCategory           	 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -201,27 +205,6 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveCharacterClasses,
 	}
 
-	e.connectionType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
-		endpoint:      "connection-type",
-		resourceType:  "connection type",
-		objLookup:     cfg.t.AreaConnectionType.lookup,
-		resToListFunc: newTypedAPIResourceList,
-	}
-
-	e.creationArea = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
-		endpoint:      "creation-area",
-		resourceType:  "creation area",
-		objLookup:     cfg.t.CreationArea.lookup,
-		resToListFunc: newTypedAPIResourceList,
-	}
-
-	e.ctbIconType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
-		endpoint:      "ctb-icon-type",
-		resourceType:  "ctb icon type",
-		objLookup:     cfg.t.CTBIconType.lookup,
-		resToListFunc: newTypedAPIResourceList,
-	}
-
 	e.elements = handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "elements",
 		resourceType:  "element",
@@ -321,11 +304,13 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.lootType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
-		endpoint:      "loot-type",
-		resourceType:  "loot type",
-		objLookup:     cfg.t.LootType.lookup,
-		resToListFunc: newTypedAPIResourceList,
+	e.modifiers = handlerInput[seeding.Modifier, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      "modifiers",
+		resourceType:  "modifier",
+		objLookup:     cfg.l.Modifiers,
+		objLookupID:   cfg.l.ModifiersID,
+		idToResFunc:   idToNamedAPIResource[seeding.Modifier, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 	}
 
 	e.monsters = handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]{
@@ -377,20 +362,6 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.monsterFormationCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
-		endpoint:      "monster-formation-category",
-		resourceType:  "monster formation category",
-		objLookup:     cfg.t.MonsterFormationCategory.lookup,
-		resToListFunc: newTypedAPIResourceList,
-	}
-
-	e.monsterSpecies = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
-		endpoint:      "monster-species",
-		resourceType:  "monster species",
-		objLookup:     cfg.t.MonsterSpecies.lookup,
-		resToListFunc: newTypedAPIResourceList,
-	}
-
 	e.overdriveCommands = handlerInput[seeding.OverdriveCommand, any, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "overdrive-commands",
 		resourceType:  "overdrive command",
@@ -420,13 +391,6 @@ func (cfg *Config) EndpointsInit() {
 		objLookupID:   cfg.l.OverdrivesID,
 		idToResFunc:   idToNamedAPIResource[seeding.Overdrive, any, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
-	}
-
-	e.overdriveModeType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
-		endpoint:      "overdrive-mode-type",
-		resourceType:  "overdrive mode type",
-		objLookup:     cfg.t.OverdriveModeType.lookup,
-		resToListFunc: newTypedAPIResourceList,
 	}
 
 	e.otherAbilities = handlerInput[seeding.OtherAbility, any, NamedAPIResource, NamedApiResourceList]{
@@ -650,10 +614,67 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveTreasures,
 	}
 
-	e.treasureType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
-		endpoint:      "treasure-type",
-		resourceType:  "treasure type",
-		objLookup:     cfg.t.TreasureType.lookup,
+
+	e.attackType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "attack-type",
+		resourceType:  "attack type",
+		objLookup:     cfg.t.AttackType.lookup,
+		resToListFunc: newTypedAPIResourceList,
+	}
+
+	e.damageFormula = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "damage-formula",
+		resourceType:  "damage formula",
+		objLookup:     cfg.t.DamageFormula.lookup,
+		resToListFunc: newTypedAPIResourceList,
+	}
+
+	e.damageType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "damage-type",
+		resourceType:  "damage type",
+		objLookup:     cfg.t.DamageType.lookup,
+		resToListFunc: newTypedAPIResourceList,
+	}
+
+	e.lootType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "loot-type",
+		resourceType:  "loot type",
+		objLookup:     cfg.t.LootType.lookup,
+		resToListFunc: newTypedAPIResourceList,
+	}
+	
+	e.monsterCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "monster-type",
+		resourceType:  "monster type",
+		objLookup:     cfg.t.MonsterCategory.lookup,
+		resToListFunc: newTypedAPIResourceList,
+	}
+
+	e.monsterFormationCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "monster-formation-category",
+		resourceType:  "monster formation category",
+		objLookup:     cfg.t.MonsterFormationCategory.lookup,
+		resToListFunc: newTypedAPIResourceList,
+	}
+
+	e.monsterSpecies = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "monster-species",
+		resourceType:  "monster species",
+		objLookup:     cfg.t.MonsterSpecies.lookup,
+		resToListFunc: newTypedAPIResourceList,
+	}
+
+	e.playerAbilityCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "player-ability-category",
+		resourceType:  "player ability category",
+		objLookup:     cfg.t.PlayerAbilityCategory.lookup,
+		resToListFunc: newTypedAPIResourceList,
+	}
+
+	e.shopCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "shop-category",
+		resourceType:  "shop category",
+		objLookup:     cfg.t.ShopCategory.lookup,
 		resToListFunc: newTypedAPIResourceList,
 	}
 

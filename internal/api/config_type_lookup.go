@@ -18,7 +18,7 @@ type TypeLookup struct {
 	LootType                    EnumType[database.LootType, any]
 	MonsterFormationCategory    EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies              EnumType[database.MonsterSpecies, any]
-	MonsterType                 EnumType[database.CtbIconType, any]
+	MonsterCategory             EnumType[database.MonsterCategory, any]
 	OverdriveModeType           EnumType[database.OverdriveModeType, any]
 	PlayerAbilityCategory		EnumType[database.PlayerAbilityCategory, any]
 	ShopCategory                EnumType[database.ShopCategory, any]
@@ -52,13 +52,24 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initLootType()
 	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
-	cfg.t.initMonsterType()
+	cfg.t.initMonsterCategory()
 	cfg.t.initOverdriveModeType()
 	cfg.t.initPlayerAbilityCategory()
 	cfg.t.initShopCategory()
 	cfg.t.initShopType()
-	cfg.t.initTargetType()
 	cfg.t.initTreasureType()
+	
+	cfg.t.initAccSourceType()
+	cfg.t.initAttackType()
+	cfg.t.initBreakDmgLimitType()
+	cfg.t.initCalculationType()
+	cfg.t.initCriticalType()
+	cfg.t.initCtbAttackType()
+	cfg.t.initDamageFormula()
+	cfg.t.initDamageType()
+	cfg.t.initDelayType()
+	cfg.t.initDurationType()
+	cfg.t.initTargetType()
 }
 
 // replace Typed logic and lookup with this struct
@@ -96,7 +107,7 @@ func (t *TypeLookup) initAreaConnectionType() {
 		},
 	}
 
-	t.AreaConnectionType = newEnumType[database.AreaConnectionType, any]("area connection type", true, typeSlice, func(s string) database.AreaConnectionType {
+	t.AreaConnectionType = newEnumType[database.AreaConnectionType, any]("area connection type", false, typeSlice, func(s string) database.AreaConnectionType {
 		return database.AreaConnectionType(s)
 	}, nil)
 }
@@ -192,7 +203,6 @@ func (t *TypeLookup) initComposer() {
 }
 
 func (t *TypeLookup) initCTBIconType() {
-
 	typeSlice := []TypedAPIResource{
 		{
 			Name:        string(database.CtbIconTypeMonster),
@@ -216,7 +226,7 @@ func (t *TypeLookup) initCTBIconType() {
 		},
 	}
 
-	t.CTBIconType = newEnumType[database.CtbIconType, any]("ctb icon type", true, typeSlice, func(s string) database.CtbIconType {
+	t.CTBIconType = newEnumType[database.CtbIconType, any]("ctb icon type", false, typeSlice, func(s string) database.CtbIconType {
 		return database.CtbIconType(s)
 	}, nil)
 }
@@ -283,7 +293,7 @@ func (t *TypeLookup) initLootType() {
 		},
 	}
 
-	t.LootType = newEnumType[database.LootType, any]("loot type", false, typeSlice, func(s string) database.LootType {
+	t.LootType = newEnumType[database.LootType, any]("loot type", true, typeSlice, func(s string) database.LootType {
 		return database.LootType(s)
 	}, nil)
 }
@@ -493,27 +503,26 @@ func (t *TypeLookup) initMonsterSpecies() {
 		},
 	}
 
-	t.MonsterSpecies = newEnumType[database.MonsterSpecies, any]("monster species", false, typeSlice, func(s string) database.MonsterSpecies {
+	t.MonsterSpecies = newEnumType[database.MonsterSpecies, any]("monster species", true, typeSlice, func(s string) database.MonsterSpecies {
 		return database.MonsterSpecies(s)
 	}, nil)
 }
 
-func (t *TypeLookup) initMonsterType() {
-
+func (t *TypeLookup) initMonsterCategory() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: string(database.CtbIconTypeMonster),
+			Name: string(database.MonsterCategoryMonster),
 		},
 		{
-			Name: string(database.CtbIconTypeBoss),
+			Name: string(database.MonsterCategoryBoss),
 		},
 		{
-			Name: string(database.CtbIconTypeSummon),
+			Name: string(database.MonsterCategorySummon),
 		},
 	}
 
-	t.MonsterType = newEnumType[database.CtbIconType, any]("monster type", false, typeSlice, func(s string) database.CtbIconType {
-		return database.CtbIconType(s)
+	t.MonsterCategory = newEnumType[database.MonsterCategory, any]("monster category", true, typeSlice, func(s string) database.MonsterCategory {
+		return database.MonsterCategory(s)
 	}, nil)
 }
 
@@ -529,7 +538,7 @@ func (t *TypeLookup) initOverdriveModeType() {
 		},
 	}
 
-	t.OverdriveModeType = newEnumType[database.OverdriveModeType, any]("overdrive mode type", true, typeSlice, func(s string) database.OverdriveModeType {
+	t.OverdriveModeType = newEnumType[database.OverdriveModeType, any]("overdrive mode type", false, typeSlice, func(s string) database.OverdriveModeType {
 		return database.OverdriveModeType(s)
 	}, nil)
 }
@@ -553,7 +562,7 @@ func (t *TypeLookup) initPlayerAbilityCategory() {
 		},
 	}
 
-	t.PlayerAbilityCategory = newEnumType[database.PlayerAbilityCategory, any]("player ability category", false, typeSlice, func(s string) database.PlayerAbilityCategory {
+	t.PlayerAbilityCategory = newEnumType[database.PlayerAbilityCategory, any]("player ability category", true, typeSlice, func(s string) database.PlayerAbilityCategory {
 		return database.PlayerAbilityCategory(s)
 	}, nil)
 }
@@ -574,7 +583,7 @@ func (t *TypeLookup) initShopCategory() {
 		},
 	}
 
-	t.ShopCategory = newEnumType[database.ShopCategory, any]("shop category", false, typeSlice, func(s string) database.ShopCategory {
+	t.ShopCategory = newEnumType[database.ShopCategory, any]("shop category", true, typeSlice, func(s string) database.ShopCategory {
 		return database.ShopCategory(s)
 	}, nil)
 }
@@ -610,7 +619,7 @@ func (t *TypeLookup) initTreasureType() {
 		},
 	}
 
-	t.TreasureType = newEnumType[database.TreasureType, any]("treasure type", true, typeSlice, func(s string) database.TreasureType {
+	t.TreasureType = newEnumType[database.TreasureType, any]("treasure type", false, typeSlice, func(s string) database.TreasureType {
 		return database.TreasureType(s)
 	}, nil)
 }
@@ -627,8 +636,260 @@ func (t *TypeLookup) initAccSourceType() {
 		},
 	}
 
-	t.AccSourceType = newEnumType[database.AccSourceType, any]("accuracy source type", true, typeSlice, func(s string) database.AccSourceType {
+	t.AccSourceType = newEnumType[database.AccSourceType, any]("accuracy source type", false, typeSlice, func(s string) database.AccSourceType {
 		return database.AccSourceType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initAttackType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.AttackTypeAttack),
+		},
+		{
+			Name: 			string(database.AttackTypeHeal),
+		},
+		{
+			Name: 			string(database.AttackTypeAbsorb),
+		},
+	}
+
+	t.AttackType = newEnumType[database.AttackType, any]("attack type", true, typeSlice, func(s string) database.AttackType {
+		return database.AttackType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initBreakDmgLimitType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.BreakDmgLmtTypeAlways),
+			Description:	"The ability always breaks the damage limit.",
+		},
+		{
+			Name: 			string(database.BreakDmgLmtTypeAutoAbility),
+			Description:	"The ability can only break the damage limit, if the user has the auto-ability 'Break Damage Limit' equipped.",
+		},
+	}
+
+	t.BreakDmgLimitType = newEnumType("break damage limit type", false, typeSlice, func(s string) database.BreakDmgLmtType {
+		return database.BreakDmgLmtType(s)
+	}, h.NullBreakDmgLmtType)
+}
+
+func (t *TypeLookup) initCalculationType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.CalculationTypeAddedPercentage),
+			Description:	"The given value is added (or subtracted, if negative) to a final percentage-based factor which is applied at the end of the calculation. Example: If the value is 3 (like with Auto-Ability 'Strength +3%'), then the result of the calculation will be multiplied by 1.03.",
+		},
+		{
+			Name: 			string(database.CalculationTypeAddedValue),
+			Description:	"The given value is added directly to the destination. This type is either used directly on stats or on factors within the calculation and is most prominently seen on abilities like 'Cheer' and its equivalents.",
+		},
+		{
+			Name: 			string(database.CalculationTypeMultiply),
+			Description:	"The result of the calculation will be multiplied by the given value. Values with calculation type 'multiply' can stack on the same destination. Example: If Rikku uses 'Hot Spurs' (overdrive-charge x1.5) and then 'Eccentrick' (overdrive-charge x2), the gauge will charge 3 times as fast.",
+		},
+		{
+			Name: 			string(database.CalculationTypeMultiplyHighest),
+			Description:	"The result of the calculation will be multiplied by the given value. If more than one modification with calculation type 'multiply-highest' reach the same destination, only the highest factor is applied. Example: Auto-Abilities 'Double AP' and 'Triple AP' both use 'multiply-highest'. Factor 3 of 'Triple AP' will override factor 2 of 'Double AP', since it's higher.",
+		},
+		{
+			Name: 			string(database.CalculationTypeSetValue),
+			Description:	"The destination becomes the given value. Example: Auto-Ability 'One MP Cost' sets the MP cost every spell to 1.",
+		},
+		{
+			Name: 			string(database.CalculationTypeSetMinValue),
+			Description:	"The destination can't be lower than the given value at the end of all calculations. Example: 'Trio of 9999' sets the minimum damage a character can deal to 9999.",
+		},
+	}
+
+	t.CalculationType = newEnumType[database.CalculationType, any]("calculation type", false, typeSlice, func(s string) database.CalculationType {
+		return database.CalculationType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initCriticalType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.CriticalTypeCrit),
+			Description:	"The ability uses the normal critical hit formula.",
+		},
+		{
+			Name: 			string(database.CriticalTypeCritweapon),
+			Description:	"The critical plus values of the user's equipment are added toward the critical hit chance.",
+		},
+		{
+			Name: 			string(database.CriticalTypeCritability),
+			Description:	"The critical plus value of the used ability is added toward the critical hit chance.",
+		},
+	}
+
+	t.CriticalType = newEnumType("critical type", false, typeSlice, func(s string) database.CriticalType {
+		return database.CriticalType(s)
+	}, h.NullCriticalType)
+}
+
+func (t *TypeLookup) initCtbAttackType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.CtbAttackTypeAttack),
+		},
+		{
+			Name: 			string(database.CtbAttackTypeHeal),
+		},
+	}
+
+	t.CtbAttackType = newEnumType[database.CtbAttackType, any]("ctb attack type", false, typeSlice, func(s string) database.CtbAttackType {
+		return database.CtbAttackType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initDamageFormula() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.DamageFormulaStrVsDef),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaStrIgnDef),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaMagVsMdf),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaMagIgnMdf),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaPercentageCurrent),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaPercentageMax),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaHealing),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaSpecialNoVar),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaSpecialVar),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaSpecialMagic),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaSpecialGil),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaSpecialKills),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaSpecial9999),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaFixed9999),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaUserMaxHp),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaSwallowedA),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.DamageFormulaSwallowedB),
+			Description: 	"",
+		},
+	}
+
+	t.DamageFormula = newEnumType[database.DamageFormula, any]("damage formula", true, typeSlice, func(s string) database.DamageFormula {
+		return database.DamageFormula(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initDamageType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.DamageTypePhysical),
+			Description: 	"The damage can be reduced by 'Protect', 'Defend' 'Power Break', 'Sentinel', 'Shield', and 'Cheer', as well as 'Defense +X%' Auto-Abilities.",
+		},
+		{
+			Name: 			string(database.DamageTypeMagical),
+			Description: 	"The damage can be reduced by 'Shell', 'Magic Break', 'Shield', and 'Focus', as well as 'Magic Def +X%' Auto-Abilities. It can be increased by 'Magic +X%' Auto-Abilities.",
+		},
+		{
+			Name: 			string(database.DamageTypeSpecial),
+			Description: 	"The damage can only be reduced by 'Shield'.",
+		},
+	}
+
+	t.DamageType = newEnumType[database.DamageType, any]("damage type", true, typeSlice, func(s string) database.DamageType {
+		return database.DamageType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initDelayType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.DelayTypeCtbBased),
+			Description: 	"Delay is based on current ticks. CTB damage/heal is only applied, if 'Slow'/'Haste' is succcessful or if the status was successfully removed.",
+		},
+		{
+			Name: 			string(database.DelayTypeTickSpeedBased),
+			Description: 	"Delay is based on tick speed. CTB damage is applied via an attack. Example: 'Delay Attack'.",
+		},
+	}
+
+	t.DelayType = newEnumType[database.DelayType, any]("delay type", false, typeSlice, func(s string) database.DelayType {
+		return database.DelayType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initDurationType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.DurationTypeTurns),
+			Description: 	"The status condition wears off after a set amount of turns.",
+		},
+		{
+			Name: 			string(database.DurationTypeInflictorNextTurn),
+			Description: 	"The status condition wears off on the inflictor's next turn. This is only used for 'Threaten'.",
+		},
+		{
+			Name: 			string(database.DurationTypeBlocks),
+			Description: 	"The status condition is present as long as it has blocks left. Used only for 'Nul-' status conditions.",
+		},
+		{
+			Name: 			string(database.DurationTypeEndless),
+			Description: 	"The status condition won't wear off. It is present until it is removed.",
+		},
+		{
+			Name: 			string(database.DurationTypeInstant),
+			Description: 	"The status condition wears off instantly. Most commonly seen on 'Death' and 'Life', but there are exceptions like Sinspawn Gui and Ultima Buster gaining 'Defend' while blocking, or Penance's Arms gaining 'Haste' while taking an action.",
+		},
+		{
+			Name: 			string(database.DurationTypeAuto),
+			Description: 	"The status condition is present forever and can't be removed. Only used on Biran Ronso's 'Mighty Guard'.",
+		},
+	}
+
+	t.DurationType = newEnumType[database.DurationType, any]("duration type", false, typeSlice, func(s string) database.DurationType {
+		return database.DurationType(s)
 	}, nil)
 }
 
@@ -680,7 +941,7 @@ func (t *TypeLookup) initTargetType() {
 		},
 	}
 
-	t.TargetType = newEnumType("target type", true, typeSlice, func(s string) database.TargetType {
+	t.TargetType = newEnumType("target type", false, typeSlice, func(s string) database.TargetType {
 		return database.TargetType(s)
 	}, h.NullTargetType)
 }

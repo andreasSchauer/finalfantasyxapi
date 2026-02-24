@@ -103,7 +103,7 @@ func convertAltStateChange(cfg *Config, asc seeding.AltStateChange) AltStateChan
 	}
 
 	if asc.AddedStatus != nil {
-		addedStatus := newInflictedStatus(cfg, *asc.AddedStatus)
+		addedStatus := convertInflictedStatus(cfg, *asc.AddedStatus)
 		change.AddedStatus = &addedStatus
 	}
 

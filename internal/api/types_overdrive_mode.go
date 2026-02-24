@@ -6,7 +6,7 @@ type OverdriveMode struct {
 	Name        string           `json:"name"`
 	Description string           `json:"description"`
 	Effect      string           `json:"effect"`
-	Type        NamedAPIResource `json:"type"`
+	Type        string			 `json:"type"`
 	FillRate    *float32         `json:"fill_rate,omitempty"`
 	Actions     []ActionAmount   `json:"actions"`
 }

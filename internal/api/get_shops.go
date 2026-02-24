@@ -12,11 +12,13 @@ func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, U
 		return Shop{}, err
 	}
 
+	category, _ := newNamedAPIResourceFromType(cfg, cfg.e.shopCategory.endpoint, shop.Category, cfg.t.ShopCategory)
+
 	response := Shop{
 		ID:          shop.ID,
 		Area:        idToAreaAPIResource(cfg, cfg.e.areas, shop.AreaID),
 		Notes:       shop.Notes,
-		Category:    shop.Category,
+		Category:    category,
 		PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShop),
 		PostAirship: convertObjPtr(cfg, shop.PostAirship, convertSubShop),
 	}

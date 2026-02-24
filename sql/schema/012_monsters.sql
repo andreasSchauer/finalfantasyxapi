@@ -4,6 +4,7 @@ CREATE TYPE monster_species AS ENUM ('adamantoise', 'aeon', 'armor', 'basilisk',
 
 CREATE TYPE ctb_icon_type AS ENUM ('monster', 'boss', 'boss-numbered', 'summon', 'cid');
 
+CREATE TYPE monster_category AS ENUM ('monster', 'boss', 'summon');
 
 CREATE TYPE monster_formation_category AS ENUM ('boss-fight', 'on-demand-fight', 'random-encounter', 'static-encounter', 'story-fight', 'tutorial');
 
@@ -20,6 +21,7 @@ CREATE TABLE monsters (
     is_repeatable BOOLEAN NOT NULL,
     can_be_captured BOOLEAN NOT NULL,
     area_conquest_location ma_creation_area,
+    category monster_category NOT NULL,
     ctb_icon_type ctb_icon_type NOT NULL,
     has_overdrive BOOLEAN NOT NULL,
     is_underwater BOOLEAN NOT NULL,
@@ -112,5 +114,6 @@ DROP TABLE IF EXISTS monster_selections;
 DROP TABLE IF EXISTS monster_amounts;
 DROP TABLE IF EXISTS monsters;
 DROP TYPE IF EXISTS monster_formation_category;
+DROP TYPE IF EXISTS monster_category;
 DROP TYPE IF EXISTS ctb_icon_type;
 DROP TYPE IF EXISTS monster_species;

@@ -20,6 +20,7 @@ type Monster struct {
 	IsRepeatable         bool              `json:"is_repeatable"`
 	CanBeCaptured        bool              `json:"can_be_captured"`
 	AreaConquestLocation *string           `json:"area_conquest_location"`
+	Category			 string			   `json:"category"`
 	CTBIconType          string            `json:"ctb_icon_type"`
 	HasOverdrive         bool              `json:"has_overdrive"`
 	IsUnderwater         bool              `json:"is_underwater"`
@@ -127,6 +128,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 				IsRepeatable:         monster.IsRepeatable,
 				CanBeCaptured:        monster.CanBeCaptured,
 				AreaConquestLocation: h.NullMaCreationArea(monster.AreaConquestLocation),
+				Category: 			  database.MonsterCategory(monster.Category),
 				CtbIconType:          database.CtbIconType(monster.CTBIconType),
 				HasOverdrive:         monster.HasOverdrive,
 				IsUnderwater:         monster.IsUnderwater,

@@ -7,7 +7,7 @@ type Treasure struct {
 	IsPostAirship   bool             `json:"is_post_airship"`
 	IsAnimaTreasure bool             `json:"is_anima_treasure"`
 	Notes           *string          `json:"notes,omitempty"`
-	TreasureType    NamedAPIResource `json:"treasure_type"`
+	TreasureType    string 			 `json:"treasure_type"`
 	LootType        NamedAPIResource `json:"loot_type"`
 	GilAmount       *int32           `json:"gil_amount,omitempty"`
 	Items           []ItemAmount     `json:"items,omitempty"`

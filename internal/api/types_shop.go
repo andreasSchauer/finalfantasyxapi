@@ -6,7 +6,7 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 type Shop struct {
 	ID          int32           `json:"id"`
 	Area        AreaAPIResource `json:"area"`
-	Category    string          `json:"category"`
+	Category    NamedAPIResource          `json:"category"`
 	Notes       *string         `json:"notes,omitempty"`
 	PreAirship  *SubShop        `json:"pre_airship"`
 	PostAirship *SubShop        `json:"post_airship"`
