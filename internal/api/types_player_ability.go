@@ -18,14 +18,15 @@ type PlayerAbility struct {
 	MpCost                	*int32					`json:"mp_cost"`
 	Category              	NamedAPIResource		`json:"category"`
 	AeonLearnItem         	*ItemAmount				`json:"aeon_learn_item"`
-	LearnedBy             	[]NamedAPIResource		`json:"learned_by"`
 	RelatedStats          	[]NamedAPIResource		`json:"related_stats"`
-	StandardGridCharacter 	*NamedAPIResource		`json:"standard_grid_character"`
-	ExpertGridCharacter   	*NamedAPIResource		`json:"expert_grid_character"`
 	Topmenu               	*NamedAPIResource		`json:"topmenu"`
 	Submenu               	*NamedAPIResource		`json:"submenu"`
 	OpenSubmenu           	*NamedAPIResource		`json:"open_submenu"`
 	Cursor                	*string					`json:"cursor"`
+	LearnedBy             	[]NamedAPIResource		`json:"learned_by"`
+	StandardGridCharacter 	*NamedAPIResource		`json:"standard_grid_character"`
+	ExpertGridCharacter   	*NamedAPIResource		`json:"expert_grid_character"`
+	Monsters				[]NamedAPIResource		`json:"monsters"`
 	BattleInteractions		[]BattleInteraction		`json:"battle_interactions"`
 }
 

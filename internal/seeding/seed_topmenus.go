@@ -28,6 +28,13 @@ func (t Topmenu) Error() string {
 	return fmt.Sprintf("topmenu %s", t.Name)
 }
 
+func (t Topmenu) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 	t.ID,
+		Name:	t.Name,
+	}
+}
+
 
 func (l *Lookup) seedTopmenus(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "data/topmenus.json"

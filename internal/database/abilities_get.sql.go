@@ -63,6 +63,36 @@ func (q *Queries) GetPlayerAbilityIDsByCategory(ctx context.Context, category Pl
 	return items, nil
 }
 
+const getPlayerAbilityIDsByName = `-- name: GetPlayerAbilityIDsByName :many
+SELECT pa.id
+FROM player_abilities pa
+JOIN abilities a ON pa.ability_id = a.id
+WHERE a.name = $1
+`
+
+func (q *Queries) GetPlayerAbilityIDsByName(ctx context.Context, name string) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByName, name)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getPlayerAbilityMonsterIDs = `-- name: GetPlayerAbilityMonsterIDs :many
 SELECT m.id
 FROM monsters m

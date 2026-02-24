@@ -1,3 +1,10 @@
+-- name: GetPlayerAbilityIDsByName :many
+SELECT pa.id
+FROM player_abilities pa
+JOIN abilities a ON pa.ability_id = a.id
+WHERE a.name = $1;
+
+
 -- name: GetPlayerAbilityMonsterIDs :many
 SELECT m.id
 FROM monsters m

@@ -28,7 +28,7 @@ type endpoints struct {
 	overdriveModes     handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
 	overdrives         handlerInput[seeding.Overdrive, any, NamedAPIResource, NamedApiResourceList]
 	otherAbilities     handlerInput[seeding.OtherAbility, any, NamedAPIResource, NamedApiResourceList]
-	playerAbilities    handlerInput[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList]
+	playerAbilities    handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
 	enemyAbilities     handlerInput[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList]
 	itemAbilities      handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]
 	overdriveAbilities handlerInput[seeding.OverdriveAbility, any, NamedAPIResource, NamedApiResourceList]
@@ -43,6 +43,7 @@ type endpoints struct {
 	statusConditions   handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
 	sublocations       handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
 	submenus           handlerInput[seeding.Submenu, any, NamedAPIResource, NamedApiResourceList]
+	topmenus           handlerInput[seeding.Topmenu, any, NamedAPIResource, NamedApiResourceList]
 	treasures          handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
 
 
@@ -402,13 +403,18 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.playerAbilities = handlerInput[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "player-abilities",
-		resourceType:  "player ability",
-		objLookup:     cfg.l.PlayerAbilities,
-		objLookupID:   cfg.l.PlayerAbilitiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.PlayerAbility, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+	e.playerAbilities = handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      		"player-abilities",
+		resourceType:  		"player ability",
+		objLookup:     		cfg.l.PlayerAbilities,
+		objLookupID:   		cfg.l.PlayerAbilitiesID,
+		queryLookup:   		cfg.q.playerAbilities,
+		idToResFunc:   		idToNamedAPIResource[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 		newNamedAPIResourceList,
+		getMultipleQuery: 	cfg.db.GetPlayerAbilityIDsByName,
+		retrieveQuery: 		cfg.db.GetPlayerAbilityIDs,
+		getSingleFunc: 		cfg.getPlayerAbility,
+		retrieveFunc: 		cfg.retrievePlayerAbilities,
 	}
 
 	e.enemyAbilities = handlerInput[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList]{
@@ -598,6 +604,15 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:     cfg.l.Submenus,
 		objLookupID:   cfg.l.SubmenusID,
 		idToResFunc:   idToNamedAPIResource[seeding.Submenu, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
+	}
+
+	e.topmenus = handlerInput[seeding.Topmenu, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      "topmenus",
+		resourceType:  "topmenu",
+		objLookup:     cfg.l.Topmenus,
+		objLookupID:   cfg.l.TopmenusID,
+		idToResFunc:   idToNamedAPIResource[seeding.Topmenu, any, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 

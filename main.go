@@ -40,6 +40,7 @@ func main() {
 	mux.HandleFunc("GET /api/monsters/", apiCfg.HandleMonsters)
 	mux.HandleFunc("GET /api/monster-formations/", apiCfg.HandleMonsterFormations)
 	mux.HandleFunc("GET /api/overdrive-modes/", apiCfg.HandleOverdriveModes)
+	mux.HandleFunc("GET /api/player-abilities/", apiCfg.HandlePlayerAbilities)
 	mux.HandleFunc("GET /api/shops/", apiCfg.HandleShops)
 	mux.HandleFunc("GET /api/songs/", apiCfg.HandleSongs)
 	mux.HandleFunc("GET /api/sidequests/", apiCfg.HandleSidequests)

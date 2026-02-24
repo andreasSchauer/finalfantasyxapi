@@ -56,6 +56,11 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 }
 
 
+func (cfg *Config) HandlePlayerAbilities(w http.ResponseWriter, r *http.Request) {
+	routerNameVersion(cfg, w, r, cfg.e.playerAbilities)
+}
+
+
 func (cfg *Config) HandleShops(w http.ResponseWriter, r *http.Request) {
 	routerIdOnly(cfg, w, r, cfg.e.shops)
 }
