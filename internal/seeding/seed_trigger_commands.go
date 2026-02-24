@@ -12,9 +12,10 @@ import (
 type TriggerCommand struct {
 	ID int32
 	Ability
+	TopmenuID		   *int32			  
 	Description        string              `json:"description"`
 	Effect             string              `json:"effect"`
-	Topmenu            string              `json:"topmenu"`
+	Topmenu            *string             `json:"topmenu"`
 	RelatedStats       []string            `json:"related_stats"`
 	Cursor             string              `json:"cursor"`
 	BattleInteractions []BattleInteraction `json:"battle_interactions"`
@@ -25,7 +26,7 @@ func (t TriggerCommand) ToHashFields() []any {
 		t.Ability.ID,
 		t.Description,
 		t.Effect,
-		t.Topmenu,
+		h.DerefOrNil(t.TopmenuID),
 		t.Cursor,
 	}
 }
@@ -87,7 +88,6 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 				AbilityID:   command.Ability.ID,
 				Description: command.Description,
 				Effect:      command.Effect,
-				Topmenu:     database.TopmenuType(command.Topmenu),
 				Cursor:      database.TargetType(command.Cursor),
 			})
 			if err != nil {
@@ -121,6 +121,17 @@ func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *
 			if err != nil {
 				return err
 			}
+
+			command.TopmenuID, err = assignFKPtr(command.Topmenu, l.Topmenus)
+			if err != nil {
+				return h.NewErr(command.Error(), err)
+			}
+
+			err = qtx.UpdateTriggerCommand(context.Background(), database.UpdateTriggerCommandParams{
+				DataHash: 	generateDataHash(command),
+				TopmenuID: 	h.GetNullInt32(command.TopmenuID),
+				ID: 		command.ID,
+			})
 
 			err = l.seedTriggerCommandRelatedStats(qtx, command)
 			if err != nil {

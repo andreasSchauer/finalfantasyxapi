@@ -12,12 +12,13 @@ import (
 type OverdriveCommand struct {
 	ID          int32
 	CharClassID *int32
+	TopmenuID	*int32
 	SubmenuID   *int32
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	User        string `json:"user"`
 	Rank        int32  `json:"rank"`
-	Topmenu     string `json:"topmenu"`
+	Topmenu     *string `json:"topmenu"`
 	OpenSubmenu string `json:"open_submenu"`
 }
 
@@ -26,7 +27,7 @@ func (oc OverdriveCommand) ToHashFields() []any {
 		oc.Name,
 		oc.Description,
 		oc.Rank,
-		oc.Topmenu,
+		h.DerefOrNil(oc.TopmenuID),
 		oc.OpenSubmenu,
 		h.DerefOrNil(oc.CharClassID),
 		h.DerefOrNil(oc.SubmenuID),
@@ -64,7 +65,6 @@ func (l *Lookup) seedOverdriveCommands(db *database.Queries, dbConn *sql.DB) err
 				Name:        command.Name,
 				Description: command.Description,
 				Rank:        command.Rank,
-				Topmenu:     database.TopmenuType(command.Topmenu),
 			})
 			if err != nil {
 				return h.NewErr(command.Error(), err, "couldn't create overdrive command")
@@ -95,6 +95,11 @@ func (l *Lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn
 				return err
 			}
 
+			command.TopmenuID, err = assignFKPtr(command.Topmenu, l.Topmenus)
+			if err != nil {
+				return h.NewErr(command.Error(), err)
+			}
+
 			command.CharClassID, err = assignFKPtr(&command.User, l.CharClasses)
 			if err != nil {
 				return h.NewErr(command.Error(), err)
@@ -108,6 +113,7 @@ func (l *Lookup) seedOverdriveCommandsRelationships(db *database.Queries, dbConn
 			err = qtx.UpdateOverdriveCommand(context.Background(), database.UpdateOverdriveCommandParams{
 				DataHash:         generateDataHash(command),
 				CharacterClassID: h.GetNullInt32(command.CharClassID),
+				TopmenuID: 		  h.GetNullInt32(command.TopmenuID),
 				SubmenuID:        h.GetNullInt32(command.SubmenuID),
 				ID:               command.ID,
 			})

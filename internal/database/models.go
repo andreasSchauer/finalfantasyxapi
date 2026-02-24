@@ -2471,50 +2471,6 @@ func (ns NullTargetType) Value() (driver.Value, error) {
 	return string(ns.TargetType), nil
 }
 
-type TopmenuType string
-
-const (
-	TopmenuTypeMain   TopmenuType = "main"
-	TopmenuTypeLeft   TopmenuType = "left"
-	TopmenuTypeRight  TopmenuType = "right"
-	TopmenuTypeHidden TopmenuType = "hidden"
-)
-
-func (e *TopmenuType) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = TopmenuType(s)
-	case string:
-		*e = TopmenuType(s)
-	default:
-		return fmt.Errorf("unsupported scan type for TopmenuType: %T", src)
-	}
-	return nil
-}
-
-type NullTopmenuType struct {
-	TopmenuType TopmenuType
-	Valid       bool // Valid is true if TopmenuType is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullTopmenuType) Scan(value interface{}) error {
-	if value == nil {
-		ns.TopmenuType, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.TopmenuType.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullTopmenuType) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.TopmenuType), nil
-}
-
 type TreasureType string
 
 const (
@@ -2705,8 +2661,8 @@ type AeonCommand struct {
 	Name        string
 	Description string
 	Effect      string
-	Topmenu     TopmenuType
 	Cursor      NullTargetType
+	TopmenuID   sql.NullInt32
 	SubmenuID   sql.NullInt32
 }
 
@@ -3776,8 +3732,8 @@ type OtherAbility struct {
 	AbilityID     int32
 	Description   sql.NullString
 	Effect        string
-	Topmenu       NullTopmenuType
 	Cursor        NullTargetType
+	TopmenuID     sql.NullInt32
 	SubmenuID     sql.NullInt32
 	OpenSubmenuID sql.NullInt32
 }
@@ -3789,11 +3745,11 @@ type Overdrife struct {
 	Version          sql.NullInt32
 	Description      string
 	Effect           string
-	Topmenu          NullTopmenuType
 	AttributesID     int32
 	UnlockCondition  sql.NullString
 	CountdownInSec   sql.NullInt32
 	Cursor           NullTargetType
+	TopmenuID        sql.NullInt32
 	OdCommandID      sql.NullInt32
 	CharacterClassID sql.NullInt32
 }
@@ -3810,8 +3766,8 @@ type OverdriveCommand struct {
 	Name             string
 	Description      string
 	Rank             int32
-	Topmenu          TopmenuType
 	CharacterClassID sql.NullInt32
+	TopmenuID        sql.NullInt32
 	SubmenuID        sql.NullInt32
 }
 
@@ -3832,10 +3788,10 @@ type PlayerAbility struct {
 	Description         sql.NullString
 	Effect              string
 	Category            PlayerAbilityCategory
-	Topmenu             NullTopmenuType
 	CanUseOutsideBattle bool
 	MpCost              sql.NullInt32
 	Cursor              NullTargetType
+	TopmenuID           sql.NullInt32
 	SubmenuID           sql.NullInt32
 	OpenSubmenuID       sql.NullInt32
 	StandardGridCharID  sql.NullInt32
@@ -4000,7 +3956,7 @@ type Submenu struct {
 	Name        string
 	Description string
 	Effect      string
-	Topmenu     NullTopmenuType
+	TopmenuID   sql.NullInt32
 }
 
 type Subquest struct {
@@ -4008,6 +3964,12 @@ type Subquest struct {
 	DataHash    string
 	QuestID     int32
 	SidequestID int32
+}
+
+type Topmenu struct {
+	ID       int32
+	DataHash string
+	Name     string
 }
 
 type Treasure struct {
@@ -4030,6 +3992,6 @@ type TriggerCommand struct {
 	AbilityID   int32
 	Description string
 	Effect      string
-	Topmenu     TopmenuType
 	Cursor      TargetType
+	TopmenuID   sql.NullInt32
 }

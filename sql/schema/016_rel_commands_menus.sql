@@ -1,10 +1,16 @@
 -- +goose Up
 ALTER TABLE aeon_commands
+ADD COLUMN topmenu_id INTEGER REFERENCES topmenus(id),
 ADD COLUMN submenu_id INTEGER REFERENCES submenus(id);
+
+
+ALTER TABLE submenus
+ADD COLUMN topmenu_id INTEGER REFERENCES topmenus(id);
 
 
 ALTER TABLE overdrive_commands
 ADD COLUMN character_class_id INTEGER REFERENCES character_classes(id),
+ADD COLUMN topmenu_id INTEGER REFERENCES topmenus(id),
 ADD COLUMN submenu_id INTEGER REFERENCES submenus(id);
 
 
@@ -33,7 +39,12 @@ DROP TABLE IF EXISTS j_submenus_users;
 
 ALTER TABLE overdrive_commands
 DROP COLUMN IF EXISTS submenu_id,
+DROP COLUMN IF EXISTS topmenu_id,
 DROP COLUMN IF EXISTS character_class_id;
 
+ALTER TABLE submenus
+DROP COLUMN IF EXISTS topmenu_id;
+
 ALTER TABLE aeon_commands
+DROP COLUMN IF EXISTS topmenu_id,
 DROP COLUMN IF EXISTS submenu_id;

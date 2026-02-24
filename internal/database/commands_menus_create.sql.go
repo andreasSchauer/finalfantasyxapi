@@ -11,10 +11,10 @@ import (
 )
 
 const createAeonCommand = `-- name: CreateAeonCommand :one
-INSERT INTO aeon_commands (data_hash, name, description, effect, topmenu, cursor)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO aeon_commands (data_hash, name, description, effect, cursor)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_commands.data_hash
-RETURNING id, data_hash, name, description, effect, topmenu, cursor, submenu_id
+RETURNING id, data_hash, name, description, effect, cursor, topmenu_id, submenu_id
 `
 
 type CreateAeonCommandParams struct {
@@ -22,7 +22,6 @@ type CreateAeonCommandParams struct {
 	Name        string
 	Description string
 	Effect      string
-	Topmenu     TopmenuType
 	Cursor      NullTargetType
 }
 
@@ -32,7 +31,6 @@ func (q *Queries) CreateAeonCommand(ctx context.Context, arg CreateAeonCommandPa
 		arg.Name,
 		arg.Description,
 		arg.Effect,
-		arg.Topmenu,
 		arg.Cursor,
 	)
 	var i AeonCommand
@@ -42,8 +40,8 @@ func (q *Queries) CreateAeonCommand(ctx context.Context, arg CreateAeonCommandPa
 		&i.Name,
 		&i.Description,
 		&i.Effect,
-		&i.Topmenu,
 		&i.Cursor,
+		&i.TopmenuID,
 		&i.SubmenuID,
 	)
 	return i, err
@@ -73,10 +71,10 @@ func (q *Queries) CreateAeonCommandsPossibleAbilitiesJunction(ctx context.Contex
 }
 
 const createOverdriveCommand = `-- name: CreateOverdriveCommand :one
-INSERT INTO overdrive_commands (data_hash, name, description, rank, topmenu)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO overdrive_commands (data_hash, name, description, rank)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
-RETURNING id, data_hash, name, description, rank, topmenu, character_class_id, submenu_id
+RETURNING id, data_hash, name, description, rank, character_class_id, topmenu_id, submenu_id
 `
 
 type CreateOverdriveCommandParams struct {
@@ -84,7 +82,6 @@ type CreateOverdriveCommandParams struct {
 	Name        string
 	Description string
 	Rank        int32
-	Topmenu     TopmenuType
 }
 
 func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriveCommandParams) (OverdriveCommand, error) {
@@ -93,7 +90,6 @@ func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriv
 		arg.Name,
 		arg.Description,
 		arg.Rank,
-		arg.Topmenu,
 	)
 	var i OverdriveCommand
 	err := row.Scan(
@@ -102,18 +98,18 @@ func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriv
 		&i.Name,
 		&i.Description,
 		&i.Rank,
-		&i.Topmenu,
 		&i.CharacterClassID,
+		&i.TopmenuID,
 		&i.SubmenuID,
 	)
 	return i, err
 }
 
 const createSubmenu = `-- name: CreateSubmenu :one
-INSERT INTO submenus (data_hash, name, description, effect, topmenu)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO submenus (data_hash, name, description, effect)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = submenus.data_hash
-RETURNING id, data_hash, name, description, effect, topmenu
+RETURNING id, data_hash, name, description, effect, topmenu_id
 `
 
 type CreateSubmenuParams struct {
@@ -121,7 +117,6 @@ type CreateSubmenuParams struct {
 	Name        string
 	Description string
 	Effect      string
-	Topmenu     NullTopmenuType
 }
 
 func (q *Queries) CreateSubmenu(ctx context.Context, arg CreateSubmenuParams) (Submenu, error) {
@@ -130,7 +125,6 @@ func (q *Queries) CreateSubmenu(ctx context.Context, arg CreateSubmenuParams) (S
 		arg.Name,
 		arg.Description,
 		arg.Effect,
-		arg.Topmenu,
 	)
 	var i Submenu
 	err := row.Scan(
@@ -139,7 +133,7 @@ func (q *Queries) CreateSubmenu(ctx context.Context, arg CreateSubmenuParams) (S
 		&i.Name,
 		&i.Description,
 		&i.Effect,
-		&i.Topmenu,
+		&i.TopmenuID,
 	)
 	return i, err
 }
@@ -161,21 +155,47 @@ func (q *Queries) CreateSubmenusUsersJunction(ctx context.Context, arg CreateSub
 	return err
 }
 
+const createTopmenu = `-- name: CreateTopmenu :one
+INSERT INTO topmenus (data_hash, name)
+VALUES ($1, $2)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = topmenus.data_hash
+RETURNING id, data_hash, name
+`
+
+type CreateTopmenuParams struct {
+	DataHash string
+	Name     string
+}
+
+func (q *Queries) CreateTopmenu(ctx context.Context, arg CreateTopmenuParams) (Topmenu, error) {
+	row := q.db.QueryRowContext(ctx, createTopmenu, arg.DataHash, arg.Name)
+	var i Topmenu
+	err := row.Scan(&i.ID, &i.DataHash, &i.Name)
+	return i, err
+}
+
 const updateAeonCommand = `-- name: UpdateAeonCommand :exec
 UPDATE aeon_commands
 SET data_hash = $1,
-    submenu_id = $2
-WHERE id = $3
+    topmenu_id = $2,
+    submenu_id = $3
+WHERE id = $4
 `
 
 type UpdateAeonCommandParams struct {
 	DataHash  string
+	TopmenuID sql.NullInt32
 	SubmenuID sql.NullInt32
 	ID        int32
 }
 
 func (q *Queries) UpdateAeonCommand(ctx context.Context, arg UpdateAeonCommandParams) error {
-	_, err := q.db.ExecContext(ctx, updateAeonCommand, arg.DataHash, arg.SubmenuID, arg.ID)
+	_, err := q.db.ExecContext(ctx, updateAeonCommand,
+		arg.DataHash,
+		arg.TopmenuID,
+		arg.SubmenuID,
+		arg.ID,
+	)
 	return err
 }
 
@@ -183,13 +203,15 @@ const updateOverdriveCommand = `-- name: UpdateOverdriveCommand :exec
 UPDATE overdrive_commands
 SET data_hash = $1,
     character_class_id = $2,
-    submenu_id = $3
-WHERE id = $4
+    topmenu_id = $3,
+    submenu_id = $4
+WHERE id = $5
 `
 
 type UpdateOverdriveCommandParams struct {
 	DataHash         string
 	CharacterClassID sql.NullInt32
+	TopmenuID        sql.NullInt32
 	SubmenuID        sql.NullInt32
 	ID               int32
 }
@@ -198,8 +220,27 @@ func (q *Queries) UpdateOverdriveCommand(ctx context.Context, arg UpdateOverdriv
 	_, err := q.db.ExecContext(ctx, updateOverdriveCommand,
 		arg.DataHash,
 		arg.CharacterClassID,
+		arg.TopmenuID,
 		arg.SubmenuID,
 		arg.ID,
 	)
+	return err
+}
+
+const updateSubmenu = `-- name: UpdateSubmenu :exec
+UPDATE submenus
+SET data_hash = $1,
+    topmenu_id = $2
+WHERE id = $3
+`
+
+type UpdateSubmenuParams struct {
+	DataHash  string
+	TopmenuID sql.NullInt32
+	ID        int32
+}
+
+func (q *Queries) UpdateSubmenu(ctx context.Context, arg UpdateSubmenuParams) error {
+	_, err := q.db.ExecContext(ctx, updateSubmenu, arg.DataHash, arg.TopmenuID, arg.ID)
 	return err
 }

@@ -204,14 +204,19 @@ func (l *Lookup) getSeeders() []seeder {
 			relFunc:  l.seedMonstersRelationships,
 		},
 		{
-			name:     "aeon commands",
-			seedFunc: l.seedAeonCommands,
-			relFunc:  l.seedAeonCommandsRelationships,
+			name:     "topmenus",
+			seedFunc: l.seedTopmenus,
+			relFunc:  nil,
 		},
 		{
 			name:     "submenus",
 			seedFunc: l.seedSubmenus,
 			relFunc:  l.seedSubmenusRelationships,
+		},
+		{
+			name:     "aeon commands",
+			seedFunc: l.seedAeonCommands,
+			relFunc:  l.seedAeonCommandsRelationships,
 		},
 		{
 			name:     "player abilities",

@@ -11,11 +11,12 @@ import (
 
 type AeonCommand struct {
 	ID                int32
+	TopmenuID		  *int32
 	SubmenuID         *int32
 	Name              string            `json:"name"`
 	Description       string            `json:"description"`
 	Effect            string            `json:"effect"`
-	Topmenu           string            `json:"topmenu"`
+	Topmenu           *string           `json:"topmenu"`
 	OpenSubmenu       *string           `json:"open_submenu"`
 	Cursor            *string           `json:"cursor"`
 	PossibleAbilities []PossibleAbility `json:"possible_abilities"`
@@ -26,7 +27,7 @@ func (c AeonCommand) ToHashFields() []any {
 		c.Name,
 		c.Description,
 		c.Effect,
-		c.Topmenu,
+		h.DerefOrNil(c.TopmenuID),
 		h.DerefOrNil(c.Cursor),
 		h.DerefOrNil(c.SubmenuID),
 	}
@@ -72,7 +73,6 @@ func (l *Lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 				Name:        command.Name,
 				Description: command.Description,
 				Effect:      command.Effect,
-				Topmenu:     database.TopmenuType(command.Topmenu),
 				Cursor:      h.NullTargetType(command.Cursor),
 			})
 			if err != nil {
@@ -103,6 +103,11 @@ func (l *Lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql
 				return err
 			}
 
+			command.TopmenuID, err = assignFKPtr(command.Topmenu, l.Topmenus)
+			if err != nil {
+				return h.NewErr(command.Error(), err)
+			}
+
 			command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, l.Submenus)
 			if err != nil {
 				return h.NewErr(command.Error(), err)
@@ -110,6 +115,7 @@ func (l *Lookup) seedAeonCommandsRelationships(db *database.Queries, dbConn *sql
 
 			err = qtx.UpdateAeonCommand(context.Background(), database.UpdateAeonCommandParams{
 				DataHash:  generateDataHash(command),
+				TopmenuID: h.GetNullInt32(command.TopmenuID),
 				SubmenuID: h.GetNullInt32(command.SubmenuID),
 				ID:        command.ID,
 			})

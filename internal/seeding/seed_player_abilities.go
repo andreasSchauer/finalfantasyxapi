@@ -12,6 +12,7 @@ import (
 type PlayerAbility struct {
 	ID int32
 	Ability
+	TopmenuID			*int32
 	SubmenuID           *int32
 	OpenSubmenuID       *int32
 	StandardGridCharID  *int32
@@ -39,7 +40,7 @@ func (p PlayerAbility) ToHashFields() []any {
 		h.DerefOrNil(p.Description),
 		p.Effect,
 		p.Category,
-		h.DerefOrNil(p.Topmenu),
+		h.DerefOrNil(p.TopmenuID),
 		p.CanUseOutsideBattle,
 		h.DerefOrNil(p.MPCost),
 		h.DerefOrNil(p.Cursor),
@@ -109,7 +110,6 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 				Description:         h.GetNullString(playerAbility.Description),
 				Effect:              playerAbility.Effect,
 				Category: 			 database.PlayerAbilityCategory(playerAbility.Category),
-				Topmenu:             h.NullTopmenuType(playerAbility.Topmenu),
 				CanUseOutsideBattle: playerAbility.CanUseOutsideBattle,
 				MpCost:              h.GetNullInt32(playerAbility.MPCost),
 				Cursor:              h.NullTargetType(playerAbility.Cursor),
@@ -176,6 +176,11 @@ func (l *Lookup) seedPlayerAbilitiesRelationships(db *database.Queries, dbConn *
 func (l *Lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbility) error {
 	var err error
 
+	ability.TopmenuID, err = assignFKPtr(ability.Topmenu, l.Topmenus)
+	if err != nil {
+		return err
+	}
+
 	ability.SubmenuID, err = assignFKPtr(ability.Submenu, l.Submenus)
 	if err != nil {
 		return err
@@ -203,6 +208,7 @@ func (l *Lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbili
 
 	err = qtx.UpdatePlayerAbility(context.Background(), database.UpdatePlayerAbilityParams{
 		DataHash:           generateDataHash(ability),
+		TopmenuID: 			h.GetNullInt32(ability.TopmenuID),
 		SubmenuID:          h.GetNullInt32(ability.SubmenuID),
 		OpenSubmenuID:      h.GetNullInt32(ability.OpenSubmenuID),
 		StandardGridCharID: h.GetNullInt32(ability.StandardGridCharID),

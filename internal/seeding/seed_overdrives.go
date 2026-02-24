@@ -10,9 +10,10 @@ import (
 )
 
 type Overdrive struct {
-	ID          int32
-	ODCommandID *int32
-	CharClassID *int32
+	ID          	   int32
+	ODCommandID		   *int32
+	CharClassID 	   *int32
+	TopmenuID		   *int32
 	Ability
 	Description        string             `json:"description"`
 	Effect             string             `json:"effect"`
@@ -33,7 +34,7 @@ func (o Overdrive) ToHashFields() []any {
 		h.DerefOrNil(o.Version),
 		o.Description,
 		o.Effect,
-		h.DerefOrNil(o.Topmenu),
+		h.DerefOrNil(o.TopmenuID),
 		h.ObjPtrToID(o.Attributes),
 		h.DerefOrNil(o.UnlockCondition),
 		h.DerefOrNil(o.CountdownInSec),
@@ -105,7 +106,6 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 				Version:         h.GetNullInt32(overdrive.Version),
 				Description:     overdrive.Description,
 				Effect:          overdrive.Effect,
-				Topmenu:         h.NullTopmenuType(overdrive.Topmenu),
 				AttributesID:    h.ObjPtrToInt32ID(overdrive.Attributes),
 				UnlockCondition: h.GetNullString(overdrive.UnlockCondition),
 				CountdownInSec:  h.GetNullInt32(overdrive.CountdownInSec),
@@ -178,6 +178,11 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 				return err
 			}
 
+			overdrive.TopmenuID, err = assignFKPtr(overdrive.Topmenu, l.Topmenus)
+			if err != nil {
+				return h.NewErr(overdrive.Error(), err)
+			}
+
 			overdrive.ODCommandID, err = assignFKPtr(overdrive.OverdriveCommand, l.OverdriveCommands)
 			if err != nil {
 				return h.NewErr(overdrive.Error(), err)
@@ -190,6 +195,7 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 
 			err = qtx.UpdateOverdrive(context.Background(), database.UpdateOverdriveParams{
 				DataHash:         generateDataHash(overdrive),
+				TopmenuID: 		  h.GetNullInt32(overdrive.TopmenuID),
 				OdCommandID:      h.GetNullInt32(overdrive.ODCommandID),
 				CharacterClassID: h.GetNullInt32(overdrive.CharClassID),
 				ID:               overdrive.ID,

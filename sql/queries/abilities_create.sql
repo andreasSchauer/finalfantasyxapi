@@ -13,8 +13,8 @@ RETURNING *;
 
 
 -- name: CreateOtherAbility :one
-INSERT INTO other_abilities (data_hash, ability_id, description, effect, topmenu, cursor)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO other_abilities (data_hash, ability_id, description, effect, cursor)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = other_abilities.data_hash
 RETURNING *;
 
@@ -22,14 +22,15 @@ RETURNING *;
 -- name: UpdateOtherAbility :exec
 UPDATE other_abilities
 SET data_hash = $1,
-    submenu_id = $2,
-    open_submenu_id = $3
-WHERE id = $4;
+    topmenu_id = $2,
+    submenu_id = $3,
+    open_submenu_id = $4
+WHERE id = $5;
 
 
 -- name: CreatePlayerAbility :one
-INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, topmenu, can_use_outside_battle, mp_cost, cursor)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, can_use_outside_battle, mp_cost, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = player_abilities.data_hash
 RETURNING *;
 
@@ -37,12 +38,13 @@ RETURNING *;
 -- name: UpdatePlayerAbility :exec
 UPDATE player_abilities
 SET data_hash = $1,
-    submenu_id = $2,
-    open_submenu_id = $3,
-    standard_grid_char_id = $4,
-    expert_grid_char_id = $5,
-    aeon_learn_item_id = $6
-WHERE id = $7;
+    topmenu_id = $2,
+    submenu_id = $3,
+    open_submenu_id = $4,
+    standard_grid_char_id = $5,
+    expert_grid_char_id = $6,
+    aeon_learn_item_id = $7
+WHERE id = $8;
 
 
 -- name: CreateotherAbilitiesRelatedStatsJunction :exec
@@ -90,10 +92,17 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateTriggerCommand :one
-INSERT INTO trigger_commands (data_hash, ability_id, description, effect, topmenu, cursor)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO trigger_commands (data_hash, ability_id, description, effect, cursor)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = trigger_commands.data_hash
 RETURNING *;
+
+
+-- name: UpdateTriggerCommand :exec
+UPDATE trigger_commands
+SET data_hash = $1,
+    topmenu_id = $2
+WHERE id = $3;
 
 
 -- name: CreateTriggerCommandsRelatedStatsJunction :exec
@@ -103,8 +112,8 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateOverdrive :one
-INSERT INTO overdrives (data_hash, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+INSERT INTO overdrives (data_hash, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrives.data_hash
 RETURNING *;
 
@@ -112,9 +121,10 @@ RETURNING *;
 -- name: UpdateOverdrive :exec
 UPDATE overdrives
 SET data_hash = $1,
-    od_command_id = $2,
-    character_class_id = $3
-WHERE id = $4;
+    topmenu_id = $2,
+    od_command_id = $3,
+    character_class_id = $4
+WHERE id = $5;
 
 
 -- name: CreateRonsoRage :one

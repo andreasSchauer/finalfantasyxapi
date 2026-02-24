@@ -38,7 +38,6 @@ CREATE TABLE other_abilities (
     ability_id INTEGER UNIQUE NOT NULL REFERENCES abilities(id),
     description TEXT,
     effect TEXT NOT NULL,
-    topmenu topmenu_type,
     cursor target_type
 );
 
@@ -50,7 +49,6 @@ CREATE TABLE player_abilities (
     description TEXT,
     effect TEXT NOT NULL,
     category player_ability_category NOT NULL,
-    topmenu topmenu_type,
     can_use_outside_battle BOOLEAN NOT NULL,
     mp_cost INTEGER,
     cursor target_type
@@ -78,7 +76,6 @@ CREATE TABLE trigger_commands (
     ability_id INTEGER UNIQUE NOT NULL REFERENCES abilities(id),
     description TEXT NOT NULL,
     effect TEXT NOT NULL,
-    topmenu topmenu_type NOT NULL,
     cursor target_type NOT NULL
 );
 
@@ -90,7 +87,6 @@ CREATE TABLE overdrives (
     version INTEGER,
     description TEXT NOT NULL,
     effect TEXT NOT NULL,
-    topmenu topmenu_type,
     attributes_id INTEGER NOT NULL REFERENCES ability_attributes(id),
     unlock_condition TEXT,
     countdown_in_sec INTEGER,

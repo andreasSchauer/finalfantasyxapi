@@ -9,6 +9,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+
 type Submenu struct {
 	ID          int32
 	Name        string   `json:"name"`
@@ -58,7 +59,6 @@ func (l *Lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 				Name:        submenu.Name,
 				Description: submenu.Description,
 				Effect:      submenu.Effect,
-				Topmenu:     h.NullTopmenuType(submenu.Topmenu),
 			})
 			if err != nil {
 				return h.NewErr(submenu.Error(), err, "couldn't create submenu")

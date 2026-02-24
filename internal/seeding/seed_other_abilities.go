@@ -12,6 +12,7 @@ import (
 type OtherAbility struct {
 	ID int32
 	Ability
+	TopmenuID		   *int32
 	SubmenuID          *int32
 	OpenSubmenuID      *int32
 	Description        *string             `json:"description"`
@@ -30,7 +31,7 @@ func (o OtherAbility) ToHashFields() []any {
 		o.Ability.ID,
 		h.DerefOrNil(o.Description),
 		o.Effect,
-		h.DerefOrNil(o.Topmenu),
+		h.DerefOrNil(o.TopmenuID),
 		h.DerefOrNil(o.Cursor),
 		h.DerefOrNil(o.SubmenuID),
 		h.DerefOrNil(o.OpenSubmenuID),
@@ -94,7 +95,6 @@ func (l *Lookup) seedotherAbilities(db *database.Queries, dbConn *sql.DB) error 
 				AbilityID:   OtherAbility.Ability.ID,
 				Description: h.GetNullString(OtherAbility.Description),
 				Effect:      OtherAbility.Effect,
-				Topmenu:     h.NullTopmenuType(OtherAbility.Topmenu),
 				Cursor:      h.NullTargetType(OtherAbility.Cursor),
 			})
 			if err != nil {
@@ -124,31 +124,31 @@ func (l *Lookup) seedotherAbilitiesRelationships(db *database.Queries, dbConn *s
 		for _, jsonAbility := range otherAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			OtherAbility, err := GetResource(abilityRef.Untyped(), l.OtherAbilities)
+			otherAbility, err := GetResource(abilityRef.Untyped(), l.OtherAbilities)
 			if err != nil {
 				return err
 			}
 
-			err = l.seedOtherAbilityFKs(qtx, OtherAbility)
+			err = l.seedOtherAbilityFKs(qtx, otherAbility)
 			if err != nil {
-				return h.NewErr(OtherAbility.Error(), err)
+				return h.NewErr(otherAbility.Error(), err)
 			}
 
-			err = l.seedOtherAbilityRelatedStats(qtx, OtherAbility)
+			err = l.seedOtherAbilityRelatedStats(qtx, otherAbility)
 			if err != nil {
-				return h.NewErr(OtherAbility.Error(), err)
+				return h.NewErr(otherAbility.Error(), err)
 			}
 
-			err = l.seedOtherAbilityLearnedBy(qtx, OtherAbility)
+			err = l.seedOtherAbilityLearnedBy(qtx, otherAbility)
 			if err != nil {
-				return h.NewErr(OtherAbility.Error(), err)
+				return h.NewErr(otherAbility.Error(), err)
 			}
 
-			l.currentAbility = OtherAbility.Ability
+			l.currentAbility = otherAbility.Ability
 
-			err = l.seedBattleInteractions(qtx, l.currentAbility, OtherAbility.BattleInteractions)
+			err = l.seedBattleInteractions(qtx, l.currentAbility, otherAbility.BattleInteractions)
 			if err != nil {
-				return h.NewErr(OtherAbility.Error(), err)
+				return h.NewErr(otherAbility.Error(), err)
 			}
 		}
 
@@ -158,6 +158,11 @@ func (l *Lookup) seedotherAbilitiesRelationships(db *database.Queries, dbConn *s
 
 func (l *Lookup) seedOtherAbilityFKs(qtx *database.Queries, ability OtherAbility) error {
 	var err error
+
+	ability.TopmenuID, err = assignFKPtr(ability.Topmenu, l.Topmenus)
+	if err != nil {
+		return err
+	}
 
 	ability.SubmenuID, err = assignFKPtr(ability.Submenu, l.Submenus)
 	if err != nil {
@@ -171,6 +176,7 @@ func (l *Lookup) seedOtherAbilityFKs(qtx *database.Queries, ability OtherAbility
 
 	err = qtx.UpdateOtherAbility(context.Background(), database.UpdateOtherAbilityParams{
 		DataHash:      generateDataHash(ability),
+		TopmenuID: 	   h.GetNullInt32(ability.TopmenuID),
 		SubmenuID:     h.GetNullInt32(ability.SubmenuID),
 		OpenSubmenuID: h.GetNullInt32(ability.OpenSubmenuID),
 		ID:            ability.ID,

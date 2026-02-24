@@ -10,7 +10,6 @@ func main() {
     nullEnumTypes := []string{
         "NullifyArmored",
         "CreationsUnlockedCategory",
-        "TopmenuType",
         "EquipType",
         "AaActivationCondition",
         "CounterType",

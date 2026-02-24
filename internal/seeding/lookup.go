@@ -120,6 +120,8 @@ type Lookup struct {
 	StatusConditionsID   map[int32]StatusCondition
 	Submenus             map[string]Submenu
 	SubmenusID           map[int32]Submenu
+	Topmenus			 map[string]Topmenu
+	TopmenusID			 map[int32]Topmenu
 	Treasures            map[string]Treasure
 	TreasuresID          map[int32]Treasure
 }
@@ -219,6 +221,8 @@ func lookupInit() Lookup {
 		StatusConditionsID:   make(map[int32]StatusCondition),
 		Submenus:             make(map[string]Submenu),
 		SubmenusID:           make(map[int32]Submenu),
+		Topmenus: 			  make(map[string]Topmenu),
+		TopmenusID: 		  make(map[int32]Topmenu),
 		Treasures:            make(map[string]Treasure),
 		TreasuresID:          make(map[int32]Treasure),
 	}

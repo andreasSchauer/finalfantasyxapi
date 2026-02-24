@@ -45,27 +45,6 @@ func ConvertNullCreationsUnlockedCategory(ne database.NullCreationsUnlockedCateg
 }
 
 
-func NullTopmenuType(s *string) database.NullTopmenuType {
-    if s == nil {
-        return database.NullTopmenuType{}
-    }
-    
-    return database.NullTopmenuType{
-        TopmenuType: database.TopmenuType(*s),
-        Valid: true,
-    }
-}
-
-func ConvertNullTopmenuType(ne database.NullTopmenuType) *string {
-    if !ne.Valid {
-        return nil
-    }
-
-    val := string(ne.TopmenuType)
-    return &val
-}
-
-
 func NullEquipType(s *string) database.NullEquipType {
     if s == nil {
         return database.NullEquipType{}

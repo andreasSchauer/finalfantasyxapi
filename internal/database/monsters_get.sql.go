@@ -487,33 +487,6 @@ func (q *Queries) GetMonsterIDsByAutoAbilityIsForced(ctx context.Context, arg Ge
 	return items, nil
 }
 
-const getMonsterIDsByCTBIconTypeBoss = `-- name: GetMonsterIDsByCTBIconTypeBoss :many
-SELECT id FROM monsters WHERE ctb_icon_type = 'boss' OR ctb_icon_type = 'boss-numbered'
-`
-
-func (q *Queries) GetMonsterIDsByCTBIconTypeBoss(ctx context.Context) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByCTBIconTypeBoss)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getMonsterIDsByCanBeCaptured = `-- name: GetMonsterIDsByCanBeCaptured :many
 SELECT id FROM monsters WHERE can_be_captured = $1
 `

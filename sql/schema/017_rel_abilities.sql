@@ -64,11 +64,13 @@ CREATE TABLE j_overdrives_overdrive_abilities (
 
 
 ALTER TABLE other_abilities
+ADD COLUMN topmenu_id INTEGER REFERENCES topmenus(id),
 ADD COLUMN submenu_id INTEGER REFERENCES submenus(id),
 ADD COLUMN open_submenu_id INTEGER REFERENCES submenus(id);
 
 
 ALTER TABLE player_abilities
+ADD COLUMN topmenu_id INTEGER REFERENCES topmenus(id),
 ADD COLUMN submenu_id INTEGER REFERENCES submenus(id),
 ADD COLUMN open_submenu_id INTEGER REFERENCES submenus(id),
 ADD COLUMN standard_grid_char_id INTEGER REFERENCES characters(id),
@@ -77,14 +79,24 @@ ADD COLUMN aeon_learn_item_id INTEGER REFERENCES item_amounts(id);
 
 
 ALTER TABLE overdrives
+ADD COLUMN topmenu_id INTEGER REFERENCES topmenus(id),
 ADD COLUMN od_command_id INTEGER REFERENCES overdrive_commands(id),
 ADD COLUMN character_class_id INTEGER REFERENCES character_classes(id);
 
 
+ALTER TABLE trigger_commands
+ADD COLUMN topmenu_id INTEGER REFERENCES topmenus(id);
+
+
 -- +goose Down
+ALTER TABLE trigger_commands
+DROP COLUMN IF EXISTS topmenu_id;
+
+
 ALTER TABLE overdrives
 DROP COLUMN IF EXISTS character_class_id,
-DROP COLUMN IF EXISTS od_command_id;
+DROP COLUMN IF EXISTS od_command_id,
+DROP COLUMN IF EXISTS topmenu_id;
 
 
 ALTER TABLE player_abilities
@@ -92,12 +104,14 @@ DROP COLUMN IF EXISTS aeon_learn_item_id,
 DROP COLUMN IF EXISTS expert_grid_char_id,
 DROP COLUMN IF EXISTS standard_grid_char_id,
 DROP COLUMN IF EXISTS open_submenu_id,
-DROP COLUMN IF EXISTS submenu_id;
+DROP COLUMN IF EXISTS submenu_id,
+DROP COLUMN IF EXISTS topmenu_id;
 
 
 ALTER TABLE other_abilities
 DROP COLUMN IF EXISTS open_submenu_id,
-DROP COLUMN IF EXISTS submenu_id;
+DROP COLUMN IF EXISTS submenu_id,
+DROP COLUMN IF EXISTS topmenu_id;
 
 
 DROP TABLE IF EXISTS j_overdrives_overdrive_abilities;

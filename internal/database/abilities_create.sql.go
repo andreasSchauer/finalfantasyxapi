@@ -123,10 +123,10 @@ func (q *Queries) CreateEnemyAbility(ctx context.Context, arg CreateEnemyAbility
 }
 
 const createOtherAbility = `-- name: CreateOtherAbility :one
-INSERT INTO other_abilities (data_hash, ability_id, description, effect, topmenu, cursor)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO other_abilities (data_hash, ability_id, description, effect, cursor)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = other_abilities.data_hash
-RETURNING id, data_hash, ability_id, description, effect, topmenu, cursor, submenu_id, open_submenu_id
+RETURNING id, data_hash, ability_id, description, effect, cursor, topmenu_id, submenu_id, open_submenu_id
 `
 
 type CreateOtherAbilityParams struct {
@@ -134,7 +134,6 @@ type CreateOtherAbilityParams struct {
 	AbilityID   int32
 	Description sql.NullString
 	Effect      string
-	Topmenu     NullTopmenuType
 	Cursor      NullTargetType
 }
 
@@ -144,7 +143,6 @@ func (q *Queries) CreateOtherAbility(ctx context.Context, arg CreateOtherAbility
 		arg.AbilityID,
 		arg.Description,
 		arg.Effect,
-		arg.Topmenu,
 		arg.Cursor,
 	)
 	var i OtherAbility
@@ -154,8 +152,8 @@ func (q *Queries) CreateOtherAbility(ctx context.Context, arg CreateOtherAbility
 		&i.AbilityID,
 		&i.Description,
 		&i.Effect,
-		&i.Topmenu,
 		&i.Cursor,
+		&i.TopmenuID,
 		&i.SubmenuID,
 		&i.OpenSubmenuID,
 	)
@@ -163,10 +161,10 @@ func (q *Queries) CreateOtherAbility(ctx context.Context, arg CreateOtherAbility
 }
 
 const createOverdrive = `-- name: CreateOverdrive :one
-INSERT INTO overdrives (data_hash, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+INSERT INTO overdrives (data_hash, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrives.data_hash
-RETURNING id, data_hash, name, version, description, effect, topmenu, attributes_id, unlock_condition, countdown_in_sec, cursor, od_command_id, character_class_id
+RETURNING id, data_hash, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor, topmenu_id, od_command_id, character_class_id
 `
 
 type CreateOverdriveParams struct {
@@ -175,7 +173,6 @@ type CreateOverdriveParams struct {
 	Version         sql.NullInt32
 	Description     string
 	Effect          string
-	Topmenu         NullTopmenuType
 	AttributesID    int32
 	UnlockCondition sql.NullString
 	CountdownInSec  sql.NullInt32
@@ -189,7 +186,6 @@ func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams
 		arg.Version,
 		arg.Description,
 		arg.Effect,
-		arg.Topmenu,
 		arg.AttributesID,
 		arg.UnlockCondition,
 		arg.CountdownInSec,
@@ -203,11 +199,11 @@ func (q *Queries) CreateOverdrive(ctx context.Context, arg CreateOverdriveParams
 		&i.Version,
 		&i.Description,
 		&i.Effect,
-		&i.Topmenu,
 		&i.AttributesID,
 		&i.UnlockCondition,
 		&i.CountdownInSec,
 		&i.Cursor,
+		&i.TopmenuID,
 		&i.OdCommandID,
 		&i.CharacterClassID,
 	)
@@ -302,10 +298,10 @@ func (q *Queries) CreatePlayerAbilitiesRelatedStatsJunction(ctx context.Context,
 }
 
 const createPlayerAbility = `-- name: CreatePlayerAbility :one
-INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, topmenu, can_use_outside_battle, mp_cost, cursor)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, can_use_outside_battle, mp_cost, cursor)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = player_abilities.data_hash
-RETURNING id, data_hash, ability_id, description, effect, category, topmenu, can_use_outside_battle, mp_cost, cursor, submenu_id, open_submenu_id, standard_grid_char_id, expert_grid_char_id, aeon_learn_item_id
+RETURNING id, data_hash, ability_id, description, effect, category, can_use_outside_battle, mp_cost, cursor, topmenu_id, submenu_id, open_submenu_id, standard_grid_char_id, expert_grid_char_id, aeon_learn_item_id
 `
 
 type CreatePlayerAbilityParams struct {
@@ -314,7 +310,6 @@ type CreatePlayerAbilityParams struct {
 	Description         sql.NullString
 	Effect              string
 	Category            PlayerAbilityCategory
-	Topmenu             NullTopmenuType
 	CanUseOutsideBattle bool
 	MpCost              sql.NullInt32
 	Cursor              NullTargetType
@@ -327,7 +322,6 @@ func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbili
 		arg.Description,
 		arg.Effect,
 		arg.Category,
-		arg.Topmenu,
 		arg.CanUseOutsideBattle,
 		arg.MpCost,
 		arg.Cursor,
@@ -340,10 +334,10 @@ func (q *Queries) CreatePlayerAbility(ctx context.Context, arg CreatePlayerAbili
 		&i.Description,
 		&i.Effect,
 		&i.Category,
-		&i.Topmenu,
 		&i.CanUseOutsideBattle,
 		&i.MpCost,
 		&i.Cursor,
+		&i.TopmenuID,
 		&i.SubmenuID,
 		&i.OpenSubmenuID,
 		&i.StandardGridCharID,
@@ -373,10 +367,10 @@ func (q *Queries) CreateRonsoRage(ctx context.Context, arg CreateRonsoRageParams
 }
 
 const createTriggerCommand = `-- name: CreateTriggerCommand :one
-INSERT INTO trigger_commands (data_hash, ability_id, description, effect, topmenu, cursor)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO trigger_commands (data_hash, ability_id, description, effect, cursor)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = trigger_commands.data_hash
-RETURNING id, data_hash, ability_id, description, effect, topmenu, cursor
+RETURNING id, data_hash, ability_id, description, effect, cursor, topmenu_id
 `
 
 type CreateTriggerCommandParams struct {
@@ -384,7 +378,6 @@ type CreateTriggerCommandParams struct {
 	AbilityID   int32
 	Description string
 	Effect      string
-	Topmenu     TopmenuType
 	Cursor      TargetType
 }
 
@@ -394,7 +387,6 @@ func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCom
 		arg.AbilityID,
 		arg.Description,
 		arg.Effect,
-		arg.Topmenu,
 		arg.Cursor,
 	)
 	var i TriggerCommand
@@ -404,8 +396,8 @@ func (q *Queries) CreateTriggerCommand(ctx context.Context, arg CreateTriggerCom
 		&i.AbilityID,
 		&i.Description,
 		&i.Effect,
-		&i.Topmenu,
 		&i.Cursor,
+		&i.TopmenuID,
 	)
 	return i, err
 }
@@ -464,13 +456,15 @@ func (q *Queries) CreateotherAbilitiesRelatedStatsJunction(ctx context.Context, 
 const updateOtherAbility = `-- name: UpdateOtherAbility :exec
 UPDATE other_abilities
 SET data_hash = $1,
-    submenu_id = $2,
-    open_submenu_id = $3
-WHERE id = $4
+    topmenu_id = $2,
+    submenu_id = $3,
+    open_submenu_id = $4
+WHERE id = $5
 `
 
 type UpdateOtherAbilityParams struct {
 	DataHash      string
+	TopmenuID     sql.NullInt32
 	SubmenuID     sql.NullInt32
 	OpenSubmenuID sql.NullInt32
 	ID            int32
@@ -479,6 +473,7 @@ type UpdateOtherAbilityParams struct {
 func (q *Queries) UpdateOtherAbility(ctx context.Context, arg UpdateOtherAbilityParams) error {
 	_, err := q.db.ExecContext(ctx, updateOtherAbility,
 		arg.DataHash,
+		arg.TopmenuID,
 		arg.SubmenuID,
 		arg.OpenSubmenuID,
 		arg.ID,
@@ -489,13 +484,15 @@ func (q *Queries) UpdateOtherAbility(ctx context.Context, arg UpdateOtherAbility
 const updateOverdrive = `-- name: UpdateOverdrive :exec
 UPDATE overdrives
 SET data_hash = $1,
-    od_command_id = $2,
-    character_class_id = $3
-WHERE id = $4
+    topmenu_id = $2,
+    od_command_id = $3,
+    character_class_id = $4
+WHERE id = $5
 `
 
 type UpdateOverdriveParams struct {
 	DataHash         string
+	TopmenuID        sql.NullInt32
 	OdCommandID      sql.NullInt32
 	CharacterClassID sql.NullInt32
 	ID               int32
@@ -504,6 +501,7 @@ type UpdateOverdriveParams struct {
 func (q *Queries) UpdateOverdrive(ctx context.Context, arg UpdateOverdriveParams) error {
 	_, err := q.db.ExecContext(ctx, updateOverdrive,
 		arg.DataHash,
+		arg.TopmenuID,
 		arg.OdCommandID,
 		arg.CharacterClassID,
 		arg.ID,
@@ -514,16 +512,18 @@ func (q *Queries) UpdateOverdrive(ctx context.Context, arg UpdateOverdriveParams
 const updatePlayerAbility = `-- name: UpdatePlayerAbility :exec
 UPDATE player_abilities
 SET data_hash = $1,
-    submenu_id = $2,
-    open_submenu_id = $3,
-    standard_grid_char_id = $4,
-    expert_grid_char_id = $5,
-    aeon_learn_item_id = $6
-WHERE id = $7
+    topmenu_id = $2,
+    submenu_id = $3,
+    open_submenu_id = $4,
+    standard_grid_char_id = $5,
+    expert_grid_char_id = $6,
+    aeon_learn_item_id = $7
+WHERE id = $8
 `
 
 type UpdatePlayerAbilityParams struct {
 	DataHash           string
+	TopmenuID          sql.NullInt32
 	SubmenuID          sql.NullInt32
 	OpenSubmenuID      sql.NullInt32
 	StandardGridCharID sql.NullInt32
@@ -535,6 +535,7 @@ type UpdatePlayerAbilityParams struct {
 func (q *Queries) UpdatePlayerAbility(ctx context.Context, arg UpdatePlayerAbilityParams) error {
 	_, err := q.db.ExecContext(ctx, updatePlayerAbility,
 		arg.DataHash,
+		arg.TopmenuID,
 		arg.SubmenuID,
 		arg.OpenSubmenuID,
 		arg.StandardGridCharID,
@@ -542,5 +543,23 @@ func (q *Queries) UpdatePlayerAbility(ctx context.Context, arg UpdatePlayerAbili
 		arg.AeonLearnItemID,
 		arg.ID,
 	)
+	return err
+}
+
+const updateTriggerCommand = `-- name: UpdateTriggerCommand :exec
+UPDATE trigger_commands
+SET data_hash = $1,
+    topmenu_id = $2
+WHERE id = $3
+`
+
+type UpdateTriggerCommandParams struct {
+	DataHash  string
+	TopmenuID sql.NullInt32
+	ID        int32
+}
+
+func (q *Queries) UpdateTriggerCommand(ctx context.Context, arg UpdateTriggerCommandParams) error {
+	_, err := q.db.ExecContext(ctx, updateTriggerCommand, arg.DataHash, arg.TopmenuID, arg.ID)
 	return err
 }
