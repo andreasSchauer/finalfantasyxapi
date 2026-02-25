@@ -24,22 +24,22 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, 
 			return nil, err
 		}
 	case "monster":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromMonster)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromMonster)
 		if err != nil {
 			return nil, err
 		}
 	case "treasure":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromTreasure)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromTreasure)
 		if err != nil {
 			return nil, err
 		}
 	case "shop":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromShop)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromShop)
 		if err != nil {
 			return nil, err
 		}
 	case "quest":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromQuest)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromQuest)
 		if err != nil {
 			return nil, err
 		}
@@ -52,10 +52,10 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, 
 
 func getAreasByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], id int32, resourceType string) ([]AreaAPIResource, error) {
 	filteredLists := []filteredResList[AreaAPIResource]{
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromMonster)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromTreasure)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromShop)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromQuest)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromMonster)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromTreasure)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromShop)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromQuest)),
 	}
 
 	resources, err := combineFilteredAPIResources(filteredLists)
@@ -71,8 +71,8 @@ func getAreasByKeyItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResourc
 	resourceType := cfg.e.keyItems.resourceType
 
 	filteredLists := []filteredResList[AreaAPIResource]{
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithKeyItemFromTreasure)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithKeyItemFromQuest)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithKeyItemFromTreasure)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithKeyItemFromQuest)),
 	}
 
 	resources, err := combineFilteredAPIResources(filteredLists)

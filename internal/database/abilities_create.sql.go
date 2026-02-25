@@ -311,7 +311,7 @@ type CreatePlayerAbilityParams struct {
 	Effect              string
 	Category            PlayerAbilityCategory
 	CanUseOutsideBattle bool
-	MpCost              sql.NullInt32
+	MpCost              int32
 	Cursor              NullTargetType
 }
 

@@ -46,6 +46,27 @@ func getResourcesDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 	return resources, nil
 }
 
+// filter resources by item id. handlerInput = endpoint of resources
+func getResourcesDbID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, lookupType string, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
+	dbIds, err := dbQuery(r.Context(), id)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss by %s id '%d'.", i.resourceType, lookupType, id), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIds)
+	return resources, nil
+}
+
+func getResourcesDbNoInput[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], lookupType string, dbQuery func(context.Context) ([]int32, error)) ([]A, error) {
+	dbIds, err := dbQuery(r.Context())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss by %s.", i.resourceType, lookupType), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIds)
+	return resources, nil
+}
+
 func getResPtrDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item seeding.LookupableID, dbQuery func(context.Context, int32) (int32, error)) (*A, error) {
 	dbID, err := dbQuery(r.Context(), item.GetID())
 	if err != nil {
@@ -57,15 +78,4 @@ func getResPtrDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 
 	res := i.idToResFunc(cfg, i, dbID)
 	return &res, nil
-}
-
-// filter resources by item id. handlerInput = endpoint of resources
-func filterResourcesDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, lookupType string, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
-	dbIds, err := dbQuery(r.Context(), id)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by %s id '%d'.", i.resourceType, lookupType, id), err)
-	}
-
-	resources := idsToAPIResources(cfg, i, dbIds)
-	return resources, nil
 }

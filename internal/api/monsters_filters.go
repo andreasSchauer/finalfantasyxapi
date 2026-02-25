@@ -94,19 +94,18 @@ func verifyMonsterResistance(cfg *Config, r *http.Request) (int, error) {
 	return resistance, nil
 }
 
-
 func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.monsters
 	resourceType := i.resourceType
 	queryParam := i.queryLookup["is_forced"]
-	
+
 	query, err := parseBooleanQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
-		return filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByAutoAbility)
+		return getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByAutoAbility)
 	}
 
 	dbIds, err := cfg.db.GetMonsterIDsByAutoAbilityIsForced(r.Context(), database.GetMonsterIDsByAutoAbilityIsForcedParams{
-		ID: id,
+		ID:       id,
 		IsForced: query,
 	})
 	if err != nil {
@@ -116,7 +115,6 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAP
 	resources := idsToAPIResources(cfg, i, dbIds)
 	return resources, nil
 }
-
 
 func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.monsters
@@ -129,27 +127,27 @@ func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResour
 
 	switch query {
 	case "":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItem)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItem)
 		if err != nil {
 			return nil, err
 		}
 	case "steal":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemSteal)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemSteal)
 		if err != nil {
 			return nil, err
 		}
 	case "drop":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemDrop)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemDrop)
 		if err != nil {
 			return nil, err
 		}
 	case "bribe":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemBribe)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemBribe)
 		if err != nil {
 			return nil, err
 		}
 	case "other":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemOther)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemOther)
 		if err != nil {
 			return nil, err
 		}

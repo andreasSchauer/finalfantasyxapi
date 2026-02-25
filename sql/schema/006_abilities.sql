@@ -50,7 +50,7 @@ CREATE TABLE player_abilities (
     effect TEXT NOT NULL,
     category player_ability_category NOT NULL,
     can_use_outside_battle BOOLEAN NOT NULL,
-    mp_cost INTEGER,
+    mp_cost INTEGER NOT NULL,
     cursor target_type
 );
 

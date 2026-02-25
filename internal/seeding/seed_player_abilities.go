@@ -29,7 +29,7 @@ type PlayerAbility struct {
 	ExpertGridPos       *string             `json:"expert_grid_pos"`
 	CanUseOutsideBattle bool                `json:"can_use_outside_battle"`
 	AeonLearnItem       *ItemAmount         `json:"aeon_learn_item"`
-	MPCost              *int32              `json:"mp_cost"`
+	MPCost              int32               `json:"mp_cost"`
 	Cursor              *string             `json:"cursor"`
 	BattleInteractions  []BattleInteraction `json:"battle_interactions"`
 }
@@ -42,7 +42,7 @@ func (p PlayerAbility) ToHashFields() []any {
 		p.Category,
 		h.DerefOrNil(p.TopmenuID),
 		p.CanUseOutsideBattle,
-		h.DerefOrNil(p.MPCost),
+		p.MPCost,
 		h.DerefOrNil(p.Cursor),
 		h.DerefOrNil(p.SubmenuID),
 		h.DerefOrNil(p.OpenSubmenuID),
@@ -111,7 +111,7 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 				Effect:              playerAbility.Effect,
 				Category: 			 database.PlayerAbilityCategory(playerAbility.Category),
 				CanUseOutsideBattle: playerAbility.CanUseOutsideBattle,
-				MpCost:              h.GetNullInt32(playerAbility.MPCost),
+				MpCost:              playerAbility.MPCost,
 				Cursor:              h.NullTargetType(playerAbility.Cursor),
 			})
 			if err != nil {

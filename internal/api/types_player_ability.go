@@ -16,7 +16,7 @@ type PlayerAbility struct {
 	AppearsInHelpBar      	bool					`json:"appears_in_help_bar"`
 	CanCopycat            	bool					`json:"can_copycat"`
 	CanUseOutsideBattle   	bool					`json:"can_use_outside_battle"`
-	MpCost                	*int32					`json:"mp_cost"`
+	MpCost                	int32					`json:"mp_cost"`
 	Cursor                	*string					`json:"cursor"`
 	RelatedStats          	[]NamedAPIResource		`json:"related_stats"`
 	LearnedBy             	[]NamedAPIResource		`json:"learned_by"`

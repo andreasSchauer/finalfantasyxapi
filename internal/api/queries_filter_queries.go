@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"net/http"
@@ -35,6 +36,28 @@ func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
+	return resources, nil
+}
+
+// query uses an id of another resource type to filter resources
+func idQueryNullable[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, sql.NullInt32) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+
+	id, err := parseIDOnlyQuery(r, queryParam, maxID)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := dbQuery(r.Context(), h.GetNullInt32(&id))
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
 	return resources, nil
 }
 
@@ -237,8 +260,53 @@ func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N a
 	return resources, nil
 }
 
-// query uses an integer value as input. dbQuery input is any, because of domains being converted to any. parseIntQuery evaluates, whether the given value really is an int, so there's no type-safety concerns.
-func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, any) ([]int32, error)) ([]A, error) {
+
+// query uses an integer value as input. 
+func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+	integer, err := parseIntQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := dbQuery(r.Context(), int32(integer))
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
+}
+
+// query uses an integer value as input. 
+func intQueryNullable[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, sql.NullInt32) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+	integer, err := parseIntQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	integer32 := int32(integer)
+
+	dbIDs, err := dbQuery(r.Context(), h.GetNullInt32(&integer32))
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
+}
+
+// query uses an domain integer value as input. those are converted to any by sqlc. dbQuery input is any, parseIntQuery evaluates, whether the given value really is an int, so there's no type-safety concerns.
+func intQueryAny[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, any) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	integer, err := parseIntQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {

@@ -3789,7 +3789,7 @@ type PlayerAbility struct {
 	Effect              string
 	Category            PlayerAbilityCategory
 	CanUseOutsideBattle bool
-	MpCost              sql.NullInt32
+	MpCost              int32
 	Cursor              NullTargetType
 	TopmenuID           sql.NullInt32
 	SubmenuID           sql.NullInt32

@@ -24,22 +24,22 @@ func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIRe
 			return nil, err
 		}
 	case "monster":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromMonster)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromMonster)
 		if err != nil {
 			return nil, err
 		}
 	case "treasure":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromTreasure)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromTreasure)
 		if err != nil {
 			return nil, err
 		}
 	case "shop":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromShop)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromShop)
 		if err != nil {
 			return nil, err
 		}
 	case "quest":
-		resources, err = filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromQuest)
+		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromQuest)
 		if err != nil {
 			return nil, err
 		}
@@ -52,10 +52,10 @@ func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIRe
 
 func getSublocationsByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32, resourceType string) ([]NamedAPIResource, error) {
 	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromMonster)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromTreasure)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromShop)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromQuest)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromMonster)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromTreasure)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromShop)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithItemFromQuest)),
 	}
 
 	resources, err := combineFilteredAPIResources(filteredLists)
@@ -71,8 +71,8 @@ func getSublocationsByKeyItem(cfg *Config, r *http.Request, id int32) ([]NamedAP
 	resourceType := cfg.e.keyItems.resourceType
 
 	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithKeyItemFromTreasure)),
-		frl(filterResourcesDB(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithKeyItemFromQuest)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithKeyItemFromTreasure)),
+		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetSublocationIDsWithKeyItemFromQuest)),
 	}
 
 	resources, err := combineFilteredAPIResources(filteredLists)

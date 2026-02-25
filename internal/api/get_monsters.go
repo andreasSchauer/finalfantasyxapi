@@ -6,7 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList], id int32) (Monster, error) {
 	monster, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
@@ -32,20 +31,20 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		IsRepeatable:         monster.IsRepeatable,
 		CanBeCaptured:        monster.CanBeCaptured,
 		AreaConquestLocation: monster.AreaConquestLocation,
-		Category: 			  category,
+		Category:             category,
 		CTBIconType:          monster.CTBIconType,
 		HasOverdrive:         monster.HasOverdrive,
 		IsUnderwater:         monster.IsUnderwater,
 		IsZombie:             monster.IsZombie,
 		Distance:             monster.Distance,
-		Properties:       	  namesToNamedAPIResources(cfg, cfg.e.properties, monster.Properties),
-		AutoAbilities:    	  namesToNamedAPIResources(cfg, cfg.e.autoAbilities, monster.AutoAbilities),
+		Properties:           namesToNamedAPIResources(cfg, cfg.e.properties, monster.Properties),
+		AutoAbilities:        namesToNamedAPIResources(cfg, cfg.e.autoAbilities, monster.AutoAbilities),
 		AP:                   monster.AP,
 		APOverkill:           monster.APOverkill,
 		OverkillDamage:       monster.OverkillDamage,
 		Gil:                  monster.Gil,
 		StealGil:             monster.StealGil,
-		RonsoRages:       	  namesToNamedAPIResources(cfg, cfg.e.ronsoRages, monster.RonsoRages),
+		RonsoRages:           namesToNamedAPIResources(cfg, cfg.e.ronsoRages, monster.RonsoRages),
 		DoomCountdown:        monster.DoomCountdown,
 		PoisonRate:           monster.PoisonRate,
 		ThreatenChance:       monster.ThreatenChance,
@@ -55,19 +54,18 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		ScanText:             monster.ScanText,
 		Areas:                rel.Areas,
 		Formations:           rel.Formations,
-		BaseStats:        	  namesToResourceAmounts(cfg, cfg.e.stats, monster.BaseStats, newBaseStat),
+		BaseStats:            namesToResourceAmounts(cfg, cfg.e.stats, monster.BaseStats, newBaseStat),
 		Items:                convertObjPtr(cfg, monster.Items, convertMonsterItems),
 		Equipment:            convertObjPtr(cfg, monster.Equipment, convertMonsterEquipment),
-		ElemResists:      	  getMonsterElemResists(cfg, monster.ElemResists),
-		StatusImmunities: 	  namesToNamedAPIResources(cfg, cfg.e.statusConditions, monster.StatusImmunities),
-		StatusResists:   	  namesToResourceAmounts(cfg, cfg.e.statusConditions, monster.StatusResists, newStatusResist),
-		Abilities:        	  convertObjSlice(cfg, monster.Abilities, convertMonsterAbility),
-		AlteredStates:    	  getMonsterAlteredStates(cfg, r, monster),
+		ElemResists:          getMonsterElemResists(cfg, monster.ElemResists),
+		StatusImmunities:     namesToNamedAPIResources(cfg, cfg.e.statusConditions, monster.StatusImmunities),
+		StatusResists:        namesToResourceAmounts(cfg, cfg.e.statusConditions, monster.StatusResists, newStatusResist),
+		Abilities:            convertObjSlice(cfg, monster.Abilities, convertMonsterAbility),
+		AlteredStates:        getMonsterAlteredStates(cfg, r, monster),
 	}
 
 	return completeMonsterResponse(cfg, r, response)
 }
-
 
 func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
@@ -78,7 +76,7 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(basicQueryWrapper(cfg, r, i, resources, "elemental_resists", getMonstersByElemResists)),
 		frl(idListQueryWrapper(cfg, r, i, resources, "status_resists", len(cfg.l.StatusConditions), getMonstersByStatusResists)),
-		
+
 		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getMonstersByItem)),
 		frl(idQuery(cfg, r, i, resources, "ronso_rage", len(cfg.l.RonsoRages), cfg.db.GetMonsterIDsByRonsoRage)),
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationMonsterIDs)),
@@ -86,8 +84,8 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetAreaMonsterIDs)),
 		frl(idQueryWrapper(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), getMonstersByAutoAbility)),
 
-		frl(intQuery(cfg, r, i, resources, "empty_slots", cfg.db.GetMonsterIDsByEmptySlots)),
-		frl(intQuery(cfg, r, i, resources, "distance", cfg.db.GetMonsterIDsByDistance)),
+		frl(intQueryAny(cfg, r, i, resources, "empty_slots", cfg.db.GetMonsterIDsByEmptySlots)),
+		frl(intQueryAny(cfg, r, i, resources, "distance", cfg.db.GetMonsterIDsByDistance)),
 		frl(typeQuery(cfg, r, i, cfg.t.MonsterCategory, resources, "type", cfg.db.GetMonsterIDsByCategory)),
 		frl(typeQuery(cfg, r, i, cfg.t.MonsterSpecies, resources, "species", cfg.db.GetMonsterIDsBySpecies)),
 		frl(nullTypeQuery(cfg, r, i, cfg.t.CreationArea, resources, "creation_area", cfg.db.GetMonsterIDsByMaCreationArea)),
