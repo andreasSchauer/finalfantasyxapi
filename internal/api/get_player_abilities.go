@@ -44,8 +44,15 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		BattleInteractions:    convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
+	response, err = applyPlayerAbilityUser(cfg, r, response, "user")
+	if err != nil {
+		return PlayerAbility{}, err
+	}
+
 	return response, nil
 }
+
+
 
 func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

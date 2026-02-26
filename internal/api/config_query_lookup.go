@@ -22,6 +22,7 @@ type QueryType struct {
 	AllowedResources []string                    `json:"allowed_resources,omitempty"`
 	AllowedValues    []string                    `json:"allowed_values,omitempty"`
 	AllowedIntRange  []int                       `json:"allowed_int_range,omitempty"`
+	AllowedResTypes	 []string					 `json:"allowed_res_types"`
 	DefaultVal       *int                        `json:"default_value,omitempty"`
 	SpecialInputs    []SpecialInput              `json:"special_inputs,omitempty"`
 }
@@ -739,12 +740,13 @@ func (cfg *Config) initOverdriveModesParams() {
 func (cfg *Config) initPlayerAbilitiesParams() {
 	params := map[string]QueryType{
 		"user": {
-			ID:          1,
-			Description: "If a player ability is a physical attack, this parameter modifies the ability's accuracy, range and power based on the given user. User can be a character or an aeon.",
-			Usage:       "?user={type}:{name|id}",
-			ExampleUses: []string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
-			ForList:     false,
-			ForSingle:   true,
+			ID:          		1,
+			Description: 		"If a player ability is a physical attack, this parameter modifies the ability's accuracy, range and power based on the given user. User can be a character or an aeon.",
+			Usage:       		"?user={type}:{name|id}",
+			ExampleUses: 		[]string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
+			ForList:     		false,
+			ForSingle:   		true,
+			AllowedResTypes: 	[]string{"character", "aeon"},
 		},
 		"category": {
 			ID:          2,
