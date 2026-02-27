@@ -18,7 +18,7 @@ type endpoints struct {
 	elements           handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
 	equipment          handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
 	fmvs               handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
-	items              handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]
+	items              handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
 	keyItems           handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]
 	locations          handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
 	modifiers		   handlerInput[seeding.Modifier, any, NamedAPIResource, NamedApiResourceList]
@@ -26,13 +26,13 @@ type endpoints struct {
 	monsterFormations  handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
 	overdriveCommands  handlerInput[seeding.OverdriveCommand, any, NamedAPIResource, NamedApiResourceList]
 	overdriveModes     handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
-	overdrives         handlerInput[seeding.Overdrive, any, NamedAPIResource, NamedApiResourceList]
-	otherAbilities     handlerInput[seeding.OtherAbility, any, NamedAPIResource, NamedApiResourceList]
+	overdrives         handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]
+	otherAbilities     handlerInput[seeding.OtherAbility, OtherAbility, NamedAPIResource, NamedApiResourceList]
 	playerAbilities    handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
-	enemyAbilities     handlerInput[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList]
-	itemAbilities      handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]
-	overdriveAbilities handlerInput[seeding.OverdriveAbility, any, NamedAPIResource, NamedApiResourceList]
-	triggerCommands    handlerInput[seeding.TriggerCommand, any, NamedAPIResource, NamedApiResourceList]
+	enemyAbilities     handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
+	itemAbilities      handlerInput[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList]
+	overdriveAbilities handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]
+	triggerCommands    handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]
 	properties         handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]
 	ronsoRages         handlerInput[seeding.RonsoRage, any, NamedAPIResource, NamedApiResourceList]
 	shops              handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
@@ -237,12 +237,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveFMVs,
 	}
 
-	e.items = handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]{
+	e.items = handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "items",
 		resourceType:  "item",
 		objLookup:     cfg.l.Items,
 		objLookupID:   cfg.l.ItemsID,
-		idToResFunc:   idToNamedAPIResource[seeding.Item, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.Item, Item, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
@@ -385,21 +385,21 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveOverdriveModes,
 	}
 
-	e.overdrives = handlerInput[seeding.Overdrive, any, NamedAPIResource, NamedApiResourceList]{
+	e.overdrives = handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "overdrives",
 		resourceType:  "overdrive",
 		objLookup:     cfg.l.Overdrives,
 		objLookupID:   cfg.l.OverdrivesID,
-		idToResFunc:   idToNamedAPIResource[seeding.Overdrive, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.otherAbilities = handlerInput[seeding.OtherAbility, any, NamedAPIResource, NamedApiResourceList]{
+	e.otherAbilities = handlerInput[seeding.OtherAbility, OtherAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "other-abilities",
 		resourceType:  "generic ability",
 		objLookup:     cfg.l.OtherAbilities,
 		objLookupID:   cfg.l.OtherAbilitiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.OtherAbility, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.OtherAbility, OtherAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
@@ -417,39 +417,39 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc: 		cfg.retrievePlayerAbilities,
 	}
 
-	e.enemyAbilities = handlerInput[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList]{
+	e.enemyAbilities = handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "enemy-abilities",
 		resourceType:  "enemy ability",
 		objLookup:     cfg.l.EnemyAbilities,
 		objLookupID:   cfg.l.EnemyAbilitiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.EnemyAbility, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.itemAbilities = handlerInput[seeding.Item, any, NamedAPIResource, NamedApiResourceList]{
+	e.itemAbilities = handlerInput[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "item-abilities",
 		resourceType:  "item ability",
 		objLookup:     cfg.l.Items,
 		objLookupID:   cfg.l.ItemsID,
-		idToResFunc:   idToNamedAPIResource[seeding.Item, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.overdriveAbilities = handlerInput[seeding.OverdriveAbility, any, NamedAPIResource, NamedApiResourceList]{
+	e.overdriveAbilities = handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "overdrive-abilities",
 		resourceType:  "overdrive ability",
 		objLookup:     cfg.l.OverdriveAbilities,
 		objLookupID:   cfg.l.OverdriveAbilitiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.OverdriveAbility, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.triggerCommands = handlerInput[seeding.TriggerCommand, any, NamedAPIResource, NamedApiResourceList]{
+	e.triggerCommands = handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "trigger-commands",
 		resourceType:  "trigger command",
 		objLookup:     cfg.l.TriggerCommands,
 		objLookupID:   cfg.l.TriggerCommandsID,
-		idToResFunc:   idToNamedAPIResource[seeding.TriggerCommand, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 

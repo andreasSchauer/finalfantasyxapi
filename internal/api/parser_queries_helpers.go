@@ -4,9 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"slices"
 	"strconv"
-	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -104,23 +102,4 @@ func checkQueryIntRange(queryParam QueryType, s string) (int, error) {
 	}
 
 	return val, nil
-}
-
-
-func parseResTypeQuery(r *http.Request, queryParam QueryType) (string, string, error) {
-	query, err := checkEmptyQuery(r, queryParam)
-	if err != nil {
-		return "", "", err
-	}
-
-	resType, idStr, found := strings.Cut(query, ":")
-	if !found {
-		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, query, queryParam.Usage), nil)
-	}
-
-	if !slices.Contains(queryParam.AllowedResTypes, resType) {
-		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resource type '%s' for parameter '%s'. supported resource types: %s.", resType, queryParam.Name, h.FormatStringSlice(queryParam.AllowedResTypes)), nil)
-	}
-
-	return resType, idStr, nil
 }

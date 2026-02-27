@@ -4,8 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"strconv"
 	"strings"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 // used, if a queryParam only takes existing ids and returns a valid id
@@ -21,6 +24,16 @@ func parseIDOnlyQuery(r *http.Request, queryParam QueryType, maxID int) (int32, 
 	}
 
 	return int32(id), nil
+}
+
+// used for queryParams that thake existing ids or unique names and return a valid id
+func parseNameOrIdQuery[T h.HasID](r *http.Request, queryParam QueryType, resourceType string, lookup map[string]T) (int32, error) {
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return 0, err
+	}
+
+	return parseQueryNamedVal(query, resourceType, queryParam, lookup)
 }
 
 // used for boolean queryParams
@@ -91,6 +104,27 @@ func parseIdListQuery(r *http.Request, queryParam QueryType, maxID int) ([]int32
 	}
 
 	return ids, nil
+}
+
+
+
+
+func parseResTypeQuery(r *http.Request, queryParam QueryType) (string, string, error) {
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return "", "", err
+	}
+
+	resType, idStr, found := strings.Cut(query, ":")
+	if !found {
+		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, query, queryParam.Usage), nil)
+	}
+
+	if !slices.Contains(queryParam.AllowedResTypes, resType) {
+		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resource type '%s' for parameter '%s'. supported resource types: %s.", resType, queryParam.Name, h.FormatStringSlice(queryParam.AllowedResTypes)), nil)
+	}
+
+	return resType, idStr, nil
 }
 
 func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {

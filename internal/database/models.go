@@ -3407,13 +3407,6 @@ type JOtherAbilitiesLearnedBy struct {
 	CharacterClassID int32
 }
 
-type JOtherAbilitiesRelatedStat struct {
-	ID             int32
-	DataHash       string
-	OtherAbilityID int32
-	StatID         int32
-}
-
 type JOverdriveAbilitiesRelatedStat struct {
 	ID                 int32
 	DataHash           string

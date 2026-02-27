@@ -7,14 +7,6 @@ CREATE TABLE j_abilities_battle_interactions (
 );
 
 
-CREATE TABLE j_other_abilities_related_stats (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    other_ability_id INTEGER NOT NULL REFERENCES other_abilities(id),
-    stat_id INTEGER NOT NULL REFERENCES stats(id)
-);
-
-
 CREATE TABLE j_other_abilities_learned_by (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -120,5 +112,4 @@ DROP TABLE IF EXISTS j_overdrive_abilities_related_stats;
 DROP TABLE IF EXISTS j_player_abilities_learned_by;
 DROP TABLE IF EXISTS j_player_abilities_related_stats;
 DROP TABLE IF EXISTS j_other_abilities_learned_by;
-DROP TABLE IF EXISTS j_other_abilities_related_stats;
 DROP TABLE IF EXISTS j_abilities_battle_interactions;

@@ -126,7 +126,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?limit=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit{int|'max'}'.",
+				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'.",
 			},
 		},
 		{

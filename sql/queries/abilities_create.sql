@@ -47,12 +47,6 @@ SET data_hash = $1,
 WHERE id = $8;
 
 
--- name: CreateotherAbilitiesRelatedStatsJunction :exec
-INSERT INTO j_other_abilities_related_stats (data_hash, other_ability_id, stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
 -- name: CreateotherAbilitiesLearnedByJunction :exec
 INSERT INTO j_other_abilities_learned_by (data_hash, other_ability_id, character_class_id)
 VALUES ($1, $2, $3)

@@ -134,11 +134,6 @@ func (l *Lookup) seedotherAbilitiesRelationships(db *database.Queries, dbConn *s
 				return h.NewErr(otherAbility.Error(), err)
 			}
 
-			err = l.seedOtherAbilityRelatedStats(qtx, otherAbility)
-			if err != nil {
-				return h.NewErr(otherAbility.Error(), err)
-			}
-
 			err = l.seedOtherAbilityLearnedBy(qtx, otherAbility)
 			if err != nil {
 				return h.NewErr(otherAbility.Error(), err)
@@ -183,26 +178,6 @@ func (l *Lookup) seedOtherAbilityFKs(qtx *database.Queries, ability OtherAbility
 	})
 	if err != nil {
 		return h.NewErr("", err, "couldn't update generic ability")
-	}
-
-	return nil
-}
-
-func (l *Lookup) seedOtherAbilityRelatedStats(qtx *database.Queries, ability OtherAbility) error {
-	for _, jsonStat := range ability.RelatedStats {
-		junction, err := createJunction(ability, jsonStat, l.Stats)
-		if err != nil {
-			return err
-		}
-
-		err = qtx.CreateotherAbilitiesRelatedStatsJunction(context.Background(), database.CreateotherAbilitiesRelatedStatsJunctionParams{
-			DataHash:       generateDataHash(junction),
-			OtherAbilityID: junction.ParentID,
-			StatID:         junction.ChildID,
-		})
-		if err != nil {
-			return h.NewErr(jsonStat, err, "couldn't junction related stat")
-		}
 	}
 
 	return nil

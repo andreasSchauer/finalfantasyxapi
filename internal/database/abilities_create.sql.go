@@ -436,23 +436,6 @@ func (q *Queries) CreateotherAbilitiesLearnedByJunction(ctx context.Context, arg
 	return err
 }
 
-const createotherAbilitiesRelatedStatsJunction = `-- name: CreateotherAbilitiesRelatedStatsJunction :exec
-INSERT INTO j_other_abilities_related_stats (data_hash, other_ability_id, stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateotherAbilitiesRelatedStatsJunctionParams struct {
-	DataHash       string
-	OtherAbilityID int32
-	StatID         int32
-}
-
-func (q *Queries) CreateotherAbilitiesRelatedStatsJunction(ctx context.Context, arg CreateotherAbilitiesRelatedStatsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createotherAbilitiesRelatedStatsJunction, arg.DataHash, arg.OtherAbilityID, arg.StatID)
-	return err
-}
-
 const updateOtherAbility = `-- name: UpdateOtherAbility :exec
 UPDATE other_abilities
 SET data_hash = $1,

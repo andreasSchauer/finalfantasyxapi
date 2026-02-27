@@ -40,6 +40,51 @@ func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 }
 
 // query uses an id of another resource type to filter resources
+func nameOrIdQuery[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, resourceType string, lookup map[string]G, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+
+	id, err := parseNameOrIdQuery(r, queryParam, resourceType, lookup)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := dbQuery(r.Context(), id)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
+}
+
+
+// query uses an id of another resource type to filter resources
+func nameOrIdQueryNullable[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, resourceType string, lookup map[string]G, dbQuery func(context.Context, sql.NullInt32) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+
+	id, err := parseNameOrIdQuery(r, queryParam, resourceType, lookup)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := dbQuery(r.Context(), h.GetNullInt32(&id))
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
+}
+
+// query uses an id of another resource type to filter resources
 func idQueryNullable[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, sql.NullInt32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 

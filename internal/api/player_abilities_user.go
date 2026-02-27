@@ -12,7 +12,7 @@ import (
 func applyPlayerAbilityUser(cfg *Config, r *http.Request, ability PlayerAbility, queryName string) (PlayerAbility, error) {
 	queryParam := cfg.q.playerAbilities[queryName]
 
-	resType, idStr, err := parseResTypeQuery(r, queryParam)
+	resType, unitStr, err := parseResTypeQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
 		return ability, nil
 	}
@@ -25,21 +25,21 @@ func applyPlayerAbilityUser(cfg *Config, r *http.Request, ability PlayerAbility,
 
 	switch resType {
 	case "character":
-		parseRes, err := parseID(idStr, resType, len(cfg.l.Characters))
+		id, err := parseQueryNamedVal(unitStr, resType, queryParam, cfg.l.Characters)
 		if err != nil {
 			return PlayerAbility{}, err
 		}
-		character, _ := seeding.GetResourceByID(parseRes.ID, cfg.l.CharactersID)
+		character, _ := seeding.GetResourceByID(id, cfg.l.CharactersID)
 		unitName = character.Name
 
 		repl.Range = &character.PhysAtkRange
 
 	case "aeon":
-		parseRes, err := parseID(idStr, resType, len(cfg.l.Aeons))
+		id, err := parseQueryNamedVal(unitStr, resType, queryParam, cfg.l.Aeons)
 		if err != nil {
 			return PlayerAbility{}, err
 		}
-		aeon, _ := seeding.GetResourceByID(parseRes.ID, cfg.l.AeonsID)
+		aeon, _ := seeding.GetResourceByID(id, cfg.l.AeonsID)
 		unitName = aeon.Name
 
 		repl.Range = aeon.PhysAtkRange
