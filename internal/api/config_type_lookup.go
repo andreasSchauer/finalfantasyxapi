@@ -15,6 +15,7 @@ type TypeLookup struct {
 	Composer                    EnumType[database.Composer, database.NullComposer]
 	CreationArea                EnumType[database.MaCreationArea, database.NullMaCreationArea]
 	CTBIconType                 EnumType[database.CtbIconType, any]
+	ItemCategory				EnumType[database.ItemCategory, any]
 	LootType                    EnumType[database.LootType, any]
 	MonsterFormationCategory    EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies              EnumType[database.MonsterSpecies, any]
@@ -49,6 +50,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initComposer()
 	cfg.t.initCTBIconType()
 	cfg.t.initCreationArea()
+	cfg.t.initItemCategory()
 	cfg.t.initLootType()
 	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
@@ -277,6 +279,39 @@ func (t *TypeLookup) initCreationArea() {
 	t.CreationArea = newEnumType("creation area", false, typeSlice, func(s string) database.MaCreationArea {
 		return database.MaCreationArea(s)
 	}, h.NullMaCreationArea)
+}
+
+func (t *TypeLookup) initItemCategory() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.ItemCategoryHealing),
+			Description: 	"Items that are used for recovery of HP and MP, or for curing negative status ailments.",
+		},
+		{
+			Name: 			string(database.ItemCategoryOffensive),
+			Description: 	"Items that deal damage to other enemies or inflict status ailments.",
+		},
+		{
+			Name: 			string(database.ItemCategorySupport),
+			Description: 	"Items that grant positive statusses or other supportive effects.",
+		},
+		{
+			Name: 			string(database.ItemCategorySphere),
+			Description: 	"Items that can only be used within the sphere grid.",
+		},
+		{
+			Name: 			string(database.ItemCategoryDistiller),
+			Description: 	"Items that cause enemies to drop spheres.",
+		},
+		{
+			Name: 			string(database.ItemCategoryOther),
+			Description: 	"Uncategorized items, that are mostly used for mixes.",
+		},
+	}
+
+	t.ItemCategory = newEnumType[database.ItemCategory, any]("item category", true, typeSlice, func(s string) database.ItemCategory {
+		return database.ItemCategory(s)
+	}, nil)
 }
 
 func (t *TypeLookup) initLootType() {

@@ -17,5 +17,3 @@ type ItemAbility struct {
 	Monsters				[]NamedAPIResource		`json:"monsters"`
 	BattleInteractions		[]BattleInteraction		`json:"battle_interactions"`
 }
-
-
