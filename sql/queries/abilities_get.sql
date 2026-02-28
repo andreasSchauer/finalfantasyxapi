@@ -187,6 +187,14 @@ ORDER BY ea.id;
 SELECT id FROM item_abilities ORDER BY id;
 
 
+-- name: GetItemAbilityIDsCanUseOutsideBattle :many
+SELECT ia.id
+FROM item_abilities ia
+JOIN items i ON ia.item_id = i.id
+WHERE i.usability = 'always' OR i.usability = 'outside-battle'
+ORDER BY ia.id;
+
+
 -- name: GetItemAbilityIDsByCategory :many
 SELECT ia.id
 FROM item_abilities ia
@@ -392,6 +400,18 @@ WHERE sc.id = $1
 ORDER BY oa.id;
 
 
+-- name: GetOtherAbilityIDsDealsDelay :many
+SELECT DISTINCT oa.id
+FROM other_abilities oa
+JOIN abilities a ON oa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_inflicted_delay j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN inflicted_delays idl ON j2.inflicted_delay_id = idl.id
+WHERE idl.ctb_attack_type = 'attack'
+ORDER BY oa.id;
+
+
 -- name: GetOtherAbilityIDsByDamageType :many
 SELECT DISTINCT oa.id
 FROM other_abilities oa
@@ -436,6 +456,12 @@ ORDER BY oa.id;
 
 
 
+-- name: GetOverdriveAbilityOverdriveID :one
+SELECT o.id
+FROM overdrives o
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_id = o.id
+JOIN overdrive_abilities oa ON j.overdrive_ability_id = oa.id
+WHERE oa.id = $1;
 
 
 -- name: GetOverdriveAbilityIDsByName :many
@@ -849,15 +875,32 @@ ORDER BY pa.id;
 
 
 
+-- name: GetTriggerCommandIDsByName :many
+SELECT tc.id
+FROM trigger_commands tc
+JOIN abilities a ON tc.ability_id = a.id
+WHERE a.name = $1
+ORDER BY tc.id;
+
 
 -- name: GetTriggerCommandMonsterFormationIDs :many
 SELECT mf.id
 FROM monster_formations mf
-JOIN j_monster_formations_trigger_commands j ON j.monster_formations_id = mf.id
+JOIN j_monster_formations_trigger_commands j ON j.monster_formation_id = mf.id
 JOIN formation_trigger_commands ftc ON j.trigger_command_id = ftc.id
 JOIN trigger_commands tc ON ftc.trigger_command_id = tc.id
 WHERE tc.id = $1
 ORDER BY mf.id;
+
+
+-- name: GetTriggerCommandCharClassIDs :many
+SELECT cc.id
+FROM character_classes cc
+JOIN j_formation_trigger_commands_users j ON j.character_class_id = cc.id
+JOIN formation_trigger_commands ftc ON j.trigger_command_id = ftc.id
+JOIN trigger_commands tc ON ftc.trigger_command_id = tc.id
+WHERE tc.id = $1
+ORDER BY cc.id;
 
 
 -- name: GetTriggerCommandIDs :many

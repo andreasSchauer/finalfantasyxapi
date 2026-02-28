@@ -5,7 +5,7 @@ CREATE TYPE item_type AS ENUM ('item', 'key-item');
 CREATE TYPE item_category AS ENUM ('distiller', 'healing', 'offensive', 'other', 'sphere', 'support');
 
 
-CREATE TYPE item_usability AS ENUM ('always', 'in-battle', 'outside-battle');
+CREATE TYPE item_usability AS ENUM ('always', 'in-battle', 'outside-battle', 'unusable');
 
 
 CREATE TYPE key_item_category AS ENUM ('celestial', 'jecht-sphere', 'other', 'primer', 'story');
@@ -32,7 +32,7 @@ CREATE TABLE items (
     effect TEXT NOT NULL,
     sphere_grid_description TEXT,
     category item_category NOT NULL,
-    usability item_usability,
+    usability item_usability NOT NULL,
     base_price INTEGER,
     sell_value INTEGER NOT NULL
 );

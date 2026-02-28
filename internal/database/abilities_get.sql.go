@@ -829,6 +829,37 @@ func (q *Queries) GetItemAbilityIDsByRemovedStatus(ctx context.Context, id int32
 	return items, nil
 }
 
+const getItemAbilityIDsCanUseOutsideBattle = `-- name: GetItemAbilityIDsCanUseOutsideBattle :many
+SELECT ia.id
+FROM item_abilities ia
+JOIN items i ON ia.item_id = i.id
+WHERE i.usability = 'always' OR i.usability = 'outside-battle'
+ORDER BY ia.id
+`
+
+func (q *Queries) GetItemAbilityIDsCanUseOutsideBattle(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsCanUseOutsideBattle)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getItemAbilityIDsDealsDelay = `-- name: GetItemAbilityIDsDealsDelay :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
@@ -1333,6 +1364,41 @@ func (q *Queries) GetOtherAbilityIDsDarkable(ctx context.Context) ([]int32, erro
 	return items, nil
 }
 
+const getOtherAbilityIDsDealsDelay = `-- name: GetOtherAbilityIDsDealsDelay :many
+SELECT DISTINCT oa.id
+FROM other_abilities oa
+JOIN abilities a ON oa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_inflicted_delay j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN inflicted_delays idl ON j2.inflicted_delay_id = idl.id
+WHERE idl.ctb_attack_type = 'attack'
+ORDER BY oa.id
+`
+
+func (q *Queries) GetOtherAbilityIDsDealsDelay(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOtherAbilityIDsDealsDelay)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getOverdriveAbilityIDs = `-- name: GetOverdriveAbilityIDs :many
 SELECT id FROM overdrive_abilities ORDER BY id
 `
@@ -1770,6 +1836,20 @@ func (q *Queries) GetOverdriveAbilityIDsWithStatChanges(ctx context.Context) ([]
 		return nil, err
 	}
 	return items, nil
+}
+
+const getOverdriveAbilityOverdriveID = `-- name: GetOverdriveAbilityOverdriveID :one
+SELECT o.id
+FROM overdrives o
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_id = o.id
+JOIN overdrive_abilities oa ON j.overdrive_ability_id = oa.id
+WHERE oa.id = $1
+`
+
+func (q *Queries) GetOverdriveAbilityOverdriveID(ctx context.Context, id int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getOverdriveAbilityOverdriveID, id)
+	err := row.Scan(&id)
+	return id, err
 }
 
 const getPlayerAbilityIDs = `-- name: GetPlayerAbilityIDs :many
@@ -2705,6 +2785,39 @@ func (q *Queries) GetPlayerAbilityMonsterIDs(ctx context.Context, id int32) ([]i
 	return items, nil
 }
 
+const getTriggerCommandCharClassIDs = `-- name: GetTriggerCommandCharClassIDs :many
+SELECT cc.id
+FROM character_classes cc
+JOIN j_formation_trigger_commands_users j ON j.character_class_id = cc.id
+JOIN formation_trigger_commands ftc ON j.trigger_command_id = ftc.id
+JOIN trigger_commands tc ON ftc.trigger_command_id = tc.id
+WHERE tc.id = $1
+ORDER BY cc.id
+`
+
+func (q *Queries) GetTriggerCommandCharClassIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTriggerCommandCharClassIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getTriggerCommandIDs = `-- name: GetTriggerCommandIDs :many
 SELECT id FROM trigger_commands ORDER BY id
 `
@@ -2744,6 +2857,37 @@ ORDER BY tc.id
 
 func (q *Queries) GetTriggerCommandIDsByCharClass(ctx context.Context, id int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getTriggerCommandIDsByCharClass, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTriggerCommandIDsByName = `-- name: GetTriggerCommandIDsByName :many
+SELECT tc.id
+FROM trigger_commands tc
+JOIN abilities a ON tc.ability_id = a.id
+WHERE a.name = $1
+ORDER BY tc.id
+`
+
+func (q *Queries) GetTriggerCommandIDsByName(ctx context.Context, name string) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTriggerCommandIDsByName, name)
 	if err != nil {
 		return nil, err
 	}
@@ -2900,7 +3044,7 @@ func (q *Queries) GetTriggerCommandIDsWithStatChanges(ctx context.Context) ([]in
 const getTriggerCommandMonsterFormationIDs = `-- name: GetTriggerCommandMonsterFormationIDs :many
 SELECT mf.id
 FROM monster_formations mf
-JOIN j_monster_formations_trigger_commands j ON j.monster_formations_id = mf.id
+JOIN j_monster_formations_trigger_commands j ON j.monster_formation_id = mf.id
 JOIN formation_trigger_commands ftc ON j.trigger_command_id = ftc.id
 JOIN trigger_commands tc ON ftc.trigger_command_id = tc.id
 WHERE tc.id = $1

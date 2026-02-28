@@ -56,8 +56,33 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 }
 
 
+func (cfg *Config) HandleEnemyAbilities(w http.ResponseWriter, r *http.Request) {
+	routerNameVersion(cfg, w, r, cfg.e.enemyAbilities)
+}
+
+
+func (cfg *Config) HandleItemAbilities(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.itemAbilities)
+}
+
+
+func (cfg *Config) HandleOtherAbilities(w http.ResponseWriter, r *http.Request) {
+	routerNameVersion(cfg, w, r, cfg.e.otherAbilities)
+}
+
+
+func (cfg *Config) HandleOverdriveAbilities(w http.ResponseWriter, r *http.Request) {
+	routerNameVersion(cfg, w, r, cfg.e.overdriveAbilities)
+}
+
+
 func (cfg *Config) HandlePlayerAbilities(w http.ResponseWriter, r *http.Request) {
 	routerNameVersion(cfg, w, r, cfg.e.playerAbilities)
+}
+
+
+func (cfg *Config) HandleTriggerCommands(w http.ResponseWriter, r *http.Request) {
+	routerNameVersion(cfg, w, r, cfg.e.triggerCommands)
 }
 
 

@@ -24,7 +24,7 @@ type CreateItemParams struct {
 	Effect                string
 	SphereGridDescription sql.NullString
 	Category              ItemCategory
-	Usability             NullItemUsability
+	Usability             ItemUsability
 	BasePrice             sql.NullInt32
 	SellValue             int32
 }

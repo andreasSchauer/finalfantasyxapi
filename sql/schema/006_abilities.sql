@@ -36,7 +36,7 @@ CREATE TABLE other_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     ability_id INTEGER UNIQUE NOT NULL REFERENCES abilities(id),
-    description TEXT,
+    description TEXT NOT NULL,
     effect TEXT NOT NULL,
     cursor target_type
 );

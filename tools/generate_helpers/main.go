@@ -17,7 +17,6 @@ func main() {
         "MaCreationCategory",
         "MaCreationSpecies",
         "TargetType",
-        "ItemUsability",
         "MusicUseCase",
         "BgReplacementType",
         "SpecialActionType",

@@ -1468,6 +1468,7 @@ const (
 	ItemUsabilityAlways        ItemUsability = "always"
 	ItemUsabilityInBattle      ItemUsability = "in-battle"
 	ItemUsabilityOutsideBattle ItemUsability = "outside-battle"
+	ItemUsabilityUnusable      ItemUsability = "unusable"
 )
 
 func (e *ItemUsability) Scan(src interface{}) error {
@@ -3007,7 +3008,7 @@ type Item struct {
 	Effect                string
 	SphereGridDescription sql.NullString
 	Category              ItemCategory
-	Usability             NullItemUsability
+	Usability             ItemUsability
 	BasePrice             sql.NullInt32
 	SellValue             int32
 }
@@ -3723,7 +3724,7 @@ type OtherAbility struct {
 	ID            int32
 	DataHash      string
 	AbilityID     int32
-	Description   sql.NullString
+	Description   string
 	Effect        string
 	Cursor        NullTargetType
 	TopmenuID     sql.NullInt32

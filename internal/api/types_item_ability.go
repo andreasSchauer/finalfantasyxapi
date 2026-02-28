@@ -12,8 +12,7 @@ type ItemAbility struct {
 	AppearsInHelpBar      	bool					`json:"appears_in_help_bar"`
 	CanCopycat            	bool					`json:"can_copycat"`
 	CanUseOutsideBattle   	bool					`json:"can_use_outside_battle"`
-	Cursor                	*string					`json:"cursor"`
+	Cursor                	string					`json:"cursor"`
 	RelatedStats          	[]NamedAPIResource		`json:"related_stats"`
-	Monsters				[]NamedAPIResource		`json:"monsters"`
 	BattleInteractions		[]BattleInteraction		`json:"battle_interactions"`
 }

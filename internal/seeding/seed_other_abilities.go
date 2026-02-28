@@ -15,7 +15,7 @@ type OtherAbility struct {
 	TopmenuID		   *int32
 	SubmenuID          *int32
 	OpenSubmenuID      *int32
-	Description        *string             `json:"description"`
+	Description        string              `json:"description"`
 	Effect             string              `json:"effect"`
 	RelatedStats       []string            `json:"related_stats"`
 	Topmenu            *string             `json:"topmenu"`
@@ -29,7 +29,7 @@ type OtherAbility struct {
 func (o OtherAbility) ToHashFields() []any {
 	return []any{
 		o.Ability.ID,
-		h.DerefOrNil(o.Description),
+		o.Description,
 		o.Effect,
 		h.DerefOrNil(o.TopmenuID),
 		h.DerefOrNil(o.Cursor),
@@ -93,7 +93,7 @@ func (l *Lookup) seedotherAbilities(db *database.Queries, dbConn *sql.DB) error 
 			dbOtherAbility, err := qtx.CreateOtherAbility(context.Background(), database.CreateOtherAbilityParams{
 				DataHash:    generateDataHash(OtherAbility),
 				AbilityID:   OtherAbility.Ability.ID,
-				Description: h.GetNullString(OtherAbility.Description),
+				Description: OtherAbility.Description,
 				Effect:      OtherAbility.Effect,
 				Cursor:      h.NullTargetType(OtherAbility.Cursor),
 			})

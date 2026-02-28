@@ -192,27 +192,6 @@ func ConvertNullTargetType(ne database.NullTargetType) *string {
 }
 
 
-func NullItemUsability(s *string) database.NullItemUsability {
-    if s == nil {
-        return database.NullItemUsability{}
-    }
-    
-    return database.NullItemUsability{
-        ItemUsability: database.ItemUsability(*s),
-        Valid: true,
-    }
-}
-
-func ConvertNullItemUsability(ne database.NullItemUsability) *string {
-    if !ne.Valid {
-        return nil
-    }
-
-    val := string(ne.ItemUsability)
-    return &val
-}
-
-
 func NullMusicUseCase(s *string) database.NullMusicUseCase {
     if s == nil {
         return database.NullMusicUseCase{}

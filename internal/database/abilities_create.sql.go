@@ -132,7 +132,7 @@ RETURNING id, data_hash, ability_id, description, effect, cursor, topmenu_id, su
 type CreateOtherAbilityParams struct {
 	DataHash    string
 	AbilityID   int32
-	Description sql.NullString
+	Description string
 	Effect      string
 	Cursor      NullTargetType
 }

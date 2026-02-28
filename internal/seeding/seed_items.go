@@ -18,7 +18,7 @@ type Item struct {
 	RelatedStats          []string `json:"related_stats"`
 	SphereGridDescription *string  `json:"sphere_grid_description"`
 	Category              string   `json:"category"`
-	Usability             *string  `json:"usability"`
+	Usability             string   `json:"usability"`
 	AvailableMenus        []string `json:"available_menus"`
 	BasePrice             *int32   `json:"base_price"`
 	SellValue             int32    `json:"sell_value"`
@@ -31,7 +31,7 @@ func (i Item) ToHashFields() []any {
 		i.Effect,
 		h.DerefOrNil(i.SphereGridDescription),
 		i.Category,
-		h.DerefOrNil(i.Usability),
+		i.Usability,
 		h.DerefOrNil(i.BasePrice),
 		i.SellValue,
 	}
@@ -127,7 +127,7 @@ func (l *Lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
 		Effect:                item.Effect,
 		SphereGridDescription: h.GetNullString(item.SphereGridDescription),
 		Category:              database.ItemCategory(item.Category),
-		Usability:             h.NullItemUsability(item.Usability),
+		Usability:             database.ItemUsability(item.Usability),
 		BasePrice:             h.GetNullInt32(item.BasePrice),
 		SellValue:             item.SellValue,
 	})

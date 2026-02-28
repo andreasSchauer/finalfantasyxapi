@@ -51,6 +51,7 @@ type endpoints struct {
 	attackType				 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	damageFormula			 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	damageType				 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	itemCategory     	     handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	monsterCategory          handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	lootType                 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	monsterFormationCategory handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
@@ -395,12 +396,17 @@ func (cfg *Config) EndpointsInit() {
 	}
 
 	e.otherAbilities = handlerInput[seeding.OtherAbility, OtherAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "other-abilities",
-		resourceType:  "generic ability",
-		objLookup:     cfg.l.OtherAbilities,
-		objLookupID:   cfg.l.OtherAbilitiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.OtherAbility, OtherAbility, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+		endpoint:      		"other-abilities",
+		resourceType:  		"other ability",
+		objLookup:     		cfg.l.OtherAbilities,
+		objLookupID:   		cfg.l.OtherAbilitiesID,
+		queryLookup: 		cfg.q.otherAbilities,
+		idToResFunc:   		idToNamedAPIResource[seeding.OtherAbility, OtherAbility, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 		newNamedAPIResourceList,
+		getMultipleQuery: 	cfg.db.GetOtherAbilityIDsByName,
+		retrieveQuery: 		cfg.db.GetOtherAbilityIDs,
+		getSingleFunc: 		cfg.getOtherAbility,
+		retrieveFunc: 		cfg.retrieveOtherAbilities,
 	}
 
 	e.playerAbilities = handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]{
@@ -418,39 +424,58 @@ func (cfg *Config) EndpointsInit() {
 	}
 
 	e.enemyAbilities = handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "enemy-abilities",
-		resourceType:  "enemy ability",
-		objLookup:     cfg.l.EnemyAbilities,
-		objLookupID:   cfg.l.EnemyAbilitiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+		endpoint:      		"enemy-abilities",
+		resourceType:  		"enemy ability",
+		objLookup:     		cfg.l.EnemyAbilities,
+		objLookupID:   		cfg.l.EnemyAbilitiesID,
+		queryLookup: 		cfg.q.enemyAbilities,
+		idToResFunc:   		idToNamedAPIResource[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 		newNamedAPIResourceList,
+		getMultipleQuery: 	cfg.db.GetEnemyAbilityIDsByName,
+		retrieveQuery: 		cfg.db.GetEnemyAbilityIDs,
+		getSingleFunc: 		cfg.getEnemyAbility,
+		retrieveFunc: 		cfg.retrieveEnemyAbilities,
 	}
 
 	e.itemAbilities = handlerInput[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "item-abilities",
-		resourceType:  "item ability",
-		objLookup:     cfg.l.Items,
-		objLookupID:   cfg.l.ItemsID,
-		idToResFunc:   idToNamedAPIResource[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+		endpoint:      		"item-abilities",
+		resourceType:  		"item ability",
+		objLookup:     		cfg.l.Items,
+		objLookupID:   		cfg.l.ItemsID,
+		queryLookup: 		cfg.q.itemAbilities,
+		idToResFunc:   		idToNamedAPIResource[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 		newNamedAPIResourceList,
+		retrieveQuery: 		cfg.db.GetItemAbilityIDs,
+		getSingleFunc: 		cfg.getItemAbility,
+		retrieveFunc: 		cfg.retrieveItemAbilities,
 	}
 
 	e.overdriveAbilities = handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "overdrive-abilities",
-		resourceType:  "overdrive ability",
-		objLookup:     cfg.l.OverdriveAbilities,
-		objLookupID:   cfg.l.OverdriveAbilitiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+		endpoint:      		"overdrive-abilities",
+		resourceType:  		"overdrive ability",
+		objLookup:     		cfg.l.OverdriveAbilities,
+		objLookupID:   		cfg.l.OverdriveAbilitiesID,
+		queryLookup: 		cfg.q.overdriveAbilities,
+		idToResFunc:   		idToNamedAPIResource[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 		newNamedAPIResourceList,
+		getMultipleQuery: 	cfg.db.GetOverdriveAbilityIDsByName,
+		retrieveQuery: 		cfg.db.GetOverdriveAbilityIDs,
+		getSingleFunc: 		cfg.getOverdriveAbility,
+		retrieveFunc: 		cfg.retrieveOverdriveAbilities,
 	}
 
 	e.triggerCommands = handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "trigger-commands",
-		resourceType:  "trigger command",
-		objLookup:     cfg.l.TriggerCommands,
-		objLookupID:   cfg.l.TriggerCommandsID,
-		idToResFunc:   idToNamedAPIResource[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+		endpoint:      		"trigger-commands",
+		resourceType:  		"trigger command",
+		objLookup:     		cfg.l.TriggerCommands,
+		objLookupID:   		cfg.l.TriggerCommandsID,
+		queryLookup: 		cfg.q.triggerCommands,
+		idToResFunc:   		idToNamedAPIResource[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 		newNamedAPIResourceList,
+		getMultipleQuery: 	cfg.db.GetTriggerCommandIDsByName,
+		retrieveQuery: 		cfg.db.GetTriggerCommandIDs,
+		getSingleFunc: 		cfg.getTriggerCommand,
+		retrieveFunc: 		cfg.retrieveTriggerCommands,
 	}
 
 	e.properties = handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]{
@@ -648,6 +673,13 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:      "damage-type",
 		resourceType:  "damage type",
 		objLookup:     cfg.t.DamageType.lookup,
+		resToListFunc: newTypedAPIResourceList,
+	}
+
+	e.itemCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "item-category",
+		resourceType:  "item category",
+		objLookup:     cfg.t.ItemCategory.lookup,
 		resToListFunc: newTypedAPIResourceList,
 	}
 
