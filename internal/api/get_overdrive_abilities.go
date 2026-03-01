@@ -12,23 +12,21 @@ func (cfg *Config) getOverdriveAbility(r *http.Request, i handlerInput[seeding.O
 		return OverdriveAbility{}, err
 	}
 
-	overdriveID, err := cfg.db.GetOverdriveAbilityOverdriveID(r.Context(), id)
+	overdriveIDs, err := cfg.db.GetOverdriveAbilityOverdriveIDs(r.Context(), id)
 	if err != nil {
 		return OverdriveAbility{}, newHTTPError(http.StatusInternalServerError, "couldn't get parent overdrive.", err)
 	}
-	overdrive, _ := seeding.GetResourceByID(overdriveID, cfg.l.OverdrivesID)
+	overdrive, _ := seeding.GetResourceByID(overdriveIDs[0], cfg.l.OverdrivesID)
 
 	response := OverdriveAbility{
 		ID:                    ability.ID,
 		Name:                  ability.Name,
 		Version:               ability.Version,
 		Specification: 		   ability.Specification,
-		Description:           overdrive.Description,
-		Effect:                overdrive.Effect,
-		Rank:                  ability.Rank,
-		AppearsInHelpBar:      ability.AppearsInHelpBar,
-		CanCopycat:            ability.CanCopycat,
-		Overdrive: 			   idToNamedAPIResource(cfg, cfg.e.overdrives, overdriveID),
+		Rank:                  overdrive.Rank,
+		AppearsInHelpBar:      overdrive.AppearsInHelpBar,
+		CanCopycat:            overdrive.CanCopycat,
+		Overdrives: 		   idsToAPIResources(cfg, cfg.e.overdrives, overdriveIDs),
 		OverdriveCommand: 	   namePtrToNamedAPIResPtr(cfg, cfg.e.overdriveCommands, overdrive.OverdriveCommand, nil),
 		User:             	   nameToNamedAPIResource(cfg, cfg.e.characterClasses, overdrive.User, nil),
 		RelatedStats:          namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),

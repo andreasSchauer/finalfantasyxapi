@@ -96,44 +96,6 @@ func applyTriggerCommandUser(cfg *Config, r *http.Request, ability TriggerComman
 }
 
 
-func canUsePlayerAbility(cfg *Config, ability PlayerAbility, unitName, resType, queryName string) error {
-	for _, class := range ability.LearnedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
-
-		if slices.Contains(classLookup.Members, unitName) {
-			return nil
-		}
-	}
-
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn player ability '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
-}
-
-
-func canUseOtherAbility(cfg *Config, ability OtherAbility, unitName, resType, queryName string) error {
-	for _, class := range ability.LearnedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
-
-		if slices.Contains(classLookup.Members, unitName) {
-			return nil
-		}
-	}
-
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn other ability '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
-}
-
-func canUseTriggerCommand(cfg *Config, ability TriggerCommand, unitName, resType, queryName string) error {
-	for _, class := range ability.UsedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
-
-		if slices.Contains(classLookup.Members, unitName) {
-			return nil
-		}
-	}
-
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn trigger command '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
-}
-
-
 func findUnit(cfg *Config, unitStr, resType string, queryParam QueryType) (string, biReplacement, error) {
 	var repl biReplacement
 	var unitName string
@@ -193,4 +155,42 @@ func replaceBattleInteractionVals(battleInteractions []BattleInteraction, repl b
 	}
 
 	return battleInteractions
+}
+
+
+func canUsePlayerAbility(cfg *Config, ability PlayerAbility, unitName, resType, queryName string) error {
+	for _, class := range ability.LearnedBy {
+		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
+
+		if slices.Contains(classLookup.Members, unitName) {
+			return nil
+		}
+	}
+
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn player ability '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
+}
+
+
+func canUseOtherAbility(cfg *Config, ability OtherAbility, unitName, resType, queryName string) error {
+	for _, class := range ability.LearnedBy {
+		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
+
+		if slices.Contains(classLookup.Members, unitName) {
+			return nil
+		}
+	}
+
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn other ability '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
+}
+
+func canUseTriggerCommand(cfg *Config, ability TriggerCommand, unitName, resType, queryName string) error {
+	for _, class := range ability.UsedBy {
+		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
+
+		if slices.Contains(classLookup.Members, unitName) {
+			return nil
+		}
+	}
+
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn trigger command '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
 }

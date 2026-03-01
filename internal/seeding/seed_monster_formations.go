@@ -437,5 +437,27 @@ func (l *Lookup) seedFormationTriggerCommand(qtx *database.Queries, triggerComma
 
 	triggerCommand.ID = dbTriggerCommand.ID
 
+	err = l.seedFormationTriggerCommandUsers(qtx, triggerCommand)
+	if err != nil {
+		return FormationTriggerCommand{}, h.NewErr(triggerCommand.Error(), err, "couldn't junction users to formation trigger command")
+	}
+
 	return triggerCommand, nil
+}
+
+func (l *Lookup) seedFormationTriggerCommandUsers(qtx *database.Queries, triggerCommand FormationTriggerCommand) error {
+	for _, user := range triggerCommand.Users {
+		junction, err := createJunction(triggerCommand, user, l.CharClasses)
+		if err != nil {
+			return err
+		}
+
+		err = qtx.CreateFormationTriggerCommandsUsersJunction(context.Background(), database.CreateFormationTriggerCommandsUsersJunctionParams{
+			DataHash: 			generateDataHash(junction),
+			TriggerCommandID: 	junction.ParentID,
+			CharacterClassID: 	junction.ChildID,
+		})
+	}
+
+	return nil
 }

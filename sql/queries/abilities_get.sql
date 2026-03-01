@@ -454,9 +454,24 @@ WHERE ad.damage_formula = $1
 ORDER BY oa.id;
 
 
+-- name: GetAbilityAttributes :many
+SELECT aa.rank, aa.can_copycat, aa.appears_in_help_bar
+FROM ability_attributes aa
+JOIN abilities a ON a.attributes_id = aa.id
+WHERE a.id = $1;
 
 
--- name: GetOverdriveAbilityOverdriveID :one
+-- name: GetOverdriveAbilityAttributes :many
+SELECT aa.rank, aa.can_copycat, aa.appears_in_help_bar
+FROM ability_attributes aa
+JOIN overdrives o ON o.attributes_id = aa.id
+JOIn j_overdrives_overdrive_abilities j ON j.overdrive_id = o.id
+JOIN overdrive_abilities oa ON j.overdrive_ability_id = oa.id
+JOIN abilities a ON oa.ability_id = a.id
+WHERE a.id = $1;
+
+
+-- name: GetOverdriveAbilityOverdriveIDs :many
 SELECT o.id
 FROM overdrives o
 JOIN j_overdrives_overdrive_abilities j ON j.overdrive_id = o.id

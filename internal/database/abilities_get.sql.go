@@ -10,6 +10,42 @@ import (
 	"database/sql"
 )
 
+const getAbilityAttributes = `-- name: GetAbilityAttributes :many
+SELECT aa.rank, aa.can_copycat, aa.appears_in_help_bar
+FROM ability_attributes aa
+JOIN abilities a ON a.attributes_id = aa.id
+WHERE a.id = $1
+`
+
+type GetAbilityAttributesRow struct {
+	Rank             sql.NullInt32
+	CanCopycat       bool
+	AppearsInHelpBar bool
+}
+
+func (q *Queries) GetAbilityAttributes(ctx context.Context, id int32) ([]GetAbilityAttributesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityAttributes, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAbilityAttributesRow
+	for rows.Next() {
+		var i GetAbilityAttributesRow
+		if err := rows.Scan(&i.Rank, &i.CanCopycat, &i.AppearsInHelpBar); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getEnemyAbilityIDs = `-- name: GetEnemyAbilityIDs :many
 SELECT id FROM enemy_abilities ORDER BY id
 `
@@ -1399,6 +1435,45 @@ func (q *Queries) GetOtherAbilityIDsDealsDelay(ctx context.Context) ([]int32, er
 	return items, nil
 }
 
+const getOverdriveAbilityAttributes = `-- name: GetOverdriveAbilityAttributes :many
+SELECT aa.rank, aa.can_copycat, aa.appears_in_help_bar
+FROM ability_attributes aa
+JOIN overdrives o ON o.attributes_id = aa.id
+JOIn j_overdrives_overdrive_abilities j ON j.overdrive_id = o.id
+JOIN overdrive_abilities oa ON j.overdrive_ability_id = oa.id
+JOIN abilities a ON oa.ability_id = a.id
+WHERE a.id = $1
+`
+
+type GetOverdriveAbilityAttributesRow struct {
+	Rank             sql.NullInt32
+	CanCopycat       bool
+	AppearsInHelpBar bool
+}
+
+func (q *Queries) GetOverdriveAbilityAttributes(ctx context.Context, id int32) ([]GetOverdriveAbilityAttributesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityAttributes, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetOverdriveAbilityAttributesRow
+	for rows.Next() {
+		var i GetOverdriveAbilityAttributesRow
+		if err := rows.Scan(&i.Rank, &i.CanCopycat, &i.AppearsInHelpBar); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getOverdriveAbilityIDs = `-- name: GetOverdriveAbilityIDs :many
 SELECT id FROM overdrive_abilities ORDER BY id
 `
@@ -1838,7 +1913,7 @@ func (q *Queries) GetOverdriveAbilityIDsWithStatChanges(ctx context.Context) ([]
 	return items, nil
 }
 
-const getOverdriveAbilityOverdriveID = `-- name: GetOverdriveAbilityOverdriveID :one
+const getOverdriveAbilityOverdriveIDs = `-- name: GetOverdriveAbilityOverdriveIDs :many
 SELECT o.id
 FROM overdrives o
 JOIN j_overdrives_overdrive_abilities j ON j.overdrive_id = o.id
@@ -1846,10 +1921,27 @@ JOIN overdrive_abilities oa ON j.overdrive_ability_id = oa.id
 WHERE oa.id = $1
 `
 
-func (q *Queries) GetOverdriveAbilityOverdriveID(ctx context.Context, id int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getOverdriveAbilityOverdriveID, id)
-	err := row.Scan(&id)
-	return id, err
+func (q *Queries) GetOverdriveAbilityOverdriveIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityOverdriveIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getPlayerAbilityIDs = `-- name: GetPlayerAbilityIDs :many
