@@ -46,6 +46,7 @@ type QueryLookup struct {
 	monsters          	map[string]QueryType
 	monsterFormations	map[string]QueryType
 	overdriveModes    	map[string]QueryType
+	abilities			map[string]QueryType
 	enemyAbilities		map[string]QueryType
 	itemAbilities		map[string]QueryType
 	otherAbilities	  	map[string]QueryType
@@ -102,6 +103,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initMonstersParams()
 	cfg.initMonsterFormationsParams()
 	cfg.initOverdriveModesParams()
+	cfg.initAbilitiesParams()
 	cfg.initEnemyAbilitiesParams()
 	cfg.initItemAbilitiesParams()
 	cfg.initOtherAbilitiesParams()
@@ -745,6 +747,161 @@ func (cfg *Config) initOverdriveModesParams() {
 
 	params = cfg.completeQueryTypeInit(params)
 	cfg.q.overdriveModes = params
+}
+
+func (cfg *Config) initAbilitiesParams() {
+	params := map[string]QueryType{
+		"type": {
+			ID:          1,
+			Description: "Searches for abilities that are of the specified ability type.",
+			Usage:       "?type={name|id}",
+			ExampleUses: []string{"?type=player-ability", "?type=2"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AbilityType.lookup,
+			References:  []string{createListURL(cfg, "ability-type")},
+		},
+		"damage_type": {
+			ID:          2,
+			Description: "Searches for abilities that deal the specified type of damage.",
+			Usage:       "?damage_type={name|id}",
+			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:	 cfg.t.DamageType.lookup,
+			References:  []string{createListURL(cfg, "damage-type")},
+		},
+		"attack_type": {
+			ID:          3,
+			Description: "Searches for abilities with battle interactions of the specified attack type.",
+			Usage:       "?attack_type={name|id}",
+			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AttackType.lookup,
+			References:  []string{createListURL(cfg, "attack-type")},
+		},
+		"damage_formula": {
+			ID:          4,
+			Description: "Searches for abilities that use the specified formula to calculate their damage.",
+			Usage:       "?damage_formula={name|id}",
+			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.DamageFormula.lookup,
+			References:  []string{createListURL(cfg, "damage-formula")},
+		},
+		"rank": {
+			ID:          5,
+			Description: "Searches for abilities with the specified rank.",
+			Usage:       "?rank={int}",
+			ExampleUses: []string{"?rank=3"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"element": {
+			ID:          6,
+			Description: "Searches for abilities that deal elemental damage based on the specified element.",
+			Usage:       "?element={name|id}",
+			ExampleUses: []string{"?element=3", "?element=fire"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "elements")},
+		},
+		"status_inflict": {
+			ID:          7,
+			Description: "Searches for abilities that can inflict the specified status condition.",
+			Usage:       "?status_inflict={id}",
+			ExampleUses: []string{"?status_inflict=3"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "status-conditions")},
+		},
+		"status_remove": {
+			ID:          8,
+			Description: "Searches for abilities that can remove the specified status condition.",
+			Usage:       "?status_remove={id}",
+			ExampleUses: []string{"?status_remove=3"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "status-conditions")},
+		},
+		"copycat": {
+			ID:          9,
+			Description: "Searches for abilities that can be copied by 'copycat'.",
+			Usage:       "?copycat={bool}",
+			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"help_bar": {
+			ID:          10,
+			Description: "Searches for abilities whose names appear in the help bar.",
+			Usage:       "?help_bar={bool}",
+			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"phys_atk": {
+			ID:          11,
+			Description: "Searches for abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
+			Usage:       "?phys_atk={bool}",
+			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"darkable": {
+			ID:          12,
+			Description: "Searches for abilities that are affected by 'darkness'.",
+			Usage:       "?darkable={bool}",
+			ExampleUses: []string{"?darkable=true", "?darkable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"silenceable": {
+			ID:          13,
+			Description: "Searches for abilities that are affected by 'silence'.",
+			Usage:       "?silenceable={bool}",
+			ExampleUses: []string{"?silenceable=true", "?silenceable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"reflectable": {
+			ID:          14,
+			Description: "Searches for abilities that are affected by 'reflect'.",
+			Usage:       "?reflectable={bool}",
+			ExampleUses: []string{"?reflectable=true", "?reflectable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"delay": {
+			ID:          15,
+			Description: "Searches for abilities that deal delay.",
+			Usage:       "?delay={bool}",
+			ExampleUses: []string{"?delay=true", "?delay=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"stat_changes": {
+			ID:          16,
+			Description: "Searches for abilities that cause stat changes.",
+			Usage:       "?stat_changes={bool}",
+			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"mod_changes": {
+			ID:          17,
+			Description: "Searches for abilities that cause modifier changes.",
+			Usage:       "?mod_changes={bool}",
+			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params)
+	cfg.q.abilities = params
 }
 
 func (cfg *Config) initEnemyAbilitiesParams() {

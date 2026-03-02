@@ -12,7 +12,6 @@ type Ability struct {
 	Rank                  	*int32					`json:"rank"`
 	AppearsInHelpBar      	bool					`json:"appears_in_help_bar"`
 	CanCopycat            	bool					`json:"can_copycat"`
-	Users					[]NamedAPIResource		`json:"users"`
 	Monsters				[]NamedAPIResource		`json:"monsters"`
 	BattleInteractions		[]BattleInteraction		`json:"battle_interactions"`
 }

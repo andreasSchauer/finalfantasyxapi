@@ -56,6 +56,11 @@ func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) 
 }
 
 
+func (cfg *Config) HandleAbilities(w http.ResponseWriter, r *http.Request) {
+	routerIdOnly(cfg, w, r, cfg.e.abilities)
+}
+
+
 func (cfg *Config) HandleEnemyAbilities(w http.ResponseWriter, r *http.Request) {
 	routerNameVersion(cfg, w, r, cfg.e.enemyAbilities)
 }

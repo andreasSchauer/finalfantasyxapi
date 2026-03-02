@@ -7,6 +7,7 @@ import (
 
 // TypeLookup holds all the enum types for the application that are either used as endpoint or query param
 type TypeLookup struct {
+	AbilityType					EnumType[database.AbilityType, any]
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
@@ -42,6 +43,7 @@ type TypeLookup struct {
 func (cfg *Config) TypeLookupInit() {
 	cfg.t = &TypeLookup{}
 
+	cfg.t.initAbilityType()
 	cfg.t.initAreaConnectionType()
 	cfg.t.initArenaCreationCategory()
 	cfg.t.initArranger()
@@ -91,6 +93,39 @@ func newEnumType[T, N any](name string, isEndpoint bool, typeSlice []TypedAPIRes
 		convFunc:     convFunc,
 		nullConvFunc: nullConvFunc,
 	}
+}
+
+func (t *TypeLookup) initAbilityType() {
+	typeSlice := []TypedAPIResource{
+		{
+			Name: 			string(database.AbilityTypeEnemyAbility),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.AbilityTypeItemAbility),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.AbilityTypeOtherAbility),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.AbilityTypeOverdriveAbility),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.AbilityTypePlayerAbility),
+			Description: 	"",
+		},
+		{
+			Name: 			string(database.AbilityTypeTriggerCommand),
+			Description: 	"",
+		},
+	}
+
+	t.AbilityType = newEnumType[database.AbilityType, any]("ability type", true, typeSlice, func(s string) database.AbilityType {
+		return database.AbilityType(s)
+	}, nil)
 }
 
 func (t *TypeLookup) initAreaConnectionType() {

@@ -43,6 +43,23 @@ func (a Ability) Error() string {
 	return fmt.Sprintf("ability %s-%v, type %s", a.Name, h.DerefOrNil(a.Version), a.Type)
 }
 
+func (a Ability) GetAbilityRef() AbilityReference {
+	return AbilityReference{
+		Name: 			a.Name,
+		Version: 		a.Version,
+		AbilityType: 	string(a.Type),
+	}
+}
+
+func (a Ability) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 			a.ID,
+		Name: 			a.Name,
+		Version: 		a.Version,
+		Specification: 	a.Specification,
+	}
+}
+
 type AbilityReference struct {
 	Name        string `json:"name"`
 	Version     *int32 `json:"version"`

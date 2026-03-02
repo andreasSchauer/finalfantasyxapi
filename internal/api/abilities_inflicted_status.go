@@ -8,6 +8,18 @@ import (
 
 
 
+func getAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+	i := cfg.e.abilities
+	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
+
+	if status.Name == "delay" {
+		return getResourcesDbNoInput(cfg, r, i, cfg.e.statusConditions.resourceType, cfg.db.GetAbilityIDsDealsDelay)
+	}
+
+	return getResourcesDB(cfg, r, i, status, cfg.db.GetAbilityIDsByInflictedStatus)
+}
+
+
 func getPlayerAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.playerAbilities
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)

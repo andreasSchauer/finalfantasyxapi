@@ -27,6 +27,7 @@ type endpoints struct {
 	overdriveCommands  handlerInput[seeding.OverdriveCommand, any, NamedAPIResource, NamedApiResourceList]
 	overdriveModes     handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
 	overdrives         handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]
+	abilities		   handlerInput[seeding.Ability, Ability, NamedAPIResource, NamedApiResourceList]
 	otherAbilities     handlerInput[seeding.OtherAbility, OtherAbility, NamedAPIResource, NamedApiResourceList]
 	playerAbilities    handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
 	enemyAbilities     handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
@@ -48,6 +49,7 @@ type endpoints struct {
 
 
 
+	abilityType				 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	attackType				 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	damageFormula			 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
 	damageType				 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
@@ -395,6 +397,19 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList,
 	}
 
+	e.abilities = handlerInput[seeding.Ability, Ability, NamedAPIResource, NamedApiResourceList]{
+		endpoint: 		"abilities",
+		resourceType: 	"ability",
+		objLookup: 		cfg.l.Abilities,
+		objLookupID: 	cfg.l.AbilitiesID,
+		queryLookup: 	cfg.q.abilities,
+		idToResFunc: 	idToNamedAPIResource[seeding.Ability, Ability, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: 	newNamedAPIResourceList,
+		retrieveQuery: 	cfg.db.GetAbilityIDs,
+		getSingleFunc: 	cfg.getAbility,
+		retrieveFunc: 	cfg.retrieveAbilities,
+	}
+
 	e.otherAbilities = handlerInput[seeding.OtherAbility, OtherAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      		"other-abilities",
 		resourceType:  		"other ability",
@@ -652,6 +667,14 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetTreasureIDs,
 		getSingleFunc: cfg.getTreasure,
 		retrieveFunc:  cfg.retrieveTreasures,
+	}
+
+
+	e.abilityType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+		endpoint:      "ability-type",
+		resourceType:  "ability type",
+		objLookup:     cfg.t.AbilityType.lookup,
+		resToListFunc: newTypedAPIResourceList,
 	}
 
 
