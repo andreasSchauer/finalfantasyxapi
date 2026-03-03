@@ -28,6 +28,7 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Type:               abilityType,
+		AbilityReference: 	createAbilityResource(cfg, ability.Name, ability.Version, ability.Type),
 		Monsters:           monsters,
 		BattleInteractions: getAbilityBattleInteractions(cfg, ability),
 	}
@@ -65,7 +66,7 @@ func getAbilityBattleInteractions(cfg *Config, ability seeding.Ability) []Battle
 		}
 
 	case database.AbilityTypeItemAbility:
-		lookup, _ := seeding.GetResource(abilityRef, cfg.l.Items)
+		lookup, _ := seeding.GetResource(ability.Name, cfg.l.Items)
 		seedBattleInteractions = lookup.BattleInteractions
 
 	case database.AbilityTypeUnspecifiedAbility:

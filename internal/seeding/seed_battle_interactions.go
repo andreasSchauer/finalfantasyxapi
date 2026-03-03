@@ -19,7 +19,7 @@ type BattleInteraction struct {
 	AffectedBy                []string          `json:"affected_by"`
 	HitAmount                 int32             `json:"hit_amount"`
 	SpecialAction             *string           `json:"special_action"`
-	InflictedDelay            []InflictedDelay  `json:"inflicted_delay"`
+	InflictedDelay            *InflictedDelay  	`json:"inflicted_delay"`
 	InflictedStatusConditions []InflictedStatus `json:"inflicted_status_conditions"`
 	RemovedStatusConditions   []string          `json:"removed_status_conditions"`
 	CopiedStatusConditions    []InflictedStatus `json:"copied_status_conditions"`
@@ -37,6 +37,7 @@ func (bi BattleInteraction) ToHashFields() []any {
 		bi.Accuracy.ID,
 		bi.HitAmount,
 		h.DerefOrNil(bi.SpecialAction),
+		h.ObjPtrToID(bi.InflictedDelay),
 	}
 }
 
@@ -163,8 +164,8 @@ func (l *Lookup) seedBattleIntAffectedBy(qtx *database.Queries, ability Ability,
 }
 
 func (l *Lookup) seedBattleIntInflictedDelay(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
-	for _, delay := range battleInteraction.InflictedDelay {
-		threeWay, err := createThreeWayJunctionSeed(qtx, ability, battleInteraction, delay, l.seedInflictedDelay)
+	if battleInteraction.InflictedDelay != nil {
+		threeWay, err := createThreeWayJunctionSeed(qtx, ability, battleInteraction, *battleInteraction.InflictedDelay, l.seedInflictedDelay)
 		if err != nil {
 			return err
 		}
@@ -176,7 +177,7 @@ func (l *Lookup) seedBattleIntInflictedDelay(qtx *database.Queries, ability Abil
 			InflictedDelayID:    threeWay.ChildID,
 		})
 		if err != nil {
-			return h.NewErr(delay.Error(), err, "couldn't junction inflicted delay")
+			return h.NewErr(battleInteraction.InflictedDelay.Error(), err, "couldn't junction inflicted delay")
 		}
 	}
 

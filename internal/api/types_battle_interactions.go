@@ -19,7 +19,7 @@ type BattleInteraction struct {
 	Reflectable       			bool				`json:"reflectable"`
 	HitAmount         			int32				`json:"hit_amount"`
 	SpecialAction     			*string				`json:"special_action,omitempty"`
-	InflictedDelay            	[]InflictedDelay  	`json:"inflicted_delay"`
+	InflictedDelay            	*InflictedDelay  	`json:"inflicted_delay"`
 	InflictedStatusConditions 	[]InflictedStatus 	`json:"inflicted_status_conditions"`
 	RemovedStatusConditions		[]NamedAPIResource	`json:"removed_status_conditions"`
 	CopiedStatusConditions		[]InflictedStatus	`json:"copied_status_conditions"`
@@ -37,7 +37,7 @@ func convertBattleInteraction(cfg *Config, ba seeding.BattleInteraction) BattleI
 		Accuracy: convertAccuracy(cfg, ba.Accuracy),
 		HitAmount: ba.HitAmount,
 		SpecialAction: ba.SpecialAction,
-		InflictedDelay: convertObjSlice(cfg, ba.InflictedDelay, convertInflictedDelay),
+		InflictedDelay: convertObjPtr(cfg, ba.InflictedDelay, convertInflictedDelay),
 		InflictedStatusConditions: convertObjSlice(cfg, ba.InflictedStatusConditions, convertInflictedStatus),
 		RemovedStatusConditions: namesToNamedAPIResources(cfg, cfg.e.statusConditions, ba.RemovedStatusConditions),
 		CopiedStatusConditions: convertObjSlice(cfg, ba.CopiedStatusConditions, convertInflictedStatus),
