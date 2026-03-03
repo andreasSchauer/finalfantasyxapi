@@ -898,6 +898,14 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
+		"target_type": {
+			ID:          7,
+			Description: "Searches for abilities with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			ForList:     true,
+			ForSingle:   false,
+		},
 	}
 
 	params = cfg.completeQueryTypeInit(params)
@@ -1020,6 +1028,14 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
+		"target_type": {
+			ID:          14,
+			Description: "Searches for enemy abilities with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			ForList:     true,
+			ForSingle:   false,
+		},
 	}
 
 	params = cfg.completeQueryTypeInit(params)
@@ -1115,6 +1131,14 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Description: "Searches for item abilities that cause modifier changes.",
 			Usage:       "?mod_changes={bool}",
 			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"target_type": {
+			ID:          11,
+			Description: "Searches for item abilities with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
 			ForList:     true,
 			ForSingle:   false,
 		},
@@ -1223,6 +1247,14 @@ func (cfg *Config) initOtherAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
+		"target_type": {
+			ID:          11,
+			Description: "Searches for other abilities with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			ForList:     true,
+			ForSingle:   false,
+		},
 	}
 
 	params = cfg.completeQueryTypeInit(params)
@@ -1325,6 +1357,14 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			Description: "Searches for overdrive abilities that cause modifier changes.",
 			Usage:       "?mod_changes={bool}",
 			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"target_type": {
+			ID:          12,
+			Description: "Searches for overdrive abilities with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
 			ForList:     true,
 			ForSingle:   false,
 		},
@@ -1569,6 +1609,14 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
+		"target_type": {
+			ID:          28,
+			Description: "Searches for player abilities with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			ForList:     true,
+			ForSingle:   false,
+		},
 	}
 
 	params = cfg.completeQueryTypeInit(params)
@@ -1625,6 +1673,14 @@ func (cfg *Config) initTriggerCommandsParams() {
 			Description: "Searches for trigger commands that cause modifier changes.",
 			Usage:       "?mod_changes={bool}",
 			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"target_type": {
+			ID:          7,
+			Description: "Searches for trigger commands with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
 			ForList:     true,
 			ForSingle:   false,
 		},

@@ -49,6 +49,7 @@ func (cfg *Config) retrieveOtherAbilities(r *http.Request, i handlerInput[seedin
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(typeQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetOtherAbilityIDsByDamageType)),
 		frl(typeQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetOtherAbilityIDsByAttackType)),
+		frl(typeQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetOtherAbilityIDsByTargetType)),
 		frl(typeQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetOtherAbilityIDsByDamageFormula)),
 		frl(intQueryNullable(cfg, r, i, resources, "rank", cfg.db.GetOtherAbilityIDsByRank)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "char_class", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetOtherAbilityIDsByCharClass)),

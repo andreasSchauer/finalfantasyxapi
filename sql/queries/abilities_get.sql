@@ -49,6 +49,15 @@ WHERE bi.based_on_phys_attack = true
 ORDER BY a.id;
 
 
+-- name: GetAbilityIDsByTargetType :many
+SELECT DISTINCT a.id
+FROM abilities a
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.target = $1
+ORDER BY a.id;
+
+
 -- name: GetAbilityIDsDarkable :many
 SELECT DISTINCT a.id
 FROM abilities a
@@ -243,6 +252,16 @@ WHERE aa.appears_in_help_bar = $1
 ORDER BY ea.id;
 
 
+-- name: GetEnemyAbilityIDsByTargetType :many
+SELECT DISTINCT ea.id
+FROM enemy_abilities ea
+JOIN abilities a ON ea.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.target = $1
+ORDER BY a.id;
+
+
 -- name: GetEnemyAbilityIDsDarkable :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
@@ -394,6 +413,16 @@ FROM item_abilities ia
 JOIN items i ON ia.item_id = i.id
 WHERE i.category = $1
 ORDER BY ia.id;
+
+
+-- name: GetItemAbilityIDsByTargetType :many
+SELECT DISTINCT ia.id
+FROM item_abilities ia
+JOIN abilities a ON ia.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.target = $1
+ORDER BY a.id;
 
 
 -- name: GetItemAbilityIDsByRelatedStat :many
@@ -568,6 +597,16 @@ WHERE bi.based_on_phys_attack = true
 ORDER BY oa.id;
 
 
+-- name: GetOtherAbilityIDsByTargetType :many
+SELECT DISTINCT oa.id
+FROM other_abilities oa
+JOIN abilities a ON oa.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.target = $1
+ORDER BY a.id;
+
+
 -- name: GetOtherAbilityIDsDarkable :many
 SELECT DISTINCT oa.id
 FROM other_abilities oa
@@ -710,6 +749,16 @@ JOIN abilities a ON oa.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.rank = $1
 ORDER BY oa.id;
+
+
+-- name: GetOverdriveAbilityIDsByTargetType :many
+SELECT DISTINCT oa.id
+FROM overdrive_abilities oa
+JOIN abilities a ON oa.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.target = $1
+ORDER BY a.id;
 
 
 -- name: GetOverdriveAbilityIDsDealsDelay :many
@@ -931,6 +980,16 @@ WHERE bi.based_on_phys_attack = true
 ORDER BY pa.id;
 
 
+-- name: GetPlayerAbilityIDsByTargetType :many
+SELECT DISTINCT pa.id
+FROM player_abilities pa
+JOIN abilities a ON pa.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.target = $1
+ORDER BY a.id;
+
+
 -- name: GetPlayerAbilityIDsDarkable :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
@@ -1141,6 +1200,16 @@ JOIN abilities a ON tc.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.rank = $1
 ORDER BY tc.id;
+
+
+-- name: GetTriggerCommandIDsByTargetType :many
+SELECT DISTINCT tc.id
+FROM trigger_commands tc
+JOIN abilities a ON tc.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.target = $1
+ORDER BY a.id;
 
 
 -- name: GetTriggerCommandIDsWithStatChanges :many

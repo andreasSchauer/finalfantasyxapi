@@ -51,6 +51,7 @@ func (cfg *Config) retrieveItemAbilities(r *http.Request, i handlerInput[seeding
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(typeQuery(cfg, r, i, cfg.t.ItemCategory, resources, "category", cfg.db.GetItemAbilityIDsByCategory)),
 		frl(typeQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetItemAbilityIDsByAttackType)),
+		frl(typeQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetItemAbilityIDsByTargetType)),
 		frl(typeQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetItemAbilityIDsByDamageFormula)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetItemAbilityIDsByElement)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetItemAbilityIDsByRelatedStat)),

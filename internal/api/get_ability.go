@@ -100,6 +100,7 @@ func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Abi
 		frl(typeQuery(cfg, r, i, cfg.t.AbilityType, resources, "type", cfg.db.GetAbilityIDsByType)),
 		frl(typeQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetAbilityIDsByDamageType)),
 		frl(typeQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetAbilityIDsByAttackType)),
+		frl(typeQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetAbilityIDsByTargetType)),
 		frl(typeQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetAbilityIDsByDamageFormula)),
 		frl(intQueryNullable(cfg, r, i, resources, "rank", cfg.db.GetAbilityIDsByRank)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetAbilityIDsByElement)),

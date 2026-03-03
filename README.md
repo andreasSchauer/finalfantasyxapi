@@ -18,6 +18,7 @@ Things that are currently unclear/unknown:
     - the road at macalania temple that connects the antechamber with the chamber of the fayth (area 167). In the German version it has the same name as the road that leads to the temple
     - which fayth areas are called 'chamber of the fayth' and which are called 'fayth'? (areas 14, 35, 63, 117, 168, 210, 212, 228)
 - What is the critical plus value of monsters? (not for the equipment they drop, but for their own abilities) Is it the same?
+- What is the critical plus value of aeons' equipment?
 - The attributes of Lulu's Thundara spell during the first Zu encounter at Bikanel
 - How exactly does Lulu's magic affect the amount of spells she casts with her overdrives?
 - From which areas in the calm lands can you start and complete the 'chocobo training' sidequest?

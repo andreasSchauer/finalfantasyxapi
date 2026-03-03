@@ -62,5 +62,6 @@ func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seedi
 		frl(nameOrIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat)),
 		frl(boolQuery2(cfg, r, i, resources, "stat_changes", cfg.db.GetTriggerCommandIDsWithStatChanges)),
 		frl(boolQuery2(cfg, r, i, resources, "mod_changes", cfg.db.GetTriggerCommandIDsWithModifierChanges)),
+		frl(typeQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetTriggerCommandIDsByTargetType)),
 	})
 }
