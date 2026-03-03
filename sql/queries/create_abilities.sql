@@ -12,15 +12,15 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_attributes.data_hash
 RETURNING *;
 
 
--- name: CreateOtherAbility :one
-INSERT INTO other_abilities (data_hash, ability_id, description, effect, cursor)
+-- name: CreateUnspecifiedAbility :one
+INSERT INTO unspecified_abilities (data_hash, ability_id, description, effect, cursor)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = other_abilities.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = unspecified_abilities.data_hash
 RETURNING *;
 
 
--- name: UpdateOtherAbility :exec
-UPDATE other_abilities
+-- name: UpdateUnspecifiedAbility :exec
+UPDATE unspecified_abilities
 SET data_hash = $1,
     topmenu_id = $2,
     submenu_id = $3,
@@ -47,8 +47,8 @@ SET data_hash = $1,
 WHERE id = $8;
 
 
--- name: CreateotherAbilitiesLearnedByJunction :exec
-INSERT INTO j_other_abilities_learned_by (data_hash, other_ability_id, character_class_id)
+-- name: CreateunspecifiedAbilitiesLearnedByJunction :exec
+INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

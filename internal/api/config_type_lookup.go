@@ -7,37 +7,37 @@ import (
 
 // TypeLookup holds all the enum types for the application that are either used as endpoint or query param
 type TypeLookup struct {
-	AbilityType					EnumType[database.AbilityType, any]
+	AbilityType                 EnumType[database.AbilityType, any]
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
 	BlitzballTournamentCategory EnumType[database.BlitzballTournamentCategory, any]
-	CharacterClassCategory		EnumType[database.CharacterClassCategory, any]
+	CharacterClassCategory      EnumType[database.CharacterClassCategory, any]
 	Composer                    EnumType[database.Composer, database.NullComposer]
 	CreationArea                EnumType[database.MaCreationArea, database.NullMaCreationArea]
 	CTBIconType                 EnumType[database.CtbIconType, any]
-	ItemCategory				EnumType[database.ItemCategory, any]
+	ItemCategory                EnumType[database.ItemCategory, any]
 	LootType                    EnumType[database.LootType, any]
 	MonsterFormationCategory    EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies              EnumType[database.MonsterSpecies, any]
 	MonsterCategory             EnumType[database.MonsterCategory, any]
 	OverdriveModeType           EnumType[database.OverdriveModeType, any]
-	PlayerAbilityCategory		EnumType[database.PlayerAbilityCategory, any]
+	PlayerAbilityCategory       EnumType[database.PlayerAbilityCategory, any]
 	ShopCategory                EnumType[database.ShopCategory, any]
 	ShopType                    EnumType[database.ShopType, any]
 	TreasureType                EnumType[database.TreasureType, any]
 
-	AccSourceType				EnumType[database.AccSourceType, any]
-	AttackType					EnumType[database.AttackType, any]
-	BreakDmgLimitType			EnumType[database.BreakDmgLmtType, database.NullBreakDmgLmtType]
-	CalculationType				EnumType[database.CalculationType, any]
-	CriticalType				EnumType[database.CriticalType, database.NullCriticalType]
-	CtbAttackType				EnumType[database.CtbAttackType, any]
-	DamageFormula				EnumType[database.DamageFormula, any]
-	DamageType					EnumType[database.DamageType, any]
-	DelayType					EnumType[database.DelayType, any]
-	DurationType				EnumType[database.DurationType, any]
-	TargetType					EnumType[database.TargetType, database.NullTargetType]
+	AccSourceType     EnumType[database.AccSourceType, any]
+	AttackType        EnumType[database.AttackType, any]
+	BreakDmgLimitType EnumType[database.BreakDmgLmtType, database.NullBreakDmgLmtType]
+	CalculationType   EnumType[database.CalculationType, any]
+	CriticalType      EnumType[database.CriticalType, database.NullCriticalType]
+	CtbAttackType     EnumType[database.CtbAttackType, any]
+	DamageFormula     EnumType[database.DamageFormula, any]
+	DamageType        EnumType[database.DamageType, any]
+	DelayType         EnumType[database.DelayType, any]
+	DurationType      EnumType[database.DurationType, any]
+	TargetType        EnumType[database.TargetType, database.NullTargetType]
 }
 
 func (cfg *Config) TypeLookupInit() {
@@ -62,7 +62,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initShopCategory()
 	cfg.t.initShopType()
 	cfg.t.initTreasureType()
-	
+
 	cfg.t.initAccSourceType()
 	cfg.t.initAttackType()
 	cfg.t.initBreakDmgLimitType()
@@ -98,28 +98,28 @@ func newEnumType[T, N any](name string, isEndpoint bool, typeSlice []TypedAPIRes
 func (t *TypeLookup) initAbilityType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.AbilityTypeEnemyAbility),
-			Description: 	"",
+			Name:        string(database.AbilityTypePlayerAbility),
+			Description: "Abilities that can either be learned via the sphere grid or are learned by aeons.",
 		},
 		{
-			Name: 			string(database.AbilityTypeItemAbility),
-			Description: 	"",
+			Name:        string(database.AbilityTypeOverdriveAbility),
+			Description: "Abilities that are accessed by using an overdrive.",
 		},
 		{
-			Name: 			string(database.AbilityTypeOtherAbility),
-			Description: 	"",
+			Name:        string(database.AbilityTypeItemAbility),
+			Description: "Abilities that are accessed by using the item of the same name.",
 		},
 		{
-			Name: 			string(database.AbilityTypeOverdriveAbility),
-			Description: 	"",
+			Name:        string(database.AbilityTypeTriggerCommand),
+			Description: "Abilities that are only available in specific boss fights.",
 		},
 		{
-			Name: 			string(database.AbilityTypePlayerAbility),
-			Description: 	"",
+			Name:        string(database.AbilityTypeUnspecifiedAbility),
+			Description: "Abilities that don't fit the other categories. Most of these are accessible from the start of the game.",
 		},
 		{
-			Name: 			string(database.AbilityTypeTriggerCommand),
-			Description: 	"",
+			Name:        string(database.AbilityTypeEnemyAbility),
+			Description: "Abilities that are used by monsters.",
 		},
 	}
 
@@ -319,28 +319,28 @@ func (t *TypeLookup) initCreationArea() {
 func (t *TypeLookup) initItemCategory() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.ItemCategoryHealing),
-			Description: 	"Items that are used for recovery of HP and MP, or for curing negative status ailments.",
+			Name:        string(database.ItemCategoryHealing),
+			Description: "Items that are used for recovery of HP and MP, or for curing negative status ailments.",
 		},
 		{
-			Name: 			string(database.ItemCategoryOffensive),
-			Description: 	"Items that deal damage to other enemies or inflict status ailments.",
+			Name:        string(database.ItemCategoryOffensive),
+			Description: "Items that deal damage to other enemies or inflict status ailments.",
 		},
 		{
-			Name: 			string(database.ItemCategorySupport),
-			Description: 	"Items that grant positive statusses or other supportive effects.",
+			Name:        string(database.ItemCategorySupport),
+			Description: "Items that grant positive statusses or other supportive effects.",
 		},
 		{
-			Name: 			string(database.ItemCategorySphere),
-			Description: 	"Items that can only be used within the sphere grid.",
+			Name:        string(database.ItemCategorySphere),
+			Description: "Items that can only be used within the sphere grid.",
 		},
 		{
-			Name: 			string(database.ItemCategoryDistiller),
-			Description: 	"Items that cause enemies to drop spheres.",
+			Name:        string(database.ItemCategoryDistiller),
+			Description: "Items that cause enemies to drop spheres.",
 		},
 		{
-			Name: 			string(database.ItemCategoryOther),
-			Description: 	"Uncategorized items, that are mostly used for mixes.",
+			Name:        string(database.ItemCategoryOther),
+			Description: "Uncategorized items, that are mostly used for mixes.",
 		},
 	}
 
@@ -697,12 +697,12 @@ func (t *TypeLookup) initTreasureType() {
 func (t *TypeLookup) initAccSourceType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.AccSourceTypeAccuracy),
-			Description:	"The accuracy of the ability is calculated via the user's accuracy stat.",
+			Name:        string(database.AccSourceTypeAccuracy),
+			Description: "The accuracy of the ability is calculated via the user's accuracy stat.",
 		},
 		{
-			Name: 			string(database.AccSourceTypeRate),
-			Description:	"The ability has its own accuracy.",
+			Name:        string(database.AccSourceTypeRate),
+			Description: "The ability has its own accuracy.",
 		},
 	}
 
@@ -714,13 +714,13 @@ func (t *TypeLookup) initAccSourceType() {
 func (t *TypeLookup) initAttackType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.AttackTypeAttack),
+			Name: string(database.AttackTypeAttack),
 		},
 		{
-			Name: 			string(database.AttackTypeHeal),
+			Name: string(database.AttackTypeHeal),
 		},
 		{
-			Name: 			string(database.AttackTypeAbsorb),
+			Name: string(database.AttackTypeAbsorb),
 		},
 	}
 
@@ -732,12 +732,12 @@ func (t *TypeLookup) initAttackType() {
 func (t *TypeLookup) initBreakDmgLimitType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.BreakDmgLmtTypeAlways),
-			Description:	"The ability always breaks the damage limit.",
+			Name:        string(database.BreakDmgLmtTypeAlways),
+			Description: "The ability always breaks the damage limit.",
 		},
 		{
-			Name: 			string(database.BreakDmgLmtTypeAutoAbility),
-			Description:	"The ability can only break the damage limit, if the user has the auto-ability 'Break Damage Limit' equipped.",
+			Name:        string(database.BreakDmgLmtTypeAutoAbility),
+			Description: "The ability can only break the damage limit, if the user has the auto-ability 'Break Damage Limit' equipped.",
 		},
 	}
 
@@ -749,28 +749,28 @@ func (t *TypeLookup) initBreakDmgLimitType() {
 func (t *TypeLookup) initCalculationType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.CalculationTypeAddedPercentage),
-			Description:	"The given value is added (or subtracted, if negative) to a final percentage-based factor which is applied at the end of the calculation. Example: If the value is 3 (like with Auto-Ability 'Strength +3%'), then the result of the calculation will be multiplied by 1.03.",
+			Name:        string(database.CalculationTypeAddedPercentage),
+			Description: "The given value is added (or subtracted, if negative) to a final percentage-based factor which is applied at the end of the calculation. Example: If the value is 3 (like with Auto-Ability 'Strength +3%'), then the result of the calculation will be multiplied by 1.03.",
 		},
 		{
-			Name: 			string(database.CalculationTypeAddedValue),
-			Description:	"The given value is added directly to the destination. This type is either used directly on stats or on factors within the calculation and is most prominently seen on abilities like 'Cheer' and its equivalents.",
+			Name:        string(database.CalculationTypeAddedValue),
+			Description: "The given value is added directly to the destination. This type is either used directly on stats or on factors within the calculation and is most prominently seen on abilities like 'Cheer' and its equivalents.",
 		},
 		{
-			Name: 			string(database.CalculationTypeMultiply),
-			Description:	"The result of the calculation will be multiplied by the given value. Values with calculation type 'multiply' can stack on the same destination. Example: If Rikku uses 'Hot Spurs' (overdrive-charge x1.5) and then 'Eccentrick' (overdrive-charge x2), the gauge will charge 3 times as fast.",
+			Name:        string(database.CalculationTypeMultiply),
+			Description: "The result of the calculation will be multiplied by the given value. Values with calculation type 'multiply' can stack on the same destination. Example: If Rikku uses 'Hot Spurs' (overdrive-charge x1.5) and then 'Eccentrick' (overdrive-charge x2), the gauge will charge 3 times as fast.",
 		},
 		{
-			Name: 			string(database.CalculationTypeMultiplyHighest),
-			Description:	"The result of the calculation will be multiplied by the given value. If more than one modification with calculation type 'multiply-highest' reach the same destination, only the highest factor is applied. Example: Auto-Abilities 'Double AP' and 'Triple AP' both use 'multiply-highest'. Factor 3 of 'Triple AP' will override factor 2 of 'Double AP', since it's higher.",
+			Name:        string(database.CalculationTypeMultiplyHighest),
+			Description: "The result of the calculation will be multiplied by the given value. If more than one modification with calculation type 'multiply-highest' reach the same destination, only the highest factor is applied. Example: Auto-Abilities 'Double AP' and 'Triple AP' both use 'multiply-highest'. Factor 3 of 'Triple AP' will override factor 2 of 'Double AP', since it's higher.",
 		},
 		{
-			Name: 			string(database.CalculationTypeSetValue),
-			Description:	"The destination becomes the given value. Example: Auto-Ability 'One MP Cost' sets the MP cost every spell to 1.",
+			Name:        string(database.CalculationTypeSetValue),
+			Description: "The destination becomes the given value. Example: Auto-Ability 'One MP Cost' sets the MP cost every spell to 1.",
 		},
 		{
-			Name: 			string(database.CalculationTypeSetMinValue),
-			Description:	"The destination can't be lower than the given value at the end of all calculations. Example: 'Trio of 9999' sets the minimum damage a character can deal to 9999.",
+			Name:        string(database.CalculationTypeSetMinValue),
+			Description: "The destination can't be lower than the given value at the end of all calculations. Example: 'Trio of 9999' sets the minimum damage a character can deal to 9999.",
 		},
 	}
 
@@ -782,16 +782,16 @@ func (t *TypeLookup) initCalculationType() {
 func (t *TypeLookup) initCriticalType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.CriticalTypeCrit),
-			Description:	"The ability uses the normal critical hit formula.",
+			Name:        string(database.CriticalTypeCrit),
+			Description: "The ability uses the normal critical hit formula.",
 		},
 		{
-			Name: 			string(database.CriticalTypeCritweapon),
-			Description:	"The critical plus values of the user's equipment are added toward the critical hit chance.",
+			Name:        string(database.CriticalTypeCritweapon),
+			Description: "The critical plus values of the user's equipment are added toward the critical hit chance.",
 		},
 		{
-			Name: 			string(database.CriticalTypeCritability),
-			Description:	"The critical plus value of the used ability is added toward the critical hit chance.",
+			Name:        string(database.CriticalTypeCritability),
+			Description: "The critical plus value of the used ability is added toward the critical hit chance.",
 		},
 	}
 
@@ -803,10 +803,10 @@ func (t *TypeLookup) initCriticalType() {
 func (t *TypeLookup) initCtbAttackType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.CtbAttackTypeAttack),
+			Name: string(database.CtbAttackTypeAttack),
 		},
 		{
-			Name: 			string(database.CtbAttackTypeHeal),
+			Name: string(database.CtbAttackTypeHeal),
 		},
 	}
 
@@ -818,72 +818,72 @@ func (t *TypeLookup) initCtbAttackType() {
 func (t *TypeLookup) initDamageFormula() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.DamageFormulaStrVsDef),
-			Description: 	"",
+			Name:        string(database.DamageFormulaStrVsDef),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaStrIgnDef),
-			Description: 	"",
+			Name:        string(database.DamageFormulaStrIgnDef),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaMagVsMdf),
-			Description: 	"",
+			Name:        string(database.DamageFormulaMagVsMdf),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaMagIgnMdf),
-			Description: 	"",
+			Name:        string(database.DamageFormulaMagIgnMdf),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaPercentageCurrent),
-			Description: 	"",
+			Name:        string(database.DamageFormulaPercentageCurrent),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaPercentageMax),
-			Description: 	"",
+			Name:        string(database.DamageFormulaPercentageMax),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaHealing),
-			Description: 	"",
+			Name:        string(database.DamageFormulaHealing),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaSpecialNoVar),
-			Description: 	"",
+			Name:        string(database.DamageFormulaSpecialNoVar),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaSpecialVar),
-			Description: 	"",
+			Name:        string(database.DamageFormulaSpecialVar),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaSpecialMagic),
-			Description: 	"",
+			Name:        string(database.DamageFormulaSpecialMagic),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaSpecialGil),
-			Description: 	"",
+			Name:        string(database.DamageFormulaSpecialGil),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaSpecialKills),
-			Description: 	"",
+			Name:        string(database.DamageFormulaSpecialKills),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaSpecial9999),
-			Description: 	"",
+			Name:        string(database.DamageFormulaSpecial9999),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaFixed9999),
-			Description: 	"",
+			Name:        string(database.DamageFormulaFixed9999),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaUserMaxHp),
-			Description: 	"",
+			Name:        string(database.DamageFormulaUserMaxHp),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaSwallowedA),
-			Description: 	"",
+			Name:        string(database.DamageFormulaSwallowedA),
+			Description: "",
 		},
 		{
-			Name: 			string(database.DamageFormulaSwallowedB),
-			Description: 	"",
+			Name:        string(database.DamageFormulaSwallowedB),
+			Description: "",
 		},
 	}
 
@@ -895,16 +895,16 @@ func (t *TypeLookup) initDamageFormula() {
 func (t *TypeLookup) initDamageType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.DamageTypePhysical),
-			Description: 	"The damage can be reduced by 'Protect', 'Defend' 'Power Break', 'Sentinel', 'Shield', and 'Cheer', as well as 'Defense +X%' Auto-Abilities.",
+			Name:        string(database.DamageTypePhysical),
+			Description: "The damage can be reduced by 'Protect', 'Defend' 'Power Break', 'Sentinel', 'Shield', and 'Cheer', as well as 'Defense +X%' Auto-Abilities.",
 		},
 		{
-			Name: 			string(database.DamageTypeMagical),
-			Description: 	"The damage can be reduced by 'Shell', 'Magic Break', 'Shield', and 'Focus', as well as 'Magic Def +X%' Auto-Abilities. It can be increased by 'Magic +X%' Auto-Abilities.",
+			Name:        string(database.DamageTypeMagical),
+			Description: "The damage can be reduced by 'Shell', 'Magic Break', 'Shield', and 'Focus', as well as 'Magic Def +X%' Auto-Abilities. It can be increased by 'Magic +X%' Auto-Abilities.",
 		},
 		{
-			Name: 			string(database.DamageTypeSpecial),
-			Description: 	"The damage can only be reduced by 'Shield'.",
+			Name:        string(database.DamageTypeSpecial),
+			Description: "The damage can only be reduced by 'Shield'.",
 		},
 	}
 
@@ -916,12 +916,12 @@ func (t *TypeLookup) initDamageType() {
 func (t *TypeLookup) initDelayType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.DelayTypeCtbBased),
-			Description: 	"Delay is based on current ticks. CTB damage/heal is only applied, if 'Slow'/'Haste' is succcessful or if the status was successfully removed.",
+			Name:        string(database.DelayTypeCtbBased),
+			Description: "Delay is based on current ticks. CTB damage/heal is only applied, if 'Slow'/'Haste' is succcessful or if the status was successfully removed.",
 		},
 		{
-			Name: 			string(database.DelayTypeTickSpeedBased),
-			Description: 	"Delay is based on tick speed. CTB damage is applied via an attack. Example: 'Delay Attack'.",
+			Name:        string(database.DelayTypeTickSpeedBased),
+			Description: "Delay is based on tick speed. CTB damage is applied via an attack. Example: 'Delay Attack'.",
 		},
 	}
 
@@ -933,28 +933,28 @@ func (t *TypeLookup) initDelayType() {
 func (t *TypeLookup) initDurationType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.DurationTypeTurns),
-			Description: 	"The status condition wears off after a set amount of turns.",
+			Name:        string(database.DurationTypeTurns),
+			Description: "The status condition wears off after a set amount of turns.",
 		},
 		{
-			Name: 			string(database.DurationTypeInflictorNextTurn),
-			Description: 	"The status condition wears off on the inflictor's next turn. This is only used for 'Threaten'.",
+			Name:        string(database.DurationTypeInflictorNextTurn),
+			Description: "The status condition wears off on the inflictor's next turn. This is only used for 'Threaten'.",
 		},
 		{
-			Name: 			string(database.DurationTypeBlocks),
-			Description: 	"The status condition is present as long as it has blocks left. Used only for 'Nul-' status conditions.",
+			Name:        string(database.DurationTypeBlocks),
+			Description: "The status condition is present as long as it has blocks left. Used only for 'Nul-' status conditions.",
 		},
 		{
-			Name: 			string(database.DurationTypeEndless),
-			Description: 	"The status condition won't wear off. It is present until it is removed.",
+			Name:        string(database.DurationTypeEndless),
+			Description: "The status condition won't wear off. It is present until it is removed.",
 		},
 		{
-			Name: 			string(database.DurationTypeInstant),
-			Description: 	"The status condition wears off instantly. Most commonly seen on 'Death' and 'Life', but there are exceptions like Sinspawn Gui and Ultima Buster gaining 'Defend' while blocking, or Penance's Arms gaining 'Haste' while taking an action.",
+			Name:        string(database.DurationTypeInstant),
+			Description: "The status condition wears off instantly. Most commonly seen on 'Death' and 'Life', but there are exceptions like Sinspawn Gui and Ultima Buster gaining 'Defend' while blocking, or Penance's Arms gaining 'Haste' while taking an action.",
 		},
 		{
-			Name: 			string(database.DurationTypeAuto),
-			Description: 	"The status condition is present forever and can't be removed. Only used on Biran Ronso's 'Mighty Guard'.",
+			Name:        string(database.DurationTypeAuto),
+			Description: "The status condition is present forever and can't be removed. Only used on Biran Ronso's 'Mighty Guard'.",
 		},
 	}
 
@@ -966,48 +966,48 @@ func (t *TypeLookup) initDurationType() {
 func (t *TypeLookup) initTargetType() {
 	typeSlice := []TypedAPIResource{
 		{
-			Name: 			string(database.TargetTypeSelf),
-			Description:	"The action targets its user.",
+			Name:        string(database.TargetTypeSelf),
+			Description: "The action targets its user.",
 		},
 		{
-			Name: 			string(database.TargetTypeSingleCharacter),
-			Description:	"The action targets one unit of the user's party.",
+			Name:        string(database.TargetTypeSingleCharacter),
+			Description: "The action targets one unit of the user's party.",
 		},
 		{
-			Name: 			string(database.TargetTypeSingleEnemy),
-			Description:	"The action targets one unit of the user's opposing party.",
+			Name:        string(database.TargetTypeSingleEnemy),
+			Description: "The action targets one unit of the user's opposing party.",
 		},
 		{
-			Name: 			string(database.TargetTypeSingleTarget),
-			Description:	"The action targets the selected unit.",
+			Name:        string(database.TargetTypeSingleTarget),
+			Description: "The action targets the selected unit.",
 		},
 		{
-			Name: 			string(database.TargetTypeRandomCharacter),
-			Description:	"The action targets a random unit of the user's party.",
+			Name:        string(database.TargetTypeRandomCharacter),
+			Description: "The action targets a random unit of the user's party.",
 		},
 		{
-			Name: 			string(database.TargetTypeRandomEnemy),
-			Description:	"The action targets a random unit of the user's opposing party.",
+			Name:        string(database.TargetTypeRandomEnemy),
+			Description: "The action targets a random unit of the user's opposing party.",
 		},
 		{
-			Name: 			string(database.TargetTypeAllCharacters),
-			Description:	"The action targets all units of the user's party.",
+			Name:        string(database.TargetTypeAllCharacters),
+			Description: "The action targets all units of the user's party.",
 		},
 		{
-			Name: 			string(database.TargetTypeAllEnemies),
-			Description:	"The action targets all units of the user's opposing party.",
+			Name:        string(database.TargetTypeAllEnemies),
+			Description: "The action targets all units of the user's opposing party.",
 		},
 		{
-			Name: 			string(database.TargetTypeTargetParty),
-			Description:	"The action targets all units of the selected party.",
+			Name:        string(database.TargetTypeTargetParty),
+			Description: "The action targets all units of the selected party.",
 		},
 		{
-			Name: 			string(database.TargetTypeNTargets),
-			Description:	"The action targets N amount of units (N is stated via the ability's hit_amount). The action can also target KO'd characters and inanimate objects. Only Seymour Natus' multi-spells and Spectral Keeper's counter attack, as well as its glyph mine activation use this target type.",
+			Name:        string(database.TargetTypeNTargets),
+			Description: "The action targets N amount of units (N is stated via the ability's hit_amount). The action can also target KO'd characters and inanimate objects. Only Seymour Natus' multi-spells and Spectral Keeper's counter attack, as well as its glyph mine activation use this target type.",
 		},
 		{
-			Name: 			string(database.TargetTypeEveryone),
-			Description:	"The action targets every unit on the field.",
+			Name:        string(database.TargetTypeEveryone),
+			Description: "The action targets every unit on the field.",
 		},
 	}
 

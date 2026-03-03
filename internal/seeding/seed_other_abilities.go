@@ -9,10 +9,10 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type OtherAbility struct {
+type UnspecifiedAbility struct {
 	ID int32
 	Ability
-	TopmenuID		   *int32
+	TopmenuID          *int32
 	SubmenuID          *int32
 	OpenSubmenuID      *int32
 	Description        string              `json:"description"`
@@ -26,7 +26,7 @@ type OtherAbility struct {
 	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
-func (o OtherAbility) ToHashFields() []any {
+func (o UnspecifiedAbility) ToHashFields() []any {
 	return []any{
 		o.Ability.ID,
 		o.Description,
@@ -38,30 +38,30 @@ func (o OtherAbility) ToHashFields() []any {
 	}
 }
 
-func (o OtherAbility) ToKeyFields() []any {
+func (o UnspecifiedAbility) ToKeyFields() []any {
 	return []any{
 		o.Ability.Name,
 		h.DerefOrNil(o.Ability.Version),
 	}
 }
 
-func (o OtherAbility) GetID() int32 {
+func (o UnspecifiedAbility) GetID() int32 {
 	return o.ID
 }
 
-func (o OtherAbility) GetAbilityRef() AbilityReference {
+func (o UnspecifiedAbility) GetAbilityRef() AbilityReference {
 	return AbilityReference{
 		Name:        o.Name,
 		Version:     o.Version,
-		AbilityType: string(database.AbilityTypeOtherAbility),
+		AbilityType: string(database.AbilityTypeUnspecifiedAbility),
 	}
 }
 
-func (o OtherAbility) Error() string {
+func (o UnspecifiedAbility) Error() string {
 	return fmt.Sprintf("generic ability %s, version %v", o.Name, h.DerefOrNil(o.Version))
 }
 
-func (o OtherAbility) GetResParamsNamed() h.ResParamsNamed {
+func (o UnspecifiedAbility) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
 		ID:            o.ID,
 		Name:          o.Name,
@@ -70,80 +70,80 @@ func (o OtherAbility) GetResParamsNamed() h.ResParamsNamed {
 	}
 }
 
-func (l *Lookup) seedotherAbilities(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/other_abilities.json"
+func (l *Lookup) seedunspecifiedAbilities(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "data/unspecified_abilities.json"
 
-	var otherAbilities []OtherAbility
+	var unspecifiedAbilities []UnspecifiedAbility
 
-	err := loadJSONFile(string(srcPath), &otherAbilities)
+	err := loadJSONFile(string(srcPath), &unspecifiedAbilities)
 	if err != nil {
 		return err
 	}
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, OtherAbility := range otherAbilities {
+		for _, UnspecifiedAbility := range unspecifiedAbilities {
 			var err error
-			OtherAbility.Type = database.AbilityTypeOtherAbility
+			UnspecifiedAbility.Type = database.AbilityTypeUnspecifiedAbility
 
-			OtherAbility.Ability, err = seedObjAssignID(qtx, OtherAbility.Ability, l.seedAbility)
+			UnspecifiedAbility.Ability, err = seedObjAssignID(qtx, UnspecifiedAbility.Ability, l.seedAbility)
 			if err != nil {
-				return h.NewErr(OtherAbility.Error(), err)
+				return h.NewErr(UnspecifiedAbility.Error(), err)
 			}
 
-			dbOtherAbility, err := qtx.CreateOtherAbility(context.Background(), database.CreateOtherAbilityParams{
-				DataHash:    generateDataHash(OtherAbility),
-				AbilityID:   OtherAbility.Ability.ID,
-				Description: OtherAbility.Description,
-				Effect:      OtherAbility.Effect,
-				Cursor:      h.NullTargetType(OtherAbility.Cursor),
+			dbUnspecifiedAbility, err := qtx.CreateUnspecifiedAbility(context.Background(), database.CreateUnspecifiedAbilityParams{
+				DataHash:    generateDataHash(UnspecifiedAbility),
+				AbilityID:   UnspecifiedAbility.Ability.ID,
+				Description: UnspecifiedAbility.Description,
+				Effect:      UnspecifiedAbility.Effect,
+				Cursor:      h.NullTargetType(UnspecifiedAbility.Cursor),
 			})
 			if err != nil {
-				return h.NewErr(OtherAbility.Error(), err, "couldn't create generic ability")
+				return h.NewErr(UnspecifiedAbility.Error(), err, "couldn't create generic ability")
 			}
 
-			OtherAbility.ID = dbOtherAbility.ID
-			key := CreateLookupKey(OtherAbility)
-			l.OtherAbilities[key] = OtherAbility
-			l.OtherAbilitiesID[OtherAbility.ID] = OtherAbility
+			UnspecifiedAbility.ID = dbUnspecifiedAbility.ID
+			key := CreateLookupKey(UnspecifiedAbility)
+			l.UnspecifiedAbilities[key] = UnspecifiedAbility
+			l.UnspecifiedAbilitiesID[UnspecifiedAbility.ID] = UnspecifiedAbility
 		}
 		return nil
 	})
 }
 
-func (l *Lookup) seedotherAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/other_abilities.json"
+func (l *Lookup) seedunspecifiedAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
+	const srcPath = "data/unspecified_abilities.json"
 
-	var otherAbilities []OtherAbility
+	var unspecifiedAbilities []UnspecifiedAbility
 
-	err := loadJSONFile(string(srcPath), &otherAbilities)
+	err := loadJSONFile(string(srcPath), &unspecifiedAbilities)
 	if err != nil {
 		return err
 	}
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, jsonAbility := range otherAbilities {
+		for _, jsonAbility := range unspecifiedAbilities {
 			abilityRef := jsonAbility.GetAbilityRef()
 
-			otherAbility, err := GetResource(abilityRef.Untyped(), l.OtherAbilities)
+			unspecifiedAbility, err := GetResource(abilityRef.Untyped(), l.UnspecifiedAbilities)
 			if err != nil {
 				return err
 			}
 
-			err = l.seedOtherAbilityFKs(qtx, otherAbility)
+			err = l.seedUnspecifiedAbilityFKs(qtx, unspecifiedAbility)
 			if err != nil {
-				return h.NewErr(otherAbility.Error(), err)
+				return h.NewErr(unspecifiedAbility.Error(), err)
 			}
 
-			err = l.seedOtherAbilityLearnedBy(qtx, otherAbility)
+			err = l.seedUnspecifiedAbilityLearnedBy(qtx, unspecifiedAbility)
 			if err != nil {
-				return h.NewErr(otherAbility.Error(), err)
+				return h.NewErr(unspecifiedAbility.Error(), err)
 			}
 
-			l.currentAbility = otherAbility.Ability
+			l.currentAbility = unspecifiedAbility.Ability
 
-			err = l.seedBattleInteractions(qtx, l.currentAbility, otherAbility.BattleInteractions)
+			err = l.seedBattleInteractions(qtx, l.currentAbility, unspecifiedAbility.BattleInteractions)
 			if err != nil {
-				return h.NewErr(otherAbility.Error(), err)
+				return h.NewErr(unspecifiedAbility.Error(), err)
 			}
 		}
 
@@ -151,7 +151,7 @@ func (l *Lookup) seedotherAbilitiesRelationships(db *database.Queries, dbConn *s
 	})
 }
 
-func (l *Lookup) seedOtherAbilityFKs(qtx *database.Queries, ability OtherAbility) error {
+func (l *Lookup) seedUnspecifiedAbilityFKs(qtx *database.Queries, ability UnspecifiedAbility) error {
 	var err error
 
 	ability.TopmenuID, err = assignFKPtr(ability.Topmenu, l.Topmenus)
@@ -169,9 +169,9 @@ func (l *Lookup) seedOtherAbilityFKs(qtx *database.Queries, ability OtherAbility
 		return err
 	}
 
-	err = qtx.UpdateOtherAbility(context.Background(), database.UpdateOtherAbilityParams{
+	err = qtx.UpdateUnspecifiedAbility(context.Background(), database.UpdateUnspecifiedAbilityParams{
 		DataHash:      generateDataHash(ability),
-		TopmenuID: 	   h.GetNullInt32(ability.TopmenuID),
+		TopmenuID:     h.GetNullInt32(ability.TopmenuID),
 		SubmenuID:     h.GetNullInt32(ability.SubmenuID),
 		OpenSubmenuID: h.GetNullInt32(ability.OpenSubmenuID),
 		ID:            ability.ID,
@@ -183,17 +183,17 @@ func (l *Lookup) seedOtherAbilityFKs(qtx *database.Queries, ability OtherAbility
 	return nil
 }
 
-func (l *Lookup) seedOtherAbilityLearnedBy(qtx *database.Queries, ability OtherAbility) error {
+func (l *Lookup) seedUnspecifiedAbilityLearnedBy(qtx *database.Queries, ability UnspecifiedAbility) error {
 	for _, charClass := range ability.LearnedBy {
 		junction, err := createJunction(ability, charClass, l.CharClasses)
 		if err != nil {
 			return err
 		}
 
-		err = qtx.CreateotherAbilitiesLearnedByJunction(context.Background(), database.CreateotherAbilitiesLearnedByJunctionParams{
-			DataHash:         generateDataHash(junction),
-			OtherAbilityID:   junction.ParentID,
-			CharacterClassID: junction.ChildID,
+		err = qtx.CreateunspecifiedAbilitiesLearnedByJunction(context.Background(), database.CreateunspecifiedAbilitiesLearnedByJunctionParams{
+			DataHash:             generateDataHash(junction),
+			UnspecifiedAbilityID: junction.ParentID,
+			CharacterClassID:     junction.ChildID,
 		})
 		if err != nil {
 			return h.NewErr(charClass, err, "couldn't junction 'learned by' class")

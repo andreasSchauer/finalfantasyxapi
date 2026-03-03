@@ -239,9 +239,9 @@ func (l *Lookup) getSeeders() []seeder {
 			relFunc:  l.seedTriggerCommandsRelationships,
 		},
 		{
-			name:     "other abilities",
-			seedFunc: l.seedotherAbilities,
-			relFunc:  l.seedotherAbilitiesRelationships,
+			name:     "unspecified abilities",
+			seedFunc: l.seedunspecifiedAbilities,
+			relFunc:  l.seedunspecifiedAbilitiesRelationships,
 		},
 		{
 			name:     "enemy abilities",

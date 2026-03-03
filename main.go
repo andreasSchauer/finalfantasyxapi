@@ -7,8 +7,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 )
 
-
-
 func main() {
 	const port = "8080"
 
@@ -30,7 +28,7 @@ func main() {
 	mux.HandleFunc("GET /api/areas/", apiCfg.HandleAreas)
 	mux.HandleFunc("GET /api/sublocations/", apiCfg.HandleSublocations)
 	mux.HandleFunc("GET /api/locations/", apiCfg.HandleLocations)
-	
+
 	mux.HandleFunc("GET /api/aeons/", apiCfg.HandleAeons)
 	mux.HandleFunc("GET /api/arena-creations/", apiCfg.HandleArenaCreations)
 	mux.HandleFunc("GET /api/blitzball-prizes/", apiCfg.HandleBlitzballPrizes)
@@ -43,7 +41,7 @@ func main() {
 	mux.HandleFunc("GET /api/abilities/", apiCfg.HandleAbilities)
 	mux.HandleFunc("GET /api/enemy-abilities/", apiCfg.HandleEnemyAbilities)
 	mux.HandleFunc("GET /api/item-abilities/", apiCfg.HandleItemAbilities)
-	mux.HandleFunc("GET /api/other-abilities/", apiCfg.HandleOtherAbilities)
+	mux.HandleFunc("GET /api/unspecified-abilities/", apiCfg.HandleUnspecifiedAbilities)
 	mux.HandleFunc("GET /api/overdrive-abilities/", apiCfg.HandleOverdriveAbilities)
 	mux.HandleFunc("GET /api/player-abilities/", apiCfg.HandlePlayerAbilities)
 	mux.HandleFunc("GET /api/trigger-commands/", apiCfg.HandleTriggerCommands)

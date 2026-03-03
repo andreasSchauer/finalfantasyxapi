@@ -22,7 +22,7 @@ type QueryType struct {
 	AllowedResources []string                    `json:"allowed_resources,omitempty"`
 	AllowedValues    []string                    `json:"allowed_values,omitempty"`
 	AllowedIntRange  []int                       `json:"allowed_int_range,omitempty"`
-	AllowedResTypes	 []string					 `json:"allowed_res_types"`
+	AllowedResTypes  []string                    `json:"allowed_res_types"`
 	DefaultVal       *int                        `json:"default_value,omitempty"`
 	SpecialInputs    []SpecialInput              `json:"special_inputs,omitempty"`
 }
@@ -34,31 +34,31 @@ type SpecialInput struct {
 
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
-	defaultParams     	map[string]QueryType
-	aeons			  	map[string]QueryType
-	arenaCreations    	map[string]QueryType
-	areas             	map[string]QueryType
-	blitzballPrizes   	map[string]QueryType
-	characters		  	map[string]QueryType
-	characterClasses  	map[string]QueryType
-	fmvs              	map[string]QueryType
-	locations         	map[string]QueryType
-	monsters          	map[string]QueryType
-	monsterFormations	map[string]QueryType
-	overdriveModes    	map[string]QueryType
-	abilities			map[string]QueryType
-	enemyAbilities		map[string]QueryType
-	itemAbilities		map[string]QueryType
-	otherAbilities	  	map[string]QueryType
-	overdriveAbilities	map[string]QueryType
-	playerAbilities	  	map[string]QueryType
-	triggerCommands		map[string]QueryType
-	shops             	map[string]QueryType
-	songs             	map[string]QueryType
-	sidequests        	map[string]QueryType
-	subquests         	map[string]QueryType
-	sublocations      	map[string]QueryType
-	treasures         	map[string]QueryType
+	defaultParams        map[string]QueryType
+	aeons                map[string]QueryType
+	arenaCreations       map[string]QueryType
+	areas                map[string]QueryType
+	blitzballPrizes      map[string]QueryType
+	characters           map[string]QueryType
+	characterClasses     map[string]QueryType
+	fmvs                 map[string]QueryType
+	locations            map[string]QueryType
+	monsters             map[string]QueryType
+	monsterFormations    map[string]QueryType
+	overdriveModes       map[string]QueryType
+	abilities            map[string]QueryType
+	enemyAbilities       map[string]QueryType
+	itemAbilities        map[string]QueryType
+	unspecifiedAbilities map[string]QueryType
+	overdriveAbilities   map[string]QueryType
+	playerAbilities      map[string]QueryType
+	triggerCommands      map[string]QueryType
+	shops                map[string]QueryType
+	songs                map[string]QueryType
+	sidequests           map[string]QueryType
+	subquests            map[string]QueryType
+	sublocations         map[string]QueryType
+	treasures            map[string]QueryType
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -106,7 +106,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initAbilitiesParams()
 	cfg.initEnemyAbilitiesParams()
 	cfg.initItemAbilitiesParams()
-	cfg.initOtherAbilitiesParams()
+	cfg.initUnspecifiedAbilitiesParams()
 	cfg.initOverdriveAbilitiesParams()
 	cfg.initPlayerAbilitiesParams()
 	cfg.initTriggerCommandsParams()
@@ -149,7 +149,7 @@ func (cfg *Config) initAeonsParams() {
 			ForList:         false,
 			ForSingle:       true,
 			AllowedIntRange: []int{0, 600},
-			DefaultVal: 	 h.GetIntPtr(0),
+			DefaultVal:      h.GetIntPtr(0),
 		},
 		"yuna_stats": {
 			ID:          2,
@@ -768,7 +768,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
 			ForList:     true,
 			ForSingle:   false,
-			TypeLookup:	 cfg.t.DamageType.lookup,
+			TypeLookup:  cfg.t.DamageType.lookup,
 			References:  []string{createListURL(cfg, "damage-type")},
 		},
 		"attack_type": {
@@ -930,7 +930,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
 			ForList:     true,
 			ForSingle:   false,
-			TypeLookup:	 cfg.t.DamageType.lookup,
+			TypeLookup:  cfg.t.DamageType.lookup,
 			References:  []string{createListURL(cfg, "damage-type")},
 		},
 		"attack_type": {
@@ -1148,30 +1148,30 @@ func (cfg *Config) initItemAbilitiesParams() {
 	cfg.q.itemAbilities = params
 }
 
-func (cfg *Config) initOtherAbilitiesParams() {
+func (cfg *Config) initUnspecifiedAbilitiesParams() {
 	params := map[string]QueryType{
 		"user": {
-			ID:          		1,
-			Description: 		"If an other ability is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
-			Usage:       		"?user={type}:{name|id}",
-			ExampleUses: 		[]string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
-			ForList:     		false,
-			ForSingle:   		true,
-			AllowedResTypes: 	[]string{"character", "aeon"},
+			ID:              1,
+			Description:     "If an unspecified ability is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
+			Usage:           "?user={type}:{name|id}",
+			ExampleUses:     []string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
+			ForList:         false,
+			ForSingle:       true,
+			AllowedResTypes: []string{"character", "aeon"},
 		},
 		"damage_type": {
 			ID:          1,
-			Description: "Searches for other abilities that deal the specified type of damage.",
+			Description: "Searches for unspecified abilities that deal the specified type of damage.",
 			Usage:       "?damage_type={name|id}",
 			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
 			ForList:     true,
 			ForSingle:   false,
-			TypeLookup:	 cfg.t.DamageType.lookup,
+			TypeLookup:  cfg.t.DamageType.lookup,
 			References:  []string{createListURL(cfg, "damage-type")},
 		},
 		"attack_type": {
 			ID:          2,
-			Description: "Searches for other abilities with battle interactions of the specified attack type.",
+			Description: "Searches for unspecified abilities with battle interactions of the specified attack type.",
 			Usage:       "?attack_type={name|id}",
 			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
 			ForList:     true,
@@ -1181,7 +1181,7 @@ func (cfg *Config) initOtherAbilitiesParams() {
 		},
 		"damage_formula": {
 			ID:          3,
-			Description: "Searches for other abilities that use the specified formula to calculate their damage.",
+			Description: "Searches for unspecified abilities that use the specified formula to calculate their damage.",
 			Usage:       "?damage_formula={name|id}",
 			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
 			ForList:     true,
@@ -1191,7 +1191,7 @@ func (cfg *Config) initOtherAbilitiesParams() {
 		},
 		"rank": {
 			ID:          4,
-			Description: "Searches for other abilities with the specified rank.",
+			Description: "Searches for unspecified abilities with the specified rank.",
 			Usage:       "?rank={int}",
 			ExampleUses: []string{"?rank=3"},
 			ForList:     true,
@@ -1199,7 +1199,7 @@ func (cfg *Config) initOtherAbilitiesParams() {
 		},
 		"char_class": {
 			ID:          5,
-			Description: "Searches for other abilities that are learned by the specified character class.",
+			Description: "Searches for unspecified abilities that are learned by the specified character class.",
 			Usage:       "?char_class={name|id}",
 			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
 			ForList:     true,
@@ -1208,7 +1208,7 @@ func (cfg *Config) initOtherAbilitiesParams() {
 		},
 		"status_inflict": {
 			ID:          6,
-			Description: "Searches for other abilities that can inflict the specified status condition.",
+			Description: "Searches for unspecified abilities that can inflict the specified status condition.",
 			Usage:       "?status_inflict={id}",
 			ExampleUses: []string{"?status_inflict=3"},
 			ForList:     true,
@@ -1217,7 +1217,7 @@ func (cfg *Config) initOtherAbilitiesParams() {
 		},
 		"copycat": {
 			ID:          7,
-			Description: "Searches for other abilities that can be copied by 'copycat'.",
+			Description: "Searches for unspecified abilities that can be copied by 'copycat'.",
 			Usage:       "?copycat={bool}",
 			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
 			ForList:     true,
@@ -1225,7 +1225,7 @@ func (cfg *Config) initOtherAbilitiesParams() {
 		},
 		"help_bar": {
 			ID:          8,
-			Description: "Searches for other abilities whose names appear in the help bar.",
+			Description: "Searches for unspecified abilities whose names appear in the help bar.",
 			Usage:       "?help_bar={bool}",
 			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
 			ForList:     true,
@@ -1233,7 +1233,7 @@ func (cfg *Config) initOtherAbilitiesParams() {
 		},
 		"phys_atk": {
 			ID:          9,
-			Description: "Searches for other abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
+			Description: "Searches for unspecified abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
 			Usage:       "?phys_atk={bool}",
 			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
 			ForList:     true,
@@ -1241,7 +1241,7 @@ func (cfg *Config) initOtherAbilitiesParams() {
 		},
 		"darkable": {
 			ID:          10,
-			Description: "Searches for other abilities that are affected by 'darkness'.",
+			Description: "Searches for unspecified abilities that are affected by 'darkness'.",
 			Usage:       "?darkable={bool}",
 			ExampleUses: []string{"?darkable=true", "?darkable=false"},
 			ForList:     true,
@@ -1249,7 +1249,7 @@ func (cfg *Config) initOtherAbilitiesParams() {
 		},
 		"target_type": {
 			ID:          11,
-			Description: "Searches for other abilities with the specified target type.",
+			Description: "Searches for unspecified abilities with the specified target type.",
 			Usage:       "?target_type={name|id}",
 			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
 			ForList:     true,
@@ -1258,7 +1258,7 @@ func (cfg *Config) initOtherAbilitiesParams() {
 	}
 
 	params = cfg.completeQueryTypeInit(params)
-	cfg.q.otherAbilities = params
+	cfg.q.unspecifiedAbilities = params
 }
 
 func (cfg *Config) initOverdriveAbilitiesParams() {
@@ -1377,13 +1377,13 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 func (cfg *Config) initPlayerAbilitiesParams() {
 	params := map[string]QueryType{
 		"user": {
-			ID:          		1,
-			Description: 		"If a player ability is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
-			Usage:       		"?user={type}:{name|id}",
-			ExampleUses: 		[]string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
-			ForList:     		false,
-			ForSingle:   		true,
-			AllowedResTypes: 	[]string{"character", "aeon"},
+			ID:              1,
+			Description:     "If a player ability is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
+			Usage:           "?user={type}:{name|id}",
+			ExampleUses:     []string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
+			ForList:         false,
+			ForSingle:       true,
+			AllowedResTypes: []string{"character", "aeon"},
 		},
 		"category": {
 			ID:          2,
@@ -1402,7 +1402,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
 			ForList:     true,
 			ForSingle:   false,
-			TypeLookup:	 cfg.t.DamageType.lookup,
+			TypeLookup:  cfg.t.DamageType.lookup,
 			References:  []string{createListURL(cfg, "damage-type")},
 		},
 		"attack_type": {
@@ -1626,13 +1626,13 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 func (cfg *Config) initTriggerCommandsParams() {
 	params := map[string]QueryType{
 		"user": {
-			ID:          		1,
-			Description: 		"If a trigger command is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
-			Usage:       		"?user={type}:{name|id}",
-			ExampleUses: 		[]string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
-			ForList:     		false,
-			ForSingle:   		true,
-			AllowedResTypes: 	[]string{"character", "aeon"},
+			ID:              1,
+			Description:     "If a trigger command is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
+			Usage:           "?user={type}:{name|id}",
+			ExampleUses:     []string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
+			ForList:         false,
+			ForSingle:       true,
+			AllowedResTypes: []string{"character", "aeon"},
 		},
 		"rank": {
 			ID:          2,

@@ -539,115 +539,115 @@ ORDER BY ia.id;
 
 
 
--- name: GetOtherAbilityIDsByName :many
-SELECT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsByName :many
+SELECT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 WHERE a.name = $1
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDs :many
-SELECT id FROM other_abilities ORDER BY id;
+-- name: GetUnspecifiedAbilityIDs :many
+SELECT id FROM unspecified_abilities ORDER BY id;
 
 
--- name: GetOtherAbilityIDsByCharClass :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN j_other_abilities_learned_by j ON j.other_ability_id = oa.id
+-- name: GetUnspecifiedAbilityIDsByCharClass :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN j_unspecified_abilities_learned_by j ON j.unspecified_ability_id = ua.id
 JOIN character_classes cc ON j.character_class_id = cc.id
 WHERE cc.id = $1
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDsByRank :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsByRank :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.rank = $1
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDsByCanCopycat :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsByCanCopycat :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.can_copycat = $1
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDsByAppearsInHelpBar :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsByAppearsInHelpBar :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.appears_in_help_bar = $1
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDsBasedOnPhysAttack :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsBasedOnPhysAttack :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.based_on_phys_attack = true
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDsByTargetType :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsByTargetType :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = $1
 ORDER BY a.id;
 
 
--- name: GetOtherAbilityIDsDarkable :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsDarkable :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN status_conditions sc ON j2.status_condition_id = sc.id
 WHERE sc.id = 4
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDsByInflictedStatus :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsByInflictedStatus :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
 JOIN status_conditions sc ON ist.status_condition_id = sc.id
 WHERE sc.id = $1
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDsDealsDelay :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsDealsDelay :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_inflicted_delay j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN inflicted_delays idl ON j2.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDsByDamageType :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsByDamageType :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
@@ -655,13 +655,13 @@ JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
 WHERE ad.damage_type = $1
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDsByAttackType :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsByAttackType :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
@@ -669,13 +669,13 @@ JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
 WHERE ad.attack_type = $1
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetOtherAbilityIDsByDamageFormula :many
-SELECT DISTINCT oa.id
-FROM other_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
+-- name: GetUnspecifiedAbilityIDsByDamageFormula :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
@@ -683,14 +683,10 @@ JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
 WHERE ad.damage_formula = $1
-ORDER BY oa.id;
+ORDER BY ua.id;
 
 
--- name: GetAbilityAttributes :many
-SELECT aa.rank, aa.can_copycat, aa.appears_in_help_bar
-FROM ability_attributes aa
-JOIN abilities a ON a.attributes_id = aa.id
-WHERE a.id = $1;
+
 
 
 -- name: GetOverdriveAbilityAttributes :one

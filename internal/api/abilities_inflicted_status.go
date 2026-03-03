@@ -6,8 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func getAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.abilities
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
@@ -18,7 +16,6 @@ func getAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]Name
 
 	return getResourcesDB(cfg, r, i, status, cfg.db.GetAbilityIDsByInflictedStatus)
 }
-
 
 func getPlayerAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.playerAbilities
@@ -31,7 +28,6 @@ func getPlayerAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) (
 	return getResourcesDB(cfg, r, i, status, cfg.db.GetPlayerAbilityIDsByInflictedStatus)
 }
 
-
 func getEnemyAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.enemyAbilities
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
@@ -42,7 +38,6 @@ func getEnemyAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([
 
 	return getResourcesDB(cfg, r, i, status, cfg.db.GetEnemyAbilityIDsByInflictedStatus)
 }
-
 
 func getItemAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.enemyAbilities
@@ -55,18 +50,16 @@ func getItemAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]
 	return getResourcesDB(cfg, r, i, status, cfg.db.GetItemAbilityIDsByInflictedStatus)
 }
 
-
-func getOtherAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	i := cfg.e.otherAbilities
+func getUnspecifiedAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+	i := cfg.e.unspecifiedAbilities
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
 
 	if status.Name == "delay" {
-		return getResourcesDbNoInput(cfg, r, i, cfg.e.statusConditions.resourceType, cfg.db.GetOtherAbilityIDsDealsDelay)
+		return getResourcesDbNoInput(cfg, r, i, cfg.e.statusConditions.resourceType, cfg.db.GetUnspecifiedAbilityIDsDealsDelay)
 	}
 
-	return getResourcesDB(cfg, r, i, status, cfg.db.GetOtherAbilityIDsByInflictedStatus)
+	return getResourcesDB(cfg, r, i, status, cfg.db.GetUnspecifiedAbilityIDsByInflictedStatus)
 }
-
 
 func getOverdriveAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.overdriveAbilities

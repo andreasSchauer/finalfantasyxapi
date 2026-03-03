@@ -7,10 +7,10 @@ CREATE TABLE j_abilities_battle_interactions (
 );
 
 
-CREATE TABLE j_other_abilities_learned_by (
+CREATE TABLE j_unspecified_abilities_learned_by (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    other_ability_id INTEGER NOT NULL REFERENCES other_abilities(id),
+    unspecified_ability_id INTEGER NOT NULL REFERENCES unspecified_abilities(id),
     character_class_id INTEGER NOT NULL REFERENCES character_classes(id)
 );
 
@@ -55,7 +55,7 @@ CREATE TABLE j_overdrives_overdrive_abilities (
 );
 
 
-ALTER TABLE other_abilities
+ALTER TABLE unspecified_abilities
 ADD COLUMN topmenu_id INTEGER REFERENCES topmenus(id),
 ADD COLUMN submenu_id INTEGER REFERENCES submenus(id),
 ADD COLUMN open_submenu_id INTEGER REFERENCES submenus(id);
@@ -100,7 +100,7 @@ DROP COLUMN IF EXISTS submenu_id,
 DROP COLUMN IF EXISTS topmenu_id;
 
 
-ALTER TABLE other_abilities
+ALTER TABLE unspecified_abilities
 DROP COLUMN IF EXISTS open_submenu_id,
 DROP COLUMN IF EXISTS submenu_id,
 DROP COLUMN IF EXISTS topmenu_id;
@@ -111,5 +111,5 @@ DROP TABLE IF EXISTS j_trigger_commands_related_stats;
 DROP TABLE IF EXISTS j_overdrive_abilities_related_stats;
 DROP TABLE IF EXISTS j_player_abilities_learned_by;
 DROP TABLE IF EXISTS j_player_abilities_related_stats;
-DROP TABLE IF EXISTS j_other_abilities_learned_by;
+DROP TABLE IF EXISTS j_unspecified_abilities_learned_by;
 DROP TABLE IF EXISTS j_abilities_battle_interactions;

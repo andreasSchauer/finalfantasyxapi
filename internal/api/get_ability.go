@@ -23,13 +23,13 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 	}
 
 	response := Ability{
-		ID:                    	ability.ID,
-		Name:                  	ability.Name,
-		Version:               	ability.Version,
-		Specification: 		   	ability.Specification,
-		Type: 					abilityType,
-		Monsters:              	monsters,
-		BattleInteractions:    	getAbilityBattleInteractions(cfg, ability),
+		ID:                 ability.ID,
+		Name:               ability.Name,
+		Version:            ability.Version,
+		Specification:      ability.Specification,
+		Type:               abilityType,
+		Monsters:           monsters,
+		BattleInteractions: getAbilityBattleInteractions(cfg, ability),
 	}
 
 	switch ability.Type {
@@ -63,23 +63,23 @@ func getAbilityBattleInteractions(cfg *Config, ability seeding.Ability) []Battle
 		if err != nil {
 			fmt.Println("error")
 		}
-	
+
 	case database.AbilityTypeItemAbility:
 		lookup, _ := seeding.GetResource(abilityRef, cfg.l.Items)
 		seedBattleInteractions = lookup.BattleInteractions
-	
-	case database.AbilityTypeOtherAbility:
-		lookup, _ := seeding.GetResource(abilityRef, cfg.l.OtherAbilities)
+
+	case database.AbilityTypeUnspecifiedAbility:
+		lookup, _ := seeding.GetResource(abilityRef, cfg.l.UnspecifiedAbilities)
 		seedBattleInteractions = lookup.BattleInteractions
-	
+
 	case database.AbilityTypeOverdriveAbility:
 		lookup, _ := seeding.GetResource(abilityRef, cfg.l.OverdriveAbilities)
 		seedBattleInteractions = lookup.BattleInteractions
-	
+
 	case database.AbilityTypePlayerAbility:
 		lookup, _ := seeding.GetResource(abilityRef, cfg.l.PlayerAbilities)
 		seedBattleInteractions = lookup.BattleInteractions
-	
+
 	case database.AbilityTypeTriggerCommand:
 		lookup, _ := seeding.GetResource(abilityRef, cfg.l.TriggerCommands)
 		seedBattleInteractions = lookup.BattleInteractions
@@ -87,8 +87,6 @@ func getAbilityBattleInteractions(cfg *Config, ability seeding.Ability) []Battle
 
 	return convertObjSlice(cfg, seedBattleInteractions, convertBattleInteraction)
 }
-
-
 
 func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Ability, Ability, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

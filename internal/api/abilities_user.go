@@ -9,12 +9,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 type biReplacement struct {
-	Range			*int32
-	ShatterRate		*int32
-	Accuracy		*Accuracy
-	DamageConstant	*int32
+	Range          *int32
+	ShatterRate    *int32
+	Accuracy       *Accuracy
+	DamageConstant *int32
 }
 
 func applyPlayerAbilityUser(cfg *Config, r *http.Request, ability PlayerAbility, queryName string) (PlayerAbility, error) {
@@ -27,7 +26,7 @@ func applyPlayerAbilityUser(cfg *Config, r *http.Request, ability PlayerAbility,
 	if err != nil {
 		return PlayerAbility{}, err
 	}
-	
+
 	unitName, repl, err := findUnit(cfg, unitStr, resType, queryParam)
 	if err != nil {
 		return PlayerAbility{}, err
@@ -43,25 +42,25 @@ func applyPlayerAbilityUser(cfg *Config, r *http.Request, ability PlayerAbility,
 	return ability, nil
 }
 
-func applyOtherAbilityUser(cfg *Config, r *http.Request, ability OtherAbility, queryName string) (OtherAbility, error) {
-	queryParam := cfg.q.otherAbilities[queryName]
+func applyUnspecifiedAbilityUser(cfg *Config, r *http.Request, ability UnspecifiedAbility, queryName string) (UnspecifiedAbility, error) {
+	queryParam := cfg.q.unspecifiedAbilities[queryName]
 
 	resType, unitStr, err := parseResTypeQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
 		return ability, nil
 	}
 	if err != nil {
-		return OtherAbility{}, err
-	}
-	
-	unitName, repl, err := findUnit(cfg, unitStr, resType, queryParam)
-	if err != nil {
-		return OtherAbility{}, err
+		return UnspecifiedAbility{}, err
 	}
 
-	err = canUseOtherAbility(cfg, ability, unitName, resType, queryName)
+	unitName, repl, err := findUnit(cfg, unitStr, resType, queryParam)
 	if err != nil {
-		return OtherAbility{}, err
+		return UnspecifiedAbility{}, err
+	}
+
+	err = canUseUnspecifiedAbility(cfg, ability, unitName, resType, queryName)
+	if err != nil {
+		return UnspecifiedAbility{}, err
 	}
 
 	ability.BattleInteractions = replaceBattleInteractionVals(ability.BattleInteractions, repl)
@@ -79,7 +78,7 @@ func applyTriggerCommandUser(cfg *Config, r *http.Request, ability TriggerComman
 	if err != nil {
 		return TriggerCommand{}, err
 	}
-	
+
 	unitName, repl, err := findUnit(cfg, unitStr, resType, queryParam)
 	if err != nil {
 		return TriggerCommand{}, err
@@ -94,7 +93,6 @@ func applyTriggerCommandUser(cfg *Config, r *http.Request, ability TriggerComman
 
 	return ability, nil
 }
-
 
 func findUnit(cfg *Config, unitStr, resType string, queryParam QueryType) (string, biReplacement, error) {
 	var repl biReplacement
@@ -128,7 +126,6 @@ func findUnit(cfg *Config, unitStr, resType string, queryParam QueryType) (strin
 	return unitName, repl, nil
 }
 
-
 func replaceBattleInteractionVals(battleInteractions []BattleInteraction, repl biReplacement) []BattleInteraction {
 	for i, battleInteraction := range battleInteractions {
 		if !battleInteraction.BasedOnPhysAttack {
@@ -157,7 +154,6 @@ func replaceBattleInteractionVals(battleInteractions []BattleInteraction, repl b
 	return battleInteractions
 }
 
-
 func canUsePlayerAbility(cfg *Config, ability PlayerAbility, unitName, resType, queryName string) error {
 	for _, class := range ability.LearnedBy {
 		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
@@ -170,8 +166,7 @@ func canUsePlayerAbility(cfg *Config, ability PlayerAbility, unitName, resType, 
 	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn player ability '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
 }
 
-
-func canUseOtherAbility(cfg *Config, ability OtherAbility, unitName, resType, queryName string) error {
+func canUseUnspecifiedAbility(cfg *Config, ability UnspecifiedAbility, unitName, resType, queryName string) error {
 	for _, class := range ability.LearnedBy {
 		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
 
@@ -180,7 +175,7 @@ func canUseOtherAbility(cfg *Config, ability OtherAbility, unitName, resType, qu
 		}
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn other ability '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn unspecified ability '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
 }
 
 func canUseTriggerCommand(cfg *Config, ability TriggerCommand, unitName, resType, queryName string) error {

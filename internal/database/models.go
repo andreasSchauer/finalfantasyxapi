@@ -57,12 +57,12 @@ func (ns NullAaActivationCondition) Value() (driver.Value, error) {
 type AbilityType string
 
 const (
-	AbilityTypeOtherAbility     AbilityType = "other-ability"
-	AbilityTypePlayerAbility    AbilityType = "player-ability"
-	AbilityTypeEnemyAbility     AbilityType = "enemy-ability"
-	AbilityTypeOverdriveAbility AbilityType = "overdrive-ability"
-	AbilityTypeTriggerCommand   AbilityType = "trigger-command"
-	AbilityTypeItemAbility      AbilityType = "item-ability"
+	AbilityTypeUnspecifiedAbility AbilityType = "unspecified-ability"
+	AbilityTypePlayerAbility      AbilityType = "player-ability"
+	AbilityTypeEnemyAbility       AbilityType = "enemy-ability"
+	AbilityTypeOverdriveAbility   AbilityType = "overdrive-ability"
+	AbilityTypeTriggerCommand     AbilityType = "trigger-command"
+	AbilityTypeItemAbility        AbilityType = "item-ability"
 )
 
 func (e *AbilityType) Scan(src interface{}) error {
@@ -3401,13 +3401,6 @@ type JMonstersStatusResist struct {
 	StatusResistID int32
 }
 
-type JOtherAbilitiesLearnedBy struct {
-	ID               int32
-	DataHash         string
-	OtherAbilityID   int32
-	CharacterClassID int32
-}
-
 type JOverdriveAbilitiesRelatedStat struct {
 	ID                 int32
 	DataHash           string
@@ -3549,6 +3542,13 @@ type JTriggerCommandsRelatedStat struct {
 	DataHash         string
 	TriggerCommandID int32
 	StatID           int32
+}
+
+type JUnspecifiedAbilitiesLearnedBy struct {
+	ID                   int32
+	DataHash             string
+	UnspecifiedAbilityID int32
+	CharacterClassID     int32
 }
 
 type KeyItem struct {
@@ -3718,18 +3718,6 @@ type OdModeAction struct {
 	DataHash string
 	UserID   int32
 	Amount   int32
-}
-
-type OtherAbility struct {
-	ID            int32
-	DataHash      string
-	AbilityID     int32
-	Description   string
-	Effect        string
-	Cursor        NullTargetType
-	TopmenuID     sql.NullInt32
-	SubmenuID     sql.NullInt32
-	OpenSubmenuID sql.NullInt32
 }
 
 type Overdrife struct {
@@ -3988,4 +3976,16 @@ type TriggerCommand struct {
 	Effect      string
 	Cursor      TargetType
 	TopmenuID   sql.NullInt32
+}
+
+type UnspecifiedAbility struct {
+	ID            int32
+	DataHash      string
+	AbilityID     int32
+	Description   string
+	Effect        string
+	Cursor        NullTargetType
+	TopmenuID     sql.NullInt32
+	SubmenuID     sql.NullInt32
+	OpenSubmenuID sql.NullInt32
 }
