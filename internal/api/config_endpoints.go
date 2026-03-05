@@ -84,6 +84,10 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc: cfg.getAeon,
 		retrieveFunc:  cfg.retrieveAeons,
 		subsections: map[string]SubSectionFns{
+			"default-abilities": {
+				dbQuery: 	 cfg.db.GetAeonDefaultAbilityIDs,
+				createSubFn: createPlayerAbilitySimple,
+			},
 			"stats": {
 				createSubFn: createAeonStatSimple,
 			},
@@ -192,6 +196,20 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetCharacterIDs,
 		getSingleFunc: cfg.getCharacter,
 		retrieveFunc:  cfg.retrieveCharacters,
+		subsections:   map[string]SubSectionFns{
+			"default-abilities": {
+				dbQuery: 	 cfg.db.GetCharacterDefaultAbilityIDs,
+				createSubFn: createPlayerAbilitySimple,
+			},
+			"std-sg-abilities": {
+				dbQuery: 	 cfg.db.GetCharacterSgAbilityIDs,
+				createSubFn: createPlayerAbilitySimple,
+			},
+			"exp-sg-abilities": {
+				dbQuery: 	 cfg.db.GetCharacterEgAbilityIDs,
+				createSubFn: createPlayerAbilitySimple,
+			},
+		},
 	}
 
 	e.characterClasses = handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]{
@@ -205,6 +223,16 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetCharacterClassesIDs,
 		getSingleFunc: cfg.getCharacterClass,
 		retrieveFunc:  cfg.retrieveCharacterClasses,
+		subsections:   map[string]SubSectionFns{
+			"default-abilities": {
+				dbQuery: 	 cfg.db.GetCharacterClassDefaultAbilityIDs,
+				createSubFn: createAbilitySimple,
+			},
+			"learnable-abilities": {
+				dbQuery: 	 cfg.db.GetCharacterClassLearnableAbilityIDs,
+				createSubFn: createAbilitySimple,
+			},
+		},
 	}
 
 	e.elements = handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]{
@@ -331,6 +359,10 @@ func (cfg *Config) EndpointsInit() {
 			"simple": {
 				createSubFn: createMonsterSimple,
 			},
+			"abilities": {
+				dbQuery: 	 cfg.db.GetMonsterAbilityIDs,
+				createSubFn: createAbilitySimple,
+			},
 			"areas": {
 				dbQuery:     cfg.db.GetMonsterAreaIDs,
 				createSubFn: createAreaSimple,
@@ -406,6 +438,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAbilityIDs,
 		getSingleFunc: cfg.getAbility,
 		retrieveFunc:  cfg.retrieveAbilities,
+		subsections:   map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createAbilitySimple,
+			},
+		},
 	}
 
 	e.unspecifiedAbilities = handlerInput[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList]{
@@ -420,6 +457,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetUnspecifiedAbilityIDs,
 		getSingleFunc:    cfg.getUnspecifiedAbility,
 		retrieveFunc:     cfg.retrieveUnspecifiedAbilities,
+		subsections:   map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createUnspecifiedAbilitySimple,
+			},
+		},
 	}
 
 	e.playerAbilities = handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]{
@@ -434,6 +476,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetPlayerAbilityIDs,
 		getSingleFunc:    cfg.getPlayerAbility,
 		retrieveFunc:     cfg.retrievePlayerAbilities,
+		subsections:   map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createPlayerAbilitySimple,
+			},
+		},
 	}
 
 	e.enemyAbilities = handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]{
@@ -448,6 +495,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetEnemyAbilityIDs,
 		getSingleFunc:    cfg.getEnemyAbility,
 		retrieveFunc:     cfg.retrieveEnemyAbilities,
+		subsections:   map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createEnemyAbilitySimple,
+			},
+		},
 	}
 
 	e.itemAbilities = handlerInput[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList]{
@@ -461,6 +513,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetItemAbilityIDs,
 		getSingleFunc: cfg.getItemAbility,
 		retrieveFunc:  cfg.retrieveItemAbilities,
+		subsections:   map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createItemAbilitySimple,
+			},
+		},
 	}
 
 	e.overdriveAbilities = handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]{
@@ -475,6 +532,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetOverdriveAbilityIDs,
 		getSingleFunc:    cfg.getOverdriveAbility,
 		retrieveFunc:     cfg.retrieveOverdriveAbilities,
+		subsections:   	  map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createOverdriveAbilitySimple,
+			},
+		},
 	}
 
 	e.triggerCommands = handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]{
@@ -489,6 +551,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetTriggerCommandIDs,
 		getSingleFunc:    cfg.getTriggerCommand,
 		retrieveFunc:     cfg.retrieveTriggerCommands,
+		subsections:      map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createTriggerCommandSimple,
+			},
+		},
 	}
 
 	e.properties = handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]{

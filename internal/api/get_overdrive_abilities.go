@@ -23,6 +23,7 @@ func (cfg *Config) getOverdriveAbility(r *http.Request, i handlerInput[seeding.O
 		Name:                  ability.Name,
 		Version:               ability.Version,
 		Specification: 		   ability.Specification,
+		UntypedAbility: 	   idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
 		Rank:                  overdrive.Rank,
 		AppearsInHelpBar:      overdrive.AppearsInHelpBar,
 		CanCopycat:            overdrive.CanCopycat,

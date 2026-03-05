@@ -29,7 +29,7 @@ CREATE TYPE ctb_attack_type AS ENUM ('attack', 'heal');
 CREATE TYPE delay_type AS ENUM ('ctb-based', 'tick-speed-based');
 
 
-CREATE TYPE calculation_type AS ENUM ('added-percentage', 'added-value', 'multiply', 'multiply-highest', 'set-value', 'set-min-value');
+CREATE TYPE calculation_type AS ENUM ('added-percentage', 'added-value', 'multiply', 'multiply-highest', 'set-value');
 
 
 CREATE TABLE damages (

@@ -22,6 +22,7 @@ func (cfg *Config) getEnemyAbility(r *http.Request, i handlerInput[seeding.Enemy
 		Name:                  ability.Name,
 		Version:               ability.Version,
 		Specification: 		   ability.Specification,
+		UntypedAbility: 	   idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
 		Effect:                ability.Effect,
 		Rank:                  ability.Rank,
 		AppearsInHelpBar:      ability.AppearsInHelpBar,

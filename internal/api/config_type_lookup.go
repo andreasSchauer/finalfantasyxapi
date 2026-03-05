@@ -768,10 +768,6 @@ func (t *TypeLookup) initCalculationType() {
 			Name:        string(database.CalculationTypeSetValue),
 			Description: "The destination becomes the given value. Example: Auto-Ability 'One MP Cost' sets the MP cost every spell to 1.",
 		},
-		{
-			Name:        string(database.CalculationTypeSetMinValue),
-			Description: "The destination can't be lower than the given value at the end of all calculations. Example: 'Trio of 9999' sets the minimum damage a character can deal to 9999.",
-		},
 	}
 
 	t.CalculationType = newEnumType[database.CalculationType, any]("calculation type", false, typeSlice, func(s string) database.CalculationType {

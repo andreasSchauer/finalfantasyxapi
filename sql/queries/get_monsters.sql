@@ -26,6 +26,16 @@ WHERE ma.monster_id = $1
 ORDER BY mf.id;
 
 
+-- name: GetMonsterAbilityIDs :many
+SELECT a.id
+FROM abilities a
+JOIN monster_abilities ma ON ma.ability_id = a.id
+JOIN j_monsters_abilities j ON j.monster_ability_id = ma.id
+JOIN monsters m ON j.monster_id = m.id
+WHERE m.id = $1
+ORDER BY a.id;
+
+
 -- name: GetMonsterIDs :many
 SELECT id FROM monsters ORDER BY id;
 

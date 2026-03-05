@@ -24,6 +24,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		Name:                  ability.Name,
 		Version:               ability.Version,
 		Specification: 		   ability.Specification,
+		UntypedAbility: 	   idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
 		Description:           ability.Description,
 		Effect:                ability.Effect,
 		Rank:                  ability.Rank,

@@ -92,6 +92,39 @@ func (q *Queries) GetCaptureMonsterIDsBySpecies(ctx context.Context, species Mon
 	return items, nil
 }
 
+const getMonsterAbilityIDs = `-- name: GetMonsterAbilityIDs :many
+SELECT a.id
+FROM abilities a
+JOIN monster_abilities ma ON ma.ability_id = a.id
+JOIN j_monsters_abilities j ON j.monster_ability_id = ma.id
+JOIN monsters m ON j.monster_id = m.id
+WHERE m.id = $1
+ORDER BY a.id
+`
+
+func (q *Queries) GetMonsterAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterAbilityIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterAreaIDs = `-- name: GetMonsterAreaIDs :many
 SELECT DISTINCT a.id
 FROM areas a

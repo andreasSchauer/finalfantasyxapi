@@ -678,7 +678,6 @@ const (
 	CalculationTypeMultiply        CalculationType = "multiply"
 	CalculationTypeMultiplyHighest CalculationType = "multiply-highest"
 	CalculationTypeSetValue        CalculationType = "set-value"
-	CalculationTypeSetMinValue     CalculationType = "set-min-value"
 )
 
 func (e *CalculationType) Scan(src interface{}) error {
@@ -1846,10 +1845,10 @@ func (ns NullMixCategory) Value() (driver.Value, error) {
 type ModifierType string
 
 const (
-	ModifierTypeBattleDependent ModifierType = "battle-dependent"
-	ModifierTypeFactor          ModifierType = "factor"
-	ModifierTypeFixedValue      ModifierType = "fixed-value"
-	ModifierTypePercentage      ModifierType = "percentage"
+	ModifierTypeDynamicValue ModifierType = "dynamic-value"
+	ModifierTypeFactor       ModifierType = "factor"
+	ModifierTypeFixedValue   ModifierType = "fixed-value"
+	ModifierTypePercentage   ModifierType = "percentage"
 )
 
 func (e *ModifierType) Scan(src interface{}) error {
