@@ -12,10 +12,10 @@ import (
 
 type BattleInteractionSimple struct {
 	Target						string				`json:"target"`
-	Range						*int32				`json:"range"`
+	Range						*int32				`json:"range,omitempty"`
 	HitAmount					int32				`json:"hit_amount"`
 	Accuracy					string				`json:"accuracy"`
-	AffectedBy 					[]string			`json:"affected_by,omitempty"`
+	AffectedBy					[]string			`json:"affected_by,omitempty"`
 	Damage						*DamageSimple		`json:"damage,omitempty"`
 	Delay						*string				`json:"delay,omitempty"`
 	InflictedStatusConditions	[]string			`json:"inflicted_status_conditions,omitempty"`
@@ -30,9 +30,9 @@ func convertBattleInteractionSimple(cfg *Config, bi seeding.BattleInteraction) B
 	biSimple := BattleInteractionSimple{
 		Target: 					bi.Target,
 		Range: 						bi.Range,
-		AffectedBy: 				sliceOrNil(bi.AffectedBy),
 		HitAmount: 					bi.HitAmount,
 		Accuracy: 					convertAccuracySimple(cfg, bi.Accuracy),
+		AffectedBy: 				sliceOrNil(bi.AffectedBy),
 		Damage: 					convertObjPtr(cfg, bi.Damage, convertDamageSimple),
 		Delay: 						convertObjPtr(cfg, bi.InflictedDelay, convertInflictedDelaySimple),
 		InflictedStatusConditions: 	convertObjSliceNullable(cfg, bi.InflictedStatusConditions, convertInflictedStatusSimple),
@@ -47,7 +47,7 @@ func convertBattleInteractionSimple(cfg *Config, bi seeding.BattleInteraction) B
 
 type DamageSimple struct {
 	CanCritical 		bool		`json:"can_critical"`
-	CanBreakDmgLimit	bool		`json:"can_break_dmg_limit"`
+	BreakDmgLimit		*string		`json:"break_dmg_limit,omitempty"`
 	Element				*string		`json:"element,omitempty"`
 	DamageCalc			[]string	`json:"damage_calc"`
 }
@@ -55,7 +55,7 @@ type DamageSimple struct {
 func convertDamageSimple(cfg *Config, d seeding.Damage) DamageSimple {
 	return DamageSimple{
 		CanCritical: 		ptrIsNotNil(d.Critical),
-		CanBreakDmgLimit: 	ptrIsNotNil(d.BreakDmgLimit),
+		BreakDmgLimit: 		convertObjPtr(cfg, d.BreakDmgLimit, convertBreakDmgLimitSimple),
 		Element: 			d.Element,
 		DamageCalc: 		convertObjSlice(cfg, d.DamageCalc, convertDamageCalcSimple),
 	}
@@ -63,6 +63,19 @@ func convertDamageSimple(cfg *Config, d seeding.Damage) DamageSimple {
 
 func convertDamageCalcSimple(cfg *Config, dc seeding.AbilityDamage) string {
 	return fmt.Sprintf("%s %s (%s), formula: %s, power: %d", dc.AttackType, dc.TargetStat, dc.DamageType, dc.DamageFormula, dc.DamageConstant)
+}
+
+
+func convertBreakDmgLimitSimple(_ *Config, breakDmgLimit string) string {
+	switch breakDmgLimit {
+	case string(database.BreakDmgLmtTypeAlways):
+		return "always"
+
+	case string(database.BreakDmgLmtTypeAutoAbility):
+		return "with auto-ability"
+	}
+
+	return ""
 }
 
 
@@ -141,7 +154,7 @@ func convertStatChangeSimple(_ *Config, sc seeding.StatChange) string {
 }
 
 func convertModChangeSimple(_ *Config, mc seeding.ModifierChange) string {
-	formattedVal := fmt.Sprintf("%.2f", mc.Value)
+	formattedVal := fmt.Sprintf("%.3f", mc.Value)
 
 	switch mc.CalculationType {
 	case string(database.CalculationTypeAddedValue):

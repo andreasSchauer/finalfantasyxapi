@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -12,18 +13,16 @@ type MonsterSimple struct {
 	Name           string                  `json:"name"`
 	Version        *int32                  `json:"version,omitempty"`
 	Specification  *string                 `json:"specification,omitempty"`
-	HP             int32                   `json:"hp"`
-	OverkillDamage int32                   `json:"overkill_damage"`
-	AP             int32                   `json:"ap"`
-	APOverkill     int32                   `json:"ap_overkill"`
+	HP             string                  `json:"hp"`
+	AP             string                  `json:"ap"`
 	Gil            int32                   `json:"gil"`
-	MaxBribeAmount *int32                  `json:"max_bribe_amount"`
+	MaxBribeAmount *int32                  `json:"max_bribe_amount,omitempty"`
 	IsStoryBased   bool                    `json:"is_story_based"`
 	IsRepeatable   bool                    `json:"is_repeatable"`
 	CanBeCaptured  bool                    `json:"can_be_captured"`
-	RonsoRages     []string                `json:"ronso_rages"`
-	Items          *MonsterItemsSimple     `json:"items"`
-	Equipment      *MonsterEquipmentSimple `json:"equipment"`
+	RonsoRages     []string                `json:"ronso_rages,omitempty"`
+	Items          *MonsterItemsSimple     `json:"items,omitempty"`
+	Equipment      *MonsterEquipmentSimple `json:"equipment,omitempty"`
 }
 
 func (m MonsterSimple) GetURL() string {
@@ -33,7 +32,7 @@ func (m MonsterSimple) GetURL() string {
 func createMonsterSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
 	i := cfg.e.monsters
 	mon, _ := seeding.GetResourceByID(id, i.objLookupID)
-	monHP := getMonsterSimpleHP(mon)
+	monHP := getMonsterHP(mon)
 
 	monSimple := MonsterSimple{
 		ID:             mon.ID,
@@ -42,15 +41,13 @@ func createMonsterSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource
 		Version:        mon.Version,
 		Specification:  mon.Specification,
 		HP:             getMonsterSimpleHP(mon),
-		OverkillDamage: mon.OverkillDamage,
-		AP:             mon.AP,
-		APOverkill:     mon.APOverkill,
+		AP:             getMonsterSimpleAP(mon),
 		Gil:            mon.Gil,
 		MaxBribeAmount: getMonsterSimpleBribeAmount(mon, monHP),
 		IsStoryBased:   mon.IsStoryBased,
 		IsRepeatable:   mon.IsRepeatable,
 		CanBeCaptured:  mon.CanBeCaptured,
-		RonsoRages:     mon.RonsoRages,
+		RonsoRages:     sliceOrNil(mon.RonsoRages),
 		Items:          convertObjPtr(cfg, mon.Items, convertMonsterItemsSimple),
 		Equipment:      convertObjPtr(cfg, mon.Equipment, convertMonsterEquipmentSimple),
 	}
@@ -58,14 +55,23 @@ func createMonsterSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource
 	return monSimple, nil
 }
 
-func getMonsterSimpleHP(mon seeding.Monster) int32 {
+func getMonsterHP(mon seeding.Monster) int32 {
 	for _, stat := range mon.BaseStats {
 		if stat.StatName == "hp" {
-			return stat.Value
+			return  stat.Value
 		}
 	}
 
 	return 0
+}
+
+func getMonsterSimpleHP(mon seeding.Monster) string {
+	hp := getMonsterHP(mon)
+	return fmt.Sprintf("%d (%d)", hp, mon.OverkillDamage)
+}
+
+func getMonsterSimpleAP(mon seeding.Monster) string {
+	return fmt.Sprintf("%d (%d)", mon.AP, mon.APOverkill)
 }
 
 func getMonsterSimpleBribeAmount(mon seeding.Monster, hp int32) *int32 {

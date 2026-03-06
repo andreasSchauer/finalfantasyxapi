@@ -25,6 +25,23 @@ func (a AbilitySimple) GetURL() string {
 	return a.URL
 }
 
+
+type PlayerAbilitySimple struct {
+	ID             		int32                	   	`json:"id"`
+	URL            		string               	   	`json:"url"`
+	Name           		string               	   	`json:"name"`
+	Version        		*int32             	    	`json:"version,omitempty"`
+	Specification  		*string            	    	`json:"specification,omitempty"`
+	Type				*string						`json:"type,omitempty"`
+	Rank				*int32						`json:"rank"`
+	MpCost				int32						`json:"mp_cost"`
+	BattleInteractions	[]BattleInteractionSimple	`json:"battle_interactions"`
+}
+
+func (a PlayerAbilitySimple) GetURL() string {
+	return a.URL
+}
+
 func createAbilitySimple(cfg *Config, r *http.Request, id int32) (SimpleResource, error) {
 	i := cfg.e.abilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
@@ -97,7 +114,7 @@ func createOverdriveAbilitySimple(cfg *Config, r *http.Request, id int32) (Simpl
 	i := cfg.e.overdriveAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	attributes, err := cfg.db.GetOverdriveAbilityAttributes(r.Context(), id)
+	attributes, err := cfg.db.GetOverdriveAbilityAttributes(r.Context(), ability.Ability.ID)
 	if err != nil {
 		var zeroType SimpleResource
 		return zeroType, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get attributes for %s", ability), err)
@@ -121,17 +138,18 @@ func createPlayerAbilitySimple(cfg *Config, _ *http.Request, id int32) (SimpleRe
 	i := cfg.e.playerAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	abilitySimple := AbilitySimple{
+	playerAbilitySimple := PlayerAbilitySimple{
 		ID: 				ability.ID,
 		URL: 				createResourceURL(cfg, i.endpoint, id),
 		Name: 				ability.Name,
 		Version: 			ability.Version,
 		Specification: 		ability.Specification,
 		Rank: 				ability.Rank,
+		MpCost: 			ability.MPCost,
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
-	return abilitySimple, nil
+	return playerAbilitySimple, nil
 }
 
 

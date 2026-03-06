@@ -180,6 +180,42 @@ func (q *Queries) GetAeonIDsOptional(ctx context.Context, isOptional bool) ([]in
 	return items, nil
 }
 
+const getAeonOverdriveAbilityIDs = `-- name: GetAeonOverdriveAbilityIDs :many
+SELECT oa.id
+FROM overdrive_abilities oa
+JOIN j_overdrives_overdrive_abilities j1 ON j1.overdrive_ability_id = oa.id
+JOIN overdrives o ON j1.overdrive_id = o.id
+JOIN character_classes cc ON o.character_class_id = cc.id
+JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
+JOIN player_units pu ON j2.unit_id = pu.id
+JOIN aeons a ON a.unit_id = pu.id
+WHERE a.id = $1
+ORDER BY oa.id
+`
+
+func (q *Queries) GetAeonOverdriveAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAeonOverdriveAbilityIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAeonOverdriveIDs = `-- name: GetAeonOverdriveIDs :many
 SELECT o.id
 FROM overdrives o
@@ -634,6 +670,42 @@ SELECT id FROM characters WHERE story_only = $1 ORDER BY id
 
 func (q *Queries) GetCharacterIDsStoryOnly(ctx context.Context, storyOnly bool) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getCharacterIDsStoryOnly, storyOnly)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getCharacterOverdriveAbilityIDs = `-- name: GetCharacterOverdriveAbilityIDs :many
+SELECT oa.id
+FROM overdrive_abilities oa
+JOIN j_overdrives_overdrive_abilities j1 ON j1.overdrive_ability_id = oa.id
+JOIN overdrives o ON j1.overdrive_id = o.id
+JOIN character_classes cc ON o.character_class_id = cc.id
+JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
+JOIN player_units pu ON j2.unit_id = pu.id
+JOIN characters c ON c.unit_id = pu.id
+WHERE c.id = $1
+ORDER BY oa.id
+`
+
+func (q *Queries) GetCharacterOverdriveAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterOverdriveAbilityIDs, id)
 	if err != nil {
 		return nil, err
 	}

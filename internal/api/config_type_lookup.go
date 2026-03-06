@@ -999,7 +999,7 @@ func (t *TypeLookup) initTargetType() {
 		},
 		{
 			Name:        string(database.TargetTypeNTargets),
-			Description: "The action targets N amount of units (N is stated via the ability's hit_amount). The action can also target KO'd characters and inanimate objects. Only Seymour Natus' multi-spells and Spectral Keeper's counter attack, as well as its glyph mine activation use this target type.",
+			Description: "The action targets N amount of units (N is stated via the ability's hit_amount). The action can also target KO'd characters and inanimate objects. Only Seymour's and Seymour Natus' multi-spells and Spectral Keeper's counter attack, as well as its glyph mine activation use this target type.",
 		},
 		{
 			Name:        string(database.TargetTypeEveryone),

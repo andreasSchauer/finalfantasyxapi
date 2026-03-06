@@ -20,7 +20,7 @@ func (s SubquestSimple) GetURL() string {
 type QuestCompletionSimple struct {
 	Condition string           `json:"condition"`
 	Areas     []string         `json:"areas"`
-	Reward    ItemAmountSimple `json:"reward"`
+	Reward    string 			`json:"reward"`
 }
 
 func convertQuestCompletionSimple(cfg *Config, qc seeding.QuestCompletion) QuestCompletionSimple {

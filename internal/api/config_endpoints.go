@@ -88,6 +88,10 @@ func (cfg *Config) EndpointsInit() {
 				dbQuery: 	 cfg.db.GetAeonDefaultAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
 			},
+			"overdrive-abilities": {
+				dbQuery: 	 cfg.db.GetAeonOverdriveAbilityIDs,
+				createSubFn: createOverdriveAbilitySimple,
+			},
 			"stats": {
 				createSubFn: createAeonStatSimple,
 			},
@@ -208,6 +212,10 @@ func (cfg *Config) EndpointsInit() {
 			"exp-sg-abilities": {
 				dbQuery: 	 cfg.db.GetCharacterEgAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
+			},
+			"overdrive-abilities": {
+				dbQuery: 	 cfg.db.GetCharacterOverdriveAbilityIDs,
+				createSubFn: createOverdriveAbilitySimple,
 			},
 		},
 	}
@@ -480,6 +488,10 @@ func (cfg *Config) EndpointsInit() {
 			"simple": {
 				createSubFn: createPlayerAbilitySimple,
 			},
+			"monsters": {
+				dbQuery: 	 cfg.db.GetPlayerAbilityMonsterIDs,
+				createSubFn: createMonsterSimple,
+			},
 		},
 	}
 
@@ -498,6 +510,10 @@ func (cfg *Config) EndpointsInit() {
 		subsections:   map[string]SubSectionFns{
 			"simple": {
 				createSubFn: createEnemyAbilitySimple,
+			},
+			"monsters": {
+				dbQuery: 	 cfg.db.GetEnemyAbilityMonsterIDs,
+				createSubFn: createMonsterSimple,
 			},
 		},
 	}

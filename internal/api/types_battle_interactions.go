@@ -27,25 +27,25 @@ type BattleInteraction struct {
 	ModifierChanges				[]ModifierChange	`json:"modifier_changes"`
 }
 
-func convertBattleInteraction(cfg *Config, ba seeding.BattleInteraction) BattleInteraction {
+func convertBattleInteraction(cfg *Config, bi seeding.BattleInteraction) BattleInteraction {
 	battleInteraction := BattleInteraction{
-		Target: ba.Target,
-		BasedOnPhysAttack: ba.BasedOnPhysAttack,
-		Range: ba.Range,
-		Damage: convertObjPtr(cfg, ba.Damage, convertDamage),
-		ShatterRate: ba.ShatterRate,
-		Accuracy: convertAccuracy(cfg, ba.Accuracy),
-		HitAmount: ba.HitAmount,
-		SpecialAction: ba.SpecialAction,
-		InflictedDelay: convertObjPtr(cfg, ba.InflictedDelay, convertInflictedDelay),
-		InflictedStatusConditions: convertObjSlice(cfg, ba.InflictedStatusConditions, convertInflictedStatus),
-		RemovedStatusConditions: namesToNamedAPIResources(cfg, cfg.e.statusConditions, ba.RemovedStatusConditions),
-		CopiedStatusConditions: convertObjSlice(cfg, ba.CopiedStatusConditions, convertInflictedStatus),
-		StatChanges: convertObjSlice(cfg, ba.StatChanges, convertStatChange),
-		ModifierChanges: convertObjSlice(cfg, ba.ModifierChanges, convertModifierChange),
+		Target: bi.Target,
+		BasedOnPhysAttack: bi.BasedOnPhysAttack,
+		Range: bi.Range,
+		Damage: convertObjPtr(cfg, bi.Damage, convertDamage),
+		ShatterRate: bi.ShatterRate,
+		Accuracy: convertAccuracy(cfg, bi.Accuracy),
+		HitAmount: bi.HitAmount,
+		SpecialAction: bi.SpecialAction,
+		InflictedDelay: convertObjPtr(cfg, bi.InflictedDelay, convertInflictedDelay),
+		InflictedStatusConditions: convertObjSlice(cfg, bi.InflictedStatusConditions, convertInflictedStatus),
+		RemovedStatusConditions: namesToNamedAPIResources(cfg, cfg.e.statusConditions, bi.RemovedStatusConditions),
+		CopiedStatusConditions: convertObjSlice(cfg, bi.CopiedStatusConditions, convertInflictedStatus),
+		StatChanges: convertObjSlice(cfg, bi.StatChanges, convertStatChange),
+		ModifierChanges: convertObjSlice(cfg, bi.ModifierChanges, convertModifierChange),
 	}
 
-	for _, status := range ba.AffectedBy {
+	for _, status := range bi.AffectedBy {
 		switch status {
 		case "darkness":
 			battleInteraction.Darkable = true

@@ -3,14 +3,14 @@ package api
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
 type MonsterItemsSimple struct {
-	StealCommon         *ItemAmountSimple  `json:"steal_common"`
-	StealRare           *ItemAmountSimple  `json:"steal_rare"`
-	DropCommon          *ItemAmountSimple  `json:"drop_common"`
-	DropRare            *ItemAmountSimple  `json:"drop_rare"`
-	SecondaryDropCommon *ItemAmountSimple  `json:"secondary_drop_common"`
-	SecondaryDropRare   *ItemAmountSimple  `json:"secondary_drop_rare"`
-	Bribe               *ItemAmountSimple  `json:"bribe"`
-	OtherItems          []ItemAmountSimple `json:"other_items"`
+	StealCommon         *string  `json:"steal_common,omitempty"`
+	StealRare           *string  `json:"steal_rare,omitempty"`
+	DropCommon          *string  `json:"drop_common,omitempty"`
+	DropRare            *string  `json:"drop_rare,omitempty"`
+	SecondaryDropCommon *string  `json:"secondary_drop_common,omitempty"`
+	SecondaryDropRare   *string  `json:"secondary_drop_rare,omitempty"`
+	Bribe               *string  `json:"bribe,omitempty"`
+	OtherItems          []string `json:"other_items,omitempty"`
 }
 
 func convertMonsterItemsSimple(cfg *Config, items seeding.MonsterItems) MonsterItemsSimple {
@@ -22,7 +22,7 @@ func convertMonsterItemsSimple(cfg *Config, items seeding.MonsterItems) MonsterI
 		SecondaryDropCommon: convertObjPtr(cfg, items.SecondaryDropCommon, convertItemAmountSimple),
 		SecondaryDropRare:   convertObjPtr(cfg, items.SecondaryDropRare, convertItemAmountSimple),
 		Bribe:               convertObjPtr(cfg, items.Bribe, convertItemAmountSimple),
-		OtherItems:          convertObjSlice(cfg, items.OtherItems, posItemToItemAmtSimple),
+		OtherItems:          convertObjSliceNullable(cfg, items.OtherItems, posItemToItemAmtSimple),
 	}
 }
 

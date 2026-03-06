@@ -47,6 +47,19 @@ JOIN characters c ON c.unit_id = pu.id
 WHERE c.id = $1;
 
 
+-- name: GetCharacterOverdriveAbilityIDs :many
+SELECT oa.id
+FROM overdrive_abilities oa
+JOIN j_overdrives_overdrive_abilities j1 ON j1.overdrive_ability_id = oa.id
+JOIN overdrives o ON j1.overdrive_id = o.id
+JOIN character_classes cc ON o.character_class_id = cc.id
+JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
+JOIN player_units pu ON j2.unit_id = pu.id
+JOIN characters c ON c.unit_id = pu.id
+WHERE c.id = $1
+ORDER BY oa.id;
+
+
 -- name: GetCharacterCelestialWeaponID :one
 SELECT cw.id
 FROM celestial_weapons cw
@@ -119,6 +132,19 @@ JOIN player_units pu ON j.unit_id = pu.id
 JOIN aeons a ON a.unit_id = pu.id
 WHERE a.id = $1
 ORDER BY o.id;
+
+
+-- name: GetAeonOverdriveAbilityIDs :many
+SELECT oa.id
+FROM overdrive_abilities oa
+JOIN j_overdrives_overdrive_abilities j1 ON j1.overdrive_ability_id = oa.id
+JOIN overdrives o ON j1.overdrive_id = o.id
+JOIN character_classes cc ON o.character_class_id = cc.id
+JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
+JOIN player_units pu ON j2.unit_id = pu.id
+JOIN aeons a ON a.unit_id = pu.id
+WHERE a.id = $1
+ORDER BY oa.id;
 
 
 -- name: GetAeonIDs :many

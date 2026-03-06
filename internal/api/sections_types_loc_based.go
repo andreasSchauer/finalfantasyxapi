@@ -48,7 +48,7 @@ func convertShopSummarySimple(_ *Config, shop seeding.SubShop) ShopSummarySimple
 type TreasuresLocSimple struct {
 	TreasureCount int                `json:"treasure_count"`
 	TotalGil      int32              `json:"total_gil"`
-	Items         []ItemAmountSimple `json:"items"`
+	Items         []string 			 `json:"items"`
 	Equipment     []EquipmentSimple  `json:"equipment"`
 }
 
@@ -69,8 +69,9 @@ func getTreasuresLocSimple(cfg *Config, r *http.Request, resourceType string, id
 func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSimple {
 	treasures := TreasuresLocSimple{
 		TreasureCount: len(treasureIDs),
-		Items:         []ItemAmountSimple{},
 	}
+
+	itemAmounts := []seeding.ItemAmount{}
 
 	for _, treasureID := range treasureIDs {
 		treasure, _ := seeding.GetResourceByID(treasureID, cfg.l.TreasuresID)
@@ -81,8 +82,7 @@ func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSi
 
 		case string(database.LootTypeItem):
 			for _, itemAmount := range treasure.Items {
-				ia := convertItemAmountSimple(cfg, itemAmount)
-				treasures.Items = append(treasures.Items, ia)
+				itemAmounts = append(itemAmounts, itemAmount)
 			}
 
 		case string(database.LootTypeEquipment):
@@ -92,7 +92,8 @@ func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSi
 		}
 	}
 
-	treasures.Items = sortSimpleItemAmountsByID(cfg, treasures.Items)
+	itemAmounts = sortItemAmountsByID(cfg, itemAmounts)
+	treasures.Items = convertObjSlice(cfg, itemAmounts, convertItemAmountSimple)
 	return treasures
 }
 

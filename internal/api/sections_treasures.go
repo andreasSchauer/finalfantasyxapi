@@ -15,7 +15,7 @@ type TreasureSimple struct {
 	TreasureType  string             `json:"treasure_type"`
 	LootType      string             `json:"loot_type"`
 	GilAmount     *int32             `json:"gil_amount,omitempty"`
-	Items         []ItemAmountSimple `json:"items,omitempty"`
+	Items         []string 			 `json:"items,omitempty"`
 	Equipment     *EquipmentSimple   `json:"equipment,omitempty"`
 }
 

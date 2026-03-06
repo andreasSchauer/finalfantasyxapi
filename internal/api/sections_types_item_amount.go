@@ -13,23 +13,16 @@ type ItemAmountSimple struct {
 	ItemType      database.ItemType  `json:"item_type"`
 }
 
-func convertItemAmountSimple(cfg *Config, ia seeding.ItemAmount) ItemAmountSimple {
-	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.MasterItems)
-	itemStr := nameAmountString(ia.ItemName, nil, nil, ia.Amount)
-
-	return ItemAmountSimple{
-		ia:            ia,
-		ItemAmountStr: itemStr,
-		ItemType:      itemLookup.Type,
-	}
+func convertItemAmountSimple(cfg *Config, ia seeding.ItemAmount) string {
+	return nameAmountString(ia.ItemName, nil, nil, ia.Amount)
 }
 
-func posItemToItemAmtSimple(cfg *Config, posItem seeding.PossibleItem) ItemAmountSimple {
+func posItemToItemAmtSimple(cfg *Config, posItem seeding.PossibleItem) string {
 	return convertItemAmountSimple(cfg, posItem.ItemAmount)
 }
 
-func sortSimpleItemAmountsByID(cfg *Config, s []ItemAmountSimple) []ItemAmountSimple {
-	slices.SortStableFunc(s, func(a, b ItemAmountSimple) int {
+func sortItemAmountsByID(cfg *Config, s []seeding.ItemAmount) []seeding.ItemAmount {
+	slices.SortStableFunc(s, func(a, b seeding.ItemAmount) int {
 		A := getMasterItemID(cfg, a)
 		B := getMasterItemID(cfg, b)
 
@@ -41,18 +34,31 @@ func sortSimpleItemAmountsByID(cfg *Config, s []ItemAmountSimple) []ItemAmountSi
 			return 1
 		}
 
+		if A == B {
+			if a.Amount < b.Amount {
+				return -1
+			}
+
+			if a.Amount > b.Amount {
+				return 1
+			}
+		}
+
 		return 0
 	})
 
 	return s
 }
 
-func getMasterItemID(cfg *Config, ia ItemAmountSimple) int32 {
-	if ia.ItemType == database.ItemTypeItem {
-		itemLookup, _ := seeding.GetResource(ia.ia.ItemName, cfg.l.Items)
+func getMasterItemID(cfg *Config, ia seeding.ItemAmount) int32 {
+	lookup, _ := seeding.GetResource(ia.ItemName, cfg.l.MasterItems)
+
+	if lookup.Type == database.ItemTypeItem {
+		itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.Items)
 		return itemLookup.MasterItem.ID
 	}
 
-	itemLookup, _ := seeding.GetResource(ia.ia.ItemName, cfg.l.KeyItems)
+	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.KeyItems)
 	return itemLookup.MasterItem.ID
 }
+
