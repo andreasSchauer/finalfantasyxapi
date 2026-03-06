@@ -36,6 +36,18 @@ func convertObjSliceNullable[Old, New any](cfg *Config, items []Old, converter f
 	return slice
 }
 
+func sliceOrNil[T any](s []T) []T {
+	if len(s) == 0 {
+		return nil
+	}
+
+	return s
+}
+
+func ptrIsNotNil[T any](ptr *T) bool {
+	return ptr != nil
+}
+
 func dbQueryToSlice[T any](cfg *Config, r *http.Request, rtParent, rtChild string, id int32, dbQuery func(context.Context, int32) ([]int32, error), converter func(*Config, int32) T) ([]T, error) {
 	IDs, err := dbQuery(r.Context(), id)
 	if err != nil {

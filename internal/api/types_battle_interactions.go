@@ -9,16 +9,16 @@ import (
 
 type BattleInteraction struct {
 	Target            			string				`json:"target"`
-	BasedOnPhysAttack 			bool				`json:"based_on_phys_attack"`
 	Range             			*int32				`json:"range"`
-	Damage			  			*Damage				`json:"damage"`
+	HitAmount         			int32				`json:"hit_amount"`
 	ShatterRate       			*int32				`json:"shatter_rate"`
-	Accuracy					Accuracy			`json:"accuracy"`
+	SpecialAction     			*string				`json:"special_action,omitempty"`
+	BasedOnPhysAttack 			bool				`json:"based_on_phys_attack"`
 	Darkable          			bool				`json:"darkable"`
 	Silenceable       			bool				`json:"silenceable"`
 	Reflectable       			bool				`json:"reflectable"`
-	HitAmount         			int32				`json:"hit_amount"`
-	SpecialAction     			*string				`json:"special_action,omitempty"`
+	Accuracy					Accuracy			`json:"accuracy"`
+	Damage			  			*Damage				`json:"damage"`
 	InflictedDelay            	*InflictedDelay  	`json:"inflicted_delay"`
 	InflictedStatusConditions 	[]InflictedStatus 	`json:"inflicted_status_conditions"`
 	RemovedStatusConditions		[]NamedAPIResource	`json:"removed_status_conditions"`
