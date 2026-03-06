@@ -94,10 +94,9 @@ ORDER BY a.id;
 -- name: GetAbilityIDsDealsDelay :many
 SELECT DISTINCT a.id
 FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_delay j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_delays idl ON j2.inflicted_delay_id = idl.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
 ORDER BY a.id;
 
@@ -302,10 +301,9 @@ ORDER BY ea.id;
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_delay j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_delays idl ON j2.inflicted_delay_id = idl.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
 ORDER BY ea.id;
 
@@ -438,10 +436,9 @@ ORDER BY ia.id;
 SELECT DISTINCT ia.id
 FROM item_abilities ia
 JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_delay j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_delays idl ON j2.inflicted_delay_id = idl.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
 ORDER BY ia.id;
 
@@ -636,10 +633,9 @@ ORDER BY ua.id;
 SELECT DISTINCT ua.id
 FROM unspecified_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_delay j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_delays idl ON j2.inflicted_delay_id = idl.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
 ORDER BY ua.id;
 
@@ -761,10 +757,9 @@ ORDER BY a.id;
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_delay j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_delays idl ON j2.inflicted_delay_id = idl.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
 ORDER BY oa.id;
 
@@ -1026,10 +1021,9 @@ ORDER BY pa.id;
 SELECT DISTINCT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_delay j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_delays idl ON j2.inflicted_delay_id = idl.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
 ORDER BY pa.id;
 

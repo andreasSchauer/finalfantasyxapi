@@ -22,15 +22,6 @@ CREATE TABLE j_battle_interactions_affected_by (
 );
 
 
-CREATE TABLE j_battle_interactions_inflicted_delay (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    ability_id INTEGER NOT NULL REFERENCES abilities(id),
-    battle_interaction_id INTEGER NOT NULL REFERENCES battle_interactions(id),
-    inflicted_delay_id INTEGER NOT NULL REFERENCES inflicted_delays(id)
-);
-
-
 CREATE TABLE j_battle_interactions_inflicted_status_conditions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -95,7 +86,6 @@ DROP TABLE IF EXISTS j_battle_interactions_stat_changes;
 DROP TABLE IF EXISTS j_battle_interactions_copied_status_conditions;
 DROP TABLE IF EXISTS j_battle_interactions_removed_status_conditions;
 DROP TABLE IF EXISTS j_battle_interactions_inflicted_status_conditions;
-DROP TABLE IF EXISTS j_battle_interactions_inflicted_delay;
 DROP TABLE IF EXISTS j_battle_interactions_affected_by;
 DROP TABLE IF EXISTS j_battle_interactions_damage;
 

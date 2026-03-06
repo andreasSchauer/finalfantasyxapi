@@ -85,6 +85,11 @@ func (l *Lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 		return BattleInteraction{}, h.NewErr(battleInteraction.Error(), err)
 	}
 
+	battleInteraction.InflictedDelay, err = seedObjPtrAssignFK(qtx, battleInteraction.InflictedDelay, l.seedInflictedDelay)
+	if err != nil {
+		return BattleInteraction{}, h.NewErr(battleInteraction.Error(), err)
+	}
+
 	dbBattleInteraction, err := qtx.CreateBattleInteraction(context.Background(), database.CreateBattleInteractionParams{
 		DataHash:          generateDataHash(battleInteraction),
 		Target:            database.TargetType(battleInteraction.Target),
@@ -92,6 +97,7 @@ func (l *Lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 		Range:             h.GetNullInt32(battleInteraction.Range),
 		ShatterRate:       h.GetNullInt32(battleInteraction.ShatterRate),
 		AccuracyID:        battleInteraction.Accuracy.ID,
+		InflictedDelayID:  h.ObjPtrToNullInt32ID(battleInteraction.InflictedDelay),
 		HitAmount:         battleInteraction.HitAmount,
 		SpecialAction:     h.NullSpecialActionType(battleInteraction.SpecialAction),
 	})
@@ -124,7 +130,6 @@ func (l *Lookup) seedBattleInteractionRelationships(qtx *database.Queries, abili
 
 	functions := []func(*database.Queries, Ability, BattleInteraction) error{
 		l.seedBattleIntAffectedBy,
-		l.seedBattleIntInflictedDelay,
 		l.seedBattleIntInflictedConditions,
 		l.seedBattleIntRemovedConditions,
 		l.seedBattleIntCopiedConditions,
@@ -163,26 +168,6 @@ func (l *Lookup) seedBattleIntAffectedBy(qtx *database.Queries, ability Ability,
 	return nil
 }
 
-func (l *Lookup) seedBattleIntInflictedDelay(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
-	if battleInteraction.InflictedDelay != nil {
-		threeWay, err := createThreeWayJunctionSeed(qtx, ability, battleInteraction, *battleInteraction.InflictedDelay, l.seedInflictedDelay)
-		if err != nil {
-			return err
-		}
-
-		err = qtx.CreateBattleIntInflictedDelayJunction(context.Background(), database.CreateBattleIntInflictedDelayJunctionParams{
-			DataHash:            generateDataHash(threeWay),
-			AbilityID:           threeWay.GrandparentID,
-			BattleInteractionID: threeWay.ParentID,
-			InflictedDelayID:    threeWay.ChildID,
-		})
-		if err != nil {
-			return h.NewErr(battleInteraction.InflictedDelay.Error(), err, "couldn't junction inflicted delay")
-		}
-	}
-
-	return nil
-}
 
 func (l *Lookup) seedBattleIntInflictedConditions(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, condition := range battleInteraction.InflictedStatusConditions {

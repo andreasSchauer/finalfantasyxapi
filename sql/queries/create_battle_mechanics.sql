@@ -94,8 +94,9 @@ RETURNING *;
 -- name: UpdateStatusCondition :exec
 UPDATE status_conditions
 SET data_hash = $1,
-    added_elem_resist_id = $2
-WHERE id = $3;
+    added_elem_resist_id = $2,
+    inflicted_delay_id = $3
+WHERE id = $4;
 
 
 -- name: CreateStatusConditionsRelatedStatsJunction :exec
@@ -138,12 +139,6 @@ RETURNING *;
 
 -- name: CreatePropertiesRelatedStatsJunction :exec
 INSERT INTO j_properties_related_stats(data_hash, property_id, stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreatePropertiesRemovedStatusConditionsJunction :exec
-INSERT INTO j_properties_removed_status_conditions (data_hash, property_id, status_condition_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

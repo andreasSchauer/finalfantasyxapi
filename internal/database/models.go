@@ -2784,6 +2784,7 @@ type BattleInteraction struct {
 	Range             interface{}
 	ShatterRate       interface{}
 	AccuracyID        int32
+	InflictedDelayID  sql.NullInt32
 	HitAmount         int32
 	SpecialAction     NullSpecialActionType
 	DamageID          sql.NullInt32
@@ -3184,14 +3185,6 @@ type JBattleInteractionsDamage struct {
 	AbilityID           int32
 	BattleInteractionID int32
 	DamageID            int32
-}
-
-type JBattleInteractionsInflictedDelay struct {
-	ID                  int32
-	DataHash            string
-	AbilityID           int32
-	BattleInteractionID int32
-	InflictedDelayID    int32
 }
 
 type JBattleInteractionsInflictedStatusCondition struct {
@@ -3914,6 +3907,7 @@ type StatusCondition struct {
 	Visualization     sql.NullString
 	NullifyArmored    NullNullifyArmored
 	AddedElemResistID sql.NullInt32
+	InflictedDelayID  sql.NullInt32
 }
 
 type StatusResist struct {

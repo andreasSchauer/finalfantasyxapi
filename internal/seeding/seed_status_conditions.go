@@ -17,6 +17,7 @@ type StatusCondition struct {
 	RelatedStats            []string         `json:"related_stats"`
 	RemovedStatusConditions []string         `json:"removed_status_conditions"`
 	AddedElemResist         *ElementalResist `json:"added_elem_resist"`
+	CtbOnInfliction			*InflictedDelay	 `json:"ctb_on_infliction"`
 	NullifyArmored          *string          `json:"h.Nullify_armored"`
 	StatChanges             []StatChange     `json:"stat_changes"`
 	ModifierChanges         []ModifierChange `json:"modifier_changes"`
@@ -98,9 +99,15 @@ func (l *Lookup) seedStatusConditionsRelationships(db *database.Queries, dbConn 
 				return h.NewErr(condition.Error(), err)
 			}
 
+			condition.CtbOnInfliction, err = seedObjPtrAssignFK(qtx, condition.CtbOnInfliction, l.seedInflictedDelay)
+			if err != nil {
+				return h.NewErr(condition.Error(), err)
+			}
+
 			err = qtx.UpdateStatusCondition(context.Background(), database.UpdateStatusConditionParams{
 				DataHash:          generateDataHash(condition),
 				AddedElemResistID: h.ObjPtrToNullInt32ID(condition.AddedElemResist),
+				InflictedDelayID:  h.ObjPtrToNullInt32ID(condition.CtbOnInfliction),
 				ID:                condition.ID,
 			})
 			if err != nil {

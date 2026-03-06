@@ -65,6 +65,16 @@ CREATE TABLE ability_accuracies (
 );
 
 
+CREATE TABLE inflicted_delays (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    condition TEXT,
+    ctb_attack_type ctb_attack_type NOT NULL,
+    delay_type delay_type NOT NULL,
+    damage_constant uint8 NOT NULL
+);
+
+
 CREATE TABLE battle_interactions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -73,6 +83,7 @@ CREATE TABLE battle_interactions (
     range distance,
     shatter_rate uint8,
     accuracy_id INTEGER NOT NULL REFERENCES ability_accuracies(id),
+    inflicted_delay_id INTEGER REFERENCES inflicted_delays(id),
     hit_amount INTEGER NOT NULL,
     special_action special_action_type
 );
@@ -85,16 +96,6 @@ CREATE TABLE inflicted_statusses (
     probability uint8 NOT NULL,
     duration_type duration_type NOT NULL,
     amount INTEGER
-);
-
-
-CREATE TABLE inflicted_delays (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    condition TEXT,
-    ctb_attack_type ctb_attack_type NOT NULL,
-    delay_type delay_type NOT NULL,
-    damage_constant uint8 NOT NULL
 );
 
 
@@ -119,9 +120,9 @@ CREATE TABLE modifier_changes (
 -- +goose Down
 DROP TABLE IF EXISTS modifier_changes;
 DROP TABLE IF EXISTS stat_changes;
-DROP TABLE IF EXISTS inflicted_delays;
 DROP TABLE IF EXISTS inflicted_statusses;
 DROP TABLE IF EXISTS battle_interactions;
+DROP TABLE IF EXISTS inflicted_delays;
 DROP TABLE IF EXISTS ability_accuracies;
 DROP TABLE IF EXISTS ability_damages;
 DROP TABLE IF EXISTS damages;

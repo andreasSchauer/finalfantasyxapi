@@ -14,7 +14,6 @@ type Property struct {
 	Name                    string           `json:"name"`
 	Effect                  string           `json:"effect"`
 	RelatedStats            []string         `json:"related_stats"`
-	RemovedStatusConditions []string         `json:"removed_status_conditions"`
 	NullifyArmored          *string          `json:"h.Nullify_armored"`
 	StatChanges             []StatChange     `json:"stat_changes"`
 	ModifierChanges         []ModifierChange `json:"modifier_changes"`
@@ -90,7 +89,6 @@ func (l *Lookup) seedPropertiesRelationships(db *database.Queries, dbConn *sql.D
 
 			relationShipFunctions := []func(*database.Queries, Property) error{
 				l.seedPropertyRelatedStats,
-				l.seedPropertyRemovedConditions,
 				l.seedPropertyStatChanges,
 				l.seedPropertyModifierChanges,
 			}
@@ -128,25 +126,6 @@ func (l *Lookup) seedPropertyRelatedStats(qtx *database.Queries, property Proper
 	return nil
 }
 
-func (l *Lookup) seedPropertyRemovedConditions(qtx *database.Queries, property Property) error {
-	for _, jsonCondition := range property.RemovedStatusConditions {
-		junction, err := createJunction(property, jsonCondition, l.StatusConditions)
-		if err != nil {
-			return err
-		}
-
-		err = qtx.CreatePropertiesRemovedStatusConditionsJunction(context.Background(), database.CreatePropertiesRemovedStatusConditionsJunctionParams{
-			DataHash:          generateDataHash(junction),
-			PropertyID:        junction.ParentID,
-			StatusConditionID: junction.ChildID,
-		})
-		if err != nil {
-			return h.NewErr(jsonCondition, err, "couldn't junction removed status condition")
-		}
-	}
-
-	return nil
-}
 
 func (l *Lookup) seedPropertyStatChanges(qtx *database.Queries, property Property) error {
 	for _, statChange := range property.StatChanges {

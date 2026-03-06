@@ -54,8 +54,8 @@ RETURNING *;
 
 
 -- name: CreateBattleInteraction :one
-INSERT INTO battle_interactions (data_hash, target, based_on_phys_attack, range, shatter_rate, accuracy_id, hit_amount, special_action)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+INSERT INTO battle_interactions (data_hash, target, based_on_phys_attack, range, shatter_rate, accuracy_id, inflicted_delay_id, hit_amount, special_action)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = battle_interactions.data_hash
 RETURNING *;
 
@@ -68,12 +68,6 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 -- name: CreateBattleIntAffectedByJunction :exec
 INSERT INTO j_battle_interactions_affected_by (data_hash, ability_id, battle_interaction_id, status_condition_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateBattleIntInflictedDelayJunction :exec
-INSERT INTO j_battle_interactions_inflicted_delay (data_hash, ability_id, battle_interaction_id, inflicted_delay_id)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
