@@ -3442,13 +3442,6 @@ type JPropertiesRelatedStat struct {
 	StatID     int32
 }
 
-type JPropertiesRemovedStatusCondition struct {
-	ID                int32
-	DataHash          string
-	PropertyID        int32
-	StatusConditionID int32
-}
-
 type JPropertiesStatChange struct {
 	ID           int32
 	DataHash     string

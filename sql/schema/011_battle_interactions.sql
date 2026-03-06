@@ -81,7 +81,7 @@ CREATE TABLE battle_interactions (
     target target_type NOT NULL,
     based_on_phys_attack BOOLEAN NOT NULL,
     range distance,
-    shatter_rate uint8,
+    shatter_rate uint8 NOT NULL,
     accuracy_id INTEGER NOT NULL REFERENCES ability_accuracies(id),
     inflicted_delay_id INTEGER REFERENCES inflicted_delays(id),
     hit_amount INTEGER NOT NULL,

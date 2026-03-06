@@ -137,7 +137,7 @@ func replaceBattleInteractionVals(battleInteractions []BattleInteraction, repl b
 		}
 
 		if repl.ShatterRate != nil {
-			battleInteraction.ShatterRate = repl.ShatterRate
+			battleInteraction.ShatterRate = *repl.ShatterRate
 		}
 
 		if repl.Accuracy != nil {

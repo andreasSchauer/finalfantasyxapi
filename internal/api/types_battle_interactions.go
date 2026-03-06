@@ -11,7 +11,7 @@ type BattleInteraction struct {
 	Target            			string				`json:"target"`
 	Range             			*int32				`json:"range"`
 	HitAmount         			int32				`json:"hit_amount"`
-	ShatterRate       			*int32				`json:"shatter_rate"`
+	ShatterRate       			int32				`json:"shatter_rate"`
 	SpecialAction     			*string				`json:"special_action,omitempty"`
 	BasedOnPhysAttack 			bool				`json:"based_on_phys_attack"`
 	Darkable          			bool				`json:"darkable"`

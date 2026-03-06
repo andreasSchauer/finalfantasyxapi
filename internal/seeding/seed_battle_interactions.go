@@ -14,7 +14,7 @@ type BattleInteraction struct {
 	BasedOnPhysAttack         bool              `json:"based_on_phys_attack"`
 	Range                     *int32            `json:"range"`
 	Damage                    *Damage           `json:"damage"`
-	ShatterRate               *int32            `json:"shatter_rate"`
+	ShatterRate               int32             `json:"shatter_rate"`
 	Accuracy                  Accuracy          `json:"accuracy"`
 	AffectedBy                []string          `json:"affected_by"`
 	HitAmount                 int32             `json:"hit_amount"`
@@ -33,7 +33,7 @@ func (bi BattleInteraction) ToHashFields() []any {
 		bi.BasedOnPhysAttack,
 		h.DerefOrNil(bi.Range),
 		h.ObjPtrToID(bi.Damage),
-		h.DerefOrNil(bi.ShatterRate),
+		bi.ShatterRate,
 		bi.Accuracy.ID,
 		bi.HitAmount,
 		h.DerefOrNil(bi.SpecialAction),
@@ -46,7 +46,7 @@ func (bi BattleInteraction) GetID() int32 {
 }
 
 func (bi BattleInteraction) Error() string {
-	return fmt.Sprintf("battle interaction with target: %s, phys attack: %t, range: %v, damage id: %v, shatter rate: %v, accuracy id: %d, hit amount: %d, special action: %v", bi.Target, bi.BasedOnPhysAttack, h.DerefOrNil(bi.Range), h.ObjPtrToID(bi.Damage), h.DerefOrNil(bi.ShatterRate), bi.Accuracy.ID, bi.HitAmount, h.DerefOrNil(bi.SpecialAction))
+	return fmt.Sprintf("battle interaction with target: %s, phys attack: %t, range: %v, damage id: %v, shatter rate: %v, accuracy id: %d, hit amount: %d, special action: %v", bi.Target, bi.BasedOnPhysAttack, h.DerefOrNil(bi.Range), h.ObjPtrToID(bi.Damage), bi.ShatterRate, bi.Accuracy.ID, bi.HitAmount, h.DerefOrNil(bi.SpecialAction))
 }
 
 func (l *Lookup) seedBattleInteractions(qtx *database.Queries, ability Ability, battleInteractions []BattleInteraction) error {
@@ -95,7 +95,7 @@ func (l *Lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 		Target:            database.TargetType(battleInteraction.Target),
 		BasedOnPhysAttack: battleInteraction.BasedOnPhysAttack,
 		Range:             h.GetNullInt32(battleInteraction.Range),
-		ShatterRate:       h.GetNullInt32(battleInteraction.ShatterRate),
+		ShatterRate:       battleInteraction.ShatterRate,
 		AccuracyID:        battleInteraction.Accuracy.ID,
 		InflictedDelayID:  h.ObjPtrToNullInt32ID(battleInteraction.InflictedDelay),
 		HitAmount:         battleInteraction.HitAmount,

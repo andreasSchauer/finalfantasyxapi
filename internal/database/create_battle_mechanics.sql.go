@@ -324,23 +324,6 @@ func (q *Queries) CreatePropertiesRelatedStatsJunction(ctx context.Context, arg 
 	return err
 }
 
-const createPropertiesRemovedStatusConditionsJunction = `-- name: CreatePropertiesRemovedStatusConditionsJunction :exec
-INSERT INTO j_properties_removed_status_conditions (data_hash, property_id, status_condition_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreatePropertiesRemovedStatusConditionsJunctionParams struct {
-	DataHash          string
-	PropertyID        int32
-	StatusConditionID int32
-}
-
-func (q *Queries) CreatePropertiesRemovedStatusConditionsJunction(ctx context.Context, arg CreatePropertiesRemovedStatusConditionsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createPropertiesRemovedStatusConditionsJunction, arg.DataHash, arg.PropertyID, arg.StatusConditionID)
-	return err
-}
-
 const createPropertiesStatChangesJunction = `-- name: CreatePropertiesStatChangesJunction :exec
 INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
 VALUES ($1, $2, $3)
