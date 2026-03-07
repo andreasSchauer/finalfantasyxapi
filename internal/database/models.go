@@ -2420,6 +2420,49 @@ func (ns NullSpecialActionType) Value() (driver.Value, error) {
 	return string(ns.SpecialActionType), nil
 }
 
+type StatusConditionCategory string
+
+const (
+	StatusConditionCategoryNegative StatusConditionCategory = "negative"
+	StatusConditionCategoryPositive StatusConditionCategory = "positive"
+	StatusConditionCategoryOther    StatusConditionCategory = "other"
+)
+
+func (e *StatusConditionCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = StatusConditionCategory(s)
+	case string:
+		*e = StatusConditionCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for StatusConditionCategory: %T", src)
+	}
+	return nil
+}
+
+type NullStatusConditionCategory struct {
+	StatusConditionCategory StatusConditionCategory
+	Valid                   bool // Valid is true if StatusConditionCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullStatusConditionCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.StatusConditionCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.StatusConditionCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullStatusConditionCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.StatusConditionCategory), nil
+}
+
 type TargetType string
 
 const (
@@ -3896,6 +3939,8 @@ type StatusCondition struct {
 	ID                int32
 	DataHash          string
 	Name              string
+	Category          StatusConditionCategory
+	IsPermanent       bool
 	Effect            string
 	Visualization     sql.NullString
 	NullifyArmored    NullNullifyArmored

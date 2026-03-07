@@ -15,14 +15,9 @@ func compareParameterLists(test test, _ string, exp expListNames, got QueryParam
 func compareSectionLists(test test, endpoint string, exp expListNames, got SectionList) {
 	test.t.Helper()
 	compareListParams(test, exp.getListParams(), got.getListParams())
-	expURLs := []string{}
+	
 
-	for _, section := range exp.results {
-		url := createSectionURL(test.cfg, endpoint, section)
-		expURLs = append(expURLs, url)
-	}
-
-	checkStringsInSlice(test, "results", expURLs, got.Results)
+	checkStringsInSlice(test, "results", exp.results, got.Results)
 }
 
 // checks if the provided slice of strings contains all stated strings

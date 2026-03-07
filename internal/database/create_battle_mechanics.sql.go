@@ -413,15 +413,17 @@ func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) (Stat, e
 }
 
 const createStatusCondition = `-- name: CreateStatusCondition :one
-INSERT INTO status_conditions (data_hash, name, effect, visualization, nullify_armored)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_conditions.data_hash
-RETURNING id, data_hash, name, effect, visualization, nullify_armored, added_elem_resist_id, inflicted_delay_id
+RETURNING id, data_hash, name, category, is_permanent, effect, visualization, nullify_armored, added_elem_resist_id, inflicted_delay_id
 `
 
 type CreateStatusConditionParams struct {
 	DataHash       string
 	Name           string
+	Category       StatusConditionCategory
+	IsPermanent    bool
 	Effect         string
 	Visualization  sql.NullString
 	NullifyArmored NullNullifyArmored
@@ -431,6 +433,8 @@ func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusCon
 	row := q.db.QueryRowContext(ctx, createStatusCondition,
 		arg.DataHash,
 		arg.Name,
+		arg.Category,
+		arg.IsPermanent,
 		arg.Effect,
 		arg.Visualization,
 		arg.NullifyArmored,
@@ -440,6 +444,8 @@ func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusCon
 		&i.ID,
 		&i.DataHash,
 		&i.Name,
+		&i.Category,
+		&i.IsPermanent,
 		&i.Effect,
 		&i.Visualization,
 		&i.NullifyArmored,

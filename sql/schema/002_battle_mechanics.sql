@@ -8,6 +8,9 @@ CREATE TYPE nullify_armored AS ENUM ('target', 'bearer');
 CREATE TYPE modifier_type AS ENUM ('dynamic-value', 'factor', 'fixed-value', 'percentage');
 
 
+CREATE TYPE status_condition_category AS ENUM ('negative', 'positive', 'other');
+
+
 CREATE TABLE stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -88,6 +91,8 @@ CREATE TABLE status_conditions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     name TEXT UNIQUE NOT NULL,
+    category status_condition_category NOT NULL,
+    is_permanent BOOL NOT NULL,
     effect TEXT NOT NULL,
     visualization TEXT,
     nullify_armored nullify_armored
@@ -137,6 +142,7 @@ DROP TABLE IF EXISTS affinities;
 DROP TABLE IF EXISTS elements;
 DROP TABLE IF EXISTS base_stats;
 DROP TABLE IF EXISTS stats;
+DROP TYPE IF EXISTS status_condition_category;
 DROP TYPE IF EXISTS modifier_type;
 DROP TYPE IF EXISTS nullify_armored;
 DROP TYPE IF EXISTS overdrive_mode_type;

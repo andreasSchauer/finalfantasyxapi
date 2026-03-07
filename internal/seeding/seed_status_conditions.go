@@ -12,6 +12,8 @@ import (
 type StatusCondition struct {
 	ID                      int32
 	Name                    string           `json:"name"`
+	Category				string			 `json:"category"`
+	IsPermanent				bool			 `json:"is_permanent"`
 	Effect                  string           `json:"effect"`
 	Visualization           *string          `json:"visualization"`
 	RelatedStats            []string         `json:"related_stats"`
@@ -26,6 +28,8 @@ type StatusCondition struct {
 func (s StatusCondition) ToHashFields() []any {
 	return []any{
 		s.Name,
+		s.Category,
+		s.IsPermanent,
 		s.Effect,
 		h.DerefOrNil(s.Visualization),
 		h.ObjPtrToID(s.AddedElemResist),
@@ -62,6 +66,8 @@ func (l *Lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 			dbCondition, err := qtx.CreateStatusCondition(context.Background(), database.CreateStatusConditionParams{
 				DataHash:       generateDataHash(condition),
 				Name:           condition.Name,
+				Category: 		database.StatusConditionCategory(condition.Category),
+				IsPermanent: 	condition.IsPermanent,
 				Effect:         condition.Effect,
 				Visualization:  h.GetNullString(condition.Visualization),
 				NullifyArmored: h.NullNullifyArmored(condition.NullifyArmored),

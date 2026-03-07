@@ -14,8 +14,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.areas.endpoint,
 				handler:        testCfg.HandleAreas,
 			},
-			count:   20,
-			results: []string{"limit", "offset", "item", "save_sphere", "sublocation"},
+			count:   21,
+			results: []string{"limit", "offset", "item", "save_sphere", "sublocation", "ids"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -24,8 +24,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.sublocations.endpoint,
 				handler:        testCfg.HandleSublocations,
 			},
-			count:   14,
-			results: []string{"location", "item", "method", "aeons", "shops", "fmvs"},
+			count:   15,
+			results: []string{"location", "item", "method", "aeons", "shops", "fmvs", "ids"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -34,8 +34,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.locations.endpoint,
 				handler:        testCfg.HandleLocations,
 			},
-			count:   13,
-			results: []string{"key_item", "characters", "aeons", "treasures", "sidequests"},
+			count:   14,
+			results: []string{"key_item", "characters", "aeons", "treasures", "sidequests", "ids"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -75,8 +75,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsters.endpoint,
 				handler:        testCfg.HandleMonsters,
 			},
-			count:   28,
-			results: []string{"kimahri_stats", "aeon_stats", "altered_state", "omnis_elements", "status_resists", "auto_ability", "area", "distance", "underwater", "species"},
+			count:   29,
+			results: []string{"kimahri_stats", "aeon_stats", "altered_state", "omnis_elements", "status_resists", "auto_ability", "area", "distance", "underwater", "species", "ids"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -85,8 +85,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsterFormations.endpoint,
 				handler:        testCfg.HandleMonsterFormations,
 			},
-			count:   8,
-			results: []string{"monster", "location", "ambush", "category"},
+			count:   9,
+			results: []string{"monster", "location", "ambush", "category", "ids"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -105,8 +105,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.shops.endpoint,
 				handler:        testCfg.HandleShops,
 			},
-			count:   10,
-			results: []string{"location", "auto_ability", "items", "equipment", "pre_airship"},
+			count:   11,
+			results: []string{"location", "auto_ability", "items", "equipment", "pre_airship", "ids"},
 		},
 		{
 			testGeneral: testGeneral{

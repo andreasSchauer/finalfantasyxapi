@@ -65,12 +65,55 @@ func TestSections(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/aeons/sections",
+				expectedStatus: http.StatusOK,
+				endpoint:       testCfg.e.aeons.endpoint,
+				handler:        testCfg.HandleAeons,
+			},
+			count: 3,
+			results: []string{
+				"default-abilities",
+				"overdrive-abilities",
+				"stats",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/characters/sections",
+				expectedStatus: http.StatusOK,
+				endpoint:       testCfg.e.characters.endpoint,
+				handler:        testCfg.HandleCharacters,
+			},
+			count: 4,
+			results: []string{
+				"default-abilities",
+				"std-sg-abilities",
+				"exp-sg-abilities",
+				"overdrive-abilities",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/character-classes/sections",
+				expectedStatus: http.StatusOK,
+				endpoint:       testCfg.e.characterClasses.endpoint,
+				handler:        testCfg.HandleCharacterClasses,
+			},
+			count: 2,
+			results: []string{
+				"default-abilities",
+				"learnable-abilities",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       testCfg.e.arenaCreations.endpoint,
 				handler:        testCfg.HandleArenaCreations,
 			},
 			count: 0,
+			results: []string{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -80,6 +123,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleBlitzballPrizes,
 			},
 			count: 0,
+			results: []string{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -89,6 +133,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleFMVs,
 			},
 			count: 0,
+			results: []string{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -97,9 +142,10 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.monsters.endpoint,
 				handler:        testCfg.HandleMonsters,
 			},
-			count: 3,
+			count: 4,
 			results: []string{
 				"simple",
+				"abilities",
 				"areas",
 				"monster-formations",
 			},
@@ -125,6 +171,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleOverdriveModes,
 			},
 			count: 0,
+			results: []string{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -146,6 +193,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleSongs,
 			},
 			count: 0,
+			results: []string{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -167,6 +215,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleSubquests,
 			},
 			count: 0,
+			results: []string{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -176,6 +225,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleTreasures,
 			},
 			count: 0,
+			results: []string{},
 		},
 	}
 
