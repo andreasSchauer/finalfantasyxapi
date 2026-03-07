@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList], id int32) (PlayerAbility, error) {
-	ability, err := verifyParamsAndGet(r, i, id)
+	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
@@ -23,8 +23,8 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		ID:                    ability.ID,
 		Name:                  ability.Name,
 		Version:               ability.Version,
-		Specification: 		   ability.Specification,
-		UntypedAbility: 	   idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		Specification:         ability.Specification,
+		UntypedAbility:        idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
 		Description:           ability.Description,
 		Effect:                ability.Effect,
 		Rank:                  ability.Rank,
@@ -53,8 +53,6 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

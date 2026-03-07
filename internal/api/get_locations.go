@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList], id int32) (Location, error) {
-	location, err := verifyParamsAndGet(r, i, id)
+	location, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Location{}, err
 	}
@@ -37,8 +37,6 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

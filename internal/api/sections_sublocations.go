@@ -9,8 +9,8 @@ import (
 type SublocationSimple struct {
 	ID             int32               `json:"id"`
 	URL            string              `json:"url"`
-	ParentLocation SimpleRef           `json:"parent_location"`
 	Name           string              `json:"name"`
+	ParentLocation SimpleRef           `json:"parent_location"`
 	Shops          []ShopLocSimple     `json:"shops"`
 	Treasures      *TreasuresLocSimple `json:"treasures"`
 	Monsters       []string            `json:"monsters"`

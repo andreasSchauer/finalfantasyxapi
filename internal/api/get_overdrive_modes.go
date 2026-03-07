@@ -6,9 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList], id int32) (OverdriveMode, error) {
-	mode, err := verifyParamsAndGet(r, i, id)
+	mode, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return OverdriveMode{}, err
 	}

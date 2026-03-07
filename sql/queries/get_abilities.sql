@@ -144,6 +144,28 @@ JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
 ORDER BY a.id;
 
 
+-- name: GetAbilityIDsCanCrit :many
+SELECT DISTINCT a.id
+FROM abilities a
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN damages d ON j2.damage_id = d.id
+WHERE d.critical IS NOT NULL
+ORDER BY a.id;
+
+
+-- name: GetAbilityIDsBreakDmgLimit :many
+SELECT DISTINCT a.id
+FROM abilities a
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN damages d ON j2.damage_id = d.id
+WHERE d.break_dmg_limit IS NOT NULL
+ORDER BY a.id;
+
+
 -- name: GetAbilityIDsByElement :many
 SELECT DISTINCT a.id
 FROM abilities a
@@ -258,7 +280,7 @@ JOIN abilities a ON ea.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = $1
-ORDER BY a.id;
+ORDER BY ea.id;
 
 
 -- name: GetEnemyAbilityIDsDarkable :many
@@ -330,6 +352,30 @@ JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN status_conditions sc ON j2.status_condition_id = sc.id
 WHERE sc.id = $1
+ORDER BY ea.id;
+
+
+-- name: GetEnemyAbilityIDsCanCrit :many
+SELECT DISTINCT ea.id
+FROM enemy_abilities ea
+JOIN abilities a ON ea.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN damages d ON j2.damage_id = d.id
+WHERE d.critical IS NOT NULL
+ORDER BY ea.id;
+
+
+-- name: GetEnemyAbilityIDsBreakDmgLimit :many
+SELECT DISTINCT ea.id
+FROM enemy_abilities ea
+JOIN abilities a ON ea.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN damages d ON j2.damage_id = d.id
+WHERE d.break_dmg_limit IS NOT NULL
 ORDER BY ea.id;
 
 
@@ -420,7 +466,7 @@ JOIN abilities a ON ia.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = $1
-ORDER BY a.id;
+ORDER BY ia.id;
 
 
 -- name: GetItemAbilityIDsByRelatedStat :many
@@ -601,7 +647,7 @@ JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = $1
-ORDER BY a.id;
+ORDER BY ua.id;
 
 
 -- name: GetUnspecifiedAbilityIDsDarkable :many
@@ -750,7 +796,7 @@ JOIN abilities a ON oa.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = $1
-ORDER BY a.id;
+ORDER BY oa.id;
 
 
 -- name: GetOverdriveAbilityIDsDealsDelay :many
@@ -978,7 +1024,7 @@ JOIN abilities a ON pa.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = $1
-ORDER BY a.id;
+ORDER BY pa.id;
 
 
 -- name: GetPlayerAbilityIDsDarkable :many
@@ -1199,7 +1245,7 @@ JOIN abilities a ON tc.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = $1
-ORDER BY a.id;
+ORDER BY tc.id;
 
 
 -- name: GetTriggerCommandIDsWithStatChanges :many

@@ -8,10 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList], id int32) (ArenaCreation, error) {
-	creation, err := verifyParamsAndGet(r, i, id)
+	creation, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return ArenaCreation{}, err
 	}

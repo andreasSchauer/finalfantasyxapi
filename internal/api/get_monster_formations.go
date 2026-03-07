@@ -6,10 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList], id int32) (MonsterFormation, error) {
-	formation, err := verifyParamsAndGet(r, i, id)
+	formation, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return MonsterFormation{}, err
 	}

@@ -91,14 +91,20 @@ func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
 	return val, nil
 }
 
-// converts a list of ids into a slice and checks every id's validity
-func parseIdListQuery(r *http.Request, queryParam QueryType, maxID int) ([]int32, error) {
+// converts a list of ids into a slice and checks every id's validity. duplicates are simply filtered out.
+func parseIdListQuery[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, fetchLimit int) ([]int32, error) {
+	queryParam := i.queryLookup[queryName]
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
-		return nil, err
+		return nil, newHTTPError(http.StatusBadRequest, "parameter 'ids' can't be empty.", err)
 	}
 
-	ids, err := queryIDsToSlice(query, queryParam, maxID)
+	idStrs := querySplit(query, ",")
+	if len(idStrs) > fetchLimit {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("too many ids. the maximum amount of ids is %d", fetchLimit), nil)
+	}
+
+	ids, err := idStrsToUniqueIDs(idStrs, i.resourceType, len(i.objLookupID))
 	if err != nil {
 		return nil, err
 	}
@@ -106,8 +112,20 @@ func parseIdListQuery(r *http.Request, queryParam QueryType, maxID int) ([]int32
 	return ids, nil
 }
 
+// converts a list of unique ids into a slice and checks every id's validity. duplicates produce an error.
+func parseIdListQueryNoDupes(r *http.Request, queryParam QueryType, maxID int) ([]int32, error) {
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
 
+	ids, err := queryIDsToSliceNoDupes(query, queryParam, maxID)
+	if err != nil {
+		return nil, err
+	}
 
+	return ids, nil
+}
 
 func parseResTypeQuery(r *http.Request, queryParam QueryType) (string, string, error) {
 	query, err := checkEmptyQuery(r, queryParam)

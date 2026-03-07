@@ -6,10 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList], id int32) (Treasure, error) {
-	treasure, err := verifyParamsAndGet(r, i, id)
+	treasure, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Treasure{}, err
 	}

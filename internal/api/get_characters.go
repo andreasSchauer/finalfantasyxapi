@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList], id int32) (Character, error) {
-	character, err := verifyParamsAndGet(r, i, id)
+	character, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Character{}, err
 	}
@@ -18,27 +18,26 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 	}
 
 	response := Character{
-		ID: 					character.ID,
-		Name: 					character.Name,
-		Area: 					locAreaToAreaAPIResource(cfg, cfg.e.areas, character.LocationArea),
-		StoryOnly: 				character.StoryOnly,
-		CanFightUnderwater: 	character.CanFightUnderwater,
-		PhysAtkRange: 			character.PhysAtkRange,
-		WeaponType: 			character.WeaponType,
-		ArmorType: 				character.ArmorType,
-		CelestialWeapon: 		rel.CelestialWeapon,
-		OverdriveCommand: 		rel.OverdriveCommand,
-		CharacterClasses: 		rel.CharacterClasses,
-		BaseStats: 				namesToResourceAmounts(cfg, cfg.e.stats, character.BaseStats, newBaseStat),
-		DefaultAbilities: 		rel.DefaultAbilities,
+		ID:                     character.ID,
+		Name:                   character.Name,
+		Area:                   locAreaToAreaAPIResource(cfg, cfg.e.areas, character.LocationArea),
+		StoryOnly:              character.StoryOnly,
+		CanFightUnderwater:     character.CanFightUnderwater,
+		PhysAtkRange:           character.PhysAtkRange,
+		WeaponType:             character.WeaponType,
+		ArmorType:              character.ArmorType,
+		CelestialWeapon:        rel.CelestialWeapon,
+		OverdriveCommand:       rel.OverdriveCommand,
+		CharacterClasses:       rel.CharacterClasses,
+		BaseStats:              namesToResourceAmounts(cfg, cfg.e.stats, character.BaseStats, newBaseStat),
+		DefaultAbilities:       rel.DefaultAbilities,
 		StdSphereGridAbilities: rel.StdSphereGridAbilities,
 		ExpSphereGridAbilities: rel.ExpSphereGridAbilities,
-		OverdriveModes: 		rel.OverdriveModes,
+		OverdriveModes:         rel.OverdriveModes,
 	}
 
 	return response, nil
 }
-
 
 func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

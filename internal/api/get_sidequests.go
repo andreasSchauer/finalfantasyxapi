@@ -6,10 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList], id int32) (Sidequest, error) {
-	sidequest, err := verifyParamsAndGet(r, i, id)
+	sidequest, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Sidequest{}, err
 	}

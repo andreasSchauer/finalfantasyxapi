@@ -10,7 +10,7 @@ import (
 )
 
 func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, Ability, NamedAPIResource, NamedApiResourceList], id int32) (Ability, error) {
-	ability, err := verifyParamsAndGet(r, i, id)
+	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Ability{}, err
 	}
@@ -114,6 +114,8 @@ func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Abi
 		frl(idQuery(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), cfg.db.GetAbilityIDsByRemovedStatus)),
 		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetAbilityIDsByCanCopycat)),
 		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetAbilityIDsByAppearsInHelpBar)),
+		frl(boolQuery2(cfg, r, i, resources, "can_crit", cfg.db.GetAbilityIDsCanCrit)),
+		frl(boolQuery2(cfg, r, i, resources, "bdl", cfg.db.GetAbilityIDsBreakDmgLimit)),
 		frl(boolQuery2(cfg, r, i, resources, "phys_atk", cfg.db.GetAbilityIDsBasedOnPhysAttack)),
 		frl(boolQuery2(cfg, r, i, resources, "darkable", cfg.db.GetAbilityIDsDarkable)),
 		frl(boolQuery2(cfg, r, i, resources, "silenceable", cfg.db.GetAbilityIDsSilenceable)),

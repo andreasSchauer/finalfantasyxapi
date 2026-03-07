@@ -26,7 +26,7 @@ func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryP
 }
 
 func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32, error) {
-	eaPairs := strings.Split(query, ",")
+	eaPairs := querySplit(query, ",")
 	var ids []int32
 	elemMap := make(map[int32]bool)
 

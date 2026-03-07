@@ -2423,17 +2423,17 @@ func (ns NullSpecialActionType) Value() (driver.Value, error) {
 type TargetType string
 
 const (
-	TargetTypeSelf            TargetType = "self"
-	TargetTypeSingleCharacter TargetType = "single-character"
-	TargetTypeSingleEnemy     TargetType = "single-enemy"
-	TargetTypeSingleTarget    TargetType = "single-target"
-	TargetTypeRandomCharacter TargetType = "random-character"
-	TargetTypeRandomEnemy     TargetType = "random-enemy"
-	TargetTypeAllCharacters   TargetType = "all-characters"
-	TargetTypeAllEnemies      TargetType = "all-enemies"
-	TargetTypeTargetParty     TargetType = "target-party"
-	TargetTypeNTargets        TargetType = "n-targets"
-	TargetTypeEveryone        TargetType = "everyone"
+	TargetTypeSelf         TargetType = "self"
+	TargetTypeSingleAlly   TargetType = "single-ally"
+	TargetTypeSingleEnemy  TargetType = "single-enemy"
+	TargetTypeSingleTarget TargetType = "single-target"
+	TargetTypeRandomAlly   TargetType = "random-ally"
+	TargetTypeRandomEnemy  TargetType = "random-enemy"
+	TargetTypeAllAllies    TargetType = "all-allies"
+	TargetTypeAllEnemies   TargetType = "all-enemies"
+	TargetTypeTargetParty  TargetType = "target-party"
+	TargetTypeNTargets     TargetType = "n-targets"
+	TargetTypeEveryone     TargetType = "everyone"
 )
 
 func (e *TargetType) Scan(src interface{}) error {

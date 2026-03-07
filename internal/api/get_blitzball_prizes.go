@@ -6,9 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList], id int32) (BlitzballPrize, error) {
-	bbPos, err := verifyParamsAndGet(r, i, id)
+	bbPos, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return BlitzballPrize{}, err
 	}

@@ -12,8 +12,10 @@ type QueryType struct {
 	Description      string                      `json:"description"`
 	Usage            string                      `json:"usage"`
 	ExampleUses      []string                    `json:"example_uses"`
-	ForList          bool                        `json:"for_list"`
+	DefaultOnly      bool                        `json:"only_use_alone"`
 	ForSingle        bool                        `json:"for_single"`
+	ForList          bool                        `json:"for_list"`
+	ForSegment       *string                     `json:"for_segment"`
 	IsRequired       bool                        `json:"is_required"`
 	TypeLookup       map[string]TypedAPIResource `json:"-"`
 	RequiredParams   []string                    `json:"required_params,omitempty"`
@@ -66,7 +68,7 @@ func (cfg *Config) QueryLookupInit() {
 
 	cfg.q.defaultParams = map[string]QueryType{
 		"limit": {
-			ID:          -2,
+			ID:          1001,
 			Name:        "limit",
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20. The value 'max' can also be used to forgo pagination of lists entirely.",
 			Usage:       "?limit={int|'max'}",
@@ -82,7 +84,7 @@ func (cfg *Config) QueryLookupInit() {
 			DefaultVal: h.GetIntPtr(20),
 		},
 		"offset": {
-			ID:          -1,
+			ID:          1002,
 			Name:        "offset",
 			Description: "Sets the offset from where to start the displayed entries in a list response. If not set manually, the default is 0.",
 			Usage:       "?offset={int}",
@@ -121,19 +123,33 @@ func (cfg *Config) QueryLookupInit() {
 }
 
 func (cfg *Config) assignDefaultParams() map[string]QueryType {
-	return cfg.completeQueryTypeInit(createEmptyQueryMap())
+	return cfg.completeQueryTypeInit(createEmptyQueryMap(), false)
 }
 
 func createEmptyQueryMap() map[string]QueryType {
 	return make(map[string]QueryType)
 }
 
-func (cfg *Config) completeQueryTypeInit(params map[string]QueryType) map[string]QueryType {
+func (cfg *Config) completeQueryTypeInit(params map[string]QueryType, hasSimpleView bool) map[string]QueryType {
 	maps.Copy(params, cfg.q.defaultParams)
 
 	for key, entry := range params {
 		entry.Name = key
 		params[key] = entry
+	}
+
+	if hasSimpleView {
+		params["ids"] = QueryType{
+			ID:          1003,
+			Name:        "ids",
+			Description: "Used to input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",
+			Usage:       "?ids={id},...",
+			ExampleUses: []string{"?ids=1,3,4"},
+			DefaultOnly: true,
+			ForList:     false,
+			ForSingle:   false,
+			ForSegment:  h.GetStrPtr("simple"),
+		}
 	}
 
 	return params
@@ -169,7 +185,7 @@ func (cfg *Config) initAeonsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, false)
 	cfg.q.aeons = params
 }
 
@@ -327,7 +343,7 @@ func (cfg *Config) initAreasParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.areas = params
 }
 
@@ -344,7 +360,7 @@ func (cfg *Config) initArenaCreationsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, false)
 	cfg.q.arenaCreations = params
 }
 
@@ -361,7 +377,7 @@ func (cfg *Config) initBlitzballPrizesParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, false)
 	cfg.q.blitzballPrizes = params
 }
 
@@ -385,7 +401,7 @@ func (cfg *Config) initCharactersParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, false)
 	cfg.q.characters = params
 }
 
@@ -402,7 +418,7 @@ func (cfg *Config) initCharacterClassesParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, false)
 	cfg.q.characterClasses = params
 }
 
@@ -419,7 +435,7 @@ func (cfg *Config) initFMVsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, false)
 	cfg.q.fmvs = params
 }
 
@@ -666,7 +682,7 @@ func (cfg *Config) initMonstersParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.monsters = params
 }
 
@@ -728,7 +744,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.monsterFormations = params
 }
 
@@ -745,7 +761,7 @@ func (cfg *Config) initOverdriveModesParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, false)
 	cfg.q.overdriveModes = params
 }
 
@@ -761,18 +777,72 @@ func (cfg *Config) initAbilitiesParams() {
 			TypeLookup:  cfg.t.AbilityType.lookup,
 			References:  []string{createListURL(cfg, "ability-type")},
 		},
-		"damage_type": {
+		"rank": {
 			ID:          2,
-			Description: "Searches for abilities that deal the specified type of damage.",
-			Usage:       "?damage_type={name|id}",
-			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+			Description: "Searches for abilities with the specified rank.",
+			Usage:       "?rank={int}",
+			ExampleUses: []string{"?rank=3"},
 			ForList:     true,
 			ForSingle:   false,
-			TypeLookup:  cfg.t.DamageType.lookup,
-			References:  []string{createListURL(cfg, "damage-type")},
+		},
+		"copycat": {
+			ID:          3,
+			Description: "Searches for abilities that can be copied by 'copycat'.",
+			Usage:       "?copycat={bool}",
+			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"help_bar": {
+			ID:          4,
+			Description: "Searches for abilities whose names appear in the help bar.",
+			Usage:       "?help_bar={bool}",
+			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"target_type": {
+			ID:          5,
+			Description: "Searches for abilities with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"phys_atk": {
+			ID:          6,
+			Description: "Searches for abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
+			Usage:       "?phys_atk={bool}",
+			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"darkable": {
+			ID:          7,
+			Description: "Searches for abilities that are affected by 'darkness'.",
+			Usage:       "?darkable={bool}",
+			ExampleUses: []string{"?darkable=true", "?darkable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"silenceable": {
+			ID:          8,
+			Description: "Searches for abilities that are affected by 'silence'.",
+			Usage:       "?silenceable={bool}",
+			ExampleUses: []string{"?silenceable=true", "?silenceable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"reflectable": {
+			ID:          9,
+			Description: "Searches for abilities that are affected by 'reflect'.",
+			Usage:       "?reflectable={bool}",
+			ExampleUses: []string{"?reflectable=true", "?reflectable=false"},
+			ForList:     true,
+			ForSingle:   false,
 		},
 		"attack_type": {
-			ID:          3,
+			ID:          10,
 			Description: "Searches for abilities with battle interactions of the specified attack type.",
 			Usage:       "?attack_type={name|id}",
 			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
@@ -781,8 +851,18 @@ func (cfg *Config) initAbilitiesParams() {
 			TypeLookup:  cfg.t.AttackType.lookup,
 			References:  []string{createListURL(cfg, "attack-type")},
 		},
+		"damage_type": {
+			ID:          11,
+			Description: "Searches for abilities that deal the specified type of damage.",
+			Usage:       "?damage_type={name|id}",
+			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.DamageType.lookup,
+			References:  []string{createListURL(cfg, "damage-type")},
+		},
 		"damage_formula": {
-			ID:          4,
+			ID:          12,
 			Description: "Searches for abilities that use the specified formula to calculate their damage.",
 			Usage:       "?damage_formula={name|id}",
 			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
@@ -791,16 +871,24 @@ func (cfg *Config) initAbilitiesParams() {
 			TypeLookup:  cfg.t.DamageFormula.lookup,
 			References:  []string{createListURL(cfg, "damage-formula")},
 		},
-		"rank": {
-			ID:          5,
-			Description: "Searches for abilities with the specified rank.",
-			Usage:       "?rank={int}",
-			ExampleUses: []string{"?rank=3"},
+		"can_crit": {
+			ID:          13,
+			Description: "Searches for abilities that can land critical hits.",
+			Usage:       "?can_crit={bool}",
+			ExampleUses: []string{"?can_crit=true", "?can_crit=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"bdl": {
+			ID:          14,
+			Description: "Searches for abilities that can break the damage cap of 9999.",
+			Usage:       "?bdl={bool}",
+			ExampleUses: []string{"?bdl=true", "?bdl=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
 		"element": {
-			ID:          6,
+			ID:          15,
 			Description: "Searches for abilities that deal elemental damage based on the specified element.",
 			Usage:       "?element={name|id}",
 			ExampleUses: []string{"?element=3", "?element=fire"},
@@ -808,8 +896,16 @@ func (cfg *Config) initAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements")},
 		},
+		"delay": {
+			ID:          16,
+			Description: "Searches for abilities that deal delay.",
+			Usage:       "?delay={bool}",
+			ExampleUses: []string{"?delay=true", "?delay=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
 		"status_inflict": {
-			ID:          7,
+			ID:          17,
 			Description: "Searches for abilities that can inflict the specified status condition.",
 			Usage:       "?status_inflict={id}",
 			ExampleUses: []string{"?status_inflict=3"},
@@ -818,7 +914,7 @@ func (cfg *Config) initAbilitiesParams() {
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
 		"status_remove": {
-			ID:          8,
+			ID:          18,
 			Description: "Searches for abilities that can remove the specified status condition.",
 			Usage:       "?status_remove={id}",
 			ExampleUses: []string{"?status_remove=3"},
@@ -826,64 +922,8 @@ func (cfg *Config) initAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"copycat": {
-			ID:          9,
-			Description: "Searches for abilities that can be copied by 'copycat'.",
-			Usage:       "?copycat={bool}",
-			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"help_bar": {
-			ID:          10,
-			Description: "Searches for abilities whose names appear in the help bar.",
-			Usage:       "?help_bar={bool}",
-			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"phys_atk": {
-			ID:          11,
-			Description: "Searches for abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
-			Usage:       "?phys_atk={bool}",
-			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"darkable": {
-			ID:          12,
-			Description: "Searches for abilities that are affected by 'darkness'.",
-			Usage:       "?darkable={bool}",
-			ExampleUses: []string{"?darkable=true", "?darkable=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"silenceable": {
-			ID:          13,
-			Description: "Searches for abilities that are affected by 'silence'.",
-			Usage:       "?silenceable={bool}",
-			ExampleUses: []string{"?silenceable=true", "?silenceable=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"reflectable": {
-			ID:          14,
-			Description: "Searches for abilities that are affected by 'reflect'.",
-			Usage:       "?reflectable={bool}",
-			ExampleUses: []string{"?reflectable=true", "?reflectable=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"delay": {
-			ID:          15,
-			Description: "Searches for abilities that deal delay.",
-			Usage:       "?delay={bool}",
-			ExampleUses: []string{"?delay=true", "?delay=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
 		"stat_changes": {
-			ID:          16,
+			ID:          19,
 			Description: "Searches for abilities that cause stat changes.",
 			Usage:       "?stat_changes={bool}",
 			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
@@ -891,31 +931,39 @@ func (cfg *Config) initAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"mod_changes": {
-			ID:          17,
+			ID:          20,
 			Description: "Searches for abilities that cause modifier changes.",
 			Usage:       "?mod_changes={bool}",
 			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"target_type": {
-			ID:          7,
-			Description: "Searches for abilities with the specified target type.",
-			Usage:       "?target_type={name|id}",
-			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
-			ForList:     true,
-			ForSingle:   false,
-		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.abilities = params
 }
 
 func (cfg *Config) initEnemyAbilitiesParams() {
 	params := map[string]QueryType{
-		"monster": {
+		"rank": {
 			ID:          1,
+			Description: "Searches for enemy abilities with the specified rank.",
+			Usage:       "?rank={int}",
+			ExampleUses: []string{"?rank=3"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"help_bar": {
+			ID:          2,
+			Description: "Searches for enemy abilities whose names appear in the help bar.",
+			Usage:       "?help_bar={bool}",
+			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"monster": {
+			ID:          3,
 			Description: "Searches for enemy abilities that can be used by the specified monster.",
 			Usage:       "?monster={id}",
 			ExampleUses: []string{"?monster=17"},
@@ -923,18 +971,40 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "monsters")},
 		},
-		"damage_type": {
-			ID:          2,
-			Description: "Searches for enemy abilities that deal the specified type of damage.",
-			Usage:       "?damage_type={name|id}",
-			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+		"target_type": {
+			ID:          4,
+			Description: "Searches for enemy abilities with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
 			ForList:     true,
 			ForSingle:   false,
-			TypeLookup:  cfg.t.DamageType.lookup,
-			References:  []string{createListURL(cfg, "damage-type")},
+		},
+		"darkable": {
+			ID:          5,
+			Description: "Searches for enemy abilities that are affected by 'darkness'.",
+			Usage:       "?darkable={bool}",
+			ExampleUses: []string{"?darkable=true", "?darkable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"silenceable": {
+			ID:          6,
+			Description: "Searches for enemy abilities that are affected by 'silence'.",
+			Usage:       "?silenceable={bool}",
+			ExampleUses: []string{"?silenceable=true", "?silenceable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"reflectable": {
+			ID:          7,
+			Description: "Searches for enemy abilities that are affected by 'reflect'.",
+			Usage:       "?reflectable={bool}",
+			ExampleUses: []string{"?reflectable=true", "?reflectable=false"},
+			ForList:     true,
+			ForSingle:   false,
 		},
 		"attack_type": {
-			ID:          3,
+			ID:          8,
 			Description: "Searches for enemy abilities with battle interactions of the specified attack type.",
 			Usage:       "?attack_type={name|id}",
 			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
@@ -943,8 +1013,18 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			TypeLookup:  cfg.t.AttackType.lookup,
 			References:  []string{createListURL(cfg, "attack-type")},
 		},
+		"damage_type": {
+			ID:          9,
+			Description: "Searches for enemy abilities that deal the specified type of damage.",
+			Usage:       "?damage_type={name|id}",
+			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.DamageType.lookup,
+			References:  []string{createListURL(cfg, "damage-type")},
+		},
 		"damage_formula": {
-			ID:          4,
+			ID:          10,
 			Description: "Searches for enemy abilities that use the specified formula to calculate their damage.",
 			Usage:       "?damage_formula={name|id}",
 			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
@@ -953,16 +1033,24 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			TypeLookup:  cfg.t.DamageFormula.lookup,
 			References:  []string{createListURL(cfg, "damage-formula")},
 		},
-		"rank": {
-			ID:          5,
-			Description: "Searches for enemy abilities with the specified rank.",
-			Usage:       "?rank={int}",
-			ExampleUses: []string{"?rank=3"},
+		"can_crit": {
+			ID:          11,
+			Description: "Searches for enemy abilities that can land critical hits.",
+			Usage:       "?can_crit={bool}",
+			ExampleUses: []string{"?can_crit=true", "?can_crit=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"bdl": {
+			ID:          12,
+			Description: "Searches for enemy abilities that can break the damage cap of 9999.",
+			Usage:       "?bdl={bool}",
+			ExampleUses: []string{"?bdl=true", "?bdl=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
 		"element": {
-			ID:          6,
+			ID:          13,
 			Description: "Searches for enemy abilities that deal elemental damage based on the specified element.",
 			Usage:       "?element={name|id}",
 			ExampleUses: []string{"?element=3", "?element=fire"},
@@ -970,8 +1058,16 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements")},
 		},
+		"delay": {
+			ID:          14,
+			Description: "Searches for enemy abilities that deal delay.",
+			Usage:       "?delay={bool}",
+			ExampleUses: []string{"?delay=true", "?delay=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
 		"status_inflict": {
-			ID:          7,
+			ID:          15,
 			Description: "Searches for enemy abilities that can inflict the specified status condition.",
 			Usage:       "?status_inflict={id}",
 			ExampleUses: []string{"?status_inflict=3"},
@@ -980,7 +1076,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
 		"status_remove": {
-			ID:          8,
+			ID:          16,
 			Description: "Searches for enemy abilities that can remove the specified status condition.",
 			Usage:       "?status_remove={id}",
 			ExampleUses: []string{"?status_remove=3"},
@@ -988,57 +1084,9 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"help_bar": {
-			ID:          9,
-			Description: "Searches for enemy abilities whose names appear in the help bar.",
-			Usage:       "?help_bar={bool}",
-			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"darkable": {
-			ID:          10,
-			Description: "Searches for enemy abilities that are affected by 'darkness'.",
-			Usage:       "?darkable={bool}",
-			ExampleUses: []string{"?darkable=true", "?darkable=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"silenceable": {
-			ID:          11,
-			Description: "Searches for enemy abilities that are affected by 'silence'.",
-			Usage:       "?silenceable={bool}",
-			ExampleUses: []string{"?silenceable=true", "?silenceable=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"reflectable": {
-			ID:          12,
-			Description: "Searches for enemy abilities that are affected by 'reflect'.",
-			Usage:       "?reflectable={bool}",
-			ExampleUses: []string{"?reflectable=true", "?reflectable=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"delay": {
-			ID:          13,
-			Description: "Searches for enemy abilities that deal delay.",
-			Usage:       "?delay={bool}",
-			ExampleUses: []string{"?delay=true", "?delay=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"target_type": {
-			ID:          14,
-			Description: "Searches for enemy abilities with the specified target type.",
-			Usage:       "?target_type={name|id}",
-			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
-			ForList:     true,
-			ForSingle:   false,
-		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.enemyAbilities = params
 }
 
@@ -1054,8 +1102,25 @@ func (cfg *Config) initItemAbilitiesParams() {
 			TypeLookup:  cfg.t.ItemCategory.lookup,
 			References:  []string{createListURL(cfg, "item-category")},
 		},
-		"attack_type": {
+		"related_stat": {
 			ID:          2,
+			Description: "Searches for item abilities that are related to the specified stat.",
+			Usage:       "?related_stat={name|id}",
+			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "stats")},
+		},
+		"target_type": {
+			ID:          3,
+			Description: "Searches for item abilities with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"attack_type": {
+			ID:          4,
 			Description: "Searches for item abilities with battle interactions of the specified attack type.",
 			Usage:       "?attack_type={name|id}",
 			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
@@ -1065,7 +1130,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			References:  []string{createListURL(cfg, "attack-type")},
 		},
 		"damage_formula": {
-			ID:          3,
+			ID:          5,
 			Description: "Searches for item abilities that use the specified formula to calculate their damage.",
 			Usage:       "?damage_formula={name|id}",
 			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
@@ -1075,7 +1140,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			References:  []string{createListURL(cfg, "damage-formula")},
 		},
 		"element": {
-			ID:          4,
+			ID:          6,
 			Description: "Searches for item abilities that deal elemental damage based on the specified element.",
 			Usage:       "?element={name|id}",
 			ExampleUses: []string{"?element=3", "?element=fire"},
@@ -1083,17 +1148,16 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements")},
 		},
-		"related_stat": {
-			ID:          5,
-			Description: "Searches for item abilities that are related to the specified stat.",
-			Usage:       "?related_stat={name|id}",
-			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
+		"delay": {
+			ID:          7,
+			Description: "Searches for item abilities that deal delay.",
+			Usage:       "?delay={bool}",
+			ExampleUses: []string{"?delay=true", "?delay=false"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "stats")},
 		},
 		"status_inflict": {
-			ID:          6,
+			ID:          8,
 			Description: "Searches for item abilities that can inflict the specified status condition.",
 			Usage:       "?status_inflict={id}",
 			ExampleUses: []string{"?status_inflict=3"},
@@ -1102,7 +1166,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
 		"status_remove": {
-			ID:          7,
+			ID:          9,
 			Description: "Searches for item abilities that can remove the specified status condition.",
 			Usage:       "?status_remove={id}",
 			ExampleUses: []string{"?status_remove=3"},
@@ -1110,16 +1174,8 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"delay": {
-			ID:          8,
-			Description: "Searches for item abilities that deal delay.",
-			Usage:       "?delay={bool}",
-			ExampleUses: []string{"?delay=true", "?delay=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
 		"stat_changes": {
-			ID:          9,
+			ID:          10,
 			Description: "Searches for item abilities that cause stat changes.",
 			Usage:       "?stat_changes={bool}",
 			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
@@ -1127,144 +1183,57 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"mod_changes": {
-			ID:          10,
+			ID:          11,
 			Description: "Searches for item abilities that cause modifier changes.",
 			Usage:       "?mod_changes={bool}",
 			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"target_type": {
-			ID:          11,
-			Description: "Searches for item abilities with the specified target type.",
-			Usage:       "?target_type={name|id}",
-			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
-			ForList:     true,
-			ForSingle:   false,
-		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.itemAbilities = params
 }
 
-func (cfg *Config) initUnspecifiedAbilitiesParams() {
+func (cfg *Config) initOverdriveAbilitiesParams() {
 	params := map[string]QueryType{
-		"user": {
-			ID:              1,
-			Description:     "If an unspecified ability is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
-			Usage:           "?user={type}:{name|id}",
-			ExampleUses:     []string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
-			ForList:         false,
-			ForSingle:       true,
-			AllowedResTypes: []string{"character", "aeon"},
-		},
-		"damage_type": {
-			ID:          1,
-			Description: "Searches for unspecified abilities that deal the specified type of damage.",
-			Usage:       "?damage_type={name|id}",
-			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.DamageType.lookup,
-			References:  []string{createListURL(cfg, "damage-type")},
-		},
-		"attack_type": {
-			ID:          2,
-			Description: "Searches for unspecified abilities with battle interactions of the specified attack type.",
-			Usage:       "?attack_type={name|id}",
-			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.AttackType.lookup,
-			References:  []string{createListURL(cfg, "attack-type")},
-		},
-		"damage_formula": {
-			ID:          3,
-			Description: "Searches for unspecified abilities that use the specified formula to calculate their damage.",
-			Usage:       "?damage_formula={name|id}",
-			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.DamageFormula.lookup,
-			References:  []string{createListURL(cfg, "damage-formula")},
-		},
 		"rank": {
-			ID:          4,
-			Description: "Searches for unspecified abilities with the specified rank.",
+			ID:          1,
+			Description: "Searches for overdrive abilities with the specified rank.",
 			Usage:       "?rank={int}",
 			ExampleUses: []string{"?rank=3"},
 			ForList:     true,
 			ForSingle:   false,
 		},
 		"char_class": {
-			ID:          5,
-			Description: "Searches for unspecified abilities that are learned by the specified character class.",
+			ID:          2,
+			Description: "Searches for overdrive abilities that are learned by the specified character class.",
 			Usage:       "?char_class={name|id}",
 			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
 		},
-		"status_inflict": {
-			ID:          6,
-			Description: "Searches for unspecified abilities that can inflict the specified status condition.",
-			Usage:       "?status_inflict={id}",
-			ExampleUses: []string{"?status_inflict=3"},
+		"related_stat": {
+			ID:          3,
+			Description: "Searches for overdrive abilities that are related to the specified stat.",
+			Usage:       "?related_stat={name|id}",
+			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
-		},
-		"copycat": {
-			ID:          7,
-			Description: "Searches for unspecified abilities that can be copied by 'copycat'.",
-			Usage:       "?copycat={bool}",
-			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"help_bar": {
-			ID:          8,
-			Description: "Searches for unspecified abilities whose names appear in the help bar.",
-			Usage:       "?help_bar={bool}",
-			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"phys_atk": {
-			ID:          9,
-			Description: "Searches for unspecified abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
-			Usage:       "?phys_atk={bool}",
-			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"darkable": {
-			ID:          10,
-			Description: "Searches for unspecified abilities that are affected by 'darkness'.",
-			Usage:       "?darkable={bool}",
-			ExampleUses: []string{"?darkable=true", "?darkable=false"},
-			ForList:     true,
-			ForSingle:   false,
+			References:  []string{createListURL(cfg, "stats")},
 		},
 		"target_type": {
-			ID:          11,
-			Description: "Searches for unspecified abilities with the specified target type.",
+			ID:          4,
+			Description: "Searches for overdrive abilities with the specified target type.",
 			Usage:       "?target_type={name|id}",
 			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
 			ForList:     true,
 			ForSingle:   false,
 		},
-	}
-
-	params = cfg.completeQueryTypeInit(params)
-	cfg.q.unspecifiedAbilities = params
-}
-
-func (cfg *Config) initOverdriveAbilitiesParams() {
-	params := map[string]QueryType{
 		"attack_type": {
-			ID:          1,
+			ID:          5,
 			Description: "Searches for overdrive abilities with battle interactions of the specified attack type.",
 			Usage:       "?attack_type={name|id}",
 			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
@@ -1274,7 +1243,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			References:  []string{createListURL(cfg, "attack-type")},
 		},
 		"damage_formula": {
-			ID:          2,
+			ID:          6,
 			Description: "Searches for overdrive abilities that use the specified formula to calculate their damage.",
 			Usage:       "?damage_formula={name|id}",
 			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
@@ -1283,16 +1252,8 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			TypeLookup:  cfg.t.DamageFormula.lookup,
 			References:  []string{createListURL(cfg, "damage-formula")},
 		},
-		"rank": {
-			ID:          3,
-			Description: "Searches for overdrive abilities with the specified rank.",
-			Usage:       "?rank={int}",
-			ExampleUses: []string{"?rank=3"},
-			ForList:     true,
-			ForSingle:   false,
-		},
 		"element": {
-			ID:          4,
+			ID:          7,
 			Description: "Searches for overdrive abilities that deal elemental damage based on the specified element.",
 			Usage:       "?element={name|id}",
 			ExampleUses: []string{"?element=3", "?element=fire"},
@@ -1300,26 +1261,16 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements")},
 		},
-		"char_class": {
-			ID:          5,
-			Description: "Searches for overdrive abilities that are learned by the specified character class.",
-			Usage:       "?char_class={name|id}",
-			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
+		"delay": {
+			ID:          8,
+			Description: "Searches for overdrive abilities that deal delay.",
+			Usage:       "?delay={bool}",
+			ExampleUses: []string{"?delay=true", "?delay=false"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "character-classes")},
-		},
-		"related_stat": {
-			ID:          6,
-			Description: "Searches for overdrive abilities that are related to the specified stat.",
-			Usage:       "?related_stat={name|id}",
-			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
-			ForList:     true,
-			ForSingle:   false,
-			References:  []string{createListURL(cfg, "stats")},
 		},
 		"status_inflict": {
-			ID:          7,
+			ID:          9,
 			Description: "Searches for overdrive abilities that can inflict the specified status condition.",
 			Usage:       "?status_inflict={id}",
 			ExampleUses: []string{"?status_inflict=3"},
@@ -1328,7 +1279,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
 		"status_remove": {
-			ID:          8,
+			ID:          10,
 			Description: "Searches for overdrive abilities that can remove the specified status condition.",
 			Usage:       "?status_remove={id}",
 			ExampleUses: []string{"?status_remove=3"},
@@ -1336,16 +1287,8 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"delay": {
-			ID:          9,
-			Description: "Searches for overdrive abilities that deal delay.",
-			Usage:       "?delay={bool}",
-			ExampleUses: []string{"?delay=true", "?delay=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
 		"stat_changes": {
-			ID:          10,
+			ID:          11,
 			Description: "Searches for overdrive abilities that cause stat changes.",
 			Usage:       "?stat_changes={bool}",
 			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
@@ -1353,24 +1296,16 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"mod_changes": {
-			ID:          11,
+			ID:          12,
 			Description: "Searches for overdrive abilities that cause modifier changes.",
 			Usage:       "?mod_changes={bool}",
 			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"target_type": {
-			ID:          12,
-			Description: "Searches for overdrive abilities with the specified target type.",
-			Usage:       "?target_type={name|id}",
-			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
-			ForList:     true,
-			ForSingle:   false,
-		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.overdriveAbilities = params
 }
 
@@ -1385,8 +1320,32 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:       true,
 			AllowedResTypes: []string{"character", "aeon"},
 		},
-		"category": {
+		"rank": {
 			ID:          2,
+			Description: "Searches for player abilities with the specified rank.",
+			Usage:       "?rank={int}",
+			ExampleUses: []string{"?rank=3"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"copycat": {
+			ID:          3,
+			Description: "Searches for player abilities that can be copied by 'copycat'.",
+			Usage:       "?copycat={bool}",
+			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"help_bar": {
+			ID:          4,
+			Description: "Searches for player abilities whose names appear in the help bar.",
+			Usage:       "?help_bar={bool}",
+			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"category": {
+			ID:          5,
 			Description: "Searches for player abilities that are of the specified player ability category.",
 			Usage:       "?category={name|id}",
 			ExampleUses: []string{"?category=black-magic", "?category=2"},
@@ -1395,38 +1354,16 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			TypeLookup:  cfg.t.PlayerAbilityCategory.lookup,
 			References:  []string{createListURL(cfg, "player-ability-category")},
 		},
-		"damage_type": {
-			ID:          3,
-			Description: "Searches for player abilities that deal the specified type of damage.",
-			Usage:       "?damage_type={name|id}",
-			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+		"outside_battle": {
+			ID:          6,
+			Description: "Searches for player abilities that can be used outside of battle, in the 'abilities' menu.",
+			Usage:       "?outside_battle={bool}",
+			ExampleUses: []string{"?outside_battle=true", "?outside_battle=false"},
 			ForList:     true,
 			ForSingle:   false,
-			TypeLookup:  cfg.t.DamageType.lookup,
-			References:  []string{createListURL(cfg, "damage-type")},
-		},
-		"attack_type": {
-			ID:          4,
-			Description: "Searches for player abilities with battle interactions of the specified attack type.",
-			Usage:       "?attack_type={name|id}",
-			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.AttackType.lookup,
-			References:  []string{createListURL(cfg, "attack-type")},
-		},
-		"damage_formula": {
-			ID:          5,
-			Description: "Searches for player abilities that use the specified formula to calculate their damage.",
-			Usage:       "?damage_formula={name|id}",
-			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.DamageFormula.lookup,
-			References:  []string{createListURL(cfg, "damage-formula")},
 		},
 		"mp": {
-			ID:          6,
+			ID:          7,
 			Description: "Searches for player abilities with the specified mp cost.",
 			Usage:       "?mp={int}",
 			ExampleUses: []string{"?mp=16"},
@@ -1434,7 +1371,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"mp_min": {
-			ID:          7,
+			ID:          8,
 			Description: "Searches for player abilities with an mp cost that is equal or more than the specified amount.",
 			Usage:       "?mp_min={int}",
 			ExampleUses: []string{"?mp_min=16"},
@@ -1442,29 +1379,21 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"mp_max": {
-			ID:          8,
+			ID:          9,
 			Description: "Searches for player abilities with an mp cost that is equal or less than the specified amount.",
 			Usage:       "?mp_max={int}",
 			ExampleUses: []string{"?mp_max=16"},
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"rank": {
-			ID:          9,
-			Description: "Searches for player abilities with the specified rank.",
-			Usage:       "?rank={int}",
-			ExampleUses: []string{"?rank=3"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"element": {
+		"related_stat": {
 			ID:          10,
-			Description: "Searches for player abilities that deal elemental damage based on the specified element.",
-			Usage:       "?element={name|id}",
-			ExampleUses: []string{"?element=3", "?element=fire"},
+			Description: "Searches for player abilities that are related to the specified stat.",
+			Usage:       "?related_stat={name|id}",
+			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "elements")},
+			References:  []string{createListURL(cfg, "stats")},
 		},
 		"char_class": {
 			ID:          11,
@@ -1475,44 +1404,8 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
 		},
-		"learn_item": {
-			ID:          12,
-			Description: "Searches for player abilities an aeon can learn via the specified item.",
-			Usage:       "?learn_item={id}",
-			ExampleUses: []string{"?learn_item=3"},
-			ForList:     true,
-			ForSingle:   false,
-			References:  []string{createListURL(cfg, "items")},
-		},
-		"related_stat": {
-			ID:          13,
-			Description: "Searches for player abilities that are related to the specified stat.",
-			Usage:       "?related_stat={name|id}",
-			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
-			ForList:     true,
-			ForSingle:   false,
-			References:  []string{createListURL(cfg, "stats")},
-		},
-		"status_inflict": {
-			ID:          14,
-			Description: "Searches for player abilities that can inflict the specified status condition.",
-			Usage:       "?status_inflict={id}",
-			ExampleUses: []string{"?status_inflict=3"},
-			ForList:     true,
-			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
-		},
-		"status_remove": {
-			ID:          15,
-			Description: "Searches for player abilities that can remove the specified status condition.",
-			Usage:       "?status_remove={id}",
-			ExampleUses: []string{"?status_remove=3"},
-			ForList:     true,
-			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
-		},
 		"std_sg": {
-			ID:          16,
+			ID:          12,
 			Description: "Searches for player abilities that are located on the specified character's standard sphere grid.",
 			Usage:       "?std_sg={name|id}",
 			ExampleUses: []string{"?std_sg=3", "?std_sg=tidus"},
@@ -1521,7 +1414,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "characters")},
 		},
 		"exp_sg": {
-			ID:          17,
+			ID:          13,
 			Description: "Searches for player abilities that are located on the specified character's expert sphere grid.",
 			Usage:       "?exp_sg={name|id}",
 			ExampleUses: []string{"?exp_sg=3", "?exp_sg=tidus"},
@@ -1529,32 +1422,25 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "characters")},
 		},
-		"outside_battle": {
-			ID:          18,
-			Description: "Searches for player abilities that can be used outside of battle, in the 'abilities' menu.",
-			Usage:       "?outside_battle={bool}",
-			ExampleUses: []string{"?outside_battle=true", "?outside_battle=false"},
+		"learn_item": {
+			ID:          14,
+			Description: "Searches for player abilities an aeon can learn via the specified item.",
+			Usage:       "?learn_item={id}",
+			ExampleUses: []string{"?learn_item=3"},
 			ForList:     true,
 			ForSingle:   false,
+			References:  []string{createListURL(cfg, "items")},
 		},
-		"copycat": {
-			ID:          19,
-			Description: "Searches for player abilities that can be copied by 'copycat'.",
-			Usage:       "?copycat={bool}",
-			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
-		"help_bar": {
-			ID:          20,
-			Description: "Searches for player abilities whose names appear in the help bar.",
-			Usage:       "?help_bar={bool}",
-			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
+		"target_type": {
+			ID:          15,
+			Description: "Searches for player abilities with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
 			ForList:     true,
 			ForSingle:   false,
 		},
 		"phys_atk": {
-			ID:          21,
+			ID:          16,
 			Description: "Searches for player abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
 			Usage:       "?phys_atk={bool}",
 			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
@@ -1562,7 +1448,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"darkable": {
-			ID:          22,
+			ID:          17,
 			Description: "Searches for player abilities that are affected by 'darkness'.",
 			Usage:       "?darkable={bool}",
 			ExampleUses: []string{"?darkable=true", "?darkable=false"},
@@ -1570,7 +1456,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"silenceable": {
-			ID:          23,
+			ID:          18,
 			Description: "Searches for player abilities that are affected by 'silence'.",
 			Usage:       "?silenceable={bool}",
 			ExampleUses: []string{"?silenceable=true", "?silenceable=false"},
@@ -1578,23 +1464,80 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"reflectable": {
-			ID:          24,
+			ID:          19,
 			Description: "Searches for player abilities that are affected by 'reflect'.",
 			Usage:       "?reflectable={bool}",
 			ExampleUses: []string{"?reflectable=true", "?reflectable=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
+		"attack_type": {
+			ID:          20,
+			Description: "Searches for player abilities with battle interactions of the specified attack type.",
+			Usage:       "?attack_type={name|id}",
+			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AttackType.lookup,
+			References:  []string{createListURL(cfg, "attack-type")},
+		},
+		"damage_type": {
+			ID:          21,
+			Description: "Searches for player abilities that deal the specified type of damage.",
+			Usage:       "?damage_type={name|id}",
+			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.DamageType.lookup,
+			References:  []string{createListURL(cfg, "damage-type")},
+		},
+		"damage_formula": {
+			ID:          22,
+			Description: "Searches for player abilities that use the specified formula to calculate their damage.",
+			Usage:       "?damage_formula={name|id}",
+			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.DamageFormula.lookup,
+			References:  []string{createListURL(cfg, "damage-formula")},
+		},
+		"element": {
+			ID:          23,
+			Description: "Searches for player abilities that deal elemental damage based on the specified element.",
+			Usage:       "?element={name|id}",
+			ExampleUses: []string{"?element=3", "?element=fire"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "elements")},
+		},
 		"delay": {
-			ID:          25,
+			ID:          24,
 			Description: "Searches for player abilities that deal delay.",
 			Usage:       "?delay={bool}",
 			ExampleUses: []string{"?delay=true", "?delay=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"stat_changes": {
+		"status_inflict": {
+			ID:          25,
+			Description: "Searches for player abilities that can inflict the specified status condition.",
+			Usage:       "?status_inflict={id}",
+			ExampleUses: []string{"?status_inflict=3"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "status-conditions")},
+		},
+		"status_remove": {
 			ID:          26,
+			Description: "Searches for player abilities that can remove the specified status condition.",
+			Usage:       "?status_remove={id}",
+			ExampleUses: []string{"?status_remove=3"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "status-conditions")},
+		},
+		"stat_changes": {
+			ID:          27,
 			Description: "Searches for player abilities that cause stat changes.",
 			Usage:       "?stat_changes={bool}",
 			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
@@ -1602,24 +1545,16 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"mod_changes": {
-			ID:          27,
+			ID:          28,
 			Description: "Searches for player abilities that cause modifier changes.",
 			Usage:       "?mod_changes={bool}",
 			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"target_type": {
-			ID:          28,
-			Description: "Searches for player abilities with the specified target type.",
-			Usage:       "?target_type={name|id}",
-			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
-			ForList:     true,
-			ForSingle:   false,
-		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.playerAbilities = params
 }
 
@@ -1642,17 +1577,8 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"char_class": {
-			ID:          3,
-			Description: "Searches for trigger commands that are learned by the specified character class.",
-			Usage:       "?char_class={name|id}",
-			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
-			ForList:     true,
-			ForSingle:   false,
-			References:  []string{createListURL(cfg, "character-classes")},
-		},
 		"related_stat": {
-			ID:          4,
+			ID:          3,
 			Description: "Searches for trigger commands that are related to the specified stat.",
 			Usage:       "?related_stat={name|id}",
 			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
@@ -1660,8 +1586,25 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
 		},
-		"stat_changes": {
+		"char_class": {
+			ID:          4,
+			Description: "Searches for trigger commands that are learned by the specified character class.",
+			Usage:       "?char_class={name|id}",
+			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "character-classes")},
+		},
+		"target_type": {
 			ID:          5,
+			Description: "Searches for trigger commands with the specified target type.",
+			Usage:       "?target_type={name|id}",
+			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"stat_changes": {
+			ID:          6,
 			Description: "Searches for trigger commands that cause stat changes.",
 			Usage:       "?stat_changes={bool}",
 			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
@@ -1669,25 +1612,130 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ForSingle:   false,
 		},
 		"mod_changes": {
-			ID:          6,
+			ID:          7,
 			Description: "Searches for trigger commands that cause modifier changes.",
 			Usage:       "?mod_changes={bool}",
 			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
+	}
+
+	params = cfg.completeQueryTypeInit(params, true)
+	cfg.q.triggerCommands = params
+}
+
+func (cfg *Config) initUnspecifiedAbilitiesParams() {
+	params := map[string]QueryType{
+		"user": {
+			ID:              1,
+			Description:     "If an unspecified ability is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
+			Usage:           "?user={type}:{name|id}",
+			ExampleUses:     []string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
+			ForList:         false,
+			ForSingle:       true,
+			AllowedResTypes: []string{"character", "aeon"},
+		},
+		"rank": {
+			ID:          2,
+			Description: "Searches for unspecified abilities with the specified rank.",
+			Usage:       "?rank={int}",
+			ExampleUses: []string{"?rank=3"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"copycat": {
+			ID:          3,
+			Description: "Searches for unspecified abilities that can be copied by 'copycat'.",
+			Usage:       "?copycat={bool}",
+			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"help_bar": {
+			ID:          4,
+			Description: "Searches for unspecified abilities whose names appear in the help bar.",
+			Usage:       "?help_bar={bool}",
+			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"char_class": {
+			ID:          5,
+			Description: "Searches for unspecified abilities that are learned by the specified character class.",
+			Usage:       "?char_class={name|id}",
+			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "character-classes")},
+		},
 		"target_type": {
-			ID:          7,
-			Description: "Searches for trigger commands with the specified target type.",
+			ID:          6,
+			Description: "Searches for unspecified abilities with the specified target type.",
 			Usage:       "?target_type={name|id}",
 			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
 			ForList:     true,
 			ForSingle:   false,
 		},
+		"phys_atk": {
+			ID:          7,
+			Description: "Searches for unspecified abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
+			Usage:       "?phys_atk={bool}",
+			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"darkable": {
+			ID:          8,
+			Description: "Searches for unspecified abilities that are affected by 'darkness'.",
+			Usage:       "?darkable={bool}",
+			ExampleUses: []string{"?darkable=true", "?darkable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"attack_type": {
+			ID:          9,
+			Description: "Searches for unspecified abilities with battle interactions of the specified attack type.",
+			Usage:       "?attack_type={name|id}",
+			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AttackType.lookup,
+			References:  []string{createListURL(cfg, "attack-type")},
+		},
+		"damage_type": {
+			ID:          10,
+			Description: "Searches for unspecified abilities that deal the specified type of damage.",
+			Usage:       "?damage_type={name|id}",
+			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.DamageType.lookup,
+			References:  []string{createListURL(cfg, "damage-type")},
+		},
+		"damage_formula": {
+			ID:          11,
+			Description: "Searches for unspecified abilities that use the specified formula to calculate their damage.",
+			Usage:       "?damage_formula={name|id}",
+			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.DamageFormula.lookup,
+			References:  []string{createListURL(cfg, "damage-formula")},
+		},
+		"status_inflict": {
+			ID:          12,
+			Description: "Searches for unspecified abilities that can inflict the specified status condition.",
+			Usage:       "?status_inflict={id}",
+			ExampleUses: []string{"?status_inflict=3"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "status-conditions")},
+		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
-	cfg.q.triggerCommands = params
+	params = cfg.completeQueryTypeInit(params, true)
+	cfg.q.unspecifiedAbilities = params
 }
 
 func (cfg *Config) initSublocationsParams() {
@@ -1795,7 +1843,7 @@ func (cfg *Config) initSublocationsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.sublocations = params
 }
 
@@ -1895,7 +1943,7 @@ func (cfg *Config) initLocationsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.locations = params
 }
 
@@ -1972,7 +2020,7 @@ func (cfg *Config) initShopsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.shops = params
 }
 
@@ -2041,7 +2089,7 @@ func (cfg *Config) initSongsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, false)
 	cfg.q.songs = params
 }
 
@@ -2111,6 +2159,6 @@ func (cfg *Config) initTreasuresParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params)
+	params = cfg.completeQueryTypeInit(params, false)
 	cfg.q.treasures = params
 }

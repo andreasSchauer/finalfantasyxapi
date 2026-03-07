@@ -6,10 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList], id int32) (Subquest, error) {
-	subquest, err := verifyParamsAndGet(r, i, id)
+	subquest, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Subquest{}, err
 	}

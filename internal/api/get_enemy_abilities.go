@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getEnemyAbility(r *http.Request, i handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList], id int32) (EnemyAbility, error) {
-	ability, err := verifyParamsAndGet(r, i, id)
+	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return EnemyAbility{}, err
 	}
@@ -18,23 +18,21 @@ func (cfg *Config) getEnemyAbility(r *http.Request, i handlerInput[seeding.Enemy
 	}
 
 	response := EnemyAbility{
-		ID:                    ability.ID,
-		Name:                  ability.Name,
-		Version:               ability.Version,
-		Specification: 		   ability.Specification,
-		UntypedAbility: 	   idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
-		Effect:                ability.Effect,
-		Rank:                  ability.Rank,
-		AppearsInHelpBar:      ability.AppearsInHelpBar,
-		CanCopycat:            ability.CanCopycat,
-		Monsters:              monsters,
-		BattleInteractions:    convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
+		ID:                 ability.ID,
+		Name:               ability.Name,
+		Version:            ability.Version,
+		Specification:      ability.Specification,
+		UntypedAbility:     idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		Effect:             ability.Effect,
+		Rank:               ability.Rank,
+		AppearsInHelpBar:   ability.AppearsInHelpBar,
+		CanCopycat:         ability.CanCopycat,
+		Monsters:           monsters,
+		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrieveEnemyAbilities(r *http.Request, i handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
@@ -53,6 +51,8 @@ func (cfg *Config) retrieveEnemyAbilities(r *http.Request, i handlerInput[seedin
 		frl(idQueryWrapper(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getEnemyAbilitiesInflictedStatus)),
 		frl(idQuery(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), cfg.db.GetEnemyAbilityIDsByRemovedStatus)),
 		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetEnemyAbilityIDsByAppearsInHelpBar)),
+		frl(boolQuery2(cfg, r, i, resources, "can_crit", cfg.db.GetEnemyAbilityIDsCanCrit)),
+		frl(boolQuery2(cfg, r, i, resources, "bdl", cfg.db.GetEnemyAbilityIDsBreakDmgLimit)),
 		frl(boolQuery2(cfg, r, i, resources, "darkable", cfg.db.GetEnemyAbilityIDsDarkable)),
 		frl(boolQuery2(cfg, r, i, resources, "silenceable", cfg.db.GetEnemyAbilityIDsSilenceable)),
 		frl(boolQuery2(cfg, r, i, resources, "reflectable", cfg.db.GetEnemyAbilityIDsReflectable)),

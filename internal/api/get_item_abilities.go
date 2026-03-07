@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList], id int32) (ItemAbility, error) {
-	ability, err := verifyParamsAndGet(r, i, id)
+	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return ItemAbility{}, err
 	}
@@ -16,22 +16,20 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.Item, 
 
 	category, _ := newNamedAPIResourceFromType(cfg, cfg.e.itemCategory.endpoint, ability.Category, cfg.t.ItemCategory)
 
-	
-
 	response := ItemAbility{
-		ID:                    ability.ID,
-		Name:                  ability.Name,
-		Item: 				   idToNamedAPIResource(cfg, cfg.e.items, id),
-		UntypedAbility: 	   idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
-		Description:           ability.Description,
-		Effect:                ability.Effect,
-		Category:              category,
-		Rank:                  ability.Rank,
-		AppearsInHelpBar:      ability.AppearsInHelpBar,
-		CanCopycat:            ability.CanCopycat,
-		RelatedStats:          namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),
-		Cursor:                item.Cursor,
-		BattleInteractions:    convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
+		ID:                 ability.ID,
+		Name:               ability.Name,
+		Item:               idToNamedAPIResource(cfg, cfg.e.items, id),
+		UntypedAbility:     idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		Description:        ability.Description,
+		Effect:             ability.Effect,
+		Category:           category,
+		Rank:               ability.Rank,
+		AppearsInHelpBar:   ability.AppearsInHelpBar,
+		CanCopycat:         ability.CanCopycat,
+		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),
+		Cursor:             item.Cursor,
+		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	if item.Usability == "outside-battle" || item.Usability == "always" {
@@ -40,8 +38,6 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.Item, 
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrieveItemAbilities(r *http.Request, i handlerInput[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

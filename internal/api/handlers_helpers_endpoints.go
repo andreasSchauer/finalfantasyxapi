@@ -28,6 +28,11 @@ func handleEndpointIDOnly[T h.HasID, R any, A APIResource, L APIResourceList](cf
 		return
 	}
 
+	if segment == "simple" {
+		handleSimple(cfg, w, r, i)
+		return
+	}
+
 	parseRes, err := parseID(segment, i.resourceType, len(i.objLookup))
 	if handleHTTPError(w, err) {
 		return
@@ -51,6 +56,11 @@ func handleEndpointNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](
 
 	if segment == "sections" {
 		handleSections(cfg, w, r, i)
+		return
+	}
+
+	if segment == "simple" {
+		handleSimple(cfg, w, r, i)
 		return
 	}
 
@@ -176,6 +186,12 @@ func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 }
 
 func handleParameters[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+	segment := "parameters"
+	err := verifyDefaultParamsOnly(cfg, r, i, &segment)
+	if handleHTTPError(w, err) {
+		return
+	}
+
 	parameterList, err := getQueryParamList(cfg, r, i)
 	if handleHTTPError(w, err) {
 		return
@@ -184,9 +200,47 @@ func handleParameters[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 }
 
 func handleSections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+	segment := "sections"
+	err := verifyDefaultParamsOnly(cfg, r, i, &segment)
+	if handleHTTPError(w, err) {
+		return
+	}
+
 	sectionList, err := getSectionList(cfg, r, i)
 	if handleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, sectionList)
+}
+
+func handleSimple[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+	const fetchLimit int = 50
+	segment := "simple"
+
+	err := verifyQueryParams(cfg, r, i, nil, &segment)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	ids, err := parseIdListQuery(r, i, "ids", fetchLimit)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	resources, err := createSimpleResources(cfg, r, ids, i.subsections[segment].createSubFn)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	subResList := SimpleResourceList{
+		ListParams: listParams,
+		Results:    shownResources,
+	}
+
+	respondWithJSON(w, http.StatusOK, subResList)
 }

@@ -18,15 +18,14 @@ func (l SectionList) getListParams() ListParams {
 
 func getSectionList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (SectionList, error) {
 	sectionMap := i.subsections
-	sectionURLs := []string{}
+	sectionNames := []string{}
 
 	for section := range sectionMap {
-		url := createSectionURL(cfg, i.endpoint, section)
-		sectionURLs = append(sectionURLs, url)
+		sectionNames = append(sectionNames, section)
 	}
-	slices.Sort(sectionURLs)
+	slices.Sort(sectionNames)
 
-	listParams, sections, err := createPaginatedList(cfg, r, sectionURLs)
+	listParams, sections, err := createPaginatedList(cfg, r, sectionNames)
 	if err != nil {
 		return SectionList{}, err
 	}

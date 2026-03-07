@@ -6,10 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList], id int32) (Song, error) {
-	song, err := verifyParamsAndGet(r, i, id)
+	song, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Song{}, err
 	}

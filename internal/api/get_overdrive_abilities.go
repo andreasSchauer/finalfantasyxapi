@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getOverdriveAbility(r *http.Request, i handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList], id int32) (OverdriveAbility, error) {
-	ability, err := verifyParamsAndGet(r, i, id)
+	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return OverdriveAbility{}, err
 	}
@@ -19,27 +19,25 @@ func (cfg *Config) getOverdriveAbility(r *http.Request, i handlerInput[seeding.O
 	overdrive, _ := seeding.GetResourceByID(overdriveIDs[0], cfg.l.OverdrivesID)
 
 	response := OverdriveAbility{
-		ID:                    ability.ID,
-		Name:                  ability.Name,
-		Version:               ability.Version,
-		Specification: 		   ability.Specification,
-		UntypedAbility: 	   idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
-		Rank:                  overdrive.Rank,
-		AppearsInHelpBar:      overdrive.AppearsInHelpBar,
-		CanCopycat:            overdrive.CanCopycat,
-		Overdrives: 		   idsToAPIResources(cfg, cfg.e.overdrives, overdriveIDs),
-		OverdriveCommand: 	   namePtrToNamedAPIResPtr(cfg, cfg.e.overdriveCommands, overdrive.OverdriveCommand, nil),
-		User:             	   nameToNamedAPIResource(cfg, cfg.e.characterClasses, overdrive.User, nil),
-		RelatedStats:          namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),
-		Topmenu:               namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, overdrive.Topmenu, nil),
-		Cursor:                overdrive.Cursor,
-		BattleInteractions:    convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
+		ID:                 ability.ID,
+		Name:               ability.Name,
+		Version:            ability.Version,
+		Specification:      ability.Specification,
+		UntypedAbility:     idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		Rank:               overdrive.Rank,
+		AppearsInHelpBar:   overdrive.AppearsInHelpBar,
+		CanCopycat:         overdrive.CanCopycat,
+		Overdrives:         idsToAPIResources(cfg, cfg.e.overdrives, overdriveIDs),
+		OverdriveCommand:   namePtrToNamedAPIResPtr(cfg, cfg.e.overdriveCommands, overdrive.OverdriveCommand, nil),
+		User:               nameToNamedAPIResource(cfg, cfg.e.characterClasses, overdrive.User, nil),
+		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),
+		Topmenu:            namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, overdrive.Topmenu, nil),
+		Cursor:             overdrive.Cursor,
+		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrieveOverdriveAbilities(r *http.Request, i handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

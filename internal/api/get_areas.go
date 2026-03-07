@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], id int32) (Area, error) {
-	area, err := verifyParamsAndGet(r, i, id)
+	area, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Area{}, err
 	}

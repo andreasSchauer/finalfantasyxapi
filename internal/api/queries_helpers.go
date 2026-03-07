@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"slices"
 	"strings"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func queryMapToSlice(lookup map[string]QueryType) []QueryType {
@@ -22,8 +24,19 @@ func queryMapToSlice(lookup map[string]QueryType) []QueryType {
 	return queryParams
 }
 
-func queryIDsToSlice(query string, queryParam QueryType, maxID int) ([]int32, error) {
-	idStrs := strings.Split(query, ",")
+func queryMapToString(lookup map[string]QueryType) string {
+	params := queryMapToSlice(lookup)
+	names := []string{}
+
+	for _, param := range params {
+		names = append(names, param.Name)
+	}
+
+	return h.FormatStringSlice(names)
+}
+
+func queryIDsToSliceNoDupes(query string, queryParam QueryType, maxID int) ([]int32, error) {
+	idStrs := querySplit(query, ",")
 	ids := []int32{}
 
 	for _, idStr := range idStrs {
@@ -54,4 +67,31 @@ func checkDuplicateIDs(queryParam QueryType, ids []int32) error {
 	}
 
 	return nil
+}
+
+func idStrsToUniqueIDs(idStrs []string, resourceType string, maxID int) ([]int32, error) {
+	idMap := make(map[int32]bool)
+	ids := []int32{}
+
+	for _, idStr := range idStrs {
+		resp, err := parseID(idStr, resourceType, maxID)
+		if err != nil {
+			return nil, err
+		}
+		id := resp.ID
+
+		if idMap[id] {
+			continue
+		}
+
+		idMap[id] = true
+		ids = append(ids, id)
+	}
+
+	return ids, nil
+}
+
+func querySplit(query, sep string) []string {
+	queryTrimmed := strings.TrimSuffix(query, sep)
+	return strings.Split(queryTrimmed, sep)
 }

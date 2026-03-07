@@ -6,9 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32) (Sublocation, error) {
-	sublocation, err := verifyParamsAndGet(r, i, id)
+	sublocation, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Sublocation{}, err
 	}
@@ -39,8 +38,6 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Subloc
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

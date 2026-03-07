@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList], id int32) (Shop, error) {
-	shop, err := verifyParamsAndGet(r, i, id)
+	shop, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Shop{}, err
 	}

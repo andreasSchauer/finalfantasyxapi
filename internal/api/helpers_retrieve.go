@@ -8,10 +8,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func verifyParamsAndGet[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], id int32) (T, error) {
+func verifyParamsAndGet[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32) (T, error) {
 	var zeroType T
 
-	err := verifyQueryParams(r, i, &id)
+	err := verifyQueryParams(cfg, r, i, &id, nil)
 	if err != nil {
 		return zeroType, err
 	}
@@ -24,8 +24,8 @@ func verifyParamsAndGet[T h.HasID, R any, A APIResource, L APIResourceList](r *h
 	return resource, nil
 }
 
-func verifyParamsAndRetrieve[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L]) ([]int32, error) {
-	err := verifyQueryParams(r, i, nil)
+func verifyParamsAndRetrieve[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]int32, error) {
+	err := verifyQueryParams(cfg, r, i, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func getMultipleAPIResources[T h.HasID, R any, A APIResource, L APIResourceList]
 
 
 func retrieveAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]A, error) {
-	dbIDs, err := verifyParamsAndRetrieve(r, i)
+	dbIDs, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return nil, err
 	}

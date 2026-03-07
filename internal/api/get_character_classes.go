@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getCharacterClass(r *http.Request, i handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList], id int32) (CharacterClass, error) {
-	class, err := verifyParamsAndGet(r, i, id)
+	class, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return CharacterClass{}, err
 	}

@@ -966,7 +966,7 @@ func (t *TypeLookup) initTargetType() {
 			Description: "The action targets its user.",
 		},
 		{
-			Name:        string(database.TargetTypeSingleCharacter),
+			Name:        string(database.TargetTypeSingleAlly),
 			Description: "The action targets one unit of the user's party.",
 		},
 		{
@@ -978,7 +978,7 @@ func (t *TypeLookup) initTargetType() {
 			Description: "The action targets the selected unit.",
 		},
 		{
-			Name:        string(database.TargetTypeRandomCharacter),
+			Name:        string(database.TargetTypeRandomAlly),
 			Description: "The action targets a random unit of the user's party.",
 		},
 		{
@@ -986,7 +986,7 @@ func (t *TypeLookup) initTargetType() {
 			Description: "The action targets a random unit of the user's opposing party.",
 		},
 		{
-			Name:        string(database.TargetTypeAllCharacters),
+			Name:        string(database.TargetTypeAllAllies),
 			Description: "The action targets all units of the user's party.",
 		},
 		{

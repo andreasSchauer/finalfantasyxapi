@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getUnspecifiedAbility(r *http.Request, i handlerInput[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList], id int32) (UnspecifiedAbility, error) {
-	ability, err := verifyParamsAndGet(r, i, id)
+	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return UnspecifiedAbility{}, err
 	}
@@ -17,7 +17,7 @@ func (cfg *Config) getUnspecifiedAbility(r *http.Request, i handlerInput[seeding
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility: 	idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		UntypedAbility:     idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
 		Description:        ability.Description,
 		Effect:             ability.Effect,
 		Rank:               ability.Rank,

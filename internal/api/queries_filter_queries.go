@@ -61,7 +61,6 @@ func nameOrIdQuery[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 	return resources, nil
 }
 
-
 // query uses an id of another resource type to filter resources
 func nameOrIdQueryNullable[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, resourceType string, lookup map[string]G, dbQuery func(context.Context, sql.NullInt32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
@@ -152,7 +151,7 @@ func idQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, []int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
-	queryIDs, err := parseIdListQuery(r, queryParam, maxID)
+	queryIDs, err := parseIdListQueryNoDupes(r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}
@@ -174,7 +173,7 @@ func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 func idListQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, []int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
-	queryIDs, err := parseIdListQuery(r, queryParam, maxID)
+	queryIDs, err := parseIdListQueryNoDupes(r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}
@@ -305,8 +304,7 @@ func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N a
 	return resources, nil
 }
 
-
-// query uses an integer value as input. 
+// query uses an integer value as input.
 func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	integer, err := parseIntQuery(r, queryParam)
@@ -327,7 +325,7 @@ func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r
 	return resources, nil
 }
 
-// query uses an integer value as input. 
+// query uses an integer value as input.
 func intQueryNullable[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, sql.NullInt32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	integer, err := parseIntQuery(r, queryParam)

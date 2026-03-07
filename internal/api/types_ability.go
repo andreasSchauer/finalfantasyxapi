@@ -24,10 +24,10 @@ type EnemyAbility struct {
 	Version               	*int32					`json:"version,omitempty"`
 	Specification         	*string					`json:"specification,omitempty"`
 	UntypedAbility			NamedAPIResource		`json:"untyped_ability"`
-	Effect                	*string					`json:"effect"`
 	Rank                  	*int32					`json:"rank"`
 	AppearsInHelpBar      	bool					`json:"appears_in_help_bar"`
 	CanCopycat            	bool					`json:"can_copycat"`
+	Effect                	*string					`json:"effect"`
 	Monsters				[]NamedAPIResource		`json:"monsters"`
 	BattleInteractions		[]BattleInteraction		`json:"battle_interactions"`
 }
@@ -36,14 +36,14 @@ type EnemyAbility struct {
 type ItemAbility struct {
 	ID                    	int32					`json:"id"`
 	Name                  	string					`json:"name"`
-	Item					NamedAPIResource		`json:"item"`
 	UntypedAbility			NamedAPIResource		`json:"untyped_ability"`
-	Description           	string					`json:"description"`
-	Effect                	string					`json:"effect"`
-	Category              	NamedAPIResource		`json:"category"`
 	Rank                  	*int32					`json:"rank"`
 	AppearsInHelpBar      	bool					`json:"appears_in_help_bar"`
 	CanCopycat            	bool					`json:"can_copycat"`
+	Item					NamedAPIResource		`json:"item"`
+	Description           	string					`json:"description"`
+	Effect                	string					`json:"effect"`
+	Category              	NamedAPIResource		`json:"category"`
 	CanUseOutsideBattle   	bool					`json:"can_use_outside_battle"`
 	Cursor                	string					`json:"cursor"`
 	RelatedStats          	[]NamedAPIResource		`json:"related_stats"`
@@ -57,13 +57,13 @@ type OverdriveAbility struct {
 	Version               	*int32					`json:"version,omitempty"`
 	Specification         	*string					`json:"specification,omitempty"`
 	UntypedAbility			NamedAPIResource		`json:"untyped_ability"`
+	Rank                  	*int32					`json:"rank"`
+	AppearsInHelpBar      	bool					`json:"appears_in_help_bar"`
+	CanCopycat            	bool					`json:"can_copycat"`
 	User             		NamedAPIResource		`json:"user"`
 	OverdriveCommand		*NamedAPIResource		`json:"overdrive_command"`
 	Overdrives				[]NamedAPIResource		`json:"overdrives"`
 	Topmenu               	*NamedAPIResource		`json:"topmenu"`
-	Rank                  	*int32					`json:"rank"`
-	AppearsInHelpBar      	bool					`json:"appears_in_help_bar"`
-	CanCopycat            	bool					`json:"can_copycat"`
 	Cursor                	*string					`json:"cursor"`
 	RelatedStats          	[]NamedAPIResource		`json:"related_stats"`
 	BattleInteractions		[]BattleInteraction		`json:"battle_interactions"`
@@ -76,15 +76,15 @@ type PlayerAbility struct {
 	Version               	*int32					`json:"version,omitempty"`
 	Specification         	*string					`json:"specification,omitempty"`
 	UntypedAbility			NamedAPIResource		`json:"untyped_ability"`
-	Description           	*string					`json:"description"`
-	Effect                	string					`json:"effect"`
-	Category              	NamedAPIResource		`json:"category"`
-	Topmenu               	*NamedAPIResource		`json:"topmenu"`
-	Submenu               	*NamedAPIResource		`json:"submenu"`
-	OpenSubmenu           	*NamedAPIResource		`json:"open_submenu,omitempty"`
 	Rank                  	*int32					`json:"rank"`
 	AppearsInHelpBar      	bool					`json:"appears_in_help_bar"`
 	CanCopycat            	bool					`json:"can_copycat"`
+	Category              	NamedAPIResource		`json:"category"`
+	Description           	*string					`json:"description"`
+	Effect                	string					`json:"effect"`
+	Topmenu               	*NamedAPIResource		`json:"topmenu"`
+	Submenu               	*NamedAPIResource		`json:"submenu"`
+	OpenSubmenu           	*NamedAPIResource		`json:"open_submenu,omitempty"`
 	CanUseOutsideBattle   	bool					`json:"can_use_outside_battle"`
 	MpCost                	int32					`json:"mp_cost"`
 	Cursor                	*string					`json:"cursor"`
@@ -104,12 +104,12 @@ type TriggerCommand struct {
 	Version               	*int32					`json:"version,omitempty"`
 	Specification         	*string					`json:"specification,omitempty"`
 	UntypedAbility			NamedAPIResource		`json:"untyped_ability"`
-	Description           	string					`json:"description"`
-	Effect                	string					`json:"effect"`
-	Topmenu               	*NamedAPIResource		`json:"topmenu"`
 	Rank                  	*int32					`json:"rank"`
 	AppearsInHelpBar      	bool					`json:"appears_in_help_bar"`
 	CanCopycat            	bool					`json:"can_copycat"`
+	Description           	string					`json:"description"`
+	Effect                	string					`json:"effect"`
+	Topmenu               	*NamedAPIResource		`json:"topmenu"`
 	Cursor                	string					`json:"cursor"`
 	RelatedStats          	[]NamedAPIResource		`json:"related_stats"`
 	UsedBy             		[]NamedAPIResource		`json:"used_by"`
@@ -124,14 +124,14 @@ type UnspecifiedAbility struct {
 	Version            *int32              `json:"version,omitempty"`
 	Specification      *string             `json:"specification,omitempty"`
 	UntypedAbility	   NamedAPIResource	   `json:"untyped_ability"`
+	Rank               *int32              `json:"rank"`
+	AppearsInHelpBar   bool                `json:"appears_in_help_bar"`
+	CanCopycat         bool                `json:"can_copycat"`
 	Description        string              `json:"description"`
 	Effect             string              `json:"effect"`
 	Topmenu            *NamedAPIResource   `json:"topmenu"`
 	Submenu            *NamedAPIResource   `json:"submenu"`
 	OpenSubmenu        *NamedAPIResource   `json:"open_submenu,omitempty"`
-	Rank               *int32              `json:"rank"`
-	AppearsInHelpBar   bool                `json:"appears_in_help_bar"`
-	CanCopycat         bool                `json:"can_copycat"`
 	Cursor             *string             `json:"cursor"`
 	LearnedBy          []NamedAPIResource  `json:"learned_by"`
 	BattleInteractions []BattleInteraction `json:"battle_interactions"`

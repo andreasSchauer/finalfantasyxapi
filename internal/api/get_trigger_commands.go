@@ -7,11 +7,11 @@ import (
 )
 
 func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList], id int32) (TriggerCommand, error) {
-	ability, err := verifyParamsAndGet(r, i, id)
+	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
-	
+
 	monsterFormations, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, ability, cfg.db.GetTriggerCommandMonsterFormationIDs)
 	if err != nil {
 		return TriggerCommand{}, err
@@ -23,22 +23,22 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.Tri
 	}
 
 	response := TriggerCommand{
-		ID:                    ability.ID,
-		Name:                  ability.Name,
-		Version:               ability.Version,
-		Specification: 		   ability.Specification,
-		UntypedAbility: 	   idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
-		Description:           ability.Description,
-		Effect:                ability.Effect,
-		Rank:                  ability.Rank,
-		AppearsInHelpBar:      ability.AppearsInHelpBar,
-		CanCopycat:            ability.CanCopycat,
-		UsedBy:                users,
-		RelatedStats:          namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),
-		Topmenu:               namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, ability.Topmenu, nil),
-		Cursor:                ability.Cursor,
-		MonsterFormations:     monsterFormations,
-		BattleInteractions:    convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
+		ID:                 ability.ID,
+		Name:               ability.Name,
+		Version:            ability.Version,
+		Specification:      ability.Specification,
+		UntypedAbility:     idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		Description:        ability.Description,
+		Effect:             ability.Effect,
+		Rank:               ability.Rank,
+		AppearsInHelpBar:   ability.AppearsInHelpBar,
+		CanCopycat:         ability.CanCopycat,
+		UsedBy:             users,
+		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),
+		Topmenu:            namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, ability.Topmenu, nil),
+		Cursor:             ability.Cursor,
+		MonsterFormations:  monsterFormations,
+		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	response, err = applyTriggerCommandUser(cfg, r, response, "user")
@@ -48,8 +48,6 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.Tri
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

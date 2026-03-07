@@ -9,9 +9,9 @@ import (
 type AreaSimple struct {
 	ID                int32               `json:"id"`
 	URL               string              `json:"url"`
+	Name              string              `json:"name"`
 	ParentLocation    SimpleRef           `json:"parent_location"`
 	ParentSublocation SimpleRef           `json:"parent_sublocation"`
-	Name              string              `json:"name"`
 	Version           *int32              `json:"version,omitempty"`
 	Specification     *string             `json:"specification,omitempty"`
 	HasSaveSphere     bool                `json:"has_save_sphere"`
