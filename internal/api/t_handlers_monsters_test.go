@@ -32,6 +32,13 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/1/?ids=1",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2/3",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. usage: '/api/monsters', '/api/monsters/{id}', '/api/monsters/{name}', '/api/monsters/{name}/{version}', '/api/monsters/id/{subsection}'. supported subsections: 'abilities', 'areas', 'monster-formations', 'simple'.",
@@ -1022,6 +1029,13 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?ids=1,33,22,68,",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr: "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental_resists=weak",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid input for parameter 'elemental_resists': 'weak'. usage: '?elemental_resists={element|id}={affinity|id},...'.",
@@ -1289,6 +1303,54 @@ func TestRetrieveMonsters(t *testing.T) {
 
 func TestSubsectionMonsters(t *testing.T) {
 	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/?ids=1&location=15",
+				expectedStatus: http.StatusBadRequest,
+				handler:        testCfg.HandleMonsters,
+				expectedErr: "parameter 'ids' can only be used with default parameters. available default parameters: 'limit', 'offset'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/simple?ids=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,",
+				expectedStatus: http.StatusBadRequest,
+				handler:        testCfg.HandleMonsters,
+				expectedErr: "fetch limit exceeded. the maximum amount of resources that can be fetched is 50.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/simple",
+				expectedStatus: http.StatusBadRequest,
+				handler:        testCfg.HandleMonsters,
+				expectedErr: "parameter 'ids' can't be empty.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/simple?ids=1,33,22,68,",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleMonsters,
+				dontCheck: map[string]bool{
+					"parent resource": true,
+				},
+			},
+			count:          4,
+			results:        []int32{1, 33, 22, 68},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/simple?ids=1,2,2,70,",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleMonsters,
+				dontCheck: map[string]bool{
+					"parent resource": true,
+				},
+			},
+			count:          3,
+			results:        []int32{1, 2, 70},
+		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/90/monsters/",

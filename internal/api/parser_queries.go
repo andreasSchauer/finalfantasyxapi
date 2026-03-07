@@ -101,7 +101,7 @@ func parseIdListQuery[T h.HasID, R any, A APIResource, L APIResourceList](r *htt
 
 	idStrs := querySplit(query, ",")
 	if len(idStrs) > fetchLimit {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("too many ids. the maximum amount of ids is %d", fetchLimit), nil)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of resources that can be fetched is %d.", fetchLimit), nil)
 	}
 
 	ids, err := idStrsToUniqueIDs(idStrs, i.resourceType, len(i.objLookupID))
