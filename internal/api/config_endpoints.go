@@ -31,7 +31,7 @@ type endpoints struct {
 	unspecifiedAbilities handlerInput[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList]
 	playerAbilities      handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
 	enemyAbilities       handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
-	itemAbilities        handlerInput[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList]
+	itemAbilities        handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]
 	overdriveAbilities   handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]
 	triggerCommands      handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]
 	properties           handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]
@@ -518,13 +518,13 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.itemAbilities = handlerInput[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList]{
+	e.itemAbilities = handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "item-abilities",
 		resourceType:  "item ability",
-		objLookup:     cfg.l.Items,
-		objLookupID:   cfg.l.ItemsID,
+		objLookup:     cfg.l.ItemAbilities,
+		objLookupID:   cfg.l.ItemAbilitiesID,
 		queryLookup:   cfg.q.itemAbilities,
-		idToResFunc:   idToNamedAPIResource[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetItemAbilityIDs,
 		getSingleFunc: cfg.getItemAbility,

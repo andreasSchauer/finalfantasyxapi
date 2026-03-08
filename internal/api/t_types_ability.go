@@ -122,8 +122,6 @@ type expOverdriveAbility struct {
 	testGeneral
 	expNameVer
 	rank				*int32
-	appearsInHelpBar	bool
-	canCopyCat			bool
 	untypedAbility		int32
 	overdriveCommand	*int32
 	overdrives			[]int32
@@ -137,8 +135,6 @@ func (a expOverdriveAbility) GetTestGeneral() testGeneral {
 func compareOverdriveAbilities(test test, exp expOverdriveAbility, got OverdriveAbility) {
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compare(test, "rank", exp.rank, got.Rank)
-	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
-	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
 	compIdApiResource(test, "untyped ability", test.cfg.e.abilities.endpoint, exp.untypedAbility, got.UntypedAbility)
 	compIdApiResourcePtrs(test, "overdrive command", test.cfg.e.overdriveCommands.endpoint, exp.overdriveCommand, got.OverdriveCommand)
 	checkResIDsInSlice(test, "overdrives", test.cfg.e.overdrives.endpoint, exp.overdrives, got.Overdrives)

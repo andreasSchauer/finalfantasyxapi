@@ -56,11 +56,7 @@ func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seedi
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(intQueryNullable(cfg, r, i, resources, "rank", cfg.db.GetTriggerCommandIDsByRank)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "char_class", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat)),
-		frl(boolQuery2(cfg, r, i, resources, "stat_changes", cfg.db.GetTriggerCommandIDsWithStatChanges)),
-		frl(boolQuery2(cfg, r, i, resources, "mod_changes", cfg.db.GetTriggerCommandIDsWithModifierChanges)),
-		frl(typeQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetTriggerCommandIDsByTargetType)),
 	})
 }

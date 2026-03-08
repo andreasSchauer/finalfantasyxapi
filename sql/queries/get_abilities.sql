@@ -12,6 +12,16 @@ ORDER BY m.id;
 SELECT id FROM abilities ORDER BY id;
 
 
+-- name: GetAbilityIDsByMonster :many
+SELECT DISTINCT a.id
+FROM abilities a
+JOIN monster_abilities ma ON ma.ability_id = a.id
+JOIN j_monsters_abilities j ON j.monster_ability_id = ma.id
+JOIN monsters m ON j.monster_id = m.id
+WHERE m.id = $1
+ORDER BY a.id;
+
+
 -- name: GetAbilityIDsByType :many
 SELECT id FROM abilities WHERE type = $1 ORDER BY id;
 
@@ -783,8 +793,20 @@ ORDER BY oa.id;
 -- name: GetOverdriveAbilityIDsByRank :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN ability_attributes aa ON a.attributes_id = aa.id
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+JOIN overdrives o ON j.overdrive_id = o.id
+JOIN ability_attributes aa ON o.attributes_id = aa.id
+WHERE aa.rank = $1
+ORDER BY oa.id;
+
+
+-- name: GetGenericOverdriveAbilityIDsByRank :many
+SELECT DISTINCT a.id
+FROM abilities a
+JOIN overdrive_abilities oa ON oa.ability_id = a.id
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+JOIN overdrives o ON j.overdrive_id = o.id
+JOIN ability_attributes aa ON o.attributes_id = aa.id
 WHERE aa.rank = $1
 ORDER BY oa.id;
 
@@ -832,6 +854,18 @@ JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN status_conditions sc ON j2.status_condition_id = sc.id
 WHERE sc.id = $1
+ORDER BY oa.id;
+
+
+-- name: GetOverdriveAbilityIDsCanCrit :many
+SELECT DISTINCT oa.id
+FROM overdrive_abilities oa
+JOIN abilities a ON oa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN damages d ON j2.damage_id = d.id
+WHERE d.critical IS NOT NULL
 ORDER BY oa.id;
 
 
@@ -1223,7 +1257,7 @@ ORDER BY tc.id;
 -- name: GetTriggerCommandIDsByRelatedStat :many
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
-JOIN j_trigger_commands_related_stats j ON j.trigger_command = tc.id
+JOIN j_trigger_commands_related_stats j ON j.trigger_command_id = tc.id
 JOIN stats s ON j.stat_id = s.id
 WHERE s.id = $1
 ORDER BY tc.id;

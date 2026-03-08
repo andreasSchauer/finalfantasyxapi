@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList], id int32) (ItemAbility, error) {
+func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList], id int32) (ItemAbility, error) {
 	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return ItemAbility{}, err
@@ -14,20 +14,20 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.Item, 
 
 	item, _ := seeding.GetResourceByID(id, cfg.l.ItemsID)
 
-	category, _ := newNamedAPIResourceFromType(cfg, cfg.e.itemCategory.endpoint, ability.Category, cfg.t.ItemCategory)
+	category, _ := newNamedAPIResourceFromType(cfg, cfg.e.itemCategory.endpoint, item.Category, cfg.t.ItemCategory)
 
 	response := ItemAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
 		Item:               idToNamedAPIResource(cfg, cfg.e.items, id),
 		UntypedAbility:     idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
-		Description:        ability.Description,
-		Effect:             ability.Effect,
+		Description:        item.Description,
+		Effect:             item.Effect,
 		Category:           category,
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),
+		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, item.RelatedStats),
 		Cursor:             item.Cursor,
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
@@ -39,7 +39,7 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.Item, 
 	return response, nil
 }
 
-func (cfg *Config) retrieveItemAbilities(r *http.Request, i handlerInput[seeding.Item, ItemAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+func (cfg *Config) retrieveItemAbilities(r *http.Request, i handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err

@@ -31,6 +31,8 @@ type Lookup struct {
 	AbilitiesID            map[int32]Ability
 	EnemyAbilities         map[string]EnemyAbility
 	EnemyAbilitiesID       map[int32]EnemyAbility
+	ItemAbilities		   map[string]ItemAbility
+	ItemAbilitiesID		   map[int32]ItemAbility
 	UnspecifiedAbilities   map[string]UnspecifiedAbility
 	UnspecifiedAbilitiesID map[int32]UnspecifiedAbility
 	OverdriveAbilities     map[string]OverdriveAbility
@@ -134,6 +136,8 @@ func lookupInit() Lookup {
 		UnspecifiedAbilitiesID: make(map[int32]UnspecifiedAbility),
 		EnemyAbilities:         make(map[string]EnemyAbility),
 		EnemyAbilitiesID:       make(map[int32]EnemyAbility),
+		ItemAbilities: 			make(map[string]ItemAbility),
+		ItemAbilitiesID: 		make(map[int32]ItemAbility),
 		OverdriveAbilities:     make(map[string]OverdriveAbility),
 		OverdriveAbilitiesID:   make(map[int32]OverdriveAbility),
 		PlayerAbilities:        make(map[string]PlayerAbility),

@@ -63,8 +63,6 @@ type OverdriveAbility struct {
 	User             		NamedAPIResource		`json:"user"`
 	OverdriveCommand		*NamedAPIResource		`json:"overdrive_command"`
 	Overdrives				[]NamedAPIResource		`json:"overdrives"`
-	Topmenu               	*NamedAPIResource		`json:"topmenu"`
-	Cursor                	*string					`json:"cursor"`
 	RelatedStats          	[]NamedAPIResource		`json:"related_stats"`
 	BattleInteractions		[]BattleInteraction		`json:"battle_interactions"`
 }

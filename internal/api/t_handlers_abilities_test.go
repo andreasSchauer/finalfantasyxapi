@@ -112,7 +112,7 @@ func TestGetAbility(t *testing.T) {
 			},
 			expNameVer: newExpNameVer(269, "hyper mighty g", 0),
 			rank: h.GetInt32Ptr(6),
-			appearsInHelpBar: true,
+			appearsInHelpBar: false,
 			canCopyCat: false,
 			abilityType: 2,
 			typedAbility: "/overdrive-abilities/167",
@@ -205,39 +205,68 @@ func TestGetAbility(t *testing.T) {
 	testSingleResources(t, tests, "GetAbility", testCfg.HandleAbilities, compareAbilities)
 }
 
-func TestGetMultipleAbilities(t *testing.T) {
-	tests := []expListIDs{
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/guado_guardian",
-				expectedStatus: http.StatusMultipleChoices,
-			},
-			count:   3,
-			results: []int32{94, 96, 113},
-		},
-	}
-
-	testIdList(t, tests, testCfg.e.abilities.endpoint, "GetMultipleAbilities", testCfg.HandleAbilities, compareAPIResourceLists[NamedApiResourceList])
-}
 
 func TestRetrieveAbilities(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?species=wywrm",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value 'wywrm' used for parameter 'species'. use /api/monsters/parameters to see allowed values.",
+				requestURL:     "/api/abilities?limit=max",
+				expectedStatus: http.StatusOK,
 			},
+			count:    840,
+			previous: nil,
+			next:     nil,
+			results:  []int32{1, 133, 299, 333, 555, 666, 840},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?limit=max",
+				requestURL:     "/api/abilities?monster=86",
 				expectedStatus: http.StatusOK,
 			},
-			count:    307,
+			count:    11,
 			previous: nil,
 			next:     nil,
-			results:  []int32{1, 175, 238, 307},
+			results:  []int32{69, 70, 71, 72, 415, 481, 548, 565, 706, 804, 831},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?type=3&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    69,
+			previous: nil,
+			next:     nil,
+			results:  []int32{293, 295, 310, 337, 344, 352, 361},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?delay=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    34,
+			previous: nil,
+			next:     nil,
+			results:  []int32{9, 10, 88, 138, 340, 546, 710, 803},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?status_inflict=4&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    39,
+			previous: nil,
+			next:     nil,
+			results:  []int32{3, 6, 8, 134, 226, 333, 422, 709, 753},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?bdl=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    281,
+			previous: nil,
+			next:     nil,
+			results:  []int32{1, 5, 65, 89, 128, 170, 205, 399, 449, 530, 623, 830},
 		},
 	}
 

@@ -46,16 +46,10 @@ func (cfg *Config) retrieveUnspecifiedAbilities(r *http.Request, i handlerInput[
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(typeQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetUnspecifiedAbilityIDsByDamageType)),
-		frl(typeQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetUnspecifiedAbilityIDsByAttackType)),
-		frl(typeQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetUnspecifiedAbilityIDsByTargetType)),
-		frl(typeQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetUnspecifiedAbilityIDsByDamageFormula)),
 		frl(intQueryNullable(cfg, r, i, resources, "rank", cfg.db.GetUnspecifiedAbilityIDsByRank)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "char_class", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetUnspecifiedAbilityIDsByCharClass)),
-		frl(idQueryWrapper(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getUnspecifiedAbilitiesInflictedStatus)),
 		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetUnspecifiedAbilityIDsByCanCopycat)),
 		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetUnspecifiedAbilityIDsByAppearsInHelpBar)),
 		frl(boolQuery2(cfg, r, i, resources, "phys_atk", cfg.db.GetUnspecifiedAbilityIDsBasedOnPhysAttack)),
-		frl(boolQuery2(cfg, r, i, resources, "darkable", cfg.db.GetUnspecifiedAbilityIDsDarkable)),
 	})
 }

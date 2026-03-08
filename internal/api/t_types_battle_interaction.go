@@ -2,15 +2,15 @@ package api
 
 
 type expBattleInteraction struct {
-	target			string
-	abilityRange	*int32
-	hitAmount		int32
-	shatterRate		int32
-	specialAction	*string
-	basedOnPhysAtk	bool
-	darkable		bool
-	silenceable		bool
-	reflectable		bool
+	target						string
+	abilityRange				*int32
+	hitAmount					int32
+	shatterRate					int32
+	specialAction				*string
+	basedOnPhysAtk				bool
+	darkable					bool
+	silenceable					bool
+	reflectable					bool
 	accuracy					expAccuracy
 	damage						*expDamage
 	inflictedDelay				*expInflictedDelay

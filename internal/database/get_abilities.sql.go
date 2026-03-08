@@ -343,6 +343,39 @@ func (q *Queries) GetAbilityIDsByInflictedStatus(ctx context.Context, id int32) 
 	return items, nil
 }
 
+const getAbilityIDsByMonster = `-- name: GetAbilityIDsByMonster :many
+SELECT DISTINCT a.id
+FROM abilities a
+JOIN monster_abilities ma ON ma.ability_id = a.id
+JOIN j_monsters_abilities j ON j.monster_ability_id = ma.id
+JOIN monsters m ON j.monster_id = m.id
+WHERE m.id = $1
+ORDER BY a.id
+`
+
+func (q *Queries) GetAbilityIDsByMonster(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByMonster, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAbilityIDsByRank = `-- name: GetAbilityIDsByRank :many
 SELECT DISTINCT a.id
 FROM abilities a
@@ -1385,6 +1418,40 @@ func (q *Queries) GetEnemyAbilityMonsterIDs(ctx context.Context, id int32) ([]in
 	return items, nil
 }
 
+const getGenericOverdriveAbilityIDsByRank = `-- name: GetGenericOverdriveAbilityIDsByRank :many
+SELECT DISTINCT a.id
+FROM abilities a
+JOIN overdrive_abilities oa ON oa.ability_id = a.id
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+JOIN overdrives o ON j.overdrive_id = o.id
+JOIN ability_attributes aa ON o.attributes_id = aa.id
+WHERE aa.rank = $1
+ORDER BY oa.id
+`
+
+func (q *Queries) GetGenericOverdriveAbilityIDsByRank(ctx context.Context, rank sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getGenericOverdriveAbilityIDsByRank, rank)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getItemAbilityIDs = `-- name: GetItemAbilityIDs :many
 SELECT id FROM item_abilities ORDER BY id
 `
@@ -2085,8 +2152,9 @@ func (q *Queries) GetOverdriveAbilityIDsByName(ctx context.Context, name string)
 const getOverdriveAbilityIDsByRank = `-- name: GetOverdriveAbilityIDsByRank :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN ability_attributes aa ON a.attributes_id = aa.id
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+JOIN overdrives o ON j.overdrive_id = o.id
+JOIN ability_attributes aa ON o.attributes_id = aa.id
 WHERE aa.rank = $1
 ORDER BY oa.id
 `
@@ -2193,6 +2261,41 @@ ORDER BY oa.id
 
 func (q *Queries) GetOverdriveAbilityIDsByTargetType(ctx context.Context, target TargetType) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByTargetType, target)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOverdriveAbilityIDsCanCrit = `-- name: GetOverdriveAbilityIDsCanCrit :many
+SELECT DISTINCT oa.id
+FROM overdrive_abilities oa
+JOIN abilities a ON oa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN damages d ON j2.damage_id = d.id
+WHERE d.critical IS NOT NULL
+ORDER BY oa.id
+`
+
+func (q *Queries) GetOverdriveAbilityIDsCanCrit(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsCanCrit)
 	if err != nil {
 		return nil, err
 	}
@@ -3471,7 +3574,7 @@ func (q *Queries) GetTriggerCommandIDsByRank(ctx context.Context, rank sql.NullI
 const getTriggerCommandIDsByRelatedStat = `-- name: GetTriggerCommandIDsByRelatedStat :many
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
-JOIN j_trigger_commands_related_stats j ON j.trigger_command = tc.id
+JOIN j_trigger_commands_related_stats j ON j.trigger_command_id = tc.id
 JOIN stats s ON j.stat_id = s.id
 WHERE s.id = $1
 ORDER BY tc.id

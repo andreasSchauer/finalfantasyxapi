@@ -84,6 +84,13 @@ func (a ItemAbility) Error() string {
 	return fmt.Sprintf("item ability %s", a.Name)
 }
 
+func (a ItemAbility) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 			a.ID,
+		Name: 			a.Name,
+	}
+}
+
 func (l *Lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "data/items.json"
 
@@ -168,6 +175,8 @@ func (l *Lookup) seedItemAbility(qtx *database.Queries, item Item) error {
 
 	item.ItemAbility = itemAbility
 	l.Items[item.Name] = item
+	l.ItemAbilities[item.Name] = itemAbility
+	l.ItemAbilitiesID[itemAbility.ID] = itemAbility
 
 	return nil
 }

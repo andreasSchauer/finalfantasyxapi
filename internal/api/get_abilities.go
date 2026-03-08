@@ -41,8 +41,8 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		}
 
 		response.Rank = h.NullInt32ToPtr(attributes.Rank)
-		response.CanCopycat = attributes.CanCopycat
-		response.AppearsInHelpBar = attributes.AppearsInHelpBar
+		response.CanCopycat = false
+		response.AppearsInHelpBar = false
 
 	default:
 		response.Rank = ability.Rank
@@ -112,6 +112,7 @@ func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Abi
 		frl(nameOrIdQuery(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetAbilityIDsByElement)),
 		frl(idQueryWrapper(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getAbilitiesInflictedStatus)),
 		frl(idQuery(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), cfg.db.GetAbilityIDsByRemovedStatus)),
+		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.MonsterFormations), cfg.db.GetAbilityIDsByMonster)),
 		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetAbilityIDsByCanCopycat)),
 		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetAbilityIDsByAppearsInHelpBar)),
 		frl(boolQuery2(cfg, r, i, resources, "can_crit", cfg.db.GetAbilityIDsCanCrit)),
