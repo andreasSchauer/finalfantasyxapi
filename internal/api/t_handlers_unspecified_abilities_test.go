@@ -39,6 +39,13 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/unspecified-abilities/2?bomb_wpn=true",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid usage of parameter 'bomb_wpn'. parameter 'bomb_wpn' can only be used in combination with parameter(s): 'user'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/unspecified-abilities/1?user=character:wakka",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -98,7 +105,66 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/2?user=aeon:cindy",
+				requestURL:     "/api/unspecified-abilities/1?user=character:wakka&bomb_wpn=true",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+
+				},
+				expLengths: map[string]int{
+					"battle interactions": 1,
+				},
+			},
+			expNameVer: newExpNameVer(1, "attack", 1),
+			rank: h.GetInt32Ptr(3),
+			appearsInHelpBar: false,
+			canCopyCat: true,
+			untypedAbility: 374,
+			topmenu: h.GetInt32Ptr(1),
+			submenu: nil,
+			openSubmenu: nil,
+			battleInteractions: []expBattleInteraction{
+				{
+					target: "single-target",
+					abilityRange: h.GetInt32Ptr(4),
+					hitAmount: 1,
+					shatterRate: 30,
+					basedOnPhysAtk: true,
+					darkable: true,
+					silenceable: false,
+					reflectable: false,
+					accuracy: expAccuracy{
+						accSource: "accuracy",
+						hitChance: nil,
+						accModifier: h.GetFloat32Ptr(1),
+					},
+					damage: &expDamage{
+						damageCalc: []expAbilityDamage{
+							{
+								attackType: 1,
+								targetStat: 1,
+								damageType: 1,
+								damageFormula: 1,
+								damageConstant: 18,
+							},
+						},
+						critical: h.GetStrPtr("crit+weapon%"),
+						criticalPlusVal: nil,
+						isPiercing: false,
+						breakDmgLmt: h.GetStrPtr("auto-ability"),
+						element: nil,
+					},
+					inflictedDelay: nil,
+					inflictedStatusConditions: []int32{},
+					removedStatusConditions: []int32{},
+					copiedStatusConditions: []int32{},
+					statChanges: []expStatChange{},
+					modifierChanges: []expModChange{},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/unspecified-abilities/2?user=aeon:cindy&bomb_wpn=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 

@@ -138,7 +138,7 @@ func parseResTypeQuery(r *http.Request, queryParam QueryType) (string, string, e
 		return "", "", err
 	}
 
-	resType, idStr, found := strings.Cut(query, ":")
+	resType, unitStr, found := strings.Cut(query, ":")
 	if !found {
 		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, query, queryParam.Usage), nil)
 	}
@@ -147,7 +147,7 @@ func parseResTypeQuery(r *http.Request, queryParam QueryType) (string, string, e
 		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resource type '%s' for parameter '%s'. supported resource types: %s.", resType, queryParam.Name, h.FormatStringSlice(queryParam.AllowedResTypes)), nil)
 	}
 
-	return resType, idStr, nil
+	return resType, unitStr, nil
 }
 
 func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {

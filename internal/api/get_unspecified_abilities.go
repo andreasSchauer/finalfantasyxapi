@@ -31,10 +31,11 @@ func (cfg *Config) getUnspecifiedAbility(r *http.Request, i handlerInput[seeding
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	response, err = applyUnspecifiedAbilityUser(cfg, r, response, "user")
+	battleInteractions, err := applyUser(cfg, r, response, "user", i.queryLookup)
 	if err != nil {
 		return UnspecifiedAbility{}, err
 	}
+	response.BattleInteractions = battleInteractions
 
 	return response, nil
 }

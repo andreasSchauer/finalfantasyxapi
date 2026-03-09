@@ -41,10 +41,11 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.Tri
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	response, err = applyTriggerCommandUser(cfg, r, response, "user")
+	battleInteractions, err := applyUser(cfg, r, response, "user", i.queryLookup)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
+	response.BattleInteractions = battleInteractions
 
 	return response, nil
 }

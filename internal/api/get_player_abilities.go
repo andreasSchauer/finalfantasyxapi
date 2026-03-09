@@ -44,10 +44,11 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		BattleInteractions:    convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	response, err = applyPlayerAbilityUser(cfg, r, response, "user")
+	battleInteractions, err := applyUser(cfg, r, response, "user", i.queryLookup)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
+	response.BattleInteractions = battleInteractions
 
 	return response, nil
 }

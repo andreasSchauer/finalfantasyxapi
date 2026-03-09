@@ -220,7 +220,7 @@ func (cfg *Config) initAreasParams() {
 		},
 		"method": {
 			ID:             4,
-			Description:    "Specifies the method of acquisition for the item parameter.",
+			Description:    "Specifies the method of acquisition for the 'item' parameter.",
 			Usage:          "?item={id}&method={method_name}",
 			ExampleUses:    []string{"?item=45&method=treasure"},
 			ForList:        true,
@@ -497,7 +497,7 @@ func (cfg *Config) initMonstersParams() {
 		},
 		"resistance": {
 			ID:              7,
-			Description:     "Specifies the minimum resistance for the status_resists parameter. Resistance is an integer ranging from 1 to 254 (immune). The value 'immune' can also be used, which counts as 254.",
+			Description:     "Specifies the minimum resistance for the 'status_resists' parameter. Resistance is an integer ranging from 1 to 254 (immune). The value 'immune' can also be used, which counts as 254.",
 			Usage:           "status_resists={id},...&resistance={int|'immune'}",
 			ExampleUses:     []string{"status_resists=13&resistance=50", "status_resists=4,17&resistance=30", "status_resists=sleep&resistance=immune"},
 			ForList:         true,
@@ -523,7 +523,7 @@ func (cfg *Config) initMonstersParams() {
 		},
 		"method": {
 			ID:             9,
-			Description:    "Specifies the method of acquisition for the item parameter.",
+			Description:    "Specifies the method of acquisition for the 'item' parameter.",
 			Usage:          "?item={id}&method={method_name}",
 			ExampleUses:    []string{"?item=45&method=steal"},
 			ForList:        true,
@@ -542,7 +542,7 @@ func (cfg *Config) initMonstersParams() {
 		},
 		"is_forced": {
 			ID:             11,
-			Description:    "Specifies whether the auto-ability a monster drops is forced or not when using the auto_ability parameter.",
+			Description:    "Specifies whether the auto-ability a monster drops is forced or not when using the 'auto_ability' parameter.",
 			Usage:          "?auto_ability={id}&is_forced={bool}",
 			ExampleUses:    []string{"?auto_ability=45&is_forced=false"},
 			ForList:        true,
@@ -1345,8 +1345,17 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:       true,
 			AllowedResTypes: []string{"character", "aeon"},
 		},
+		"bomb_wpn": {
+			ID:              2,
+			Description:     "If a player ability is a physical attack, this parameter modifies the ability's damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'user' parameter and only takes effect, if the specified user is a character.",
+			Usage:           "?user={type}:{name|id}&bomb_wpn={bool}",
+			ExampleUses:     []string{"?user=character:wakka&bomb_wpn=true"},
+			ForList:         false,
+			ForSingle:       true,
+			RequiredParams:  []string{"user"},
+		},
 		"rank": {
-			ID:          2,
+			ID:          3,
 			Description: "Searches for player abilities with the specified rank.",
 			Usage:       "?rank={int}",
 			ExampleUses: []string{"?rank=3"},
@@ -1354,7 +1363,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"copycat": {
-			ID:          3,
+			ID:          4,
 			Description: "Searches for player abilities that can be copied by 'copycat'.",
 			Usage:       "?copycat={bool}",
 			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
@@ -1362,7 +1371,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"help_bar": {
-			ID:          4,
+			ID:          5,
 			Description: "Searches for player abilities whose names appear in the help bar.",
 			Usage:       "?help_bar={bool}",
 			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
@@ -1370,7 +1379,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"category": {
-			ID:          5,
+			ID:          6,
 			Description: "Searches for player abilities that are of the specified player ability category.",
 			Usage:       "?category={name|id}",
 			ExampleUses: []string{"?category=black-magic", "?category=2"},
@@ -1380,7 +1389,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "player-ability-category")},
 		},
 		"outside_battle": {
-			ID:          6,
+			ID:          7,
 			Description: "Searches for player abilities that can be used outside of battle, in the 'abilities' menu.",
 			Usage:       "?outside_battle={bool}",
 			ExampleUses: []string{"?outside_battle=true", "?outside_battle=false"},
@@ -1388,7 +1397,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"mp": {
-			ID:          7,
+			ID:          8,
 			Description: "Searches for player abilities with the specified mp cost.",
 			Usage:       "?mp={int}",
 			ExampleUses: []string{"?mp=16"},
@@ -1396,7 +1405,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"mp_min": {
-			ID:          8,
+			ID:          9,
 			Description: "Searches for player abilities with an mp cost that is equal or more than the specified amount.",
 			Usage:       "?mp_min={int}",
 			ExampleUses: []string{"?mp_min=16"},
@@ -1404,7 +1413,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"mp_max": {
-			ID:          9,
+			ID:          10,
 			Description: "Searches for player abilities with an mp cost that is equal or less than the specified amount.",
 			Usage:       "?mp_max={int}",
 			ExampleUses: []string{"?mp_max=16"},
@@ -1412,7 +1421,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"related_stat": {
-			ID:          10,
+			ID:          11,
 			Description: "Searches for player abilities that are related to the specified stat.",
 			Usage:       "?related_stat={name|id}",
 			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
@@ -1421,7 +1430,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "stats")},
 		},
 		"char_class": {
-			ID:          11,
+			ID:          12,
 			Description: "Searches for player abilities that are learned by the specified character class.",
 			Usage:       "?char_class={name|id}",
 			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
@@ -1430,7 +1439,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "character-classes")},
 		},
 		"std_sg": {
-			ID:          12,
+			ID:          13,
 			Description: "Searches for player abilities that are located on the specified character's standard sphere grid.",
 			Usage:       "?std_sg={name|id}",
 			ExampleUses: []string{"?std_sg=3", "?std_sg=tidus"},
@@ -1439,7 +1448,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "characters")},
 		},
 		"exp_sg": {
-			ID:          13,
+			ID:          14,
 			Description: "Searches for player abilities that are located on the specified character's expert sphere grid.",
 			Usage:       "?exp_sg={name|id}",
 			ExampleUses: []string{"?exp_sg=3", "?exp_sg=tidus"},
@@ -1448,7 +1457,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "characters")},
 		},
 		"learn_item": {
-			ID:          14,
+			ID:          15,
 			Description: "Searches for player abilities an aeon can learn via the specified item.",
 			Usage:       "?learn_item={id}",
 			ExampleUses: []string{"?learn_item=3"},
@@ -1457,7 +1466,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "items")},
 		},
 		"target_type": {
-			ID:          15,
+			ID:          16,
 			Description: "Searches for player abilities with the specified target type.",
 			Usage:       "?target_type={name|id}",
 			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
@@ -1465,7 +1474,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"phys_atk": {
-			ID:          16,
+			ID:          17,
 			Description: "Searches for player abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
 			Usage:       "?phys_atk={bool}",
 			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
@@ -1473,7 +1482,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"darkable": {
-			ID:          17,
+			ID:          18,
 			Description: "Searches for player abilities that are affected by 'darkness'.",
 			Usage:       "?darkable={bool}",
 			ExampleUses: []string{"?darkable=true", "?darkable=false"},
@@ -1481,7 +1490,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"silenceable": {
-			ID:          18,
+			ID:          19,
 			Description: "Searches for player abilities that are affected by 'silence'.",
 			Usage:       "?silenceable={bool}",
 			ExampleUses: []string{"?silenceable=true", "?silenceable=false"},
@@ -1489,7 +1498,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"reflectable": {
-			ID:          19,
+			ID:          20,
 			Description: "Searches for player abilities that are affected by 'reflect'.",
 			Usage:       "?reflectable={bool}",
 			ExampleUses: []string{"?reflectable=true", "?reflectable=false"},
@@ -1497,7 +1506,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"attack_type": {
-			ID:          20,
+			ID:          21,
 			Description: "Searches for player abilities with battle interactions of the specified attack type.",
 			Usage:       "?attack_type={name|id}",
 			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
@@ -1507,7 +1516,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "attack-type")},
 		},
 		"damage_type": {
-			ID:          21,
+			ID:          22,
 			Description: "Searches for player abilities that deal the specified type of damage.",
 			Usage:       "?damage_type={name|id}",
 			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
@@ -1517,7 +1526,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "damage-type")},
 		},
 		"damage_formula": {
-			ID:          22,
+			ID:          23,
 			Description: "Searches for player abilities that use the specified formula to calculate their damage.",
 			Usage:       "?damage_formula={name|id}",
 			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
@@ -1527,7 +1536,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "damage-formula")},
 		},
 		"element": {
-			ID:          23,
+			ID:          24,
 			Description: "Searches for player abilities that deal elemental damage based on the specified element.",
 			Usage:       "?element={name|id}",
 			ExampleUses: []string{"?element=3", "?element=fire"},
@@ -1536,7 +1545,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "elements")},
 		},
 		"delay": {
-			ID:          24,
+			ID:          25,
 			Description: "Searches for player abilities that deal delay.",
 			Usage:       "?delay={bool}",
 			ExampleUses: []string{"?delay=true", "?delay=false"},
@@ -1544,7 +1553,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"status_inflict": {
-			ID:          25,
+			ID:          26,
 			Description: "Searches for player abilities that can inflict the specified status condition.",
 			Usage:       "?status_inflict={id}",
 			ExampleUses: []string{"?status_inflict=3"},
@@ -1553,7 +1562,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
 		"status_remove": {
-			ID:          26,
+			ID:          27,
 			Description: "Searches for player abilities that can remove the specified status condition.",
 			Usage:       "?status_remove={id}",
 			ExampleUses: []string{"?status_remove=3"},
@@ -1562,7 +1571,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
 		"stat_changes": {
-			ID:          27,
+			ID:          28,
 			Description: "Searches for player abilities that cause stat changes.",
 			Usage:       "?stat_changes={bool}",
 			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
@@ -1570,7 +1579,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"mod_changes": {
-			ID:          28,
+			ID:          29,
 			Description: "Searches for player abilities that cause modifier changes.",
 			Usage:       "?mod_changes={bool}",
 			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
@@ -1593,6 +1602,15 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ForList:         false,
 			ForSingle:       true,
 			AllowedResTypes: []string{"character", "aeon"},
+		},
+		"bomb_wpn": {
+			ID:              2,
+			Description:     "If a trigger command is a physical attack, this parameter modifies the ability's damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'user' parameter and only takes effect, if the specified user is a character.",
+			Usage:           "?user={type}:{name|id}&bomb_wpn={bool}",
+			ExampleUses:     []string{"?user=character:wakka&bomb_wpn=true"},
+			ForList:         false,
+			ForSingle:       true,
+			RequiredParams:  []string{"user"},
 		},
 		"related_stat": {
 			ID:          3,
@@ -1629,8 +1647,17 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 			ForSingle:       true,
 			AllowedResTypes: []string{"character", "aeon"},
 		},
+		"bomb_wpn": {
+			ID:              2,
+			Description:     "If an unspecified ability is a physical attack, this parameter modifies the ability's damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'user' parameter and only takes effect, if the specified user is a character.",
+			Usage:           "?user={type}:{name|id}&bomb_wpn={bool}",
+			ExampleUses:     []string{"?user=character:wakka&bomb_wpn=true"},
+			ForList:         false,
+			ForSingle:       true,
+			RequiredParams:  []string{"user"},
+		},
 		"rank": {
-			ID:          2,
+			ID:          3,
 			Description: "Searches for unspecified abilities with the specified rank.",
 			Usage:       "?rank={int}",
 			ExampleUses: []string{"?rank=3"},
@@ -1638,7 +1665,7 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"copycat": {
-			ID:          3,
+			ID:          4,
 			Description: "Searches for unspecified abilities that can be copied by 'copycat'.",
 			Usage:       "?copycat={bool}",
 			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
@@ -1646,7 +1673,7 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"help_bar": {
-			ID:          4,
+			ID:          5,
 			Description: "Searches for unspecified abilities whose names appear in the help bar.",
 			Usage:       "?help_bar={bool}",
 			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
@@ -1654,7 +1681,7 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 			ForSingle:   false,
 		},
 		"char_class": {
-			ID:          5,
+			ID:          6,
 			Description: "Searches for unspecified abilities that are learned by the specified character class.",
 			Usage:       "?char_class={name|id}",
 			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
@@ -1663,7 +1690,7 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 			References:  []string{createListURL(cfg, "character-classes")},
 		},
 		"phys_atk": {
-			ID:          6,
+			ID:          7,
 			Description: "Searches for unspecified abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
 			Usage:       "?phys_atk={bool}",
 			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
@@ -1698,7 +1725,7 @@ func (cfg *Config) initSublocationsParams() {
 		},
 		"method": {
 			ID:             3,
-			Description:    "Specifies the method of acquisition for the item parameter.",
+			Description:    "Specifies the method of acquisition for the 'item' parameter.",
 			Usage:          "?item={id}&method={method_name}",
 			ExampleUses:    []string{"?item=45&method=treasure"},
 			ForList:        true,
@@ -1798,7 +1825,7 @@ func (cfg *Config) initLocationsParams() {
 		},
 		"method": {
 			ID:             2,
-			Description:    "Specifies the method of acquisition for the item parameter.",
+			Description:    "Specifies the method of acquisition for the 'item' parameter.",
 			Usage:          "?item={id}&method={method_name}",
 			ExampleUses:    []string{"?item=45&method=treasure"},
 			ForList:        true,

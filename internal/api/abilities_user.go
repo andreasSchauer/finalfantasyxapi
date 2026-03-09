@@ -4,10 +4,16 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"slices"
 
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
+
+type userAbility interface {
+	canUseAbility(*Config, string) bool
+	getBattleInteractions() []BattleInteraction
+	error
+}
 
 type biReplacement struct {
 	Range          *int32
@@ -16,91 +22,46 @@ type biReplacement struct {
 	DamageConstant *int32
 }
 
-func applyPlayerAbilityUser(cfg *Config, r *http.Request, ability PlayerAbility, queryName string) (PlayerAbility, error) {
-	queryParam := cfg.q.playerAbilities[queryName]
+
+func applyUser(cfg *Config, r *http.Request, ability userAbility, queryName string, queryLookup map[string]QueryType) ([]BattleInteraction, error) {
+	queryParam := queryLookup[queryName]
+	queryParamBomb := queryLookup["bomb_wpn"]
 
 	resType, unitStr, err := parseResTypeQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
-		return ability, nil
+		return ability.getBattleInteractions(), nil
 	}
 	if err != nil {
-		return PlayerAbility{}, err
+		return nil, err
 	}
 
-	unitName, repl, err := findUnit(cfg, unitStr, resType, queryParam)
+	unitName, repl, err := findUnit(cfg, r, unitStr, resType, queryParam, queryParamBomb)
 	if err != nil {
-		return PlayerAbility{}, err
+		return nil, err
 	}
 
-	err = canUsePlayerAbility(cfg, ability, unitName, resType, queryName)
+	err = verifyAbilityUsage(cfg, ability, unitName, resType, queryName)
 	if err != nil {
-		return PlayerAbility{}, err
+		return nil, err
 	}
 
-	ability.BattleInteractions = replaceBattleInteractionVals(ability.BattleInteractions, repl)
+	battleInteractions := applyBiReplacement(ability.getBattleInteractions(), repl)
 
-	return ability, nil
+	return battleInteractions, nil
 }
 
-func applyUnspecifiedAbilityUser(cfg *Config, r *http.Request, ability UnspecifiedAbility, queryName string) (UnspecifiedAbility, error) {
-	queryParam := cfg.q.unspecifiedAbilities[queryName]
-
-	resType, unitStr, err := parseResTypeQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
-		return ability, nil
-	}
-	if err != nil {
-		return UnspecifiedAbility{}, err
-	}
-
-	unitName, repl, err := findUnit(cfg, unitStr, resType, queryParam)
-	if err != nil {
-		return UnspecifiedAbility{}, err
-	}
-
-	err = canUseUnspecifiedAbility(cfg, ability, unitName, resType, queryName)
-	if err != nil {
-		return UnspecifiedAbility{}, err
-	}
-
-	ability.BattleInteractions = replaceBattleInteractionVals(ability.BattleInteractions, repl)
-
-	return ability, nil
-}
-
-func applyTriggerCommandUser(cfg *Config, r *http.Request, ability TriggerCommand, queryName string) (TriggerCommand, error) {
-	queryParam := cfg.q.triggerCommands[queryName]
-
-	resType, unitStr, err := parseResTypeQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
-		return ability, nil
-	}
-	if err != nil {
-		return TriggerCommand{}, err
-	}
-
-	unitName, repl, err := findUnit(cfg, unitStr, resType, queryParam)
-	if err != nil {
-		return TriggerCommand{}, err
-	}
-
-	err = canUseTriggerCommand(cfg, ability, unitName, resType, queryName)
-	if err != nil {
-		return TriggerCommand{}, err
-	}
-
-	ability.BattleInteractions = replaceBattleInteractionVals(ability.BattleInteractions, repl)
-
-	return ability, nil
-}
-
-func findUnit(cfg *Config, unitStr, resType string, queryParam QueryType) (string, biReplacement, error) {
+func findUnit(cfg *Config, r *http.Request, unitStr, resType string, queryParamUser, queryParamBomb QueryType) (string, biReplacement, error) {
 	var repl biReplacement
 	var unitName string
 
+	bombWpn, err := parseBooleanQuery(r, queryParamBomb)
+	if err != nil && !errors.Is(err, errEmptyQuery) {
+		return "", biReplacement{}, err
+	}
+
 	switch resType {
 	case "character":
-		id, err := parseQueryNamedVal(unitStr, resType, queryParam, cfg.l.Characters)
+		id, err := parseQueryNamedVal(unitStr, resType, queryParamUser, cfg.l.Characters)
 		if err != nil {
 			return "", biReplacement{}, err
 		}
@@ -109,8 +70,12 @@ func findUnit(cfg *Config, unitStr, resType string, queryParam QueryType) (strin
 
 		repl.Range = &character.PhysAtkRange
 
+		if bombWpn {
+			repl.DamageConstant = h.GetInt32Ptr(18)
+		}
+
 	case "aeon":
-		id, err := parseQueryNamedVal(unitStr, resType, queryParam, cfg.l.Aeons)
+		id, err := parseQueryNamedVal(unitStr, resType, queryParamUser, cfg.l.Aeons)
 		if err != nil {
 			return "", biReplacement{}, err
 		}
@@ -126,7 +91,18 @@ func findUnit(cfg *Config, unitStr, resType string, queryParam QueryType) (strin
 	return unitName, repl, nil
 }
 
-func replaceBattleInteractionVals(battleInteractions []BattleInteraction, repl biReplacement) []BattleInteraction {
+
+
+func verifyAbilityUsage(cfg *Config, ability userAbility, unitName, resType, queryName string) error {
+	if !ability.canUseAbility(cfg, unitName) {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, resType, unitName, ability), nil)
+	}
+
+	return nil
+}
+
+
+func applyBiReplacement(battleInteractions []BattleInteraction, repl biReplacement) []BattleInteraction {
 	for i, battleInteraction := range battleInteractions {
 		if !battleInteraction.BasedOnPhysAttack {
 			continue
@@ -152,40 +128,4 @@ func replaceBattleInteractionVals(battleInteractions []BattleInteraction, repl b
 	}
 
 	return battleInteractions
-}
-
-func canUsePlayerAbility(cfg *Config, ability PlayerAbility, unitName, resType, queryName string) error {
-	for _, class := range ability.LearnedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
-
-		if slices.Contains(classLookup.Members, unitName) {
-			return nil
-		}
-	}
-
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn player ability '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
-}
-
-func canUseUnspecifiedAbility(cfg *Config, ability UnspecifiedAbility, unitName, resType, queryName string) error {
-	for _, class := range ability.LearnedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
-
-		if slices.Contains(classLookup.Members, unitName) {
-			return nil
-		}
-	}
-
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn unspecified ability '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
-}
-
-func canUseTriggerCommand(cfg *Config, ability TriggerCommand, unitName, resType, queryName string) error {
-	for _, class := range ability.UsedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
-
-		if slices.Contains(classLookup.Members, unitName) {
-			return nil
-		}
-	}
-
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn trigger command '%s'", queryName, resType, unitName, nameToString(ability.Name, ability.Version, nil)), nil)
 }

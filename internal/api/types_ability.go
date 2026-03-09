@@ -1,7 +1,11 @@
 package api
 
-// overdrive abilities need different query to get their ability attributes (GetOverdriveAbilityAttributes)
-// it could be the case that the unspecified ability types don't even need a db query for that
+import (
+	"fmt"
+	"slices"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+)
 
 type Ability struct {
 	ID                 int32               `json:"id"`
@@ -95,6 +99,26 @@ type PlayerAbility struct {
 	BattleInteractions		[]BattleInteraction		`json:"battle_interactions"`
 }
 
+func (a PlayerAbility) canUseAbility(cfg *Config, unitName string) bool {
+	for _, class := range a.LearnedBy {
+		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
+
+		if slices.Contains(classLookup.Members, unitName) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (a PlayerAbility) getBattleInteractions() []BattleInteraction {
+	return a.BattleInteractions
+}
+
+func (a PlayerAbility) Error() string {
+	return fmt.Sprintf("player ability '%s'", nameToString(a.Name, a.Version, nil))
+}
+
 
 type TriggerCommand struct {
 	ID                    	int32					`json:"id"`
@@ -115,6 +139,26 @@ type TriggerCommand struct {
 	BattleInteractions		[]BattleInteraction		`json:"battle_interactions"`
 }
 
+func (a TriggerCommand) canUseAbility(cfg *Config, unitName string) bool {
+	for _, class := range a.UsedBy {
+		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
+
+		if slices.Contains(classLookup.Members, unitName) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (a TriggerCommand) getBattleInteractions() []BattleInteraction {
+	return a.BattleInteractions
+}
+
+func (a TriggerCommand) Error() string {
+	return fmt.Sprintf("trigger command '%s'", nameToString(a.Name, a.Version, nil))
+}
+
 
 type UnspecifiedAbility struct {
 	ID                 int32               `json:"id"`
@@ -133,4 +177,24 @@ type UnspecifiedAbility struct {
 	Cursor             *string             `json:"cursor"`
 	LearnedBy          []NamedAPIResource  `json:"learned_by"`
 	BattleInteractions []BattleInteraction `json:"battle_interactions"`
+}
+
+func (a UnspecifiedAbility) canUseAbility(cfg *Config, unitName string) bool {
+	for _, class := range a.LearnedBy {
+		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
+
+		if slices.Contains(classLookup.Members, unitName) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (a UnspecifiedAbility) getBattleInteractions() []BattleInteraction {
+	return a.BattleInteractions
+}
+
+func (a UnspecifiedAbility) Error() string {
+	return fmt.Sprintf("unspecified ability '%s'", nameToString(a.Name, a.Version, nil))
 }
