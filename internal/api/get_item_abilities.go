@@ -14,8 +14,6 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.ItemAb
 
 	item, _ := seeding.GetResourceByID(id, cfg.l.ItemsID)
 
-	category, _ := newNamedAPIResourceFromType(cfg, cfg.e.itemCategory.endpoint, item.Category, cfg.t.ItemCategory)
-
 	response := ItemAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
@@ -23,7 +21,7 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.ItemAb
 		UntypedAbility:     idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
 		Description:        item.Description,
 		Effect:             item.Effect,
-		Category:           category,
+		Category:           newNamedAPIResourceFromType(cfg, cfg.e.itemCategory.endpoint, item.Category, cfg.t.ItemCategory),
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,

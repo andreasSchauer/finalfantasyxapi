@@ -1418,40 +1418,6 @@ func (q *Queries) GetEnemyAbilityMonsterIDs(ctx context.Context, id int32) ([]in
 	return items, nil
 }
 
-const getGenericOverdriveAbilityIDsByRank = `-- name: GetGenericOverdriveAbilityIDsByRank :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN overdrive_abilities oa ON oa.ability_id = a.id
-JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
-JOIN overdrives o ON j.overdrive_id = o.id
-JOIN ability_attributes aa ON o.attributes_id = aa.id
-WHERE aa.rank = $1
-ORDER BY oa.id
-`
-
-func (q *Queries) GetGenericOverdriveAbilityIDsByRank(ctx context.Context, rank sql.NullInt32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getGenericOverdriveAbilityIDsByRank, rank)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getItemAbilityIDs = `-- name: GetItemAbilityIDs :many
 SELECT id FROM item_abilities ORDER BY id
 `
@@ -2152,9 +2118,8 @@ func (q *Queries) GetOverdriveAbilityIDsByName(ctx context.Context, name string)
 const getOverdriveAbilityIDsByRank = `-- name: GetOverdriveAbilityIDsByRank :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
-JOIN overdrives o ON j.overdrive_id = o.id
-JOIN ability_attributes aa ON o.attributes_id = aa.id
+JOIN abilities a ON oa.ability_id = a.id
+JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.rank = $1
 ORDER BY oa.id
 `

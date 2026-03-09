@@ -7,6 +7,7 @@ import (
 )
 
 var errNotAnID = errors.New("not an id.")
+var errIdNotFound = errors.New("id doesn't exit.")
 var errNoResource = errors.New("no resources found.")
 var errEmptyQuery = errors.New("query parameter is empty.")
 var errNoDefaultVal = errors.New("query parameter doesn't have a default value, or default value is unused.")

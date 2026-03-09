@@ -9,11 +9,13 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+
 type OverdriveAbility struct {
 	ID int32
 	Ability
-	RelatedStats       []string            `json:"related_stats"`
-	BattleInteractions []BattleInteraction `json:"battle_interactions"`
+	Overdrive			LookupObject		`json:"overdrive"`	// not meant for seeding
+	RelatedStats       	[]string            `json:"related_stats"`
+	BattleInteractions 	[]BattleInteraction `json:"battle_interactions"`
 }
 
 func (o OverdriveAbility) ToHashFields() []any {
@@ -67,7 +69,19 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, overdriveAbility := range overdriveAbilities {
 			var err error
+			
+			odKey := CreateLookupKey(overdriveAbility.Overdrive)
+			overdrive, err := GetResource(odKey, l.Overdrives)
+			if err != nil {
+				return h.NewErr(overdriveAbility.Error(), err)
+			}
+			
 			overdriveAbility.Type = database.AbilityTypeOverdriveAbility
+			overdriveAbility.Attributes = &Attributes{
+				Rank: overdrive.Rank,
+				AppearsInHelpBar: false,
+				CanCopycat: false,
+			}
 
 			overdriveAbility.Ability, err = seedObjAssignID(qtx, overdriveAbility.Ability, l.seedAbility)
 			if err != nil {

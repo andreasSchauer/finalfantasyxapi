@@ -793,20 +793,8 @@ ORDER BY oa.id;
 -- name: GetOverdriveAbilityIDsByRank :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
-JOIN overdrives o ON j.overdrive_id = o.id
-JOIN ability_attributes aa ON o.attributes_id = aa.id
-WHERE aa.rank = $1
-ORDER BY oa.id;
-
-
--- name: GetGenericOverdriveAbilityIDsByRank :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN overdrive_abilities oa ON oa.ability_id = a.id
-JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
-JOIN overdrives o ON j.overdrive_id = o.id
-JOIN ability_attributes aa ON o.attributes_id = aa.id
+JOIN abilities a ON oa.ability_id = a.id
+JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.rank = $1
 ORDER BY oa.id;
 

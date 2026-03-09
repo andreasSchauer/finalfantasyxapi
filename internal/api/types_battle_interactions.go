@@ -96,16 +96,12 @@ type AbilityDamage struct {
 }
 
 func convertAbilityDamage(cfg *Config, ad seeding.AbilityDamage) AbilityDamage {
-	attackType, _ := newNamedAPIResourceFromType(cfg, cfg.e.attackType.endpoint, ad.AttackType, cfg.t.AttackType)
-	damageType, _ := newNamedAPIResourceFromType(cfg, cfg.e.damageType.endpoint, ad.DamageType, cfg.t.DamageType)
-	damageFormula, _ := newNamedAPIResourceFromType(cfg, cfg.e.damageFormula.endpoint, ad.DamageFormula, cfg.t.DamageFormula)
-
 	return AbilityDamage{
 		Condition: 		ad.Condition,
-		AttackType: 	attackType,
+		AttackType: 	newNamedAPIResourceFromType(cfg, cfg.e.attackType.endpoint, ad.AttackType, cfg.t.AttackType),
 		TargetStat:		nameToNamedAPIResource(cfg, cfg.e.stats, ad.TargetStat, nil),
-		DamageType: 	damageType,
-		DamageFormula: 	damageFormula,
+		DamageType: 	newNamedAPIResourceFromType(cfg, cfg.e.damageType.endpoint, ad.DamageType, cfg.t.DamageType),
+		DamageFormula: 	newNamedAPIResourceFromType(cfg, cfg.e.damageFormula.endpoint, ad.DamageFormula, cfg.t.DamageFormula),
 		DamageConstant: ad.DamageConstant,
 	}
 }

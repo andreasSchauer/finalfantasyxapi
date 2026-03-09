@@ -17,21 +17,18 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		return Monster{}, err
 	}
 
-	category, _ := newNamedAPIResourceFromType(cfg, cfg.e.monsterCategory.endpoint, monster.Category, cfg.t.MonsterCategory)
-	species, _ := newNamedAPIResourceFromType(cfg, cfg.e.monsterSpecies.endpoint, monster.Species, cfg.t.MonsterSpecies)
-
 	response := Monster{
 		ID:                   monster.ID,
 		Name:                 monster.Name,
 		Version:              monster.Version,
 		Specification:        monster.Specification,
 		Notes:                monster.Notes,
-		Species:              species,
+		Species:              newNamedAPIResourceFromType(cfg, cfg.e.monsterSpecies.endpoint, monster.Species, cfg.t.MonsterSpecies),
 		IsStoryBased:         monster.IsStoryBased,
 		IsRepeatable:         monster.IsRepeatable,
 		CanBeCaptured:        monster.CanBeCaptured,
 		AreaConquestLocation: monster.AreaConquestLocation,
-		Category:             category,
+		Category:             newNamedAPIResourceFromType(cfg, cfg.e.monsterCategory.endpoint, monster.Category, cfg.t.MonsterCategory),
 		CTBIconType:          monster.CTBIconType,
 		HasOverdrive:         monster.HasOverdrive,
 		IsUnderwater:         monster.IsUnderwater,

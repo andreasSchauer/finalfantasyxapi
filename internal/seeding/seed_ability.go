@@ -125,14 +125,11 @@ func (a Attributes) Error() string {
 }
 
 func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, error) {
-	// overdrive abilities inherit attributes from overdrives
-	if ability.Type != database.AbilityTypeOverdriveAbility {
-		var err error
-
-		ability.Attributes, err = seedObjPtrAssignFK(qtx, ability.Attributes, l.seedAbilityAttributes)
-		if err != nil {
-			return Ability{}, h.NewErr(ability.Error(), err)
-		}
+	var err error
+	
+	ability.Attributes, err = seedObjPtrAssignFK(qtx, ability.Attributes, l.seedAbilityAttributes)
+	if err != nil {
+		return Ability{}, h.NewErr(ability.Error(), err)
 	}
 
 	dbAbility, err := qtx.CreateAbility(context.Background(), database.CreateAbilityParams{

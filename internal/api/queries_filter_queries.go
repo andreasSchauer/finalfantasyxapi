@@ -191,6 +191,27 @@ func idListQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg 
 	return resources, nil
 }
 
+func boolQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, bool) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+
+	b, err := parseBooleanQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := wrapperFn(cfg, r, b)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
+}
+
 // db query searches for resources with matching boolean db column value
 func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, bool) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]

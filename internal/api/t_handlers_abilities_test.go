@@ -210,6 +210,20 @@ func TestRetrieveAbilities(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?type=7",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr: "provided id '7' used for parameter 'type' doesn't exist. max id: 6.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?type=asd",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr: "invalid enum value 'asd' used for parameter 'type'. use /api/abilities/parameters to see allowed values.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/abilities?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -227,6 +241,16 @@ func TestRetrieveAbilities(t *testing.T) {
 			previous: nil,
 			next:     nil,
 			results:  []int32{69, 70, 71, 72, 415, 481, 548, 565, 706, 804, 831},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?type=2&help_bar=false&rank=5&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    58,
+			previous: nil,
+			next:     nil,
+			results:  []int32{107, 118, 147, 155, 178, 212},
 		},
 		{
 			testGeneral: testGeneral{

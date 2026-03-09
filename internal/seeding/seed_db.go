@@ -224,6 +224,11 @@ func (l *Lookup) getSeeders() []seeder {
 			relFunc:  l.seedPlayerAbilitiesRelationships,
 		},
 		{
+			name:     "overdrives",
+			seedFunc: l.seedOverdrives,
+			relFunc:  l.seedOverdrivesRelationships,
+		},
+		{
 			name:     "overdrive abilities",
 			seedFunc: l.seedOverdriveAbilities,
 			relFunc:  l.seedOverdriveAbilitiesRelationships,
@@ -252,11 +257,6 @@ func (l *Lookup) getSeeders() []seeder {
 			name:     "overdrive commands",
 			seedFunc: l.seedOverdriveCommands,
 			relFunc:  l.seedOverdriveCommandsRelationships,
-		},
-		{
-			name:     "overdrives",
-			seedFunc: l.seedOverdrives,
-			relFunc:  l.seedOverdrivesRelationships,
 		},
 		{
 			name:     "key items",

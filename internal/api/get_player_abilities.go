@@ -12,8 +12,6 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		return PlayerAbility{}, err
 	}
 
-	category, _ := newNamedAPIResourceFromType(cfg, cfg.e.playerAbilityCategory.endpoint, ability.Category, cfg.t.PlayerAbilityCategory)
-
 	monsters, err := getResourcesDB(cfg, r, cfg.e.monsters, ability, cfg.db.GetPlayerAbilityMonsterIDs)
 	if err != nil {
 		return PlayerAbility{}, err
@@ -32,7 +30,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		CanCopycat:            ability.CanCopycat,
 		CanUseOutsideBattle:   ability.CanUseOutsideBattle,
 		MpCost:                ability.MPCost,
-		Category:              category,
+		Category:              newNamedAPIResourceFromType(cfg, cfg.e.playerAbilityCategory.endpoint, ability.Category, cfg.t.PlayerAbilityCategory),
 		AeonLearnItem:         convertObjPtr(cfg, ability.AeonLearnItem, convertItemAmount),
 		LearnedBy:             namesToNamedAPIResources(cfg, cfg.e.characterClasses, ability.LearnedBy),
 		RelatedStats:          namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),

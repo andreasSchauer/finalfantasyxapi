@@ -50,17 +50,6 @@ func getItemAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]
 	return getResourcesDB(cfg, r, i, status, cfg.db.GetItemAbilityIDsByInflictedStatus)
 }
 
-func getUnspecifiedAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	i := cfg.e.unspecifiedAbilities
-	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
-
-	if status.Name == "delay" {
-		return getResourcesDbNoInput(cfg, r, i, cfg.e.statusConditions.resourceType, cfg.db.GetUnspecifiedAbilityIDsDealsDelay)
-	}
-
-	return getResourcesDB(cfg, r, i, status, cfg.db.GetUnspecifiedAbilityIDsByInflictedStatus)
-}
-
 func getOverdriveAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.overdriveAbilities
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)

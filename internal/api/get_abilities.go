@@ -15,8 +15,6 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		return Ability{}, err
 	}
 
-	abilityType, _ := newNamedAPIResourceFromType(cfg, cfg.e.abilityType.endpoint, string(ability.Type), cfg.t.AbilityType)
-
 	monsters, err := getResourcesDB(cfg, r, cfg.e.monsters, ability, cfg.db.GetAbilityMonsterIDs)
 	if err != nil {
 		return Ability{}, err
@@ -27,7 +25,7 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		Type:               abilityType,
+		Type:               newNamedAPIResourceFromType(cfg, cfg.e.abilityType.endpoint, string(ability.Type), cfg.t.AbilityType),
 		TypedAbility:       createAbilityResource(cfg, ability.Name, ability.Version, ability.Type),
 		Monsters:           monsters,
 		BattleInteractions: getAbilityBattleInteractions(cfg, ability),

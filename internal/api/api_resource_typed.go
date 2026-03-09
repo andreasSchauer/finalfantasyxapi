@@ -55,21 +55,21 @@ func (r TypedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func newNamedAPIResourceFromType[T, N any](cfg *Config, endpoint, key string, et EnumType[T, N]) (NamedAPIResource, error) {
-	enumType, err := GetTypedAPIResource(key, et)
-	if err != nil {
-		return NamedAPIResource{}, newHTTPError(http.StatusInternalServerError, err.Error(), fmt.Errorf("%s: %v", endpoint, err))
-	}
+func newNamedAPIResourceFromType[T, N any](cfg *Config, endpoint, key string, et EnumType[T, N]) (NamedAPIResource) {
+	typedRes, _ := GetTypedAPIResource(key, et)
+	
+	resource := newNamedAPIResourceSimple(cfg, endpoint, typedRes.ID, typedRes.Name)
 
-	resource := newNamedAPIResourceSimple(cfg, endpoint, enumType.ID, enumType.Name)
-
-	return resource, nil
+	return resource
 }
 
 // Searches a TypedAPIResource based on its value or an idString (mostly from queries)
 func GetTypedAPIResource[T, N any](key string, et EnumType[T, N]) (TypedAPIResource, error) {
 	id, err := strconv.Atoi(key)
 	if err == nil {
+		if id > len(et.lookup) || id <= 0 {
+			return TypedAPIResource{}, errIdNotFound
+		}
 		for _, res := range et.lookup {
 			if int32(id) == res.ID {
 				return res, nil
@@ -88,7 +88,7 @@ func GetTypedAPIResource[T, N any](key string, et EnumType[T, N]) (TypedAPIResou
 		return res, nil
 	}
 
-	return TypedAPIResource{}, fmt.Errorf("value '%s' is not valid in enum '%s'.", key, et.name)
+	return TypedAPIResource{}, errNoResource
 }
 
 func newTypedAPIResourceList(cfg *Config, r *http.Request, resources []TypedAPIResource) (TypedApiResourceList, error) {

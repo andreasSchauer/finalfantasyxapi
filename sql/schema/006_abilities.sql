@@ -24,11 +24,7 @@ CREATE TABLE abilities (
     attributes_id INTEGER REFERENCES ability_attributes(id),
     type ability_type NOT NULL,
 
-    UNIQUE(name, version, type),
-    CHECK(
-        (type != 'overdrive-ability' AND attributes_id IS NOT NULL) OR
-        (type = 'overdrive-ability' AND attributes_id IS NULL)
-    )
+    UNIQUE(name, version, type)
 );
 
 

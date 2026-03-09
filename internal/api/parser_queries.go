@@ -59,11 +59,16 @@ func parseTypeQuery[T, N any](r *http.Request, endpoint string, queryParam Query
 	}
 
 	enum, err := GetTypedAPIResource(query, et)
-	if err != nil {
-		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", query, queryParam.Name, endpoint), err)
-	}
+	switch err {
+	case errIdNotFound:
+		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d.", query, queryParam.Name, len(et.lookup)), nil)
 
-	return enum, nil
+	case errNoResource:
+		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", query, queryParam.Name, endpoint), nil)
+
+	default:
+		return enum, nil
+	}
 }
 
 // checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored.
