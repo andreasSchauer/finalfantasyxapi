@@ -15,6 +15,13 @@ type userAbility interface {
 	error
 }
 
+type unitRepl struct {
+	resType 	string
+	unitName	string
+	bombWpn		bool
+	replVals	biReplacement
+}
+
 type biReplacement struct {
 	Range          *int32
 	ShatterRate    *int32
@@ -24,10 +31,7 @@ type biReplacement struct {
 
 
 func applyUser(cfg *Config, r *http.Request, ability userAbility, queryName string, queryLookup map[string]QueryType) ([]BattleInteraction, error) {
-	queryParam := queryLookup[queryName]
-	queryParamBomb := queryLookup["bomb_wpn"]
-
-	resType, unitStr, err := parseResTypeQuery(r, queryParam)
+	repl, err := getUnitRepl(cfg, r, queryName, queryLookup)
 	if errors.Is(err, errEmptyQuery) {
 		return ability.getBattleInteractions(), nil
 	}
@@ -35,93 +39,119 @@ func applyUser(cfg *Config, r *http.Request, ability userAbility, queryName stri
 		return nil, err
 	}
 
-	unitName, repl, err := findUnit(cfg, r, unitStr, resType, queryParam, queryParamBomb)
+	err = verifyAbilityUsage(cfg, ability, repl, queryName)
 	if err != nil {
 		return nil, err
 	}
 
-	err = verifyAbilityUsage(cfg, ability, unitName, resType, queryName)
-	if err != nil {
-		return nil, err
-	}
-
-	battleInteractions := applyBiReplacement(ability.getBattleInteractions(), repl)
+	battleInteractions := applyBiReplacement(ability.getBattleInteractions(), repl.replVals)
 
 	return battleInteractions, nil
 }
 
-func findUnit(cfg *Config, r *http.Request, unitStr, resType string, queryParamUser, queryParamBomb QueryType) (string, biReplacement, error) {
-	var repl biReplacement
-	var unitName string
 
+func getUnitRepl(cfg *Config, r *http.Request, queryName string, queryLookup map[string]QueryType) (unitRepl, error) {
+	queryParamUser := queryLookup[queryName]
+	queryParamBomb := queryLookup["bomb_wpn"]
+
+	resType, unitStr, err := parseResTypeQuery(r, queryParamUser)
+	if err != nil {
+		return unitRepl{}, err
+	}
+	
 	bombWpn, err := parseBooleanQuery(r, queryParamBomb)
 	if err != nil && !errors.Is(err, errEmptyQuery) {
-		return "", biReplacement{}, err
+		return unitRepl{}, err
 	}
 
-	switch resType {
+	repl := unitRepl{
+		resType: 	resType,
+		bombWpn: 	bombWpn,
+		replVals: 	biReplacement{},
+	}
+
+	switch repl.resType {
 	case "character":
-		id, err := parseQueryNamedVal(unitStr, resType, queryParamUser, cfg.l.Characters)
+		repl, err = populateReplCharacter(cfg, unitStr, repl, queryParamUser)
 		if err != nil {
-			return "", biReplacement{}, err
-		}
-		character, _ := seeding.GetResourceByID(id, cfg.l.CharactersID)
-		unitName = character.Name
-
-		repl.Range = &character.PhysAtkRange
-
-		if bombWpn {
-			repl.DamageConstant = h.GetInt32Ptr(18)
+			return unitRepl{}, err
 		}
 
 	case "aeon":
-		id, err := parseQueryNamedVal(unitStr, resType, queryParamUser, cfg.l.Aeons)
+		repl, err = populateReplAeon(cfg, unitStr, repl, queryParamUser)
 		if err != nil {
-			return "", biReplacement{}, err
+			return unitRepl{}, err
 		}
-		aeon, _ := seeding.GetResourceByID(id, cfg.l.AeonsID)
-		unitName = aeon.Name
-
-		repl.Range = aeon.PhysAtkRange
-		repl.ShatterRate = aeon.PhysAtkShatterRate
-		repl.Accuracy = convertObjPtr(cfg, aeon.PhysAtkAccuracy, convertAccuracy)
-		repl.DamageConstant = aeon.PhysAtkDmgConstant
 	}
 
-	return unitName, repl, nil
+	return repl, nil
+}
+
+
+func populateReplCharacter(cfg *Config, unitStr string, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
+	id, err := parseQueryNamedVal(unitStr, repl.resType, queryParamUser, cfg.l.Characters)
+	if err != nil {
+		return unitRepl{}, err
+	}
+	character, _ := seeding.GetResourceByID(id, cfg.l.CharactersID)
+	repl.unitName = character.Name
+
+	repl.replVals.Range = &character.PhysAtkRange
+
+	if repl.bombWpn {
+		repl.replVals.DamageConstant = h.GetInt32Ptr(18)
+	}
+
+	return repl, nil
+}
+
+func populateReplAeon(cfg *Config, unitStr string, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
+	id, err := parseQueryNamedVal(unitStr, repl.resType, queryParamUser, cfg.l.Aeons)
+	if err != nil {
+		return unitRepl{}, err
+	}
+	aeon, _ := seeding.GetResourceByID(id, cfg.l.AeonsID)
+	repl.unitName = aeon.Name
+
+	repl.replVals.Range = aeon.PhysAtkRange
+	repl.replVals.ShatterRate = aeon.PhysAtkShatterRate
+	repl.replVals.Accuracy = convertObjPtr(cfg, aeon.PhysAtkAccuracy, convertAccuracy)
+	repl.replVals.DamageConstant = aeon.PhysAtkDmgConstant
+
+	return repl, nil
 }
 
 
 
-func verifyAbilityUsage(cfg *Config, ability userAbility, unitName, resType, queryName string) error {
-	if !ability.canUseAbility(cfg, unitName) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, resType, unitName, ability), nil)
+func verifyAbilityUsage(cfg *Config, ability userAbility, repl unitRepl, queryName string) error {
+	if !ability.canUseAbility(cfg, repl.unitName) {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, repl.resType, repl.unitName, ability), nil)
 	}
 
 	return nil
 }
 
 
-func applyBiReplacement(battleInteractions []BattleInteraction, repl biReplacement) []BattleInteraction {
+func applyBiReplacement(battleInteractions []BattleInteraction, replVals biReplacement) []BattleInteraction {
 	for i, battleInteraction := range battleInteractions {
 		if !battleInteraction.BasedOnPhysAttack {
 			continue
 		}
 
-		if repl.Range != nil {
-			battleInteraction.Range = repl.Range
+		if replVals.Range != nil {
+			battleInteraction.Range = replVals.Range
 		}
 
-		if repl.ShatterRate != nil {
-			battleInteraction.ShatterRate = *repl.ShatterRate
+		if replVals.ShatterRate != nil {
+			battleInteraction.ShatterRate = *replVals.ShatterRate
 		}
 
-		if repl.Accuracy != nil {
-			battleInteraction.Accuracy = *repl.Accuracy
+		if replVals.Accuracy != nil {
+			battleInteraction.Accuracy = *replVals.Accuracy
 		}
 
-		if repl.DamageConstant != nil {
-			battleInteraction.Damage.DamageCalc[0].DamageConstant = *repl.DamageConstant
+		if replVals.DamageConstant != nil {
+			battleInteraction.Damage.DamageCalc[0].DamageConstant = *replVals.DamageConstant
 		}
 
 		battleInteractions[i] = battleInteraction
