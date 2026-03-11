@@ -26,7 +26,7 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Type:               newNamedAPIResourceFromType(cfg, cfg.e.abilityType.endpoint, string(ability.Type), cfg.t.AbilityType),
-		TypedAbility:       createAbilityResource(cfg, ability.Name, ability.Version, ability.Type),
+		TypedAbility:       createAbilityResource(cfg, ability.GetAbilityRef()),
 		Monsters:           monsters,
 		BattleInteractions: getAbilityBattleInteractions(cfg, ability),
 	}

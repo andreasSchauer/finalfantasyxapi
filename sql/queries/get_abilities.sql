@@ -1290,3 +1290,53 @@ JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
 ORDER BY tc.id;
+
+
+
+
+
+
+-- name: GetOverdriveOverdriveAbilityIDs :many
+SELECT oa.id
+FROM overdrive_abilities oa
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+JOIN overdrives o ON j.overdrive_id = o.id
+WHERE o.id = $1
+ORDER BY oa.id;
+
+
+-- name: GetOverdriveIDs :many
+SELECT id FROM overdrives ORDER BY id;
+
+
+-- name: GetOverdriveIDsByRank :many
+SELECT o.id
+FROM overdrives o
+JOIN ability_attributes aa ON o.attributes_id = aa.id
+WHERE aa.rank = $1
+ORDER BY o.id;
+
+
+-- name: GetOverdriveIDsByUser :many
+SELECT o.id
+FROM overdrives o
+JOIN character_classes cc ON o.character_class_id = cc.id
+WHERE cc.id = $1
+ORDER BY o.id;
+
+
+
+
+
+
+-- name: GetRonsoRageIDs :many
+SELECT id FROM ronso_rages ORDER BY id;
+
+
+-- name: GetRonsoRageMonsterIDs :many
+SELECT m.id
+FROM monsters m
+JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
+JOIN ronso_rages r ON j.ronso_rage_id = r.id
+WHERE r.id = $1
+ORDER BY m.id;

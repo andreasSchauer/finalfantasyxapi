@@ -96,3 +96,9 @@ func monsterAutoAbilityString(_ *Config, drop seeding.EquipmentDrop) string {
 	formattedChars := h.StringSliceToListString(drop.Characters)
 	return fmt.Sprintf("%s (%s)", drop.Ability, formattedChars)
 }
+
+// if this is only used for overdrives, I might get rid of the type in the string
+func abilityRefString(cfg *Config, ref seeding.AbilityReference) string {
+	ability, _ := seeding.GetResource(ref, cfg.l.Abilities)
+	return fmt.Sprintf("%s: %s", ref.AbilityType, nameToString(ability.Name, ability.Version, ability.Specification))
+}

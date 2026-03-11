@@ -79,3 +79,29 @@ func getResPtrDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 	res := i.idToResFunc(cfg, i, dbID)
 	return &res, nil
 }
+
+func getResPtrDbNullable[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item seeding.LookupableID, dbQuery func(context.Context, sql.NullInt32) (int32, error)) (*A, error) {
+	id := item.GetID()
+	dbID, err := dbQuery(r.Context(), h.GetNullInt32(&id))
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", i.resourceType, item), err)
+	}
+
+	res := i.idToResFunc(cfg, i, dbID)
+	return &res, nil
+}
+
+func convertDbQueryMany(query func(context.Context, sql.NullInt32) ([]int32, error)) func(context.Context, int32) ([]int32, error) {
+	return func(ctx context.Context, id int32) ([]int32, error) {
+		return query(ctx, h.GetNullInt32(&id))
+	}
+}
+
+func convertDbQueryOne(query func(context.Context, sql.NullInt32) (int32, error)) func(context.Context, int32) (int32, error) {
+	return func(ctx context.Context, id int32) (int32, error) {
+		return query(ctx, h.GetNullInt32(&id))
+	}
+}

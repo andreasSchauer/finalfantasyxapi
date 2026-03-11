@@ -8,6 +8,17 @@ WHERE c.id = $1
 ORDER BY cc.id;
 
 
+-- name: GetCharacterOverdriveIDs :many
+SELECT o.id
+FROM overdrives o
+JOIN character_classes cc ON o.character_class_id = cc.id
+JOIN j_character_class_player_units j ON j.class_id = cc.id
+JOIN player_units pu ON j.unit_id = pu.id
+JOIN characters c ON c.unit_id = pu.id
+WHERE c.id = $1
+ORDER BY o.id;
+
+
 -- name: GetCharacterDefaultAbilityIDs :many
 SELECT pa.id
 FROM player_abilities pa

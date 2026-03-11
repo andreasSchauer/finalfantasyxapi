@@ -2415,6 +2415,127 @@ func (q *Queries) GetOverdriveAbilityOverdriveIDs(ctx context.Context, id int32)
 	return items, nil
 }
 
+const getOverdriveIDs = `-- name: GetOverdriveIDs :many
+SELECT id FROM overdrives ORDER BY id
+`
+
+func (q *Queries) GetOverdriveIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOverdriveIDsByRank = `-- name: GetOverdriveIDsByRank :many
+SELECT o.id
+FROM overdrives o
+JOIN ability_attributes aa ON o.attributes_id = aa.id
+WHERE aa.rank = $1
+ORDER BY o.id
+`
+
+func (q *Queries) GetOverdriveIDsByRank(ctx context.Context, rank sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveIDsByRank, rank)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOverdriveIDsByUser = `-- name: GetOverdriveIDsByUser :many
+SELECT o.id
+FROM overdrives o
+JOIN character_classes cc ON o.character_class_id = cc.id
+WHERE cc.id = $1
+ORDER BY o.id
+`
+
+func (q *Queries) GetOverdriveIDsByUser(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveIDsByUser, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOverdriveOverdriveAbilityIDs = `-- name: GetOverdriveOverdriveAbilityIDs :many
+SELECT oa.id
+FROM overdrive_abilities oa
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+JOIN overdrives o ON j.overdrive_id = o.id
+WHERE o.id = $1
+ORDER BY oa.id
+`
+
+func (q *Queries) GetOverdriveOverdriveAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveOverdriveAbilityIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getPlayerAbilityIDs = `-- name: GetPlayerAbilityIDs :many
 SELECT id FROM player_abilities ORDER BY id
 `
@@ -3359,6 +3480,65 @@ ORDER BY m.id
 
 func (q *Queries) GetPlayerAbilityMonsterIDs(ctx context.Context, id int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getPlayerAbilityMonsterIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getRonsoRageIDs = `-- name: GetRonsoRageIDs :many
+SELECT id FROM ronso_rages ORDER BY id
+`
+
+func (q *Queries) GetRonsoRageIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getRonsoRageIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getRonsoRageMonsterIDs = `-- name: GetRonsoRageMonsterIDs :many
+SELECT m.id
+FROM monsters m
+JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
+JOIN ronso_rages r ON j.ronso_rage_id = r.id
+WHERE r.id = $1
+ORDER BY m.id
+`
+
+func (q *Queries) GetRonsoRageMonsterIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getRonsoRageMonsterIDs, id)
 	if err != nil {
 		return nil, err
 	}

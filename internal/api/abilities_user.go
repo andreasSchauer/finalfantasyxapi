@@ -105,6 +105,7 @@ func populateReplCharacter(cfg *Config, unitStr string, repl unitRepl, queryPara
 	return repl, nil
 }
 
+
 func populateReplAeon(cfg *Config, unitStr string, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
 	id, err := parseQueryNamedVal(unitStr, repl.resType, queryParamUser, cfg.l.Aeons)
 	if err != nil {

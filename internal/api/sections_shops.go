@@ -76,7 +76,7 @@ func foundEquipmentAbilitiesStringPtr(fe seeding.FoundEquipment) *string {
 	}
 }
 
-func createShopSub(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+func createShopSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
 	i := cfg.e.shops
 	shop, _ := seeding.GetResourceByID(id, i.objLookupID)
 

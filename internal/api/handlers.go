@@ -74,6 +74,26 @@ func (cfg *Config) HandleTriggerCommands(w http.ResponseWriter, r *http.Request)
 	routerNameVersion(cfg, w, r, cfg.e.triggerCommands)
 }
 
+func (cfg *Config) HandleOverdrives(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.overdrives)
+}
+
+func (cfg *Config) HandleRonsoRages(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.ronsoRages)
+}
+
+func (cfg *Config) HandleOverdriveCommands(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.overdriveCommands)
+}
+
+func (cfg *Config) HandleSubmenus(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.submenus)
+}
+
+func (cfg *Config) HandleTopmenus(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.topmenus)
+}
+
 func (cfg *Config) HandleShops(w http.ResponseWriter, r *http.Request) {
 	routerIdOnly(cfg, w, r, cfg.e.shops)
 }

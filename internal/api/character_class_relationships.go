@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
@@ -14,7 +13,7 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.Chara
 		return CharacterClass{}, err
 	}
 
-	defaultAbilities, err := createAbilityResourceSlice(cfg, r, class, cfg.db.GetCharacterClassDefaultAbilityIDs)
+	defaultAbilities, err := getAbilityResourcesDB(cfg, r, class, cfg.db.GetCharacterClassDefaultAbilityIDs)
 	if err != nil {
 		return CharacterClass{}, err
 	}
@@ -69,28 +68,11 @@ func getClassUnits(cfg *Config, r *http.Request, class seeding.CharacterClass) (
 }
 
 func getClassLearnableAbilities(cfg *Config, r *http.Request, class seeding.CharacterClass, defaultAbilities []NamedAPIResource) ([]NamedAPIResource, error) {
-	allAbilities, err := createAbilityResourceSlice(cfg, r, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
+	allAbilities, err := getAbilityResourcesDB(cfg, r, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err
 	}
 
 	learnableAbilities := removeResourcesURL(allAbilities, defaultAbilities)
 	return learnableAbilities, nil
-}
-
-func createAbilityResourceSlice[T seeding.LookupableID](cfg *Config, r *http.Request, item T, dbQuery func(context.Context, int32) ([]int32, error)) ([]NamedAPIResource, error) {
-	abilityIDs, err := dbQuery(r.Context(), item.GetID())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get abilities of '%s'", item), err)
-	}
-
-	abilities := []NamedAPIResource{}
-
-	for _, id := range abilityIDs {
-		ability, _ := seeding.GetResourceByID(id, cfg.l.AbilitiesID)
-		abilityRes := createAbilityResource(cfg, ability.Name, ability.Version, ability.Type)
-		abilities = append(abilities, abilityRes)
-	}
-
-	return abilities, nil
 }

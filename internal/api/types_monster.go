@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -75,7 +74,7 @@ type MonsterAbility struct {
 
 func convertMonsterAbility(cfg *Config, ability seeding.MonsterAbility) MonsterAbility {
 	return MonsterAbility{
-		Ability:  createAbilityResource(cfg, ability.Name, ability.Version, database.AbilityType(ability.AbilityType)),
+		Ability:  createAbilityResource(cfg, ability.AbilityReference),
 		IsForced: ability.IsForced,
 		IsUnused: ability.IsUnused,
 	}

@@ -743,6 +743,40 @@ func (q *Queries) GetCharacterOverdriveCommandID(ctx context.Context, id int32) 
 	return id, err
 }
 
+const getCharacterOverdriveIDs = `-- name: GetCharacterOverdriveIDs :many
+SELECT o.id
+FROM overdrives o
+JOIN character_classes cc ON o.character_class_id = cc.id
+JOIN j_character_class_player_units j ON j.class_id = cc.id
+JOIN player_units pu ON j.unit_id = pu.id
+JOIN characters c ON c.unit_id = pu.id
+WHERE c.id = $1
+ORDER BY o.id
+`
+
+func (q *Queries) GetCharacterOverdriveIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterOverdriveIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getCharacterSgAbilityIDs = `-- name: GetCharacterSgAbilityIDs :many
 SELECT pa.id
 FROM player_abilities pa

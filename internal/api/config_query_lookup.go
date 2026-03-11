@@ -55,6 +55,12 @@ type QueryLookup struct {
 	overdriveAbilities   map[string]QueryType
 	playerAbilities      map[string]QueryType
 	triggerCommands      map[string]QueryType
+	overdriveCommands	 map[string]QueryType
+	overdrives			 map[string]QueryType
+	ronsoRages			 map[string]QueryType
+	aeonCommands		 map[string]QueryType
+	submenus			 map[string]QueryType
+	topmenus			 map[string]QueryType
 	shops                map[string]QueryType
 	songs                map[string]QueryType
 	sidequests           map[string]QueryType
@@ -112,6 +118,8 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initOverdriveAbilitiesParams()
 	cfg.initPlayerAbilitiesParams()
 	cfg.initTriggerCommandsParams()
+	cfg.initOverdrivesParams()
+	cfg.initSubmenusParams()
 	cfg.initSublocationsParams()
 	cfg.initLocationsParams()
 	cfg.initShopsParams()
@@ -120,6 +128,10 @@ func (cfg *Config) QueryLookupInit() {
 
 	cfg.q.sidequests = cfg.assignDefaultParams()
 	cfg.q.subquests = cfg.assignDefaultParams()
+	cfg.q.ronsoRages = cfg.assignDefaultParams()
+	cfg.q.aeonCommands = cfg.assignDefaultParams()
+	cfg.q.topmenus = cfg.assignDefaultParams()
+	cfg.q.overdriveCommands = cfg.assignDefaultParams()
 }
 
 func (cfg *Config) assignDefaultParams() map[string]QueryType {
@@ -1701,6 +1713,48 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 
 	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.unspecifiedAbilities = params
+}
+
+func (cfg *Config) initOverdrivesParams() {
+	params := map[string]QueryType{
+		"rank": {
+			ID:          1,
+			Description: "Searches for overdrives with the specified rank.",
+			Usage:       "?rank={int}",
+			ExampleUses: []string{"?rank=3"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"user": {
+			ID:          2,
+			Description: "Searches for overdrives that are learned by the specified character class.",
+			Usage:       "?char_class={name|id}",
+			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "character-classes")},
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params, true)
+	cfg.q.overdrives = params
+}
+
+func (cfg *Config) initSubmenusParams() {
+	params := map[string]QueryType{
+		"topmenu": {
+			ID:          1,
+			Description: "Searches for submenus that are found within the specified topmenu.",
+			Usage:       "?topmenu={name|id}",
+			ExampleUses: []string{"?topmenu=2", "?topmenu=main"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "topmenus")},
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params, false)
+	cfg.q.submenus = params
 }
 
 func (cfg *Config) initSublocationsParams() {

@@ -16,6 +16,7 @@ type Submenu struct {
 	Description string   `json:"description"`
 	Effect      string   `json:"effect"`
 	Topmenu     *string  `json:"topmenu"`
+	TopmenuID	*int32
 	Users       []string `json:"users"`
 }
 
@@ -87,6 +88,17 @@ func (l *Lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 			if err != nil {
 				return err
 			}
+
+			submenu.TopmenuID, err = assignFKPtr(submenu.Topmenu, l.Topmenus)
+			if err != nil {
+				return h.NewErr(submenu.Error(), err)
+			}
+
+			err = qtx.UpdateSubmenu(context.Background(), database.UpdateSubmenuParams{
+				DataHash: 	generateDataHash(submenu),
+				TopmenuID: 	h.GetNullInt32(submenu.TopmenuID),
+				ID: 		submenu.ID,
+			})
 
 			for _, jsonCharClass := range jsonSubmenu.Users {
 				junction, err := createJunction(submenu, jsonCharClass, l.CharClasses)
