@@ -12,12 +12,12 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, N
 		return Song{}, err
 	}
 
-	bossFights, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, song, cfg.db.GetSongMonsterFormationIDs)
+	bossFights, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, song, cfg.db.GetSongMonsterFormationIDs)
 	if err != nil {
 		return Song{}, err
 	}
 
-	fmvs, err := getResourcesDB(cfg, r, cfg.e.fmvs, song, cfg.db.GetSongFmvIDs)
+	fmvs, err := getResourcesDbItem(cfg, r, cfg.e.fmvs, song, cfg.db.GetSongFmvIDs)
 	if err != nil {
 		return Song{}, err
 	}
@@ -113,10 +113,10 @@ func getLocBasedSongs(cfg *Config, r *http.Request, item seeding.LookupableID, q
 	resources := []NamedAPIResource{}
 
 	filteredLists := []filteredResList[NamedAPIResource]{
-		frl(getResourcesDB(cfg, r, i, item, queries.CueSongs)),
-		frl(getResourcesDB(cfg, r, i, item, queries.BmSongs)),
-		frl(getResourcesDB(cfg, r, i, item, queries.FMVSongs)),
-		frl(getResourcesDB(cfg, r, i, item, queries.BossMusic)),
+		frl(getResourcesDbItem(cfg, r, i, item, queries.CueSongs)),
+		frl(getResourcesDbItem(cfg, r, i, item, queries.BmSongs)),
+		frl(getResourcesDbItem(cfg, r, i, item, queries.FMVSongs)),
+		frl(getResourcesDbItem(cfg, r, i, item, queries.BossMusic)),
 	}
 
 	for _, filtered := range filteredLists {

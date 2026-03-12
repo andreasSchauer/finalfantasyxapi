@@ -7,32 +7,32 @@ import (
 )
 
 func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Location) (LocRel, error) {
-	characters, err := getResourcesDB(cfg, r, cfg.e.characters, location, cfg.db.GetLocationCharacterIDs)
+	characters, err := getResourcesDbItem(cfg, r, cfg.e.characters, location, cfg.db.GetLocationCharacterIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	aeons, err := getResourcesDB(cfg, r, cfg.e.aeons, location, cfg.db.GetLocationAeonIDs)
+	aeons, err := getResourcesDbItem(cfg, r, cfg.e.aeons, location, cfg.db.GetLocationAeonIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	shops, err := getResourcesDB(cfg, r, cfg.e.shops, location, cfg.db.GetLocationShopIDs)
+	shops, err := getResourcesDbItem(cfg, r, cfg.e.shops, location, cfg.db.GetLocationShopIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	treasures, err := getResourcesDB(cfg, r, cfg.e.treasures, location, cfg.db.GetLocationTreasureIDs)
+	treasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, location, cfg.db.GetLocationTreasureIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	monsters, err := getResourcesDB(cfg, r, cfg.e.monsters, location, cfg.db.GetLocationMonsterIDs)
+	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, location, cfg.db.GetLocationMonsterIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	formations, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, location, cfg.db.GetLocationMonsterFormationIDs)
+	formations, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, location, cfg.db.GetLocationMonsterFormationIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
@@ -52,7 +52,7 @@ func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Loc
 		return LocRel{}, err
 	}
 
-	fmvs, err := getResourcesDB(cfg, r, cfg.e.fmvs, location, cfg.db.GetLocationFmvIDs)
+	fmvs, err := getResourcesDbItem(cfg, r, cfg.e.fmvs, location, cfg.db.GetLocationFmvIDs)
 	if err != nil {
 		return LocRel{}, err
 	}

@@ -12,12 +12,12 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Subloc
 		return Sublocation{}, err
 	}
 
-	connectedSublocations, err := getResourcesDB(cfg, r, cfg.e.sublocations, sublocation, cfg.db.GetConnectedSublocationIDs)
+	connectedSublocations, err := getResourcesDbItem(cfg, r, cfg.e.sublocations, sublocation, cfg.db.GetConnectedSublocationIDs)
 	if err != nil {
 		return Sublocation{}, err
 	}
 
-	areas, err := getResourcesDB(cfg, r, cfg.e.areas, sublocation, cfg.db.GetSublocationAreaIDs)
+	areas, err := getResourcesDbItem(cfg, r, cfg.e.areas, sublocation, cfg.db.GetSublocationAreaIDs)
 	if err != nil {
 		return Sublocation{}, err
 	}

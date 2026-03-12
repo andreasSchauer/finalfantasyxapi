@@ -7,25 +7,25 @@ import (
 )
 
 func createSubmenuOpenedBy(cfg *Config, r *http.Request, submenu seeding.Submenu) (*MenuOpen, error) {
-	ability, err := getAbilityResPtrDB(cfg, r, submenu, cfg.db.GetSubmenuOpenedByAbilityID)
+	ability, err := getAbilityResPtrDB(cfg, r, submenu, queryOne(cfg.db.GetSubmenuOpenedByAbilityID))
 	if err != nil {
 		return nil, err
 	}
 
-	aeonCommand, err := getResPtrDbNullable(cfg, r, cfg.e.aeonCommands, submenu, cfg.db.GetSubmenuOpenedByAeonCommandID)
+	aeonCommand, err := getResPtrDB(cfg, r, cfg.e.aeonCommands, submenu, queryOne(cfg.db.GetSubmenuOpenedByAeonCommandID))
 	if err != nil {
 		return nil, err
 	}
 
-	overdriveCommands, err := getResourcesDB(cfg, r, cfg.e.overdriveCommands, submenu, cfg.db.GetSubmenuOpenedByOverdriveCommandIDs)
+	overdriveCommands, err := getResourcesDbItem(cfg, r, cfg.e.overdriveCommands, submenu, cfg.db.GetSubmenuOpenedByOverdriveCommandIDs)
 	if err != nil {
 		return nil, err
 	}
 
 	menuOpen := MenuOpen{
-			Ability: 			ability,
-			AeonCommand: 		aeonCommand,
-			OverdriveCommands: 	overdriveCommands,
+		Ability:           ability,
+		AeonCommand:       aeonCommand,
+		OverdriveCommands: sliceOrNil(overdriveCommands),
 	}
 
 	if menuOpen.IsZero() {

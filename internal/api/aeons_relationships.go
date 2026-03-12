@@ -13,22 +13,22 @@ func getAeonRelationships(cfg *Config, r *http.Request, ae seeding.Aeon) (Aeon, 
 		return Aeon{}, err
 	}
 
-	characterClasses, err := getResourcesDB(cfg, r, cfg.e.characterClasses, ae, cfg.db.GetAeonCharClassIDs)
+	characterClasses, err := getResourcesDbItem(cfg, r, cfg.e.characterClasses, ae, cfg.db.GetAeonCharClassIDs)
 	if err != nil {
 		return Aeon{}, err
 	}
 
-	aeonCommands, err := getResourcesDB(cfg, r, cfg.e.aeonCommands, ae, cfg.db.GetAeonAeonCommandIDs)
+	aeonCommands, err := getResourcesDbItem(cfg, r, cfg.e.aeonCommands, ae, cfg.db.GetAeonAeonCommandIDs)
 	if err != nil {
 		return Aeon{}, err
 	}
 
-	overdrives, err := getResourcesDB(cfg, r, cfg.e.overdrives, ae, cfg.db.GetAeonOverdriveIDs)
+	overdrives, err := getResourcesDbItem(cfg, r, cfg.e.overdrives, ae, cfg.db.GetAeonOverdriveIDs)
 	if err != nil {
 		return Aeon{}, err
 	}
 
-	defaultAbilities, err := getResourcesDB(cfg, r, cfg.e.playerAbilities, ae, cfg.db.GetAeonDefaultAbilityIDs)
+	defaultAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, ae, cfg.db.GetAeonDefaultAbilityIDs)
 	if err != nil {
 		return Aeon{}, err
 	}
@@ -43,7 +43,6 @@ func getAeonRelationships(cfg *Config, r *http.Request, ae seeding.Aeon) (Aeon, 
 
 	return aeon, nil
 }
-
 
 func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon) (Aeon, error) {
 	var err error
@@ -66,7 +65,6 @@ func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon) (Aeon, error) {
 	return aeon, nil
 }
 
-
 func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName string) ([]BaseStat, error) {
 	queryParam := cfg.q.aeons[queryName]
 	battles, err := parseIntQuery(r, queryParam)
@@ -77,7 +75,7 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName st
 		return nil, err
 	}
 
-	i := battles / 30 - 1
+	i := battles/30 - 1
 
 	if battles < 60 {
 		i = 0
@@ -90,12 +88,11 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName st
 	return baseStats, nil
 }
 
-
 func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName string) ([]BaseStat, error) {
 	allowedStatIDs := []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	baseStats := aeon.BaseStats
 	queryParam := cfg.q.aeons[queryName]
-	
+
 	yuna, _ := seeding.GetResource("yuna", cfg.l.Characters)
 	yunaBS := namesToResourceAmounts(cfg, cfg.e.stats, yuna.BaseStats, newBaseStat)
 
@@ -115,7 +112,6 @@ func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName string) (
 	return aeonStats, nil
 }
 
-
 func calcAeonStats(cfg *Config, aeon Aeon, yuna map[string]int32) []BaseStat {
 	baseStats := aeon.BaseStats
 	aVals, bVals := getAeonStatTables(cfg, aeon)
@@ -131,21 +127,19 @@ func calcAeonStats(cfg *Config, aeon Aeon, yuna map[string]int32) []BaseStat {
 	return baseStats
 }
 
-
 func getAeonStatTables(cfg *Config, aeon Aeon) (map[string]float64, map[string]float64) {
 	aeonLookup, _ := seeding.GetResourceByID(aeon.ID, cfg.l.AeonsID)
-	
+
 	aValsSlice := namesToResourceAmounts(cfg, cfg.e.stats, aeonLookup.BaseStats.AVals, newBaseStat)
 	aValsInt := getResourceAmountMap(aValsSlice)
 	aVals := getResAmountFloatMap(aValsInt)
-	
+
 	bValsSlice := namesToResourceAmounts(cfg, cfg.e.stats, aeonLookup.BaseStats.BVals, newBaseStat)
 	bValsInt := getResourceAmountMap(bValsSlice)
 	bVals := getResAmountFloatMap(bValsInt)
 
 	return aVals, bVals
 }
-
 
 func getResAmountFloatMap(intMap map[string]int32) map[string]float64 {
 	floatMap := make(map[string]float64)
@@ -154,15 +148,13 @@ func getResAmountFloatMap(intMap map[string]int32) map[string]float64 {
 		float := float64(intMap[key])
 		floatMap[key] = float
 	}
-	
+
 	return floatMap
 }
 
-
 func yParamCalc(yuna map[string]int32) float64 {
-	return float64(yuna["hp"] / 100 + yuna["mp"] / 10 + yuna["strength"] + yuna["defense"] + yuna["magic"] + yuna["magic defense"] + yuna["agility"] + yuna["evasion"] + yuna["accuracy"])
+	return float64(yuna["hp"]/100 + yuna["mp"]/10 + yuna["strength"] + yuna["defense"] + yuna["magic"] + yuna["magic defense"] + yuna["agility"] + yuna["evasion"] + yuna["accuracy"])
 }
-
 
 func yStatCalc(stat string, yParameter float64, aVals, bVals, yuna map[string]float64) int32 {
 	var yFloat float64
@@ -170,12 +162,12 @@ func yStatCalc(stat string, yParameter float64, aVals, bVals, yuna map[string]fl
 
 	switch stat {
 	case "hp":
-		yFloat = aVals[stat] * yParameter + bVals[stat] * (yuna[stat] / 100)
+		yFloat = aVals[stat]*yParameter + bVals[stat]*(yuna[stat]/100)
 		yStat = int32(yFloat)
 		return min(yStat, 99999)
 
 	case "mp":
-		yFloat = aVals[stat] * (yParameter / 10) + bVals[stat] * (yuna[stat] / 100)
+		yFloat = aVals[stat]*(yParameter/10) + bVals[stat]*(yuna[stat]/100)
 		yStat = int32(yFloat)
 		return min(yStat, 9999)
 
@@ -183,14 +175,11 @@ func yStatCalc(stat string, yParameter float64, aVals, bVals, yuna map[string]fl
 		return int32(yuna[stat])
 
 	default:
-		yFloat := yParameter / aVals[stat] + bVals[stat] * (yuna[stat] / 10)
+		yFloat := yParameter/aVals[stat] + bVals[stat]*(yuna[stat]/10)
 		yStat = int32(yFloat)
 		return min(yStat, 255)
 	}
 }
-
-
-
 
 func getAeonAgilityParams(cfg *Config, r *http.Request, aeon Aeon) (AgilityParams, error) {
 	agilityTier, err := getAgilityTier(cfg, r, aeon.BaseStats)

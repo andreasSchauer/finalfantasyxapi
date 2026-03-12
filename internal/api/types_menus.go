@@ -22,9 +22,9 @@ type Submenu struct {
 }
 
 type MenuOpen struct {
-	Ability				*NamedAPIResource	`json:"ability"`
-	AeonCommand			*NamedAPIResource	`json:"aeon_command"`
-	OverdriveCommands	[]NamedAPIResource	`json:"overdrive_commands"`
+	Ability				*NamedAPIResource	`json:"ability,omitempty"`
+	AeonCommand			*NamedAPIResource	`json:"aeon_command,omitempty"`
+	OverdriveCommands	[]NamedAPIResource	`json:"overdrive_commands,omitempty"`
 }
 
 func (mo MenuOpen) IsZero() bool {

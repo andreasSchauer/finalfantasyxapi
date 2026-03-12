@@ -9,62 +9,59 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 type BattleInteractionSimple struct {
-	Target						string				`json:"target"`
-	Range						*int32				`json:"range,omitempty"`
-	HitAmount					int32				`json:"hit_amount"`
-	Accuracy					string				`json:"accuracy"`
-	AffectedBy					[]string			`json:"affected_by,omitempty"`
-	Damage						*DamageSimple		`json:"damage,omitempty"`
-	Delay						*string				`json:"delay,omitempty"`
-	InflictedStatusConditions	[]string			`json:"inflicted_status_conditions,omitempty"`
-	RemovedStatusConditions 	[]string			`json:"removed_status_conditions,omitempty"`
-	CopiedStatusConditions 		[]string			`json:"copied_status_conditions,omitempty"`
-	StatChanges 				[]string			`json:"stat_changes,omitempty"`
-	ModChanges					[]string			`json:"modifier_changes,omitempty"`
+	Target                    string        `json:"target"`
+	Range                     *int32        `json:"range,omitempty"`
+	HitAmount                 int32         `json:"hit_amount"`
+	Accuracy                  string        `json:"accuracy"`
+	AffectedBy                []string      `json:"affected_by,omitempty"`
+	Damage                    *DamageSimple `json:"damage,omitempty"`
+	Delay                     *string       `json:"delay,omitempty"`
+	InflictedStatusConditions []string      `json:"inflicted_status_conditions,omitempty"`
+	RemovedStatusConditions   []string      `json:"removed_status_conditions,omitempty"`
+	CopiedStatusConditions    []string      `json:"copied_status_conditions,omitempty"`
+	StatChanges               []string      `json:"stat_changes,omitempty"`
+	ModChanges                []string      `json:"modifier_changes,omitempty"`
 }
-
 
 func convertBattleInteractionSimple(cfg *Config, bi seeding.BattleInteraction) BattleInteractionSimple {
 	biSimple := BattleInteractionSimple{
-		Target: 					bi.Target,
-		Range: 						bi.Range,
-		HitAmount: 					bi.HitAmount,
-		Accuracy: 					convertAccuracySimple(cfg, bi.Accuracy),
-		AffectedBy: 				sliceOrNil(bi.AffectedBy),
-		Damage: 					convertObjPtr(cfg, bi.Damage, convertDamageSimple),
-		Delay: 						convertObjPtr(cfg, bi.InflictedDelay, convertInflictedDelaySimple),
-		InflictedStatusConditions: 	convertObjSliceNullable(cfg, bi.InflictedStatusConditions, convertInflictedStatusSimple),
-		RemovedStatusConditions: 	sliceOrNil(bi.RemovedStatusConditions),
-		CopiedStatusConditions: 	convertObjSliceNullable(cfg, bi.CopiedStatusConditions, convertInflictedStatusSimple),
-		StatChanges: 				convertObjSliceNullable(cfg, bi.StatChanges, convertStatChangeSimple),
-		ModChanges: 				convertObjSliceNullable(cfg, bi.ModifierChanges, convertModChangeSimple),
+		Target:                    bi.Target,
+		Range:                     bi.Range,
+		HitAmount:                 bi.HitAmount,
+		Accuracy:                  convertAccuracySimple(cfg, bi.Accuracy),
+		AffectedBy:                sliceOrNil(bi.AffectedBy),
+		Damage:                    convertObjPtr(cfg, bi.Damage, convertDamageSimple),
+		Delay:                     convertObjPtr(cfg, bi.InflictedDelay, convertInflictedDelaySimple),
+		InflictedStatusConditions: convertObjSliceOrNil(cfg, bi.InflictedStatusConditions, convertInflictedStatusSimple),
+		RemovedStatusConditions:   sliceOrNil(bi.RemovedStatusConditions),
+		CopiedStatusConditions:    convertObjSliceOrNil(cfg, bi.CopiedStatusConditions, convertInflictedStatusSimple),
+		StatChanges:               convertObjSliceOrNil(cfg, bi.StatChanges, convertStatChangeSimple),
+		ModChanges:                convertObjSliceOrNil(cfg, bi.ModifierChanges, convertModChangeSimple),
 	}
 
 	return biSimple
 }
 
 type DamageSimple struct {
-	CanCritical 		bool		`json:"can_critical"`
-	BreakDmgLimit		*string		`json:"break_dmg_limit,omitempty"`
-	Element				*string		`json:"element,omitempty"`
-	DamageCalc			[]string	`json:"damage_calc"`
+	CanCritical   bool     `json:"can_critical"`
+	BreakDmgLimit *string  `json:"break_dmg_limit,omitempty"`
+	Element       *string  `json:"element,omitempty"`
+	DamageCalc    []string `json:"damage_calc"`
 }
 
 func convertDamageSimple(cfg *Config, d seeding.Damage) DamageSimple {
 	return DamageSimple{
-		CanCritical: 		ptrIsNotNil(d.Critical),
-		BreakDmgLimit: 		convertObjPtr(cfg, d.BreakDmgLimit, convertBreakDmgLimitSimple),
-		Element: 			d.Element,
-		DamageCalc: 		convertObjSlice(cfg, d.DamageCalc, convertDamageCalcSimple),
+		CanCritical:   ptrIsNotNil(d.Critical),
+		BreakDmgLimit: convertObjPtr(cfg, d.BreakDmgLimit, convertBreakDmgLimitSimple),
+		Element:       d.Element,
+		DamageCalc:    convertObjSlice(cfg, d.DamageCalc, convertDamageCalcSimple),
 	}
 }
 
 func convertDamageCalcSimple(cfg *Config, dc seeding.AbilityDamage) string {
 	return fmt.Sprintf("%s %s (%s), formula: %s, power: %d", dc.AttackType, dc.TargetStat, dc.DamageType, dc.DamageFormula, dc.DamageConstant)
 }
-
 
 func convertBreakDmgLimitSimple(_ *Config, breakDmgLimit string) string {
 	switch breakDmgLimit {
@@ -77,7 +74,6 @@ func convertBreakDmgLimitSimple(_ *Config, breakDmgLimit string) string {
 
 	return ""
 }
-
 
 func convertAccuracySimple(_ *Config, acc seeding.Accuracy) string {
 	switch acc.AccSource {
@@ -94,7 +90,6 @@ func convertAccuracySimple(_ *Config, acc seeding.Accuracy) string {
 	return ""
 }
 
-
 func convertInflictedDelaySimple(_ *Config, id seeding.InflictedDelay) string {
 	var delayStr string
 
@@ -103,7 +98,7 @@ func convertInflictedDelaySimple(_ *Config, id seeding.InflictedDelay) string {
 		if id.DamageConstant == 8 {
 			delayStr = "weak"
 		}
-		
+
 		if id.DamageConstant == 16 {
 			delayStr = "strong"
 		}
@@ -112,7 +107,7 @@ func convertInflictedDelaySimple(_ *Config, id seeding.InflictedDelay) string {
 		if id.DamageConstant == 24 {
 			delayStr = "weak"
 		}
-		
+
 		if id.DamageConstant == 48 {
 			delayStr = "strong"
 		}
@@ -120,7 +115,6 @@ func convertInflictedDelaySimple(_ *Config, id seeding.InflictedDelay) string {
 
 	return delayStr
 }
-
 
 func convertInflictedStatusSimple(_ *Config, is seeding.InflictedStatus) string {
 	var probabilityStr string

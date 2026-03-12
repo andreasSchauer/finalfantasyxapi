@@ -47,7 +47,7 @@ func (cfg *Config) retrieveUnspecifiedAbilities(r *http.Request, i handlerInput[
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(intQueryNullable(cfg, r, i, resources, "rank", cfg.db.GetUnspecifiedAbilityIDsByRank)),
+		frl(intQuery(cfg, r, i, resources, "rank", queryMany(cfg.db.GetUnspecifiedAbilityIDsByRank))),
 		frl(nameOrIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetUnspecifiedAbilityIDsByCharClass)),
 		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetUnspecifiedAbilityIDsByCanCopycat)),
 		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetUnspecifiedAbilityIDsByAppearsInHelpBar)),

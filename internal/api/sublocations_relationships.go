@@ -7,32 +7,32 @@ import (
 )
 
 func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seeding.Sublocation) (LocRel, error) {
-	characters, err := getResourcesDB(cfg, r, cfg.e.characters, sublocation, cfg.db.GetSublocationCharacterIDs)
+	characters, err := getResourcesDbItem(cfg, r, cfg.e.characters, sublocation, cfg.db.GetSublocationCharacterIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	aeons, err := getResourcesDB(cfg, r, cfg.e.aeons, sublocation, cfg.db.GetSublocationAeonIDs)
+	aeons, err := getResourcesDbItem(cfg, r, cfg.e.aeons, sublocation, cfg.db.GetSublocationAeonIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	shops, err := getResourcesDB(cfg, r, cfg.e.shops, sublocation, cfg.db.GetSublocationShopIDs)
+	shops, err := getResourcesDbItem(cfg, r, cfg.e.shops, sublocation, cfg.db.GetSublocationShopIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	treasures, err := getResourcesDB(cfg, r, cfg.e.treasures, sublocation, cfg.db.GetSublocationTreasureIDs)
+	treasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, sublocation, cfg.db.GetSublocationTreasureIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	monsters, err := getResourcesDB(cfg, r, cfg.e.monsters, sublocation, cfg.db.GetSublocationMonsterIDs)
+	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, sublocation, cfg.db.GetSublocationMonsterIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	formations, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, sublocation, cfg.db.GetSublocationMonsterFormationIDs)
+	formations, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, sublocation, cfg.db.GetSublocationMonsterFormationIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
@@ -52,7 +52,7 @@ func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seedi
 		return LocRel{}, err
 	}
 
-	fmvs, err := getResourcesDB(cfg, r, cfg.e.fmvs, sublocation, cfg.db.GetSublocationFmvIDs)
+	fmvs, err := getResourcesDbItem(cfg, r, cfg.e.fmvs, sublocation, cfg.db.GetSublocationFmvIDs)
 	if err != nil {
 		return LocRel{}, err
 	}

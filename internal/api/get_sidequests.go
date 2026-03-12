@@ -12,7 +12,7 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 		return Sidequest{}, err
 	}
 
-	subquests, err := getResourcesDB(cfg, r, cfg.e.subquests, sidequest, cfg.db.GetSidequestSubquestIDs)
+	subquests, err := getResourcesDbItem(cfg, r, cfg.e.subquests, sidequest, cfg.db.GetSidequestSubquestIDs)
 	if err != nil {
 		return Sidequest{}, err
 	}

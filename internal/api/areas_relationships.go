@@ -8,10 +8,10 @@ import (
 )
 
 type AreaConnection struct {
-	Area           AreaAPIResource  `json:"area"`
-	ConnectionType string 			`json:"connection_type"`
-	StoryOnly      bool             `json:"story_only"`
-	Notes          *string          `json:"notes,omitempty"`
+	Area           AreaAPIResource `json:"area"`
+	ConnectionType string          `json:"connection_type"`
+	StoryOnly      bool            `json:"story_only"`
+	Notes          *string         `json:"notes,omitempty"`
 }
 
 func (ac AreaConnection) GetAPIResource() APIResource {
@@ -19,32 +19,32 @@ func (ac AreaConnection) GetAPIResource() APIResource {
 }
 
 func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocRel, error) {
-	characters, err := getResourcesDB(cfg, r, cfg.e.characters, area, cfg.db.GetAreaCharacterIDs)
+	characters, err := getResourcesDbItem(cfg, r, cfg.e.characters, area, cfg.db.GetAreaCharacterIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	aeons, err := getResourcesDB(cfg, r, cfg.e.aeons, area, cfg.db.GetAreaAeonIDs)
+	aeons, err := getResourcesDbItem(cfg, r, cfg.e.aeons, area, cfg.db.GetAreaAeonIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	shops, err := getResourcesDB(cfg, r, cfg.e.shops, area, cfg.db.GetAreaShopIDs)
+	shops, err := getResourcesDbItem(cfg, r, cfg.e.shops, area, cfg.db.GetAreaShopIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	treasures, err := getResourcesDB(cfg, r, cfg.e.treasures, area, cfg.db.GetAreaTreasureIDs)
+	treasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, area, cfg.db.GetAreaTreasureIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	monsters, err := getResourcesDB(cfg, r, cfg.e.monsters, area, cfg.db.GetAreaMonsterIDs)
+	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, area, cfg.db.GetAreaMonsterIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	formations, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, area, cfg.db.GetAreaMonsterFormationIDs)
+	formations, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, area, cfg.db.GetAreaMonsterFormationIDs)
 	if err != nil {
 		return LocRel{}, err
 	}
@@ -64,7 +64,7 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 		return LocRel{}, err
 	}
 
-	fmvs, err := getResourcesDB(cfg, r, cfg.e.fmvs, area, cfg.db.GetAreaFmvIDs)
+	fmvs, err := getResourcesDbItem(cfg, r, cfg.e.fmvs, area, cfg.db.GetAreaFmvIDs)
 	if err != nil {
 		return LocRel{}, err
 	}

@@ -6,27 +6,24 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) (Monster, error) {
-	areas, err := getResourcesDB(cfg, r, cfg.e.areas, mon, cfg.db.GetMonsterAreaIDs)
+	areas, err := getResourcesDbItem(cfg, r, cfg.e.areas, mon, cfg.db.GetMonsterAreaIDs)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	formations, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, mon, cfg.db.GetMonsterMonsterFormationIDs)
+	formations, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, mon, cfg.db.GetMonsterMonsterFormationIDs)
 	if err != nil {
 		return Monster{}, err
 	}
 
 	monster := Monster{
-		Areas:            areas,
-		Formations:       formations,
+		Areas:      areas,
+		Formations: formations,
 	}
 
 	return monster, nil
 }
-
 
 func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster, error) {
 	mon, err := applyAlteredState(cfg, r, mon, "altered_state")
@@ -67,7 +64,6 @@ func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster
 	return mon, nil
 }
 
-
 func getMonsterElemResists(cfg *Config, resists []seeding.ElementalResist) []ElementalResist {
 	elemResists := namesToElemResists(cfg, resists)
 	elemResistMap := getResourceMap(elemResists)
@@ -83,7 +79,6 @@ func getMonsterElemResists(cfg *Config, resists []seeding.ElementalResist) []Ele
 	return resourceMapToSlice(elemResistMap)
 }
 
-
 func getMonsterPoisonDamage(cfg *Config, mon Monster) (*int32, error) {
 	if mon.PoisonRate == nil {
 		return nil, nil
@@ -96,7 +91,6 @@ func getMonsterPoisonDamage(cfg *Config, mon Monster) (*int32, error) {
 
 	return &poisonDamage, nil
 }
-
 
 func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*AgilityParams, error) {
 	agilityTier, err := getAgilityTier(cfg, r, mon.BaseStats)
@@ -122,7 +116,6 @@ func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*Agilit
 
 	return &agilityParams, nil
 }
-
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
 func getMonsterBribeChances(cfg *Config, mon Monster) ([]BribeChance, error) {

@@ -789,7 +789,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveSubmenus,
 		subsections: map[string]SubSectionFns{
 			"abilities": {
-				dbQuery:     convertDbQueryMany(cfg.db.GetSubmenuAbilityIDs),
+				dbQuery:     queryMany(cfg.db.GetSubmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
 			},
 		},
@@ -808,7 +808,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveTopmenus,
 		subsections: map[string]SubSectionFns{
 			"abilities": {
-				dbQuery:     convertDbQueryMany(cfg.db.GetTopmenuAbilityIDs),
+				dbQuery:     queryMany(cfg.db.GetTopmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
 			},
 		},

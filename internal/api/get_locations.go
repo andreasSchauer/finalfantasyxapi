@@ -12,12 +12,12 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 		return Location{}, err
 	}
 
-	connectedLocations, err := getResourcesDB(cfg, r, cfg.e.locations, location, cfg.db.GetConnectedLocationIDs)
+	connectedLocations, err := getResourcesDbItem(cfg, r, cfg.e.locations, location, cfg.db.GetConnectedLocationIDs)
 	if err != nil {
 		return Location{}, err
 	}
 
-	sublocations, err := getResourcesDB(cfg, r, cfg.e.sublocations, location, cfg.db.GetLocationSublocationIDs)
+	sublocations, err := getResourcesDbItem(cfg, r, cfg.e.sublocations, location, cfg.db.GetLocationSublocationIDs)
 	if err != nil {
 		return Location{}, err
 	}

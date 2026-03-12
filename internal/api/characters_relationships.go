@@ -6,7 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Character) (Character, error) {
 	celestialWeapon, err := getResPtrDB(cfg, r, cfg.e.celestialWeapons, char, cfg.db.GetCharacterCelestialWeaponID)
 	if err != nil {
@@ -18,21 +17,21 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 		return Character{}, err
 	}
 
-	characterClasses, err := getResourcesDB(cfg, r, cfg.e.characterClasses, char, cfg.db.GetCharacterCharClassIDs)
+	characterClasses, err := getResourcesDbItem(cfg, r, cfg.e.characterClasses, char, cfg.db.GetCharacterCharClassIDs)
 	if err != nil {
 		return Character{}, err
 	}
 
-	defaultAbilities, err := getResourcesDB(cfg, r, cfg.e.playerAbilities, char, cfg.db.GetCharacterDefaultAbilityIDs)
+	defaultAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, char, cfg.db.GetCharacterDefaultAbilityIDs)
 	if err != nil {
 		return Character{}, err
 	}
-	
-	stdSgAbilities, err := getResourcesDB(cfg, r, cfg.e.playerAbilities, char, cfg.db.GetCharacterSgAbilityIDs)
+
+	stdSgAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, char, cfg.db.GetCharacterSgAbilityIDs)
 	if err != nil {
 		return Character{}, err
 	}
-	expSgAbilities, err := getResourcesDB(cfg, r, cfg.e.playerAbilities, char, cfg.db.GetCharacterEgAbilityIDs)
+	expSgAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, char, cfg.db.GetCharacterEgAbilityIDs)
 	if err != nil {
 		return Character{}, err
 	}
@@ -43,22 +42,21 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 	}
 
 	character := Character{
-		CelestialWeapon: 		celestialWeapon,
-		OverdriveCommand: 		overdriveCommand,
-		CharacterClasses: 		characterClasses,
-		DefaultAbilities: 		defaultAbilities,
+		CelestialWeapon:        celestialWeapon,
+		OverdriveCommand:       overdriveCommand,
+		CharacterClasses:       characterClasses,
+		DefaultAbilities:       defaultAbilities,
 		StdSphereGridAbilities: stdSgAbilities,
 		ExpSphereGridAbilities: expSgAbilities,
-		OverdriveModes: 		modeAmounts,
+		OverdriveModes:         modeAmounts,
 	}
 
 	return character, nil
 }
 
-
 func getCharacterModeAmounts(cfg *Config, r *http.Request, char seeding.Character) ([]ModeAmount, error) {
 	modeAmounts := []ModeAmount{}
-	
+
 	if char.StoryOnly {
 		return modeAmounts, nil
 	}
@@ -75,7 +73,7 @@ func getCharacterModeAmounts(cfg *Config, r *http.Request, char seeding.Characte
 		}
 
 		mode := idToNamedAPIResource(cfg, cfg.e.overdriveModes, id)
-		amount := modeLookup.ActionsToLearn[char.ID - 1].Amount
+		amount := modeLookup.ActionsToLearn[char.ID-1].Amount
 
 		modeAmount := convertModeAmount(mode, amount)
 		modeAmounts = append(modeAmounts, modeAmount)

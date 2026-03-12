@@ -12,12 +12,12 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.Tri
 		return TriggerCommand{}, err
 	}
 
-	monsterFormations, err := getResourcesDB(cfg, r, cfg.e.monsterFormations, ability, cfg.db.GetTriggerCommandMonsterFormationIDs)
+	monsterFormations, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, ability, cfg.db.GetTriggerCommandMonsterFormationIDs)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
 
-	users, err := getResourcesDB(cfg, r, cfg.e.characterClasses, ability, cfg.db.GetTriggerCommandCharClassIDs)
+	users, err := getResourcesDbItem(cfg, r, cfg.e.characterClasses, ability, cfg.db.GetTriggerCommandCharClassIDs)
 	if err != nil {
 		return TriggerCommand{}, err
 	}

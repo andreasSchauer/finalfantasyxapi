@@ -12,7 +12,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		return PlayerAbility{}, err
 	}
 
-	monsters, err := getResourcesDB(cfg, r, cfg.e.monsters, ability, cfg.db.GetPlayerAbilityMonsterIDs)
+	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, ability, cfg.db.GetPlayerAbilityMonsterIDs)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
@@ -68,15 +68,15 @@ func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seedi
 		frl(intQuery(cfg, r, i, resources, "mp", cfg.db.GetPlayerAbilityIDsByMpCost)),
 		frl(intQuery(cfg, r, i, resources, "mp_min", cfg.db.GetPlayerAbilityIDsByMpCostMin)),
 		frl(intQuery(cfg, r, i, resources, "mp_max", cfg.db.GetPlayerAbilityIDsByMpCostMax)),
-		frl(intQueryNullable(cfg, r, i, resources, "rank", cfg.db.GetPlayerAbilityIDsByRank)),
+		frl(intQuery(cfg, r, i, resources, "rank", queryMany(cfg.db.GetPlayerAbilityIDsByRank))),
 		frl(nameOrIdQuery(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetPlayerAbilityIDsByElement)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass)),
 		frl(idQuery(cfg, r, i, resources, "learn_item", len(cfg.l.Items), cfg.db.GetPlayerAbilityIDsByLearnItem)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat)),
 		frl(idQueryWrapper(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getPlayerAbilitiesInflictedStatus)),
 		frl(idQuery(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), cfg.db.GetPlayerAbilityIDsByRemovedStatus)),
-		frl(nameOrIdQueryNullable(cfg, r, i, resources, "std_sg", cfg.e.characters.resourceType, cfg.l.Characters, cfg.db.GetPlayerAbilityIDsStdSgChar)),
-		frl(nameOrIdQueryNullable(cfg, r, i, resources, "exp_sg", cfg.e.characters.resourceType, cfg.l.Characters, cfg.db.GetPlayerAbilityIDsExpSgChar)),
+		frl(nameOrIdQuery(cfg, r, i, resources, "std_sg", cfg.e.characters.resourceType, cfg.l.Characters, queryMany(cfg.db.GetPlayerAbilityIDsStdSgChar))),
+		frl(nameOrIdQuery(cfg, r, i, resources, "exp_sg", cfg.e.characters.resourceType, cfg.l.Characters, queryMany(cfg.db.GetPlayerAbilityIDsExpSgChar))),
 		frl(boolQuery(cfg, r, i, resources, "outside_battle", cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle)),
 		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetPlayerAbilityIDsByCanCopycat)),
 		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetPlayerAbilityIDsByAppearsInHelpBar)),

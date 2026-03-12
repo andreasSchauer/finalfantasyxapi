@@ -57,22 +57,22 @@ type LocBasedMusicQueries struct {
 func getMusicLocBased(cfg *Config, r *http.Request, item seeding.LookupableID, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
 	i := cfg.e.songs
 
-	cueSongs, err := getResourcesDB(cfg, r, i, item, queries.CueSongs)
+	cueSongs, err := getResourcesDbItem(cfg, r, i, item, queries.CueSongs)
 	if err != nil {
 		return nil, err
 	}
 
-	bmSongs, err := getResourcesDB(cfg, r, i, item, queries.BmSongs)
+	bmSongs, err := getResourcesDbItem(cfg, r, i, item, queries.BmSongs)
 	if err != nil {
 		return nil, err
 	}
 
-	fmvSongs, err := getResourcesDB(cfg, r, i, item, queries.FMVSongs)
+	fmvSongs, err := getResourcesDbItem(cfg, r, i, item, queries.FMVSongs)
 	if err != nil {
 		return nil, err
 	}
 
-	bossSongs, err := getResourcesDB(cfg, r, i, item, queries.BossMusic)
+	bossSongs, err := getResourcesDbItem(cfg, r, i, item, queries.BossMusic)
 	if err != nil {
 		return nil, err
 	}

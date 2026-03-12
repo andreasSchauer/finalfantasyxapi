@@ -11,6 +11,59 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
+
+func getAbilityResourcesDB[T seeding.LookupableID](cfg *Config, r *http.Request, item T, dbQuery func(context.Context, int32) ([]int32, error)) ([]NamedAPIResource, error) {
+	abilityIDs, err := dbQuery(r.Context(), item.GetID())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get abilities of '%s'", item), err)
+	}
+
+	abilities := idsToAbilityResources(cfg, abilityIDs)
+
+	return abilities, nil
+}
+
+func getAbilityResPtrDB[T seeding.LookupableID](cfg *Config, r *http.Request, item T, dbQuery func(context.Context, int32) (int32, error)) (*NamedAPIResource, error) {
+	abilityID, err := dbQuery(r.Context(), item.GetID())
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get abilities of '%s'", item), err)
+	}
+
+	ability := idToAbilityResource(cfg, abilityID)
+	return &ability, nil
+}
+
+func idsToAbilityResources(cfg *Config, ids []int32) []NamedAPIResource {
+	abilities := []NamedAPIResource{}
+
+	for _, id := range ids {
+		abilityRes := idToAbilityResource(cfg, id)
+		abilities = append(abilities, abilityRes)
+	}
+
+	return abilities
+}
+
+func refsToAbilityResources(cfg *Config, refs []seeding.AbilityReference) []NamedAPIResource {
+	abilities := []NamedAPIResource{}
+
+	for _, ref := range refs {
+		abilityRes := createAbilityResource(cfg, ref)
+		abilities = append(abilities, abilityRes)
+	}
+
+	return abilities
+}
+
+func idToAbilityResource(cfg *Config, id int32) NamedAPIResource {
+	ability, _ := seeding.GetResourceByID(id, cfg.l.AbilitiesID)
+	return createAbilityResource(cfg, ability.GetAbilityRef())
+}
+
+
 func createAbilityResource(cfg *Config, ref seeding.AbilityReference) NamedAPIResource {
 	var res NamedAPIResource
 
@@ -35,65 +88,4 @@ func createAbilityResource(cfg *Config, ref seeding.AbilityReference) NamedAPIRe
 
 	}
 	return res
-}
-
-func getAbilityResourcesDB[T seeding.LookupableID](cfg *Config, r *http.Request, item T, dbQuery func(context.Context, int32) ([]int32, error)) ([]NamedAPIResource, error) {
-	abilityIDs, err := dbQuery(r.Context(), item.GetID())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get abilities of '%s'", item), err)
-	}
-
-	abilities := idsToAbilityResources(cfg, abilityIDs)
-
-	return abilities, nil
-}
-
-func getAbilityResPtrDB[T seeding.LookupableID](cfg *Config, r *http.Request, item T, dbQuery func(context.Context, sql.NullInt32) (int32, error)) (*NamedAPIResource, error) {
-	abilityID, err := convertDbQueryOne(dbQuery)(r.Context(), item.GetID())
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
-		}
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get abilities of '%s'", item), err)
-	}
-
-	ability := idToAbilityResource(cfg, abilityID)
-	return &ability, nil
-}
-
-func getAbilityResourcesDbNullable[T seeding.LookupableID](cfg *Config, r *http.Request, item T, dbQuery func(context.Context, sql.NullInt32) ([]int32, error)) ([]NamedAPIResource, error) {
-	abilityIDs, err := convertDbQueryMany(dbQuery)(r.Context(), item.GetID())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get abilities of '%s'", item), err)
-	}
-
-	abilities := idsToAbilityResources(cfg, abilityIDs)
-	return abilities, nil
-}
-
-func idsToAbilityResources(cfg *Config, ids []int32) []NamedAPIResource {
-	abilities := []NamedAPIResource{}
-
-	for _, id := range ids {
-		abilityRes := idToAbilityResource(cfg, id)
-		abilities = append(abilities, abilityRes)
-	}
-
-	return abilities
-}
-
-func idToAbilityResource(cfg *Config, id int32) NamedAPIResource {
-	ability, _ := seeding.GetResourceByID(id, cfg.l.AbilitiesID)
-	return createAbilityResource(cfg, ability.GetAbilityRef())
-}
-
-func refsToAbilityResources(cfg *Config, refs []seeding.AbilityReference) []NamedAPIResource {
-	abilities := []NamedAPIResource{}
-
-	for _, ref := range refs {
-		abilityRes := createAbilityResource(cfg, ref)
-		abilities = append(abilities, abilityRes)
-	}
-
-	return abilities
 }

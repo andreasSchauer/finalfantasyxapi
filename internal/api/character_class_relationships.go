@@ -23,17 +23,17 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.Chara
 		return CharacterClass{}, err
 	}
 
-	defaultOverdrives, err := getResourcesDB(cfg, r, cfg.e.overdrives, class, cfg.db.GetCharacterClassDefaultOverdriveIDs)
+	defaultOverdrives, err := getResourcesDbItem(cfg, r, cfg.e.overdrives, class, cfg.db.GetCharacterClassDefaultOverdriveIDs)
 	if err != nil {
 		return CharacterClass{}, err
 	}
 
-	learnableOverdrives, err := getResourcesDB(cfg, r, cfg.e.overdrives, class, cfg.db.GetCharacterClassLearnableOverdriveIDs)
+	learnableOverdrives, err := getResourcesDbItem(cfg, r, cfg.e.overdrives, class, cfg.db.GetCharacterClassLearnableOverdriveIDs)
 	if err != nil {
 		return CharacterClass{}, err
 	}
 
-	submenus, err := getResourcesDB(cfg, r, cfg.e.submenus, class, cfg.db.GetCharacterClassSubmenuIDs)
+	submenus, err := getResourcesDbItem(cfg, r, cfg.e.submenus, class, cfg.db.GetCharacterClassSubmenuIDs)
 	if err != nil {
 		return CharacterClass{}, err
 	}

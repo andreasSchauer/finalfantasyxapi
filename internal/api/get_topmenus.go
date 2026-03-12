@@ -11,40 +11,40 @@ func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, T
 	if err != nil {
 		return Topmenu{}, err
 	}
-	
-	submenus, err := getResourcesDB(cfg, r, cfg.e.submenus, topmenu, cfg.db.GetTopmenuSubmenuIDs)
+
+	submenus, err := getResourcesDbItem(cfg, r, cfg.e.submenus, topmenu, cfg.db.GetTopmenuSubmenuIDs)
 	if err != nil {
 		return Topmenu{}, err
 	}
 
-	overdriveCommands, err := getResourcesDB(cfg, r, cfg.e.overdriveCommands, topmenu, cfg.db.GetTopmenuOverdriveCommandIDs)
+	overdriveCommands, err := getResourcesDbItem(cfg, r, cfg.e.overdriveCommands, topmenu, cfg.db.GetTopmenuOverdriveCommandIDs)
 	if err != nil {
 		return Topmenu{}, err
 	}
 
-	overdrives, err := getResourcesDB(cfg, r, cfg.e.overdrives, topmenu, cfg.db.GetTopmenuOverdriveIDs)
+	overdrives, err := getResourcesDbItem(cfg, r, cfg.e.overdrives, topmenu, cfg.db.GetTopmenuOverdriveIDs)
 	if err != nil {
 		return Topmenu{}, err
 	}
 
-	aeonCommands, err := getResourcesDB(cfg, r, cfg.e.aeonCommands, topmenu, cfg.db.GetTopmenuAeonCommandIDs)
+	aeonCommands, err := getResourcesDbItem(cfg, r, cfg.e.aeonCommands, topmenu, cfg.db.GetTopmenuAeonCommandIDs)
 	if err != nil {
 		return Topmenu{}, err
 	}
 
-	abilities, err := getAbilityResourcesDbNullable(cfg, r, topmenu, cfg.db.GetTopmenuAbilityIDs)
+	abilities, err := getAbilityResourcesDB(cfg, r, topmenu, queryMany(cfg.db.GetTopmenuAbilityIDs))
 	if err != nil {
 		return Topmenu{}, err
 	}
 
 	response := Topmenu{
-		ID:             	topmenu.ID,
-		Name:           	topmenu.Name,
-		Submenus: 			submenus,
-		OverdriveCommands: 	overdriveCommands,
-		Overdrives: 		overdrives,
-		AeonCommands: 		aeonCommands,
-		Abilities: 			abilities,
+		ID:                topmenu.ID,
+		Name:              topmenu.Name,
+		Submenus:          submenus,
+		OverdriveCommands: overdriveCommands,
+		Overdrives:        overdrives,
+		AeonCommands:      aeonCommands,
+		Abilities:         abilities,
 	}
 
 	return response, nil

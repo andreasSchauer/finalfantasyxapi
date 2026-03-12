@@ -22,7 +22,7 @@ func convertMonsterItemsSimple(cfg *Config, items seeding.MonsterItems) MonsterI
 		SecondaryDropCommon: convertObjPtr(cfg, items.SecondaryDropCommon, convertItemAmountSimple),
 		SecondaryDropRare:   convertObjPtr(cfg, items.SecondaryDropRare, convertItemAmountSimple),
 		Bribe:               convertObjPtr(cfg, items.Bribe, convertItemAmountSimple),
-		OtherItems:          convertObjSliceNullable(cfg, items.OtherItems, posItemToItemAmtSimple),
+		OtherItems:          convertObjSliceOrNil(cfg, items.OtherItems, posItemToItemAmtSimple),
 	}
 }
 
