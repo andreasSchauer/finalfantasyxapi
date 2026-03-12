@@ -20,7 +20,7 @@ func (l LookupObject) ToKeyFields() []any {
 }
 
 func (l LookupObject) Error() string {
-	return fmt.Sprintf("lookup object name: %s, version %d", l.Name, h.DerefOrNil(l.Version))
+	return fmt.Sprintf("lookup object '%s'", h.NameToString(l.Name, l.Version, nil))
 }
 
 type Lookup struct {

@@ -40,7 +40,7 @@ func (a Ability) GetID() int32 {
 }
 
 func (a Ability) Error() string {
-	return fmt.Sprintf("ability %s-%v, type %s", a.Name, h.DerefOrNil(a.Version), a.Type)
+	return fmt.Sprintf("ability '%s', type %s", h.NameToString(a.Name, a.Version, a.Specification), a.Type)
 }
 
 func (a Ability) GetAbilityRef() AbilityReference {
@@ -75,7 +75,7 @@ func (a AbilityReference) ToKeyFields() []any {
 }
 
 func (a AbilityReference) Error() string {
-	return fmt.Sprintf("ability reference %s-%v, type %s", a.Name, h.DerefOrNil(a.Version), a.AbilityType)
+	return fmt.Sprintf("ability reference '%s', type %s", h.NameToString(a.Name, a.Version, nil), a.AbilityType)
 }
 
 func (a AbilityReference) Untyped() UntypedAbilityRef {
@@ -98,7 +98,7 @@ func (a UntypedAbilityRef) ToKeyFields() []any {
 }
 
 func (a UntypedAbilityRef) Error() string {
-	return fmt.Sprintf("untyped ability reference %s-%v", a.Name, h.DerefOrNil(a.Version))
+	return fmt.Sprintf("untyped ability reference '%s'", h.NameToString(a.Name, a.Version, nil))
 }
 
 type Attributes struct {

@@ -43,7 +43,7 @@ func (e EnemyAbility) GetAbilityRef() AbilityReference {
 }
 
 func (e EnemyAbility) Error() string {
-	return fmt.Sprintf("enemy ability %s, version %v", e.Name, h.DerefOrNil(e.Version))
+	return fmt.Sprintf("enemy ability '%s'", h.NameToString(e.Name, e.Version, e.Specification))
 }
 
 func (e EnemyAbility) GetResParamsNamed() h.ResParamsNamed {

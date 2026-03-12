@@ -1,6 +1,9 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import (
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+)
 
 type MonsterAmount struct {
 	Monster NamedAPIResource `json:"monster"`
@@ -16,7 +19,7 @@ func (ma MonsterAmount) GetAPIResource() APIResource {
 }
 
 func (ma MonsterAmount) GetName() string {
-	return nameToString(ma.Monster.Name, ma.Monster.Version, nil)
+	return h.NameToString(ma.Monster.Name, ma.Monster.Version, nil)
 }
 
 func (ma MonsterAmount) GetVersion() *int32 {

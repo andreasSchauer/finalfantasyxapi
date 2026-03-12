@@ -72,7 +72,7 @@ func (p PlayerAbility) GetAbilityRef() AbilityReference {
 }
 
 func (p PlayerAbility) Error() string {
-	return fmt.Sprintf("player ability %s, version %v", p.Name, h.DerefOrNil(p.Version))
+	return fmt.Sprintf("player ability '%s'", h.NameToString(p.Name, p.Version, p.Specification))
 }
 
 func (p PlayerAbility) GetResParamsNamed() h.ResParamsNamed {

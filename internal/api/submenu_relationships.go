@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -25,7 +26,7 @@ func createSubmenuOpenedBy(cfg *Config, r *http.Request, submenu seeding.Submenu
 	menuOpen := MenuOpen{
 		Ability:           ability,
 		AeonCommand:       aeonCommand,
-		OverdriveCommands: sliceOrNil(overdriveCommands),
+		OverdriveCommands: h.SliceOrNil(overdriveCommands),
 	}
 
 	if menuOpen.IsZero() {

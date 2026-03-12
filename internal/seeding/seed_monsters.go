@@ -3,7 +3,6 @@ package seeding
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -94,7 +93,7 @@ func (m Monster) GetID() int32 {
 }
 
 func (m Monster) Error() string {
-	return fmt.Sprintf("monster %s, version: %v", m.Name, h.DerefOrNil(m.Version))
+	return h.NameToString(m.Name, m.Version, m.Specification)
 }
 
 func (m Monster) GetResParamsNamed() h.ResParamsNamed {

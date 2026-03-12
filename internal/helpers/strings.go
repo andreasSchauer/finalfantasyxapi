@@ -8,6 +8,41 @@ import (
 )
 
 
+func NameToString(name string, version *int32, spec *string) string {
+	var verStr string
+	var specStr string
+
+	if version != nil {
+		intVer := int(*version)
+		verStr = fmt.Sprintf(" - %d", intVer)
+	}
+
+	if spec != nil {
+		specStr = fmt.Sprintf(" (%s)", *spec)
+	}
+
+	return name + verStr + specStr
+}
+
+func NameAmountString(name string, version *int32, spec *string, amount int32) string {
+	nameStr := NameToString(name, version, spec)
+
+	if amount == 1 {
+		return nameStr
+	}
+
+	return fmt.Sprintf("%s x%d", nameStr, amount)
+}
+
+func DerefVerStr(version *int32) string {
+	if version == nil {
+		return "null"
+	}
+
+	return fmt.Sprintf("%d", *version)
+}
+
+
 func GetMapKeyStr[T any](itemMap map[string]T) string {
 	keys := []string{}
 

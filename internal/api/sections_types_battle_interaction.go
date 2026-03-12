@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -30,11 +31,11 @@ func convertBattleInteractionSimple(cfg *Config, bi seeding.BattleInteraction) B
 		Range:                     bi.Range,
 		HitAmount:                 bi.HitAmount,
 		Accuracy:                  convertAccuracySimple(cfg, bi.Accuracy),
-		AffectedBy:                sliceOrNil(bi.AffectedBy),
+		AffectedBy:                h.SliceOrNil(bi.AffectedBy),
 		Damage:                    convertObjPtr(cfg, bi.Damage, convertDamageSimple),
 		Delay:                     convertObjPtr(cfg, bi.InflictedDelay, convertInflictedDelaySimple),
 		InflictedStatusConditions: convertObjSliceOrNil(cfg, bi.InflictedStatusConditions, convertInflictedStatusSimple),
-		RemovedStatusConditions:   sliceOrNil(bi.RemovedStatusConditions),
+		RemovedStatusConditions:   h.SliceOrNil(bi.RemovedStatusConditions),
 		CopiedStatusConditions:    convertObjSliceOrNil(cfg, bi.CopiedStatusConditions, convertInflictedStatusSimple),
 		StatChanges:               convertObjSliceOrNil(cfg, bi.StatChanges, convertStatChangeSimple),
 		ModChanges:                convertObjSliceOrNil(cfg, bi.ModifierChanges, convertModChangeSimple),
@@ -52,7 +53,7 @@ type DamageSimple struct {
 
 func convertDamageSimple(cfg *Config, d seeding.Damage) DamageSimple {
 	return DamageSimple{
-		CanCritical:   ptrIsNotNil(d.Critical),
+		CanCritical:   h.PtrIsNotNil(d.Critical),
 		BreakDmgLimit: convertObjPtr(cfg, d.BreakDmgLimit, convertBreakDmgLimitSimple),
 		Element:       d.Element,
 		DamageCalc:    convertObjSlice(cfg, d.DamageCalc, convertDamageCalcSimple),

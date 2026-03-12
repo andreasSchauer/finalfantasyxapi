@@ -30,7 +30,7 @@ type LocationArea struct {
 }
 
 func (la LocationArea) Error() string {
-	return fmt.Sprintf("location area with location: '%s', sublocation: '%s', area: '%s', version: '%v'", la.Location, la.Sublocation, la.Area, h.DerefOrNil(la.Version))
+	return fmt.Sprintf("location area with location: '%s', sublocation: '%s', area: '%s'", la.Location, la.Sublocation, h.NameToString(la.Area, la.Version, nil))
 }
 
 type LocBasedMusic struct {

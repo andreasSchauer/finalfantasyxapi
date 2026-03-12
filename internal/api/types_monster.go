@@ -1,8 +1,7 @@
 package api
 
 import (
-	"fmt"
-
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -54,14 +53,8 @@ type Monster struct {
 	AlteredStates        []AlteredState       `json:"altered_states"`
 }
 
-func (m *Monster) Error() string {
-	msg := fmt.Sprintf("monster '%s'", m.Name)
-
-	if m.Version != nil {
-		msg += fmt.Sprintf(", version '%d'", *m.Version)
-	}
-
-	return msg
+func (m Monster) Error() string {
+	return h.NameToString(m.Name, m.Version, m.Specification)
 }
 
 

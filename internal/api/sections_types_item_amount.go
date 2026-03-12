@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -14,7 +15,7 @@ type ItemAmountSimple struct {
 }
 
 func convertItemAmountSimple(cfg *Config, ia seeding.ItemAmount) string {
-	return nameAmountString(ia.ItemName, nil, nil, ia.Amount)
+	return h.NameAmountString(ia.ItemName, nil, nil, ia.Amount)
 }
 
 func posItemToItemAmtSimple(cfg *Config, posItem seeding.PossibleItem) string {
@@ -61,4 +62,3 @@ func getMasterItemID(cfg *Config, ia seeding.ItemAmount) int32 {
 	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.KeyItems)
 	return itemLookup.MasterItem.ID
 }
-

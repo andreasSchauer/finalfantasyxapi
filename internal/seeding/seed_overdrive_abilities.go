@@ -44,7 +44,7 @@ func (o OverdriveAbility) GetAbilityRef() AbilityReference {
 }
 
 func (o OverdriveAbility) Error() string {
-	return fmt.Sprintf("overdrive ability %s, version %v", o.Name, h.DerefOrNil(o.Version))
+	return fmt.Sprintf("overdrive ability '%s'", h.NameToString(o.Name, o.Version, o.Specification))
 }
 
 func (o OverdriveAbility) GetResParamsNamed() h.ResParamsNamed {

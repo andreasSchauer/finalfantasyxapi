@@ -51,7 +51,7 @@ func (t TriggerCommand) GetAbilityRef() AbilityReference {
 }
 
 func (t TriggerCommand) Error() string {
-	return fmt.Sprintf("trigger command %s, version %v", t.Name, h.DerefOrNil(t.Version))
+	return fmt.Sprintf("trigger command '%s'", h.NameToString(t.Name, t.Version, t.Specification))
 }
 
 func (t TriggerCommand) GetResParamsNamed() h.ResParamsNamed {

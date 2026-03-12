@@ -29,7 +29,7 @@ func (m MonsterAbility) GetID() int32 {
 }
 
 func (m MonsterAbility) Error() string {
-	return fmt.Sprintf("monster ability %s-%v, type: %s, is forced: %t, is unused: %t", m.Name, h.DerefOrNil(m.Version), m.AbilityType, m.IsForced, m.IsUnused)
+	return fmt.Sprintf("monster ability '%s', type: %s, is forced: %t, is unused: %t", h.NameToString(m.Name, m.Version, nil), m.AbilityType, m.IsForced, m.IsUnused)
 }
 
 func (l *Lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility MonsterAbility) (MonsterAbility, error) {

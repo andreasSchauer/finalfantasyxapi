@@ -3,37 +3,10 @@ package api
 import (
 	"fmt"
 	"slices"
-	"strconv"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
-
-func nameToString(name string, version *int32, spec *string) string {
-	var verStr string
-	var specStr string
-
-	if version != nil {
-		intVer := int(*version)
-		verStr = fmt.Sprintf(" - %s", strconv.Itoa(intVer))
-	}
-
-	if spec != nil {
-		specStr = fmt.Sprintf(" (%s)", *spec)
-	}
-
-	return name + verStr + specStr
-}
-
-func nameAmountString(name string, version *int32, spec *string, amount int32) string {
-	nameStr := nameToString(name, version, spec)
-
-	if amount == 1 {
-		return nameStr
-	}
-
-	return fmt.Sprintf("%s x%d", nameStr, amount)
-}
 
 func idToLocAreaString(cfg *Config, areaID int32) string {
 	area, _ := seeding.GetResourceByID(areaID, cfg.l.AreasID)
@@ -47,7 +20,7 @@ func locAreaString(cfg *Config, locArea seeding.LocationArea) string {
 
 func areaToLocAreaString(area seeding.Area) string {
 	locArea := area.GetLocationArea()
-	locAreaString := nameToString(area.Name, area.Version, area.Specification)
+	locAreaString := h.NameToString(area.Name, area.Version, area.Specification)
 
 	if area.Name != locArea.Sublocation {
 		locAreaString = fmt.Sprintf("%s - %s", locArea.Sublocation, locAreaString)
@@ -59,6 +32,7 @@ func areaToLocAreaString(area seeding.Area) string {
 
 	return locAreaString
 }
+
 
 func locAreaStrings[T seeding.HasLocArea](cfg *Config, items []T) []string {
 	strings := []string{}
@@ -80,12 +54,12 @@ func monsterAmountString(cfg *Config, ma seeding.MonsterAmount) string {
 		Version: ma.Version,
 	}
 	mon, _ := seeding.GetResource(key, cfg.l.Monsters)
-	return nameAmountString(mon.Name, mon.Version, mon.Specification, ma.Amount)
+	return h.NameAmountString(mon.Name, mon.Version, mon.Specification, ma.Amount)
 }
 
 func idToMonsterSimpleString(cfg *Config, monID int32) string {
 	mon, _ := seeding.GetResourceByID(monID, cfg.l.MonstersID)
-	return nameToString(mon.Name, mon.Version, mon.Specification)
+	return h.NameToString(mon.Name, mon.Version, mon.Specification)
 }
 
 func monsterAutoAbilityString(_ *Config, drop seeding.EquipmentDrop) string {
@@ -97,8 +71,7 @@ func monsterAutoAbilityString(_ *Config, drop seeding.EquipmentDrop) string {
 	return fmt.Sprintf("%s (%s)", drop.Ability, formattedChars)
 }
 
-// if this is only used for overdrives, I might get rid of the type in the string
 func abilityRefString(cfg *Config, ref seeding.AbilityReference) string {
 	ability, _ := seeding.GetResource(ref, cfg.l.Abilities)
-	return fmt.Sprintf("%s: %s", ref.AbilityType, nameToString(ability.Name, ability.Version, ability.Specification))
+	return h.NameToString(ability.Name, ability.Version, ability.Specification)
 }

@@ -100,7 +100,7 @@ func (a Area) GetID() int32 {
 }
 
 func (a Area) Error() string {
-	return fmt.Sprintf("area %s, version %v", a.Name, h.DerefOrNil(a.Version))
+	return fmt.Sprintf("area '%s'", h.NameToString(a.Name, a.Version, a.Specification))
 }
 
 func (a Area) GetLocationArea() LocationArea {
@@ -145,7 +145,7 @@ func (la LocationArea) GetID() int32 {
 }
 
 func (la LocationArea) Error() string {
-	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: %s, version: %v", la.Location, la.Sublocation, la.Area, h.DerefOrNil(la.Version))
+	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: '%s'", la.Location, la.Sublocation, h.NameToString(la.Area, la.Version, nil))
 }
 
 func (la LocationArea) GetLocationArea() LocationArea {

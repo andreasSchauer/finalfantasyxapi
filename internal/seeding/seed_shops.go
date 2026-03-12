@@ -41,7 +41,7 @@ func (s Shop) GetID() int32 {
 }
 
 func (s Shop) Error() string {
-	return fmt.Sprintf("shop %s, %v", s.LocationArea, h.DerefOrNil(s.Version))
+	return fmt.Sprintf("shop %s, %v", s.LocationArea, h.DerefVerStr(s.Version))
 }
 
 func (s Shop) GetResParamsUnnamed() h.ResParamsUnnamed {

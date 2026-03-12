@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func convertObjPtr[Old, New any](cfg *Config, item *Old, converter func(*Config, Old) New) *New {
@@ -28,20 +30,9 @@ func convertObjSlice[Old, New any](cfg *Config, items []Old, converter func(*Con
 
 func convertObjSliceOrNil[Old, New any](cfg *Config, items []Old, converter func(*Config, Old) New) []New {
 	slice := convertObjSlice(cfg, items, converter)
-	return sliceOrNil(slice)
+	return h.SliceOrNil(slice)
 }
 
-func sliceOrNil[T any](s []T) []T {
-	if len(s) == 0 {
-		return nil
-	}
-
-	return s
-}
-
-func ptrIsNotNil[T any](ptr *T) bool {
-	return ptr != nil
-}
 
 func dbQueryToSlice[T any](cfg *Config, r *http.Request, rtParent, rtChild string, id int32, dbQuery func(context.Context, int32) ([]int32, error), converter func(*Config, int32) T) ([]T, error) {
 	dbIDs, err := dbQuery(r.Context(), id)

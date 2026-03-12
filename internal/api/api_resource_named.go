@@ -48,7 +48,7 @@ func (r NamedAPIResource) ToKeyFields() []any {
 }
 
 func (r NamedAPIResource) Error() string {
-	return fmt.Sprintf("named api resource %s, version: %v, url: %s", r.Name, h.DerefOrNil(r.Version), r.URL)
+	return fmt.Sprintf("named api resource '%s', url: %s", h.NameToString(r.Name, r.Version, r.Specification), r.URL)
 }
 
 func (r NamedAPIResource) GetAPIResource() APIResource {

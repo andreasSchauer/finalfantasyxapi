@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -21,7 +22,7 @@ type MonsterSimple struct {
 	IsRepeatable   bool                    `json:"is_repeatable"`
 	CanBeCaptured  bool                    `json:"can_be_captured"`
 	RonsoRages     []string                `json:"ronso_rages,omitempty"`
-	Areas          []string 			   `json:"areas"`
+	Areas          []string                `json:"areas"`
 	Items          *MonsterItemsSimple     `json:"items,omitempty"`
 	Equipment      *MonsterEquipmentSimple `json:"equipment,omitempty"`
 }
@@ -53,8 +54,8 @@ func createMonsterSimple(cfg *Config, r *http.Request, id int32) (SimpleResource
 		IsStoryBased:   mon.IsStoryBased,
 		IsRepeatable:   mon.IsRepeatable,
 		CanBeCaptured:  mon.CanBeCaptured,
-		RonsoRages:     sliceOrNil(mon.RonsoRages),
-		Areas: 			areas,
+		RonsoRages:     h.SliceOrNil(mon.RonsoRages),
+		Areas:          areas,
 		Items:          convertObjPtr(cfg, mon.Items, convertMonsterItemsSimple),
 		Equipment:      convertObjPtr(cfg, mon.Equipment, convertMonsterEquipmentSimple),
 	}
@@ -62,11 +63,10 @@ func createMonsterSimple(cfg *Config, r *http.Request, id int32) (SimpleResource
 	return monSimple, nil
 }
 
-
 func getMonsterHP(mon seeding.Monster) int32 {
 	for _, stat := range mon.BaseStats {
 		if stat.StatName == "hp" {
-			return  stat.Value
+			return stat.Value
 		}
 	}
 

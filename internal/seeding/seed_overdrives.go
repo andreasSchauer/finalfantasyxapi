@@ -47,7 +47,7 @@ func (o Overdrive) GetID() int32 {
 }
 
 func (o Overdrive) Error() string {
-	return fmt.Sprintf("overdrive %s, version %v", o.Name, h.DerefOrNil(o.Version))
+	return fmt.Sprintf("overdrive '%s'", h.NameToString(o.Name, o.Version, o.Specification))
 }
 
 func (o Overdrive) GetResParamsNamed() h.ResParamsNamed {

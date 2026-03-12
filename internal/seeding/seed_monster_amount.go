@@ -55,7 +55,7 @@ func (ma MonsterAmount) GetVal() int32 {
 }
 
 func (ma MonsterAmount) Error() string {
-	return fmt.Sprintf("monster amount with monster: %s, version: %v, amount: %d", ma.MonsterName, h.DerefOrNil(ma.Version), ma.Amount)
+	return fmt.Sprintf("monster amount with monster: '%s', amount: %d", h.NameToString(ma.MonsterName, ma.Version, nil), ma.Amount)
 }
 
 func (l *Lookup) seedMonsterAmount(qtx *database.Queries, monsterAmount MonsterAmount) (MonsterAmount, error) {

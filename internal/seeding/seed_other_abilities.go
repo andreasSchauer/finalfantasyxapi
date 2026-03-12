@@ -26,47 +26,47 @@ type UnspecifiedAbility struct {
 	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
-func (o UnspecifiedAbility) ToHashFields() []any {
+func (u UnspecifiedAbility) ToHashFields() []any {
 	return []any{
-		o.Ability.ID,
-		o.Description,
-		o.Effect,
-		h.DerefOrNil(o.TopmenuID),
-		h.DerefOrNil(o.Cursor),
-		h.DerefOrNil(o.SubmenuID),
-		h.DerefOrNil(o.OpenSubmenuID),
+		u.Ability.ID,
+		u.Description,
+		u.Effect,
+		h.DerefOrNil(u.TopmenuID),
+		h.DerefOrNil(u.Cursor),
+		h.DerefOrNil(u.SubmenuID),
+		h.DerefOrNil(u.OpenSubmenuID),
 	}
 }
 
-func (o UnspecifiedAbility) ToKeyFields() []any {
+func (u UnspecifiedAbility) ToKeyFields() []any {
 	return []any{
-		o.Ability.Name,
-		h.DerefOrNil(o.Ability.Version),
+		u.Ability.Name,
+		h.DerefOrNil(u.Ability.Version),
 	}
 }
 
-func (o UnspecifiedAbility) GetID() int32 {
-	return o.ID
+func (u UnspecifiedAbility) GetID() int32 {
+	return u.ID
 }
 
-func (o UnspecifiedAbility) GetAbilityRef() AbilityReference {
+func (u UnspecifiedAbility) GetAbilityRef() AbilityReference {
 	return AbilityReference{
-		Name:        o.Name,
-		Version:     o.Version,
+		Name:        u.Name,
+		Version:     u.Version,
 		AbilityType: string(database.AbilityTypeUnspecifiedAbility),
 	}
 }
 
-func (o UnspecifiedAbility) Error() string {
-	return fmt.Sprintf("generic ability %s, version %v", o.Name, h.DerefOrNil(o.Version))
+func (u UnspecifiedAbility) Error() string {
+	return fmt.Sprintf("unspecified ability '%s'", h.NameToString(u.Name, u.Version, u.Specification))
 }
 
-func (o UnspecifiedAbility) GetResParamsNamed() h.ResParamsNamed {
+func (u UnspecifiedAbility) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID:            o.ID,
-		Name:          o.Name,
-		Version:       o.Version,
-		Specification: o.Specification,
+		ID:            u.ID,
+		Name:          u.Name,
+		Version:       u.Version,
+		Specification: u.Specification,
 	}
 }
 
