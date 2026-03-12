@@ -44,7 +44,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		BattleInteractions:    convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, response, "user", i.queryLookup)
+	battleInteractions, err := applyUser(cfg, r, response, "ability_user", i.queryLookup)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
@@ -70,7 +70,7 @@ func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seedi
 		frl(intQuery(cfg, r, i, resources, "mp_max", cfg.db.GetPlayerAbilityIDsByMpCostMax)),
 		frl(intQueryNullable(cfg, r, i, resources, "rank", cfg.db.GetPlayerAbilityIDsByRank)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetPlayerAbilityIDsByElement)),
-		frl(nameOrIdQuery(cfg, r, i, resources, "char_class", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass)),
+		frl(nameOrIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass)),
 		frl(idQuery(cfg, r, i, resources, "learn_item", len(cfg.l.Items), cfg.db.GetPlayerAbilityIDsByLearnItem)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat)),
 		frl(idQueryWrapper(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getPlayerAbilitiesInflictedStatus)),
@@ -80,7 +80,7 @@ func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seedi
 		frl(boolQuery(cfg, r, i, resources, "outside_battle", cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle)),
 		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetPlayerAbilityIDsByCanCopycat)),
 		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetPlayerAbilityIDsByAppearsInHelpBar)),
-		frl(boolQuery2(cfg, r, i, resources, "phys_atk", cfg.db.GetPlayerAbilityIDsBasedOnPhysAttack)),
+		frl(boolQuery2(cfg, r, i, resources, "user_atk", cfg.db.GetPlayerAbilityIDsBasedOnUserAttack)),
 		frl(boolQuery2(cfg, r, i, resources, "darkable", cfg.db.GetPlayerAbilityIDsDarkable)),
 		frl(boolQuery2(cfg, r, i, resources, "silenceable", cfg.db.GetPlayerAbilityIDsSilenceable)),
 		frl(boolQuery2(cfg, r, i, resources, "reflectable", cfg.db.GetPlayerAbilityIDsReflectable)),

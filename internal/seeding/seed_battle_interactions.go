@@ -11,7 +11,7 @@ import (
 type BattleInteraction struct {
 	ID                        int32
 	Target                    string            `json:"target"`
-	BasedOnPhysAttack         bool              `json:"based_on_phys_attack"`
+	BasedOnUserAttack         bool              `json:"based_on_user_attack"`
 	Range                     *int32            `json:"range"`
 	Damage                    *Damage           `json:"damage"`
 	ShatterRate               int32             `json:"shatter_rate"`
@@ -19,7 +19,7 @@ type BattleInteraction struct {
 	AffectedBy                []string          `json:"affected_by"`
 	HitAmount                 int32             `json:"hit_amount"`
 	SpecialAction             *string           `json:"special_action"`
-	InflictedDelay            *InflictedDelay  	`json:"inflicted_delay"`
+	InflictedDelay            *InflictedDelay   `json:"inflicted_delay"`
 	InflictedStatusConditions []InflictedStatus `json:"inflicted_status_conditions"`
 	RemovedStatusConditions   []string          `json:"removed_status_conditions"`
 	CopiedStatusConditions    []InflictedStatus `json:"copied_status_conditions"`
@@ -30,7 +30,7 @@ type BattleInteraction struct {
 func (bi BattleInteraction) ToHashFields() []any {
 	return []any{
 		bi.Target,
-		bi.BasedOnPhysAttack,
+		bi.BasedOnUserAttack,
 		h.DerefOrNil(bi.Range),
 		h.ObjPtrToID(bi.Damage),
 		bi.ShatterRate,
@@ -46,7 +46,7 @@ func (bi BattleInteraction) GetID() int32 {
 }
 
 func (bi BattleInteraction) Error() string {
-	return fmt.Sprintf("battle interaction with target: %s, phys attack: %t, range: %v, damage id: %v, shatter rate: %v, accuracy id: %d, hit amount: %d, special action: %v", bi.Target, bi.BasedOnPhysAttack, h.DerefOrNil(bi.Range), h.ObjPtrToID(bi.Damage), bi.ShatterRate, bi.Accuracy.ID, bi.HitAmount, h.DerefOrNil(bi.SpecialAction))
+	return fmt.Sprintf("battle interaction with target: %s, phys attack: %t, range: %v, damage id: %v, shatter rate: %v, accuracy id: %d, hit amount: %d, special action: %v", bi.Target, bi.BasedOnUserAttack, h.DerefOrNil(bi.Range), h.ObjPtrToID(bi.Damage), bi.ShatterRate, bi.Accuracy.ID, bi.HitAmount, h.DerefOrNil(bi.SpecialAction))
 }
 
 func (l *Lookup) seedBattleInteractions(qtx *database.Queries, ability Ability, battleInteractions []BattleInteraction) error {
@@ -93,7 +93,7 @@ func (l *Lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 	dbBattleInteraction, err := qtx.CreateBattleInteraction(context.Background(), database.CreateBattleInteractionParams{
 		DataHash:          generateDataHash(battleInteraction),
 		Target:            database.TargetType(battleInteraction.Target),
-		BasedOnPhysAttack: battleInteraction.BasedOnPhysAttack,
+		BasedOnUserAttack: battleInteraction.BasedOnUserAttack,
 		Range:             h.GetNullInt32(battleInteraction.Range),
 		ShatterRate:       battleInteraction.ShatterRate,
 		AccuracyID:        battleInteraction.Accuracy.ID,
@@ -167,7 +167,6 @@ func (l *Lookup) seedBattleIntAffectedBy(qtx *database.Queries, ability Ability,
 
 	return nil
 }
-
 
 func (l *Lookup) seedBattleIntInflictedConditions(qtx *database.Queries, ability Ability, battleInteraction BattleInteraction) error {
 	for _, condition := range battleInteraction.InflictedStatusConditions {

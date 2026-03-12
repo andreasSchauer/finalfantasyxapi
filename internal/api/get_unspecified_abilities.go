@@ -31,7 +31,7 @@ func (cfg *Config) getUnspecifiedAbility(r *http.Request, i handlerInput[seeding
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, response, "user", i.queryLookup)
+	battleInteractions, err := applyUser(cfg, r, response, "ability_user", i.queryLookup)
 	if err != nil {
 		return UnspecifiedAbility{}, err
 	}
@@ -48,9 +48,9 @@ func (cfg *Config) retrieveUnspecifiedAbilities(r *http.Request, i handlerInput[
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(intQueryNullable(cfg, r, i, resources, "rank", cfg.db.GetUnspecifiedAbilityIDsByRank)),
-		frl(nameOrIdQuery(cfg, r, i, resources, "char_class", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetUnspecifiedAbilityIDsByCharClass)),
+		frl(nameOrIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetUnspecifiedAbilityIDsByCharClass)),
 		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetUnspecifiedAbilityIDsByCanCopycat)),
 		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetUnspecifiedAbilityIDsByAppearsInHelpBar)),
-		frl(boolQuery2(cfg, r, i, resources, "phys_atk", cfg.db.GetUnspecifiedAbilityIDsBasedOnPhysAttack)),
+		frl(boolQuery2(cfg, r, i, resources, "user_atk", cfg.db.GetUnspecifiedAbilityIDsBasedOnUserAttack)),
 	})
 }

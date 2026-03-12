@@ -82,6 +82,10 @@ func (cfg *Config) HandleRonsoRages(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.ronsoRages)
 }
 
+func (cfg *Config) HandleAeonCommands(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.aeonCommands)
+}
+
 func (cfg *Config) HandleOverdriveCommands(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.overdriveCommands)
 }

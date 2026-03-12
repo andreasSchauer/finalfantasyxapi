@@ -5,44 +5,42 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 type BattleInteraction struct {
-	Target            			string				`json:"target"`
-	Range             			*int32				`json:"range"`
-	HitAmount         			int32				`json:"hit_amount"`
-	ShatterRate       			int32				`json:"shatter_rate"`
-	SpecialAction     			*string				`json:"special_action,omitempty"`
-	BasedOnPhysAttack 			bool				`json:"based_on_phys_attack"`
-	Darkable          			bool				`json:"darkable"`
-	Silenceable       			bool				`json:"silenceable"`
-	Reflectable       			bool				`json:"reflectable"`
-	Accuracy					Accuracy			`json:"accuracy"`
-	Damage			  			*Damage				`json:"damage"`
-	InflictedDelay            	*InflictedDelay  	`json:"inflicted_delay"`
-	InflictedStatusConditions 	[]InflictedStatus 	`json:"inflicted_status_conditions"`
-	RemovedStatusConditions		[]NamedAPIResource	`json:"removed_status_conditions"`
-	CopiedStatusConditions		[]InflictedStatus	`json:"copied_status_conditions"`
-	StatChanges					[]StatChange		`json:"stat_changes"`
-	ModifierChanges				[]ModifierChange	`json:"modifier_changes"`
+	Target                    string             `json:"target"`
+	Range                     *int32             `json:"range"`
+	HitAmount                 int32              `json:"hit_amount"`
+	ShatterRate               int32              `json:"shatter_rate"`
+	SpecialAction             *string            `json:"special_action,omitempty"`
+	BasedOnUserAttack         bool               `json:"based_on_user_attack"`
+	Darkable                  bool               `json:"darkable"`
+	Silenceable               bool               `json:"silenceable"`
+	Reflectable               bool               `json:"reflectable"`
+	Accuracy                  Accuracy           `json:"accuracy"`
+	Damage                    *Damage            `json:"damage"`
+	InflictedDelay            *InflictedDelay    `json:"inflicted_delay"`
+	InflictedStatusConditions []InflictedStatus  `json:"inflicted_status_conditions"`
+	RemovedStatusConditions   []NamedAPIResource `json:"removed_status_conditions"`
+	CopiedStatusConditions    []InflictedStatus  `json:"copied_status_conditions"`
+	StatChanges               []StatChange       `json:"stat_changes"`
+	ModifierChanges           []ModifierChange   `json:"modifier_changes"`
 }
 
 func convertBattleInteraction(cfg *Config, bi seeding.BattleInteraction) BattleInteraction {
 	battleInteraction := BattleInteraction{
-		Target: bi.Target,
-		BasedOnPhysAttack: bi.BasedOnPhysAttack,
-		Range: bi.Range,
-		Damage: convertObjPtr(cfg, bi.Damage, convertDamage),
-		ShatterRate: bi.ShatterRate,
-		Accuracy: convertAccuracy(cfg, bi.Accuracy),
-		HitAmount: bi.HitAmount,
-		SpecialAction: bi.SpecialAction,
-		InflictedDelay: convertObjPtr(cfg, bi.InflictedDelay, convertInflictedDelay),
+		Target:                    bi.Target,
+		BasedOnUserAttack:         bi.BasedOnUserAttack,
+		Range:                     bi.Range,
+		Damage:                    convertObjPtr(cfg, bi.Damage, convertDamage),
+		ShatterRate:               bi.ShatterRate,
+		Accuracy:                  convertAccuracy(cfg, bi.Accuracy),
+		HitAmount:                 bi.HitAmount,
+		SpecialAction:             bi.SpecialAction,
+		InflictedDelay:            convertObjPtr(cfg, bi.InflictedDelay, convertInflictedDelay),
 		InflictedStatusConditions: convertObjSlice(cfg, bi.InflictedStatusConditions, convertInflictedStatus),
-		RemovedStatusConditions: namesToNamedAPIResources(cfg, cfg.e.statusConditions, bi.RemovedStatusConditions),
-		CopiedStatusConditions: convertObjSlice(cfg, bi.CopiedStatusConditions, convertInflictedStatus),
-		StatChanges: convertObjSlice(cfg, bi.StatChanges, convertStatChange),
-		ModifierChanges: convertObjSlice(cfg, bi.ModifierChanges, convertModifierChange),
+		RemovedStatusConditions:   namesToNamedAPIResources(cfg, cfg.e.statusConditions, bi.RemovedStatusConditions),
+		CopiedStatusConditions:    convertObjSlice(cfg, bi.CopiedStatusConditions, convertInflictedStatus),
+		StatChanges:               convertObjSlice(cfg, bi.StatChanges, convertStatChange),
+		ModifierChanges:           convertObjSlice(cfg, bi.ModifierChanges, convertModifierChange),
 	}
 
 	for _, status := range bi.AffectedBy {
@@ -61,53 +59,45 @@ func convertBattleInteraction(cfg *Config, bi seeding.BattleInteraction) BattleI
 	return battleInteraction
 }
 
-
-
 type Damage struct {
-	DamageCalc      []AbilityDamage 	`json:"damage_calc"`
-	Critical        *string         	`json:"critical"`
-	CriticalPlusVal *int32          	`json:"critical_plus_val,omitempty"`
-	IsPiercing      bool            	`json:"is_piercing"`
-	BreakDmgLimit   *string         	`json:"break_dmg_lmt"`
-	Element         *NamedAPIResource 	`json:"element"`		
+	DamageCalc      []AbilityDamage   `json:"damage_calc"`
+	Critical        *string           `json:"critical"`
+	CriticalPlusVal *int32            `json:"critical_plus_val,omitempty"`
+	IsPiercing      bool              `json:"is_piercing"`
+	BreakDmgLimit   *string           `json:"break_dmg_lmt"`
+	Element         *NamedAPIResource `json:"element"`
 }
 
 func convertDamage(cfg *Config, d seeding.Damage) Damage {
 	return Damage{
-		DamageCalc: 		convertObjSlice(cfg, d.DamageCalc, convertAbilityDamage),
-		Critical: 			d.Critical,
-		CriticalPlusVal: 	d.CriticalPlusVal,
-		IsPiercing: 		d.IsPiercing,
-		BreakDmgLimit: 		d.BreakDmgLimit,
-		Element: 			namePtrToNamedAPIResPtr(cfg, cfg.e.elements, d.Element, nil),
+		DamageCalc:      convertObjSlice(cfg, d.DamageCalc, convertAbilityDamage),
+		Critical:        d.Critical,
+		CriticalPlusVal: d.CriticalPlusVal,
+		IsPiercing:      d.IsPiercing,
+		BreakDmgLimit:   d.BreakDmgLimit,
+		Element:         namePtrToNamedAPIResPtr(cfg, cfg.e.elements, d.Element, nil),
 	}
 }
 
-
-
-
 type AbilityDamage struct {
-	Condition      *string 				`json:"condition,omitempty"`
-	AttackType     NamedAPIResource  	`json:"attack_type"`
-	TargetStat     NamedAPIResource 	`json:"target_stat"`
-	DamageType     NamedAPIResource 	`json:"damage_type"`
-	DamageFormula  NamedAPIResource 	`json:"damage_formula"`
-	DamageConstant int32  				`json:"damage_constant"`
+	Condition      *string          `json:"condition,omitempty"`
+	AttackType     NamedAPIResource `json:"attack_type"`
+	TargetStat     NamedAPIResource `json:"target_stat"`
+	DamageType     NamedAPIResource `json:"damage_type"`
+	DamageFormula  NamedAPIResource `json:"damage_formula"`
+	DamageConstant int32            `json:"damage_constant"`
 }
 
 func convertAbilityDamage(cfg *Config, ad seeding.AbilityDamage) AbilityDamage {
 	return AbilityDamage{
-		Condition: 		ad.Condition,
-		AttackType: 	newNamedAPIResourceFromType(cfg, cfg.e.attackType.endpoint, ad.AttackType, cfg.t.AttackType),
-		TargetStat:		nameToNamedAPIResource(cfg, cfg.e.stats, ad.TargetStat, nil),
-		DamageType: 	newNamedAPIResourceFromType(cfg, cfg.e.damageType.endpoint, ad.DamageType, cfg.t.DamageType),
-		DamageFormula: 	newNamedAPIResourceFromType(cfg, cfg.e.damageFormula.endpoint, ad.DamageFormula, cfg.t.DamageFormula),
+		Condition:      ad.Condition,
+		AttackType:     newNamedAPIResourceFromType(cfg, cfg.e.attackType.endpoint, ad.AttackType, cfg.t.AttackType),
+		TargetStat:     nameToNamedAPIResource(cfg, cfg.e.stats, ad.TargetStat, nil),
+		DamageType:     newNamedAPIResourceFromType(cfg, cfg.e.damageType.endpoint, ad.DamageType, cfg.t.DamageType),
+		DamageFormula:  newNamedAPIResourceFromType(cfg, cfg.e.damageFormula.endpoint, ad.DamageFormula, cfg.t.DamageFormula),
 		DamageConstant: ad.DamageConstant,
 	}
 }
-
-
-
 
 type Accuracy struct {
 	AccSource   string   `json:"acc_source"`
@@ -117,33 +107,29 @@ type Accuracy struct {
 
 func convertAccuracy(_ *Config, a seeding.Accuracy) Accuracy {
 	return Accuracy{
-		AccSource: 		a.AccSource,
-		HitChance: 		a.HitChance,
-		AccModifier: 	a.AccModifier,
+		AccSource:   a.AccSource,
+		HitChance:   a.HitChance,
+		AccModifier: a.AccModifier,
 	}
 }
 
-
-
-
 type InflictedDelay struct {
-	Condition      	*string `json:"condition,omitempty"`
-	CTBAttackType  	string  `json:"ctb_attack_type"`
-	DelayType      	string  `json:"delay_type"`
-	DamageConstant 	int32   `json:"damage_constant"`
-	DelayStrength	string	`json:"delay_strength"`
+	Condition      *string `json:"condition,omitempty"`
+	CTBAttackType  string  `json:"ctb_attack_type"`
+	DelayType      string  `json:"delay_type"`
+	DamageConstant int32   `json:"damage_constant"`
+	DelayStrength  string  `json:"delay_strength"`
 }
 
 func convertInflictedDelay(_ *Config, id seeding.InflictedDelay) InflictedDelay {
 	return InflictedDelay{
-		Condition: 		id.Condition,
-		CTBAttackType: 	id.CTBAttackType,
-		DelayType: 		id.DelayType,
+		Condition:      id.Condition,
+		CTBAttackType:  id.CTBAttackType,
+		DelayType:      id.DelayType,
 		DamageConstant: id.DamageConstant,
-		DelayStrength: 	getDelayStrength(id),
+		DelayStrength:  getDelayStrength(id),
 	}
 }
-
 
 func getDelayStrength(id seeding.InflictedDelay) string {
 	switch id.DelayType {
@@ -169,7 +155,6 @@ func getDelayStrength(id seeding.InflictedDelay) string {
 	return ""
 }
 
-
 type InflictedStatus struct {
 	StatusCondition NamedAPIResource `json:"status_condition"`
 	Probability     int32            `json:"probability"`
@@ -194,12 +179,10 @@ func convertInflictedStatus(cfg *Config, status seeding.InflictedStatus) Inflict
 	}
 }
 
-
-
 type StatChange struct {
-	Stat			NamedAPIResource	`json:"stat"`
-	CalculationType	string				`json:"calculation_type"`
-	Value			float32				`json:"value"`
+	Stat            NamedAPIResource `json:"stat"`
+	CalculationType string           `json:"calculation_type"`
+	Value           float32          `json:"value"`
 }
 
 func (sc StatChange) GetAPIResource() APIResource {
@@ -212,18 +195,16 @@ func (sc StatChange) IsZero() bool {
 
 func convertStatChange(cfg *Config, sc seeding.StatChange) StatChange {
 	return StatChange{
-		Stat: 				nameToNamedAPIResource(cfg, cfg.e.stats, sc.StatName, nil),
-		CalculationType: 	sc.CalculationType,
-		Value: 				sc.Value,
+		Stat:            nameToNamedAPIResource(cfg, cfg.e.stats, sc.StatName, nil),
+		CalculationType: sc.CalculationType,
+		Value:           sc.Value,
 	}
 }
 
-
-
 type ModifierChange struct {
-	Modifier		NamedAPIResource	`json:"modifier"`
-	CalculationType	string				`json:"calculation_type"`
-	Value			float32				`json:"value"`
+	Modifier        NamedAPIResource `json:"modifier"`
+	CalculationType string           `json:"calculation_type"`
+	Value           float32          `json:"value"`
 }
 
 func (mc ModifierChange) GetAPIResource() APIResource {
@@ -236,8 +217,8 @@ func (mc ModifierChange) IsZero() bool {
 
 func convertModifierChange(cfg *Config, mc seeding.ModifierChange) ModifierChange {
 	return ModifierChange{
-		Modifier: 			nameToNamedAPIResource(cfg, cfg.e.modifiers, mc.ModifierName, nil),
-		CalculationType: 	mc.CalculationType,
-		Value: 				mc.Value,
+		Modifier:        nameToNamedAPIResource(cfg, cfg.e.modifiers, mc.ModifierName, nil),
+		CalculationType: mc.CalculationType,
+		Value:           mc.Value,
 	}
 }

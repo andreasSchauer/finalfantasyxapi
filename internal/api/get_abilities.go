@@ -115,7 +115,7 @@ func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Abi
 		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetAbilityIDsByAppearsInHelpBar)),
 		frl(boolQuery2(cfg, r, i, resources, "can_crit", cfg.db.GetAbilityIDsCanCrit)),
 		frl(boolQuery2(cfg, r, i, resources, "bdl", cfg.db.GetAbilityIDsBreakDmgLimit)),
-		frl(boolQuery2(cfg, r, i, resources, "phys_atk", cfg.db.GetAbilityIDsBasedOnPhysAttack)),
+		frl(boolQuery2(cfg, r, i, resources, "user_atk", cfg.db.GetAbilityIDsBasedOnUserAttack)),
 		frl(boolQuery2(cfg, r, i, resources, "darkable", cfg.db.GetAbilityIDsDarkable)),
 		frl(boolQuery2(cfg, r, i, resources, "silenceable", cfg.db.GetAbilityIDsSilenceable)),
 		frl(boolQuery2(cfg, r, i, resources, "reflectable", cfg.db.GetAbilityIDsReflectable)),

@@ -37,17 +37,17 @@ func (q *Queries) GetAbilityIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getAbilityIDsBasedOnPhysAttack = `-- name: GetAbilityIDsBasedOnPhysAttack :many
+const getAbilityIDsBasedOnUserAttack = `-- name: GetAbilityIDsBasedOnUserAttack :many
 SELECT DISTINCT a.id
 FROM abilities a
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.based_on_phys_attack = true
+WHERE bi.based_on_user_attack = true
 ORDER BY a.id
 `
 
-func (q *Queries) GetAbilityIDsBasedOnPhysAttack(ctx context.Context) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsBasedOnPhysAttack)
+func (q *Queries) GetAbilityIDsBasedOnUserAttack(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsBasedOnUserAttack)
 	if err != nil {
 		return nil, err
 	}
@@ -2563,18 +2563,18 @@ func (q *Queries) GetPlayerAbilityIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getPlayerAbilityIDsBasedOnPhysAttack = `-- name: GetPlayerAbilityIDsBasedOnPhysAttack :many
+const getPlayerAbilityIDsBasedOnUserAttack = `-- name: GetPlayerAbilityIDsBasedOnUserAttack :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.based_on_phys_attack = true
+WHERE bi.based_on_user_attack = true
 ORDER BY pa.id
 `
 
-func (q *Queries) GetPlayerAbilityIDsBasedOnPhysAttack(ctx context.Context) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsBasedOnPhysAttack)
+func (q *Queries) GetPlayerAbilityIDsBasedOnUserAttack(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsBasedOnUserAttack)
 	if err != nil {
 		return nil, err
 	}
@@ -3909,18 +3909,18 @@ func (q *Queries) GetUnspecifiedAbilityIDs(ctx context.Context) ([]int32, error)
 	return items, nil
 }
 
-const getUnspecifiedAbilityIDsBasedOnPhysAttack = `-- name: GetUnspecifiedAbilityIDsBasedOnPhysAttack :many
+const getUnspecifiedAbilityIDsBasedOnUserAttack = `-- name: GetUnspecifiedAbilityIDsBasedOnUserAttack :many
 SELECT DISTINCT ua.id
 FROM unspecified_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.based_on_phys_attack = true
+WHERE bi.based_on_user_attack = true
 ORDER BY ua.id
 `
 
-func (q *Queries) GetUnspecifiedAbilityIDsBasedOnPhysAttack(ctx context.Context) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsBasedOnPhysAttack)
+func (q *Queries) GetUnspecifiedAbilityIDsBasedOnUserAttack(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsBasedOnUserAttack)
 	if err != nil {
 		return nil, err
 	}

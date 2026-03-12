@@ -104,3 +104,8 @@ ORDER BY a.id;
 
 -- name: GetTopmenuIDs :many
 SELECT id FROM topmenus ORDER BY id;
+
+
+
+-- name: GetAeonCommandIDs :many
+SELECT id FROM aeon_commands ORDER BY id;

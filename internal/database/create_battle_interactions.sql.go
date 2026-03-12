@@ -245,16 +245,16 @@ func (q *Queries) CreateBattleIntStatChangesJunction(ctx context.Context, arg Cr
 }
 
 const createBattleInteraction = `-- name: CreateBattleInteraction :one
-INSERT INTO battle_interactions (data_hash, target, based_on_phys_attack, range, shatter_rate, accuracy_id, inflicted_delay_id, hit_amount, special_action)
+INSERT INTO battle_interactions (data_hash, target, based_on_user_attack, range, shatter_rate, accuracy_id, inflicted_delay_id, hit_amount, special_action)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = battle_interactions.data_hash
-RETURNING id, data_hash, target, based_on_phys_attack, range, shatter_rate, accuracy_id, inflicted_delay_id, hit_amount, special_action, damage_id
+RETURNING id, data_hash, target, based_on_user_attack, range, shatter_rate, accuracy_id, inflicted_delay_id, hit_amount, special_action, damage_id
 `
 
 type CreateBattleInteractionParams struct {
 	DataHash          string
 	Target            TargetType
-	BasedOnPhysAttack bool
+	BasedOnUserAttack bool
 	Range             interface{}
 	ShatterRate       interface{}
 	AccuracyID        int32
@@ -267,7 +267,7 @@ func (q *Queries) CreateBattleInteraction(ctx context.Context, arg CreateBattleI
 	row := q.db.QueryRowContext(ctx, createBattleInteraction,
 		arg.DataHash,
 		arg.Target,
-		arg.BasedOnPhysAttack,
+		arg.BasedOnUserAttack,
 		arg.Range,
 		arg.ShatterRate,
 		arg.AccuracyID,
@@ -280,7 +280,7 @@ func (q *Queries) CreateBattleInteraction(ctx context.Context, arg CreateBattleI
 		&i.ID,
 		&i.DataHash,
 		&i.Target,
-		&i.BasedOnPhysAttack,
+		&i.BasedOnUserAttack,
 		&i.Range,
 		&i.ShatterRate,
 		&i.AccuracyID,

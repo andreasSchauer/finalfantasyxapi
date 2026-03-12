@@ -2823,7 +2823,7 @@ type BattleInteraction struct {
 	ID                int32
 	DataHash          string
 	Target            TargetType
-	BasedOnPhysAttack bool
+	BasedOnUserAttack bool
 	Range             interface{}
 	ShatterRate       interface{}
 	AccuracyID        int32
@@ -3967,7 +3967,7 @@ type Submenu struct {
 	ID          int32
 	DataHash    string
 	Name        string
-	Description string
+	Description sql.NullString
 	Effect      string
 	TopmenuID   sql.NullInt32
 }

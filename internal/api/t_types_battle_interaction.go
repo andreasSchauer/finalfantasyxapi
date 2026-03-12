@@ -1,24 +1,23 @@
 package api
 
-
 type expBattleInteraction struct {
-	target						string
-	abilityRange				*int32
-	hitAmount					int32
-	shatterRate					int32
-	specialAction				*string
-	basedOnPhysAtk				bool
-	darkable					bool
-	silenceable					bool
-	reflectable					bool
-	accuracy					expAccuracy
-	damage						*expDamage
-	inflictedDelay				*expInflictedDelay
-	inflictedStatusConditions	[]int32
-	removedStatusConditions		[]int32
-	copiedStatusConditions		[]int32
-	statChanges					[]expStatChange
-	modifierChanges				[]expModChange
+	target                    string
+	abilityRange              *int32
+	hitAmount                 int32
+	shatterRate               int32
+	specialAction             *string
+	basedOnUserAtk            bool
+	darkable                  bool
+	silenceable               bool
+	reflectable               bool
+	accuracy                  expAccuracy
+	damage                    *expDamage
+	inflictedDelay            *expInflictedDelay
+	inflictedStatusConditions []int32
+	removedStatusConditions   []int32
+	copiedStatusConditions    []int32
+	statChanges               []expStatChange
+	modifierChanges           []expModChange
 }
 
 func compareBattleInteractions(test test, fieldName string, exp expBattleInteraction, got BattleInteraction) {
@@ -27,7 +26,7 @@ func compareBattleInteractions(test test, fieldName string, exp expBattleInterac
 	compare(test, fieldName+" hit amount", exp.hitAmount, got.HitAmount)
 	compare(test, fieldName+" shatter rate", exp.shatterRate, got.ShatterRate)
 	compare(test, fieldName+" special action", exp.specialAction, got.SpecialAction)
-	compare(test, fieldName+" based on phys atk", exp.basedOnPhysAtk, got.BasedOnPhysAttack)
+	compare(test, fieldName+" based on phys atk", exp.basedOnUserAtk, got.BasedOnUserAttack)
 	compare(test, fieldName+" darkable", exp.darkable, got.Darkable)
 	compare(test, fieldName+" silenceable", exp.silenceable, got.Silenceable)
 	compare(test, fieldName+" reflectable", exp.reflectable, got.Reflectable)
@@ -42,9 +41,9 @@ func compareBattleInteractions(test test, fieldName string, exp expBattleInterac
 }
 
 type expAccuracy struct {
-	accSource		string
-	hitChance		*int32
-	accModifier		*float32
+	accSource   string
+	hitChance   *int32
+	accModifier *float32
 }
 
 func compareAccuracies(test test, fieldName string, exp expAccuracy, got Accuracy) {
@@ -54,12 +53,12 @@ func compareAccuracies(test test, fieldName string, exp expAccuracy, got Accurac
 }
 
 type expDamage struct {
-	damageCalc		[]expAbilityDamage
-	critical		*string
-	criticalPlusVal	*int32
-	isPiercing		bool
-	breakDmgLmt		*string
-	element			*int32
+	damageCalc      []expAbilityDamage
+	critical        *string
+	criticalPlusVal *int32
+	isPiercing      bool
+	breakDmgLmt     *string
+	element         *int32
 }
 
 func compareDamages(test test, fieldName string, exp expDamage, got Damage) {
@@ -72,11 +71,11 @@ func compareDamages(test test, fieldName string, exp expDamage, got Damage) {
 }
 
 type expAbilityDamage struct {
-	attackType		int32
-	targetStat		int32
-	damageType		int32
-	damageFormula	int32
-	damageConstant	int32
+	attackType     int32
+	targetStat     int32
+	damageType     int32
+	damageFormula  int32
+	damageConstant int32
 }
 
 func compareAbilityDamages(test test, fieldName string, exp expAbilityDamage, got AbilityDamage) {
@@ -88,10 +87,10 @@ func compareAbilityDamages(test test, fieldName string, exp expAbilityDamage, go
 }
 
 type expInflictedDelay struct {
-	ctbAttackType	string
-	delayType		string
-	damageConstant	int32
-	delayStrength	string
+	ctbAttackType  string
+	delayType      string
+	damageConstant int32
+	delayStrength  string
 }
 
 func compareInflictedDelays(test test, fieldName string, exp expInflictedDelay, got InflictedDelay) {
@@ -102,9 +101,9 @@ func compareInflictedDelays(test test, fieldName string, exp expInflictedDelay, 
 }
 
 type expStatChange struct {
-	stat			int32
-	calculationType	string
-	value			float32
+	stat            int32
+	calculationType string
+	value           float32
 }
 
 func compareStatChanges(test test, fieldName string, exp expStatChange, got StatChange) {
@@ -114,13 +113,13 @@ func compareStatChanges(test test, fieldName string, exp expStatChange, got Stat
 }
 
 type expModChange struct {
-	modifier		int32
-	calculationType	string
-	value			float32
+	modifier        int32
+	calculationType string
+	value           float32
 }
 
 func compareModChanges(test test, fieldName string, exp expModChange, got ModifierChange) {
-	compIdApiResource(test, fieldName+ " - mc modifier", test.cfg.e.modifiers.endpoint, exp.modifier, got.Modifier)
+	compIdApiResource(test, fieldName+" - mc modifier", test.cfg.e.modifiers.endpoint, exp.modifier, got.Modifier)
 	compare(test, fieldName+" - calculation type", exp.calculationType, got.CalculationType)
 	compare(test, fieldName+" - value", exp.value, got.Value)
 }

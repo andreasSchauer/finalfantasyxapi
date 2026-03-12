@@ -13,7 +13,7 @@ import (
 type Submenu struct {
 	ID          int32
 	Name        string   `json:"name"`
-	Description string   `json:"description"`
+	Description *string   `json:"description"`
 	Effect      string   `json:"effect"`
 	Topmenu     *string  `json:"topmenu"`
 	TopmenuID	*int32
@@ -58,7 +58,7 @@ func (l *Lookup) seedSubmenus(db *database.Queries, dbConn *sql.DB) error {
 			dbSubmenu, err := qtx.CreateSubmenu(context.Background(), database.CreateSubmenuParams{
 				DataHash:    generateDataHash(submenu),
 				Name:        submenu.Name,
-				Description: submenu.Description,
+				Description: h.GetNullString(submenu.Description),
 				Effect:      submenu.Effect,
 			})
 			if err != nil {

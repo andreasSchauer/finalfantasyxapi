@@ -79,7 +79,7 @@ CREATE TABLE battle_interactions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     target target_type NOT NULL,
-    based_on_phys_attack BOOLEAN NOT NULL,
+    based_on_user_attack BOOLEAN NOT NULL,
     range distance,
     shatter_rate uint8 NOT NULL,
     accuracy_id INTEGER NOT NULL REFERENCES ability_accuracies(id),

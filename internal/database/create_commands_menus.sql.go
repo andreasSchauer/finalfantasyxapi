@@ -115,7 +115,7 @@ RETURNING id, data_hash, name, description, effect, topmenu_id
 type CreateSubmenuParams struct {
 	DataHash    string
 	Name        string
-	Description string
+	Description sql.NullString
 	Effect      string
 }
 

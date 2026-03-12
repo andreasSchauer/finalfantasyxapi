@@ -5,7 +5,7 @@ import (
 )
 
 type endpoints struct {
-	aeonCommands         handlerInput[seeding.AeonCommand, any, NamedAPIResource, NamedApiResourceList]
+	aeonCommands         handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]
 	aeons                handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]
 	affinities           handlerInput[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList]
 	arenaCreations       handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
@@ -63,13 +63,17 @@ type endpoints struct {
 func (cfg *Config) EndpointsInit() {
 	e := endpoints{}
 
-	e.aeonCommands = handlerInput[seeding.AeonCommand, any, NamedAPIResource, NamedApiResourceList]{
+	e.aeonCommands = handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "aeon-commands",
 		resourceType:  "aeon command",
 		objLookup:     cfg.l.AeonCommands,
 		objLookupID:   cfg.l.AeonCommandsID,
-		idToResFunc:   idToNamedAPIResource[seeding.AeonCommand, any, NamedAPIResource, NamedApiResourceList],
+		queryLookup:   cfg.q.aeonCommands,
+		idToResFunc:   idToNamedAPIResource[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetAeonCommandIDs,
+		getSingleFunc: cfg.getAeonCommand,
+		retrieveFunc:  cfg.retrieveAeonCommands,
 	}
 
 	e.aeons = handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]{

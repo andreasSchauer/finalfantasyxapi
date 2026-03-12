@@ -24,7 +24,7 @@ CREATE TABLE submenus (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     name TEXT UNIQUE NOT NULL,
-    description TEXT NOT NULL,
+    description TEXT,
     effect TEXT NOT NULL
 );
 

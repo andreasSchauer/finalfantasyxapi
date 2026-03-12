@@ -47,6 +47,7 @@ func main() {
 	mux.HandleFunc("GET /api/trigger-commands/", apiCfg.HandleTriggerCommands)
 	mux.HandleFunc("GET /api/overdrives/", apiCfg.HandleOverdrives)
 	mux.HandleFunc("GET /api/ronso-rages/", apiCfg.HandleRonsoRages)
+	mux.HandleFunc("GET /api/aeon-commands/", apiCfg.HandleAeonCommands)
 	mux.HandleFunc("GET /api/overdrive-commands/", apiCfg.HandleOverdriveCommands)
 	mux.HandleFunc("GET /api/submenus/", apiCfg.HandleSubmenus)
 	mux.HandleFunc("GET /api/topmenus/", apiCfg.HandleTopmenus)

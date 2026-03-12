@@ -16,10 +16,10 @@ type userAbility interface {
 }
 
 type unitRepl struct {
-	resType 	string
-	unitName	string
-	bombWpn		bool
-	replVals	biReplacement
+	resType  string
+	unitName string
+	bombWpn  bool
+	replVals biReplacement
 }
 
 type biReplacement struct {
@@ -28,7 +28,6 @@ type biReplacement struct {
 	Accuracy       *Accuracy
 	DamageConstant *int32
 }
-
 
 func applyUser(cfg *Config, r *http.Request, ability userAbility, queryName string, queryLookup map[string]QueryType) ([]BattleInteraction, error) {
 	repl, err := getUnitRepl(cfg, r, queryName, queryLookup)
@@ -49,7 +48,6 @@ func applyUser(cfg *Config, r *http.Request, ability userAbility, queryName stri
 	return battleInteractions, nil
 }
 
-
 func getUnitRepl(cfg *Config, r *http.Request, queryName string, queryLookup map[string]QueryType) (unitRepl, error) {
 	queryParamUser := queryLookup[queryName]
 	queryParamBomb := queryLookup["bomb_wpn"]
@@ -58,16 +56,16 @@ func getUnitRepl(cfg *Config, r *http.Request, queryName string, queryLookup map
 	if err != nil {
 		return unitRepl{}, err
 	}
-	
+
 	bombWpn, err := parseBooleanQuery(r, queryParamBomb)
 	if err != nil && !errors.Is(err, errEmptyQuery) {
 		return unitRepl{}, err
 	}
 
 	repl := unitRepl{
-		resType: 	resType,
-		bombWpn: 	bombWpn,
-		replVals: 	biReplacement{},
+		resType:  resType,
+		bombWpn:  bombWpn,
+		replVals: biReplacement{},
 	}
 
 	switch repl.resType {
@@ -87,7 +85,6 @@ func getUnitRepl(cfg *Config, r *http.Request, queryName string, queryLookup map
 	return repl, nil
 }
 
-
 func populateReplCharacter(cfg *Config, unitStr string, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
 	id, err := parseQueryNamedVal(unitStr, repl.resType, queryParamUser, cfg.l.Characters)
 	if err != nil {
@@ -105,7 +102,6 @@ func populateReplCharacter(cfg *Config, unitStr string, repl unitRepl, queryPara
 	return repl, nil
 }
 
-
 func populateReplAeon(cfg *Config, unitStr string, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
 	id, err := parseQueryNamedVal(unitStr, repl.resType, queryParamUser, cfg.l.Aeons)
 	if err != nil {
@@ -122,8 +118,6 @@ func populateReplAeon(cfg *Config, unitStr string, repl unitRepl, queryParamUser
 	return repl, nil
 }
 
-
-
 func verifyAbilityUsage(cfg *Config, ability userAbility, repl unitRepl, queryName string) error {
 	if !ability.canUseAbility(cfg, repl.unitName) {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, repl.resType, repl.unitName, ability), nil)
@@ -132,10 +126,9 @@ func verifyAbilityUsage(cfg *Config, ability userAbility, repl unitRepl, queryNa
 	return nil
 }
 
-
 func applyBiReplacement(battleInteractions []BattleInteraction, replVals biReplacement) []BattleInteraction {
 	for i, battleInteraction := range battleInteractions {
-		if !battleInteraction.BasedOnPhysAttack {
+		if !battleInteraction.BasedOnUserAttack {
 			continue
 		}
 

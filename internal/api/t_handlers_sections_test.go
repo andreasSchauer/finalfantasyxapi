@@ -70,10 +70,11 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.aeons.endpoint,
 				handler:        testCfg.HandleAeons,
 			},
-			count: 3,
+			count: 4,
 			results: []string{
 				"default-abilities",
 				"overdrive-abilities",
+				"overdrives",
 				"stats",
 			},
 		},
@@ -84,12 +85,13 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.characters.endpoint,
 				handler:        testCfg.HandleCharacters,
 			},
-			count: 4,
+			count: 5,
 			results: []string{
 				"default-abilities",
 				"std-sg-abilities",
 				"exp-sg-abilities",
 				"overdrive-abilities",
+				"overdrives",
 			},
 		},
 		{
@@ -99,10 +101,12 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.characterClasses.endpoint,
 				handler:        testCfg.HandleCharacterClasses,
 			},
-			count: 2,
+			count: 4,
 			results: []string{
 				"default-abilities",
 				"learnable-abilities",
+				"default-overdrives",
+				"learnable-overdrives",
 			},
 		},
 		{

@@ -830,11 +830,11 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"phys_atk": {
+		"user_atk": {
 			ID:          7,
-			Description: "Searches for abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
-			Usage:       "?phys_atk={bool}",
-			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
+			Description: "Searches for abilities whose range, shatter rate, accuracy, and damage constant are based on the user's attack.",
+			Usage:       "?user_atk={bool}",
+			ExampleUses: []string{"?user_atk=true", "?user_atk=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
@@ -1235,11 +1235,11 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"char_class": {
+		"user": {
 			ID:          2,
 			Description: "Searches for overdrive abilities that are learned by the specified character class.",
-			Usage:       "?char_class={name|id}",
-			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
+			Usage:       "?user={name|id}",
+			ExampleUses: []string{"?user=3", "?user=characters"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
@@ -1348,23 +1348,23 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 
 func (cfg *Config) initPlayerAbilitiesParams() {
 	params := map[string]QueryType{
-		"user": {
+		"ability_user": {
 			ID:              1,
-			Description:     "If a player ability is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
-			Usage:           "?user={type}:{name|id}",
-			ExampleUses:     []string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
+			Description:     "If a player ability is based on a user's attack, this parameter modifies its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
+			Usage:           "?ability_user={type}:{name|id}",
+			ExampleUses:     []string{"?ability_user=character:wakka", "?ability_user=aeon:valefor", "?ability_user=character:2"},
 			ForList:         false,
 			ForSingle:       true,
 			AllowedResTypes: []string{"character", "aeon"},
 		},
 		"bomb_wpn": {
 			ID:              2,
-			Description:     "If a player ability is a physical attack, this parameter modifies the ability's damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'user' parameter and only takes effect, if the specified user is a character.",
-			Usage:           "?user={type}:{name|id}&bomb_wpn={bool}",
-			ExampleUses:     []string{"?user=character:wakka&bomb_wpn=true"},
+			Description:     "If a player ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Usage:           "?ability_user={type}:{name|id}&bomb_wpn={bool}",
+			ExampleUses:     []string{"?ability_user=character:wakka&bomb_wpn=true"},
 			ForList:         false,
 			ForSingle:       true,
-			RequiredParams:  []string{"user"},
+			RequiredParams:  []string{"ability_user"},
 		},
 		"rank": {
 			ID:          3,
@@ -1441,11 +1441,11 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
 		},
-		"char_class": {
+		"user": {
 			ID:          12,
 			Description: "Searches for player abilities that are learned by the specified character class.",
-			Usage:       "?char_class={name|id}",
-			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
+			Usage:       "?user={name|id}",
+			ExampleUses: []string{"?user=3", "?user=characters"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
@@ -1485,11 +1485,11 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"phys_atk": {
+		"user_atk": {
 			ID:          17,
-			Description: "Searches for player abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
-			Usage:       "?phys_atk={bool}",
-			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
+			Description: "Searches for player abilities whose range, shatter rate, accuracy, and damage constant are based on the user's attack.",
+			Usage:       "?user_atk={bool}",
+			ExampleUses: []string{"?user_atk=true", "?user_atk=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
@@ -1606,23 +1606,23 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 
 func (cfg *Config) initTriggerCommandsParams() {
 	params := map[string]QueryType{
-		"user": {
+		"ability_user": {
 			ID:              1,
-			Description:     "If a trigger command is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
-			Usage:           "?user={type}:{name|id}",
-			ExampleUses:     []string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
+			Description:     "If a trigger command is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this command.",
+			Usage:           "?ability_user={type}:{name|id}",
+			ExampleUses:     []string{"?ability_user=character:wakka", "?ability_user=aeon:valefor", "?ability_user=character:2"},
 			ForList:         false,
 			ForSingle:       true,
 			AllowedResTypes: []string{"character", "aeon"},
 		},
 		"bomb_wpn": {
 			ID:              2,
-			Description:     "If a trigger command is a physical attack, this parameter modifies the ability's damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'user' parameter and only takes effect, if the specified user is a character.",
-			Usage:           "?user={type}:{name|id}&bomb_wpn={bool}",
-			ExampleUses:     []string{"?user=character:wakka&bomb_wpn=true"},
+			Description:     "If a trigger command is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Usage:           "?ability_user={type}:{name|id}&bomb_wpn={bool}",
+			ExampleUses:     []string{"?ability_user=character:wakka&bomb_wpn=true"},
 			ForList:         false,
 			ForSingle:       true,
-			RequiredParams:  []string{"user"},
+			RequiredParams:  []string{"ability_user"},
 		},
 		"related_stat": {
 			ID:          3,
@@ -1633,11 +1633,11 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
 		},
-		"char_class": {
+		"user": {
 			ID:          4,
 			Description: "Searches for trigger commands that are learned by the specified character class.",
-			Usage:       "?char_class={name|id}",
-			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
+			Usage:       "?user={name|id}",
+			ExampleUses: []string{"?user=3", "?user=characters"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
@@ -1650,23 +1650,23 @@ func (cfg *Config) initTriggerCommandsParams() {
 
 func (cfg *Config) initUnspecifiedAbilitiesParams() {
 	params := map[string]QueryType{
-		"user": {
+		"ability_user": {
 			ID:              1,
-			Description:     "If an unspecified ability is a physical attack, this parameter modifies the ability's accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka.",
-			Usage:           "?user={type}:{name|id}",
-			ExampleUses:     []string{"?user=character:wakka", "?category=aeon:valefor", "?user=character:2"},
+			Description:     "If an unspecified ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
+			Usage:           "?ability_user={type}:{name|id}",
+			ExampleUses:     []string{"?ability_user=character:wakka", "?ability_user=aeon:valefor", "?ability_user=character:2"},
 			ForList:         false,
 			ForSingle:       true,
 			AllowedResTypes: []string{"character", "aeon"},
 		},
 		"bomb_wpn": {
 			ID:              2,
-			Description:     "If an unspecified ability is a physical attack, this parameter modifies the ability's damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'user' parameter and only takes effect, if the specified user is a character.",
-			Usage:           "?user={type}:{name|id}&bomb_wpn={bool}",
-			ExampleUses:     []string{"?user=character:wakka&bomb_wpn=true"},
+			Description:     "If an unspecified ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Usage:           "?ability_user={type}:{name|id}&bomb_wpn={bool}",
+			ExampleUses:     []string{"?ability_user=character:wakka&bomb_wpn=true"},
 			ForList:         false,
 			ForSingle:       true,
-			RequiredParams:  []string{"user"},
+			RequiredParams:  []string{"ability_user"},
 		},
 		"rank": {
 			ID:          3,
@@ -1692,20 +1692,20 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"char_class": {
+		"user": {
 			ID:          6,
 			Description: "Searches for unspecified abilities that are learned by the specified character class.",
-			Usage:       "?char_class={name|id}",
-			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
+			Usage:       "?user={name|id}",
+			ExampleUses: []string{"?user=3", "?user=characters"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
 		},
-		"phys_atk": {
+		"user_atk": {
 			ID:          7,
-			Description: "Searches for unspecified abilities whose range, shatter rate, accuracy, and damage constant are based on the user's.",
-			Usage:       "?phys_atk={bool}",
-			ExampleUses: []string{"?phys_atk=true", "?phys_atk=false"},
+			Description: "Searches for unspecified abilities whose range, shatter rate, accuracy, and damage constant are based on the user's attack.",
+			Usage:       "?user_atk={bool}",
+			ExampleUses: []string{"?user_atk=true", "?user_atk=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
@@ -1728,8 +1728,8 @@ func (cfg *Config) initOverdrivesParams() {
 		"user": {
 			ID:          2,
 			Description: "Searches for overdrives that are learned by the specified character class.",
-			Usage:       "?char_class={name|id}",
-			ExampleUses: []string{"?char_class=3", "?char_class=characters"},
+			Usage:       "?user={name|id}",
+			ExampleUses: []string{"?user=3", "?user=characters"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},

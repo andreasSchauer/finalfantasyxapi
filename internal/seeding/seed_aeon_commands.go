@@ -11,15 +11,15 @@ import (
 
 type AeonCommand struct {
 	ID                int32
-	TopmenuID		  *int32
+	TopmenuID         *int32
 	SubmenuID         *int32
-	Name              string            `json:"name"`
-	Description       string            `json:"description"`
-	Effect            string            `json:"effect"`
-	Topmenu           *string           `json:"topmenu"`
-	OpenSubmenu       *string           `json:"open_submenu"`
-	Cursor            *string           `json:"cursor"`
-	PossibleAbilities []PossibleAbility `json:"possible_abilities"`
+	Name              string                `json:"name"`
+	Description       string                `json:"description"`
+	Effect            string                `json:"effect"`
+	Topmenu           *string               `json:"topmenu"`
+	OpenSubmenu       *string               `json:"open_submenu"`
+	Cursor            *string               `json:"cursor"`
+	PossibleAbilities []PossibleAbilityList `json:"possible_abilities"`
 }
 
 func (c AeonCommand) ToHashFields() []any {
@@ -43,17 +43,17 @@ func (c AeonCommand) Error() string {
 
 func (c AeonCommand) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: 	c.ID,
-		Name: 	c.Name,
+		ID:   c.ID,
+		Name: c.Name,
 	}
 }
 
-type PossibleAbility struct {
+type PossibleAbilityList struct {
 	User      string             `json:"user"`
 	Abilities []AbilityReference `json:"abilities"`
 }
 
-func (pa PossibleAbility) Error() string {
+func (pa PossibleAbilityList) Error() string {
 	return fmt.Sprintf("possible abilities for %s", pa.User)
 }
 

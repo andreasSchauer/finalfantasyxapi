@@ -50,12 +50,12 @@ WHERE aa.appears_in_help_bar = $1
 ORDER BY a.id;
 
 
--- name: GetAbilityIDsBasedOnPhysAttack :many
+-- name: GetAbilityIDsBasedOnUserAttack :many
 SELECT DISTINCT a.id
 FROM abilities a
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.based_on_phys_attack = true
+WHERE bi.based_on_user_attack = true
 ORDER BY a.id;
 
 
@@ -640,13 +640,13 @@ WHERE aa.appears_in_help_bar = $1
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsBasedOnPhysAttack :many
+-- name: GetUnspecifiedAbilityIDsBasedOnUserAttack :many
 SELECT DISTINCT ua.id
 FROM unspecified_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.based_on_phys_attack = true
+WHERE bi.based_on_user_attack = true
 ORDER BY ua.id;
 
 
@@ -1029,13 +1029,13 @@ WHERE aa.appears_in_help_bar = $1
 ORDER BY pa.id;
 
 
--- name: GetPlayerAbilityIDsBasedOnPhysAttack :many
+-- name: GetPlayerAbilityIDsBasedOnUserAttack :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.based_on_phys_attack = true
+WHERE bi.based_on_user_attack = true
 ORDER BY pa.id;
 
 

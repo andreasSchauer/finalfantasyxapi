@@ -13,7 +13,7 @@ type Topmenu struct {
 type Submenu struct {
 	ID          int32				`json:"id"`
 	Name        string   			`json:"name"`
-	Description string   			`json:"description"`
+	Description *string   			`json:"description"`
 	Effect      string   			`json:"effect"`
 	Topmenu     *NamedAPIResource  	`json:"topmenu"`
 	Users       []NamedAPIResource 	`json:"users"`
