@@ -337,3 +337,51 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 
 	testIdList(t, tests, testCfg.e.playerAbilities.endpoint, "RetrievePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[NamedApiResourceList])
 }
+
+
+func TestSubsectionPlayerAbilities(t *testing.T) {
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/characters/2/default-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleCharacters,
+			},
+			count:          2,
+			parentResource: h.GetStrPtr("/characters/2"),
+			results:        []int32{45, 53},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/characters/2/std-sg-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleCharacters,
+			},
+			count:          18,
+			parentResource: h.GetStrPtr("/characters/2"),
+			results:        []int32{26, 42, 47, 53, 60, 62, 66},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/characters/2/exp-sg-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleCharacters,
+			},
+			count:          19,
+			parentResource: h.GetStrPtr("/characters/2"),
+			results:        []int32{14, 45, 49, 54, 60, 64, 65},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/aeons/1/default-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleAeons,
+			},
+			count:          5,
+			parentResource: h.GetStrPtr("/aeons/1"),
+			results:        []int32{69, 70, 71, 72, 88},
+		},
+	}
+
+	testIdList(t, tests, testCfg.e.playerAbilities.endpoint, "SubsectionPlayerAbilities", nil, compareSimpleResourceLists[NamedAPIResource, PlayerAbilitySimple])
+}

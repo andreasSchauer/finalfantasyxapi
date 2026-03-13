@@ -289,3 +289,62 @@ func TestRetrieveAbilities(t *testing.T) {
 
 	testIdList(t, tests, testCfg.e.abilities.endpoint, "RetrieveAbilities", testCfg.HandleAbilities, compareAPIResourceLists[NamedApiResourceList])
 }
+
+
+
+func TestSubsectionAbilities(t *testing.T) {
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/character-classes/1/default-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleCharacterClasses,
+			},
+			count:          5,
+			parentResource: h.GetStrPtr("/character-classes/1"),
+			results:        []int32{374, 376, 377, 378, 379},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/character-classes/1/learnable-abilities?limit=max",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleCharacterClasses,
+			},
+			count:          90,
+			parentResource: h.GetStrPtr("/character-classes/1"),
+			results:        []int32{1, 13, 24, 53, 66, 78, 374, 379},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/submenus/2/abilities?limit=max",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleSubmenus,
+			},
+			count:          22,
+			parentResource: h.GetStrPtr("/submenus/2"),
+			results:        []int32{1, 5, 8, 13, 17, 19, 22},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/topmenus/2/abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleTopmenus,
+			},
+			count:          6,
+			parentResource: h.GetStrPtr("/topmenus/2"),
+			results:        []int32{377, 378, 379, 380, 381, 382},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/185/abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleMonsters,
+			},
+			count:          6,
+			parentResource: h.GetStrPtr("/monsters/185"),
+			results:        []int32{61, 62, 460, 531, 573, 630},
+		},
+	}
+
+	testIdList(t, tests, testCfg.e.abilities.endpoint, "SubsectionAbilities", nil, compareSimpleResourceLists[NamedAPIResource, AbilitySimple])
+}

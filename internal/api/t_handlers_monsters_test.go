@@ -255,9 +255,7 @@ func TestGetMonster(t *testing.T) {
 			statusResists: map[string]int32{
 				"silence": 20,
 			},
-			abilities: []string{
-				"/player-abilities/70",
-			},
+			abilities: []int32{70},
 		},
 		{
 			testGeneral: testGeneral{
@@ -388,19 +386,7 @@ func TestGetMonster(t *testing.T) {
 			statusResists: map[string]int32{
 				"poison": 90,
 			},
-			abilities: []string{
-				"/player-abilities/69",
-				"/player-abilities/70",
-				"/player-abilities/71",
-				"/player-abilities/72",
-				"/enemy-abilities/18",
-				"/enemy-abilities/84",
-				"/enemy-abilities/151",
-				"/enemy-abilities/168",
-				"/enemy-abilities/309",
-				"/enemy-abilities/407",
-				"/enemy-abilities/434",
-			},
+			abilities: []int32{69, 70, 71, 72, 415, 481, 548, 565, 706, 804, 831},
 			defaultState: &testDefaultState{
 				IsTemporary: false,
 				Changes: []testAltStateChange{

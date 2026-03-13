@@ -383,3 +383,52 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 
 	testIdList(t, tests, testCfg.e.overdriveAbilities.endpoint, "RetrieveOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[NamedApiResourceList])
 }
+
+
+func TestSubsectionOverdriveAbilities(t *testing.T) {
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/overdrives/14/overdrive-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleOverdrives,
+			},
+			count:          6,
+			parentResource: h.GetStrPtr("/overdrives/14"),
+			results:        []int32{26, 27, 28, 29, 30, 31},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/overdrive-commands/1/overdrive-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleOverdriveCommands,
+			},
+			count:          8,
+			parentResource: h.GetStrPtr("/overdrive-commands/1"),
+			results:        []int32{1, 2, 3, 4, 5, 6, 7, 8},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/characters/1/overdrive-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleCharacters,
+			},
+			count:          8,
+			parentResource: h.GetStrPtr("/characters/1"),
+			results:        []int32{1, 2, 3, 4, 5, 6, 7, 8},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/aeons/1/overdrive-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleAeons,
+			},
+			count:          2,
+			parentResource: h.GetStrPtr("/aeons/1"),
+			results:        []int32{183, 184},
+		},
+	}
+
+	testIdList(t, tests, testCfg.e.overdriveAbilities.endpoint, "SubsectionOverdriveAbilities", nil, compareSimpleResourceLists[NamedAPIResource, AbilitySimple])
+}
+

@@ -21,7 +21,7 @@ type expMonster struct {
 	statusImmunities []int32
 	statusResists    map[string]int32
 	defaultState     *testDefaultState
-	abilities        []string
+	abilities        []int32
 }
 
 func (e expMonster) GetTestGeneral() testGeneral {
@@ -49,7 +49,7 @@ func compareMonsters(test test, exp expMonster, got Monster) {
 	checkResIDsInSlice(test, "areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)
 	checkResIDsInSlice(test, "formations", test.cfg.e.monsterFormations.endpoint, exp.formations, got.Formations)
 	checkResIDsInSlice(test, "status immunities", test.cfg.e.statusConditions.endpoint, exp.statusImmunities, got.StatusImmunities)
-	checkResPathsInSlice(test, "abilities", exp.abilities, got.Abilities)
+	checkResIDsInSlice(test, "abilities", test.cfg.e.abilities.endpoint, exp.abilities, got.Abilities)
 }
 
 type testMonItems struct {
