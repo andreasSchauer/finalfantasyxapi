@@ -36,7 +36,7 @@ func createMonsterSimple(cfg *Config, r *http.Request, id int32) (SimpleResource
 	mon, _ := seeding.GetResourceByID(id, i.objLookupID)
 	monHP := getMonsterHP(mon)
 
-	areas, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.areas.resourceType, id, cfg.db.GetMonsterAreaIDs, idToLocAreaString)
+	areas, err := convertFromDB(cfg, r, i.resourceType, cfg.e.areas.resourceType, id, cfg.db.GetMonsterAreaIDs, idToLocAreaString)
 	if err != nil {
 		return MonsterSimple{}, err
 	}

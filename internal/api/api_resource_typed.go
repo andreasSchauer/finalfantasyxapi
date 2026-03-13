@@ -55,7 +55,7 @@ func (r TypedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func newNamedAPIResourceFromType[T, N any](cfg *Config, endpoint, key string, et EnumType[T, N]) (NamedAPIResource) {
+func newNamedAPIResourceFromType[E, N any](cfg *Config, endpoint, key string, et EnumType[E, N]) NamedAPIResource {
 	typedRes, _ := GetTypedAPIResource(key, et)
 	
 	resource := newNamedAPIResourceSimple(cfg, endpoint, typedRes.ID, typedRes.Name)
@@ -64,7 +64,7 @@ func newNamedAPIResourceFromType[T, N any](cfg *Config, endpoint, key string, et
 }
 
 // Searches a TypedAPIResource based on its value or an idString (mostly from queries)
-func GetTypedAPIResource[T, N any](key string, et EnumType[T, N]) (TypedAPIResource, error) {
+func GetTypedAPIResource[E, N any](key string, et EnumType[E, N]) (TypedAPIResource, error) {
 	id, err := strconv.Atoi(key)
 	if err == nil {
 		if id > len(et.lookup) || id <= 0 {

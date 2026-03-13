@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
+// 4 outside uses
 func getAbilityResourcesDB[T seeding.LookupableID](cfg *Config, r *http.Request, item T, dbQuery func(context.Context, int32) ([]int32, error)) ([]NamedAPIResource, error) {
 	abilityIDs, err := dbQuery(r.Context(), item.GetID())
 	if err != nil {
@@ -23,6 +23,7 @@ func getAbilityResourcesDB[T seeding.LookupableID](cfg *Config, r *http.Request,
 	return abilities, nil
 }
 
+// 1 outside use
 func getAbilityResPtrDB[T seeding.LookupableID](cfg *Config, r *http.Request, item T, dbQuery func(context.Context, int32) (int32, error)) (*NamedAPIResource, error) {
 	abilityID, err := dbQuery(r.Context(), item.GetID())
 	if errors.Is(err, sql.ErrNoRows) {
@@ -36,6 +37,7 @@ func getAbilityResPtrDB[T seeding.LookupableID](cfg *Config, r *http.Request, it
 	return &ability, nil
 }
 
+// no outside use, 1 use in this file
 func idsToAbilityResources(cfg *Config, ids []int32) []NamedAPIResource {
 	abilities := []NamedAPIResource{}
 
@@ -47,6 +49,7 @@ func idsToAbilityResources(cfg *Config, ids []int32) []NamedAPIResource {
 	return abilities
 }
 
+// 2 outside uses
 func refsToAbilityResources(cfg *Config, refs []seeding.AbilityReference) []NamedAPIResource {
 	abilities := []NamedAPIResource{}
 
@@ -58,12 +61,14 @@ func refsToAbilityResources(cfg *Config, refs []seeding.AbilityReference) []Name
 	return abilities
 }
 
+// no outside use, 2 uses in this file
 func idToAbilityResource(cfg *Config, id int32) NamedAPIResource {
 	ability, _ := seeding.GetResourceByID(id, cfg.l.AbilitiesID)
 	return createAbilityResource(cfg, ability.GetAbilityRef())
 }
 
 
+// 2 outside uses, 2 uses in this file
 func createAbilityResource(cfg *Config, ref seeding.AbilityReference) NamedAPIResource {
 	var res NamedAPIResource
 

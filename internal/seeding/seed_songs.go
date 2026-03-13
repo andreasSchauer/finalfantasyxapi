@@ -83,7 +83,7 @@ func (sc SongCredits) GetID() int32 {
 }
 
 func (sc SongCredits) Error() string {
-	return fmt.Sprintf("song credits with composer: %v, arranger: %v, performer: %v, lyricist: %v", h.DerefOrNil(sc.Composer), h.DerefOrNil(sc.Arranger), h.DerefOrNil(sc.Performer), h.DerefOrNil(sc.Lyricist))
+	return fmt.Sprintf("song credits with composer: %v, arranger: %v, performer: %v, lyricist: %v", h.PtrToString(sc.Composer), h.PtrToString(sc.Arranger), h.PtrToString(sc.Performer), h.PtrToString(sc.Lyricist))
 }
 
 type BackgroundMusic struct {
@@ -105,7 +105,7 @@ func (bm BackgroundMusic) GetID() int32 {
 }
 
 func (bm BackgroundMusic) Error() string {
-	return fmt.Sprintf("background music replacing encounter music: %t, condition: %v", bm.ReplacesEncounterMusic, h.DerefOrNil(bm.Condition))
+	return fmt.Sprintf("background music replacing encounter music: %t, condition: %v", bm.ReplacesEncounterMusic, h.PtrToString(bm.Condition))
 }
 
 type SongAreaJunction struct {
@@ -148,7 +148,7 @@ func (c Cue) GetID() int32 {
 }
 
 func (c Cue) Error() string {
-	return fmt.Sprintf("cue for scene: %s at %v, with song id: %d", c.SceneDescription, h.DerefOrNil(c.TriggerLocationArea), c.SongID)
+	return fmt.Sprintf("cue for scene: %s at %v, with song id: %d", c.SceneDescription, h.PtrToString(c.TriggerLocationArea), c.SongID)
 }
 
 func (l *Lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {

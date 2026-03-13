@@ -32,7 +32,7 @@ func (e EquipmentDrop) GetID() int32 {
 }
 
 func (e EquipmentDrop) Error() string {
-	return fmt.Sprintf("equipment drop with auto-ability id: %d, type: %s, is forced: %t, probability: %v", e.AutoAbilityID, e.Type, e.IsForced, h.DerefOrNil(e.Probability))
+	return fmt.Sprintf("equipment drop with auto-ability id: %d, type: %s, is forced: %t, probability: %v", e.AutoAbilityID, e.Type, e.IsForced, h.PtrToString(e.Probability))
 }
 
 func (l *Lookup) seedEquipmentDrops(qtx *database.Queries, monsterEquipment MonsterEquipment, drops []EquipmentDrop, equipType database.EquipType) error {

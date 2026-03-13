@@ -22,7 +22,7 @@ func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.O
 		Name:        command.Name,
 		Description: command.Description,
 		Rank:        command.Rank,
-		User:        nameToNamedAPIResource(cfg, cfg.e.characterClasses, command.Name, nil),
+		User:        nameToNamedAPIResource(cfg, cfg.e.characterClasses, command.User, nil),
 		Topmenu:     namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, command.Topmenu, nil),
 		OpenSubmenu: nameToNamedAPIResource(cfg, cfg.e.submenus, command.OpenSubmenu, nil),
 		Overdrives:  overdrives,

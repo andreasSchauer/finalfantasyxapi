@@ -41,7 +41,7 @@ func (mf MonsterFormation) GetID() int32 {
 }
 
 func (mf MonsterFormation) Error() string {
-	return fmt.Sprintf("monster formation with version: %s, %s, %s", h.DerefVerStr(mf.Version), mf.MonsterSelection, mf.FormationData)
+	return fmt.Sprintf("monster formation with version: %s, %s, %s", h.PtrToString(mf.Version), mf.MonsterSelection, mf.FormationData)
 }
 
 func (mf MonsterFormation) GetResParamsUnnamed() h.ResParamsUnnamed {
@@ -107,7 +107,7 @@ func (fd FormationData) ToHashFields() []any {
 }
 
 func (fd FormationData) Error() string {
-	return fmt.Sprintf("formation data with category: %s, forced ambush: %t, can escape: %t, boss music id: %v, notes: %v", fd.Category, fd.IsForcedAmbush, fd.CanEscape, h.ObjPtrToID(fd.BossMusic), h.DerefOrNil(fd.Notes))
+	return fmt.Sprintf("formation data with category: %s, forced ambush: %t, can escape: %t, boss music id: %v, notes: %v", fd.Category, fd.IsForcedAmbush, fd.CanEscape, h.ObjPtrToID(fd.BossMusic), h.PtrToString(fd.Notes))
 }
 
 type EncounterArea struct {
@@ -136,7 +136,7 @@ func (el EncounterArea) GetID() int32 {
 }
 
 func (el EncounterArea) Error() string {
-	return fmt.Sprintf("encounter location with %s, specification: %s", el.LocationArea, h.DerefOrNil(el.Specification))
+	return fmt.Sprintf("encounter location with %s, specification: %s", el.LocationArea, h.PtrToString(el.Specification))
 }
 
 func (el EncounterArea) GetLocationArea() LocationArea {
@@ -384,9 +384,9 @@ func (l *Lookup) seedFormationEncounterAreas(qtx *database.Queries, formation Mo
 		}
 
 		err = qtx.CreateMonsterFormationsEncounterAreasJunction(context.Background(), database.CreateMonsterFormationsEncounterAreasJunctionParams{
-			DataHash:            generateDataHash(junction),
-			MonsterFormationID:  junction.ParentID,
-			EncounterAreaID: 	 junction.ChildID,
+			DataHash:           generateDataHash(junction),
+			MonsterFormationID: junction.ParentID,
+			EncounterAreaID:    junction.ChildID,
 		})
 		if err != nil {
 			subjects := h.JoinErrSubjects(formation.Error(), encounterArea.Error())
@@ -453,9 +453,9 @@ func (l *Lookup) seedFormationTriggerCommandUsers(qtx *database.Queries, trigger
 		}
 
 		err = qtx.CreateFormationTriggerCommandsUsersJunction(context.Background(), database.CreateFormationTriggerCommandsUsersJunctionParams{
-			DataHash: 			generateDataHash(junction),
-			TriggerCommandID: 	junction.ParentID,
-			CharacterClassID: 	junction.ChildID,
+			DataHash:         generateDataHash(junction),
+			TriggerCommandID: junction.ParentID,
+			CharacterClassID: junction.ChildID,
 		})
 	}
 

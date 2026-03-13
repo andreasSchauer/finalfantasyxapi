@@ -29,12 +29,12 @@ func createAreaSimple(cfg *Config, r *http.Request, id int32) (SimpleResource, e
 	i := cfg.e.areas
 	area, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetAreaMonsterIDs, idToMonsterSimpleString)
+	monsters, err := convertFromDB(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetAreaMonsterIDs, idToMonsterSimpleString)
 	if err != nil {
 		return AreaSimple{}, err
 	}
 
-	shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetAreaShopIDs, idToShopLocSimple)
+	shops, err := convertFromDB(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetAreaShopIDs, idToShopLocSimple)
 	if err != nil {
 		return AreaSimple{}, err
 	}

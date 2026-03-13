@@ -45,18 +45,18 @@ func (a Ability) Error() string {
 
 func (a Ability) GetAbilityRef() AbilityReference {
 	return AbilityReference{
-		Name: 			a.Name,
-		Version: 		a.Version,
-		AbilityType: 	string(a.Type),
+		Name:        a.Name,
+		Version:     a.Version,
+		AbilityType: string(a.Type),
 	}
 }
 
 func (a Ability) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: 			a.ID,
-		Name: 			a.Name,
-		Version: 		a.Version,
-		Specification: 	a.Specification,
+		ID:            a.ID,
+		Name:          a.Name,
+		Version:       a.Version,
+		Specification: a.Specification,
 	}
 }
 
@@ -80,14 +80,14 @@ func (a AbilityReference) Error() string {
 
 func (a AbilityReference) Untyped() UntypedAbilityRef {
 	return UntypedAbilityRef{
-		Name: a.Name,
+		Name:    a.Name,
 		Version: a.Version,
 	}
 }
 
 type UntypedAbilityRef struct {
-	Name        string
-	Version     *int32
+	Name    string
+	Version *int32
 }
 
 func (a UntypedAbilityRef) ToKeyFields() []any {
@@ -121,12 +121,12 @@ func (a Attributes) GetID() int32 {
 }
 
 func (a Attributes) Error() string {
-	return fmt.Sprintf("ability attributes with rank: %v, help bar: %t, copycat: %t", h.DerefOrNil(a.Rank), a.AppearsInHelpBar, a.CanCopycat)
+	return fmt.Sprintf("ability attributes with rank: %v, help bar: %t, copycat: %t", h.PtrToString(a.Rank), a.AppearsInHelpBar, a.CanCopycat)
 }
 
 func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, error) {
 	var err error
-	
+
 	ability.Attributes, err = seedObjPtrAssignFK(qtx, ability.Attributes, l.seedAbilityAttributes)
 	if err != nil {
 		return Ability{}, h.NewErr(ability.Error(), err)

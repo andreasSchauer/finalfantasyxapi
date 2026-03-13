@@ -28,7 +28,7 @@ func (a Accuracy) GetID() int32 {
 }
 
 func (a Accuracy) Error() string {
-	return fmt.Sprintf("accuracy with source: %s, hit chance: %v, modifier: %v", a.AccSource, h.DerefOrNil(a.HitChance), h.DerefOrNil(a.AccModifier))
+	return fmt.Sprintf("accuracy with source: %s, hit chance: %v, modifier: %v", a.AccSource, h.PtrToString(a.HitChance), h.PtrToString(a.AccModifier))
 }
 
 func (l *Lookup) seedAccuracy(qtx *database.Queries, accuracy Accuracy) (Accuracy, error) {

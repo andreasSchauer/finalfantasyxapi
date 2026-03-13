@@ -34,7 +34,7 @@ func (d Damage) GetID() int32 {
 }
 
 func (d Damage) Error() string {
-	return fmt.Sprintf("damage with critical: %v, crit plus: %v, piercing: %t, bdl: %v, element: %v", h.DerefOrNil(d.Critical), h.DerefOrNil(d.CriticalPlusVal), d.IsPiercing, h.DerefOrNil(d.BreakDmgLimit), h.DerefOrNil(d.Element))
+	return fmt.Sprintf("damage with critical: %v, crit plus: %v, piercing: %t, bdl: %v, element: %v", h.PtrToString(d.Critical), h.PtrToString(d.CriticalPlusVal), d.IsPiercing, h.PtrToString(d.BreakDmgLimit), h.PtrToString(d.Element))
 }
 
 type AbilityDamage struct {
@@ -64,7 +64,7 @@ func (ad AbilityDamage) GetID() int32 {
 }
 
 func (ad AbilityDamage) Error() string {
-	return fmt.Sprintf("ability damage with attack type: %s, target stat: %s, damage type: %s, formula: %s, damage constant %d, condition: %v", ad.AttackType, ad.TargetStat, ad.DamageType, ad.DamageFormula, ad.DamageConstant, h.DerefOrNil(ad.Condition))
+	return fmt.Sprintf("ability damage with attack type: %s, target stat: %s, damage type: %s, formula: %s, damage constant %d, condition: %v", ad.AttackType, ad.TargetStat, ad.DamageType, ad.DamageFormula, ad.DamageConstant, h.PtrToString(ad.Condition))
 }
 
 func (l *Lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error) {

@@ -23,12 +23,12 @@ func createLocationSimple(cfg *Config, r *http.Request, id int32) (SimpleResourc
 	i := cfg.e.locations
 	location, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetLocationMonsterIDs, idToMonsterSimpleString)
+	monsters, err := convertFromDB(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetLocationMonsterIDs, idToMonsterSimpleString)
 	if err != nil {
 		return LocationSimple{}, err
 	}
 
-	shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetLocationShopIDs, idToShopLocSimple)
+	shops, err := convertFromDB(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetLocationShopIDs, idToShopLocSimple)
 	if err != nil {
 		return LocationSimple{}, err
 	}

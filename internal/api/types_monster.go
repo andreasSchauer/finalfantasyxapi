@@ -1,6 +1,8 @@
 package api
 
 import (
+	"fmt"
+
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
@@ -54,7 +56,7 @@ type Monster struct {
 }
 
 func (m Monster) Error() string {
-	return h.NameToString(m.Name, m.Version, m.Specification)
+	return fmt.Sprintf("monster '%s'", h.NameToString(m.Name, m.Version, m.Specification))
 }
 
 

@@ -33,8 +33,7 @@ func convertObjSliceOrNil[Old, New any](cfg *Config, items []Old, converter func
 	return h.SliceOrNil(slice)
 }
 
-
-func dbQueryToSlice[T any](cfg *Config, r *http.Request, rtParent, rtChild string, id int32, dbQuery func(context.Context, int32) ([]int32, error), converter func(*Config, int32) T) ([]T, error) {
+func convertFromDB[T any](cfg *Config, r *http.Request, rtParent, rtChild string, id int32, dbQuery func(context.Context, int32) ([]int32, error), converter func(*Config, int32) T) ([]T, error) {
 	dbIDs, err := dbQuery(r.Context(), id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss of %s with id '%d'", rtChild, rtParent, id), err)

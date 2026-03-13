@@ -106,7 +106,7 @@ func (cl CompletionArea) ToHashFields() []any {
 }
 
 func (cl CompletionArea) Error() string {
-	return fmt.Sprintf("completion location %s, with completion id: %d, notes: %v", cl.LocationArea, cl.CompletionID, h.DerefOrNil(cl.Notes))
+	return fmt.Sprintf("completion location %s, with completion id: %d, notes: %v", cl.LocationArea, cl.CompletionID, h.PtrToString(cl.Notes))
 }
 
 func (cl CompletionArea) GetLocationArea() LocationArea {

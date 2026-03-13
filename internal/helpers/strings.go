@@ -1,12 +1,11 @@
 package helpers
 
 import (
-    "cmp"
+	"cmp"
 	"fmt"
-    "slices"
-    "strings"
+	"slices"
+	"strings"
 )
-
 
 func NameToString(name string, version *int32, spec *string) string {
 	var verStr string
@@ -34,14 +33,13 @@ func NameAmountString(name string, version *int32, spec *string, amount int32) s
 	return fmt.Sprintf("%s x%d", nameStr, amount)
 }
 
-func DerefVerStr(version *int32) string {
-	if version == nil {
+func PtrToString[T any](ptr *T) string {
+	if ptr == nil {
 		return "null"
 	}
 
-	return fmt.Sprintf("%d", *version)
+	return fmt.Sprintf("%v", *ptr)
 }
-
 
 func GetMapKeyStr[T any](itemMap map[string]T) string {
 	keys := []string{}
@@ -58,7 +56,6 @@ func GetMapKeyStr[T any](itemMap map[string]T) string {
 	return strings.Join(keys, ", ")
 }
 
-
 func GetNameWithSpaces(name, separator string) string {
 	nameLower := strings.ToLower(name)
 	return strings.ReplaceAll(nameLower, separator, " ")
@@ -73,7 +70,6 @@ func StringSliceToListString(s []string) string {
 	return strings.Join(s, ", ")
 }
 
-
 func FormatStringSlice(items []string) string {
 	formattedVals := []string{}
 
@@ -84,7 +80,6 @@ func FormatStringSlice(items []string) string {
 
 	return strings.Join(formattedVals, ", ")
 }
-
 
 func FormatIntSlice(IDs []int32) string {
 	formattedIDs := []string{}

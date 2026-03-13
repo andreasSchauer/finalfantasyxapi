@@ -24,12 +24,12 @@ func createSublocationSimple(cfg *Config, r *http.Request, id int32) (SimpleReso
 	i := cfg.e.sublocations
 	sublocation, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	monsters, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetSublocationMonsterIDs, idToMonsterSimpleString)
+	monsters, err := convertFromDB(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetSublocationMonsterIDs, idToMonsterSimpleString)
 	if err != nil {
 		return SublocationSimple{}, err
 	}
 
-	shops, err := dbQueryToSlice(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetSublocationShopIDs, idToShopLocSimple)
+	shops, err := convertFromDB(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetSublocationShopIDs, idToShopLocSimple)
 	if err != nil {
 		return SublocationSimple{}, err
 	}
