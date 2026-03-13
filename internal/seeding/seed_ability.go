@@ -51,12 +51,13 @@ func (a Ability) GetAbilityRef() AbilityReference {
 	}
 }
 
-func (a Ability) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (a Ability) GetResParamsAbility() h.ResParamsAbility {
+	return h.ResParamsAbility{
 		ID:            a.ID,
 		Name:          a.Name,
 		Version:       a.Version,
 		Specification: a.Specification,
+		AbilityType:   a.Type,
 	}
 }
 

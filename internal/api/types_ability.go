@@ -27,7 +27,7 @@ type EnemyAbility struct {
 	Name               string              `json:"name"`
 	Version            *int32              `json:"version,omitempty"`
 	Specification      *string             `json:"specification,omitempty"`
-	UntypedAbility     NamedAPIResource    `json:"untyped_ability"`
+	UntypedAbility     AbilityAPIResource   `json:"untyped_ability"`
 	Rank               *int32              `json:"rank"`
 	AppearsInHelpBar   bool                `json:"appears_in_help_bar"`
 	CanCopycat         bool                `json:"can_copycat"`
@@ -39,7 +39,7 @@ type EnemyAbility struct {
 type ItemAbility struct {
 	ID                  int32               `json:"id"`
 	Name                string              `json:"name"`
-	UntypedAbility      NamedAPIResource    `json:"untyped_ability"`
+	UntypedAbility      AbilityAPIResource   `json:"untyped_ability"`
 	Rank                *int32              `json:"rank"`
 	AppearsInHelpBar    bool                `json:"appears_in_help_bar"`
 	CanCopycat          bool                `json:"can_copycat"`
@@ -58,7 +58,7 @@ type OverdriveAbility struct {
 	Name               string              `json:"name"`
 	Version            *int32              `json:"version,omitempty"`
 	Specification      *string             `json:"specification,omitempty"`
-	UntypedAbility     NamedAPIResource    `json:"untyped_ability"`
+	UntypedAbility     AbilityAPIResource   `json:"untyped_ability"`
 	Rank               *int32              `json:"rank"`
 	AppearsInHelpBar   bool                `json:"appears_in_help_bar"`
 	CanCopycat         bool                `json:"can_copycat"`
@@ -74,7 +74,7 @@ type PlayerAbility struct {
 	Name                  string              `json:"name"`
 	Version               *int32              `json:"version,omitempty"`
 	Specification         *string             `json:"specification,omitempty"`
-	UntypedAbility        NamedAPIResource    `json:"untyped_ability"`
+	UntypedAbility        AbilityAPIResource   `json:"untyped_ability"`
 	Rank                  *int32              `json:"rank"`
 	AppearsInHelpBar      bool                `json:"appears_in_help_bar"`
 	CanCopycat            bool                `json:"can_copycat"`
@@ -121,7 +121,7 @@ type TriggerCommand struct {
 	Name               string               `json:"name"`
 	Version            *int32               `json:"version,omitempty"`
 	Specification      *string              `json:"specification,omitempty"`
-	UntypedAbility     NamedAPIResource     `json:"untyped_ability"`
+	UntypedAbility     AbilityAPIResource   `json:"untyped_ability"`
 	Rank               *int32               `json:"rank"`
 	AppearsInHelpBar   bool                 `json:"appears_in_help_bar"`
 	CanCopycat         bool                 `json:"can_copycat"`
@@ -160,7 +160,7 @@ type UnspecifiedAbility struct {
 	Name               string              `json:"name"`
 	Version            *int32              `json:"version,omitempty"`
 	Specification      *string             `json:"specification,omitempty"`
-	UntypedAbility     NamedAPIResource    `json:"untyped_ability"`
+	UntypedAbility     AbilityAPIResource  `json:"untyped_ability"`
 	Rank               *int32              `json:"rank"`
 	AppearsInHelpBar   bool                `json:"appears_in_help_bar"`
 	CanCopycat         bool                `json:"can_copycat"`

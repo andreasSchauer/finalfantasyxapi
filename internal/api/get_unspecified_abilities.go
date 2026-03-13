@@ -17,7 +17,7 @@ func (cfg *Config) getUnspecifiedAbility(r *http.Request, i handlerInput[seeding
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility:     idToNamedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		UntypedAbility:     idToAbilityAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
 		Description:        ability.Description,
 		Effect:             ability.Effect,
 		Rank:               ability.Rank,

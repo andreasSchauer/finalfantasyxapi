@@ -13,7 +13,7 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.Chara
 		return CharacterClass{}, err
 	}
 
-	defaultAbilities, err := getAbilityResourcesDB(cfg, r, class, cfg.db.GetCharacterClassDefaultAbilityIDs)
+	defaultAbilities, err := getResourcesDbItem(cfg, r, cfg.e.abilities, class, cfg.db.GetCharacterClassDefaultAbilityIDs)
 	if err != nil {
 		return CharacterClass{}, err
 	}
@@ -67,8 +67,8 @@ func getClassUnits(cfg *Config, r *http.Request, class seeding.CharacterClass) (
 	return resources, nil
 }
 
-func getClassLearnableAbilities(cfg *Config, r *http.Request, class seeding.CharacterClass, defaultAbilities []NamedAPIResource) ([]NamedAPIResource, error) {
-	allAbilities, err := getAbilityResourcesDB(cfg, r, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
+func getClassLearnableAbilities(cfg *Config, r *http.Request, class seeding.CharacterClass, defaultAbilities []AbilityAPIResource) ([]AbilityAPIResource, error) {
+	allAbilities, err := getResourcesDbItem(cfg, r, cfg.e.abilities, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err
 	}

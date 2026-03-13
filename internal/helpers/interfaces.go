@@ -1,5 +1,7 @@
 package helpers
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 // these interfaces serve as bridge between the seeding resources and the api resources and are used to convert the former into the latter
 
 type HasID interface {
@@ -19,6 +21,11 @@ type IsUnnamed interface {
 type IsLocationBased interface {
 	HasID
 	GetResParamsLocation() ResParamsLocation
+}
+
+type IsAbility interface {
+	HasID
+	GetResParamsAbility() ResParamsAbility
 }
 
 type IsTypeBased interface {
@@ -44,6 +51,14 @@ type ResParamsLocation struct {
 	Area			string
 	Version			*int32
 	Specification 	*string
+}
+
+type ResParamsAbility struct {
+	ID            	int32
+	Name          	string
+	Version       	*int32
+	Specification 	*string
+	AbilityType		database.AbilityType
 }
 
 type ResParamsTyped struct {

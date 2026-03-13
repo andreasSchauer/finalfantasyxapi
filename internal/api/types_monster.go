@@ -62,14 +62,14 @@ func (m Monster) Error() string {
 
 
 type MonsterAbility struct {
-	Ability  NamedAPIResource `json:"ability"`
-	IsForced bool             `json:"is_forced"`
-	IsUnused bool             `json:"is_unused"`
+	Ability  AbilityAPIResource `json:"ability"`
+	IsForced bool             	`json:"is_forced"`
+	IsUnused bool             	`json:"is_unused"`
 }
 
 func convertMonsterAbility(cfg *Config, ability seeding.MonsterAbility) MonsterAbility {
 	return MonsterAbility{
-		Ability:  createAbilityResource(cfg, ability.AbilityReference),
+		Ability:  refToAbilityAPIResource(cfg, cfg.e.abilities, ability.AbilityReference),
 		IsForced: ability.IsForced,
 		IsUnused: ability.IsUnused,
 	}

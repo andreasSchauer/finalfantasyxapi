@@ -34,11 +34,11 @@ func getAeonRelationships(cfg *Config, r *http.Request, ae seeding.Aeon) (Aeon, 
 	}
 
 	aeon := Aeon{
-		CelestialWeapon:  celestialWeapon,
-		CharacterClasses: characterClasses,
-		AeonCommands:     aeonCommands,
-		Overdrives:       overdrives,
-		DefaultAbilities: defaultAbilities,
+		CelestialWeapon:        celestialWeapon,
+		CharacterClasses:       characterClasses,
+		AeonCommands:           aeonCommands,
+		Overdrives:             overdrives,
+		DefaultPlayerAbilities: defaultAbilities,
 	}
 
 	return aeon, nil

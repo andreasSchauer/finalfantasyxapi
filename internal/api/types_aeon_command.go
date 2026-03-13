@@ -15,13 +15,13 @@ type AeonCommand struct {
 }
 
 type PossibleAbilityList struct {
-	User      NamedAPIResource   `json:"user"`
-	Abilities []NamedAPIResource `json:"abilities"`
+	User      NamedAPIResource   	`json:"user"`
+	Abilities []AbilityAPIResource 	`json:"abilities"`
 }
 
 func convertPossibleAbilityList(cfg *Config, pa seeding.PossibleAbilityList) PossibleAbilityList {
 	return PossibleAbilityList{
 		User:      nameToNamedAPIResource(cfg, cfg.e.characterClasses, pa.User, nil),
-		Abilities: refsToAbilityResources(cfg, pa.Abilities),
+		Abilities: refsToAbilityAPIResources(cfg, cfg.e.abilities, pa.Abilities),
 	}
 }

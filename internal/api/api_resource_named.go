@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
@@ -143,4 +144,41 @@ func newNamedAPIResourceSimple(cfg *Config, endpoint string, id int32, name stri
 		Name: name,
 		URL:  createResourceURL(cfg, endpoint, id),
 	}
+}
+
+func refsToNamedAPIResources(cfg *Config, refs []seeding.AbilityReference) []NamedAPIResource {
+	abilities := []NamedAPIResource{}
+
+	for _, ref := range refs {
+		abilityRes := refToNamedApiResource(cfg, ref)
+		abilities = append(abilities, abilityRes)
+	}
+
+	return abilities
+}
+
+func refToNamedApiResource(cfg *Config, ref seeding.AbilityReference) NamedAPIResource {
+	var res NamedAPIResource
+
+	switch database.AbilityType(ref.AbilityType) {
+	case database.AbilityTypeUnspecifiedAbility:
+		res = nameToNamedAPIResource(cfg, cfg.e.unspecifiedAbilities, ref.Name, ref.Version)
+
+	case database.AbilityTypePlayerAbility:
+		res = nameToNamedAPIResource(cfg, cfg.e.playerAbilities, ref.Name, ref.Version)
+
+	case database.AbilityTypeEnemyAbility:
+		res = nameToNamedAPIResource(cfg, cfg.e.enemyAbilities, ref.Name, ref.Version)
+
+	case database.AbilityTypeOverdriveAbility:
+		res = nameToNamedAPIResource(cfg, cfg.e.overdriveAbilities, ref.Name, ref.Version)
+
+	case database.AbilityTypeItemAbility:
+		res = nameToNamedAPIResource(cfg, cfg.e.itemAbilities, ref.Name, ref.Version)
+
+	case database.AbilityTypeTriggerCommand:
+		res = nameToNamedAPIResource(cfg, cfg.e.triggerCommands, ref.Name, ref.Version)
+
+	}
+	return res
 }

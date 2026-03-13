@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, Ability, NamedAPIResource, NamedApiResourceList], id int32) (Ability, error) {
+func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, Ability, AbilityAPIResource, AbilityAPIResourceList], id int32) (Ability, error) {
 	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Ability{}, err
@@ -26,7 +26,7 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Type:               newNamedAPIResourceFromType(cfg, cfg.e.abilityType.endpoint, string(ability.Type), cfg.t.AbilityType),
-		TypedAbility:       createAbilityResource(cfg, ability.GetAbilityRef()),
+		TypedAbility:       refToNamedApiResource(cfg, ability.GetAbilityRef()),
 		Monsters:           monsters,
 		BattleInteractions: getAbilityBattleInteractions(cfg, ability),
 	}
@@ -51,56 +51,13 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 	return response, nil
 }
 
-func getAbilityBattleInteractions(cfg *Config, ability seeding.Ability) []BattleInteraction {
-	seedBattleInteractions := lookupAbilityBattleInteractions(cfg, ability)
-	return convertObjSlice(cfg, seedBattleInteractions, convertBattleInteraction)
-}
-
-func getAbilityBattleInteractionsSimple(cfg *Config, ability seeding.Ability) []BattleInteractionSimple {
-	seedBattleInteractions := lookupAbilityBattleInteractions(cfg, ability)
-	return convertObjSlice(cfg, seedBattleInteractions, convertBattleInteractionSimple)
-}
-
-func lookupAbilityBattleInteractions(cfg *Config, ability seeding.Ability) []seeding.BattleInteraction {
-	var seedBattleInteractions []seeding.BattleInteraction
-	abilityRef := ability.GetAbilityRef().Untyped()
-
-	switch ability.Type {
-	case database.AbilityTypeEnemyAbility:
-		lookup, _ := seeding.GetResource(abilityRef, cfg.l.EnemyAbilities)
-		seedBattleInteractions = lookup.BattleInteractions
-
-	case database.AbilityTypeItemAbility:
-		lookup, _ := seeding.GetResource(ability.Name, cfg.l.Items)
-		seedBattleInteractions = lookup.BattleInteractions
-
-	case database.AbilityTypeUnspecifiedAbility:
-		lookup, _ := seeding.GetResource(abilityRef, cfg.l.UnspecifiedAbilities)
-		seedBattleInteractions = lookup.BattleInteractions
-
-	case database.AbilityTypeOverdriveAbility:
-		lookup, _ := seeding.GetResource(abilityRef, cfg.l.OverdriveAbilities)
-		seedBattleInteractions = lookup.BattleInteractions
-
-	case database.AbilityTypePlayerAbility:
-		lookup, _ := seeding.GetResource(abilityRef, cfg.l.PlayerAbilities)
-		seedBattleInteractions = lookup.BattleInteractions
-
-	case database.AbilityTypeTriggerCommand:
-		lookup, _ := seeding.GetResource(abilityRef, cfg.l.TriggerCommands)
-		seedBattleInteractions = lookup.BattleInteractions
-	}
-
-	return seedBattleInteractions
-}
-
-func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Ability, Ability, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Ability, Ability, AbilityAPIResource, AbilityAPIResourceList]) (AbilityAPIResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
-		return NamedApiResourceList{}, err
+		return AbilityAPIResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[AbilityAPIResource]{
 		frl(typeQuery(cfg, r, i, cfg.t.AbilityType, resources, "type", cfg.db.GetAbilityIDsByType)),
 		frl(typeQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetAbilityIDsByDamageType)),
 		frl(typeQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetAbilityIDsByAttackType)),

@@ -30,9 +30,9 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 		OverdriveCommand:       rel.OverdriveCommand,
 		CharacterClasses:       rel.CharacterClasses,
 		BaseStats:              namesToResourceAmounts(cfg, cfg.e.stats, character.BaseStats, newBaseStat),
-		DefaultAbilities:       rel.DefaultAbilities,
-		StdSphereGridAbilities: rel.StdSphereGridAbilities,
-		ExpSphereGridAbilities: rel.ExpSphereGridAbilities,
+		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
+		StdSgPlayerAbilities:   rel.StdSgPlayerAbilities,
+		ExpSgPlayerAbilities:   rel.ExpSgPlayerAbilities,
 		OverdriveModes:         rel.OverdriveModes,
 	}
 

@@ -45,9 +45,9 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 		CelestialWeapon:        celestialWeapon,
 		OverdriveCommand:       overdriveCommand,
 		CharacterClasses:       characterClasses,
-		DefaultAbilities:       defaultAbilities,
-		StdSphereGridAbilities: stdSgAbilities,
-		ExpSphereGridAbilities: expSgAbilities,
+		DefaultPlayerAbilities: defaultAbilities,
+		StdSgPlayerAbilities:   stdSgAbilities,
+		ExpSgPlayerAbilities:   expSgAbilities,
 		OverdriveModes:         modeAmounts,
 	}
 

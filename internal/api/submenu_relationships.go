@@ -8,7 +8,7 @@ import (
 )
 
 func createSubmenuOpenedBy(cfg *Config, r *http.Request, submenu seeding.Submenu) (*MenuOpen, error) {
-	ability, err := getAbilityResPtrDB(cfg, r, submenu, queryOne(cfg.db.GetSubmenuOpenedByAbilityID))
+	ability, err := getResPtrDB(cfg, r, cfg.e.abilities, submenu, queryOne(cfg.db.GetSubmenuOpenedByAbilityID))
 	if err != nil {
 		return nil, err
 	}

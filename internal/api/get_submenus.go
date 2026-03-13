@@ -12,7 +12,7 @@ func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, S
 		return Submenu{}, err
 	}
 	
-	abilities, err := getAbilityResourcesDB(cfg, r, submenu, queryMany(cfg.db.GetSubmenuAbilityIDs))
+	abilities, err := getResourcesDbItem(cfg, r, cfg.e.abilities, submenu, queryMany(cfg.db.GetSubmenuAbilityIDs))
 	if err != nil {
 		return Submenu{}, err
 	}
