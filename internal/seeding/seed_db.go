@@ -3,7 +3,6 @@ package seeding
 import (
 	"database/sql"
 	"fmt"
-	"path/filepath"
 	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -18,13 +17,11 @@ type seeder struct {
 }
 
 func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
-	root, err := h.ProjectRoot()
+	const migrationsDir = "sql/schema/"
+	fullPath, err := h.GetAbsoluteFilepath(migrationsDir)
 	if err != nil {
 		return nil, err
 	}
-
-	const migrationsDir = "sql/schema/"
-	fullPath := filepath.Join(root, migrationsDir)
 
 	start := time.Now()
 

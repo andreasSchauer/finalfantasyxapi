@@ -5,17 +5,15 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func loadJSONFile[T any](path string, target *T) error {
-	root, err := h.ProjectRoot()
+	fullPath, err := h.GetAbsoluteFilepath(path)
 	if err != nil {
 		return err
 	}
-	fullPath := filepath.Join(root, path)
 	
 	file, err := os.Open(fullPath)
 	if err != nil {

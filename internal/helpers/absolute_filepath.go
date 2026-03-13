@@ -6,8 +6,17 @@ import (
 	"os"
 )
 
+func GetAbsoluteFilepath(path string) (string, error) {
+	root, err := projectRoot()
+    if err != nil {
+        return "", err
+    }
 
-func ProjectRoot() (string, error) {
+	return filepath.Join(root, path), nil
+}
+
+
+func projectRoot() (string, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return "", err

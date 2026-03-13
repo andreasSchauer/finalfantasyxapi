@@ -1,7 +1,7 @@
 package api
 
 import (
-    "path/filepath"
+
 
     "github.com/joho/godotenv"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -9,10 +9,10 @@ import (
 
 
 func LoadEnvFromRoot() error {
-    root, err := h.ProjectRoot()
+    envPath, err := h.GetAbsoluteFilepath(".env")
     if err != nil {
         return err
     }
-    envPath := filepath.Join(root, ".env")
+
     return godotenv.Load(envPath)
 }
