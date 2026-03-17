@@ -21,7 +21,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 		ID:                     character.ID,
 		Name:                   character.Name,
 		Area:                   locAreaToAreaAPIResource(cfg, cfg.e.areas, character.LocationArea),
-		StoryOnly:              character.StoryOnly,
+		IsStoryBased:           character.IsStoryBased,
 		CanFightUnderwater:     character.CanFightUnderwater,
 		PhysAtkRange:           character.PhysAtkRange,
 		WeaponType:             character.WeaponType,
@@ -46,7 +46,7 @@ func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Ch
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(boolQuery(cfg, r, i, resources, "story_based", cfg.db.GetCharacterIDsStoryOnly)),
+		frl(boolQuery(cfg, r, i, resources, "story_based", cfg.db.GetCharacterIDsStoryBased)),
 		frl(boolQuery(cfg, r, i, resources, "underwater", cfg.db.GetCharacterIDsCanFightUnderwater)),
 	})
 }

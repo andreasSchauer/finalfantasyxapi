@@ -6,7 +6,7 @@ RETURNING *;
 
 
 -- name: CreateCharacter :one
-INSERT INTO characters (data_hash, unit_id, story_only, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
+INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = characters.data_hash
 RETURNING *;

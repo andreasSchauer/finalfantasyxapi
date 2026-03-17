@@ -10,11 +10,11 @@ import (
 )
 
 type Character struct {
-	ID 				   int32
+	ID int32
 	PlayerUnit
 	LocationArea       LocationArea `json:"location_area"`
 	AreaID             *int32
-	StoryOnly          bool       `json:"story_only"`
+	IsStoryBased       bool       `json:"is_story_based"`
 	WeaponType         string     `json:"weapon_type"`
 	ArmorType          string     `json:"armor_type"`
 	PhysAtkRange       int32      `json:"physical_attack_range"`
@@ -26,7 +26,7 @@ func (c Character) ToHashFields() []any {
 	return []any{
 		c.PlayerUnit.ID,
 		h.DerefOrNil(c.AreaID),
-		c.StoryOnly,
+		c.IsStoryBased,
 		c.WeaponType,
 		c.ArmorType,
 		c.PhysAtkRange,
@@ -71,7 +71,7 @@ func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 			dbCharacter, err := qtx.CreateCharacter(context.Background(), database.CreateCharacterParams{
 				DataHash:            generateDataHash(character),
 				UnitID:              character.PlayerUnit.ID,
-				StoryOnly:           character.StoryOnly,
+				IsStoryBased:        character.IsStoryBased,
 				WeaponType:          database.WeaponType(character.WeaponType),
 				ArmorType:           database.ArmorType(character.ArmorType),
 				PhysicalAttackRange: character.PhysAtkRange,
@@ -85,7 +85,7 @@ func (l *Lookup) seedCharacters(db *database.Queries, dbConn *sql.DB) error {
 			l.Characters[character.Name] = character
 			l.CharactersID[character.ID] = character
 		}
-		
+
 		return nil
 	})
 }

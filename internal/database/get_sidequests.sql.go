@@ -172,6 +172,41 @@ func (q *Queries) GetSidequestIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getSidequestIDsByPostAirship = `-- name: GetSidequestIDsByPostAirship :many
+SELECT DISTINCT si.id
+FROM sidequests si
+JOIN quests qsi ON si.quest_id = qsi.id
+JOIN quest_completions qcsi ON qcsi.quest_id = qsi.id
+JOIN subquests su ON su.sidequest_id = si.id
+JOIN quests qsu ON su.quest_id = qsu.id
+JOIN quest_completions qcsu ON qcsu.quest_id = qsu.id
+WHERE qcsi.is_post_airship = $1 OR qcsu.is_post_airship = $1
+ORDER BY si.id
+`
+
+func (q *Queries) GetSidequestIDsByPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSidequestIDsByPostAirship, isPostAirship)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getSidequestSubquestIDs = `-- name: GetSidequestSubquestIDs :many
 SELECT id FROM subquests WHERE sidequest_id = $1 ORDER BY id
 `
@@ -205,6 +240,38 @@ SELECT id FROM subquests ORDER BY id
 
 func (q *Queries) GetSubquestIDs(ctx context.Context) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getSubquestIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSubquestIDsByPostAirship = `-- name: GetSubquestIDsByPostAirship :many
+SELECT DISTINCT s.id
+FROM subquests s
+JOIN quests q ON s.quest_id = q.id
+JOIN quest_completions qc ON qc.quest_id = q.id
+WHERE qc.is_post_airship = true
+ORDER BY s.id
+`
+
+func (q *Queries) GetSubquestIDsByPostAirship(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSubquestIDsByPostAirship)
 	if err != nil {
 		return nil, err
 	}

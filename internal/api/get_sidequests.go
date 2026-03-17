@@ -33,5 +33,7 @@ func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Si
 		return NamedApiResourceList{}, err
 	}
 
-	return i.resToListFunc(cfg, r, resources)
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
+		frl(boolQuery(cfg, r, i, resources, "post_airship", cfg.db.GetSidequestIDsByPostAirship)),
+	})
 }

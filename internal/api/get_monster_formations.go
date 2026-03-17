@@ -15,6 +15,8 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 	response := MonsterFormation{
 		ID:              formation.ID,
 		Category:        formation.FormationData.Category,
+		IsPostAirship: 	 formation.FormationData.IsPostAirship,
+		IsStoryBased: 	 formation.FormationData.IsStoryBased,
 		IsForcedAmbush:  formation.FormationData.IsForcedAmbush,
 		CanEscape:       formation.FormationData.CanEscape,
 		Notes:           formation.FormationData.Notes,
@@ -38,6 +40,9 @@ func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[see
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetMonsterFormationIDsByLocation)),
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetMonsterFormationIDsBySublocation)),
 		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetMonsterFormationIDsByArea)),
+		frl(boolQuery(cfg, r, i, resources, "post_airship", cfg.db.GetMonsterFormationIDsByPostAirship)),
+		frl(boolQuery(cfg, r, i, resources, "story_based", cfg.db.GetMonsterFormationIDsByStoryBased)),
+		frl(boolQuery2(cfg, r, i, resources, "repeatable", cfg.db.GetMonsterFormationIDsByRepeatable)),
 		frl(boolQuery(cfg, r, i, resources, "ambush", cfg.db.GetMonsterFormationIDsByForcedAmbush)),
 		frl(typeQuery(cfg, r, i, cfg.t.MonsterFormationCategory, resources, "category", cfg.db.GetMonsterFormationIDsByCategory)),
 	})

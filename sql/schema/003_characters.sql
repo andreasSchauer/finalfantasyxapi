@@ -25,7 +25,7 @@ CREATE TABLE characters (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     unit_id INTEGER NOT NULL REFERENCES player_units(id),
-    story_only BOOLEAN NOT NULL,
+    is_story_based BOOLEAN NOT NULL,
     weapon_type weapon_type NOT NULL,
     armor_type armor_type NOT NULL,
     physical_attack_range distance NOT NULL,

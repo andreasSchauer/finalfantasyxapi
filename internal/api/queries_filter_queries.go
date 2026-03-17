@@ -215,6 +215,32 @@ func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 	return resources, nil
 }
 
+// db query accumulates all resources that fulfill a certain condition (mostly if it has resources of a specific type). a true boolean flips these results
+func boolQuery3[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+
+	b, err := parseBooleanQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := dbQuery(r.Context())
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	if b {
+		resources = removeResources(inputRes, resources)
+	}
+
+	return resources, nil
+}
+
 // query uses an enum type (id or string possible) that needs to be checked for validity and then returns all resources matching that type
 func typeQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery func(context.Context, E) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]

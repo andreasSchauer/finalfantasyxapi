@@ -384,7 +384,7 @@ func (t *TypeLookup) initMonsterFormationCategory() {
 		},
 		{
 			Name:        string(database.MonsterFormationCategoryStaticEncounter),
-			Description: "A non-boss-encounter that is triggered by interacting with it. This only applies to the Sandragoras in Bikanel.",
+			Description: "A non-boss-encounter that is triggered by interacting with it. This only applies to Lord Ochu in Kilika and the Sandragoras in Bikanel.",
 		},
 		{
 			Name:        string(database.MonsterFormationCategoryTutorial),

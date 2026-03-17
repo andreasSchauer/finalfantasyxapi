@@ -10,7 +10,7 @@ import (
 type AreaConnection struct {
 	Area           AreaAPIResource `json:"area"`
 	ConnectionType string          `json:"connection_type"`
-	StoryOnly      bool            `json:"story_only"`
+	IsStoryBased   bool            `json:"is_story_based"`
 	Notes          *string         `json:"notes,omitempty"`
 }
 
@@ -92,7 +92,7 @@ func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, er
 		connection := AreaConnection{
 			Area:           locAreaToAreaAPIResource(cfg, i, connArea.LocationArea),
 			ConnectionType: connArea.ConnectionType,
-			StoryOnly:      connArea.StoryOnly,
+			IsStoryBased:   connArea.IsStoryBased,
 			Notes:          connArea.Notes,
 		}
 

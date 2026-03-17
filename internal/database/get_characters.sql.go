@@ -664,12 +664,12 @@ func (q *Queries) GetCharacterIDsCanFightUnderwater(ctx context.Context, canFigh
 	return items, nil
 }
 
-const getCharacterIDsStoryOnly = `-- name: GetCharacterIDsStoryOnly :many
-SELECT id FROM characters WHERE story_only = $1 ORDER BY id
+const getCharacterIDsStoryBased = `-- name: GetCharacterIDsStoryBased :many
+SELECT id FROM characters WHERE is_story_based = $1 ORDER BY id
 `
 
-func (q *Queries) GetCharacterIDsStoryOnly(ctx context.Context, storyOnly bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getCharacterIDsStoryOnly, storyOnly)
+func (q *Queries) GetCharacterIDsStoryBased(ctx context.Context, isStoryBased bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterIDsStoryBased, isStoryBased)
 	if err != nil {
 		return nil, err
 	}

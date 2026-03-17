@@ -41,8 +41,8 @@ RETURNING *;
 
 
 -- name: CreateFormationData :one
-INSERT INTO formation_data (data_hash, category, is_forced_ambush, can_escape, boss_song_id, notes)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO formation_data (data_hash, category, is_post_airship, is_story_based, is_forced_ambush, can_escape, boss_song_id, notes)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_data.data_hash
 RETURNING *;
 

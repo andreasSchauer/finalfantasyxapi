@@ -163,16 +163,16 @@ func (q *Queries) CreateAeonsWeaponArmorJunction(ctx context.Context, arg Create
 }
 
 const createCharacter = `-- name: CreateCharacter :one
-INSERT INTO characters (data_hash, unit_id, story_only, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
+INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = characters.data_hash
-RETURNING id, data_hash, unit_id, story_only, weapon_type, armor_type, physical_attack_range, can_fight_underwater, area_id
+RETURNING id, data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater, area_id
 `
 
 type CreateCharacterParams struct {
 	DataHash            string
 	UnitID              int32
-	StoryOnly           bool
+	IsStoryBased        bool
 	WeaponType          WeaponType
 	ArmorType           ArmorType
 	PhysicalAttackRange interface{}
@@ -183,7 +183,7 @@ func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams
 	row := q.db.QueryRowContext(ctx, createCharacter,
 		arg.DataHash,
 		arg.UnitID,
-		arg.StoryOnly,
+		arg.IsStoryBased,
 		arg.WeaponType,
 		arg.ArmorType,
 		arg.PhysicalAttackRange,
@@ -194,7 +194,7 @@ func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams
 		&i.ID,
 		&i.DataHash,
 		&i.UnitID,
-		&i.StoryOnly,
+		&i.IsStoryBased,
 		&i.WeaponType,
 		&i.ArmorType,
 		&i.PhysicalAttackRange,

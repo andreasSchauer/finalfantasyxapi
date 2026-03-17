@@ -8,7 +8,6 @@ type Location struct {
 	LocRel
 }
 
-
 type Sublocation struct {
 	ID                    int32              `json:"id"`
 	Name                  string             `json:"name"`
@@ -18,7 +17,6 @@ type Sublocation struct {
 	LocRel
 }
 
-
 type Area struct {
 	ID                int32            `json:"id"`
 	Name              string           `json:"name"`
@@ -27,7 +25,8 @@ type Area struct {
 	DisplayName       string           `json:"display_name"`
 	ParentLocation    NamedAPIResource `json:"parent_location"`
 	ParentSublocation NamedAPIResource `json:"parent_sublocation"`
-	StoryOnly         bool             `json:"story_only"`
+	IsPostAirship     bool             `json:"is_post_airship"`
+	IsStoryBased      bool             `json:"is_story_based"`
 	HasSaveSphere     bool             `json:"has_save_sphere"`
 	AirshipDropOff    bool             `json:"airship_drop_off"`
 	HasCompSphere     bool             `json:"has_comp_sphere"`

@@ -296,15 +296,17 @@ func (q *Queries) CreateFormationBossSong(ctx context.Context, arg CreateFormati
 }
 
 const createFormationData = `-- name: CreateFormationData :one
-INSERT INTO formation_data (data_hash, category, is_forced_ambush, can_escape, boss_song_id, notes)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO formation_data (data_hash, category, is_post_airship, is_story_based, is_forced_ambush, can_escape, boss_song_id, notes)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_data.data_hash
-RETURNING id, data_hash, category, is_forced_ambush, can_escape, boss_song_id, notes
+RETURNING id, data_hash, category, is_post_airship, is_story_based, is_forced_ambush, can_escape, boss_song_id, notes
 `
 
 type CreateFormationDataParams struct {
 	DataHash       string
 	Category       MonsterFormationCategory
+	IsPostAirship  bool
+	IsStoryBased   bool
 	IsForcedAmbush bool
 	CanEscape      bool
 	BossSongID     sql.NullInt32
@@ -315,6 +317,8 @@ func (q *Queries) CreateFormationData(ctx context.Context, arg CreateFormationDa
 	row := q.db.QueryRowContext(ctx, createFormationData,
 		arg.DataHash,
 		arg.Category,
+		arg.IsPostAirship,
+		arg.IsStoryBased,
 		arg.IsForcedAmbush,
 		arg.CanEscape,
 		arg.BossSongID,
@@ -325,6 +329,8 @@ func (q *Queries) CreateFormationData(ctx context.Context, arg CreateFormationDa
 		&i.ID,
 		&i.DataHash,
 		&i.Category,
+		&i.IsPostAirship,
+		&i.IsStoryBased,
 		&i.IsForcedAmbush,
 		&i.CanEscape,
 		&i.BossSongID,

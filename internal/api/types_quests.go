@@ -22,16 +22,18 @@ type Subquest struct {
 
 
 type QuestCompletion struct {
-	Condition	string				`json:"condition"`
-	Areas  		[]CompletionArea 	`json:"areas"`
-	Reward 		ItemAmount       	`json:"reward"`
+	Condition		string				`json:"condition"`
+	IsPostAirship	bool				`json:"is_post_airship"`
+	Areas  			[]CompletionArea 	`json:"areas"`
+	Reward 			ItemAmount       	`json:"reward"`
 }
 
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
-		Condition: 	qc.Condition,
-		Areas:  	convertObjSlice(cfg, qc.Areas, convertCompletionArea),
-		Reward: 	convertItemAmount(cfg, qc.Reward),
+		Condition: 		qc.Condition,
+		IsPostAirship: 	qc.IsPostAirship,
+		Areas:  		convertObjSlice(cfg, qc.Areas, convertCompletionArea),
+		Reward: 		convertItemAmount(cfg, qc.Reward),
 	}
 }
 

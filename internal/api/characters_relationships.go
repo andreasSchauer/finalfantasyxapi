@@ -57,7 +57,7 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 func getCharacterModeAmounts(cfg *Config, r *http.Request, char seeding.Character) ([]ModeAmount, error) {
 	modeAmounts := []ModeAmount{}
 
-	if char.StoryOnly {
+	if char.IsStoryBased {
 		return modeAmounts, nil
 	}
 

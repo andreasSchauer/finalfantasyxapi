@@ -15,6 +15,7 @@ CREATE TABLE quest_completions (
     data_hash TEXT UNIQUE NOT NULL,
     quest_id INTEGER NOT NULL REFERENCES quests(id),
     condition TEXT NOT NULL,
+    is_post_airship BOOLEAN NOT NULL,
     item_amount_id INTEGER NOT NULL REFERENCES item_amounts(id)
 );
 

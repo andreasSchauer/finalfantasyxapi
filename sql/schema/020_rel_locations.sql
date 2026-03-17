@@ -8,7 +8,7 @@ CREATE TABLE area_connections (
     data_hash TEXT UNIQUE NOT NULL,
     area_id INTEGER NOT NULL REFERENCES areas(id),
     connection_type area_connection_type NOT NULL,
-    story_only BOOLEAN NOT NULL,
+    is_story_based BOOLEAN NOT NULL,
     notes TEXT
 );
 

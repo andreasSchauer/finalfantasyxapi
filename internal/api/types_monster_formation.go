@@ -6,6 +6,8 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 type MonsterFormation struct {
 	ID              int32                     `json:"id"`
 	Category        string                    `json:"category"`
+	IsPostAirship	bool					  `json:"is_post_airship"`
+	IsStoryBased	bool					  `json:"is_story_based"`
 	IsForcedAmbush  bool                      `json:"is_forced_ambush"`
 	CanEscape       bool                      `json:"can_escape"`
 	Notes           *string                   `json:"notes,omitempty"`

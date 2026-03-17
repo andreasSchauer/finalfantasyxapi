@@ -72,7 +72,8 @@ type Area struct {
 	Name                 string           `json:"area"`
 	Version              *int32           `json:"version"`
 	Specification        *string          `json:"specification"`
-	StoryOnly            bool             `json:"story_only"`
+	IsStoryBased         bool             `json:"is_story_based"`
+	IsPostAirship        bool             `json:"is_post_airship"`
 	HasSaveSphere        bool             `json:"has_save_sphere"`
 	AirshipDropOff       bool             `json:"airship_drop_off"`
 	HasCompilationSphere bool             `json:"has_compilation_sphere"`
@@ -87,7 +88,8 @@ func (a Area) ToHashFields() []any {
 		a.Name,
 		h.DerefOrNil(a.Version),
 		h.DerefOrNil(a.Specification),
-		a.StoryOnly,
+		a.IsStoryBased,
+		a.IsPostAirship,
 		a.HasSaveSphere,
 		a.AirshipDropOff,
 		a.HasCompilationSphere,
@@ -157,7 +159,7 @@ type AreaConnection struct {
 	AreaID         int32
 	LocationArea   LocationArea `json:"location_area"`
 	ConnectionType string       `json:"connection_type"`
-	StoryOnly      bool         `json:"story_only"`
+	IsStoryBased   bool         `json:"is_story_based"`
 	Notes          *string      `json:"notes"`
 }
 
@@ -165,7 +167,7 @@ func (ac AreaConnection) ToHashFields() []any {
 	return []any{
 		ac.AreaID,
 		ac.ConnectionType,
-		ac.StoryOnly,
+		ac.IsStoryBased,
 		h.DerefOrNil(ac.Notes),
 	}
 }
@@ -246,7 +248,8 @@ func (l *Lookup) seedAreas(qtx *database.Queries, sublocation Sublocation) error
 			Name:                 area.Name,
 			Version:              h.GetNullInt32(area.Version),
 			Specification:        h.GetNullString(area.Specification),
-			StoryOnly:            area.StoryOnly,
+			IsStoryBased:         area.IsStoryBased,
+			IsPostAirship:        area.IsPostAirship,
 			HasSaveSphere:        area.HasSaveSphere,
 			AirshipDropOff:       area.AirshipDropOff,
 			HasCompilationSphere: area.HasCompilationSphere,
@@ -336,7 +339,7 @@ func (l *Lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnec
 		DataHash:       generateDataHash(connection),
 		AreaID:         connection.AreaID,
 		ConnectionType: database.AreaConnectionType(connection.ConnectionType),
-		StoryOnly:      connection.StoryOnly,
+		IsStoryBased:   connection.IsStoryBased,
 		Notes:          h.GetNullString(connection.Notes),
 	})
 	if err != nil {

@@ -14,15 +14,16 @@ Things that are currently unclear/unknown:
 - There is conflicting information on song credits on the internet
 - Some names of areas I can't check, because I currently only have access to the German PS2 version of the game and thus am dependant on English videos and resources:
     - all of dream zanarkand (except overpass, where the save sphere is) (areas 1 to 5)
-    - the story-only area in kilika where the sending is performed (area 50; currently called 'square' derived from its German name 'Marktplatz', similar to Luca's square area)
+    - the story-only area in kilika where the sending is performed (area 50; currently called 'square' derived from its German name 'Marktplatz', similar to Luca's 'square' area)
     - the road at macalania temple that connects the antechamber with the chamber of the fayth (area 167). In the German version it has the same name as the road that leads to the temple
     - which fayth areas are called 'chamber of the fayth' and which are called 'fayth'? (areas 14, 35, 63, 117, 168, 210, 212, 228)
 - What is the critical plus value of monsters? (not for the equipment they drop, but for their own abilities) Is it the same?
-- What is the critical plus value of aeons' equipment?
+- What is the critical plus value of aeons' equipment? Currently, I'm assuming it's 3 for both as is standard for most equipment dropped by enemies
+- Does equipment bought in shops also have a critical plus value?
 - The attributes of Lulu's Thundara spell during the first Zu encounter at Bikanel
 - How exactly does Lulu's magic affect the amount of spells she casts with her overdrives?
 - From which areas in the calm lands can you start and complete the 'chocobo training' sidequest?
-- What exactly is Wakka's Power Shot? When is it triggered? Which ability is triggered with two Aurochs Symbols on Aurochs Reels? Currently I treat Power Shot as the shot that is performed when you get no matching symbol at any Aurochs Reels. For a two-symbol Aurochs Shot, I didn't find any evidence of existence in my data, so I just assumed it worked like the other Slots Overdrives where a variant of the three-symbol version that hits a single random enemy is performed. 
+- What exactly is Wakka's Power Shot? When is it triggered? Which ability is triggered with two Aurochs Symbols on Aurochs Reels? Currently I treat Power Shot as the shot that is performed when you get no matching symbol at any Aurochs Reels. For a two-symbol Aurochs Shot, I didn't find any evidence of existence in my source, so I just assumed it worked like the other Slots Overdrives where a variant of the three-symbol version that hits a single random enemy is performed. 
 - Monster equipment drops:
     - if a monster only can get 0 ability rolls (like with octopus), will it only ever drop equipment with 1 empty slot, or just piercing for kimahri and auron, and ignore its auto-ability table completely?
     - is the forced auto-ability (piercing in most cases) taken into account with the amount of attached abilities, or is it seen as extra?

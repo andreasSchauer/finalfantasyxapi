@@ -13,14 +13,14 @@ RETURNING *;
 
 
 -- name: CreateArea :one
-INSERT INTO areas (data_hash, sublocation_id, name, version, specification, story_only, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+INSERT INTO areas (data_hash, sublocation_id, name, version, specification, is_story_based, is_post_airship, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = areas.data_hash
 RETURNING *;
 
 
 -- name: CreateAreaConnection :one
-INSERT INTO area_connections (data_hash, area_id, connection_type, story_only, notes)
+INSERT INTO area_connections (data_hash, area_id, connection_type, is_story_based, notes)
 VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = area_connections.data_hash
 RETURNING *;
@@ -33,8 +33,8 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateTreasure :one
-INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_story_based, is_anima_treasure, notes, gil_amount)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = treasures.data_hash
 RETURNING *;
 

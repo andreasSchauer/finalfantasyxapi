@@ -32,5 +32,7 @@ func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Sub
 		return NamedApiResourceList{}, err
 	}
 
-	return i.resToListFunc(cfg, r, resources)
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
+		frl(boolQuery2(cfg, r, i, resources, "post_airship", cfg.db.GetSubquestIDsByPostAirship)),
+	})
 }

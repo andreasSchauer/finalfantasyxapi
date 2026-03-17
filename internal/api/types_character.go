@@ -4,7 +4,7 @@ type Character struct {
 	ID                     int32              `json:"id"`
 	Name                   string             `json:"name"`
 	Area                   AreaAPIResource    `json:"area"`
-	StoryOnly              bool               `json:"story_only"`
+	IsStoryBased           bool               `json:"is_story_based"`
 	CanFightUnderwater     bool               `json:"can_fight_underwater"`
 	PhysAtkRange           int32              `json:"physical_attack_range"`
 	WeaponType             string             `json:"weapon_type"`

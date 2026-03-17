@@ -70,6 +70,8 @@ CREATE TABLE formation_data (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     category monster_formation_category NOT NULL,
+    is_post_airship BOOLEAN NOT NULL,
+    is_story_based BOOLEAN NOT NULL,
     is_forced_ambush BOOLEAN NOT NULL,
     can_escape BOOLEAN NOT NULL,
     boss_song_id INTEGER REFERENCES formation_boss_songs(id),

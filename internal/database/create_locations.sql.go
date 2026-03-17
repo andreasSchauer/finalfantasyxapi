@@ -11,10 +11,10 @@ import (
 )
 
 const createArea = `-- name: CreateArea :one
-INSERT INTO areas (data_hash, sublocation_id, name, version, specification, story_only, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+INSERT INTO areas (data_hash, sublocation_id, name, version, specification, is_story_based, is_post_airship, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = areas.data_hash
-RETURNING id, data_hash, sublocation_id, name, version, specification, story_only, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo
+RETURNING id, data_hash, sublocation_id, name, version, specification, is_story_based, is_post_airship, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo
 `
 
 type CreateAreaParams struct {
@@ -23,7 +23,8 @@ type CreateAreaParams struct {
 	Name                 string
 	Version              sql.NullInt32
 	Specification        sql.NullString
-	StoryOnly            bool
+	IsStoryBased         bool
+	IsPostAirship        bool
 	HasSaveSphere        bool
 	AirshipDropOff       bool
 	HasCompilationSphere bool
@@ -37,7 +38,8 @@ func (q *Queries) CreateArea(ctx context.Context, arg CreateAreaParams) (Area, e
 		arg.Name,
 		arg.Version,
 		arg.Specification,
-		arg.StoryOnly,
+		arg.IsStoryBased,
+		arg.IsPostAirship,
 		arg.HasSaveSphere,
 		arg.AirshipDropOff,
 		arg.HasCompilationSphere,
@@ -51,7 +53,8 @@ func (q *Queries) CreateArea(ctx context.Context, arg CreateAreaParams) (Area, e
 		&i.Name,
 		&i.Version,
 		&i.Specification,
-		&i.StoryOnly,
+		&i.IsStoryBased,
+		&i.IsPostAirship,
 		&i.HasSaveSphere,
 		&i.AirshipDropOff,
 		&i.HasCompilationSphere,
@@ -78,17 +81,17 @@ func (q *Queries) CreateAreaConnectedAreasJunction(ctx context.Context, arg Crea
 }
 
 const createAreaConnection = `-- name: CreateAreaConnection :one
-INSERT INTO area_connections (data_hash, area_id, connection_type, story_only, notes)
+INSERT INTO area_connections (data_hash, area_id, connection_type, is_story_based, notes)
 VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = area_connections.data_hash
-RETURNING id, data_hash, area_id, connection_type, story_only, notes
+RETURNING id, data_hash, area_id, connection_type, is_story_based, notes
 `
 
 type CreateAreaConnectionParams struct {
 	DataHash       string
 	AreaID         int32
 	ConnectionType AreaConnectionType
-	StoryOnly      bool
+	IsStoryBased   bool
 	Notes          sql.NullString
 }
 
@@ -97,7 +100,7 @@ func (q *Queries) CreateAreaConnection(ctx context.Context, arg CreateAreaConnec
 		arg.DataHash,
 		arg.AreaID,
 		arg.ConnectionType,
-		arg.StoryOnly,
+		arg.IsStoryBased,
 		arg.Notes,
 	)
 	var i AreaConnection
@@ -106,7 +109,7 @@ func (q *Queries) CreateAreaConnection(ctx context.Context, arg CreateAreaConnec
 		&i.DataHash,
 		&i.AreaID,
 		&i.ConnectionType,
-		&i.StoryOnly,
+		&i.IsStoryBased,
 		&i.Notes,
 	)
 	return i, err
@@ -337,10 +340,10 @@ func (q *Queries) CreateSublocation(ctx context.Context, arg CreateSublocationPa
 }
 
 const createTreasure = `-- name: CreateTreasure :one
-INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_story_based, is_anima_treasure, notes, gil_amount)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = treasures.data_hash
-RETURNING id, data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_anima_treasure, notes, gil_amount, found_equipment_id
+RETURNING id, data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_story_based, is_anima_treasure, notes, gil_amount, found_equipment_id
 `
 
 type CreateTreasureParams struct {
@@ -350,6 +353,7 @@ type CreateTreasureParams struct {
 	TreasureType    TreasureType
 	LootType        LootType
 	IsPostAirship   bool
+	IsStoryBased    bool
 	IsAnimaTreasure bool
 	Notes           sql.NullString
 	GilAmount       sql.NullInt32
@@ -363,6 +367,7 @@ func (q *Queries) CreateTreasure(ctx context.Context, arg CreateTreasureParams) 
 		arg.TreasureType,
 		arg.LootType,
 		arg.IsPostAirship,
+		arg.IsStoryBased,
 		arg.IsAnimaTreasure,
 		arg.Notes,
 		arg.GilAmount,
@@ -376,6 +381,7 @@ func (q *Queries) CreateTreasure(ctx context.Context, arg CreateTreasureParams) 
 		&i.TreasureType,
 		&i.LootType,
 		&i.IsPostAirship,
+		&i.IsStoryBased,
 		&i.IsAnimaTreasure,
 		&i.Notes,
 		&i.GilAmount,

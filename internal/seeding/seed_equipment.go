@@ -123,12 +123,10 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, table := range equipmentTables {
-			if table.SpecificCharacter != nil {
-				var err error
-				table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, l.Characters)
-				if err != nil {
-					return h.NewErr(table.Error(), err)
-				}
+			var err error
+			table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, l.Characters)
+			if err != nil {
+				return h.NewErr(table.Error(), err)
 			}
 
 			dbEquipmentTable, err := qtx.CreateEquipmentTable(context.Background(), database.CreateEquipmentTableParams{

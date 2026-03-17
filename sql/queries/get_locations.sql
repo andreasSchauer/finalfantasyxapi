@@ -135,8 +135,12 @@ SELECT id FROM areas WHERE airship_drop_off = $1 ORDER BY id;
 SELECT id FROM areas WHERE can_ride_chocobo = $1 ORDER BY id;
 
 
--- name: GetAreaIDsStoryOnly :many
-SELECT id FROM areas WHERE story_only = $1 ORDER BY id;
+-- name: GetAreaIDsPostAirship :many
+SELECT id FROM areas WHERE is_post_airship = $1 ORDER BY id;
+
+
+-- name: GetAreaIDsStoryBased :many
+SELECT id FROM areas WHERE is_story_based = $1 ORDER BY id;
 
 
 -- name: GetAreaIDsWithCharacters :many
@@ -1017,6 +1021,10 @@ SELECT id FROM treasures WHERE treasure_type = $1 ORDER BY id;
 
 -- name: GetTreasureIDsByIsAnimaTreasure :many
 SELECT id FROM treasures WHERE is_anima_treasure = $1 ORDER BY id;
+
+
+-- name: GetTreasureIDsByIsStoryBased :many
+SELECT id FROM treasures WHERE is_story_based = $1 ORDER BY id;
 
 
 -- name: GetTreasureIDsByIsPostAirship :many

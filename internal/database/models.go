@@ -2768,7 +2768,8 @@ type Area struct {
 	Name                 string
 	Version              sql.NullInt32
 	Specification        sql.NullString
-	StoryOnly            bool
+	IsStoryBased         bool
+	IsPostAirship        bool
 	HasSaveSphere        bool
 	AirshipDropOff       bool
 	HasCompilationSphere bool
@@ -2780,7 +2781,7 @@ type AreaConnection struct {
 	DataHash       string
 	AreaID         int32
 	ConnectionType AreaConnectionType
-	StoryOnly      bool
+	IsStoryBased   bool
 	Notes          sql.NullString
 }
 
@@ -2861,7 +2862,7 @@ type Character struct {
 	ID                  int32
 	DataHash            string
 	UnitID              int32
-	StoryOnly           bool
+	IsStoryBased        bool
 	WeaponType          WeaponType
 	ArmorType           ArmorType
 	PhysicalAttackRange interface{}
@@ -3004,6 +3005,8 @@ type FormationDatum struct {
 	ID             int32
 	DataHash       string
 	Category       MonsterFormationCategory
+	IsPostAirship  bool
+	IsStoryBased   bool
 	IsForcedAmbush bool
 	CanEscape      bool
 	BossSongID     sql.NullInt32
@@ -3847,11 +3850,12 @@ type Quest struct {
 }
 
 type QuestCompletion struct {
-	ID           int32
-	DataHash     string
-	QuestID      int32
-	Condition    string
-	ItemAmountID int32
+	ID            int32
+	DataHash      string
+	QuestID       int32
+	Condition     string
+	IsPostAirship bool
+	ItemAmountID  int32
 }
 
 type RonsoRage struct {
@@ -3993,6 +3997,7 @@ type Treasure struct {
 	TreasureType     TreasureType
 	LootType         LootType
 	IsPostAirship    bool
+	IsStoryBased     bool
 	IsAnimaTreasure  bool
 	Notes            sql.NullString
 	GilAmount        sql.NullInt32

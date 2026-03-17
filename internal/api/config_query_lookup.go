@@ -122,12 +122,12 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initSubmenusParams()
 	cfg.initSublocationsParams()
 	cfg.initLocationsParams()
+	cfg.initSidequestsParams()
+	cfg.initSubquestsParams()
 	cfg.initShopsParams()
 	cfg.initSongsParams()
 	cfg.initTreasuresParams()
 
-	cfg.q.sidequests = cfg.assignDefaultParams()
-	cfg.q.subquests = cfg.assignDefaultParams()
 	cfg.q.ronsoRages = cfg.assignDefaultParams()
 	cfg.q.aeonCommands = cfg.assignDefaultParams()
 	cfg.q.topmenus = cfg.assignDefaultParams()
@@ -249,16 +249,24 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "key-items")},
 		},
-		"story_based": {
+		"post_airship": {
 			ID:          6,
-			Description: "Searches for areas that can only be visited during story events.",
+			Description: "Searches for areas that can only be accessed after acquiring the airship.",
+			Usage:       "?post_airship={bool}",
+			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"story_based": {
+			ID:          7,
+			Description: "Searches for areas that can only be accessed during certain sections of the story.",
 			Usage:       "?story_based={bool}",
 			ExampleUses: []string{"?story_based=true", "?story_based=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
 		"save_sphere": {
-			ID:          7,
+			ID:          8,
 			Description: "Searches for areas that have a save sphere.",
 			Usage:       "?save_sphere={bool}",
 			ExampleUses: []string{"?save_sphere=true", "?save_sphere=false"},
@@ -266,7 +274,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"comp_sphere": {
-			ID:          8,
+			ID:          9,
 			Description: "Searches for areas that contain an al bhed compilation sphere.",
 			Usage:       "?comp_sphere={bool}",
 			ExampleUses: []string{"?comp_sphere=true", "?comp_sphere=false"},
@@ -274,7 +282,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"airship": {
-			ID:          9,
+			ID:          10,
 			Description: "Searches for areas where you get dropped off when visiting with the airship.",
 			Usage:       "?airship={bool}",
 			ExampleUses: []string{"?airship=true", "?airship=false"},
@@ -282,7 +290,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"chocobo": {
-			ID:          10,
+			ID:          11,
 			Description: "Searches for areas where you can ride a chocobo.",
 			Usage:       "?chocobo={bool}",
 			ExampleUses: []string{"?chocobo=true", "?chocobo=false"},
@@ -290,7 +298,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"characters": {
-			ID:          11,
+			ID:          12,
 			Description: "Searches for areas where a character permanently joins the party.",
 			Usage:       "?characters={bool}",
 			ExampleUses: []string{"?characters=true", "?characters=false"},
@@ -298,7 +306,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"aeons": {
-			ID:          12,
+			ID:          13,
 			Description: "Searches for areas where a new aeon is acquired.",
 			Usage:       "?aeons={bool}",
 			ExampleUses: []string{"?aeons=true", "?aeons=false"},
@@ -306,7 +314,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"monsters": {
-			ID:          13,
+			ID:          14,
 			Description: "Searches for areas that have monsters.",
 			Usage:       "?monsters={bool}",
 			ExampleUses: []string{"?monsters=true", "?monsters=false"},
@@ -314,7 +322,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"boss_fights": {
-			ID:          14,
+			ID:          15,
 			Description: "Searches for areas that have bosses.",
 			Usage:       "?boss_fights={bool}",
 			ExampleUses: []string{"?boss_fights=true", "?boss_fights=false"},
@@ -322,7 +330,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"shops": {
-			ID:          15,
+			ID:          16,
 			Description: "Searches for areas that have shops.",
 			Usage:       "?shops={bool}",
 			ExampleUses: []string{"?shops=true", "?shops=false"},
@@ -330,7 +338,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"treasures": {
-			ID:          16,
+			ID:          17,
 			Description: "Searches for areas that have treasures.",
 			Usage:       "?treasures={bool}",
 			ExampleUses: []string{"?treasures=true", "?treasures=false"},
@@ -338,7 +346,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"sidequests": {
-			ID:          17,
+			ID:          18,
 			Description: "Searchces for areas that feature sidequests.",
 			Usage:       "?sidequests={bool}",
 			ExampleUses: []string{"?sidequests=true", "?sidequests=false"},
@@ -346,7 +354,7 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 		},
 		"fmvs": {
-			ID:          18,
+			ID:          19,
 			Description: "Searches for areas that feature fmv sequences.",
 			Usage:       "?fmvs={bool}",
 			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
@@ -397,7 +405,7 @@ func (cfg *Config) initCharactersParams() {
 	params := map[string]QueryType{
 		"story_based": {
 			ID:          1,
-			Description: "Searches for characters that are only playable during story events.",
+			Description: "Searches for characters that are only playable during certain sections of the story.",
 			Usage:       "?story_based={bool}",
 			ExampleUses: []string{"?story_based=true", "?story_based=false"},
 			ForList:     true,
@@ -615,16 +623,24 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:       false,
 			AllowedIntRange: []int{1, 4},
 		},
-		"story_based": {
+		"post_airship": {
 			ID:          18,
-			Description: "Searches for monsters that only appear during story events.",
+			Description: "Searches for monsters that only appear after acquiring the airship.",
+			Usage:       "?post_airship={bool}",
+			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"story_based": {
+			ID:          19,
+			Description: "Searches for monsters that only appear during certain sections of the story.",
 			Usage:       "?story_based={bool}",
 			ExampleUses: []string{"?story_based=true", "?story_based=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},
 		"repeatable": {
-			ID:          19,
+			ID:          20,
 			Description: "Searches for monsters that can be farmed.",
 			Usage:       "?repeatable={bool}",
 			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
@@ -632,7 +648,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"capture": {
-			ID:          20,
+			ID:          21,
 			Description: "Searches for monsters that can be captured.",
 			Usage:       "?capture={bool}",
 			ExampleUses: []string{"?capture=true", "?capture=false"},
@@ -640,7 +656,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"has_overdrive": {
-			ID:          21,
+			ID:          22,
 			Description: "Searches for monsters that have an overdrive gauge.",
 			Usage:       "?has_overdrive={bool}",
 			ExampleUses: []string{"?has_overdrive=true", "?has_overdrive=false"},
@@ -648,7 +664,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"underwater": {
-			ID:          22,
+			ID:          23,
 			Description: "Searches for monsters that are fought underwater.",
 			Usage:       "?underwater={bool}",
 			ExampleUses: []string{"?underwater=true", "?underwater=false"},
@@ -656,7 +672,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"zombie": {
-			ID:          23,
+			ID:          24,
 			Description: "Searches for monsters that are zombies.",
 			Usage:       "?zombie={bool}",
 			ExampleUses: []string{"?zombie=true", "?zombie=false"},
@@ -664,7 +680,7 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 		},
 		"species": {
-			ID:          24,
+			ID:          25,
 			Description: "Searches for monsters of the specified species.",
 			Usage:       "?species={name|id}",
 			ExampleUses: []string{"?species=wyrm", "?species=5"},
@@ -674,7 +690,7 @@ func (cfg *Config) initMonstersParams() {
 			References:  []string{createListURL(cfg, "monster-species")},
 		},
 		"creation_area": {
-			ID:          25,
+			ID:          26,
 			Description: "Searches for monsters that need to be captured in the specified area to create its area creation.",
 			Usage:       "?creation_area={name|id}",
 			ExampleUses: []string{"?creation_area=thunder-plains", "?creation_area=5"},
@@ -683,7 +699,7 @@ func (cfg *Config) initMonstersParams() {
 			TypeLookup:  cfg.t.CreationArea.lookup,
 		},
 		"type": {
-			ID:          26,
+			ID:          27,
 			Description: "Searches for monsters that are of the specified monster-type.",
 			Usage:       "?type={name|id}",
 			ExampleUses: []string{"?type=boss", "?type=2"},
@@ -709,43 +725,8 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "monsters")},
 		},
-		"location": {
-			ID:          2,
-			Description: "Searches for monster formations that appear within the specified location.",
-			Usage:       "?location={id}",
-			ExampleUses: []string{"?location=17"},
-			ForList:     true,
-			ForSingle:   false,
-			References:  []string{createListURL(cfg, "locations")},
-		},
-		"sublocation": {
-			ID:          3,
-			Description: "Searches for monster formations that appear within the specified sublocation.",
-			Usage:       "?sublocation={id}",
-			ExampleUses: []string{"?sublocation=13"},
-			ForList:     true,
-			ForSingle:   false,
-			References:  []string{createListURL(cfg, "sublocations")},
-		},
-		"area": {
-			ID:          4,
-			Description: "Searches for monster formations that appear within the specified area.",
-			Usage:       "?area={id}",
-			ExampleUses: []string{"?area=13", "?area=240"},
-			ForList:     true,
-			ForSingle:   false,
-			References:  []string{createListURL(cfg, "areas")},
-		},
-		"ambush": {
-			ID:          5,
-			Description: "Searches for monster formations that are forced ambushes.",
-			Usage:       "?ambush={bool}",
-			ExampleUses: []string{"?ambush=true", "?ambush=false"},
-			ForList:     true,
-			ForSingle:   false,
-		},
 		"category": {
-			ID:          6,
+			ID:          2,
 			Description: "Searches for monster formations with the specified monster-formation-category.",
 			Usage:       "?category={name|id}",
 			ExampleUses: []string{"?category=boss-fight", "?category=2"},
@@ -754,6 +735,66 @@ func (cfg *Config) initMonsterFormationsParams() {
 			TypeLookup:  cfg.t.MonsterFormationCategory.lookup,
 			References:  []string{createListURL(cfg, "monster-formation-category")},
 		},
+		"location": {
+			ID:          3,
+			Description: "Searches for monster formations that appear within the specified location.",
+			Usage:       "?location={id}",
+			ExampleUses: []string{"?location=17"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "locations")},
+		},
+		"sublocation": {
+			ID:          4,
+			Description: "Searches for monster formations that appear within the specified sublocation.",
+			Usage:       "?sublocation={id}",
+			ExampleUses: []string{"?sublocation=13"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "sublocations")},
+		},
+		"area": {
+			ID:          5,
+			Description: "Searches for monster formations that appear within the specified area.",
+			Usage:       "?area={id}",
+			ExampleUses: []string{"?area=13", "?area=240"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "areas")},
+		},
+		"post_airship": {
+			ID:          6,
+			Description: "Searches for monster formations that are only available after acquiring the airship.",
+			Usage:       "?post_airship={bool}",
+			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"story_based": {
+			ID:          7,
+			Description: "Searches for monster formations that are only available during certain sections of the story.",
+			Usage:       "?story_based={bool}",
+			ExampleUses: []string{"?story_based=true", "?story_based=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"repeatable": {
+			ID:          8,
+			Description: "Searches for monster formations that can be triggered more than once.",
+			Usage:       "?repeatable={bool}",
+			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"ambush": {
+			ID:          9,
+			Description: "Searches for monster formations that are forced ambushes.",
+			Usage:       "?ambush={bool}",
+			ExampleUses: []string{"?ambush=true", "?ambush=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		
 	}
 
 	params = cfg.completeQueryTypeInit(params, true)
@@ -1966,6 +2007,38 @@ func (cfg *Config) initLocationsParams() {
 	cfg.q.locations = params
 }
 
+func (cfg *Config) initSidequestsParams() {
+	params := map[string]QueryType{
+		"post_airship": {
+			ID:          1,
+			Description: "Searches for sidequests that are only completable after acquiring the airship.",
+			Usage:       "?post_airship={bool}",
+			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params, false)
+	cfg.q.sidequests = params
+}
+
+func (cfg *Config) initSubquestsParams() {
+	params := map[string]QueryType{
+		"post_airship": {
+			ID:          1,
+			Description: "Searches for subquests that are only completable after acquiring the airship.",
+			Usage:       "?post_airship={bool}",
+			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params, false)
+	cfg.q.subquests = params
+}
+
 func (cfg *Config) initShopsParams() {
 	params := map[string]QueryType{
 		"location": {
@@ -2168,11 +2241,19 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"airship": {
+		"post_airship": {
 			ID:          7,
 			Description: "Searches for treasures that are only available after acquiring the airship.",
-			Usage:       "?airship={bool}",
-			ExampleUses: []string{"?airship=true", "?airship=false"},
+			Usage:       "?post_airship={bool}",
+			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"story_based": {
+			ID:          7,
+			Description: "Searches for treasures that are only available during certain sections of the story.",
+			Usage:       "?post_airship={bool}",
+			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},

@@ -82,8 +82,8 @@ WHERE c.id = $1;
 SELECT id FROM characters ORDER BY id;
 
 
--- name: GetCharacterIDsStoryOnly :many
-SELECT id FROM characters WHERE story_only = $1 ORDER BY id;
+-- name: GetCharacterIDsStoryBased :many
+SELECT id FROM characters WHERE is_story_based = $1 ORDER BY id;
 
 
 -- name: GetCharacterIDsCanFightUnderwater :many

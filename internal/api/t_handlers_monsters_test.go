@@ -1339,6 +1339,18 @@ func TestSubsectionMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/simple?ids=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21&limit=max",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleMonsters,
+				dontCheck: map[string]bool{
+					"parent resource": true,
+				},
+			},
+			count:          21,
+			results:        []int32{1, 5, 16, 18, 21},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/90/monsters/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleAreas,

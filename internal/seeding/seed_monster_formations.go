@@ -86,6 +86,8 @@ func (ms MonsterSelection) Error() string {
 type FormationData struct {
 	ID             int32              `json:"-"`
 	Category       string             `json:"category"`
+	IsPostAirship  bool				  `json:"is_post_airship"`
+	IsStoryBased   bool				  `json:"is_story_based"`
 	IsForcedAmbush bool               `json:"is_forced_ambush"`
 	CanEscape      bool               `json:"can_escape"`
 	BossMusic      *FormationBossSong `json:"boss_music"`
@@ -99,6 +101,8 @@ func (fd FormationData) GetID() int32 {
 func (fd FormationData) ToHashFields() []any {
 	return []any{
 		fd.Category,
+		fd.IsPostAirship,
+		fd.IsStoryBased,
 		fd.IsForcedAmbush,
 		fd.CanEscape,
 		h.ObjPtrToID(fd.BossMusic),
@@ -315,6 +319,8 @@ func (l *Lookup) seedFormationData(qtx *database.Queries, formationData Formatio
 	dbFormation, err := qtx.CreateFormationData(context.Background(), database.CreateFormationDataParams{
 		DataHash:       generateDataHash(formationData),
 		Category:       database.MonsterFormationCategory(formationData.Category),
+		IsPostAirship:  formationData.IsPostAirship,
+		IsStoryBased: 	formationData.IsStoryBased,
 		IsForcedAmbush: formationData.IsForcedAmbush,
 		CanEscape:      formationData.CanEscape,
 		BossSongID:     h.ObjPtrToNullInt32ID(formationData.BossMusic),

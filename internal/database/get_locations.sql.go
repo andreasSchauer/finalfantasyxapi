@@ -322,12 +322,39 @@ func (q *Queries) GetAreaIDsChocobo(ctx context.Context, canRideChocobo bool) ([
 	return items, nil
 }
 
-const getAreaIDsStoryOnly = `-- name: GetAreaIDsStoryOnly :many
-SELECT id FROM areas WHERE story_only = $1 ORDER BY id
+const getAreaIDsPostAirship = `-- name: GetAreaIDsPostAirship :many
+SELECT id FROM areas WHERE is_post_airship = $1 ORDER BY id
 `
 
-func (q *Queries) GetAreaIDsStoryOnly(ctx context.Context, storyOnly bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsStoryOnly, storyOnly)
+func (q *Queries) GetAreaIDsPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsPostAirship, isPostAirship)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreaIDsStoryBased = `-- name: GetAreaIDsStoryBased :many
+SELECT id FROM areas WHERE is_story_based = $1 ORDER BY id
+`
+
+func (q *Queries) GetAreaIDsStoryBased(ctx context.Context, isStoryBased bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsStoryBased, isStoryBased)
 	if err != nil {
 		return nil, err
 	}
@@ -3406,6 +3433,33 @@ SELECT id FROM treasures WHERE is_post_airship = $1 ORDER BY id
 
 func (q *Queries) GetTreasureIDsByIsPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getTreasureIDsByIsPostAirship, isPostAirship)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTreasureIDsByIsStoryBased = `-- name: GetTreasureIDsByIsStoryBased :many
+SELECT id FROM treasures WHERE is_story_based = $1 ORDER BY id
+`
+
+func (q *Queries) GetTreasureIDsByIsStoryBased(ctx context.Context, isStoryBased bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDsByIsStoryBased, isStoryBased)
 	if err != nil {
 		return nil, err
 	}

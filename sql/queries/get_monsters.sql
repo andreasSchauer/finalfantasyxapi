@@ -193,6 +193,18 @@ WHERE j.ronso_rage_id = $1
 ORDER BY m.id;
 
 
+-- name: GetMonsterIDsByPostAirship :many
+SELECT DISTINCT m.id
+FROM monsters m
+JOIN monster_amounts ma ON ma.monster_id = m.id
+JOIN j_monster_selections_monsters j ON j.monster_amount_id = ma.id
+JOIN monster_selections ms ON j.monster_selection_id = ms.id
+JOIN monster_formations mf ON mf.monster_selection_id = ms.id
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+WHERE fd.is_post_airship = false
+ORDER BY m.id;
+
+
 -- name: GetMonsterIDsByDistance :many
 SELECT id FROM monsters WHERE distance = $1;
 
@@ -260,6 +272,30 @@ SELECT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
 WHERE fd.category = $1
+ORDER BY mf.id;
+
+
+-- name: GetMonsterFormationIDsByPostAirship :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+WHERE fd.is_post_airship = $1
+ORDER BY mf.id;
+
+
+-- name: GetMonsterFormationIDsByStoryBased :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+WHERE fd.is_story_based = $1
+ORDER BY mf.id;
+
+
+-- name: GetMonsterFormationIDsByRepeatable :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+WHERE fd.category = 'random-encounter' OR fd.category = 'on-demand-fight'
 ORDER BY mf.id;
 
 
