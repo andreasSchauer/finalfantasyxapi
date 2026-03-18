@@ -339,3 +339,24 @@ func ConvertNullArranger(ne database.NullArranger) *string {
 }
 
 
+func NullShopType(s *string) database.NullShopType {
+    if s == nil {
+        return database.NullShopType{}
+    }
+    
+    return database.NullShopType{
+        ShopType: database.ShopType(*s),
+        Valid: true,
+    }
+}
+
+func ConvertNullShopType(ne database.NullShopType) *string {
+    if !ne.Valid {
+        return nil
+    }
+
+    val := string(ne.ShopType)
+    return &val
+}
+
+

@@ -119,7 +119,7 @@ func (q *Queries) GetBlitzballPrizeIDsByCategory(ctx context.Context, category B
 }
 
 const getParentSidequest = `-- name: GetParentSidequest :one
-SELECT q.id, q.data_hash, q.name, q.type
+SELECT q.id, q.data_hash, q.name, q.type, q.is_post_airship
 FROM subquests su
 LEFT JOIN sidequests si ON su.sidequest_id = si.id
 LEFT JOIN quests q ON si.quest_id = q.id
@@ -127,10 +127,11 @@ WHERE su.id = $1
 `
 
 type GetParentSidequestRow struct {
-	ID       sql.NullInt32
-	DataHash sql.NullString
-	Name     sql.NullString
-	Type     NullQuestType
+	ID            sql.NullInt32
+	DataHash      sql.NullString
+	Name          sql.NullString
+	Type          NullQuestType
+	IsPostAirship sql.NullBool
 }
 
 func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSidequestRow, error) {
@@ -141,6 +142,7 @@ func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSi
 		&i.DataHash,
 		&i.Name,
 		&i.Type,
+		&i.IsPostAirship,
 	)
 	return i, err
 }
@@ -173,15 +175,11 @@ func (q *Queries) GetSidequestIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getSidequestIDsByPostAirship = `-- name: GetSidequestIDsByPostAirship :many
-SELECT DISTINCT si.id
-FROM sidequests si
-JOIN quests qsi ON si.quest_id = qsi.id
-JOIN quest_completions qcsi ON qcsi.quest_id = qsi.id
-JOIN subquests su ON su.sidequest_id = si.id
-JOIN quests qsu ON su.quest_id = qsu.id
-JOIN quest_completions qcsu ON qcsu.quest_id = qsu.id
-WHERE qcsi.is_post_airship = $1 OR qcsu.is_post_airship = $1
-ORDER BY si.id
+SELECT DISTINCT s.id
+FROM sidequests s
+JOIN quests q ON s.quest_id = q.id
+WHERE q.is_post_airship = $1
+ORDER BY s.id
 `
 
 func (q *Queries) GetSidequestIDsByPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
@@ -265,13 +263,12 @@ const getSubquestIDsByPostAirship = `-- name: GetSubquestIDsByPostAirship :many
 SELECT DISTINCT s.id
 FROM subquests s
 JOIN quests q ON s.quest_id = q.id
-JOIN quest_completions qc ON qc.quest_id = q.id
-WHERE qc.is_post_airship = true
+WHERE q.is_post_airship = $1
 ORDER BY s.id
 `
 
-func (q *Queries) GetSubquestIDsByPostAirship(ctx context.Context) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSubquestIDsByPostAirship)
+func (q *Queries) GetSubquestIDsByPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSubquestIDsByPostAirship, isPostAirship)
 	if err != nil {
 		return nil, err
 	}

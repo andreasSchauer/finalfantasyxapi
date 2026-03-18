@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 )
 
 const getAreaAeonIDs = `-- name: GetAreaAeonIDs :many
@@ -2211,20 +2212,12 @@ func (q *Queries) GetShopIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getShopIDsByAutoAbility = `-- name: GetShopIDsByAutoAbility :many
-SELECT DISTINCT sh.id
-FROM shops sh
-JOIN j_shops_equipment j1 ON j1.shop_id = sh.id
-JOIN shop_equipment_pieces ep ON j1.shop_equipment_id = ep.id
-JOIN found_equipment_pieces fe ON ep.found_equipment_id = fe.id
-JOIN j_found_equipment_abilities j2 ON j2.found_equipment_id = fe.id
-JOIN auto_abilities aa ON j2.auto_ability_id = aa.id
-WHERE aa.id = $1
-ORDER BY sh.id
+const getShopIDsByCategory = `-- name: GetShopIDsByCategory :many
+SELECT id FROM shops WHERE category = $1 ORDER BY id
 `
 
-func (q *Queries) GetShopIDsByAutoAbility(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsByAutoAbility, id)
+func (q *Queries) GetShopIDsByCategory(ctx context.Context, category ShopCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsByCategory, category)
 	if err != nil {
 		return nil, err
 	}
@@ -2246,12 +2239,80 @@ func (q *Queries) GetShopIDsByAutoAbility(ctx context.Context, id int32) ([]int3
 	return items, nil
 }
 
-const getShopIDsByCategory = `-- name: GetShopIDsByCategory :many
-SELECT id FROM shops WHERE category = $1 ORDER BY id
+const getShopIDsByEmptySlots = `-- name: GetShopIDsByEmptySlots :many
+SELECT DISTINCT sh.id
+FROM shops sh
+JOIN j_shops_equipment j ON j.shop_id = sh.id
+JOIN shop_equipment_pieces se ON j.shop_equipment_id = se.id
+LEFT JOIN equipment_names en ON se.equipment_name_id = en.id
+LEFT JOIN characters c ON en.character_id = c.id
+WHERE
+  ($1::shop_type IS NULL OR j.shop_type = $1::shop_type)
+  AND ($2::int IS NULL OR c.id = $2::int)
+  AND ($3::int IS NULL OR se.empty_slots_amount = $3::int)
+ORDER BY sh.id
 `
 
-func (q *Queries) GetShopIDsByCategory(ctx context.Context, category ShopCategory) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsByCategory, category)
+type GetShopIDsByEmptySlotsParams struct {
+	ShopType    NullShopType
+	CharacterID sql.NullInt32
+	EmptySlots  sql.NullInt32
+}
+
+func (q *Queries) GetShopIDsByEmptySlots(ctx context.Context, arg GetShopIDsByEmptySlotsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsByEmptySlots, arg.ShopType, arg.CharacterID, arg.EmptySlots)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getShopIDsEquipmentFilter = `-- name: GetShopIDsEquipmentFilter :many
+SELECT DISTINCT sh.id
+FROM shops sh
+JOIN j_shops_equipment j1 ON j1.shop_id = sh.id
+JOIN shop_equipment_pieces se ON j1.shop_equipment_id = se.id
+LEFT JOIN j_shop_equipment_abilities j2 ON j2.shop_equipment_id = se.id
+LEFT JOIN auto_abilities aa ON j2.auto_ability_id = aa.id
+LEFT JOIN equipment_names en ON se.equipment_name_id = en.id
+LEFT JOIN characters c ON en.character_id = c.id
+WHERE
+  ($1::shop_type IS NULL OR j1.shop_type = $1::shop_type)
+  AND ($2::int IS NULL OR aa.id = $2::int)
+  AND ($3::int IS NULL OR c.id = $3::int)
+  AND ($4::int IS NULL OR se.empty_slots_amount = $4::int)
+ORDER BY sh.id
+`
+
+type GetShopIDsEquipmentFilterParams struct {
+	ShopType      NullShopType
+	AutoAbilityID sql.NullInt32
+	CharacterID   sql.NullInt32
+	EmptySlots    sql.NullInt32
+}
+
+func (q *Queries) GetShopIDsEquipmentFilter(ctx context.Context, arg GetShopIDsEquipmentFilterParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsEquipmentFilter,
+		arg.ShopType,
+		arg.AutoAbilityID,
+		arg.CharacterID,
+		arg.EmptySlots,
+	)
 	if err != nil {
 		return nil, err
 	}

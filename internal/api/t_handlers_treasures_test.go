@@ -180,7 +180,7 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?airship=true&limit=max",
+				requestURL:     "/api/treasures?post_airship=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
 			count:   69,

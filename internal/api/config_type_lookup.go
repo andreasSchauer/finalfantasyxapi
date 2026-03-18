@@ -24,7 +24,7 @@ type TypeLookup struct {
 	OverdriveModeType           EnumType[database.OverdriveModeType, any]
 	PlayerAbilityCategory       EnumType[database.PlayerAbilityCategory, any]
 	ShopCategory                EnumType[database.ShopCategory, any]
-	ShopType                    EnumType[database.ShopType, any]
+	ShopType                    EnumType[database.ShopType, database.NullShopType]
 	TreasureType                EnumType[database.TreasureType, any]
 
 	AccSourceType     EnumType[database.AccSourceType, any]
@@ -668,9 +668,9 @@ func (t *TypeLookup) initShopType() {
 		},
 	}
 
-	t.ShopType = newEnumType[database.ShopType, any]("shop type", false, typeSlice, func(s string) database.ShopType {
+	t.ShopType = newEnumType("shop type", false, typeSlice, func(s string) database.ShopType {
 		return database.ShopType(s)
-	}, nil)
+	}, h.NullShopType)
 }
 
 func (t *TypeLookup) initTreasureType() {

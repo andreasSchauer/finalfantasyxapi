@@ -245,8 +245,8 @@ func TestRetrieveShops(t *testing.T) {
 				requestURL:     "/api/shops?auto_ability=103",
 				expectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{5, 6, 9, 12},
+			count:   3,
+			results: []int32{5, 6, 9},
 		},
 		{
 			testGeneral: testGeneral{

@@ -15,15 +15,11 @@ SELECT id FROM sidequests ORDER BY id;
 
 
 -- name: GetSidequestIDsByPostAirship :many
-SELECT DISTINCT si.id
-FROM sidequests si
-JOIN quests qsi ON si.quest_id = qsi.id
-JOIN quest_completions qcsi ON qcsi.quest_id = qsi.id
-JOIN subquests su ON su.sidequest_id = si.id
-JOIN quests qsu ON su.quest_id = qsu.id
-JOIN quest_completions qcsu ON qcsu.quest_id = qsu.id
-WHERE qcsi.is_post_airship = $1 OR qcsu.is_post_airship = $1
-ORDER BY si.id;
+SELECT DISTINCT s.id
+FROM sidequests s
+JOIN quests q ON s.quest_id = q.id
+WHERE q.is_post_airship = $1
+ORDER BY s.id;
 
 
 -- name: GetSubquestIDs :many
@@ -34,8 +30,7 @@ SELECT id FROM subquests ORDER BY id;
 SELECT DISTINCT s.id
 FROM subquests s
 JOIN quests q ON s.quest_id = q.id
-JOIN quest_completions qc ON qc.quest_id = q.id
-WHERE qc.is_post_airship = true
+WHERE q.is_post_airship = $1
 ORDER BY s.id;
 
 

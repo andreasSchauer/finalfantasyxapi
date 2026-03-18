@@ -21,21 +21,15 @@ func frl[T HasAPIResource](res []T, err error) filteredResList[T] {
 	}
 }
 
-// a query filter that can't really be generalized. this one simply checks, if it's empty and converts the ids to apiResources at the end.
-func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, string, QueryType) ([]int32, error)) ([]A, error) {
+// a query filter that can't really be generalized. this one simply checks, if it's empty and then calls the wrapperFn
+func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, string, QueryType) ([]A, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return inputRes, nil
 	}
 
-	dbIDs, err := wrapperFn(cfg, r, query, queryParam)
-	if err != nil {
-		return nil, err
-	}
-
-	resources := idsToAPIResources(cfg, i, dbIDs)
-	return resources, nil
+	return wrapperFn(cfg, r, query, queryParam)
 }
 
 // query uses an id of another resource type to filter resources
@@ -303,6 +297,30 @@ func typeQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N a
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
+	return resources, nil
+}
+
+// query uses an integer value as input.
+func intQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+	integer, err := parseIntQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := wrapperFn(cfg, r, int32(integer))
+	if errors.Is(err, errQueryUsedElsewhere) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
 	return resources, nil
 }
 

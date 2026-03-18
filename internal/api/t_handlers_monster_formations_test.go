@@ -182,8 +182,8 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 				requestURL:     "/api/monster-formations?category=boss-fight&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   63,
-			results: []int32{3, 36, 83, 137, 189, 204, 245, 272, 296},
+			count:   54,
+			results: []int32{3, 37, 83, 137, 189, 204, 245, 270, 296},
 		},
 	}
 

@@ -10,13 +10,12 @@ var errNotAnID = errors.New("not an id.")
 var errIdNotFound = errors.New("id doesn't exit.")
 var errNoResource = errors.New("no resources found.")
 var errEmptyQuery = errors.New("query parameter is empty.")
+var errQueryUsedElsewhere = errors.New("query parameter is not empty, but will be dealt with else where.")
 var errNoDefaultVal = errors.New("query parameter doesn't have a default value, or default value is unused.")
 var errNoSpecialInput = errors.New("query parameter doesn't have special inputs, or no special input was found.")
 var errNoIntRange = errors.New("query parameter doesn't have integer range.")
 var errCorrect = errors.New("test got the expected error.")
 var errIgnoredField = errors.New("this field of the test struct is ignored")
-
-
 
 type httpError struct {
 	code int

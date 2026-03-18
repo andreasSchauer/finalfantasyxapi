@@ -11,43 +11,28 @@ import (
 func getLocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.locations
 	resourceType := cfg.e.items.resourceType
-	queryParam := i.queryLookup["method"]
-	query := r.URL.Query().Get(queryParam.Name)
+	queryParamMethod := i.queryLookup["method"]
+	queryMethod := r.URL.Query().Get(queryParamMethod.Name)
 
-	var resources []NamedAPIResource
-	var err error
-
-	switch query {
+	switch queryMethod {
 	case "":
-		resources, err = getLocationsByItemAllMethods(cfg, r, i, id, resourceType)
-		if err != nil {
-			return nil, err
-		}
+		return getLocationsByItemAllMethods(cfg, r, i, id, resourceType)
+		
 	case "monster":
-		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetLocationIDsWithItemFromMonster)
-		if err != nil {
-			return nil, err
-		}
+		return getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetLocationIDsWithItemFromMonster)
+		
 	case "treasure":
-		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetLocationIDsWithItemFromTreasure)
-		if err != nil {
-			return nil, err
-		}
+		return getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetLocationIDsWithItemFromTreasure)
+		
 	case "shop":
-		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetLocationIDsWithItemFromShop)
-		if err != nil {
-			return nil, err
-		}
+		return getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetLocationIDsWithItemFromShop)
+		
 	case "quest":
-		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetLocationIDsWithItemFromQuest)
-		if err != nil {
-			return nil, err
-		}
+		return getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetLocationIDsWithItemFromQuest)
+		
 	default:
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for 'method'. allowed values: %s.", query, h.FormatStringSlice(queryParam.AllowedValues)), err)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for 'method'. allowed values: %s.", queryMethod, h.FormatStringSlice(queryParamMethod.AllowedValues)), nil)
 	}
-
-	return resources, nil
 }
 
 func getLocationsByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList], id int32, resourceType string) ([]NamedAPIResource, error) {

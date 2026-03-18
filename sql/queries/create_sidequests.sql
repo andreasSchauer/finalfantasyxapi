@@ -12,8 +12,8 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateQuest :one
-INSERT INTO quests (data_hash, name, type)
-VALUES ($1, $2, $3)
+INSERT INTO quests (data_hash, name, type, is_post_airship)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quests.data_hash
 RETURNING *;
 
@@ -33,8 +33,8 @@ RETURNING *;
 
 
 -- name: CreateQuestCompletion :one
-INSERT INTO quest_completions (data_hash, quest_id, condition, is_post_airship,item_amount_id)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO quest_completions (data_hash, quest_id, condition,item_amount_id)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
 RETURNING *;
 

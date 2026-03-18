@@ -97,7 +97,8 @@ type ShopEquipment struct {
 
 func (s ShopEquipment) ToHashFields() []any {
 	return []any{
-		s.FoundEquipment.ID,
+		s.EquipmentNameID,
+		s.EmptySlotsAmount,
 		s.Price,
 	}
 }
@@ -297,14 +298,15 @@ func (l *Lookup) seedShopEquipmentPieces(qtx *database.Queries, shop Shop, subSh
 func (l *Lookup) seedShopEquipment(qtx *database.Queries, shopEquipment ShopEquipment) (ShopEquipment, error) {
 	var err error
 
-	shopEquipment.FoundEquipment, err = seedObjAssignID(qtx, shopEquipment.FoundEquipment, l.seedFoundEquipment)
+	shopEquipment.EquipmentNameID, err = assignFK(shopEquipment.Name, l.EquipmentNames)
 	if err != nil {
 		return ShopEquipment{}, h.NewErr(shopEquipment.Error(), err)
 	}
 
 	dbShopEquipment, err := qtx.CreateShopEquipmentPiece(context.Background(), database.CreateShopEquipmentPieceParams{
 		DataHash:         generateDataHash(shopEquipment),
-		FoundEquipmentID: shopEquipment.FoundEquipment.ID,
+		EquipmentNameID:  shopEquipment.EquipmentNameID,
+		EmptySlotsAmount: shopEquipment.EmptySlotsAmount,
 		Price:            shopEquipment.Price,
 	})
 	if err != nil {
@@ -313,5 +315,30 @@ func (l *Lookup) seedShopEquipment(qtx *database.Queries, shopEquipment ShopEqui
 
 	shopEquipment.ID = dbShopEquipment.ID
 
+	err = l.seedShopEquipmentAbilities(qtx, shopEquipment)
+	if err != nil {
+		return ShopEquipment{}, h.NewErr(shopEquipment.Error(), err)
+	}
+
 	return shopEquipment, nil
+}
+
+func (l *Lookup) seedShopEquipmentAbilities(qtx *database.Queries, shopEquipment ShopEquipment) error {
+	for _, autoAbility := range shopEquipment.Abilities {
+		junction, err := createJunction(shopEquipment, autoAbility, l.AutoAbilities)
+		if err != nil {
+			return h.NewErr(autoAbility, err)
+		}
+
+		err = qtx.CreateShopEquipmentAbilitiesJunction(context.Background(), database.CreateShopEquipmentAbilitiesJunctionParams{
+			DataHash:         generateDataHash(junction),
+			ShopEquipmentID: junction.ParentID,
+			AutoAbilityID:    junction.ChildID,
+		})
+		if err != nil {
+			return h.NewErr(autoAbility, err, "couldn't junction auto-ability")
+		}
+	}
+
+	return nil
 }

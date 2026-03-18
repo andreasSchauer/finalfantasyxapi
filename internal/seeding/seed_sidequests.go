@@ -70,7 +70,6 @@ type QuestCompletion struct {
 	ID        		int32
 	QuestID   		int32
 	Condition 		string           	`json:"condition"`
-	IsPostAirship	bool				`json:"is_post_airship"`
 	Areas     		[]CompletionArea 	`json:"areas"`
 	Reward    		ItemAmount       	`json:"reward"`
 }
@@ -79,7 +78,6 @@ func (qc QuestCompletion) ToHashFields() []any {
 	return []any{
 		qc.QuestID,
 		qc.Condition,
-		qc.IsPostAirship,
 		qc.Reward.ID,
 	}
 }
@@ -258,7 +256,6 @@ func (l *Lookup) seedQuestCompletion(qtx *database.Queries, completion QuestComp
 	dbCompletion, err := qtx.CreateQuestCompletion(context.Background(), database.CreateQuestCompletionParams{
 		DataHash:     generateDataHash(completion),
 		QuestID:      	completion.QuestID,
-		IsPostAirship: 	completion.IsPostAirship,
 		Condition:    	completion.Condition,
 		ItemAmountID: 	completion.Reward.ID,
 	})

@@ -981,7 +981,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 				expectedStatus: http.StatusMultipleChoices,
 			},
 			count:   3,
-			results: []int32{165, 222, 234},
+			results: []int32{165, 222, 235},
 		},
 		{
 			testGeneral: testGeneral{

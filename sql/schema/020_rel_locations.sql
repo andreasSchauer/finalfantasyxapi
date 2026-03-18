@@ -56,8 +56,17 @@ CREATE TABLE shop_items (
 CREATE TABLE shop_equipment_pieces (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    found_equipment_id INTEGER NOT NULL REFERENCES found_equipment_pieces(id),
+    equipment_name_id INTEGER NOT NULL REFERENCES equipment_names(id),
+    empty_slots_amount equipment_slots NOT NULL,
     price INTEGER NOT NULL
+);
+
+
+CREATE TABLE j_shop_equipment_abilities (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    shop_equipment_id INTEGER NOT NULL REFERENCES shop_equipment_pieces(id),
+    auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id)
 );
 
 
@@ -90,6 +99,7 @@ DROP COLUMN IF EXISTS found_equipment_id;
 
 DROP TABLE IF EXISTS j_shops_equipment;
 DROP TABLE IF EXISTS j_shops_items;
+DROP TABLE IF EXISTS j_shop_equipment_abilities;
 DROP TABLE IF EXISTS shop_equipment_pieces;
 DROP TABLE IF EXISTS shop_items;
 DROP TABLE IF EXISTS j_treasures_items;

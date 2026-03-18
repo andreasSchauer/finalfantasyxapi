@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryParam QueryType) ([]int32, error) {
+func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryParam QueryType) ([]NamedAPIResource, error) {
 	ids, err := getElemResistIDs(cfg, query, queryParam)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,9 @@ func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryP
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by elemental affinities.", err)
 	}
 
-	return dbIDs, nil
+	resources := idsToAPIResources(cfg, cfg.e.monsters, dbIDs)
+
+	return resources, nil
 }
 
 func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32, error) {
@@ -104,7 +106,7 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAP
 		return getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByAutoAbility)
 	}
 
-	dbIds, err := cfg.db.GetMonsterIDsByAutoAbilityIsForced(r.Context(), database.GetMonsterIDsByAutoAbilityIsForcedParams{
+	dbIDs, err := cfg.db.GetMonsterIDsByAutoAbilityIsForced(r.Context(), database.GetMonsterIDsByAutoAbilityIsForcedParams{
 		ID:       id,
 		IsForced: query,
 	})
@@ -112,7 +114,7 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAP
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by auto-ability id '%d'.", i.resourceType, id), err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIds)
+	resources := idsToAPIResources(cfg, i, dbIDs)
 	return resources, nil
 }
 

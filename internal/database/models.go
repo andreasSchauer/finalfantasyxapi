@@ -3495,6 +3495,13 @@ type JPropertiesStatChange struct {
 	StatChangeID int32
 }
 
+type JShopEquipmentAbility struct {
+	ID              int32
+	DataHash        string
+	ShopEquipmentID int32
+	AutoAbilityID   int32
+}
+
 type JShopsEquipment struct {
 	ID              int32
 	DataHash        string
@@ -3843,19 +3850,19 @@ type Property struct {
 }
 
 type Quest struct {
-	ID       int32
-	DataHash string
-	Name     string
-	Type     QuestType
+	ID            int32
+	DataHash      string
+	Name          string
+	Type          QuestType
+	IsPostAirship bool
 }
 
 type QuestCompletion struct {
-	ID            int32
-	DataHash      string
-	QuestID       int32
-	Condition     string
-	IsPostAirship bool
-	ItemAmountID  int32
+	ID           int32
+	DataHash     string
+	QuestID      int32
+	Condition    string
+	ItemAmountID int32
 }
 
 type RonsoRage struct {
@@ -3876,7 +3883,8 @@ type Shop struct {
 type ShopEquipmentPiece struct {
 	ID               int32
 	DataHash         string
-	FoundEquipmentID int32
+	EquipmentNameID  int32
+	EmptySlotsAmount interface{}
 	Price            int32
 }
 

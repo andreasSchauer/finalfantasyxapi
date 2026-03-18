@@ -66,6 +66,12 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
+-- name: CreateShopEquipmentAbilitiesJunction :exec
+INSERT INTO j_shop_equipment_abilities (data_hash, shop_equipment_id, auto_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
 -- name: CreateTreasuresItemsJunction :exec
 INSERT INTO j_treasures_items (data_hash, treasure_id, item_amount_id)
 VALUES ($1, $2, $3)
@@ -80,8 +86,8 @@ RETURNING *;
 
 
 -- name: CreateShopEquipmentPiece :one
-INSERT INTO shop_equipment_pieces (data_hash, found_equipment_id, price)
-VALUES ($1, $2, $3)
+INSERT INTO shop_equipment_pieces (data_hash, equipment_name_id, empty_slots_amount, price)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = shop_equipment_pieces.data_hash
 RETURNING *;
 

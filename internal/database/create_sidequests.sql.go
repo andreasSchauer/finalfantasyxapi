@@ -121,43 +121,49 @@ func (q *Queries) CreateMonsterArenaCreation(ctx context.Context, arg CreateMons
 }
 
 const createQuest = `-- name: CreateQuest :one
-INSERT INTO quests (data_hash, name, type)
-VALUES ($1, $2, $3)
+INSERT INTO quests (data_hash, name, type, is_post_airship)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quests.data_hash
-RETURNING id, data_hash, name, type
+RETURNING id, data_hash, name, type, is_post_airship
 `
 
 type CreateQuestParams struct {
-	DataHash string
-	Name     string
-	Type     QuestType
+	DataHash      string
+	Name          string
+	Type          QuestType
+	IsPostAirship bool
 }
 
 func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest, error) {
-	row := q.db.QueryRowContext(ctx, createQuest, arg.DataHash, arg.Name, arg.Type)
+	row := q.db.QueryRowContext(ctx, createQuest,
+		arg.DataHash,
+		arg.Name,
+		arg.Type,
+		arg.IsPostAirship,
+	)
 	var i Quest
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
 		&i.Name,
 		&i.Type,
+		&i.IsPostAirship,
 	)
 	return i, err
 }
 
 const createQuestCompletion = `-- name: CreateQuestCompletion :one
-INSERT INTO quest_completions (data_hash, quest_id, condition, is_post_airship,item_amount_id)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO quest_completions (data_hash, quest_id, condition,item_amount_id)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
-RETURNING id, data_hash, quest_id, condition, is_post_airship, item_amount_id
+RETURNING id, data_hash, quest_id, condition, item_amount_id
 `
 
 type CreateQuestCompletionParams struct {
-	DataHash      string
-	QuestID       int32
-	Condition     string
-	IsPostAirship bool
-	ItemAmountID  int32
+	DataHash     string
+	QuestID      int32
+	Condition    string
+	ItemAmountID int32
 }
 
 func (q *Queries) CreateQuestCompletion(ctx context.Context, arg CreateQuestCompletionParams) (QuestCompletion, error) {
@@ -165,7 +171,6 @@ func (q *Queries) CreateQuestCompletion(ctx context.Context, arg CreateQuestComp
 		arg.DataHash,
 		arg.QuestID,
 		arg.Condition,
-		arg.IsPostAirship,
 		arg.ItemAmountID,
 	)
 	var i QuestCompletion
@@ -174,7 +179,6 @@ func (q *Queries) CreateQuestCompletion(ctx context.Context, arg CreateQuestComp
 		&i.DataHash,
 		&i.QuestID,
 		&i.Condition,
-		&i.IsPostAirship,
 		&i.ItemAmountID,
 	)
 	return i, err

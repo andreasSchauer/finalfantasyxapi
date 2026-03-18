@@ -18,10 +18,11 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 	}
 
 	response := Sidequest{
-		ID:         sidequest.ID,
-		Name:       sidequest.Name,
-		Completion: convertObjPtr(cfg, sidequest.Completion, convertQuestCompletion),
-		Subquests:  subquests,
+		ID:         	sidequest.ID,
+		Name:       	sidequest.Name,
+		IsPostAirship: 	sidequest.IsPostAirship,
+		Completion: 	convertObjPtr(cfg, sidequest.Completion, convertQuestCompletion),
+		Subquests:  	subquests,
 	}
 
 	return response, nil

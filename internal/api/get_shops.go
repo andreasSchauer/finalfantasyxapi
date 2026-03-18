@@ -31,9 +31,10 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
+		frl(intQueryWrapper(cfg, r, i, resources, "empty_slots", getShopsByEmptySlots)),
+		frl(idQueryWrapper(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), getShopsByAutoAbility)),
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationShopIDs)),
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationShopIDs)),
-		frl(idQuery(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), cfg.db.GetShopIDsByAutoAbility)),
 		frl(boolQuery2(cfg, r, i, resources, "items", cfg.db.GetShopIDsWithItems)),
 		frl(boolQuery2(cfg, r, i, resources, "equipment", cfg.db.GetShopIDsWithEquipment)),
 		frl(boolQuery2(cfg, r, i, resources, "pre_airship", cfg.db.GetShopIDsPreAirship)),
@@ -41,3 +42,4 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 		frl(typeQuery(cfg, r, i, cfg.t.ShopCategory, resources, "category", cfg.db.GetShopIDsByCategory)),
 	})
 }
+

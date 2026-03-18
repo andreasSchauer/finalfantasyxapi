@@ -211,26 +211,50 @@ func (q *Queries) CreateShop(ctx context.Context, arg CreateShopParams) (Shop, e
 	return i, err
 }
 
-const createShopEquipmentPiece = `-- name: CreateShopEquipmentPiece :one
-INSERT INTO shop_equipment_pieces (data_hash, found_equipment_id, price)
+const createShopEquipmentAbilitiesJunction = `-- name: CreateShopEquipmentAbilitiesJunction :exec
+INSERT INTO j_shop_equipment_abilities (data_hash, shop_equipment_id, auto_ability_id)
 VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateShopEquipmentAbilitiesJunctionParams struct {
+	DataHash        string
+	ShopEquipmentID int32
+	AutoAbilityID   int32
+}
+
+func (q *Queries) CreateShopEquipmentAbilitiesJunction(ctx context.Context, arg CreateShopEquipmentAbilitiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createShopEquipmentAbilitiesJunction, arg.DataHash, arg.ShopEquipmentID, arg.AutoAbilityID)
+	return err
+}
+
+const createShopEquipmentPiece = `-- name: CreateShopEquipmentPiece :one
+INSERT INTO shop_equipment_pieces (data_hash, equipment_name_id, empty_slots_amount, price)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = shop_equipment_pieces.data_hash
-RETURNING id, data_hash, found_equipment_id, price
+RETURNING id, data_hash, equipment_name_id, empty_slots_amount, price
 `
 
 type CreateShopEquipmentPieceParams struct {
 	DataHash         string
-	FoundEquipmentID int32
+	EquipmentNameID  int32
+	EmptySlotsAmount interface{}
 	Price            int32
 }
 
 func (q *Queries) CreateShopEquipmentPiece(ctx context.Context, arg CreateShopEquipmentPieceParams) (ShopEquipmentPiece, error) {
-	row := q.db.QueryRowContext(ctx, createShopEquipmentPiece, arg.DataHash, arg.FoundEquipmentID, arg.Price)
+	row := q.db.QueryRowContext(ctx, createShopEquipmentPiece,
+		arg.DataHash,
+		arg.EquipmentNameID,
+		arg.EmptySlotsAmount,
+		arg.Price,
+	)
 	var i ShopEquipmentPiece
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
-		&i.FoundEquipmentID,
+		&i.EquipmentNameID,
+		&i.EmptySlotsAmount,
 		&i.Price,
 	)
 	return i, err

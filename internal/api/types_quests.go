@@ -4,16 +4,18 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
 
 type Sidequest struct {
-	ID         int32              `json:"id"`
-	Name       string             `json:"name"`
-	Completion *QuestCompletion   `json:"completion"`
-	Subquests  []NamedAPIResource `json:"subquests"`
+	ID         		int32              	`json:"id"`
+	Name       		string             	`json:"name"`
+	IsPostAirship	bool				`json:"is_post_airship"`
+	Completion 		*QuestCompletion   	`json:"completion"`
+	Subquests  		[]NamedAPIResource 	`json:"subquests"`
 }
 
 
 type Subquest struct {
 	ID              int32             	`json:"id"`
 	Name            string            	`json:"name"`
+	IsPostAirship	bool				`json:"is_post_airship"`
 	ParentSidequest NamedAPIResource  	`json:"parent_sidequest"`
 	Completions     []QuestCompletion 	`json:"completions"`
 	ArenaCreation	*NamedAPIResource	`json:"arena_creation,omitempty"`
@@ -31,7 +33,6 @@ type QuestCompletion struct {
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
 		Condition: 		qc.Condition,
-		IsPostAirship: 	qc.IsPostAirship,
 		Areas:  		convertObjSlice(cfg, qc.Areas, convertCompletionArea),
 		Reward: 		convertItemAmount(cfg, qc.Reward),
 	}

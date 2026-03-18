@@ -13,10 +13,11 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 	}
 
 	response := Subquest{
-		ID:              subquest.ID,
-		Name:            subquest.Name,
-		ParentSidequest: idToNamedAPIResource(cfg, cfg.e.sidequests, subquest.SidequestID),
-		Completions:     convertObjSlice(cfg, subquest.Completions, convertQuestCompletion),
+		ID:              	subquest.ID,
+		Name:            	subquest.Name,
+		ParentSidequest: 	idToNamedAPIResource(cfg, cfg.e.sidequests, subquest.SidequestID),
+		IsPostAirship: 		subquest.IsPostAirship,
+		Completions:     	convertObjSlice(cfg, subquest.Completions, convertQuestCompletion),
 	}
 
 	if response.ParentSidequest.Name == "monster arena" {
@@ -33,6 +34,6 @@ func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Sub
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(boolQuery2(cfg, r, i, resources, "post_airship", cfg.db.GetSubquestIDsByPostAirship)),
+		frl(boolQuery(cfg, r, i, resources, "post_airship", cfg.db.GetSubquestIDsByPostAirship)),
 	})
 }

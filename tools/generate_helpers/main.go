@@ -24,9 +24,10 @@ func main() {
         "BreakDmgLmtType",
         "Composer",
         "Arranger",
+        "ShopType",
     }
 
-    filePath := "./internal/helpers/null_enums.go"
+    filePath := "./internal/helpers/conv_null_enum.go"
     
     var output strings.Builder
     output.WriteString("package helpers\n\nimport \"github.com/andreasSchauer/finalfantasyxapi/internal/database\"\n\n\n")

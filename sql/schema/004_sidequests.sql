@@ -22,6 +22,7 @@ CREATE TABLE quests (
     data_hash TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     type quest_type NOT NULL,
+    is_post_airship BOOLEAN NOT NULL,
     UNIQUE(name, type)
 );
 

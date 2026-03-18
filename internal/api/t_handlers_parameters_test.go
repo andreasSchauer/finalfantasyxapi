@@ -14,7 +14,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.areas.endpoint,
 				handler:        testCfg.HandleAreas,
 			},
-			count:   21,
+			count:   22,
 			results: []string{"limit", "offset", "item", "save_sphere", "sublocation", "ids"},
 		},
 		{
@@ -75,7 +75,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsters.endpoint,
 				handler:        testCfg.HandleMonsters,
 			},
-			count:   29,
+			count:   30,
 			results: []string{"kimahri_stats", "aeon_stats", "altered_state", "omnis_elements", "status_resists", "auto_ability", "area", "distance", "underwater", "species", "ids"},
 		},
 		{
@@ -85,7 +85,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsterFormations.endpoint,
 				handler:        testCfg.HandleMonsterFormations,
 			},
-			count:   9,
+			count:   12,
 			results: []string{"monster", "location", "ambush", "category", "ids"},
 		},
 		{
@@ -105,7 +105,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.shops.endpoint,
 				handler:        testCfg.HandleShops,
 			},
-			count:   11,
+			count:   14,
 			results: []string{"location", "auto_ability", "items", "equipment", "pre_airship", "ids"},
 		},
 		{
@@ -125,8 +125,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.sidequests.endpoint,
 				handler:        testCfg.HandleSidequests,
 			},
-			count:   2,
-			results: []string{"limit", "offset"},
+			count:   3,
+			results: []string{"limit", "offset", "post_airship"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -135,8 +135,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.subquests.endpoint,
 				handler:        testCfg.HandleSubquests,
 			},
-			count:   2,
-			results: []string{"limit", "offset"},
+			count:   3,
+			results: []string{"limit", "offset", "post_airship"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -145,8 +145,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.treasures.endpoint,
 				handler:        testCfg.HandleTreasures,
 			},
-			count:   9,
-			results: []string{"sublocation", "loot_type", "treasure_type", "anima", "airship"},
+			count:   10,
+			results: []string{"sublocation", "loot_type", "treasure_type", "anima", "post_airship"},
 		},
 	}
 

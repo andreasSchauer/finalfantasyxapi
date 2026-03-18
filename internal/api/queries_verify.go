@@ -148,10 +148,10 @@ func verifyRequiredParams(q url.Values, queryParam QueryType) error {
 	for _, reqParam := range queryParam.RequiredParams {
 		reqParamVal := q.Get(reqParam)
 
-		if reqParamVal == "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in combination with parameter(s): %s.", queryParam.Name, queryParam.Name, h.FormatStringSlice(queryParam.RequiredParams)), nil)
+		if reqParamVal != "" {
+			return nil
 		}
 	}
 
-	return nil
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in combination with parameter(s): %s.", queryParam.Name, queryParam.Name, h.FormatStringSlice(queryParam.RequiredParams)), nil)
 }
