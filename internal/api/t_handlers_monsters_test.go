@@ -1073,14 +1073,14 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?resistance=50",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'resistance'. parameter 'resistance' can only be used in combination with parameter(s): 'status_resists'.",
+				expectedErr:    "invalid usage of parameter 'resistance'. when using parameter 'resistance', the following parameter(s) must be present: 'status_resists'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?method=steal",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'method'. parameter 'method' can only be used in combination with parameter(s): 'item'.",
+				expectedErr:    "invalid usage of parameter 'method'. when using parameter 'method', the following parameter(s) must be present: 'item'.",
 			},
 		},
 		{

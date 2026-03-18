@@ -14,6 +14,7 @@ type Item struct {
 	AvailableMenus		[]NamedAPIResource		`json:"available_menus"`
 	RelatedStats       	[]NamedAPIResource		`json:"related_stats"`
 	Monsters			[]NamedAPIResource		`json:"monsters"`
+	Areas				[]AreaAPIResource		`json:"areas"` // not sure yet
 	Treasures			[]UnnamedAPIResource	`json:"treasures"`
 	Shops				[]UnnamedAPIResource	`json:"shops"`
 	Sidequests			[]NamedAPIResource		`json:"sidequests"`

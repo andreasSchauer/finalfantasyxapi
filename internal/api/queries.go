@@ -312,7 +312,7 @@ func intQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Co
 	}
 
 	dbIDs, err := wrapperFn(cfg, r, int32(integer))
-	if errors.Is(err, errQueryUsedElsewhere) {
+	if errors.Is(err, errQueryRedirect) {
 		return inputRes, nil
 	}
 	if err != nil {

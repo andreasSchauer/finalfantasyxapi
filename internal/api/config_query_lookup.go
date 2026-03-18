@@ -19,6 +19,7 @@ type QueryType struct {
 	IsRequired       bool                        `json:"is_required"`
 	TypeLookup       map[string]TypedAPIResource `json:"-"`
 	RequiredParams   []string                    `json:"required_params,omitempty"`
+	UsableWith		 []string					 `json:"usable_with,omitempty"`
 	References       []string                    `json:"references,omitempty"`
 	AllowedIDs       []int32                     `json:"-"`
 	AllowedResources []string                    `json:"allowed_resources,omitempty"`
@@ -2094,7 +2095,7 @@ func (cfg *Config) initShopsParams() {
 			ExampleUses:    []string{"?auto_ability=111&character=wakka"},
 			ForList:        true,
 			ForSingle:      false,
-			RequiredParams: []string{"auto_ability", "empty_slots"},
+			UsableWith: 	[]string{"auto_ability", "empty_slots"},
 			References: 	[]string{createListURL(cfg, "characters")},
 		},
 		"shop_type": {
@@ -2104,7 +2105,7 @@ func (cfg *Config) initShopsParams() {
 			ExampleUses: []string{"?shop_type=pre-airship", "?shop_type=2"},
 			ForList:     true,
 			ForSingle:   false,
-			RequiredParams: []string{"auto_ability", "empty_slots"},
+			UsableWith:  []string{"auto_ability", "empty_slots"},
 			TypeLookup:  cfg.t.ShopType.lookup,
 		},
 		"items": {

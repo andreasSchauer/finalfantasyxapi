@@ -41,7 +41,7 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/unspecified-abilities/2?bomb_wpn=true",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'bomb_wpn'. parameter 'bomb_wpn' can only be used in combination with parameter(s): 'ability_user'.",
+				expectedErr:    "invalid usage of parameter 'bomb_wpn'. when using parameter 'bomb_wpn', the following parameter(s) must be present: 'ability_user'.",
 			},
 		},
 		{
