@@ -46,7 +46,7 @@ type StatTable struct {
 }
 
 func newStatTable(cfg *Config, baseStats []seeding.BaseStat) StatTable {
-	stats := namesToResourceAmounts(cfg, cfg.e.stats, baseStats, newBaseStat)
+	stats := namesToNamedResourceAmounts(cfg, cfg.e.stats, baseStats, newBaseStat)
 	statMap := getResourceAmountMap(stats)
 	luckPtr := h.GetInt32Ptr(statMap["luck"])
 

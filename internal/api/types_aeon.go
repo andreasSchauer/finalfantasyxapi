@@ -5,6 +5,7 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 type Aeon struct {
 	ID                     int32              `json:"id"`
 	Name                   string             `json:"name"`
+	UntypedUnit			   TypedAPIResource	  `json:"untyped_unit"`
 	UnlockCondition        string             `json:"unlock_condition"`
 	Area                   AreaAPIResource    `json:"area"`
 	IsOptional             bool               `json:"is_optional"`

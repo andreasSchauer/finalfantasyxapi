@@ -8,7 +8,7 @@ type Sidequest struct {
 	Name       		string             	`json:"name"`
 	IsPostAirship	bool				`json:"is_post_airship"`
 	Completion 		*QuestCompletion   	`json:"completion"`
-	Subquests  		[]NamedAPIResource 	`json:"subquests"`
+	Subquests  		[]QuestAPIResource 	`json:"subquests"`
 }
 
 

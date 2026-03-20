@@ -15,6 +15,8 @@ type endpoints struct {
 	celestialWeapons     handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]
 	characters           handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]
 	characterClasses     handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]
+	playerUnits			 handlerInput[seeding.PlayerUnit, any, TypedAPIResource, TypedAPIResourceList]
+	masterItems			 handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]
 	elements             handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
 	equipment            handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
 	fmvs                 handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
@@ -27,7 +29,7 @@ type endpoints struct {
 	overdriveCommands    handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]
 	overdriveModes       handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
 	overdrives           handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]
-	abilities            handlerInput[seeding.Ability, Ability, AbilityAPIResource, AbilityAPIResourceList]
+	abilities            handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]
 	unspecifiedAbilities handlerInput[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList]
 	playerAbilities      handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
 	enemyAbilities       handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
@@ -38,7 +40,7 @@ type endpoints struct {
 	ronsoRages           handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]
 	shops                handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
 	sidequests           handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList]
-	subquests            handlerInput[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList]
+	subquests            handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]
 	songs                handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
 	stats                handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
 	statusConditions     handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
@@ -263,6 +265,32 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
+	e.playerUnits = handlerInput[seeding.PlayerUnit, any, TypedAPIResource, TypedAPIResourceList]{
+		endpoint:      "player-units",
+		resourceType:  "player unit",
+		objLookup:     cfg.l.PlayerUnits,
+		objLookupID:   cfg.l.PlayerUnitsID,
+		queryLookup:   nil,
+		idToResFunc:   idToTypedAPIResource[seeding.PlayerUnit, any, TypedAPIResource, TypedAPIResourceList],
+		resToListFunc: newTypedAPIResourceList,
+		retrieveQuery: nil,
+		getSingleFunc: nil,
+		retrieveFunc:  nil,
+	}
+
+	e.masterItems = handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]{
+		endpoint:      "master-items",
+		resourceType:  "master item",
+		objLookup:     cfg.l.MasterItems,
+		objLookupID:   cfg.l.MasterItemsID,
+		queryLookup:   nil,
+		idToResFunc:   idToTypedAPIResource[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList],
+		resToListFunc: newTypedAPIResourceList,
+		retrieveQuery: nil,
+		getSingleFunc: nil,
+		retrieveFunc:  nil,
+	}
+
 	e.elements = handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "elements",
 		resourceType:  "element",
@@ -482,14 +510,14 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.abilities = handlerInput[seeding.Ability, Ability, AbilityAPIResource, AbilityAPIResourceList]{
+	e.abilities = handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]{
 		endpoint:      "abilities",
 		resourceType:  "ability",
 		objLookup:     cfg.l.Abilities,
 		objLookupID:   cfg.l.AbilitiesID,
 		queryLookup:   cfg.q.abilities,
-		idToResFunc:   idToAbilityAPIResource,
-		resToListFunc: newAbilityAPIResourceList,
+		idToResFunc:   idToTypedAPIResource[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList],
+		resToListFunc: newTypedAPIResourceList,
 		retrieveQuery: cfg.db.GetAbilityIDs,
 		getSingleFunc: cfg.getAbility,
 		retrieveFunc:  cfg.retrieveAbilities,
@@ -686,14 +714,14 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.subquests = handlerInput[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList]{
+	e.subquests = handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]{
 		endpoint:      "subquests",
 		resourceType:  "subquest",
 		objLookup:     cfg.l.Subquests,
 		objLookupID:   cfg.l.SubquestsID,
 		queryLookup:   cfg.q.subquests,
-		idToResFunc:   idToNamedAPIResource[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+		idToResFunc:   idToQuestAPIResource,
+		resToListFunc: newQuestAPIResourceList,
 		retrieveQuery: cfg.db.GetSubquestIDs,
 		getSingleFunc: cfg.getSubquest,
 		retrieveFunc:  cfg.retrieveSubquests,

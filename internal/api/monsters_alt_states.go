@@ -88,7 +88,7 @@ func convertAltStateChange(cfg *Config, asc seeding.AltStateChange) AltStateChan
 	}
 
 	if asc.BaseStats != nil {
-		baseStats := namesToResourceAmounts(cfg, cfg.e.stats, *asc.BaseStats, newBaseStat)
+		baseStats := namesToNamedResourceAmounts(cfg, cfg.e.stats, *asc.BaseStats, newBaseStat)
 		change.BaseStats = h.SliceOrNil(baseStats)
 	}
 

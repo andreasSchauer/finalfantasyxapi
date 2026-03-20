@@ -103,16 +103,16 @@ func namesToNamedAPIResources[T h.IsNamed, R any, A APIResource, L APIResourceLi
 }
 
 // converts inputs to a resourceAmount of any kind by calling the given constructor fn
-func nameToResourceAmount[NA NameAmount, RA ResourceAmount, T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], item NA, fn func(NamedAPIResource, int32) RA) RA {
+func nameToNamedResourceAmount[NA NameAmount, RA ResourceAmount, T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], item NA, fn func(NamedAPIResource, int32) RA) RA {
 	resource := nameToNamedAPIResource(cfg, i, item.GetName(), item.GetVersion())
 	return fn(resource, item.GetVal())
 }
 
-func namesToResourceAmounts[NA NameAmount, RA ResourceAmount, T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], items []NA, fn func(NamedAPIResource, int32) RA) []RA {
+func namesToNamedResourceAmounts[NA NameAmount, RA ResourceAmount, T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], items []NA, fn func(NamedAPIResource, int32) RA) []RA {
 	results := []RA{}
 
 	for _, item := range items {
-		ra := nameToResourceAmount(cfg, i, item, fn)
+		ra := nameToNamedResourceAmount(cfg, i, item, fn)
 		results = append(results, ra)
 	}
 

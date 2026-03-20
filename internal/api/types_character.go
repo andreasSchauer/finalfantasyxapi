@@ -3,6 +3,7 @@ package api
 type Character struct {
 	ID                     int32              `json:"id"`
 	Name                   string             `json:"name"`
+	UntypedUnit			   TypedAPIResource	  `json:"untyped_unit"`
 	Area                   AreaAPIResource    `json:"area"`
 	IsStoryBased           bool               `json:"is_story_based"`
 	CanFightUnderwater     bool               `json:"can_fight_underwater"`

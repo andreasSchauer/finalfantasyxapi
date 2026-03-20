@@ -27,7 +27,7 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.Tri
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility:     idToAbilityAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		UntypedAbility:     idToTypedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
 		Description:        ability.Description,
 		Effect:             ability.Effect,
 		Rank:               ability.Rank,

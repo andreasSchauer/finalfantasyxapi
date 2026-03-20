@@ -31,7 +31,7 @@ func (ma MonsterAmount) GetVal() int32 {
 }
 
 func convertMonsterAmount(cfg *Config, input seeding.MonsterAmount) MonsterAmount {
-	return nameToResourceAmount(cfg, cfg.e.monsters, input, newMonsterAmount)
+	return nameToNamedResourceAmount(cfg, cfg.e.monsters, input, newMonsterAmount)
 }
 
 func newMonsterAmount(res NamedAPIResource, amount int32) MonsterAmount {

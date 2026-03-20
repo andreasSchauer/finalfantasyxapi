@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, Ability, AbilityAPIResource, AbilityAPIResourceList], id int32) (Ability, error) {
+func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList], id int32) (Ability, error) {
 	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Ability{}, err
@@ -51,13 +51,13 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 	return response, nil
 }
 
-func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Ability, Ability, AbilityAPIResource, AbilityAPIResourceList]) (AbilityAPIResourceList, error) {
+func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]) (TypedAPIResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
-		return AbilityAPIResourceList{}, err
+		return TypedAPIResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[AbilityAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[TypedAPIResource]{
 		frl(typeQuery(cfg, r, i, cfg.t.AbilityType, resources, "type", cfg.db.GetAbilityIDsByType)),
 		frl(typeQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetAbilityIDsByDamageType)),
 		frl(typeQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetAbilityIDsByAttackType)),

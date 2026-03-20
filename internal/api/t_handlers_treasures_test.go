@@ -59,7 +59,7 @@ func TestGetTreasure(t *testing.T) {
 			lootType:        1,
 			gilAmount:       nil,
 			items: []testItemAmount{
-				newTestItemAmount("/items/82", 1),
+				newTestItemAmount(82, 1),
 			},
 			equipment: nil,
 		},
@@ -78,7 +78,7 @@ func TestGetTreasure(t *testing.T) {
 			lootType:        1,
 			gilAmount:       nil,
 			items: []testItemAmount{
-				newTestItemAmount("/key-items/35", 1),
+				newTestItemAmount(147, 1),
 			},
 			equipment: nil,
 		},
@@ -135,7 +135,7 @@ func TestGetTreasure(t *testing.T) {
 			lootType:        1,
 			gilAmount:       nil,
 			items: []testItemAmount{
-				newTestItemAmount("/items/97", 1),
+				newTestItemAmount(97, 1),
 			},
 			equipment: nil,
 		},

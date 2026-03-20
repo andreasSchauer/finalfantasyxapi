@@ -20,8 +20,8 @@ type Monster struct {
 	IsRepeatable         bool                 `json:"is_repeatable"`
 	CanBeCaptured        bool                 `json:"can_be_captured"`
 	AreaConquestLocation *string              `json:"area_conquest_location,omitempty"`
-	Category			 NamedAPIResource	  `json:"category"`
-	CTBIconType          string    			  `json:"ctb_icon_type"`
+	Category             NamedAPIResource     `json:"category"`
+	CTBIconType          string               `json:"ctb_icon_type"`
 	HasOverdrive         bool                 `json:"has_overdrive"`
 	IsUnderwater         bool                 `json:"is_underwater"`
 	IsZombie             bool                 `json:"is_zombie"`
@@ -59,17 +59,15 @@ func (m Monster) Error() string {
 	return fmt.Sprintf("monster '%s'", h.NameToString(m.Name, m.Version, m.Specification))
 }
 
-
-
 type MonsterAbility struct {
-	Ability  AbilityAPIResource `json:"ability"`
-	IsForced bool             	`json:"is_forced"`
-	IsUnused bool             	`json:"is_unused"`
+	Ability  TypedAPIResource `json:"ability"`
+	IsForced bool             `json:"is_forced"`
+	IsUnused bool             `json:"is_unused"`
 }
 
 func convertMonsterAbility(cfg *Config, ability seeding.MonsterAbility) MonsterAbility {
 	return MonsterAbility{
-		Ability:  refToAbilityAPIResource(cfg, cfg.e.abilities, ability.AbilityReference),
+		Ability:  keyToTypedAPIResource(cfg, cfg.e.abilities, ability.AbilityReference),
 		IsForced: ability.IsForced,
 		IsUnused: ability.IsUnused,
 	}
@@ -79,9 +77,7 @@ func (ma MonsterAbility) GetAPIResource() APIResource {
 	return ma.Ability
 }
 
-
 type BribeChance struct {
 	Gil    int32 `json:"gil"`
 	Chance int32 `json:"chance"`
 }
-

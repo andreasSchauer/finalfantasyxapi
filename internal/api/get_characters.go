@@ -20,6 +20,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 	response := Character{
 		ID:                     character.ID,
 		Name:                   character.Name,
+		UntypedUnit: 			idToTypedAPIResource(cfg, cfg.e.playerUnits, character.PlayerUnit.ID),
 		Area:                   locAreaToAreaAPIResource(cfg, cfg.e.areas, character.LocationArea),
 		IsStoryBased:           character.IsStoryBased,
 		CanFightUnderwater:     character.CanFightUnderwater,
@@ -29,7 +30,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 		CelestialWeapon:        rel.CelestialWeapon,
 		OverdriveCommand:       rel.OverdriveCommand,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              namesToResourceAmounts(cfg, cfg.e.stats, character.BaseStats, newBaseStat),
+		BaseStats:              namesToNamedResourceAmounts(cfg, cfg.e.stats, character.BaseStats, newBaseStat),
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		StdSgPlayerAbilities:   rel.StdSgPlayerAbilities,
 		ExpSgPlayerAbilities:   rel.ExpSgPlayerAbilities,

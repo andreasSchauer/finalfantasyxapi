@@ -187,11 +187,11 @@ func TestGetMonster(t *testing.T) {
 			items: &testMonItems{
 				itemDropChance: 255,
 				items: map[string]*testItemAmount{
-					"steal common": h.GetStructPtr(newTestItemAmount("/items/27", 1)),
-					"steal rare":   h.GetStructPtr(newTestItemAmount("/items/28", 1)),
-					"drop common":  h.GetStructPtr(newTestItemAmount("/items/71", 1)),
-					"drop rare":    h.GetStructPtr(newTestItemAmount("/items/71", 1)),
-					"bribe":        h.GetStructPtr(newTestItemAmount("/items/28", 6)),
+					"steal common": h.GetStructPtr(newTestItemAmount(27, 1)),
+					"steal rare":   h.GetStructPtr(newTestItemAmount(28, 1)),
+					"drop common":  h.GetStructPtr(newTestItemAmount(71, 1)),
+					"drop rare":    h.GetStructPtr(newTestItemAmount(71, 1)),
+					"bribe":        h.GetStructPtr(newTestItemAmount(28, 6)),
 				},
 			},
 			bribeChances: []BribeChance{
@@ -283,13 +283,13 @@ func TestGetMonster(t *testing.T) {
 			items: &testMonItems{
 				itemDropChance: 0,
 				items: map[string]*testItemAmount{
-					"steal common": h.GetStructPtr(newTestItemAmount("/items/1", 1)),
-					"steal rare":   h.GetStructPtr(newTestItemAmount("/items/1", 1)),
+					"steal common": h.GetStructPtr(newTestItemAmount(1, 1)),
+					"steal rare":   h.GetStructPtr(newTestItemAmount(1, 1)),
 				},
 				otherItems: []testPossibleItem{
-					newTestPossibleItem(0, "/items/9", 1, 60),
-					newTestPossibleItem(1, "/items/64", 1, 20),
-					newTestPossibleItem(2, "/items/7", 1, 20),
+					newTestPossibleItem(0, 9, 1, 60),
+					newTestPossibleItem(1, 64, 1, 20),
+					newTestPossibleItem(2, 7, 1, 20),
 				},
 			},
 		},
@@ -336,10 +336,10 @@ func TestGetMonster(t *testing.T) {
 			items: &testMonItems{
 				itemDropChance: 255,
 				items: map[string]*testItemAmount{
-					"steal common": h.GetStructPtr(newTestItemAmount("/items/5", 1)),
-					"steal rare":   h.GetStructPtr(newTestItemAmount("/items/6", 1)),
-					"drop common":  h.GetStructPtr(newTestItemAmount("/items/82", 1)),
-					"drop rare":    h.GetStructPtr(newTestItemAmount("/items/82", 1)),
+					"steal common": h.GetStructPtr(newTestItemAmount(5, 1)),
+					"steal rare":   h.GetStructPtr(newTestItemAmount(6, 1)),
+					"drop common":  h.GetStructPtr(newTestItemAmount(82, 1)),
+					"drop rare":    h.GetStructPtr(newTestItemAmount(82, 1)),
 					"bribe":        nil,
 				},
 			},

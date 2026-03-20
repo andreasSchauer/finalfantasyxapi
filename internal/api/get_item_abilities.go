@@ -18,7 +18,7 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.ItemAb
 		ID:                 ability.ID,
 		Name:               ability.Name,
 		Item:               idToNamedAPIResource(cfg, cfg.e.items, id),
-		UntypedAbility:     idToAbilityAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		UntypedAbility:     idToTypedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
 		Description:        item.Description,
 		Effect:             item.Effect,
 		Category:           newNamedAPIResourceFromEnum(cfg, cfg.e.itemCategory.endpoint, item.Category, cfg.t.ItemCategory),

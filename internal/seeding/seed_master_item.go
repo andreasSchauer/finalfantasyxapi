@@ -24,7 +24,6 @@ func (i MasterItem) ToHashFields() []any {
 func (i MasterItem) ToKeyFields() []any {
 	return []any{
 		i.Name,
-		i.Type,
 	}
 }
 
@@ -34,6 +33,14 @@ func (i MasterItem) GetID() int32 {
 
 func (i MasterItem) Error() string {
 	return fmt.Sprintf("master item %s, type %s", i.Name, i.Type)
+}
+
+func (i MasterItem) GetResParamsTyped() h.ResParamsTyped {
+	return h.ResParamsTyped{
+		ID: 	i.ID,
+		Name: 	i.Name,
+		Type: 	string(i.Type),
+	}
 }
 
 func (l *Lookup) seedMasterItem(qtx *database.Queries, masterItem MasterItem) (MasterItem, error) {

@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]AbilityAPIResource, error) {
+func getAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]TypedAPIResource, error) {
 	i := cfg.e.abilities
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
 

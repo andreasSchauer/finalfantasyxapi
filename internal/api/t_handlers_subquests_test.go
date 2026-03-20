@@ -45,7 +45,7 @@ func TestGetSubquest(t *testing.T) {
 				{
 					index:  0,
 					areas:  []int32{205},
-					reward: newTestItemAmount("/items/50", 99),
+					reward: newTestItemAmount(50, 99),
 				},
 			},
 			arenaCreation: h.GetInt32Ptr(5),
@@ -65,12 +65,12 @@ func TestGetSubquest(t *testing.T) {
 				{
 					index:  0,
 					areas:  []int32{209},
-					reward: newTestItemAmount("/items/54", 10),
+					reward: newTestItemAmount(54, 10),
 				},
 				{
 					index:  1,
 					areas:  []int32{209},
-					reward: newTestItemAmount("/items/70", 8),
+					reward: newTestItemAmount(70, 8),
 				},
 			},
 			arenaCreation: nil,
@@ -90,12 +90,12 @@ func TestGetSubquest(t *testing.T) {
 				{
 					index:  0,
 					areas:  []int32{144, 145},
-					reward: newTestItemAmount("/items/98", 1),
+					reward: newTestItemAmount(98, 1),
 				},
 				{
 					index:  1,
 					areas:  []int32{144, 145},
-					reward: newTestItemAmount("/key-items/18", 1),
+					reward: newTestItemAmount(130, 1),
 				},
 			},
 			arenaCreation: nil,

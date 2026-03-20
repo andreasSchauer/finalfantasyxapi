@@ -24,7 +24,6 @@ func (pu PlayerUnit) ToHashFields() []any {
 func (pu PlayerUnit) ToKeyFields() []any {
 	return []any{
 		pu.Name,
-		pu.Type,
 	}
 }
 
@@ -34,6 +33,14 @@ func (pu PlayerUnit) GetID() int32 {
 
 func (pu PlayerUnit) Error() string {
 	return fmt.Sprintf("player unit %s, type %s", pu.Name, pu.Type)
+}
+
+func (pu PlayerUnit) GetResParamsTyped() h.ResParamsTyped {
+	return h.ResParamsTyped{
+		ID: 	pu.ID,
+		Name: 	pu.Name,
+		Type: 	string(pu.Type),
+	}
 }
 
 func (l *Lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (PlayerUnit, error) {

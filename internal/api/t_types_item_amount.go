@@ -1,18 +1,18 @@
 package api
 
 type testItemAmount struct {
-	item   string
+	item   int32
 	amount int32
 }
 
 func compareItemAmounts(test test, fieldName string, exp testItemAmount, got ItemAmount) {
-	compPathApiResource(test, fieldName+" - item", exp.item, got)
+	compIdApiResource(test, fieldName+" - item", test.cfg.e.masterItems.endpoint, exp.item, got)
 	compare(test, fieldName+" - amount", exp.amount, got.Amount)
 }
 
-func newTestItemAmount(itemPath string, amount int32) testItemAmount {
+func newTestItemAmount(itemID int32, amount int32) testItemAmount {
 	return testItemAmount{
-		item:   itemPath,
+		item:   itemID,
 		amount: amount,
 	}
 }
@@ -23,10 +23,10 @@ type testPossibleItem struct {
 	chance int32
 }
 
-func newTestPossibleItem(idx int, itemPath string, amount, chance int32) testPossibleItem {
+func newTestPossibleItem(idx int, itemID int32, amount, chance int32) testPossibleItem {
 	return testPossibleItem{
 		index:          idx,
-		testItemAmount: newTestItemAmount(itemPath, amount),
+		testItemAmount: newTestItemAmount(itemID, amount),
 		chance:         chance,
 	}
 }

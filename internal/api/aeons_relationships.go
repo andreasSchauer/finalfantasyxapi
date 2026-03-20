@@ -83,7 +83,7 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName st
 
 	seedAeon, _ := seeding.GetResourceByID(aeon.ID, cfg.l.AeonsID)
 	newBaseStats := seedAeon.BaseStats.XVals[i].BaseStats
-	baseStats := namesToResourceAmounts(cfg, cfg.e.stats, newBaseStats, newBaseStat)
+	baseStats := namesToNamedResourceAmounts(cfg, cfg.e.stats, newBaseStats, newBaseStat)
 
 	return baseStats, nil
 }
@@ -94,7 +94,7 @@ func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName string) (
 	queryParam := cfg.q.aeons[queryName]
 
 	yuna, _ := seeding.GetResource("yuna", cfg.l.Characters)
-	yunaBS := namesToResourceAmounts(cfg, cfg.e.stats, yuna.BaseStats, newBaseStat)
+	yunaBS := namesToNamedResourceAmounts(cfg, cfg.e.stats, yuna.BaseStats, newBaseStat)
 
 	yunaStatMapInt, err := parseStatQuery(cfg, r, queryParam, yunaBS, allowedStatIDs)
 	if errors.Is(err, errEmptyQuery) {
@@ -130,11 +130,11 @@ func calcAeonStats(cfg *Config, aeon Aeon, yuna map[string]int32) []BaseStat {
 func getAeonStatTables(cfg *Config, aeon Aeon) (map[string]float64, map[string]float64) {
 	aeonLookup, _ := seeding.GetResourceByID(aeon.ID, cfg.l.AeonsID)
 
-	aValsSlice := namesToResourceAmounts(cfg, cfg.e.stats, aeonLookup.BaseStats.AVals, newBaseStat)
+	aValsSlice := namesToNamedResourceAmounts(cfg, cfg.e.stats, aeonLookup.BaseStats.AVals, newBaseStat)
 	aValsInt := getResourceAmountMap(aValsSlice)
 	aVals := getResAmountFloatMap(aValsInt)
 
-	bValsSlice := namesToResourceAmounts(cfg, cfg.e.stats, aeonLookup.BaseStats.BVals, newBaseStat)
+	bValsSlice := namesToNamedResourceAmounts(cfg, cfg.e.stats, aeonLookup.BaseStats.BVals, newBaseStat)
 	bValsInt := getResourceAmountMap(bValsSlice)
 	bVals := getResAmountFloatMap(bValsInt)
 

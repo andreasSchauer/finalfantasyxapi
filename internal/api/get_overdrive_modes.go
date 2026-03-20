@@ -12,7 +12,7 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 		return OverdriveMode{}, err
 	}
 
-	actions := namesToResourceAmounts(cfg, cfg.e.characters, mode.ActionsToLearn, convertActionAmount)
+	actions := namesToNamedResourceAmounts(cfg, cfg.e.characters, mode.ActionsToLearn, convertActionAmount)
 
 	response := OverdriveMode{
 		ID:          mode.ID,

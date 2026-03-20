@@ -22,6 +22,7 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 	response := Aeon{
 		ID:                     aeon.ID,
 		Name:                   aeon.Name,
+		UntypedUnit: 			idToTypedAPIResource(cfg, cfg.e.playerUnits, aeon.PlayerUnit.ID),
 		Area:                   locAreaToAreaAPIResource(cfg, cfg.e.areas, aeon.LocationArea),
 		UnlockCondition:        aeon.UnlockCondition,
 		IsOptional:             aeon.IsOptional,
@@ -32,7 +33,7 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 		PhysAtkAccuracy:        convertObjPtr(cfg, aeon.PhysAtkAccuracy, convertAccuracy),
 		CelestialWeapon:        rel.CelestialWeapon,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              namesToResourceAmounts(cfg, cfg.e.stats, baseStats, newBaseStat),
+		BaseStats:              namesToNamedResourceAmounts(cfg, cfg.e.stats, baseStats, newBaseStat),
 		AeonCommands:           rel.AeonCommands,
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		Overdrives:             rel.Overdrives,

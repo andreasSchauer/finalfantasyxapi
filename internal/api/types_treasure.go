@@ -1,7 +1,7 @@
 package api
 
 type Treasure struct {
-	ID              int32
+	ID              int32			 `json:"id"`
 	Area            AreaAPIResource  `json:"area"`
 	IsPostAirship   bool             `json:"is_post_airship"`
 	IsStoryBased    bool             `json:"is_story_based"`

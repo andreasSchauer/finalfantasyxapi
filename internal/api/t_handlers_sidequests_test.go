@@ -49,7 +49,7 @@ func TestGetSidequest(t *testing.T) {
 			expUnique: newExpUnique(2, "remiem temple"),
 			completion: &testQuestCompletion{
 				areas:  []int32{209},
-				reward: newTestItemAmount("/key-items/14", 1),
+				reward: newTestItemAmount(126, 1),
 			},
 			subquests: []int32{37, 39, 42, 44},
 		},
@@ -79,7 +79,7 @@ func TestGetSidequest(t *testing.T) {
 			expUnique: newExpUnique(9, "al bhed primers"),
 			completion: &testQuestCompletion{
 				areas:  []int32{185, 182},
-				reward: newTestItemAmount("/items/111", 99),
+				reward: newTestItemAmount(111, 99),
 			},
 			subquests: []int32{},
 		},

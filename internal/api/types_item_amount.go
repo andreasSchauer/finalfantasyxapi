@@ -5,7 +5,7 @@ import (
 )
 
 type ItemAmount struct {
-	Item   NamedAPIResource `json:"item"`
+	Item   TypedAPIResource `json:"item"`
 	Amount int32            `json:"amount"`
 }
 
@@ -29,7 +29,7 @@ func (ia ItemAmount) GetVal() int32 {
 	return ia.Amount
 }
 
-func newItemAmount(res NamedAPIResource, amount int32) ItemAmount {
+func newItemAmount(res TypedAPIResource, amount int32) ItemAmount {
 	return ItemAmount{
 		Item:   res,
 		Amount: amount,
@@ -37,25 +37,8 @@ func newItemAmount(res NamedAPIResource, amount int32) ItemAmount {
 }
 
 func convertItemAmount(cfg *Config, input seeding.ItemAmount) ItemAmount {
-	iItems := cfg.e.items
-	iKeyItems := cfg.e.keyItems
-	var ia ItemAmount
-
-	_, ok := iItems.objLookup[input.ItemName]
-	if ok {
-		ia = nameToResourceAmount(cfg, iItems, input, newItemAmount)
-		return ia
-	}
-
-	_, ok = iKeyItems.objLookup[input.ItemName]
-	if ok {
-		ia = nameToResourceAmount(cfg, iKeyItems, input, newItemAmount)
-		return ia
-	}
-
-	return ItemAmount{}
+	return keyToTypedResourceAmount(cfg, cfg.e.masterItems, input, newItemAmount)
 }
-
 
 
 type PossibleItem struct {

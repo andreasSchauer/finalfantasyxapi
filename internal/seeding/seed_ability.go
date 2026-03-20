@@ -51,13 +51,13 @@ func (a Ability) GetAbilityRef() AbilityReference {
 	}
 }
 
-func (a Ability) GetResParamsAbility() h.ResParamsAbility {
-	return h.ResParamsAbility{
+func (a Ability) GetResParamsTyped() h.ResParamsTyped {
+	return h.ResParamsTyped{
 		ID:            a.ID,
 		Name:          a.Name,
 		Version:       a.Version,
 		Specification: a.Specification,
-		AbilityType:   a.Type,
+		Type:          string(a.Type),
 	}
 }
 
@@ -78,6 +78,7 @@ func (a AbilityReference) ToKeyFields() []any {
 func (a AbilityReference) Error() string {
 	return fmt.Sprintf("ability reference '%s', type %s", h.NameToString(a.Name, a.Version, nil), a.AbilityType)
 }
+
 
 func (a AbilityReference) Untyped() UntypedAbilityRef {
 	return UntypedAbilityRef{

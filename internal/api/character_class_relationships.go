@@ -8,7 +8,7 @@ import (
 )
 
 func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.CharacterClass) (CharacterClass, error) {
-	units, err := getClassUnits(cfg, r, class)
+	units, err := getResourcesDbItem(cfg, r, cfg.e.playerUnits, class, cfg.db.GetCharacterClassUnitIDs)
 	if err != nil {
 		return CharacterClass{}, err
 	}
@@ -67,7 +67,7 @@ func getClassUnits(cfg *Config, r *http.Request, class seeding.CharacterClass) (
 	return resources, nil
 }
 
-func getClassLearnableAbilities(cfg *Config, r *http.Request, class seeding.CharacterClass, defaultAbilities []AbilityAPIResource) ([]AbilityAPIResource, error) {
+func getClassLearnableAbilities(cfg *Config, r *http.Request, class seeding.CharacterClass, defaultAbilities []TypedAPIResource) ([]TypedAPIResource, error) {
 	allAbilities, err := getResourcesDbItem(cfg, r, cfg.e.abilities, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err

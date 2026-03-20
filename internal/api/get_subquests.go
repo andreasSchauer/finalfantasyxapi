@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList], id int32) (Subquest, error) {
+func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList], id int32) (Subquest, error) {
 	subquest, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Subquest{}, err
@@ -27,13 +27,13 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 	return response, nil
 }
 
-func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Subquest, Subquest, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]) (QuestApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
-		return NamedApiResourceList{}, err
+		return QuestApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
 		frl(boolQuery(cfg, r, i, resources, "post_airship", cfg.db.GetSubquestIDsByPostAirship)),
 	})
 }

@@ -14,7 +14,7 @@ func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName string
 	queryParam := cfg.q.monsters[queryName]
 
 	kimahri, _ := seeding.GetResource("kimahri", cfg.l.Characters)
-	kimahriBS := namesToResourceAmounts(cfg, cfg.e.stats, kimahri.BaseStats, newBaseStat)
+	kimahriBS := namesToNamedResourceAmounts(cfg, cfg.e.stats, kimahri.BaseStats, newBaseStat)
 
 	kimahriStatMap, err := parseStatQuery(cfg, r, queryParam, kimahriBS, allowedStatIDs)
 	if errors.Is(err, errEmptyQuery) {
@@ -47,7 +47,7 @@ func getRonsoHP(mon Monster, kimahriStatMap map[string]int32) int32 {
 	v2 := float64(h.PowInt(kimahriMag, 3))
 	v3 := (v1 + v2) / 2 * 16 / 15
 
-	hpMod := ((int32(v3)/32)+30)*586/730
+	hpMod := ((int32(v3) / 32) + 30) * 586 / 730
 
 	if mon.Name == "biran ronso" {
 		return hpMod * 8
