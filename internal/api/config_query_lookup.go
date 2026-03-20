@@ -7,27 +7,27 @@ import (
 )
 
 type QueryType struct {
-	ID               int                         `json:"-"`
-	Name             string                      `json:"name"`
-	Description      string                      `json:"description"`
-	Usage            string                      `json:"usage"`
-	ExampleUses      []string                    `json:"example_uses"`
-	DefaultOnly      bool                        `json:"only_use_alone"`
-	ForSingle        bool                        `json:"for_single"`
-	ForList          bool                        `json:"for_list"`
-	ForSegment       *string                     `json:"for_segment"`
-	IsRequired       bool                        `json:"is_required"`
-	TypeLookup       map[string]TypedAPIResource `json:"-"`
-	RequiredParams   []string                    `json:"required_params,omitempty"`
-	UsableWith		 []string					 `json:"usable_with,omitempty"`
-	References       []string                    `json:"references,omitempty"`
-	AllowedIDs       []int32                     `json:"-"`
-	AllowedResources []string                    `json:"allowed_resources,omitempty"`
-	AllowedValues    []string                    `json:"allowed_values,omitempty"`
-	AllowedIntRange  []int                       `json:"allowed_int_range,omitempty"`
-	AllowedResTypes  []string                    `json:"allowed_res_types"`
-	DefaultVal       *int                        `json:"default_value,omitempty"`
-	SpecialInputs    []SpecialInput              `json:"special_inputs,omitempty"`
+	ID               int                        `json:"-"`
+	Name             string                     `json:"name"`
+	Description      string                     `json:"description"`
+	Usage            string                     `json:"usage"`
+	ExampleUses      []string                   `json:"example_uses"`
+	DefaultOnly      bool                       `json:"only_use_alone"`
+	ForSingle        bool                       `json:"for_single"`
+	ForList          bool                       `json:"for_list"`
+	ForSegment       *string                    `json:"for_segment"`
+	IsRequired       bool                       `json:"is_required"`
+	TypeLookup       map[string]EnumAPIResource `json:"-"`
+	RequiredParams   []string                   `json:"required_params,omitempty"`
+	UsableWith       []string                   `json:"usable_with,omitempty"`
+	References       []string                   `json:"references,omitempty"`
+	AllowedIDs       []int32                    `json:"-"`
+	AllowedResources []string                   `json:"allowed_resources,omitempty"`
+	AllowedValues    []string                   `json:"allowed_values,omitempty"`
+	AllowedIntRange  []int                      `json:"allowed_int_range,omitempty"`
+	AllowedResTypes  []string                   `json:"allowed_res_types"`
+	DefaultVal       *int                       `json:"default_value,omitempty"`
+	SpecialInputs    []SpecialInput             `json:"special_inputs,omitempty"`
 }
 
 type SpecialInput struct {
@@ -56,12 +56,12 @@ type QueryLookup struct {
 	overdriveAbilities   map[string]QueryType
 	playerAbilities      map[string]QueryType
 	triggerCommands      map[string]QueryType
-	overdriveCommands	 map[string]QueryType
-	overdrives			 map[string]QueryType
-	ronsoRages			 map[string]QueryType
-	aeonCommands		 map[string]QueryType
-	submenus			 map[string]QueryType
-	topmenus			 map[string]QueryType
+	overdriveCommands    map[string]QueryType
+	overdrives           map[string]QueryType
+	ronsoRages           map[string]QueryType
+	aeonCommands         map[string]QueryType
+	submenus             map[string]QueryType
+	topmenus             map[string]QueryType
 	shops                map[string]QueryType
 	songs                map[string]QueryType
 	sidequests           map[string]QueryType
@@ -795,7 +795,6 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
-		
 	}
 
 	params = cfg.completeQueryTypeInit(params, true)
@@ -1400,13 +1399,13 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			AllowedResTypes: []string{"character", "aeon"},
 		},
 		"bomb_wpn": {
-			ID:              2,
-			Description:     "If a player ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
-			Usage:           "?ability_user={type}:{name|id}&bomb_wpn={bool}",
-			ExampleUses:     []string{"?ability_user=character:wakka&bomb_wpn=true"},
-			ForList:         false,
-			ForSingle:       true,
-			RequiredParams:  []string{"ability_user"},
+			ID:             2,
+			Description:    "If a player ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Usage:          "?ability_user={type}:{name|id}&bomb_wpn={bool}",
+			ExampleUses:    []string{"?ability_user=character:wakka&bomb_wpn=true"},
+			ForList:        false,
+			ForSingle:      true,
+			RequiredParams: []string{"ability_user"},
 		},
 		"rank": {
 			ID:          3,
@@ -1658,13 +1657,13 @@ func (cfg *Config) initTriggerCommandsParams() {
 			AllowedResTypes: []string{"character", "aeon"},
 		},
 		"bomb_wpn": {
-			ID:              2,
-			Description:     "If a trigger command is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
-			Usage:           "?ability_user={type}:{name|id}&bomb_wpn={bool}",
-			ExampleUses:     []string{"?ability_user=character:wakka&bomb_wpn=true"},
-			ForList:         false,
-			ForSingle:       true,
-			RequiredParams:  []string{"ability_user"},
+			ID:             2,
+			Description:    "If a trigger command is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Usage:          "?ability_user={type}:{name|id}&bomb_wpn={bool}",
+			ExampleUses:    []string{"?ability_user=character:wakka&bomb_wpn=true"},
+			ForList:        false,
+			ForSingle:      true,
+			RequiredParams: []string{"ability_user"},
 		},
 		"related_stat": {
 			ID:          3,
@@ -1702,13 +1701,13 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 			AllowedResTypes: []string{"character", "aeon"},
 		},
 		"bomb_wpn": {
-			ID:              2,
-			Description:     "If an unspecified ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
-			Usage:           "?ability_user={type}:{name|id}&bomb_wpn={bool}",
-			ExampleUses:     []string{"?ability_user=character:wakka&bomb_wpn=true"},
-			ForList:         false,
-			ForSingle:       true,
-			RequiredParams:  []string{"ability_user"},
+			ID:             2,
+			Description:    "If an unspecified ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Usage:          "?ability_user={type}:{name|id}&bomb_wpn={bool}",
+			ExampleUses:    []string{"?ability_user=character:wakka&bomb_wpn=true"},
+			ForList:        false,
+			ForSingle:      true,
+			RequiredParams: []string{"ability_user"},
 		},
 		"rank": {
 			ID:          3,
@@ -2089,14 +2088,14 @@ func (cfg *Config) initShopsParams() {
 			AllowedIntRange: []int{0, 4},
 		},
 		"character": {
-			ID:             6,
-			Description:    "Specifies the character the offered equipment is for when searching for shops with the 'auto_ability' or 'empty_slots' parameters.",
-			Usage:          "?auto_ability={id}&character={id|name}",
-			ExampleUses:    []string{"?auto_ability=111&character=wakka"},
-			ForList:        true,
-			ForSingle:      false,
-			UsableWith: 	[]string{"auto_ability", "empty_slots"},
-			References: 	[]string{createListURL(cfg, "characters")},
+			ID:          6,
+			Description: "Specifies the character the offered equipment is for when searching for shops with the 'auto_ability' or 'empty_slots' parameters.",
+			Usage:       "?auto_ability={id}&character={id|name}",
+			ExampleUses: []string{"?auto_ability=111&character=wakka"},
+			ForList:     true,
+			ForSingle:   false,
+			UsableWith:  []string{"auto_ability", "empty_slots"},
+			References:  []string{createListURL(cfg, "characters")},
 		},
 		"shop_type": {
 			ID:          7,

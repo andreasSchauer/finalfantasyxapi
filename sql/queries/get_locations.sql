@@ -1060,20 +1060,6 @@ WHERE
 ORDER BY sh.id;
 
 
--- name: GetShopIDsByEmptySlots :many
-SELECT DISTINCT sh.id
-FROM shops sh
-JOIN j_shops_equipment j ON j.shop_id = sh.id
-JOIN shop_equipment_pieces se ON j.shop_equipment_id = se.id
-LEFT JOIN equipment_names en ON se.equipment_name_id = en.id
-LEFT JOIN characters c ON en.character_id = c.id
-WHERE
-  (sqlc.narg('shop_type')::shop_type IS NULL OR j.shop_type = sqlc.narg('shop_type')::shop_type)
-  AND (sqlc.narg('character_id')::int IS NULL OR c.id = sqlc.narg('character_id')::int)
-  AND (sqlc.narg('empty_slots')::int IS NULL OR se.empty_slots_amount = sqlc.narg('empty_slots')::int)
-ORDER BY sh.id;
-
-
 -- name: GetShopIDsWithItems :many
 SELECT DISTINCT s.id
 FROM shops s

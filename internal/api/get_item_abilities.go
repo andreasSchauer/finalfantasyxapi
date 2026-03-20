@@ -21,7 +21,7 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.ItemAb
 		UntypedAbility:     idToAbilityAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
 		Description:        item.Description,
 		Effect:             item.Effect,
-		Category:           newNamedAPIResourceFromType(cfg, cfg.e.itemCategory.endpoint, item.Category, cfg.t.ItemCategory),
+		Category:           newNamedAPIResourceFromEnum(cfg, cfg.e.itemCategory.endpoint, item.Category, cfg.t.ItemCategory),
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,

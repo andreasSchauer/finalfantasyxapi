@@ -47,17 +47,17 @@ type endpoints struct {
 	topmenus             handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]
 	treasures            handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
 
-	abilityType              handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	attackType               handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	damageFormula            handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	damageType               handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	itemCategory             handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	monsterCategory          handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	lootType                 handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	monsterFormationCategory handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	monsterSpecies           handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	playerAbilityCategory    handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
-	shopCategory             handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]
+	abilityType              handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	attackType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	damageFormula            handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	damageType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	itemCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	monsterCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	lootType                 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	monsterFormationCategory handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	monsterSpecies           handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	playerAbilityCategory    handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	shopCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -827,81 +827,81 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveTreasures,
 	}
 
-	e.abilityType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.abilityType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "ability-type",
 		resourceType:  "ability type",
 		objLookup:     cfg.t.AbilityType.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
-	e.attackType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.attackType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "attack-type",
 		resourceType:  "attack type",
 		objLookup:     cfg.t.AttackType.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
-	e.damageFormula = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.damageFormula = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "damage-formula",
 		resourceType:  "damage formula",
 		objLookup:     cfg.t.DamageFormula.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
-	e.damageType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.damageType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "damage-type",
 		resourceType:  "damage type",
 		objLookup:     cfg.t.DamageType.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
-	e.itemCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.itemCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "item-category",
 		resourceType:  "item category",
 		objLookup:     cfg.t.ItemCategory.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
-	e.lootType = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.lootType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "loot-type",
 		resourceType:  "loot type",
 		objLookup:     cfg.t.LootType.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
-	e.monsterCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.monsterCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "monster-type",
 		resourceType:  "monster type",
 		objLookup:     cfg.t.MonsterCategory.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
-	e.monsterFormationCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.monsterFormationCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "monster-formation-category",
 		resourceType:  "monster formation category",
 		objLookup:     cfg.t.MonsterFormationCategory.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
-	e.monsterSpecies = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.monsterSpecies = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "monster-species",
 		resourceType:  "monster species",
 		objLookup:     cfg.t.MonsterSpecies.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
-	e.playerAbilityCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.playerAbilityCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "player-ability-category",
 		resourceType:  "player ability category",
 		objLookup:     cfg.t.PlayerAbilityCategory.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
-	e.shopCategory = handlerInput[TypedAPIResource, TypedAPIResource, TypedAPIResource, TypedApiResourceList]{
+	e.shopCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "shop-category",
 		resourceType:  "shop category",
 		objLookup:     cfg.t.ShopCategory.lookup,
-		resToListFunc: newTypedAPIResourceList,
+		resToListFunc: newEnumAPIResourceList,
 	}
 
 	cfg.e = &e

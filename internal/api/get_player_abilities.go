@@ -30,7 +30,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		CanCopycat:            ability.CanCopycat,
 		CanUseOutsideBattle:   ability.CanUseOutsideBattle,
 		MpCost:                ability.MPCost,
-		Category:              newNamedAPIResourceFromType(cfg, cfg.e.playerAbilityCategory.endpoint, ability.Category, cfg.t.PlayerAbilityCategory),
+		Category:              newNamedAPIResourceFromEnum(cfg, cfg.e.playerAbilityCategory.endpoint, ability.Category, cfg.t.PlayerAbilityCategory),
 		AeonLearnItem:         convertObjPtr(cfg, ability.AeonLearnItem, convertItemAmount),
 		LearnedBy:             namesToNamedAPIResources(cfg, cfg.e.characterClasses, ability.LearnedBy),
 		RelatedStats:          namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),

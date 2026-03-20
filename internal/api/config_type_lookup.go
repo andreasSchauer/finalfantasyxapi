@@ -80,12 +80,12 @@ func (cfg *Config) TypeLookupInit() {
 type EnumType[T, N any] struct {
 	name         string
 	isEndpoint   bool
-	lookup       map[string]TypedAPIResource
+	lookup       map[string]EnumAPIResource
 	convFunc     func(string) T
 	nullConvFunc func(*string) N
 }
 
-func newEnumType[T, N any](name string, isEndpoint bool, typeSlice []TypedAPIResource, convFunc func(string) T, nullConvFunc func(*string) N) EnumType[T, N] {
+func newEnumType[T, N any](name string, isEndpoint bool, typeSlice []EnumAPIResource, convFunc func(string) T, nullConvFunc func(*string) N) EnumType[T, N] {
 	return EnumType[T, N]{
 		name:         name,
 		isEndpoint:   isEndpoint,
@@ -96,7 +96,7 @@ func newEnumType[T, N any](name string, isEndpoint bool, typeSlice []TypedAPIRes
 }
 
 func (t *TypeLookup) initAbilityType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AbilityTypePlayerAbility),
 			Description: "Abilities that can either be learned via the sphere grid or are learned by aeons.",
@@ -129,7 +129,7 @@ func (t *TypeLookup) initAbilityType() {
 }
 
 func (t *TypeLookup) initAreaConnectionType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AreaConnectionTypeBothDirections),
 			Description: "The edges of two areas are directly connected with each other, and you can freely zone between those areas.",
@@ -150,7 +150,7 @@ func (t *TypeLookup) initAreaConnectionType() {
 }
 
 func (t *TypeLookup) initArenaCreationCategory() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.MaCreationCategoryArea),
 		},
@@ -168,7 +168,7 @@ func (t *TypeLookup) initArenaCreationCategory() {
 }
 
 func (t *TypeLookup) initArranger() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.ArrangerNobuouematsu),
 		},
@@ -189,7 +189,7 @@ func (t *TypeLookup) initArranger() {
 }
 
 func (t *TypeLookup) initBlitzballTournamentCategory() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.BlitzballTournamentCategoryLeague),
 		},
@@ -204,7 +204,7 @@ func (t *TypeLookup) initBlitzballTournamentCategory() {
 }
 
 func (t *TypeLookup) initCharacterClassCategory() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.CharacterClassCategoryGroup),
 		},
@@ -222,7 +222,7 @@ func (t *TypeLookup) initCharacterClassCategory() {
 }
 
 func (t *TypeLookup) initComposer() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.ComposerNobuouematsu),
 		},
@@ -240,7 +240,7 @@ func (t *TypeLookup) initComposer() {
 }
 
 func (t *TypeLookup) initCTBIconType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.CtbIconTypeMonster),
 			Description: "Used for regular monsters",
@@ -269,7 +269,7 @@ func (t *TypeLookup) initCTBIconType() {
 }
 
 func (t *TypeLookup) initCreationArea() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.MaCreationAreaBesaid),
 		},
@@ -317,7 +317,7 @@ func (t *TypeLookup) initCreationArea() {
 }
 
 func (t *TypeLookup) initItemCategory() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.ItemCategoryHealing),
 			Description: "Items that are used for recovery of HP and MP, or for curing negative status ailments.",
@@ -351,7 +351,7 @@ func (t *TypeLookup) initItemCategory() {
 
 func (t *TypeLookup) initLootType() {
 
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.LootTypeItem),
 		},
@@ -369,7 +369,7 @@ func (t *TypeLookup) initLootType() {
 }
 
 func (t *TypeLookup) initMonsterFormationCategory() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.MonsterFormationCategoryRandomEncounter),
 			Description: "A typical random encounter which can effectively be triggered indefinitely.",
@@ -402,7 +402,7 @@ func (t *TypeLookup) initMonsterFormationCategory() {
 }
 
 func (t *TypeLookup) initMonsterSpecies() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.MonsterSpeciesAdamantoise),
 		},
@@ -579,7 +579,7 @@ func (t *TypeLookup) initMonsterSpecies() {
 }
 
 func (t *TypeLookup) initMonsterCategory() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.MonsterCategoryMonster),
 		},
@@ -597,7 +597,7 @@ func (t *TypeLookup) initMonsterCategory() {
 }
 
 func (t *TypeLookup) initOverdriveModeType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.OverdriveModeTypeFormula),
 			Description: "The fill-amount of the overdrive gauge is determined by a formula.",
@@ -614,7 +614,7 @@ func (t *TypeLookup) initOverdriveModeType() {
 }
 
 func (t *TypeLookup) initPlayerAbilityCategory() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.PlayerAbilityCategorySkill),
 		},
@@ -638,7 +638,7 @@ func (t *TypeLookup) initPlayerAbilityCategory() {
 }
 
 func (t *TypeLookup) initShopCategory() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.ShopCategoryStandard),
 		},
@@ -659,7 +659,7 @@ func (t *TypeLookup) initShopCategory() {
 }
 
 func (t *TypeLookup) initShopType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.ShopTypePreAirship),
 		},
@@ -674,7 +674,7 @@ func (t *TypeLookup) initShopType() {
 }
 
 func (t *TypeLookup) initTreasureType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.TreasureTypeChest),
 			Description: "The treasure is found in a chest.",
@@ -695,7 +695,7 @@ func (t *TypeLookup) initTreasureType() {
 }
 
 func (t *TypeLookup) initAccSourceType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AccSourceTypeAccuracy),
 			Description: "The accuracy of the ability is calculated via the user's accuracy stat.",
@@ -712,7 +712,7 @@ func (t *TypeLookup) initAccSourceType() {
 }
 
 func (t *TypeLookup) initAttackType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.AttackTypeAttack),
 		},
@@ -730,7 +730,7 @@ func (t *TypeLookup) initAttackType() {
 }
 
 func (t *TypeLookup) initBreakDmgLimitType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.BreakDmgLmtTypeAlways),
 			Description: "The ability always breaks the damage limit.",
@@ -747,7 +747,7 @@ func (t *TypeLookup) initBreakDmgLimitType() {
 }
 
 func (t *TypeLookup) initCalculationType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.CalculationTypeAddedPercentage),
 			Description: "The given value is added (or subtracted, if negative) to a final percentage-based factor which is applied at the end of the calculation. Example: If the value is 3 (like with Auto-Ability 'Strength +3%'), then the result of the calculation will be multiplied by 1.03.",
@@ -776,7 +776,7 @@ func (t *TypeLookup) initCalculationType() {
 }
 
 func (t *TypeLookup) initCriticalType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.CriticalTypeCrit),
 			Description: "The ability uses the normal critical hit formula.",
@@ -797,7 +797,7 @@ func (t *TypeLookup) initCriticalType() {
 }
 
 func (t *TypeLookup) initCtbAttackType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.CtbAttackTypeAttack),
 		},
@@ -812,7 +812,7 @@ func (t *TypeLookup) initCtbAttackType() {
 }
 
 func (t *TypeLookup) initDamageFormula() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.DamageFormulaStrVsDef),
 			Description: "",
@@ -889,7 +889,7 @@ func (t *TypeLookup) initDamageFormula() {
 }
 
 func (t *TypeLookup) initDamageType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.DamageTypePhysical),
 			Description: "The damage can be reduced by 'Protect', 'Defend' 'Power Break', 'Sentinel', 'Shield', and 'Cheer', as well as 'Defense +X%' Auto-Abilities.",
@@ -910,7 +910,7 @@ func (t *TypeLookup) initDamageType() {
 }
 
 func (t *TypeLookup) initDelayType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.DelayTypeCtbBased),
 			Description: "Delay is based on current ticks. CTB damage/heal is only applied, if 'Slow'/'Haste' is succcessful or if the status was successfully removed.",
@@ -927,7 +927,7 @@ func (t *TypeLookup) initDelayType() {
 }
 
 func (t *TypeLookup) initDurationType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.DurationTypeTurns),
 			Description: "The status condition wears off after a set amount of turns.",
@@ -960,7 +960,7 @@ func (t *TypeLookup) initDurationType() {
 }
 
 func (t *TypeLookup) initTargetType() {
-	typeSlice := []TypedAPIResource{
+	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.TargetTypeSelf),
 			Description: "The action targets its user.",

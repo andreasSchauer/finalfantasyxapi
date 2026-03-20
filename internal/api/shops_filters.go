@@ -65,6 +65,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 	return dbIDs, nil
 }
 
+
 // these functions can be generalized, if needed
 
 func getSlotsPtr(r *http.Request, queryLookup map[string]QueryType) (*int32, error) {

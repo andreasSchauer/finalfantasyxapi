@@ -52,19 +52,19 @@ func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, error) {
 }
 
 // used, if a queryParam is looking up an enum entry
-func parseTypeQuery[T, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[T, N]) (TypedAPIResource, error) {
+func parseTypeQuery[T, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[T, N]) (EnumAPIResource, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
-		return TypedAPIResource{}, err
+		return EnumAPIResource{}, err
 	}
 
-	enum, err := GetTypedAPIResource(query, et)
+	enum, err := GetEnumAPIResource(query, et)
 	switch err {
 	case errIdNotFound:
-		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d.", query, queryParam.Name, len(et.lookup)), nil)
+		return EnumAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d.", query, queryParam.Name, len(et.lookup)), nil)
 
 	case errNoResource:
-		return TypedAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", query, queryParam.Name, endpoint), nil)
+		return EnumAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", query, queryParam.Name, endpoint), nil)
 
 	default:
 		return enum, nil

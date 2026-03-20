@@ -16,7 +16,7 @@ func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, U
 		ID:          shop.ID,
 		Area:        idToAreaAPIResource(cfg, cfg.e.areas, shop.AreaID),
 		Notes:       shop.Notes,
-		Category:    newNamedAPIResourceFromType(cfg, cfg.e.shopCategory.endpoint, shop.Category, cfg.t.ShopCategory),
+		Category:    newNamedAPIResourceFromEnum(cfg, cfg.e.shopCategory.endpoint, shop.Category, cfg.t.ShopCategory),
 		PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShop),
 		PostAirship: convertObjPtr(cfg, shop.PostAirship, convertSubShop),
 	}
@@ -42,4 +42,3 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 		frl(typeQuery(cfg, r, i, cfg.t.ShopCategory, resources, "category", cfg.db.GetShopIDsByCategory)),
 	})
 }
-
