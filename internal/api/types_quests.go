@@ -2,10 +2,19 @@ package api
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
+type Quest struct {
+	ID         			int32              	`json:"id"`
+	Name       			string             	`json:"name"`
+	Type               	NamedAPIResource    `json:"type"`
+	TypedQuest			QuestAPIResource	`json:"typed_quest"`
+	IsPostAirship		bool				`json:"is_post_airship"`
+}
+
 
 type Sidequest struct {
 	ID         		int32              	`json:"id"`
 	Name       		string             	`json:"name"`
+	UntypedQuest	QuestAPIResource	`json:"untyped_quest"`
 	IsPostAirship	bool				`json:"is_post_airship"`
 	Completion 		*QuestCompletion   	`json:"completion"`
 	Subquests  		[]QuestAPIResource 	`json:"subquests"`
@@ -15,8 +24,9 @@ type Sidequest struct {
 type Subquest struct {
 	ID              int32             	`json:"id"`
 	Name            string            	`json:"name"`
+	UntypedQuest	QuestAPIResource	`json:"untyped_quest"`
 	IsPostAirship	bool				`json:"is_post_airship"`
-	ParentSidequest NamedAPIResource  	`json:"parent_sidequest"`
+	ParentSidequest QuestAPIResource  	`json:"parent_sidequest"`
 	Completions     []QuestCompletion 	`json:"completions"`
 	ArenaCreation	*NamedAPIResource	`json:"arena_creation,omitempty"`
 }
@@ -25,7 +35,6 @@ type Subquest struct {
 
 type QuestCompletion struct {
 	Condition		string				`json:"condition"`
-	IsPostAirship	bool				`json:"is_post_airship"`
 	Areas  			[]CompletionArea 	`json:"areas"`
 	Reward 			ItemAmount       	`json:"reward"`
 }

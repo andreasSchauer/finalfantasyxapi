@@ -8,7 +8,7 @@ type ArenaCreation struct {
 	Name                      string             `json:"name"`
 	Category                  string             `json:"category"`
 	Monster                   NamedAPIResource   `json:"monster"`
-	ParentSubquest            NamedAPIResource   `json:"parent_subquest"`
+	ParentSubquest            QuestAPIResource   `json:"parent_subquest"`
 	Reward                    ItemAmount         `json:"reward"`
 	RequiredCatchAmount       int32              `json:"required_catch_amount"`
 	UnlockedCreationsCategory *string            `json:"unlocked_creations_category,omitempty"`

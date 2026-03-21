@@ -30,10 +30,12 @@ func (s Sidequest) Error() string {
 	return fmt.Sprintf("sidequest %s", s.Name)
 }
 
-func (s Sidequest) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
-		ID:   s.ID,
-		Name: s.Name,
+func (s Sidequest) GetResParamsQuest() h.ResParamsQuest {
+	return h.ResParamsQuest{
+		ID:        		s.ID,
+		Sidequest:		&s.Name,
+		Subquest:  		nil,
+		Type:			string(s.Quest.Type),
 	}
 }
 
@@ -59,19 +61,21 @@ func (s Subquest) Error() string {
 	return fmt.Sprintf("subquest %s", s.Name)
 }
 
-func (s Subquest) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
-		ID:   s.ID,
-		Name: s.Name,
+func (s Subquest) GetResParamsQuest() h.ResParamsQuest {
+	return h.ResParamsQuest{
+		ID:        		s.ID,
+		Sidequest: 		nil,
+		Subquest:  		&s.Name,
+		Type:			string(s.Quest.Type),
 	}
 }
 
 type QuestCompletion struct {
-	ID        		int32
-	QuestID   		int32
-	Condition 		string           	`json:"condition"`
-	Areas     		[]CompletionArea 	`json:"areas"`
-	Reward    		ItemAmount       	`json:"reward"`
+	ID        int32
+	QuestID   int32
+	Condition string           `json:"condition"`
+	Areas     []CompletionArea `json:"areas"`
+	Reward    ItemAmount       `json:"reward"`
 }
 
 func (qc QuestCompletion) ToHashFields() []any {
@@ -255,9 +259,9 @@ func (l *Lookup) seedQuestCompletion(qtx *database.Queries, completion QuestComp
 
 	dbCompletion, err := qtx.CreateQuestCompletion(context.Background(), database.CreateQuestCompletionParams{
 		DataHash:     generateDataHash(completion),
-		QuestID:      	completion.QuestID,
-		Condition:    	completion.Condition,
-		ItemAmountID: 	completion.Reward.ID,
+		QuestID:      completion.QuestID,
+		Condition:    completion.Condition,
+		ItemAmountID: completion.Reward.ID,
 	})
 	if err != nil {
 		return QuestCompletion{}, h.NewErr(completion.Error(), err, "couldn't create quest completion")

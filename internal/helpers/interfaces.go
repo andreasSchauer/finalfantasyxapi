@@ -26,6 +26,11 @@ type IsTyped interface {
 	GetResParamsTyped() ResParamsTyped
 }
 
+type IsQuest interface {
+	HasID
+	GetResParamsQuest() ResParamsQuest
+}
+
 type IsEnum interface {
 	HasID
 	GetResParamsEnum() ResParamsEnum
@@ -57,6 +62,13 @@ type ResParamsTyped struct {
 	Version       *int32
 	Specification *string
 	Type          string
+}
+
+type ResParamsQuest struct {
+	ID			int32
+	Sidequest	*string
+	Subquest	*string
+	Type		string
 }
 
 type ResParamsEnum struct {

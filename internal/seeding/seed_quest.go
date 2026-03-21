@@ -38,6 +38,28 @@ func (q Quest) Error() string {
 	return fmt.Sprintf("quest %s, type %s", q.Name, q.Type)
 }
 
+func (q Quest) GetResParamsQuest() h.ResParamsQuest {
+	switch q.Type {
+	case database.QuestTypeSidequest:
+		return h.ResParamsQuest{
+			ID: 		q.ID,
+			Sidequest: 	&q.Name,
+			Subquest: 	nil,
+			Type: 		string(q.Type),
+		}
+
+	case database.QuestTypeSubquest:
+		return h.ResParamsQuest{
+			ID: 		q.ID,
+			Sidequest: 	nil,
+			Subquest: 	&q.Name,
+			Type: 		string(q.Type),
+		}
+	}
+
+	return h.ResParamsQuest{}
+}
+
 func (l *Lookup) seedQuest(qtx *database.Queries, quest Quest) (Quest, error) {
 	dbQuest, err := qtx.CreateQuest(context.Background(), database.CreateQuestParams{
 		DataHash: generateDataHash(quest),

@@ -8,6 +8,9 @@ import (
 // TypeLookup holds all the enum types for the application that are either used as endpoint or query param
 type TypeLookup struct {
 	AbilityType                 EnumType[database.AbilityType, any]
+	UnitType					EnumType[database.UnitType, any]
+	ItemType					EnumType[database.ItemType, any]
+	QuestType					EnumType[database.QuestType, any]
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
@@ -44,6 +47,9 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t = &TypeLookup{}
 
 	cfg.t.initAbilityType()
+	cfg.t.initUnitType()
+	cfg.t.initItemType()
+	cfg.t.initQuestType()
 	cfg.t.initAreaConnectionType()
 	cfg.t.initArenaCreationCategory()
 	cfg.t.initArranger()
@@ -125,6 +131,57 @@ func (t *TypeLookup) initAbilityType() {
 
 	t.AbilityType = newEnumType[database.AbilityType, any]("ability type", true, typeSlice, func(s string) database.AbilityType {
 		return database.AbilityType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initUnitType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.UnitTypeCharacter),
+			Description: "",
+		},
+		{
+			Name:        string(database.UnitTypeAeon),
+			Description: "",
+		},
+	}
+
+	t.UnitType = newEnumType[database.UnitType, any]("unit type", true, typeSlice, func(s string) database.UnitType {
+		return database.UnitType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initItemType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.ItemTypeItem),
+			Description: "",
+		},
+		{
+			Name:        string(database.ItemTypeKeyItem),
+			Description: "",
+		},
+	}
+
+	t.ItemType = newEnumType[database.ItemType, any]("item type", true, typeSlice, func(s string) database.ItemType {
+		return database.ItemType(s)
+	}, nil)
+}
+
+func (t *TypeLookup) initQuestType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.QuestTypeSidequest),
+			Description: "",
+		},
+		{
+			Name:        string(database.QuestTypeSubquest),
+			Description: "",
+		},
+	}
+
+	t.QuestType = newEnumType[database.QuestType, any]("quest type", true, typeSlice, func(s string) database.QuestType {
+		return database.QuestType(s)
 	}, nil)
 }
 

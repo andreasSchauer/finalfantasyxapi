@@ -1,3 +1,15 @@
+-- name: GetQuestIDs :many
+SELECT id FROM quests ORDER BY id;
+
+
+-- name: GetQuestIDsByType :many
+SELECT id FROM quests WHERE type = $1 ORDER BY id;
+
+
+-- name: GetQuestIDsByPostAirship :many
+SELECT id FROM quests WHERE is_post_airship = $1 ORDER BY id;
+
+
 -- name: GetParentSidequest :one
 SELECT q.*
 FROM subquests su

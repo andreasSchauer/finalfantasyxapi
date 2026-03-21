@@ -8,6 +8,17 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+type IsPlayerUnit interface {
+	GetPlayerUnitParams() PlayerUnitParams
+}
+
+type PlayerUnitParams struct {
+	ID		int32
+	Name	string
+	Type	string
+	
+}
+
 type PlayerUnit struct {
 	ID   int32
 	Name string `json:"name"`

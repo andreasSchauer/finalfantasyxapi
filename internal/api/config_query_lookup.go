@@ -42,6 +42,7 @@ type QueryLookup struct {
 	arenaCreations       map[string]QueryType
 	areas                map[string]QueryType
 	blitzballPrizes      map[string]QueryType
+	playerUnits			 map[string]QueryType
 	characters           map[string]QueryType
 	characterClasses     map[string]QueryType
 	fmvs                 map[string]QueryType
@@ -64,6 +65,7 @@ type QueryLookup struct {
 	topmenus             map[string]QueryType
 	shops                map[string]QueryType
 	songs                map[string]QueryType
+	quests           	 map[string]QueryType
 	sidequests           map[string]QueryType
 	subquests            map[string]QueryType
 	sublocations         map[string]QueryType
@@ -106,6 +108,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initAreasParams()
 	cfg.initArenaCreationsParams()
 	cfg.initBlitzballPrizesParams()
+	cfg.initPlayerUnitsParams()
 	cfg.initCharacterClassesParams()
 	cfg.initCharactersParams()
 	cfg.initFMVsParams()
@@ -123,6 +126,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initSubmenusParams()
 	cfg.initSublocationsParams()
 	cfg.initLocationsParams()
+	cfg.initQuestsParams()
 	cfg.initSidequestsParams()
 	cfg.initSubquestsParams()
 	cfg.initShopsParams()
@@ -400,6 +404,24 @@ func (cfg *Config) initBlitzballPrizesParams() {
 
 	params = cfg.completeQueryTypeInit(params, false)
 	cfg.q.blitzballPrizes = params
+}
+
+func (cfg *Config) initPlayerUnitsParams() {
+	params := map[string]QueryType{
+		"type": {
+			ID:          1,
+			Description: "Searches for player units that are of the specified unit type.",
+			Usage:       "?type={name|id}",
+			ExampleUses: []string{"?type=character", "?type=2"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.UnitType.lookup,
+			References:  []string{createListURL(cfg, "unit-type")},
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params, false)
+	cfg.q.playerUnits = params
 }
 
 func (cfg *Config) initCharactersParams() {
@@ -2005,6 +2027,32 @@ func (cfg *Config) initLocationsParams() {
 
 	params = cfg.completeQueryTypeInit(params, true)
 	cfg.q.locations = params
+}
+
+func (cfg *Config) initQuestsParams() {
+	params := map[string]QueryType{
+		"type": {
+			ID:          1,
+			Description: "Searches for quests that are of the specified quest type.",
+			Usage:       "?type={name|id}",
+			ExampleUses: []string{"?type=sidequest", "?type=2"},
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.QuestType.lookup,
+			References:  []string{createListURL(cfg, "quest-type")},
+		},
+		"post_airship": {
+			ID:          2,
+			Description: "Searches for quests that are only completable after acquiring the airship.",
+			Usage:       "?post_airship={bool}",
+			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	params = cfg.completeQueryTypeInit(params, false)
+	cfg.q.quests = params
 }
 
 func (cfg *Config) initSidequestsParams() {

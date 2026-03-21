@@ -17,7 +17,7 @@ type LocRel struct {
 	Treasures  []UnnamedAPIResource `json:"treasures"`
 	Monsters   []NamedAPIResource   `json:"monsters"`
 	Formations []UnnamedAPIResource `json:"monster_formations"`
-	Sidequests []NamedAPIResource   `json:"sidequests"`
+	Sidequests []QuestAPIResource   `json:"sidequests"`
 	Music      *LocBasedMusic       `json:"music"`
 	FMVs       []NamedAPIResource   `json:"fmvs"`
 }
@@ -87,8 +87,8 @@ func getMusicLocBased(cfg *Config, r *http.Request, item seeding.LookupableID, q
 	return &music, nil
 }
 
-func getLocBasedSidequests(cfg *Config, r *http.Request, item seeding.LookupableID, dbQuery func(context.Context, int32) ([]int32, error)) ([]NamedAPIResource, error) {
-	resources := []NamedAPIResource{}
+func getLocBasedSidequests(cfg *Config, r *http.Request, item seeding.LookupableID, dbQuery func(context.Context, int32) ([]int32, error)) ([]QuestAPIResource, error) {
+	resources := []QuestAPIResource{}
 
 	dbQuestIDs, err := dbQuery(r.Context(), item.GetID())
 	if err != nil {

@@ -15,12 +15,13 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 	response := Subquest{
 		ID:              	subquest.ID,
 		Name:            	subquest.Name,
-		ParentSidequest: 	idToNamedAPIResource(cfg, cfg.e.sidequests, subquest.SidequestID),
+		UntypedQuest: 		idToQuestAPIResource(cfg, cfg.e.quests, subquest.Quest.ID),
+		ParentSidequest: 	idToQuestAPIResource(cfg, cfg.e.sidequests, subquest.SidequestID),
 		IsPostAirship: 		subquest.IsPostAirship,
 		Completions:     	convertObjSlice(cfg, subquest.Completions, convertQuestCompletion),
 	}
 
-	if response.ParentSidequest.Name == "monster arena" {
+	if response.ParentSidequest.Sidequest == "monster arena" {
 		response.ArenaCreation = namePtrToNamedAPIResPtr(cfg, cfg.e.arenaCreations, &subquest.Name, nil)
 	}
 

@@ -147,6 +147,87 @@ func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSi
 	return i, err
 }
 
+const getQuestIDs = `-- name: GetQuestIDs :many
+SELECT id FROM quests ORDER BY id
+`
+
+func (q *Queries) GetQuestIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getQuestIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getQuestIDsByPostAirship = `-- name: GetQuestIDsByPostAirship :many
+SELECT id FROM quests WHERE is_post_airship = $1 ORDER BY id
+`
+
+func (q *Queries) GetQuestIDsByPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getQuestIDsByPostAirship, isPostAirship)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getQuestIDsByType = `-- name: GetQuestIDsByType :many
+SELECT id FROM quests WHERE type = $1 ORDER BY id
+`
+
+func (q *Queries) GetQuestIDsByType(ctx context.Context, type_ QuestType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getQuestIDsByType, type_)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getSidequestIDs = `-- name: GetSidequestIDs :many
 SELECT id FROM sidequests ORDER BY id
 `

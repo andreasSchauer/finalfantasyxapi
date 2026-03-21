@@ -807,3 +807,57 @@ func (q *Queries) GetCharacterSgAbilityIDs(ctx context.Context, id int32) ([]int
 	}
 	return items, nil
 }
+
+const getPlayerUnitIDs = `-- name: GetPlayerUnitIDs :many
+SELECT id FROM player_units ORDER BY id
+`
+
+func (q *Queries) GetPlayerUnitIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerUnitIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPlayerUnitIDsByType = `-- name: GetPlayerUnitIDsByType :many
+SELECT id FROM player_units WHERE type = $1 ORDER BY id
+`
+
+func (q *Queries) GetPlayerUnitIDsByType(ctx context.Context, type_ UnitType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerUnitIDsByType, type_)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

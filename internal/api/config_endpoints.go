@@ -15,7 +15,7 @@ type endpoints struct {
 	celestialWeapons     handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]
 	characters           handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]
 	characterClasses     handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]
-	playerUnits			 handlerInput[seeding.PlayerUnit, any, TypedAPIResource, TypedAPIResourceList]
+	playerUnits			 handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]
 	masterItems			 handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]
 	elements             handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
 	equipment            handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
@@ -39,7 +39,8 @@ type endpoints struct {
 	properties           handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]
 	ronsoRages           handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]
 	shops                handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
-	sidequests           handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList]
+	quests           handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]
+	sidequests           handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]
 	subquests            handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]
 	songs                handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
 	stats                handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
@@ -50,6 +51,9 @@ type endpoints struct {
 	treasures            handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
 
 	abilityType              handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	unitType              	 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	itemType              	 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	questType              	 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	attackType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageFormula            handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
@@ -265,17 +269,17 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.playerUnits = handlerInput[seeding.PlayerUnit, any, TypedAPIResource, TypedAPIResourceList]{
+	e.playerUnits = handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]{
 		endpoint:      "player-units",
 		resourceType:  "player unit",
 		objLookup:     cfg.l.PlayerUnits,
 		objLookupID:   cfg.l.PlayerUnitsID,
-		queryLookup:   nil,
-		idToResFunc:   idToTypedAPIResource[seeding.PlayerUnit, any, TypedAPIResource, TypedAPIResourceList],
+		queryLookup:   cfg.q.playerUnits,
+		idToResFunc:   idToTypedAPIResource[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList],
 		resToListFunc: newTypedAPIResourceList,
-		retrieveQuery: nil,
-		getSingleFunc: nil,
-		retrieveFunc:  nil,
+		retrieveQuery: cfg.db.GetPlayerUnitIDs,
+		getSingleFunc: cfg.getPlayerUnit,
+		retrieveFunc:  cfg.retrievePlayerUnits,
 	}
 
 	e.masterItems = handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]{
@@ -695,14 +699,27 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.sidequests = handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList]{
+	e.quests = handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]{
+		endpoint:      "quests",
+		resourceType:  "quest",
+		objLookup:     cfg.l.Quests,
+		objLookupID:   cfg.l.QuestsID,
+		queryLookup:   cfg.q.quests,
+		idToResFunc:   idToQuestAPIResource[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList],
+		resToListFunc: newQuestAPIResourceList,
+		retrieveQuery: cfg.db.GetQuestIDs,
+		getSingleFunc: cfg.getQuest,
+		retrieveFunc:  cfg.retrieveQuests,
+	}
+
+	e.sidequests = handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]{
 		endpoint:      "sidequests",
 		resourceType:  "sidequest",
 		objLookup:     cfg.l.Sidequests,
 		objLookupID:   cfg.l.SidequestsID,
 		queryLookup:   cfg.q.sidequests,
-		idToResFunc:   idToNamedAPIResource[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+		idToResFunc:   idToQuestAPIResource[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList],
+		resToListFunc: newQuestAPIResourceList,
 		retrieveQuery: cfg.db.GetSidequestIDs,
 		getSingleFunc: cfg.getSidequest,
 		retrieveFunc:  cfg.retrieveSidequests,
@@ -720,7 +737,7 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:     cfg.l.Subquests,
 		objLookupID:   cfg.l.SubquestsID,
 		queryLookup:   cfg.q.subquests,
-		idToResFunc:   idToQuestAPIResource,
+		idToResFunc:   idToQuestAPIResource[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList],
 		resToListFunc: newQuestAPIResourceList,
 		retrieveQuery: cfg.db.GetSubquestIDs,
 		getSingleFunc: cfg.getSubquest,
@@ -859,6 +876,27 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:      "ability-type",
 		resourceType:  "ability type",
 		objLookup:     cfg.t.AbilityType.lookup,
+		resToListFunc: newEnumAPIResourceList,
+	}
+
+	e.unitType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
+		endpoint:      "unit-type",
+		resourceType:  "unit type",
+		objLookup:     cfg.t.UnitType.lookup,
+		resToListFunc: newEnumAPIResourceList,
+	}
+
+	e.itemType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
+		endpoint:      "item-type",
+		resourceType:  "item type",
+		objLookup:     cfg.t.ItemType.lookup,
+		resToListFunc: newEnumAPIResourceList,
+	}
+
+	e.questType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
+		endpoint:      "quest-type",
+		resourceType:  "quest type",
+		objLookup:     cfg.t.QuestType.lookup,
 		resToListFunc: newEnumAPIResourceList,
 	}
 

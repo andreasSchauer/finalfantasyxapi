@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList], id int32) (Sidequest, error) {
+func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList], id int32) (Sidequest, error) {
 	sidequest, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return Sidequest{}, err
@@ -20,6 +20,7 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 	response := Sidequest{
 		ID:         	sidequest.ID,
 		Name:       	sidequest.Name,
+		UntypedQuest: 	idToQuestAPIResource(cfg, cfg.e.quests, sidequest.Quest.ID),
 		IsPostAirship: 	sidequest.IsPostAirship,
 		Completion: 	convertObjPtr(cfg, sidequest.Completion, convertQuestCompletion),
 		Subquests:  	subquests,
@@ -28,13 +29,13 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 	return response, nil
 }
 
-func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]) (QuestApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
-		return NamedApiResourceList{}, err
+		return QuestApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
 		frl(boolQuery(cfg, r, i, resources, "post_airship", cfg.db.GetSidequestIDsByPostAirship)),
 	})
 }

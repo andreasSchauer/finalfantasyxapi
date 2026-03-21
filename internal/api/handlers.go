@@ -18,6 +18,10 @@ func (cfg *Config) HandleBlitzballPrizes(w http.ResponseWriter, r *http.Request)
 	routerIdOnly(cfg, w, r, cfg.e.blitzballPrizes)
 }
 
+func (cfg *Config) HandlePlayerUnits(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.playerUnits)
+}
+
 func (cfg *Config) HandleCharacterClasses(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.characterClasses)
 }
@@ -100,6 +104,10 @@ func (cfg *Config) HandleTopmenus(w http.ResponseWriter, r *http.Request) {
 
 func (cfg *Config) HandleShops(w http.ResponseWriter, r *http.Request) {
 	routerIdOnly(cfg, w, r, cfg.e.shops)
+}
+
+func (cfg *Config) HandleQuests(w http.ResponseWriter, r *http.Request) {
+	routerIdOnly(cfg, w, r, cfg.e.quests)
 }
 
 func (cfg *Config) HandleSidequests(w http.ResponseWriter, r *http.Request) {

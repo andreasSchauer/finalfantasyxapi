@@ -1,3 +1,11 @@
+-- name: GetPlayerUnitIDs :many
+SELECT id FROM player_units ORDER BY id;
+
+
+-- name: GetPlayerUnitIDsByType :many
+SELECT id FROM player_units WHERE type = $1 ORDER BY id;
+
+
 -- name: GetCharacterCharClassIDs :many
 SELECT cc.id
 FROM character_classes cc

@@ -27,7 +27,7 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 		Name:                      creation.Name,
 		Category:                  creation.Category,
 		Monster:                   idToNamedAPIResource(cfg, cfg.e.monsters, *creation.MonsterID),
-		ParentSubquest:            idToNamedAPIResource(cfg, cfg.e.subquests, creation.SubquestID),
+		ParentSubquest:            idToQuestAPIResource(cfg, cfg.e.subquests, creation.SubquestID),
 		Reward:                    convertItemAmount(cfg, ia),
 		RequiredCatchAmount:       creation.Amount,
 		UnlockedCreationsCategory: creation.CreationsUnlockedCategory,
