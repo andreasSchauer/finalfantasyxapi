@@ -153,16 +153,17 @@ func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest
 }
 
 const createQuestCompletion = `-- name: CreateQuestCompletion :one
-INSERT INTO quest_completions (data_hash, quest_id, condition,item_amount_id)
-VALUES ($1, $2, $3, $4)
+INSERT INTO quest_completions (data_hash, quest_id, condition, is_repeatable, item_amount_id)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
-RETURNING id, data_hash, quest_id, condition, item_amount_id
+RETURNING id, data_hash, quest_id, condition, is_repeatable, item_amount_id
 `
 
 type CreateQuestCompletionParams struct {
 	DataHash     string
 	QuestID      int32
 	Condition    string
+	IsRepeatable bool
 	ItemAmountID int32
 }
 
@@ -171,6 +172,7 @@ func (q *Queries) CreateQuestCompletion(ctx context.Context, arg CreateQuestComp
 		arg.DataHash,
 		arg.QuestID,
 		arg.Condition,
+		arg.IsRepeatable,
 		arg.ItemAmountID,
 	)
 	var i QuestCompletion
@@ -179,6 +181,7 @@ func (q *Queries) CreateQuestCompletion(ctx context.Context, arg CreateQuestComp
 		&i.DataHash,
 		&i.QuestID,
 		&i.Condition,
+		&i.IsRepeatable,
 		&i.ItemAmountID,
 	)
 	return i, err

@@ -71,17 +71,19 @@ func (s Subquest) GetResParamsQuest() h.ResParamsQuest {
 }
 
 type QuestCompletion struct {
-	ID        int32
-	QuestID   int32
-	Condition string           `json:"condition"`
-	Areas     []CompletionArea `json:"areas"`
-	Reward    ItemAmount       `json:"reward"`
+	ID        		int32
+	QuestID   		int32
+	Condition 		string           `json:"condition"`
+	IsRepeatable	bool			 `json:"is_repeatable"`
+	Areas     		[]CompletionArea `json:"areas"`
+	Reward    		ItemAmount       `json:"reward"`
 }
 
 func (qc QuestCompletion) ToHashFields() []any {
 	return []any{
 		qc.QuestID,
 		qc.Condition,
+		qc.IsRepeatable,
 		qc.Reward.ID,
 	}
 }
@@ -261,6 +263,7 @@ func (l *Lookup) seedQuestCompletion(qtx *database.Queries, completion QuestComp
 		DataHash:     generateDataHash(completion),
 		QuestID:      completion.QuestID,
 		Condition:    completion.Condition,
+		IsRepeatable: completion.IsRepeatable,
 		ItemAmountID: completion.Reward.ID,
 	})
 	if err != nil {

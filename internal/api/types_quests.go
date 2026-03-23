@@ -35,6 +35,7 @@ type Subquest struct {
 
 type QuestCompletion struct {
 	Condition		string				`json:"condition"`
+	IsRepeatable	bool				`json:"is_repeatable"`
 	Areas  			[]CompletionArea 	`json:"areas"`
 	Reward 			ItemAmount       	`json:"reward"`
 }
@@ -42,6 +43,7 @@ type QuestCompletion struct {
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
 		Condition: 		qc.Condition,
+		IsRepeatable: 	qc.IsRepeatable,
 		Areas:  		convertObjSlice(cfg, qc.Areas, convertCompletionArea),
 		Reward: 		convertItemAmount(cfg, qc.Reward),
 	}

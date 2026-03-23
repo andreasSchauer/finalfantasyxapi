@@ -3862,6 +3862,7 @@ type QuestCompletion struct {
 	DataHash     string
 	QuestID      int32
 	Condition    string
+	IsRepeatable bool
 	ItemAmountID int32
 }
 

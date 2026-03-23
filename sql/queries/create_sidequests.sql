@@ -33,8 +33,8 @@ RETURNING *;
 
 
 -- name: CreateQuestCompletion :one
-INSERT INTO quest_completions (data_hash, quest_id, condition,item_amount_id)
-VALUES ($1, $2, $3, $4)
+INSERT INTO quest_completions (data_hash, quest_id, condition, is_repeatable, item_amount_id)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
 RETURNING *;
 
