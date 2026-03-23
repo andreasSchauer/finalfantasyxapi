@@ -16,8 +16,7 @@ func (l QueryParameterList) getListParams() ListParams {
 }
 
 func getQueryParamList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (QueryParameterList, error) {
-	
-	
+
 	queryParams := queryMapToSlice(i.queryLookup)
 	queryParams = getAllowedResources(cfg, i, queryParams)
 	queryParams = getAllowedValuesFromTypes(cfg, queryParams)
@@ -53,7 +52,7 @@ func getAllowedValuesFromTypes(cfg *Config, params []QueryType) []QueryType {
 			continue
 		}
 
-		types := createTypeResourceSlice(cfg, "", param.TypeLookup)
+		types := createEnumResourceSlice(cfg, "", param.TypeLookup)
 
 		for _, typeRes := range types {
 			param.AllowedValues = append(param.AllowedValues, typeRes.Name)

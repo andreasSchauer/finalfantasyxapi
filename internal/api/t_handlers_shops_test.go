@@ -296,6 +296,22 @@ func TestRetrieveShops(t *testing.T) {
 			count:   14,
 			results: []int32{3, 4, 10, 13, 22, 26, 30},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/shops?auto_ability=111&character=3&empty_slots=0",
+				expectedStatus: http.StatusOK,
+			},
+			count:   4,
+			results: []int32{1, 2, 9, 21},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/shops?empty_slots=3&shop_type=post-airship",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{1, 2, 24, 27, 32},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.shops.endpoint, "RetrieveShops", testCfg.HandleShops, compareAPIResourceLists[UnnamedApiResourceList])

@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -48,23 +47,6 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.Chara
 	}
 
 	return charClass, nil
-}
-
-func getClassUnits(cfg *Config, r *http.Request, class seeding.CharacterClass) ([]NamedAPIResource, error) {
-	unitIDs, err := cfg.db.GetCharacterClassUnitIDs(r.Context(), class.ID)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get units of class '%s'", class.Name), err)
-	}
-
-	resources := []NamedAPIResource{}
-
-	for _, id := range unitIDs {
-		unit, _ := seeding.GetResourceByID(id, cfg.l.PlayerUnitsID)
-		unitRes := createPlayerUnitResource(cfg, unit.Name, unit.Type)
-		resources = append(resources, unitRes)
-	}
-
-	return resources, nil
 }
 
 func getClassLearnableAbilities(cfg *Config, r *http.Request, class seeding.CharacterClass, defaultAbilities []TypedAPIResource) ([]TypedAPIResource, error) {

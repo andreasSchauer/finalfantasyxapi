@@ -194,6 +194,14 @@ func TestRetrieveTreasures(t *testing.T) {
 			count:   6,
 			results: []int32{39, 62, 150, 211, 254, 303},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?story_based=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   94,
+			results: []int32{1, 23, 91, 119, 139, 207, 239, 261, 264},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.treasures.endpoint, "RetrieveTreasures", testCfg.HandleTreasures, compareAPIResourceLists[UnnamedApiResourceList])

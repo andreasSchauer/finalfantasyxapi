@@ -8,9 +8,9 @@ import (
 // TypeLookup holds all the enum types for the application that are either used as endpoint or query param
 type TypeLookup struct {
 	AbilityType                 EnumType[database.AbilityType, any]
-	UnitType					EnumType[database.UnitType, any]
-	ItemType					EnumType[database.ItemType, any]
-	QuestType					EnumType[database.QuestType, any]
+	UnitType                    EnumType[database.UnitType, any]
+	ItemType                    EnumType[database.ItemType, any]
+	QuestType                   EnumType[database.QuestType, any]
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
@@ -95,7 +95,7 @@ func newEnumType[T, N any](name string, isEndpoint bool, typeSlice []EnumAPIReso
 	return EnumType[T, N]{
 		name:         name,
 		isEndpoint:   isEndpoint,
-		lookup:       typeSliceToMap(typeSlice),
+		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     convFunc,
 		nullConvFunc: nullConvFunc,
 	}

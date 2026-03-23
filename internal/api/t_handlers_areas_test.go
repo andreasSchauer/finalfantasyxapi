@@ -330,6 +330,14 @@ func TestRetrieveAreas(t *testing.T) {
 			count:   2,
 			results: []int32{46, 169},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?post_airship=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   25,
+			results: []int32{13, 14, 28, 98, 106, 210, 235, 240},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.areas.endpoint, "RetrieveAreas", testCfg.HandleAreas, compareAPIResourceLists[AreaApiResourceList])

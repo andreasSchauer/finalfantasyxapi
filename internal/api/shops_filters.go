@@ -66,7 +66,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 }
 
 
-// these functions can be generalized, if needed
+// can generalize these functions pretty easliy, if needed
 
 func getSlotsPtr(r *http.Request, queryLookup map[string]QueryType) (*int32, error) {
 	var slotsPtr *int32

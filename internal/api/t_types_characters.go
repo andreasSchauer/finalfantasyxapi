@@ -1,8 +1,10 @@
 package api
 
+
 type expCharacter struct {
 	testGeneral
 	expUnique
+	untypedUnit			   int32
 	area                   int32
 	weaponType             string
 	celestialWeapon        *int32
@@ -21,6 +23,7 @@ func (e expCharacter) GetTestGeneral() testGeneral {
 
 func compareCharacters(test test, exp expCharacter, got Character) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
+	compIdApiResource(test, "untyped unit", test.cfg.e.playerUnits.endpoint, exp.untypedUnit, got.UntypedUnit)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
 	compare(test, "weapon type", exp.weaponType, got.WeaponType)
 	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.e.celestialWeapons.endpoint, exp.celestialWeapon, got.CelestialWeapon)

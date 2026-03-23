@@ -185,6 +185,30 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			count:   54,
 			results: []int32{3, 37, 83, 137, 189, 204, 245, 270, 296},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations?post_airship=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   87,
+			results: []int32{7, 20, 70, 171, 213, 267, 287, 314, 331},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations?story_based=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   102,
+			results: []int32{1, 2, 28, 37, 134, 164, 178, 203, 277, 279},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations?repeatable=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   235,
+			results: []int32{9, 35, 58, 81, 103, 148, 165, 193, 239, 280, 319, 331},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.monsterFormations.endpoint, "RetrieveMonsterFormations", testCfg.HandleMonsterFormations, compareAPIResourceLists[UnnamedApiResourceList])

@@ -40,6 +40,7 @@ func TestGetSubquest(t *testing.T) {
 				},
 			},
 			expUnique:       newExpUnique(5, "jormungand"),
+			untypedQuest: 6,
 			parentSidequest: 1,
 			completions: []testQuestCompletion{
 				{
@@ -60,6 +61,7 @@ func TestGetSubquest(t *testing.T) {
 				},
 			},
 			expUnique:       newExpUnique(39, "ixion"),
+			untypedQuest: 41,
 			parentSidequest: 2,
 			completions: []testQuestCompletion{
 				{
@@ -85,6 +87,7 @@ func TestGetSubquest(t *testing.T) {
 				},
 			},
 			expUnique:       newExpUnique(53, "after obtaining the airship"),
+			untypedQuest: 59,
 			parentSidequest: 6,
 			completions: []testQuestCompletion{
 				{
@@ -114,6 +117,14 @@ func TestRetrieveSubquests(t *testing.T) {
 			},
 			count:   56,
 			results: []int32{1, 5, 17, 28, 30, 34, 44, 51, 56},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/subquests?post_airship=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   33,
+			results: []int32{1, 8, 12, 23, 33, 53},
 		},
 	}
 

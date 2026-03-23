@@ -3,6 +3,7 @@ package api
 type expAeon struct {
 	testGeneral
 	expUnique
+	untypedUnit			   int32
 	area                   int32
 	battlesToRegen         int32
 	agility                AgilityParams
@@ -22,6 +23,7 @@ func (e expAeon) GetTestGeneral() testGeneral {
 
 func compareAeons(test test, exp expAeon, got Aeon) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
+	compIdApiResource(test, "untyped unit", test.cfg.e.playerUnits.endpoint, exp.untypedUnit, got.UntypedUnit)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
 	compare(test, "battles to regenerate", exp.battlesToRegen, got.BattlesToRegenerate)
 	compStructs(test, "agility params", exp.agility, got.AgilityParameters)

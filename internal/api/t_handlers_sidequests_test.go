@@ -47,6 +47,7 @@ func TestGetSidequest(t *testing.T) {
 				},
 			},
 			expUnique: newExpUnique(2, "remiem temple"),
+			untypedQuest: 38,
 			completion: &testQuestCompletion{
 				areas:  []int32{209},
 				reward: newTestItemAmount(126, 1),
@@ -63,6 +64,7 @@ func TestGetSidequest(t *testing.T) {
 				},
 			},
 			expUnique:  newExpUnique(4, "chocobo training"),
+			untypedQuest: 49,
 			completion: nil,
 			subquests:  []int32{46, 47, 48, 49},
 		},
@@ -77,6 +79,7 @@ func TestGetSidequest(t *testing.T) {
 				},
 			},
 			expUnique: newExpUnique(9, "al bhed primers"),
+			untypedQuest: 65,
 			completion: &testQuestCompletion{
 				areas:  []int32{185, 182},
 				reward: newTestItemAmount(111, 99),
@@ -96,6 +99,14 @@ func TestRetrieveSidequests(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   9,
+			results: []int32{1, 2, 3, 5, 6, 9},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sidequests?post_airship=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
 			results: []int32{1, 2, 5, 6, 9},
 		},
 	}

@@ -2329,8 +2329,8 @@ func (cfg *Config) initTreasuresParams() {
 		"story_based": {
 			ID:          7,
 			Description: "Searches for treasures that are only available during certain sections of the story.",
-			Usage:       "?post_airship={bool}",
-			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			Usage:       "?story_based={bool}",
+			ExampleUses: []string{"?story_based=true", "?story_based=false"},
 			ForList:     true,
 			ForSingle:   false,
 		},

@@ -105,7 +105,7 @@ func newEnumAPIResourceList(cfg *Config, r *http.Request, resources []EnumAPIRes
 	return list, nil
 }
 
-func createTypeResourceSlice(cfg *Config, endpoint string, lookup map[string]EnumAPIResource) []EnumAPIResource {
+func createEnumResourceSlice(cfg *Config, endpoint string, lookup map[string]EnumAPIResource) []EnumAPIResource {
 	resources := []EnumAPIResource{}
 
 	for _, resource := range lookup {
@@ -118,7 +118,7 @@ func createTypeResourceSlice(cfg *Config, endpoint string, lookup map[string]Enu
 	return resources
 }
 
-func typeSliceToMap(enumTypes []EnumAPIResource) map[string]EnumAPIResource {
+func enumSliceToMap(enumTypes []EnumAPIResource) map[string]EnumAPIResource {
 	typeMap := make(map[string]EnumAPIResource)
 
 	for i, enumType := range enumTypes {

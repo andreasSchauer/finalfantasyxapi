@@ -1282,6 +1282,14 @@ func TestRetrieveMonsters(t *testing.T) {
 			count:   7,
 			results: []int32{60, 63, 67},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?post_airship=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   93,
+			results: []int32{196, 202, 213, 227, 246, 268, 284, 307},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.monsters.endpoint, "RetrieveMonsters", testCfg.HandleMonsters, compareAPIResourceLists[NamedApiResourceList])
