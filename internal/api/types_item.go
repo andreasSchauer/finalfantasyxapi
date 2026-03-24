@@ -1,5 +1,7 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+
 type Item struct {
 	ID                 	int32					`json:"id"`
 	Name               	string					`json:"name"`
@@ -13,15 +15,14 @@ type Item struct {
 	ItemAbility			*NamedAPIResource		`json:"item_ability"`
 	AvailableMenus		[]NamedAPIResource		`json:"available_menus"`
 	RelatedStats       	[]NamedAPIResource		`json:"related_stats"`
-	Monsters			[]NamedAPIResource		`json:"monsters"`
-	Areas				[]AreaAPIResource		`json:"areas"` // not sure yet
-	Treasures			[]UnnamedAPIResource	`json:"treasures"`
-	Shops				[]UnnamedAPIResource	`json:"shops"`
-	Sidequests			[]NamedAPIResource		`json:"sidequests"`
-	BlitzballPrizes		[]UnnamedAPIResource	`json:"blitzball_prizes"`
-	AeonLearnAbilities	[]AbilityAmount			`json:"aeon_learn_abilities"`
-	AutoAbilities		[]AutoAbilityAmount		`json:"auto_abilities"`
-	Mixes				[]NamedAPIResource		`json:"mixes"`
+	Monsters			[]ItemMonster			`json:"monsters"` // GetMonsterIDsByItem
+	Treasures			[]UnnamedAPIResource	`json:"treasures"` // GetTreasureIDsByItem
+	Shops				[]UnnamedAPIResource	`json:"shops"` // GetItemShopIDs
+	Quests				[]QuestAPIResource		`json:"quests"` // GetItemQuestIDs
+	BlitzballPrizes		[]UnnamedAPIResource	`json:"blitzball_prizes"` // GetItemBlitzballPrizeIDs
+	AeonLearnAbilities	[]AbilityAmount			`json:"aeon_learn_abilities"` // GetItemPlayerAbilityIDs
+	AutoAbilities		[]AutoAbilityAmount		`json:"auto_abilities"` // GetItemAutoAbilityIDs
+	Mixes				[]NamedAPIResource		`json:"mixes"` // GetItemMixIDs
 }
 
 
@@ -88,4 +89,56 @@ func newAutoAbilityAmount(res NamedAPIResource, amount int32) AutoAbilityAmount 
 		AutoAbility:   	res,
 		Amount: 		amount,
 	}
+}
+
+// need to account for otherItems
+type ItemMonster struct {
+	Monster			NamedAPIResource	`json:"monster"`
+	Steal			*CommonRareAmount	`json:"steal,omitempty"`
+	Drop			*CommonRareAmount	`json:"drop,omitempty"`
+	SecondaryDrop	*CommonRareAmount	`json:"secondary_drop,omitempty"`
+	Bribe			int32				`json:"bribe,omitempty"`
+}
+
+
+type CommonRareAmount struct {
+	Common	int32	`json:"common,omitempty"`
+	Rare	int32	`json:"rare,omitempty"`
+}
+
+func (cra CommonRareAmount) IsZero() bool {
+	return cra.Common == 0 && cra.Rare == 0
+}
+
+func createItemMonster(cfg *Config, item seeding.Item, mon NamedAPIResource) ItemMonster {
+	monster, _ := seeding.GetResourceByID(mon.ID, cfg.l.MonstersID)
+
+	return ItemMonster{
+		Monster:		mon,
+		Steal: 	 		craPtr(item, monster.Items.StealCommon, monster.Items.StealRare),
+		Drop: 			craPtr(item, monster.Items.DropCommon, monster.Items.DropRare),
+		SecondaryDrop: 	craPtr(item, monster.Items.SecondaryDropCommon, monster.Items.SecondaryDropRare),
+		Bribe: 			getMonItemAmount(item, monster.Items.Bribe),
+	}
+}
+
+func craPtr(item seeding.Item, common, rare *seeding.ItemAmount) *CommonRareAmount {
+	cra := CommonRareAmount{
+		Common: getMonItemAmount(item, common),
+		Rare: 	getMonItemAmount(item, rare),
+	}
+
+	if cra.IsZero() {
+		return nil
+	}
+
+	return &cra
+}
+
+func getMonItemAmount(item seeding.Item, ia *seeding.ItemAmount) int32 {
+	if ia == nil || ia.ItemName != item.Name {
+		return 0
+	}
+
+	return ia.Amount
 }

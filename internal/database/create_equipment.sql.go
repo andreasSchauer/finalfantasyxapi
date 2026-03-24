@@ -339,31 +339,34 @@ func (q *Queries) CreateEquipmentTablesNamesJunction(ctx context.Context, arg Cr
 const updateAutoAbility = `-- name: UpdateAutoAbility :exec
 UPDATE auto_abilities
 SET data_hash = $1,
-    grad_rcvry_stat_id = $2,
-    on_hit_element_id = $3,
-    added_elem_resist_id = $4,
-    on_hit_status_id = $5,
-    added_property_id = $6,
-    cnvrsn_from_mod_id = $7,
-    cnvrsn_to_mod_id = $8
-WHERE id = $9
+    required_item_amount_id = $2,
+    grad_rcvry_stat_id = $3,
+    on_hit_element_id = $4,
+    added_elem_resist_id = $5,
+    on_hit_status_id = $6,
+    added_property_id = $7,
+    cnvrsn_from_mod_id = $8,
+    cnvrsn_to_mod_id = $9
+WHERE id = $10
 `
 
 type UpdateAutoAbilityParams struct {
-	DataHash          string
-	GradRcvryStatID   sql.NullInt32
-	OnHitElementID    sql.NullInt32
-	AddedElemResistID sql.NullInt32
-	OnHitStatusID     sql.NullInt32
-	AddedPropertyID   sql.NullInt32
-	CnvrsnFromModID   sql.NullInt32
-	CnvrsnToModID     sql.NullInt32
-	ID                int32
+	DataHash             string
+	RequiredItemAmountID sql.NullInt32
+	GradRcvryStatID      sql.NullInt32
+	OnHitElementID       sql.NullInt32
+	AddedElemResistID    sql.NullInt32
+	OnHitStatusID        sql.NullInt32
+	AddedPropertyID      sql.NullInt32
+	CnvrsnFromModID      sql.NullInt32
+	CnvrsnToModID        sql.NullInt32
+	ID                   int32
 }
 
 func (q *Queries) UpdateAutoAbility(ctx context.Context, arg UpdateAutoAbilityParams) error {
 	_, err := q.db.ExecContext(ctx, updateAutoAbility,
 		arg.DataHash,
+		arg.RequiredItemAmountID,
 		arg.GradRcvryStatID,
 		arg.OnHitElementID,
 		arg.AddedElemResistID,

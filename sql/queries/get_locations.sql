@@ -1019,6 +1019,17 @@ SELECT id FROM treasures WHERE loot_type = $1 ORDER BY id;
 SELECT id FROM treasures WHERE treasure_type = $1 ORDER BY id;
 
 
+-- name: GetTreasureIDsByItem :many
+SELECT DISTINCT t.id
+FROM treasures t
+JOIN j_treasures_items j ON j.treasure_id = t.id
+JOIN item_amounts ia ON j.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
+JOIN items i ON i.master_item_id = mi.id
+WHERE i.id = $1
+ORDER BY t.id;
+
+
 -- name: GetTreasureIDsByIsAnimaTreasure :many
 SELECT id FROM treasures WHERE is_anima_treasure = $1 ORDER BY id;
 

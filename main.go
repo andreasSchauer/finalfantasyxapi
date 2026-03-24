@@ -28,21 +28,21 @@ func main() {
 	mux.HandleFunc("GET /api/locations/", apiCfg.HandleLocations)
 	mux.HandleFunc("GET /api/sublocations/", apiCfg.HandleSublocations)
 	mux.HandleFunc("GET /api/areas/", apiCfg.HandleAreas)
-
-	mux.HandleFunc("GET /api/arena-creations/", apiCfg.HandleArenaCreations)
-	mux.HandleFunc("GET /api/blitzball-prizes/", apiCfg.HandleBlitzballPrizes)
-	mux.HandleFunc("GET /api/fmvs/", apiCfg.HandleFMVs)
+	
 	mux.HandleFunc("GET /api/monster-formations/", apiCfg.HandleMonsterFormations)
+	mux.HandleFunc("GET /api/shops/", apiCfg.HandleShops)
+	mux.HandleFunc("GET /api/treasures/", apiCfg.HandleTreasures)
 	mux.HandleFunc("GET /api/quests/", apiCfg.HandleQuests)
 	mux.HandleFunc("GET /api/sidequests/", apiCfg.HandleSidequests)
 	mux.HandleFunc("GET /api/subquests/", apiCfg.HandleSubquests)
-	mux.HandleFunc("GET /api/shops/", apiCfg.HandleShops)
+	mux.HandleFunc("GET /api/arena-creations/", apiCfg.HandleArenaCreations)
+	mux.HandleFunc("GET /api/blitzball-prizes/", apiCfg.HandleBlitzballPrizes)
+	mux.HandleFunc("GET /api/fmvs/", apiCfg.HandleFMVs)
 	mux.HandleFunc("GET /api/songs/", apiCfg.HandleSongs)
-	mux.HandleFunc("GET /api/treasures/", apiCfg.HandleTreasures)
-
+	
 	mux.HandleFunc("GET /api/player-units/", apiCfg.HandlePlayerUnits)
-	mux.HandleFunc("GET /api/aeons/", apiCfg.HandleAeons)
 	mux.HandleFunc("GET /api/characters/", apiCfg.HandleCharacters)
+	mux.HandleFunc("GET /api/aeons/", apiCfg.HandleAeons)
 	mux.HandleFunc("GET /api/character-classes/", apiCfg.HandleCharacterClasses)
 	mux.HandleFunc("GET /api/monsters/", apiCfg.HandleMonsters)
 	
@@ -60,6 +60,8 @@ func main() {
 	mux.HandleFunc("GET /api/ronso-rages/", apiCfg.HandleRonsoRages)
 	mux.HandleFunc("GET /api/submenus/", apiCfg.HandleSubmenus)
 	mux.HandleFunc("GET /api/topmenus/", apiCfg.HandleTopmenus)
+	
+	mux.HandleFunc("GET /api/items/", apiCfg.HandleItems)
 
 	mux.HandleFunc("GET /api/overdrive-modes/", apiCfg.HandleOverdriveModes)
 

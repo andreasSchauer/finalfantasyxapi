@@ -23,14 +23,15 @@ RETURNING *;
 -- name: UpdateAutoAbility :exec
 UPDATE auto_abilities
 SET data_hash = $1,
-    grad_rcvry_stat_id = $2,
-    on_hit_element_id = $3,
-    added_elem_resist_id = $4,
-    on_hit_status_id = $5,
-    added_property_id = $6,
-    cnvrsn_from_mod_id = $7,
-    cnvrsn_to_mod_id = $8
-WHERE id = $9;
+    required_item_amount_id = $2,
+    grad_rcvry_stat_id = $3,
+    on_hit_element_id = $4,
+    added_elem_resist_id = $5,
+    on_hit_status_id = $6,
+    added_property_id = $7,
+    cnvrsn_from_mod_id = $8,
+    cnvrsn_to_mod_id = $9
+WHERE id = $10;
 
 
 -- name: CreateAutoAbilitiesRelatedStatsJunction :exec

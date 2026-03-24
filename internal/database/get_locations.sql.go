@@ -3499,6 +3499,40 @@ func (q *Queries) GetTreasureIDsByIsStoryBased(ctx context.Context, isStoryBased
 	return items, nil
 }
 
+const getTreasureIDsByItem = `-- name: GetTreasureIDsByItem :many
+SELECT DISTINCT t.id
+FROM treasures t
+JOIN j_treasures_items j ON j.treasure_id = t.id
+JOIN item_amounts ia ON j.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
+JOIN items i ON i.master_item_id = mi.id
+WHERE i.id = $1
+ORDER BY t.id
+`
+
+func (q *Queries) GetTreasureIDsByItem(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDsByItem, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getTreasureIDsByLootType = `-- name: GetTreasureIDsByLootType :many
 SELECT id FROM treasures WHERE loot_type = $1 ORDER BY id
 `

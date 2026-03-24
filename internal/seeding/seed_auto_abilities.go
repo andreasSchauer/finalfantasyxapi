@@ -133,15 +133,16 @@ func (l *Lookup) seedAutoAbilitiesRelationships(db *database.Queries, dbConn *sq
 			}
 
 			err = qtx.UpdateAutoAbility(context.Background(), database.UpdateAutoAbilityParams{
-				DataHash:          generateDataHash(autoAbility),
-				GradRcvryStatID:   h.GetNullInt32(autoAbility.GradRecoveryStatID),
-				OnHitElementID:    h.GetNullInt32(autoAbility.OnHitElementID),
-				AddedElemResistID: h.ObjPtrToNullInt32ID(autoAbility.AddedElemResist),
-				OnHitStatusID:     h.ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
-				AddedPropertyID:   h.GetNullInt32(autoAbility.AddedPropertyID),
-				CnvrsnFromModID:   h.GetNullInt32(autoAbility.CnvrsnFromModID),
-				CnvrsnToModID:     h.GetNullInt32(autoAbility.CnvrsnToModID),
-				ID:                autoAbility.ID,
+				DataHash:          		generateDataHash(autoAbility),
+				RequiredItemAmountID: 	h.ObjPtrToNullInt32ID(autoAbility.RequiredItem),
+				GradRcvryStatID:   		h.GetNullInt32(autoAbility.GradRecoveryStatID),
+				OnHitElementID:    		h.GetNullInt32(autoAbility.OnHitElementID),
+				AddedElemResistID: 		h.ObjPtrToNullInt32ID(autoAbility.AddedElemResist),
+				OnHitStatusID:     		h.ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
+				AddedPropertyID:   		h.GetNullInt32(autoAbility.AddedPropertyID),
+				CnvrsnFromModID:   		h.GetNullInt32(autoAbility.CnvrsnFromModID),
+				CnvrsnToModID:     		h.GetNullInt32(autoAbility.CnvrsnToModID),
+				ID:                		autoAbility.ID,
 			})
 			if err != nil {
 				return h.NewErr(autoAbility.Error(), err, "couldn't update auto-ability")

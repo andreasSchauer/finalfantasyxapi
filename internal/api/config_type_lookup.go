@@ -50,6 +50,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initUnitType()
 	cfg.t.initItemType()
 	cfg.t.initQuestType()
+	
 	cfg.t.initAreaConnectionType()
 	cfg.t.initArenaCreationCategory()
 	cfg.t.initArranger()

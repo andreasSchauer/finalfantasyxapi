@@ -33,6 +33,13 @@ func (m Mix) Error() string {
 	return fmt.Sprintf("mix %s", m.Name)
 }
 
+func (m Mix) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: m.ID,
+		Name: m.Name,
+	}
+}
+
 type MixCombination struct {
 	ID           int32
 	MixID        int32
