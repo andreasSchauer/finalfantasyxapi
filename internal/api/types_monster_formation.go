@@ -2,22 +2,19 @@ package api
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
-
 type MonsterFormation struct {
-	ID              int32                     `json:"id"`
-	Category        string                    `json:"category"`
-	IsPostAirship	bool					  `json:"is_post_airship"`
-	IsStoryBased	bool					  `json:"is_story_based"`
-	IsForcedAmbush  bool                      `json:"is_forced_ambush"`
-	CanEscape       bool                      `json:"can_escape"`
-	Notes           *string                   `json:"notes,omitempty"`
-	BossMusic       *FormationBossSong        `json:"boss_music,omitempty"`
-	Monsters        []MonsterAmount           `json:"monsters"`
-	Areas           []EncounterArea           `json:"areas"`
-	TriggerCommands []FormationTriggerCommand `json:"trigger_commands"`
+	ID              int32                              `json:"id"`
+	Category        string                             `json:"category"`
+	IsPostAirship   bool                               `json:"is_post_airship"`
+	IsStoryBased    bool                               `json:"is_story_based"`
+	IsForcedAmbush  bool                               `json:"is_forced_ambush"`
+	CanEscape       bool                               `json:"can_escape"`
+	Notes           *string                            `json:"notes,omitempty"`
+	BossMusic       *FormationBossSong                 `json:"boss_music,omitempty"`
+	Monsters        []ResourceAmount[NamedAPIResource] `json:"monsters"`
+	Areas           []EncounterArea                    `json:"areas"`
+	TriggerCommands []FormationTriggerCommand          `json:"trigger_commands"`
 }
-
-
 
 type EncounterArea struct {
 	Area          AreaAPIResource `json:"area"`
@@ -34,8 +31,6 @@ func convertEncounterArea(cfg *Config, el seeding.EncounterArea) EncounterArea {
 		Specification: el.Specification,
 	}
 }
-
-
 
 type FormationTriggerCommand struct {
 	Ability   NamedAPIResource   `json:"ability"`
@@ -56,8 +51,6 @@ func convertFormationTriggerCommand(cfg *Config, tc seeding.FormationTriggerComm
 		Users:     namesToNamedAPIResources(cfg, cfg.e.characterClasses, tc.Users),
 	}
 }
-
-
 
 type FormationBossSong struct {
 	Song             NamedAPIResource `json:"song"`

@@ -22,7 +22,7 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 		TreasureType:    treasure.TreasureType,
 		LootType:        newNamedAPIResourceFromEnum(cfg, cfg.e.lootType.endpoint, treasure.LootType, cfg.t.LootType),
 		GilAmount:       treasure.GilAmount,
-		Items:           convertObjSlice(cfg, treasure.Items, convertItemAmount),
+		Items:           nameAmtsToResAmts(cfg, cfg.e.masterItems, treasure.Items),
 		Equipment:       convertObjPtr(cfg, treasure.Equipment, convertFoundEquipment),
 	}
 

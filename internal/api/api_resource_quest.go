@@ -47,6 +47,15 @@ func (r QuestAPIResource) ToKeyFields() []any {
 	}
 }
 
+func (r QuestAPIResource) GetKey() string {
+	var subquestStr string
+
+	if r.Subquest != nil {
+		subquestStr = fmt.Sprintf(" - %s", *r.Subquest)
+	}
+	return r.Sidequest + subquestStr
+}
+
 func (r QuestAPIResource) Error() string {
 	return fmt.Sprintf("quest api resource '%s', url: %s", h.PtrToString(r.Subquest), r.URL)
 }

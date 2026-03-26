@@ -48,6 +48,11 @@ func (r TypedAPIResource) ToKeyFields() []any {
 	}
 }
 
+func (r TypedAPIResource) GetKey() string {
+	nameStr := h.NameToString(r.Name, r.Version, nil)
+	return fmt.Sprintf("%s - %s", r.Type, nameStr)
+}
+
 func (r TypedAPIResource) Error() string {
 	return fmt.Sprintf("typed api resource '%s', type: %s, url: %s", h.NameToString(r.Name, r.Version, r.Specification), r.Type, r.URL)
 }
@@ -95,22 +100,7 @@ func keysToTypedAPIResources[T h.IsTyped, R, K any, A APIResource, L APIResource
 	return resources
 }
 
-// converts inputs to a resourceAmount of any kind by calling the given constructor fn
-func keyToTypedResourceAmount[NA NameAmount, RA ResourceAmount, T h.IsTyped, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], item NA, fn func(TypedAPIResource, int32) RA) RA {
-	resource := keyToTypedAPIResource(cfg, i, item.GetName())
-	return fn(resource, item.GetVal())
-}
 
-func keysToTypedResourceAmounts[NA NameAmount, RA ResourceAmount, T h.IsTyped, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], items []NA, fn func(TypedAPIResource, int32) RA) []RA {
-	results := []RA{}
-
-	for _, item := range items {
-		ra := keyToTypedResourceAmount(cfg, i, item, fn)
-		results = append(results, ra)
-	}
-
-	return results
-}
 
 func newTypedAPIResourceList(cfg *Config, r *http.Request, resources []TypedAPIResource) (TypedAPIResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)

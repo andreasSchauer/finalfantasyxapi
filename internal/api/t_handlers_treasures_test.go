@@ -58,8 +58,8 @@ func TestGetTreasure(t *testing.T) {
 			treasureType:    "chest",
 			lootType:        1,
 			gilAmount:       nil,
-			items: []testItemAmount{
-				newTestItemAmount(82, 1),
+			items: []testResAmount[TypedAPIResource]{
+				newTestResAmount[TypedAPIResource](82, 1),
 			},
 			equipment: nil,
 		},
@@ -77,8 +77,8 @@ func TestGetTreasure(t *testing.T) {
 			treasureType:    "object",
 			lootType:        1,
 			gilAmount:       nil,
-			items: []testItemAmount{
-				newTestItemAmount(147, 1),
+			items: []testResAmount[TypedAPIResource]{
+				newTestResAmount[TypedAPIResource](147, 1),
 			},
 			equipment: nil,
 		},
@@ -134,8 +134,8 @@ func TestGetTreasure(t *testing.T) {
 			treasureType:    "gift",
 			lootType:        1,
 			gilAmount:       nil,
-			items: []testItemAmount{
-				newTestItemAmount(97, 1),
+			items: []testResAmount[TypedAPIResource]{
+				newTestResAmount[TypedAPIResource](97, 1),
 			},
 			equipment: nil,
 		},

@@ -20,5 +20,5 @@ func compareOverdriveModes(test test, exp expOverdriveMode, got OverdriveMode) {
 	compare(test, "effect", exp.effect, got.Effect)
 	compare(test, "type", exp.modeType, got.Type)
 	compare(test, "fill rate", exp.fillRate, got.FillRate)
-	checkResAmtsNameVals(test, "actions", exp.actionsAmount, got.Actions)
+	checkResAmts(test, "actions", exp.actionsAmount, got.Actions)
 }

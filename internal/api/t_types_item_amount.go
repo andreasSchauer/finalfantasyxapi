@@ -1,17 +1,17 @@
 package api
 
-type testItemAmount struct {
+type testResAmount[A APIResource] struct {
 	item   int32
 	amount int32
 }
 
-func compareItemAmounts(test test, fieldName string, exp testItemAmount, got ItemAmount) {
-	compIdApiResource(test, fieldName+" - item", test.cfg.e.masterItems.endpoint, exp.item, got)
+func compareResAmounts[A APIResource](test test, fieldName string, exp testResAmount[A], got ResourceAmount[A]) {
+	compIdApiResource(test, fieldName+" - resource", test.cfg.e.masterItems.endpoint, exp.item, got)
 	compare(test, fieldName+" - amount", exp.amount, got.Amount)
 }
 
-func newTestItemAmount(itemID int32, amount int32) testItemAmount {
-	return testItemAmount{
+func newTestResAmount[A APIResource](itemID int32, amount int32) testResAmount[A] {
+	return testResAmount[A]{
 		item:   itemID,
 		amount: amount,
 	}
@@ -19,15 +19,15 @@ func newTestItemAmount(itemID int32, amount int32) testItemAmount {
 
 type testPossibleItem struct {
 	index int
-	testItemAmount
+	testResAmount[TypedAPIResource]
 	chance int32
 }
 
 func newTestPossibleItem(idx int, itemID int32, amount, chance int32) testPossibleItem {
 	return testPossibleItem{
-		index:          idx,
-		testItemAmount: newTestItemAmount(itemID, amount),
-		chance:         chance,
+		index:         idx,
+		testResAmount: newTestResAmount[TypedAPIResource](itemID, amount),
+		chance:        chance,
 	}
 }
 
@@ -36,6 +36,6 @@ func (t testPossibleItem) GetIndex() int {
 }
 
 func comparePossibleItems(test test, fieldName string, exp testPossibleItem, got PossibleItem) {
-	compareItemAmounts(test, fieldName+" - itemAmount", exp.testItemAmount, got.ItemAmount)
+	compareResAmounts(test, fieldName+" - itemAmount", exp.testResAmount, got.ResourceAmount)
 	compare(test, fieldName+" - chance", exp.chance, got.Chance)
 }

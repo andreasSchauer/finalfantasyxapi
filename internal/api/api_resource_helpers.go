@@ -62,12 +62,10 @@ func removeResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemov
 	return keptItems
 }
 
-
 func removeResourcesURL[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) []T {
 	keptItems, _ := separateResourcesURL(items, itemsToRemove)
 	return keptItems
 }
-
 
 // s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,4,5]
 func getSharedResources[T HasAPIResource](s1, s2 []T) []T {
@@ -144,16 +142,6 @@ func resourceMapToSlice[T HasAPIResource](lookup map[int32]T) []T {
 	return s
 }
 
-func getResourceAmountMap[T ResourceAmount](items []T) map[string]int32 {
-	amountMap := make(map[string]int32)
-
-	for _, item := range items {
-		key := item.GetName()
-		amountMap[key] = item.GetVal()
-	}
-
-	return amountMap
-}
 
 func sortAPIResources[T HasAPIResource](a, b T) int {
 	if getAPIResourceID(a) < getAPIResourceID(b) {

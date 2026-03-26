@@ -18,6 +18,7 @@ func idsToAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 	return resources
 }
 
+
 func idsToAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], dbIDs []int32) (L, error) {
 	var zeroType L
 

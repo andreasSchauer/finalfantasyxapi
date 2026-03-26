@@ -3,107 +3,40 @@ package api
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
 type Item struct {
-	ID                 	int32					`json:"id"`
-	Name               	string					`json:"name"`
-	Description        	string					`json:"description"`
-	SgDescription		*string					`json:"sg_description,omitempty"`
-	Effect              string					`json:"effect"`
-	Category            NamedAPIResource		`json:"category"`
-	Usability			string					`json:"usability"`
-	BasePrice			*int32					`json:"base_price"`
-	SellValue			int32					`json:"sell_value"`
-	ItemAbility			*NamedAPIResource		`json:"item_ability"`
-	AvailableMenus		[]NamedAPIResource		`json:"available_menus"`
-	RelatedStats       	[]NamedAPIResource		`json:"related_stats"`
-	Monsters			[]ItemMonster			`json:"monsters"` // GetMonsterIDsByItem
-	Treasures			[]UnnamedAPIResource	`json:"treasures"` // GetTreasureIDsByItem
-	Shops				[]UnnamedAPIResource	`json:"shops"` // GetItemShopIDs
-	Quests				[]QuestAPIResource		`json:"quests"` // GetItemQuestIDs
-	BlitzballPrizes		[]UnnamedAPIResource	`json:"blitzball_prizes"` // GetItemBlitzballPrizeIDs
-	AeonLearnAbilities	[]AbilityAmount			`json:"aeon_learn_abilities"` // GetItemPlayerAbilityIDs
-	AutoAbilities		[]AutoAbilityAmount		`json:"auto_abilities"` // GetItemAutoAbilityIDs
-	Mixes				[]NamedAPIResource		`json:"mixes"` // GetItemMixIDs
-}
-
-
-type AbilityAmount struct {
-	Ability NamedAPIResource	`json:"player_ability"`
-	Amount	int32				`json:"amount"`
-}
-
-func (aa AbilityAmount) IsZero() bool {
-	return aa.Ability.Name == ""
-}
-
-func (aa AbilityAmount) GetAPIResource() APIResource {
-	return aa.Ability
-}
-
-func (aa AbilityAmount) GetName() string {
-	return aa.Ability.Name
-}
-
-func (aa AbilityAmount) GetVersion() *int32 {
-	return nil
-}
-
-func (aa AbilityAmount) GetVal() int32 {
-	return aa.Amount
-}
-
-func newAbilityAmount(res NamedAPIResource, amount int32) AbilityAmount {
-	return AbilityAmount{
-		Ability:   	res,
-		Amount: 	amount,
-	}
-}
-
-
-type AutoAbilityAmount struct {
-	AutoAbility NamedAPIResource	`json:"ability"`
-	Amount		int32				`json:"amount"`
-}
-
-func (aa AutoAbilityAmount) IsZero() bool {
-	return aa.AutoAbility.Name == ""
-}
-
-func (aa AutoAbilityAmount) GetAPIResource() APIResource {
-	return aa.AutoAbility
-}
-
-func (aa AutoAbilityAmount) GetName() string {
-	return aa.AutoAbility.Name
-}
-
-func (aa AutoAbilityAmount) GetVersion() *int32 {
-	return nil
-}
-
-func (aa AutoAbilityAmount) GetVal() int32 {
-	return aa.Amount
-}
-
-func newAutoAbilityAmount(res NamedAPIResource, amount int32) AutoAbilityAmount {
-	return AutoAbilityAmount{
-		AutoAbility:   	res,
-		Amount: 		amount,
-	}
+	ID                 int32                              `json:"id"`
+	Name               string                             `json:"name"`
+	Description        string                             `json:"description"`
+	SgDescription      *string                            `json:"sg_description,omitempty"`
+	Effect             string                             `json:"effect"`
+	Category           NamedAPIResource                   `json:"category"`
+	Usability          string                             `json:"usability"`
+	BasePrice          *int32                             `json:"base_price"`
+	SellValue          int32                              `json:"sell_value"`
+	ItemAbility        *NamedAPIResource                  `json:"item_ability"`
+	AvailableMenus     []NamedAPIResource                 `json:"available_menus"`
+	RelatedStats       []NamedAPIResource                 `json:"related_stats"`
+	Monsters           []ItemMonster                      `json:"monsters"`             // GetMonsterIDsByItem
+	Treasures          []UnnamedAPIResource               `json:"treasures"`            // GetTreasureIDsByItem
+	Shops              []UnnamedAPIResource               `json:"shops"`                // GetItemShopIDs
+	Quests             []QuestAPIResource                 `json:"quests"`               // GetItemQuestIDs
+	BlitzballPrizes    []UnnamedAPIResource               `json:"blitzball_prizes"`     // GetItemBlitzballPrizeIDs
+	AeonLearnAbilities []ResourceAmount[NamedAPIResource] `json:"aeon_learn_abilities"` // GetItemPlayerAbilityIDs
+	AutoAbilities      []ResourceAmount[NamedAPIResource] `json:"auto_abilities"`       // GetItemAutoAbilityIDs
+	Mixes              []NamedAPIResource                 `json:"mixes"`                // GetItemMixIDs
 }
 
 // need to account for otherItems
 type ItemMonster struct {
-	Monster			NamedAPIResource	`json:"monster"`
-	Steal			*CommonRareAmount	`json:"steal,omitempty"`
-	Drop			*CommonRareAmount	`json:"drop,omitempty"`
-	SecondaryDrop	*CommonRareAmount	`json:"secondary_drop,omitempty"`
-	Bribe			int32				`json:"bribe,omitempty"`
+	Monster       NamedAPIResource  `json:"monster"`
+	Steal         *CommonRareAmount `json:"steal,omitempty"`
+	Drop          *CommonRareAmount `json:"drop,omitempty"`
+	SecondaryDrop *CommonRareAmount `json:"secondary_drop,omitempty"`
+	Bribe         int32             `json:"bribe,omitempty"`
 }
 
-
 type CommonRareAmount struct {
-	Common	int32	`json:"common,omitempty"`
-	Rare	int32	`json:"rare,omitempty"`
+	Common int32 `json:"common,omitempty"`
+	Rare   int32 `json:"rare,omitempty"`
 }
 
 func (cra CommonRareAmount) IsZero() bool {
@@ -114,18 +47,18 @@ func createItemMonster(cfg *Config, item seeding.Item, mon NamedAPIResource) Ite
 	monster, _ := seeding.GetResourceByID(mon.ID, cfg.l.MonstersID)
 
 	return ItemMonster{
-		Monster:		mon,
-		Steal: 	 		craPtr(item, monster.Items.StealCommon, monster.Items.StealRare),
-		Drop: 			craPtr(item, monster.Items.DropCommon, monster.Items.DropRare),
-		SecondaryDrop: 	craPtr(item, monster.Items.SecondaryDropCommon, monster.Items.SecondaryDropRare),
-		Bribe: 			getMonItemAmount(item, monster.Items.Bribe),
+		Monster:       mon,
+		Steal:         craPtr(item, monster.Items.StealCommon, monster.Items.StealRare),
+		Drop:          craPtr(item, monster.Items.DropCommon, monster.Items.DropRare),
+		SecondaryDrop: craPtr(item, monster.Items.SecondaryDropCommon, monster.Items.SecondaryDropRare),
+		Bribe:         getAmountMonItem(item, monster.Items.Bribe),
 	}
 }
 
 func craPtr(item seeding.Item, common, rare *seeding.ItemAmount) *CommonRareAmount {
 	cra := CommonRareAmount{
-		Common: getMonItemAmount(item, common),
-		Rare: 	getMonItemAmount(item, rare),
+		Common: getAmountMonItem(item, common),
+		Rare:   getAmountMonItem(item, rare),
 	}
 
 	if cra.IsZero() {
@@ -135,7 +68,7 @@ func craPtr(item seeding.Item, common, rare *seeding.ItemAmount) *CommonRareAmou
 	return &cra
 }
 
-func getMonItemAmount(item seeding.Item, ia *seeding.ItemAmount) int32 {
+func getAmountMonItem(item seeding.Item, ia *seeding.ItemAmount) int32 {
 	if ia == nil || ia.ItemName != item.Name {
 		return 0
 	}

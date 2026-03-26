@@ -14,7 +14,7 @@ func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName string
 	queryParam := cfg.q.monsters[queryName]
 
 	kimahri, _ := seeding.GetResource("kimahri", cfg.l.Characters)
-	kimahriBS := namesToNamedResourceAmounts(cfg, cfg.e.stats, kimahri.BaseStats, newBaseStat)
+	kimahriBS := toResAmtType(cfg, cfg.e.stats, kimahri.BaseStats, newBaseStat)
 
 	kimahriStatMap, err := parseStatQuery(cfg, r, queryParam, kimahriBS, allowedStatIDs)
 	if errors.Is(err, errEmptyQuery) {

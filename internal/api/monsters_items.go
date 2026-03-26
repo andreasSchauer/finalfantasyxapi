@@ -5,17 +5,17 @@ import (
 )
 
 type MonsterItems struct {
-	DropChance          int32          `json:"drop_chance"`
-	DropCondition       *string        `json:"drop_condition,omitempty"`
-	StealCommon         *ItemAmount    `json:"steal_common"`
-	StealRare           *ItemAmount    `json:"steal_rare"`
-	DropCommon          *ItemAmount    `json:"drop_common"`
-	DropRare            *ItemAmount    `json:"drop_rare"`
-	SecondaryDropCommon *ItemAmount    `json:"secondary_drop_common"`
-	SecondaryDropRare   *ItemAmount    `json:"secondary_drop_rare"`
-	Bribe               *ItemAmount    `json:"bribe"`
-	OtherItemsCondition *string        `json:"other_items_condition,omitempty"`
-	OtherItems          []PossibleItem `json:"other_items"`
+	DropChance          int32                             `json:"drop_chance"`
+	DropCondition       *string                           `json:"drop_condition,omitempty"`
+	StealCommon         *ResourceAmount[TypedAPIResource] `json:"steal_common"`
+	StealRare           *ResourceAmount[TypedAPIResource] `json:"steal_rare"`
+	DropCommon          *ResourceAmount[TypedAPIResource] `json:"drop_common"`
+	DropRare            *ResourceAmount[TypedAPIResource] `json:"drop_rare"`
+	SecondaryDropCommon *ResourceAmount[TypedAPIResource] `json:"secondary_drop_common"`
+	SecondaryDropRare   *ResourceAmount[TypedAPIResource] `json:"secondary_drop_rare"`
+	Bribe               *ResourceAmount[TypedAPIResource] `json:"bribe"`
+	OtherItemsCondition *string                           `json:"other_items_condition,omitempty"`
+	OtherItems          []PossibleItem                    `json:"other_items"`
 }
 
 func (mi MonsterItems) IsZero() bool {
@@ -31,37 +31,37 @@ func convertMonsterItems(cfg *Config, items seeding.MonsterItems) MonsterItems {
 	}
 
 	if items.StealCommon != nil {
-		stealCommon := convertItemAmount(cfg, *items.StealCommon)
+		stealCommon := nameAmountToResourceAmount(cfg, cfg.e.masterItems, *items.StealCommon)
 		monItems.StealCommon = &stealCommon
 	}
 
 	if items.StealRare != nil {
-		stealRare := convertItemAmount(cfg, *items.StealRare)
+		stealRare := nameAmountToResourceAmount(cfg, cfg.e.masterItems, *items.StealRare)
 		monItems.StealRare = &stealRare
 	}
 
 	if items.DropCommon != nil {
-		dropCommon := convertItemAmount(cfg, *items.DropCommon)
+		dropCommon := nameAmountToResourceAmount(cfg, cfg.e.masterItems, *items.DropCommon)
 		monItems.DropCommon = &dropCommon
 	}
 
 	if items.DropRare != nil {
-		dropRare := convertItemAmount(cfg, *items.DropRare)
+		dropRare := nameAmountToResourceAmount(cfg, cfg.e.masterItems, *items.DropRare)
 		monItems.DropRare = &dropRare
 	}
 
 	if items.SecondaryDropCommon != nil {
-		secDropCommon := convertItemAmount(cfg, *items.SecondaryDropCommon)
+		secDropCommon := nameAmountToResourceAmount(cfg, cfg.e.masterItems, *items.SecondaryDropCommon)
 		monItems.SecondaryDropCommon = &secDropCommon
 	}
 
 	if items.SecondaryDropRare != nil {
-		secDropRare := convertItemAmount(cfg, *items.SecondaryDropRare)
+		secDropRare := nameAmountToResourceAmount(cfg, cfg.e.masterItems, *items.SecondaryDropRare)
 		monItems.SecondaryDropRare = &secDropRare
 	}
 
 	if items.Bribe != nil {
-		bribe := convertItemAmount(cfg, *items.Bribe)
+		bribe := nameAmountToResourceAmount(cfg, cfg.e.masterItems, *items.Bribe)
 		monItems.Bribe = &bribe
 	}
 

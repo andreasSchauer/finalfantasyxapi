@@ -60,8 +60,8 @@ func compareMonsterAltStateChanges(test test, fieldName string, exp testAltState
 
 	compare(test, desc+"type", exp.AlterationType, string(got.AlterationType))
 	compare(test, desc+"distance", exp.Distance, got.Distance)
-	checkResAmtsNameVals(test, desc+"base stats", exp.BaseStats, got.BaseStats)
-	checkResAmtsNameVals(test, desc+"status resists", exp.StatusResists, got.StatusResists)
+	checkResAmtTypes(test, desc+"base stats", exp.BaseStats, got.BaseStats)
+	checkResAmtTypes(test, desc+"status resists", exp.StatusResists, got.StatusResists)
 	compStructPtrs(test, desc+"added status", exp.AddedStatus, got.AddedStatus)
 	compIdApiResourcePtrs(test, desc+"removed status", test.cfg.e.statusConditions.endpoint, exp.RemovedStatus, got.RemovedStatus)
 	compTestStructSlices(test, desc+"elemental resists", exp.ElemResists, got.ElemResists, compareElemResists)

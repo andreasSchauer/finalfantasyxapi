@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -43,6 +44,10 @@ func (r AreaAPIResource) ToKeyFields() []any {
 	return []any{
 		r.URL,
 	}
+}
+
+func (r AreaAPIResource) GetKey() string {
+	return h.NameToString(r.Area, r.Version, nil)
 }
 
 func (r AreaAPIResource) Error() string {

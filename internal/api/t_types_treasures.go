@@ -9,7 +9,7 @@ type expTreasure struct {
 	treasureType    string
 	lootType        int32
 	gilAmount       *int32
-	items           []testItemAmount
+	items           []testResAmount[TypedAPIResource]
 	equipment       *testFoundEquipment
 }
 
@@ -25,7 +25,7 @@ func compareTreasures(test test, exp expTreasure, got Treasure) {
 	compare(test, "treasure type", exp.treasureType, got.TreasureType)
 	compIdApiResource(test, "loot type", test.cfg.e.lootType.endpoint, exp.lootType, got.LootType)
 	compare(test, "gil amount", exp.gilAmount, got.GilAmount)
-	compTestStructSlices(test, "items", exp.items, got.Items, compareItemAmounts)
+	compTestStructSlices(test, "items", exp.items, got.Items, compareResAmounts)
 	compTestStructPtrs(test, "equipment", exp.equipment, got.Equipment, compareFoundEquipment)
 }
 

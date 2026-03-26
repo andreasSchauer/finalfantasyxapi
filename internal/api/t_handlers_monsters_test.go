@@ -186,12 +186,12 @@ func TestGetMonster(t *testing.T) {
 			},
 			items: &testMonItems{
 				itemDropChance: 255,
-				items: map[string]*testItemAmount{
-					"steal common": h.GetStructPtr(newTestItemAmount(27, 1)),
-					"steal rare":   h.GetStructPtr(newTestItemAmount(28, 1)),
-					"drop common":  h.GetStructPtr(newTestItemAmount(71, 1)),
-					"drop rare":    h.GetStructPtr(newTestItemAmount(71, 1)),
-					"bribe":        h.GetStructPtr(newTestItemAmount(28, 6)),
+				items: map[string]*testResAmount[TypedAPIResource]{
+					"steal common": h.GetStructPtr(newTestResAmount[TypedAPIResource](27, 1)),
+					"steal rare":   h.GetStructPtr(newTestResAmount[TypedAPIResource](28, 1)),
+					"drop common":  h.GetStructPtr(newTestResAmount[TypedAPIResource](71, 1)),
+					"drop rare":    h.GetStructPtr(newTestResAmount[TypedAPIResource](71, 1)),
+					"bribe":        h.GetStructPtr(newTestResAmount[TypedAPIResource](28, 6)),
 				},
 			},
 			bribeChances: []BribeChance{
@@ -282,9 +282,9 @@ func TestGetMonster(t *testing.T) {
 			agility:    nil,
 			items: &testMonItems{
 				itemDropChance: 0,
-				items: map[string]*testItemAmount{
-					"steal common": h.GetStructPtr(newTestItemAmount(1, 1)),
-					"steal rare":   h.GetStructPtr(newTestItemAmount(1, 1)),
+				items: map[string]*testResAmount[TypedAPIResource]{
+					"steal common": h.GetStructPtr(newTestResAmount[TypedAPIResource](1, 1)),
+					"steal rare":   h.GetStructPtr(newTestResAmount[TypedAPIResource](1, 1)),
 				},
 				otherItems: []testPossibleItem{
 					newTestPossibleItem(0, 9, 1, 60),
@@ -335,11 +335,11 @@ func TestGetMonster(t *testing.T) {
 			formations: []int32{126},
 			items: &testMonItems{
 				itemDropChance: 255,
-				items: map[string]*testItemAmount{
-					"steal common": h.GetStructPtr(newTestItemAmount(5, 1)),
-					"steal rare":   h.GetStructPtr(newTestItemAmount(6, 1)),
-					"drop common":  h.GetStructPtr(newTestItemAmount(82, 1)),
-					"drop rare":    h.GetStructPtr(newTestItemAmount(82, 1)),
+				items: map[string]*testResAmount[TypedAPIResource]{
+					"steal common": h.GetStructPtr(newTestResAmount[TypedAPIResource](5, 1)),
+					"steal rare":   h.GetStructPtr(newTestResAmount[TypedAPIResource](6, 1)),
+					"drop common":  h.GetStructPtr(newTestResAmount[TypedAPIResource](82, 1)),
+					"drop rare":    h.GetStructPtr(newTestResAmount[TypedAPIResource](82, 1)),
 					"bribe":        nil,
 				},
 			},
@@ -1017,7 +1017,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?ids=1,33,22,68,",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'.",
+				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'.",
 			},
 		},
 		{
@@ -1302,7 +1302,7 @@ func TestSubsectionMonsters(t *testing.T) {
 				requestURL:     "/api/monsters/?ids=1&location=15",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testCfg.HandleMonsters,
-				expectedErr: "parameter 'ids' can only be used with default parameters. available default parameters: 'limit', 'offset'.",
+				expectedErr:    "parameter 'ids' can only be used with default parameters. available default parameters: 'limit', 'offset'.",
 			},
 		},
 		{
@@ -1310,7 +1310,7 @@ func TestSubsectionMonsters(t *testing.T) {
 				requestURL:     "/api/monsters/simple?ids=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testCfg.HandleMonsters,
-				expectedErr: "fetch limit exceeded. the maximum amount of resources that can be fetched is 50.",
+				expectedErr:    "fetch limit exceeded. the maximum amount of resources that can be fetched is 50.",
 			},
 		},
 		{
@@ -1318,7 +1318,7 @@ func TestSubsectionMonsters(t *testing.T) {
 				requestURL:     "/api/monsters/simple",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testCfg.HandleMonsters,
-				expectedErr: "parameter 'ids' can't be empty.",
+				expectedErr:    "parameter 'ids' can't be empty.",
 			},
 		},
 		{
@@ -1330,8 +1330,8 @@ func TestSubsectionMonsters(t *testing.T) {
 					"parent resource": true,
 				},
 			},
-			count:          4,
-			results:        []int32{1, 33, 22, 68},
+			count:   4,
+			results: []int32{1, 33, 22, 68},
 		},
 		{
 			testGeneral: testGeneral{
@@ -1342,8 +1342,8 @@ func TestSubsectionMonsters(t *testing.T) {
 					"parent resource": true,
 				},
 			},
-			count:          3,
-			results:        []int32{1, 2, 70},
+			count:   3,
+			results: []int32{1, 2, 70},
 		},
 		{
 			testGeneral: testGeneral{
@@ -1354,8 +1354,8 @@ func TestSubsectionMonsters(t *testing.T) {
 					"parent resource": true,
 				},
 			},
-			count:          21,
-			results:        []int32{1, 5, 16, 18, 21},
+			count:   21,
+			results: []int32{1, 5, 16, 18, 21},
 		},
 		{
 			testGeneral: testGeneral{

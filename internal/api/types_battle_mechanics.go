@@ -32,6 +32,13 @@ func (bs BaseStat) GetVal() int32 {
 	return bs.Value
 }
 
+func (bs BaseStat) ToResAmount() ResourceAmount[NamedAPIResource] {
+	return ResourceAmount[NamedAPIResource]{
+		Resource: 	bs.Stat,
+		Amount: 	bs.Value,
+	}
+}
+
 func getBaseStat(cfg *Config, stat string, baseStats []BaseStat) BaseStat {
 	statLookup, _ := seeding.GetResource(stat, cfg.l.Stats)
 	statMap := getResourceMap(baseStats)
@@ -111,3 +118,9 @@ func (sr StatusResist) GetVal() int32 {
 	return sr.Resistance
 }
 
+func (sr StatusResist) ToResAmount() ResourceAmount[NamedAPIResource] {
+	return ResourceAmount[NamedAPIResource]{
+		Resource: 	sr.StatusCondition,
+		Amount: 	sr.Resistance,
+	}
+}

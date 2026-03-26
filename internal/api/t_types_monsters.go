@@ -33,8 +33,8 @@ func compareMonsters(test test, exp expMonster, got Monster) {
 	compIdApiResource(test, "species", test.cfg.e.monsterSpecies.endpoint, exp.species, got.Species)
 	compare(test, "ctb icon type", exp.ctbIconType, got.CTBIconType)
 	compare(test, "distance", exp.distance, got.Distance)
-	checkResAmtsNameVals(test, "base stats", exp.baseStats, got.BaseStats)
-	checkResAmtsNameVals(test, "status resists", exp.statusResists, got.StatusResists)
+	checkResAmtTypes(test, "base stats", exp.baseStats, got.BaseStats)
+	checkResAmtTypes(test, "status resists", exp.statusResists, got.StatusResists)
 	compStructPtrs(test, "agility params", exp.agility, got.AgilityParameters)
 	compStructSlices(test, "bribe chances", exp.bribeChances, got.BribeChances)
 	compTestStructSlices(test, "elemental resists", exp.elemResists, got.ElemResists, compareElemResists)
@@ -54,7 +54,7 @@ func compareMonsters(test test, exp expMonster, got Monster) {
 
 type testMonItems struct {
 	itemDropChance int32
-	items          map[string]*testItemAmount
+	items          map[string]*testResAmount[TypedAPIResource]
 	otherItems     []testPossibleItem
 }
 
@@ -62,13 +62,13 @@ func compareMonsterItems(test test, fieldName string, exp testMonItems, got Mons
 	itemMap := exp.items
 
 	compare(test, "item drop chance", exp.itemDropChance, got.DropChance)
-	compTestStructPtrs(test, "steal common", itemMap["steal common"], got.StealCommon, compareItemAmounts)
-	compTestStructPtrs(test, "steal rare", itemMap["steal rare"], got.StealRare, compareItemAmounts)
-	compTestStructPtrs(test, "drop common", itemMap["drop common"], got.DropCommon, compareItemAmounts)
-	compTestStructPtrs(test, "drop rare", itemMap["drop rare"], got.DropRare, compareItemAmounts)
-	compTestStructPtrs(test, "sec drop common", itemMap["sec drop common"], got.SecondaryDropCommon, compareItemAmounts)
-	compTestStructPtrs(test, "sec drop rare", itemMap["sec drop rare"], got.SecondaryDropRare, compareItemAmounts)
-	compTestStructPtrs(test, "bribe", itemMap["bribe"], got.Bribe, compareItemAmounts)
+	compTestStructPtrs(test, "steal common", itemMap["steal common"], got.StealCommon, compareResAmounts)
+	compTestStructPtrs(test, "steal rare", itemMap["steal rare"], got.StealRare, compareResAmounts)
+	compTestStructPtrs(test, "drop common", itemMap["drop common"], got.DropCommon, compareResAmounts)
+	compTestStructPtrs(test, "drop rare", itemMap["drop rare"], got.DropRare, compareResAmounts)
+	compTestStructPtrs(test, "sec drop common", itemMap["sec drop common"], got.SecondaryDropCommon, compareResAmounts)
+	compTestStructPtrs(test, "sec drop rare", itemMap["sec drop rare"], got.SecondaryDropRare, compareResAmounts)
+	compTestStructPtrs(test, "bribe", itemMap["bribe"], got.Bribe, compareResAmounts)
 	compTestStructSlices(test, "other items", exp.otherItems, got.OtherItems, comparePossibleItems)
 }
 

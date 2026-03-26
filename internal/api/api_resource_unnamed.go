@@ -44,6 +44,10 @@ func (r UnnamedAPIResource) ToKeyFields() []any {
 	}
 }
 
+func (r UnnamedAPIResource) GetKey() string {
+	return fmt.Sprint(r.ID)
+}
+
 func (r UnnamedAPIResource) Error() string {
 	return fmt.Sprintf("unnamed api resource with url: %s", r.URL)
 }

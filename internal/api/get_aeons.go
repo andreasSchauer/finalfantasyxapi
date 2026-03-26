@@ -33,7 +33,7 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 		PhysAtkAccuracy:        convertObjPtr(cfg, aeon.PhysAtkAccuracy, convertAccuracy),
 		CelestialWeapon:        rel.CelestialWeapon,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              namesToNamedResourceAmounts(cfg, cfg.e.stats, baseStats, newBaseStat),
+		BaseStats:              toResAmtType(cfg, cfg.e.stats, baseStats, newBaseStat),
 		AeonCommands:           rel.AeonCommands,
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		Overdrives:             rel.Overdrives,

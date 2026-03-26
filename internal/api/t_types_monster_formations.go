@@ -22,7 +22,7 @@ func compareMonsterFormations(test test, exp expMonsterFormation, got MonsterFor
 	compare(test, "is forced ambush", exp.isForcedAmbush, got.IsForcedAmbush)
 	compare(test, "can escape", exp.canEscape, got.CanEscape)
 	compIdApiResourcePtrs(test, "boss song", test.cfg.e.songs.endpoint, exp.bossMusic, got.BossMusic)
-	checkResAmtsNameVals(test, "monsters", exp.monsters, got.Monsters)
+	checkResAmts(test, "monsters", exp.monsters, got.Monsters)
 	compTestStructSlices(test, "trigger commands", exp.triggerCommands, got.TriggerCommands, compareFormationTCs)
 	checkResIDsInSlice(test, "areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)
 }

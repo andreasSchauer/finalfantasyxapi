@@ -8,6 +8,7 @@ type APIResource interface {
 	HasAPIResource
 	helpers.HasID
 	HasURL
+	GetKey() string
 }
 
 type HasAPIResource interface {
@@ -33,7 +34,7 @@ type NameAmount interface {
 	GetVal() int32
 }
 
-type ResourceAmount interface {
-	HasAPIResource
+type ResourceAmountType[A APIResource] interface {
+	ToResAmount() ResourceAmount[A]
 	NameAmount
 }

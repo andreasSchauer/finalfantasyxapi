@@ -951,8 +951,8 @@ SELECT DISTINCT m.id
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON ia.id = mi.bribe_id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON i.master_item_id = mit.id
 WHERE i.id = $1
 ORDER BY m.id
 `
@@ -991,8 +991,8 @@ JOIN item_amounts ia
       mi.secondary_drop_common_id,
       mi.secondary_drop_rare_id
   )
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON i.master_item_id = mit.id
 WHERE i.id = $1
 ORDER BY m.id
 `
@@ -1027,8 +1027,8 @@ JOIN monster_items mi ON mi.monster_id = m.id
 JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
 JOIN possible_items pi ON pi.id = jmio.possible_item_id
 JOIN item_amounts ia ON ia.id = pi.item_amount_id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON i.master_item_id = mit.id
 WHERE i.id = $1
 ORDER BY m.id
 `
@@ -1063,8 +1063,8 @@ JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia
   ON ia.id = mi.steal_common_id
   OR ia.id = mi.steal_rare_id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON i.master_item_id = mit.id
 WHERE i.id = $1
 ORDER BY m.id
 `

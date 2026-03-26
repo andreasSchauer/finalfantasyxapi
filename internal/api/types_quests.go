@@ -3,53 +3,47 @@ package api
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
 type Quest struct {
-	ID         			int32              	`json:"id"`
-	Name       			string             	`json:"name"`
-	Type               	NamedAPIResource    `json:"type"`
-	TypedQuest			QuestAPIResource	`json:"typed_quest"`
-	IsPostAirship		bool				`json:"is_post_airship"`
+	ID            int32            `json:"id"`
+	Name          string           `json:"name"`
+	Type          NamedAPIResource `json:"type"`
+	TypedQuest    QuestAPIResource `json:"typed_quest"`
+	IsPostAirship bool             `json:"is_post_airship"`
 }
-
 
 type Sidequest struct {
-	ID         		int32              	`json:"id"`
-	Name       		string             	`json:"name"`
-	UntypedQuest	QuestAPIResource	`json:"untyped_quest"`
-	IsPostAirship	bool				`json:"is_post_airship"`
-	Completion 		*QuestCompletion   	`json:"completion"`
-	Subquests  		[]QuestAPIResource 	`json:"subquests"`
+	ID            int32              `json:"id"`
+	Name          string             `json:"name"`
+	UntypedQuest  QuestAPIResource   `json:"untyped_quest"`
+	IsPostAirship bool               `json:"is_post_airship"`
+	Completion    *QuestCompletion   `json:"completion"`
+	Subquests     []QuestAPIResource `json:"subquests"`
 }
-
 
 type Subquest struct {
-	ID              int32             	`json:"id"`
-	Name            string            	`json:"name"`
-	UntypedQuest	QuestAPIResource	`json:"untyped_quest"`
-	IsPostAirship	bool				`json:"is_post_airship"`
-	ParentSidequest QuestAPIResource  	`json:"parent_sidequest"`
-	Completions     []QuestCompletion 	`json:"completions"`
-	ArenaCreation	*NamedAPIResource	`json:"arena_creation,omitempty"`
+	ID              int32             `json:"id"`
+	Name            string            `json:"name"`
+	UntypedQuest    QuestAPIResource  `json:"untyped_quest"`
+	IsPostAirship   bool              `json:"is_post_airship"`
+	ParentSidequest QuestAPIResource  `json:"parent_sidequest"`
+	Completions     []QuestCompletion `json:"completions"`
+	ArenaCreation   *NamedAPIResource `json:"arena_creation,omitempty"`
 }
 
-
-
 type QuestCompletion struct {
-	Condition		string				`json:"condition"`
-	IsRepeatable	bool				`json:"is_repeatable"`
-	Areas  			[]CompletionArea 	`json:"areas"`
-	Reward 			ItemAmount       	`json:"reward"`
+	Condition    string                           `json:"condition"`
+	IsRepeatable bool                             `json:"is_repeatable"`
+	Areas        []CompletionArea                 `json:"areas"`
+	Reward       ResourceAmount[TypedAPIResource] `json:"reward"`
 }
 
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
-		Condition: 		qc.Condition,
-		IsRepeatable: 	qc.IsRepeatable,
-		Areas:  		convertObjSlice(cfg, qc.Areas, convertCompletionArea),
-		Reward: 		convertItemAmount(cfg, qc.Reward),
+		Condition:    qc.Condition,
+		IsRepeatable: qc.IsRepeatable,
+		Areas:        convertObjSlice(cfg, qc.Areas, convertCompletionArea),
+		Reward:       nameAmountToResourceAmount(cfg, cfg.e.masterItems, qc.Reward),
 	}
 }
-
-
 
 type CompletionArea struct {
 	Area  AreaAPIResource `json:"area"`

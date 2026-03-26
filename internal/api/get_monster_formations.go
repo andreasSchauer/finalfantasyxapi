@@ -15,13 +15,13 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 	response := MonsterFormation{
 		ID:              formation.ID,
 		Category:        formation.FormationData.Category,
-		IsPostAirship: 	 formation.FormationData.IsPostAirship,
-		IsStoryBased: 	 formation.FormationData.IsStoryBased,
+		IsPostAirship:   formation.FormationData.IsPostAirship,
+		IsStoryBased:    formation.FormationData.IsStoryBased,
 		IsForcedAmbush:  formation.FormationData.IsForcedAmbush,
 		CanEscape:       formation.FormationData.CanEscape,
 		Notes:           formation.FormationData.Notes,
 		BossMusic:       convertObjPtr(cfg, formation.FormationData.BossMusic, convertFormationBossSong),
-		Monsters:        convertObjSlice(cfg, formation.Monsters, convertMonsterAmount),
+		Monsters:        nameAmtsToResAmts(cfg, cfg.e.monsters, formation.Monsters),
 		Areas:           convertObjSlice(cfg, formation.EncounterAreas, convertEncounterArea),
 		TriggerCommands: convertObjSlice(cfg, formation.TriggerCommands, convertFormationTriggerCommand),
 	}

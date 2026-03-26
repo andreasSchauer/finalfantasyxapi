@@ -48,6 +48,10 @@ func (r NamedAPIResource) ToKeyFields() []any {
 	}
 }
 
+func (r NamedAPIResource) GetKey() string {
+	return h.NameToString(r.Name, r.Version, nil)
+}
+
 func (r NamedAPIResource) Error() string {
 	return fmt.Sprintf("named api resource '%s', url: %s", h.NameToString(r.Name, r.Version, r.Specification), r.URL)
 }
@@ -102,22 +106,6 @@ func namesToNamedAPIResources[T h.IsNamed, R any, A APIResource, L APIResourceLi
 	return resources
 }
 
-// converts inputs to a resourceAmount of any kind by calling the given constructor fn
-func nameToNamedResourceAmount[NA NameAmount, RA ResourceAmount, T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], item NA, fn func(NamedAPIResource, int32) RA) RA {
-	resource := nameToNamedAPIResource(cfg, i, item.GetName(), item.GetVersion())
-	return fn(resource, item.GetVal())
-}
-
-func namesToNamedResourceAmounts[NA NameAmount, RA ResourceAmount, T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], items []NA, fn func(NamedAPIResource, int32) RA) []RA {
-	results := []RA{}
-
-	for _, item := range items {
-		ra := nameToNamedResourceAmount(cfg, i, item, fn)
-		results = append(results, ra)
-	}
-
-	return results
-}
 
 func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIResource) (NamedApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)

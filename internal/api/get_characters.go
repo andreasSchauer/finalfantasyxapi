@@ -30,7 +30,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 		CelestialWeapon:        rel.CelestialWeapon,
 		OverdriveCommand:       rel.OverdriveCommand,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              namesToNamedResourceAmounts(cfg, cfg.e.stats, character.BaseStats, newBaseStat),
+		BaseStats:              toResAmtType(cfg, cfg.e.stats, character.BaseStats, newBaseStat),
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		StdSgPlayerAbilities:   rel.StdSgPlayerAbilities,
 		ExpSgPlayerAbilities:   rel.ExpSgPlayerAbilities,

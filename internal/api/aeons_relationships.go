@@ -83,7 +83,7 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName st
 
 	seedAeon, _ := seeding.GetResourceByID(aeon.ID, cfg.l.AeonsID)
 	newBaseStats := seedAeon.BaseStats.XVals[i].BaseStats
-	baseStats := namesToNamedResourceAmounts(cfg, cfg.e.stats, newBaseStats, newBaseStat)
+	baseStats := toResAmtType(cfg, cfg.e.stats, newBaseStats, newBaseStat)
 
 	return baseStats, nil
 }
@@ -94,7 +94,7 @@ func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName string) (
 	queryParam := cfg.q.aeons[queryName]
 
 	yuna, _ := seeding.GetResource("yuna", cfg.l.Characters)
-	yunaBS := namesToNamedResourceAmounts(cfg, cfg.e.stats, yuna.BaseStats, newBaseStat)
+	yunaBS := toResAmtType(cfg, cfg.e.stats, yuna.BaseStats, newBaseStat)
 
 	yunaStatMapInt, err := parseStatQuery(cfg, r, queryParam, yunaBS, allowedStatIDs)
 	if errors.Is(err, errEmptyQuery) {
@@ -115,7 +115,7 @@ func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName string) (
 func calcAeonStats(cfg *Config, aeon Aeon, yuna map[string]int32) []BaseStat {
 	baseStats := aeon.BaseStats
 	aVals, bVals := getAeonStatTables(cfg, aeon)
-	yunaFloat := getResAmountFloatMap(yuna)
+	yunaFloat := resAmtMapToFloat(yuna)
 	yParameter := yParamCalc(yuna)
 
 	for i, baseStat := range baseStats {
@@ -130,18 +130,18 @@ func calcAeonStats(cfg *Config, aeon Aeon, yuna map[string]int32) []BaseStat {
 func getAeonStatTables(cfg *Config, aeon Aeon) (map[string]float64, map[string]float64) {
 	aeonLookup, _ := seeding.GetResourceByID(aeon.ID, cfg.l.AeonsID)
 
-	aValsSlice := namesToNamedResourceAmounts(cfg, cfg.e.stats, aeonLookup.BaseStats.AVals, newBaseStat)
-	aValsInt := getResourceAmountMap(aValsSlice)
-	aVals := getResAmountFloatMap(aValsInt)
+	aValsSlice := toResAmtType(cfg, cfg.e.stats, aeonLookup.BaseStats.AVals, newBaseStat)
+	aValsInt := getResAmtTypeMap(aValsSlice)
+	aVals := resAmtMapToFloat(aValsInt)
 
-	bValsSlice := namesToNamedResourceAmounts(cfg, cfg.e.stats, aeonLookup.BaseStats.BVals, newBaseStat)
-	bValsInt := getResourceAmountMap(bValsSlice)
-	bVals := getResAmountFloatMap(bValsInt)
+	bValsSlice := toResAmtType(cfg, cfg.e.stats, aeonLookup.BaseStats.BVals, newBaseStat)
+	bValsInt := getResAmtTypeMap(bValsSlice)
+	bVals := resAmtMapToFloat(bValsInt)
 
 	return aVals, bVals
 }
 
-func getResAmountFloatMap(intMap map[string]int32) map[string]float64 {
+func resAmtMapToFloat(intMap map[string]int32) map[string]float64 {
 	floatMap := make(map[string]float64)
 
 	for key := range intMap {

@@ -36,7 +36,7 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 		return Character{}, err
 	}
 
-	modeAmounts, err := getCharacterModeAmounts(cfg, r, char)
+	modeAmounts, err := getCharacterModes(cfg, r, char)
 	if err != nil {
 		return Character{}, err
 	}
@@ -54,11 +54,11 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 	return character, nil
 }
 
-func getCharacterModeAmounts(cfg *Config, r *http.Request, char seeding.Character) ([]ModeAmount, error) {
-	modeAmounts := []ModeAmount{}
+func getCharacterModes(cfg *Config, r *http.Request, char seeding.Character) ([]ResourceAmount[NamedAPIResource], error) {
+	modes := []ResourceAmount[NamedAPIResource]{}
 
 	if char.IsStoryBased {
-		return modeAmounts, nil
+		return modes, nil
 	}
 
 	modeIDs, err := cfg.db.GetOverdriveModeIDs(r.Context())
@@ -67,17 +67,16 @@ func getCharacterModeAmounts(cfg *Config, r *http.Request, char seeding.Characte
 	}
 
 	for _, id := range modeIDs {
-		modeLookup, _ := seeding.GetResourceByID(id, cfg.l.OverdriveModesID)
+		i := cfg.e.overdriveModes
+		modeLookup, _ := seeding.GetResourceByID(id, i.objLookupID)
 		if len(modeLookup.ActionsToLearn) == 0 {
 			continue
 		}
 
-		mode := idToNamedAPIResource(cfg, cfg.e.overdriveModes, id)
-		amount := modeLookup.ActionsToLearn[char.ID-1].Amount
-
-		modeAmount := convertModeAmount(mode, amount)
-		modeAmounts = append(modeAmounts, modeAmount)
+		amount := modeLookup.ActionsToLearn[char.GetID()-1].Amount
+		modeAmount := idAmountToResourceAmount(cfg, i, id, amount)
+		modes = append(modes, modeAmount)
 	}
 
-	return modeAmounts, nil
+	return modes, nil
 }

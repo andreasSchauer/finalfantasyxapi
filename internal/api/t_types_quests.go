@@ -3,9 +3,9 @@ package api
 type expSidequest struct {
 	testGeneral
 	expUnique
-	untypedQuest 	int32
-	completion 		*testQuestCompletion
-	subquests  		[]int32
+	untypedQuest int32
+	completion   *testQuestCompletion
+	subquests    []int32
 }
 
 func (e expSidequest) GetTestGeneral() testGeneral {
@@ -22,10 +22,10 @@ func compareSidequests(test test, exp expSidequest, got Sidequest) {
 type expSubquest struct {
 	testGeneral
 	expUnique
-	untypedQuest 	int32
+	untypedQuest    int32
 	parentSidequest int32
 	completions     []testQuestCompletion
-	arenaCreation	*int32
+	arenaCreation   *int32
 }
 
 func (e expSubquest) GetTestGeneral() testGeneral {
@@ -43,7 +43,7 @@ func compareSubquests(test test, exp expSubquest, got Subquest) {
 type testQuestCompletion struct {
 	index  int
 	areas  []int32
-	reward testItemAmount
+	reward testResAmount[TypedAPIResource]
 }
 
 func (t testQuestCompletion) GetIndex() int {
@@ -52,5 +52,5 @@ func (t testQuestCompletion) GetIndex() int {
 
 func compareQuestCompletions(test test, fieldName string, exp testQuestCompletion, got QuestCompletion) {
 	checkResIDsInSlice(test, fieldName+" - areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)
-	compareItemAmounts(test, fieldName+" - rewards", exp.reward, got.Reward)
+	compareResAmounts(test, fieldName+" - rewards", exp.reward, got.Reward)
 }

@@ -24,26 +24,26 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 	}
 
 	response := Item{
-		ID:             	item.ID,
-		Name:           	item.Name,
-		Description:    	item.Description,
-		SgDescription: 		item.SphereGridDescription,
-		Effect: 			item.Effect,
-		Category: 			newNamedAPIResourceFromEnum(cfg, cfg.e.itemCategory.endpoint, item.Category, cfg.t.ItemCategory),
-		Usability: 			item.Usability,
-		BasePrice: 			item.BasePrice,
-		SellValue: 			item.SellValue,
-		ItemAbility: 		namePtrToNamedAPIResPtr(cfg, cfg.e.itemAbilities, itemAbilityNamePtr, nil),
-		AvailableMenus: 	namesToNamedAPIResources(cfg, cfg.e.submenus, item.AvailableMenus),
-		RelatedStats: 		namesToNamedAPIResources(cfg, cfg.e.stats, item.RelatedStats),
-		Monsters: 			rel.Monsters,
-		Treasures: 			rel.Treasures,
-		Shops: 				rel.Shops,
-		Quests: 			rel.Quests,
-		BlitzballPrizes: 	rel.BlitzballPrizes,
+		ID:                 item.ID,
+		Name:               item.Name,
+		Description:        item.Description,
+		SgDescription:      item.SphereGridDescription,
+		Effect:             item.Effect,
+		Category:           newNamedAPIResourceFromEnum(cfg, cfg.e.itemCategory.endpoint, item.Category, cfg.t.ItemCategory),
+		Usability:          item.Usability,
+		BasePrice:          item.BasePrice,
+		SellValue:          item.SellValue,
+		ItemAbility:        namePtrToNamedAPIResPtr(cfg, cfg.e.itemAbilities, itemAbilityNamePtr, nil),
+		AvailableMenus:     namesToNamedAPIResources(cfg, cfg.e.submenus, item.AvailableMenus),
+		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, item.RelatedStats),
+		Monsters:           rel.Monsters,
+		Treasures:          rel.Treasures,
+		Shops:              rel.Shops,
+		Quests:             rel.Quests,
+		BlitzballPrizes:    rel.BlitzballPrizes,
 		AeonLearnAbilities: rel.AeonLearnAbilities,
-		AutoAbilities: 		rel.AutoAbilities,
-		Mixes: 				rel.Mixes,
+		AutoAbilities:      rel.AutoAbilities,
+		Mixes:              rel.Mixes,
 	}
 
 	return response, nil
@@ -85,40 +85,37 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 		return Item{}, err
 	}
 
-	mixes, err := getResourcesDbItem(cfg, r, cfg.e.mixes, item ,cfg.db.GetItemMixIDs)
+	mixes, err := getResourcesDbItem(cfg, r, cfg.e.mixes, item, cfg.db.GetItemMixIDs)
 	if err != nil {
 		return Item{}, err
 	}
 
-	playerAbilityAmts := []AbilityAmount{}
-	autoAbilityAmts := []AutoAbilityAmount{}
-
-	for _, ability := range playerAbilities {
-		playerAbility, _ := seeding.GetResourceByID(ability.ID, cfg.l.PlayerAbilitiesID)
-		itemAmount := *playerAbility.AeonLearnItem
-		abilityAmount := newAbilityAmount(ability, itemAmount.Amount)
-		playerAbilityAmts = append(playerAbilityAmts, abilityAmount)
-	}
-
-	for _, ability := range autoAbilities {
-		autoAbility, _ := seeding.GetResourceByID(ability.ID, cfg.l.AutoAbilitiesID)
-		itemAmount := *autoAbility.RequiredItem
-		abilityAmount := newAutoAbilityAmount(ability, itemAmount.Amount)
-		autoAbilityAmts = append(autoAbilityAmts, abilityAmount)
-	}
-
 	rel := Item{
-		Monsters: 			monsters,
-		Treasures: 			treasures,
-		Shops: 				shops,
-		Quests: 			quests,
-		BlitzballPrizes: 	blitzballPrizes,
-		AeonLearnAbilities: playerAbilityAmts,
-		AutoAbilities: 		autoAbilityAmts,
-		Mixes: 				mixes,
+		Monsters:           monsters,
+		Treasures:          treasures,
+		Shops:              shops,
+		Quests:             quests,
+		BlitzballPrizes:    blitzballPrizes,
+		AeonLearnAbilities: getForeignResAmts(cfg, playerAbilities, getPlayerAbilityAmount),
+		AutoAbilities:      getForeignResAmts(cfg, autoAbilities, getAutoAbilityAmount),
+		Mixes:              mixes,
 	}
 
 	return rel, nil
+}
+
+func getPlayerAbilityAmount(cfg *Config, res NamedAPIResource) ResourceAmount[NamedAPIResource] {
+	i := cfg.e.playerAbilities
+	playerAbility, _ := seeding.GetResourceByID(res.GetID(), i.objLookupID)
+	itemAmount := *playerAbility.AeonLearnItem
+	return newResourceAmount(res, itemAmount.Amount)
+}
+
+func getAutoAbilityAmount(cfg *Config, res NamedAPIResource) ResourceAmount[NamedAPIResource] {
+	i := cfg.e.autoAbilities
+	autoAbility, _ := seeding.GetResourceByID(res.GetID(), i.objLookupID)
+	itemAmount := *autoAbility.RequiredItem
+	return newResourceAmount(res, itemAmount.Amount)
 }
 
 func getItemMonsters(cfg *Config, r *http.Request, item seeding.Item) ([]ItemMonster, error) {
@@ -137,14 +134,11 @@ func getItemMonsters(cfg *Config, r *http.Request, item seeding.Item) ([]ItemMon
 	return itemMonsters, nil
 }
 
-
 func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-
-	})
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{})
 }
