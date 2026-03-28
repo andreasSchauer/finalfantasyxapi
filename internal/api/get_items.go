@@ -1,8 +1,11 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -106,12 +109,35 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 
 
 func getMonItemAmts(cfg *Config, r *http.Request, item seeding.Item) ([]MonItemAmts, error) {
+	i := cfg.e.monsters
 	monItemAmts := []MonItemAmts{}
 
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, item, cfg.db.GetMonsterIDsByItem)
+	postAirship, err := getBoolPtr(r, "post_airship", i.queryLookup)
 	if err != nil {
 		return nil, err
 	}
+	
+	storyBased, err := getBoolPtr(r, "story_based", i.queryLookup)
+	if err != nil {
+		return nil, err
+	}
+
+	repeatable, err := getBoolPtr(r, "repeatable", i.queryLookup)
+	if err != nil {
+		return nil, err
+	}
+
+	dbIds, err := cfg.db.GetItemMonsterIDs(r.Context(), database.GetItemMonsterIDsParams{
+		ItemID: 		item.GetID(),
+		PostAirship: 	h.GetNullBool(postAirship),
+		StoryBased: 	h.GetNullBool(storyBased),
+		Repeatable: 	h.GetNullBool(repeatable),
+	})
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", i.resourceType, item), err)
+	}
+
+	monsters := idsToAPIResources(cfg, i, dbIds)
 
 	for _, monster := range monsters {
 		monItemAmt := createItemMonster(cfg, item, monster)

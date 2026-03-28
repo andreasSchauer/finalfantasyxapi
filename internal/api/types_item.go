@@ -15,14 +15,14 @@ type Item struct {
 	ItemAbility        *NamedAPIResource                  	`json:"item_ability"`
 	AvailableMenus     []NamedAPIResource                 	`json:"available_menus"`
 	RelatedStats       []NamedAPIResource                 	`json:"related_stats"`
-	Monsters           []MonItemAmts                      	`json:"monsters"`             // GetMonsterIDsByItem
-	Treasures          []ResourceAmount[UnnamedAPIResource] `json:"treasures"`            // GetTreasureIDsByItem
-	Shops              []UnnamedAPIResource               	`json:"shops"`                // GetItemShopIDs
-	Quests             []ResourceAmount[QuestAPIResource]	`json:"quests"`               // GetItemQuestIDs
-	BlitzballPrizes    []ResourceAmount[NamedAPIResource]	`json:"blitzball_prizes"`     // GetItemBlitzballPrizeIDs
-	AeonLearnAbilities []ResourceAmount[NamedAPIResource] 	`json:"aeon_learn_abilities"` // GetItemPlayerAbilityIDs
-	AutoAbilities      []ResourceAmount[NamedAPIResource] 	`json:"auto_abilities"`       // GetItemAutoAbilityIDs
-	Mixes              []NamedAPIResource                 	`json:"mixes"`                // GetItemMixIDs
+	Monsters           []MonItemAmts                      	`json:"monsters"`
+	Treasures          []ResourceAmount[UnnamedAPIResource] `json:"treasures"`
+	Shops              []UnnamedAPIResource               	`json:"shops"`
+	Quests             []ResourceAmount[QuestAPIResource]	`json:"quests"`
+	BlitzballPrizes    []ResourceAmount[NamedAPIResource]	`json:"blitzball_prizes"`
+	AeonLearnAbilities []ResourceAmount[NamedAPIResource] 	`json:"aeon_learn_abilities"`
+	AutoAbilities      []ResourceAmount[NamedAPIResource] 	`json:"auto_abilities"`
+	Mixes              []NamedAPIResource                 	`json:"mixes"`
 }
 
 // need to account for otherItems

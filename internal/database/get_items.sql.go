@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 )
 
 const getItemAutoAbilityIDs = `-- name: GetItemAutoAbilityIDs :many
@@ -136,6 +137,102 @@ func (q *Queries) GetItemMixIDs(ctx context.Context, id int32) ([]int32, error) 
 	return items, nil
 }
 
+const getItemMonsterIDs = `-- name: GetItemMonsterIDs :many
+SELECT DISTINCT m.id
+FROM monsters m
+JOIN monster_items mi ON mi.monster_id = m.id
+LEFT JOIN j_monster_items_other_items jmio
+  ON jmio.monster_items_id = mi.id
+LEFT JOIN possible_items pi
+  ON pi.id = jmio.possible_item_id
+JOIN item_amounts ia
+  ON ia.id IN (
+      mi.steal_common_id,
+      mi.steal_rare_id,
+      mi.drop_common_id,
+      mi.drop_rare_id,
+      mi.secondary_drop_common_id,
+      mi.secondary_drop_rare_id,
+      mi.bribe_id,
+      pi.item_amount_id
+  )
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON i.master_item_id = mit.id
+WHERE
+    i.id = $1
+    AND ($2::BOOLEAN IS NULL OR m.is_story_based = $2::BOOLEAN)
+    AND ($3::BOOLEAN IS NULL OR m.is_repeatable = $3::BOOLEAN)
+    AND (
+        $4::boolean IS NULL
+
+        OR (
+            $4::boolean = TRUE -- at least one post_airship = true
+            AND NOT EXISTS (
+                SELECT 1
+                FROM monster_amounts ma2
+                JOIN j_monster_selections_monsters j2 ON j2.monster_amount_id = ma2.id
+                JOIN monster_selections ms2 ON ms2.id = j2.monster_selection_id
+                JOIN monster_formations mf2 ON mf2.monster_selection_id = ms2.id
+                JOIN formation_data fd2 ON fd2.id = mf2.formation_data_id
+                WHERE
+                    ma2.monster_id = m.id
+                    AND fd2.is_post_airship = FALSE
+            )  
+        )
+
+        OR (
+            $4::boolean = FALSE -- all post_airship = false
+            AND EXISTS (
+                SELECT 1
+                FROM monster_amounts ma2
+                JOIN j_monster_selections_monsters j2 ON j2.monster_amount_id = ma2.id
+                JOIN monster_selections ms2 ON ms2.id = j2.monster_selection_id
+                JOIN monster_formations mf2 ON mf2.monster_selection_id = ms2.id
+                JOIN formation_data fd2 ON fd2.id = mf2.formation_data_id
+                WHERE
+                    ma2.monster_id = m.id
+                    AND fd2.is_post_airship = FALSE
+            )
+        )
+    )
+ORDER BY m.id
+`
+
+type GetItemMonsterIDsParams struct {
+	ItemID      int32
+	StoryBased  sql.NullBool
+	Repeatable  sql.NullBool
+	PostAirship sql.NullBool
+}
+
+func (q *Queries) GetItemMonsterIDs(ctx context.Context, arg GetItemMonsterIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemMonsterIDs,
+		arg.ItemID,
+		arg.StoryBased,
+		arg.Repeatable,
+		arg.PostAirship,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getItemPlayerAbilityIDs = `-- name: GetItemPlayerAbilityIDs :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
@@ -215,6 +312,40 @@ ORDER BY s.id
 
 func (q *Queries) GetItemShopIDs(ctx context.Context, id int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getItemShopIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getItemTreasureIDs = `-- name: GetItemTreasureIDs :many
+SELECT DISTINCT t.id
+FROM treasures t
+JOIN j_treasures_items j ON j.treasure_id = t.id
+JOIN item_amounts ia ON j.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
+JOIN items i ON i.master_item_id = mi.id
+WHERE i.id = $1
+ORDER BY t.id
+`
+
+func (q *Queries) GetItemTreasureIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemTreasureIDs, id)
 	if err != nil {
 		return nil, err
 	}

@@ -2360,6 +2360,30 @@ func (cfg *Config) initSubmenusParams() {
 
 func (cfg *Config) initItemsParams() {
 	params := map[string]QueryType{
+		"post_airship": {
+			ID:          1,
+			Description: "Only displays related resources that are only available after acquiring the airship.",
+			Usage:       "?post_airship={bool}",
+			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			ForList:     false,
+			ForSingle:   true,
+		},
+		"story_based": {
+			ID:          2,
+			Description: "Only displays related resources that are available during the events of the story.",
+			Usage:       "?story_based={bool}",
+			ExampleUses: []string{"?story_based=true", "?story_based=false"},
+			ForList:     false,
+			ForSingle:   true,
+		},
+		"repeatable": {
+			ID:          2,
+			Description: "Only displays related monsters and quests that can be farmed.",
+			Usage:       "?repeatable={bool}",
+			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
+			ForList:     false,
+			ForSingle:   true,
+		},
 		"type": {
 			ID:          1,
 			Description: "Searches for overdrive-modes that are of the specified overdrive-mode-type.",

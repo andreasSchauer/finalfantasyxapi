@@ -27,6 +27,14 @@ func GetNullFloat64(f *float32) sql.NullFloat64 {
 	return sql.NullFloat64{Float64: float64(*f), Valid: true}
 }
 
+func GetNullBool(b *bool) sql.NullBool {
+	if b == nil {
+		return sql.NullBool{}
+	}
+
+	return sql.NullBool{Bool: *b, Valid: true}
+}
+
 
 
 // these functions are all used to convert a nullable db value into a normal value or pointer
