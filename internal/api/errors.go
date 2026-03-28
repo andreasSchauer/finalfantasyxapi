@@ -8,6 +8,7 @@ import (
 
 var errNotAnID = errors.New("not an id.")
 var errIdNotFound = errors.New("id doesn't exit.")
+var errContinue = errors.New("loop should be continued.")
 var errNoResource = errors.New("no resources found.")
 var errEmptyQuery = errors.New("query parameter is empty.")
 var errQueryRedirect = errors.New("query parameter is not empty, but will be dealt with else where.")

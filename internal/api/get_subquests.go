@@ -13,12 +13,13 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 	}
 
 	response := Subquest{
-		ID:              	subquest.ID,
-		Name:            	subquest.Name,
-		UntypedQuest: 		idToQuestAPIResource(cfg, cfg.e.quests, subquest.Quest.ID),
-		ParentSidequest: 	idToQuestAPIResource(cfg, cfg.e.sidequests, subquest.SidequestID),
-		IsPostAirship: 		subquest.IsPostAirship,
-		Completions:     	convertObjSlice(cfg, subquest.Completions, convertQuestCompletion),
+		ID:              subquest.ID,
+		Name:            subquest.Name,
+		UntypedQuest:    idToQuestAPIResource(cfg, cfg.e.quests, subquest.Quest.ID),
+		ParentSidequest: idToQuestAPIResource(cfg, cfg.e.sidequests, subquest.SidequestID),
+		IsPostAirship:   subquest.IsPostAirship,
+		IsRepeatable: 	 subquest.IsRepeatable,
+		Completion:      convertQuestCompletion(cfg, *subquest.Completion),
 	}
 
 	if response.ParentSidequest.Sidequest == "monster arena" {
@@ -36,5 +37,6 @@ func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Sub
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
 		frl(boolQuery(cfg, r, i, resources, "post_airship", cfg.db.GetSubquestIDsByPostAirship)),
+		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetSubquestIDsByRepeatable)),
 	})
 }

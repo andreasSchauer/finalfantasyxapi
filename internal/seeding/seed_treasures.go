@@ -69,6 +69,10 @@ func (t Treasure) GetResParamsUnnamed() h.ResParamsUnnamed {
 	}
 }
 
+func (t Treasure) GetItemAmounts() []ItemAmount {
+	return t.Items
+}
+
 func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "data/treasures.json"
 

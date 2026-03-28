@@ -50,7 +50,7 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 }
 
 func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item, error) {
-	monsters, err := getItemMonsters(cfg, r, item)
+	monsters, err := getMonItemAmts(cfg, r, item)
 	if err != nil {
 		return Item{}, err
 	}
@@ -92,34 +92,21 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 
 	rel := Item{
 		Monsters:           monsters,
-		Treasures:          treasures,
+		Treasures:          getForeignResAmts2(cfg, cfg.e.treasures, treasures, item.ID),
 		Shops:              shops,
-		Quests:             quests,
-		BlitzballPrizes:    blitzballPrizes,
-		AeonLearnAbilities: getForeignResAmts(cfg, playerAbilities, getPlayerAbilityAmount),
-		AutoAbilities:      getForeignResAmts(cfg, autoAbilities, getAutoAbilityAmount),
+		Quests:             getForeignResAmts(cfg.e.quests, quests),
+		BlitzballPrizes:    getForeignResAmts2(cfg, cfg.e.blitzballPrizes, blitzballPrizes, item.ID),
+		AeonLearnAbilities: getForeignResAmts(cfg.e.playerAbilities, playerAbilities),
+		AutoAbilities:      getForeignResAmts(cfg.e.autoAbilities, autoAbilities),
 		Mixes:              mixes,
 	}
 
 	return rel, nil
 }
 
-func getPlayerAbilityAmount(cfg *Config, res NamedAPIResource) ResourceAmount[NamedAPIResource] {
-	i := cfg.e.playerAbilities
-	playerAbility, _ := seeding.GetResourceByID(res.GetID(), i.objLookupID)
-	itemAmount := *playerAbility.AeonLearnItem
-	return newResourceAmount(res, itemAmount.Amount)
-}
 
-func getAutoAbilityAmount(cfg *Config, res NamedAPIResource) ResourceAmount[NamedAPIResource] {
-	i := cfg.e.autoAbilities
-	autoAbility, _ := seeding.GetResourceByID(res.GetID(), i.objLookupID)
-	itemAmount := *autoAbility.RequiredItem
-	return newResourceAmount(res, itemAmount.Amount)
-}
-
-func getItemMonsters(cfg *Config, r *http.Request, item seeding.Item) ([]ItemMonster, error) {
-	itemMonsters := []ItemMonster{}
+func getMonItemAmts(cfg *Config, r *http.Request, item seeding.Item) ([]MonItemAmts, error) {
+	monItemAmts := []MonItemAmts{}
 
 	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, item, cfg.db.GetMonsterIDsByItem)
 	if err != nil {
@@ -127,11 +114,11 @@ func getItemMonsters(cfg *Config, r *http.Request, item seeding.Item) ([]ItemMon
 	}
 
 	for _, monster := range monsters {
-		itemMonster := createItemMonster(cfg, item, monster)
-		itemMonsters = append(itemMonsters, itemMonster)
+		monItemAmt := createItemMonster(cfg, item, monster)
+		monItemAmts = append(monItemAmts, monItemAmt)
 	}
 
-	return itemMonsters, nil
+	return monItemAmts, nil
 }
 
 func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {

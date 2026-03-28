@@ -26,15 +26,15 @@ RETURNING *;
 
 
 -- name: CreateSubquest :one
-INSERT INTO subquests (data_hash, quest_id, sidequest_id)
-VALUES ($1, $2, $3)
+INSERT INTO subquests (data_hash, quest_id, sidequest_id, is_repeatable)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = subquests.data_hash
 RETURNING *;
 
 
 -- name: CreateQuestCompletion :one
-INSERT INTO quest_completions (data_hash, quest_id, condition, is_repeatable, item_amount_id)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO quest_completions (data_hash, condition, item_amount_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
 RETURNING *;
 
@@ -50,6 +50,13 @@ INSERT INTO monster_arena_creations (data_hash, subquest_id, category, required_
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO Update SET data_hash = monster_arena_creations.data_hash
 RETURNING *;
+
+
+-- name: UpdateQuest :exec
+UPDATE quests
+SET data_hash = $1,
+    completion_id = $2
+WHERE id = $3;
 
 
 -- name: UpdateMonsterArenaCreation :exec

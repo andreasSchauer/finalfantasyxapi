@@ -29,3 +29,12 @@ type Hashable interface {
 	ToHashFields() []any
 }
 
+type HasItemAmount interface {
+	h.HasID
+	GetItemAmount() ItemAmount
+}
+
+type HasItemAmounts interface {
+	h.HasID
+	GetItemAmounts() []ItemAmount
+}

@@ -124,7 +124,7 @@ const createQuest = `-- name: CreateQuest :one
 INSERT INTO quests (data_hash, name, type, is_post_airship)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quests.data_hash
-RETURNING id, data_hash, name, type, is_post_airship
+RETURNING id, data_hash, name, type, is_post_airship, completion_id
 `
 
 type CreateQuestParams struct {
@@ -148,40 +148,31 @@ func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest
 		&i.Name,
 		&i.Type,
 		&i.IsPostAirship,
+		&i.CompletionID,
 	)
 	return i, err
 }
 
 const createQuestCompletion = `-- name: CreateQuestCompletion :one
-INSERT INTO quest_completions (data_hash, quest_id, condition, is_repeatable, item_amount_id)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO quest_completions (data_hash, condition, item_amount_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
-RETURNING id, data_hash, quest_id, condition, is_repeatable, item_amount_id
+RETURNING id, data_hash, condition, item_amount_id
 `
 
 type CreateQuestCompletionParams struct {
 	DataHash     string
-	QuestID      int32
-	Condition    string
-	IsRepeatable bool
+	Condition    sql.NullString
 	ItemAmountID int32
 }
 
 func (q *Queries) CreateQuestCompletion(ctx context.Context, arg CreateQuestCompletionParams) (QuestCompletion, error) {
-	row := q.db.QueryRowContext(ctx, createQuestCompletion,
-		arg.DataHash,
-		arg.QuestID,
-		arg.Condition,
-		arg.IsRepeatable,
-		arg.ItemAmountID,
-	)
+	row := q.db.QueryRowContext(ctx, createQuestCompletion, arg.DataHash, arg.Condition, arg.ItemAmountID)
 	var i QuestCompletion
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
-		&i.QuestID,
 		&i.Condition,
-		&i.IsRepeatable,
 		&i.ItemAmountID,
 	)
 	return i, err
@@ -207,26 +198,33 @@ func (q *Queries) CreateSidequest(ctx context.Context, arg CreateSidequestParams
 }
 
 const createSubquest = `-- name: CreateSubquest :one
-INSERT INTO subquests (data_hash, quest_id, sidequest_id)
-VALUES ($1, $2, $3)
+INSERT INTO subquests (data_hash, quest_id, sidequest_id, is_repeatable)
+VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = subquests.data_hash
-RETURNING id, data_hash, quest_id, sidequest_id
+RETURNING id, data_hash, quest_id, sidequest_id, is_repeatable
 `
 
 type CreateSubquestParams struct {
-	DataHash    string
-	QuestID     int32
-	SidequestID int32
+	DataHash     string
+	QuestID      int32
+	SidequestID  int32
+	IsRepeatable bool
 }
 
 func (q *Queries) CreateSubquest(ctx context.Context, arg CreateSubquestParams) (Subquest, error) {
-	row := q.db.QueryRowContext(ctx, createSubquest, arg.DataHash, arg.QuestID, arg.SidequestID)
+	row := q.db.QueryRowContext(ctx, createSubquest,
+		arg.DataHash,
+		arg.QuestID,
+		arg.SidequestID,
+		arg.IsRepeatable,
+	)
 	var i Subquest
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
 		&i.QuestID,
 		&i.SidequestID,
+		&i.IsRepeatable,
 	)
 	return i, err
 }
@@ -246,5 +244,23 @@ type UpdateMonsterArenaCreationParams struct {
 
 func (q *Queries) UpdateMonsterArenaCreation(ctx context.Context, arg UpdateMonsterArenaCreationParams) error {
 	_, err := q.db.ExecContext(ctx, updateMonsterArenaCreation, arg.DataHash, arg.MonsterID, arg.ID)
+	return err
+}
+
+const updateQuest = `-- name: UpdateQuest :exec
+UPDATE quests
+SET data_hash = $1,
+    completion_id = $2
+WHERE id = $3
+`
+
+type UpdateQuestParams struct {
+	DataHash     string
+	CompletionID sql.NullInt32
+	ID           int32
+}
+
+func (q *Queries) UpdateQuest(ctx context.Context, arg UpdateQuestParams) error {
+	_, err := q.db.ExecContext(ctx, updateQuest, arg.DataHash, arg.CompletionID, arg.ID)
 	return err
 }

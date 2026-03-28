@@ -119,7 +119,7 @@ func (q *Queries) GetBlitzballPrizeIDsByCategory(ctx context.Context, category B
 }
 
 const getParentSidequest = `-- name: GetParentSidequest :one
-SELECT q.id, q.data_hash, q.name, q.type, q.is_post_airship
+SELECT q.id, q.data_hash, q.name, q.type, q.is_post_airship, q.completion_id
 FROM subquests su
 LEFT JOIN sidequests si ON su.sidequest_id = si.id
 LEFT JOIN quests q ON si.quest_id = q.id
@@ -132,6 +132,7 @@ type GetParentSidequestRow struct {
 	Name          sql.NullString
 	Type          NullQuestType
 	IsPostAirship sql.NullBool
+	CompletionID  sql.NullInt32
 }
 
 func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSidequestRow, error) {
@@ -143,6 +144,7 @@ func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSi
 		&i.Name,
 		&i.Type,
 		&i.IsPostAirship,
+		&i.CompletionID,
 	)
 	return i, err
 }
@@ -350,6 +352,33 @@ ORDER BY s.id
 
 func (q *Queries) GetSubquestIDsByPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getSubquestIDsByPostAirship, isPostAirship)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSubquestIDsByRepeatable = `-- name: GetSubquestIDsByRepeatable :many
+SELECT id FROM subquests WHERE is_repeatable = $1 ORDER BY id
+`
+
+func (q *Queries) GetSubquestIDsByRepeatable(ctx context.Context, isRepeatable bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSubquestIDsByRepeatable, isRepeatable)
 	if err != nil {
 		return nil, err
 	}

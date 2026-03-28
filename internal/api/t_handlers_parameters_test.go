@@ -135,8 +135,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.subquests.endpoint,
 				handler:        testCfg.HandleSubquests,
 			},
-			count:   3,
-			results: []string{"limit", "offset", "post_airship"},
+			count:   4,
+			results: []string{"limit", "offset", "post_airship", "repeatable"},
 		},
 		{
 			testGeneral: testGeneral{

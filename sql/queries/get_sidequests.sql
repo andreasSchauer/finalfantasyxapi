@@ -46,6 +46,10 @@ WHERE q.is_post_airship = $1
 ORDER BY s.id;
 
 
+-- name: GetSubquestIDsByRepeatable :many
+SELECT id FROM subquests WHERE is_repeatable = $1 ORDER BY id;
+
+
 -- name: GetArenaCreationIDs :many
 SELECT id FROM monster_arena_creations ORDER BY id;
 

@@ -1,7 +1,10 @@
 package api
 
 import (
+	"errors"
+
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type ResourceAmount[A APIResource] struct {
@@ -20,16 +23,6 @@ func newResourceAmount[A APIResource](resource A, amount int32) ResourceAmount[A
 	}
 }
 
-func getForeignResAmts[A APIResource](cfg *Config, items []A, fn func(*Config, A) ResourceAmount[A]) []ResourceAmount[A] {
-	resAmts := []ResourceAmount[A]{}
-
-	for _, item := range items {
-		resAmt := fn(cfg, item)
-		resAmts = append(resAmts, resAmt)
-	}
-
-	return resAmts
-}
 
 func idAmountToResourceAmount[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id, amount int32) ResourceAmount[A] {
 	return ResourceAmount[A]{
@@ -107,6 +100,61 @@ func resAmtTypesToStructs[T ResourceAmountType[A], A APIResource](items []T) []R
 
 	for _, item := range items {
 		resAmts = append(resAmts, item.ToResAmount())
+	}
+
+	return resAmts
+}
+
+func getForeignResAmts[T seeding.HasItemAmount, R any, A APIResource, L APIResourceList](i handlerInput[T, R, A, L], resources []A) []ResourceAmount[A] {
+	resAmts := []ResourceAmount[A]{}
+
+	for _, res := range resources {
+		lookup, _ := seeding.GetResourceByID(res.GetID(), i.objLookupID)
+		itemAmount := lookup.GetItemAmount()
+		resAmt := newResourceAmount(res, itemAmount.Amount)
+		resAmts = append(resAmts, resAmt)
+	}
+
+	return resAmts
+}
+
+func getForeignResAmts2[T seeding.HasItemAmounts, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], resources []A, id int32) []ResourceAmount[A] {
+	resAmts := []ResourceAmount[A]{}
+
+	for _, res := range resources {
+		lookup, _ := seeding.GetResourceByID(res.GetID(), i.objLookupID)
+		itemAmounts := lookup.GetItemAmounts()
+		var itemAmount seeding.ItemAmount
+
+		for _, ia := range itemAmounts {
+			item, _ := seeding.GetResource(ia.ItemName, cfg.l.Items)
+			if item.ID == id {
+				itemAmount = ia
+			}
+		}
+
+		resAmt := newResourceAmount(res, itemAmount.Amount)
+		resAmts = append(resAmts, resAmt)
+	}
+
+	return resAmts
+}
+
+
+func getForeignSliceResAmts[K seeding.LookupableID ,T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], targetItem K, skipCondition bool, fn func(*Config, K, int32) (ResourceAmount[A], error)) []ResourceAmount[A] {
+	resAmts := []ResourceAmount[A]{}
+
+	if skipCondition {
+		return resAmts
+	}
+
+	for idx := range len(i.objLookup) {
+		id := int32(idx + 1)
+		resAmt, err := fn(cfg, targetItem, id)
+		if errors.Is(err, errContinue) {
+			continue
+		}
+		resAmts = append(resAmts, resAmt)
 	}
 
 	return resAmts

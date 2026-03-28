@@ -3855,14 +3855,13 @@ type Quest struct {
 	Name          string
 	Type          QuestType
 	IsPostAirship bool
+	CompletionID  sql.NullInt32
 }
 
 type QuestCompletion struct {
 	ID           int32
 	DataHash     string
-	QuestID      int32
-	Condition    string
-	IsRepeatable bool
+	Condition    sql.NullString
 	ItemAmountID int32
 }
 
@@ -3986,10 +3985,11 @@ type Submenu struct {
 }
 
 type Subquest struct {
-	ID          int32
-	DataHash    string
-	QuestID     int32
-	SidequestID int32
+	ID           int32
+	DataHash     string
+	QuestID      int32
+	SidequestID  int32
+	IsRepeatable bool
 }
 
 type Topmenu struct {

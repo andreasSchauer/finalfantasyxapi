@@ -16,7 +16,7 @@ type endpoints struct {
 	sidequests           	 handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]
 	subquests            	 handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]
 	arenaCreations       	 handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
-	blitzballPrizes      	 handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList]
+	blitzballPrizes      	 handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]
 	songs                	 handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
 	fmvs                 	 handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
 
@@ -325,14 +325,14 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveArenaCreations,
 	}
 
-	e.blitzballPrizes = handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList]{
+	e.blitzballPrizes = handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "blitzball-prizes",
 		resourceType:  "blitzball prize table",
 		objLookup:     cfg.l.Positions,
 		objLookupID:   cfg.l.PositionsID,
 		queryLookup:   cfg.q.blitzballPrizes,
-		idToResFunc:   idToUnnamedAPIResource[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList],
-		resToListFunc: newUnnamedAPIResourceList,
+		idToResFunc:   idToNamedAPIResource[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetBlitzballPrizeIDs,
 		getSingleFunc: cfg.getBlitzballPrize,
 		retrieveFunc:  cfg.retrieveBlitzballPrizes,

@@ -43,7 +43,7 @@ func TestGetSidequest(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
 					"completion - areas": 1,
-					"subquests":          8,
+					"subquests":          16,
 				},
 			},
 			expUnique:    newExpUnique(2, "remiem temple"),
@@ -52,7 +52,7 @@ func TestGetSidequest(t *testing.T) {
 				areas:  []int32{209},
 				reward: newTestResAmount[TypedAPIResource](126, 1),
 			},
-			subquests: []int32{37, 39, 42, 44},
+			subquests: []int32{37, 39, 42, 44, 45, 49, 52},
 		},
 		{
 			testGeneral: testGeneral{
@@ -60,13 +60,13 @@ func TestGetSidequest(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"subquests": 4,
+					"subquests": 9,
 				},
 			},
 			expUnique:    newExpUnique(4, "chocobo training"),
-			untypedQuest: 49,
+			untypedQuest: 62,
 			completion:   nil,
-			subquests:    []int32{46, 47, 48, 49},
+			subquests:    []int32{59, 62, 64, 65, 67},
 		},
 		{
 			testGeneral: testGeneral{
@@ -79,7 +79,7 @@ func TestGetSidequest(t *testing.T) {
 				},
 			},
 			expUnique:    newExpUnique(9, "al bhed primers"),
-			untypedQuest: 65,
+			untypedQuest: 97,
 			completion: &testQuestCompletion{
 				areas:  []int32{185, 182},
 				reward: newTestResAmount[TypedAPIResource](111, 99),

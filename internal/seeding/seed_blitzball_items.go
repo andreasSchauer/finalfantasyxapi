@@ -38,10 +38,21 @@ func (b BlitzballPosition) Error() string {
 	return fmt.Sprintf("blitzball position %s in %s", b.Slot, b.Category)
 }
 
-func (b BlitzballPosition) GetResParamsUnnamed() h.ResParamsUnnamed {
-	return h.ResParamsUnnamed{
+func (b BlitzballPosition) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
 		ID: b.ID,
+		Name: fmt.Sprintf("%s - %s", b.Category, b.Slot),
 	}
+}
+
+func (b BlitzballPosition) GetItemAmounts() []ItemAmount {
+	ias := []ItemAmount{}
+
+	for _, item := range b.Items {
+		ias = append(ias, item.ItemAmount)
+	}
+
+	return ias
 }
 
 type PossibleItem struct {

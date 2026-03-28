@@ -84,6 +84,16 @@ func (p PlayerAbility) GetResParamsNamed() h.ResParamsNamed {
 	}
 }
 
+func (p PlayerAbility) GetItemAmount() ItemAmount {
+	itemAmtPtr := p.AeonLearnItem
+
+	if itemAmtPtr == nil {
+		return ItemAmount{}
+	}
+
+	return *itemAmtPtr
+}
+
 func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "data/player_abilities.json"
 

@@ -24,7 +24,7 @@ type expSubquest struct {
 	expUnique
 	untypedQuest    int32
 	parentSidequest int32
-	completions     []testQuestCompletion
+	completion      testQuestCompletion
 	arenaCreation   *int32
 }
 
@@ -36,18 +36,13 @@ func compareSubquests(test test, exp expSubquest, got Subquest) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "untyped quest", test.cfg.e.quests.endpoint, exp.untypedQuest, got.UntypedQuest)
 	compIdApiResource(test, "parent sidequest", test.cfg.e.sidequests.endpoint, exp.parentSidequest, got.ParentSidequest)
-	checkTestStructsInSlice(test, "completions", exp.completions, got.Completions, compareQuestCompletions)
+	compareQuestCompletions(test, "completion", exp.completion, got.Completion)
 	compIdApiResourcePtrs(test, "arena creation", test.cfg.e.arenaCreations.endpoint, exp.arenaCreation, got.ArenaCreation)
 }
 
 type testQuestCompletion struct {
-	index  int
 	areas  []int32
 	reward testResAmount[TypedAPIResource]
-}
-
-func (t testQuestCompletion) GetIndex() int {
-	return t.index
 }
 
 func compareQuestCompletions(test test, fieldName string, exp testQuestCompletion, got QuestCompletion) {

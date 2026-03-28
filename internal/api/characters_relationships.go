@@ -36,11 +36,6 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 		return Character{}, err
 	}
 
-	modeAmounts, err := getCharacterModes(cfg, r, char)
-	if err != nil {
-		return Character{}, err
-	}
-
 	character := Character{
 		CelestialWeapon:        celestialWeapon,
 		OverdriveCommand:       overdriveCommand,
@@ -48,35 +43,23 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 		DefaultPlayerAbilities: defaultAbilities,
 		StdSgPlayerAbilities:   stdSgAbilities,
 		ExpSgPlayerAbilities:   expSgAbilities,
-		OverdriveModes:         modeAmounts,
+		OverdriveModes:         getForeignSliceResAmts(cfg, cfg.e.overdriveModes, char, char.IsStoryBased, getCharModeAmount),
 	}
 
 	return character, nil
 }
 
-func getCharacterModes(cfg *Config, r *http.Request, char seeding.Character) ([]ResourceAmount[NamedAPIResource], error) {
-	modes := []ResourceAmount[NamedAPIResource]{}
 
-	if char.IsStoryBased {
-		return modes, nil
+func getCharModeAmount(cfg *Config, char seeding.Character, id int32) (ResourceAmount[NamedAPIResource], error) {
+	i := cfg.e.overdriveModes
+
+	modeLookup, _ := seeding.GetResourceByID(id, i.objLookupID)
+	if len(modeLookup.ActionsToLearn) == 0 {
+		return ResourceAmount[NamedAPIResource]{}, errContinue
 	}
 
-	modeIDs, err := cfg.db.GetOverdriveModeIDs(r.Context())
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get overdrive modes", err)
-	}
+	amount := modeLookup.ActionsToLearn[char.GetID()-1].Amount
+	modeAmount := idAmountToResourceAmount(cfg, i, id, amount)
 
-	for _, id := range modeIDs {
-		i := cfg.e.overdriveModes
-		modeLookup, _ := seeding.GetResourceByID(id, i.objLookupID)
-		if len(modeLookup.ActionsToLearn) == 0 {
-			continue
-		}
-
-		amount := modeLookup.ActionsToLearn[char.GetID()-1].Amount
-		modeAmount := idAmountToResourceAmount(cfg, i, id, amount)
-		modes = append(modes, modeAmount)
-	}
-
-	return modes, nil
+	return modeAmount, nil
 }

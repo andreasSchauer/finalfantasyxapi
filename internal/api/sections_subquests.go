@@ -10,26 +10,15 @@ type SubquestSimple struct {
 	ID          int32                   `json:"id"`
 	URL         string                  `json:"url"`
 	Name        string                  `json:"name"`
-	Completions []QuestCompletionSimple `json:"completions"`
+	Condition *string           `json:"condition"`
+	Areas     []string         	`json:"areas"`
+	Reward    string 			`json:"reward"`
 }
 
 func (s SubquestSimple) GetURL() string {
 	return s.URL
 }
 
-type QuestCompletionSimple struct {
-	Condition string           `json:"condition"`
-	Areas     []string         `json:"areas"`
-	Reward    string 			`json:"reward"`
-}
-
-func convertQuestCompletionSimple(cfg *Config, qc seeding.QuestCompletion) QuestCompletionSimple {
-	return QuestCompletionSimple{
-		Condition: qc.Condition,
-		Areas:     locAreaStrings(cfg, qc.Areas),
-		Reward:    convertItemAmountSimple(cfg, qc.Reward),
-	}
-}
 
 func createSubquestSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
 	i := cfg.e.subquests
@@ -39,7 +28,9 @@ func createSubquestSimple(cfg *Config, _ *http.Request, id int32) (SimpleResourc
 		ID:          subquest.ID,
 		URL:         createResourceURL(cfg, i.endpoint, id),
 		Name:        subquest.Name,
-		Completions: convertObjSlice(cfg, subquest.Completions, convertQuestCompletionSimple),
+		Condition: 	 subquest.Completion.Condition,
+		Areas: 		 locAreaStrings(cfg, subquest.Completion.Areas),
+		Reward: 	 convertItemAmountSimple(cfg, subquest.GetItemAmount()),
 	}
 
 	return subquestSimple, nil

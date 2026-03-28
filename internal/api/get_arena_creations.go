@@ -15,7 +15,7 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 	}
 
 	subquest, _ := seeding.GetResourceByID(creation.SubquestID, cfg.l.SubquestsID)
-	ia := subquest.Completions[0].Reward
+	ia := subquest.Completion.Reward
 
 	monsters, err := getArenaCreationMonsters(cfg, r, creation)
 	if err != nil {

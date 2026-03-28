@@ -77,6 +77,16 @@ func (a AutoAbility) GetResParamsNamed() h.ResParamsNamed {
 	}
 }
 
+func (a AutoAbility) GetItemAmount() ItemAmount {
+	itemAmtPtr := a.RequiredItem
+
+	if itemAmtPtr == nil {
+		return ItemAmount{}
+	}
+
+	return *itemAmtPtr
+}
+
 func (l *Lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "data/auto_abilities.json"
 

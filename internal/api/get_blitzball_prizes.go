@@ -1,12 +1,13 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList], id int32) (BlitzballPrize, error) {
+func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList], id int32) (BlitzballPrize, error) {
 	bbPos, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
 		return BlitzballPrize{}, err
@@ -14,6 +15,7 @@ func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.Bli
 
 	response := BlitzballPrize{
 		ID:       bbPos.ID,
+		Name: 	  fmt.Sprintf("%s - %s", bbPos.Category, bbPos.Slot),
 		Category: bbPos.Category,
 		Slot:     bbPos.Slot,
 		Items:    convertObjSlice(cfg, bbPos.Items, convertBlitzballItem),
@@ -22,13 +24,13 @@ func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.Bli
 	return response, nil
 }
 
-func (cfg *Config) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, UnnamedAPIResource, UnnamedApiResourceList]) (UnnamedApiResourceList, error) {
+func (cfg *Config) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
-		return UnnamedApiResourceList{}, err
+		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(typeQuery(cfg, r, i, cfg.t.BlitzballTournamentCategory, resources, "category", cfg.db.GetBlitzballPrizeIDsByCategory)),
 	})
 }

@@ -24,13 +24,14 @@ type Subquest struct {
 	Name            string            `json:"name"`
 	UntypedQuest    QuestAPIResource  `json:"untyped_quest"`
 	IsPostAirship   bool              `json:"is_post_airship"`
+	IsRepeatable	bool			  `json:"is_repeatable"`
 	ParentSidequest QuestAPIResource  `json:"parent_sidequest"`
-	Completions     []QuestCompletion `json:"completions"`
+	Completion      QuestCompletion   `json:"completion"`
 	ArenaCreation   *NamedAPIResource `json:"arena_creation,omitempty"`
 }
 
 type QuestCompletion struct {
-	Condition    string                           `json:"condition"`
+	Condition    *string                          `json:"condition"`
 	IsRepeatable bool                             `json:"is_repeatable"`
 	Areas        []CompletionArea                 `json:"areas"`
 	Reward       ResourceAmount[TypedAPIResource] `json:"reward"`
@@ -39,7 +40,6 @@ type QuestCompletion struct {
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
 		Condition:    qc.Condition,
-		IsRepeatable: qc.IsRepeatable,
 		Areas:        convertObjSlice(cfg, qc.Areas, convertCompletionArea),
 		Reward:       nameAmountToResourceAmount(cfg, cfg.e.masterItems, qc.Reward),
 	}

@@ -883,7 +883,7 @@ SELECT DISTINCT a.id
 FROM areas a
 JOIN completion_areas ca ON ca.area_id = a.id
 JOIN quest_completions qc ON ca.completion_id = qc.id
-JOIN quests q ON qc.quest_id = q.id
+JOIN quests q ON q.completion_id = qc.id
 ORDER BY a.id
 `
 
@@ -1013,7 +1013,7 @@ func (q *Queries) GetAreaMonsterIDs(ctx context.Context, id int32) ([]int32, err
 const getAreaQuestIDs = `-- name: GetAreaQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN quest_completions qc ON qc.quest_id = q.id
+JOIN quest_completions qc ON q.completion_id = qc.id
 JOIN completion_areas ca ON ca.completion_id = qc.id
 JOIN areas a ON ca.area_id = a.id
 WHERE a.id = $1
@@ -1920,7 +1920,7 @@ JOIN sublocations s ON s.location_id = l.id
 JOIN areas a ON a.sublocation_id = s.id
 JOIN completion_areas ca ON ca.area_id = a.id
 JOIN quest_completions qc ON ca.completion_id = qc.id
-JOIN quests q ON qc.quest_id = q.id
+JOIN quests q ON q.completion_id = qc.id
 ORDER BY l.id
 `
 
@@ -2056,7 +2056,7 @@ func (q *Queries) GetLocationMonsterIDs(ctx context.Context, locationID int32) (
 const getLocationQuestIDs = `-- name: GetLocationQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN quest_completions qc ON qc.quest_id = q.id
+JOIN quest_completions qc ON q.completion_id = qc.id
 JOIN completion_areas ca ON ca.completion_id = qc.id
 JOIN areas a ON ca.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
@@ -3163,7 +3163,7 @@ FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN completion_areas ca ON ca.area_id = a.id
 JOIN quest_completions qc ON ca.completion_id = qc.id
-JOIN quests q ON qc.quest_id = q.id
+JOIN quests q ON q.completion_id = qc.id
 ORDER BY s.id
 `
 
@@ -3296,7 +3296,7 @@ func (q *Queries) GetSublocationMonsterIDs(ctx context.Context, id int32) ([]int
 const getSublocationQuestIDs = `-- name: GetSublocationQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN quest_completions qc ON qc.quest_id = q.id
+JOIN quest_completions qc ON q.completion_id = qc.id
 JOIN completion_areas ca ON ca.completion_id = qc.id
 JOIN areas a ON ca.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id

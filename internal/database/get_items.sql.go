@@ -172,7 +172,7 @@ func (q *Queries) GetItemPlayerAbilityIDs(ctx context.Context, id int32) ([]int3
 const getItemQuestIDs = `-- name: GetItemQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN quest_completions qc ON qc.quest_id = q.id
+JOIN quest_completions qc ON q.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
 JOIN master_items mi ON ia.master_item_id = mi.id
 JOIN items i ON i.master_item_id = mi.id

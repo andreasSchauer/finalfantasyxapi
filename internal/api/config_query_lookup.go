@@ -888,6 +888,14 @@ func (cfg *Config) initSubquestsParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
+		"repeatable": {
+			ID:          2,
+			Description: "Searches for subquests that can be completed more than once.",
+			Usage:       "?repeatable={bool}",
+			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
 	}
 
 	params = cfg.completeQueryTypeInit(params, false)
