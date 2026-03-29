@@ -17,7 +17,7 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 		Name:            subquest.Name,
 		UntypedQuest:    idToQuestAPIResource(cfg, cfg.e.quests, subquest.Quest.ID),
 		ParentSidequest: idToQuestAPIResource(cfg, cfg.e.sidequests, subquest.SidequestID),
-		IsPostAirship:   subquest.IsPostAirship,
+		Availability:    newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, subquest.Availability, cfg.t.AvailabilityType),
 		IsRepeatable: 	 subquest.IsRepeatable,
 		Completion:      convertQuestCompletion(cfg, *subquest.Completion),
 	}
@@ -36,7 +36,7 @@ func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Sub
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
-		frl(boolQuery(cfg, r, i, resources, "post_airship", cfg.db.GetSubquestIDsByPostAirship)),
+		frl(typeQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetSubquestIDsByAvailability)),
 		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetSubquestIDsByRepeatable)),
 	})
 }

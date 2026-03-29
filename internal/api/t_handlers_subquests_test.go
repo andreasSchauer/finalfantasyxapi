@@ -101,7 +101,7 @@ func TestRetrieveSubquests(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/subquests?post_airship=true&limit=max",
+				requestURL:     "/api/subquests?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
 			count:   39,

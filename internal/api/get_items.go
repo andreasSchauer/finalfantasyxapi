@@ -112,12 +112,7 @@ func getMonItemAmts(cfg *Config, r *http.Request, item seeding.Item) ([]MonItemA
 	i := cfg.e.monsters
 	monItemAmts := []MonItemAmts{}
 
-	postAirship, err := getBoolPtr(r, "post_airship", i.queryLookup)
-	if err != nil {
-		return nil, err
-	}
-	
-	storyBased, err := getBoolPtr(r, "story_based", i.queryLookup)
+	availability, err := getTypePtr(r, "availability", cfg.e.availabilityType.endpoint, cfg.t.AvailabilityType, i.queryLookup)
 	if err != nil {
 		return nil, err
 	}
@@ -129,8 +124,7 @@ func getMonItemAmts(cfg *Config, r *http.Request, item seeding.Item) ([]MonItemA
 
 	dbIds, err := cfg.db.GetItemMonsterIDs(r.Context(), database.GetItemMonsterIDsParams{
 		ItemID: 		item.GetID(),
-		PostAirship: 	h.GetNullBool(postAirship),
-		StoryBased: 	h.GetNullBool(storyBased),
+		Availability: 	h.NullAvailabilityType(availability),
 		Repeatable: 	h.GetNullBool(repeatable),
 	})
 	if err != nil {

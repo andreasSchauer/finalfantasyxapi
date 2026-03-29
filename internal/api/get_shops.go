@@ -37,8 +37,7 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationShopIDs)),
 		frl(boolQuery2(cfg, r, i, resources, "items", cfg.db.GetShopIDsWithItems)),
 		frl(boolQuery2(cfg, r, i, resources, "equipment", cfg.db.GetShopIDsWithEquipment)),
-		frl(boolQuery2(cfg, r, i, resources, "pre_airship", cfg.db.GetShopIDsPreAirship)),
-		frl(boolQuery2(cfg, r, i, resources, "post_airship", cfg.db.GetShopIDsPostAirship)),
+		frl(typeQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetShopIDsByAvailability)),
 		frl(typeQuery(cfg, r, i, cfg.t.ShopCategory, resources, "category", cfg.db.GetShopIDsByCategory)),
 	})
 }

@@ -103,7 +103,7 @@ func TestRetrieveSidequests(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests?post_airship=true",
+				requestURL:     "/api/sidequests?availability=post",
 				expectedStatus: http.StatusOK,
 			},
 			count:   5,

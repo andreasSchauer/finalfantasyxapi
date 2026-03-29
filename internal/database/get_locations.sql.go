@@ -296,66 +296,39 @@ func (q *Queries) GetAreaIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getAreaIDsByAvailability = `-- name: GetAreaIDsByAvailability :many
+SELECT id FROM areas WHERE availability = $1 ORDER BY id
+`
+
+func (q *Queries) GetAreaIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsByAvailability, availability)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAreaIDsChocobo = `-- name: GetAreaIDsChocobo :many
 SELECT id FROM areas WHERE can_ride_chocobo = $1 ORDER BY id
 `
 
 func (q *Queries) GetAreaIDsChocobo(ctx context.Context, canRideChocobo bool) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getAreaIDsChocobo, canRideChocobo)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaIDsPostAirship = `-- name: GetAreaIDsPostAirship :many
-SELECT id FROM areas WHERE is_post_airship = $1 ORDER BY id
-`
-
-func (q *Queries) GetAreaIDsPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsPostAirship, isPostAirship)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaIDsStoryBased = `-- name: GetAreaIDsStoryBased :many
-SELECT id FROM areas WHERE is_story_based = $1 ORDER BY id
-`
-
-func (q *Queries) GetAreaIDsStoryBased(ctx context.Context, isStoryBased bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsStoryBased, isStoryBased)
 	if err != nil {
 		return nil, err
 	}
@@ -2212,6 +2185,33 @@ func (q *Queries) GetShopIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getShopIDsByAvailability = `-- name: GetShopIDsByAvailability :many
+SELECT id FROM shops WHERE availability = $1 ORDER BY id
+`
+
+func (q *Queries) GetShopIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsByAvailability, availability)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getShopIDsByCategory = `-- name: GetShopIDsByCategory :many
 SELECT id FROM shops WHERE category = $1 ORDER BY id
 `
@@ -2270,88 +2270,6 @@ func (q *Queries) GetShopIDsEquipmentFilter(ctx context.Context, arg GetShopIDsE
 		arg.CharacterID,
 		arg.EmptySlots,
 	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getShopIDsPostAirship = `-- name: GetShopIDsPostAirship :many
-SELECT DISTINCT s.id
-FROM shops s
-WHERE EXISTS (
-    SELECT 1
-    FROM j_shops_equipment je
-    WHERE je.shop_id = s.id
-      AND je.shop_type = 'post-airship'
-)
-OR EXISTS (
-    SELECT 1
-    FROM j_shops_items ji
-    WHERE ji.shop_id = s.id
-      AND ji.shop_type = 'post-airship'
-)
-ORDER BY s.id
-`
-
-func (q *Queries) GetShopIDsPostAirship(ctx context.Context) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsPostAirship)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getShopIDsPreAirship = `-- name: GetShopIDsPreAirship :many
-SELECT DISTINCT s.id
-FROM shops s
-WHERE EXISTS (
-    SELECT 1
-    FROM j_shops_equipment je
-    WHERE je.shop_id = s.id
-      AND je.shop_type = 'pre-airship'
-)
-OR EXISTS (
-    SELECT 1
-    FROM j_shops_items ji
-    WHERE ji.shop_id = s.id
-      AND ji.shop_type = 'pre-airship'
-)
-ORDER BY s.id
-`
-
-func (q *Queries) GetShopIDsPreAirship(ctx context.Context) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsPreAirship)
 	if err != nil {
 		return nil, err
 	}
@@ -3418,66 +3336,39 @@ func (q *Queries) GetTreasureIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getTreasureIDsByAvailability = `-- name: GetTreasureIDsByAvailability :many
+SELECT id FROM treasures WHERE availability = $1 ORDER BY id
+`
+
+func (q *Queries) GetTreasureIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDsByAvailability, availability)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getTreasureIDsByIsAnimaTreasure = `-- name: GetTreasureIDsByIsAnimaTreasure :many
 SELECT id FROM treasures WHERE is_anima_treasure = $1 ORDER BY id
 `
 
 func (q *Queries) GetTreasureIDsByIsAnimaTreasure(ctx context.Context, isAnimaTreasure bool) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getTreasureIDsByIsAnimaTreasure, isAnimaTreasure)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getTreasureIDsByIsPostAirship = `-- name: GetTreasureIDsByIsPostAirship :many
-SELECT id FROM treasures WHERE is_post_airship = $1 ORDER BY id
-`
-
-func (q *Queries) GetTreasureIDsByIsPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTreasureIDsByIsPostAirship, isPostAirship)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getTreasureIDsByIsStoryBased = `-- name: GetTreasureIDsByIsStoryBased :many
-SELECT id FROM treasures WHERE is_story_based = $1 ORDER BY id
-`
-
-func (q *Queries) GetTreasureIDsByIsStoryBased(ctx context.Context, isStoryBased bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTreasureIDsByIsStoryBased, isStoryBased)
 	if err != nil {
 		return nil, err
 	}

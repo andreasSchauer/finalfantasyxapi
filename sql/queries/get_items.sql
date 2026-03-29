@@ -25,41 +25,8 @@ JOIN master_items mit ON ia.master_item_id = mit.id
 JOIN items i ON i.master_item_id = mit.id
 WHERE
     i.id = sqlc.arg(item_id)
-    AND (sqlc.narg('story_based')::BOOLEAN IS NULL OR m.is_story_based = sqlc.narg('story_based')::BOOLEAN)
     AND (sqlc.narg('repeatable')::BOOLEAN IS NULL OR m.is_repeatable = sqlc.narg('repeatable')::BOOLEAN)
-    AND (
-        sqlc.narg('post_airship')::boolean IS NULL
-
-        OR (
-            sqlc.narg('post_airship')::boolean = TRUE -- at least one post_airship = true
-            AND NOT EXISTS (
-                SELECT 1
-                FROM monster_amounts ma2
-                JOIN j_monster_selections_monsters j2 ON j2.monster_amount_id = ma2.id
-                JOIN monster_selections ms2 ON ms2.id = j2.monster_selection_id
-                JOIN monster_formations mf2 ON mf2.monster_selection_id = ms2.id
-                JOIN formation_data fd2 ON fd2.id = mf2.formation_data_id
-                WHERE
-                    ma2.monster_id = m.id
-                    AND fd2.is_post_airship = FALSE
-            )  
-        )
-
-        OR (
-            sqlc.narg('post_airship')::boolean = FALSE -- all post_airship = false
-            AND EXISTS (
-                SELECT 1
-                FROM monster_amounts ma2
-                JOIN j_monster_selections_monsters j2 ON j2.monster_amount_id = ma2.id
-                JOIN monster_selections ms2 ON ms2.id = j2.monster_selection_id
-                JOIN monster_formations mf2 ON mf2.monster_selection_id = ms2.id
-                JOIN formation_data fd2 ON fd2.id = mf2.formation_data_id
-                WHERE
-                    ma2.monster_id = m.id
-                    AND fd2.is_post_airship = FALSE
-            )
-        )
-    )
+    AND (sqlc.narg('availability')::availability_type IS NULL OR m.availability = sqlc.narg('availability')::availability_type)
 ORDER BY m.id;
 
 

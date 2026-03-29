@@ -119,7 +119,7 @@ func (q *Queries) GetBlitzballPrizeIDsByCategory(ctx context.Context, category B
 }
 
 const getParentSidequest = `-- name: GetParentSidequest :one
-SELECT q.id, q.data_hash, q.name, q.type, q.is_post_airship, q.completion_id
+SELECT q.id, q.data_hash, q.name, q.type, q.availability, q.completion_id
 FROM subquests su
 LEFT JOIN sidequests si ON su.sidequest_id = si.id
 LEFT JOIN quests q ON si.quest_id = q.id
@@ -127,12 +127,12 @@ WHERE su.id = $1
 `
 
 type GetParentSidequestRow struct {
-	ID            sql.NullInt32
-	DataHash      sql.NullString
-	Name          sql.NullString
-	Type          NullQuestType
-	IsPostAirship sql.NullBool
-	CompletionID  sql.NullInt32
+	ID           sql.NullInt32
+	DataHash     sql.NullString
+	Name         sql.NullString
+	Type         NullQuestType
+	Availability NullAvailabilityType
+	CompletionID sql.NullInt32
 }
 
 func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSidequestRow, error) {
@@ -143,7 +143,7 @@ func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSi
 		&i.DataHash,
 		&i.Name,
 		&i.Type,
-		&i.IsPostAirship,
+		&i.Availability,
 		&i.CompletionID,
 	)
 	return i, err
@@ -176,12 +176,12 @@ func (q *Queries) GetQuestIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getQuestIDsByPostAirship = `-- name: GetQuestIDsByPostAirship :many
-SELECT id FROM quests WHERE is_post_airship = $1 ORDER BY id
+const getQuestIDsByAvailability = `-- name: GetQuestIDsByAvailability :many
+SELECT id FROM quests WHERE availability = $1 ORDER BY id
 `
 
-func (q *Queries) GetQuestIDsByPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getQuestIDsByPostAirship, isPostAirship)
+func (q *Queries) GetQuestIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getQuestIDsByAvailability, availability)
 	if err != nil {
 		return nil, err
 	}
@@ -257,16 +257,16 @@ func (q *Queries) GetSidequestIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getSidequestIDsByPostAirship = `-- name: GetSidequestIDsByPostAirship :many
+const getSidequestIDsByAvailability = `-- name: GetSidequestIDsByAvailability :many
 SELECT DISTINCT s.id
 FROM sidequests s
 JOIN quests q ON s.quest_id = q.id
-WHERE q.is_post_airship = $1
+WHERE q.availability = $1
 ORDER BY s.id
 `
 
-func (q *Queries) GetSidequestIDsByPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSidequestIDsByPostAirship, isPostAirship)
+func (q *Queries) GetSidequestIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSidequestIDsByAvailability, availability)
 	if err != nil {
 		return nil, err
 	}
@@ -342,16 +342,16 @@ func (q *Queries) GetSubquestIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getSubquestIDsByPostAirship = `-- name: GetSubquestIDsByPostAirship :many
+const getSubquestIDsByAvailability = `-- name: GetSubquestIDsByAvailability :many
 SELECT DISTINCT s.id
 FROM subquests s
 JOIN quests q ON s.quest_id = q.id
-WHERE q.is_post_airship = $1
+WHERE q.availability = $1
 ORDER BY s.id
 `
 
-func (q *Queries) GetSubquestIDsByPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSubquestIDsByPostAirship, isPostAirship)
+func (q *Queries) GetSubquestIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSubquestIDsByAvailability, availability)
 	if err != nil {
 		return nil, err
 	}

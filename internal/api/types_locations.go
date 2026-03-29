@@ -25,8 +25,7 @@ type Area struct {
 	DisplayName       string           `json:"display_name"`
 	ParentLocation    NamedAPIResource `json:"parent_location"`
 	ParentSublocation NamedAPIResource `json:"parent_sublocation"`
-	IsPostAirship     bool             `json:"is_post_airship"`
-	IsStoryBased      bool             `json:"is_story_based"`
+	Availability      NamedAPIResource `json:"is_post_airship"`
 	HasSaveSphere     bool             `json:"has_save_sphere"`
 	AirshipDropOff    bool             `json:"airship_drop_off"`
 	HasCompSphere     bool             `json:"has_comp_sphere"`

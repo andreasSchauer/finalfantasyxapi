@@ -500,6 +500,50 @@ func (ns NullAutoAbilityPool) Value() (driver.Value, error) {
 	return string(ns.AutoAbilityPool), nil
 }
 
+type AvailabilityType string
+
+const (
+	AvailabilityTypeAlways    AvailabilityType = "always"
+	AvailabilityTypeStory     AvailabilityType = "story"
+	AvailabilityTypePost      AvailabilityType = "post"
+	AvailabilityTypePostStory AvailabilityType = "post-story"
+)
+
+func (e *AvailabilityType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AvailabilityType(s)
+	case string:
+		*e = AvailabilityType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AvailabilityType: %T", src)
+	}
+	return nil
+}
+
+type NullAvailabilityType struct {
+	AvailabilityType AvailabilityType
+	Valid            bool // Valid is true if AvailabilityType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAvailabilityType) Scan(value interface{}) error {
+	if value == nil {
+		ns.AvailabilityType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AvailabilityType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAvailabilityType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AvailabilityType), nil
+}
+
 type BgReplacementType string
 
 const (
@@ -2768,8 +2812,7 @@ type Area struct {
 	Name                 string
 	Version              sql.NullInt32
 	Specification        sql.NullString
-	IsStoryBased         bool
-	IsPostAirship        bool
+	Availability         AvailabilityType
 	HasSaveSphere        bool
 	AirshipDropOff       bool
 	HasCompilationSphere bool
@@ -3005,8 +3048,7 @@ type FormationDatum struct {
 	ID             int32
 	DataHash       string
 	Category       MonsterFormationCategory
-	IsPostAirship  bool
-	IsStoryBased   bool
+	Availability   AvailabilityType
 	IsForcedAmbush bool
 	CanEscape      bool
 	BossSongID     sql.NullInt32
@@ -3652,7 +3694,7 @@ type Monster struct {
 	Specification        sql.NullString
 	Notes                sql.NullString
 	Species              MonsterSpecies
-	IsStoryBased         bool
+	Availability         AvailabilityType
 	IsRepeatable         bool
 	CanBeCaptured        bool
 	AreaConquestLocation NullMaCreationArea
@@ -3850,12 +3892,12 @@ type Property struct {
 }
 
 type Quest struct {
-	ID            int32
-	DataHash      string
-	Name          string
-	Type          QuestType
-	IsPostAirship bool
-	CompletionID  sql.NullInt32
+	ID           int32
+	DataHash     string
+	Name         string
+	Type         QuestType
+	Availability AvailabilityType
+	CompletionID sql.NullInt32
 }
 
 type QuestCompletion struct {
@@ -3872,12 +3914,13 @@ type RonsoRage struct {
 }
 
 type Shop struct {
-	ID       int32
-	DataHash string
-	Version  sql.NullInt32
-	AreaID   int32
-	Notes    sql.NullString
-	Category ShopCategory
+	ID           int32
+	DataHash     string
+	Version      sql.NullInt32
+	AreaID       int32
+	Notes        sql.NullString
+	Category     ShopCategory
+	Availability AvailabilityType
 }
 
 type ShopEquipmentPiece struct {
@@ -4005,8 +4048,7 @@ type Treasure struct {
 	Version          int32
 	TreasureType     TreasureType
 	LootType         LootType
-	IsPostAirship    bool
-	IsStoryBased     bool
+	Availability     AvailabilityType
 	IsAnimaTreasure  bool
 	Notes            sql.NullString
 	GilAmount        sql.NullInt32

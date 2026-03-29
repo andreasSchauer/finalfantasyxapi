@@ -239,8 +239,8 @@ SELECT id FROM monsters WHERE area_conquest_location = $1 AND can_be_captured = 
 SELECT id FROM monsters WHERE category = $1;
 
 
--- name: GetMonsterIDsByIsStoryBased :many
-SELECT id FROM monsters WHERE is_story_based = $1;
+-- name: GetMonsterIDsByAvailability :many
+SELECT id FROM monsters WHERE availability = $1;
 
 
 -- name: GetMonsterIDsByIsRepeatable :many
@@ -285,19 +285,11 @@ WHERE fd.category = $1
 ORDER BY mf.id;
 
 
--- name: GetMonsterFormationIDsByPostAirship :many
+-- name: GetMonsterFormationIDsByAvailability :many
 SELECT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.is_post_airship = $1
-ORDER BY mf.id;
-
-
--- name: GetMonsterFormationIDsByStoryBased :many
-SELECT mf.id
-FROM monster_formations mf
-JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.is_story_based = $1
+WHERE fd.availability = $1
 ORDER BY mf.id;
 
 

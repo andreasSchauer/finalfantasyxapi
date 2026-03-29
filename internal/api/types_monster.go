@@ -16,7 +16,7 @@ type Monster struct {
 	AgilityParameters    *AgilityParams       `json:"agility_parameters"`
 	Notes                *string              `json:"notes,omitempty"`
 	Species              NamedAPIResource     `json:"species"`
-	IsStoryBased         bool                 `json:"is_story_based"`
+	Availability	     NamedAPIResource	  `json:"availability"`
 	IsRepeatable         bool                 `json:"is_repeatable"`
 	CanBeCaptured        bool                 `json:"can_be_captured"`
 	AreaConquestLocation *string              `json:"area_conquest_location,omitempty"`

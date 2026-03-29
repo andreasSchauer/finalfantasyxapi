@@ -12,7 +12,7 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateQuest :one
-INSERT INTO quests (data_hash, name, type, is_post_airship)
+INSERT INTO quests (data_hash, name, type, availability)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quests.data_hash
 RETURNING *;

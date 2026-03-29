@@ -64,6 +64,7 @@ type endpoints struct {
 	questType              	 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 
 	attackType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	availabilityType         handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageFormula            handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	itemCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
@@ -944,6 +945,13 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:      "attack-type",
 		resourceType:  "attack type",
 		objLookup:     cfg.t.AttackType.lookup,
+		resToListFunc: newEnumAPIResourceList,
+	}
+
+	e.availabilityType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
+		endpoint:      "availability",
+		resourceType:  "availability type",
+		objLookup:     cfg.t.AvailabilityType.lookup,
 		resToListFunc: newEnumAPIResourceList,
 	}
 

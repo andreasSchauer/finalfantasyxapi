@@ -72,8 +72,7 @@ type Area struct {
 	Name                 string           `json:"area"`
 	Version              *int32           `json:"version"`
 	Specification        *string          `json:"specification"`
-	IsStoryBased         bool             `json:"is_story_based"`
-	IsPostAirship        bool             `json:"is_post_airship"`
+	Availability		 string			  `json:"availability"`
 	HasSaveSphere        bool             `json:"has_save_sphere"`
 	AirshipDropOff       bool             `json:"airship_drop_off"`
 	HasCompilationSphere bool             `json:"has_compilation_sphere"`
@@ -88,8 +87,7 @@ func (a Area) ToHashFields() []any {
 		a.Name,
 		h.DerefOrNil(a.Version),
 		h.DerefOrNil(a.Specification),
-		a.IsStoryBased,
-		a.IsPostAirship,
+		a.Availability,
 		a.HasSaveSphere,
 		a.AirshipDropOff,
 		a.HasCompilationSphere,
@@ -248,8 +246,7 @@ func (l *Lookup) seedAreas(qtx *database.Queries, sublocation Sublocation) error
 			Name:                 area.Name,
 			Version:              h.GetNullInt32(area.Version),
 			Specification:        h.GetNullString(area.Specification),
-			IsStoryBased:         area.IsStoryBased,
-			IsPostAirship:        area.IsPostAirship,
+			Availability:         database.AvailabilityType(area.Availability),
 			HasSaveSphere:        area.HasSaveSphere,
 			AirshipDropOff:       area.AirshipDropOff,
 			HasCompilationSphere: area.HasCompilationSphere,

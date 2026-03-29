@@ -446,21 +446,15 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "key-items")},
 		},
-		"post_airship": {
+		"availability": {
 			ID:          6,
-			Description: "Searches for areas that can only be accessed after acquiring the airship.",
-			Usage:       "?post_airship={bool}",
-			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			Description: "Searches for areas with the given availability.",
+			Usage:       "?availability={value|id}",
+			ExampleUses: []string{"?availability=post", "?availability=2"},
 			ForList:     true,
 			ForSingle:   false,
-		},
-		"story_based": {
-			ID:          7,
-			Description: "Searches for areas that can only be accessed during certain sections of the story.",
-			Usage:       "?story_based={bool}",
-			ExampleUses: []string{"?story_based=true", "?story_based=false"},
-			ForList:     true,
-			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 		"save_sphere": {
 			ID:          8,
@@ -614,21 +608,15 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "areas")},
 		},
-		"post_airship": {
+		"availability": {
 			ID:          6,
-			Description: "Searches for monster formations that are only available after acquiring the airship.",
-			Usage:       "?post_airship={bool}",
-			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			Description: "Searches for monster formations with the given availability.",
+			Usage:       "?availability={value|id}",
+			ExampleUses: []string{"?availability=post", "?availability=2"},
 			ForList:     true,
 			ForSingle:   false,
-		},
-		"story_based": {
-			ID:          7,
-			Description: "Searches for monster formations that are only available during certain sections of the story.",
-			Usage:       "?story_based={bool}",
-			ExampleUses: []string{"?story_based=true", "?story_based=false"},
-			ForList:     true,
-			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 		"repeatable": {
 			ID:          8,
@@ -736,21 +724,15 @@ func (cfg *Config) initShopsParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"pre_airship": {
+		"availability": {
 			ID:          10,
-			Description: "Searches for shops that are available before acquiring the airship.",
-			Usage:       "?pre_airship={bool}",
-			ExampleUses: []string{"?pre_airship=true", "?pre_airship=false"},
+			Description: "Searches for shops with the given availability.",
+			Usage:       "?availability={value|id}",
+			ExampleUses: []string{"?availability=post", "?availability=2"},
 			ForList:     true,
 			ForSingle:   false,
-		},
-		"post_airship": {
-			ID:          11,
-			Description: "Searches for shops that are available after acquiring the airship.",
-			Usage:       "?post_airship={bool}",
-			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
-			ForList:     true,
-			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 	}
 
@@ -814,21 +796,15 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"post_airship": {
+		"availability": {
 			ID:          7,
-			Description: "Searches for treasures that are only available after acquiring the airship.",
-			Usage:       "?post_airship={bool}",
-			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			Description: "Searches for treasures with the given availability.",
+			Usage:       "?availability={value|id}",
+			ExampleUses: []string{"?availability=post", "?availability=2"},
 			ForList:     true,
 			ForSingle:   false,
-		},
-		"story_based": {
-			ID:          7,
-			Description: "Searches for treasures that are only available during certain sections of the story.",
-			Usage:       "?story_based={bool}",
-			ExampleUses: []string{"?story_based=true", "?story_based=false"},
-			ForList:     true,
-			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 	}
 
@@ -848,13 +824,15 @@ func (cfg *Config) initQuestsParams() {
 			TypeLookup:  cfg.t.QuestType.lookup,
 			References:  []string{createListURL(cfg, "quest-type")},
 		},
-		"post_airship": {
-			ID:          2,
-			Description: "Searches for quests that are only completable after acquiring the airship.",
-			Usage:       "?post_airship={bool}",
-			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+		"availability": {
+			ID:          6,
+			Description: "Searches for quests with the given availability.",
+			Usage:       "?availability={value|id}",
+			ExampleUses: []string{"?availability=post", "?availability=2"},
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 	}
 
@@ -864,13 +842,15 @@ func (cfg *Config) initQuestsParams() {
 
 func (cfg *Config) initSidequestsParams() {
 	params := map[string]QueryType{
-		"post_airship": {
-			ID:          1,
-			Description: "Searches for sidequests that are only completable after acquiring the airship.",
-			Usage:       "?post_airship={bool}",
-			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+		"availability": {
+			ID:          6,
+			Description: "Searches for sidequests with the given availability.",
+			Usage:       "?availability={value|id}",
+			ExampleUses: []string{"?availability=post", "?availability=2"},
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 	}
 
@@ -880,13 +860,15 @@ func (cfg *Config) initSidequestsParams() {
 
 func (cfg *Config) initSubquestsParams() {
 	params := map[string]QueryType{
-		"post_airship": {
+		"availability": {
 			ID:          1,
-			Description: "Searches for subquests that are only completable after acquiring the airship.",
-			Usage:       "?post_airship={bool}",
-			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			Description: "Searches for subquests with the given availability.",
+			Usage:       "?availability={value|id}",
+			ExampleUses: []string{"?availability=post", "?availability=2"},
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 		"repeatable": {
 			ID:          2,
@@ -1281,21 +1263,15 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:       false,
 			AllowedIntRange: []int{1, 4},
 		},
-		"post_airship": {
+		"availability": {
 			ID:          18,
-			Description: "Searches for monsters that only appear after acquiring the airship.",
-			Usage:       "?post_airship={bool}",
-			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			Description: "Searches for monsters with the given availability.",
+			Usage:       "?availability={value|id}",
+			ExampleUses: []string{"?availability=post", "?availability=2"},
 			ForList:     true,
 			ForSingle:   false,
-		},
-		"story_based": {
-			ID:          19,
-			Description: "Searches for monsters that only appear during certain sections of the story.",
-			Usage:       "?story_based={bool}",
-			ExampleUses: []string{"?story_based=true", "?story_based=false"},
-			ForList:     true,
-			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 		"repeatable": {
 			ID:          20,
@@ -2360,21 +2336,15 @@ func (cfg *Config) initSubmenusParams() {
 
 func (cfg *Config) initItemsParams() {
 	params := map[string]QueryType{
-		"post_airship": {
+		"availability": {
 			ID:          1,
-			Description: "Only displays related resources that are only available after acquiring the airship.",
-			Usage:       "?post_airship={bool}",
-			ExampleUses: []string{"?post_airship=true", "?post_airship=false"},
+			Description: "Only displays related resources with the given availability.",
+			Usage:       "?availability={value|id}",
+			ExampleUses: []string{"?availability=post", "?availability=2"},
 			ForList:     false,
 			ForSingle:   true,
-		},
-		"story_based": {
-			ID:          2,
-			Description: "Only displays related resources that are available during the events of the story.",
-			Usage:       "?story_based={bool}",
-			ExampleUses: []string{"?story_based=true", "?story_based=false"},
-			ForList:     false,
-			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 		"repeatable": {
 			ID:          2,

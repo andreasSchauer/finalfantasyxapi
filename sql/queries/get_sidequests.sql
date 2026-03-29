@@ -6,8 +6,8 @@ SELECT id FROM quests ORDER BY id;
 SELECT id FROM quests WHERE type = $1 ORDER BY id;
 
 
--- name: GetQuestIDsByPostAirship :many
-SELECT id FROM quests WHERE is_post_airship = $1 ORDER BY id;
+-- name: GetQuestIDsByAvailability :many
+SELECT id FROM quests WHERE availability = $1 ORDER BY id;
 
 
 -- name: GetParentSidequest :one
@@ -26,11 +26,11 @@ SELECT id FROM subquests WHERE sidequest_id = $1 ORDER BY id;
 SELECT id FROM sidequests ORDER BY id;
 
 
--- name: GetSidequestIDsByPostAirship :many
+-- name: GetSidequestIDsByAvailability :many
 SELECT DISTINCT s.id
 FROM sidequests s
 JOIN quests q ON s.quest_id = q.id
-WHERE q.is_post_airship = $1
+WHERE q.availability = $1
 ORDER BY s.id;
 
 
@@ -38,11 +38,11 @@ ORDER BY s.id;
 SELECT id FROM subquests ORDER BY id;
 
 
--- name: GetSubquestIDsByPostAirship :many
+-- name: GetSubquestIDsByAvailability :many
 SELECT DISTINCT s.id
 FROM subquests s
 JOIN quests q ON s.quest_id = q.id
-WHERE q.is_post_airship = $1
+WHERE q.availability = $1
 ORDER BY s.id;
 
 

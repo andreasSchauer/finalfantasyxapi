@@ -18,7 +18,7 @@ type MonsterSimple struct {
 	AP             string                  `json:"ap"`
 	Gil            int32                   `json:"gil"`
 	MaxBribeAmount *int32                  `json:"max_bribe_amount,omitempty"`
-	IsStoryBased   bool                    `json:"is_story_based"`
+	Availability   string			  	   `json:"availability"`
 	IsRepeatable   bool                    `json:"is_repeatable"`
 	CanBeCaptured  bool                    `json:"can_be_captured"`
 	RonsoRages     []string                `json:"ronso_rages,omitempty"`
@@ -51,7 +51,7 @@ func createMonsterSimple(cfg *Config, r *http.Request, id int32) (SimpleResource
 		AP:             getMonsterSimpleAP(mon),
 		Gil:            mon.Gil,
 		MaxBribeAmount: getMonsterSimpleBribeAmount(mon, monHP),
-		IsStoryBased:   mon.IsStoryBased,
+		Availability:   mon.Availability,
 		IsRepeatable:   mon.IsRepeatable,
 		CanBeCaptured:  mon.CanBeCaptured,
 		RonsoRages:     h.SliceOrNil(mon.RonsoRages),

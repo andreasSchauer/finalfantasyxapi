@@ -1,5 +1,5 @@
 -- name: CreateMonster :one
-INSERT INTO monsters (data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, category, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text)
+INSERT INTO monsters (data_hash, name, version, specification, notes, species, availability, is_repeatable, can_be_captured, area_conquest_location, category, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = monsters.data_hash
 RETURNING *;
@@ -41,8 +41,8 @@ RETURNING *;
 
 
 -- name: CreateFormationData :one
-INSERT INTO formation_data (data_hash, category, is_post_airship, is_story_based, is_forced_ambush, can_escape, boss_song_id, notes)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+INSERT INTO formation_data (data_hash, category, availability, is_forced_ambush, can_escape, boss_song_id, notes)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_data.data_hash
 RETURNING *;
 

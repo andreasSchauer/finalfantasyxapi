@@ -187,19 +187,19 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?post_airship=true&limit=max",
+				requestURL:     "/api/monster-formations?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   87,
+			count:   71,
 			results: []int32{7, 20, 70, 171, 213, 267, 287, 314, 331},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?story_based=true&limit=max",
+				requestURL:     "/api/monster-formations?availability=story&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   102,
-			results: []int32{1, 2, 28, 37, 134, 164, 178, 203, 277, 279},
+			count:   86,
+			results: []int32{1, 2, 28, 37, 134, 164, 178, 203, 245, 254},
 		},
 		{
 			testGeneral: testGeneral{

@@ -160,58 +160,19 @@ JOIN master_items mit ON ia.master_item_id = mit.id
 JOIN items i ON i.master_item_id = mit.id
 WHERE
     i.id = $1
-    AND ($2::BOOLEAN IS NULL OR m.is_story_based = $2::BOOLEAN)
-    AND ($3::BOOLEAN IS NULL OR m.is_repeatable = $3::BOOLEAN)
-    AND (
-        $4::boolean IS NULL
-
-        OR (
-            $4::boolean = TRUE -- at least one post_airship = true
-            AND NOT EXISTS (
-                SELECT 1
-                FROM monster_amounts ma2
-                JOIN j_monster_selections_monsters j2 ON j2.monster_amount_id = ma2.id
-                JOIN monster_selections ms2 ON ms2.id = j2.monster_selection_id
-                JOIN monster_formations mf2 ON mf2.monster_selection_id = ms2.id
-                JOIN formation_data fd2 ON fd2.id = mf2.formation_data_id
-                WHERE
-                    ma2.monster_id = m.id
-                    AND fd2.is_post_airship = FALSE
-            )  
-        )
-
-        OR (
-            $4::boolean = FALSE -- all post_airship = false
-            AND EXISTS (
-                SELECT 1
-                FROM monster_amounts ma2
-                JOIN j_monster_selections_monsters j2 ON j2.monster_amount_id = ma2.id
-                JOIN monster_selections ms2 ON ms2.id = j2.monster_selection_id
-                JOIN monster_formations mf2 ON mf2.monster_selection_id = ms2.id
-                JOIN formation_data fd2 ON fd2.id = mf2.formation_data_id
-                WHERE
-                    ma2.monster_id = m.id
-                    AND fd2.is_post_airship = FALSE
-            )
-        )
-    )
+    AND ($2::BOOLEAN IS NULL OR m.is_repeatable = $2::BOOLEAN)
+    AND ($3::availability_type IS NULL OR m.availability = $3::availability_type)
 ORDER BY m.id
 `
 
 type GetItemMonsterIDsParams struct {
-	ItemID      int32
-	StoryBased  sql.NullBool
-	Repeatable  sql.NullBool
-	PostAirship sql.NullBool
+	ItemID       int32
+	Repeatable   sql.NullBool
+	Availability NullAvailabilityType
 }
 
 func (q *Queries) GetItemMonsterIDs(ctx context.Context, arg GetItemMonsterIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemMonsterIDs,
-		arg.ItemID,
-		arg.StoryBased,
-		arg.Repeatable,
-		arg.PostAirship,
-	)
+	rows, err := q.db.QueryContext(ctx, getItemMonsterIDs, arg.ItemID, arg.Repeatable, arg.Availability)
 	if err != nil {
 		return nil, err
 	}

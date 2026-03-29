@@ -53,7 +53,7 @@ func TestGetTreasure(t *testing.T) {
 			},
 			expIdOnly:       newExpIdOnly(200),
 			area:            160,
-			isPostAirship:   false,
+			availability:    2,
 			isAnimaTreasure: false,
 			treasureType:    "chest",
 			lootType:        1,
@@ -72,7 +72,7 @@ func TestGetTreasure(t *testing.T) {
 			},
 			expIdOnly:       newExpIdOnly(13),
 			area:            15,
-			isPostAirship:   false,
+			availability:    2,
 			isAnimaTreasure: false,
 			treasureType:    "object",
 			lootType:        1,
@@ -91,7 +91,7 @@ func TestGetTreasure(t *testing.T) {
 			},
 			expIdOnly:       newExpIdOnly(62),
 			area:            61,
-			isPostAirship:   false,
+			availability:    1,
 			isAnimaTreasure: true,
 			treasureType:    "chest",
 			lootType:        2,
@@ -112,7 +112,7 @@ func TestGetTreasure(t *testing.T) {
 			},
 			expIdOnly:       newExpIdOnly(285),
 			area:            214,
-			isPostAirship:   false,
+			availability:    1,
 			isAnimaTreasure: false,
 			treasureType:    "chest",
 			lootType:        3,
@@ -129,7 +129,7 @@ func TestGetTreasure(t *testing.T) {
 			},
 			expIdOnly:       newExpIdOnly(45),
 			area:            42,
-			isPostAirship:   true,
+			availability:    3,
 			isAnimaTreasure: false,
 			treasureType:    "gift",
 			lootType:        1,
@@ -180,14 +180,6 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?post_airship=true&limit=max",
-				expectedStatus: http.StatusOK,
-			},
-			count:   69,
-			results: []int32{5, 11, 29, 30, 45, 63, 81, 109, 153, 213, 303, 318, 341},
-		},
-		{
-			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?anima=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -196,7 +188,7 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?story_based=true&limit=max",
+				requestURL:     "/api/treasures?availability=story&limit=max",
 				expectedStatus: http.StatusOK,
 			},
 			count:   94,

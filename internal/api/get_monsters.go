@@ -24,7 +24,7 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 		Specification:        monster.Specification,
 		Notes:                monster.Notes,
 		Species:              newNamedAPIResourceFromEnum(cfg, cfg.e.monsterSpecies.endpoint, monster.Species, cfg.t.MonsterSpecies),
-		IsStoryBased:         monster.IsStoryBased,
+		Availability: 		  newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, monster.Availability, cfg.t.AvailabilityType),
 		IsRepeatable:         monster.IsRepeatable,
 		CanBeCaptured:        monster.CanBeCaptured,
 		AreaConquestLocation: monster.AreaConquestLocation,
@@ -87,7 +87,7 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 		frl(typeQuery(cfg, r, i, cfg.t.MonsterSpecies, resources, "species", cfg.db.GetMonsterIDsBySpecies)),
 		frl(nullTypeQuery(cfg, r, i, cfg.t.CreationArea, resources, "creation_area", cfg.db.GetMonsterIDsByMaCreationArea)),
 
-		frl(boolQuery(cfg, r, i, resources, "story_based", cfg.db.GetMonsterIDsByIsStoryBased)),
+		frl(typeQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetMonsterIDsByAvailability)),
 		frl(boolQuery3(cfg, r, i, resources, "post_airship", cfg.db.GetMonsterIDsByPostAirship)),
 		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetMonsterIDsByIsRepeatable)),
 		frl(boolQuery(cfg, r, i, resources, "capture", cfg.db.GetMonsterIDsByCanBeCaptured)),

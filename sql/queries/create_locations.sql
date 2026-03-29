@@ -13,8 +13,8 @@ RETURNING *;
 
 
 -- name: CreateArea :one
-INSERT INTO areas (data_hash, sublocation_id, name, version, specification, is_story_based, is_post_airship, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+INSERT INTO areas (data_hash, sublocation_id, name, version, specification, availability, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = areas.data_hash
 RETURNING *;
 
@@ -33,8 +33,8 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateTreasure :one
-INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, is_post_airship, is_story_based, is_anima_treasure, notes, gil_amount)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, availability, is_anima_treasure, notes, gil_amount)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = treasures.data_hash
 RETURNING *;
 
@@ -47,8 +47,8 @@ WHERE id = $3;
 
 
 -- name: CreateShop :one
-INSERT INTO shops (data_hash, version, area_id, notes, category)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO shops (data_hash, version, area_id, notes, category, availability)
+VALUES ($1, $2, $3, $4, $5, $6)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = shops.data_hash
 RETURNING *;
 

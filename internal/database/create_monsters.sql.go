@@ -296,17 +296,16 @@ func (q *Queries) CreateFormationBossSong(ctx context.Context, arg CreateFormati
 }
 
 const createFormationData = `-- name: CreateFormationData :one
-INSERT INTO formation_data (data_hash, category, is_post_airship, is_story_based, is_forced_ambush, can_escape, boss_song_id, notes)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+INSERT INTO formation_data (data_hash, category, availability, is_forced_ambush, can_escape, boss_song_id, notes)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = formation_data.data_hash
-RETURNING id, data_hash, category, is_post_airship, is_story_based, is_forced_ambush, can_escape, boss_song_id, notes
+RETURNING id, data_hash, category, availability, is_forced_ambush, can_escape, boss_song_id, notes
 `
 
 type CreateFormationDataParams struct {
 	DataHash       string
 	Category       MonsterFormationCategory
-	IsPostAirship  bool
-	IsStoryBased   bool
+	Availability   AvailabilityType
 	IsForcedAmbush bool
 	CanEscape      bool
 	BossSongID     sql.NullInt32
@@ -317,8 +316,7 @@ func (q *Queries) CreateFormationData(ctx context.Context, arg CreateFormationDa
 	row := q.db.QueryRowContext(ctx, createFormationData,
 		arg.DataHash,
 		arg.Category,
-		arg.IsPostAirship,
-		arg.IsStoryBased,
+		arg.Availability,
 		arg.IsForcedAmbush,
 		arg.CanEscape,
 		arg.BossSongID,
@@ -329,8 +327,7 @@ func (q *Queries) CreateFormationData(ctx context.Context, arg CreateFormationDa
 		&i.ID,
 		&i.DataHash,
 		&i.Category,
-		&i.IsPostAirship,
-		&i.IsStoryBased,
+		&i.Availability,
 		&i.IsForcedAmbush,
 		&i.CanEscape,
 		&i.BossSongID,
@@ -389,10 +386,10 @@ func (q *Queries) CreateFormationTriggerCommandsUsersJunction(ctx context.Contex
 }
 
 const createMonster = `-- name: CreateMonster :one
-INSERT INTO monsters (data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, category, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text)
+INSERT INTO monsters (data_hash, name, version, specification, notes, species, availability, is_repeatable, can_be_captured, area_conquest_location, category, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = monsters.data_hash
-RETURNING id, data_hash, name, version, specification, notes, species, is_story_based, is_repeatable, can_be_captured, area_conquest_location, category, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text
+RETURNING id, data_hash, name, version, specification, notes, species, availability, is_repeatable, can_be_captured, area_conquest_location, category, ctb_icon_type, has_overdrive, is_underwater, is_zombie, distance, ap, ap_overkill, overkill_damage, gil, steal_gil, doom_countdown, poison_rate, threaten_chance, zanmato_level, monster_arena_price, sensor_text, scan_text
 `
 
 type CreateMonsterParams struct {
@@ -402,7 +399,7 @@ type CreateMonsterParams struct {
 	Specification        sql.NullString
 	Notes                sql.NullString
 	Species              MonsterSpecies
-	IsStoryBased         bool
+	Availability         AvailabilityType
 	IsRepeatable         bool
 	CanBeCaptured        bool
 	AreaConquestLocation NullMaCreationArea
@@ -434,7 +431,7 @@ func (q *Queries) CreateMonster(ctx context.Context, arg CreateMonsterParams) (M
 		arg.Specification,
 		arg.Notes,
 		arg.Species,
-		arg.IsStoryBased,
+		arg.Availability,
 		arg.IsRepeatable,
 		arg.CanBeCaptured,
 		arg.AreaConquestLocation,
@@ -466,7 +463,7 @@ func (q *Queries) CreateMonster(ctx context.Context, arg CreateMonsterParams) (M
 		&i.Specification,
 		&i.Notes,
 		&i.Species,
-		&i.IsStoryBased,
+		&i.Availability,
 		&i.IsRepeatable,
 		&i.CanBeCaptured,
 		&i.AreaConquestLocation,

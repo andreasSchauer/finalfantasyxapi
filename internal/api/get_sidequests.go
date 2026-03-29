@@ -21,7 +21,7 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 		ID:         	sidequest.ID,
 		Name:       	sidequest.Name,
 		UntypedQuest: 	idToQuestAPIResource(cfg, cfg.e.quests, sidequest.Quest.ID),
-		IsPostAirship: 	sidequest.IsPostAirship,
+		Availability:   newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, sidequest.Availability, cfg.t.AvailabilityType),
 		Completion: 	convertObjPtr(cfg, sidequest.Completion, convertQuestCompletion),
 		Subquests:  	subquests,
 	}
@@ -36,6 +36,6 @@ func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Si
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
-		frl(boolQuery(cfg, r, i, resources, "post_airship", cfg.db.GetSidequestIDsByPostAirship)),
+		frl(typeQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetSidequestIDsByAvailability)),
 	})
 }

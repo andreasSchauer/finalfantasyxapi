@@ -1244,11 +1244,11 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?distance=2&story_based=false",
+				requestURL:     "/api/monsters?distance=2&availability=story",
 				expectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{191, 289},
+			count:   5,
+			results: []int32{57, 58, 92, 119, 194},
 		},
 		{
 			testGeneral: testGeneral{
@@ -1284,11 +1284,11 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?post_airship=true&limit=max",
+				requestURL:     "/api/monsters?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   93,
-			results: []int32{196, 202, 213, 227, 246, 268, 284, 307},
+			count:   71,
+			results: []int32{201, 202, 210, 227, 246, 268, 284, 307},
 		},
 	}
 

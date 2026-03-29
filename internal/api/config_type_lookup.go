@@ -14,6 +14,7 @@ type TypeLookup struct {
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
+	AvailabilityType			EnumType[database.AvailabilityType, any]
 	BlitzballTournamentCategory EnumType[database.BlitzballTournamentCategory, any]
 	CharacterClassCategory      EnumType[database.CharacterClassCategory, any]
 	Composer                    EnumType[database.Composer, database.NullComposer]
@@ -54,6 +55,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initAreaConnectionType()
 	cfg.t.initArenaCreationCategory()
 	cfg.t.initArranger()
+	cfg.t.initAvailabilityType()
 	cfg.t.initBlitzballTournamentCategory()
 	cfg.t.initCharacterClassCategory()
 	cfg.t.initComposer()
@@ -244,6 +246,31 @@ func (t *TypeLookup) initArranger() {
 	t.Arranger = newEnumType("arranger", false, typeSlice, func(s string) database.Arranger {
 		return database.Arranger(s)
 	}, h.NullArranger)
+}
+
+func (t *TypeLookup) initAvailabilityType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.AvailabilityTypeAlways),
+			Description: "The resource is available at any point in the story.",
+		},
+		{
+			Name:        string(database.AvailabilityTypeStory),
+			Description: "The resource is only available during the events of the story.",
+		},
+		{
+			Name:        string(database.AvailabilityTypePost),
+			Description: "The resource is only available after acquiring the airship.",
+		},
+		{
+			Name:        string(database.AvailabilityTypePostStory),
+			Description: "The resource is only available during the events of the story that happen after acquiring the airship.",
+		},
+	}
+
+	t.AvailabilityType = newEnumType[database.AvailabilityType, any]("availability type", true, typeSlice, func(s string) database.AvailabilityType {
+		return database.AvailabilityType(s)
+	}, nil)
 }
 
 func (t *TypeLookup) initBlitzballTournamentCategory() {

@@ -15,7 +15,7 @@ type AreaSimple struct {
 	Version           *int32              `json:"version,omitempty"`
 	Specification     *string             `json:"specification,omitempty"`
 	HasSaveSphere     bool                `json:"has_save_sphere"`
-	IsStoryBased      bool                `json:"is_story_based"`
+	Availability	  string			  `json:"availability"`
 	Shops             []ShopLocSimple     `json:"shops"`
 	Treasures         *TreasuresLocSimple `json:"treasures"`
 	Monsters          []string            `json:"monsters"`
@@ -53,7 +53,7 @@ func createAreaSimple(cfg *Config, r *http.Request, id int32) (SimpleResource, e
 		Version:           area.Version,
 		Specification:     area.Specification,
 		HasSaveSphere:     area.HasSaveSphere,
-		IsStoryBased:      area.IsStoryBased,
+		Availability:      area.Availability,
 		Shops:             shops,
 		Treasures:         treasures,
 		Monsters:          monsters,

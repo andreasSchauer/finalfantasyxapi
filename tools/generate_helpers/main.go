@@ -25,6 +25,7 @@ func main() {
         "Composer",
         "Arranger",
         "ShopType",
+        "AvailabilityType",
     }
 
     filePath := "./internal/helpers/conv_null_enum.go"

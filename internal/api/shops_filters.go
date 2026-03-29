@@ -47,7 +47,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 		return nil, err
 	}
 
-	shopTypePtr, err := getShopTypePtr(cfg, r, i.queryLookup)
+	shopTypePtr, err := getTypePtr(r, "shop_type", cfg.e.shops.endpoint, cfg.t.ShopType, i.queryLookup)
 	if err != nil {
 		return nil, err
 	}
@@ -133,23 +133,24 @@ func getCharIdPtr(cfg *Config, r *http.Request, queryLookup map[string]QueryType
 	return charIdPtr, nil
 }
 
-func getShopTypePtr(cfg *Config, r *http.Request, queryLookup map[string]QueryType) (*string, error) {
-	var shopTypePtr *string
+func getTypePtr[E, N any](r *http.Request, queryName, endpoint string, et EnumType[E, N], queryLookup map[string]QueryType) (*string, error) {
+	var typePtr *string
 
-	queryParamShopType := queryLookup["shop_type"]
-	var shopTypeIsEmpty bool
-	shopType, err := parseTypeQuery(r, cfg.e.shops.endpoint, queryParamShopType, cfg.t.ShopType)
+	queryParam := queryLookup[queryName]
+	var isEmpty bool
+	enumRes, err := parseTypeQuery(r, endpoint, queryParam, et)
 	if err != nil {
 		if errors.Is(err, errEmptyQuery) {
-			shopTypeIsEmpty = true
+			isEmpty = true
 		} else {
 			return nil, err
 		}
 	}
 
-	if !shopTypeIsEmpty {
-		shopTypePtr = &shopType.Name
+	if !isEmpty {
+		typePtr = &enumRes.Name
 	}
 
-	return shopTypePtr, nil
+	return typePtr, nil
 }
+

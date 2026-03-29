@@ -83,7 +83,7 @@ func TestRetrieveQuests(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/quests?limit=max&post_airship=true",
+				requestURL:     "/api/quests?limit=max&availability=post",
 				expectedStatus: http.StatusOK,
 			},
 			count:   44,

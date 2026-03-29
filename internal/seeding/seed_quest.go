@@ -11,8 +11,8 @@ import (
 type Quest struct {
 	ID   			int32
 	Name 			string 				`json:"name"`
-	IsPostAirship	bool				`json:"is_post_airship"`
-	Completion 		*QuestCompletion `json:"completion"`
+	Availability	string			  	`json:"availability"`
+	Completion 		*QuestCompletion 	`json:"completion"`
 	Type 			database.QuestType
 }
 
@@ -21,7 +21,7 @@ func (q Quest) ToHashFields() []any {
 		q.Name,
 		q.Type,
 		h.ObjPtrToID(q.Completion),
-		q.IsPostAirship,
+		q.Availability,
 	}
 }
 
@@ -75,7 +75,7 @@ func (l *Lookup) seedQuest(qtx *database.Queries, quest Quest) (Quest, error) {
 		DataHash: generateDataHash(quest),
 		Name:     		quest.Name,
 		Type:     		quest.Type,
-		IsPostAirship: 	quest.IsPostAirship,
+		Availability: 	database.AvailabilityType(quest.Availability),
 	})
 	if err != nil {
 		return Quest{}, h.NewErr(quest.Error(), err, "couldn't create quest")

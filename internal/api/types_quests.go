@@ -7,14 +7,14 @@ type Quest struct {
 	Name          string           `json:"name"`
 	Type          NamedAPIResource `json:"type"`
 	TypedQuest    QuestAPIResource `json:"typed_quest"`
-	IsPostAirship bool             `json:"is_post_airship"`
+	Availability  NamedAPIResource `json:"availability"`
 }
 
 type Sidequest struct {
 	ID            int32              `json:"id"`
 	Name          string             `json:"name"`
 	UntypedQuest  QuestAPIResource   `json:"untyped_quest"`
-	IsPostAirship bool               `json:"is_post_airship"`
+	Availability  NamedAPIResource	 `json:"availability"`
 	Completion    *QuestCompletion   `json:"completion"`
 	Subquests     []QuestAPIResource `json:"subquests"`
 }
@@ -23,7 +23,7 @@ type Subquest struct {
 	ID              int32             `json:"id"`
 	Name            string            `json:"name"`
 	UntypedQuest    QuestAPIResource  `json:"untyped_quest"`
-	IsPostAirship   bool              `json:"is_post_airship"`
+	Availability    NamedAPIResource  `json:"availability"`
 	IsRepeatable	bool			  `json:"is_repeatable"`
 	ParentSidequest QuestAPIResource  `json:"parent_sidequest"`
 	Completion      QuestCompletion   `json:"completion"`

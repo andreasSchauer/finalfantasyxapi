@@ -221,6 +221,37 @@ func (q *Queries) GetMonsterFormationIDsByArea(ctx context.Context, id int32) ([
 	return items, nil
 }
 
+const getMonsterFormationIDsByAvailability = `-- name: GetMonsterFormationIDsByAvailability :many
+SELECT mf.id
+FROM monster_formations mf
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+WHERE fd.availability = $1
+ORDER BY mf.id
+`
+
+func (q *Queries) GetMonsterFormationIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByAvailability, availability)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterFormationIDsByCategory = `-- name: GetMonsterFormationIDsByCategory :many
 SELECT mf.id
 FROM monster_formations mf
@@ -352,37 +383,6 @@ func (q *Queries) GetMonsterFormationIDsByMonster(ctx context.Context, id int32)
 	return items, nil
 }
 
-const getMonsterFormationIDsByPostAirship = `-- name: GetMonsterFormationIDsByPostAirship :many
-SELECT mf.id
-FROM monster_formations mf
-JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.is_post_airship = $1
-ORDER BY mf.id
-`
-
-func (q *Queries) GetMonsterFormationIDsByPostAirship(ctx context.Context, isPostAirship bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByPostAirship, isPostAirship)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getMonsterFormationIDsByRepeatable = `-- name: GetMonsterFormationIDsByRepeatable :many
 SELECT mf.id
 FROM monster_formations mf
@@ -393,37 +393,6 @@ ORDER BY mf.id
 
 func (q *Queries) GetMonsterFormationIDsByRepeatable(ctx context.Context) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByRepeatable)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMonsterFormationIDsByStoryBased = `-- name: GetMonsterFormationIDsByStoryBased :many
-SELECT mf.id
-FROM monster_formations mf
-JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.is_story_based = $1
-ORDER BY mf.id
-`
-
-func (q *Queries) GetMonsterFormationIDsByStoryBased(ctx context.Context, isStoryBased bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByStoryBased, isStoryBased)
 	if err != nil {
 		return nil, err
 	}
@@ -592,6 +561,33 @@ type GetMonsterIDsByAutoAbilityIsForcedParams struct {
 
 func (q *Queries) GetMonsterIDsByAutoAbilityIsForced(ctx context.Context, arg GetMonsterIDsByAutoAbilityIsForcedParams) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getMonsterIDsByAutoAbilityIsForced, arg.ID, arg.IsForced)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterIDsByAvailability = `-- name: GetMonsterIDsByAvailability :many
+SELECT id FROM monsters WHERE availability = $1
+`
+
+func (q *Queries) GetMonsterIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByAvailability, availability)
 	if err != nil {
 		return nil, err
 	}
@@ -796,33 +792,6 @@ SELECT id FROM monsters WHERE is_repeatable = $1
 
 func (q *Queries) GetMonsterIDsByIsRepeatable(ctx context.Context, isRepeatable bool) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getMonsterIDsByIsRepeatable, isRepeatable)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMonsterIDsByIsStoryBased = `-- name: GetMonsterIDsByIsStoryBased :many
-SELECT id FROM monsters WHERE is_story_based = $1
-`
-
-func (q *Queries) GetMonsterIDsByIsStoryBased(ctx context.Context, isStoryBased bool) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByIsStoryBased, isStoryBased)
 	if err != nil {
 		return nil, err
 	}

@@ -14,7 +14,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.areas.endpoint,
 				handler:        testCfg.HandleAreas,
 			},
-			count:   22,
+			count:   21,
 			results: []string{"limit", "offset", "item", "save_sphere", "sublocation", "ids"},
 		},
 		{
@@ -75,7 +75,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsters.endpoint,
 				handler:        testCfg.HandleMonsters,
 			},
-			count:   30,
+			count:   29,
 			results: []string{"kimahri_stats", "aeon_stats", "altered_state", "omnis_elements", "status_resists", "auto_ability", "area", "distance", "underwater", "species", "ids"},
 		},
 		{
@@ -85,7 +85,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsterFormations.endpoint,
 				handler:        testCfg.HandleMonsterFormations,
 			},
-			count:   12,
+			count:   11,
 			results: []string{"monster", "location", "ambush", "category", "ids"},
 		},
 		{
@@ -105,8 +105,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.shops.endpoint,
 				handler:        testCfg.HandleShops,
 			},
-			count:   14,
-			results: []string{"location", "auto_ability", "items", "equipment", "pre_airship", "ids"},
+			count:   13,
+			results: []string{"location", "auto_ability", "items", "equipment", "availability", "ids"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -126,7 +126,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleSidequests,
 			},
 			count:   3,
-			results: []string{"limit", "offset", "post_airship"},
+			results: []string{"limit", "offset", "availability"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -136,7 +136,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleSubquests,
 			},
 			count:   4,
-			results: []string{"limit", "offset", "post_airship", "repeatable"},
+			results: []string{"limit", "offset", "availability", "repeatable"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -145,8 +145,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.treasures.endpoint,
 				handler:        testCfg.HandleTreasures,
 			},
-			count:   10,
-			results: []string{"sublocation", "loot_type", "treasure_type", "anima", "post_airship"},
+			count:   9,
+			results: []string{"sublocation", "loot_type", "treasure_type", "anima", "availability"},
 		},
 	}
 

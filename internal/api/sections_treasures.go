@@ -10,7 +10,7 @@ type TreasureSimple struct {
 	ID            int32            `json:"id"`
 	URL           string           `json:"url"`
 	Area          string           `json:"area"`
-	IsPostAirship bool             `json:"is_post_airship"`
+	Availability  string		   `json:"availability"`
 	Notes         *string          `json:"notes,omitempty"`
 	TreasureType  string           `json:"treasure_type"`
 	LootType      string           `json:"loot_type"`
@@ -31,7 +31,7 @@ func createTreasureSimple(cfg *Config, _ *http.Request, id int32) (SimpleResourc
 		ID:            treasure.ID,
 		URL:           createResourceURL(cfg, i.endpoint, id),
 		Area:          idToLocAreaString(cfg, treasure.AreaID),
-		IsPostAirship: treasure.IsPostAirship,
+		Availability:  treasure.Availability,
 		Notes:         treasure.Notes,
 		TreasureType:  treasure.TreasureType,
 		LootType:      treasure.LootType,

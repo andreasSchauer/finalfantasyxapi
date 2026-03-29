@@ -6,6 +6,7 @@ CREATE TYPE ma_creation_category AS ENUM ('area', 'species', 'original');
 CREATE TYPE ma_creation_area AS ENUM ('besaid', 'kilika', 'mi''ihen-highroad', 'mushroom-rock-road', 'djose', 'thunder-plains', 'macalania', 'bikanel', 'calm-lands', 'cavern-of-the-stolen-fayth', 'mount-gagazet', 'sin', 'omega-ruins');
 CREATE TYPE ma_creation_species AS ENUM ('bird', 'bomb', 'drake', 'elemental', 'evil-eye', 'flan', 'fungus', 'helm', 'imp', 'iron-giant', 'lupine', 'reptile', 'ruminant', 'wasp');
 CREATE TYPE creations_unlocked_category AS ENUM ('area', 'species');
+CREATE TYPE availability_type AS ENUM ('always', 'story', 'post', 'post-story');
 
 
 CREATE TABLE blitzball_positions (
@@ -22,7 +23,7 @@ CREATE TABLE quests (
     data_hash TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     type quest_type NOT NULL,
-    is_post_airship BOOLEAN NOT NULL,
+    availability availability_type NOT NULL,
     UNIQUE(name, type)
 );
 
@@ -69,6 +70,7 @@ DROP TABLE IF EXISTS subquests;
 DROP TABLE IF EXISTS sidequests;
 DROP TABLE IF EXISTS quests;
 DROP TABLE IF EXISTS blitzball_positions;
+DROP TYPE IF EXISTS availability_type;
 DROP TYPE IF EXISTS ma_creation_area;
 DROP TYPE IF EXISTS ma_creation_species;
 DROP TYPE IF EXISTS ma_creation_category;

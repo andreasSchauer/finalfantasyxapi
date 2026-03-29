@@ -4,7 +4,7 @@ type expTreasure struct {
 	testGeneral
 	expIdOnly
 	area            int32
-	isPostAirship   bool
+	availability    int32
 	isAnimaTreasure bool
 	treasureType    string
 	lootType        int32
@@ -20,7 +20,7 @@ func (e expTreasure) GetTestGeneral() testGeneral {
 func compareTreasures(test test, exp expTreasure, got Treasure) {
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
-	compare(test, "is post airship", exp.isPostAirship, got.IsPostAirship)
+	compIdApiResource(test, "availability", test.cfg.e.availabilityType.endpoint, exp.availability, got.Availability)
 	compare(test, "is anima treasure", exp.isAnimaTreasure, got.IsAnimaTreasure)
 	compare(test, "treasure type", exp.treasureType, got.TreasureType)
 	compIdApiResource(test, "loot type", test.cfg.e.lootType.endpoint, exp.lootType, got.LootType)

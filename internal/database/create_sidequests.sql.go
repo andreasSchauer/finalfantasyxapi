@@ -121,17 +121,17 @@ func (q *Queries) CreateMonsterArenaCreation(ctx context.Context, arg CreateMons
 }
 
 const createQuest = `-- name: CreateQuest :one
-INSERT INTO quests (data_hash, name, type, is_post_airship)
+INSERT INTO quests (data_hash, name, type, availability)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quests.data_hash
-RETURNING id, data_hash, name, type, is_post_airship, completion_id
+RETURNING id, data_hash, name, type, availability, completion_id
 `
 
 type CreateQuestParams struct {
-	DataHash      string
-	Name          string
-	Type          QuestType
-	IsPostAirship bool
+	DataHash     string
+	Name         string
+	Type         QuestType
+	Availability AvailabilityType
 }
 
 func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest, error) {
@@ -139,7 +139,7 @@ func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest
 		arg.DataHash,
 		arg.Name,
 		arg.Type,
-		arg.IsPostAirship,
+		arg.Availability,
 	)
 	var i Quest
 	err := row.Scan(
@@ -147,7 +147,7 @@ func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest
 		&i.DataHash,
 		&i.Name,
 		&i.Type,
-		&i.IsPostAirship,
+		&i.Availability,
 		&i.CompletionID,
 	)
 	return i, err

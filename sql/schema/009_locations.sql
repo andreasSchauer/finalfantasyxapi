@@ -27,8 +27,7 @@ CREATE TABLE areas (
     name TEXT NOT NULL,
     version INTEGER,
     specification TEXT,
-    is_story_based BOOLEAN NOT NULL,
-    is_post_airship BOOLEAN NOT NULL,
+    availability availability_type NOT NULL,
     has_save_sphere BOOLEAN NOT NULL,
     airship_drop_off BOOLEAN NOT NULL,
     has_compilation_sphere BOOLEAN NOT NULL,
@@ -45,8 +44,7 @@ CREATE TABLE treasures (
     version INTEGER NOT NULL,
     treasure_type treasure_type NOT NULL,
     loot_type loot_type NOT NULL,
-    is_post_airship BOOLEAN NOT NULL,
-    is_story_based BOOLEAN NOT NULL,
+    availability availability_type NOT NULL,
     is_anima_treasure BOOLEAN NOT NULL,
     notes TEXT,
     gil_amount INTEGER,
@@ -62,6 +60,7 @@ CREATE TABLE shops (
     area_id INTEGER NOT NULL REFERENCES areas(id),
     notes TEXT,
     category shop_category NOT NULL,
+    availability availability_type NOT NULL,
 
     UNIQUE(area_id, version)
 );

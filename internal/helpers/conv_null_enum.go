@@ -360,3 +360,24 @@ func ConvertNullShopType(ne database.NullShopType) *string {
 }
 
 
+func NullAvailabilityType(s *string) database.NullAvailabilityType {
+    if s == nil {
+        return database.NullAvailabilityType{}
+    }
+    
+    return database.NullAvailabilityType{
+        AvailabilityType: database.AvailabilityType(*s),
+        Valid: true,
+    }
+}
+
+func ConvertNullAvailabilityType(ne database.NullAvailabilityType) *string {
+    if !ne.Valid {
+        return nil
+    }
+
+    val := string(ne.AvailabilityType)
+    return &val
+}
+
+

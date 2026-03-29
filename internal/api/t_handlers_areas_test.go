@@ -300,11 +300,11 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?item=7&story_based=false&monsters=false",
+				requestURL:     "/api/areas?item=7&availability=always&monsters=false",
 				expectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{35, 129, 140, 163, 208},
+			count:   4,
+			results: []int32{129, 140, 163, 208},
 		},
 		{
 			testGeneral: testGeneral{
@@ -332,11 +332,11 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?post_airship=true&limit=max",
+				requestURL:     "/api/areas?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   25,
-			results: []int32{13, 14, 28, 98, 106, 210, 235, 240},
+			count:   22,
+			results: []int32{13, 28, 106, 210, 235, 240},
 		},
 	}
 

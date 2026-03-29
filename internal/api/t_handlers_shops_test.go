@@ -266,11 +266,11 @@ func TestRetrieveShops(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/shops?post_airship=true",
+				requestURL:     "/api/shops?availability=always",
 				expectedStatus: http.StatusOK,
 			},
-			count:   18,
-			results: []int32{1, 6, 7, 12, 17, 20, 21, 27, 32, 33, 36},
+			count:   16,
+			results: []int32{1, 6, 7, 12, 17, 20, 21, 32, 33, 34},
 		},
 		{
 			testGeneral: testGeneral{

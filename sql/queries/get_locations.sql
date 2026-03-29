@@ -135,12 +135,8 @@ SELECT id FROM areas WHERE airship_drop_off = $1 ORDER BY id;
 SELECT id FROM areas WHERE can_ride_chocobo = $1 ORDER BY id;
 
 
--- name: GetAreaIDsPostAirship :many
-SELECT id FROM areas WHERE is_post_airship = $1 ORDER BY id;
-
-
--- name: GetAreaIDsStoryBased :many
-SELECT id FROM areas WHERE is_story_based = $1 ORDER BY id;
+-- name: GetAreaIDsByAvailability :many
+SELECT id FROM areas WHERE availability = $1 ORDER BY id;
 
 
 -- name: GetAreaIDsWithCharacters :many
@@ -1034,12 +1030,8 @@ ORDER BY t.id;
 SELECT id FROM treasures WHERE is_anima_treasure = $1 ORDER BY id;
 
 
--- name: GetTreasureIDsByIsStoryBased :many
-SELECT id FROM treasures WHERE is_story_based = $1 ORDER BY id;
-
-
--- name: GetTreasureIDsByIsPostAirship :many
-SELECT id FROM treasures WHERE is_post_airship = $1 ORDER BY id;
+-- name: GetTreasureIDsByAvailability :many
+SELECT id FROM treasures WHERE availability = $1 ORDER BY id;
 
 
 
@@ -1085,37 +1077,5 @@ JOIN j_shops_equipment j ON j.shop_id = s.id
 ORDER BY s.id;
 
 
--- name: GetShopIDsPreAirship :many
-SELECT DISTINCT s.id
-FROM shops s
-WHERE EXISTS (
-    SELECT 1
-    FROM j_shops_equipment je
-    WHERE je.shop_id = s.id
-      AND je.shop_type = 'pre-airship'
-)
-OR EXISTS (
-    SELECT 1
-    FROM j_shops_items ji
-    WHERE ji.shop_id = s.id
-      AND ji.shop_type = 'pre-airship'
-)
-ORDER BY s.id;
-
-
--- name: GetShopIDsPostAirship :many
-SELECT DISTINCT s.id
-FROM shops s
-WHERE EXISTS (
-    SELECT 1
-    FROM j_shops_equipment je
-    WHERE je.shop_id = s.id
-      AND je.shop_type = 'post-airship'
-)
-OR EXISTS (
-    SELECT 1
-    FROM j_shops_items ji
-    WHERE ji.shop_id = s.id
-      AND ji.shop_type = 'post-airship'
-)
-ORDER BY s.id;
+-- name: GetShopIDsByAvailability :many
+SELECT id FROM shops WHERE availability = $1 ORDER BY id;

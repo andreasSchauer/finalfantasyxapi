@@ -24,8 +24,7 @@ type Treasure struct {
 	AreaID          int32
 	TreasureType    string          `json:"treasure_type"`
 	LootType        string          `json:"loot_type"`
-	IsPostAirship   bool            `json:"is_post_airship"`
-	IsStoryBased    bool            `json:"is_story_based"`
+	Availability	string			`json:"availability"`
 	IsAnimaTreasure bool            `json:"is_anima_treasure"`
 	Notes           *string         `json:"notes"`
 	GilAmount       *int32          `json:"gil_amount"`
@@ -39,8 +38,7 @@ func (t Treasure) ToHashFields() []any {
 		t.AreaID,
 		t.TreasureType,
 		t.LootType,
-		t.IsPostAirship,
-		t.IsStoryBased,
+		t.Availability,
 		t.IsAnimaTreasure,
 		h.DerefOrNil(t.Notes),
 		h.DerefOrNil(t.GilAmount),
@@ -102,8 +100,7 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 					Version:         treasure.Version,
 					TreasureType:    database.TreasureType(treasure.TreasureType),
 					LootType:        database.LootType(treasure.LootType),
-					IsPostAirship:   treasure.IsPostAirship,
-					IsStoryBased:    treasure.IsStoryBased,
+					Availability:    database.AvailabilityType(treasure.Availability),
 					IsAnimaTreasure: treasure.IsAnimaTreasure,
 					Notes:           h.GetNullString(treasure.Notes),
 					GilAmount:       h.GetNullInt32(treasure.GilAmount),

@@ -11,13 +11,14 @@ import (
 
 type Shop struct {
 	ID           int32
-	Version      *int32       `json:"version"`
-	LocationArea LocationArea `json:"location_area"`
+	Version      *int32       	`json:"version"`
+	LocationArea LocationArea 	`json:"location_area"`
 	AreaID       int32
-	Notes        *string  `json:"notes"`
-	Category     string   `json:"category"`
-	PreAirship   *SubShop `json:"pre_airship"`
-	PostAirship  *SubShop `json:"post_airship"`
+	Notes        *string  		`json:"notes"`
+	Category     string   		`json:"category"`
+	Availability string			`json:"availability"`
+	PreAirship   *SubShop 		`json:"pre_airship"`
+	PostAirship  *SubShop 		`json:"post_airship"`
 }
 
 func (s Shop) ToHashFields() []any {
@@ -26,6 +27,7 @@ func (s Shop) ToHashFields() []any {
 		s.AreaID,
 		h.DerefOrNil(s.Notes),
 		s.Category,
+		s.Availability,
 	}
 }
 
@@ -152,11 +154,12 @@ func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			dbShop, err := qtx.CreateShop(context.Background(), database.CreateShopParams{
-				DataHash: generateDataHash(shop),
-				Version:  h.GetNullInt32(shop.Version),
-				AreaID:   shop.AreaID,
-				Notes:    h.GetNullString(shop.Notes),
-				Category: database.ShopCategory(shop.Category),
+				DataHash: 		generateDataHash(shop),
+				Version:  		h.GetNullInt32(shop.Version),
+				AreaID:   		shop.AreaID,
+				Notes:    		h.GetNullString(shop.Notes),
+				Category: 		database.ShopCategory(shop.Category),
+				Availability: 	database.AvailabilityType(shop.Availability),
 			})
 			if err != nil {
 				return h.NewErr(shop.Error(), err, "couldn't create shop")
