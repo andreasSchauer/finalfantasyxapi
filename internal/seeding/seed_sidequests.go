@@ -41,7 +41,6 @@ func (s Sidequest) GetResParamsQuest() h.ResParamsQuest {
 type Subquest struct {
 	ID 				int32
 	Quest
-	IsRepeatable	bool	`json:"is_repeatable"`
 	SidequestID 	int32
 }
 
@@ -49,7 +48,6 @@ func (s Subquest) ToHashFields() []any {
 	return []any{
 		s.Quest.ID,
 		s.SidequestID,
-		s.IsRepeatable,
 	}
 }
 
@@ -126,7 +124,6 @@ func (l *Lookup) seedSubquests(qtx *database.Queries, sidequest Sidequest) error
 			DataHash:     generateDataHash(subquest),
 			QuestID:      subquest.Quest.ID,
 			SidequestID:  subquest.SidequestID,
-			IsRepeatable: subquest.IsRepeatable,
 		})
 		if err != nil {
 			return h.NewErr(subquest.Error(), err, "couldn't create subquest")

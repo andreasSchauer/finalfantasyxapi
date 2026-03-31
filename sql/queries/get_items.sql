@@ -26,7 +26,7 @@ JOIN items i ON i.master_item_id = mit.id
 WHERE
     i.id = sqlc.arg(item_id)
     AND (sqlc.narg('repeatable')::BOOLEAN IS NULL OR m.is_repeatable = sqlc.narg('repeatable')::BOOLEAN)
-    AND (sqlc.narg('availability')::availability_type IS NULL OR m.availability = sqlc.narg('availability')::availability_type)
+    AND (sqlc.narg('availability')::availability_type[] IS NULL OR m.availability = ANY(sqlc.narg('availability')::availability_type[]))
 ORDER BY m.id;
 
 
@@ -37,7 +37,9 @@ JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
 JOIN master_items mi ON ia.master_item_id = mi.id
 JOIN items i ON i.master_item_id = mi.id
-WHERE i.id = $1
+WHERE
+  i.id = sqlc.arg(item_id)
+  AND (sqlc.narg('availability')::availability_type[] IS NULL OR t.availability = ANY(sqlc.narg('availability')::availability_type[]))
 ORDER BY t.id;
 
 
@@ -47,7 +49,9 @@ FROM shops s
 JOIN j_shops_items j ON j.shop_id = s.id
 JOIN shop_items si ON j.shop_item_id = si.id
 JOIN items i ON si.item_id = i.id
-WHERE i.id = $1
+WHERE
+  i.id = sqlc.arg(item_id)
+  AND (sqlc.narg('availability')::availability_type[] IS NULL OR s.availability = ANY(sqlc.narg('availability')::availability_type[]))
 ORDER BY s.id;
 
 
@@ -58,7 +62,10 @@ JOIN quest_completions qc ON q.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
 JOIN master_items mi ON ia.master_item_id = mi.id
 JOIN items i ON i.master_item_id = mi.id
-WHERE i.id = $1
+WHERE
+  i.id = sqlc.arg(item_id)
+  AND (sqlc.narg('repeatable')::BOOLEAN IS NULL OR q.is_repeatable = sqlc.narg('repeatable')::BOOLEAN)
+  AND (sqlc.narg('availability')::availability_type[] IS NULL OR q.availability = ANY(sqlc.narg('availability')::availability_type[]))
 ORDER BY q.id;
 
 

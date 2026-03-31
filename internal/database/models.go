@@ -3897,6 +3897,7 @@ type Quest struct {
 	Name         string
 	Type         QuestType
 	Availability AvailabilityType
+	IsRepeatable bool
 	CompletionID sql.NullInt32
 }
 
@@ -4028,11 +4029,10 @@ type Submenu struct {
 }
 
 type Subquest struct {
-	ID           int32
-	DataHash     string
-	QuestID      int32
-	SidequestID  int32
-	IsRepeatable bool
+	ID          int32
+	DataHash    string
+	QuestID     int32
+	SidequestID int32
 }
 
 type Topmenu struct {

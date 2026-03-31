@@ -8,6 +8,8 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/lib/pq"
 )
 
 const getItemAutoAbilityIDs = `-- name: GetItemAutoAbilityIDs :many
@@ -161,18 +163,18 @@ JOIN items i ON i.master_item_id = mit.id
 WHERE
     i.id = $1
     AND ($2::BOOLEAN IS NULL OR m.is_repeatable = $2::BOOLEAN)
-    AND ($3::availability_type IS NULL OR m.availability = $3::availability_type)
+    AND ($3::availability_type[] IS NULL OR m.availability = ANY($3::availability_type[]))
 ORDER BY m.id
 `
 
 type GetItemMonsterIDsParams struct {
 	ItemID       int32
 	Repeatable   sql.NullBool
-	Availability NullAvailabilityType
+	Availability []AvailabilityType
 }
 
 func (q *Queries) GetItemMonsterIDs(ctx context.Context, arg GetItemMonsterIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemMonsterIDs, arg.ItemID, arg.Repeatable, arg.Availability)
+	rows, err := q.db.QueryContext(ctx, getItemMonsterIDs, arg.ItemID, arg.Repeatable, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -234,12 +236,21 @@ JOIN quest_completions qc ON q.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
 JOIN master_items mi ON ia.master_item_id = mi.id
 JOIN items i ON i.master_item_id = mi.id
-WHERE i.id = $1
+WHERE
+  i.id = $1
+  AND ($2::BOOLEAN IS NULL OR q.is_repeatable = $2::BOOLEAN)
+  AND ($3::availability_type[] IS NULL OR q.availability = ANY($3::availability_type[]))
 ORDER BY q.id
 `
 
-func (q *Queries) GetItemQuestIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemQuestIDs, id)
+type GetItemQuestIDsParams struct {
+	ItemID       int32
+	Repeatable   sql.NullBool
+	Availability []AvailabilityType
+}
+
+func (q *Queries) GetItemQuestIDs(ctx context.Context, arg GetItemQuestIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemQuestIDs, arg.ItemID, arg.Repeatable, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -267,12 +278,19 @@ FROM shops s
 JOIN j_shops_items j ON j.shop_id = s.id
 JOIN shop_items si ON j.shop_item_id = si.id
 JOIN items i ON si.item_id = i.id
-WHERE i.id = $1
+WHERE
+  i.id = $1
+  AND ($2::availability_type[] IS NULL OR s.availability = ANY($2::availability_type[]))
 ORDER BY s.id
 `
 
-func (q *Queries) GetItemShopIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemShopIDs, id)
+type GetItemShopIDsParams struct {
+	ItemID       int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) GetItemShopIDs(ctx context.Context, arg GetItemShopIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemShopIDs, arg.ItemID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -301,12 +319,19 @@ JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
 JOIN master_items mi ON ia.master_item_id = mi.id
 JOIN items i ON i.master_item_id = mi.id
-WHERE i.id = $1
+WHERE
+  i.id = $1
+  AND ($2::availability_type[] IS NULL OR t.availability = ANY($2::availability_type[]))
 ORDER BY t.id
 `
 
-func (q *Queries) GetItemTreasureIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemTreasureIDs, id)
+type GetItemTreasureIDsParams struct {
+	ItemID       int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) GetItemTreasureIDs(ctx context.Context, arg GetItemTreasureIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemTreasureIDs, arg.ItemID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}

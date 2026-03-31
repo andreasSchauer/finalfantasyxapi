@@ -15,7 +15,7 @@ import (
 func getResourcesDbItem[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], filterItem seeding.LookupableID, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
 	dbIds, err := dbQuery(r.Context(), filterItem.GetID())
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", i.resourceType, filterItem), err)
+		return nil, newHTTPErrorDB(i.resourceType, filterItem, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIds)
@@ -26,7 +26,7 @@ func getResourcesDbItem[T h.HasID, R any, A APIResource, L APIResourceList](cfg 
 func getResourcesDbID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, lookupType string, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
 	dbIds, err := dbQuery(r.Context(), id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss by %s id '%d'.", i.resourceType, lookupType, id), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by %s id '%d'.", i.resourceType, lookupType, id), err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIds)

@@ -10,6 +10,10 @@ SELECT id FROM quests WHERE type = $1 ORDER BY id;
 SELECT id FROM quests WHERE availability = $1 ORDER BY id;
 
 
+-- name: GetQuestIDsByRepeatable :many
+SELECT id FROM quests WHERE is_repeatable = $1 ORDER BY id;
+
+
 -- name: GetParentSidequest :one
 SELECT q.*
 FROM subquests su
@@ -47,7 +51,11 @@ ORDER BY s.id;
 
 
 -- name: GetSubquestIDsByRepeatable :many
-SELECT id FROM subquests WHERE is_repeatable = $1 ORDER BY id;
+SELECT s.id
+FROM subquests s
+JOIN quests q ON s.quest_id = q.id
+WHERE q.is_repeatable = $1
+ORDER BY s.id;
 
 
 -- name: GetArenaCreationIDs :many

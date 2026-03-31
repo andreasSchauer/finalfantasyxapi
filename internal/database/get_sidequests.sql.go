@@ -119,7 +119,7 @@ func (q *Queries) GetBlitzballPrizeIDsByCategory(ctx context.Context, category B
 }
 
 const getParentSidequest = `-- name: GetParentSidequest :one
-SELECT q.id, q.data_hash, q.name, q.type, q.availability, q.completion_id
+SELECT q.id, q.data_hash, q.name, q.type, q.availability, q.is_repeatable, q.completion_id
 FROM subquests su
 LEFT JOIN sidequests si ON su.sidequest_id = si.id
 LEFT JOIN quests q ON si.quest_id = q.id
@@ -132,6 +132,7 @@ type GetParentSidequestRow struct {
 	Name         sql.NullString
 	Type         NullQuestType
 	Availability NullAvailabilityType
+	IsRepeatable sql.NullBool
 	CompletionID sql.NullInt32
 }
 
@@ -144,6 +145,7 @@ func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSi
 		&i.Name,
 		&i.Type,
 		&i.Availability,
+		&i.IsRepeatable,
 		&i.CompletionID,
 	)
 	return i, err
@@ -182,6 +184,33 @@ SELECT id FROM quests WHERE availability = $1 ORDER BY id
 
 func (q *Queries) GetQuestIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getQuestIDsByAvailability, availability)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getQuestIDsByRepeatable = `-- name: GetQuestIDsByRepeatable :many
+SELECT id FROM quests WHERE is_repeatable = $1 ORDER BY id
+`
+
+func (q *Queries) GetQuestIDsByRepeatable(ctx context.Context, isRepeatable bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getQuestIDsByRepeatable, isRepeatable)
 	if err != nil {
 		return nil, err
 	}
@@ -374,7 +403,11 @@ func (q *Queries) GetSubquestIDsByAvailability(ctx context.Context, availability
 }
 
 const getSubquestIDsByRepeatable = `-- name: GetSubquestIDsByRepeatable :many
-SELECT id FROM subquests WHERE is_repeatable = $1 ORDER BY id
+SELECT s.id
+FROM subquests s
+JOIN quests q ON s.quest_id = q.id
+WHERE q.is_repeatable = $1
+ORDER BY s.id
 `
 
 func (q *Queries) GetSubquestIDsByRepeatable(ctx context.Context, isRepeatable bool) ([]int32, error) {

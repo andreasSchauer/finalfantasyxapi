@@ -53,25 +53,51 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 }
 
 func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item, error) {
-	monsters, err := getMonItemAmts(cfg, r, item)
+	queryParamAvailability := cfg.e.items.queryLookup["availability"]
+	availabilitySlice, err := parseTypeSliceQuery(r, cfg.e.items.endpoint, queryParamAvailability, cfg.t.AvailabilityType)
 	if err != nil {
 		return Item{}, err
 	}
 
-	treasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, item, cfg.db.GetTreasureIDsByItem)
+	repeatable, err := getBoolPtr(r, "repeatable", cfg.e.monsters.queryLookup)
 	if err != nil {
 		return Item{}, err
 	}
 
-	shops, err := getResourcesDbItem(cfg, r, cfg.e.shops, item, cfg.db.GetItemShopIDs)
+	monsters, err := getMonItemAmts(cfg, r, item, availabilitySlice, repeatable)
 	if err != nil {
 		return Item{}, err
 	}
 
-	quests, err := getResourcesDbItem(cfg, r, cfg.e.quests, item, cfg.db.GetItemQuestIDs)
+	treasureIDs, err := cfg.db.GetItemTreasureIDs(r.Context(), database.GetItemTreasureIDsParams{
+		ItemID: 		item.ID,
+		Availability: 	availabilitySlice,
+	})
 	if err != nil {
-		return Item{}, err
+		return Item{}, newHTTPErrorDB(cfg.e.treasures.resourceType, item, err)
 	}
+	treasures := idsToAPIResources(cfg, cfg.e.treasures, treasureIDs)
+
+
+	shopIDs, err := cfg.db.GetItemShopIDs(r.Context(), database.GetItemShopIDsParams{
+		ItemID: 		item.ID,
+		Availability: 	availabilitySlice,
+	})
+	if err != nil {
+		return Item{}, newHTTPErrorDB(cfg.e.shops.resourceType, item, err)
+	}
+	shops := idsToAPIResources(cfg, cfg.e.shops, shopIDs)
+
+
+	questIDs, err := cfg.db.GetItemQuestIDs(r.Context(), database.GetItemQuestIDsParams{
+		ItemID: 		item.ID,
+		Repeatable: 	h.GetNullBool(repeatable),
+		Availability: 	availabilitySlice,
+	})
+	if err != nil {
+		return Item{}, newHTTPErrorDB(cfg.e.quests.resourceType, item, err)
+	}
+	quests := idsToAPIResources(cfg, cfg.e.quests, questIDs)
 
 	blitzballPrizes, err := getResourcesDbItem(cfg, r, cfg.e.blitzballPrizes, item, cfg.db.GetItemBlitzballPrizeIDs)
 	if err != nil {
@@ -108,30 +134,20 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 }
 
 
-func getMonItemAmts(cfg *Config, r *http.Request, item seeding.Item) ([]MonItemAmts, error) {
+func getMonItemAmts(cfg *Config, r *http.Request, item seeding.Item, availabilitySlice []database.AvailabilityType, repeatable *bool) ([]MonItemAmts, error) {
 	i := cfg.e.monsters
-	monItemAmts := []MonItemAmts{}
-
-	availability, err := getTypePtr(r, "availability", cfg.e.availabilityType.endpoint, cfg.t.AvailabilityType, i.queryLookup)
-	if err != nil {
-		return nil, err
-	}
-
-	repeatable, err := getBoolPtr(r, "repeatable", i.queryLookup)
-	if err != nil {
-		return nil, err
-	}
-
+	
 	dbIds, err := cfg.db.GetItemMonsterIDs(r.Context(), database.GetItemMonsterIDsParams{
 		ItemID: 		item.GetID(),
-		Availability: 	h.NullAvailabilityType(availability),
+		Availability: 	availabilitySlice,
 		Repeatable: 	h.GetNullBool(repeatable),
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", i.resourceType, item), err)
 	}
-
 	monsters := idsToAPIResources(cfg, i, dbIds)
+	
+	monItemAmts := []MonItemAmts{}
 
 	for _, monster := range monsters {
 		monItemAmt := createItemMonster(cfg, item, monster)

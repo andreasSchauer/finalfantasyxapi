@@ -12,8 +12,8 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateQuest :one
-INSERT INTO quests (data_hash, name, type, availability)
-VALUES ($1, $2, $3, $4)
+INSERT INTO quests (data_hash, name, type, availability, is_repeatable)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quests.data_hash
 RETURNING *;
 
@@ -26,8 +26,8 @@ RETURNING *;
 
 
 -- name: CreateSubquest :one
-INSERT INTO subquests (data_hash, quest_id, sidequest_id, is_repeatable)
-VALUES ($1, $2, $3, $4)
+INSERT INTO subquests (data_hash, quest_id, sidequest_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = subquests.data_hash
 RETURNING *;
 

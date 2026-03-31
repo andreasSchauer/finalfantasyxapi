@@ -121,10 +121,10 @@ func (q *Queries) CreateMonsterArenaCreation(ctx context.Context, arg CreateMons
 }
 
 const createQuest = `-- name: CreateQuest :one
-INSERT INTO quests (data_hash, name, type, availability)
-VALUES ($1, $2, $3, $4)
+INSERT INTO quests (data_hash, name, type, availability, is_repeatable)
+VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = quests.data_hash
-RETURNING id, data_hash, name, type, availability, completion_id
+RETURNING id, data_hash, name, type, availability, is_repeatable, completion_id
 `
 
 type CreateQuestParams struct {
@@ -132,6 +132,7 @@ type CreateQuestParams struct {
 	Name         string
 	Type         QuestType
 	Availability AvailabilityType
+	IsRepeatable bool
 }
 
 func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest, error) {
@@ -140,6 +141,7 @@ func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest
 		arg.Name,
 		arg.Type,
 		arg.Availability,
+		arg.IsRepeatable,
 	)
 	var i Quest
 	err := row.Scan(
@@ -148,6 +150,7 @@ func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest
 		&i.Name,
 		&i.Type,
 		&i.Availability,
+		&i.IsRepeatable,
 		&i.CompletionID,
 	)
 	return i, err
@@ -198,33 +201,26 @@ func (q *Queries) CreateSidequest(ctx context.Context, arg CreateSidequestParams
 }
 
 const createSubquest = `-- name: CreateSubquest :one
-INSERT INTO subquests (data_hash, quest_id, sidequest_id, is_repeatable)
-VALUES ($1, $2, $3, $4)
+INSERT INTO subquests (data_hash, quest_id, sidequest_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = subquests.data_hash
-RETURNING id, data_hash, quest_id, sidequest_id, is_repeatable
+RETURNING id, data_hash, quest_id, sidequest_id
 `
 
 type CreateSubquestParams struct {
-	DataHash     string
-	QuestID      int32
-	SidequestID  int32
-	IsRepeatable bool
+	DataHash    string
+	QuestID     int32
+	SidequestID int32
 }
 
 func (q *Queries) CreateSubquest(ctx context.Context, arg CreateSubquestParams) (Subquest, error) {
-	row := q.db.QueryRowContext(ctx, createSubquest,
-		arg.DataHash,
-		arg.QuestID,
-		arg.SidequestID,
-		arg.IsRepeatable,
-	)
+	row := q.db.QueryRowContext(ctx, createSubquest, arg.DataHash, arg.QuestID, arg.SidequestID)
 	var i Subquest
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
 		&i.QuestID,
 		&i.SidequestID,
-		&i.IsRepeatable,
 	)
 	return i, err
 }

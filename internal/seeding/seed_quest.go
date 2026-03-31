@@ -12,6 +12,7 @@ type Quest struct {
 	ID   			int32
 	Name 			string 				`json:"name"`
 	Availability	string			  	`json:"availability"`
+	IsRepeatable	bool				`json:"is_repeatable"`
 	Completion 		*QuestCompletion 	`json:"completion"`
 	Type 			database.QuestType
 }
@@ -22,6 +23,7 @@ func (q Quest) ToHashFields() []any {
 		q.Type,
 		h.ObjPtrToID(q.Completion),
 		q.Availability,
+		q.IsRepeatable,
 	}
 }
 
@@ -76,6 +78,7 @@ func (l *Lookup) seedQuest(qtx *database.Queries, quest Quest) (Quest, error) {
 		Name:     		quest.Name,
 		Type:     		quest.Type,
 		Availability: 	database.AvailabilityType(quest.Availability),
+		IsRepeatable:	quest.IsRepeatable,
 	})
 	if err != nil {
 		return Quest{}, h.NewErr(quest.Error(), err, "couldn't create quest")

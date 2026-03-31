@@ -24,6 +24,7 @@ CREATE TABLE quests (
     name TEXT NOT NULL,
     type quest_type NOT NULL,
     availability availability_type NOT NULL,
+    is_repeatable BOOLEAN NOT NULL,
     UNIQUE(name, type)
 );
 
@@ -40,7 +41,6 @@ CREATE TABLE subquests (
     data_hash TEXT UNIQUE NOT NULL,
     quest_id INTEGER NOT NULL REFERENCES quests(id),
     sidequest_id INTEGER NOT NULL REFERENCES sidequests(id),
-    is_repeatable BOOLEAN NOT NULL,
     UNIQUE(quest_id, sidequest_id)
 );
 

@@ -8,6 +8,7 @@ type Quest struct {
 	Type          NamedAPIResource `json:"type"`
 	TypedQuest    QuestAPIResource `json:"typed_quest"`
 	Availability  NamedAPIResource `json:"availability"`
+	IsRepeatable  bool			   `json:"is_repeatable"`
 }
 
 type Sidequest struct {
@@ -15,6 +16,7 @@ type Sidequest struct {
 	Name          string             `json:"name"`
 	UntypedQuest  QuestAPIResource   `json:"untyped_quest"`
 	Availability  NamedAPIResource	 `json:"availability"`
+	IsRepeatable  bool			   	 `json:"is_repeatable"`
 	Completion    *QuestCompletion   `json:"completion"`
 	Subquests     []QuestAPIResource `json:"subquests"`
 }

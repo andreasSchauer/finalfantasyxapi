@@ -22,6 +22,7 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 		Name:       	sidequest.Name,
 		UntypedQuest: 	idToQuestAPIResource(cfg, cfg.e.quests, sidequest.Quest.ID),
 		Availability:   newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, sidequest.Availability, cfg.t.AvailabilityType),
+		IsRepeatable: 	sidequest.IsRepeatable,
 		Completion: 	convertObjPtr(cfg, sidequest.Completion, convertQuestCompletion),
 		Subquests:  	subquests,
 	}

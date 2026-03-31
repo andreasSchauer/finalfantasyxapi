@@ -18,7 +18,8 @@ func (cfg *Config) getQuest(r *http.Request, i handlerInput[seeding.Quest, Quest
 		Type: 			newNamedAPIResourceFromEnum(cfg, cfg.e.questType.endpoint, string(quest.Type), cfg.t.QuestType),
 		TypedQuest: 	questToQuestAPIResource(cfg, quest),
 		Availability: 	newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, quest.Availability, cfg.t.AvailabilityType),
-	}
+		IsRepeatable: 	quest.IsRepeatable,
+	}	
 
 	return response, nil
 }
@@ -32,5 +33,6 @@ func (cfg *Config) retrieveQuests(r *http.Request, i handlerInput[seeding.Quest,
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
 		frl(typeQuery(cfg, r, i, cfg.t.QuestType, resources, "type", cfg.db.GetQuestIDsByType)),
 		frl(typeQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetQuestIDsByAvailability)),
+		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetQuestIDsByRepeatable)),
 	})
 }

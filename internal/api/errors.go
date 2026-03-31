@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 var errNotAnID = errors.New("not an id.")
@@ -37,6 +39,10 @@ func newHTTPError(code int, msg string, err error) httpError {
 		msg:  msg,
 		err:  err,
 	}
+}
+
+func newHTTPErrorDB(resourceType string, filterItem seeding.LookupableID, err error) httpError {
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", resourceType, filterItem), err)
 }
 
 func handleHTTPError(w http.ResponseWriter, err error) bool {

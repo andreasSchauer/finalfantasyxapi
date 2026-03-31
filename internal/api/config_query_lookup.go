@@ -834,6 +834,14 @@ func (cfg *Config) initQuestsParams() {
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
 		},
+		"repeatable": {
+			ID:          2,
+			Description: "Searches for quests that can be completed more than once.",
+			Usage:       "?repeatable={bool}",
+			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
 	}
 
 	params = cfg.completeQueryTypeInit(params, false)
