@@ -15,7 +15,7 @@ func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.Bli
 
 	response := BlitzballPrize{
 		ID:       bbPos.ID,
-		Name: 	  fmt.Sprintf("%s - %s", bbPos.Category, bbPos.Slot),
+		Name:     fmt.Sprintf("%s - %s", bbPos.Category, bbPos.Slot),
 		Category: bbPos.Category,
 		Slot:     bbPos.Slot,
 		Items:    convertObjSlice(cfg, bbPos.Items, convertBlitzballItem),
@@ -31,6 +31,6 @@ func (cfg *Config) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seedi
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(typeQuery(cfg, r, i, cfg.t.BlitzballTournamentCategory, resources, "category", cfg.db.GetBlitzballPrizeIDsByCategory)),
+		frl(enumQuery(cfg, r, i, cfg.t.BlitzballTournamentCategory, resources, "category", cfg.db.GetBlitzballPrizeIDsByCategory)),
 	})
 }

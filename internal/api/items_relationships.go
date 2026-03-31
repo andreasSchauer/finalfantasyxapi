@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -8,11 +9,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
+// one or both of the query functions return errEmptyQuery
 func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item, error) {
 	queryParamAvailability := cfg.e.items.queryLookup["availability"]
-	availabilitySlice, err := parseTypeSliceQuery(r, cfg.e.items.endpoint, queryParamAvailability, cfg.t.AvailabilityType)
-	if err != nil {
+	availabilitySlice, err := parseEnumSliceQuery(r, cfg.e.items.endpoint, queryParamAvailability, cfg.t.AvailabilityType)
+	if err != nil && !errors.Is(err, errEmptyQuery) {
 		return Item{}, err
 	}
 
@@ -21,48 +22,43 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 		return Item{}, err
 	}
 
-	
 	monsterIDs, err := cfg.db.GetItemMonsterIDs(r.Context(), database.GetItemMonsterIDsParams{
-		ItemID: 		item.ID,
-		Repeatable: 	h.GetNullBool(repeatable),
-		Availability: 	availabilitySlice,
+		ItemID:       item.ID,
+		Repeatable:   h.GetNullBool(repeatable),
+		Availability: availabilitySlice,
 	})
 	if err != nil {
 		return Item{}, newHTTPErrorDB(cfg.e.monsters.resourceType, item, err)
 	}
 	monsters := idsToAPIResources(cfg, cfg.e.monsters, monsterIDs)
 
-
 	treasureIDs, err := cfg.db.GetItemTreasureIDs(r.Context(), database.GetItemTreasureIDsParams{
-		ItemID: 		item.ID,
-		Availability: 	availabilitySlice,
+		ItemID:       item.ID,
+		Availability: availabilitySlice,
 	})
 	if err != nil {
 		return Item{}, newHTTPErrorDB(cfg.e.treasures.resourceType, item, err)
 	}
 	treasures := idsToAPIResources(cfg, cfg.e.treasures, treasureIDs)
 
-
 	shopIDs, err := cfg.db.GetItemShopIDs(r.Context(), database.GetItemShopIDsParams{
-		ItemID: 		item.ID,
-		Availability: 	availabilitySlice,
+		ItemID:       item.ID,
+		Availability: availabilitySlice,
 	})
 	if err != nil {
 		return Item{}, newHTTPErrorDB(cfg.e.shops.resourceType, item, err)
 	}
 	shops := idsToAPIResources(cfg, cfg.e.shops, shopIDs)
 
-
 	questIDs, err := cfg.db.GetItemQuestIDs(r.Context(), database.GetItemQuestIDsParams{
-		ItemID: 		item.ID,
-		Repeatable: 	h.GetNullBool(repeatable),
-		Availability: 	availabilitySlice,
+		ItemID:       item.ID,
+		Repeatable:   h.GetNullBool(repeatable),
+		Availability: availabilitySlice,
 	})
 	if err != nil {
 		return Item{}, newHTTPErrorDB(cfg.e.quests.resourceType, item, err)
 	}
 	quests := idsToAPIResources(cfg, cfg.e.quests, questIDs)
-
 
 	blitzballPrizes, err := getResourcesDbItem(cfg, r, cfg.e.blitzballPrizes, item, cfg.db.GetItemBlitzballPrizeIDs)
 	if err != nil {
@@ -97,7 +93,6 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 
 	return rel, nil
 }
-
 
 func getMonItemAmts(cfg *Config, monsters []NamedAPIResource, item seeding.Item) []MonItemAmts {
 	monItemAmts := []MonItemAmts{}

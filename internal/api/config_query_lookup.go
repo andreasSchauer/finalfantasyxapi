@@ -2362,14 +2362,32 @@ func (cfg *Config) initItemsParams() {
 			ForList:     false,
 			ForSingle:   true,
 		},
-		"type": {
-			ID:          1,
-			Description: "Searches for overdrive-modes that are of the specified overdrive-mode-type.",
-			Usage:       "?type={name|id}",
-			ExampleUses: []string{"?type=per-action", "?type=2"},
+		"category": {
+			ID:          3,
+			Description: "Searches for items that are of the specified item category.",
+			Usage:       "?category={name|id}",
+			ExampleUses: []string{"?category=healing", "?category=2"},
 			ForList:     true,
 			ForSingle:   false,
-			TypeLookup:  cfg.t.OverdriveModeType.lookup,
+			TypeLookup:  cfg.t.ItemCategory.lookup,
+			References:  []string{createListURL(cfg, "item-category")},
+		},
+		"has_ability": {
+			ID:          4,
+			Description: "Searches for items that can be used in battle.",
+			Usage:       "?has_ability={bool}",
+			ExampleUses: []string{"?has_ability=true", "?has_ability=false"},
+			ForList:     true,
+			ForSingle:   false,
+		},
+		"related_stat": {
+			ID:          5,
+			Description: "Searches for items that are related to the specified stat.",
+			Usage:       "?related_stat={name|id}",
+			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "stats")},
 		},
 	}
 

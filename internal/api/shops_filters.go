@@ -65,7 +65,6 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 	return dbIDs, nil
 }
 
-
 // can generalize these functions pretty easliy, if needed
 
 func getBoolPtr(r *http.Request, queryName string, queryLookup map[string]QueryType) (*bool, error) {
@@ -138,7 +137,7 @@ func getTypePtr[E, N any](r *http.Request, queryName, endpoint string, et EnumTy
 
 	queryParam := queryLookup[queryName]
 	var isEmpty bool
-	enumRes, err := parseTypeQuery(r, endpoint, queryParam, et)
+	enumRes, err := parseEnumQuery(r, endpoint, queryParam, et)
 	if err != nil {
 		if errors.Is(err, errEmptyQuery) {
 			isEmpty = true
@@ -153,4 +152,3 @@ func getTypePtr[E, N any](r *http.Request, queryName, endpoint string, et EnumTy
 
 	return typePtr, nil
 }
-

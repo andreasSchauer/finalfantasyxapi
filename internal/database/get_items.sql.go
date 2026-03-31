@@ -107,6 +107,95 @@ func (q *Queries) GetItemIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getItemIDsByRelatedStat = `-- name: GetItemIDsByRelatedStat :many
+SELECT i.id
+FROM items i
+JOIN j_items_related_stats j ON j.item_id = i.id
+JOIN stats s ON j.stat_id = s.id
+WHERE s.id = $1
+ORDER BY i.id
+`
+
+func (q *Queries) GetItemIDsByRelatedStat(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsByRelatedStat, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getItemIDsCategory = `-- name: GetItemIDsCategory :many
+SELECT id FROM items WHERE category = $1 ORDER BY id
+`
+
+func (q *Queries) GetItemIDsCategory(ctx context.Context, category ItemCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsCategory, category)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getItemIDsWithAbility = `-- name: GetItemIDsWithAbility :many
+SELECT i.id
+FROM items i
+JOIN item_abilities ia ON ia.item_id = i.id
+ORDER BY i.id
+`
+
+func (q *Queries) GetItemIDsWithAbility(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsWithAbility)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getItemMixIDs = `-- name: GetItemMixIDs :many
 SELECT DISTINCT m.id
 FROM mixes m

@@ -108,3 +108,23 @@ JOIN mix_combinations mc ON mc.mix_id = m.id
 JOIN items i ON mc.first_item_id = i.id OR mc.second_item_id = i.id
 WHERE i.id = $1
 ORDER BY m.id;
+
+
+-- name: GetItemIDsCategory :many
+SELECT id FROM items WHERE category = $1 ORDER BY id;
+
+
+-- name: GetItemIDsWithAbility :many
+SELECT i.id
+FROM items i
+JOIN item_abilities ia ON ia.item_id = i.id
+ORDER BY i.id;
+
+
+-- name: GetItemIDsByRelatedStat :many
+SELECT i.id
+FROM items i
+JOIN j_items_related_stats j ON j.item_id = i.id
+JOIN stats s ON j.stat_id = s.id
+WHERE s.id = $1
+ORDER BY i.id;

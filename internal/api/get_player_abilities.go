@@ -60,11 +60,11 @@ func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seedi
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(typeQuery(cfg, r, i, cfg.t.PlayerAbilityCategory, resources, "category", cfg.db.GetPlayerAbilityIDsByCategory)),
-		frl(typeQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetPlayerAbilityIDsByDamageType)),
-		frl(typeQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetPlayerAbilityIDsByAttackType)),
-		frl(typeQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetPlayerAbilityIDsByTargetType)),
-		frl(typeQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetPlayerAbilityIDsByDamageFormula)),
+		frl(enumQuery(cfg, r, i, cfg.t.PlayerAbilityCategory, resources, "category", cfg.db.GetPlayerAbilityIDsByCategory)),
+		frl(enumQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetPlayerAbilityIDsByDamageType)),
+		frl(enumQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetPlayerAbilityIDsByAttackType)),
+		frl(enumQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetPlayerAbilityIDsByTargetType)),
+		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetPlayerAbilityIDsByDamageFormula)),
 		frl(intQuery(cfg, r, i, resources, "mp", cfg.db.GetPlayerAbilityIDsByMpCost)),
 		frl(intQuery(cfg, r, i, resources, "mp_min", cfg.db.GetPlayerAbilityIDsByMpCostMin)),
 		frl(intQuery(cfg, r, i, resources, "mp_max", cfg.db.GetPlayerAbilityIDsByMpCostMax)),

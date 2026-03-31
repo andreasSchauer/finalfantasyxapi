@@ -25,13 +25,13 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerU
 		}
 
 		response = PlayerUnit{
-			ID:                     unit.ID,
-			Name:                   unit.Name,
-			Type: 					newNamedAPIResourceFromEnum(cfg, cfg.e.unitType.endpoint, string(unit.Type), cfg.t.UnitType),
-			TypedUnit: 				nameToNamedAPIResource(cfg, cfg.e.characters, unit.Name, nil),
-			Area:                   locAreaToAreaAPIResource(cfg, cfg.e.areas, character.LocationArea),
-			CelestialWeapon:        rel.CelestialWeapon,
-			CharacterClasses:       rel.CharacterClasses,
+			ID:               unit.ID,
+			Name:             unit.Name,
+			Type:             newNamedAPIResourceFromEnum(cfg, cfg.e.unitType.endpoint, string(unit.Type), cfg.t.UnitType),
+			TypedUnit:        nameToNamedAPIResource(cfg, cfg.e.characters, unit.Name, nil),
+			Area:             locAreaToAreaAPIResource(cfg, cfg.e.areas, character.LocationArea),
+			CelestialWeapon:  rel.CelestialWeapon,
+			CharacterClasses: rel.CharacterClasses,
 		}
 
 	case database.UnitTypeAeon:
@@ -43,13 +43,13 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerU
 		}
 
 		response = PlayerUnit{
-			ID:                     unit.ID,
-			Name:                   unit.Name,
-			Type: 					newNamedAPIResourceFromEnum(cfg, cfg.e.unitType.endpoint, string(unit.Type), cfg.t.UnitType),
-			TypedUnit: 				nameToNamedAPIResource(cfg, cfg.e.aeons, unit.Name, nil),
-			Area:                   locAreaToAreaAPIResource(cfg, cfg.e.areas, aeon.LocationArea),
-			CelestialWeapon:        rel.CelestialWeapon,
-			CharacterClasses:       rel.CharacterClasses,
+			ID:               unit.ID,
+			Name:             unit.Name,
+			Type:             newNamedAPIResourceFromEnum(cfg, cfg.e.unitType.endpoint, string(unit.Type), cfg.t.UnitType),
+			TypedUnit:        nameToNamedAPIResource(cfg, cfg.e.aeons, unit.Name, nil),
+			Area:             locAreaToAreaAPIResource(cfg, cfg.e.areas, aeon.LocationArea),
+			CelestialWeapon:  rel.CelestialWeapon,
+			CharacterClasses: rel.CharacterClasses,
 		}
 	}
 
@@ -63,6 +63,6 @@ func (cfg *Config) retrievePlayerUnits(r *http.Request, i handlerInput[seeding.P
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[TypedAPIResource]{
-		frl(typeQuery(cfg, r, i, cfg.t.UnitType, resources, "type", cfg.db.GetPlayerUnitIDsByType)),
+		frl(enumQuery(cfg, r, i, cfg.t.UnitType, resources, "type", cfg.db.GetPlayerUnitIDsByType)),
 	})
 }

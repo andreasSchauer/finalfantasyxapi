@@ -52,7 +52,7 @@ func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, error) {
 }
 
 // used, if a queryParam is looking up an enum entry
-func parseTypeQuery[E, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[E, N]) (EnumAPIResource, error) {
+func parseEnumQuery[E, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[E, N]) (EnumAPIResource, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return EnumAPIResource{}, err
@@ -61,14 +61,14 @@ func parseTypeQuery[E, N any](r *http.Request, endpoint string, queryParam Query
 	return parseEnum(query, endpoint, queryParam, et)
 }
 
-func parseTypeSliceQuery[E, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[E, N]) ([]E, error) {
+func parseEnumSliceQuery[E, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[E, N]) ([]E, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
 	}
 
 	enumStrs := strings.Split(query, ",")
-	var enums []E
+	enums := []E{}
 
 	for _, str := range enumStrs {
 		_, err := parseEnum(str, endpoint, queryParam, et)
@@ -82,7 +82,6 @@ func parseTypeSliceQuery[E, N any](r *http.Request, endpoint string, queryParam 
 
 	return enums, nil
 }
-
 
 func parseEnum[E, N any](val, endpoint string, queryParam QueryType, et EnumType[E, N]) (EnumAPIResource, error) {
 	enum, err := GetEnumAPIResource(val, et)

@@ -64,8 +64,8 @@ func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, S
 		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.l.Areas), getSongsArea)),
 		frl(boolQuery2(cfg, r, i, resources, "special_use", cfg.db.GetSongIDsWithSpecialUseCase)),
 		frl(boolQuery2(cfg, r, i, resources, "fmvs", cfg.db.GetSongIDsWithFMVs)),
-		frl(nullTypeQuery(cfg, r, i, cfg.t.Composer, resources, "composer", cfg.db.GetSongIDsByComposer)),
-		frl(nullTypeQuery(cfg, r, i, cfg.t.Arranger, resources, "arranger", cfg.db.GetSongIDsByArranger)),
+		frl(nullEnumQuery(cfg, r, i, cfg.t.Composer, resources, "composer", cfg.db.GetSongIDsByComposer)),
+		frl(nullEnumQuery(cfg, r, i, cfg.t.Arranger, resources, "arranger", cfg.db.GetSongIDsByArranger)),
 	})
 }
 

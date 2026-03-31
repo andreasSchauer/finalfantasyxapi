@@ -25,13 +25,14 @@ type Item struct {
 	Mixes              []NamedAPIResource                 	`json:"mixes"`
 }
 
-// need to account for otherItems
+
 type MonItemAmts struct {
 	Monster       NamedAPIResource  `json:"monster"`
 	Steal         *CommonRareAmount `json:"steal,omitempty"`
 	Drop          *CommonRareAmount `json:"drop,omitempty"`
 	SecondaryDrop *CommonRareAmount `json:"secondary_drop,omitempty"`
 	Bribe         int32             `json:"bribe,omitempty"`
+	Other		  int32				`json:"other,omitempty"`
 }
 
 type CommonRareAmount struct {
@@ -52,6 +53,7 @@ func createItemMonster(cfg *Config, item seeding.Item, mon NamedAPIResource) Mon
 		Drop:          craPtr(item, monster.Items.DropCommon, monster.Items.DropRare),
 		SecondaryDrop: craPtr(item, monster.Items.SecondaryDropCommon, monster.Items.SecondaryDropRare),
 		Bribe:         getAmountMonItem(item, monster.Items.Bribe),
+		Other: 		   getAmountOther(item, monster.Items.OtherItems),
 	}
 }
 
@@ -74,4 +76,14 @@ func getAmountMonItem(item seeding.Item, ia *seeding.ItemAmount) int32 {
 	}
 
 	return ia.Amount
+}
+
+func getAmountOther(item seeding.Item, otherItems []seeding.PossibleItem) int32 {
+	for _, otherItem := range otherItems {
+		if otherItem.ItemAmount.ItemName == item.Name {
+			return otherItem.ItemAmount.Amount
+		}
+	}
+
+	return 0
 }

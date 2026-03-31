@@ -18,13 +18,13 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 	}
 
 	response := Sidequest{
-		ID:         	sidequest.ID,
-		Name:       	sidequest.Name,
-		UntypedQuest: 	idToQuestAPIResource(cfg, cfg.e.quests, sidequest.Quest.ID),
-		Availability:   newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, sidequest.Availability, cfg.t.AvailabilityType),
-		IsRepeatable: 	sidequest.IsRepeatable,
-		Completion: 	convertObjPtr(cfg, sidequest.Completion, convertQuestCompletion),
-		Subquests:  	subquests,
+		ID:           sidequest.ID,
+		Name:         sidequest.Name,
+		UntypedQuest: idToQuestAPIResource(cfg, cfg.e.quests, sidequest.Quest.ID),
+		Availability: newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, sidequest.Availability, cfg.t.AvailabilityType),
+		IsRepeatable: sidequest.IsRepeatable,
+		Completion:   convertObjPtr(cfg, sidequest.Completion, convertQuestCompletion),
+		Subquests:    subquests,
 	}
 
 	return response, nil
@@ -37,6 +37,6 @@ func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Si
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
-		frl(typeQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetSidequestIDsByAvailability)),
+		frl(enumQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetSidequestIDsByAvailability)),
 	})
 }

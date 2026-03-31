@@ -42,10 +42,10 @@ func (cfg *Config) retrieveEnemyAbilities(r *http.Request, i handlerInput[seedin
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetEnemyAbilityIDsByMonster)),
-		frl(typeQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetEnemyAbilityIDsByDamageType)),
-		frl(typeQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetEnemyAbilityIDsByAttackType)),
-		frl(typeQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetEnemyAbilityIDsByTargetType)),
-		frl(typeQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetEnemyAbilityIDsByDamageFormula)),
+		frl(enumQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetEnemyAbilityIDsByDamageType)),
+		frl(enumQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetEnemyAbilityIDsByAttackType)),
+		frl(enumQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetEnemyAbilityIDsByTargetType)),
+		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetEnemyAbilityIDsByDamageFormula)),
 		frl(intQuery(cfg, r, i, resources, "rank", queryMany(cfg.db.GetEnemyAbilityIDsByRank))),
 		frl(nameOrIdQuery(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetEnemyAbilityIDsByElement)),
 		frl(idQueryWrapper(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getEnemyAbilitiesInflictedStatus)),

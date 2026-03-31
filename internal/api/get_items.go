@@ -6,7 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList], id int32) (Item, error) {
 	item, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
@@ -50,12 +49,15 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 	return response, nil
 }
 
-
 func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{})
+	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
+		frl(enumQuery(cfg, r, i, cfg.t.ItemCategory, resources, "category", cfg.db.GetItemIDsCategory)),
+		frl(boolQuery2(cfg, r, i, resources, "has_ability", cfg.db.GetItemIDsWithAbility)),
+		frl(idQuery(cfg, r, i, resources, "related_stat", len(cfg.l.Stats), cfg.db.GetItemIDsByRelatedStat)),
+	})
 }
