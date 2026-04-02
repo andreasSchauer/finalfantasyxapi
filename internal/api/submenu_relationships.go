@@ -8,12 +8,12 @@ import (
 )
 
 func createSubmenuOpenedBy(cfg *Config, r *http.Request, submenu seeding.Submenu) (*MenuOpen, error) {
-	ability, err := getResPtrDB(cfg, r, cfg.e.abilities, submenu, queryOne(cfg.db.GetSubmenuOpenedByAbilityID))
+	ability, err := getResPtrDB(cfg, r, cfg.e.abilities, submenu, NullToIntOne(cfg.db.GetSubmenuOpenedByAbilityID))
 	if err != nil {
 		return nil, err
 	}
 
-	aeonCommand, err := getResPtrDB(cfg, r, cfg.e.aeonCommands, submenu, queryOne(cfg.db.GetSubmenuOpenedByAeonCommandID))
+	aeonCommand, err := getResPtrDB(cfg, r, cfg.e.aeonCommands, submenu, NullToIntOne(cfg.db.GetSubmenuOpenedByAeonCommandID))
 	if err != nil {
 		return nil, err
 	}

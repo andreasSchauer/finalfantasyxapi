@@ -23,6 +23,17 @@ func ConvertNullNullifyArmored(ne database.NullNullifyArmored) *string {
     return &val
 }
 
+func GetNullNullifyArmored(e *database.NullifyArmored) database.NullNullifyArmored {
+    if e == nil {
+        return database.NullNullifyArmored{}
+    }
+
+    return database.NullNullifyArmored{
+        NullifyArmored: *e,
+        Valid:  true,
+    }
+}
+
 
 func NullCreationsUnlockedCategory(s *string) database.NullCreationsUnlockedCategory {
     if s == nil {
@@ -42,6 +53,17 @@ func ConvertNullCreationsUnlockedCategory(ne database.NullCreationsUnlockedCateg
 
     val := string(ne.CreationsUnlockedCategory)
     return &val
+}
+
+func GetNullCreationsUnlockedCategory(e *database.CreationsUnlockedCategory) database.NullCreationsUnlockedCategory {
+    if e == nil {
+        return database.NullCreationsUnlockedCategory{}
+    }
+
+    return database.NullCreationsUnlockedCategory{
+        CreationsUnlockedCategory: *e,
+        Valid:  true,
+    }
 }
 
 
@@ -65,6 +87,17 @@ func ConvertNullEquipType(ne database.NullEquipType) *string {
     return &val
 }
 
+func GetNullEquipType(e *database.EquipType) database.NullEquipType {
+    if e == nil {
+        return database.NullEquipType{}
+    }
+
+    return database.NullEquipType{
+        EquipType: *e,
+        Valid:  true,
+    }
+}
+
 
 func NullAaActivationCondition(s *string) database.NullAaActivationCondition {
     if s == nil {
@@ -84,6 +117,17 @@ func ConvertNullAaActivationCondition(ne database.NullAaActivationCondition) *st
 
     val := string(ne.AaActivationCondition)
     return &val
+}
+
+func GetNullAaActivationCondition(e *database.AaActivationCondition) database.NullAaActivationCondition {
+    if e == nil {
+        return database.NullAaActivationCondition{}
+    }
+
+    return database.NullAaActivationCondition{
+        AaActivationCondition: *e,
+        Valid:  true,
+    }
 }
 
 
@@ -107,6 +151,17 @@ func ConvertNullCounterType(ne database.NullCounterType) *string {
     return &val
 }
 
+func GetNullCounterType(e *database.CounterType) database.NullCounterType {
+    if e == nil {
+        return database.NullCounterType{}
+    }
+
+    return database.NullCounterType{
+        CounterType: *e,
+        Valid:  true,
+    }
+}
+
 
 func NullMaCreationArea(s *string) database.NullMaCreationArea {
     if s == nil {
@@ -126,6 +181,17 @@ func ConvertNullMaCreationArea(ne database.NullMaCreationArea) *string {
 
     val := string(ne.MaCreationArea)
     return &val
+}
+
+func GetNullMaCreationArea(e *database.MaCreationArea) database.NullMaCreationArea {
+    if e == nil {
+        return database.NullMaCreationArea{}
+    }
+
+    return database.NullMaCreationArea{
+        MaCreationArea: *e,
+        Valid:  true,
+    }
 }
 
 
@@ -149,6 +215,17 @@ func ConvertNullMaCreationCategory(ne database.NullMaCreationCategory) *string {
     return &val
 }
 
+func GetNullMaCreationCategory(e *database.MaCreationCategory) database.NullMaCreationCategory {
+    if e == nil {
+        return database.NullMaCreationCategory{}
+    }
+
+    return database.NullMaCreationCategory{
+        MaCreationCategory: *e,
+        Valid:  true,
+    }
+}
+
 
 func NullMaCreationSpecies(s *string) database.NullMaCreationSpecies {
     if s == nil {
@@ -168,6 +245,17 @@ func ConvertNullMaCreationSpecies(ne database.NullMaCreationSpecies) *string {
 
     val := string(ne.MaCreationSpecies)
     return &val
+}
+
+func GetNullMaCreationSpecies(e *database.MaCreationSpecies) database.NullMaCreationSpecies {
+    if e == nil {
+        return database.NullMaCreationSpecies{}
+    }
+
+    return database.NullMaCreationSpecies{
+        MaCreationSpecies: *e,
+        Valid:  true,
+    }
 }
 
 
@@ -191,6 +279,17 @@ func ConvertNullTargetType(ne database.NullTargetType) *string {
     return &val
 }
 
+func GetNullTargetType(e *database.TargetType) database.NullTargetType {
+    if e == nil {
+        return database.NullTargetType{}
+    }
+
+    return database.NullTargetType{
+        TargetType: *e,
+        Valid:  true,
+    }
+}
+
 
 func NullMusicUseCase(s *string) database.NullMusicUseCase {
     if s == nil {
@@ -210,6 +309,17 @@ func ConvertNullMusicUseCase(ne database.NullMusicUseCase) *string {
 
     val := string(ne.MusicUseCase)
     return &val
+}
+
+func GetNullMusicUseCase(e *database.MusicUseCase) database.NullMusicUseCase {
+    if e == nil {
+        return database.NullMusicUseCase{}
+    }
+
+    return database.NullMusicUseCase{
+        MusicUseCase: *e,
+        Valid:  true,
+    }
 }
 
 
@@ -233,6 +343,17 @@ func ConvertNullBgReplacementType(ne database.NullBgReplacementType) *string {
     return &val
 }
 
+func GetNullBgReplacementType(e *database.BgReplacementType) database.NullBgReplacementType {
+    if e == nil {
+        return database.NullBgReplacementType{}
+    }
+
+    return database.NullBgReplacementType{
+        BgReplacementType: *e,
+        Valid:  true,
+    }
+}
+
 
 func NullSpecialActionType(s *string) database.NullSpecialActionType {
     if s == nil {
@@ -252,6 +373,17 @@ func ConvertNullSpecialActionType(ne database.NullSpecialActionType) *string {
 
     val := string(ne.SpecialActionType)
     return &val
+}
+
+func GetNullSpecialActionType(e *database.SpecialActionType) database.NullSpecialActionType {
+    if e == nil {
+        return database.NullSpecialActionType{}
+    }
+
+    return database.NullSpecialActionType{
+        SpecialActionType: *e,
+        Valid:  true,
+    }
 }
 
 
@@ -275,6 +407,17 @@ func ConvertNullCriticalType(ne database.NullCriticalType) *string {
     return &val
 }
 
+func GetNullCriticalType(e *database.CriticalType) database.NullCriticalType {
+    if e == nil {
+        return database.NullCriticalType{}
+    }
+
+    return database.NullCriticalType{
+        CriticalType: *e,
+        Valid:  true,
+    }
+}
+
 
 func NullBreakDmgLmtType(s *string) database.NullBreakDmgLmtType {
     if s == nil {
@@ -294,6 +437,17 @@ func ConvertNullBreakDmgLmtType(ne database.NullBreakDmgLmtType) *string {
 
     val := string(ne.BreakDmgLmtType)
     return &val
+}
+
+func GetNullBreakDmgLmtType(e *database.BreakDmgLmtType) database.NullBreakDmgLmtType {
+    if e == nil {
+        return database.NullBreakDmgLmtType{}
+    }
+
+    return database.NullBreakDmgLmtType{
+        BreakDmgLmtType: *e,
+        Valid:  true,
+    }
 }
 
 
@@ -317,6 +471,17 @@ func ConvertNullComposer(ne database.NullComposer) *string {
     return &val
 }
 
+func GetNullComposer(e *database.Composer) database.NullComposer {
+    if e == nil {
+        return database.NullComposer{}
+    }
+
+    return database.NullComposer{
+        Composer: *e,
+        Valid:  true,
+    }
+}
+
 
 func NullArranger(s *string) database.NullArranger {
     if s == nil {
@@ -336,6 +501,17 @@ func ConvertNullArranger(ne database.NullArranger) *string {
 
     val := string(ne.Arranger)
     return &val
+}
+
+func GetNullArranger(e *database.Arranger) database.NullArranger {
+    if e == nil {
+        return database.NullArranger{}
+    }
+
+    return database.NullArranger{
+        Arranger: *e,
+        Valid:  true,
+    }
 }
 
 
@@ -359,6 +535,17 @@ func ConvertNullShopType(ne database.NullShopType) *string {
     return &val
 }
 
+func GetNullShopType(e *database.ShopType) database.NullShopType {
+    if e == nil {
+        return database.NullShopType{}
+    }
+
+    return database.NullShopType{
+        ShopType: *e,
+        Valid:  true,
+    }
+}
+
 
 func NullAvailabilityType(s *string) database.NullAvailabilityType {
     if s == nil {
@@ -378,6 +565,17 @@ func ConvertNullAvailabilityType(ne database.NullAvailabilityType) *string {
 
     val := string(ne.AvailabilityType)
     return &val
+}
+
+func GetNullAvailabilityType(e *database.AvailabilityType) database.NullAvailabilityType {
+    if e == nil {
+        return database.NullAvailabilityType{}
+    }
+
+    return database.NullAvailabilityType{
+        AvailabilityType: *e,
+        Valid:  true,
+    }
 }
 
 

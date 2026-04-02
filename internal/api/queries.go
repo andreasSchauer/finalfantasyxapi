@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -33,7 +32,7 @@ func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 }
 
 // query uses an id of another resource type to filter resources
-func nameOrIdQuery[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, resourceType string, lookup map[string]G, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
+func nameOrIdQuery[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, resourceType string, lookup map[string]G, dbQuery DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseNameOrIdQuery(r, queryParam, resourceType, lookup)
@@ -55,7 +54,7 @@ func nameOrIdQuery[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 }
 
 // query uses an id of another resource type to filter resources
-func idQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
+func idQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseIDOnlyQuery(r, queryParam, maxID)
@@ -97,7 +96,7 @@ func idQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 }
 
 // query uses a list of ids as database input to filter for resources
-func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery func(context.Context, []int32) ([]int32, error)) ([]A, error) {
+func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryIntList) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	queryIDs, err := parseIdListQueryNoDupes(r, queryParam, maxID)
@@ -162,7 +161,7 @@ func boolQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 }
 
 // db query searches for resources with matching boolean db column value
-func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, bool) ([]int32, error)) ([]A, error) {
+func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryBool) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
@@ -184,7 +183,7 @@ func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, 
 }
 
 // db query accumulates all resources that fulfill a certain condition (mostly if it has resources of a specific type). a false boolean flips these results
-func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context) ([]int32, error)) ([]A, error) {
+func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryNoInput) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
@@ -210,7 +209,7 @@ func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 }
 
 // db query accumulates all resources that fulfill a certain condition (mostly if it has resources of a specific type). a true boolean flips these results
-func boolQuery3[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context) ([]int32, error)) ([]A, error) {
+func boolQuery3[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryNoInput) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
@@ -236,7 +235,7 @@ func boolQuery3[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 }
 
 // query uses an enum type (id or string possible) that needs to be checked for validity and then returns all resources matching that type
-func enumQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery func(context.Context, E) ([]int32, error)) ([]A, error) {
+func enumQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery DbQueryEnum[E]) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	enum, err := parseEnumQuery(r, i.endpoint, queryParam, et)
 	if errors.Is(err, errEmptyQuery) {
@@ -257,27 +256,6 @@ func enumQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg
 	return resources, nil
 }
 
-// like a type query, but with the database expecting a nullEnumType as input
-func nullEnumQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery func(context.Context, N) ([]int32, error)) ([]A, error) {
-	queryParam := i.queryLookup[queryName]
-	enum, err := parseEnumQuery(r, i.endpoint, queryParam, et)
-	if errors.Is(err, errEmptyQuery) {
-		return inputRes, nil
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	typedStr := et.nullConvFunc(&enum.Name)
-
-	dbIDs, err := dbQuery(r.Context(), typedStr)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
-	}
-
-	resources := idsToAPIResources(cfg, i, dbIDs)
-	return resources, nil
-}
 
 // like type query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
 func enumQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, E) ([]int32, error)) ([]A, error) {
@@ -325,7 +303,7 @@ func intQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Co
 }
 
 // query uses an integer value as input.
-func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, int32) ([]int32, error)) ([]A, error) {
+func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	integer, err := parseIntQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
@@ -346,7 +324,7 @@ func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r
 }
 
 // query uses an domain integer value as input. those are converted to any by sqlc. dbQuery input is any, parseIntQuery evaluates, whether the given value really is an int, so there's no type-safety concerns.
-func intQueryAny[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery func(context.Context, any) ([]int32, error)) ([]A, error) {
+func intQueryAny[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryAny) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	integer, err := parseIntQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {

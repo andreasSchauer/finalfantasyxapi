@@ -63,7 +63,7 @@ func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Abi
 		frl(enumQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetAbilityIDsByAttackType)),
 		frl(enumQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetAbilityIDsByTargetType)),
 		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetAbilityIDsByDamageFormula)),
-		frl(intQuery(cfg, r, i, resources, "rank", queryMany(cfg.db.GetAbilityIDsByRank))),
+		frl(intQuery(cfg, r, i, resources, "rank", NullToIntMany(cfg.db.GetAbilityIDsByRank))),
 		frl(nameOrIdQuery(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetAbilityIDsByElement)),
 		frl(idQueryWrapper(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getAbilitiesInflictedStatus)),
 		frl(idQuery(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), cfg.db.GetAbilityIDsByRemovedStatus)),

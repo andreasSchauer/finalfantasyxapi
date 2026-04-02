@@ -11,7 +11,7 @@ func getAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]Type
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
 
 	if status.Name == "delay" {
-		return getResourcesDbID(cfg, r, i, 0, cfg.e.statusConditions.resourceType, queryNoInput(cfg.db.GetAbilityIDsDealsDelay))
+		return getResourcesDbID(cfg, r, i, 0, cfg.e.statusConditions.resourceType, NoInputToIntMany(cfg.db.GetAbilityIDsDealsDelay))
 	}
 
 	return getResourcesDbItem(cfg, r, i, status, cfg.db.GetAbilityIDsByInflictedStatus)
@@ -22,7 +22,7 @@ func getPlayerAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) (
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
 
 	if status.Name == "delay" {
-		return getResourcesDbID(cfg, r, i, 0, cfg.e.statusConditions.resourceType, queryNoInput(cfg.db.GetPlayerAbilityIDsDealsDelay))
+		return getResourcesDbID(cfg, r, i, 0, cfg.e.statusConditions.resourceType, NoInputToIntMany(cfg.db.GetPlayerAbilityIDsDealsDelay))
 	}
 
 	return getResourcesDbItem(cfg, r, i, status, cfg.db.GetPlayerAbilityIDsByInflictedStatus)
@@ -33,7 +33,7 @@ func getEnemyAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
 
 	if status.Name == "delay" {
-		return getResourcesDbID(cfg, r, i, 0, cfg.e.statusConditions.resourceType, queryNoInput(cfg.db.GetEnemyAbilityIDsDealsDelay))
+		return getResourcesDbID(cfg, r, i, 0, cfg.e.statusConditions.resourceType, NoInputToIntMany(cfg.db.GetEnemyAbilityIDsDealsDelay))
 	}
 
 	return getResourcesDbItem(cfg, r, i, status, cfg.db.GetEnemyAbilityIDsByInflictedStatus)
@@ -44,7 +44,7 @@ func getItemAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32) ([]
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
 
 	if status.Name == "delay" {
-		return getResourcesDbID(cfg, r, i, 0, cfg.e.statusConditions.resourceType, queryNoInput(cfg.db.GetItemAbilityIDsDealsDelay))
+		return getResourcesDbID(cfg, r, i, 0, cfg.e.statusConditions.resourceType, NoInputToIntMany(cfg.db.GetItemAbilityIDsDealsDelay))
 	}
 
 	return getResourcesDbItem(cfg, r, i, status, cfg.db.GetItemAbilityIDsByInflictedStatus)
@@ -55,7 +55,7 @@ func getOverdriveAbilitiesInflictedStatus(cfg *Config, r *http.Request, id int32
 	status, _ := seeding.GetResourceByID(id, cfg.l.StatusConditionsID)
 
 	if status.Name == "delay" {
-		return getResourcesDbID(cfg, r, i, 0, cfg.e.statusConditions.resourceType, queryNoInput(cfg.db.GetOverdriveAbilityIDsDealsDelay))
+		return getResourcesDbID(cfg, r, i, 0, cfg.e.statusConditions.resourceType, NoInputToIntMany(cfg.db.GetOverdriveAbilityIDsDealsDelay))
 	}
 
 	return getResourcesDbItem(cfg, r, i, status, cfg.db.GetOverdriveAbilityIDsByInflictedStatus)

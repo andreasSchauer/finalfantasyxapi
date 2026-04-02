@@ -47,7 +47,7 @@ func (cfg *Config) retrieveOverdriveAbilities(r *http.Request, i handlerInput[se
 		frl(enumQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetOverdriveAbilityIDsByAttackType)),
 		frl(enumQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetOverdriveAbilityIDsByTargetType)),
 		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetOverdriveAbilityIDsByDamageFormula)),
-		frl(intQuery(cfg, r, i, resources, "rank", queryMany(cfg.db.GetOverdriveAbilityIDsByRank))),
+		frl(intQuery(cfg, r, i, resources, "rank", NullToIntMany(cfg.db.GetOverdriveAbilityIDsByRank))),
 		frl(nameOrIdQuery(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetOverdriveAbilityIDsByElement)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetOverdriveAbilityIDsByCharClass)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetOverdriveAbilityIDsByRelatedStat)),

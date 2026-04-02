@@ -5,63 +5,63 @@ import (
 )
 
 type endpoints struct {
-	locations            	 handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
-	sublocations         	 handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
-	areas                	 handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
+	locations    handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
+	sublocations handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
+	areas        handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
 
-	monsterFormations    	 handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
-	shops                	 handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
-	treasures           	 handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
-	quests           		 handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]
-	sidequests           	 handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]
-	subquests            	 handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]
-	arenaCreations       	 handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
-	blitzballPrizes      	 handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]
-	songs                	 handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
-	fmvs                 	 handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
+	monsterFormations handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
+	shops             handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
+	treasures         handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
+	quests            handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]
+	sidequests        handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]
+	subquests         handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]
+	arenaCreations    handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
+	blitzballPrizes   handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]
+	songs             handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
+	fmvs              handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
 
-	playerUnits			 	 handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]
-	characters           	 handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]
-	aeons                	 handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]
-	characterClasses     	 handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]
-	monsters             	 handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
-	
-	abilities            	 handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]
-	playerAbilities      	 handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
-	overdriveAbilities   	 handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]
-	itemAbilities        	 handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]
-	triggerCommands      	 handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]
-	unspecifiedAbilities 	 handlerInput[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList]
-	enemyAbilities       	 handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
+	playerUnits      handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]
+	characters       handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]
+	aeons            handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]
+	characterClasses handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]
+	monsters         handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
 
-	aeonCommands         	 handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]
-	overdriveCommands    	 handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]
-	overdrives           	 handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]
-	ronsoRages           	 handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]
-	submenus             	 handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]
-	topmenus             	 handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]
-	
-	masterItems			 	 handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]
-	items                	 handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
-	keyItems             	 handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]
-	mixes             	 	handlerInput[seeding.Mix, any, NamedAPIResource, NamedApiResourceList]
-	
-	autoAbilities        	 handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
-	equipment            	 handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
-	celestialWeapons     	 handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]
-	
-	stats                	 handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
-	properties          	 handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]
-	overdriveModes      	 handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
-	elements            	 handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
-	affinities           	 handlerInput[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList]
-	statusConditions       	 handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
-	modifiers            	 handlerInput[seeding.Modifier, any, NamedAPIResource, NamedApiResourceList]
+	abilities            handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]
+	playerAbilities      handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
+	overdriveAbilities   handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]
+	itemAbilities        handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]
+	triggerCommands      handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]
+	unspecifiedAbilities handlerInput[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList]
+	enemyAbilities       handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
 
-	abilityType              handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	unitType              	 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	itemType              	 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	questType              	 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	aeonCommands      handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]
+	overdriveCommands handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]
+	overdrives        handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]
+	ronsoRages        handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]
+	submenus          handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]
+	topmenus          handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]
+
+	masterItems handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]
+	items       handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
+	keyItems    handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]
+	mixes       handlerInput[seeding.Mix, any, NamedAPIResource, NamedApiResourceList]
+
+	autoAbilities    handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
+	equipment        handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
+	celestialWeapons handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]
+
+	stats            handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
+	properties       handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]
+	overdriveModes   handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
+	elements         handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
+	affinities       handlerInput[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList]
+	statusConditions handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
+	modifiers        handlerInput[seeding.Modifier, any, NamedAPIResource, NamedApiResourceList]
+
+	abilityType handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	unitType    handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	itemType    handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	questType   handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 
 	attackType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	availabilityType         handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
@@ -213,8 +213,6 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-
-
 	e.monsterFormations = handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      "monster-formations",
 		resourceType:  "monster formation",
@@ -365,8 +363,6 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveFMVs,
 	}
 
-
-
 	e.playerUnits = handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]{
 		endpoint:      "player-units",
 		resourceType:  "player unit",
@@ -379,7 +375,7 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc: cfg.getPlayerUnit,
 		retrieveFunc:  cfg.retrievePlayerUnits,
 	}
-	
+
 	e.characters = handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "characters",
 		resourceType:  "character",
@@ -506,8 +502,6 @@ func (cfg *Config) EndpointsInit() {
 			},
 		},
 	}
-
-
 
 	e.abilities = handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]{
 		endpoint:      "abilities",
@@ -648,8 +642,6 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-
-
 	e.aeonCommands = handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "aeon-commands",
 		resourceType:  "aeon command",
@@ -740,7 +732,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveSubmenus,
 		subsections: map[string]SubSectionFns{
 			"abilities": {
-				dbQuery:     queryMany(cfg.db.GetSubmenuAbilityIDs),
+				dbQuery:     NullToIntMany(cfg.db.GetSubmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
 			},
 		},
@@ -759,13 +751,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveTopmenus,
 		subsections: map[string]SubSectionFns{
 			"abilities": {
-				dbQuery:     queryMany(cfg.db.GetTopmenuAbilityIDs),
+				dbQuery:     NullToIntMany(cfg.db.GetTopmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
 			},
 		},
 	}
-
-
 
 	e.masterItems = handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]{
 		endpoint:      "master-items",
@@ -811,8 +801,6 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-
-
 	e.autoAbilities = handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "auto-abilities",
 		resourceType:  "auto ability",
@@ -839,8 +827,6 @@ func (cfg *Config) EndpointsInit() {
 		idToResFunc:   idToNamedAPIResource[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
-
-	
 
 	e.stats = handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "stats",
@@ -909,8 +895,6 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-
-
 	e.abilityType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "ability-type",
 		resourceType:  "ability type",
@@ -938,8 +922,6 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:     cfg.t.QuestType.lookup,
 		resToListFunc: newEnumAPIResourceList,
 	}
-
-
 
 	e.attackType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
 		endpoint:      "attack-type",
@@ -1017,8 +999,6 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:     cfg.t.ShopCategory.lookup,
 		resToListFunc: newEnumAPIResourceList,
 	}
-
-
 
 	cfg.e = &e
 }

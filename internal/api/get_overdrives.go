@@ -39,7 +39,7 @@ func (cfg *Config) retrieveOverdrives(r *http.Request, i handlerInput[seeding.Ov
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(intQuery(cfg, r, i, resources, "rank", queryMany(cfg.db.GetOverdriveIDsByRank))),
+		frl(intQuery(cfg, r, i, resources, "rank", NullToIntMany(cfg.db.GetOverdriveIDsByRank))),
 		frl(nameOrIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetOverdriveIDsByUser)),
 	})
 }

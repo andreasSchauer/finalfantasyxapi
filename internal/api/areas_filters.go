@@ -50,6 +50,7 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, 
 	return resources, nil
 }
 
+// I would do method lists like this, but append based on a for loop with the vals and a switch
 func getAreasByItemAllMethods(cfg *Config, r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], id int32, resourceType string) ([]AreaAPIResource, error) {
 	filteredLists := []filteredResList[AreaAPIResource]{
 		frl(getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetAreaIDsWithItemFromMonster)),

@@ -68,24 +68,17 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 // can generalize these functions pretty easliy, if needed
 
 func getBoolPtr(r *http.Request, queryName string, queryLookup map[string]QueryType) (*bool, error) {
-	var boolPtr *bool
 	queryParam := queryLookup[queryName]
-	var paramIsEmpty bool
 
 	b, err := parseBooleanQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
+		return nil, nil
+	}
 	if err != nil {
-		if errors.Is(err, errEmptyQuery) {
-			paramIsEmpty = true
-		} else {
-			return nil, err
-		}
+		return nil, err
 	}
 
-	if !paramIsEmpty {
-		boolPtr = &b
-	}
-
-	return boolPtr, nil
+	return &b, nil
 }
 
 func getSlotsPtr(r *http.Request, queryLookup map[string]QueryType) (*int32, error) {

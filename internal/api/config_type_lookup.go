@@ -14,7 +14,7 @@ type TypeLookup struct {
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
-	AvailabilityType			EnumType[database.AvailabilityType, any]
+	AvailabilityType            EnumType[database.AvailabilityType, any]
 	BlitzballTournamentCategory EnumType[database.BlitzballTournamentCategory, any]
 	CharacterClassCategory      EnumType[database.CharacterClassCategory, any]
 	Composer                    EnumType[database.Composer, database.NullComposer]
@@ -51,7 +51,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initUnitType()
 	cfg.t.initItemType()
 	cfg.t.initQuestType()
-	
+
 	cfg.t.initAreaConnectionType()
 	cfg.t.initArenaCreationCategory()
 	cfg.t.initArranger()
@@ -86,21 +86,23 @@ func (cfg *Config) TypeLookupInit() {
 }
 
 // replace Typed logic and lookup with this struct
-type EnumType[T, N any] struct {
+type EnumType[E, N any] struct {
 	name         string
 	isEndpoint   bool
 	lookup       map[string]EnumAPIResource
-	convFunc     func(string) T
+	convFunc     func(string) E
 	nullConvFunc func(*string) N
+	getNullEnum  func(*E) N
 }
 
-func newEnumType[T, N any](name string, isEndpoint bool, typeSlice []EnumAPIResource, convFunc func(string) T, nullConvFunc func(*string) N) EnumType[T, N] {
-	return EnumType[T, N]{
+func newEnumType[E, N any](name string, isEndpoint bool, typeSlice []EnumAPIResource, convFunc func(string) E, nullConvFunc func(*string) N, getNullEnum func(*E) N) EnumType[E, N] {
+	return EnumType[E, N]{
 		name:         name,
 		isEndpoint:   isEndpoint,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     convFunc,
 		nullConvFunc: nullConvFunc,
+		getNullEnum:  getNullEnum,
 	}
 }
 
@@ -134,7 +136,7 @@ func (t *TypeLookup) initAbilityType() {
 
 	t.AbilityType = newEnumType[database.AbilityType, any]("ability type", true, typeSlice, func(s string) database.AbilityType {
 		return database.AbilityType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initUnitType() {
@@ -151,7 +153,7 @@ func (t *TypeLookup) initUnitType() {
 
 	t.UnitType = newEnumType[database.UnitType, any]("unit type", true, typeSlice, func(s string) database.UnitType {
 		return database.UnitType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initItemType() {
@@ -168,7 +170,7 @@ func (t *TypeLookup) initItemType() {
 
 	t.ItemType = newEnumType[database.ItemType, any]("item type", true, typeSlice, func(s string) database.ItemType {
 		return database.ItemType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initQuestType() {
@@ -185,7 +187,7 @@ func (t *TypeLookup) initQuestType() {
 
 	t.QuestType = newEnumType[database.QuestType, any]("quest type", true, typeSlice, func(s string) database.QuestType {
 		return database.QuestType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initAreaConnectionType() {
@@ -206,7 +208,7 @@ func (t *TypeLookup) initAreaConnectionType() {
 
 	t.AreaConnectionType = newEnumType[database.AreaConnectionType, any]("area connection type", false, typeSlice, func(s string) database.AreaConnectionType {
 		return database.AreaConnectionType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initArenaCreationCategory() {
@@ -224,7 +226,7 @@ func (t *TypeLookup) initArenaCreationCategory() {
 
 	t.ArenaCreationCategory = newEnumType("arena creation category", false, typeSlice, func(s string) database.MaCreationCategory {
 		return database.MaCreationCategory(s)
-	}, h.NullMaCreationCategory)
+	}, h.NullMaCreationCategory, h.GetNullMaCreationCategory)
 }
 
 func (t *TypeLookup) initArranger() {
@@ -245,7 +247,7 @@ func (t *TypeLookup) initArranger() {
 
 	t.Arranger = newEnumType("arranger", false, typeSlice, func(s string) database.Arranger {
 		return database.Arranger(s)
-	}, h.NullArranger)
+	}, h.NullArranger, h.GetNullArranger)
 }
 
 func (t *TypeLookup) initAvailabilityType() {
@@ -270,7 +272,7 @@ func (t *TypeLookup) initAvailabilityType() {
 
 	t.AvailabilityType = newEnumType[database.AvailabilityType, any]("availability type", true, typeSlice, func(s string) database.AvailabilityType {
 		return database.AvailabilityType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initBlitzballTournamentCategory() {
@@ -285,7 +287,7 @@ func (t *TypeLookup) initBlitzballTournamentCategory() {
 
 	t.BlitzballTournamentCategory = newEnumType[database.BlitzballTournamentCategory, any]("blitzball tournament category", false, typeSlice, func(s string) database.BlitzballTournamentCategory {
 		return database.BlitzballTournamentCategory(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initCharacterClassCategory() {
@@ -303,7 +305,7 @@ func (t *TypeLookup) initCharacterClassCategory() {
 
 	t.CharacterClassCategory = newEnumType[database.CharacterClassCategory, any]("character class category", false, typeSlice, func(s string) database.CharacterClassCategory {
 		return database.CharacterClassCategory(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initComposer() {
@@ -321,7 +323,7 @@ func (t *TypeLookup) initComposer() {
 
 	t.Composer = newEnumType("composer", false, typeSlice, func(s string) database.Composer {
 		return database.Composer(s)
-	}, h.NullComposer)
+	}, h.NullComposer, h.GetNullComposer)
 }
 
 func (t *TypeLookup) initCTBIconType() {
@@ -350,7 +352,7 @@ func (t *TypeLookup) initCTBIconType() {
 
 	t.CTBIconType = newEnumType[database.CtbIconType, any]("ctb icon type", false, typeSlice, func(s string) database.CtbIconType {
 		return database.CtbIconType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initCreationArea() {
@@ -398,7 +400,7 @@ func (t *TypeLookup) initCreationArea() {
 
 	t.CreationArea = newEnumType("creation area", false, typeSlice, func(s string) database.MaCreationArea {
 		return database.MaCreationArea(s)
-	}, h.NullMaCreationArea)
+	}, h.NullMaCreationArea, h.GetNullMaCreationArea)
 }
 
 func (t *TypeLookup) initItemCategory() {
@@ -431,7 +433,7 @@ func (t *TypeLookup) initItemCategory() {
 
 	t.ItemCategory = newEnumType[database.ItemCategory, any]("item category", true, typeSlice, func(s string) database.ItemCategory {
 		return database.ItemCategory(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initLootType() {
@@ -450,7 +452,7 @@ func (t *TypeLookup) initLootType() {
 
 	t.LootType = newEnumType[database.LootType, any]("loot type", true, typeSlice, func(s string) database.LootType {
 		return database.LootType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initMonsterFormationCategory() {
@@ -483,7 +485,7 @@ func (t *TypeLookup) initMonsterFormationCategory() {
 
 	t.MonsterFormationCategory = newEnumType[database.MonsterFormationCategory, any]("monster formation category", true, typeSlice, func(s string) database.MonsterFormationCategory {
 		return database.MonsterFormationCategory(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initMonsterSpecies() {
@@ -660,7 +662,7 @@ func (t *TypeLookup) initMonsterSpecies() {
 
 	t.MonsterSpecies = newEnumType[database.MonsterSpecies, any]("monster species", true, typeSlice, func(s string) database.MonsterSpecies {
 		return database.MonsterSpecies(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initMonsterCategory() {
@@ -678,7 +680,7 @@ func (t *TypeLookup) initMonsterCategory() {
 
 	t.MonsterCategory = newEnumType[database.MonsterCategory, any]("monster category", true, typeSlice, func(s string) database.MonsterCategory {
 		return database.MonsterCategory(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initOverdriveModeType() {
@@ -695,7 +697,7 @@ func (t *TypeLookup) initOverdriveModeType() {
 
 	t.OverdriveModeType = newEnumType[database.OverdriveModeType, any]("overdrive mode type", false, typeSlice, func(s string) database.OverdriveModeType {
 		return database.OverdriveModeType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initPlayerAbilityCategory() {
@@ -719,7 +721,7 @@ func (t *TypeLookup) initPlayerAbilityCategory() {
 
 	t.PlayerAbilityCategory = newEnumType[database.PlayerAbilityCategory, any]("player ability category", true, typeSlice, func(s string) database.PlayerAbilityCategory {
 		return database.PlayerAbilityCategory(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initShopCategory() {
@@ -740,7 +742,7 @@ func (t *TypeLookup) initShopCategory() {
 
 	t.ShopCategory = newEnumType[database.ShopCategory, any]("shop category", true, typeSlice, func(s string) database.ShopCategory {
 		return database.ShopCategory(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initShopType() {
@@ -755,7 +757,7 @@ func (t *TypeLookup) initShopType() {
 
 	t.ShopType = newEnumType("shop type", false, typeSlice, func(s string) database.ShopType {
 		return database.ShopType(s)
-	}, h.NullShopType)
+	}, h.NullShopType, h.GetNullShopType)
 }
 
 func (t *TypeLookup) initTreasureType() {
@@ -776,7 +778,7 @@ func (t *TypeLookup) initTreasureType() {
 
 	t.TreasureType = newEnumType[database.TreasureType, any]("treasure type", false, typeSlice, func(s string) database.TreasureType {
 		return database.TreasureType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initAccSourceType() {
@@ -793,7 +795,7 @@ func (t *TypeLookup) initAccSourceType() {
 
 	t.AccSourceType = newEnumType[database.AccSourceType, any]("accuracy source type", false, typeSlice, func(s string) database.AccSourceType {
 		return database.AccSourceType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initAttackType() {
@@ -811,7 +813,7 @@ func (t *TypeLookup) initAttackType() {
 
 	t.AttackType = newEnumType[database.AttackType, any]("attack type", true, typeSlice, func(s string) database.AttackType {
 		return database.AttackType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initBreakDmgLimitType() {
@@ -828,7 +830,7 @@ func (t *TypeLookup) initBreakDmgLimitType() {
 
 	t.BreakDmgLimitType = newEnumType("break damage limit type", false, typeSlice, func(s string) database.BreakDmgLmtType {
 		return database.BreakDmgLmtType(s)
-	}, h.NullBreakDmgLmtType)
+	}, h.NullBreakDmgLmtType, h.GetNullBreakDmgLmtType)
 }
 
 func (t *TypeLookup) initCalculationType() {
@@ -857,7 +859,7 @@ func (t *TypeLookup) initCalculationType() {
 
 	t.CalculationType = newEnumType[database.CalculationType, any]("calculation type", false, typeSlice, func(s string) database.CalculationType {
 		return database.CalculationType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initCriticalType() {
@@ -878,7 +880,7 @@ func (t *TypeLookup) initCriticalType() {
 
 	t.CriticalType = newEnumType("critical type", false, typeSlice, func(s string) database.CriticalType {
 		return database.CriticalType(s)
-	}, h.NullCriticalType)
+	}, h.NullCriticalType, h.GetNullCriticalType)
 }
 
 func (t *TypeLookup) initCtbAttackType() {
@@ -893,7 +895,7 @@ func (t *TypeLookup) initCtbAttackType() {
 
 	t.CtbAttackType = newEnumType[database.CtbAttackType, any]("ctb attack type", false, typeSlice, func(s string) database.CtbAttackType {
 		return database.CtbAttackType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initDamageFormula() {
@@ -970,7 +972,7 @@ func (t *TypeLookup) initDamageFormula() {
 
 	t.DamageFormula = newEnumType[database.DamageFormula, any]("damage formula", true, typeSlice, func(s string) database.DamageFormula {
 		return database.DamageFormula(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initDamageType() {
@@ -991,7 +993,7 @@ func (t *TypeLookup) initDamageType() {
 
 	t.DamageType = newEnumType[database.DamageType, any]("damage type", true, typeSlice, func(s string) database.DamageType {
 		return database.DamageType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initDelayType() {
@@ -1008,7 +1010,7 @@ func (t *TypeLookup) initDelayType() {
 
 	t.DelayType = newEnumType[database.DelayType, any]("delay type", false, typeSlice, func(s string) database.DelayType {
 		return database.DelayType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initDurationType() {
@@ -1041,7 +1043,7 @@ func (t *TypeLookup) initDurationType() {
 
 	t.DurationType = newEnumType[database.DurationType, any]("duration type", false, typeSlice, func(s string) database.DurationType {
 		return database.DurationType(s)
-	}, nil)
+	}, nil, nil)
 }
 
 func (t *TypeLookup) initTargetType() {
@@ -1094,5 +1096,5 @@ func (t *TypeLookup) initTargetType() {
 
 	t.TargetType = newEnumType("target type", false, typeSlice, func(s string) database.TargetType {
 		return database.TargetType(s)
-	}, h.NullTargetType)
+	}, h.NullTargetType, h.GetNullTargetType)
 }

@@ -36,7 +36,8 @@ func main() {
     for _, enumType := range nullEnumTypes {
         nullEnumFuncName := "Null" + enumType
         convertFuncName := "Convert" + nullEnumFuncName
-        output.WriteString(fmt.Sprintf(`func %s(s *string) database.Null%s {
+        getNullEnumFuncName := "Get" + nullEnumFuncName
+        fmt.Fprintf(&output, `func %s(s *string) database.Null%s {
     if s == nil {
         return database.Null%s{}
     }
@@ -56,8 +57,19 @@ func %s(ne database.Null%s) *string {
     return &val
 }
 
+func %s(e *database.%s) database.Null%s {
+    if e == nil {
+        return database.Null%s{}
+    }
 
-`, nullEnumFuncName, enumType, enumType, enumType, enumType, enumType, convertFuncName, enumType, enumType))
+    return database.Null%s{
+        %s: *e,
+        Valid:  true,
+    }
+}
+
+
+`, nullEnumFuncName, enumType, enumType, enumType, enumType, enumType, convertFuncName, enumType, enumType, getNullEnumFuncName, enumType, enumType, enumType, enumType, enumType)
     }
 
     os.WriteFile(filePath, []byte(output.String()), 0644)
