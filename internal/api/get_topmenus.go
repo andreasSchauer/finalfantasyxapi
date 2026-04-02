@@ -32,7 +32,7 @@ func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, T
 		return Topmenu{}, err
 	}
 
-	abilities, err := getResourcesDbItem(cfg, r, cfg.e.abilities, topmenu, NullToIntMany(cfg.db.GetTopmenuAbilityIDs))
+	abilities, err := getResourcesDbItem(cfg, r, cfg.e.abilities, topmenu, ToIntManyNull(cfg.db.GetTopmenuAbilityIDs))
 	if err != nil {
 		return Topmenu{}, err
 	}

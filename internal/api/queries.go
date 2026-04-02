@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -21,15 +20,26 @@ func frl[T HasAPIResource](res []T, err error) filteredResList[T] {
 }
 
 // a query filter that can't really be generalized. this one simply checks, if it's empty and then calls the wrapperFn
-func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, string, QueryType) ([]A, error)) ([]A, error) {
+func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, string, QueryType) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return inputRes, nil
 	}
 
-	return wrapperFn(cfg, r, query, queryParam)
+	dbIDs, err := wrapperFn(cfg, r, query, queryParam)
+	if errors.Is(err, errQueryRedirect) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+	return resources, nil
 }
+
+// 1, 2, 9, 21, 22, 23, 25
 
 // query uses an id of another resource type to filter resources
 func nameOrIdQuery[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, resourceType string, lookup map[string]G, dbQuery DbQueryIntMany) ([]A, error) {
@@ -45,7 +55,7 @@ func nameOrIdQuery[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 
 	dbIDs, err := dbQuery(r.Context(), id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -67,7 +77,7 @@ func idQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r 
 
 	dbIDs, err := dbQuery(r.Context(), id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -109,7 +119,7 @@ func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 
 	dbIDs, err := dbQuery(r.Context(), queryIDs)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by auto-ability.", err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -152,7 +162,7 @@ func boolQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 
 	dbIDs, err := wrapperFn(cfg, r, b)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -174,7 +184,7 @@ func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, 
 
 	dbIDs, err := dbQuery(r.Context(), b)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -196,7 +206,7 @@ func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 
 	dbIDs, err := dbQuery(r.Context())
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -222,7 +232,7 @@ func boolQuery3[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 
 	dbIDs, err := dbQuery(r.Context())
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -249,15 +259,14 @@ func enumQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg
 
 	dbIDs, err := dbQuery(r.Context(), typedStr)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
 	return resources, nil
 }
 
-
-// like type query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
+// like enum query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
 func enumQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, E) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	enum, err := parseEnumQuery(r, i.endpoint, queryParam, et)
@@ -279,6 +288,27 @@ func enumQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N a
 }
 
 // query uses an integer value as input.
+func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryIntMany) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+	integer, err := parseIntQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := dbQuery(r.Context(), int32(integer))
+	if err != nil {
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
+}
+
+// query uses an integer value as input.
 func intQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	integer, err := parseIntQuery(r, queryParam)
@@ -294,7 +324,7 @@ func intQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Co
 		return inputRes, nil
 	}
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -302,10 +332,10 @@ func intQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Co
 	return resources, nil
 }
 
-// query uses an integer value as input.
-func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryIntMany) ([]A, error) {
+func intListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryIntList) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
-	integer, err := parseIntQuery(r, queryParam)
+
+	ints, err := parseIntListQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}
@@ -313,30 +343,9 @@ func intQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r
 		return nil, err
 	}
 
-	dbIDs, err := dbQuery(r.Context(), int32(integer))
+	dbIDs, err := dbQuery(r.Context(), ints)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
-	}
-
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	return resources, nil
-}
-
-// query uses an domain integer value as input. those are converted to any by sqlc. dbQuery input is any, parseIntQuery evaluates, whether the given value really is an int, so there's no type-safety concerns.
-func intQueryAny[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryAny) ([]A, error) {
-	queryParam := i.queryLookup[queryName]
-	integer, err := parseIntQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
-		return inputRes, nil
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	dbIDs, err := dbQuery(r.Context(), integer)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", i.resourceType, queryParam.Name), err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)

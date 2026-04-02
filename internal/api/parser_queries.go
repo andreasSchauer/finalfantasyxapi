@@ -101,21 +101,11 @@ func parseEnum[E, N any](val, endpoint string, queryParam QueryType, et EnumType
 func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
 	query := r.URL.Query().Get(queryParam.Name)
 
-	defaultVal, err := checkQueryIntDefaultVal(queryParam, query)
+	val, err := checkQueryInt(queryParam, query)
 	if errors.Is(err, errEmptyQuery) {
 		return 0, errEmptyQuery
 	}
-	if !errors.Is(err, errNoDefaultVal) {
-		return defaultVal, nil
-	}
-
-	specialVal, err := checkQueryIntSpecialVals(queryParam, query)
-	if !errors.Is(err, errNoSpecialInput) {
-		return specialVal, nil
-	}
-
-	val, err := checkQueryIntRange(queryParam, query)
-	if err != nil && !errors.Is(err, errNoIntRange) {
+	if err != nil {
 		return 0, err
 	}
 
@@ -158,6 +148,20 @@ func parseIdListQueryNoDupes(r *http.Request, queryParam QueryType, maxID int) (
 	return ids, nil
 }
 
+func parseIntListQuery(r *http.Request, queryParam QueryType) ([]int32, error) {
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+
+	ints, err := queryIntsToSlice(query, queryParam)
+	if err != nil {
+		return nil, err
+	}
+
+	return ints, nil
+}
+
 func parseResTypeQuery(r *http.Request, queryParam QueryType) (string, string, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
@@ -174,13 +178,4 @@ func parseResTypeQuery(r *http.Request, queryParam QueryType) (string, string, e
 	}
 
 	return resType, unitStr, nil
-}
-
-func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {
-	query := r.URL.Query().Get(queryParam.Name)
-	if query == "" {
-		return "", errEmptyQuery
-	}
-
-	return strings.ToLower(query), nil
 }

@@ -19,26 +19,33 @@ type DbQueryEnumList[E any] func(context.Context, []E) ([]int32, error)
 type DbQueryNullEnum[N any] func(context.Context, N) ([]int32, error)
 type DbQueryAny func(context.Context, any) ([]int32, error)
 
-func NullToIntMany(dbQuery DbQueryNullIntMany) DbQueryIntMany {
+
+func ToIntManyNull(q DbQueryNullIntMany) DbQueryIntMany {
 	return func(ctx context.Context, id int32) ([]int32, error) {
-		return dbQuery(ctx, h.GetNullInt32(&id))
+		return q(ctx, h.GetNullInt32(&id))
 	}
 }
 
-func NoInputToIntMany(dbQuery DbQueryNoInput) DbQueryIntMany {
+func ToIntManyAny(q DbQueryAny) DbQueryIntMany {
+	return func(ctx context.Context, id int32) ([]int32, error) {
+		return q(ctx, id)
+	}
+}
+
+func ToIntManyNoInput(q DbQueryNoInput) DbQueryIntMany {
 	return func(ctx context.Context, _ int32) ([]int32, error) {
-		return dbQuery(ctx)
+		return q(ctx)
 	}
 }
 
-func NullToIntOne(dbQuery DbQueryNullIntOne) DbQueryIntOne {
+func ToIntOneNull(q DbQueryNullIntOne) DbQueryIntOne {
 	return func(ctx context.Context, id int32) (int32, error) {
-		return dbQuery(ctx, h.GetNullInt32(&id))
+		return q(ctx, h.GetNullInt32(&id))
 	}
 }
 
-func NullToEnum[E, N any](et EnumType[E, N], dbQuery DbQueryNullEnum[N]) DbQueryEnum[E] {
+func ToEnumQuery[E, N any](et EnumType[E, N], q DbQueryNullEnum[N]) DbQueryEnum[E] {
 	return func(ctx context.Context, enum E) ([]int32, error) {
-		return dbQuery(ctx, et.getNullEnum(&enum))
+		return q(ctx, et.getNullEnum(&enum))
 	}
 }

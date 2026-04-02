@@ -26,23 +26,21 @@ func getAvailabilityParams[T seeding.LookupableID, R any, A APIResource, L APIRe
 		return AvailabilityParams{}, err
 	}
 
-	repeatable, err := getBoolPtr(r, "repeatable", cfg.e.monsters.queryLookup)
+	repeatable, err := getQueryBoolPtr(r, "repeatable", cfg.e.monsters.queryLookup)
 	if err != nil {
 		return AvailabilityParams{}, err
 	}
 
 	availabilityParams := AvailabilityParams{
-		ParentID:       	item.GetID(),
-		Availability: 	availabilitySlice,
-		Repeatable: 	h.GetNullBool(repeatable),
+		ParentID:     item.GetID(),
+		Availability: availabilitySlice,
+		Repeatable:   h.GetNullBool(repeatable),
 	}
 
 	return availabilityParams, nil
 }
 
-
-
-func runAvailabilityQuery[T, K seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput [T, R, A, L], item K, params AvailabilityParams, dbQuery AvailabilityDbQuery) ([]A, error) {
+func runAvailabilityQuery[T, K seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item K, params AvailabilityParams, dbQuery AvailabilityDbQuery) ([]A, error) {
 	dbIDs, err := dbQuery(r.Context(), params)
 	if err != nil {
 		return nil, newHTTPErrorDB(i.resourceType, item, err)

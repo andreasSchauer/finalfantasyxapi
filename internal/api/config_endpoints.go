@@ -732,7 +732,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveSubmenus,
 		subsections: map[string]SubSectionFns{
 			"abilities": {
-				dbQuery:     NullToIntMany(cfg.db.GetSubmenuAbilityIDs),
+				dbQuery:     ToIntManyNull(cfg.db.GetSubmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
 			},
 		},
@@ -751,7 +751,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveTopmenus,
 		subsections: map[string]SubSectionFns{
 			"abilities": {
-				dbQuery:     NullToIntMany(cfg.db.GetTopmenuAbilityIDs),
+				dbQuery:     ToIntManyNull(cfg.db.GetTopmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
 			},
 		},

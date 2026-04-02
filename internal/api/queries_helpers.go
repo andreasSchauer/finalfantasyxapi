@@ -56,6 +56,35 @@ func queryIDsToSliceNoDupes(query string, queryParam QueryType, maxID int) ([]in
 	return ids, nil
 }
 
+func queryIntsToSlice(query string, queryParam QueryType) ([]int32, error) {
+	intSegments := querySplit(query, ",")
+	ints := []int32{}
+
+	for _, segment := range intSegments {
+		intsNew, err := checkQueryIntRange(queryParam, segment)
+		if err != nil {
+			return nil, err
+		}
+		ints = slices.Concat(ints, intsNew)
+	}
+
+	err := checkDuplicateInts(queryParam, ints)
+	if err != nil {
+		return nil, err
+	}
+
+	return ints, nil
+}
+
+func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {
+	query := r.URL.Query().Get(queryParam.Name)
+	if query == "" {
+		return "", errEmptyQuery
+	}
+
+	return strings.ToLower(query), nil
+}
+
 func checkDuplicateIDs(queryParam QueryType, ids []int32) error {
 	idMap := make(map[int32]bool)
 
@@ -64,6 +93,19 @@ func checkDuplicateIDs(queryParam QueryType, ids []int32) error {
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id '%d' for parameter '%s'. each id can only be used once.", id, queryParam.Name), nil)
 		}
 		idMap[id] = true
+	}
+
+	return nil
+}
+
+func checkDuplicateInts(queryParam QueryType, ints []int32) error {
+	intMap := make(map[int32]bool)
+
+	for _, int := range ints {
+		if intMap[int] {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of value '%d' for parameter '%s'. each value can only be used once.", int, queryParam.Name), nil)
+		}
+		intMap[int] = true
 	}
 
 	return nil

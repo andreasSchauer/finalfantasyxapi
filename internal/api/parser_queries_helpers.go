@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -54,7 +55,29 @@ func checkQueryIDVal(idStr string, queryParam QueryType, maxID int) (int32, erro
 	return int32(id), nil
 }
 
-func checkQueryIntDefaultVal(queryParam QueryType, s string) (int, error) {
+func checkQueryInt(queryParam QueryType, queryVal string) (int, error) {
+	defaultVal, err := checkIntQueryDefaultVal(queryParam, queryVal)
+	if errors.Is(err, errEmptyQuery) {
+		return 0, errEmptyQuery
+	}
+	if !errors.Is(err, errNoDefaultVal) {
+		return defaultVal, nil
+	}
+
+	specialVal, err := checkIntQuerySpecialVals(queryParam, queryVal)
+	if !errors.Is(err, errNoSpecialInput) {
+		return specialVal, nil
+	}
+
+	val, err := checkIntQueryAllowedRange(queryParam, queryVal)
+	if err != nil && !errors.Is(err, errNoIntRange) {
+		return 0, err
+	}
+
+	return val, nil
+}
+
+func checkIntQueryDefaultVal(queryParam QueryType, s string) (int, error) {
 	if queryParam.DefaultVal == nil {
 		if s == "" {
 			return 0, errEmptyQuery
@@ -69,7 +92,7 @@ func checkQueryIntDefaultVal(queryParam QueryType, s string) (int, error) {
 	return 0, errNoDefaultVal
 }
 
-func checkQueryIntSpecialVals(queryParam QueryType, s string) (int, error) {
+func checkIntQuerySpecialVals(queryParam QueryType, s string) (int, error) {
 	if queryParam.SpecialInputs == nil {
 		return 0, errNoSpecialInput
 	}
@@ -83,7 +106,7 @@ func checkQueryIntSpecialVals(queryParam QueryType, s string) (int, error) {
 	return 0, errNoSpecialInput
 }
 
-func checkQueryIntRange(queryParam QueryType, s string) (int, error) {
+func checkIntQueryAllowedRange(queryParam QueryType, s string) (int, error) {
 	val, err := strconv.Atoi(s)
 	if err != nil {
 		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. usage: '%s'.", s, queryParam.Name, queryParam.Usage), err)
@@ -102,4 +125,47 @@ func checkQueryIntRange(queryParam QueryType, s string) (int, error) {
 	}
 
 	return val, nil
+}
+
+func checkQueryIntRange(queryParam QueryType, segment string) ([]int32, error) {
+	intStrs := strings.Split(segment, "-")
+	ints := []int32{}
+
+	switch len(intStrs) {
+	case 0:
+		return nil, nil
+
+	case 1:
+		integer, err := checkQueryInt(queryParam, intStrs[0])
+		if err != nil {
+			return nil, err
+		}
+		ints = append(ints, int32(integer))
+
+	case 2:
+		minInt, err := checkQueryInt(queryParam, intStrs[0])
+		if err != nil {
+			return nil, err
+		}
+
+		maxInt, err := checkQueryInt(queryParam, intStrs[1])
+		if err != nil {
+			return nil, err
+		}
+
+		if minInt > maxInt {
+			temp := minInt
+			minInt = maxInt
+			maxInt = temp
+		}
+
+		for i := minInt; i <= maxInt; i++ {
+			ints = append(ints, int32(i))
+		}
+
+	default:
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, segment, queryParam.Usage), nil)
+	}
+
+	return ints, nil
 }

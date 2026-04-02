@@ -1260,7 +1260,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?underwater=true&type=bOss",
+				requestURL:     "/api/monsters?underwater=true&category=bOss",
 				expectedStatus: http.StatusOK,
 			},
 			count:   6,

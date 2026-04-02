@@ -8,6 +8,8 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/lib/pq"
 )
 
 const getAbilityIDs = `-- name: GetAbilityIDs :many
@@ -380,12 +382,12 @@ const getAbilityIDsByRank = `-- name: GetAbilityIDsByRank :many
 SELECT DISTINCT a.id
 FROM abilities a
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY($1::int[])
 ORDER BY a.id
 `
 
-func (q *Queries) GetAbilityIDsByRank(ctx context.Context, rank sql.NullInt32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsByRank, rank)
+func (q *Queries) GetAbilityIDsByRank(ctx context.Context, rank []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByRank, pq.Array(rank))
 	if err != nil {
 		return nil, err
 	}
@@ -1115,12 +1117,12 @@ SELECT DISTINCT ea.id
 FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY($1::int[])
 ORDER BY ea.id
 `
 
-func (q *Queries) GetEnemyAbilityIDsByRank(ctx context.Context, rank sql.NullInt32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByRank, rank)
+func (q *Queries) GetEnemyAbilityIDsByRank(ctx context.Context, rank []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByRank, pq.Array(rank))
 	if err != nil {
 		return nil, err
 	}
@@ -2120,12 +2122,12 @@ SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY($1::int[])
 ORDER BY oa.id
 `
 
-func (q *Queries) GetOverdriveAbilityIDsByRank(ctx context.Context, rank sql.NullInt32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByRank, rank)
+func (q *Queries) GetOverdriveAbilityIDsByRank(ctx context.Context, rank []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByRank, pq.Array(rank))
 	if err != nil {
 		return nil, err
 	}
@@ -2446,12 +2448,12 @@ const getOverdriveIDsByRank = `-- name: GetOverdriveIDsByRank :many
 SELECT o.id
 FROM overdrives o
 JOIN ability_attributes aa ON o.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY($1::int[])
 ORDER BY o.id
 `
 
-func (q *Queries) GetOverdriveIDsByRank(ctx context.Context, rank sql.NullInt32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getOverdriveIDsByRank, rank)
+func (q *Queries) GetOverdriveIDsByRank(ctx context.Context, rank []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveIDsByRank, pq.Array(rank))
 	if err != nil {
 		return nil, err
 	}
@@ -2936,11 +2938,11 @@ func (q *Queries) GetPlayerAbilityIDsByLearnItem(ctx context.Context, id int32) 
 }
 
 const getPlayerAbilityIDsByMpCost = `-- name: GetPlayerAbilityIDsByMpCost :many
-SELECT id FROM player_abilities WHERE mp_cost = $1 ORDER BY id
+SELECT id FROM player_abilities WHERE mp_cost = ANY($1::int[]) ORDER BY id
 `
 
-func (q *Queries) GetPlayerAbilityIDsByMpCost(ctx context.Context, mpCost int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByMpCost, mpCost)
+func (q *Queries) GetPlayerAbilityIDsByMpCost(ctx context.Context, mpCost []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByMpCost, pq.Array(mpCost))
 	if err != nil {
 		return nil, err
 	}
@@ -3052,12 +3054,12 @@ SELECT DISTINCT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY($1::int[])
 ORDER BY pa.id
 `
 
-func (q *Queries) GetPlayerAbilityIDsByRank(ctx context.Context, rank sql.NullInt32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByRank, rank)
+func (q *Queries) GetPlayerAbilityIDsByRank(ctx context.Context, rank []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByRank, pq.Array(rank))
 	if err != nil {
 		return nil, err
 	}
@@ -3689,12 +3691,12 @@ SELECT DISTINCT tc.id
 FROM trigger_commands tc
 JOIN abilities a ON tc.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY($1::int[])
 ORDER BY tc.id
 `
 
-func (q *Queries) GetTriggerCommandIDsByRank(ctx context.Context, rank sql.NullInt32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTriggerCommandIDsByRank, rank)
+func (q *Queries) GetTriggerCommandIDsByRank(ctx context.Context, rank []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTriggerCommandIDsByRank, pq.Array(rank))
 	if err != nil {
 		return nil, err
 	}
@@ -4221,12 +4223,12 @@ SELECT DISTINCT ua.id
 FROM unspecified_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY($1::int[])
 ORDER BY ua.id
 `
 
-func (q *Queries) GetUnspecifiedAbilityIDsByRank(ctx context.Context, rank sql.NullInt32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsByRank, rank)
+func (q *Queries) GetUnspecifiedAbilityIDsByRank(ctx context.Context, rank []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsByRank, pq.Array(rank))
 	if err != nil {
 		return nil, err
 	}

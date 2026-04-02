@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryParam QueryType) ([]NamedAPIResource, error) {
+func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryParam QueryType) ([]int32, error) {
 	ids, err := getElemResistIDs(cfg, query, queryParam)
 	if err != nil {
 		return nil, err
@@ -22,9 +22,7 @@ func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryP
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by elemental affinities.", err)
 	}
 
-	resources := idsToAPIResources(cfg, cfg.e.monsters, dbIDs)
-
-	return resources, nil
+	return dbIDs, nil
 }
 
 func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32, error) {

@@ -22,9 +22,9 @@ type TypeLookup struct {
 	CTBIconType                 EnumType[database.CtbIconType, any]
 	ItemCategory                EnumType[database.ItemCategory, any]
 	LootType                    EnumType[database.LootType, any]
+	MonsterCategory             EnumType[database.MonsterCategory, any]
 	MonsterFormationCategory    EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies              EnumType[database.MonsterSpecies, any]
-	MonsterCategory             EnumType[database.MonsterCategory, any]
 	OverdriveModeType           EnumType[database.OverdriveModeType, any]
 	PlayerAbilityCategory       EnumType[database.PlayerAbilityCategory, any]
 	ShopCategory                EnumType[database.ShopCategory, any]
@@ -63,9 +63,9 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initCreationArea()
 	cfg.t.initItemCategory()
 	cfg.t.initLootType()
+	cfg.t.initMonsterCategory()
 	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
-	cfg.t.initMonsterCategory()
 	cfg.t.initOverdriveModeType()
 	cfg.t.initPlayerAbilityCategory()
 	cfg.t.initShopCategory()
@@ -471,7 +471,7 @@ func (t *TypeLookup) initMonsterFormationCategory() {
 		},
 		{
 			Name:        string(database.MonsterFormationCategoryStaticEncounter),
-			Description: "A non-boss-encounter that is triggered by interacting with it. This only applies to Lord Ochu in Kilika and the Sandragoras in Bikanel.",
+			Description: "An encounter that is triggered by interacting with the enemy in the overworld. You can flee from these encounters. This only applies to Lord Ochu in Kilika, the Sandragoras in Bikanel and both Dark Ixion fights.",
 		},
 		{
 			Name:        string(database.MonsterFormationCategoryTutorial),

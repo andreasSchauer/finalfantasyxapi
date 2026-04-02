@@ -180,7 +180,7 @@ JOIN monster_equipment_slots asl ON asl.monster_equipment_id = me.id AND asl.typ
 JOIN monster_equipment_slots aa ON aa.monster_equipment_id = me.id AND aa.type = 'attached-abilities'
 JOIN j_monster_equipment_slots_chances j ON j.monster_equipment_id = me.id AND j.equipment_slots_id = aa.id
 JOIN equipment_slots_chances esc ON j.slots_chance_id = esc.id
-WHERE esc.amount = 0 AND (asl.min_amount = $1 OR asl.max_amount = $1)
+WHERE esc.amount = 0 AND (asl.min_amount = ANY(sqlc.arg(slots)::int[]) OR asl.max_amount = ANY(sqlc.arg(slots)::int[]))
 ORDER BY m.id;
 
 
@@ -216,7 +216,7 @@ ORDER BY m.id;
 
 
 -- name: GetMonsterIDsByDistance :many
-SELECT id FROM monsters WHERE distance = $1;
+SELECT id FROM monsters WHERE distance = ANY(sqlc.arg(distances)::int[]);
 
 
 -- name: GetMonsterIDsBySpecies :many

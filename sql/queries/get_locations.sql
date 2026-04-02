@@ -1051,15 +1051,25 @@ SELECT DISTINCT sh.id
 FROM shops sh
 JOIN j_shops_equipment j1 ON j1.shop_id = sh.id
 JOIN shop_equipment_pieces se ON j1.shop_equipment_id = se.id
-LEFT JOIN j_shop_equipment_abilities j2 ON j2.shop_equipment_id = se.id
-LEFT JOIN auto_abilities aa ON j2.auto_ability_id = aa.id
-LEFT JOIN equipment_names en ON se.equipment_name_id = en.id
-LEFT JOIN characters c ON en.character_id = c.id
 WHERE
   (sqlc.narg('shop_type')::shop_type IS NULL OR j1.shop_type = sqlc.narg('shop_type')::shop_type)
-  AND (sqlc.narg('auto_ability_id')::int IS NULL OR aa.id = sqlc.narg('auto_ability_id')::int)
-  AND (sqlc.narg('character_id')::int IS NULL OR c.id = sqlc.narg('character_id')::int)
-  AND (sqlc.narg('empty_slots')::int IS NULL OR se.empty_slots_amount = sqlc.narg('empty_slots')::int)
+
+  AND (sqlc.narg('empty_slots')::int[] IS NULL
+       OR se.empty_slots_amount::int = ANY(sqlc.narg('empty_slots')::int[]))
+
+  AND (sqlc.narg('character_id')::int IS NULL OR EXISTS (
+        SELECT 1
+        FROM equipment_names en
+        WHERE en.id = se.equipment_name_id
+          AND en.character_id = sqlc.narg('character_id')::int
+      ))
+
+  AND (sqlc.narg('auto_ability_id')::int IS NULL OR EXISTS (
+        SELECT 1
+        FROM j_shop_equipment_abilities j2
+        WHERE j2.shop_equipment_id = se.id
+          AND j2.auto_ability_id = sqlc.narg('auto_ability_id')::int
+      ))
 ORDER BY sh.id;
 
 

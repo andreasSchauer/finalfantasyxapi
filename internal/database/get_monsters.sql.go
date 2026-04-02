@@ -664,11 +664,11 @@ func (q *Queries) GetMonsterIDsByCategory(ctx context.Context, category MonsterC
 }
 
 const getMonsterIDsByDistance = `-- name: GetMonsterIDsByDistance :many
-SELECT id FROM monsters WHERE distance = $1
+SELECT id FROM monsters WHERE distance = ANY($1::int[])
 `
 
-func (q *Queries) GetMonsterIDsByDistance(ctx context.Context, distance interface{}) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByDistance, distance)
+func (q *Queries) GetMonsterIDsByDistance(ctx context.Context, distances []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByDistance, pq.Array(distances))
 	if err != nil {
 		return nil, err
 	}
@@ -732,12 +732,12 @@ JOIN monster_equipment_slots asl ON asl.monster_equipment_id = me.id AND asl.typ
 JOIN monster_equipment_slots aa ON aa.monster_equipment_id = me.id AND aa.type = 'attached-abilities'
 JOIN j_monster_equipment_slots_chances j ON j.monster_equipment_id = me.id AND j.equipment_slots_id = aa.id
 JOIN equipment_slots_chances esc ON j.slots_chance_id = esc.id
-WHERE esc.amount = 0 AND (asl.min_amount = $1 OR asl.max_amount = $1)
+WHERE esc.amount = 0 AND (asl.min_amount = ANY($1::int[]) OR asl.max_amount = ANY($1::int[]))
 ORDER BY m.id
 `
 
-func (q *Queries) GetMonsterIDsByEmptySlots(ctx context.Context, minAmount interface{}) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByEmptySlots, minAmount)
+func (q *Queries) GetMonsterIDsByEmptySlots(ctx context.Context, slots []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByEmptySlots, pq.Array(slots))
 	if err != nil {
 		return nil, err
 	}

@@ -30,7 +30,7 @@ SELECT id FROM abilities WHERE type = $1 ORDER BY id;
 SELECT DISTINCT a.id
 FROM abilities a
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY(sqlc.arg(rank)::int[])
 ORDER BY a.id;
 
 
@@ -270,7 +270,7 @@ SELECT DISTINCT ea.id
 FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY(sqlc.arg(rank)::int[])
 ORDER BY ea.id;
 
 
@@ -618,7 +618,7 @@ SELECT DISTINCT ua.id
 FROM unspecified_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY(sqlc.arg(rank)::int[])
 ORDER BY ua.id;
 
 
@@ -795,7 +795,7 @@ SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY(sqlc.arg(rank)::int[])
 ORDER BY oa.id;
 
 
@@ -951,7 +951,7 @@ SELECT id FROM player_abilities WHERE category = $1 ORDER BY id;
 
 
 -- name: GetPlayerAbilityIDsByMpCost :many
-SELECT id FROM player_abilities WHERE mp_cost = $1 ORDER BY id;
+SELECT id FROM player_abilities WHERE mp_cost = ANY(sqlc.arg(mp_cost)::int[]) ORDER BY id;
 
 
 -- name: GetPlayerAbilityIDsByMpCostMin :many
@@ -1007,7 +1007,7 @@ SELECT DISTINCT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY(sqlc.arg(rank)::int[])
 ORDER BY pa.id;
 
 
@@ -1256,7 +1256,7 @@ SELECT DISTINCT tc.id
 FROM trigger_commands tc
 JOIN abilities a ON tc.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY(sqlc.arg(rank)::int[])
 ORDER BY tc.id;
 
 
@@ -1313,7 +1313,7 @@ SELECT id FROM overdrives ORDER BY id;
 SELECT o.id
 FROM overdrives o
 JOIN ability_attributes aa ON o.attributes_id = aa.id
-WHERE aa.rank = $1
+WHERE aa.rank = ANY(sqlc.arg(rank)::int[])
 ORDER BY o.id;
 
 

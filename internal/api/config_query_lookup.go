@@ -1340,15 +1340,15 @@ func (cfg *Config) initMonstersParams() {
 			ForSingle:   false,
 			TypeLookup:  cfg.t.CreationArea.lookup,
 		},
-		"type": {
+		"category": {
 			ID:          27,
-			Description: "Searches for monsters that are of the specified monster-type.",
-			Usage:       "?type={name|id}",
-			ExampleUses: []string{"?type=boss", "?type=2"},
+			Description: "Searches for monsters that are of the specified monster-category.",
+			Usage:       "?category={name|id}",
+			ExampleUses: []string{"?category=boss", "?category=2"},
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.MonsterCategory.lookup,
-			References:  []string{createListURL(cfg, "monster-type")},
+			References:  []string{createListURL(cfg, "monster-category")},
 		},
 	}
 
