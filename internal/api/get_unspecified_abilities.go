@@ -31,7 +31,7 @@ func (cfg *Config) getUnspecifiedAbility(r *http.Request, i handlerInput[seeding
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, response, "ability_user", i.queryLookup)
+	battleInteractions, err := applyUser(cfg, r, i, response, "ability_user")
 	if err != nil {
 		return UnspecifiedAbility{}, err
 	}

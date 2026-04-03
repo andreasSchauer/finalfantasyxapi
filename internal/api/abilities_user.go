@@ -16,8 +16,7 @@ type userAbility interface {
 }
 
 type unitRepl struct {
-	resType  string
-	unitName string
+	unit	 seeding.PlayerUnit
 	bombWpn  bool
 	replVals biReplacement
 }
@@ -29,8 +28,8 @@ type biReplacement struct {
 	DamageConstant *int32
 }
 
-func applyUser(cfg *Config, r *http.Request, ability userAbility, queryName string, queryLookup map[string]QueryType) ([]BattleInteraction, error) {
-	repl, err := getUnitRepl(cfg, r, queryName, queryLookup)
+func applyUser[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], ability userAbility, queryName string) ([]BattleInteraction, error) {
+	repl, err := getUnitRepl(cfg, r, i, queryName)
 	if errors.Is(err, errEmptyQuery) {
 		return ability.getBattleInteractions(), nil
 	}
@@ -48,14 +47,15 @@ func applyUser(cfg *Config, r *http.Request, ability userAbility, queryName stri
 	return battleInteractions, nil
 }
 
-func getUnitRepl(cfg *Config, r *http.Request, queryName string, queryLookup map[string]QueryType) (unitRepl, error) {
-	queryParamUser := queryLookup[queryName]
-	queryParamBomb := queryLookup["bomb_wpn"]
+func getUnitRepl[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], queryName string) (unitRepl, error) {
+	queryParamUser := i.queryLookup[queryName]
+	queryParamBomb := i.queryLookup["bomb_wpn"]
 
-	resType, unitStr, err := parseResTypeQuery(r, queryParamUser)
+	unitID, err := parseNameOrIdQuery(r, queryParamUser, cfg.e.playerUnits.resourceType, cfg.e.playerUnits.objLookup)
 	if err != nil {
 		return unitRepl{}, err
 	}
+	unit, _ := seeding.GetResourceByID(unitID, cfg.l.PlayerUnitsID)
 
 	bombWpn, err := parseBooleanQuery(r, queryParamBomb)
 	if err != nil && !errors.Is(err, errEmptyQuery) {
@@ -63,20 +63,20 @@ func getUnitRepl(cfg *Config, r *http.Request, queryName string, queryLookup map
 	}
 
 	repl := unitRepl{
-		resType:  resType,
+		unit: 	  unit,
 		bombWpn:  bombWpn,
 		replVals: biReplacement{},
 	}
 
-	switch repl.resType {
+	switch repl.unit.Type {
 	case "character":
-		repl, err = populateReplCharacter(cfg, unitStr, repl, queryParamUser)
+		repl, err = populateReplCharacter(cfg, repl, queryParamUser)
 		if err != nil {
 			return unitRepl{}, err
 		}
 
 	case "aeon":
-		repl, err = populateReplAeon(cfg, unitStr, repl, queryParamUser)
+		repl, err = populateReplAeon(cfg, repl, queryParamUser)
 		if err != nil {
 			return unitRepl{}, err
 		}
@@ -85,13 +85,12 @@ func getUnitRepl(cfg *Config, r *http.Request, queryName string, queryLookup map
 	return repl, nil
 }
 
-func populateReplCharacter(cfg *Config, unitStr string, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
-	id, err := parseQueryNamedVal(unitStr, repl.resType, queryParamUser, cfg.l.Characters)
+func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
+	id, err := parseQueryNamedVal(repl.unit.Name, string(repl.unit.Type), queryParamUser, cfg.l.Characters)
 	if err != nil {
 		return unitRepl{}, err
 	}
 	character, _ := seeding.GetResourceByID(id, cfg.l.CharactersID)
-	repl.unitName = character.Name
 
 	repl.replVals.Range = &character.PhysAtkRange
 
@@ -102,13 +101,12 @@ func populateReplCharacter(cfg *Config, unitStr string, repl unitRepl, queryPara
 	return repl, nil
 }
 
-func populateReplAeon(cfg *Config, unitStr string, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
-	id, err := parseQueryNamedVal(unitStr, repl.resType, queryParamUser, cfg.l.Aeons)
+func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
+	id, err := parseQueryNamedVal(repl.unit.Name, string(repl.unit.Type), queryParamUser, cfg.l.Aeons)
 	if err != nil {
 		return unitRepl{}, err
 	}
 	aeon, _ := seeding.GetResourceByID(id, cfg.l.AeonsID)
-	repl.unitName = aeon.Name
 
 	repl.replVals.Range = aeon.PhysAtkRange
 	repl.replVals.ShatterRate = aeon.PhysAtkShatterRate
@@ -119,8 +117,8 @@ func populateReplAeon(cfg *Config, unitStr string, repl unitRepl, queryParamUser
 }
 
 func verifyAbilityUsage(cfg *Config, ability userAbility, repl unitRepl, queryName string) error {
-	if !ability.canUseAbility(cfg, repl.unitName) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, repl.resType, repl.unitName, ability), nil)
+	if !ability.canUseAbility(cfg, repl.unit.Name) {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, cfg.e.playerUnits.resourceType, repl.unit.Name, ability), nil)
 	}
 
 	return nil

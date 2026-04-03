@@ -18,23 +18,16 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/2?ability_user=character:cindy",
+				requestURL:     "/api/unspecified-abilities/2?ability_user=wakka",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "unknown character 'cindy' used for parameter 'ability_user'.",
+				expectedErr:    "invalid input for parameter 'ability_user': player unit 'wakka' can't learn unspecified ability 'attack - 2'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/2?ability_user=character:wakka",
+				requestURL:     "/api/unspecified-abilities/2?ability_user=we",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input for parameter 'ability_user': character 'wakka' can't learn unspecified ability 'attack - 2'",
-			},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/2?ability_user=aeon:we",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "unknown aeon 'we' used for parameter 'ability_user'.",
+				expectedErr:    "unknown player unit 'we' used for parameter 'ability_user'.",
 			},
 		},
 		{
@@ -46,7 +39,7 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/1?ability_user=character:wakka",
+				requestURL:     "/api/unspecified-abilities/1?ability_user=wakka",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -103,7 +96,7 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/1?ability_user=character:wakka&bomb_wpn=true",
+				requestURL:     "/api/unspecified-abilities/1?ability_user=3&bomb_wpn=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -160,7 +153,7 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/2?ability_user=aeon:cindy&bomb_wpn=true",
+				requestURL:     "/api/unspecified-abilities/2?ability_user=16&bomb_wpn=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{

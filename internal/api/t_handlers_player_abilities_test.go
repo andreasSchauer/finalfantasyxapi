@@ -18,7 +18,7 @@ func TestGetPlayerAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities/10?ability_user=aeon:shiva",
+				requestURL:     "/api/player-abilities/10?ability_user=shiva",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
