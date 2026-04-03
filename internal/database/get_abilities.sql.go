@@ -282,13 +282,15 @@ JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+WHERE
+    ($1::int[] IS NULL AND d.element_id IS NULL)
+    OR
+    ($1::int[] IS NOT NULL AND d.element_id = ANY($1::int[]))
 ORDER BY a.id
 `
 
-func (q *Queries) GetAbilityIDsByElement(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsByElement, id)
+func (q *Queries) GetAbilityIDsByElement(ctx context.Context, element []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByElement, pq.Array(element))
 	if err != nil {
 		return nil, err
 	}
@@ -315,15 +317,37 @@ SELECT DISTINCT a.id
 FROM abilities a
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY a.id
 `
 
-func (q *Queries) GetAbilityIDsByInflictedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsByInflictedStatus, id)
+func (q *Queries) GetAbilityIDsByInflictedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByInflictedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}
@@ -414,14 +438,26 @@ SELECT DISTINCT a.id
 FROM abilities a
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND j2.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ))
 ORDER BY a.id
 `
 
-func (q *Queries) GetAbilityIDsByRemovedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsByRemovedStatus, id)
+func (q *Queries) GetAbilityIDsByRemovedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByRemovedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}
@@ -983,13 +1019,15 @@ JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+WHERE
+    ($1::int[] IS NULL AND d.element_id IS NULL)
+    OR
+    ($1::int[] IS NOT NULL AND d.element_id = ANY($1::int[]))
 ORDER BY ea.id
 `
 
-func (q *Queries) GetEnemyAbilityIDsByElement(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByElement, id)
+func (q *Queries) GetEnemyAbilityIDsByElement(ctx context.Context, element []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByElement, pq.Array(element))
 	if err != nil {
 		return nil, err
 	}
@@ -1017,15 +1055,37 @@ FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY ea.id
 `
 
-func (q *Queries) GetEnemyAbilityIDsByInflictedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByInflictedStatus, id)
+func (q *Queries) GetEnemyAbilityIDsByInflictedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByInflictedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}
@@ -1150,14 +1210,26 @@ FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND j2.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ))
 ORDER BY ea.id
 `
 
-func (q *Queries) GetEnemyAbilityIDsByRemovedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByRemovedStatus, id)
+func (q *Queries) GetEnemyAbilityIDsByRemovedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByRemovedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}
@@ -1560,13 +1632,15 @@ JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+WHERE
+    ($1::int[] IS NULL AND d.element_id IS NULL)
+    OR
+    ($1::int[] IS NOT NULL AND d.element_id = ANY($1::int[]))
 ORDER BY ia.id
 `
 
-func (q *Queries) GetItemAbilityIDsByElement(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByElement, id)
+func (q *Queries) GetItemAbilityIDsByElement(ctx context.Context, element []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByElement, pq.Array(element))
 	if err != nil {
 		return nil, err
 	}
@@ -1594,15 +1668,37 @@ FROM item_abilities ia
 JOIN abilities a ON ia.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY ia.id
 `
 
-func (q *Queries) GetItemAbilityIDsByInflictedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByInflictedStatus, id)
+func (q *Queries) GetItemAbilityIDsByInflictedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByInflictedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}
@@ -1662,14 +1758,26 @@ FROM item_abilities ia
 JOIN abilities a ON ia.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND j2.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ))
 ORDER BY ia.id
 `
 
-func (q *Queries) GetItemAbilityIDsByRemovedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByRemovedStatus, id)
+func (q *Queries) GetItemAbilityIDsByRemovedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByRemovedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}
@@ -2022,13 +2130,15 @@ JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+WHERE
+    ($1::int[] IS NULL AND d.element_id IS NULL)
+    OR
+    ($1::int[] IS NOT NULL AND d.element_id = ANY($1::int[]))
 ORDER BY oa.id
 `
 
-func (q *Queries) GetOverdriveAbilityIDsByElement(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByElement, id)
+func (q *Queries) GetOverdriveAbilityIDsByElement(ctx context.Context, element []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByElement, pq.Array(element))
 	if err != nil {
 		return nil, err
 	}
@@ -2056,15 +2166,37 @@ FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY oa.id
 `
 
-func (q *Queries) GetOverdriveAbilityIDsByInflictedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByInflictedStatus, id)
+func (q *Queries) GetOverdriveAbilityIDsByInflictedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByInflictedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}
@@ -2187,14 +2319,26 @@ FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND j2.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ))
 ORDER BY oa.id
 `
 
-func (q *Queries) GetOverdriveAbilityIDsByRemovedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByRemovedStatus, id)
+func (q *Queries) GetOverdriveAbilityIDsByRemovedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByRemovedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}
@@ -2840,13 +2984,15 @@ JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+WHERE
+    ($1::int[] IS NULL AND d.element_id IS NULL)
+    OR
+    ($1::int[] IS NOT NULL AND d.element_id = ANY($1::int[]))
 ORDER BY pa.id
 `
 
-func (q *Queries) GetPlayerAbilityIDsByElement(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByElement, id)
+func (q *Queries) GetPlayerAbilityIDsByElement(ctx context.Context, element []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByElement, pq.Array(element))
 	if err != nil {
 		return nil, err
 	}
@@ -2874,15 +3020,37 @@ FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY pa.id
 `
 
-func (q *Queries) GetPlayerAbilityIDsByInflictedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByInflictedStatus, id)
+func (q *Queries) GetPlayerAbilityIDsByInflictedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByInflictedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}
@@ -3119,14 +3287,26 @@ FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND j2.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ))
 ORDER BY pa.id
 `
 
-func (q *Queries) GetPlayerAbilityIDsByRemovedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByRemovedStatus, id)
+func (q *Queries) GetPlayerAbilityIDsByRemovedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByRemovedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}
@@ -4120,15 +4300,37 @@ FROM unspecified_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    ($1::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = $1::int
+    ))
+    OR
+    ($1::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    ($1::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY ua.id
 `
 
-func (q *Queries) GetUnspecifiedAbilityIDsByInflictedStatus(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsByInflictedStatus, id)
+func (q *Queries) GetUnspecifiedAbilityIDsByInflictedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsByInflictedStatus, statusID)
 	if err != nil {
 		return nil, err
 	}

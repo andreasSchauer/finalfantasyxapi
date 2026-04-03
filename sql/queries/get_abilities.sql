@@ -116,10 +116,32 @@ SELECT DISTINCT a.id
 FROM abilities a
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY a.id;
 
 
@@ -128,9 +150,21 @@ SELECT DISTINCT a.id
 FROM abilities a
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND j2.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ))
 ORDER BY a.id;
 
 
@@ -183,8 +217,10 @@ JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+WHERE
+    (sqlc.narg('element')::int[] IS NULL AND d.element_id IS NULL)
+    OR
+    (sqlc.narg('element')::int[] IS NOT NULL AND d.element_id = ANY(sqlc.narg('element')::int[]))
 ORDER BY a.id;
 
 
@@ -346,10 +382,32 @@ FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY ea.id;
 
 
@@ -359,9 +417,21 @@ FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND j2.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ))
 ORDER BY ea.id;
 
 
@@ -397,8 +467,10 @@ JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+WHERE
+    (sqlc.narg('element')::int[] IS NULL AND d.element_id IS NULL)
+    OR
+    (sqlc.narg('element')::int[] IS NOT NULL AND d.element_id = ANY(sqlc.narg('element')::int[]))
 ORDER BY ea.id;
 
 
@@ -505,10 +577,32 @@ FROM item_abilities ia
 JOIN abilities a ON ia.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY ia.id;
 
 
@@ -518,9 +612,21 @@ FROM item_abilities ia
 JOIN abilities a ON ia.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND j2.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ))
 ORDER BY ia.id;
 
 
@@ -554,8 +660,10 @@ JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+WHERE
+    (sqlc.narg('element')::int[] IS NULL AND d.element_id IS NULL)
+    OR
+    (sqlc.narg('element')::int[] IS NOT NULL AND d.element_id = ANY(sqlc.narg('element')::int[]))
 ORDER BY ia.id;
 
 
@@ -678,10 +786,32 @@ FROM unspecified_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY ua.id;
 
 
@@ -812,10 +942,32 @@ FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY oa.id;
 
 
@@ -825,9 +977,21 @@ FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND j2.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ))
 ORDER BY oa.id;
 
 
@@ -873,8 +1037,10 @@ JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+WHERE
+    (sqlc.narg('element')::int[] IS NULL AND d.element_id IS NULL)
+    OR
+    (sqlc.narg('element')::int[] IS NOT NULL AND d.element_id = ANY(sqlc.narg('element')::int[]))
 ORDER BY oa.id;
 
 
@@ -1088,10 +1254,32 @@ FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND ist.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int = 6 AND EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_inflicted_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM inflicted_delays idl
+        WHERE bi.inflicted_delay_id = idl.id
+    ))
 ORDER BY pa.id;
 
 
@@ -1101,9 +1289,21 @@ FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE
+    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+          AND j2.status_condition_id = sqlc.narg('status_id')::int
+    ))
+    OR
+    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_battle_interactions_removed_status_conditions j2
+        WHERE j2.ability_id = a.id
+          AND j2.battle_interaction_id = bi.id
+    ))
 ORDER BY pa.id;
 
 
@@ -1137,8 +1337,10 @@ JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+WHERE
+    (sqlc.narg('element')::int[] IS NULL AND d.element_id IS NULL)
+    OR
+    (sqlc.narg('element')::int[] IS NOT NULL AND d.element_id = ANY(sqlc.narg('element')::int[]))
 ORDER BY pa.id;
 
 

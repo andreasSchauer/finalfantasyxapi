@@ -8,6 +8,7 @@ import (
 )
 
 // can make those return sql.NullTypes, if the pointers have no other use
+// might modify those to return errEmptyQuery, then I can use them for filter queries, if needed
 
 func getQueryBoolPtr(r *http.Request, queryName string, queryLookup map[string]QueryType) (*bool, error) {
 	queryParam := queryLookup[queryName]
@@ -38,6 +39,7 @@ func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]Qu
 	return &integer32, nil
 }
 
+// this is actually getQueryNameOrIdPtr
 func getQueryIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryType) (*int32, error) {
 	queryParam := queryLookup[queryName]
 

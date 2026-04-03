@@ -26,14 +26,33 @@ func parseIDOnlyQuery(r *http.Request, queryParam QueryType, maxID int) (int32, 
 	return int32(id), nil
 }
 
+func parseIDOnlyQueryNul(r *http.Request, queryParam QueryType, maxID int) (*int32, error) {
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+
+	err = checkNoneQuery(query)
+	if err != nil {
+		return nil, nil
+	}
+
+	id, err := parseQueryIdVal(query, queryParam, maxID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &id, nil
+}
+
 // used for queryParams that thake existing ids or unique names and return a valid id
-func parseNameOrIdQuery[T h.HasID](r *http.Request, queryParam QueryType, resourceType string, lookup map[string]T) (int32, error) {
+func parseNameOrIdQuery[P h.HasID](r *http.Request, queryParam QueryType, pResType string, pLookup map[string]P) (int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return 0, err
 	}
 
-	return parseQueryNamedVal(query, resourceType, queryParam, lookup)
+	return parseQueryNamedVal(query, pResType, queryParam, pLookup)
 }
 
 // used for boolean queryParams
@@ -61,11 +80,10 @@ func parseEnumQuery[E, N any](r *http.Request, endpoint string, queryParam Query
 	return checkEnum(query, endpoint, queryParam, et)
 }
 
-
 // checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored.
 func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
 	query := r.URL.Query().Get(queryParam.Name)
-
+	// checkEmptyQuery should happen here
 	val, err := checkQueryInt(queryParam, query)
 	if errors.Is(err, errEmptyQuery) {
 		return 0, errEmptyQuery
@@ -106,6 +124,29 @@ func parseIdListQueryNoDupes(r *http.Request, queryParam QueryType, maxID int) (
 	}
 
 	return queryIDsToSliceNoDupes(query, queryParam, maxID)
+}
+
+func parseNameIdListQueryNullable[P h.HasID](r *http.Request, queryParam QueryType, pResType string, pLookup map[string]P) ([]int32, error) {
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+
+	err = checkNoneQuery(query)
+	if err != nil {
+		return nil, nil
+	}
+
+	return queryNamesIDsToSlice(query, queryParam, pResType, pLookup)
+}
+
+func parseNameIdListQuery[P h.HasID](r *http.Request, queryParam QueryType, pResType string, pLookup map[string]P) ([]int32, error) {
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return nil, err
+	}
+
+	return queryNamesIDsToSlice(query, queryParam, pResType, pLookup)
 }
 
 func parseIntListQuery(r *http.Request, queryParam QueryType) ([]int32, error) {

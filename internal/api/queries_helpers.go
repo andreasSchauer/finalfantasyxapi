@@ -10,6 +10,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+
 func queryMapToSlice(lookup map[string]QueryType) []QueryType {
 	queryParams := []QueryType{}
 
@@ -45,6 +46,26 @@ func queryIDsToSliceNoDupes(query string, queryParam QueryType, maxID int) ([]in
 			return nil, err
 		}
 
+		ids = append(ids, id)
+	}
+
+	err := checkDuplicateIDs(queryParam, ids)
+	if err != nil {
+		return nil, err
+	}
+
+	return ids, nil
+}
+
+func queryNamesIDsToSlice[P h.HasID](query string, queryParam QueryType, pResType string, pLookup map[string]P) ([]int32, error) {
+	queryStrs := querySplit(query, ",")
+	ids := []int32{}
+
+	for _, str := range queryStrs {
+		id, err := parseQueryNamedVal(str, pResType, queryParam, pLookup)
+		if err != nil {
+			return nil, err
+		}
 		ids = append(ids, id)
 	}
 
@@ -118,6 +139,14 @@ func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {
 	}
 
 	return strings.ToLower(query), nil
+}
+
+func checkNoneQuery(query string) error {
+	if query == "none" {
+		return errQueryNone
+	}
+
+	return nil
 }
 
 func checkDuplicateIDs(queryParam QueryType, ids []int32) error {

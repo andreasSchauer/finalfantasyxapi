@@ -13,6 +13,7 @@ var errIdNotFound = errors.New("id doesn't exit.")
 var errContinue = errors.New("loop should be continued.")
 var errNoResource = errors.New("no resources found.")
 var errEmptyQuery = errors.New("query parameter is empty.")
+var errQueryNone = errors.New("'none' input in query.")
 var errQueryRedirect = errors.New("query parameter is not empty, but will be dealt with else where.")
 var errNoDefaultVal = errors.New("query parameter doesn't have a default value, or default value is unused.")
 var errNoSpecialInput = errors.New("query parameter doesn't have special inputs, or no special input was found.")
@@ -44,6 +45,7 @@ func newHTTPError(code int, msg string, err error) httpError {
 func newHTTPErrorDB(resourceType string, filterItem seeding.LookupableID, err error) httpError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", resourceType, filterItem), err)
 }
+
 
 func newHTTPErrorDbFilter(resourceType string, queryParam QueryType, err error) httpError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", resourceType, queryParam.Name), err)

@@ -39,13 +39,11 @@ func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 	return resources, nil
 }
 
-// 1, 2, 9, 21, 22, 23, 25
-
 // query uses an id of another resource type to filter resources
-func nameOrIdQuery[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, resourceType string, lookup map[string]G, dbQuery DbQueryIntMany) ([]A, error) {
+func nameOrIdQuery[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, dbQuery DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
-	id, err := parseNameOrIdQuery(r, queryParam, resourceType, lookup)
+	id, err := parseNameOrIdQuery(r, queryParam, pResType, pLookup)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}
@@ -54,6 +52,28 @@ func nameOrIdQuery[T, G h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 	}
 
 	dbIDs, err := dbQuery(r.Context(), id)
+	if err != nil {
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
+}
+
+// query uses a list of names or ids as database input to filter for resources. alternatively, "none" can be used as input instead.
+func nameIdListQueryNul[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, dbQuery DbQueryIntList) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+
+	queryIDs, err := parseNameIdListQueryNullable(r, queryParam, pResType, pLookup)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := dbQuery(r.Context(), queryIDs)
 	if err != nil {
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
@@ -102,6 +122,26 @@ func idQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 		return nil, err
 	}
 
+	return resources, nil
+}
+
+func idQueryNul[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryNullIntMany) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+
+	idPtr, err := parseIDOnlyQueryNul(r, queryParam, maxID)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIds, err := dbQuery(r.Context(), h.GetNullInt32(idPtr))
+	if err != nil {
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIds)
 	return resources, nil
 }
 
@@ -284,10 +324,6 @@ func enumListQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any]
 	resources := idsToAPIResources(cfg, i, dbIDs)
 	return resources, nil
 }
-
-
-
-
 
 // like enum query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
 func enumQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, E) ([]int32, error)) ([]A, error) {
