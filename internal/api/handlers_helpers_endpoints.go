@@ -214,15 +214,20 @@ func handleSections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 }
 
 func handleSimple[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
-	const fetchLimit int = 50
 	segment := "simple"
+	queryParamIDs := i.queryLookup["ids"]
+	_, err := checkEmptyQuery(r, queryParamIDs)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "parameter 'ids' can't be empty.", err)
+		return 
+	}
 
-	err := verifyQueryParams(cfg, r, i, nil, &segment)
+	err = verifyQueryParams(cfg, r, i, nil, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	ids, err := parseIdListQuery(r, i, "ids", fetchLimit)
+	ids, err := parseIdListQuery(r, queryParamIDs, len(i.objLookup))
 	if handleHTTPError(w, err) {
 		return
 	}

@@ -10,7 +10,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 func queryMapToSlice(lookup map[string]QueryType) []QueryType {
 	queryParams := []QueryType{}
 
@@ -36,9 +35,14 @@ func queryMapToString(lookup map[string]QueryType) string {
 	return h.FormatStringSlice(names)
 }
 
-func queryIDsToSliceNoDupes(query string, queryParam QueryType, maxID int) ([]int32, error) {
+func queryIDsToSlice(query string, queryParam QueryType, maxID int) ([]int32, error) {
 	idStrs := querySplit(query, ",")
 	ids := []int32{}
+	const fetchLimit = 50
+
+	if len(idStrs) > fetchLimit {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of resources that can be fetched is %d.", fetchLimit), nil)
+	}
 
 	for _, idStr := range idStrs {
 		id, err := parseQueryIdVal(idStr, queryParam, maxID)
@@ -188,29 +192,37 @@ func checkDuplicateEnums[E any](queryParam QueryType, enums []E) error {
 	return nil
 }
 
-func idStrsToUniqueIDs(idStrs []string, resourceType string, maxID int) ([]int32, error) {
-	idMap := make(map[int32]bool)
-	ids := []int32{}
-
-	for _, idStr := range idStrs {
-		resp, err := parseID(idStr, resourceType, maxID)
-		if err != nil {
-			return nil, err
-		}
-		id := resp.ID
-
-		if idMap[id] {
-			continue
-		}
-
-		idMap[id] = true
-		ids = append(ids, id)
-	}
-
-	return ids, nil
-}
-
 func querySplit(query, sep string) []string {
 	queryTrimmed := strings.TrimSuffix(query, sep)
 	return strings.Split(queryTrimmed, sep)
+}
+
+func filterByIdAndValues[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, queryName, pResType string, dbQueryMap map[string]DbQueryIntMany) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return dbQueriesToApiResources(cfg, r, i, id, pResType, dbQueryMap)
+	}
+
+	values := querySplit(query, ",")
+	valueMap := make(map[string]bool)
+
+	filteredLists := []filteredResList[A]{}
+
+	for _, value := range values {
+		dbQuery, ok := dbQueryMap[value]
+		if !ok {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. allowed values: %s.", query, queryParam.Name, h.FormatStringSlice(queryParam.AllowedValues)), nil)
+		}
+
+		if valueMap[value] {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of value '%s' for parameter '%s'. each value can only be used once.", value, queryParam.Name), nil)
+		}
+
+		filteredLists = append(filteredLists, frl(getResourcesDbID(cfg, r, i, id, pResType, dbQuery)))
+
+		valueMap[value] = true
+	}
+
+	return combineFilteredAPIResources(filteredLists)
 }

@@ -7,13 +7,13 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type filteredResList[T HasAPIResource] struct {
-	resources []T
+type filteredResList[A APIResource] struct {
+	resources []A
 	err       error
 }
 
-func frl[T HasAPIResource](res []T, err error) filteredResList[T] {
-	return filteredResList[T]{
+func frl[A APIResource](res []A, err error) filteredResList[A] {
+	return filteredResList[A]{
 		resources: res,
 		err:       err,
 	}
@@ -65,7 +65,7 @@ func nameOrIdQuery[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 func nameIdListQueryNul[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, dbQuery DbQueryIntList) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
-	queryIDs, err := parseNameIdListQueryNullable(r, queryParam, pResType, pLookup)
+	queryIDs, err := parseNameIdListQuery(r, queryParam, pResType, pLookup)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}
@@ -149,7 +149,7 @@ func idQueryNul[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryIntList) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
-	queryIDs, err := parseIdListQueryNoDupes(r, queryParam, maxID)
+	queryIDs, err := parseIdListQuery(r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}
@@ -171,7 +171,7 @@ func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 func idListQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, []int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
-	queryIDs, err := parseIdListQueryNoDupes(r, queryParam, maxID)
+	queryIDs, err := parseIdListQuery(r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}

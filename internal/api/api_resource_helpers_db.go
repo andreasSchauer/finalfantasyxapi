@@ -45,3 +45,14 @@ func getResPtrDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 	res := i.idToResFunc(cfg, i, dbID)
 	return &res, nil
 }
+
+func dbQueriesToApiResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, pResType string, dbQueryMap map[string]DbQueryIntMany) ([]A, error) {
+	resLists := []filteredResList[A]{}
+
+	for key := range dbQueryMap {
+		resList := frl(getResourcesDbID(cfg, r, i, id, pResType, dbQueryMap[key]))
+		resLists = append(resLists, resList)
+	}
+
+	return combineFilteredAPIResources(resLists)
+}

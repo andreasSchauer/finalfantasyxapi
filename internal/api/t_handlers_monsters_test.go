@@ -1087,7 +1087,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?item=22&method=steals",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'steals' used for 'method'. allowed values: 'steal', 'drop', 'bribe', 'other'.",
+				expectedErr:    "invalid value 'steals' used for parameter 'method'. allowed values: 'steal', 'drop', 'bribe', 'other'.",
 			},
 		},
 		{
@@ -1323,6 +1323,14 @@ func TestSubsectionMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/simple?ids=1,2,2,70,",
+				expectedStatus: http.StatusBadRequest,
+				handler:        testCfg.HandleMonsters,
+				expectedErr: 	"duplicate use of id '2' for parameter 'ids'. each id can only be used once.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/simple?ids=1,33,22,68,",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleMonsters,
@@ -1332,18 +1340,6 @@ func TestSubsectionMonsters(t *testing.T) {
 			},
 			count:   4,
 			results: []int32{1, 33, 22, 68},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/simple?ids=1,2,2,70,",
-				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleMonsters,
-				dontCheck: map[string]bool{
-					"parent resource": true,
-				},
-			},
-			count:   3,
-			results: []int32{1, 2, 70},
 		},
 		{
 			testGeneral: testGeneral{

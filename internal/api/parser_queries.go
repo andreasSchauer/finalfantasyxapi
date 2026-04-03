@@ -95,38 +95,17 @@ func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
 	return val, nil
 }
 
-// converts a list of ids into a slice and checks every id's validity. duplicates are simply filtered out.
-func parseIdListQuery[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, fetchLimit int) ([]int32, error) {
-	queryParam := i.queryLookup[queryName]
-	query, err := checkEmptyQuery(r, queryParam)
-	if err != nil {
-		return nil, newHTTPError(http.StatusBadRequest, "parameter 'ids' can't be empty.", err)
-	}
-
-	idStrs := querySplit(query, ",")
-	if len(idStrs) > fetchLimit {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of resources that can be fetched is %d.", fetchLimit), nil)
-	}
-
-	ids, err := idStrsToUniqueIDs(idStrs, i.resourceType, len(i.objLookupID))
-	if err != nil {
-		return nil, err
-	}
-
-	return ids, nil
-}
-
 // converts a list of unique ids into a slice and checks every id's validity. duplicates produce an error.
-func parseIdListQueryNoDupes(r *http.Request, queryParam QueryType, maxID int) ([]int32, error) {
+func parseIdListQuery(r *http.Request, queryParam QueryType, maxID int) ([]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
 	}
 
-	return queryIDsToSliceNoDupes(query, queryParam, maxID)
+	return queryIDsToSlice(query, queryParam, maxID)
 }
 
-func parseNameIdListQueryNullable[P h.HasID](r *http.Request, queryParam QueryType, pResType string, pLookup map[string]P) ([]int32, error) {
+func parseNameIdListQuery[P h.HasID](r *http.Request, queryParam QueryType, pResType string, pLookup map[string]P) ([]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -135,15 +114,6 @@ func parseNameIdListQueryNullable[P h.HasID](r *http.Request, queryParam QueryTy
 	err = checkNoneQuery(query)
 	if err != nil {
 		return nil, nil
-	}
-
-	return queryNamesIDsToSlice(query, queryParam, pResType, pLookup)
-}
-
-func parseNameIdListQuery[P h.HasID](r *http.Request, queryParam QueryType, pResType string, pLookup map[string]P) ([]int32, error) {
-	query, err := checkEmptyQuery(r, queryParam)
-	if err != nil {
-		return nil, err
 	}
 
 	return queryNamesIDsToSlice(query, queryParam, pResType, pLookup)

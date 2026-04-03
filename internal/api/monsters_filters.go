@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -116,44 +115,12 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAP
 	return resources, nil
 }
 
+
 func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	i := cfg.e.monsters
-	resourceType := i.resourceType
-	queryParam := i.queryLookup["method"]
-	query := r.URL.Query().Get(queryParam.Name)
-
-	var resources []NamedAPIResource
-	var err error
-
-	switch query {
-	case "":
-		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItem)
-		if err != nil {
-			return nil, err
-		}
-	case "steal":
-		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemSteal)
-		if err != nil {
-			return nil, err
-		}
-	case "drop":
-		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemDrop)
-		if err != nil {
-			return nil, err
-		}
-	case "bribe":
-		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemBribe)
-		if err != nil {
-			return nil, err
-		}
-	case "other":
-		resources, err = getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByItemOther)
-		if err != nil {
-			return nil, err
-		}
-	default:
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for 'method'. allowed values: %s.", query, h.FormatStringSlice(queryParam.AllowedValues)), err)
-	}
-
-	return resources, nil
+	return filterByIdAndValues(cfg, r, cfg.e.monsters, id, "method", cfg.e.items.resourceType, map[string]DbQueryIntMany{
+		"steal": 	cfg.db.GetMonsterIDsByItemSteal,
+		"drop": 	cfg.db.GetMonsterIDsByItemDrop,
+		"bribe": 	cfg.db.GetMonsterIDsByItemBribe,
+		"other": 	cfg.db.GetMonsterIDsByItemOther,
+	})
 }
