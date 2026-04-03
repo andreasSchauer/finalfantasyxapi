@@ -23,7 +23,7 @@ ORDER BY a.id;
 
 
 -- name: GetAbilityIDsByType :many
-SELECT id FROM abilities WHERE type = $1 ORDER BY id;
+SELECT id FROM abilities WHERE type = ANY(sqlc.narg('ability_type')::ability_type[]) ORDER BY id;
 
 
 -- name: GetAbilityIDsByRank :many
@@ -64,7 +64,7 @@ SELECT DISTINCT a.id
 FROM abilities a
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY a.id;
 
 
@@ -197,7 +197,7 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.damage_type = $1
+WHERE ad.damage_type = ANY(sqlc.narg('damage_type')::damage_type[])
 ORDER BY a.id;
 
 
@@ -210,7 +210,7 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY a.id;
 
 
@@ -289,7 +289,7 @@ FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY ea.id;
 
 
@@ -412,7 +412,7 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.damage_type = $1
+WHERE ad.damage_type = ANY(sqlc.narg('damage_type')::damage_type[])
 ORDER BY ea.id;
 
 
@@ -426,7 +426,7 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY ea.id;
 
 
@@ -465,7 +465,7 @@ ORDER BY ia.id;
 SELECT ia.id
 FROM item_abilities ia
 JOIN items i ON ia.item_id = i.id
-WHERE i.category = $1
+WHERE i.category = ANY(sqlc.narg('category')::item_category[])
 ORDER BY ia.id;
 
 
@@ -475,7 +475,7 @@ FROM item_abilities ia
 JOIN abilities a ON ia.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY ia.id;
 
 
@@ -569,7 +569,7 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY ia.id;
 
 
@@ -656,7 +656,7 @@ FROM unspecified_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY ua.id;
 
 
@@ -696,20 +696,6 @@ WHERE idl.ctb_attack_type = 'attack'
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsByDamageType :many
-SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.damage_type = $1
-ORDER BY ua.id;
-
-
 -- name: GetUnspecifiedAbilityIDsByAttackType :many
 SELECT DISTINCT ua.id
 FROM unspecified_abilities ua
@@ -720,7 +706,7 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY ua.id;
 
 
@@ -805,7 +791,7 @@ FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY oa.id;
 
 
@@ -902,7 +888,7 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY oa.id;
 
 
@@ -947,7 +933,7 @@ SELECT id FROM player_abilities ORDER BY id;
 
 
 -- name: GetPlayerAbilityIDsByCategory :many
-SELECT id FROM player_abilities WHERE category = $1 ORDER BY id;
+SELECT id FROM player_abilities WHERE category = ANY(sqlc.narg('category')::player_ability_category[]) ORDER BY id;
 
 
 -- name: GetPlayerAbilityIDsByMpCost :many
@@ -1045,7 +1031,7 @@ FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY pa.id;
 
 
@@ -1166,7 +1152,7 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.damage_type = $1
+WHERE ad.damage_type = ANY(sqlc.narg('damage_type')::damage_type[])
 ORDER BY pa.id;
 
 
@@ -1180,7 +1166,7 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY pa.id;
 
 
@@ -1266,7 +1252,7 @@ FROM trigger_commands tc
 JOIN abilities a ON tc.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY tc.id;
 
 

@@ -299,11 +299,11 @@ func (q *Queries) GetAreaIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getAreaIDsByAvailability = `-- name: GetAreaIDsByAvailability :many
-SELECT id FROM areas WHERE availability = $1 ORDER BY id
+SELECT id FROM areas WHERE availability = ANY($1::availability_type[]) ORDER BY id
 `
 
-func (q *Queries) GetAreaIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsByAvailability, availability)
+func (q *Queries) GetAreaIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsByAvailability, pq.Array(availability))
 	if err != nil {
 		return nil, err
 	}
@@ -2188,11 +2188,11 @@ func (q *Queries) GetShopIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getShopIDsByAvailability = `-- name: GetShopIDsByAvailability :many
-SELECT id FROM shops WHERE availability = $1 ORDER BY id
+SELECT id FROM shops WHERE availability = ANY($1::availability_type[]) ORDER BY id
 `
 
-func (q *Queries) GetShopIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsByAvailability, availability)
+func (q *Queries) GetShopIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsByAvailability, pq.Array(availability))
 	if err != nil {
 		return nil, err
 	}
@@ -2215,11 +2215,11 @@ func (q *Queries) GetShopIDsByAvailability(ctx context.Context, availability Ava
 }
 
 const getShopIDsByCategory = `-- name: GetShopIDsByCategory :many
-SELECT id FROM shops WHERE category = $1 ORDER BY id
+SELECT id FROM shops WHERE category = ANY($1::shop_category[]) ORDER BY id
 `
 
-func (q *Queries) GetShopIDsByCategory(ctx context.Context, category ShopCategory) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsByCategory, category)
+func (q *Queries) GetShopIDsByCategory(ctx context.Context, category []ShopCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsByCategory, pq.Array(category))
 	if err != nil {
 		return nil, err
 	}
@@ -3349,11 +3349,11 @@ func (q *Queries) GetTreasureIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getTreasureIDsByAvailability = `-- name: GetTreasureIDsByAvailability :many
-SELECT id FROM treasures WHERE availability = $1 ORDER BY id
+SELECT id FROM treasures WHERE availability = ANY($1::availability_type[]) ORDER BY id
 `
 
-func (q *Queries) GetTreasureIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTreasureIDsByAvailability, availability)
+func (q *Queries) GetTreasureIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDsByAvailability, pq.Array(availability))
 	if err != nil {
 		return nil, err
 	}

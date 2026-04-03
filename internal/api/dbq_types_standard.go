@@ -17,6 +17,7 @@ type DbQueryBool func(context.Context, bool) ([]int32, error)
 type DbQueryEnum[E any] func(context.Context, E) ([]int32, error)
 type DbQueryEnumList[E any] func(context.Context, []E) ([]int32, error)
 type DbQueryNullEnum[N any] func(context.Context, N) ([]int32, error)
+type DbQueryNullEnumList[N any] func(context.Context, []N) ([]int32, error)
 type DbQueryAny func(context.Context, any) ([]int32, error)
 
 
@@ -47,5 +48,18 @@ func ToIntOneNull(q DbQueryNullIntOne) DbQueryIntOne {
 func ToEnumQuery[E, N any](et EnumType[E, N], q DbQueryNullEnum[N]) DbQueryEnum[E] {
 	return func(ctx context.Context, enum E) ([]int32, error) {
 		return q(ctx, et.getNullEnum(&enum))
+	}
+}
+
+func ToEnumListQuery[E, N any](et EnumType[E, N], q DbQueryNullEnumList[N]) DbQueryEnumList[E] {
+	return func(ctx context.Context, enums []E) ([]int32, error) {
+		nullEnums := []N{}
+
+		for _, enum := range enums {
+			nullEnum := et.getNullEnum(&enum)
+			nullEnums = append(nullEnums, nullEnum)
+		}
+
+		return q(ctx, nullEnums)
 	}
 }

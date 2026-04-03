@@ -236,11 +236,11 @@ SELECT id FROM monsters WHERE area_conquest_location = $1 AND can_be_captured = 
 
 
 -- name: GetMonsterIDsByCategory :many
-SELECT id FROM monsters WHERE category = $1;
+SELECT id FROM monsters WHERE category = ANY(sqlc.narg('category')::monster_category[]);
 
 
 -- name: GetMonsterIDsByAvailability :many
-SELECT id FROM monsters WHERE availability = $1;
+SELECT id FROM monsters WHERE availability = ANY(sqlc.narg('availability')::availability_type[]) ORDER BY id;
 
 
 -- name: GetMonsterIDsByIsRepeatable :many
@@ -281,7 +281,7 @@ SELECT id FROM monster_formations ORDER BY id;
 SELECT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.category = $1
+WHERE fd.category = ANY(sqlc.narg('category')::monster_formation_category[])
 ORDER BY mf.id;
 
 
@@ -289,7 +289,7 @@ ORDER BY mf.id;
 SELECT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.availability = $1
+WHERE fd.availability = ANY(sqlc.narg('availability')::availability_type[])
 ORDER BY mf.id;
 
 

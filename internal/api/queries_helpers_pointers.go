@@ -52,7 +52,7 @@ func getQueryIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.R
 	return &id, nil
 }
 
-func getQueryTypePtr[E, N any](r *http.Request, queryName, endpoint string, et EnumType[E, N], queryLookup map[string]QueryType) (*string, error) {
+func getQueryEnumPtr[E, N any](r *http.Request, queryName, endpoint string, et EnumType[E, N], queryLookup map[string]QueryType) (*string, error) {
 	queryParam := queryLookup[queryName]
 
 	enumRes, err := parseEnumQuery(r, endpoint, queryParam, et)

@@ -8,6 +8,8 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/lib/pq"
 )
 
 const getArenaCreationIDs = `-- name: GetArenaCreationIDs :many
@@ -38,11 +40,11 @@ func (q *Queries) GetArenaCreationIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getArenaCreationIDsByCategory = `-- name: GetArenaCreationIDsByCategory :many
-SELECT id FROM monster_arena_creations WHERE category = $1 ORDER BY id
+SELECT id FROM monster_arena_creations WHERE category = ANY($1::ma_creation_category[]) ORDER BY id
 `
 
-func (q *Queries) GetArenaCreationIDsByCategory(ctx context.Context, category MaCreationCategory) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getArenaCreationIDsByCategory, category)
+func (q *Queries) GetArenaCreationIDsByCategory(ctx context.Context, category []MaCreationCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getArenaCreationIDsByCategory, pq.Array(category))
 	if err != nil {
 		return nil, err
 	}
@@ -179,11 +181,11 @@ func (q *Queries) GetQuestIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getQuestIDsByAvailability = `-- name: GetQuestIDsByAvailability :many
-SELECT id FROM quests WHERE availability = $1 ORDER BY id
+SELECT id FROM quests WHERE availability = ANY($1::availability_type[]) ORDER BY id
 `
 
-func (q *Queries) GetQuestIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getQuestIDsByAvailability, availability)
+func (q *Queries) GetQuestIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getQuestIDsByAvailability, pq.Array(availability))
 	if err != nil {
 		return nil, err
 	}
@@ -290,12 +292,12 @@ const getSidequestIDsByAvailability = `-- name: GetSidequestIDsByAvailability :m
 SELECT DISTINCT s.id
 FROM sidequests s
 JOIN quests q ON s.quest_id = q.id
-WHERE q.availability = $1
+WHERE q.availability = ANY($1::availability_type[])
 ORDER BY s.id
 `
 
-func (q *Queries) GetSidequestIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSidequestIDsByAvailability, availability)
+func (q *Queries) GetSidequestIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSidequestIDsByAvailability, pq.Array(availability))
 	if err != nil {
 		return nil, err
 	}
@@ -375,12 +377,12 @@ const getSubquestIDsByAvailability = `-- name: GetSubquestIDsByAvailability :man
 SELECT DISTINCT s.id
 FROM subquests s
 JOIN quests q ON s.quest_id = q.id
-WHERE q.availability = $1
+WHERE q.availability = ANY($1::availability_type[])
 ORDER BY s.id
 `
 
-func (q *Queries) GetSubquestIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSubquestIDsByAvailability, availability)
+func (q *Queries) GetSubquestIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSubquestIDsByAvailability, pq.Array(availability))
 	if err != nil {
 		return nil, err
 	}

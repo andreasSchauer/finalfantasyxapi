@@ -111,7 +111,7 @@ ORDER BY m.id;
 
 
 -- name: GetItemIDsCategory :many
-SELECT id FROM items WHERE category = $1 ORDER BY id;
+SELECT id FROM items WHERE category = ANY(sqlc.narg('category')::item_category[]) ORDER BY id;
 
 
 -- name: GetItemIDsWithAbility :many

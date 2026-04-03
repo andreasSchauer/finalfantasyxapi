@@ -225,12 +225,12 @@ const getMonsterFormationIDsByAvailability = `-- name: GetMonsterFormationIDsByA
 SELECT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.availability = $1
+WHERE fd.availability = ANY($1::availability_type[])
 ORDER BY mf.id
 `
 
-func (q *Queries) GetMonsterFormationIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByAvailability, availability)
+func (q *Queries) GetMonsterFormationIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByAvailability, pq.Array(availability))
 	if err != nil {
 		return nil, err
 	}
@@ -256,12 +256,12 @@ const getMonsterFormationIDsByCategory = `-- name: GetMonsterFormationIDsByCateg
 SELECT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.category = $1
+WHERE fd.category = ANY($1::monster_formation_category[])
 ORDER BY mf.id
 `
 
-func (q *Queries) GetMonsterFormationIDsByCategory(ctx context.Context, category MonsterFormationCategory) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByCategory, category)
+func (q *Queries) GetMonsterFormationIDsByCategory(ctx context.Context, category []MonsterFormationCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByCategory, pq.Array(category))
 	if err != nil {
 		return nil, err
 	}
@@ -583,11 +583,11 @@ func (q *Queries) GetMonsterIDsByAutoAbilityIsForced(ctx context.Context, arg Ge
 }
 
 const getMonsterIDsByAvailability = `-- name: GetMonsterIDsByAvailability :many
-SELECT id FROM monsters WHERE availability = $1
+SELECT id FROM monsters WHERE availability = ANY($1::availability_type[]) ORDER BY id
 `
 
-func (q *Queries) GetMonsterIDsByAvailability(ctx context.Context, availability AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByAvailability, availability)
+func (q *Queries) GetMonsterIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByAvailability, pq.Array(availability))
 	if err != nil {
 		return nil, err
 	}
@@ -637,11 +637,11 @@ func (q *Queries) GetMonsterIDsByCanBeCaptured(ctx context.Context, canBeCapture
 }
 
 const getMonsterIDsByCategory = `-- name: GetMonsterIDsByCategory :many
-SELECT id FROM monsters WHERE category = $1
+SELECT id FROM monsters WHERE category = ANY($1::monster_category[])
 `
 
-func (q *Queries) GetMonsterIDsByCategory(ctx context.Context, category MonsterCategory) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByCategory, category)
+func (q *Queries) GetMonsterIDsByCategory(ctx context.Context, category []MonsterCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByCategory, pq.Array(category))
 	if err != nil {
 		return nil, err
 	}

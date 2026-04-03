@@ -58,44 +58,9 @@ func parseEnumQuery[E, N any](r *http.Request, endpoint string, queryParam Query
 		return EnumAPIResource{}, err
 	}
 
-	return parseEnum(query, endpoint, queryParam, et)
+	return checkEnum(query, endpoint, queryParam, et)
 }
 
-func parseEnumSliceQuery[E, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[E, N]) ([]E, error) {
-	query, err := checkEmptyQuery(r, queryParam)
-	if err != nil {
-		return nil, err
-	}
-
-	enumStrs := strings.Split(query, ",")
-	enums := []E{}
-
-	for _, str := range enumStrs {
-		_, err := parseEnum(str, endpoint, queryParam, et)
-		if err != nil {
-			return nil, err
-		}
-
-		enum := et.convFunc(str)
-		enums = append(enums, enum)
-	}
-
-	return enums, nil
-}
-
-func parseEnum[E, N any](val, endpoint string, queryParam QueryType, et EnumType[E, N]) (EnumAPIResource, error) {
-	enum, err := GetEnumAPIResource(val, et)
-	switch err {
-	case errIdNotFound:
-		return EnumAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d.", val, queryParam.Name, len(et.lookup)), nil)
-
-	case errNoResource:
-		return EnumAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", val, queryParam.Name, endpoint), nil)
-
-	default:
-		return enum, nil
-	}
-}
 
 // checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored.
 func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
@@ -140,12 +105,7 @@ func parseIdListQueryNoDupes(r *http.Request, queryParam QueryType, maxID int) (
 		return nil, err
 	}
 
-	ids, err := queryIDsToSliceNoDupes(query, queryParam, maxID)
-	if err != nil {
-		return nil, err
-	}
-
-	return ids, nil
+	return queryIDsToSliceNoDupes(query, queryParam, maxID)
 }
 
 func parseIntListQuery(r *http.Request, queryParam QueryType) ([]int32, error) {
@@ -154,12 +114,16 @@ func parseIntListQuery(r *http.Request, queryParam QueryType) ([]int32, error) {
 		return nil, err
 	}
 
-	ints, err := queryIntsToSlice(query, queryParam)
+	return queryIntsToSlice(query, queryParam)
+}
+
+func parseEnumListQuery[E, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[E, N]) ([]E, error) {
+	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
 	}
 
-	return ints, nil
+	return queryEnumsToSlice(query, endpoint, queryParam, et)
 }
 
 func parseResTypeQuery(r *http.Request, queryParam QueryType) (string, string, error) {

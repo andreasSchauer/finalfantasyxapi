@@ -136,7 +136,7 @@ SELECT id FROM areas WHERE can_ride_chocobo = $1 ORDER BY id;
 
 
 -- name: GetAreaIDsByAvailability :many
-SELECT id FROM areas WHERE availability = $1 ORDER BY id;
+SELECT id FROM areas WHERE availability = ANY(sqlc.narg('availability')::availability_type[]) ORDER BY id;
 
 
 -- name: GetAreaIDsWithCharacters :many
@@ -1031,7 +1031,7 @@ SELECT id FROM treasures WHERE is_anima_treasure = $1 ORDER BY id;
 
 
 -- name: GetTreasureIDsByAvailability :many
-SELECT id FROM treasures WHERE availability = $1 ORDER BY id;
+SELECT id FROM treasures WHERE availability = ANY(sqlc.narg('availability')::availability_type[]) ORDER BY id;
 
 
 
@@ -1043,7 +1043,7 @@ SELECT id FROM shops ORDER BY id;
 
 
 -- name: GetShopIDsByCategory :many
-SELECT id FROM shops WHERE category = $1 ORDER BY id;
+SELECT id FROM shops WHERE category = ANY(sqlc.narg('category')::shop_category[]) ORDER BY id;
 
 
 -- name: GetShopIDsEquipmentFilter :many
@@ -1088,4 +1088,4 @@ ORDER BY s.id;
 
 
 -- name: GetShopIDsByAvailability :many
-SELECT id FROM shops WHERE availability = $1 ORDER BY id;
+SELECT id FROM shops WHERE availability = ANY(sqlc.narg('availability')::availability_type[]) ORDER BY id;

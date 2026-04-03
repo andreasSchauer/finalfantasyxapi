@@ -58,10 +58,10 @@ func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Abi
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[TypedAPIResource]{
-		frl(enumQuery(cfg, r, i, cfg.t.AbilityType, resources, "type", cfg.db.GetAbilityIDsByType)),
-		frl(enumQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetAbilityIDsByDamageType)),
-		frl(enumQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetAbilityIDsByAttackType)),
-		frl(enumQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetAbilityIDsByTargetType)),
+		frl(enumListQuery(cfg, r, i, cfg.t.AbilityType, resources, "type", cfg.db.GetAbilityIDsByType)),
+		frl(enumListQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetAbilityIDsByDamageType)),
+		frl(enumListQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetAbilityIDsByAttackType)),
+		frl(enumListQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetAbilityIDsByTargetType)),
 		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetAbilityIDsByDamageFormula)),
 		frl(intListQuery(cfg, r, i, resources, "rank", cfg.db.GetAbilityIDsByRank)),
 		frl(nameOrIdQuery(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetAbilityIDsByElement)),

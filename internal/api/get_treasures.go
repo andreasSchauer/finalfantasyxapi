@@ -39,7 +39,7 @@ func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Tre
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationTreasureIDs)),
 		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetAreaTreasureIDs)),
 		frl(boolQuery(cfg, r, i, resources, "anima", cfg.db.GetTreasureIDsByIsAnimaTreasure)),
-		frl(enumQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetTreasureIDsByAvailability)),
+		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetTreasureIDsByAvailability)),
 		frl(enumQuery(cfg, r, i, cfg.t.LootType, resources, "loot_type", cfg.db.GetTreasureIDsByLootType)),
 		frl(enumQuery(cfg, r, i, cfg.t.TreasureType, resources, "treasure_type", cfg.db.GetTreasureIDsByTreasureType)),
 	})

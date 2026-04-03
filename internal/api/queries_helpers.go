@@ -76,6 +76,41 @@ func queryIntsToSlice(query string, queryParam QueryType) ([]int32, error) {
 	return ints, nil
 }
 
+func checkEnum[E, N any](val, endpoint string, queryParam QueryType, et EnumType[E, N]) (EnumAPIResource, error) {
+	enum, err := GetEnumAPIResource(val, et)
+	switch err {
+	case errIdNotFound:
+		return EnumAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d.", val, queryParam.Name, len(et.lookup)), nil)
+
+	case errNoResource:
+		return EnumAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", val, queryParam.Name, endpoint), nil)
+
+	default:
+		return enum, nil
+	}
+}
+
+func queryEnumsToSlice[E, N any](query, endpoint string, queryParam QueryType, et EnumType[E, N]) ([]E, error) {
+	enumStrs := querySplit(query, ",")
+	enums := []E{}
+
+	for _, enumStr := range enumStrs {
+		enum, err := checkEnum(enumStr, endpoint, queryParam, et)
+		if err != nil {
+			return nil, err
+		}
+		typedStr := et.convFunc(enum.Name)
+		enums = append(enums, typedStr)
+	}
+
+	err := checkDuplicateEnums(queryParam, enums)
+	if err != nil {
+		return nil, err
+	}
+
+	return enums, nil
+}
+
 func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {
 	query := r.URL.Query().Get(queryParam.Name)
 	if query == "" {
@@ -106,6 +141,19 @@ func checkDuplicateInts(queryParam QueryType, ints []int32) error {
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of value '%d' for parameter '%s'. each value can only be used once.", int, queryParam.Name), nil)
 		}
 		intMap[int] = true
+	}
+
+	return nil
+}
+
+func checkDuplicateEnums[E any](queryParam QueryType, enums []E) error {
+	enumMap := make(map[any]bool)
+
+	for _, enum := range enums {
+		if enumMap[enum] {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of enum '%v' for parameter '%s'. each enum can only be used once.", enum, queryParam.Name), nil)
+		}
+		enumMap[enum] = true
 	}
 
 	return nil

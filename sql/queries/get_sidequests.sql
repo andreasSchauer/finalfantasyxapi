@@ -7,7 +7,7 @@ SELECT id FROM quests WHERE type = $1 ORDER BY id;
 
 
 -- name: GetQuestIDsByAvailability :many
-SELECT id FROM quests WHERE availability = $1 ORDER BY id;
+SELECT id FROM quests WHERE availability = ANY(sqlc.narg('availability')::availability_type[]) ORDER BY id;
 
 
 -- name: GetQuestIDsByRepeatable :many
@@ -34,7 +34,7 @@ SELECT id FROM sidequests ORDER BY id;
 SELECT DISTINCT s.id
 FROM sidequests s
 JOIN quests q ON s.quest_id = q.id
-WHERE q.availability = $1
+WHERE q.availability = ANY(sqlc.narg('availability')::availability_type[])
 ORDER BY s.id;
 
 
@@ -46,7 +46,7 @@ SELECT id FROM subquests ORDER BY id;
 SELECT DISTINCT s.id
 FROM subquests s
 JOIN quests q ON s.quest_id = q.id
-WHERE q.availability = $1
+WHERE q.availability = ANY(sqlc.narg('availability')::availability_type[])
 ORDER BY s.id;
 
 
@@ -63,7 +63,7 @@ SELECT id FROM monster_arena_creations ORDER BY id;
 
 
 -- name: GetArenaCreationIDsByCategory :many
-SELECT id FROM monster_arena_creations WHERE category = $1 ORDER BY id;
+SELECT id FROM monster_arena_creations WHERE category = ANY(sqlc.narg('category')::ma_creation_category[]) ORDER BY id;
 
 
 -- name: GetBlitzballPrizeIDs :many

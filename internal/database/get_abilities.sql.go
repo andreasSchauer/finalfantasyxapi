@@ -145,12 +145,12 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY($1::attack_type[])
 ORDER BY a.id
 `
 
-func (q *Queries) GetAbilityIDsByAttackType(ctx context.Context, attackType AttackType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsByAttackType, attackType)
+func (q *Queries) GetAbilityIDsByAttackType(ctx context.Context, attackType []AttackType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByAttackType, pq.Array(attackType))
 	if err != nil {
 		return nil, err
 	}
@@ -248,12 +248,12 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.damage_type = $1
+WHERE ad.damage_type = ANY($1::damage_type[])
 ORDER BY a.id
 `
 
-func (q *Queries) GetAbilityIDsByDamageType(ctx context.Context, damageType DamageType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsByDamageType, damageType)
+func (q *Queries) GetAbilityIDsByDamageType(ctx context.Context, damageType []DamageType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByDamageType, pq.Array(damageType))
 	if err != nil {
 		return nil, err
 	}
@@ -448,12 +448,12 @@ SELECT DISTINCT a.id
 FROM abilities a
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY($1::target_type[])
 ORDER BY a.id
 `
 
-func (q *Queries) GetAbilityIDsByTargetType(ctx context.Context, target TargetType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsByTargetType, target)
+func (q *Queries) GetAbilityIDsByTargetType(ctx context.Context, targetType []TargetType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByTargetType, pq.Array(targetType))
 	if err != nil {
 		return nil, err
 	}
@@ -476,11 +476,11 @@ func (q *Queries) GetAbilityIDsByTargetType(ctx context.Context, target TargetTy
 }
 
 const getAbilityIDsByType = `-- name: GetAbilityIDsByType :many
-SELECT id FROM abilities WHERE type = $1 ORDER BY id
+SELECT id FROM abilities WHERE type = ANY($1::ability_type[]) ORDER BY id
 `
 
-func (q *Queries) GetAbilityIDsByType(ctx context.Context, type_ AbilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsByType, type_)
+func (q *Queries) GetAbilityIDsByType(ctx context.Context, abilityType []AbilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByType, pq.Array(abilityType))
 	if err != nil {
 		return nil, err
 	}
@@ -874,12 +874,12 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY($1::attack_type[])
 ORDER BY ea.id
 `
 
-func (q *Queries) GetEnemyAbilityIDsByAttackType(ctx context.Context, attackType AttackType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByAttackType, attackType)
+func (q *Queries) GetEnemyAbilityIDsByAttackType(ctx context.Context, attackType []AttackType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByAttackType, pq.Array(attackType))
 	if err != nil {
 		return nil, err
 	}
@@ -948,12 +948,12 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.damage_type = $1
+WHERE ad.damage_type = ANY($1::damage_type[])
 ORDER BY ea.id
 `
 
-func (q *Queries) GetEnemyAbilityIDsByDamageType(ctx context.Context, damageType DamageType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByDamageType, damageType)
+func (q *Queries) GetEnemyAbilityIDsByDamageType(ctx context.Context, damageType []DamageType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByDamageType, pq.Array(damageType))
 	if err != nil {
 		return nil, err
 	}
@@ -1185,12 +1185,12 @@ FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY($1::target_type[])
 ORDER BY ea.id
 `
 
-func (q *Queries) GetEnemyAbilityIDsByTargetType(ctx context.Context, target TargetType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByTargetType, target)
+func (q *Queries) GetEnemyAbilityIDsByTargetType(ctx context.Context, targetType []TargetType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getEnemyAbilityIDsByTargetType, pq.Array(targetType))
 	if err != nil {
 		return nil, err
 	}
@@ -1457,12 +1457,12 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY($1::attack_type[])
 ORDER BY ia.id
 `
 
-func (q *Queries) GetItemAbilityIDsByAttackType(ctx context.Context, attackType AttackType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByAttackType, attackType)
+func (q *Queries) GetItemAbilityIDsByAttackType(ctx context.Context, attackType []AttackType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByAttackType, pq.Array(attackType))
 	if err != nil {
 		return nil, err
 	}
@@ -1488,12 +1488,12 @@ const getItemAbilityIDsByCategory = `-- name: GetItemAbilityIDsByCategory :many
 SELECT ia.id
 FROM item_abilities ia
 JOIN items i ON ia.item_id = i.id
-WHERE i.category = $1
+WHERE i.category = ANY($1::item_category[])
 ORDER BY ia.id
 `
 
-func (q *Queries) GetItemAbilityIDsByCategory(ctx context.Context, category ItemCategory) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByCategory, category)
+func (q *Queries) GetItemAbilityIDsByCategory(ctx context.Context, category []ItemCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByCategory, pq.Array(category))
 	if err != nil {
 		return nil, err
 	}
@@ -1697,12 +1697,12 @@ FROM item_abilities ia
 JOIN abilities a ON ia.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY($1::target_type[])
 ORDER BY ia.id
 `
 
-func (q *Queries) GetItemAbilityIDsByTargetType(ctx context.Context, target TargetType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByTargetType, target)
+func (q *Queries) GetItemAbilityIDsByTargetType(ctx context.Context, targetType []TargetType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByTargetType, pq.Array(targetType))
 	if err != nil {
 		return nil, err
 	}
@@ -1917,12 +1917,12 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY($1::attack_type[])
 ORDER BY oa.id
 `
 
-func (q *Queries) GetOverdriveAbilityIDsByAttackType(ctx context.Context, attackType AttackType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByAttackType, attackType)
+func (q *Queries) GetOverdriveAbilityIDsByAttackType(ctx context.Context, attackType []AttackType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByAttackType, pq.Array(attackType))
 	if err != nil {
 		return nil, err
 	}
@@ -2222,12 +2222,12 @@ FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY($1::target_type[])
 ORDER BY oa.id
 `
 
-func (q *Queries) GetOverdriveAbilityIDsByTargetType(ctx context.Context, target TargetType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByTargetType, target)
+func (q *Queries) GetOverdriveAbilityIDsByTargetType(ctx context.Context, targetType []TargetType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIDsByTargetType, pq.Array(targetType))
 	if err != nil {
 		return nil, err
 	}
@@ -2640,12 +2640,12 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY($1::attack_type[])
 ORDER BY pa.id
 `
 
-func (q *Queries) GetPlayerAbilityIDsByAttackType(ctx context.Context, attackType AttackType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByAttackType, attackType)
+func (q *Queries) GetPlayerAbilityIDsByAttackType(ctx context.Context, attackType []AttackType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByAttackType, pq.Array(attackType))
 	if err != nil {
 		return nil, err
 	}
@@ -2700,11 +2700,11 @@ func (q *Queries) GetPlayerAbilityIDsByCanCopycat(ctx context.Context, canCopyca
 }
 
 const getPlayerAbilityIDsByCategory = `-- name: GetPlayerAbilityIDsByCategory :many
-SELECT id FROM player_abilities WHERE category = $1 ORDER BY id
+SELECT id FROM player_abilities WHERE category = ANY($1::player_ability_category[]) ORDER BY id
 `
 
-func (q *Queries) GetPlayerAbilityIDsByCategory(ctx context.Context, category PlayerAbilityCategory) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByCategory, category)
+func (q *Queries) GetPlayerAbilityIDsByCategory(ctx context.Context, category []PlayerAbilityCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByCategory, pq.Array(category))
 	if err != nil {
 		return nil, err
 	}
@@ -2805,12 +2805,12 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.damage_type = $1
+WHERE ad.damage_type = ANY($1::damage_type[])
 ORDER BY pa.id
 `
 
-func (q *Queries) GetPlayerAbilityIDsByDamageType(ctx context.Context, damageType DamageType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByDamageType, damageType)
+func (q *Queries) GetPlayerAbilityIDsByDamageType(ctx context.Context, damageType []DamageType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByDamageType, pq.Array(damageType))
 	if err != nil {
 		return nil, err
 	}
@@ -3154,12 +3154,12 @@ FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY($1::target_type[])
 ORDER BY pa.id
 `
 
-func (q *Queries) GetPlayerAbilityIDsByTargetType(ctx context.Context, target TargetType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByTargetType, target)
+func (q *Queries) GetPlayerAbilityIDsByTargetType(ctx context.Context, targetType []TargetType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPlayerAbilityIDsByTargetType, pq.Array(targetType))
 	if err != nil {
 		return nil, err
 	}
@@ -3756,12 +3756,12 @@ FROM trigger_commands tc
 JOIN abilities a ON tc.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY($1::target_type[])
 ORDER BY tc.id
 `
 
-func (q *Queries) GetTriggerCommandIDsByTargetType(ctx context.Context, target TargetType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTriggerCommandIDsByTargetType, target)
+func (q *Queries) GetTriggerCommandIDsByTargetType(ctx context.Context, targetType []TargetType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTriggerCommandIDsByTargetType, pq.Array(targetType))
 	if err != nil {
 		return nil, err
 	}
@@ -3986,12 +3986,12 @@ JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_inter
 JOIN damages d ON j2.damage_id = d.id
 JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
 JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.attack_type = $1
+WHERE ad.attack_type = ANY($1::attack_type[])
 ORDER BY ua.id
 `
 
-func (q *Queries) GetUnspecifiedAbilityIDsByAttackType(ctx context.Context, attackType AttackType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsByAttackType, attackType)
+func (q *Queries) GetUnspecifiedAbilityIDsByAttackType(ctx context.Context, attackType []AttackType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsByAttackType, pq.Array(attackType))
 	if err != nil {
 		return nil, err
 	}
@@ -4093,43 +4093,6 @@ ORDER BY ua.id
 
 func (q *Queries) GetUnspecifiedAbilityIDsByDamageFormula(ctx context.Context, damageFormula DamageFormula) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsByDamageFormula, damageFormula)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getUnspecifiedAbilityIDsByDamageType = `-- name: GetUnspecifiedAbilityIDsByDamageType :many
-SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
-WHERE ad.damage_type = $1
-ORDER BY ua.id
-`
-
-func (q *Queries) GetUnspecifiedAbilityIDsByDamageType(ctx context.Context, damageType DamageType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsByDamageType, damageType)
 	if err != nil {
 		return nil, err
 	}
@@ -4256,12 +4219,12 @@ FROM unspecified_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE bi.target = $1
+WHERE bi.target = ANY($1::target_type[])
 ORDER BY ua.id
 `
 
-func (q *Queries) GetUnspecifiedAbilityIDsByTargetType(ctx context.Context, target TargetType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsByTargetType, target)
+func (q *Queries) GetUnspecifiedAbilityIDsByTargetType(ctx context.Context, targetType []TargetType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getUnspecifiedAbilityIDsByTargetType, pq.Array(targetType))
 	if err != nil {
 		return nil, err
 	}

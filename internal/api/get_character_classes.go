@@ -39,6 +39,6 @@ func (cfg *Config) retrieveCharacterClasses(r *http.Request, i handlerInput[seed
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumQuery(cfg, r, i, cfg.t.CharacterClassCategory, resources, "category", cfg.db.GetCharacterClassesIDsByCategory)),
+		frl(enumListQuery(cfg, r, i, cfg.t.CharacterClassCategory, resources, "category", cfg.db.GetCharacterClassesIDsByCategory)),
 	})
 }

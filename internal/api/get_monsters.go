@@ -84,10 +84,10 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 		frl(intListQuery(cfg, r, i, resources, "empty_slots", cfg.db.GetMonsterIDsByEmptySlots)),
 		frl(intListQuery(cfg, r, i, resources, "distance", cfg.db.GetMonsterIDsByDistance)),
 
-		frl(enumQuery(cfg, r, i, cfg.t.MonsterCategory, resources, "category", cfg.db.GetMonsterIDsByCategory)),
+		frl(enumListQuery(cfg, r, i, cfg.t.MonsterCategory, resources, "category", cfg.db.GetMonsterIDsByCategory)),
 		frl(enumQuery(cfg, r, i, cfg.t.MonsterSpecies, resources, "species", cfg.db.GetMonsterIDsBySpecies)),
 		frl(enumQuery(cfg, r, i, cfg.t.CreationArea, resources, "creation_area", ToEnumQuery(cfg.t.CreationArea, cfg.db.GetMonsterIDsByMaCreationArea))),
-		frl(enumQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetMonsterIDsByAvailability)),
+		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetMonsterIDsByAvailability)),
 
 		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetMonsterIDsByIsRepeatable)),
 		frl(boolQuery(cfg, r, i, resources, "capture", cfg.db.GetMonsterIDsByCanBeCaptured)),

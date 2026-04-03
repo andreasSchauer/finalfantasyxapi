@@ -237,4 +237,4 @@ SELECT id FROM character_classes ORDER BY id;
 
 
 -- name: GetCharacterClassesIDsByCategory :many
-SELECT id FROM character_classes WHERE category = $1 ORDER BY id;
+SELECT id FROM character_classes WHERE category = ANY(sqlc.narg('category')::character_class_category[]) ORDER BY id;

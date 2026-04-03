@@ -7,6 +7,8 @@ package database
 
 import (
 	"context"
+
+	"github.com/lib/pq"
 )
 
 const getAeonAeonCommandIDs = `-- name: GetAeonAeonCommandIDs :many
@@ -517,11 +519,11 @@ func (q *Queries) GetCharacterClassesIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getCharacterClassesIDsByCategory = `-- name: GetCharacterClassesIDsByCategory :many
-SELECT id FROM character_classes WHERE category = $1 ORDER BY id
+SELECT id FROM character_classes WHERE category = ANY($1::character_class_category[]) ORDER BY id
 `
 
-func (q *Queries) GetCharacterClassesIDsByCategory(ctx context.Context, category CharacterClassCategory) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getCharacterClassesIDsByCategory, category)
+func (q *Queries) GetCharacterClassesIDsByCategory(ctx context.Context, category []CharacterClassCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterClassesIDsByCategory, pq.Array(category))
 	if err != nil {
 		return nil, err
 	}

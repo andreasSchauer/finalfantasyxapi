@@ -36,7 +36,7 @@ func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Sub
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
-		frl(enumQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetSubquestIDsByAvailability)),
+		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetSubquestIDsByAvailability)),
 		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetSubquestIDsByRepeatable)),
 	})
 }

@@ -140,11 +140,11 @@ func (q *Queries) GetItemIDsByRelatedStat(ctx context.Context, id int32) ([]int3
 }
 
 const getItemIDsCategory = `-- name: GetItemIDsCategory :many
-SELECT id FROM items WHERE category = $1 ORDER BY id
+SELECT id FROM items WHERE category = ANY($1::item_category[]) ORDER BY id
 `
 
-func (q *Queries) GetItemIDsCategory(ctx context.Context, category ItemCategory) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemIDsCategory, category)
+func (q *Queries) GetItemIDsCategory(ctx context.Context, category []ItemCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsCategory, pq.Array(category))
 	if err != nil {
 		return nil, err
 	}

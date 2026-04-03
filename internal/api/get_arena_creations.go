@@ -44,7 +44,7 @@ func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seedin
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumQuery(cfg, r, i, cfg.t.ArenaCreationCategory, resources, "category", cfg.db.GetArenaCreationIDsByCategory)),
+		frl(enumListQuery(cfg, r, i, cfg.t.ArenaCreationCategory, resources, "category", cfg.db.GetArenaCreationIDsByCategory)),
 	})
 }
 

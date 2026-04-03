@@ -21,7 +21,7 @@ type AvailabilityParams struct {
 
 func getAvailabilityParams[T seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item T) (AvailabilityParams, error) {
 	queryParamAvailability := i.queryLookup["availability"]
-	availabilitySlice, err := parseEnumSliceQuery(r, i.endpoint, queryParamAvailability, cfg.t.AvailabilityType)
+	availabilitySlice, err := parseEnumListQuery(r, i.endpoint, queryParamAvailability, cfg.t.AvailabilityType)
 	if err != nil && !errors.Is(err, errEmptyQuery) {
 		return AvailabilityParams{}, err
 	}
