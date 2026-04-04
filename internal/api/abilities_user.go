@@ -16,7 +16,7 @@ type userAbility interface {
 }
 
 type unitRepl struct {
-	unit	 seeding.PlayerUnit
+	unit     seeding.PlayerUnit
 	bombWpn  bool
 	replVals biReplacement
 }
@@ -51,7 +51,7 @@ func getUnitRepl[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 	queryParamUser := i.queryLookup[queryName]
 	queryParamBomb := i.queryLookup["bomb_wpn"]
 
-	unitID, err := parseNameOrIdQuery(r, queryParamUser, cfg.e.playerUnits.resourceType, cfg.e.playerUnits.objLookup)
+	unitID, err := parseNameIdQuery(r, queryParamUser, cfg.e.playerUnits.resourceType, cfg.e.playerUnits.objLookup)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -63,7 +63,7 @@ func getUnitRepl[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 	}
 
 	repl := unitRepl{
-		unit: 	  unit,
+		unit:     unit,
 		bombWpn:  bombWpn,
 		replVals: biReplacement{},
 	}
@@ -86,7 +86,7 @@ func getUnitRepl[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 }
 
 func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
-	id, err := parseQueryNamedVal(repl.unit.Name, string(repl.unit.Type), queryParamUser, cfg.l.Characters)
+	id, err := checkQueryNameID(repl.unit.Name, string(repl.unit.Type), queryParamUser, cfg.l.Characters)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -102,7 +102,7 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryType)
 }
 
 func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
-	id, err := parseQueryNamedVal(repl.unit.Name, string(repl.unit.Type), queryParamUser, cfg.l.Aeons)
+	id, err := checkQueryNameID(repl.unit.Name, string(repl.unit.Type), queryParamUser, cfg.l.Aeons)
 	if err != nil {
 		return unitRepl{}, err
 	}

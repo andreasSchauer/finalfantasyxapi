@@ -35,7 +35,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32,
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, element, queryParam.Usage), nil)
 		}
 
-		elementID, err := parseQueryNamedVal(element, cfg.e.elements.resourceType, queryParam, cfg.l.Elements)
+		elementID, err := checkQueryNameID(element, cfg.e.elements.resourceType, queryParam, cfg.l.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -44,7 +44,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32,
 		}
 		elemMap[elementID] = true
 
-		affinityID, err := parseQueryNamedVal(affinity, cfg.e.affinities.resourceType, queryParam, cfg.l.Affinities)
+		affinityID, err := checkQueryNameID(affinity, cfg.e.affinities.resourceType, queryParam, cfg.l.Affinities)
 		if err != nil {
 			return nil, err
 		}
@@ -115,12 +115,11 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAP
 	return resources, nil
 }
 
-
 func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	return filterByIdAndValues(cfg, r, cfg.e.monsters, id, "method", cfg.e.items.resourceType, map[string]DbQueryIntMany{
-		"steal": 	cfg.db.GetMonsterIDsByItemSteal,
-		"drop": 	cfg.db.GetMonsterIDsByItemDrop,
-		"bribe": 	cfg.db.GetMonsterIDsByItemBribe,
-		"other": 	cfg.db.GetMonsterIDsByItemOther,
+		"steal": cfg.db.GetMonsterIDsByItemSteal,
+		"drop":  cfg.db.GetMonsterIDsByItemDrop,
+		"bribe": cfg.db.GetMonsterIDsByItemBribe,
+		"other": cfg.db.GetMonsterIDsByItemOther,
 	})
 }

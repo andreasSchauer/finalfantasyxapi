@@ -2,13 +2,32 @@ package api
 
 import (
 	"cmp"
-	"fmt"
 	"net/http"
 	"slices"
 	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
+
+
+func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {
+	query := r.URL.Query().Get(queryParam.Name)
+	if query == "" {
+		return "", errEmptyQuery
+	}
+
+	return strings.ToLower(query), nil
+}
+
+
+func checkNoneQuery(query string) error {
+	if query == "none" {
+		return errQueryNone
+	}
+
+	return nil
+}
+
 
 func queryMapToSlice(lookup map[string]QueryType) []QueryType {
 	queryParams := []QueryType{}
@@ -24,6 +43,7 @@ func queryMapToSlice(lookup map[string]QueryType) []QueryType {
 	return queryParams
 }
 
+
 func queryMapToString(lookup map[string]QueryType) string {
 	params := queryMapToSlice(lookup)
 	names := []string{}
@@ -35,194 +55,8 @@ func queryMapToString(lookup map[string]QueryType) string {
 	return h.FormatStringSlice(names)
 }
 
-func queryIDsToSlice(query string, queryParam QueryType, maxID int) ([]int32, error) {
-	idStrs := querySplit(query, ",")
-	ids := []int32{}
-	const fetchLimit = 50
-
-	if len(idStrs) > fetchLimit {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of resources that can be fetched is %d.", fetchLimit), nil)
-	}
-
-	for _, idStr := range idStrs {
-		id, err := parseQueryIdVal(idStr, queryParam, maxID)
-		if err != nil {
-			return nil, err
-		}
-
-		ids = append(ids, id)
-	}
-
-	err := checkDuplicateIDs(queryParam, ids)
-	if err != nil {
-		return nil, err
-	}
-
-	return ids, nil
-}
-
-func queryNamesIDsToSlice[P h.HasID](query string, queryParam QueryType, pResType string, pLookup map[string]P) ([]int32, error) {
-	queryStrs := querySplit(query, ",")
-	ids := []int32{}
-
-	for _, str := range queryStrs {
-		id, err := parseQueryNamedVal(str, pResType, queryParam, pLookup)
-		if err != nil {
-			return nil, err
-		}
-		ids = append(ids, id)
-	}
-
-	err := checkDuplicateIDs(queryParam, ids)
-	if err != nil {
-		return nil, err
-	}
-
-	return ids, nil
-}
-
-func queryIntsToSlice(query string, queryParam QueryType) ([]int32, error) {
-	intSegments := querySplit(query, ",")
-	ints := []int32{}
-
-	for _, segment := range intSegments {
-		intsNew, err := checkQueryIntRange(queryParam, segment)
-		if err != nil {
-			return nil, err
-		}
-		ints = slices.Concat(ints, intsNew)
-	}
-
-	err := checkDuplicateInts(queryParam, ints)
-	if err != nil {
-		return nil, err
-	}
-
-	return ints, nil
-}
-
-func checkEnum[E, N any](val, endpoint string, queryParam QueryType, et EnumType[E, N]) (EnumAPIResource, error) {
-	enum, err := GetEnumAPIResource(val, et)
-	switch err {
-	case errIdNotFound:
-		return EnumAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d.", val, queryParam.Name, len(et.lookup)), nil)
-
-	case errNoResource:
-		return EnumAPIResource{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", val, queryParam.Name, endpoint), nil)
-
-	default:
-		return enum, nil
-	}
-}
-
-func queryEnumsToSlice[E, N any](query, endpoint string, queryParam QueryType, et EnumType[E, N]) ([]E, error) {
-	enumStrs := querySplit(query, ",")
-	enums := []E{}
-
-	for _, enumStr := range enumStrs {
-		enum, err := checkEnum(enumStr, endpoint, queryParam, et)
-		if err != nil {
-			return nil, err
-		}
-		typedStr := et.convFunc(enum.Name)
-		enums = append(enums, typedStr)
-	}
-
-	err := checkDuplicateEnums(queryParam, enums)
-	if err != nil {
-		return nil, err
-	}
-
-	return enums, nil
-}
-
-func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {
-	query := r.URL.Query().Get(queryParam.Name)
-	if query == "" {
-		return "", errEmptyQuery
-	}
-
-	return strings.ToLower(query), nil
-}
-
-func checkNoneQuery(query string) error {
-	if query == "none" {
-		return errQueryNone
-	}
-
-	return nil
-}
-
-func checkDuplicateIDs(queryParam QueryType, ids []int32) error {
-	idMap := make(map[int32]bool)
-
-	for _, id := range ids {
-		if idMap[id] {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id '%d' for parameter '%s'. each id can only be used once.", id, queryParam.Name), nil)
-		}
-		idMap[id] = true
-	}
-
-	return nil
-}
-
-func checkDuplicateInts(queryParam QueryType, ints []int32) error {
-	intMap := make(map[int32]bool)
-
-	for _, int := range ints {
-		if intMap[int] {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of value '%d' for parameter '%s'. each value can only be used once.", int, queryParam.Name), nil)
-		}
-		intMap[int] = true
-	}
-
-	return nil
-}
-
-func checkDuplicateEnums[E any](queryParam QueryType, enums []E) error {
-	enumMap := make(map[any]bool)
-
-	for _, enum := range enums {
-		if enumMap[enum] {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of enum '%v' for parameter '%s'. each enum can only be used once.", enum, queryParam.Name), nil)
-		}
-		enumMap[enum] = true
-	}
-
-	return nil
-}
 
 func querySplit(query, sep string) []string {
 	queryTrimmed := strings.TrimSuffix(query, sep)
 	return strings.Split(queryTrimmed, sep)
-}
-
-func filterByIdAndValues[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, queryName, pResType string, dbQueryMap map[string]DbQueryIntMany) ([]A, error) {
-	queryParam := i.queryLookup[queryName]
-	query, err := checkEmptyQuery(r, queryParam)
-	if err != nil {
-		return dbQueriesToApiResources(cfg, r, i, id, pResType, dbQueryMap)
-	}
-
-	values := querySplit(query, ",")
-	valueMap := make(map[string]bool)
-
-	filteredLists := []filteredResList[A]{}
-
-	for _, value := range values {
-		dbQuery, ok := dbQueryMap[value]
-		if !ok {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. allowed values: %s.", query, queryParam.Name, h.FormatStringSlice(queryParam.AllowedValues)), nil)
-		}
-
-		if valueMap[value] {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of value '%s' for parameter '%s'. each value can only be used once.", value, queryParam.Name), nil)
-		}
-
-		filteredLists = append(filteredLists, frl(getResourcesDbID(cfg, r, i, id, pResType, dbQuery)))
-
-		valueMap[value] = true
-	}
-
-	return combineFilteredAPIResources(filteredLists)
 }
