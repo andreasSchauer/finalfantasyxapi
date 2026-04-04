@@ -9,6 +9,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+// checks, if a queryParam is empty and returns errEmptyQuery, if it is
 func checkEmptyQuery(r *http.Request, queryParam QueryParam) (string, error) {
 	query := r.URL.Query().Get(queryParam.Name)
 	if query == "" {
@@ -18,6 +19,7 @@ func checkEmptyQuery(r *http.Request, queryParam QueryParam) (string, error) {
 	return strings.ToLower(query), nil
 }
 
+// checks, if "none" was used as input and returns errQueryNone, if it was
 func checkNoneQuery(query string) error {
 	if query == "none" {
 		return errQueryNone
@@ -38,6 +40,19 @@ func queryMapToSlice(lookup map[string]QueryParam) []QueryParam {
 	})
 
 	return queryParams
+}
+
+func querySliceToMap(cfg *Config, params []QueryParam) map[string]QueryParam {
+	paramMap := make(map[string]QueryParam)
+
+	for i, param := range params {
+		param.ID = i + 1
+
+		param = cfg.assignParamUsage(param)
+		paramMap[param.Name] = param
+	}
+
+	return paramMap
 }
 
 func queryMapToString(lookup map[string]QueryParam) string {

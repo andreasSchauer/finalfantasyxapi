@@ -5,6 +5,28 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+
+type EnumType[E, N any] struct {
+	name         string
+	isEndpoint   bool
+	lookup       map[string]EnumAPIResource
+	convFunc     func(string) E
+	nullConvFunc func(*string) N
+	getNullEnum  func(*E) N
+}
+
+func newEnumType[E, N any](name string, isEndpoint bool, typeSlice []EnumAPIResource, convFunc func(string) E, nullConvFunc func(*string) N, getNullEnum func(*E) N) EnumType[E, N] {
+	return EnumType[E, N]{
+		name:         name,
+		isEndpoint:   isEndpoint,
+		lookup:       enumSliceToMap(typeSlice),
+		convFunc:     convFunc,
+		nullConvFunc: nullConvFunc,
+		getNullEnum:  getNullEnum,
+	}
+}
+
+
 // TypeLookup holds all the enum types for the application that are either used as endpoint or query param
 type TypeLookup struct {
 	AbilityType                 EnumType[database.AbilityType, any]
@@ -85,26 +107,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initTargetType()
 }
 
-// replace Typed logic and lookup with this struct
-type EnumType[E, N any] struct {
-	name         string
-	isEndpoint   bool
-	lookup       map[string]EnumAPIResource
-	convFunc     func(string) E
-	nullConvFunc func(*string) N
-	getNullEnum  func(*E) N
-}
 
-func newEnumType[E, N any](name string, isEndpoint bool, typeSlice []EnumAPIResource, convFunc func(string) E, nullConvFunc func(*string) N, getNullEnum func(*E) N) EnumType[E, N] {
-	return EnumType[E, N]{
-		name:         name,
-		isEndpoint:   isEndpoint,
-		lookup:       enumSliceToMap(typeSlice),
-		convFunc:     convFunc,
-		nullConvFunc: nullConvFunc,
-		getNullEnum:  getNullEnum,
-	}
-}
 
 func (t *TypeLookup) initAbilityType() {
 	typeSlice := []EnumAPIResource{

@@ -1,7 +1,9 @@
 package api
 
 import (
-	"maps"
+	"fmt"
+	"slices"
+	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -9,7 +11,9 @@ import (
 type QueryParam struct {
 	ID               int                        `json:"-"`
 	Name             string                     `json:"name"`
+	Type			 string						`json:"param_type"`
 	Description      string                     `json:"description"`
+	ExampleVals		 []string					`json:"-"`
 	Usage            string                     `json:"usage"`
 	ExampleUses      []string                   `json:"example_uses"`
 	DefaultOnly      bool                       `json:"only_use_alone"`
@@ -25,12 +29,12 @@ type QueryParam struct {
 	AllowedResources []string                   `json:"allowed_resources,omitempty"`
 	AllowedValues    []string                   `json:"allowed_values,omitempty"`
 	AllowedIntRange  []int                      `json:"allowed_int_range,omitempty"`
-	AllowedResTypes  []string                   `json:"allowed_res_types"`
+	AllowedResTypes  []string                   `json:"allowed_res_types,omitempty"`
 	DefaultVal       *int                       `json:"default_value,omitempty"`
-	SpecialInputs    []SpecialInput             `json:"special_inputs,omitempty"`
+	SpecialInputs    []SpecialQueryInput        `json:"special_inputs,omitempty"`
 }
 
-type SpecialInput struct {
+type SpecialQueryInput struct {
 	Key string `json:"key"`
 	Val int    `json:"value"`
 }
@@ -38,7 +42,7 @@ type SpecialInput struct {
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
 	defaultParams map[string]QueryParam
-
+	
 	locations    map[string]QueryParam
 	sublocations map[string]QueryParam
 	areas        map[string]QueryParam
@@ -83,16 +87,14 @@ type QueryLookup struct {
 func (cfg *Config) QueryLookupInit() {
 	cfg.q = &QueryLookup{}
 
-	cfg.q.defaultParams = map[string]QueryParam{
-		"limit": {
-			ID:          1001,
-			Name:        "limit",
+	defaultParams := []QueryParam{
+		{
+			Name:		 "limit",
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20. The value 'max' can also be used to forgo pagination of lists entirely.",
-			Usage:       "?limit={int|'max'}",
-			ExampleUses: []string{"?limit=50", "?limit=max"},
+			Type:		 "int",
 			ForList:     true,
 			ForSingle:   false,
-			SpecialInputs: []SpecialInput{
+			SpecialInputs: []SpecialQueryInput{
 				{
 					Key: "max",
 					Val: 9999,
@@ -100,631 +102,647 @@ func (cfg *Config) QueryLookupInit() {
 			},
 			DefaultVal: h.GetIntPtr(20),
 		},
-		"offset": {
-			ID:          1002,
-			Name:        "offset",
+		{
+			Name:		 "offset",
 			Description: "Sets the offset from where to start the displayed entries in a list response. If not set manually, the default is 0.",
-			Usage:       "?offset={int}",
-			ExampleUses: []string{"?offset=30"},
+			Type: 		 "int",
 			ForList:     true,
 			ForSingle:   false,
 			DefaultVal:  h.GetIntPtr(0),
 		},
 	}
 
-	cfg.initLocationsParams()
-	cfg.initSublocationsParams()
-	cfg.initAreasParams()
+	cfg.q.defaultParams = querySliceToMap(cfg, defaultParams)
+	cfg.initLocationsParams(defaultParams)
+	cfg.initSublocationsParams(defaultParams)
+	cfg.initAreasParams(defaultParams)
 
-	cfg.initMonsterFormationsParams()
-	cfg.initShopsParams()
-	cfg.initTreasuresParams()
-	cfg.initQuestsParams()
-	cfg.initSidequestsParams()
-	cfg.initSubquestsParams()
-	cfg.initArenaCreationsParams()
-	cfg.initBlitzballPrizesParams()
-	cfg.initSongsParams()
-	cfg.initFMVsParams()
+	cfg.initMonsterFormationsParams(defaultParams)
+	cfg.initShopsParams(defaultParams)
+	cfg.initTreasuresParams(defaultParams)
+	cfg.initQuestsParams(defaultParams)
+	cfg.initSidequestsParams(defaultParams)
+	cfg.initSubquestsParams(defaultParams)
+	cfg.initArenaCreationsParams(defaultParams)
+	cfg.initBlitzballPrizesParams(defaultParams)
+	cfg.initSongsParams(defaultParams)
+	cfg.initFMVsParams(defaultParams)
 
-	cfg.initPlayerUnitsParams()
-	cfg.initCharactersParams()
-	cfg.initAeonsParams()
-	cfg.initCharacterClassesParams()
-	cfg.initMonstersParams()
+	cfg.initPlayerUnitsParams(defaultParams)
+	cfg.initCharactersParams(defaultParams)
+	cfg.initAeonsParams(defaultParams)
+	cfg.initCharacterClassesParams(defaultParams)
+	cfg.initMonstersParams(defaultParams)
 
-	cfg.initAbilitiesParams()
-	cfg.initPlayerAbilitiesParams()
-	cfg.initOverdriveAbilitiesParams()
-	cfg.initItemAbilitiesParams()
-	cfg.initTriggerCommandsParams()
-	cfg.initUnspecifiedAbilitiesParams()
-	cfg.initEnemyAbilitiesParams()
+	cfg.initAbilitiesParams(defaultParams)
+	cfg.initPlayerAbilitiesParams(defaultParams)
+	cfg.initOverdriveAbilitiesParams(defaultParams)
+	cfg.initItemAbilitiesParams(defaultParams)
+	cfg.initTriggerCommandsParams(defaultParams)
+	cfg.initUnspecifiedAbilitiesParams(defaultParams)
+	cfg.initEnemyAbilitiesParams(defaultParams)
 
-	cfg.q.aeonCommands = cfg.assignDefaultParams()
-	cfg.q.overdriveCommands = cfg.assignDefaultParams()
-	cfg.initOverdrivesParams()
-	cfg.q.ronsoRages = cfg.assignDefaultParams()
-	cfg.initSubmenusParams()
-	cfg.q.topmenus = cfg.assignDefaultParams()
+	cfg.q.aeonCommands = cfg.assignDefaultParams(defaultParams)
+	cfg.q.overdriveCommands = cfg.assignDefaultParams(defaultParams)
+	cfg.initOverdrivesParams(defaultParams)
+	cfg.q.ronsoRages = cfg.assignDefaultParams(defaultParams)
+	cfg.initSubmenusParams(defaultParams)
+	cfg.q.topmenus = cfg.assignDefaultParams(defaultParams)
 
-	cfg.initItemsParams()
+	cfg.initItemsParams(defaultParams)
 
-	cfg.initOverdriveModesParams()
+	cfg.initOverdriveModesParams(defaultParams)
 
 }
 
-func (cfg *Config) assignDefaultParams() map[string]QueryParam {
-	return cfg.completeQueryTypeInit(createEmptyQueryMap(), false)
+func (cfg *Config) assignDefaultParams(defaultParams []QueryParam) map[string]QueryParam {
+	return cfg.completeQueryParamsInit([]QueryParam{}, defaultParams, false)
 }
 
-func createEmptyQueryMap() map[string]QueryParam {
-	return make(map[string]QueryParam)
-}
 
-func (cfg *Config) completeQueryTypeInit(params map[string]QueryParam, hasSimpleView bool) map[string]QueryParam {
-	maps.Copy(params, cfg.q.defaultParams)
-
-	for key, entry := range params {
-		entry.Name = key
-		params[key] = entry
-	}
+func (cfg *Config) completeQueryParamsInit(params, defaultParams []QueryParam, hasSimpleView bool) map[string]QueryParam {
+	params = slices.Concat(params, defaultParams)
 
 	if hasSimpleView {
-		params["ids"] = QueryParam{
-			ID:          1003,
-			Name:        "ids",
+		queryParamIDs := QueryParam{
+			Name: 		 "ids",
 			Description: "Used to input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",
-			Usage:       "?ids={id},...",
-			ExampleUses: []string{"?ids=1,3,4"},
+			Type: 		 "id-list",
 			DefaultOnly: true,
 			ForList:     false,
 			ForSingle:   false,
 			ForSegment:  h.GetStrPtr("simple"),
 		}
+		params = append(params, queryParamIDs)
 	}
 
-	return params
+	return querySliceToMap(cfg, params)
 }
 
-func (cfg *Config) initLocationsParams() {
-	params := map[string]QueryParam{
-		"item": {
-			ID:          1,
+
+func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
+	s := fmt.Sprintf("?%s=", p.Name)
+
+	switch p.Type {
+	case "bool":
+		p.Usage = s + "{bool}"
+		p.ExampleUses = []string{s + "true", s + "false"}
+
+	case "enum":
+		enums := createEnumResourceSlice(cfg, "", p.TypeLookup)
+		e := enums[0].Name
+		p.Usage = s + "{value|id}"
+		p.ExampleUses = []string{s + "1", s + e}
+
+	case "enum-list":
+		enums := createEnumResourceSlice(cfg, "", p.TypeLookup)
+		e1 := enums[0].Name
+		e2 := enums[1].Name
+		p.Usage = s + "{value|id},..."
+		p.ExampleUses = []string{s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
+
+	case "id":
+		p.Usage = s + "{id}"
+		p.ExampleUses = []string{s + "1"}
+
+	case "id-nul":
+		p.Usage = s + "{id|'none'}"
+		p.ExampleUses = []string{s + "1", s + "none"}
+
+	case "id-list":
+		p.Usage = s + "{id},..."
+		p.ExampleUses = []string{s + "1", s + "1,2", s + "1-3"}
+
+	case "int":
+		p.Usage = s + "{int}"
+		p.ExampleUses = []string{s + "1"}
+
+	case "int-list":
+		p.Usage = s + "{int},..."
+		p.ExampleUses = []string{s + "1", s + "1,2", s + "1-3"}
+
+	case "name/id":
+		e := p.ExampleVals[0]
+		p.Usage = s + "{name|id}"
+		p.ExampleUses = []string{s + "1", s + e}
+
+	case "name/id-list":
+		e1 := p.ExampleVals[0]
+		e2 := p.ExampleVals[1]
+		p.Usage = s + "{name|id},..."
+		p.ExampleUses = []string{s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
+
+	case "name/id-list-nul":
+		e1 := p.ExampleVals[0]
+		e2 := p.ExampleVals[1]
+		p.Usage = s + "{name|id},...|'none'"
+		p.ExampleUses = []string{s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2), s + "none"}
+
+	case "value-list":
+		e1 := p.AllowedValues[0]
+		e2 := p.AllowedValues[1]
+		p.Usage = s + "{val}"
+		p.ExampleUses = []string{s + e1, s + fmt.Sprintf("%s,%s", e1, e2)}
+
+	case "stat":
+		p.Usage = s + "{stat}={int},..."
+
+	default:
+		return p
+	}
+
+	if p.SpecialInputs != nil {
+		for _, input := range p.SpecialInputs {
+			usageTrimmed := strings.TrimSuffix(p.Usage, "}")
+			p.Usage = fmt.Sprintf("%s|'%s'}", usageTrimmed, input.Key)
+			p.ExampleUses = append(p.ExampleUses, s + input.Key)
+		}
+	}
+
+	return p
+}
+
+
+func (cfg *Config) initLocationsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "item",
 			Description: "Searches for locations where the specified item can be acquired. Can be specified further with the 'method' parameter.",
-			Usage:       "?item={id}",
-			ExampleUses: []string{"?item=45"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "items")},
 		},
-		"method": {
-			ID:             2,
+		{
+			Name:		 	"method",
 			Description:    "Specifies the method of acquisition for the 'item' parameter.",
-			Usage:          "?item={id}&method={method_name}",
-			ExampleUses:    []string{"?item=45&method=treasure"},
+			Type:		 	"value-list",
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []string{"item"},
 			AllowedValues:  []string{"monster", "treasure", "shop", "quest"},
 		},
-		"key_item": {
-			ID:          3,
+		{
+			Name:		 "key_item",
 			Description: "Searches for locations where the specified key item can be acquired.",
-			Usage:       "?key_item={id}",
-			ExampleUses: []string{"?key_item=22"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "key-items")},
 		},
-		"characters": {
-			ID:          4,
+		{
+			Name:		 "characters",
 			Description: "Searches for locations where a character permanently joins the party.",
-			Usage:       "?characters={bool}",
-			ExampleUses: []string{"?characters=true", "?characters=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"aeons": {
-			ID:          5,
+		{
+			Name:		 "aeons",
 			Description: "Searches for locations where a new aeon is acquired.",
-			Usage:       "?aeons={bool}",
-			ExampleUses: []string{"?aeons=true", "?aeons=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"monsters": {
-			ID:          6,
+		{
+			Name:		 "monsters",
 			Description: "Searches for locations that have monsters.",
-			Usage:       "?monsters={bool}",
-			ExampleUses: []string{"?monsters=true", "?monsters=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"boss_fights": {
-			ID:          7,
+		{
+			Name:		 "boss_fights",
 			Description: "Searches for locations that have bosses.",
-			Usage:       "?boss_fights={bool}",
-			ExampleUses: []string{"?boss_fights=true", "?boss_fights=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"shops": {
-			ID:          8,
+		{
+			Name:		 "shops",
 			Description: "Searches for locations that have shops.",
-			Usage:       "?shops={bool}",
-			ExampleUses: []string{"?shops=true", "?shops=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"treasures": {
-			ID:          9,
+		{
+			Name:		 "treasures",
 			Description: "Searches for locations that have treasures.",
-			Usage:       "?treasures={bool}",
-			ExampleUses: []string{"?treasures=true", "?treasures=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"sidequests": {
-			ID:          10,
+		{
+			Name:		 "sidequests",
 			Description: "Searchces for locations that feature sidequests.",
-			Usage:       "?sidequests={bool}",
-			ExampleUses: []string{"?sidequests=true", "?sidequests=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"fmvs": {
-			ID:          11,
+		{
+			Name:		 "fmvs",
 			Description: "Searches for locations that feature fmv sequences.",
-			Usage:       "?fmvs={bool}",
-			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.locations = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.locations = paramsMap
 }
 
-func (cfg *Config) initSublocationsParams() {
-	params := map[string]QueryParam{
-		"location": {
-			ID:          1,
+func (cfg *Config) initSublocationsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "location",
 			Description: "Searches for sublocations that are located within the specified location.",
-			Usage:       "?location={id}",
-			ExampleUses: []string{"?location=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "locations")},
 		},
-		"item": {
-			ID:          2,
+		{
+			Name:		 "item",
 			Description: "Searches for sublocations where the specified item can be acquired. Can be specified further with the 'method' parameter.",
-			Usage:       "?item={id}",
-			ExampleUses: []string{"?item=45"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "items")},
 		},
-		"method": {
-			ID:             3,
+		{
+			Name:		 	"method",
 			Description:    "Specifies the method of acquisition for the 'item' parameter.",
-			Usage:          "?item={id}&method={method_name}",
-			ExampleUses:    []string{"?item=45&method=treasure"},
+			Type:		 	"value-list",
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []string{"item"},
 			AllowedValues:  []string{"monster", "treasure", "shop", "quest"},
 		},
-		"key_item": {
-			ID:          4,
+		{
+			Name:		 "key_item",
 			Description: "Searches for sublocations where the specified key item can be acquired.",
-			Usage:       "?key_item={id}",
-			ExampleUses: []string{"?key_item=22"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "key-items")},
 		},
-		"characters": {
-			ID:          5,
+		{
+			Name:		 "characters",
 			Description: "Searches for sublocations where a character permanently joins the party.",
-			Usage:       "?characters={bool}",
-			ExampleUses: []string{"?characters=true", "?characters=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"aeons": {
-			ID:          6,
+		{
+			Name:		 "aeons",
 			Description: "Searches for sublocations where a new aeon is acquired.",
-			Usage:       "?aeons={bool}",
-			ExampleUses: []string{"?aeons=true", "?aeons=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"monsters": {
-			ID:          7,
+		{
+			Name:		 "monsters",
 			Description: "Searches for sublocations that have monsters.",
-			Usage:       "?monsters={bool}",
-			ExampleUses: []string{"?monsters=true", "?monsters=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"boss_fights": {
-			ID:          8,
+		{
+			Name:		 "boss_fights",
 			Description: "Searches for sublocations that have bosses.",
-			Usage:       "?boss_fights={bool}",
-			ExampleUses: []string{"?boss_fights=true", "?boss_fights=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"shops": {
-			ID:          9,
+		{
+			Name:		 "shops",
 			Description: "Searches for sublocations that have shops.",
-			Usage:       "?shops={bool}",
-			ExampleUses: []string{"?shops=true", "?shops=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"treasures": {
-			ID:          10,
+		{
+			Name:		 "treasures",
 			Description: "Searches for sublocations that have treasures.",
-			Usage:       "?treasures={bool}",
-			ExampleUses: []string{"?treasures=true", "?treasures=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"sidequests": {
-			ID:          11,
+		{
+			Name:		 "sidequests",
 			Description: "Searchces for sublocations that feature sidequests.",
-			Usage:       "?sidequests={bool}",
-			ExampleUses: []string{"?sidequests=true", "?sidequests=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"fmvs": {
-			ID:          12,
+		{
+			Name:		 "fmvs",
 			Description: "Searches for sublocations that feature fmv sequences.",
-			Usage:       "?fmvs={bool}",
-			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.sublocations = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.sublocations = paramsMap
 }
 
-func (cfg *Config) initAreasParams() {
-	params := map[string]QueryParam{
-		"location": {
-			ID:          1,
+func (cfg *Config) initAreasParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "location",
 			Description: "Searches for areas that are located within the specified location.",
-			Usage:       "?location={id}",
-			ExampleUses: []string{"?location=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "locations")},
 		},
-		"sublocation": {
-			ID:          2,
+		{
+			Name:		 "sublocation",
 			Description: "Searches for areas that are located within the specified sublocation.",
-			Usage:       "?sublocation={id}",
-			ExampleUses: []string{"?sublocation=13"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
-		"item": {
-			ID:          3,
+		{
+			Name:		 "item",
 			Description: "Searches for areas where the specified item can be acquired. Can be specified further with the 'method' parameter.",
-			Usage:       "?item={id}",
-			ExampleUses: []string{"?item=45"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "items")},
 		},
-		"method": {
-			ID:             4,
+		{
+			Name:		 	"method",
 			Description:    "Specifies the method of acquisition for the 'item' parameter.",
-			Usage:          "?item={id}&method={method_name}",
-			ExampleUses:    []string{"?item=45&method=treasure"},
+			Type:			"value-list",
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []string{"item"},
 			AllowedValues:  []string{"monster", "treasure", "shop", "quest"},
 		},
-		"key_item": {
-			ID:          5,
+		{
+			Name:		 "key_item",
 			Description: "Searches for areas where the specified key item can be acquired.",
-			Usage:       "?key_item={id}",
-			ExampleUses: []string{"?key_item=22"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "key-items")},
 		},
-		"availability": {
-			ID:          6,
+		{
+			Name:		 "availability",
 			Description: "Searches for areas with the given availability.",
-			Usage:       "?availability={value|id}",
-			ExampleUses: []string{"?availability=post", "?availability=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
 		},
-		"save_sphere": {
-			ID:          8,
+		{
+			Name:		 "save_sphere",
 			Description: "Searches for areas that have a save sphere.",
-			Usage:       "?save_sphere={bool}",
-			ExampleUses: []string{"?save_sphere=true", "?save_sphere=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"comp_sphere": {
-			ID:          9,
+		{
+			Name:		 "comp_sphere",
 			Description: "Searches for areas that contain an al bhed compilation sphere.",
-			Usage:       "?comp_sphere={bool}",
-			ExampleUses: []string{"?comp_sphere=true", "?comp_sphere=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"airship": {
-			ID:          10,
+		{
+			Name:		 "airship",
 			Description: "Searches for areas where you get dropped off when visiting with the airship.",
-			Usage:       "?airship={bool}",
-			ExampleUses: []string{"?airship=true", "?airship=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"chocobo": {
-			ID:          11,
+		{
+			Name:		 "chocobo",
 			Description: "Searches for areas where you can ride a chocobo.",
-			Usage:       "?chocobo={bool}",
-			ExampleUses: []string{"?chocobo=true", "?chocobo=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"characters": {
-			ID:          12,
+		{
+			Name:		 "characters",
 			Description: "Searches for areas where a character permanently joins the party.",
-			Usage:       "?characters={bool}",
-			ExampleUses: []string{"?characters=true", "?characters=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"aeons": {
-			ID:          13,
+		{
+			Name:		 "aeons",
 			Description: "Searches for areas where a new aeon is acquired.",
-			Usage:       "?aeons={bool}",
-			ExampleUses: []string{"?aeons=true", "?aeons=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"monsters": {
-			ID:          14,
+		{
+			Name:		 "monsters",
 			Description: "Searches for areas that have monsters.",
-			Usage:       "?monsters={bool}",
-			ExampleUses: []string{"?monsters=true", "?monsters=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"boss_fights": {
-			ID:          15,
+		{
+			Name:		 "boss_fights",
 			Description: "Searches for areas that have bosses.",
-			Usage:       "?boss_fights={bool}",
-			ExampleUses: []string{"?boss_fights=true", "?boss_fights=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"shops": {
-			ID:          16,
+		{
+			Name:		 "shops",
 			Description: "Searches for areas that have shops.",
-			Usage:       "?shops={bool}",
-			ExampleUses: []string{"?shops=true", "?shops=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"treasures": {
-			ID:          17,
+		{
+			Name:		 "treasures",
 			Description: "Searches for areas that have treasures.",
-			Usage:       "?treasures={bool}",
-			ExampleUses: []string{"?treasures=true", "?treasures=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"sidequests": {
-			ID:          18,
+		{
+			Name:		 "sidequests",
 			Description: "Searchces for areas that feature sidequests.",
-			Usage:       "?sidequests={bool}",
-			ExampleUses: []string{"?sidequests=true", "?sidequests=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"fmvs": {
-			ID:          19,
+		{
+			Name:		 "fmvs",
 			Description: "Searches for areas that feature fmv sequences.",
-			Usage:       "?fmvs={bool}",
-			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.areas = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.areas = paramsMap
 }
 
-func (cfg *Config) initMonsterFormationsParams() {
-	params := map[string]QueryParam{
-		"monster": {
-			ID:          1,
+func (cfg *Config) initMonsterFormationsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "monster",
 			Description: "Searches for monster formations that feature the specified monster.",
-			Usage:       "?monster={id}",
-			ExampleUses: []string{"?monster=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "monsters")},
 		},
-		"category": {
-			ID:          2,
+		{
+			Name:		 "category",
 			Description: "Searches for monster formations with the specified monster-formation-category.",
-			Usage:       "?category={name|id}",
-			ExampleUses: []string{"?category=boss-fight", "?category=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.MonsterFormationCategory.lookup,
 			References:  []string{createListURL(cfg, "monster-formation-category")},
 		},
-		"location": {
-			ID:          3,
+		{
+			Name:		 "location",
 			Description: "Searches for monster formations that appear within the specified location.",
-			Usage:       "?location={id}",
-			ExampleUses: []string{"?location=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "locations")},
 		},
-		"sublocation": {
-			ID:          4,
+		{
+			Name:		 "sublocation",
 			Description: "Searches for monster formations that appear within the specified sublocation.",
-			Usage:       "?sublocation={id}",
-			ExampleUses: []string{"?sublocation=13"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
-		"area": {
-			ID:          5,
+		{
+			Name:		 "area",
 			Description: "Searches for monster formations that appear within the specified area.",
-			Usage:       "?area={id}",
-			ExampleUses: []string{"?area=13", "?area=240"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "areas")},
 		},
-		"availability": {
-			ID:          6,
+		{
+			Name:		 "availability",
 			Description: "Searches for monster formations with the given availability.",
-			Usage:       "?availability={value|id}",
-			ExampleUses: []string{"?availability=post", "?availability=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
 		},
-		"repeatable": {
-			ID:          8,
+		{
+			Name:		 "repeatable",
 			Description: "Searches for monster formations that can be triggered more than once.",
-			Usage:       "?repeatable={bool}",
-			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"ambush": {
-			ID:          9,
+		{
+			Name:		 "ambush",
 			Description: "Searches for monster formations that are forced ambushes.",
-			Usage:       "?ambush={bool}",
-			ExampleUses: []string{"?ambush=true", "?ambush=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.monsterFormations = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.monsterFormations = paramsMap
 }
 
-func (cfg *Config) initShopsParams() {
-	params := map[string]QueryParam{
-		"category": {
-			ID:          1,
+func (cfg *Config) initShopsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "category",
 			Description: "Searches for shops with the specified shop category.",
-			Usage:       "?category={name|id}",
-			ExampleUses: []string{"?category=oaka", "?category=4"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.ShopCategory.lookup,
 			References:  []string{createListURL(cfg, "shop-category")},
 		},
-		"location": {
-			ID:          2,
+		{
+			Name:		 "location",
 			Description: "Searches for shops that appear within the specified location.",
-			Usage:       "?location={id}",
-			ExampleUses: []string{"?location=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "locations")},
 		},
-		"sublocation": {
-			ID:          3,
+		{
+			Name:		 "sublocation",
 			Description: "Searches for shops that appear within the specified sublocation.",
-			Usage:       "?sublocation={id}",
-			ExampleUses: []string{"?sublocation=13"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
-		"auto_ability": {
-			ID:          4,
+		{
+			Name:		 "auto_ability",
 			Description: "Searches for shops that offer equipment with the specified auto-ability.",
-			Usage:       "?auto_ability={id}",
-			ExampleUses: []string{"?auto_ability=7"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "auto-abilities")},
 		},
-		"empty_slots": {
-			ID:              5,
+		{
+			Name:		 "empty_slots",
 			Description:     "Searches for shops that offer equipment with the specified amount of empty slots.",
-			Usage:           "?empty_slots={int}",
-			ExampleUses:     []string{"?empty_slots=3"},
+			Type: 		     "int-list",
 			ForList:         true,
 			ForSingle:       false,
 			AllowedIntRange: []int{0, 4},
 		},
-		"character": {
-			ID:          6,
+		{
+			Name:		 "character",
 			Description: "Specifies the character the offered equipment is for when searching for shops with the 'auto_ability' or 'empty_slots' parameters.",
-			Usage:       "?auto_ability={id}&character={id|name}",
-			ExampleUses: []string{"?auto_ability=111&character=wakka"},
+			Type:		 "name/id",
+			ExampleVals: []string{"wakka"},
 			ForList:     true,
 			ForSingle:   false,
 			UsableWith:  []string{"auto_ability", "empty_slots"},
 			References:  []string{createListURL(cfg, "characters")},
 		},
-		"shop_type": {
-			ID:          7,
+		{
+			Name:		 "shop_type",
 			Description: "Specifies whether the given auto-ability is sold before or after acquiring the airship when searching for shops with the 'auto_ability' or 'empty_slots' parameters.",
-			Usage:       "?shop_type={value|id}",
-			ExampleUses: []string{"?shop_type=pre-airship", "?shop_type=2"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			UsableWith:  []string{"auto_ability", "empty_slots"},
 			TypeLookup:  cfg.t.ShopType.lookup,
 		},
-		"items": {
-			ID:          8,
+		{
+			Name:		 "items",
 			Description: "Searches for shops that offer items.",
-			Usage:       "?items={bool}",
-			ExampleUses: []string{"?items=true", "?items=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"equipment": {
-			ID:          9,
+		{
+			Name:		 "equipment",
 			Description: "Searches for shops that offer equipment.",
-			Usage:       "?equipment={bool}",
-			ExampleUses: []string{"?equipment=true", "?equipment=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"availability": {
-			ID:          10,
+		{
+			Name:		 "availability",
 			Description: "Searches for shops with the given availability.",
-			Usage:       "?availability={value|id}",
-			ExampleUses: []string{"?availability=post", "?availability=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
@@ -732,71 +750,64 @@ func (cfg *Config) initShopsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.shops = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.shops = paramsMap
 }
 
-func (cfg *Config) initTreasuresParams() {
-	params := map[string]QueryParam{
-		"location": {
-			ID:          1,
+func (cfg *Config) initTreasuresParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "location",
 			Description: "Searches for treasures that appear within the specified location.",
-			Usage:       "?location={id}",
-			ExampleUses: []string{"?location=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "locations")},
 		},
-		"sublocation": {
-			ID:          2,
+		{
+			Name:		 "sublocation",
 			Description: "Searches for treasures that appear within the specified sublocation.",
-			Usage:       "?sublocation={id}",
-			ExampleUses: []string{"?sublocation=13"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
-		"area": {
-			ID:          3,
+		{
+			Name:		 "area",
 			Description: "Searches for treasures that appear within the specified area.",
-			Usage:       "?area={id}",
-			ExampleUses: []string{"?area=13", "?area=240"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "areas")},
 		},
-		"loot_type": {
-			ID:          4,
+		{
+			Name:		 "loot_type",
 			Description: "Searches for treasures with the specified loot type.",
-			Usage:       "?loot_type={name|id}",
-			ExampleUses: []string{"?loot_type=item", "?loot_type=2"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.LootType.lookup,
 			References:  []string{createListURL(cfg, "loot-type")},
 		},
-		"treasure_type": {
-			ID:          5,
+		{
+			Name:		 "treasure_type",
 			Description: "Searches for treasures with the specified treasure type.",
-			Usage:       "?treasure_type={name|id}",
-			ExampleUses: []string{"?treasure_type=chest", "?treasure_type=2"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.TreasureType.lookup,
 		},
-		"anima": {
-			ID:          6,
+		{
+			Name:		 "anima",
 			Description: "Searches for treasures that are necessary for getting Anima.",
-			Usage:       "?anima={bool}",
-			ExampleUses: []string{"?anima=true", "?anima=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"availability": {
-			ID:          7,
+		{
+			Name:		 "availability",
 			Description: "Searches for treasures with the given availability.",
-			Usage:       "?availability={value|id}",
-			ExampleUses: []string{"?availability=post", "?availability=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
@@ -804,53 +815,49 @@ func (cfg *Config) initTreasuresParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.treasures = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.treasures = paramsMap
 }
 
-func (cfg *Config) initQuestsParams() {
-	params := map[string]QueryParam{
-		"type": {
-			ID:          1,
+func (cfg *Config) initQuestsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "type",
 			Description: "Searches for quests that are of the specified quest type.",
-			Usage:       "?type={name|id}",
-			ExampleUses: []string{"?type=sidequest", "?type=2"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.QuestType.lookup,
 			References:  []string{createListURL(cfg, "quest-type")},
 		},
-		"availability": {
-			ID:          6,
+		{
+			Name:		 "availability",
 			Description: "Searches for quests with the given availability.",
-			Usage:       "?availability={value|id}",
-			ExampleUses: []string{"?availability=post", "?availability=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
 		},
-		"repeatable": {
-			ID:          2,
+		{
+			Name:		 "repeatable",
 			Description: "Searches for quests that can be completed more than once.",
-			Usage:       "?repeatable={bool}",
-			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.quests = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.quests = paramsMap
 }
 
-func (cfg *Config) initSidequestsParams() {
-	params := map[string]QueryParam{
-		"availability": {
-			ID:          6,
+func (cfg *Config) initSidequestsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "availability",
 			Description: "Searches for sidequests with the given availability.",
-			Usage:       "?availability={value|id}",
-			ExampleUses: []string{"?availability=post", "?availability=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
@@ -858,163 +865,150 @@ func (cfg *Config) initSidequestsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.sidequests = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.sidequests = paramsMap
 }
 
-func (cfg *Config) initSubquestsParams() {
-	params := map[string]QueryParam{
-		"availability": {
-			ID:          1,
+func (cfg *Config) initSubquestsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "availability",
 			Description: "Searches for subquests with the given availability.",
-			Usage:       "?availability={value|id}",
-			ExampleUses: []string{"?availability=post", "?availability=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
 		},
-		"repeatable": {
-			ID:          2,
+		{
+			Name:		 "repeatable",
 			Description: "Searches for subquests that can be completed more than once.",
-			Usage:       "?repeatable={bool}",
-			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.subquests = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.subquests = paramsMap
 }
 
-func (cfg *Config) initArenaCreationsParams() {
-	params := map[string]QueryParam{
-		"category": {
-			ID:          1,
+func (cfg *Config) initArenaCreationsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "category",
 			Description: "Searches for monster formations with the specified arena-creation-category.",
-			Usage:       "?category={name|id}",
-			ExampleUses: []string{"?category=species", "?category=3"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.ArenaCreationCategory.lookup,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.arenaCreations = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.arenaCreations = paramsMap
 }
 
-func (cfg *Config) initBlitzballPrizesParams() {
-	params := map[string]QueryParam{
-		"category": {
-			ID:          1,
+func (cfg *Config) initBlitzballPrizesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "category",
 			Description: "Searches for blitzball prize tables with the specified blitzball-tournament-category.",
-			Usage:       "?category={name|id}",
-			ExampleUses: []string{"?category=league", "?category=2"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.BlitzballTournamentCategory.lookup,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.blitzballPrizes = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.blitzballPrizes = paramsMap
 }
 
-func (cfg *Config) initSongsParams() {
-	params := map[string]QueryParam{
-		"location": {
-			ID:          1,
+func (cfg *Config) initSongsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "location",
 			Description: "Searches for songs that are played within the specified location. Songs with special use cases are not included.",
-			Usage:       "?location={id}",
-			ExampleUses: []string{"?location=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "locations")},
 		},
-		"sublocation": {
-			ID:          2,
+		{
+			Name:		 "sublocation",
 			Description: "Searches for songs that are played within the specified sublocation. Songs with special use cases are not included.",
-			Usage:       "?sublocation={id}",
-			ExampleUses: []string{"?sublocation=13"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
-		"area": {
-			ID:          3,
+		{
+			Name:		 "area",
 			Description: "Searches for songs that are played within the specified area. Songs with special use cases are not included.",
-			Usage:       "?area={id}",
-			ExampleUses: []string{"?area=13", "?area=240"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "areas")},
 		},
-		"fmvs": {
-			ID:          4,
+		{
+			Name:		 "fmvs",
 			Description: "Searches for songs that are played in fmvs.",
-			Usage:       "?fmvs={bool}",
-			ExampleUses: []string{"?fmvs=true", "?fmvs=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"special_use": {
-			ID:          5,
+		{
+			Name:		 "special_use",
 			Description: "Searches for songs with a special use case.",
-			Usage:       "?special_use={bool}",
-			ExampleUses: []string{"?special_use=true", "?special_use=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"composer": {
-			ID:          6,
+		{
+			Name:		 "composer",
 			Description: "Searches for songs that were composed by the stated composer.",
-			Usage:       "?composer={name|id}",
-			ExampleUses: []string{"?composer=nobuo-uematsu", "?composer=2"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.Composer.lookup,
 		},
-		"arranger": {
-			ID:          7,
+		{
+			Name:		 "arranger",
 			Description: "Searches for songs that were arranged by the stated arranger.",
-			Usage:       "?arranger={name|id}",
-			ExampleUses: []string{"?arranger=nobuo-uematsu", "?arranger=2"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.Arranger.lookup,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.songs = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.songs = paramsMap
 }
 
-func (cfg *Config) initFMVsParams() {
-	params := map[string]QueryParam{
-		"location": {
-			ID:          1,
+func (cfg *Config) initFMVsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "location",
 			Description: "Searches for fmvs that are played within the specified location.",
-			Usage:       "?location={id}",
-			ExampleUses: []string{"?location=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "locations")},
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.fmvs = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.fmvs = paramsMap
 }
 
-func (cfg *Config) initPlayerUnitsParams() {
-	params := map[string]QueryParam{
-		"type": {
-			ID:          1,
+func (cfg *Config) initPlayerUnitsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "type",
 			Description: "Searches for player units that are of the specified unit type.",
-			Usage:       "?type={name|id}",
-			ExampleUses: []string{"?type=character", "?type=2"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.UnitType.lookup,
@@ -1022,151 +1016,145 @@ func (cfg *Config) initPlayerUnitsParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.playerUnits = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.playerUnits = paramsMap
 }
 
-func (cfg *Config) initCharactersParams() {
-	params := map[string]QueryParam{
-		"story_based": {
-			ID:          1,
+func (cfg *Config) initCharactersParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "story_based",
 			Description: "Searches for characters that are only playable during certain sections of the story.",
-			Usage:       "?story_based={bool}",
-			ExampleUses: []string{"?story_based=true", "?story_based=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"underwater": {
-			ID:          2,
+		{
+			Name:		 "underwater",
 			Description: "Searches for characters that can fight underwater.",
-			Usage:       "?underwater={bool}",
-			ExampleUses: []string{"?underwater=true", "?underwater=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.characters = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.characters = paramsMap
 }
 
-func (cfg *Config) initAeonsParams() {
-	params := map[string]QueryParam{
-		"battles": {
-			ID:              1,
+func (cfg *Config) initAeonsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "battles",
 			Description:     "Specifies the amount of battles the player has taken part in and takes them into account when calculating the aeon's stats. An aeon's stats increase for the first time after 60 battles and then every 30 additional battles with the final increase being at 600. Can be used in combination with the 'yuna_stats' parameter.",
-			Usage:           "?battles={int}",
-			ExampleUses:     []string{"?battles=123"},
+			Type: 		     "int",
 			ForList:         false,
 			ForSingle:       true,
 			AllowedIntRange: []int{0, 600},
 			DefaultVal:      h.GetIntPtr(0),
 		},
-		"yuna_stats": {
-			ID:          2,
+		{
+			Name:		 "yuna_stats",
 			Description: "Calculate an aeon's stats based on Yuna's stats. If a stat is not given, Yuna's respective default stat is used instead. Every stat instead of luck is available, since an aeon simply copies Yuna's luck stat. Can be used in combination with the 'battles' parameter.",
-			Usage:       "?yuna_stats={stat}={int},...",
+			Type: 		 "stat",
 			ExampleUses: []string{"?yuna_stats=hp=3000,strength=75,defense=50,magic=30,agility=20", "?yuna_stats=accuracy=150,magic_defense=255"},
 			ForList:     false,
 			ForSingle:   true,
 		},
-		"optional": {
-			ID:          3,
+		{
+			Name:		 "optional",
 			Description: "Searches for aeons that are not mandatory to complete the main story.",
-			Usage:       "?optional={bool}",
-			ExampleUses: []string{"?optional=true", "?optional=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.aeons = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.aeons = paramsMap
 }
 
-func (cfg *Config) initCharacterClassesParams() {
-	params := map[string]QueryParam{
-		"category": {
-			ID:          1,
+func (cfg *Config) initCharacterClassesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "category",
 			Description: "Searches for character classes with the specified category.",
-			Usage:       "?category={name|id}",
-			ExampleUses: []string{"?category=group", "?category=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.CharacterClassCategory.lookup,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.characterClasses = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.characterClasses = paramsMap
 }
 
-func (cfg *Config) initMonstersParams() {
-	params := map[string]QueryParam{
-		"kimahri_stats": {
-			ID:          1,
+func (cfg *Config) initMonstersParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "kimahri_stats",
 			Description: "Calculate the stats of Biran and Yenke Ronso that are based on Kimahri's stats. These are: HP, strength, magic, agility. If unused, their stats are based on Kimahri's base stats.",
-			Usage:       "?kimahri_stats={stat}={int},...",
+			Type: 		 "stat",
 			ExampleUses: []string{"?kimahri_stats=hp=3000,strength=25,magic=30,agility=40", "?kimahri_stats=hp=15000,agility=255"},
 			ForList:     false,
 			ForSingle:   true,
 			AllowedIDs:  []int32{167, 168},
 		},
-		"aeon_stats": {
-			ID:          2,
+		{
+			Name:		 "aeon_stats",
 			Description: "Replace the stats of Possessed Aeons with your own. All stats are replaceable, except for MP and luck. If unused, their stats are based on your own Aeon's base stats.",
-			Usage:       "?aeon_stats={stat}={int},...",
+			Type: 		 "stat",
 			ExampleUses: []string{"?aeon_stats=hp=3000,strength=75,defense=50,magic=30,agility=20", "?aeon_stats=accuracy=150,magic_defense=255"},
 			ForList:     false,
 			ForSingle:   true,
 			AllowedIDs:  []int32{216, 217, 218, 219, 220, 221, 222, 223, 224, 225},
 		},
-		"altered_state": {
-			ID:          3,
+		{
+			Name:		 "altered_state",
 			Description: "If a monster has altered states, apply the changes of an altered state to that monster. The default state will show up as the first altered state in the new entry.",
-			Usage:       "?altered_state={id}",
-			ExampleUses: []string{"?altered_state=1"},
+			Type:		 "id",
 			ForList:     false,
 			ForSingle:   true,
 		},
-		"omnis_elements": {
-			ID:            4,
+		{
+			Name:		   "omnis_elements",
 			Description:   "Calculate the elemental affinities of Seymour Omnis by using exactly four of the letters 'f' (fire), 'l' (lightning), 'w' (water) and 'i' (ice). The letters represent the Mortiphasms pointing at Omnis. 0 of a color = 'neutral', 1 = 'halved', 2 = 'immune', 3 = 'absorb', 4 = 'absorb' + 'weak' to opposing element. The order of the letters doesn't matter.",
+			Type: 		   "other",
 			Usage:         "?omnis_elements={4xf|l|w|i}",
-			ExampleUses:   []string{"?omnis_elements=ifil", "?omnis_elements=llll", "?omnis_elements=wfwf"},
+			ExampleUses:   []string{"?omnis_elements=ifil", "?omnis_elements=llll", "?omnis_elements=wilf"},
 			ForList:       false,
 			ForSingle:     true,
 			AllowedIDs:    []int32{211},
 			AllowedValues: []string{"f", "l", "w", "i"},
 		},
-		"elemental_resists": {
-			ID:          5,
+		{
+			Name:		 "elemental_resists",
 			Description: "Searches for monsters that have the specified elemental affinities.",
+			Type: 		 "other",
 			Usage:       "?elemental_resists={element|id}={affinity|id},...",
 			ExampleUses: []string{"?elemental_resists=fire=weak,water=absorb", "?elemental_resists=1=3,2=4"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements"), createListURL(cfg, "affinities")},
 		},
-		"status_resists": {
-			ID:          6,
+		{
+			Name:		 "status_resists",
 			Description: "Searches for monsters that resist or are immune to the specified status condition(s). You can optionally use the 'resistance' parameter to specify the minimum resistance. By default, the minimum resistance is 1.",
-			Usage:       "?status_resists={id},...",
-			ExampleUses: []string{"status_resists=1,4"},
+			Type: 		 "id-list",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"resistance": {
-			ID:              7,
+		{
+			Name:		 	 "resistance",
 			Description:     "Specifies the minimum resistance for the 'status_resists' parameter. Resistance is an integer ranging from 1 to 254 (immune). The value 'immune' can also be used, which counts as 254.",
-			Usage:           "status_resists={id},...&resistance={int|'immune'}",
-			ExampleUses:     []string{"status_resists=13&resistance=50", "status_resists=4,17&resistance=30", "status_resists=sleep&resistance=immune"},
+			Type: 		     "int",
 			ForList:         true,
 			ForSingle:       false,
 			RequiredParams:  []string{"status_resists"},
 			AllowedIntRange: []int{1, 254},
-			SpecialInputs: []SpecialInput{
+			SpecialInputs: []SpecialQueryInput{
 				{
 					Key: "immune",
 					Val: 254,
@@ -1174,171 +1162,152 @@ func (cfg *Config) initMonstersParams() {
 			},
 			DefaultVal: h.GetIntPtr(1),
 		},
-		"item": {
-			ID:          8,
+		{
+			Name:		 "item",
 			Description: "Searches for monsters that have the specified item as loot. Can be specified further with the 'method' parameter.",
-			Usage:       "?item={id}",
-			ExampleUses: []string{"?item=45"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "items")},
 		},
-		"method": {
-			ID:             9,
+		{
+			Name:		 	"method",
 			Description:    "Specifies the method of acquisition for the 'item' parameter.",
-			Usage:          "?item={id}&method={method_name}",
-			ExampleUses:    []string{"?item=45&method=steal"},
+			Type:		 	"value-list",
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []string{"item"},
 			AllowedValues:  []string{"steal", "drop", "bribe", "other"},
 		},
-		"auto_ability": {
-			ID:          10,
+		{
+			Name:		 "auto_ability",
 			Description: "Searches for monsters that drop the specified auto-ability.",
-			Usage:       "?auto_ability={id}",
-			ExampleUses: []string{"?auto_ability=16"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "auto-abilities")},
 		},
-		"is_forced": {
-			ID:             11,
+		{
+			Name:		 	"is_forced",
 			Description:    "Specifies whether the auto-ability a monster drops is forced or not when using the 'auto_ability' parameter.",
-			Usage:          "?auto_ability={id}&is_forced={bool}",
-			ExampleUses:    []string{"?auto_ability=45&is_forced=false"},
+			Type:		 	"bool",
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []string{"auto_ability"},
 		},
-		"empty_slots": {
-			ID:              12,
+		{
+			Name:		 "empty_slots",
 			Description:     "Searches for monsters that can drop equipment with the specified amount of empty slots and no other auto-abilities attached to it.",
-			Usage:           "?empty_slots={int}",
-			ExampleUses:     []string{"?empty_slots=3"},
+			Type: 		 	 "int-list",
 			ForList:         true,
 			ForSingle:       false,
 			AllowedIntRange: []int{1, 4},
 		},
-		"ronso_rage": {
-			ID:          13,
+		{
+			Name:		 "ronso_rage",
 			Description: "Searches for monsters that can teach the specified ronso rage to Kimahri.",
-			Usage:       "?ronso_rage={id}",
-			ExampleUses: []string{"?ronso_rage=5"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "ronso-rages")},
 		},
-		"location": {
-			ID:          14,
+		{
+			Name:		 "location",
 			Description: "Searches for monsters that appear within the specified location.",
-			Usage:       "?location={id}",
-			ExampleUses: []string{"?location=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "locations")},
 		},
-		"sublocation": {
-			ID:          15,
+		{
+			Name:		 "sublocation",
 			Description: "Searches for monsters that appear within the specified sublocation.",
-			Usage:       "?sublocation={id}",
-			ExampleUses: []string{"?sublocation=13"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
-		"area": {
-			ID:          16,
+		{
+			Name:		 "area",
 			Description: "Searches for monsters that appear within the specified area.",
-			Usage:       "?area={id}",
-			ExampleUses: []string{"?area=13", "?area=240"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "areas")},
 		},
-		"distance": {
-			ID:              17,
+		{
+			Name:		 "distance",
 			Description:     "Searches for monsters with the specified distance. Distance is an integer ranging from 1 (close) to 4 (very far/infinite).",
-			Usage:           "?distance={int}",
-			ExampleUses:     []string{"?distance=3"},
+			Type: 		 	 "int-list",
 			ForList:         true,
 			ForSingle:       false,
 			AllowedIntRange: []int{1, 4},
 		},
-		"availability": {
-			ID:          18,
+		{
+			Name:		 "availability",
 			Description: "Searches for monsters with the given availability.",
-			Usage:       "?availability={value|id}",
-			ExampleUses: []string{"?availability=post", "?availability=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
 		},
-		"repeatable": {
-			ID:          20,
+		{
+			Name:		 "repeatable",
 			Description: "Searches for monsters that can be farmed.",
-			Usage:       "?repeatable={bool}",
-			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"capture": {
-			ID:          21,
+		{
+			Name:		 "capture",
 			Description: "Searches for monsters that can be captured.",
-			Usage:       "?capture={bool}",
-			ExampleUses: []string{"?capture=true", "?capture=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"has_overdrive": {
-			ID:          22,
+		{
+			Name:		 "has_overdrive",
 			Description: "Searches for monsters that have an overdrive gauge.",
-			Usage:       "?has_overdrive={bool}",
-			ExampleUses: []string{"?has_overdrive=true", "?has_overdrive=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"underwater": {
-			ID:          23,
+		{
+			Name:		 "underwater",
 			Description: "Searches for monsters that are fought underwater.",
-			Usage:       "?underwater={bool}",
-			ExampleUses: []string{"?underwater=true", "?underwater=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"zombie": {
-			ID:          24,
+		{
+			Name:		 "zombie",
 			Description: "Searches for monsters that are zombies.",
-			Usage:       "?zombie={bool}",
-			ExampleUses: []string{"?zombie=true", "?zombie=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"species": {
-			ID:          25,
+		{
+			Name:		 "species",
 			Description: "Searches for monsters of the specified species.",
-			Usage:       "?species={name|id}",
-			ExampleUses: []string{"?species=wyrm", "?species=5"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.MonsterSpecies.lookup,
 			References:  []string{createListURL(cfg, "monster-species")},
 		},
-		"creation_area": {
-			ID:          26,
+		{
+			Name:		 "creation_area",
 			Description: "Searches for monsters that need to be captured in the specified area to create its area creation.",
-			Usage:       "?creation_area={name|id}",
-			ExampleUses: []string{"?creation_area=thunder-plains", "?creation_area=5"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.CreationArea.lookup,
 		},
-		"category": {
-			ID:          27,
+		{
+			Name:		 "category",
 			Description: "Searches for monsters that are of the specified monster-category.",
-			Usage:       "?category={name|id}",
-			ExampleUses: []string{"?category=boss", "?category=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.MonsterCategory.lookup,
@@ -1346,1053 +1315,971 @@ func (cfg *Config) initMonstersParams() {
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.monsters = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.monsters = paramsMap
 }
 
-func (cfg *Config) initAbilitiesParams() {
-	params := map[string]QueryParam{
-		"type": {
-			ID:          1,
+func (cfg *Config) initAbilitiesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "type",
 			Description: "Searches for abilities that are of the specified ability type.",
-			Usage:       "?type={name|id}",
-			ExampleUses: []string{"?type=player-ability", "?type=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AbilityType.lookup,
 			References:  []string{createListURL(cfg, "ability-type")},
 		},
-		"rank": {
-			ID:          2,
+		{
+			Name:		 "rank",
 			Description: "Searches for abilities with the specified rank.",
-			Usage:       "?rank={int}",
-			ExampleUses: []string{"?rank=3"},
+			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"copycat": {
-			ID:          3,
+		{
+			Name:		 "copycat",
 			Description: "Searches for abilities that can be copied by 'copycat'.",
-			Usage:       "?copycat={bool}",
-			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"help_bar": {
-			ID:          4,
+		{
+			Name:		 "help_bar",
 			Description: "Searches for abilities whose names appear in the help bar.",
-			Usage:       "?help_bar={bool}",
-			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"monster": {
-			ID:          5,
+		{
+			Name:		 "monster",
 			Description: "Searches for abilities that can be used by the specified monster.",
-			Usage:       "?monster={id}",
-			ExampleUses: []string{"?monster=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "monsters")},
 		},
-		"target_type": {
-			ID:          6,
+		{
+			Name:		 "target_type",
 			Description: "Searches for abilities with the specified target type.",
-			Usage:       "?target_type={name|id}",
-			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.TargetType.lookup,
 		},
-		"user_atk": {
-			ID:          7,
+		{
+			Name:		 "user_atk",
 			Description: "Searches for abilities whose range, shatter rate, accuracy, and damage constant are based on the user's attack.",
-			Usage:       "?user_atk={bool}",
-			ExampleUses: []string{"?user_atk=true", "?user_atk=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"darkable": {
-			ID:          8,
+		{
+			Name:		 "darkable",
 			Description: "Searches for abilities that are affected by 'darkness'.",
-			Usage:       "?darkable={bool}",
-			ExampleUses: []string{"?darkable=true", "?darkable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"silenceable": {
-			ID:          9,
+		{
+			Name:		 "silenceable",
 			Description: "Searches for abilities that are affected by 'silence'.",
-			Usage:       "?silenceable={bool}",
-			ExampleUses: []string{"?silenceable=true", "?silenceable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"reflectable": {
-			ID:          10,
+		{
+			Name:		 "reflectable",
 			Description: "Searches for abilities that are affected by 'reflect'.",
-			Usage:       "?reflectable={bool}",
-			ExampleUses: []string{"?reflectable=true", "?reflectable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"attack_type": {
-			ID:          11,
+		{
+			Name:		 "attack_type",
 			Description: "Searches for abilities with battle interactions of the specified attack type.",
-			Usage:       "?attack_type={name|id}",
-			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AttackType.lookup,
 			References:  []string{createListURL(cfg, "attack-type")},
 		},
-		"damage_type": {
-			ID:          12,
+		{
+			Name:		 "damage_type",
 			Description: "Searches for abilities that deal the specified type of damage.",
-			Usage:       "?damage_type={name|id}",
-			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageType.lookup,
 			References:  []string{createListURL(cfg, "damage-type")},
 		},
-		"damage_formula": {
-			ID:          13,
+		{
+			Name:		 "damage_formula",
 			Description: "Searches for abilities that use the specified formula to calculate their damage.",
-			Usage:       "?damage_formula={name|id}",
-			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageFormula.lookup,
 			References:  []string{createListURL(cfg, "damage-formula")},
 		},
-		"can_crit": {
-			ID:          14,
+		{
+			Name:		 "can_crit",
 			Description: "Searches for abilities that can land critical hits.",
-			Usage:       "?can_crit={bool}",
-			ExampleUses: []string{"?can_crit=true", "?can_crit=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"bdl": {
-			ID:          15,
+		{
+			Name:		 "bdl",
 			Description: "Searches for abilities that can break the damage cap of 9999.",
-			Usage:       "?bdl={bool}",
-			ExampleUses: []string{"?bdl=true", "?bdl=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"element": {
-			ID:          16,
+		{
+			Name:		 "element",
 			Description: "Searches for abilities that deal elemental damage based on the specified element.",
-			Usage:       "?element={name|id}",
-			ExampleUses: []string{"?element=3", "?element=fire"},
+			Type:		 "name/id-list-nul",
+			ExampleVals: []string{"fire", "ice"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements")},
 		},
-		"delay": {
-			ID:          17,
+		{
+			Name:		 "delay",
 			Description: "Searches for abilities that deal delay.",
-			Usage:       "?delay={bool}",
-			ExampleUses: []string{"?delay=true", "?delay=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"status_inflict": {
-			ID:          18,
+		{
+			Name:		 "status_inflict",
 			Description: "Searches for abilities that can inflict the specified status condition.",
-			Usage:       "?status_inflict={id}",
-			ExampleUses: []string{"?status_inflict=3"},
+			Type:		 "id-nul",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"status_remove": {
-			ID:          19,
+		{
+			Name:		 "status_remove",
 			Description: "Searches for abilities that can remove the specified status condition.",
-			Usage:       "?status_remove={id}",
-			ExampleUses: []string{"?status_remove=3"},
+			Type:		 "id-nul",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"stat_changes": {
-			ID:          20,
+		{
+			Name:		 "stat_changes",
 			Description: "Searches for abilities that cause stat changes.",
-			Usage:       "?stat_changes={bool}",
-			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"mod_changes": {
-			ID:          21,
+		{
+			Name:		 "mod_changes",
 			Description: "Searches for abilities that cause modifier changes.",
-			Usage:       "?mod_changes={bool}",
-			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.abilities = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.abilities = paramsMap
 }
 
-func (cfg *Config) initPlayerAbilitiesParams() {
-	params := map[string]QueryParam{
-		"ability_user": {
-			ID:          1,
-			Description: "If a player ability is based on a user's attack, this parameter modifies its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
-			Usage:       "?ability_user={type}:{name|id}",
-			ExampleUses: []string{"?ability_user=wakka", "?ability_user=valefor", "?ability_user=2"},
+func (cfg *Config) initPlayerAbilitiesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "ability_user",
+			Description: "If a player ability is based on a user's attack, this parameter modifies its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
+			Type:		 "name/id",
+			ExampleVals: []string{"wakka", "valefor"},
 			ForList:     false,
 			ForSingle:   true,
+			References:  []string{createListURL(cfg, "player-units")},
 		},
-		"bomb_wpn": {
-			ID:             2,
+		{
+			Name:		 	"bomb_wpn",
 			Description:    "If a player ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
-			Usage:          "?ability_user={type}:{name|id}&bomb_wpn={bool}",
-			ExampleUses:    []string{"?ability_user=character:wakka&bomb_wpn=true"},
+			Type:		    "bool",
 			ForList:        false,
 			ForSingle:      true,
 			RequiredParams: []string{"ability_user"},
 		},
-		"rank": {
-			ID:          3,
+		{
+			Name:		 "rank",
 			Description: "Searches for player abilities with the specified rank.",
-			Usage:       "?rank={int}",
-			ExampleUses: []string{"?rank=3"},
+			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"copycat": {
-			ID:          4,
+		{
+			Name:		 "copycat",
 			Description: "Searches for player abilities that can be copied by 'copycat'.",
-			Usage:       "?copycat={bool}",
-			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"help_bar": {
-			ID:          5,
+		{
+			Name:		 "help_bar",
 			Description: "Searches for player abilities whose names appear in the help bar.",
-			Usage:       "?help_bar={bool}",
-			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"category": {
-			ID:          6,
+		{
+			Name:		 "category",
 			Description: "Searches for player abilities that are of the specified player ability category.",
-			Usage:       "?category={name|id}",
-			ExampleUses: []string{"?category=black-magic", "?category=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.PlayerAbilityCategory.lookup,
 			References:  []string{createListURL(cfg, "player-ability-category")},
 		},
-		"outside_battle": {
-			ID:          7,
+		{
+			Name:		 "outside_battle",
 			Description: "Searches for player abilities that can be used outside of battle, in the 'abilities' menu.",
-			Usage:       "?outside_battle={bool}",
-			ExampleUses: []string{"?outside_battle=true", "?outside_battle=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"mp": {
-			ID:          8,
+		{
+			Name:		 "mp",
 			Description: "Searches for player abilities with the specified mp cost.",
-			Usage:       "?mp={int}",
-			ExampleUses: []string{"?mp=16"},
+			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"mp_min": {
-			ID:          9,
+		{
+			Name:		 "mp_min",
 			Description: "Searches for player abilities with an mp cost that is equal or more than the specified amount.",
-			Usage:       "?mp_min={int}",
-			ExampleUses: []string{"?mp_min=16"},
+			Type: 		 "int",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"mp_max": {
-			ID:          10,
+		{
+			Name:		 "mp_max",
 			Description: "Searches for player abilities with an mp cost that is equal or less than the specified amount.",
-			Usage:       "?mp_max={int}",
-			ExampleUses: []string{"?mp_max=16"},
+			Type: 		 "int",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"related_stat": {
-			ID:          11,
+		{
+			Name:		 "related_stat",
 			Description: "Searches for player abilities that are related to the specified stat.",
-			Usage:       "?related_stat={name|id}",
-			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
+			Type:		 "name/id",
+			ExampleVals: []string{"hp", "strength"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
 		},
-		"user": {
-			ID:          12,
+		{
+			Name:		 "user",
 			Description: "Searches for player abilities that are learned by the specified character class.",
-			Usage:       "?user={name|id}",
-			ExampleUses: []string{"?user=3", "?user=characters"},
+			Type:		 "name/id",
+			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
 		},
-		"std_sg": {
-			ID:          13,
+		{
+			Name:		 "std_sg",
 			Description: "Searches for player abilities that are located on the specified character's standard sphere grid.",
-			Usage:       "?std_sg={name|id}",
-			ExampleUses: []string{"?std_sg=3", "?std_sg=tidus"},
+			Type:		 "name/id",
+			ExampleVals: []string{"tidus", "wakka"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "characters")},
 		},
-		"exp_sg": {
-			ID:          14,
+		{
+			Name:		 "exp_sg",
 			Description: "Searches for player abilities that are located on the specified character's expert sphere grid.",
-			Usage:       "?exp_sg={name|id}",
-			ExampleUses: []string{"?exp_sg=3", "?exp_sg=tidus"},
+			Type:		 "name/id",
+			ExampleVals: []string{"tidus", "wakka"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "characters")},
 		},
-		"learn_item": {
-			ID:          15,
+		{
+			Name:		 "learn_item",
 			Description: "Searches for player abilities an aeon can learn via the specified item.",
-			Usage:       "?learn_item={id}",
-			ExampleUses: []string{"?learn_item=3"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "items")},
 		},
-		"target_type": {
-			ID:          16,
+		{
+			Name:		 "target_type",
 			Description: "Searches for player abilities with the specified target type.",
-			Usage:       "?target_type={name|id}",
-			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.TargetType.lookup,
 		},
-		"user_atk": {
-			ID:          17,
+		{
+			Name:		 "user_atk",
 			Description: "Searches for player abilities whose range, shatter rate, accuracy, and damage constant are based on the user's attack.",
-			Usage:       "?user_atk={bool}",
-			ExampleUses: []string{"?user_atk=true", "?user_atk=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"darkable": {
-			ID:          18,
+		{
+			Name:		 "darkable",
 			Description: "Searches for player abilities that are affected by 'darkness'.",
-			Usage:       "?darkable={bool}",
-			ExampleUses: []string{"?darkable=true", "?darkable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"silenceable": {
-			ID:          19,
+		{
+			Name:		 "silenceable",
 			Description: "Searches for player abilities that are affected by 'silence'.",
-			Usage:       "?silenceable={bool}",
-			ExampleUses: []string{"?silenceable=true", "?silenceable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"reflectable": {
-			ID:          20,
+		{
+			Name:		 "reflectable",
 			Description: "Searches for player abilities that are affected by 'reflect'.",
-			Usage:       "?reflectable={bool}",
-			ExampleUses: []string{"?reflectable=true", "?reflectable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"attack_type": {
-			ID:          21,
+		{
+			Name:		 "attack_type",
 			Description: "Searches for player abilities with battle interactions of the specified attack type.",
-			Usage:       "?attack_type={name|id}",
-			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AttackType.lookup,
 			References:  []string{createListURL(cfg, "attack-type")},
 		},
-		"damage_type": {
-			ID:          22,
+		{
+			Name:		 "damage_type",
 			Description: "Searches for player abilities that deal the specified type of damage.",
-			Usage:       "?damage_type={name|id}",
-			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageType.lookup,
 			References:  []string{createListURL(cfg, "damage-type")},
 		},
-		"damage_formula": {
-			ID:          23,
+		{
+			Name:		 "damage_formula",
 			Description: "Searches for player abilities that use the specified formula to calculate their damage.",
-			Usage:       "?damage_formula={name|id}",
-			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageFormula.lookup,
 			References:  []string{createListURL(cfg, "damage-formula")},
 		},
-		"element": {
-			ID:          24,
+		{
+			Name:		 "element",
 			Description: "Searches for player abilities that deal elemental damage based on the specified element.",
-			Usage:       "?element={name|id}",
-			ExampleUses: []string{"?element=3", "?element=fire"},
+			Type:		 "name/id-list-nul",
+			ExampleVals: []string{"fire", "ice"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements")},
 		},
-		"delay": {
-			ID:          25,
+		{
+			Name:		 "delay",
 			Description: "Searches for player abilities that deal delay.",
-			Usage:       "?delay={bool}",
-			ExampleUses: []string{"?delay=true", "?delay=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"status_inflict": {
-			ID:          26,
+		{
+			Name:		 "status_inflict",
 			Description: "Searches for player abilities that can inflict the specified status condition.",
-			Usage:       "?status_inflict={id}",
-			ExampleUses: []string{"?status_inflict=3"},
+			Type:		 "id-nul",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"status_remove": {
-			ID:          27,
+		{
+			Name:		 "status_remove",
 			Description: "Searches for player abilities that can remove the specified status condition.",
-			Usage:       "?status_remove={id}",
-			ExampleUses: []string{"?status_remove=3"},
+			Type:		 "id-nul",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"stat_changes": {
-			ID:          28,
+		{
+			Name:		 "stat_changes",
 			Description: "Searches for player abilities that cause stat changes.",
-			Usage:       "?stat_changes={bool}",
-			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"mod_changes": {
-			ID:          29,
+		{
+			Name:		 "mod_changes",
 			Description: "Searches for player abilities that cause modifier changes.",
-			Usage:       "?mod_changes={bool}",
-			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.playerAbilities = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.playerAbilities = paramsMap
 }
 
-func (cfg *Config) initOverdriveAbilitiesParams() {
-	params := map[string]QueryParam{
-		"rank": {
-			ID:          1,
+func (cfg *Config) initOverdriveAbilitiesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "rank",
 			Description: "Searches for overdrive abilities with the specified rank.",
-			Usage:       "?rank={int}",
-			ExampleUses: []string{"?rank=3"},
+			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"user": {
-			ID:          2,
+		{
+			Name:		 "user",
 			Description: "Searches for overdrive abilities that are learned by the specified character class.",
-			Usage:       "?user={name|id}",
-			ExampleUses: []string{"?user=3", "?user=characters"},
+			Type:		 "name/id",
+			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
 		},
-		"related_stat": {
-			ID:          3,
+		{
+			Name:		 "related_stat",
 			Description: "Searches for overdrive abilities that are related to the specified stat.",
-			Usage:       "?related_stat={name|id}",
-			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
+			Type:		 "name/id",
+			ExampleVals: []string{"hp", "strength"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
 		},
-		"target_type": {
-			ID:          4,
+		{
+			Name:		 "target_type",
 			Description: "Searches for overdrive abilities with the specified target type.",
-			Usage:       "?target_type={name|id}",
-			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.TargetType.lookup,
 		},
-		"attack_type": {
-			ID:          5,
+		{
+			Name:		 "attack_type",
 			Description: "Searches for overdrive abilities with battle interactions of the specified attack type.",
-			Usage:       "?attack_type={name|id}",
-			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AttackType.lookup,
 			References:  []string{createListURL(cfg, "attack-type")},
 		},
-		"damage_formula": {
-			ID:          6,
+		{
+			Name:		 "damage_formula",
 			Description: "Searches for overdrive abilities that use the specified formula to calculate their damage.",
-			Usage:       "?damage_formula={name|id}",
-			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageFormula.lookup,
 			References:  []string{createListURL(cfg, "damage-formula")},
 		},
-		"can_crit": {
-			ID:          7,
+		{
+			Name:		 "can_crit",
 			Description: "Searches for overdrive abilities that can land critical hits.",
-			Usage:       "?can_crit={bool}",
-			ExampleUses: []string{"?can_crit=true", "?can_crit=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"element": {
-			ID:          8,
+		{
+			Name:		 "element",
 			Description: "Searches for overdrive abilities that deal elemental damage based on the specified element.",
-			Usage:       "?element={name|id}",
-			ExampleUses: []string{"?element=3", "?element=fire"},
+			Type:		 "name/id-list-nul",
+			ExampleVals: []string{"fire", "ice"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements")},
 		},
-		"delay": {
-			ID:          9,
+		{
+			Name:		 "delay",
 			Description: "Searches for overdrive abilities that deal delay.",
-			Usage:       "?delay={bool}",
-			ExampleUses: []string{"?delay=true", "?delay=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"status_inflict": {
-			ID:          10,
+		{
+			Name:		 "status_inflict",
 			Description: "Searches for overdrive abilities that can inflict the specified status condition.",
-			Usage:       "?status_inflict={id}",
-			ExampleUses: []string{"?status_inflict=3"},
+			Type:		 "id-nul",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"status_remove": {
-			ID:          11,
+		{
+			Name:		 "status_remove",
 			Description: "Searches for overdrive abilities that can remove the specified status condition.",
-			Usage:       "?status_remove={id}",
-			ExampleUses: []string{"?status_remove=3"},
+			Type:		 "id-nul",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"stat_changes": {
-			ID:          12,
+		{
+			Name:		 "stat_changes",
 			Description: "Searches for overdrive abilities that cause stat changes.",
-			Usage:       "?stat_changes={bool}",
-			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"mod_changes": {
-			ID:          13,
+		{
+			Name:		 "mod_changes",
 			Description: "Searches for overdrive abilities that cause modifier changes.",
-			Usage:       "?mod_changes={bool}",
-			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.overdriveAbilities = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.overdriveAbilities = paramsMap
 }
 
-func (cfg *Config) initItemAbilitiesParams() {
-	params := map[string]QueryParam{
-		"category": {
-			ID:          1,
+func (cfg *Config) initItemAbilitiesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "category",
 			Description: "Searches for item abilities that are of the specified item category.",
-			Usage:       "?category={name|id}",
-			ExampleUses: []string{"?category=healing", "?category=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.ItemCategory.lookup,
 			References:  []string{createListURL(cfg, "item-category")},
 		},
-		"outside_battle": {
-			ID:          2,
+		{
+			Name:		 "outside_battle",
 			Description: "Searches for item abilities that can be used outside of battle, in the 'abilities' menu.",
-			Usage:       "?outside_battle={bool}",
-			ExampleUses: []string{"?outside_battle=true", "?outside_battle=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"related_stat": {
-			ID:          3,
+		{
+			Name:		 "related_stat",
 			Description: "Searches for item abilities that are related to the specified stat.",
-			Usage:       "?related_stat={name|id}",
-			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
+			Type:		 "name/id",
+			ExampleVals: []string{"hp", "strength"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
 		},
-		"target_type": {
-			ID:          4,
+		{
+			Name:		 "target_type",
 			Description: "Searches for item abilities with the specified target type.",
-			Usage:       "?target_type={name|id}",
-			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.TargetType.lookup,
 		},
-		"attack_type": {
-			ID:          5,
+		{
+			Name:		 "attack_type",
 			Description: "Searches for item abilities with battle interactions of the specified attack type.",
-			Usage:       "?attack_type={name|id}",
-			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AttackType.lookup,
 			References:  []string{createListURL(cfg, "attack-type")},
 		},
-		"damage_formula": {
-			ID:          6,
+		{
+			Name:		 "damage_formula",
 			Description: "Searches for item abilities that use the specified formula to calculate their damage.",
-			Usage:       "?damage_formula={name|id}",
-			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageFormula.lookup,
 			References:  []string{createListURL(cfg, "damage-formula")},
 		},
-		"element": {
-			ID:          7,
+		{
+			Name:		 "element",
 			Description: "Searches for item abilities that deal elemental damage based on the specified element.",
-			Usage:       "?element={name|id}",
-			ExampleUses: []string{"?element=3", "?element=fire"},
+			Type:		 "name/id-list-nul",
+			ExampleVals: []string{"fire", "ice"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements")},
 		},
-		"delay": {
-			ID:          8,
+		{
+			Name:		 "delay",
 			Description: "Searches for item abilities that deal delay.",
-			Usage:       "?delay={bool}",
-			ExampleUses: []string{"?delay=true", "?delay=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"status_inflict": {
-			ID:          9,
+		{
+			Name:		 "status_inflict",
 			Description: "Searches for item abilities that can inflict the specified status condition.",
-			Usage:       "?status_inflict={id}",
-			ExampleUses: []string{"?status_inflict=3"},
+			Type:		 "id-nul",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"status_remove": {
-			ID:          10,
+		{
+			Name:		 "status_remove",
 			Description: "Searches for item abilities that can remove the specified status condition.",
-			Usage:       "?status_remove={id}",
-			ExampleUses: []string{"?status_remove=3"},
+			Type:		 "id-nul",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"stat_changes": {
-			ID:          11,
+		{
+			Name:		 "stat_changes",
 			Description: "Searches for item abilities that cause stat changes.",
-			Usage:       "?stat_changes={bool}",
-			ExampleUses: []string{"?stat_changes=true", "?stat_changes=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"mod_changes": {
-			ID:          12,
+		{
+			Name:		 "mod_changes",
 			Description: "Searches for item abilities that cause modifier changes.",
-			Usage:       "?mod_changes={bool}",
-			ExampleUses: []string{"?mod_changes=true", "?mod_changes=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.itemAbilities = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.itemAbilities = paramsMap
 }
 
-func (cfg *Config) initTriggerCommandsParams() {
-	params := map[string]QueryParam{
-		"ability_user": {
-			ID:          1,
-			Description: "If a trigger command is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this command.",
-			Usage:       "?ability_user={type}:{name|id}",
-			ExampleUses: []string{"?ability_user=wakka", "?ability_user=valefor", "?ability_user=2"},
+func (cfg *Config) initTriggerCommandsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "ability_user",
+			Description: "If a trigger command is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this command.",
+			Type:		 "name/id",
+			ExampleVals: []string{"wakka", "valefor"},
 			ForList:     false,
 			ForSingle:   true,
+			References:  []string{createListURL(cfg, "player-units")},
 		},
-		"bomb_wpn": {
-			ID:             2,
+		{
+			Name:		 	"bomb_wpn",
 			Description:    "If a trigger command is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
-			Usage:          "?ability_user={type}:{name|id}&bomb_wpn={bool}",
-			ExampleUses:    []string{"?ability_user=character:wakka&bomb_wpn=true"},
+			Type:		    "bool",
 			ForList:        false,
 			ForSingle:      true,
 			RequiredParams: []string{"ability_user"},
 		},
-		"related_stat": {
-			ID:          3,
+		{
+			Name:		 "related_stat",
 			Description: "Searches for trigger commands that are related to the specified stat.",
-			Usage:       "?related_stat={name|id}",
-			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
+			Type:		 "name/id",
+			ExampleVals: []string{"hp", "strength"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
 		},
-		"user": {
-			ID:          4,
+		{
+			Name:		 "user",
 			Description: "Searches for trigger commands that are learned by the specified character class.",
-			Usage:       "?user={name|id}",
-			ExampleUses: []string{"?user=3", "?user=characters"},
+			Type:		 "name/id",
+			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.triggerCommands = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.triggerCommands = paramsMap
 }
 
-func (cfg *Config) initUnspecifiedAbilitiesParams() {
-	params := map[string]QueryParam{
-		"ability_user": {
-			ID:          1,
-			Description: "If an unspecified ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
-			Usage:       "?ability_user={type}:{name|id}",
-			ExampleUses: []string{"?ability_user=wakka", "?ability_user=valefor", "?ability_user=2"},
+func (cfg *Config) initUnspecifiedAbilitiesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "ability_user",
+			Description: "If an unspecified ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
+			Type:		 "name/id",
+			ExampleVals: []string{"wakka", "valefor"},
 			ForList:     false,
 			ForSingle:   true,
+			References:  []string{createListURL(cfg, "player-units")},
 		},
-		"bomb_wpn": {
-			ID:             2,
+		{
+			Name:		 	"bomb_wpn",
 			Description:    "If an unspecified ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
-			Usage:          "?ability_user={type}:{name|id}&bomb_wpn={bool}",
-			ExampleUses:    []string{"?ability_user=character:wakka&bomb_wpn=true"},
+			Type:		    "bool",
 			ForList:        false,
 			ForSingle:      true,
 			RequiredParams: []string{"ability_user"},
 		},
-		"rank": {
-			ID:          3,
+		{
+			Name:		 "rank",
 			Description: "Searches for unspecified abilities with the specified rank.",
-			Usage:       "?rank={int}",
-			ExampleUses: []string{"?rank=3"},
+			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"copycat": {
-			ID:          4,
+		{
+			Name:		 "copycat",
 			Description: "Searches for unspecified abilities that can be copied by 'copycat'.",
-			Usage:       "?copycat={bool}",
-			ExampleUses: []string{"?copycat=true", "?can_copycat=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"help_bar": {
-			ID:          5,
+		{
+			Name:		 "help_bar",
 			Description: "Searches for unspecified abilities whose names appear in the help bar.",
-			Usage:       "?help_bar={bool}",
-			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"user": {
-			ID:          6,
+		{
+			Name:		 "user",
 			Description: "Searches for unspecified abilities that are learned by the specified character class.",
-			Usage:       "?user={name|id}",
-			ExampleUses: []string{"?user=3", "?user=characters"},
+			Type:		 "name/id",
+			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
 		},
-		"user_atk": {
-			ID:          7,
+		{
+			Name:		 "user_atk",
 			Description: "Searches for unspecified abilities whose range, shatter rate, accuracy, and damage constant are based on the user's attack.",
-			Usage:       "?user_atk={bool}",
-			ExampleUses: []string{"?user_atk=true", "?user_atk=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.unspecifiedAbilities = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.unspecifiedAbilities = paramsMap
 }
 
-func (cfg *Config) initEnemyAbilitiesParams() {
-	params := map[string]QueryParam{
-		"rank": {
-			ID:          1,
+func (cfg *Config) initEnemyAbilitiesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "rank",
 			Description: "Searches for enemy abilities with the specified rank.",
-			Usage:       "?rank={int}",
-			ExampleUses: []string{"?rank=3"},
+			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"help_bar": {
-			ID:          2,
+		{
+			Name:		 "help_bar",
 			Description: "Searches for enemy abilities whose names appear in the help bar.",
-			Usage:       "?help_bar={bool}",
-			ExampleUses: []string{"?help_bar=true", "?help_bar=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"monster": {
-			ID:          3,
+		{
+			Name:		 "monster",
 			Description: "Searches for enemy abilities that can be used by the specified monster.",
-			Usage:       "?monster={id}",
-			ExampleUses: []string{"?monster=17"},
+			Type:		 "id",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "monsters")},
 		},
-		"target_type": {
-			ID:          4,
+		{
+			Name:		 "target_type",
 			Description: "Searches for enemy abilities with the specified target type.",
-			Usage:       "?target_type={name|id}",
-			ExampleUses: []string{"?target_type=3", "?target_type=single-target"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
+			TypeLookup:  cfg.t.TargetType.lookup,
 		},
-		"darkable": {
-			ID:          5,
+		{
+			Name:		 "darkable",
 			Description: "Searches for enemy abilities that are affected by 'darkness'.",
-			Usage:       "?darkable={bool}",
-			ExampleUses: []string{"?darkable=true", "?darkable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"silenceable": {
-			ID:          6,
+		{
+			Name:		 "silenceable",
 			Description: "Searches for enemy abilities that are affected by 'silence'.",
-			Usage:       "?silenceable={bool}",
-			ExampleUses: []string{"?silenceable=true", "?silenceable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"reflectable": {
-			ID:          7,
+		{
+			Name:		 "reflectable",
 			Description: "Searches for enemy abilities that are affected by 'reflect'.",
-			Usage:       "?reflectable={bool}",
-			ExampleUses: []string{"?reflectable=true", "?reflectable=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"attack_type": {
-			ID:          8,
+		{
+			Name:		 "attack_type",
 			Description: "Searches for enemy abilities with battle interactions of the specified attack type.",
-			Usage:       "?attack_type={name|id}",
-			ExampleUses: []string{"?attack_type=attack", "?attack_type=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AttackType.lookup,
 			References:  []string{createListURL(cfg, "attack-type")},
 		},
-		"damage_type": {
-			ID:          9,
+		{
+			Name:		 "damage_type",
 			Description: "Searches for enemy abilities that deal the specified type of damage.",
-			Usage:       "?damage_type={name|id}",
-			ExampleUses: []string{"?damage_type=3", "?damage_type=physical"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageType.lookup,
 			References:  []string{createListURL(cfg, "damage-type")},
 		},
-		"damage_formula": {
-			ID:          10,
+		{
+			Name:		 "damage_formula",
 			Description: "Searches for enemy abilities that use the specified formula to calculate their damage.",
-			Usage:       "?damage_formula={name|id}",
-			ExampleUses: []string{"?damage_formula=str-vs-def", "?attack_type=4"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageFormula.lookup,
 			References:  []string{createListURL(cfg, "damage-formula")},
 		},
-		"can_crit": {
-			ID:          11,
+		{
+			Name:		 "can_crit",
 			Description: "Searches for enemy abilities that can land critical hits.",
-			Usage:       "?can_crit={bool}",
-			ExampleUses: []string{"?can_crit=true", "?can_crit=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"bdl": {
-			ID:          12,
+		{
+			Name:		 "bdl",
 			Description: "Searches for enemy abilities that can break the damage cap of 9999.",
-			Usage:       "?bdl={bool}",
-			ExampleUses: []string{"?bdl=true", "?bdl=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"element": {
-			ID:          13,
+		{
+			Name:		 "element",
 			Description: "Searches for enemy abilities that deal elemental damage based on the specified element.",
-			Usage:       "?element={name|id}",
-			ExampleUses: []string{"?element=3", "?element=fire"},
+			Type:		 "name/id-list-nul",
+			ExampleVals: []string{"fire", "ice"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "elements")},
 		},
-		"delay": {
-			ID:          14,
+		{
+			Name:		 "delay",
 			Description: "Searches for enemy abilities that deal delay.",
-			Usage:       "?delay={bool}",
-			ExampleUses: []string{"?delay=true", "?delay=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"status_inflict": {
-			ID:          15,
+		{
+			Name:		 "status_inflict",
 			Description: "Searches for enemy abilities that can inflict the specified status condition.",
-			Usage:       "?status_inflict={id}",
-			ExampleUses: []string{"?status_inflict=3"},
+			Type:		 "id-nul",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
-		"status_remove": {
-			ID:          16,
+		{
+			Name:		 "status_remove",
 			Description: "Searches for enemy abilities that can remove the specified status condition.",
-			Usage:       "?status_remove={id}",
-			ExampleUses: []string{"?status_remove=3"},
+			Type:		 "id-nul",
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "status-conditions")},
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.enemyAbilities = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.enemyAbilities = paramsMap
 }
 
-func (cfg *Config) initOverdrivesParams() {
-	params := map[string]QueryParam{
-		"rank": {
-			ID:          1,
+func (cfg *Config) initOverdrivesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "rank",
 			Description: "Searches for overdrives with the specified rank.",
-			Usage:       "?rank={int}",
-			ExampleUses: []string{"?rank=3"},
+			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"user": {
-			ID:          2,
+		{
+			Name:		 "user",
 			Description: "Searches for overdrives that are learned by the specified character class.",
-			Usage:       "?user={name|id}",
-			ExampleUses: []string{"?user=3", "?user=characters"},
+			Type:		 "name/id",
+			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "character-classes")},
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, true)
-	cfg.q.overdrives = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	cfg.q.overdrives = paramsMap
 }
 
-func (cfg *Config) initSubmenusParams() {
-	params := map[string]QueryParam{
-		"topmenu": {
-			ID:          1,
+func (cfg *Config) initSubmenusParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "topmenu",
 			Description: "Searches for submenus that are found within the specified topmenu.",
-			Usage:       "?topmenu={name|id}",
-			ExampleUses: []string{"?topmenu=2", "?topmenu=main"},
+			Type:		 "name/id",
+			ExampleVals: []string{"main", "left"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "topmenus")},
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.submenus = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.submenus = paramsMap
 }
 
-func (cfg *Config) initItemsParams() {
-	params := map[string]QueryParam{
-		"availability": {
-			ID:          1,
-			Description: "Only displays related resources with the given availability.",
-			Usage:       "?availability={value|id}",
-			ExampleUses: []string{"?availability=post", "?availability=2"},
+func (cfg *Config) initItemsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "availability",
+			Description: "Only displays an item's related resources with the given availability.",
+			Type:		 "enum-list",
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
 		},
-		"repeatable": {
-			ID:          2,
-			Description: "Only displays related monsters and quests that can be farmed.",
-			Usage:       "?repeatable={bool}",
-			ExampleUses: []string{"?repeatable=true", "?repeatable=false"},
+		{
+			Name:		 "repeatable",
+			Description: "Only displays an item's related monsters and quests that can be farmed.",
+			Type:		 "bool",
 			ForList:     false,
 			ForSingle:   true,
 		},
-		"category": {
-			ID:          3,
+		{
+			Name:		 "category",
 			Description: "Searches for items that are of the specified item category.",
-			Usage:       "?category={name|id}",
-			ExampleUses: []string{"?category=healing", "?category=2"},
+			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.ItemCategory.lookup,
 			References:  []string{createListURL(cfg, "item-category")},
 		},
-		"has_ability": {
-			ID:          4,
+		{
+			Name:		 "has_ability",
 			Description: "Searches for items that can be used in battle.",
-			Usage:       "?has_ability={bool}",
-			ExampleUses: []string{"?has_ability=true", "?has_ability=false"},
+			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
-		"related_stat": {
-			ID:          5,
+		{
+			Name:		 "related_stat",
 			Description: "Searches for items that are related to the specified stat.",
-			Usage:       "?related_stat={name|id}",
-			ExampleUses: []string{"?related_stat=3", "?related_stat=hp"},
+			Type:		 "name/id",
+			ExampleVals: []string{"hp", "strength"},
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.items = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.items = paramsMap
 }
 
-func (cfg *Config) initOverdriveModesParams() {
-	params := map[string]QueryParam{
-		"type": {
-			ID:          1,
+func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "type",
 			Description: "Searches for overdrive modes that are of the specified overdrive-mode-type.",
-			Usage:       "?type={name|id}",
-			ExampleUses: []string{"?type=per-action", "?type=2"},
+			Type:		 "enum",
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.OverdriveModeType.lookup,
 		},
 	}
 
-	params = cfg.completeQueryTypeInit(params, false)
-	cfg.q.overdriveModes = params
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.overdriveModes = paramsMap
 }
