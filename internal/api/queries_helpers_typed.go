@@ -9,9 +9,8 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 // validates typed-QueryParam and checks emptiness
-func parseTypedQuery(r *http.Request, queryParam QueryType) (string, string, error) {
+func parseTypedQuery(r *http.Request, queryParam QueryParam) (string, string, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return "", "", err

@@ -10,7 +10,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func getShopsByEmptySlots(cfg *Config, r *http.Request, _ string, _ QueryType) ([]int32, error) {
+func getShopsByEmptySlots(cfg *Config, r *http.Request, _ string, _ QueryParam) ([]int32, error) {
 	i := cfg.e.shops
 
 	queryParamAutoAbility := i.queryLookup["auto_ability"]

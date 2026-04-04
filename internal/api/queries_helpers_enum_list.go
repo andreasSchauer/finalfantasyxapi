@@ -6,7 +6,7 @@ import (
 )
 
 // checks for emptiness of enum-list-queryParam and converts its input into a slice of valid enum-strings.
-func parseEnumListQuery[E, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[E, N]) ([]E, error) {
+func parseEnumListQuery[E, N any](r *http.Request, endpoint string, queryParam QueryParam, et EnumType[E, N]) ([]E, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -16,7 +16,7 @@ func parseEnumListQuery[E, N any](r *http.Request, endpoint string, queryParam Q
 }
 
 // converts a list of unique query enum values or ids into a slice of valid typed enum-strings.
-func queryEnumsToSlice[E, N any](query, endpoint string, queryParam QueryType, et EnumType[E, N]) ([]E, error) {
+func queryEnumsToSlice[E, N any](query, endpoint string, queryParam QueryParam, et EnumType[E, N]) ([]E, error) {
 	enumStrs := querySplit(query, ",")
 	enums := []E{}
 
@@ -37,7 +37,7 @@ func queryEnumsToSlice[E, N any](query, endpoint string, queryParam QueryType, e
 	return enums, nil
 }
 
-func checkDuplicateEnums[E any](queryParam QueryType, enums []E) error {
+func checkDuplicateEnums[E any](queryParam QueryParam, enums []E) error {
 	enumMap := make(map[any]bool)
 
 	for _, enum := range enums {

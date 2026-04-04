@@ -6,7 +6,7 @@ import (
 )
 
 // checks for emptiness of id-list-queryParam and converts its input into a slice of valid ids.
-func parseIdListQuery(r *http.Request, queryParam QueryType, maxID int) ([]int32, error) {
+func parseIdListQuery(r *http.Request, queryParam QueryParam, maxID int) ([]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -16,7 +16,7 @@ func parseIdListQuery(r *http.Request, queryParam QueryType, maxID int) ([]int32
 }
 
 // converts a list of unique query ids into a slice of valid ids.
-func queryIDsToSlice(query string, queryParam QueryType, maxID int) ([]int32, error) {
+func queryIDsToSlice(query string, queryParam QueryParam, maxID int) ([]int32, error) {
 	idStrs := querySplit(query, ",")
 	ids := []int32{}
 	const fetchLimit = 50
@@ -43,7 +43,7 @@ func queryIDsToSlice(query string, queryParam QueryType, maxID int) ([]int32, er
 }
 
 // checks, if there are duplicate ids in a slice.
-func checkDuplicateIDs(queryParam QueryType, ids []int32) error {
+func checkDuplicateIDs(queryParam QueryParam, ids []int32) error {
 	idMap := make(map[int32]bool)
 
 	for _, id := range ids {

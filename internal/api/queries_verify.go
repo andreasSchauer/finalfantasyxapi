@@ -49,7 +49,7 @@ func verifyQueryParams[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 	return nil
 }
 
-func verifyDefaultOnlyParam(cfg *Config, q url.Values, lookup map[string]QueryType) bool {
+func verifyDefaultOnlyParam(cfg *Config, q url.Values, lookup map[string]QueryParam) bool {
 	defaultOnlyCount := 0
 
 	for query := range q {
@@ -80,7 +80,7 @@ func isDefaultParam(cfg *Config, queryName string) bool {
 	return ok
 }
 
-func verifyQueryUsage(q url.Values, queryParam QueryType, endpoint string, id *int32, segment *string) error {
+func verifyQueryUsage(q url.Values, queryParam QueryParam, endpoint string, id *int32, segment *string) error {
 	if queryParam.ForSegment != nil && !segmentsMatch(queryParam.ForSegment, segment) {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in the following format: '/api/%s/%s%s'.", queryParam.Name, queryParam.Name, endpoint, *queryParam.ForSegment, queryParam.Usage), nil)
 	}
@@ -126,7 +126,7 @@ func segmentsMatch(sParam, sReq *string) bool {
 	}
 }
 
-func verifyAllowedIDs(queryParam QueryType, id int32) error {
+func verifyAllowedIDs(queryParam QueryParam, id int32) error {
 	if queryParam.AllowedIDs == nil {
 		return nil
 	}
@@ -145,7 +145,7 @@ func verifyAllowedIDs(queryParam QueryType, id int32) error {
 	return nil
 }
 
-func verifyRequiredParams(q url.Values, queryParam QueryType) error {
+func verifyRequiredParams(q url.Values, queryParam QueryParam) error {
 	if queryParam.RequiredParams == nil {
 		return nil
 	}
@@ -161,7 +161,7 @@ func verifyRequiredParams(q url.Values, queryParam QueryType) error {
 	return nil
 }
 
-func verifyUsableWith(q url.Values, queryParam QueryType) error {
+func verifyUsableWith(q url.Values, queryParam QueryParam) error {
 	if queryParam.UsableWith == nil {
 		return nil
 	}

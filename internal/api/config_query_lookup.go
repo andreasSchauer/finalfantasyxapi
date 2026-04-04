@@ -6,7 +6,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type QueryType struct {
+type QueryParam struct {
 	ID               int                        `json:"-"`
 	Name             string                     `json:"name"`
 	Description      string                     `json:"description"`
@@ -37,53 +37,53 @@ type SpecialInput struct {
 
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
-	defaultParams        map[string]QueryType
+	defaultParams map[string]QueryParam
 
-	locations            map[string]QueryType
-	sublocations         map[string]QueryType
-	areas                map[string]QueryType
+	locations    map[string]QueryParam
+	sublocations map[string]QueryParam
+	areas        map[string]QueryParam
 
-	monsterFormations    map[string]QueryType
-	shops                map[string]QueryType
-	treasures            map[string]QueryType
-	quests           	 map[string]QueryType
-	sidequests           map[string]QueryType
-	subquests            map[string]QueryType
-	arenaCreations       map[string]QueryType
-	blitzballPrizes      map[string]QueryType
-	songs                map[string]QueryType
-	fmvs                 map[string]QueryType
+	monsterFormations map[string]QueryParam
+	shops             map[string]QueryParam
+	treasures         map[string]QueryParam
+	quests            map[string]QueryParam
+	sidequests        map[string]QueryParam
+	subquests         map[string]QueryParam
+	arenaCreations    map[string]QueryParam
+	blitzballPrizes   map[string]QueryParam
+	songs             map[string]QueryParam
+	fmvs              map[string]QueryParam
 
-	playerUnits			 map[string]QueryType
-	characters           map[string]QueryType
-	aeons                map[string]QueryType
-	characterClasses     map[string]QueryType
-	monsters             map[string]QueryType
+	playerUnits      map[string]QueryParam
+	characters       map[string]QueryParam
+	aeons            map[string]QueryParam
+	characterClasses map[string]QueryParam
+	monsters         map[string]QueryParam
 
-	abilities            map[string]QueryType
-	playerAbilities      map[string]QueryType
-	overdriveAbilities   map[string]QueryType
-	itemAbilities        map[string]QueryType
-	triggerCommands      map[string]QueryType
-	unspecifiedAbilities map[string]QueryType
-	enemyAbilities       map[string]QueryType
+	abilities            map[string]QueryParam
+	playerAbilities      map[string]QueryParam
+	overdriveAbilities   map[string]QueryParam
+	itemAbilities        map[string]QueryParam
+	triggerCommands      map[string]QueryParam
+	unspecifiedAbilities map[string]QueryParam
+	enemyAbilities       map[string]QueryParam
 
-	aeonCommands         map[string]QueryType
-	overdriveCommands    map[string]QueryType
-	overdrives           map[string]QueryType
-	ronsoRages           map[string]QueryType
-	submenus             map[string]QueryType
-	topmenus             map[string]QueryType
+	aeonCommands      map[string]QueryParam
+	overdriveCommands map[string]QueryParam
+	overdrives        map[string]QueryParam
+	ronsoRages        map[string]QueryParam
+	submenus          map[string]QueryParam
+	topmenus          map[string]QueryParam
 
-	items				 map[string]QueryType
-	
-	overdriveModes       map[string]QueryType
+	items map[string]QueryParam
+
+	overdriveModes map[string]QueryParam
 }
 
 func (cfg *Config) QueryLookupInit() {
 	cfg.q = &QueryLookup{}
 
-	cfg.q.defaultParams = map[string]QueryType{
+	cfg.q.defaultParams = map[string]QueryParam{
 		"limit": {
 			ID:          1001,
 			Name:        "limit",
@@ -126,7 +126,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initBlitzballPrizesParams()
 	cfg.initSongsParams()
 	cfg.initFMVsParams()
-	
+
 	cfg.initPlayerUnitsParams()
 	cfg.initCharactersParams()
 	cfg.initAeonsParams()
@@ -149,20 +149,20 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.q.topmenus = cfg.assignDefaultParams()
 
 	cfg.initItemsParams()
-	
+
 	cfg.initOverdriveModesParams()
 
 }
 
-func (cfg *Config) assignDefaultParams() map[string]QueryType {
+func (cfg *Config) assignDefaultParams() map[string]QueryParam {
 	return cfg.completeQueryTypeInit(createEmptyQueryMap(), false)
 }
 
-func createEmptyQueryMap() map[string]QueryType {
-	return make(map[string]QueryType)
+func createEmptyQueryMap() map[string]QueryParam {
+	return make(map[string]QueryParam)
 }
 
-func (cfg *Config) completeQueryTypeInit(params map[string]QueryType, hasSimpleView bool) map[string]QueryType {
+func (cfg *Config) completeQueryTypeInit(params map[string]QueryParam, hasSimpleView bool) map[string]QueryParam {
 	maps.Copy(params, cfg.q.defaultParams)
 
 	for key, entry := range params {
@@ -171,7 +171,7 @@ func (cfg *Config) completeQueryTypeInit(params map[string]QueryType, hasSimpleV
 	}
 
 	if hasSimpleView {
-		params["ids"] = QueryType{
+		params["ids"] = QueryParam{
 			ID:          1003,
 			Name:        "ids",
 			Description: "Used to input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",
@@ -187,10 +187,8 @@ func (cfg *Config) completeQueryTypeInit(params map[string]QueryType, hasSimpleV
 	return params
 }
 
-
-
 func (cfg *Config) initLocationsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"item": {
 			ID:          1,
 			Description: "Searches for locations where the specified item can be acquired. Can be specified further with the 'method' parameter.",
@@ -290,7 +288,7 @@ func (cfg *Config) initLocationsParams() {
 }
 
 func (cfg *Config) initSublocationsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"location": {
 			ID:          1,
 			Description: "Searches for sublocations that are located within the specified location.",
@@ -399,7 +397,7 @@ func (cfg *Config) initSublocationsParams() {
 }
 
 func (cfg *Config) initAreasParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"location": {
 			ID:          1,
 			Description: "Searches for areas that are located within the specified location.",
@@ -558,10 +556,8 @@ func (cfg *Config) initAreasParams() {
 	cfg.q.areas = params
 }
 
-
-
 func (cfg *Config) initMonsterFormationsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"monster": {
 			ID:          1,
 			Description: "Searches for monster formations that feature the specified monster.",
@@ -641,7 +637,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 }
 
 func (cfg *Config) initShopsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"category": {
 			ID:          1,
 			Description: "Searches for shops with the specified shop category.",
@@ -741,7 +737,7 @@ func (cfg *Config) initShopsParams() {
 }
 
 func (cfg *Config) initTreasuresParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"location": {
 			ID:          1,
 			Description: "Searches for treasures that appear within the specified location.",
@@ -813,7 +809,7 @@ func (cfg *Config) initTreasuresParams() {
 }
 
 func (cfg *Config) initQuestsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"type": {
 			ID:          1,
 			Description: "Searches for quests that are of the specified quest type.",
@@ -849,7 +845,7 @@ func (cfg *Config) initQuestsParams() {
 }
 
 func (cfg *Config) initSidequestsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"availability": {
 			ID:          6,
 			Description: "Searches for sidequests with the given availability.",
@@ -867,7 +863,7 @@ func (cfg *Config) initSidequestsParams() {
 }
 
 func (cfg *Config) initSubquestsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"availability": {
 			ID:          1,
 			Description: "Searches for subquests with the given availability.",
@@ -893,7 +889,7 @@ func (cfg *Config) initSubquestsParams() {
 }
 
 func (cfg *Config) initArenaCreationsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"category": {
 			ID:          1,
 			Description: "Searches for monster formations with the specified arena-creation-category.",
@@ -910,7 +906,7 @@ func (cfg *Config) initArenaCreationsParams() {
 }
 
 func (cfg *Config) initBlitzballPrizesParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"category": {
 			ID:          1,
 			Description: "Searches for blitzball prize tables with the specified blitzball-tournament-category.",
@@ -927,7 +923,7 @@ func (cfg *Config) initBlitzballPrizesParams() {
 }
 
 func (cfg *Config) initSongsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"location": {
 			ID:          1,
 			Description: "Searches for songs that are played within the specified location. Songs with special use cases are not included.",
@@ -996,7 +992,7 @@ func (cfg *Config) initSongsParams() {
 }
 
 func (cfg *Config) initFMVsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"location": {
 			ID:          1,
 			Description: "Searches for fmvs that are played within the specified location.",
@@ -1012,10 +1008,8 @@ func (cfg *Config) initFMVsParams() {
 	cfg.q.fmvs = params
 }
 
-
-
 func (cfg *Config) initPlayerUnitsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"type": {
 			ID:          1,
 			Description: "Searches for player units that are of the specified unit type.",
@@ -1033,7 +1027,7 @@ func (cfg *Config) initPlayerUnitsParams() {
 }
 
 func (cfg *Config) initCharactersParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"story_based": {
 			ID:          1,
 			Description: "Searches for characters that are only playable during certain sections of the story.",
@@ -1057,7 +1051,7 @@ func (cfg *Config) initCharactersParams() {
 }
 
 func (cfg *Config) initAeonsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"battles": {
 			ID:              1,
 			Description:     "Specifies the amount of battles the player has taken part in and takes them into account when calculating the aeon's stats. An aeon's stats increase for the first time after 60 battles and then every 30 additional battles with the final increase being at 600. Can be used in combination with the 'yuna_stats' parameter.",
@@ -1091,7 +1085,7 @@ func (cfg *Config) initAeonsParams() {
 }
 
 func (cfg *Config) initCharacterClassesParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"category": {
 			ID:          1,
 			Description: "Searches for character classes with the specified category.",
@@ -1108,7 +1102,7 @@ func (cfg *Config) initCharacterClassesParams() {
 }
 
 func (cfg *Config) initMonstersParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"kimahri_stats": {
 			ID:          1,
 			Description: "Calculate the stats of Biran and Yenke Ronso that are based on Kimahri's stats. These are: HP, strength, magic, agility. If unused, their stats are based on Kimahri's base stats.",
@@ -1356,10 +1350,8 @@ func (cfg *Config) initMonstersParams() {
 	cfg.q.monsters = params
 }
 
-
-
 func (cfg *Config) initAbilitiesParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"type": {
 			ID:          1,
 			Description: "Searches for abilities that are of the specified ability type.",
@@ -1547,14 +1539,14 @@ func (cfg *Config) initAbilitiesParams() {
 }
 
 func (cfg *Config) initPlayerAbilitiesParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"ability_user": {
-			ID:              1,
-			Description:     "If a player ability is based on a user's attack, this parameter modifies its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
-			Usage:           "?ability_user={type}:{name|id}",
-			ExampleUses:     []string{"?ability_user=wakka", "?ability_user=valefor", "?ability_user=2"},
-			ForList:         false,
-			ForSingle:       true,
+			ID:          1,
+			Description: "If a player ability is based on a user's attack, this parameter modifies its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
+			Usage:       "?ability_user={type}:{name|id}",
+			ExampleUses: []string{"?ability_user=wakka", "?ability_user=valefor", "?ability_user=2"},
+			ForList:     false,
+			ForSingle:   true,
 		},
 		"bomb_wpn": {
 			ID:             2,
@@ -1804,7 +1796,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 }
 
 func (cfg *Config) initOverdriveAbilitiesParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"rank": {
 			ID:          1,
 			Description: "Searches for overdrive abilities with the specified rank.",
@@ -1925,7 +1917,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 }
 
 func (cfg *Config) initItemAbilitiesParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"category": {
 			ID:          1,
 			Description: "Searches for item abilities that are of the specified item category.",
@@ -2039,14 +2031,14 @@ func (cfg *Config) initItemAbilitiesParams() {
 }
 
 func (cfg *Config) initTriggerCommandsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"ability_user": {
-			ID:              1,
-			Description:     "If a trigger command is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this command.",
-			Usage:           "?ability_user={type}:{name|id}",
-			ExampleUses:     []string{"?ability_user=wakka", "?ability_user=valefor", "?ability_user=2"},
-			ForList:         false,
-			ForSingle:       true,
+			ID:          1,
+			Description: "If a trigger command is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this command.",
+			Usage:       "?ability_user={type}:{name|id}",
+			ExampleUses: []string{"?ability_user=wakka", "?ability_user=valefor", "?ability_user=2"},
+			ForList:     false,
+			ForSingle:   true,
 		},
 		"bomb_wpn": {
 			ID:             2,
@@ -2082,14 +2074,14 @@ func (cfg *Config) initTriggerCommandsParams() {
 }
 
 func (cfg *Config) initUnspecifiedAbilitiesParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"ability_user": {
-			ID:              1,
-			Description:     "If an unspecified ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
-			Usage:           "?ability_user={type}:{name|id}",
-			ExampleUses:     []string{"?ability_user=wakka", "?ability_user=valefor", "?ability_user=2"},
-			ForList:         false,
-			ForSingle:       true,
+			ID:          1,
+			Description: "If an unspecified ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. User can be a character or an aeon. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
+			Usage:       "?ability_user={type}:{name|id}",
+			ExampleUses: []string{"?ability_user=wakka", "?ability_user=valefor", "?ability_user=2"},
+			ForList:     false,
+			ForSingle:   true,
 		},
 		"bomb_wpn": {
 			ID:             2,
@@ -2148,7 +2140,7 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 }
 
 func (cfg *Config) initEnemyAbilitiesParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"rank": {
 			ID:          1,
 			Description: "Searches for enemy abilities with the specified rank.",
@@ -2293,10 +2285,8 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 	cfg.q.enemyAbilities = params
 }
 
-
-
 func (cfg *Config) initOverdrivesParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"rank": {
 			ID:          1,
 			Description: "Searches for overdrives with the specified rank.",
@@ -2321,7 +2311,7 @@ func (cfg *Config) initOverdrivesParams() {
 }
 
 func (cfg *Config) initSubmenusParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"topmenu": {
 			ID:          1,
 			Description: "Searches for submenus that are found within the specified topmenu.",
@@ -2337,10 +2327,8 @@ func (cfg *Config) initSubmenusParams() {
 	cfg.q.submenus = params
 }
 
-
-
 func (cfg *Config) initItemsParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"availability": {
 			ID:          1,
 			Description: "Only displays related resources with the given availability.",
@@ -2392,10 +2380,8 @@ func (cfg *Config) initItemsParams() {
 	cfg.q.items = params
 }
 
-
-
 func (cfg *Config) initOverdriveModesParams() {
-	params := map[string]QueryType{
+	params := map[string]QueryParam{
 		"type": {
 			ID:          1,
 			Description: "Searches for overdrive modes that are of the specified overdrive-mode-type.",

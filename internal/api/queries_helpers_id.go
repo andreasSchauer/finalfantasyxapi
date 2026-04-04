@@ -8,7 +8,7 @@ import (
 )
 
 // validates id-queryParam and checks emptiness.
-func parseIdQuery(r *http.Request, queryParam QueryType, maxID int) (int32, error) {
+func parseIdQuery(r *http.Request, queryParam QueryParam, maxID int) (int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return 0, err
@@ -23,7 +23,7 @@ func parseIdQuery(r *http.Request, queryParam QueryType, maxID int) (int32, erro
 }
 
 // validates id-queryParam and checks emptiness. accepts "none" as input.
-func parseIdQueryNul(r *http.Request, queryParam QueryType, maxID int) (*int32, error) {
+func parseIdQueryNul(r *http.Request, queryParam QueryParam, maxID int) (*int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func parseIdQueryNul(r *http.Request, queryParam QueryType, maxID int) (*int32, 
 }
 
 // checks if query ID is valid and within range. if it's invalid, it will return an httpError. if you want to soft-check the ID and do name checks afterwards, use checkQueryID()
-func parseQueryID(idStr string, queryParam QueryType, maxID int) (int32, error) {
+func parseQueryID(idStr string, queryParam QueryParam, maxID int) (int32, error) {
 	id, err := checkQueryID(idStr, queryParam, maxID)
 	if errors.Is(err, errNotAnID) {
 		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s' used for parameter '%s'.", idStr, queryParam.Name), err)
@@ -56,7 +56,7 @@ func parseQueryID(idStr string, queryParam QueryType, maxID int) (int32, error) 
 }
 
 // checks if query ID is valid and within range. if it's invalid, it will return errNotAnID, providing the possibility to do name-based checks. for a hard-check with errors, use parseQueryID()
-func checkQueryID(idStr string, queryParam QueryType, maxID int) (int32, error) {
+func checkQueryID(idStr string, queryParam QueryParam, maxID int) (int32, error) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		return 0, errNotAnID

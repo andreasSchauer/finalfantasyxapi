@@ -10,7 +10,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryType, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
+func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryParam, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryType, baseStat
 	return statMap, nil
 }
 
-func parseStatPair(cfg *Config, pair string, queryParam QueryType, allowedStatIDs []int32) (string, int, error) {
+func parseStatPair(cfg *Config, pair string, queryParam QueryParam, allowedStatIDs []int32) (string, int, error) {
 	stat, valueStr, found := strings.Cut(pair, "=")
 	if !found {
 		return "", 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s' . usage: '%s'.", queryParam.Name, stat, queryParam.Usage), nil)
@@ -63,7 +63,7 @@ func getDefaultStats(queryStatMap map[string]int32, baseStats []BaseStat) map[st
 	return statMap
 }
 
-func validateQueryStatName(cfg *Config, stat string, allowedStatIDs []int32, queryParam QueryType) error {
+func validateQueryStatName(cfg *Config, stat string, allowedStatIDs []int32, queryParam QueryParam) error {
 	parseResp, err := checkUniqueName(stat, cfg.l.Stats)
 	if err != nil {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: '%s' in '%s'. stat doesn't exist. use '/api/stats' to see existing stats.", stat, queryParam.Name), err)
@@ -76,7 +76,7 @@ func validateQueryStatName(cfg *Config, stat string, allowedStatIDs []int32, que
 	return nil
 }
 
-func validateQueryStatVal(statName string, valStr string, queryParam QueryType) (int, error) {
+func validateQueryStatVal(statName string, valStr string, queryParam QueryParam) (int, error) {
 	val, err := strconv.Atoi(valStr)
 	if err != nil {
 		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat value '%s' in '%s'. stat value needs to be a positive integer.", valStr, queryParam.Name), err)

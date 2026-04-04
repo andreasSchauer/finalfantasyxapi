@@ -13,7 +13,7 @@ type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 	usage            []string
 	objLookup        map[string]T
 	objLookupID      map[int32]T
-	queryLookup      map[string]QueryType
+	queryLookup      map[string]QueryParam
 	getMultipleQuery func(context.Context, string) ([]int32, error)
 	retrieveQuery    func(context.Context) ([]int32, error)
 	idToResFunc      func(*Config, handlerInput[T, R, A, L], int32) A

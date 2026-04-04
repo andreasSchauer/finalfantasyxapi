@@ -85,7 +85,7 @@ func getUnitRepl[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 	return repl, nil
 }
 
-func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
+func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
 	id, err := checkQueryNameID(repl.unit.Name, string(repl.unit.Type), queryParamUser, cfg.l.Characters)
 	if err != nil {
 		return unitRepl{}, err
@@ -101,7 +101,7 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryType)
 	return repl, nil
 }
 
-func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryType) (unitRepl, error) {
+func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
 	id, err := checkQueryNameID(repl.unit.Name, string(repl.unit.Type), queryParamUser, cfg.l.Aeons)
 	if err != nil {
 		return unitRepl{}, err

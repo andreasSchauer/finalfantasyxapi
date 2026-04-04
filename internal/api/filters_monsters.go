@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryParam QueryType) ([]int32, error) {
+func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryParam QueryParam) ([]int32, error) {
 	ids, err := getElemResistIDs(cfg, query, queryParam)
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryP
 	return dbIDs, nil
 }
 
-func getElemResistIDs(cfg *Config, query string, queryParam QueryType) ([]int32, error) {
+func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32, error) {
 	eaPairs := querySplit(query, ",")
 	var ids []int32
 	elemMap := make(map[int32]bool)

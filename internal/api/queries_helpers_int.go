@@ -7,9 +7,8 @@ import (
 	"strconv"
 )
 
-
 // checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored. also checks for emptiness and replaces empty inputs with default values, if they exist.
-func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
+func parseIntQuery(r *http.Request, queryParam QueryParam) (int, error) {
 	query := r.URL.Query().Get(queryParam.Name)
 
 	val, err := checkQueryInt(queryParam, query)
@@ -24,7 +23,7 @@ func parseIntQuery(r *http.Request, queryParam QueryType) (int, error) {
 }
 
 // checks if query-int is valid and within allowed range. replaces special inputs with their corresponding value and replaces empty inputs with default values.
-func checkQueryInt(queryParam QueryType, queryVal string) (int, error) {
+func checkQueryInt(queryParam QueryParam, queryVal string) (int, error) {
 	defaultVal, err := checkIntQueryDefaultVal(queryParam, queryVal)
 	if errors.Is(err, errEmptyQuery) {
 		return 0, errEmptyQuery
@@ -47,7 +46,7 @@ func checkQueryInt(queryParam QueryType, queryVal string) (int, error) {
 }
 
 // checks, if an int-queryParam uses a default value. if the query is empty, it returns the default val if it exists, and errEmptyQuery if not. returns errNoDefaultVal, if the query isn't empty.
-func checkIntQueryDefaultVal(queryParam QueryType, query string) (int, error) {
+func checkIntQueryDefaultVal(queryParam QueryParam, query string) (int, error) {
 	if query == "" {
 		if queryParam.DefaultVal == nil {
 			return 0, errEmptyQuery
@@ -59,7 +58,7 @@ func checkIntQueryDefaultVal(queryParam QueryType, query string) (int, error) {
 }
 
 // checks, if an int-queryParam uses special inputs. returns errNoSpecialInput, if it doesn't, and replaces the query value with the special input value, if it does.
-func checkIntQuerySpecialVals(queryParam QueryType, query string) (int, error) {
+func checkIntQuerySpecialVals(queryParam QueryParam, query string) (int, error) {
 	if queryParam.SpecialInputs == nil {
 		return 0, errNoSpecialInput
 	}
@@ -74,7 +73,7 @@ func checkIntQuerySpecialVals(queryParam QueryType, query string) (int, error) {
 }
 
 // checks if an int-queryParam input is valid, and within the allowed range. returns errNoIntRange, if the parameter doesn't use an integer range.
-func checkIntQueryAllowedRange(queryParam QueryType, query string) (int, error) {
+func checkIntQueryAllowedRange(queryParam QueryParam, query string) (int, error) {
 	val, err := strconv.Atoi(query)
 	if err != nil {
 		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. usage: '%s'.", query, queryParam.Name, queryParam.Usage), err)

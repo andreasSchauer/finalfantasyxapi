@@ -9,8 +9,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
-func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {
+func checkEmptyQuery(r *http.Request, queryParam QueryParam) (string, error) {
 	query := r.URL.Query().Get(queryParam.Name)
 	if query == "" {
 		return "", errEmptyQuery
@@ -18,7 +17,6 @@ func checkEmptyQuery(r *http.Request, queryParam QueryType) (string, error) {
 
 	return strings.ToLower(query), nil
 }
-
 
 func checkNoneQuery(query string) error {
 	if query == "none" {
@@ -28,23 +26,21 @@ func checkNoneQuery(query string) error {
 	return nil
 }
 
-
-func queryMapToSlice(lookup map[string]QueryType) []QueryType {
-	queryParams := []QueryType{}
+func queryMapToSlice(lookup map[string]QueryParam) []QueryParam {
+	queryParams := []QueryParam{}
 
 	for key := range lookup {
 		queryParams = append(queryParams, lookup[key])
 	}
 
-	slices.SortStableFunc(queryParams, func(a, b QueryType) int {
+	slices.SortStableFunc(queryParams, func(a, b QueryParam) int {
 		return cmp.Compare(a.ID, b.ID)
 	})
 
 	return queryParams
 }
 
-
-func queryMapToString(lookup map[string]QueryType) string {
+func queryMapToString(lookup map[string]QueryParam) string {
 	params := queryMapToSlice(lookup)
 	names := []string{}
 
@@ -54,7 +50,6 @@ func queryMapToString(lookup map[string]QueryType) string {
 
 	return h.FormatStringSlice(names)
 }
-
 
 func querySplit(query, sep string) []string {
 	queryTrimmed := strings.TrimSuffix(query, sep)

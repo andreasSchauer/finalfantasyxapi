@@ -6,7 +6,7 @@ import (
 )
 
 // validates enum-queryParam and checks emptiness.
-func parseEnumQuery[E, N any](r *http.Request, endpoint string, queryParam QueryType, et EnumType[E, N]) (EnumAPIResource, error) {
+func parseEnumQuery[E, N any](r *http.Request, endpoint string, queryParam QueryParam, et EnumType[E, N]) (EnumAPIResource, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return EnumAPIResource{}, err
@@ -16,7 +16,7 @@ func parseEnumQuery[E, N any](r *http.Request, endpoint string, queryParam Query
 }
 
 // checks, if query enum is valid.
-func checkQueryEnum[E, N any](val, endpoint string, queryParam QueryType, et EnumType[E, N]) (EnumAPIResource, error) {
+func checkQueryEnum[E, N any](val, endpoint string, queryParam QueryParam, et EnumType[E, N]) (EnumAPIResource, error) {
 	enum, err := GetEnumAPIResource(val, et)
 	switch err {
 	case errIdNotFound:

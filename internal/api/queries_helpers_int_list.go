@@ -8,7 +8,7 @@ import (
 )
 
 // checks for emptiness of int-list-queryParam and converts its input into a slice of valid integers
-func parseIntListQuery(r *http.Request, queryParam QueryType) ([]int32, error) {
+func parseIntListQuery(r *http.Request, queryParam QueryParam) ([]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -18,7 +18,7 @@ func parseIntListQuery(r *http.Request, queryParam QueryType) ([]int32, error) {
 }
 
 // converts a list of unique query ints into a slice of valid integers. also deals with ranged inputs.
-func queryIntsToSlice(query string, queryParam QueryType) ([]int32, error) {
+func queryIntsToSlice(query string, queryParam QueryParam) ([]int32, error) {
 	intSegments := querySplit(query, ",")
 	ints := []int32{}
 
@@ -39,7 +39,7 @@ func queryIntsToSlice(query string, queryParam QueryType) ([]int32, error) {
 }
 
 // parses a single item of a query id-list.
-func checkQueryIntRange(queryParam QueryType, segment string) ([]int32, error) {
+func checkQueryIntRange(queryParam QueryParam, segment string) ([]int32, error) {
 	intStrs := strings.Split(segment, "-")
 	ints := []int32{}
 
@@ -69,9 +69,9 @@ func checkQueryIntRange(queryParam QueryType, segment string) ([]int32, error) {
 }
 
 // converts the two values of a ranged int query input into a slice of integers.
-func intRangeToSlice(queryParam QueryType, intStrs []string) ([]int32, error) {
+func intRangeToSlice(queryParam QueryParam, intStrs []string) ([]int32, error) {
 	ints := []int32{}
-	
+
 	minInt, err := checkQueryInt(queryParam, intStrs[0])
 	if err != nil {
 		return nil, err
@@ -95,9 +95,8 @@ func intRangeToSlice(queryParam QueryType, intStrs []string) ([]int32, error) {
 	return ints, nil
 }
 
-
 // checks, if there are duplicate ints in a slice.
-func checkDuplicateInts(queryParam QueryType, ints []int32) error {
+func checkDuplicateInts(queryParam QueryParam, ints []int32) error {
 	intMap := make(map[int32]bool)
 
 	for _, int := range ints {

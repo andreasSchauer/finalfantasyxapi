@@ -7,7 +7,7 @@ import (
 )
 
 // validates bool-queryParam and checks emptiness.
-func parseBooleanQuery(r *http.Request, queryParam QueryType) (bool, error) {
+func parseBooleanQuery(r *http.Request, queryParam QueryParam) (bool, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return false, err

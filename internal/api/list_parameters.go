@@ -8,7 +8,7 @@ import (
 
 type QueryParameterList struct {
 	ListParams
-	Results []QueryType `json:"results"`
+	Results []QueryParam `json:"results"`
 }
 
 func (l QueryParameterList) getListParams() ListParams {
@@ -34,7 +34,7 @@ func getQueryParamList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 	return list, nil
 }
 
-func getAllowedResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], params []QueryType) []QueryType {
+func getAllowedResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		for _, id := range param.AllowedIDs {
 			allowedRes := createResourceURL(cfg, i.endpoint, id)
@@ -46,7 +46,7 @@ func getAllowedResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg
 	return params
 }
 
-func getAllowedValuesFromTypes(cfg *Config, params []QueryType) []QueryType {
+func getAllowedValuesFromTypes(cfg *Config, params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		if param.TypeLookup == nil {
 			continue

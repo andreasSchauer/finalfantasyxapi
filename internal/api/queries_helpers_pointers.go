@@ -10,7 +10,7 @@ import (
 // can make those return sql.NullTypes, if the pointers have no other use
 // might modify those to return errEmptyQuery, then I can use them for filter queries, if needed
 
-func getQueryBoolPtr(r *http.Request, queryName string, queryLookup map[string]QueryType) (*bool, error) {
+func getQueryBoolPtr(r *http.Request, queryName string, queryLookup map[string]QueryParam) (*bool, error) {
 	queryParam := queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
@@ -24,7 +24,7 @@ func getQueryBoolPtr(r *http.Request, queryName string, queryLookup map[string]Q
 	return &b, nil
 }
 
-func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]QueryType) (*int32, error) {
+func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 
 	integer, err := parseIntQuery(r, queryParam)
@@ -40,7 +40,7 @@ func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]Qu
 }
 
 // this is actually getQueryNameOrIdPtr
-func getQueryIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryType) (*int32, error) {
+func getQueryIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := parseNameIdQuery(r, queryParam, i.resourceType, i.objLookup)
@@ -54,7 +54,7 @@ func getQueryIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.R
 	return &id, nil
 }
 
-func getQueryEnumPtr[E, N any](r *http.Request, queryName, endpoint string, et EnumType[E, N], queryLookup map[string]QueryType) (*string, error) {
+func getQueryEnumPtr[E, N any](r *http.Request, queryName, endpoint string, et EnumType[E, N], queryLookup map[string]QueryParam) (*string, error) {
 	queryParam := queryLookup[queryName]
 
 	enumRes, err := parseEnumQuery(r, endpoint, queryParam, et)
