@@ -1066,7 +1066,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?status_resists=4&resistance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'frank' used for parameter 'resistance'. usage: 'status_resists={id},...&resistance={int|'immune'}'.",
+				expectedErr:    "invalid value 'frank' used for parameter 'resistance'. usage: '?resistance={int|'immune'}'.",
 			},
 		},
 		{
@@ -1108,7 +1108,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?distance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'frank' used for parameter 'distance'. usage: '?distance={int}'.",
+				expectedErr:    "invalid value 'frank' used for parameter 'distance'. usage: '?distance={int},...'.",
 			},
 		},
 		{

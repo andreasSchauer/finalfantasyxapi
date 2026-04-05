@@ -213,14 +213,26 @@ ORDER BY a.id;
 -- name: GetAbilityIDsByElement :many
 SELECT DISTINCT a.id
 FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
 WHERE
-    (sqlc.narg('element')::int[] IS NULL AND d.element_id IS NULL)
+    (sqlc.narg('element')::int[] IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id IS NOT NULL
+    ))
     OR
-    (sqlc.narg('element')::int[] IS NOT NULL AND d.element_id = ANY(sqlc.narg('element')::int[]))
+    (sqlc.narg('element')::int[] IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id = ANY(sqlc.narg('element')::int[])
+    ))
 ORDER BY a.id;
 
 
@@ -463,14 +475,26 @@ ORDER BY ea.id;
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
 WHERE
-    (sqlc.narg('element')::int[] IS NULL AND d.element_id IS NULL)
+    (sqlc.narg('element')::int[] IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id IS NOT NULL
+    ))
     OR
-    (sqlc.narg('element')::int[] IS NOT NULL AND d.element_id = ANY(sqlc.narg('element')::int[]))
+    (sqlc.narg('element')::int[] IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id = ANY(sqlc.narg('element')::int[])
+    ))
 ORDER BY ea.id;
 
 
@@ -656,14 +680,26 @@ ORDER BY ia.id;
 SELECT DISTINCT ia.id
 FROM item_abilities ia
 JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
 WHERE
-    (sqlc.narg('element')::int[] IS NULL AND d.element_id IS NULL)
+    (sqlc.narg('element')::int[] IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id IS NOT NULL
+    ))
     OR
-    (sqlc.narg('element')::int[] IS NOT NULL AND d.element_id = ANY(sqlc.narg('element')::int[]))
+    (sqlc.narg('element')::int[] IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id = ANY(sqlc.narg('element')::int[])
+    ))
 ORDER BY ia.id;
 
 
@@ -1033,14 +1069,26 @@ ORDER BY oa.id;
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
 WHERE
-    (sqlc.narg('element')::int[] IS NULL AND d.element_id IS NULL)
+    (sqlc.narg('element')::int[] IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id IS NOT NULL
+    ))
     OR
-    (sqlc.narg('element')::int[] IS NOT NULL AND d.element_id = ANY(sqlc.narg('element')::int[]))
+    (sqlc.narg('element')::int[] IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id = ANY(sqlc.narg('element')::int[])
+    ))
 ORDER BY oa.id;
 
 
@@ -1333,14 +1381,26 @@ ORDER BY pa.id;
 SELECT DISTINCT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
 WHERE
-    (sqlc.narg('element')::int[] IS NULL AND d.element_id IS NULL)
+    (sqlc.narg('element')::int[] IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id IS NOT NULL
+    ))
     OR
-    (sqlc.narg('element')::int[] IS NOT NULL AND d.element_id = ANY(sqlc.narg('element')::int[]))
+    (sqlc.narg('element')::int[] IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id = ANY(sqlc.narg('element')::int[])
+    ))
 ORDER BY pa.id;
 
 

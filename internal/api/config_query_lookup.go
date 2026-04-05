@@ -211,7 +211,7 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 
 	case "id-list":
 		p.Usage = s + "{id},..."
-		p.ExampleUses = []string{s + "1", s + "1,2", s + "1-3"}
+		p.ExampleUses = []string{s + "1", s + "1,2"}
 
 	case "int":
 		p.Usage = s + "{int}"
@@ -230,13 +230,13 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 		e1 := p.ExampleVals[0]
 		e2 := p.ExampleVals[1]
 		p.Usage = s + "{name|id},..."
-		p.ExampleUses = []string{s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
+		p.ExampleUses = []string{s + "1", s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
 
 	case "name/id-list-nul":
 		e1 := p.ExampleVals[0]
 		e2 := p.ExampleVals[1]
-		p.Usage = s + "{name|id},...|'none'"
-		p.ExampleUses = []string{s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2), s + "none"}
+		p.Usage = s + "{name|id},...|{'none'}"
+		p.ExampleUses = []string{s + "1", s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2), s + "none"}
 
 	case "value-list":
 		e1 := p.AllowedValues[0]

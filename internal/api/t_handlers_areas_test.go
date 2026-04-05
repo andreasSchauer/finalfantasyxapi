@@ -300,11 +300,19 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?item=7&availability=always&monsters=false",
+				requestURL:     "/api/areas?item=7&availability=always,post&monsters=false",
 				expectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{129, 140, 163, 208},
+			count:   5,
+			results: []int32{35, 129, 140, 163, 208},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?item=3&method=quest,monster",
+				expectedStatus: http.StatusOK,
+			},
+			count:   17,
+			results: []int32{26, 79, 140, 161, 176, 192, 209},
 		},
 		{
 			testGeneral: testGeneral{

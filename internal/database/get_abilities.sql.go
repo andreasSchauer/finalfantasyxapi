@@ -278,14 +278,26 @@ func (q *Queries) GetAbilityIDsByDamageType(ctx context.Context, damageType []Da
 const getAbilityIDsByElement = `-- name: GetAbilityIDsByElement :many
 SELECT DISTINCT a.id
 FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
 WHERE
-    ($1::int[] IS NULL AND d.element_id IS NULL)
+    ($1::int[] IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id IS NOT NULL
+    ))
     OR
-    ($1::int[] IS NOT NULL AND d.element_id = ANY($1::int[]))
+    ($1::int[] IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id = ANY($1::int[])
+    ))
 ORDER BY a.id
 `
 
@@ -1015,14 +1027,26 @@ const getEnemyAbilityIDsByElement = `-- name: GetEnemyAbilityIDsByElement :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
 WHERE
-    ($1::int[] IS NULL AND d.element_id IS NULL)
+    ($1::int[] IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id IS NOT NULL
+    ))
     OR
-    ($1::int[] IS NOT NULL AND d.element_id = ANY($1::int[]))
+    ($1::int[] IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id = ANY($1::int[])
+    ))
 ORDER BY ea.id
 `
 
@@ -1628,14 +1652,26 @@ const getItemAbilityIDsByElement = `-- name: GetItemAbilityIDsByElement :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
 JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
 WHERE
-    ($1::int[] IS NULL AND d.element_id IS NULL)
+    ($1::int[] IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id IS NOT NULL
+    ))
     OR
-    ($1::int[] IS NOT NULL AND d.element_id = ANY($1::int[]))
+    ($1::int[] IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id = ANY($1::int[])
+    ))
 ORDER BY ia.id
 `
 
@@ -2126,14 +2162,26 @@ const getOverdriveAbilityIDsByElement = `-- name: GetOverdriveAbilityIDsByElemen
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
 WHERE
-    ($1::int[] IS NULL AND d.element_id IS NULL)
+    ($1::int[] IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id IS NOT NULL
+    ))
     OR
-    ($1::int[] IS NOT NULL AND d.element_id = ANY($1::int[]))
+    ($1::int[] IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id = ANY($1::int[])
+    ))
 ORDER BY oa.id
 `
 
@@ -2980,14 +3028,26 @@ const getPlayerAbilityIDsByElement = `-- name: GetPlayerAbilityIDsByElement :man
 SELECT DISTINCT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
 WHERE
-    ($1::int[] IS NULL AND d.element_id IS NULL)
+    ($1::int[] IS NULL AND NOT EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id IS NOT NULL
+    ))
     OR
-    ($1::int[] IS NOT NULL AND d.element_id = ANY($1::int[]))
+    ($1::int[] IS NOT NULL AND EXISTS (
+        SELECT 1
+        FROM j_abilities_battle_interactions j1
+        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+        JOIN damages d ON j2.damage_id = d.id
+        WHERE j1.ability_id = a.id
+          AND d.element_id = ANY($1::int[])
+    ))
 ORDER BY pa.id
 `
 

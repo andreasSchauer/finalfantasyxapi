@@ -2,31 +2,13 @@ package api
 
 import (
 	"cmp"
-	"net/http"
 	"slices"
 	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-// checks, if a queryParam is empty and returns errEmptyQuery, if it is
-func checkEmptyQuery(r *http.Request, queryParam QueryParam) (string, error) {
-	query := r.URL.Query().Get(queryParam.Name)
-	if query == "" {
-		return "", errEmptyQuery
-	}
 
-	return strings.ToLower(query), nil
-}
-
-// checks, if "none" was used as input and returns errQueryNone, if it was
-func checkNoneQuery(query string) error {
-	if query == "none" {
-		return errQueryNone
-	}
-
-	return nil
-}
 
 func queryMapToSlice(lookup map[string]QueryParam) []QueryParam {
 	queryParams := []QueryParam{}

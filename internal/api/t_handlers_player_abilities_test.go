@@ -295,6 +295,16 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/player-abilities?status_inflict=none&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    50,
+			previous: nil,
+			next:     nil,
+			results:  []int32{20, 28, 36, 39, 53, 76, 86, 96, 102},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?silenceable=true&reflectable=false&user=3",
 				expectedStatus: http.StatusOK,
 			},
@@ -332,6 +342,26 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			previous: nil,
 			next:     nil,
 			results:  []int32{71, 75},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/player-abilities?element=fire,ice",
+				expectedStatus: http.StatusOK,
+			},
+			count:    6,
+			previous: nil,
+			next:     nil,
+			results:  []int32{69, 72, 73, 76, 77, 80},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/player-abilities?element=none&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    89,
+			previous: nil,
+			next:     nil,
+			results:  []int32{1, 12, 24, 34, 43, 55, 67, 95, 102},
 		},
 	}
 

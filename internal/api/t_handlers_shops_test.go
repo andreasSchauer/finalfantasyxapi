@@ -306,11 +306,11 @@ func TestRetrieveShops(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/shops?empty_slots=3&shop_type=post-airship",
+				requestURL:     "/api/shops?empty_slots=2-4&shop_type=post-airship",
 				expectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{1, 2, 24, 27, 32},
+			count:   12,
+			results: []int32{1, 2, 12, 24, 27, 32, 36},
 		},
 	}
 
