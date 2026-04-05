@@ -81,6 +81,7 @@ type QueryLookup struct {
 
 	items 		map[string]QueryParam
 	keyItems 	map[string]QueryParam
+	primers		map[string]QueryParam
 
 	overdriveModes map[string]QueryParam
 }
@@ -152,6 +153,7 @@ func (cfg *Config) QueryLookupInit() {
 
 	cfg.initItemsParams(defaultParams)
 	cfg.initKeyItemsParams(defaultParams)
+	cfg.initPrimersParams(defaultParams)
 
 	cfg.initOverdriveModesParams(defaultParams)
 
@@ -2302,10 +2304,10 @@ func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "availability",
-			Description: "Only displays a key-item's related resources with the given availability.",
+			Description: "Searches for key-items with the given availability.",
 			Type:		 "enum-list",
-			ForList:     false,
-			ForSingle:   true,
+			ForList:     true,
+			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
 		},
@@ -2336,6 +2338,23 @@ func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
 
 	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
 	cfg.q.keyItems = paramsMap
+}
+
+func (cfg *Config) initPrimersParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "availability",
+			Description: "Searches for primers with the given availability.",
+			Type:		 "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.primers = paramsMap
 }
 
 func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {

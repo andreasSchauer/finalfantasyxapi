@@ -676,6 +676,53 @@ func (q *Queries) GetKeyItemIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getKeyItemIDsByAvailability = `-- name: GetKeyItemIDsByAvailability :many
+SELECT DISTINCT ki.id
+FROM key_items ki
+JOIN master_items mi ON ki.master_item_id = mi.id
+JOIN item_amounts ia ON ia.master_item_id = mi.id
+WHERE
+  EXISTS (
+    SELECT 1
+    FROM j_treasures_items j
+    JOIN treasures t ON j.treasure_id = t.id
+    WHERE j.item_amount_id = ia.id
+      AND ($1::availability_type[] IS NULL OR t.availability = ANY($1::availability_type[]))
+  )
+  OR
+  EXISTS (
+    SELECT 1
+    FROM quest_completions qc
+    JOIN quests q ON q.completion_id = qc.id
+    WHERE qc.item_amount_id = ia.id
+      AND ($1::availability_type[] IS NULL OR q.availability = ANY($1::availability_type[]))
+  )
+ORDER BY ki.id
+`
+
+func (q *Queries) GetKeyItemIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getKeyItemIDsByAvailability, pq.Array(availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getKeyItemIDsCategory = `-- name: GetKeyItemIDsCategory :many
 SELECT id FROM key_items WHERE category = ANY($1::key_item_category[]) ORDER BY id
 `
@@ -776,21 +823,12 @@ JOIN quest_completions qc ON q.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
 JOIN master_items mi ON ia.master_item_id = mi.id
 JOIN key_items ki ON ki.master_item_id = mi.id
-WHERE
-  ki.id = $1
-  AND ($2::BOOLEAN IS NULL OR q.is_repeatable = $2::BOOLEAN)
-  AND ($3::availability_type[] IS NULL OR q.availability = ANY($3::availability_type[]))
+WHERE ki.id = $1
 ORDER BY q.id
 `
 
-type GetKeyItemQuestIDsParams struct {
-	KeyItemID    int32
-	Repeatable   sql.NullBool
-	Availability []AvailabilityType
-}
-
-func (q *Queries) GetKeyItemQuestIDs(ctx context.Context, arg GetKeyItemQuestIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getKeyItemQuestIDs, arg.KeyItemID, arg.Repeatable, pq.Array(arg.Availability))
+func (q *Queries) GetKeyItemQuestIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getKeyItemQuestIDs, id)
 	if err != nil {
 		return nil, err
 	}
@@ -819,19 +857,145 @@ JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
 JOIN master_items mi ON ia.master_item_id = mi.id
 JOIN key_items ki ON ki.master_item_id = mi.id
-WHERE
-  ki.id = $1
-  AND ($2::availability_type[] IS NULL OR t.availability = ANY($2::availability_type[]))
+WHERE ki.id = $1
 ORDER BY t.id
 `
 
-type GetKeyItemTreasureIDsParams struct {
-	KeyItemID    int32
-	Availability []AvailabilityType
+func (q *Queries) GetKeyItemTreasureIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getKeyItemTreasureIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
-func (q *Queries) GetKeyItemTreasureIDs(ctx context.Context, arg GetKeyItemTreasureIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getKeyItemTreasureIDs, arg.KeyItemID, pq.Array(arg.Availability))
+const getPrimerAreaIDs = `-- name: GetPrimerAreaIDs :many
+SELECT DISTINCT a.id
+FROM areas a
+JOIN treasures t ON t.area_id = a.id
+JOIN j_treasures_items j ON j.treasure_id = t.id
+JOIN item_amounts ia ON j.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
+JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN primers p ON p.key_item_id = ki.id
+WHERE p.id = $1
+ORDER BY a.id
+`
+
+func (q *Queries) GetPrimerAreaIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPrimerAreaIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPrimerIDs = `-- name: GetPrimerIDs :many
+SELECT id FROM primers ORDER BY id
+`
+
+func (q *Queries) GetPrimerIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPrimerIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPrimerIDsByAvailability = `-- name: GetPrimerIDsByAvailability :many
+SELECT DISTINCT p.id
+FROM primers p
+JOIN key_items ki ON p.key_item_id = ki.id
+JOIN master_items mi ON ki.master_item_id = mi.id
+JOIN item_amounts ia ON ia.master_item_id = mi.id
+JOIN j_treasures_items j ON j.item_amount_id = ia.id
+JOIN treasures t ON j.treasure_id = t.id
+WHERE t.availability = ANY($1::availability_type[])
+ORDER BY p.id
+`
+
+func (q *Queries) GetPrimerIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPrimerIDsByAvailability, pq.Array(availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPrimerTreasureIDs = `-- name: GetPrimerTreasureIDs :many
+SELECT DISTINCT t.id
+FROM treasures t
+JOIN j_treasures_items j ON j.treasure_id = t.id
+JOIN item_amounts ia ON j.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
+JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN primers p ON p.key_item_id = ki.id
+WHERE p.id = $1
+ORDER BY t.id
+`
+
+func (q *Queries) GetPrimerTreasureIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPrimerTreasureIDs, id)
 	if err != nil {
 		return nil, err
 	}

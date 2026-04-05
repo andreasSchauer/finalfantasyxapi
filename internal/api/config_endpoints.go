@@ -44,8 +44,8 @@ type endpoints struct {
 	masterItems handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]
 	items       handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
 	keyItems    handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]
+	primers     handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]
 	mixes       handlerInput[seeding.Mix, any, NamedAPIResource, NamedApiResourceList]
-	primers     handlerInput[seeding.Primer, any, NamedAPIResource, NamedApiResourceList]
 
 	autoAbilities    handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
 	equipment        handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
@@ -798,21 +798,25 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveKeyItems,
 	}
 
+	e.primers = handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      "primers",
+		resourceType:  "primer",
+		objLookup:     cfg.l.Primers,
+		objLookupID:   cfg.l.PrimersID,
+		queryLookup:   cfg.q.primers,
+		idToResFunc:   idToNamedAPIResource[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetPrimerIDs,
+		getSingleFunc: cfg.getPrimer,
+		retrieveFunc:  cfg.retrievePrimers,
+	}
+
 	e.mixes = handlerInput[seeding.Mix, any, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "mixes",
 		resourceType:  "mix",
 		objLookup:     cfg.l.Mixes,
 		objLookupID:   cfg.l.MixesID,
 		idToResFunc:   idToNamedAPIResource[seeding.Mix, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
-	}
-
-	e.primers = handlerInput[seeding.Primer, any, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "primers",
-		resourceType:  "primer",
-		objLookup:     cfg.l.Primers,
-		objLookupID:   cfg.l.PrimersID,
-		idToResFunc:   idToNamedAPIResource[seeding.Primer, any, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 

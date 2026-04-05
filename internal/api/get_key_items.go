@@ -44,5 +44,6 @@ func (cfg *Config) retrieveKeyItems(r *http.Request, i handlerInput[seeding.KeyI
 		frl(enumListQuery(cfg, r, i, cfg.t.KeyItemCategory, resources, "category", cfg.db.GetKeyItemIDsCategory)),
 		frl(boolQuery2(cfg, r, i, resources, "treasure", cfg.db.GetKeyItemIDsTreasure)),
 		frl(boolQuery2(cfg, r, i, resources, "quest", cfg.db.GetKeyItemIDsQuest)),
+		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetKeyItemIDsByAvailability)),
 	})
 }

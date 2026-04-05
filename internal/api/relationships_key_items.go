@@ -9,17 +9,12 @@ import (
 )
 
 func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyItem) (KeyItem, error) {
-	availabilityParams, err := getAvailabilityParams(cfg, r, cfg.e.keyItems, keyItem)
+	treasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, keyItem, cfg.db.GetKeyItemTreasureIDs)
 	if err != nil {
 		return KeyItem{}, err
 	}
 
-	treasures, err := runAvailabilityQuery(cfg, r, cfg.e.treasures, keyItem, availabilityParams, convGetKeyItemTreasureIDs(cfg))
-	if err != nil {
-		return KeyItem{}, err
-	}
-
-	quests, err := runAvailabilityQuery(cfg, r, cfg.e.quests, keyItem, availabilityParams, convGetKeyItemQuestIDs(cfg))
+	quests, err := getResourcesDbItem(cfg, r, cfg.e.quests, keyItem, cfg.db.GetKeyItemQuestIDs)
 	if err != nil {
 		return KeyItem{}, err
 	}
@@ -30,9 +25,9 @@ func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyIt
 	}
 
 	rel := KeyItem{
-		Treasures:  treasures,
-		Quests:  	quests,
-		Areas:		areas,
+		Treasures:  	treasures,
+		Quests:  		quests,
+		Areas:			areas,
 	}
 
 	if keyItem.Category == string(database.KeyItemCategoryPrimer) {

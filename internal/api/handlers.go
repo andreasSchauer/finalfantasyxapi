@@ -145,6 +145,10 @@ func (cfg *Config) HandleKeyItems(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.keyItems)
 }
 
+func (cfg *Config) HandlePrimers(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.primers)
+}
+
 
 
 
