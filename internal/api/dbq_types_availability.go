@@ -87,3 +87,21 @@ func convGetItemQuestIDs(cfg *Config) AvailabilityDbQuery {
 		})
 	}
 }
+
+func convGetKeyItemTreasureIDs(cfg *Config) AvailabilityDbQuery {
+	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetKeyItemTreasureIDs(ctx, database.GetKeyItemTreasureIDsParams{
+			KeyItemID:    p.ParentID,
+			Availability: p.Availability,
+		})
+	}
+}
+
+func convGetKeyItemQuestIDs(cfg *Config) AvailabilityDbQuery {
+	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetKeyItemQuestIDs(ctx, database.GetKeyItemQuestIDsParams{
+			KeyItemID:    p.ParentID,
+			Availability: p.Availability,
+		})
+	}
+}

@@ -100,6 +100,8 @@ type Lookup struct {
 	OverdrivesID           map[int32]Overdrive
 	Positions              map[string]BlitzballPosition
 	PositionsID            map[int32]BlitzballPosition
+	Primers				   map[string]Primer
+	PrimersID			   map[int32]Primer
 	Properties             map[string]Property
 	PropertiesID           map[int32]Property
 	Quests                 map[string]Quest
@@ -203,6 +205,8 @@ func lookupInit() Lookup {
 		OverdrivesID:           make(map[int32]Overdrive),
 		Positions:              make(map[string]BlitzballPosition),
 		PositionsID:            make(map[int32]BlitzballPosition),
+		Primers: 				make(map[string]Primer),
+		PrimersID: 				make(map[int32]Primer),
 		Properties:             make(map[string]Property),
 		PropertiesID:           make(map[int32]Property),
 		Quests:                 make(map[string]Quest),

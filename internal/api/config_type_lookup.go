@@ -33,6 +33,7 @@ type TypeLookup struct {
 	UnitType                    EnumType[database.UnitType, any]
 	ItemType                    EnumType[database.ItemType, any]
 	QuestType                   EnumType[database.QuestType, any]
+
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
@@ -43,6 +44,7 @@ type TypeLookup struct {
 	CreationArea                EnumType[database.MaCreationArea, database.NullMaCreationArea]
 	CTBIconType                 EnumType[database.CtbIconType, any]
 	ItemCategory                EnumType[database.ItemCategory, any]
+	KeyItemCategory				EnumType[database.KeyItemCategory, any]
 	LootType                    EnumType[database.LootType, any]
 	MonsterCategory             EnumType[database.MonsterCategory, any]
 	MonsterFormationCategory    EnumType[database.MonsterFormationCategory, any]
@@ -84,6 +86,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initCTBIconType()
 	cfg.t.initCreationArea()
 	cfg.t.initItemCategory()
+	cfg.t.initKeyItemCategory()
 	cfg.t.initLootType()
 	cfg.t.initMonsterCategory()
 	cfg.t.initMonsterFormationCategory()
@@ -436,6 +439,35 @@ func (t *TypeLookup) initItemCategory() {
 
 	t.ItemCategory = newEnumType[database.ItemCategory, any]("item category", true, typeSlice, func(s string) database.ItemCategory {
 		return database.ItemCategory(s)
+	}, nil, nil)
+}
+
+func (t *TypeLookup) initKeyItemCategory() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.KeyItemCategoryStory),
+			Description: "Key-items that are obtained during the course of the story.",
+		},
+		{
+			Name:        string(database.KeyItemCategoryCelestial),
+			Description: "Key-items that are related to the celestial weapons.",
+		},
+		{
+			Name:        string(database.KeyItemCategoryPrimer),
+			Description: "Key-items that are Al Bhed Primers.",
+		},
+		{
+			Name:        string(database.KeyItemCategoryJechtSphere),
+			Description: "Key-items that are Jecht Spheres.",
+		},
+		{
+			Name:        string(database.KeyItemCategoryOther),
+			Description: "Key-items that don't fit the other categories.",
+		},	
+	}
+
+	t.KeyItemCategory = newEnumType[database.KeyItemCategory, any]("key-item category", true, typeSlice, func(s string) database.KeyItemCategory {
+		return database.KeyItemCategory(s)
 	}, nil, nil)
 }
 

@@ -46,6 +46,10 @@ func newHTTPErrorDB(resourceType string, filterItem seeding.LookupableID, err er
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", resourceType, filterItem), err)
 }
 
+func newHTTPErrorDbOne(resourceType string, filterItem seeding.LookupableID, err error) httpError {
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", resourceType, filterItem), err)
+}
+
 func newHTTPErrorDbFilter(resourceType string, queryParam QueryParam, err error) httpError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", resourceType, queryParam.Name), err)
 }

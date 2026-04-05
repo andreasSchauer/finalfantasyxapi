@@ -5,10 +5,11 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 type Item struct {
 	ID                 int32                              	`json:"id"`
 	Name               string                             	`json:"name"`
+	UntypedItem		   TypedAPIResource						`json:"untyped_item"`
+	Category           NamedAPIResource                   	`json:"category"`
 	Description        string                             	`json:"description"`
 	SgDescription      *string                            	`json:"sg_description,omitempty"`
 	Effect             string                             	`json:"effect"`
-	Category           NamedAPIResource                   	`json:"category"`
 	Usability          string                             	`json:"usability"`
 	BasePrice          *int32                             	`json:"base_price"`
 	SellValue          int32                              	`json:"sell_value"`

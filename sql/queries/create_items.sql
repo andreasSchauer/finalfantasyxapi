@@ -40,10 +40,11 @@ RETURNING *;
 
 
 
--- name: CreatePrimer :exec
+-- name: CreatePrimer :one
 INSERT INTO primers (data_hash, key_item_id, al_bhed_letter, english_letter)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = primers.data_hash
+RETURNING *;
 
 
 

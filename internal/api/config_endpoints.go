@@ -43,8 +43,9 @@ type endpoints struct {
 
 	masterItems handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]
 	items       handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
-	keyItems    handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]
+	keyItems    handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]
 	mixes       handlerInput[seeding.Mix, any, NamedAPIResource, NamedApiResourceList]
+	primers     handlerInput[seeding.Primer, any, NamedAPIResource, NamedApiResourceList]
 
 	autoAbilities    handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
 	equipment        handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
@@ -68,6 +69,7 @@ type endpoints struct {
 	damageFormula            handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	itemCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	keyItemCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	lootType                 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	monsterCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	monsterFormationCategory handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
@@ -783,13 +785,17 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveItems,
 	}
 
-	e.keyItems = handlerInput[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList]{
+	e.keyItems = handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "key-items",
 		resourceType:  "key item",
 		objLookup:     cfg.l.KeyItems,
 		objLookupID:   cfg.l.KeyItemsID,
-		idToResFunc:   idToNamedAPIResource[seeding.KeyItem, any, NamedAPIResource, NamedApiResourceList],
+		queryLookup:   cfg.q.keyItems,
+		idToResFunc:   idToNamedAPIResource[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetKeyItemIDs,
+		getSingleFunc: cfg.getKeyItem,
+		retrieveFunc:  cfg.retrieveKeyItems,
 	}
 
 	e.mixes = handlerInput[seeding.Mix, any, NamedAPIResource, NamedApiResourceList]{
@@ -798,6 +804,15 @@ func (cfg *Config) EndpointsInit() {
 		objLookup:     cfg.l.Mixes,
 		objLookupID:   cfg.l.MixesID,
 		idToResFunc:   idToNamedAPIResource[seeding.Mix, any, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
+	}
+
+	e.primers = handlerInput[seeding.Primer, any, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      "primers",
+		resourceType:  "primer",
+		objLookup:     cfg.l.Primers,
+		objLookupID:   cfg.l.PrimersID,
+		idToResFunc:   idToNamedAPIResource[seeding.Primer, any, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
@@ -955,6 +970,13 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:      "item-category",
 		resourceType:  "item category",
 		objLookup:     cfg.t.ItemCategory.lookup,
+		resToListFunc: newEnumAPIResourceList,
+	}
+
+	e.keyItemCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
+		endpoint:      "key-item-category",
+		resourceType:  "key-item category",
+		objLookup:     cfg.t.KeyItemCategory.lookup,
 		resToListFunc: newEnumAPIResourceList,
 	}
 

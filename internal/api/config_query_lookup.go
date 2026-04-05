@@ -79,7 +79,8 @@ type QueryLookup struct {
 	submenus          map[string]QueryParam
 	topmenus          map[string]QueryParam
 
-	items map[string]QueryParam
+	items 		map[string]QueryParam
+	keyItems 	map[string]QueryParam
 
 	overdriveModes map[string]QueryParam
 }
@@ -150,6 +151,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.q.topmenus = cfg.assignDefaultParams(defaultParams)
 
 	cfg.initItemsParams(defaultParams)
+	cfg.initKeyItemsParams(defaultParams)
 
 	cfg.initOverdriveModesParams(defaultParams)
 
@@ -218,8 +220,8 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 		p.ExampleUses = []string{s + "1"}
 
 	case "int-list":
-		p.Usage = s + "{int},..."
-		p.ExampleUses = []string{s + "1", s + "1,2", s + "1-3"}
+		p.Usage = s + "{int},...|{int}-{int}"
+		p.ExampleUses = []string{s + "1", s + "1,2", s + "1-3", s + "1,2-4"}
 
 	case "name/id":
 		e := p.ExampleVals[0]
@@ -2262,10 +2264,78 @@ func (cfg *Config) initItemsParams(defaultParams []QueryParam) {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
 		},
+		{
+			Name:		 "monster",
+			Description: "Searches for items that can be obtained via monsters.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+		{
+			Name:		 "treasure",
+			Description: "Searches for items that can be obtained via treasure.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+		{
+			Name:		 "shop",
+			Description: "Searches for items that can be bought in shops.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+		{
+			Name:		 "quest",
+			Description: "Searches for items that can be obtained by completing a quest.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
 	}
 
 	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
 	cfg.q.items = paramsMap
+}
+
+func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "availability",
+			Description: "Only displays a key-item's related resources with the given availability.",
+			Type:		 "enum-list",
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:		 "category",
+			Description: "Searches for key-items that are of the specified key-item category.",
+			Type:		 "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.KeyItemCategory.lookup,
+			References:  []string{createListURL(cfg, "key-item-category")},
+		},
+		{
+			Name:		 "treasure",
+			Description: "Searches for key-items that can be obtained via treasure.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+		{
+			Name:		 "quest",
+			Description: "Searches for key-items that can be obtained by completing quest.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.keyItems = paramsMap
 }
 
 func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {

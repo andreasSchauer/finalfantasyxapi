@@ -10,8 +10,7 @@ import (
 )
 
 type Primer struct {
-	//id 			int32
-	//dataHash		string
+	ID 			  int32
 	Name          string `json:"name"`
 	AlBhedLetter  string `json:"al_bhed_letter"`
 	EnglishLetter string `json:"english_letter"`
@@ -26,8 +25,19 @@ func (p Primer) ToHashFields() []any {
 	}
 }
 
+func (p Primer) GetID() int32 {
+	return p.ID
+}
+
 func (p Primer) Error() string {
 	return fmt.Sprintf("primer %s", p.Name)
+}
+
+func (p Primer) GetResParamsNamed() h.ResParamsNamed {
+	return h.ResParamsNamed{
+		ID: 	p.ID,
+		Name: 	p.Name,
+	}
 }
 
 func (l *Lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
@@ -48,7 +58,7 @@ func (l *Lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 				return h.NewErr(primer.Error(), err)
 			}
 
-			err = qtx.CreatePrimer(context.Background(), database.CreatePrimerParams{
+			dbPrimer, err := qtx.CreatePrimer(context.Background(), database.CreatePrimerParams{
 				DataHash:      generateDataHash(primer),
 				KeyItemID:     primer.KeyItemID,
 				AlBhedLetter:  primer.AlBhedLetter,
@@ -57,6 +67,10 @@ func (l *Lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
 			if err != nil {
 				return h.NewErr(primer.Error(), err, "couldn't create primer")
 			}
+
+			primer.ID = dbPrimer.ID
+			l.Primers[primer.Name] = primer
+			l.PrimersID[primer.ID] = primer
 		}
 		return nil
 	})

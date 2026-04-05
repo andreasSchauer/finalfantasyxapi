@@ -293,10 +293,11 @@ func (q *Queries) CreatePossibleItem(ctx context.Context, arg CreatePossibleItem
 	return i, err
 }
 
-const createPrimer = `-- name: CreatePrimer :exec
+const createPrimer = `-- name: CreatePrimer :one
 INSERT INTO primers (data_hash, key_item_id, al_bhed_letter, english_letter)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = primers.data_hash
+RETURNING id, data_hash, key_item_id, al_bhed_letter, english_letter
 `
 
 type CreatePrimerParams struct {
@@ -306,12 +307,20 @@ type CreatePrimerParams struct {
 	EnglishLetter string
 }
 
-func (q *Queries) CreatePrimer(ctx context.Context, arg CreatePrimerParams) error {
-	_, err := q.db.ExecContext(ctx, createPrimer,
+func (q *Queries) CreatePrimer(ctx context.Context, arg CreatePrimerParams) (Primer, error) {
+	row := q.db.QueryRowContext(ctx, createPrimer,
 		arg.DataHash,
 		arg.KeyItemID,
 		arg.AlBhedLetter,
 		arg.EnglishLetter,
 	)
-	return err
+	var i Primer
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.KeyItemID,
+		&i.AlBhedLetter,
+		&i.EnglishLetter,
+	)
+	return i, err
 }
