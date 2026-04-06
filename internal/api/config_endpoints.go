@@ -784,6 +784,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetItemIDs,
 		getSingleFunc: cfg.getItem,
 		retrieveFunc:  cfg.retrieveItems,
+		subsections: map[string]SubSectionFns{
+			"mixes": {
+				dbQuery: 	 cfg.db.GetItemMixIDs,
+				createSubFn: createMixSimple,
+			},
+		},
 	}
 
 	e.keyItems = handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]{
@@ -823,6 +829,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetMixIDs,
 		getSingleFunc: cfg.getMix,
 		retrieveFunc:  cfg.retrieveMixes,
+		subsections: map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createMixSimple,
+			},
+		},
 	}
 
 	e.autoAbilities = handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]{

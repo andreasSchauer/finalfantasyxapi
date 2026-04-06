@@ -38,7 +38,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 	i := cfg.e.shops
 
 	emptySlots, err := parseIntListQuery(r, i.queryLookup["empty_slots"])
-	if err != nil && !errors.Is(err, errEmptyQuery) {
+	if errIsNotEmptyQuery(err) {
 		return nil, err
 	}
 

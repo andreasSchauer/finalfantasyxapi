@@ -58,7 +58,7 @@ func getUnitRepl[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 	unit, _ := seeding.GetResourceByID(unitID, cfg.l.PlayerUnitsID)
 
 	bombWpn, err := parseBooleanQuery(r, queryParamBomb)
-	if err != nil && !errors.Is(err, errEmptyQuery) {
+	if errIsNotEmptyQuery(err) {
 		return unitRepl{}, err
 	}
 

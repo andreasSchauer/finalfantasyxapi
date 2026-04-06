@@ -30,9 +30,9 @@ func getSegmentCases(segments []string) (bool, bool, bool) {
 	firstIsInt := isValidInt(segments[0])
 	secondIsInt := isValidInt(segments[1])
 
-	isSubsection := firstIsInt && !secondIsInt
-	isNameVersion := !firstIsInt && secondIsInt
-	subsectionIsInt := firstIsInt && secondIsInt
+	isSubsection := firstIsInt && !secondIsInt		// endpoint/1/section
+	isNameVersion := !firstIsInt && secondIsInt		// endpoint/name/1
+	subsectionIsInt := firstIsInt && secondIsInt	// endpoint/1/2
 
 	return isSubsection, isNameVersion, subsectionIsInt
 }
