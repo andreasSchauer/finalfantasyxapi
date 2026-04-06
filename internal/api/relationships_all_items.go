@@ -6,33 +6,33 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getMasterItemRelationships(cfg *Config, r *http.Request, masterItem seeding.MasterItem) (MasterItem, error) {
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, masterItem, cfg.db.GetMasterItemMonsterIDs)
+func getMasterItemObtainable(cfg *Config, r *http.Request, masterItem seeding.MasterItem) (ObtainableFrom, error) {
+	monsters, err := cfg.db.GetMasterItemMonstersBool(r.Context(), masterItem.ID)
 	if err != nil {
-		return MasterItem{}, err
-	}
-	
-	treasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, masterItem, cfg.db.GetMasterItemTreasureIDs)
-	if err != nil {
-		return MasterItem{}, err
+		return ObtainableFrom{}, err
 	}
 
-	shops, err := getResourcesDbItem(cfg, r, cfg.e.shops, masterItem, cfg.db.GetMasterItemShopIDs)
+	treasures, err := cfg.db.GetMasterItemTreasuresBool(r.Context(), masterItem.ID)
 	if err != nil {
-		return MasterItem{}, err
+		return ObtainableFrom{}, err
 	}
 
-	quests, err := getResourcesDbItem(cfg, r, cfg.e.quests, masterItem, cfg.db.GetMasterItemQuestIDs)
+	shops, err := cfg.db.GetMasterItemShopsBool(r.Context(), masterItem.ID)
 	if err != nil {
-		return MasterItem{}, err
+		return ObtainableFrom{}, err
 	}
 
-	rel := MasterItem{
-		Monsters: 		monsters,
-		Treasures:  	treasures,
-		Shops: 			shops,
-		Quests:  		quests,
+	quests, err := cfg.db.GetMasterItemQuestsBool(r.Context(), masterItem.ID)
+	if err != nil {
+		return ObtainableFrom{}, err
 	}
 
-	return rel, nil
+	obtainable := ObtainableFrom{
+		Monsters:  monsters,
+		Treasures: treasures,
+		Shops:     shops,
+		Quests:    quests,
+	}
+
+	return obtainable, nil
 }

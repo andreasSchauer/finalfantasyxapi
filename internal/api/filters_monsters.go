@@ -98,14 +98,14 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAP
 	resourceType := i.resourceType
 	queryParam := i.queryLookup["is_forced"]
 
-	query, err := parseBooleanQuery(r, queryParam)
+	isForced, err := parseBooleanQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
 		return getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByAutoAbility)
 	}
 
 	dbIDs, err := cfg.db.GetMonsterIDsByAutoAbilityIsForced(r.Context(), database.GetMonsterIDsByAutoAbilityIsForcedParams{
 		ID:       id,
-		IsForced: query,
+		IsForced: isForced,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by auto-ability id '%d'.", i.resourceType, id), err)

@@ -138,7 +138,7 @@ func (cfg *Config) HandleTopmenus(w http.ResponseWriter, r *http.Request) {
 
 
 func (cfg *Config) HandleAllItems(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.e.allItems)
+	routerNameOrID(cfg, w, r, cfg.e.allItems)
 }
 
 func (cfg *Config) HandleItems(w http.ResponseWriter, r *http.Request) {
@@ -151,6 +151,10 @@ func (cfg *Config) HandleKeyItems(w http.ResponseWriter, r *http.Request) {
 
 func (cfg *Config) HandlePrimers(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.primers)
+}
+
+func (cfg *Config) HandleMixes(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.mixes)
 }
 
 

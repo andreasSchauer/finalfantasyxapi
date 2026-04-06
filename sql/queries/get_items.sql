@@ -1,12 +1,13 @@
--- name: GetMasterItemMonsterIDs :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_items mi ON mi.monster_id = m.id
-WHERE EXISTS (
-    SELECT 1
-    FROM item_amounts ia
-    JOIN master_items mit ON ia.master_item_id = mit.id
-    WHERE ia.id IN (
+-- name: GetMasterItemMonstersBool :one
+SELECT EXISTS (
+  SELECT 1
+  FROM monsters m
+  JOIN monster_items mi ON mi.monster_id = m.id
+  WHERE (
+    EXISTS (
+      SELECT 1
+      FROM item_amounts ia
+      WHERE ia.id IN (
         mi.steal_common_id,
         mi.steal_rare_id,
         mi.drop_common_id,
@@ -14,50 +15,51 @@ WHERE EXISTS (
         mi.secondary_drop_common_id,
         mi.secondary_drop_rare_id,
         mi.bribe_id
+      )
+      AND ia.master_item_id = $1
     )
-    AND mit.id = $1
-)
-OR EXISTS (
+    OR EXISTS (
+      SELECT 1
+      FROM j_monster_items_other_items jmio
+      JOIN possible_items pi ON pi.id = jmio.possible_item_id
+      JOIN item_amounts ia ON ia.id = pi.item_amount_id
+      WHERE jmio.monster_items_id = mi.id
+        AND ia.master_item_id = $1
+    )
+  )
+) AS obtainable_from_monsters;
+
+
+-- name: GetMasterItemTreasuresBool :one
+SELECT EXISTS (
   SELECT 1
-  FROM j_monster_items_other_items jmio
-  JOIN possible_items pi ON pi.id = jmio.possible_item_id
-  JOIN item_amounts ia ON pi.item_amount_id = ia.id
-  JOIN master_items mit ON ia.master_item_id = mit.id
-  WHERE jmio.monster_items_id = mi.id
-    AND mit.id = $1
-)
-ORDER BY m.id;
+  FROM treasures t
+  JOIN j_treasures_items j ON j.treasure_id = t.id
+  JOIN item_amounts ia ON j.item_amount_id = ia.id
+  WHERE ia.master_item_id = $1
+) AS obtainable_from_treasures;
 
 
--- name: GetMasterItemTreasureIDs :many
-SELECT DISTINCT t.id
-FROM treasures t
-JOIN j_treasures_items j ON j.treasure_id = t.id
-JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-WHERE mi.id = $1
-ORDER BY t.id;
+-- name: GetMasterItemShopsBool :one
+SELECT EXISTS (
+  SELECT 1
+  FROM shops s
+  JOIN j_shops_items j ON j.shop_id = s.id
+  JOIN shop_items si ON j.shop_item_id = si.id
+  JOIN items i ON si.item_id = i.id
+  JOIN master_items mi ON i.master_item_id = mi.id
+  WHERE mi.id = $1
+) AS obtainable_from_shops;
 
 
--- name: GetMasterItemShopIDs :many
-SELECT DISTINCT s.id
-FROM shops s
-JOIN j_shops_items j ON j.shop_id = s.id
-JOIN shop_items si ON j.shop_item_id = si.id
-JOIN items i ON si.item_id = i.id
-JOIN master_items mi ON i.master_item_id = mi.id
-WHERE mi.id = $1
-ORDER BY s.id;
-
-
--- name: GetMasterItemQuestIDs :many
-SELECT DISTINCT q.id
-FROM quests q
-JOIN quest_completions qc ON q.completion_id = qc.id
-JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-WHERE mi.id = $1
-ORDER BY q.id;
+-- name: GetMasterItemQuestsBool :one
+SELECT EXISTS (
+  SELECT 1
+  FROM quests q
+  JOIN quest_completions qc ON q.completion_id = qc.id
+  JOIN item_amounts ia ON qc.item_amount_id = ia.id
+  WHERE ia.master_item_id = $1
+) AS obtainable_from_quests;
 
 
 -- name: GetMasterItemIDs :many
@@ -487,3 +489,47 @@ JOIN j_treasures_items j ON j.item_amount_id = ia.id
 JOIN treasures t ON j.treasure_id = t.id
 WHERE t.availability = ANY(sqlc.narg('availability')::availability_type[])
 ORDER BY p.id;
+
+
+
+
+
+
+-- name: GetMixIDs :many
+SELECT id FROM mixes ORDER BY id;
+
+
+-- name: GetMixIDsByCategory :many
+SELECT id FROM mixes WHERE category = ANY(sqlc.narg('category')::mix_category[]) ORDER BY id;
+
+
+-- name: GetMixIDsByItems :many
+SELECT DISTINCT m.id
+FROM mixes m
+JOIN mix_combinations mc ON mc.mix_id = m.id
+WHERE
+  (
+    sqlc.narg('second_item_id')::int IS NULL
+    AND (
+        mc.first_item_id = sqlc.arg('first_item_id')::int
+        OR
+        mc.second_item_id = sqlc.arg('first_item_id')::int
+    )
+  )
+  OR (
+    sqlc.narg('second_item_id')::int IS NOT NULL
+    AND (
+      (
+        mc.first_item_id = sqlc.arg('first_item_id')::int
+        AND
+        mc.second_item_id = sqlc.narg('second_item_id')::int
+      )
+      OR
+      (
+        mc.first_item_id = sqlc.narg('second_item_id')::int
+        AND
+        mc.second_item_id = sqlc.arg('first_item_id')::int
+      )
+    )
+)
+ORDER BY m.id;

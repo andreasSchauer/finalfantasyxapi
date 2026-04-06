@@ -42,7 +42,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 		return nil, err
 	}
 
-	charIdPtr, err := getQueryIdPtr(r, cfg.e.characters, "character", i.queryLookup)
+	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, "character", i.queryLookup)
 	if err != nil {
 		return nil, err
 	}

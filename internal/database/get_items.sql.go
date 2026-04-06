@@ -1105,15 +1105,16 @@ func (q *Queries) GetMasterItemIDsTreasure(ctx context.Context) ([]int32, error)
 	return items, nil
 }
 
-const getMasterItemMonsterIDs = `-- name: GetMasterItemMonsterIDs :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_items mi ON mi.monster_id = m.id
-WHERE EXISTS (
-    SELECT 1
-    FROM item_amounts ia
-    JOIN master_items mit ON ia.master_item_id = mit.id
-    WHERE ia.id IN (
+const getMasterItemMonstersBool = `-- name: GetMasterItemMonstersBool :one
+SELECT EXISTS (
+  SELECT 1
+  FROM monsters m
+  JOIN monster_items mi ON mi.monster_id = m.id
+  WHERE (
+    EXISTS (
+      SELECT 1
+      FROM item_amounts ia
+      WHERE ia.id IN (
         mi.steal_common_id,
         mi.steal_rare_id,
         mi.drop_common_id,
@@ -1121,123 +1122,174 @@ WHERE EXISTS (
         mi.secondary_drop_common_id,
         mi.secondary_drop_rare_id,
         mi.bribe_id
+      )
+      AND ia.master_item_id = $1
     )
-    AND mit.id = $1
-)
-OR EXISTS (
+    OR EXISTS (
+      SELECT 1
+      FROM j_monster_items_other_items jmio
+      JOIN possible_items pi ON pi.id = jmio.possible_item_id
+      JOIN item_amounts ia ON ia.id = pi.item_amount_id
+      WHERE jmio.monster_items_id = mi.id
+        AND ia.master_item_id = $1
+    )
+  )
+) AS obtainable_from_monsters
+`
+
+func (q *Queries) GetMasterItemMonstersBool(ctx context.Context, masterItemID int32) (bool, error) {
+	row := q.db.QueryRowContext(ctx, getMasterItemMonstersBool, masterItemID)
+	var obtainable_from_monsters bool
+	err := row.Scan(&obtainable_from_monsters)
+	return obtainable_from_monsters, err
+}
+
+const getMasterItemQuestsBool = `-- name: GetMasterItemQuestsBool :one
+SELECT EXISTS (
   SELECT 1
-  FROM j_monster_items_other_items jmio
-  JOIN possible_items pi ON pi.id = jmio.possible_item_id
-  JOIN item_amounts ia ON pi.item_amount_id = ia.id
-  JOIN master_items mit ON ia.master_item_id = mit.id
-  WHERE jmio.monster_items_id = mi.id
-    AND mit.id = $1
+  FROM quests q
+  JOIN quest_completions qc ON q.completion_id = qc.id
+  JOIN item_amounts ia ON qc.item_amount_id = ia.id
+  WHERE ia.master_item_id = $1
+) AS obtainable_from_quests
+`
+
+func (q *Queries) GetMasterItemQuestsBool(ctx context.Context, masterItemID int32) (bool, error) {
+	row := q.db.QueryRowContext(ctx, getMasterItemQuestsBool, masterItemID)
+	var obtainable_from_quests bool
+	err := row.Scan(&obtainable_from_quests)
+	return obtainable_from_quests, err
+}
+
+const getMasterItemShopsBool = `-- name: GetMasterItemShopsBool :one
+SELECT EXISTS (
+  SELECT 1
+  FROM shops s
+  JOIN j_shops_items j ON j.shop_id = s.id
+  JOIN shop_items si ON j.shop_item_id = si.id
+  JOIN items i ON si.item_id = i.id
+  JOIN master_items mi ON i.master_item_id = mi.id
+  WHERE mi.id = $1
+) AS obtainable_from_shops
+`
+
+func (q *Queries) GetMasterItemShopsBool(ctx context.Context, id int32) (bool, error) {
+	row := q.db.QueryRowContext(ctx, getMasterItemShopsBool, id)
+	var obtainable_from_shops bool
+	err := row.Scan(&obtainable_from_shops)
+	return obtainable_from_shops, err
+}
+
+const getMasterItemTreasuresBool = `-- name: GetMasterItemTreasuresBool :one
+SELECT EXISTS (
+  SELECT 1
+  FROM treasures t
+  JOIN j_treasures_items j ON j.treasure_id = t.id
+  JOIN item_amounts ia ON j.item_amount_id = ia.id
+  WHERE ia.master_item_id = $1
+) AS obtainable_from_treasures
+`
+
+func (q *Queries) GetMasterItemTreasuresBool(ctx context.Context, masterItemID int32) (bool, error) {
+	row := q.db.QueryRowContext(ctx, getMasterItemTreasuresBool, masterItemID)
+	var obtainable_from_treasures bool
+	err := row.Scan(&obtainable_from_treasures)
+	return obtainable_from_treasures, err
+}
+
+const getMixIDs = `-- name: GetMixIDs :many
+SELECT id FROM mixes ORDER BY id
+`
+
+func (q *Queries) GetMixIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMixIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMixIDsByCategory = `-- name: GetMixIDsByCategory :many
+SELECT id FROM mixes WHERE category = ANY($1::mix_category[]) ORDER BY id
+`
+
+func (q *Queries) GetMixIDsByCategory(ctx context.Context, category []MixCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMixIDsByCategory, pq.Array(category))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMixIDsByItems = `-- name: GetMixIDsByItems :many
+SELECT DISTINCT m.id
+FROM mixes m
+JOIN mix_combinations mc ON mc.mix_id = m.id
+WHERE
+  (
+    $1::int IS NULL
+    AND (
+        mc.first_item_id = $2::int
+        OR
+        mc.second_item_id = $2::int
+    )
+  )
+  OR (
+    $1::int IS NOT NULL
+    AND (
+      (
+        mc.first_item_id = $2::int
+        AND
+        mc.second_item_id = $1::int
+      )
+      OR
+      (
+        mc.first_item_id = $1::int
+        AND
+        mc.second_item_id = $2::int
+      )
+    )
 )
 ORDER BY m.id
 `
 
-func (q *Queries) GetMasterItemMonsterIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMasterItemMonsterIDs, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+type GetMixIDsByItemsParams struct {
+	SecondItemID sql.NullInt32
+	FirstItemID  int32
 }
 
-const getMasterItemQuestIDs = `-- name: GetMasterItemQuestIDs :many
-SELECT DISTINCT q.id
-FROM quests q
-JOIN quest_completions qc ON q.completion_id = qc.id
-JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-WHERE mi.id = $1
-ORDER BY q.id
-`
-
-func (q *Queries) GetMasterItemQuestIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMasterItemQuestIDs, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMasterItemShopIDs = `-- name: GetMasterItemShopIDs :many
-SELECT DISTINCT s.id
-FROM shops s
-JOIN j_shops_items j ON j.shop_id = s.id
-JOIN shop_items si ON j.shop_item_id = si.id
-JOIN items i ON si.item_id = i.id
-JOIN master_items mi ON i.master_item_id = mi.id
-WHERE mi.id = $1
-ORDER BY s.id
-`
-
-func (q *Queries) GetMasterItemShopIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMasterItemShopIDs, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMasterItemTreasureIDs = `-- name: GetMasterItemTreasureIDs :many
-SELECT DISTINCT t.id
-FROM treasures t
-JOIN j_treasures_items j ON j.treasure_id = t.id
-JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-WHERE mi.id = $1
-ORDER BY t.id
-`
-
-func (q *Queries) GetMasterItemTreasureIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMasterItemTreasureIDs, id)
+func (q *Queries) GetMixIDsByItems(ctx context.Context, arg GetMixIDsByItemsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMixIDsByItems, arg.SecondItemID, arg.FirstItemID)
 	if err != nil {
 		return nil, err
 	}

@@ -105,6 +105,11 @@ func verifyQueryUsage(q url.Values, queryParam QueryParam, endpoint string, id *
 		return err
 	}
 
+	err = verifyForbiddenParams(q, queryParam)
+	if err != nil {
+		return err
+	}
+
 	err = verifyUsableWith(q, queryParam)
 	if err != nil {
 		return err
@@ -155,6 +160,22 @@ func verifyRequiredParams(q url.Values, queryParam QueryParam) error {
 
 		if reqParamVal == "" {
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. when using parameter '%s', the following parameter(s) must be present: %s.", queryParam.Name, queryParam.Name, h.FormatStringSlice(queryParam.RequiredParams)), nil)
+		}
+	}
+
+	return nil
+}
+
+func verifyForbiddenParams(q url.Values, queryParam QueryParam) error {
+	if queryParam.ForbiddenParams == nil {
+		return nil
+	}
+
+	for _, frbParam := range queryParam.ForbiddenParams {
+		frbParamVal := q.Get(frbParam)
+
+		if frbParamVal != "" {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can't be used in combination with the following parameter(s): %s.", queryParam.Name, queryParam.Name, h.FormatStringSlice(queryParam.ForbiddenParams)), nil)
 		}
 	}
 

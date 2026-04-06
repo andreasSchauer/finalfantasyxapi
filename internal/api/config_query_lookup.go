@@ -24,6 +24,7 @@ type QueryParam struct {
 	TypeLookup       map[string]EnumAPIResource `json:"-"`
 	RequiredParams   []string                   `json:"required_params,omitempty"`
 	UsableWith       []string                   `json:"usable_with,omitempty"`
+	ForbiddenParams	 []string					`json:"forbidden_params,omitempty"`
 	References       []string                   `json:"references,omitempty"`
 	AllowedIDs       []int32                    `json:"-"`
 	AllowedResources []string                   `json:"allowed_resources,omitempty"`
@@ -79,10 +80,11 @@ type QueryLookup struct {
 	submenus          map[string]QueryParam
 	topmenus          map[string]QueryParam
 
-	allItems	map[string]QueryParam
+	allItems		map[string]QueryParam
 	items 			map[string]QueryParam
 	keyItems 		map[string]QueryParam
 	primers			map[string]QueryParam
+	mixes			map[string]QueryParam
 
 	overdriveModes 	map[string]QueryParam
 }
@@ -156,6 +158,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initItemsParams(defaultParams)
 	cfg.initKeyItemsParams(defaultParams)
 	cfg.initPrimersParams(defaultParams)
+	cfg.initMixesParams(defaultParams)
 
 	cfg.initOverdriveModesParams(defaultParams)
 
@@ -2402,6 +2405,60 @@ func (cfg *Config) initPrimersParams(defaultParams []QueryParam) {
 
 	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
 	cfg.q.primers = paramsMap
+}
+
+func (cfg *Config) initMixesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "contains_item",
+			Description: "Modifies combinations to only display item combinations that include the specified item.",
+			Type:		 "name/id",
+			ExampleVals: []string{"grenade", "power_sphere"},
+			ForList:     false,
+			ForSingle:   true,
+			ForbiddenParams: []string{"best"},
+			References:  []string{createListURL(cfg, "items")},
+		},
+		{
+			Name:		 "best",
+			Description: "Modifies combinations to only display the easiest item combinations to accumulate (hand-picked by the dev).",
+			Type:		 "bool",
+			ForList:     false,
+			ForSingle:   true,
+			ForbiddenParams: []string{"contains_item"},
+		},
+		{
+			Name:		 "category",
+			Description: "Searches for mixes that are of the specified mix categories.",
+			Type:		 "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.MixCategory.lookup,
+			References:  []string{createListURL(cfg, "mix-category")},
+		},
+		{
+			Name:		 "req_item",
+			Description: "Searches for mixes that can be built with the specified item.",
+			Type:		 "name/id",
+			ExampleVals: []string{"grenade", "power_sphere"},
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "items")},
+		},
+		{
+			Name:		 "second_item",
+			Description: "Can be used in combination with 'req_item' to get the mix the two specified items will create.",
+			Type:		 "name/id",
+			ExampleVals: []string{"grenade", "power_sphere"},
+			ForList:     true,
+			ForSingle:   false,
+			RequiredParams: []string{"req_item"},
+			References:  []string{createListURL(cfg, "items")},
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.mixes = paramsMap
 }
 
 func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {

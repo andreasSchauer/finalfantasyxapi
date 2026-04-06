@@ -25,6 +25,30 @@ func nameOrIdQuery[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
+	
+	return resources, nil
+}
+
+
+
+func nameOrIdQueryWrapper[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]A, error) {
+	queryParam := i.queryLookup[queryName]
+
+	id, err := parseNameIdQuery(r, queryParam, pResType, pLookup)
+	if errors.Is(err, errEmptyQuery) {
+		return inputRes, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := wrapperFn(cfg, r, id)
+	if err != nil {
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
 
 	return resources, nil
 }
+

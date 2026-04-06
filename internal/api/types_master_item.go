@@ -7,8 +7,12 @@ type MasterItem struct {
 	TypedItem		   NamedAPIResource		`json:"typed_item"`
 	Description        string               `json:"description"`
 	Effect             string               `json:"effect"`
-	Monsters           []NamedAPIResource   `json:"monsters"`
-	Treasures          []UnnamedAPIResource `json:"treasures"`
-	Shops              []UnnamedAPIResource `json:"shops"`
-	Quests             []QuestAPIResource	`json:"quests"`
+	ObtainableFrom	   ObtainableFrom		`json:"obtainable_from"`
+}
+
+type ObtainableFrom struct {
+	Monsters 	bool	`json:"monsters"`
+	Treasures 	bool	`json:"treasures"`
+	Shops		bool	`json:"shops"`
+	Quests		bool	`json:"quests"`
 }

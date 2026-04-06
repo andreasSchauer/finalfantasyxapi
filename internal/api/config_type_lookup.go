@@ -46,6 +46,7 @@ type TypeLookup struct {
 	ItemCategory                EnumType[database.ItemCategory, any]
 	KeyItemCategory				EnumType[database.KeyItemCategory, any]
 	LootType                    EnumType[database.LootType, any]
+	MixCategory					EnumType[database.MixCategory, any]
 	MonsterCategory             EnumType[database.MonsterCategory, any]
 	MonsterFormationCategory    EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies              EnumType[database.MonsterSpecies, any]
@@ -88,6 +89,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initItemCategory()
 	cfg.t.initKeyItemCategory()
 	cfg.t.initLootType()
+	cfg.t.initMixCategory()
 	cfg.t.initMonsterCategory()
 	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
@@ -487,6 +489,63 @@ func (t *TypeLookup) initLootType() {
 
 	t.LootType = newEnumType[database.LootType, any]("loot type", true, typeSlice, func(s string) database.LootType {
 		return database.LootType(s)
+	}, nil, nil)
+}
+
+func (t *TypeLookup) initMixCategory() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.MixCategoryRecovery),
+			Description: "Mixes that heal the party.",
+		},
+		{
+			Name:        string(database.MixCategoryPositiveStatus),
+			Description: "Mixes that grant positive status effects to the party.",
+		},
+		{
+			Name:        string(database.MixCategoryHpMp),
+			Description: "Mixes that double the party's HP or MP.",
+		},
+		{
+			Name:        string(database.MixCategoryOverdriveSpeed),
+			Description: "Mixes that multiply the charge speed of the party's overdrive gauges.",
+		},
+		{
+			Name:        string(database.MixCategoryCriticalHits),
+			Description: "Mixes that double the party's critical hit rate.",
+		},
+		{
+			Name:        string(database.MixCategory9999Damage),
+			Description: "Mixes that set the party's minimum amount of damage dealt to 9999.",
+		},
+		{
+			Name:        string(database.MixCategoryFireElemental),
+			Description: "Mixes that deal fire-elemental damage.",
+		},
+		{
+			Name:        string(database.MixCategoryLightningElemental),
+			Description: "Mixes that deal lightning-elemental damage.",
+		},
+		{
+			Name:        string(database.MixCategoryWaterElemental),
+			Description: "Mixes that deal water-elemental damage.",
+		},
+		{
+			Name:        string(database.MixCategoryIceElemental),
+			Description: "Mixes that deal ice-elemental damage.",
+		},
+		{
+			Name:        string(database.MixCategoryNonElemental),
+			Description: "Mixes that deal non-elemental damage.",
+		},
+		{
+			Name:        string(database.MixCategoryGravityBased),
+			Description: "Mixes that deal percentage-damage.",
+		},
+	}
+
+	t.MixCategory = newEnumType[database.MixCategory, any]("mix category", true, typeSlice, func(s string) database.MixCategory {
+		return database.MixCategory(s)
 	}, nil, nil)
 }
 
