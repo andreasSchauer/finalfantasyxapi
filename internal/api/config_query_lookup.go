@@ -79,11 +79,12 @@ type QueryLookup struct {
 	submenus          map[string]QueryParam
 	topmenus          map[string]QueryParam
 
-	items 		map[string]QueryParam
-	keyItems 	map[string]QueryParam
-	primers		map[string]QueryParam
+	allItems	map[string]QueryParam
+	items 			map[string]QueryParam
+	keyItems 		map[string]QueryParam
+	primers			map[string]QueryParam
 
-	overdriveModes map[string]QueryParam
+	overdriveModes 	map[string]QueryParam
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -151,6 +152,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initSubmenusParams(defaultParams)
 	cfg.q.topmenus = cfg.assignDefaultParams(defaultParams)
 
+	cfg.initAllItemsParams(defaultParams)
 	cfg.initItemsParams(defaultParams)
 	cfg.initKeyItemsParams(defaultParams)
 	cfg.initPrimersParams(defaultParams)
@@ -279,7 +281,7 @@ func (cfg *Config) initLocationsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 	"method",
-			Description:    "Specifies the method of acquisition for the 'item' parameter.",
+			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
 			Type:		 	"value-list",
 			ForList:        true,
 			ForSingle:      false,
@@ -376,7 +378,7 @@ func (cfg *Config) initSublocationsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 	"method",
-			Description:    "Specifies the method of acquisition for the 'item' parameter.",
+			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
 			Type:		 	"value-list",
 			ForList:        true,
 			ForSingle:      false,
@@ -481,7 +483,7 @@ func (cfg *Config) initAreasParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 	"method",
-			Description:    "Specifies the method of acquisition for the 'item' parameter.",
+			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
 			Type:			"value-list",
 			ForList:        true,
 			ForSingle:      false,
@@ -498,7 +500,7 @@ func (cfg *Config) initAreasParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "availability",
-			Description: "Searches for areas with the given availability.",
+			Description: "Searches for areas with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -607,7 +609,7 @@ func (cfg *Config) initMonsterFormationsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "category",
-			Description: "Searches for monster formations with the specified monster-formation-category.",
+			Description: "Searches for monster formations with the specified monster-formation-categories.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -640,7 +642,7 @@ func (cfg *Config) initMonsterFormationsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "availability",
-			Description: "Searches for monster formations with the given availability.",
+			Description: "Searches for monster formations with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -671,7 +673,7 @@ func (cfg *Config) initShopsParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "category",
-			Description: "Searches for shops with the specified shop category.",
+			Description: "Searches for shops with the specified shop categories.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -704,7 +706,7 @@ func (cfg *Config) initShopsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "empty_slots",
-			Description:     "Searches for shops that offer equipment with the specified amount of empty slots.",
+			Description:     "Searches for shops that offer equipment with the specified amounts of empty slots.",
 			Type: 		     "int-list",
 			ForList:         true,
 			ForSingle:       false,
@@ -745,7 +747,7 @@ func (cfg *Config) initShopsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "availability",
-			Description: "Searches for shops with the given availability.",
+			Description: "Searches for shops with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -810,7 +812,7 @@ func (cfg *Config) initTreasuresParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "availability",
-			Description: "Searches for treasures with the given availability.",
+			Description: "Searches for treasures with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -836,7 +838,7 @@ func (cfg *Config) initQuestsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "availability",
-			Description: "Searches for quests with the given availability.",
+			Description: "Searches for quests with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -860,7 +862,7 @@ func (cfg *Config) initSidequestsParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "availability",
-			Description: "Searches for sidequests with the given availability.",
+			Description: "Searches for sidequests with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -877,7 +879,7 @@ func (cfg *Config) initSubquestsParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "availability",
-			Description: "Searches for subquests with the given availability.",
+			Description: "Searches for subquests with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -901,7 +903,7 @@ func (cfg *Config) initArenaCreationsParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "category",
-			Description: "Searches for monster formations with the specified arena-creation-category.",
+			Description: "Searches for monster formations with the specified arena-creation-categories.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1082,7 +1084,7 @@ func (cfg *Config) initCharacterClassesParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "category",
-			Description: "Searches for character classes with the specified category.",
+			Description: "Searches for character classes with the specified categories.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1144,7 +1146,7 @@ func (cfg *Config) initMonstersParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "status_resists",
-			Description: "Searches for monsters that resist or are immune to the specified status condition(s). You can optionally use the 'resistance' parameter to specify the minimum resistance. By default, the minimum resistance is 1.",
+			Description: "Searches for monsters that resist or are immune to the specified status conditions. You can optionally use the 'resistance' parameter to specify the minimum resistance. By default, the minimum resistance is 1.",
 			Type: 		 "id-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1176,7 +1178,7 @@ func (cfg *Config) initMonstersParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 	"method",
-			Description:    "Specifies the method of acquisition for the 'item' parameter.",
+			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
 			Type:		 	"value-list",
 			ForList:        true,
 			ForSingle:      false,
@@ -1201,7 +1203,7 @@ func (cfg *Config) initMonstersParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "empty_slots",
-			Description:     "Searches for monsters that can drop equipment with the specified amount of empty slots and no other auto-abilities attached to it.",
+			Description:     "Searches for monsters that can drop equipment with the specified amounts of empty slots and no other auto-abilities attached to it.",
 			Type: 		 	 "int-list",
 			ForList:         true,
 			ForSingle:       false,
@@ -1241,7 +1243,7 @@ func (cfg *Config) initMonstersParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "distance",
-			Description:     "Searches for monsters with the specified distance. Distance is an integer ranging from 1 (close) to 4 (very far/infinite).",
+			Description:     "Searches for monsters with the specified distances. Distance is an integer ranging from 1 (close) to 4 (very far/infinite).",
 			Type: 		 	 "int-list",
 			ForList:         true,
 			ForSingle:       false,
@@ -1249,7 +1251,7 @@ func (cfg *Config) initMonstersParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "availability",
-			Description: "Searches for monsters with the given availability.",
+			Description: "Searches for monsters with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1310,7 +1312,7 @@ func (cfg *Config) initMonstersParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "category",
-			Description: "Searches for monsters that are of the specified monster-category.",
+			Description: "Searches for monsters that are of the specified monster-categories.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1327,7 +1329,7 @@ func (cfg *Config) initAbilitiesParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "type",
-			Description: "Searches for abilities that are of the specified ability type.",
+			Description: "Searches for abilities that are of the specified ability types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1336,7 +1338,7 @@ func (cfg *Config) initAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "rank",
-			Description: "Searches for abilities with the specified rank.",
+			Description: "Searches for abilities with the specified ranks.",
 			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1365,7 +1367,7 @@ func (cfg *Config) initAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "target_type",
-			Description: "Searches for abilities with the specified target type.",
+			Description: "Searches for abilities with the specified target types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1401,7 +1403,7 @@ func (cfg *Config) initAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "attack_type",
-			Description: "Searches for abilities with battle interactions of the specified attack type.",
+			Description: "Searches for abilities with battle interactions of the specified attack types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1410,7 +1412,7 @@ func (cfg *Config) initAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "damage_type",
-			Description: "Searches for abilities that deal the specified type of damage.",
+			Description: "Searches for abilities that deal the specified types of damage.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1513,7 +1515,7 @@ func (cfg *Config) initPlayerAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "rank",
-			Description: "Searches for player abilities with the specified rank.",
+			Description: "Searches for player abilities with the specified ranks.",
 			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1534,7 +1536,7 @@ func (cfg *Config) initPlayerAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "category",
-			Description: "Searches for player abilities that are of the specified player ability category.",
+			Description: "Searches for player abilities that are of the specified player ability categories.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1550,7 +1552,7 @@ func (cfg *Config) initPlayerAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "mp",
-			Description: "Searches for player abilities with the specified mp cost.",
+			Description: "Searches for player abilities with the specified mp costs.",
 			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1615,7 +1617,7 @@ func (cfg *Config) initPlayerAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "target_type",
-			Description: "Searches for player abilities with the specified target type.",
+			Description: "Searches for player abilities with the specified target types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1651,7 +1653,7 @@ func (cfg *Config) initPlayerAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "attack_type",
-			Description: "Searches for player abilities with battle interactions of the specified attack type.",
+			Description: "Searches for player abilities with battle interactions of the specified attack types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1660,7 +1662,7 @@ func (cfg *Config) initPlayerAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "damage_type",
-			Description: "Searches for player abilities that deal the specified type of damage.",
+			Description: "Searches for player abilities that deal the specified types of damage.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1732,7 +1734,7 @@ func (cfg *Config) initOverdriveAbilitiesParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "rank",
-			Description: "Searches for overdrive abilities with the specified rank.",
+			Description: "Searches for overdrive abilities with the specified ranks.",
 			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1757,7 +1759,7 @@ func (cfg *Config) initOverdriveAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "target_type",
-			Description: "Searches for overdrive abilities with the specified target type.",
+			Description: "Searches for overdrive abilities with the specified target types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1765,7 +1767,7 @@ func (cfg *Config) initOverdriveAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "attack_type",
-			Description: "Searches for overdrive abilities with battle interactions of the specified attack type.",
+			Description: "Searches for overdrive abilities with battle interactions of the specified attack types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1844,7 +1846,7 @@ func (cfg *Config) initItemAbilitiesParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "category",
-			Description: "Searches for item abilities that are of the specified item category.",
+			Description: "Searches for item abilities that are of the specified item categories.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1869,7 +1871,7 @@ func (cfg *Config) initItemAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "target_type",
-			Description: "Searches for item abilities with the specified target type.",
+			Description: "Searches for item abilities with the specified target types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1877,7 +1879,7 @@ func (cfg *Config) initItemAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "attack_type",
-			Description: "Searches for item abilities with battle interactions of the specified attack type.",
+			Description: "Searches for item abilities with battle interactions of the specified attack types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2009,7 +2011,7 @@ func (cfg *Config) initUnspecifiedAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "rank",
-			Description: "Searches for unspecified abilities with the specified rank.",
+			Description: "Searches for unspecified abilities with the specified ranks.",
 			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2054,7 +2056,7 @@ func (cfg *Config) initEnemyAbilitiesParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "rank",
-			Description: "Searches for enemy abilities with the specified rank.",
+			Description: "Searches for enemy abilities with the specified ranks.",
 			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2076,7 +2078,7 @@ func (cfg *Config) initEnemyAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "target_type",
-			Description: "Searches for enemy abilities with the specified target type.",
+			Description: "Searches for enemy abilities with the specified target types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2105,7 +2107,7 @@ func (cfg *Config) initEnemyAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "attack_type",
-			Description: "Searches for enemy abilities with battle interactions of the specified attack type.",
+			Description: "Searches for enemy abilities with battle interactions of the specified attack types.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2114,7 +2116,7 @@ func (cfg *Config) initEnemyAbilitiesParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "damage_type",
-			Description: "Searches for enemy abilities that deal the specified type of damage.",
+			Description: "Searches for enemy abilities that deal the specified types of damage.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2186,7 +2188,7 @@ func (cfg *Config) initOverdrivesParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "rank",
-			Description: "Searches for overdrives with the specified rank.",
+			Description: "Searches for overdrives with the specified ranks.",
 			Type: 		 "int-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2223,11 +2225,56 @@ func (cfg *Config) initSubmenusParams(defaultParams []QueryParam) {
 	cfg.q.submenus = paramsMap
 }
 
+func (cfg *Config) initAllItemsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "type",
+			Description: "Searches for items that are of the specified item-types.",
+			Type:		 "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.ItemType.lookup,
+			References:  []string{createListURL(cfg, "item-type")},
+		},
+		{
+			Name:		 "monster",
+			Description: "Searches for items that can be obtained via monsters.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+		{
+			Name:		 "treasure",
+			Description: "Searches for items that can be obtained via treasure.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+		{
+			Name:		 "shop",
+			Description: "Searches for items that can be bought in shops.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+		{
+			Name:		 "quest",
+			Description: "Searches for items that can be obtained by completing a quest.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.allItems = paramsMap
+}
+
 func (cfg *Config) initItemsParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
-			Name:		 "availability",
-			Description: "Only displays an item's related resources with the given availability.",
+			Name:		 "rel_availability",
+			Description: "Only displays an item's related resources with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     false,
 			ForSingle:   true,
@@ -2243,7 +2290,7 @@ func (cfg *Config) initItemsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "category",
-			Description: "Searches for items that are of the specified item category.",
+			Description: "Searches for items that are of the specified item categories.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2304,7 +2351,7 @@ func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "availability",
-			Description: "Searches for key-items with the given availability.",
+			Description: "Searches for key-items with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2313,7 +2360,7 @@ func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "category",
-			Description: "Searches for key-items that are of the specified key-item category.",
+			Description: "Searches for key-items that are of the specified key-item categories.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2329,7 +2376,7 @@ func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "quest",
-			Description: "Searches for key-items that can be obtained by completing quest.",
+			Description: "Searches for key-items that can be obtained by completing a quest.",
 			Type:		 "bool",
 			ForList:     true,
 			ForSingle:   false,
@@ -2344,7 +2391,7 @@ func (cfg *Config) initPrimersParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "availability",
-			Description: "Searches for primers with the given availability.",
+			Description: "Searches for primers with the given availabilities.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,

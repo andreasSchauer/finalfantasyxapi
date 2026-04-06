@@ -6,7 +6,7 @@ type testResAmount[A APIResource] struct {
 }
 
 func compareResAmounts[A APIResource](test test, fieldName string, exp testResAmount[A], got ResourceAmount[A]) {
-	compIdApiResource(test, fieldName+" - resource", test.cfg.e.masterItems.endpoint, exp.item, got)
+	compIdApiResource(test, fieldName+" - resource", test.cfg.e.allItems.endpoint, exp.item, got)
 	compare(test, fieldName+" - amount", exp.amount, got.Amount)
 }
 

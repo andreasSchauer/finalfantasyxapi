@@ -61,6 +61,7 @@ func main() {
 	mux.HandleFunc("GET /api/submenus/", apiCfg.HandleSubmenus)
 	mux.HandleFunc("GET /api/topmenus/", apiCfg.HandleTopmenus)
 	
+	mux.HandleFunc("GET /api/all-items/", apiCfg.HandleAllItems)
 	mux.HandleFunc("GET /api/items/", apiCfg.HandleItems)
 	mux.HandleFunc("GET /api/key-items/", apiCfg.HandleKeyItems)
 	mux.HandleFunc("GET /api/primers/", apiCfg.HandlePrimers)

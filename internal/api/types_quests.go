@@ -3,22 +3,22 @@ package api
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
 type Quest struct {
-	ID            int32            `json:"id"`
-	Name          string           `json:"name"`
-	Type          NamedAPIResource `json:"type"`
-	TypedQuest    QuestAPIResource `json:"typed_quest"`
-	Availability  NamedAPIResource `json:"availability"`
-	IsRepeatable  bool			   `json:"is_repeatable"`
+	ID           int32            `json:"id"`
+	Name         string           `json:"name"`
+	Type         NamedAPIResource `json:"type"`
+	TypedQuest   QuestAPIResource `json:"typed_quest"`
+	Availability NamedAPIResource `json:"availability"`
+	IsRepeatable bool             `json:"is_repeatable"`
 }
 
 type Sidequest struct {
-	ID            int32              `json:"id"`
-	Name          string             `json:"name"`
-	UntypedQuest  QuestAPIResource   `json:"untyped_quest"`
-	Availability  NamedAPIResource	 `json:"availability"`
-	IsRepeatable  bool			   	 `json:"is_repeatable"`
-	Completion    *QuestCompletion   `json:"completion"`
-	Subquests     []QuestAPIResource `json:"subquests"`
+	ID           int32              `json:"id"`
+	Name         string             `json:"name"`
+	UntypedQuest QuestAPIResource   `json:"untyped_quest"`
+	Availability NamedAPIResource   `json:"availability"`
+	IsRepeatable bool               `json:"is_repeatable"`
+	Completion   *QuestCompletion   `json:"completion"`
+	Subquests    []QuestAPIResource `json:"subquests"`
 }
 
 type Subquest struct {
@@ -26,7 +26,7 @@ type Subquest struct {
 	Name            string            `json:"name"`
 	UntypedQuest    QuestAPIResource  `json:"untyped_quest"`
 	Availability    NamedAPIResource  `json:"availability"`
-	IsRepeatable	bool			  `json:"is_repeatable"`
+	IsRepeatable    bool              `json:"is_repeatable"`
 	ParentSidequest QuestAPIResource  `json:"parent_sidequest"`
 	Completion      QuestCompletion   `json:"completion"`
 	ArenaCreation   *NamedAPIResource `json:"arena_creation,omitempty"`
@@ -41,9 +41,9 @@ type QuestCompletion struct {
 
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
-		Condition:    qc.Condition,
-		Areas:        convertObjSlice(cfg, qc.Areas, convertCompletionArea),
-		Reward:       nameAmountToResourceAmount(cfg, cfg.e.masterItems, qc.Reward),
+		Condition: qc.Condition,
+		Areas:     convertObjSlice(cfg, qc.Areas, convertCompletionArea),
+		Reward:    nameAmountToResourceAmount(cfg, cfg.e.allItems, qc.Reward),
 	}
 }
 

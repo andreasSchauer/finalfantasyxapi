@@ -41,11 +41,11 @@ type endpoints struct {
 	submenus          handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]
 	topmenus          handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]
 
-	masterItems handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]
-	items       handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
-	keyItems    handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]
-	primers     handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]
-	mixes       handlerInput[seeding.Mix, any, NamedAPIResource, NamedApiResourceList]
+	allItems handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]
+	items    handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
+	keyItems handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]
+	primers  handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]
+	mixes    handlerInput[seeding.Mix, any, NamedAPIResource, NamedApiResourceList]
 
 	autoAbilities    handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
 	equipment        handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
@@ -69,7 +69,7 @@ type endpoints struct {
 	damageFormula            handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	itemCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	keyItemCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	keyItemCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	lootType                 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	monsterCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	monsterFormationCategory handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
@@ -759,17 +759,17 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.masterItems = handlerInput[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList]{
-		endpoint:      "master-items",
-		resourceType:  "master item",
+	e.allItems = handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]{
+		endpoint:      "all-items",
+		resourceType:  "all item",
 		objLookup:     cfg.l.MasterItems,
 		objLookupID:   cfg.l.MasterItemsID,
-		queryLookup:   nil,
-		idToResFunc:   idToTypedAPIResource[seeding.MasterItem, any, TypedAPIResource, TypedAPIResourceList],
+		queryLookup:   cfg.q.allItems,
+		idToResFunc:   idToTypedAPIResource[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList],
 		resToListFunc: newTypedAPIResourceList,
-		retrieveQuery: nil,
-		getSingleFunc: nil,
-		retrieveFunc:  nil,
+		retrieveQuery: cfg.db.GetMasterItemIDs,
+		getSingleFunc: cfg.getMasterItem,
+		retrieveFunc:  cfg.retrieveMasterItems,
 	}
 
 	e.items = handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]{

@@ -31,7 +31,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		CanUseOutsideBattle:   ability.CanUseOutsideBattle,
 		MpCost:                ability.MPCost,
 		Category:              newNamedAPIResourceFromEnum(cfg, cfg.e.playerAbilityCategory.endpoint, ability.Category, cfg.t.PlayerAbilityCategory),
-		AeonLearnItem:         nameAmountPtrToResAmtPtr(cfg, cfg.e.masterItems, ability.AeonLearnItem),
+		AeonLearnItem:         nameAmountPtrToResAmtPtr(cfg, cfg.e.allItems, ability.AeonLearnItem),
 		LearnedBy:             namesToNamedAPIResources(cfg, cfg.e.characterClasses, ability.LearnedBy),
 		RelatedStats:          namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),
 		StandardGridCharacter: namePtrToNamedAPIResPtr(cfg, cfg.e.characters, ability.StandardGridPos, nil),

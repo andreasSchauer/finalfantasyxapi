@@ -137,6 +137,10 @@ func (cfg *Config) HandleTopmenus(w http.ResponseWriter, r *http.Request) {
 
 
 
+func (cfg *Config) HandleAllItems(w http.ResponseWriter, r *http.Request) {
+	routerIdOnly(cfg, w, r, cfg.e.allItems)
+}
+
 func (cfg *Config) HandleItems(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.items)
 }
