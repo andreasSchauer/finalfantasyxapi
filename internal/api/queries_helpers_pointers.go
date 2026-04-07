@@ -39,6 +39,20 @@ func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]Qu
 	return &integer32, nil
 }
 
+func getQueryIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
+	queryParam := queryLookup[queryName]
+
+	id, err := parseIdQuery(r, queryParam, len(i.objLookup))
+	if errors.Is(err, errEmptyQuery) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return &id, nil
+}
+
 
 func getQueryNameIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]

@@ -794,7 +794,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.keyItems = handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "key-items",
-		resourceType:  "key item",
+		resourceType:  "key-item",
 		objLookup:     cfg.l.KeyItems,
 		objLookupID:   cfg.l.KeyItemsID,
 		queryLookup:   cfg.q.keyItems,

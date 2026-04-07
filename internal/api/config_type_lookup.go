@@ -262,7 +262,7 @@ func (t *TypeLookup) initAvailabilityType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AvailabilityTypeAlways),
-			Description: "The resource is available at any point in the story.",
+			Description: "The resource is always available once its location is reached in the story.",
 		},
 		{
 			Name:        string(database.AvailabilityTypeStory),
@@ -270,7 +270,7 @@ func (t *TypeLookup) initAvailabilityType() {
 		},
 		{
 			Name:        string(database.AvailabilityTypePost),
-			Description: "The resource is only available after acquiring the airship.",
+			Description: "The resource is only available after acquiring the airship. Note that for the resources that are located inside Sin to become available, you have to do the boss rush against it.",
 		},
 		{
 			Name:        string(database.AvailabilityTypePostStory),

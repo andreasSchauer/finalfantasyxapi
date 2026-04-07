@@ -42,6 +42,6 @@ func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seeding.Mix, Mi
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(enumListQuery(cfg, r, i, cfg.t.MixCategory, resources, "category", cfg.db.GetMixIDsByCategory)),
-		frl(nameOrIdQueryWrapper(cfg, r, i, resources, "req_item", cfg.e.items.resourceType, cfg.l.Items, getMixesByItem)),
+		frl(idQueryWrapper(cfg, r, i, resources, "req_item", len(cfg.l.Items), getMixesByItem)),
 	})
 }

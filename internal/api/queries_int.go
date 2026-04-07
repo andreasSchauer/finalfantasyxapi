@@ -45,7 +45,7 @@ func intQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Co
 		return inputRes, nil
 	}
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+		return nil, err
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)

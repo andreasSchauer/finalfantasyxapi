@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 // checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored. also checks for emptiness and replaces empty inputs with default values, if they exist.
@@ -64,7 +65,7 @@ func checkIntQuerySpecialVals(queryParam QueryParam, query string) (int, error) 
 	}
 
 	for _, input := range queryParam.SpecialInputs {
-		if query == input.Key {
+		if strings.ToLower(query) == input.Key {
 			return input.Val, nil
 		}
 	}

@@ -44,7 +44,7 @@ func nameOrIdQueryWrapper[T, P h.HasID, R any, A APIResource, L APIResourceList]
 
 	dbIDs, err := wrapperFn(cfg, r, id)
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+		return nil, err
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)

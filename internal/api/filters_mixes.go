@@ -9,10 +9,10 @@ import (
 )
 
 
-func getMixesByItem(cfg *Config, r *http.Request, firstItemId int32) ([]int32, error) {
+func getMixesByItem(cfg *Config, r *http.Request, firstItemId int32) ([]NamedAPIResource, error) {
 	i := cfg.e.mixes
 
-	secondItemIdPtr, err := getQueryNameIdPtr(r, cfg.e.items, "second_item", i.queryLookup)
+	secondItemIdPtr, err := getQueryIdPtr(r, cfg.e.items, "second_item", i.queryLookup)
 	if err != nil {
 		return nil, err
 	}
@@ -24,6 +24,7 @@ func getMixesByItem(cfg *Config, r *http.Request, firstItemId int32) ([]int32, e
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by items.", i.resourceType), err)
 	}
+	resources := idsToAPIResources(cfg, i, dbIDs)
 
-	return dbIDs, nil
+	return resources, nil
 }

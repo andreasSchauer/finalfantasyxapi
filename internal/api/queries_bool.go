@@ -68,7 +68,7 @@ func boolQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 
 	dbIDs, err := wrapperFn(cfg, r, b)
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+		return nil, err
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
