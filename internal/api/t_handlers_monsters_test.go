@@ -1302,7 +1302,7 @@ func TestSubsectionMonsters(t *testing.T) {
 				requestURL:     "/api/monsters/?ids=1&location=15",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testCfg.HandleMonsters,
-				expectedErr:    "parameter 'ids' can only be used with default parameters. available default parameters: 'limit', 'offset'.",
+				expectedErr:    "parameter 'ids' can only be used with default parameters. available default parameters: 'limit', 'offset', 'flip'.",
 			},
 		},
 		{

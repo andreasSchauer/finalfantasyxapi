@@ -32,15 +32,25 @@ func retrieveAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cf
 
 func filterAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A, filteredLists []filteredResList[A]) (L, error) {
 	var zeroType L
+	filteredRes := resources
 
 	for _, filtered := range filteredLists {
 		if filtered.err != nil {
 			return zeroType, filtered.err
 		}
-		resources = getSharedResources(resources, filtered.resources)
+		filteredRes = getSharedResources(filteredRes, filtered.resources)
 	}
 
-	resourceList, err := i.resToListFunc(cfg, r, resources)
+	flip, err := parseBooleanQuery(r, i.queryLookup["flip"])
+	if errIsNotEmptyQuery(err) {
+		return zeroType, err
+	}
+
+	if flip {
+		filteredRes = removeResources(resources, filteredRes)
+	}
+
+	resourceList, err := i.resToListFunc(cfg, r, filteredRes)
 	if err != nil {
 		return zeroType, err
 	}

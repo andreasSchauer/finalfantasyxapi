@@ -115,6 +115,13 @@ func (cfg *Config) QueryLookupInit() {
 			ForSingle:   false,
 			DefaultVal:  h.GetIntPtr(0),
 		},
+		{
+			Name:		 "flip",
+			Description: "Flips the filtered results in a list response and returns the negative.",
+			Type: 		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
 	}
 
 	cfg.q.defaultParams = querySliceToMap(cfg, defaultParams)
@@ -2240,32 +2247,12 @@ func (cfg *Config) initAllItemsParams(defaultParams []QueryParam) {
 			References:  []string{createListURL(cfg, "item-type")},
 		},
 		{
-			Name:		 "monster",
-			Description: "Searches for items that can be obtained via monsters.",
-			Type:		 "bool",
+			Name:		 "method",
+			Description: "Searches for items that can be obtained via all of the given methods.",
+			Type:		 "value-list",
 			ForList:     true,
 			ForSingle:   false,
-		},
-		{
-			Name:		 "treasure",
-			Description: "Searches for items that can be obtained via treasure.",
-			Type:		 "bool",
-			ForList:     true,
-			ForSingle:   false,
-		},
-		{
-			Name:		 "shop",
-			Description: "Searches for items that can be bought in shops.",
-			Type:		 "bool",
-			ForList:     true,
-			ForSingle:   false,
-		},
-		{
-			Name:		 "quest",
-			Description: "Searches for items that can be obtained by completing a quest.",
-			Type:		 "bool",
-			ForList:     true,
-			ForSingle:   false,
+			AllowedValues: []string{"monster", "treasure", "shop", "quest"},
 		},
 	}
 
@@ -2301,6 +2288,14 @@ func (cfg *Config) initItemsParams(defaultParams []QueryParam) {
 			References:  []string{createListURL(cfg, "item-category")},
 		},
 		{
+			Name:		 "method",
+			Description: "Searches for items that can be obtained via all of the given methods.",
+			Type:		 "value-list",
+			ForList:     true,
+			ForSingle:   false,
+			AllowedValues: []string{"monster", "treasure", "shop", "quest"},
+		},
+		{
 			Name:		 "has_ability",
 			Description: "Searches for items that can be used in battle.",
 			Type:		 "bool",
@@ -2315,34 +2310,6 @@ func (cfg *Config) initItemsParams(defaultParams []QueryParam) {
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
-		},
-		{
-			Name:		 "monster",
-			Description: "Searches for items that can be obtained via monsters.",
-			Type:		 "bool",
-			ForList:     true,
-			ForSingle:   false,
-		},
-		{
-			Name:		 "treasure",
-			Description: "Searches for items that can be obtained via treasure.",
-			Type:		 "bool",
-			ForList:     true,
-			ForSingle:   false,
-		},
-		{
-			Name:		 "shop",
-			Description: "Searches for items that can be bought in shops.",
-			Type:		 "bool",
-			ForList:     true,
-			ForSingle:   false,
-		},
-		{
-			Name:		 "quest",
-			Description: "Searches for items that can be obtained by completing a quest.",
-			Type:		 "bool",
-			ForList:     true,
-			ForSingle:   false,
 		},
 	}
 
@@ -2369,6 +2336,14 @@ func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
 			ForSingle:   false,
 			TypeLookup:  cfg.t.KeyItemCategory.lookup,
 			References:  []string{createListURL(cfg, "key-item-category")},
+		},
+		{
+			Name:		 "method",
+			Description: "Searches for key-items that can be obtained via all of the given methods.",
+			Type:		 "value-list",
+			ForList:     true,
+			ForSingle:   false,
+			AllowedValues: []string{"treasure", "shop"},
 		},
 		{
 			Name:		 "treasure",
@@ -2457,7 +2432,7 @@ func (cfg *Config) initMixesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
 	cfg.q.mixes = paramsMap
 }
 
