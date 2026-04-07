@@ -9,9 +9,9 @@ func TestGetQuest(t *testing.T) {
 	tests := []expQuest{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/quests/98",
+				requestURL:     "/api/quests/99",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "quest with provided id '98' doesn't exist. max id: 97.",
+				expectedErr:    "quest with provided id '99' doesn't exist. max id: 98.",
 			},
 		},
 		{
@@ -70,16 +70,16 @@ func TestRetrieveQuests(t *testing.T) {
 				requestURL:     "/api/quests?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   97,
-			results: []int32{1, 3, 17, 18, 25, 37, 44, 58, 65, 77, 83, 91, 97},
+			count:   98,
+			results: []int32{1, 3, 17, 18, 25, 37, 44, 58, 65, 77, 83, 91, 98},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/quests?type=sidequest",
 				expectedStatus: http.StatusOK,
 			},
-			count:   9,
-			results: []int32{1, 38, 55, 62, 72, 77, 84, 94, 97},
+			count:   10,
+			results: []int32{1, 38, 55, 62, 72, 77, 84, 94, 97, 98},
 		},
 		{
 			testGeneral: testGeneral{

@@ -2280,7 +2280,7 @@ func (cfg *Config) initItemsParams(defaultParams []QueryParam) {
 		},
 		{
 			Name:		 "category",
-			Description: "Searches for items that are of the specified item categories.",
+			Description: "Searches for items that are from one of the specified item categories.",
 			Type:		 "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2344,20 +2344,6 @@ func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
 			ForList:     true,
 			ForSingle:   false,
 			AllowedValues: []string{"treasure", "shop"},
-		},
-		{
-			Name:		 "treasure",
-			Description: "Searches for key-items that can be obtained via treasure.",
-			Type:		 "bool",
-			ForList:     true,
-			ForSingle:   false,
-		},
-		{
-			Name:		 "quest",
-			Description: "Searches for key-items that can be obtained by completing a quest.",
-			Type:		 "bool",
-			ForList:     true,
-			ForSingle:   false,
 		},
 	}
 

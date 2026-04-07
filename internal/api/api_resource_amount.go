@@ -95,6 +95,18 @@ func getResAmtMap[A APIResource](items []ResourceAmount[A]) map[string]int32 {
 	return amountMap
 }
 
+func getResAmtIdMap[A APIResource](items []ResourceAmount[A]) map[int32]int32 {
+	amountMap := make(map[int32]int32)
+
+	for _, item := range items {
+		url := item.Resource.GetURL()
+		id := getIdFromURL(url)
+		amountMap[id] = item.Amount
+	}
+
+	return amountMap
+}
+
 func resAmtTypesToStructs[T ResourceAmountType[A], A APIResource](items []T) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}
 

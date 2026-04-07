@@ -327,8 +327,8 @@ func TestRetrieveAreas(t *testing.T) {
 				requestURL:     "/api/areas?sidequests=true",
 				expectedStatus: http.StatusOK,
 			},
-			count:   11,
-			results: []int32{75, 140, 144, 145, 182, 185, 203},
+			count:   12,
+			results: []int32{75, 140, 144, 145, 147, 182, 185, 203},
 		},
 		{
 			testGeneral: testGeneral{

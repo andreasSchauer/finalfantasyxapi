@@ -64,7 +64,7 @@ func TestGetSublocation(t *testing.T) {
 			areas:                 []int32{202, 203, 204, 205, 206, 207},
 			expLocRel: expLocRel{
 				shops:      []int32{31, 32, 33},
-				treasures:  []int32{265, 268, 270, 273},
+				treasures:  []int32{265, 268, 270, 272},
 				monsters:   []int32{138, 142, 149, 259, 270, 282, 292},
 				formations: []int32{193, 198, 205, 306, 312, 320, 331},
 				sidequests: []int32{1, 4},

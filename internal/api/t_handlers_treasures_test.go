@@ -18,9 +18,9 @@ func TestGetTreasure(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/344",
+				requestURL:     "/api/treasures/343",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "treasure with provided id '344' doesn't exist. max id: 343.",
+				expectedErr:    "treasure with provided id '343' doesn't exist. max id: 342.",
 			},
 		},
 		{
@@ -46,12 +46,12 @@ func TestGetTreasure(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/200",
+				requestURL:     "/api/treasures/199",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIdOnly:       newExpIdOnly(200),
+			expIdOnly:       newExpIdOnly(199),
 			area:            160,
 			availability:    2,
 			isAnimaTreasure: false,
@@ -105,12 +105,12 @@ func TestGetTreasure(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/285",
+				requestURL:     "/api/treasures/284",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIdOnly:       newExpIdOnly(285),
+			expIdOnly:       newExpIdOnly(284),
 			area:            214,
 			availability:    1,
 			isAnimaTreasure: false,
@@ -151,8 +151,8 @@ func TestRetrieveTreasures(t *testing.T) {
 				requestURL:     "/api/treasures?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   343,
-			results: []int32{1, 28, 53, 84, 123, 127, 167, 191, 214, 286, 300, 343},
+			count:   342,
+			results: []int32{1, 28, 53, 84, 123, 127, 167, 191, 214, 286, 300, 342},
 		},
 		{
 			testGeneral: testGeneral{
@@ -168,7 +168,7 @@ func TestRetrieveTreasures(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   15,
-			results: []int32{329, 330, 335, 337, 339, 343},
+			results: []int32{328, 330, 335, 337, 339, 342},
 		},
 		{
 			testGeneral: testGeneral{
@@ -176,7 +176,7 @@ func TestRetrieveTreasures(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   6,
-			results: []int32{285, 286, 287, 288, 289, 290},
+			results: []int32{284, 285, 286, 287, 288, 289},
 		},
 		{
 			testGeneral: testGeneral{
@@ -184,7 +184,7 @@ func TestRetrieveTreasures(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   6,
-			results: []int32{39, 62, 150, 211, 254, 303},
+			results: []int32{39, 62, 150, 210, 253, 302},
 		},
 		{
 			testGeneral: testGeneral{
@@ -192,7 +192,7 @@ func TestRetrieveTreasures(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   94,
-			results: []int32{1, 23, 91, 119, 139, 207, 239, 261, 264},
+			results: []int32{1, 23, 91, 119, 139, 206, 239, 261, 263},
 		},
 	}
 
@@ -229,7 +229,7 @@ func TestSubsectionTreasures(t *testing.T) {
 			},
 			count:          3,
 			parentResource: h.GetStrPtr("/areas/225"),
-			results:        []int32{299, 300, 301},
+			results:        []int32{298, 299, 300},
 		},
 	}
 
