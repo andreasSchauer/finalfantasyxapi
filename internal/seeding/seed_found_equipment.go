@@ -10,6 +10,7 @@ import (
 
 type FoundEquipment struct {
 	ID               int32
+	TreasureID		 int32
 	EquipmentNameID  int32
 	Name             string   `json:"name"`
 	Abilities        []string `json:"abilities"`
@@ -18,6 +19,7 @@ type FoundEquipment struct {
 
 func (f FoundEquipment) ToHashFields() []any {
 	return []any{
+		f.TreasureID,
 		f.EquipmentNameID,
 		f.EmptySlotsAmount,
 	}
@@ -39,8 +41,9 @@ func (l *Lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment FoundE
 		return FoundEquipment{}, h.NewErr(foundEquipment.Error(), err)
 	}
 
-	dbFoundEquipment, err := qtx.CreateFoundEquipmentPiece(context.Background(), database.CreateFoundEquipmentPieceParams{
+	dbFoundEquipment, err := qtx.CreateTreasureEquipmentPiece(context.Background(), database.CreateTreasureEquipmentPieceParams{
 		DataHash:         generateDataHash(foundEquipment),
+		TreasureID:	  	  foundEquipment.TreasureID,
 		EquipmentNameID:  foundEquipment.EquipmentNameID,
 		EmptySlotsAmount: foundEquipment.EmptySlotsAmount,
 	})
@@ -65,10 +68,10 @@ func (l *Lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipme
 			return h.NewErr(autoAbility, err)
 		}
 
-		err = qtx.CreateFoundEquipmentAbilitiesJunction(context.Background(), database.CreateFoundEquipmentAbilitiesJunctionParams{
-			DataHash:         generateDataHash(junction),
-			FoundEquipmentID: junction.ParentID,
-			AutoAbilityID:    junction.ChildID,
+		err = qtx.CreateTreasureEquipmentAbilitiesJunction(context.Background(), database.CreateTreasureEquipmentAbilitiesJunctionParams{
+			DataHash:         		generateDataHash(junction),
+			TreasureEquipmentID: 	junction.ParentID,
+			AutoAbilityID:   		junction.ChildID,
 		})
 		if err != nil {
 			return h.NewErr(autoAbility, err, "couldn't junction auto-ability")

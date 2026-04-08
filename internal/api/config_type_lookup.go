@@ -34,15 +34,21 @@ type TypeLookup struct {
 	ItemType                    EnumType[database.ItemType, any]
 	QuestType                   EnumType[database.QuestType, any]
 
+	AaActivationCondition		EnumType[database.AaActivationCondition, database.NullAaActivationCondition]
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
+	AutoAbilityCategory			EnumType[database.AutoAbilityCategory, any]
 	AvailabilityType            EnumType[database.AvailabilityType, any]
 	BlitzballTournamentCategory EnumType[database.BlitzballTournamentCategory, any]
+	CelestialFormula			EnumType[database.CelestialFormula, any]
 	CharacterClassCategory      EnumType[database.CharacterClassCategory, any]
+	CounterType					EnumType[database.CounterType, database.NullCounterType]
 	Composer                    EnumType[database.Composer, database.NullComposer]
 	CreationArea                EnumType[database.MaCreationArea, database.NullMaCreationArea]
 	CTBIconType                 EnumType[database.CtbIconType, any]
+	EquipClass					EnumType[database.EquipClass, any]
+	EquipType					EnumType[database.EquipType, database.NullEquipType]
 	ItemCategory                EnumType[database.ItemCategory, any]
 	KeyItemCategory				EnumType[database.KeyItemCategory, any]
 	LootType                    EnumType[database.LootType, any]
@@ -77,15 +83,21 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initItemType()
 	cfg.t.initQuestType()
 
+	cfg.t.initAaActivationCondition()
 	cfg.t.initAreaConnectionType()
 	cfg.t.initArenaCreationCategory()
 	cfg.t.initArranger()
+	cfg.t.initAutoAbilityCategory()
 	cfg.t.initAvailabilityType()
 	cfg.t.initBlitzballTournamentCategory()
+	cfg.t.initCelestialFormula()
 	cfg.t.initCharacterClassCategory()
 	cfg.t.initComposer()
+	cfg.t.initCounterType()
 	cfg.t.initCTBIconType()
 	cfg.t.initCreationArea()
+	cfg.t.initEquipClass()
+	cfg.t.initEquipType()
 	cfg.t.initItemCategory()
 	cfg.t.initKeyItemCategory()
 	cfg.t.initLootType()
@@ -198,6 +210,31 @@ func (t *TypeLookup) initQuestType() {
 	}, nil, nil)
 }
 
+func (t *TypeLookup) initAaActivationCondition() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.AaActivationConditionAlways),
+			Description: "The auto-ability is always active in-battle.",
+		},
+		{
+			Name:        string(database.AaActivationConditionActiveParty),
+			Description: "The auto-ability is only active in-battle, while the wearer is in the active party.",
+		},
+		{
+			Name:        string(database.AaActivationConditionHpCritical),
+			Description: "The auto-ability activates in-battle, while the wearer is in hp-critical condition.",
+		},
+		{
+			Name:        string(database.AaActivationConditionOutsideBattle),
+			Description: "The auto-ability's effects apply outside of battle.",
+		},
+	}
+
+	t.AaActivationCondition = newEnumType("auto ability activation condition", false, typeSlice, func(s string) database.AaActivationCondition {
+		return database.AaActivationCondition(s)
+	}, h.NullAaActivationCondition, h.GetNullAaActivationCondition)
+}
+
 func (t *TypeLookup) initAreaConnectionType() {
 	typeSlice := []EnumAPIResource{
 		{
@@ -258,6 +295,63 @@ func (t *TypeLookup) initArranger() {
 	}, h.NullArranger, h.GetNullArranger)
 }
 
+func (t *TypeLookup) initAutoAbilityCategory() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.AutoAbilityCategoryStatX),
+			Description: "Auto-abilities that increase stats or modify formulae related to that stat.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategoryElementalStrike),
+			Description: "Auto-abilities that grant elemental properties to the user's attack and skills.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategoryElementalProtection),
+			Description: "Auto-abilities that grant protection from elements.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategoryStatusInfliction),
+			Description: "Auto-abilities that grant the chance of inflicting a status to the user's attack and skills.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategoryStatusProtection),
+			Description: "Auto-abilities that grant protection from status conditions.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategoryAutoCure),
+			Description: "Auto-abilities that let the user use restorative items automatically.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategoryAutoStatus),
+			Description: "Auto-abilities that grant a positive status to the user at all times.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategorySosStatus),
+			Description: "Auto-abilities that grant a positive status to the user, if they are in hp-critical condition.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategoryCounter),
+			Description: "Auto-abilities that let the user perform a counterattack, if a certain condition is met.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategoryApOverdrive),
+			Description: "Auto-abilities that modify the user's overdrive charge rate or ap gain.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategoryBreakLimit),
+			Description: "Auto-abilities that raise the upper limit of the user's stats or damage.",
+		},
+		{
+			Name:        string(database.AutoAbilityCategoryOther),
+			Description: "Auto-abilities that don't match the other categories.",
+		},
+	}
+
+	t.AutoAbilityCategory = newEnumType[database.AutoAbilityCategory, any]("auto-ability category", true, typeSlice, func(s string) database.AutoAbilityCategory {
+		return database.AutoAbilityCategory(s)
+	}, nil, nil)
+}
+
 func (t *TypeLookup) initAvailabilityType() {
 	typeSlice := []EnumAPIResource{
 		{
@@ -298,6 +392,27 @@ func (t *TypeLookup) initBlitzballTournamentCategory() {
 	}, nil, nil)
 }
 
+func (t *TypeLookup) initCelestialFormula() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.CelestialFormulaHpHigh),
+			Description: "The celestial weapon deals more damage, the higher the user's hp are.",
+		},
+		{
+			Name:        string(database.CelestialFormulaHpLow),
+			Description: "The celestial weapon deals more damage, the lower the user's hp are.",
+		},
+		{
+			Name:        string(database.CelestialFormulaMpHigh),
+			Description: "The celestial weapon deals more damage, the higher the user's mp are.",
+		},
+	}
+
+	t.CelestialFormula = newEnumType[database.CelestialFormula, any]("celestial formula", false, typeSlice, func(s string) database.CelestialFormula {
+		return database.CelestialFormula(s)
+	}, nil, nil)
+}
+
 func (t *TypeLookup) initCharacterClassCategory() {
 	typeSlice := []EnumAPIResource{
 		{
@@ -332,6 +447,23 @@ func (t *TypeLookup) initComposer() {
 	t.Composer = newEnumType("composer", false, typeSlice, func(s string) database.Composer {
 		return database.Composer(s)
 	}, h.NullComposer, h.GetNullComposer)
+}
+
+func (t *TypeLookup) initCounterType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.CounterTypePhysical),
+			Description: "The user counters when being hit by a physical attack.",
+		},
+		{
+			Name:        string(database.CounterTypeMagical),
+			Description: "The user counters when being hit by a magical attack.",
+		},
+	}
+
+	t.CounterType = newEnumType("counter type", false, typeSlice, func(s string) database.CounterType {
+		return database.CounterType(s)
+	}, h.NullCounterType, h.GetNullCounterType)
 }
 
 func (t *TypeLookup) initCTBIconType() {
@@ -409,6 +541,42 @@ func (t *TypeLookup) initCreationArea() {
 	t.CreationArea = newEnumType("creation area", false, typeSlice, func(s string) database.MaCreationArea {
 		return database.MaCreationArea(s)
 	}, h.NullMaCreationArea, h.GetNullMaCreationArea)
+}
+
+func (t *TypeLookup) initEquipClass() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.EquipClassStandard),
+			Description: "A standard, customizable equipment piece.",
+		},
+		{
+			Name:        string(database.EquipClassUnique),
+			Description: "The equipment piece is one of a kind and its auto-abilities can only be modified by progressing through the story.",
+		},
+		{
+			Name:        string(database.EquipClassCelestialWeapon),
+			Description: "The equipment piece is a celestial weapon and its auto-abilities can only be modified by upgrading it with its equivalent crest and sigil.",
+		},
+	}
+
+	t.EquipClass = newEnumType[database.EquipClass, any]("equip class", false, typeSlice, func(s string) database.EquipClass {
+		return database.EquipClass(s)
+	}, nil, nil)
+}
+
+func (t *TypeLookup) initEquipType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.EquipTypeWeapon),
+		},
+		{
+			Name:        string(database.EquipTypeArmor),
+		},
+	}
+
+	t.EquipType = newEnumType("equip type", false, typeSlice, func(s string) database.EquipType {
+		return database.EquipType(s)
+	}, h.NullEquipType, h.GetNullEquipType)
 }
 
 func (t *TypeLookup) initItemCategory() {

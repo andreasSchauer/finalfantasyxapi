@@ -53,7 +53,7 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 	}
 
 	rel := Item{
-		Monsters:           getMonItemAmts(cfg, monsters, item),
+		Monsters:           getMonItemAmts(cfg, monsters, item.Name),
 		Treasures:          getForeignResAmts2(cfg, cfg.e.treasures, treasures, item.ID),
 		Shops:              shops,
 		Quests:             getForeignResAmts(cfg.e.quests, quests),
@@ -68,11 +68,11 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 
 
 
-func getMonItemAmts(cfg *Config, monsters []NamedAPIResource, item seeding.Item) []MonItemAmts {
+func getMonItemAmts(cfg *Config, monsters []NamedAPIResource, itemName string) []MonItemAmts {
 	monItemAmts := []MonItemAmts{}
 
 	for _, monster := range monsters {
-		monItemAmt := createItemMonster(cfg, item, monster)
+		monItemAmt := createItemMonster(cfg, itemName, monster)
 		monItemAmts = append(monItemAmts, monItemAmt)
 	}
 

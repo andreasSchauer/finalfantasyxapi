@@ -86,3 +86,50 @@ func convGetItemQuestIDs(cfg *Config) AvailabilityDbQuery {
 		})
 	}
 }
+
+func convGetAutoAbilityItemMonsterIDs(cfg *Config) AvailabilityDbQuery {
+	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetAutoAbilityItemMonsterIDs(ctx, database.GetAutoAbilityItemMonsterIDsParams{
+			AutoAbilityID:	p.ParentID,
+			Availability: 	p.Availability,
+			Repeatable: 	p.Repeatable,
+		})
+	}
+}
+
+func convGetAutoAbilityMonsterIDs(cfg *Config) AvailabilityDbQuery {
+	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetAutoAbilityMonsterIDs(ctx, database.GetAutoAbilityMonsterIDsParams{
+			AutoAbilityID:	p.ParentID,
+			Availability: 	p.Availability,
+			Repeatable: 	p.Repeatable,
+		})
+	}
+}
+
+func convGetAutoAbilityTreasuresIDs(cfg *Config) AvailabilityDbQuery {
+	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetAutoAbilityTreasureIDs(ctx, database.GetAutoAbilityTreasureIDsParams{
+			AutoAbilityID:	p.ParentID,
+			Availability: 	p.Availability,
+		})
+	}
+}
+
+func convGetAutoAbilityShopIDsPre(cfg *Config) AvailabilityDbQuery {
+	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetAutoAbilityShopIDsPre(ctx, database.GetAutoAbilityShopIDsPreParams{
+			AutoAbilityID:	p.ParentID,
+			Availability: 	p.Availability,
+		})
+	}
+}
+
+func convGetAutoAbilityShopIDsPost(cfg *Config) AvailabilityDbQuery {
+	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetAutoAbilityShopIDsPost(ctx, database.GetAutoAbilityShopIDsPostParams{
+			AutoAbilityID:	p.ParentID,
+			Availability: 	p.Availability,
+		})
+	}
+}

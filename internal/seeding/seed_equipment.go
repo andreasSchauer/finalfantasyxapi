@@ -52,6 +52,12 @@ func (e EquipmentTable) Error() string {
 	return fmt.Sprintf("equipment table with type: %s, classification: %s, specific character: %v, version: %v, priority: %v", e.Type, e.Classification, h.PtrToString(e.SpecificCharacter), h.PtrToString(e.Version), h.PtrToString(e.Priority))
 }
 
+func (e EquipmentTable) GetResParamsUnnamed() h.ResParamsUnnamed {
+	return h.ResParamsUnnamed{
+		ID: e.ID,
+	}
+}
+
 type AbilityPool struct {
 	ID					int32
 	EquipmentTableID	int32

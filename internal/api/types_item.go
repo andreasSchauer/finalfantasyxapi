@@ -45,23 +45,23 @@ func (cra CommonRareAmount) IsZero() bool {
 	return cra.Common == 0 && cra.Rare == 0
 }
 
-func createItemMonster(cfg *Config, item seeding.Item, mon NamedAPIResource) MonItemAmts {
+func createItemMonster(cfg *Config, itemName string, mon NamedAPIResource) MonItemAmts {
 	monster, _ := seeding.GetResourceByID(mon.ID, cfg.l.MonstersID)
 
 	return MonItemAmts{
 		Monster:       mon,
-		Steal:         craPtr(item, monster.Items.StealCommon, monster.Items.StealRare),
-		Drop:          craPtr(item, monster.Items.DropCommon, monster.Items.DropRare),
-		SecondaryDrop: craPtr(item, monster.Items.SecondaryDropCommon, monster.Items.SecondaryDropRare),
-		Bribe:         getAmountMonItem(item, monster.Items.Bribe),
-		Other: 		   getAmountOther(item, monster.Items.OtherItems),
+		Steal:         craPtr(itemName, monster.Items.StealCommon, monster.Items.StealRare),
+		Drop:          craPtr(itemName, monster.Items.DropCommon, monster.Items.DropRare),
+		SecondaryDrop: craPtr(itemName, monster.Items.SecondaryDropCommon, monster.Items.SecondaryDropRare),
+		Bribe:         getAmountMonItem(itemName, monster.Items.Bribe),
+		Other: 		   getAmountOther(itemName, monster.Items.OtherItems),
 	}
 }
 
-func craPtr(item seeding.Item, common, rare *seeding.ItemAmount) *CommonRareAmount {
+func craPtr(itemName string, common, rare *seeding.ItemAmount) *CommonRareAmount {
 	cra := CommonRareAmount{
-		Common: getAmountMonItem(item, common),
-		Rare:   getAmountMonItem(item, rare),
+		Common: getAmountMonItem(itemName, common),
+		Rare:   getAmountMonItem(itemName, rare),
 	}
 
 	if cra.IsZero() {
@@ -71,17 +71,17 @@ func craPtr(item seeding.Item, common, rare *seeding.ItemAmount) *CommonRareAmou
 	return &cra
 }
 
-func getAmountMonItem(item seeding.Item, ia *seeding.ItemAmount) int32 {
-	if ia == nil || ia.ItemName != item.Name {
+func getAmountMonItem(itemName string, ia *seeding.ItemAmount) int32 {
+	if ia == nil || ia.ItemName != itemName {
 		return 0
 	}
 
 	return ia.Amount
 }
 
-func getAmountOther(item seeding.Item, otherItems []seeding.PossibleItem) int32 {
+func getAmountOther(itemName string, otherItems []seeding.PossibleItem) int32 {
 	for _, otherItem := range otherItems {
-		if otherItem.ItemAmount.ItemName == item.Name {
+		if otherItem.ItemAmount.ItemName == itemName {
 			return otherItem.ItemAmount.Amount
 		}
 	}

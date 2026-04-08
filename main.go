@@ -66,6 +66,8 @@ func main() {
 	mux.HandleFunc("GET /api/key-items/", apiCfg.HandleKeyItems)
 	mux.HandleFunc("GET /api/primers/", apiCfg.HandlePrimers)
 	mux.HandleFunc("GET /api/mixes/", apiCfg.HandleMixes)
+	
+	mux.HandleFunc("GET /api/auto-abilities/", apiCfg.HandleAutoAbilities)
 
 	mux.HandleFunc("GET /api/overdrive-modes/", apiCfg.HandleOverdriveModes)
 

@@ -69,6 +69,13 @@ func (er ElementalResist) GetAPIResource() APIResource {
 	return er.Element
 }
 
+func convertElemResist(cfg *Config, er seeding.ElementalResist) ElementalResist {
+	return ElementalResist{
+		Element:  nameToNamedAPIResource(cfg, cfg.e.elements, er.Element, nil),
+		Affinity: nameToNamedAPIResource(cfg, cfg.e.affinities, er.Affinity, nil),
+	}
+}
+
 func newElemResist(cfg *Config, element, affinity string) ElementalResist {
 	return ElementalResist{
 		Element:  nameToNamedAPIResource(cfg, cfg.e.elements, element, nil),
@@ -97,6 +104,13 @@ type StatusResist struct {
 
 func (sr StatusResist) GetAPIResource() APIResource {
 	return sr.StatusCondition
+}
+
+func convertStatusResist(cfg *Config, sr seeding.StatusResist) StatusResist {
+	return StatusResist{
+		StatusCondition: nameToNamedAPIResource(cfg, cfg.e.statusConditions, sr.StatusCondition, nil),
+		Resistance: sr.Resistance,
+	}
 }
 
 func newStatusResist(res NamedAPIResource, resistance int32) StatusResist {

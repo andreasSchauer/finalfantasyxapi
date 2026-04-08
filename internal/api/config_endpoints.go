@@ -47,7 +47,8 @@ type endpoints struct {
 	primers  handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]
 	mixes    handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]
 
-	autoAbilities    handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]
+	autoAbilities    handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]
+	equipmentTables	 handlerInput[seeding.EquipmentTable, any, UnnamedAPIResource, UnnamedApiResourceList]
 	equipment        handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
 	celestialWeapons handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]
 
@@ -65,6 +66,7 @@ type endpoints struct {
 	questType   handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 
 	attackType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	autoAbilityCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	availabilityType         handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageFormula            handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
@@ -836,13 +838,26 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.autoAbilities = handlerInput[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList]{
+	e.autoAbilities = handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "auto-abilities",
 		resourceType:  "auto ability",
 		objLookup:     cfg.l.AutoAbilities,
 		objLookupID:   cfg.l.AutoAbilitiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.AutoAbility, any, NamedAPIResource, NamedApiResourceList],
+		queryLookup:   cfg.q.autoAbilities,
+		idToResFunc:   idToNamedAPIResource[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetAutoAbilityIDs,
+		getSingleFunc: cfg.getAutoAbility,
+		retrieveFunc:  cfg.retrieveAutoAbilities,
+	}
+
+	e.equipmentTables = handlerInput[seeding.EquipmentTable, any, UnnamedAPIResource, UnnamedApiResourceList]{
+		endpoint:      "equipment",
+		resourceType:  "equipment",
+		objLookup:     cfg.l.EquipmentTables,
+		objLookupID:   cfg.l.EquipmentTablesID,
+		idToResFunc:   idToUnnamedAPIResource[seeding.EquipmentTable, any, UnnamedAPIResource, UnnamedApiResourceList],
+		resToListFunc: newUnnamedAPIResourceList,
 	}
 
 	e.equipment = handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]{
@@ -962,6 +977,13 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:      "attack-type",
 		resourceType:  "attack type",
 		objLookup:     cfg.t.AttackType.lookup,
+		resToListFunc: newEnumAPIResourceList,
+	}
+
+	e.autoAbilityCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
+		endpoint:      "auto-ability-category",
+		resourceType:  "auto ability category",
+		objLookup:     cfg.t.AutoAbilityCategory.lookup,
 		resToListFunc: newEnumAPIResourceList,
 	}
 

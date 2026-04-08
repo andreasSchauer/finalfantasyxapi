@@ -3026,13 +3026,6 @@ type FormationTriggerCommand struct {
 	UseAmount        sql.NullInt32
 }
 
-type FoundEquipmentPiece struct {
-	ID               int32
-	DataHash         string
-	EquipmentNameID  int32
-	EmptySlotsAmount interface{}
-}
-
 type InflictedDelay struct {
 	ID             int32
 	DataHash       string
@@ -3330,13 +3323,6 @@ type JFormationTriggerCommandsUser struct {
 	CharacterClassID int32
 }
 
-type JFoundEquipmentAbility struct {
-	ID               int32
-	DataHash         string
-	FoundEquipmentID int32
-	AutoAbilityID    int32
-}
-
 type JItemsAvailableMenu struct {
 	ID        int32
 	DataHash  string
@@ -3513,14 +3499,6 @@ type JShopEquipmentAbility struct {
 	AutoAbilityID   int32
 }
 
-type JShopsEquipment struct {
-	ID              int32
-	DataHash        string
-	ShopID          int32
-	ShopEquipmentID int32
-	ShopType        ShopType
-}
-
 type JShopsItem struct {
 	ID         int32
 	DataHash   string
@@ -3577,6 +3555,13 @@ type JSubmenusUser struct {
 	DataHash         string
 	SubmenuID        int32
 	CharacterClassID int32
+}
+
+type JTreasureEquipmentAbility struct {
+	ID                  int32
+	DataHash            string
+	TreasureEquipmentID int32
+	AutoAbilityID       int32
 }
 
 type JTreasuresItem struct {
@@ -3896,7 +3881,9 @@ type Shop struct {
 type ShopEquipmentPiece struct {
 	ID               int32
 	DataHash         string
+	ShopID           int32
 	EquipmentNameID  int32
+	ShopType         ShopType
 	EmptySlotsAmount interface{}
 	Price            int32
 }
@@ -4011,17 +3998,24 @@ type Topmenu struct {
 }
 
 type Treasure struct {
+	ID              int32
+	DataHash        string
+	AreaID          int32
+	Version         int32
+	TreasureType    TreasureType
+	LootType        LootType
+	Availability    AvailabilityType
+	IsAnimaTreasure bool
+	Notes           sql.NullString
+	GilAmount       sql.NullInt32
+}
+
+type TreasureEquipmentPiece struct {
 	ID               int32
 	DataHash         string
-	AreaID           int32
-	Version          int32
-	TreasureType     TreasureType
-	LootType         LootType
-	Availability     AvailabilityType
-	IsAnimaTreasure  bool
-	Notes            sql.NullString
-	GilAmount        sql.NullInt32
-	FoundEquipmentID sql.NullInt32
+	TreasureID       int32
+	EquipmentNameID  int32
+	EmptySlotsAmount interface{}
 }
 
 type TriggerCommand struct {

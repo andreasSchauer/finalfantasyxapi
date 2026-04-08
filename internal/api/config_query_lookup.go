@@ -86,6 +86,8 @@ type QueryLookup struct {
 	primers			map[string]QueryParam
 	mixes			map[string]QueryParam
 
+	autoAbilities	map[string]QueryParam
+
 	overdriveModes 	map[string]QueryParam
 }
 
@@ -166,6 +168,8 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initKeyItemsParams(defaultParams)
 	cfg.initPrimersParams(defaultParams)
 	cfg.initMixesParams(defaultParams)
+
+	cfg.initAutoAbilitiesParams(defaultParams)
 
 	cfg.initOverdriveModesParams(defaultParams)
 
@@ -2420,6 +2424,63 @@ func (cfg *Config) initMixesParams(defaultParams []QueryParam) {
 
 	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
 	cfg.q.mixes = paramsMap
+}
+
+func (cfg *Config) initAutoAbilitiesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "rel_availability",
+			Description: "Only displays an auto-ability's related monsters with the given availabilities.",
+			Type:		 "enum-list",
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:		 "repeatable",
+			Description: "Only displays an auto-ability's related monsters that can be farmed.",
+			Type:		 "bool",
+			ForList:     false,
+			ForSingle:   true,
+		},
+		{
+			Name:		 "category",
+			Description: "Searches for auto-abilities that are of the specified auto-ability categories.",
+			Type:		 "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AutoAbilityCategory.lookup,
+			References:  []string{createListURL(cfg, "auto-ability-category")},
+		},
+		{
+			Name:		 "type",
+			Description: "Searches for auto-abilities that are of the specified equip type.",
+			Type:		 "enum",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.EquipType.lookup,
+		},
+		{
+			Name:		 "monster",
+			Description: "Searches for auto-abilities that are dropped by the specified monster.",
+			Type:		 "id",
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "monsters")},
+		},
+		{
+			Name:		 "monster_items",
+			Description: "Searches for auto-abilities that can be crafted with the items dropped by the specified monster.",
+			Type:		 "id",
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "monsters")},
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.autoAbilities = paramsMap
 }
 
 func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {

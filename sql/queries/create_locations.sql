@@ -39,13 +39,6 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = treasures.data_hash
 RETURNING *;
 
 
--- name: UpdateTreasure :exec
-UPDATE treasures
-SET data_hash = $1,
-    found_equipment_id = $2
-WHERE id = $3;
-
-
 -- name: CreateShop :one
 INSERT INTO shops (data_hash, version, area_id, notes, category, availability)
 VALUES ($1, $2, $3, $4, $5, $6)
@@ -53,15 +46,15 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = shops.data_hash
 RETURNING *;
 
 
--- name: CreateFoundEquipmentPiece :one
-INSERT INTO found_equipment_pieces (data_hash, equipment_name_id, empty_slots_amount)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = found_equipment_pieces.data_hash
+-- name: CreateTreasureEquipmentPiece :one
+INSERT INTO treasure_equipment_pieces (data_hash, treasure_id, equipment_name_id, empty_slots_amount)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = treasure_equipment_pieces.data_hash
 RETURNING *;
 
 
--- name: CreateFoundEquipmentAbilitiesJunction :exec
-INSERT INTO j_found_equipment_abilities (data_hash, found_equipment_id, auto_ability_id)
+-- name: CreateTreasureEquipmentAbilitiesJunction :exec
+INSERT INTO j_treasure_equipment_abilities (data_hash, treasure_equipment_id, auto_ability_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
@@ -86,19 +79,13 @@ RETURNING *;
 
 
 -- name: CreateShopEquipmentPiece :one
-INSERT INTO shop_equipment_pieces (data_hash, equipment_name_id, empty_slots_amount, price)
-VALUES ($1, $2, $3, $4)
+INSERT INTO shop_equipment_pieces (data_hash, shop_id, equipment_name_id, shop_type, empty_slots_amount, price)
+VALUES ($1, $2, $3, $4, $5, $6)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = shop_equipment_pieces.data_hash
 RETURNING *;
 
 
 -- name: CreateShopsItemsJunction :exec
 INSERT INTO j_shops_items (data_hash, shop_id, shop_item_id, shop_type)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateShopsEquipmentJunction :exec
-INSERT INTO j_shops_equipment (data_hash, shop_id, shop_equipment_id, shop_type)
 VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;

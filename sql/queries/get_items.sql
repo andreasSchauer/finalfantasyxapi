@@ -487,7 +487,7 @@ JOIN master_items mi ON ki.master_item_id = mi.id
 JOIN item_amounts ia ON ia.master_item_id = mi.id
 JOIN j_treasures_items j ON j.item_amount_id = ia.id
 JOIN treasures t ON j.treasure_id = t.id
-WHERE t.availability = ANY(sqlc.narg('availability')::availability_type[])
+WHERE t.availability = ANY(sqlc.arg('availability')::availability_type[])
 ORDER BY p.id;
 
 

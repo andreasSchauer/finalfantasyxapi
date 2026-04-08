@@ -93,13 +93,17 @@ func (s ShopItem) Error() string {
 
 type ShopEquipment struct {
 	ID int32
+	ShopID	int32
+	ShopType	database.ShopType
 	FoundEquipment
 	Price int32 `json:"price"`
 }
 
 func (s ShopEquipment) ToHashFields() []any {
 	return []any{
+		s.ShopID,
 		s.EquipmentNameID,
+		s.ShopType,
 		s.EmptySlotsAmount,
 		s.Price,
 	}
@@ -274,57 +278,38 @@ func (l *Lookup) seedShopItem(qtx *database.Queries, shopItem ShopItem) (ShopIte
 
 func (l *Lookup) seedShopEquipmentPieces(qtx *database.Queries, shop Shop, subShop *SubShop) error {
 	for _, shopEquipment := range subShop.Equipment {
-		junction, err := createJunctionSeed(qtx, shop, shopEquipment, l.seedShopEquipment)
+		var err error
+		shopEquipment.ShopID = shop.ID
+		shopEquipment.ShopType = subShop.Type
+
+		shopEquipment.EquipmentNameID, err = assignFK(shopEquipment.Name, l.EquipmentNames)
 		if err != nil {
-			return err
+			return h.NewErr(shopEquipment.Error(), err)
 		}
 
-		shopJunction := ShopJunction{
-			Junction: junction,
-			ShopType: subShop.Type,
-		}
-
-		err = qtx.CreateShopsEquipmentJunction(context.Background(), database.CreateShopsEquipmentJunctionParams{
-			DataHash:        generateDataHash(shopJunction),
-			ShopID:          shopJunction.ParentID,
-			ShopEquipmentID: shopJunction.ChildID,
-			ShopType:        shopJunction.ShopType,
+		dbShopEquipment, err := qtx.CreateShopEquipmentPiece(context.Background(), database.CreateShopEquipmentPieceParams{
+			DataHash:         generateDataHash(shopEquipment),
+			ShopID: 		  shopEquipment.ShopID,
+			EquipmentNameID:  shopEquipment.EquipmentNameID,
+			ShopType: 		  shopEquipment.ShopType,
+			EmptySlotsAmount: shopEquipment.EmptySlotsAmount,
+			Price:            shopEquipment.Price,
 		})
 		if err != nil {
-			return h.NewErr(shopEquipment.Error(), err, "couldn't junction shop equipment")
+			return h.NewErr(shopEquipment.Error(), err, "couldn't create shop equipment")
+		}
+
+		shopEquipment.ID = dbShopEquipment.ID
+
+		err = l.seedShopEquipmentAbilities(qtx, shopEquipment)
+		if err != nil {
+			return h.NewErr(shopEquipment.Error(), err)
 		}
 	}
 
 	return nil
 }
 
-func (l *Lookup) seedShopEquipment(qtx *database.Queries, shopEquipment ShopEquipment) (ShopEquipment, error) {
-	var err error
-
-	shopEquipment.EquipmentNameID, err = assignFK(shopEquipment.Name, l.EquipmentNames)
-	if err != nil {
-		return ShopEquipment{}, h.NewErr(shopEquipment.Error(), err)
-	}
-
-	dbShopEquipment, err := qtx.CreateShopEquipmentPiece(context.Background(), database.CreateShopEquipmentPieceParams{
-		DataHash:         generateDataHash(shopEquipment),
-		EquipmentNameID:  shopEquipment.EquipmentNameID,
-		EmptySlotsAmount: shopEquipment.EmptySlotsAmount,
-		Price:            shopEquipment.Price,
-	})
-	if err != nil {
-		return ShopEquipment{}, h.NewErr(shopEquipment.Error(), err, "couldn't create shop equipment")
-	}
-
-	shopEquipment.ID = dbShopEquipment.ID
-
-	err = l.seedShopEquipmentAbilities(qtx, shopEquipment)
-	if err != nil {
-		return ShopEquipment{}, h.NewErr(shopEquipment.Error(), err)
-	}
-
-	return shopEquipment, nil
-}
 
 func (l *Lookup) seedShopEquipmentAbilities(qtx *database.Queries, shopEquipment ShopEquipment) error {
 	for _, autoAbility := range shopEquipment.Abilities {

@@ -151,18 +151,13 @@ func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 					return h.NewErr(treasure.Error(), err)
 				}
 
+				if treasure.Equipment != nil {
+					treasure.Equipment.TreasureID = treasure.ID
+				}
+
 				treasure.Equipment, err = seedObjPtrAssignFK(qtx, treasure.Equipment, l.seedFoundEquipment)
 				if err != nil {
 					return h.NewErr(treasure.Error(), err)
-				}
-
-				err = qtx.UpdateTreasure(context.Background(), database.UpdateTreasureParams{
-					DataHash:         generateDataHash(treasure),
-					FoundEquipmentID: h.ObjPtrToNullInt32ID(treasure.Equipment),
-					ID:               treasure.ID,
-				})
-				if err != nil {
-					return h.NewErr(treasure.Error(), err, "couldn't update treasure")
 				}
 			}
 		}

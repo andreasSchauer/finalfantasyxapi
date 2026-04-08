@@ -160,6 +160,12 @@ func (cfg *Config) HandleMixes(w http.ResponseWriter, r *http.Request) {
 
 
 
+func (cfg *Config) HandleAutoAbilities(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.autoAbilities)
+}
+
+
+
 func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.overdriveModes)
 }
