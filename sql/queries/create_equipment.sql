@@ -77,8 +77,8 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateEquipmentTable :one
-INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, pool_1_amt, pool_2_amt, empty_slots_amt)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, empty_slots_amt)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_tables.data_hash
 RETURNING *;
 
@@ -96,7 +96,20 @@ VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateEquipmentTablesAbilityPoolJunction :exec
-INSERT INTO j_equipment_tables_ability_pool (data_hash, equipment_table_id, auto_ability_id, ability_pool)
+-- name: CreateEquipmentTablesRequiredAutoAbilitiesJunction :exec
+INSERT INTO j_equipment_tables_required_auto_abilities (data_hash, equipment_table_id, auto_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAbilityPool :one
+INSERT INTO ability_pools (data_hash, equipment_table_id, pool_idx, req_amount)
 VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_pools.data_hash
+RETURNING *;
+
+
+-- name: CreateAbilityPoolsAutoAbilitiesJunction :exec
+INSERT INTO j_ability_pools_auto_abilities (data_hash, ability_pool_id, auto_ability_id)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;

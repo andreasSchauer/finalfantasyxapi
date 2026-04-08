@@ -457,49 +457,6 @@ func (ns NullAutoAbilityCategory) Value() (driver.Value, error) {
 	return string(ns.AutoAbilityCategory), nil
 }
 
-type AutoAbilityPool string
-
-const (
-	AutoAbilityPoolRequired AutoAbilityPool = "required"
-	AutoAbilityPoolOne      AutoAbilityPool = "one"
-	AutoAbilityPoolTwo      AutoAbilityPool = "two"
-)
-
-func (e *AutoAbilityPool) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = AutoAbilityPool(s)
-	case string:
-		*e = AutoAbilityPool(s)
-	default:
-		return fmt.Errorf("unsupported scan type for AutoAbilityPool: %T", src)
-	}
-	return nil
-}
-
-type NullAutoAbilityPool struct {
-	AutoAbilityPool AutoAbilityPool
-	Valid           bool // Valid is true if AutoAbilityPool is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullAutoAbilityPool) Scan(value interface{}) error {
-	if value == nil {
-		ns.AutoAbilityPool, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.AutoAbilityPool.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullAutoAbilityPool) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.AutoAbilityPool), nil
-}
-
 type AvailabilityType string
 
 const (
@@ -2728,6 +2685,14 @@ type AbilityDamage struct {
 	DamageConstant interface{}
 }
 
+type AbilityPool struct {
+	ID               int32
+	DataHash         string
+	EquipmentTableID int32
+	PoolIdx          int32
+	ReqAmount        int32
+}
+
 type Aeon struct {
 	ID                    int32
 	DataHash              string
@@ -3022,8 +2987,6 @@ type EquipmentTable struct {
 	SpecificCharacterID sql.NullInt32
 	Version             sql.NullInt32
 	Priority            sql.NullInt32
-	Pool1Amt            sql.NullInt32
-	Pool2Amt            sql.NullInt32
 	EmptySlotsAmt       interface{}
 }
 
@@ -3121,6 +3084,13 @@ type JAbilitiesBattleInteraction struct {
 	DataHash            string
 	AbilityID           int32
 	BattleInteractionID int32
+}
+
+type JAbilityPoolsAutoAbility struct {
+	ID            int32
+	DataHash      string
+	AbilityPoolID int32
+	AutoAbilityID int32
 }
 
 type JAeonCommandsPossibleAbility struct {
@@ -3338,20 +3308,19 @@ type JEquipmentDropsCharacter struct {
 	CharacterID        int32
 }
 
-type JEquipmentTablesAbilityPool struct {
-	ID               int32
-	DataHash         string
-	EquipmentTableID int32
-	AutoAbilityID    int32
-	AbilityPool      AutoAbilityPool
-}
-
 type JEquipmentTablesName struct {
 	ID                int32
 	DataHash          string
 	EquipmentTableID  int32
 	EquipmentNameID   int32
 	CelestialWeaponID sql.NullInt32
+}
+
+type JEquipmentTablesRequiredAutoAbility struct {
+	ID               int32
+	DataHash         string
+	EquipmentTableID int32
+	AutoAbilityID    int32
 }
 
 type JFormationTriggerCommandsUser struct {

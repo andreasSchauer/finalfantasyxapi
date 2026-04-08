@@ -1,7 +1,4 @@
 -- +goose Up
-CREATE TYPE auto_ability_pool AS ENUM ('required', 'one', 'two');
-
-
 ALTER TABLE celestial_weapons
 ADD COLUMN character_id INTEGER REFERENCES characters(id),
 ADD COLUMN aeon_id INTEGER REFERENCES aeons(id);
@@ -93,20 +90,36 @@ CREATE TABLE j_equipment_tables_names (
 );
 
 
-CREATE TABLE j_equipment_tables_ability_pool (
+CREATE TABLE j_equipment_tables_required_auto_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     equipment_table_id INTEGER NOT NULL REFERENCES equipment_tables(id),
-    auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
-    ability_pool auto_ability_pool NOT NULL
+    auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id)
+);
+
+
+CREATE TABLE ability_pools (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    equipment_table_id INTEGER NOT NULL REFERENCES equipment_tables(id),
+    pool_idx INTEGER NOT NULL,
+    req_amount INTEGER NOT NULL
+);
+
+
+CREATE TABLE j_ability_pools_auto_abilities (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    ability_pool_id INTEGER NOT NULL REFERENCES ability_pools(id),
+    auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id)
 );
 
 
 
-
-
 -- +goose Down
-DROP TABLE IF EXISTS j_equipment_tables_ability_pool;
+DROP TABLE IF EXISTS j_ability_pools_auto_abilities;
+DROP TABLE IF EXISTS ability_pools;
+DROP TABLE IF EXISTS j_equipment_tables_required_auto_abilities;
 DROP TABLE IF EXISTS j_equipment_tables_names;
 DROP TABLE IF EXISTS equipment_names;
 DROP TABLE IF EXISTS j_auto_abilities_modifier_changes;
@@ -134,5 +147,3 @@ DROP COLUMN IF EXISTS required_item_amount_id;
 ALTER TABLE celestial_weapons
 DROP COLUMN IF EXISTS character_id,
 DROP COLUMN IF EXISTS aeon_id;
-
-DROP TYPE IF EXISTS auto_ability_pool;

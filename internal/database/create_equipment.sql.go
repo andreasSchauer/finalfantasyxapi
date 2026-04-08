@@ -10,6 +10,55 @@ import (
 	"database/sql"
 )
 
+const createAbilityPool = `-- name: CreateAbilityPool :one
+INSERT INTO ability_pools (data_hash, equipment_table_id, pool_idx, req_amount)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_pools.data_hash
+RETURNING id, data_hash, equipment_table_id, pool_idx, req_amount
+`
+
+type CreateAbilityPoolParams struct {
+	DataHash         string
+	EquipmentTableID int32
+	PoolIdx          int32
+	ReqAmount        int32
+}
+
+func (q *Queries) CreateAbilityPool(ctx context.Context, arg CreateAbilityPoolParams) (AbilityPool, error) {
+	row := q.db.QueryRowContext(ctx, createAbilityPool,
+		arg.DataHash,
+		arg.EquipmentTableID,
+		arg.PoolIdx,
+		arg.ReqAmount,
+	)
+	var i AbilityPool
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.EquipmentTableID,
+		&i.PoolIdx,
+		&i.ReqAmount,
+	)
+	return i, err
+}
+
+const createAbilityPoolsAutoAbilitiesJunction = `-- name: CreateAbilityPoolsAutoAbilitiesJunction :exec
+INSERT INTO j_ability_pools_auto_abilities (data_hash, ability_pool_id, auto_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAbilityPoolsAutoAbilitiesJunctionParams struct {
+	DataHash      string
+	AbilityPoolID int32
+	AutoAbilityID int32
+}
+
+func (q *Queries) CreateAbilityPoolsAutoAbilitiesJunction(ctx context.Context, arg CreateAbilityPoolsAutoAbilitiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAbilityPoolsAutoAbilitiesJunction, arg.DataHash, arg.AbilityPoolID, arg.AutoAbilityID)
+	return err
+}
+
 const createAutoAbilitiesAddedStatusResistsJunction = `-- name: CreateAutoAbilitiesAddedStatusResistsJunction :exec
 INSERT INTO j_auto_abilities_added_status_resists (data_hash, auto_ability_id, status_resist_id)
 VALUES ($1, $2, $3)
@@ -244,10 +293,10 @@ func (q *Queries) CreateEquipmentName(ctx context.Context, arg CreateEquipmentNa
 }
 
 const createEquipmentTable = `-- name: CreateEquipmentTable :one
-INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, pool_1_amt, pool_2_amt, empty_slots_amt)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, empty_slots_amt)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_tables.data_hash
-RETURNING id, data_hash, type, classification, specific_character_id, version, priority, pool_1_amt, pool_2_amt, empty_slots_amt
+RETURNING id, data_hash, type, classification, specific_character_id, version, priority, empty_slots_amt
 `
 
 type CreateEquipmentTableParams struct {
@@ -257,8 +306,6 @@ type CreateEquipmentTableParams struct {
 	SpecificCharacterID sql.NullInt32
 	Version             sql.NullInt32
 	Priority            sql.NullInt32
-	Pool1Amt            sql.NullInt32
-	Pool2Amt            sql.NullInt32
 	EmptySlotsAmt       interface{}
 }
 
@@ -270,8 +317,6 @@ func (q *Queries) CreateEquipmentTable(ctx context.Context, arg CreateEquipmentT
 		arg.SpecificCharacterID,
 		arg.Version,
 		arg.Priority,
-		arg.Pool1Amt,
-		arg.Pool2Amt,
 		arg.EmptySlotsAmt,
 	)
 	var i EquipmentTable
@@ -283,34 +328,9 @@ func (q *Queries) CreateEquipmentTable(ctx context.Context, arg CreateEquipmentT
 		&i.SpecificCharacterID,
 		&i.Version,
 		&i.Priority,
-		&i.Pool1Amt,
-		&i.Pool2Amt,
 		&i.EmptySlotsAmt,
 	)
 	return i, err
-}
-
-const createEquipmentTablesAbilityPoolJunction = `-- name: CreateEquipmentTablesAbilityPoolJunction :exec
-INSERT INTO j_equipment_tables_ability_pool (data_hash, equipment_table_id, auto_ability_id, ability_pool)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateEquipmentTablesAbilityPoolJunctionParams struct {
-	DataHash         string
-	EquipmentTableID int32
-	AutoAbilityID    int32
-	AbilityPool      AutoAbilityPool
-}
-
-func (q *Queries) CreateEquipmentTablesAbilityPoolJunction(ctx context.Context, arg CreateEquipmentTablesAbilityPoolJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createEquipmentTablesAbilityPoolJunction,
-		arg.DataHash,
-		arg.EquipmentTableID,
-		arg.AutoAbilityID,
-		arg.AbilityPool,
-	)
-	return err
 }
 
 const createEquipmentTablesNamesJunction = `-- name: CreateEquipmentTablesNamesJunction :exec
@@ -333,6 +353,23 @@ func (q *Queries) CreateEquipmentTablesNamesJunction(ctx context.Context, arg Cr
 		arg.EquipmentNameID,
 		arg.CelestialWeaponID,
 	)
+	return err
+}
+
+const createEquipmentTablesRequiredAutoAbilitiesJunction = `-- name: CreateEquipmentTablesRequiredAutoAbilitiesJunction :exec
+INSERT INTO j_equipment_tables_required_auto_abilities (data_hash, equipment_table_id, auto_ability_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateEquipmentTablesRequiredAutoAbilitiesJunctionParams struct {
+	DataHash         string
+	EquipmentTableID int32
+	AutoAbilityID    int32
+}
+
+func (q *Queries) CreateEquipmentTablesRequiredAutoAbilitiesJunction(ctx context.Context, arg CreateEquipmentTablesRequiredAutoAbilitiesJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createEquipmentTablesRequiredAutoAbilitiesJunction, arg.DataHash, arg.EquipmentTableID, arg.AutoAbilityID)
 	return err
 }
 
