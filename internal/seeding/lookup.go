@@ -118,6 +118,8 @@ type Lookup struct {
 	CuesID                 map[int32]Cue
 	BackgroundMusicID      map[int32]BackgroundMusic
 	SongsID                map[int32]Song
+	Spheres				   map[string]Sphere
+	SpheresID			   map[int32]Sphere
 	Stats                  map[string]Stat
 	StatsID                map[int32]Stat
 	StatusConditions       map[string]StatusCondition
@@ -223,6 +225,8 @@ func lookupInit() Lookup {
 		SongsID:                make(map[int32]Song),
 		CuesID:                 make(map[int32]Cue),
 		BackgroundMusicID:      make(map[int32]BackgroundMusic),
+		Spheres: 				make(map[string]Sphere),
+		SpheresID: 				make(map[int32]Sphere),
 		Stats:                  make(map[string]Stat),
 		StatsID:                make(map[int32]Stat),
 		StatusConditions:       make(map[string]StatusCondition),

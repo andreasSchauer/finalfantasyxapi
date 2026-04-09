@@ -6,8 +6,8 @@ RETURNING *;
 
 
 -- name: CreateItem :one
-INSERT INTO items (data_hash, master_item_id, description, effect, sphere_grid_description, category, usability, base_price, sell_value)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO items (data_hash, master_item_id, description, effect, category, usability, base_price, sell_value)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = items.data_hash
 RETURNING *;
 
@@ -30,6 +30,33 @@ VALUES ($1, $2, $3, $4)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = item_abilities.data_hash
 RETURNING *;
 
+
+
+-- name: CreateSphere :one
+INSERT INTO spheres (data_hash, item_id, sphere_grid_description, sphere_color, sphere_effect, target_node_position, target_node_state)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = spheres.data_hash
+RETURNING *;
+
+
+-- name: UpdateSphere :exec
+UPDATE spheres
+SET data_hash = $1,
+    created_node_id = $2
+WHERE id = $3;
+
+
+-- name: CreateSphereTargetableNode :exec
+INSERT INTO spheres_targetable_nodes (data_hash, sphere_id, node)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateCreatedNode :one
+INSERT INTO created_nodes(data_hash, node, value)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = created_nodes.data_hash
+RETURNING *;
 
 
 -- name: CreateKeyItem :one

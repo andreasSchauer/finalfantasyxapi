@@ -10,23 +10,47 @@ import (
 	"database/sql"
 )
 
+const createCreatedNode = `-- name: CreateCreatedNode :one
+INSERT INTO created_nodes(data_hash, node, value)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = created_nodes.data_hash
+RETURNING id, data_hash, node, value
+`
+
+type CreateCreatedNodeParams struct {
+	DataHash string
+	Node     NodeType
+	Value    int32
+}
+
+func (q *Queries) CreateCreatedNode(ctx context.Context, arg CreateCreatedNodeParams) (CreatedNode, error) {
+	row := q.db.QueryRowContext(ctx, createCreatedNode, arg.DataHash, arg.Node, arg.Value)
+	var i CreatedNode
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.Node,
+		&i.Value,
+	)
+	return i, err
+}
+
 const createItem = `-- name: CreateItem :one
-INSERT INTO items (data_hash, master_item_id, description, effect, sphere_grid_description, category, usability, base_price, sell_value)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO items (data_hash, master_item_id, description, effect, category, usability, base_price, sell_value)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = items.data_hash
-RETURNING id, data_hash, master_item_id, description, effect, sphere_grid_description, category, usability, base_price, sell_value
+RETURNING id, data_hash, master_item_id, description, effect, category, usability, base_price, sell_value
 `
 
 type CreateItemParams struct {
-	DataHash              string
-	MasterItemID          int32
-	Description           string
-	Effect                string
-	SphereGridDescription sql.NullString
-	Category              ItemCategory
-	Usability             ItemUsability
-	BasePrice             sql.NullInt32
-	SellValue             int32
+	DataHash     string
+	MasterItemID int32
+	Description  string
+	Effect       string
+	Category     ItemCategory
+	Usability    ItemUsability
+	BasePrice    sql.NullInt32
+	SellValue    int32
 }
 
 func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) (Item, error) {
@@ -35,7 +59,6 @@ func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) (Item, e
 		arg.MasterItemID,
 		arg.Description,
 		arg.Effect,
-		arg.SphereGridDescription,
 		arg.Category,
 		arg.Usability,
 		arg.BasePrice,
@@ -48,7 +71,6 @@ func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) (Item, e
 		&i.MasterItemID,
 		&i.Description,
 		&i.Effect,
-		&i.SphereGridDescription,
 		&i.Category,
 		&i.Usability,
 		&i.BasePrice,
@@ -323,4 +345,81 @@ func (q *Queries) CreatePrimer(ctx context.Context, arg CreatePrimerParams) (Pri
 		&i.EnglishLetter,
 	)
 	return i, err
+}
+
+const createSphere = `-- name: CreateSphere :one
+INSERT INTO spheres (data_hash, item_id, sphere_grid_description, sphere_color, sphere_effect, target_node_position, target_node_state)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = spheres.data_hash
+RETURNING id, data_hash, item_id, sphere_grid_description, sphere_color, sphere_effect, target_node_position, target_node_state, created_node_id
+`
+
+type CreateSphereParams struct {
+	DataHash              string
+	ItemID                int32
+	SphereGridDescription string
+	SphereColor           SphereColor
+	SphereEffect          SphereEffect
+	TargetNodePosition    NodePosition
+	TargetNodeState       NullNodeState
+}
+
+func (q *Queries) CreateSphere(ctx context.Context, arg CreateSphereParams) (Sphere, error) {
+	row := q.db.QueryRowContext(ctx, createSphere,
+		arg.DataHash,
+		arg.ItemID,
+		arg.SphereGridDescription,
+		arg.SphereColor,
+		arg.SphereEffect,
+		arg.TargetNodePosition,
+		arg.TargetNodeState,
+	)
+	var i Sphere
+	err := row.Scan(
+		&i.ID,
+		&i.DataHash,
+		&i.ItemID,
+		&i.SphereGridDescription,
+		&i.SphereColor,
+		&i.SphereEffect,
+		&i.TargetNodePosition,
+		&i.TargetNodeState,
+		&i.CreatedNodeID,
+	)
+	return i, err
+}
+
+const createSphereTargetableNode = `-- name: CreateSphereTargetableNode :exec
+INSERT INTO spheres_targetable_nodes (data_hash, sphere_id, node)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateSphereTargetableNodeParams struct {
+	DataHash string
+	SphereID int32
+	Node     NodeType
+}
+
+func (q *Queries) CreateSphereTargetableNode(ctx context.Context, arg CreateSphereTargetableNodeParams) error {
+	_, err := q.db.ExecContext(ctx, createSphereTargetableNode, arg.DataHash, arg.SphereID, arg.Node)
+	return err
+}
+
+const updateSphere = `-- name: UpdateSphere :exec
+UPDATE spheres
+SET data_hash = $1,
+    created_node_id = $2
+WHERE id = $3
+`
+
+type UpdateSphereParams struct {
+	DataHash      string
+	CreatedNodeID sql.NullInt32
+	ID            int32
+}
+
+func (q *Queries) UpdateSphere(ctx context.Context, arg UpdateSphereParams) error {
+	_, err := q.db.ExecContext(ctx, updateSphere, arg.DataHash, arg.CreatedNodeID, arg.ID)
+	return err
 }

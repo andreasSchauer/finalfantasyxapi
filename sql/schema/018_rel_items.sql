@@ -27,8 +27,33 @@ CREATE TABLE j_items_available_menus(
 );
 
 
+CREATE TABLE spheres_targetable_nodes(
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    sphere_id INTEGER NOT NULL REFERENCES spheres(id),
+    node node_type NOT NULL
+);
+
+
+CREATE TABLE created_nodes(
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    node node_type NOT NULL,
+    value INTEGER NOT NULL
+);
+
+
+ALTER TABLE spheres
+ADD COLUMN created_node_id INTEGER REFERENCES created_nodes(id);
+
 
 -- +goose Down
+ALTER TABLE spheres
+DROP COLUMN IF EXISTS created_node_id;
+
+
+DROP TABLE IF EXISTS created_nodes;
+DROP TABLE IF EXISTS spheres_targetable_nodes;
 DROP TABLE IF EXISTS j_items_available_menus;
 DROP TABLE IF EXISTS j_items_related_stats;
 DROP TABLE IF EXISTS mix_combinations;

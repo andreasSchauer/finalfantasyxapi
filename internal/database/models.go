@@ -2120,6 +2120,153 @@ func (ns NullMusicUseCase) Value() (driver.Value, error) {
 	return string(ns.MusicUseCase), nil
 }
 
+type NodePosition string
+
+const (
+	NodePositionNeighboring  NodePosition = "neighboring"
+	NodePositionAllyPosition NodePosition = "ally-position"
+	NodePositionAny          NodePosition = "any"
+)
+
+func (e *NodePosition) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = NodePosition(s)
+	case string:
+		*e = NodePosition(s)
+	default:
+		return fmt.Errorf("unsupported scan type for NodePosition: %T", src)
+	}
+	return nil
+}
+
+type NullNodePosition struct {
+	NodePosition NodePosition
+	Valid        bool // Valid is true if NodePosition is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullNodePosition) Scan(value interface{}) error {
+	if value == nil {
+		ns.NodePosition, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.NodePosition.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullNodePosition) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.NodePosition), nil
+}
+
+type NodeState string
+
+const (
+	NodeStateActiveSelf NodeState = "active-self"
+	NodeStateActiveAlly NodeState = "active-ally"
+	NodeStateActiveAny  NodeState = "active-any"
+	NodeStateInactive   NodeState = "inactive"
+	NodeStateAny        NodeState = "any"
+)
+
+func (e *NodeState) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = NodeState(s)
+	case string:
+		*e = NodeState(s)
+	default:
+		return fmt.Errorf("unsupported scan type for NodeState: %T", src)
+	}
+	return nil
+}
+
+type NullNodeState struct {
+	NodeState NodeState
+	Valid     bool // Valid is true if NodeState is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullNodeState) Scan(value interface{}) error {
+	if value == nil {
+		ns.NodeState, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.NodeState.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullNodeState) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.NodeState), nil
+}
+
+type NodeType string
+
+const (
+	NodeTypeHp           NodeType = "hp"
+	NodeTypeMp           NodeType = "mp"
+	NodeTypeStrength     NodeType = "strength"
+	NodeTypeDefense      NodeType = "defense"
+	NodeTypeMagic        NodeType = "magic"
+	NodeTypeMagicDefense NodeType = "magic-defense"
+	NodeTypeAgility      NodeType = "agility"
+	NodeTypeLuck         NodeType = "luck"
+	NodeTypeEvasion      NodeType = "evasion"
+	NodeTypeAccuracy     NodeType = "accuracy"
+	NodeTypeSkill        NodeType = "skill"
+	NodeTypeSppecial     NodeType = "sppecial"
+	NodeTypeWhtMagic     NodeType = "wht-magic"
+	NodeTypeBlkMagic     NodeType = "blk-magic"
+	NodeTypeLv1Lock      NodeType = "lv-1-lock"
+	NodeTypeLv2Lock      NodeType = "lv-2-lock"
+	NodeTypeLv3Lock      NodeType = "lv-3-lock"
+	NodeTypeLv4Lock      NodeType = "lv-4-lock"
+	NodeTypeEmpty        NodeType = "empty"
+)
+
+func (e *NodeType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = NodeType(s)
+	case string:
+		*e = NodeType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for NodeType: %T", src)
+	}
+	return nil
+}
+
+type NullNodeType struct {
+	NodeType NodeType
+	Valid    bool // Valid is true if NodeType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullNodeType) Scan(value interface{}) error {
+	if value == nil {
+		ns.NodeType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.NodeType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullNodeType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.NodeType), nil
+}
+
 type NullifyArmored string
 
 const (
@@ -2419,6 +2566,96 @@ func (ns NullSpecialActionType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.SpecialActionType), nil
+}
+
+type SphereColor string
+
+const (
+	SphereColorRed    SphereColor = "red"
+	SphereColorYellow SphereColor = "yellow"
+	SphereColorBlack  SphereColor = "black"
+	SphereColorPurple SphereColor = "purple"
+	SphereColorBlue   SphereColor = "blue"
+	SphereColorWhite  SphereColor = "white"
+)
+
+func (e *SphereColor) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = SphereColor(s)
+	case string:
+		*e = SphereColor(s)
+	default:
+		return fmt.Errorf("unsupported scan type for SphereColor: %T", src)
+	}
+	return nil
+}
+
+type NullSphereColor struct {
+	SphereColor SphereColor
+	Valid       bool // Valid is true if SphereColor is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullSphereColor) Scan(value interface{}) error {
+	if value == nil {
+		ns.SphereColor, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.SphereColor.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullSphereColor) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.SphereColor), nil
+}
+
+type SphereEffect string
+
+const (
+	SphereEffectActivation    SphereEffect = "activation"
+	SphereEffectRemoval       SphereEffect = "removal"
+	SphereEffectCreation      SphereEffect = "creation"
+	SphereEffectTeleportation SphereEffect = "teleportation"
+)
+
+func (e *SphereEffect) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = SphereEffect(s)
+	case string:
+		*e = SphereEffect(s)
+	default:
+		return fmt.Errorf("unsupported scan type for SphereEffect: %T", src)
+	}
+	return nil
+}
+
+type NullSphereEffect struct {
+	SphereEffect SphereEffect
+	Valid        bool // Valid is true if SphereEffect is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullSphereEffect) Scan(value interface{}) error {
+	if value == nil {
+		ns.SphereEffect, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.SphereEffect.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullSphereEffect) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.SphereEffect), nil
 }
 
 type StatusConditionCategory string
@@ -2893,6 +3130,13 @@ type CompletionArea struct {
 	Notes        sql.NullString
 }
 
+type CreatedNode struct {
+	ID       int32
+	DataHash string
+	Node     NodeType
+	Value    int32
+}
+
 type Cue struct {
 	ID                     int32
 	DataHash               string
@@ -3045,16 +3289,15 @@ type InflictedStatuss struct {
 }
 
 type Item struct {
-	ID                    int32
-	DataHash              string
-	MasterItemID          int32
-	Description           string
-	Effect                string
-	SphereGridDescription sql.NullString
-	Category              ItemCategory
-	Usability             ItemUsability
-	BasePrice             sql.NullInt32
-	SellValue             int32
+	ID           int32
+	DataHash     string
+	MasterItemID int32
+	Description  string
+	Effect       string
+	Category     ItemCategory
+	Usability    ItemUsability
+	BasePrice    sql.NullInt32
+	SellValue    int32
 }
 
 type ItemAbility struct {
@@ -3926,6 +4169,25 @@ type SongCredit struct {
 	Arranger  NullArranger
 	Performer sql.NullString
 	Lyricist  sql.NullString
+}
+
+type Sphere struct {
+	ID                    int32
+	DataHash              string
+	ItemID                int32
+	SphereGridDescription string
+	SphereColor           SphereColor
+	SphereEffect          SphereEffect
+	TargetNodePosition    NodePosition
+	TargetNodeState       NullNodeState
+	CreatedNodeID         sql.NullInt32
+}
+
+type SpheresTargetableNode struct {
+	ID       int32
+	DataHash string
+	SphereID int32
+	Node     NodeType
 }
 
 type Stat struct {

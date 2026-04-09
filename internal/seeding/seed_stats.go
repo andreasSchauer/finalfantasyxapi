@@ -10,14 +10,14 @@ import (
 )
 
 type Stat struct {
-	ID       int32
-	Name     string `json:"name"`
-	Effect   string `json:"effect"`
-	MinVal   int32  `json:"min_val"`
-	MaxVal   int32  `json:"max_val"`
-	MaxVal2  *int32 `json:"max_val_2"`
-	SphereID *int32
-	Sphere   string `json:"sphere"`
+	ID       			int32
+	Name     			string `json:"name"`
+	Effect   			string `json:"effect"`
+	MinVal   			int32  `json:"min_val"`
+	MaxVal   			int32  `json:"max_val"`
+	MaxVal2  			*int32 `json:"max_val_2"`
+	SphereID 			*int32
+	ActivationSphere  	string `json:"activation_sphere"`
 }
 
 func (s Stat) ToHashFields() []any {
@@ -93,7 +93,7 @@ func (l *Lookup) seedStatsRelationships(db *database.Queries, dbConn *sql.DB) er
 				return err
 			}
 
-			stat.SphereID, err = assignFKPtr(&jsonStat.Sphere, l.Items)
+			stat.SphereID, err = assignFKPtr(&jsonStat.ActivationSphere, l.Items)
 			if err != nil {
 				return h.NewErr(stat.Error(), err)
 			}

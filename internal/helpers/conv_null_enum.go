@@ -579,3 +579,35 @@ func GetNullAvailabilityType(e *database.AvailabilityType) database.NullAvailabi
 }
 
 
+func NullNodeState(s *string) database.NullNodeState {
+    if s == nil {
+        return database.NullNodeState{}
+    }
+    
+    return database.NullNodeState{
+        NodeState: database.NodeState(*s),
+        Valid: true,
+    }
+}
+
+func ConvertNullNodeState(ne database.NullNodeState) *string {
+    if !ne.Valid {
+        return nil
+    }
+
+    val := string(ne.NodeState)
+    return &val
+}
+
+func GetNullNodeState(e *database.NodeState) database.NullNodeState {
+    if e == nil {
+        return database.NullNodeState{}
+    }
+
+    return database.NullNodeState{
+        NodeState: *e,
+        Valid:  true,
+    }
+}
+
+

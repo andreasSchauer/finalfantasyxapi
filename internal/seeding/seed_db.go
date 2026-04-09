@@ -271,6 +271,11 @@ func (l *Lookup) getSeeders() []seeder {
 			relFunc:  l.seedMixesRelationships,
 		},
 		{
+			name: 	  "spheres",
+			seedFunc: l.seedSpheres,
+			relFunc:  l.seedSpheresRelationships,
+		},
+		{
 			name:     "celestial weapons",
 			seedFunc: l.seedCelestialWeapons,
 			relFunc:  l.seedCelestialWeaponsRelationships,

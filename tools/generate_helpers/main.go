@@ -26,6 +26,7 @@ func main() {
         "Arranger",
         "ShopType",
         "AvailabilityType",
+        "NodeState",
     }
 
     filePath := "./internal/helpers/conv_null_enum.go"

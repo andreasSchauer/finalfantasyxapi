@@ -132,7 +132,6 @@ func (l *Lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
 		MasterItemID:          item.MasterItem.ID,
 		Description:           item.Description,
 		Effect:                item.Effect,
-		SphereGridDescription: h.GetNullString(item.SphereGridDescription),
 		Category:              database.ItemCategory(item.Category),
 		Usability:             database.ItemUsability(item.Usability),
 		BasePrice:             h.GetNullInt32(item.BasePrice),
