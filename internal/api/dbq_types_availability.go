@@ -18,7 +18,7 @@ type AvailabilityParams struct {
 	Repeatable   sql.NullBool
 }
 
-func getAvailabilityParams[T seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item T) (AvailabilityParams, error) {
+func getAvailabilityParams[T seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], parentID int32) (AvailabilityParams, error) {
 	queryParamAvailability := i.queryLookup["rel_availability"]
 	availabilitySlice, err := parseEnumListQuery(r, i.endpoint, queryParamAvailability, cfg.t.AvailabilityType)
 	if errIsNotEmptyQuery(err) {
@@ -31,7 +31,7 @@ func getAvailabilityParams[T seeding.LookupableID, R any, A APIResource, L APIRe
 	}
 
 	availabilityParams := AvailabilityParams{
-		ParentID:     item.GetID(),
+		ParentID:     parentID,
 		Availability: availabilitySlice,
 		Repeatable:   h.GetNullBool(repeatable),
 	}

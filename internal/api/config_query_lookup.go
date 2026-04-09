@@ -83,6 +83,7 @@ type QueryLookup struct {
 	allItems		map[string]QueryParam
 	items 			map[string]QueryParam
 	keyItems 		map[string]QueryParam
+	spheres 		map[string]QueryParam
 	primers			map[string]QueryParam
 	mixes			map[string]QueryParam
 
@@ -166,6 +167,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initAllItemsParams(defaultParams)
 	cfg.initItemsParams(defaultParams)
 	cfg.initKeyItemsParams(defaultParams)
+	cfg.initSpheresParams(defaultParams)
 	cfg.initPrimersParams(defaultParams)
 	cfg.initMixesParams(defaultParams)
 
@@ -2353,6 +2355,38 @@ func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
 
 	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
 	cfg.q.keyItems = paramsMap
+}
+
+func (cfg *Config) initSpheresParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "rel_availability",
+			Description: "Only displays a sphere's related resources with the given availabilities.",
+			Type:		 "enum-list",
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:		 "repeatable",
+			Description: "Only displays an sphere's related monsters and quests that can be farmed.",
+			Type:		 "bool",
+			ForList:     false,
+			ForSingle:   true,
+		},
+		{
+			Name:		 "color",
+			Description: "Searches for spheres with any of the given colors.",
+			Type:		 "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.SphereColor.lookup,
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.spheres = paramsMap
 }
 
 func (cfg *Config) initPrimersParams(defaultParams []QueryParam) {

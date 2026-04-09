@@ -3,15 +3,31 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item, error) {
-	availabilityParams, err := getAvailabilityParams(cfg, r, cfg.e.items, item)
+	availabilityParams, err := getAvailabilityParams(cfg, r, cfg.e.items, item.ID)
 	if err != nil {
 		return Item{}, err
 	}
 
+	rel, err := runItemRelQueries(cfg, r, item, availabilityParams)
+	if err != nil {
+		return Item{}, err
+	}
+
+	if item.Category == string(database.ItemCategorySphere) {
+		sphereRes := nameToNamedAPIResource(cfg, cfg.e.spheres, item.Name, nil)
+		rel.Sphere = &sphereRes
+	}
+
+	return rel, nil
+}
+
+
+func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabilityParams AvailabilityParams) (Item, error) {
 	monsters, err := runAvailabilityQuery(cfg, r, cfg.e.monsters, item, availabilityParams, convGetItemMonsterIDs(cfg))
 	if err != nil {
 		return Item{}, err

@@ -149,6 +149,10 @@ func (cfg *Config) HandleKeyItems(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.keyItems)
 }
 
+func (cfg *Config) HandleSpheres(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.spheres)
+}
+
 func (cfg *Config) HandlePrimers(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.primers)
 }

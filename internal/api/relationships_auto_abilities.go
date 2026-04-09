@@ -7,7 +7,7 @@ import (
 )
 
 func getAutoAbilityRelationships(cfg *Config, r *http.Request, autoAbility seeding.AutoAbility) (AutoAbility, error) {
-	availabilityParams, err := getAvailabilityParams(cfg, r, cfg.e.autoAbilities, autoAbility)
+	availabilityParams, err := getAvailabilityParams(cfg, r, cfg.e.autoAbilities, autoAbility.ID)
 	if err != nil {
 		return AutoAbility{}, err
 	}

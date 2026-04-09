@@ -446,6 +446,13 @@ ORDER BY ki.id;
 
 
 
+-- name: GetSphereIDs :many
+SELECT id FROM spheres ORDER BY id;
+
+
+-- name: GetSphereIDsByColor :many
+SELECT id FROM spheres WHERE sphere_color = ANY(sqlc.arg('color')::sphere_color[]) ORDER BY id;
+
 
 
 

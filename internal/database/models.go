@@ -2222,7 +2222,7 @@ const (
 	NodeTypeEvasion      NodeType = "evasion"
 	NodeTypeAccuracy     NodeType = "accuracy"
 	NodeTypeSkill        NodeType = "skill"
-	NodeTypeSppecial     NodeType = "sppecial"
+	NodeTypeSpecial      NodeType = "special"
 	NodeTypeWhtMagic     NodeType = "wht-magic"
 	NodeTypeBlkMagic     NodeType = "blk-magic"
 	NodeTypeLv1Lock      NodeType = "lv-1-lock"

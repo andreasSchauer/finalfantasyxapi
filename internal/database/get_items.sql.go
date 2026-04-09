@@ -1443,3 +1443,57 @@ func (q *Queries) GetPrimerTreasureIDs(ctx context.Context, id int32) ([]int32, 
 	}
 	return items, nil
 }
+
+const getSphereIDs = `-- name: GetSphereIDs :many
+SELECT id FROM spheres ORDER BY id
+`
+
+func (q *Queries) GetSphereIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSphereIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSphereIDsByColor = `-- name: GetSphereIDsByColor :many
+SELECT id FROM spheres WHERE sphere_color = ANY($1::sphere_color[]) ORDER BY id
+`
+
+func (q *Queries) GetSphereIDsByColor(ctx context.Context, color []SphereColor) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSphereIDsByColor, pq.Array(color))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

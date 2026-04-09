@@ -56,10 +56,13 @@ type TypeLookup struct {
 	MonsterCategory             EnumType[database.MonsterCategory, any]
 	MonsterFormationCategory    EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies              EnumType[database.MonsterSpecies, any]
+	NodePosition				EnumType[database.NodePosition, any]
+	NodeState					EnumType[database.NodeState, database.NullNodeState]
 	OverdriveModeType           EnumType[database.OverdriveModeType, any]
 	PlayerAbilityCategory       EnumType[database.PlayerAbilityCategory, any]
 	ShopCategory                EnumType[database.ShopCategory, any]
 	ShopType                    EnumType[database.ShopType, database.NullShopType]
+	SphereColor					EnumType[database.SphereColor, any]
 	TreasureType                EnumType[database.TreasureType, any]
 
 	AccSourceType     EnumType[database.AccSourceType, any]
@@ -105,10 +108,13 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initMonsterCategory()
 	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
+	cfg.t.initNodePosition()
+	cfg.t.initNodeState()
 	cfg.t.initOverdriveModeType()
 	cfg.t.initPlayerAbilityCategory()
 	cfg.t.initShopCategory()
 	cfg.t.initShopType()
+	cfg.t.initSphereColor()
 	cfg.t.initTreasureType()
 
 	cfg.t.initAccSourceType()
@@ -945,6 +951,56 @@ func (t *TypeLookup) initMonsterCategory() {
 	}, nil, nil)
 }
 
+func (t *TypeLookup) initNodePosition() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.NodePositionNeighboring),
+			Description: "The sphere can target neighboring nodes, or the node the selected character is currently positioned.",
+		},
+		{
+			Name: string(database.NodePositionAllyPosition),
+			Description: "The sphere can only target nodes, another character is currently positioned.",
+		},
+		{
+			Name: string(database.NodePositionAny),
+			Description: "The sphere can target any node that it is able to.",
+		},
+	}
+
+	t.NodePosition = newEnumType[database.NodePosition, any]("node position", false, typeSlice, func(s string) database.NodePosition {
+		return database.NodePosition(s)
+	}, nil, nil)
+}
+
+func (t *TypeLookup) initNodeState() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.NodeStateActiveSelf),
+			Description: "The node has been activated by the selected character.",
+		},
+		{
+			Name: string(database.NodeStateActiveAlly),
+			Description: "The node hasn't been activated by the selected character, but by another character.",
+		},
+		{
+			Name: string(database.NodeStateActiveAny),
+			Description: "The node has been activated by at least one character.",
+		},
+		{
+			Name: string(database.NodeStateInactive),
+			Description: "The node hasn't been activated by the selected character.",
+		},
+		{
+			Name: string(database.NodeStateAny),
+			Description: "The node's activation state doesn't matter for this resource.",
+		},
+	}
+
+	t.NodeState = newEnumType("node state", false, typeSlice, func(s string) database.NodeState {
+		return database.NodeState(s)
+	}, h.NullNodeState, h.GetNullNodeState)
+}
+
 func (t *TypeLookup) initOverdriveModeType() {
 	typeSlice := []EnumAPIResource{
 		{
@@ -1022,6 +1078,33 @@ func (t *TypeLookup) initShopType() {
 	}, h.NullShopType, h.GetNullShopType)
 }
 
+func (t *TypeLookup) initSphereColor() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.SphereColorRed),
+		},
+		{
+			Name:        string(database.SphereColorYellow),
+		},
+		{
+			Name:        string(database.SphereColorBlack),
+		},
+		{
+			Name:        string(database.SphereColorPurple),
+		},
+		{
+			Name:        string(database.SphereColorBlue),
+		},
+		{
+			Name:        string(database.SphereColorWhite),
+		},
+	}
+
+	t.SphereColor = newEnumType[database.SphereColor, any]("sphere color", false, typeSlice, func(s string) database.SphereColor {
+		return database.SphereColor(s)
+	}, nil, nil)
+}
+
 func (t *TypeLookup) initTreasureType() {
 	typeSlice := []EnumAPIResource{
 		{
@@ -1042,6 +1125,11 @@ func (t *TypeLookup) initTreasureType() {
 		return database.TreasureType(s)
 	}, nil, nil)
 }
+
+
+
+
+
 
 func (t *TypeLookup) initAccSourceType() {
 	typeSlice := []EnumAPIResource{

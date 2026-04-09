@@ -35,6 +35,7 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 		BasePrice:          item.BasePrice,
 		SellValue:          item.SellValue,
 		ItemAbility:        namePtrToNamedAPIResPtr(cfg, cfg.e.itemAbilities, itemAbilityNamePtr, nil),
+		Sphere: 			rel.Sphere,
 		AvailableMenus:     namesToNamedAPIResources(cfg, cfg.e.submenus, item.AvailableMenus),
 		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, item.RelatedStats),
 		Monsters:           rel.Monsters,

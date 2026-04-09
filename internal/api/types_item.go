@@ -13,7 +13,8 @@ type Item struct {
 	Usability          string                             	`json:"usability"`
 	BasePrice          *int32                             	`json:"base_price"`
 	SellValue          int32                              	`json:"sell_value"`
-	ItemAbility        *NamedAPIResource                  	`json:"item_ability"`
+	ItemAbility        *NamedAPIResource                  	`json:"item_ability,omitempty"`
+	Sphere			   *NamedAPIResource					`json:"sphere,omitempty"`
 	AvailableMenus     []NamedAPIResource                 	`json:"available_menus"`
 	RelatedStats       []NamedAPIResource                 	`json:"related_stats"`
 	Monsters           []MonItemAmts                      	`json:"monsters"`

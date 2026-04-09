@@ -44,6 +44,7 @@ type endpoints struct {
 	allItems handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]
 	items    handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
 	keyItems handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]
+	spheres	 handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]
 	primers  handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]
 	mixes    handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]
 
@@ -792,6 +793,19 @@ func (cfg *Config) EndpointsInit() {
 				createSubFn: createMixSimple,
 			},
 		},
+	}
+
+	e.spheres = handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]{
+		endpoint:      "spheres",
+		resourceType:  "sphere",
+		objLookup:     cfg.l.Spheres,
+		objLookupID:   cfg.l.SpheresID,
+		queryLookup:   cfg.q.spheres,
+		idToResFunc:   idToNamedAPIResource[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList],
+		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetSphereIDs,
+		getSingleFunc: cfg.getSphere,
+		retrieveFunc:  cfg.retrieveSpheres,
 	}
 
 	e.keyItems = handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]{
