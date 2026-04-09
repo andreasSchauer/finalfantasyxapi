@@ -10,17 +10,17 @@ import (
 )
 
 type EquipmentTable struct {
-	ID                  	int32
-	Type                	string 			`json:"type"`
-	Classification      	string 			`json:"classification"`
-	SpecificCharacterID 	*int32
-	SpecificCharacter   	*string         `json:"specific_character"`
-	Version             	*int32          `json:"version"`
-	Priority            	*int32          `json:"priority"`
+	ID                      int32
+	Type                    string `json:"type"`
+	Classification          string `json:"classification"`
+	SpecificCharacterID     *int32
+	SpecificCharacter       *string         `json:"specific_character"`
+	Version                 *int32          `json:"version"`
+	Priority                *int32          `json:"priority"`
 	RequiredAutoAbilities   []string        `json:"required_auto_abilities"`
-	SelectableAutoAbilities []AbilityPool	`json:"selectable_auto_abilities"`
-	EmptySlotsAmt       	int32           `json:"empty_slots_amount"`
-	EquipmentNames      	[]EquipmentName `json:"names"`
+	SelectableAutoAbilities []AbilityPool   `json:"selectable_auto_abilities"`
+	EmptySlotsAmt           int32           `json:"empty_slots_amount"`
+	EquipmentNames          []EquipmentName `json:"names"`
 }
 
 func (e EquipmentTable) ToHashFields() []any {
@@ -59,11 +59,11 @@ func (e EquipmentTable) GetResParamsUnnamed() h.ResParamsUnnamed {
 }
 
 type AbilityPool struct {
-	ID					int32
-	EquipmentTableID	int32
-	PoolIdx				int32
-	AbilityPool			[]string	`json:"auto_abilities"`
-	ReqAmount			int32		`json:"req_amount"`
+	ID               int32
+	EquipmentTableID int32
+	PoolIdx          int32
+	AutoAbilities    []string `json:"auto_abilities"`
+	ReqAmount        int32    `json:"req_amount"`
 }
 
 func (p AbilityPool) ToHashFields() []any {
@@ -239,10 +239,10 @@ func (l *Lookup) seedEquipmentTableAbilityPools(qtx *database.Queries, table Equ
 		abilityPool.PoolIdx = int32(i) + 1
 
 		dbAbilityPool, err := qtx.CreateAbilityPool(context.Background(), database.CreateAbilityPoolParams{
-			DataHash: 			generateDataHash(abilityPool),
-			EquipmentTableID: 	abilityPool.EquipmentTableID,
-			PoolIdx: 			abilityPool.PoolIdx,
-			ReqAmount: 			abilityPool.ReqAmount,
+			DataHash:         generateDataHash(abilityPool),
+			EquipmentTableID: abilityPool.EquipmentTableID,
+			PoolIdx:          abilityPool.PoolIdx,
+			ReqAmount:        abilityPool.ReqAmount,
 		})
 		if err != nil {
 			return h.NewErr(abilityPool.Error(), err, "couldn't create ability pool")
@@ -258,18 +258,17 @@ func (l *Lookup) seedEquipmentTableAbilityPools(qtx *database.Queries, table Equ
 	return nil
 }
 
-
 func (l *Lookup) seedAbilityPoolAutoAbilities(qtx *database.Queries, abilityPool AbilityPool) error {
-	for _, autoAbility := range abilityPool.AbilityPool {
+	for _, autoAbility := range abilityPool.AutoAbilities {
 		junction, err := createJunction(abilityPool, autoAbility, l.AutoAbilities)
 		if err != nil {
 			return err
 		}
 
 		err = qtx.CreateAbilityPoolsAutoAbilitiesJunction(context.Background(), database.CreateAbilityPoolsAutoAbilitiesJunctionParams{
-			DataHash:       generateDataHash(junction),
-			AbilityPoolID: 	junction.ParentID,
-			AutoAbilityID:  junction.ChildID,
+			DataHash:      generateDataHash(junction),
+			AbilityPoolID: junction.ParentID,
+			AutoAbilityID: junction.ChildID,
 		})
 		if err != nil {
 			return h.NewErr(autoAbility, err, "couldn't junction auto ability")
@@ -278,7 +277,6 @@ func (l *Lookup) seedAbilityPoolAutoAbilities(qtx *database.Queries, abilityPool
 
 	return nil
 }
-
 
 func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable) error {
 	for _, equipmentName := range table.EquipmentNames {

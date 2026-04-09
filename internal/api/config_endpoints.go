@@ -49,7 +49,7 @@ type endpoints struct {
 	mixes    handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]
 
 	autoAbilities    handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]
-	equipmentTables	 handlerInput[seeding.EquipmentTable, any, UnnamedAPIResource, UnnamedApiResourceList]
+	equipmentTables	 handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]
 	equipment        handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]
 	celestialWeapons handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]
 
@@ -67,7 +67,7 @@ type endpoints struct {
 	questType   handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 
 	attackType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	autoAbilityCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	autoAbilityCategory      handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	availabilityType         handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageFormula            handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
@@ -865,13 +865,17 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveAutoAbilities,
 	}
 
-	e.equipmentTables = handlerInput[seeding.EquipmentTable, any, UnnamedAPIResource, UnnamedApiResourceList]{
-		endpoint:      "equipment",
+	e.equipmentTables = handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]{
+		endpoint:      "equipment-tables",
 		resourceType:  "equipment",
 		objLookup:     cfg.l.EquipmentTables,
 		objLookupID:   cfg.l.EquipmentTablesID,
-		idToResFunc:   idToUnnamedAPIResource[seeding.EquipmentTable, any, UnnamedAPIResource, UnnamedApiResourceList],
+		queryLookup:   cfg.q.equipmentTables,
+		idToResFunc:   idToUnnamedAPIResource[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList],
 		resToListFunc: newUnnamedAPIResourceList,
+		retrieveQuery: cfg.db.GetEquipmentTableIDs,
+		getSingleFunc: cfg.getEquipmentTable,
+		retrieveFunc:  cfg.retrieveEquipmentTables,
 	}
 
 	e.equipment = handlerInput[seeding.EquipmentName, any, NamedAPIResource, NamedApiResourceList]{

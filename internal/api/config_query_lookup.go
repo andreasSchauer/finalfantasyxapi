@@ -88,6 +88,8 @@ type QueryLookup struct {
 	mixes			map[string]QueryParam
 
 	autoAbilities	map[string]QueryParam
+	equipmentTables	map[string]QueryParam
+	equipment		map[string]QueryParam
 
 	overdriveModes 	map[string]QueryParam
 }
@@ -172,6 +174,8 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initMixesParams(defaultParams)
 
 	cfg.initAutoAbilitiesParams(defaultParams)
+	cfg.initEquipmentTablesParams(defaultParams)
+	cfg.initEquipmentParams(defaultParams)
 
 	cfg.initOverdriveModesParams(defaultParams)
 
@@ -2515,6 +2519,46 @@ func (cfg *Config) initAutoAbilitiesParams(defaultParams []QueryParam) {
 
 	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
 	cfg.q.autoAbilities = paramsMap
+}
+
+func (cfg *Config) initEquipmentTablesParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "auto_abilities",
+			Description: "Searches for equipment tables with all of the given auto-abilities.",
+			Type:		 "id-list",
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "auto-abilities")},
+		},
+		{
+			Name:		 "type",
+			Description: "Searches for equipment tables that are of the specified equip type.",
+			Type:		 "enum",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.EquipType.lookup,
+		},
+		{
+			Name:		 "celestial_weapon",
+			Description: "Searches for the equipment tables of the celestial weapons.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.equipmentTables = paramsMap
+}
+
+func (cfg *Config) initEquipmentParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.equipment = paramsMap
 }
 
 func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {

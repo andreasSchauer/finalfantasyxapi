@@ -168,6 +168,10 @@ func (cfg *Config) HandleAutoAbilities(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.autoAbilities)
 }
 
+func (cfg *Config) HandleEquipmentTables(w http.ResponseWriter, r *http.Request) {
+	routerIdOnly(cfg, w, r, cfg.e.equipmentTables)
+}
+
 
 
 func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) {

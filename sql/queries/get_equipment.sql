@@ -105,13 +105,13 @@ FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
 WHERE
-    (
-        sqlc.narg('availability')::availability_type[] IS NULL
-        OR
-        sh.availability = ANY(sqlc.narg('availability')::availability_type[])
-    )
-    AND se.shop_type = 'post-airship'
-    AND j.auto_ability_id = $1
+(
+    sqlc.narg('availability')::availability_type[] IS NULL
+    OR
+    sh.availability = ANY(sqlc.narg('availability')::availability_type[])
+)
+AND se.shop_type = 'post-airship'
+AND j.auto_ability_id = $1
 ORDER BY sh.id;
 
 
@@ -171,3 +171,53 @@ OR EXISTS (
 ORDER BY aa.id;
 
 
+
+
+
+-- name: GetEquipmentTableCelestialWeaponID :one
+SELECT cw.id
+FROM celestial_weapons cw
+JOIN j_equipment_tables_names j ON j.celestial_weapon_id = cw.id
+JOIN equipment_tables et ON j.equipment_table_id = et.id
+WHERE et.id = $1;
+
+
+-- name: GetEquipmentTableIDs :many
+SELECT id FROM equipment_tables ORDER BY id;
+
+
+-- name: GetEquipmentTableIDsByAutoAbilty :many
+WITH wanted AS (
+    SELECT sqlc.arg('auto_ability_ids')::int[] AS ids
+)
+SELECT et.id
+FROM equipment_tables et, wanted w
+WHERE (
+    SELECT COUNT(*)
+    FROM unnest(w.ids) AS req(id)
+    WHERE EXISTS (
+        SELECT 1
+        FROM j_equipment_tables_required_auto_abilities jreq
+        JOIN auto_abilities aa ON jreq.auto_ability_id = aa.id
+        WHERE jreq.equipment_table_id = et.id
+        AND aa.id = req.id
+        
+        UNION ALL
+
+        SELECT 1
+        FROM ability_pools ap
+        JOIN j_ability_pools_auto_abilities jpool ON jpool.ability_pool_id = ap.id
+        JOIN auto_abilities aa ON jpool.auto_ability_id = aa.id
+        WHERE ap.equipment_table_id = et.id
+        AND aa.id = req.id
+    )
+) = cardinality(w.ids)
+ORDER BY et.id;
+
+
+-- name: GetEquipmentTableIDsEquipType :many
+SELECT id FROM equipment_tables WHERE type = $1 ORDER BY id;
+
+
+-- name: GetEquipmentTableIDsCelestialWeapon :many
+SELECT id FROM equipment_tables WHERE classification = 'celestial-weapon' ORDER BY id;
