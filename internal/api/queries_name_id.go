@@ -8,7 +8,7 @@ import (
 )
 
 // query uses the name or id of another resource type to filter resources
-func nameOrIdQuery[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, dbQuery DbQueryIntMany) ([]A, error) {
+func nameIdQuery[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, dbQuery DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseNameIdQuery(r, queryParam, pResType, pLookup)
@@ -25,13 +25,11 @@ func nameOrIdQuery[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
-	
+
 	return resources, nil
 }
 
-
-
-func nameOrIdQueryWrapper[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]A, error) {
+func nameIdQueryWrapper[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseNameIdQuery(r, queryParam, pResType, pLookup)
@@ -51,4 +49,3 @@ func nameOrIdQueryWrapper[T, P h.HasID, R any, A APIResource, L APIResourceList]
 
 	return resources, nil
 }
-

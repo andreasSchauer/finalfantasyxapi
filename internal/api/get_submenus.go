@@ -43,6 +43,6 @@ func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seeding.Subm
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(nameOrIdQuery(cfg, r, i, resources, "topmenu", cfg.e.topmenus.resourceType, cfg.l.Topmenus, cfg.db.GetTopmenuSubmenuIDs)),
+		frl(nameIdQuery(cfg, r, i, resources, "topmenu", cfg.e.topmenus.resourceType, cfg.l.Topmenus, cfg.db.GetTopmenuSubmenuIDs)),
 	})
 }

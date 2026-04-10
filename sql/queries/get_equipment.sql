@@ -191,7 +191,8 @@ WITH wanted AS (
     SELECT sqlc.arg('auto_ability_ids')::int[] AS ids
 )
 SELECT et.id
-FROM equipment_tables et, wanted w
+FROM equipment_tables et
+CROSS JOIN wanted w
 WHERE (
     SELECT COUNT(*)
     FROM unnest(w.ids) AS req(id)
@@ -221,3 +222,111 @@ SELECT id FROM equipment_tables WHERE type = $1 ORDER BY id;
 
 -- name: GetEquipmentTableIDsCelestialWeapon :many
 SELECT id FROM equipment_tables WHERE classification = 'celestial-weapon' ORDER BY id;
+
+
+
+
+
+-- name: GetEquipmentEquipmentTableIDs :many
+SELECT DISTINCT et.id
+FROM equipment_tables et
+JOIN j_equipment_tables_names j ON j.equipment_table_id = et.id
+JOIN equipment_names en ON j.equipment_name_id = en.id
+WHERE en.id = $1
+ORDER BY et.id;
+
+
+-- name: GetEquipmentTreasureIDs :many
+SELECT DISTINCT t.id
+FROM treasures t
+JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
+JOIN equipment_names en ON te.equipment_name_id = en.id
+WHERE
+(
+    sqlc.narg('availability')::availability_type[] IS NULL
+    OR
+    t.availability = ANY(sqlc.narg('availability')::availability_type[])
+)
+AND en.id = sqlc.arg('equipment_id')::int
+ORDER BY t.id;
+
+
+-- name: GetEquipmentShopIDs :many
+WITH wanted AS (
+   SELECT sqlc.narg('availability')::availability_type[] AS values
+)
+SELECT DISTINCT sh.id
+FROM shops sh
+JOIN shop_equipment_pieces se ON se.shop_id = sh.id
+JOIN equipment_names en ON se.equipment_name_id = en.id
+CROSS JOIN wanted w
+WHERE
+    en.id = sqlc.arg('equipment_id')::int
+    AND (
+        w.values IS NULL
+        OR (
+            CASE se.shop_type
+                WHEN 'pre-airship' THEN 'story'::availability_type
+                WHEN 'post-airship' THEN 'post'::availability_type
+            END
+        ) = ANY(w.values)
+    )
+ORDER BY sh.id;
+
+
+-- name: GetEquipmentIDs :many
+SELECT id FROM equipment_names ORDER BY id;
+
+
+-- name: GetEquipmentIDsByCharacter :many
+SELECT id FROM equipment_names WHERE character_id = $1 ORDER BY id;
+
+
+-- name: GetEquipmentIDsByEquipType :many
+SELECT DISTINCT en.id
+FROM equipment_names en
+JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
+JOIN equipment_tables et ON j.equipment_table_id = et.id
+WHERE et.type = $1
+ORDER BY en.id;
+
+
+-- name: GetEquipmentIDsCelestialWeapon :many
+SELECT DISTINCT en.id
+FROM equipment_names en
+JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
+JOIN equipment_tables et ON j.equipment_table_id = et.id
+WHERE et.classification = 'celestial-weapon'
+ORDER BY en.id;
+
+
+-- name: GetEquipmentIDsByAutoAbilty :many
+WITH wanted AS (
+    SELECT sqlc.arg('auto_ability_ids')::int[] AS ids
+)
+SELECT en.id
+FROM equipment_names en
+JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
+JOIN equipment_tables et ON j.equipment_table_id = et.id
+CROSS JOIN wanted w
+WHERE (
+    SELECT COUNT(*)
+    FROM unnest(w.ids) AS req(id)
+    WHERE EXISTS (
+        SELECT 1
+        FROM j_equipment_tables_required_auto_abilities jreq
+        JOIN auto_abilities aa ON jreq.auto_ability_id = aa.id
+        WHERE jreq.equipment_table_id = et.id
+        AND aa.id = req.id
+        
+        UNION ALL
+
+        SELECT 1
+        FROM ability_pools ap
+        JOIN j_ability_pools_auto_abilities jpool ON jpool.ability_pool_id = ap.id
+        JOIN auto_abilities aa ON jpool.auto_ability_id = aa.id
+        WHERE ap.equipment_table_id = et.id
+        AND aa.id = req.id
+    )
+) = cardinality(w.ids)
+ORDER BY en.id;

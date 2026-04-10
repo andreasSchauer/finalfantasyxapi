@@ -172,6 +172,10 @@ func (cfg *Config) HandleEquipmentTables(w http.ResponseWriter, r *http.Request)
 	routerIdOnly(cfg, w, r, cfg.e.equipmentTables)
 }
 
+func (cfg *Config) HandleEquipment(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.equipment)
+}
+
 
 
 func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) {

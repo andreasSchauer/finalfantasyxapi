@@ -49,7 +49,7 @@ func (cfg *Config) retrieveItemAbilities(r *http.Request, i handlerInput[seeding
 		frl(enumListQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetItemAbilityIDsByTargetType)),
 		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetItemAbilityIDsByDamageFormula)),
 		frl(nameIdListQueryNul(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetItemAbilityIDsByElement)),
-		frl(nameOrIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetItemAbilityIDsByRelatedStat)),
+		frl(nameIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetItemAbilityIDsByRelatedStat)),
 		frl(idQueryNul(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), cfg.db.GetItemAbilityIDsByInflictedStatus)),
 		frl(idQueryNul(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), cfg.db.GetItemAbilityIDsByRemovedStatus)),
 		frl(boolQuery2(cfg, r, i, resources, "outside_battle", cfg.db.GetItemAbilityIDsCanUseOutsideBattle)),

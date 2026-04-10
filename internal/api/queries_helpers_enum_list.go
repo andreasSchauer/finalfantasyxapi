@@ -25,6 +25,9 @@ func queryEnumsToSlice[E, N any](query, endpoint string, queryParam QueryParam, 
 		if err != nil {
 			return nil, err
 		}
+
+		// do the alias logic here. alias, ok := et.Aliasses[enum]; if ok => concat to enums and continue
+
 		typedStr := et.convFunc(enum.Name)
 		enums = append(enums, typedStr)
 	}

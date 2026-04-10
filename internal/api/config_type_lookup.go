@@ -376,6 +376,14 @@ func (t *TypeLookup) initAvailabilityType() {
 			Name:        string(database.AvailabilityTypePostStory),
 			Description: "The resource is only available during the events of the story that happen after acquiring the airship.",
 		},
+		{
+			Name:		 string(database.AvailabilityTypePostGame),
+			Description: "The resource is available in the post-game, meaning it either was already available before acquiring the airship, or it becomes available after acquiring the airship. This excludes story-specific resources. This value is essentially a combination of 'always' and 'post'.",
+		},
+		{
+			Name:		 string(database.AvailabilityTypeStoryOnly),
+			Description: "The resource is only available during the events of the story. This value is essentially a combination of 'story' and 'post-story'.",
+		},
 	}
 
 	t.AvailabilityType = newEnumType[database.AvailabilityType, any]("availability type", true, typeSlice, func(s string) database.AvailabilityType {

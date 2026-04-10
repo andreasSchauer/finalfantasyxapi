@@ -524,14 +524,26 @@ func (q *Queries) GetItemQuestIDs(ctx context.Context, arg GetItemQuestIDsParams
 }
 
 const getItemShopIDs = `-- name: GetItemShopIDs :many
+WITH wanted AS (
+   SELECT $2::availability_type[] AS values
+)
 SELECT DISTINCT s.id
 FROM shops s
 JOIN j_shops_items j ON j.shop_id = s.id
 JOIN shop_items si ON j.shop_item_id = si.id
 JOIN items i ON si.item_id = i.id
+CROSS JOIN wanted w
 WHERE
-  i.id = $1
-  AND ($2::availability_type[] IS NULL OR s.availability = ANY($2::availability_type[]))
+    i.id = $1::int
+    AND (
+        w.values IS NULL
+        OR (
+            CASE j.shop_type
+                WHEN 'pre-airship' THEN 'story'::availability_type
+                WHEN 'post-airship' THEN 'post'::availability_type
+            END
+        ) = ANY(w.values)
+    )
 ORDER BY s.id
 `
 

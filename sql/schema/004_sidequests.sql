@@ -6,7 +6,7 @@ CREATE TYPE ma_creation_category AS ENUM ('area', 'species', 'original');
 CREATE TYPE ma_creation_area AS ENUM ('besaid', 'kilika', 'mi''ihen-highroad', 'mushroom-rock-road', 'djose', 'thunder-plains', 'macalania', 'bikanel', 'calm-lands', 'cavern-of-the-stolen-fayth', 'mount-gagazet', 'sin', 'omega-ruins');
 CREATE TYPE ma_creation_species AS ENUM ('bird', 'bomb', 'drake', 'elemental', 'evil-eye', 'flan', 'fungus', 'helm', 'imp', 'iron-giant', 'lupine', 'reptile', 'ruminant', 'wasp');
 CREATE TYPE creations_unlocked_category AS ENUM ('area', 'species');
-CREATE TYPE availability_type AS ENUM ('always', 'story', 'post', 'post-story');
+CREATE TYPE availability_type AS ENUM ('always', 'story', 'post', 'post-story', 'post-game', 'story-only');
 
 
 CREATE TABLE blitzball_positions (

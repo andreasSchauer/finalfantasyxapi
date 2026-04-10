@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -13,17 +14,18 @@ func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seeding.Equ
 	}
 
 	response := EquipmentTable{
-		ID:                        table.ID,
-		Type: table.Type,
-		Classification: table.Classification,
-		SpecificCharacter: namePtrToNamedAPIResPtr(cfg, cfg.e.characters, table.SpecificCharacter, nil),
-		Priority: table.Priority,
-		RequiredAutoAbilities: namesToNamedAPIResources(cfg, cfg.e.autoAbilities, table.RequiredAutoAbilities),
-		SelectableAutoAbilities: convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool),
-		Equipment: convertObjSlice(cfg, table.EquipmentNames, convertEquipmentName),
+		ID:                       	table.ID,
+		Type: 						table.Type,
+		Classification: 			table.Classification,
+		SpecificCharacter: 			namePtrToNamedAPIResPtr(cfg, cfg.e.characters, table.SpecificCharacter, nil),
+		Priority: 					table.Priority,
+		RequiredAutoAbilities: 		namesToNamedAPIResources(cfg, cfg.e.autoAbilities, table.RequiredAutoAbilities),
+		SelectableAutoAbilities: 	convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool),
+		EmptySlotsAmt: 				table.EmptySlotsAmt,
+		Equipment: 					convertObjSlice(cfg, table.EquipmentNames, convertEquipmentName),
 	}
 
-	if table.SpecificCharacter != nil {
+	if table.SpecificCharacter != nil && table.Classification == string(database.EquipClassCelestialWeapon) {
 		classRes, err := getResPtrDB(cfg, r, cfg.e.celestialWeapons, table, cfg.db.GetEquipmentTableCelestialWeaponID)
 		if err != nil {
 			return EquipmentTable{}, err

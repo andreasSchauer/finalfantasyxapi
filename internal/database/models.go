@@ -464,6 +464,8 @@ const (
 	AvailabilityTypeStory     AvailabilityType = "story"
 	AvailabilityTypePost      AvailabilityType = "post"
 	AvailabilityTypePostStory AvailabilityType = "post-story"
+	AvailabilityTypePostGame  AvailabilityType = "post-game"
+	AvailabilityTypeStoryOnly AvailabilityType = "story-only"
 )
 
 func (e *AvailabilityType) Scan(src interface{}) error {

@@ -2554,7 +2554,56 @@ func (cfg *Config) initEquipmentTablesParams(defaultParams []QueryParam) {
 
 func (cfg *Config) initEquipmentParams(defaultParams []QueryParam) {
 	params := []QueryParam{
-		
+		{
+			Name: 		 "table",
+			Description: "Selects the equipment table whose data should be displayed for celestial weapons and the brotherhood. The default is set to the fully-upgraded table (1). For the brotherhood, only 1 and 2 are available. For celestial weapons, 1 equals the fully-upgraded table, 2 is the table with just the crest, and 3 is the table with no upgrades.",
+			Type: 		 "int",
+			ForSingle:   true,
+			ForList: 	 false,
+			AllowedIDs:  []int32{1, 2, 3, 4, 5, 6, 7, 8},
+			DefaultVal:  h.GetIntPtr(1),
+		},
+		{
+			Name:		 "rel_availability",
+			Description: "Only displays an equipment's related treasures and shops with the given availabilities.",
+			Type:		 "enum-list",
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:		 "auto_abilities",
+			Description: "Searches for equipment with all of the given auto-abilities.",
+			Type:		 "id-list",
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "auto-abilities")},
+		},
+		{
+			Name:		 "character",
+			Description: "Searches for equipment of the specified character.",
+			ExampleVals: []string{"yuna"},
+			Type:		 "name/id",
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "character")},
+		},
+		{
+			Name:		 "type",
+			Description: "Searches for equipment that is of the specified equip type.",
+			Type:		 "enum",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.EquipType.lookup,
+		},
+		{
+			Name:		 "celestial_weapon",
+			Description: "Searches for the celestial weapons.",
+			Type:		 "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
 	}
 
 	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
