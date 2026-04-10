@@ -34,13 +34,16 @@ func compareItems(test test, exp expItem, got Item) {
 }
 
 type testMonItemAmts struct {
-	index		  int
-	monster       int32
-	steal         *CommonRareAmount
-	drop          *CommonRareAmount
-	secondaryDrop *CommonRareAmount
-	bribe         int32
-	other         int32
+	index		  		int
+	monster       		int32
+	stealCommon         int32
+	stealRare         	int32
+	dropCommon          int32
+	dropRare          	int32
+	secondaryDropCommon int32
+	secondaryDropRare 	int32
+	bribe         		int32
+	other        		int32
 }
 
 func (t testMonItemAmts) GetIndex() int {
@@ -49,9 +52,12 @@ func (t testMonItemAmts) GetIndex() int {
 
 func compareMonItemAmts(test test, fieldName string, exp testMonItemAmts, got MonItemAmts) {
 	compIdApiResource(test, fieldName+" - monster", test.cfg.e.monsters.endpoint, exp.monster, got.Monster)
-	compStructPtrs(test, fieldName+" - steal", exp.steal, got.Steal)
-	compStructPtrs(test, fieldName+" - drop", exp.drop, got.Drop)
-	compStructPtrs(test, fieldName+" - secondary drop", exp.secondaryDrop, got.SecondaryDrop)
+	compare(test, fieldName+" - steal common", exp.stealCommon, got.StealCommon)
+	compare(test, fieldName+" - steal rare", exp.stealRare, got.StealRare)
+	compare(test, fieldName+" - drop common", exp.dropCommon, got.DropCommon)
+	compare(test, fieldName+" - drop rare", exp.dropRare, got.DropRare)
+	compare(test, fieldName+" - secondary drop common", exp.secondaryDropCommon, got.SecondaryDropCommon)
+	compare(test, fieldName+" - secondary drop rare", exp.secondaryDropRare, got.SecondaryDropRare)
 	compare(test, fieldName+" - bribe", exp.bribe, got.Bribe)
 	compare(test, fieldName+" - other", exp.other, got.Other)
 }

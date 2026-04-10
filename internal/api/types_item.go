@@ -29,60 +29,46 @@ type Item struct {
 
 
 type MonItemAmts struct {
-	Monster       NamedAPIResource  `json:"monster"`
-	Steal         *CommonRareAmount `json:"steal,omitempty"`
-	Drop          *CommonRareAmount `json:"drop,omitempty"`
-	SecondaryDrop *CommonRareAmount `json:"secondary_drop,omitempty"`
-	Bribe         int32             `json:"bribe,omitempty"`
-	Other		  int32				`json:"other,omitempty"`
+	Monster       		NamedAPIResource  	`json:"monster"`
+	StealCommon   		int32 				`json:"steal_common,omitempty"`
+	StealRare   		int32 				`json:"steal_rare,omitempty"`
+	DropCommon          int32 				`json:"drop_common,omitempty"`
+	DropRare          	int32 				`json:"drop_rare,omitempty"`
+	SecondaryDropCommon int32 				`json:"secondary_drop_common,omitempty"`
+	SecondaryDropRare 	int32 				`json:"secondary_drop_rare,omitempty"`
+	Bribe         		int32             	`json:"bribe,omitempty"`
+	Other		  		int32				`json:"other,omitempty"`
 }
 
-type CommonRareAmount struct {
-	Common int32 `json:"common,omitempty"`
-	Rare   int32 `json:"rare,omitempty"`
-}
-
-func (cra CommonRareAmount) IsZero() bool {
-	return cra.Common == 0 && cra.Rare == 0
-}
 
 func createItemMonster(cfg *Config, itemName string, mon NamedAPIResource) MonItemAmts {
 	monster, _ := seeding.GetResourceByID(mon.ID, cfg.l.MonstersID)
 
 	return MonItemAmts{
-		Monster:       mon,
-		Steal:         craPtr(itemName, monster.Items.StealCommon, monster.Items.StealRare),
-		Drop:          craPtr(itemName, monster.Items.DropCommon, monster.Items.DropRare),
-		SecondaryDrop: craPtr(itemName, monster.Items.SecondaryDropCommon, monster.Items.SecondaryDropRare),
-		Bribe:         getAmountMonItem(itemName, monster.Items.Bribe),
-		Other: 		   getAmountOther(itemName, monster.Items.OtherItems),
+		Monster:       			mon,
+		StealCommon: 			getAmountMonItem(itemName, monster.Items.StealCommon),
+		StealRare: 				getAmountMonItem(itemName, monster.Items.StealRare),
+		DropCommon: 			getAmountMonItem(itemName, monster.Items.DropCommon),
+		DropRare: 				getAmountMonItem(itemName, monster.Items.DropRare),
+		SecondaryDropCommon: 	getAmountMonItem(itemName, monster.Items.SecondaryDropCommon),
+		SecondaryDropRare: 		getAmountMonItem(itemName, monster.Items.SecondaryDropRare),
+		Bribe:         			getAmountMonItem(itemName, monster.Items.Bribe),
+		Other: 		   			getAmountOther(itemName, monster.Items.OtherItems),
 	}
 }
 
-func craPtr(itemName string, common, rare *seeding.ItemAmount) *CommonRareAmount {
-	cra := CommonRareAmount{
-		Common: getAmountMonItem(itemName, common),
-		Rare:   getAmountMonItem(itemName, rare),
-	}
 
-	if cra.IsZero() {
-		return nil
-	}
-
-	return &cra
-}
-
-func getAmountMonItem(itemName string, ia *seeding.ItemAmount) int32 {
-	if ia == nil || ia.ItemName != itemName {
+func getAmountMonItem(wantedItem string, ia *seeding.ItemAmount) int32 {
+	if ia == nil || ia.ItemName != wantedItem {
 		return 0
 	}
 
 	return ia.Amount
 }
 
-func getAmountOther(itemName string, otherItems []seeding.PossibleItem) int32 {
+func getAmountOther(wantedItem string, otherItems []seeding.PossibleItem) int32 {
 	for _, otherItem := range otherItems {
-		if otherItem.ItemAmount.ItemName == itemName {
+		if otherItem.ItemAmount.ItemName == wantedItem {
 			return otherItem.ItemAmount.Amount
 		}
 	}

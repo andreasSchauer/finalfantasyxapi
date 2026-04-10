@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"slices"
 )
 
 // checks for emptiness of enum-list-queryParam and converts its input into a slice of valid enum-strings.
@@ -26,7 +27,12 @@ func queryEnumsToSlice[E, N any](query, endpoint string, queryParam QueryParam, 
 			return nil, err
 		}
 
-		// do the alias logic here. alias, ok := et.Aliasses[enum]; if ok => concat to enums and continue
+		if et.aliasses != nil {
+			aliasVals, ok := et.aliasses[string(enum.Name)]
+			if ok {
+				enums = slices.Concat(enums, aliasVals)
+			}
+		}
 
 		typedStr := et.convFunc(enum.Name)
 		enums = append(enums, typedStr)
