@@ -176,6 +176,10 @@ func (cfg *Config) HandleEquipment(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.equipment)
 }
 
+func (cfg *Config) HandleCelestialWeapons(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.celestialWeapons)
+}
+
 
 
 func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) {

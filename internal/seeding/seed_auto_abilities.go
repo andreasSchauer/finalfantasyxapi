@@ -19,13 +19,13 @@ type AutoAbility struct {
 	Name                string           `json:"name"`
 	Description         *string          `json:"description"`
 	Effect              string           `json:"effect"`
-	Type                *string          `json:"type"`
+	Type                string           `json:"type"`
 	Category            string           `json:"category"`
 	RelatedStats        []string         `json:"related_stats"`
 	AbilityValue        *int32           `json:"ability_value"`
 	RequiredItem        *ItemAmount      `json:"required_item"`
 	LockedOutAbilities  []string         `json:"locked_out_abilities"`
-	ActivationCondition *string          `json:"activation_condition"`
+	ActivationCondition string          `json:"activation_condition"`
 	Counter             *string          `json:"counter"`
 	GradualRecovery     *string          `json:"gradual_recovery"`
 	AutoItemUse         []string         `json:"auto_item_use"`
@@ -46,11 +46,11 @@ func (a AutoAbility) ToHashFields() []any {
 		a.Name,
 		h.DerefOrNil(a.Description),
 		a.Effect,
-		h.DerefOrNil(a.Type),
+		a.Type,
 		a.Category,
 		h.DerefOrNil(a.AbilityValue),
 		h.ObjPtrToID(a.RequiredItem),
-		h.DerefOrNil(a.ActivationCondition),
+		a.ActivationCondition,
 		h.DerefOrNil(a.Counter),
 		h.DerefOrNil(a.GradRecoveryStatID),
 		h.DerefOrNil(a.OnHitElementID),
@@ -103,10 +103,10 @@ func (l *Lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 				Name:                autoAbility.Name,
 				Description:         h.GetNullString(autoAbility.Description),
 				Effect:              autoAbility.Effect,
-				Type:                h.NullEquipType(autoAbility.Type),
+				Type:                database.EquipType(autoAbility.Type),
 				Category:            database.AutoAbilityCategory(autoAbility.Category),
 				AbilityValue:        h.GetNullInt32(autoAbility.AbilityValue),
-				ActivationCondition: h.NullAaActivationCondition(autoAbility.ActivationCondition),
+				ActivationCondition: database.AaActivationCondition(autoAbility.ActivationCondition),
 				Counter:             h.NullCounterType(autoAbility.Counter),
 			})
 			if err != nil {

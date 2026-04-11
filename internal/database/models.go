@@ -3038,10 +3038,10 @@ type AutoAbility struct {
 	Name                 string
 	Description          sql.NullString
 	Effect               string
-	Type                 NullEquipType
+	Type                 EquipType
 	Category             AutoAbilityCategory
 	AbilityValue         sql.NullInt32
-	ActivationCondition  NullAaActivationCondition
+	ActivationCondition  AaActivationCondition
 	Counter              NullCounterType
 	RequiredItemAmountID sql.NullInt32
 	GradRcvryStatID      sql.NullInt32

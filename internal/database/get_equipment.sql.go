@@ -114,7 +114,7 @@ const getAutoAbilityIDsByEquipType = `-- name: GetAutoAbilityIDsByEquipType :man
 SELECT id FROM auto_abilities WHERE type = $1 ORDER BY id
 `
 
-func (q *Queries) GetAutoAbilityIDsByEquipType(ctx context.Context, type_ NullEquipType) ([]int32, error) {
+func (q *Queries) GetAutoAbilityIDsByEquipType(ctx context.Context, type_ EquipType) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByEquipType, type_)
 	if err != nil {
 		return nil, err
@@ -462,6 +462,115 @@ func (q *Queries) GetAutoAbilityTreasureIDs(ctx context.Context, arg GetAutoAbil
 		return nil, err
 	}
 	return items, nil
+}
+
+const getCelestialWeaponAutoAbilityIDs = `-- name: GetCelestialWeaponAutoAbilityIDs :many
+SELECT DISTINCT aa.id
+FROM auto_abilities aa
+JOIN j_equipment_tables_required_auto_abilities j1 ON j1.auto_ability_id = aa.id
+JOIN equipment_tables et ON j1.equipment_table_id = et.id
+JOIN j_equipment_tables_names j2 ON j2.equipment_table_id = et.id
+JOIN celestial_weapons cw ON j2.celestial_weapon_id = cw.id
+WHERE cw.id = $1::int AND et.id = $2::int
+ORDER BY aa.id
+`
+
+type GetCelestialWeaponAutoAbilityIDsParams struct {
+	CelestialWeaponID int32
+	EquipmentTableID  int32
+}
+
+func (q *Queries) GetCelestialWeaponAutoAbilityIDs(ctx context.Context, arg GetCelestialWeaponAutoAbilityIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCelestialWeaponAutoAbilityIDs, arg.CelestialWeaponID, arg.EquipmentTableID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getCelestialWeaponIDs = `-- name: GetCelestialWeaponIDs :many
+SELECT id FROM celestial_weapons ORDER BY id
+`
+
+func (q *Queries) GetCelestialWeaponIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCelestialWeaponIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getCelestialWeaponIDsByFormula = `-- name: GetCelestialWeaponIDsByFormula :many
+SELECT id FROM celestial_weapons WHERE formula = $1 ORDER BY id
+`
+
+func (q *Queries) GetCelestialWeaponIDsByFormula(ctx context.Context, formula CelestialFormula) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCelestialWeaponIDsByFormula, formula)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getCelestialWeaponTreasureID = `-- name: GetCelestialWeaponTreasureID :one
+SELECT t.id
+FROM treasures t
+JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
+JOIN equipment_names en ON te.equipment_name_id = en.id
+JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
+JOIN celestial_weapons cw ON j.celestial_weapon_id = cw.id
+WHERE cw.id = $1
+`
+
+func (q *Queries) GetCelestialWeaponTreasureID(ctx context.Context, id int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getCelestialWeaponTreasureID, id)
+	err := row.Scan(&id)
+	return id, err
 }
 
 const getEquipmentEquipmentTableIDs = `-- name: GetEquipmentEquipmentTableIDs :many

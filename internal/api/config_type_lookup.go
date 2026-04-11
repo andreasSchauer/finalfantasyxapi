@@ -25,7 +25,7 @@ type TypeLookup struct {
 	ItemType                    EnumType[database.ItemType, any]
 	QuestType                   EnumType[database.QuestType, any]
 
-	AaActivationCondition		EnumType[database.AaActivationCondition, database.NullAaActivationCondition]
+	AaActivationCondition		EnumType[database.AaActivationCondition, any]
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
@@ -39,7 +39,7 @@ type TypeLookup struct {
 	CreationArea                EnumType[database.MaCreationArea, database.NullMaCreationArea]
 	CTBIconType                 EnumType[database.CtbIconType, any]
 	EquipClass					EnumType[database.EquipClass, any]
-	EquipType					EnumType[database.EquipType, database.NullEquipType]
+	EquipType					EnumType[database.EquipType, any]
 	ItemCategory                EnumType[database.ItemCategory, any]
 	KeyItemCategory				EnumType[database.KeyItemCategory, any]
 	LootType                    EnumType[database.LootType, any]
@@ -247,13 +247,11 @@ func (t *TypeLookup) initAaActivationCondition() {
 		},
 	}
 
-	t.AaActivationCondition = EnumType[database.AaActivationCondition, database.NullAaActivationCondition]{
+	t.AaActivationCondition = EnumType[database.AaActivationCondition, any]{
 		name:         "auto ability activation condition",
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.AaActivationCondition { return database.AaActivationCondition(s) },
-		nullConvFunc: h.NullAaActivationCondition,
-		getNullEnum:  h.GetNullAaActivationCondition,
 	}
 }
 
@@ -664,13 +662,11 @@ func (t *TypeLookup) initEquipType() {
 		},
 	}
 
-	t.EquipType = EnumType[database.EquipType, database.NullEquipType]{
+	t.EquipType = EnumType[database.EquipType, any]{
 		name:         "equip type",
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.EquipType { return database.EquipType(s) },
-		nullConvFunc: h.NullEquipType,
-		getNullEnum:  h.GetNullEquipType,
 	}
 }
 

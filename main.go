@@ -71,6 +71,7 @@ func main() {
 	mux.HandleFunc("GET /api/auto-abilities/", apiCfg.HandleAutoAbilities)
 	mux.HandleFunc("GET /api/equipment-tables/", apiCfg.HandleEquipmentTables)
 	mux.HandleFunc("GET /api/equipment/", apiCfg.HandleEquipment)
+	mux.HandleFunc("GET /api/celestial-weapons/", apiCfg.HandleCelestialWeapons)
 
 	mux.HandleFunc("GET /api/overdrive-modes/", apiCfg.HandleOverdriveModes)
 

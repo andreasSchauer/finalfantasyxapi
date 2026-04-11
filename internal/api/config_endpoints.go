@@ -51,7 +51,7 @@ type endpoints struct {
 	autoAbilities    handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]
 	equipmentTables	 handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]
 	equipment        handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]
-	celestialWeapons handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]
+	celestialWeapons handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]
 
 	stats            handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
 	properties       handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]
@@ -863,6 +863,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAutoAbilityIDs,
 		getSingleFunc: cfg.getAutoAbility,
 		retrieveFunc:  cfg.retrieveAutoAbilities,
+		subsections:   map[string]SubSectionFns{
+			"simple": {
+				createSubFn: createAutoAbilitySimple,
+			},
+		},
 	}
 
 	e.equipmentTables = handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]{
@@ -891,13 +896,23 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveEquipment,
 	}
 
-	e.celestialWeapons = handlerInput[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList]{
+	e.celestialWeapons = handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "celestial-weapons",
 		resourceType:  "celestial weapon",
 		objLookup:     cfg.l.CelestialWeapons,
 		objLookupID:   cfg.l.CelestialWeaponsID,
-		idToResFunc:   idToNamedAPIResource[seeding.CelestialWeapon, any, NamedAPIResource, NamedApiResourceList],
+		queryLookup:   cfg.q.celestialWeapons,
+		idToResFunc:   idToNamedAPIResource[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetCelestialWeaponIDs,
+		getSingleFunc: cfg.getCelestialWeapon,
+		retrieveFunc:  cfg.retrieveCelestialWeapons,
+		subsections:   map[string]SubSectionFns{
+			"auto-abilities": {
+				dbQuery: 	 convertGetCelestialWeaponAutoAbilityIDs(cfg),
+				createSubFn: createAutoAbilitySimple,
+			},
+		},
 	}
 
 	e.stats = handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]{

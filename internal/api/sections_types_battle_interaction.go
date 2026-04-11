@@ -128,47 +128,50 @@ func convertInflictedStatusSimple(_ *Config, is seeding.InflictedStatus) string 
 		probabilityStr = "infinite %"
 
 	default:
-		probabilityStr = strconv.Itoa(int(is.Probability)) + " %"
+		probabilityStr = strconv.Itoa(int(is.Probability)) + "%"
 	}
 
 	return fmt.Sprintf("%s (%s)", is.StatusCondition, probabilityStr)
 }
 
 func convertStatChangeSimple(_ *Config, sc seeding.StatChange) string {
-	var operatorStr string
-
-	switch sc.CalculationType {
-	case string(database.CalculationTypeAddedValue):
-		operatorStr = "+"
-
-	case string(database.CalculationTypeMultiplyHighest):
-		operatorStr = "x"
-	}
-
-	return fmt.Sprintf("%s %s%d", sc.StatName, operatorStr, int32(sc.Value))
+	return formatChange(sc.StatName, sc.CalculationType, sc.Value)
 }
 
-func convertModChangeSimple(_ *Config, mc seeding.ModifierChange) string {
-	formattedVal := fmt.Sprintf("%.3f", mc.Value)
+func convertModChangeSimple(cfg *Config, mc seeding.ModifierChange) string {
+	formatted := formatChange(mc.ModifierName, mc.CalculationType, mc.Value)
 
-	switch mc.CalculationType {
+	modifier, _ := seeding.GetResource(mc.ModifierName, cfg.l.Modifiers)
+
+	if modifier.Type == string(database.ModifierTypePercentage) {
+		formatted += "%"
+	}
+
+	return formatted
+}
+
+
+func formatChange(name, calcType string, val float32) string {
+	formattedVal := strconv.FormatFloat(float64(val), 'f', -1, 32)
+
+	switch calcType {
 	case string(database.CalculationTypeAddedValue):
 		if strings.HasPrefix(formattedVal, "-") {
-			return fmt.Sprintf("%s %s", mc.ModifierName, formattedVal)
+			return fmt.Sprintf("%s %s", name, formattedVal)
 		}
-		return fmt.Sprintf("%s +%s", mc.ModifierName, formattedVal)
+		return fmt.Sprintf("%s +%s", name, formattedVal)
 
 	case string(database.CalculationTypeAddedPercentage):
 		if strings.HasPrefix(formattedVal, "-") {
-			return fmt.Sprintf("%s %s", mc.ModifierName, formattedVal)
+			return fmt.Sprintf("%s %s", name, formattedVal) + "%"
 		}
-		return fmt.Sprintf("%s +%s", mc.ModifierName, formattedVal) + "%"
+		return fmt.Sprintf("%s +%s", name, formattedVal) + "%"
 
 	case string(database.CalculationTypeMultiplyHighest), string(database.CalculationTypeMultiply):
-		return fmt.Sprintf("%s x%s", mc.ModifierName, formattedVal)
+		return fmt.Sprintf("%s x%s", name, formattedVal)
 
 	case string(database.CalculationTypeSetValue):
-		return fmt.Sprintf("%s = %d", mc.ModifierName, int32(mc.Value))
+		return fmt.Sprintf("%s = %d", name, int32(val))
 	}
 
 	return ""

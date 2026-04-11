@@ -37,8 +37,6 @@ func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.Equipmen
 }
 
 
-
-
 func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {

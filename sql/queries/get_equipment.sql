@@ -330,3 +330,36 @@ WHERE (
     )
 ) = cardinality(w.ids)
 ORDER BY en.id;
+
+
+
+
+
+
+-- name: GetCelestialWeaponTreasureID :one
+SELECT t.id
+FROM treasures t
+JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
+JOIN equipment_names en ON te.equipment_name_id = en.id
+JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
+JOIN celestial_weapons cw ON j.celestial_weapon_id = cw.id
+WHERE cw.id = $1;
+
+
+-- name: GetCelestialWeaponAutoAbilityIDs :many
+SELECT DISTINCT aa.id
+FROM auto_abilities aa
+JOIN j_equipment_tables_required_auto_abilities j1 ON j1.auto_ability_id = aa.id
+JOIN equipment_tables et ON j1.equipment_table_id = et.id
+JOIN j_equipment_tables_names j2 ON j2.equipment_table_id = et.id
+JOIN celestial_weapons cw ON j2.celestial_weapon_id = cw.id
+WHERE cw.id = sqlc.arg('celestial_weapon_id')::int AND et.id = sqlc.arg('equipment_table_id')::int
+ORDER BY aa.id;
+
+
+-- name: GetCelestialWeaponIDs :many
+SELECT id FROM celestial_weapons ORDER BY id;
+
+
+-- name: GetCelestialWeaponIDsByFormula :many
+SELECT id FROM celestial_weapons WHERE formula = $1 ORDER BY id;

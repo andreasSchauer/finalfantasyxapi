@@ -10,6 +10,18 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
+func getResDbItemOne[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], filterItem seeding.LookupableID, dbQuery DbQueryIntOne) (A, error) {
+	var zeroType A
+
+	dbId, err := dbQuery(r.Context(), filterItem.GetID())
+	if err != nil {
+		return zeroType, newHTTPErrorDB(i.resourceType, filterItem, err)
+	}
+
+	res := i.idToResFunc(cfg, i, dbId)
+	return res, nil
+}
+
 // get relationship resources of item. handlerInput = endpoint of fetched resources
 func getResourcesDbItem[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], filterItem seeding.LookupableID, dbQuery DbQueryIntMany) ([]A, error) {
 	dbIds, err := dbQuery(r.Context(), filterItem.GetID())

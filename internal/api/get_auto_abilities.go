@@ -62,7 +62,7 @@ func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seeding
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(enumListQuery(cfg, r, i, cfg.t.AutoAbilityCategory, resources, "category", cfg.db.GetAutoAbilityIDsByCategory)),
-		frl(enumQuery(cfg, r, i, cfg.t.EquipType, resources, "type", ToEnumQuery(cfg.t.EquipType, cfg.db.GetAutoAbilityIDsByEquipType))),
+		frl(enumQuery(cfg, r, i, cfg.t.EquipType, resources, "type", cfg.db.GetAutoAbilityIDsByEquipType)),
 		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetAutoAbilityIDsByMonster)),
 		frl(idQuery(cfg, r, i, resources, "monster_items", len(cfg.l.Monsters), cfg.db.GetAutoAbilityIDsByMonsterItems)),
 	})

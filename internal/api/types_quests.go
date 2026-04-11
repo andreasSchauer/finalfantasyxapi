@@ -9,6 +9,7 @@ type Quest struct {
 	TypedQuest   QuestAPIResource `json:"typed_quest"`
 	Availability NamedAPIResource `json:"availability"`
 	IsRepeatable bool             `json:"is_repeatable"`
+	Completion   *QuestCompletion `json:"completion"`
 }
 
 type Sidequest struct {
@@ -34,7 +35,6 @@ type Subquest struct {
 
 type QuestCompletion struct {
 	Condition    *string                          `json:"condition"`
-	IsRepeatable bool                             `json:"is_repeatable"`
 	Areas        []CompletionArea                 `json:"areas"`
 	Reward       ResourceAmount[TypedAPIResource] `json:"reward"`
 }

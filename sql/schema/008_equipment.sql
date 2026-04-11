@@ -35,10 +35,10 @@ CREATE TABLE auto_abilities (
     name TEXT UNIQUE NOT NULL,
     description TEXT,
     effect TEXT NOT NULL,
-    type equip_type,
+    type equip_type NOT NULL,
     category auto_ability_category NOT NULL,
     ability_value INTEGER,
-    activation_condition aa_activation_condition,
+    activation_condition aa_activation_condition NOT NULL,
     counter counter_type
 );
 

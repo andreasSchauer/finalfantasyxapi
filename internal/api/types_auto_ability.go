@@ -6,12 +6,12 @@ type AutoAbility struct {
 	Category               NamedAPIResource                  `json:"category"`
 	Description            *string                           `json:"description"`
 	Effect                 string                            `json:"effect"`
-	EquipType              *string                           `json:"equip_type"`
+	EquipType              string                            `json:"equip_type"`
 	AbilityValue           *int32                            `json:"ability_value"`
 	RequiredItem           *ResourceAmount[TypedAPIResource] `json:"required_item"`
 	RelatedStats           []NamedAPIResource                `json:"related_stats"`
 	LockedOutAutoAbilities []NamedAPIResource                `json:"locked_out_auto_abilities"`
-	ActivationCondition    *string                           `json:"activation_condition"`
+	ActivationCondition    string                            `json:"activation_condition"`
 	Counter                *string                           `json:"counter"`
 	GradualRecovery        *NamedAPIResource                 `json:"gradual_recovery"`
 	AutoItemUse            []NamedAPIResource                `json:"auto_item_use"`

@@ -87,9 +87,10 @@ type QueryLookup struct {
 	primers			map[string]QueryParam
 	mixes			map[string]QueryParam
 
-	autoAbilities	map[string]QueryParam
-	equipmentTables	map[string]QueryParam
-	equipment		map[string]QueryParam
+	autoAbilities		map[string]QueryParam
+	equipmentTables		map[string]QueryParam
+	equipment			map[string]QueryParam
+	celestialWeapons	map[string]QueryParam
 
 	overdriveModes 	map[string]QueryParam
 }
@@ -176,6 +177,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initAutoAbilitiesParams(defaultParams)
 	cfg.initEquipmentTablesParams(defaultParams)
 	cfg.initEquipmentParams(defaultParams)
+	cfg.initCelestialWeaponsParams(defaultParams)
 
 	cfg.initOverdriveModesParams(defaultParams)
 
@@ -2517,7 +2519,7 @@ func (cfg *Config) initAutoAbilitiesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
 	cfg.q.autoAbilities = paramsMap
 }
 
@@ -2608,6 +2610,22 @@ func (cfg *Config) initEquipmentParams(defaultParams []QueryParam) {
 
 	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
 	cfg.q.equipment = paramsMap
+}
+
+func (cfg *Config) initCelestialWeaponsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "formula",
+			Description: "Searches for celestial-weapons that are of the specified celestial formula.",
+			Type:		 "enum",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.CelestialFormula.lookup,
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.celestialWeapons = paramsMap
 }
 
 func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {
