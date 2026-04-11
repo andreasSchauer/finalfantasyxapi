@@ -1310,7 +1310,7 @@ func TestSubsectionMonsters(t *testing.T) {
 				requestURL:     "/api/monsters/simple?ids=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testCfg.HandleMonsters,
-				expectedErr:    "fetch limit exceeded. the maximum amount of resources that can be fetched is 50.",
+				expectedErr:    "fetch limit exceeded. the maximum amount of inputs is 50.",
 			},
 		},
 		{
@@ -1323,15 +1323,7 @@ func TestSubsectionMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/simple?ids=1,2,2,70,",
-				expectedStatus: http.StatusBadRequest,
-				handler:        testCfg.HandleMonsters,
-				expectedErr: 	"duplicate use of id '2' for parameter 'ids'. each id can only be used once.",
-			},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/simple?ids=1,33,22,68,",
+				requestURL:     "/api/monsters/simple?ids=1,33,22,22,22,22,68,",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleMonsters,
 				dontCheck: map[string]bool{
@@ -1339,7 +1331,7 @@ func TestSubsectionMonsters(t *testing.T) {
 				},
 			},
 			count:   4,
-			results: []int32{1, 33, 22, 68},
+			results: []int32{1, 22, 33, 68},
 		},
 		{
 			testGeneral: testGeneral{

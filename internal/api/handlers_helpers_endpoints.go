@@ -227,7 +227,7 @@ func handleSimple[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Confi
 		return
 	}
 
-	ids, err := parseIdListQuery(r, queryParamIDs, len(i.objLookup))
+	ids, err := parseIdListQuery(cfg, r, queryParamIDs, len(i.objLookup))
 	if handleHTTPError(w, err) {
 		return
 	}

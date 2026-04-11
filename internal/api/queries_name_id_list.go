@@ -11,7 +11,7 @@ import (
 func nameIdListQueryNul[T, P h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, dbQuery DbQueryIntList) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
-	queryIDs, err := parseNameIdListQuery(r, queryParam, pResType, pLookup)
+	queryIDs, err := parseNameIdListQuery(cfg, r, queryParam, pResType, pLookup)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}

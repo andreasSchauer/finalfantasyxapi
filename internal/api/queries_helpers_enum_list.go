@@ -7,18 +7,21 @@ import (
 )
 
 // checks for emptiness of enum-list-queryParam and converts its input into a slice of valid enum-strings.
-func parseEnumListQuery[E, N any](r *http.Request, endpoint string, queryParam QueryParam, et EnumType[E, N]) ([]E, error) {
+func parseEnumListQuery[E, N any](cfg *Config, r *http.Request, endpoint string, queryParam QueryParam, et EnumType[E, N]) ([]E, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
 	}
 
-	return queryEnumsToSlice(query, endpoint, queryParam, et)
+	return queryEnumsToSlice(cfg, query, endpoint, queryParam, et)
 }
 
 // converts a list of unique query enum values or ids into a slice of valid typed enum-strings.
-func queryEnumsToSlice[E, N any](query, endpoint string, queryParam QueryParam, et EnumType[E, N]) ([]E, error) {
-	enumStrs := querySplit(query, ",")
+func queryEnumsToSlice[E, N any](cfg *Config, query, endpoint string, queryParam QueryParam, et EnumType[E, N]) ([]E, error) {
+	enumStrs, err := queryListSplit(cfg, query)
+	if err != nil {
+		return nil, err
+	}
 	enums := []E{}
 
 	for _, enumStr := range enumStrs {
@@ -38,23 +41,42 @@ func queryEnumsToSlice[E, N any](query, endpoint string, queryParam QueryParam, 
 		enums = append(enums, typedStr)
 	}
 
-	err := checkDuplicateEnums(queryParam, enums)
-	if err != nil {
-		return nil, err
-	}
+	enums = removeDuplicateEnums(enums)
 
 	return enums, nil
 }
 
-func checkDuplicateEnums[E any](queryParam QueryParam, enums []E) error {
+func removeDuplicateEnums[E any](enums []E) []E {
 	enumMap := make(map[any]bool)
+	newEnums := []E{}
 
 	for _, enum := range enums {
 		if enumMap[enum] {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of enum '%v' for parameter '%s'. each enum can only be used once.", enum, queryParam.Name), nil)
+			continue
 		}
 		enumMap[enum] = true
+		newEnums = append(newEnums, enum)
 	}
 
-	return nil
+	return sortEnums(newEnums)
+}
+
+
+func sortEnums[E any](enums []E) []E {
+	slices.SortStableFunc(enums, func(a, b E) int {
+		A := fmt.Sprint(a)
+		B := fmt.Sprint(b)
+
+		if A < B {
+			return -1
+		}
+
+		if B > A {
+			return 1
+		}
+
+		return 0
+	})
+
+	return enums
 }

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"cmp"
 	"fmt"
 	"net/http"
 	"slices"
@@ -8,18 +9,21 @@ import (
 )
 
 // checks for emptiness of int-list-queryParam and converts its input into a slice of valid integers
-func parseIntListQuery(r *http.Request, queryParam QueryParam) ([]int32, error) {
+func parseIntListQuery(cfg *Config, r *http.Request, queryParam QueryParam) ([]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
 	}
 
-	return queryIntsToSlice(query, queryParam)
+	return queryIntsToSlice(cfg, r, query, queryParam)
 }
 
 // converts a list of unique query ints into a slice of valid integers. also deals with ranged inputs.
-func queryIntsToSlice(query string, queryParam QueryParam) ([]int32, error) {
-	intSegments := querySplit(query, ",")
+func queryIntsToSlice(cfg *Config, r *http.Request, query string, queryParam QueryParam) ([]int32, error) {
+	intSegments, err := queryListSplit(cfg, query)
+	if err != nil {
+		return nil, err
+	}
 	ints := []int32{}
 
 	for _, segment := range intSegments {
@@ -28,9 +32,13 @@ func queryIntsToSlice(query string, queryParam QueryParam) ([]int32, error) {
 			return nil, err
 		}
 		ints = slices.Concat(ints, intsNew)
+
+		if len(ints) > cfg.fetchLimit {
+			return nil, newHTTPErrorFetchLimit(cfg.fetchLimit)
+		}
 	}
 
-	err := checkDuplicateInts(queryParam, ints)
+	ints, err = cleanUpIntList(cfg, r, ints)
 	if err != nil {
 		return nil, err
 	}
@@ -70,8 +78,6 @@ func checkQueryIntRange(queryParam QueryParam, segment string) ([]int32, error) 
 
 // converts the two values of a ranged int query input into a slice of integers.
 func intRangeToSlice(queryParam QueryParam, intStrs []string) ([]int32, error) {
-	ints := []int32{}
-
 	minInt, err := checkQueryInt(queryParam, intStrs[0])
 	if err != nil {
 		return nil, err
@@ -82,29 +88,58 @@ func intRangeToSlice(queryParam QueryParam, intStrs []string) ([]int32, error) {
 		return nil, err
 	}
 
-	if minInt > maxInt {
-		temp := minInt
-		minInt = maxInt
-		maxInt = temp
+	ints := sliceFromIntRange(int32(minInt), int32(maxInt))
+
+	return ints, nil
+}
+
+func sliceFromIntRange(min, max int32) []int32 {
+	ints := []int32{}
+
+	if min > max {
+		temp := min
+		min = max
+		max = temp
 	}
 
-	for i := minInt; i <= maxInt; i++ {
+	for i := min; i <= max; i++ {
 		ints = append(ints, int32(i))
+	}
+
+	return ints
+}
+
+func cleanUpIntList(cfg *Config, r *http.Request, ints []int32) ([]int32, error) {
+	ints = removeIntListDuplicates(ints)
+
+	limit, err := getQueryLimit(cfg, r)
+	if err != nil {
+		return nil, err
+	}
+
+	if limit <= len(ints) {
+		return ints[0:limit], nil
 	}
 
 	return ints, nil
 }
 
-// checks, if there are duplicate ints in a slice.
-func checkDuplicateInts(queryParam QueryParam, ints []int32) error {
-	intMap := make(map[int32]bool)
 
-	for _, int := range ints {
-		if intMap[int] {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of value '%d' for parameter '%s'. each value can only be used once.", int, queryParam.Name), nil)
+func removeIntListDuplicates(ints []int32) []int32 {
+	intMap := make(map[int32]bool)
+	newInts := []int32{}
+
+	for _, integer := range ints {
+		if intMap[integer] {
+			continue
 		}
-		intMap[int] = true
+		intMap[integer] = true
+		newInts = append(newInts, integer)
 	}
 
-	return nil
+	slices.SortStableFunc(newInts, func(a, b int32) int {
+		return cmp.Compare(a, b)
+	})
+
+	return newInts
 }

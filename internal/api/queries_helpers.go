@@ -2,6 +2,7 @@ package api
 
 import (
 	"cmp"
+	"net/http"
 	"slices"
 	"strings"
 
@@ -51,4 +52,46 @@ func queryMapToString(lookup map[string]QueryParam) string {
 func querySplit(query, sep string) []string {
 	queryTrimmed := strings.TrimSuffix(query, sep)
 	return strings.Split(queryTrimmed, sep)
+}
+
+func queryListSplit(cfg *Config, query string) ([]string, error) {
+	segments := querySplit(query, ",")
+
+	if len(segments) > cfg.fetchLimit {
+		return nil, newHTTPErrorFetchLimit(cfg.fetchLimit)
+	}
+
+	return segments, nil
+}
+
+func queryIntMapToSlice(m map[string]int32) []int32 {
+	items := []int32{}
+
+	for _, item := range m {
+		items = append(items, item)
+	}
+
+	slices.SortStableFunc(items, func(a, b int32) int {
+		return cmp.Compare(a, b)
+	})
+
+	return items
+}
+
+
+func getQueryLimit(cfg *Config, r *http.Request) (int, error) {
+	queryParamLimit := cfg.q.defaultParams["limit"]
+
+	limit, err := parseIntQuery(r, queryParamLimit)
+	if err != nil {
+		return 0, err
+	}
+	if limit == 0 {
+		limit = *queryParamLimit.DefaultVal
+	}
+	if limit > cfg.fetchLimit {
+		return cfg.fetchLimit, nil
+	}
+
+	return limit, nil
 }

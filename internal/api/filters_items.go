@@ -4,7 +4,7 @@ import "net/http"
 
 
 func getMasterItemsByMethod(cfg *Config, r *http.Request, query string, queryParam QueryParam) ([]int32, error) {
-	return filterByValues(r, cfg.e.allItems, query, queryParam, map[string]DbQueryNoInput{
+	return filterByValues(cfg, r, cfg.e.allItems, query, queryParam, map[string]DbQueryNoInput{
 		"monster": 	cfg.db.GetMasterItemIDsMonster,
 		"treasure": cfg.db.GetMasterItemIDsTreasure,
 		"shop": 	cfg.db.GetMasterItemIDsShop,
@@ -13,7 +13,7 @@ func getMasterItemsByMethod(cfg *Config, r *http.Request, query string, queryPar
 }
 
 func getItemsByMethod(cfg *Config, r *http.Request, query string, queryParam QueryParam) ([]int32, error) {
-	return filterByValues(r, cfg.e.items, query, queryParam, map[string]DbQueryNoInput{
+	return filterByValues(cfg, r, cfg.e.items, query, queryParam, map[string]DbQueryNoInput{
 		"monster": 	cfg.db.GetItemIDsMonster,
 		"treasure": cfg.db.GetItemIDsTreasure,
 		"shop": 	cfg.db.GetItemIDsShop,
@@ -22,7 +22,7 @@ func getItemsByMethod(cfg *Config, r *http.Request, query string, queryParam Que
 }
 
 func getKeyItemsByMethod(cfg *Config, r *http.Request, query string, queryParam QueryParam) ([]int32, error) {
-	return filterByValues(r, cfg.e.keyItems, query, queryParam, map[string]DbQueryNoInput{
+	return filterByValues(cfg, r, cfg.e.keyItems, query, queryParam, map[string]DbQueryNoInput{
 		"treasure": cfg.db.GetKeyItemIDsTreasure,
 		"quest": 	cfg.db.GetKeyItemIDsQuest,
 	})

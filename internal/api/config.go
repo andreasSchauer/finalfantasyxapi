@@ -21,10 +21,12 @@ type Config struct {
 	platform    string
 	adminApiKey string
 	host        string
+	fetchLimit	int
 }
 
 func ConfigInit() (*Config, error) {
 	const domain = "localhost:8080"
+	const fetchLimit = 50
 
 	dbURL := os.Getenv("DB_URL")
 	if dbURL == "" {
@@ -53,6 +55,7 @@ func ConfigInit() (*Config, error) {
 		platform:    platform,
 		adminApiKey: adminApiKey,
 		host:        domain,
+		fetchLimit:  fetchLimit,
 	}
 
 	apiCfg.l, err = seeding.SeedDatabase(apiCfg.db, apiCfg.dbConn)

@@ -37,7 +37,7 @@ func getShopsByAutoAbility(cfg *Config, r *http.Request, id int32) ([]UnnamedAPI
 func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32) ([]int32, error) {
 	i := cfg.e.shops
 
-	emptySlots, err := parseIntListQuery(r, i.queryLookup["empty_slots"])
+	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup["empty_slots"])
 	if errIsNotEmptyQuery(err) {
 		return nil, err
 	}

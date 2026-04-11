@@ -19,8 +19,10 @@ type AvailabilityParams struct {
 }
 
 func getAvailabilityParams[T seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], parentID int32) (AvailabilityParams, error) {
-	availabilities, err := getAvailabilities(cfg, r, i)
-	if err != nil {
+	queryParam := i.queryLookup["rel_availability"]
+
+	availabilities, err := parseEnumListQuery(cfg, r, i.endpoint, queryParam, cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
 		return AvailabilityParams{}, err
 	}
 
@@ -38,43 +40,6 @@ func getAvailabilityParams[T seeding.LookupableID, R any, A APIResource, L APIRe
 	return availabilityParams, nil
 }
 
-func getAvailabilities[T seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]database.AvailabilityType, error) {
-	queryParam := i.queryLookup["rel_availability"]
-	
-	availabilitySlice, err := parseEnumListQuery(r, i.endpoint, queryParam, cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
-		return nil, err
-	}
-
-	valMap := make(map[database.AvailabilityType]bool)
-	var availabilities []database.AvailabilityType
-
-	for _, val := range availabilitySlice {
-		if valMap[val] {
-			continue
-		}
-
-		if val == database.AvailabilityTypePostGame {
-			valMap[database.AvailabilityTypeAlways] = true
-			valMap[database.AvailabilityTypePost] = true
-			continue
-		}
-
-		if val == database.AvailabilityTypeStoryOnly {
-			valMap[database.AvailabilityTypeStory] = true
-			valMap[database.AvailabilityTypePostStory] = true
-			continue
-		}
-
-		valMap[val] = true
-	}
-
-	for val := range valMap {
-		availabilities = append(availabilities, val)
-	}
-
-	return availabilities, nil
-}
 
 func runAvailabilityQuery[T, K seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item K, params AvailabilityParams, dbQuery AvailabilityDbQuery) ([]A, error) {
 	dbIDs, err := dbQuery(r.Context(), params)

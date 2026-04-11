@@ -10,7 +10,7 @@ import (
 func intListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryIntList) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
-	ints, err := parseIntListQuery(r, queryParam)
+	ints, err := parseIntListQuery(cfg, r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}

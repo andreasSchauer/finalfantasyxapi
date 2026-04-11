@@ -11,7 +11,7 @@ import (
 func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryIntList) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
-	queryIDs, err := parseIdListQuery(r, queryParam, maxID)
+	queryIDs, err := parseIdListQuery(cfg, r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}
@@ -33,7 +33,7 @@ func idListQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 func idListQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, []int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
-	queryIDs, err := parseIdListQuery(r, queryParam, maxID)
+	queryIDs, err := parseIdListQuery(cfg, r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}

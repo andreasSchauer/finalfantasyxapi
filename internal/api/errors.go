@@ -58,6 +58,10 @@ func newHTTPErrorDbFilter(resourceType string, queryParam QueryParam, err error)
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", resourceType, queryParam.Name), err)
 }
 
+func newHTTPErrorFetchLimit(fetchLimit int) httpError {
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of inputs is %d.", fetchLimit), nil)
+}
+
 func handleHTTPError(w http.ResponseWriter, err error) bool {
 	if err == nil {
 		return false

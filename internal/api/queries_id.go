@@ -78,7 +78,10 @@ func filterByIdAndValues[T h.HasID, R any, A APIResource, L APIResourceList](cfg
 		return dbQueriesToApiResources(cfg, r, i, id, pResType, dbQueryMap)
 	}
 
-	values := querySplit(query, ",")
+	values, err := queryListSplit(cfg, query)
+	if err != nil {
+		return nil, err
+	}
 	valueMap := make(map[string]bool)
 
 	filteredLists := []filteredResList[A]{}
@@ -87,10 +90,6 @@ func filterByIdAndValues[T h.HasID, R any, A APIResource, L APIResourceList](cfg
 		dbQuery, ok := dbQueryMap[value]
 		if !ok {
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. allowed values: %s.", query, queryParam.Name, h.FormatStringSlice(queryParam.AllowedValues)), nil)
-		}
-
-		if valueMap[value] {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of value '%s' for parameter '%s'. each value can only be used once.", value, queryParam.Name), nil)
 		}
 
 		filteredLists = append(filteredLists, frl(getResourcesDbID(cfg, r, i, id, pResType, dbQuery)))
