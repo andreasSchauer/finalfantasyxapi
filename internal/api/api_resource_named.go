@@ -96,7 +96,7 @@ func namePtrToNamedAPIResPtr[T h.IsNamed, R any, A APIResource, L APIResourceLis
 }
 
 func namesToNamedAPIResources[T h.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], names []string) []NamedAPIResource {
-	resources := []NamedAPIResource{}
+	resources := make([]NamedAPIResource, 0, len(names)) // put this into more high frequency places
 
 	for _, name := range names {
 		resource := nameToNamedAPIResource(cfg, i, name, nil)

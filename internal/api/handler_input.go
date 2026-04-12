@@ -19,10 +19,22 @@ type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 	resToListFunc    func(*Config, *http.Request, []A) (L, error)
 	getSingleFunc    func(*http.Request, handlerInput[T, R, A, L], int32) (R, error)
 	retrieveFunc     func(*http.Request, handlerInput[T, R, A, L]) (L, error)
-	subsections      map[string]SubSectionFns
+	subsections      map[string]Subsection
 }
 
-type SubSectionFns struct {
-	dbQuery     DbQueryIntMany
-	createSubFn func(*Config, *http.Request, int32) (SimpleResource, error)
+type Subsection struct {
+	dbQuery     	DbQueryIntMany
+	createSubFn 	func(*Config, *http.Request, int32) (SimpleResource, error)
+	relationsFn		func(*Config, *http.Request, []int32) (map[int32]map[Relation][]int32, error)
+	relations		map[int32]map[Relation][]int32
 }
+
+
+type Relation string
+
+const (
+	RelationAreas 		Relation = "areas"
+	RelationTreasures	Relation = "treasures"
+	RelationShops		Relation = "shops"
+	RelationMonsters	Relation = "monsters"
+)

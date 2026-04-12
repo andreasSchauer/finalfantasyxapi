@@ -169,6 +169,9 @@ func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 		return
 	}
 
+	// I could wrap this within something bigger and define that in subsections
+	// this is for the simple subsection /endpoint/{id}/simple
+	// could maybe also try if subsection == "simple", since that's clearer
 	if fns.dbQuery == nil {
 		simpleRes, err := fns.createSubFn(cfg, r, parseRes.ID)
 		if handleHTTPError(w, err) {
@@ -232,7 +235,7 @@ func handleSimple[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Confi
 		return
 	}
 
-	resources, err := createSimpleResources(cfg, r, ids, i.subsections[segment].createSubFn)
+	resources, err := createSimpleResources(cfg, r, ids, i.subsections[segment])
 	if handleHTTPError(w, err) {
 		return
 	}

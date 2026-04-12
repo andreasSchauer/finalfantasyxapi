@@ -44,12 +44,12 @@ type endpoints struct {
 	allItems handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]
 	items    handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
 	keyItems handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]
-	spheres	 handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]
+	spheres  handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]
 	primers  handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]
 	mixes    handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]
 
 	autoAbilities    handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]
-	equipmentTables	 handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]
+	equipmentTables  handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]
 	equipment        handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]
 	celestialWeapons handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]
 
@@ -74,7 +74,7 @@ type endpoints struct {
 	itemCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	keyItemCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	lootType                 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	mixCategory				 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	mixCategory              handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	monsterCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	monsterFormationCategory handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	monsterSpecies           handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
@@ -96,7 +96,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetLocationIDs,
 		getSingleFunc: cfg.getLocation,
 		retrieveFunc:  cfg.retrieveLocations,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createLocationSimple,
 			},
@@ -146,7 +146,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetSublocationIDs,
 		getSingleFunc: cfg.getSublocation,
 		retrieveFunc:  cfg.retrieveSublocations,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createSublocationSimple,
 			},
@@ -192,7 +192,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAreaIDs,
 		getSingleFunc: cfg.getArea,
 		retrieveFunc:  cfg.retrieveAreas,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createAreaSimple,
 			},
@@ -230,7 +230,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetMonsterFormationIDs,
 		getSingleFunc: cfg.getMonsterFormation,
 		retrieveFunc:  cfg.retrieveMonsterFormations,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createMonsterFormationSimple,
 			},
@@ -252,7 +252,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetShopIDs,
 		getSingleFunc: cfg.getShop,
 		retrieveFunc:  cfg.retrieveShops,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createShopSimple,
 			},
@@ -296,7 +296,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetSidequestIDs,
 		getSingleFunc: cfg.getSidequest,
 		retrieveFunc:  cfg.retrieveSidequests,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"subquests": {
 				dbQuery:     cfg.db.GetSidequestSubquestIDs,
 				createSubFn: createSubquestSimple,
@@ -393,7 +393,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetCharacterIDs,
 		getSingleFunc: cfg.getCharacter,
 		retrieveFunc:  cfg.retrieveCharacters,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"default-abilities": {
 				dbQuery:     cfg.db.GetCharacterDefaultAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
@@ -428,7 +428,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAeonIDs,
 		getSingleFunc: cfg.getAeon,
 		retrieveFunc:  cfg.retrieveAeons,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"default-abilities": {
 				dbQuery:     cfg.db.GetAeonDefaultAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
@@ -458,7 +458,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetCharacterClassesIDs,
 		getSingleFunc: cfg.getCharacterClass,
 		retrieveFunc:  cfg.retrieveCharacterClasses,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"default-abilities": {
 				dbQuery:     cfg.db.GetCharacterClassDefaultAbilityIDs,
 				createSubFn: createAbilitySimple,
@@ -490,7 +490,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetMonsterIDs,
 		getSingleFunc:    cfg.getMonster,
 		retrieveFunc:     cfg.retrieveMonsters,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createMonsterSimple,
 			},
@@ -520,7 +520,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAbilityIDs,
 		getSingleFunc: cfg.getAbility,
 		retrieveFunc:  cfg.retrieveAbilities,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createAbilitySimple,
 			},
@@ -539,7 +539,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetPlayerAbilityIDs,
 		getSingleFunc:    cfg.getPlayerAbility,
 		retrieveFunc:     cfg.retrievePlayerAbilities,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createPlayerAbilitySimple,
 			},
@@ -562,7 +562,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetOverdriveAbilityIDs,
 		getSingleFunc:    cfg.getOverdriveAbility,
 		retrieveFunc:     cfg.retrieveOverdriveAbilities,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createOverdriveAbilitySimple,
 			},
@@ -580,7 +580,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetItemAbilityIDs,
 		getSingleFunc: cfg.getItemAbility,
 		retrieveFunc:  cfg.retrieveItemAbilities,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createItemAbilitySimple,
 			},
@@ -599,7 +599,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetTriggerCommandIDs,
 		getSingleFunc:    cfg.getTriggerCommand,
 		retrieveFunc:     cfg.retrieveTriggerCommands,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createTriggerCommandSimple,
 			},
@@ -618,7 +618,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetUnspecifiedAbilityIDs,
 		getSingleFunc:    cfg.getUnspecifiedAbility,
 		retrieveFunc:     cfg.retrieveUnspecifiedAbilities,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createUnspecifiedAbilitySimple,
 			},
@@ -637,7 +637,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetEnemyAbilityIDs,
 		getSingleFunc:    cfg.getEnemyAbility,
 		retrieveFunc:     cfg.retrieveEnemyAbilities,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createEnemyAbilitySimple,
 			},
@@ -672,7 +672,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetOverdriveCommandIDs,
 		getSingleFunc: cfg.getOverdriveCommand,
 		retrieveFunc:  cfg.retrieveOverdriveCommands,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"overdrive-abilities": {
 				dbQuery:     cfg.db.GetOverdriveCommandOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
@@ -695,7 +695,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetOverdriveIDs,
 		getSingleFunc: cfg.getOverdrive,
 		retrieveFunc:  cfg.retrieveOverdrives,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createOverdriveSimple,
 			},
@@ -717,7 +717,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetRonsoRageIDs,
 		getSingleFunc: cfg.getRonsoRage,
 		retrieveFunc:  cfg.retrieveRonsoRages,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"monsters": {
 				dbQuery:     cfg.db.GetRonsoRageMonsterIDs,
 				createSubFn: createMonsterSimple,
@@ -736,7 +736,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetSubmenuIDs,
 		getSingleFunc: cfg.getSubmenu,
 		retrieveFunc:  cfg.retrieveSubmenus,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"abilities": {
 				dbQuery:     ToIntManyNull(cfg.db.GetSubmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
@@ -755,7 +755,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetTopmenuIDs,
 		getSingleFunc: cfg.getTopmenu,
 		retrieveFunc:  cfg.retrieveTopmenus,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"abilities": {
 				dbQuery:     ToIntManyNull(cfg.db.GetTopmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
@@ -787,9 +787,9 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetItemIDs,
 		getSingleFunc: cfg.getItem,
 		retrieveFunc:  cfg.retrieveItems,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"mixes": {
-				dbQuery: 	 cfg.db.GetItemMixIDs,
+				dbQuery:     cfg.db.GetItemMixIDs,
 				createSubFn: createMixSimple,
 			},
 		},
@@ -845,7 +845,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetMixIDs,
 		getSingleFunc: cfg.getMix,
 		retrieveFunc:  cfg.retrieveMixes,
-		subsections: map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createMixSimple,
 			},
@@ -863,7 +863,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAutoAbilityIDs,
 		getSingleFunc: cfg.getAutoAbility,
 		retrieveFunc:  cfg.retrieveAutoAbilities,
-		subsections:   map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createAutoAbilitySimple,
 			},
@@ -907,9 +907,9 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetCelestialWeaponIDs,
 		getSingleFunc: cfg.getCelestialWeapon,
 		retrieveFunc:  cfg.retrieveCelestialWeapons,
-		subsections:   map[string]SubSectionFns{
+		subsections: map[string]Subsection{
 			"auto-abilities": {
-				dbQuery: 	 convertGetCelestialWeaponAutoAbilityIDs(cfg),
+				dbQuery:     convertGetCelestialWeaponAutoAbilityIDs(cfg),
 				createSubFn: createAutoAbilitySimple,
 			},
 		},

@@ -161,6 +161,49 @@ func (q *Queries) GetMonsterAreaIDs(ctx context.Context, monsterID int32) ([]int
 	return items, nil
 }
 
+const getMonsterAreaIdPairs = `-- name: GetMonsterAreaIdPairs :many
+SELECT DISTINCT
+  ma.monster_id,
+  a.id AS area_id
+FROM areas a
+JOIN encounter_areas ea ON ea.area_id = a.id
+JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
+JOIN monster_formations mf ON j1.monster_formation_id = mf.id
+JOIN monster_selections ms ON mf.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
+JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
+WHERE ma.monster_id = ANY($1::int[])
+ORDER BY ma.monster_id, a.id
+`
+
+type GetMonsterAreaIdPairsRow struct {
+	MonsterID int32
+	AreaID    int32
+}
+
+func (q *Queries) GetMonsterAreaIdPairs(ctx context.Context, monsterIds []int32) ([]GetMonsterAreaIdPairsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterAreaIdPairs, pq.Array(monsterIds))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonsterAreaIdPairsRow
+	for rows.Next() {
+		var i GetMonsterAreaIdPairsRow
+		if err := rows.Scan(&i.MonsterID, &i.AreaID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterFormationIDs = `-- name: GetMonsterFormationIDs :many
 SELECT id FROM monster_formations ORDER BY id
 `
