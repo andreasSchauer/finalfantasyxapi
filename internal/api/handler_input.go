@@ -21,20 +21,3 @@ type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
 	retrieveFunc     func(*http.Request, handlerInput[T, R, A, L]) (L, error)
 	subsections      map[string]Subsection
 }
-
-type Subsection struct {
-	dbQuery     	DbQueryIntMany
-	createSubFn 	func(*Config, *http.Request, int32) (SimpleResource, error)
-	relationsFn		func(*Config, *http.Request, []int32) (map[int32]map[Relation][]int32, error)
-	relations		map[int32]map[Relation][]int32
-}
-
-
-type Relation string
-
-const (
-	RelationAreas 		Relation = "areas"
-	RelationTreasures	Relation = "treasures"
-	RelationShops		Relation = "shops"
-	RelationMonsters	Relation = "monsters"
-)

@@ -19,33 +19,54 @@ func (l LocationSimple) GetURL() string {
 	return l.URL
 }
 
-func createLocationSimple(cfg *Config, r *http.Request, id int32) (SimpleResource, error) {
+func createLocationSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := cfg.e.locations
 	location, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	monsters, err := convertFromDB(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetLocationMonsterIDs, idToMonsterSimpleString)
-	if err != nil {
-		return LocationSimple{}, err
-	}
-
-	shops, err := convertFromDB(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetLocationShopIDs, idToShopLocSimple)
-	if err != nil {
-		return LocationSimple{}, err
-	}
-
-	treasures, err := getTreasuresLocSimple(cfg, r, i.resourceType, id, cfg.db.GetLocationTreasureIDs)
-	if err != nil {
-		return LocationSimple{}, err
-	}
+	monsterIDs := subsection.relations[id][RelationMonsters]
+	shopIDs := subsection.relations[id][RelationShops]
 
 	locationSimple := LocationSimple{
 		ID:        location.ID,
 		URL:       createResourceURL(cfg, i.endpoint, id),
 		Name:      location.Name,
-		Shops:     shops,
-		Treasures: treasures,
-		Monsters:  monsters,
+		Shops:     convertObjSlice(cfg, shopIDs, idToShopLocSimple),
+		Treasures: getTreasuresLocSimple(cfg, id, subsection),
+		Monsters:  convertObjSlice(cfg, monsterIDs, idToMonsterSimpleString),
 	}
 
 	return locationSimple, nil
+}
+
+
+func getLocationSectionRelations(cfg *Config, r *http.Request, locIDs []int32) (map[int32]map[Relation][]int32, error) {
+	i := cfg.e.locations
+	relations := make(map[int32]map[Relation][]int32)
+
+	treasureJunctions, err := getJunctions(r, locIDs, i.resourceType, cfg.e.treasures.resourceType, cfg.db.GetLocationTreasureIdPairs, juncLocationTreasure)
+	if err != nil {
+		return nil, err
+	}
+	
+	shopJunctions, err := getJunctions(r, locIDs, i.resourceType, cfg.e.shops.resourceType, cfg.db.GetLocationShopIdPairs, juncLocationShop)
+	if err != nil {
+		return nil, err
+	}
+	
+	monsterJunctions, err := getJunctions(r, locIDs, i.resourceType, cfg.e.monsters.resourceType, cfg.db.GetLocationMonsterIdPairs, juncLocationMonster)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, locID := range locIDs {
+		relationMap := make(map[Relation][]int32)
+
+		relationMap[RelationTreasures], treasureJunctions = getJunctionIDs(locID, treasureJunctions)
+		relationMap[RelationShops], shopJunctions = getJunctionIDs(locID, shopJunctions)
+		relationMap[RelationMonsters], monsterJunctions = getJunctionIDs(locID, monsterJunctions)
+
+		relations[locID] = relationMap
+	}
+
+	return relations, nil
 }

@@ -20,7 +20,7 @@ func (s SubquestSimple) GetURL() string {
 }
 
 
-func createSubquestSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+func createSubquestSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.subquests
 	subquest, _ := seeding.GetResourceByID(id, i.objLookupID)
 

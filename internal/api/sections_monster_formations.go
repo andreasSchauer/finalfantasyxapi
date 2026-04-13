@@ -19,7 +19,7 @@ func (m MonsterFormationSimple) GetURL() string {
 	return m.URL
 }
 
-func createMonsterFormationSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+func createMonsterFormationSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.monsterFormations
 	formation, _ := seeding.GetResourceByID(id, i.objLookupID)
 

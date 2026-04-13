@@ -1,10 +1,6 @@
 package api
 
 import (
-	"context"
-	"fmt"
-	"net/http"
-
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
@@ -52,18 +48,15 @@ type TreasuresLocSimple struct {
 	Equipment     []EquipmentSimple  `json:"equipment"`
 }
 
-func getTreasuresLocSimple(cfg *Config, r *http.Request, resourceType string, id int32, dbQuery func(context.Context, int32) ([]int32, error)) (*TreasuresLocSimple, error) {
-	treasureIDs, err := dbQuery(r.Context(), id)
-	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve treasures of %s with id '%d'", resourceType, id), err)
-	}
+func getTreasuresLocSimple(cfg *Config, id int32, subsection Subsection) *TreasuresLocSimple {
+	treasureIDs := subsection.relations[id][RelationTreasures]
 
 	if len(treasureIDs) == 0 {
-		return nil, nil
+		return nil
 	}
 
 	treasures := populateTreasuresLocSimple(cfg, treasureIDs)
-	return &treasures, nil
+	return &treasures
 }
 
 func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSimple {

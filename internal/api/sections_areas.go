@@ -25,24 +25,12 @@ func (a AreaSimple) GetURL() string {
 	return a.URL
 }
 
-func createAreaSimple(cfg *Config, r *http.Request, id int32) (SimpleResource, error) {
+func createAreaSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := cfg.e.areas
 	area, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	monsters, err := convertFromDB(cfg, r, i.resourceType, cfg.e.monsters.resourceType, id, cfg.db.GetAreaMonsterIDs, idToMonsterSimpleString)
-	if err != nil {
-		return AreaSimple{}, err
-	}
-
-	shops, err := convertFromDB(cfg, r, i.resourceType, cfg.e.shops.resourceType, id, cfg.db.GetAreaShopIDs, idToShopLocSimple)
-	if err != nil {
-		return AreaSimple{}, err
-	}
-
-	treasures, err := getTreasuresLocSimple(cfg, r, i.resourceType, id, cfg.db.GetAreaTreasureIDs)
-	if err != nil {
-		return AreaSimple{}, err
-	}
+	monsterIDs := subsection.relations[id][RelationMonsters]
+	shopIDs := subsection.relations[id][RelationShops]
 
 	areaSimple := AreaSimple{
 		ID:                area.ID,
@@ -54,10 +42,42 @@ func createAreaSimple(cfg *Config, r *http.Request, id int32) (SimpleResource, e
 		Specification:     area.Specification,
 		HasSaveSphere:     area.HasSaveSphere,
 		Availability:      area.Availability,
-		Shops:             shops,
-		Treasures:         treasures,
-		Monsters:          monsters,
+		Shops:             convertObjSlice(cfg, shopIDs, idToShopLocSimple),
+		Treasures:         getTreasuresLocSimple(cfg, id, subsection),
+		Monsters:          convertObjSlice(cfg, monsterIDs, idToMonsterSimpleString),
 	}
 
 	return areaSimple, nil
+}
+
+func getAreaSectionRelations(cfg *Config, r *http.Request, areaIDs []int32) (map[int32]map[Relation][]int32, error) {
+	i := cfg.e.areas
+	relations := make(map[int32]map[Relation][]int32)
+
+	treasureJunctions, err := getJunctions(r, areaIDs, i.resourceType, cfg.e.treasures.resourceType, cfg.db.GetAreaTreasureIdPairs, juncAreaTreasure)
+	if err != nil {
+		return nil, err
+	}
+	
+	shopJunctions, err := getJunctions(r, areaIDs, i.resourceType, cfg.e.shops.resourceType, cfg.db.GetAreaShopIdPairs, juncAreaShop)
+	if err != nil {
+		return nil, err
+	}
+	
+	monsterJunctions, err := getJunctions(r, areaIDs, i.resourceType, cfg.e.monsters.resourceType, cfg.db.GetAreaMonsterIdPairs, juncAreaMonster)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, areaID := range areaIDs {
+		relationMap := make(map[Relation][]int32)
+
+		relationMap[RelationTreasures], treasureJunctions = getJunctionIDs(areaID, treasureJunctions)
+		relationMap[RelationShops], shopJunctions = getJunctionIDs(areaID, shopJunctions)
+		relationMap[RelationMonsters], monsterJunctions = getJunctionIDs(areaID, monsterJunctions)
+
+		relations[areaID] = relationMap
+	}
+
+	return relations, nil
 }

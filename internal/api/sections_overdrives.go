@@ -20,7 +20,7 @@ func (o OverdriveSimple) GetURL() string {
 	return o.URL
 }
 
-func createOverdriveSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+func createOverdriveSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.overdrives
 	overdrive, _ := seeding.GetResourceByID(id, i.objLookupID)
 

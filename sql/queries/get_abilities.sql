@@ -1,3 +1,16 @@
+-- name: GetAbilityIdRankPairs :many
+SELECT DISTINCT
+    a.id AS ability_id,
+    aa.rank AS rank
+FROM abilities a
+JOIN overdrive_abilities oa ON oa.ability_id = a.id
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+JOIN overdrives o ON j.overdrive_id = o.id
+JOIN ability_attributes aa ON o.attributes_id = aa.id
+WHERE a.id = ANY(sqlc.arg('ability_ids')::int[])
+ORDER BY a.id, aa.rank;
+
+
 -- name: GetAbilityMonsterIDs :many
 SELECT DISTINCT m.id
 FROM monsters m
@@ -891,6 +904,16 @@ ORDER BY ua.id;
 
 
 
+-- name: GetOverdriveAbilityIdRankPairs :many
+SELECT DISTINCT
+    oa.id AS overdrive_ability_id,
+    aa.rank AS rank
+FROM overdrive_abilities oa
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+JOIN overdrives o ON j.overdrive_id = o.id
+JOIN ability_attributes aa ON o.attributes_id = aa.id
+WHERE oa.id = ANY(sqlc.arg('overdrive_ability_ids')::int[])
+ORDER BY oa.id, aa.rank;
 
 
 -- name: GetOverdriveAbilityAttributes :one

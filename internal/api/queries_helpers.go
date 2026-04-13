@@ -9,8 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
-
 func queryMapToSlice(lookup map[string]QueryParam) []QueryParam {
 	queryParams := []QueryParam{}
 
@@ -78,11 +76,14 @@ func queryIntMapToSlice(m map[string]int32) []int32 {
 	return items
 }
 
-
-func getQueryLimit(cfg *Config, r *http.Request) (int, error) {
+func getRawQueryLimit(cfg *Config, r *http.Request) (int, error) {
 	queryParamLimit := cfg.q.defaultParams["limit"]
+	query, err := checkEmptyQuery(r, queryParamLimit)
+	if err != nil {
+		return 0, err
+	}
 
-	limit, err := parseIntQuery(r, queryParamLimit)
+	limit, err := checkQueryInt(queryParamLimit, query)
 	if err != nil {
 		return 0, err
 	}

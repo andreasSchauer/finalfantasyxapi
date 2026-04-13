@@ -23,7 +23,7 @@ func (s SongSimple) GetURL() string {
 	return s.URL
 }
 
-func createSongSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+func createSongSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.songs
 	song, _ := seeding.GetResourceByID(id, i.objLookupID)
 

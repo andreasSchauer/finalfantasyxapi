@@ -31,15 +31,11 @@ func (m MonsterSimple) GetURL() string {
 	return m.URL
 }
 
-func createMonsterSimple(cfg *Config, r *http.Request, id int32) (SimpleResource, error) {
+func createMonsterSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := cfg.e.monsters
 	mon, _ := seeding.GetResourceByID(id, i.objLookupID)
-	monHP := getMonsterHP(mon)
 
-	areas, err := convertFromDB(cfg, r, i.resourceType, cfg.e.areas.resourceType, id, cfg.db.GetMonsterAreaIDs, idToLocAreaString)
-	if err != nil {
-		return MonsterSimple{}, err
-	}
+	areaIDs := subsection.relations[id][RelationAreas]
 
 	monSimple := MonsterSimple{
 		ID:             mon.ID,
@@ -50,12 +46,12 @@ func createMonsterSimple(cfg *Config, r *http.Request, id int32) (SimpleResource
 		HP:             getMonsterSimpleHP(mon),
 		AP:             getMonsterSimpleAP(mon),
 		Gil:            mon.Gil,
-		MaxBribeAmount: getMonsterSimpleBribeAmount(mon, monHP),
+		MaxBribeAmount: getMonsterSimpleBribeAmount(mon, getMonsterHP(mon)),
 		Availability:   mon.Availability,
 		IsRepeatable:   mon.IsRepeatable,
 		CanBeCaptured:  mon.CanBeCaptured,
 		RonsoRages:     h.SliceOrNil(mon.RonsoRages),
-		Areas:          areas,
+		Areas:          convertObjSlice(cfg, areaIDs, idToLocAreaString),
 		Items:          convertObjPtr(cfg, mon.Items, convertMonsterItemsSimple),
 		Equipment:      convertObjPtr(cfg, mon.Equipment, convertMonsterEquipmentSimple),
 	}
@@ -89,4 +85,25 @@ func getMonsterSimpleBribeAmount(mon seeding.Monster, hp int32) *int32 {
 
 	bribeAmount := hp * 25
 	return &bribeAmount
+}
+
+
+func getMonsterSectionRelations(cfg *Config, r *http.Request, monIDs []int32) (map[int32]map[Relation][]int32, error) {
+	i := cfg.e.monsters
+	relations := make(map[int32]map[Relation][]int32)
+
+	monsterJunctions, err := getJunctions(r, monIDs, i.resourceType, cfg.e.areas.resourceType, cfg.db.GetMonsterAreaIdPairs, juncMonsterArea)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, monID := range monIDs {
+		relationMap := make(map[Relation][]int32)
+
+		relationMap[RelationMonsters], monsterJunctions = getJunctionIDs(monID, monsterJunctions)
+
+		relations[monID] = relationMap
+	}
+
+	return relations, nil
 }

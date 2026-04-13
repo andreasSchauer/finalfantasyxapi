@@ -2,6 +2,7 @@ package api
 
 import (
 	"cmp"
+	"errors"
 	"fmt"
 	"net/http"
 	"slices"
@@ -112,7 +113,10 @@ func sliceFromIntRange(min, max int32) []int32 {
 func cleanUpIntList(cfg *Config, r *http.Request, ints []int32) ([]int32, error) {
 	ints = removeIntListDuplicates(ints)
 
-	limit, err := getQueryLimit(cfg, r)
+	limit, err := getRawQueryLimit(cfg, r)
+	if errors.Is(err, errEmptyQuery) {
+		return ints, nil
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +127,6 @@ func cleanUpIntList(cfg *Config, r *http.Request, ints []int32) ([]int32, error)
 
 	return ints, nil
 }
-
 
 func removeIntListDuplicates(ints []int32) []int32 {
 	intMap := make(map[int32]bool)

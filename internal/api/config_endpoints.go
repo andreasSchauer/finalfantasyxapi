@@ -99,18 +99,22 @@ func (cfg *Config) EndpointsInit() {
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createLocationSimple,
+				relationsFn: getLocationSectionRelations,
 			},
 			"connected": {
 				dbQuery:     cfg.db.GetConnectedLocationIDs,
 				createSubFn: createLocationSimple,
+				relationsFn: getLocationSectionRelations,
 			},
 			"sublocations": {
 				dbQuery:     cfg.db.GetLocationSublocationIDs,
 				createSubFn: createSublocationSimple,
+				relationsFn: getSublocationSectionRelations,
 			},
 			"areas": {
 				dbQuery:     cfg.db.GetLocationAreaIDs,
 				createSubFn: createAreaSimple,
+				relationsFn: getAreaSectionRelations,
 			},
 			"monster-formations": {
 				dbQuery:     cfg.db.GetLocationMonsterFormationIDs,
@@ -119,6 +123,7 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:     cfg.db.GetLocationMonsterIDs,
 				createSubFn: createMonsterSimple,
+				relationsFn: getMonsterSectionRelations,
 			},
 			"shops": {
 				dbQuery:     cfg.db.GetLocationShopIDs,
@@ -149,10 +154,12 @@ func (cfg *Config) EndpointsInit() {
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createSublocationSimple,
+				relationsFn: getSublocationSectionRelations,
 			},
 			"connected": {
 				dbQuery:     cfg.db.GetConnectedSublocationIDs,
 				createSubFn: createSublocationSimple,
+				relationsFn: getSublocationSectionRelations,
 			},
 			"areas": {
 				dbQuery:     cfg.db.GetSublocationAreaIDs,
@@ -165,6 +172,7 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:     cfg.db.GetSublocationMonsterIDs,
 				createSubFn: createMonsterSimple,
+				relationsFn: getMonsterSectionRelations,
 			},
 			"shops": {
 				dbQuery:     cfg.db.GetSublocationShopIDs,
@@ -195,10 +203,12 @@ func (cfg *Config) EndpointsInit() {
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createAreaSimple,
+				relationsFn: getAreaSectionRelations,
 			},
 			"connected": {
 				dbQuery:     cfg.db.GetAreaConnectionIDs,
 				createSubFn: createAreaSimple,
+				relationsFn: getAreaSectionRelations,
 			},
 			"monster-formations": {
 				dbQuery:     cfg.db.GetAreaMonsterFormationIDs,
@@ -207,6 +217,7 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:     cfg.db.GetAreaMonsterIDs,
 				createSubFn: createMonsterSimple,
+				relationsFn: getMonsterSectionRelations,
 			},
 			"songs": {
 				dbQuery:     cfg.getAreaSongIDs,
@@ -237,6 +248,7 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:     cfg.db.GetMonsterFormationMonsterIDs,
 				createSubFn: createMonsterSimple,
+				relationsFn: getMonsterSectionRelations,
 			},
 		},
 	}
@@ -409,6 +421,7 @@ func (cfg *Config) EndpointsInit() {
 			"overdrive-abilities": {
 				dbQuery:     cfg.db.GetCharacterOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
+				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 			"overdrives": {
 				dbQuery:     cfg.db.GetCharacterOverdriveIDs,
@@ -436,6 +449,7 @@ func (cfg *Config) EndpointsInit() {
 			"overdrive-abilities": {
 				dbQuery:     cfg.db.GetAeonOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
+				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 			"overdrives": {
 				dbQuery:     cfg.db.GetAeonOverdriveIDs,
@@ -462,10 +476,12 @@ func (cfg *Config) EndpointsInit() {
 			"default-abilities": {
 				dbQuery:     cfg.db.GetCharacterClassDefaultAbilityIDs,
 				createSubFn: createAbilitySimple,
+				relationsFn: getAbilitySectionRelations,
 			},
 			"learnable-abilities": {
 				dbQuery:     cfg.db.GetCharacterClassLearnableAbilityIDs,
 				createSubFn: createAbilitySimple,
+				relationsFn: getAbilitySectionRelations,
 			},
 			"default-overdrives": {
 				dbQuery:     cfg.db.GetCharacterClassDefaultOverdriveIDs,
@@ -493,14 +509,17 @@ func (cfg *Config) EndpointsInit() {
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createMonsterSimple,
+				relationsFn: getMonsterSectionRelations,
 			},
 			"abilities": {
 				dbQuery:     cfg.db.GetMonsterAbilityIDs,
 				createSubFn: createAbilitySimple,
+				relationsFn: getAbilitySectionRelations,
 			},
 			"areas": {
 				dbQuery:     cfg.db.GetMonsterAreaIDs,
 				createSubFn: createAreaSimple,
+				relationsFn: getAreaSectionRelations,
 			},
 			"monster-formations": {
 				dbQuery:     cfg.db.GetMonsterMonsterFormationIDs,
@@ -523,6 +542,7 @@ func (cfg *Config) EndpointsInit() {
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createAbilitySimple,
+				relationsFn: getAbilitySectionRelations,
 			},
 		},
 	}
@@ -546,6 +566,7 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:     cfg.db.GetPlayerAbilityMonsterIDs,
 				createSubFn: createMonsterSimple,
+				relationsFn: getMonsterSectionRelations,
 			},
 		},
 	}
@@ -565,6 +586,7 @@ func (cfg *Config) EndpointsInit() {
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createOverdriveAbilitySimple,
+				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 		},
 	}
@@ -644,6 +666,7 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:     cfg.db.GetEnemyAbilityMonsterIDs,
 				createSubFn: createMonsterSimple,
+				relationsFn: getMonsterSectionRelations,
 			},
 		},
 	}
@@ -676,6 +699,7 @@ func (cfg *Config) EndpointsInit() {
 			"overdrive-abilities": {
 				dbQuery:     cfg.db.GetOverdriveCommandOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
+				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 			"overdrives": {
 				dbQuery:     cfg.db.GetOverdriveCommandOverdriveIDs,
@@ -702,6 +726,7 @@ func (cfg *Config) EndpointsInit() {
 			"overdrive-abilities": {
 				dbQuery:     cfg.db.GetOverdriveOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
+				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 		},
 	}
@@ -721,6 +746,7 @@ func (cfg *Config) EndpointsInit() {
 			"monsters": {
 				dbQuery:     cfg.db.GetRonsoRageMonsterIDs,
 				createSubFn: createMonsterSimple,
+				relationsFn: getMonsterSectionRelations,
 			},
 		},
 	}
@@ -740,6 +766,7 @@ func (cfg *Config) EndpointsInit() {
 			"abilities": {
 				dbQuery:     ToIntManyNull(cfg.db.GetSubmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
+				relationsFn: getAbilitySectionRelations,
 			},
 		},
 	}
@@ -759,6 +786,7 @@ func (cfg *Config) EndpointsInit() {
 			"abilities": {
 				dbQuery:     ToIntManyNull(cfg.db.GetTopmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
+				relationsFn: getAbilitySectionRelations,
 			},
 		},
 	}

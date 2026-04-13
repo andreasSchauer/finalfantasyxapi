@@ -23,7 +23,7 @@ func (t TreasureSimple) GetURL() string {
 	return t.URL
 }
 
-func createTreasureSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+func createTreasureSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.treasures
 	treasure, _ := seeding.GetResourceByID(id, i.objLookupID)
 

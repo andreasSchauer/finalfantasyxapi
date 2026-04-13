@@ -68,7 +68,7 @@ func newStatTable(cfg *Config, baseStats []seeding.BaseStat) StatTable {
 	}
 }
 
-func createAeonStatSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+func createAeonStatSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.aeons
 	aeon, _ := seeding.GetResourceByID(id, cfg.l.AeonsID)
 

@@ -1,11 +1,9 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -42,21 +40,15 @@ func (a PlayerAbilitySimple) GetURL() string {
 	return a.URL
 }
 
-func createAbilitySimple(cfg *Config, r *http.Request, id int32) (SimpleResource, error) {
+func createAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := cfg.e.abilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 	typeStr := string(ability.Type)
-	var rank *int32
+	rank := ability.Rank
 
 	if ability.Type == database.AbilityTypeOverdriveAbility {
-		attributes, err := cfg.db.GetOverdriveAbilityAttributes(r.Context(), id)
-		if err != nil {
-			var zeroType SimpleResource
-			return zeroType, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get attributes for %s", ability), err)
-		}
-		rank = h.NullInt32ToPtr(attributes.Rank)
-	} else {
-		rank = ability.Rank
+		fetchedRank := subsection.relations[id][RelationRanks][0]
+		rank = &fetchedRank
 	}
 
 	abilitySimple := AbilitySimple{
@@ -73,8 +65,28 @@ func createAbilitySimple(cfg *Config, r *http.Request, id int32) (SimpleResource
 	return abilitySimple, nil
 }
 
+func getAbilitySectionRelations(cfg *Config, r *http.Request, abilityIDs []int32) (map[int32]map[Relation][]int32, error) {
+	i := cfg.e.abilities
+	relations := make(map[int32]map[Relation][]int32)
 
-func createEnemyAbilitySimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+	abilityJunctions, err := getJunctions(r, abilityIDs, i.resourceType, "rank", cfg.db.GetAbilityIdRankPairs, juncAbilityRank)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, abilityID := range abilityIDs {
+		relationMap := make(map[Relation][]int32)
+
+		relationMap[RelationRanks], abilityJunctions = getJunctionIDs(abilityID, abilityJunctions)
+
+		relations[abilityID] = relationMap
+	}
+
+	return relations, nil
+}
+
+
+func createEnemyAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.enemyAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
@@ -92,7 +104,7 @@ func createEnemyAbilitySimple(cfg *Config, _ *http.Request, id int32) (SimpleRes
 }
 
 
-func createItemAbilitySimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+func createItemAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.itemAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
@@ -110,15 +122,11 @@ func createItemAbilitySimple(cfg *Config, _ *http.Request, id int32) (SimpleReso
 }
 
 
-func createOverdriveAbilitySimple(cfg *Config, r *http.Request, id int32) (SimpleResource, error) {
+func createOverdriveAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := cfg.e.overdriveAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	attributes, err := cfg.db.GetOverdriveAbilityAttributes(r.Context(), ability.Ability.ID)
-	if err != nil {
-		var zeroType SimpleResource
-		return zeroType, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get attributes for %s", ability), err)
-	}
+	rank := subsection.relations[id][RelationRanks][0]
 
 	abilitySimple := AbilitySimple{
 		ID: 				ability.ID,
@@ -126,15 +134,35 @@ func createOverdriveAbilitySimple(cfg *Config, r *http.Request, id int32) (Simpl
 		Name: 				ability.Name,
 		Version: 			ability.Version,
 		Specification: 		ability.Specification,
-		Rank: 				h.NullInt32ToPtr(attributes.Rank),
+		Rank: 				&rank,
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
 }
 
+func getOverdriveAbilitySectionRelations(cfg *Config, r *http.Request, abilityIDs []int32) (map[int32]map[Relation][]int32, error) {
+	i := cfg.e.overdriveAbilities
+	relations := make(map[int32]map[Relation][]int32)
 
-func createPlayerAbilitySimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+	abilityJunctions, err := getJunctions(r, abilityIDs, i.resourceType, "rank", cfg.db.GetOverdriveAbilityIdRankPairs, juncOverdriveAbilityRank)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, abilityID := range abilityIDs {
+		relationMap := make(map[Relation][]int32)
+
+		relationMap[RelationRanks], abilityJunctions = getJunctionIDs(abilityID, abilityJunctions)
+
+		relations[abilityID] = relationMap
+	}
+
+	return relations, nil
+}
+
+
+func createPlayerAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.playerAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
@@ -153,7 +181,7 @@ func createPlayerAbilitySimple(cfg *Config, _ *http.Request, id int32) (SimpleRe
 }
 
 
-func createTriggerCommandSimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+func createTriggerCommandSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.triggerCommands
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
@@ -171,7 +199,7 @@ func createTriggerCommandSimple(cfg *Config, _ *http.Request, id int32) (SimpleR
 }
 
 
-func createUnspecifiedAbilitySimple(cfg *Config, _ *http.Request, id int32) (SimpleResource, error) {
+func createUnspecifiedAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.unspecifiedAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 

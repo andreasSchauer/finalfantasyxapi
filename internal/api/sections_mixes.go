@@ -22,7 +22,7 @@ func (m MixSimple) GetURL() string {
 	return m.URL
 }
 
-func createMixSimple(cfg *Config, r *http.Request, id int32) (SimpleResource, error) {
+func createMixSimple(cfg *Config, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.mixes
 	mix, _ := seeding.GetResourceByID(id, i.objLookupID)
 	combinations := mix.PossibleCombinations

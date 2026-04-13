@@ -785,6 +785,47 @@ func (q *Queries) GetAbilityIDsWithStatChanges(ctx context.Context) ([]int32, er
 	return items, nil
 }
 
+const getAbilityIdRankPairs = `-- name: GetAbilityIdRankPairs :many
+SELECT DISTINCT
+    a.id AS ability_id,
+    aa.rank AS rank
+FROM abilities a
+JOIN overdrive_abilities oa ON oa.ability_id = a.id
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+JOIN overdrives o ON j.overdrive_id = o.id
+JOIN ability_attributes aa ON o.attributes_id = aa.id
+WHERE a.id = ANY($1::int[])
+ORDER BY a.id, aa.rank
+`
+
+type GetAbilityIdRankPairsRow struct {
+	AbilityID int32
+	Rank      sql.NullInt32
+}
+
+func (q *Queries) GetAbilityIdRankPairs(ctx context.Context, abilityIds []int32) ([]GetAbilityIdRankPairsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIdRankPairs, pq.Array(abilityIds))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAbilityIdRankPairsRow
+	for rows.Next() {
+		var i GetAbilityIdRankPairsRow
+		if err := rows.Scan(&i.AbilityID, &i.Rank); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAbilityMonsterIDs = `-- name: GetAbilityMonsterIDs :many
 SELECT DISTINCT m.id
 FROM monsters m
@@ -2568,6 +2609,46 @@ func (q *Queries) GetOverdriveAbilityIDsWithStatChanges(ctx context.Context) ([]
 			return nil, err
 		}
 		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOverdriveAbilityIdRankPairs = `-- name: GetOverdriveAbilityIdRankPairs :many
+SELECT DISTINCT
+    oa.id AS overdrive_ability_id,
+    aa.rank AS rank
+FROM overdrive_abilities oa
+JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+JOIN overdrives o ON j.overdrive_id = o.id
+JOIN ability_attributes aa ON o.attributes_id = aa.id
+WHERE oa.id = ANY($1::int[])
+ORDER BY oa.id, aa.rank
+`
+
+type GetOverdriveAbilityIdRankPairsRow struct {
+	OverdriveAbilityID int32
+	Rank               sql.NullInt32
+}
+
+func (q *Queries) GetOverdriveAbilityIdRankPairs(ctx context.Context, overdriveAbilityIds []int32) ([]GetOverdriveAbilityIdRankPairsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveAbilityIdRankPairs, pq.Array(overdriveAbilityIds))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetOverdriveAbilityIdRankPairsRow
+	for rows.Next() {
+		var i GetOverdriveAbilityIdRankPairsRow
+		if err := rows.Scan(&i.OverdriveAbilityID, &i.Rank); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

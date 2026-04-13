@@ -156,24 +156,31 @@ func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceLi
 
 func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	idStr := segments[0]
-	subsection := segments[1]
+	sectionName := segments[1]
 
 	parseRes, err := parseID(idStr, i.resourceType, len(i.objLookup))
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	fns, ok := i.subsections[subsection]
+	subsection, ok := i.subsections[sectionName]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s.", subsection, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s.", sectionName, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
 		return
 	}
 
-	// I could wrap this within something bigger and define that in subsections
 	// this is for the simple subsection /endpoint/{id}/simple
-	// could maybe also try if subsection == "simple", since that's clearer
-	if fns.dbQuery == nil {
-		simpleRes, err := fns.createSubFn(cfg, r, parseRes.ID)
+	// used to be 'if subsection.dbQuery == nil', so if something breaks, just use that again
+	if sectionName == "simple" {
+		if subsection.relationsFn != nil {
+			var err error
+			subsection.relations, err = subsection.relationsFn(cfg, r, []int32{parseRes.ID})
+			if handleHTTPError(w, err) {
+				return
+			}
+		}
+
+		simpleRes, err := subsection.createSubFn(cfg, r, parseRes.ID, subsection)
 		if handleHTTPError(w, err) {
 			return
 		}
@@ -181,7 +188,7 @@ func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 		return
 	}
 
-	list, err := newSimpleResourceList(cfg, r, i, parseRes.ID, subsection, fns)
+	list, err := newSimpleResourceList(cfg, r, i, parseRes.ID, sectionName, subsection)
 	if handleHTTPError(w, err) {
 		return
 	}
