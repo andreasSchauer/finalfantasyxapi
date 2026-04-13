@@ -18,7 +18,7 @@ type MonsterSimple struct {
 	AP             string                  `json:"ap"`
 	Gil            int32                   `json:"gil"`
 	MaxBribeAmount *int32                  `json:"max_bribe_amount,omitempty"`
-	Availability   string			  	   `json:"availability"`
+	Availability   string                  `json:"availability"`
 	IsRepeatable   bool                    `json:"is_repeatable"`
 	CanBeCaptured  bool                    `json:"can_be_captured"`
 	RonsoRages     []string                `json:"ronso_rages,omitempty"`
@@ -87,12 +87,11 @@ func getMonsterSimpleBribeAmount(mon seeding.Monster, hp int32) *int32 {
 	return &bribeAmount
 }
 
-
 func getMonsterSectionRelations(cfg *Config, r *http.Request, monIDs []int32) (map[int32]map[Relation][]int32, error) {
 	i := cfg.e.monsters
 	relations := make(map[int32]map[Relation][]int32)
 
-	monsterJunctions, err := getJunctions(r, monIDs, i.resourceType, cfg.e.areas.resourceType, cfg.db.GetMonsterAreaIdPairs, juncMonsterArea)
+	monsterJunctions, err := getDbJunctions(r, monIDs, i.resourceType, cfg.e.areas.resourceType, cfg.db.GetMonsterAreaIdPairs, juncMonsterArea)
 	if err != nil {
 		return nil, err
 	}

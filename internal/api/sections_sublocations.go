@@ -44,17 +44,17 @@ func getSublocationSectionRelations(cfg *Config, r *http.Request, subLocIDs []in
 	i := cfg.e.sublocations
 	relations := make(map[int32]map[Relation][]int32)
 
-	treasureJunctions, err := getJunctions(r, subLocIDs, i.resourceType, cfg.e.treasures.resourceType, cfg.db.GetSublocationTreasureIdPairs, juncSublocationTreasure)
+	treasureJunctions, err := getDbJunctions(r, subLocIDs, i.resourceType, cfg.e.treasures.resourceType, cfg.db.GetSublocationTreasureIdPairs, juncSublocationTreasure)
 	if err != nil {
 		return nil, err
 	}
-	
-	shopJunctions, err := getJunctions(r, subLocIDs, i.resourceType, cfg.e.shops.resourceType, cfg.db.GetSublocationShopIdPairs, juncSublocationShop)
+
+	shopJunctions, err := getDbJunctions(r, subLocIDs, i.resourceType, cfg.e.shops.resourceType, cfg.db.GetSublocationShopIdPairs, juncSublocationShop)
 	if err != nil {
 		return nil, err
 	}
-	
-	monsterJunctions, err := getJunctions(r, subLocIDs, i.resourceType, cfg.e.monsters.resourceType, cfg.db.GetSublocationMonsterIdPairs, juncSublocationMonster)
+
+	monsterJunctions, err := getDbJunctions(r, subLocIDs, i.resourceType, cfg.e.monsters.resourceType, cfg.db.GetSublocationMonsterIdPairs, juncSublocationMonster)
 	if err != nil {
 		return nil, err
 	}
