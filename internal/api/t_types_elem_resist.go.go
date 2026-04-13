@@ -7,7 +7,7 @@ type testElemResist struct {
 
 func compareElemResists(test test, fieldName string, exp testElemResist, got ElementalResist) {
 	elemEndpoint := test.cfg.e.elements.endpoint
-	affinityEndpoint := test.cfg.e.affinities.endpoint
+	affinityEndpoint := test.cfg.e.elementalAffinity.endpoint
 
 	compIdApiResource(test, fieldName+" - elements", elemEndpoint, exp.element, got.Element)
 	compIdApiResource(test, fieldName+" - affinities", affinityEndpoint, exp.affinity, got.Affinity)

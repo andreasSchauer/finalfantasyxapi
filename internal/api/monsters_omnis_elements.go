@@ -5,16 +5,17 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName string) ([]ElementalResist, error) {
 	circlesAffinity := map[int]string{
-		0: "neutral",
-		1: "halved",
-		2: "immune",
-		3: "absorb",
-		4: "absorb",
+		0: string(database.ElementalAffinityNeutral),
+		1: string(database.ElementalAffinityHalved),
+		2: string(database.ElementalAffinityImmune),
+		3: string(database.ElementalAffinityAbsorb),
+		4: string(database.ElementalAffinityAbsorb),
 	}
 
 	circleCounts, err := parseOmnisQuery(cfg, r, queryName)
@@ -37,14 +38,14 @@ func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName str
 		if err != nil {
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element '%s'.", elementName), err)
 		}
-		oppositeElementName := *elementLookup.OppositeElement
+		oppositeElementName := *elementLookup.OppositeElement // safe, because holy continues
 
 		circleCount := circleCounts[elementName]
 		circleCountOpposite := circleCounts[oppositeElementName]
 
 		// if the opposite element has 4 circles, seymour omnis is weak to this element
 		if circleCountOpposite == 4 {
-			mon.ElemResists[i] = newElemResist(cfg, elementName, "weak")
+			mon.ElemResists[i] = newElemResist(cfg, elementName, string(database.ElementalAffinityWeak))
 			continue
 		}
 

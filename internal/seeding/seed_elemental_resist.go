@@ -11,7 +11,6 @@ import (
 type ElementalResist struct {
 	ID         int32
 	ElementID  int32
-	AffinityID int32
 	Element    string `json:"name"`
 	Affinity   string `json:"affinity"`
 }
@@ -19,14 +18,14 @@ type ElementalResist struct {
 func (er ElementalResist) ToHashFields() []any {
 	return []any{
 		er.ElementID,
-		er.AffinityID,
+		er.Affinity,
 	}
 }
 
 func (er ElementalResist) ToKeyFields() []any {
 	return []any{
 		er.ElementID,
-		er.AffinityID,
+		er.Affinity,
 	}
 }
 
@@ -46,15 +45,10 @@ func (l *Lookup) seedElementalResist(qtx *database.Queries, elemResist Elemental
 		return ElementalResist{}, h.NewErr(elemResist.Error(), err)
 	}
 
-	elemResist.AffinityID, err = assignFK(elemResist.Affinity, l.Affinities)
-	if err != nil {
-		return ElementalResist{}, h.NewErr(elemResist.Error(), err)
-	}
-
 	dbElemResist, err := qtx.CreateElementalResist(context.Background(), database.CreateElementalResistParams{
 		DataHash:   generateDataHash(elemResist),
 		ElementID:  elemResist.ElementID,
-		AffinityID: elemResist.AffinityID,
+		Affinity: 	database.ElementalAffinity(elemResist.Affinity),
 	})
 	if err != nil {
 		return ElementalResist{}, h.NewErr(elemResist.Error(), err, "couldn't create elemental resist")

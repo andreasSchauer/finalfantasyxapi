@@ -15,9 +15,9 @@ func (cfg *Config) getQuest(r *http.Request, i handlerInput[seeding.Quest, Quest
 	response := Quest{
 		ID:           quest.ID,
 		Name:         quest.Name,
-		Type:         newNamedAPIResourceFromEnum(cfg, cfg.e.questType.endpoint, string(quest.Type), cfg.t.QuestType),
+		Type:         enumToNamedAPIResource(cfg, cfg.e.questType.endpoint, string(quest.Type), cfg.t.QuestType),
 		TypedQuest:   questToQuestAPIResource(cfg, quest),
-		Availability: newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, quest.Availability, cfg.t.AvailabilityType),
+		Availability: enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, quest.Availability, cfg.t.AvailabilityType),
 		IsRepeatable: quest.IsRepeatable,
 		Completion:   convertObjPtr(cfg, quest.Completion, convertQuestCompletion),
 	}

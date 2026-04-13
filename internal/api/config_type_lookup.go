@@ -26,6 +26,7 @@ type TypeLookup struct {
 	QuestType                   EnumType[database.QuestType, any]
 
 	AaActivationCondition		EnumType[database.AaActivationCondition, any]
+	ElementalAffinity			EnumType[database.ElementalAffinity, any]
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
@@ -90,6 +91,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initCounterType()
 	cfg.t.initCTBIconType()
 	cfg.t.initCreationArea()
+	cfg.t.initElementalAffinity()
 	cfg.t.initEquipClass()
 	cfg.t.initEquipType()
 	cfg.t.initItemCategory()
@@ -625,6 +627,42 @@ func (t *TypeLookup) initCreationArea() {
 		convFunc:     func(s string) database.MaCreationArea { return database.MaCreationArea(s) },
 		nullConvFunc: h.NullMaCreationArea,
 		getNullEnum:  h.GetNullMaCreationArea,
+	}
+}
+
+func (t *TypeLookup) initElementalAffinity() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.ElementalAffinityNeutral),
+			Description: "The element doesn't affect the damage the target takes.",
+		},
+		{
+			Name:        string(database.ElementalAffinityWeak),
+			Description: "The damage the target takes from attacks bearing this element is multiplied by 1.5.",
+		},
+		{
+			Name:        string(database.ElementalAffinityHalved),
+			Description: "The damage the target takes from attacks bearing this element is halved.",
+		},
+		{
+			Name:        string(database.ElementalAffinityImmune),
+			Description: "The target takes 0 damage from attacks bearing this element.",
+		},
+		{
+			Name:        string(database.ElementalAffinityAbsorb),
+			Description: "Instead of taking damage, the target is healed by the same amount, if it is hit by an attack bearing this element.",
+		},
+		{
+			Name:        string(database.ElementalAffinityVaries),
+			Description: "The target's relationship to this element is not fixed and is dependent on other factors.",
+		},
+	}
+
+	t.ElementalAffinity = EnumType[database.ElementalAffinity, any]{
+		name:         "elemental affinity",
+		isEndpoint:   true,
+		lookup:       enumSliceToMap(typeSlice),
+		convFunc:     func(s string) database.ElementalAffinity { return database.ElementalAffinity(s) },
 	}
 }
 

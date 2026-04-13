@@ -126,11 +126,6 @@ func (l *Lookup) getSeeders() []seeder {
 			relFunc:  l.seedElementsRelationships,
 		},
 		{
-			name:     "affinities",
-			seedFunc: l.seedAffinities,
-			relFunc:  nil,
-		},
-		{
 			name:     "agility tiers",
 			seedFunc: l.seedAgilityTiers,
 			relFunc:  nil,

@@ -33,15 +33,8 @@ SET data_hash = $1,
 WHERE id = $3;
 
 
--- name: CreateAffinity :one
-INSERT INTO affinities (data_hash, name, damage_factor)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = affinities.data_hash
-RETURNING *;
-
-
 -- name: CreateElementalResist :one
-INSERT INTO elemental_resists (data_hash, element_id, affinity_id)
+INSERT INTO elemental_resists (data_hash, element_id, affinity)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = elemental_resists.data_hash
 RETURNING *;

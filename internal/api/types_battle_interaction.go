@@ -91,10 +91,10 @@ type AbilityDamage struct {
 func convertAbilityDamage(cfg *Config, ad seeding.AbilityDamage) AbilityDamage {
 	return AbilityDamage{
 		Condition:      ad.Condition,
-		AttackType:     newNamedAPIResourceFromEnum(cfg, cfg.e.attackType.endpoint, ad.AttackType, cfg.t.AttackType),
+		AttackType:     enumToNamedAPIResource(cfg, cfg.e.attackType.endpoint, ad.AttackType, cfg.t.AttackType),
 		TargetStat:     nameToNamedAPIResource(cfg, cfg.e.stats, ad.TargetStat, nil),
-		DamageType:     newNamedAPIResourceFromEnum(cfg, cfg.e.damageType.endpoint, ad.DamageType, cfg.t.DamageType),
-		DamageFormula:  newNamedAPIResourceFromEnum(cfg, cfg.e.damageFormula.endpoint, ad.DamageFormula, cfg.t.DamageFormula),
+		DamageType:     enumToNamedAPIResource(cfg, cfg.e.damageType.endpoint, ad.DamageType, cfg.t.DamageType),
+		DamageFormula:  enumToNamedAPIResource(cfg, cfg.e.damageFormula.endpoint, ad.DamageFormula, cfg.t.DamageFormula),
 		DamageConstant: ad.DamageConstant,
 	}
 }

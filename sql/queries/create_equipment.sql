@@ -77,7 +77,7 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateEquipmentTable :one
-INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, empty_slots_amt)
+INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, required_slots)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_tables.data_hash
 RETURNING *;

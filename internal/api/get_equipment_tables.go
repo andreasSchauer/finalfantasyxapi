@@ -14,15 +14,15 @@ func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seeding.Equ
 	}
 
 	response := EquipmentTable{
-		ID:                       	table.ID,
-		Type: 						table.Type,
-		Classification: 			table.Classification,
-		SpecificCharacter: 			namePtrToNamedAPIResPtr(cfg, cfg.e.characters, table.SpecificCharacter, nil),
-		Priority: 					table.Priority,
-		RequiredAutoAbilities: 		namesToNamedAPIResources(cfg, cfg.e.autoAbilities, table.RequiredAutoAbilities),
-		SelectableAutoAbilities: 	convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool),
-		EmptySlotsAmt: 				table.EmptySlotsAmt,
-		Equipment: 					convertObjSlice(cfg, table.EquipmentNames, convertEquipmentName),
+		ID:                      table.ID,
+		Type:                    table.Type,
+		Classification:          table.Classification,
+		SpecificCharacter:       namePtrToNamedAPIResPtr(cfg, cfg.e.characters, table.SpecificCharacter, nil),
+		Priority:                table.Priority,
+		RequiredAutoAbilities:   namesToNamedAPIResources(cfg, cfg.e.autoAbilities, table.RequiredAutoAbilities),
+		SelectableAutoAbilities: convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool),
+		RequiredSlots:           table.RequiredSlots,
+		Equipment:               convertObjSlice(cfg, table.EquipmentNames, convertEquipmentName),
 	}
 
 	if table.SpecificCharacter != nil && table.Classification == string(database.EquipClassCelestialWeapon) {

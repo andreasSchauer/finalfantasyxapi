@@ -293,10 +293,10 @@ func (q *Queries) CreateEquipmentName(ctx context.Context, arg CreateEquipmentNa
 }
 
 const createEquipmentTable = `-- name: CreateEquipmentTable :one
-INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, empty_slots_amt)
+INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, required_slots)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_tables.data_hash
-RETURNING id, data_hash, type, classification, specific_character_id, version, priority, empty_slots_amt
+RETURNING id, data_hash, type, classification, specific_character_id, version, priority, required_slots
 `
 
 type CreateEquipmentTableParams struct {
@@ -306,7 +306,7 @@ type CreateEquipmentTableParams struct {
 	SpecificCharacterID sql.NullInt32
 	Version             sql.NullInt32
 	Priority            sql.NullInt32
-	EmptySlotsAmt       interface{}
+	RequiredSlots       interface{}
 }
 
 func (q *Queries) CreateEquipmentTable(ctx context.Context, arg CreateEquipmentTableParams) (EquipmentTable, error) {
@@ -317,7 +317,7 @@ func (q *Queries) CreateEquipmentTable(ctx context.Context, arg CreateEquipmentT
 		arg.SpecificCharacterID,
 		arg.Version,
 		arg.Priority,
-		arg.EmptySlotsAmt,
+		arg.RequiredSlots,
 	)
 	var i EquipmentTable
 	err := row.Scan(
@@ -328,7 +328,7 @@ func (q *Queries) CreateEquipmentTable(ctx context.Context, arg CreateEquipmentT
 		&i.SpecificCharacterID,
 		&i.Version,
 		&i.Priority,
-		&i.EmptySlotsAmt,
+		&i.RequiredSlots,
 	)
 	return i, err
 }

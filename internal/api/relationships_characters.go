@@ -36,7 +36,7 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 		return Character{}, err
 	}
 
-	character := Character{
+	rel := Character{
 		CelestialWeapon:        celestialWeapon,
 		OverdriveCommand:       overdriveCommand,
 		CharacterClasses:       characterClasses,
@@ -46,7 +46,7 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 		OverdriveModes:         getForeignSliceResAmts(cfg, cfg.e.overdriveModes, char, char.IsStoryBased, getCharModeAmount),
 	}
 
-	return character, nil
+	return rel, nil
 }
 
 

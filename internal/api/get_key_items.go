@@ -21,7 +21,7 @@ func (cfg *Config) getKeyItem(r *http.Request, i handlerInput[seeding.KeyItem, K
 		ID:              keyItem.ID,
 		Name:            keyItem.Name,
 		UntypedItem:     idToTypedAPIResource(cfg, cfg.e.allItems, keyItem.MasterItem.ID),
-		Category:        newNamedAPIResourceFromEnum(cfg, cfg.e.keyItemCategory.endpoint, keyItem.Category, cfg.t.KeyItemCategory),
+		Category:        enumToNamedAPIResource(cfg, cfg.e.keyItemCategory.endpoint, keyItem.Category, cfg.t.KeyItemCategory),
 		Description:     keyItem.Description,
 		Effect:          keyItem.Effect,
 		Primer:          rel.Primer,

@@ -19,7 +19,7 @@ type EquipmentTable struct {
 	Priority                *int32          `json:"priority"`
 	RequiredAutoAbilities   []string        `json:"required_auto_abilities"`
 	SelectableAutoAbilities []AbilityPool   `json:"selectable_auto_abilities"`
-	EmptySlotsAmt           int32           `json:"empty_slots_amount"`
+	RequiredSlots           *int32           `json:"required_slots"`
 	EquipmentNames          []EquipmentName `json:"names"`
 }
 
@@ -30,7 +30,7 @@ func (e EquipmentTable) ToHashFields() []any {
 		h.DerefOrNil(e.SpecificCharacterID),
 		h.DerefOrNil(e.Version),
 		h.DerefOrNil(e.Priority),
-		e.EmptySlotsAmt,
+		h.DerefOrNil(e.RequiredSlots),
 	}
 }
 
@@ -161,7 +161,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 				SpecificCharacterID: h.GetNullInt32(table.SpecificCharacterID),
 				Version:             h.GetNullInt32(table.Version),
 				Priority:            h.GetNullInt32(table.Priority),
-				EmptySlotsAmt:       table.EmptySlotsAmt,
+				RequiredSlots:       table.RequiredSlots,
 			})
 			if err != nil {
 				return h.NewErr(table.Error(), err, "couldn't create equipment table")

@@ -92,6 +92,7 @@ type QueryLookup struct {
 	equipment			map[string]QueryParam
 	celestialWeapons	map[string]QueryParam
 
+	elements		map[string]QueryParam
 	overdriveModes 	map[string]QueryParam
 }
 
@@ -179,6 +180,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initEquipmentParams(defaultParams)
 	cfg.initCelestialWeaponsParams(defaultParams)
 
+	cfg.q.elements = cfg.assignDefaultParams(defaultParams)
 	cfg.initOverdriveModesParams(defaultParams)
 
 }

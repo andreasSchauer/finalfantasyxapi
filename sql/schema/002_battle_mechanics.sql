@@ -11,6 +11,9 @@ CREATE TYPE modifier_type AS ENUM ('dynamic-value', 'factor', 'fixed-value', 'pe
 CREATE TYPE status_condition_category AS ENUM ('negative', 'positive', 'other');
 
 
+CREATE TYPE elemental_affinity AS ENUM ('neutral', 'weak', 'halved', 'immune', 'absorb', 'varies');
+
+
 CREATE TABLE stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -37,19 +40,11 @@ CREATE TABLE elements (
 );
 
 
-CREATE TABLE affinities (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    name TEXT NOT NULL,
-    damage_factor REAL
-);
-
-
 CREATE TABLE elemental_resists (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     element_id INTEGER NOT NULL REFERENCES elements(id),
-    affinity_id INTEGER NOT NULL REFERENCES affinities(id)
+    affinity elemental_affinity NOT NULL
 );
 
 
@@ -138,10 +133,10 @@ DROP TABLE IF EXISTS overdrive_modes;
 DROP TABLE IF EXISTS agility_subtiers;
 DROP TABLE IF EXISTS agility_tiers;
 DROP TABLE IF EXISTS elemental_resists;
-DROP TABLE IF EXISTS affinities;
 DROP TABLE IF EXISTS elements;
 DROP TABLE IF EXISTS base_stats;
 DROP TABLE IF EXISTS stats;
+DROP TYPE IF EXISTS elemental_affinity;
 DROP TYPE IF EXISTS status_condition_category;
 DROP TYPE IF EXISTS modifier_type;
 DROP TYPE IF EXISTS nullify_armored;

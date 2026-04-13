@@ -3,14 +3,14 @@ package api
 type expEquipment struct {
 	testGeneral
 	expUnique
-	equipmentTable			int32
-	priority				*int32
-	celestialWeapon			*int32
-	requiredAutoAbilities	[]int32
-	selectableAutoAbilities	[]testAbilityPool
-	emptySlotsAmt			int32
-	treasures				[]int32
-	shops					[]int32
+	equipmentTable          int32
+	priority                *int32
+	celestialWeapon         *int32
+	requiredAutoAbilities   []int32
+	selectableAutoAbilities []testAbilityPool
+	requiredSlots           *int32
+	treasures               []int32
+	shops                   []int32
 }
 
 func (e expEquipment) GetTestGeneral() testGeneral {
@@ -24,7 +24,7 @@ func compareEquipment(test test, exp expEquipment, got EquipmentName) {
 	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.e.celestialWeapons.endpoint, exp.celestialWeapon, got.CelestialWeapon)
 	checkResIDsInSlice(test, "required auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.requiredAutoAbilities, got.RequiredAutoAbilities)
 	compTestStructSlices(test, "selectable auto-abilities", exp.selectableAutoAbilities, got.SelectableAutoAbilities, compareAbilityPools)
-	compare(test, "empty slots amount", exp.emptySlotsAmt, got.EmptySlotsAmt)
+	compare(test, "required slots", exp.requiredSlots, got.RequiredSlots)
 	checkResIDsInSlice(test, "treasures", test.cfg.e.treasures.endpoint, exp.treasures, got.Treasures)
 	checkResIDsInSlice(test, "shops", test.cfg.e.shops.endpoint, exp.shops, got.Shops)
 }

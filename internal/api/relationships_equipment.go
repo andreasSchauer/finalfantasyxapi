@@ -8,11 +8,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.EquipmentName) (EquipmentName, error) {
 	i := cfg.e.equipment
-	
+
 	availabilityParams, err := getAvailabilityParams(cfg, r, i, equipment.ID)
 	if err != nil {
 		return EquipmentName{}, err
@@ -35,16 +33,16 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 	table, _ := seeding.GetResourceByID(tableRef.ID, cfg.l.EquipmentTablesID)
 
 	rel := EquipmentName{
-		Character: 					nameToNamedAPIResource(cfg, cfg.e.characters, equipment.CharacterName, nil),
-		EquipmentTable: 			tableRef,
-		Type: 						table.Type,
-		Classification: 			table.Classification,
-		Priority: 					table.Priority,
-		RequiredAutoAbilities: 		namesToNamedAPIResources(cfg, cfg.e.autoAbilities, table.RequiredAutoAbilities),
-		SelectableAutoAbilities: 	convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool),
-		EmptySlotsAmt: 				table.EmptySlotsAmt,
-		Treasures: 					treasures,
-		Shops: 						shops,
+		Character:               nameToNamedAPIResource(cfg, cfg.e.characters, equipment.CharacterName, nil),
+		EquipmentTable:          tableRef,
+		Type:                    table.Type,
+		Classification:          table.Classification,
+		Priority:                table.Priority,
+		RequiredAutoAbilities:   namesToNamedAPIResources(cfg, cfg.e.autoAbilities, table.RequiredAutoAbilities),
+		SelectableAutoAbilities: convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool),
+		RequiredSlots:           table.RequiredSlots,
+		Treasures:               treasures,
+		Shops:                   shops,
 	}
 
 	if table.Classification == string(database.EquipClassCelestialWeapon) {
@@ -58,7 +56,6 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 
 	return rel, nil
 }
-
 
 func getEquipmentTableRef(cfg *Config, r *http.Request, queryParam QueryParam, equipment seeding.EquipmentName) (UnnamedAPIResource, error) {
 	tables, err := getResourcesDbItem(cfg, r, cfg.e.equipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
@@ -74,7 +71,6 @@ func getEquipmentTableRef(cfg *Config, r *http.Request, queryParam QueryParam, e
 
 	return tableRef, nil
 }
-
 
 func getTableIndex(r *http.Request, queryParam QueryParam, maxID int) (int, error) {
 	tableIdx, err := parseIntQuery(r, queryParam)

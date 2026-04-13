@@ -34,8 +34,8 @@ func (bs BaseStat) GetVal() int32 {
 
 func (bs BaseStat) ToResAmount() ResourceAmount[NamedAPIResource] {
 	return ResourceAmount[NamedAPIResource]{
-		Resource: 	bs.Stat,
-		Amount: 	bs.Value,
+		Resource: bs.Stat,
+		Amount:   bs.Value,
 	}
 }
 
@@ -57,9 +57,6 @@ func replaceBaseStats(baseStats []BaseStat, statMap map[string]int32) []BaseStat
 	return baseStats
 }
 
-
-
-
 type ElementalResist struct {
 	Element  NamedAPIResource `json:"element"`
 	Affinity NamedAPIResource `json:"affinity"`
@@ -72,14 +69,14 @@ func (er ElementalResist) GetAPIResource() APIResource {
 func convertElemResist(cfg *Config, er seeding.ElementalResist) ElementalResist {
 	return ElementalResist{
 		Element:  nameToNamedAPIResource(cfg, cfg.e.elements, er.Element, nil),
-		Affinity: nameToNamedAPIResource(cfg, cfg.e.affinities, er.Affinity, nil),
+		Affinity: enumToNamedAPIResource(cfg, cfg.e.elementalAffinity.endpoint, er.Affinity, cfg.t.ElementalAffinity),
 	}
 }
 
 func newElemResist(cfg *Config, element, affinity string) ElementalResist {
 	return ElementalResist{
 		Element:  nameToNamedAPIResource(cfg, cfg.e.elements, element, nil),
-		Affinity: nameToNamedAPIResource(cfg, cfg.e.affinities, affinity, nil),
+		Affinity: enumToNamedAPIResource(cfg, cfg.e.elementalAffinity.endpoint, affinity, cfg.t.ElementalAffinity),
 	}
 }
 
@@ -94,9 +91,6 @@ func namesToElemResists(cfg *Config, resists []seeding.ElementalResist) []Elemen
 	return elemResists
 }
 
-
-
-
 type StatusResist struct {
 	StatusCondition NamedAPIResource `json:"status_condition"`
 	Resistance      int32            `json:"resistance"`
@@ -109,7 +103,7 @@ func (sr StatusResist) GetAPIResource() APIResource {
 func convertStatusResist(cfg *Config, sr seeding.StatusResist) StatusResist {
 	return StatusResist{
 		StatusCondition: nameToNamedAPIResource(cfg, cfg.e.statusConditions, sr.StatusCondition, nil),
-		Resistance: sr.Resistance,
+		Resistance:      sr.Resistance,
 	}
 }
 
@@ -134,7 +128,7 @@ func (sr StatusResist) GetVal() int32 {
 
 func (sr StatusResist) ToResAmount() ResourceAmount[NamedAPIResource] {
 	return ResourceAmount[NamedAPIResource]{
-		Resource: 	sr.StatusCondition,
-		Amount: 	sr.Resistance,
+		Resource: sr.StatusCondition,
+		Amount:   sr.Resistance,
 	}
 }

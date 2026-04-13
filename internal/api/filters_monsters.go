@@ -33,12 +33,12 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 	elemMap := make(map[int32]bool)
 
 	for _, pair := range eaPairs {
-		element, affinity, found := strings.Cut(pair, "=")
+		elementStr, affinityStr, found := strings.Cut(pair, "=")
 		if !found {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, element, queryParam.Usage), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
-		elementID, err := checkQueryNameID(element, cfg.e.elements.resourceType, queryParam, cfg.l.Elements)
+		elementID, err := checkQueryNameID(elementStr, cfg.e.elements.resourceType, queryParam, cfg.l.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -47,14 +47,14 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 		}
 		elemMap[elementID] = true
 
-		affinityID, err := checkQueryNameID(affinity, cfg.e.affinities.resourceType, queryParam, cfg.l.Affinities)
+		affinity, err := checkQueryEnum(affinityStr, cfg.e.elementalAffinity.endpoint, queryParam, cfg.t.ElementalAffinity)
 		if err != nil {
 			return nil, err
 		}
 
 		elemResist := seeding.ElementalResist{
 			ElementID:  elementID,
-			AffinityID: affinityID,
+			Affinity: 	affinity.Name,
 		}
 
 		elemResistLookup, err := seeding.GetResource(elemResist, cfg.l.ElementalResists)

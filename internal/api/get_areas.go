@@ -30,7 +30,7 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, A
 		DisplayName:       getAreaDisplayName(area),
 		ParentLocation:    nameToNamedAPIResource(cfg, cfg.e.locations, area.Sublocation.Location.Name, nil),
 		ParentSublocation: nameToNamedAPIResource(cfg, cfg.e.sublocations, area.Sublocation.Name, nil),
-		Availability:      newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, area.Availability, cfg.t.AvailabilityType),
+		Availability:      enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, area.Availability, cfg.t.AvailabilityType),
 		HasSaveSphere:     area.HasSaveSphere,
 		AirshipDropOff:    area.AirshipDropOff,
 		HasCompSphere:     area.HasCompilationSphere,

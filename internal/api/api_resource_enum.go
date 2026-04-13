@@ -59,7 +59,7 @@ func (r EnumAPIResource) GetKey() string {
 	return r.Name
 }
 
-func newNamedAPIResourceFromEnum[E, N any](cfg *Config, endpoint, key string, et EnumType[E, N]) NamedAPIResource {
+func enumToNamedAPIResource[E, N any](cfg *Config, endpoint, key string, et EnumType[E, N]) NamedAPIResource {
 	enumRes, _ := GetEnumAPIResource(key, et)
 
 	resource := newNamedAPIResourceSimple(cfg, endpoint, enumRes.ID, enumRes.Name)

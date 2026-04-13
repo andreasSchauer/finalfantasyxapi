@@ -18,24 +18,23 @@ func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.Equipmen
 	}
 
 	response := EquipmentName{
-		ID:                     	equipment.ID,
-		Name:                   	equipment.Name,
-		Character: 					rel.Character,
-		EquipmentTable: 			rel.EquipmentTable,
-		Type: 						rel.Type,
-		Classification: 			rel.Classification,
-		Priority: 					rel.Priority,
-		CelestialWeapon: 			rel.CelestialWeapon,
-		RequiredAutoAbilities: 		rel.RequiredAutoAbilities,
-		SelectableAutoAbilities: 	rel.SelectableAutoAbilities,
-		EmptySlotsAmt: 				rel.EmptySlotsAmt,
-		Treasures: 					rel.Treasures,
-		Shops: 						rel.Shops,
+		ID:                      equipment.ID,
+		Name:                    equipment.Name,
+		Character:               rel.Character,
+		EquipmentTable:          rel.EquipmentTable,
+		Type:                    rel.Type,
+		Classification:          rel.Classification,
+		Priority:                rel.Priority,
+		CelestialWeapon:         rel.CelestialWeapon,
+		RequiredAutoAbilities:   rel.RequiredAutoAbilities,
+		SelectableAutoAbilities: rel.SelectableAutoAbilities,
+		RequiredSlots:           rel.RequiredSlots,
+		Treasures:               rel.Treasures,
+		Shops:                   rel.Shops,
 	}
 
 	return response, nil
 }
-
 
 func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

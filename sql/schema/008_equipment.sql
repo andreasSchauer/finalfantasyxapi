@@ -51,7 +51,7 @@ CREATE TABLE equipment_tables (
     specific_character_id INTEGER REFERENCES characters(id),
     version INTEGER,
     priority INTEGER,
-    empty_slots_amt equipment_slots NOT NULL,
+    required_slots equipment_slots,
     UNIQUE(type, classification, specific_character_id, version, priority)
 );
 

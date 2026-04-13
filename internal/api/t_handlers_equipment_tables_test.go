@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"testing"
+
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -21,18 +22,18 @@ func TestGetEquipmentTable(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"required auto-abilities":     	4,
-					"selectable auto-abilities":	0,
-					"equipment":            		1,
+					"required auto-abilities":   4,
+					"selectable auto-abilities": 0,
+					"equipment":                 1,
 				},
 			},
-			expIdOnly:   newExpIdOnly(2),
-			celestialWeapon: 		 h.GetInt32Ptr(2),
-			specificCharacter: 		 h.GetInt32Ptr(2),
-			requiredAutoAbilities: 	 []int32{51, 49, 44, 43},
+			expIdOnly:               newExpIdOnly(2),
+			celestialWeapon:         h.GetInt32Ptr(2),
+			specificCharacter:       h.GetInt32Ptr(2),
+			requiredAutoAbilities:   []int32{51, 49, 44, 43},
 			selectableAutoAbilities: []testAbilityPool{},
-			emptySlotsAmt: 			 0,
-			equipment: 				 []int32{2},
+			requiredSlots:           nil,
+			equipment:               []int32{2},
 		},
 		{
 			testGeneral: testGeneral{
@@ -40,18 +41,18 @@ func TestGetEquipmentTable(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"required auto-abilities":     	1,
-					"selectable auto-abilities":	0,
-					"equipment":            		7,
+					"required auto-abilities":   1,
+					"selectable auto-abilities": 0,
+					"equipment":                 7,
 				},
 			},
-			expIdOnly:   newExpIdOnly(20),
-			celestialWeapon: 		 nil,
-			specificCharacter: 		 nil,
-			requiredAutoAbilities: 	 []int32{45},
+			expIdOnly:               newExpIdOnly(20),
+			celestialWeapon:         nil,
+			specificCharacter:       nil,
+			requiredAutoAbilities:   []int32{45},
 			selectableAutoAbilities: []testAbilityPool{},
-			emptySlotsAmt: 			 0,
-			equipment: 				 []int32{65, 66, 67, 68, 69, 70, 71},
+			requiredSlots:           nil,
+			equipment:               []int32{65, 66, 67, 68, 69, 70, 71},
 		},
 		{
 			testGeneral: testGeneral{
@@ -59,31 +60,31 @@ func TestGetEquipmentTable(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"required auto-abilities":     	0,
-					"selectable auto-abilities":	2,
+					"required auto-abilities":                      0,
+					"selectable auto-abilities":                    2,
 					"selectable auto-abilities 0 - auto-abilities": 4,
 					"selectable auto-abilities 1 - auto-abilities": 4,
-					"equipment":            		7,
+					"equipment": 7,
 				},
 			},
-			expIdOnly:   newExpIdOnly(145),
-			celestialWeapon: 		 nil,
-			specificCharacter: 		 nil,
-			requiredAutoAbilities: 	 []int32{},
+			expIdOnly:             newExpIdOnly(145),
+			celestialWeapon:       nil,
+			specificCharacter:     nil,
+			requiredAutoAbilities: []int32{},
 			selectableAutoAbilities: []testAbilityPool{
 				{
-					index:   		0,
-					autoAbilities:	[]int32{114, 113, 112, 111},
-					reqAmount:   	1,
+					index:         0,
+					autoAbilities: []int32{114, 113, 112, 111},
+					reqAmount:     1,
 				},
 				{
-					index:   		1,
-					autoAbilities:	[]int32{118, 117, 116, 115},
-					reqAmount:   	1,
+					index:         1,
+					autoAbilities: []int32{118, 117, 116, 115},
+					reqAmount:     1,
 				},
 			},
-			emptySlotsAmt: 			 0,
-			equipment: 				 []int32{929, 930, 931, 932, 933, 934, 935},
+			requiredSlots: nil,
+			equipment:     []int32{929, 930, 931, 932, 933, 934, 935},
 		},
 	}
 

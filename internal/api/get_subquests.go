@@ -17,7 +17,7 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 		Name:            subquest.Name,
 		UntypedQuest:    idToQuestAPIResource(cfg, cfg.e.quests, subquest.Quest.ID),
 		ParentSidequest: idToQuestAPIResource(cfg, cfg.e.sidequests, subquest.SidequestID),
-		Availability:    newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, subquest.Availability, cfg.t.AvailabilityType),
+		Availability:    enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, subquest.Availability, cfg.t.AvailabilityType),
 		IsRepeatable:    subquest.IsRepeatable,
 		Completion:      convertQuestCompletion(cfg, *subquest.Completion),
 	}

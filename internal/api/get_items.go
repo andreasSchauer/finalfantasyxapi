@@ -27,7 +27,7 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 		ID:                 item.ID,
 		Name:               item.Name,
 		UntypedItem:        idToTypedAPIResource(cfg, cfg.e.allItems, item.MasterItem.ID),
-		Category:           newNamedAPIResourceFromEnum(cfg, cfg.e.itemCategory.endpoint, item.Category, cfg.t.ItemCategory),
+		Category:           enumToNamedAPIResource(cfg, cfg.e.itemCategory.endpoint, item.Category, cfg.t.ItemCategory),
 		Description:        item.Description,
 		SgDescription:      item.SphereGridDescription,
 		Effect:             item.Effect,

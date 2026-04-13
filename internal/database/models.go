@@ -1249,6 +1249,52 @@ func (ns NullDurationType) Value() (driver.Value, error) {
 	return string(ns.DurationType), nil
 }
 
+type ElementalAffinity string
+
+const (
+	ElementalAffinityNeutral ElementalAffinity = "neutral"
+	ElementalAffinityWeak    ElementalAffinity = "weak"
+	ElementalAffinityHalved  ElementalAffinity = "halved"
+	ElementalAffinityImmune  ElementalAffinity = "immune"
+	ElementalAffinityAbsorb  ElementalAffinity = "absorb"
+	ElementalAffinityVaries  ElementalAffinity = "varies"
+)
+
+func (e *ElementalAffinity) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ElementalAffinity(s)
+	case string:
+		*e = ElementalAffinity(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ElementalAffinity: %T", src)
+	}
+	return nil
+}
+
+type NullElementalAffinity struct {
+	ElementalAffinity ElementalAffinity
+	Valid             bool // Valid is true if ElementalAffinity is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullElementalAffinity) Scan(value interface{}) error {
+	if value == nil {
+		ns.ElementalAffinity, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ElementalAffinity.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullElementalAffinity) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ElementalAffinity), nil
+}
+
 type EquipClass string
 
 const (
@@ -2965,13 +3011,6 @@ type AeonEquipment struct {
 	EquipType     EquipType
 }
 
-type Affinity struct {
-	ID           int32
-	DataHash     string
-	Name         string
-	DamageFactor sql.NullFloat64
-}
-
 type AgilitySubtier struct {
 	ID                int32
 	DataHash          string
@@ -3182,10 +3221,10 @@ type Element struct {
 }
 
 type ElementalResist struct {
-	ID         int32
-	DataHash   string
-	ElementID  int32
-	AffinityID int32
+	ID        int32
+	DataHash  string
+	ElementID int32
+	Affinity  interface{}
 }
 
 type EncounterArea struct {
@@ -3233,7 +3272,7 @@ type EquipmentTable struct {
 	SpecificCharacterID sql.NullInt32
 	Version             sql.NullInt32
 	Priority            sql.NullInt32
-	EmptySlotsAmt       interface{}
+	RequiredSlots       interface{}
 }
 
 type Fmv struct {

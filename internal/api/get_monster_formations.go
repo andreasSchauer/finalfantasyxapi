@@ -15,7 +15,7 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 	response := MonsterFormation{
 		ID:              formation.ID,
 		Category:        formation.FormationData.Category,
-		Availability:    newNamedAPIResourceFromEnum(cfg, cfg.e.availabilityType.endpoint, formation.FormationData.Availability, cfg.t.AvailabilityType),
+		Availability:    enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, formation.FormationData.Availability, cfg.t.AvailabilityType),
 		IsForcedAmbush:  formation.FormationData.IsForcedAmbush,
 		CanEscape:       formation.FormationData.CanEscape,
 		Notes:           formation.FormationData.Notes,

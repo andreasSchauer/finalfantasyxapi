@@ -73,6 +73,7 @@ func main() {
 	mux.HandleFunc("GET /api/equipment/", apiCfg.HandleEquipment)
 	mux.HandleFunc("GET /api/celestial-weapons/", apiCfg.HandleCelestialWeapons)
 
+	mux.HandleFunc("GET /api/elements/", apiCfg.HandleElements)
 	mux.HandleFunc("GET /api/overdrive-modes/", apiCfg.HandleOverdriveModes)
 
 	srv := &http.Server{

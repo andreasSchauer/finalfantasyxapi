@@ -16,7 +16,7 @@ func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, U
 		ID:          shop.ID,
 		Area:        idToAreaAPIResource(cfg, cfg.e.areas, shop.AreaID),
 		Notes:       shop.Notes,
-		Category:    newNamedAPIResourceFromEnum(cfg, cfg.e.shopCategory.endpoint, shop.Category, cfg.t.ShopCategory),
+		Category:    enumToNamedAPIResource(cfg, cfg.e.shopCategory.endpoint, shop.Category, cfg.t.ShopCategory),
 		PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShop),
 		PostAirship: convertObjPtr(cfg, shop.PostAirship, convertSubShop),
 	}

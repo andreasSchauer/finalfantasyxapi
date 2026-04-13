@@ -10,31 +10,6 @@ import (
 	"database/sql"
 )
 
-const createAffinity = `-- name: CreateAffinity :one
-INSERT INTO affinities (data_hash, name, damage_factor)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = affinities.data_hash
-RETURNING id, data_hash, name, damage_factor
-`
-
-type CreateAffinityParams struct {
-	DataHash     string
-	Name         string
-	DamageFactor sql.NullFloat64
-}
-
-func (q *Queries) CreateAffinity(ctx context.Context, arg CreateAffinityParams) (Affinity, error) {
-	row := q.db.QueryRowContext(ctx, createAffinity, arg.DataHash, arg.Name, arg.DamageFactor)
-	var i Affinity
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.DamageFactor,
-	)
-	return i, err
-}
-
 const createAgilitySubtier = `-- name: CreateAgilitySubtier :exec
 INSERT INTO agility_subtiers (data_hash, agility_tier_id, subtier_min_agility, subtier_max_agility, character_min_icv)
 VALUES ($1, $2, $3, $4, $5)
@@ -151,26 +126,26 @@ func (q *Queries) CreateElement(ctx context.Context, arg CreateElementParams) (E
 }
 
 const createElementalResist = `-- name: CreateElementalResist :one
-INSERT INTO elemental_resists (data_hash, element_id, affinity_id)
+INSERT INTO elemental_resists (data_hash, element_id, affinity)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = elemental_resists.data_hash
-RETURNING id, data_hash, element_id, affinity_id
+RETURNING id, data_hash, element_id, affinity
 `
 
 type CreateElementalResistParams struct {
-	DataHash   string
-	ElementID  int32
-	AffinityID int32
+	DataHash  string
+	ElementID int32
+	Affinity  interface{}
 }
 
 func (q *Queries) CreateElementalResist(ctx context.Context, arg CreateElementalResistParams) (ElementalResist, error) {
-	row := q.db.QueryRowContext(ctx, createElementalResist, arg.DataHash, arg.ElementID, arg.AffinityID)
+	row := q.db.QueryRowContext(ctx, createElementalResist, arg.DataHash, arg.ElementID, arg.Affinity)
 	var i ElementalResist
 	err := row.Scan(
 		&i.ID,
 		&i.DataHash,
 		&i.ElementID,
-		&i.AffinityID,
+		&i.Affinity,
 	)
 	return i, err
 }

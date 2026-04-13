@@ -19,9 +19,9 @@ func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterI
 	}
 
 	response := MasterItem{
-		ID:        		masterItem.ID,
-		Name:      		masterItem.Name,
-		Type:      		newNamedAPIResourceFromEnum(cfg, cfg.e.itemType.endpoint, string(masterItem.Type), cfg.t.ItemType),
+		ID:             masterItem.ID,
+		Name:           masterItem.Name,
+		Type:           enumToNamedAPIResource(cfg, cfg.e.itemType.endpoint, string(masterItem.Type), cfg.t.ItemType),
 		ObtainableFrom: obtainable,
 	}
 

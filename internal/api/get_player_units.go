@@ -27,7 +27,7 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerU
 		response = PlayerUnit{
 			ID:               unit.ID,
 			Name:             unit.Name,
-			Type:             newNamedAPIResourceFromEnum(cfg, cfg.e.unitType.endpoint, string(unit.Type), cfg.t.UnitType),
+			Type:             enumToNamedAPIResource(cfg, cfg.e.unitType.endpoint, string(unit.Type), cfg.t.UnitType),
 			TypedUnit:        nameToNamedAPIResource(cfg, cfg.e.characters, unit.Name, nil),
 			Area:             locAreaToAreaAPIResource(cfg, cfg.e.areas, character.LocationArea),
 			CelestialWeapon:  rel.CelestialWeapon,
@@ -45,7 +45,7 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerU
 		response = PlayerUnit{
 			ID:               unit.ID,
 			Name:             unit.Name,
-			Type:             newNamedAPIResourceFromEnum(cfg, cfg.e.unitType.endpoint, string(unit.Type), cfg.t.UnitType),
+			Type:             enumToNamedAPIResource(cfg, cfg.e.unitType.endpoint, string(unit.Type), cfg.t.UnitType),
 			TypedUnit:        nameToNamedAPIResource(cfg, cfg.e.aeons, unit.Name, nil),
 			Area:             locAreaToAreaAPIResource(cfg, cfg.e.areas, aeon.LocationArea),
 			CelestialWeapon:  rel.CelestialWeapon,

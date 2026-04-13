@@ -56,8 +56,7 @@ type endpoints struct {
 	stats            handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
 	properties       handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]
 	overdriveModes   handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
-	elements         handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]
-	affinities       handlerInput[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList]
+	elements         handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]
 	statusConditions handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
 	modifiers        handlerInput[seeding.Modifier, any, NamedAPIResource, NamedApiResourceList]
 
@@ -71,6 +70,7 @@ type endpoints struct {
 	availabilityType         handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageFormula            handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	damageType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	elementalAffinity        handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	itemCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	keyItemCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	lootType                 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
@@ -974,22 +974,17 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveOverdriveModes,
 	}
 
-	e.elements = handlerInput[seeding.Element, any, NamedAPIResource, NamedApiResourceList]{
+	e.elements = handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "elements",
 		resourceType:  "element",
 		objLookup:     cfg.l.Elements,
 		objLookupID:   cfg.l.ElementsID,
-		idToResFunc:   idToNamedAPIResource[seeding.Element, any, NamedAPIResource, NamedApiResourceList],
+		queryLookup:   cfg.q.elements,
+		idToResFunc:   idToNamedAPIResource[seeding.Element, Element, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
-	}
-
-	e.affinities = handlerInput[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      "affinities",
-		resourceType:  "affinity",
-		objLookup:     cfg.l.Affinities,
-		objLookupID:   cfg.l.AffinitiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.Affinity, any, NamedAPIResource, NamedApiResourceList],
-		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetElementIDs,
+		getSingleFunc: cfg.getElement,
+		retrieveFunc:  cfg.retrieveElements,
 	}
 
 	e.statusConditions = handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]{
@@ -1070,6 +1065,13 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:      "damage-type",
 		resourceType:  "damage type",
 		objLookup:     cfg.t.DamageType.lookup,
+		resToListFunc: newEnumAPIResourceList,
+	}
+
+	e.elementalAffinity = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
+		endpoint:      "elemental-affinities",
+		resourceType:  "elemental affinity",
+		objLookup:     cfg.t.ElementalAffinity.lookup,
 		resToListFunc: newEnumAPIResourceList,
 	}
 
