@@ -47,12 +47,13 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 		Shops: 						shops,
 	}
 
-	if table.SpecificCharacter != nil && table.Classification == string(database.EquipClassCelestialWeapon) {
-		classRes, err := getResPtrDB(cfg, r, cfg.e.celestialWeapons, table, cfg.db.GetEquipmentTableCelestialWeaponID)
+	if table.Classification == string(database.EquipClassCelestialWeapon) {
+		char, _ := seeding.GetResource(equipment.CharacterName, cfg.l.Characters)
+		cwRes, err := getResPtrDB(cfg, r, cfg.e.celestialWeapons, char, cfg.db.GetCharacterCelestialWeaponID)
 		if err != nil {
 			return EquipmentName{}, err
 		}
-		rel.CelestialWeapon = classRes
+		rel.CelestialWeapon = cwRes
 	}
 
 	return rel, nil
@@ -82,7 +83,7 @@ func getTableIndex(r *http.Request, queryParam QueryParam, maxID int) (int, erro
 	}
 
 	if tableIdx <= 0 || tableIdx > maxID {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d' used for parameter '%s'. '%s' for this resource can range from 1 to %d.", tableIdx, queryParam.Name, queryParam.Name, maxID), nil)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d' used for parameter '%s'. '%s' can range from 1 to %d for this resource.", tableIdx, queryParam.Name, queryParam.Name, maxID), nil)
 	}
 	tableIdx -= 1
 

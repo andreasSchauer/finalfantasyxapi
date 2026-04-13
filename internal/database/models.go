@@ -461,11 +461,11 @@ type AvailabilityType string
 
 const (
 	AvailabilityTypeAlways    AvailabilityType = "always"
-	AvailabilityTypeStory     AvailabilityType = "story"
+	AvailabilityTypePreStory  AvailabilityType = "pre-story"
 	AvailabilityTypePost      AvailabilityType = "post"
 	AvailabilityTypePostStory AvailabilityType = "post-story"
 	AvailabilityTypePostGame  AvailabilityType = "post-game"
-	AvailabilityTypeStoryOnly AvailabilityType = "story-only"
+	AvailabilityTypeStory     AvailabilityType = "story"
 )
 
 func (e *AvailabilityType) Scan(src interface{}) error {

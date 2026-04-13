@@ -1244,7 +1244,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?distance=2&availability=story",
+				requestURL:     "/api/monsters?distance=2&availability=pre-story",
 				expectedStatus: http.StatusOK,
 			},
 			count:   5,

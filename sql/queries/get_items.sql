@@ -200,7 +200,7 @@ WHERE
         w.values IS NULL
         OR (
             CASE j.shop_type
-                WHEN 'pre-airship' THEN 'story'::availability_type
+                WHEN 'pre-airship' THEN 'pre-story'::availability_type
                 WHEN 'post-airship' THEN 'post'::availability_type
             END
         ) = ANY(w.values)

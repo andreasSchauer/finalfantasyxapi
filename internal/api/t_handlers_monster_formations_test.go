@@ -195,7 +195,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?availability=story&limit=max",
+				requestURL:     "/api/monster-formations?availability=pre-story&limit=max",
 				expectedStatus: http.StatusOK,
 			},
 			count:   86,

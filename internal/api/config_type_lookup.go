@@ -395,7 +395,7 @@ func (t *TypeLookup) initAvailabilityType() {
 			Description: "The resource is always available once its location is reached in the story.",
 		},
 		{
-			Name:        string(database.AvailabilityTypeStory),
+			Name:        string(database.AvailabilityTypePreStory),
 			Description: "The resource is only available during the events of the story.",
 		},
 		{
@@ -411,8 +411,8 @@ func (t *TypeLookup) initAvailabilityType() {
 			Description: "The resource is available in the post-game, meaning it either was already available before acquiring the airship, or it becomes available after acquiring the airship. This excludes story-specific resources. This value is essentially a combination of 'always' and 'post'.",
 		},
 		{
-			Name:		 string(database.AvailabilityTypeStoryOnly),
-			Description: "The resource is only available during the events of the story. This value is essentially a combination of 'story' and 'post-story'.",
+			Name:		 string(database.AvailabilityTypeStory),
+			Description: "The resource is only available during the events of the story. This value is essentially a combination of 'pre-story' and 'post-story'.",
 		},
 	}
 
@@ -427,8 +427,8 @@ func (t *TypeLookup) initAvailabilityType() {
 				database.AvailabilityTypePost,
 			},
 
-			string(database.AvailabilityTypeStoryOnly): {
-				database.AvailabilityTypeStory,
+			string(database.AvailabilityTypeStory): {
+				database.AvailabilityTypePreStory,
 				database.AvailabilityTypePostStory,
 			},
 		},

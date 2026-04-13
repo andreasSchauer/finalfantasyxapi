@@ -32,6 +32,6 @@ type testAbilityPool struct {
 }
 
 func compareAbilityPools(test test, fieldName string, exp testAbilityPool, got AbilityPool) {
-	checkResIDsInSlice(test, fieldName+" - auto abilities", test.cfg.e.autoAbilities.endpoint, exp.autoAbilities, got.AutoAbilities)
+	checkResIDsInSlice(test, fieldName+" - auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.autoAbilities, got.AutoAbilities)
 	compare(test, fieldName+" - required amount", exp.reqAmount, got.ReqAmount)
 }

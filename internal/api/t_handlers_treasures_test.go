@@ -188,10 +188,10 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?availability=story&limit=max",
+				requestURL:     "/api/treasures?availability=pre-story&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   94,
+			count:   100,
 			results: []int32{1, 23, 91, 119, 139, 206, 239, 261, 263},
 		},
 	}

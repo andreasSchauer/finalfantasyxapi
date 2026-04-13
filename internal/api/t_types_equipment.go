@@ -4,7 +4,7 @@ type expEquipment struct {
 	testGeneral
 	expUnique
 	equipmentTable			int32
-	priority				int32
+	priority				*int32
 	celestialWeapon			*int32
 	requiredAutoAbilities	[]int32
 	selectableAutoAbilities	[]testAbilityPool

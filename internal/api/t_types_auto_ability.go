@@ -5,9 +5,9 @@ type expAutoAbility struct {
 	expUnique
 	monstersDrop 		[]int32
 	monstersItems 		[]testMonItemAmts
-	treasures			[]int32
 	shopsPreAirship		[]int32
 	shopsPostAirship	[]int32
+	treasures			[]int32
 	equipmentTables		[]int32
 }
 

@@ -19,30 +19,30 @@ func TestGetPrimer(t *testing.T) {
 				requestURL:     "/api/primers/1",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
-				expLengths: 	map[string]int{
-					"areas": 		2,
-					"treasures": 	2,
+				expLengths: map[string]int{
+					"areas":     2,
+					"treasures": 2,
 				},
 			},
-			expUnique:  newExpUnique(1, "al bhed primer i"),
-			keyItem:	35,
-			areas: 		[]int32{15, 169},
-			treasures: 	[]int32{13, 215},
+			expUnique: newExpUnique(1, "al bhed primer i"),
+			keyItem:   35,
+			areas:     []int32{15, 169},
+			treasures: []int32{13, 215},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/primers/22",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
-				expLengths: 	map[string]int{
-					"areas": 		1,
-					"treasures": 	1,
+				expLengths: map[string]int{
+					"areas":     1,
+					"treasures": 1,
 				},
 			},
-			expUnique:  newExpUnique(22, "al bhed primer xxii"),
-			keyItem:	56,
-			areas: 		[]int32{197},
-			treasures: 	[]int32{252},
+			expUnique: newExpUnique(22, "al bhed primer xxii"),
+			keyItem:   56,
+			areas:     []int32{197},
+			treasures: []int32{252},
 		},
 	}
 
@@ -61,7 +61,7 @@ func TestRetrievePrimers(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/primers?availability=story",
+				requestURL:     "/api/primers?availability=pre-story",
 				expectedStatus: http.StatusOK,
 			},
 			count:   7,

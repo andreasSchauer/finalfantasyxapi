@@ -882,7 +882,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.autoAbilities = handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "auto-abilities",
-		resourceType:  "auto ability",
+		resourceType:  "auto-ability",
 		objLookup:     cfg.l.AutoAbilities,
 		objLookupID:   cfg.l.AutoAbilitiesID,
 		queryLookup:   cfg.q.autoAbilities,
@@ -900,7 +900,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.equipmentTables = handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      "equipment-tables",
-		resourceType:  "equipment",
+		resourceType:  "equipment table",
 		objLookup:     cfg.l.EquipmentTables,
 		objLookupID:   cfg.l.EquipmentTablesID,
 		queryLookup:   cfg.q.equipmentTables,
