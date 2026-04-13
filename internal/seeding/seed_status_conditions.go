@@ -20,7 +20,7 @@ type StatusCondition struct {
 	RemovedStatusConditions []string         `json:"removed_status_conditions"`
 	AddedElemResist         *ElementalResist `json:"added_elem_resist"`
 	CtbOnInfliction			*InflictedDelay	 `json:"ctb_on_infliction"`
-	NullifyArmored          *string          `json:"h.Nullify_armored"`
+	NullifyArmored          *string          `json:"nullify_armored"`
 	StatChanges             []StatChange     `json:"stat_changes"`
 	ModifierChanges         []ModifierChange `json:"modifier_changes"`
 }

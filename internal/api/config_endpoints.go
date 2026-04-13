@@ -53,12 +53,13 @@ type endpoints struct {
 	equipment        handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]
 	celestialWeapons handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]
 
-	stats            handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]
-	properties       handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]
+	stats            handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]
+	properties       handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]
 	overdriveModes   handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
 	elements         handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]
-	statusConditions handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]
-	modifiers        handlerInput[seeding.Modifier, any, NamedAPIResource, NamedApiResourceList]
+	statusConditions handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]
+	modifiers        handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]
+	agilityTiers	 handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]
 
 	abilityType handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	unitType    handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
@@ -943,21 +944,21 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.stats = handlerInput[seeding.Stat, any, NamedAPIResource, NamedApiResourceList]{
+	e.stats = handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "stats",
 		resourceType:  "stat",
 		objLookup:     cfg.l.Stats,
 		objLookupID:   cfg.l.StatsID,
-		idToResFunc:   idToNamedAPIResource[seeding.Stat, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.properties = handlerInput[seeding.Property, any, NamedAPIResource, NamedApiResourceList]{
+	e.properties = handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "properties",
 		resourceType:  "property",
 		objLookup:     cfg.l.Properties,
 		objLookupID:   cfg.l.PropertiesID,
-		idToResFunc:   idToNamedAPIResource[seeding.Property, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.Property, Property, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
@@ -987,22 +988,31 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveElements,
 	}
 
-	e.statusConditions = handlerInput[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList]{
+	e.statusConditions = handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "status-conditions",
 		resourceType:  "status condition",
 		objLookup:     cfg.l.StatusConditions,
 		objLookupID:   cfg.l.StatusConditionsID,
-		idToResFunc:   idToNamedAPIResource[seeding.StatusCondition, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 	}
 
-	e.modifiers = handlerInput[seeding.Modifier, any, NamedAPIResource, NamedApiResourceList]{
+	e.modifiers = handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      "modifiers",
 		resourceType:  "modifier",
 		objLookup:     cfg.l.Modifiers,
 		objLookupID:   cfg.l.ModifiersID,
-		idToResFunc:   idToNamedAPIResource[seeding.Modifier, any, NamedAPIResource, NamedApiResourceList],
+		idToResFunc:   idToNamedAPIResource[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+	}
+
+	e.agilityTiers = handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]{
+		endpoint:      "agility-tiers",
+		resourceType:  "agility tier",
+		objLookup:     nil,
+		objLookupID:   cfg.l.AgilityTiersID,
+		idToResFunc:   idToUnnamedAPIResource[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList],
+		resToListFunc: newUnnamedAPIResourceList,
 	}
 
 	e.abilityType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{

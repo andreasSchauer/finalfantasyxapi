@@ -39,6 +39,12 @@ func (a AgilityTier) Error() string {
 	return fmt.Sprintf("agility tier with min agility: %d, max agility: %d", a.MinAgility, a.MaxAgility)
 }
 
+func (a AgilityTier) GetResParamsUnnamed() h.ResParamsUnnamed {
+	return h.ResParamsUnnamed{
+		ID: a.ID,
+	}
+}
+
 type AgilitySubtier struct {
 	//id 			int32
 	//dataHash		string
