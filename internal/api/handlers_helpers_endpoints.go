@@ -33,7 +33,7 @@ func handleEndpointIDOnly[T h.HasID, R any, A APIResource, L APIResourceList](cf
 		return
 	}
 
-	parseRes, err := parseID(segment, i.resourceType, len(i.objLookup))
+	parseRes, err := parseID(segment, i.resourceType, len(i.objLookupID))
 	if handleHTTPError(w, err) {
 		return
 	}

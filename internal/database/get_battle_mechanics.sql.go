@@ -1205,7 +1205,7 @@ func (q *Queries) GetStatPlayerAbilityIDsStatChange(ctx context.Context, statID 
 const getStatPropertyIDs = `-- name: GetStatPropertyIDs :many
 SELECT DISTINCT p.id
 FROM properties p
-JOIN j_properties_related_stats j ON j.status_condition_id = p.id
+JOIN j_properties_related_stats j ON j.property_id = p.id
 WHERE j.stat_id = $1
 ORDER BY p.id
 `
@@ -1236,7 +1236,7 @@ func (q *Queries) GetStatPropertyIDs(ctx context.Context, statID int32) ([]int32
 const getStatPropertyIDsStatChange = `-- name: GetStatPropertyIDsStatChange :many
 SELECT DISTINCT p.id
 FROM properties p
-JOIN j_properties_stat_changes j ON j.status_condition_id = p.id
+JOIN j_properties_stat_changes j ON j.property_id = p.id
 JOIN stat_changes sc ON j.stat_change_id = sc.id
 WHERE sc.stat_id = $1
 ORDER BY p.id
@@ -1485,12 +1485,25 @@ FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
-  AND ist.probability >= $2::int
-  AND ist.probability <= $3::int
+WHERE EXISTS (
+    SELECT 1
+    FROM j_battle_interactions_inflicted_status_conditions j2
+    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+    JOIN status_conditions sc ON ist.status_condition_id = sc.id
+    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+      AND sc.id = $1::int
+      AND ist.probability >= $2::int
+      AND ist.probability <= $3::int
+
+    UNION ALL
+
+    SELECT 1
+    FROM inflicted_delays id
+    WHERE bi.inflicted_delay_id = id.id
+      AND $1::int = 6
+    
+
+)
 ORDER BY ea.id
 `
 
@@ -1612,18 +1625,62 @@ func (q *Queries) GetStatusConditionIDsByCategory(ctx context.Context, category 
 	return items, nil
 }
 
+const getStatusConditionInflictedDelayConditionIDs = `-- name: GetStatusConditionInflictedDelayConditionIDs :many
+SELECT DISTINCT sc.id
+FROM status_conditions sc
+JOIN inflicted_delays idl ON sc.inflicted_delay_id = idl.id
+WHERE $1::int = 6
+  AND sc.inflicted_delay_id IS NOT NULL
+  AND idl.ctb_attack_type = 'attack'
+ORDER BY sc.id
+`
+
+func (q *Queries) GetStatusConditionInflictedDelayConditionIDs(ctx context.Context, statusID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionInflictedDelayConditionIDs, statusID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getStatusConditionItemAbilityIDsInflicted = `-- name: GetStatusConditionItemAbilityIDsInflicted :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
 JOIN abilities a ON ia.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
-  AND ist.probability >= $2::int
-  AND ist.probability <= $3::int
+WHERE EXISTS (
+    SELECT 1
+    FROM j_battle_interactions_inflicted_status_conditions j2
+    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+    JOIN status_conditions sc ON ist.status_condition_id = sc.id
+    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+      AND sc.id = $1::int
+      AND ist.probability >= $2::int
+      AND ist.probability <= $3::int
+
+    UNION ALL
+
+    SELECT 1
+    FROM inflicted_delays id
+    WHERE bi.inflicted_delay_id = id.id
+      AND $1::int = 6
+)
 ORDER BY ia.id
 `
 
@@ -1697,12 +1754,23 @@ FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
-  AND ist.probability >= $2::int
-  AND ist.probability <= $3::int
+WHERE EXISTS (
+    SELECT 1
+    FROM j_battle_interactions_inflicted_status_conditions j2
+    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+    JOIN status_conditions sc ON ist.status_condition_id = sc.id
+    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+      AND sc.id = $1::int
+      AND ist.probability >= $2::int
+      AND ist.probability <= $3::int
+
+    UNION ALL
+
+    SELECT 1
+    FROM inflicted_delays id
+    WHERE bi.inflicted_delay_id = id.id
+      AND $1::int = 6
+)
 ORDER BY oa.id
 `
 
@@ -1776,12 +1844,23 @@ FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
-  AND ist.probability >= $2::int
-  AND ist.probability <= $3::int
+WHERE EXISTS (
+    SELECT 1
+    FROM j_battle_interactions_inflicted_status_conditions j2
+    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+    JOIN status_conditions sc ON ist.status_condition_id = sc.id
+    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+      AND sc.id = $1::int
+      AND ist.probability >= $2::int
+      AND ist.probability <= $3::int
+
+    UNION ALL
+
+    SELECT 1
+    FROM inflicted_delays id
+    WHERE bi.inflicted_delay_id = id.id
+      AND $1::int = 6
+)
 ORDER BY pa.id
 `
 
@@ -1888,7 +1967,7 @@ WHERE EXISTS (
     SELECT 1
     FROM j_monsters_immunities jmi
     WHERE jmi.monster_id = m.id
-      AND jmi.status_condition_id = $1
+      AND jmi.status_condition_id = $1::int
 
     UNION ALL
 
@@ -1896,7 +1975,7 @@ WHERE EXISTS (
     FROM j_monsters_status_resists jmsr
     JOIN status_resists sr ON sr.id = jmsr.status_resist_id
     WHERE jmsr.monster_id = m.id
-      AND sr.status_condition_id = $1
+      AND sr.status_condition_id = $1::int
       AND sr.resistance >= $2::int
 )
 ORDER BY m.id
@@ -1936,12 +2015,23 @@ FROM unspecified_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
-  AND ist.probability >= $2::int
-  AND ist.probability <= $3::int
+WHERE EXISTS (
+    SELECT 1
+    FROM j_battle_interactions_inflicted_status_conditions j2
+    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+    JOIN status_conditions sc ON ist.status_condition_id = sc.id
+    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+      AND sc.id = $1::int
+      AND ist.probability >= $2::int
+      AND ist.probability <= $3::int
+
+    UNION ALL
+
+    SELECT 1
+    FROM inflicted_delays id
+    WHERE bi.inflicted_delay_id = id.id
+      AND $1::int = 6
+)
 ORDER BY ua.id
 `
 

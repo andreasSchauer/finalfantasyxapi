@@ -25,42 +25,42 @@ func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat
 
 	spheres, err := getResourcesDbItem(cfg, r, cfg.e.spheres, stat, cfg.db.GetStatSphereIDs)
 	if err != nil {
-		return Stat{}, nil
+		return Stat{}, err
 	}
 
 	autoAbilities, err := getResourcesDbItem(cfg, r, cfg.e.autoAbilities, stat, queries.AutoAbilities)
 	if err != nil {
-		return Stat{}, nil
+		return Stat{}, err
 	}
 
 	playerAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, stat, queries.PlayerAbilities)
 	if err != nil {
-		return Stat{}, nil
+		return Stat{}, err
 	}
 
 	overdriveAbilities, err := getResourcesDbItem(cfg, r, cfg.e.overdriveAbilities, stat, queries.OverdriveAbilities)
 	if err != nil {
-		return Stat{}, nil
+		return Stat{}, err
 	}
 
 	itemAbilities, err := getResourcesDbItem(cfg, r, cfg.e.itemAbilities, stat, queries.ItemAbilities)
 	if err != nil {
-		return Stat{}, nil
+		return Stat{}, err
 	}
 
 	triggerCommands, err := getResourcesDbItem(cfg, r, cfg.e.triggerCommands, stat, queries.TriggerCommands)
 	if err != nil {
-		return Stat{}, nil
+		return Stat{}, err
 	}
 
 	statusConditions, err := getResourcesDbItem(cfg, r, cfg.e.statusConditions, stat, queries.StatusConditions)
 	if err != nil {
-		return Stat{}, nil
+		return Stat{}, err
 	}
 
 	properties, err := getResourcesDbItem(cfg, r, cfg.e.properties, stat, queries.Properties)
 	if err != nil {
-		return Stat{}, nil
+		return Stat{}, err
 	}
 
 	rel := Stat{

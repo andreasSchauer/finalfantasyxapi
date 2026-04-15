@@ -2764,6 +2764,7 @@ func (cfg *Config) initAgilityTierParams(defaultParams []QueryParam) {
 			Type:		 "int",
 			ForList:     true,
 			ForSingle:   false,
+			AllowedIntRange: []int{0, 255},
 		},
 	}
 

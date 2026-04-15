@@ -6,7 +6,7 @@ type Stat struct {
 	Effect   			string 				`json:"effect"`
 	MinVal   			int32  				`json:"min_val"`
 	MaxVal   			int32  				`json:"max_val"`
-	MaxVal2  			*int32 				`json:"max_val_2"`
+	MaxVal2  			*int32 				`json:"max_val_2,omitempty"`
 	ActivationSphere  	NamedAPIResource	`json:"activation_sphere"`
 	Spheres				[]NamedAPIResource	`json:"spheres"`
 	AutoAbilities		[]NamedAPIResource	`json:"auto_abilities"`

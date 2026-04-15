@@ -51,6 +51,7 @@ func getStatusConditionRelationships(cfg *Config, r *http.Request, status seedin
 		ItemAbilities: convGetStatusConditionItemAbilityIDsInflicted(cfg, minRate32, maxRate32),
 		UnspecifiedAbilities: convGetStatusConditionUnspecifiedAbilityIDsInflicted(cfg, minRate32, maxRate32),
 		EnemyAbilities: convGetStatusConditionEnemyAbilityIDsInflicted(cfg, minRate32, maxRate32),
+		StatusConditions: cfg.db.GetStatusConditionInflictedDelayConditionIDs,
 	})
 	if err != nil {
 		return StatusCondition{}, err
@@ -86,7 +87,16 @@ type StatusInteractions struct {
 	ItemAbilities			[]NamedAPIResource	`json:"item_abilities"`
 	UnspecifiedAbilities	[]NamedAPIResource	`json:"unspecified_abilities"`
 	EnemyAbilities			[]NamedAPIResource	`json:"enemy_abilities"`
-	StatusConditions		[]NamedAPIResource	`json:"status_conditions,omitempty"`
+	StatusConditions		[]NamedAPIResource	`json:"status_conditions"`
+}
+
+func (s StatusInteractions) IsZero() bool {
+	return 	len(s.PlayerAbilities) == 0 &&
+			len(s.OverdriveAbilities) == 0 &&
+			len(s.ItemAbilities) == 0 &&
+			len(s.UnspecifiedAbilities) == 0 &&
+			len(s.EnemyAbilities) == 0 &&
+			len(s.StatusConditions) == 0
 }
 
 type StatusInteractionQueries struct {
@@ -98,41 +108,43 @@ type StatusInteractionQueries struct {
 	StatusConditions 		DbQueryIntMany
 }
 
-func getStatusInteractions(cfg *Config, r *http.Request, status seeding.StatusCondition, queries StatusInteractionQueries) (StatusInteractions, error) {
+func getStatusInteractions(cfg *Config, r *http.Request, status seeding.StatusCondition, queries StatusInteractionQueries) (*StatusInteractions, error) {
 	var err error
 	statusInteractions := StatusInteractions{}
 
 	statusInteractions.PlayerAbilities, err = getResourcesDbItem(cfg, r, cfg.e.playerAbilities, status, queries.PlayerAbilities)
 	if err != nil {
-		return StatusInteractions{}, err
+		return nil, err
 	}
 
 	statusInteractions.OverdriveAbilities, err = getResourcesDbItem(cfg, r, cfg.e.overdriveAbilities, status, queries.OverdriveAbilities)
 	if err != nil {
-		return StatusInteractions{}, err
+		return nil, err
 	}
 
 	statusInteractions.ItemAbilities, err = getResourcesDbItem(cfg, r, cfg.e.itemAbilities, status, queries.ItemAbilities)
 	if err != nil {
-		return StatusInteractions{}, err
+		return nil, err
 	}
 
 	statusInteractions.UnspecifiedAbilities, err = getResourcesDbItem(cfg, r, cfg.e.unspecifiedAbilities, status, queries.UnspecifiedAbilities)
 	if err != nil {
-		return StatusInteractions{}, err
+		return nil, err
 	}
 
 	statusInteractions.EnemyAbilities, err = getResourcesDbItem(cfg, r, cfg.e.enemyAbilities, status, queries.EnemyAbilities)
 	if err != nil {
-		return StatusInteractions{}, err
+		return nil, err
 	}
 
-	if queries.StatusConditions != nil {
-		statusInteractions.StatusConditions, err = getResourcesDbItem(cfg, r, cfg.e.statusConditions, status, queries.StatusConditions)
-		if err != nil {
-			return StatusInteractions{}, err
-		}
+	statusInteractions.StatusConditions, err = getResourcesDbItem(cfg, r, cfg.e.statusConditions, status, queries.StatusConditions)
+	if err != nil {
+		return nil, err
 	}
 
-	return statusInteractions, nil
+	if statusInteractions.IsZero() {
+		return nil, nil
+	}
+
+	return &statusInteractions, nil
 }

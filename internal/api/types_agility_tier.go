@@ -8,8 +8,8 @@ type AgilityTier struct {
 	FromAgility     int32            	`json:"from_agility"`
 	ToAgility       int32            	`json:"to_agility"`
 	TickSpeed       int32            	`json:"tick_speed"`
-	MonMinICV    	*int32           	`json:"mon_min_icv"`
 	MonMaxICV    	*int32           	`json:"mon_max_icv"`
+	MonMinICV    	*int32           	`json:"mon_min_icv"`
 	CharMaxICV  	*int32           	`json:"char_max_icv"`
 	CharMinICVs 	[]AgilitySubtier 	`json:"char_min_icvs"`
 }
@@ -18,13 +18,13 @@ type AgilityTier struct {
 type AgilitySubtier struct {
 	FromAgility int32  `json:"from_agility"`
 	ToAgility  	int32  `json:"to_agility"`
-	ICV 		*int32 `json:"icv"`
+	CharMinICV 	*int32 `json:"char_min_icv"`
 }
 
 func convertAgilitySubtier(_ *Config, st seeding.AgilitySubtier) AgilitySubtier {
 	return AgilitySubtier{
 		FromAgility: 	st.MinAgility,
 		ToAgility: 		st.MaxAgility,
-		ICV: 			st.CharacterMinICV,
+		CharMinICV: 	st.CharacterMinICV,
 	}
 }
