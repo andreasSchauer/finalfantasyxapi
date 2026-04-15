@@ -135,7 +135,7 @@ RETURNING id, data_hash, element_id, affinity
 type CreateElementalResistParams struct {
 	DataHash  string
 	ElementID int32
-	Affinity  interface{}
+	Affinity  ElementalAffinity
 }
 
 func (q *Queries) CreateElementalResist(ctx context.Context, arg CreateElementalResistParams) (ElementalResist, error) {
@@ -151,17 +151,17 @@ func (q *Queries) CreateElementalResist(ctx context.Context, arg CreateElemental
 }
 
 const createModifier = `-- name: CreateModifier :one
-INSERT INTO modifiers (data_hash, name, effect, type, default_value)
+INSERT INTO modifiers (data_hash, name, effect, category, default_value)
 VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifiers.data_hash
-RETURNING id, data_hash, name, effect, type, default_value
+RETURNING id, data_hash, name, effect, category, default_value
 `
 
 type CreateModifierParams struct {
 	DataHash     string
 	Name         string
 	Effect       string
-	Type         ModifierType
+	Category     ModifierCategory
 	DefaultValue sql.NullFloat64
 }
 
@@ -170,7 +170,7 @@ func (q *Queries) CreateModifier(ctx context.Context, arg CreateModifierParams) 
 		arg.DataHash,
 		arg.Name,
 		arg.Effect,
-		arg.Type,
+		arg.Category,
 		arg.DefaultValue,
 	)
 	var i Modifier
@@ -179,7 +179,7 @@ func (q *Queries) CreateModifier(ctx context.Context, arg CreateModifierParams) 
 		&i.DataHash,
 		&i.Name,
 		&i.Effect,
-		&i.Type,
+		&i.Category,
 		&i.DefaultValue,
 	)
 	return i, err

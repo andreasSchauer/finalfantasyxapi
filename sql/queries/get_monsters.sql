@@ -67,33 +67,31 @@ ORDER BY m.id;
 
 
 -- name: GetMonsterIDsByStatusResists :many
-WITH wanted_statuses AS (
-    SELECT unnest(sqlc.arg(status_condition_ids)::int[]) AS status_condition_id
-),
-monster_status_match AS (
-    SELECT
-        m.id                           AS monster_id,
-        ws.status_condition_id         AS status_condition_id
-    FROM monsters m
-    JOIN wanted_statuses ws ON TRUE
-    LEFT JOIN j_monsters_immunities jmi
-        ON jmi.monster_id = m.id
-       AND jmi.status_condition_id = ws.status_condition_id
-    LEFT JOIN j_monsters_status_resists jmsr
-        ON jmsr.monster_id = m.id
-    LEFT JOIN status_resists sr
-        ON sr.id = jmsr.status_resist_id
-       AND sr.status_condition_id = ws.status_condition_id
-    WHERE
-        jmi.status_condition_id IS NOT NULL
-        OR (sr.status_condition_id IS NOT NULL AND sr.resistance >= sqlc.arg(min_resistance))
+WITH wanted AS (
+    SELECT sqlc.arg('status_condition_ids')::int[] AS ids
 )
 SELECT m.id
 FROM monsters m
-JOIN monster_status_match msm ON msm.monster_id = m.id
-GROUP BY m.id
-HAVING COUNT(DISTINCT msm.status_condition_id)
-       = array_length(sqlc.arg(status_condition_ids)::int[], 1)
+CROSS JOIN wanted w
+WHERE (
+    SELECT COUNT(*)
+    FROM unnest(w.ids) AS req(id)
+    WHERE EXISTS (
+        SELECT 1
+        FROM j_monsters_immunities jmi
+        WHERE jmi.monster_id = m.id
+          AND jmi.status_condition_id = req.id
+
+        UNION ALL
+
+        SELECT 1
+        FROM j_monsters_status_resists jmsr
+        JOIN status_resists sr ON sr.id = jmsr.status_resist_id
+        WHERE jmsr.monster_id = m.id
+          AND sr.status_condition_id = req.id
+          AND sr.resistance >= sqlc.arg('min_resistance')
+    )
+) = cardinality(w.ids)
 ORDER BY m.id;
 
 

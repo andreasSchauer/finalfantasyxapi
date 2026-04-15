@@ -21,7 +21,7 @@ type AgilitySubtier struct {
 	ICV 		*int32 `json:"icv"`
 }
 
-func convertAgilitySubtier(cfg *Config, st seeding.AgilitySubtier) AgilitySubtier {
+func convertAgilitySubtier(_ *Config, st seeding.AgilitySubtier) AgilitySubtier {
 	return AgilitySubtier{
 		FromAgility: 	st.MinAgility,
 		ToAgility: 		st.MaxAgility,

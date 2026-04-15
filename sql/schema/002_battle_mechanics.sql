@@ -5,7 +5,7 @@ CREATE TYPE overdrive_mode_type AS ENUM ('formula', 'per-action');
 CREATE TYPE nullify_armored AS ENUM ('target', 'bearer');
 
 
-CREATE TYPE modifier_type AS ENUM ('dynamic-value', 'factor', 'fixed-value', 'percentage');
+CREATE TYPE modifier_category AS ENUM ('dynamic-value', 'factor', 'fixed-value', 'percentage');
 
 
 CREATE TYPE status_condition_category AS ENUM ('negative', 'positive', 'other');
@@ -116,7 +116,7 @@ CREATE TABLE modifiers (
     data_hash TEXT UNIQUE NOT NULL,
     name TEXT UNIQUE NOT NULL,
     effect TEXT NOT NULL,
-    type modifier_type NOT NULL,
+    category modifier_category NOT NULL,
     default_value REAL
 );
 
@@ -138,6 +138,6 @@ DROP TABLE IF EXISTS base_stats;
 DROP TABLE IF EXISTS stats;
 DROP TYPE IF EXISTS elemental_affinity;
 DROP TYPE IF EXISTS status_condition_category;
-DROP TYPE IF EXISTS modifier_type;
+DROP TYPE IF EXISTS modifier_category;
 DROP TYPE IF EXISTS nullify_armored;
 DROP TYPE IF EXISTS overdrive_mode_type;

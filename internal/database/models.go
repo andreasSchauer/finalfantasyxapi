@@ -1891,48 +1891,48 @@ func (ns NullMixCategory) Value() (driver.Value, error) {
 	return string(ns.MixCategory), nil
 }
 
-type ModifierType string
+type ModifierCategory string
 
 const (
-	ModifierTypeDynamicValue ModifierType = "dynamic-value"
-	ModifierTypeFactor       ModifierType = "factor"
-	ModifierTypeFixedValue   ModifierType = "fixed-value"
-	ModifierTypePercentage   ModifierType = "percentage"
+	ModifierCategoryDynamicValue ModifierCategory = "dynamic-value"
+	ModifierCategoryFactor       ModifierCategory = "factor"
+	ModifierCategoryFixedValue   ModifierCategory = "fixed-value"
+	ModifierCategoryPercentage   ModifierCategory = "percentage"
 )
 
-func (e *ModifierType) Scan(src interface{}) error {
+func (e *ModifierCategory) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = ModifierType(s)
+		*e = ModifierCategory(s)
 	case string:
-		*e = ModifierType(s)
+		*e = ModifierCategory(s)
 	default:
-		return fmt.Errorf("unsupported scan type for ModifierType: %T", src)
+		return fmt.Errorf("unsupported scan type for ModifierCategory: %T", src)
 	}
 	return nil
 }
 
-type NullModifierType struct {
-	ModifierType ModifierType
-	Valid        bool // Valid is true if ModifierType is not NULL
+type NullModifierCategory struct {
+	ModifierCategory ModifierCategory
+	Valid            bool // Valid is true if ModifierCategory is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullModifierType) Scan(value interface{}) error {
+func (ns *NullModifierCategory) Scan(value interface{}) error {
 	if value == nil {
-		ns.ModifierType, ns.Valid = "", false
+		ns.ModifierCategory, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.ModifierType.Scan(value)
+	return ns.ModifierCategory.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullModifierType) Value() (driver.Value, error) {
+func (ns NullModifierCategory) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return string(ns.ModifierType), nil
+	return string(ns.ModifierCategory), nil
 }
 
 type MonsterCategory string
@@ -3224,7 +3224,7 @@ type ElementalResist struct {
 	ID        int32
 	DataHash  string
 	ElementID int32
-	Affinity  interface{}
+	Affinity  ElementalAffinity
 }
 
 type EncounterArea struct {
@@ -3912,7 +3912,7 @@ type Modifier struct {
 	DataHash     string
 	Name         string
 	Effect       string
-	Type         ModifierType
+	Category     ModifierCategory
 	DefaultValue sql.NullFloat64
 }
 

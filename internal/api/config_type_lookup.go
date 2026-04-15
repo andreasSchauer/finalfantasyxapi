@@ -45,6 +45,7 @@ type TypeLookup struct {
 	KeyItemCategory				EnumType[database.KeyItemCategory, any]
 	LootType                    EnumType[database.LootType, any]
 	MixCategory					EnumType[database.MixCategory, any]
+	ModifierCategory			EnumType[database.ModifierCategory, any]
 	MonsterCategory             EnumType[database.MonsterCategory, any]
 	MonsterFormationCategory    EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies              EnumType[database.MonsterSpecies, any]
@@ -55,6 +56,7 @@ type TypeLookup struct {
 	ShopCategory                EnumType[database.ShopCategory, any]
 	ShopType                    EnumType[database.ShopType, database.NullShopType]
 	SphereColor					EnumType[database.SphereColor, any]
+	StatusConditionCategory		EnumType[database.StatusConditionCategory, any]
 	TreasureType                EnumType[database.TreasureType, any]
 
 	AccSourceType     EnumType[database.AccSourceType, any]
@@ -98,6 +100,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initKeyItemCategory()
 	cfg.t.initLootType()
 	cfg.t.initMixCategory()
+	cfg.t.initModifierCategory()
 	cfg.t.initMonsterCategory()
 	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
@@ -108,6 +111,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initShopCategory()
 	cfg.t.initShopType()
 	cfg.t.initSphereColor()
+	cfg.t.initStatusConditionCategory()
 	cfg.t.initTreasureType()
 
 	cfg.t.initAccSourceType()
@@ -858,6 +862,35 @@ func (t *TypeLookup) initMixCategory() {
 	}
 }
 
+func (t *TypeLookup) initModifierCategory() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.ModifierCategoryFixedValue),
+			Description: "",
+		},
+		{
+			Name:        string(database.ModifierCategoryDynamicValue),
+			Description: "",
+		},
+		{
+			Name:        string(database.ModifierCategoryFactor),
+			Description: "",
+		},
+		{
+			Name:        string(database.ModifierCategoryPercentage),
+			Description: "",
+		},
+		
+	}
+
+	t.ModifierCategory = EnumType[database.ModifierCategory, any]{
+		name:         "modifier category",
+		isEndpoint:   false,
+		lookup:       enumSliceToMap(typeSlice),
+		convFunc:     func(s string) database.ModifierCategory { return database.ModifierCategory(s) },
+	}
+}
+
 func (t *TypeLookup) initMonsterFormationCategory() {
 	typeSlice := []EnumAPIResource{
 		{
@@ -1271,6 +1304,27 @@ func (t *TypeLookup) initSphereColor() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.SphereColor { return database.SphereColor(s) },
+	}
+}
+
+func (t *TypeLookup) initStatusConditionCategory() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name:        string(database.StatusConditionCategoryNegative),
+		},
+		{
+			Name:        string(database.StatusConditionCategoryPositive),
+		},
+		{
+			Name:        string(database.StatusConditionCategoryOther),
+		},
+	}
+
+	t.StatusConditionCategory = EnumType[database.StatusConditionCategory, any]{
+		name:         "status condition category",
+		isEndpoint:   true,
+		lookup:       enumSliceToMap(typeSlice),
+		convFunc:     func(s string) database.StatusConditionCategory { return database.StatusConditionCategory(s) },
 	}
 }
 

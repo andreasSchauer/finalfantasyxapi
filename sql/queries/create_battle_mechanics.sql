@@ -149,7 +149,7 @@ ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateModifier :one
-INSERT INTO modifiers (data_hash, name, effect, type, default_value)
+INSERT INTO modifiers (data_hash, name, effect, category, default_value)
 VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifiers.data_hash
 RETURNING *;

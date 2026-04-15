@@ -143,13 +143,12 @@ func convertModChangeSimple(cfg *Config, mc seeding.ModifierChange) string {
 
 	modifier, _ := seeding.GetResource(mc.ModifierName, cfg.l.Modifiers)
 
-	if modifier.Type == string(database.ModifierTypePercentage) {
+	if modifier.Category == string(database.ModifierCategoryPercentage) {
 		formatted += "%"
 	}
 
 	return formatted
 }
-
 
 func formatChange(name, calcType string, val float32) string {
 	formattedVal := strconv.FormatFloat(float64(val), 'f', -1, 32)

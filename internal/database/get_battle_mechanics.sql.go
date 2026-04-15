@@ -7,6 +7,8 @@ package database
 
 import (
 	"context"
+
+	"github.com/lib/pq"
 )
 
 const getAgilityTierByAgility = `-- name: GetAgilityTierByAgility :one
@@ -31,8 +33,65 @@ func (q *Queries) GetAgilityTierByAgility(ctx context.Context, agility int32) (A
 	return i, err
 }
 
+const getAgilityTierIDs = `-- name: GetAgilityTierIDs :many
+SELECT id FROM agility_tiers ORDER BY id
+`
+
+func (q *Queries) GetAgilityTierIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAgilityTierIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAgilityTierIDsByAgility = `-- name: GetAgilityTierIDsByAgility :many
+SELECT id FROM agility_tiers
+WHERE ($1::int) >= min_agility
+AND ($1::int) <= max_agility
+ORDER BY id
+`
+
+func (q *Queries) GetAgilityTierIDsByAgility(ctx context.Context, agility int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAgilityTierIDsByAgility, agility)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getElementAutoAbilityIDs = `-- name: GetElementAutoAbilityIDs :many
-SELECT DISTINCT aa.id
+SELECT aa.id
 FROM auto_abilities aa
 WHERE EXISTS (
     SELECT 1
@@ -374,7 +433,7 @@ func (q *Queries) GetElementPlayerAbilityIDs(ctx context.Context, id int32) ([]i
 }
 
 const getElementStatusConditionID = `-- name: GetElementStatusConditionID :one
-SELECT sc.id
+SELECT DISTINCT sc.id
 FROM status_conditions sc
 JOIN elemental_resists er ON sc.added_elem_resist_id = er.id
 JOIN elements e ON er.element_id = e.id
@@ -385,6 +444,331 @@ func (q *Queries) GetElementStatusConditionID(ctx context.Context, id int32) (in
 	row := q.db.QueryRowContext(ctx, getElementStatusConditionID, id)
 	err := row.Scan(&id)
 	return id, err
+}
+
+const getModifierAutoAbilityIDs = `-- name: GetModifierAutoAbilityIDs :many
+SELECT DISTINCT aa.id
+FROM auto_abilities aa
+JOIN j_auto_abilities_modifier_changes j ON j.auto_ability_id = aa.id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
+WHERE mc.modifier_id = $1
+ORDER BY aa.id
+`
+
+func (q *Queries) GetModifierAutoAbilityIDs(ctx context.Context, modifierID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getModifierAutoAbilityIDs, modifierID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getModifierEnemyAbilityIDs = `-- name: GetModifierEnemyAbilityIDs :many
+SELECT DISTINCT ea.id
+FROM enemy_abilities ea
+JOIN abilities a ON ea.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+WHERE mc.modifier_id = $1
+ORDER BY ea.id
+`
+
+func (q *Queries) GetModifierEnemyAbilityIDs(ctx context.Context, modifierID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getModifierEnemyAbilityIDs, modifierID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getModifierIDs = `-- name: GetModifierIDs :many
+SELECT id FROM modifiers ORDER BY id
+`
+
+func (q *Queries) GetModifierIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getModifierIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getModifierIDsByCategory = `-- name: GetModifierIDsByCategory :many
+SELECT id FROM modifiers WHERE category = ANY($1::modifier_category[]) ORDER BY id
+`
+
+func (q *Queries) GetModifierIDsByCategory(ctx context.Context, category []ModifierCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getModifierIDsByCategory, pq.Array(category))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getModifierItemAbilityIDs = `-- name: GetModifierItemAbilityIDs :many
+SELECT DISTINCT ia.id
+FROM item_abilities ia
+JOIN abilities a ON ia.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+WHERE mc.modifier_id = $1
+ORDER BY ia.id
+`
+
+func (q *Queries) GetModifierItemAbilityIDs(ctx context.Context, modifierID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getModifierItemAbilityIDs, modifierID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getModifierOverdriveAbilityIDs = `-- name: GetModifierOverdriveAbilityIDs :many
+SELECT DISTINCT oa.id
+FROM overdrive_abilities oa
+JOIN abilities a ON oa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+WHERE mc.modifier_id = $1
+ORDER BY oa.id
+`
+
+func (q *Queries) GetModifierOverdriveAbilityIDs(ctx context.Context, modifierID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getModifierOverdriveAbilityIDs, modifierID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getModifierPlayerAbilityIDs = `-- name: GetModifierPlayerAbilityIDs :many
+SELECT DISTINCT pa.id
+FROM player_abilities pa
+JOIN abilities a ON pa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+WHERE mc.modifier_id = $1
+ORDER BY pa.id
+`
+
+func (q *Queries) GetModifierPlayerAbilityIDs(ctx context.Context, modifierID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getModifierPlayerAbilityIDs, modifierID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getModifierPropertyIDs = `-- name: GetModifierPropertyIDs :many
+SELECT DISTINCT p.id
+FROM properties p
+JOIN j_properties_modifier_changes j ON j.property_id = p.id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
+WHERE mc.modifier_id = $1
+ORDER BY p.id
+`
+
+func (q *Queries) GetModifierPropertyIDs(ctx context.Context, modifierID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getModifierPropertyIDs, modifierID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getModifierStatusConditionIDs = `-- name: GetModifierStatusConditionIDs :many
+SELECT DISTINCT sc.id
+FROM status_conditions sc
+JOIN j_status_conditions_modifier_changes j ON j.status_condition_id = sc.id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
+WHERE mc.modifier_id = $1
+ORDER BY sc.id
+`
+
+func (q *Queries) GetModifierStatusConditionIDs(ctx context.Context, modifierID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getModifierStatusConditionIDs, modifierID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getModifierTriggerCommandIDs = `-- name: GetModifierTriggerCommandIDs :many
+SELECT DISTINCT tc.id
+FROM trigger_commands tc
+JOIN abilities a ON tc.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+WHERE mc.modifier_id = $1
+ORDER BY tc.id
+`
+
+func (q *Queries) GetModifierTriggerCommandIDs(ctx context.Context, modifierID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getModifierTriggerCommandIDs, modifierID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getOverdriveModeIDs = `-- name: GetOverdriveModeIDs :many
@@ -420,6 +804,1190 @@ SELECT id FROM overdrive_modes WHERE type = $1 ORDER BY id
 
 func (q *Queries) GetOverdriveModeIDsByType(ctx context.Context, type_ OverdriveModeType) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getOverdriveModeIDsByType, type_)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPropertyAutoAbilityIDs = `-- name: GetPropertyAutoAbilityIDs :many
+SELECT aa.id
+FROM auto_abilities aa
+WHERE aa.added_property_id = $1::int
+ORDER BY aa.id
+`
+
+func (q *Queries) GetPropertyAutoAbilityIDs(ctx context.Context, propertyID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPropertyAutoAbilityIDs, propertyID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPropertyIDs = `-- name: GetPropertyIDs :many
+SELECT id FROM properties ORDER BY id
+`
+
+func (q *Queries) GetPropertyIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPropertyIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPropertyMonsterIDs = `-- name: GetPropertyMonsterIDs :many
+SELECT m.id
+FROM monsters m
+JOIN j_monsters_properties j ON j.monster_id = m.id
+WHERE j.property_id = $1
+ORDER BY m.id
+`
+
+func (q *Queries) GetPropertyMonsterIDs(ctx context.Context, propertyID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPropertyMonsterIDs, propertyID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatAutoAbilityIDs = `-- name: GetStatAutoAbilityIDs :many
+SELECT DISTINCT aa.id
+FROM auto_abilities aa
+JOIN j_auto_abilities_related_stats j ON j.auto_ability_id = aa.id
+WHERE j.stat_id = $1
+ORDER BY aa.id
+`
+
+func (q *Queries) GetStatAutoAbilityIDs(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatAutoAbilityIDs, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatAutoAbilityIDsStatChange = `-- name: GetStatAutoAbilityIDsStatChange :many
+SELECT DISTINCT aa.id
+FROM auto_abilities aa
+JOIN j_auto_abilities_stat_changes j ON j.auto_ability_id = aa.id
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY aa.id
+`
+
+func (q *Queries) GetStatAutoAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatAutoAbilityIDsStatChange, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatIDs = `-- name: GetStatIDs :many
+SELECT id FROM stats ORDER BY id
+`
+
+func (q *Queries) GetStatIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatItemAbilityIDs = `-- name: GetStatItemAbilityIDs :many
+SELECT DISTINCT ia.id
+FROM item_abilities ia
+JOIN items i ON ia.item_id = i.id
+JOIN j_items_related_stats j ON j.item_id = i.id
+WHERE j.stat_id = $1
+ORDER BY ia.id
+`
+
+func (q *Queries) GetStatItemAbilityIDs(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatItemAbilityIDs, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatItemAbilityIDsStatChange = `-- name: GetStatItemAbilityIDsStatChange :many
+SELECT DISTINCT ia.id
+FROM item_abilities ia
+JOIN abilities a ON ia.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN stat_changes sc ON j2.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY ia.id
+`
+
+func (q *Queries) GetStatItemAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatItemAbilityIDsStatChange, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatOverdriveAbilityIDs = `-- name: GetStatOverdriveAbilityIDs :many
+SELECT DISTINCT oa.id
+FROM overdrive_abilities oa
+JOIN j_overdrive_abilities_related_stats j ON j.overdrive_ability_id = oa.id
+WHERE j.stat_id = $1
+ORDER BY oa.id
+`
+
+func (q *Queries) GetStatOverdriveAbilityIDs(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatOverdriveAbilityIDs, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatOverdriveAbilityIDsStatChange = `-- name: GetStatOverdriveAbilityIDsStatChange :many
+SELECT DISTINCT oa.id
+FROM overdrive_abilities oa
+JOIN abilities a ON oa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN stat_changes sc ON j2.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY oa.id
+`
+
+func (q *Queries) GetStatOverdriveAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatOverdriveAbilityIDsStatChange, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatPlayerAbilityIDs = `-- name: GetStatPlayerAbilityIDs :many
+SELECT DISTINCT pa.id
+FROM player_abilities pa
+JOIN j_player_abilities_related_stats j ON j.player_ability_id = pa.id
+WHERE j.stat_id = $1
+ORDER BY pa.id
+`
+
+func (q *Queries) GetStatPlayerAbilityIDs(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatPlayerAbilityIDs, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatPlayerAbilityIDsStatChange = `-- name: GetStatPlayerAbilityIDsStatChange :many
+SELECT DISTINCT pa.id
+FROM player_abilities pa
+JOIN abilities a ON pa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN stat_changes sc ON j2.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY pa.id
+`
+
+func (q *Queries) GetStatPlayerAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatPlayerAbilityIDsStatChange, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatPropertyIDs = `-- name: GetStatPropertyIDs :many
+SELECT DISTINCT p.id
+FROM properties p
+JOIN j_properties_related_stats j ON j.status_condition_id = p.id
+WHERE j.stat_id = $1
+ORDER BY p.id
+`
+
+func (q *Queries) GetStatPropertyIDs(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatPropertyIDs, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatPropertyIDsStatChange = `-- name: GetStatPropertyIDsStatChange :many
+SELECT DISTINCT p.id
+FROM properties p
+JOIN j_properties_stat_changes j ON j.status_condition_id = p.id
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY p.id
+`
+
+func (q *Queries) GetStatPropertyIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatPropertyIDsStatChange, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatSphereIDs = `-- name: GetStatSphereIDs :many
+SELECT DISTINCT sph.id
+FROM spheres sph
+JOIN items i ON sph.item_id = i.id
+JOIN j_items_related_stats j ON j.item_id = i.id
+WHERE j.stat_id = $1
+ORDER BY sph.id
+`
+
+func (q *Queries) GetStatSphereIDs(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatSphereIDs, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatStatusConditionIDs = `-- name: GetStatStatusConditionIDs :many
+SELECT DISTINCT sc.id
+FROM status_conditions sc
+JOIN j_status_conditions_related_stats j ON j.status_condition_id = sc.id
+WHERE j.stat_id = $1
+ORDER BY sc.id
+`
+
+func (q *Queries) GetStatStatusConditionIDs(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatStatusConditionIDs, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatStatusConditionIDsStatChange = `-- name: GetStatStatusConditionIDsStatChange :many
+SELECT DISTINCT scon.id
+FROM status_conditions scon
+JOIN j_status_conditions_stat_changes j ON j.status_condition_id = scon.id
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY scon.id
+`
+
+func (q *Queries) GetStatStatusConditionIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatStatusConditionIDsStatChange, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatTriggerCommandIDs = `-- name: GetStatTriggerCommandIDs :many
+SELECT DISTINCT tc.id
+FROM trigger_commands tc
+JOIN j_trigger_commands_related_stats j ON j.trigger_command_id = tc.id
+WHERE j.stat_id = $1
+ORDER BY tc.id
+`
+
+func (q *Queries) GetStatTriggerCommandIDs(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatTriggerCommandIDs, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatTriggerCommandIDsStatChange = `-- name: GetStatTriggerCommandIDsStatChange :many
+SELECT DISTINCT tc.id
+FROM trigger_commands tc
+JOIN abilities a ON tc.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN stat_changes sc ON j2.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY tc.id
+`
+
+func (q *Queries) GetStatTriggerCommandIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatTriggerCommandIDsStatChange, statID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionAutoAbilityIDs = `-- name: GetStatusConditionAutoAbilityIDs :many
+SELECT aa.id
+FROM auto_abilities aa
+WHERE EXISTS (
+    SELECT 1
+    FROM j_auto_abilities_added_statusses j
+    JOIN status_conditions sc ON j.status_condition_id = sc.id
+    WHERE j.auto_ability_id = aa.id
+      AND sc.id = $1
+
+    UNION ALL
+
+    SELECT 1
+    FROM j_auto_abilities_added_status_resists j
+    JOIN status_resists sr ON j.status_resist_id = sr.id
+    JOIN status_conditions sc ON sr.status_condition_id = sc.id
+    WHERE j.auto_ability_id = aa.id
+      AND sc.id = $1
+
+    UNION ALL
+
+    SELECT 1
+    FROM inflicted_statusses ist
+    JOIN status_conditions sc ON ist.status_condition_id = sc.id
+    WHERE aa.on_hit_status_id = ist.id
+      AND sc.id = $1
+)
+ORDER BY aa.id
+`
+
+func (q *Queries) GetStatusConditionAutoAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionAutoAbilityIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionEnemyAbilityIDsInflicted = `-- name: GetStatusConditionEnemyAbilityIDsInflicted :many
+SELECT DISTINCT ea.id
+FROM enemy_abilities ea
+JOIN abilities a ON ea.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+JOIN status_conditions sc ON ist.status_condition_id = sc.id
+WHERE sc.id = $1
+  AND ist.probability >= $2::int
+  AND ist.probability <= $3::int
+ORDER BY ea.id
+`
+
+type GetStatusConditionEnemyAbilityIDsInflictedParams struct {
+	StatusConditionID int32
+	MinRate           int32
+	MaxRate           int32
+}
+
+func (q *Queries) GetStatusConditionEnemyAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionEnemyAbilityIDsInflictedParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionEnemyAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionEnemyAbilityIDsRemoved = `-- name: GetStatusConditionEnemyAbilityIDsRemoved :many
+SELECT DISTINCT ea.id
+FROM enemy_abilities ea
+JOIN abilities a ON ea.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN status_conditions sc ON j2.status_condition_id = sc.id
+WHERE sc.id = $1
+ORDER BY ea.id
+`
+
+func (q *Queries) GetStatusConditionEnemyAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionEnemyAbilityIDsRemoved, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionIDs = `-- name: GetStatusConditionIDs :many
+SELECT id FROM status_conditions ORDER BY id
+`
+
+func (q *Queries) GetStatusConditionIDs(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionIDsByCategory = `-- name: GetStatusConditionIDsByCategory :many
+SELECT id FROM status_conditions WHERE category = ANY($1::status_condition_category[]) ORDER BY id
+`
+
+func (q *Queries) GetStatusConditionIDsByCategory(ctx context.Context, category []StatusConditionCategory) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionIDsByCategory, pq.Array(category))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionItemAbilityIDsInflicted = `-- name: GetStatusConditionItemAbilityIDsInflicted :many
+SELECT DISTINCT ia.id
+FROM item_abilities ia
+JOIN abilities a ON ia.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+JOIN status_conditions sc ON ist.status_condition_id = sc.id
+WHERE sc.id = $1
+  AND ist.probability >= $2::int
+  AND ist.probability <= $3::int
+ORDER BY ia.id
+`
+
+type GetStatusConditionItemAbilityIDsInflictedParams struct {
+	StatusConditionID int32
+	MinRate           int32
+	MaxRate           int32
+}
+
+func (q *Queries) GetStatusConditionItemAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionItemAbilityIDsInflictedParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionItemAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionItemAbilityIDsRemoved = `-- name: GetStatusConditionItemAbilityIDsRemoved :many
+SELECT DISTINCT ia.id
+FROM item_abilities ia
+JOIN abilities a ON ia.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN status_conditions sc ON j2.status_condition_id = sc.id
+WHERE sc.id = $1
+ORDER BY ia.id
+`
+
+func (q *Queries) GetStatusConditionItemAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionItemAbilityIDsRemoved, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionOverdriveAbilityIDsInflicted = `-- name: GetStatusConditionOverdriveAbilityIDsInflicted :many
+SELECT DISTINCT oa.id
+FROM overdrive_abilities oa
+JOIN abilities a ON oa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+JOIN status_conditions sc ON ist.status_condition_id = sc.id
+WHERE sc.id = $1
+  AND ist.probability >= $2::int
+  AND ist.probability <= $3::int
+ORDER BY oa.id
+`
+
+type GetStatusConditionOverdriveAbilityIDsInflictedParams struct {
+	StatusConditionID int32
+	MinRate           int32
+	MaxRate           int32
+}
+
+func (q *Queries) GetStatusConditionOverdriveAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionOverdriveAbilityIDsInflictedParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionOverdriveAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionOverdriveAbilityIDsRemoved = `-- name: GetStatusConditionOverdriveAbilityIDsRemoved :many
+SELECT DISTINCT oa.id
+FROM overdrive_abilities oa
+JOIN abilities a ON oa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN status_conditions sc ON j2.status_condition_id = sc.id
+WHERE sc.id = $1
+ORDER BY oa.id
+`
+
+func (q *Queries) GetStatusConditionOverdriveAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionOverdriveAbilityIDsRemoved, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionPlayerAbilityIDsInflicted = `-- name: GetStatusConditionPlayerAbilityIDsInflicted :many
+SELECT DISTINCT pa.id
+FROM player_abilities pa
+JOIN abilities a ON pa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+JOIN status_conditions sc ON ist.status_condition_id = sc.id
+WHERE sc.id = $1
+  AND ist.probability >= $2::int
+  AND ist.probability <= $3::int
+ORDER BY pa.id
+`
+
+type GetStatusConditionPlayerAbilityIDsInflictedParams struct {
+	StatusConditionID int32
+	MinRate           int32
+	MaxRate           int32
+}
+
+func (q *Queries) GetStatusConditionPlayerAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionPlayerAbilityIDsInflictedParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionPlayerAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionPlayerAbilityIDsRemoved = `-- name: GetStatusConditionPlayerAbilityIDsRemoved :many
+SELECT DISTINCT pa.id
+FROM player_abilities pa
+JOIN abilities a ON pa.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN status_conditions sc ON j2.status_condition_id = sc.id
+WHERE sc.id = $1
+ORDER BY pa.id
+`
+
+func (q *Queries) GetStatusConditionPlayerAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionPlayerAbilityIDsRemoved, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionRemovedConditionIDs = `-- name: GetStatusConditionRemovedConditionIDs :many
+SELECT DISTINCT sc1.id
+FROM status_conditions sc1
+JOIN j_status_conditions_removed_status_conditions j ON j.child_condition_id = sc1.id
+JOIN status_conditions sc2 ON j.parent_condition_id = sc2.id
+WHERE sc2.id = $1
+ORDER BY sc1.id
+`
+
+func (q *Queries) GetStatusConditionRemovedConditionIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionRemovedConditionIDs, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionResistingMonsterIDs = `-- name: GetStatusConditionResistingMonsterIDs :many
+SELECT m.id
+FROM monsters m
+WHERE EXISTS (
+    SELECT 1
+    FROM j_monsters_immunities jmi
+    WHERE jmi.monster_id = m.id
+      AND jmi.status_condition_id = $1
+
+    UNION ALL
+
+    SELECT 1
+    FROM j_monsters_status_resists jmsr
+    JOIN status_resists sr ON sr.id = jmsr.status_resist_id
+    WHERE jmsr.monster_id = m.id
+      AND sr.status_condition_id = $1
+      AND sr.resistance >= $2::int
+)
+ORDER BY m.id
+`
+
+type GetStatusConditionResistingMonsterIDsParams struct {
+	StatusConditionID int32
+	MinResistance     int32
+}
+
+func (q *Queries) GetStatusConditionResistingMonsterIDs(ctx context.Context, arg GetStatusConditionResistingMonsterIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionResistingMonsterIDs, arg.StatusConditionID, arg.MinResistance)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionUnspecifiedAbilityIDsInflicted = `-- name: GetStatusConditionUnspecifiedAbilityIDsInflicted :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+JOIN status_conditions sc ON ist.status_condition_id = sc.id
+WHERE sc.id = $1
+  AND ist.probability >= $2::int
+  AND ist.probability <= $3::int
+ORDER BY ua.id
+`
+
+type GetStatusConditionUnspecifiedAbilityIDsInflictedParams struct {
+	StatusConditionID int32
+	MinRate           int32
+	MaxRate           int32
+}
+
+func (q *Queries) GetStatusConditionUnspecifiedAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionUnspecifiedAbilityIDsInflictedParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionUnspecifiedAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionUnspecifiedAbilityIDsRemoved = `-- name: GetStatusConditionUnspecifiedAbilityIDsRemoved :many
+SELECT DISTINCT ua.id
+FROM unspecified_abilities ua
+JOIN abilities a ON ua.ability_id = a.id
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
+JOIN status_conditions sc ON j2.status_condition_id = sc.id
+WHERE sc.id = $1
+ORDER BY ua.id
+`
+
+func (q *Queries) GetStatusConditionUnspecifiedAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionUnspecifiedAbilityIDsRemoved, id)
 	if err != nil {
 		return nil, err
 	}

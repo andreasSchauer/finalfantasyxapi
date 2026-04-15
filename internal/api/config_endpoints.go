@@ -81,6 +81,7 @@ type endpoints struct {
 	monsterSpecies           handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	playerAbilityCategory    handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 	shopCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
+	statusConditionCategory	 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -949,8 +950,12 @@ func (cfg *Config) EndpointsInit() {
 		resourceType:  "stat",
 		objLookup:     cfg.l.Stats,
 		objLookupID:   cfg.l.StatsID,
+		queryLookup:   cfg.q.stats,
 		idToResFunc:   idToNamedAPIResource[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetStatIDs,
+		getSingleFunc: cfg.getStat,
+		retrieveFunc:  cfg.retrieveStats,
 	}
 
 	e.properties = handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]{
@@ -958,8 +963,12 @@ func (cfg *Config) EndpointsInit() {
 		resourceType:  "property",
 		objLookup:     cfg.l.Properties,
 		objLookupID:   cfg.l.PropertiesID,
+		queryLookup:   cfg.q.properties,
 		idToResFunc:   idToNamedAPIResource[seeding.Property, Property, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetPropertyIDs,
+		getSingleFunc: cfg.getProperty,
+		retrieveFunc:  cfg.retrieveProperties,
 	}
 
 	e.overdriveModes = handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]{
@@ -993,8 +1002,12 @@ func (cfg *Config) EndpointsInit() {
 		resourceType:  "status condition",
 		objLookup:     cfg.l.StatusConditions,
 		objLookupID:   cfg.l.StatusConditionsID,
+		queryLookup:   cfg.q.statusConditions,
 		idToResFunc:   idToNamedAPIResource[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetStatusConditionIDs,
+		getSingleFunc: cfg.getStatusCondition,
+		retrieveFunc:  cfg.retrieveStatusConditions,
 	}
 
 	e.modifiers = handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]{
@@ -1002,8 +1015,12 @@ func (cfg *Config) EndpointsInit() {
 		resourceType:  "modifier",
 		objLookup:     cfg.l.Modifiers,
 		objLookupID:   cfg.l.ModifiersID,
+		queryLookup:   cfg.q.modifiers,
 		idToResFunc:   idToNamedAPIResource[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
+		retrieveQuery: cfg.db.GetModifierIDs,
+		getSingleFunc: cfg.getModifier,
+		retrieveFunc:  cfg.retrieveModifiers,
 	}
 
 	e.agilityTiers = handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]{
@@ -1011,8 +1028,12 @@ func (cfg *Config) EndpointsInit() {
 		resourceType:  "agility tier",
 		objLookup:     nil,
 		objLookupID:   cfg.l.AgilityTiersID,
+		queryLookup:   cfg.q.agilityTiers,
 		idToResFunc:   idToUnnamedAPIResource[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList],
 		resToListFunc: newUnnamedAPIResourceList,
+		retrieveQuery: cfg.db.GetAgilityTierIDs,
+		getSingleFunc: cfg.getAgilityTier,
+		retrieveFunc:  cfg.retrieveAgilityTiers,
 	}
 
 	e.abilityType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
@@ -1145,6 +1166,13 @@ func (cfg *Config) EndpointsInit() {
 		endpoint:      "shop-category",
 		resourceType:  "shop category",
 		objLookup:     cfg.t.ShopCategory.lookup,
+		resToListFunc: newEnumAPIResourceList,
+	}
+
+	e.statusConditionCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
+		endpoint:      "status-condition-category",
+		resourceType:  "status condition category",
+		objLookup:     cfg.t.StatusConditionCategory.lookup,
 		resToListFunc: newEnumAPIResourceList,
 	}
 

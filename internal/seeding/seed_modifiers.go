@@ -13,7 +13,7 @@ type Modifier struct {
 	ID           int32
 	Name         string   `json:"name"`
 	Effect       string   `json:"effect"`
-	Type         string   `json:"type"`
+	Category     string   `json:"type"`
 	DefaultValue *float32 `json:"default_value"`
 }
 
@@ -21,7 +21,7 @@ func (m Modifier) ToHashFields() []any {
 	return []any{
 		m.Name,
 		m.Effect,
-		m.Type,
+		m.Category,
 		h.DerefOrNil(m.DefaultValue),
 	}
 }
@@ -36,8 +36,8 @@ func (m Modifier) Error() string {
 
 func (m Modifier) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: 	m.ID,
-		Name: 	m.Name,
+		ID:   m.ID,
+		Name: m.Name,
 	}
 }
 
@@ -56,7 +56,7 @@ func (l *Lookup) seedModifiers(db *database.Queries, dbConn *sql.DB) error {
 				DataHash:     generateDataHash(modifier),
 				Name:         modifier.Name,
 				Effect:       modifier.Effect,
-				Type:         database.ModifierType(modifier.Type),
+				Category:     database.ModifierCategory(modifier.Category),
 				DefaultValue: h.GetNullFloat64(modifier.DefaultValue),
 			})
 			if err != nil {

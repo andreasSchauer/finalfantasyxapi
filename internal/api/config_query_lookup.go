@@ -73,27 +73,32 @@ type QueryLookup struct {
 	unspecifiedAbilities map[string]QueryParam
 	enemyAbilities       map[string]QueryParam
 
-	aeonCommands      map[string]QueryParam
-	overdriveCommands map[string]QueryParam
-	overdrives        map[string]QueryParam
-	ronsoRages        map[string]QueryParam
-	submenus          map[string]QueryParam
-	topmenus          map[string]QueryParam
+	aeonCommands      	map[string]QueryParam
+	overdriveCommands 	map[string]QueryParam
+	overdrives       	map[string]QueryParam
+	ronsoRages        	map[string]QueryParam
+	submenus          	map[string]QueryParam
+	topmenus          	map[string]QueryParam
 
-	allItems		map[string]QueryParam
-	items 			map[string]QueryParam
-	keyItems 		map[string]QueryParam
-	spheres 		map[string]QueryParam
-	primers			map[string]QueryParam
-	mixes			map[string]QueryParam
+	allItems			map[string]QueryParam
+	items 				map[string]QueryParam
+	keyItems 			map[string]QueryParam
+	spheres 			map[string]QueryParam
+	primers				map[string]QueryParam
+	mixes				map[string]QueryParam
 
 	autoAbilities		map[string]QueryParam
 	equipmentTables		map[string]QueryParam
 	equipment			map[string]QueryParam
 	celestialWeapons	map[string]QueryParam
 
-	elements		map[string]QueryParam
-	overdriveModes 	map[string]QueryParam
+	stats				map[string]QueryParam
+	properties			map[string]QueryParam
+	overdriveModes 		map[string]QueryParam
+	elements			map[string]QueryParam
+	statusConditions	map[string]QueryParam
+	modifiers			map[string]QueryParam
+	agilityTiers		map[string]QueryParam
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -180,8 +185,13 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initEquipmentParams(defaultParams)
 	cfg.initCelestialWeaponsParams(defaultParams)
 
-	cfg.q.elements = cfg.assignDefaultParams(defaultParams)
+	cfg.initStatsParams(defaultParams)
+	cfg.q.properties = cfg.assignDefaultParams(defaultParams)
 	cfg.initOverdriveModesParams(defaultParams)
+	cfg.q.elements = cfg.assignDefaultParams(defaultParams)
+	cfg.initStatusConditionsParams(defaultParams)
+	cfg.initModifierwsParams(defaultParams)
+	cfg.initAgilityTierParams(defaultParams)
 
 }
 
@@ -2630,6 +2640,21 @@ func (cfg *Config) initCelestialWeaponsParams(defaultParams []QueryParam) {
 	cfg.q.celestialWeapons = paramsMap
 }
 
+func (cfg *Config) initStatsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "changes_only",
+			Description: "Only includes a stat's related auto-abilities, abilities, status conditions, and properties that cause stat changes.",
+			Type:		 "bool",
+			ForList:     false,
+			ForSingle:   true,
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.stats = paramsMap
+}
+
 func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
@@ -2644,4 +2669,104 @@ func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {
 
 	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
 	cfg.q.overdriveModes = paramsMap
+}
+
+func (cfg *Config) initStatusConditionsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "inflict_min",
+			Description: "Only shows a status condition's related abilities with an infliction rate higher than or equal to the given amount. The default value is '1'. Can be combined with 'inflict_max', but can't be higher. Special values are 'infinite' (=254) and 'always' (=255).",
+			Type:		 "int",
+			ForList:     false,
+			ForSingle:   true,
+			AllowedIntRange: []int{1, 255},
+			SpecialInputs: []SpecialQueryInput{
+				{
+					Key: "infinite",
+					Val: 254,
+				},
+				{
+					Key: "always",
+					Val: 255,
+				},
+			},
+			DefaultVal:      h.GetIntPtr(1),
+		},
+		{
+			Name:		 "inflict_max",
+			Description: "Only shows a status condition's related abilities with an infliction rate lower than or equal to the given amount. The default value is '25'. Can be combined with 'inflict_min', but can't be lower. Special values are 'infinite' (=254) and 'always' (=255).",
+			Type:		 "int",
+			ForList:     false,
+			ForSingle:   true,
+			AllowedIntRange: []int{1, 255},
+			SpecialInputs: []SpecialQueryInput{
+				{
+					Key: "infinite",
+					Val: 254,
+				},
+				{
+					Key: "always",
+					Val: 255,
+				},
+			},
+			DefaultVal:      h.GetIntPtr(255),
+		},
+		{
+			Name:		 	 "resistance",
+			Description:     "Only shows a status condition's related monsters with a resistance higher than or equal to the given amount. Resistance is an integer ranging from 1 to 254 (immune). The value 'immune' can also be used, which counts as 254.",
+			Type: 		     "int",
+			ForList:         false,
+			ForSingle:       true,
+			AllowedIntRange: []int{1, 254},
+			SpecialInputs: []SpecialQueryInput{
+				{
+					Key: "immune",
+					Val: 254,
+				},
+			},
+			DefaultVal: h.GetIntPtr(1),
+		},
+		{
+			Name:		 "category",
+			Description: "Searches for status conditions that are of the specified status condition categories.",
+			Type:		 "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.StatusConditionCategory.lookup,
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.statusConditions = paramsMap
+}
+
+func (cfg *Config) initModifierwsParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "category",
+			Description: "Searches for modifiers that are of the specified modifier categories.",
+			Type:		 "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.ModifierCategory.lookup,
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.modifiers = paramsMap
+}
+
+func (cfg *Config) initAgilityTierParams(defaultParams []QueryParam) {
+	params := []QueryParam{
+		{
+			Name:		 "agility",
+			Description: "Searches for the agility tier that the given agility value belongs to.",
+			Type:		 "int",
+			ForList:     true,
+			ForSingle:   false,
+		},
+	}
+
+	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	cfg.q.agilityTiers = paramsMap
 }

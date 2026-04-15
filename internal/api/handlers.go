@@ -183,10 +183,30 @@ func (cfg *Config) HandleCelestialWeapons(w http.ResponseWriter, r *http.Request
 
 
 
-func (cfg *Config) HandleElements(w http.ResponseWriter, r *http.Request) {
-	routerNameOrID(cfg, w, r, cfg.e.elements)
+func (cfg *Config) HandleStats(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.stats)
+}
+
+func (cfg *Config) HandleProperties(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.properties)
 }
 
 func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.overdriveModes)
+}
+
+func (cfg *Config) HandleElements(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.elements)
+}
+
+func (cfg *Config) HandleStatusConditions(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.statusConditions)
+}
+
+func (cfg *Config) HandleModifiers(w http.ResponseWriter, r *http.Request) {
+	routerNameOrID(cfg, w, r, cfg.e.modifiers)
+}
+
+func (cfg *Config) HandleAgilityTiers(w http.ResponseWriter, r *http.Request) {
+	routerIdOnly(cfg, w, r, cfg.e.agilityTiers)
 }
