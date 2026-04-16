@@ -159,224 +159,57 @@ SELECT id FROM elements ORDER BY id;
 -- name: GetStatusConditionAutoAbilityIDs :many
 SELECT aa.id
 FROM auto_abilities aa
-WHERE EXISTS (
-    SELECT 1
-    FROM j_auto_abilities_added_statusses j
-    JOIN status_conditions sc ON j.status_condition_id = sc.id
-    WHERE j.auto_ability_id = aa.id
-      AND sc.id = $1
+JOIN j_auto_abilities_added_statusses j ON j.auto_ability_id = aa.id
+JOIN status_conditions sc ON j.status_condition_id = sc.id
+WHERE sc.id = $1
 
-    UNION ALL
+UNION
 
-    SELECT 1
-    FROM j_auto_abilities_added_status_resists j
-    JOIN status_resists sr ON j.status_resist_id = sr.id
-    JOIN status_conditions sc ON sr.status_condition_id = sc.id
-    WHERE j.auto_ability_id = aa.id
-      AND sc.id = $1
+SELECT aa.id
+FROM auto_abilities aa
+JOIN j_auto_abilities_added_status_resists j ON j.auto_ability_id = aa.id
+JOIN status_resists sr ON j.status_resist_id = sr.id
+JOIN status_conditions sc ON sr.status_condition_id = sc.id
+WHERE sc.id = $1
 
-    UNION ALL
+UNION
 
-    SELECT 1
-    FROM inflicted_statusses ist
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE aa.on_hit_status_id = ist.id
-      AND sc.id = $1
-)
-ORDER BY aa.id;
+SELECT aa.id
+FROM auto_abilities aa
+JOIN inflicted_statusses ist ON aa.on_hit_status_id = ist.id
+JOIN status_conditions sc ON ist.status_condition_id = sc.id
+WHERE sc.id = $1
+
+ORDER BY id;
 
 
--- name: GetStatusConditionPlayerAbilityIDsInflicted :many
-SELECT DISTINCT pa.id
-FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
+
+-- name: GetStatusConditionAbilityIDsInflicted :many
+SELECT a.id FROM abilities a
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = j1.battle_interaction_id
+JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+WHERE ist.status_condition_id = sqlc.arg(status_condition_id)::int AND ist.probability BETWEEN sqlc.arg('min_rate')::int AND sqlc.arg('max_rate')::int
+
+UNION
+
+SELECT a.id FROM abilities a
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE EXISTS (
-    SELECT 1
-    FROM j_battle_interactions_inflicted_status_conditions j2
-    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-      AND sc.id = sqlc.arg(status_condition_id)::int
-      AND ist.probability >= sqlc.arg('min_rate')::int
-      AND ist.probability <= sqlc.arg('max_rate')::int
+WHERE sqlc.arg(status_condition_id)::int = 6 AND bi.inflicted_delay_id IS NOT NULL
 
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_delays id
-    WHERE bi.inflicted_delay_id = id.id
-      AND sqlc.arg(status_condition_id)::int = 6
-)
-ORDER BY pa.id;
+ORDER BY id;
 
 
-
--- name: GetStatusConditionPlayerAbilityIDsRemoved :many
-SELECT DISTINCT pa.id
-FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
+-- name: GetStatusConditionAbilityIDsRemoved :many
+SELECT DISTINCT a.id
+FROM abilities a
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN status_conditions sc ON j2.status_condition_id = sc.id
 WHERE sc.id = $1
-ORDER BY pa.id;
-
-
--- name: GetStatusConditionOverdriveAbilityIDsInflicted :many
-SELECT DISTINCT oa.id
-FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE EXISTS (
-    SELECT 1
-    FROM j_battle_interactions_inflicted_status_conditions j2
-    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-      AND sc.id = sqlc.arg(status_condition_id)::int
-      AND ist.probability >= sqlc.arg('min_rate')::int
-      AND ist.probability <= sqlc.arg('max_rate')::int
-
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_delays id
-    WHERE bi.inflicted_delay_id = id.id
-      AND sqlc.arg(status_condition_id)::int = 6
-)
-ORDER BY oa.id;
-
-
--- name: GetStatusConditionOverdriveAbilityIDsRemoved :many
-SELECT DISTINCT oa.id
-FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
-ORDER BY oa.id;
-
-
--- name: GetStatusConditionItemAbilityIDsInflicted :many
-SELECT DISTINCT ia.id
-FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE EXISTS (
-    SELECT 1
-    FROM j_battle_interactions_inflicted_status_conditions j2
-    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-      AND sc.id = sqlc.arg(status_condition_id)::int
-      AND ist.probability >= sqlc.arg('min_rate')::int
-      AND ist.probability <= sqlc.arg('max_rate')::int
-
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_delays id
-    WHERE bi.inflicted_delay_id = id.id
-      AND sqlc.arg(status_condition_id)::int = 6
-)
-ORDER BY ia.id;
-
-
--- name: GetStatusConditionItemAbilityIDsRemoved :many
-SELECT DISTINCT ia.id
-FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
-ORDER BY ia.id;
-
-
--- name: GetStatusConditionUnspecifiedAbilityIDsInflicted :many
-SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE EXISTS (
-    SELECT 1
-    FROM j_battle_interactions_inflicted_status_conditions j2
-    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-      AND sc.id = sqlc.arg(status_condition_id)::int
-      AND ist.probability >= sqlc.arg('min_rate')::int
-      AND ist.probability <= sqlc.arg('max_rate')::int
-
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_delays id
-    WHERE bi.inflicted_delay_id = id.id
-      AND sqlc.arg(status_condition_id)::int = 6
-)
-ORDER BY ua.id;
-
-
--- name: GetStatusConditionUnspecifiedAbilityIDsRemoved :many
-SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
-ORDER BY ua.id;
-
-
--- name: GetStatusConditionEnemyAbilityIDsInflicted :many
-SELECT DISTINCT ea.id
-FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE EXISTS (
-    SELECT 1
-    FROM j_battle_interactions_inflicted_status_conditions j2
-    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-      AND sc.id = sqlc.arg(status_condition_id)::int
-      AND ist.probability >= sqlc.arg('min_rate')::int
-      AND ist.probability <= sqlc.arg('max_rate')::int
-
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_delays id
-    WHERE bi.inflicted_delay_id = id.id
-      AND sqlc.arg(status_condition_id)::int = 6
-    
-
-)
-ORDER BY ea.id;
-
-
--- name: GetStatusConditionEnemyAbilityIDsRemoved :many
-SELECT DISTINCT ea.id
-FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
-ORDER BY ea.id;
+ORDER BY a.id;
 
 
 -- name: GetStatusConditionInflictedDelayConditionIDs :many
@@ -401,23 +234,19 @@ ORDER BY sc1.id;
 -- name: GetStatusConditionResistingMonsterIDs :many
 SELECT m.id
 FROM monsters m
-WHERE EXISTS (
-    SELECT 1
-    FROM j_monsters_immunities jmi
-    WHERE jmi.monster_id = m.id
-      AND jmi.status_condition_id = sqlc.arg(status_condition_id)::int
+JOIN j_monsters_immunities jmi ON jmi.monster_id = m.id
+WHERE jmi.status_condition_id = sqlc.arg(status_condition_id)::int
 
-    UNION ALL
+UNION
 
-    SELECT 1
-    FROM j_monsters_status_resists jmsr
-    JOIN status_resists sr ON sr.id = jmsr.status_resist_id
-    WHERE jmsr.monster_id = m.id
-      AND sr.status_condition_id = sqlc.arg(status_condition_id)::int
-      AND sr.resistance >= sqlc.arg('min_resistance')::int
-)
-ORDER BY m.id;
+SELECT m.id
+FROM monsters m
+JOIN j_monsters_status_resists jmsr ON jmsr.monster_id = m.id
+JOIN status_resists sr ON sr.id = jmsr.status_resist_id
+WHERE sr.status_condition_id = sqlc.arg(status_condition_id)::int
+  AND sr.resistance >= sqlc.arg('min_resistance')::int
 
+ORDER BY id;
 
 
 -- name: GetStatusConditionIDs :many

@@ -1426,95 +1426,31 @@ func (q *Queries) GetStatTriggerCommandIDsStatChange(ctx context.Context, statID
 	return items, nil
 }
 
-const getStatusConditionAutoAbilityIDs = `-- name: GetStatusConditionAutoAbilityIDs :many
-SELECT aa.id
-FROM auto_abilities aa
-WHERE EXISTS (
-    SELECT 1
-    FROM j_auto_abilities_added_statusses j
-    JOIN status_conditions sc ON j.status_condition_id = sc.id
-    WHERE j.auto_ability_id = aa.id
-      AND sc.id = $1
+const getStatusConditionAbilityIDsInflicted = `-- name: GetStatusConditionAbilityIDsInflicted :many
+SELECT a.id FROM abilities a
+JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
+JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = j1.battle_interaction_id
+JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+WHERE ist.status_condition_id = $1::int AND ist.probability BETWEEN $2::int AND $3::int
 
-    UNION ALL
+UNION
 
-    SELECT 1
-    FROM j_auto_abilities_added_status_resists j
-    JOIN status_resists sr ON j.status_resist_id = sr.id
-    JOIN status_conditions sc ON sr.status_condition_id = sc.id
-    WHERE j.auto_ability_id = aa.id
-      AND sc.id = $1
-
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_statusses ist
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE aa.on_hit_status_id = ist.id
-      AND sc.id = $1
-)
-ORDER BY aa.id
-`
-
-func (q *Queries) GetStatusConditionAutoAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionAutoAbilityIDs, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getStatusConditionEnemyAbilityIDsInflicted = `-- name: GetStatusConditionEnemyAbilityIDsInflicted :many
-SELECT DISTINCT ea.id
-FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
+SELECT a.id FROM abilities a
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE EXISTS (
-    SELECT 1
-    FROM j_battle_interactions_inflicted_status_conditions j2
-    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-      AND sc.id = $1::int
-      AND ist.probability >= $2::int
-      AND ist.probability <= $3::int
+WHERE $1::int = 6 AND bi.inflicted_delay_id IS NOT NULL
 
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_delays id
-    WHERE bi.inflicted_delay_id = id.id
-      AND $1::int = 6
-    
-
-)
-ORDER BY ea.id
+ORDER BY id
 `
 
-type GetStatusConditionEnemyAbilityIDsInflictedParams struct {
+type GetStatusConditionAbilityIDsInflictedParams struct {
 	StatusConditionID int32
 	MinRate           int32
 	MaxRate           int32
 }
 
-func (q *Queries) GetStatusConditionEnemyAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionEnemyAbilityIDsInflictedParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionEnemyAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
+func (q *Queries) GetStatusConditionAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionAbilityIDsInflictedParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
 	if err != nil {
 		return nil, err
 	}
@@ -1536,20 +1472,69 @@ func (q *Queries) GetStatusConditionEnemyAbilityIDsInflicted(ctx context.Context
 	return items, nil
 }
 
-const getStatusConditionEnemyAbilityIDsRemoved = `-- name: GetStatusConditionEnemyAbilityIDsRemoved :many
-SELECT DISTINCT ea.id
-FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
+const getStatusConditionAbilityIDsRemoved = `-- name: GetStatusConditionAbilityIDsRemoved :many
+SELECT DISTINCT a.id
+FROM abilities a
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
 JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
 JOIN status_conditions sc ON j2.status_condition_id = sc.id
 WHERE sc.id = $1
-ORDER BY ea.id
+ORDER BY a.id
 `
 
-func (q *Queries) GetStatusConditionEnemyAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionEnemyAbilityIDsRemoved, id)
+func (q *Queries) GetStatusConditionAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionAbilityIDsRemoved, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStatusConditionAutoAbilityIDs = `-- name: GetStatusConditionAutoAbilityIDs :many
+SELECT aa.id
+FROM auto_abilities aa
+JOIN j_auto_abilities_added_statusses j ON j.auto_ability_id = aa.id
+JOIN status_conditions sc ON j.status_condition_id = sc.id
+WHERE sc.id = $1
+
+UNION
+
+SELECT aa.id
+FROM auto_abilities aa
+JOIN j_auto_abilities_added_status_resists j ON j.auto_ability_id = aa.id
+JOIN status_resists sr ON j.status_resist_id = sr.id
+JOIN status_conditions sc ON sr.status_condition_id = sc.id
+WHERE sc.id = $1
+
+UNION
+
+SELECT aa.id
+FROM auto_abilities aa
+JOIN inflicted_statusses ist ON aa.on_hit_status_id = ist.id
+JOIN status_conditions sc ON ist.status_condition_id = sc.id
+WHERE sc.id = $1
+
+ORDER BY id
+`
+
+func (q *Queries) GetStatusConditionAutoAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionAutoAbilityIDs, id)
 	if err != nil {
 		return nil, err
 	}
@@ -1658,276 +1643,6 @@ func (q *Queries) GetStatusConditionInflictedDelayConditionIDs(ctx context.Conte
 	return items, nil
 }
 
-const getStatusConditionItemAbilityIDsInflicted = `-- name: GetStatusConditionItemAbilityIDsInflicted :many
-SELECT DISTINCT ia.id
-FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE EXISTS (
-    SELECT 1
-    FROM j_battle_interactions_inflicted_status_conditions j2
-    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-      AND sc.id = $1::int
-      AND ist.probability >= $2::int
-      AND ist.probability <= $3::int
-
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_delays id
-    WHERE bi.inflicted_delay_id = id.id
-      AND $1::int = 6
-)
-ORDER BY ia.id
-`
-
-type GetStatusConditionItemAbilityIDsInflictedParams struct {
-	StatusConditionID int32
-	MinRate           int32
-	MaxRate           int32
-}
-
-func (q *Queries) GetStatusConditionItemAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionItemAbilityIDsInflictedParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionItemAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getStatusConditionItemAbilityIDsRemoved = `-- name: GetStatusConditionItemAbilityIDsRemoved :many
-SELECT DISTINCT ia.id
-FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
-ORDER BY ia.id
-`
-
-func (q *Queries) GetStatusConditionItemAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionItemAbilityIDsRemoved, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getStatusConditionOverdriveAbilityIDsInflicted = `-- name: GetStatusConditionOverdriveAbilityIDsInflicted :many
-SELECT DISTINCT oa.id
-FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE EXISTS (
-    SELECT 1
-    FROM j_battle_interactions_inflicted_status_conditions j2
-    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-      AND sc.id = $1::int
-      AND ist.probability >= $2::int
-      AND ist.probability <= $3::int
-
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_delays id
-    WHERE bi.inflicted_delay_id = id.id
-      AND $1::int = 6
-)
-ORDER BY oa.id
-`
-
-type GetStatusConditionOverdriveAbilityIDsInflictedParams struct {
-	StatusConditionID int32
-	MinRate           int32
-	MaxRate           int32
-}
-
-func (q *Queries) GetStatusConditionOverdriveAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionOverdriveAbilityIDsInflictedParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionOverdriveAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getStatusConditionOverdriveAbilityIDsRemoved = `-- name: GetStatusConditionOverdriveAbilityIDsRemoved :many
-SELECT DISTINCT oa.id
-FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
-ORDER BY oa.id
-`
-
-func (q *Queries) GetStatusConditionOverdriveAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionOverdriveAbilityIDsRemoved, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getStatusConditionPlayerAbilityIDsInflicted = `-- name: GetStatusConditionPlayerAbilityIDsInflicted :many
-SELECT DISTINCT pa.id
-FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE EXISTS (
-    SELECT 1
-    FROM j_battle_interactions_inflicted_status_conditions j2
-    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-      AND sc.id = $1::int
-      AND ist.probability >= $2::int
-      AND ist.probability <= $3::int
-
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_delays id
-    WHERE bi.inflicted_delay_id = id.id
-      AND $1::int = 6
-)
-ORDER BY pa.id
-`
-
-type GetStatusConditionPlayerAbilityIDsInflictedParams struct {
-	StatusConditionID int32
-	MinRate           int32
-	MaxRate           int32
-}
-
-func (q *Queries) GetStatusConditionPlayerAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionPlayerAbilityIDsInflictedParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionPlayerAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getStatusConditionPlayerAbilityIDsRemoved = `-- name: GetStatusConditionPlayerAbilityIDsRemoved :many
-SELECT DISTINCT pa.id
-FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
-ORDER BY pa.id
-`
-
-func (q *Queries) GetStatusConditionPlayerAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionPlayerAbilityIDsRemoved, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getStatusConditionRemovedConditionIDs = `-- name: GetStatusConditionRemovedConditionIDs :many
 SELECT DISTINCT sc1.id
 FROM status_conditions sc1
@@ -1963,22 +1678,19 @@ func (q *Queries) GetStatusConditionRemovedConditionIDs(ctx context.Context, id 
 const getStatusConditionResistingMonsterIDs = `-- name: GetStatusConditionResistingMonsterIDs :many
 SELECT m.id
 FROM monsters m
-WHERE EXISTS (
-    SELECT 1
-    FROM j_monsters_immunities jmi
-    WHERE jmi.monster_id = m.id
-      AND jmi.status_condition_id = $1::int
+JOIN j_monsters_immunities jmi ON jmi.monster_id = m.id
+WHERE jmi.status_condition_id = $1::int
 
-    UNION ALL
+UNION
 
-    SELECT 1
-    FROM j_monsters_status_resists jmsr
-    JOIN status_resists sr ON sr.id = jmsr.status_resist_id
-    WHERE jmsr.monster_id = m.id
-      AND sr.status_condition_id = $1::int
-      AND sr.resistance >= $2::int
-)
-ORDER BY m.id
+SELECT m.id
+FROM monsters m
+JOIN j_monsters_status_resists jmsr ON jmsr.monster_id = m.id
+JOIN status_resists sr ON sr.id = jmsr.status_resist_id
+WHERE sr.status_condition_id = $1::int
+  AND sr.resistance >= $2::int
+
+ORDER BY id
 `
 
 type GetStatusConditionResistingMonsterIDsParams struct {
@@ -1988,96 +1700,6 @@ type GetStatusConditionResistingMonsterIDsParams struct {
 
 func (q *Queries) GetStatusConditionResistingMonsterIDs(ctx context.Context, arg GetStatusConditionResistingMonsterIDsParams) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getStatusConditionResistingMonsterIDs, arg.StatusConditionID, arg.MinResistance)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getStatusConditionUnspecifiedAbilityIDsInflicted = `-- name: GetStatusConditionUnspecifiedAbilityIDsInflicted :many
-SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE EXISTS (
-    SELECT 1
-    FROM j_battle_interactions_inflicted_status_conditions j2
-    JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-    JOIN status_conditions sc ON ist.status_condition_id = sc.id
-    WHERE j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-      AND sc.id = $1::int
-      AND ist.probability >= $2::int
-      AND ist.probability <= $3::int
-
-    UNION ALL
-
-    SELECT 1
-    FROM inflicted_delays id
-    WHERE bi.inflicted_delay_id = id.id
-      AND $1::int = 6
-)
-ORDER BY ua.id
-`
-
-type GetStatusConditionUnspecifiedAbilityIDsInflictedParams struct {
-	StatusConditionID int32
-	MinRate           int32
-	MaxRate           int32
-}
-
-func (q *Queries) GetStatusConditionUnspecifiedAbilityIDsInflicted(ctx context.Context, arg GetStatusConditionUnspecifiedAbilityIDsInflictedParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionUnspecifiedAbilityIDsInflicted, arg.StatusConditionID, arg.MinRate, arg.MaxRate)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getStatusConditionUnspecifiedAbilityIDsRemoved = `-- name: GetStatusConditionUnspecifiedAbilityIDsRemoved :many
-SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
-ORDER BY ua.id
-`
-
-func (q *Queries) GetStatusConditionUnspecifiedAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionUnspecifiedAbilityIDsRemoved, id)
 	if err != nil {
 		return nil, err
 	}
