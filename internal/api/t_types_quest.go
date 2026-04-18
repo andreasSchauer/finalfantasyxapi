@@ -3,8 +3,8 @@ package api
 type expQuest struct {
 	testGeneral
 	expUnique
-	questType			int32
-	typedQuest			string
+	questType  int32
+	typedQuest string
 }
 
 func (e expQuest) GetTestGeneral() testGeneral {

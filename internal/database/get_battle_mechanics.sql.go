@@ -1644,12 +1644,12 @@ func (q *Queries) GetStatusConditionInflictedDelayConditionIDs(ctx context.Conte
 }
 
 const getStatusConditionRemovedConditionIDs = `-- name: GetStatusConditionRemovedConditionIDs :many
-SELECT DISTINCT sc1.id
-FROM status_conditions sc1
-JOIN j_status_conditions_removed_status_conditions j ON j.child_condition_id = sc1.id
-JOIN status_conditions sc2 ON j.parent_condition_id = sc2.id
-WHERE sc2.id = $1
-ORDER BY sc1.id
+SELECT DISTINCT scp.id
+FROM status_conditions scp
+JOIN j_status_conditions_removed_status_conditions j ON j.parent_condition_id = scp.id
+JOIN status_conditions scc ON j.child_condition_id = scc.id
+WHERE scc.id = $1
+ORDER BY scp.id
 `
 
 func (q *Queries) GetStatusConditionRemovedConditionIDs(ctx context.Context, id int32) ([]int32, error) {

@@ -3,17 +3,17 @@ package api
 type expKeyItem struct {
 	testGeneral
 	expUnique
-	untypedItem        	int32
-	category           	int32
-	celestialWeapon		*int32	
-	primer				*int32
-	areas				[]int32
-	treasures			[]int32
-	quests				[]int32
+	untypedItem     int32
+	category        int32
+	celestialWeapon *int32
+	primer          *int32
+	areas           []int32
+	treasures       []int32
+	quests          []int32
 }
 
-func (i expKeyItem) GetTestGeneral() testGeneral {
-	return i.testGeneral
+func (e expKeyItem) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareKeyItems(test test, exp expKeyItem, got KeyItem) {

@@ -190,7 +190,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initOverdriveModesParams(defaultParams)
 	cfg.q.elements = cfg.assignDefaultParams(defaultParams)
 	cfg.initStatusConditionsParams(defaultParams)
-	cfg.initModifierwsParams(defaultParams)
+	cfg.initModifiersParams(defaultParams)
 	cfg.initAgilityTierParams(defaultParams)
 
 }
@@ -2740,7 +2740,7 @@ func (cfg *Config) initStatusConditionsParams(defaultParams []QueryParam) {
 	cfg.q.statusConditions = paramsMap
 }
 
-func (cfg *Config) initModifierwsParams(defaultParams []QueryParam) {
+func (cfg *Config) initModifiersParams(defaultParams []QueryParam) {
 	params := []QueryParam{
 		{
 			Name:		 "category",

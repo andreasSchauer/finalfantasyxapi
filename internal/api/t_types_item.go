@@ -15,8 +15,8 @@ type expItem struct {
 	mixes              []int32
 }
 
-func (i expItem) GetTestGeneral() testGeneral {
-	return i.testGeneral
+func (e expItem) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareItems(test test, exp expItem, got Item) {
@@ -34,16 +34,16 @@ func compareItems(test test, exp expItem, got Item) {
 }
 
 type testMonItemAmts struct {
-	index		  		int
-	monster       		int32
+	index               int
+	monster             int32
 	stealCommon         int32
-	stealRare         	int32
+	stealRare           int32
 	dropCommon          int32
-	dropRare          	int32
+	dropRare            int32
 	secondaryDropCommon int32
-	secondaryDropRare 	int32
-	bribe         		int32
-	other        		int32
+	secondaryDropRare   int32
+	bribe               int32
+	other               int32
 }
 
 func (t testMonItemAmts) GetIndex() int {

@@ -3,10 +3,10 @@ package api
 type expSubmenu struct {
 	testGeneral
 	expUnique
-	topmenu			*int32
-	users			[]int32
-	abilities		[]int32
-	openedBy		*expMenuOpen
+	topmenu   *int32
+	users     []int32
+	abilities []int32
+	openedBy  *expMenuOpen
 }
 
 func (e expSubmenu) GetTestGeneral() testGeneral {
@@ -22,9 +22,9 @@ func compareSubmenus(test test, exp expSubmenu, got Submenu) {
 }
 
 type expMenuOpen struct {
-	ability				*int32
-	aeonCommand			*int32
-	overdriveCommands	[]int32
+	ability           *int32
+	aeonCommand       *int32
+	overdriveCommands []int32
 }
 
 func compareMenuOpen(test test, fieldName string, exp expMenuOpen, got MenuOpen) {

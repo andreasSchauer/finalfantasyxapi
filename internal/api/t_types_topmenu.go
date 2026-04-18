@@ -3,11 +3,11 @@ package api
 type expTopmenu struct {
 	testGeneral
 	expUnique
-	submenus			[]int32
-	abilities			[]int32
-	overdriveCommands	[]int32
-	overdrives			[]int32
-	aeonCommands		[]int32
+	submenus          []int32
+	abilities         []int32
+	overdriveCommands []int32
+	overdrives        []int32
+	aeonCommands      []int32
 }
 
 func (e expTopmenu) GetTestGeneral() testGeneral {

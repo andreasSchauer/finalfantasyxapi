@@ -3,16 +3,16 @@ package api
 type expAutoAbility struct {
 	testGeneral
 	expUnique
-	monstersDrop 		[]int32
-	monstersItems 		[]testMonItemAmts
-	shopsPreAirship		[]int32
-	shopsPostAirship	[]int32
-	treasures			[]int32
-	equipmentTables		[]int32
+	monstersDrop     []int32
+	monstersItems    []testMonItemAmts
+	shopsPreAirship  []int32
+	shopsPostAirship []int32
+	treasures        []int32
+	equipmentTables  []int32
 }
 
-func (a expAutoAbility) GetTestGeneral() testGeneral {
-	return a.testGeneral
+func (e expAutoAbility) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareAutoAbilities(test test, exp expAutoAbility, got AutoAbility) {

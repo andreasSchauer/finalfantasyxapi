@@ -116,10 +116,6 @@ func getStatusInteractions(cfg *Config, r *http.Request, status seeding.StatusCo
 }
 
 func populateStatusInteractions(cfg *Config, abilities []TypedAPIResource) StatusInteractions {
-	if len(abilities) == 0 {
-		return StatusInteractions{}
-	}
-
 	ints := StatusInteractions{
 		PlayerAbilities: []NamedAPIResource{},
 		OverdriveAbilities: []NamedAPIResource{},
@@ -145,7 +141,7 @@ func populateStatusInteractions(cfg *Config, abilities []TypedAPIResource) Statu
 			ints.OverdriveAbilities = append(ints.OverdriveAbilities, res)
 
 		case string(database.AbilityTypeItemAbility):
-			itemAbility, _ := seeding.GetResource(obj, cfg.l.ItemAbilities)
+			itemAbility, _ := seeding.GetResource(ability.Name, cfg.l.ItemAbilities)
 			res := nameToNamedAPIResource(cfg, cfg.e.itemAbilities, itemAbility.Name, itemAbility.Version)
 			ints.ItemAbilities = append(ints.ItemAbilities, res)
 

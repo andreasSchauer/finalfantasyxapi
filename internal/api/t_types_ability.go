@@ -1,20 +1,19 @@
 package api
 
-
 type expAbility struct {
 	testGeneral
 	expNameVer
-	rank				*int32
-	appearsInHelpBar	bool
-	canCopyCat			bool
-	abilityType			int32
-	typedAbility		string
-	monsters			[]int32
-	battleInteractions	[]expBattleInteraction
+	rank               *int32
+	appearsInHelpBar   bool
+	canCopyCat         bool
+	abilityType        int32
+	typedAbility       string
+	monsters           []int32
+	battleInteractions []expBattleInteraction
 }
 
-func (a expAbility) GetTestGeneral() testGeneral {
-	return a.testGeneral
+func (e expAbility) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareAbilities(test test, exp expAbility, got Ability) {
@@ -32,16 +31,16 @@ func compareAbilities(test test, exp expAbility, got Ability) {
 type expEnemyAbility struct {
 	testGeneral
 	expNameVer
-	rank				*int32
-	appearsInHelpBar	bool
-	canCopyCat			bool
-	untypedAbility		int32
-	monsters			[]int32
-	battleInteractions	[]expBattleInteraction
+	rank               *int32
+	appearsInHelpBar   bool
+	canCopyCat         bool
+	untypedAbility     int32
+	monsters           []int32
+	battleInteractions []expBattleInteraction
 }
 
-func (a expEnemyAbility) GetTestGeneral() testGeneral {
-	return a.testGeneral
+func (e expEnemyAbility) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareEnemyAbilities(test test, exp expEnemyAbility, got EnemyAbility) {
@@ -57,18 +56,18 @@ func compareEnemyAbilities(test test, exp expEnemyAbility, got EnemyAbility) {
 type expItemAbility struct {
 	testGeneral
 	expUnique
-	rank				*int32
-	appearsInHelpBar	bool
-	canCopyCat			bool
-	untypedAbility		int32
-	item				int32
-	category			int32
-	CanUseOutsideBattle	bool
-	battleInteractions	[]expBattleInteraction
+	rank                *int32
+	appearsInHelpBar    bool
+	canCopyCat          bool
+	untypedAbility      int32
+	item                int32
+	category            int32
+	CanUseOutsideBattle bool
+	battleInteractions  []expBattleInteraction
 }
 
-func (a expItemAbility) GetTestGeneral() testGeneral {
-	return a.testGeneral
+func (e expItemAbility) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareItemAbilities(test test, exp expItemAbility, got ItemAbility) {
@@ -86,21 +85,21 @@ func compareItemAbilities(test test, exp expItemAbility, got ItemAbility) {
 type expPlayerAbility struct {
 	testGeneral
 	expNameVer
-	rank				*int32
-	appearsInHelpBar	bool
-	canCopyCat			bool
-	untypedAbility		int32
-	topmenu				*int32
-	submenu				*int32
-	openSubmenu			*int32
-	stdChar				*int32
-	expChar				*int32
-	monsters			[]int32
-	battleInteractions	[]expBattleInteraction
+	rank               *int32
+	appearsInHelpBar   bool
+	canCopyCat         bool
+	untypedAbility     int32
+	topmenu            *int32
+	submenu            *int32
+	openSubmenu        *int32
+	stdChar            *int32
+	expChar            *int32
+	monsters           []int32
+	battleInteractions []expBattleInteraction
 }
 
-func (a expPlayerAbility) GetTestGeneral() testGeneral {
-	return a.testGeneral
+func (e expPlayerAbility) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func comparePlayerAbilities(test test, exp expPlayerAbility, got PlayerAbility) {
@@ -121,15 +120,15 @@ func comparePlayerAbilities(test test, exp expPlayerAbility, got PlayerAbility) 
 type expOverdriveAbility struct {
 	testGeneral
 	expNameVer
-	rank				*int32
-	untypedAbility		int32
-	overdriveCommand	*int32
-	overdrives			[]int32
-	battleInteractions	[]expBattleInteraction
+	rank               *int32
+	untypedAbility     int32
+	overdriveCommand   *int32
+	overdrives         []int32
+	battleInteractions []expBattleInteraction
 }
 
-func (a expOverdriveAbility) GetTestGeneral() testGeneral {
-	return a.testGeneral
+func (e expOverdriveAbility) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareOverdriveAbilities(test test, exp expOverdriveAbility, got OverdriveAbility) {
@@ -144,18 +143,18 @@ func compareOverdriveAbilities(test test, exp expOverdriveAbility, got Overdrive
 type expUnspecifiedAbility struct {
 	testGeneral
 	expNameVer
-	rank				*int32
-	appearsInHelpBar	bool
-	canCopyCat			bool
-	untypedAbility		int32
-	topmenu				*int32
-	submenu				*int32
-	openSubmenu			*int32
-	battleInteractions	[]expBattleInteraction
+	rank               *int32
+	appearsInHelpBar   bool
+	canCopyCat         bool
+	untypedAbility     int32
+	topmenu            *int32
+	submenu            *int32
+	openSubmenu        *int32
+	battleInteractions []expBattleInteraction
 }
 
-func (a expUnspecifiedAbility) GetTestGeneral() testGeneral {
-	return a.testGeneral
+func (e expUnspecifiedAbility) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareUnspecifiedAbilities(test test, exp expUnspecifiedAbility, got UnspecifiedAbility) {
@@ -173,18 +172,18 @@ func compareUnspecifiedAbilities(test test, exp expUnspecifiedAbility, got Unspe
 type expTriggerCommand struct {
 	testGeneral
 	expNameVer
-	rank				*int32
-	appearsInHelpBar	bool
-	canCopyCat			bool
-	untypedAbility		int32
-	topmenu				*int32
-	usedBy				[]int32
-	monsterFormations	[]int32
-	battleInteractions	[]expBattleInteraction
+	rank               *int32
+	appearsInHelpBar   bool
+	canCopyCat         bool
+	untypedAbility     int32
+	topmenu            *int32
+	usedBy             []int32
+	monsterFormations  []int32
+	battleInteractions []expBattleInteraction
 }
 
-func (a expTriggerCommand) GetTestGeneral() testGeneral {
-	return a.testGeneral
+func (e expTriggerCommand) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareTriggerCommands(test test, exp expTriggerCommand, got TriggerCommand) {

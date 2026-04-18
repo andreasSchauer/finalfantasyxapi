@@ -3,13 +3,13 @@ package api
 type expMasterItem struct {
 	testGeneral
 	expUnique
-	itemType			int32
-	typedItem			string
-	obtainableFrom		ObtainableFrom
+	itemType       int32
+	typedItem      string
+	obtainableFrom ObtainableFrom
 }
 
-func (i expMasterItem) GetTestGeneral() testGeneral {
-	return i.testGeneral
+func (e expMasterItem) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareMasterItems(test test, exp expMasterItem, got MasterItem) {

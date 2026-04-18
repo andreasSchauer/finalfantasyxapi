@@ -1,20 +1,19 @@
 package api
 
-
 type expSphere struct {
 	testGeneral
 	expUnique
-	item				int32
-	createdNode			*CreatedNode
-	monsters           	[]testMonItemAmts
-	treasures          	map[int32]int32
-	shops              	[]int32
-	quests             	map[int32]int32
-	blitzballPrizes    	map[int32]int32
+	item            int32
+	createdNode     *CreatedNode
+	monsters        []testMonItemAmts
+	treasures       map[int32]int32
+	shops           []int32
+	quests          map[int32]int32
+	blitzballPrizes map[int32]int32
 }
 
-func (s expSphere) GetTestGeneral() testGeneral {
-	return s.testGeneral
+func (e expSphere) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareSpheres(test test, exp expSphere, got Sphere) {

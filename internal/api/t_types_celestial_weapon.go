@@ -3,17 +3,17 @@ package api
 type expCelestialWeapon struct {
 	testGeneral
 	expUnique
-	equipment		int32
-	autoAbilities	[]int32
-	crest			int32
-	sigil			int32
-	wpnTreasure		int32
-	crestTreasure	int32
-	sigilQuest		int32
+	equipment     int32
+	autoAbilities []int32
+	crest         int32
+	sigil         int32
+	wpnTreasure   int32
+	crestTreasure int32
+	sigilQuest    int32
 }
 
-func (w expCelestialWeapon) GetTestGeneral() testGeneral {
-	return w.testGeneral
+func (e expCelestialWeapon) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareCelestialWeapons(test test, exp expCelestialWeapon, got CelestialWeapon) {

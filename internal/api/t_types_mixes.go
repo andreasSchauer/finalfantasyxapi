@@ -3,13 +3,13 @@ package api
 type expMix struct {
 	testGeneral
 	expUnique
-	category		int32
-	overdrive		int32
-	combinations	[]testMixCombination
+	category     int32
+	overdrive    int32
+	combinations []testMixCombination
 }
 
-func (m expMix) GetTestGeneral() testGeneral {
-	return m.testGeneral
+func (e expMix) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareMixes(test test, exp expMix, got Mix) {
@@ -20,9 +20,9 @@ func compareMixes(test test, exp expMix, got Mix) {
 }
 
 type testMixCombination struct {
-	index		int
-	firstItem	int32
-	secondItem	int32
+	index      int
+	firstItem  int32
+	secondItem int32
 }
 
 func (mc testMixCombination) GetIndex() int {

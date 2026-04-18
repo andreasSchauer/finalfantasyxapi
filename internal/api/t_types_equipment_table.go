@@ -11,8 +11,8 @@ type expEquipmentTable struct {
 	equipment               []int32
 }
 
-func (t expEquipmentTable) GetTestGeneral() testGeneral {
-	return t.testGeneral
+func (e expEquipmentTable) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func compareEquipmentTables(test test, exp expEquipmentTable, got EquipmentTable) {

@@ -3,11 +3,11 @@ package api
 type expOverdrive struct {
 	testGeneral
 	expUnique
-	rank				*int32
-	countdownInSec		*int32
-	user				int32
-	overdriveCommand	*int32
-	overdriveAbilities	[]int32
+	rank               *int32
+	countdownInSec     *int32
+	user               int32
+	overdriveCommand   *int32
+	overdriveAbilities []int32
 }
 
 func (e expOverdrive) GetTestGeneral() testGeneral {

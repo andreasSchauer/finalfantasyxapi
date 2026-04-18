@@ -3,8 +3,8 @@ package api
 type expRonsoRage struct {
 	testGeneral
 	expUnique
-	overdrive	int32
-	monsters	[]int32
+	overdrive int32
+	monsters  []int32
 }
 
 func (e expRonsoRage) GetTestGeneral() testGeneral {

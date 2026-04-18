@@ -3,11 +3,11 @@ package api
 type expPlayerUnit struct {
 	testGeneral
 	expUnique
-	unitType			   int32
-	typedUnit			   string
-	area                   int32
-	celestialWeapon        *int32
-	characterClasses       []int32
+	unitType         int32
+	typedUnit        string
+	area             int32
+	celestialWeapon  *int32
+	characterClasses []int32
 }
 
 func (e expPlayerUnit) GetTestGeneral() testGeneral {

@@ -3,13 +3,13 @@ package api
 type expPrimer struct {
 	testGeneral
 	expUnique
-	keyItem		int32
-	areas		[]int32
-	treasures	[]int32
+	keyItem   int32
+	areas     []int32
+	treasures []int32
 }
 
-func (p expPrimer) GetTestGeneral() testGeneral {
-	return p.testGeneral
+func (e expPrimer) GetTestGeneral() testGeneral {
+	return e.testGeneral
 }
 
 func comparePrimers(test test, exp expPrimer, got Primer) {
