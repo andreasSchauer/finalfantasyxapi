@@ -163,6 +163,10 @@ type expAgilityTier struct {
 	charMinICVs	[]AgilitySubtier
 }
 
+func (e expAgilityTier) GetTestGeneral() testGeneral {
+	return e.testGeneral
+}
+
 func compareAgilityTiers(test test, exp expAgilityTier, got AgilityTier) {
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compare(test, "from agility", exp.fromAgility, got.FromAgility)
