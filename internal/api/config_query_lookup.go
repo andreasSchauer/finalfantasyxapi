@@ -42,6 +42,7 @@ type SpecialQueryInput struct {
 
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
+	defaultParamSlice []QueryParam
 	defaultParams map[string]QueryParam
 	
 	locations    map[string]QueryParam
@@ -136,72 +137,73 @@ func (cfg *Config) QueryLookupInit() {
 		},
 	}
 
+	cfg.q.defaultParamSlice = defaultParams
 	cfg.q.defaultParams = querySliceToMap(cfg, defaultParams)
-	cfg.initLocationsParams(defaultParams)
-	cfg.initSublocationsParams(defaultParams)
-	cfg.initAreasParams(defaultParams)
+	cfg.initLocationsParams()
+	cfg.initSublocationsParams()
+	cfg.initAreasParams()
 
-	cfg.initMonsterFormationsParams(defaultParams)
-	cfg.initShopsParams(defaultParams)
-	cfg.initTreasuresParams(defaultParams)
-	cfg.initQuestsParams(defaultParams)
-	cfg.initSidequestsParams(defaultParams)
-	cfg.initSubquestsParams(defaultParams)
-	cfg.initArenaCreationsParams(defaultParams)
-	cfg.initBlitzballPrizesParams(defaultParams)
-	cfg.initSongsParams(defaultParams)
-	cfg.initFMVsParams(defaultParams)
+	cfg.initMonsterFormationsParams()
+	cfg.initShopsParams()
+	cfg.initTreasuresParams()
+	cfg.initQuestsParams()
+	cfg.initSidequestsParams()
+	cfg.initSubquestsParams()
+	cfg.initArenaCreationsParams()
+	cfg.initBlitzballPrizesParams()
+	cfg.initSongsParams()
+	cfg.initFMVsParams()
 
-	cfg.initPlayerUnitsParams(defaultParams)
-	cfg.initCharactersParams(defaultParams)
-	cfg.initAeonsParams(defaultParams)
-	cfg.initCharacterClassesParams(defaultParams)
-	cfg.initMonstersParams(defaultParams)
+	cfg.initPlayerUnitsParams()
+	cfg.initCharactersParams()
+	cfg.initAeonsParams()
+	cfg.initCharacterClassesParams()
+	cfg.initMonstersParams()
 
-	cfg.initAbilitiesParams(defaultParams)
-	cfg.initPlayerAbilitiesParams(defaultParams)
-	cfg.initOverdriveAbilitiesParams(defaultParams)
-	cfg.initItemAbilitiesParams(defaultParams)
-	cfg.initTriggerCommandsParams(defaultParams)
-	cfg.initUnspecifiedAbilitiesParams(defaultParams)
-	cfg.initEnemyAbilitiesParams(defaultParams)
+	cfg.initAbilitiesParams()
+	cfg.initPlayerAbilitiesParams()
+	cfg.initOverdriveAbilitiesParams()
+	cfg.initItemAbilitiesParams()
+	cfg.initTriggerCommandsParams()
+	cfg.initUnspecifiedAbilitiesParams()
+	cfg.initEnemyAbilitiesParams()
 
-	cfg.q.aeonCommands = cfg.assignDefaultParams(defaultParams)
-	cfg.q.overdriveCommands = cfg.assignDefaultParams(defaultParams)
-	cfg.initOverdrivesParams(defaultParams)
-	cfg.q.ronsoRages = cfg.assignDefaultParams(defaultParams)
-	cfg.initSubmenusParams(defaultParams)
-	cfg.q.topmenus = cfg.assignDefaultParams(defaultParams)
+	cfg.q.aeonCommands = cfg.assignDefaultParams()
+	cfg.q.overdriveCommands = cfg.assignDefaultParams()
+	cfg.initOverdrivesParams()
+	cfg.q.ronsoRages = cfg.assignDefaultParams()
+	cfg.initSubmenusParams()
+	cfg.q.topmenus = cfg.assignDefaultParams()
 
-	cfg.initAllItemsParams(defaultParams)
-	cfg.initItemsParams(defaultParams)
-	cfg.initKeyItemsParams(defaultParams)
-	cfg.initSpheresParams(defaultParams)
-	cfg.initPrimersParams(defaultParams)
-	cfg.initMixesParams(defaultParams)
+	cfg.initAllItemsParams()
+	cfg.initItemsParams()
+	cfg.initKeyItemsParams()
+	cfg.initSpheresParams()
+	cfg.initPrimersParams()
+	cfg.initMixesParams()
 
-	cfg.initAutoAbilitiesParams(defaultParams)
-	cfg.initEquipmentTablesParams(defaultParams)
-	cfg.initEquipmentParams(defaultParams)
-	cfg.initCelestialWeaponsParams(defaultParams)
+	cfg.initAutoAbilitiesParams()
+	cfg.initEquipmentTablesParams()
+	cfg.initEquipmentParams()
+	cfg.initCelestialWeaponsParams()
 
-	cfg.initStatsParams(defaultParams)
-	cfg.q.properties = cfg.assignDefaultParams(defaultParams)
-	cfg.initOverdriveModesParams(defaultParams)
-	cfg.q.elements = cfg.assignDefaultParams(defaultParams)
-	cfg.initStatusConditionsParams(defaultParams)
-	cfg.initModifiersParams(defaultParams)
-	cfg.initAgilityTierParams(defaultParams)
+	cfg.initStatsParams()
+	cfg.q.properties = cfg.assignDefaultParams()
+	cfg.initOverdriveModesParams()
+	cfg.q.elements = cfg.assignDefaultParams()
+	cfg.initStatusConditionsParams()
+	cfg.initModifiersParams()
+	cfg.initAgilityTierParams()
 
 }
 
-func (cfg *Config) assignDefaultParams(defaultParams []QueryParam) map[string]QueryParam {
-	return cfg.completeQueryParamsInit([]QueryParam{}, defaultParams, false)
+func (cfg *Config) assignDefaultParams() map[string]QueryParam {
+	return cfg.completeQueryParamsInit([]QueryParam{}, false)
 }
 
 
-func (cfg *Config) completeQueryParamsInit(params, defaultParams []QueryParam, hasSimpleView bool) map[string]QueryParam {
-	params = slices.Concat(params, defaultParams)
+func (cfg *Config) completeQueryParamsInit(params []QueryParam, hasSimpleView bool) map[string]QueryParam {
+	params = slices.Concat(params, cfg.q.defaultParamSlice)
 
 	if hasSimpleView {
 		queryParamIDs := QueryParam{
@@ -303,7 +305,7 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 }
 
 
-func (cfg *Config) initLocationsParams(defaultParams []QueryParam) {
+func (cfg *Config) initLocationsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "item",
@@ -388,11 +390,11 @@ func (cfg *Config) initLocationsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.locations = paramsMap
 }
 
-func (cfg *Config) initSublocationsParams(defaultParams []QueryParam) {
+func (cfg *Config) initSublocationsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "location",
@@ -485,11 +487,11 @@ func (cfg *Config) initSublocationsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.sublocations = paramsMap
 }
 
-func (cfg *Config) initAreasParams(defaultParams []QueryParam) {
+func (cfg *Config) initAreasParams() {
 	params := []QueryParam{
 		{
 			Name:		 "location",
@@ -627,11 +629,11 @@ func (cfg *Config) initAreasParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.areas = paramsMap
 }
 
-func (cfg *Config) initMonsterFormationsParams(defaultParams []QueryParam) {
+func (cfg *Config) initMonsterFormationsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "monster",
@@ -699,11 +701,11 @@ func (cfg *Config) initMonsterFormationsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.monsterFormations = paramsMap
 }
 
-func (cfg *Config) initShopsParams(defaultParams []QueryParam) {
+func (cfg *Config) initShopsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "category",
@@ -790,11 +792,11 @@ func (cfg *Config) initShopsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.shops = paramsMap
 }
 
-func (cfg *Config) initTreasuresParams(defaultParams []QueryParam) {
+func (cfg *Config) initTreasuresParams() {
 	params := []QueryParam{
 		{
 			Name:		 "location",
@@ -855,11 +857,11 @@ func (cfg *Config) initTreasuresParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.treasures = paramsMap
 }
 
-func (cfg *Config) initQuestsParams(defaultParams []QueryParam) {
+func (cfg *Config) initQuestsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "type",
@@ -888,11 +890,11 @@ func (cfg *Config) initQuestsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.quests = paramsMap
 }
 
-func (cfg *Config) initSidequestsParams(defaultParams []QueryParam) {
+func (cfg *Config) initSidequestsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "availability",
@@ -905,11 +907,11 @@ func (cfg *Config) initSidequestsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.sidequests = paramsMap
 }
 
-func (cfg *Config) initSubquestsParams(defaultParams []QueryParam) {
+func (cfg *Config) initSubquestsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "availability",
@@ -929,11 +931,11 @@ func (cfg *Config) initSubquestsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.subquests = paramsMap
 }
 
-func (cfg *Config) initArenaCreationsParams(defaultParams []QueryParam) {
+func (cfg *Config) initArenaCreationsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "category",
@@ -945,11 +947,11 @@ func (cfg *Config) initArenaCreationsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.arenaCreations = paramsMap
 }
 
-func (cfg *Config) initBlitzballPrizesParams(defaultParams []QueryParam) {
+func (cfg *Config) initBlitzballPrizesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "category",
@@ -961,11 +963,11 @@ func (cfg *Config) initBlitzballPrizesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.blitzballPrizes = paramsMap
 }
 
-func (cfg *Config) initSongsParams(defaultParams []QueryParam) {
+func (cfg *Config) initSongsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "location",
@@ -1023,11 +1025,11 @@ func (cfg *Config) initSongsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.songs = paramsMap
 }
 
-func (cfg *Config) initFMVsParams(defaultParams []QueryParam) {
+func (cfg *Config) initFMVsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "location",
@@ -1039,11 +1041,11 @@ func (cfg *Config) initFMVsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.fmvs = paramsMap
 }
 
-func (cfg *Config) initPlayerUnitsParams(defaultParams []QueryParam) {
+func (cfg *Config) initPlayerUnitsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "type",
@@ -1056,11 +1058,11 @@ func (cfg *Config) initPlayerUnitsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.playerUnits = paramsMap
 }
 
-func (cfg *Config) initCharactersParams(defaultParams []QueryParam) {
+func (cfg *Config) initCharactersParams() {
 	params := []QueryParam{
 		{
 			Name:		 "story_based",
@@ -1078,11 +1080,11 @@ func (cfg *Config) initCharactersParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.characters = paramsMap
 }
 
-func (cfg *Config) initAeonsParams(defaultParams []QueryParam) {
+func (cfg *Config) initAeonsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "battles",
@@ -1110,11 +1112,11 @@ func (cfg *Config) initAeonsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.aeons = paramsMap
 }
 
-func (cfg *Config) initCharacterClassesParams(defaultParams []QueryParam) {
+func (cfg *Config) initCharacterClassesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "category",
@@ -1126,11 +1128,11 @@ func (cfg *Config) initCharacterClassesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.characterClasses = paramsMap
 }
 
-func (cfg *Config) initMonstersParams(defaultParams []QueryParam) {
+func (cfg *Config) initMonstersParams() {
 	params := []QueryParam{
 		{
 			Name:		 "kimahri_stats",
@@ -1355,11 +1357,11 @@ func (cfg *Config) initMonstersParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.monsters = paramsMap
 }
 
-func (cfg *Config) initAbilitiesParams(defaultParams []QueryParam) {
+func (cfg *Config) initAbilitiesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "type",
@@ -1524,11 +1526,11 @@ func (cfg *Config) initAbilitiesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.abilities = paramsMap
 }
 
-func (cfg *Config) initPlayerAbilitiesParams(defaultParams []QueryParam) {
+func (cfg *Config) initPlayerAbilitiesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "ability_user",
@@ -1760,11 +1762,11 @@ func (cfg *Config) initPlayerAbilitiesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.playerAbilities = paramsMap
 }
 
-func (cfg *Config) initOverdriveAbilitiesParams(defaultParams []QueryParam) {
+func (cfg *Config) initOverdriveAbilitiesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "rank",
@@ -1872,11 +1874,11 @@ func (cfg *Config) initOverdriveAbilitiesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.overdriveAbilities = paramsMap
 }
 
-func (cfg *Config) initItemAbilitiesParams(defaultParams []QueryParam) {
+func (cfg *Config) initItemAbilitiesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "category",
@@ -1977,11 +1979,11 @@ func (cfg *Config) initItemAbilitiesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.itemAbilities = paramsMap
 }
 
-func (cfg *Config) initTriggerCommandsParams(defaultParams []QueryParam) {
+func (cfg *Config) initTriggerCommandsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "ability_user",
@@ -2020,11 +2022,11 @@ func (cfg *Config) initTriggerCommandsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.triggerCommands = paramsMap
 }
 
-func (cfg *Config) initUnspecifiedAbilitiesParams(defaultParams []QueryParam) {
+func (cfg *Config) initUnspecifiedAbilitiesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "ability_user",
@@ -2082,11 +2084,11 @@ func (cfg *Config) initUnspecifiedAbilitiesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.unspecifiedAbilities = paramsMap
 }
 
-func (cfg *Config) initEnemyAbilitiesParams(defaultParams []QueryParam) {
+func (cfg *Config) initEnemyAbilitiesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "rank",
@@ -2214,11 +2216,11 @@ func (cfg *Config) initEnemyAbilitiesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.enemyAbilities = paramsMap
 }
 
-func (cfg *Config) initOverdrivesParams(defaultParams []QueryParam) {
+func (cfg *Config) initOverdrivesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "rank",
@@ -2238,11 +2240,11 @@ func (cfg *Config) initOverdrivesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.overdrives = paramsMap
 }
 
-func (cfg *Config) initSubmenusParams(defaultParams []QueryParam) {
+func (cfg *Config) initSubmenusParams() {
 	params := []QueryParam{
 		{
 			Name:		 "topmenu",
@@ -2255,11 +2257,11 @@ func (cfg *Config) initSubmenusParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.submenus = paramsMap
 }
 
-func (cfg *Config) initAllItemsParams(defaultParams []QueryParam) {
+func (cfg *Config) initAllItemsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "type",
@@ -2280,11 +2282,11 @@ func (cfg *Config) initAllItemsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.allItems = paramsMap
 }
 
-func (cfg *Config) initItemsParams(defaultParams []QueryParam) {
+func (cfg *Config) initItemsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "rel_availability",
@@ -2337,11 +2339,11 @@ func (cfg *Config) initItemsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.items = paramsMap
 }
 
-func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
+func (cfg *Config) initKeyItemsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "availability",
@@ -2371,11 +2373,11 @@ func (cfg *Config) initKeyItemsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.keyItems = paramsMap
 }
 
-func (cfg *Config) initSpheresParams(defaultParams []QueryParam) {
+func (cfg *Config) initSpheresParams() {
 	params := []QueryParam{
 		{
 			Name:		 "rel_availability",
@@ -2403,11 +2405,11 @@ func (cfg *Config) initSpheresParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.spheres = paramsMap
 }
 
-func (cfg *Config) initPrimersParams(defaultParams []QueryParam) {
+func (cfg *Config) initPrimersParams() {
 	params := []QueryParam{
 		{
 			Name:		 "availability",
@@ -2420,11 +2422,11 @@ func (cfg *Config) initPrimersParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.primers = paramsMap
 }
 
-func (cfg *Config) initMixesParams(defaultParams []QueryParam) {
+func (cfg *Config) initMixesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "contains_item",
@@ -2474,11 +2476,11 @@ func (cfg *Config) initMixesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.mixes = paramsMap
 }
 
-func (cfg *Config) initAutoAbilitiesParams(defaultParams []QueryParam) {
+func (cfg *Config) initAutoAbilitiesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "rel_availability",
@@ -2531,11 +2533,11 @@ func (cfg *Config) initAutoAbilitiesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, true)
+	paramsMap := cfg.completeQueryParamsInit(params, true)
 	cfg.q.autoAbilities = paramsMap
 }
 
-func (cfg *Config) initEquipmentTablesParams(defaultParams []QueryParam) {
+func (cfg *Config) initEquipmentTablesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "auto_abilities",
@@ -2562,11 +2564,11 @@ func (cfg *Config) initEquipmentTablesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.equipmentTables = paramsMap
 }
 
-func (cfg *Config) initEquipmentParams(defaultParams []QueryParam) {
+func (cfg *Config) initEquipmentParams() {
 	params := []QueryParam{
 		{
 			Name: 		 "table",
@@ -2620,11 +2622,11 @@ func (cfg *Config) initEquipmentParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.equipment = paramsMap
 }
 
-func (cfg *Config) initCelestialWeaponsParams(defaultParams []QueryParam) {
+func (cfg *Config) initCelestialWeaponsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "formula",
@@ -2636,11 +2638,11 @@ func (cfg *Config) initCelestialWeaponsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.celestialWeapons = paramsMap
 }
 
-func (cfg *Config) initStatsParams(defaultParams []QueryParam) {
+func (cfg *Config) initStatsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "changes_only",
@@ -2651,11 +2653,11 @@ func (cfg *Config) initStatsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.stats = paramsMap
 }
 
-func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {
+func (cfg *Config) initOverdriveModesParams() {
 	params := []QueryParam{
 		{
 			Name:		 "type",
@@ -2667,11 +2669,11 @@ func (cfg *Config) initOverdriveModesParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.overdriveModes = paramsMap
 }
 
-func (cfg *Config) initStatusConditionsParams(defaultParams []QueryParam) {
+func (cfg *Config) initStatusConditionsParams() {
 	params := []QueryParam{
 		{
 			Name:		 "inflict_min",
@@ -2736,11 +2738,11 @@ func (cfg *Config) initStatusConditionsParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.statusConditions = paramsMap
 }
 
-func (cfg *Config) initModifiersParams(defaultParams []QueryParam) {
+func (cfg *Config) initModifiersParams() {
 	params := []QueryParam{
 		{
 			Name:		 "category",
@@ -2752,11 +2754,11 @@ func (cfg *Config) initModifiersParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.modifiers = paramsMap
 }
 
-func (cfg *Config) initAgilityTierParams(defaultParams []QueryParam) {
+func (cfg *Config) initAgilityTierParams() {
 	params := []QueryParam{
 		{
 			Name:		 "agility",
@@ -2768,6 +2770,6 @@ func (cfg *Config) initAgilityTierParams(defaultParams []QueryParam) {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, defaultParams, false)
+	paramsMap := cfg.completeQueryParamsInit(params, false)
 	cfg.q.agilityTiers = paramsMap
 }

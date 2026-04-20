@@ -102,9 +102,10 @@ func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*Agilit
 	}
 
 	agilityParams := AgilityParams{
-		TickSpeed: agilityTier.TickSpeed,
-		MinICV:    agilityTier.MonsterMinICV,
-		MaxICV:    agilityTier.MonsterMaxICV,
+		AgilityTier: 	idToUnnamedAPIResource(cfg, cfg.e.agilityTiers, agilityTier.ID),
+		TickSpeed:		agilityTier.TickSpeed,
+		MinICV:    		agilityTier.MonsterMinICV,
+		MaxICV:    		agilityTier.MonsterMaxICV,
 	}
 
 	fs := nameToNamedAPIResource(cfg, cfg.e.autoAbilities, "first strike", nil)

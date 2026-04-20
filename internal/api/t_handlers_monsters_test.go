@@ -166,10 +166,11 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			expNameVer: newExpNameVer(27, "yellow element", 0),
-			agility: &AgilityParams{
-				TickSpeed: 16,
-				MinICV:    h.GetInt32Ptr(48),
-				MaxICV:    h.GetInt32Ptr(53),
+			agility: &testAgilityParams{
+				agilityTier: 6,
+				tickSpeed: 16,
+				minICV:    h.GetInt32Ptr(48),
+				maxICV:    h.GetInt32Ptr(53),
 			},
 			species:       19,
 			ctbIconType:   "monster",
@@ -321,10 +322,11 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			expNameVer: newExpNameVer(86, "spherimorph", 0),
-			agility: &AgilityParams{
-				TickSpeed: 12,
-				MinICV:    h.GetInt32Ptr(36),
-				MaxICV:    h.GetInt32Ptr(40),
+			agility: &testAgilityParams{
+				agilityTier: 10,
+				tickSpeed: 12,
+				minICV:    h.GetInt32Ptr(36),
+				maxICV:    h.GetInt32Ptr(40),
 			},
 			appliedState: &testAppliedState{
 				condition:   "Fire-elemental.",
@@ -527,10 +529,11 @@ func TestGetMonster(t *testing.T) {
 				condition:   "Without its shell.",
 				isTemporary: false,
 			},
-			agility: &AgilityParams{
-				TickSpeed: 4,
-				MinICV:    h.GetInt32Ptr(12),
-				MaxICV:    h.GetInt32Ptr(13),
+			agility: &testAgilityParams{
+				agilityTier: 18,
+				tickSpeed: 4,
+				minICV:    h.GetInt32Ptr(12),
+				maxICV:    h.GetInt32Ptr(13),
 			},
 			properties:    []int32{8},
 			autoAbilities: []int32{},
@@ -800,10 +803,11 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			expNameVer: newExpNameVer(167, "biran ronso", 0),
-			agility: &AgilityParams{
-				TickSpeed: 3,
-				MinICV:    h.GetInt32Ptr(9),
-				MaxICV:    h.GetInt32Ptr(10),
+			agility: &testAgilityParams{
+				agilityTier: 19,
+				tickSpeed: 3,
+				minICV:    h.GetInt32Ptr(9),
+				maxICV:    h.GetInt32Ptr(10),
 			},
 			ronsoRages: []int32{4, 5, 8, 11},
 			baseStats: map[string]int32{
@@ -838,10 +842,11 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			expNameVer: newExpNameVer(168, "yenke ronso", 0),
-			agility: &AgilityParams{
-				TickSpeed: 10,
-				MinICV:    h.GetInt32Ptr(30),
-				MaxICV:    h.GetInt32Ptr(33),
+			agility: &testAgilityParams{
+				agilityTier: 12,
+				tickSpeed: 10,
+				minICV:    h.GetInt32Ptr(30),
+				maxICV:    h.GetInt32Ptr(33),
 			},
 			ronsoRages: []int32{2, 6, 7, 9},
 			baseStats: map[string]int32{
@@ -875,10 +880,11 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			expNameVer: newExpNameVer(168, "yenke ronso", 0),
-			agility: &AgilityParams{
-				TickSpeed: 26,
-				MinICV:    h.GetInt32Ptr(84),
-				MaxICV:    h.GetInt32Ptr(93),
+			agility: &testAgilityParams{
+				agilityTier: 2,
+				tickSpeed: 26,
+				minICV:    h.GetInt32Ptr(84),
+				maxICV:    h.GetInt32Ptr(93),
 			},
 			baseStats: map[string]int32{
 				"hp":       864,
@@ -911,10 +917,11 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			expNameVer: newExpNameVer(216, "valefor", 1),
-			agility: &AgilityParams{
-				TickSpeed: 5,
-				MinICV:    h.GetInt32Ptr(-1),
-				MaxICV:    h.GetInt32Ptr(-1),
+			agility: &testAgilityParams{
+				agilityTier: 17,
+				tickSpeed: 5,
+				minICV:    h.GetInt32Ptr(-1),
+				maxICV:    h.GetInt32Ptr(-1),
 			},
 			baseStats: map[string]int32{
 				"hp":            725,
@@ -953,10 +960,11 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			expNameVer: newExpNameVer(93, "seymour", 0),
-			agility: &AgilityParams{
-				TickSpeed: 10,
-				MinICV:    h.GetInt32Ptr(-1),
-				MaxICV:    h.GetInt32Ptr(-1),
+			agility: &testAgilityParams{
+				agilityTier: 12,
+				tickSpeed: 10,
+				minICV:    h.GetInt32Ptr(-1),
+				maxICV:    h.GetInt32Ptr(-1),
 			},
 			autoAbilities: []int32{3},
 		},

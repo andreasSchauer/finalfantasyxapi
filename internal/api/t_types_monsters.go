@@ -4,7 +4,7 @@ type expMonster struct {
 	testGeneral
 	expNameVer
 	appliedState     *testAppliedState
-	agility          *AgilityParams
+	agility          *testAgilityParams
 	species          int32
 	ctbIconType      string
 	distance         int32
@@ -35,7 +35,7 @@ func compareMonsters(test test, exp expMonster, got Monster) {
 	compare(test, "distance", exp.distance, got.Distance)
 	checkResAmtTypes(test, "base stats", exp.baseStats, got.BaseStats)
 	checkResAmtTypes(test, "status resists", exp.statusResists, got.StatusResists)
-	compStructPtrs(test, "agility params", exp.agility, got.AgilityParameters)
+	compTestStructPtrs(test, "agility params", exp.agility, got.AgilityParameters, compareAgilityParams)
 	compStructSlices(test, "bribe chances", exp.bribeChances, got.BribeChances)
 	compTestStructSlices(test, "elemental resists", exp.elemResists, got.ElemResists, compareElemResists)
 	compTestStructPtrs(test, "applied state", exp.appliedState, got.AppliedState, compareMonsterAppliedStates)
@@ -84,4 +84,18 @@ func compareMonsterEquipment(test test, _ string, exp testMonEquipment, got Mons
 	compStructs(test, "attached abilities", exp.attachedAbilities, got.AttachedAbilities)
 	checkResIDsInSlice(test, "weapon abilities", test.cfg.e.autoAbilities.endpoint, exp.weaponAbilities, got.WeaponAbilities)
 	checkResIDsInSlice(test, "armor abilities", test.cfg.e.autoAbilities.endpoint, exp.armorAbilities, got.ArmorAbilities)
+}
+
+type testAgilityParams struct {
+	agilityTier	int32
+	tickSpeed 	int32
+	minICV    	*int32
+	maxICV    	*int32
+}
+
+func compareAgilityParams(test test, fieldName string, exp testAgilityParams, got AgilityParams) {
+	compIdApiResource(test, fieldName+" - agility tier", test.cfg.e.agilityTiers.endpoint, exp.agilityTier, got.AgilityTier)
+	compare(test, fieldName+" - tick speed", exp.tickSpeed, got.TickSpeed)
+	compare(test, fieldName+" - min icv", exp.minICV, got.MinICV)
+	compare(test, fieldName+" - max icv", exp.maxICV, got.MaxICV)
 }

@@ -8,9 +8,10 @@ import (
 
 
 type AgilityParams struct {
-	TickSpeed int32  `json:"tick_speed"`
-	MinICV    *int32 `json:"min_icv"`
-	MaxICV    *int32 `json:"max_icv"`
+	AgilityTier	UnnamedAPIResource 	`json:"agility_tier"`
+	TickSpeed 	int32  				`json:"tick_speed"`
+	MinICV    	*int32 				`json:"min_icv"`
+	MaxICV    	*int32 				`json:"max_icv"`
 }
 
 func getAgilityTier(cfg *Config, r *http.Request, stats []BaseStat) (seeding.AgilityTier, error) {
