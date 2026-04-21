@@ -96,7 +96,7 @@ const getAeonDefaultAbilityIDs = `-- name: GetAeonDefaultAbilityIDs :many
 SELECT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
-JOIN default_abilities da ON da.ability_id = a.id
+JOIN j_default_abilities da ON da.ability_id = a.id
 JOIN character_classes cc ON da.class_id = cc.id
 JOIN j_character_class_player_units j ON j.class_id = cc.id
 JOIN player_units pu ON j.unit_id = pu.id
@@ -301,7 +301,7 @@ func (q *Queries) GetCharacterCharClassIDs(ctx context.Context, id int32) ([]int
 const getCharacterClassDefaultAbilityIDs = `-- name: GetCharacterClassDefaultAbilityIDs :many
 SELECT a.id
 FROM abilities a
-JOIN default_abilities da ON da.ability_id = a.id
+JOIN j_default_abilities da ON da.ability_id = a.id
 JOIN character_classes cc ON da.class_id = cc.id
 WHERE cc.id = $1
 ORDER BY a.id
@@ -549,7 +549,7 @@ const getCharacterDefaultAbilityIDs = `-- name: GetCharacterDefaultAbilityIDs :m
 SELECT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
-JOIN default_abilities da ON da.ability_id = a.id
+JOIN j_default_abilities da ON da.ability_id = a.id
 JOIN character_classes cc ON da.class_id = cc.id
 JOIN j_character_class_player_units j ON j.class_id = cc.id
 JOIN player_units pu ON j.unit_id = pu.id

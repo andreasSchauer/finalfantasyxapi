@@ -2,6 +2,7 @@
 CREATE TYPE music_use_case AS ENUM ('blitzball-game', 'blitzball-menu', 'boss-battle-default', 'chocobo', 'game-over', 'main-menu', 'random-encounter-default', 'victory');
 
 
+-- 1
 CREATE TABLE songs (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -20,6 +21,7 @@ CREATE TABLE songs (
 );
 
 
+-- 3
 CREATE TABLE fmvs (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -29,7 +31,6 @@ CREATE TABLE fmvs (
     song_id INTEGER REFERENCES songs(id),
     area_id INTEGER NOT NULL REFERENCES areas(id)
 );
-
 
 
 -- +goose Down

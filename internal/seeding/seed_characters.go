@@ -24,6 +24,7 @@ type Character struct {
 
 func (c Character) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", c),
 		c.PlayerUnit.ID,
 		h.DerefOrNil(c.AreaID),
 		c.IsStoryBased,

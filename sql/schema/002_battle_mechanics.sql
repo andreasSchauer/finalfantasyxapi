@@ -14,6 +14,7 @@ CREATE TYPE status_condition_category AS ENUM ('negative', 'positive', 'other');
 CREATE TYPE elemental_affinity AS ENUM ('neutral', 'weak', 'halved', 'immune', 'absorb', 'varies');
 
 
+-- 3
 CREATE TABLE stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -25,6 +26,7 @@ CREATE TABLE stats (
 );
 
 
+-- 4
 CREATE TABLE base_stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -33,6 +35,7 @@ CREATE TABLE base_stats (
 );
 
 
+-- 0 (need update for opposite element id (1))
 CREATE TABLE elements (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -40,6 +43,7 @@ CREATE TABLE elements (
 );
 
 
+-- 1
 CREATE TABLE elemental_resists (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -48,7 +52,7 @@ CREATE TABLE elemental_resists (
 );
 
 
-
+-- 0
 CREATE TABLE agility_tiers (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -61,6 +65,7 @@ CREATE TABLE agility_tiers (
 );
 
 
+-- 1
 CREATE TABLE agility_subtiers (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -71,6 +76,7 @@ CREATE TABLE agility_subtiers (
 );
 
 
+-- 0
 CREATE TABLE overdrive_modes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -82,6 +88,7 @@ CREATE TABLE overdrive_modes (
 );
 
 
+-- 2
 CREATE TABLE status_conditions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -94,6 +101,7 @@ CREATE TABLE status_conditions (
 );
 
 
+-- 3
 CREATE TABLE status_resists (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -102,6 +110,7 @@ CREATE TABLE status_resists (
 );
 
 
+-- 0
 CREATE TABLE properties (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -111,6 +120,7 @@ CREATE TABLE properties (
 );
 
 
+-- 0
 CREATE TABLE modifiers (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

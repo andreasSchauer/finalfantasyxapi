@@ -16,6 +16,7 @@ type Topmenu struct {
 
 func (t Topmenu) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", t),
 		t.Name,
 	}
 }

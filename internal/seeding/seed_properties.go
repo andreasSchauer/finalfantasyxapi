@@ -21,6 +21,7 @@ type Property struct {
 
 func (p Property) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", p),
 		p.Name,
 		p.Effect,
 		h.DerefOrNil(p.NullifyArmored),

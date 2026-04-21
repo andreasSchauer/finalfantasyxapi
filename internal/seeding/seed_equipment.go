@@ -25,6 +25,7 @@ type EquipmentTable struct {
 
 func (e EquipmentTable) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", e),
 		e.Type,
 		e.Classification,
 		h.DerefOrNil(e.SpecificCharacterID),
@@ -68,6 +69,7 @@ type AbilityPool struct {
 
 func (p AbilityPool) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", p),
 		p.EquipmentTableID,
 		p.PoolIdx,
 		p.ReqAmount,
@@ -91,6 +93,7 @@ type EquipmentName struct {
 
 func (e EquipmentName) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", e),
 		e.CharacterID,
 		e.Name,
 	}
@@ -118,6 +121,7 @@ type EquipmentTableNameClstlJunction struct {
 
 func (j EquipmentTableNameClstlJunction) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", j),
 		j.ParentID,
 		j.ChildID,
 		h.DerefOrNil(j.CelestialWeaponID),
@@ -131,6 +135,7 @@ type EquipmentAutoAbilityJunction struct {
 
 func (j EquipmentAutoAbilityJunction) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", j),
 		j.ParentID,
 		j.ChildID,
 		j.AbilityPool,

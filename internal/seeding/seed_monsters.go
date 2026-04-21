@@ -3,6 +3,7 @@ package seeding
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -52,6 +53,7 @@ type Monster struct {
 
 func (m Monster) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", m),
 		m.Name,
 		h.DerefOrNil(m.Version),
 		h.DerefOrNil(m.Specification),

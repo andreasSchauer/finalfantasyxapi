@@ -19,6 +19,7 @@ type Modifier struct {
 
 func (m Modifier) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", m),
 		m.Name,
 		m.Effect,
 		m.Category,

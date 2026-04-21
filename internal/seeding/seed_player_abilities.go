@@ -36,6 +36,7 @@ type PlayerAbility struct {
 
 func (p PlayerAbility) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", p),
 		p.Ability.ID,
 		h.DerefOrNil(p.Description),
 		p.Effect,

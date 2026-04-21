@@ -21,6 +21,7 @@ type Damage struct {
 
 func (d Damage) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", d),
 		h.DerefOrNil(d.Critical),
 		h.DerefOrNil(d.CriticalPlusVal),
 		d.IsPiercing,
@@ -50,6 +51,7 @@ type AbilityDamage struct {
 
 func (ad AbilityDamage) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", ad),
 		h.DerefOrNil(ad.Condition),
 		ad.AttackType,
 		ad.StatID,

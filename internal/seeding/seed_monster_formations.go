@@ -22,6 +22,7 @@ type MonsterFormation struct {
 
 func (mf MonsterFormation) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", mf),
 		h.DerefOrNil(mf.Version),
 		mf.MonsterSelection.ID,
 		mf.FormationData.ID,
@@ -59,7 +60,9 @@ func (ms MonsterSelection) ToHashFields() []any {
 	monsters := ms.Monsters
 
 	sort.SliceStable(monsters, func(i, j int) bool { return monsters[i].MonsterID < monsters[j].MonsterID })
-	monsterKeys := []any{}
+	monsterKeys := []any{
+		fmt.Sprintf("%T", ms),
+	}
 
 	for _, mon := range ms.Monsters {
 		key := combineFields(mon.ToFormationHashFields())
@@ -99,6 +102,7 @@ func (fd FormationData) GetID() int32 {
 
 func (fd FormationData) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", fd),
 		fd.Category,
 		fd.Availability,
 		fd.IsForcedAmbush,
@@ -121,6 +125,7 @@ type EncounterArea struct {
 
 func (el EncounterArea) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", el),
 		el.AreaID,
 		h.DerefOrNil(el.Specification),
 	}
@@ -156,6 +161,7 @@ type FormationTriggerCommand struct {
 
 func (tc FormationTriggerCommand) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", tc),
 		tc.TriggerCommandID,
 		h.DerefOrNil(tc.Condition),
 		h.DerefOrNil(tc.UseAmount),
@@ -179,6 +185,7 @@ type FormationBossSong struct {
 
 func (s FormationBossSong) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.SongID,
 		s.CelebrateVictory,
 	}

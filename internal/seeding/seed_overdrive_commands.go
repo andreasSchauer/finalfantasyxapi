@@ -24,6 +24,7 @@ type OverdriveCommand struct {
 
 func (oc OverdriveCommand) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", oc),
 		oc.Name,
 		oc.Description,
 		oc.Rank,

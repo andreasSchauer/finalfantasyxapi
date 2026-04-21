@@ -27,6 +27,7 @@ type PlayerUnit struct {
 
 func (pu PlayerUnit) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", pu),
 		pu.Name,
 		pu.Type,
 	}

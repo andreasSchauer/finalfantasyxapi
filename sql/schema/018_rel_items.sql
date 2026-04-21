@@ -1,4 +1,6 @@
 -- +goose Up
+
+-- 5
 CREATE TABLE mix_combinations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -11,7 +13,7 @@ CREATE TABLE mix_combinations (
 );
 
 
-CREATE TABLE j_items_related_stats(
+CREATE TABLE j_items_related_stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     item_id INTEGER NOT NULL REFERENCES items(id),
@@ -19,7 +21,7 @@ CREATE TABLE j_items_related_stats(
 );
 
 
-CREATE TABLE j_items_available_menus(
+CREATE TABLE j_items_available_menus (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     item_id INTEGER NOT NULL REFERENCES items(id),
@@ -27,7 +29,8 @@ CREATE TABLE j_items_available_menus(
 );
 
 
-CREATE TABLE spheres_targetable_nodes(
+-- 3
+CREATE TABLE spheres_targetable_nodes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     sphere_id INTEGER NOT NULL REFERENCES spheres(id),
@@ -35,7 +38,8 @@ CREATE TABLE spheres_targetable_nodes(
 );
 
 
-CREATE TABLE created_nodes(
+-- 0
+CREATE TABLE created_nodes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     node node_type NOT NULL,

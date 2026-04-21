@@ -29,6 +29,7 @@ type Aeon struct {
 
 func (a Aeon) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.PlayerUnit.ID,
 		a.UnlockCondition,
 		h.DerefOrNil(a.AreaID),
@@ -66,6 +67,7 @@ type AeonEquipment struct {
 
 func (a AeonEquipment) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.AutoAbilityID,
 		a.CelestialWeapon,
 		a.EquipType,

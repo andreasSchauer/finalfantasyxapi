@@ -22,6 +22,7 @@ type MonsterEquipment struct {
 
 func (m MonsterEquipment) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", m),
 		m.MonsterID,
 		m.DropChance,
 		m.Power,

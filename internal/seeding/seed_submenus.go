@@ -22,6 +22,7 @@ type Submenu struct {
 
 func (s Submenu) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.Name,
 		s.Description,
 		s.Effect,

@@ -53,14 +53,14 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateDefaultAbility :exec
-INSERT INTO default_abilities (data_hash, class_id, ability_id)
+-- name: CreateDefaultAbilityJunction :exec
+INSERT INTO j_default_abilities (data_hash, class_id, ability_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateDefaultOverdriveAbility :exec
-INSERT INTO default_overdrive_abilities (data_hash, class_id, ability_id)
+-- name: CreateDefaultOverdriveAbilityJunction :exec
+INSERT INTO j_default_overdrive_abilities (data_hash, class_id, ability_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

@@ -18,6 +18,7 @@ type BlitzballPosition struct {
 
 func (b BlitzballPosition) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", b),
 		b.Category,
 		b.Slot,
 	}
@@ -63,6 +64,7 @@ type PossibleItem struct {
 
 func (i PossibleItem) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", i),
 		i.ItemAmount.ID,
 		i.Chance,
 	}
@@ -83,6 +85,7 @@ type BlitzballItem struct {
 
 func (b BlitzballItem) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", b),
 		b.PositionID,
 		b.PossibleItem.ID,
 	}

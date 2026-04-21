@@ -30,7 +30,7 @@ CREATE TYPE mix_category AS ENUM ('9999-damage', 'critical-hits', 'fire-elementa
 
 
 
-
+-- 0
 CREATE TABLE master_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -41,6 +41,7 @@ CREATE TABLE master_items (
 );
 
 
+-- 1
 CREATE TABLE items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -54,6 +55,7 @@ CREATE TABLE items (
 );
 
 
+-- 2
 CREATE TABLE item_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -65,6 +67,7 @@ CREATE TABLE item_abilities (
 );
 
 
+-- 2
 CREATE TABLE spheres (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -77,6 +80,7 @@ CREATE TABLE spheres (
 );
 
 
+-- 1
 CREATE TABLE key_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -87,6 +91,7 @@ CREATE TABLE key_items (
 );
 
 
+-- 2
 CREATE TABLE primers (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -96,7 +101,7 @@ CREATE TABLE primers (
 );
 
 
-
+-- 4
 CREATE TABLE mixes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -105,6 +110,7 @@ CREATE TABLE mixes (
 );
 
 
+-- 1
 CREATE TABLE item_amounts (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -113,7 +119,7 @@ CREATE TABLE item_amounts (
 );
 
 
-
+-- 2
 CREATE TABLE possible_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

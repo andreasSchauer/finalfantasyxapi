@@ -17,6 +17,7 @@ type StatusResist struct {
 
 func (sr StatusResist) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", sr),
 		sr.StatusConditionID,
 		sr.Resistance,
 	}

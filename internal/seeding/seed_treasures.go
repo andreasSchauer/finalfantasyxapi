@@ -34,6 +34,7 @@ type Treasure struct {
 
 func (t Treasure) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", t),
 		t.Version,
 		t.AreaID,
 		t.TreasureType,

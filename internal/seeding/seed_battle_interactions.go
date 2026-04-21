@@ -29,6 +29,7 @@ type BattleInteraction struct {
 
 func (bi BattleInteraction) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", bi),
 		bi.Target,
 		bi.BasedOnUserAttack,
 		h.DerefOrNil(bi.Range),

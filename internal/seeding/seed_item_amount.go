@@ -17,6 +17,7 @@ type ItemAmount struct {
 
 func (ia ItemAmount) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", ia),
 		ia.MasterItem.ID,
 		ia.Amount,
 	}

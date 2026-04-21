@@ -21,6 +21,7 @@ type OverdriveMode struct {
 
 func (o OverdriveMode) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", o),
 		o.Name,
 		o.Description,
 		o.Effect,
@@ -53,6 +54,7 @@ type ActionToLearn struct {
 
 func (a ActionToLearn) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.UserID,
 		a.Amount,
 	}

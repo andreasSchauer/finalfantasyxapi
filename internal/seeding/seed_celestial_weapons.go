@@ -22,6 +22,7 @@ type CelestialWeapon struct {
 
 func (cw CelestialWeapon) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", cw),
 		cw.Name,
 		cw.KeyItemBase,
 		cw.Formula,

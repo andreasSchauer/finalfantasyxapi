@@ -18,6 +18,7 @@ type MonsterAmount struct {
 
 func (ma MonsterAmount) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", ma),
 		ma.MonsterID,
 		ma.Amount,
 	}

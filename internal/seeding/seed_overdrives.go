@@ -28,6 +28,7 @@ type Overdrive struct {
 
 func (o Overdrive) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", o),
 		h.DerefOrNil(o.ODCommandID),
 		h.DerefOrNil(o.CharClassID),
 		o.Name,
@@ -65,6 +66,7 @@ type RonsoRage struct {
 
 func (r RonsoRage) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", r),
 		r.Overdrive.ID,
 	}
 }
@@ -252,7 +254,7 @@ func (l *Lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive
 		return h.NewErr(abilityRef.Error(), err)
 	}
 
-	err = qtx.CreateDefaultOverdriveAbility(context.Background(), database.CreateDefaultOverdriveAbilityParams{
+	err = qtx.CreateDefaultOverdriveAbilityJunction(context.Background(), database.CreateDefaultOverdriveAbilityJunctionParams{
 		DataHash:  generateDataHash(junction),
 		ClassID:   junction.ParentID,
 		AbilityID: junction.ChildID,

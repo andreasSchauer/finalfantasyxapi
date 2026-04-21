@@ -17,6 +17,7 @@ type ElementalResist struct {
 
 func (er ElementalResist) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", er),
 		er.ElementID,
 		er.Affinity,
 	}

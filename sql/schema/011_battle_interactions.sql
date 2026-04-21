@@ -32,6 +32,7 @@ CREATE TYPE delay_type AS ENUM ('ctb-based', 'tick-speed-based');
 CREATE TYPE calculation_type AS ENUM ('added-percentage', 'added-value', 'multiply', 'multiply-highest', 'set-value');
 
 
+-- 1
 CREATE TABLE damages (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -43,6 +44,7 @@ CREATE TABLE damages (
 );
 
 
+-- 4
 CREATE TABLE ability_damages (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -56,6 +58,7 @@ CREATE TABLE ability_damages (
 );
 
 
+-- 0
 CREATE TABLE ability_accuracies (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -65,6 +68,7 @@ CREATE TABLE ability_accuracies (
 );
 
 
+-- 0
 CREATE TABLE inflicted_delays (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -75,6 +79,7 @@ CREATE TABLE inflicted_delays (
 );
 
 
+-- 2
 CREATE TABLE battle_interactions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -89,6 +94,7 @@ CREATE TABLE battle_interactions (
 );
 
 
+-- 3
 CREATE TABLE inflicted_statusses (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -99,6 +105,7 @@ CREATE TABLE inflicted_statusses (
 );
 
 
+-- 4
 CREATE TABLE stat_changes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -108,6 +115,7 @@ CREATE TABLE stat_changes (
 );
 
 
+-- 1
 CREATE TABLE modifier_changes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

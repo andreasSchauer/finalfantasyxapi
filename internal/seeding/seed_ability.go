@@ -19,6 +19,7 @@ type Ability struct {
 
 func (a Ability) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.Name,
 		h.DerefOrNil(a.Version),
 		h.DerefOrNil(a.Specification),
@@ -112,6 +113,7 @@ type Attributes struct {
 
 func (a Attributes) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		h.DerefOrNil(a.Rank),
 		a.AppearsInHelpBar,
 		a.CanCopycat,

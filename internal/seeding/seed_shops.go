@@ -23,6 +23,7 @@ type Shop struct {
 
 func (s Shop) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		h.DerefOrNil(s.Version),
 		s.AreaID,
 		h.DerefOrNil(s.Notes),
@@ -71,6 +72,7 @@ type ShopItem struct {
 
 func (s ShopItem) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.ItemID,
 		s.Price,
 	}
@@ -101,6 +103,7 @@ type ShopEquipment struct {
 
 func (s ShopEquipment) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.ShopID,
 		s.EquipmentNameID,
 		s.ShopType,
@@ -132,6 +135,7 @@ type ShopJunction struct {
 
 func (sj ShopJunction) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", sj),
 		sj.ParentID,
 		sj.ChildID,
 		sj.ShopType,

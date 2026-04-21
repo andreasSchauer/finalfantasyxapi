@@ -18,6 +18,7 @@ type ModifierChange struct {
 
 func (m ModifierChange) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", m),
 		m.ModifierID,
 		m.CalculationType,
 		m.Value,

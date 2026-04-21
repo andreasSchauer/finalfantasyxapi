@@ -43,6 +43,7 @@ type AutoAbility struct {
 
 func (a AutoAbility) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.Name,
 		h.DerefOrNil(a.Description),
 		a.Effect,

@@ -19,6 +19,7 @@ type KeyItem struct {
 
 func (k KeyItem) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", k),
 		k.MasterItem.ID,
 		k.Category,
 		k.Description,

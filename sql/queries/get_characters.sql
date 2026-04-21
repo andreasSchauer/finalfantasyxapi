@@ -31,7 +31,7 @@ ORDER BY o.id;
 SELECT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
-JOIN default_abilities da ON da.ability_id = a.id
+JOIN j_default_abilities da ON da.ability_id = a.id
 JOIN character_classes cc ON da.class_id = cc.id
 JOIN j_character_class_player_units j ON j.class_id = cc.id
 JOIN player_units pu ON j.unit_id = pu.id
@@ -114,7 +114,7 @@ ORDER BY cc.id;
 SELECT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
-JOIN default_abilities da ON da.ability_id = a.id
+JOIN j_default_abilities da ON da.ability_id = a.id
 JOIN character_classes cc ON da.class_id = cc.id
 JOIN j_character_class_player_units j ON j.class_id = cc.id
 JOIN player_units pu ON j.unit_id = pu.id
@@ -189,7 +189,7 @@ ORDER BY pu.id;
 -- name: GetCharacterClassDefaultAbilityIDs :many
 SELECT a.id
 FROM abilities a
-JOIN default_abilities da ON da.ability_id = a.id
+JOIN j_default_abilities da ON da.ability_id = a.id
 JOIN character_classes cc ON da.class_id = cc.id
 WHERE cc.id = $1
 ORDER BY a.id;

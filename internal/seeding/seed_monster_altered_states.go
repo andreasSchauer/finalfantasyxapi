@@ -18,6 +18,7 @@ type AlteredState struct {
 
 func (a AlteredState) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.MonsterID,
 		a.Condition,
 		a.IsTemporary,
@@ -47,6 +48,7 @@ type AltStateChange struct {
 
 func (a AltStateChange) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.AlteredStateID,
 		a.AlterationType,
 		h.DerefOrNil(a.Distance),

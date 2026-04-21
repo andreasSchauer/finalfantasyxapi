@@ -263,37 +263,37 @@ func (q *Queries) CreateCharactersBaseStatsJunction(ctx context.Context, arg Cre
 	return err
 }
 
-const createDefaultAbility = `-- name: CreateDefaultAbility :exec
-INSERT INTO default_abilities (data_hash, class_id, ability_id)
+const createDefaultAbilityJunction = `-- name: CreateDefaultAbilityJunction :exec
+INSERT INTO j_default_abilities (data_hash, class_id, ability_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateDefaultAbilityParams struct {
+type CreateDefaultAbilityJunctionParams struct {
 	DataHash  string
 	ClassID   int32
 	AbilityID int32
 }
 
-func (q *Queries) CreateDefaultAbility(ctx context.Context, arg CreateDefaultAbilityParams) error {
-	_, err := q.db.ExecContext(ctx, createDefaultAbility, arg.DataHash, arg.ClassID, arg.AbilityID)
+func (q *Queries) CreateDefaultAbilityJunction(ctx context.Context, arg CreateDefaultAbilityJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createDefaultAbilityJunction, arg.DataHash, arg.ClassID, arg.AbilityID)
 	return err
 }
 
-const createDefaultOverdriveAbility = `-- name: CreateDefaultOverdriveAbility :exec
-INSERT INTO default_overdrive_abilities (data_hash, class_id, ability_id)
+const createDefaultOverdriveAbilityJunction = `-- name: CreateDefaultOverdriveAbilityJunction :exec
+INSERT INTO j_default_overdrive_abilities (data_hash, class_id, ability_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateDefaultOverdriveAbilityParams struct {
+type CreateDefaultOverdriveAbilityJunctionParams struct {
 	DataHash  string
 	ClassID   int32
 	AbilityID int32
 }
 
-func (q *Queries) CreateDefaultOverdriveAbility(ctx context.Context, arg CreateDefaultOverdriveAbilityParams) error {
-	_, err := q.db.ExecContext(ctx, createDefaultOverdriveAbility, arg.DataHash, arg.ClassID, arg.AbilityID)
+func (q *Queries) CreateDefaultOverdriveAbilityJunction(ctx context.Context, arg CreateDefaultOverdriveAbilityJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createDefaultOverdriveAbilityJunction, arg.DataHash, arg.ClassID, arg.AbilityID)
 	return err
 }
 

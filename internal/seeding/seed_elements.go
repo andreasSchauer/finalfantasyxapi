@@ -18,6 +18,7 @@ type Element struct {
 
 func (e Element) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", e),
 		e.Name,
 		h.DerefOrNil(e.OppositeElementID),
 	}

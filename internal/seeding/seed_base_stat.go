@@ -17,6 +17,7 @@ type BaseStat struct {
 
 func (bs BaseStat) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", bs),
 		bs.StatID,
 		bs.Value,
 	}

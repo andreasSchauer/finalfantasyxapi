@@ -15,6 +15,7 @@ CREATE TABLE j_characters_base_stats (
 );
 
 
+-- 5
 CREATE TABLE aeon_equipment (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -57,7 +58,7 @@ CREATE TABLE j_aeons_base_stats_x (
 );
 
 
-CREATE TABLE default_abilities (
+CREATE TABLE j_default_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     class_id INTEGER NOT NULL REFERENCES character_classes(id),
@@ -65,7 +66,7 @@ CREATE TABLE default_abilities (
 );
 
 
-CREATE TABLE default_overdrive_abilities (
+CREATE TABLE j_default_overdrive_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     class_id INTEGER NOT NULL REFERENCES character_classes(id),
@@ -90,8 +91,8 @@ ALTER TABLE aeons
 DROP COLUMN IF EXISTS accuracy_id,
 DROP COLUMN IF EXISTS area_id;
 
-DROP TABLE IF EXISTS default_overdrive_abilities;
-DROP TABLE IF EXISTS default_abilities;
+DROP TABLE IF EXISTS j_default_overdrive_abilities;
+DROP TABLE IF EXISTS j_default_abilities;
 DROP TABLE IF EXISTS j_aeons_weapon_armor;
 DROP TABLE IF EXISTS aeon_equipment;
 DROP TABLE IF EXISTS j_aeons_base_stats_x;

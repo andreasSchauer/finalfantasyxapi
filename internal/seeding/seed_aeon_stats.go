@@ -3,6 +3,7 @@ package seeding
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -28,6 +29,7 @@ type AeonXStatJunction struct {
 
 func (j AeonXStatJunction) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", j),
 		j.ParentID,
 		j.ChildID,
 		j.Battles,

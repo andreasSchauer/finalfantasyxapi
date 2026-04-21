@@ -26,6 +26,7 @@ type Item struct {
 
 func (i Item) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", i),
 		i.MasterItem.ID,
 		i.Description,
 		i.Effect,
@@ -62,6 +63,7 @@ type ItemAbility struct {
 
 func (a ItemAbility) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.ItemID,
 		a.Ability.ID,
 		a.Cursor,

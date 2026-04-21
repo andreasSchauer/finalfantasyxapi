@@ -3199,20 +3199,6 @@ type Damage struct {
 	ElementID       sql.NullInt32
 }
 
-type DefaultAbility struct {
-	ID        int32
-	DataHash  string
-	ClassID   int32
-	AbilityID int32
-}
-
-type DefaultOverdriveAbility struct {
-	ID        int32
-	DataHash  string
-	ClassID   int32
-	AbilityID int32
-}
-
 type Element struct {
 	ID                int32
 	DataHash          string
@@ -3575,6 +3561,20 @@ type JDamagesDamageCalc struct {
 	BattleInteractionID int32
 	DamageID            int32
 	AbilityDamageID     int32
+}
+
+type JDefaultAbility struct {
+	ID        int32
+	DataHash  string
+	ClassID   int32
+	AbilityID int32
+}
+
+type JDefaultOverdriveAbility struct {
+	ID        int32
+	DataHash  string
+	ClassID   int32
+	AbilityID int32
 }
 
 type JEquipmentDropsCharacter struct {

@@ -19,6 +19,7 @@ type InflictedStatus struct {
 
 func (is InflictedStatus) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", is),
 		is.StatusConditionID,
 		is.Probability,
 		is.DurationType,

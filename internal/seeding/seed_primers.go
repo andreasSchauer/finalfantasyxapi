@@ -19,6 +19,7 @@ type Primer struct {
 
 func (p Primer) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", p),
 		p.AlBhedLetter,
 		p.EnglishLetter,
 		p.KeyItemID,

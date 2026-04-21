@@ -24,6 +24,7 @@ type AeonCommand struct {
 
 func (c AeonCommand) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", c),
 		c.Name,
 		c.Description,
 		c.Effect,

@@ -16,6 +16,7 @@ type MasterItem struct {
 
 func (i MasterItem) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", i),
 		i.Name,
 		i.Type,
 	}

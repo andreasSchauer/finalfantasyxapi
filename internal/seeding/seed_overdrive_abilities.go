@@ -20,6 +20,7 @@ type OverdriveAbility struct {
 
 func (o OverdriveAbility) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", o),
 		o.Ability.ID,
 	}
 }

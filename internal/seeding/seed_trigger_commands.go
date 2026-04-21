@@ -23,6 +23,7 @@ type TriggerCommand struct {
 
 func (t TriggerCommand) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", t),
 		t.Ability.ID,
 		t.Description,
 		t.Effect,

@@ -18,6 +18,7 @@ type InflictedDelay struct {
 
 func (id InflictedDelay) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", id),
 		h.DerefOrNil(id.Condition),
 		id.CTBAttackType,
 		id.DelayType,

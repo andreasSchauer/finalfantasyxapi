@@ -30,6 +30,7 @@ type Song struct {
 
 func (s Song) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.Name,
 		h.DerefOrNil(s.StreamingName),
 		h.DerefOrNil(s.InGameName),
@@ -71,6 +72,7 @@ type SongCredits struct {
 
 func (sc SongCredits) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", sc),
 		h.DerefOrNil(sc.Composer),
 		h.DerefOrNil(sc.Arranger),
 		h.DerefOrNil(sc.Performer),
@@ -95,6 +97,7 @@ type BackgroundMusic struct {
 
 func (bm BackgroundMusic) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", bm),
 		h.DerefOrNil(bm.Condition),
 		bm.ReplacesEncounterMusic,
 	}
@@ -115,6 +118,7 @@ type SongAreaJunction struct {
 
 func (j SongAreaJunction) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", j),
 		j.ParentID,
 		j.ChildID,
 		j.AreaID,
@@ -134,6 +138,7 @@ type Cue struct {
 
 func (c Cue) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", c),
 		c.SceneDescription,
 		c.SongID,
 		h.ObjPtrToID(c.TriggerLocationArea),

@@ -24,6 +24,7 @@ type ArenaCreation struct {
 
 func (a ArenaCreation) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.SubquestID,
 		h.DerefOrNil(a.MonsterID),
 		a.Category,

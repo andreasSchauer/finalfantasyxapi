@@ -22,6 +22,7 @@ type Stat struct {
 
 func (s Stat) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.Name,
 		s.Effect,
 		s.MinVal,

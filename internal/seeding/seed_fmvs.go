@@ -22,6 +22,7 @@ type FMV struct {
 
 func (f FMV) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", f),
 		f.Name,
 		h.DerefOrNil(f.Translation),
 		f.CutsceneDescription,

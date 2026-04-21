@@ -26,6 +26,7 @@ type MonsterItems struct {
 
 func (m MonsterItems) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", m),
 		m.MonsterID,
 		m.DropChance,
 		h.DerefOrNil(m.DropCondition),

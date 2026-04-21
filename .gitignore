@@ -4,6 +4,7 @@ connection_string.txt
 .env.*.local
 notes.txt
 notes_types.txt
+notes_seeding.txt
 testrequests.http
 ./scripts/goose-*.sh
 .vscode/

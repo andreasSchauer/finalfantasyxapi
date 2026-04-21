@@ -18,6 +18,7 @@ type MonsterAbility struct {
 
 func (m MonsterAbility) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", m),
 		m.AbilityID,
 		m.IsForced,
 		m.IsUnused,

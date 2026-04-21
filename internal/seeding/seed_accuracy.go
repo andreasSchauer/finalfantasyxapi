@@ -17,6 +17,7 @@ type Accuracy struct {
 
 func (a Accuracy) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.AccSource,
 		h.DerefOrNil(a.HitChance),
 		h.DerefOrNil(a.AccModifier),

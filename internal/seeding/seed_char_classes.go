@@ -18,6 +18,7 @@ type CharacterClass struct {
 
 func (cc CharacterClass) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", cc),
 		cc.Name,
 	}
 }

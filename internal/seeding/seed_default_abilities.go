@@ -45,7 +45,7 @@ func (l *Lookup) seedCharClassDefaultAbilities(qtx *database.Queries, class Char
 			return err
 		}
 
-		err = qtx.CreateDefaultAbility(context.Background(), database.CreateDefaultAbilityParams{
+		err = qtx.CreateDefaultAbilityJunction(context.Background(), database.CreateDefaultAbilityJunctionParams{
 			DataHash:  generateDataHash(junction),
 			ClassID:   junction.ParentID,
 			AbilityID: junction.ChildID,

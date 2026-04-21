@@ -19,6 +19,7 @@ type Quest struct {
 
 func (q Quest) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", q),
 		q.Name,
 		q.Type,
 		h.ObjPtrToID(q.Completion),
@@ -102,6 +103,7 @@ type QuestCompletion struct {
 
 func (qc QuestCompletion) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", qc),
 		qc.Condition,
 		qc.Reward.ID,
 	}
@@ -124,6 +126,7 @@ type CompletionArea struct {
 
 func (cl CompletionArea) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", cl),
 		cl.CompletionID,
 		cl.AreaID,
 		h.DerefOrNil(cl.Notes),

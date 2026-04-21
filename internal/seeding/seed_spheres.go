@@ -25,6 +25,7 @@ type Sphere struct {
 
 func (s Sphere) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.ItemID,
 		s.SgDescription,
 		s.SphereColor,
@@ -58,6 +59,7 @@ type CreatedNode struct {
 
 func (n CreatedNode) ToHashFields() []any{
 	return []any{
+		fmt.Sprintf("%T", n),
 		n.Node,
 		n.Value,
 	}
@@ -78,6 +80,7 @@ type TargetableNode struct {
 
 func (n TargetableNode) ToHashFields() []any{
 	return []any{
+		fmt.Sprintf("%T", n),
 		n.SphereID,
 		n.Node,
 	}

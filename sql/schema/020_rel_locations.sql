@@ -3,6 +3,7 @@ CREATE TYPE area_connection_type AS ENUM('both-directions', 'one-direction', 'wa
 CREATE TYPE shop_type AS ENUM ('pre-airship', 'post-airship');
 
 
+-- 3
 CREATE TABLE area_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -21,6 +22,7 @@ CREATE TABLE j_area_connected_areas (
 );
 
 
+-- 5
 CREATE TABLE treasure_equipment_pieces (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -46,6 +48,7 @@ CREATE TABLE j_treasures_items (
 );
 
 
+-- 2
 CREATE TABLE shop_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -54,6 +57,7 @@ CREATE TABLE shop_items (
 );
 
 
+-- 5
 CREATE TABLE shop_equipment_pieces (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

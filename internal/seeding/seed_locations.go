@@ -17,6 +17,7 @@ type Location struct {
 
 func (l Location) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", l),
 		l.Name,
 	}
 }
@@ -46,6 +47,7 @@ type Sublocation struct {
 
 func (s Sublocation) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.Location.ID,
 		s.Name,
 		h.DerefOrNil(s.Specification),
@@ -83,6 +85,7 @@ type Area struct {
 
 func (a Area) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.Sublocation.ID,
 		a.Name,
 		h.DerefOrNil(a.Version),
@@ -163,6 +166,7 @@ type AreaConnection struct {
 
 func (ac AreaConnection) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", ac),
 		ac.AreaID,
 		ac.ConnectionType,
 		ac.IsStoryBased,

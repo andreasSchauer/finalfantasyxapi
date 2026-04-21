@@ -20,6 +20,7 @@ CREATE TYPE counter_type AS ENUM ('physical', 'magical');
 CREATE TYPE equip_class AS ENUM ('standard', 'unique', 'celestial-weapon');
 
 
+-- 4
 CREATE TABLE celestial_weapons (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -29,6 +30,7 @@ CREATE TABLE celestial_weapons (
 );
 
 
+-- 4
 CREATE TABLE auto_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -43,6 +45,7 @@ CREATE TABLE auto_abilities (
 );
 
 
+-- 4
 CREATE TABLE equipment_tables (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

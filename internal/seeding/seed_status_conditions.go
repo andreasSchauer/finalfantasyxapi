@@ -27,6 +27,7 @@ type StatusCondition struct {
 
 func (s StatusCondition) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.Name,
 		s.Category,
 		s.IsPermanent,

@@ -20,6 +20,7 @@ type Mix struct {
 
 func (m Mix) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", m),
 		m.OverdriveID,
 		m.Category,
 	}
@@ -52,6 +53,7 @@ type MixCombination struct {
 
 func (m MixCombination) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", m),
 		m.MixID,
 		m.FirstItemID,
 		m.SecondItemID,

@@ -17,6 +17,7 @@ type Sidequest struct {
 
 func (s Sidequest) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.Quest.ID,
 	}
 }
@@ -46,6 +47,7 @@ type Subquest struct {
 
 func (s Subquest) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.Quest.ID,
 		s.SidequestID,
 	}

@@ -19,6 +19,7 @@ type FoundEquipment struct {
 
 func (f FoundEquipment) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", f),
 		f.TreasureID,
 		f.EquipmentNameID,
 		f.EmptySlotsAmount,

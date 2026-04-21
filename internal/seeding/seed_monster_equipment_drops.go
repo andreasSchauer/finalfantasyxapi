@@ -20,6 +20,7 @@ type EquipmentDrop struct {
 
 func (e EquipmentDrop) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", e),
 		e.AutoAbilityID,
 		e.IsForced,
 		h.DerefOrNil(e.Probability),

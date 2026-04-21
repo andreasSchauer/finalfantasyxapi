@@ -19,6 +19,7 @@ type MonsterEquipmentSlots struct {
 
 func (m MonsterEquipmentSlots) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", m),
 		m.MonsterEquipmentID,
 		m.MinAmount,
 		m.MaxAmount,
@@ -42,6 +43,7 @@ type EquipmentSlotsChance struct {
 
 func (e EquipmentSlotsChance) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", e),
 		e.Amount,
 		e.Chance,
 	}

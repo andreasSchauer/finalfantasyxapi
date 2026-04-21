@@ -28,6 +28,7 @@ type UnspecifiedAbility struct {
 
 func (u UnspecifiedAbility) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", u),
 		u.Ability.ID,
 		u.Description,
 		u.Effect,

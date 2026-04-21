@@ -18,6 +18,7 @@ type StatChange struct {
 
 func (s StatChange) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", s),
 		s.StatID,
 		s.CalculationType,
 		s.Value,

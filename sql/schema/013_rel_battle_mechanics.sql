@@ -12,6 +12,7 @@ ADD COLUMN added_elem_resist_id INTEGER REFERENCES elemental_resists(id),
 ADD COLUMN inflicted_delay_id INTEGER REFERENCES inflicted_delays(id);
 
 
+-- 4
 CREATE TABLE od_mode_actions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

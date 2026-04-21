@@ -18,6 +18,7 @@ type EnemyAbility struct {
 
 func (e EnemyAbility) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", e),
 		e.Ability.ID,
 		h.DerefOrNil(e.Effect),
 	}

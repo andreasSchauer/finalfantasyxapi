@@ -22,6 +22,7 @@ type AgilityTier struct {
 
 func (a AgilityTier) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.MinAgility,
 		a.MaxAgility,
 		a.TickSpeed,
@@ -56,6 +57,7 @@ type AgilitySubtier struct {
 
 func (a AgilitySubtier) ToHashFields() []any {
 	return []any{
+		fmt.Sprintf("%T", a),
 		a.AgilityTierID,
 		a.MinAgility,
 		a.MaxAgility,
