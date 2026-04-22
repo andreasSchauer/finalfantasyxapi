@@ -1,6 +1,6 @@
 -- +goose Up
 
--- 5
+-- 6
 CREATE TABLE mix_combinations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE j_items_available_menus (
 );
 
 
--- 3
+-- 4
 CREATE TABLE spheres_targetable_nodes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE spheres_targetable_nodes (
 );
 
 
--- 0
+-- 1
 CREATE TABLE created_nodes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

@@ -2,7 +2,7 @@
 CREATE TYPE target_type AS ENUM ('self', 'single-ally', 'single-enemy', 'single-target', 'random-ally', 'random-enemy', 'all-allies', 'all-enemies', 'target-party', 'n-targets', 'everyone');
 
 
--- 0
+-- 1
 CREATE TABLE topmenus (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE topmenus (
 );
 
 
--- 2
+-- 3
 CREATE TABLE aeon_commands (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE aeon_commands (
 );
 
 
--- 1
+-- 2
 CREATE TABLE submenus (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE submenus (
 );
 
 
--- 2
+-- 3
 CREATE TABLE overdrive_commands (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

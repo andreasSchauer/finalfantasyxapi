@@ -112,7 +112,7 @@ func (bm BackgroundMusic) Error() string {
 }
 
 type SongAreaJunction struct {
-	Junction
+	StdJunction
 	AreaID int32
 }
 
@@ -180,7 +180,7 @@ func (l *Lookup) seedSongs(db *database.Queries, dbConn *sql.DB) error {
 				OstTrackNumber:       h.GetNullInt32(song.OSTTrackNumber),
 				DurationInSeconds:    song.DurationInSeconds,
 				CanLoop:              song.CanLoop,
-				SpecialUseCase:       h.NullMusicUseCase(song.SpecialUseCase),
+				SpecialUseCase:       database.ToNullMusicUseCase(song.SpecialUseCase),
 			})
 			if err != nil {
 				return h.NewErr(song.Error(), err, "couldn't create song")
@@ -242,8 +242,8 @@ func (l *Lookup) seedSongsRelationships(db *database.Queries, dbConn *sql.DB) er
 func (l *Lookup) seedCredits(qtx *database.Queries, credits SongCredits) (SongCredits, error) {
 	dbSongCredits, err := qtx.CreateSongCredit(context.Background(), database.CreateSongCreditParams{
 		DataHash:  generateDataHash(credits),
-		Composer:  h.NullComposer(credits.Composer),
-		Arranger:  h.NullArranger(credits.Arranger),
+		Composer:  database.ToNullComposer(credits.Composer),
+		Arranger:  database.ToNullArranger(credits.Arranger),
 		Performer: h.GetNullString(credits.Performer),
 		Lyricist:  h.GetNullString(credits.Lyricist),
 	})
@@ -267,7 +267,7 @@ func (l *Lookup) seedBackgroundMusicEntries(qtx *database.Queries, song Song) er
 			var err error
 
 			saJunction := SongAreaJunction{}
-			saJunction.Junction = junction
+			saJunction.StdJunction = junction
 			saJunction.AreaID, err = assignFK(locationArea, l.Areas)
 			if err != nil {
 				return h.NewErr(bm.Error(), err)
@@ -349,7 +349,7 @@ func (l *Lookup) seedCue(qtx *database.Queries, cue Cue) (Cue, error) {
 		SongID:                 cue.SongID,
 		SceneDescription:       cue.SceneDescription,
 		TriggerAreaID:          h.ObjPtrToNullInt32ID(cue.TriggerLocationArea),
-		ReplacesBgMusic:        h.NullBgReplacementType(cue.ReplacesBGMusic),
+		ReplacesBgMusic:        database.ToNullBgReplacementType(cue.ReplacesBGMusic),
 		EndTrigger:             h.GetNullString(cue.EndTrigger),
 		ReplacesEncounterMusic: cue.ReplacesEncounterMusic,
 	})

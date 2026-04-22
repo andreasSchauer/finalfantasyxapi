@@ -100,7 +100,7 @@ func (l *Lookup) seedBattleInteraction(qtx *database.Queries, battleInteraction 
 		AccuracyID:        battleInteraction.Accuracy.ID,
 		InflictedDelayID:  h.ObjPtrToNullInt32ID(battleInteraction.InflictedDelay),
 		HitAmount:         battleInteraction.HitAmount,
-		SpecialAction:     h.NullSpecialActionType(battleInteraction.SpecialAction),
+		SpecialAction:     database.ToNullSpecialActionType(battleInteraction.SpecialAction),
 	})
 	if err != nil {
 		return BattleInteraction{}, h.NewErr(battleInteraction.Error(), err, "couldn't create battle interaction")

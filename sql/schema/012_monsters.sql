@@ -9,7 +9,7 @@ CREATE TYPE monster_category AS ENUM ('monster', 'boss', 'summon');
 CREATE TYPE monster_formation_category AS ENUM ('boss-fight', 'on-demand-fight', 'random-encounter', 'static-encounter', 'story-fight', 'tutorial');
 
 
--- 0
+-- 1
 CREATE TABLE monsters (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE monsters (
 );
 
 
--- 1
+-- 2
 CREATE TABLE monster_amounts (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -54,14 +54,14 @@ CREATE TABLE monster_amounts (
 );
 
 
--- 0
+-- 1
 CREATE TABLE monster_selections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL
 );
 
 
--- 2
+-- 3
 CREATE TABLE formation_boss_songs (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE formation_boss_songs (
 );
 
 
--- 3
+-- 4
 CREATE TABLE formation_data (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE formation_data (
 );
 
 
--- 4
+-- 5
 CREATE TABLE monster_formations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE monster_formations (
 );
 
 
--- 3
+-- 4
 CREATE TABLE encounter_areas (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE encounter_areas (
 );
 
 
--- 3
+-- 4
 CREATE TABLE formation_trigger_commands (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

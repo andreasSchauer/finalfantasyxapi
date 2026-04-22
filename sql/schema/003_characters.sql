@@ -13,7 +13,7 @@ CREATE TYPE accuracy_source AS ENUM ('accuracy', 'rate');
 CREATE TYPE character_class_category AS ENUM ('character', 'aeon', 'group');
 
 
--- 0
+-- 1
 CREATE TABLE player_units (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE player_units (
 );
 
 
--- 3
+-- 4
 CREATE TABLE characters (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE characters (
 );
 
 
--- 3
+-- 4
 CREATE TABLE aeons (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE aeons (
 );
 
 
--- 0
+-- 1
 CREATE TABLE character_classes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

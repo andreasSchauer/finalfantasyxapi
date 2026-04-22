@@ -111,7 +111,7 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 				AttributesID:    h.ObjPtrToInt32ID(overdrive.Attributes),
 				UnlockCondition: h.GetNullString(overdrive.UnlockCondition),
 				CountdownInSec:  h.GetNullInt32(overdrive.CountdownInSec),
-				Cursor:          h.NullTargetType(overdrive.Cursor),
+				Cursor:          database.ToNullTargetType(overdrive.Cursor),
 			})
 			if err != nil {
 				return h.NewErr(overdrive.Error(), err, "couldn't create overdrive")

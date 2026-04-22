@@ -58,7 +58,7 @@ func (l *Lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
 				DataHash:       generateDataHash(property),
 				Name:           property.Name,
 				Effect:         property.Effect,
-				NullifyArmored: h.NullNullifyArmored(property.NullifyArmored),
+				NullifyArmored: database.ToNullNullifyArmored(property.NullifyArmored),
 			})
 			if err != nil {
 				return h.NewErr(property.Error(), err, "couldn't create property")

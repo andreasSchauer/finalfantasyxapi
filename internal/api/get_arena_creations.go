@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -58,7 +57,7 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.Are
 	monsterIdSlices := []filteredIdList{}
 
 	if mf.RequiredArea != nil {
-		area := h.NullMaCreationArea(mf.RequiredArea)
+		area := database.ToNullMaCreationArea(mf.RequiredArea)
 		idSlice := fidl(cfg.db.GetCaptureMonsterIDsByMaCreationArea(r.Context(), area))
 		monsterIdSlices = append(monsterIdSlices, idSlice)
 	}

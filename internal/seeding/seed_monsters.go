@@ -128,7 +128,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 				Availability:         database.AvailabilityType(monster.Availability),
 				IsRepeatable:         monster.IsRepeatable,
 				CanBeCaptured:        monster.CanBeCaptured,
-				AreaConquestLocation: h.NullMaCreationArea(monster.AreaConquestLocation),
+				AreaConquestLocation: database.ToNullMaCreationArea(monster.AreaConquestLocation),
 				Category: 			  database.MonsterCategory(monster.Category),
 				CtbIconType:          database.CtbIconType(monster.CTBIconType),
 				HasOverdrive:         monster.HasOverdrive,

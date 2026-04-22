@@ -6,4 +6,85 @@ sql:
     gen:
       go:
         out: "internal/database"
-        
+        overrides:
+          - db_type: "null_int"
+            go_type: "database/sql.NullInt32"
+
+          - db_type: "null_string"
+            go_type: "database/sql.NullString"
+
+          - db_type: "null_bool"
+            go_type: "database/sql.NullBool"
+
+          - db_type: "null_float"
+            go_type: "database/sql.NullFloat64"
+
+          - db_type: "null_nullify_armored"
+            go_type:
+              type: "NullNullifyArmored"
+
+          - db_type: "null_creations_unlocked_category"
+            go_type:
+              type: "NullCreationsUnlockedCategory"
+
+          - db_type: "null_counter_type"
+            go_type:
+              type: "NullCounterType"
+
+          - db_type: "null_ma_creation_area"
+            go_type:
+              type: "NullMaCreationArea"
+              
+          - db_type: "null_ma_creation_category"
+            go_type:
+              type: "NullMaCreationCategory"
+
+          - db_type: "null_ma_creation_species"
+            go_type:
+              type: "NullMaCreationSpecies"
+
+          - db_type: "null_target_type"
+            go_type:
+              type: "NullTargetType"
+
+          - db_type: "null_music_use_case"
+            go_type:
+              type: "NullMusicUseCase"
+
+          - db_type: "null_bg_replacement_type"
+            go_type:
+              type: "NullBgReplacementType"
+
+          - db_type: "null_special_action_type"
+            go_type:
+              type: "NullSpecialActionType"
+
+          - db_type: "null_critical_type"
+            go_type:
+              type: "NullCriticalType"
+
+          - db_type: "null_break_dmg_lmt_type"
+            go_type:
+              type: "NullBreakDmgLmtType"
+
+          - db_type: "null_composer"
+            go_type:
+              type: "NullComposer"
+
+          - db_type: "null_arranger"
+            go_type:
+              type: "NullArranger"
+
+          - db_type: "null_shop_type"
+            go_type:
+              type: "NullShopType"
+
+          - db_type: "null_availability_type"
+            go_type:
+              type: "NullAvailabilityType"
+
+          - db_type: "null_node_state"
+            go_type:
+              type: "NullNodeState"
+         
+

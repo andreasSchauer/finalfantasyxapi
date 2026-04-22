@@ -108,7 +108,7 @@ func (l *Lookup) seedAutoAbilities(db *database.Queries, dbConn *sql.DB) error {
 				Category:            database.AutoAbilityCategory(autoAbility.Category),
 				AbilityValue:        h.GetNullInt32(autoAbility.AbilityValue),
 				ActivationCondition: database.AaActivationCondition(autoAbility.ActivationCondition),
-				Counter:             h.NullCounterType(autoAbility.Counter),
+				Counter:             database.ToNullCounterType(autoAbility.Counter),
 			})
 			if err != nil {
 				return h.NewErr(autoAbility.Error(), err, "couldn't create auto-ability")

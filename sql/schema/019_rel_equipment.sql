@@ -73,7 +73,7 @@ CREATE TABLE j_auto_abilities_modifier_changes (
 );
 
 
--- 4
+-- 5
 CREATE TABLE equipment_names (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -99,7 +99,7 @@ CREATE TABLE j_equipment_tables_required_auto_abilities (
 );
 
 
--- 5
+-- 6
 CREATE TABLE ability_pools (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

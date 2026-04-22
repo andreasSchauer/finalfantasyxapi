@@ -74,7 +74,7 @@ func (l *Lookup) seedAeonCommands(db *database.Queries, dbConn *sql.DB) error {
 				Name:        command.Name,
 				Description: command.Description,
 				Effect:      command.Effect,
-				Cursor:      h.NullTargetType(command.Cursor),
+				Cursor:      database.ToNullTargetType(command.Cursor),
 			})
 			if err != nil {
 				return h.NewErr(command.Error(), err, "couldn't create aeon command")

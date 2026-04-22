@@ -96,7 +96,7 @@ func (l *Lookup) seedunspecifiedAbilities(db *database.Queries, dbConn *sql.DB) 
 				AbilityID:   UnspecifiedAbility.Ability.ID,
 				Description: UnspecifiedAbility.Description,
 				Effect:      UnspecifiedAbility.Effect,
-				Cursor:      h.NullTargetType(UnspecifiedAbility.Cursor),
+				Cursor:      database.ToNullTargetType(UnspecifiedAbility.Cursor),
 			})
 			if err != nil {
 				return h.NewErr(UnspecifiedAbility.Error(), err, "couldn't create generic ability")

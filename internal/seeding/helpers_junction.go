@@ -2,26 +2,37 @@ package seeding
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type Junction struct {
+type Junction interface {
+	ToHashFieldsJ(string) []any
+	Hashable
+}
+
+type StdJunction struct {
 	ParentID int32
 	ChildID  int32
 }
 
-func (j Junction) ToHashFields() []any {
+func (j StdJunction) ToHashFields() []any {
 	return []any{
 		j.ParentID,
 		j.ChildID,
 	}
 }
 
+func (j StdJunction) ToHashFieldsJ(name string) []any {
+	return slices.Concat([]any{name}, j.ToHashFields())
+}
+
+
 type ThreeWayJunction struct {
 	GrandparentID int32
-	Junction
+	StdJunction
 }
 
 func (j ThreeWayJunction) ToHashFields() []any {
@@ -30,6 +41,10 @@ func (j ThreeWayJunction) ToHashFields() []any {
 		j.ParentID,
 		j.ChildID,
 	}
+}
+
+func (j ThreeWayJunction) ToHashFieldsJ(name string) []any {
+	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
 type FourWayJunction struct {
@@ -46,13 +61,17 @@ func (j FourWayJunction) ToHashFields() []any {
 	}
 }
 
-func createJunction[T any, P, C h.HasID](parent P, childKey T, lookup map[string]C) (Junction, error) {
+func (j FourWayJunction) ToHashFieldsJ(name string) []any {
+	return slices.Concat([]any{name}, j.ToHashFields())
+}
+
+func createJunction[T any, P, C h.HasID](parent P, childKey T, lookup map[string]C) (StdJunction, error) {
 	child, err := GetResource(childKey, lookup)
 	if err != nil {
-		return Junction{}, fmt.Errorf("couldn't create junction: %v", err)
+		return StdJunction{}, fmt.Errorf("couldn't create junction: %v", err)
 	}
 
-	junction := Junction{
+	junction := StdJunction{
 		ParentID: parent.GetID(),
 		ChildID:  child.GetID(),
 	}
@@ -60,13 +79,13 @@ func createJunction[T any, P, C h.HasID](parent P, childKey T, lookup map[string
 	return junction, nil
 }
 
-func createJunctionSeed[P, C h.HasID](qtx *database.Queries, parent P, child C, seed func(*database.Queries, C) (C, error)) (Junction, error) {
+func createJunctionSeed[P, C h.HasID](qtx *database.Queries, parent P, child C, seed func(*database.Queries, C) (C, error)) (StdJunction, error) {
 	child, err := seed(qtx, child)
 	if err != nil {
-		return Junction{}, fmt.Errorf("couldn't seed object and create junction: %v", err)
+		return StdJunction{}, fmt.Errorf("couldn't seed object and create junction: %v", err)
 	}
 
-	junction := Junction{
+	junction := StdJunction{
 		ParentID: parent.GetID(),
 		ChildID:  child.GetID(),
 	}
@@ -82,7 +101,7 @@ func createThreeWayJunction[T any, GP, P, C h.HasID](grandParent GP, parent P, c
 
 	threeWay := ThreeWayJunction{
 		GrandparentID: grandParent.GetID(),
-		Junction:      junction,
+		StdJunction:   junction,
 	}
 
 	return threeWay, nil
@@ -96,7 +115,7 @@ func createThreeWayJunctionSeed[GP, P, C h.HasID](qtx *database.Queries, grandPa
 
 	threeWay := ThreeWayJunction{
 		GrandparentID: grandParent.GetID(),
-		Junction:      junction,
+		StdJunction:   junction,
 	}
 
 	return threeWay, nil

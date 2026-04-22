@@ -23,8 +23,8 @@ type XVal struct {
 }
 
 type AeonXStatJunction struct {
-	Junction
-	Battles   int32
+	StdJunction
+	Battles int32
 }
 
 func (j AeonXStatJunction) ToHashFields() []any {
@@ -76,7 +76,6 @@ func (l *Lookup) seedAeonStats(db *database.Queries, dbConn *sql.DB) error {
 	})
 }
 
-
 func (l *Lookup) seedAeonBaseStatsA(qtx *database.Queries, aeon Aeon, baseStats []BaseStat) error {
 	for _, baseStat := range baseStats {
 		junction, err := createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
@@ -95,7 +94,6 @@ func (l *Lookup) seedAeonBaseStatsA(qtx *database.Queries, aeon Aeon, baseStats 
 	}
 	return nil
 }
-
 
 func (l *Lookup) seedAeonBaseStatsB(qtx *database.Queries, aeon Aeon, baseStats []BaseStat) error {
 	for _, baseStat := range baseStats {
@@ -116,20 +114,19 @@ func (l *Lookup) seedAeonBaseStatsB(qtx *database.Queries, aeon Aeon, baseStats 
 	return nil
 }
 
-
 func (l *Lookup) seedAeonBaseStatsX(qtx *database.Queries, aeon Aeon, xVals []XVal) error {
 	for _, xVal := range xVals {
 		for _, baseStat := range xVal.BaseStats {
 			var err error
 			asJunction := AeonXStatJunction{}
-	
-			asJunction.Junction, err = createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
+
+			asJunction.StdJunction, err = createJunctionSeed(qtx, aeon, baseStat, l.seedBaseStat)
 			if err != nil {
 				return h.NewErr(baseStat.Error(), err)
 			}
-	
+
 			asJunction.Battles = xVal.Battles
-	
+
 			err = qtx.CreateAeonsBaseStatXJunction(context.Background(), database.CreateAeonsBaseStatXJunctionParams{
 				DataHash:   generateDataHash(asJunction),
 				AeonID:     asJunction.ParentID,

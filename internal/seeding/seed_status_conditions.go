@@ -71,7 +71,7 @@ func (l *Lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 				IsPermanent: 	condition.IsPermanent,
 				Effect:         condition.Effect,
 				Visualization:  h.GetNullString(condition.Visualization),
-				NullifyArmored: h.NullNullifyArmored(condition.NullifyArmored),
+				NullifyArmored: database.ToNullNullifyArmored(condition.NullifyArmored),
 			})
 			if err != nil {
 				return h.NewErr(condition.Error(), err, "couldn't create status condition")

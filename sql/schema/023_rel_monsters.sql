@@ -3,7 +3,7 @@ CREATE TYPE alteration_type AS ENUM ('change', 'gain', 'loss');
 CREATE TYPE equipment_slots_type AS ENUM ('ability-slots', 'attached-abilities');
 
 
--- 2
+-- 3
 CREATE TABLE monster_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE monster_items (
 );
 
 
--- 0
+-- 1
 CREATE TABLE equipment_slots_chances (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE equipment_slots_chances (
 );
 
 
--- 1
+-- 2
 CREATE TABLE monster_equipment (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE monster_equipment (
 );
 
 
--- 2
+-- 3
 CREATE TABLE monster_equipment_slots (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE monster_equipment_slots (
 );
 
 
--- 5
+-- 6
 CREATE TABLE equipment_drops (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE equipment_drops (
 );
 
 
--- 1
+-- 2
 CREATE TABLE altered_states (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE altered_states (
 );
 
 
--- 4
+-- 5
 CREATE TABLE alt_state_changes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE alt_state_changes (
 );
 
 
--- 2
+-- 3
 CREATE TABLE monster_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

@@ -12,6 +12,13 @@ func generateDataHash(h Hashable) string {
 	return fmt.Sprintf("%x", hash)
 }
 
+func generateJunctionHash(junction Junction, name string) string {
+	fields := junction.ToHashFieldsJ(name)
+	combined := combineFields(fields)
+	hash := sha256.Sum256([]byte(combined))
+	return fmt.Sprintf("%x", hash)
+}
+
 
 func combineFields(fields []any) string {
 	var combined string

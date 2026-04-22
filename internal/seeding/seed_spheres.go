@@ -111,7 +111,7 @@ func (l *Lookup) seedSpheres(db *database.Queries, dbConn *sql.DB) error {
 				SphereColor: 			database.SphereColor(sphere.SphereColor),
 				SphereEffect: 			database.SphereEffect(sphere.SphereEffect),
 				TargetNodePosition: 	database.NodePosition(sphere.TargetNodePosition),
-				TargetNodeState: 		h.NullNodeState(sphere.TargetNodeState),
+				TargetNodeState: 		database.ToNullNodeState(sphere.TargetNodeState),
 			})
 			if err != nil {
 				return h.NewErr(sphere.Error(), err, "couldn't create sphere")

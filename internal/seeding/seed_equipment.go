@@ -19,7 +19,7 @@ type EquipmentTable struct {
 	Priority                *int32          `json:"priority"`
 	RequiredAutoAbilities   []string        `json:"required_auto_abilities"`
 	SelectableAutoAbilities []AbilityPool   `json:"selectable_auto_abilities"`
-	RequiredSlots           *int32           `json:"required_slots"`
+	RequiredSlots           *int32          `json:"required_slots"`
 	EquipmentNames          []EquipmentName `json:"names"`
 }
 
@@ -115,7 +115,7 @@ func (e EquipmentName) GetResParamsNamed() h.ResParamsNamed {
 }
 
 type EquipmentTableNameClstlJunction struct {
-	Junction
+	StdJunction
 	CelestialWeaponID *int32
 }
 
@@ -129,7 +129,7 @@ func (j EquipmentTableNameClstlJunction) ToHashFields() []any {
 }
 
 type EquipmentAutoAbilityJunction struct {
-	Junction
+	StdJunction
 	AbilityPool string
 }
 
@@ -288,7 +288,7 @@ func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 		var err error
 
 		etncJunction := EquipmentTableNameClstlJunction{}
-		etncJunction.Junction, err = createJunctionSeed(qtx, table, equipmentName, l.seedEquipmentName)
+		etncJunction.StdJunction, err = createJunctionSeed(qtx, table, equipmentName, l.seedEquipmentName)
 		if err != nil {
 			return err
 		}

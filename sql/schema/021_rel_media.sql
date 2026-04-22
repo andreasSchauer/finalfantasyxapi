@@ -4,7 +4,7 @@ CREATE TYPE composer AS ENUM ('nobuo uematsu', 'junya nakano', 'masashi hamauzu'
 CREATE TYPE arranger AS ENUM ('nobuo uematsu', 'junya nakano', 'masashi hamauzu', 'shiro hamaguchi');
 
 
--- 0
+-- 1
 CREATE TABLE background_music (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE j_songs_background_music (
 );
 
 
--- 3
+-- 4
 CREATE TABLE cues (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE j_songs_cues (
 );
 
 
--- 0
+-- 1
 CREATE TABLE song_credits (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

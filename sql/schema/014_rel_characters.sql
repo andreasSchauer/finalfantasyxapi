@@ -15,7 +15,7 @@ CREATE TABLE j_characters_base_stats (
 );
 
 
--- 5
+-- 6
 CREATE TABLE aeon_equipment (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

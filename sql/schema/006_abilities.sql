@@ -5,7 +5,7 @@ CREATE TYPE ability_type AS ENUM ('unspecified-ability', 'player-ability', 'enem
 CREATE TYPE player_ability_category AS ENUM ('skill', 'special', 'white-magic', 'black-magic', 'aeon');
 
 
--- 0
+-- 1
 CREATE TABLE ability_attributes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE ability_attributes (
 );
 
 
--- 1
+-- 2
 CREATE TABLE abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE abilities (
 );
 
 
--- 2
+-- 3
 CREATE TABLE unspecified_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE unspecified_abilities (
 );
 
 
--- 4
+-- 5
 CREATE TABLE player_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE player_abilities (
 );
 
 
--- 2
+-- 3
 CREATE TABLE enemy_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE enemy_abilities (
 );
 
 
--- 2
+-- 3
 CREATE TABLE overdrive_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE overdrive_abilities (
 );
 
 
--- 2
+-- 3
 CREATE TABLE trigger_commands (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE trigger_commands (
 );
 
 
--- 3
+-- 4
 CREATE TABLE overdrives (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE overdrives (
 );
 
 
--- 4
+-- 5
 CREATE TABLE ronso_rages (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

@@ -2,7 +2,7 @@
 ALTER TABLE monster_arena_creations
 ADD COLUMN monster_id INTEGER REFERENCES monsters(id);
 
--- 3
+-- 4
 CREATE TABLE blitzball_items (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE blitzball_items (
 );
 
 
--- 2
+-- 3
 CREATE TABLE quest_completions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE quest_completions (
 );
 
 
--- 3
+-- 4
 CREATE TABLE completion_areas (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

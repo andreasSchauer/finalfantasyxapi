@@ -27,27 +27,27 @@ func main() {
         "NodeState",
     }
 
-    filePath := "./internal/helpers/conv_null_enum.go"
+    filePath := "./internal/database/conv_null_enum.go"
     
     var output strings.Builder
-    output.WriteString("package helpers\n\nimport \"github.com/andreasSchauer/finalfantasyxapi/internal/database\"\n\n\n")
+    output.WriteString("package database\n\n")
 
     for _, enumType := range nullEnumTypes {
-        nullEnumFuncName := "Null" + enumType
-        convertFuncName := "Convert" + nullEnumFuncName
-        getNullEnumFuncName := "Get" + nullEnumFuncName
-        fmt.Fprintf(&output, `func %s(s *string) database.Null%s {
+        nullEnumFuncName := "ToNull" + enumType
+        convertFuncName := "ConvertNull" + enumType
+        getNullEnumFuncName := "GetNull" + enumType
+        fmt.Fprintf(&output, `func %s(s *string) Null%s {
     if s == nil {
-        return database.Null%s{}
+        return Null%s{}
     }
     
-    return database.Null%s{
-        %s: database.%s(*s),
+    return Null%s{
+        %s: %s(*s),
         Valid: true,
     }
 }
 
-func %s(ne database.Null%s) *string {
+func %s(ne Null%s) *string {
     if !ne.Valid {
         return nil
     }
@@ -56,12 +56,12 @@ func %s(ne database.Null%s) *string {
     return &val
 }
 
-func %s(e *database.%s) database.Null%s {
+func %s(e *%s) Null%s {
     if e == nil {
-        return database.Null%s{}
+        return Null%s{}
     }
 
-    return database.Null%s{
+    return Null%s{
         %s: *e,
         Valid:  true,
     }

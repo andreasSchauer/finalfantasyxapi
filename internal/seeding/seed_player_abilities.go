@@ -123,7 +123,7 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 				Category: 			 database.PlayerAbilityCategory(playerAbility.Category),
 				CanUseOutsideBattle: playerAbility.CanUseOutsideBattle,
 				MpCost:              playerAbility.MPCost,
-				Cursor:              h.NullTargetType(playerAbility.Cursor),
+				Cursor:              database.ToNullTargetType(playerAbility.Cursor),
 			})
 			if err != nil {
 				return h.NewErr(playerAbility.Error(), err, "couldn't create player ability")

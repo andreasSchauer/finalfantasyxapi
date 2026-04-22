@@ -11,14 +11,14 @@ import (
 
 type Shop struct {
 	ID           int32
-	Version      *int32       	`json:"version"`
-	LocationArea LocationArea 	`json:"location_area"`
+	Version      *int32       `json:"version"`
+	LocationArea LocationArea `json:"location_area"`
 	AreaID       int32
-	Notes        *string  		`json:"notes"`
-	Category     string   		`json:"category"`
-	Availability string			`json:"availability"`
-	PreAirship   *SubShop 		`json:"pre_airship"`
-	PostAirship  *SubShop 		`json:"post_airship"`
+	Notes        *string  `json:"notes"`
+	Category     string   `json:"category"`
+	Availability string   `json:"availability"`
+	PreAirship   *SubShop `json:"pre_airship"`
+	PostAirship  *SubShop `json:"post_airship"`
 }
 
 func (s Shop) ToHashFields() []any {
@@ -94,9 +94,9 @@ func (s ShopItem) Error() string {
 }
 
 type ShopEquipment struct {
-	ID int32
-	ShopID	int32
-	ShopType	database.ShopType
+	ID       int32
+	ShopID   int32
+	ShopType database.ShopType
 	FoundEquipment
 	Price int32 `json:"price"`
 }
@@ -129,7 +129,7 @@ func (s ShopEquipment) Error() string {
 }
 
 type ShopJunction struct {
-	Junction
+	StdJunction
 	ShopType database.ShopType
 }
 
@@ -162,12 +162,12 @@ func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			dbShop, err := qtx.CreateShop(context.Background(), database.CreateShopParams{
-				DataHash: 		generateDataHash(shop),
-				Version:  		h.GetNullInt32(shop.Version),
-				AreaID:   		shop.AreaID,
-				Notes:    		h.GetNullString(shop.Notes),
-				Category: 		database.ShopCategory(shop.Category),
-				Availability: 	database.AvailabilityType(shop.Availability),
+				DataHash:     generateDataHash(shop),
+				Version:      h.GetNullInt32(shop.Version),
+				AreaID:       shop.AreaID,
+				Notes:        h.GetNullString(shop.Notes),
+				Category:     database.ShopCategory(shop.Category),
+				Availability: database.AvailabilityType(shop.Availability),
 			})
 			if err != nil {
 				return h.NewErr(shop.Error(), err, "couldn't create shop")
@@ -240,8 +240,8 @@ func (l *Lookup) seedShopItems(qtx *database.Queries, shop Shop, subShop *SubSho
 		}
 
 		shopJunction := ShopJunction{
-			Junction: junction,
-			ShopType: subShop.Type,
+			StdJunction: junction,
+			ShopType:    subShop.Type,
 		}
 
 		err = qtx.CreateShopsItemsJunction(context.Background(), database.CreateShopsItemsJunctionParams{
@@ -293,9 +293,9 @@ func (l *Lookup) seedShopEquipmentPieces(qtx *database.Queries, shop Shop, subSh
 
 		dbShopEquipment, err := qtx.CreateShopEquipmentPiece(context.Background(), database.CreateShopEquipmentPieceParams{
 			DataHash:         generateDataHash(shopEquipment),
-			ShopID: 		  shopEquipment.ShopID,
+			ShopID:           shopEquipment.ShopID,
 			EquipmentNameID:  shopEquipment.EquipmentNameID,
-			ShopType: 		  shopEquipment.ShopType,
+			ShopType:         shopEquipment.ShopType,
 			EmptySlotsAmount: shopEquipment.EmptySlotsAmount,
 			Price:            shopEquipment.Price,
 		})
@@ -314,7 +314,6 @@ func (l *Lookup) seedShopEquipmentPieces(qtx *database.Queries, shop Shop, subSh
 	return nil
 }
 
-
 func (l *Lookup) seedShopEquipmentAbilities(qtx *database.Queries, shopEquipment ShopEquipment) error {
 	for _, autoAbility := range shopEquipment.Abilities {
 		junction, err := createJunction(shopEquipment, autoAbility, l.AutoAbilities)
@@ -323,9 +322,9 @@ func (l *Lookup) seedShopEquipmentAbilities(qtx *database.Queries, shopEquipment
 		}
 
 		err = qtx.CreateShopEquipmentAbilitiesJunction(context.Background(), database.CreateShopEquipmentAbilitiesJunctionParams{
-			DataHash:         generateDataHash(junction),
+			DataHash:        generateDataHash(junction),
 			ShopEquipmentID: junction.ParentID,
-			AutoAbilityID:    junction.ChildID,
+			AutoAbilityID:   junction.ChildID,
 		})
 		if err != nil {
 			return h.NewErr(autoAbility, err, "couldn't junction auto-ability")

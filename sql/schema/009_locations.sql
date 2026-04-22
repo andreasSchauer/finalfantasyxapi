@@ -4,7 +4,7 @@ CREATE TYPE loot_type AS ENUM ('item', 'equipment', 'gil');
 CREATE TYPE shop_category AS ENUM ('standard', 'oaka', 'travel-agency', 'wantz');
 
 
--- 0
+-- 1
 CREATE TABLE locations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE locations (
 );
 
 
--- 1
+-- 2
 CREATE TABLE sublocations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE sublocations (
 );
 
 
--- 2
+-- 3
 CREATE TABLE areas (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE areas (
 );
 
 
--- 3
+-- 4
 CREATE TABLE treasures (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE treasures (
 );
 
 
--- 3
+-- 4
 CREATE TABLE shops (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

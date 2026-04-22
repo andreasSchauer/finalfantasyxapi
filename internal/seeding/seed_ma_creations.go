@@ -73,10 +73,10 @@ func (l *Lookup) seedArenaCreations(db *database.Queries, dbConn *sql.DB) error 
 				DataHash:                  generateDataHash(creation),
 				SubquestID:                creation.SubquestID,
 				Category:                  database.MaCreationCategory(creation.Category),
-				RequiredArea:              h.NullMaCreationArea(creation.RequiredArea),
-				RequiredSpecies:           h.NullMaCreationSpecies(creation.RequiredSpecies),
+				RequiredArea:              database.ToNullMaCreationArea(creation.RequiredArea),
+				RequiredSpecies:           database.ToNullMaCreationSpecies(creation.RequiredSpecies),
 				UnderwaterOnly:            creation.UnderwaterOnly,
-				CreationsUnlockedCategory: h.NullCreationsUnlockedCategory(creation.CreationsUnlockedCategory),
+				CreationsUnlockedCategory: database.ToNullCreationsUnlockedCategory(creation.CreationsUnlockedCategory),
 				Amount:                    creation.Amount,
 			})
 			if err != nil {

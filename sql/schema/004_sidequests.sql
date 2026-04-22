@@ -9,7 +9,7 @@ CREATE TYPE creations_unlocked_category AS ENUM ('area', 'species');
 CREATE TYPE availability_type AS ENUM ('always', 'pre-story', 'post', 'post-story', 'post-game', 'story');
 
 
--- 0
+-- 1
 CREATE TABLE blitzball_positions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE blitzball_positions (
 );
 
 
--- 3
+-- 4
 CREATE TABLE quests (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE quests (
 );
 
 
--- 4
+-- 5
 CREATE TABLE sidequests (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE sidequests (
 );
 
 
--- 5
+-- 6
 CREATE TABLE subquests (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE subquests (
 );
 
 
--- 6
+-- 7
 CREATE TABLE monster_arena_creations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,

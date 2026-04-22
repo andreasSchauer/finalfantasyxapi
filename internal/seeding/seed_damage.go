@@ -79,10 +79,10 @@ func (l *Lookup) seedDamage(qtx *database.Queries, damage Damage) (Damage, error
 
 	dbDamage, err := qtx.CreateDamage(context.Background(), database.CreateDamageParams{
 		DataHash:        generateDataHash(damage),
-		Critical:        h.NullCriticalType(damage.Critical),
+		Critical:        database.ToNullCriticalType(damage.Critical),
 		CriticalPlusVal: h.GetNullInt32(damage.CriticalPlusVal),
 		IsPiercing:      damage.IsPiercing,
-		BreakDmgLimit:   h.NullBreakDmgLmtType(damage.BreakDmgLimit),
+		BreakDmgLimit:   database.ToNullBreakDmgLmtType(damage.BreakDmgLimit),
 		ElementID:       h.GetNullInt32(damage.ElementID),
 	})
 	if err != nil {

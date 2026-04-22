@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 
@@ -303,8 +302,8 @@ func (t *TypeLookup) initArenaCreationCategory() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.MaCreationCategory { return database.MaCreationCategory(s) },
-		nullConvFunc: h.NullMaCreationCategory,
-		getNullEnum:  h.GetNullMaCreationCategory,
+		nullConvFunc: database.ToNullMaCreationCategory,
+		getNullEnum:  database.GetNullMaCreationCategory,
 	}
 }
 
@@ -329,8 +328,8 @@ func (t *TypeLookup) initArranger() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.Arranger { return database.Arranger(s) },
-		nullConvFunc: h.NullArranger,
-		getNullEnum:  h.GetNullArranger,
+		nullConvFunc: database.ToNullArranger,
+		getNullEnum:  database.GetNullArranger,
 	}
 }
 
@@ -522,8 +521,8 @@ func (t *TypeLookup) initComposer() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.Composer { return database.Composer(s) },
-		nullConvFunc: h.NullComposer,
-		getNullEnum:  h.GetNullComposer,
+		nullConvFunc: database.ToNullComposer,
+		getNullEnum:  database.GetNullComposer,
 	}
 }
 
@@ -544,8 +543,8 @@ func (t *TypeLookup) initCounterType() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.CounterType { return database.CounterType(s) },
-		nullConvFunc: h.NullCounterType,
-		getNullEnum:  h.GetNullCounterType,
+		nullConvFunc: database.ToNullCounterType,
+		getNullEnum:  database.GetNullCounterType,
 	}
 }
 
@@ -629,8 +628,8 @@ func (t *TypeLookup) initCreationArea() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.MaCreationArea { return database.MaCreationArea(s) },
-		nullConvFunc: h.NullMaCreationArea,
-		getNullEnum:  h.GetNullMaCreationArea,
+		nullConvFunc: database.ToNullMaCreationArea,
+		getNullEnum:  database.GetNullMaCreationArea,
 	}
 }
 
@@ -1181,8 +1180,8 @@ func (t *TypeLookup) initNodeState() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.NodeState { return database.NodeState(s) },
-		nullConvFunc: h.NullNodeState,
-		getNullEnum:  h.GetNullNodeState,
+		nullConvFunc: database.ToNullNodeState,
+		getNullEnum:  database.GetNullNodeState,
 	}
 }
 
@@ -1272,8 +1271,8 @@ func (t *TypeLookup) initShopType() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.ShopType { return database.ShopType(s) },
-		nullConvFunc: h.NullShopType,
-		getNullEnum:  h.GetNullShopType,
+		nullConvFunc: database.ToNullShopType,
+		getNullEnum:  database.GetNullShopType,
 	}
 }
 
@@ -1415,8 +1414,8 @@ func (t *TypeLookup) initBreakDmgLimitType() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.BreakDmgLmtType { return database.BreakDmgLmtType(s) },
-		nullConvFunc: h.NullBreakDmgLmtType,
-		getNullEnum:  h.GetNullBreakDmgLmtType,
+		nullConvFunc: database.ToNullBreakDmgLmtType,
+		getNullEnum:  database.GetNullBreakDmgLmtType,
 	}
 }
 
@@ -1473,8 +1472,8 @@ func (t *TypeLookup) initCriticalType() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.CriticalType { return database.CriticalType(s) },
-		nullConvFunc: h.NullCriticalType,
-		getNullEnum:  h.GetNullCriticalType,
+		nullConvFunc: database.ToNullCriticalType,
+		getNullEnum:  database.GetNullCriticalType,
 	}
 }
 
@@ -1709,7 +1708,7 @@ func (t *TypeLookup) initTargetType() {
 		isEndpoint:   false,
 		lookup:       enumSliceToMap(typeSlice),
 		convFunc:     func(s string) database.TargetType { return database.TargetType(s) },
-		nullConvFunc: h.NullTargetType,
-		getNullEnum:  h.GetNullTargetType,
+		nullConvFunc: database.ToNullTargetType,
+		getNullEnum:  database.GetNullTargetType,
 	}
 }
