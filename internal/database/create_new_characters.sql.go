@@ -122,6 +122,93 @@ func (q *Queries) CreateAeonEquipmentBulk(ctx context.Context, arg CreateAeonEqu
 	return items, nil
 }
 
+const createAeonsBaseStatAJunctionBulk = `-- name: CreateAeonsBaseStatAJunctionBulk :exec
+INSERT INTO j_aeons_base_stats_a (data_hash, aeon_id, base_stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsBaseStatAJunctionBulkParams struct {
+	DataHash   []string
+	AeonID     []int32
+	BaseStatID []int32
+}
+
+func (q *Queries) CreateAeonsBaseStatAJunctionBulk(ctx context.Context, arg CreateAeonsBaseStatAJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatAJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AeonID), pq.Array(arg.BaseStatID))
+	return err
+}
+
+const createAeonsBaseStatBJunctionBulk = `-- name: CreateAeonsBaseStatBJunctionBulk :exec
+INSERT INTO j_aeons_base_stats_b (data_hash, aeon_id, base_stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsBaseStatBJunctionBulkParams struct {
+	DataHash   []string
+	AeonID     []int32
+	BaseStatID []int32
+}
+
+func (q *Queries) CreateAeonsBaseStatBJunctionBulk(ctx context.Context, arg CreateAeonsBaseStatBJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatBJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AeonID), pq.Array(arg.BaseStatID))
+	return err
+}
+
+const createAeonsBaseStatXJunctionBulk = `-- name: CreateAeonsBaseStatXJunctionBulk :exec
+INSERT INTO j_aeons_base_stats_x (data_hash, aeon_id, base_stat_id, battles)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsBaseStatXJunctionBulkParams struct {
+	DataHash   []string
+	AeonID     []int32
+	BaseStatID []int32
+	Battles    []int32
+}
+
+func (q *Queries) CreateAeonsBaseStatXJunctionBulk(ctx context.Context, arg CreateAeonsBaseStatXJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatXJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AeonID),
+		pq.Array(arg.BaseStatID),
+		pq.Array(arg.Battles),
+	)
+	return err
+}
+
+const createAeonsWeaponArmorJunctionBulk = `-- name: CreateAeonsWeaponArmorJunctionBulk :exec
+INSERT INTO j_aeons_weapon_armor (data_hash, aeon_id, aeon_equipment_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsWeaponArmorJunctionBulkParams struct {
+	DataHash        []string
+	AeonID          []int32
+	AeonEquipmentID []int32
+}
+
+func (q *Queries) CreateAeonsWeaponArmorJunctionBulk(ctx context.Context, arg CreateAeonsWeaponArmorJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsWeaponArmorJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AeonID), pq.Array(arg.AeonEquipmentID))
+	return err
+}
+
 const createCharacterBulk = `-- name: CreateCharacterBulk :many
 INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
 SELECT
@@ -217,6 +304,86 @@ func (q *Queries) CreateCharacterClassBulk(ctx context.Context, arg CreateCharac
 		return nil, err
 	}
 	return items, nil
+}
+
+const createCharacterClassPlayerUnitsJunctionBulk = `-- name: CreateCharacterClassPlayerUnitsJunctionBulk :exec
+INSERT INTO j_character_class_player_units (data_hash, class_id, unit_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCharacterClassPlayerUnitsJunctionBulkParams struct {
+	DataHash []string
+	ClassID  []int32
+	UnitID   []int32
+}
+
+func (q *Queries) CreateCharacterClassPlayerUnitsJunctionBulk(ctx context.Context, arg CreateCharacterClassPlayerUnitsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createCharacterClassPlayerUnitsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ClassID), pq.Array(arg.UnitID))
+	return err
+}
+
+const createCharactersBaseStatsJunctionBulk = `-- name: CreateCharactersBaseStatsJunctionBulk :exec
+INSERT INTO j_characters_base_stats (data_hash, character_id, base_stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCharactersBaseStatsJunctionBulkParams struct {
+	DataHash    []string
+	CharacterID []int32
+	BaseStatID  []int32
+}
+
+func (q *Queries) CreateCharactersBaseStatsJunctionBulk(ctx context.Context, arg CreateCharactersBaseStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createCharactersBaseStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.CharacterID), pq.Array(arg.BaseStatID))
+	return err
+}
+
+const createDefaultAbilityJunctionBulk = `-- name: CreateDefaultAbilityJunctionBulk :exec
+INSERT INTO j_default_abilities (data_hash, class_id, ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateDefaultAbilityJunctionBulkParams struct {
+	DataHash  []string
+	ClassID   []int32
+	AbilityID []int32
+}
+
+func (q *Queries) CreateDefaultAbilityJunctionBulk(ctx context.Context, arg CreateDefaultAbilityJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createDefaultAbilityJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ClassID), pq.Array(arg.AbilityID))
+	return err
+}
+
+const createDefaultOverdriveAbilityJunctionBulk = `-- name: CreateDefaultOverdriveAbilityJunctionBulk :exec
+INSERT INTO j_default_overdrive_abilities (data_hash, class_id, ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateDefaultOverdriveAbilityJunctionBulkParams struct {
+	DataHash  []string
+	ClassID   []int32
+	AbilityID []int32
+}
+
+func (q *Queries) CreateDefaultOverdriveAbilityJunctionBulk(ctx context.Context, arg CreateDefaultOverdriveAbilityJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createDefaultOverdriveAbilityJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ClassID), pq.Array(arg.AbilityID))
+	return err
 }
 
 const createPlayerUnitBulk = `-- name: CreatePlayerUnitBulk :many

@@ -58,6 +58,166 @@ func (q *Queries) CreateAbilityPoolBulk(ctx context.Context, arg CreateAbilityPo
 	return items, nil
 }
 
+const createAbilityPoolsAutoAbilitiesJunctionBulk = `-- name: CreateAbilityPoolsAutoAbilitiesJunctionBulk :exec
+INSERT INTO j_ability_pools_auto_abilities (data_hash, ability_pool_id, auto_ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAbilityPoolsAutoAbilitiesJunctionBulkParams struct {
+	DataHash      []string
+	AbilityPoolID []int32
+	AutoAbilityID []int32
+}
+
+func (q *Queries) CreateAbilityPoolsAutoAbilitiesJunctionBulk(ctx context.Context, arg CreateAbilityPoolsAutoAbilitiesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAbilityPoolsAutoAbilitiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AbilityPoolID), pq.Array(arg.AutoAbilityID))
+	return err
+}
+
+const createAutoAbilitiesAddedStatusResistsJunctionBulk = `-- name: CreateAutoAbilitiesAddedStatusResistsJunctionBulk :exec
+INSERT INTO j_auto_abilities_added_status_resists (data_hash, auto_ability_id, status_resist_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilitiesAddedStatusResistsJunctionBulkParams struct {
+	DataHash       []string
+	AutoAbilityID  []int32
+	StatusResistID []int32
+}
+
+func (q *Queries) CreateAutoAbilitiesAddedStatusResistsJunctionBulk(ctx context.Context, arg CreateAutoAbilitiesAddedStatusResistsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilitiesAddedStatusResistsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AutoAbilityID), pq.Array(arg.StatusResistID))
+	return err
+}
+
+const createAutoAbilitiesAddedStatussesJunctionBulk = `-- name: CreateAutoAbilitiesAddedStatussesJunctionBulk :exec
+INSERT INTO j_auto_abilities_added_statusses (data_hash, auto_ability_id, status_condition_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilitiesAddedStatussesJunctionBulkParams struct {
+	DataHash          []string
+	AutoAbilityID     []int32
+	StatusConditionID []int32
+}
+
+func (q *Queries) CreateAutoAbilitiesAddedStatussesJunctionBulk(ctx context.Context, arg CreateAutoAbilitiesAddedStatussesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilitiesAddedStatussesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AutoAbilityID), pq.Array(arg.StatusConditionID))
+	return err
+}
+
+const createAutoAbilitiesLockedOutJunctionBulk = `-- name: CreateAutoAbilitiesLockedOutJunctionBulk :exec
+INSERT INTO j_auto_abilities_locked_out (data_hash, parent_ability_id, child_ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilitiesLockedOutJunctionBulkParams struct {
+	DataHash        []string
+	ParentAbilityID []int32
+	ChildAbilityID  []int32
+}
+
+func (q *Queries) CreateAutoAbilitiesLockedOutJunctionBulk(ctx context.Context, arg CreateAutoAbilitiesLockedOutJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilitiesLockedOutJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ParentAbilityID), pq.Array(arg.ChildAbilityID))
+	return err
+}
+
+const createAutoAbilitiesModifierChangesJunctionBulk = `-- name: CreateAutoAbilitiesModifierChangesJunctionBulk :exec
+INSERT INTO j_auto_abilities_modifier_changes (data_hash, auto_ability_id, modifier_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilitiesModifierChangesJunctionBulkParams struct {
+	DataHash         []string
+	AutoAbilityID    []int32
+	ModifierChangeID []int32
+}
+
+func (q *Queries) CreateAutoAbilitiesModifierChangesJunctionBulk(ctx context.Context, arg CreateAutoAbilitiesModifierChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilitiesModifierChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AutoAbilityID), pq.Array(arg.ModifierChangeID))
+	return err
+}
+
+const createAutoAbilitiesRelatedStatsJunctionBulk = `-- name: CreateAutoAbilitiesRelatedStatsJunctionBulk :exec
+INSERT INTO j_auto_abilities_related_stats(data_hash, auto_ability_id, stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilitiesRelatedStatsJunctionBulkParams struct {
+	DataHash      []string
+	AutoAbilityID []int32
+	StatID        []int32
+}
+
+func (q *Queries) CreateAutoAbilitiesRelatedStatsJunctionBulk(ctx context.Context, arg CreateAutoAbilitiesRelatedStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilitiesRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AutoAbilityID), pq.Array(arg.StatID))
+	return err
+}
+
+const createAutoAbilitiesRequiredItemJunctionBulk = `-- name: CreateAutoAbilitiesRequiredItemJunctionBulk :exec
+INSERT INTO j_auto_abilities_required_item (data_hash, auto_ability_id, item_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilitiesRequiredItemJunctionBulkParams struct {
+	DataHash      []string
+	AutoAbilityID []int32
+	ItemID        []int32
+}
+
+func (q *Queries) CreateAutoAbilitiesRequiredItemJunctionBulk(ctx context.Context, arg CreateAutoAbilitiesRequiredItemJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilitiesRequiredItemJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AutoAbilityID), pq.Array(arg.ItemID))
+	return err
+}
+
+const createAutoAbilitiesStatChangesJunctionBulk = `-- name: CreateAutoAbilitiesStatChangesJunctionBulk :exec
+INSERT INTO j_auto_abilities_stat_changes (data_hash, auto_ability_id, stat_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilitiesStatChangesJunctionBulkParams struct {
+	DataHash      []string
+	AutoAbilityID []int32
+	StatChangeID  []int32
+}
+
+func (q *Queries) CreateAutoAbilitiesStatChangesJunctionBulk(ctx context.Context, arg CreateAutoAbilitiesStatChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilitiesStatChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AutoAbilityID), pq.Array(arg.StatChangeID))
+	return err
+}
+
 const createAutoAbilityBulk = `-- name: CreateAutoAbilityBulk :many
 INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter)
 SELECT
@@ -287,4 +447,51 @@ func (q *Queries) CreateEquipmentTableBulk(ctx context.Context, arg CreateEquipm
 		return nil, err
 	}
 	return items, nil
+}
+
+const createEquipmentTablesNamesJunctionBulk = `-- name: CreateEquipmentTablesNamesJunctionBulk :exec
+INSERT INTO j_equipment_tables_names (data_hash, equipment_table_id, equipment_name_id, celestial_weapon_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateEquipmentTablesNamesJunctionBulkParams struct {
+	DataHash          []string
+	EquipmentTableID  []int32
+	EquipmentNameID   []int32
+	CelestialWeaponID []int32
+}
+
+func (q *Queries) CreateEquipmentTablesNamesJunctionBulk(ctx context.Context, arg CreateEquipmentTablesNamesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createEquipmentTablesNamesJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.EquipmentTableID),
+		pq.Array(arg.EquipmentNameID),
+		pq.Array(arg.CelestialWeaponID),
+	)
+	return err
+}
+
+const createEquipmentTablesRequiredAutoAbilitiesJunctionBulk = `-- name: CreateEquipmentTablesRequiredAutoAbilitiesJunctionBulk :exec
+INSERT INTO j_equipment_tables_required_auto_abilities (data_hash, equipment_table_id, auto_ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateEquipmentTablesRequiredAutoAbilitiesJunctionBulkParams struct {
+	DataHash         []string
+	EquipmentTableID []int32
+	AutoAbilityID    []int32
+}
+
+func (q *Queries) CreateEquipmentTablesRequiredAutoAbilitiesJunctionBulk(ctx context.Context, arg CreateEquipmentTablesRequiredAutoAbilitiesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createEquipmentTablesRequiredAutoAbilitiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.EquipmentTableID), pq.Array(arg.AutoAbilityID))
+	return err
 }

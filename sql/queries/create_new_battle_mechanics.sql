@@ -143,7 +143,6 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id;
 
 
-
 -- name: CreateModifierBulk :many
 INSERT INTO modifiers (data_hash, name, effect, category, default_value)
 SELECT
@@ -154,3 +153,80 @@ SELECT
     unnest(sqlc.arg('default_value')::null_float[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id;
+
+
+
+
+
+
+
+-- name: CreateOverdriveModesActionsToLearnJunctionBulk :exec
+INSERT INTO j_overdrive_modes_actions_to_learn (data_hash, overdrive_mode_id, action_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('overdrive_mode_id')::int[]),
+    unnest(sqlc.arg('action_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateStatusConditionsRelatedStatsJunctionBulk :exec
+INSERT INTO j_status_conditions_related_stats(data_hash, status_condition_id, stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('status_condition_id')::int[]),
+    unnest(sqlc.arg('stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateStatusConditionsRemovedStatusConditionsJunctionBulk :exec
+INSERT INTO j_status_conditions_removed_status_conditions (data_hash, parent_condition_id, child_condition_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('parent_condition_id')::int[]),
+    unnest(sqlc.arg('child_condition_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateStatusConditionsStatChangesJunctionBulk :exec
+INSERT INTO j_status_conditions_stat_changes (data_hash, status_condition_id, stat_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('status_condition_id')::int[]),
+    unnest(sqlc.arg('stat_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateStatusConditionsModifierChangesJunctionBulk :exec
+INSERT INTO j_status_conditions_modifier_changes (data_hash, status_condition_id, modifier_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('status_condition_id')::int[]),
+    unnest(sqlc.arg('modifier_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreatePropertiesRelatedStatsJunctionBulk :exec
+INSERT INTO j_properties_related_stats(data_hash, property_id, stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('property_id')::int[]),
+    unnest(sqlc.arg('stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreatePropertiesStatChangesJunctionBulk :exec
+INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('property_id')::int[]),
+    unnest(sqlc.arg('stat_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreatePropertiesModifierChangesJunctionBulk :exec
+INSERT INTO j_properties_modifier_changes (data_hash, property_id, modifier_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('property_id')::int[]),
+    unnest(sqlc.arg('modifier_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;

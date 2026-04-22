@@ -96,3 +96,89 @@ SELECT
     unnest(sqlc.arg('special_action')::null_special_action_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = battle_interactions.data_hash
 RETURNING id;
+
+
+
+
+
+
+
+-- name: CreateDamagesDamageCalcJunctionBulk :exec
+INSERT INTO j_damages_damage_calc (data_hash, ability_id, battle_interaction_id, damage_id, ability_damage_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('ability_id')::int[]),
+    unnest(sqlc.arg('battle_interaction_id')::int[]),
+    unnest(sqlc.arg('damage_id')::int[]),
+    unnest(sqlc.arg('ability_damage_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateBattleIntDamageJunctionBulk :exec
+INSERT INTO j_battle_interactions_damage (data_hash, ability_id, battle_interaction_id, damage_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('ability_id')::int[]),
+    unnest(sqlc.arg('battle_interaction_id')::int[]),
+    unnest(sqlc.arg('damage_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateBattleIntAffectedByJunctionBulk :exec
+INSERT INTO j_battle_interactions_affected_by (data_hash, ability_id, battle_interaction_id, status_condition_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('ability_id')::int[]),
+    unnest(sqlc.arg('battle_interaction_id')::int[]),
+    unnest(sqlc.arg('status_condition_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateBattleIntInflictedConditionsJunctionBulk :exec
+INSERT INTO j_battle_interactions_inflicted_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('ability_id')::int[]),
+    unnest(sqlc.arg('battle_interaction_id')::int[]),
+    unnest(sqlc.arg('inflicted_status_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateBattleIntRemovedConditionsJunctionBulk :exec
+INSERT INTO j_battle_interactions_removed_status_conditions (data_hash, ability_id, battle_interaction_id, status_condition_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('ability_id')::int[]),
+    unnest(sqlc.arg('battle_interaction_id')::int[]),
+    unnest(sqlc.arg('status_condition_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateBattleIntCopiedConditionsJunctionBulk :exec
+INSERT INTO j_battle_interactions_copied_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('ability_id')::int[]),
+    unnest(sqlc.arg('battle_interaction_id')::int[]),
+    unnest(sqlc.arg('inflicted_status_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateBattleIntStatChangesJunctionBulk :exec
+INSERT INTO j_battle_interactions_stat_changes (data_hash, ability_id, battle_interaction_id, stat_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('ability_id')::int[]),
+    unnest(sqlc.arg('battle_interaction_id')::int[]),
+    unnest(sqlc.arg('stat_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateBattleIntModifierChangesJunctionBulk :exec
+INSERT INTO j_battle_interactions_modifier_changes (data_hash, ability_id, battle_interaction_id, modifier_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('ability_id')::int[]),
+    unnest(sqlc.arg('battle_interaction_id')::int[]),
+    unnest(sqlc.arg('modifier_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;

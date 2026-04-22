@@ -113,6 +113,195 @@ func (q *Queries) CreateAbilityDamageBulk(ctx context.Context, arg CreateAbility
 	return items, nil
 }
 
+const createBattleIntAffectedByJunctionBulk = `-- name: CreateBattleIntAffectedByJunctionBulk :exec
+INSERT INTO j_battle_interactions_affected_by (data_hash, ability_id, battle_interaction_id, status_condition_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntAffectedByJunctionBulkParams struct {
+	DataHash            []string
+	AbilityID           []int32
+	BattleInteractionID []int32
+	StatusConditionID   []int32
+}
+
+func (q *Queries) CreateBattleIntAffectedByJunctionBulk(ctx context.Context, arg CreateBattleIntAffectedByJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntAffectedByJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.BattleInteractionID),
+		pq.Array(arg.StatusConditionID),
+	)
+	return err
+}
+
+const createBattleIntCopiedConditionsJunctionBulk = `-- name: CreateBattleIntCopiedConditionsJunctionBulk :exec
+INSERT INTO j_battle_interactions_copied_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntCopiedConditionsJunctionBulkParams struct {
+	DataHash            []string
+	AbilityID           []int32
+	BattleInteractionID []int32
+	InflictedStatusID   []int32
+}
+
+func (q *Queries) CreateBattleIntCopiedConditionsJunctionBulk(ctx context.Context, arg CreateBattleIntCopiedConditionsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntCopiedConditionsJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.BattleInteractionID),
+		pq.Array(arg.InflictedStatusID),
+	)
+	return err
+}
+
+const createBattleIntDamageJunctionBulk = `-- name: CreateBattleIntDamageJunctionBulk :exec
+INSERT INTO j_battle_interactions_damage (data_hash, ability_id, battle_interaction_id, damage_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntDamageJunctionBulkParams struct {
+	DataHash            []string
+	AbilityID           []int32
+	BattleInteractionID []int32
+	DamageID            []int32
+}
+
+func (q *Queries) CreateBattleIntDamageJunctionBulk(ctx context.Context, arg CreateBattleIntDamageJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntDamageJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.BattleInteractionID),
+		pq.Array(arg.DamageID),
+	)
+	return err
+}
+
+const createBattleIntInflictedConditionsJunctionBulk = `-- name: CreateBattleIntInflictedConditionsJunctionBulk :exec
+INSERT INTO j_battle_interactions_inflicted_status_conditions (data_hash, ability_id, battle_interaction_id, inflicted_status_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntInflictedConditionsJunctionBulkParams struct {
+	DataHash            []string
+	AbilityID           []int32
+	BattleInteractionID []int32
+	InflictedStatusID   []int32
+}
+
+func (q *Queries) CreateBattleIntInflictedConditionsJunctionBulk(ctx context.Context, arg CreateBattleIntInflictedConditionsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntInflictedConditionsJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.BattleInteractionID),
+		pq.Array(arg.InflictedStatusID),
+	)
+	return err
+}
+
+const createBattleIntModifierChangesJunctionBulk = `-- name: CreateBattleIntModifierChangesJunctionBulk :exec
+INSERT INTO j_battle_interactions_modifier_changes (data_hash, ability_id, battle_interaction_id, modifier_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntModifierChangesJunctionBulkParams struct {
+	DataHash            []string
+	AbilityID           []int32
+	BattleInteractionID []int32
+	ModifierChangeID    []int32
+}
+
+func (q *Queries) CreateBattleIntModifierChangesJunctionBulk(ctx context.Context, arg CreateBattleIntModifierChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntModifierChangesJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.BattleInteractionID),
+		pq.Array(arg.ModifierChangeID),
+	)
+	return err
+}
+
+const createBattleIntRemovedConditionsJunctionBulk = `-- name: CreateBattleIntRemovedConditionsJunctionBulk :exec
+INSERT INTO j_battle_interactions_removed_status_conditions (data_hash, ability_id, battle_interaction_id, status_condition_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntRemovedConditionsJunctionBulkParams struct {
+	DataHash            []string
+	AbilityID           []int32
+	BattleInteractionID []int32
+	StatusConditionID   []int32
+}
+
+func (q *Queries) CreateBattleIntRemovedConditionsJunctionBulk(ctx context.Context, arg CreateBattleIntRemovedConditionsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntRemovedConditionsJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.BattleInteractionID),
+		pq.Array(arg.StatusConditionID),
+	)
+	return err
+}
+
+const createBattleIntStatChangesJunctionBulk = `-- name: CreateBattleIntStatChangesJunctionBulk :exec
+INSERT INTO j_battle_interactions_stat_changes (data_hash, ability_id, battle_interaction_id, stat_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateBattleIntStatChangesJunctionBulkParams struct {
+	DataHash            []string
+	AbilityID           []int32
+	BattleInteractionID []int32
+	StatChangeID        []int32
+}
+
+func (q *Queries) CreateBattleIntStatChangesJunctionBulk(ctx context.Context, arg CreateBattleIntStatChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createBattleIntStatChangesJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.BattleInteractionID),
+		pq.Array(arg.StatChangeID),
+	)
+	return err
+}
+
 const createBattleInteractionBulk = `-- name: CreateBattleInteractionBulk :many
 INSERT INTO battle_interactions (data_hash, target, based_on_user_attack, range, shatter_rate, accuracy_id, inflicted_delay_id, hit_amount, special_action)
 SELECT
@@ -224,6 +413,36 @@ func (q *Queries) CreateDamageBulk(ctx context.Context, arg CreateDamageBulkPara
 		return nil, err
 	}
 	return items, nil
+}
+
+const createDamagesDamageCalcJunctionBulk = `-- name: CreateDamagesDamageCalcJunctionBulk :exec
+INSERT INTO j_damages_damage_calc (data_hash, ability_id, battle_interaction_id, damage_id, ability_damage_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[]),
+    unnest($5::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateDamagesDamageCalcJunctionBulkParams struct {
+	DataHash            []string
+	AbilityID           []int32
+	BattleInteractionID []int32
+	DamageID            []int32
+	AbilityDamageID     []int32
+}
+
+func (q *Queries) CreateDamagesDamageCalcJunctionBulk(ctx context.Context, arg CreateDamagesDamageCalcJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createDamagesDamageCalcJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.BattleInteractionID),
+		pq.Array(arg.DamageID),
+		pq.Array(arg.AbilityDamageID),
+	)
+	return err
 }
 
 const createInflictedDelayBulk = `-- name: CreateInflictedDelayBulk :many

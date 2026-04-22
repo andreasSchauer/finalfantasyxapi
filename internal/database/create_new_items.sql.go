@@ -194,6 +194,46 @@ func (q *Queries) CreateItemBulk(ctx context.Context, arg CreateItemBulkParams) 
 	return items, nil
 }
 
+const createItemsAvailableMenusJunctionBulk = `-- name: CreateItemsAvailableMenusJunctionBulk :exec
+INSERT INTO j_items_available_menus (data_hash, item_id, submenu_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateItemsAvailableMenusJunctionBulkParams struct {
+	DataHash  []string
+	ItemID    []int32
+	SubmenuID []int32
+}
+
+func (q *Queries) CreateItemsAvailableMenusJunctionBulk(ctx context.Context, arg CreateItemsAvailableMenusJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createItemsAvailableMenusJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ItemID), pq.Array(arg.SubmenuID))
+	return err
+}
+
+const createItemsRelatedStatsJunctionBulk = `-- name: CreateItemsRelatedStatsJunctionBulk :exec
+INSERT INTO j_items_related_stats (data_hash, item_id, stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateItemsRelatedStatsJunctionBulkParams struct {
+	DataHash []string
+	ItemID   []int32
+	StatID   []int32
+}
+
+func (q *Queries) CreateItemsRelatedStatsJunctionBulk(ctx context.Context, arg CreateItemsRelatedStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createItemsRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ItemID), pq.Array(arg.StatID))
+	return err
+}
+
 const createKeyItemBulk = `-- name: CreateKeyItemBulk :many
 INSERT INTO key_items (data_hash, master_item_id, category, description, effect)
 SELECT

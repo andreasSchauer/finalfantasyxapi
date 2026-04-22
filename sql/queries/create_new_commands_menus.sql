@@ -44,3 +44,25 @@ SELECT
     unnest(sqlc.arg('submenu_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id;
+
+
+
+
+
+-- name: CreateAeonCommandsPossibleAbilitiesJunctionBulk :exec
+INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, character_class_id, ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('aeon_command_id')::int[]),
+    unnest(sqlc.arg('character_class_id')::int[]),
+    unnest(sqlc.arg('ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateSubmenusUsersJunctionBulk :exec
+INSERT INTO j_submenus_users (data_hash, submenu_id, character_class_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('submenu_id')::int[]),
+    unnest(sqlc.arg('character_class_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;

@@ -12,6 +12,26 @@ import (
 	"github.com/lib/pq"
 )
 
+const createAbilitiesBattleInteractionsJunctionBulk = `-- name: CreateAbilitiesBattleInteractionsJunctionBulk :exec
+INSERT INTO j_abilities_battle_interactions (data_hash, ability_id, battle_interaction_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAbilitiesBattleInteractionsJunctionBulkParams struct {
+	DataHash            []string
+	AbilityID           []int32
+	BattleInteractionID []int32
+}
+
+func (q *Queries) CreateAbilitiesBattleInteractionsJunctionBulk(ctx context.Context, arg CreateAbilitiesBattleInteractionsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAbilitiesBattleInteractionsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AbilityID), pq.Array(arg.BattleInteractionID))
+	return err
+}
+
 const createAbilityAttributesBulk = `-- name: CreateAbilityAttributesBulk :many
 INSERT INTO ability_attributes (data_hash, rank, appears_in_help_bar, can_copycat)
 SELECT
@@ -149,6 +169,26 @@ func (q *Queries) CreateEnemyAbilityBulk(ctx context.Context, arg CreateEnemyAbi
 	return items, nil
 }
 
+const createOverdriveAbilitiesRelatedStatsJunctionBulk = `-- name: CreateOverdriveAbilitiesRelatedStatsJunctionBulk :exec
+INSERT INTO j_overdrive_abilities_related_stats (data_hash, overdrive_ability_id, stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateOverdriveAbilitiesRelatedStatsJunctionBulkParams struct {
+	DataHash           []string
+	OverdriveAbilityID []int32
+	StatID             []int32
+}
+
+func (q *Queries) CreateOverdriveAbilitiesRelatedStatsJunctionBulk(ctx context.Context, arg CreateOverdriveAbilitiesRelatedStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createOverdriveAbilitiesRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.OverdriveAbilityID), pq.Array(arg.StatID))
+	return err
+}
+
 const createOverdriveAbilityBulk = `-- name: CreateOverdriveAbilityBulk :many
 INSERT INTO overdrive_abilities (data_hash, ability_id)
 SELECT
@@ -254,6 +294,66 @@ func (q *Queries) CreateOverdriveBulk(ctx context.Context, arg CreateOverdriveBu
 		return nil, err
 	}
 	return items, nil
+}
+
+const createOverdrivesOverdriveAbilitiesJunctionBulk = `-- name: CreateOverdrivesOverdriveAbilitiesJunctionBulk :exec
+INSERT INTO j_overdrives_overdrive_abilities (data_hash, overdrive_id, overdrive_ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateOverdrivesOverdriveAbilitiesJunctionBulkParams struct {
+	DataHash           []string
+	OverdriveID        []int32
+	OverdriveAbilityID []int32
+}
+
+func (q *Queries) CreateOverdrivesOverdriveAbilitiesJunctionBulk(ctx context.Context, arg CreateOverdrivesOverdriveAbilitiesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createOverdrivesOverdriveAbilitiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.OverdriveID), pq.Array(arg.OverdriveAbilityID))
+	return err
+}
+
+const createPlayerAbilitiesLearnedByJunctionBulk = `-- name: CreatePlayerAbilitiesLearnedByJunctionBulk :exec
+INSERT INTO j_player_abilities_learned_by (data_hash, player_ability_id, character_class_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePlayerAbilitiesLearnedByJunctionBulkParams struct {
+	DataHash         []string
+	PlayerAbilityID  []int32
+	CharacterClassID []int32
+}
+
+func (q *Queries) CreatePlayerAbilitiesLearnedByJunctionBulk(ctx context.Context, arg CreatePlayerAbilitiesLearnedByJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createPlayerAbilitiesLearnedByJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.PlayerAbilityID), pq.Array(arg.CharacterClassID))
+	return err
+}
+
+const createPlayerAbilitiesRelatedStatsJunctionBulk = `-- name: CreatePlayerAbilitiesRelatedStatsJunctionBulk :exec
+INSERT INTO j_player_abilities_related_stats (data_hash, player_ability_id, stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePlayerAbilitiesRelatedStatsJunctionBulkParams struct {
+	DataHash        []string
+	PlayerAbilityID []int32
+	StatID          []int32
+}
+
+func (q *Queries) CreatePlayerAbilitiesRelatedStatsJunctionBulk(ctx context.Context, arg CreatePlayerAbilitiesRelatedStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createPlayerAbilitiesRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.PlayerAbilityID), pq.Array(arg.StatID))
+	return err
 }
 
 const createPlayerAbilityBulk = `-- name: CreatePlayerAbilityBulk :many
@@ -421,6 +521,26 @@ func (q *Queries) CreateTriggerCommandBulk(ctx context.Context, arg CreateTrigge
 	return items, nil
 }
 
+const createTriggerCommandsRelatedStatsJunctionBulk = `-- name: CreateTriggerCommandsRelatedStatsJunctionBulk :exec
+INSERT INTO j_trigger_commands_related_stats (data_hash, trigger_command_id, stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateTriggerCommandsRelatedStatsJunctionBulkParams struct {
+	DataHash         []string
+	TriggerCommandID []int32
+	StatID           []int32
+}
+
+func (q *Queries) CreateTriggerCommandsRelatedStatsJunctionBulk(ctx context.Context, arg CreateTriggerCommandsRelatedStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createTriggerCommandsRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.TriggerCommandID), pq.Array(arg.StatID))
+	return err
+}
+
 const createUnspecifiedAbilityBulk = `-- name: CreateUnspecifiedAbilityBulk :many
 INSERT INTO unspecified_abilities (data_hash, ability_id, description, effect, cursor, topmenu_id, submenu_id, open_submenu_id)
 SELECT
@@ -477,4 +597,24 @@ func (q *Queries) CreateUnspecifiedAbilityBulk(ctx context.Context, arg CreateUn
 		return nil, err
 	}
 	return items, nil
+}
+
+const createunspecifiedAbilitiesLearnedByJunctionBulk = `-- name: CreateunspecifiedAbilitiesLearnedByJunctionBulk :exec
+INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateunspecifiedAbilitiesLearnedByJunctionBulkParams struct {
+	DataHash             []string
+	UnspecifiedAbilityID []int32
+	CharacterClassID     []int32
+}
+
+func (q *Queries) CreateunspecifiedAbilitiesLearnedByJunctionBulk(ctx context.Context, arg CreateunspecifiedAbilitiesLearnedByJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createunspecifiedAbilitiesLearnedByJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.UnspecifiedAbilityID), pq.Array(arg.CharacterClassID))
+	return err
 }

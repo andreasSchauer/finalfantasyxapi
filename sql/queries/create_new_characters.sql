@@ -59,3 +59,80 @@ SELECT
     unnest(sqlc.arg('equip_type')::equip_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id;
+
+
+
+
+
+
+-- name: CreateCharactersBaseStatsJunctionBulk :exec
+INSERT INTO j_characters_base_stats (data_hash, character_id, base_stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('character_id')::int[]),
+    unnest(sqlc.arg('base_stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateCharacterClassPlayerUnitsJunctionBulk :exec
+INSERT INTO j_character_class_player_units (data_hash, class_id, unit_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('class_id')::int[]),
+    unnest(sqlc.arg('unit_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateDefaultAbilityJunctionBulk :exec
+INSERT INTO j_default_abilities (data_hash, class_id, ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('class_id')::int[]),
+    unnest(sqlc.arg('ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateDefaultOverdriveAbilityJunctionBulk :exec
+INSERT INTO j_default_overdrive_abilities (data_hash, class_id, ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('class_id')::int[]),
+    unnest(sqlc.arg('ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAeonsBaseStatAJunctionBulk :exec
+INSERT INTO j_aeons_base_stats_a (data_hash, aeon_id, base_stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('aeon_id')::int[]),
+    unnest(sqlc.arg('base_stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAeonsBaseStatBJunctionBulk :exec
+INSERT INTO j_aeons_base_stats_b (data_hash, aeon_id, base_stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('aeon_id')::int[]),
+    unnest(sqlc.arg('base_stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAeonsBaseStatXJunctionBulk :exec
+INSERT INTO j_aeons_base_stats_x (data_hash, aeon_id, base_stat_id, battles)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('aeon_id')::int[]),
+    unnest(sqlc.arg('base_stat_id')::int[]),
+    unnest(sqlc.arg('battles')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAeonsWeaponArmorJunctionBulk :exec
+INSERT INTO j_aeons_weapon_armor (data_hash, aeon_id, aeon_equipment_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('aeon_id')::int[]),
+    unnest(sqlc.arg('aeon_equipment_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;

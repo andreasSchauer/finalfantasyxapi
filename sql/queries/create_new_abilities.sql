@@ -116,3 +116,71 @@ SELECT
     unnest(sqlc.arg('overdrive_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id;
+
+
+
+
+
+
+
+-- name: CreateunspecifiedAbilitiesLearnedByJunctionBulk :exec
+INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('unspecified_ability_id')::int[]),
+    unnest(sqlc.arg('character_class_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreatePlayerAbilitiesRelatedStatsJunctionBulk :exec
+INSERT INTO j_player_abilities_related_stats (data_hash, player_ability_id, stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('player_ability_id')::int[]),
+    unnest(sqlc.arg('stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreatePlayerAbilitiesLearnedByJunctionBulk :exec
+INSERT INTO j_player_abilities_learned_by (data_hash, player_ability_id, character_class_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('player_ability_id')::int[]),
+    unnest(sqlc.arg('character_class_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateOverdriveAbilitiesRelatedStatsJunctionBulk :exec
+INSERT INTO j_overdrive_abilities_related_stats (data_hash, overdrive_ability_id, stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('overdrive_ability_id')::int[]),
+    unnest(sqlc.arg('stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateTriggerCommandsRelatedStatsJunctionBulk :exec
+INSERT INTO j_trigger_commands_related_stats (data_hash, trigger_command_id, stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('trigger_command_id')::int[]),
+    unnest(sqlc.arg('stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateOverdrivesOverdriveAbilitiesJunctionBulk :exec
+INSERT INTO j_overdrives_overdrive_abilities (data_hash, overdrive_id, overdrive_ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('overdrive_id')::int[]),
+    unnest(sqlc.arg('overdrive_ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAbilitiesBattleInteractionsJunctionBulk :exec
+INSERT INTO j_abilities_battle_interactions (data_hash, ability_id, battle_interaction_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('ability_id')::int[]),
+    unnest(sqlc.arg('battle_interaction_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;

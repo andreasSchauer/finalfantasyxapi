@@ -67,6 +67,33 @@ func (q *Queries) CreateAeonCommandBulk(ctx context.Context, arg CreateAeonComma
 	return items, nil
 }
 
+const createAeonCommandsPossibleAbilitiesJunctionBulk = `-- name: CreateAeonCommandsPossibleAbilitiesJunctionBulk :exec
+INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, character_class_id, ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonCommandsPossibleAbilitiesJunctionBulkParams struct {
+	DataHash         []string
+	AeonCommandID    []int32
+	CharacterClassID []int32
+	AbilityID        []int32
+}
+
+func (q *Queries) CreateAeonCommandsPossibleAbilitiesJunctionBulk(ctx context.Context, arg CreateAeonCommandsPossibleAbilitiesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonCommandsPossibleAbilitiesJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AeonCommandID),
+		pq.Array(arg.CharacterClassID),
+		pq.Array(arg.AbilityID),
+	)
+	return err
+}
+
 const createOverdriveCommandBulk = `-- name: CreateOverdriveCommandBulk :many
 INSERT INTO overdrive_commands (data_hash, name, description, rank)
 SELECT
@@ -166,6 +193,26 @@ func (q *Queries) CreateSubmenuBulk(ctx context.Context, arg CreateSubmenuBulkPa
 		return nil, err
 	}
 	return items, nil
+}
+
+const createSubmenusUsersJunctionBulk = `-- name: CreateSubmenusUsersJunctionBulk :exec
+INSERT INTO j_submenus_users (data_hash, submenu_id, character_class_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateSubmenusUsersJunctionBulkParams struct {
+	DataHash         []string
+	SubmenuID        []int32
+	CharacterClassID []int32
+}
+
+func (q *Queries) CreateSubmenusUsersJunctionBulk(ctx context.Context, arg CreateSubmenusUsersJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createSubmenusUsersJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.SubmenuID), pq.Array(arg.CharacterClassID))
+	return err
 }
 
 const createTopmenuBulk = `-- name: CreateTopmenuBulk :many

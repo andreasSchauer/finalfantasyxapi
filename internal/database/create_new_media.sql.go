@@ -282,3 +282,50 @@ func (q *Queries) CreateSongCreditBulk(ctx context.Context, arg CreateSongCredit
 	}
 	return items, nil
 }
+
+const createSongsBackgroundMusicJunctionBulk = `-- name: CreateSongsBackgroundMusicJunctionBulk :exec
+INSERT INTO j_songs_background_music (data_hash, song_id, bm_id, area_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateSongsBackgroundMusicJunctionBulkParams struct {
+	DataHash []string
+	SongID   []int32
+	BmID     []int32
+	AreaID   []int32
+}
+
+func (q *Queries) CreateSongsBackgroundMusicJunctionBulk(ctx context.Context, arg CreateSongsBackgroundMusicJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createSongsBackgroundMusicJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.SongID),
+		pq.Array(arg.BmID),
+		pq.Array(arg.AreaID),
+	)
+	return err
+}
+
+const createSongsCuesJunctionBulk = `-- name: CreateSongsCuesJunctionBulk :exec
+INSERT INTO j_songs_cues (data_hash, cue_id, included_area_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateSongsCuesJunctionBulkParams struct {
+	DataHash       []string
+	CueID          []int32
+	IncludedAreaID []int32
+}
+
+func (q *Queries) CreateSongsCuesJunctionBulk(ctx context.Context, arg CreateSongsCuesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createSongsCuesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.CueID), pq.Array(arg.IncludedAreaID))
+	return err
+}

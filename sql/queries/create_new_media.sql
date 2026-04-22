@@ -66,3 +66,26 @@ SELECT
     unnest(sqlc.arg('area_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id;
+
+
+
+
+
+
+-- name: CreateSongsBackgroundMusicJunctionBulk :exec
+INSERT INTO j_songs_background_music (data_hash, song_id, bm_id, area_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('song_id')::int[]),
+    unnest(sqlc.arg('bm_id')::int[]),
+    unnest(sqlc.arg('area_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateSongsCuesJunctionBulk :exec
+INSERT INTO j_songs_cues (data_hash, cue_id, included_area_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('cue_id')::int[]),
+    unnest(sqlc.arg('included_area_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;

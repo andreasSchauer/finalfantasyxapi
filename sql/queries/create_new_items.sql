@@ -135,3 +135,24 @@ SELECT
     unnest(sqlc.arg('chance')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id;
+
+
+
+
+
+-- name: CreateItemsRelatedStatsJunctionBulk :exec
+INSERT INTO j_items_related_stats (data_hash, item_id, stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('item_id')::int[]),
+    unnest(sqlc.arg('stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateItemsAvailableMenusJunctionBulk :exec
+INSERT INTO j_items_available_menus (data_hash, item_id, submenu_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('item_id')::int[]),
+    unnest(sqlc.arg('submenu_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;

@@ -204,3 +204,199 @@ SELECT
     unnest(sqlc.arg('is_unused')::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id;
+
+
+
+
+
+
+
+-- name: CreateMonsterFormationsEncounterAreasJunctionBulk :exec
+INSERT INTO j_monster_formations_encounter_areas (data_hash, monster_formation_id, encounter_area_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_formation_id')::int[]),
+    unnest(sqlc.arg('encounter_area_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonsterSelectionsMonstersJunctionBulk :exec
+INSERT INTO j_monster_selections_monsters (data_hash, monster_selection_id, monster_amount_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_selection_id')::int[]),
+    unnest(sqlc.arg('monster_amount_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonsterFormationsTriggerCommandsJunctionBulk :exec
+INSERT INTO j_monster_formations_trigger_commands (data_hash, monster_formation_id, trigger_command_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_formation_id')::int[]),
+    unnest(sqlc.arg('trigger_command_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateFormationTriggerCommandsUsersJunctionBulk :exec
+INSERT INTO j_formation_trigger_commands_users (data_hash, trigger_command_id, character_class_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('trigger_command_id')::int[]),
+    unnest(sqlc.arg('character_class_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonstersPropertiesJunctionBulk :exec
+INSERT INTO j_monsters_properties (data_hash, monster_id, property_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_id')::int[]),
+    unnest(sqlc.arg('property_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonstersAutoAbilitiesJunctionBulk :exec
+INSERT INTO j_monsters_auto_abilities (data_hash, monster_id, auto_ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_id')::int[]),
+    unnest(sqlc.arg('auto_ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonstersRonsoRagesJunctionBulk :exec
+INSERT INTO j_monsters_ronso_rages (data_hash, monster_id, ronso_rage_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_id')::int[]),
+    unnest(sqlc.arg('ronso_rage_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonstersBaseStatsJunctionBulk :exec
+INSERT INTO j_monsters_base_stats (data_hash, monster_id, base_stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_id')::int[]),
+    unnest(sqlc.arg('base_stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonstersElemResistsJunctionBulk :exec
+INSERT INTO j_monsters_elem_resists (data_hash, monster_id, elem_resist_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_id')::int[]),
+    unnest(sqlc.arg('elem_resist_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonstersImmunitiesJunctionBulk :exec
+INSERT INTO j_monsters_immunities (data_hash, monster_id, status_condition_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_id')::int[]),
+    unnest(sqlc.arg('status_condition_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonstersStatusResistsJunctionBulk :exec
+INSERT INTO j_monsters_status_resists (data_hash, monster_id, status_resist_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_id')::int[]),
+    unnest(sqlc.arg('status_resist_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonstersAbilitiesJunctionBulk :exec
+INSERT INTO j_monsters_abilities (data_hash, monster_id, monster_ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_id')::int[]),
+    unnest(sqlc.arg('monster_ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonsterItemsOtherItemsJunctionBulk :exec
+INSERT INTO j_monster_items_other_items (data_hash, monster_items_id, possible_item_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_items_id')::int[]),
+    unnest(sqlc.arg('possible_item_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonsterEquipmentAbilitiesJunctionBulk :exec
+INSERT INTO j_monster_equipment_abilities (data_hash, monster_equipment_id, equipment_drop_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_equipment_id')::int[]),
+    unnest(sqlc.arg('equipment_drop_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateMonsterEquipmentSlotsChancesJunctionBulk :exec
+INSERT INTO j_monster_equipment_slots_chances(data_hash, monster_equipment_id, equipment_slots_id, slots_chance_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_equipment_id')::int[]),
+    unnest(sqlc.arg('equipment_slots_id')::int[]),
+    unnest(sqlc.arg('slots_chance_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateEquipmentDropsCharactersJunctionBulk :exec
+INSERT INTO j_equipment_drops_characters (data_hash, monster_equipment_id, equipment_drop_id, character_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('monster_equipment_id')::int[]),
+    unnest(sqlc.arg('equipment_drop_id')::int[]),
+    unnest(sqlc.arg('character_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAltStateChangesPropertiesJunctionBulk :exec
+INSERT INTO j_alt_state_changes_properties (data_hash, alt_state_change_id, property_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('alt_state_change_id')::int[]),
+    unnest(sqlc.arg('property_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAltStateChangesAutoAbilitiesJunctionBulk :exec
+INSERT INTO j_alt_state_changes_auto_abilities (data_hash, alt_state_change_id, auto_ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('alt_state_change_id')::int[]),
+    unnest(sqlc.arg('auto_ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAltStateChangesBaseStatsJunctionBulk :exec
+INSERT INTO j_alt_state_changes_base_stats (data_hash, alt_state_change_id, base_stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('alt_state_change_id')::int[]),
+    unnest(sqlc.arg('base_stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAltStateChangesElemResistsJunctionBulk :exec
+INSERT INTO j_alt_state_changes_elem_resists (data_hash, alt_state_change_id, elem_resist_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('alt_state_change_id')::int[]),
+    unnest(sqlc.arg('elem_resist_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAltStateChangesStatusImmunitiesJunctionBulk :exec
+INSERT INTO j_alt_state_changes_status_immunities (data_hash, alt_state_change_id, status_condition_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('alt_state_change_id')::int[]),
+    unnest(sqlc.arg('status_condition_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;

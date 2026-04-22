@@ -371,6 +371,86 @@ func (q *Queries) CreateOverdriveModeBulk(ctx context.Context, arg CreateOverdri
 	return items, nil
 }
 
+const createOverdriveModesActionsToLearnJunctionBulk = `-- name: CreateOverdriveModesActionsToLearnJunctionBulk :exec
+INSERT INTO j_overdrive_modes_actions_to_learn (data_hash, overdrive_mode_id, action_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateOverdriveModesActionsToLearnJunctionBulkParams struct {
+	DataHash        []string
+	OverdriveModeID []int32
+	ActionID        []int32
+}
+
+func (q *Queries) CreateOverdriveModesActionsToLearnJunctionBulk(ctx context.Context, arg CreateOverdriveModesActionsToLearnJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createOverdriveModesActionsToLearnJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.OverdriveModeID), pq.Array(arg.ActionID))
+	return err
+}
+
+const createPropertiesModifierChangesJunctionBulk = `-- name: CreatePropertiesModifierChangesJunctionBulk :exec
+INSERT INTO j_properties_modifier_changes (data_hash, property_id, modifier_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertiesModifierChangesJunctionBulkParams struct {
+	DataHash         []string
+	PropertyID       []int32
+	ModifierChangeID []int32
+}
+
+func (q *Queries) CreatePropertiesModifierChangesJunctionBulk(ctx context.Context, arg CreatePropertiesModifierChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createPropertiesModifierChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.PropertyID), pq.Array(arg.ModifierChangeID))
+	return err
+}
+
+const createPropertiesRelatedStatsJunctionBulk = `-- name: CreatePropertiesRelatedStatsJunctionBulk :exec
+INSERT INTO j_properties_related_stats(data_hash, property_id, stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertiesRelatedStatsJunctionBulkParams struct {
+	DataHash   []string
+	PropertyID []int32
+	StatID     []int32
+}
+
+func (q *Queries) CreatePropertiesRelatedStatsJunctionBulk(ctx context.Context, arg CreatePropertiesRelatedStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createPropertiesRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.PropertyID), pq.Array(arg.StatID))
+	return err
+}
+
+const createPropertiesStatChangesJunctionBulk = `-- name: CreatePropertiesStatChangesJunctionBulk :exec
+INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertiesStatChangesJunctionBulkParams struct {
+	DataHash     []string
+	PropertyID   []int32
+	StatChangeID []int32
+}
+
+func (q *Queries) CreatePropertiesStatChangesJunctionBulk(ctx context.Context, arg CreatePropertiesStatChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createPropertiesStatChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.PropertyID), pq.Array(arg.StatChangeID))
+	return err
+}
+
 const createPropertyBulk = `-- name: CreatePropertyBulk :many
 INSERT INTO properties (data_hash, name, effect, nullify_armored)
 SELECT
@@ -531,6 +611,86 @@ func (q *Queries) CreateStatusConditionBulk(ctx context.Context, arg CreateStatu
 		return nil, err
 	}
 	return items, nil
+}
+
+const createStatusConditionsModifierChangesJunctionBulk = `-- name: CreateStatusConditionsModifierChangesJunctionBulk :exec
+INSERT INTO j_status_conditions_modifier_changes (data_hash, status_condition_id, modifier_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionsModifierChangesJunctionBulkParams struct {
+	DataHash          []string
+	StatusConditionID []int32
+	ModifierChangeID  []int32
+}
+
+func (q *Queries) CreateStatusConditionsModifierChangesJunctionBulk(ctx context.Context, arg CreateStatusConditionsModifierChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionsModifierChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.StatusConditionID), pq.Array(arg.ModifierChangeID))
+	return err
+}
+
+const createStatusConditionsRelatedStatsJunctionBulk = `-- name: CreateStatusConditionsRelatedStatsJunctionBulk :exec
+INSERT INTO j_status_conditions_related_stats(data_hash, status_condition_id, stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionsRelatedStatsJunctionBulkParams struct {
+	DataHash          []string
+	StatusConditionID []int32
+	StatID            []int32
+}
+
+func (q *Queries) CreateStatusConditionsRelatedStatsJunctionBulk(ctx context.Context, arg CreateStatusConditionsRelatedStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionsRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.StatusConditionID), pq.Array(arg.StatID))
+	return err
+}
+
+const createStatusConditionsRemovedStatusConditionsJunctionBulk = `-- name: CreateStatusConditionsRemovedStatusConditionsJunctionBulk :exec
+INSERT INTO j_status_conditions_removed_status_conditions (data_hash, parent_condition_id, child_condition_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionsRemovedStatusConditionsJunctionBulkParams struct {
+	DataHash          []string
+	ParentConditionID []int32
+	ChildConditionID  []int32
+}
+
+func (q *Queries) CreateStatusConditionsRemovedStatusConditionsJunctionBulk(ctx context.Context, arg CreateStatusConditionsRemovedStatusConditionsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionsRemovedStatusConditionsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ParentConditionID), pq.Array(arg.ChildConditionID))
+	return err
+}
+
+const createStatusConditionsStatChangesJunctionBulk = `-- name: CreateStatusConditionsStatChangesJunctionBulk :exec
+INSERT INTO j_status_conditions_stat_changes (data_hash, status_condition_id, stat_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionsStatChangesJunctionBulkParams struct {
+	DataHash          []string
+	StatusConditionID []int32
+	StatChangeID      []int32
+}
+
+func (q *Queries) CreateStatusConditionsStatChangesJunctionBulk(ctx context.Context, arg CreateStatusConditionsStatChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionsStatChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.StatusConditionID), pq.Array(arg.StatChangeID))
+	return err
 }
 
 const createStatusResistBulk = `-- name: CreateStatusResistBulk :many

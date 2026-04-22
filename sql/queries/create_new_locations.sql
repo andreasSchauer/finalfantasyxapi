@@ -108,3 +108,52 @@ SELECT
     unnest(sqlc.arg('price')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id;
+
+
+
+
+
+-- name: CreateAreaConnectedAreasJunctionBulk :exec
+INSERT INTO j_area_connected_areas (data_hash, area_id, connection_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('area_id')::int[]),
+    unnest(sqlc.arg('connection_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateTreasureEquipmentAbilitiesJunctionBulk :exec
+INSERT INTO j_treasure_equipment_abilities (data_hash, treasure_equipment_id, auto_ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('treasure_equipment_id')::int[]),
+    unnest(sqlc.arg('auto_ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateShopEquipmentAbilitiesJunctionBulk :exec
+INSERT INTO j_shop_equipment_abilities (data_hash, shop_equipment_id, auto_ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('shop_equipment_id')::int[]),
+    unnest(sqlc.arg('auto_ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateTreasuresItemsJunctionBulk :exec
+INSERT INTO j_treasures_items (data_hash, treasure_id, item_amount_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('treasure_id')::int[]),
+    unnest(sqlc.arg('item_amount_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateShopsItemsJunctionBulk :exec
+INSERT INTO j_shops_items (data_hash, shop_id, shop_item_id, shop_type)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('shop_id')::int[]),
+    unnest(sqlc.arg('shop_item_id')::int[]),
+    unnest(sqlc.arg('shop_type')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
