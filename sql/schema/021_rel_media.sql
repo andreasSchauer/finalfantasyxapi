@@ -31,7 +31,7 @@ CREATE TABLE cues (
     trigger_area_id INTEGER REFERENCES areas(id),
     replaces_bg_music bg_replacement_type,
     end_trigger TEXT,
-    replaces_encounter_music bool NOT NULL
+    replaces_encounter_music BOOLEAN NOT NULL
 );
 
 

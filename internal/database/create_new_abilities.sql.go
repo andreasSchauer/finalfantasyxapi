@@ -12,7 +12,53 @@ import (
 	"github.com/lib/pq"
 )
 
-const createAbilitiesBulk = `-- name: CreateAbilitiesBulk :many
+const createAbilityAttributesBulk = `-- name: CreateAbilityAttributesBulk :many
+INSERT INTO ability_attributes (data_hash, rank, appears_in_help_bar, can_copycat)
+SELECT
+    unnest($1::text[]),
+    unnest($2::null_int[]),
+    unnest($3::boolean[]),
+    unnest($4::boolean[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id
+`
+
+type CreateAbilityAttributesBulkParams struct {
+	DataHash         []string
+	Rank             []sql.NullInt32
+	AppearsInHelpBar []bool
+	CanCopycat       []bool
+}
+
+func (q *Queries) CreateAbilityAttributesBulk(ctx context.Context, arg CreateAbilityAttributesBulkParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, createAbilityAttributesBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Rank),
+		pq.Array(arg.AppearsInHelpBar),
+		pq.Array(arg.CanCopycat),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createAbilityBulk = `-- name: CreateAbilityBulk :many
 INSERT INTO abilities (data_hash, name, version, specification, attributes_id, type)
 SELECT 
     unnest($1::text[]), 
@@ -20,46 +66,409 @@ SELECT
     unnest($3::null_int[]), 
     unnest($4::null_string[]),
     unnest($5::null_int[]),
-    unnest($6::null_nullify_armored[])
-ON CONFLICT (data_hash) DO UPDATE SET 
-    data_hash = EXCLUDED.data_hash
-RETURNING id, data_hash
+    unnest($6::ability_type[])
+ON CONFLICT (data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id
 `
 
-type CreateAbilitiesBulkParams struct {
-	DataHashes     []string
-	Names          []string
-	Versions       []sql.NullInt32
-	Specifications []sql.NullString
-	AttributesIds  []sql.NullInt32
-	Types          []NullNullifyArmored
+type CreateAbilityBulkParams struct {
+	DataHash      []string
+	Names         []string
+	Version       []sql.NullInt32
+	Specification []sql.NullString
+	AttributesID  []sql.NullInt32
+	Type          []AbilityType
 }
 
-type CreateAbilitiesBulkRow struct {
-	ID       int32
-	DataHash string
-}
-
-func (q *Queries) CreateAbilitiesBulk(ctx context.Context, arg CreateAbilitiesBulkParams) ([]CreateAbilitiesBulkRow, error) {
-	rows, err := q.db.QueryContext(ctx, createAbilitiesBulk,
-		pq.Array(arg.DataHashes),
+func (q *Queries) CreateAbilityBulk(ctx context.Context, arg CreateAbilityBulkParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, createAbilityBulk,
+		pq.Array(arg.DataHash),
 		pq.Array(arg.Names),
-		pq.Array(arg.Versions),
-		pq.Array(arg.Specifications),
-		pq.Array(arg.AttributesIds),
-		pq.Array(arg.Types),
+		pq.Array(arg.Version),
+		pq.Array(arg.Specification),
+		pq.Array(arg.AttributesID),
+		pq.Array(arg.Type),
 	)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []CreateAbilitiesBulkRow
+	var items []int32
 	for rows.Next() {
-		var i CreateAbilitiesBulkRow
-		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createEnemyAbilityBulk = `-- name: CreateEnemyAbilityBulk :many
+INSERT INTO enemy_abilities (data_hash, ability_id, effect)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::null_string[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id
+`
+
+type CreateEnemyAbilityBulkParams struct {
+	DataHash  []string
+	AbilityID []int32
+	Effect    []sql.NullString
+}
+
+func (q *Queries) CreateEnemyAbilityBulk(ctx context.Context, arg CreateEnemyAbilityBulkParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, createEnemyAbilityBulk, pq.Array(arg.DataHash), pq.Array(arg.AbilityID), pq.Array(arg.Effect))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createOverdriveAbilityBulk = `-- name: CreateOverdriveAbilityBulk :many
+INSERT INTO overdrive_abilities (data_hash, ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id
+`
+
+type CreateOverdriveAbilityBulkParams struct {
+	DataHash  []string
+	AbilityID []int32
+}
+
+func (q *Queries) CreateOverdriveAbilityBulk(ctx context.Context, arg CreateOverdriveAbilityBulkParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, createOverdriveAbilityBulk, pq.Array(arg.DataHash), pq.Array(arg.AbilityID))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createOverdriveBulk = `-- name: CreateOverdriveBulk :many
+INSERT INTO overdrives (data_hash, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor, topmenu_id, od_command_id, character_class_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::null_int[]),
+    unnest($4::text[]),
+    unnest($5::text[]),
+    unnest($6::int[]),
+    unnest($7::null_string[]),
+    unnest($8::null_int[]),
+    unnest($9::null_target_type[]),
+    unnest($10::null_int[]),
+    unnest($11::null_int[]),
+    unnest($12::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id
+`
+
+type CreateOverdriveBulkParams struct {
+	DataHash         []string
+	Name             []string
+	Version          []sql.NullInt32
+	Description      []string
+	Effect           []string
+	AttributesID     []int32
+	UnlockCondition  []sql.NullString
+	CountdownInSec   []sql.NullInt32
+	Cursor           []NullTargetType
+	TopmenuID        []sql.NullInt32
+	OdCommandID      []sql.NullInt32
+	CharacterClassID []sql.NullInt32
+}
+
+func (q *Queries) CreateOverdriveBulk(ctx context.Context, arg CreateOverdriveBulkParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, createOverdriveBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.Version),
+		pq.Array(arg.Description),
+		pq.Array(arg.Effect),
+		pq.Array(arg.AttributesID),
+		pq.Array(arg.UnlockCondition),
+		pq.Array(arg.CountdownInSec),
+		pq.Array(arg.Cursor),
+		pq.Array(arg.TopmenuID),
+		pq.Array(arg.OdCommandID),
+		pq.Array(arg.CharacterClassID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createPlayerAbilityBulk = `-- name: CreatePlayerAbilityBulk :many
+INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, can_use_outside_battle, mp_cost, cursor, topmenu_id, submenu_id, open_submenu_id, standard_grid_char_id, exp_grid_char_ids, aeon_learn_item_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::text[]),
+    unnest($4::text[]),
+    unnest($5::player_ability_category[]),
+    unnest($6::boolean[]),
+    unnest($7::int[]),
+    unnest($8::null_target_type[]),
+    unnest($9::null_int[]),
+    unnest($10::null_int[]),
+    unnest($11::null_int[]),
+    unnest($12::null_int[]),
+    unnest($13::null_int[]),
+    unnest($14::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id
+`
+
+type CreatePlayerAbilityBulkParams struct {
+	DataHash            []string
+	AbilityID           []int32
+	Description         []string
+	Effect              []string
+	Category            []PlayerAbilityCategory
+	CanUseOutsideBattle []bool
+	MpCost              []int32
+	Cursor              []NullTargetType
+	TopmenuID           []sql.NullInt32
+	SubmenuID           []sql.NullInt32
+	OpenSubmenuID       []sql.NullInt32
+	StdGridCharID       []sql.NullInt32
+	ExpGridCharID       []sql.NullInt32
+	AeonLearnItemID     []sql.NullInt32
+}
+
+func (q *Queries) CreatePlayerAbilityBulk(ctx context.Context, arg CreatePlayerAbilityBulkParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, createPlayerAbilityBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.Description),
+		pq.Array(arg.Effect),
+		pq.Array(arg.Category),
+		pq.Array(arg.CanUseOutsideBattle),
+		pq.Array(arg.MpCost),
+		pq.Array(arg.Cursor),
+		pq.Array(arg.TopmenuID),
+		pq.Array(arg.SubmenuID),
+		pq.Array(arg.OpenSubmenuID),
+		pq.Array(arg.StdGridCharID),
+		pq.Array(arg.ExpGridCharID),
+		pq.Array(arg.AeonLearnItemID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createRonsoRageBulk = `-- name: CreateRonsoRageBulk :many
+INSERT INTO ronso_rages (data_hash, overdrive_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id
+`
+
+type CreateRonsoRageBulkParams struct {
+	DataHash    []string
+	OverdriveID []int32
+}
+
+func (q *Queries) CreateRonsoRageBulk(ctx context.Context, arg CreateRonsoRageBulkParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, createRonsoRageBulk, pq.Array(arg.DataHash), pq.Array(arg.OverdriveID))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createTriggerCommandBulk = `-- name: CreateTriggerCommandBulk :many
+INSERT INTO trigger_commands (data_hash, ability_id, description, effect, cursor, topmenu_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::text[]),
+    unnest($4::text[]),
+    unnest($5::target_type[]),
+    unnest($6::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id
+`
+
+type CreateTriggerCommandBulkParams struct {
+	DataHash    []string
+	AbilityID   []int32
+	Description []string
+	Effect      []string
+	Cursor      []TargetType
+	TopmenuID   []sql.NullInt32
+}
+
+func (q *Queries) CreateTriggerCommandBulk(ctx context.Context, arg CreateTriggerCommandBulkParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, createTriggerCommandBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.Description),
+		pq.Array(arg.Effect),
+		pq.Array(arg.Cursor),
+		pq.Array(arg.TopmenuID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createUnspecifiedAbilityBulk = `-- name: CreateUnspecifiedAbilityBulk :many
+INSERT INTO unspecified_abilities (data_hash, ability_id, description, effect, cursor, topmenu_id, submenu_id, open_submenu_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::text[]),
+    unnest($4::text[]),
+    unnest($5::null_target_type[]),
+    unnest($6::null_int[]),
+    unnest($7::null_int[]),
+    unnest($8::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id
+`
+
+type CreateUnspecifiedAbilityBulkParams struct {
+	DataHash      []string
+	AbilityID     []int32
+	Description   []string
+	Effect        []string
+	Cursor        []NullTargetType
+	TopmenuID     []sql.NullInt32
+	SubmenuID     []sql.NullInt32
+	OpenSubmenuID []sql.NullInt32
+}
+
+func (q *Queries) CreateUnspecifiedAbilityBulk(ctx context.Context, arg CreateUnspecifiedAbilityBulkParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, createUnspecifiedAbilityBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.Description),
+		pq.Array(arg.Effect),
+		pq.Array(arg.Cursor),
+		pq.Array(arg.TopmenuID),
+		pq.Array(arg.SubmenuID),
+		pq.Array(arg.OpenSubmenuID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
