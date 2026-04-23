@@ -36,7 +36,7 @@ func (o Overdrive) ToHashFields() []any {
 		o.Description,
 		o.Effect,
 		h.DerefOrNil(o.TopmenuID),
-		h.ObjPtrToID(o.Attributes),
+		o.Attributes,
 		h.DerefOrNil(o.UnlockCondition),
 		h.DerefOrNil(o.CountdownInSec),
 		h.DerefOrNil(o.Cursor),
@@ -97,7 +97,7 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, overdrive := range overdrives {
-			overdrive.Attributes, err = seedObjPtrAssignFK(qtx, overdrive.Attributes, l.seedAbilityAttributes)
+			overdrive.Attributes, err = seedObjAssignID(qtx, overdrive.Attributes, l.seedAbilityAttributes)
 			if err != nil {
 				return h.NewErr(overdrive.Error(), err)
 			}
@@ -108,7 +108,7 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 				Version:         h.GetNullInt32(overdrive.Version),
 				Description:     overdrive.Description,
 				Effect:          overdrive.Effect,
-				AttributesID:    h.ObjPtrToInt32ID(overdrive.Attributes),
+				AttributesID:    overdrive.Attributes.ID,
 				UnlockCondition: h.GetNullString(overdrive.UnlockCondition),
 				CountdownInSec:  h.GetNullInt32(overdrive.CountdownInSec),
 				Cursor:          database.ToNullTargetType(overdrive.Cursor),

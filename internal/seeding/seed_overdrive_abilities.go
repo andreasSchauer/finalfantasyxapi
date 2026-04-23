@@ -70,19 +70,21 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, overdriveAbility := range overdriveAbilities {
 			var err error
+			overdriveAbility.Type = database.AbilityTypeOverdriveAbility
 			
+			/*
 			odKey := CreateLookupKey(overdriveAbility.Overdrive)
 			overdrive, err := GetResource(odKey, l.Overdrives)
 			if err != nil {
 				return h.NewErr(overdriveAbility.Error(), err)
 			}
 			
-			overdriveAbility.Type = database.AbilityTypeOverdriveAbility
 			overdriveAbility.Attributes = &Attributes{
 				Rank: overdrive.Rank,
 				AppearsInHelpBar: overdrive.AppearsInHelpBar,
 				CanCopycat: overdrive.CanCopycat,
 			}
+			*/
 
 			overdriveAbility.Ability, err = seedObjAssignID(qtx, overdriveAbility.Ability, l.seedAbility)
 			if err != nil {

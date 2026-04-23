@@ -39,7 +39,7 @@ type CreateAbilityParams struct {
 	Name          string
 	Version       sql.NullInt32
 	Specification sql.NullString
-	AttributesID  sql.NullInt32
+	AttributesID  int32
 	Type          AbilityType
 }
 

@@ -14,7 +14,7 @@ type Ability struct {
 	Version       *int32 `json:"version"`
 	Type          database.AbilityType
 	Specification *string `json:"specification"`
-	*Attributes
+	Attributes
 }
 
 func (a Ability) ToHashFields() []any {
@@ -24,7 +24,7 @@ func (a Ability) ToHashFields() []any {
 		h.DerefOrNil(a.Version),
 		h.DerefOrNil(a.Specification),
 		a.Type,
-		h.ObjPtrToID(a.Attributes),
+		a.Attributes,
 	}
 }
 
@@ -131,7 +131,7 @@ func (a Attributes) Error() string {
 func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, error) {
 	var err error
 
-	ability.Attributes, err = seedObjPtrAssignFK(qtx, ability.Attributes, l.seedAbilityAttributes)
+	ability.Attributes, err = seedObjAssignID(qtx, ability.Attributes, l.seedAbilityAttributes)
 	if err != nil {
 		return Ability{}, h.NewErr(ability.Error(), err)
 	}
@@ -141,7 +141,7 @@ func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, e
 		Name:          ability.Name,
 		Version:       h.GetNullInt32(ability.Version),
 		Specification: h.GetNullString(ability.Specification),
-		AttributesID:  h.ObjPtrToNullInt32ID(ability.Attributes),
+		AttributesID:  ability.Attributes.ID,
 		Type:          ability.Type,
 	})
 	if err != nil {

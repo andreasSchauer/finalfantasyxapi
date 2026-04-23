@@ -23,7 +23,7 @@ CREATE TABLE abilities (
     name TEXT NOT NULL,
     version INTEGER,
     specification TEXT,
-    attributes_id INTEGER REFERENCES ability_attributes(id),
+    attributes_id INTEGER NOT NULL REFERENCES ability_attributes(id),
     type ability_type NOT NULL,
 
     UNIQUE(name, version, type)

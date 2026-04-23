@@ -4,11 +4,146 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
+
+func (l *Lookup) seedLoop1(qtx *database.Queries, ctx context.Context) error {
+	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+		l.loop1SeedAgilityTiers,
+		l.loop1SeedElements,
+		l.loop1SeedOverdriveModes,
+		l.loop1SeedProperties,
+		l.loop1SeedModifiers,
+		l.loop1SeedPlayerUnits,
+		l.loop1SeedCharacterClasses,
+		l.loop1SeedBlitzballPositions,
+		l.loop1SeedTopmenus,
+		l.loop1SeedAbilityAttributes,
+		l.loop1SeedMasterItems,
+		l.loop1SeedCreatedNodes,
+		l.loop1SeedLocations,
+	})
+}
+
+func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
+	locationsJson := l.json.locations
+	locations := dedupeRows(locationsJson, l.Hashes)
+
+	params := database.CreateLocationBulkParams{
+		DataHash: 	make([]string, len(locations)),
+		Name: 		make([]string, len(locations)),
+	}
+
+	for i, mi := range locations {
+		params.DataHash[i] = generateDataHash(mi)
+		params.Name[i] = mi.Name
+	}
+
+	dbRows, err := qtx.CreateLocationBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create locations: %v", err)
+	}
+
+	for i, row := range dbRows {
+		locations[i].ID = row.ID
+		l.Locations[locations[i].Name] = locations[i]
+		l.LocationsID[row.ID] = locations[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
+	nodesJson := l.getCreatedNodes()
+	nodes := dedupeRows(nodesJson, l.Hashes)
+
+	params := database.CreateCreatedNodeBulkParams{
+		DataHash: 	make([]string, len(nodes)),
+		Node: 		make([]database.NodeType, len(nodes)),
+		Value: 		make([]int32, len(nodes)),
+	}
+
+	for i, mi := range nodes {
+		params.DataHash[i] = generateDataHash(mi)
+		params.Node[i] = database.NodeType(mi.Node)
+		params.Value[i] = mi.Value
+	}
+
+	dbRows, err := qtx.CreateCreatedNodeBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create created nodes: %v", err)
+	}
+
+	for i, row := range dbRows {
+		nodes[i].ID = row.ID
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) getCreatedNodes() []CreatedNode {
+	createdNodes := []CreatedNode{}
+	
+	for _, sphere := range l.json.spheres {
+		if sphere.CreatedNode != nil {
+			createdNodes = append(createdNodes, *sphere.CreatedNode)
+		}
+	}
+
+	return createdNodes
+}
+
+func (l *Lookup) loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
+	itemsJson := l.getMasterItems()
+	items := dedupeRows(itemsJson, l.Hashes)
+
+	params := database.CreateMasterItemBulkParams{
+		DataHash: 	make([]string, len(items)),
+		Name: 		make([]string, len(items)),
+		Type: 		make([]database.ItemType, len(items)),
+	}
+
+	for i, mi := range items {
+		params.DataHash[i] = generateDataHash(mi)
+		params.Name[i] = mi.Name
+		params.Type[i] = mi.Type
+	}
+
+	dbRows, err := qtx.CreateMasterItemBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create master items: %v", err)
+	}
+
+	for i, row := range dbRows {
+		items[i].ID = row.ID
+		key := CreateLookupKey(items[i])
+		l.MasterItems[key] = items[i]
+		l.MasterItemsID[row.ID] = items[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) getMasterItems() []MasterItem {
+	masterItems := []MasterItem{}
+
+	for _, i := range l.json.items {
+		i.MasterItem.Type = database.ItemTypeItem
+		masterItems = append(masterItems, i.MasterItem)
+	}
+
+	for _, i := range l.json.keyItems {
+		i.MasterItem.Type = database.ItemTypeKeyItem
+		masterItems = append(masterItems, i.MasterItem)
+	}
+
+	return masterItems
+}
 
 func (l *Lookup) loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.Context) error {
 	attributesJson := l.getAbilityAttributes()
@@ -46,39 +181,33 @@ func (l *Lookup) getAbilityAttributes() []Attributes {
 	attributes := []Attributes{}
 
 	for _, ability := range l.json.enemyAbilities {
-		if ability.Attributes != nil {
-			attributes = append(attributes, *ability.Attributes)
-		}
+		attributes = append(attributes, ability.Attributes)
 	}
 	
 	for _, ability := range l.json.items {
-		if ability.Attributes != nil && len(ability.BattleInteractions) > 0 {
-			attributes = append(attributes, *ability.Attributes)
+		if len(ability.BattleInteractions) > 0 {
+			attributes = append(attributes, ability.Attributes)
 		}
 	}
 
 	for _, ability := range l.json.overdrives {
-		if ability.Attributes != nil {
-			attributes = append(attributes, *ability.Attributes)
-		}
+		attributes = append(attributes, ability.Attributes)
+	}
+
+	for _, ability := range l.json.overdriveAbilities {
+		attributes = append(attributes, ability.Attributes)
 	}
 	
 	for _, ability := range l.json.playerAbilities {
-		if ability.Attributes != nil {
-			attributes = append(attributes, *ability.Attributes)
-		}
+		attributes = append(attributes, ability.Attributes)
 	}
 
 	for _, ability := range l.json.triggerCommands {
-		if ability.Attributes != nil {
-			attributes = append(attributes, *ability.Attributes)
-		}
+		attributes = append(attributes, ability.Attributes)
 	}
 	
 	for _, ability := range l.json.unspecifiedAbilities {
-		if ability.Attributes != nil {
-			attributes = append(attributes, *ability.Attributes)
-		}
+		attributes = append(attributes, ability.Attributes)
 	}
 
 	return attributes
@@ -400,184 +529,3 @@ func (l *Lookup) loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Contex
 	return nil
 }
 
-func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
-	const migrationsDir = "sql/schema/"
-	fullPath, err := h.GetAbsoluteFilepath(migrationsDir)
-	if err != nil {
-		return nil, err
-	}
-
-	start := time.Now()
-
-	err = setupDB(dbConn, fullPath)
-	if err != nil {
-		return nil, fmt.Errorf("couldn't setup database: %v", err)
-	}
-	
-	l := lookupInit()
-	err = l.loadJSONFiles()
-	if err != nil {
-		return nil, err
-	}
-
-	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		err = l.seedLoop1(qtx, context.Background())
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	
-	totalDuration := time.Since(start)
-	fmt.Printf("database seeding took %.3f seconds\n\n", totalDuration.Seconds())
-
-	return l, nil
-}
-
-func (l *Lookup) seedLoop1(qtx *database.Queries, ctx context.Context) error {
-	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
-		l.loop1SeedAgilityTiers,
-		l.loop1SeedElements,
-		l.loop1SeedOverdriveModes,
-		l.loop1SeedProperties,
-		l.loop1SeedModifiers,
-		l.loop1SeedPlayerUnits,
-		l.loop1SeedCharacterClasses,
-		l.loop1SeedBlitzballPositions,
-		l.loop1SeedTopmenus,
-		l.loop1SeedAbilityAttributes,
-	})
-}
-
-func (l *Lookup) seedLoop(qtx *database.Queries, ctx context.Context, fns []func(*database.Queries, context.Context) error) error {
-	for _, fn := range fns {
-		err := fn(qtx, ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func dedupeRows[T Hashable](rows []T, hashes map[string]int32) []T {
-    seen := make(map[string]bool)
-    ordered := []T{}
-
-    for _, row := range rows {
-        hash := generateDataHash(row)
-		_, ok := hashes[hash]
-		if ok || seen[hash] {
-			continue
-		}
-
-		seen[hash] = true
-		ordered = append(ordered, row)
-    }
-    return ordered
-}
-
-
-
-func (l *Lookup) loadJSONFiles() error {
-	l.json = jsonLookup{}
-	var err error
-
-	checkErr := func(e error) {
-		if err != nil {
-			return
-		}
-
-		err = e
-	}
-
-	checkErr(loadJSONFile("data/aeon_commands.json", &l.json.aeonCommands))
-	checkErr(loadJSONFile("data/aeon_stats.json", &l.json.aeonStats))
-	checkErr(loadJSONFile("data/aeons.json", &l.json.aeons))
-	checkErr(loadJSONFile("data/agility_tiers.json", &l.json.agilityTiers))
-	checkErr(loadJSONFile("data/auto_abilities.json", &l.json.autoAbilities))
-	checkErr(loadJSONFile("data/blitzball_items.json", &l.json.blitzballPositions))
-	checkErr(loadJSONFile("data/celestial_weapons.json", &l.json.celestialWeapons))
-	checkErr(loadJSONFile("data/character_classes.json", &l.json.characterClasses))
-	checkErr(loadJSONFile("data/characters.json", &l.json.characters))
-	checkErr(loadJSONFile("data/default_abilities.json", &l.json.defaultAbilities))
-	checkErr(loadJSONFile("data/elements.json", &l.json.elements))
-	checkErr(loadJSONFile("data/enemy_abilities.json", &l.json.enemyAbilities))
-	checkErr(loadJSONFile("data/equipment.json", &l.json.equipment))
-	checkErr(loadJSONFile("data/fmvs.json", &l.json.fmvs))
-	checkErr(loadJSONFile("data/items.json", &l.json.items))
-	checkErr(loadJSONFile("data/key_items.json", &l.json.keyItems))
-	checkErr(loadJSONFile("data/locations.json", &l.json.locations))
-	checkErr(loadJSONFile("data/mixes.json", &l.json.mixes))
-	checkErr(loadJSONFile("data/modifiers.json", &l.json.modifiers))
-	checkErr(loadJSONFile("data/monster_arena_creations.json", &l.json.monsterArenaCreations))
-	checkErr(loadJSONFile("data/monster_formations.json", &l.json.monsterFormations))
-	checkErr(loadJSONFile("data/monsters.json", &l.json.monsters))
-	checkErr(loadJSONFile("data/overdrive_abilities.json", &l.json.overdriveAbilities))
-	checkErr(loadJSONFile("data/overdrive_commands.json", &l.json.overdriveCommands))
-	checkErr(loadJSONFile("data/overdrive_modes.json", &l.json.overdriveModes))
-	checkErr(loadJSONFile("data/overdrives.json", &l.json.overdrives))
-	checkErr(loadJSONFile("data/player_abilities.json", &l.json.playerAbilities))
-	checkErr(loadJSONFile("data/primers.json", &l.json.primers))
-	checkErr(loadJSONFile("data/properties.json", &l.json.properties))
-	checkErr(loadJSONFile("data/shops.json", &l.json.shops))
-	checkErr(loadJSONFile("data/sidequests.json", &l.json.sidequests))
-	checkErr(loadJSONFile("data/songs.json", &l.json.songs))
-	checkErr(loadJSONFile("data/spheres.json", &l.json.spheres))
-	checkErr(loadJSONFile("data/stats.json", &l.json.stats))
-	checkErr(loadJSONFile("data/status_conditions.json", &l.json.statusConditions))
-	checkErr(loadJSONFile("data/submenus.json", &l.json.submenus))
-	checkErr(loadJSONFile("data/topmenus.json", &l.json.topmenus))
-	checkErr(loadJSONFile("data/treasures.json", &l.json.treasures))
-	checkErr(loadJSONFile("data/trigger_commands.json", &l.json.triggerCommands))
-	checkErr(loadJSONFile("data/unspecified_abilities.json", &l.json.unspecifiedAbilities))
-
-	return err
-}
-
-type jsonLookup struct {
-	aeonCommands			[]AeonCommand
-	aeonStats				[]AeonStat
-	aeons					[]Aeon
-	agilityTiers 			[]AgilityTier
-	autoAbilities			[]AutoAbility
-	blitzballPositions		[]BlitzballPosition
-	celestialWeapons		[]CelestialWeapon
-	characterClasses		[]CharacterClass
-	characters				[]Character
-	defaultAbilities		[]DefaultAbilitiesEntry
-	elements	 			[]Element
-	enemyAbilities			[]EnemyAbility
-	equipment				[]EquipmentTable
-	fmvs					[]FMV
-	items					[]Item
-	keyItems				[]KeyItem
-	locations				[]Location
-	mixes					[]Mix
-	modifiers				[]Modifier
-	monsterArenaCreations	[]ArenaCreation
-	monsterFormations		[]MonsterFormation
-	monsters				[]Monster
-	overdriveAbilities		[]OverdriveAbility
-	overdriveCommands		[]OverdriveCommand
-	overdriveModes			[]OverdriveMode
-	overdrives				[]Overdrive
-	playerAbilities			[]PlayerAbility
-	primers					[]Primer
-	properties				[]Property
-	shops					[]Shop
-	sidequests				[]Sidequest
-	songs					[]Song
-	spheres					[]Sphere
-	stats					[]Stat
-	statusConditions		[]StatusCondition
-	submenus				[]Submenu
-	topmenus				[]Topmenu
-	treasures				[]Treasure
-	triggerCommands			[]TriggerCommand
-	unspecifiedAbilities	[]UnspecifiedAbility
-}
