@@ -8,7 +8,7 @@ SELECT
     unnest(sqlc.arg('attributes_id')::null_int[]),
     unnest(sqlc.arg('type')::ability_type[])
 ON CONFLICT (data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAbilityAttributesBulk :many
@@ -19,7 +19,7 @@ SELECT
     unnest(sqlc.arg('appears_in_help_bar')::boolean[]),
     unnest(sqlc.arg('can_copycat')::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateUnspecifiedAbilityBulk :many
@@ -34,7 +34,7 @@ SELECT
     unnest(sqlc.arg('submenu_id')::null_int[]),
     unnest(sqlc.arg('open_submenu_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreatePlayerAbilityBulk :many
@@ -55,7 +55,7 @@ SELECT
     unnest(sqlc.arg('exp_grid_char_id')::null_int[]),
     unnest(sqlc.arg('aeon_learn_item_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateEnemyAbilityBulk :many
@@ -65,7 +65,7 @@ SELECT
     unnest(sqlc.arg('ability_id')::int[]),
     unnest(sqlc.arg('effect')::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateOverdriveAbilityBulk :many
@@ -74,7 +74,7 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('ability_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateTriggerCommandBulk :many
@@ -87,7 +87,7 @@ SELECT
     unnest(sqlc.arg('cursor')::target_type[]),
     unnest(sqlc.arg('topmenu_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateOverdriveBulk :many
@@ -106,7 +106,7 @@ SELECT
     unnest(sqlc.arg('od_command_id')::null_int[]),
     unnest(sqlc.arg('character_class_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateRonsoRageBulk :many
@@ -115,7 +115,7 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('overdrive_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 

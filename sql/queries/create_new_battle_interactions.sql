@@ -8,7 +8,7 @@ SELECT
     unnest(sqlc.arg('break_dmg_limit')::null_break_dmg_lmt_type[]),
     unnest(sqlc.arg('element_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = damages.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAbilityDamageBulk :many
@@ -22,7 +22,7 @@ SELECT
     unnest(sqlc.arg('damage_formula')::damage_formula[]),
     unnest(sqlc.arg('damage_constant')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_damages.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAbilityAccuracyBulk :many
@@ -33,7 +33,7 @@ SELECT
     unnest(sqlc.arg('hit_chance')::null_int[]),
     unnest(sqlc.arg('acc_modifier')::null_float[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_accuracies.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateInflictedStatusBulk :many
@@ -45,7 +45,7 @@ SELECT
     unnest(sqlc.arg('duration_type')::duration_type[]),
     unnest(sqlc.arg('amount')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = inflicted_statusses.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateInflictedDelayBulk :many
@@ -57,7 +57,7 @@ SELECT
     unnest(sqlc.arg('delay_type')::delay_type[]),
     unnest(sqlc.arg('damage_constant')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = inflicted_delays.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateStatChangeBulk :many
@@ -68,7 +68,7 @@ SELECT
     unnest(sqlc.arg('calculation_type')::calculation_type[]),
     unnest(sqlc.arg('value')::real[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = stat_changes.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateModifierChangeBulk :many
@@ -79,7 +79,7 @@ SELECT
     unnest(sqlc.arg('calculation_type')::calculation_type[]),
     unnest(sqlc.arg('value')::real[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifier_changes.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateBattleInteractionBulk :many
@@ -95,7 +95,7 @@ SELECT
     unnest(sqlc.arg('hit_amount')::int[]),
     unnest(sqlc.arg('special_action')::null_special_action_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = battle_interactions.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 

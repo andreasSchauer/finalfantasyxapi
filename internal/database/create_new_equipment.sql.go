@@ -20,7 +20,7 @@ SELECT
     unnest($3::int[]),
     unnest($4::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateAbilityPoolBulkParams struct {
@@ -30,7 +30,12 @@ type CreateAbilityPoolBulkParams struct {
 	ReqAmount        []int32
 }
 
-func (q *Queries) CreateAbilityPoolBulk(ctx context.Context, arg CreateAbilityPoolBulkParams) ([]int32, error) {
+type CreateAbilityPoolBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateAbilityPoolBulk(ctx context.Context, arg CreateAbilityPoolBulkParams) ([]CreateAbilityPoolBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createAbilityPoolBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.EquipmentTableID),
@@ -41,13 +46,13 @@ func (q *Queries) CreateAbilityPoolBulk(ctx context.Context, arg CreateAbilityPo
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateAbilityPoolBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateAbilityPoolBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -239,7 +244,7 @@ SELECT
     unnest($16::null_int[]),
     unnest($17::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateAutoAbilityBulkParams struct {
@@ -262,7 +267,12 @@ type CreateAutoAbilityBulkParams struct {
 	CnvrsnToModID        []sql.NullInt32
 }
 
-func (q *Queries) CreateAutoAbilityBulk(ctx context.Context, arg CreateAutoAbilityBulkParams) ([]int32, error) {
+type CreateAutoAbilityBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateAutoAbilityBulk(ctx context.Context, arg CreateAutoAbilityBulkParams) ([]CreateAutoAbilityBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createAutoAbilityBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Name),
@@ -286,13 +296,13 @@ func (q *Queries) CreateAutoAbilityBulk(ctx context.Context, arg CreateAutoAbili
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateAutoAbilityBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateAutoAbilityBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -313,7 +323,7 @@ SELECT
     unnest($5::null_int[]),
     unnest($6::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateCelestialWeaponBulkParams struct {
@@ -325,7 +335,12 @@ type CreateCelestialWeaponBulkParams struct {
 	AeonID      []sql.NullInt32
 }
 
-func (q *Queries) CreateCelestialWeaponBulk(ctx context.Context, arg CreateCelestialWeaponBulkParams) ([]int32, error) {
+type CreateCelestialWeaponBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateCelestialWeaponBulk(ctx context.Context, arg CreateCelestialWeaponBulkParams) ([]CreateCelestialWeaponBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createCelestialWeaponBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Name),
@@ -338,13 +353,13 @@ func (q *Queries) CreateCelestialWeaponBulk(ctx context.Context, arg CreateCeles
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateCelestialWeaponBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateCelestialWeaponBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -362,7 +377,7 @@ SELECT
     unnest($2::int[]),
     unnest($3::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateEquipmentNameBulkParams struct {
@@ -371,19 +386,24 @@ type CreateEquipmentNameBulkParams struct {
 	Name        []string
 }
 
-func (q *Queries) CreateEquipmentNameBulk(ctx context.Context, arg CreateEquipmentNameBulkParams) ([]int32, error) {
+type CreateEquipmentNameBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateEquipmentNameBulk(ctx context.Context, arg CreateEquipmentNameBulkParams) ([]CreateEquipmentNameBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createEquipmentNameBulk, pq.Array(arg.DataHash), pq.Array(arg.CharacterID), pq.Array(arg.Name))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateEquipmentNameBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateEquipmentNameBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -405,7 +425,7 @@ SELECT
     unnest($6::null_int[]),
     unnest($7::null_equipment_slots[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateEquipmentTableBulkParams struct {
@@ -418,7 +438,12 @@ type CreateEquipmentTableBulkParams struct {
 	RequiredSlots       []interface{}
 }
 
-func (q *Queries) CreateEquipmentTableBulk(ctx context.Context, arg CreateEquipmentTableBulkParams) ([]int32, error) {
+type CreateEquipmentTableBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateEquipmentTableBulk(ctx context.Context, arg CreateEquipmentTableBulkParams) ([]CreateEquipmentTableBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createEquipmentTableBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Type),
@@ -432,13 +457,13 @@ func (q *Queries) CreateEquipmentTableBulk(ctx context.Context, arg CreateEquipm
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateEquipmentTableBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateEquipmentTableBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

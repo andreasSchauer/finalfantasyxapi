@@ -23,7 +23,7 @@ SELECT
     unnest($6::null_int[]),
     unnest($7::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateAeonCommandBulkParams struct {
@@ -36,7 +36,12 @@ type CreateAeonCommandBulkParams struct {
 	SubmenuID   []sql.NullInt32
 }
 
-func (q *Queries) CreateAeonCommandBulk(ctx context.Context, arg CreateAeonCommandBulkParams) ([]int32, error) {
+type CreateAeonCommandBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateAeonCommandBulk(ctx context.Context, arg CreateAeonCommandBulkParams) ([]CreateAeonCommandBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createAeonCommandBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Name),
@@ -50,13 +55,13 @@ func (q *Queries) CreateAeonCommandBulk(ctx context.Context, arg CreateAeonComma
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateAeonCommandBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateAeonCommandBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -105,7 +110,7 @@ SELECT
     unnest($6::null_int[]),
     unnest($7::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateOverdriveCommandBulkParams struct {
@@ -118,7 +123,12 @@ type CreateOverdriveCommandBulkParams struct {
 	SubmenuID        []sql.NullInt32
 }
 
-func (q *Queries) CreateOverdriveCommandBulk(ctx context.Context, arg CreateOverdriveCommandBulkParams) ([]int32, error) {
+type CreateOverdriveCommandBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateOverdriveCommandBulk(ctx context.Context, arg CreateOverdriveCommandBulkParams) ([]CreateOverdriveCommandBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createOverdriveCommandBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Name),
@@ -132,13 +142,13 @@ func (q *Queries) CreateOverdriveCommandBulk(ctx context.Context, arg CreateOver
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateOverdriveCommandBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateOverdriveCommandBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -157,7 +167,7 @@ SELECT
     unnest($3::null_string[]),
     unnest($4::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateSubmenuBulkParams struct {
@@ -167,7 +177,12 @@ type CreateSubmenuBulkParams struct {
 	Effect      []string
 }
 
-func (q *Queries) CreateSubmenuBulk(ctx context.Context, arg CreateSubmenuBulkParams) ([]int32, error) {
+type CreateSubmenuBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSubmenuBulk(ctx context.Context, arg CreateSubmenuBulkParams) ([]CreateSubmenuBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createSubmenuBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Name),
@@ -178,13 +193,13 @@ func (q *Queries) CreateSubmenuBulk(ctx context.Context, arg CreateSubmenuBulkPa
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateSubmenuBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateSubmenuBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -221,7 +236,7 @@ SELECT
     unnest($1::text[]),
     unnest($2::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateTopmenuBulkParams struct {
@@ -229,19 +244,24 @@ type CreateTopmenuBulkParams struct {
 	Name     []string
 }
 
-func (q *Queries) CreateTopmenuBulk(ctx context.Context, arg CreateTopmenuBulkParams) ([]int32, error) {
+type CreateTopmenuBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateTopmenuBulk(ctx context.Context, arg CreateTopmenuBulkParams) ([]CreateTopmenuBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createTopmenuBulk, pq.Array(arg.DataHash), pq.Array(arg.Name))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateTopmenuBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateTopmenuBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

@@ -9,7 +9,7 @@ SELECT
     unnest(sqlc.arg('topmenu_id')::null_int[]),
     unnest(sqlc.arg('submenu_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateTopmenuBulk :many
@@ -18,7 +18,7 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateSubmenuBulk :many
@@ -29,7 +29,7 @@ SELECT
     unnest(sqlc.arg('description')::null_string[]),
     unnest(sqlc.arg('effect')::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateOverdriveCommandBulk :many
@@ -43,7 +43,7 @@ SELECT
     unnest(sqlc.arg('topmenu_id')::null_int[]),
     unnest(sqlc.arg('submenu_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 

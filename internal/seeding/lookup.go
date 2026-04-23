@@ -24,6 +24,8 @@ func (l LookupObject) Error() string {
 }
 
 type Lookup struct {
+	json                   jsonLookup
+	Hashes				   map[string]int32
 	currentAbility         Ability           // currentAbility and currentBI are
 	currentBI              BattleInteraction // used for seeding of ability damage
 	currentME              MonsterEquipment  // used for some monster equipment junctions
@@ -31,8 +33,8 @@ type Lookup struct {
 	AbilitiesID            map[int32]Ability
 	EnemyAbilities         map[string]EnemyAbility
 	EnemyAbilitiesID       map[int32]EnemyAbility
-	ItemAbilities		   map[string]ItemAbility
-	ItemAbilitiesID		   map[int32]ItemAbility
+	ItemAbilities          map[string]ItemAbility
+	ItemAbilitiesID        map[int32]ItemAbility
 	UnspecifiedAbilities   map[string]UnspecifiedAbility
 	UnspecifiedAbilitiesID map[int32]UnspecifiedAbility
 	OverdriveAbilities     map[string]OverdriveAbility
@@ -98,8 +100,8 @@ type Lookup struct {
 	OverdrivesID           map[int32]Overdrive
 	Positions              map[string]BlitzballPosition
 	PositionsID            map[int32]BlitzballPosition
-	Primers				   map[string]Primer
-	PrimersID			   map[int32]Primer
+	Primers                map[string]Primer
+	PrimersID              map[int32]Primer
 	Properties             map[string]Property
 	PropertiesID           map[int32]Property
 	Quests                 map[string]Quest
@@ -116,8 +118,8 @@ type Lookup struct {
 	CuesID                 map[int32]Cue
 	BackgroundMusicID      map[int32]BackgroundMusic
 	SongsID                map[int32]Song
-	Spheres				   map[string]Sphere
-	SpheresID			   map[int32]Sphere
+	Spheres                map[string]Sphere
+	SpheresID              map[int32]Sphere
 	Stats                  map[string]Stat
 	StatsID                map[int32]Stat
 	StatusConditions       map[string]StatusCondition
@@ -130,16 +132,17 @@ type Lookup struct {
 	TreasuresID            map[int32]Treasure
 }
 
-func lookupInit() Lookup {
-	return Lookup{
+func lookupInit() *Lookup {
+	l := Lookup{
+		Hashes: 				make(map[string]int32),
 		Abilities:              make(map[string]Ability),
 		AbilitiesID:            make(map[int32]Ability),
 		UnspecifiedAbilities:   make(map[string]UnspecifiedAbility),
 		UnspecifiedAbilitiesID: make(map[int32]UnspecifiedAbility),
 		EnemyAbilities:         make(map[string]EnemyAbility),
 		EnemyAbilitiesID:       make(map[int32]EnemyAbility),
-		ItemAbilities: 			make(map[string]ItemAbility),
-		ItemAbilitiesID: 		make(map[int32]ItemAbility),
+		ItemAbilities:          make(map[string]ItemAbility),
+		ItemAbilitiesID:        make(map[int32]ItemAbility),
 		OverdriveAbilities:     make(map[string]OverdriveAbility),
 		OverdriveAbilitiesID:   make(map[int32]OverdriveAbility),
 		PlayerAbilities:        make(map[string]PlayerAbility),
@@ -203,8 +206,8 @@ func lookupInit() Lookup {
 		OverdrivesID:           make(map[int32]Overdrive),
 		Positions:              make(map[string]BlitzballPosition),
 		PositionsID:            make(map[int32]BlitzballPosition),
-		Primers: 				make(map[string]Primer),
-		PrimersID: 				make(map[int32]Primer),
+		Primers:                make(map[string]Primer),
+		PrimersID:              make(map[int32]Primer),
 		Properties:             make(map[string]Property),
 		PropertiesID:           make(map[int32]Property),
 		Quests:                 make(map[string]Quest),
@@ -221,8 +224,8 @@ func lookupInit() Lookup {
 		SongsID:                make(map[int32]Song),
 		CuesID:                 make(map[int32]Cue),
 		BackgroundMusicID:      make(map[int32]BackgroundMusic),
-		Spheres: 				make(map[string]Sphere),
-		SpheresID: 				make(map[int32]Sphere),
+		Spheres:                make(map[string]Sphere),
+		SpheresID:              make(map[int32]Sphere),
 		Stats:                  make(map[string]Stat),
 		StatsID:                make(map[int32]Stat),
 		StatusConditions:       make(map[string]StatusCondition),
@@ -234,6 +237,8 @@ func lookupInit() Lookup {
 		Treasures:              make(map[string]Treasure),
 		TreasuresID:            make(map[int32]Treasure),
 	}
+
+	return &l
 }
 
 func GetResource[T any, K any](key K, lookup map[string]T) (T, error) {

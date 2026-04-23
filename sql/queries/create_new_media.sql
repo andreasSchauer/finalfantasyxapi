@@ -16,7 +16,7 @@ SELECT
     unnest(sqlc.arg('special_use_case')::null_music_use_case[]),
     unnest(sqlc.arg('credits_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateSongCreditBulk :many
@@ -28,7 +28,7 @@ SELECT
     unnest(sqlc.arg('performer')::null_string[]),
     unnest(sqlc.arg('lyricist')::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateBackgroundMusicBulk :many
@@ -38,7 +38,7 @@ SELECT
     unnest(sqlc.arg('condition')::null_string[]),
     unnest(sqlc.arg('replaces_encounter_music')::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateCueBulk :many
@@ -52,7 +52,7 @@ SELECT
     unnest(sqlc.arg('end_trigger')::null_string[]),
     unnest(sqlc.arg('replaces_encounter_music')::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateFMVBulk :many
@@ -65,7 +65,7 @@ SELECT
     unnest(sqlc.arg('song_id')::null_int[]),
     unnest(sqlc.arg('area_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 

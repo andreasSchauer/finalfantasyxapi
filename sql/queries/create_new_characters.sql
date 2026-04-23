@@ -5,7 +5,7 @@ SELECT
     unnest(sqlc.arg('name')::text[]),
     unnest(sqlc.arg('type')::unit_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateCharacterBulk :many
@@ -20,7 +20,7 @@ SELECT
     unnest(sqlc.arg('can_fight_underwater')::boolean[]),
     unnest(sqlc.arg('area_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAeonBulk :many
@@ -37,7 +37,7 @@ SELECT
     unnest(sqlc.arg('area_id')::null_int[]),
     unnest(sqlc.arg('accuracy_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateCharacterClassBulk :many
@@ -47,7 +47,7 @@ SELECT
     unnest(sqlc.arg('name')::text[]),
     unnest(sqlc.arg('category')::character_class_category[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAeonEquipmentBulk :many
@@ -58,7 +58,7 @@ SELECT
     unnest(sqlc.arg('celestial_wpn')::boolean[]),
     unnest(sqlc.arg('equip_type')::equip_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 

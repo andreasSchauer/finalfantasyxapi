@@ -9,7 +9,7 @@ SELECT
     unnest(sqlc.arg('max_val_2')::null_int[]),
     unnest(sqlc.arg('sphere_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 
@@ -20,7 +20,7 @@ SELECT
     unnest(sqlc.arg('stat_id')::int[]),
     unnest(sqlc.arg('value')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateElementBulk :many
@@ -29,7 +29,7 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: UpdateElementBulk :exec
@@ -50,7 +50,7 @@ SELECT
     unnest(sqlc.arg('element_id')::int[]),
     unnest(sqlc.arg('affinity')::elemental_affinity[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAgilityTierBulk :many
@@ -64,7 +64,7 @@ SELECT
     unnest(sqlc.arg('monster_max_icv')::null_int[]),
     unnest(sqlc.arg('character_max_icv')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAgilitySubtierBulk :many
@@ -76,7 +76,7 @@ SELECT
     unnest(sqlc.arg('max_agility')::int[]),
     unnest(sqlc.arg('character_min_icv')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 
@@ -91,7 +91,7 @@ SELECT
     unnest(sqlc.arg('type')::overdrive_mode_type[]),
     unnest(sqlc.arg('fill_rate')::null_float[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateODModeActionBulk :many
@@ -101,7 +101,7 @@ SELECT
     unnest(sqlc.arg('user_id')::int[]),
     unnest(sqlc.arg('amount')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 
@@ -119,7 +119,7 @@ SELECT
     unnest(sqlc.arg('added_elem_resist_id')::null_int[]),
     unnest(sqlc.arg('inflicted_delay_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateStatusResistBulk :many
@@ -129,7 +129,7 @@ SELECT
     unnest(sqlc.arg('status_condition_id')::int[]),
     unnest(sqlc.arg('resistance')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreatePropertyBulk :many
@@ -140,7 +140,7 @@ SELECT
     unnest(sqlc.arg('effect')::text[]),
     unnest(sqlc.arg('nullify_armored')::null_nullify_armored[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateModifierBulk :many
@@ -152,7 +152,7 @@ SELECT
     unnest(sqlc.arg('category')::modifier_category[]),
     unnest(sqlc.arg('default_value')::null_float[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 

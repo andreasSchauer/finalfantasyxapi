@@ -21,7 +21,7 @@ SELECT
     unnest($4::null_int[]),
     unnest($5::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateAltStateChangeBulkParams struct {
@@ -32,7 +32,12 @@ type CreateAltStateChangeBulkParams struct {
 	AddedStatusID  []sql.NullInt32
 }
 
-func (q *Queries) CreateAltStateChangeBulk(ctx context.Context, arg CreateAltStateChangeBulkParams) ([]int32, error) {
+type CreateAltStateChangeBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateAltStateChangeBulk(ctx context.Context, arg CreateAltStateChangeBulkParams) ([]CreateAltStateChangeBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createAltStateChangeBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.AlteredStateID),
@@ -44,13 +49,13 @@ func (q *Queries) CreateAltStateChangeBulk(ctx context.Context, arg CreateAltSta
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateAltStateChangeBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateAltStateChangeBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -169,7 +174,7 @@ SELECT
     unnest($3::text[]),
     unnest($4::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateAlteredStateBulkParams struct {
@@ -179,7 +184,12 @@ type CreateAlteredStateBulkParams struct {
 	IsTemporary []bool
 }
 
-func (q *Queries) CreateAlteredStateBulk(ctx context.Context, arg CreateAlteredStateBulkParams) ([]int32, error) {
+type CreateAlteredStateBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateAlteredStateBulk(ctx context.Context, arg CreateAlteredStateBulkParams) ([]CreateAlteredStateBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createAlteredStateBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.MonsterID),
@@ -190,13 +200,13 @@ func (q *Queries) CreateAlteredStateBulk(ctx context.Context, arg CreateAlteredS
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateAlteredStateBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateAlteredStateBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -214,7 +224,7 @@ SELECT
     unnest($2::int[]),
     unnest($3::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateEncounterAreaBulkParams struct {
@@ -223,19 +233,24 @@ type CreateEncounterAreaBulkParams struct {
 	Specification []sql.NullString
 }
 
-func (q *Queries) CreateEncounterAreaBulk(ctx context.Context, arg CreateEncounterAreaBulkParams) ([]int32, error) {
+type CreateEncounterAreaBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateEncounterAreaBulk(ctx context.Context, arg CreateEncounterAreaBulkParams) ([]CreateEncounterAreaBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createEncounterAreaBulk, pq.Array(arg.DataHash), pq.Array(arg.AreaID), pq.Array(arg.Specification))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateEncounterAreaBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateEncounterAreaBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -255,7 +270,7 @@ SELECT
     unnest($4::null_auto_ability_probability[]),
     unnest($5::equip_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateEquipmentDropBulkParams struct {
@@ -266,7 +281,12 @@ type CreateEquipmentDropBulkParams struct {
 	Type          []EquipType
 }
 
-func (q *Queries) CreateEquipmentDropBulk(ctx context.Context, arg CreateEquipmentDropBulkParams) ([]int32, error) {
+type CreateEquipmentDropBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateEquipmentDropBulk(ctx context.Context, arg CreateEquipmentDropBulkParams) ([]CreateEquipmentDropBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createEquipmentDropBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.AutoAbilityID),
@@ -278,13 +298,13 @@ func (q *Queries) CreateEquipmentDropBulk(ctx context.Context, arg CreateEquipme
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateEquipmentDropBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateEquipmentDropBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -329,7 +349,7 @@ SELECT
     unnest($2::int[]),
     unnest($3::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateEquipmentSlotsChanceBulkParams struct {
@@ -338,19 +358,24 @@ type CreateEquipmentSlotsChanceBulkParams struct {
 	Chance   []int32
 }
 
-func (q *Queries) CreateEquipmentSlotsChanceBulk(ctx context.Context, arg CreateEquipmentSlotsChanceBulkParams) ([]int32, error) {
+type CreateEquipmentSlotsChanceBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateEquipmentSlotsChanceBulk(ctx context.Context, arg CreateEquipmentSlotsChanceBulkParams) ([]CreateEquipmentSlotsChanceBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createEquipmentSlotsChanceBulk, pq.Array(arg.DataHash), pq.Array(arg.Amount), pq.Array(arg.Chance))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateEquipmentSlotsChanceBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateEquipmentSlotsChanceBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -368,7 +393,7 @@ SELECT
     unnest($2::int[]),
     unnest($3::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateFormationBossSongBulkParams struct {
@@ -377,19 +402,24 @@ type CreateFormationBossSongBulkParams struct {
 	CelebrateVictory []bool
 }
 
-func (q *Queries) CreateFormationBossSongBulk(ctx context.Context, arg CreateFormationBossSongBulkParams) ([]int32, error) {
+type CreateFormationBossSongBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateFormationBossSongBulk(ctx context.Context, arg CreateFormationBossSongBulkParams) ([]CreateFormationBossSongBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createFormationBossSongBulk, pq.Array(arg.DataHash), pq.Array(arg.SongID), pq.Array(arg.CelebrateVictory))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateFormationBossSongBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateFormationBossSongBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -411,7 +441,7 @@ SELECT
     unnest($6::null_int[]),
     unnest($7::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateFormationDataBulkParams struct {
@@ -424,7 +454,12 @@ type CreateFormationDataBulkParams struct {
 	Notes          []sql.NullString
 }
 
-func (q *Queries) CreateFormationDataBulk(ctx context.Context, arg CreateFormationDataBulkParams) ([]int32, error) {
+type CreateFormationDataBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateFormationDataBulk(ctx context.Context, arg CreateFormationDataBulkParams) ([]CreateFormationDataBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createFormationDataBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Category),
@@ -438,13 +473,13 @@ func (q *Queries) CreateFormationDataBulk(ctx context.Context, arg CreateFormati
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateFormationDataBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateFormationDataBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -463,7 +498,7 @@ SELECT
     unnest($3::null_string[]),
     unnest($4::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateFormationTriggerCommandBulkParams struct {
@@ -473,7 +508,12 @@ type CreateFormationTriggerCommandBulkParams struct {
 	UseAmount        []sql.NullInt32
 }
 
-func (q *Queries) CreateFormationTriggerCommandBulk(ctx context.Context, arg CreateFormationTriggerCommandBulkParams) ([]int32, error) {
+type CreateFormationTriggerCommandBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateFormationTriggerCommandBulk(ctx context.Context, arg CreateFormationTriggerCommandBulkParams) ([]CreateFormationTriggerCommandBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createFormationTriggerCommandBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.TriggerCommandID),
@@ -484,13 +524,13 @@ func (q *Queries) CreateFormationTriggerCommandBulk(ctx context.Context, arg Cre
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateFormationTriggerCommandBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateFormationTriggerCommandBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -529,7 +569,7 @@ SELECT
     unnest($3::boolean[]),
     unnest($4::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateMonsterAbilityBulkParams struct {
@@ -539,7 +579,12 @@ type CreateMonsterAbilityBulkParams struct {
 	IsUnused  []bool
 }
 
-func (q *Queries) CreateMonsterAbilityBulk(ctx context.Context, arg CreateMonsterAbilityBulkParams) ([]int32, error) {
+type CreateMonsterAbilityBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMonsterAbilityBulk(ctx context.Context, arg CreateMonsterAbilityBulkParams) ([]CreateMonsterAbilityBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createMonsterAbilityBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.AbilityID),
@@ -550,13 +595,13 @@ func (q *Queries) CreateMonsterAbilityBulk(ctx context.Context, arg CreateMonste
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateMonsterAbilityBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateMonsterAbilityBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -574,7 +619,7 @@ SELECT
     unnest($2::int[]),
     unnest($3::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateMonsterAmountBulkParams struct {
@@ -583,19 +628,24 @@ type CreateMonsterAmountBulkParams struct {
 	Amount    []int32
 }
 
-func (q *Queries) CreateMonsterAmountBulk(ctx context.Context, arg CreateMonsterAmountBulkParams) ([]int32, error) {
+type CreateMonsterAmountBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMonsterAmountBulk(ctx context.Context, arg CreateMonsterAmountBulkParams) ([]CreateMonsterAmountBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createMonsterAmountBulk, pq.Array(arg.DataHash), pq.Array(arg.MonsterID), pq.Array(arg.Amount))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateMonsterAmountBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateMonsterAmountBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -638,7 +688,7 @@ SELECT
     unnest($27::null_string[]),
     unnest($28::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateMonsterBulkParams struct {
@@ -672,7 +722,12 @@ type CreateMonsterBulkParams struct {
 	ScanText             []sql.NullString
 }
 
-func (q *Queries) CreateMonsterBulk(ctx context.Context, arg CreateMonsterBulkParams) ([]int32, error) {
+type CreateMonsterBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMonsterBulk(ctx context.Context, arg CreateMonsterBulkParams) ([]CreateMonsterBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createMonsterBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Name),
@@ -707,13 +762,13 @@ func (q *Queries) CreateMonsterBulk(ctx context.Context, arg CreateMonsterBulkPa
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateMonsterBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateMonsterBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -753,7 +808,7 @@ SELECT
     unnest($4::int[]),
     unnest($5::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateMonsterEquipmentBulkParams struct {
@@ -764,7 +819,12 @@ type CreateMonsterEquipmentBulkParams struct {
 	CriticalPlus []int32
 }
 
-func (q *Queries) CreateMonsterEquipmentBulk(ctx context.Context, arg CreateMonsterEquipmentBulkParams) ([]int32, error) {
+type CreateMonsterEquipmentBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMonsterEquipmentBulk(ctx context.Context, arg CreateMonsterEquipmentBulkParams) ([]CreateMonsterEquipmentBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createMonsterEquipmentBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.MonsterID),
@@ -776,13 +836,13 @@ func (q *Queries) CreateMonsterEquipmentBulk(ctx context.Context, arg CreateMons
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateMonsterEquipmentBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateMonsterEquipmentBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -802,7 +862,7 @@ SELECT
     unnest($4::int[]),
     unnest($5::equipment_slots_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateMonsterEquipmentSlotsBulkParams struct {
@@ -813,7 +873,12 @@ type CreateMonsterEquipmentSlotsBulkParams struct {
 	Type               []EquipmentSlotsType
 }
 
-func (q *Queries) CreateMonsterEquipmentSlotsBulk(ctx context.Context, arg CreateMonsterEquipmentSlotsBulkParams) ([]int32, error) {
+type CreateMonsterEquipmentSlotsBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMonsterEquipmentSlotsBulk(ctx context.Context, arg CreateMonsterEquipmentSlotsBulkParams) ([]CreateMonsterEquipmentSlotsBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createMonsterEquipmentSlotsBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.MonsterEquipmentID),
@@ -825,13 +890,13 @@ func (q *Queries) CreateMonsterEquipmentSlotsBulk(ctx context.Context, arg Creat
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateMonsterEquipmentSlotsBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateMonsterEquipmentSlotsBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -877,7 +942,7 @@ SELECT
     unnest($3::int[]),
     unnest($4::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateMonsterFormationBulkParams struct {
@@ -887,7 +952,12 @@ type CreateMonsterFormationBulkParams struct {
 	FormationDataID    []int32
 }
 
-func (q *Queries) CreateMonsterFormationBulk(ctx context.Context, arg CreateMonsterFormationBulkParams) ([]int32, error) {
+type CreateMonsterFormationBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMonsterFormationBulk(ctx context.Context, arg CreateMonsterFormationBulkParams) ([]CreateMonsterFormationBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createMonsterFormationBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Version),
@@ -898,13 +968,13 @@ func (q *Queries) CreateMonsterFormationBulk(ctx context.Context, arg CreateMons
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateMonsterFormationBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateMonsterFormationBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -971,7 +1041,7 @@ SELECT
     unnest($11::null_int[]),
     unnest($12::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateMonsterItemBulkParams struct {
@@ -989,7 +1059,12 @@ type CreateMonsterItemBulkParams struct {
 	BribeID               []sql.NullInt32
 }
 
-func (q *Queries) CreateMonsterItemBulk(ctx context.Context, arg CreateMonsterItemBulkParams) ([]int32, error) {
+type CreateMonsterItemBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMonsterItemBulk(ctx context.Context, arg CreateMonsterItemBulkParams) ([]CreateMonsterItemBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createMonsterItemBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.MonsterID),
@@ -1008,13 +1083,13 @@ func (q *Queries) CreateMonsterItemBulk(ctx context.Context, arg CreateMonsterIt
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateMonsterItemBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateMonsterItemBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1050,22 +1125,22 @@ INSERT INTO monster_selections (data_hash)
 SELECT
     unnest($1::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
-func (q *Queries) CreateMonsterSelectionBulk(ctx context.Context, dataHash []string) ([]int32, error) {
+func (q *Queries) CreateMonsterSelectionBulk(ctx context.Context, dataHash []string) ([]MonsterSelection, error) {
 	rows, err := q.db.QueryContext(ctx, createMonsterSelectionBulk, pq.Array(dataHash))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []MonsterSelection
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i MonsterSelection
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

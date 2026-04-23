@@ -4,7 +4,7 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateSublocationBulk :many
@@ -15,7 +15,7 @@ SELECT
     unnest(sqlc.arg('name')::text[]),
     unnest(sqlc.arg('specification')::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAreaBulk :many
@@ -32,7 +32,7 @@ SELECT
     unnest(sqlc.arg('has_compilation_sphere')::boolean[]),
     unnest(sqlc.arg('can_ride_chocobo')::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAreaConnectionBulk :many
@@ -44,7 +44,7 @@ SELECT
     unnest(sqlc.arg('is_story_based')::boolean[]),
     unnest(sqlc.arg('notes')::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateTreasureBulk :many
@@ -60,7 +60,7 @@ SELECT
     unnest(sqlc.arg('notes')::null_string[]),
     unnest(sqlc.arg('gil_amount')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateShopBulk :many
@@ -73,7 +73,7 @@ SELECT
     unnest(sqlc.arg('category')::shop_category[]),
     unnest(sqlc.arg('availability')::availability_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateTreasureEquipmentPieceBulk :many
@@ -84,7 +84,7 @@ SELECT
     unnest(sqlc.arg('equipment_name_id')::int[]),
     unnest(sqlc.arg('empty_slots_amount')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateShopItemBulk :many
@@ -94,7 +94,7 @@ SELECT
     unnest(sqlc.arg('item_id')::int[]),
     unnest(sqlc.arg('price')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateShopEquipmentPieceBulk :many
@@ -107,7 +107,7 @@ SELECT
     unnest(sqlc.arg('empty_slots_amount')::int[]),
     unnest(sqlc.arg('price')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 

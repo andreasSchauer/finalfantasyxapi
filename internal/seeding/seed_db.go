@@ -41,7 +41,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	totalDuration := time.Since(start)
 	fmt.Printf("database seeding took %.3f seconds\n\n", totalDuration.Seconds())
 
-	return &l, nil
+	return l, nil
 }
 
 func handleDBFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) error {

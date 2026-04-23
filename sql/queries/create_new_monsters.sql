@@ -30,7 +30,7 @@ SELECT
     unnest(sqlc.arg('sensor_text')::null_string[]),
     unnest(sqlc.arg('scan_text')::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateMonsterAmountBulk :many
@@ -40,7 +40,7 @@ SELECT
     unnest(sqlc.arg('monster_id')::int[]),
     unnest(sqlc.arg('amount')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateMonsterFormationBulk :many
@@ -51,7 +51,7 @@ SELECT
     unnest(sqlc.arg('monster_selection_id')::int[]),
     unnest(sqlc.arg('formation_data_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateMonsterSelectionBulk :many
@@ -59,7 +59,7 @@ INSERT INTO monster_selections (data_hash)
 SELECT
     unnest(sqlc.arg('data_hash')::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateEncounterAreaBulk :many
@@ -69,7 +69,7 @@ SELECT
     unnest(sqlc.arg('area_id')::int[]),
     unnest(sqlc.arg('specification')::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateFormationBossSongBulk :many
@@ -79,7 +79,7 @@ SELECT
     unnest(sqlc.arg('song_id')::int[]),
     unnest(sqlc.arg('celebrate_victory')::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateFormationDataBulk :many
@@ -93,7 +93,7 @@ SELECT
     unnest(sqlc.arg('boss_song_id')::null_int[]),
     unnest(sqlc.arg('notes')::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateFormationTriggerCommandBulk :many
@@ -104,7 +104,7 @@ SELECT
     unnest(sqlc.arg('condition')::null_string[]),
     unnest(sqlc.arg('use_amount')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateMonsterItemBulk :many
@@ -123,7 +123,7 @@ SELECT
     unnest(sqlc.arg('secondary_drop_rare_id')::null_int[]),
     unnest(sqlc.arg('bribe_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateMonsterEquipmentBulk :many
@@ -135,7 +135,7 @@ SELECT
     unnest(sqlc.arg('power')::int[]),
     unnest(sqlc.arg('critical_plus')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateMonsterEquipmentSlotsBulk :many
@@ -147,7 +147,7 @@ SELECT
     unnest(sqlc.arg('max_amount')::int[]),
     unnest(sqlc.arg('type')::equipment_slots_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateEquipmentSlotsChanceBulk :many
@@ -157,7 +157,7 @@ SELECT
     unnest(sqlc.arg('amount')::int[]),
     unnest(sqlc.arg('chance')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateEquipmentDropBulk :many
@@ -169,7 +169,7 @@ SELECT
     unnest(sqlc.arg('probability')::null_auto_ability_probability[]),
     unnest(sqlc.arg('type')::equip_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAlteredStateBulk :many
@@ -180,7 +180,7 @@ SELECT
     unnest(sqlc.arg('condition')::text[]),
     unnest(sqlc.arg('is_temporary')::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateAltStateChangeBulk :many
@@ -192,7 +192,7 @@ SELECT
     unnest(sqlc.arg('distance')::null_int[]),
     unnest(sqlc.arg('added_status_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateMonsterAbilityBulk :many
@@ -203,7 +203,7 @@ SELECT
     unnest(sqlc.arg('is_forced')::boolean[]),
     unnest(sqlc.arg('is_unused')::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 

@@ -19,7 +19,7 @@ SELECT
     unnest($2::node_type[]),
     unnest($3::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateCreatedNodeBulkParams struct {
@@ -28,19 +28,24 @@ type CreateCreatedNodeBulkParams struct {
 	Value    []int32
 }
 
-func (q *Queries) CreateCreatedNodeBulk(ctx context.Context, arg CreateCreatedNodeBulkParams) ([]int32, error) {
+type CreateCreatedNodeBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateCreatedNodeBulk(ctx context.Context, arg CreateCreatedNodeBulkParams) ([]CreateCreatedNodeBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createCreatedNodeBulk, pq.Array(arg.DataHash), pq.Array(arg.Node), pq.Array(arg.Value))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateCreatedNodeBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateCreatedNodeBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -59,7 +64,7 @@ SELECT
     unnest($3::int[]),
     unnest($4::target_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateItemAbilityBulkParams struct {
@@ -69,7 +74,12 @@ type CreateItemAbilityBulkParams struct {
 	Cursor    []TargetType
 }
 
-func (q *Queries) CreateItemAbilityBulk(ctx context.Context, arg CreateItemAbilityBulkParams) ([]int32, error) {
+type CreateItemAbilityBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateItemAbilityBulk(ctx context.Context, arg CreateItemAbilityBulkParams) ([]CreateItemAbilityBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createItemAbilityBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.ItemID),
@@ -80,13 +90,13 @@ func (q *Queries) CreateItemAbilityBulk(ctx context.Context, arg CreateItemAbili
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateItemAbilityBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateItemAbilityBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -104,7 +114,7 @@ SELECT
     unnest($2::int[]),
     unnest($3::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateItemAmountBulkParams struct {
@@ -113,19 +123,24 @@ type CreateItemAmountBulkParams struct {
 	Amount       []int32
 }
 
-func (q *Queries) CreateItemAmountBulk(ctx context.Context, arg CreateItemAmountBulkParams) ([]int32, error) {
+type CreateItemAmountBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateItemAmountBulk(ctx context.Context, arg CreateItemAmountBulkParams) ([]CreateItemAmountBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createItemAmountBulk, pq.Array(arg.DataHash), pq.Array(arg.MasterItemID), pq.Array(arg.Amount))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateItemAmountBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateItemAmountBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -148,7 +163,7 @@ SELECT
     unnest($7::null_int[]),
     unnest($8::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateItemBulkParams struct {
@@ -162,7 +177,12 @@ type CreateItemBulkParams struct {
 	SellValue    []int32
 }
 
-func (q *Queries) CreateItemBulk(ctx context.Context, arg CreateItemBulkParams) ([]int32, error) {
+type CreateItemBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateItemBulk(ctx context.Context, arg CreateItemBulkParams) ([]CreateItemBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createItemBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.MasterItemID),
@@ -177,13 +197,13 @@ func (q *Queries) CreateItemBulk(ctx context.Context, arg CreateItemBulkParams) 
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateItemBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateItemBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -243,7 +263,7 @@ SELECT
     unnest($4::text[]),
     unnest($5::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateKeyItemBulkParams struct {
@@ -254,7 +274,12 @@ type CreateKeyItemBulkParams struct {
 	Effect       []string
 }
 
-func (q *Queries) CreateKeyItemBulk(ctx context.Context, arg CreateKeyItemBulkParams) ([]int32, error) {
+type CreateKeyItemBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateKeyItemBulk(ctx context.Context, arg CreateKeyItemBulkParams) ([]CreateKeyItemBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createKeyItemBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.MasterItemID),
@@ -266,13 +291,13 @@ func (q *Queries) CreateKeyItemBulk(ctx context.Context, arg CreateKeyItemBulkPa
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateKeyItemBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateKeyItemBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -290,7 +315,7 @@ SELECT
     unnest($2::text[]),
     unnest($3::item_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateMasterItemBulkParams struct {
@@ -299,19 +324,24 @@ type CreateMasterItemBulkParams struct {
 	Type     []ItemType
 }
 
-func (q *Queries) CreateMasterItemBulk(ctx context.Context, arg CreateMasterItemBulkParams) ([]int32, error) {
+type CreateMasterItemBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMasterItemBulk(ctx context.Context, arg CreateMasterItemBulkParams) ([]CreateMasterItemBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createMasterItemBulk, pq.Array(arg.DataHash), pq.Array(arg.Name), pq.Array(arg.Type))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateMasterItemBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateMasterItemBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -329,7 +359,7 @@ SELECT
     unnest($2::int[]),
     unnest($3::mix_category[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateMixBulkParams struct {
@@ -338,19 +368,24 @@ type CreateMixBulkParams struct {
 	Category    []MixCategory
 }
 
-func (q *Queries) CreateMixBulk(ctx context.Context, arg CreateMixBulkParams) ([]int32, error) {
+type CreateMixBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMixBulk(ctx context.Context, arg CreateMixBulkParams) ([]CreateMixBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createMixBulk, pq.Array(arg.DataHash), pq.Array(arg.OverdriveID), pq.Array(arg.Category))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateMixBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateMixBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -370,7 +405,7 @@ SELECT
     unnest($4::int[]),
     unnest($5::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateMixCombinationBulkParams struct {
@@ -381,7 +416,12 @@ type CreateMixCombinationBulkParams struct {
 	IsBestCombo  []bool
 }
 
-func (q *Queries) CreateMixCombinationBulk(ctx context.Context, arg CreateMixCombinationBulkParams) ([]int32, error) {
+type CreateMixCombinationBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMixCombinationBulk(ctx context.Context, arg CreateMixCombinationBulkParams) ([]CreateMixCombinationBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createMixCombinationBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.MixID),
@@ -393,13 +433,13 @@ func (q *Queries) CreateMixCombinationBulk(ctx context.Context, arg CreateMixCom
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateMixCombinationBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateMixCombinationBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -417,7 +457,7 @@ SELECT
     unnest($2::int[]),
     unnest($3::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreatePossibleItemBulkParams struct {
@@ -426,19 +466,24 @@ type CreatePossibleItemBulkParams struct {
 	Chance       []int32
 }
 
-func (q *Queries) CreatePossibleItemBulk(ctx context.Context, arg CreatePossibleItemBulkParams) ([]int32, error) {
+type CreatePossibleItemBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreatePossibleItemBulk(ctx context.Context, arg CreatePossibleItemBulkParams) ([]CreatePossibleItemBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createPossibleItemBulk, pq.Array(arg.DataHash), pq.Array(arg.ItemAmountID), pq.Array(arg.Chance))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreatePossibleItemBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreatePossibleItemBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -457,7 +502,7 @@ SELECT
     unnest($3::text[]),
     unnest($4::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreatePrimerBulkParams struct {
@@ -467,7 +512,12 @@ type CreatePrimerBulkParams struct {
 	EnglishLetter []string
 }
 
-func (q *Queries) CreatePrimerBulk(ctx context.Context, arg CreatePrimerBulkParams) ([]int32, error) {
+type CreatePrimerBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreatePrimerBulk(ctx context.Context, arg CreatePrimerBulkParams) ([]CreatePrimerBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createPrimerBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.KeyItemID),
@@ -478,13 +528,13 @@ func (q *Queries) CreatePrimerBulk(ctx context.Context, arg CreatePrimerBulkPara
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreatePrimerBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreatePrimerBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -507,7 +557,7 @@ SELECT
     unnest($7::null_node_state[]),
     unnest($8::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateSphereBulkParams struct {
@@ -521,7 +571,12 @@ type CreateSphereBulkParams struct {
 	CreatedNodeID         []sql.NullInt32
 }
 
-func (q *Queries) CreateSphereBulk(ctx context.Context, arg CreateSphereBulkParams) ([]int32, error) {
+type CreateSphereBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSphereBulk(ctx context.Context, arg CreateSphereBulkParams) ([]CreateSphereBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createSphereBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.ItemID),
@@ -536,13 +591,13 @@ func (q *Queries) CreateSphereBulk(ctx context.Context, arg CreateSphereBulkPara
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateSphereBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateSphereBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -560,7 +615,7 @@ SELECT
     unnest($2::int[]),
     unnest($3::node_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateSphereTargetableNodeBulkParams struct {
@@ -569,19 +624,24 @@ type CreateSphereTargetableNodeBulkParams struct {
 	Node     []NodeType
 }
 
-func (q *Queries) CreateSphereTargetableNodeBulk(ctx context.Context, arg CreateSphereTargetableNodeBulkParams) ([]int32, error) {
+type CreateSphereTargetableNodeBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSphereTargetableNodeBulk(ctx context.Context, arg CreateSphereTargetableNodeBulkParams) ([]CreateSphereTargetableNodeBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createSphereTargetableNodeBulk, pq.Array(arg.DataHash), pq.Array(arg.SphereID), pq.Array(arg.Node))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateSphereTargetableNodeBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateSphereTargetableNodeBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

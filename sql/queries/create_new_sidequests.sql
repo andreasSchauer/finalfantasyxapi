@@ -5,7 +5,7 @@ SELECT
     unnest(sqlc.arg('category')::blitzball_tournament_category[]),
     unnest(sqlc.arg('slot')::blitzball_position_slot[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateBlitzballItemBulk :many
@@ -15,7 +15,7 @@ SELECT
     unnest(sqlc.arg('position_id')::int[]),
     unnest(sqlc.arg('possible_item_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateQuestBulk :many
@@ -28,7 +28,7 @@ SELECT
     unnest(sqlc.arg('is_repeatable')::boolean[]),
     unnest(sqlc.arg('completion_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateSidequestBulk :many
@@ -37,7 +37,7 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('quest_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateSubquestBulk :many
@@ -47,7 +47,7 @@ SELECT
     unnest(sqlc.arg('quest_id')::int[]),
     unnest(sqlc.arg('sidequest_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateQuestCompletionBulk :many
@@ -57,7 +57,7 @@ SELECT
     unnest(sqlc.arg('condition')::null_string[]),
     unnest(sqlc.arg('item_amount_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateCompletionAreaBulk :many
@@ -68,7 +68,7 @@ SELECT
     unnest(sqlc.arg('area_id')::int[]),
     unnest(sqlc.arg('notes')::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateMonsterArenaCreationBulk :many
@@ -84,4 +84,4 @@ SELECT
     unnest(sqlc.arg('amount')::int[]),
     unnest(sqlc.arg('monster_id')::null_int[])
 ON CONFLICT(data_hash) DO Update SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;

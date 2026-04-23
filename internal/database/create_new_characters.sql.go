@@ -26,7 +26,7 @@ SELECT
     unnest($9::null_int[]),
     unnest($10::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateAeonBulkParams struct {
@@ -42,7 +42,12 @@ type CreateAeonBulkParams struct {
 	AccuracyID            []sql.NullInt32
 }
 
-func (q *Queries) CreateAeonBulk(ctx context.Context, arg CreateAeonBulkParams) ([]int32, error) {
+type CreateAeonBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateAeonBulk(ctx context.Context, arg CreateAeonBulkParams) ([]CreateAeonBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createAeonBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.UnitID),
@@ -59,13 +64,13 @@ func (q *Queries) CreateAeonBulk(ctx context.Context, arg CreateAeonBulkParams) 
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateAeonBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateAeonBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -84,7 +89,7 @@ SELECT
     unnest($3::boolean[]),
     unnest($4::equip_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateAeonEquipmentBulkParams struct {
@@ -94,7 +99,12 @@ type CreateAeonEquipmentBulkParams struct {
 	EquipType     []EquipType
 }
 
-func (q *Queries) CreateAeonEquipmentBulk(ctx context.Context, arg CreateAeonEquipmentBulkParams) ([]int32, error) {
+type CreateAeonEquipmentBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateAeonEquipmentBulk(ctx context.Context, arg CreateAeonEquipmentBulkParams) ([]CreateAeonEquipmentBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createAeonEquipmentBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.AutoAbilityID),
@@ -105,13 +115,13 @@ func (q *Queries) CreateAeonEquipmentBulk(ctx context.Context, arg CreateAeonEqu
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateAeonEquipmentBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateAeonEquipmentBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -221,7 +231,7 @@ SELECT
     unnest($7::boolean[]),
     unnest($8::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateCharacterBulkParams struct {
@@ -235,7 +245,12 @@ type CreateCharacterBulkParams struct {
 	AreaID              []sql.NullInt32
 }
 
-func (q *Queries) CreateCharacterBulk(ctx context.Context, arg CreateCharacterBulkParams) ([]int32, error) {
+type CreateCharacterBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateCharacterBulk(ctx context.Context, arg CreateCharacterBulkParams) ([]CreateCharacterBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createCharacterBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.UnitID),
@@ -250,13 +265,13 @@ func (q *Queries) CreateCharacterBulk(ctx context.Context, arg CreateCharacterBu
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateCharacterBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateCharacterBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -274,7 +289,7 @@ SELECT
     unnest($2::text[]),
     unnest($3::character_class_category[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateCharacterClassBulkParams struct {
@@ -283,19 +298,24 @@ type CreateCharacterClassBulkParams struct {
 	Category []CharacterClassCategory
 }
 
-func (q *Queries) CreateCharacterClassBulk(ctx context.Context, arg CreateCharacterClassBulkParams) ([]int32, error) {
+type CreateCharacterClassBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateCharacterClassBulk(ctx context.Context, arg CreateCharacterClassBulkParams) ([]CreateCharacterClassBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createCharacterClassBulk, pq.Array(arg.DataHash), pq.Array(arg.Name), pq.Array(arg.Category))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateCharacterClassBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateCharacterClassBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -393,7 +413,7 @@ SELECT
     unnest($2::text[]),
     unnest($3::unit_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreatePlayerUnitBulkParams struct {
@@ -402,19 +422,24 @@ type CreatePlayerUnitBulkParams struct {
 	Type     []UnitType
 }
 
-func (q *Queries) CreatePlayerUnitBulk(ctx context.Context, arg CreatePlayerUnitBulkParams) ([]int32, error) {
+type CreatePlayerUnitBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreatePlayerUnitBulk(ctx context.Context, arg CreatePlayerUnitBulkParams) ([]CreatePlayerUnitBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createPlayerUnitBulk, pq.Array(arg.DataHash), pq.Array(arg.Name), pq.Array(arg.Type))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreatePlayerUnitBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreatePlayerUnitBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

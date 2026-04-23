@@ -19,7 +19,7 @@ SELECT
     unnest($2::null_string[]),
     unnest($3::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateBackgroundMusicBulkParams struct {
@@ -28,19 +28,24 @@ type CreateBackgroundMusicBulkParams struct {
 	ReplacesEncounterMusic []bool
 }
 
-func (q *Queries) CreateBackgroundMusicBulk(ctx context.Context, arg CreateBackgroundMusicBulkParams) ([]int32, error) {
+type CreateBackgroundMusicBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateBackgroundMusicBulk(ctx context.Context, arg CreateBackgroundMusicBulkParams) ([]CreateBackgroundMusicBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createBackgroundMusicBulk, pq.Array(arg.DataHash), pq.Array(arg.Condition), pq.Array(arg.ReplacesEncounterMusic))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateBackgroundMusicBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateBackgroundMusicBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -62,7 +67,7 @@ SELECT
     unnest($6::null_string[]),
     unnest($7::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateCueBulkParams struct {
@@ -75,7 +80,12 @@ type CreateCueBulkParams struct {
 	ReplacesEncounterMusic []bool
 }
 
-func (q *Queries) CreateCueBulk(ctx context.Context, arg CreateCueBulkParams) ([]int32, error) {
+type CreateCueBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateCueBulk(ctx context.Context, arg CreateCueBulkParams) ([]CreateCueBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createCueBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.SongID),
@@ -89,13 +99,13 @@ func (q *Queries) CreateCueBulk(ctx context.Context, arg CreateCueBulkParams) ([
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateCueBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateCueBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -116,7 +126,7 @@ SELECT
     unnest($5::null_int[]),
     unnest($6::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateFMVBulkParams struct {
@@ -128,7 +138,12 @@ type CreateFMVBulkParams struct {
 	AreaID              []int32
 }
 
-func (q *Queries) CreateFMVBulk(ctx context.Context, arg CreateFMVBulkParams) ([]int32, error) {
+type CreateFMVBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateFMVBulk(ctx context.Context, arg CreateFMVBulkParams) ([]CreateFMVBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createFMVBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Name),
@@ -141,13 +156,13 @@ func (q *Queries) CreateFMVBulk(ctx context.Context, arg CreateFMVBulkParams) ([
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateFMVBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateFMVBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -176,7 +191,7 @@ SELECT
     unnest($13::null_music_use_case[]),
     unnest($14::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateSongBulkParams struct {
@@ -196,7 +211,12 @@ type CreateSongBulkParams struct {
 	CreditsID            []sql.NullInt32
 }
 
-func (q *Queries) CreateSongBulk(ctx context.Context, arg CreateSongBulkParams) ([]int32, error) {
+type CreateSongBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSongBulk(ctx context.Context, arg CreateSongBulkParams) ([]CreateSongBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createSongBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Name),
@@ -217,13 +237,13 @@ func (q *Queries) CreateSongBulk(ctx context.Context, arg CreateSongBulkParams) 
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateSongBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateSongBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -243,7 +263,7 @@ SELECT
     unnest($4::null_string[]),
     unnest($5::null_string[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id
+RETURNING id, data_hash
 `
 
 type CreateSongCreditBulkParams struct {
@@ -254,7 +274,12 @@ type CreateSongCreditBulkParams struct {
 	Lyricist  []sql.NullString
 }
 
-func (q *Queries) CreateSongCreditBulk(ctx context.Context, arg CreateSongCreditBulkParams) ([]int32, error) {
+type CreateSongCreditBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSongCreditBulk(ctx context.Context, arg CreateSongCreditBulkParams) ([]CreateSongCreditBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createSongCreditBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Composer),
@@ -266,13 +291,13 @@ func (q *Queries) CreateSongCreditBulk(ctx context.Context, arg CreateSongCredit
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []CreateSongCreditBulkRow
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var i CreateSongCreditBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

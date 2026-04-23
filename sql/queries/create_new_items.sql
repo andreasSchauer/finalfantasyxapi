@@ -5,7 +5,7 @@ SELECT
     unnest(sqlc.arg('name')::text[]),
     unnest(sqlc.arg('type')::item_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateItemBulk :many
@@ -20,7 +20,7 @@ SELECT
     unnest(sqlc.arg('base_price')::null_int[]),
     unnest(sqlc.arg('sell_value')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateItemAbilityBulk :many
@@ -31,7 +31,7 @@ SELECT
     unnest(sqlc.arg('ability_id')::int[]),
     unnest(sqlc.arg('cursor')::target_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 
@@ -47,7 +47,7 @@ SELECT
     unnest(sqlc.arg('target_node_state')::null_node_state[]),
     unnest(sqlc.arg('created_node_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateSphereTargetableNodeBulk :many
@@ -57,7 +57,7 @@ SELECT
     unnest(sqlc.arg('sphere_id')::int[]),
     unnest(sqlc.arg('node')::node_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateCreatedNodeBulk :many
@@ -67,7 +67,7 @@ SELECT
     unnest(sqlc.arg('node')::node_type[]),
     unnest(sqlc.arg('value')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateKeyItemBulk :many
@@ -79,7 +79,7 @@ SELECT
     unnest(sqlc.arg('description')::text[]),
     unnest(sqlc.arg('effect')::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 
@@ -91,7 +91,7 @@ SELECT
     unnest(sqlc.arg('al_bhed_letter')::text[]),
     unnest(sqlc.arg('english_letter')::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 
@@ -102,7 +102,7 @@ SELECT
     unnest(sqlc.arg('overdrive_id')::int[]),
     unnest(sqlc.arg('category')::mix_category[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateMixCombinationBulk :many
@@ -114,7 +114,7 @@ SELECT
     unnest(sqlc.arg('second_item_id')::int[]),
     unnest(sqlc.arg('is_best_combo')::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreateItemAmountBulk :many
@@ -124,7 +124,7 @@ SELECT
     unnest(sqlc.arg('master_item_id')::int[]),
     unnest(sqlc.arg('amount')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 -- name: CreatePossibleItemBulk :many
@@ -134,7 +134,7 @@ SELECT
     unnest(sqlc.arg('item_amount_id')::int[]),
     unnest(sqlc.arg('chance')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id;
+RETURNING id, data_hash;
 
 
 
