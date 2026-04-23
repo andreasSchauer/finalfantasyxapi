@@ -35,7 +35,17 @@ CREATE DOMAIN zanmato_level AS INTEGER
     CHECK (VALUE >= 1 AND VALUE <= 6);
 
 
+CREATE DOMAIN null_int AS INTEGER;
+CREATE DOMAIN null_float AS REAL;
+CREATE DOMAIN null_string AS TEXT;
+CREATE DOMAIN null_bool AS BOOLEAN;
+
+
 -- +goose Down
+DROP DOMAIN IF EXISTS null_bool;
+DROP DOMAIN IF EXISTS null_string;
+DROP DOMAIN IF EXISTS null_float;
+DROP DOMAIN IF EXISTS null_int;
 DROP DOMAIN IF EXISTS zanmato_level;
 DROP DOMAIN IF EXISTS auto_ability_probability;
 DROP DOMAIN IF EXISTS equipment_rolls;

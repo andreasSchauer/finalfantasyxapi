@@ -80,8 +80,8 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 			overdriveAbility.Type = database.AbilityTypeOverdriveAbility
 			overdriveAbility.Attributes = &Attributes{
 				Rank: overdrive.Rank,
-				AppearsInHelpBar: false,
-				CanCopycat: false,
+				AppearsInHelpBar: overdrive.AppearsInHelpBar,
+				CanCopycat: overdrive.CanCopycat,
 			}
 
 			overdriveAbility.Ability, err = seedObjAssignID(qtx, overdriveAbility.Ability, l.seedAbility)

@@ -18,6 +18,7 @@ CREATE TYPE node_position AS ENUM('neighboring', 'ally-position', 'any');
 
 
 CREATE TYPE node_state AS ENUM('active-self', 'active-ally', 'active-any', 'inactive', 'any');
+CREATE DOMAIN null_node_state AS node_state;
 
 
 CREATE TYPE node_type AS ENUM('hp', 'mp', 'strength', 'defense', 'magic', 'magic-defense', 'agility', 'luck', 'evasion', 'accuracy', 'skill', 'special', 'wht-magic', 'blk-magic', 'lv-1-lock', 'lv-2-lock', 'lv-3-lock', 'lv-4-lock', 'empty');
@@ -143,6 +144,7 @@ DROP TABLE IF EXISTS master_items;
 DROP TYPE IF EXISTS mix_category;
 DROP TYPE IF EXISTS key_item_category;
 DROP TYPE IF EXISTS node_type;
+DROP DOMAIN IF EXISTS null_node_state;
 DROP TYPE IF EXISTS node_state;
 DROP TYPE IF EXISTS node_position;
 DROP TYPE IF EXISTS sphere_effect;

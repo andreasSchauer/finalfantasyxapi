@@ -3,6 +3,7 @@ CREATE TYPE overdrive_mode_type AS ENUM ('formula', 'per-action');
 
 
 CREATE TYPE nullify_armored AS ENUM ('target', 'bearer');
+CREATE DOMAIN null_nullify_armored AS nullify_armored;
 
 
 CREATE TYPE modifier_category AS ENUM ('dynamic-value', 'factor', 'fixed-value', 'percentage');
@@ -149,5 +150,6 @@ DROP TABLE IF EXISTS stats;
 DROP TYPE IF EXISTS elemental_affinity;
 DROP TYPE IF EXISTS status_condition_category;
 DROP TYPE IF EXISTS modifier_category;
+DROP DOMAIN IF EXISTS null_nullify_armored;
 DROP TYPE IF EXISTS nullify_armored;
 DROP TYPE IF EXISTS overdrive_mode_type;

@@ -1,5 +1,6 @@
 -- +goose Up
 CREATE TYPE target_type AS ENUM ('self', 'single-ally', 'single-enemy', 'single-target', 'random-ally', 'random-enemy', 'all-allies', 'all-enemies', 'target-party', 'n-targets', 'everyone');
+CREATE DOMAIN null_target_type AS target_type;
 
 
 -- 1
@@ -48,4 +49,5 @@ DROP TABLE IF EXISTS overdrive_commands;
 DROP TABLE IF EXISTS submenus;
 DROP TABLE IF EXISTS aeon_commands;
 DROP TABLE IF EXISTS topmenus;
+DROP DOMAIN IF EXISTS null_target_type;
 DROP TYPE IF EXISTS target_type;

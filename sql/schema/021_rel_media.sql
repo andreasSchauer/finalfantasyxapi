@@ -1,7 +1,10 @@
 -- +goose Up
 CREATE TYPE bg_replacement_type AS ENUM ('until-trigger', 'until-zone-change');
+CREATE DOMAIN null_bg_replacement_type AS bg_replacement_type;
 CREATE TYPE composer AS ENUM ('nobuo uematsu', 'junya nakano', 'masashi hamauzu');
+CREATE DOMAIN null_composer AS composer;
 CREATE TYPE arranger AS ENUM ('nobuo uematsu', 'junya nakano', 'masashi hamauzu', 'shiro hamaguchi');
+CREATE DOMAIN null_arranger AS arranger;
 
 
 -- 1
@@ -70,6 +73,9 @@ DROP TABLE IF EXISTS j_songs_cues;
 DROP TABLE IF EXISTS cues;
 DROP TABLE IF EXISTS j_songs_background_music;
 DROP TABLE IF EXISTS background_music;
+DROP DOMAIN IF EXISTS null_arranger;
 DROP TYPE IF EXISTS arranger;
+DROP DOMAIN IF EXISTS null_composer;
 DROP TYPE IF EXISTS composer;
+DROP DOMAIN IF EXISTS null_bg_replacement_type;
 DROP TYPE IF EXISTS bg_replacement_type;

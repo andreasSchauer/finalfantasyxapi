@@ -1,5 +1,6 @@
 -- +goose Up
 CREATE TYPE music_use_case AS ENUM ('blitzball-game', 'blitzball-menu', 'boss-battle-default', 'chocobo', 'game-over', 'main-menu', 'random-encounter-default', 'victory');
+CREATE DOMAIN null_music_use_case AS music_use_case;
 
 
 -- 2
@@ -36,4 +37,5 @@ CREATE TABLE fmvs (
 -- +goose Down
 DROP TABLE IF EXISTS fmvs;
 DROP TABLE IF EXISTS songs;
+DROP DOMAIN IF EXISTS null_music_use_case;
 DROP TYPE IF EXISTS music_use_case;

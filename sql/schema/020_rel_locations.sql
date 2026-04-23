@@ -1,6 +1,7 @@
 -- +goose Up
 CREATE TYPE area_connection_type AS ENUM('both-directions', 'one-direction', 'warp');
 CREATE TYPE shop_type AS ENUM ('pre-airship', 'post-airship');
+CREATE DOMAIN null_shop_type AS shop_type;
 
 
 -- 4
@@ -97,5 +98,6 @@ DROP TABLE IF EXISTS j_treasure_equipment_abilities;
 DROP TABLE IF EXISTS treasure_equipment_pieces;
 DROP TABLE IF EXISTS j_area_connected_areas;
 DROP TABLE IF EXISTS area_connections;
+DROP DOMAIN IF EXISTS null_shop_type;
 DROP TYPE IF EXISTS shop_type;
 DROP TYPE IF EXISTS area_connection_type;

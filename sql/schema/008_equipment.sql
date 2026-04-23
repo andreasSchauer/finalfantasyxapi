@@ -15,6 +15,7 @@ CREATE TYPE aa_activation_condition AS ENUM ('always', 'active-party', 'hp-criti
 
 
 CREATE TYPE counter_type AS ENUM ('physical', 'magical');
+CREATE DOMAIN null_counter_type AS counter_type;
 
 
 CREATE TYPE equip_class AS ENUM ('standard', 'unique', 'celestial-weapon');
@@ -65,6 +66,7 @@ DROP TABLE IF EXISTS equipment_tables;
 DROP TABLE IF EXISTS auto_abilities;
 DROP TABLE IF EXISTS celestial_weapons;
 DROP TYPE IF EXISTS equip_class;
+DROP DOMAIN IF EXISTS null_counter_type;
 DROP TYPE IF EXISTS counter_type;
 DROP TYPE IF EXISTS aa_activation_condition;
 DROP TYPE IF EXISTS auto_ability_category;

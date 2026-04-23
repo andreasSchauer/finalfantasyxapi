@@ -3,10 +3,15 @@ CREATE TYPE blitzball_tournament_category AS ENUM ('league', 'tournament');
 CREATE TYPE blitzball_position_slot AS ENUM ('1st', '2nd', '3rd', 'top-scorer');
 CREATE TYPE quest_type AS ENUM ('sidequest', 'subquest');
 CREATE TYPE ma_creation_category AS ENUM ('area', 'species', 'original');
+CREATE DOMAIN null_ma_creation_category AS ma_creation_category;
 CREATE TYPE ma_creation_area AS ENUM ('besaid', 'kilika', 'mi''ihen-highroad', 'mushroom-rock-road', 'djose', 'thunder-plains', 'macalania', 'bikanel', 'calm-lands', 'cavern-of-the-stolen-fayth', 'mount-gagazet', 'sin', 'omega-ruins');
+CREATE DOMAIN null_ma_creation_area AS ma_creation_area;
 CREATE TYPE ma_creation_species AS ENUM ('bird', 'bomb', 'drake', 'elemental', 'evil-eye', 'flan', 'fungus', 'helm', 'imp', 'iron-giant', 'lupine', 'reptile', 'ruminant', 'wasp');
+CREATE DOMAIN null_ma_creation_species AS ma_creation_species;
 CREATE TYPE creations_unlocked_category AS ENUM ('area', 'species');
+CREATE DOMAIN null_creations_unlocked_category AS creations_unlocked_category;
 CREATE TYPE availability_type AS ENUM ('always', 'pre-story', 'post', 'post-story', 'post-game', 'story');
+CREATE DOMAIN null_availability_type AS availability_type;
 
 
 -- 1
@@ -75,10 +80,15 @@ DROP TABLE IF EXISTS subquests;
 DROP TABLE IF EXISTS sidequests;
 DROP TABLE IF EXISTS quests;
 DROP TABLE IF EXISTS blitzball_positions;
+DROP DOMAIN IF EXISTS null_availability_type;
 DROP TYPE IF EXISTS availability_type;
-DROP TYPE IF EXISTS ma_creation_area;
+DROP DOMAIN IF EXISTS null_ma_creation_species;
 DROP TYPE IF EXISTS ma_creation_species;
+DROP DOMAIN IF EXISTS null_ma_creation_area;
+DROP TYPE IF EXISTS ma_creation_area;
+DROP DOMAIN IF EXISTS null_ma_creation_category;
 DROP TYPE IF EXISTS ma_creation_category;
+DROP DOMAIN IF EXISTS null_creations_unlocked_category;
 DROP TYPE IF EXISTS creations_unlocked_category;
 DROP TYPE IF EXISTS quest_type;
 DROP TYPE IF EXISTS blitzball_tournament_category;

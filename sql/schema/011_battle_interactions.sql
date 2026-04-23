@@ -1,11 +1,14 @@
 -- +goose Up
 CREATE TYPE special_action_type AS ENUM ('bribe', 'steal-gil', 'steal-item', 'transfer-overdrive');
+CREATE DOMAIN null_special_action_type AS special_action_type;
 
 
 CREATE TYPE critical_type AS ENUM ('crit', 'crit+ability%', 'crit+weapon%');
+CREATE DOMAIN null_critical_type AS critical_type;
 
 
 CREATE TYPE break_dmg_lmt_type AS ENUM ('always', 'auto-ability');
+CREATE DOMAIN null_break_dmg_lmt_type AS break_dmg_lmt_type;
 
 
 CREATE TYPE acc_source_type AS ENUM ('accuracy', 'rate');
@@ -142,6 +145,9 @@ DROP TYPE IF EXISTS damage_formula;
 DROP TYPE IF EXISTS damage_type;
 DROP TYPE IF EXISTS attack_type;
 DROP TYPE IF EXISTS acc_source_type;
+DROP DOMAIN IF EXISTS null_break_dmg_lmt_type;
 DROP TYPE IF EXISTS break_dmg_lmt_type;
+DROP DOMAIN IF EXISTS null_critical_type;
 DROP TYPE IF EXISTS critical_type;
+DROP DOMAIN IF EXISTS null_special_action_type;
 DROP TYPE IF EXISTS special_action_type;
