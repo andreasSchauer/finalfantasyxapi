@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -24,7 +25,434 @@ func (l *Lookup) seedLoop1(qtx *database.Queries, ctx context.Context) error {
 		l.loop1SeedMasterItems,
 		l.loop1SeedCreatedNodes,
 		l.loop1SeedLocations,
+		l.loop1SeedBackgroundMusic,
+		l.loop1SeedSongCredits,
+		l.loop1SeedAbilityAccuracies,
+		l.loop1SeedInflictedDelays,
+		l.loop1SeedMonsters,
+		l.loop1SeedMonsterSelections,
+		l.loop1SeedEquipmentSlotsChances,
 	})
+}
+
+func (l *Lookup) seedLoop2(qtx *database.Queries, ctx context.Context) error {
+	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+		
+	})
+}
+
+func (l *Lookup) loop1SeedEquipmentSlotsChances(qtx *database.Queries, ctx context.Context) error {
+	chancesJson := l.getEquipmentSlotsChances()
+	chances := dedupeRows(chancesJson, l.Hashes)
+
+	params := database.CreateEquipmentSlotsChanceBulkParams{
+		DataHash: 	make([]string, len(chances)),
+		Amount: 	make([]int32, len(chances)),
+		Chance: 	make([]int32, len(chances)),
+	}
+
+	for i, c := range chances {
+		params.DataHash[i] = generateDataHash(c)
+		params.Amount[i] = c.Amount
+		params.Chance[i] = c.Chance
+	}
+
+	dbRows, err := qtx.CreateEquipmentSlotsChanceBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create equipment slot chances: %v", err)
+	}
+
+	for i, row := range dbRows {
+		chances[i].ID = row.ID
+		l.Hashes[row.DataHash] = row.ID
+	}
+	
+	return nil
+}
+
+func (l *Lookup) getEquipmentSlotsChances() []EquipmentSlotsChance {
+	chances := []EquipmentSlotsChance{}
+
+	for _, m := range l.json.monsters {
+		if m.Equipment != nil {
+			chances = slices.Concat(chances, m.Equipment.AbilitySlots.Chances)
+			chances = slices.Concat(chances, m.Equipment.AttachedAbilities.Chances)
+		}
+	}
+
+	return chances
+}
+
+func (l *Lookup) loop1SeedMonsterSelections(qtx *database.Queries, ctx context.Context) error {
+	selectionsJson := l.getMonsterSelections()
+	selections := dedupeRows(selectionsJson, l.Hashes)
+
+	dataHashes := make([]string, len(selections))
+
+	for i, s := range selections {
+		dataHashes[i] = generateDataHash(s)
+	}
+
+	dbRows, err := qtx.CreateMonsterSelectionBulk(ctx, dataHashes)
+	if err != nil {
+		return fmt.Errorf("couldn't create monster selections: %v", err)
+	}
+
+	for i, row := range dbRows {
+		selections[i].ID = row.ID
+		l.Hashes[row.DataHash] = row.ID
+	}
+	
+	return nil
+}
+
+func (l *Lookup) getMonsterSelections() []MonsterSelection {
+	selections := []MonsterSelection{}
+
+	for _, mf := range l.json.monsterFormations {
+		selections = append(selections, mf.MonsterSelection)
+	}
+
+	return selections
+}
+
+func (l *Lookup) loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
+	monstersJson := l.json.monsters
+	monsters := dedupeRows(monstersJson, l.Hashes)
+
+	params := database.CreateMonsterBulkParams{
+		DataHash: 				make([]string, len(monsters)),
+		Name: 					make([]string, len(monsters)),
+		Version: 				make([]sql.NullInt32, len(monsters)),
+		Specification: 			make([]sql.NullString, len(monsters)),
+		Notes: 					make([]sql.NullString, len(monsters)),
+		Species: 				make([]database.MonsterSpecies, len(monsters)),
+		Availability: 			make([]database.AvailabilityType, len(monsters)),
+		IsRepeatable: 			make([]bool, len(monsters)),
+		CanBeCaptured: 			make([]bool, len(monsters)),
+		AreaConquestLocation: 	make([]database.NullMaCreationArea, len(monsters)),
+		Category: 				make([]database.MonsterCategory, len(monsters)),
+		CtbIconType: 			make([]database.CtbIconType, len(monsters)),
+		HasOverdrive: 			make([]bool, len(monsters)),
+		IsUnderwater: 			make([]bool, len(monsters)),
+		IsZombie: 				make([]bool, len(monsters)),
+		Distance: 				make([]int32, len(monsters)),
+		Ap: 					make([]int32, len(monsters)),
+		ApOverkill: 			make([]int32, len(monsters)),
+		OverkillDamage: 		make([]int32, len(monsters)),
+		Gil: 					make([]int32, len(monsters)),
+		StealGil: 				make([]sql.NullInt32, len(monsters)),
+		DoomCountdown: 			make([]sql.NullInt32, len(monsters)),
+		PoisonRate: 			make([]sql.NullFloat64, len(monsters)),
+		ThreatenChance: 		make([]sql.NullInt32, len(monsters)),
+		ZanmatoLevel: 			make([]int32, len(monsters)),
+		MonsterArenaPrice: 		make([]sql.NullInt32, len(monsters)),
+		SensorText:				make([]sql.NullString, len(monsters)),
+		ScanText: 				make([]sql.NullString, len(monsters)),
+	}
+
+	for i, m := range monsters {
+		params.DataHash[i] = generateDataHash(m)
+		params.Name[i] = m.Name
+		params.Version[i] = h.GetNullInt32(m.Version)
+		params.Specification[i] = h.GetNullString(m.Specification)
+		params.Notes[i] = h.GetNullString(m.Notes)
+		params.Species[i] = database.MonsterSpecies(m.Species)
+		params.Availability[i] = database.AvailabilityType(m.Availability)
+		params.IsRepeatable[i] = m.IsRepeatable
+		params.CanBeCaptured[i] = m.CanBeCaptured
+		params.AreaConquestLocation[i] = database.ToNullMaCreationArea(m.AreaConquestLocation)
+		params.Category[i] = database.MonsterCategory(m.Category)
+		params.CtbIconType[i] = database.CtbIconType(m.CTBIconType)
+		params.HasOverdrive[i] = m.HasOverdrive
+		params.IsUnderwater[i] = m.IsUnderwater
+		params.IsZombie[i] = m.IsZombie
+		params.Distance[i] = m.Distance
+		params.Ap[i] = m.AP
+		params.ApOverkill[i] = m.APOverkill
+		params.OverkillDamage[i] = m.OverkillDamage
+		params.Gil[i] = m.Gil
+		params.StealGil[i] = h.GetNullInt32(m.StealGil)
+		params.DoomCountdown[i] = h.GetNullInt32(m.DoomCountdown)
+		params.PoisonRate[i] = h.GetNullFloat64(m.PoisonRate)
+		params.ThreatenChance[i] = h.GetNullInt32(m.ThreatenChance)
+		params.ZanmatoLevel[i] = m.ZanmatoLevel
+		params.MonsterArenaPrice[i] = h.GetNullInt32(m.MonsterArenaPrice)
+		params.SensorText[i] = h.GetNullString(m.SensorText)
+		params.ScanText[i] = h.GetNullString(m.ScanText)
+	}
+
+	dbRows, err := qtx.CreateMonsterBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create monsters: %v", err)
+	}
+
+	for i, row := range dbRows {
+		monsters[i].ID = row.ID
+		key := CreateLookupKey(monsters[i])
+		l.Monsters[key] = monsters[i]
+		l.MonstersID[row.ID] = monsters[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) loop1SeedInflictedDelays(qtx *database.Queries, ctx context.Context) error {
+	delaysJson := l.getInflictedDelays()
+	delays := dedupeRows(delaysJson, l.Hashes)
+
+	params := database.CreateInflictedDelayBulkParams{
+		DataHash: 		make([]string, len(delays)),
+		Condition: 		make([]sql.NullString, len(delays)),
+		CtbAttackType: 	make([]database.CtbAttackType, len(delays)),
+		DelayType: 		make([]database.DelayType, len(delays)),
+		DamageConstant: make([]int32, len(delays)),
+	}
+
+	for i, d := range delays {
+		params.DataHash[i] = generateDataHash(d)
+		params.Condition[i] = h.GetNullString(d.Condition)
+		params.CtbAttackType[i] = database.CtbAttackType(d.CTBAttackType)
+		params.DelayType[i] = database.DelayType(d.DelayType)
+		params.DamageConstant[i] = d.DamageConstant
+	}
+
+	dbRows, err := qtx.CreateInflictedDelayBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create inflicted delays: %v", err)
+	}
+
+	for i, row := range dbRows {
+		delays[i].ID = row.ID
+		l.Hashes[row.DataHash] = row.ID
+	}
+	
+	return nil
+}
+
+func (l *Lookup) getInflictedDelays() []InflictedDelay {
+	delays := []InflictedDelay{}
+
+	for _, ability := range l.json.enemyAbilities {
+		for _, bi := range ability.BattleInteractions {
+			if bi.InflictedDelay != nil {
+				delays = append(delays, *bi.InflictedDelay)
+			}
+		}
+	}
+	
+	for _, ability := range l.json.items {
+		for _, bi := range ability.BattleInteractions {
+			if bi.InflictedDelay != nil {
+				delays = append(delays, *bi.InflictedDelay)
+			}
+		}
+	}
+
+	for _, ability := range l.json.overdriveAbilities {
+		for _, bi := range ability.BattleInteractions {
+			if bi.InflictedDelay != nil {
+				delays = append(delays, *bi.InflictedDelay)
+			}
+		}
+	}
+	
+	for _, ability := range l.json.playerAbilities {
+		for _, bi := range ability.BattleInteractions {
+			if bi.InflictedDelay != nil {
+				delays = append(delays, *bi.InflictedDelay)
+			}
+		}
+	}
+
+	for _, ability := range l.json.triggerCommands {
+		for _, bi := range ability.BattleInteractions {
+			if bi.InflictedDelay != nil {
+				delays = append(delays, *bi.InflictedDelay)
+			}
+		}
+	}
+	
+	for _, ability := range l.json.unspecifiedAbilities {
+		for _, bi := range ability.BattleInteractions {
+			if bi.InflictedDelay != nil {
+				delays = append(delays, *bi.InflictedDelay)
+			}
+		}
+	}
+
+	for _, status := range l.json.statusConditions {
+		if status.CtbOnInfliction != nil {
+			delays = append(delays, *status.CtbOnInfliction)
+		}
+	}
+
+	return delays
+}
+
+func (l *Lookup) loop1SeedAbilityAccuracies(qtx *database.Queries, ctx context.Context) error {
+	accuraciesJson := l.getAbilityAccuracies()
+	accuracies := dedupeRows(accuraciesJson, l.Hashes)
+
+	params := database.CreateAbilityAccuracyBulkParams{
+		DataHash: 		make([]string, len(accuracies)),
+		AccSource: 		make([]database.AccSourceType, len(accuracies)),
+		HitChance: 		make([]sql.NullInt32, len(accuracies)),
+		AccModifier: 	make([]sql.NullFloat64, len(accuracies)),
+	}
+
+	for i, a := range accuracies {
+		params.DataHash[i] = generateDataHash(a)
+		params.AccSource[i] = database.AccSourceType(a.AccSource)
+		params.HitChance[i] = h.GetNullInt32(a.HitChance)
+		params.AccModifier[i] = h.GetNullFloat64(a.AccModifier)
+	}
+
+	dbRows, err := qtx.CreateAbilityAccuracyBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create ability accuracies: %v", err)
+	}
+
+	for i, row := range dbRows {
+		accuracies[i].ID = row.ID
+		l.Hashes[row.DataHash] = row.ID
+	}
+	
+	return nil
+}
+
+
+func (l *Lookup) getAbilityAccuracies() []Accuracy {
+	accuracies := []Accuracy{}
+
+	for _, ability := range l.json.enemyAbilities {
+		for _, bi := range ability.BattleInteractions {
+			accuracies = append(accuracies, bi.Accuracy)
+		}
+	}
+	
+	for _, ability := range l.json.items {
+		for _, bi := range ability.BattleInteractions {
+			accuracies = append(accuracies, bi.Accuracy)
+		}
+	}
+
+	for _, ability := range l.json.overdriveAbilities {
+		for _, bi := range ability.BattleInteractions {
+			accuracies = append(accuracies, bi.Accuracy)
+		}
+	}
+	
+	for _, ability := range l.json.playerAbilities {
+		for _, bi := range ability.BattleInteractions {
+			accuracies = append(accuracies, bi.Accuracy)
+		}
+	}
+
+	for _, ability := range l.json.triggerCommands {
+		for _, bi := range ability.BattleInteractions {
+			accuracies = append(accuracies, bi.Accuracy)
+		}
+	}
+	
+	for _, ability := range l.json.unspecifiedAbilities {
+		for _, bi := range ability.BattleInteractions {
+			accuracies = append(accuracies, bi.Accuracy)
+		}
+	}
+
+	for _, aeon := range l.json.aeons {
+		if aeon.PhysAtkAccuracy != nil {
+			accuracies = append(accuracies, *aeon.PhysAtkAccuracy)
+		}
+	}
+
+	return accuracies
+}
+
+func (l *Lookup) loop1SeedSongCredits(qtx *database.Queries, ctx context.Context) error {
+	creditsJson := l.getSongCredits()
+	credits := dedupeRows(creditsJson, l.Hashes)
+
+	params := database.CreateSongCreditBulkParams{
+		DataHash: 	make([]string, len(credits)),
+		Composer: 	make([]database.NullComposer, len(credits)),
+		Arranger: 	make([]database.NullArranger, len(credits)),
+		Performer: 	make([]sql.NullString, len(credits)),
+		Lyricist: 	make([]sql.NullString, len(credits)),
+	}
+
+	for i, c := range credits {
+		params.DataHash[i] = generateDataHash(c)
+		params.Composer[i] = database.ToNullComposer(c.Composer)
+		params.Arranger[i] = database.ToNullArranger(c.Arranger)
+		params.Performer[i] = h.GetNullString(c.Performer)
+		params.Lyricist[i] = h.GetNullString(c.Lyricist)
+	}
+
+	dbRows, err := qtx.CreateSongCreditBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create song credits: %v", err)
+	}
+
+	for i, row := range dbRows {
+		credits[i].ID = row.ID
+		l.Hashes[row.DataHash] = row.ID
+	}
+	
+	return nil
+}
+
+func (l *Lookup) getSongCredits() []SongCredits {
+	credits := []SongCredits{}
+	
+	for _, song := range l.json.songs {
+		if song.Credits != nil {
+			credits = append(credits, *song.Credits)
+		}
+	}
+
+	return credits
+}
+
+func (l *Lookup) loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
+	bmJson := l.getBackgroundMusic()
+	bm := dedupeRows(bmJson, l.Hashes)
+
+	params := database.CreateBackgroundMusicBulkParams{
+		DataHash: 				make([]string, len(bm)),
+		Condition: 				make([]sql.NullString, len(bm)),
+		ReplacesEncounterMusic: make([]bool, len(bm)),
+	}
+
+	for i, music := range bm {
+		params.DataHash[i] = generateDataHash(music)
+		params.Condition[i] = h.GetNullString(music.Condition)
+		params.ReplacesEncounterMusic[i] = music.ReplacesEncounterMusic
+	}
+
+	dbRows, err := qtx.CreateBackgroundMusicBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create background music: %v", err)
+	}
+
+	for i, row := range dbRows {
+		bm[i].ID = row.ID
+		l.Hashes[row.DataHash] = row.ID
+	}
+	
+	return nil
+}
+
+func (l *Lookup) getBackgroundMusic() []BackgroundMusic {
+	bgMusic := []BackgroundMusic{}
+	
+	for _, song := range l.json.songs {
+		bgMusic = slices.Concat(bgMusic, song.BackgroundMusic)
+	}
+
+	return bgMusic
 }
 
 func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
