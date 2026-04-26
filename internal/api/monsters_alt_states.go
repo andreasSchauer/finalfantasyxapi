@@ -75,37 +75,12 @@ func getAltStateChanges(cfg *Config, as seeding.AlteredState) []AltStateChange {
 }
 
 func convertAltStateChange(cfg *Config, asc seeding.AltStateChange) AltStateChange {
-	var change AltStateChange
-
-	if asc.Properties != nil {
-		properties := namesToNamedAPIResources(cfg, cfg.e.properties, *asc.Properties)
-		change.Properties = h.SliceOrNil(properties)
+	return AltStateChange{
+		Properties:			h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.e.properties, asc.Properties)),
+		AutoAbilities: 		h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.e.autoAbilities, asc.AutoAbilities)),
+		BaseStats: 			h.SliceOrNil(toResAmtType(cfg, cfg.e.stats, asc.BaseStats, newBaseStat)),
+		ElemResists: 		h.SliceOrNil(namesToElemResists(cfg, asc.ElemResists)),
+		StatusImmunities: 	h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.e.statusConditions, asc.StatusImmunities)),
+		AddedStatus: 		convertObjPtr(cfg, asc.AddedStatus, convertInflictedStatus),
 	}
-
-	if asc.AutoAbilities != nil {
-		autoAbilities := namesToNamedAPIResources(cfg, cfg.e.autoAbilities, *asc.AutoAbilities)
-		change.AutoAbilities = h.SliceOrNil(autoAbilities)
-	}
-
-	if asc.BaseStats != nil {
-		baseStats := toResAmtType(cfg, cfg.e.stats, *asc.BaseStats, newBaseStat)
-		change.BaseStats = h.SliceOrNil(baseStats)
-	}
-
-	if asc.ElemResists != nil {
-		elemResists := namesToElemResists(cfg, *asc.ElemResists)
-		change.ElemResists = h.SliceOrNil(elemResists)
-	}
-
-	if asc.StatusImmunities != nil {
-		immunities := namesToNamedAPIResources(cfg, cfg.e.statusConditions, *asc.StatusImmunities)
-		change.StatusImmunities = h.SliceOrNil(immunities)
-	}
-
-	if asc.AddedStatus != nil {
-		addedStatus := convertInflictedStatus(cfg, *asc.AddedStatus)
-		change.AddedStatus = &addedStatus
-	}
-
-	return change
 }

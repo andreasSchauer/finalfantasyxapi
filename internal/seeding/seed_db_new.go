@@ -31,7 +31,10 @@ func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	}
 
 	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		err = l.seedLoop1(qtx, context.Background())
+		err = l.seedLoop(qtx, context.Background(), []func(*database.Queries, context.Context) error{
+			l.seedLoop1,
+			l.seedLoop2,
+		})
 		if err != nil {
 			return err
 		}

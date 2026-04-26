@@ -38,11 +38,11 @@ type AltStateChange struct {
 	AlteredStateID   int32
 	AlterationType   string             `json:"alteration_type"`
 	Distance         *int32             `json:"distance"`
-	Properties       *[]string          `json:"properties"`
-	AutoAbilities    *[]string          `json:"auto_abilities"`
-	BaseStats        *[]BaseStat        `json:"base_stats"`
-	ElemResists      *[]ElementalResist `json:"elem_resists"`
-	StatusImmunities *[]string          `json:"status_immunities"`
+	Properties       []string          `json:"properties"`
+	AutoAbilities    []string          `json:"auto_abilities"`
+	BaseStats        []BaseStat        `json:"base_stats"`
+	ElemResists      []ElementalResist `json:"elem_resists"`
+	StatusImmunities []string          `json:"status_immunities"`
 	AddedStatus      *InflictedStatus   `json:"added_status"`
 }
 
@@ -165,7 +165,7 @@ func (l *Lookup) seedAltStateChangeProperties(qtx *database.Queries, change AltS
 		return nil
 	}
 
-	for _, propertyStr := range *change.Properties {
+	for _, propertyStr := range change.Properties {
 		junction, err := createJunction(change, propertyStr, l.Properties)
 		if err != nil {
 			return err
@@ -189,7 +189,7 @@ func (l *Lookup) seedAltStateChangeAutoAbilities(qtx *database.Queries, change A
 		return nil
 	}
 
-	for _, autoAbilityStr := range *change.AutoAbilities {
+	for _, autoAbilityStr := range change.AutoAbilities {
 		junction, err := createJunction(change, autoAbilityStr, l.AutoAbilities)
 		if err != nil {
 			return err
@@ -213,7 +213,7 @@ func (l *Lookup) seedAltStateBaseStats(qtx *database.Queries, change AltStateCha
 		return nil
 	}
 
-	for _, baseStat := range *change.BaseStats {
+	for _, baseStat := range change.BaseStats {
 		junction, err := createJunctionSeed(qtx, change, baseStat, l.seedBaseStat)
 		if err != nil {
 			return err
@@ -237,7 +237,7 @@ func (l *Lookup) seedAltStateElemResists(qtx *database.Queries, change AltStateC
 		return nil
 	}
 
-	for _, elemResist := range *change.ElemResists {
+	for _, elemResist := range change.ElemResists {
 		junction, err := createJunctionSeed(qtx, change, elemResist, l.seedElementalResist)
 		if err != nil {
 			return err
@@ -261,7 +261,7 @@ func (l *Lookup) seedAltStateChangeStatusImmunities(qtx *database.Queries, chang
 		return nil
 	}
 
-	for _, conditionStr := range *change.StatusImmunities {
+	for _, conditionStr := range change.StatusImmunities {
 		junction, err := createJunction(change, conditionStr, l.StatusConditions)
 		if err != nil {
 			return err

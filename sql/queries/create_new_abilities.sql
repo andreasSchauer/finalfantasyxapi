@@ -2,10 +2,10 @@
 INSERT INTO abilities (data_hash, name, version, specification, attributes_id, type)
 SELECT 
     unnest(sqlc.arg('data_hash')::text[]), 
-    unnest(sqlc.arg('names')::text[]), 
+    unnest(sqlc.arg('name')::text[]), 
     unnest(sqlc.arg('version')::null_int[]), 
     unnest(sqlc.arg('specification')::null_string[]),
-    unnest(sqlc.arg('attributes_id')::null_int[]),
+    unnest(sqlc.arg('attributes_id')::int[]),
     unnest(sqlc.arg('type')::ability_type[])
 ON CONFLICT (data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;

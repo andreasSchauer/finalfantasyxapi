@@ -47,7 +47,7 @@ func (a AgilityTier) GetResParamsUnnamed() h.ResParamsUnnamed {
 }
 
 type AgilitySubtier struct {
-	//id 			int32
+	ID				int32
 	//dataHash		string
 	AgilityTierID   int32
 	MinAgility      int32  `json:"subtier_min_agility"`
@@ -63,6 +63,10 @@ func (a AgilitySubtier) ToHashFields() []any {
 		a.MaxAgility,
 		h.DerefOrNil(a.CharacterMinICV),
 	}
+}
+
+func (a AgilitySubtier) GetID() int32 {
+	return a.ID
 }
 
 func (a AgilitySubtier) Error() string {

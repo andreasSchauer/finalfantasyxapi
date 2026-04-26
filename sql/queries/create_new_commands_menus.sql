@@ -22,10 +22,11 @@ RETURNING id, data_hash;
 
 
 -- name: CreateSubmenuBulk :many
-INSERT INTO submenus (data_hash, name, description, effect)
+INSERT INTO submenus (data_hash, name, topmenu_id, description, effect)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('topmenu_id')::null_int[]),
     unnest(sqlc.arg('description')::null_string[]),
     unnest(sqlc.arg('effect')::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash

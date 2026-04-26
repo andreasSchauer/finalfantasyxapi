@@ -32,15 +32,18 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 
 
--- name: UpdateElementBulk :exec
+-- name: UpdateElementBulk :many
 UPDATE elements AS e
-SET opposite_element_id = u.opposite_id
+SET opposite_element_id = u.opp_id,
+    data_hash = u.d_hash
 FROM (
     SELECT 
         unnest(sqlc.arg('id')::int[]) AS id,
-        unnest(sqlc.arg('opposite_id')::null_int[])
+        unnest(sqlc.arg('data_hash')::text[]) AS d_hash,
+        unnest(sqlc.arg('opposite_element_id')::null_int[]) AS opp_id
 ) AS u
-WHERE e.id = u.id;
+WHERE e.id = u.id
+RETURNING e.id, e.data_hash;
 
 
 -- name: CreateElementalResistBulk :many

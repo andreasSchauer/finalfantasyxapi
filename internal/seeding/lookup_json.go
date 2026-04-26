@@ -9,57 +9,55 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type jsonLookup struct {
-	aeonCommands			[]AeonCommand
-	aeonStats				[]AeonStat
-	aeons					[]Aeon
-	agilityTiers 			[]AgilityTier
-	autoAbilities			[]AutoAbility
-	blitzballPositions		[]BlitzballPosition
-	celestialWeapons		[]CelestialWeapon
-	characterClasses		[]CharacterClass
-	characters				[]Character
-	defaultAbilities		[]DefaultAbilitiesEntry
-	elements	 			[]Element
-	enemyAbilities			[]EnemyAbility
-	equipment				[]EquipmentTable
-	fmvs					[]FMV
-	items					[]Item
-	keyItems				[]KeyItem
-	locations				[]Location
-	mixes					[]Mix
-	modifiers				[]Modifier
-	monsterArenaCreations	[]ArenaCreation
-	monsterFormations		[]MonsterFormation
-	monsters				[]Monster
-	overdriveAbilities		[]OverdriveAbility
-	overdriveCommands		[]OverdriveCommand
-	overdriveModes			[]OverdriveMode
-	overdrives				[]Overdrive
-	playerAbilities			[]PlayerAbility
-	primers					[]Primer
-	properties				[]Property
-	shops					[]Shop
-	sidequests				[]Sidequest
-	songs					[]Song
-	spheres					[]Sphere
-	stats					[]Stat
-	statusConditions		[]StatusCondition
-	submenus				[]Submenu
-	topmenus				[]Topmenu
-	treasures				[]Treasure
-	triggerCommands			[]TriggerCommand
-	unspecifiedAbilities	[]UnspecifiedAbility
+	aeonCommands          []AeonCommand
+	aeonStats             []AeonStat
+	aeons                 []Aeon
+	agilityTiers          []AgilityTier
+	autoAbilities         []AutoAbility
+	blitzballPositions    []BlitzballPosition
+	celestialWeapons      []CelestialWeapon
+	characterClasses      []CharacterClass
+	characters            []Character
+	defaultAbilities      []DefaultAbilitiesEntry
+	elements              []Element
+	enemyAbilities        []EnemyAbility
+	equipment             []EquipmentTable
+	fmvs                  []FMV
+	items                 []Item
+	keyItems              []KeyItem
+	locations             []Location
+	mixes                 []Mix
+	modifiers             []Modifier
+	monsterArenaCreations []ArenaCreation
+	monsterFormations     []MonsterFormation
+	monsters              []Monster
+	overdriveAbilities    []OverdriveAbility
+	overdriveCommands     []OverdriveCommand
+	overdriveModes        []OverdriveMode
+	overdrives            []Overdrive
+	playerAbilities       []PlayerAbility
+	primers               []Primer
+	properties            []Property
+	shops                 []Shop
+	sidequests            []Sidequest
+	songs                 []Song
+	spheres               []Sphere
+	stats                 []Stat
+	statusConditions      []StatusCondition
+	submenus              []Submenu
+	topmenus              []Topmenu
+	treasureLists         []TreasureList
+	triggerCommands       []TriggerCommand
+	unspecifiedAbilities  []UnspecifiedAbility
 }
-
 
 func loadJSONFile[T any](path string, target *T) error {
 	fullPath, err := h.GetAbsoluteFilepath(path)
 	if err != nil {
 		return err
 	}
-	
+
 	file, err := os.Open(fullPath)
 	if err != nil {
 		return fmt.Errorf("couldn't open file: %v", err)
@@ -78,7 +76,6 @@ func loadJSONFile[T any](path string, target *T) error {
 
 	return nil
 }
-
 
 func (l *Lookup) loadJSONFiles() error {
 	l.json = jsonLookup{}
@@ -129,7 +126,7 @@ func (l *Lookup) loadJSONFiles() error {
 	checkErr(loadJSONFile("data/status_conditions.json", &l.json.statusConditions))
 	checkErr(loadJSONFile("data/submenus.json", &l.json.submenus))
 	checkErr(loadJSONFile("data/topmenus.json", &l.json.topmenus))
-	checkErr(loadJSONFile("data/treasures.json", &l.json.treasures))
+	checkErr(loadJSONFile("data/treasures.json", &l.json.treasureLists))
 	checkErr(loadJSONFile("data/trigger_commands.json", &l.json.triggerCommands))
 	checkErr(loadJSONFile("data/unspecified_abilities.json", &l.json.unspecifiedAbilities))
 

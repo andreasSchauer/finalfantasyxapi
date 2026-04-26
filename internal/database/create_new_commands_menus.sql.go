@@ -160,12 +160,13 @@ func (q *Queries) CreateOverdriveCommandBulk(ctx context.Context, arg CreateOver
 }
 
 const createSubmenuBulk = `-- name: CreateSubmenuBulk :many
-INSERT INTO submenus (data_hash, name, description, effect)
+INSERT INTO submenus (data_hash, name, topmenu_id, description, effect)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),
-    unnest($3::null_string[]),
-    unnest($4::text[])
+    unnest($3::null_int[]),
+    unnest($4::null_string[]),
+    unnest($5::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
@@ -173,6 +174,7 @@ RETURNING id, data_hash
 type CreateSubmenuBulkParams struct {
 	DataHash    []string
 	Name        []string
+	TopmenuID   []sql.NullInt32
 	Description []sql.NullString
 	Effect      []string
 }
@@ -186,6 +188,7 @@ func (q *Queries) CreateSubmenuBulk(ctx context.Context, arg CreateSubmenuBulkPa
 	rows, err := q.db.QueryContext(ctx, createSubmenuBulk,
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Name),
+		pq.Array(arg.TopmenuID),
 		pq.Array(arg.Description),
 		pq.Array(arg.Effect),
 	)

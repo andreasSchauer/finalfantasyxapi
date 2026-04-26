@@ -792,23 +792,50 @@ func (q *Queries) CreateStatusResistBulk(ctx context.Context, arg CreateStatusRe
 	return items, nil
 }
 
-const updateElementBulk = `-- name: UpdateElementBulk :exec
+const updateElementBulk = `-- name: UpdateElementBulk :many
 UPDATE elements AS e
-SET opposite_element_id = u.opposite_id
+SET opposite_element_id = u.opp_id,
+    data_hash = u.d_hash
 FROM (
     SELECT 
         unnest($1::int[]) AS id,
-        unnest($2::null_int[])
+        unnest($2::text[]) AS d_hash,
+        unnest($3::null_int[]) AS opp_id
 ) AS u
 WHERE e.id = u.id
+RETURNING e.id, e.data_hash
 `
 
 type UpdateElementBulkParams struct {
-	ID         []int32
-	OppositeID []sql.NullInt32
+	ID                []int32
+	DataHash          []string
+	OppositeElementID []sql.NullInt32
 }
 
-func (q *Queries) UpdateElementBulk(ctx context.Context, arg UpdateElementBulkParams) error {
-	_, err := q.db.ExecContext(ctx, updateElementBulk, pq.Array(arg.ID), pq.Array(arg.OppositeID))
-	return err
+type UpdateElementBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) UpdateElementBulk(ctx context.Context, arg UpdateElementBulkParams) ([]UpdateElementBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, updateElementBulk, pq.Array(arg.ID), pq.Array(arg.DataHash), pq.Array(arg.OppositeElementID))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []UpdateElementBulkRow
+	for rows.Next() {
+		var i UpdateElementBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

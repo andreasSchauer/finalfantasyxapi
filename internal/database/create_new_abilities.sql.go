@@ -90,7 +90,7 @@ SELECT
     unnest($2::text[]), 
     unnest($3::null_int[]), 
     unnest($4::null_string[]),
-    unnest($5::null_int[]),
+    unnest($5::int[]),
     unnest($6::ability_type[])
 ON CONFLICT (data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
@@ -98,10 +98,10 @@ RETURNING id, data_hash
 
 type CreateAbilityBulkParams struct {
 	DataHash      []string
-	Names         []string
+	Name          []string
 	Version       []sql.NullInt32
 	Specification []sql.NullString
-	AttributesID  []sql.NullInt32
+	AttributesID  []int32
 	Type          []AbilityType
 }
 
@@ -113,7 +113,7 @@ type CreateAbilityBulkRow struct {
 func (q *Queries) CreateAbilityBulk(ctx context.Context, arg CreateAbilityBulkParams) ([]CreateAbilityBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createAbilityBulk,
 		pq.Array(arg.DataHash),
-		pq.Array(arg.Names),
+		pq.Array(arg.Name),
 		pq.Array(arg.Version),
 		pq.Array(arg.Specification),
 		pq.Array(arg.AttributesID),
