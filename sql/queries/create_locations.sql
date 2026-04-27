@@ -6,8 +6,8 @@ RETURNING *;
 
 
 -- name: CreateSublocation :one
-INSERT INTO sublocations (data_hash, location_id, name, specification)
-VALUES ($1, $2, $3, $4)
+INSERT INTO sublocations (data_hash, location_id, name)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = sublocations.data_hash
 RETURNING *;
 

@@ -40,7 +40,7 @@ func (l Location) GetResParamsNamed() h.ResParamsNamed {
 type Sublocation struct {
 	ID            int32
 	Name          string  `json:"sublocation"`
-	Specification *string `json:"specification"`
+
 	Areas         []Area  `json:"areas"`
 	Location      Location
 }
@@ -50,7 +50,6 @@ func (s Sublocation) ToHashFields() []any {
 		fmt.Sprintf("%T", s),
 		s.Location.ID,
 		s.Name,
-		h.DerefOrNil(s.Specification),
 	}
 }
 
@@ -222,7 +221,6 @@ func (l *Lookup) seedSublocations(qtx *database.Queries, location Location) erro
 			DataHash:      generateDataHash(sublocation),
 			LocationID:    sublocation.Location.ID,
 			Name:          sublocation.Name,
-			Specification: h.GetNullString(sublocation.Specification),
 		})
 		if err != nil {
 			return h.NewErr(sublocation.Error(), err, "couldn't create sublocation")

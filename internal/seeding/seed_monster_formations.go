@@ -12,12 +12,12 @@ import (
 )
 
 type MonsterFormation struct {
-	ID      int32  `json:"-"`
-	Version *int32 `json:"version"`
+	ID      			int32  						`json:"-"`
+	Version 			*int32 						`json:"version"`
 	MonsterSelection
-	FormationData   FormationData             `json:"formation_data"`
-	TriggerCommands []FormationTriggerCommand `json:"trigger_commands"`
-	EncounterAreas  []EncounterArea           `json:"encounter_areas"`
+	FormationData   	FormationData             	`json:"formation_data"`
+	TriggerCommands 	[]FormationTriggerCommand 	`json:"trigger_commands"`
+	EncounterAreas  	[]EncounterArea           	`json:"encounter_areas"`
 }
 
 func (mf MonsterFormation) ToHashFields() []any {

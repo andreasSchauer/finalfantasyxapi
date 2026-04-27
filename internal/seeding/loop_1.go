@@ -45,7 +45,591 @@ func (l *Lookup) seedLoop2(qtx *database.Queries, ctx context.Context) error {
 		l.loop2SeedItems,
 		l.loop2SeedKeyItems,
 		l.loop2SeedItemAmounts,
+		l.loop2SeedSublocations,
+		l.loop2SeedSongs,
+		l.loop2SeedDamages,
+		l.loop2SeedModifierChanges,
+		l.loop2SeedMonsterAmounts,
+		l.loop2SeedMonsterEquipments,
+		l.loop2SeedAlteredStates,
 	})
+}
+
+func (l *Lookup) loop2SeedAlteredStates(qtx *database.Queries, ctx context.Context) error {
+	statesJson := l.getMonsterAlteredStates()
+	states := dedupeRows(statesJson, l.Hashes)
+
+	params := database.CreateAlteredStateBulkParams{
+		DataHash: 		make([]string, len(states)),
+		MonsterID: 		make([]int32, len(states)),
+		Condition: 		make([]string, len(states)),
+		IsTemporary: 	make([]bool, len(states)),
+	}
+
+	for i, s := range states {
+		params.DataHash[i] = generateDataHash(s)
+		params.MonsterID[i] = s.MonsterID
+		params.Condition[i] = s.Condition
+		params.IsTemporary[i] = s.IsTemporary
+	}
+
+	dbRows, err := qtx.CreateAlteredStateBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create altered states: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) getMonsterAlteredStates() []AlteredState {
+	states := []AlteredState{}
+
+	for i := range l.json.monsters {
+		mon := &l.json.monsters[i]
+
+		for j := range mon.AlteredStates {
+			state := &mon.AlteredStates[j]
+			state.MonsterID = mon.ID
+			states = append(states, *state)
+		}
+	}
+
+	return states
+}
+
+func (l *Lookup) loop2SeedMonsterEquipments(qtx *database.Queries, ctx context.Context) error {
+	equipmentsJson := l.getMonsterEquipments()
+	equipments := dedupeRows(equipmentsJson, l.Hashes)
+
+	params := database.CreateMonsterEquipmentBulkParams{
+		DataHash: 		make([]string, len(equipments)),
+		MonsterID: 		make([]int32, len(equipments)),
+		DropChance: 	make([]int32, len(equipments)),
+		Power: 			make([]int32, len(equipments)),
+		CriticalPlus: 	make([]int32, len(equipments)),
+	}
+
+	for i, e := range equipments {
+		params.DataHash[i] = generateDataHash(e)
+		params.MonsterID[i] = e.MonsterID
+		params.DropChance[i] = e.DropChance
+		params.Power[i] = e.Power
+		params.CriticalPlus[i] = e.CriticalPlus
+	}
+
+	dbRows, err := qtx.CreateMonsterEquipmentBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create monster equipments: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) getMonsterEquipments() []MonsterEquipment {
+	equipments := []MonsterEquipment{}
+
+	for i := range l.json.monsters {
+		mon := &l.json.monsters[i]
+
+		if mon.Equipment != nil {
+			mon.Equipment.MonsterID = mon.ID
+			equipments = append(equipments, *mon.Equipment)
+		}
+	}
+
+	return equipments
+}
+
+func (l *Lookup) loop2SeedMonsterAmounts(qtx *database.Queries, ctx context.Context) error {
+	masJson, err := l.getMonsterAmounts()
+	if err != nil {
+		return err
+	}
+	mas := dedupeRows(masJson, l.Hashes)
+
+	params := database.CreateMonsterAmountBulkParams{
+		DataHash: 	make([]string, len(mas)),
+		MonsterID: 	make([]int32, len(mas)),
+		Amount: 	make([]int32, len(mas)),
+	}
+
+	for i, c := range mas {
+		params.DataHash[i] = generateDataHash(c)
+		params.MonsterID[i] = c.MonsterID
+		params.Amount[i] = c.Amount
+	}
+
+	dbRows, err := qtx.CreateMonsterAmountBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create monster amounts: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) getMonsterAmounts() ([]MonsterAmount, error) {
+	var err error
+	mas := []MonsterAmount{}
+
+	for i := range l.json.monsterFormations {
+		mf := &l.json.monsterFormations[i]
+
+		for j := range mf.Monsters {
+			ma := &mf.Monsters[j]
+
+			key := CreateLookupKey(*ma)
+			ma.MonsterID, err = assignFK(key, l.Monsters)
+			if err != nil {
+				return nil, err
+			}
+
+			mas = append(mas, *ma)
+		}
+	}
+
+	return mas, nil
+}
+
+func (l *Lookup) loop2SeedModifierChanges(qtx *database.Queries, ctx context.Context) error {
+	changesJson, err := l.getModifierChanges()
+	if err != nil {
+		return err
+	}
+	changes := dedupeRows(changesJson, l.Hashes)
+
+	params := database.CreateModifierChangeBulkParams{
+		DataHash: 			make([]string, len(changes)),
+		ModifierID: 		make([]int32, len(changes)),
+		CalculationType: 	make([]database.CalculationType, len(changes)),
+		Value: 				make([]float32, len(changes)),
+	}
+
+	for i, c := range changes {
+		params.DataHash[i] = generateDataHash(c)
+		params.ModifierID[i] = c.ModifierID
+		params.CalculationType[i] = database.CalculationType(c.CalculationType)
+		params.Value[i] = c.Value
+	}
+
+	dbRows, err := qtx.CreateModifierChangeBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create modifier changes: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) getModifierChanges() ([]ModifierChange, error) {
+	changes := []ModifierChange{}
+
+	for i := range l.json.playerAbilities {
+		ability := &l.json.playerAbilities[i]
+
+		newChanges, err := l.prepareAbilityModifierChanges(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		changes = append(changes, newChanges...)
+	}
+
+	for i := range l.json.overdriveAbilities {
+		ability := &l.json.overdriveAbilities[i]
+
+		newChanges, err := l.prepareAbilityModifierChanges(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		changes = append(changes, newChanges...)
+	}
+
+	for i := range l.json.items {
+		item := &l.json.items[i]
+
+		if len(item.BattleInteractions) > 0 {
+			newChanges, err := l.prepareAbilityModifierChanges(item.BattleInteractions)
+			if err != nil {
+				return nil, err
+			}
+
+			changes = append(changes, newChanges...)
+		}
+	}
+
+	for i := range l.json.triggerCommands {
+		command := &l.json.triggerCommands[i]
+
+		newChanges, err := l.prepareAbilityModifierChanges(command.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		changes = append(changes, newChanges...)
+	}
+
+	for i := range l.json.unspecifiedAbilities {
+		ability := &l.json.unspecifiedAbilities[i]
+
+		newChanges, err := l.prepareAbilityModifierChanges(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		changes = append(changes, newChanges...)
+	}
+
+	for i := range l.json.enemyAbilities {
+		ability := &l.json.enemyAbilities[i]
+
+		newChanges, err := l.prepareAbilityModifierChanges(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		changes = append(changes, newChanges...)
+	}
+
+	for i := range l.json.autoAbilities {
+		autoAbility := &l.json.autoAbilities[i]
+
+		newChanges, err := l.prepareModifierChanges(autoAbility.ModifierChanges)
+		if err != nil {
+			return nil, err
+		}
+
+		changes = append(changes, newChanges...)
+	}
+
+	for i := range l.json.properties {
+		property := &l.json.properties[i]
+
+		newChanges, err := l.prepareModifierChanges(property.ModifierChanges)
+		if err != nil {
+			return nil, err
+		}
+
+		changes = append(changes, newChanges...)
+	}
+
+	for i := range l.json.statusConditions {
+		status := &l.json.statusConditions[i]
+
+		newChanges, err := l.prepareModifierChanges(status.ModifierChanges)
+		if err != nil {
+			return nil, err
+		}
+
+		changes = append(changes, newChanges...)
+	}
+
+	return changes, nil
+}
+
+func (l *Lookup) prepareAbilityModifierChanges(battleInteractions []BattleInteraction) ([]ModifierChange, error) {
+	changes := []ModifierChange{}
+
+	for i := range battleInteractions {
+		bi := &battleInteractions[i]
+
+		changesNew, err := l.prepareModifierChanges(bi.ModifierChanges)
+		if err != nil {
+			return nil, err
+		}
+		changes = append(changes, changesNew...)
+	}
+
+	return changes, nil
+}
+
+func (l *Lookup) prepareModifierChanges(changes []ModifierChange) ([]ModifierChange, error) {
+	var err error
+	changesNew := []ModifierChange{}
+	
+	for i := range changes {
+		change := &changes[i]
+
+		change.ModifierID, err = assignFK(change.ModifierName, l.Modifiers)
+		if err != nil {
+			return nil, err
+		}
+
+		changesNew = append(changesNew, *change)
+	}
+
+	return changesNew, nil
+}
+
+func (l *Lookup) loop2SeedDamages(qtx *database.Queries, ctx context.Context) error {
+	damagesJson, err := l.getDamages()
+	if err != nil {
+		return err
+	}
+	damages := dedupeRows(damagesJson, l.Hashes)
+
+	params := database.CreateDamageBulkParams{
+		DataHash: 			make([]string, len(damages)),
+		Critical: 			make([]database.NullCriticalType, len(damages)),
+		CriticalPlusVal: 	make([]sql.NullInt32, len(damages)),
+		IsPiercing: 		make([]bool, len(damages)),
+		BreakDmgLimit: 		make([]database.NullBreakDmgLmtType, len(damages)),
+		ElementID: 			make([]sql.NullInt32, len(damages)),
+	}
+
+	for i, d := range damages {
+		params.DataHash[i] = generateDataHash(d)
+		params.Critical[i] = database.ToNullCriticalType(d.Critical)
+		params.CriticalPlusVal[i] = h.GetNullInt32(d.CriticalPlusVal)
+		params.IsPiercing[i] = d.IsPiercing
+		params.BreakDmgLimit[i] = database.ToNullBreakDmgLmtType(d.BreakDmgLimit)
+		params.ElementID[i] = h.GetNullInt32(d.ElementID)
+	}
+
+	dbRows, err := qtx.CreateDamageBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create damages: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) getDamages() ([]Damage, error) {
+	damages := []Damage{}
+
+	for i := range l.json.playerAbilities {
+		ability := &l.json.playerAbilities[i]
+
+		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	for i := range l.json.overdriveAbilities {
+		ability := &l.json.overdriveAbilities[i]
+
+		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	for i := range l.json.items {
+		item := &l.json.items[i]
+
+		if len(item.BattleInteractions) > 0 {
+			newDamages, err := l.prepareDamages(item.BattleInteractions)
+			if err != nil {
+				return nil, err
+			}
+			
+			damages = append(damages, newDamages...)
+		}
+	}
+
+	for i := range l.json.triggerCommands {
+		command := &l.json.triggerCommands[i]
+
+		newDamages, err := l.prepareDamages(command.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	for i := range l.json.unspecifiedAbilities {
+		ability := &l.json.unspecifiedAbilities[i]
+
+		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	for i := range l.json.enemyAbilities {
+		ability := &l.json.enemyAbilities[i]
+
+		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	return damages, nil
+}
+
+func (l *Lookup) prepareDamages(battleInteractions []BattleInteraction) ([]Damage, error) {
+	var err error
+	damages := []Damage{}
+
+	for i := range battleInteractions {
+		bi := &battleInteractions[i]
+
+		if bi.Damage != nil {
+			bi.Damage.ElementID, err = assignFKPtr(bi.Damage.Element, l.Elements)
+			if err != nil {
+				return nil, err
+			}
+
+			damages = append(damages, *bi.Damage)
+		}
+	}
+
+	return damages, nil
+}
+
+func (l *Lookup) loop2SeedSongs(qtx *database.Queries, ctx context.Context) error {
+	songsJson := l.getSongs()
+	songs := dedupeRows(songsJson, l.Hashes)
+
+	params := database.CreateSongBulkParams{
+		DataHash:     			make([]string, len(songs)),
+		Name: 					make([]string, len(songs)),
+		StreamingName: 			make([]sql.NullString, len(songs)),
+		InGameName: 			make([]sql.NullString, len(songs)),
+		OstName: 				make([]sql.NullString, len(songs)),
+		Translation: 			make([]sql.NullString, len(songs)),
+		StreamingTrackNumber: 	make([]sql.NullInt32, len(songs)),
+		MusicSphereID: 			make([]sql.NullInt32, len(songs)),
+		OstDisc: 				make([]sql.NullInt32, len(songs)),
+		OstTrackNumber: 		make([]sql.NullInt32, len(songs)),
+		DurationInSeconds: 		make([]int32, len(songs)),
+		CanLoop: 				make([]bool, len(songs)),
+		SpecialUseCase: 		make([]database.NullMusicUseCase, len(songs)),
+		CreditsID: 				make([]sql.NullInt32, len(songs)),
+	}
+
+	for i, s := range songs {
+		params.DataHash[i] = generateDataHash(s)
+		params.Name[i] = s.Name
+		params.StreamingName[i] = h.GetNullString(s.StreamingName)
+		params.InGameName[i] = h.GetNullString(s.InGameName)
+		params.OstName[i] = h.GetNullString(s.OSTName)
+		params.Translation[i] = h.GetNullString(s.Translation)
+		params.StreamingTrackNumber[i] = h.GetNullInt32(s.StreamingTrackNumber)
+		params.MusicSphereID[i] = h.GetNullInt32(s.MusicSphereID)
+		params.OstDisc[i] = h.GetNullInt32(s.OSTDisc)
+		params.OstTrackNumber[i] = h.GetNullInt32(s.OSTTrackNumber)
+		params.DurationInSeconds[i] = s.DurationInSeconds
+		params.CanLoop[i] = s.CanLoop
+		params.SpecialUseCase[i] = database.ToNullMusicUseCase(s.SpecialUseCase)
+		params.CreditsID[i] = h.ObjPtrToNullInt32ID(s.Credits)
+	}
+
+	dbRows, err := qtx.CreateSongBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create songs: %v", err)
+	}
+
+	for i, row := range dbRows {
+		songs[i].ID = row.ID
+		l.json.songs[i].ID = row.ID
+		l.Songs[songs[i].Name] = songs[i]
+		l.SongsID[row.ID] = songs[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) getSongs() []Song {
+	songs := []Song{}
+
+	for i := range l.json.songs {
+		song := &l.json.songs[i]
+
+		if song.Credits != nil {
+			song.Credits.ID = l.getHashID(*song.Credits)
+		}
+		songs = append(songs, *song)
+	}
+
+	return songs
+}
+
+func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
+	sublocationsJson, err := l.getSublocations()
+	if err != nil {
+		return err
+	}
+	sublocations := dedupeRows(sublocationsJson, l.Hashes)
+
+	params := database.CreateSublocationBulkParams{
+		DataHash:   make([]string, len(sublocations)),
+		LocationID: make([]int32, len(sublocations)),
+		Name: 		make([]string, len(sublocations)),
+	}
+
+	for i, s := range sublocations {
+		params.DataHash[i] = generateDataHash(s)
+		params.LocationID[i] = s.Location.ID
+		params.Name[i] = s.Name
+	}
+
+	dbRows, err := qtx.CreateSublocationBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create sublocations: %v", err)
+	}
+
+	for i, row := range dbRows {
+		sublocations[i].ID = row.ID
+		l.Sublocations[sublocations[i].Name] = sublocations[i]
+		l.SublocationsID[row.ID] = sublocations[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) getSublocations() ([]Sublocation, error) {
+	var err error
+	sublocations := []Sublocation{}
+
+	for i := range l.json.locations {
+		location := &l.json.locations[i]
+
+		for j := range location.Sublocations {
+			sublocation := &location.Sublocations[j]
+
+			sublocation.Location.ID, err = assignFK(location.Name, l.Locations)
+			if err != nil {
+				return nil, err
+			}
+
+			sublocations = append(sublocations, *sublocation)
+		}
+	}
+
+	return sublocations, nil
 }
 
 func (l *Lookup) loop2SeedItemAmounts(qtx *database.Queries, ctx context.Context) error {
@@ -255,6 +839,12 @@ func (l *Lookup) prepareItemAmt(ia *ItemAmount) (*ItemAmount, error) {
 	if err != nil {
 		return nil, err
 	}
+	
+	mi, err := GetResourceByID(ia.MasterItem.ID, l.MasterItemsID)
+	if err != nil {
+		return nil, err
+	}
+	ia.MasterItem.Type = mi.Type
 
 	return ia, nil
 }
@@ -412,14 +1002,14 @@ func (l *Lookup) getAbilities() []Ability {
 
 	for i := range l.json.playerAbilities {
 		ability := &l.json.playerAbilities[i]
-		ability.Attributes.ID = l.Hashes[generateDataHash(ability.Attributes)]
+		ability.Attributes.ID = l.getHashID(ability.Attributes)
 		ability.Type = database.AbilityTypePlayerAbility
 		abilities = append(abilities, ability.Ability)
 	}
 
 	for i := range l.json.overdriveAbilities {
 		ability := &l.json.overdriveAbilities[i]
-		ability.Attributes.ID = l.Hashes[generateDataHash(ability.Attributes)]
+		ability.Attributes.ID = l.getHashID(ability.Attributes)
 		ability.Type = database.AbilityTypeOverdriveAbility
 		abilities = append(abilities, ability.Ability)
 	}
@@ -427,7 +1017,7 @@ func (l *Lookup) getAbilities() []Ability {
 	for i := range l.json.items {
 		item := &l.json.items[i]
 		if len(item.BattleInteractions) > 0 {
-			item.Attributes.ID = l.Hashes[generateDataHash(item.Attributes)]
+			item.Attributes.ID = l.getHashID(item.Attributes)
 			item.Ability.Name = item.Name
 			item.Ability.Type = database.AbilityTypeItemAbility
 			abilities = append(abilities, item.Ability)
@@ -436,21 +1026,21 @@ func (l *Lookup) getAbilities() []Ability {
 
 	for i := range l.json.triggerCommands {
 		command := &l.json.triggerCommands[i]
-		command.Attributes.ID = l.Hashes[generateDataHash(command.Attributes)]
+		command.Attributes.ID = l.getHashID(command.Attributes)
 		command.Type = database.AbilityTypeTriggerCommand
 		abilities = append(abilities, command.Ability)
 	}
 
 	for i := range l.json.unspecifiedAbilities {
 		ability := &l.json.unspecifiedAbilities[i]
-		ability.Attributes.ID = l.Hashes[generateDataHash(ability.Attributes)]
+		ability.Attributes.ID = l.getHashID(ability.Attributes)
 		ability.Type = database.AbilityTypeUnspecifiedAbility
 		abilities = append(abilities, ability.Ability)
 	}
 
 	for i := range l.json.enemyAbilities {
 		ability := &l.json.enemyAbilities[i]
-		ability.Attributes.ID = l.Hashes[generateDataHash(ability.Attributes)]
+		ability.Attributes.ID = l.getHashID(ability.Attributes)
 		ability.Type = database.AbilityTypeEnemyAbility
 		abilities = append(abilities, ability.Ability)
 	}

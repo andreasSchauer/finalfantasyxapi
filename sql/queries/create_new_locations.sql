@@ -8,12 +8,11 @@ RETURNING id, data_hash;
 
 
 -- name: CreateSublocationBulk :many
-INSERT INTO sublocations (data_hash, location_id, name, specification)
+INSERT INTO sublocations (data_hash, location_id, name)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('location_id')::int[]),
-    unnest(sqlc.arg('name')::text[]),
-    unnest(sqlc.arg('specification')::null_string[])
+    unnest(sqlc.arg('name')::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 

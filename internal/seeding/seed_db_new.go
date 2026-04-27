@@ -17,18 +17,29 @@ func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
-	start := time.Now()
+	setupStart := time.Now()
 
 	err = setupDB(dbConn, fullPath)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't setup database: %v", err)
 	}
 	
+	setupDuration := time.Since(setupStart)
+	fmt.Printf("\ndatabase setup took %.3f seconds\n", setupDuration.Seconds())
+
+
+	lookupStart := time.Now()
+
 	l := lookupInit()
 	err = l.loadJSONFiles()
 	if err != nil {
 		return nil, err
 	}
+
+	lookupDuration := time.Since(lookupStart)
+	fmt.Printf("creating lookups took %.3f seconds\n", lookupDuration.Seconds())
+
+	seedingStart := time.Now()
 
 	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		err = l.seedLoop(qtx, context.Background(), []func(*database.Queries, context.Context) error{
@@ -45,8 +56,8 @@ func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 	
-	totalDuration := time.Since(start)
-	fmt.Printf("database seeding took %.3f seconds\n\n", totalDuration.Seconds())
+	seedingDuration := time.Since(seedingStart)
+	fmt.Printf("database seeding took %.3f seconds\n\n", seedingDuration.Seconds())
 
 	return l, nil
 }

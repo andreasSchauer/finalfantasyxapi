@@ -403,21 +403,19 @@ func (q *Queries) CreateShopsItemsJunctionBulk(ctx context.Context, arg CreateSh
 }
 
 const createSublocationBulk = `-- name: CreateSublocationBulk :many
-INSERT INTO sublocations (data_hash, location_id, name, specification)
+INSERT INTO sublocations (data_hash, location_id, name)
 SELECT
     unnest($1::text[]),
     unnest($2::int[]),
-    unnest($3::text[]),
-    unnest($4::null_string[])
+    unnest($3::text[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
 
 type CreateSublocationBulkParams struct {
-	DataHash      []string
-	LocationID    []int32
-	Name          []string
-	Specification []sql.NullString
+	DataHash   []string
+	LocationID []int32
+	Name       []string
 }
 
 type CreateSublocationBulkRow struct {
@@ -426,12 +424,7 @@ type CreateSublocationBulkRow struct {
 }
 
 func (q *Queries) CreateSublocationBulk(ctx context.Context, arg CreateSublocationBulkParams) ([]CreateSublocationBulkRow, error) {
-	rows, err := q.db.QueryContext(ctx, createSublocationBulk,
-		pq.Array(arg.DataHash),
-		pq.Array(arg.LocationID),
-		pq.Array(arg.Name),
-		pq.Array(arg.Specification),
-	)
+	rows, err := q.db.QueryContext(ctx, createSublocationBulk, pq.Array(arg.DataHash), pq.Array(arg.LocationID), pq.Array(arg.Name))
 	if err != nil {
 		return nil, err
 	}

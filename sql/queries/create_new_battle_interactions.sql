@@ -3,7 +3,7 @@ INSERT INTO damages (data_hash, critical, critical_plus_val, is_piercing, break_
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('critical')::null_critical_type[]),
-    unnest(sqlc.arg('critical_plus_val')::int[]),
+    unnest(sqlc.arg('critical_plus_val')::null_int[]),
     unnest(sqlc.arg('is_piercing')::boolean[]),
     unnest(sqlc.arg('break_dmg_limit')::null_break_dmg_lmt_type[]),
     unnest(sqlc.arg('element_id')::null_int[])

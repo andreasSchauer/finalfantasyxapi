@@ -383,7 +383,7 @@ INSERT INTO damages (data_hash, critical, critical_plus_val, is_piercing, break_
 SELECT
     unnest($1::text[]),
     unnest($2::null_critical_type[]),
-    unnest($3::int[]),
+    unnest($3::null_int[]),
     unnest($4::boolean[]),
     unnest($5::null_break_dmg_lmt_type[]),
     unnest($6::null_int[])
@@ -394,7 +394,7 @@ RETURNING id, data_hash
 type CreateDamageBulkParams struct {
 	DataHash        []string
 	Critical        []NullCriticalType
-	CriticalPlusVal []int32
+	CriticalPlusVal []sql.NullInt32
 	IsPiercing      []bool
 	BreakDmgLimit   []NullBreakDmgLmtType
 	ElementID       []sql.NullInt32

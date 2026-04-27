@@ -273,26 +273,20 @@ func (q *Queries) CreateShopsItemsJunction(ctx context.Context, arg CreateShopsI
 }
 
 const createSublocation = `-- name: CreateSublocation :one
-INSERT INTO sublocations (data_hash, location_id, name, specification)
-VALUES ($1, $2, $3, $4)
+INSERT INTO sublocations (data_hash, location_id, name)
+VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = sublocations.data_hash
 RETURNING id, data_hash, location_id, name, specification
 `
 
 type CreateSublocationParams struct {
-	DataHash      string
-	LocationID    int32
-	Name          string
-	Specification sql.NullString
+	DataHash   string
+	LocationID int32
+	Name       string
 }
 
 func (q *Queries) CreateSublocation(ctx context.Context, arg CreateSublocationParams) (Sublocation, error) {
-	row := q.db.QueryRowContext(ctx, createSublocation,
-		arg.DataHash,
-		arg.LocationID,
-		arg.Name,
-		arg.Specification,
-	)
+	row := q.db.QueryRowContext(ctx, createSublocation, arg.DataHash, arg.LocationID, arg.Name)
 	var i Sublocation
 	err := row.Scan(
 		&i.ID,

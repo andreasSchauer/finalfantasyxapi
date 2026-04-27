@@ -19,6 +19,9 @@ func generateJunctionHash(junction Junction, name string) string {
 	return fmt.Sprintf("%x", hash)
 }
 
+func (l *Lookup) getHashID(h Hashable) int32 {
+	return l.Hashes[generateDataHash(h)]
+}
 
 func combineFields(fields []any) string {
 	var combined string
