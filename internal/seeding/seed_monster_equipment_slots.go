@@ -129,3 +129,44 @@ func (l *Lookup) seedEquipmentSlotsChance(qtx *database.Queries, esc EquipmentSl
 
 	return esc, nil
 }
+
+
+func (l *Lookup) loop1SeedEquipmentSlotsChances(qtx *database.Queries, ctx context.Context) error {
+	chances := l.getEquipmentSlotsChances()
+
+	params := database.CreateEquipmentSlotsChanceBulkParams{
+		DataHash: make([]string, len(chances)),
+		Amount:   make([]int32, len(chances)),
+		Chance:   make([]int32, len(chances)),
+	}
+
+	for i, c := range chances {
+		params.DataHash[i] = generateDataHash(c)
+		params.Amount[i] = c.Amount
+		params.Chance[i] = c.Chance
+	}
+
+	dbRows, err := qtx.CreateEquipmentSlotsChanceBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create equipment slot chances: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) getEquipmentSlotsChances() []EquipmentSlotsChance {
+	chances := []EquipmentSlotsChance{}
+
+	for _, m := range l.json.monsters {
+		if m.Equipment != nil {
+			chances = append(chances, m.Equipment.AbilitySlots.Chances...)
+			chances = append(chances, m.Equipment.AttachedAbilities.Chances...)
+		}
+	}
+
+	return dedupeRows(chances, l.Hashes)
+}

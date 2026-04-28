@@ -198,3 +198,44 @@ func (l *Lookup) seedSphereTargetableNodes(qtx *database.Queries, sphere Sphere)
 
 	return nil
 }
+
+
+func (l *Lookup) loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
+	nodes := l.extractCreatedNodes()
+
+	params := database.CreateCreatedNodeBulkParams{
+		DataHash: make([]string, len(nodes)),
+		Node:     make([]database.NodeType, len(nodes)),
+		Value:    make([]int32, len(nodes)),
+	}
+
+	for i, mi := range nodes {
+		params.DataHash[i] = generateDataHash(mi)
+		params.Node[i] = database.NodeType(mi.Node)
+		params.Value[i] = mi.Value
+	}
+
+	dbRows, err := qtx.CreateCreatedNodeBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create created nodes: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractCreatedNodes() []CreatedNode {
+	createdNodes := []CreatedNode{}
+
+	for _, sphere := range l.json.spheres {
+		if sphere.CreatedNode != nil {
+			createdNodes = append(createdNodes, *sphere.CreatedNode)
+		}
+	}
+
+	return dedupeRows(createdNodes, l.Hashes)
+}
+

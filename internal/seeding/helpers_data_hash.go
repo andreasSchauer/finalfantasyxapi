@@ -19,8 +19,13 @@ func generateJunctionHash(junction Junction, name string) string {
 	return fmt.Sprintf("%x", hash)
 }
 
-func (l *Lookup) getHashID(h Hashable) int32 {
-	return l.Hashes[generateDataHash(h)]
+func (l *Lookup) getHashID(h Hashable) (int32, error) {
+	id, ok := l.Hashes[generateDataHash(h)]
+	if !ok {
+		return 0, fmt.Errorf("no data hash available for %s", combineFields(h.ToHashFields()))
+	}
+
+	return id, nil
 }
 
 func combineFields(fields []any) string {

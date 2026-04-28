@@ -86,3 +86,49 @@ func (l *Lookup) seedMonsterEquipmentRelationships(qtx *database.Queries, monste
 
 	return nil
 }
+
+func (l *Lookup) loop2SeedMonsterEquipments(qtx *database.Queries, ctx context.Context) error {
+	equipments := l.extractMonsterEquipments()
+
+	params := database.CreateMonsterEquipmentBulkParams{
+		DataHash:     make([]string, len(equipments)),
+		MonsterID:    make([]int32, len(equipments)),
+		DropChance:   make([]int32, len(equipments)),
+		Power:        make([]int32, len(equipments)),
+		CriticalPlus: make([]int32, len(equipments)),
+	}
+
+	for i, e := range equipments {
+		params.DataHash[i] = generateDataHash(e)
+		params.MonsterID[i] = e.MonsterID
+		params.DropChance[i] = e.DropChance
+		params.Power[i] = e.Power
+		params.CriticalPlus[i] = e.CriticalPlus
+	}
+
+	dbRows, err := qtx.CreateMonsterEquipmentBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create monster equipments: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractMonsterEquipments() []MonsterEquipment {
+	equipments := []MonsterEquipment{}
+
+	for i := range l.json.monsters {
+		mon := &l.json.monsters[i]
+
+		if mon.Equipment != nil {
+			mon.Equipment.MonsterID = mon.ID
+			equipments = append(equipments, *mon.Equipment)
+		}
+	}
+
+	return dedupeRows(equipments, l.Hashes)
+}

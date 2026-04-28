@@ -261,3 +261,61 @@ func (l *Lookup) seedItemAvailableMenus(qtx *database.Queries, item Item) error 
 
 	return nil
 }
+
+
+func (l *Lookup) loop2SeedItems(qtx *database.Queries, ctx context.Context) error {
+	items, err := l.extractItems()
+
+	params := database.CreateItemBulkParams{
+		DataHash:     make([]string, len(items)),
+		MasterItemID: make([]int32, len(items)),
+		Description:  make([]string, len(items)),
+		Effect:       make([]string, len(items)),
+		Category:     make([]database.ItemCategory, len(items)),
+		Usability:    make([]database.ItemUsability, len(items)),
+		BasePrice:    make([]sql.NullInt32, len(items)),
+		SellValue:    make([]int32, len(items)),
+	}
+
+	for i, item := range items {
+		params.DataHash[i] = generateDataHash(item)
+		params.MasterItemID[i] = item.MasterItem.ID
+		params.Description[i] = item.Description
+		params.Effect[i] = item.Effect
+		params.Category[i] = database.ItemCategory(item.Category)
+		params.Usability[i] = database.ItemUsability(item.Usability)
+		params.BasePrice[i] = h.GetNullInt32(item.BasePrice)
+		params.SellValue[i] = item.SellValue
+	}
+
+	dbRows, err := qtx.CreateItemBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create items: %v", err)
+	}
+
+	for i, row := range dbRows {
+		items[i].ID = row.ID
+		l.json.items[i].ID = row.ID
+		l.Items[items[i].Name] = items[i]
+		l.ItemsID[row.ID] = items[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractItems() ([]Item, error) {
+	items := []Item{}
+	var err error
+
+	for i := range l.json.items {
+		item := &l.json.items[i]
+		item.MasterItem.ID, err = assignFK(item.Name, l.MasterItems)
+		if err != nil {
+			return nil, err
+		}
+		items = append(items, *item)
+	}
+
+	return dedupeRows(items, l.Hashes), nil
+}

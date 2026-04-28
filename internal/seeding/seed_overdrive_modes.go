@@ -169,3 +169,41 @@ func (l *Lookup) seedODModeAction(qtx *database.Queries, action ActionToLearn) (
 
 	return action, nil
 }
+
+
+func (l *Lookup) loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Context) error {
+	modes := dedupeRows(l.json.overdriveModes, l.Hashes)
+
+	params := database.CreateOverdriveModeBulkParams{
+		DataHash:    make([]string, len(modes)),
+		Name:        make([]string, len(modes)),
+		Description: make([]string, len(modes)),
+		Effect:      make([]string, len(modes)),
+		Type:        make([]database.OverdriveModeType, len(modes)),
+		FillRate:    make([]sql.NullFloat64, len(modes)),
+	}
+
+	for i, m := range modes {
+		params.DataHash[i] = generateDataHash(m)
+		params.Name[i] = m.Name
+		params.Description[i] = m.Description
+		params.Effect[i] = m.Effect
+		params.Type[i] = database.OverdriveModeType(m.Type)
+		params.FillRate[i] = h.GetNullFloat64(m.FillRate)
+	}
+
+	dbRows, err := qtx.CreateOverdriveModeBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create overdrive modes: %v", err)
+	}
+
+	for i, row := range dbRows {
+		modes[i].ID = row.ID
+		l.json.overdriveModes[i].ID = row.ID
+		l.OverdriveModes[modes[i].Name] = modes[i]
+		l.OverdriveModesID[row.ID] = modes[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}

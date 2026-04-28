@@ -185,3 +185,36 @@ func (l *Lookup) seedPossibleItem(qtx *database.Queries, item PossibleItem) (Pos
 
 	return item, nil
 }
+
+
+func (l *Lookup) loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.Context) error {
+	positions := dedupeRows(l.json.blitzballPositions, l.Hashes)
+
+	params := database.CreateBlitzballPositionBulkParams{
+		DataHash: make([]string, len(positions)),
+		Category: make([]database.BlitzballTournamentCategory, len(positions)),
+		Slot:     make([]database.BlitzballPositionSlot, len(positions)),
+	}
+
+	for i, p := range positions {
+		params.DataHash[i] = generateDataHash(p)
+		params.Category[i] = database.BlitzballTournamentCategory(p.Category)
+		params.Slot[i] = database.BlitzballPositionSlot(p.Slot)
+	}
+
+	dbRows, err := qtx.CreateBlitzballPositionBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create blitzball position: %v", err)
+	}
+
+	for i, row := range dbRows {
+		positions[i].ID = row.ID
+		l.json.blitzballPositions[i].ID = row.ID
+		key := CreateLookupKey(positions[i])
+		l.Positions[key] = positions[i]
+		l.PositionsID[row.ID] = positions[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}

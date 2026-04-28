@@ -122,3 +122,61 @@ func (l *Lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 		return nil
 	})
 }
+
+
+func (l *Lookup) loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
+	submenus, err := l.extractSubmenus()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateSubmenuBulkParams{
+		DataHash:    make([]string, len(submenus)),
+		Name:        make([]string, len(submenus)),
+		TopmenuID:   make([]sql.NullInt32, len(submenus)),
+		Description: make([]sql.NullString, len(submenus)),
+		Effect:      make([]string, len(submenus)),
+	}
+
+	for i, s := range submenus {
+		params.DataHash[i] = generateDataHash(s)
+		params.Name[i] = s.Name
+		params.TopmenuID[i] = h.GetNullInt32(s.TopmenuID)
+		params.Description[i] = h.GetNullString(s.Description)
+		params.Effect[i] = s.Effect
+	}
+
+	dbRows, err := qtx.CreateSubmenuBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create submenus: %v", err)
+	}
+
+	for i, row := range dbRows {
+		submenus[i].ID = row.ID
+		l.json.submenus[i].ID = row.ID
+		l.Submenus[submenus[i].Name] = submenus[i]
+		l.SubmenusID[row.ID] = submenus[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractSubmenus() ([]Submenu, error) {
+	submenus := []Submenu{}
+	var err error
+
+	for i := range l.json.submenus {
+		submenu := &l.json.submenus[i]
+
+		if submenu.Topmenu != nil {
+			submenu.TopmenuID, err = assignFKPtr(submenu.Topmenu, l.Topmenus)
+			if err != nil {
+				return nil, err
+			}
+		}
+		submenus = append(submenus, *submenu)
+	}
+
+	return dedupeRows(submenus, l.Hashes), nil
+}

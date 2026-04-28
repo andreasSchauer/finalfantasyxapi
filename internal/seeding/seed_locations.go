@@ -348,3 +348,91 @@ func (l *Lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnec
 
 	return connection, nil
 }
+
+
+func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
+	locations := dedupeRows(l.json.locations, l.Hashes)
+
+	params := database.CreateLocationBulkParams{
+		DataHash: make([]string, len(locations)),
+		Name:     make([]string, len(locations)),
+	}
+
+	for i, mi := range locations {
+		params.DataHash[i] = generateDataHash(mi)
+		params.Name[i] = mi.Name
+	}
+
+	dbRows, err := qtx.CreateLocationBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create locations: %v", err)
+	}
+
+	for i, row := range dbRows {
+		locations[i].ID = row.ID
+		l.json.locations[i].ID = row.ID
+		l.Locations[locations[i].Name] = locations[i]
+		l.LocationsID[row.ID] = locations[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+
+
+func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
+	sublocations, err := l.extractSublocations()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateSublocationBulkParams{
+		DataHash:   make([]string, len(sublocations)),
+		LocationID: make([]int32, len(sublocations)),
+		Name:       make([]string, len(sublocations)),
+	}
+
+	for i, s := range sublocations {
+		params.DataHash[i] = generateDataHash(s)
+		params.LocationID[i] = s.Location.ID
+		params.Name[i] = s.Name
+	}
+
+	dbRows, err := qtx.CreateSublocationBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create sublocations: %v", err)
+	}
+
+	for i, row := range dbRows {
+		sublocations[i].ID = row.ID
+		l.Sublocations[sublocations[i].Name] = sublocations[i]
+		l.SublocationsID[row.ID] = sublocations[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractSublocations() ([]Sublocation, error) {
+	sublocations := []Sublocation{}
+	var err error
+
+	for i := range l.json.locations {
+		location := &l.json.locations[i]
+
+		for j := range location.Sublocations {
+			sublocation := &location.Sublocations[j]
+
+			sublocation.Location.ID, err = assignFK(location.Name, l.Locations)
+			if err != nil {
+				return nil, err
+			}
+
+			sublocations = append(sublocations, *sublocation)
+		}
+	}
+
+	return dedupeRows(sublocations, l.Hashes), nil
+}
+
