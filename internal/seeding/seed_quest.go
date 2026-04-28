@@ -2,6 +2,7 @@ package seeding
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -190,4 +191,71 @@ func (l *Lookup) seedCompletionAreas(qtx *database.Queries, completion QuestComp
 	}
 
 	return nil
+}
+
+func (l *Lookup) loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Context) error {
+	completions, err := l.extractQuestCompletions()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateQuestCompletionBulkParams{
+		DataHash:     make([]string, len(completions)),
+		Condition:    make([]sql.NullString, len(completions)),
+		ItemAmountID: make([]int32, len(completions)),
+	}
+
+	for i, qc := range completions {
+		params.DataHash[i] = generateDataHash(qc)
+		params.Condition[i] = h.GetNullString(qc.Condition)
+		params.ItemAmountID[i] = qc.Reward.ID
+
+	}
+
+	dbRows, err := qtx.CreateQuestCompletionBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create quest completions: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+
+func (l *Lookup) extractQuestCompletions() ([]QuestCompletion, error) {
+	completions := []QuestCompletion{}
+	var err error
+
+	for i := range l.json.sidequests {
+		sidequest := &l.json.sidequests[i]
+
+		if sidequest.Completion != nil {
+			completion := sidequest.Completion
+			completion.Reward.ID, err = l.getHashID(completion.Reward)
+			if err != nil {
+				return nil, err
+			}
+
+			completions = append(completions, *completion)
+		}
+
+		for j := range sidequest.Subquests {
+			subquest := &sidequest.Subquests[j]
+
+			if subquest.Completion != nil {
+				completion := subquest.Completion
+				completion.Reward.ID, err = l.getHashID(completion.Reward)
+				if err != nil {
+					return nil, err
+				}
+
+				completions = append(completions, *completion)
+			}
+		}
+	}
+
+	return dedupeRows(completions, l.Hashes), nil
 }

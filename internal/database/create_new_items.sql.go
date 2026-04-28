@@ -546,7 +546,7 @@ func (q *Queries) CreatePrimerBulk(ctx context.Context, arg CreatePrimerBulkPara
 }
 
 const createSphereBulk = `-- name: CreateSphereBulk :many
-INSERT INTO spheres (data_hash, item_id, sphere_grid_description, sphere_color, sphere_effect, target_node_position, target_node_state)
+INSERT INTO spheres (data_hash, item_id, sphere_grid_description, sphere_color, sphere_effect, target_node_position, target_node_state, created_node_id)
 SELECT
     unnest($1::text[]),
     unnest($2::int[]),

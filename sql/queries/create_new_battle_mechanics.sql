@@ -110,7 +110,7 @@ RETURNING id, data_hash;
 
 
 -- name: CreateStatusConditionBulk :many
-INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored)
+INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored, added_elem_resist_id, inflicted_delay_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[]),

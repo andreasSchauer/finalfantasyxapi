@@ -603,7 +603,7 @@ func (q *Queries) CreateStatBulk(ctx context.Context, arg CreateStatBulkParams) 
 }
 
 const createStatusConditionBulk = `-- name: CreateStatusConditionBulk :many
-INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored)
+INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored, added_elem_resist_id, inflicted_delay_id)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),

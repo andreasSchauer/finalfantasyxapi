@@ -13,7 +13,7 @@ import (
 )
 
 const createAeonCommandBulk = `-- name: CreateAeonCommandBulk :many
-INSERT INTO aeon_commands (data_hash, name, description, effect, cursor)
+INSERT INTO aeon_commands (data_hash, name, description, effect, cursor, topmenu_id, submenu_id)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),
@@ -100,7 +100,7 @@ func (q *Queries) CreateAeonCommandsPossibleAbilitiesJunctionBulk(ctx context.Co
 }
 
 const createOverdriveCommandBulk = `-- name: CreateOverdriveCommandBulk :many
-INSERT INTO overdrive_commands (data_hash, name, description, rank)
+INSERT INTO overdrive_commands (data_hash, name, description, rank, character_class_id, topmenu_id, submenu_id)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),

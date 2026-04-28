@@ -36,7 +36,7 @@ RETURNING id, data_hash;
 
 
 -- name: CreateSphereBulk :many
-INSERT INTO spheres (data_hash, item_id, sphere_grid_description, sphere_color, sphere_effect, target_node_position, target_node_state)
+INSERT INTO spheres (data_hash, item_id, sphere_grid_description, sphere_color, sphere_effect, target_node_position, target_node_state, created_node_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('item_id')::int[]),

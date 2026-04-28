@@ -170,3 +170,69 @@ func (l *Lookup) seedTriggerCommandRelatedStats(qtx *database.Queries, command T
 
 	return nil
 }
+
+
+
+func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Context) error {
+	commands, err := l.extractTriggerCommands()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateTriggerCommandBulkParams{
+		DataHash:   	make([]string, len(commands)),
+		AbilityID: 		make([]int32, len(commands)),
+		Description:    make([]string, len(commands)),
+		Effect: 		make([]string, len(commands)),
+		Cursor: 		make([]database.TargetType, len(commands)),
+		TopmenuID: 		make([]sql.NullInt32, len(commands)),
+	}
+
+	for i, c := range commands {
+		params.DataHash[i] = generateDataHash(c)
+		params.AbilityID[i] = c.Ability.ID
+		params.Description[i] = c.Description
+		params.Effect[i] = c.Effect
+		params.Cursor[i] = database.TargetType(c.Cursor)
+		params.TopmenuID[i] = h.GetNullInt32(c.TopmenuID)
+	}
+
+	dbRows, err := qtx.CreateTriggerCommandBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create trigger command: %v", err)
+	}
+
+	for i, row := range dbRows {
+		commands[i].ID = row.ID
+		l.json.triggerCommands[i].ID = row.ID
+		l.TriggerCommands[commands[i].Name] = commands[i]
+		l.TriggerCommandsID[row.ID] = commands[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+
+func (l *Lookup) extractTriggerCommands() ([]TriggerCommand, error) {
+	commands := []TriggerCommand{}
+	var err error
+
+	for i := range l.json.triggerCommands {
+		command := &l.json.triggerCommands[i]
+
+		command.Ability.ID, err = l.getHashID(command.Ability)
+		if err != nil {
+			return nil, err
+		}
+
+		command.TopmenuID, err = assignFKPtr(command.Topmenu, l.Topmenus)
+		if err != nil {
+			return nil, err
+		}
+
+		commands = append(commands, *command)
+	}
+
+	return dedupeRows(commands, l.Hashes), nil
+}

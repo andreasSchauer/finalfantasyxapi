@@ -71,20 +71,6 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 		for _, overdriveAbility := range overdriveAbilities {
 			var err error
 			overdriveAbility.Type = database.AbilityTypeOverdriveAbility
-			
-			/*
-			odKey := CreateLookupKey(overdriveAbility.Overdrive)
-			overdrive, err := GetResource(odKey, l.Overdrives)
-			if err != nil {
-				return h.NewErr(overdriveAbility.Error(), err)
-			}
-			
-			overdriveAbility.Attributes = &Attributes{
-				Rank: overdrive.Rank,
-				AppearsInHelpBar: overdrive.AppearsInHelpBar,
-				CanCopycat: overdrive.CanCopycat,
-			}
-			*/
 
 			overdriveAbility.Ability, err = seedObjAssignID(qtx, overdriveAbility.Ability, l.seedAbility)
 			if err != nil {
@@ -162,4 +148,57 @@ func (l *Lookup) seedOverdriveAbilityRelatedStats(qtx *database.Queries, ability
 	}
 
 	return nil
+}
+
+
+
+func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
+	abilities, err := l.extractOverdriveAbilities()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateOverdriveAbilityBulkParams{
+		DataHash:   	make([]string, len(abilities)),
+		AbilityID: 		make([]int32, len(abilities)),
+	}
+
+	for i, a := range abilities {
+		params.DataHash[i] = generateDataHash(a)
+		params.AbilityID[i] = a.Ability.ID
+	}
+
+	dbRows, err := qtx.CreateOverdriveAbilityBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create overdrive abilities: %v", err)
+	}
+
+	for i, row := range dbRows {
+		abilities[i].ID = row.ID
+		l.json.overdriveAbilities[i].ID = row.ID
+		l.OverdriveAbilities[abilities[i].Name] = abilities[i]
+		l.OverdriveAbilitiesID[row.ID] = abilities[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+
+func (l *Lookup) extractOverdriveAbilities() ([]OverdriveAbility, error) {
+	abilities := []OverdriveAbility{}
+	var err error
+
+	for i := range l.json.overdriveAbilities {
+		ability := &l.json.overdriveAbilities[i]
+
+		ability.Ability.ID, err = l.getHashID(ability.Ability)
+		if err != nil {
+			return nil, err
+		}
+
+		abilities = append(abilities, *ability)
+	}
+
+	return dedupeRows(abilities, l.Hashes), nil
 }

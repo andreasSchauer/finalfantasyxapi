@@ -170,3 +170,71 @@ func (l *Lookup) getEquipmentSlotsChances() []EquipmentSlotsChance {
 
 	return dedupeRows(chances, l.Hashes)
 }
+
+
+func (l *Lookup) loop3SeedMonsterEquipmentSlots(qtx *database.Queries, ctx context.Context) error {
+	slots, err := l.extractMonsterEquipmentSlots()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateMonsterEquipmentSlotsBulkParams{
+		DataHash: 			make([]string, len(slots)),
+		MonsterEquipmentID: make([]int32, len(slots)),
+		MinAmount: 			make([]int32, len(slots)),
+		MaxAmount: 			make([]int32, len(slots)),
+		Type: 				make([]database.EquipmentSlotsType, len(slots)),
+	}
+
+	for i, s := range slots {
+		params.DataHash[i] = generateDataHash(s)
+		params.MonsterEquipmentID[i] = s.MonsterEquipmentID
+		params.MinAmount[i] = s.MinAmount
+		params.MaxAmount[i] = s.MaxAmount
+		params.Type[i] = s.Type
+	}
+
+	dbRows, err := qtx.CreateMonsterEquipmentSlotsBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create monster equipment slots: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractMonsterEquipmentSlots() ([]MonsterEquipmentSlots, error) {
+	slots := []MonsterEquipmentSlots{}
+	var err error
+
+	for i := range l.json.monsters {
+		mon := &l.json.monsters[i]
+
+		if mon.Equipment == nil {
+			continue
+		}
+
+		abilitySlots := &mon.Equipment.AbilitySlots
+		abilitySlots.MonsterEquipmentID, err = l.getHashID(mon.Equipment)
+		if err != nil {
+			return nil, err
+		}
+
+		abilitySlots.Type = database.EquipmentSlotsTypeAbilitySlots
+		slots = append(slots, *abilitySlots)
+
+		attachedAbilities := &mon.Equipment.AttachedAbilities
+		attachedAbilities.MonsterEquipmentID, err = l.getHashID(mon.Equipment)
+		if err != nil {
+			return nil, err
+		}
+
+		attachedAbilities.Type = database.EquipmentSlotsTypeAttachedAbilities
+		slots = append(slots, *attachedAbilities)
+	}
+
+	return dedupeRows(slots, l.Hashes), nil
+}

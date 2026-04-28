@@ -242,15 +242,18 @@ func (l *Lookup) extractAbilities() ([]Ability, error) {
 
 	for i := range l.json.items {
 		item := &l.json.items[i]
-		if len(item.BattleInteractions) > 0 {
-			item.Attributes.ID, err = l.getHashID(item.Attributes)
-			if err != nil {
-				return nil, err
-			}
-			item.Ability.Name = item.Name
-			item.Ability.Type = database.AbilityTypeItemAbility
-			abilities = append(abilities, item.Ability)
+
+		if len(item.BattleInteractions) == 0 {
+			continue
 		}
+
+		item.Attributes.ID, err = l.getHashID(item.Attributes)
+		if err != nil {
+			return nil, err
+		}
+		item.Ability.Name = item.Name
+		item.Ability.Type = database.AbilityTypeItemAbility
+		abilities = append(abilities, item.Ability)
 	}
 
 	for i := range l.json.triggerCommands {
@@ -329,9 +332,10 @@ func (l *Lookup) extractAbilityAttributes() []Attributes {
 	}
 
 	for _, ability := range l.json.items {
-		if len(ability.BattleInteractions) > 0 {
-			attributes = append(attributes, ability.Attributes)
+		if len(ability.BattleInteractions) == 0 {
+			continue
 		}
+		attributes = append(attributes, ability.Attributes)
 	}
 
 	for _, ability := range l.json.overdrives {

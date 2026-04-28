@@ -1,5 +1,5 @@
 -- name: CreateAeonCommandBulk :many
-INSERT INTO aeon_commands (data_hash, name, description, effect, cursor)
+INSERT INTO aeon_commands (data_hash, name, description, effect, cursor, topmenu_id, submenu_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[]),
@@ -34,7 +34,7 @@ RETURNING id, data_hash;
 
 
 -- name: CreateOverdriveCommandBulk :many
-INSERT INTO overdrive_commands (data_hash, name, description, rank)
+INSERT INTO overdrive_commands (data_hash, name, description, rank, character_class_id, topmenu_id, submenu_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[]),

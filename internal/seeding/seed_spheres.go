@@ -200,6 +200,77 @@ func (l *Lookup) seedSphereTargetableNodes(qtx *database.Queries, sphere Sphere)
 }
 
 
+func (l *Lookup) loop3SeedSpheres(qtx *database.Queries, ctx context.Context) error {
+	spheres, err := l.extractSpheres()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateSphereBulkParams{
+		DataHash:   			make([]string, len(spheres)),
+		ItemID: 				make([]int32, len(spheres)),
+		SphereGridDescription: 	make([]string, len(spheres)),
+		SphereColor: 			make([]database.SphereColor, len(spheres)),
+		SphereEffect: 			make([]database.SphereEffect, len(spheres)),
+		TargetNodePosition: 	make([]database.NodePosition, len(spheres)),
+		TargetNodeState: 		make([]database.NullNodeState, len(spheres)),
+		CreatedNodeID: 			make([]sql.NullInt32, len(spheres)),
+	}
+
+	for i, s := range spheres {
+		params.DataHash[i] = generateDataHash(s)
+		params.ItemID[i] = s.ItemID
+		params.SphereGridDescription[i] = s.SgDescription
+		params.SphereColor[i] = database.SphereColor(s.SphereColor)
+		params.SphereEffect[i] = database.SphereEffect(s.SphereEffect)
+		params.TargetNodePosition[i] = database.NodePosition(s.TargetNodePosition)
+		params.TargetNodeState[i] = database.ToNullNodeState(s.TargetNodeState)
+		params.CreatedNodeID[i] = h.ObjPtrToNullInt32ID(s.CreatedNode)
+	}
+
+	dbRows, err := qtx.CreateSphereBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create spheres: %v", err)
+	}
+
+	for i, row := range dbRows {
+		spheres[i].ID = row.ID
+		l.json.spheres[i].ID = row.ID
+		l.Spheres[spheres[i].Name] = spheres[i]
+		l.SpheresID[row.ID] = spheres[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+
+func (l *Lookup) extractSpheres() ([]Sphere, error) {
+	spheres := []Sphere{}
+	var err error
+
+	for i := range l.json.spheres {
+		sphere := &l.json.spheres[i]
+
+		sphere.ItemID, err = assignFK(sphere.Name, l.Items)
+		if err != nil {
+			return nil, err
+		}
+		
+		if sphere.CreatedNode != nil {
+			sphere.CreatedNode.ID, err = l.getHashID(*sphere.CreatedNode)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		spheres = append(spheres, *sphere)
+	}
+
+	return dedupeRows(spheres, l.Hashes), nil
+}
+
+
 func (l *Lookup) loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
 	nodes := l.extractCreatedNodes()
 
@@ -238,4 +309,3 @@ func (l *Lookup) extractCreatedNodes() []CreatedNode {
 
 	return dedupeRows(createdNodes, l.Hashes)
 }
-

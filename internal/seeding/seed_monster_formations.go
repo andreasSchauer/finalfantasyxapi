@@ -557,3 +557,56 @@ func (l *Lookup) extractMonsterAmounts() ([]MonsterAmount, error) {
 
 	return dedupeRows(mas, l.Hashes), nil
 }
+
+
+func (l *Lookup) loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.Context) error {
+	songs, err := l.extractFormationBossSongs()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateFormationBossSongBulkParams{
+		DataHash: 			make([]string, len(songs)),
+		SongID: 			make([]int32, len(songs)),
+		CelebrateVictory: 	make([]bool, len(songs)),
+	}
+
+	for i, s := range songs {
+		params.DataHash[i] = generateDataHash(s)
+		params.SongID[i] = s.SongID
+		params.CelebrateVictory[i] = s.CelebrateVictory
+	}
+
+	dbRows, err := qtx.CreateFormationBossSongBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create formation boss songs: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractFormationBossSongs() ([]FormationBossSong, error) {
+	songs := []FormationBossSong{}
+	var err error
+
+	for i := range l.json.monsterFormations {
+		data := &l.json.monsterFormations[i].FormationData
+
+		if data.BossMusic == nil {
+			continue
+		}
+
+		data.BossMusic.SongID, err = assignFK(data.BossMusic.Song, l.Songs)
+		if err != nil {
+			return nil, err
+		}
+
+		songs = append(songs, *data.BossMusic)
+	}
+
+	return dedupeRows(songs, l.Hashes), nil
+}

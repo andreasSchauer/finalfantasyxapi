@@ -436,3 +436,75 @@ func (l *Lookup) extractSublocations() ([]Sublocation, error) {
 	return dedupeRows(sublocations, l.Hashes), nil
 }
 
+func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) error {
+	areas, err := l.extractAreas()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateAreaBulkParams{
+		DataHash:   			make([]string, len(areas)),
+		SublocationID: 			make([]int32, len(areas)),
+		Name:       			make([]string, len(areas)),
+		Version: 				make([]sql.NullInt32, len(areas)),
+		Specification: 			make([]sql.NullString, len(areas)),
+		Availability: 			make([]database.AvailabilityType, len(areas)),
+		HasSaveSphere: 			make([]bool, len(areas)),
+		AirshipDropOff: 		make([]bool, len(areas)),
+		HasCompilationSphere: 	make([]bool, len(areas)),
+		CanRideChocobo: 		make([]bool, len(areas)),
+	}
+
+	for i, a := range areas {
+		params.DataHash[i] = generateDataHash(a)
+		params.SublocationID[i] = a.Sublocation.ID
+		params.Name[i] = a.Name
+		params.Version[i] = h.GetNullInt32(a.Version)
+		params.Specification[i] = h.GetNullString(a.Specification)
+		params.Availability[i] = database.AvailabilityType(a.Availability)
+		params.HasSaveSphere[i] = a.HasSaveSphere
+		params.AirshipDropOff[i] = a.AirshipDropOff
+		params.HasCompilationSphere[i] = a.HasCompilationSphere
+		params.CanRideChocobo[i] = a.CanRideChocobo
+	}
+
+	dbRows, err := qtx.CreateAreaBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create areas: %v", err)
+	}
+
+	for i, row := range dbRows {
+		areas[i].ID = row.ID
+		l.Areas[areas[i].Name] = areas[i]
+		l.AreasID[row.ID] = areas[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractAreas() ([]Area, error) {
+	areas := []Area{}
+	var err error
+
+	for i := range l.json.locations {
+		location := &l.json.locations[i]
+
+		for j := range location.Sublocations {
+			sublocation := &location.Sublocations[j]
+
+			for k := range sublocation.Areas {
+				area := &sublocation.Areas[k]
+
+				area.Sublocation.ID, err = assignFK(sublocation.Name, l.Sublocations)
+				if err != nil {
+					return nil, err
+				}
+
+				areas = append(areas, *area)
+			}
+		}
+	}
+
+	return dedupeRows(areas, l.Hashes), nil
+}

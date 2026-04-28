@@ -45,6 +45,8 @@ func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		err = l.seedLoop(qtx, context.Background(), []func(*database.Queries, context.Context) error{
 			l.seedLoop1,
 			l.seedLoop2,
+			l.seedLoop3,
+			l.seedLoop4,
 		})
 		if err != nil {
 			return err

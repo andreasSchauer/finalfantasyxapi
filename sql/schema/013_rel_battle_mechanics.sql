@@ -1,6 +1,6 @@
 -- +goose Up
 ALTER TABLE stats
-ADD COLUMN sphere_id INTEGER REFERENCES items(id);
+ADD COLUMN sphere_id INTEGER REFERENCES spheres(id);
 
 
 ALTER TABLE elements

@@ -135,6 +135,74 @@ func (l *Lookup) extractItemAmounts() ([]ItemAmount, error) {
 		}
 	}
 
+	monsterItems, err := l.extractItemAmtsMonsters()
+	if err != nil {
+		return nil, err
+	}
+	itemAmounts = append(itemAmounts, monsterItems...)
+
+	for i := range l.json.playerAbilities {
+		playerAbility := &l.json.playerAbilities[i]
+
+		if playerAbility.AeonLearnItem != nil {
+			itemAmt, err := l.prepareItemAmt(playerAbility.AeonLearnItem)
+			if err != nil {
+				return nil, err
+			}
+
+			itemAmounts = append(itemAmounts, *itemAmt)
+		}
+	}
+
+	for i := range l.json.sidequests {
+		sidequest := &l.json.sidequests[i]
+
+		if sidequest.Completion != nil {
+			itemAmt, err := l.prepareItemAmt(&sidequest.Completion.Reward)
+			if err != nil {
+				return nil, err
+			}
+
+			itemAmounts = append(itemAmounts, *itemAmt)
+		}
+
+		for j := range sidequest.Subquests {
+			subquest := &sidequest.Subquests[j]
+
+			if subquest.Completion != nil {
+				itemAmt, err := l.prepareItemAmt(&subquest.Completion.Reward)
+				if err != nil {
+					return nil, err
+				}
+
+				itemAmounts = append(itemAmounts, *itemAmt)
+			}
+		}
+	}
+
+	for i := range l.json.treasureLists {
+		treasureList := &l.json.treasureLists[i]
+		for j := range treasureList.Treasures {
+			treasure := &treasureList.Treasures[j]
+
+			for j := range treasure.Items {
+				itemAmt, err := l.prepareItemAmt(&treasure.Items[j])
+				if err != nil {
+					return nil, err
+				}
+
+				itemAmounts = append(itemAmounts, *itemAmt)
+			}
+		}
+	}
+
+	return dedupeRows(itemAmounts, l.Hashes), nil
+}
+
+func (l *Lookup) extractItemAmtsMonsters() ([]ItemAmount, error) {
+	itemAmounts := []ItemAmount{}
+	var err error
+
 	for i := range l.json.monsters {
 		monster := l.json.monsters[i]
 
@@ -215,62 +283,7 @@ func (l *Lookup) extractItemAmounts() ([]ItemAmount, error) {
 		}
 	}
 
-	for i := range l.json.playerAbilities {
-		playerAbility := &l.json.playerAbilities[i]
-
-		if playerAbility.AeonLearnItem != nil {
-			itemAmt, err := l.prepareItemAmt(playerAbility.AeonLearnItem)
-			if err != nil {
-				return nil, err
-			}
-
-			itemAmounts = append(itemAmounts, *itemAmt)
-		}
-	}
-
-	for i := range l.json.sidequests {
-		sidequest := &l.json.sidequests[i]
-
-		if sidequest.Completion != nil {
-			itemAmt, err := l.prepareItemAmt(&sidequest.Completion.Reward)
-			if err != nil {
-				return nil, err
-			}
-
-			itemAmounts = append(itemAmounts, *itemAmt)
-		}
-
-		for j := range sidequest.Subquests {
-			subquest := sidequest.Subquests[j]
-
-			if subquest.Completion != nil {
-				itemAmt, err := l.prepareItemAmt(&subquest.Completion.Reward)
-				if err != nil {
-					return nil, err
-				}
-
-				itemAmounts = append(itemAmounts, *itemAmt)
-			}
-		}
-	}
-
-	for i := range l.json.treasureLists {
-		treasureList := &l.json.treasureLists[i]
-		for j := range treasureList.Treasures {
-			treasure := &treasureList.Treasures[j]
-
-			for j := range treasure.Items {
-				itemAmt, err := l.prepareItemAmt(&treasure.Items[j])
-				if err != nil {
-					return nil, err
-				}
-
-				itemAmounts = append(itemAmounts, *itemAmt)
-			}
-		}
-	}
-
-	return dedupeRows(itemAmounts, l.Hashes), nil
+	return itemAmounts, nil
 }
 
 func (l *Lookup) prepareItemAmt(ia *ItemAmount) (*ItemAmount, error) {
