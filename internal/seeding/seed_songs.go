@@ -521,3 +521,67 @@ func (l *Lookup) extractBackgroundMusic() []BackgroundMusic {
 	return dedupeRows(bgMusic, l.Hashes)
 }
 
+
+
+func (l *Lookup) loop4SeedCues(qtx *database.Queries, ctx context.Context) error {
+	cues, err := l.extractCues()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateCueBulkParams{
+		DataHash:   			make([]string, len(cues)),
+		SongID: 				make([]int32, len(cues)),
+		SceneDescription: 		make([]string, len(cues)),
+		TriggerAreaID: 			make([]sql.NullInt32, len(cues)),
+		ReplacesBgMusic: 		make([]database.NullBgReplacementType, len(cues)),
+		EndTrigger: 			make([]sql.NullString, len(cues)),
+		ReplacesEncounterMusic: make([]bool, len(cues)),
+	}
+
+	for i, c := range cues {
+		params.DataHash[i] = generateDataHash(c)
+		params.SongID[i] = c.SongID
+		params.SceneDescription[i] = c.SceneDescription
+		params.TriggerAreaID[i] = h.ObjPtrToNullInt32ID(c.TriggerLocationArea)
+		params.ReplacesBgMusic[i] = database.ToNullBgReplacementType(c.ReplacesBGMusic)
+		params.EndTrigger[i] = h.GetNullString(c.EndTrigger)
+		params.ReplacesEncounterMusic[i] = c.ReplacesEncounterMusic
+	}
+
+	dbRows, err := qtx.CreateCueBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create cues: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractCues() ([]Cue, error) {
+	cues := []Cue{}
+	var err error
+
+	for i := range l.json.songs {
+		song := &l.json.songs[i]
+
+		for j := range song.Cues {
+			cue := &song.Cues[j]
+			cue.SongID = song.ID
+
+			if cue.TriggerLocationArea != nil {
+				cue.TriggerLocationArea.ID, err = assignFK(*cue.TriggerLocationArea, l.Areas)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			cues = append(cues, *cue)
+		}
+	}
+
+	return dedupeRows(cues, l.Hashes), nil
+}

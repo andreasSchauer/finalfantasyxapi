@@ -153,7 +153,8 @@ func (l *Lookup) loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Cont
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.enemyAbilities[i].ID = row.ID
-		l.EnemyAbilities[abilities[i].Name] = abilities[i]
+		key := CreateLookupKey(abilities[i])
+		l.EnemyAbilities[key] = abilities[i]
 		l.EnemyAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

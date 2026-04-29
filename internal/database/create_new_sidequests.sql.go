@@ -218,7 +218,7 @@ func (q *Queries) CreateMonsterArenaCreationBulk(ctx context.Context, arg Create
 }
 
 const createQuestBulk = `-- name: CreateQuestBulk :many
-INSERT INTO quests (data_hash, name, type, availability, is_repeatable)
+INSERT INTO quests (data_hash, name, type, availability, is_repeatable, completion_id)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),

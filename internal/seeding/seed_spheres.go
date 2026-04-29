@@ -309,3 +309,52 @@ func (l *Lookup) extractCreatedNodes() []CreatedNode {
 
 	return dedupeRows(createdNodes, l.Hashes)
 }
+
+
+func (l *Lookup) loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Context) error {
+	nodes := l.extractTargetableNodes()
+
+	params := database.CreateSphereTargetableNodeBulkParams{
+		DataHash:   make([]string, len(nodes)),
+		SphereID: 	make([]int32, len(nodes)),
+		Node: 		make([]database.NodeType, len(nodes)),
+	}
+
+	for i, s := range nodes {
+		params.DataHash[i] = generateDataHash(s)
+		params.SphereID[i] = s.SphereID
+		params.Node[i] = database.NodeType(s.Node)
+	}
+
+	dbRows, err := qtx.CreateSphereTargetableNodeBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create targetable nodes: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractTargetableNodes() []TargetableNode {
+	nodes := []TargetableNode{}
+
+	for i := range l.json.spheres {
+		sphere := &l.json.spheres[i]
+
+		for j := range sphere.TargetableNodes {
+			nodeString := sphere.TargetableNodes[j]
+
+			node := TargetableNode{
+				SphereID: 	sphere.ID,
+				Node: 		nodeString,
+			}
+
+			nodes = append(nodes, node)
+		}
+	}
+
+	return dedupeRows(nodes, l.Hashes)
+}

@@ -505,6 +505,66 @@ func (l *Lookup) extractMonsterSelections() []MonsterSelection {
 }
 
 
+
+func (l *Lookup) loop4SeedFormationData(qtx *database.Queries, ctx context.Context) error {
+	data, err := l.extractFormationData()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateFormationDataBulkParams{
+		DataHash:   	make([]string, len(data)),
+		Category: 		make([]database.MonsterFormationCategory, len(data)),
+		Availability: 	make([]database.AvailabilityType, len(data)),
+		IsForcedAmbush: make([]bool, len(data)),
+		CanEscape: 		make([]bool, len(data)),
+		BossSongID: 	make([]sql.NullInt32, len(data)),
+		Notes: 			make([]sql.NullString, len(data)),
+	}
+
+	for i, d := range data {
+		params.DataHash[i] = generateDataHash(d)
+		params.Category[i] = database.MonsterFormationCategory(d.Category)
+		params.Availability[i] = database.AvailabilityType(d.Availability)
+		params.IsForcedAmbush[i] = d.IsForcedAmbush
+		params.CanEscape[i] = d.CanEscape
+		params.BossSongID[i] = h.ObjPtrToNullInt32ID(d.BossMusic)
+		params.Notes[i] = h.GetNullString(d.Notes)
+	}
+
+	dbRows, err := qtx.CreateFormationDataBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create formation data: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractFormationData() ([]FormationData, error) {
+	data := []FormationData{}
+	var err error
+
+	for i := range l.json.monsterFormations {
+		mfData := &l.json.monsterFormations[i].FormationData
+
+		if mfData.BossMusic != nil {
+			mfData.BossMusic.ID, err = l.getHashID(mfData.BossMusic)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		data = append(data, *mfData)
+	}
+
+	return dedupeRows(data, l.Hashes), nil
+}
+
+
 func (l *Lookup) loop2SeedMonsterAmounts(qtx *database.Queries, ctx context.Context) error {
 	mas, err := l.extractMonsterAmounts()
 	if err != nil {
@@ -609,4 +669,112 @@ func (l *Lookup) extractFormationBossSongs() ([]FormationBossSong, error) {
 	}
 
 	return dedupeRows(songs, l.Hashes), nil
+}
+
+
+func (l *Lookup) loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Context) error {
+	areas, err := l.extractEncounterAreas()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateEncounterAreaBulkParams{
+		DataHash:   	make([]string, len(areas)),
+		AreaID: 		make([]int32, len(areas)),
+		Specification:	make([]sql.NullString, len(areas)),
+	}
+
+	for i, a := range areas {
+		params.DataHash[i] = generateDataHash(a)
+		params.AreaID[i] = a.AreaID
+		params.Specification[i] = h.GetNullString(a.Specification)
+	}
+
+	dbRows, err := qtx.CreateEncounterAreaBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create encounter areas: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractEncounterAreas() ([]EncounterArea, error) {
+	areas := []EncounterArea{}
+	var err error
+
+	for i := range l.json.monsterFormations {
+		mf := &l.json.monsterFormations[i]
+
+		for j := range mf.EncounterAreas {
+			area := &mf.EncounterAreas[j]
+
+			area.AreaID, err = assignFK(area.LocationArea, l.Areas)
+			if err != nil {
+				return nil, err
+			}
+
+			areas = append(areas, *area)
+		}
+	}
+
+	return dedupeRows(areas, l.Hashes), nil
+}
+
+
+func (l *Lookup) loop4SeedFormationTriggerCommands(qtx *database.Queries, ctx context.Context) error {
+	commands, err := l.extractFormationTriggerCommands()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateFormationTriggerCommandBulkParams{
+		DataHash:   		make([]string, len(commands)),
+		TriggerCommandID: 	make([]int32, len(commands)),
+		Condition: 			make([]sql.NullString, len(commands)),
+		UseAmount: 			make([]sql.NullInt32, len(commands)),
+	}
+
+	for i, c := range commands {
+		params.DataHash[i] = generateDataHash(c)
+		params.TriggerCommandID[i] = c.TriggerCommandID
+		params.Condition[i] = h.GetNullString(c.Condition)
+		params.UseAmount[i] = h.GetNullInt32(c.UseAmount)
+	}
+
+	dbRows, err := qtx.CreateFormationTriggerCommandBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create formation trigger commands: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractFormationTriggerCommands() ([]FormationTriggerCommand, error) {
+	commands := []FormationTriggerCommand{}
+	var err error
+
+	for i := range l.json.monsterFormations {
+		mf := &l.json.monsterFormations[i]
+
+		for j := range mf.TriggerCommands {
+			command := & mf.TriggerCommands[j]
+
+			command.TriggerCommandID, err = assignFK(command.AbilityReference.Untyped(), l.TriggerCommands)
+			if err != nil {
+				return nil, err
+			}
+
+			commands = append(commands, *command)
+		}
+	}
+
+	return dedupeRows(commands, l.Hashes), nil
 }

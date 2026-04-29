@@ -19,7 +19,7 @@ RETURNING id, data_hash;
 
 
 -- name: CreateQuestBulk :many
-INSERT INTO quests (data_hash, name, type, availability, is_repeatable)
+INSERT INTO quests (data_hash, name, type, availability, is_repeatable, completion_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[]),

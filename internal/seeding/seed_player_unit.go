@@ -106,12 +106,14 @@ func (l *Lookup) loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context
 func (l *Lookup) extractPlayerUnits() []PlayerUnit {
 	playerUnits := []PlayerUnit{}
 
-	for _, c := range l.json.characters {
+	for i := range l.json.characters {
+		c := &l.json.characters[i]
 		c.PlayerUnit.Type = database.UnitTypeCharacter
 		playerUnits = append(playerUnits, c.PlayerUnit)
 	}
 
-	for _, a := range l.json.aeons {
+	for i := range l.json.aeons {
+		a := &l.json.aeons[i]
 		a.PlayerUnit.Type = database.UnitTypeAeon
 		playerUnits = append(playerUnits, a.PlayerUnit)
 	}

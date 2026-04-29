@@ -2,6 +2,7 @@ package seeding
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -148,4 +149,132 @@ func (l *Lookup) seedAbilityDamage(qtx *database.Queries, abilityDamage AbilityD
 	abilityDamage.ID = dbAbilityDamage.ID
 
 	return abilityDamage, nil
+}
+
+func (l *Lookup) loop2SeedDamages(qtx *database.Queries, ctx context.Context) error {
+	damages, err := l.extractDamages()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateDamageBulkParams{
+		DataHash:        make([]string, len(damages)),
+		Critical:        make([]database.NullCriticalType, len(damages)),
+		CriticalPlusVal: make([]sql.NullInt32, len(damages)),
+		IsPiercing:      make([]bool, len(damages)),
+		BreakDmgLimit:   make([]database.NullBreakDmgLmtType, len(damages)),
+		ElementID:       make([]sql.NullInt32, len(damages)),
+	}
+
+	for i, d := range damages {
+		params.DataHash[i] = generateDataHash(d)
+		params.Critical[i] = database.ToNullCriticalType(d.Critical)
+		params.CriticalPlusVal[i] = h.GetNullInt32(d.CriticalPlusVal)
+		params.IsPiercing[i] = d.IsPiercing
+		params.BreakDmgLimit[i] = database.ToNullBreakDmgLmtType(d.BreakDmgLimit)
+		params.ElementID[i] = h.GetNullInt32(d.ElementID)
+	}
+
+	dbRows, err := qtx.CreateDamageBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create damages: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractDamages() ([]Damage, error) {
+	damages := []Damage{}
+
+	for i := range l.json.playerAbilities {
+		ability := &l.json.playerAbilities[i]
+
+		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	for i := range l.json.overdriveAbilities {
+		ability := &l.json.overdriveAbilities[i]
+
+		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	for i := range l.json.items {
+		item := &l.json.items[i]
+
+		newDamages, err := l.prepareDamages(item.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	for i := range l.json.triggerCommands {
+		command := &l.json.triggerCommands[i]
+
+		newDamages, err := l.prepareDamages(command.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	for i := range l.json.unspecifiedAbilities {
+		ability := &l.json.unspecifiedAbilities[i]
+
+		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	for i := range l.json.enemyAbilities {
+		ability := &l.json.enemyAbilities[i]
+
+		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		if err != nil {
+			return nil, err
+		}
+
+		damages = append(damages, newDamages...)
+	}
+
+	return dedupeRows(damages, l.Hashes), nil
+}
+
+func (l *Lookup) prepareDamages(battleInteractions []BattleInteraction) ([]Damage, error) {
+	damages := []Damage{}
+	var err error
+
+	for i := range battleInteractions {
+		bi := &battleInteractions[i]
+
+		if bi.Damage != nil {
+			bi.Damage.ElementID, err = assignFKPtr(bi.Damage.Element, l.Elements)
+			if err != nil {
+				return nil, err
+			}
+
+			damages = append(damages, *bi.Damage)
+		}
+	}
+
+	return damages, nil
 }

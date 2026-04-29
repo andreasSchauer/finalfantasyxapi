@@ -190,3 +190,86 @@ func (l *Lookup) seedSidequestsRelationships(db *database.Queries, dbConn *sql.D
 		return nil
 	})
 }
+
+
+
+func (l *Lookup) loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Context) error {
+	areas, err := l.extractCompletionAreas()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateCompletionAreaBulkParams{
+		DataHash:   	make([]string, len(areas)),
+		CompletionID: 	make([]int32, len(areas)),
+		AreaID: 		make([]int32, len(areas)),
+		Notes: 			make([]sql.NullString, len(areas)),
+	}
+
+	for i, a := range areas {
+		params.DataHash[i] = generateDataHash(a)
+		params.CompletionID[i] = a.CompletionID
+		params.AreaID[i] = a.AreaID
+		params.Notes[i] = h.GetNullString(a.Notes)
+	}
+
+	dbRows, err := qtx.CreateCompletionAreaBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create completion areas: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractCompletionAreas() ([]CompletionArea, error) {
+	areas := []CompletionArea{}
+
+	for i := range l.json.sidequests {
+		sidequest := &l.json.sidequests[i]
+
+		if sidequest.Completion != nil {
+			areasNew, err := l.prepareCompletionAreas(sidequest.Completion.Areas, sidequest.Completion.ID)
+			if err != nil {
+				return nil, err
+			}
+			areas = append(areas, areasNew...)
+		}
+
+		for j := range sidequest.Subquests {
+			subquest := &sidequest.Subquests[j]
+
+			if subquest.Completion != nil {
+				areasNew, err := l.prepareCompletionAreas(subquest.Completion.Areas, subquest.Completion.ID)
+				if err != nil {
+					return nil, err
+				}
+				areas = append(areas, areasNew...)
+			}
+		}
+	}
+
+	return dedupeRows(areas, l.Hashes), nil
+}
+
+func (l *Lookup) prepareCompletionAreas(areas []CompletionArea, completionID int32) ([]CompletionArea, error) {
+	areasNew := []CompletionArea{}
+	var err error
+
+	for i := range areas {
+		area := &areas[i]
+		area.CompletionID = completionID
+
+		area.AreaID, err = assignFK(area.LocationArea, l.Areas)
+		if err != nil {
+			return nil, err
+		}
+
+		areasNew = append(areasNew, *area)
+	}
+
+	return areasNew, nil
+}

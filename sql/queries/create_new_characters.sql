@@ -9,7 +9,7 @@ RETURNING id, data_hash;
 
 
 -- name: CreateCharacterBulk :many
-INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
+INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater, area_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('unit_id')::int[]),
@@ -24,7 +24,7 @@ RETURNING id, data_hash;
 
 
 -- name: CreateAeonBulk :many
-INSERT INTO aeons (data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate)
+INSERT INTO aeons (data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, area_id, accuracy_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('unit_id')::int[]),

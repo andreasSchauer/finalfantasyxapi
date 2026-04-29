@@ -221,6 +221,60 @@ func (l *Lookup) loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.
 
 
 
+func (l *Lookup) loop4SeedBlitzballItems(qtx *database.Queries, ctx context.Context) error {
+	items, err := l.extractBlitzballItems()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateBlitzballItemBulkParams{
+		DataHash:   	make([]string, len(items)),
+		PositionID: 	make([]int32, len(items)),
+		PossibleItemID: make([]int32, len(items)),
+	}
+
+	for i, bi := range items {
+		params.DataHash[i] = generateDataHash(bi)
+		params.PositionID[i] = bi.PositionID
+		params.PossibleItemID[i] = bi.PossibleItem.ID
+	}
+
+	dbRows, err := qtx.CreateBlitzballItemBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create blitzball items: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractBlitzballItems() ([]BlitzballItem, error) {
+	items := []BlitzballItem{}
+	var err error
+
+	for i := range l.json.blitzballPositions {
+		pos := &l.json.blitzballPositions[i]
+
+		for j := range pos.Items {
+			item := &pos.Items[j]
+			item.PositionID = pos.ID
+
+			item.PossibleItem.ID, err = l.getHashID(item.PossibleItem)
+			if err != nil {
+				return nil, err
+			}
+
+			items = append(items, *item)
+		}
+	}
+
+	return dedupeRows(items, l.Hashes), nil
+}
+
+
 func (l *Lookup) loop3SeedPossibleItems(qtx *database.Queries, ctx context.Context) error {
 	items, err := l.extractPossibleItems()
 	if err != nil {

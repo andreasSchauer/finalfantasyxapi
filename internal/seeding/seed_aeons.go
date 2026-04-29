@@ -218,3 +218,83 @@ func (l *Lookup) seedAeonEquipment(qtx *database.Queries, aeonEquipment AeonEqui
 
 	return aeonEquipment, nil
 }
+
+
+
+func (l *Lookup) loop4SeedAeons(qtx *database.Queries, ctx context.Context) error {
+	aeons, err := l.extractAeons()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateAeonBulkParams{
+		DataHash:   			make([]string, len(aeons)),
+		UnitID: 				make([]int32, len(aeons)),
+		UnlockCondition: 		make([]string, len(aeons)),
+		IsOptional: 			make([]bool, len(aeons)),
+		BattlesToRegenerate: 	make([]int32, len(aeons)),
+		PhysAtkDamageConstant: 	make([]sql.NullInt32, len(aeons)),
+		PhysAtkRange: 			make([]sql.NullInt32, len(aeons)),
+		PhysAtkShatterRate: 	make([]sql.NullInt32, len(aeons)),
+		AreaID: 				make([]sql.NullInt32, len(aeons)),
+		AccuracyID: 			make([]sql.NullInt32, len(aeons)),
+	}
+
+	for i, a := range aeons {
+		params.DataHash[i] = generateDataHash(a)
+		params.UnitID[i] = a.PlayerUnit.ID
+		params.UnlockCondition[i] = a.UnlockCondition
+		params.IsOptional[i] = a.IsOptional
+		params.BattlesToRegenerate[i] = a.BattlesToRegenerate
+		params.PhysAtkDamageConstant[i] = h.GetNullInt32(a.PhysAtkDmgConstant)
+		params.PhysAtkRange[i] = h.GetNullInt32(a.PhysAtkRange)
+		params.PhysAtkShatterRate[i] = h.GetNullInt32(a.PhysAtkShatterRate)
+		params.AreaID[i] = h.GetNullInt32(a.AreaID)
+		params.AccuracyID[i] = h.ObjPtrToNullInt32ID(a.PhysAtkAccuracy)
+	}
+
+	dbRows, err := qtx.CreateAeonBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create aeons: %v", err)
+	}
+
+	for i, row := range dbRows {
+		aeons[i].ID = row.ID
+		l.json.aeons[i].ID = row.ID
+		l.Aeons[aeons[i].Name] = aeons[i]
+		l.AeonsID[row.ID] = aeons[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractAeons() ([]Aeon, error) {
+	aeons := []Aeon{}
+	var err error
+
+	for i := range l.json.aeons {
+		aeon := &l.json.aeons[i]
+
+		aeon.PlayerUnit.ID, err = l.getHashID(aeon.PlayerUnit)
+		if err != nil {
+			return nil, err
+		}
+
+		aeon.AreaID, err = assignFKPtr(&aeon.LocationArea, l.Areas)
+		if err != nil {
+			return nil, err
+		}
+
+		if aeon.PhysAtkAccuracy != nil {
+			aeon.PhysAtkAccuracy.ID, err = l.getHashID(aeon.PhysAtkAccuracy)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		aeons = append(aeons, *aeon)
+	}
+
+	return dedupeRows(aeons, l.Hashes), nil
+}

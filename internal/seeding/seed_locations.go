@@ -382,10 +382,7 @@ func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) 
 
 
 func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
-	sublocations, err := l.extractSublocations()
-	if err != nil {
-		return err
-	}
+	sublocations := l.extractSublocations()
 
 	params := database.CreateSublocationBulkParams{
 		DataHash:   make([]string, len(sublocations)),
@@ -414,26 +411,20 @@ func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Contex
 	return nil
 }
 
-func (l *Lookup) extractSublocations() ([]Sublocation, error) {
+func (l *Lookup) extractSublocations() []Sublocation {
 	sublocations := []Sublocation{}
-	var err error
 
 	for i := range l.json.locations {
 		location := &l.json.locations[i]
 
 		for j := range location.Sublocations {
 			sublocation := &location.Sublocations[j]
-
-			sublocation.Location.ID, err = assignFK(location.Name, l.Locations)
-			if err != nil {
-				return nil, err
-			}
-
+			sublocation.Location = *location
 			sublocations = append(sublocations, *sublocation)
 		}
 	}
 
-	return dedupeRows(sublocations, l.Hashes), nil
+	return dedupeRows(sublocations, l.Hashes)
 }
 
 func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) error {
@@ -475,7 +466,8 @@ func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) erro
 
 	for i, row := range dbRows {
 		areas[i].ID = row.ID
-		l.Areas[areas[i].Name] = areas[i]
+		key := CreateLookupKey(areas[i].GetLocationArea())
+		l.Areas[key] = areas[i]
 		l.AreasID[row.ID] = areas[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -487,6 +479,7 @@ func (l *Lookup) extractAreas() ([]Area, error) {
 	areas := []Area{}
 	var err error
 
+	// why does area.Sublocation.ID get updated, but not sublocation.ID and location.Sublocations[i].ID?
 	for i := range l.json.locations {
 		location := &l.json.locations[i]
 
@@ -495,8 +488,9 @@ func (l *Lookup) extractAreas() ([]Area, error) {
 
 			for k := range sublocation.Areas {
 				area := &sublocation.Areas[k]
+				area.Sublocation = *sublocation
 
-				area.Sublocation.ID, err = assignFK(sublocation.Name, l.Sublocations)
+				area.Sublocation.ID, err = l.getHashID(area.Sublocation)
 				if err != nil {
 					return nil, err
 				}
@@ -507,4 +501,84 @@ func (l *Lookup) extractAreas() ([]Area, error) {
 	}
 
 	return dedupeRows(areas, l.Hashes), nil
+}
+
+
+
+func (l *Lookup) loop4SeedAreaConnections(qtx *database.Queries, ctx context.Context) error {
+	areas, err := l.extractAreaConnections()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateAreaConnectionBulkParams{
+		DataHash:   	make([]string, len(areas)),
+		AreaID: 		make([]int32, len(areas)),
+		ConnectionType: make([]database.AreaConnectionType, len(areas)),
+		IsStoryBased: 	make([]bool, len(areas)),
+		Notes: 			make([]sql.NullString, len(areas)),
+	}
+
+	for i, a := range areas {
+		params.DataHash[i] = generateDataHash(a)
+		params.AreaID[i] = a.AreaID
+		params.ConnectionType[i] = database.AreaConnectionType(a.ConnectionType)
+		params.IsStoryBased[i] = a.IsStoryBased
+		params.Notes[i] = h.GetNullString(a.Notes)
+	}
+
+	dbRows, err := qtx.CreateAreaConnectionBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create area connections: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractAreaConnections() ([]AreaConnection, error) {
+	areas := []AreaConnection{}
+
+	for i := range l.json.locations {
+		location := &l.json.locations[i]
+
+		for j := range location.Sublocations {
+			sublocation := &location.Sublocations[j]
+
+			connAreas, err := l.prepareAreaConnections(sublocation.Areas)
+			if err != nil {
+				return nil, err
+			}
+
+			areas = append(areas, connAreas...)
+		}
+	}
+
+	return dedupeRows(areas, l.Hashes), nil
+}
+
+
+func (l *Lookup) prepareAreaConnections(areas []Area) ([]AreaConnection, error) {
+	connectedAreas := []AreaConnection{}
+	var err error
+
+	for i := range areas {
+		area := &areas[i]
+
+		for j := range area.ConnectedAreas {
+			connArea := &area.ConnectedAreas[j]
+
+			connArea.AreaID, err = assignFK(connArea.LocationArea, l.Areas)
+			if err != nil {
+				return nil, err
+			}
+
+			connectedAreas = append(connectedAreas, *connArea)
+		}
+	}
+
+	return connectedAreas, nil
 }

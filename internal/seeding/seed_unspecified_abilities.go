@@ -242,7 +242,8 @@ func (l *Lookup) loop3SeedUnspecifiedAbilities(qtx *database.Queries, ctx contex
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.unspecifiedAbilities[i].ID = row.ID
-		l.UnspecifiedAbilities[abilities[i].Name] = abilities[i]
+		key := CreateLookupKey(abilities[i])
+		l.UnspecifiedAbilities[key] = abilities[i]
 		l.UnspecifiedAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

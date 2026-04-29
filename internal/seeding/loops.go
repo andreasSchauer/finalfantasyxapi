@@ -78,5 +78,22 @@ func (l *Lookup) seedLoop3(qtx *database.Queries, ctx context.Context) error {
 func (l *Lookup) seedLoop4(qtx *database.Queries, ctx context.Context) error {
 	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
 		l.loop4SeedStats,
+		l.loop4SeedStatusResists,
+		l.loop4SeedCharacters,
+		l.loop4SeedAeons,
+		l.loop4SeedQuests,
+		l.loop4SeedBlitzballItems,
+		l.loop4SeedCompletionAreas,
+		l.loop4SeedOverdrives,
+		l.loop4SeedTargetableNodes,
+		l.loop4SeedTreasures,
+		l.loop4SeedShops,
+		l.loop4SeedAreaConnections,
+		l.loop4SeedFMVs,
+		l.loop4SeedCues,
+		l.loop4SeedInflictedStatusses,
+		l.loop4SeedFormationData,
+		l.loop4SeedEncounterAreas,
+		l.loop4SeedFormationTriggerCommands,
 	})
 }
