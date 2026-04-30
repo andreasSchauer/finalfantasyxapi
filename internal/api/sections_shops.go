@@ -42,7 +42,7 @@ type ShopEquipmentSimple struct {
 func convertShopEquipmentSimple(cfg *Config, se seeding.ShopEquipment) ShopEquipmentSimple {
 	return ShopEquipmentSimple{
 		EquipmentName: shopEquipmentNameString(cfg, se),
-		Abilities:     foundEquipmentAbilitiesStringPtr(se.FoundEquipment),
+		Abilities:     foundEquipmentAbilitiesStringPtr(se.TreasureEquipment),
 	}
 }
 
@@ -54,7 +54,7 @@ func shopEquipmentNameString(_ *Config, se seeding.ShopEquipment) string {
 	return fmt.Sprintf("%s - %d Gil", se.Name, se.Price)
 }
 
-func foundEquipmentAbilitiesStringPtr(fe seeding.FoundEquipment) *string {
+func foundEquipmentAbilitiesStringPtr(fe seeding.TreasureEquipment) *string {
 	zeroAbilities := len(fe.Abilities) == 0
 	zeroSlots := fe.EmptySlotsAmount == 0
 	slotsStr := fmt.Sprintf("(%d)", fe.EmptySlotsAmount)

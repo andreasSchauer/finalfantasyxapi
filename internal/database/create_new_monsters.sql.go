@@ -267,7 +267,7 @@ SELECT
     unnest($1::text[]),
     unnest($2::int[]),
     unnest($3::boolean[]),
-    unnest($4::null_auto_ability_probability[]),
+    unnest($4::null_int[]),
     unnest($5::equip_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
@@ -277,7 +277,7 @@ type CreateEquipmentDropBulkParams struct {
 	DataHash      []string
 	AutoAbilityID []int32
 	IsForced      []bool
-	Probability   []interface{}
+	Probability   []sql.NullInt32
 	Type          []EquipType
 }
 

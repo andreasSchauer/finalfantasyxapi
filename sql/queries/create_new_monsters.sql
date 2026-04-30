@@ -166,7 +166,7 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('auto_ability_id')::int[]),
     unnest(sqlc.arg('is_forced')::boolean[]),
-    unnest(sqlc.arg('probability')::null_auto_ability_probability[]),
+    unnest(sqlc.arg('probability')::null_int[]),
     unnest(sqlc.arg('type')::equip_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;

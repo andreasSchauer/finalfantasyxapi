@@ -382,11 +382,11 @@ func (q *Queries) CreatePlayerAbilitiesRelatedStatsJunctionBulk(ctx context.Cont
 }
 
 const createPlayerAbilityBulk = `-- name: CreatePlayerAbilityBulk :many
-INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, can_use_outside_battle, mp_cost, cursor, topmenu_id, submenu_id, open_submenu_id, standard_grid_char_id, exp_grid_char_ids, aeon_learn_item_id)
+INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, can_use_outside_battle, mp_cost, cursor, topmenu_id, submenu_id, open_submenu_id, standard_grid_char_id, expert_grid_char_id, aeon_learn_item_id)
 SELECT
     unnest($1::text[]),
     unnest($2::int[]),
-    unnest($3::text[]),
+    unnest($3::null_string[]),
     unnest($4::text[]),
     unnest($5::player_ability_category[]),
     unnest($6::boolean[]),
@@ -405,7 +405,7 @@ RETURNING id, data_hash
 type CreatePlayerAbilityBulkParams struct {
 	DataHash            []string
 	AbilityID           []int32
-	Description         []string
+	Description         []sql.NullString
 	Effect              []string
 	Category            []PlayerAbilityCategory
 	CanUseOutsideBattle []bool

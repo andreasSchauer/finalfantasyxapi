@@ -472,9 +472,72 @@ func (l *Lookup) seedFormationTriggerCommandUsers(qtx *database.Queries, trigger
 	return nil
 }
 
+func (l *Lookup) loop5SeedMonsterFormations(qtx *database.Queries, ctx context.Context) error {
+	formations, err := l.extractMonsterFormations()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateMonsterFormationBulkParams{
+		DataHash:   		make([]string, len(formations)),
+		Version: 			make([]sql.NullInt32, len(formations)),
+		MonsterSelectionID: make([]int32, len(formations)),
+		FormationDataID: 	make([]int32, len(formations)),
+	}
+
+	for i, mf := range formations {
+		params.DataHash[i] = generateDataHash(mf)
+		params.Version[i] = h.GetNullInt32(mf.Version)
+		params.MonsterSelectionID[i] = mf.MonsterSelection.ID
+		params.FormationDataID[i] = mf.FormationData.ID
+	}
+
+	dbRows, err := qtx.CreateMonsterFormationBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create monster formations: %v", err)
+	}
+
+	for i, row := range dbRows {
+		formations[i].ID = row.ID
+		l.json.monsterFormations[i].ID = row.ID
+		key := CreateLookupKey(formations[i])
+		l.MonsterFormations[key] = formations[i]
+		l.MonsterFormationsID[row.ID] = formations[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractMonsterFormations() ([]MonsterFormation, error) {
+	formations := []MonsterFormation{}
+	var err error
+
+	for i := range l.json.monsterFormations {
+		mf := &l.json.monsterFormations[i]
+
+		mf.FormationData.ID, err = l.getHashID(mf.FormationData)
+		if err != nil {
+			return nil, err
+		}
+
+		mf.MonsterSelection.ID, err = l.getHashID(mf.MonsterSelection)
+		if err != nil {
+			return nil, err
+		}
+
+		formations = append(formations, *mf)
+	}
+
+	return dedupeRows(formations, l.Hashes), nil
+}
+
 
 func (l *Lookup) loop1SeedMonsterSelections(qtx *database.Queries, ctx context.Context) error {
-	selections := l.extractMonsterSelections()
+	selections, err := l.extractMonsterSelections()
+	if err != nil {
+		return err
+	}
 
 	dataHashes := make([]string, len(selections))
 
@@ -494,14 +557,27 @@ func (l *Lookup) loop1SeedMonsterSelections(qtx *database.Queries, ctx context.C
 	return nil
 }
 
-func (l *Lookup) extractMonsterSelections() []MonsterSelection {
+func (l *Lookup) extractMonsterSelections() ([]MonsterSelection, error) {
 	selections := []MonsterSelection{}
+	var err error
 
-	for _, mf := range l.json.monsterFormations {
+	for i := range l.json.monsterFormations {
+		mf := &l.json.monsterFormations[i]
+
+		for j := range mf.MonsterSelection.Monsters {
+			ma := &mf.MonsterSelection.Monsters[j]
+
+			key := CreateLookupKey(*ma)
+			ma.MonsterID, err = assignFK(key, l.Monsters)
+			if err != nil {
+				return nil, err
+			}
+		}
+
 		selections = append(selections, mf.MonsterSelection)
 	}
 
-	return dedupeRows(selections, l.Hashes)
+	return dedupeRows(selections, l.Hashes), nil
 }
 
 

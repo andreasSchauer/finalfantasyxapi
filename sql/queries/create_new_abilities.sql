@@ -38,11 +38,11 @@ RETURNING id, data_hash;
 
 
 -- name: CreatePlayerAbilityBulk :many
-INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, can_use_outside_battle, mp_cost, cursor, topmenu_id, submenu_id, open_submenu_id, standard_grid_char_id, exp_grid_char_ids, aeon_learn_item_id)
+INSERT INTO player_abilities (data_hash, ability_id, description, effect, category, can_use_outside_battle, mp_cost, cursor, topmenu_id, submenu_id, open_submenu_id, standard_grid_char_id, expert_grid_char_id, aeon_learn_item_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('ability_id')::int[]),
-    unnest(sqlc.arg('description')::text[]),
+    unnest(sqlc.arg('description')::null_string[]),
     unnest(sqlc.arg('effect')::text[]),
     unnest(sqlc.arg('category')::player_ability_category[]),
     unnest(sqlc.arg('can_use_outside_battle')::boolean[]),

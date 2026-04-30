@@ -207,3 +207,56 @@ func (l *Lookup) loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Cont
 
 	return nil
 }
+
+
+func (l *Lookup) loop5SeedOdModeActions(qtx *database.Queries, ctx context.Context) error {
+	actions, err := l.extractOdModeActions()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateODModeActionBulkParams{
+		DataHash:   make([]string, len(actions)),
+		UserID: 	make([]int32, len(actions)),
+		Amount: 	make([]int32, len(actions)),
+	}
+
+	for i, a := range actions {
+		params.DataHash[i] = generateDataHash(a)
+		params.UserID[i] = a.UserID
+		params.Amount[i] = a.Amount
+	}
+
+	dbRows, err := qtx.CreateODModeActionBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create overdrive mode actions: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractOdModeActions() ([]ActionToLearn, error) {
+	actions := []ActionToLearn{}
+	var err error
+
+	for i := range l.json.overdriveModes {
+		mode := &l.json.overdriveModes[i]
+
+		for j := range mode.ActionsToLearn {
+			action := &mode.ActionsToLearn[j]
+
+			action.UserID, err = assignFK(action.User, l.Characters)
+			if err != nil {
+				return nil, err
+			}
+
+			actions = append(actions, *action)
+		}
+	}
+
+	return dedupeRows(actions, l.Hashes), nil
+}

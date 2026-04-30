@@ -2,17 +2,14 @@ package api
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
-
 type Shop struct {
-	ID          int32           	`json:"id"`
-	Area        AreaAPIResource 	`json:"area"`
-	Category    NamedAPIResource    `json:"category"`
-	Notes       *string         	`json:"notes,omitempty"`
-	PreAirship  *SubShop        	`json:"pre_airship"`
-	PostAirship *SubShop        	`json:"post_airship"`
+	ID          int32            `json:"id"`
+	Area        AreaAPIResource  `json:"area"`
+	Category    NamedAPIResource `json:"category"`
+	Notes       *string          `json:"notes,omitempty"`
+	PreAirship  *SubShop         `json:"pre_airship"`
+	PostAirship *SubShop         `json:"post_airship"`
 }
-
-
 
 type SubShop struct {
 	Items     []ShopItem      `json:"items"`
@@ -26,8 +23,6 @@ func convertSubShop(cfg *Config, ss seeding.SubShop) SubShop {
 	}
 }
 
-
-
 type ShopItem struct {
 	Item  NamedAPIResource `json:"item"`
 	Price int32            `json:"price"`
@@ -40,8 +35,6 @@ func convertShopItem(cfg *Config, si seeding.ShopItem) ShopItem {
 	}
 }
 
-
-
 type ShopEquipment struct {
 	Equipment FoundEquipment `json:"equipment"`
 	Price     int32          `json:"price"`
@@ -49,7 +42,7 @@ type ShopEquipment struct {
 
 func convertShopEquipment(cfg *Config, se seeding.ShopEquipment) ShopEquipment {
 	return ShopEquipment{
-		Equipment: convertFoundEquipment(cfg, se.FoundEquipment),
+		Equipment: convertFoundEquipment(cfg, se.TreasureEquipment),
 		Price:     se.Price,
 	}
 }

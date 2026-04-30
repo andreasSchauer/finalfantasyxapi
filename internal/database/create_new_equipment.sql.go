@@ -19,7 +19,7 @@ SELECT
     unnest($2::int[]),
     unnest($3::int[]),
     unnest($4::int[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
 
@@ -224,7 +224,7 @@ func (q *Queries) CreateAutoAbilitiesStatChangesJunctionBulk(ctx context.Context
 }
 
 const createAutoAbilityBulk = `-- name: CreateAutoAbilityBulk :many
-INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter)
+INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter, required_item_amount_id, grad_rcvry_stat_id, on_hit_element_id, added_elem_resist_id, on_hit_status_id, added_property_id, cnvrsn_from_mod_id, cnvrsn_to_mod_id)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),
@@ -243,7 +243,7 @@ SELECT
     unnest($15::null_int[]),
     unnest($16::null_int[]),
     unnest($17::null_int[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
 
@@ -314,7 +314,7 @@ func (q *Queries) CreateAutoAbilityBulk(ctx context.Context, arg CreateAutoAbili
 }
 
 const createCelestialWeaponBulk = `-- name: CreateCelestialWeaponBulk :many
-INSERT INTO celestial_weapons (data_hash, name, key_item_base, formula)
+INSERT INTO celestial_weapons (data_hash, name, key_item_base, formula, character_id, aeon_id)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),
@@ -322,7 +322,7 @@ SELECT
     unnest($4::celestial_formula[]),
     unnest($5::null_int[]),
     unnest($6::null_int[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
 
@@ -376,7 +376,7 @@ SELECT
     unnest($1::text[]),
     unnest($2::int[]),
     unnest($3::text[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
 
@@ -423,8 +423,8 @@ SELECT
     unnest($4::null_int[]),
     unnest($5::null_int[]),
     unnest($6::null_int[]),
-    unnest($7::null_equipment_slots[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
+    unnest($7::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
 
@@ -435,7 +435,7 @@ type CreateEquipmentTableBulkParams struct {
 	SpecificCharacterID []sql.NullInt32
 	Version             []sql.NullInt32
 	Priority            []sql.NullInt32
-	RequiredSlots       []interface{}
+	RequiredSlots       []sql.NullInt32
 }
 
 type CreateEquipmentTableBulkRow struct {

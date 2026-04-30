@@ -97,3 +97,40 @@ func (l *Lookup) seedLoop4(qtx *database.Queries, ctx context.Context) error {
 		l.loop4SeedFormationTriggerCommands,
 	})
 }
+
+func (l *Lookup) seedLoop5(qtx *database.Queries, ctx context.Context) error {
+	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+		l.loop5SeedBaseStats,
+		l.loop5SeedOdModeActions,
+		l.loop5SeedSidequests,
+		l.loop5SeedPlayerAbilities,
+		l.loop5SeedRonsoRages,
+		l.loop5SeedMixes,
+		l.loop5SeedCelestialWeapons,
+		l.loop5SeedAutoAbilities,
+		l.loop5SeedEquipmentTables,
+		l.loop5SeedEquipmentNames,
+		l.loop5SeedMonsterFormations,
+		l.loop5SeedAbilityDamages,
+		l.loop5SeedStatChanges,
+		l.loop5SeedAltStateChanges,
+	})
+}
+
+func (l *Lookup) seedLoop6(qtx *database.Queries, ctx context.Context) error {
+	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+		l.loop6SeedAeonEquipment,
+		l.loop6SeedSubquests,
+		l.loop6SeedMixCombinations,
+		l.loop6SeedAbilityPools,
+		l.loop6SeedTreasureEquipment,
+		l.loop6SeedShopEquipment,
+		l.loop6SeedEquipmentDrops,
+	})
+}
+
+func (l *Lookup) seedLoop7(qtx *database.Queries, ctx context.Context) error {
+	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+		l.loop7SeedArenaCreations,
+	})
+}

@@ -42,10 +42,10 @@ func convertShopSummarySimple(_ *Config, shop seeding.SubShop) ShopSummarySimple
 }
 
 type TreasuresLocSimple struct {
-	TreasureCount int                `json:"treasure_count"`
-	TotalGil      int32              `json:"total_gil"`
-	Items         []string 			 `json:"items"`
-	Equipment     []EquipmentSimple  `json:"equipment"`
+	TreasureCount int               `json:"treasure_count"`
+	TotalGil      int32             `json:"total_gil"`
+	Items         []string          `json:"items"`
+	Equipment     []EquipmentSimple `json:"equipment"`
 }
 
 func getTreasuresLocSimple(cfg *Config, id int32, subsection Subsection) *TreasuresLocSimple {
@@ -95,7 +95,7 @@ type EquipmentSimple struct {
 	AutoAbilities *string `json:"auto_abilities"`
 }
 
-func convertEquipmentSimple(_ *Config, equipment seeding.FoundEquipment) EquipmentSimple {
+func convertEquipmentSimple(_ *Config, equipment seeding.TreasureEquipment) EquipmentSimple {
 	return EquipmentSimple{
 		Name:          equipment.Name,
 		AutoAbilities: foundEquipmentAbilitiesStringPtr(equipment),

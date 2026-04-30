@@ -150,9 +150,7 @@ func (l *Lookup) seedMixCombinations(qtx *database.Queries, mix Mix) error {
 		combo.MixID = mix.ID
 
 		key := CreateLookupKey(combo)
-		if _, exists := bestComboMap[key]; exists {
-			combo.IsBestCombo = true
-		}
+		combo.IsBestCombo = bestComboMap[key]
 
 		_, err = seedObjAssignID(qtx, combo, l.seedMixCombination)
 		if err != nil {
@@ -163,12 +161,12 @@ func (l *Lookup) seedMixCombinations(qtx *database.Queries, mix Mix) error {
 	return nil
 }
 
-func getBestComboMap(mix Mix) map[string]struct{} {
-	bestComboMap := make(map[string]struct{})
+func getBestComboMap(mix Mix) map[string]bool {
+	bestComboMap := make(map[string]bool)
 
 	for _, combo := range mix.BestCombinations {
 		key := CreateLookupKey(combo)
-		bestComboMap[key] = struct{}{}
+		bestComboMap[key] = true
 	}
 
 	return bestComboMap
@@ -207,4 +205,128 @@ func (l *Lookup) seedMixCombination(qtx *database.Queries, combo MixCombination)
 	combo.ID = dbCombo.ID
 
 	return combo, nil
+}
+
+func (l *Lookup) loop5SeedMixes(qtx *database.Queries, ctx context.Context) error {
+	mixes, err := l.extractMixes()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateMixBulkParams{
+		DataHash:   	make([]string, len(mixes)),
+		OverdriveID: 	make([]int32, len(mixes)),
+		Category: 		make([]database.MixCategory, len(mixes)),
+	}
+
+	for i, m := range mixes {
+		params.DataHash[i] = generateDataHash(m)
+		params.OverdriveID[i] = m.OverdriveID
+		params.Category[i] = database.MixCategory(m.Category)
+	}
+
+	dbRows, err := qtx.CreateMixBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create mixes: %v", err)
+	}
+
+	for i, row := range dbRows {
+		mixes[i].ID = row.ID
+		l.json.mixes[i].ID = row.ID
+		l.Mixes[mixes[i].Name] = mixes[i]
+		l.MixesID[row.ID] = mixes[i]
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractMixes() ([]Mix, error) {
+	mixes := []Mix{}
+	var err error
+
+	for i := range l.json.mixes {
+		mix := &l.json.mixes[i]
+
+		mix.OverdriveID, err = assignFK(mix.Name, l.Overdrives)
+		if err != nil {
+			return nil, err
+		}
+
+		mixes = append(mixes, *mix)
+	}
+
+	return dedupeRows(mixes, l.Hashes), nil
+}
+
+func (l *Lookup) loop6SeedMixCombinations(qtx *database.Queries, ctx context.Context) error {
+	combos, err := l.extractMixCombinations()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateMixCombinationBulkParams{
+		DataHash:   	make([]string, len(combos)),
+		MixID: 			make([]int32, len(combos)),
+		FirstItemID: 	make([]int32, len(combos)),
+		SecondItemID: 	make([]int32, len(combos)),
+		IsBestCombo: 	make([]bool, len(combos)),
+	}
+
+	for i, c := range combos {
+		params.DataHash[i] = generateDataHash(c)
+		params.MixID[i] = c.MixID
+		params.FirstItemID[i] = c.FirstItemID
+		params.SecondItemID[i] = c.SecondItemID
+		params.IsBestCombo[i] = c.IsBestCombo
+	}
+
+	dbRows, err := qtx.CreateMixCombinationBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create mix combinations: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractMixCombinations() ([]MixCombination, error) {
+	combos := []MixCombination{}
+	var err error
+
+	for i := range l.json.mixes {
+		mix := &l.json.mixes[i]
+		bestComboMap := getBestComboMap(*mix)
+
+		for j := range mix.PossibleCombinations {
+			combo := &mix.PossibleCombinations[j]
+			combo.MixID = mix.ID
+
+			key := CreateLookupKey(combo)
+			combo.IsBestCombo = bestComboMap[key]
+
+			combo.FirstItemID, err = assignFK(combo.FirstItem, l.Items)
+			if err != nil {
+				return nil, err
+			}
+
+			combo.SecondItemID, err = assignFK(combo.SecondItem, l.Items)
+			if err != nil {
+				return nil, err
+			}
+
+			if combo.FirstItemID > combo.SecondItemID {
+				temp := combo.FirstItemID
+				combo.FirstItemID = combo.SecondItemID
+				combo.SecondItemID = temp
+			}
+
+			combos = append(combos, *combo)
+		}
+	}
+
+	return dedupeRows(combos, l.Hashes), nil
 }

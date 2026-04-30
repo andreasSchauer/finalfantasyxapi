@@ -152,7 +152,7 @@ func (q *Queries) CreateCompletionAreaBulk(ctx context.Context, arg CreateComple
 }
 
 const createMonsterArenaCreationBulk = `-- name: CreateMonsterArenaCreationBulk :many
-INSERT INTO monster_arena_creations (data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount)
+INSERT INTO monster_arena_creations (data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount, monster_id)
 SELECT
     unnest($1::text[]),
     unnest($2::int[]),

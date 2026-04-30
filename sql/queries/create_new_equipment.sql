@@ -1,5 +1,5 @@
 -- name: CreateCelestialWeaponBulk :many
-INSERT INTO celestial_weapons (data_hash, name, key_item_base, formula)
+INSERT INTO celestial_weapons (data_hash, name, key_item_base, formula, character_id, aeon_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[]),
@@ -7,12 +7,12 @@ SELECT
     unnest(sqlc.arg('formula')::celestial_formula[]),
     unnest(sqlc.arg('character_id')::null_int[]),
     unnest(sqlc.arg('aeon_id')::null_int[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 
 
 -- name: CreateAutoAbilityBulk :many
-INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter)
+INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter, required_item_amount_id, grad_rcvry_stat_id, on_hit_element_id, added_elem_resist_id, on_hit_status_id, added_property_id, cnvrsn_from_mod_id, cnvrsn_to_mod_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[]),
@@ -31,7 +31,7 @@ SELECT
     unnest(sqlc.arg('added_property_id')::null_int[]),
     unnest(sqlc.arg('cnvrsn_from_mod_id')::null_int[]),
     unnest(sqlc.arg('cnvrsn_to_mod_id')::null_int[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 
 
@@ -44,8 +44,8 @@ SELECT
     unnest(sqlc.arg('specific_character_id')::null_int[]),
     unnest(sqlc.arg('version')::null_int[]),
     unnest(sqlc.arg('priority')::null_int[]),
-    unnest(sqlc.arg('required_slots')::null_equipment_slots[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
+    unnest(sqlc.arg('required_slots')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 
 
@@ -55,7 +55,7 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('character_id')::int[]),
     unnest(sqlc.arg('name')::text[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 
 
@@ -66,7 +66,7 @@ SELECT
     unnest(sqlc.arg('equipment_table_id')::int[]),
     unnest(sqlc.arg('pool_idx')::int[]),
     unnest(sqlc.arg('req_amount')::int[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXLUDED.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 
 

@@ -22,14 +22,14 @@ type Treasure struct {
 	ID              int32
 	Version         int32
 	AreaID          int32
-	TreasureType    string          `json:"treasure_type"`
-	LootType        string          `json:"loot_type"`
-	Availability	string			`json:"availability"`
-	IsAnimaTreasure bool            `json:"is_anima_treasure"`
-	Notes           *string         `json:"notes"`
-	GilAmount       *int32          `json:"gil_amount"`
-	Items           []ItemAmount    `json:"items"`
-	Equipment       *FoundEquipment `json:"equipment"`
+	TreasureType    string             `json:"treasure_type"`
+	LootType        string             `json:"loot_type"`
+	Availability    string             `json:"availability"`
+	IsAnimaTreasure bool               `json:"is_anima_treasure"`
+	Notes           *string            `json:"notes"`
+	GilAmount       *int32             `json:"gil_amount"`
+	Items           []ItemAmount       `json:"items"`
+	Equipment       *TreasureEquipment `json:"equipment"`
 }
 
 func (t Treasure) ToHashFields() []any {
@@ -186,8 +186,6 @@ func (l *Lookup) seedTreasureItemAmounts(qtx *database.Queries, treasure Treasur
 	return nil
 }
 
-
-
 func (l *Lookup) loop4SeedTreasures(qtx *database.Queries, ctx context.Context) error {
 	treasures, err := l.extractTreasures()
 	if err != nil {
@@ -195,15 +193,15 @@ func (l *Lookup) loop4SeedTreasures(qtx *database.Queries, ctx context.Context) 
 	}
 
 	params := database.CreateTreasureBulkParams{
-		DataHash:   		make([]string, len(treasures)),
-		AreaID: 			make([]int32, len(treasures)),
-		Version: 			make([]int32, len(treasures)),
-		TreasureType: 		make([]database.TreasureType, len(treasures)),
-		LootType: 			make([]database.LootType, len(treasures)),
-		Availability: 		make([]database.AvailabilityType, len(treasures)),
-		IsAnimaTreasure: 	make([]bool, len(treasures)),
-		Notes: 				make([]sql.NullString, len(treasures)),
-		GilAmount: 			make([]sql.NullInt32, len(treasures)),
+		DataHash:        make([]string, len(treasures)),
+		AreaID:          make([]int32, len(treasures)),
+		Version:         make([]int32, len(treasures)),
+		TreasureType:    make([]database.TreasureType, len(treasures)),
+		LootType:        make([]database.LootType, len(treasures)),
+		Availability:    make([]database.AvailabilityType, len(treasures)),
+		IsAnimaTreasure: make([]bool, len(treasures)),
+		Notes:           make([]sql.NullString, len(treasures)),
+		GilAmount:       make([]sql.NullInt32, len(treasures)),
 	}
 
 	for i, t := range treasures {
@@ -255,4 +253,67 @@ func (l *Lookup) extractTreasures() ([]Treasure, error) {
 	}
 
 	return dedupeRows(treasures, l.Hashes), nil
+}
+
+func (l *Lookup) loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.Context) error {
+	equipment, err := l.extractTreasureEquipment()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateTreasureEquipmentPieceBulkParams{
+		DataHash:         make([]string, len(equipment)),
+		TreasureID:       make([]int32, len(equipment)),
+		EquipmentNameID:  make([]int32, len(equipment)),
+		EmptySlotsAmount: make([]int32, len(equipment)),
+	}
+
+	for i, e := range equipment {
+		params.DataHash[i] = generateDataHash(e)
+		params.TreasureID[i] = e.TreasureID
+		params.EquipmentNameID[i] = e.EquipmentNameID
+		params.EmptySlotsAmount[i] = e.EmptySlotsAmount
+	}
+
+	dbRows, err := qtx.CreateTreasureEquipmentPieceBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create treasure equipment: %v", err)
+	}
+
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) extractTreasureEquipment() ([]TreasureEquipment, error) {
+	equipment := []TreasureEquipment{}
+	var err error
+
+	for i := range l.json.treasureLists {
+		list := &l.json.treasureLists[i]
+
+		for j := range list.Treasures {
+			treasure := &list.Treasures[j]
+
+			if treasure.Equipment == nil {
+				continue
+			}
+
+			treasure.Equipment.TreasureID, err = l.getHashID(treasure)
+			if err != nil {
+				return nil, err
+			}
+
+			treasure.Equipment.EquipmentNameID, err = assignFK(treasure.Equipment.Name, l.EquipmentNames)
+			if err != nil {
+				return nil, err
+			}
+
+			equipment = append(equipment, *treasure.Equipment)
+		}
+	}
+
+	return dedupeRows(equipment, l.Hashes), nil
 }

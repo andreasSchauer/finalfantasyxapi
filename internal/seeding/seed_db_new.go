@@ -47,6 +47,9 @@ func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 			l.seedLoop2,
 			l.seedLoop3,
 			l.seedLoop4,
+			l.seedLoop5,
+			l.seedLoop6,
+			l.seedLoop7,
 		})
 		if err != nil {
 			return err
@@ -78,17 +81,18 @@ func (l *Lookup) seedLoop(qtx *database.Queries, ctx context.Context, fns []func
 
 func dedupeRows[T Hashable](rows []T, hashes map[string]int32) []T {
     seen := make(map[string]bool)
-    ordered := []T{}
+    new := []T{}
 
     for _, row := range rows {
         hash := generateDataHash(row)
+		
 		_, ok := hashes[hash]
 		if ok || seen[hash] {
 			continue
 		}
 
 		seen[hash] = true
-		ordered = append(ordered, row)
+		new = append(new, row)
     }
-    return ordered
+    return new
 }
