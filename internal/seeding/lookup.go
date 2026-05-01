@@ -3,6 +3,7 @@ package seeding
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -25,7 +26,7 @@ func (l LookupObject) Error() string {
 
 type Lookup struct {
 	json                   jsonLookup
-	Hashes				   map[string]int32
+	Hashes                 map[string]int32
 	currentAbility         Ability           // currentAbility and currentBI are
 	currentBI              BattleInteraction // used for seeding of ability damage
 	currentME              MonsterEquipment  // used for some monster equipment junctions
@@ -132,9 +133,11 @@ type Lookup struct {
 	TreasuresID            map[int32]Treasure
 }
 
-func lookupInit() *Lookup {
+func lookupInit() (*Lookup, error) {
+	start := time.Now()
+
 	l := Lookup{
-		Hashes: 				make(map[string]int32),
+		Hashes:                 make(map[string]int32),
 		Abilities:              make(map[string]Ability),
 		AbilitiesID:            make(map[int32]Ability),
 		UnspecifiedAbilities:   make(map[string]UnspecifiedAbility),
@@ -238,7 +241,15 @@ func lookupInit() *Lookup {
 		TreasuresID:            make(map[int32]Treasure),
 	}
 
-	return &l
+	err := l.loadJSONFiles()
+	if err != nil {
+		return nil, err
+	}
+
+	duration := time.Since(start)
+	fmt.Printf("creating lookups took %.3f seconds\n", duration.Seconds())
+
+	return &l, nil
 }
 
 func GetResource[T any, K any](key K, lookup map[string]T) (T, error) {
@@ -274,7 +285,7 @@ func getResourceStrKey[T any](key string, lookup map[string]T) (T, error) {
 }
 
 func getResourceObjKey[T any](obj Lookupable, lookup map[string]T) (T, error) {
-	key := CreateLookupKey(obj)
+	key := Key(obj)
 
 	resource, err := GetResource(key, lookup)
 	if err != nil {

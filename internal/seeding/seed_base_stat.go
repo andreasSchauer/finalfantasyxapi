@@ -27,6 +27,10 @@ func (bs BaseStat) GetID() int32 {
 	return bs.ID
 }
 
+func (b *BaseStat) SetID(id int32) {
+	b.ID = id
+}
+
 func (bs BaseStat) GetName() string {
 	return bs.StatName
 }

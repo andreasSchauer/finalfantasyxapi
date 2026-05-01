@@ -107,6 +107,10 @@ func (bm BackgroundMusic) GetID() int32 {
 	return bm.ID
 }
 
+func (bm *BackgroundMusic) SetID(id int32) {
+	bm.ID = id
+}
+
 func (bm BackgroundMusic) Error() string {
 	return fmt.Sprintf("background music replacing encounter music: %t, condition: %v", bm.ReplacesEncounterMusic, h.PtrToString(bm.Condition))
 }
@@ -150,6 +154,10 @@ func (c Cue) ToHashFields() []any {
 
 func (c Cue) GetID() int32 {
 	return c.ID
+}
+
+func (c *Cue) SetID(id int32) {
+	c.ID = id
 }
 
 func (c Cue) Error() string {

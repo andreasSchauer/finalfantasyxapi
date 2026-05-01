@@ -31,6 +31,10 @@ func (m MonsterEquipmentSlots) GetID() int32 {
 	return m.ID
 }
 
+func (m *MonsterEquipmentSlots) SetID(id int32) {
+	m.ID = id
+}
+
 func (m MonsterEquipmentSlots) Error() string {
 	return fmt.Sprintf("monster equipment slots with monster equipment id: %d, type: %s, min amount: %d, max amount: %d", m.ID, m.Type, m.MinAmount, m.MaxAmount)
 }
@@ -51,6 +55,10 @@ func (e EquipmentSlotsChance) ToHashFields() []any {
 
 func (e EquipmentSlotsChance) GetID() int32 {
 	return e.ID
+}
+
+func (e *EquipmentSlotsChance) SetID(id int32) {
+	e.ID = id
 }
 
 func (e EquipmentSlotsChance) Error() string {

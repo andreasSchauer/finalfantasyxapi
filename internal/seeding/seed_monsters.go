@@ -16,11 +16,11 @@ type Monster struct {
 	Specification        *string           `json:"specification"`
 	Notes                *string           `json:"notes"`
 	Species              string            `json:"species"`
-	Availability		 string			   `json:"availability"`
+	Availability         string            `json:"availability"`
 	IsRepeatable         bool              `json:"is_repeatable"`
 	CanBeCaptured        bool              `json:"can_be_captured"`
 	AreaConquestLocation *string           `json:"area_conquest_location"`
-	Category			 string			   `json:"category"`
+	Category             string            `json:"category"`
 	CTBIconType          string            `json:"ctb_icon_type"`
 	HasOverdrive         bool              `json:"has_overdrive"`
 	IsUnderwater         bool              `json:"is_underwater"`
@@ -129,7 +129,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 				IsRepeatable:         monster.IsRepeatable,
 				CanBeCaptured:        monster.CanBeCaptured,
 				AreaConquestLocation: database.ToNullMaCreationArea(monster.AreaConquestLocation),
-				Category: 			  database.MonsterCategory(monster.Category),
+				Category:             database.MonsterCategory(monster.Category),
 				CtbIconType:          database.CtbIconType(monster.CTBIconType),
 				HasOverdrive:         monster.HasOverdrive,
 				IsUnderwater:         monster.IsUnderwater,
@@ -153,7 +153,7 @@ func (l *Lookup) seedMonsters(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			monster.ID = dbMonster.ID
-			key := CreateLookupKey(monster)
+			key := Key(monster)
 			l.Monsters[key] = monster
 			l.MonstersID[monster.ID] = monster
 		}
@@ -173,7 +173,7 @@ func (l *Lookup) seedMonstersRelationships(db *database.Queries, dbConn *sql.DB)
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonMonster := range monsters {
-			key := CreateLookupKey(jsonMonster)
+			key := Key(jsonMonster)
 
 			monster, err := GetResource(key, l.Monsters)
 			if err != nil {
@@ -415,7 +415,6 @@ func (l *Lookup) seedMonsterAbilities(qtx *database.Queries, monster Monster) er
 	return nil
 }
 
-
 func (l *Lookup) loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
 	err := l.completeMonstersElements()
 	if err != nil {
@@ -493,7 +492,7 @@ func (l *Lookup) loop1SeedMonsters(qtx *database.Queries, ctx context.Context) e
 	for i, row := range dbRows {
 		monsters[i].ID = row.ID
 		l.json.monsters[i].ID = row.ID
-		key := CreateLookupKey(monsters[i])
+		key := Key(monsters[i])
 		l.Monsters[key] = monsters[i]
 		l.MonstersID[row.ID] = monsters[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -528,4 +527,3 @@ func (l *Lookup) completeMonstersElements() error {
 
 	return nil
 }
-

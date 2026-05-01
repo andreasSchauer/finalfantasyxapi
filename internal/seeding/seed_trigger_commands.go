@@ -12,7 +12,7 @@ import (
 type TriggerCommand struct {
 	ID int32
 	Ability
-	TopmenuID		   *int32			  
+	TopmenuID          *int32
 	Description        string              `json:"description"`
 	Effect             string              `json:"effect"`
 	Topmenu            *string             `json:"topmenu"`
@@ -96,7 +96,7 @@ func (l *Lookup) seedTriggerCommands(db *database.Queries, dbConn *sql.DB) error
 			}
 
 			command.ID = dbTriggerCommand.ID
-			key := CreateLookupKey(command)
+			key := Key(command)
 			l.TriggerCommands[key] = command
 			l.TriggerCommandsID[command.ID] = command
 		}
@@ -129,9 +129,9 @@ func (l *Lookup) seedTriggerCommandsRelationships(db *database.Queries, dbConn *
 			}
 
 			err = qtx.UpdateTriggerCommand(context.Background(), database.UpdateTriggerCommandParams{
-				DataHash: 	generateDataHash(command),
-				TopmenuID: 	h.GetNullInt32(command.TopmenuID),
-				ID: 		command.ID,
+				DataHash:  generateDataHash(command),
+				TopmenuID: h.GetNullInt32(command.TopmenuID),
+				ID:        command.ID,
 			})
 
 			err = l.seedTriggerCommandRelatedStats(qtx, command)
@@ -171,8 +171,6 @@ func (l *Lookup) seedTriggerCommandRelatedStats(qtx *database.Queries, command T
 	return nil
 }
 
-
-
 func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Context) error {
 	commands, err := l.extractTriggerCommands()
 	if err != nil {
@@ -180,12 +178,12 @@ func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Con
 	}
 
 	params := database.CreateTriggerCommandBulkParams{
-		DataHash:   	make([]string, len(commands)),
-		AbilityID: 		make([]int32, len(commands)),
-		Description:    make([]string, len(commands)),
-		Effect: 		make([]string, len(commands)),
-		Cursor: 		make([]database.TargetType, len(commands)),
-		TopmenuID: 		make([]sql.NullInt32, len(commands)),
+		DataHash:    make([]string, len(commands)),
+		AbilityID:   make([]int32, len(commands)),
+		Description: make([]string, len(commands)),
+		Effect:      make([]string, len(commands)),
+		Cursor:      make([]database.TargetType, len(commands)),
+		TopmenuID:   make([]sql.NullInt32, len(commands)),
 	}
 
 	for i, c := range commands {
@@ -205,7 +203,7 @@ func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Con
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
 		l.json.triggerCommands[i].ID = row.ID
-		key := CreateLookupKey(commands[i])
+		key := Key(commands[i])
 		l.TriggerCommands[key] = commands[i]
 		l.TriggerCommandsID[row.ID] = commands[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -213,7 +211,6 @@ func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Con
 
 	return nil
 }
-
 
 func (l *Lookup) extractTriggerCommands() ([]TriggerCommand, error) {
 	commands := []TriggerCommand{}

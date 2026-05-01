@@ -35,6 +35,10 @@ func (d Damage) GetID() int32 {
 	return d.ID
 }
 
+func (d *Damage) SetID(id int32) {
+	d.ID = id
+}
+
 func (d Damage) Error() string {
 	return fmt.Sprintf("damage with critical: %v, crit plus: %v, piercing: %t, bdl: %v, element: %v", h.PtrToString(d.Critical), h.PtrToString(d.CriticalPlusVal), d.IsPiercing, h.PtrToString(d.BreakDmgLimit), h.PtrToString(d.Element))
 }
@@ -64,6 +68,10 @@ func (ad AbilityDamage) ToHashFields() []any {
 
 func (ad AbilityDamage) GetID() int32 {
 	return ad.ID
+}
+
+func (ad *AbilityDamage) SetID(id int32) {
+	ad.ID = id
 }
 
 func (ad AbilityDamage) Error() string {

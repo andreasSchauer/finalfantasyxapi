@@ -103,7 +103,7 @@ func (l *Lookup) seedunspecifiedAbilities(db *database.Queries, dbConn *sql.DB) 
 			}
 
 			UnspecifiedAbility.ID = dbUnspecifiedAbility.ID
-			key := CreateLookupKey(UnspecifiedAbility)
+			key := Key(UnspecifiedAbility)
 			l.UnspecifiedAbilities[key] = UnspecifiedAbility
 			l.UnspecifiedAbilitiesID[UnspecifiedAbility.ID] = UnspecifiedAbility
 		}
@@ -204,8 +204,6 @@ func (l *Lookup) seedUnspecifiedAbilityLearnedBy(qtx *database.Queries, ability 
 	return nil
 }
 
-
-
 func (l *Lookup) loop3SeedUnspecifiedAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := l.extractUnspecifiedAbilities()
 	if err != nil {
@@ -213,14 +211,14 @@ func (l *Lookup) loop3SeedUnspecifiedAbilities(qtx *database.Queries, ctx contex
 	}
 
 	params := database.CreateUnspecifiedAbilityBulkParams{
-		DataHash:   	make([]string, len(abilities)),
-		AbilityID: 		make([]int32, len(abilities)),
-		Description:    make([]string, len(abilities)),
-		Effect: 		make([]string, len(abilities)),
-		Cursor: 		make([]database.NullTargetType, len(abilities)),
-		TopmenuID: 		make([]sql.NullInt32, len(abilities)),
-		SubmenuID: 		make([]sql.NullInt32, len(abilities)),
-		OpenSubmenuID: 	make([]sql.NullInt32, len(abilities)),
+		DataHash:      make([]string, len(abilities)),
+		AbilityID:     make([]int32, len(abilities)),
+		Description:   make([]string, len(abilities)),
+		Effect:        make([]string, len(abilities)),
+		Cursor:        make([]database.NullTargetType, len(abilities)),
+		TopmenuID:     make([]sql.NullInt32, len(abilities)),
+		SubmenuID:     make([]sql.NullInt32, len(abilities)),
+		OpenSubmenuID: make([]sql.NullInt32, len(abilities)),
 	}
 
 	for i, a := range abilities {
@@ -242,7 +240,7 @@ func (l *Lookup) loop3SeedUnspecifiedAbilities(qtx *database.Queries, ctx contex
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.unspecifiedAbilities[i].ID = row.ID
-		key := CreateLookupKey(abilities[i])
+		key := Key(abilities[i])
 		l.UnspecifiedAbilities[key] = abilities[i]
 		l.UnspecifiedAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -250,7 +248,6 @@ func (l *Lookup) loop3SeedUnspecifiedAbilities(qtx *database.Queries, ctx contex
 
 	return nil
 }
-
 
 func (l *Lookup) extractUnspecifiedAbilities() ([]UnspecifiedAbility, error) {
 	abilities := []UnspecifiedAbility{}
@@ -268,7 +265,7 @@ func (l *Lookup) extractUnspecifiedAbilities() ([]UnspecifiedAbility, error) {
 		if err != nil {
 			return nil, err
 		}
-		
+
 		ability.SubmenuID, err = assignFKPtr(ability.Submenu, l.Submenus)
 		if err != nil {
 			return nil, err
@@ -278,7 +275,6 @@ func (l *Lookup) extractUnspecifiedAbilities() ([]UnspecifiedAbility, error) {
 		if err != nil {
 			return nil, err
 		}
-
 
 		abilities = append(abilities, *ability)
 	}

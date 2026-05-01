@@ -47,6 +47,10 @@ func (bi BattleInteraction) GetID() int32 {
 	return bi.ID
 }
 
+func (bi *BattleInteraction) SetID(id int32) {
+	bi.ID = id
+}
+
 func (bi BattleInteraction) Error() string {
 	return fmt.Sprintf("battle interaction with target: %s, phys attack: %t, range: %v, damage id: %v, shatter rate: %v, accuracy id: %d, hit amount: %d, special action: %v", bi.Target, bi.BasedOnUserAttack, h.PtrToString(bi.Range), h.ObjPtrToID(bi.Damage), bi.ShatterRate, bi.Accuracy.ID, bi.HitAmount, h.PtrToString(bi.SpecialAction))
 }

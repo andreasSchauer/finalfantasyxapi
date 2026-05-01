@@ -78,6 +78,10 @@ func (a AeonEquipment) GetID() int32 {
 	return a.ID
 }
 
+func (a *AeonEquipment) SetID(id int32) {
+	a.ID = id
+}
+
 func (a AeonEquipment) Error() string {
 	return fmt.Sprintf("aeon equipment with auto ability: %s, clstl_wpn: %t, equip type: %s", a.AutoAbility, a.CelestialWeapon, a.EquipType)
 }

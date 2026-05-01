@@ -17,21 +17,25 @@ type TreasureEquipment struct {
 	EmptySlotsAmount int32    `json:"empty_slots_amount"`
 }
 
-func (f TreasureEquipment) ToHashFields() []any {
+func (te TreasureEquipment) ToHashFields() []any {
 	return []any{
-		fmt.Sprintf("%T", f),
-		f.TreasureID,
-		f.EquipmentNameID,
-		f.EmptySlotsAmount,
+		fmt.Sprintf("%T", te),
+		te.TreasureID,
+		te.EquipmentNameID,
+		te.EmptySlotsAmount,
 	}
 }
 
-func (f TreasureEquipment) GetID() int32 {
-	return f.ID
+func (te TreasureEquipment) GetID() int32 {
+	return te.ID
 }
 
-func (f TreasureEquipment) Error() string {
-	return fmt.Sprintf("treasure equipment with name: %s, empty slots: %d", f.Name, f.EmptySlotsAmount)
+func (te *TreasureEquipment) SetID(id int32) {
+	te.ID = id
+}
+
+func (te TreasureEquipment) Error() string {
+	return fmt.Sprintf("treasure equipment with name: %s, empty slots: %d", te.Name, te.EmptySlotsAmount)
 }
 
 func (l *Lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment TreasureEquipment) (TreasureEquipment, error) {

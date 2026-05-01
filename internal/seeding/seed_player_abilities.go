@@ -12,7 +12,7 @@ import (
 type PlayerAbility struct {
 	ID int32
 	Ability
-	TopmenuID			*int32
+	TopmenuID           *int32
 	SubmenuID           *int32
 	OpenSubmenuID       *int32
 	StandardGridCharID  *int32
@@ -20,7 +20,7 @@ type PlayerAbility struct {
 	Description         *string             `json:"description"`
 	Effect              string              `json:"effect"`
 	RelatedStats        []string            `json:"related_stats"`
-	Category			string				`json:"category"`
+	Category            string              `json:"category"`
 	Topmenu             *string             `json:"topmenu"`
 	Submenu             *string             `json:"submenu"`
 	OpenSubmenu         *string             `json:"open_submenu"`
@@ -120,7 +120,7 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 				AbilityID:           playerAbility.Ability.ID,
 				Description:         h.GetNullString(playerAbility.Description),
 				Effect:              playerAbility.Effect,
-				Category: 			 database.PlayerAbilityCategory(playerAbility.Category),
+				Category:            database.PlayerAbilityCategory(playerAbility.Category),
 				CanUseOutsideBattle: playerAbility.CanUseOutsideBattle,
 				MpCost:              playerAbility.MPCost,
 				Cursor:              database.ToNullTargetType(playerAbility.Cursor),
@@ -130,7 +130,7 @@ func (l *Lookup) seedPlayerAbilities(db *database.Queries, dbConn *sql.DB) error
 			}
 
 			playerAbility.ID = dbPlayerAbility.ID
-			key := CreateLookupKey(playerAbility)
+			key := Key(playerAbility)
 			l.PlayerAbilities[key] = playerAbility
 			l.PlayerAbilitiesID[playerAbility.ID] = playerAbility
 		}
@@ -219,7 +219,7 @@ func (l *Lookup) seedPlayerAbilityFKs(qtx *database.Queries, ability PlayerAbili
 
 	err = qtx.UpdatePlayerAbility(context.Background(), database.UpdatePlayerAbilityParams{
 		DataHash:           generateDataHash(ability),
-		TopmenuID: 			h.GetNullInt32(ability.TopmenuID),
+		TopmenuID:          h.GetNullInt32(ability.TopmenuID),
 		SubmenuID:          h.GetNullInt32(ability.SubmenuID),
 		OpenSubmenuID:      h.GetNullInt32(ability.OpenSubmenuID),
 		StandardGridCharID: h.GetNullInt32(ability.StandardGridCharID),
@@ -274,7 +274,6 @@ func (l *Lookup) seedPlayerAbilityLearnedBy(qtx *database.Queries, ability Playe
 	return nil
 }
 
-
 func (l *Lookup) loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := l.extractPlayerAbilities()
 	if err != nil {
@@ -282,20 +281,20 @@ func (l *Lookup) loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Con
 	}
 
 	params := database.CreatePlayerAbilityBulkParams{
-		DataHash:   			make([]string, len(abilities)),
-		AbilityID: 				make([]int32, len(abilities)),
-		Description: 			make([]sql.NullString, len(abilities)),
-		Effect: 				make([]string, len(abilities)),
-		Category: 				make([]database.PlayerAbilityCategory, len(abilities)),
-		CanUseOutsideBattle: 	make([]bool, len(abilities)),
-		MpCost: 				make([]int32, len(abilities)),
-		Cursor: 				make([]database.NullTargetType, len(abilities)),
-		TopmenuID: 				make([]sql.NullInt32, len(abilities)),
-		SubmenuID: 				make([]sql.NullInt32, len(abilities)),
-		OpenSubmenuID: 			make([]sql.NullInt32, len(abilities)),
-		StdGridCharID: 			make([]sql.NullInt32, len(abilities)),
-		ExpGridCharID: 			make([]sql.NullInt32, len(abilities)),
-		AeonLearnItemID: 		make([]sql.NullInt32, len(abilities)),
+		DataHash:            make([]string, len(abilities)),
+		AbilityID:           make([]int32, len(abilities)),
+		Description:         make([]sql.NullString, len(abilities)),
+		Effect:              make([]string, len(abilities)),
+		Category:            make([]database.PlayerAbilityCategory, len(abilities)),
+		CanUseOutsideBattle: make([]bool, len(abilities)),
+		MpCost:              make([]int32, len(abilities)),
+		Cursor:              make([]database.NullTargetType, len(abilities)),
+		TopmenuID:           make([]sql.NullInt32, len(abilities)),
+		SubmenuID:           make([]sql.NullInt32, len(abilities)),
+		OpenSubmenuID:       make([]sql.NullInt32, len(abilities)),
+		StdGridCharID:       make([]sql.NullInt32, len(abilities)),
+		ExpGridCharID:       make([]sql.NullInt32, len(abilities)),
+		AeonLearnItemID:     make([]sql.NullInt32, len(abilities)),
 	}
 
 	for i, a := range abilities {
@@ -323,7 +322,7 @@ func (l *Lookup) loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Con
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.playerAbilities[i].ID = row.ID
-		key := CreateLookupKey(abilities[i])
+		key := Key(abilities[i])
 		l.PlayerAbilities[key] = abilities[i]
 		l.PlayerAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID

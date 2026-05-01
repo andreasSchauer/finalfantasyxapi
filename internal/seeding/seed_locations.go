@@ -38,11 +38,11 @@ func (l Location) GetResParamsNamed() h.ResParamsNamed {
 }
 
 type Sublocation struct {
-	ID            int32
-	Name          string  `json:"sublocation"`
+	ID   int32
+	Name string `json:"sublocation"`
 
-	Areas         []Area  `json:"areas"`
-	Location      Location
+	Areas    []Area `json:"areas"`
+	Location Location
 }
 
 func (s Sublocation) ToHashFields() []any {
@@ -55,6 +55,10 @@ func (s Sublocation) ToHashFields() []any {
 
 func (s Sublocation) GetID() int32 {
 	return s.ID
+}
+
+func (s *Sublocation) SetID(id int32) {
+	s.ID = id
 }
 
 func (s Sublocation) Error() string {
@@ -73,7 +77,7 @@ type Area struct {
 	Name                 string           `json:"area"`
 	Version              *int32           `json:"version"`
 	Specification        *string          `json:"specification"`
-	Availability		 string			  `json:"availability"`
+	Availability         string           `json:"availability"`
 	HasSaveSphere        bool             `json:"has_save_sphere"`
 	AirshipDropOff       bool             `json:"airship_drop_off"`
 	HasCompilationSphere bool             `json:"has_compilation_sphere"`
@@ -99,6 +103,10 @@ func (a Area) ToHashFields() []any {
 
 func (a Area) GetID() int32 {
 	return a.ID
+}
+
+func (a *Area) SetID(id int32) {
+	a.ID = id
 }
 
 func (a Area) Error() string {
@@ -177,6 +185,10 @@ func (ac AreaConnection) GetID() int32 {
 	return ac.ID
 }
 
+func (ac *AreaConnection) SetID(id int32) {
+	ac.ID = id
+}
+
 func (ac AreaConnection) Error() string {
 	return fmt.Sprintf("area connection with %s", ac.LocationArea)
 }
@@ -218,9 +230,9 @@ func (l *Lookup) seedSublocations(qtx *database.Queries, location Location) erro
 		sublocation.Location = location
 
 		dbSublocation, err := qtx.CreateSublocation(context.Background(), database.CreateSublocationParams{
-			DataHash:      generateDataHash(sublocation),
-			LocationID:    sublocation.Location.ID,
-			Name:          sublocation.Name,
+			DataHash:   generateDataHash(sublocation),
+			LocationID: sublocation.Location.ID,
+			Name:       sublocation.Name,
 		})
 		if err != nil {
 			return h.NewErr(sublocation.Error(), err, "couldn't create sublocation")
@@ -261,7 +273,7 @@ func (l *Lookup) seedAreas(qtx *database.Queries, sublocation Sublocation) error
 		area.ID = dbArea.ID
 		locationArea := area.GetLocationArea()
 
-		key := CreateLookupKey(locationArea)
+		key := Key(locationArea)
 		l.Areas[key] = area
 		l.AreasID[area.ID] = area
 	}
@@ -349,7 +361,6 @@ func (l *Lookup) seedAreaConnection(qtx *database.Queries, connection AreaConnec
 	return connection, nil
 }
 
-
 func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
 	locations := dedupeRows(l.json.locations, l.Hashes)
 
@@ -378,8 +389,6 @@ func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) 
 
 	return nil
 }
-
-
 
 func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
 	sublocations := l.extractSublocations()
@@ -434,16 +443,16 @@ func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) erro
 	}
 
 	params := database.CreateAreaBulkParams{
-		DataHash:   			make([]string, len(areas)),
-		SublocationID: 			make([]int32, len(areas)),
-		Name:       			make([]string, len(areas)),
-		Version: 				make([]sql.NullInt32, len(areas)),
-		Specification: 			make([]sql.NullString, len(areas)),
-		Availability: 			make([]database.AvailabilityType, len(areas)),
-		HasSaveSphere: 			make([]bool, len(areas)),
-		AirshipDropOff: 		make([]bool, len(areas)),
-		HasCompilationSphere: 	make([]bool, len(areas)),
-		CanRideChocobo: 		make([]bool, len(areas)),
+		DataHash:             make([]string, len(areas)),
+		SublocationID:        make([]int32, len(areas)),
+		Name:                 make([]string, len(areas)),
+		Version:              make([]sql.NullInt32, len(areas)),
+		Specification:        make([]sql.NullString, len(areas)),
+		Availability:         make([]database.AvailabilityType, len(areas)),
+		HasSaveSphere:        make([]bool, len(areas)),
+		AirshipDropOff:       make([]bool, len(areas)),
+		HasCompilationSphere: make([]bool, len(areas)),
+		CanRideChocobo:       make([]bool, len(areas)),
 	}
 
 	for i, a := range areas {
@@ -466,7 +475,7 @@ func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) erro
 
 	for i, row := range dbRows {
 		areas[i].ID = row.ID
-		key := CreateLookupKey(areas[i].GetLocationArea())
+		key := Key(areas[i].GetLocationArea())
 		l.Areas[key] = areas[i]
 		l.AreasID[row.ID] = areas[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -503,8 +512,6 @@ func (l *Lookup) extractAreas() ([]Area, error) {
 	return dedupeRows(areas, l.Hashes), nil
 }
 
-
-
 func (l *Lookup) loop4SeedAreaConnections(qtx *database.Queries, ctx context.Context) error {
 	areas, err := l.extractAreaConnections()
 	if err != nil {
@@ -512,11 +519,11 @@ func (l *Lookup) loop4SeedAreaConnections(qtx *database.Queries, ctx context.Con
 	}
 
 	params := database.CreateAreaConnectionBulkParams{
-		DataHash:   	make([]string, len(areas)),
-		AreaID: 		make([]int32, len(areas)),
+		DataHash:       make([]string, len(areas)),
+		AreaID:         make([]int32, len(areas)),
 		ConnectionType: make([]database.AreaConnectionType, len(areas)),
-		IsStoryBased: 	make([]bool, len(areas)),
-		Notes: 			make([]sql.NullString, len(areas)),
+		IsStoryBased:   make([]bool, len(areas)),
+		Notes:          make([]sql.NullString, len(areas)),
 	}
 
 	for i, a := range areas {
@@ -559,7 +566,6 @@ func (l *Lookup) extractAreaConnections() ([]AreaConnection, error) {
 
 	return dedupeRows(areas, l.Hashes), nil
 }
-
 
 func (l *Lookup) prepareAreaConnections(areas []Area) ([]AreaConnection, error) {
 	connectedAreas := []AreaConnection{}

@@ -38,9 +38,9 @@ func (i MasterItem) Error() string {
 
 func (i MasterItem) GetResParamsTyped() h.ResParamsTyped {
 	return h.ResParamsTyped{
-		ID: 	i.ID,
-		Name: 	i.Name,
-		Type: 	string(i.Type),
+		ID:   i.ID,
+		Name: i.Name,
+		Type: string(i.Type),
 	}
 }
 
@@ -60,7 +60,6 @@ func (l *Lookup) seedMasterItem(qtx *database.Queries, masterItem MasterItem) (M
 
 	return masterItem, nil
 }
-
 
 func (l *Lookup) loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
 	items := l.extractMasterItems()
@@ -84,7 +83,7 @@ func (l *Lookup) loop1SeedMasterItems(qtx *database.Queries, ctx context.Context
 
 	for i, row := range dbRows {
 		items[i].ID = row.ID
-		key := CreateLookupKey(items[i])
+		key := Key(items[i])
 		l.MasterItems[key] = items[i]
 		l.MasterItemsID[row.ID] = items[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -108,4 +107,3 @@ func (l *Lookup) extractMasterItems() []MasterItem {
 
 	return dedupeRows(masterItems, l.Hashes)
 }
-

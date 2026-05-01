@@ -8,6 +8,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/pressly/goose/v3"
 )
 
 func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
@@ -17,32 +18,20 @@ func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
-	setupStart := time.Now()
-
 	err = setupDB(dbConn, fullPath)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't setup database: %v", err)
 	}
-	
-	setupDuration := time.Since(setupStart)
-	fmt.Printf("\ndatabase setup took %.3f seconds\n", setupDuration.Seconds())
 
-
-	lookupStart := time.Now()
-
-	l := lookupInit()
-	err = l.loadJSONFiles()
+	l, err := lookupInit()
 	if err != nil {
 		return nil, err
-	}
-
-	lookupDuration := time.Since(lookupStart)
-	fmt.Printf("creating lookups took %.3f seconds\n", lookupDuration.Seconds())
-
-	seedingStart := time.Now()
+	}	
 
 	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		err = l.seedLoop(qtx, context.Background(), []func(*database.Queries, context.Context) error{
+		start := time.Now()
+
+		err := l.seedLoop(qtx, context.Background(), []seedFunc{
 			l.seedLoop1,
 			l.seedLoop2,
 			l.seedLoop3,
@@ -55,29 +44,44 @@ func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 			return err
 		}
 
+		duration := time.Since(start)
+		fmt.Printf("database seeding took %.3f seconds\n\n", duration.Seconds())
+
 		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
-	
-	seedingDuration := time.Since(seedingStart)
-	fmt.Printf("database seeding took %.3f seconds\n\n", seedingDuration.Seconds())
 
 	return l, nil
 }
 
 
-func (l *Lookup) seedLoop(qtx *database.Queries, ctx context.Context, fns []func(*database.Queries, context.Context) error) error {
-	for _, fn := range fns {
-		err := fn(qtx, ctx)
-		if err != nil {
-			return err
-		}
+
+func setupDB(dbConn *sql.DB, migrationsDir string) error {
+	start := time.Now()
+
+	err := goose.SetDialect("postgres")
+	if err != nil {
+		return err
 	}
+
+	err = goose.DownTo(dbConn, migrationsDir, 0)
+	if err != nil {
+		return err
+	}
+
+	err = goose.Up(dbConn, migrationsDir)
+	if err != nil {
+		return err
+	}
+
+	duration := time.Since(start)
+	fmt.Printf("\ndatabase setup took %.3f seconds\n", duration.Seconds())
 
 	return nil
 }
+
 
 func dedupeRows[T Hashable](rows []T, hashes map[string]int32) []T {
     seen := make(map[string]bool)

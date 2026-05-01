@@ -86,7 +86,7 @@ func (l *Lookup) seedEnemyAbilities(db *database.Queries, dbConn *sql.DB) error 
 			}
 
 			enemyAbility.ID = dbEnemyAbility.ID
-			key := CreateLookupKey(enemyAbility)
+			key := Key(enemyAbility)
 			l.EnemyAbilities[key] = enemyAbility
 			l.EnemyAbilitiesID[enemyAbility.ID] = enemyAbility
 		}
@@ -125,8 +125,6 @@ func (l *Lookup) seedEnemyAbilitiesRelationships(db *database.Queries, dbConn *s
 	})
 }
 
-
-
 func (l *Lookup) loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := l.extractEnemyAbilities()
 	if err != nil {
@@ -134,9 +132,9 @@ func (l *Lookup) loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Cont
 	}
 
 	params := database.CreateEnemyAbilityBulkParams{
-		DataHash:   	make([]string, len(abilities)),
-		AbilityID: 		make([]int32, len(abilities)),
-		Effect: 		make([]sql.NullString, len(abilities)),
+		DataHash:  make([]string, len(abilities)),
+		AbilityID: make([]int32, len(abilities)),
+		Effect:    make([]sql.NullString, len(abilities)),
 	}
 
 	for i, a := range abilities {
@@ -153,7 +151,7 @@ func (l *Lookup) loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Cont
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.enemyAbilities[i].ID = row.ID
-		key := CreateLookupKey(abilities[i])
+		key := Key(abilities[i])
 		l.EnemyAbilities[key] = abilities[i]
 		l.EnemyAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -161,7 +159,6 @@ func (l *Lookup) loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Cont
 
 	return nil
 }
-
 
 func (l *Lookup) extractEnemyAbilities() ([]EnemyAbility, error) {
 	abilities := []EnemyAbility{}

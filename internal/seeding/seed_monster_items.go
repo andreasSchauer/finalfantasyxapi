@@ -46,6 +46,10 @@ func (m MonsterItems) GetID() int32 {
 	return m.ID
 }
 
+func (m *MonsterItems) SetID(id int32) {
+	m.ID = id
+}
+
 func (m MonsterItems) Error() string {
 	return fmt.Sprintf("monster items of monster with id %d", m.MonsterID)
 }

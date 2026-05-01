@@ -32,6 +32,10 @@ func (is InflictedStatus) GetID() int32 {
 	return is.ID
 }
 
+func (is *InflictedStatus) SetID(id int32) {
+	is.ID = id
+}
+
 func (is InflictedStatus) Error() string {
 	return fmt.Sprintf("inflicted status with condition: %s, probability: %d, duration type: %s, amount: %v", is.StatusCondition, is.Probability, is.DurationType, is.Amount)
 }

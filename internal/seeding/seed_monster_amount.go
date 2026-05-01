@@ -43,6 +43,10 @@ func (ma MonsterAmount) GetID() int32 {
 	return ma.ID
 }
 
+func (ma *MonsterAmount) SetID(id int32) {
+	ma.ID = id
+}
+
 func (ma MonsterAmount) GetName() string {
 	return ma.MonsterName
 }

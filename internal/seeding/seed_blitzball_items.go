@@ -41,7 +41,7 @@ func (b BlitzballPosition) Error() string {
 
 func (b BlitzballPosition) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: b.ID,
+		ID:   b.ID,
 		Name: fmt.Sprintf("%s - %s", b.Category, b.Slot),
 	}
 }
@@ -79,7 +79,8 @@ func (i PossibleItem) Error() string {
 }
 
 type BlitzballItem struct {
-	PositionID int32
+	ID				int32
+	PositionID 		int32
 	PossibleItem
 }
 
@@ -89,6 +90,14 @@ func (b BlitzballItem) ToHashFields() []any {
 		b.PositionID,
 		b.PossibleItem.ID,
 	}
+}
+
+func (b BlitzballItem) GetID() int32 {
+	return b.ID
+}
+
+func (b *BlitzballItem) SetID(id int32) {
+	b.ID = id
 }
 
 func (b BlitzballItem) Error() string {
@@ -115,7 +124,7 @@ func (l *Lookup) seedBlitzballItems(db *database.Queries, dbConn *sql.DB) error 
 				return h.NewErr(position.Error(), err, "couldn't create blitzball position")
 			}
 			position.ID = dbPosition.ID
-			key := CreateLookupKey(position)
+			key := Key(position)
 			l.Positions[key] = position
 			l.PositionsID[position.ID] = position
 		}
@@ -134,7 +143,7 @@ func (l *Lookup) seedBlitzballItemsRelationships(db *database.Queries, dbConn *s
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonPosition := range blitzballPositions {
-			key := CreateLookupKey(jsonPosition)
+			key := Key(jsonPosition)
 			position, err := GetResource(key, l.Positions)
 			if err != nil {
 				return err
@@ -186,7 +195,6 @@ func (l *Lookup) seedPossibleItem(qtx *database.Queries, item PossibleItem) (Pos
 	return item, nil
 }
 
-
 func (l *Lookup) loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.Context) error {
 	positions := dedupeRows(l.json.blitzballPositions, l.Hashes)
 
@@ -210,7 +218,7 @@ func (l *Lookup) loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.
 	for i, row := range dbRows {
 		positions[i].ID = row.ID
 		l.json.blitzballPositions[i].ID = row.ID
-		key := CreateLookupKey(positions[i])
+		key := Key(positions[i])
 		l.Positions[key] = positions[i]
 		l.PositionsID[row.ID] = positions[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -219,8 +227,6 @@ func (l *Lookup) loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.
 	return nil
 }
 
-
-
 func (l *Lookup) loop4SeedBlitzballItems(qtx *database.Queries, ctx context.Context) error {
 	items, err := l.extractBlitzballItems()
 	if err != nil {
@@ -228,8 +234,8 @@ func (l *Lookup) loop4SeedBlitzballItems(qtx *database.Queries, ctx context.Cont
 	}
 
 	params := database.CreateBlitzballItemBulkParams{
-		DataHash:   	make([]string, len(items)),
-		PositionID: 	make([]int32, len(items)),
+		DataHash:       make([]string, len(items)),
+		PositionID:     make([]int32, len(items)),
 		PossibleItemID: make([]int32, len(items)),
 	}
 
@@ -274,7 +280,6 @@ func (l *Lookup) extractBlitzballItems() ([]BlitzballItem, error) {
 	return dedupeRows(items, l.Hashes), nil
 }
 
-
 func (l *Lookup) loop3SeedPossibleItems(qtx *database.Queries, ctx context.Context) error {
 	items, err := l.extractPossibleItems()
 	if err != nil {
@@ -282,9 +287,9 @@ func (l *Lookup) loop3SeedPossibleItems(qtx *database.Queries, ctx context.Conte
 	}
 
 	params := database.CreatePossibleItemBulkParams{
-		DataHash: 		make([]string, len(items)),
-		ItemAmountID: 	make([]int32, len(items)),
-		Chance: 		make([]int32, len(items)),
+		DataHash:     make([]string, len(items)),
+		ItemAmountID: make([]int32, len(items)),
+		Chance:       make([]int32, len(items)),
 	}
 
 	for i, pi := range items {

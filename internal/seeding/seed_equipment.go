@@ -80,6 +80,10 @@ func (p AbilityPool) GetID() int32 {
 	return p.ID
 }
 
+func (p *AbilityPool) SetID(id int32) {
+	p.ID = id
+}
+
 func (p AbilityPool) Error() string {
 	return fmt.Sprintf("ability pool with equipment table id: %d, req amount: %d", p.EquipmentTableID, p.ReqAmount)
 }
@@ -101,6 +105,10 @@ func (e EquipmentName) ToHashFields() []any {
 
 func (e EquipmentName) GetID() int32 {
 	return e.ID
+}
+
+func (e *EquipmentName) SetID(id int32) {
+	e.ID = id
 }
 
 func (e EquipmentName) Error() string {
@@ -173,7 +181,7 @@ func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
 			}
 
 			table.ID = dbEquipmentTable.ID
-			key := CreateLookupKey(table)
+			key := Key(table)
 			l.EquipmentTables[key] = table
 			l.EquipmentTablesID[table.ID] = table
 		}
@@ -192,7 +200,7 @@ func (l *Lookup) seedEquipmentRelationships(db *database.Queries, dbConn *sql.DB
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonTable := range equipmentTables {
-			key := CreateLookupKey(jsonTable)
+			key := Key(jsonTable)
 			table, err := GetResource(key, l.EquipmentTables)
 			if err != nil {
 				return err
@@ -344,7 +352,6 @@ func (l *Lookup) seedEquipmentName(qtx *database.Queries, equipmentName Equipmen
 	return equipmentName, nil
 }
 
-
 func (l *Lookup) loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Context) error {
 	tables, err := l.extractEquipmentTables()
 	if err != nil {
@@ -352,13 +359,13 @@ func (l *Lookup) loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Con
 	}
 
 	params := database.CreateEquipmentTableBulkParams{
-		DataHash:   			make([]string, len(tables)),
-		Type: 					make([]database.EquipType, len(tables)),
-		Classification: 		make([]database.EquipClass, len(tables)),
-		SpecificCharacterID: 	make([]sql.NullInt32, len(tables)),
-		Version: 				make([]sql.NullInt32, len(tables)),
-		Priority: 				make([]sql.NullInt32, len(tables)),
-		RequiredSlots: 			make([]sql.NullInt32, len(tables)),
+		DataHash:            make([]string, len(tables)),
+		Type:                make([]database.EquipType, len(tables)),
+		Classification:      make([]database.EquipClass, len(tables)),
+		SpecificCharacterID: make([]sql.NullInt32, len(tables)),
+		Version:             make([]sql.NullInt32, len(tables)),
+		Priority:            make([]sql.NullInt32, len(tables)),
+		RequiredSlots:       make([]sql.NullInt32, len(tables)),
 	}
 
 	for i, t := range tables {
@@ -379,7 +386,7 @@ func (l *Lookup) loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Con
 	for i, row := range dbRows {
 		tables[i].ID = row.ID
 		l.json.equipment[i].ID = row.ID
-		key := CreateLookupKey(tables[i])
+		key := Key(tables[i])
 		l.EquipmentTables[key] = tables[i]
 		l.EquipmentTablesID[row.ID] = tables[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -406,7 +413,6 @@ func (l *Lookup) extractEquipmentTables() ([]EquipmentTable, error) {
 	return dedupeRows(tables, l.Hashes), nil
 }
 
-
 func (l *Lookup) loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Context) error {
 	names, err := l.extractEquipmentNames()
 	if err != nil {
@@ -414,9 +420,9 @@ func (l *Lookup) loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Cont
 	}
 
 	params := database.CreateEquipmentNameBulkParams{
-		DataHash:   	make([]string, len(names)),
-		CharacterID: 	make([]int32, len(names)),
-		Name: 			make([]string, len(names)),
+		DataHash:    make([]string, len(names)),
+		CharacterID: make([]int32, len(names)),
+		Name:        make([]string, len(names)),
 	}
 
 	for i, n := range names {
@@ -462,15 +468,14 @@ func (l *Lookup) extractEquipmentNames() ([]EquipmentName, error) {
 	return dedupeRows(names, l.Hashes), nil
 }
 
-
 func (l *Lookup) loop6SeedAbilityPools(qtx *database.Queries, ctx context.Context) error {
 	pools := l.extractAbilityPools()
 
 	params := database.CreateAbilityPoolBulkParams{
-		DataHash:   		make([]string, len(pools)),
-		EquipmentTableID: 	make([]int32, len(pools)),
-		PoolIdx: 			make([]int32, len(pools)),
-		ReqAmount: 			make([]int32, len(pools)),
+		DataHash:         make([]string, len(pools)),
+		EquipmentTableID: make([]int32, len(pools)),
+		PoolIdx:          make([]int32, len(pools)),
+		ReqAmount:        make([]int32, len(pools)),
 	}
 
 	for i, p := range pools {
@@ -478,7 +483,7 @@ func (l *Lookup) loop6SeedAbilityPools(qtx *database.Queries, ctx context.Contex
 		params.EquipmentTableID[i] = p.EquipmentTableID
 		params.PoolIdx[i] = p.PoolIdx
 		params.ReqAmount[i] = p.ReqAmount
- 	}
+	}
 
 	dbRows, err := qtx.CreateAbilityPoolBulk(ctx, params)
 	if err != nil {

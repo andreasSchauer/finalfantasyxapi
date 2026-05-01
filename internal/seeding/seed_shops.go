@@ -34,7 +34,7 @@ func (s Shop) ToHashFields() []any {
 
 func (s Shop) ToKeyFields() []any {
 	return []any{
-		CreateLookupKey(s.LocationArea),
+		Key(s.LocationArea),
 		h.DerefOrNil(s.Version),
 	}
 }
@@ -89,6 +89,10 @@ func (s ShopItem) GetID() int32 {
 	return s.ID
 }
 
+func (s *ShopItem) SetID(id int32) {
+	s.ID = id
+}
+
 func (s ShopItem) Error() string {
 	return fmt.Sprintf("shop item %s, price %d", s.Name, s.Price)
 }
@@ -122,6 +126,10 @@ func (s ShopEquipment) ToKeyFields() []any {
 
 func (s ShopEquipment) GetID() int32 {
 	return s.ID
+}
+
+func (s *ShopEquipment) SetID(id int32) {
+	s.ID = id
 }
 
 func (s ShopEquipment) Error() string {
@@ -173,7 +181,7 @@ func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
 				return h.NewErr(shop.Error(), err, "couldn't create shop")
 			}
 			shop.ID = dbShop.ID
-			key := CreateLookupKey(shop)
+			key := Key(shop)
 			l.Shops[key] = shop
 			l.ShopsID[shop.ID] = shop
 		}
@@ -192,7 +200,7 @@ func (l *Lookup) seedShopsRelationships(db *database.Queries, dbConn *sql.DB) er
 
 	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		for _, jsonShop := range shops {
-			key := CreateLookupKey(jsonShop)
+			key := Key(jsonShop)
 			shop, err := GetResource(key, l.Shops)
 			if err != nil {
 				return err
@@ -366,7 +374,7 @@ func (l *Lookup) loop4SeedShops(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		shops[i].ID = row.ID
 		l.json.shops[i].ID = row.ID
-		key := CreateLookupKey(shops[i])
+		key := Key(shops[i])
 		l.Shops[key] = shops[i]
 		l.ShopsID[row.ID] = shops[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -467,12 +475,12 @@ func (l *Lookup) loop6SeedShopEquipment(qtx *database.Queries, ctx context.Conte
 	}
 
 	params := database.CreateShopEquipmentPieceBulkParams{
-		DataHash: 			make([]string, len(equipment)),
-		ShopID:   			make([]int32, len(equipment)),
-		EquipmentNameID: 	make([]int32, len(equipment)),
-		ShopType: 			make([]database.ShopType, len(equipment)),
-		EmptySlotsAmount: 	make([]int32, len(equipment)),
-		Price:    			make([]int32, len(equipment)),
+		DataHash:         make([]string, len(equipment)),
+		ShopID:           make([]int32, len(equipment)),
+		EquipmentNameID:  make([]int32, len(equipment)),
+		ShopType:         make([]database.ShopType, len(equipment)),
+		EmptySlotsAmount: make([]int32, len(equipment)),
+		Price:            make([]int32, len(equipment)),
 	}
 
 	for i, se := range equipment {

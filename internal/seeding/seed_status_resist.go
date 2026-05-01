@@ -27,6 +27,10 @@ func (sr StatusResist) GetID() int32 {
 	return sr.ID
 }
 
+func (sr *StatusResist) SetID(id int32) {
+	sr.ID = id
+}
+
 func (sr StatusResist) GetName() string {
 	return sr.StatusCondition
 }

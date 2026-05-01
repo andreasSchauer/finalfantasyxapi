@@ -57,6 +57,10 @@ func (s Subquest) GetID() int32 {
 	return s.ID
 }
 
+func (s *Subquest) SetID(id int32) {
+	s.ID = id
+}
+
 func (s Subquest) Error() string {
 	return fmt.Sprintf("subquest %s", s.Name)
 }

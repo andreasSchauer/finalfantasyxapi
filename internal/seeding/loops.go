@@ -6,8 +6,21 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
+type seedFunc func(*database.Queries, context.Context) error
+
+func (l *Lookup) seedLoop(qtx *database.Queries, ctx context.Context, fns []seedFunc) error {
+	for _, fn := range fns {
+		err := fn(qtx, ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (l *Lookup) seedLoop1(qtx *database.Queries, ctx context.Context) error {
-	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop1SeedAgilityTiers,
 		l.loop1SeedElements,
 		l.loop1SeedOverdriveModes,
@@ -32,7 +45,7 @@ func (l *Lookup) seedLoop1(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop2(qtx *database.Queries, ctx context.Context) error {
-	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop2SeedAgilitySubtiers,
 		l.loop2UpdateElements,
 		l.loop2SeedElementalResists,
@@ -52,7 +65,7 @@ func (l *Lookup) seedLoop2(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop3(qtx *database.Queries, ctx context.Context) error {
-	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop3SeedStatusConditions,
 		l.loop3SeedQuestCompletions,
 		l.loop3SeedAeonCommands,
@@ -76,7 +89,7 @@ func (l *Lookup) seedLoop3(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop4(qtx *database.Queries, ctx context.Context) error {
-	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop4SeedStats,
 		l.loop4SeedStatusResists,
 		l.loop4SeedCharacters,
@@ -99,7 +112,7 @@ func (l *Lookup) seedLoop4(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop5(qtx *database.Queries, ctx context.Context) error {
-	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop5SeedBaseStats,
 		l.loop5SeedOdModeActions,
 		l.loop5SeedSidequests,
@@ -118,7 +131,7 @@ func (l *Lookup) seedLoop5(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop6(qtx *database.Queries, ctx context.Context) error {
-	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop6SeedAeonEquipment,
 		l.loop6SeedSubquests,
 		l.loop6SeedMixCombinations,
@@ -130,7 +143,7 @@ func (l *Lookup) seedLoop6(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop7(qtx *database.Queries, ctx context.Context) error {
-	return l.seedLoop(qtx, ctx, []func(*database.Queries, context.Context) error{
+	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop7SeedArenaCreations,
 	})
 }

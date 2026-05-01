@@ -33,6 +33,10 @@ func (e EquipmentDrop) GetID() int32 {
 	return e.ID
 }
 
+func (e *EquipmentDrop) SetID(id int32) {
+	e.ID = id
+}
+
 func (e EquipmentDrop) Error() string {
 	return fmt.Sprintf("equipment drop with auto-ability id: %d, type: %s, is forced: %t, probability: %v", e.AutoAbilityID, e.Type, e.IsForced, h.PtrToString(e.Probability))
 }

@@ -36,7 +36,7 @@ func (m Mix) Error() string {
 
 func (m Mix) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: m.ID,
+		ID:   m.ID,
 		Name: m.Name,
 	}
 }
@@ -70,6 +70,10 @@ func (m MixCombination) ToKeyFields() []any {
 
 func (m MixCombination) GetID() int32 {
 	return m.ID
+}
+
+func (m *MixCombination) SetID(id int32) {
+	m.ID = id
 }
 
 func (m MixCombination) Error() string {
@@ -149,7 +153,7 @@ func (l *Lookup) seedMixCombinations(qtx *database.Queries, mix Mix) error {
 		var err error
 		combo.MixID = mix.ID
 
-		key := CreateLookupKey(combo)
+		key := Key(combo)
 		combo.IsBestCombo = bestComboMap[key]
 
 		_, err = seedObjAssignID(qtx, combo, l.seedMixCombination)
@@ -165,7 +169,7 @@ func getBestComboMap(mix Mix) map[string]bool {
 	bestComboMap := make(map[string]bool)
 
 	for _, combo := range mix.BestCombinations {
-		key := CreateLookupKey(combo)
+		key := Key(combo)
 		bestComboMap[key] = true
 	}
 
@@ -214,9 +218,9 @@ func (l *Lookup) loop5SeedMixes(qtx *database.Queries, ctx context.Context) erro
 	}
 
 	params := database.CreateMixBulkParams{
-		DataHash:   	make([]string, len(mixes)),
-		OverdriveID: 	make([]int32, len(mixes)),
-		Category: 		make([]database.MixCategory, len(mixes)),
+		DataHash:    make([]string, len(mixes)),
+		OverdriveID: make([]int32, len(mixes)),
+		Category:    make([]database.MixCategory, len(mixes)),
 	}
 
 	for i, m := range mixes {
@@ -266,11 +270,11 @@ func (l *Lookup) loop6SeedMixCombinations(qtx *database.Queries, ctx context.Con
 	}
 
 	params := database.CreateMixCombinationBulkParams{
-		DataHash:   	make([]string, len(combos)),
-		MixID: 			make([]int32, len(combos)),
-		FirstItemID: 	make([]int32, len(combos)),
-		SecondItemID: 	make([]int32, len(combos)),
-		IsBestCombo: 	make([]bool, len(combos)),
+		DataHash:     make([]string, len(combos)),
+		MixID:        make([]int32, len(combos)),
+		FirstItemID:  make([]int32, len(combos)),
+		SecondItemID: make([]int32, len(combos)),
+		IsBestCombo:  make([]bool, len(combos)),
 	}
 
 	for i, c := range combos {
@@ -305,7 +309,7 @@ func (l *Lookup) extractMixCombinations() ([]MixCombination, error) {
 			combo := &mix.PossibleCombinations[j]
 			combo.MixID = mix.ID
 
-			key := CreateLookupKey(combo)
+			key := Key(combo)
 			combo.IsBestCombo = bestComboMap[key]
 
 			combo.FirstItemID, err = assignFK(combo.FirstItem, l.Items)

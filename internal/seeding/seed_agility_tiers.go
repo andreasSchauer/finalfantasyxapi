@@ -36,6 +36,7 @@ func (a AgilityTier) GetID() int32 {
 	return a.ID
 }
 
+
 func (a AgilityTier) Error() string {
 	return fmt.Sprintf("agility tier with min agility: %d, max agility: %d", a.MinAgility, a.MaxAgility)
 }
@@ -67,6 +68,10 @@ func (a AgilitySubtier) ToHashFields() []any {
 
 func (a AgilitySubtier) GetID() int32 {
 	return a.ID
+}
+
+func (a *AgilitySubtier) SetID(id int32) {
+	a.ID = id
 }
 
 func (a AgilitySubtier) Error() string {

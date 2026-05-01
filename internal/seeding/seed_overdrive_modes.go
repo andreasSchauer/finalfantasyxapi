@@ -64,6 +64,10 @@ func (a ActionToLearn) GetID() int32 {
 	return a.ID
 }
 
+func (a *ActionToLearn) SetID(id int32) {
+	a.ID = id
+}
+
 func (a ActionToLearn) GetName() string {
 	return a.User
 }

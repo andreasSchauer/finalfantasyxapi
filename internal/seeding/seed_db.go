@@ -7,7 +7,6 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/pressly/goose/v3"
 )
 
 type seeder struct {
@@ -30,26 +29,30 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, fmt.Errorf("couldn't setup database: %v", err)
 	}
 
-	l := lookupInit()
-	seeders := l.getSeeders()
-
-	err = handleDBFunctions(db, dbConn, seeders)
+	l, err := lookupInit()
 	if err != nil {
 		return nil, err
 	}
 
-	totalDuration := time.Since(start)
-	fmt.Printf("database seeding took %.3f seconds\n\n", totalDuration.Seconds())
+	seeders := l.getSeeders()
+
+	err = handleSeedFunctions(db, dbConn, seeders)
+	if err != nil {
+		return nil, err
+	}
+
+	duration := time.Since(start)
+	fmt.Printf("database seeding took %.3f seconds\n\n", duration.Seconds())
 
 	return l, nil
 }
 
-func handleDBFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) error {
+func handleSeedFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) error {
 	seedingStart := time.Now()
 	fmt.Printf("\ninitial seeding...\n\n")
 
 	for _, seeder := range seeders {
-		err := handleDBFunction(db, dbConn, seeder.seedFunc, seeder.name)
+		err := handleSeedFunction(db, dbConn, seeder.seedFunc, seeder.name)
 		if err != nil {
 			return h.NewErr(seeder.name, err)
 		}
@@ -61,22 +64,20 @@ func handleDBFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) e
 	fmt.Printf("\nseeding relationships...\n\n")
 
 	for _, seeder := range seeders {
-		err := handleDBFunction(db, dbConn, seeder.relFunc, seeder.name)
+		err := handleSeedFunction(db, dbConn, seeder.relFunc, seeder.name)
 		if err != nil {
 			return h.NewErr(seeder.name, err)
 		}
 	}
 
 	relationshipsDuration := time.Since(relationshipsStart)
-
 	fmt.Printf("\n\ninitial seeding took %.3f seconds\n", seedingDuration.Seconds())
-
 	fmt.Printf("seeding relationships took %.3f seconds\n", relationshipsDuration.Seconds())
 
 	return nil
 }
 
-func handleDBFunction(db *database.Queries, dbConn *sql.DB, function func(*database.Queries, *sql.DB) error, name string) error {
+func handleSeedFunction(db *database.Queries, dbConn *sql.DB, function func(*database.Queries, *sql.DB) error, name string) error {
 	if function == nil {
 		return nil
 	}
@@ -94,24 +95,6 @@ func handleDBFunction(db *database.Queries, dbConn *sql.DB, function func(*datab
 	return nil
 }
 
-func setupDB(dbConn *sql.DB, migrationsDir string) error {
-	err := goose.SetDialect("postgres")
-	if err != nil {
-		return err
-	}
-
-	err = goose.DownTo(dbConn, migrationsDir, 0)
-	if err != nil {
-		return err
-	}
-
-	err = goose.Up(dbConn, migrationsDir)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
 
 func (l *Lookup) getSeeders() []seeder {
 	return []seeder{

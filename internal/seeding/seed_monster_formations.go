@@ -12,12 +12,12 @@ import (
 )
 
 type MonsterFormation struct {
-	ID      			int32  						`json:"-"`
-	Version 			*int32 						`json:"version"`
+	ID      int32  `json:"-"`
+	Version *int32 `json:"version"`
 	MonsterSelection
-	FormationData   	FormationData             	`json:"formation_data"`
-	TriggerCommands 	[]FormationTriggerCommand 	`json:"trigger_commands"`
-	EncounterAreas  	[]EncounterArea           	`json:"encounter_areas"`
+	FormationData   FormationData             `json:"formation_data"`
+	TriggerCommands []FormationTriggerCommand `json:"trigger_commands"`
+	EncounterAreas  []EncounterArea           `json:"encounter_areas"`
 }
 
 func (mf MonsterFormation) ToHashFields() []any {
@@ -89,7 +89,7 @@ func (ms MonsterSelection) Error() string {
 type FormationData struct {
 	ID             int32              `json:"-"`
 	Category       string             `json:"category"`
-	Availability   string			  `json:"availability"`
+	Availability   string             `json:"availability"`
 	IsForcedAmbush bool               `json:"is_forced_ambush"`
 	CanEscape      bool               `json:"can_escape"`
 	BossMusic      *FormationBossSong `json:"boss_music"`
@@ -123,31 +123,35 @@ type EncounterArea struct {
 	Specification *string `json:"specification"`
 }
 
-func (el EncounterArea) ToHashFields() []any {
+func (ea EncounterArea) ToHashFields() []any {
 	return []any{
-		fmt.Sprintf("%T", el),
-		el.AreaID,
-		h.DerefOrNil(el.Specification),
+		fmt.Sprintf("%T", ea),
+		ea.AreaID,
+		h.DerefOrNil(ea.Specification),
 	}
 }
 
-func (el EncounterArea) ToKeyFields() []any {
+func (ea EncounterArea) ToKeyFields() []any {
 	return []any{
-		CreateLookupKey(el.LocationArea),
-		el.Specification,
+		Key(ea.LocationArea),
+		ea.Specification,
 	}
 }
 
-func (el EncounterArea) GetID() int32 {
-	return el.ID
+func (ea EncounterArea) GetID() int32 {
+	return ea.ID
 }
 
-func (el EncounterArea) Error() string {
-	return fmt.Sprintf("encounter location with %s, specification: %s", el.LocationArea, h.PtrToString(el.Specification))
+func (ea *EncounterArea) SetID(id int32) {
+	ea.ID = id
 }
 
-func (el EncounterArea) GetLocationArea() LocationArea {
-	return el.LocationArea
+func (ea EncounterArea) Error() string {
+	return fmt.Sprintf("encounter location with %s, specification: %s", ea.LocationArea, h.PtrToString(ea.Specification))
+}
+
+func (ea EncounterArea) GetLocationArea() LocationArea {
+	return ea.LocationArea
 }
 
 type FormationTriggerCommand struct {
@@ -170,6 +174,10 @@ func (tc FormationTriggerCommand) ToHashFields() []any {
 
 func (tc FormationTriggerCommand) GetID() int32 {
 	return tc.ID
+}
+
+func (tc *FormationTriggerCommand) SetID(id int32) {
+	tc.ID = id
 }
 
 func (tc FormationTriggerCommand) Error() string {
@@ -232,7 +240,7 @@ func (l *Lookup) seedMonsterFormations(db *database.Queries, dbConn *sql.DB) err
 			}
 
 			formation.ID = dbFormation.ID
-			key := CreateLookupKey(formation)
+			key := Key(formation)
 			l.MonsterFormations[key] = formation
 			l.MonsterFormationsID[formation.ID] = formation
 		}
@@ -260,7 +268,7 @@ func (l *Lookup) seedEncounterArea(qtx *database.Queries, encounterArea Encounte
 	}
 
 	encounterArea.ID = dbEncounterArea.ID
-	key := CreateLookupKey(encounterArea)
+	key := Key(encounterArea)
 	l.EncounterAreas[key] = encounterArea
 
 	return encounterArea, nil
@@ -362,7 +370,7 @@ func (l *Lookup) seedFormationBossSong(qtx *database.Queries, bossSong Formation
 func (l *Lookup) seedSelectionMonsterAmounts(qtx *database.Queries, selection MonsterSelection) error {
 	for _, monsterAmount := range selection.Monsters {
 		var err error
-		key := CreateLookupKey(monsterAmount)
+		key := Key(monsterAmount)
 		monsterAmount.MonsterID, err = assignFK(key, l.Monsters)
 		if err != nil {
 			return err
@@ -479,10 +487,10 @@ func (l *Lookup) loop5SeedMonsterFormations(qtx *database.Queries, ctx context.C
 	}
 
 	params := database.CreateMonsterFormationBulkParams{
-		DataHash:   		make([]string, len(formations)),
-		Version: 			make([]sql.NullInt32, len(formations)),
+		DataHash:           make([]string, len(formations)),
+		Version:            make([]sql.NullInt32, len(formations)),
 		MonsterSelectionID: make([]int32, len(formations)),
-		FormationDataID: 	make([]int32, len(formations)),
+		FormationDataID:    make([]int32, len(formations)),
 	}
 
 	for i, mf := range formations {
@@ -500,7 +508,7 @@ func (l *Lookup) loop5SeedMonsterFormations(qtx *database.Queries, ctx context.C
 	for i, row := range dbRows {
 		formations[i].ID = row.ID
 		l.json.monsterFormations[i].ID = row.ID
-		key := CreateLookupKey(formations[i])
+		key := Key(formations[i])
 		l.MonsterFormations[key] = formations[i]
 		l.MonsterFormationsID[row.ID] = formations[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -531,7 +539,6 @@ func (l *Lookup) extractMonsterFormations() ([]MonsterFormation, error) {
 
 	return dedupeRows(formations, l.Hashes), nil
 }
-
 
 func (l *Lookup) loop1SeedMonsterSelections(qtx *database.Queries, ctx context.Context) error {
 	selections, err := l.extractMonsterSelections()
@@ -567,7 +574,7 @@ func (l *Lookup) extractMonsterSelections() ([]MonsterSelection, error) {
 		for j := range mf.MonsterSelection.Monsters {
 			ma := &mf.MonsterSelection.Monsters[j]
 
-			key := CreateLookupKey(*ma)
+			key := Key(*ma)
 			ma.MonsterID, err = assignFK(key, l.Monsters)
 			if err != nil {
 				return nil, err
@@ -580,8 +587,6 @@ func (l *Lookup) extractMonsterSelections() ([]MonsterSelection, error) {
 	return dedupeRows(selections, l.Hashes), nil
 }
 
-
-
 func (l *Lookup) loop4SeedFormationData(qtx *database.Queries, ctx context.Context) error {
 	data, err := l.extractFormationData()
 	if err != nil {
@@ -589,13 +594,13 @@ func (l *Lookup) loop4SeedFormationData(qtx *database.Queries, ctx context.Conte
 	}
 
 	params := database.CreateFormationDataBulkParams{
-		DataHash:   	make([]string, len(data)),
-		Category: 		make([]database.MonsterFormationCategory, len(data)),
-		Availability: 	make([]database.AvailabilityType, len(data)),
+		DataHash:       make([]string, len(data)),
+		Category:       make([]database.MonsterFormationCategory, len(data)),
+		Availability:   make([]database.AvailabilityType, len(data)),
 		IsForcedAmbush: make([]bool, len(data)),
-		CanEscape: 		make([]bool, len(data)),
-		BossSongID: 	make([]sql.NullInt32, len(data)),
-		Notes: 			make([]sql.NullString, len(data)),
+		CanEscape:      make([]bool, len(data)),
+		BossSongID:     make([]sql.NullInt32, len(data)),
+		Notes:          make([]sql.NullString, len(data)),
 	}
 
 	for i, d := range data {
@@ -640,7 +645,6 @@ func (l *Lookup) extractFormationData() ([]FormationData, error) {
 	return dedupeRows(data, l.Hashes), nil
 }
 
-
 func (l *Lookup) loop2SeedMonsterAmounts(qtx *database.Queries, ctx context.Context) error {
 	mas, err := l.extractMonsterAmounts()
 	if err != nil {
@@ -681,7 +685,7 @@ func (l *Lookup) extractMonsterAmounts() ([]MonsterAmount, error) {
 		for j := range mf.Monsters {
 			ma := &mf.Monsters[j]
 
-			key := CreateLookupKey(*ma)
+			key := Key(*ma)
 			ma.MonsterID, err = assignFK(key, l.Monsters)
 			if err != nil {
 				return nil, err
@@ -694,7 +698,6 @@ func (l *Lookup) extractMonsterAmounts() ([]MonsterAmount, error) {
 	return dedupeRows(mas, l.Hashes), nil
 }
 
-
 func (l *Lookup) loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.Context) error {
 	songs, err := l.extractFormationBossSongs()
 	if err != nil {
@@ -702,9 +705,9 @@ func (l *Lookup) loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.
 	}
 
 	params := database.CreateFormationBossSongBulkParams{
-		DataHash: 			make([]string, len(songs)),
-		SongID: 			make([]int32, len(songs)),
-		CelebrateVictory: 	make([]bool, len(songs)),
+		DataHash:         make([]string, len(songs)),
+		SongID:           make([]int32, len(songs)),
+		CelebrateVictory: make([]bool, len(songs)),
 	}
 
 	for i, s := range songs {
@@ -747,7 +750,6 @@ func (l *Lookup) extractFormationBossSongs() ([]FormationBossSong, error) {
 	return dedupeRows(songs, l.Hashes), nil
 }
 
-
 func (l *Lookup) loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Context) error {
 	areas, err := l.extractEncounterAreas()
 	if err != nil {
@@ -755,9 +757,9 @@ func (l *Lookup) loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Cont
 	}
 
 	params := database.CreateEncounterAreaBulkParams{
-		DataHash:   	make([]string, len(areas)),
-		AreaID: 		make([]int32, len(areas)),
-		Specification:	make([]sql.NullString, len(areas)),
+		DataHash:      make([]string, len(areas)),
+		AreaID:        make([]int32, len(areas)),
+		Specification: make([]sql.NullString, len(areas)),
 	}
 
 	for i, a := range areas {
@@ -800,7 +802,6 @@ func (l *Lookup) extractEncounterAreas() ([]EncounterArea, error) {
 	return dedupeRows(areas, l.Hashes), nil
 }
 
-
 func (l *Lookup) loop4SeedFormationTriggerCommands(qtx *database.Queries, ctx context.Context) error {
 	commands, err := l.extractFormationTriggerCommands()
 	if err != nil {
@@ -808,10 +809,10 @@ func (l *Lookup) loop4SeedFormationTriggerCommands(qtx *database.Queries, ctx co
 	}
 
 	params := database.CreateFormationTriggerCommandBulkParams{
-		DataHash:   		make([]string, len(commands)),
-		TriggerCommandID: 	make([]int32, len(commands)),
-		Condition: 			make([]sql.NullString, len(commands)),
-		UseAmount: 			make([]sql.NullInt32, len(commands)),
+		DataHash:         make([]string, len(commands)),
+		TriggerCommandID: make([]int32, len(commands)),
+		Condition:        make([]sql.NullString, len(commands)),
+		UseAmount:        make([]sql.NullInt32, len(commands)),
 	}
 
 	for i, c := range commands {
@@ -841,7 +842,7 @@ func (l *Lookup) extractFormationTriggerCommands() ([]FormationTriggerCommand, e
 		mf := &l.json.monsterFormations[i]
 
 		for j := range mf.TriggerCommands {
-			command := & mf.TriggerCommands[j]
+			command := &mf.TriggerCommands[j]
 
 			command.TriggerCommandID, err = assignFK(command.AbilityReference.Untyped(), l.TriggerCommands)
 			if err != nil {

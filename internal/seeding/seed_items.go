@@ -74,6 +74,10 @@ func (a ItemAbility) GetID() int32 {
 	return a.ID
 }
 
+func (a *ItemAbility) SetID(id int32) {
+	a.ID = id
+}
+
 func (a ItemAbility) GetAbilityRef() AbilityReference {
 	return AbilityReference{
 		Name:        a.Name,

@@ -13,10 +13,9 @@ type IsPlayerUnit interface {
 }
 
 type PlayerUnitParams struct {
-	ID		int32
-	Name	string
-	Type	string
-	
+	ID   int32
+	Name string
+	Type string
 }
 
 type PlayerUnit struct {
@@ -49,9 +48,9 @@ func (pu PlayerUnit) Error() string {
 
 func (pu PlayerUnit) GetResParamsTyped() h.ResParamsTyped {
 	return h.ResParamsTyped{
-		ID: 	pu.ID,
-		Name: 	pu.Name,
-		Type: 	string(pu.Type),
+		ID:   pu.ID,
+		Name: pu.Name,
+		Type: string(pu.Type),
 	}
 }
 
@@ -94,7 +93,7 @@ func (l *Lookup) loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context
 
 	for i, row := range dbRows {
 		units[i].ID = row.ID
-		key := CreateLookupKey(units[i])
+		key := Key(units[i])
 		l.PlayerUnits[key] = units[i]
 		l.PlayerUnitsID[row.ID] = units[i]
 		l.Hashes[row.DataHash] = row.ID

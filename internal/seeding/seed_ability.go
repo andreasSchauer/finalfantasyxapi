@@ -81,7 +81,6 @@ func (a AbilityReference) Error() string {
 	return fmt.Sprintf("ability reference '%s', type %s", h.NameToString(a.Name, a.Version, nil), a.AbilityType)
 }
 
-
 func (a AbilityReference) Untyped() UntypedAbilityRef {
 	return UntypedAbilityRef{
 		Name:    a.Name,
@@ -150,7 +149,7 @@ func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, e
 	}
 
 	ability.ID = dbAbility.ID
-	key := CreateLookupKey(ability)
+	key := Key(ability)
 	l.Abilities[key] = ability
 	l.AbilitiesID[ability.ID] = ability
 
@@ -172,7 +171,6 @@ func (l *Lookup) seedAbilityAttributes(qtx *database.Queries, attributes Attribu
 
 	return attributes, nil
 }
-
 
 func (l *Lookup) loop2SeedAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := l.extractAbilities()
@@ -205,7 +203,7 @@ func (l *Lookup) loop2SeedAbilities(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		key := CreateLookupKey(abilities[i])
+		key := Key(abilities[i])
 		l.Abilities[key] = abilities[i]
 		l.AbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -292,9 +290,6 @@ func (l *Lookup) extractAbilities() ([]Ability, error) {
 	return dedupeRows(abilities, l.Hashes), nil
 }
 
-
-
-
 func (l *Lookup) loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.Context) error {
 	attributes := l.extractAbilityAttributes()
 
@@ -360,4 +355,3 @@ func (l *Lookup) extractAbilityAttributes() []Attributes {
 
 	return dedupeRows(attributes, l.Hashes)
 }
-

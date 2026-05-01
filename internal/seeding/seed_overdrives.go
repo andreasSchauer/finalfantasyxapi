@@ -10,10 +10,10 @@ import (
 )
 
 type Overdrive struct {
-	ID          	   int32
-	ODCommandID		   *int32
-	CharClassID 	   *int32
-	TopmenuID		   *int32
+	ID          int32
+	ODCommandID *int32
+	CharClassID *int32
+	TopmenuID   *int32
 	Ability
 	Description        string             `json:"description"`
 	Effect             string             `json:"effect"`
@@ -53,9 +53,9 @@ func (o Overdrive) Error() string {
 
 func (o Overdrive) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: 		o.ID,
-		Name: 		o.Name,
-		Version: 	o.Version,
+		ID:      o.ID,
+		Name:    o.Name,
+		Version: o.Version,
 	}
 }
 
@@ -131,7 +131,7 @@ func (l *Lookup) seedOverdrives(db *database.Queries, dbConn *sql.DB) error {
 				Version: overdrive.Version,
 			}
 
-			key := CreateLookupKey(lookupObj)
+			key := Key(lookupObj)
 			l.Overdrives[key] = overdrive
 			l.OverdrivesID[overdrive.ID] = overdrive
 		}
@@ -197,7 +197,7 @@ func (l *Lookup) seedOverdrivesRelationships(db *database.Queries, dbConn *sql.D
 
 			err = qtx.UpdateOverdrive(context.Background(), database.UpdateOverdriveParams{
 				DataHash:         generateDataHash(overdrive),
-				TopmenuID: 		  h.GetNullInt32(overdrive.TopmenuID),
+				TopmenuID:        h.GetNullInt32(overdrive.TopmenuID),
 				OdCommandID:      h.GetNullInt32(overdrive.ODCommandID),
 				CharacterClassID: h.GetNullInt32(overdrive.CharClassID),
 				ID:               overdrive.ID,
@@ -266,8 +266,6 @@ func (l *Lookup) seedDefaultOverdrive(qtx *database.Queries, overdrive Overdrive
 	return nil
 }
 
-
-
 func (l *Lookup) loop4SeedOverdrives(qtx *database.Queries, ctx context.Context) error {
 	overdrives, err := l.extractOverdrives()
 	if err != nil {
@@ -275,18 +273,18 @@ func (l *Lookup) loop4SeedOverdrives(qtx *database.Queries, ctx context.Context)
 	}
 
 	params := database.CreateOverdriveBulkParams{
-		DataHash:   		make([]string, len(overdrives)),
-		Name:       		make([]string, len(overdrives)),
-		Version: 			make([]sql.NullInt32, len(overdrives)),
-		Description: 		make([]string, len(overdrives)),
-		Effect: 			make([]string, len(overdrives)),
-		AttributesID: 		make([]int32, len(overdrives)),
-		UnlockCondition: 	make([]sql.NullString, len(overdrives)),
-		CountdownInSec: 	make([]sql.NullInt32, len(overdrives)),
-		Cursor: 			make([]database.NullTargetType, len(overdrives)),
-		TopmenuID: 			make([]sql.NullInt32, len(overdrives)),
-		CharacterClassID: 	make([]sql.NullInt32, len(overdrives)),
-		OdCommandID: 		make([]sql.NullInt32, len(overdrives)),
+		DataHash:         make([]string, len(overdrives)),
+		Name:             make([]string, len(overdrives)),
+		Version:          make([]sql.NullInt32, len(overdrives)),
+		Description:      make([]string, len(overdrives)),
+		Effect:           make([]string, len(overdrives)),
+		AttributesID:     make([]int32, len(overdrives)),
+		UnlockCondition:  make([]sql.NullString, len(overdrives)),
+		CountdownInSec:   make([]sql.NullInt32, len(overdrives)),
+		Cursor:           make([]database.NullTargetType, len(overdrives)),
+		TopmenuID:        make([]sql.NullInt32, len(overdrives)),
+		CharacterClassID: make([]sql.NullInt32, len(overdrives)),
+		OdCommandID:      make([]sql.NullInt32, len(overdrives)),
 	}
 
 	for i, o := range overdrives {
@@ -353,13 +351,12 @@ func (l *Lookup) extractOverdrives() ([]Overdrive, error) {
 	return dedupeRows(overdrives, l.Hashes), nil
 }
 
-
 func (l *Lookup) loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
 	rages := l.extractRonsoRages()
 
 	params := database.CreateRonsoRageBulkParams{
-		DataHash:   	make([]string, len(rages)),
-		OverdriveID: 	make([]int32, len(rages)),
+		DataHash:    make([]string, len(rages)),
+		OverdriveID: make([]int32, len(rages)),
 	}
 
 	for i, r := range rages {
@@ -391,7 +388,7 @@ func (l *Lookup) extractRonsoRages() []RonsoRage {
 		}
 
 		rage := RonsoRage{
-			ID: 0,
+			ID:        0,
 			Overdrive: overdrive,
 		}
 

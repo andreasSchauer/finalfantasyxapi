@@ -9,13 +9,12 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type OverdriveAbility struct {
 	ID int32
 	Ability
-	Overdrive			LookupObject		`json:"overdrive"`	// not meant for seeding
-	RelatedStats       	[]string            `json:"related_stats"`
-	BattleInteractions 	[]BattleInteraction `json:"battle_interactions"`
+	Overdrive          LookupObject        `json:"overdrive"` // not meant for seeding
+	RelatedStats       []string            `json:"related_stats"`
+	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (o OverdriveAbility) ToHashFields() []any {
@@ -86,7 +85,7 @@ func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) er
 			}
 
 			overdriveAbility.ID = dbOverdriveAbility.ID
-			key := CreateLookupKey(overdriveAbility)
+			key := Key(overdriveAbility)
 			l.OverdriveAbilities[key] = overdriveAbility
 			l.OverdriveAbilitiesID[overdriveAbility.ID] = overdriveAbility
 		}
@@ -150,8 +149,6 @@ func (l *Lookup) seedOverdriveAbilityRelatedStats(qtx *database.Queries, ability
 	return nil
 }
 
-
-
 func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := l.extractOverdriveAbilities()
 	if err != nil {
@@ -159,8 +156,8 @@ func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.
 	}
 
 	params := database.CreateOverdriveAbilityBulkParams{
-		DataHash:   	make([]string, len(abilities)),
-		AbilityID: 		make([]int32, len(abilities)),
+		DataHash:  make([]string, len(abilities)),
+		AbilityID: make([]int32, len(abilities)),
 	}
 
 	for i, a := range abilities {
@@ -176,7 +173,7 @@ func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.overdriveAbilities[i].ID = row.ID
-		key := CreateLookupKey(abilities[i])
+		key := Key(abilities[i])
 		l.OverdriveAbilities[key] = abilities[i]
 		l.OverdriveAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -184,7 +181,6 @@ func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.
 
 	return nil
 }
-
 
 func (l *Lookup) extractOverdriveAbilities() ([]OverdriveAbility, error) {
 	abilities := []OverdriveAbility{}

@@ -10,12 +10,12 @@ import (
 )
 
 type Quest struct {
-	ID   			int32
-	Name 			string 				`json:"name"`
-	Availability	string			  	`json:"availability"`
-	IsRepeatable	bool				`json:"is_repeatable"`
-	Completion 		*QuestCompletion 	`json:"completion"`
-	Type 			database.QuestType
+	ID           int32
+	Name         string           `json:"name"`
+	Availability string           `json:"availability"`
+	IsRepeatable bool             `json:"is_repeatable"`
+	Completion   *QuestCompletion `json:"completion"`
+	Type         database.QuestType
 }
 
 func (q Quest) ToHashFields() []any {
@@ -48,18 +48,18 @@ func (q Quest) GetResParamsQuest() h.ResParamsQuest {
 	switch q.Type {
 	case database.QuestTypeSidequest:
 		return h.ResParamsQuest{
-			ID: 		q.ID,
-			Sidequest: 	&q.Name,
-			Subquest: 	nil,
-			Type: 		string(q.Type),
+			ID:        q.ID,
+			Sidequest: &q.Name,
+			Subquest:  nil,
+			Type:      string(q.Type),
 		}
 
 	case database.QuestTypeSubquest:
 		return h.ResParamsQuest{
-			ID: 		q.ID,
-			Sidequest: 	nil,
-			Subquest: 	&q.Name,
-			Type: 		string(q.Type),
+			ID:        q.ID,
+			Sidequest: nil,
+			Subquest:  &q.Name,
+			Type:      string(q.Type),
 		}
 	}
 
@@ -76,30 +76,29 @@ func (q Quest) GetItemAmount() ItemAmount {
 
 func (l *Lookup) seedQuest(qtx *database.Queries, quest Quest) (Quest, error) {
 	dbQuest, err := qtx.CreateQuest(context.Background(), database.CreateQuestParams{
-		DataHash: generateDataHash(quest),
-		Name:     		quest.Name,
-		Type:     		quest.Type,
-		Availability: 	database.AvailabilityType(quest.Availability),
-		IsRepeatable:	quest.IsRepeatable,
+		DataHash:     generateDataHash(quest),
+		Name:         quest.Name,
+		Type:         quest.Type,
+		Availability: database.AvailabilityType(quest.Availability),
+		IsRepeatable: quest.IsRepeatable,
 	})
 	if err != nil {
 		return Quest{}, h.NewErr(quest.Error(), err, "couldn't create quest")
 	}
 
 	quest.ID = dbQuest.ID
-	key := CreateLookupKey(quest)
+	key := Key(quest)
 	l.Quests[key] = quest
 	l.QuestsID[quest.ID] = quest
 
 	return quest, nil
 }
 
-
 type QuestCompletion struct {
-	ID        		int32
-	Condition 		*string          `json:"condition"`
-	Areas     		[]CompletionArea `json:"areas"`
-	Reward    		ItemAmount       `json:"reward"`
+	ID        int32
+	Condition *string          `json:"condition"`
+	Areas     []CompletionArea `json:"areas"`
+	Reward    ItemAmount       `json:"reward"`
 }
 
 func (qc QuestCompletion) ToHashFields() []any {
@@ -141,7 +140,6 @@ func (cl CompletionArea) Error() string {
 func (cl CompletionArea) GetLocationArea() LocationArea {
 	return cl.LocationArea
 }
-
 
 func (l *Lookup) seedQuestCompletion(qtx *database.Queries, completion QuestCompletion) (QuestCompletion, error) {
 	var err error
@@ -193,7 +191,6 @@ func (l *Lookup) seedCompletionAreas(qtx *database.Queries, completion QuestComp
 	return nil
 }
 
-
 func (l *Lookup) loop4SeedQuests(qtx *database.Queries, ctx context.Context) error {
 	quests, err := l.extractQuests()
 	if err != nil {
@@ -201,9 +198,9 @@ func (l *Lookup) loop4SeedQuests(qtx *database.Queries, ctx context.Context) err
 	}
 
 	params := database.CreateQuestBulkParams{
-		DataHash:   make([]string, len(quests)),
-		Name:       make([]string, len(quests)),
-		Type: make([]database.QuestType, len(quests)),
+		DataHash:     make([]string, len(quests)),
+		Name:         make([]string, len(quests)),
+		Type:         make([]database.QuestType, len(quests)),
 		Availability: make([]database.AvailabilityType, len(quests)),
 		IsRepeatable: make([]bool, len(quests)),
 		CompletionID: make([]sql.NullInt32, len(quests)),
@@ -225,7 +222,7 @@ func (l *Lookup) loop4SeedQuests(qtx *database.Queries, ctx context.Context) err
 
 	for i, row := range dbRows {
 		quests[i].ID = row.ID
-		key := CreateLookupKey(quests[i])
+		key := Key(quests[i])
 		l.Quests[key] = quests[i]
 		l.QuestsID[row.ID] = quests[i]
 		l.Hashes[row.DataHash] = row.ID
@@ -303,7 +300,6 @@ func (l *Lookup) loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Co
 
 	return nil
 }
-
 
 func (l *Lookup) extractQuestCompletions() ([]QuestCompletion, error) {
 	completions := []QuestCompletion{}

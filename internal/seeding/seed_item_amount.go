@@ -34,6 +34,10 @@ func (ia ItemAmount) GetID() int32 {
 	return ia.ID
 }
 
+func (ia *ItemAmount) SetID(id int32) {
+	ia.ID = id
+}
+
 func (ia ItemAmount) GetName() string {
 	return ia.ItemName
 }

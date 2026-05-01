@@ -58,6 +58,10 @@ func (t Treasure) GetID() int32 {
 	return t.ID
 }
 
+func (t *Treasure) SetID(id int32) {
+	t.ID = id
+}
+
 func (t Treasure) Error() string {
 	return fmt.Sprintf("treasure number: %d", t.Version)
 }
@@ -111,7 +115,7 @@ func (l *Lookup) seedTreasures(db *database.Queries, dbConn *sql.DB) error {
 				}
 
 				treasure.ID = dbTreasure.ID
-				key := CreateLookupKey(treasure)
+				key := Key(treasure)
 				l.Treasures[key] = treasure
 				l.TreasuresID[treasure.ID] = treasure
 			}
@@ -140,7 +144,7 @@ func (l *Lookup) seedTreasuresRelationships(db *database.Queries, dbConn *sql.DB
 			for j, jsonTreasure := range list.Treasures {
 				jsonTreasure.AreaID = list.LocationArea.ID
 				jsonTreasure.Version = int32(j + 1)
-				key := CreateLookupKey(jsonTreasure)
+				key := Key(jsonTreasure)
 
 				treasure, err := GetResource(key, l.Treasures)
 				if err != nil {
@@ -223,7 +227,7 @@ func (l *Lookup) loop4SeedTreasures(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		treasures[i].ID = row.ID
-		key := CreateLookupKey(treasures[i])
+		key := Key(treasures[i])
 		l.Treasures[key] = treasures[i]
 		l.TreasuresID[row.ID] = treasures[i]
 		l.Hashes[row.DataHash] = row.ID

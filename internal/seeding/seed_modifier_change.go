@@ -29,6 +29,10 @@ func (m ModifierChange) GetID() int32 {
 	return m.ID
 }
 
+func (m *ModifierChange) SetID(id int32) {
+	m.ID = id
+}
+
 func (m ModifierChange) Error() string {
 	return fmt.Sprintf("modifier change with modifier: %s, calc type: %s, value %f", m.ModifierName, m.CalculationType, m.Value)
 }
