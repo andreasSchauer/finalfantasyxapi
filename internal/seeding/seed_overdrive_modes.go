@@ -280,3 +280,21 @@ func (l *Lookup) extractOdModeActions() ([]ActionToLearn, error) {
 
 	return dedupeRows(actions, l.Hashes), nil
 }
+
+func (l *Lookup) getOverdriveModeActions(om OverdriveMode) ([]ActionToLearn, error) {
+	return om.ActionsToLearn, nil
+}
+
+func (l *Lookup) seedJuncOverdriveModeActions(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "overdrive modes + actions"
+	jParams, err := processJunctions(l, desc, l.json.overdriveModes, l.getOverdriveModeActions)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateOverdriveModesActionsToLearnJunctionBulk(ctx, database.CreateOverdriveModesActionsToLearnJunctionBulkParams{
+		DataHash:          	jParams.DataHashes,
+		OverdriveModeID: 	jParams.ParentIDs,
+		ActionID:  			jParams.ChildIDs,
+	})
+}

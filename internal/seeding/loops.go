@@ -158,6 +158,17 @@ func (l *Lookup) seedLoop7(qtx *database.Queries, ctx context.Context) error {
 
 func (l *Lookup) seedJunctions(qtx *database.Queries, ctx context.Context) error {
 	return l.seedLoop(qtx, ctx, []seedFunc{
-
+		l.seedJuncOverdriveModeActions,
+		l.seedJuncPropertiesModifierChanges,
+		l.seedJuncPropertiesRelatedStats,
+		l.seedJuncStatusConditionModifierChanges,
+		l.seedJuncStatusConditionRelatedStats,
+		l.seedJuncStatusConditionRemovedConditions,
+		l.seedJuncStatusConditionStatChanges,
+		l.seedJuncAeonBaseStatsA,
+		l.seedJuncAeonBaseStatsB,
+		l.seedJuncAeonAeonEquipment,
+		l.seedJuncCharacterClassesPlayerUnits,
+		l.seedJuncCharactersBaseStats,
 	})
 }

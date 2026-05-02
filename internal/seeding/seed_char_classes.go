@@ -10,10 +10,10 @@ import (
 )
 
 type CharacterClass struct {
-	ID   		int32
-	Name 		string		`json:"name"`
-	Category	string		`json:"category"`
-	Members		[]string	`json:"members"`
+	ID       int32
+	Name     string   `json:"name"`
+	Category string   `json:"category"`
+	Members  []string `json:"members"`
 }
 
 func (cc CharacterClass) ToHashFields() []any {
@@ -33,8 +33,8 @@ func (cc CharacterClass) Error() string {
 
 func (cc CharacterClass) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: 			cc.ID,
-		Name: 			cc.Name,
+		ID:   cc.ID,
+		Name: cc.Name,
 	}
 }
 
@@ -66,7 +66,6 @@ func (l *Lookup) seedCharacterClasses(db *database.Queries, dbConn *sql.DB) erro
 	})
 }
 
-
 func (l *Lookup) seedCharacterClassesRelationships(db *database.Queries, dbConn *sql.DB) error {
 	const srcPath = "data/character_classes.json"
 
@@ -88,7 +87,7 @@ func (l *Lookup) seedCharacterClassesRelationships(db *database.Queries, dbConn 
 				if err != nil {
 					return err
 				}
-	
+
 				err = qtx.CreateCharacterClassPlayerUnitsJunction(context.Background(), database.CreateCharacterClassPlayerUnitsJunctionParams{
 					DataHash: generateDataHash(junction),
 					ClassID:  junction.ParentID,
@@ -102,7 +101,6 @@ func (l *Lookup) seedCharacterClassesRelationships(db *database.Queries, dbConn 
 		return nil
 	})
 }
-
 
 func (l *Lookup) loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Context) error {
 	classes := dedupeRows(l.json.characterClasses, l.Hashes)
@@ -134,3 +132,40 @@ func (l *Lookup) loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Co
 
 	return nil
 }
+
+func (l *Lookup) getCharacterClassPlayerUnits(c CharacterClass) ([]PlayerUnit, error) {
+	return toObjects(c.Members, l.PlayerUnits)
+}
+
+func (l *Lookup) getDefaultAbilitiesCharacterClasses(entries []DefaultAbilitiesEntry) ([]CharacterClass, error) {
+	classes := make([]CharacterClass, len(entries))
+
+	for i, entry := range entries {
+		class, err := GetResource(entry.Name, l.CharClasses)
+		if err != nil {
+			return nil, err
+		}
+		classes[i] = class
+	}
+
+	return classes, nil
+}
+
+func (l *Lookup) getDefaultAbilities(entry DefaultAbilitiesEntry) ([]Ability, error) {
+	return toObjects(entry.DefaultAbilities, l.Abilities)
+}
+
+func (l *Lookup) seedJuncCharacterClassesPlayerUnits(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "character classes + player units"
+	jParams, err := processJunctions(l, desc, l.json.characterClasses, l.getCharacterClassPlayerUnits)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateCharacterClassPlayerUnitsJunctionBulk(ctx, database.CreateCharacterClassPlayerUnitsJunctionBulkParams{
+		DataHash: jParams.DataHashes,
+		ClassID:  jParams.ParentIDs,
+		UnitID:   jParams.ChildIDs,
+	})
+}
+

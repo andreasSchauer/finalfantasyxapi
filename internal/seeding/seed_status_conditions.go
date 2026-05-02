@@ -12,14 +12,14 @@ import (
 type StatusCondition struct {
 	ID                      int32
 	Name                    string           `json:"name"`
-	Category				string			 `json:"category"`
-	IsPermanent				bool			 `json:"is_permanent"`
+	Category                string           `json:"category"`
+	IsPermanent             bool             `json:"is_permanent"`
 	Effect                  string           `json:"effect"`
 	Visualization           *string          `json:"visualization"`
 	RelatedStats            []string         `json:"related_stats"`
 	RemovedStatusConditions []string         `json:"removed_status_conditions"`
 	AddedElemResist         *ElementalResist `json:"added_elem_resist"`
-	CtbOnInfliction			*InflictedDelay	 `json:"ctb_on_infliction"`
+	CtbOnInfliction         *InflictedDelay  `json:"ctb_on_infliction"`
 	NullifyArmored          *string          `json:"nullify_armored"`
 	StatChanges             []StatChange     `json:"stat_changes"`
 	ModifierChanges         []ModifierChange `json:"modifier_changes"`
@@ -67,8 +67,8 @@ func (l *Lookup) seedStatusConditions(db *database.Queries, dbConn *sql.DB) erro
 			dbCondition, err := qtx.CreateStatusCondition(context.Background(), database.CreateStatusConditionParams{
 				DataHash:       generateDataHash(condition),
 				Name:           condition.Name,
-				Category: 		database.StatusConditionCategory(condition.Category),
-				IsPermanent: 	condition.IsPermanent,
+				Category:       database.StatusConditionCategory(condition.Category),
+				IsPermanent:    condition.IsPermanent,
 				Effect:         condition.Effect,
 				Visualization:  h.GetNullString(condition.Visualization),
 				NullifyArmored: database.ToNullNullifyArmored(condition.NullifyArmored),
@@ -219,7 +219,6 @@ func (l *Lookup) seedStatusConditionModifierChanges(qtx *database.Queries, condi
 	return nil
 }
 
-
 func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Context) error {
 	statusses, err := l.extractStatusConditions()
 	if err != nil {
@@ -227,15 +226,15 @@ func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Co
 	}
 
 	params := database.CreateStatusConditionBulkParams{
-		DataHash:   		make([]string, len(statusses)),
-		Name:      			make([]string, len(statusses)),
-		Category: 			make([]database.StatusConditionCategory, len(statusses)),
-		IsPermanent: 		make([]bool, len(statusses)),
-		Effect: 			make([]string, len(statusses)),
-		Visualization: 		make([]sql.NullString, len(statusses)),
-		NullifyArmored: 	make([]database.NullNullifyArmored, len(statusses)),
-		AddedElemResistID: 	make([]sql.NullInt32, len(statusses)),
-		InflictedDelayID: 	make([]sql.NullInt32, len(statusses)),
+		DataHash:          make([]string, len(statusses)),
+		Name:              make([]string, len(statusses)),
+		Category:          make([]database.StatusConditionCategory, len(statusses)),
+		IsPermanent:       make([]bool, len(statusses)),
+		Effect:            make([]string, len(statusses)),
+		Visualization:     make([]sql.NullString, len(statusses)),
+		NullifyArmored:    make([]database.NullNullifyArmored, len(statusses)),
+		AddedElemResistID: make([]sql.NullInt32, len(statusses)),
+		InflictedDelayID:  make([]sql.NullInt32, len(statusses)),
 	}
 
 	for i, s := range statusses {
@@ -265,7 +264,6 @@ func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Co
 
 	return nil
 }
-
 
 func (l *Lookup) extractStatusConditions() ([]StatusCondition, error) {
 	statusses := []StatusCondition{}
@@ -313,4 +311,76 @@ func (l *Lookup) completeStatusConditions() error {
 	}
 
 	return nil
+}
+
+func (l *Lookup) getStatusConditionModifierChanges(sc StatusCondition) ([]ModifierChange, error) {
+	return sc.ModifierChanges, nil
+}
+
+func (l *Lookup) getStatusConditionRelatedStats(sc StatusCondition) ([]Stat, error) {
+	return toObjects(sc.RelatedStats, l.Stats)
+}
+
+func (l *Lookup) getStatusConditionRemovedConditions(sc StatusCondition) ([]StatusCondition, error) {
+	return toObjects(sc.RemovedStatusConditions, l.StatusConditions)
+}
+
+func (l *Lookup) getStatusConditionStatChanges(sc StatusCondition) ([]StatChange, error) {
+	return sc.StatChanges, nil
+}
+
+func (l *Lookup) seedJuncStatusConditionModifierChanges(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "status conditions + modifier changes"
+	jParams, err := processJunctions(l, desc, l.json.statusConditions, l.getStatusConditionModifierChanges)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateStatusConditionsModifierChangesJunctionBulk(ctx, database.CreateStatusConditionsModifierChangesJunctionBulkParams{
+		DataHash:          jParams.DataHashes,
+		StatusConditionID: jParams.ParentIDs,
+		ModifierChangeID:  jParams.ChildIDs,
+	})
+}
+
+func (l *Lookup) seedJuncStatusConditionRelatedStats(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "status conditions + related stats"
+	jParams, err := processJunctions(l, desc, l.json.statusConditions, l.getStatusConditionRelatedStats)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateStatusConditionsRelatedStatsJunctionBulk(ctx, database.CreateStatusConditionsRelatedStatsJunctionBulkParams{
+		DataHash:          jParams.DataHashes,
+		StatusConditionID: jParams.ParentIDs,
+		StatID:            jParams.ChildIDs,
+	})
+}
+
+func (l *Lookup) seedJuncStatusConditionRemovedConditions(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "status conditions + removed conditions"
+	jParams, err := processJunctions(l, desc, l.json.statusConditions, l.getStatusConditionRemovedConditions)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateStatusConditionsRemovedStatusConditionsJunctionBulk(ctx, database.CreateStatusConditionsRemovedStatusConditionsJunctionBulkParams{
+		DataHash:          jParams.DataHashes,
+		ParentConditionID: jParams.ParentIDs,
+		ChildConditionID:  jParams.ChildIDs,
+	})
+}
+
+func (l *Lookup) seedJuncStatusConditionStatChanges(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "status conditions + stat changes"
+	jParams, err := processJunctions(l, desc, l.json.statusConditions, l.getStatusConditionStatChanges)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateStatusConditionsStatChangesJunctionBulk(ctx, database.CreateStatusConditionsStatChangesJunctionBulkParams{
+		DataHash:          jParams.DataHashes,
+		StatusConditionID: jParams.ParentIDs,
+		StatChangeID:      jParams.ChildIDs,
+	})
 }

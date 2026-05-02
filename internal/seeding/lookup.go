@@ -252,7 +252,7 @@ func lookupInit() (*Lookup, error) {
 	return &l, nil
 }
 
-func GetResource[T any, K any](key K, lookup map[string]T) (T, error) {
+func GetResource[T, K any](key K, lookup map[string]T) (T, error) {
 	switch k := any(key).(type) {
 	case string:
 		return getResourceStrKey(k, lookup)
@@ -302,4 +302,19 @@ func getTypeName[T any]() string {
 	typeOnly := strings.Split(typeString, ".")
 
 	return typeOnly[len(typeOnly)-1]
+}
+
+func toObjects[T, K any](keys []K, lookup map[string]T) ([]T, error) {
+	objects := make([]T, len(keys))
+
+	for i, key := range keys {
+		obj, err := GetResource(key, lookup)
+		if err != nil {
+			return nil, err
+		}
+
+		objects[i] = obj
+	}
+
+	return objects, nil
 }

@@ -165,6 +165,7 @@ func (l *Lookup) completeAeonStats() error {
 		aeon.BaseStats = *as
 		l.Aeons[as.Name] = aeon
 		l.AeonsID[as.AeonID] = aeon
+		l.json.aeons[i].BaseStats = *as
 	}
 
 	return nil
@@ -180,4 +181,40 @@ func (l *Lookup) completeAeonXVals(xVals []XVal) error {
 	}
 
 	return nil
+}
+
+func (l *Lookup) getAeonBaseStatsA(a Aeon) ([]BaseStat, error) {
+	return a.BaseStats.AVals, nil
+}
+
+func (l *Lookup) getAeonBaseStatsB(a Aeon) ([]BaseStat, error) {
+	return a.BaseStats.BVals, nil
+}
+
+func (l *Lookup) seedJuncAeonBaseStatsA(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "aeons + base stats a"
+	jParams, err := processJunctions(l, desc, l.json.aeons, l.getAeonBaseStatsA)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateAeonsBaseStatAJunctionBulk(ctx, database.CreateAeonsBaseStatAJunctionBulkParams{
+		DataHash:       jParams.DataHashes,
+		AeonID: 		jParams.ParentIDs,
+		BaseStatID:  	jParams.ChildIDs,
+	})
+}
+
+func (l *Lookup) seedJuncAeonBaseStatsB(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "aeons + base stats b"
+	jParams, err := processJunctions(l, desc, l.json.aeons, l.getAeonBaseStatsB)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateAeonsBaseStatBJunctionBulk(ctx, database.CreateAeonsBaseStatBJunctionBulkParams{
+		DataHash:       jParams.DataHashes,
+		AeonID: 		jParams.ParentIDs,
+		BaseStatID:  	jParams.ChildIDs,
+	})
 }

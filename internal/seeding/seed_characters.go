@@ -234,3 +234,21 @@ func (l *Lookup) completeCharacters() error {
 
 	return nil
 }
+
+func (l *Lookup) getCharacterBaseStats(c Character) ([]BaseStat, error) {
+	return c.BaseStats, nil
+}
+
+func (l *Lookup) seedJuncCharactersBaseStats(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "characters + base stats"
+	jParams, err := processJunctions(l, desc, l.json.characters, l.getCharacterBaseStats)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateCharactersBaseStatsJunctionBulk(ctx, database.CreateCharactersBaseStatsJunctionBulkParams{
+		DataHash:       jParams.DataHashes,
+		CharacterID: 	jParams.ParentIDs,
+		BaseStatID:  	jParams.ChildIDs,
+	})
+}

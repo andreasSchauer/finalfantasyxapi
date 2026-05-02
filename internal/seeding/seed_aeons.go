@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -388,4 +389,22 @@ func (l *Lookup) completeAeons() error {
 	}
 
 	return nil
+}
+
+func (l *Lookup) getAeonAeonEquipment(a Aeon) ([]AeonEquipment, error) {
+	return slices.Concat(a.Weapon, a.Armor), nil
+}
+
+func (l *Lookup) seedJuncAeonAeonEquipment(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "aeons + aeon equipment"
+	jParams, err := processJunctions(l, desc, l.json.aeons, l.getAeonAeonEquipment)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateAeonsWeaponArmorJunctionBulk(ctx, database.CreateAeonsWeaponArmorJunctionBulkParams{
+		DataHash:       	jParams.DataHashes,
+		AeonID: 			jParams.ParentIDs,
+		AeonEquipmentID:  	jParams.ChildIDs,
+	})
 }

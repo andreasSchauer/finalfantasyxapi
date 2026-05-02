@@ -29,7 +29,6 @@ func (j StdJunction) ToHashFieldsJ(name string) []any {
 	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
-
 type ThreeWayJunction struct {
 	GrandparentID int32
 	StdJunction
@@ -66,19 +65,18 @@ func (j FourWayJunction) ToHashFieldsJ(name string) []any {
 }
 
 type JunctionParams struct {
-	DataHashes 			[]string
-	GreatGrandParentIDs []int32 	// probably not needed
-	GrandParentIDs		[]int32		// can still use a generic helper, since I need to gather them before anyways
-	ParentIDs			[]int32
-	ChildIDs			[]int32
+	DataHashes          []string
+	GreatGrandParentIDs []int32 // probably not needed
+	GrandParentIDs      []int32 // can still use a generic helper, since I need to gather them before anyways
+	ParentIDs           []int32
+	ChildIDs            []int32
 }
 
-
-func ProcessJunctions[P, C Hashable](l *Lookup, tableName string, parents []P, getChildren func(P) []C) (JunctionParams, error) {
+func processJunctions[P, C Hashable](l *Lookup, desc string, parents []P, getChildren func(P) ([]C, error)) (JunctionParams, error) {
 	params := JunctionParams{
-		DataHashes:	make([]string, 0),
-		ParentIDs:	make([]int32, 0),
-		ChildIDs:	make([]int32, 0),
+		DataHashes: make([]string, 0),
+		ParentIDs:  make([]int32, 0),
+		ChildIDs:   make([]int32, 0),
 	}
 
 	for _, p := range parents {
@@ -87,7 +85,10 @@ func ProcessJunctions[P, C Hashable](l *Lookup, tableName string, parents []P, g
 			return JunctionParams{}, err
 		}
 
-		children := getChildren(p)
+		children, err := getChildren(p)
+		if err != nil {
+			return JunctionParams{}, err
+		}
 
 		for _, c := range children {
 			cID, err := l.getHashID(c)
@@ -97,9 +98,9 @@ func ProcessJunctions[P, C Hashable](l *Lookup, tableName string, parents []P, g
 
 			j := StdJunction{
 				ParentID: pID,
-				ChildID: cID,
+				ChildID:  cID,
 			}
-			dataHash := generateJunctionHash(j, tableName)
+			dataHash := generateJunctionHash(j, desc)
 
 			params.DataHashes = append(params.DataHashes, dataHash)
 			params.ParentIDs = append(params.ParentIDs, pID)
@@ -109,8 +110,6 @@ func ProcessJunctions[P, C Hashable](l *Lookup, tableName string, parents []P, g
 
 	return params, nil
 }
-
-
 
 func createJunction[T any, P, C h.HasID](parent P, childKey T, lookup map[string]C) (StdJunction, error) {
 	child, err := GetResource(childKey, lookup)

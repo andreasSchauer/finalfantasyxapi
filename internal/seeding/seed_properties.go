@@ -10,13 +10,13 @@ import (
 )
 
 type Property struct {
-	ID                      int32
-	Name                    string           `json:"name"`
-	Effect                  string           `json:"effect"`
-	RelatedStats            []string         `json:"related_stats"`
-	NullifyArmored          *string          `json:"nullify_armored"`
-	StatChanges             []StatChange     `json:"stat_changes"`
-	ModifierChanges         []ModifierChange `json:"modifier_changes"`
+	ID              int32
+	Name            string           `json:"name"`
+	Effect          string           `json:"effect"`
+	RelatedStats    []string         `json:"related_stats"`
+	NullifyArmored  *string          `json:"nullify_armored"`
+	StatChanges     []StatChange     `json:"stat_changes"`
+	ModifierChanges []ModifierChange `json:"modifier_changes"`
 }
 
 func (p Property) ToHashFields() []any {
@@ -127,7 +127,6 @@ func (l *Lookup) seedPropertyRelatedStats(qtx *database.Queries, property Proper
 	return nil
 }
 
-
 func (l *Lookup) seedPropertyStatChanges(qtx *database.Queries, property Property) error {
 	for _, statChange := range property.StatChanges {
 		junction, err := createJunctionSeed(qtx, property, statChange, l.seedStatChange)
@@ -167,7 +166,6 @@ func (l *Lookup) seedPropertyModifierChanges(qtx *database.Queries, property Pro
 
 	return nil
 }
-
 
 func (l *Lookup) loop1SeedProperties(qtx *database.Queries, ctx context.Context) error {
 	properties := dedupeRows(l.json.properties, l.Hashes)
@@ -216,4 +214,40 @@ func (l *Lookup) completeProperties() error {
 	}
 
 	return nil
+}
+
+func (l *Lookup) getPropertyModifierChanges(p Property) ([]ModifierChange, error) {
+	return p.ModifierChanges, nil
+}
+
+func (l *Lookup) getPropertyRelatedStats(p Property) ([]Stat, error) {
+	return toObjects(p.RelatedStats, l.Stats)
+}
+
+func (l *Lookup) seedJuncPropertiesModifierChanges(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "properties + modifier changes"
+	jParams, err := processJunctions(l, desc, l.json.properties, l.getPropertyModifierChanges)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreatePropertiesModifierChangesJunctionBulk(ctx, database.CreatePropertiesModifierChangesJunctionBulkParams{
+		DataHash:         jParams.DataHashes,
+		PropertyID:       jParams.ParentIDs,
+		ModifierChangeID: jParams.ChildIDs,
+	})
+}
+
+func (l *Lookup) seedJuncPropertiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "properties + related stats"
+	jParams, err := processJunctions(l, desc, l.json.properties, l.getPropertyRelatedStats)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreatePropertiesRelatedStatsJunctionBulk(ctx, database.CreatePropertiesRelatedStatsJunctionBulkParams{
+		DataHash:   jParams.DataHashes,
+		PropertyID: jParams.ParentIDs,
+		StatID:     jParams.ChildIDs,
+	})
 }
