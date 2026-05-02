@@ -413,6 +413,26 @@ func (l *Lookup) extractEquipmentTables() ([]EquipmentTable, error) {
 	return dedupeRows(tables, l.Hashes), nil
 }
 
+func (l *Lookup) completeEquipment() error {
+	for i := range l.json.equipment {
+		table := &l.json.equipment[i]
+		err := assignIDs(l, table.SelectableAutoAbilities)
+		if err != nil {
+			return err
+		}
+		
+		err = assignIDs(l, table.EquipmentNames)
+		if err != nil {
+			return err
+		}
+
+		l.EquipmentTables[Key(*table)] = *table
+		l.EquipmentTablesID[table.ID] = *table
+	}
+
+	return nil
+}
+
 func (l *Lookup) loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Context) error {
 	names, err := l.extractEquipmentNames()
 	if err != nil {

@@ -212,6 +212,22 @@ func (l *Lookup) loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Cont
 	return nil
 }
 
+func (l *Lookup) completeOverdriveModes() error {
+	for i := range l.json.overdriveModes {
+		mode := &l.json.overdriveModes[i]
+
+		err := assignIDs(l, mode.ActionsToLearn)
+		if err != nil {
+			return err
+		}
+
+		l.OverdriveModes[mode.Name] = *mode
+		l.OverdriveModesID[mode.ID] = *mode
+	}
+
+	return nil
+}
+
 
 func (l *Lookup) loop5SeedOdModeActions(qtx *database.Queries, ctx context.Context) error {
 	actions, err := l.extractOdModeActions()

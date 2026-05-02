@@ -199,3 +199,19 @@ func (l *Lookup) extractOverdriveAbilities() ([]OverdriveAbility, error) {
 
 	return dedupeRows(abilities, l.Hashes), nil
 }
+
+func (l *Lookup) completeOverdriveAbilities() error {
+	for i := range l.json.overdriveAbilities {
+		ability := &l.json.overdriveAbilities[i]
+
+		err := l.completeBattleInteractions(ability.BattleInteractions)
+		if err != nil {
+			return err
+		}
+
+		l.OverdriveAbilities[Key(ability)] = *ability
+		l.OverdriveAbilitiesID[ability.ID] = *ability
+	}
+
+	return nil
+}

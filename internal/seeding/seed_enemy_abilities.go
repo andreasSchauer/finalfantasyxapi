@@ -177,3 +177,19 @@ func (l *Lookup) extractEnemyAbilities() ([]EnemyAbility, error) {
 
 	return dedupeRows(abilities, l.Hashes), nil
 }
+
+func (l *Lookup) completeEnemyAbilities() error {
+	for i := range l.json.enemyAbilities {
+		ability := &l.json.enemyAbilities[i]
+
+		err := l.completeBattleInteractions(ability.BattleInteractions)
+		if err != nil {
+			return err
+		}
+
+		l.EnemyAbilities[Key(ability)] = *ability
+		l.EnemyAbilitiesID[ability.ID] = *ability
+	}
+
+	return nil
+}

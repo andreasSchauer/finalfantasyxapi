@@ -234,3 +234,19 @@ func (l *Lookup) extractTriggerCommands() ([]TriggerCommand, error) {
 
 	return dedupeRows(commands, l.Hashes), nil
 }
+
+func (l *Lookup) completeTriggerCommands() error {
+	for i := range l.json.triggerCommands {
+		ability := &l.json.triggerCommands[i]
+
+		err := l.completeBattleInteractions(ability.BattleInteractions)
+		if err != nil {
+			return err
+		}
+
+		l.TriggerCommands[Key(ability)] = *ability
+		l.TriggerCommandsID[ability.ID] = *ability
+	}
+
+	return nil
+}

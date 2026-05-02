@@ -219,3 +219,18 @@ func (l *Lookup) extractCharacters() ([]Character, error) {
 
 	return dedupeRows(chars, l.Hashes), nil
 }
+
+func (l *Lookup) completeCharacters() error {
+	for i := range l.json.characters {
+		character := &l.json.characters[i]
+		err := assignIDs(l, character.BaseStats)
+		if err != nil {
+			return err
+		}
+
+		l.Characters[character.Name] = *character
+		l.CharactersID[character.ID] = *character
+	}
+
+	return nil
+}

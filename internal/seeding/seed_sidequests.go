@@ -246,6 +246,22 @@ func (l *Lookup) extractSidequests() ([]Sidequest, error) {
 	return dedupeRows(sidequests, l.Hashes), nil
 }
 
+func (l *Lookup) completeSidequests() error {
+	for i := range l.json.sidequests {
+		sidequest := &l.json.sidequests[i]
+
+		err := assignIDs(l, sidequest.Subquests)
+		if err != nil {
+			return err
+		}
+
+		l.Sidequests[sidequest.Name] = *sidequest
+		l.SidequestsID[sidequest.ID] = *sidequest
+	}
+
+	return nil
+}
+
 
 func (l *Lookup) loop6SeedSubquests(qtx *database.Queries, ctx context.Context) error {
 	subquests, err := l.extractSubquests()

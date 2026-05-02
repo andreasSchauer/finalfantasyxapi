@@ -263,6 +263,22 @@ func (l *Lookup) extractMixes() ([]Mix, error) {
 	return dedupeRows(mixes, l.Hashes), nil
 }
 
+func (l *Lookup) completeMixes() error {
+	for i := range l.json.mixes {
+		mix := &l.json.mixes[i]
+
+		err := assignIDs(l, mix.PossibleCombinations)
+		if err != nil {
+			return err
+		}
+
+		l.Mixes[mix.Name] = *mix
+		l.MixesID[mix.ID] = *mix
+	}
+
+	return nil
+}
+
 func (l *Lookup) loop6SeedMixCombinations(qtx *database.Queries, ctx context.Context) error {
 	combos, err := l.extractMixCombinations()
 	if err != nil {

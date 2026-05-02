@@ -287,6 +287,24 @@ func (l *Lookup) prepareDamages(battleInteractions []BattleInteraction) ([]Damag
 	return damages, nil
 }
 
+func (l *Lookup) completeDamage(damage *Damage) error {
+	if damage == nil {
+		return nil
+	}
+
+	err := l.assignID(damage)
+	if err != nil {
+		return err
+	}
+
+	err = assignIDs(l, damage.DamageCalc)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 
 func (l *Lookup) loop5SeedAbilityDamages(qtx *database.Queries, ctx context.Context) error {
 	damages, err := l.extractAbilityDamages()

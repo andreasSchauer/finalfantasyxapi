@@ -293,3 +293,24 @@ func (l *Lookup) extractStatusConditions() ([]StatusCondition, error) {
 
 	return dedupeRows(statusses, l.Hashes), nil
 }
+
+func (l *Lookup) completeStatusConditions() error {
+	for i := range l.json.statusConditions {
+		status := &l.json.statusConditions[i]
+
+		err := assignIDs(l, status.StatChanges)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, status.ModifierChanges)
+		if err != nil {
+			return err
+		}
+
+		l.StatusConditions[status.Name] = *status
+		l.StatusConditionsID[status.ID] = *status
+	}
+
+	return nil
+}

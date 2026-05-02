@@ -257,3 +257,21 @@ func (l *Lookup) extractMonsterItems() ([]MonsterItems, error) {
 
 	return dedupeRows(items, l.Hashes), nil
 }
+
+func (l *Lookup) completeMonsterItems(items *MonsterItems) error {
+	if items == nil {
+		return nil
+	}
+
+	err := l.assignID(items)
+	if err != nil {
+		return err
+	}
+
+	err = assignIDs(l, items.OtherItems)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

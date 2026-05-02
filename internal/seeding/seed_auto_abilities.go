@@ -497,3 +497,29 @@ func (l *Lookup) extractAutoAbilities() ([]AutoAbility, error) {
 
 	return dedupeRows(abilities, l.Hashes), nil
 }
+
+func (l *Lookup) completeAutoAbilities() error {
+	for i := range l.json.autoAbilities {
+		autoAbility := &l.json.autoAbilities[i]
+
+		err := assignIDs(l, autoAbility.AddedStatusResists)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, autoAbility.StatChanges)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, autoAbility.ModifierChanges)
+		if err != nil {
+			return err
+		}
+
+		l.AutoAbilities[autoAbility.Name] = *autoAbility
+		l.AutoAbilitiesID[autoAbility.ID] = *autoAbility
+	}
+
+	return nil
+}

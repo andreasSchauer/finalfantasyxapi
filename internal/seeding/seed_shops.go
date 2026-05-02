@@ -390,6 +390,14 @@ func (l *Lookup) extractShops() ([]Shop, error) {
 	for i := range l.json.shops {
 		shop := &l.json.shops[i]
 
+		if shop.PreAirship != nil {
+			shop.PreAirship.Type = database.ShopTypePreAirship
+		}
+
+		if shop.PostAirship != nil {
+			shop.PostAirship.Type = database.ShopTypePostAirship
+		}
+
 		shop.AreaID, err = assignFK(shop.LocationArea, l.Areas)
 		if err != nil {
 			return nil, err
@@ -399,6 +407,45 @@ func (l *Lookup) extractShops() ([]Shop, error) {
 	}
 
 	return dedupeRows(shops, l.Hashes), nil
+}
+
+func (l *Lookup) completeShops() error {
+	for i := range l.json.shops {
+		shop := &l.json.shops[i]
+
+		err := l.completeSubShop(shop.PreAirship)
+		if err != nil {
+			return err
+		}
+
+		err = l.completeSubShop(shop.PostAirship)
+		if err != nil {
+			return err
+		}
+
+		l.Shops[Key(*shop)] = *shop
+		l.ShopsID[shop.ID] = *shop
+	}
+
+	return nil
+}
+
+func (l *Lookup) completeSubShop(subShop *SubShop) error {
+	if subShop == nil {
+		return nil
+	}
+
+	err := assignIDs(l, subShop.Items)
+	if err != nil {
+		return err
+	}
+
+	err = assignIDs(l, subShop.Equipment)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (l *Lookup) loop3SeedShopItems(qtx *database.Queries, ctx context.Context) error {

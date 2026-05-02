@@ -314,14 +314,40 @@ func (l *Lookup) extractItems() ([]Item, error) {
 
 	for i := range l.json.items {
 		item := &l.json.items[i]
+		
 		item.MasterItem.ID, err = assignFK(item.Name, l.MasterItems)
 		if err != nil {
 			return nil, err
 		}
+		item.MasterItem.Type = database.ItemTypeItem
+
 		items = append(items, *item)
 	}
 
 	return dedupeRows(items, l.Hashes), nil
+}
+
+func (l *Lookup) completeItems() error {
+	for i := range l.json.items {
+		item := &l.json.items[i]
+
+		if len(item.BattleInteractions) > 0 {
+			item.ItemAbility.ID = item.ID
+
+			err := l.completeBattleInteractions(item.BattleInteractions)
+			if err != nil {
+				return err
+			}
+	
+			l.ItemAbilities[Key(item)] = item.ItemAbility
+			l.ItemAbilitiesID[item.ID] = item.ItemAbility
+		}
+
+		l.Items[item.Name] = *item
+		l.ItemsID[item.ID] = *item
+	}
+
+	return nil
 }
 
 

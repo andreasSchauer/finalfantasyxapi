@@ -53,6 +53,8 @@ func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
+	l.completeLookups()
+
 	return l, nil
 }
 
@@ -78,6 +80,44 @@ func setupDB(dbConn *sql.DB, migrationsDir string) error {
 
 	duration := time.Since(start)
 	fmt.Printf("\ndatabase setup took %.3f seconds\n", duration.Seconds())
+
+	return nil
+}
+
+func (l *Lookup) completeLookups() error {
+	fns := []func() error{
+		l.completeEnemyAbilities,
+		l.completeItems,
+		l.completeOverdriveAbilities,
+		l.completePlayerAbilities,
+		l.completeTriggerCommands,
+		l.completeUnspecifiedAbilities,
+		l.completeAeons,
+		l.completeAeonStats,
+		l.completeAgilityTiers,
+		l.completeAutoAbilities,
+		l.completeBlitzballPositions,
+		l.completeCharacters,
+		l.completeEquipment,
+		l.completeLocations,
+		l.completeMixes,
+		l.completeMonsterFormations,
+		l.completeMonsters,
+		l.completeOverdriveModes,
+		l.completeProperties,
+		l.completeShops,
+		l.completeSidequests,
+		l.completeSongs,
+		l.completeStatusConditions,
+		l.completeTreasureLists,
+	}
+
+	for _, fn := range fns {
+		err := fn()
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 }

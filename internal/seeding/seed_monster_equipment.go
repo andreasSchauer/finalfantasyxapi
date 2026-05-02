@@ -136,3 +136,46 @@ func (l *Lookup) extractMonsterEquipments() []MonsterEquipment {
 
 	return dedupeRows(equipments, l.Hashes)
 }
+
+func (l *Lookup) completeMonsterEquipment(equipment *MonsterEquipment) error {
+	if equipment == nil {
+		return nil
+	}
+
+	err := l.assignID(equipment)
+	if err != nil {
+		return nil
+	}
+
+	err = l.assignID(&equipment.AbilitySlots)
+	if err != nil {
+		return nil
+	}
+
+	err = l.assignID(&equipment.AttachedAbilities)
+	if err != nil {
+		return nil
+	}
+
+	err = assignIDs(l, equipment.AbilitySlots.Chances)
+	if err != nil {
+		return nil
+	}
+
+	err = assignIDs(l, equipment.AttachedAbilities.Chances)
+	if err != nil {
+		return nil
+	}
+
+	err = assignIDs(l, equipment.WeaponAbilities)
+	if err != nil {
+		return nil
+	}
+
+	err = assignIDs(l, equipment.ArmorAbilities)
+	if err != nil {
+		return nil
+	}
+
+	return nil
+}

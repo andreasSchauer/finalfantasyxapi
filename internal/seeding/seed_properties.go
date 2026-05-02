@@ -201,3 +201,19 @@ func (l *Lookup) loop1SeedProperties(qtx *database.Queries, ctx context.Context)
 
 	return nil
 }
+
+func (l *Lookup) completeProperties() error {
+	for i := range l.json.properties {
+		property := &l.json.properties[i]
+
+		err := assignIDs(l, property.ModifierChanges)
+		if err != nil {
+			return err
+		}
+
+		l.Properties[property.Name] = *property
+		l.PropertiesID[property.ID] = *property
+	}
+
+	return nil
+}

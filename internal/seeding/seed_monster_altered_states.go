@@ -30,6 +30,10 @@ func (a AlteredState) GetID() int32 {
 	return a.ID
 }
 
+func (a *AlteredState) SetID(id int32) {
+	a.ID = id
+}
+
 func (a AlteredState) Error() string {
 	return fmt.Sprintf("altered state with monster id: %d, is temporary: %t, condition: %s", a.MonsterID, a.IsTemporary, a.Condition)
 }
@@ -59,6 +63,10 @@ func (a AltStateChange) ToHashFields() []any {
 
 func (a AltStateChange) GetID() int32 {
 	return a.ID
+}
+
+func (a *AltStateChange) SetID(id int32) {
+	a.ID = id
 }
 
 func (a AltStateChange) Error() string {
@@ -378,6 +386,24 @@ func (l *Lookup) extractAltStateChanges() ([]AltStateChange, error) {
 	return dedupeRows(changes, l.Hashes), nil
 }
 
+func (l *Lookup) completeAlteredStates(states []AlteredState) error {
+	for i := range states {
+		state := &states[i]
+
+		err := l.assignID(state)
+		if err != nil {
+			return err
+		}
+
+		err = l.completeAltStateChanges(state.Changes)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (l *Lookup) prepareAltStateChanges(states []AlteredState) ([]AltStateChange, error) {
 	changes := []AltStateChange{}
 	var err error
@@ -405,4 +431,27 @@ func (l *Lookup) prepareAltStateChanges(states []AlteredState) ([]AltStateChange
 	}
 
 	return changes, nil
+}
+
+func (l *Lookup) completeAltStateChanges(changes []AltStateChange) error {
+	for i := range changes {
+		change := &changes[i]
+
+		err := l.assignID(change)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, change.BaseStats)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, change.ElemResists)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

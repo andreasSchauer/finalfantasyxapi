@@ -122,10 +122,13 @@ func (l *Lookup) extractKeyItems() ([]KeyItem, error) {
 
 	for i := range l.json.keyItems {
 		keyItem := &l.json.keyItems[i]
+
 		keyItem.MasterItem.ID, err = assignFK(keyItem.Name, l.MasterItems)
 		if err != nil {
 			return nil, err
 		}
+		keyItem.MasterItem.Type = database.ItemTypeKeyItem
+
 		keyItems = append(keyItems, *keyItem)
 	}
 

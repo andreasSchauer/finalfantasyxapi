@@ -369,3 +369,23 @@ func (l *Lookup) extractAeonEquipment() ([]AeonEquipment, error) {
 
 	return dedupeRows(equipment, l.Hashes), nil
 }
+
+func (l *Lookup) completeAeons() error {
+	for i := range l.json.aeons {
+		aeon := &l.json.aeons[i]
+		err := assignIDs(l, aeon.Weapon)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, aeon.Armor)
+		if err != nil {
+			return err
+		}
+
+		l.Aeons[aeon.Name] = *aeon
+		l.AeonsID[aeon.ID] = *aeon
+	}
+
+	return nil
+}

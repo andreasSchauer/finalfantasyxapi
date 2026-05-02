@@ -380,3 +380,19 @@ func (l *Lookup) extractPlayerAbilities() ([]PlayerAbility, error) {
 
 	return dedupeRows(abilities, l.Hashes), nil
 }
+
+func (l *Lookup) completePlayerAbilities() error {
+	for i := range l.json.playerAbilities {
+		ability := &l.json.playerAbilities[i]
+
+		err := l.completeBattleInteractions(ability.BattleInteractions)
+		if err != nil {
+			return err
+		}
+
+		l.PlayerAbilities[Key(ability)] = *ability
+		l.PlayerAbilitiesID[ability.ID] = *ability
+	}
+
+	return nil
+}

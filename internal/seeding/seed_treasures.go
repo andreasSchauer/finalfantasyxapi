@@ -259,6 +259,47 @@ func (l *Lookup) extractTreasures() ([]Treasure, error) {
 	return dedupeRows(treasures, l.Hashes), nil
 }
 
+func (l *Lookup) completeTreasureLists() error {
+	for i := range l.json.treasureLists {
+		list := &l.json.treasureLists[i]
+
+		err := l.completeTreasures(list.Treasures)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (l *Lookup) completeTreasures(treasures []Treasure) error {
+	for i := range treasures {
+		treasure := &treasures[i]
+
+		err := assignIDs(l, treasure.Items)
+		if err != nil {
+			return err
+		}
+
+		err = l.assignID(treasure)
+		if err != nil {
+			return err
+		}
+
+		if treasure.Equipment != nil {
+			err := l.assignID(treasure.Equipment)
+			if err != nil {
+				return err
+			}
+		}
+
+		l.Treasures[Key(*treasure)] = *treasure
+		l.TreasuresID[treasure.ID] = *treasure
+	}
+
+	return nil
+}
+
 func (l *Lookup) loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.Context) error {
 	equipment, err := l.extractTreasureEquipment()
 	if err != nil {

@@ -74,6 +74,10 @@ func (i PossibleItem) GetID() int32 {
 	return i.ID
 }
 
+func (i *PossibleItem) SetID(id int32) {
+	i.ID = id
+}
+
 func (i PossibleItem) Error() string {
 	return fmt.Sprintf("possible item %s, amount: %d, chance: %d", i.ItemAmount.ItemName, i.ItemAmount.Amount, i.Chance)
 }
@@ -222,6 +226,21 @@ func (l *Lookup) loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.
 		l.Positions[key] = positions[i]
 		l.PositionsID[row.ID] = positions[i]
 		l.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func (l *Lookup) completeBlitzballPositions() error {
+	for i := range l.json.blitzballPositions {
+		pos := &l.json.blitzballPositions[i]
+		err := assignIDs(l, pos.Items)
+		if err != nil {
+			return err
+		}
+
+		l.Positions[Key(*pos)] = *pos
+		l.PositionsID[pos.ID] = *pos
 	}
 
 	return nil

@@ -281,3 +281,19 @@ func (l *Lookup) extractUnspecifiedAbilities() ([]UnspecifiedAbility, error) {
 
 	return dedupeRows(abilities, l.Hashes), nil
 }
+
+func (l *Lookup) completeUnspecifiedAbilities() error {
+	for i := range l.json.unspecifiedAbilities {
+		ability := &l.json.unspecifiedAbilities[i]
+
+		err := l.completeBattleInteractions(ability.BattleInteractions)
+		if err != nil {
+			return err
+		}
+
+		l.UnspecifiedAbilities[Key(ability)] = *ability
+		l.UnspecifiedAbilitiesID[ability.ID] = *ability
+	}
+
+	return nil
+}

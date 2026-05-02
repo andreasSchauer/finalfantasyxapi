@@ -540,6 +540,32 @@ func (l *Lookup) extractMonsterFormations() ([]MonsterFormation, error) {
 	return dedupeRows(formations, l.Hashes), nil
 }
 
+func (l *Lookup) completeMonsterFormations() error {
+	for i := range l.json.monsterFormations {
+		formation := &l.json.monsterFormations[i]
+
+		err := assignIDs(l, formation.Monsters)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, formation.EncounterAreas)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, formation.TriggerCommands)
+		if err != nil {
+			return err
+		}
+
+		l.MonsterFormations[Key(*formation)] = *formation
+		l.MonsterFormationsID[formation.ID] = *formation
+	}
+
+	return nil
+}
+
 func (l *Lookup) loop1SeedMonsterSelections(qtx *database.Queries, ctx context.Context) error {
 	selections, err := l.extractMonsterSelections()
 	if err != nil {

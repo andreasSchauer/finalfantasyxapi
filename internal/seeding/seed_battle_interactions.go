@@ -415,3 +415,41 @@ func (l *Lookup) prepareBattleInteractions(bis []BattleInteraction) ([]BattleInt
 
 	return bisNew, nil
 }
+
+func (l *Lookup) completeBattleInteractions(bis []BattleInteraction) error {
+	for i := range bis {
+		bi := &bis[i]
+
+		err := l.assignID(bi)
+		if err != nil {
+			return err
+		}
+
+		err = l.completeDamage(bi.Damage)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, bi.InflictedStatusConditions)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, bi.CopiedStatusConditions)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, bi.StatChanges)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, bi.ModifierChanges)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

@@ -501,6 +501,52 @@ func (l *Lookup) loop1SeedMonsters(qtx *database.Queries, ctx context.Context) e
 	return nil
 }
 
+func (l *Lookup) completeMonsters() error {
+	for i := range l.json.monsters {
+		mon := &l.json.monsters[i]
+
+		err := assignIDs(l, mon.ElemResists)
+		if err != nil {
+			return err
+		}
+		
+		err = assignIDs(l, mon.StatusResists)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, mon.BaseStats)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, mon.Abilities)
+		if err != nil {
+			return err
+		}
+
+		err = l.completeMonsterItems(mon.Items)
+		if err != nil {
+			return err
+		}
+
+		err = l.completeMonsterEquipment(mon.Equipment)
+		if err != nil {
+			return err
+		}
+
+		err = l.completeAlteredStates(mon.AlteredStates)
+		if err != nil {
+			return err
+		}
+
+		l.Monsters[Key(*mon)] = *mon
+		l.MonstersID[mon.ID] = *mon
+	}
+
+	return nil
+}
+
 func (l *Lookup) completeMonstersElements() error {
 	elements := []string{"fire", "lightning", "water", "ice", "holy"}
 

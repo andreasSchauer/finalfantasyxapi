@@ -219,3 +219,16 @@ func (l *Lookup) extractAgilitySubtiers() []AgilitySubtier {
 
 	return dedupeRows(subtiers, l.Hashes)
 }
+
+func (l *Lookup) completeAgilityTiers() error {
+	for i := range l.json.agilityTiers {
+		tier := &l.json.agilityTiers[i]
+
+		err := assignIDs(l, tier.CharacterMinICVs)
+		if err != nil {
+			return err
+		}
+	}
+	
+	return nil
+}

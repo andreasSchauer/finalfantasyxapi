@@ -390,6 +390,22 @@ func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) 
 	return nil
 }
 
+func (l *Lookup) completeLocations() error {
+	for i := range l.json.locations {
+		location := &l.json.locations[i]
+
+		err := l.completeSublocations(location.Sublocations)
+		if err != nil {
+			return err
+		}
+
+		l.Locations[location.Name] = *location
+		l.LocationsID[location.ID] = *location
+	}
+
+	return nil
+}
+
 func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
 	sublocations := l.extractSublocations()
 
@@ -434,6 +450,22 @@ func (l *Lookup) extractSublocations() []Sublocation {
 	}
 
 	return dedupeRows(sublocations, l.Hashes)
+}
+
+func (l *Lookup) completeSublocations(sublocations []Sublocation) error {
+	for i := range sublocations {
+		sublocation := &sublocations[i]
+
+		err := l.completeAreas(sublocation.Areas)
+		if err != nil {
+			return err
+		}
+
+		l.Sublocations[sublocation.Name] = *sublocation
+		l.SublocationsID[sublocation.ID] = *sublocation
+	}
+
+	return nil
 }
 
 func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) error {
@@ -488,28 +520,47 @@ func (l *Lookup) extractAreas() ([]Area, error) {
 	areas := []Area{}
 	var err error
 
-	// why does area.Sublocation.ID get updated, but not sublocation.ID and location.Sublocations[i].ID?
 	for i := range l.json.locations {
 		location := &l.json.locations[i]
 
 		for j := range location.Sublocations {
 			sublocation := &location.Sublocations[j]
 
+			sublocation.ID, err = l.getHashID(sublocation)
+			if err != nil {
+				return nil, err
+			}
+
 			for k := range sublocation.Areas {
 				area := &sublocation.Areas[k]
 				area.Sublocation = *sublocation
-
-				area.Sublocation.ID, err = l.getHashID(area.Sublocation)
-				if err != nil {
-					return nil, err
-				}
-
 				areas = append(areas, *area)
 			}
 		}
 	}
 
 	return dedupeRows(areas, l.Hashes), nil
+}
+
+func (l *Lookup) completeAreas(areas []Area) error {
+	for i := range areas {
+		area := &areas[i]
+		
+		err := assignIDs(l, area.ConnectedAreas)
+		if err != nil {
+			return err
+		}
+
+		area.ID, err = l.getHashID(area)
+		if err != nil {
+			return err
+		}
+		
+		l.Areas[Key(area.GetLocationArea())] = *area
+		l.AreasID[area.ID] = *area
+	}
+
+	return nil
 }
 
 func (l *Lookup) loop4SeedAreaConnections(qtx *database.Queries, ctx context.Context) error {

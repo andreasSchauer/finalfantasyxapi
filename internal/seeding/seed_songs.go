@@ -447,6 +447,27 @@ func (l *Lookup) extractSongs() ([]Song, error) {
 	return dedupeRows(songs, l.Hashes), nil
 }
 
+func (l *Lookup) completeSongs() error {
+	for i := range l.json.songs {
+		song := &l.json.songs[i]
+
+		err := assignIDs(l, song.BackgroundMusic)
+		if err != nil {
+			return err
+		}
+
+		err = assignIDs(l, song.Cues)
+		if err != nil {
+			return err
+		}
+
+		l.Songs[song.Name] = *song
+		l.SongsID[song.ID] = *song
+	}
+
+	return nil
+}
+
 
 func (l *Lookup) loop1SeedSongCredits(qtx *database.Queries, ctx context.Context) error {
 	credits := l.extractSongCredits()
