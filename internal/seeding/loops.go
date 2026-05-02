@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type seedFunc func(*database.Queries, context.Context) error
@@ -20,6 +21,7 @@ func (l *Lookup) seedLoop(qtx *database.Queries, ctx context.Context, fns []seed
 }
 
 func (l *Lookup) seedLoop1(qtx *database.Queries, ctx context.Context) error {
+	defer h.MeasureTime("- seed loop 1")()
 	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop1SeedAgilityTiers,
 		l.loop1SeedElements,
@@ -45,6 +47,7 @@ func (l *Lookup) seedLoop1(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop2(qtx *database.Queries, ctx context.Context) error {
+	defer h.MeasureTime("- seed loop 2")()
 	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop2SeedAgilitySubtiers,
 		l.loop2UpdateElements,
@@ -65,6 +68,7 @@ func (l *Lookup) seedLoop2(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop3(qtx *database.Queries, ctx context.Context) error {
+	defer h.MeasureTime("- seed loop 3")()
 	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop3SeedStatusConditions,
 		l.loop3SeedQuestCompletions,
@@ -89,6 +93,7 @@ func (l *Lookup) seedLoop3(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop4(qtx *database.Queries, ctx context.Context) error {
+	defer h.MeasureTime("- seed loop 4")()
 	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop4SeedStats,
 		l.loop4SeedStatusResists,
@@ -112,6 +117,7 @@ func (l *Lookup) seedLoop4(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop5(qtx *database.Queries, ctx context.Context) error {
+	defer h.MeasureTime("- seed loop 5")()
 	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop5SeedBaseStats,
 		l.loop5SeedOdModeActions,
@@ -131,6 +137,7 @@ func (l *Lookup) seedLoop5(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop6(qtx *database.Queries, ctx context.Context) error {
+	defer h.MeasureTime("- seed loop 6")()
 	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop6SeedAeonEquipment,
 		l.loop6SeedSubquests,
@@ -143,7 +150,14 @@ func (l *Lookup) seedLoop6(qtx *database.Queries, ctx context.Context) error {
 }
 
 func (l *Lookup) seedLoop7(qtx *database.Queries, ctx context.Context) error {
+	defer h.MeasureTime("- seed loop 7")()
 	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.loop7SeedArenaCreations,
+	})
+}
+
+func (l *Lookup) seedJunctions(qtx *database.Queries, ctx context.Context) error {
+	return l.seedLoop(qtx, ctx, []seedFunc{
+
 	})
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -12,6 +11,9 @@ import (
 )
 
 func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
+	defer fmt.Println()
+	defer h.MeasureTime("database seeding")()
+
 	const migrationsDir = "sql/schema/"
 	fullPath, err := h.GetAbsoluteFilepath(migrationsDir)
 	if err != nil {
@@ -26,12 +28,13 @@ func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	l, err := lookupInit()
 	if err != nil {
 		return nil, err
-	}	
+	}
 
 	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		start := time.Now()
+		defer h.MeasureTime("initial database seeding")()
+		fmt.Println("initial database seeding...")
 
-		err := l.seedLoop(qtx, context.Background(), []seedFunc{
+		return l.seedLoop(qtx, context.Background(), []seedFunc{
 			l.seedLoop1,
 			l.seedLoop2,
 			l.seedLoop3,
@@ -40,28 +43,32 @@ func Seed(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 			l.seedLoop6,
 			l.seedLoop7,
 		})
-		if err != nil {
-			return err
-		}
-
-		duration := time.Since(start)
-		fmt.Printf("database seeding took %.3f seconds\n\n", duration.Seconds())
-
-		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	l.completeLookups()
+	err = l.completeLookups()
+	if err != nil {
+		return nil, err
+	}
+
+	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		defer h.MeasureTime("seeding junctions")()
+		return l.seedJunctions(qtx, context.Background())
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println()
 
 	return l, nil
 }
 
 
-
 func setupDB(dbConn *sql.DB, migrationsDir string) error {
-	start := time.Now()
+	defer h.MeasureTime("\ndatabase setup")()
 
 	err := goose.SetDialect("postgres")
 	if err != nil {
@@ -78,13 +85,12 @@ func setupDB(dbConn *sql.DB, migrationsDir string) error {
 		return err
 	}
 
-	duration := time.Since(start)
-	fmt.Printf("\ndatabase setup took %.3f seconds\n", duration.Seconds())
-
 	return nil
 }
 
 func (l *Lookup) completeLookups() error {
+	defer h.MeasureTime("lookup completion")()
+	
 	fns := []func() error{
 		l.completeEnemyAbilities,
 		l.completeItems,
