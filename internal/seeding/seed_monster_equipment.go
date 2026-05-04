@@ -3,6 +3,7 @@ package seeding
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -178,4 +179,34 @@ func (l *Lookup) completeMonsterEquipment(equipment *MonsterEquipment) error {
 	}
 
 	return nil
+}
+
+func (l *Lookup) getMonsterEquipments() []MonsterEquipment {
+	monsterEquipment := []MonsterEquipment{}
+
+	for _, mon := range l.json.monsters {
+		if mon.Equipment != nil {
+			monsterEquipment = append(monsterEquipment, *mon.Equipment)
+		}
+	}
+
+	return monsterEquipment
+}
+
+func (l *Lookup) getMonsterEquipmentEquipmentDrops(me MonsterEquipment) ([]EquipmentDrop, error) {
+	return slices.Concat(me.WeaponAbilities, me.ArmorAbilities), nil
+}
+
+func (l *Lookup) seedJuncMonsterEquipmentEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "monster equipment + equipment drops"
+	jParams, err := processJunctions(l, desc, l.getMonsterEquipments(), l.getMonsterEquipmentEquipmentDrops)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateMonsterEquipmentAbilitiesJunctionBulk(ctx, database.CreateMonsterEquipmentAbilitiesJunctionBulkParams{
+		DataHash:       	jParams.DataHashes,
+		MonsterEquipmentID: jParams.ParentIDs,
+		EquipmentDropID:  	jParams.ChildIDs,
+	})
 }

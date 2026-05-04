@@ -82,8 +82,8 @@ SELECT
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateSongsCuesJunctionBulk :exec
-INSERT INTO j_songs_cues (data_hash, cue_id, included_area_id)
+-- name: CreateCuesIncludedAreasJunctionBulk :exec
+INSERT INTO j_cues_areas (data_hash, cue_id, included_area_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('cue_id')::int[]),

@@ -581,6 +581,26 @@ func (q *Queries) CreateTriggerCommandsRelatedStatsJunctionBulk(ctx context.Cont
 	return err
 }
 
+const createUnspecifiedAbilitiesLearnedByJunctionBulk = `-- name: CreateUnspecifiedAbilitiesLearnedByJunctionBulk :exec
+INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateUnspecifiedAbilitiesLearnedByJunctionBulkParams struct {
+	DataHash             []string
+	UnspecifiedAbilityID []int32
+	CharacterClassID     []int32
+}
+
+func (q *Queries) CreateUnspecifiedAbilitiesLearnedByJunctionBulk(ctx context.Context, arg CreateUnspecifiedAbilitiesLearnedByJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createUnspecifiedAbilitiesLearnedByJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.UnspecifiedAbilityID), pq.Array(arg.CharacterClassID))
+	return err
+}
+
 const createUnspecifiedAbilityBulk = `-- name: CreateUnspecifiedAbilityBulk :many
 INSERT INTO unspecified_abilities (data_hash, ability_id, description, effect, cursor, topmenu_id, submenu_id, open_submenu_id)
 SELECT
@@ -642,24 +662,4 @@ func (q *Queries) CreateUnspecifiedAbilityBulk(ctx context.Context, arg CreateUn
 		return nil, err
 	}
 	return items, nil
-}
-
-const createunspecifiedAbilitiesLearnedByJunctionBulk = `-- name: CreateunspecifiedAbilitiesLearnedByJunctionBulk :exec
-INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateunspecifiedAbilitiesLearnedByJunctionBulkParams struct {
-	DataHash             []string
-	UnspecifiedAbilityID []int32
-	CharacterClassID     []int32
-}
-
-func (q *Queries) CreateunspecifiedAbilitiesLearnedByJunctionBulk(ctx context.Context, arg CreateunspecifiedAbilitiesLearnedByJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createunspecifiedAbilitiesLearnedByJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.UnspecifiedAbilityID), pq.Array(arg.CharacterClassID))
-	return err
 }

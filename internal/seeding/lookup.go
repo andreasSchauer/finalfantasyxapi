@@ -318,3 +318,18 @@ func toObjects[T, K any](keys []K, lookup map[string]T) ([]T, error) {
 
 	return objects, nil
 }
+
+func typedAbilityRefsToObjects[T any](refs []AbilityReference, lookup map[string]T) ([]T, error) {
+	objects := make([]T, len(refs))
+
+	for i, ref := range refs {
+		obj, err := GetResource(ref.Untyped(), lookup)
+		if err != nil {
+			return nil, err
+		}
+
+		objects[i] = obj
+	}
+
+	return objects, nil
+}

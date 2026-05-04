@@ -85,3 +85,35 @@ func (l *Lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipme
 
 	return nil
 }
+
+func (l *Lookup) getTreasureEquipment() []TreasureEquipment {
+	treasureEquipment := []TreasureEquipment{}
+
+	for _, list := range l.json.treasureLists {
+		for _, treasure := range list.Treasures {
+			if treasure.Equipment != nil {
+				treasureEquipment = append(treasureEquipment, *treasure.Equipment)
+			}
+		}
+	}
+
+	return treasureEquipment
+}
+
+func (l *Lookup) getTreasureEquipmentAutoAbilities(te TreasureEquipment) ([]AutoAbility, error) {
+	return toObjects(te.Abilities, l.AutoAbilities)
+}
+
+func (l *Lookup) seedJuncTreasureEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "treasure equipment + auto-abilities"
+	jParams, err := processJunctions(l, desc, l.getTreasureEquipment(), l.getTreasureEquipmentAutoAbilities)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateTreasureEquipmentAbilitiesJunctionBulk(ctx, database.CreateTreasureEquipmentAbilitiesJunctionBulkParams{
+		DataHash:       		jParams.DataHashes,
+		TreasureEquipmentID: 	jParams.ParentIDs,
+		AutoAbilityID:  		jParams.ChildIDs,
+	})
+}

@@ -43,7 +43,6 @@ func (t Treasure) ToHashFields() []any {
 		t.IsAnimaTreasure,
 		h.DerefOrNil(t.Notes),
 		h.DerefOrNil(t.GilAmount),
-		h.ObjPtrToID(t.Equipment),
 	}
 }
 
@@ -361,4 +360,32 @@ func (l *Lookup) extractTreasureEquipment() ([]TreasureEquipment, error) {
 	}
 
 	return dedupeRows(equipment, l.Hashes), nil
+}
+
+func (l *Lookup) getTreasures() []Treasure {
+	treasures := []Treasure{}
+
+	for _, list := range l.json.treasureLists {
+		treasures = append(treasures, list.Treasures...)
+	}
+
+	return treasures
+}
+
+func (l *Lookup) getTreasureItems(t Treasure) ([]ItemAmount, error) {
+	return t.Items, nil
+}
+
+func (l *Lookup) seedJuncTreasuresItems(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "treasures + items"
+	jParams, err := processJunctions(l, desc, l.getTreasures(), l.getTreasureItems)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateTreasuresItemsJunctionBulk(ctx, database.CreateTreasuresItemsJunctionBulkParams{
+		DataHash:      	jParams.DataHashes,
+		TreasureID: 	jParams.ParentIDs,
+		ItemAmountID:  	jParams.ChildIDs,
+	})
 }

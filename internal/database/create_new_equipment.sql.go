@@ -123,6 +123,26 @@ func (q *Queries) CreateAutoAbilitiesAddedStatussesJunctionBulk(ctx context.Cont
 	return err
 }
 
+const createAutoAbilitiesAutoItemJunctionBulk = `-- name: CreateAutoAbilitiesAutoItemJunctionBulk :exec
+INSERT INTO j_auto_abilities_auto_item (data_hash, auto_ability_id, item_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilitiesAutoItemJunctionBulkParams struct {
+	DataHash      []string
+	AutoAbilityID []int32
+	ItemID        []int32
+}
+
+func (q *Queries) CreateAutoAbilitiesAutoItemJunctionBulk(ctx context.Context, arg CreateAutoAbilitiesAutoItemJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilitiesAutoItemJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AutoAbilityID), pq.Array(arg.ItemID))
+	return err
+}
+
 const createAutoAbilitiesLockedOutJunctionBulk = `-- name: CreateAutoAbilitiesLockedOutJunctionBulk :exec
 INSERT INTO j_auto_abilities_locked_out (data_hash, parent_ability_id, child_ability_id)
 SELECT
@@ -180,26 +200,6 @@ type CreateAutoAbilitiesRelatedStatsJunctionBulkParams struct {
 
 func (q *Queries) CreateAutoAbilitiesRelatedStatsJunctionBulk(ctx context.Context, arg CreateAutoAbilitiesRelatedStatsJunctionBulkParams) error {
 	_, err := q.db.ExecContext(ctx, createAutoAbilitiesRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AutoAbilityID), pq.Array(arg.StatID))
-	return err
-}
-
-const createAutoAbilitiesRequiredItemJunctionBulk = `-- name: CreateAutoAbilitiesRequiredItemJunctionBulk :exec
-INSERT INTO j_auto_abilities_required_item (data_hash, auto_ability_id, item_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAutoAbilitiesRequiredItemJunctionBulkParams struct {
-	DataHash      []string
-	AutoAbilityID []int32
-	ItemID        []int32
-}
-
-func (q *Queries) CreateAutoAbilitiesRequiredItemJunctionBulk(ctx context.Context, arg CreateAutoAbilitiesRequiredItemJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createAutoAbilitiesRequiredItemJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AutoAbilityID), pq.Array(arg.ItemID))
 	return err
 }
 

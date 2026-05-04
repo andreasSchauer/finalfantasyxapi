@@ -250,3 +250,21 @@ func (l *Lookup) completeTriggerCommands() error {
 
 	return nil
 }
+
+func (l *Lookup) getTriggerCommandRelatedStats(tc TriggerCommand) ([]Stat, error) {
+	return toObjects(tc.RelatedStats, l.Stats)
+}
+
+func (l *Lookup) seedJuncTriggerCommandsRelatedStats(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "trigger commands + related stats"
+	jParams, err := processJunctions(l, desc, l.json.triggerCommands, l.getTriggerCommandRelatedStats)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateTriggerCommandsRelatedStatsJunctionBulk(ctx, database.CreateTriggerCommandsRelatedStatsJunctionBulkParams{
+		DataHash:   		jParams.DataHashes,
+		TriggerCommandID:  	jParams.ParentIDs,
+		StatID: 			jParams.ChildIDs,
+	})
+}

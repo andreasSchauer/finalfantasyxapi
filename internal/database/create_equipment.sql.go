@@ -93,6 +93,23 @@ func (q *Queries) CreateAutoAbilitiesAddedStatussesJunction(ctx context.Context,
 	return err
 }
 
+const createAutoAbilitiesAutoItemJunction = `-- name: CreateAutoAbilitiesAutoItemJunction :exec
+INSERT INTO j_auto_abilities_auto_item (data_hash, auto_ability_id, item_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAutoAbilitiesAutoItemJunctionParams struct {
+	DataHash      string
+	AutoAbilityID int32
+	ItemID        int32
+}
+
+func (q *Queries) CreateAutoAbilitiesAutoItemJunction(ctx context.Context, arg CreateAutoAbilitiesAutoItemJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createAutoAbilitiesAutoItemJunction, arg.DataHash, arg.AutoAbilityID, arg.ItemID)
+	return err
+}
+
 const createAutoAbilitiesLockedOutJunction = `-- name: CreateAutoAbilitiesLockedOutJunction :exec
 INSERT INTO j_auto_abilities_locked_out (data_hash, parent_ability_id, child_ability_id)
 VALUES ($1, $2, $3)
@@ -141,23 +158,6 @@ type CreateAutoAbilitiesRelatedStatsJunctionParams struct {
 
 func (q *Queries) CreateAutoAbilitiesRelatedStatsJunction(ctx context.Context, arg CreateAutoAbilitiesRelatedStatsJunctionParams) error {
 	_, err := q.db.ExecContext(ctx, createAutoAbilitiesRelatedStatsJunction, arg.DataHash, arg.AutoAbilityID, arg.StatID)
-	return err
-}
-
-const createAutoAbilitiesRequiredItemJunction = `-- name: CreateAutoAbilitiesRequiredItemJunction :exec
-INSERT INTO j_auto_abilities_required_item (data_hash, auto_ability_id, item_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAutoAbilitiesRequiredItemJunctionParams struct {
-	DataHash      string
-	AutoAbilityID int32
-	ItemID        int32
-}
-
-func (q *Queries) CreateAutoAbilitiesRequiredItemJunction(ctx context.Context, arg CreateAutoAbilitiesRequiredItemJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAutoAbilitiesRequiredItemJunction, arg.DataHash, arg.AutoAbilityID, arg.ItemID)
 	return err
 }
 

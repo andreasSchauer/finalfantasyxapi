@@ -46,8 +46,8 @@ VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAutoAbilitiesRequiredItemJunction :exec
-INSERT INTO j_auto_abilities_required_item (data_hash, auto_ability_id, item_id)
+-- name: CreateAutoAbilitiesAutoItemJunction :exec
+INSERT INTO j_auto_abilities_auto_item (data_hash, auto_ability_id, item_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

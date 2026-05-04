@@ -76,6 +76,23 @@ func (q *Queries) CreateCue(ctx context.Context, arg CreateCueParams) (Cue, erro
 	return i, err
 }
 
+const createCuesIncludedAreasJunction = `-- name: CreateCuesIncludedAreasJunction :exec
+INSERT INTO j_cues_areas (data_hash, cue_id, included_area_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCuesIncludedAreasJunctionParams struct {
+	DataHash       string
+	CueID          int32
+	IncludedAreaID int32
+}
+
+func (q *Queries) CreateCuesIncludedAreasJunction(ctx context.Context, arg CreateCuesIncludedAreasJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createCuesIncludedAreasJunction, arg.DataHash, arg.CueID, arg.IncludedAreaID)
+	return err
+}
+
 const createFMV = `-- name: CreateFMV :one
 INSERT INTO fmvs (data_hash, name, translation, cutscene_description, song_id, area_id)
 VALUES ($1, $2, $3, $4, $5, $6)
@@ -229,23 +246,6 @@ func (q *Queries) CreateSongsBackgroundMusicJunction(ctx context.Context, arg Cr
 		arg.BmID,
 		arg.AreaID,
 	)
-	return err
-}
-
-const createSongsCuesJunction = `-- name: CreateSongsCuesJunction :exec
-INSERT INTO j_songs_cues (data_hash, cue_id, included_area_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateSongsCuesJunctionParams struct {
-	DataHash       string
-	CueID          int32
-	IncludedAreaID int32
-}
-
-func (q *Queries) CreateSongsCuesJunction(ctx context.Context, arg CreateSongsCuesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createSongsCuesJunction, arg.DataHash, arg.CueID, arg.IncludedAreaID)
 	return err
 }
 

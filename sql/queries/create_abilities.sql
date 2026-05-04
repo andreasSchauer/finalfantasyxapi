@@ -47,7 +47,7 @@ SET data_hash = $1,
 WHERE id = $8;
 
 
--- name: CreateunspecifiedAbilitiesLearnedByJunction :exec
+-- name: CreateUnspecifiedAbilitiesLearnedByJunction :exec
 INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;

@@ -90,8 +90,8 @@ SELECT
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAutoAbilitiesRequiredItemJunctionBulk :exec
-INSERT INTO j_auto_abilities_required_item (data_hash, auto_ability_id, item_id)
+-- name: CreateAutoAbilitiesAutoItemJunctionBulk :exec
+INSERT INTO j_auto_abilities_auto_item (data_hash, auto_ability_id, item_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('auto_ability_id')::int[]),

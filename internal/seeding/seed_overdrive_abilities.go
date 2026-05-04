@@ -215,3 +215,21 @@ func (l *Lookup) completeOverdriveAbilities() error {
 
 	return nil
 }
+
+func (l *Lookup) getOverdriveAbilityRelatedStats(oa OverdriveAbility) ([]Stat, error) {
+	return toObjects(oa.RelatedStats, l.Stats)
+}
+
+func (l *Lookup) seedJuncOverdriveAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "overdrive abilities + related stats"
+	jParams, err := processJunctions(l, desc, l.json.overdriveAbilities, l.getOverdriveAbilityRelatedStats)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateOverdriveAbilitiesRelatedStatsJunctionBulk(ctx, database.CreateOverdriveAbilitiesRelatedStatsJunctionBulkParams{
+		DataHash:   		 jParams.DataHashes,
+		OverdriveAbilityID:  jParams.ParentIDs,
+		StatID: 			 jParams.ChildIDs,
+	})
+}

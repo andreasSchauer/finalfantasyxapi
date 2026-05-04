@@ -123,7 +123,7 @@ RETURNING id, data_hash;
 
 
 
--- name: CreateunspecifiedAbilitiesLearnedByJunctionBulk :exec
+-- name: CreateUnspecifiedAbilitiesLearnedByJunctionBulk :exec
 INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),

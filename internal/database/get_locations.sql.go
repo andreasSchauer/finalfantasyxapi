@@ -180,7 +180,7 @@ const getAreaCueSongIDs = `-- name: GetAreaCueSongIDs :many
 SELECT DISTINCT so.id
 FROM songs so
 JOIN cues c ON c.song_id = so.id
-LEFT JOIN j_songs_cues j ON j.cue_id = c.id
+LEFT JOIN j_cues_areas j ON j.cue_id = c.id
 JOIN areas a ON c.trigger_area_id = a.id
 WHERE a.id = $1 OR j.included_area_id = $1 ORDER BY so.id
 `
@@ -1439,7 +1439,7 @@ const getLocationCueSongIDs = `-- name: GetLocationCueSongIDs :many
 SELECT DISTINCT so.id
 FROM songs so
 JOIN cues c ON c.song_id = so.id
-LEFT JOIN j_songs_cues j ON j.cue_id = c.id
+LEFT JOIN j_cues_areas j ON j.cue_id = c.id
 JOIN areas a ON c.trigger_area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id
@@ -2779,7 +2779,7 @@ const getSublocationCueSongIDs = `-- name: GetSublocationCueSongIDs :many
 SELECT DISTINCT so.id
 FROM songs so
 JOIN cues c ON c.song_id = so.id
-LEFT JOIN j_songs_cues j ON j.cue_id = c.id
+LEFT JOIN j_cues_areas j ON j.cue_id = c.id
 JOIN areas a ON c.trigger_area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
 WHERE s.id = $1

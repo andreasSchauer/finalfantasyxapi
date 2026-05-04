@@ -33,7 +33,7 @@ CREATE TABLE j_auto_abilities_locked_out (
 );
 
 
-CREATE TABLE j_auto_abilities_required_item (
+CREATE TABLE j_auto_abilities_auto_item (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
@@ -128,7 +128,7 @@ DROP TABLE IF EXISTS j_auto_abilities_modifier_changes;
 DROP TABLE IF EXISTS j_auto_abilities_stat_changes;
 DROP TABLE IF EXISTS j_auto_abilities_added_statusses;
 DROP TABLE IF EXISTS j_auto_abilities_added_status_resists;
-DROP TABLE IF EXISTS j_auto_abilities_required_item;
+DROP TABLE IF EXISTS j_auto_abilities_auto_item;
 DROP TABLE IF EXISTS j_auto_abilities_locked_out;
 DROP TABLE IF EXISTS j_auto_abilities_related_stats;
 

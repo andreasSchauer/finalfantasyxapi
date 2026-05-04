@@ -39,8 +39,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = cues.data_hash
 RETURNING *;
 
 
--- name: CreateSongsCuesJunction :exec
-INSERT INTO j_songs_cues (data_hash, cue_id, included_area_id)
+-- name: CreateCuesIncludedAreasJunction :exec
+INSERT INTO j_cues_areas (data_hash, cue_id, included_area_id)
 VALUES ($1, $2, $3)
 ON CONFLICT(data_hash) DO NOTHING;
 

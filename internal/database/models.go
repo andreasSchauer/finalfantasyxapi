@@ -3449,6 +3449,13 @@ type JAutoAbilitiesAddedStatuss struct {
 	StatusConditionID int32
 }
 
+type JAutoAbilitiesAutoItem struct {
+	ID            int32
+	DataHash      string
+	AutoAbilityID int32
+	ItemID        int32
+}
+
 type JAutoAbilitiesLockedOut struct {
 	ID              int32
 	DataHash        string
@@ -3468,13 +3475,6 @@ type JAutoAbilitiesRelatedStat struct {
 	DataHash      string
 	AutoAbilityID int32
 	StatID        int32
-}
-
-type JAutoAbilitiesRequiredItem struct {
-	ID            int32
-	DataHash      string
-	AutoAbilityID int32
-	ItemID        int32
 }
 
 type JAutoAbilitiesStatChange struct {
@@ -3552,6 +3552,13 @@ type JCharactersBaseStat struct {
 	DataHash    string
 	CharacterID int32
 	BaseStatID  int32
+}
+
+type JCuesArea struct {
+	ID             int32
+	DataHash       string
+	CueID          int32
+	IncludedAreaID int32
 }
 
 type JDamagesDamageCalc struct {
@@ -3797,13 +3804,6 @@ type JSongsBackgroundMusic struct {
 	SongID   int32
 	BmID     int32
 	AreaID   int32
-}
-
-type JSongsCue struct {
-	ID             int32
-	DataHash       string
-	CueID          int32
-	IncludedAreaID int32
 }
 
 type JStatusConditionsModifierChange struct {

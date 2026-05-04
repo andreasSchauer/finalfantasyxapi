@@ -351,6 +351,24 @@ func (l *Lookup) extractOverdrives() ([]Overdrive, error) {
 	return dedupeRows(overdrives, l.Hashes), nil
 }
 
+func (l *Lookup) getOverdriveOverdriveAbilities(o Overdrive) ([]OverdriveAbility, error) {
+	return typedAbilityRefsToObjects(o.OverdriveAbilities, l.OverdriveAbilities)
+}
+
+func (l *Lookup) seedJuncOverdrivesOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "overdrives + overdrive abilities"
+	jParams, err := processJunctions(l, desc, l.json.overdrives, l.getOverdriveOverdriveAbilities)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateOverdrivesOverdriveAbilitiesJunctionBulk(ctx, database.CreateOverdrivesOverdriveAbilitiesJunctionBulkParams{
+		DataHash:   		jParams.DataHashes,
+		OverdriveID:  		jParams.ParentIDs,
+		OverdriveAbilityID: jParams.ChildIDs,
+	})
+}
+
 func (l *Lookup) loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
 	rages := l.extractRonsoRages()
 

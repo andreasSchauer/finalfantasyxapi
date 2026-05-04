@@ -533,3 +533,31 @@ func (l *Lookup) extractAbilityPools() []AbilityPool {
 
 	return dedupeRows(pools, l.Hashes)
 }
+
+func (l *Lookup) getAbilityPools() []AbilityPool {
+	pools := []AbilityPool{}
+
+	for _, table := range l.json.equipment {
+		pools = append(pools, table.SelectableAutoAbilities...)
+	}
+
+	return pools
+}
+
+func (l *Lookup) getAbilityPoolAutoAbilities(ap AbilityPool) ([]AutoAbility, error) {
+	return toObjects(ap.AutoAbilities, l.AutoAbilities)
+}
+
+func (l *Lookup) seedJuncAbilityPoolsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "ability pools + auto-abilities"
+	jParams, err := processJunctions(l, desc, l.getAbilityPools(), l.getAbilityPoolAutoAbilities)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateAbilityPoolsAutoAbilitiesJunctionBulk(ctx, database.CreateAbilityPoolsAutoAbilitiesJunctionBulkParams{
+		DataHash:       	jParams.DataHashes,
+		AbilityPoolID:  	jParams.ParentIDs,
+		AutoAbilityID: 		jParams.ChildIDs,
+	})
+}

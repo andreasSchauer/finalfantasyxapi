@@ -275,3 +275,33 @@ func (l *Lookup) completeMonsterItems(items *MonsterItems) error {
 
 	return nil
 }
+
+func (l *Lookup) getMonsterItems() []MonsterItems {
+	monsterItems := []MonsterItems{}
+
+	for _, mon := range l.json.monsters {
+		if mon.Items != nil {
+			monsterItems = append(monsterItems, *mon.Items)
+		}
+	}
+
+	return monsterItems
+}
+
+func (l *Lookup) getMonsterItemsOtherItems(mi MonsterItems) ([]PossibleItem, error) {
+	return mi.OtherItems, nil
+}
+
+func (l *Lookup) seedJuncMonsterItemsOtherItems(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "monster items + other items"
+	jParams, err := processJunctions(l, desc, l.getMonsterItems(), l.getMonsterItemsOtherItems)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateMonsterItemsOtherItemsJunctionBulk(ctx, database.CreateMonsterItemsOtherItemsJunctionBulkParams{
+		DataHash:       	jParams.DataHashes,
+		MonsterItemsID: 	jParams.ParentIDs,
+		PossibleItemID:  	jParams.ChildIDs,
+	})
+}

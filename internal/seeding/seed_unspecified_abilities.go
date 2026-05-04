@@ -191,7 +191,7 @@ func (l *Lookup) seedUnspecifiedAbilityLearnedBy(qtx *database.Queries, ability 
 			return err
 		}
 
-		err = qtx.CreateunspecifiedAbilitiesLearnedByJunction(context.Background(), database.CreateunspecifiedAbilitiesLearnedByJunctionParams{
+		err = qtx.CreateUnspecifiedAbilitiesLearnedByJunction(context.Background(), database.CreateUnspecifiedAbilitiesLearnedByJunctionParams{
 			DataHash:             generateDataHash(junction),
 			UnspecifiedAbilityID: junction.ParentID,
 			CharacterClassID:     junction.ChildID,
@@ -296,4 +296,22 @@ func (l *Lookup) completeUnspecifiedAbilities() error {
 	}
 
 	return nil
+}
+
+func (l *Lookup) getUnspecifiedAbilityLearnedBy(ua UnspecifiedAbility) ([]CharacterClass, error) {
+	return toObjects(ua.LearnedBy, l.CharClasses)
+}
+
+func (l *Lookup) seedJuncUnspecifiedAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "unspecified abilities + learned by"
+	jParams, err := processJunctions(l, desc, l.json.unspecifiedAbilities, l.getUnspecifiedAbilityLearnedBy)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateUnspecifiedAbilitiesLearnedByJunctionBulk(ctx, database.CreateUnspecifiedAbilitiesLearnedByJunctionBulkParams{
+		DataHash:   			jParams.DataHashes,
+		UnspecifiedAbilityID:  	jParams.ParentIDs,
+		CharacterClassID: 		jParams.ChildIDs,
+	})
 }

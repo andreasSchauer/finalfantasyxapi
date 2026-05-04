@@ -381,6 +381,23 @@ func (q *Queries) CreateTriggerCommandsRelatedStatsJunction(ctx context.Context,
 	return err
 }
 
+const createUnspecifiedAbilitiesLearnedByJunction = `-- name: CreateUnspecifiedAbilitiesLearnedByJunction :exec
+INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
+VALUES ($1, $2, $3)
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateUnspecifiedAbilitiesLearnedByJunctionParams struct {
+	DataHash             string
+	UnspecifiedAbilityID int32
+	CharacterClassID     int32
+}
+
+func (q *Queries) CreateUnspecifiedAbilitiesLearnedByJunction(ctx context.Context, arg CreateUnspecifiedAbilitiesLearnedByJunctionParams) error {
+	_, err := q.db.ExecContext(ctx, createUnspecifiedAbilitiesLearnedByJunction, arg.DataHash, arg.UnspecifiedAbilityID, arg.CharacterClassID)
+	return err
+}
+
 const createUnspecifiedAbility = `-- name: CreateUnspecifiedAbility :one
 INSERT INTO unspecified_abilities (data_hash, ability_id, description, effect, cursor)
 VALUES ($1, $2, $3, $4, $5)
@@ -417,23 +434,6 @@ func (q *Queries) CreateUnspecifiedAbility(ctx context.Context, arg CreateUnspec
 		&i.OpenSubmenuID,
 	)
 	return i, err
-}
-
-const createunspecifiedAbilitiesLearnedByJunction = `-- name: CreateunspecifiedAbilitiesLearnedByJunction :exec
-INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateunspecifiedAbilitiesLearnedByJunctionParams struct {
-	DataHash             string
-	UnspecifiedAbilityID int32
-	CharacterClassID     int32
-}
-
-func (q *Queries) CreateunspecifiedAbilitiesLearnedByJunction(ctx context.Context, arg CreateunspecifiedAbilitiesLearnedByJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createunspecifiedAbilitiesLearnedByJunction, arg.DataHash, arg.UnspecifiedAbilityID, arg.CharacterClassID)
-	return err
 }
 
 const updateOverdrive = `-- name: UpdateOverdrive :exec

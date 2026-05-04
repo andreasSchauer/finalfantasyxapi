@@ -396,3 +396,39 @@ func (l *Lookup) completePlayerAbilities() error {
 
 	return nil
 }
+
+func (l *Lookup) getPlayerAbilityLearnedBy(pa PlayerAbility) ([]CharacterClass, error) {
+	return toObjects(pa.LearnedBy, l.CharClasses)
+}
+
+func (l *Lookup) getPlayerAbilityRelatedStats(pa PlayerAbility) ([]Stat, error) {
+	return toObjects(pa.RelatedStats, l.Stats)
+}
+
+func (l *Lookup) seedJuncPlayerAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "player abilities + learned by"
+	jParams, err := processJunctions(l, desc, l.json.playerAbilities, l.getPlayerAbilityLearnedBy)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreatePlayerAbilitiesLearnedByJunctionBulk(ctx, database.CreatePlayerAbilitiesLearnedByJunctionBulkParams{
+		DataHash:   		jParams.DataHashes,
+		PlayerAbilityID:  	jParams.ParentIDs,
+		CharacterClassID: 	jParams.ChildIDs,
+	})
+}
+
+func (l *Lookup) seedJuncPlayerAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "player abilites + related stats"
+	jParams, err := processJunctions(l, desc, l.json.playerAbilities, l.getPlayerAbilityRelatedStats)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreatePlayerAbilitiesRelatedStatsJunctionBulk(ctx, database.CreatePlayerAbilitiesRelatedStatsJunctionBulkParams{
+		DataHash:   		jParams.DataHashes,
+		PlayerAbilityID:  	jParams.ParentIDs,
+		StatID: 			jParams.ChildIDs,
+	})
+}

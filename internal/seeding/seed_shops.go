@@ -430,6 +430,21 @@ func (l *Lookup) completeShops() error {
 	return nil
 }
 
+func (l *Lookup) getShopItems(s Shop) []ShopItem {
+	shopItems := []ShopItem{}
+
+	if s.PreAirship != nil {
+		shopItems = append(shopItems, s.PreAirship.Items...)
+	}
+
+	if s.PostAirship != nil {
+		shopItems = append(shopItems, s.PostAirship.Items...)
+	}
+
+	return shopItems
+}
+
+
 func (l *Lookup) completeSubShop(subShop *SubShop) error {
 	if subShop == nil {
 		return nil
@@ -592,4 +607,38 @@ func (l *Lookup) extractShopEquipment() ([]ShopEquipment, error) {
 	}
 
 	return dedupeRows(shopEquipment, l.Hashes), nil
+}
+
+func (l *Lookup) getShopEquipment() []ShopEquipment {
+	shopEquipment := []ShopEquipment{}
+
+	for _, shop := range l.json.shops {
+		if shop.PreAirship != nil {
+			shopEquipment = append(shopEquipment, shop.PreAirship.Equipment...)
+		}
+
+		if shop.PostAirship != nil {
+			shopEquipment = append(shopEquipment, shop.PostAirship.Equipment...)
+		}
+	}
+
+	return shopEquipment
+}
+
+func (l *Lookup) getShopEquipmentAutoAbilities(se ShopEquipment) ([]AutoAbility, error) {
+	return toObjects(se.Abilities, l.AutoAbilities)
+}
+
+func (l *Lookup) seedJuncShopEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "shop equipment + auto-abilities"
+	jParams, err := processJunctions(l, desc, l.getShopEquipment(), l.getShopEquipmentAutoAbilities)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateShopEquipmentAbilitiesJunctionBulk(ctx, database.CreateShopEquipmentAbilitiesJunctionBulkParams{
+		DataHash:       	jParams.DataHashes,
+		ShopEquipmentID: 	jParams.ParentIDs,
+		AutoAbilityID:  	jParams.ChildIDs,
+	})
 }

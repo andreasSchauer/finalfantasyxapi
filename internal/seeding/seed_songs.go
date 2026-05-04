@@ -312,7 +312,7 @@ func (l *Lookup) seedCues(qtx *database.Queries, song Song) error {
 				return err
 			}
 
-			err = qtx.CreateSongsCuesJunction(context.Background(), database.CreateSongsCuesJunctionParams{
+			err = qtx.CreateCuesIncludedAreasJunction(context.Background(), database.CreateCuesIncludedAreasJunctionParams{
 				DataHash:       generateDataHash(junction),
 				CueID:          junction.ParentID,
 				IncludedAreaID: junction.ChildID,
@@ -613,4 +613,33 @@ func (l *Lookup) extractCues() ([]Cue, error) {
 	}
 
 	return dedupeRows(cues, l.Hashes), nil
+}
+
+
+func (l *Lookup) getCues() []Cue {
+	cues := []Cue{}
+
+	for _, song := range l.json.songs {
+		cues = append(cues, song.Cues...)
+	}
+
+	return cues
+}
+
+func (l *Lookup) getCueIncludedAreas(c Cue) ([]Area, error) {
+	return toObjects(c.IncludedAreas, l.Areas)
+}
+
+func (l *Lookup) seedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "cues + included areas"
+	jParams, err := processJunctions(l, desc, l.getCues(), l.getCueIncludedAreas)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateCuesIncludedAreasJunctionBulk(ctx, database.CreateCuesIncludedAreasJunctionBulkParams{
+		DataHash:       jParams.DataHashes,
+		CueID: 			jParams.ParentIDs,
+		IncludedAreaID:	jParams.ChildIDs,
+	})
 }

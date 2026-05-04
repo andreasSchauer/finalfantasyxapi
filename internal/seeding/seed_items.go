@@ -350,6 +350,41 @@ func (l *Lookup) completeItems() error {
 	return nil
 }
 
+func (l *Lookup) getItemAvailableMenus(i Item) ([]Submenu, error) {
+	return toObjects(i.AvailableMenus, l.Submenus)
+}
+
+func (l *Lookup) getItemRelatedStats(i Item) ([]Stat, error) {
+	return toObjects(i.RelatedStats, l.Stats)
+}
+
+func (l *Lookup) seedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "items + available menus"
+	jParams, err := processJunctions(l, desc, l.json.items, l.getItemAvailableMenus)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateItemsAvailableMenusJunctionBulk(ctx, database.CreateItemsAvailableMenusJunctionBulkParams{
+		DataHash:   jParams.DataHashes,
+		ItemID:  	jParams.ParentIDs,
+		SubmenuID: 	jParams.ChildIDs,
+	})
+}
+
+func (l *Lookup) seedJuncItemsRelatedStats(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "items + related stats"
+	jParams, err := processJunctions(l, desc, l.json.items, l.getItemRelatedStats)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateItemsRelatedStatsJunctionBulk(ctx, database.CreateItemsRelatedStatsJunctionBulkParams{
+		DataHash:   jParams.DataHashes,
+		ItemID:  	jParams.ParentIDs,
+		StatID: 	jParams.ChildIDs,
+	})
+}
 
 func (l *Lookup) loop3SeedItemAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := l.extractItemAbilities()

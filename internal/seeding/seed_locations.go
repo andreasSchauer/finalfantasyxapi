@@ -563,6 +563,36 @@ func (l *Lookup) completeAreas(areas []Area) error {
 	return nil
 }
 
+func (l *Lookup) getAreas() []Area {
+	areas := []Area{}
+
+	for _, location := range l.json.locations {
+		for _, sublocation := range location.Sublocations {
+			areas = append(areas, sublocation.Areas...)
+		}
+	}
+
+	return areas
+}
+
+func (l *Lookup) getAreaConnectedAreas(a Area) ([]AreaConnection, error) {
+	return a.ConnectedAreas, nil
+}
+
+func (l *Lookup) seedJuncAreaConnectedAreas(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "area + area connections"
+	jParams, err := processJunctions(l, desc, l.getAreas(), l.getAreaConnectedAreas)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateAreaConnectedAreasJunctionBulk(ctx, database.CreateAreaConnectedAreasJunctionBulkParams{
+		DataHash:       jParams.DataHashes,
+		AreaID: 		jParams.ParentIDs,
+		ConnectionID:  	jParams.ChildIDs,
+	})
+}
+
 func (l *Lookup) loop4SeedAreaConnections(qtx *database.Queries, ctx context.Context) error {
 	areas, err := l.extractAreaConnections()
 	if err != nil {

@@ -116,6 +116,26 @@ func (q *Queries) CreateCueBulk(ctx context.Context, arg CreateCueBulkParams) ([
 	return items, nil
 }
 
+const createCuesIncludedAreasJunctionBulk = `-- name: CreateCuesIncludedAreasJunctionBulk :exec
+INSERT INTO j_cues_areas (data_hash, cue_id, included_area_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCuesIncludedAreasJunctionBulkParams struct {
+	DataHash       []string
+	CueID          []int32
+	IncludedAreaID []int32
+}
+
+func (q *Queries) CreateCuesIncludedAreasJunctionBulk(ctx context.Context, arg CreateCuesIncludedAreasJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createCuesIncludedAreasJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.CueID), pq.Array(arg.IncludedAreaID))
+	return err
+}
+
 const createFMVBulk = `-- name: CreateFMVBulk :many
 INSERT INTO fmvs (data_hash, name, translation, cutscene_description, song_id, area_id)
 SELECT
@@ -332,25 +352,5 @@ func (q *Queries) CreateSongsBackgroundMusicJunctionBulk(ctx context.Context, ar
 		pq.Array(arg.BmID),
 		pq.Array(arg.AreaID),
 	)
-	return err
-}
-
-const createSongsCuesJunctionBulk = `-- name: CreateSongsCuesJunctionBulk :exec
-INSERT INTO j_songs_cues (data_hash, cue_id, included_area_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateSongsCuesJunctionBulkParams struct {
-	DataHash       []string
-	CueID          []int32
-	IncludedAreaID []int32
-}
-
-func (q *Queries) CreateSongsCuesJunctionBulk(ctx context.Context, arg CreateSongsCuesJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createSongsCuesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.CueID), pq.Array(arg.IncludedAreaID))
 	return err
 }

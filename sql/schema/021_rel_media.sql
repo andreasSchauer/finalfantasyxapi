@@ -38,7 +38,7 @@ CREATE TABLE cues (
 );
 
 
-CREATE TABLE j_songs_cues (
+CREATE TABLE j_cues_areas (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     cue_id INTEGER NOT NULL REFERENCES cues(id),
@@ -69,7 +69,7 @@ ALTER TABLE songs
 DROP COLUMN IF EXISTS credits_id;
 
 DROP TABLE IF EXISTS song_credits;
-DROP TABLE IF EXISTS j_songs_cues;
+DROP TABLE IF EXISTS j_cues_areas;
 DROP TABLE IF EXISTS cues;
 DROP TABLE IF EXISTS j_songs_background_music;
 DROP TABLE IF EXISTS background_music;
