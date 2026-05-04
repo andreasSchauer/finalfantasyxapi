@@ -285,15 +285,15 @@ func (l *Lookup) loop3SeedBattleInteractions(qtx *database.Queries, ctx context.
 	}
 
 	params := database.CreateBattleInteractionBulkParams{
-		DataHash:       	make([]string, len(bis)),
-		Target: 			make([]database.TargetType, len(bis)),
-		BasedOnUserAttack: 	make([]bool, len(bis)),
-		Range: 				make([]sql.NullInt32, len(bis)),
-		ShatterRate: 		make([]int32, len(bis)),
-		AccuracyID: 		make([]int32, len(bis)),
-		InflictedDelayID: 	make([]sql.NullInt32, len(bis)),
-		HitAmount: 			make([]int32, len(bis)),
-		SpecialAction: 		make([]database.NullSpecialActionType, len(bis)),
+		DataHash:          make([]string, len(bis)),
+		Target:            make([]database.TargetType, len(bis)),
+		BasedOnUserAttack: make([]bool, len(bis)),
+		Range:             make([]sql.NullInt32, len(bis)),
+		ShatterRate:       make([]int32, len(bis)),
+		AccuracyID:        make([]int32, len(bis)),
+		InflictedDelayID:  make([]sql.NullInt32, len(bis)),
+		HitAmount:         make([]int32, len(bis)),
+		SpecialAction:     make([]database.NullSpecialActionType, len(bis)),
 	}
 
 	for i, bi := range bis {
@@ -392,7 +392,6 @@ func (l *Lookup) extractBattleInteractions() ([]BattleInteraction, error) {
 	return dedupeRows(bis, l.Hashes), nil
 }
 
-
 func (l *Lookup) prepareBattleInteractions(bis []BattleInteraction) ([]BattleInteraction, error) {
 	bisNew := []BattleInteraction{}
 	var err error
@@ -454,7 +453,7 @@ func (l *Lookup) completeBattleInteractions(bis []BattleInteraction) error {
 }
 
 func (l *Lookup) getBattleInteractionAffectedBy(bi BattleInteraction) ([]StatusCondition, error) {
-	return toObjects(bi.AffectedBy, l.StatusConditions)
+	return getResources(bi.AffectedBy, l.StatusConditions)
 }
 
 func (l *Lookup) getBattleInteractionCopiedStatusConditions(bi BattleInteraction) ([]InflictedStatus, error) {
@@ -478,7 +477,7 @@ func (l *Lookup) getBattleInteractionModifierChanges(bi BattleInteraction) ([]Mo
 }
 
 func (l *Lookup) getBattleInteractionRemovedStatusConditions(bi BattleInteraction) ([]StatusCondition, error) {
-	return toObjects(bi.RemovedStatusConditions, l.StatusConditions)
+	return getResources(bi.RemovedStatusConditions, l.StatusConditions)
 }
 
 func (l *Lookup) getBattleInteractionStatChanges(bi BattleInteraction) ([]StatChange, error) {
@@ -493,10 +492,10 @@ func (l *Lookup) seedJuncBattleInteractionsAffectedBy(qtx *database.Queries, ctx
 	}
 
 	return qtx.CreateBattleIntAffectedByJunctionBulk(ctx, database.CreateBattleIntAffectedByJunctionBulkParams{
-		DataHash:       		jParams.DataHashes,
-		AbilityID: 				jParams.GrandParentIDs,
-		BattleInteractionID: 	jParams.ParentIDs,
-		StatusConditionID:  	jParams.ChildIDs,
+		DataHash:            jParams.DataHashes,
+		AbilityID:           jParams.GrandParentIDs,
+		BattleInteractionID: jParams.ParentIDs,
+		StatusConditionID:   jParams.ChildIDs,
 	})
 }
 
@@ -508,10 +507,10 @@ func (l *Lookup) seedJuncBattleInteractionsCopiedStatusConditions(qtx *database.
 	}
 
 	return qtx.CreateBattleIntCopiedConditionsJunctionBulk(ctx, database.CreateBattleIntCopiedConditionsJunctionBulkParams{
-		DataHash:       		jParams.DataHashes,
-		AbilityID: 				jParams.GrandParentIDs,
-		BattleInteractionID: 	jParams.ParentIDs,
-		InflictedStatusID:  	jParams.ChildIDs,
+		DataHash:            jParams.DataHashes,
+		AbilityID:           jParams.GrandParentIDs,
+		BattleInteractionID: jParams.ParentIDs,
+		InflictedStatusID:   jParams.ChildIDs,
 	})
 }
 
@@ -523,10 +522,10 @@ func (l *Lookup) seedJuncBattleInteractionsDamages(qtx *database.Queries, ctx co
 	}
 
 	return qtx.CreateBattleIntDamageJunctionBulk(ctx, database.CreateBattleIntDamageJunctionBulkParams{
-		DataHash:       		jParams.DataHashes,
-		AbilityID: 				jParams.GrandParentIDs,
-		BattleInteractionID: 	jParams.ParentIDs,
-		DamageID:  				jParams.ChildIDs,
+		DataHash:            jParams.DataHashes,
+		AbilityID:           jParams.GrandParentIDs,
+		BattleInteractionID: jParams.ParentIDs,
+		DamageID:            jParams.ChildIDs,
 	})
 }
 
@@ -538,10 +537,10 @@ func (l *Lookup) seedJuncBattleInteractionsInflictedStatusConditions(qtx *databa
 	}
 
 	return qtx.CreateBattleIntInflictedConditionsJunctionBulk(ctx, database.CreateBattleIntInflictedConditionsJunctionBulkParams{
-		DataHash:       		jParams.DataHashes,
-		AbilityID: 				jParams.GrandParentIDs,
-		BattleInteractionID: 	jParams.ParentIDs,
-		InflictedStatusID:  	jParams.ChildIDs,
+		DataHash:            jParams.DataHashes,
+		AbilityID:           jParams.GrandParentIDs,
+		BattleInteractionID: jParams.ParentIDs,
+		InflictedStatusID:   jParams.ChildIDs,
 	})
 }
 
@@ -553,10 +552,10 @@ func (l *Lookup) seedJuncBattleInteractionsModifierChanges(qtx *database.Queries
 	}
 
 	return qtx.CreateBattleIntModifierChangesJunctionBulk(ctx, database.CreateBattleIntModifierChangesJunctionBulkParams{
-		DataHash:       		jParams.DataHashes,
-		AbilityID: 				jParams.GrandParentIDs,
-		BattleInteractionID: 	jParams.ParentIDs,
-		ModifierChangeID:  		jParams.ChildIDs,
+		DataHash:            jParams.DataHashes,
+		AbilityID:           jParams.GrandParentIDs,
+		BattleInteractionID: jParams.ParentIDs,
+		ModifierChangeID:    jParams.ChildIDs,
 	})
 }
 
@@ -568,10 +567,10 @@ func (l *Lookup) seedJuncBattleInteractionsRemovedStatusConditions(qtx *database
 	}
 
 	return qtx.CreateBattleIntRemovedConditionsJunctionBulk(ctx, database.CreateBattleIntRemovedConditionsJunctionBulkParams{
-		DataHash:       		jParams.DataHashes,
-		AbilityID: 				jParams.GrandParentIDs,
-		BattleInteractionID: 	jParams.ParentIDs,
-		StatusConditionID:  	jParams.ChildIDs,
+		DataHash:            jParams.DataHashes,
+		AbilityID:           jParams.GrandParentIDs,
+		BattleInteractionID: jParams.ParentIDs,
+		StatusConditionID:   jParams.ChildIDs,
 	})
 }
 
@@ -583,9 +582,9 @@ func (l *Lookup) seedJuncBattleInteractionsStatChanges(qtx *database.Queries, ct
 	}
 
 	return qtx.CreateBattleIntStatChangesJunctionBulk(ctx, database.CreateBattleIntStatChangesJunctionBulkParams{
-		DataHash:       		jParams.DataHashes,
-		AbilityID: 				jParams.GrandParentIDs,
-		BattleInteractionID: 	jParams.ParentIDs,
-		StatChangeID:  			jParams.ChildIDs,
+		DataHash:            jParams.DataHashes,
+		AbilityID:           jParams.GrandParentIDs,
+		BattleInteractionID: jParams.ParentIDs,
+		StatChangeID:        jParams.ChildIDs,
 	})
 }

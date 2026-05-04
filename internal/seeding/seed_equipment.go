@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -122,32 +123,21 @@ func (e EquipmentName) GetResParamsNamed() h.ResParamsNamed {
 	}
 }
 
-type EquipmentTableNameClstlJunction struct {
+type EquipmentTableNameJunction struct {
 	StdJunction
 	CelestialWeaponID *int32
 }
 
-func (j EquipmentTableNameClstlJunction) ToHashFields() []any {
+func (j EquipmentTableNameJunction) ToHashFields() []any {
 	return []any{
-		fmt.Sprintf("%T", j),
 		j.ParentID,
 		j.ChildID,
 		h.DerefOrNil(j.CelestialWeaponID),
 	}
 }
 
-type EquipmentAutoAbilityJunction struct {
-	StdJunction
-	AbilityPool string
-}
-
-func (j EquipmentAutoAbilityJunction) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", j),
-		j.ParentID,
-		j.ChildID,
-		j.AbilityPool,
-	}
+func (j EquipmentTableNameJunction) ToHashFieldsJ(name string) []any {
+	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
 func (l *Lookup) seedEquipment(db *database.Queries, dbConn *sql.DB) error {
@@ -295,7 +285,7 @@ func (l *Lookup) seedEquipmentNames(qtx *database.Queries, table EquipmentTable)
 	for _, equipmentName := range table.EquipmentNames {
 		var err error
 
-		etncJunction := EquipmentTableNameClstlJunction{}
+		etncJunction := EquipmentTableNameJunction{}
 		etncJunction.StdJunction, err = createJunctionSeed(qtx, table, equipmentName, l.seedEquipmentName)
 		if err != nil {
 			return err
@@ -420,7 +410,7 @@ func (l *Lookup) completeEquipment() error {
 		if err != nil {
 			return err
 		}
-		
+
 		err = assignIDs(l, table.EquipmentNames)
 		if err != nil {
 			return err
@@ -431,6 +421,24 @@ func (l *Lookup) completeEquipment() error {
 	}
 
 	return nil
+}
+
+func (l *Lookup) getEquipmentReqAutoAbilities(et EquipmentTable) ([]AutoAbility, error) {
+	return getResources(et.RequiredAutoAbilities, l.AutoAbilities)
+}
+
+func (l *Lookup) seedJuncEquipmentReqAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "equipment table + required auto-abilities"
+	jParams, err := processJunctions(l, desc, l.json.equipment, l.getEquipmentReqAutoAbilities)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateEquipmentTablesRequiredAutoAbilitiesJunctionBulk(ctx, database.CreateEquipmentTablesRequiredAutoAbilitiesJunctionBulkParams{
+		DataHash:         jParams.DataHashes,
+		EquipmentTableID: jParams.ParentIDs,
+		AutoAbilityID:    jParams.ChildIDs,
+	})
 }
 
 func (l *Lookup) loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Context) error {
@@ -486,6 +494,41 @@ func (l *Lookup) extractEquipmentNames() ([]EquipmentName, error) {
 	}
 
 	return dedupeRows(names, l.Hashes), nil
+}
+
+func(l *Lookup) seedJuncEquipmentTablesNames(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "equipment tables + equipment names"
+	params := database.CreateEquipmentTablesNamesJunctionBulkParams{
+		DataHash: 			make([]string, 0),
+		EquipmentTableID: 	make([]int32, 0),
+		EquipmentNameID: 	make([]int32, 0),
+		CelestialWeaponID: 	make([]sql.NullInt32, 0),
+	}
+
+	for _, table := range l.json.equipment {
+		for _, name := range table.EquipmentNames {
+			j := EquipmentTableNameJunction{}
+			j.ParentID = table.ID
+			j.ChildID = name.ID
+			
+			if table.Classification == string(database.EquipClassCelestialWeapon) {
+				var err error
+				j.CelestialWeaponID, err = assignFKPtr(&name.Name, l.CelestialWeapons)
+				if err != nil {
+					return err
+				}
+			}
+
+			dataHash := generateJunctionHash(j, desc)
+
+			params.DataHash = append(params.DataHash, dataHash)
+			params.EquipmentTableID = append(params.EquipmentTableID, table.ID)
+			params.EquipmentNameID = append(params.EquipmentNameID, name.ID)
+			params.CelestialWeaponID = append(params.CelestialWeaponID, h.GetNullInt32(j.CelestialWeaponID))
+		}
+	}
+
+	return qtx.CreateEquipmentTablesNamesJunctionBulk(ctx, params)
 }
 
 func (l *Lookup) loop6SeedAbilityPools(qtx *database.Queries, ctx context.Context) error {
@@ -545,7 +588,7 @@ func (l *Lookup) getAbilityPools() []AbilityPool {
 }
 
 func (l *Lookup) getAbilityPoolAutoAbilities(ap AbilityPool) ([]AutoAbility, error) {
-	return toObjects(ap.AutoAbilities, l.AutoAbilities)
+	return getResources(ap.AutoAbilities, l.AutoAbilities)
 }
 
 func (l *Lookup) seedJuncAbilityPoolsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -556,8 +599,8 @@ func (l *Lookup) seedJuncAbilityPoolsAutoAbilities(qtx *database.Queries, ctx co
 	}
 
 	return qtx.CreateAbilityPoolsAutoAbilitiesJunctionBulk(ctx, database.CreateAbilityPoolsAutoAbilitiesJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AbilityPoolID:  	jParams.ParentIDs,
-		AutoAbilityID: 		jParams.ChildIDs,
+		DataHash:      jParams.DataHashes,
+		AbilityPoolID: jParams.ParentIDs,
+		AutoAbilityID: jParams.ChildIDs,
 	})
 }

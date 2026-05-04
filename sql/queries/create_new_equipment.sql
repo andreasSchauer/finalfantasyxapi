@@ -141,7 +141,7 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('equipment_table_id')::int[]),
     unnest(sqlc.arg('equipment_name_id')::int[]),
-    unnest(sqlc.arg('celestial_weapon_id')::int[])
+    unnest(sqlc.arg('celestial_weapon_id')::null_int[])
 ON CONFLICT(data_hash) DO NOTHING;
 
 

@@ -67,7 +67,7 @@ func (j FourWayJunction) ToHashFieldsJ(name string) []any {
 type JunctionParams struct {
 	DataHashes          []string
 	GreatGrandParentIDs []int32 // probably not needed
-	GrandParentIDs      []int32 // can still use a generic helper, since I need to gather them before anyways
+	GrandParentIDs      []int32
 	ParentIDs           []int32
 	ChildIDs            []int32
 }

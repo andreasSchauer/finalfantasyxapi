@@ -217,7 +217,7 @@ func (l *Lookup) completeOverdriveAbilities() error {
 }
 
 func (l *Lookup) getOverdriveAbilityRelatedStats(oa OverdriveAbility) ([]Stat, error) {
-	return toObjects(oa.RelatedStats, l.Stats)
+	return getResources(oa.RelatedStats, l.Stats)
 }
 
 func (l *Lookup) seedJuncOverdriveAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
@@ -228,8 +228,8 @@ func (l *Lookup) seedJuncOverdriveAbilitiesRelatedStats(qtx *database.Queries, c
 	}
 
 	return qtx.CreateOverdriveAbilitiesRelatedStatsJunctionBulk(ctx, database.CreateOverdriveAbilitiesRelatedStatsJunctionBulkParams{
-		DataHash:   		 jParams.DataHashes,
-		OverdriveAbilityID:  jParams.ParentIDs,
-		StatID: 			 jParams.ChildIDs,
+		DataHash:           jParams.DataHashes,
+		OverdriveAbilityID: jParams.ParentIDs,
+		StatID:             jParams.ChildIDs,
 	})
 }

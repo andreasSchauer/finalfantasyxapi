@@ -30,7 +30,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 			sigil: 			20,
 			wpnTreasure: 	81,
 			crestTreasure: 	71,
-			sigilQuest: 	96,
+			sigilQuest: 	98,
 		},
 		{
 			testGeneral: testGeneral{
@@ -48,7 +48,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 			sigil: 			16,
 			wpnTreasure: 	115,
 			crestTreasure: 	107,
-			sigilQuest: 	37,
+			sigilQuest: 	46,
 		},
 	}
 

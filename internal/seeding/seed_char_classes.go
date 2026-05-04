@@ -134,7 +134,7 @@ func (l *Lookup) loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Co
 }
 
 func (l *Lookup) getCharacterClassPlayerUnits(c CharacterClass) ([]PlayerUnit, error) {
-	return toObjects(c.Members, l.PlayerUnits)
+	return getResources(c.Members, l.PlayerUnits)
 }
 
 func (l *Lookup) getDefaultAbilitiesCharacterClasses(entries []DefaultAbilitiesEntry) ([]CharacterClass, error) {
@@ -152,7 +152,7 @@ func (l *Lookup) getDefaultAbilitiesCharacterClasses(entries []DefaultAbilitiesE
 }
 
 func (l *Lookup) getDefaultAbilities(entry DefaultAbilitiesEntry) ([]Ability, error) {
-	return toObjects(entry.DefaultAbilities, l.Abilities)
+	return getResources(entry.DefaultAbilities, l.Abilities)
 }
 
 func (l *Lookup) seedJuncCharacterClassesPlayerUnits(qtx *database.Queries, ctx context.Context) error {
@@ -168,4 +168,3 @@ func (l *Lookup) seedJuncCharacterClassesPlayerUnits(qtx *database.Queries, ctx 
 		UnitID:   jParams.ChildIDs,
 	})
 }
-

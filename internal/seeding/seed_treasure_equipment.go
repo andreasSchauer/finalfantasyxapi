@@ -101,7 +101,7 @@ func (l *Lookup) getTreasureEquipment() []TreasureEquipment {
 }
 
 func (l *Lookup) getTreasureEquipmentAutoAbilities(te TreasureEquipment) ([]AutoAbility, error) {
-	return toObjects(te.Abilities, l.AutoAbilities)
+	return getResources(te.Abilities, l.AutoAbilities)
 }
 
 func (l *Lookup) seedJuncTreasureEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -112,8 +112,8 @@ func (l *Lookup) seedJuncTreasureEquipmentAutoAbilities(qtx *database.Queries, c
 	}
 
 	return qtx.CreateTreasureEquipmentAbilitiesJunctionBulk(ctx, database.CreateTreasureEquipmentAbilitiesJunctionBulkParams{
-		DataHash:       		jParams.DataHashes,
-		TreasureEquipmentID: 	jParams.ParentIDs,
-		AutoAbilityID:  		jParams.ChildIDs,
+		DataHash:            jParams.DataHashes,
+		TreasureEquipmentID: jParams.ParentIDs,
+		AutoAbilityID:       jParams.ChildIDs,
 	})
 }

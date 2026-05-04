@@ -582,9 +582,9 @@ func (l *Lookup) seedJuncMonsterFormationsEncounterAreas(qtx *database.Queries, 
 	}
 
 	return qtx.CreateMonsterFormationsEncounterAreasJunctionBulk(ctx, database.CreateMonsterFormationsEncounterAreasJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
+		DataHash:           jParams.DataHashes,
 		MonsterFormationID: jParams.ParentIDs,
-		EncounterAreaID:  	jParams.ChildIDs,
+		EncounterAreaID:    jParams.ChildIDs,
 	})
 }
 
@@ -596,9 +596,9 @@ func (l *Lookup) seedJuncMonsterFormationsTriggerCommands(qtx *database.Queries,
 	}
 
 	return qtx.CreateMonsterFormationsTriggerCommandsJunctionBulk(ctx, database.CreateMonsterFormationsTriggerCommandsJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
+		DataHash:           jParams.DataHashes,
 		MonsterFormationID: jParams.ParentIDs,
-		TriggerCommandID:  	jParams.ChildIDs,
+		TriggerCommandID:   jParams.ChildIDs,
 	})
 }
 
@@ -671,9 +671,9 @@ func (l *Lookup) seedJuncMonsterSelectionMonsterAmounts(qtx *database.Queries, c
 	}
 
 	return qtx.CreateMonsterSelectionsMonstersJunctionBulk(ctx, database.CreateMonsterSelectionsMonstersJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
+		DataHash:           jParams.DataHashes,
 		MonsterSelectionID: jParams.ParentIDs,
-		MonsterAmountID:  	jParams.ChildIDs,
+		MonsterAmountID:    jParams.ChildIDs,
 	})
 }
 
@@ -957,7 +957,7 @@ func (l *Lookup) getFormationTriggerCommands() []FormationTriggerCommand {
 }
 
 func (l *Lookup) getFormationTriggerCommandUsers(tc FormationTriggerCommand) ([]CharacterClass, error) {
-	return toObjects(tc.Users, l.CharClasses)
+	return getResources(tc.Users, l.CharClasses)
 }
 
 func (l *Lookup) seedJuncFormationTriggerCommandsUsers(qtx *database.Queries, ctx context.Context) error {
@@ -968,8 +968,8 @@ func (l *Lookup) seedJuncFormationTriggerCommandsUsers(qtx *database.Queries, ct
 	}
 
 	return qtx.CreateFormationTriggerCommandsUsersJunctionBulk(ctx, database.CreateFormationTriggerCommandsUsersJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		TriggerCommandID: 	jParams.ParentIDs,
-		CharacterClassID:  	jParams.ChildIDs,
+		DataHash:         jParams.DataHashes,
+		TriggerCommandID: jParams.ParentIDs,
+		CharacterClassID: jParams.ChildIDs,
 	})
 }

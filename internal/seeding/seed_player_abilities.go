@@ -398,11 +398,11 @@ func (l *Lookup) completePlayerAbilities() error {
 }
 
 func (l *Lookup) getPlayerAbilityLearnedBy(pa PlayerAbility) ([]CharacterClass, error) {
-	return toObjects(pa.LearnedBy, l.CharClasses)
+	return getResources(pa.LearnedBy, l.CharClasses)
 }
 
 func (l *Lookup) getPlayerAbilityRelatedStats(pa PlayerAbility) ([]Stat, error) {
-	return toObjects(pa.RelatedStats, l.Stats)
+	return getResources(pa.RelatedStats, l.Stats)
 }
 
 func (l *Lookup) seedJuncPlayerAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
@@ -413,9 +413,9 @@ func (l *Lookup) seedJuncPlayerAbilitiesLearnedBy(qtx *database.Queries, ctx con
 	}
 
 	return qtx.CreatePlayerAbilitiesLearnedByJunctionBulk(ctx, database.CreatePlayerAbilitiesLearnedByJunctionBulkParams{
-		DataHash:   		jParams.DataHashes,
-		PlayerAbilityID:  	jParams.ParentIDs,
-		CharacterClassID: 	jParams.ChildIDs,
+		DataHash:         jParams.DataHashes,
+		PlayerAbilityID:  jParams.ParentIDs,
+		CharacterClassID: jParams.ChildIDs,
 	})
 }
 
@@ -427,8 +427,8 @@ func (l *Lookup) seedJuncPlayerAbilitiesRelatedStats(qtx *database.Queries, ctx 
 	}
 
 	return qtx.CreatePlayerAbilitiesRelatedStatsJunctionBulk(ctx, database.CreatePlayerAbilitiesRelatedStatsJunctionBulkParams{
-		DataHash:   		jParams.DataHashes,
-		PlayerAbilityID:  	jParams.ParentIDs,
-		StatID: 			jParams.ChildIDs,
+		DataHash:        jParams.DataHashes,
+		PlayerAbilityID: jParams.ParentIDs,
+		StatID:          jParams.ChildIDs,
 	})
 }

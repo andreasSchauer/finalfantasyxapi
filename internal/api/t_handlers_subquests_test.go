@@ -40,7 +40,7 @@ func TestGetSubquest(t *testing.T) {
 				},
 			},
 			expUnique:       newExpUnique(5, "jormungand"),
-			untypedQuest:    6,
+			untypedQuest:    15,
 			parentSidequest: 1,
 			completion: testQuestCompletion{
 				areas:  []int32{205},
@@ -58,7 +58,7 @@ func TestGetSubquest(t *testing.T) {
 				},
 			},
 			expUnique:       newExpUnique(39, "ifrit - first win"),
-			untypedQuest:    41,
+			untypedQuest:    49,
 			parentSidequest: 2,
 			completion: testQuestCompletion{
 				areas:  []int32{209},
@@ -76,7 +76,7 @@ func TestGetSubquest(t *testing.T) {
 				},
 			},
 			expUnique:       newExpUnique(76, "first hunt after acquiring the airship"),
-			untypedQuest:    82,
+			untypedQuest:    86,
 			parentSidequest: 6,
 			completion: testQuestCompletion{
 				areas:  []int32{144, 145},

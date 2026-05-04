@@ -246,3 +246,26 @@ func (l *Lookup) extractMonsterEquipmentSlots() ([]MonsterEquipmentSlots, error)
 
 	return dedupeRows(slots, l.Hashes), nil
 }
+
+func (l *Lookup) getMonsterEquipmentEquipmentSlots(me MonsterEquipment) ([]MonsterEquipmentSlots, error) {
+	return []MonsterEquipmentSlots{me.AbilitySlots, me.AttachedAbilities}, nil
+}
+
+func (l *Lookup) getMonsterEquipmentSlotsSlotChances(mes MonsterEquipmentSlots) ([]EquipmentSlotsChance, error) {
+	return mes.Chances, nil
+}
+
+func (l *Lookup) seedJuncMonsterEquipmentSlotChances(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "monster equipment + equipment slot chances"
+	jParams, err := processThreewayJunctions(l, desc, l.getMonsterEquipments(), l.getMonsterEquipmentEquipmentSlots, l.getMonsterEquipmentSlotsSlotChances)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateMonsterEquipmentSlotsChancesJunctionBulk(ctx, database.CreateMonsterEquipmentSlotsChancesJunctionBulkParams{
+		DataHash:       	jParams.DataHashes,
+		MonsterEquipmentID: jParams.GrandParentIDs,
+		EquipmentSlotsID: 	jParams.ParentIDs,
+		SlotsChanceID:  	jParams.ChildIDs,
+	})
+}

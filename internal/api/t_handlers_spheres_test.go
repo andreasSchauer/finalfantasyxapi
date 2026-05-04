@@ -97,7 +97,7 @@ func TestGetSphere(t *testing.T) {
 			},
 			shops: []int32{},
 			quests: map[int32]int32{
-				89: 3,
+				92: 3,
 			},
 			blitzballPrizes: nil,
 		},

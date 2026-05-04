@@ -1,23 +1,16 @@
 package seeding
 
 import (
-	"crypto/sha256"
 	"fmt"
+	"strings"
 )
 
 func generateDataHash(h Hashable) string {
-	fields := h.ToHashFields()
-	combined := combineFields(fields)
-	return combined
-	//hash := sha256.Sum256([]byte(combined))
-	//return fmt.Sprintf("%x", hash)
+	return combineFields(h.ToHashFields())
 }
 
-func generateJunctionHash(junction Junction, name string) string {
-	fields := junction.ToHashFieldsJ(name)
-	combined := combineFields(fields)
-	hash := sha256.Sum256([]byte(combined))
-	return fmt.Sprintf("%x", hash)
+func generateJunctionHash(j Junction, desc string) string {
+	return combineFields(j.ToHashFieldsJ(desc))
 }
 
 func (l *Lookup) getHashID(h Hashable) (int32, error) {
@@ -31,19 +24,19 @@ func (l *Lookup) getHashID(h Hashable) (int32, error) {
 
 
 func combineFields(fields []any) string {
-	var combined string
+	var builder strings.Builder
 
 	for i, field := range fields {
 		if i > 0 {
-			combined += "|"
+			builder.WriteString("|")
 		}
 
 		if field == nil {
-			combined += "NULL"
+			builder.WriteString("NULL")
 		} else {
-			combined += fmt.Sprintf("%v", field)
+			fmt.Fprint(&builder, field)
 		}
 	}
 
-	return combined
+	return builder.String()
 }

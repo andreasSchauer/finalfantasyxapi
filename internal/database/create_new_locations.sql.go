@@ -381,7 +381,7 @@ SELECT
     unnest($1::text[]),
     unnest($2::int[]),
     unnest($3::int[]),
-    unnest($4::int[])
+    unnest($4::shop_type[])
 ON CONFLICT(data_hash) DO NOTHING
 `
 
@@ -389,7 +389,7 @@ type CreateShopsItemsJunctionBulkParams struct {
 	DataHash   []string
 	ShopID     []int32
 	ShopItemID []int32
-	ShopType   []int32
+	ShopType   []ShopType
 }
 
 func (q *Queries) CreateShopsItemsJunctionBulk(ctx context.Context, arg CreateShopsItemsJunctionBulkParams) error {

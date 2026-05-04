@@ -9,14 +9,13 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type Submenu struct {
 	ID          int32
-	Name        string   `json:"name"`
-	Description *string   `json:"description"`
-	Effect      string   `json:"effect"`
-	Topmenu     *string  `json:"topmenu"`
-	TopmenuID	*int32
+	Name        string  `json:"name"`
+	Description *string `json:"description"`
+	Effect      string  `json:"effect"`
+	Topmenu     *string `json:"topmenu"`
+	TopmenuID   *int32
 	Users       []string `json:"users"`
 }
 
@@ -40,7 +39,7 @@ func (s Submenu) Error() string {
 
 func (s Submenu) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: s.ID,
+		ID:   s.ID,
 		Name: s.Name,
 	}
 }
@@ -96,9 +95,9 @@ func (l *Lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 			}
 
 			err = qtx.UpdateSubmenu(context.Background(), database.UpdateSubmenuParams{
-				DataHash: 	generateDataHash(submenu),
-				TopmenuID: 	h.GetNullInt32(submenu.TopmenuID),
-				ID: 		submenu.ID,
+				DataHash:  generateDataHash(submenu),
+				TopmenuID: h.GetNullInt32(submenu.TopmenuID),
+				ID:        submenu.ID,
 			})
 
 			for _, jsonCharClass := range jsonSubmenu.Users {
@@ -122,7 +121,6 @@ func (l *Lookup) seedSubmenusRelationships(db *database.Queries, dbConn *sql.DB)
 		return nil
 	})
 }
-
 
 func (l *Lookup) loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
 	submenus, err := l.extractSubmenus()
@@ -182,7 +180,7 @@ func (l *Lookup) extractSubmenus() ([]Submenu, error) {
 }
 
 func (l *Lookup) getSubmenuUsers(s Submenu) ([]CharacterClass, error) {
-	return toObjects(s.Users, l.CharClasses)
+	return getResources(s.Users, l.CharClasses)
 }
 
 func (l *Lookup) seedJuncSubmenusUsers(qtx *database.Queries, ctx context.Context) error {
@@ -193,8 +191,8 @@ func (l *Lookup) seedJuncSubmenusUsers(qtx *database.Queries, ctx context.Contex
 	}
 
 	return qtx.CreateSubmenusUsersJunctionBulk(ctx, database.CreateSubmenusUsersJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		SubmenuID: 			jParams.ParentIDs,
-		CharacterClassID:  	jParams.ChildIDs,
+		DataHash:         jParams.DataHashes,
+		SubmenuID:        jParams.ParentIDs,
+		CharacterClassID: jParams.ChildIDs,
 	})
 }

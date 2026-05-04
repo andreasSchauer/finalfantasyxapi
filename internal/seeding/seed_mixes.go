@@ -252,7 +252,11 @@ func (l *Lookup) extractMixes() ([]Mix, error) {
 	for i := range l.json.mixes {
 		mix := &l.json.mixes[i]
 
-		mix.OverdriveID, err = assignFK(mix.Name, l.Overdrives)
+		obj := LookupObject{
+			Name: mix.Name,
+		}
+
+		mix.OverdriveID, err = assignFK(Key(obj), l.Overdrives)
 		if err != nil {
 			return nil, err
 		}

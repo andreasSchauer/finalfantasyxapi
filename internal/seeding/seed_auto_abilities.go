@@ -25,7 +25,7 @@ type AutoAbility struct {
 	AbilityValue        *int32           `json:"ability_value"`
 	RequiredItem        *ItemAmount      `json:"required_item"`
 	LockedOutAbilities  []string         `json:"locked_out_abilities"`
-	ActivationCondition string          `json:"activation_condition"`
+	ActivationCondition string           `json:"activation_condition"`
 	Counter             *string          `json:"counter"`
 	GradualRecovery     *string          `json:"gradual_recovery"`
 	AutoItemUse         []string         `json:"auto_item_use"`
@@ -144,16 +144,16 @@ func (l *Lookup) seedAutoAbilitiesRelationships(db *database.Queries, dbConn *sq
 			}
 
 			err = qtx.UpdateAutoAbility(context.Background(), database.UpdateAutoAbilityParams{
-				DataHash:          		generateDataHash(autoAbility),
-				RequiredItemAmountID: 	h.ObjPtrToNullInt32ID(autoAbility.RequiredItem),
-				GradRcvryStatID:   		h.GetNullInt32(autoAbility.GradRecoveryStatID),
-				OnHitElementID:    		h.GetNullInt32(autoAbility.OnHitElementID),
-				AddedElemResistID: 		h.ObjPtrToNullInt32ID(autoAbility.AddedElemResist),
-				OnHitStatusID:     		h.ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
-				AddedPropertyID:   		h.GetNullInt32(autoAbility.AddedPropertyID),
-				CnvrsnFromModID:   		h.GetNullInt32(autoAbility.CnvrsnFromModID),
-				CnvrsnToModID:     		h.GetNullInt32(autoAbility.CnvrsnToModID),
-				ID:                		autoAbility.ID,
+				DataHash:             generateDataHash(autoAbility),
+				RequiredItemAmountID: h.ObjPtrToNullInt32ID(autoAbility.RequiredItem),
+				GradRcvryStatID:      h.GetNullInt32(autoAbility.GradRecoveryStatID),
+				OnHitElementID:       h.GetNullInt32(autoAbility.OnHitElementID),
+				AddedElemResistID:    h.ObjPtrToNullInt32ID(autoAbility.AddedElemResist),
+				OnHitStatusID:        h.ObjPtrToNullInt32ID(autoAbility.OnHitStatus),
+				AddedPropertyID:      h.GetNullInt32(autoAbility.AddedPropertyID),
+				CnvrsnFromModID:      h.GetNullInt32(autoAbility.CnvrsnFromModID),
+				CnvrsnToModID:        h.GetNullInt32(autoAbility.CnvrsnToModID),
+				ID:                   autoAbility.ID,
 			})
 			if err != nil {
 				return h.NewErr(autoAbility.Error(), err, "couldn't update auto-ability")
@@ -376,7 +376,6 @@ func (l *Lookup) seedAutoAbilityModifierChanges(qtx *database.Queries, autoAbili
 	return nil
 }
 
-
 func (l *Lookup) loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := l.extractAutoAbilities()
 	if err != nil {
@@ -384,23 +383,23 @@ func (l *Lookup) loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Conte
 	}
 
 	params := database.CreateAutoAbilityBulkParams{
-		DataHash:   			make([]string, len(abilities)),
-		Name: 					make([]string, len(abilities)),
-		Description: 			make([]sql.NullString, len(abilities)),
-		Effect: 				make([]string, len(abilities)),
-		Type: 					make([]database.EquipType, len(abilities)),
-		Category: 				make([]database.AutoAbilityCategory, len(abilities)),
-		AbilityValue: 			make([]sql.NullInt32, len(abilities)),
-		ActivationCondition: 	make([]database.AaActivationCondition, len(abilities)),
-		Counter: 				make([]database.NullCounterType, len(abilities)),
-		RequiredItemAmountID: 	make([]sql.NullInt32, len(abilities)),
-		GradRcvryStatID: 		make([]sql.NullInt32, len(abilities)),
-		OnHitElementID: 		make([]sql.NullInt32, len(abilities)),
-		AddedElemResistID: 		make([]sql.NullInt32, len(abilities)),
-		OnHitStatusID: 			make([]sql.NullInt32, len(abilities)),
-		AddedPropertyID: 		make([]sql.NullInt32, len(abilities)),
-		CnvrsnFromModID: 		make([]sql.NullInt32, len(abilities)),
-		CnvrsnToModID: 			make([]sql.NullInt32, len(abilities)),
+		DataHash:             make([]string, len(abilities)),
+		Name:                 make([]string, len(abilities)),
+		Description:          make([]sql.NullString, len(abilities)),
+		Effect:               make([]string, len(abilities)),
+		Type:                 make([]database.EquipType, len(abilities)),
+		Category:             make([]database.AutoAbilityCategory, len(abilities)),
+		AbilityValue:         make([]sql.NullInt32, len(abilities)),
+		ActivationCondition:  make([]database.AaActivationCondition, len(abilities)),
+		Counter:              make([]database.NullCounterType, len(abilities)),
+		RequiredItemAmountID: make([]sql.NullInt32, len(abilities)),
+		GradRcvryStatID:      make([]sql.NullInt32, len(abilities)),
+		OnHitElementID:       make([]sql.NullInt32, len(abilities)),
+		AddedElemResistID:    make([]sql.NullInt32, len(abilities)),
+		OnHitStatusID:        make([]sql.NullInt32, len(abilities)),
+		AddedPropertyID:      make([]sql.NullInt32, len(abilities)),
+		CnvrsnFromModID:      make([]sql.NullInt32, len(abilities)),
+		CnvrsnToModID:        make([]sql.NullInt32, len(abilities)),
 	}
 
 	for i, a := range abilities {
@@ -529,15 +528,15 @@ func (l *Lookup) getAutoAbilityAddedStatusResists(a AutoAbility) ([]StatusResist
 }
 
 func (l *Lookup) getAutoAbilityAddedStatusses(a AutoAbility) ([]StatusCondition, error) {
-	return toObjects(a.AddedStatusses, l.StatusConditions)
+	return getResources(a.AddedStatusses, l.StatusConditions)
 }
 
 func (l *Lookup) getAutoAbilityAutoItems(a AutoAbility) ([]Item, error) {
-	return toObjects(a.AutoItemUse, l.Items)
+	return getResources(a.AutoItemUse, l.Items)
 }
 
 func (l *Lookup) getAutoAbilityLockedOutAbilities(a AutoAbility) ([]AutoAbility, error) {
-	return toObjects(a.LockedOutAbilities, l.AutoAbilities)
+	return getResources(a.LockedOutAbilities, l.AutoAbilities)
 }
 
 func (l *Lookup) getAutoAbilityModifierChanges(a AutoAbility) ([]ModifierChange, error) {
@@ -545,7 +544,7 @@ func (l *Lookup) getAutoAbilityModifierChanges(a AutoAbility) ([]ModifierChange,
 }
 
 func (l *Lookup) getAutoAbilityRelatedStats(a AutoAbility) ([]Stat, error) {
-	return toObjects(a.RelatedStats, l.Stats)
+	return getResources(a.RelatedStats, l.Stats)
 }
 
 func (l *Lookup) getAutoAbilityStatChanges(a AutoAbility) ([]StatChange, error) {
@@ -560,9 +559,9 @@ func (l *Lookup) seedJuncAutoAbilitiesAddedStatusResists(qtx *database.Queries, 
 	}
 
 	return qtx.CreateAutoAbilitiesAddedStatusResistsJunctionBulk(ctx, database.CreateAutoAbilitiesAddedStatusResistsJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AutoAbilityID: 		jParams.ParentIDs,
-		StatusResistID:  	jParams.ChildIDs,
+		DataHash:       jParams.DataHashes,
+		AutoAbilityID:  jParams.ParentIDs,
+		StatusResistID: jParams.ChildIDs,
 	})
 }
 
@@ -574,9 +573,9 @@ func (l *Lookup) seedJuncAutoAbilitiesAddedStatusses(qtx *database.Queries, ctx 
 	}
 
 	return qtx.CreateAutoAbilitiesAddedStatussesJunctionBulk(ctx, database.CreateAutoAbilitiesAddedStatussesJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AutoAbilityID: 		jParams.ParentIDs,
-		StatusConditionID:  jParams.ChildIDs,
+		DataHash:          jParams.DataHashes,
+		AutoAbilityID:     jParams.ParentIDs,
+		StatusConditionID: jParams.ChildIDs,
 	})
 }
 
@@ -588,9 +587,9 @@ func (l *Lookup) seedJuncAutoAbilitiesAutoItems(qtx *database.Queries, ctx conte
 	}
 
 	return qtx.CreateAutoAbilitiesAutoItemJunctionBulk(ctx, database.CreateAutoAbilitiesAutoItemJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AutoAbilityID: 		jParams.ParentIDs,
-		ItemID:  			jParams.ChildIDs,
+		DataHash:      jParams.DataHashes,
+		AutoAbilityID: jParams.ParentIDs,
+		ItemID:        jParams.ChildIDs,
 	})
 }
 
@@ -602,9 +601,9 @@ func (l *Lookup) seedJuncAutoAbilitiesLockedOutAbilities(qtx *database.Queries, 
 	}
 
 	return qtx.CreateAutoAbilitiesLockedOutJunctionBulk(ctx, database.CreateAutoAbilitiesLockedOutJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		ParentAbilityID: 	jParams.ParentIDs,
-		ChildAbilityID:  	jParams.ChildIDs,
+		DataHash:        jParams.DataHashes,
+		ParentAbilityID: jParams.ParentIDs,
+		ChildAbilityID:  jParams.ChildIDs,
 	})
 }
 
@@ -616,9 +615,9 @@ func (l *Lookup) seedJuncAutoAbilitiesModifierChanges(qtx *database.Queries, ctx
 	}
 
 	return qtx.CreateAutoAbilitiesModifierChangesJunctionBulk(ctx, database.CreateAutoAbilitiesModifierChangesJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AutoAbilityID: 		jParams.ParentIDs,
-		ModifierChangeID:  	jParams.ChildIDs,
+		DataHash:         jParams.DataHashes,
+		AutoAbilityID:    jParams.ParentIDs,
+		ModifierChangeID: jParams.ChildIDs,
 	})
 }
 
@@ -630,9 +629,9 @@ func (l *Lookup) seedJuncAutoAbilitiesRelatedStats(qtx *database.Queries, ctx co
 	}
 
 	return qtx.CreateAutoAbilitiesRelatedStatsJunctionBulk(ctx, database.CreateAutoAbilitiesRelatedStatsJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AutoAbilityID: 		jParams.ParentIDs,
-		StatID:  			jParams.ChildIDs,
+		DataHash:      jParams.DataHashes,
+		AutoAbilityID: jParams.ParentIDs,
+		StatID:        jParams.ChildIDs,
 	})
 }
 
@@ -644,8 +643,8 @@ func (l *Lookup) seedJuncAutoAbilitiesStatChanges(qtx *database.Queries, ctx con
 	}
 
 	return qtx.CreateAutoAbilitiesStatChangesJunctionBulk(ctx, database.CreateAutoAbilitiesStatChangesJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AutoAbilityID: 		jParams.ParentIDs,
-		StatChangeID:  		jParams.ChildIDs,
+		DataHash:      jParams.DataHashes,
+		AutoAbilityID: jParams.ParentIDs,
+		StatChangeID:  jParams.ChildIDs,
 	})
 }

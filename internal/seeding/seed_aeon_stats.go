@@ -3,7 +3,7 @@ package seeding
 import (
 	"context"
 	"database/sql"
-	"fmt"
+	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -29,11 +29,14 @@ type AeonXStatJunction struct {
 
 func (j AeonXStatJunction) ToHashFields() []any {
 	return []any{
-		fmt.Sprintf("%T", j),
 		j.ParentID,
 		j.ChildID,
 		j.Battles,
 	}
+}
+
+func (j AeonXStatJunction) ToHashFieldsJ(name string) []any {
+	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
 func (l *Lookup) seedAeonStats(db *database.Queries, dbConn *sql.DB) error {
@@ -217,4 +220,34 @@ func (l *Lookup) seedJuncAeonBaseStatsB(qtx *database.Queries, ctx context.Conte
 		AeonID: 		jParams.ParentIDs,
 		BaseStatID:  	jParams.ChildIDs,
 	})
+}
+
+
+func (l *Lookup) seedJuncAeonBaseStatsX(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "aeons + base stats x"
+	params := database.CreateAeonsBaseStatXJunctionBulkParams{
+		DataHash: 	make([]string, 0),
+		AeonID:  	make([]int32, 0),
+		BaseStatID: make([]int32, 0),
+		Battles: 	make([]int32, 0),
+	}
+
+	for _, aeon := range l.json.aeons {
+		for _, xVal := range aeon.BaseStats.XVals {
+			for _, baseStat := range xVal.BaseStats {
+				j := AeonXStatJunction{}
+				j.ParentID = aeon.ID
+				j.ChildID = baseStat.ID
+				j.Battles = xVal.Battles
+				dataHash := generateJunctionHash(j, desc)
+
+				params.DataHash = append(params.DataHash, dataHash)
+				params.AeonID = append(params.AeonID, aeon.ID)
+				params.BaseStatID = append(params.BaseStatID, baseStat.ID)
+				params.Battles = append(params.Battles, xVal.Battles)
+			}
+		}
+	}
+
+	return qtx.CreateAeonsBaseStatXJunctionBulk(ctx, params)
 }

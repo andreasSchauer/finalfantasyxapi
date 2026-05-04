@@ -116,7 +116,6 @@ func (l *Lookup) seedEquipmentDropCharacters(qtx *database.Queries, drop Equipme
 	return nil
 }
 
-
 func (l *Lookup) loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
 	drops, err := l.extractEquipmentDrops()
 	if err != nil {
@@ -124,11 +123,11 @@ func (l *Lookup) loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Cont
 	}
 
 	params := database.CreateEquipmentDropBulkParams{
-		DataHash:   	make([]string, len(drops)),
-		AutoAbilityID: 	make([]int32, len(drops)),
-		IsForced: 		make([]bool, len(drops)),
-		Probability: 	make([]sql.NullInt32, len(drops)),
-		Type: 			make([]database.EquipType, len(drops)),
+		DataHash:      make([]string, len(drops)),
+		AutoAbilityID: make([]int32, len(drops)),
+		IsForced:      make([]bool, len(drops)),
+		Probability:   make([]sql.NullInt32, len(drops)),
+		Type:          make([]database.EquipType, len(drops)),
 	}
 
 	for i, d := range drops {
@@ -188,4 +187,23 @@ func (l *Lookup) extractEquipmentDrops() ([]EquipmentDrop, error) {
 	}
 
 	return dedupeRows(drops, l.Hashes), nil
+}
+
+func (l *Lookup) getEquipmentDropCharacters(ed EquipmentDrop) ([]Character, error) {
+	return getResources(ed.Characters, l.Characters)
+}
+
+func (l *Lookup) seedJuncEquipmentDropsCharacters(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "equipment drops + characters"
+	jParams, err := processThreewayJunctions(l, desc, l.getMonsterEquipments(), l.getMonsterEquipmentEquipmentDrops, l.getEquipmentDropCharacters)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateEquipmentDropsCharactersJunctionBulk(ctx, database.CreateEquipmentDropsCharactersJunctionBulkParams{
+		DataHash:           jParams.DataHashes,
+		MonsterEquipmentID: jParams.GrandParentIDs,
+		EquipmentDropID:    jParams.ParentIDs,
+		CharacterID:        jParams.ChildIDs,
+	})
 }

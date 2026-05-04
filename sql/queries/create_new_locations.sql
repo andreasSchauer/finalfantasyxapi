@@ -154,5 +154,5 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('shop_id')::int[]),
     unnest(sqlc.arg('shop_item_id')::int[]),
-    unnest(sqlc.arg('shop_type')::int[])
+    unnest(sqlc.arg('shop_type')::shop_type[])
 ON CONFLICT(data_hash) DO NOTHING;

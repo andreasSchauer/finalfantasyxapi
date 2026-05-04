@@ -240,10 +240,10 @@ func TestRetrieveAbilities(t *testing.T) {
 				requestURL:     "/api/abilities?type=2&help_bar=false&rank=5&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:    58,
+			count:    8,
 			previous: nil,
 			next:     nil,
-			results:  []int32{107, 118, 147, 155, 178, 212},
+			results:  []int32{111, 112, 113, 114, 115, 116, 117, 118},
 		},
 		{
 			testGeneral: testGeneral{

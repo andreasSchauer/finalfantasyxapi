@@ -252,7 +252,7 @@ func (l *Lookup) completeTriggerCommands() error {
 }
 
 func (l *Lookup) getTriggerCommandRelatedStats(tc TriggerCommand) ([]Stat, error) {
-	return toObjects(tc.RelatedStats, l.Stats)
+	return getResources(tc.RelatedStats, l.Stats)
 }
 
 func (l *Lookup) seedJuncTriggerCommandsRelatedStats(qtx *database.Queries, ctx context.Context) error {
@@ -263,8 +263,8 @@ func (l *Lookup) seedJuncTriggerCommandsRelatedStats(qtx *database.Queries, ctx 
 	}
 
 	return qtx.CreateTriggerCommandsRelatedStatsJunctionBulk(ctx, database.CreateTriggerCommandsRelatedStatsJunctionBulkParams{
-		DataHash:   		jParams.DataHashes,
-		TriggerCommandID:  	jParams.ParentIDs,
-		StatID: 			jParams.ChildIDs,
+		DataHash:         jParams.DataHashes,
+		TriggerCommandID: jParams.ParentIDs,
+		StatID:           jParams.ChildIDs,
 	})
 }

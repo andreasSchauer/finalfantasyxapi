@@ -480,7 +480,7 @@ SELECT
     unnest($1::text[]),
     unnest($2::int[]),
     unnest($3::int[]),
-    unnest($4::int[])
+    unnest($4::null_int[])
 ON CONFLICT(data_hash) DO NOTHING
 `
 
@@ -488,7 +488,7 @@ type CreateEquipmentTablesNamesJunctionBulkParams struct {
 	DataHash          []string
 	EquipmentTableID  []int32
 	EquipmentNameID   []int32
-	CelestialWeaponID []int32
+	CelestialWeaponID []sql.NullInt32
 }
 
 func (q *Queries) CreateEquipmentTablesNamesJunctionBulk(ctx context.Context, arg CreateEquipmentTablesNamesJunctionBulkParams) error {

@@ -30,13 +30,13 @@ func TestGetQuest(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/quests/39",
+				requestURL:     "/api/quests/47",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{},
 			},
 			expUnique: expUnique{
-				id:   39,
+				id:   47,
 				name: "valefor - first win",
 			},
 			questType: 	2,
@@ -44,7 +44,7 @@ func TestGetQuest(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/quests/75",
+				requestURL:     "/api/quests/80",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -52,7 +52,7 @@ func TestGetQuest(t *testing.T) {
 				},
 			},
 			expUnique: expUnique{
-				id:   75,
+				id:   80,
 				name: "6 or 7 guardian spheres",
 			},
 			questType: 	2,
@@ -79,7 +79,7 @@ func TestRetrieveQuests(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   10,
-			results: []int32{1, 38, 55, 62, 72, 77, 84, 94, 97, 98},
+			results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		},
 		{
 			testGeneral: testGeneral{
@@ -87,7 +87,7 @@ func TestRetrieveQuests(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   44,
-			results: []int32{1, 18, 28, 33, 53, 72, 77, 83, 97},
+			results: []int32{1, 6, 11, 24, 34, 46, 62, 80, 87},
 		},
 	}
 

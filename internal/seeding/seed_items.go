@@ -92,8 +92,8 @@ func (a ItemAbility) Error() string {
 
 func (a ItemAbility) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID: 			a.ID,
-		Name: 			a.Name,
+		ID:   a.ID,
+		Name: a.Name,
 	}
 }
 
@@ -134,14 +134,14 @@ func (l *Lookup) seedItems(db *database.Queries, dbConn *sql.DB) error {
 
 func (l *Lookup) seedItem(qtx *database.Queries, item Item) (Item, error) {
 	dbItem, err := qtx.CreateItem(context.Background(), database.CreateItemParams{
-		DataHash:              generateDataHash(item),
-		MasterItemID:          item.MasterItem.ID,
-		Description:           item.Description,
-		Effect:                item.Effect,
-		Category:              database.ItemCategory(item.Category),
-		Usability:             database.ItemUsability(item.Usability),
-		BasePrice:             h.GetNullInt32(item.BasePrice),
-		SellValue:             item.SellValue,
+		DataHash:     generateDataHash(item),
+		MasterItemID: item.MasterItem.ID,
+		Description:  item.Description,
+		Effect:       item.Effect,
+		Category:     database.ItemCategory(item.Category),
+		Usability:    database.ItemUsability(item.Usability),
+		BasePrice:    h.GetNullInt32(item.BasePrice),
+		SellValue:    item.SellValue,
 	})
 	if err != nil {
 		return Item{}, h.NewErr(item.Error(), err, "couldn't create item")
@@ -266,7 +266,6 @@ func (l *Lookup) seedItemAvailableMenus(qtx *database.Queries, item Item) error 
 	return nil
 }
 
-
 func (l *Lookup) loop2SeedItems(qtx *database.Queries, ctx context.Context) error {
 	items, err := l.extractItems()
 
@@ -314,7 +313,7 @@ func (l *Lookup) extractItems() ([]Item, error) {
 
 	for i := range l.json.items {
 		item := &l.json.items[i]
-		
+
 		item.MasterItem.ID, err = assignFK(item.Name, l.MasterItems)
 		if err != nil {
 			return nil, err
@@ -338,7 +337,7 @@ func (l *Lookup) completeItems() error {
 			if err != nil {
 				return err
 			}
-	
+
 			l.ItemAbilities[Key(item)] = item.ItemAbility
 			l.ItemAbilitiesID[item.ID] = item.ItemAbility
 		}
@@ -351,11 +350,11 @@ func (l *Lookup) completeItems() error {
 }
 
 func (l *Lookup) getItemAvailableMenus(i Item) ([]Submenu, error) {
-	return toObjects(i.AvailableMenus, l.Submenus)
+	return getResources(i.AvailableMenus, l.Submenus)
 }
 
 func (l *Lookup) getItemRelatedStats(i Item) ([]Stat, error) {
-	return toObjects(i.RelatedStats, l.Stats)
+	return getResources(i.RelatedStats, l.Stats)
 }
 
 func (l *Lookup) seedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.Context) error {
@@ -366,9 +365,9 @@ func (l *Lookup) seedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.
 	}
 
 	return qtx.CreateItemsAvailableMenusJunctionBulk(ctx, database.CreateItemsAvailableMenusJunctionBulkParams{
-		DataHash:   jParams.DataHashes,
-		ItemID:  	jParams.ParentIDs,
-		SubmenuID: 	jParams.ChildIDs,
+		DataHash:  jParams.DataHashes,
+		ItemID:    jParams.ParentIDs,
+		SubmenuID: jParams.ChildIDs,
 	})
 }
 
@@ -380,9 +379,9 @@ func (l *Lookup) seedJuncItemsRelatedStats(qtx *database.Queries, ctx context.Co
 	}
 
 	return qtx.CreateItemsRelatedStatsJunctionBulk(ctx, database.CreateItemsRelatedStatsJunctionBulkParams{
-		DataHash:   jParams.DataHashes,
-		ItemID:  	jParams.ParentIDs,
-		StatID: 	jParams.ChildIDs,
+		DataHash: jParams.DataHashes,
+		ItemID:   jParams.ParentIDs,
+		StatID:   jParams.ChildIDs,
 	})
 }
 
@@ -393,10 +392,10 @@ func (l *Lookup) loop3SeedItemAbilities(qtx *database.Queries, ctx context.Conte
 	}
 
 	params := database.CreateItemAbilityBulkParams{
-		DataHash:   make([]string, len(abilities)),
-		ItemID: 	make([]int32, len(abilities)),
-		AbilityID: 	make([]int32, len(abilities)),
-		Cursor: 	make([]database.TargetType, len(abilities)),
+		DataHash:  make([]string, len(abilities)),
+		ItemID:    make([]int32, len(abilities)),
+		AbilityID: make([]int32, len(abilities)),
+		Cursor:    make([]database.TargetType, len(abilities)),
 	}
 
 	for i, a := range abilities {
@@ -421,7 +420,6 @@ func (l *Lookup) loop3SeedItemAbilities(qtx *database.Queries, ctx context.Conte
 	return nil
 }
 
-
 func (l *Lookup) extractItemAbilities() ([]ItemAbility, error) {
 	abilities := []ItemAbility{}
 	var err error
@@ -437,7 +435,6 @@ func (l *Lookup) extractItemAbilities() ([]ItemAbility, error) {
 		ability.Name = item.Name
 		ability.Type = database.AbilityTypeItemAbility
 		ability.ItemID = item.ID
-
 
 		ability.Ability.ID, err = l.getHashID(ability.Ability)
 		if err != nil {

@@ -41,14 +41,14 @@ func (a AlteredState) Error() string {
 type AltStateChange struct {
 	ID               int32
 	AlteredStateID   int32
-	AlterationType   string             `json:"alteration_type"`
-	Distance         *int32             `json:"distance"`
+	AlterationType   string            `json:"alteration_type"`
+	Distance         *int32            `json:"distance"`
 	Properties       []string          `json:"properties"`
 	AutoAbilities    []string          `json:"auto_abilities"`
 	BaseStats        []BaseStat        `json:"base_stats"`
 	ElemResists      []ElementalResist `json:"elem_resists"`
 	StatusImmunities []string          `json:"status_immunities"`
-	AddedStatus      *InflictedStatus   `json:"added_status"`
+	AddedStatus      *InflictedStatus  `json:"added_status"`
 }
 
 func (a AltStateChange) ToHashFields() []any {
@@ -289,7 +289,6 @@ func (l *Lookup) seedAltStateChangeStatusImmunities(qtx *database.Queries, chang
 	return nil
 }
 
-
 func (l *Lookup) loop2SeedAlteredStates(qtx *database.Queries, ctx context.Context) error {
 	states := l.extractMonsterAlteredStates()
 
@@ -342,11 +341,11 @@ func (l *Lookup) loop5SeedAltStateChanges(qtx *database.Queries, ctx context.Con
 	}
 
 	params := database.CreateAltStateChangeBulkParams{
-		DataHash:   	make([]string, len(changes)),
+		DataHash:       make([]string, len(changes)),
 		AlteredStateID: make([]int32, len(changes)),
 		AlterationType: make([]database.AlterationType, len(changes)),
-		Distance: 		make([]sql.NullInt32, len(changes)),
-		AddedStatusID: 	make([]sql.NullInt32, len(changes)),
+		Distance:       make([]sql.NullInt32, len(changes)),
+		AddedStatusID:  make([]sql.NullInt32, len(changes)),
 	}
 
 	for i, c := range changes {
@@ -407,7 +406,7 @@ func (l *Lookup) completeAlteredStates(states []AlteredState) error {
 func (l *Lookup) prepareAltStateChanges(states []AlteredState) ([]AltStateChange, error) {
 	changes := []AltStateChange{}
 	var err error
-	
+
 	for i := range states {
 		state := &states[i]
 
@@ -469,7 +468,7 @@ func (l *Lookup) getAltStateChanges() []AltStateChange {
 }
 
 func (l *Lookup) getAltStateChangeAutoAbilities(c AltStateChange) ([]AutoAbility, error) {
-	return toObjects(c.AutoAbilities, l.AutoAbilities)
+	return getResources(c.AutoAbilities, l.AutoAbilities)
 }
 
 func (l *Lookup) getAltStateChangeBaseStats(c AltStateChange) ([]BaseStat, error) {
@@ -481,11 +480,11 @@ func (l *Lookup) getAltStateChangeElementalResists(c AltStateChange) ([]Elementa
 }
 
 func (l *Lookup) getAltStateChangeProperties(c AltStateChange) ([]Property, error) {
-	return toObjects(c.Properties, l.Properties)
+	return getResources(c.Properties, l.Properties)
 }
 
 func (l *Lookup) getAltStateChangeStatusImmunities(c AltStateChange) ([]StatusCondition, error) {
-	return toObjects(c.StatusImmunities, l.StatusConditions)
+	return getResources(c.StatusImmunities, l.StatusConditions)
 }
 
 func (l *Lookup) seedJuncAltStateChangesAutoAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -496,9 +495,9 @@ func (l *Lookup) seedJuncAltStateChangesAutoAbilities(qtx *database.Queries, ctx
 	}
 
 	return qtx.CreateAltStateChangesAutoAbilitiesJunctionBulk(ctx, database.CreateAltStateChangesAutoAbilitiesJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AltStateChangeID: 	jParams.ParentIDs,
-		AutoAbilityID:  	jParams.ChildIDs,
+		DataHash:         jParams.DataHashes,
+		AltStateChangeID: jParams.ParentIDs,
+		AutoAbilityID:    jParams.ChildIDs,
 	})
 }
 
@@ -510,9 +509,9 @@ func (l *Lookup) seedJuncAltStateChangesBaseStats(qtx *database.Queries, ctx con
 	}
 
 	return qtx.CreateAltStateChangesBaseStatsJunctionBulk(ctx, database.CreateAltStateChangesBaseStatsJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AltStateChangeID: 	jParams.ParentIDs,
-		BaseStatID:  		jParams.ChildIDs,
+		DataHash:         jParams.DataHashes,
+		AltStateChangeID: jParams.ParentIDs,
+		BaseStatID:       jParams.ChildIDs,
 	})
 }
 
@@ -524,9 +523,9 @@ func (l *Lookup) seedJuncAltStateChangesElementalResists(qtx *database.Queries, 
 	}
 
 	return qtx.CreateAltStateChangesElemResistsJunctionBulk(ctx, database.CreateAltStateChangesElemResistsJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AltStateChangeID: 	jParams.ParentIDs,
-		ElemResistID:  		jParams.ChildIDs,
+		DataHash:         jParams.DataHashes,
+		AltStateChangeID: jParams.ParentIDs,
+		ElemResistID:     jParams.ChildIDs,
 	})
 }
 
@@ -538,9 +537,9 @@ func (l *Lookup) seedJuncAltStateChangesProperties(qtx *database.Queries, ctx co
 	}
 
 	return qtx.CreateAltStateChangesPropertiesJunctionBulk(ctx, database.CreateAltStateChangesPropertiesJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AltStateChangeID: 	jParams.ParentIDs,
-		PropertyID:  		jParams.ChildIDs,
+		DataHash:         jParams.DataHashes,
+		AltStateChangeID: jParams.ParentIDs,
+		PropertyID:       jParams.ChildIDs,
 	})
 }
 
@@ -552,8 +551,8 @@ func (l *Lookup) seedJuncAltStateChangesStatusImmunities(qtx *database.Queries, 
 	}
 
 	return qtx.CreateAltStateChangesStatusImmunitiesJunctionBulk(ctx, database.CreateAltStateChangesStatusImmunitiesJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		AltStateChangeID: 	jParams.ParentIDs,
-		StatusConditionID:  jParams.ChildIDs,
+		DataHash:          jParams.DataHashes,
+		AltStateChangeID:  jParams.ParentIDs,
+		StatusConditionID: jParams.ChildIDs,
 	})
 }

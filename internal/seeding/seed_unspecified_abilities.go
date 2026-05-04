@@ -299,7 +299,7 @@ func (l *Lookup) completeUnspecifiedAbilities() error {
 }
 
 func (l *Lookup) getUnspecifiedAbilityLearnedBy(ua UnspecifiedAbility) ([]CharacterClass, error) {
-	return toObjects(ua.LearnedBy, l.CharClasses)
+	return getResources(ua.LearnedBy, l.CharClasses)
 }
 
 func (l *Lookup) seedJuncUnspecifiedAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
@@ -310,8 +310,8 @@ func (l *Lookup) seedJuncUnspecifiedAbilitiesLearnedBy(qtx *database.Queries, ct
 	}
 
 	return qtx.CreateUnspecifiedAbilitiesLearnedByJunctionBulk(ctx, database.CreateUnspecifiedAbilitiesLearnedByJunctionBulkParams{
-		DataHash:   			jParams.DataHashes,
-		UnspecifiedAbilityID:  	jParams.ParentIDs,
-		CharacterClassID: 		jParams.ChildIDs,
+		DataHash:             jParams.DataHashes,
+		UnspecifiedAbilityID: jParams.ParentIDs,
+		CharacterClassID:     jParams.ChildIDs,
 	})
 }

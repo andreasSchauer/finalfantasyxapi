@@ -318,11 +318,11 @@ func (l *Lookup) getStatusConditionModifierChanges(sc StatusCondition) ([]Modifi
 }
 
 func (l *Lookup) getStatusConditionRelatedStats(sc StatusCondition) ([]Stat, error) {
-	return toObjects(sc.RelatedStats, l.Stats)
+	return getResources(sc.RelatedStats, l.Stats)
 }
 
 func (l *Lookup) getStatusConditionRemovedConditions(sc StatusCondition) ([]StatusCondition, error) {
-	return toObjects(sc.RemovedStatusConditions, l.StatusConditions)
+	return getResources(sc.RemovedStatusConditions, l.StatusConditions)
 }
 
 func (l *Lookup) getStatusConditionStatChanges(sc StatusCondition) ([]StatChange, error) {

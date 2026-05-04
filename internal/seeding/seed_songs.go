@@ -371,7 +371,6 @@ func (l *Lookup) seedCue(qtx *database.Queries, cue Cue) (Cue, error) {
 	return cue, nil
 }
 
-
 func (l *Lookup) loop2SeedSongs(qtx *database.Queries, ctx context.Context) error {
 	songs, err := l.extractSongs()
 	if err != nil {
@@ -468,6 +467,28 @@ func (l *Lookup) completeSongs() error {
 	return nil
 }
 
+func (l *Lookup) getSongBackgroundMusic(s Song) ([]BackgroundMusic, error) {
+	return s.BackgroundMusic, nil
+}
+
+func (l *Lookup) getBackgroundMusicAreas(bm BackgroundMusic) ([]Area, error) {
+	return getResources(bm.LocationAreas, l.Areas)
+}
+
+func (l *Lookup) seedJuncSongsBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "songs + background music"
+	jParams, err := processThreewayJunctions(l, desc, l.json.songs, l.getSongBackgroundMusic, l.getBackgroundMusicAreas)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateSongsBackgroundMusicJunctionBulk(ctx, database.CreateSongsBackgroundMusicJunctionBulkParams{
+		DataHash: jParams.DataHashes,
+		SongID:   jParams.GrandParentIDs,
+		BmID:     jParams.ParentIDs,
+		AreaID:   jParams.ChildIDs,
+	})
+}
 
 func (l *Lookup) loop1SeedSongCredits(qtx *database.Queries, ctx context.Context) error {
 	credits := l.extractSongCredits()
@@ -512,7 +533,6 @@ func (l *Lookup) extractSongCredits() []SongCredits {
 	return dedupeRows(credits, l.Hashes)
 }
 
-
 func (l *Lookup) loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
 	bm := l.extractBackgroundMusic()
 
@@ -550,8 +570,6 @@ func (l *Lookup) extractBackgroundMusic() []BackgroundMusic {
 	return dedupeRows(bgMusic, l.Hashes)
 }
 
-
-
 func (l *Lookup) loop4SeedCues(qtx *database.Queries, ctx context.Context) error {
 	cues, err := l.extractCues()
 	if err != nil {
@@ -559,12 +577,12 @@ func (l *Lookup) loop4SeedCues(qtx *database.Queries, ctx context.Context) error
 	}
 
 	params := database.CreateCueBulkParams{
-		DataHash:   			make([]string, len(cues)),
-		SongID: 				make([]int32, len(cues)),
-		SceneDescription: 		make([]string, len(cues)),
-		TriggerAreaID: 			make([]sql.NullInt32, len(cues)),
-		ReplacesBgMusic: 		make([]database.NullBgReplacementType, len(cues)),
-		EndTrigger: 			make([]sql.NullString, len(cues)),
+		DataHash:               make([]string, len(cues)),
+		SongID:                 make([]int32, len(cues)),
+		SceneDescription:       make([]string, len(cues)),
+		TriggerAreaID:          make([]sql.NullInt32, len(cues)),
+		ReplacesBgMusic:        make([]database.NullBgReplacementType, len(cues)),
+		EndTrigger:             make([]sql.NullString, len(cues)),
 		ReplacesEncounterMusic: make([]bool, len(cues)),
 	}
 
@@ -615,7 +633,6 @@ func (l *Lookup) extractCues() ([]Cue, error) {
 	return dedupeRows(cues, l.Hashes), nil
 }
 
-
 func (l *Lookup) getCues() []Cue {
 	cues := []Cue{}
 
@@ -627,7 +644,7 @@ func (l *Lookup) getCues() []Cue {
 }
 
 func (l *Lookup) getCueIncludedAreas(c Cue) ([]Area, error) {
-	return toObjects(c.IncludedAreas, l.Areas)
+	return getResources(c.IncludedAreas, l.Areas)
 }
 
 func (l *Lookup) seedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Context) error {
@@ -639,7 +656,7 @@ func (l *Lookup) seedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Co
 
 	return qtx.CreateCuesIncludedAreasJunctionBulk(ctx, database.CreateCuesIncludedAreasJunctionBulkParams{
 		DataHash:       jParams.DataHashes,
-		CueID: 			jParams.ParentIDs,
-		IncludedAreaID:	jParams.ChildIDs,
+		CueID:          jParams.ParentIDs,
+		IncludedAreaID: jParams.ChildIDs,
 	})
 }

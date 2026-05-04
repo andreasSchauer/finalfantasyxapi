@@ -221,7 +221,7 @@ func (l *Lookup) getPropertyModifierChanges(p Property) ([]ModifierChange, error
 }
 
 func (l *Lookup) getPropertyRelatedStats(p Property) ([]Stat, error) {
-	return toObjects(p.RelatedStats, l.Stats)
+	return getResources(p.RelatedStats, l.Stats)
 }
 
 func (l *Lookup) seedJuncPropertiesModifierChanges(qtx *database.Queries, ctx context.Context) error {

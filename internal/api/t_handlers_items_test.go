@@ -54,8 +54,8 @@ func TestGetItem(t *testing.T) {
 			treasures: nil,
 			shops:     []int32{},
 			quests: map[int32]int32{
-				29: 60,
-				61: 60,
+				38: 60,
+				68: 60,
 			},
 			blitzballPrizes: map[int32]int32{
 				1: 1,
@@ -239,7 +239,7 @@ func TestGetItem(t *testing.T) {
 			treasures: nil,
 			shops:     []int32{},
 			quests: map[int32]int32{
-				20: 60,
+				29: 60,
 			},
 			blitzballPrizes:    nil,
 			aeonLearnAbilities: nil,

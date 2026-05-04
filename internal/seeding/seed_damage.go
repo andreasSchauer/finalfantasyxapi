@@ -454,3 +454,44 @@ func (l *Lookup) prepareAbilityDamage(abilityDamages []AbilityDamage) ([]Ability
 
 	return damages, nil
 }
+
+func (l *Lookup) seedJuncDamagesDamageCalc(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "damages + damage calc"
+	params := database.CreateDamagesDamageCalcJunctionBulkParams{
+		DataHash: 				make([]string, 0),
+		AbilityID: 				make([]int32, 0),
+		BattleInteractionID: 	make([]int32, 0),
+		DamageID: 				make([]int32, 0),
+		AbilityDamageID: 		make([]int32, 0),
+	}
+
+	for _, ability := range l.getAbilities() {
+		bis, err := l.getAbilityBattleInteractions(ability)
+		if err != nil {
+			return err
+		}
+		
+		for _, bi := range bis {
+			if bi.Damage == nil {
+				continue
+			}
+
+			for _, ad := range bi.Damage.DamageCalc {
+				j := FourWayJunction{}
+				j.GreatGrandparentID = ability.ID
+				j.GrandparentID = bi.ID
+				j.ParentID = bi.Damage.ID
+				j.ChildID = ad.ID
+				dataHash := generateJunctionHash(j, desc)
+
+				params.DataHash = append(params.DataHash, dataHash)
+				params.AbilityID = append(params.AbilityID, ability.ID)
+				params.BattleInteractionID = append(params.BattleInteractionID, bi.ID)
+				params.DamageID = append(params.DamageID, bi.Damage.ID)
+				params.AbilityDamageID = append(params.AbilityDamageID, ad.ID)
+			}
+		}
+	}
+
+	return qtx.CreateDamagesDamageCalcJunctionBulk(ctx, params)
+}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -141,13 +142,16 @@ type ShopJunction struct {
 	ShopType database.ShopType
 }
 
-func (sj ShopJunction) ToHashFields() []any {
+func (j ShopJunction) ToHashFields() []any {
 	return []any{
-		fmt.Sprintf("%T", sj),
-		sj.ParentID,
-		sj.ChildID,
-		sj.ShopType,
+		j.ParentID,
+		j.ChildID,
+		j.ShopType,
 	}
+}
+
+func (j ShopJunction) ToHashFieldsJ(name string) []any {
+	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
 func (l *Lookup) seedShops(db *database.Queries, dbConn *sql.DB) error {
@@ -430,20 +434,49 @@ func (l *Lookup) completeShops() error {
 	return nil
 }
 
-func (l *Lookup) getShopItems(s Shop) []ShopItem {
-	shopItems := []ShopItem{}
-
-	if s.PreAirship != nil {
-		shopItems = append(shopItems, s.PreAirship.Items...)
+func (l *Lookup) seedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "shops + shop items"
+	params := database.CreateShopsItemsJunctionBulkParams{
+		DataHash:   make([]string, 0),
+		ShopID:     make([]int32, 0),
+		ShopItemID: make([]int32, 0),
+		ShopType:   make([]database.ShopType, 0),
 	}
 
-	if s.PostAirship != nil {
-		shopItems = append(shopItems, s.PostAirship.Items...)
+	for _, shop := range l.json.shops {
+		if shop.PreAirship != nil {
+			for _, item := range shop.PreAirship.Items {
+				j := ShopJunction{}
+				j.ParentID = shop.ID
+				j.ChildID = item.ID
+				j.ShopType = shop.PreAirship.Type
+				dataHash := generateJunctionHash(j, desc)
+
+				params.DataHash = append(params.DataHash, dataHash)
+				params.ShopID = append(params.ShopID, shop.ID)
+				params.ShopItemID = append(params.ShopItemID, item.ID)
+				params.ShopType = append(params.ShopType, shop.PreAirship.Type)
+			}
+		}
+
+		if shop.PostAirship != nil {
+			for _, item := range shop.PostAirship.Items {
+				j := ShopJunction{}
+				j.ParentID = shop.ID
+				j.ChildID = item.ID
+				j.ShopType = shop.PostAirship.Type
+				dataHash := generateJunctionHash(j, desc)
+
+				params.DataHash = append(params.DataHash, dataHash)
+				params.ShopID = append(params.ShopID, shop.ID)
+				params.ShopItemID = append(params.ShopItemID, item.ID)
+				params.ShopType = append(params.ShopType, shop.PostAirship.Type)
+			}
+		}
 	}
 
-	return shopItems
+	return qtx.CreateShopsItemsJunctionBulk(ctx, params)
 }
-
 
 func (l *Lookup) completeSubShop(subShop *SubShop) error {
 	if subShop == nil {
@@ -626,7 +659,7 @@ func (l *Lookup) getShopEquipment() []ShopEquipment {
 }
 
 func (l *Lookup) getShopEquipmentAutoAbilities(se ShopEquipment) ([]AutoAbility, error) {
-	return toObjects(se.Abilities, l.AutoAbilities)
+	return getResources(se.Abilities, l.AutoAbilities)
 }
 
 func (l *Lookup) seedJuncShopEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -637,8 +670,8 @@ func (l *Lookup) seedJuncShopEquipmentAutoAbilities(qtx *database.Queries, ctx c
 	}
 
 	return qtx.CreateShopEquipmentAbilitiesJunctionBulk(ctx, database.CreateShopEquipmentAbilitiesJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		ShopEquipmentID: 	jParams.ParentIDs,
-		AutoAbilityID:  	jParams.ChildIDs,
+		DataHash:        jParams.DataHashes,
+		ShopEquipmentID: jParams.ParentIDs,
+		AutoAbilityID:   jParams.ChildIDs,
 	})
 }

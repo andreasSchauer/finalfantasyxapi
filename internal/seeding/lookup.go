@@ -304,7 +304,7 @@ func getTypeName[T any]() string {
 	return typeOnly[len(typeOnly)-1]
 }
 
-func toObjects[T, K any](keys []K, lookup map[string]T) ([]T, error) {
+func getResources[T, K any](keys []K, lookup map[string]T) ([]T, error) {
 	objects := make([]T, len(keys))
 
 	for i, key := range keys {
@@ -319,7 +319,7 @@ func toObjects[T, K any](keys []K, lookup map[string]T) ([]T, error) {
 	return objects, nil
 }
 
-func typedAbilityRefsToObjects[T any](refs []AbilityReference, lookup map[string]T) ([]T, error) {
+func typedRefsToResources[T any](refs []AbilityReference, lookup map[string]T) ([]T, error) {
 	objects := make([]T, len(refs))
 
 	for i, ref := range refs {

@@ -47,7 +47,7 @@ func TestGetSidequest(t *testing.T) {
 				},
 			},
 			expUnique:    newExpUnique(2, "remiem temple"),
-			untypedQuest: 38,
+			untypedQuest: 2,
 			completion: &testQuestCompletion{
 				areas:  []int32{209},
 				reward: newTestResAmount[TypedAPIResource](126, 1),
@@ -64,7 +64,7 @@ func TestGetSidequest(t *testing.T) {
 				},
 			},
 			expUnique:    newExpUnique(4, "chocobo training"),
-			untypedQuest: 62,
+			untypedQuest: 4,
 			completion:   nil,
 			subquests:    []int32{59, 62, 64, 65, 67},
 		},
@@ -79,7 +79,7 @@ func TestGetSidequest(t *testing.T) {
 				},
 			},
 			expUnique:    newExpUnique(9, "al bhed primers"),
-			untypedQuest: 97,
+			untypedQuest: 9,
 			completion: &testQuestCompletion{
 				areas:  []int32{185, 182},
 				reward: newTestResAmount[TypedAPIResource](111, 99),
