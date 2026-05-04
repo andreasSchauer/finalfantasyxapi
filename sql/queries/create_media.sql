@@ -1,52 +1,91 @@
--- name: CreateSong :one
-INSERT INTO songs (data_hash, name, streaming_name, in_game_name, ost_name, translation, streaming_track_number, music_sphere_id, ost_disc, ost_track_number, duration_in_seconds, can_loop, special_use_case)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = songs.data_hash
-RETURNING *;
+-- name: CreateSongBulk :many
+INSERT INTO songs (data_hash, name, streaming_name, in_game_name, ost_name, translation, streaming_track_number, music_sphere_id, ost_disc, ost_track_number, duration_in_seconds, can_loop, special_use_case, credits_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('streaming_name')::null_string[]),
+    unnest(sqlc.arg('in_game_name')::null_string[]),
+    unnest(sqlc.arg('ost_name')::null_string[]),
+    unnest(sqlc.arg('translation')::null_string[]),
+    unnest(sqlc.arg('streaming_track_number')::null_int[]),
+    unnest(sqlc.arg('music_sphere_id')::null_int[]),
+    unnest(sqlc.arg('ost_disc')::null_int[]),
+    unnest(sqlc.arg('ost_track_number')::null_int[]),
+    unnest(sqlc.arg('duration_in_seconds')::int[]),
+    unnest(sqlc.arg('can_loop')::boolean[]),
+    unnest(sqlc.arg('special_use_case')::null_music_use_case[]),
+    unnest(sqlc.arg('credits_id')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: UpdateSong :exec
-UPDATE songs
-SET data_hash = $1,
-    credits_id = $2
-WHERE id = $3;
-
-
--- name: CreateSongCredit :one
+-- name: CreateSongCreditBulk :many
 INSERT INTO song_credits (data_hash, composer, arranger, performer, lyricist)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = song_credits.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('composer')::null_composer[]),
+    unnest(sqlc.arg('arranger')::null_arranger[]),
+    unnest(sqlc.arg('performer')::null_string[]),
+    unnest(sqlc.arg('lyricist')::null_string[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateBackgroundMusic :one
+-- name: CreateBackgroundMusicBulk :many
 INSERT INTO background_music (data_hash, condition, replaces_encounter_music)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = background_music.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('condition')::null_string[]),
+    unnest(sqlc.arg('replaces_encounter_music')::boolean[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateSongsBackgroundMusicJunction :exec
-INSERT INTO j_songs_background_music (data_hash, song_id, bm_id, area_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateCue :one
+-- name: CreateCueBulk :many
 INSERT INTO cues (data_hash, song_id, scene_description, trigger_area_id, replaces_bg_music, end_trigger, replaces_encounter_music)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = cues.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('song_id')::int[]),
+    unnest(sqlc.arg('scene_description')::text[]),
+    unnest(sqlc.arg('trigger_area_id')::null_int[]),
+    unnest(sqlc.arg('replaces_bg_music')::null_bg_replacement_type[]),
+    unnest(sqlc.arg('end_trigger')::null_string[]),
+    unnest(sqlc.arg('replaces_encounter_music')::boolean[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateCuesIncludedAreasJunction :exec
-INSERT INTO j_cues_areas (data_hash, cue_id, included_area_id)
-VALUES ($1, $2, $3)
+-- name: CreateFMVBulk :many
+INSERT INTO fmvs (data_hash, name, translation, cutscene_description, song_id, area_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('translation')::null_string[]),
+    unnest(sqlc.arg('cutscene_description')::text[]),
+    unnest(sqlc.arg('song_id')::null_int[]),
+    unnest(sqlc.arg('area_id')::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
+
+
+
+
+
+
+-- name: CreateSongsBackgroundMusicJunctionBulk :exec
+INSERT INTO j_songs_background_music (data_hash, song_id, bm_id, area_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('song_id')::int[]),
+    unnest(sqlc.arg('bm_id')::int[]),
+    unnest(sqlc.arg('area_id')::int[])
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateFMV :one
-INSERT INTO fmvs (data_hash, name, translation, cutscene_description, song_id, area_id)
-VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = fmvs.data_hash
-RETURNING *;
+-- name: CreateCuesIncludedAreasJunctionBulk :exec
+INSERT INTO j_cues_areas (data_hash, cue_id, included_area_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('cue_id')::int[]),
+    unnest(sqlc.arg('included_area_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;

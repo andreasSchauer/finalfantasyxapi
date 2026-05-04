@@ -8,578 +8,834 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/lib/pq"
 )
 
-const createAgilitySubtier = `-- name: CreateAgilitySubtier :exec
+const createAgilitySubtierBulk = `-- name: CreateAgilitySubtierBulk :many
 INSERT INTO agility_subtiers (data_hash, agility_tier_id, subtier_min_agility, subtier_max_agility, character_min_icv)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO NOTHING
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[]),
+    unnest($5::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateAgilitySubtierParams struct {
-	DataHash          string
-	AgilityTierID     int32
-	SubtierMinAgility interface{}
-	SubtierMaxAgility interface{}
-	CharacterMinIcv   sql.NullInt32
+type CreateAgilitySubtierBulkParams struct {
+	DataHash        []string
+	AgilityTierID   []int32
+	MinAgility      []int32
+	MaxAgility      []int32
+	CharacterMinIcv []sql.NullInt32
 }
 
-func (q *Queries) CreateAgilitySubtier(ctx context.Context, arg CreateAgilitySubtierParams) error {
-	_, err := q.db.ExecContext(ctx, createAgilitySubtier,
-		arg.DataHash,
-		arg.AgilityTierID,
-		arg.SubtierMinAgility,
-		arg.SubtierMaxAgility,
-		arg.CharacterMinIcv,
-	)
-	return err
-}
-
-const createAgilityTier = `-- name: CreateAgilityTier :one
-INSERT INTO agility_tiers (data_hash, min_agility, max_agility, tick_speed, monster_min_icv, monster_max_icv, character_max_icv)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = agility_tiers.data_hash
-RETURNING id, data_hash, min_agility, max_agility, tick_speed, monster_min_icv, monster_max_icv, character_max_icv
-`
-
-type CreateAgilityTierParams struct {
-	DataHash        string
-	MinAgility      interface{}
-	MaxAgility      interface{}
-	TickSpeed       int32
-	MonsterMinIcv   sql.NullInt32
-	MonsterMaxIcv   sql.NullInt32
-	CharacterMaxIcv sql.NullInt32
-}
-
-func (q *Queries) CreateAgilityTier(ctx context.Context, arg CreateAgilityTierParams) (AgilityTier, error) {
-	row := q.db.QueryRowContext(ctx, createAgilityTier,
-		arg.DataHash,
-		arg.MinAgility,
-		arg.MaxAgility,
-		arg.TickSpeed,
-		arg.MonsterMinIcv,
-		arg.MonsterMaxIcv,
-		arg.CharacterMaxIcv,
-	)
-	var i AgilityTier
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.MinAgility,
-		&i.MaxAgility,
-		&i.TickSpeed,
-		&i.MonsterMinIcv,
-		&i.MonsterMaxIcv,
-		&i.CharacterMaxIcv,
-	)
-	return i, err
-}
-
-const createBaseStat = `-- name: CreateBaseStat :one
-INSERT INTO base_stats (data_hash, stat_id, value)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = base_stats.data_hash
-RETURNING id, data_hash, stat_id, value
-`
-
-type CreateBaseStatParams struct {
-	DataHash string
-	StatID   int32
-	Value    int32
-}
-
-func (q *Queries) CreateBaseStat(ctx context.Context, arg CreateBaseStatParams) (BaseStat, error) {
-	row := q.db.QueryRowContext(ctx, createBaseStat, arg.DataHash, arg.StatID, arg.Value)
-	var i BaseStat
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.StatID,
-		&i.Value,
-	)
-	return i, err
-}
-
-const createElement = `-- name: CreateElement :one
-INSERT INTO elements (data_hash, name)
-VALUES ($1, $2)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = elements.data_hash
-RETURNING id, data_hash, name, opposite_element_id
-`
-
-type CreateElementParams struct {
-	DataHash string
-	Name     string
-}
-
-func (q *Queries) CreateElement(ctx context.Context, arg CreateElementParams) (Element, error) {
-	row := q.db.QueryRowContext(ctx, createElement, arg.DataHash, arg.Name)
-	var i Element
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.OppositeElementID,
-	)
-	return i, err
-}
-
-const createElementalResist = `-- name: CreateElementalResist :one
-INSERT INTO elemental_resists (data_hash, element_id, affinity)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = elemental_resists.data_hash
-RETURNING id, data_hash, element_id, affinity
-`
-
-type CreateElementalResistParams struct {
-	DataHash  string
-	ElementID int32
-	Affinity  ElementalAffinity
-}
-
-func (q *Queries) CreateElementalResist(ctx context.Context, arg CreateElementalResistParams) (ElementalResist, error) {
-	row := q.db.QueryRowContext(ctx, createElementalResist, arg.DataHash, arg.ElementID, arg.Affinity)
-	var i ElementalResist
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.ElementID,
-		&i.Affinity,
-	)
-	return i, err
-}
-
-const createModifier = `-- name: CreateModifier :one
-INSERT INTO modifiers (data_hash, name, effect, category, default_value)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifiers.data_hash
-RETURNING id, data_hash, name, effect, category, default_value
-`
-
-type CreateModifierParams struct {
-	DataHash     string
-	Name         string
-	Effect       string
-	Category     ModifierCategory
-	DefaultValue sql.NullFloat64
-}
-
-func (q *Queries) CreateModifier(ctx context.Context, arg CreateModifierParams) (Modifier, error) {
-	row := q.db.QueryRowContext(ctx, createModifier,
-		arg.DataHash,
-		arg.Name,
-		arg.Effect,
-		arg.Category,
-		arg.DefaultValue,
-	)
-	var i Modifier
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Effect,
-		&i.Category,
-		&i.DefaultValue,
-	)
-	return i, err
-}
-
-const createODModeAction = `-- name: CreateODModeAction :one
-INSERT INTO od_mode_actions (data_hash, user_id, amount)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = od_mode_actions.data_hash
-RETURNING id, data_hash, user_id, amount
-`
-
-type CreateODModeActionParams struct {
-	DataHash string
-	UserID   int32
-	Amount   int32
-}
-
-func (q *Queries) CreateODModeAction(ctx context.Context, arg CreateODModeActionParams) (OdModeAction, error) {
-	row := q.db.QueryRowContext(ctx, createODModeAction, arg.DataHash, arg.UserID, arg.Amount)
-	var i OdModeAction
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.UserID,
-		&i.Amount,
-	)
-	return i, err
-}
-
-const createOverdriveMode = `-- name: CreateOverdriveMode :one
-INSERT INTO overdrive_modes (data_hash, name, description, effect, type, fill_rate)
-VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_modes.data_hash
-RETURNING id, data_hash, name, description, effect, type, fill_rate
-`
-
-type CreateOverdriveModeParams struct {
-	DataHash    string
-	Name        string
-	Description string
-	Effect      string
-	Type        OverdriveModeType
-	FillRate    interface{}
-}
-
-func (q *Queries) CreateOverdriveMode(ctx context.Context, arg CreateOverdriveModeParams) (OverdriveMode, error) {
-	row := q.db.QueryRowContext(ctx, createOverdriveMode,
-		arg.DataHash,
-		arg.Name,
-		arg.Description,
-		arg.Effect,
-		arg.Type,
-		arg.FillRate,
-	)
-	var i OverdriveMode
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Description,
-		&i.Effect,
-		&i.Type,
-		&i.FillRate,
-	)
-	return i, err
-}
-
-const createOverdriveModesActionsToLearnJunction = `-- name: CreateOverdriveModesActionsToLearnJunction :exec
-INSERT INTO j_overdrive_modes_actions_to_learn (data_hash, overdrive_mode_id, action_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateOverdriveModesActionsToLearnJunctionParams struct {
-	DataHash        string
-	OverdriveModeID int32
-	ActionID        int32
-}
-
-func (q *Queries) CreateOverdriveModesActionsToLearnJunction(ctx context.Context, arg CreateOverdriveModesActionsToLearnJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createOverdriveModesActionsToLearnJunction, arg.DataHash, arg.OverdriveModeID, arg.ActionID)
-	return err
-}
-
-const createPropertiesModifierChangesJunction = `-- name: CreatePropertiesModifierChangesJunction :exec
-INSERT INTO j_properties_modifier_changes (data_hash, property_id, modifier_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreatePropertiesModifierChangesJunctionParams struct {
-	DataHash         string
-	PropertyID       int32
-	ModifierChangeID int32
-}
-
-func (q *Queries) CreatePropertiesModifierChangesJunction(ctx context.Context, arg CreatePropertiesModifierChangesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createPropertiesModifierChangesJunction, arg.DataHash, arg.PropertyID, arg.ModifierChangeID)
-	return err
-}
-
-const createPropertiesRelatedStatsJunction = `-- name: CreatePropertiesRelatedStatsJunction :exec
-INSERT INTO j_properties_related_stats(data_hash, property_id, stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreatePropertiesRelatedStatsJunctionParams struct {
-	DataHash   string
-	PropertyID int32
-	StatID     int32
-}
-
-func (q *Queries) CreatePropertiesRelatedStatsJunction(ctx context.Context, arg CreatePropertiesRelatedStatsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createPropertiesRelatedStatsJunction, arg.DataHash, arg.PropertyID, arg.StatID)
-	return err
-}
-
-const createPropertiesStatChangesJunction = `-- name: CreatePropertiesStatChangesJunction :exec
-INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreatePropertiesStatChangesJunctionParams struct {
-	DataHash     string
-	PropertyID   int32
-	StatChangeID int32
-}
-
-func (q *Queries) CreatePropertiesStatChangesJunction(ctx context.Context, arg CreatePropertiesStatChangesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createPropertiesStatChangesJunction, arg.DataHash, arg.PropertyID, arg.StatChangeID)
-	return err
-}
-
-const createProperty = `-- name: CreateProperty :one
-INSERT INTO properties (data_hash, name, effect, nullify_armored)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = properties.data_hash
-RETURNING id, data_hash, name, effect, nullify_armored
-`
-
-type CreatePropertyParams struct {
-	DataHash       string
-	Name           string
-	Effect         string
-	NullifyArmored NullNullifyArmored
-}
-
-func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) (Property, error) {
-	row := q.db.QueryRowContext(ctx, createProperty,
-		arg.DataHash,
-		arg.Name,
-		arg.Effect,
-		arg.NullifyArmored,
-	)
-	var i Property
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Effect,
-		&i.NullifyArmored,
-	)
-	return i, err
-}
-
-const createStat = `-- name: CreateStat :one
-INSERT INTO stats (data_hash, name, effect, min_val, max_val, max_val_2)
-VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = stats.data_hash
-RETURNING id, data_hash, name, effect, min_val, max_val, max_val_2, sphere_id
-`
-
-type CreateStatParams struct {
-	DataHash string
-	Name     string
-	Effect   string
-	MinVal   int32
-	MaxVal   int32
-	MaxVal2  sql.NullInt32
-}
-
-func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) (Stat, error) {
-	row := q.db.QueryRowContext(ctx, createStat,
-		arg.DataHash,
-		arg.Name,
-		arg.Effect,
-		arg.MinVal,
-		arg.MaxVal,
-		arg.MaxVal2,
-	)
-	var i Stat
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Effect,
-		&i.MinVal,
-		&i.MaxVal,
-		&i.MaxVal2,
-		&i.SphereID,
-	)
-	return i, err
-}
-
-const createStatusCondition = `-- name: CreateStatusCondition :one
-INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_conditions.data_hash
-RETURNING id, data_hash, name, category, is_permanent, effect, visualization, nullify_armored, added_elem_resist_id, inflicted_delay_id
-`
-
-type CreateStatusConditionParams struct {
-	DataHash       string
-	Name           string
-	Category       StatusConditionCategory
-	IsPermanent    bool
-	Effect         string
-	Visualization  sql.NullString
-	NullifyArmored NullNullifyArmored
-}
-
-func (q *Queries) CreateStatusCondition(ctx context.Context, arg CreateStatusConditionParams) (StatusCondition, error) {
-	row := q.db.QueryRowContext(ctx, createStatusCondition,
-		arg.DataHash,
-		arg.Name,
-		arg.Category,
-		arg.IsPermanent,
-		arg.Effect,
-		arg.Visualization,
-		arg.NullifyArmored,
-	)
-	var i StatusCondition
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Category,
-		&i.IsPermanent,
-		&i.Effect,
-		&i.Visualization,
-		&i.NullifyArmored,
-		&i.AddedElemResistID,
-		&i.InflictedDelayID,
-	)
-	return i, err
-}
-
-const createStatusConditionsModifierChangesJunction = `-- name: CreateStatusConditionsModifierChangesJunction :exec
-INSERT INTO j_status_conditions_modifier_changes (data_hash, status_condition_id, modifier_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateStatusConditionsModifierChangesJunctionParams struct {
-	DataHash          string
-	StatusConditionID int32
-	ModifierChangeID  int32
-}
-
-func (q *Queries) CreateStatusConditionsModifierChangesJunction(ctx context.Context, arg CreateStatusConditionsModifierChangesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createStatusConditionsModifierChangesJunction, arg.DataHash, arg.StatusConditionID, arg.ModifierChangeID)
-	return err
-}
-
-const createStatusConditionsRelatedStatsJunction = `-- name: CreateStatusConditionsRelatedStatsJunction :exec
-INSERT INTO j_status_conditions_related_stats(data_hash, status_condition_id, stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateStatusConditionsRelatedStatsJunctionParams struct {
-	DataHash          string
-	StatusConditionID int32
-	StatID            int32
-}
-
-func (q *Queries) CreateStatusConditionsRelatedStatsJunction(ctx context.Context, arg CreateStatusConditionsRelatedStatsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createStatusConditionsRelatedStatsJunction, arg.DataHash, arg.StatusConditionID, arg.StatID)
-	return err
-}
-
-const createStatusConditionsRemovedStatusConditionsJunction = `-- name: CreateStatusConditionsRemovedStatusConditionsJunction :exec
-INSERT INTO j_status_conditions_removed_status_conditions (data_hash, parent_condition_id, child_condition_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateStatusConditionsRemovedStatusConditionsJunctionParams struct {
-	DataHash          string
-	ParentConditionID int32
-	ChildConditionID  int32
-}
-
-func (q *Queries) CreateStatusConditionsRemovedStatusConditionsJunction(ctx context.Context, arg CreateStatusConditionsRemovedStatusConditionsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createStatusConditionsRemovedStatusConditionsJunction, arg.DataHash, arg.ParentConditionID, arg.ChildConditionID)
-	return err
-}
-
-const createStatusConditionsStatChangesJunction = `-- name: CreateStatusConditionsStatChangesJunction :exec
-INSERT INTO j_status_conditions_stat_changes (data_hash, status_condition_id, stat_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateStatusConditionsStatChangesJunctionParams struct {
-	DataHash          string
-	StatusConditionID int32
-	StatChangeID      int32
-}
-
-func (q *Queries) CreateStatusConditionsStatChangesJunction(ctx context.Context, arg CreateStatusConditionsStatChangesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createStatusConditionsStatChangesJunction, arg.DataHash, arg.StatusConditionID, arg.StatChangeID)
-	return err
-}
-
-const createStatusResist = `-- name: CreateStatusResist :one
-INSERT INTO status_resists (data_hash, status_condition_id, resistance)
-VALUES ( $1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_resists.data_hash
-RETURNING id, data_hash, status_condition_id, resistance
-`
-
-type CreateStatusResistParams struct {
-	DataHash          string
-	StatusConditionID int32
-	Resistance        interface{}
-}
-
-func (q *Queries) CreateStatusResist(ctx context.Context, arg CreateStatusResistParams) (StatusResist, error) {
-	row := q.db.QueryRowContext(ctx, createStatusResist, arg.DataHash, arg.StatusConditionID, arg.Resistance)
-	var i StatusResist
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.StatusConditionID,
-		&i.Resistance,
-	)
-	return i, err
-}
-
-const updateElement = `-- name: UpdateElement :exec
-UPDATE elements
-SET data_hash = $1,
-    opposite_element_id = $2
-WHERE id = $3
-`
-
-type UpdateElementParams struct {
-	DataHash          string
-	OppositeElementID sql.NullInt32
-	ID                int32
-}
-
-func (q *Queries) UpdateElement(ctx context.Context, arg UpdateElementParams) error {
-	_, err := q.db.ExecContext(ctx, updateElement, arg.DataHash, arg.OppositeElementID, arg.ID)
-	return err
-}
-
-const updateStat = `-- name: UpdateStat :exec
-UPDATE stats
-SET data_hash = $1,
-    sphere_id = $2
-WHERE id = $3
-`
-
-type UpdateStatParams struct {
-	DataHash string
-	SphereID sql.NullInt32
+type CreateAgilitySubtierBulkRow struct {
 	ID       int32
+	DataHash string
 }
 
-func (q *Queries) UpdateStat(ctx context.Context, arg UpdateStatParams) error {
-	_, err := q.db.ExecContext(ctx, updateStat, arg.DataHash, arg.SphereID, arg.ID)
-	return err
+func (q *Queries) CreateAgilitySubtierBulk(ctx context.Context, arg CreateAgilitySubtierBulkParams) ([]CreateAgilitySubtierBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createAgilitySubtierBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AgilityTierID),
+		pq.Array(arg.MinAgility),
+		pq.Array(arg.MaxAgility),
+		pq.Array(arg.CharacterMinIcv),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateAgilitySubtierBulkRow
+	for rows.Next() {
+		var i CreateAgilitySubtierBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
-const updateStatusCondition = `-- name: UpdateStatusCondition :exec
-UPDATE status_conditions
-SET data_hash = $1,
-    added_elem_resist_id = $2,
-    inflicted_delay_id = $3
-WHERE id = $4
+const createAgilityTierBulk = `-- name: CreateAgilityTierBulk :many
+INSERT INTO agility_tiers (data_hash, min_agility, max_agility, tick_speed, monster_min_icv, monster_max_icv, character_max_icv)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[]),
+    unnest($5::null_int[]),
+    unnest($6::null_int[]),
+    unnest($7::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type UpdateStatusConditionParams struct {
-	DataHash          string
-	AddedElemResistID sql.NullInt32
-	InflictedDelayID  sql.NullInt32
-	ID                int32
+type CreateAgilityTierBulkParams struct {
+	DataHash        []string
+	MinAgility      []int32
+	MaxAgility      []int32
+	TickSpeed       []int32
+	MonsterMinIcv   []sql.NullInt32
+	MonsterMaxIcv   []sql.NullInt32
+	CharacterMaxIcv []sql.NullInt32
 }
 
-func (q *Queries) UpdateStatusCondition(ctx context.Context, arg UpdateStatusConditionParams) error {
-	_, err := q.db.ExecContext(ctx, updateStatusCondition,
-		arg.DataHash,
-		arg.AddedElemResistID,
-		arg.InflictedDelayID,
-		arg.ID,
+type CreateAgilityTierBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateAgilityTierBulk(ctx context.Context, arg CreateAgilityTierBulkParams) ([]CreateAgilityTierBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createAgilityTierBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.MinAgility),
+		pq.Array(arg.MaxAgility),
+		pq.Array(arg.TickSpeed),
+		pq.Array(arg.MonsterMinIcv),
+		pq.Array(arg.MonsterMaxIcv),
+		pq.Array(arg.CharacterMaxIcv),
 	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateAgilityTierBulkRow
+	for rows.Next() {
+		var i CreateAgilityTierBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createBaseStatBulk = `-- name: CreateBaseStatBulk :many
+INSERT INTO base_stats (data_hash, stat_id, value)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateBaseStatBulkParams struct {
+	DataHash []string
+	StatID   []int32
+	Value    []int32
+}
+
+type CreateBaseStatBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateBaseStatBulk(ctx context.Context, arg CreateBaseStatBulkParams) ([]CreateBaseStatBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createBaseStatBulk, pq.Array(arg.DataHash), pq.Array(arg.StatID), pq.Array(arg.Value))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateBaseStatBulkRow
+	for rows.Next() {
+		var i CreateBaseStatBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createElementBulk = `-- name: CreateElementBulk :many
+INSERT INTO elements (data_hash, name)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateElementBulkParams struct {
+	DataHash []string
+	Name     []string
+}
+
+type CreateElementBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateElementBulk(ctx context.Context, arg CreateElementBulkParams) ([]CreateElementBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createElementBulk, pq.Array(arg.DataHash), pq.Array(arg.Name))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateElementBulkRow
+	for rows.Next() {
+		var i CreateElementBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createElementalResistBulk = `-- name: CreateElementalResistBulk :many
+INSERT INTO elemental_resists (data_hash, element_id, affinity)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::elemental_affinity[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateElementalResistBulkParams struct {
+	DataHash  []string
+	ElementID []int32
+	Affinity  []ElementalAffinity
+}
+
+type CreateElementalResistBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateElementalResistBulk(ctx context.Context, arg CreateElementalResistBulkParams) ([]CreateElementalResistBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createElementalResistBulk, pq.Array(arg.DataHash), pq.Array(arg.ElementID), pq.Array(arg.Affinity))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateElementalResistBulkRow
+	for rows.Next() {
+		var i CreateElementalResistBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createModifierBulk = `-- name: CreateModifierBulk :many
+INSERT INTO modifiers (data_hash, name, effect, category, default_value)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::text[]),
+    unnest($4::modifier_category[]),
+    unnest($5::null_float[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateModifierBulkParams struct {
+	DataHash     []string
+	Name         []string
+	Effect       []string
+	Category     []ModifierCategory
+	DefaultValue []sql.NullFloat64
+}
+
+type CreateModifierBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateModifierBulk(ctx context.Context, arg CreateModifierBulkParams) ([]CreateModifierBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createModifierBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.Effect),
+		pq.Array(arg.Category),
+		pq.Array(arg.DefaultValue),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateModifierBulkRow
+	for rows.Next() {
+		var i CreateModifierBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createODModeActionBulk = `-- name: CreateODModeActionBulk :many
+INSERT INTO od_mode_actions (data_hash, user_id, amount)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateODModeActionBulkParams struct {
+	DataHash []string
+	UserID   []int32
+	Amount   []int32
+}
+
+type CreateODModeActionBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateODModeActionBulk(ctx context.Context, arg CreateODModeActionBulkParams) ([]CreateODModeActionBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createODModeActionBulk, pq.Array(arg.DataHash), pq.Array(arg.UserID), pq.Array(arg.Amount))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateODModeActionBulkRow
+	for rows.Next() {
+		var i CreateODModeActionBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createOverdriveModeBulk = `-- name: CreateOverdriveModeBulk :many
+INSERT INTO overdrive_modes (data_hash, name, description, effect, type, fill_rate)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::text[]),
+    unnest($4::text[]),
+    unnest($5::overdrive_mode_type[]),
+    unnest($6::null_float[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateOverdriveModeBulkParams struct {
+	DataHash    []string
+	Name        []string
+	Description []string
+	Effect      []string
+	Type        []OverdriveModeType
+	FillRate    []sql.NullFloat64
+}
+
+type CreateOverdriveModeBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateOverdriveModeBulk(ctx context.Context, arg CreateOverdriveModeBulkParams) ([]CreateOverdriveModeBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createOverdriveModeBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.Description),
+		pq.Array(arg.Effect),
+		pq.Array(arg.Type),
+		pq.Array(arg.FillRate),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateOverdriveModeBulkRow
+	for rows.Next() {
+		var i CreateOverdriveModeBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createOverdriveModesActionsToLearnJunctionBulk = `-- name: CreateOverdriveModesActionsToLearnJunctionBulk :exec
+INSERT INTO j_overdrive_modes_actions_to_learn (data_hash, overdrive_mode_id, action_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateOverdriveModesActionsToLearnJunctionBulkParams struct {
+	DataHash        []string
+	OverdriveModeID []int32
+	ActionID        []int32
+}
+
+func (q *Queries) CreateOverdriveModesActionsToLearnJunctionBulk(ctx context.Context, arg CreateOverdriveModesActionsToLearnJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createOverdriveModesActionsToLearnJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.OverdriveModeID), pq.Array(arg.ActionID))
 	return err
+}
+
+const createPropertiesModifierChangesJunctionBulk = `-- name: CreatePropertiesModifierChangesJunctionBulk :exec
+INSERT INTO j_properties_modifier_changes (data_hash, property_id, modifier_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertiesModifierChangesJunctionBulkParams struct {
+	DataHash         []string
+	PropertyID       []int32
+	ModifierChangeID []int32
+}
+
+func (q *Queries) CreatePropertiesModifierChangesJunctionBulk(ctx context.Context, arg CreatePropertiesModifierChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createPropertiesModifierChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.PropertyID), pq.Array(arg.ModifierChangeID))
+	return err
+}
+
+const createPropertiesRelatedStatsJunctionBulk = `-- name: CreatePropertiesRelatedStatsJunctionBulk :exec
+INSERT INTO j_properties_related_stats(data_hash, property_id, stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertiesRelatedStatsJunctionBulkParams struct {
+	DataHash   []string
+	PropertyID []int32
+	StatID     []int32
+}
+
+func (q *Queries) CreatePropertiesRelatedStatsJunctionBulk(ctx context.Context, arg CreatePropertiesRelatedStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createPropertiesRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.PropertyID), pq.Array(arg.StatID))
+	return err
+}
+
+const createPropertiesStatChangesJunctionBulk = `-- name: CreatePropertiesStatChangesJunctionBulk :exec
+INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreatePropertiesStatChangesJunctionBulkParams struct {
+	DataHash     []string
+	PropertyID   []int32
+	StatChangeID []int32
+}
+
+func (q *Queries) CreatePropertiesStatChangesJunctionBulk(ctx context.Context, arg CreatePropertiesStatChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createPropertiesStatChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.PropertyID), pq.Array(arg.StatChangeID))
+	return err
+}
+
+const createPropertyBulk = `-- name: CreatePropertyBulk :many
+INSERT INTO properties (data_hash, name, effect, nullify_armored)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::text[]),
+    unnest($4::null_nullify_armored[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreatePropertyBulkParams struct {
+	DataHash       []string
+	Name           []string
+	Effect         []string
+	NullifyArmored []NullNullifyArmored
+}
+
+type CreatePropertyBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreatePropertyBulk(ctx context.Context, arg CreatePropertyBulkParams) ([]CreatePropertyBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createPropertyBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.Effect),
+		pq.Array(arg.NullifyArmored),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreatePropertyBulkRow
+	for rows.Next() {
+		var i CreatePropertyBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createStatBulk = `-- name: CreateStatBulk :many
+INSERT INTO stats (data_hash, name, effect, min_val, max_val, max_val_2, sphere_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::text[]),
+    unnest($4::int[]),
+    unnest($5::int[]),
+    unnest($6::null_int[]),
+    unnest($7::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateStatBulkParams struct {
+	DataHash []string
+	Name     []string
+	Effect   []string
+	MinVal   []int32
+	MaxVal   []int32
+	MaxVal2  []sql.NullInt32
+	SphereID []sql.NullInt32
+}
+
+type CreateStatBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateStatBulk(ctx context.Context, arg CreateStatBulkParams) ([]CreateStatBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createStatBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.Effect),
+		pq.Array(arg.MinVal),
+		pq.Array(arg.MaxVal),
+		pq.Array(arg.MaxVal2),
+		pq.Array(arg.SphereID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateStatBulkRow
+	for rows.Next() {
+		var i CreateStatBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createStatusConditionBulk = `-- name: CreateStatusConditionBulk :many
+INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored, added_elem_resist_id, inflicted_delay_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::status_condition_category[]),
+    unnest($4::boolean[]),
+    unnest($5::text[]),
+    unnest($6::null_string[]),
+    unnest($7::null_nullify_armored[]),
+    unnest($8::null_int[]),
+    unnest($9::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateStatusConditionBulkParams struct {
+	DataHash          []string
+	Name              []string
+	Category          []StatusConditionCategory
+	IsPermanent       []bool
+	Effect            []string
+	Visualization     []sql.NullString
+	NullifyArmored    []NullNullifyArmored
+	AddedElemResistID []sql.NullInt32
+	InflictedDelayID  []sql.NullInt32
+}
+
+type CreateStatusConditionBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateStatusConditionBulk(ctx context.Context, arg CreateStatusConditionBulkParams) ([]CreateStatusConditionBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createStatusConditionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.Category),
+		pq.Array(arg.IsPermanent),
+		pq.Array(arg.Effect),
+		pq.Array(arg.Visualization),
+		pq.Array(arg.NullifyArmored),
+		pq.Array(arg.AddedElemResistID),
+		pq.Array(arg.InflictedDelayID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateStatusConditionBulkRow
+	for rows.Next() {
+		var i CreateStatusConditionBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createStatusConditionsModifierChangesJunctionBulk = `-- name: CreateStatusConditionsModifierChangesJunctionBulk :exec
+INSERT INTO j_status_conditions_modifier_changes (data_hash, status_condition_id, modifier_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionsModifierChangesJunctionBulkParams struct {
+	DataHash          []string
+	StatusConditionID []int32
+	ModifierChangeID  []int32
+}
+
+func (q *Queries) CreateStatusConditionsModifierChangesJunctionBulk(ctx context.Context, arg CreateStatusConditionsModifierChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionsModifierChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.StatusConditionID), pq.Array(arg.ModifierChangeID))
+	return err
+}
+
+const createStatusConditionsRelatedStatsJunctionBulk = `-- name: CreateStatusConditionsRelatedStatsJunctionBulk :exec
+INSERT INTO j_status_conditions_related_stats(data_hash, status_condition_id, stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionsRelatedStatsJunctionBulkParams struct {
+	DataHash          []string
+	StatusConditionID []int32
+	StatID            []int32
+}
+
+func (q *Queries) CreateStatusConditionsRelatedStatsJunctionBulk(ctx context.Context, arg CreateStatusConditionsRelatedStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionsRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.StatusConditionID), pq.Array(arg.StatID))
+	return err
+}
+
+const createStatusConditionsRemovedStatusConditionsJunctionBulk = `-- name: CreateStatusConditionsRemovedStatusConditionsJunctionBulk :exec
+INSERT INTO j_status_conditions_removed_status_conditions (data_hash, parent_condition_id, child_condition_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionsRemovedStatusConditionsJunctionBulkParams struct {
+	DataHash          []string
+	ParentConditionID []int32
+	ChildConditionID  []int32
+}
+
+func (q *Queries) CreateStatusConditionsRemovedStatusConditionsJunctionBulk(ctx context.Context, arg CreateStatusConditionsRemovedStatusConditionsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionsRemovedStatusConditionsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ParentConditionID), pq.Array(arg.ChildConditionID))
+	return err
+}
+
+const createStatusConditionsStatChangesJunctionBulk = `-- name: CreateStatusConditionsStatChangesJunctionBulk :exec
+INSERT INTO j_status_conditions_stat_changes (data_hash, status_condition_id, stat_change_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateStatusConditionsStatChangesJunctionBulkParams struct {
+	DataHash          []string
+	StatusConditionID []int32
+	StatChangeID      []int32
+}
+
+func (q *Queries) CreateStatusConditionsStatChangesJunctionBulk(ctx context.Context, arg CreateStatusConditionsStatChangesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createStatusConditionsStatChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.StatusConditionID), pq.Array(arg.StatChangeID))
+	return err
+}
+
+const createStatusResistBulk = `-- name: CreateStatusResistBulk :many
+INSERT INTO status_resists (data_hash, status_condition_id, resistance)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateStatusResistBulkParams struct {
+	DataHash          []string
+	StatusConditionID []int32
+	Resistance        []int32
+}
+
+type CreateStatusResistBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateStatusResistBulk(ctx context.Context, arg CreateStatusResistBulkParams) ([]CreateStatusResistBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createStatusResistBulk, pq.Array(arg.DataHash), pq.Array(arg.StatusConditionID), pq.Array(arg.Resistance))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateStatusResistBulkRow
+	for rows.Next() {
+		var i CreateStatusResistBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateElementBulk = `-- name: UpdateElementBulk :many
+UPDATE elements AS e
+SET opposite_element_id = u.opp_id,
+    data_hash = u.d_hash
+FROM (
+    SELECT 
+        unnest($1::int[]) AS id,
+        unnest($2::text[]) AS d_hash,
+        unnest($3::null_int[]) AS opp_id
+) AS u
+WHERE e.id = u.id
+RETURNING e.id, e.data_hash
+`
+
+type UpdateElementBulkParams struct {
+	ID                []int32
+	DataHash          []string
+	OppositeElementID []sql.NullInt32
+}
+
+type UpdateElementBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) UpdateElementBulk(ctx context.Context, arg UpdateElementBulkParams) ([]UpdateElementBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, updateElementBulk, pq.Array(arg.ID), pq.Array(arg.DataHash), pq.Array(arg.OppositeElementID))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []UpdateElementBulkRow
+	for rows.Next() {
+		var i UpdateElementBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

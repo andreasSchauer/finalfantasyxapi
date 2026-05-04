@@ -9,57 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type AeonCommand struct {
-	ID                int32
-	TopmenuID         *int32
-	SubmenuID         *int32
-	Name              string                `json:"name"`
-	Description       string                `json:"description"`
-	Effect            string                `json:"effect"`
-	Topmenu           *string               `json:"topmenu"`
-	OpenSubmenu       *string               `json:"open_submenu"`
-	Cursor            *string               `json:"cursor"`
-	PossibleAbilities []PossibleAbilityList `json:"possible_abilities"`
-}
-
-func (c AeonCommand) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", c),
-		c.Name,
-		c.Description,
-		c.Effect,
-		h.DerefOrNil(c.TopmenuID),
-		h.DerefOrNil(c.Cursor),
-		h.DerefOrNil(c.SubmenuID),
-	}
-}
-
-func (c AeonCommand) GetID() int32 {
-	return c.ID
-}
-
-func (c AeonCommand) Error() string {
-	return fmt.Sprintf("aeon command %s", c.Name)
-}
-
-func (c AeonCommand) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
-		ID:   c.ID,
-		Name: c.Name,
-	}
-}
-
-type PossibleAbilityList struct {
-	User      string             `json:"user"`
-	Abilities []AbilityReference `json:"abilities"`
-}
-
-func (pa PossibleAbilityList) Error() string {
-	return fmt.Sprintf("possible abilities for %s", pa.User)
-}
-
-
-
 func (l *Lookup) loop3SeedAeonCommands(qtx *database.Queries, ctx context.Context) error {
 	commands, err := l.extractAeonCommands()
 	if err != nil {
@@ -67,13 +16,13 @@ func (l *Lookup) loop3SeedAeonCommands(qtx *database.Queries, ctx context.Contex
 	}
 
 	params := database.CreateAeonCommandBulkParams{
-		DataHash:   	make([]string, len(commands)),
-		Name:      		make([]string, len(commands)),
-		Description:    make([]string, len(commands)),
-		Effect: 		make([]string, len(commands)),
-		Cursor: 		make([]database.NullTargetType, len(commands)),
-		TopmenuID: 		make([]sql.NullInt32, len(commands)),
-		SubmenuID: 		make([]sql.NullInt32, len(commands)),
+		DataHash:    make([]string, len(commands)),
+		Name:        make([]string, len(commands)),
+		Description: make([]string, len(commands)),
+		Effect:      make([]string, len(commands)),
+		Cursor:      make([]database.NullTargetType, len(commands)),
+		TopmenuID:   make([]sql.NullInt32, len(commands)),
+		SubmenuID:   make([]sql.NullInt32, len(commands)),
 	}
 
 	for i, ac := range commands {
@@ -102,7 +51,6 @@ func (l *Lookup) loop3SeedAeonCommands(qtx *database.Queries, ctx context.Contex
 	return nil
 }
 
-
 func (l *Lookup) extractAeonCommands() ([]AeonCommand, error) {
 	commands := []AeonCommand{}
 	var err error
@@ -114,7 +62,7 @@ func (l *Lookup) extractAeonCommands() ([]AeonCommand, error) {
 		if err != nil {
 			return nil, err
 		}
-		
+
 		command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, l.Submenus)
 		if err != nil {
 			return nil, err
@@ -128,10 +76,10 @@ func (l *Lookup) extractAeonCommands() ([]AeonCommand, error) {
 
 func (l *Lookup) processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
 	params := JunctionParams{
-		DataHashes: 	make([]string, 0),
+		DataHashes:     make([]string, 0),
 		GrandParentIDs: make([]int32, 0),
-		ParentIDs:  	make([]int32, 0),
-		ChildIDs:   	make([]int32, 0),
+		ParentIDs:      make([]int32, 0),
+		ChildIDs:       make([]int32, 0),
 	}
 
 	for _, command := range l.json.aeonCommands {
@@ -172,9 +120,9 @@ func (l *Lookup) seedJuncAeonCommandsPossibleAbilities(qtx *database.Queries, ct
 	}
 
 	return qtx.CreateAeonCommandsPossibleAbilitiesJunctionBulk(ctx, database.CreateAeonCommandsPossibleAbilitiesJunctionBulkParams{
-		DataHash:   		jParams.DataHashes,
-		AeonCommandID: 		jParams.GrandParentIDs,
-		CharacterClassID: 	jParams.ParentIDs,
-		AbilityID:  		jParams.ChildIDs,
+		DataHash:         jParams.DataHashes,
+		AeonCommandID:    jParams.GrandParentIDs,
+		CharacterClassID: jParams.ParentIDs,
+		AbilityID:        jParams.ChildIDs,
 	})
 }

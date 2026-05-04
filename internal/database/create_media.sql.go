@@ -8,261 +8,349 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/lib/pq"
 )
 
-const createBackgroundMusic = `-- name: CreateBackgroundMusic :one
+const createBackgroundMusicBulk = `-- name: CreateBackgroundMusicBulk :many
 INSERT INTO background_music (data_hash, condition, replaces_encounter_music)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = background_music.data_hash
-RETURNING id, data_hash, condition, replaces_encounter_music
+SELECT
+    unnest($1::text[]),
+    unnest($2::null_string[]),
+    unnest($3::boolean[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateBackgroundMusicParams struct {
-	DataHash               string
-	Condition              sql.NullString
-	ReplacesEncounterMusic bool
+type CreateBackgroundMusicBulkParams struct {
+	DataHash               []string
+	Condition              []sql.NullString
+	ReplacesEncounterMusic []bool
 }
 
-func (q *Queries) CreateBackgroundMusic(ctx context.Context, arg CreateBackgroundMusicParams) (BackgroundMusic, error) {
-	row := q.db.QueryRowContext(ctx, createBackgroundMusic, arg.DataHash, arg.Condition, arg.ReplacesEncounterMusic)
-	var i BackgroundMusic
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Condition,
-		&i.ReplacesEncounterMusic,
-	)
-	return i, err
-}
-
-const createCue = `-- name: CreateCue :one
-INSERT INTO cues (data_hash, song_id, scene_description, trigger_area_id, replaces_bg_music, end_trigger, replaces_encounter_music)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = cues.data_hash
-RETURNING id, data_hash, song_id, scene_description, trigger_area_id, replaces_bg_music, end_trigger, replaces_encounter_music
-`
-
-type CreateCueParams struct {
-	DataHash               string
-	SongID                 int32
-	SceneDescription       string
-	TriggerAreaID          sql.NullInt32
-	ReplacesBgMusic        NullBgReplacementType
-	EndTrigger             sql.NullString
-	ReplacesEncounterMusic bool
-}
-
-func (q *Queries) CreateCue(ctx context.Context, arg CreateCueParams) (Cue, error) {
-	row := q.db.QueryRowContext(ctx, createCue,
-		arg.DataHash,
-		arg.SongID,
-		arg.SceneDescription,
-		arg.TriggerAreaID,
-		arg.ReplacesBgMusic,
-		arg.EndTrigger,
-		arg.ReplacesEncounterMusic,
-	)
-	var i Cue
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.SongID,
-		&i.SceneDescription,
-		&i.TriggerAreaID,
-		&i.ReplacesBgMusic,
-		&i.EndTrigger,
-		&i.ReplacesEncounterMusic,
-	)
-	return i, err
-}
-
-const createCuesIncludedAreasJunction = `-- name: CreateCuesIncludedAreasJunction :exec
-INSERT INTO j_cues_areas (data_hash, cue_id, included_area_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateCuesIncludedAreasJunctionParams struct {
-	DataHash       string
-	CueID          int32
-	IncludedAreaID int32
-}
-
-func (q *Queries) CreateCuesIncludedAreasJunction(ctx context.Context, arg CreateCuesIncludedAreasJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createCuesIncludedAreasJunction, arg.DataHash, arg.CueID, arg.IncludedAreaID)
-	return err
-}
-
-const createFMV = `-- name: CreateFMV :one
-INSERT INTO fmvs (data_hash, name, translation, cutscene_description, song_id, area_id)
-VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = fmvs.data_hash
-RETURNING id, data_hash, name, translation, cutscene_description, song_id, area_id
-`
-
-type CreateFMVParams struct {
-	DataHash            string
-	Name                string
-	Translation         sql.NullString
-	CutsceneDescription string
-	SongID              sql.NullInt32
-	AreaID              int32
-}
-
-func (q *Queries) CreateFMV(ctx context.Context, arg CreateFMVParams) (Fmv, error) {
-	row := q.db.QueryRowContext(ctx, createFMV,
-		arg.DataHash,
-		arg.Name,
-		arg.Translation,
-		arg.CutsceneDescription,
-		arg.SongID,
-		arg.AreaID,
-	)
-	var i Fmv
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Translation,
-		&i.CutsceneDescription,
-		&i.SongID,
-		&i.AreaID,
-	)
-	return i, err
-}
-
-const createSong = `-- name: CreateSong :one
-INSERT INTO songs (data_hash, name, streaming_name, in_game_name, ost_name, translation, streaming_track_number, music_sphere_id, ost_disc, ost_track_number, duration_in_seconds, can_loop, special_use_case)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = songs.data_hash
-RETURNING id, data_hash, name, streaming_name, in_game_name, ost_name, translation, streaming_track_number, music_sphere_id, ost_disc, ost_track_number, duration_in_seconds, can_loop, special_use_case, credits_id
-`
-
-type CreateSongParams struct {
-	DataHash             string
-	Name                 string
-	StreamingName        sql.NullString
-	InGameName           sql.NullString
-	OstName              sql.NullString
-	Translation          sql.NullString
-	StreamingTrackNumber sql.NullInt32
-	MusicSphereID        sql.NullInt32
-	OstDisc              interface{}
-	OstTrackNumber       sql.NullInt32
-	DurationInSeconds    int32
-	CanLoop              bool
-	SpecialUseCase       NullMusicUseCase
-}
-
-func (q *Queries) CreateSong(ctx context.Context, arg CreateSongParams) (Song, error) {
-	row := q.db.QueryRowContext(ctx, createSong,
-		arg.DataHash,
-		arg.Name,
-		arg.StreamingName,
-		arg.InGameName,
-		arg.OstName,
-		arg.Translation,
-		arg.StreamingTrackNumber,
-		arg.MusicSphereID,
-		arg.OstDisc,
-		arg.OstTrackNumber,
-		arg.DurationInSeconds,
-		arg.CanLoop,
-		arg.SpecialUseCase,
-	)
-	var i Song
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.StreamingName,
-		&i.InGameName,
-		&i.OstName,
-		&i.Translation,
-		&i.StreamingTrackNumber,
-		&i.MusicSphereID,
-		&i.OstDisc,
-		&i.OstTrackNumber,
-		&i.DurationInSeconds,
-		&i.CanLoop,
-		&i.SpecialUseCase,
-		&i.CreditsID,
-	)
-	return i, err
-}
-
-const createSongCredit = `-- name: CreateSongCredit :one
-INSERT INTO song_credits (data_hash, composer, arranger, performer, lyricist)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = song_credits.data_hash
-RETURNING id, data_hash, composer, arranger, performer, lyricist
-`
-
-type CreateSongCreditParams struct {
-	DataHash  string
-	Composer  NullComposer
-	Arranger  NullArranger
-	Performer sql.NullString
-	Lyricist  sql.NullString
-}
-
-func (q *Queries) CreateSongCredit(ctx context.Context, arg CreateSongCreditParams) (SongCredit, error) {
-	row := q.db.QueryRowContext(ctx, createSongCredit,
-		arg.DataHash,
-		arg.Composer,
-		arg.Arranger,
-		arg.Performer,
-		arg.Lyricist,
-	)
-	var i SongCredit
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Composer,
-		&i.Arranger,
-		&i.Performer,
-		&i.Lyricist,
-	)
-	return i, err
-}
-
-const createSongsBackgroundMusicJunction = `-- name: CreateSongsBackgroundMusicJunction :exec
-INSERT INTO j_songs_background_music (data_hash, song_id, bm_id, area_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateSongsBackgroundMusicJunctionParams struct {
+type CreateBackgroundMusicBulkRow struct {
+	ID       int32
 	DataHash string
-	SongID   int32
-	BmID     int32
-	AreaID   int32
 }
 
-func (q *Queries) CreateSongsBackgroundMusicJunction(ctx context.Context, arg CreateSongsBackgroundMusicJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createSongsBackgroundMusicJunction,
-		arg.DataHash,
-		arg.SongID,
-		arg.BmID,
-		arg.AreaID,
+func (q *Queries) CreateBackgroundMusicBulk(ctx context.Context, arg CreateBackgroundMusicBulkParams) ([]CreateBackgroundMusicBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createBackgroundMusicBulk, pq.Array(arg.DataHash), pq.Array(arg.Condition), pq.Array(arg.ReplacesEncounterMusic))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateBackgroundMusicBulkRow
+	for rows.Next() {
+		var i CreateBackgroundMusicBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createCueBulk = `-- name: CreateCueBulk :many
+INSERT INTO cues (data_hash, song_id, scene_description, trigger_area_id, replaces_bg_music, end_trigger, replaces_encounter_music)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::text[]),
+    unnest($4::null_int[]),
+    unnest($5::null_bg_replacement_type[]),
+    unnest($6::null_string[]),
+    unnest($7::boolean[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateCueBulkParams struct {
+	DataHash               []string
+	SongID                 []int32
+	SceneDescription       []string
+	TriggerAreaID          []sql.NullInt32
+	ReplacesBgMusic        []NullBgReplacementType
+	EndTrigger             []sql.NullString
+	ReplacesEncounterMusic []bool
+}
+
+type CreateCueBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateCueBulk(ctx context.Context, arg CreateCueBulkParams) ([]CreateCueBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createCueBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.SongID),
+		pq.Array(arg.SceneDescription),
+		pq.Array(arg.TriggerAreaID),
+		pq.Array(arg.ReplacesBgMusic),
+		pq.Array(arg.EndTrigger),
+		pq.Array(arg.ReplacesEncounterMusic),
 	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateCueBulkRow
+	for rows.Next() {
+		var i CreateCueBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createCuesIncludedAreasJunctionBulk = `-- name: CreateCuesIncludedAreasJunctionBulk :exec
+INSERT INTO j_cues_areas (data_hash, cue_id, included_area_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCuesIncludedAreasJunctionBulkParams struct {
+	DataHash       []string
+	CueID          []int32
+	IncludedAreaID []int32
+}
+
+func (q *Queries) CreateCuesIncludedAreasJunctionBulk(ctx context.Context, arg CreateCuesIncludedAreasJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createCuesIncludedAreasJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.CueID), pq.Array(arg.IncludedAreaID))
 	return err
 }
 
-const updateSong = `-- name: UpdateSong :exec
-UPDATE songs
-SET data_hash = $1,
-    credits_id = $2
-WHERE id = $3
+const createFMVBulk = `-- name: CreateFMVBulk :many
+INSERT INTO fmvs (data_hash, name, translation, cutscene_description, song_id, area_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::null_string[]),
+    unnest($4::text[]),
+    unnest($5::null_int[]),
+    unnest($6::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type UpdateSongParams struct {
-	DataHash  string
-	CreditsID sql.NullInt32
-	ID        int32
+type CreateFMVBulkParams struct {
+	DataHash            []string
+	Name                []string
+	Translation         []sql.NullString
+	CutsceneDescription []string
+	SongID              []sql.NullInt32
+	AreaID              []int32
 }
 
-func (q *Queries) UpdateSong(ctx context.Context, arg UpdateSongParams) error {
-	_, err := q.db.ExecContext(ctx, updateSong, arg.DataHash, arg.CreditsID, arg.ID)
+type CreateFMVBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateFMVBulk(ctx context.Context, arg CreateFMVBulkParams) ([]CreateFMVBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createFMVBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.Translation),
+		pq.Array(arg.CutsceneDescription),
+		pq.Array(arg.SongID),
+		pq.Array(arg.AreaID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateFMVBulkRow
+	for rows.Next() {
+		var i CreateFMVBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createSongBulk = `-- name: CreateSongBulk :many
+INSERT INTO songs (data_hash, name, streaming_name, in_game_name, ost_name, translation, streaming_track_number, music_sphere_id, ost_disc, ost_track_number, duration_in_seconds, can_loop, special_use_case, credits_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::null_string[]),
+    unnest($4::null_string[]),
+    unnest($5::null_string[]),
+    unnest($6::null_string[]),
+    unnest($7::null_int[]),
+    unnest($8::null_int[]),
+    unnest($9::null_int[]),
+    unnest($10::null_int[]),
+    unnest($11::int[]),
+    unnest($12::boolean[]),
+    unnest($13::null_music_use_case[]),
+    unnest($14::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateSongBulkParams struct {
+	DataHash             []string
+	Name                 []string
+	StreamingName        []sql.NullString
+	InGameName           []sql.NullString
+	OstName              []sql.NullString
+	Translation          []sql.NullString
+	StreamingTrackNumber []sql.NullInt32
+	MusicSphereID        []sql.NullInt32
+	OstDisc              []sql.NullInt32
+	OstTrackNumber       []sql.NullInt32
+	DurationInSeconds    []int32
+	CanLoop              []bool
+	SpecialUseCase       []NullMusicUseCase
+	CreditsID            []sql.NullInt32
+}
+
+type CreateSongBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSongBulk(ctx context.Context, arg CreateSongBulkParams) ([]CreateSongBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createSongBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.StreamingName),
+		pq.Array(arg.InGameName),
+		pq.Array(arg.OstName),
+		pq.Array(arg.Translation),
+		pq.Array(arg.StreamingTrackNumber),
+		pq.Array(arg.MusicSphereID),
+		pq.Array(arg.OstDisc),
+		pq.Array(arg.OstTrackNumber),
+		pq.Array(arg.DurationInSeconds),
+		pq.Array(arg.CanLoop),
+		pq.Array(arg.SpecialUseCase),
+		pq.Array(arg.CreditsID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateSongBulkRow
+	for rows.Next() {
+		var i CreateSongBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createSongCreditBulk = `-- name: CreateSongCreditBulk :many
+INSERT INTO song_credits (data_hash, composer, arranger, performer, lyricist)
+SELECT
+    unnest($1::text[]),
+    unnest($2::null_composer[]),
+    unnest($3::null_arranger[]),
+    unnest($4::null_string[]),
+    unnest($5::null_string[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateSongCreditBulkParams struct {
+	DataHash  []string
+	Composer  []NullComposer
+	Arranger  []NullArranger
+	Performer []sql.NullString
+	Lyricist  []sql.NullString
+}
+
+type CreateSongCreditBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSongCreditBulk(ctx context.Context, arg CreateSongCreditBulkParams) ([]CreateSongCreditBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createSongCreditBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Composer),
+		pq.Array(arg.Arranger),
+		pq.Array(arg.Performer),
+		pq.Array(arg.Lyricist),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateSongCreditBulkRow
+	for rows.Next() {
+		var i CreateSongCreditBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createSongsBackgroundMusicJunctionBulk = `-- name: CreateSongsBackgroundMusicJunctionBulk :exec
+INSERT INTO j_songs_background_music (data_hash, song_id, bm_id, area_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateSongsBackgroundMusicJunctionBulkParams struct {
+	DataHash []string
+	SongID   []int32
+	BmID     []int32
+	AreaID   []int32
+}
+
+func (q *Queries) CreateSongsBackgroundMusicJunctionBulk(ctx context.Context, arg CreateSongsBackgroundMusicJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createSongsBackgroundMusicJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.SongID),
+		pq.Array(arg.BmID),
+		pq.Array(arg.AreaID),
+	)
 	return err
 }

@@ -8,239 +8,269 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/lib/pq"
 )
 
-const createAeonCommand = `-- name: CreateAeonCommand :one
-INSERT INTO aeon_commands (data_hash, name, description, effect, cursor)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_commands.data_hash
-RETURNING id, data_hash, name, description, effect, cursor, topmenu_id, submenu_id
+const createAeonCommandBulk = `-- name: CreateAeonCommandBulk :many
+INSERT INTO aeon_commands (data_hash, name, description, effect, cursor, topmenu_id, submenu_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::text[]),
+    unnest($4::text[]),
+    unnest($5::null_target_type[]),
+    unnest($6::null_int[]),
+    unnest($7::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateAeonCommandParams struct {
-	DataHash    string
-	Name        string
-	Description string
-	Effect      string
-	Cursor      NullTargetType
+type CreateAeonCommandBulkParams struct {
+	DataHash    []string
+	Name        []string
+	Description []string
+	Effect      []string
+	Cursor      []NullTargetType
+	TopmenuID   []sql.NullInt32
+	SubmenuID   []sql.NullInt32
 }
 
-func (q *Queries) CreateAeonCommand(ctx context.Context, arg CreateAeonCommandParams) (AeonCommand, error) {
-	row := q.db.QueryRowContext(ctx, createAeonCommand,
-		arg.DataHash,
-		arg.Name,
-		arg.Description,
-		arg.Effect,
-		arg.Cursor,
-	)
-	var i AeonCommand
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Description,
-		&i.Effect,
-		&i.Cursor,
-		&i.TopmenuID,
-		&i.SubmenuID,
-	)
-	return i, err
-}
-
-const createAeonCommandsPossibleAbilitiesJunction = `-- name: CreateAeonCommandsPossibleAbilitiesJunction :exec
-INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, character_class_id, ability_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAeonCommandsPossibleAbilitiesJunctionParams struct {
-	DataHash         string
-	AeonCommandID    int32
-	CharacterClassID int32
-	AbilityID        int32
-}
-
-func (q *Queries) CreateAeonCommandsPossibleAbilitiesJunction(ctx context.Context, arg CreateAeonCommandsPossibleAbilitiesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAeonCommandsPossibleAbilitiesJunction,
-		arg.DataHash,
-		arg.AeonCommandID,
-		arg.CharacterClassID,
-		arg.AbilityID,
-	)
-	return err
-}
-
-const createOverdriveCommand = `-- name: CreateOverdriveCommand :one
-INSERT INTO overdrive_commands (data_hash, name, description, rank)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
-RETURNING id, data_hash, name, description, rank, character_class_id, topmenu_id, submenu_id
-`
-
-type CreateOverdriveCommandParams struct {
-	DataHash    string
-	Name        string
-	Description string
-	Rank        int32
-}
-
-func (q *Queries) CreateOverdriveCommand(ctx context.Context, arg CreateOverdriveCommandParams) (OverdriveCommand, error) {
-	row := q.db.QueryRowContext(ctx, createOverdriveCommand,
-		arg.DataHash,
-		arg.Name,
-		arg.Description,
-		arg.Rank,
-	)
-	var i OverdriveCommand
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Description,
-		&i.Rank,
-		&i.CharacterClassID,
-		&i.TopmenuID,
-		&i.SubmenuID,
-	)
-	return i, err
-}
-
-const createSubmenu = `-- name: CreateSubmenu :one
-INSERT INTO submenus (data_hash, name, description, effect)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = submenus.data_hash
-RETURNING id, data_hash, name, description, effect, topmenu_id
-`
-
-type CreateSubmenuParams struct {
-	DataHash    string
-	Name        string
-	Description sql.NullString
-	Effect      string
-}
-
-func (q *Queries) CreateSubmenu(ctx context.Context, arg CreateSubmenuParams) (Submenu, error) {
-	row := q.db.QueryRowContext(ctx, createSubmenu,
-		arg.DataHash,
-		arg.Name,
-		arg.Description,
-		arg.Effect,
-	)
-	var i Submenu
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Description,
-		&i.Effect,
-		&i.TopmenuID,
-	)
-	return i, err
-}
-
-const createSubmenusUsersJunction = `-- name: CreateSubmenusUsersJunction :exec
-INSERT INTO j_submenus_users (data_hash, submenu_id, character_class_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateSubmenusUsersJunctionParams struct {
-	DataHash         string
-	SubmenuID        int32
-	CharacterClassID int32
-}
-
-func (q *Queries) CreateSubmenusUsersJunction(ctx context.Context, arg CreateSubmenusUsersJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createSubmenusUsersJunction, arg.DataHash, arg.SubmenuID, arg.CharacterClassID)
-	return err
-}
-
-const createTopmenu = `-- name: CreateTopmenu :one
-INSERT INTO topmenus (data_hash, name)
-VALUES ($1, $2)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = topmenus.data_hash
-RETURNING id, data_hash, name
-`
-
-type CreateTopmenuParams struct {
+type CreateAeonCommandBulkRow struct {
+	ID       int32
 	DataHash string
-	Name     string
 }
 
-func (q *Queries) CreateTopmenu(ctx context.Context, arg CreateTopmenuParams) (Topmenu, error) {
-	row := q.db.QueryRowContext(ctx, createTopmenu, arg.DataHash, arg.Name)
-	var i Topmenu
-	err := row.Scan(&i.ID, &i.DataHash, &i.Name)
-	return i, err
+func (q *Queries) CreateAeonCommandBulk(ctx context.Context, arg CreateAeonCommandBulkParams) ([]CreateAeonCommandBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createAeonCommandBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.Description),
+		pq.Array(arg.Effect),
+		pq.Array(arg.Cursor),
+		pq.Array(arg.TopmenuID),
+		pq.Array(arg.SubmenuID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateAeonCommandBulkRow
+	for rows.Next() {
+		var i CreateAeonCommandBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
-const updateAeonCommand = `-- name: UpdateAeonCommand :exec
-UPDATE aeon_commands
-SET data_hash = $1,
-    topmenu_id = $2,
-    submenu_id = $3
-WHERE id = $4
+const createAeonCommandsPossibleAbilitiesJunctionBulk = `-- name: CreateAeonCommandsPossibleAbilitiesJunctionBulk :exec
+INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, character_class_id, ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
 `
 
-type UpdateAeonCommandParams struct {
-	DataHash  string
-	TopmenuID sql.NullInt32
-	SubmenuID sql.NullInt32
-	ID        int32
+type CreateAeonCommandsPossibleAbilitiesJunctionBulkParams struct {
+	DataHash         []string
+	AeonCommandID    []int32
+	CharacterClassID []int32
+	AbilityID        []int32
 }
 
-func (q *Queries) UpdateAeonCommand(ctx context.Context, arg UpdateAeonCommandParams) error {
-	_, err := q.db.ExecContext(ctx, updateAeonCommand,
-		arg.DataHash,
-		arg.TopmenuID,
-		arg.SubmenuID,
-		arg.ID,
+func (q *Queries) CreateAeonCommandsPossibleAbilitiesJunctionBulk(ctx context.Context, arg CreateAeonCommandsPossibleAbilitiesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonCommandsPossibleAbilitiesJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AeonCommandID),
+		pq.Array(arg.CharacterClassID),
+		pq.Array(arg.AbilityID),
 	)
 	return err
 }
 
-const updateOverdriveCommand = `-- name: UpdateOverdriveCommand :exec
-UPDATE overdrive_commands
-SET data_hash = $1,
-    character_class_id = $2,
-    topmenu_id = $3,
-    submenu_id = $4
-WHERE id = $5
+const createOverdriveCommandBulk = `-- name: CreateOverdriveCommandBulk :many
+INSERT INTO overdrive_commands (data_hash, name, description, rank, character_class_id, topmenu_id, submenu_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::text[]),
+    unnest($4::int[]),
+    unnest($5::null_int[]),
+    unnest($6::null_int[]),
+    unnest($7::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type UpdateOverdriveCommandParams struct {
-	DataHash         string
-	CharacterClassID sql.NullInt32
-	TopmenuID        sql.NullInt32
-	SubmenuID        sql.NullInt32
-	ID               int32
+type CreateOverdriveCommandBulkParams struct {
+	DataHash         []string
+	Name             []string
+	Description      []string
+	Rank             []int32
+	CharacterClassID []sql.NullInt32
+	TopmenuID        []sql.NullInt32
+	SubmenuID        []sql.NullInt32
 }
 
-func (q *Queries) UpdateOverdriveCommand(ctx context.Context, arg UpdateOverdriveCommandParams) error {
-	_, err := q.db.ExecContext(ctx, updateOverdriveCommand,
-		arg.DataHash,
-		arg.CharacterClassID,
-		arg.TopmenuID,
-		arg.SubmenuID,
-		arg.ID,
+type CreateOverdriveCommandBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateOverdriveCommandBulk(ctx context.Context, arg CreateOverdriveCommandBulkParams) ([]CreateOverdriveCommandBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createOverdriveCommandBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.Description),
+		pq.Array(arg.Rank),
+		pq.Array(arg.CharacterClassID),
+		pq.Array(arg.TopmenuID),
+		pq.Array(arg.SubmenuID),
 	)
-	return err
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateOverdriveCommandBulkRow
+	for rows.Next() {
+		var i CreateOverdriveCommandBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
-const updateSubmenu = `-- name: UpdateSubmenu :exec
-UPDATE submenus
-SET data_hash = $1,
-    topmenu_id = $2
-WHERE id = $3
+const createSubmenuBulk = `-- name: CreateSubmenuBulk :many
+INSERT INTO submenus (data_hash, name, topmenu_id, description, effect)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::null_int[]),
+    unnest($4::null_string[]),
+    unnest($5::text[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type UpdateSubmenuParams struct {
-	DataHash  string
-	TopmenuID sql.NullInt32
-	ID        int32
+type CreateSubmenuBulkParams struct {
+	DataHash    []string
+	Name        []string
+	TopmenuID   []sql.NullInt32
+	Description []sql.NullString
+	Effect      []string
 }
 
-func (q *Queries) UpdateSubmenu(ctx context.Context, arg UpdateSubmenuParams) error {
-	_, err := q.db.ExecContext(ctx, updateSubmenu, arg.DataHash, arg.TopmenuID, arg.ID)
+type CreateSubmenuBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSubmenuBulk(ctx context.Context, arg CreateSubmenuBulkParams) ([]CreateSubmenuBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createSubmenuBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.TopmenuID),
+		pq.Array(arg.Description),
+		pq.Array(arg.Effect),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateSubmenuBulkRow
+	for rows.Next() {
+		var i CreateSubmenuBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createSubmenusUsersJunctionBulk = `-- name: CreateSubmenusUsersJunctionBulk :exec
+INSERT INTO j_submenus_users (data_hash, submenu_id, character_class_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateSubmenusUsersJunctionBulkParams struct {
+	DataHash         []string
+	SubmenuID        []int32
+	CharacterClassID []int32
+}
+
+func (q *Queries) CreateSubmenusUsersJunctionBulk(ctx context.Context, arg CreateSubmenusUsersJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createSubmenusUsersJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.SubmenuID), pq.Array(arg.CharacterClassID))
 	return err
+}
+
+const createTopmenuBulk = `-- name: CreateTopmenuBulk :many
+INSERT INTO topmenus (data_hash, name)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateTopmenuBulkParams struct {
+	DataHash []string
+	Name     []string
+}
+
+type CreateTopmenuBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateTopmenuBulk(ctx context.Context, arg CreateTopmenuBulkParams) ([]CreateTopmenuBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createTopmenuBulk, pq.Array(arg.DataHash), pq.Array(arg.Name))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateTopmenuBulkRow
+	for rows.Next() {
+		var i CreateTopmenuBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

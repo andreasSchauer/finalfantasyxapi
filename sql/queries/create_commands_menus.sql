@@ -1,62 +1,69 @@
--- name: CreateAeonCommand :one
-INSERT INTO aeon_commands (data_hash, name, description, effect, cursor)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_commands.data_hash
-RETURNING *;
+-- name: CreateAeonCommandBulk :many
+INSERT INTO aeon_commands (data_hash, name, description, effect, cursor, topmenu_id, submenu_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('description')::text[]),
+    unnest(sqlc.arg('effect')::text[]),
+    unnest(sqlc.arg('cursor')::null_target_type[]),
+    unnest(sqlc.arg('topmenu_id')::null_int[]),
+    unnest(sqlc.arg('submenu_id')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: UpdateAeonCommand :exec
-UPDATE aeon_commands
-SET data_hash = $1,
-    topmenu_id = $2,
-    submenu_id = $3
-WHERE id = $4;
-
-
--- name: CreateAeonCommandsPossibleAbilitiesJunction :exec
-INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, character_class_id, ability_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateTopmenu :one
+-- name: CreateTopmenuBulk :many
 INSERT INTO topmenus (data_hash, name)
-VALUES ($1, $2)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = topmenus.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateSubmenu :one
-INSERT INTO submenus (data_hash, name, description, effect)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = submenus.data_hash
-RETURNING *;
+-- name: CreateSubmenuBulk :many
+INSERT INTO submenus (data_hash, name, topmenu_id, description, effect)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('topmenu_id')::null_int[]),
+    unnest(sqlc.arg('description')::null_string[]),
+    unnest(sqlc.arg('effect')::text[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: UpdateSubmenu :exec
-UPDATE submenus
-SET data_hash = $1,
-    topmenu_id = $2
-WHERE id = $3;
+-- name: CreateOverdriveCommandBulk :many
+INSERT INTO overdrive_commands (data_hash, name, description, rank, character_class_id, topmenu_id, submenu_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('description')::text[]),
+    unnest(sqlc.arg('rank')::int[]),
+    unnest(sqlc.arg('character_class_id')::null_int[]),
+    unnest(sqlc.arg('topmenu_id')::null_int[]),
+    unnest(sqlc.arg('submenu_id')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateSubmenusUsersJunction :exec
-INSERT INTO j_submenus_users (data_hash, submenu_id, character_class_id)
-VALUES ($1, $2, $3)
+
+
+
+-- name: CreateAeonCommandsPossibleAbilitiesJunctionBulk :exec
+INSERT INTO j_aeon_commands_possible_abilities (data_hash, aeon_command_id, character_class_id, ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('aeon_command_id')::int[]),
+    unnest(sqlc.arg('character_class_id')::int[]),
+    unnest(sqlc.arg('ability_id')::int[])
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateOverdriveCommand :one
-INSERT INTO overdrive_commands (data_hash, name, description, rank)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_commands.data_hash
-RETURNING *;
-
-
--- name: UpdateOverdriveCommand :exec
-UPDATE overdrive_commands
-SET data_hash = $1,
-    character_class_id = $2,
-    topmenu_id = $3,
-    submenu_id = $4
-WHERE id = $5;
+-- name: CreateSubmenusUsersJunctionBulk :exec
+INSERT INTO j_submenus_users (data_hash, submenu_id, character_class_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('submenu_id')::int[]),
+    unnest(sqlc.arg('character_class_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;

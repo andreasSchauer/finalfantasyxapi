@@ -8,255 +8,398 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/lib/pq"
 )
 
-const createBlitzballItem = `-- name: CreateBlitzballItem :exec
+const createBlitzballItemBulk = `-- name: CreateBlitzballItemBulk :many
 INSERT INTO blitzball_items (data_hash, position_id, possible_item_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateBlitzballItemParams struct {
-	DataHash       string
-	PositionID     int32
-	PossibleItemID int32
+type CreateBlitzballItemBulkParams struct {
+	DataHash       []string
+	PositionID     []int32
+	PossibleItemID []int32
 }
 
-func (q *Queries) CreateBlitzballItem(ctx context.Context, arg CreateBlitzballItemParams) error {
-	_, err := q.db.ExecContext(ctx, createBlitzballItem, arg.DataHash, arg.PositionID, arg.PossibleItemID)
-	return err
+type CreateBlitzballItemBulkRow struct {
+	ID       int32
+	DataHash string
 }
 
-const createBlitzballPosition = `-- name: CreateBlitzballPosition :one
+func (q *Queries) CreateBlitzballItemBulk(ctx context.Context, arg CreateBlitzballItemBulkParams) ([]CreateBlitzballItemBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createBlitzballItemBulk, pq.Array(arg.DataHash), pq.Array(arg.PositionID), pq.Array(arg.PossibleItemID))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateBlitzballItemBulkRow
+	for rows.Next() {
+		var i CreateBlitzballItemBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createBlitzballPositionBulk = `-- name: CreateBlitzballPositionBulk :many
 INSERT INTO blitzball_positions (data_hash, category, slot)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = blitzball_positions.data_hash
-RETURNING id, data_hash, category, slot
+SELECT
+    unnest($1::text[]),
+    unnest($2::blitzball_tournament_category[]),
+    unnest($3::blitzball_position_slot[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateBlitzballPositionParams struct {
+type CreateBlitzballPositionBulkParams struct {
+	DataHash []string
+	Category []BlitzballTournamentCategory
+	Slot     []BlitzballPositionSlot
+}
+
+type CreateBlitzballPositionBulkRow struct {
+	ID       int32
 	DataHash string
-	Category BlitzballTournamentCategory
-	Slot     BlitzballPositionSlot
 }
 
-func (q *Queries) CreateBlitzballPosition(ctx context.Context, arg CreateBlitzballPositionParams) (BlitzballPosition, error) {
-	row := q.db.QueryRowContext(ctx, createBlitzballPosition, arg.DataHash, arg.Category, arg.Slot)
-	var i BlitzballPosition
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Category,
-		&i.Slot,
-	)
-	return i, err
+func (q *Queries) CreateBlitzballPositionBulk(ctx context.Context, arg CreateBlitzballPositionBulkParams) ([]CreateBlitzballPositionBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createBlitzballPositionBulk, pq.Array(arg.DataHash), pq.Array(arg.Category), pq.Array(arg.Slot))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateBlitzballPositionBulkRow
+	for rows.Next() {
+		var i CreateBlitzballPositionBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
-const createCompletionArea = `-- name: CreateCompletionArea :exec
+const createCompletionAreaBulk = `-- name: CreateCompletionAreaBulk :many
 INSERT INTO completion_areas (data_hash, completion_id, area_id, notes)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::null_string[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateCompletionAreaParams struct {
-	DataHash     string
-	CompletionID int32
-	AreaID       int32
-	Notes        sql.NullString
+type CreateCompletionAreaBulkParams struct {
+	DataHash     []string
+	CompletionID []int32
+	AreaID       []int32
+	Notes        []sql.NullString
 }
 
-func (q *Queries) CreateCompletionArea(ctx context.Context, arg CreateCompletionAreaParams) error {
-	_, err := q.db.ExecContext(ctx, createCompletionArea,
-		arg.DataHash,
-		arg.CompletionID,
-		arg.AreaID,
-		arg.Notes,
-	)
-	return err
-}
-
-const createMonsterArenaCreation = `-- name: CreateMonsterArenaCreation :one
-INSERT INTO monster_arena_creations (data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-ON CONFLICT(data_hash) DO Update SET data_hash = monster_arena_creations.data_hash
-RETURNING id, data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount, monster_id
-`
-
-type CreateMonsterArenaCreationParams struct {
-	DataHash                  string
-	SubquestID                int32
-	Category                  MaCreationCategory
-	RequiredArea              NullMaCreationArea
-	RequiredSpecies           NullMaCreationSpecies
-	UnderwaterOnly            bool
-	CreationsUnlockedCategory NullCreationsUnlockedCategory
-	Amount                    int32
-}
-
-func (q *Queries) CreateMonsterArenaCreation(ctx context.Context, arg CreateMonsterArenaCreationParams) (MonsterArenaCreation, error) {
-	row := q.db.QueryRowContext(ctx, createMonsterArenaCreation,
-		arg.DataHash,
-		arg.SubquestID,
-		arg.Category,
-		arg.RequiredArea,
-		arg.RequiredSpecies,
-		arg.UnderwaterOnly,
-		arg.CreationsUnlockedCategory,
-		arg.Amount,
-	)
-	var i MonsterArenaCreation
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.SubquestID,
-		&i.Category,
-		&i.RequiredArea,
-		&i.RequiredSpecies,
-		&i.UnderwaterOnly,
-		&i.CreationsUnlockedCategory,
-		&i.Amount,
-		&i.MonsterID,
-	)
-	return i, err
-}
-
-const createQuest = `-- name: CreateQuest :one
-INSERT INTO quests (data_hash, name, type, availability, is_repeatable)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = quests.data_hash
-RETURNING id, data_hash, name, type, availability, is_repeatable, completion_id
-`
-
-type CreateQuestParams struct {
-	DataHash     string
-	Name         string
-	Type         QuestType
-	Availability AvailabilityType
-	IsRepeatable bool
-}
-
-func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) (Quest, error) {
-	row := q.db.QueryRowContext(ctx, createQuest,
-		arg.DataHash,
-		arg.Name,
-		arg.Type,
-		arg.Availability,
-		arg.IsRepeatable,
-	)
-	var i Quest
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Type,
-		&i.Availability,
-		&i.IsRepeatable,
-		&i.CompletionID,
-	)
-	return i, err
-}
-
-const createQuestCompletion = `-- name: CreateQuestCompletion :one
-INSERT INTO quest_completions (data_hash, condition, item_amount_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
-RETURNING id, data_hash, condition, item_amount_id
-`
-
-type CreateQuestCompletionParams struct {
-	DataHash     string
-	Condition    sql.NullString
-	ItemAmountID int32
-}
-
-func (q *Queries) CreateQuestCompletion(ctx context.Context, arg CreateQuestCompletionParams) (QuestCompletion, error) {
-	row := q.db.QueryRowContext(ctx, createQuestCompletion, arg.DataHash, arg.Condition, arg.ItemAmountID)
-	var i QuestCompletion
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Condition,
-		&i.ItemAmountID,
-	)
-	return i, err
-}
-
-const createSidequest = `-- name: CreateSidequest :one
-INSERT INTO sidequests (data_hash, quest_id)
-VALUES ($1, $2)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = sidequests.data_hash
-RETURNING id, data_hash, quest_id
-`
-
-type CreateSidequestParams struct {
+type CreateCompletionAreaBulkRow struct {
+	ID       int32
 	DataHash string
-	QuestID  int32
 }
 
-func (q *Queries) CreateSidequest(ctx context.Context, arg CreateSidequestParams) (Sidequest, error) {
-	row := q.db.QueryRowContext(ctx, createSidequest, arg.DataHash, arg.QuestID)
-	var i Sidequest
-	err := row.Scan(&i.ID, &i.DataHash, &i.QuestID)
-	return i, err
-}
-
-const createSubquest = `-- name: CreateSubquest :one
-INSERT INTO subquests (data_hash, quest_id, sidequest_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = subquests.data_hash
-RETURNING id, data_hash, quest_id, sidequest_id
-`
-
-type CreateSubquestParams struct {
-	DataHash    string
-	QuestID     int32
-	SidequestID int32
-}
-
-func (q *Queries) CreateSubquest(ctx context.Context, arg CreateSubquestParams) (Subquest, error) {
-	row := q.db.QueryRowContext(ctx, createSubquest, arg.DataHash, arg.QuestID, arg.SidequestID)
-	var i Subquest
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.QuestID,
-		&i.SidequestID,
+func (q *Queries) CreateCompletionAreaBulk(ctx context.Context, arg CreateCompletionAreaBulkParams) ([]CreateCompletionAreaBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createCompletionAreaBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.CompletionID),
+		pq.Array(arg.AreaID),
+		pq.Array(arg.Notes),
 	)
-	return i, err
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateCompletionAreaBulkRow
+	for rows.Next() {
+		var i CreateCompletionAreaBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
-const updateMonsterArenaCreation = `-- name: UpdateMonsterArenaCreation :exec
-UPDATE monster_arena_creations
-SET data_hash = $1,
-    monster_id = $2
-WHERE id = $3
+const createMonsterArenaCreationBulk = `-- name: CreateMonsterArenaCreationBulk :many
+INSERT INTO monster_arena_creations (data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount, monster_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::ma_creation_category[]),
+    unnest($4::null_ma_creation_area[]),
+    unnest($5::null_ma_creation_species[]),
+    unnest($6::boolean[]),
+    unnest($7::null_creations_unlocked_category[]),
+    unnest($8::int[]),
+    unnest($9::null_int[])
+ON CONFLICT(data_hash) DO Update SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type UpdateMonsterArenaCreationParams struct {
-	DataHash  string
-	MonsterID sql.NullInt32
-	ID        int32
+type CreateMonsterArenaCreationBulkParams struct {
+	DataHash                  []string
+	SubquestID                []int32
+	Category                  []MaCreationCategory
+	RequiredArea              []NullMaCreationArea
+	RequiredSpecies           []NullMaCreationSpecies
+	UnderwaterOnly            []bool
+	CreationsUnlockedCategory []NullCreationsUnlockedCategory
+	Amount                    []int32
+	MonsterID                 []sql.NullInt32
 }
 
-func (q *Queries) UpdateMonsterArenaCreation(ctx context.Context, arg UpdateMonsterArenaCreationParams) error {
-	_, err := q.db.ExecContext(ctx, updateMonsterArenaCreation, arg.DataHash, arg.MonsterID, arg.ID)
-	return err
+type CreateMonsterArenaCreationBulkRow struct {
+	ID       int32
+	DataHash string
 }
 
-const updateQuest = `-- name: UpdateQuest :exec
-UPDATE quests
-SET data_hash = $1,
-    completion_id = $2
-WHERE id = $3
+func (q *Queries) CreateMonsterArenaCreationBulk(ctx context.Context, arg CreateMonsterArenaCreationBulkParams) ([]CreateMonsterArenaCreationBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createMonsterArenaCreationBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.SubquestID),
+		pq.Array(arg.Category),
+		pq.Array(arg.RequiredArea),
+		pq.Array(arg.RequiredSpecies),
+		pq.Array(arg.UnderwaterOnly),
+		pq.Array(arg.CreationsUnlockedCategory),
+		pq.Array(arg.Amount),
+		pq.Array(arg.MonsterID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateMonsterArenaCreationBulkRow
+	for rows.Next() {
+		var i CreateMonsterArenaCreationBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createQuestBulk = `-- name: CreateQuestBulk :many
+INSERT INTO quests (data_hash, name, type, availability, is_repeatable, completion_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::quest_type[]),
+    unnest($4::availability_type[]),
+    unnest($5::boolean[]),
+    unnest($6::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type UpdateQuestParams struct {
-	DataHash     string
-	CompletionID sql.NullInt32
-	ID           int32
+type CreateQuestBulkParams struct {
+	DataHash     []string
+	Name         []string
+	Type         []QuestType
+	Availability []AvailabilityType
+	IsRepeatable []bool
+	CompletionID []sql.NullInt32
 }
 
-func (q *Queries) UpdateQuest(ctx context.Context, arg UpdateQuestParams) error {
-	_, err := q.db.ExecContext(ctx, updateQuest, arg.DataHash, arg.CompletionID, arg.ID)
-	return err
+type CreateQuestBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateQuestBulk(ctx context.Context, arg CreateQuestBulkParams) ([]CreateQuestBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createQuestBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Name),
+		pq.Array(arg.Type),
+		pq.Array(arg.Availability),
+		pq.Array(arg.IsRepeatable),
+		pq.Array(arg.CompletionID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateQuestBulkRow
+	for rows.Next() {
+		var i CreateQuestBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createQuestCompletionBulk = `-- name: CreateQuestCompletionBulk :many
+INSERT INTO quest_completions (data_hash, condition, item_amount_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::null_string[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateQuestCompletionBulkParams struct {
+	DataHash     []string
+	Condition    []sql.NullString
+	ItemAmountID []int32
+}
+
+type CreateQuestCompletionBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateQuestCompletionBulk(ctx context.Context, arg CreateQuestCompletionBulkParams) ([]CreateQuestCompletionBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createQuestCompletionBulk, pq.Array(arg.DataHash), pq.Array(arg.Condition), pq.Array(arg.ItemAmountID))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateQuestCompletionBulkRow
+	for rows.Next() {
+		var i CreateQuestCompletionBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createSidequestBulk = `-- name: CreateSidequestBulk :many
+INSERT INTO sidequests (data_hash, quest_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateSidequestBulkParams struct {
+	DataHash []string
+	QuestID  []int32
+}
+
+type CreateSidequestBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSidequestBulk(ctx context.Context, arg CreateSidequestBulkParams) ([]CreateSidequestBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createSidequestBulk, pq.Array(arg.DataHash), pq.Array(arg.QuestID))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateSidequestBulkRow
+	for rows.Next() {
+		var i CreateSidequestBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createSubquestBulk = `-- name: CreateSubquestBulk :many
+INSERT INTO subquests (data_hash, quest_id, sidequest_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateSubquestBulkParams struct {
+	DataHash    []string
+	QuestID     []int32
+	SidequestID []int32
+}
+
+type CreateSubquestBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSubquestBulk(ctx context.Context, arg CreateSubquestBulkParams) ([]CreateSubquestBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createSubquestBulk, pq.Array(arg.DataHash), pq.Array(arg.QuestID), pq.Array(arg.SidequestID))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateSubquestBulkRow
+	for rows.Next() {
+		var i CreateSubquestBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

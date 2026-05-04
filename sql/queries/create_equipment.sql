@@ -1,115 +1,163 @@
--- name: CreateCelestialWeapon :one
-INSERT INTO celestial_weapons (data_hash, name, key_item_base, formula)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = celestial_weapons.data_hash
-RETURNING *;
+-- name: CreateCelestialWeaponBulk :many
+INSERT INTO celestial_weapons (data_hash, name, key_item_base, formula, character_id, aeon_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('key_item_base')::key_item_base[]),
+    unnest(sqlc.arg('formula')::celestial_formula[]),
+    unnest(sqlc.arg('character_id')::null_int[]),
+    unnest(sqlc.arg('aeon_id')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: UpdateCelestialWeapon :exec
-UPDATE celestial_weapons
-SET data_hash = $1,
-    character_id = $2,
-    aeon_id = $3
-WHERE id = $4;
+-- name: CreateAutoAbilityBulk :many
+INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter, required_item_amount_id, grad_rcvry_stat_id, on_hit_element_id, added_elem_resist_id, on_hit_status_id, added_property_id, cnvrsn_from_mod_id, cnvrsn_to_mod_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('description')::null_string[]),
+    unnest(sqlc.arg('effect')::text[]),
+    unnest(sqlc.arg('type')::equip_type[]),
+    unnest(sqlc.arg('category')::auto_ability_category[]),
+    unnest(sqlc.arg('ability_value')::null_int[]),
+    unnest(sqlc.arg('activation_condition')::aa_activation_condition[]),
+    unnest(sqlc.arg('counter')::null_counter_type[]),
+    unnest(sqlc.arg('required_item_amount_id')::null_int[]),
+    unnest(sqlc.arg('grad_rcvry_stat_id')::null_int[]),
+    unnest(sqlc.arg('on_hit_element_id')::null_int[]),
+    unnest(sqlc.arg('added_elem_resist_id')::null_int[]),
+    unnest(sqlc.arg('on_hit_status_id')::null_int[]),
+    unnest(sqlc.arg('added_property_id')::null_int[]),
+    unnest(sqlc.arg('cnvrsn_from_mod_id')::null_int[]),
+    unnest(sqlc.arg('cnvrsn_to_mod_id')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateAutoAbility :one
-INSERT INTO auto_abilities (data_hash, name, description, effect, type, category, ability_value, activation_condition, counter)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = auto_abilities.data_hash
-RETURNING *;
-
-
--- name: UpdateAutoAbility :exec
-UPDATE auto_abilities
-SET data_hash = $1,
-    required_item_amount_id = $2,
-    grad_rcvry_stat_id = $3,
-    on_hit_element_id = $4,
-    added_elem_resist_id = $5,
-    on_hit_status_id = $6,
-    added_property_id = $7,
-    cnvrsn_from_mod_id = $8,
-    cnvrsn_to_mod_id = $9
-WHERE id = $10;
-
-
--- name: CreateAutoAbilitiesRelatedStatsJunction :exec
-INSERT INTO j_auto_abilities_related_stats(data_hash, auto_ability_id, stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateAutoAbilitiesLockedOutJunction :exec
-INSERT INTO j_auto_abilities_locked_out (data_hash, parent_ability_id, child_ability_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateAutoAbilitiesAutoItemJunction :exec
-INSERT INTO j_auto_abilities_auto_item (data_hash, auto_ability_id, item_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateAutoAbilitiesAddedStatussesJunction :exec
-INSERT INTO j_auto_abilities_added_statusses (data_hash, auto_ability_id, status_condition_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateAutoAbilitiesAddedStatusResistsJunction :exec
-INSERT INTO j_auto_abilities_added_status_resists (data_hash, auto_ability_id, status_resist_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateAutoAbilitiesStatChangesJunction :exec
-INSERT INTO j_auto_abilities_stat_changes (data_hash, auto_ability_id, stat_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateAutoAbilitiesModifierChangesJunction :exec
-INSERT INTO j_auto_abilities_modifier_changes (data_hash, auto_ability_id, modifier_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateEquipmentTable :one
+-- name: CreateEquipmentTableBulk :many
 INSERT INTO equipment_tables (data_hash, type, classification, specific_character_id, version, priority, required_slots)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_tables.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('type')::equip_type[]),
+    unnest(sqlc.arg('classification')::equip_class[]),
+    unnest(sqlc.arg('specific_character_id')::null_int[]),
+    unnest(sqlc.arg('version')::null_int[]),
+    unnest(sqlc.arg('priority')::null_int[]),
+    unnest(sqlc.arg('required_slots')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateEquipmentName :one
+-- name: CreateEquipmentNameBulk :many
 INSERT INTO equipment_names (data_hash, character_id, name)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = equipment_names.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('character_id')::int[]),
+    unnest(sqlc.arg('name')::text[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateEquipmentTablesNamesJunction :exec
-INSERT INTO j_equipment_tables_names (data_hash, equipment_table_id, equipment_name_id, celestial_weapon_id)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateEquipmentTablesRequiredAutoAbilitiesJunction :exec
-INSERT INTO j_equipment_tables_required_auto_abilities (data_hash, equipment_table_id, auto_ability_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateAbilityPool :one
+-- name: CreateAbilityPoolBulk :many
 INSERT INTO ability_pools (data_hash, equipment_table_id, pool_idx, req_amount)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_pools.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('equipment_table_id')::int[]),
+    unnest(sqlc.arg('pool_idx')::int[]),
+    unnest(sqlc.arg('req_amount')::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateAbilityPoolsAutoAbilitiesJunction :exec
+
+
+-- name: CreateAutoAbilitiesRelatedStatsJunctionBulk :exec
+INSERT INTO j_auto_abilities_related_stats(data_hash, auto_ability_id, stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('auto_ability_id')::int[]),
+    unnest(sqlc.arg('stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilitiesLockedOutJunctionBulk :exec
+INSERT INTO j_auto_abilities_locked_out (data_hash, parent_ability_id, child_ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('parent_ability_id')::int[]),
+    unnest(sqlc.arg('child_ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilitiesAutoItemJunctionBulk :exec
+INSERT INTO j_auto_abilities_auto_item (data_hash, auto_ability_id, item_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('auto_ability_id')::int[]),
+    unnest(sqlc.arg('item_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilitiesAddedStatussesJunctionBulk :exec
+INSERT INTO j_auto_abilities_added_statusses (data_hash, auto_ability_id, status_condition_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('auto_ability_id')::int[]),
+    unnest(sqlc.arg('status_condition_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilitiesAddedStatusResistsJunctionBulk :exec
+INSERT INTO j_auto_abilities_added_status_resists (data_hash, auto_ability_id, status_resist_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('auto_ability_id')::int[]),
+    unnest(sqlc.arg('status_resist_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilitiesStatChangesJunctionBulk :exec
+INSERT INTO j_auto_abilities_stat_changes (data_hash, auto_ability_id, stat_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('auto_ability_id')::int[]),
+    unnest(sqlc.arg('stat_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAutoAbilitiesModifierChangesJunctionBulk :exec
+INSERT INTO j_auto_abilities_modifier_changes (data_hash, auto_ability_id, modifier_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('auto_ability_id')::int[]),
+    unnest(sqlc.arg('modifier_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateEquipmentTablesNamesJunctionBulk :exec
+INSERT INTO j_equipment_tables_names (data_hash, equipment_table_id, equipment_name_id, celestial_weapon_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('equipment_table_id')::int[]),
+    unnest(sqlc.arg('equipment_name_id')::int[]),
+    unnest(sqlc.arg('celestial_weapon_id')::null_int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateEquipmentTablesRequiredAutoAbilitiesJunctionBulk :exec
+INSERT INTO j_equipment_tables_required_auto_abilities (data_hash, equipment_table_id, auto_ability_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('equipment_table_id')::int[]),
+    unnest(sqlc.arg('auto_ability_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateAbilityPoolsAutoAbilitiesJunctionBulk :exec
 INSERT INTO j_ability_pools_auto_abilities (data_hash, ability_pool_id, auto_ability_id)
-VALUES ($1, $2, $3)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('ability_pool_id')::int[]),
+    unnest(sqlc.arg('auto_ability_id')::int[])
 ON CONFLICT(data_hash) DO NOTHING;

@@ -1,66 +1,87 @@
--- name: CreateBlitzballPosition :one
+-- name: CreateBlitzballPositionBulk :many
 INSERT INTO blitzball_positions (data_hash, category, slot)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = blitzball_positions.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('category')::blitzball_tournament_category[]),
+    unnest(sqlc.arg('slot')::blitzball_position_slot[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateBlitzballItem :exec
+-- name: CreateBlitzballItemBulk :many
 INSERT INTO blitzball_items (data_hash, position_id, possible_item_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('position_id')::int[]),
+    unnest(sqlc.arg('possible_item_id')::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateQuest :one
-INSERT INTO quests (data_hash, name, type, availability, is_repeatable)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = quests.data_hash
-RETURNING *;
+-- name: CreateQuestBulk :many
+INSERT INTO quests (data_hash, name, type, availability, is_repeatable, completion_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('type')::quest_type[]),
+    unnest(sqlc.arg('availability')::availability_type[]),
+    unnest(sqlc.arg('is_repeatable')::boolean[]),
+    unnest(sqlc.arg('completion_id')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateSidequest :one
+-- name: CreateSidequestBulk :many
 INSERT INTO sidequests (data_hash, quest_id)
-VALUES ($1, $2)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = sidequests.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('quest_id')::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateSubquest :one
+-- name: CreateSubquestBulk :many
 INSERT INTO subquests (data_hash, quest_id, sidequest_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = subquests.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('quest_id')::int[]),
+    unnest(sqlc.arg('sidequest_id')::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateQuestCompletion :one
+-- name: CreateQuestCompletionBulk :many
 INSERT INTO quest_completions (data_hash, condition, item_amount_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = quest_completions.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('condition')::null_string[]),
+    unnest(sqlc.arg('item_amount_id')::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateCompletionArea :exec
+-- name: CreateCompletionAreaBulk :many
 INSERT INTO completion_areas (data_hash, completion_id, area_id, notes)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('completion_id')::int[]),
+    unnest(sqlc.arg('area_id')::int[]),
+    unnest(sqlc.arg('notes')::null_string[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateMonsterArenaCreation :one
-INSERT INTO monster_arena_creations (data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-ON CONFLICT(data_hash) DO Update SET data_hash = monster_arena_creations.data_hash
-RETURNING *;
-
-
--- name: UpdateQuest :exec
-UPDATE quests
-SET data_hash = $1,
-    completion_id = $2
-WHERE id = $3;
-
-
--- name: UpdateMonsterArenaCreation :exec
-UPDATE monster_arena_creations
-SET data_hash = $1,
-    monster_id = $2
-WHERE id = $3;
+-- name: CreateMonsterArenaCreationBulk :many
+INSERT INTO monster_arena_creations (data_hash, subquest_id, category, required_area, required_species, underwater_only, creations_unlocked_category, amount, monster_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('subquest_id')::int[]),
+    unnest(sqlc.arg('category')::ma_creation_category[]),
+    unnest(sqlc.arg('required_area')::null_ma_creation_area[]),
+    unnest(sqlc.arg('required_species')::null_ma_creation_species[]),
+    unnest(sqlc.arg('underwater_only')::boolean[]),
+    unnest(sqlc.arg('creations_unlocked_category')::null_creations_unlocked_category[]),
+    unnest(sqlc.arg('amount')::int[]),
+    unnest(sqlc.arg('monster_id')::null_int[])
+ON CONFLICT(data_hash) DO Update SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;

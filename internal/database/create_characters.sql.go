@@ -8,359 +8,444 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/lib/pq"
 )
 
-const createAeon = `-- name: CreateAeon :one
-INSERT INTO aeons (data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeons.data_hash
-RETURNING id, data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, area_id, accuracy_id
+const createAeonBulk = `-- name: CreateAeonBulk :many
+INSERT INTO aeons (data_hash, unit_id, unlock_condition, is_optional, battles_to_regenerate, phys_atk_damage_constant, phys_atk_range, phys_atk_shatter_rate, area_id, accuracy_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::text[]),
+    unnest($4::boolean[]),
+    unnest($5::int[]),
+    unnest($6::null_int[]),
+    unnest($7::null_int[]),
+    unnest($8::null_int[]),
+    unnest($9::null_int[]),
+    unnest($10::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateAeonParams struct {
-	DataHash              string
-	UnitID                int32
-	UnlockCondition       string
-	IsOptional            bool
-	BattlesToRegenerate   int32
-	PhysAtkDamageConstant sql.NullInt32
-	PhysAtkRange          interface{}
-	PhysAtkShatterRate    interface{}
+type CreateAeonBulkParams struct {
+	DataHash              []string
+	UnitID                []int32
+	UnlockCondition       []string
+	IsOptional            []bool
+	BattlesToRegenerate   []int32
+	PhysAtkDamageConstant []sql.NullInt32
+	PhysAtkRange          []sql.NullInt32
+	PhysAtkShatterRate    []sql.NullInt32
+	AreaID                []sql.NullInt32
+	AccuracyID            []sql.NullInt32
 }
 
-func (q *Queries) CreateAeon(ctx context.Context, arg CreateAeonParams) (Aeon, error) {
-	row := q.db.QueryRowContext(ctx, createAeon,
-		arg.DataHash,
-		arg.UnitID,
-		arg.UnlockCondition,
-		arg.IsOptional,
-		arg.BattlesToRegenerate,
-		arg.PhysAtkDamageConstant,
-		arg.PhysAtkRange,
-		arg.PhysAtkShatterRate,
-	)
-	var i Aeon
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.UnitID,
-		&i.UnlockCondition,
-		&i.IsOptional,
-		&i.BattlesToRegenerate,
-		&i.PhysAtkDamageConstant,
-		&i.PhysAtkRange,
-		&i.PhysAtkShatterRate,
-		&i.AreaID,
-		&i.AccuracyID,
-	)
-	return i, err
-}
-
-const createAeonEquipment = `-- name: CreateAeonEquipment :one
-INSERT INTO aeon_equipment (data_hash, auto_ability_id, celestial_wpn, equip_type)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = aeon_equipment.data_hash
-RETURNING id, data_hash, auto_ability_id, celestial_wpn, equip_type
-`
-
-type CreateAeonEquipmentParams struct {
-	DataHash      string
-	AutoAbilityID int32
-	CelestialWpn  bool
-	EquipType     EquipType
-}
-
-func (q *Queries) CreateAeonEquipment(ctx context.Context, arg CreateAeonEquipmentParams) (AeonEquipment, error) {
-	row := q.db.QueryRowContext(ctx, createAeonEquipment,
-		arg.DataHash,
-		arg.AutoAbilityID,
-		arg.CelestialWpn,
-		arg.EquipType,
-	)
-	var i AeonEquipment
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.AutoAbilityID,
-		&i.CelestialWpn,
-		&i.EquipType,
-	)
-	return i, err
-}
-
-const createAeonsBaseStatAJunction = `-- name: CreateAeonsBaseStatAJunction :exec
-INSERT INTO j_aeons_base_stats_a (data_hash, aeon_id, base_stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAeonsBaseStatAJunctionParams struct {
-	DataHash   string
-	AeonID     int32
-	BaseStatID int32
-}
-
-func (q *Queries) CreateAeonsBaseStatAJunction(ctx context.Context, arg CreateAeonsBaseStatAJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAeonsBaseStatAJunction, arg.DataHash, arg.AeonID, arg.BaseStatID)
-	return err
-}
-
-const createAeonsBaseStatBJunction = `-- name: CreateAeonsBaseStatBJunction :exec
-INSERT INTO j_aeons_base_stats_b (data_hash, aeon_id, base_stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAeonsBaseStatBJunctionParams struct {
-	DataHash   string
-	AeonID     int32
-	BaseStatID int32
-}
-
-func (q *Queries) CreateAeonsBaseStatBJunction(ctx context.Context, arg CreateAeonsBaseStatBJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAeonsBaseStatBJunction, arg.DataHash, arg.AeonID, arg.BaseStatID)
-	return err
-}
-
-const createAeonsBaseStatXJunction = `-- name: CreateAeonsBaseStatXJunction :exec
-INSERT INTO j_aeons_base_stats_x (data_hash, aeon_id, base_stat_id, battles)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAeonsBaseStatXJunctionParams struct {
-	DataHash   string
-	AeonID     int32
-	BaseStatID int32
-	Battles    int32
-}
-
-func (q *Queries) CreateAeonsBaseStatXJunction(ctx context.Context, arg CreateAeonsBaseStatXJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAeonsBaseStatXJunction,
-		arg.DataHash,
-		arg.AeonID,
-		arg.BaseStatID,
-		arg.Battles,
-	)
-	return err
-}
-
-const createAeonsWeaponArmorJunction = `-- name: CreateAeonsWeaponArmorJunction :exec
-INSERT INTO j_aeons_weapon_armor (data_hash, aeon_id, aeon_equipment_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAeonsWeaponArmorJunctionParams struct {
-	DataHash        string
-	AeonID          int32
-	AeonEquipmentID int32
-}
-
-func (q *Queries) CreateAeonsWeaponArmorJunction(ctx context.Context, arg CreateAeonsWeaponArmorJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAeonsWeaponArmorJunction, arg.DataHash, arg.AeonID, arg.AeonEquipmentID)
-	return err
-}
-
-const createCharacter = `-- name: CreateCharacter :one
-INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = characters.data_hash
-RETURNING id, data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater, area_id
-`
-
-type CreateCharacterParams struct {
-	DataHash            string
-	UnitID              int32
-	IsStoryBased        bool
-	WeaponType          WeaponType
-	ArmorType           ArmorType
-	PhysicalAttackRange interface{}
-	CanFightUnderwater  bool
-}
-
-func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams) (Character, error) {
-	row := q.db.QueryRowContext(ctx, createCharacter,
-		arg.DataHash,
-		arg.UnitID,
-		arg.IsStoryBased,
-		arg.WeaponType,
-		arg.ArmorType,
-		arg.PhysicalAttackRange,
-		arg.CanFightUnderwater,
-	)
-	var i Character
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.UnitID,
-		&i.IsStoryBased,
-		&i.WeaponType,
-		&i.ArmorType,
-		&i.PhysicalAttackRange,
-		&i.CanFightUnderwater,
-		&i.AreaID,
-	)
-	return i, err
-}
-
-const createCharacterClass = `-- name: CreateCharacterClass :one
-INSERT INTO character_classes (data_hash, name, category)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = character_classes.data_hash
-RETURNING id, data_hash, name, category
-`
-
-type CreateCharacterClassParams struct {
-	DataHash string
-	Name     string
-	Category CharacterClassCategory
-}
-
-func (q *Queries) CreateCharacterClass(ctx context.Context, arg CreateCharacterClassParams) (CharacterClass, error) {
-	row := q.db.QueryRowContext(ctx, createCharacterClass, arg.DataHash, arg.Name, arg.Category)
-	var i CharacterClass
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Category,
-	)
-	return i, err
-}
-
-const createCharacterClassPlayerUnitsJunction = `-- name: CreateCharacterClassPlayerUnitsJunction :exec
-INSERT INTO j_character_class_player_units (data_hash, class_id, unit_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateCharacterClassPlayerUnitsJunctionParams struct {
-	DataHash string
-	ClassID  int32
-	UnitID   int32
-}
-
-func (q *Queries) CreateCharacterClassPlayerUnitsJunction(ctx context.Context, arg CreateCharacterClassPlayerUnitsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createCharacterClassPlayerUnitsJunction, arg.DataHash, arg.ClassID, arg.UnitID)
-	return err
-}
-
-const createCharactersBaseStatsJunction = `-- name: CreateCharactersBaseStatsJunction :exec
-INSERT INTO j_characters_base_stats (data_hash, character_id, base_stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateCharactersBaseStatsJunctionParams struct {
-	DataHash    string
-	CharacterID int32
-	BaseStatID  int32
-}
-
-func (q *Queries) CreateCharactersBaseStatsJunction(ctx context.Context, arg CreateCharactersBaseStatsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createCharactersBaseStatsJunction, arg.DataHash, arg.CharacterID, arg.BaseStatID)
-	return err
-}
-
-const createDefaultAbilityJunction = `-- name: CreateDefaultAbilityJunction :exec
-INSERT INTO j_default_abilities (data_hash, class_id, ability_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateDefaultAbilityJunctionParams struct {
-	DataHash  string
-	ClassID   int32
-	AbilityID int32
-}
-
-func (q *Queries) CreateDefaultAbilityJunction(ctx context.Context, arg CreateDefaultAbilityJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createDefaultAbilityJunction, arg.DataHash, arg.ClassID, arg.AbilityID)
-	return err
-}
-
-const createDefaultOverdriveAbilityJunction = `-- name: CreateDefaultOverdriveAbilityJunction :exec
-INSERT INTO j_default_overdrive_abilities (data_hash, class_id, ability_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateDefaultOverdriveAbilityJunctionParams struct {
-	DataHash  string
-	ClassID   int32
-	AbilityID int32
-}
-
-func (q *Queries) CreateDefaultOverdriveAbilityJunction(ctx context.Context, arg CreateDefaultOverdriveAbilityJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createDefaultOverdriveAbilityJunction, arg.DataHash, arg.ClassID, arg.AbilityID)
-	return err
-}
-
-const createPlayerUnit = `-- name: CreatePlayerUnit :one
-INSERT INTO player_units (data_hash, name, type)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = player_units.data_hash
-RETURNING id, data_hash, name, type
-`
-
-type CreatePlayerUnitParams struct {
-	DataHash string
-	Name     string
-	Type     UnitType
-}
-
-func (q *Queries) CreatePlayerUnit(ctx context.Context, arg CreatePlayerUnitParams) (PlayerUnit, error) {
-	row := q.db.QueryRowContext(ctx, createPlayerUnit, arg.DataHash, arg.Name, arg.Type)
-	var i PlayerUnit
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Type,
-	)
-	return i, err
-}
-
-const updateAeon = `-- name: UpdateAeon :exec
-UPDATE aeons
-SET data_hash = $1,
-    area_id = $2,
-    accuracy_id = $3
-WHERE id = $4
-`
-
-type UpdateAeonParams struct {
-	DataHash   string
-	AreaID     sql.NullInt32
-	AccuracyID sql.NullInt32
-	ID         int32
-}
-
-func (q *Queries) UpdateAeon(ctx context.Context, arg UpdateAeonParams) error {
-	_, err := q.db.ExecContext(ctx, updateAeon,
-		arg.DataHash,
-		arg.AreaID,
-		arg.AccuracyID,
-		arg.ID,
-	)
-	return err
-}
-
-const updateCharacter = `-- name: UpdateCharacter :exec
-UPDATE characters
-SET data_hash = $1,
-    area_id = $2
-WHERE id = $3
-`
-
-type UpdateCharacterParams struct {
-	DataHash string
-	AreaID   sql.NullInt32
+type CreateAeonBulkRow struct {
 	ID       int32
+	DataHash string
 }
 
-func (q *Queries) UpdateCharacter(ctx context.Context, arg UpdateCharacterParams) error {
-	_, err := q.db.ExecContext(ctx, updateCharacter, arg.DataHash, arg.AreaID, arg.ID)
+func (q *Queries) CreateAeonBulk(ctx context.Context, arg CreateAeonBulkParams) ([]CreateAeonBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createAeonBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.UnitID),
+		pq.Array(arg.UnlockCondition),
+		pq.Array(arg.IsOptional),
+		pq.Array(arg.BattlesToRegenerate),
+		pq.Array(arg.PhysAtkDamageConstant),
+		pq.Array(arg.PhysAtkRange),
+		pq.Array(arg.PhysAtkShatterRate),
+		pq.Array(arg.AreaID),
+		pq.Array(arg.AccuracyID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateAeonBulkRow
+	for rows.Next() {
+		var i CreateAeonBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createAeonEquipmentBulk = `-- name: CreateAeonEquipmentBulk :many
+INSERT INTO aeon_equipment (data_hash, auto_ability_id, celestial_wpn, equip_type)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::boolean[]),
+    unnest($4::equip_type[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateAeonEquipmentBulkParams struct {
+	DataHash      []string
+	AutoAbilityID []int32
+	CelestialWpn  []bool
+	EquipType     []EquipType
+}
+
+type CreateAeonEquipmentBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateAeonEquipmentBulk(ctx context.Context, arg CreateAeonEquipmentBulkParams) ([]CreateAeonEquipmentBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createAeonEquipmentBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AutoAbilityID),
+		pq.Array(arg.CelestialWpn),
+		pq.Array(arg.EquipType),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateAeonEquipmentBulkRow
+	for rows.Next() {
+		var i CreateAeonEquipmentBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createAeonsBaseStatAJunctionBulk = `-- name: CreateAeonsBaseStatAJunctionBulk :exec
+INSERT INTO j_aeons_base_stats_a (data_hash, aeon_id, base_stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsBaseStatAJunctionBulkParams struct {
+	DataHash   []string
+	AeonID     []int32
+	BaseStatID []int32
+}
+
+func (q *Queries) CreateAeonsBaseStatAJunctionBulk(ctx context.Context, arg CreateAeonsBaseStatAJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatAJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AeonID), pq.Array(arg.BaseStatID))
 	return err
+}
+
+const createAeonsBaseStatBJunctionBulk = `-- name: CreateAeonsBaseStatBJunctionBulk :exec
+INSERT INTO j_aeons_base_stats_b (data_hash, aeon_id, base_stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsBaseStatBJunctionBulkParams struct {
+	DataHash   []string
+	AeonID     []int32
+	BaseStatID []int32
+}
+
+func (q *Queries) CreateAeonsBaseStatBJunctionBulk(ctx context.Context, arg CreateAeonsBaseStatBJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatBJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AeonID), pq.Array(arg.BaseStatID))
+	return err
+}
+
+const createAeonsBaseStatXJunctionBulk = `-- name: CreateAeonsBaseStatXJunctionBulk :exec
+INSERT INTO j_aeons_base_stats_x (data_hash, aeon_id, base_stat_id, battles)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsBaseStatXJunctionBulkParams struct {
+	DataHash   []string
+	AeonID     []int32
+	BaseStatID []int32
+	Battles    []int32
+}
+
+func (q *Queries) CreateAeonsBaseStatXJunctionBulk(ctx context.Context, arg CreateAeonsBaseStatXJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsBaseStatXJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AeonID),
+		pq.Array(arg.BaseStatID),
+		pq.Array(arg.Battles),
+	)
+	return err
+}
+
+const createAeonsWeaponArmorJunctionBulk = `-- name: CreateAeonsWeaponArmorJunctionBulk :exec
+INSERT INTO j_aeons_weapon_armor (data_hash, aeon_id, aeon_equipment_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAeonsWeaponArmorJunctionBulkParams struct {
+	DataHash        []string
+	AeonID          []int32
+	AeonEquipmentID []int32
+}
+
+func (q *Queries) CreateAeonsWeaponArmorJunctionBulk(ctx context.Context, arg CreateAeonsWeaponArmorJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAeonsWeaponArmorJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AeonID), pq.Array(arg.AeonEquipmentID))
+	return err
+}
+
+const createCharacterBulk = `-- name: CreateCharacterBulk :many
+INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater, area_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::boolean[]),
+    unnest($4::weapon_type[]),
+    unnest($5::armor_type[]),
+    unnest($6::int[]),
+    unnest($7::boolean[]),
+    unnest($8::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateCharacterBulkParams struct {
+	DataHash            []string
+	UnitID              []int32
+	IsStoryBased        []bool
+	WeaponType          []WeaponType
+	ArmorType           []ArmorType
+	PhysicalAttackRange []int32
+	CanFightUnderwater  []bool
+	AreaID              []sql.NullInt32
+}
+
+type CreateCharacterBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateCharacterBulk(ctx context.Context, arg CreateCharacterBulkParams) ([]CreateCharacterBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createCharacterBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.UnitID),
+		pq.Array(arg.IsStoryBased),
+		pq.Array(arg.WeaponType),
+		pq.Array(arg.ArmorType),
+		pq.Array(arg.PhysicalAttackRange),
+		pq.Array(arg.CanFightUnderwater),
+		pq.Array(arg.AreaID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateCharacterBulkRow
+	for rows.Next() {
+		var i CreateCharacterBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createCharacterClassBulk = `-- name: CreateCharacterClassBulk :many
+INSERT INTO character_classes (data_hash, name, category)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::character_class_category[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateCharacterClassBulkParams struct {
+	DataHash []string
+	Name     []string
+	Category []CharacterClassCategory
+}
+
+type CreateCharacterClassBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateCharacterClassBulk(ctx context.Context, arg CreateCharacterClassBulkParams) ([]CreateCharacterClassBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createCharacterClassBulk, pq.Array(arg.DataHash), pq.Array(arg.Name), pq.Array(arg.Category))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateCharacterClassBulkRow
+	for rows.Next() {
+		var i CreateCharacterClassBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createCharacterClassPlayerUnitsJunctionBulk = `-- name: CreateCharacterClassPlayerUnitsJunctionBulk :exec
+INSERT INTO j_character_class_player_units (data_hash, class_id, unit_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCharacterClassPlayerUnitsJunctionBulkParams struct {
+	DataHash []string
+	ClassID  []int32
+	UnitID   []int32
+}
+
+func (q *Queries) CreateCharacterClassPlayerUnitsJunctionBulk(ctx context.Context, arg CreateCharacterClassPlayerUnitsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createCharacterClassPlayerUnitsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ClassID), pq.Array(arg.UnitID))
+	return err
+}
+
+const createCharactersBaseStatsJunctionBulk = `-- name: CreateCharactersBaseStatsJunctionBulk :exec
+INSERT INTO j_characters_base_stats (data_hash, character_id, base_stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateCharactersBaseStatsJunctionBulkParams struct {
+	DataHash    []string
+	CharacterID []int32
+	BaseStatID  []int32
+}
+
+func (q *Queries) CreateCharactersBaseStatsJunctionBulk(ctx context.Context, arg CreateCharactersBaseStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createCharactersBaseStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.CharacterID), pq.Array(arg.BaseStatID))
+	return err
+}
+
+const createDefaultAbilityJunctionBulk = `-- name: CreateDefaultAbilityJunctionBulk :exec
+INSERT INTO j_default_abilities (data_hash, class_id, ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateDefaultAbilityJunctionBulkParams struct {
+	DataHash  []string
+	ClassID   []int32
+	AbilityID []int32
+}
+
+func (q *Queries) CreateDefaultAbilityJunctionBulk(ctx context.Context, arg CreateDefaultAbilityJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createDefaultAbilityJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ClassID), pq.Array(arg.AbilityID))
+	return err
+}
+
+const createDefaultOverdriveAbilityJunctionBulk = `-- name: CreateDefaultOverdriveAbilityJunctionBulk :exec
+INSERT INTO j_default_overdrive_abilities (data_hash, class_id, ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateDefaultOverdriveAbilityJunctionBulkParams struct {
+	DataHash  []string
+	ClassID   []int32
+	AbilityID []int32
+}
+
+func (q *Queries) CreateDefaultOverdriveAbilityJunctionBulk(ctx context.Context, arg CreateDefaultOverdriveAbilityJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createDefaultOverdriveAbilityJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ClassID), pq.Array(arg.AbilityID))
+	return err
+}
+
+const createPlayerUnitBulk = `-- name: CreatePlayerUnitBulk :many
+INSERT INTO player_units (data_hash, name, type)
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[]),
+    unnest($3::unit_type[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreatePlayerUnitBulkParams struct {
+	DataHash []string
+	Name     []string
+	Type     []UnitType
+}
+
+type CreatePlayerUnitBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreatePlayerUnitBulk(ctx context.Context, arg CreatePlayerUnitBulkParams) ([]CreatePlayerUnitBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createPlayerUnitBulk, pq.Array(arg.DataHash), pq.Array(arg.Name), pq.Array(arg.Type))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreatePlayerUnitBulkRow
+	for rows.Next() {
+		var i CreatePlayerUnitBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

@@ -8,405 +8,597 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/lib/pq"
 )
 
-const createArea = `-- name: CreateArea :one
+const createAreaBulk = `-- name: CreateAreaBulk :many
 INSERT INTO areas (data_hash, sublocation_id, name, version, specification, availability, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = areas.data_hash
-RETURNING id, data_hash, sublocation_id, name, version, specification, availability, has_save_sphere, airship_drop_off, has_compilation_sphere, can_ride_chocobo
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::text[]),
+    unnest($4::null_int[]),
+    unnest($5::null_string[]),
+    unnest($6::availability_type[]),
+    unnest($7::boolean[]),
+    unnest($8::boolean[]),
+    unnest($9::boolean[]),
+    unnest($10::boolean[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateAreaParams struct {
-	DataHash             string
-	SublocationID        int32
-	Name                 string
-	Version              sql.NullInt32
-	Specification        sql.NullString
-	Availability         AvailabilityType
-	HasSaveSphere        bool
-	AirshipDropOff       bool
-	HasCompilationSphere bool
-	CanRideChocobo       bool
+type CreateAreaBulkParams struct {
+	DataHash             []string
+	SublocationID        []int32
+	Name                 []string
+	Version              []sql.NullInt32
+	Specification        []sql.NullString
+	Availability         []AvailabilityType
+	HasSaveSphere        []bool
+	AirshipDropOff       []bool
+	HasCompilationSphere []bool
+	CanRideChocobo       []bool
 }
 
-func (q *Queries) CreateArea(ctx context.Context, arg CreateAreaParams) (Area, error) {
-	row := q.db.QueryRowContext(ctx, createArea,
-		arg.DataHash,
-		arg.SublocationID,
-		arg.Name,
-		arg.Version,
-		arg.Specification,
-		arg.Availability,
-		arg.HasSaveSphere,
-		arg.AirshipDropOff,
-		arg.HasCompilationSphere,
-		arg.CanRideChocobo,
-	)
-	var i Area
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.SublocationID,
-		&i.Name,
-		&i.Version,
-		&i.Specification,
-		&i.Availability,
-		&i.HasSaveSphere,
-		&i.AirshipDropOff,
-		&i.HasCompilationSphere,
-		&i.CanRideChocobo,
-	)
-	return i, err
+type CreateAreaBulkRow struct {
+	ID       int32
+	DataHash string
 }
 
-const createAreaConnectedAreasJunction = `-- name: CreateAreaConnectedAreasJunction :exec
+func (q *Queries) CreateAreaBulk(ctx context.Context, arg CreateAreaBulkParams) ([]CreateAreaBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createAreaBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.SublocationID),
+		pq.Array(arg.Name),
+		pq.Array(arg.Version),
+		pq.Array(arg.Specification),
+		pq.Array(arg.Availability),
+		pq.Array(arg.HasSaveSphere),
+		pq.Array(arg.AirshipDropOff),
+		pq.Array(arg.HasCompilationSphere),
+		pq.Array(arg.CanRideChocobo),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateAreaBulkRow
+	for rows.Next() {
+		var i CreateAreaBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createAreaConnectedAreasJunctionBulk = `-- name: CreateAreaConnectedAreasJunctionBulk :exec
 INSERT INTO j_area_connected_areas (data_hash, area_id, connection_id)
-VALUES ($1, $2, $3)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateAreaConnectedAreasJunctionParams struct {
-	DataHash     string
-	AreaID       int32
-	ConnectionID int32
+type CreateAreaConnectedAreasJunctionBulkParams struct {
+	DataHash     []string
+	AreaID       []int32
+	ConnectionID []int32
 }
 
-func (q *Queries) CreateAreaConnectedAreasJunction(ctx context.Context, arg CreateAreaConnectedAreasJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createAreaConnectedAreasJunction, arg.DataHash, arg.AreaID, arg.ConnectionID)
+func (q *Queries) CreateAreaConnectedAreasJunctionBulk(ctx context.Context, arg CreateAreaConnectedAreasJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAreaConnectedAreasJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AreaID), pq.Array(arg.ConnectionID))
 	return err
 }
 
-const createAreaConnection = `-- name: CreateAreaConnection :one
+const createAreaConnectionBulk = `-- name: CreateAreaConnectionBulk :many
 INSERT INTO area_connections (data_hash, area_id, connection_type, is_story_based, notes)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = area_connections.data_hash
-RETURNING id, data_hash, area_id, connection_type, is_story_based, notes
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::area_connection_type[]),
+    unnest($4::boolean[]),
+    unnest($5::null_string[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateAreaConnectionParams struct {
-	DataHash       string
-	AreaID         int32
-	ConnectionType AreaConnectionType
-	IsStoryBased   bool
-	Notes          sql.NullString
+type CreateAreaConnectionBulkParams struct {
+	DataHash       []string
+	AreaID         []int32
+	ConnectionType []AreaConnectionType
+	IsStoryBased   []bool
+	Notes          []sql.NullString
 }
 
-func (q *Queries) CreateAreaConnection(ctx context.Context, arg CreateAreaConnectionParams) (AreaConnection, error) {
-	row := q.db.QueryRowContext(ctx, createAreaConnection,
-		arg.DataHash,
-		arg.AreaID,
-		arg.ConnectionType,
-		arg.IsStoryBased,
-		arg.Notes,
-	)
-	var i AreaConnection
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.AreaID,
-		&i.ConnectionType,
-		&i.IsStoryBased,
-		&i.Notes,
-	)
-	return i, err
+type CreateAreaConnectionBulkRow struct {
+	ID       int32
+	DataHash string
 }
 
-const createLocation = `-- name: CreateLocation :one
+func (q *Queries) CreateAreaConnectionBulk(ctx context.Context, arg CreateAreaConnectionBulkParams) ([]CreateAreaConnectionBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createAreaConnectionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AreaID),
+		pq.Array(arg.ConnectionType),
+		pq.Array(arg.IsStoryBased),
+		pq.Array(arg.Notes),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateAreaConnectionBulkRow
+	for rows.Next() {
+		var i CreateAreaConnectionBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createLocationBulk = `-- name: CreateLocationBulk :many
 INSERT INTO locations (data_hash, name)
-VALUES ($1, $2)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = locations.data_hash
-RETURNING id, data_hash, name
+SELECT
+    unnest($1::text[]),
+    unnest($2::text[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateLocationParams struct {
+type CreateLocationBulkParams struct {
+	DataHash []string
+	Name     []string
+}
+
+type CreateLocationBulkRow struct {
+	ID       int32
 	DataHash string
-	Name     string
 }
 
-func (q *Queries) CreateLocation(ctx context.Context, arg CreateLocationParams) (Location, error) {
-	row := q.db.QueryRowContext(ctx, createLocation, arg.DataHash, arg.Name)
-	var i Location
-	err := row.Scan(&i.ID, &i.DataHash, &i.Name)
-	return i, err
+func (q *Queries) CreateLocationBulk(ctx context.Context, arg CreateLocationBulkParams) ([]CreateLocationBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createLocationBulk, pq.Array(arg.DataHash), pq.Array(arg.Name))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateLocationBulkRow
+	for rows.Next() {
+		var i CreateLocationBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
-const createShop = `-- name: CreateShop :one
+const createShopBulk = `-- name: CreateShopBulk :many
 INSERT INTO shops (data_hash, version, area_id, notes, category, availability)
-VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = shops.data_hash
-RETURNING id, data_hash, version, area_id, notes, category, availability
+SELECT
+    unnest($1::text[]),
+    unnest($2::null_int[]),
+    unnest($3::int[]),
+    unnest($4::null_string[]),
+    unnest($5::shop_category[]),
+    unnest($6::availability_type[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateShopParams struct {
-	DataHash     string
-	Version      sql.NullInt32
-	AreaID       int32
-	Notes        sql.NullString
-	Category     ShopCategory
-	Availability AvailabilityType
+type CreateShopBulkParams struct {
+	DataHash     []string
+	Version      []sql.NullInt32
+	AreaID       []int32
+	Notes        []sql.NullString
+	Category     []ShopCategory
+	Availability []AvailabilityType
 }
 
-func (q *Queries) CreateShop(ctx context.Context, arg CreateShopParams) (Shop, error) {
-	row := q.db.QueryRowContext(ctx, createShop,
-		arg.DataHash,
-		arg.Version,
-		arg.AreaID,
-		arg.Notes,
-		arg.Category,
-		arg.Availability,
-	)
-	var i Shop
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Version,
-		&i.AreaID,
-		&i.Notes,
-		&i.Category,
-		&i.Availability,
-	)
-	return i, err
-}
-
-const createShopEquipmentAbilitiesJunction = `-- name: CreateShopEquipmentAbilitiesJunction :exec
-INSERT INTO j_shop_equipment_abilities (data_hash, shop_equipment_id, auto_ability_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateShopEquipmentAbilitiesJunctionParams struct {
-	DataHash        string
-	ShopEquipmentID int32
-	AutoAbilityID   int32
-}
-
-func (q *Queries) CreateShopEquipmentAbilitiesJunction(ctx context.Context, arg CreateShopEquipmentAbilitiesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createShopEquipmentAbilitiesJunction, arg.DataHash, arg.ShopEquipmentID, arg.AutoAbilityID)
-	return err
-}
-
-const createShopEquipmentPiece = `-- name: CreateShopEquipmentPiece :one
-INSERT INTO shop_equipment_pieces (data_hash, shop_id, equipment_name_id, shop_type, empty_slots_amount, price)
-VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = shop_equipment_pieces.data_hash
-RETURNING id, data_hash, shop_id, equipment_name_id, shop_type, empty_slots_amount, price
-`
-
-type CreateShopEquipmentPieceParams struct {
-	DataHash         string
-	ShopID           int32
-	EquipmentNameID  int32
-	ShopType         ShopType
-	EmptySlotsAmount interface{}
-	Price            int32
-}
-
-func (q *Queries) CreateShopEquipmentPiece(ctx context.Context, arg CreateShopEquipmentPieceParams) (ShopEquipmentPiece, error) {
-	row := q.db.QueryRowContext(ctx, createShopEquipmentPiece,
-		arg.DataHash,
-		arg.ShopID,
-		arg.EquipmentNameID,
-		arg.ShopType,
-		arg.EmptySlotsAmount,
-		arg.Price,
-	)
-	var i ShopEquipmentPiece
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.ShopID,
-		&i.EquipmentNameID,
-		&i.ShopType,
-		&i.EmptySlotsAmount,
-		&i.Price,
-	)
-	return i, err
-}
-
-const createShopItem = `-- name: CreateShopItem :one
-INSERT INTO shop_items (data_hash, item_id, price)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = shop_items.data_hash
-RETURNING id, data_hash, item_id, price
-`
-
-type CreateShopItemParams struct {
+type CreateShopBulkRow struct {
+	ID       int32
 	DataHash string
-	ItemID   int32
-	Price    int32
 }
 
-func (q *Queries) CreateShopItem(ctx context.Context, arg CreateShopItemParams) (ShopItem, error) {
-	row := q.db.QueryRowContext(ctx, createShopItem, arg.DataHash, arg.ItemID, arg.Price)
-	var i ShopItem
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.ItemID,
-		&i.Price,
+func (q *Queries) CreateShopBulk(ctx context.Context, arg CreateShopBulkParams) ([]CreateShopBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createShopBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Version),
+		pq.Array(arg.AreaID),
+		pq.Array(arg.Notes),
+		pq.Array(arg.Category),
+		pq.Array(arg.Availability),
 	)
-	return i, err
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateShopBulkRow
+	for rows.Next() {
+		var i CreateShopBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
-const createShopsItemsJunction = `-- name: CreateShopsItemsJunction :exec
+const createShopEquipmentAbilitiesJunctionBulk = `-- name: CreateShopEquipmentAbilitiesJunctionBulk :exec
+INSERT INTO j_shop_equipment_abilities (data_hash, shop_equipment_id, auto_ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateShopEquipmentAbilitiesJunctionBulkParams struct {
+	DataHash        []string
+	ShopEquipmentID []int32
+	AutoAbilityID   []int32
+}
+
+func (q *Queries) CreateShopEquipmentAbilitiesJunctionBulk(ctx context.Context, arg CreateShopEquipmentAbilitiesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createShopEquipmentAbilitiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.ShopEquipmentID), pq.Array(arg.AutoAbilityID))
+	return err
+}
+
+const createShopEquipmentPieceBulk = `-- name: CreateShopEquipmentPieceBulk :many
+INSERT INTO shop_equipment_pieces (data_hash, shop_id, equipment_name_id, shop_type, empty_slots_amount, price)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::shop_type[]),
+    unnest($5::int[]),
+    unnest($6::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateShopEquipmentPieceBulkParams struct {
+	DataHash         []string
+	ShopID           []int32
+	EquipmentNameID  []int32
+	ShopType         []ShopType
+	EmptySlotsAmount []int32
+	Price            []int32
+}
+
+type CreateShopEquipmentPieceBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateShopEquipmentPieceBulk(ctx context.Context, arg CreateShopEquipmentPieceBulkParams) ([]CreateShopEquipmentPieceBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createShopEquipmentPieceBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.ShopID),
+		pq.Array(arg.EquipmentNameID),
+		pq.Array(arg.ShopType),
+		pq.Array(arg.EmptySlotsAmount),
+		pq.Array(arg.Price),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateShopEquipmentPieceBulkRow
+	for rows.Next() {
+		var i CreateShopEquipmentPieceBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createShopItemBulk = `-- name: CreateShopItemBulk :many
+INSERT INTO shop_items (data_hash, item_id, price)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateShopItemBulkParams struct {
+	DataHash []string
+	ItemID   []int32
+	Price    []int32
+}
+
+type CreateShopItemBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateShopItemBulk(ctx context.Context, arg CreateShopItemBulkParams) ([]CreateShopItemBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createShopItemBulk, pq.Array(arg.DataHash), pq.Array(arg.ItemID), pq.Array(arg.Price))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateShopItemBulkRow
+	for rows.Next() {
+		var i CreateShopItemBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createShopsItemsJunctionBulk = `-- name: CreateShopsItemsJunctionBulk :exec
 INSERT INTO j_shops_items (data_hash, shop_id, shop_item_id, shop_type)
-VALUES ($1, $2, $3, $4)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::shop_type[])
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateShopsItemsJunctionParams struct {
-	DataHash   string
-	ShopID     int32
-	ShopItemID int32
-	ShopType   ShopType
+type CreateShopsItemsJunctionBulkParams struct {
+	DataHash   []string
+	ShopID     []int32
+	ShopItemID []int32
+	ShopType   []ShopType
 }
 
-func (q *Queries) CreateShopsItemsJunction(ctx context.Context, arg CreateShopsItemsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createShopsItemsJunction,
-		arg.DataHash,
-		arg.ShopID,
-		arg.ShopItemID,
-		arg.ShopType,
+func (q *Queries) CreateShopsItemsJunctionBulk(ctx context.Context, arg CreateShopsItemsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createShopsItemsJunctionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.ShopID),
+		pq.Array(arg.ShopItemID),
+		pq.Array(arg.ShopType),
 	)
 	return err
 }
 
-const createSublocation = `-- name: CreateSublocation :one
+const createSublocationBulk = `-- name: CreateSublocationBulk :many
 INSERT INTO sublocations (data_hash, location_id, name)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = sublocations.data_hash
-RETURNING id, data_hash, location_id, name, specification
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::text[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateSublocationParams struct {
-	DataHash   string
-	LocationID int32
-	Name       string
+type CreateSublocationBulkParams struct {
+	DataHash   []string
+	LocationID []int32
+	Name       []string
 }
 
-func (q *Queries) CreateSublocation(ctx context.Context, arg CreateSublocationParams) (Sublocation, error) {
-	row := q.db.QueryRowContext(ctx, createSublocation, arg.DataHash, arg.LocationID, arg.Name)
-	var i Sublocation
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.LocationID,
-		&i.Name,
-		&i.Specification,
-	)
-	return i, err
+type CreateSublocationBulkRow struct {
+	ID       int32
+	DataHash string
 }
 
-const createTreasure = `-- name: CreateTreasure :one
+func (q *Queries) CreateSublocationBulk(ctx context.Context, arg CreateSublocationBulkParams) ([]CreateSublocationBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createSublocationBulk, pq.Array(arg.DataHash), pq.Array(arg.LocationID), pq.Array(arg.Name))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateSublocationBulkRow
+	for rows.Next() {
+		var i CreateSublocationBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createTreasureBulk = `-- name: CreateTreasureBulk :many
 INSERT INTO treasures (data_hash, area_id, version, treasure_type, loot_type, availability, is_anima_treasure, notes, gil_amount)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = treasures.data_hash
-RETURNING id, data_hash, area_id, version, treasure_type, loot_type, availability, is_anima_treasure, notes, gil_amount
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::treasure_type[]),
+    unnest($5::loot_type[]),
+    unnest($6::availability_type[]),
+    unnest($7::boolean[]),
+    unnest($8::null_string[]),
+    unnest($9::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateTreasureParams struct {
-	DataHash        string
-	AreaID          int32
-	Version         int32
-	TreasureType    TreasureType
-	LootType        LootType
-	Availability    AvailabilityType
-	IsAnimaTreasure bool
-	Notes           sql.NullString
-	GilAmount       sql.NullInt32
+type CreateTreasureBulkParams struct {
+	DataHash        []string
+	AreaID          []int32
+	Version         []int32
+	TreasureType    []TreasureType
+	LootType        []LootType
+	Availability    []AvailabilityType
+	IsAnimaTreasure []bool
+	Notes           []sql.NullString
+	GilAmount       []sql.NullInt32
 }
 
-func (q *Queries) CreateTreasure(ctx context.Context, arg CreateTreasureParams) (Treasure, error) {
-	row := q.db.QueryRowContext(ctx, createTreasure,
-		arg.DataHash,
-		arg.AreaID,
-		arg.Version,
-		arg.TreasureType,
-		arg.LootType,
-		arg.Availability,
-		arg.IsAnimaTreasure,
-		arg.Notes,
-		arg.GilAmount,
-	)
-	var i Treasure
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.AreaID,
-		&i.Version,
-		&i.TreasureType,
-		&i.LootType,
-		&i.Availability,
-		&i.IsAnimaTreasure,
-		&i.Notes,
-		&i.GilAmount,
-	)
-	return i, err
+type CreateTreasureBulkRow struct {
+	ID       int32
+	DataHash string
 }
 
-const createTreasureEquipmentAbilitiesJunction = `-- name: CreateTreasureEquipmentAbilitiesJunction :exec
+func (q *Queries) CreateTreasureBulk(ctx context.Context, arg CreateTreasureBulkParams) ([]CreateTreasureBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createTreasureBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AreaID),
+		pq.Array(arg.Version),
+		pq.Array(arg.TreasureType),
+		pq.Array(arg.LootType),
+		pq.Array(arg.Availability),
+		pq.Array(arg.IsAnimaTreasure),
+		pq.Array(arg.Notes),
+		pq.Array(arg.GilAmount),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateTreasureBulkRow
+	for rows.Next() {
+		var i CreateTreasureBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createTreasureEquipmentAbilitiesJunctionBulk = `-- name: CreateTreasureEquipmentAbilitiesJunctionBulk :exec
 INSERT INTO j_treasure_equipment_abilities (data_hash, treasure_equipment_id, auto_ability_id)
-VALUES ($1, $2, $3)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateTreasureEquipmentAbilitiesJunctionParams struct {
-	DataHash            string
-	TreasureEquipmentID int32
-	AutoAbilityID       int32
+type CreateTreasureEquipmentAbilitiesJunctionBulkParams struct {
+	DataHash            []string
+	TreasureEquipmentID []int32
+	AutoAbilityID       []int32
 }
 
-func (q *Queries) CreateTreasureEquipmentAbilitiesJunction(ctx context.Context, arg CreateTreasureEquipmentAbilitiesJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createTreasureEquipmentAbilitiesJunction, arg.DataHash, arg.TreasureEquipmentID, arg.AutoAbilityID)
+func (q *Queries) CreateTreasureEquipmentAbilitiesJunctionBulk(ctx context.Context, arg CreateTreasureEquipmentAbilitiesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createTreasureEquipmentAbilitiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.TreasureEquipmentID), pq.Array(arg.AutoAbilityID))
 	return err
 }
 
-const createTreasureEquipmentPiece = `-- name: CreateTreasureEquipmentPiece :one
+const createTreasureEquipmentPieceBulk = `-- name: CreateTreasureEquipmentPieceBulk :many
 INSERT INTO treasure_equipment_pieces (data_hash, treasure_id, equipment_name_id, empty_slots_amount)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = treasure_equipment_pieces.data_hash
-RETURNING id, data_hash, treasure_id, equipment_name_id, empty_slots_amount
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
 `
 
-type CreateTreasureEquipmentPieceParams struct {
-	DataHash         string
-	TreasureID       int32
-	EquipmentNameID  int32
-	EmptySlotsAmount interface{}
+type CreateTreasureEquipmentPieceBulkParams struct {
+	DataHash         []string
+	TreasureID       []int32
+	EquipmentNameID  []int32
+	EmptySlotsAmount []int32
 }
 
-func (q *Queries) CreateTreasureEquipmentPiece(ctx context.Context, arg CreateTreasureEquipmentPieceParams) (TreasureEquipmentPiece, error) {
-	row := q.db.QueryRowContext(ctx, createTreasureEquipmentPiece,
-		arg.DataHash,
-		arg.TreasureID,
-		arg.EquipmentNameID,
-		arg.EmptySlotsAmount,
-	)
-	var i TreasureEquipmentPiece
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.TreasureID,
-		&i.EquipmentNameID,
-		&i.EmptySlotsAmount,
-	)
-	return i, err
+type CreateTreasureEquipmentPieceBulkRow struct {
+	ID       int32
+	DataHash string
 }
 
-const createTreasuresItemsJunction = `-- name: CreateTreasuresItemsJunction :exec
+func (q *Queries) CreateTreasureEquipmentPieceBulk(ctx context.Context, arg CreateTreasureEquipmentPieceBulkParams) ([]CreateTreasureEquipmentPieceBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createTreasureEquipmentPieceBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.TreasureID),
+		pq.Array(arg.EquipmentNameID),
+		pq.Array(arg.EmptySlotsAmount),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateTreasureEquipmentPieceBulkRow
+	for rows.Next() {
+		var i CreateTreasureEquipmentPieceBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createTreasuresItemsJunctionBulk = `-- name: CreateTreasuresItemsJunctionBulk :exec
 INSERT INTO j_treasures_items (data_hash, treasure_id, item_amount_id)
-VALUES ($1, $2, $3)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
 ON CONFLICT(data_hash) DO NOTHING
 `
 
-type CreateTreasuresItemsJunctionParams struct {
-	DataHash     string
-	TreasureID   int32
-	ItemAmountID int32
+type CreateTreasuresItemsJunctionBulkParams struct {
+	DataHash     []string
+	TreasureID   []int32
+	ItemAmountID []int32
 }
 
-func (q *Queries) CreateTreasuresItemsJunction(ctx context.Context, arg CreateTreasuresItemsJunctionParams) error {
-	_, err := q.db.ExecContext(ctx, createTreasuresItemsJunction, arg.DataHash, arg.TreasureID, arg.ItemAmountID)
+func (q *Queries) CreateTreasuresItemsJunctionBulk(ctx context.Context, arg CreateTreasuresItemsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createTreasuresItemsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.TreasureID), pq.Array(arg.ItemAmountID))
 	return err
 }

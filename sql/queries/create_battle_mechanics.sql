@@ -1,155 +1,235 @@
--- name: CreateStat :one
-INSERT INTO stats (data_hash, name, effect, min_val, max_val, max_val_2)
-VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = stats.data_hash
-RETURNING *;
+-- name: CreateStatBulk :many
+INSERT INTO stats (data_hash, name, effect, min_val, max_val, max_val_2, sphere_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('effect')::text[]),
+    unnest(sqlc.arg('min_val')::int[]),
+    unnest(sqlc.arg('max_val')::int[]),
+    unnest(sqlc.arg('max_val_2')::null_int[]),
+    unnest(sqlc.arg('sphere_id')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: UpdateStat :exec
-UPDATE stats
-SET data_hash = $1,
-    sphere_id = $2
-WHERE id = $3;
 
-
--- name: CreateBaseStat :one
+-- name: CreateBaseStatBulk :many
 INSERT INTO base_stats (data_hash, stat_id, value)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = base_stats.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('stat_id')::int[]),
+    unnest(sqlc.arg('value')::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateElement :one
+-- name: CreateElementBulk :many
 INSERT INTO elements (data_hash, name)
-VALUES ($1, $2)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = elements.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: UpdateElement :exec
-UPDATE elements
-SET data_hash = $1,
-    opposite_element_id = $2
-WHERE id = $3;
+-- name: UpdateElementBulk :many
+UPDATE elements AS e
+SET opposite_element_id = u.opp_id,
+    data_hash = u.d_hash
+FROM (
+    SELECT 
+        unnest(sqlc.arg('id')::int[]) AS id,
+        unnest(sqlc.arg('data_hash')::text[]) AS d_hash,
+        unnest(sqlc.arg('opposite_element_id')::null_int[]) AS opp_id
+) AS u
+WHERE e.id = u.id
+RETURNING e.id, e.data_hash;
 
 
--- name: CreateElementalResist :one
+-- name: CreateElementalResistBulk :many
 INSERT INTO elemental_resists (data_hash, element_id, affinity)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = elemental_resists.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('element_id')::int[]),
+    unnest(sqlc.arg('affinity')::elemental_affinity[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateAgilityTier :one
+-- name: CreateAgilityTierBulk :many
 INSERT INTO agility_tiers (data_hash, min_agility, max_agility, tick_speed, monster_min_icv, monster_max_icv, character_max_icv)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = agility_tiers.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('min_agility')::int[]),
+    unnest(sqlc.arg('max_agility')::int[]),
+    unnest(sqlc.arg('tick_speed')::int[]),
+    unnest(sqlc.arg('monster_min_icv')::null_int[]),
+    unnest(sqlc.arg('monster_max_icv')::null_int[]),
+    unnest(sqlc.arg('character_max_icv')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateAgilitySubtier :exec
+-- name: CreateAgilitySubtierBulk :many
 INSERT INTO agility_subtiers (data_hash, agility_tier_id, subtier_min_agility, subtier_max_agility, character_min_icv)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO NOTHING;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('agility_tier_id')::int[]),
+    unnest(sqlc.arg('min_agility')::int[]),
+    unnest(sqlc.arg('max_agility')::int[]),
+    unnest(sqlc.arg('character_min_icv')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
 
 
--- name: CreateOverdriveMode :one
+-- name: CreateOverdriveModeBulk :many
 INSERT INTO overdrive_modes (data_hash, name, description, effect, type, fill_rate)
-VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = overdrive_modes.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('description')::text[]),
+    unnest(sqlc.arg('effect')::text[]),
+    unnest(sqlc.arg('type')::overdrive_mode_type[]),
+    unnest(sqlc.arg('fill_rate')::null_float[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateODModeAction :one
+-- name: CreateODModeActionBulk :many
 INSERT INTO od_mode_actions (data_hash, user_id, amount)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = od_mode_actions.data_hash
-RETURNING *;
-
-
--- name: CreateOverdriveModesActionsToLearnJunction :exec
-INSERT INTO j_overdrive_modes_actions_to_learn (data_hash, overdrive_mode_id, action_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('user_id')::int[]),
+    unnest(sqlc.arg('amount')::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
 
 
--- name: CreateStatusCondition :one
-INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_conditions.data_hash
-RETURNING *;
+-- name: CreateStatusConditionBulk :many
+INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored, added_elem_resist_id, inflicted_delay_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('category')::status_condition_category[]),
+    unnest(sqlc.arg('is_permanent')::boolean[]),
+    unnest(sqlc.arg('effect')::text[]),
+    unnest(sqlc.arg('visualization')::null_string[]),
+    unnest(sqlc.arg('nullify_armored')::null_nullify_armored[]),
+    unnest(sqlc.arg('added_elem_resist_id')::null_int[]),
+    unnest(sqlc.arg('inflicted_delay_id')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: UpdateStatusCondition :exec
-UPDATE status_conditions
-SET data_hash = $1,
-    added_elem_resist_id = $2,
-    inflicted_delay_id = $3
-WHERE id = $4;
-
-
--- name: CreateStatusConditionsRelatedStatsJunction :exec
-INSERT INTO j_status_conditions_related_stats(data_hash, status_condition_id, stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateStatusConditionsRemovedStatusConditionsJunction :exec
-INSERT INTO j_status_conditions_removed_status_conditions (data_hash, parent_condition_id, child_condition_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateStatusConditionsStatChangesJunction :exec
-INSERT INTO j_status_conditions_stat_changes (data_hash, status_condition_id, stat_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateStatusConditionsModifierChangesJunction :exec
-INSERT INTO j_status_conditions_modifier_changes (data_hash, status_condition_id, modifier_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateStatusResist :one
+-- name: CreateStatusResistBulk :many
 INSERT INTO status_resists (data_hash, status_condition_id, resistance)
-VALUES ( $1, $2, $3)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = status_resists.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('status_condition_id')::int[]),
+    unnest(sqlc.arg('resistance')::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreateProperty :one
+-- name: CreatePropertyBulk :many
 INSERT INTO properties (data_hash, name, effect, nullify_armored)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = properties.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('effect')::text[]),
+    unnest(sqlc.arg('nullify_armored')::null_nullify_armored[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
 
 
--- name: CreatePropertiesRelatedStatsJunction :exec
-INSERT INTO j_properties_related_stats(data_hash, property_id, stat_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreatePropertiesStatChangesJunction :exec
-INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreatePropertiesModifierChangesJunction :exec
-INSERT INTO j_properties_modifier_changes (data_hash, property_id, modifier_change_id)
-VALUES ($1, $2, $3)
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreateModifier :one
+-- name: CreateModifierBulk :many
 INSERT INTO modifiers (data_hash, name, effect, category, default_value)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = modifiers.data_hash
-RETURNING *;
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('effect')::text[]),
+    unnest(sqlc.arg('category')::modifier_category[]),
+    unnest(sqlc.arg('default_value')::null_float[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
+
+
+
+
+
+
+
+-- name: CreateOverdriveModesActionsToLearnJunctionBulk :exec
+INSERT INTO j_overdrive_modes_actions_to_learn (data_hash, overdrive_mode_id, action_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('overdrive_mode_id')::int[]),
+    unnest(sqlc.arg('action_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateStatusConditionsRelatedStatsJunctionBulk :exec
+INSERT INTO j_status_conditions_related_stats(data_hash, status_condition_id, stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('status_condition_id')::int[]),
+    unnest(sqlc.arg('stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateStatusConditionsRemovedStatusConditionsJunctionBulk :exec
+INSERT INTO j_status_conditions_removed_status_conditions (data_hash, parent_condition_id, child_condition_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('parent_condition_id')::int[]),
+    unnest(sqlc.arg('child_condition_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateStatusConditionsStatChangesJunctionBulk :exec
+INSERT INTO j_status_conditions_stat_changes (data_hash, status_condition_id, stat_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('status_condition_id')::int[]),
+    unnest(sqlc.arg('stat_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreateStatusConditionsModifierChangesJunctionBulk :exec
+INSERT INTO j_status_conditions_modifier_changes (data_hash, status_condition_id, modifier_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('status_condition_id')::int[]),
+    unnest(sqlc.arg('modifier_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreatePropertiesRelatedStatsJunctionBulk :exec
+INSERT INTO j_properties_related_stats(data_hash, property_id, stat_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('property_id')::int[]),
+    unnest(sqlc.arg('stat_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreatePropertiesStatChangesJunctionBulk :exec
+INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('property_id')::int[]),
+    unnest(sqlc.arg('stat_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
+
+
+-- name: CreatePropertiesModifierChangesJunctionBulk :exec
+INSERT INTO j_properties_modifier_changes (data_hash, property_id, modifier_change_id)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('property_id')::int[]),
+    unnest(sqlc.arg('modifier_change_id')::int[])
+ON CONFLICT(data_hash) DO NOTHING;
