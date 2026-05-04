@@ -368,7 +368,6 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 	testIdList(t, tests, testCfg.e.playerAbilities.endpoint, "RetrievePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[NamedApiResourceList])
 }
 
-
 func TestSubsectionPlayerAbilities(t *testing.T) {
 	tests := []expListIDs{
 		{

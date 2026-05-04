@@ -33,7 +33,6 @@ func areaToLocAreaString(area seeding.Area) string {
 	return locAreaString
 }
 
-
 func locAreaStrings[T seeding.HasLocArea](cfg *Config, items []T) []string {
 	strings := []string{}
 

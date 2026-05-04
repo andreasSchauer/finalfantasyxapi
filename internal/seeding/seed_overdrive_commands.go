@@ -9,47 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type OverdriveCommand struct {
-	ID          int32
-	CharClassID *int32
-	TopmenuID	*int32
-	SubmenuID   *int32
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	User        string `json:"user"`
-	Rank        int32  `json:"rank"`
-	Topmenu     *string `json:"topmenu"`
-	OpenSubmenu string `json:"open_submenu"`
-}
-
-func (oc OverdriveCommand) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", oc),
-		oc.Name,
-		oc.Description,
-		oc.Rank,
-		h.DerefOrNil(oc.TopmenuID),
-		oc.OpenSubmenu,
-		h.DerefOrNil(oc.CharClassID),
-		h.DerefOrNil(oc.SubmenuID),
-	}
-}
-
-func (oc OverdriveCommand) GetID() int32 {
-	return oc.ID
-}
-
-func (oc OverdriveCommand) Error() string {
-	return fmt.Sprintf("overdrive command %s", oc.Name)
-}
-
-func (o OverdriveCommand) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
-		ID:   o.ID,
-		Name: o.Name,
-	}
-}
-
 func (l *Lookup) loop3SeedOverdriveCommands(qtx *database.Queries, ctx context.Context) error {
 	commands, err := l.extractOverdriveCommands()
 	if err != nil {
@@ -57,13 +16,13 @@ func (l *Lookup) loop3SeedOverdriveCommands(qtx *database.Queries, ctx context.C
 	}
 
 	params := database.CreateOverdriveCommandBulkParams{
-		DataHash:   		make([]string, len(commands)),
-		Name:      			make([]string, len(commands)),
-		Description:    	make([]string, len(commands)),
-		Rank: 				make([]int32, len(commands)),
-		TopmenuID: 			make([]sql.NullInt32, len(commands)),
-		SubmenuID: 			make([]sql.NullInt32, len(commands)),
-		CharacterClassID: 	make([]sql.NullInt32, len(commands)),
+		DataHash:         make([]string, len(commands)),
+		Name:             make([]string, len(commands)),
+		Description:      make([]string, len(commands)),
+		Rank:             make([]int32, len(commands)),
+		TopmenuID:        make([]sql.NullInt32, len(commands)),
+		SubmenuID:        make([]sql.NullInt32, len(commands)),
+		CharacterClassID: make([]sql.NullInt32, len(commands)),
 	}
 
 	for i, oc := range commands {
@@ -92,7 +51,6 @@ func (l *Lookup) loop3SeedOverdriveCommands(qtx *database.Queries, ctx context.C
 	return nil
 }
 
-
 func (l *Lookup) extractOverdriveCommands() ([]OverdriveCommand, error) {
 	commands := []OverdriveCommand{}
 	var err error
@@ -104,7 +62,7 @@ func (l *Lookup) extractOverdriveCommands() ([]OverdriveCommand, error) {
 		if err != nil {
 			return nil, err
 		}
-		
+
 		command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, l.Submenus)
 		if err != nil {
 			return nil, err

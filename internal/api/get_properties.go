@@ -17,20 +17,20 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property,
 		return Property{}, err
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, property,cfg.db.GetPropertyMonsterIDs)
+	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, property, cfg.db.GetPropertyMonsterIDs)
 	if err != nil {
 		return Property{}, err
 	}
 
 	response := Property{
-		ID:                	property.ID,
-		Name:               property.Name,
-		Effect: 			property.Effect,
-		NullifyArmored: 	property.NullifyArmored,
-		RelatedStats: 		namesToNamedAPIResources(cfg, cfg.e.stats, property.RelatedStats),
-		ModifierChanges: 	convertObjSlice(cfg, property.ModifierChanges, convertModifierChange),
-		AutoAbilities: 		autoAbilities,
-		Monsters: 			monsters,
+		ID:              property.ID,
+		Name:            property.Name,
+		Effect:          property.Effect,
+		NullifyArmored:  property.NullifyArmored,
+		RelatedStats:    namesToNamedAPIResources(cfg, cfg.e.stats, property.RelatedStats),
+		ModifierChanges: convertObjSlice(cfg, property.ModifierChanges, convertModifierChange),
+		AutoAbilities:   autoAbilities,
+		Monsters:        monsters,
 	}
 
 	return response, nil

@@ -20,7 +20,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 	response := Character{
 		ID:                     character.ID,
 		Name:                   character.Name,
-		UntypedUnit: 			idToTypedAPIResource(cfg, cfg.e.playerUnits, character.PlayerUnit.ID),
+		UntypedUnit:            idToTypedAPIResource(cfg, cfg.e.playerUnits, character.PlayerUnit.ID),
 		Area:                   locAreaToAreaAPIResource(cfg, cfg.e.areas, character.LocationArea),
 		IsStoryBased:           character.IsStoryBased,
 		CanFightUnderwater:     character.CanFightUnderwater,

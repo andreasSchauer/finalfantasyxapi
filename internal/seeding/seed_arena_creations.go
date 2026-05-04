@@ -9,48 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type ArenaCreation struct {
-	ID                        int32
-	SubquestID                int32
-	MonsterID                 *int32
-	Name                      string  `json:"name"`
-	Category                  string  `json:"category"`
-	RequiredArea              *string `json:"required_area"`
-	RequiredSpecies           *string `json:"required_species"`
-	UnderwaterOnly            bool    `json:"underwater_only"`
-	CreationsUnlockedCategory *string `json:"creations_unlocked_category"`
-	Amount                    int32   `json:"amount"`
-}
-
-func (a ArenaCreation) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", a),
-		a.SubquestID,
-		h.DerefOrNil(a.MonsterID),
-		a.Category,
-		h.DerefOrNil(a.RequiredArea),
-		h.DerefOrNil(a.RequiredSpecies),
-		a.UnderwaterOnly,
-		h.DerefOrNil(a.CreationsUnlockedCategory),
-		a.Amount,
-	}
-}
-
-func (a ArenaCreation) GetID() int32 {
-	return a.ID
-}
-
-func (a ArenaCreation) Error() string {
-	return fmt.Sprintf("monster arena creation %s", a.Name)
-}
-
-func (a ArenaCreation) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
-		ID:   a.ID,
-		Name: a.Name,
-	}
-}
-
 func (l *Lookup) loop7SeedArenaCreations(qtx *database.Queries, ctx context.Context) error {
 	creations, err := l.extractArenaCreations()
 	if err != nil {
@@ -58,15 +16,15 @@ func (l *Lookup) loop7SeedArenaCreations(qtx *database.Queries, ctx context.Cont
 	}
 
 	params := database.CreateMonsterArenaCreationBulkParams{
-		DataHash:   				make([]string, len(creations)),
-		SubquestID: 				make([]int32, len(creations)),
-		Category: 					make([]database.MaCreationCategory, len(creations)),
-		RequiredArea: 				make([]database.NullMaCreationArea, len(creations)),
-		RequiredSpecies: 			make([]database.NullMaCreationSpecies, len(creations)),
-		UnderwaterOnly: 			make([]bool, len(creations)),
-		CreationsUnlockedCategory: 	make([]database.NullCreationsUnlockedCategory, len(creations)),
-		Amount: 					make([]int32, len(creations)),
-		MonsterID: 					make([]sql.NullInt32, len(creations)),
+		DataHash:                  make([]string, len(creations)),
+		SubquestID:                make([]int32, len(creations)),
+		Category:                  make([]database.MaCreationCategory, len(creations)),
+		RequiredArea:              make([]database.NullMaCreationArea, len(creations)),
+		RequiredSpecies:           make([]database.NullMaCreationSpecies, len(creations)),
+		UnderwaterOnly:            make([]bool, len(creations)),
+		CreationsUnlockedCategory: make([]database.NullCreationsUnlockedCategory, len(creations)),
+		Amount:                    make([]int32, len(creations)),
+		MonsterID:                 make([]sql.NullInt32, len(creations)),
 	}
 
 	for i, c := range creations {

@@ -39,7 +39,7 @@ func queryNamesIDsToSlice[P h.HasID](cfg *Config, query string, queryParam Query
 		if err != nil {
 			return nil, err
 		}
-		
+
 		idMap[str] = id
 	}
 

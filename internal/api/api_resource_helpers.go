@@ -142,7 +142,6 @@ func resourceMapToSlice[T HasAPIResource](lookup map[int32]T) []T {
 	return s
 }
 
-
 func sortAPIResources[T HasAPIResource](a, b T) int {
 	if getAPIResourceID(a) < getAPIResourceID(b) {
 		return -1
@@ -181,5 +180,3 @@ func combineFilteredAPIResources[A APIResource](filteredLists []filteredResList[
 
 	return resources, nil
 }
-
-

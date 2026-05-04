@@ -9,52 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type MonsterItems struct {
-	ID                  int32
-	MonsterID           int32
-	DropChance          int32          `json:"drop_chance"`
-	DropCondition       *string        `json:"drop_condition"`
-	OtherItemsCondition *string        `json:"other_items_condition"`
-	OtherItems          []PossibleItem `json:"other_items"`
-	StealCommon         *ItemAmount    `json:"steal_common"`
-	StealRare           *ItemAmount    `json:"steal_rare"`
-	DropCommon          *ItemAmount    `json:"drop_common"`
-	DropRare            *ItemAmount    `json:"drop_rare"`
-	SecondaryDropCommon *ItemAmount    `json:"secondary_drop_common"`
-	SecondaryDropRare   *ItemAmount    `json:"secondary_drop_rare"`
-	Bribe               *ItemAmount    `json:"bribe"`
-}
-
-func (m MonsterItems) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", m),
-		m.MonsterID,
-		m.DropChance,
-		h.DerefOrNil(m.DropCondition),
-		h.DerefOrNil(m.OtherItemsCondition),
-		h.ObjPtrToID(m.StealCommon),
-		h.ObjPtrToID(m.StealRare),
-		h.ObjPtrToID(m.DropCommon),
-		h.ObjPtrToID(m.DropRare),
-		h.ObjPtrToID(m.SecondaryDropCommon),
-		h.ObjPtrToID(m.SecondaryDropRare),
-		h.ObjPtrToID(m.Bribe),
-	}
-}
-
-func (m MonsterItems) GetID() int32 {
-	return m.ID
-}
-
-func (m *MonsterItems) SetID(id int32) {
-	m.ID = id
-}
-
-func (m MonsterItems) Error() string {
-	return fmt.Sprintf("monster items of monster with id %d", m.MonsterID)
-}
-
-
 func (l *Lookup) loop3SeedMonsterItems(qtx *database.Queries, ctx context.Context) error {
 	items, err := l.extractMonsterItems()
 	if err != nil {
@@ -62,18 +16,18 @@ func (l *Lookup) loop3SeedMonsterItems(qtx *database.Queries, ctx context.Contex
 	}
 
 	params := database.CreateMonsterItemBulkParams{
-		DataHash: 				make([]string, len(items)),
-		MonsterID: 				make([]int32, len(items)),
-		DropChance: 			make([]int32, len(items)),
-		DropCondition: 			make([]sql.NullString, len(items)),
-		OtherItemsCondition: 	make([]sql.NullString, len(items)),
-		StealCommonID: 			make([]sql.NullInt32, len(items)),
-		StealRareID: 			make([]sql.NullInt32, len(items)),
-		DropCommonID: 			make([]sql.NullInt32, len(items)),
-		DropRareID: 			make([]sql.NullInt32, len(items)),
-		SecondaryDropCommonID: 	make([]sql.NullInt32, len(items)),
-		SecondaryDropRareID: 	make([]sql.NullInt32, len(items)),
-		BribeID: 				make([]sql.NullInt32, len(items)),
+		DataHash:              make([]string, len(items)),
+		MonsterID:             make([]int32, len(items)),
+		DropChance:            make([]int32, len(items)),
+		DropCondition:         make([]sql.NullString, len(items)),
+		OtherItemsCondition:   make([]sql.NullString, len(items)),
+		StealCommonID:         make([]sql.NullInt32, len(items)),
+		StealRareID:           make([]sql.NullInt32, len(items)),
+		DropCommonID:          make([]sql.NullInt32, len(items)),
+		DropRareID:            make([]sql.NullInt32, len(items)),
+		SecondaryDropCommonID: make([]sql.NullInt32, len(items)),
+		SecondaryDropRareID:   make([]sql.NullInt32, len(items)),
+		BribeID:               make([]sql.NullInt32, len(items)),
 	}
 
 	for i, mi := range items {
@@ -188,34 +142,4 @@ func (l *Lookup) completeMonsterItems(items *MonsterItems) error {
 	}
 
 	return nil
-}
-
-func (l *Lookup) getMonsterItems() []MonsterItems {
-	monsterItems := []MonsterItems{}
-
-	for _, mon := range l.json.monsters {
-		if mon.Items != nil {
-			monsterItems = append(monsterItems, *mon.Items)
-		}
-	}
-
-	return monsterItems
-}
-
-func (l *Lookup) getMonsterItemsOtherItems(mi MonsterItems) ([]PossibleItem, error) {
-	return mi.OtherItems, nil
-}
-
-func (l *Lookup) seedJuncMonsterItemsOtherItems(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "monster items + other items"
-	jParams, err := processJunctions(l, desc, l.getMonsterItems(), l.getMonsterItemsOtherItems)
-	if err != nil {
-		return err
-	}
-
-	return qtx.CreateMonsterItemsOtherItemsJunctionBulk(ctx, database.CreateMonsterItemsOtherItemsJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		MonsterItemsID: 	jParams.ParentIDs,
-		PossibleItemID:  	jParams.ChildIDs,
-	})
 }

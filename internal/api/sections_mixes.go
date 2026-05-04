@@ -11,11 +11,11 @@ import (
 )
 
 type MixSimple struct {
-	ID            	int32       `json:"id"`
-	Name		 	string		`json:"name"`
-	URL           	string      `json:"url"`
-	Category		string		`json:"category"`
-	Combinations	[]string	`json:"combinations"`
+	ID           int32    `json:"id"`
+	Name         string   `json:"name"`
+	URL          string   `json:"url"`
+	Category     string   `json:"category"`
+	Combinations []string `json:"combinations"`
 }
 
 func (m MixSimple) GetURL() string {
@@ -26,7 +26,7 @@ func createMixSimple(cfg *Config, r *http.Request, id int32, _ Subsection) (Simp
 	i := cfg.e.mixes
 	mix, _ := seeding.GetResourceByID(id, i.objLookupID)
 	combinations := mix.PossibleCombinations
-	
+
 	prefix := fmt.Sprintf("/api/%s", cfg.e.items.endpoint)
 	path := strings.ToLower(r.URL.Path)
 	segments := getPathSegments(path, cfg.e.items.endpoint)
@@ -42,11 +42,11 @@ func createMixSimple(cfg *Config, r *http.Request, id int32, _ Subsection) (Simp
 	}
 
 	mixSimple := MixSimple{
-		ID: 			mix.ID,
-		Name: 			mix.Name,
-		URL: 			createResourceURL(cfg, i.endpoint, id),
-		Category: 		mix.Category,
-		Combinations: 	convertObjSlice(cfg, combinations, convertMixCombinationSimple),
+		ID:           mix.ID,
+		Name:         mix.Name,
+		URL:          createResourceURL(cfg, i.endpoint, id),
+		Category:     mix.Category,
+		Combinations: convertObjSlice(cfg, combinations, convertMixCombinationSimple),
 	}
 
 	return mixSimple, nil

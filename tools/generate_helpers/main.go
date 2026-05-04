@@ -1,42 +1,42 @@
 package main
 
 import (
-    "fmt"
-    "os"
-    "strings"
+	"fmt"
+	"os"
+	"strings"
 )
 
 func main() {
-    nullEnumTypes := []string{
-        "NullifyArmored",
-        "CreationsUnlockedCategory",
-        "CounterType",
-        "MaCreationArea",
-        "MaCreationCategory",
-        "MaCreationSpecies",
-        "TargetType",
-        "MusicUseCase",
-        "BgReplacementType",
-        "SpecialActionType",
-        "CriticalType",
-        "BreakDmgLmtType",
-        "Composer",
-        "Arranger",
-        "ShopType",
-        "AvailabilityType",
-        "NodeState",
-    }
+	nullEnumTypes := []string{
+		"NullifyArmored",
+		"CreationsUnlockedCategory",
+		"CounterType",
+		"MaCreationArea",
+		"MaCreationCategory",
+		"MaCreationSpecies",
+		"TargetType",
+		"MusicUseCase",
+		"BgReplacementType",
+		"SpecialActionType",
+		"CriticalType",
+		"BreakDmgLmtType",
+		"Composer",
+		"Arranger",
+		"ShopType",
+		"AvailabilityType",
+		"NodeState",
+	}
 
-    filePath := "./internal/database/conv_null_enum.go"
-    
-    var output strings.Builder
-    output.WriteString("package database\n\n")
+	filePath := "./internal/database/conv_null_enum.go"
 
-    for _, enumType := range nullEnumTypes {
-        nullEnumFuncName := "ToNull" + enumType
-        convertFuncName := "ConvertNull" + enumType
-        getNullEnumFuncName := "GetNull" + enumType
-        fmt.Fprintf(&output, `func %s(s *string) Null%s {
+	var output strings.Builder
+	output.WriteString("package database\n\n")
+
+	for _, enumType := range nullEnumTypes {
+		nullEnumFuncName := "ToNull" + enumType
+		convertFuncName := "ConvertNull" + enumType
+		getNullEnumFuncName := "GetNull" + enumType
+		fmt.Fprintf(&output, `func %s(s *string) Null%s {
     if s == nil {
         return Null%s{}
     }
@@ -69,7 +69,7 @@ func %s(e *%s) Null%s {
 
 
 `, nullEnumFuncName, enumType, enumType, enumType, enumType, enumType, convertFuncName, enumType, enumType, getNullEnumFuncName, enumType, enumType, enumType, enumType, enumType)
-    }
+	}
 
-    os.WriteFile(filePath, []byte(output.String()), 0644)
+	os.WriteFile(filePath, []byte(output.String()), 0644)
 }

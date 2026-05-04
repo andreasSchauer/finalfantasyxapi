@@ -106,7 +106,6 @@ func namesToNamedAPIResources[T h.IsNamed, R any, A APIResource, L APIResourceLi
 	return resources
 }
 
-
 func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIResource) (NamedApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {

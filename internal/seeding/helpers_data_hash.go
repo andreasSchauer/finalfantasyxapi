@@ -22,7 +22,6 @@ func (l *Lookup) getHashID(h Hashable) (int32, error) {
 	return id, nil
 }
 
-
 func combineFields(fields []any) string {
 	var builder strings.Builder
 

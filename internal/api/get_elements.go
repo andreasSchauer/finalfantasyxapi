@@ -18,19 +18,19 @@ func (cfg *Config) getElement(r *http.Request, i handlerInput[seeding.Element, E
 	}
 
 	response := Element{
-		ID:                	element.ID,
+		ID:                 element.ID,
 		Name:               element.Name,
-		OppositeElement: 	namePtrToNamedAPIResPtr(cfg, i, element.OppositeElement, nil),
-		StatusProtection: 	rel.StatusProtection,
-		AutoAbilities: 		rel.AutoAbilities,
-		PlayerAbilities: 	rel.PlayerAbilities,
+		OppositeElement:    namePtrToNamedAPIResPtr(cfg, i, element.OppositeElement, nil),
+		StatusProtection:   rel.StatusProtection,
+		AutoAbilities:      rel.AutoAbilities,
+		PlayerAbilities:    rel.PlayerAbilities,
 		OverdriveAbilities: rel.OverdriveAbilities,
-		ItemAbilities: 		rel.ItemAbilities,
-		EnemyAbilities: 	rel.EnemyAbilities,
-		MonstersWeak: 		rel.MonstersWeak,
-		MonstersHalved: 	rel.MonstersHalved,
-		MonstersImmune: 	rel.MonstersImmune,
-		MonstersAbsorb: 	rel.MonstersAbsorb,
+		ItemAbilities:      rel.ItemAbilities,
+		EnemyAbilities:     rel.EnemyAbilities,
+		MonstersWeak:       rel.MonstersWeak,
+		MonstersHalved:     rel.MonstersHalved,
+		MonstersImmune:     rel.MonstersImmune,
+		MonstersAbsorb:     rel.MonstersAbsorb,
 	}
 
 	return response, nil

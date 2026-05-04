@@ -2,7 +2,6 @@ package api
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
-
 type Song struct {
 	ID                   int32                `json:"id"`
 	Name                 string               `json:"name"`
@@ -27,8 +26,6 @@ type Song struct {
 	FMVs                 []NamedAPIResource   `json:"fmvs"`
 }
 
-
-
 type BackgroundMusic struct {
 	Condition              *string           `json:"condition,omitempty"`
 	ReplacesEncounterMusic bool              `json:"replaces_encounter_music"`
@@ -42,8 +39,6 @@ func convertBackgroundMusic(cfg *Config, bm seeding.BackgroundMusic) BackgroundM
 		Areas:                  locAreasToAreaAPIResources(cfg, cfg.e.areas, bm.LocationAreas),
 	}
 }
-
-
 
 type Cue struct {
 	SceneDescription       string            `json:"scene_description"`

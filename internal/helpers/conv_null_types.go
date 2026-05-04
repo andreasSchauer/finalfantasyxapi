@@ -2,7 +2,6 @@ package helpers
 
 import "database/sql"
 
-
 // use these for dealing with pointer-fields when inputting values that can be null for a database query
 // can also write functions that do the opposite with the sqlc return values (return pointers)
 
@@ -34,8 +33,6 @@ func GetNullBool(b *bool) sql.NullBool {
 
 	return sql.NullBool{Bool: *b, Valid: true}
 }
-
-
 
 // these functions are all used to convert a nullable db value into a normal value or pointer
 func NullStringToPtr(s sql.NullString) *string {

@@ -16,6 +16,6 @@ type StatusCondition struct {
 	ModifierChanges         []ModifierChange   `json:"modifier_changes"`
 	AutoAbilities           []NamedAPIResource `json:"auto_abilities"`
 	InflictedBy             *StatusInfliction  `json:"inflicted_by"`
-	RemovedBy               *StatusRemoval  `json:"removed_by"`
+	RemovedBy               *StatusRemoval     `json:"removed_by"`
 	MonstersResistance      []NamedAPIResource `json:"monsters_resistance"`
 }

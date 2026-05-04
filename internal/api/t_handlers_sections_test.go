@@ -116,7 +116,7 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.arenaCreations.endpoint,
 				handler:        testCfg.HandleArenaCreations,
 			},
-			count: 0,
+			count:   0,
 			results: []string{},
 		},
 		{
@@ -126,7 +126,7 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.blitzballPrizes.endpoint,
 				handler:        testCfg.HandleBlitzballPrizes,
 			},
-			count: 0,
+			count:   0,
 			results: []string{},
 		},
 		{
@@ -136,7 +136,7 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.fmvs.endpoint,
 				handler:        testCfg.HandleFMVs,
 			},
-			count: 0,
+			count:   0,
 			results: []string{},
 		},
 		{
@@ -174,7 +174,7 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.overdriveModes.endpoint,
 				handler:        testCfg.HandleOverdriveModes,
 			},
-			count: 0,
+			count:   0,
 			results: []string{},
 		},
 		{
@@ -196,7 +196,7 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.songs.endpoint,
 				handler:        testCfg.HandleSongs,
 			},
-			count: 0,
+			count:   0,
 			results: []string{},
 		},
 		{
@@ -218,7 +218,7 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.subquests.endpoint,
 				handler:        testCfg.HandleSubquests,
 			},
-			count: 0,
+			count:   0,
 			results: []string{},
 		},
 		{
@@ -228,7 +228,7 @@ func TestSections(t *testing.T) {
 				endpoint:       testCfg.e.treasures.endpoint,
 				handler:        testCfg.HandleTreasures,
 			},
-			count: 0,
+			count:   0,
 			results: []string{},
 		},
 	}

@@ -9,44 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type Stat struct {
-	ID       			int32
-	Name     			string `json:"name"`
-	Effect   			string `json:"effect"`
-	MinVal   			int32  `json:"min_val"`
-	MaxVal   			int32  `json:"max_val"`
-	MaxVal2  			*int32 `json:"max_val_2"`
-	SphereID 			*int32
-	ActivationSphere  	string `json:"activation_sphere"`
-}
-
-func (s Stat) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", s),
-		s.Name,
-		s.Effect,
-		s.MinVal,
-		s.MaxVal,
-		h.DerefOrNil(s.MaxVal2),
-		h.DerefOrNil(s.SphereID),
-	}
-}
-
-func (s Stat) GetID() int32 {
-	return s.ID
-}
-
-func (s Stat) Error() string {
-	return fmt.Sprintf("stat %s", s.Name)
-}
-
-func (s Stat) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
-		ID:   s.ID,
-		Name: s.Name,
-	}
-}
-
 func (l *Lookup) loop4SeedStats(qtx *database.Queries, ctx context.Context) error {
 	stats, err := l.extractStats()
 	if err != nil {
@@ -54,13 +16,13 @@ func (l *Lookup) loop4SeedStats(qtx *database.Queries, ctx context.Context) erro
 	}
 
 	params := database.CreateStatBulkParams{
-		DataHash:   make([]string, len(stats)),
-		Name:       make([]string, len(stats)),
-		Effect: 	make([]string, len(stats)),
-		MinVal: 	make([]int32, len(stats)),
-		MaxVal: 	make([]int32, len(stats)),
-		MaxVal2: 	make([]sql.NullInt32, len(stats)),
-		SphereID: 	make([]sql.NullInt32, len(stats)),
+		DataHash: make([]string, len(stats)),
+		Name:     make([]string, len(stats)),
+		Effect:   make([]string, len(stats)),
+		MinVal:   make([]int32, len(stats)),
+		MaxVal:   make([]int32, len(stats)),
+		MaxVal2:  make([]sql.NullInt32, len(stats)),
+		SphereID: make([]sql.NullInt32, len(stats)),
 	}
 
 	for i, s := range stats {

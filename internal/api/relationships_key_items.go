@@ -25,9 +25,9 @@ func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyIt
 	}
 
 	rel := KeyItem{
-		Treasures:  	treasures,
-		Quests:  		quests,
-		Areas:			areas,
+		Treasures: treasures,
+		Quests:    quests,
+		Areas:     areas,
 	}
 
 	if keyItem.Category == string(database.KeyItemCategoryPrimer) {

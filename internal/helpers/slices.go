@@ -4,13 +4,12 @@ import (
 	"slices"
 )
 
-func Unshift[T any] (items[]T, added T) []T {
+func Unshift[T any](items []T, added T) []T {
 	newSlice := []T{added}
 	newSlice = slices.Concat(newSlice, items)
 
 	return newSlice
 }
-
 
 func Filter[T any](s []T, fn func(T) bool) []T {
 	if s == nil {

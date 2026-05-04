@@ -9,37 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type InflictedStatus struct {
-	ID                int32
-	StatusConditionID int32
-	StatusCondition   string `json:"name"`
-	Probability       int32  `json:"probability"`
-	DurationType      string `json:"duration_type"`
-	Amount            *int32 `json:"amount"`
-}
-
-func (is InflictedStatus) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", is),
-		is.StatusConditionID,
-		is.Probability,
-		is.DurationType,
-		h.DerefOrNil(is.Amount),
-	}
-}
-
-func (is InflictedStatus) GetID() int32 {
-	return is.ID
-}
-
-func (is *InflictedStatus) SetID(id int32) {
-	is.ID = id
-}
-
-func (is InflictedStatus) Error() string {
-	return fmt.Sprintf("inflicted status with condition: %s, probability: %d, duration type: %s, amount: %v", is.StatusCondition, is.Probability, is.DurationType, is.Amount)
-}
-
 func (l *Lookup) loop4SeedInflictedStatusses(qtx *database.Queries, ctx context.Context) error {
 	statusses, err := l.extractInflictedStatusses()
 	if err != nil {
@@ -47,11 +16,11 @@ func (l *Lookup) loop4SeedInflictedStatusses(qtx *database.Queries, ctx context.
 	}
 
 	params := database.CreateInflictedStatusBulkParams{
-		DataHash:   		make([]string, len(statusses)),
-		StatusConditionID: 	make([]int32, len(statusses)),
-		Probability: 		make([]int32, len(statusses)),
-		DurationType: 		make([]database.DurationType, len(statusses)),
-		Amount: 			make([]sql.NullInt32, len(statusses)),
+		DataHash:          make([]string, len(statusses)),
+		StatusConditionID: make([]int32, len(statusses)),
+		Probability:       make([]int32, len(statusses)),
+		DurationType:      make([]database.DurationType, len(statusses)),
+		Amount:            make([]sql.NullInt32, len(statusses)),
 	}
 
 	for i, s := range statusses {
@@ -73,7 +42,6 @@ func (l *Lookup) loop4SeedInflictedStatusses(qtx *database.Queries, ctx context.
 
 	return nil
 }
-
 
 func (l *Lookup) extractInflictedStatusses() ([]InflictedStatus, error) {
 	statusses := []InflictedStatus{}
@@ -221,7 +189,6 @@ func (l *Lookup) extractAltStateInflictedStatusses(state *AlteredState) ([]Infli
 
 	return statusses, nil
 }
-
 
 func (l *Lookup) prepareInflictedStatus(is *InflictedStatus) (*InflictedStatus, error) {
 	var err error

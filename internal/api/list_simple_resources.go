@@ -21,7 +21,6 @@ func (l SimpleResourceList) getResults() []SimpleResource {
 	return l.Results
 }
 
-
 func newSimpleResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, sectionName string, subsection Subsection) (SimpleResourceList, error) {
 	dbIDs, err := subsection.dbQuery(r.Context(), id)
 	if err != nil {
@@ -49,7 +48,7 @@ func newSimpleResourceList[T h.HasID, R any, A APIResource, L APIResourceList](c
 
 func createSimpleResources(cfg *Config, r *http.Request, dbIDs []int32, subsection Subsection) ([]SimpleResource, error) {
 	subs := []SimpleResource{}
-	
+
 	if subsection.relationsFn != nil {
 		var err error
 		subsection.relations, err = subsection.relationsFn(cfg, r, dbIDs)
@@ -69,11 +68,3 @@ func createSimpleResources(cfg *Config, r *http.Request, dbIDs []int32, subsecti
 
 	return subs, nil
 }
-
-
-
-
-
-
-
-

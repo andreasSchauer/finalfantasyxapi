@@ -24,11 +24,11 @@ func TestGetOverdrive(t *testing.T) {
 					"overdrive abilities": 7,
 				},
 			},
-			expUnique: newExpUnique(15, "status reels"),
-			rank: 				h.GetInt32Ptr(4),
-			countdownInSec:		h.GetInt32Ptr(20),
-			user:				7,
-			overdriveCommand: 	h.GetInt32Ptr(3),
+			expUnique:          newExpUnique(15, "status reels"),
+			rank:               h.GetInt32Ptr(4),
+			countdownInSec:     h.GetInt32Ptr(20),
+			user:               7,
+			overdriveCommand:   h.GetInt32Ptr(3),
 			overdriveAbilities: []int32{17, 32, 33, 34, 35, 36, 37},
 		},
 		{
@@ -39,11 +39,11 @@ func TestGetOverdrive(t *testing.T) {
 					"overdrive abilities": 3,
 				},
 			},
-			expUnique: newExpUnique(50, "banishing blade"),
-			rank: 				h.GetInt32Ptr(6),
-			countdownInSec:		h.GetInt32Ptr(4),
-			user:				10,
-			overdriveCommand: 	h.GetInt32Ptr(6),
+			expUnique:          newExpUnique(50, "banishing blade"),
+			rank:               h.GetInt32Ptr(6),
+			countdownInSec:     h.GetInt32Ptr(4),
+			user:               10,
+			overdriveCommand:   h.GetInt32Ptr(6),
 			overdriveAbilities: []int32{113, 114, 115},
 		},
 		{
@@ -54,11 +54,11 @@ func TestGetOverdrive(t *testing.T) {
 					"overdrive abilities": 1,
 				},
 			},
-			expUnique: newExpUnique(64, "burning soul"),
-			rank: 				h.GetInt32Ptr(6),
-			countdownInSec:		nil,
-			user:				11,
-			overdriveCommand: 	h.GetInt32Ptr(7),
+			expUnique:          newExpUnique(64, "burning soul"),
+			rank:               h.GetInt32Ptr(6),
+			countdownInSec:     nil,
+			user:               11,
+			overdriveCommand:   h.GetInt32Ptr(7),
 			overdriveAbilities: []int32{130},
 		},
 		{
@@ -69,11 +69,11 @@ func TestGetOverdrive(t *testing.T) {
 					"overdrive abilities": 1,
 				},
 			},
-			expUnique: newExpUnique(124, "delta attack"),
-			rank: 				h.GetInt32Ptr(6),
-			countdownInSec:		nil,
-			user:				4,
-			overdriveCommand: 	nil,
+			expUnique:          newExpUnique(124, "delta attack"),
+			rank:               h.GetInt32Ptr(6),
+			countdownInSec:     nil,
+			user:               4,
+			overdriveCommand:   nil,
 			overdriveAbilities: []int32{190},
 		},
 	}
@@ -103,7 +103,6 @@ func TestRetrieveOverdrives(t *testing.T) {
 
 	testIdList(t, tests, testCfg.e.overdrives.endpoint, "RetrieveOverdrives", testCfg.HandleOverdrives, compareAPIResourceLists[NamedApiResourceList])
 }
-
 
 func TestSubsectionOverdrives(t *testing.T) {
 	tests := []expListIDs{

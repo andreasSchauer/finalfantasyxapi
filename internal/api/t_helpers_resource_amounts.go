@@ -19,7 +19,6 @@ func checkResAmts[A APIResource](test test, fieldName string, exp map[string]int
 	}
 }
 
-
 func checkResAmtsID[A APIResource](test test, fieldName string, exp map[int32]int32, got []ResourceAmount[A]) {
 	compLength(test, fieldName, len(got))
 
@@ -33,7 +32,6 @@ func checkResAmtsID[A APIResource](test test, fieldName string, exp map[int32]in
 		compare(test, fmt.Sprintf("id: '%d'", id), expVal, gotVal)
 	}
 }
-
 
 // expects a map[res.GetKey()]Amount and checks, if all stated resources are present and their respective amounts match. Used for ResourceAmount-ish types with different field names.
 func checkResAmtTypes[T ResourceAmountType[A], A APIResource](test test, fieldName string, exp map[string]int32, got []T) {

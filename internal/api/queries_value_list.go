@@ -7,7 +7,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 func filterByValues[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], query string, queryParam QueryParam, dbQueryMap map[string]DbQueryNoInput) ([]int32, error) {
 	values, err := queryListSplit(cfg, query)
 	if err != nil {

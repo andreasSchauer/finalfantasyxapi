@@ -58,16 +58,16 @@ func getElementRelationships(cfg *Config, r *http.Request, element seeding.Eleme
 	}
 
 	rel := Element{
-		StatusProtection: 	statusProtection,
-		AutoAbilities: 		autoAbilities,
-		PlayerAbilities: 	playerAbilities,
+		StatusProtection:   statusProtection,
+		AutoAbilities:      autoAbilities,
+		PlayerAbilities:    playerAbilities,
 		OverdriveAbilities: overdriveAbilities,
-		ItemAbilities: 		itemAbilities,
-		EnemyAbilities: 	enemyAbilities,
-		MonstersWeak: 		monstersWeak,
-		MonstersHalved: 	monstersHalved,
-		MonstersImmune: 	monstersImmune,
-		MonstersAbsorb: 	monstersAbsorb,
+		ItemAbilities:      itemAbilities,
+		EnemyAbilities:     enemyAbilities,
+		MonstersWeak:       monstersWeak,
+		MonstersHalved:     monstersHalved,
+		MonstersImmune:     monstersImmune,
+		MonstersAbsorb:     monstersAbsorb,
 	}
 
 	return rel, nil

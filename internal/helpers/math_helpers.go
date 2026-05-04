@@ -1,6 +1,5 @@
 package helpers
 
-
 func PowInt(x, y int32) int32 {
 	var i int32 = 1
 	var result int32 = 1

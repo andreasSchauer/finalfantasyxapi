@@ -4,7 +4,6 @@ import (
 	// "filepath"
 	"os"
 	"testing"
-
 )
 
 var testCfg *Config

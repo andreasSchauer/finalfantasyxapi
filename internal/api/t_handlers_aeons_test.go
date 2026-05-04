@@ -34,7 +34,7 @@ func TestGetAeon(t *testing.T) {
 				id:   3,
 				name: "ixion",
 			},
-			untypedUnit: 	11,
+			untypedUnit:    11,
 			area:           115,
 			battlesToRegen: 20,
 			agility: AgilityParams{
@@ -109,7 +109,7 @@ func TestGetAeon(t *testing.T) {
 					"armor abilities":   3,
 				},
 			},
-			untypedUnit: 	17,
+			untypedUnit: 17,
 			expUnique: expUnique{
 				id:   9,
 				name: "sandy",
@@ -158,7 +158,7 @@ func TestGetAeon(t *testing.T) {
 				id:   1,
 				name: "valefor",
 			},
-			untypedUnit: 	9,
+			untypedUnit:    9,
 			area:           33,
 			battlesToRegen: 8,
 			agility: AgilityParams{
@@ -205,7 +205,7 @@ func TestGetAeon(t *testing.T) {
 				id:   1,
 				name: "valefor",
 			},
-			untypedUnit: 	9,
+			untypedUnit: 9,
 			agility: AgilityParams{
 				TickSpeed: 7,
 				MinICV:    h.GetInt32Ptr(20),

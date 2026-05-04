@@ -13,14 +13,14 @@ func (cfg *Config) getAgilityTier(r *http.Request, i handlerInput[seeding.Agilit
 	}
 
 	response := AgilityTier{
-		ID:       		agilityTier.ID,
-		FromAgility: 	agilityTier.MinAgility,
-		ToAgility: 		agilityTier.MaxAgility,
-		TickSpeed: 		agilityTier.TickSpeed,
-		MonMinICV: 		agilityTier.MonsterMinICV,
-		MonMaxICV: 		agilityTier.MonsterMaxICV,
-		CharMaxICV: 	agilityTier.CharacterMaxICV,
-		CharMinICVs: 	convertObjSlice(cfg, agilityTier.CharacterMinICVs, convertAgilitySubtier),
+		ID:          agilityTier.ID,
+		FromAgility: agilityTier.MinAgility,
+		ToAgility:   agilityTier.MaxAgility,
+		TickSpeed:   agilityTier.TickSpeed,
+		MonMinICV:   agilityTier.MonsterMinICV,
+		MonMaxICV:   agilityTier.MonsterMaxICV,
+		CharMaxICV:  agilityTier.CharacterMaxICV,
+		CharMinICVs: convertObjSlice(cfg, agilityTier.CharacterMinICVs, convertAgilitySubtier),
 	}
 
 	return response, nil

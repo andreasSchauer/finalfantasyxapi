@@ -87,10 +87,10 @@ func compareMonsterEquipment(test test, _ string, exp testMonEquipment, got Mons
 }
 
 type testAgilityParams struct {
-	agilityTier	int32
-	tickSpeed 	int32
-	minICV    	*int32
-	maxICV    	*int32
+	agilityTier int32
+	tickSpeed   int32
+	minICV      *int32
+	maxICV      *int32
 }
 
 func compareAgilityParams(test test, fieldName string, exp testAgilityParams, got AgilityParams) {

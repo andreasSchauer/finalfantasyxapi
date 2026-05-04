@@ -40,7 +40,6 @@ func getAvailabilityParams[T seeding.LookupableID, R any, A APIResource, L APIRe
 	return availabilityParams, nil
 }
 
-
 func runAvailabilityQuery[T, K seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item K, params AvailabilityParams, dbQuery AvailabilityDbQuery) ([]A, error) {
 	dbIDs, err := dbQuery(r.Context(), params)
 	if err != nil {
@@ -50,8 +49,6 @@ func runAvailabilityQuery[T, K seeding.LookupableID, R any, A APIResource, L API
 	resources := idsToAPIResources(cfg, i, dbIDs)
 	return resources, nil
 }
-
-
 
 func convGetItemMonsterIDs(cfg *Config) AvailabilityDbQuery {
 	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
@@ -94,9 +91,9 @@ func convGetItemQuestIDs(cfg *Config) AvailabilityDbQuery {
 func convGetAutoAbilityItemMonsterIDs(cfg *Config) AvailabilityDbQuery {
 	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
 		return cfg.db.GetAutoAbilityItemMonsterIDs(ctx, database.GetAutoAbilityItemMonsterIDsParams{
-			AutoAbilityID:	p.ParentID,
-			Availability: 	p.Availability,
-			Repeatable: 	p.Repeatable,
+			AutoAbilityID: p.ParentID,
+			Availability:  p.Availability,
+			Repeatable:    p.Repeatable,
 		})
 	}
 }
@@ -104,9 +101,9 @@ func convGetAutoAbilityItemMonsterIDs(cfg *Config) AvailabilityDbQuery {
 func convGetAutoAbilityMonsterIDs(cfg *Config) AvailabilityDbQuery {
 	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
 		return cfg.db.GetAutoAbilityMonsterIDs(ctx, database.GetAutoAbilityMonsterIDsParams{
-			AutoAbilityID:	p.ParentID,
-			Availability: 	p.Availability,
-			Repeatable: 	p.Repeatable,
+			AutoAbilityID: p.ParentID,
+			Availability:  p.Availability,
+			Repeatable:    p.Repeatable,
 		})
 	}
 }
@@ -114,8 +111,8 @@ func convGetAutoAbilityMonsterIDs(cfg *Config) AvailabilityDbQuery {
 func convGetAutoAbilityTreasuresIDs(cfg *Config) AvailabilityDbQuery {
 	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
 		return cfg.db.GetAutoAbilityTreasureIDs(ctx, database.GetAutoAbilityTreasureIDsParams{
-			AutoAbilityID:	p.ParentID,
-			Availability: 	p.Availability,
+			AutoAbilityID: p.ParentID,
+			Availability:  p.Availability,
 		})
 	}
 }
@@ -123,8 +120,8 @@ func convGetAutoAbilityTreasuresIDs(cfg *Config) AvailabilityDbQuery {
 func convGetAutoAbilityShopIDsPre(cfg *Config) AvailabilityDbQuery {
 	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
 		return cfg.db.GetAutoAbilityShopIDsPre(ctx, database.GetAutoAbilityShopIDsPreParams{
-			AutoAbilityID:	p.ParentID,
-			Availability: 	p.Availability,
+			AutoAbilityID: p.ParentID,
+			Availability:  p.Availability,
 		})
 	}
 }
@@ -132,18 +129,17 @@ func convGetAutoAbilityShopIDsPre(cfg *Config) AvailabilityDbQuery {
 func convGetAutoAbilityShopIDsPost(cfg *Config) AvailabilityDbQuery {
 	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
 		return cfg.db.GetAutoAbilityShopIDsPost(ctx, database.GetAutoAbilityShopIDsPostParams{
-			AutoAbilityID:	p.ParentID,
-			Availability: 	p.Availability,
+			AutoAbilityID: p.ParentID,
+			Availability:  p.Availability,
 		})
 	}
 }
 
-
 func convGetEquipmentTreasureIDs(cfg *Config) AvailabilityDbQuery {
 	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
 		return cfg.db.GetEquipmentTreasureIDs(ctx, database.GetEquipmentTreasureIDsParams{
-			EquipmentID:	p.ParentID,
-			Availability: 	p.Availability,
+			EquipmentID:  p.ParentID,
+			Availability: p.Availability,
 		})
 	}
 }
@@ -151,8 +147,8 @@ func convGetEquipmentTreasureIDs(cfg *Config) AvailabilityDbQuery {
 func convGetEquipmentShopIDs(cfg *Config) AvailabilityDbQuery {
 	return func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
 		return cfg.db.GetEquipmentShopIDs(ctx, database.GetEquipmentShopIDsParams{
-			EquipmentID:	p.ParentID,
-			Availability: 	p.Availability,
+			EquipmentID:  p.ParentID,
+			Availability: p.Availability,
 		})
 	}
 }

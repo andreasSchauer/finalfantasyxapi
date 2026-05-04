@@ -73,10 +73,10 @@ func idToQuestAPIResource[T h.IsQuest, R any, A APIResource, L APIResourceList](
 		sidequest, _ := seeding.GetResource(*params.Sidequest, cfg.l.Sidequests)
 
 		return QuestAPIResource{
-			ID: 		params.ID,
-			Sidequest: 	sidequest.Name,
-			Subquest: 	nil,
-			URL: 		createResourceURL(cfg, i.endpoint, params.ID),
+			ID:        params.ID,
+			Sidequest: sidequest.Name,
+			Subquest:  nil,
+			URL:       createResourceURL(cfg, i.endpoint, params.ID),
 		}
 
 	case string(database.QuestTypeSubquest):
@@ -84,10 +84,10 @@ func idToQuestAPIResource[T h.IsQuest, R any, A APIResource, L APIResourceList](
 		sidequest, _ := seeding.GetResourceByID(subquest.SidequestID, cfg.l.SidequestsID)
 
 		return QuestAPIResource{
-			ID: 		params.ID,
-			Sidequest: 	sidequest.Name,
-			Subquest: 	&subquest.Name,
-			URL: 		createResourceURL(cfg,i.endpoint, params.ID),
+			ID:        params.ID,
+			Sidequest: sidequest.Name,
+			Subquest:  &subquest.Name,
+			URL:       createResourceURL(cfg, i.endpoint, params.ID),
 		}
 	}
 

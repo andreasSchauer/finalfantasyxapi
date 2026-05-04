@@ -53,8 +53,8 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 		}
 
 		elemResist := seeding.ElementalResist{
-			ElementID:  elementID,
-			Affinity: 	affinity.Name,
+			ElementID: elementID,
+			Affinity:  affinity.Name,
 		}
 
 		elemResistLookup, err := seeding.GetResource(elemResist, cfg.l.ElementalResists)

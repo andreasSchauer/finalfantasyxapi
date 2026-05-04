@@ -5,7 +5,7 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 type MonsterFormation struct {
 	ID              int32                              `json:"id"`
 	Category        string                             `json:"category"`
-	Availability	NamedAPIResource			  	   `json:"availability"`
+	Availability    NamedAPIResource                   `json:"availability"`
 	IsForcedAmbush  bool                               `json:"is_forced_ambush"`
 	CanEscape       bool                               `json:"can_escape"`
 	Notes           *string                            `json:"notes,omitempty"`

@@ -7,20 +7,20 @@ import (
 
 func TestCombineFields(t *testing.T) {
 	tests := []struct {
-		input		[]any
-		expected    string
+		input    []any
+		expected string
 	}{
 		{
-			input: 		[]any{"sleep buster", 15, nil, false, nil, nil, 7.5, "phoenix down", 3, true, nil},
+			input:    []any{"sleep buster", 15, nil, false, nil, nil, 7.5, "phoenix down", 3, true, nil},
 			expected: "sleep buster|15|NULL|false|NULL|NULL|7.5|phoenix down|3|true|NULL",
 		},
 		{
-			input:		[]any{},
-			expected:	"",
+			input:    []any{},
+			expected: "",
 		},
 		{
-			input:		[]any{nil, nil, nil, nil},
-			expected:	"NULL|NULL|NULL|NULL",
+			input:    []any{nil, nil, nil, nil},
+			expected: "NULL|NULL|NULL|NULL",
 		},
 	}
 

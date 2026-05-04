@@ -5,40 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
-
-type Primer struct {
-	ID 			  int32
-	Name          string `json:"name"`
-	AlBhedLetter  string `json:"al_bhed_letter"`
-	EnglishLetter string `json:"english_letter"`
-	KeyItemID     int32
-}
-
-func (p Primer) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", p),
-		p.AlBhedLetter,
-		p.EnglishLetter,
-		p.KeyItemID,
-	}
-}
-
-func (p Primer) GetID() int32 {
-	return p.ID
-}
-
-func (p Primer) Error() string {
-	return fmt.Sprintf("primer %s", p.Name)
-}
-
-func (p Primer) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
-		ID: 	p.ID,
-		Name: 	p.Name,
-	}
-}
 
 func (l *Lookup) loop3SeedPrimers(qtx *database.Queries, ctx context.Context) error {
 	primers, err := l.extractPrimers()
@@ -47,10 +14,10 @@ func (l *Lookup) loop3SeedPrimers(qtx *database.Queries, ctx context.Context) er
 	}
 
 	params := database.CreatePrimerBulkParams{
-		DataHash:   	make([]string, len(primers)),
-		KeyItemID: 		make([]int32, len(primers)),
-		AlBhedLetter: 	make([]string, len(primers)),
-		EnglishLetter: 	make([]string, len(primers)),
+		DataHash:      make([]string, len(primers)),
+		KeyItemID:     make([]int32, len(primers)),
+		AlBhedLetter:  make([]string, len(primers)),
+		EnglishLetter: make([]string, len(primers)),
 	}
 
 	for i, p := range primers {
@@ -76,7 +43,6 @@ func (l *Lookup) loop3SeedPrimers(qtx *database.Queries, ctx context.Context) er
 	return nil
 }
 
-
 func (l *Lookup) extractPrimers() ([]Primer, error) {
 	primers := []Primer{}
 	var err error
@@ -88,7 +54,7 @@ func (l *Lookup) extractPrimers() ([]Primer, error) {
 		if err != nil {
 			return nil, err
 		}
-		
+
 		primers = append(primers, *primer)
 	}
 

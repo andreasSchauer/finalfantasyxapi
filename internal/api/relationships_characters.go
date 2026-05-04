@@ -49,7 +49,6 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 	return rel, nil
 }
 
-
 func getCharModeAmount(cfg *Config, char seeding.Character, id int32) (ResourceAmount[NamedAPIResource], error) {
 	i := cfg.e.overdriveModes
 

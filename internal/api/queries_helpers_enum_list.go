@@ -61,7 +61,6 @@ func removeDuplicateEnums[E any](enums []E) []E {
 	return sortEnums(newEnums)
 }
 
-
 func sortEnums[E any](enums []E) []E {
 	slices.SortStableFunc(enums, func(a, b E) int {
 		A := fmt.Sprint(a)

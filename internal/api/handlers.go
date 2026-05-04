@@ -14,8 +14,6 @@ func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
 	routerIdOnly(cfg, w, r, cfg.e.areas)
 }
 
-
-
 func (cfg *Config) HandleMonsterFormations(w http.ResponseWriter, r *http.Request) {
 	routerIdOnly(cfg, w, r, cfg.e.monsterFormations)
 }
@@ -56,8 +54,6 @@ func (cfg *Config) HandleFMVs(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.fmvs)
 }
 
-
-
 func (cfg *Config) HandlePlayerUnits(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.playerUnits)
 }
@@ -77,8 +73,6 @@ func (cfg *Config) HandleCharacterClasses(w http.ResponseWriter, r *http.Request
 func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 	routerNameVersion(cfg, w, r, cfg.e.monsters)
 }
-
-
 
 func (cfg *Config) HandleAbilities(w http.ResponseWriter, r *http.Request) {
 	routerIdOnly(cfg, w, r, cfg.e.abilities)
@@ -108,8 +102,6 @@ func (cfg *Config) HandleEnemyAbilities(w http.ResponseWriter, r *http.Request) 
 	routerNameVersion(cfg, w, r, cfg.e.enemyAbilities)
 }
 
-
-
 func (cfg *Config) HandleAeonCommands(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.aeonCommands)
 }
@@ -133,9 +125,6 @@ func (cfg *Config) HandleSubmenus(w http.ResponseWriter, r *http.Request) {
 func (cfg *Config) HandleTopmenus(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.topmenus)
 }
-
-
-
 
 func (cfg *Config) HandleAllItems(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.allItems)
@@ -161,9 +150,6 @@ func (cfg *Config) HandleMixes(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.mixes)
 }
 
-
-
-
 func (cfg *Config) HandleAutoAbilities(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.autoAbilities)
 }
@@ -179,9 +165,6 @@ func (cfg *Config) HandleEquipment(w http.ResponseWriter, r *http.Request) {
 func (cfg *Config) HandleCelestialWeapons(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.celestialWeapons)
 }
-
-
-
 
 func (cfg *Config) HandleStats(w http.ResponseWriter, r *http.Request) {
 	routerNameOrID(cfg, w, r, cfg.e.stats)

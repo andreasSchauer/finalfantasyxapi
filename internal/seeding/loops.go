@@ -62,7 +62,7 @@ func (l *Lookup) seedLoop2(qtx *database.Queries, ctx context.Context) error {
 		l.loop2SeedDamages,
 		l.loop2SeedModifierChanges,
 		l.loop2SeedMonsterAmounts,
-		l.loop2SeedMonsterEquipments,
+		l.loop2SeedMonsterEquipment,
 		l.loop2SeedAlteredStates,
 	})
 }

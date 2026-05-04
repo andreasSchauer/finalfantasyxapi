@@ -384,7 +384,6 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 	testIdList(t, tests, testCfg.e.overdriveAbilities.endpoint, "RetrieveOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[NamedApiResourceList])
 }
 
-
 func TestSubsectionOverdriveAbilities(t *testing.T) {
 	tests := []expListIDs{
 		{
@@ -431,4 +430,3 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 
 	testIdList(t, tests, testCfg.e.overdriveAbilities.endpoint, "SubsectionOverdriveAbilities", nil, compareSimpleResourceLists[NamedAPIResource, AbilitySimple])
 }
-

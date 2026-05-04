@@ -48,14 +48,14 @@ func getModifierRelationships(cfg *Config, r *http.Request, modifier seeding.Mod
 	}
 
 	rel := Modifier{
-		AutoAbilities: 		autoAbilities,
-		PlayerAbilities: 	playerAbilities,
+		AutoAbilities:      autoAbilities,
+		PlayerAbilities:    playerAbilities,
 		OverdriveAbilities: overdriveAbilities,
-		ItemAbilities: 		itemAbilities,
-		TriggerCommands: 	triggerCommands,
-		EnemyAbilities: 	enemyAbilities,
-		StatusConditions: 	statusConditions,
-		Properties: 		properties,
+		ItemAbilities:      itemAbilities,
+		TriggerCommands:    triggerCommands,
+		EnemyAbilities:     enemyAbilities,
+		StatusConditions:   statusConditions,
+		Properties:         properties,
 	}
 
 	return rel, nil

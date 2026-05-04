@@ -34,7 +34,6 @@ func parseID(idStr, resourceType string, maxID int) (parseResponse, error) {
 	return response, nil
 }
 
-
 func checkID(idStr, resourceType string, maxID int) (parseResponse, error) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {

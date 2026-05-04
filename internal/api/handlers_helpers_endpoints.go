@@ -229,7 +229,7 @@ func handleSimple[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Confi
 	_, err := checkEmptyQuery(r, queryParamIDs)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "parameter 'ids' can't be empty.", err)
-		return 
+		return
 	}
 
 	err = verifyQueryParams(cfg, r, i, nil, &segment)

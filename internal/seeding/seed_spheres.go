@@ -9,83 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type Sphere struct {
-	ID 			  		int32
-	ItemID     	  		int32
-	Name          		string 			`json:"name"`
-	SgDescription		string			`json:"sphere_grid_description"`
-	SphereColor			string			`json:"sphere_color"`
-	SphereEffect		string			`json:"sphere_effect"`
-	TargetNodePosition	string			`json:"target_node_position"`
-	TargetNodeState		*string			`json:"target_node_state"`
-	TargetableNodes		[]string		`json:"targetable_nodes"`
-	CreatedNode			*CreatedNode	`json:"created_node"`
-}
-
-
-func (s Sphere) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", s),
-		s.ItemID,
-		s.SgDescription,
-		s.SphereColor,
-		s.SphereEffect,
-		s.TargetNodePosition,
-		s.TargetNodeState,
-		h.ObjPtrToID(s.CreatedNode),
-	}
-}
-
-func (s Sphere) GetID() int32 {
-	return s.ID
-}
-
-func (s Sphere) Error() string {
-	return fmt.Sprintf("sphere %s", s.Name)
-}
-
-func (s Sphere) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
-		ID: 	s.ID,
-		Name: 	s.Name,
-	}
-}
-
-type CreatedNode struct {
-	ID		int32
-	Node	string	`json:"node"`
-	Value	int32	`json:"value"`
-}
-
-func (n CreatedNode) ToHashFields() []any{
-	return []any{
-		fmt.Sprintf("%T", n),
-		n.Node,
-		n.Value,
-	}
-}
-
-func (n CreatedNode) GetID() int32 {
-	return n.ID
-}
-
-func (n CreatedNode) Error() string {
-	return fmt.Sprintf("created node %s with value: %d", n.Node, n.Value)
-}
-
-type TargetableNode struct {
-	SphereID	int32
-	Node		string
-}
-
-func (n TargetableNode) ToHashFields() []any{
-	return []any{
-		fmt.Sprintf("%T", n),
-		n.SphereID,
-		n.Node,
-	}
-}
-
 func (l *Lookup) loop3SeedSpheres(qtx *database.Queries, ctx context.Context) error {
 	spheres, err := l.extractSpheres()
 	if err != nil {
@@ -93,14 +16,14 @@ func (l *Lookup) loop3SeedSpheres(qtx *database.Queries, ctx context.Context) er
 	}
 
 	params := database.CreateSphereBulkParams{
-		DataHash:   			make([]string, len(spheres)),
-		ItemID: 				make([]int32, len(spheres)),
-		SphereGridDescription: 	make([]string, len(spheres)),
-		SphereColor: 			make([]database.SphereColor, len(spheres)),
-		SphereEffect: 			make([]database.SphereEffect, len(spheres)),
-		TargetNodePosition: 	make([]database.NodePosition, len(spheres)),
-		TargetNodeState: 		make([]database.NullNodeState, len(spheres)),
-		CreatedNodeID: 			make([]sql.NullInt32, len(spheres)),
+		DataHash:              make([]string, len(spheres)),
+		ItemID:                make([]int32, len(spheres)),
+		SphereGridDescription: make([]string, len(spheres)),
+		SphereColor:           make([]database.SphereColor, len(spheres)),
+		SphereEffect:          make([]database.SphereEffect, len(spheres)),
+		TargetNodePosition:    make([]database.NodePosition, len(spheres)),
+		TargetNodeState:       make([]database.NullNodeState, len(spheres)),
+		CreatedNodeID:         make([]sql.NullInt32, len(spheres)),
 	}
 
 	for i, s := range spheres {
@@ -130,7 +53,6 @@ func (l *Lookup) loop3SeedSpheres(qtx *database.Queries, ctx context.Context) er
 	return nil
 }
 
-
 func (l *Lookup) extractSpheres() ([]Sphere, error) {
 	spheres := []Sphere{}
 	var err error
@@ -142,7 +64,7 @@ func (l *Lookup) extractSpheres() ([]Sphere, error) {
 		if err != nil {
 			return nil, err
 		}
-		
+
 		if sphere.CreatedNode != nil {
 			sphere.CreatedNode.ID, err = l.getHashID(*sphere.CreatedNode)
 			if err != nil {
@@ -155,7 +77,6 @@ func (l *Lookup) extractSpheres() ([]Sphere, error) {
 
 	return dedupeRows(spheres, l.Hashes), nil
 }
-
 
 func (l *Lookup) loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
 	nodes := l.extractCreatedNodes()
@@ -196,14 +117,13 @@ func (l *Lookup) extractCreatedNodes() []CreatedNode {
 	return dedupeRows(createdNodes, l.Hashes)
 }
 
-
 func (l *Lookup) loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Context) error {
 	nodes := l.extractTargetableNodes()
 
 	params := database.CreateSphereTargetableNodeBulkParams{
-		DataHash:   make([]string, len(nodes)),
-		SphereID: 	make([]int32, len(nodes)),
-		Node: 		make([]database.NodeType, len(nodes)),
+		DataHash: make([]string, len(nodes)),
+		SphereID: make([]int32, len(nodes)),
+		Node:     make([]database.NodeType, len(nodes)),
 	}
 
 	for i, s := range nodes {
@@ -234,8 +154,8 @@ func (l *Lookup) extractTargetableNodes() []TargetableNode {
 			nodeString := sphere.TargetableNodes[j]
 
 			node := TargetableNode{
-				SphereID: 	sphere.ID,
-				Node: 		nodeString,
+				SphereID: sphere.ID,
+				Node:     nodeString,
 			}
 
 			nodes = append(nodes, node)

@@ -100,8 +100,6 @@ func keysToTypedAPIResources[T h.IsTyped, R, K any, A APIResource, L APIResource
 	return resources
 }
 
-
-
 func newTypedAPIResourceList(cfg *Config, r *http.Request, resources []TypedAPIResource) (TypedAPIResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {

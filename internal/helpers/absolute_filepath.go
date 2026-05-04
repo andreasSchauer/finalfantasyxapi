@@ -2,19 +2,18 @@ package helpers
 
 import (
 	"fmt"
-	"path/filepath"
 	"os"
+	"path/filepath"
 )
 
 func GetAbsoluteFilepath(path string) (string, error) {
 	root, err := projectRoot()
-    if err != nil {
-        return "", err
-    }
+	if err != nil {
+		return "", err
+	}
 
 	return filepath.Join(root, path), nil
 }
-
 
 func projectRoot() (string, error) {
 	wd, err := os.Getwd()
@@ -32,7 +31,7 @@ func projectRoot() (string, error) {
 		if wd == parent {
 			return "", fmt.Errorf("project root not found from %s", wd)
 		}
-		
+
 		wd = parent
 	}
 }

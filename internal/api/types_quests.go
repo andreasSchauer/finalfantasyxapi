@@ -34,9 +34,9 @@ type Subquest struct {
 }
 
 type QuestCompletion struct {
-	Condition    *string                          `json:"condition"`
-	Areas        []CompletionArea                 `json:"areas"`
-	Reward       ResourceAmount[TypedAPIResource] `json:"reward"`
+	Condition *string                          `json:"condition"`
+	Areas     []CompletionArea                 `json:"areas"`
+	Reward    ResourceAmount[TypedAPIResource] `json:"reward"`
 }
 
 func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {

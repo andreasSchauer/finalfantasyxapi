@@ -15,7 +15,6 @@ func compareParameterLists(test test, _ string, exp expListNames, got QueryParam
 func compareSectionLists(test test, endpoint string, exp expListNames, got SectionList) {
 	test.t.Helper()
 	compareListParams(test, exp.getListParams(), got.getListParams())
-	
 
 	checkStringsInSlice(test, "results", exp.results, got.Results)
 }

@@ -43,12 +43,12 @@ func getAutoAbilityRelationships(cfg *Config, r *http.Request, autoAbility seedi
 	}
 
 	rel := AutoAbility{
-		MonstersDrop:    	monstersDrop,
-		MonstersItems: 	 	[]MonItemAmts{},
-		ShopsPreAirship:  	shopsPre,
-		ShopsPostAirship: 	shopsPost,
-		Treasures: 		 	treasures,
-		EquipmentTables: 	equipmentTables,
+		MonstersDrop:     monstersDrop,
+		MonstersItems:    []MonItemAmts{},
+		ShopsPreAirship:  shopsPre,
+		ShopsPostAirship: shopsPost,
+		Treasures:        treasures,
+		EquipmentTables:  equipmentTables,
 	}
 
 	if autoAbility.RequiredItem != nil {

@@ -20,14 +20,14 @@ func getSphereRelationships(cfg *Config, r *http.Request, sphere seeding.Sphere)
 	}
 
 	rel := Sphere{
-		Item: 				nameToNamedAPIResource(cfg, cfg.e.items, item.Name, nil),
-		Description: 		item.Description,
-		Effect: 			item.Effect,
-		Monsters: 			itemRel.Monsters,
-		Treasures: 			itemRel.Treasures,
-		Shops: 				itemRel.Shops,
-		Quests: 			itemRel.Quests,
-		BlitzballPrizes: 	itemRel.BlitzballPrizes,
+		Item:            nameToNamedAPIResource(cfg, cfg.e.items, item.Name, nil),
+		Description:     item.Description,
+		Effect:          item.Effect,
+		Monsters:        itemRel.Monsters,
+		Treasures:       itemRel.Treasures,
+		Shops:           itemRel.Shops,
+		Quests:          itemRel.Quests,
+		BlitzballPrizes: itemRel.BlitzballPrizes,
 	}
 
 	return rel, nil

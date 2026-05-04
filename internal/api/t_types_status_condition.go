@@ -40,11 +40,11 @@ func compareStatusInflictions(test test, fieldName string, exp testStatusInflict
 }
 
 type testStatusRemoval struct {
-	playerAbilities      []int32
-	overdriveAbilities   []int32
-	itemAbilities        []int32
-	enemyAbilities       []int32
-	statusConditions     []int32
+	playerAbilities    []int32
+	overdriveAbilities []int32
+	itemAbilities      []int32
+	enemyAbilities     []int32
+	statusConditions   []int32
 }
 
 func compareStatusRemovals(test test, fieldName string, exp testStatusRemoval, got StatusRemoval) {

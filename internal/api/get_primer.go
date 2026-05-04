@@ -20,14 +20,14 @@ func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Pri
 	keyItem, _ := seeding.GetResource(primer.Name, cfg.l.KeyItems)
 
 	response := Primer{
-		ID:                 primer.ID,
-		Name:               primer.Name,
-		KeyItem: 			nameToNamedAPIResource(cfg, cfg.e.keyItems, keyItem.Name, nil),
-		Description: 		keyItem.Description,
-		AlBhedLetter: 		primer.AlBhedLetter,
-		EnglishLetter: 		primer.EnglishLetter,
-		Treasures:          rel.Treasures,
-		Areas: 				rel.Areas,
+		ID:            primer.ID,
+		Name:          primer.Name,
+		KeyItem:       nameToNamedAPIResource(cfg, cfg.e.keyItems, keyItem.Name, nil),
+		Description:   keyItem.Description,
+		AlBhedLetter:  primer.AlBhedLetter,
+		EnglishLetter: primer.EnglishLetter,
+		Treasures:     rel.Treasures,
+		Areas:         rel.Areas,
 	}
 
 	return response, nil

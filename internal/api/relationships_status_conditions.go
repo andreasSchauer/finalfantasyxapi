@@ -68,4 +68,3 @@ func getStatusConditionRelationships(cfg *Config, r *http.Request, status seedin
 
 	return rel, nil
 }
-

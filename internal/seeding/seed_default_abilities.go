@@ -14,9 +14,9 @@ type DefaultAbilitiesEntry struct {
 func (l *Lookup) seedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "default abilities"
 	params := database.CreateDefaultAbilityJunctionBulkParams{
-		DataHash: 	make([]string, 0),
-		ClassID: 	make([]int32, 0),
-		AbilityID: 	make([]int32, 0),
+		DataHash:  make([]string, 0),
+		ClassID:   make([]int32, 0),
+		AbilityID: make([]int32, 0),
 	}
 
 	for _, entry := range l.json.defaultAbilities {
@@ -32,8 +32,8 @@ func (l *Lookup) seedJuncDefaultAbilities(qtx *database.Queries, ctx context.Con
 			}
 
 			j := StdJunction{
-				ParentID: 	class.ID,
-				ChildID: 	ability.ID,
+				ParentID: class.ID,
+				ChildID:  ability.ID,
 			}
 			dataHash := generateJunctionHash(j, desc)
 

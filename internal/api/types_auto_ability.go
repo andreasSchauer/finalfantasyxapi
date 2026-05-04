@@ -24,10 +24,10 @@ type AutoAbility struct {
 	ConversionTo           *NamedAPIResource                 `json:"conversion_to"`
 	StatChanges            []StatChange                      `json:"stat_changes"`
 	ModifierChanges        []ModifierChange                  `json:"modifier_changes"`
-	MonstersDrop 		   []NamedAPIResource 				 `json:"monsters_drop"`
-	MonstersItems          []MonItemAmts      				 `json:"monsters_items"`
-	ShopsPreAirship  	   []UnnamedAPIResource 			 `json:"shops_pre_airship"`
-	ShopsPostAirship 	   []UnnamedAPIResource 			 `json:"shops_post_airship"`
-	Treasures			   []UnnamedAPIResource				 `json:"treasures"`
+	MonstersDrop           []NamedAPIResource                `json:"monsters_drop"`
+	MonstersItems          []MonItemAmts                     `json:"monsters_items"`
+	ShopsPreAirship        []UnnamedAPIResource              `json:"shops_pre_airship"`
+	ShopsPostAirship       []UnnamedAPIResource              `json:"shops_post_airship"`
+	Treasures              []UnnamedAPIResource              `json:"treasures"`
 	EquipmentTables        []UnnamedAPIResource              `json:"equipment_tables"`
 }

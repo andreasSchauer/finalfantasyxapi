@@ -18,8 +18,8 @@ func getPrimerRelationships(cfg *Config, r *http.Request, primer seeding.Primer)
 	}
 
 	rel := Primer{
-		Treasures:  treasures,
-		Areas:		areas,
+		Treasures: treasures,
+		Areas:     areas,
 	}
 
 	return rel, nil

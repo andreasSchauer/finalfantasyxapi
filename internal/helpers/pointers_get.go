@@ -19,4 +19,3 @@ func GetStrPtr(s string) *string {
 func GetStructPtr[T any](obj T) *T {
 	return &obj
 }
-

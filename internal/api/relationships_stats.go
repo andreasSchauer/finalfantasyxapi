@@ -6,15 +6,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 type StatQueries struct {
-	AutoAbilities		DbQueryIntMany
-	PlayerAbilities		DbQueryIntMany
-	OverdriveAbilities 	DbQueryIntMany
-	ItemAbilities		DbQueryIntMany
-	TriggerCommands		DbQueryIntMany
-	StatusConditions	DbQueryIntMany
-	Properties			DbQueryIntMany
+	AutoAbilities      DbQueryIntMany
+	PlayerAbilities    DbQueryIntMany
+	OverdriveAbilities DbQueryIntMany
+	ItemAbilities      DbQueryIntMany
+	TriggerCommands    DbQueryIntMany
+	StatusConditions   DbQueryIntMany
+	Properties         DbQueryIntMany
 }
 
 func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat, error) {
@@ -64,21 +63,20 @@ func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat
 	}
 
 	rel := Stat{
-		Spheres: 			spheres,
-		AutoAbilities: 		autoAbilities,
-		PlayerAbilities: 	playerAbilities,
+		Spheres:            spheres,
+		AutoAbilities:      autoAbilities,
+		PlayerAbilities:    playerAbilities,
 		OverdriveAbilities: overdriveAbilities,
-		ItemAbilities: 		itemAbilities,
-		TriggerCommands: 	triggerCommands,
-		StatusConditions: 	statusConditions,
-		Properties: 		properties,
+		ItemAbilities:      itemAbilities,
+		TriggerCommands:    triggerCommands,
+		StatusConditions:   statusConditions,
+		Properties:         properties,
 	}
 
 	rel.Spheres = spheres
 
 	return rel, nil
 }
-
 
 func getStatQueries(cfg *Config, r *http.Request) (StatQueries, error) {
 	changesOnly, err := parseBooleanQuery(r, cfg.q.stats["changes_only"])
@@ -87,26 +85,26 @@ func getStatQueries(cfg *Config, r *http.Request) (StatQueries, error) {
 	}
 
 	var queries StatQueries
-	
+
 	if changesOnly {
 		queries = StatQueries{
-			AutoAbilities: 		cfg.db.GetStatAutoAbilityIDsStatChange,
-			PlayerAbilities: 	cfg.db.GetStatPlayerAbilityIDsStatChange,
+			AutoAbilities:      cfg.db.GetStatAutoAbilityIDsStatChange,
+			PlayerAbilities:    cfg.db.GetStatPlayerAbilityIDsStatChange,
 			OverdriveAbilities: cfg.db.GetStatOverdriveAbilityIDsStatChange,
-			ItemAbilities: 		cfg.db.GetStatItemAbilityIDsStatChange,
-			TriggerCommands: 	cfg.db.GetStatTriggerCommandIDsStatChange,
-			StatusConditions: 	cfg.db.GetStatStatusConditionIDsStatChange,
-			Properties: 		cfg.db.GetStatPropertyIDsStatChange,
+			ItemAbilities:      cfg.db.GetStatItemAbilityIDsStatChange,
+			TriggerCommands:    cfg.db.GetStatTriggerCommandIDsStatChange,
+			StatusConditions:   cfg.db.GetStatStatusConditionIDsStatChange,
+			Properties:         cfg.db.GetStatPropertyIDsStatChange,
 		}
 	} else {
 		queries = StatQueries{
-			AutoAbilities: 		cfg.db.GetStatAutoAbilityIDs,
-			PlayerAbilities: 	cfg.db.GetStatPlayerAbilityIDs,
+			AutoAbilities:      cfg.db.GetStatAutoAbilityIDs,
+			PlayerAbilities:    cfg.db.GetStatPlayerAbilityIDs,
 			OverdriveAbilities: cfg.db.GetStatOverdriveAbilityIDs,
-			ItemAbilities: 		cfg.db.GetStatItemAbilityIDs,
-			TriggerCommands: 	cfg.db.GetStatTriggerCommandIDs,
-			StatusConditions: 	cfg.db.GetStatStatusConditionIDs,
-			Properties: 		cfg.db.GetStatPropertyIDs,
+			ItemAbilities:      cfg.db.GetStatItemAbilityIDs,
+			TriggerCommands:    cfg.db.GetStatTriggerCommandIDs,
+			StatusConditions:   cfg.db.GetStatStatusConditionIDs,
+			Properties:         cfg.db.GetStatPropertyIDs,
 		}
 	}
 

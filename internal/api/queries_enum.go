@@ -29,7 +29,6 @@ func enumQuery[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg
 	return resources, nil
 }
 
-
 // like enum query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
 func enumQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, E) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
@@ -42,7 +41,7 @@ func enumQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList, E, N a
 	}
 
 	typedStr := et.convFunc(enum.Name)
-	
+
 	dbIDs, err := wrapperFn(cfg, r, typedStr)
 	if err != nil {
 		return nil, err

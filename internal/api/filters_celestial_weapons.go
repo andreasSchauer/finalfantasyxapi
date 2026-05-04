@@ -8,7 +8,7 @@ import (
 )
 
 func convertGetCelestialWeaponAutoAbilityIDs(cfg *Config) DbQueryIntMany {
-	return func (ctx context.Context, id int32) ([]int32, error) {
+	return func(ctx context.Context, id int32) ([]int32, error) {
 		cw, _ := seeding.GetResourceByID(id, cfg.l.CelestialWeaponsID)
 
 		equipment, _ := seeding.GetResource(cw.Name, cfg.l.EquipmentNames)
@@ -20,8 +20,8 @@ func convertGetCelestialWeaponAutoAbilityIDs(cfg *Config) DbQueryIntMany {
 		table, _ := seeding.GetResourceByID(dbTableIDs[0], cfg.l.EquipmentTablesID)
 
 		return cfg.db.GetCelestialWeaponAutoAbilityIDs(ctx, database.GetCelestialWeaponAutoAbilityIDsParams{
-			CelestialWeaponID: 	cw.ID,
-			EquipmentTableID: 	table.ID,
+			CelestialWeaponID: cw.ID,
+			EquipmentTableID:  table.ID,
 		})
 	}
 }

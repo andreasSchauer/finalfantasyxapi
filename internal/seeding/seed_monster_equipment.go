@@ -3,47 +3,12 @@ package seeding
 import (
 	"context"
 	"fmt"
-	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type MonsterEquipment struct {
-	ID                int32
-	MonsterID         int32
-	DropChance        int32                 `json:"drop_chance"`
-	Power             int32                 `json:"power"`
-	CriticalPlus      int32                 `json:"critical_plus"`
-	AbilitySlots      MonsterEquipmentSlots `json:"ability_slots"`
-	AttachedAbilities MonsterEquipmentSlots `json:"attached_abilities"`
-	WeaponAbilities   []EquipmentDrop       `json:"weapon_abilities"`
-	ArmorAbilities    []EquipmentDrop       `json:"armor_abilities"`
-}
-
-func (m MonsterEquipment) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", m),
-		m.MonsterID,
-		m.DropChance,
-		m.Power,
-		m.CriticalPlus,
-	}
-}
-
-func (m MonsterEquipment) GetID() int32 {
-	return m.ID
-}
-
-func (m *MonsterEquipment) SetID(id int32) {
-	m.ID = id
-}
-
-func (m MonsterEquipment) Error() string {
-	return fmt.Sprintf("monster equipment of monster with id %d", m.MonsterID)
-}
-
-func (l *Lookup) loop2SeedMonsterEquipments(qtx *database.Queries, ctx context.Context) error {
-	equipments := l.extractMonsterEquipments()
+func (l *Lookup) loop2SeedMonsterEquipment(qtx *database.Queries, ctx context.Context) error {
+	equipments := l.extractMonsterEquipment()
 
 	params := database.CreateMonsterEquipmentBulkParams{
 		DataHash:     make([]string, len(equipments)),
@@ -73,7 +38,7 @@ func (l *Lookup) loop2SeedMonsterEquipments(qtx *database.Queries, ctx context.C
 	return nil
 }
 
-func (l *Lookup) extractMonsterEquipments() []MonsterEquipment {
+func (l *Lookup) extractMonsterEquipment() []MonsterEquipment {
 	equipments := []MonsterEquipment{}
 
 	for i := range l.json.monsters {
@@ -129,34 +94,4 @@ func (l *Lookup) completeMonsterEquipment(equipment *MonsterEquipment) error {
 	}
 
 	return nil
-}
-
-func (l *Lookup) getMonsterEquipments() []MonsterEquipment {
-	monsterEquipment := []MonsterEquipment{}
-
-	for _, mon := range l.json.monsters {
-		if mon.Equipment != nil {
-			monsterEquipment = append(monsterEquipment, *mon.Equipment)
-		}
-	}
-
-	return monsterEquipment
-}
-
-func (l *Lookup) getMonsterEquipmentEquipmentDrops(me MonsterEquipment) ([]EquipmentDrop, error) {
-	return slices.Concat(me.WeaponAbilities, me.ArmorAbilities), nil
-}
-
-func (l *Lookup) seedJuncMonsterEquipmentEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "monster equipment + equipment drops"
-	jParams, err := processJunctions(l, desc, l.getMonsterEquipments(), l.getMonsterEquipmentEquipmentDrops)
-	if err != nil {
-		return err
-	}
-
-	return qtx.CreateMonsterEquipmentAbilitiesJunctionBulk(ctx, database.CreateMonsterEquipmentAbilitiesJunctionBulkParams{
-		DataHash:       	jParams.DataHashes,
-		MonsterEquipmentID: jParams.ParentIDs,
-		EquipmentDropID:  	jParams.ChildIDs,
-	})
 }

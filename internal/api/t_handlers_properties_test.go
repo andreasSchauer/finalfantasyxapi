@@ -20,13 +20,13 @@ func TestGetProperty(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"auto-abilities": 	0,
-					"monsters": 		53,
+					"auto-abilities": 0,
+					"monsters":       53,
 				},
 			},
-			expUnique: 		newExpUnique(1, "armored"),
-			autoAbilities: 	[]int32{},
-			monsters: 		[]int32{5, 29, 79, 107, 197, 277, 292},
+			expUnique:     newExpUnique(1, "armored"),
+			autoAbilities: []int32{},
+			monsters:      []int32{5, 29, 79, 107, 197, 277, 292},
 		},
 		{
 			testGeneral: testGeneral{
@@ -34,13 +34,13 @@ func TestGetProperty(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"auto-abilities": 	1,
-					"monsters": 		0,
+					"auto-abilities": 1,
+					"monsters":       0,
 				},
 			},
-			expUnique: 		newExpUnique(4, "piercing"),
-			autoAbilities: 	[]int32{2},
-			monsters: 		[]int32{},
+			expUnique:     newExpUnique(4, "piercing"),
+			autoAbilities: []int32{2},
+			monsters:      []int32{},
 		},
 	}
 

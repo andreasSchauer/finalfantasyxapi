@@ -20,27 +20,25 @@ func (cfg *Config) getSphere(r *http.Request, i handlerInput[seeding.Sphere, Sph
 	response := Sphere{
 		ID:                 sphere.ID,
 		Name:               sphere.Name,
-		Item: 				rel.Item,
-		Description: 		rel.Description,
-		Effect: 			rel.Effect,
-		SgDescription: 		sphere.SgDescription,
-		SphereColor: 		sphere.SphereColor,
-		SphereEffect: 		sphere.SphereEffect,
+		Item:               rel.Item,
+		Description:        rel.Description,
+		Effect:             rel.Effect,
+		SgDescription:      sphere.SgDescription,
+		SphereColor:        sphere.SphereColor,
+		SphereEffect:       sphere.SphereEffect,
 		TargetNodePosition: sphere.TargetNodePosition,
-		TargetNodeState: 	sphere.TargetNodeState,
-		TargetableNodes: 	sphere.TargetableNodes,
-		CreatedNode: 		convertObjPtr(cfg, sphere.CreatedNode, convertCreatedNode),
-		Monsters: 			rel.Monsters,
-		Treasures: 			rel.Treasures,
-		Shops: 				rel.Shops,
-		Quests: 			rel.Quests,
-		BlitzballPrizes: 	rel.BlitzballPrizes,
+		TargetNodeState:    sphere.TargetNodeState,
+		TargetableNodes:    sphere.TargetableNodes,
+		CreatedNode:        convertObjPtr(cfg, sphere.CreatedNode, convertCreatedNode),
+		Monsters:           rel.Monsters,
+		Treasures:          rel.Treasures,
+		Shops:              rel.Shops,
+		Quests:             rel.Quests,
+		BlitzballPrizes:    rel.BlitzballPrizes,
 	}
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

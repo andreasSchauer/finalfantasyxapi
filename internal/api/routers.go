@@ -7,7 +7,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 func routerIdOnly[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	i.usage = []string{"/{id}"}
 	segments := getPathSegments(r.URL.Path, i.endpoint)
@@ -31,7 +30,6 @@ func routerIdOnly[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Confi
 	}
 }
 
-
 func routerNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	i.usage = []string{"/{id}", "/{name}"}
 	segments := getPathSegments(r.URL.Path, i.endpoint)
@@ -54,7 +52,6 @@ func routerNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 		return
 	}
 }
-
 
 func routerNameVersion[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	i.usage = []string{"/{id}", "/{name}", "/{name}/{version}"}

@@ -26,7 +26,6 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 	return rel, nil
 }
 
-
 func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabilityParams AvailabilityParams) (Item, error) {
 	monsters, err := runAvailabilityQuery(cfg, r, cfg.e.monsters, item, availabilityParams, convGetItemMonsterIDs(cfg))
 	if err != nil {
@@ -81,8 +80,6 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabi
 
 	return rel, nil
 }
-
-
 
 func getMonItemAmts(cfg *Config, monsters []NamedAPIResource, itemName string) []MonItemAmts {
 	monItemAmts := []MonItemAmts{}

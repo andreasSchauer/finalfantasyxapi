@@ -7,36 +7,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type TreasureEquipment struct {
-	ID               int32
-	TreasureID       int32
-	EquipmentNameID  int32
-	Name             string   `json:"name"`
-	Abilities        []string `json:"abilities"`
-	EmptySlotsAmount int32    `json:"empty_slots_amount"`
-}
-
-func (te TreasureEquipment) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", te),
-		te.TreasureID,
-		te.EquipmentNameID,
-		te.EmptySlotsAmount,
-	}
-}
-
-func (te TreasureEquipment) GetID() int32 {
-	return te.ID
-}
-
-func (te *TreasureEquipment) SetID(id int32) {
-	te.ID = id
-}
-
-func (te TreasureEquipment) Error() string {
-	return fmt.Sprintf("treasure equipment with name: %s, empty slots: %d", te.Name, te.EmptySlotsAmount)
-}
-
 func (l *Lookup) loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.Context) error {
 	equipment, err := l.extractTreasureEquipment()
 	if err != nil {
@@ -98,36 +68,4 @@ func (l *Lookup) extractTreasureEquipment() ([]TreasureEquipment, error) {
 	}
 
 	return dedupeRows(equipment, l.Hashes), nil
-}
-
-func (l *Lookup) getTreasureEquipment() []TreasureEquipment {
-	treasureEquipment := []TreasureEquipment{}
-
-	for _, list := range l.json.treasureLists {
-		for _, treasure := range list.Treasures {
-			if treasure.Equipment != nil {
-				treasureEquipment = append(treasureEquipment, *treasure.Equipment)
-			}
-		}
-	}
-
-	return treasureEquipment
-}
-
-func (l *Lookup) getTreasureEquipmentAutoAbilities(te TreasureEquipment) ([]AutoAbility, error) {
-	return getResources(te.Abilities, l.AutoAbilities)
-}
-
-func (l *Lookup) seedJuncTreasureEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "treasure equipment + auto-abilities"
-	jParams, err := processJunctions(l, desc, l.getTreasureEquipment(), l.getTreasureEquipmentAutoAbilities)
-	if err != nil {
-		return err
-	}
-
-	return qtx.CreateTreasureEquipmentAbilitiesJunctionBulk(ctx, database.CreateTreasureEquipmentAbilitiesJunctionBulkParams{
-		DataHash:            jParams.DataHashes,
-		TreasureEquipmentID: jParams.ParentIDs,
-		AutoAbilityID:       jParams.ChildIDs,
-	})
 }

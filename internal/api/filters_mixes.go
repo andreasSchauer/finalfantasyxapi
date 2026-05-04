@@ -8,7 +8,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 func getMixesByItem(cfg *Config, r *http.Request, firstItemId int32) ([]NamedAPIResource, error) {
 	i := cfg.e.mixes
 

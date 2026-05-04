@@ -7,7 +7,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 type StatusInfliction struct {
 	PlayerAbilities      []NamedAPIResource `json:"player_abilities"`
 	OverdriveAbilities   []NamedAPIResource `json:"overdrive_abilities"`
@@ -27,11 +26,11 @@ func (s StatusInfliction) IsZero() bool {
 }
 
 type StatusRemoval struct {
-	PlayerAbilities      []NamedAPIResource `json:"player_abilities"`
-	OverdriveAbilities   []NamedAPIResource `json:"overdrive_abilities"`
-	ItemAbilities        []NamedAPIResource `json:"item_abilities"`
-	EnemyAbilities       []NamedAPIResource `json:"enemy_abilities"`
-	StatusConditions     []NamedAPIResource `json:"status_conditions"`
+	PlayerAbilities    []NamedAPIResource `json:"player_abilities"`
+	OverdriveAbilities []NamedAPIResource `json:"overdrive_abilities"`
+	ItemAbilities      []NamedAPIResource `json:"item_abilities"`
+	EnemyAbilities     []NamedAPIResource `json:"enemy_abilities"`
+	StatusConditions   []NamedAPIResource `json:"status_conditions"`
 }
 
 func (s StatusRemoval) IsZero() bool {
@@ -130,13 +129,12 @@ func populateStatusInfliction(cfg *Config, abilities []TypedAPIResource) StatusI
 	return infliction
 }
 
-
 func populateStatusRemoval(cfg *Config, abilities []TypedAPIResource) StatusRemoval {
 	removal := StatusRemoval{
-		PlayerAbilities:      []NamedAPIResource{},
-		OverdriveAbilities:   []NamedAPIResource{},
-		ItemAbilities:        []NamedAPIResource{},
-		EnemyAbilities:       []NamedAPIResource{},
+		PlayerAbilities:    []NamedAPIResource{},
+		OverdriveAbilities: []NamedAPIResource{},
+		ItemAbilities:      []NamedAPIResource{},
+		EnemyAbilities:     []NamedAPIResource{},
 	}
 
 	for _, ability := range abilities {

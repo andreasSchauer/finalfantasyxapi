@@ -65,10 +65,10 @@ type ResParamsTyped struct {
 }
 
 type ResParamsQuest struct {
-	ID			int32
-	Sidequest	*string
-	Subquest	*string
-	Type		string
+	ID        int32
+	Sidequest *string
+	Subquest  *string
+	Type      string
 }
 
 type ResParamsEnum struct {

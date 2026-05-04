@@ -53,7 +53,6 @@ func getQueryIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.R
 	return &id, nil
 }
 
-
 func getQueryNameIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 

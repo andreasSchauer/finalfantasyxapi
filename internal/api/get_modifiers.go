@@ -18,25 +18,23 @@ func (cfg *Config) getModifier(r *http.Request, i handlerInput[seeding.Modifier,
 	}
 
 	response := Modifier{
-		ID:            		modifier.ID,
-		Name:          		modifier.Name,
-		Effect:        		modifier.Effect,
-		Category:      		modifier.Category,
-		DefaultValue: 		modifier.DefaultValue,
-		AutoAbilities: 		rel.AutoAbilities,
-		PlayerAbilities: 	rel.PlayerAbilities,
+		ID:                 modifier.ID,
+		Name:               modifier.Name,
+		Effect:             modifier.Effect,
+		Category:           modifier.Category,
+		DefaultValue:       modifier.DefaultValue,
+		AutoAbilities:      rel.AutoAbilities,
+		PlayerAbilities:    rel.PlayerAbilities,
 		OverdriveAbilities: rel.OverdriveAbilities,
-		ItemAbilities: 		rel.ItemAbilities,
-		TriggerCommands: 	rel.TriggerCommands,
-		EnemyAbilities: 	rel.EnemyAbilities,
-		StatusConditions: 	rel.StatusConditions,
-		Properties: 		rel.Properties,
+		ItemAbilities:      rel.ItemAbilities,
+		TriggerCommands:    rel.TriggerCommands,
+		EnemyAbilities:     rel.EnemyAbilities,
+		StatusConditions:   rel.StatusConditions,
+		Properties:         rel.Properties,
 	}
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)

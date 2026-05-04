@@ -9,38 +9,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type EquipmentDrop struct {
-	ID            int32
-	AutoAbilityID int32
-	Ability       string   `json:"ability"`
-	Characters    []string `json:"characters"`
-	IsForced      bool     `json:"is_forced"`
-	Probability   *int32   `json:"probability"`
-	Type          database.EquipType
-}
-
-func (e EquipmentDrop) ToHashFields() []any {
-	return []any{
-		fmt.Sprintf("%T", e),
-		e.AutoAbilityID,
-		e.IsForced,
-		h.DerefOrNil(e.Probability),
-		e.Type,
-	}
-}
-
-func (e EquipmentDrop) GetID() int32 {
-	return e.ID
-}
-
-func (e *EquipmentDrop) SetID(id int32) {
-	e.ID = id
-}
-
-func (e EquipmentDrop) Error() string {
-	return fmt.Sprintf("equipment drop with auto-ability id: %d, type: %s, is forced: %t, probability: %v", e.AutoAbilityID, e.Type, e.IsForced, h.PtrToString(e.Probability))
-}
-
 func (l *Lookup) loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
 	drops, err := l.extractEquipmentDrops()
 	if err != nil {
@@ -112,23 +80,4 @@ func (l *Lookup) extractEquipmentDrops() ([]EquipmentDrop, error) {
 	}
 
 	return dedupeRows(drops, l.Hashes), nil
-}
-
-func (l *Lookup) getEquipmentDropCharacters(ed EquipmentDrop) ([]Character, error) {
-	return getResources(ed.Characters, l.Characters)
-}
-
-func (l *Lookup) seedJuncEquipmentDropsCharacters(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "equipment drops + characters"
-	jParams, err := processThreewayJunctions(l, desc, l.getMonsterEquipments(), l.getMonsterEquipmentEquipmentDrops, l.getEquipmentDropCharacters)
-	if err != nil {
-		return err
-	}
-
-	return qtx.CreateEquipmentDropsCharactersJunctionBulk(ctx, database.CreateEquipmentDropsCharactersJunctionBulkParams{
-		DataHash:           jParams.DataHashes,
-		MonsterEquipmentID: jParams.GrandParentIDs,
-		EquipmentDropID:    jParams.ParentIDs,
-		CharacterID:        jParams.ChildIDs,
-	})
 }

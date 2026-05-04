@@ -19,13 +19,13 @@ func TestGetQuest(t *testing.T) {
 				requestURL:     "/api/quests/1",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{},
+				expLengths:     map[string]int{},
 			},
 			expUnique: expUnique{
 				id:   1,
 				name: "monster arena",
 			},
-			questType: 	1,
+			questType:  1,
 			typedQuest: "/sidequests/1",
 		},
 		{
@@ -33,13 +33,13 @@ func TestGetQuest(t *testing.T) {
 				requestURL:     "/api/quests/47",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{},
+				expLengths:     map[string]int{},
 			},
 			expUnique: expUnique{
 				id:   47,
 				name: "valefor - first win",
 			},
-			questType: 	2,
+			questType:  2,
 			typedQuest: "/subquests/37",
 		},
 		{
@@ -55,7 +55,7 @@ func TestGetQuest(t *testing.T) {
 				id:   80,
 				name: "6 or 7 guardian spheres",
 			},
-			questType: 	2,
+			questType:  2,
 			typedQuest: "/subquests/70",
 		},
 	}

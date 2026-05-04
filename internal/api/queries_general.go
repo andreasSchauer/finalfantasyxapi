@@ -28,7 +28,6 @@ func basicQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 	return resources, nil
 }
 
-
 // checks, if a queryParam is empty and returns errEmptyQuery, if it is
 func checkEmptyQuery(r *http.Request, queryParam QueryParam) (string, error) {
 	query := r.URL.Query().Get(queryParam.Name)

@@ -23,7 +23,6 @@ func newResourceAmount[A APIResource](resource A, amount int32) ResourceAmount[A
 	}
 }
 
-
 func idAmountToResourceAmount[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id, amount int32) ResourceAmount[A] {
 	return ResourceAmount[A]{
 		Resource: i.idToResFunc(cfg, i, id),
@@ -152,8 +151,7 @@ func getForeignResAmts2[T seeding.HasItemAmounts, R any, A APIResource, L APIRes
 	return resAmts
 }
 
-
-func getForeignSliceResAmts[K seeding.LookupableID ,T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], targetItem K, skipCondition bool, fn func(*Config, K, int32) (ResourceAmount[A], error)) []ResourceAmount[A] {
+func getForeignSliceResAmts[K seeding.LookupableID, T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], targetItem K, skipCondition bool, fn func(*Config, K, int32) (ResourceAmount[A], error)) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}
 
 	if skipCondition {

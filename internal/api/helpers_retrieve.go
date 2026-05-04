@@ -7,7 +7,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 func getMultipleAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], name string) (L, error) {
 	var zeroType L
 
@@ -19,7 +18,6 @@ func getMultipleAPIResources[T h.HasID, R any, A APIResource, L APIResourceList]
 	return idsToAPIResourceList(cfg, r, i, dbIDs)
 }
 
-
 func retrieveAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]A, error) {
 	dbIDs, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
@@ -28,7 +26,6 @@ func retrieveAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cf
 
 	return idsToAPIResources(cfg, i, dbIDs), nil
 }
-
 
 func filterAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A, filteredLists []filteredResList[A]) (L, error) {
 	var zeroType L
