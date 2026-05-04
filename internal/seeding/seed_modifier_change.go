@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type ModifierChange struct {
@@ -36,29 +35,6 @@ func (m *ModifierChange) SetID(id int32) {
 func (m ModifierChange) Error() string {
 	return fmt.Sprintf("modifier change with modifier: %s, calc type: %s, value %f", m.ModifierName, m.CalculationType, m.Value)
 }
-
-func (l *Lookup) seedModifierChange(qtx *database.Queries, modifierChange ModifierChange) (ModifierChange, error) {
-	var err error
-
-	modifierChange.ModifierID, err = assignFK(modifierChange.ModifierName, l.Modifiers)
-	if err != nil {
-		return ModifierChange{}, h.NewErr(modifierChange.Error(), err)
-	}
-
-	dbModifierChange, err := qtx.CreateModifierChange(context.Background(), database.CreateModifierChangeParams{
-		DataHash:        generateDataHash(modifierChange),
-		ModifierID:      modifierChange.ModifierID,
-		CalculationType: database.CalculationType(modifierChange.CalculationType),
-		Value:           modifierChange.Value,
-	})
-	if err != nil {
-		return ModifierChange{}, h.NewErr(modifierChange.Error(), err, "couldn't create modifier change")
-	}
-	modifierChange.ID = dbModifierChange.ID
-
-	return modifierChange, nil
-}
-
 
 func (l *Lookup) loop2SeedModifierChanges(qtx *database.Queries, ctx context.Context) error {
 	changes, err := l.extractModifierChanges()

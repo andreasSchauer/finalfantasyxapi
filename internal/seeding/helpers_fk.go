@@ -3,7 +3,6 @@ package seeding
 import (
 	"fmt"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -29,28 +28,4 @@ func assignFKPtr[T any, R h.HasID](key *T, lookup map[string]R) (*int32, error) 
 
 	id := result.GetID()
 	return &id, nil
-}
-
-func seedObjAssignID[T h.HasID](qtx *database.Queries, obj T, seed func(*database.Queries, T) (T, error)) (T, error) {
-	var object T
-
-	object, err := seed(qtx, obj)
-	if err != nil {
-		return object, fmt.Errorf("couldn't seed object and assign id: %v", err)
-	}
-
-	return object, nil
-}
-
-func seedObjPtrAssignFK[T h.HasID](qtx *database.Queries, obj *T, seed func(*database.Queries, T) (T, error)) (*T, error) {
-	if obj == nil {
-		return nil, nil
-	}
-
-	object, err := seed(qtx, *obj)
-	if err != nil {
-		return nil, fmt.Errorf("couldn't seed object pointer and assign id: %v", err)
-	}
-
-	return &object, nil
 }

@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type MonsterEquipmentSlots struct {
@@ -64,80 +63,6 @@ func (e *EquipmentSlotsChance) SetID(id int32) {
 func (e EquipmentSlotsChance) Error() string {
 	return fmt.Sprintf("equipment slots chance with amount: %d, chance: %d", e.Amount, e.Chance)
 }
-
-func (l *Lookup) seedMonsterEquipmentSlotsWrapper(qtx *database.Queries, monsterEquipment MonsterEquipment, mes MonsterEquipmentSlots, slotsType database.EquipmentSlotsType) error {
-	var err error
-
-	mes.MonsterEquipmentID = monsterEquipment.ID
-	mes.Type = slotsType
-
-	mes, err = seedObjAssignID(qtx, mes, l.seedMonsterEquipmentSlots)
-	if err != nil {
-		return h.NewErr(monsterEquipment.Error(), err)
-	}
-
-	return nil
-}
-
-func (l *Lookup) seedMonsterEquipmentSlots(qtx *database.Queries, mes MonsterEquipmentSlots) (MonsterEquipmentSlots, error) {
-	dbMes, err := qtx.CreateMonsterEquipmentSlots(context.Background(), database.CreateMonsterEquipmentSlotsParams{
-		DataHash:           generateDataHash(mes),
-		MonsterEquipmentID: mes.MonsterEquipmentID,
-		MinAmount:          mes.MinAmount,
-		MaxAmount:          mes.MaxAmount,
-		Type:               mes.Type,
-	})
-	if err != nil {
-		return MonsterEquipmentSlots{}, h.NewErr(mes.Error(), err, "couldn't create monster equipment slots")
-	}
-	mes.ID = dbMes.ID
-
-	err = l.seedMonsterEquipmentSlotsChances(qtx, mes)
-	if err != nil {
-		return MonsterEquipmentSlots{}, h.NewErr(mes.Error(), err)
-	}
-
-	return mes, nil
-}
-
-func (l *Lookup) seedMonsterEquipmentSlotsChances(qtx *database.Queries, mes MonsterEquipmentSlots) error {
-	monsterEquipment := l.currentME
-
-	for _, chance := range mes.Chances {
-		threeWay, err := createThreeWayJunctionSeed(qtx, monsterEquipment, mes, chance, l.seedEquipmentSlotsChance)
-		if err != nil {
-			return err
-		}
-
-		err = qtx.CreateMonsterEquipmentSlotsChancesJunction(context.Background(), database.CreateMonsterEquipmentSlotsChancesJunctionParams{
-			DataHash:           generateDataHash(threeWay),
-			MonsterEquipmentID: threeWay.GrandparentID,
-			EquipmentSlotsID:   threeWay.ParentID,
-			SlotsChanceID:      threeWay.ChildID,
-		})
-		if err != nil {
-			return h.NewErr(chance.Error(), err, "couldn't junction chance")
-		}
-	}
-
-	return nil
-}
-
-func (l *Lookup) seedEquipmentSlotsChance(qtx *database.Queries, esc EquipmentSlotsChance) (EquipmentSlotsChance, error) {
-	dbEsc, err := qtx.CreateEquipmentSlotsChance(context.Background(), database.CreateEquipmentSlotsChanceParams{
-		DataHash: generateDataHash(esc),
-		Amount:   esc.Amount,
-		Chance:   esc.Chance,
-	})
-	if err != nil {
-		return EquipmentSlotsChance{}, h.NewErr(esc.Error(), err, "couldn't create equipment slots chance")
-	}
-
-	esc.ID = dbEsc.ID
-
-	return esc, nil
-}
-
 
 func (l *Lookup) loop1SeedEquipmentSlotsChances(qtx *database.Queries, ctx context.Context) error {
 	chances := l.getEquipmentSlotsChances()

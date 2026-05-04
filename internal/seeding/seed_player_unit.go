@@ -54,23 +54,6 @@ func (pu PlayerUnit) GetResParamsTyped() h.ResParamsTyped {
 	}
 }
 
-func (l *Lookup) seedPlayerUnit(qtx *database.Queries, playerUnit PlayerUnit) (PlayerUnit, error) {
-	dbPlayerUnit, err := qtx.CreatePlayerUnit(context.Background(), database.CreatePlayerUnitParams{
-		DataHash: generateDataHash(playerUnit),
-		Name:     playerUnit.Name,
-		Type:     playerUnit.Type,
-	})
-	if err != nil {
-		return PlayerUnit{}, h.NewErr(playerUnit.Error(), err, "couldn't create player unit")
-	}
-
-	playerUnit.ID = dbPlayerUnit.ID
-	l.PlayerUnits[playerUnit.Name] = playerUnit
-	l.PlayerUnitsID[playerUnit.ID] = playerUnit
-
-	return playerUnit, nil
-}
-
 func (l *Lookup) loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context) error {
 	units := l.extractPlayerUnits()
 

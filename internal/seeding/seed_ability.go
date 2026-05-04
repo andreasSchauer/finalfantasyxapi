@@ -128,50 +128,6 @@ func (a Attributes) Error() string {
 	return fmt.Sprintf("ability attributes with rank: %v, help bar: %t, copycat: %t", h.PtrToString(a.Rank), a.AppearsInHelpBar, a.CanCopycat)
 }
 
-func (l *Lookup) seedAbility(qtx *database.Queries, ability Ability) (Ability, error) {
-	var err error
-
-	ability.Attributes, err = seedObjAssignID(qtx, ability.Attributes, l.seedAbilityAttributes)
-	if err != nil {
-		return Ability{}, h.NewErr(ability.Error(), err)
-	}
-
-	dbAbility, err := qtx.CreateAbility(context.Background(), database.CreateAbilityParams{
-		DataHash:      generateDataHash(ability),
-		Name:          ability.Name,
-		Version:       h.GetNullInt32(ability.Version),
-		Specification: h.GetNullString(ability.Specification),
-		AttributesID:  ability.Attributes.ID,
-		Type:          ability.Type,
-	})
-	if err != nil {
-		return Ability{}, h.NewErr(ability.Error(), err, "couldn't create ability")
-	}
-
-	ability.ID = dbAbility.ID
-	key := Key(ability)
-	l.Abilities[key] = ability
-	l.AbilitiesID[ability.ID] = ability
-
-	return ability, nil
-}
-
-func (l *Lookup) seedAbilityAttributes(qtx *database.Queries, attributes Attributes) (Attributes, error) {
-	dbAttributes, err := qtx.CreateAbilityAttributes(context.Background(), database.CreateAbilityAttributesParams{
-		DataHash:         generateDataHash(attributes),
-		Rank:             h.GetNullInt32(attributes.Rank),
-		AppearsInHelpBar: attributes.AppearsInHelpBar,
-		CanCopycat:       attributes.CanCopycat,
-	})
-	if err != nil {
-		return Attributes{}, h.NewErr(attributes.Error(), err, "couldn't create ability attributes")
-	}
-
-	attributes.ID = dbAttributes.ID
-
-	return attributes, nil
-}
-
 func (l *Lookup) loop2SeedAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := l.extractAbilities()
 	if err != nil {

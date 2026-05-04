@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type ElementalResist struct {
@@ -41,31 +40,6 @@ func (er *ElementalResist) SetID(id int32) {
 
 func (er ElementalResist) Error() string {
 	return fmt.Sprintf("elemental resist with element: %s, affinity: %s", er.Element, er.Affinity)
-}
-
-func (l *Lookup) seedElementalResist(qtx *database.Queries, elemResist ElementalResist) (ElementalResist, error) {
-	var err error
-
-	elemResist.ElementID, err = assignFK(elemResist.Element, l.Elements)
-	if err != nil {
-		return ElementalResist{}, h.NewErr(elemResist.Error(), err)
-	}
-
-	dbElemResist, err := qtx.CreateElementalResist(context.Background(), database.CreateElementalResistParams{
-		DataHash:  generateDataHash(elemResist),
-		ElementID: elemResist.ElementID,
-		Affinity:  database.ElementalAffinity(elemResist.Affinity),
-	})
-	if err != nil {
-		return ElementalResist{}, h.NewErr(elemResist.Error(), err, "couldn't create elemental resist")
-	}
-
-	elemResist.ID = dbElemResist.ID
-	key := Key(elemResist)
-	l.ElementalResists[key] = elemResist
-	l.ElementalResistsID[elemResist.ID] = elemResist
-
-	return elemResist, nil
 }
 
 func (l *Lookup) loop2SeedElementalResists(qtx *database.Queries, ctx context.Context) error {

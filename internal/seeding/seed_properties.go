@@ -2,7 +2,6 @@ package seeding
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -41,130 +40,6 @@ func (p Property) GetResParamsNamed() h.ResParamsNamed {
 		ID:   p.ID,
 		Name: p.Name,
 	}
-}
-
-func (l *Lookup) seedProperties(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/properties.json"
-
-	var properties []Property
-	err := loadJSONFile(string(srcPath), &properties)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, property := range properties {
-			dbProperty, err := qtx.CreateProperty(context.Background(), database.CreatePropertyParams{
-				DataHash:       generateDataHash(property),
-				Name:           property.Name,
-				Effect:         property.Effect,
-				NullifyArmored: database.ToNullNullifyArmored(property.NullifyArmored),
-			})
-			if err != nil {
-				return h.NewErr(property.Error(), err, "couldn't create property")
-			}
-
-			property.ID = dbProperty.ID
-			l.Properties[property.Name] = property
-			l.PropertiesID[property.ID] = property
-		}
-		return nil
-	})
-}
-
-func (l *Lookup) seedPropertiesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/properties.json"
-
-	var properties []Property
-	err := loadJSONFile(string(srcPath), &properties)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, jsonProperty := range properties {
-			property, err := GetResource(jsonProperty.Name, l.Properties)
-			if err != nil {
-				return err
-			}
-
-			relationShipFunctions := []func(*database.Queries, Property) error{
-				l.seedPropertyRelatedStats,
-				l.seedPropertyStatChanges,
-				l.seedPropertyModifierChanges,
-			}
-
-			for _, function := range relationShipFunctions {
-				err := function(qtx, property)
-				if err != nil {
-					return h.NewErr(property.Error(), err)
-				}
-			}
-		}
-
-		return nil
-	})
-
-}
-
-func (l *Lookup) seedPropertyRelatedStats(qtx *database.Queries, property Property) error {
-	for _, jsonStat := range property.RelatedStats {
-		junction, err := createJunction(property, jsonStat, l.Stats)
-		if err != nil {
-			return err
-		}
-
-		err = qtx.CreatePropertiesRelatedStatsJunction(context.Background(), database.CreatePropertiesRelatedStatsJunctionParams{
-			DataHash:   generateDataHash(junction),
-			PropertyID: junction.ParentID,
-			StatID:     junction.ChildID,
-		})
-		if err != nil {
-			return h.NewErr(jsonStat, err, "couldn't junction related stat")
-		}
-	}
-
-	return nil
-}
-
-func (l *Lookup) seedPropertyStatChanges(qtx *database.Queries, property Property) error {
-	for _, statChange := range property.StatChanges {
-		junction, err := createJunctionSeed(qtx, property, statChange, l.seedStatChange)
-		if err != nil {
-			return err
-		}
-
-		err = qtx.CreatePropertiesStatChangesJunction(context.Background(), database.CreatePropertiesStatChangesJunctionParams{
-			DataHash:     generateDataHash(junction),
-			PropertyID:   junction.ParentID,
-			StatChangeID: junction.ChildID,
-		})
-		if err != nil {
-			return h.NewErr(statChange.Error(), err, "couldn't junction stat change")
-		}
-	}
-
-	return nil
-}
-
-func (l *Lookup) seedPropertyModifierChanges(qtx *database.Queries, property Property) error {
-	for _, modifierChange := range property.ModifierChanges {
-		junction, err := createJunctionSeed(qtx, property, modifierChange, l.seedModifierChange)
-		if err != nil {
-			return err
-		}
-
-		err = qtx.CreatePropertiesModifierChangesJunction(context.Background(), database.CreatePropertiesModifierChangesJunctionParams{
-			DataHash:         generateDataHash(junction),
-			PropertyID:       junction.ParentID,
-			ModifierChangeID: junction.ChildID,
-		})
-		if err != nil {
-			return h.NewErr(modifierChange.Error(), err, "couldn't junction modifier change")
-		}
-	}
-
-	return nil
 }
 
 func (l *Lookup) loop1SeedProperties(qtx *database.Queries, ctx context.Context) error {

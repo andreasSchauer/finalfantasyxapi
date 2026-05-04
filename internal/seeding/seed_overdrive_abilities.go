@@ -2,7 +2,6 @@ package seeding
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -54,99 +53,6 @@ func (o OverdriveAbility) GetResParamsNamed() h.ResParamsNamed {
 		Version:       o.Version,
 		Specification: o.Specification,
 	}
-}
-
-func (l *Lookup) seedOverdriveAbilities(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/overdrive_abilities.json"
-
-	var overdriveAbilities []OverdriveAbility
-
-	err := loadJSONFile(string(srcPath), &overdriveAbilities)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, overdriveAbility := range overdriveAbilities {
-			var err error
-			overdriveAbility.Type = database.AbilityTypeOverdriveAbility
-
-			overdriveAbility.Ability, err = seedObjAssignID(qtx, overdriveAbility.Ability, l.seedAbility)
-			if err != nil {
-				return h.NewErr(overdriveAbility.Error(), err)
-			}
-
-			dbOverdriveAbility, err := qtx.CreateOverdriveAbility(context.Background(), database.CreateOverdriveAbilityParams{
-				DataHash:  generateDataHash(overdriveAbility),
-				AbilityID: overdriveAbility.Ability.ID,
-			})
-			if err != nil {
-				return h.NewErr(overdriveAbility.Error(), err, "couldn't create overdrive ability")
-			}
-
-			overdriveAbility.ID = dbOverdriveAbility.ID
-			key := Key(overdriveAbility)
-			l.OverdriveAbilities[key] = overdriveAbility
-			l.OverdriveAbilitiesID[overdriveAbility.ID] = overdriveAbility
-		}
-		return nil
-	})
-}
-
-func (l *Lookup) seedOverdriveAbilitiesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/overdrive_abilities.json"
-
-	var overdriveAbilities []OverdriveAbility
-
-	err := loadJSONFile(string(srcPath), &overdriveAbilities)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, jsonAbility := range overdriveAbilities {
-			abilityRef := jsonAbility.GetAbilityRef()
-
-			overdriveAbility, err := GetResource(abilityRef.Untyped(), l.OverdriveAbilities)
-			if err != nil {
-				return h.NewErr(abilityRef.Error(), err)
-			}
-
-			err = l.seedOverdriveAbilityRelatedStats(qtx, overdriveAbility)
-			if err != nil {
-				return h.NewErr(overdriveAbility.Error(), err)
-			}
-
-			l.currentAbility = overdriveAbility.Ability
-
-			err = l.seedBattleInteractions(qtx, l.currentAbility, overdriveAbility.BattleInteractions)
-			if err != nil {
-				return h.NewErr(overdriveAbility.Error(), err)
-			}
-		}
-
-		return nil
-	})
-}
-
-func (l *Lookup) seedOverdriveAbilityRelatedStats(qtx *database.Queries, ability OverdriveAbility) error {
-	for _, jsonStat := range ability.RelatedStats {
-		junction, err := createJunction(ability, jsonStat, l.Stats)
-		if err != nil {
-			return err
-		}
-
-		err = qtx.CreateOverdriveAbilitiesRelatedStatsJunction(context.Background(), database.CreateOverdriveAbilitiesRelatedStatsJunctionParams{
-			DataHash:           generateDataHash(junction),
-			OverdriveAbilityID: junction.ParentID,
-			StatID:             junction.ChildID,
-		})
-		if err != nil {
-			return h.NewErr(jsonStat, err, "couldn't junction related stat")
-		}
-	}
-
-	return nil
 }
 
 func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {

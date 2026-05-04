@@ -2,7 +2,6 @@ package seeding
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -80,136 +79,6 @@ func (m MixCombination) Error() string {
 	return fmt.Sprintf("mix combination with first item: %s, second item: %s", m.FirstItem, m.SecondItem)
 }
 
-func (l *Lookup) seedMixes(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/mixes.json"
-
-	var mixes []Mix
-	err := loadJSONFile(string(srcPath), &mixes)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, mix := range mixes {
-			var err error
-
-			key := LookupObject{
-				Name: mix.Name,
-			}
-
-			mix.OverdriveID, err = assignFK(key, l.Overdrives)
-			if err != nil {
-				return h.NewErr(mix.Error(), err)
-			}
-
-			dbMix, err := qtx.CreateMix(context.Background(), database.CreateMixParams{
-				DataHash:    generateDataHash(mix),
-				OverdriveID: mix.OverdriveID,
-				Category:    database.MixCategory(mix.Category),
-			})
-			if err != nil {
-				return h.NewErr(mix.Error(), err, "couldn't create mix")
-			}
-
-			mix.ID = dbMix.ID
-			l.Mixes[mix.Name] = mix
-			l.MixesID[mix.ID] = mix
-		}
-
-		return nil
-	})
-}
-
-func (l *Lookup) seedMixesRelationships(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/mixes.json"
-
-	var mixes []Mix
-	err := loadJSONFile(string(srcPath), &mixes)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, jsonMix := range mixes {
-			mix, err := GetResource(jsonMix.Name, l.Mixes)
-			if err != nil {
-				return err
-			}
-
-			err = l.seedMixCombinations(qtx, mix)
-			if err != nil {
-				return h.NewErr(mix.Error(), err)
-			}
-		}
-
-		return nil
-	})
-}
-
-func (l *Lookup) seedMixCombinations(qtx *database.Queries, mix Mix) error {
-	bestComboMap := getBestComboMap(mix)
-
-	for _, combo := range mix.PossibleCombinations {
-		var err error
-		combo.MixID = mix.ID
-
-		key := Key(combo)
-		combo.IsBestCombo = bestComboMap[key]
-
-		_, err = seedObjAssignID(qtx, combo, l.seedMixCombination)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func getBestComboMap(mix Mix) map[string]bool {
-	bestComboMap := make(map[string]bool)
-
-	for _, combo := range mix.BestCombinations {
-		key := Key(combo)
-		bestComboMap[key] = true
-	}
-
-	return bestComboMap
-}
-
-func (l *Lookup) seedMixCombination(qtx *database.Queries, combo MixCombination) (MixCombination, error) {
-	var err error
-
-	combo.FirstItemID, err = assignFK(combo.FirstItem, l.Items)
-	if err != nil {
-		return MixCombination{}, h.NewErr(combo.Error(), err)
-	}
-
-	combo.SecondItemID, err = assignFK(combo.SecondItem, l.Items)
-	if err != nil {
-		return MixCombination{}, h.NewErr(combo.Error(), err)
-	}
-
-	if combo.FirstItemID > combo.SecondItemID {
-		temp := combo.FirstItemID
-		combo.FirstItemID = combo.SecondItemID
-		combo.SecondItemID = temp
-	}
-
-	dbCombo, err := qtx.CreateMixCombination(context.Background(), database.CreateMixCombinationParams{
-		DataHash:     generateDataHash(combo),
-		MixID:        combo.MixID,
-		FirstItemID:  combo.FirstItemID,
-		SecondItemID: combo.SecondItemID,
-		IsBestCombo:  combo.IsBestCombo,
-	})
-	if err != nil {
-		return MixCombination{}, h.NewErr(combo.Error(), err, "couldn't create mix combination")
-	}
-
-	combo.ID = dbCombo.ID
-
-	return combo, nil
-}
 
 func (l *Lookup) loop5SeedMixes(qtx *database.Queries, ctx context.Context) error {
 	mixes, err := l.extractMixes()
@@ -353,4 +222,16 @@ func (l *Lookup) extractMixCombinations() ([]MixCombination, error) {
 	}
 
 	return dedupeRows(combos, l.Hashes), nil
+}
+
+
+func getBestComboMap(mix Mix) map[string]bool {
+	bestComboMap := make(map[string]bool)
+
+	for _, combo := range mix.BestCombinations {
+		key := Key(combo)
+		bestComboMap[key] = true
+	}
+
+	return bestComboMap
 }

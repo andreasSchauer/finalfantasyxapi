@@ -2,7 +2,6 @@ package seeding
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -36,33 +35,6 @@ func (t Topmenu) GetResParamsNamed() h.ResParamsNamed {
 	}
 }
 
-
-func (l *Lookup) seedTopmenus(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/topmenus.json"
-
-	var topmenus []Topmenu
-	err := loadJSONFile(string(srcPath), &topmenus)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, topmenu := range topmenus {
-			dbTopmenu, err := qtx.CreateTopmenu(context.Background(), database.CreateTopmenuParams{
-				DataHash:    generateDataHash(topmenu),
-				Name:        topmenu.Name,
-			})
-			if err != nil {
-				return h.NewErr(topmenu.Error(), err, "couldn't create topmenu")
-			}
-
-			topmenu.ID = dbTopmenu.ID
-			l.Topmenus[topmenu.Name] = topmenu
-			l.TopmenusID[topmenu.ID] = topmenu
-		}
-		return nil
-	})
-}
 
 func (l *Lookup) loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) error {
 	topmenus := dedupeRows(l.json.topmenus, l.Hashes)

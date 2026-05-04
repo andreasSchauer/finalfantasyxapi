@@ -47,51 +47,6 @@ func (f FMV) GetResParamsNamed() h.ResParamsNamed {
 	}
 }
 
-func (l *Lookup) seedFMVs(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/fmvs.json"
-
-	var fmvs []FMV
-	err := loadJSONFile(string(srcPath), &fmvs)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, fmv := range fmvs {
-			var err error
-
-			fmv.SongID, err = assignFKPtr(fmv.SongName, l.Songs)
-			if err != nil {
-				return h.NewErr(fmv.Error(), err)
-			}
-
-			fmv.AreaID, err = assignFK(fmv.LocationArea, l.Areas)
-			if err != nil {
-				return h.NewErr(fmv.Error(), err)
-			}
-
-			dbFMV, err := qtx.CreateFMV(context.Background(), database.CreateFMVParams{
-				DataHash:            generateDataHash(fmv),
-				Name:                fmv.Name,
-				Translation:         h.GetNullString(fmv.Translation),
-				CutsceneDescription: fmv.CutsceneDescription,
-				SongID:              h.GetNullInt32(fmv.SongID),
-				AreaID:              fmv.AreaID,
-			})
-			if err != nil {
-				return h.NewErr(fmv.Error(), err, "couldn't create fmv")
-			}
-
-			fmv.ID = dbFMV.ID
-			l.FMVs[fmv.Name] = fmv
-			l.FMVsID[fmv.ID] = fmv
-		}
-		return nil
-	})
-}
-
-
-
 func (l *Lookup) loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error {
 	fmvs, err := l.extractFMVs()
 	if err != nil {

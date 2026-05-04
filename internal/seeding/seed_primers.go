@@ -2,7 +2,6 @@ package seeding
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -40,43 +39,6 @@ func (p Primer) GetResParamsNamed() h.ResParamsNamed {
 		Name: 	p.Name,
 	}
 }
-
-func (l *Lookup) seedPrimers(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/primers.json"
-
-	var primers []Primer
-	err := loadJSONFile(string(srcPath), &primers)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, primer := range primers {
-			var err error
-
-			primer.KeyItemID, err = assignFK(primer.Name, l.KeyItems)
-			if err != nil {
-				return h.NewErr(primer.Error(), err)
-			}
-
-			dbPrimer, err := qtx.CreatePrimer(context.Background(), database.CreatePrimerParams{
-				DataHash:      generateDataHash(primer),
-				KeyItemID:     primer.KeyItemID,
-				AlBhedLetter:  primer.AlBhedLetter,
-				EnglishLetter: primer.EnglishLetter,
-			})
-			if err != nil {
-				return h.NewErr(primer.Error(), err, "couldn't create primer")
-			}
-
-			primer.ID = dbPrimer.ID
-			l.Primers[primer.Name] = primer
-			l.PrimersID[primer.ID] = primer
-		}
-		return nil
-	})
-}
-
 
 func (l *Lookup) loop3SeedPrimers(qtx *database.Queries, ctx context.Context) error {
 	primers, err := l.extractPrimers()

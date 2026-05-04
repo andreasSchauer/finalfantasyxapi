@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type TreasureEquipment struct {
@@ -38,52 +37,67 @@ func (te TreasureEquipment) Error() string {
 	return fmt.Sprintf("treasure equipment with name: %s, empty slots: %d", te.Name, te.EmptySlotsAmount)
 }
 
-func (l *Lookup) seedFoundEquipment(qtx *database.Queries, foundEquipment TreasureEquipment) (TreasureEquipment, error) {
-	var err error
-
-	foundEquipment.EquipmentNameID, err = assignFK(foundEquipment.Name, l.EquipmentNames)
+func (l *Lookup) loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.Context) error {
+	equipment, err := l.extractTreasureEquipment()
 	if err != nil {
-		return TreasureEquipment{}, h.NewErr(foundEquipment.Error(), err)
+		return err
 	}
 
-	dbFoundEquipment, err := qtx.CreateTreasureEquipmentPiece(context.Background(), database.CreateTreasureEquipmentPieceParams{
-		DataHash:         generateDataHash(foundEquipment),
-		TreasureID:       foundEquipment.TreasureID,
-		EquipmentNameID:  foundEquipment.EquipmentNameID,
-		EmptySlotsAmount: foundEquipment.EmptySlotsAmount,
-	})
-	if err != nil {
-		return TreasureEquipment{}, h.NewErr(foundEquipment.Error(), err, "couldn't create found equipment")
+	params := database.CreateTreasureEquipmentPieceBulkParams{
+		DataHash:         make([]string, len(equipment)),
+		TreasureID:       make([]int32, len(equipment)),
+		EquipmentNameID:  make([]int32, len(equipment)),
+		EmptySlotsAmount: make([]int32, len(equipment)),
 	}
 
-	foundEquipment.ID = dbFoundEquipment.ID
-
-	err = l.seedFoundEquipmentAbilities(qtx, foundEquipment)
-	if err != nil {
-		return TreasureEquipment{}, h.NewErr(foundEquipment.Error(), err)
+	for i, e := range equipment {
+		params.DataHash[i] = generateDataHash(e)
+		params.TreasureID[i] = e.TreasureID
+		params.EquipmentNameID[i] = e.EquipmentNameID
+		params.EmptySlotsAmount[i] = e.EmptySlotsAmount
 	}
 
-	return foundEquipment, nil
-}
+	dbRows, err := qtx.CreateTreasureEquipmentPieceBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create treasure equipment: %v", err)
+	}
 
-func (l *Lookup) seedFoundEquipmentAbilities(qtx *database.Queries, foundEquipment TreasureEquipment) error {
-	for _, autoAbility := range foundEquipment.Abilities {
-		junction, err := createJunction(foundEquipment, autoAbility, l.AutoAbilities)
-		if err != nil {
-			return h.NewErr(autoAbility, err)
-		}
-
-		err = qtx.CreateTreasureEquipmentAbilitiesJunction(context.Background(), database.CreateTreasureEquipmentAbilitiesJunctionParams{
-			DataHash:            generateDataHash(junction),
-			TreasureEquipmentID: junction.ParentID,
-			AutoAbilityID:       junction.ChildID,
-		})
-		if err != nil {
-			return h.NewErr(autoAbility, err, "couldn't junction auto-ability")
-		}
+	for _, row := range dbRows {
+		l.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
+}
+
+func (l *Lookup) extractTreasureEquipment() ([]TreasureEquipment, error) {
+	equipment := []TreasureEquipment{}
+	var err error
+
+	for i := range l.json.treasureLists {
+		list := &l.json.treasureLists[i]
+
+		for j := range list.Treasures {
+			treasure := &list.Treasures[j]
+
+			if treasure.Equipment == nil {
+				continue
+			}
+
+			treasure.Equipment.TreasureID, err = l.getHashID(treasure)
+			if err != nil {
+				return nil, err
+			}
+
+			treasure.Equipment.EquipmentNameID, err = assignFK(treasure.Equipment.Name, l.EquipmentNames)
+			if err != nil {
+				return nil, err
+			}
+
+			equipment = append(equipment, *treasure.Equipment)
+		}
+	}
+
+	return dedupeRows(equipment, l.Hashes), nil
 }
 
 func (l *Lookup) getTreasureEquipment() []TreasureEquipment {

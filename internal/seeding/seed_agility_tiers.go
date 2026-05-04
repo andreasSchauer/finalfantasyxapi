@@ -78,61 +78,6 @@ func (a AgilitySubtier) Error() string {
 	return fmt.Sprintf("agility subtier with min agility: %d, max agility: %d", a.MinAgility, a.MaxAgility)
 }
 
-func (l *Lookup) seedAgilityTiers(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/agility_tiers.json"
-
-	var agilityTiers []AgilityTier
-	err := loadJSONFile(string(srcPath), &agilityTiers)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, agilityTier := range agilityTiers {
-			dbAgilityTier, err := qtx.CreateAgilityTier(context.Background(), database.CreateAgilityTierParams{
-				DataHash:        generateDataHash(agilityTier),
-				MinAgility:      agilityTier.MinAgility,
-				MaxAgility:      agilityTier.MaxAgility,
-				TickSpeed:       agilityTier.TickSpeed,
-				MonsterMinIcv:   h.GetNullInt32(agilityTier.MonsterMinICV),
-				MonsterMaxIcv:   h.GetNullInt32(agilityTier.MonsterMaxICV),
-				CharacterMaxIcv: h.GetNullInt32(agilityTier.CharacterMaxICV),
-			})
-			if err != nil {
-				return h.NewErr(agilityTier.Error(), err, "couldn't create agility tier")
-			}
-
-			agilityTier.ID = dbAgilityTier.ID
-			l.AgilityTiersID[agilityTier.ID] = agilityTier
-
-			err = l.seedAgilitySubtiers(qtx, agilityTier)
-			if err != nil {
-				return h.NewErr(agilityTier.Error(), err)
-			}
-		}
-		return nil
-	})
-}
-
-func (l *Lookup) seedAgilitySubtiers(qtx *database.Queries, agilityTier AgilityTier) error {
-	for _, subtier := range agilityTier.CharacterMinICVs {
-		subtier.AgilityTierID = agilityTier.ID
-
-		err := qtx.CreateAgilitySubtier(context.Background(), database.CreateAgilitySubtierParams{
-			DataHash:          generateDataHash(subtier),
-			AgilityTierID:     subtier.AgilityTierID,
-			SubtierMinAgility: subtier.MinAgility,
-			SubtierMaxAgility: subtier.MaxAgility,
-			CharacterMinIcv:   h.GetNullInt32(subtier.CharacterMinICV),
-		})
-		if err != nil {
-			return h.NewErr(subtier.Error(), err, "couldn't create agility subtier")
-		}
-	}
-
-	return nil
-}
-
 
 func (l *Lookup) loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
 	agilityTiers := dedupeRows(l.json.agilityTiers, l.Hashes)

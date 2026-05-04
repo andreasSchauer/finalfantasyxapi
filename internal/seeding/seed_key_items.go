@@ -2,7 +2,6 @@ package seeding
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -41,45 +40,6 @@ func (k KeyItem) GetResParamsNamed() h.ResParamsNamed {
 		Name: k.Name,
 	}
 }
-
-func (l *Lookup) seedKeyItems(db *database.Queries, dbConn *sql.DB) error {
-	const srcPath = "data/key_items.json"
-
-	var keyItems []KeyItem
-	err := loadJSONFile(string(srcPath), &keyItems)
-	if err != nil {
-		return err
-	}
-
-	return queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		for _, keyItem := range keyItems {
-			var err error
-			keyItem.Type = database.ItemTypeKeyItem
-
-			keyItem.MasterItem, err = seedObjAssignID(qtx, keyItem.MasterItem, l.seedMasterItem)
-			if err != nil {
-				return h.NewErr(keyItem.Error(), err)
-			}
-
-			dbKeyItem, err := qtx.CreateKeyItem(context.Background(), database.CreateKeyItemParams{
-				DataHash:     generateDataHash(keyItem),
-				MasterItemID: keyItem.MasterItem.ID,
-				Category:     database.KeyItemCategory(keyItem.Category),
-				Description:  keyItem.Description,
-				Effect:       keyItem.Effect,
-			})
-			if err != nil {
-				return h.NewErr(keyItem.Error(), err, "couldn't create key item")
-			}
-
-			keyItem.ID = dbKeyItem.ID
-			l.KeyItems[keyItem.Name] = keyItem
-			l.KeyItemsID[keyItem.ID] = keyItem
-		}
-		return nil
-	})
-}
-
 
 func (l *Lookup) loop2SeedKeyItems(qtx *database.Queries, ctx context.Context) error {
 	keyItems, err := l.extractKeyItems()

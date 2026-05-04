@@ -44,23 +44,6 @@ func (i MasterItem) GetResParamsTyped() h.ResParamsTyped {
 	}
 }
 
-func (l *Lookup) seedMasterItem(qtx *database.Queries, masterItem MasterItem) (MasterItem, error) {
-	dbMasterItem, err := qtx.CreateMasterItem(context.Background(), database.CreateMasterItemParams{
-		DataHash: generateDataHash(masterItem),
-		Name:     masterItem.Name,
-		Type:     masterItem.Type,
-	})
-	if err != nil {
-		return MasterItem{}, h.NewErr(masterItem.Error(), err)
-	}
-
-	masterItem.ID = dbMasterItem.ID
-	l.MasterItems[masterItem.Name] = masterItem
-	l.MasterItemsID[masterItem.ID] = masterItem
-
-	return masterItem, nil
-}
-
 func (l *Lookup) loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
 	items := l.extractMasterItems()
 

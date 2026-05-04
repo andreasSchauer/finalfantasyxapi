@@ -1,28 +1,24 @@
 package seeding
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
-	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/pressly/goose/v3"
 )
 
-type seeder struct {
-	name     string
-	seedFunc func(*database.Queries, *sql.DB) error
-	relFunc  func(*database.Queries, *sql.DB) error
-}
-
 func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
+	defer fmt.Println()
+	defer h.MeasureTime("database seeding")()
+
 	const migrationsDir = "sql/schema/"
 	fullPath, err := h.GetAbsoluteFilepath(migrationsDir)
 	if err != nil {
 		return nil, err
 	}
-
-	start := time.Now()
 
 	err = setupDB(dbConn, fullPath)
 	if err != nil {
@@ -34,269 +30,117 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
-	seeders := l.getSeeders()
+	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		defer h.MeasureTime("initial database seeding")()
+		fmt.Println("initial database seeding...")
 
-	err = handleSeedFunctions(db, dbConn, seeders)
+		return l.seedLoop(qtx, context.Background(), []seedFunc{
+			l.seedLoop1,
+			l.seedLoop2,
+			l.seedLoop3,
+			l.seedLoop4,
+			l.seedLoop5,
+			l.seedLoop6,
+			l.seedLoop7,
+		})
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	duration := time.Since(start)
-	fmt.Printf("database seeding took %.3f seconds\n\n", duration.Seconds())
+	err = l.completeLookups()
+	if err != nil {
+		return nil, err
+	}
+
+	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		defer h.MeasureTime("seeding junctions")()
+		return l.seedJunctions(qtx, context.Background())
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println()
 
 	return l, nil
 }
 
-func handleSeedFunctions(db *database.Queries, dbConn *sql.DB, seeders []seeder) error {
-	seedingStart := time.Now()
-	fmt.Printf("\ninitial seeding...\n\n")
+func setupDB(dbConn *sql.DB, migrationsDir string) error {
+	defer h.MeasureTime("\ndatabase setup")()
 
-	for _, seeder := range seeders {
-		err := handleSeedFunction(db, dbConn, seeder.seedFunc, seeder.name)
-		if err != nil {
-			return h.NewErr(seeder.name, err)
-		}
-	}
-
-	seedingDuration := time.Since(seedingStart)
-
-	relationshipsStart := time.Now()
-	fmt.Printf("\nseeding relationships...\n\n")
-
-	for _, seeder := range seeders {
-		err := handleSeedFunction(db, dbConn, seeder.relFunc, seeder.name)
-		if err != nil {
-			return h.NewErr(seeder.name, err)
-		}
-	}
-
-	relationshipsDuration := time.Since(relationshipsStart)
-	fmt.Printf("\n\ninitial seeding took %.3f seconds\n", seedingDuration.Seconds())
-	fmt.Printf("seeding relationships took %.3f seconds\n", relationshipsDuration.Seconds())
-
-	return nil
-}
-
-func handleSeedFunction(db *database.Queries, dbConn *sql.DB, function func(*database.Queries, *sql.DB) error, name string) error {
-	if function == nil {
-		return nil
-	}
-
-	start := time.Now()
-
-	err := function(db, dbConn)
+	err := goose.SetDialect("postgres")
 	if err != nil {
 		return err
 	}
 
-	duration := time.Since(start)
-	fmt.Printf("%.3f seconds for %s\n", duration.Seconds(), name)
+	err = goose.DownTo(dbConn, migrationsDir, 0)
+	if err != nil {
+		return err
+	}
+
+	err = goose.Up(dbConn, migrationsDir)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
+func (l *Lookup) completeLookups() error {
+	defer h.MeasureTime("lookup completion")()
 
-func (l *Lookup) getSeeders() []seeder {
-	return []seeder{
-		{
-			name:     "stats",
-			seedFunc: l.seedStats,
-			relFunc:  l.seedStatsRelationships,
-		},
-		{
-			name:     "elements",
-			seedFunc: l.seedElements,
-			relFunc:  l.seedElementsRelationships,
-		},
-		{
-			name:     "agility tiers",
-			seedFunc: l.seedAgilityTiers,
-			relFunc:  nil,
-		},
-		{
-			name:     "overdrive modes",
-			seedFunc: l.seedOverdriveModes,
-			relFunc:  l.seedOverdriveModesRelationships,
-		},
-		{
-			name:     "status conditions",
-			seedFunc: l.seedStatusConditions,
-			relFunc:  l.seedStatusConditionsRelationships,
-		},
-		{
-			name:     "properties",
-			seedFunc: l.seedProperties,
-			relFunc:  l.seedPropertiesRelationships,
-		},
-		{
-			name:     "modifiers",
-			seedFunc: l.seedModifiers,
-			relFunc:  nil,
-		},
-		{
-			name:     "characters",
-			seedFunc: l.seedCharacters,
-			relFunc:  l.seedCharactersRelationships,
-		},
-		{
-			name:     "aeons",
-			seedFunc: l.seedAeons,
-			relFunc:  l.seedAeonsRelationships,
-		},
-		{
-			name:     "character classes",
-			seedFunc: l.seedCharacterClasses,
-			relFunc:  l.seedCharacterClassesRelationships,
-		},
-		{
-			name:     "aeon stats",
-			seedFunc: nil,
-			relFunc:  l.seedAeonStats,
-		},
-		{
-			name:     "default abilities",
-			seedFunc: nil,
-			relFunc:  l.seedDefaultAbilitiesRelationships,
-		},
-		{
-			name:     "blitzball items",
-			seedFunc: l.seedBlitzballItems,
-			relFunc:  l.seedBlitzballItemsRelationships,
-		},
-		{
-			name:     "sidequests",
-			seedFunc: l.seedSidequests,
-			relFunc:  l.seedSidequestsRelationships,
-		},
-		{
-			name:     "monster arena creations",
-			seedFunc: l.seedArenaCreations,
-			relFunc:  l.seedArenaCreationsRelationships,
-		},
-		{
-			name:     "monsters",
-			seedFunc: l.seedMonsters,
-			relFunc:  l.seedMonstersRelationships,
-		},
-		{
-			name:     "topmenus",
-			seedFunc: l.seedTopmenus,
-			relFunc:  nil,
-		},
-		{
-			name:     "submenus",
-			seedFunc: l.seedSubmenus,
-			relFunc:  l.seedSubmenusRelationships,
-		},
-		{
-			name:     "aeon commands",
-			seedFunc: l.seedAeonCommands,
-			relFunc:  l.seedAeonCommandsRelationships,
-		},
-		{
-			name:     "player abilities",
-			seedFunc: l.seedPlayerAbilities,
-			relFunc:  l.seedPlayerAbilitiesRelationships,
-		},
-		{
-			name:     "overdrives",
-			seedFunc: l.seedOverdrives,
-			relFunc:  l.seedOverdrivesRelationships,
-		},
-		{
-			name:     "overdrive abilities",
-			seedFunc: l.seedOverdriveAbilities,
-			relFunc:  l.seedOverdriveAbilitiesRelationships,
-		},
-		{
-			name:     "items",
-			seedFunc: l.seedItems,
-			relFunc:  l.seedItemsRelationships,
-		},
-		{
-			name:     "trigger commands",
-			seedFunc: l.seedTriggerCommands,
-			relFunc:  l.seedTriggerCommandsRelationships,
-		},
-		{
-			name:     "unspecified abilities",
-			seedFunc: l.seedunspecifiedAbilities,
-			relFunc:  l.seedunspecifiedAbilitiesRelationships,
-		},
-		{
-			name:     "enemy abilities",
-			seedFunc: l.seedEnemyAbilities,
-			relFunc:  l.seedEnemyAbilitiesRelationships,
-		},
-		{
-			name:     "overdrive commands",
-			seedFunc: l.seedOverdriveCommands,
-			relFunc:  l.seedOverdriveCommandsRelationships,
-		},
-		{
-			name:     "key items",
-			seedFunc: l.seedKeyItems,
-			relFunc:  nil,
-		},
-		{
-			name:     "primers",
-			seedFunc: l.seedPrimers,
-			relFunc:  nil,
-		},
-		{
-			name:     "mixes",
-			seedFunc: l.seedMixes,
-			relFunc:  l.seedMixesRelationships,
-		},
-		{
-			name: 	  "spheres",
-			seedFunc: l.seedSpheres,
-			relFunc:  l.seedSpheresRelationships,
-		},
-		{
-			name:     "celestial weapons",
-			seedFunc: l.seedCelestialWeapons,
-			relFunc:  l.seedCelestialWeaponsRelationships,
-		},
-		{
-			name:     "auto abilities",
-			seedFunc: l.seedAutoAbilities,
-			relFunc:  l.seedAutoAbilitiesRelationships,
-		},
-		{
-			name:     "equipment",
-			seedFunc: l.seedEquipment,
-			relFunc:  l.seedEquipmentRelationships,
-		},
-		{
-			name:     "location areas",
-			seedFunc: l.seedLocations,
-			relFunc:  l.seedAreasRelationships,
-		},
-		{
-			name:     "treasures",
-			seedFunc: l.seedTreasures,
-			relFunc:  l.seedTreasuresRelationships,
-		},
-		{
-			name:     "shops",
-			seedFunc: l.seedShops,
-			relFunc:  l.seedShopsRelationships,
-		},
-		{
-			name:     "songs",
-			seedFunc: l.seedSongs,
-			relFunc:  l.seedSongsRelationships,
-		},
-		{
-			name:     "fmvs",
-			seedFunc: l.seedFMVs,
-			relFunc:  nil,
-		},
-		{
-			name:     "monster formations",
-			seedFunc: l.seedMonsterFormations,
-			relFunc:  l.seedMonsterFormationsRelationships,
-		},
+	fns := []func() error{
+		l.completeEnemyAbilities,
+		l.completeItems,
+		l.completeOverdriveAbilities,
+		l.completePlayerAbilities,
+		l.completeTriggerCommands,
+		l.completeUnspecifiedAbilities,
+		l.completeAeons,
+		l.completeAeonStats,
+		l.completeAgilityTiers,
+		l.completeAutoAbilities,
+		l.completeBlitzballPositions,
+		l.completeCharacters,
+		l.completeEquipment,
+		l.completeLocations,
+		l.completeMixes,
+		l.completeMonsterFormations,
+		l.completeMonsters,
+		l.completeOverdriveModes,
+		l.completeProperties,
+		l.completeShops,
+		l.completeSidequests,
+		l.completeSongs,
+		l.completeStatusConditions,
+		l.completeTreasureLists,
 	}
+
+	for _, fn := range fns {
+		err := fn()
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func dedupeRows[T Hashable](rows []T, hashes map[string]int32) []T {
+	seen := make(map[string]bool)
+	new := []T{}
+
+	for _, row := range rows {
+		hash := generateDataHash(row)
+
+		_, ok := hashes[hash]
+		if ok || seen[hash] {
+			continue
+		}
+
+		seen[hash] = true
+		new = append(new, row)
+	}
+	return new
 }

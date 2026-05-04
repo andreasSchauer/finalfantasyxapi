@@ -37,31 +37,6 @@ func (m MonsterAbility) Error() string {
 	return fmt.Sprintf("monster ability '%s', type: %s, is forced: %t, is unused: %t", h.NameToString(m.Name, m.Version, nil), m.AbilityType, m.IsForced, m.IsUnused)
 }
 
-func (l *Lookup) seedMonsterAbility(qtx *database.Queries, monsterAbility MonsterAbility) (MonsterAbility, error) {
-	var err error
-
-	monsterAbility.AbilityID, err = assignFK(monsterAbility.AbilityReference, l.Abilities)
-	if err != nil {
-		return MonsterAbility{}, h.NewErr(monsterAbility.Error(), err)
-	}
-
-	dbMonsterAbility, err := qtx.CreateMonsterAbility(context.Background(), database.CreateMonsterAbilityParams{
-		DataHash:  generateDataHash(monsterAbility),
-		AbilityID: monsterAbility.AbilityID,
-		IsForced:  monsterAbility.IsForced,
-		IsUnused:  monsterAbility.IsUnused,
-	})
-	if err != nil {
-		return MonsterAbility{}, h.NewErr(monsterAbility.Error(), err, "couldn't create monster ability")
-	}
-
-	monsterAbility.ID = dbMonsterAbility.ID
-
-	return monsterAbility, nil
-}
-
-
-
 func (l *Lookup) loop3SeedMonsterAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := l.extractMonsterAbilities()
 	if err != nil {

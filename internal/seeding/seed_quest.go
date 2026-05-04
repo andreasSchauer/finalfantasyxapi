@@ -74,25 +74,6 @@ func (q Quest) GetItemAmount() ItemAmount {
 	return q.Completion.Reward
 }
 
-func (l *Lookup) seedQuest(qtx *database.Queries, quest Quest) (Quest, error) {
-	dbQuest, err := qtx.CreateQuest(context.Background(), database.CreateQuestParams{
-		DataHash:     generateDataHash(quest),
-		Name:         quest.Name,
-		Type:         quest.Type,
-		Availability: database.AvailabilityType(quest.Availability),
-		IsRepeatable: quest.IsRepeatable,
-	})
-	if err != nil {
-		return Quest{}, h.NewErr(quest.Error(), err, "couldn't create quest")
-	}
-
-	quest.ID = dbQuest.ID
-	key := Key(quest)
-	l.Quests[key] = quest
-	l.QuestsID[quest.ID] = quest
-
-	return quest, nil
-}
 
 type QuestCompletion struct {
 	ID        int32
@@ -139,56 +120,6 @@ func (cl CompletionArea) Error() string {
 
 func (cl CompletionArea) GetLocationArea() LocationArea {
 	return cl.LocationArea
-}
-
-func (l *Lookup) seedQuestCompletion(qtx *database.Queries, completion QuestCompletion) (QuestCompletion, error) {
-	var err error
-
-	completion.Reward, err = seedObjAssignID(qtx, completion.Reward, l.seedItemAmount)
-	if err != nil {
-		return QuestCompletion{}, h.NewErr(completion.Error(), err)
-	}
-
-	dbCompletion, err := qtx.CreateQuestCompletion(context.Background(), database.CreateQuestCompletionParams{
-		DataHash:     generateDataHash(completion),
-		Condition:    h.GetNullString(completion.Condition),
-		ItemAmountID: completion.Reward.ID,
-	})
-	if err != nil {
-		return QuestCompletion{}, h.NewErr(completion.Error(), err, "couldn't create quest completion")
-	}
-	completion.ID = dbCompletion.ID
-
-	err = l.seedCompletionAreas(qtx, completion)
-	if err != nil {
-		return QuestCompletion{}, h.NewErr(completion.Error(), err)
-	}
-
-	return completion, nil
-}
-
-func (l *Lookup) seedCompletionAreas(qtx *database.Queries, completion QuestCompletion) error {
-	for _, location := range completion.Areas {
-		var err error
-
-		location.AreaID, err = assignFK(location.LocationArea, l.Areas)
-		if err != nil {
-			return err
-		}
-		location.CompletionID = completion.ID
-
-		err = qtx.CreateCompletionArea(context.Background(), database.CreateCompletionAreaParams{
-			DataHash:     generateDataHash(location),
-			CompletionID: location.CompletionID,
-			AreaID:       location.AreaID,
-			Notes:        h.GetNullString(location.Notes),
-		})
-		if err != nil {
-			return h.NewErr(location.Error(), err, "couldn't create completion location")
-		}
-	}
-
-	return nil
 }
 
 func (l *Lookup) loop4SeedQuests(qtx *database.Queries, ctx context.Context) error {
