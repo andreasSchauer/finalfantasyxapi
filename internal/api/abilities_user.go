@@ -28,7 +28,7 @@ type biReplacement struct {
 	DamageConstant *int32
 }
 
-func applyUser[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], ability userAbility, queryName string) ([]BattleInteraction, error) {
+func applyUser[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], ability userAbility, queryName string) ([]BattleInteraction, error) {
 	repl, err := getUnitRepl(cfg, r, i, queryName)
 	if errors.Is(err, errEmptyQuery) {
 		return ability.getBattleInteractions(), nil
@@ -47,7 +47,7 @@ func applyUser[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, 
 	return battleInteractions, nil
 }
 
-func getUnitRepl[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], queryName string) (unitRepl, error) {
+func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], queryName string) (unitRepl, error) {
 	queryParamUser := i.queryLookup[queryName]
 	queryParamBomb := i.queryLookup["bomb_wpn"]
 

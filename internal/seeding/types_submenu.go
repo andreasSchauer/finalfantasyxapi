@@ -40,8 +40,8 @@ func (s Submenu) Error() string {
 	return fmt.Sprintf("submenu %s", s.Name)
 }
 
-func (s Submenu) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (s Submenu) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   s.ID,
 		Name: s.Name,
 	}

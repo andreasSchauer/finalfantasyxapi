@@ -45,8 +45,8 @@ func (e EnemyAbility) Error() string {
 	return fmt.Sprintf("enemy ability '%s'", h.NameToString(e.Name, e.Version, e.Specification))
 }
 
-func (e EnemyAbility) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (e EnemyAbility) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:            e.ID,
 		Name:          e.Name,
 		Version:       e.Version,

@@ -74,8 +74,8 @@ func (p PlayerAbility) Error() string {
 	return fmt.Sprintf("player ability '%s'", h.NameToString(p.Name, p.Version, p.Specification))
 }
 
-func (p PlayerAbility) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (p PlayerAbility) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:            p.ID,
 		Name:          p.Name,
 		Version:       p.Version,

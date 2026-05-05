@@ -4,7 +4,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type Lookup struct {
 	json                   jsonLookup
 	Hashes                 map[string]int32
@@ -222,4 +221,3 @@ func lookupInit() (*Lookup, error) {
 
 	return &l, nil
 }
-

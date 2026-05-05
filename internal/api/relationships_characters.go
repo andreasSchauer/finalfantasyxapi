@@ -50,7 +50,6 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 	return rel, nil
 }
 
-
 func getCharacterModeAmts(cfg *Config, char seeding.Character) []ResourceAmount[NamedAPIResource] {
 	resAmts := []ResourceAmount[NamedAPIResource]{}
 
@@ -69,7 +68,6 @@ func getCharacterModeAmts(cfg *Config, char seeding.Character) []ResourceAmount[
 
 	return resAmts
 }
-
 
 func getCharModeAmount(cfg *Config, char seeding.Character, id int32) (ResourceAmount[NamedAPIResource], error) {
 	i := cfg.e.overdriveModes

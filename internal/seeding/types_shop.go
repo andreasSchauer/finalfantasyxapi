@@ -45,8 +45,8 @@ func (s Shop) Error() string {
 	return fmt.Sprintf("shop %s, %v", s.LocationArea, h.PtrToString(s.Version))
 }
 
-func (s Shop) GetResParamsUnnamed() h.ResParamsUnnamed {
-	return h.ResParamsUnnamed{
+func (s Shop) GetResParamsUnnamed() ResParamsUnnamed {
+	return ResParamsUnnamed{
 		ID: s.ID,
 	}
 }

@@ -5,9 +5,10 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func handleEndpointList[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func handleEndpointList[T seeding.Lookupable, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	resourceList, err := i.retrieveFunc(r, i)
 	if handleHTTPError(w, err) {
 		return
@@ -15,7 +16,7 @@ func handleEndpointList[T h.HasID, R any, A APIResource, L APIResourceList](w ht
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
 
-func handleEndpointIDOnly[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	segment := segments[0]
 
 	if segment == "parameters" {
@@ -46,7 +47,7 @@ func handleEndpointIDOnly[T h.HasID, R any, A APIResource, L APIResourceList](cf
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func handleEndpointNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func handleEndpointNameOrID[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	segment := segments[0]
 
 	if segment == "parameters" {
@@ -86,7 +87,7 @@ func handleEndpointNameOrID[T h.HasID, R any, A APIResource, L APIResourceList](
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func handleEndpointNameVersion[T h.HasID, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func handleEndpointNameVersion[T seeding.Lookupable, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	name := segments[0]
 	versionStr := segments[1]
 
@@ -103,7 +104,7 @@ func handleEndpointNameVersion[T h.HasID, R any, A APIResource, L APIResourceLis
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func handleEndpointSubsections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func handleEndpointSubsections[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	posIDStr := segments[0]
 	idIsValid := isValidInt(posIDStr)
 	posSection := segments[1]
@@ -132,7 +133,7 @@ func handleEndpointSubsections[T h.HasID, R any, A APIResource, L APIResourceLis
 	}
 }
 
-func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func handleEndpointSubOrNameVer[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	isSubsection, isNameVersion, subsectionIsInt := getSegmentCases(segments)
 
 	switch {
@@ -154,7 +155,7 @@ func handleEndpointSubOrNameVer[T h.HasID, R any, A APIResource, L APIResourceLi
 	}
 }
 
-func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	idStr := segments[0]
 	sectionName := segments[1]
 
@@ -195,7 +196,7 @@ func handleSubsection[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 	respondWithJSON(w, http.StatusOK, list)
 }
 
-func handleParameters[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func handleParameters[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := "parameters"
 	err := verifyDefaultParamsOnly(cfg, r, i, &segment)
 	if handleHTTPError(w, err) {
@@ -209,7 +210,7 @@ func handleParameters[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-func handleSections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := "sections"
 	err := verifyDefaultParamsOnly(cfg, r, i, &segment)
 	if handleHTTPError(w, err) {
@@ -223,7 +224,7 @@ func handleSections[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
 
-func handleSimple[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := "simple"
 	queryParamIDs := i.queryLookup["ids"]
 	_, err := checkEmptyQuery(r, queryParamIDs)

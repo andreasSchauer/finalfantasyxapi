@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"net/url"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 // deals with a single segment path that is either a name or an id and returns a parseResponse with the id, if a single match is found, or a name, if multiple matches with that name were found.
-func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup map[string]T) (parseResponse, error) {
+func parseSingleSegmentResource[T seeding.Lookupable](resourceType, segment string, lookup map[string]T) (parseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)
@@ -38,7 +38,7 @@ func parseSingleSegmentResource[T h.HasID](resourceType, segment string, lookup 
 }
 
 // deals with a name/version path and returns a parseResponse with the id, if a match is found.
-func parseNameVersionResource[T h.HasID](resourceType, name, versionStr string, lookup map[string]T) (parseResponse, error) {
+func parseNameVersionResource[T seeding.Lookupable](resourceType, name, versionStr string, lookup map[string]T) (parseResponse, error) {
 	nameDecoded, err := url.PathUnescape(name)
 	if err != nil {
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)

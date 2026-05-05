@@ -49,8 +49,8 @@ func (s StatusCondition) Error() string {
 	return fmt.Sprintf("status condition %s", s.Name)
 }
 
-func (s StatusCondition) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (s StatusCondition) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   s.ID,
 		Name: s.Name,
 	}

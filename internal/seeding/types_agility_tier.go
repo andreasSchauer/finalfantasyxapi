@@ -44,8 +44,8 @@ func (a AgilityTier) Error() string {
 	return fmt.Sprintf("agility tier with min agility: %d, max agility: %d", a.MinAgility, a.MaxAgility)
 }
 
-func (a AgilityTier) GetResParamsUnnamed() h.ResParamsUnnamed {
-	return h.ResParamsUnnamed{
+func (a AgilityTier) GetResParamsUnnamed() ResParamsUnnamed {
+	return ResParamsUnnamed{
 		ID: a.ID,
 	}
 }

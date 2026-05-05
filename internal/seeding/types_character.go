@@ -42,8 +42,8 @@ func (c Character) GetID() int32 {
 	return c.ID
 }
 
-func (c Character) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (c Character) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   c.ID,
 		Name: c.Name,
 	}

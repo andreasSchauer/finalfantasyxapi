@@ -2,8 +2,6 @@ package seeding
 
 import (
 	"fmt"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type CharacterClass struct {
@@ -34,8 +32,8 @@ func (c CharacterClass) Error() string {
 	return fmt.Sprintf("character class %s", c.Name)
 }
 
-func (c CharacterClass) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (c CharacterClass) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   c.ID,
 		Name: c.Name,
 	}

@@ -2,8 +2,6 @@ package seeding
 
 import (
 	"fmt"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type CelestialWeapon struct {
@@ -40,8 +38,8 @@ func (cw CelestialWeapon) Error() string {
 	return fmt.Sprintf("celestial weapon %s", cw.Name)
 }
 
-func (cw CelestialWeapon) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (cw CelestialWeapon) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   cw.ID,
 		Name: cw.Name,
 	}

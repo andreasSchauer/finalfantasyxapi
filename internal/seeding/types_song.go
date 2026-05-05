@@ -58,8 +58,8 @@ func (s Song) Error() string {
 	return fmt.Sprintf("song %s", s.Name)
 }
 
-func (s Song) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (s Song) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   s.ID,
 		Name: s.Name,
 	}

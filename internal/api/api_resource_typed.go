@@ -55,7 +55,7 @@ func (r TypedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToTypedAPIResource[T h.IsTyped, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) TypedAPIResource {
+func idToTypedAPIResource[T seeding.IsTyped, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) TypedAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID)
 	params := res.GetResParamsTyped()
 
@@ -69,12 +69,12 @@ func idToTypedAPIResource[T h.IsTyped, R any, A APIResource, L APIResourceList](
 	}
 }
 
-func keyToTypedAPIResource[T h.IsTyped, R, K any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], key K) TypedAPIResource {
+func keyToTypedAPIResource[T seeding.IsTyped, R, K any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], key K) TypedAPIResource {
 	res, _ := seeding.GetResource(key, i.objLookup)
 	return idToTypedAPIResource(cfg, i, res.GetID())
 }
 
-func keyPtrToTypedAPIResourcePtr[T h.IsTyped, R, K any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], keyPtr *K) *TypedAPIResource {
+func keyPtrToTypedAPIResourcePtr[T seeding.IsTyped, R, K any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], keyPtr *K) *TypedAPIResource {
 	if keyPtr == nil {
 		return nil
 	}
@@ -83,7 +83,7 @@ func keyPtrToTypedAPIResourcePtr[T h.IsTyped, R, K any, A APIResource, L APIReso
 	return &res
 }
 
-func keysToTypedAPIResources[T h.IsTyped, R, K any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], refs []K) []TypedAPIResource {
+func keysToTypedAPIResources[T seeding.IsTyped, R, K any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], refs []K) []TypedAPIResource {
 	resources := []TypedAPIResource{}
 
 	for _, ref := range refs {

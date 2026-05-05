@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getMultipleAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], name string) (L, error) {
+func getMultipleAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], name string) (L, error) {
 	var zeroType L
 
 	dbIDs, err := i.getMultipleQuery(r.Context(), name)
@@ -18,7 +18,7 @@ func getMultipleAPIResources[T h.HasID, R any, A APIResource, L APIResourceList]
 	return idsToAPIResourceList(cfg, r, i, dbIDs)
 }
 
-func retrieveAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]A, error) {
+func retrieveAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]A, error) {
 	dbIDs, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return nil, err
@@ -27,7 +27,7 @@ func retrieveAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cf
 	return idsToAPIResources(cfg, i, dbIDs), nil
 }
 
-func filterAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A, filteredLists []filteredResList[A]) (L, error) {
+func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A, filteredLists []filteredResList[A]) (L, error) {
 	var zeroType L
 	filteredRes := resources
 

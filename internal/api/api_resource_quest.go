@@ -58,7 +58,7 @@ func (r QuestAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToQuestAPIResource[T h.IsQuest, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) QuestAPIResource {
+func idToQuestAPIResource[T seeding.IsQuest, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) QuestAPIResource {
 	questLookup, _ := seeding.GetResourceByID(id, i.objLookupID)
 	params := questLookup.GetResParamsQuest()
 
@@ -100,12 +100,12 @@ func questToQuestAPIResource(cfg *Config, quest seeding.Quest) QuestAPIResource 
 	return QuestAPIResource{}
 }
 
-func nameToQuestAPIResource[T h.IsQuest, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], name string) QuestAPIResource {
+func nameToQuestAPIResource[T seeding.IsQuest, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], name string) QuestAPIResource {
 	quest, _ := seeding.GetResource(name, i.objLookup)
 	return idToQuestAPIResource(cfg, i, quest.GetID())
 }
 
-func namesToQuestAPIResources[T h.IsQuest, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], names []string) []QuestAPIResource {
+func namesToQuestAPIResources[T seeding.IsQuest, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], names []string) []QuestAPIResource {
 	resources := []QuestAPIResource{}
 
 	for _, name := range names {

@@ -2,8 +2,6 @@ package seeding
 
 import (
 	"fmt"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Sidequest struct {
@@ -33,8 +31,8 @@ func (s Sidequest) Error() string {
 	return fmt.Sprintf("sidequest %s", s.Name)
 }
 
-func (s Sidequest) GetResParamsQuest() h.ResParamsQuest {
-	return h.ResParamsQuest{
+func (s Sidequest) GetResParamsQuest() ResParamsQuest {
+	return ResParamsQuest{
 		ID:        s.ID,
 		Sidequest: &s.Name,
 		Subquest:  nil,
@@ -74,8 +72,8 @@ func (s Subquest) Error() string {
 	return fmt.Sprintf("subquest %s", s.Name)
 }
 
-func (s Subquest) GetResParamsQuest() h.ResParamsQuest {
-	return h.ResParamsQuest{
+func (s Subquest) GetResParamsQuest() ResParamsQuest {
+	return ResParamsQuest{
 		ID:        s.ID,
 		Sidequest: nil,
 		Subquest:  &s.Name,

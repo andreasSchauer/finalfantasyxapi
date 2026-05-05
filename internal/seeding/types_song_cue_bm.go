@@ -36,7 +36,7 @@ func (bm BackgroundMusic) Error() string {
 type Cue struct {
 	ID                     int32
 	SongID                 int32
-	TriggerAreaID		   *int32
+	TriggerAreaID          *int32
 	SceneDescription       string         `json:"scene_description"`
 	TriggerLocationArea    *LocationArea  `json:"trigger_location_area"`
 	IncludedAreas          []LocationArea `json:"included_areas"`

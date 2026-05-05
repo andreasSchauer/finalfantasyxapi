@@ -2,8 +2,6 @@ package seeding
 
 import (
 	"fmt"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Topmenu struct {
@@ -32,8 +30,8 @@ func (t Topmenu) Error() string {
 	return fmt.Sprintf("topmenu %s", t.Name)
 }
 
-func (t Topmenu) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (t Topmenu) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   t.ID,
 		Name: t.Name,
 	}

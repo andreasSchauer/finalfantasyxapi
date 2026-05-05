@@ -45,8 +45,8 @@ func (o OverdriveAbility) Error() string {
 	return fmt.Sprintf("overdrive ability '%s'", h.NameToString(o.Name, o.Version, o.Specification))
 }
 
-func (o OverdriveAbility) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (o OverdriveAbility) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:            o.ID,
 		Name:          o.Name,
 		Version:       o.Version,

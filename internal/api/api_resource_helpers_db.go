@@ -6,11 +6,10 @@ import (
 	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getResDbItemOne[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], filterItem seeding.LookupableID, dbQuery DbQueryIntOne) (A, error) {
+func getResDbItemOne[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], filterItem seeding.Lookupable, dbQuery DbQueryIntOne) (A, error) {
 	var zeroType A
 
 	dbId, err := dbQuery(r.Context(), filterItem.GetID())
@@ -23,7 +22,7 @@ func getResDbItemOne[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Co
 }
 
 // get relationship resources of item. handlerInput = endpoint of fetched resources
-func getResourcesDbItem[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], filterItem seeding.LookupableID, dbQuery DbQueryIntMany) ([]A, error) {
+func getResourcesDbItem[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], filterItem seeding.Lookupable, dbQuery DbQueryIntMany) ([]A, error) {
 	dbIds, err := dbQuery(r.Context(), filterItem.GetID())
 	if err != nil {
 		return nil, newHTTPErrorDB(i.resourceType, filterItem, err)
@@ -34,7 +33,7 @@ func getResourcesDbItem[T h.HasID, R any, A APIResource, L APIResourceList](cfg 
 }
 
 // filter resources by item id. handlerInput = endpoint of fetched resources. lookup type = resourceType of id
-func getResourcesDbID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, lookupType string, dbQuery DbQueryIntMany) ([]A, error) {
+func getResourcesDbID[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, lookupType string, dbQuery DbQueryIntMany) ([]A, error) {
 	dbIds, err := dbQuery(r.Context(), id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by %s id '%d'.", i.resourceType, lookupType, id), err)
@@ -44,7 +43,7 @@ func getResourcesDbID[T h.HasID, R any, A APIResource, L APIResourceList](cfg *C
 	return resources, nil
 }
 
-func getResPtrDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item seeding.LookupableID, dbQuery DbQueryIntOne) (*A, error) {
+func getResPtrDB[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item seeding.Lookupable, dbQuery DbQueryIntOne) (*A, error) {
 	dbID, err := dbQuery(r.Context(), item.GetID())
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -57,7 +56,7 @@ func getResPtrDB[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config
 	return &res, nil
 }
 
-func dbQueriesToApiResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, pResType string, dbQueryMap map[string]DbQueryIntMany) ([]A, error) {
+func dbQueriesToApiResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, pResType string, dbQueryMap map[string]DbQueryIntMany) ([]A, error) {
 	resLists := []filteredResList[A]{}
 
 	for key := range dbQueryMap {

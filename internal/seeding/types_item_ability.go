@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type ItemAbility struct {
@@ -50,8 +49,8 @@ func (a ItemAbility) Error() string {
 	return fmt.Sprintf("item ability %s", a.Name)
 }
 
-func (a ItemAbility) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (a ItemAbility) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   a.ID,
 		Name: a.Name,
 	}

@@ -46,8 +46,8 @@ func (o OverdriveCommand) Error() string {
 	return fmt.Sprintf("overdrive command %s", o.Name)
 }
 
-func (o OverdriveCommand) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (o OverdriveCommand) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   o.ID,
 		Name: o.Name,
 	}

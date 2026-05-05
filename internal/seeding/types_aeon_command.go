@@ -45,8 +45,8 @@ func (c AeonCommand) Error() string {
 	return fmt.Sprintf("aeon command %s", c.Name)
 }
 
-func (c AeonCommand) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (c AeonCommand) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   c.ID,
 		Name: c.Name,
 	}

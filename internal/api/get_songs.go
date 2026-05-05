@@ -108,7 +108,7 @@ func getSongsArea(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, e
 	return getLocBasedSongs(cfg, r, area, queries)
 }
 
-func getLocBasedSongs(cfg *Config, r *http.Request, item seeding.LookupableID, queries LocBasedMusicQueries) ([]NamedAPIResource, error) {
+func getLocBasedSongs(cfg *Config, r *http.Request, item seeding.Lookupable, queries LocBasedMusicQueries) ([]NamedAPIResource, error) {
 	i := cfg.e.songs
 	resources := []NamedAPIResource{}
 

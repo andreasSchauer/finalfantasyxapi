@@ -4,9 +4,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
-
 
 type PlayerUnit struct {
 	ID   int32
@@ -36,8 +34,8 @@ func (pu PlayerUnit) Error() string {
 	return fmt.Sprintf("player unit %s, type %s", pu.Name, pu.Type)
 }
 
-func (pu PlayerUnit) GetResParamsTyped() h.ResParamsTyped {
-	return h.ResParamsTyped{
+func (pu PlayerUnit) GetResParamsTyped() ResParamsTyped {
+	return ResParamsTyped{
 		ID:   pu.ID,
 		Name: pu.Name,
 		Type: string(pu.Type),

@@ -35,8 +35,8 @@ func (e Element) Error() string {
 	return fmt.Sprintf("element %s", e.Name)
 }
 
-func (e Element) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (e Element) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   e.ID,
 		Name: e.Name,
 	}

@@ -60,8 +60,8 @@ func (a Area) GetLocationArea() LocationArea {
 	}
 }
 
-func (a Area) GetResParamsLocation() h.ResParamsLocation {
-	return h.ResParamsLocation{
+func (a Area) GetResParamsLocation() ResParamsLocation {
+	return ResParamsLocation{
 		AreaID:        a.ID,
 		Location:      a.Sublocation.Location.Name,
 		Sublocation:   a.Sublocation.Name,

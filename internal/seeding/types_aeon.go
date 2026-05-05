@@ -53,8 +53,8 @@ func (a Aeon) Error() string {
 	return fmt.Sprintf("aeon %s", a.Name)
 }
 
-func (a Aeon) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (a Aeon) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   a.ID,
 		Name: a.Name,
 	}

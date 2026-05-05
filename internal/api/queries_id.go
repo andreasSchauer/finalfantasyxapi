@@ -6,10 +6,11 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 // query uses an id of another resource type to filter resources
-func idQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryIntMany) ([]A, error) {
+func idQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseIdQuery(r, queryParam, maxID)
@@ -31,7 +32,7 @@ func idQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r 
 }
 
 // like idOnlyQuery, but with more specialized logic in between (wrapperFn)
-func idQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, int32) ([]A, error)) ([]A, error) {
+func idQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, int32) ([]A, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	id, err := parseIdQuery(r, queryParam, maxID)
@@ -50,7 +51,7 @@ func idQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Con
 	return resources, nil
 }
 
-func idQueryNul[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryNullIntMany) ([]A, error) {
+func idQueryNul[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryNullIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	idPtr, err := parseIdQueryNul(r, queryParam, maxID)
@@ -71,7 +72,7 @@ func idQueryNul[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 }
 
 // can be returned by id wrapperFns that use a second parameter for a set of allowed values
-func filterByIdAndValues[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, queryName, pResType string, dbQueryMap map[string]DbQueryIntMany) ([]A, error) {
+func filterByIdAndValues[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, queryName, pResType string, dbQueryMap map[string]DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {

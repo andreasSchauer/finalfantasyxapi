@@ -46,7 +46,7 @@ func newHTTPError(code int, msg string, err error) httpError {
 	}
 }
 
-func newHTTPErrorDB(resourceType string, parentItem seeding.LookupableID, err error) httpError {
+func newHTTPErrorDB(resourceType string, parentItem seeding.Lookupable, err error) httpError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", resourceType, parentItem), err)
 }
 
@@ -54,7 +54,7 @@ func newHTTPErrorDbPairs(childResType, parentResType string, err error) httpErro
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't %s + %s pairs.", childResType, parentResType), err)
 }
 
-func newHTTPErrorDbOne(resourceType string, parentItem seeding.LookupableID, err error) httpError {
+func newHTTPErrorDbOne(resourceType string, parentItem seeding.Lookupable, err error) httpError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", resourceType, parentItem), err)
 }
 

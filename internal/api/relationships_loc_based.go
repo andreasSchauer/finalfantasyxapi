@@ -21,7 +21,6 @@ type LocRel struct {
 	FMVs       []NamedAPIResource   `json:"fmvs"`
 }
 
-
 type LocBasedMusic struct {
 	BackgroundMusic []NamedAPIResource `json:"background_music"`
 	Cues            []NamedAPIResource `json:"cues"`
@@ -43,7 +42,7 @@ type LocBasedMusicQueries struct {
 	BossMusic func(context.Context, int32) ([]int32, error)
 }
 
-func getMusicLocBased(cfg *Config, r *http.Request, item seeding.LookupableID, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
+func getMusicLocBased(cfg *Config, r *http.Request, item seeding.Lookupable, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
 	i := cfg.e.songs
 
 	cueSongs, err := getResourcesDbItem(cfg, r, i, item, queries.CueSongs)
@@ -76,7 +75,7 @@ func getMusicLocBased(cfg *Config, r *http.Request, item seeding.LookupableID, q
 	return &music, nil
 }
 
-func getLocBasedSidequests(cfg *Config, r *http.Request, item seeding.LookupableID, dbQuery func(context.Context, int32) ([]int32, error)) ([]QuestAPIResource, error) {
+func getLocBasedSidequests(cfg *Config, r *http.Request, item seeding.Lookupable, dbQuery func(context.Context, int32) ([]int32, error)) ([]QuestAPIResource, error) {
 	resources := []QuestAPIResource{}
 
 	dbQuestIDs, err := dbQuery(r.Context(), item.GetID())

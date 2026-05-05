@@ -2,8 +2,6 @@ package seeding
 
 import (
 	"fmt"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type KeyItem struct {
@@ -38,8 +36,8 @@ func (k KeyItem) Error() string {
 	return fmt.Sprintf("key item %s", k.Name)
 }
 
-func (k KeyItem) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (k KeyItem) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   k.ID,
 		Name: k.Name,
 	}

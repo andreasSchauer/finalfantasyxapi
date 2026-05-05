@@ -95,8 +95,8 @@ func (m Monster) Error() string {
 	return h.NameToString(m.Name, m.Version, m.Specification)
 }
 
-func (m Monster) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (m Monster) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:            m.ID,
 		Name:          m.Name,
 		Version:       m.Version,

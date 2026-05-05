@@ -2,8 +2,6 @@ package seeding
 
 import (
 	"fmt"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type BlitzballPosition struct {
@@ -36,8 +34,8 @@ func (b BlitzballPosition) Error() string {
 	return fmt.Sprintf("blitzball position %s in %s", b.Slot, b.Category)
 }
 
-func (b BlitzballPosition) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (b BlitzballPosition) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   b.ID,
 		Name: fmt.Sprintf("%s - %s", b.Category, b.Slot),
 	}

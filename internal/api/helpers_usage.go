@@ -4,9 +4,10 @@ import (
 	"fmt"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getUsageString[T h.HasID, R any, A APIResource, L APIResourceList](i handlerInput[T, R, A, L]) string {
+func getUsageString[T seeding.Lookupable, R any, A APIResource, L APIResourceList](i handlerInput[T, R, A, L]) string {
 	listUsage := getUsagePath("", i.endpoint)
 	usageStrings := []string{listUsage}
 

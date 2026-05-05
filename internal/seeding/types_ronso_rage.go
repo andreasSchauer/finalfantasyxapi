@@ -2,8 +2,6 @@ package seeding
 
 import (
 	"fmt"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type RonsoRage struct {
@@ -32,8 +30,8 @@ func (r RonsoRage) Error() string {
 	return fmt.Sprintf("ronso rage %s", r.Overdrive.Name)
 }
 
-func (r RonsoRage) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (r RonsoRage) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   r.ID,
 		Name: r.Name,
 	}

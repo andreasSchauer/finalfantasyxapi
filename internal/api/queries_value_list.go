@@ -5,9 +5,10 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func filterByValues[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], query string, queryParam QueryParam, dbQueryMap map[string]DbQueryNoInput) ([]int32, error) {
+func filterByValues[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], query string, queryParam QueryParam, dbQueryMap map[string]DbQueryNoInput) ([]int32, error) {
 	values, err := queryListSplit(cfg, query)
 	if err != nil {
 		return nil, err

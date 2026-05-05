@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type handlerInput[T h.HasID, R any, A APIResource, L APIResourceList] struct {
+type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList] struct {
 	endpoint         string
 	resourceType     string
 	usage            []string

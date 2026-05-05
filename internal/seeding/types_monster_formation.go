@@ -42,8 +42,8 @@ func (mf MonsterFormation) Error() string {
 	return fmt.Sprintf("monster formation with version: %s, %s, %s", h.PtrToString(mf.Version), mf.MonsterSelection, mf.FormationData)
 }
 
-func (mf MonsterFormation) GetResParamsUnnamed() h.ResParamsUnnamed {
-	return h.ResParamsUnnamed{
+func (mf MonsterFormation) GetResParamsUnnamed() ResParamsUnnamed {
+	return ResParamsUnnamed{
 		ID: mf.ID,
 	}
 }

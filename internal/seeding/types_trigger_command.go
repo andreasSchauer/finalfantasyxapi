@@ -53,8 +53,8 @@ func (t TriggerCommand) Error() string {
 	return fmt.Sprintf("trigger command '%s'", h.NameToString(t.Name, t.Version, t.Specification))
 }
 
-func (t TriggerCommand) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (t TriggerCommand) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:            t.ID,
 		Name:          t.Name,
 		Version:       t.Version,

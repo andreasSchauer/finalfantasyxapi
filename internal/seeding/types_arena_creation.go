@@ -47,8 +47,8 @@ func (a ArenaCreation) Error() string {
 	return fmt.Sprintf("monster arena creation %s", a.Name)
 }
 
-func (a ArenaCreation) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (a ArenaCreation) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   a.ID,
 		Name: a.Name,
 	}

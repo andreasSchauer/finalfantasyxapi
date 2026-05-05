@@ -4,11 +4,11 @@ import (
 	"errors"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 // db query searches for resources with matching boolean db column value
-func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryBool) ([]A, error) {
+func boolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryBool) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
@@ -30,7 +30,7 @@ func boolQuery[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, 
 }
 
 // db query accumulates all resources that fulfill a certain condition. a false boolean flips these results.
-func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryNoInput) ([]A, error) {
+func boolQuery2[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryNoInput) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
@@ -55,7 +55,7 @@ func boolQuery2[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config,
 	return resources, nil
 }
 
-func boolQueryWrapper[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, bool) ([]int32, error)) ([]A, error) {
+func boolQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, bool) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)

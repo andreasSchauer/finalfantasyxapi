@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type MasterItem struct {
@@ -35,8 +34,8 @@ func (i MasterItem) Error() string {
 	return fmt.Sprintf("master item %s, type %s", i.Name, i.Type)
 }
 
-func (i MasterItem) GetResParamsTyped() h.ResParamsTyped {
-	return h.ResParamsTyped{
+func (i MasterItem) GetResParamsTyped() ResParamsTyped {
+	return ResParamsTyped{
 		ID:   i.ID,
 		Name: i.Name,
 		Type: string(i.Type),

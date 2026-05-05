@@ -18,7 +18,7 @@ type AvailabilityParams struct {
 	Repeatable   sql.NullBool
 }
 
-func getAvailabilityParams[T seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], parentID int32) (AvailabilityParams, error) {
+func getAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], parentID int32) (AvailabilityParams, error) {
 	queryParam := i.queryLookup["rel_availability"]
 
 	availabilities, err := parseEnumListQuery(cfg, r, i.endpoint, queryParam, cfg.t.AvailabilityType)
@@ -40,7 +40,7 @@ func getAvailabilityParams[T seeding.LookupableID, R any, A APIResource, L APIRe
 	return availabilityParams, nil
 }
 
-func runAvailabilityQuery[T, K seeding.LookupableID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item K, params AvailabilityParams, dbQuery AvailabilityDbQuery) ([]A, error) {
+func runAvailabilityQuery[T, K seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item K, params AvailabilityParams, dbQuery AvailabilityDbQuery) ([]A, error) {
 	dbIDs, err := dbQuery(r.Context(), params)
 	if err != nil {
 		return nil, newHTTPErrorDB(i.resourceType, item, err)

@@ -41,6 +41,12 @@ func (r EnumAPIResource) GetURL() string {
 	return r.URL
 }
 
+func (r EnumAPIResource) ToKeyFields() []any {
+	return []any{
+		r.Name,
+	}
+}
+
 func (r EnumAPIResource) Error() string {
 	return fmt.Sprintf("enum api resource with url: %s", r.URL)
 }

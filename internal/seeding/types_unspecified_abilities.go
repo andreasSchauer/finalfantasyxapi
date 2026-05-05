@@ -60,8 +60,8 @@ func (u UnspecifiedAbility) Error() string {
 	return fmt.Sprintf("unspecified ability '%s'", h.NameToString(u.Name, u.Version, u.Specification))
 }
 
-func (u UnspecifiedAbility) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (u UnspecifiedAbility) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:            u.ID,
 		Name:          u.Name,
 		Version:       u.Version,

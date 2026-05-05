@@ -46,8 +46,8 @@ func (s Sphere) Error() string {
 	return fmt.Sprintf("sphere %s", s.Name)
 }
 
-func (s Sphere) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (s Sphere) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   s.ID,
 		Name: s.Name,
 	}

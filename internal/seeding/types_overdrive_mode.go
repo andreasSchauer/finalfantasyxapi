@@ -37,8 +37,8 @@ func (o OverdriveMode) GetID() int32 {
 	return o.ID
 }
 
-func (o OverdriveMode) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (o OverdriveMode) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   o.ID,
 		Name: o.Name,
 	}

@@ -43,8 +43,8 @@ func (f FMV) Error() string {
 	return fmt.Sprintf("fmv %s", f.Name)
 }
 
-func (f FMV) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (f FMV) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   f.ID,
 		Name: f.Name,
 	}

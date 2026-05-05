@@ -2,8 +2,6 @@ package seeding
 
 import (
 	"fmt"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Sublocation struct {
@@ -40,8 +38,8 @@ func (s Sublocation) Error() string {
 	return fmt.Sprintf("sublocation %s", s.Name)
 }
 
-func (s Sublocation) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (s Sublocation) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   s.ID,
 		Name: s.Name,
 	}

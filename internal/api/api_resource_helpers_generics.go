@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func idsToAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], IDs []int32) []A {
+func idsToAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], IDs []int32) []A {
 	resources := []A{}
 
 	for _, id := range IDs {
@@ -17,7 +17,7 @@ func idsToAPIResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 	return resources
 }
 
-func idsToAPIResourceList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], dbIDs []int32) (L, error) {
+func idsToAPIResourceList[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], dbIDs []int32) (L, error) {
 	var zeroType L
 
 	resources := idsToAPIResources(cfg, i, dbIDs)

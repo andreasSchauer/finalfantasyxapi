@@ -62,8 +62,8 @@ func (t Treasure) Error() string {
 	return fmt.Sprintf("treasure number: %d", t.Version)
 }
 
-func (t Treasure) GetResParamsUnnamed() h.ResParamsUnnamed {
-	return h.ResParamsUnnamed{
+func (t Treasure) GetResParamsUnnamed() ResParamsUnnamed {
+	return ResParamsUnnamed{
 		ID: t.ID,
 	}
 }

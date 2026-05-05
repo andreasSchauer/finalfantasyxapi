@@ -49,8 +49,8 @@ func (i Item) Error() string {
 	return fmt.Sprintf("item %s", i.Name)
 }
 
-func (i Item) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (i Item) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   i.ID,
 		Name: i.Name,
 	}

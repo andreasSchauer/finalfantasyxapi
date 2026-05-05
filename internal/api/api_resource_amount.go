@@ -1,7 +1,6 @@
 package api
 
 import (
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -21,14 +20,14 @@ func newResourceAmount[A APIResource](resource A, amount int32) ResourceAmount[A
 	}
 }
 
-func idAmountToResourceAmount[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id, amount int32) ResourceAmount[A] {
+func idAmountToResourceAmount[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id, amount int32) ResourceAmount[A] {
 	return ResourceAmount[A]{
 		Resource: i.idToResFunc(cfg, i, id),
 		Amount:   amount,
 	}
 }
 
-func nameAmountPtrToResAmtPtr[NA NameAmount, T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], itemPtr *NA) *ResourceAmount[A] {
+func nameAmountPtrToResAmtPtr[NA NameAmount, T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], itemPtr *NA) *ResourceAmount[A] {
 	if itemPtr == nil {
 		return nil
 	}
@@ -38,7 +37,7 @@ func nameAmountPtrToResAmtPtr[NA NameAmount, T h.HasID, R any, A APIResource, L 
 	return &resAmt
 }
 
-func nameAmountToResourceAmount[NA NameAmount, T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], item NA) ResourceAmount[A] {
+func nameAmountToResourceAmount[NA NameAmount, T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], item NA) ResourceAmount[A] {
 	var parseResp parseResponse
 	switch item.GetVersion() {
 	case nil:
@@ -53,7 +52,7 @@ func nameAmountToResourceAmount[NA NameAmount, T h.HasID, R any, A APIResource, 
 	}
 }
 
-func nameAmtsToResAmts[NA NameAmount, T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], items []NA) []ResourceAmount[A] {
+func nameAmtsToResAmts[NA NameAmount, T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], items []NA) []ResourceAmount[A] {
 	results := []ResourceAmount[A]{}
 
 	for _, item := range items {
@@ -64,7 +63,7 @@ func nameAmtsToResAmts[NA NameAmount, T h.HasID, R any, A APIResource, L APIReso
 	return results
 }
 
-func toResAmtType[NA NameAmount, RA ResourceAmountType[A], T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], old []NA, fn func(A, int32) RA) []RA {
+func toResAmtType[NA NameAmount, RA ResourceAmountType[A], T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], old []NA, fn func(A, int32) RA) []RA {
 	resAmts := []RA{}
 
 	for _, item := range old {

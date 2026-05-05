@@ -4,8 +4,9 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type HasLocArea interface {
-	GetLocationArea() LocationArea
+type Lookupable interface {
+	LookupableID
+	LookupableKey
 }
 
 type LookupableID interface {
@@ -13,12 +14,12 @@ type LookupableID interface {
 	error
 }
 
-type Lookupable interface {
+type LookupableKey interface {
 	ToKeyFields() []any
 	error
 }
 
-func Key(l Lookupable) string {
+func Key(l LookupableKey) string {
 	fields := l.ToKeyFields()
 	return combineFields(fields)
 }
@@ -34,11 +35,15 @@ type needsID interface {
 }
 
 type HasItemAmount interface {
-	h.HasID
+	Lookupable
 	GetItemAmount() ItemAmount
 }
 
 type HasItemAmounts interface {
-	h.HasID
+	Lookupable
 	GetItemAmounts() []ItemAmount
+}
+
+type HasLocArea interface {
+	GetLocationArea() LocationArea
 }

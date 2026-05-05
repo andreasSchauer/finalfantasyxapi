@@ -2,8 +2,6 @@ package seeding
 
 import (
 	"fmt"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Primer struct {
@@ -37,8 +35,8 @@ func (p Primer) Error() string {
 	return fmt.Sprintf("primer %s", p.Name)
 }
 
-func (p Primer) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (p Primer) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   p.ID,
 		Name: p.Name,
 	}

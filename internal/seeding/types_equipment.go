@@ -50,8 +50,8 @@ func (e EquipmentTable) Error() string {
 	return fmt.Sprintf("equipment table with type: %s, classification: %s, specific character: %v, version: %v, priority: %v", e.Type, e.Classification, h.PtrToString(e.SpecificCharacter), h.PtrToString(e.Version), h.PtrToString(e.Priority))
 }
 
-func (e EquipmentTable) GetResParamsUnnamed() h.ResParamsUnnamed {
-	return h.ResParamsUnnamed{
+func (e EquipmentTable) GetResParamsUnnamed() ResParamsUnnamed {
+	return ResParamsUnnamed{
 		ID: e.ID,
 	}
 }
@@ -118,8 +118,8 @@ func (e EquipmentName) Error() string {
 	return fmt.Sprintf("equipment name %s, character name: %s", e.Name, e.CharacterName)
 }
 
-func (e EquipmentName) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (e EquipmentName) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   e.ID,
 		Name: e.Name,
 	}

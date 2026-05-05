@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 // can make those return sql.NullTypes, if the pointers have no other use
@@ -39,7 +39,7 @@ func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]Qu
 	return &integer32, nil
 }
 
-func getQueryIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
+func getQueryIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := parseIdQuery(r, queryParam, len(i.objLookup))
@@ -53,7 +53,7 @@ func getQueryIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.R
 	return &id, nil
 }
 
-func getQueryNameIdPtr[T h.HasID, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
+func getQueryNameIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := parseNameIdQuery(r, queryParam, i.resourceType, i.objLookup)

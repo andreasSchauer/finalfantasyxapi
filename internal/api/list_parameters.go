@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type QueryParameterList struct {
@@ -15,7 +15,7 @@ func (l QueryParameterList) getListParams() ListParams {
 	return l.ListParams
 }
 
-func getQueryParamList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (QueryParameterList, error) {
+func getQueryParamList[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (QueryParameterList, error) {
 
 	queryParams := queryMapToSlice(i.queryLookup)
 	queryParams = getAllowedResources(cfg, i, queryParams)
@@ -34,7 +34,7 @@ func getQueryParamList[T h.HasID, R any, A APIResource, L APIResourceList](cfg *
 	return list, nil
 }
 
-func getAllowedResources[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], params []QueryParam) []QueryParam {
+func getAllowedResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		for _, id := range param.AllowedIDs {
 			allowedRes := createResourceURL(cfg, i.endpoint, id)

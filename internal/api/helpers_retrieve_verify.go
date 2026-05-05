@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func verifyParamsAndGet[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32) (T, error) {
+func verifyParamsAndGet[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32) (T, error) {
 	var zeroType T
 
 	err := verifyQueryParams(cfg, r, i, &id, nil)
@@ -24,7 +23,7 @@ func verifyParamsAndGet[T h.HasID, R any, A APIResource, L APIResourceList](cfg 
 	return resource, nil
 }
 
-func verifyParamsAndRetrieve[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]int32, error) {
+func verifyParamsAndRetrieve[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]int32, error) {
 	err := verifyQueryParams(cfg, r, i, nil, nil)
 	if err != nil {
 		return nil, err

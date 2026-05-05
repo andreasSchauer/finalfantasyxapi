@@ -1,6 +1,5 @@
 package seeding
 
-
 import (
 	"fmt"
 
@@ -23,7 +22,7 @@ func (l LookupObject) Error() string {
 	return fmt.Sprintf("lookup object '%s'", h.NameToString(l.Name, l.Version, nil))
 }
 
-func GetResourceByID[T h.HasID](id int32, lookup map[int32]T) (T, error) {
+func GetResourceByID[T LookupableID](id int32, lookup map[int32]T) (T, error) {
 	resource, found := lookup[id]
 	if !found {
 		var zeroType T
@@ -33,11 +32,11 @@ func GetResourceByID[T h.HasID](id int32, lookup map[int32]T) (T, error) {
 	return resource, nil
 }
 
-func GetResource[T, K any](key K, lookup map[string]T) (T, error) {
+func GetResource[T LookupableKey, K any](key K, lookup map[string]T) (T, error) {
 	switch k := any(key).(type) {
 	case string:
 		return getResourceByName(k, lookup)
-	case Lookupable:
+	case LookupableKey:
 		return getResourceByKey(k, lookup)
 	default:
 		var zeroType T
@@ -45,7 +44,7 @@ func GetResource[T, K any](key K, lookup map[string]T) (T, error) {
 	}
 }
 
-func getResourceByName[T any](key string, lookup map[string]T) (T, error) {
+func getResourceByName[T LookupableKey](key string, lookup map[string]T) (T, error) {
 	resource, found := lookup[key]
 	if !found {
 		var zeroType T
@@ -55,7 +54,7 @@ func getResourceByName[T any](key string, lookup map[string]T) (T, error) {
 	return resource, nil
 }
 
-func getResourceByKey[T any](obj Lookupable, lookup map[string]T) (T, error) {
+func getResourceByKey[T, K LookupableKey](obj K, lookup map[string]T) (T, error) {
 	key := Key(obj)
 
 	resource, err := GetResource(key, lookup)
@@ -67,7 +66,7 @@ func getResourceByKey[T any](obj Lookupable, lookup map[string]T) (T, error) {
 	return resource, nil
 }
 
-func getResources[T, K any](keys []K, lookup map[string]T) ([]T, error) {
+func getResources[T LookupableKey, K any](keys []K, lookup map[string]T) ([]T, error) {
 	objects := make([]T, len(keys))
 
 	for i, key := range keys {
@@ -82,7 +81,7 @@ func getResources[T, K any](keys []K, lookup map[string]T) ([]T, error) {
 	return objects, nil
 }
 
-func typedRefsToResources[T any](refs []AbilityReference, lookup map[string]T) ([]T, error) {
+func typedRefsToResources[T LookupableKey](refs []AbilityReference, lookup map[string]T) ([]T, error) {
 	objects := make([]T, len(refs))
 
 	for i, ref := range refs {

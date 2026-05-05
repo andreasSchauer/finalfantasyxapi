@@ -1,39 +1,10 @@
-package helpers
+package seeding
 
 // these interfaces serve as bridge between the seeding resources and the api resources and are used to convert the former into the latter
 
-type HasID interface {
-	GetID() int32
-}
-
 type IsNamed interface {
-	HasID
+	Lookupable
 	GetResParamsNamed() ResParamsNamed
-}
-
-type IsUnnamed interface {
-	HasID
-	GetResParamsUnnamed() ResParamsUnnamed
-}
-
-type IsLocationBased interface {
-	HasID
-	GetResParamsLocation() ResParamsLocation
-}
-
-type IsTyped interface {
-	HasID
-	GetResParamsTyped() ResParamsTyped
-}
-
-type IsQuest interface {
-	HasID
-	GetResParamsQuest() ResParamsQuest
-}
-
-type IsEnum interface {
-	HasID
-	GetResParamsEnum() ResParamsEnum
 }
 
 type ResParamsNamed struct {
@@ -43,8 +14,18 @@ type ResParamsNamed struct {
 	Specification *string
 }
 
+type IsUnnamed interface {
+	Lookupable
+	GetResParamsUnnamed() ResParamsUnnamed
+}
+
 type ResParamsUnnamed struct {
 	ID int32
+}
+
+type IsLocationBased interface {
+	Lookupable
+	GetResParamsLocation() ResParamsLocation
 }
 
 type ResParamsLocation struct {
@@ -56,6 +37,11 @@ type ResParamsLocation struct {
 	Specification *string
 }
 
+type IsTyped interface {
+	Lookupable
+	GetResParamsTyped() ResParamsTyped
+}
+
 type ResParamsTyped struct {
 	ID            int32
 	Name          string
@@ -64,11 +50,21 @@ type ResParamsTyped struct {
 	Type          string
 }
 
+type IsQuest interface {
+	Lookupable
+	GetResParamsQuest() ResParamsQuest
+}
+
 type ResParamsQuest struct {
 	ID        int32
 	Sidequest *string
 	Subquest  *string
 	Type      string
+}
+
+type IsEnum interface {
+	Lookupable
+	GetResParamsEnum() ResParamsEnum
 }
 
 type ResParamsEnum struct {

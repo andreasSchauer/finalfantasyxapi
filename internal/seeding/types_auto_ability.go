@@ -74,8 +74,8 @@ func (a AutoAbility) Error() string {
 	return fmt.Sprintf("auto ability %s", a.Name)
 }
 
-func (a AutoAbility) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (a AutoAbility) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   a.ID,
 		Name: a.Name,
 	}

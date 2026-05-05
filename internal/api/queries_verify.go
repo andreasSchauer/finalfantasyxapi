@@ -6,9 +6,10 @@ import (
 	"net/url"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func verifyDefaultParamsOnly[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], segment *string) error {
+func verifyDefaultParamsOnly[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], segment *string) error {
 	q := r.URL.Query()
 
 	for query := range q {
@@ -26,7 +27,7 @@ func verifyDefaultParamsOnly[T h.HasID, R any, A APIResource, L APIResourceList]
 	return nil
 }
 
-func verifyQueryParams[T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id *int32, segment *string) error {
+func verifyQueryParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id *int32, segment *string) error {
 	q := r.URL.Query()
 	canUseDefaultOnlyParam := verifyDefaultOnlyParam(cfg, q, i.queryLookup)
 

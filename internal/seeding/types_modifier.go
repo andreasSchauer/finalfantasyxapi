@@ -38,8 +38,8 @@ func (m Modifier) Error() string {
 	return fmt.Sprintf("modifier %s", m.Name)
 }
 
-func (m Modifier) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (m Modifier) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   m.ID,
 		Name: m.Name,
 	}

@@ -41,10 +41,10 @@ func (q Quest) Error() string {
 	return fmt.Sprintf("quest %s, type %s", q.Name, q.Type)
 }
 
-func (q Quest) GetResParamsQuest() h.ResParamsQuest {
+func (q Quest) GetResParamsQuest() ResParamsQuest {
 	switch q.Type {
 	case database.QuestTypeSidequest:
-		return h.ResParamsQuest{
+		return ResParamsQuest{
 			ID:        q.ID,
 			Sidequest: &q.Name,
 			Subquest:  nil,
@@ -52,7 +52,7 @@ func (q Quest) GetResParamsQuest() h.ResParamsQuest {
 		}
 
 	case database.QuestTypeSubquest:
-		return h.ResParamsQuest{
+		return ResParamsQuest{
 			ID:        q.ID,
 			Sidequest: nil,
 			Subquest:  &q.Name,
@@ -60,7 +60,7 @@ func (q Quest) GetResParamsQuest() h.ResParamsQuest {
 		}
 	}
 
-	return h.ResParamsQuest{}
+	return ResParamsQuest{}
 }
 
 func (q Quest) GetItemAmount() ItemAmount {

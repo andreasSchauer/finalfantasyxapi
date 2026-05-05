@@ -39,8 +39,8 @@ func (p Property) Error() string {
 	return fmt.Sprintf("property %s", p.Name)
 }
 
-func (p Property) GetResParamsNamed() h.ResParamsNamed {
-	return h.ResParamsNamed{
+func (p Property) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
 		ID:   p.ID,
 		Name: p.Name,
 	}
