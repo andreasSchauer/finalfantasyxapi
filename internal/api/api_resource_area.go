@@ -40,13 +40,7 @@ func (r AreaAPIResource) GetURL() string {
 	return r.URL
 }
 
-func (r AreaAPIResource) ToKeyFields() []any {
-	return []any{
-		r.URL,
-	}
-}
-
-func (r AreaAPIResource) GetKey() string {
+func (r AreaAPIResource) GetTestKey() string {
 	return h.NameToString(r.Area, r.Version, nil)
 }
 
@@ -72,7 +66,6 @@ func idPtrToAreaAPIResPtr(cfg *Config, i handlerInput[seeding.Area, Area, AreaAP
 	return &res
 }
 
-// useful for id-less locationArea slices retrieved from lookup
 func locAreaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], area seeding.LocationArea) AreaAPIResource {
 	res, _ := seeding.GetResource(area, i.objLookup)
 	return areaToAreaAPIResource(cfg, i, res)

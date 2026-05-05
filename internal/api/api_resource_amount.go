@@ -85,7 +85,7 @@ func getResAmtMap[A APIResource](items []ResourceAmount[A]) map[string]int32 {
 	amountMap := make(map[string]int32)
 
 	for _, item := range items {
-		key := item.Resource.GetKey()
+		key := item.Resource.GetTestKey()
 		amountMap[key] = item.Amount
 	}
 

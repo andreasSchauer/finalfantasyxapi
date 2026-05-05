@@ -42,13 +42,7 @@ func (r NamedAPIResource) GetURL() string {
 	return r.URL
 }
 
-func (r NamedAPIResource) ToKeyFields() []any {
-	return []any{
-		r.URL,
-	}
-}
-
-func (r NamedAPIResource) GetKey() string {
+func (r NamedAPIResource) GetTestKey() string {
 	return h.NameToString(r.Name, r.Version, nil)
 }
 

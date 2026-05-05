@@ -38,13 +38,7 @@ func (r UnnamedAPIResource) GetURL() string {
 	return r.URL
 }
 
-func (r UnnamedAPIResource) ToKeyFields() []any {
-	return []any{
-		r.URL,
-	}
-}
-
-func (r UnnamedAPIResource) GetKey() string {
+func (r UnnamedAPIResource) GetTestKey() string {
 	return fmt.Sprint(r.ID)
 }
 

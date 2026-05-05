@@ -41,13 +41,7 @@ func (r QuestAPIResource) GetURL() string {
 	return r.URL
 }
 
-func (r QuestAPIResource) ToKeyFields() []any {
-	return []any{
-		r.URL,
-	}
-}
-
-func (r QuestAPIResource) GetKey() string {
+func (r QuestAPIResource) GetTestKey() string {
 	var subquestStr string
 
 	if r.Subquest != nil {

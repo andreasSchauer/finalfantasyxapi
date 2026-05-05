@@ -8,7 +8,7 @@ type APIResource interface {
 	HasAPIResource
 	helpers.HasID
 	HasURL
-	GetKey() string
+	GetTestKey() string
 }
 
 type HasAPIResource interface {
