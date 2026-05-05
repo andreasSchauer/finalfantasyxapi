@@ -69,12 +69,12 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabi
 
 	rel := Item{
 		Monsters:           getMonItemAmts(cfg, monsters, item.Name),
-		Treasures:          getForeignResAmts2(cfg, cfg.e.treasures, treasures, item.ID),
+		Treasures:          itemAmtsToChildResAmts2(cfg, cfg.e.treasures, treasures, item.ID),
 		Shops:              shops,
-		Quests:             getForeignResAmts(cfg.e.quests, quests),
-		BlitzballPrizes:    getForeignResAmts2(cfg, cfg.e.blitzballPrizes, blitzballPrizes, item.ID),
-		AeonLearnAbilities: getForeignResAmts(cfg.e.playerAbilities, playerAbilities),
-		AutoAbilities:      getForeignResAmts(cfg.e.autoAbilities, autoAbilities),
+		Quests:             itemAmtsToChildResAmts(cfg.e.quests, quests),
+		BlitzballPrizes:    itemAmtsToChildResAmts2(cfg, cfg.e.blitzballPrizes, blitzballPrizes, item.ID),
+		AeonLearnAbilities: itemAmtsToChildResAmts(cfg.e.playerAbilities, playerAbilities),
+		AutoAbilities:      itemAmtsToChildResAmts(cfg.e.autoAbilities, autoAbilities),
 		Mixes:              mixes,
 	}
 

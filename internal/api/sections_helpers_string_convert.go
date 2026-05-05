@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"slices"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -35,11 +34,13 @@ func areaToLocAreaString(area seeding.Area) string {
 
 func locAreaStrings[T seeding.HasLocArea](cfg *Config, items []T) []string {
 	strings := []string{}
+	seen := make(map[string]bool)
 
 	for _, item := range items {
 		s := locAreaString(cfg, item.GetLocationArea())
 
-		if !slices.Contains(strings, s) {
+		if !seen[s] {
+			seen[s] = true
 			strings = append(strings, s)
 		}
 	}

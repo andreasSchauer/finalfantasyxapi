@@ -1,8 +1,6 @@
 package api
 
 import (
-	"errors"
-
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
@@ -116,7 +114,8 @@ func resAmtTypesToStructs[T ResourceAmountType[A], A APIResource](items []T) []R
 	return resAmts
 }
 
-func getForeignResAmts[T seeding.HasItemAmount, R any, A APIResource, L APIResourceList](i handlerInput[T, R, A, L], resources []A) []ResourceAmount[A] {
+// takes a slice of parent resources and for each of them, attaches the amount of the resource's seeding.ItemAmount field to the resource.
+func itemAmtsToChildResAmts[T seeding.HasItemAmount, R any, A APIResource, L APIResourceList](i handlerInput[T, R, A, L], resources []A) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}
 
 	for _, res := range resources {
@@ -129,7 +128,8 @@ func getForeignResAmts[T seeding.HasItemAmount, R any, A APIResource, L APIResou
 	return resAmts
 }
 
-func getForeignResAmts2[T seeding.HasItemAmounts, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], resources []A, id int32) []ResourceAmount[A] {
+// takes a slice of parent resources and for each of them, searches the resource's seeding.ItemAmount slice for the target item and attaches its amount to the resource.
+func itemAmtsToChildResAmts2[T seeding.HasItemAmounts, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], resources []A, itemID int32) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}
 
 	for _, res := range resources {
@@ -139,31 +139,12 @@ func getForeignResAmts2[T seeding.HasItemAmounts, R any, A APIResource, L APIRes
 
 		for _, ia := range itemAmounts {
 			item, _ := seeding.GetResource(ia.ItemName, cfg.l.Items)
-			if item.ID == id {
+			if item.ID == itemID {
 				itemAmount = ia
 			}
 		}
 
 		resAmt := newResourceAmount(res, itemAmount.Amount)
-		resAmts = append(resAmts, resAmt)
-	}
-
-	return resAmts
-}
-
-func getForeignSliceResAmts[K seeding.LookupableID, T h.HasID, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], targetItem K, skipCondition bool, fn func(*Config, K, int32) (ResourceAmount[A], error)) []ResourceAmount[A] {
-	resAmts := []ResourceAmount[A]{}
-
-	if skipCondition {
-		return resAmts
-	}
-
-	for idx := range len(i.objLookup) {
-		id := int32(idx + 1)
-		resAmt, err := fn(cfg, targetItem, id)
-		if errors.Is(err, errContinue) {
-			continue
-		}
 		resAmts = append(resAmts, resAmt)
 	}
 

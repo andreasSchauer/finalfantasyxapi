@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -43,21 +44,42 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 		DefaultPlayerAbilities: defaultAbilities,
 		StdSgPlayerAbilities:   stdSgAbilities,
 		ExpSgPlayerAbilities:   expSgAbilities,
-		OverdriveModes:         getForeignSliceResAmts(cfg, cfg.e.overdriveModes, char, char.IsStoryBased, getCharModeAmount),
+		OverdriveModes:         getCharacterModeAmts(cfg, char),
 	}
 
 	return rel, nil
 }
 
+
+func getCharacterModeAmts(cfg *Config, char seeding.Character) []ResourceAmount[NamedAPIResource] {
+	resAmts := []ResourceAmount[NamedAPIResource]{}
+
+	if char.IsStoryBased {
+		return resAmts
+	}
+
+	for i := range len(cfg.l.OverdriveModes) {
+		id := int32(i + 1)
+		resAmt, err := getCharModeAmount(cfg, char, id)
+		if errors.Is(err, errContinue) {
+			continue
+		}
+		resAmts = append(resAmts, resAmt)
+	}
+
+	return resAmts
+}
+
+
 func getCharModeAmount(cfg *Config, char seeding.Character, id int32) (ResourceAmount[NamedAPIResource], error) {
 	i := cfg.e.overdriveModes
 
-	modeLookup, _ := seeding.GetResourceByID(id, i.objLookupID)
-	if len(modeLookup.ActionsToLearn) == 0 {
+	mode, _ := seeding.GetResourceByID(id, i.objLookupID)
+	if len(mode.ActionsToLearn) == 0 {
 		return ResourceAmount[NamedAPIResource]{}, errContinue
 	}
 
-	amount := modeLookup.ActionsToLearn[char.GetID()-1].Amount
+	amount := mode.ActionsToLearn[char.GetID()-1].Amount
 	modeAmount := idAmountToResourceAmount(cfg, i, id, amount)
 
 	return modeAmount, nil
