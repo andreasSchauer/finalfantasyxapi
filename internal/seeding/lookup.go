@@ -27,9 +27,6 @@ func (l LookupObject) Error() string {
 type Lookup struct {
 	json                   jsonLookup
 	Hashes                 map[string]int32
-	currentAbility         Ability           // currentAbility and currentBI are
-	currentBI              BattleInteraction // used for seeding of ability damage
-	currentME              MonsterEquipment  // used for some monster equipment junctions
 	Abilities              map[string]Ability
 	AbilitiesID            map[int32]Ability
 	EnemyAbilities         map[string]EnemyAbility
@@ -116,8 +113,6 @@ type Lookup struct {
 	Shops                  map[string]Shop
 	ShopsID                map[int32]Shop
 	Songs                  map[string]Song
-	CuesID                 map[int32]Cue
-	BackgroundMusicID      map[int32]BackgroundMusic
 	SongsID                map[int32]Song
 	Spheres                map[string]Sphere
 	SpheresID              map[int32]Sphere
@@ -225,8 +220,6 @@ func lookupInit() (*Lookup, error) {
 		ShopsID:                make(map[int32]Shop),
 		Songs:                  make(map[string]Song),
 		SongsID:                make(map[int32]Song),
-		CuesID:                 make(map[int32]Cue),
-		BackgroundMusicID:      make(map[int32]BackgroundMusic),
 		Spheres:                make(map[string]Sphere),
 		SpheresID:              make(map[int32]Sphere),
 		Stats:                  make(map[string]Stat),

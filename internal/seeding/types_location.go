@@ -19,6 +19,12 @@ func (l Location) ToHashFields() []any {
 	}
 }
 
+func (l Location) ToKeyFields() []any {
+	return []any{
+		l.Name,
+	}
+}
+
 func (l Location) GetID() int32 {
 	return l.ID
 }

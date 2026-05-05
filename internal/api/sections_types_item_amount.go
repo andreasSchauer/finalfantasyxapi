@@ -22,10 +22,10 @@ func posItemToItemAmtSimple(cfg *Config, posItem seeding.PossibleItem) string {
 	return convertItemAmountSimple(cfg, posItem.ItemAmount)
 }
 
-func sortItemAmountsByID(cfg *Config, s []seeding.ItemAmount) []seeding.ItemAmount {
+func sortItemAmountsByID(s []seeding.ItemAmount) []seeding.ItemAmount {
 	slices.SortStableFunc(s, func(a, b seeding.ItemAmount) int {
-		A := getMasterItemID(cfg, a)
-		B := getMasterItemID(cfg, b)
+		A := a.MasterItem.ID
+		B := b.MasterItem.ID
 
 		if A < B {
 			return -1
@@ -49,16 +49,4 @@ func sortItemAmountsByID(cfg *Config, s []seeding.ItemAmount) []seeding.ItemAmou
 	})
 
 	return s
-}
-
-func getMasterItemID(cfg *Config, ia seeding.ItemAmount) int32 {
-	lookup, _ := seeding.GetResource(ia.ItemName, cfg.l.MasterItems)
-
-	if lookup.Type == database.ItemTypeItem {
-		itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.Items)
-		return itemLookup.MasterItem.ID
-	}
-
-	itemLookup, _ := seeding.GetResource(ia.ItemName, cfg.l.KeyItems)
-	return itemLookup.MasterItem.ID
 }

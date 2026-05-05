@@ -85,7 +85,7 @@ func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSi
 		}
 	}
 
-	itemAmounts = sortItemAmountsByID(cfg, itemAmounts)
+	itemAmounts = sortItemAmountsByID(itemAmounts)
 	treasures.Items = convertObjSlice(cfg, itemAmounts, convertItemAmountSimple)
 	return treasures
 }

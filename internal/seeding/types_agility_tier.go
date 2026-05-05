@@ -29,6 +29,13 @@ func (a AgilityTier) ToHashFields() []any {
 	}
 }
 
+func (a AgilityTier) ToKeyFields() []any {
+	return []any{
+		a.MinAgility,
+		a.MaxAgility,
+	}
+}
+
 func (a AgilityTier) GetID() int32 {
 	return a.ID
 }

@@ -140,7 +140,6 @@ func convertStatChangeSimple(_ *Config, sc seeding.StatChange) string {
 
 func convertModChangeSimple(cfg *Config, mc seeding.ModifierChange) string {
 	formatted := formatChange(mc.ModifierName, mc.CalculationType, mc.Value)
-
 	modifier, _ := seeding.GetResource(mc.ModifierName, cfg.l.Modifiers)
 
 	if modifier.Category == string(database.ModifierCategoryPercentage) {

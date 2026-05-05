@@ -21,6 +21,12 @@ func (e Element) ToHashFields() []any {
 	}
 }
 
+func (e Element) ToKeyFields() []any {
+	return []any{
+		e.Name,
+	}
+}
+
 func (e Element) GetID() int32 {
 	return e.ID
 }

@@ -36,6 +36,7 @@ func (bm BackgroundMusic) Error() string {
 type Cue struct {
 	ID                     int32
 	SongID                 int32
+	TriggerAreaID		   *int32
 	SceneDescription       string         `json:"scene_description"`
 	TriggerLocationArea    *LocationArea  `json:"trigger_location_area"`
 	IncludedAreas          []LocationArea `json:"included_areas"`
@@ -49,7 +50,7 @@ func (c Cue) ToHashFields() []any {
 		fmt.Sprintf("%T", c),
 		c.SceneDescription,
 		c.SongID,
-		h.ObjPtrToID(c.TriggerLocationArea),
+		h.DerefOrNil(c.TriggerAreaID),
 		h.DerefOrNil(c.ReplacesBGMusic),
 		h.DerefOrNil(c.EndTrigger),
 		c.ReplacesEncounterMusic,

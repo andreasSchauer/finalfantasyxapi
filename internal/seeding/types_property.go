@@ -25,6 +25,12 @@ func (p Property) ToHashFields() []any {
 	}
 }
 
+func (p Property) ToKeyFields() []any {
+	return []any{
+		p.Name,
+	}
+}
+
 func (p Property) GetID() int32 {
 	return p.ID
 }

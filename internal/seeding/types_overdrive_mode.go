@@ -27,6 +27,12 @@ func (o OverdriveMode) ToHashFields() []any {
 	}
 }
 
+func (o OverdriveMode) ToKeyFields() []any {
+	return []any{
+		o.Name,
+	}
+}
+
 func (o OverdriveMode) GetID() int32 {
 	return o.ID
 }

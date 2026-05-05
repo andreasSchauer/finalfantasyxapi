@@ -26,6 +26,12 @@ func (cw CelestialWeapon) ToHashFields() []any {
 	}
 }
 
+func (cw CelestialWeapon) ToKeyFields() []any {
+	return []any{
+		cw.Name,
+	}
+}
+
 func (cw CelestialWeapon) GetID() int32 {
 	return cw.ID
 }

@@ -29,6 +29,12 @@ func (s Stat) ToHashFields() []any {
 	}
 }
 
+func (s Stat) ToKeyFields() []any {
+	return []any{
+		s.Name,
+	}
+}
+
 func (s Stat) GetID() int32 {
 	return s.ID
 }

@@ -14,8 +14,7 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 
 	var itemAbilityNamePtr *string
 	if len(item.BattleInteractions) > 0 {
-		itemAbility, _ := seeding.GetResource(item.Name, cfg.l.ItemAbilities)
-		itemAbilityNamePtr = &itemAbility.Name
+		itemAbilityNamePtr = &item.Name
 	}
 
 	rel, err := getItemRelationships(cfg, r, item)

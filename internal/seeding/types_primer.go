@@ -23,6 +23,12 @@ func (p Primer) ToHashFields() []any {
 	}
 }
 
+func (p Primer) ToKeyFields() []any {
+	return []any{
+		p.Name,
+	}
+}
+
 func (p Primer) GetID() int32 {
 	return p.ID
 }

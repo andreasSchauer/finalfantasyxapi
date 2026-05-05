@@ -22,6 +22,12 @@ func (s Sublocation) ToHashFields() []any {
 	}
 }
 
+func (s Sublocation) ToKeyFields() []any {
+	return []any{
+		s.Name,
+	}
+}
+
 func (s Sublocation) GetID() int32 {
 	return s.ID
 }

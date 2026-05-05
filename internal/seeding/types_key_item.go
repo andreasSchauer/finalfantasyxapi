@@ -24,6 +24,12 @@ func (k KeyItem) ToHashFields() []any {
 	}
 }
 
+func (k KeyItem) ToKeyFields() []any {
+	return []any{
+		k.Name,
+	}
+}
+
 func (k KeyItem) GetID() int32 {
 	return k.ID
 }

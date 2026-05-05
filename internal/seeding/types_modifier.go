@@ -24,6 +24,12 @@ func (m Modifier) ToHashFields() []any {
 	}
 }
 
+func (m Modifier) ToKeyFields() []any {
+	return []any{
+		m.Name,
+	}
+}
+
 func (m Modifier) GetID() int32 {
 	return m.ID
 }

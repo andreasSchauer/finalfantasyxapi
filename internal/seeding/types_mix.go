@@ -23,6 +23,12 @@ func (m Mix) ToHashFields() []any {
 	}
 }
 
+func (m Mix) ToKeyFields() []any {
+	return []any{
+		m.Name,
+	}
+}
+
 func (m Mix) GetID() int32 {
 	return m.ID
 }

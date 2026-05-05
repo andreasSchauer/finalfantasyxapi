@@ -49,11 +49,7 @@ func locAreaStrings[T seeding.HasLocArea](cfg *Config, items []T) []string {
 }
 
 func monsterAmountString(cfg *Config, ma seeding.MonsterAmount) string {
-	key := seeding.LookupObject{
-		Name:    ma.MonsterName,
-		Version: ma.Version,
-	}
-	mon, _ := seeding.GetResource(key, cfg.l.Monsters)
+	mon, _ := seeding.GetResource(seeding.Key(ma), cfg.l.Monsters)
 	return h.NameAmountString(mon.Name, mon.Version, mon.Specification, ma.Amount)
 }
 

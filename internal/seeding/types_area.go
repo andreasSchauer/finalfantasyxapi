@@ -35,6 +35,10 @@ func (a Area) ToHashFields() []any {
 	}
 }
 
+func (a Area) ToKeyFields() []any {
+	return a.GetLocationArea().ToKeyFields()
+}
+
 func (a Area) GetID() int32 {
 	return a.ID
 }

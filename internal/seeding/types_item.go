@@ -35,6 +35,12 @@ func (i Item) ToHashFields() []any {
 	}
 }
 
+func (i Item) ToKeyFields() []any {
+	return []any{
+		i.Name,
+	}
+}
+
 func (i Item) GetID() int32 {
 	return i.ID
 }

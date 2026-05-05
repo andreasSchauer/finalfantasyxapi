@@ -23,7 +23,7 @@ func (l AreaApiResourceList) getResults() []HasAPIResource {
 
 type AreaAPIResource struct {
 	AreaID int32 `json:"-"`
-	LocationArea
+	seeding.LocationArea
 	Specification *string `json:"specification,omitempty"`
 	URL           string  `json:"url"`
 }
@@ -95,7 +95,7 @@ func areaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaA
 
 	return AreaAPIResource{
 		AreaID: params.AreaID,
-		LocationArea: LocationArea{
+		LocationArea: seeding.LocationArea{
 			Location:    params.Location,
 			Sublocation: params.Sublocation,
 			Area:        params.Area,

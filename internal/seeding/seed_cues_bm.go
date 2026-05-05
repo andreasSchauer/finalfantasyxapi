@@ -66,7 +66,7 @@ func (l *Lookup) loop4SeedCues(qtx *database.Queries, ctx context.Context) error
 		params.DataHash[i] = generateDataHash(c)
 		params.SongID[i] = c.SongID
 		params.SceneDescription[i] = c.SceneDescription
-		params.TriggerAreaID[i] = h.ObjPtrToNullInt32ID(c.TriggerLocationArea)
+		params.TriggerAreaID[i] = h.GetNullInt32(c.TriggerAreaID)
 		params.ReplacesBgMusic[i] = database.ToNullBgReplacementType(c.ReplacesBGMusic)
 		params.EndTrigger[i] = h.GetNullString(c.EndTrigger)
 		params.ReplacesEncounterMusic[i] = c.ReplacesEncounterMusic
@@ -96,7 +96,7 @@ func (l *Lookup) extractCues() ([]Cue, error) {
 			cue.SongID = song.ID
 
 			if cue.TriggerLocationArea != nil {
-				cue.TriggerLocationArea.ID, err = assignFK(*cue.TriggerLocationArea, l.Areas)
+				cue.TriggerAreaID, err = assignFKPtr(cue.TriggerLocationArea, l.Areas)
 				if err != nil {
 					return nil, err
 				}

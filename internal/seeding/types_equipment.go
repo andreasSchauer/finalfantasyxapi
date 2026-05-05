@@ -100,6 +100,12 @@ func (e EquipmentName) ToHashFields() []any {
 	}
 }
 
+func (e EquipmentName) ToKeyFields() []any {
+	return []any{
+		e.Name,
+	}
+}
+
 func (e EquipmentName) GetID() int32 {
 	return e.ID
 }

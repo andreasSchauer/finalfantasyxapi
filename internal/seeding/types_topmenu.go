@@ -18,6 +18,12 @@ func (t Topmenu) ToHashFields() []any {
 	}
 }
 
+func (t Topmenu) ToKeyFields() []any {
+	return []any{
+		t.Name,
+	}
+}
+
 func (t Topmenu) GetID() int32 {
 	return t.ID
 }

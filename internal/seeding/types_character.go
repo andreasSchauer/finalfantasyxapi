@@ -32,6 +32,12 @@ func (c Character) ToHashFields() []any {
 	}
 }
 
+func (c Character) ToKeyFields() []any {
+	return []any{
+		c.Name,
+	}
+}
+
 func (c Character) GetID() int32 {
 	return c.ID
 }

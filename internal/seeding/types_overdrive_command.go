@@ -19,25 +19,31 @@ type OverdriveCommand struct {
 	OpenSubmenu string  `json:"open_submenu"`
 }
 
-func (oc OverdriveCommand) ToHashFields() []any {
+func (o OverdriveCommand) ToHashFields() []any {
 	return []any{
-		fmt.Sprintf("%T", oc),
-		oc.Name,
-		oc.Description,
-		oc.Rank,
-		h.DerefOrNil(oc.TopmenuID),
-		oc.OpenSubmenu,
-		h.DerefOrNil(oc.CharClassID),
-		h.DerefOrNil(oc.SubmenuID),
+		fmt.Sprintf("%T", o),
+		o.Name,
+		o.Description,
+		o.Rank,
+		h.DerefOrNil(o.TopmenuID),
+		o.OpenSubmenu,
+		h.DerefOrNil(o.CharClassID),
+		h.DerefOrNil(o.SubmenuID),
 	}
 }
 
-func (oc OverdriveCommand) GetID() int32 {
-	return oc.ID
+func (o OverdriveCommand) ToKeyFields() []any {
+	return []any{
+		o.Name,
+	}
 }
 
-func (oc OverdriveCommand) Error() string {
-	return fmt.Sprintf("overdrive command %s", oc.Name)
+func (o OverdriveCommand) GetID() int32 {
+	return o.ID
+}
+
+func (o OverdriveCommand) Error() string {
+	return fmt.Sprintf("overdrive command %s", o.Name)
 }
 
 func (o OverdriveCommand) GetResParamsNamed() h.ResParamsNamed {

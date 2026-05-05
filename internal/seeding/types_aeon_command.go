@@ -31,6 +31,12 @@ func (c AeonCommand) ToHashFields() []any {
 	}
 }
 
+func (c AeonCommand) ToKeyFields() []any {
+	return []any{
+		c.Name,
+	}
+}
+
 func (c AeonCommand) GetID() int32 {
 	return c.ID
 }

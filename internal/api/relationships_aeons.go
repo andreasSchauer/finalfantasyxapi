@@ -93,7 +93,7 @@ func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName string) (
 	baseStats := aeon.BaseStats
 	queryParam := cfg.q.aeons[queryName]
 
-	yuna, _ := seeding.GetResource("yuna", cfg.l.Characters)
+	yuna := cfg.l.Characters["yuna"]
 	yunaBS := toResAmtType(cfg, cfg.e.stats, yuna.BaseStats, newBaseStat)
 
 	yunaStatMapInt, err := parseStatQuery(cfg, r, queryParam, yunaBS, allowedStatIDs)

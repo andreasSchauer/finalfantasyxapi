@@ -24,6 +24,12 @@ func (a ItemAbility) ToHashFields() []any {
 	}
 }
 
+func (a ItemAbility) ToKeyFields() []any {
+	return []any{
+		a.Name,
+	}
+}
+
 func (a ItemAbility) GetID() int32 {
 	return a.ID
 }

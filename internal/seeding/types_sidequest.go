@@ -23,6 +23,12 @@ func (s Sidequest) GetID() int32 {
 	return s.ID
 }
 
+func (s Sidequest) ToKeyFields() []any {
+	return []any{
+		s.Name,
+	}
+}
+
 func (s Sidequest) Error() string {
 	return fmt.Sprintf("sidequest %s", s.Name)
 }
@@ -47,6 +53,12 @@ func (s Subquest) ToHashFields() []any {
 		fmt.Sprintf("%T", s),
 		s.Quest.ID,
 		s.SidequestID,
+	}
+}
+
+func (s Subquest) ToKeyFields() []any {
+	return []any{
+		s.Name,
 	}
 }
 

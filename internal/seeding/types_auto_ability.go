@@ -60,6 +60,12 @@ func (a AutoAbility) ToHashFields() []any {
 	}
 }
 
+func (a AutoAbility) ToKeyFields() []any {
+	return []any{
+		a.Name,
+	}
+}
+
 func (a AutoAbility) GetID() int32 {
 	return a.ID
 }

@@ -18,6 +18,12 @@ func (r RonsoRage) ToHashFields() []any {
 	}
 }
 
+func (r RonsoRage) ToKeyFields() []any {
+	return []any{
+		r.Name,
+	}
+}
+
 func (r RonsoRage) GetID() int32 {
 	return r.ID
 }

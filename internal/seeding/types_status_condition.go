@@ -35,6 +35,12 @@ func (s StatusCondition) ToHashFields() []any {
 	}
 }
 
+func (s StatusCondition) ToKeyFields() []any {
+	return []any{
+		s.Name,
+	}
+}
+
 func (s StatusCondition) GetID() int32 {
 	return s.ID
 }

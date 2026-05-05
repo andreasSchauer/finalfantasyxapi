@@ -26,6 +26,12 @@ func (s Submenu) ToHashFields() []any {
 	}
 }
 
+func (s Submenu) ToKeyFields() []any {
+	return []any{
+		s.Name,
+	}
+}
+
 func (s Submenu) GetID() int32 {
 	return s.ID
 }

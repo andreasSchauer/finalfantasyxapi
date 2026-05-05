@@ -80,9 +80,10 @@ func (l *Lookup) extractTreasures() ([]Treasure, error) {
 
 func (l *Lookup) completeTreasureLists() error {
 	for i := range l.json.treasureLists {
+		var err error
 		list := &l.json.treasureLists[i]
 
-		err := l.completeTreasures(list.Treasures)
+		err = l.completeTreasures(list.Treasures)
 		if err != nil {
 			return err
 		}

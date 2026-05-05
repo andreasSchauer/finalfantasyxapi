@@ -81,7 +81,7 @@ func (l *Lookup) completeItems() error {
 				return err
 			}
 
-			l.ItemAbilities[Key(item)] = item.ItemAbility
+			l.ItemAbilities[Key(item.ItemAbility)] = item.ItemAbility
 			l.ItemAbilitiesID[item.ID] = item.ItemAbility
 		}
 

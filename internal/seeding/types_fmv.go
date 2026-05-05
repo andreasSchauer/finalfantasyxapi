@@ -29,6 +29,12 @@ func (f FMV) ToHashFields() []any {
 	}
 }
 
+func (f FMV) ToKeyFields() []any {
+	return []any{
+		f.Name,
+	}
+}
+
 func (f FMV) GetID() int32 {
 	return f.ID
 }

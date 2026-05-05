@@ -13,24 +13,30 @@ type CharacterClass struct {
 	Members  []string `json:"members"`
 }
 
-func (cc CharacterClass) ToHashFields() []any {
+func (c CharacterClass) ToHashFields() []any {
 	return []any{
-		fmt.Sprintf("%T", cc),
-		cc.Name,
+		fmt.Sprintf("%T", c),
+		c.Name,
 	}
 }
 
-func (cc CharacterClass) GetID() int32 {
-	return cc.ID
+func (c CharacterClass) ToKeyFields() []any {
+	return []any{
+		c.Name,
+	}
 }
 
-func (cc CharacterClass) Error() string {
-	return fmt.Sprintf("character class %s", cc.Name)
+func (c CharacterClass) GetID() int32 {
+	return c.ID
 }
 
-func (cc CharacterClass) GetResParamsNamed() h.ResParamsNamed {
+func (c CharacterClass) Error() string {
+	return fmt.Sprintf("character class %s", c.Name)
+}
+
+func (c CharacterClass) GetResParamsNamed() h.ResParamsNamed {
 	return h.ResParamsNamed{
-		ID:   cc.ID,
-		Name: cc.Name,
+		ID:   c.ID,
+		Name: c.Name,
 	}
 }

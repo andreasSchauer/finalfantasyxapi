@@ -33,6 +33,12 @@ func (a ArenaCreation) ToHashFields() []any {
 	}
 }
 
+func (a ArenaCreation) ToKeyFields() []any {
+	return []any{
+		a.Name,
+	}
+}
+
 func (a ArenaCreation) GetID() int32 {
 	return a.ID
 }

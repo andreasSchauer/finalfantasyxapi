@@ -32,6 +32,12 @@ func (s Sphere) ToHashFields() []any {
 	}
 }
 
+func (s Sphere) ToKeyFields() []any {
+	return []any{
+		s.Name,
+	}
+}
+
 func (s Sphere) GetID() int32 {
 	return s.ID
 }

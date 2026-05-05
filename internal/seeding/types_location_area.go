@@ -7,7 +7,6 @@ import (
 )
 
 type LocationArea struct {
-	ID          int32  `json:"-"`
 	Location    string `json:"location"`
 	Sublocation string `json:"sublocation"`
 	Area        string `json:"area"`
@@ -21,10 +20,6 @@ func (la LocationArea) ToKeyFields() []any {
 		la.Area,
 		h.DerefOrNil(la.Version),
 	}
-}
-
-func (la LocationArea) GetID() int32 {
-	return la.ID
 }
 
 func (la LocationArea) Error() string {

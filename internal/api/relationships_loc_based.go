@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -22,16 +21,6 @@ type LocRel struct {
 	FMVs       []NamedAPIResource   `json:"fmvs"`
 }
 
-type LocationArea struct {
-	Location    string `json:"location"`
-	Sublocation string `json:"sublocation"`
-	Area        string `json:"area"`
-	Version     *int32 `json:"version,omitempty"`
-}
-
-func (la LocationArea) Error() string {
-	return fmt.Sprintf("location area with location: '%s', sublocation: '%s', area: '%s'", la.Location, la.Sublocation, h.NameToString(la.Area, la.Version, nil))
-}
 
 type LocBasedMusic struct {
 	BackgroundMusic []NamedAPIResource `json:"background_music"`
@@ -116,10 +105,10 @@ func getLocBasedSidequests(cfg *Config, r *http.Request, item seeding.Lookupable
 }
 
 func findSidequest(cfg *Config, questID int32) (seeding.Sidequest, error) {
-	questLookup, _ := seeding.GetResourceByID(questID, cfg.l.QuestsID)
+	quest, _ := seeding.GetResourceByID(questID, cfg.l.QuestsID)
 
-	if questLookup.Type == database.QuestTypeSidequest {
-		sidequest, err := seeding.GetResource(questLookup.Name, cfg.l.Sidequests)
+	if quest.Type == database.QuestTypeSidequest {
+		sidequest, err := seeding.GetResource(quest.Name, cfg.l.Sidequests)
 		if err != nil {
 			return seeding.Sidequest{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
 		}
@@ -127,7 +116,7 @@ func findSidequest(cfg *Config, questID int32) (seeding.Sidequest, error) {
 		return sidequest, nil
 	}
 
-	subquest, err := seeding.GetResource(questLookup.Name, cfg.l.Subquests)
+	subquest, err := seeding.GetResource(quest.Name, cfg.l.Subquests)
 	if err != nil {
 		return seeding.Sidequest{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
 	}
