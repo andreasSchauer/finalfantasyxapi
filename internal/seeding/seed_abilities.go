@@ -40,8 +40,7 @@ func (l *Lookup) loop2SeedAbilities(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		key := Key(abilities[i])
-		l.Abilities[key] = abilities[i]
+		l.Abilities[Key(abilities[i])] = abilities[i]
 		l.AbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

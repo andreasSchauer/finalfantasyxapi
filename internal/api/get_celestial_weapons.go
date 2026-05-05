@@ -14,7 +14,7 @@ func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.Ce
 
 	crest, _ := seeding.GetResource(celestialWeapon.KeyItemBase+" crest", cfg.l.KeyItems)
 	sigil, _ := seeding.GetResource(celestialWeapon.KeyItemBase+" sigil", cfg.l.KeyItems)
-	equipment, _ := seeding.GetResource(celestialWeapon.Name, cfg.l.EquipmentNames)
+	equipment, _ := seeding.GetResource(celestialWeapon, cfg.l.EquipmentNames)
 
 	tables, err := getResourcesDbItem(cfg, r, cfg.e.equipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
 	if err != nil {

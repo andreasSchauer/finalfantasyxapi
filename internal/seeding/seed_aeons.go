@@ -50,7 +50,7 @@ func (l *Lookup) loop4SeedAeons(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		aeons[i].ID = row.ID
 		l.json.aeons[i].ID = row.ID
-		l.Aeons[aeons[i].Name] = aeons[i]
+		l.Aeons[Key(aeons[i])] = aeons[i]
 		l.AeonsID[row.ID] = aeons[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -101,7 +101,7 @@ func (l *Lookup) completeAeons() error {
 			return err
 		}
 
-		l.Aeons[aeon.Name] = *aeon
+		l.Aeons[Key(aeon)] = *aeon
 		l.AeonsID[aeon.ID] = *aeon
 	}
 

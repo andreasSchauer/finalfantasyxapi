@@ -42,7 +42,7 @@ func (l *Lookup) loop2SeedItems(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		items[i].ID = row.ID
 		l.json.items[i].ID = row.ID
-		l.Items[items[i].Name] = items[i]
+		l.Items[Key(items[i])] = items[i]
 		l.ItemsID[row.ID] = items[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -85,7 +85,7 @@ func (l *Lookup) completeItems() error {
 			l.ItemAbilitiesID[item.ID] = item.ItemAbility
 		}
 
-		l.Items[item.Name] = *item
+		l.Items[Key(item)] = *item
 		l.ItemsID[item.ID] = *item
 	}
 

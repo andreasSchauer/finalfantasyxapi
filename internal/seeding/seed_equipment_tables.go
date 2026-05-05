@@ -43,8 +43,7 @@ func (l *Lookup) loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Con
 	for i, row := range dbRows {
 		tables[i].ID = row.ID
 		l.json.equipment[i].ID = row.ID
-		key := Key(tables[i])
-		l.EquipmentTables[key] = tables[i]
+		l.EquipmentTables[Key(tables[i])] = tables[i]
 		l.EquipmentTablesID[row.ID] = tables[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

@@ -27,14 +27,14 @@ func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterI
 
 	switch masterItem.Type {
 	case database.ItemTypeItem:
-		item, _ := seeding.GetResource(masterItem.Name, cfg.l.Items)
+		item, _ := seeding.GetResource(masterItem, cfg.l.Items)
 
 		response.Description = item.Description
 		response.Effect = item.Effect
 		response.TypedItem = nameToNamedAPIResource(cfg, cfg.e.items, item.Name, nil)
 
 	case database.ItemTypeKeyItem:
-		keyItem, _ := seeding.GetResource(masterItem.Name, cfg.l.KeyItems)
+		keyItem, _ := seeding.GetResource(masterItem, cfg.l.KeyItems)
 
 		response.Description = keyItem.Description
 		response.Effect = keyItem.Effect

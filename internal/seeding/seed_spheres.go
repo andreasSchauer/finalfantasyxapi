@@ -45,7 +45,7 @@ func (l *Lookup) loop3SeedSpheres(qtx *database.Queries, ctx context.Context) er
 	for i, row := range dbRows {
 		spheres[i].ID = row.ID
 		l.json.spheres[i].ID = row.ID
-		l.Spheres[spheres[i].Name] = spheres[i]
+		l.Spheres[Key(spheres[i])] = spheres[i]
 		l.SpheresID[row.ID] = spheres[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

@@ -28,7 +28,7 @@ func (l *Lookup) loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) e
 	for i, row := range dbRows {
 		topmenus[i].ID = row.ID
 		l.json.topmenus[i].ID = row.ID
-		l.Topmenus[topmenus[i].Name] = topmenus[i]
+		l.Topmenus[Key(topmenus[i])] = topmenus[i]
 		l.TopmenusID[row.ID] = topmenus[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

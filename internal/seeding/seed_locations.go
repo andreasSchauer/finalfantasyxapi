@@ -28,7 +28,7 @@ func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) 
 	for i, row := range dbRows {
 		locations[i].ID = row.ID
 		l.json.locations[i].ID = row.ID
-		l.Locations[locations[i].Name] = locations[i]
+		l.Locations[Key(locations[i])] = locations[i]
 		l.LocationsID[row.ID] = locations[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -45,7 +45,7 @@ func (l *Lookup) completeLocations() error {
 			return err
 		}
 
-		l.Locations[location.Name] = *location
+		l.Locations[Key(location)] = *location
 		l.LocationsID[location.ID] = *location
 	}
 

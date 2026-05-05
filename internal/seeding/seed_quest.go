@@ -40,8 +40,7 @@ func (l *Lookup) loop4SeedQuests(qtx *database.Queries, ctx context.Context) err
 
 	for i, row := range dbRows {
 		quests[i].ID = row.ID
-		key := Key(quests[i])
-		l.Quests[key] = quests[i]
+		l.Quests[Key(quests[i])] = quests[i]
 		l.QuestsID[row.ID] = quests[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

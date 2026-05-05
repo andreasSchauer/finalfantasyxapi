@@ -31,7 +31,7 @@ func (l *Lookup) loop5SeedSidequests(qtx *database.Queries, ctx context.Context)
 	for i, row := range dbRows {
 		sidequests[i].ID = row.ID
 		l.json.sidequests[i].ID = row.ID
-		l.Sidequests[sidequests[i].Name] = sidequests[i]
+		l.Sidequests[Key(sidequests[i])] = sidequests[i]
 		l.SidequestsID[row.ID] = sidequests[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -66,7 +66,7 @@ func (l *Lookup) completeSidequests() error {
 			return err
 		}
 
-		l.Sidequests[sidequest.Name] = *sidequest
+		l.Sidequests[Key(sidequest)] = *sidequest
 		l.SidequestsID[sidequest.ID] = *sidequest
 	}
 
@@ -98,7 +98,7 @@ func (l *Lookup) loop6SeedSubquests(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		subquests[i].ID = row.ID
-		l.Subquests[subquests[i].Name] = subquests[i]
+		l.Subquests[Key(subquests[i])] = subquests[i]
 		l.SubquestsID[row.ID] = subquests[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

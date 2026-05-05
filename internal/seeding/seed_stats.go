@@ -43,7 +43,7 @@ func (l *Lookup) loop4SeedStats(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		stats[i].ID = row.ID
 		l.json.stats[i].ID = row.ID
-		l.Stats[stats[i].Name] = stats[i]
+		l.Stats[Key(stats[i])] = stats[i]
 		l.StatsID[row.ID] = stats[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

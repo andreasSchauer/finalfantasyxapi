@@ -43,7 +43,7 @@ func (l *Lookup) loop3SeedOverdriveCommands(qtx *database.Queries, ctx context.C
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
 		l.json.overdriveCommands[i].ID = row.ID
-		l.OverdriveCommands[commands[i].Name] = commands[i]
+		l.OverdriveCommands[Key(commands[i])] = commands[i]
 		l.OverdriveCommandsID[row.ID] = commands[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

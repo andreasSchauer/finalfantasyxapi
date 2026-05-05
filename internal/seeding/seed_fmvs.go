@@ -41,7 +41,7 @@ func (l *Lookup) loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error
 	for i, row := range dbRows {
 		fmvs[i].ID = row.ID
 		l.json.fmvs[i].ID = row.ID
-		l.FMVs[fmvs[i].Name] = fmvs[i]
+		l.FMVs[Key(fmvs[i])] = fmvs[i]
 		l.FMVsID[row.ID] = fmvs[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

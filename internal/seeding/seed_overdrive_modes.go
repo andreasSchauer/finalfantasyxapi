@@ -38,7 +38,7 @@ func (l *Lookup) loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Cont
 	for i, row := range dbRows {
 		modes[i].ID = row.ID
 		l.json.overdriveModes[i].ID = row.ID
-		l.OverdriveModes[modes[i].Name] = modes[i]
+		l.OverdriveModes[Key(modes[i])] = modes[i]
 		l.OverdriveModesID[row.ID] = modes[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -55,7 +55,7 @@ func (l *Lookup) completeOverdriveModes() error {
 			return err
 		}
 
-		l.OverdriveModes[mode.Name] = *mode
+		l.OverdriveModes[Key(mode)] = *mode
 		l.OverdriveModesID[mode.ID] = *mode
 	}
 

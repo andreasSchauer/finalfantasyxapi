@@ -30,8 +30,7 @@ func (l *Lookup) loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.
 	for i, row := range dbRows {
 		positions[i].ID = row.ID
 		l.json.blitzballPositions[i].ID = row.ID
-		key := Key(positions[i])
-		l.Positions[key] = positions[i]
+		l.Positions[Key(positions[i])] = positions[i]
 		l.PositionsID[row.ID] = positions[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

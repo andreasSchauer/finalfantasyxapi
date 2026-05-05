@@ -43,7 +43,7 @@ func (l *Lookup) loop3SeedAeonCommands(qtx *database.Queries, ctx context.Contex
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
 		l.json.aeonCommands[i].ID = row.ID
-		l.AeonCommands[commands[i].Name] = commands[i]
+		l.AeonCommands[Key(commands[i])] = commands[i]
 		l.AeonCommandsID[row.ID] = commands[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

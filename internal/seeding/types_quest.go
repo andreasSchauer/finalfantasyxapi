@@ -30,7 +30,6 @@ func (q Quest) ToHashFields() []any {
 func (q Quest) ToKeyFields() []any {
 	return []any{
 		q.Name,
-		q.Type,
 	}
 }
 

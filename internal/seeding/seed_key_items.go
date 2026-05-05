@@ -34,7 +34,7 @@ func (l *Lookup) loop2SeedKeyItems(qtx *database.Queries, ctx context.Context) e
 	for i, row := range dbRows {
 		keyItems[i].ID = row.ID
 		l.json.keyItems[i].ID = row.ID
-		l.KeyItems[keyItems[i].Name] = keyItems[i]
+		l.KeyItems[Key(keyItems[i])] = keyItems[i]
 		l.KeyItemsID[row.ID] = keyItems[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

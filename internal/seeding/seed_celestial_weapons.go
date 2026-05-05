@@ -41,7 +41,7 @@ func (l *Lookup) loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Co
 	for i, row := range dbRows {
 		wpns[i].ID = row.ID
 		l.json.celestialWeapons[i].ID = row.ID
-		l.CelestialWeapons[wpns[i].Name] = wpns[i]
+		l.CelestialWeapons[Key(wpns[i])] = wpns[i]
 		l.CelestialWeaponsID[row.ID] = wpns[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

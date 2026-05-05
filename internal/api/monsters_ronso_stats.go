@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName string) ([]BaseStat, error) {
@@ -13,7 +12,7 @@ func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName string
 	baseStats := mon.BaseStats
 	queryParam := cfg.q.monsters[queryName]
 
-	kimahri, _ := seeding.GetResource("kimahri", cfg.l.Characters)
+	kimahri, _ := cfg.l.Characters["kimahri"]
 	kimahriBS := toResAmtType(cfg, cfg.e.stats, kimahri.BaseStats, newBaseStat)
 
 	kimahriStatMap, err := parseStatQuery(cfg, r, queryParam, kimahriBS, allowedStatIDs)

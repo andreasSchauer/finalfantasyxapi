@@ -45,7 +45,7 @@ func (l *Lookup) loop4SeedCharacters(qtx *database.Queries, ctx context.Context)
 	for i, row := range dbRows {
 		chars[i].ID = row.ID
 		l.json.characters[i].ID = row.ID
-		l.Characters[chars[i].Name] = chars[i]
+		l.Characters[Key(chars[i])] = chars[i]
 		l.CharactersID[row.ID] = chars[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -84,7 +84,7 @@ func (l *Lookup) completeCharacters() error {
 			return err
 		}
 
-		l.Characters[character.Name] = *character
+		l.Characters[Key(character)] = *character
 		l.CharactersID[character.ID] = *character
 	}
 

@@ -41,8 +41,7 @@ func (l *Lookup) loop4SeedShops(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		shops[i].ID = row.ID
 		l.json.shops[i].ID = row.ID
-		key := Key(shops[i])
-		l.Shops[key] = shops[i]
+		l.Shops[Key(shops[i])] = shops[i]
 		l.ShopsID[row.ID] = shops[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

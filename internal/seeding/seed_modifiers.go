@@ -36,7 +36,7 @@ func (l *Lookup) loop1SeedModifiers(qtx *database.Queries, ctx context.Context) 
 	for i, row := range dbRows {
 		modifiers[i].ID = row.ID
 		l.json.modifiers[i].ID = row.ID
-		l.Modifiers[modifiers[i].Name] = modifiers[i]
+		l.Modifiers[Key(modifiers[i])] = modifiers[i]
 		l.ModifiersID[row.ID] = modifiers[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

@@ -34,7 +34,7 @@ func (l *Lookup) loop3SeedItemAbilities(qtx *database.Queries, ctx context.Conte
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.ItemAbilities[abilities[i].Name] = abilities[i]
+		l.ItemAbilities[Key(abilities[i])] = abilities[i]
 		l.ItemAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

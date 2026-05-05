@@ -17,7 +17,7 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerU
 
 	switch unit.Type {
 	case database.UnitTypeCharacter:
-		character, _ := seeding.GetResource(unit.Name, cfg.l.Characters)
+		character, _ := seeding.GetResource(unit, cfg.l.Characters)
 
 		rel, err := getCharacterRelationships(cfg, r, character)
 		if err != nil {
@@ -35,7 +35,7 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerU
 		}
 
 	case database.UnitTypeAeon:
-		aeon, _ := seeding.GetResource(unit.Name, cfg.l.Aeons)
+		aeon, _ := seeding.GetResource(unit, cfg.l.Aeons)
 
 		rel, err := getAeonRelationships(cfg, r, aeon)
 		if err != nil {

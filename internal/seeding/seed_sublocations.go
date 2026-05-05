@@ -29,7 +29,7 @@ func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Contex
 
 	for i, row := range dbRows {
 		sublocations[i].ID = row.ID
-		l.Sublocations[sublocations[i].Name] = sublocations[i]
+		l.Sublocations[Key(sublocations[i])] = sublocations[i]
 		l.SublocationsID[row.ID] = sublocations[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -62,7 +62,7 @@ func (l *Lookup) completeSublocations(sublocations []Sublocation) error {
 			return err
 		}
 
-		l.Sublocations[sublocation.Name] = *sublocation
+		l.Sublocations[Key(sublocation)] = *sublocation
 		l.SublocationsID[sublocation.ID] = *sublocation
 	}
 

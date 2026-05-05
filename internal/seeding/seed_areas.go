@@ -48,8 +48,7 @@ func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) erro
 
 	for i, row := range dbRows {
 		areas[i].ID = row.ID
-		key := Key(areas[i].GetLocationArea())
-		l.Areas[key] = areas[i]
+		l.Areas[Key(areas[i])] = areas[i]
 		l.AreasID[row.ID] = areas[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -97,7 +96,7 @@ func (l *Lookup) completeAreas(areas []Area) error {
 			return err
 		}
 
-		l.Areas[Key(area.GetLocationArea())] = *area
+		l.Areas[Key(area)] = *area
 		l.AreasID[area.ID] = *area
 	}
 

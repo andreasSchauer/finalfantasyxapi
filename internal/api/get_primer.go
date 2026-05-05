@@ -17,7 +17,7 @@ func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Pri
 		return Primer{}, err
 	}
 
-	keyItem, _ := seeding.GetResource(primer.Name, cfg.l.KeyItems)
+	keyItem, _ := seeding.GetResource(primer, cfg.l.KeyItems)
 
 	response := Primer{
 		ID:            primer.ID,

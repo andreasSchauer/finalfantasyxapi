@@ -32,7 +32,7 @@ func (l *Lookup) loop1SeedProperties(qtx *database.Queries, ctx context.Context)
 	for i, row := range dbRows {
 		properties[i].ID = row.ID
 		l.json.properties[i].ID = row.ID
-		l.Properties[properties[i].Name] = properties[i]
+		l.Properties[Key(properties[i])] = properties[i]
 		l.PropertiesID[row.ID] = properties[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -49,7 +49,7 @@ func (l *Lookup) completeProperties() error {
 			return err
 		}
 
-		l.Properties[property.Name] = *property
+		l.Properties[Key(property)] = *property
 		l.PropertiesID[property.ID] = *property
 	}
 

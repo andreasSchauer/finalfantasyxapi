@@ -32,7 +32,7 @@ func (l *Lookup) loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Cont
 
 	for i, row := range dbRows {
 		names[i].ID = row.ID
-		l.EquipmentNames[names[i].Name] = names[i]
+		l.EquipmentNames[Key(names[i])] = names[i]
 		l.EquipmentNamesID[row.ID] = names[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

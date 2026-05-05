@@ -29,8 +29,7 @@ func (l *Lookup) loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context
 
 	for i, row := range dbRows {
 		units[i].ID = row.ID
-		key := Key(units[i])
-		l.PlayerUnits[key] = units[i]
+		l.PlayerUnits[Key(units[i])] = units[i]
 		l.PlayerUnitsID[row.ID] = units[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

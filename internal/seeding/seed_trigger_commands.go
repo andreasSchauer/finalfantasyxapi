@@ -41,8 +41,7 @@ func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Con
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
 		l.json.triggerCommands[i].ID = row.ID
-		key := Key(commands[i])
-		l.TriggerCommands[key] = commands[i]
+		l.TriggerCommands[Key(commands[i])] = commands[i]
 		l.TriggerCommandsID[row.ID] = commands[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

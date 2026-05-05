@@ -34,7 +34,7 @@ func (l *Lookup) completeAeonStats() error {
 		aeon := l.Aeons[as.Name]
 		as.AeonID = aeon.ID
 		aeon.BaseStats = *as
-		l.Aeons[as.Name] = aeon
+		l.Aeons[Key(aeon)] = aeon
 		l.AeonsID[as.AeonID] = aeon
 		l.json.aeons[i].BaseStats = *as
 	}

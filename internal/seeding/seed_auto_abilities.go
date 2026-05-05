@@ -63,7 +63,7 @@ func (l *Lookup) loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Conte
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.autoAbilities[i].ID = row.ID
-		l.AutoAbilities[abilities[i].Name] = abilities[i]
+		l.AutoAbilities[Key(abilities[i])] = abilities[i]
 		l.AutoAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -149,7 +149,7 @@ func (l *Lookup) completeAutoAbilities() error {
 			return err
 		}
 
-		l.AutoAbilities[autoAbility.Name] = *autoAbility
+		l.AutoAbilities[Key(autoAbility)] = *autoAbility
 		l.AutoAbilitiesID[autoAbility.ID] = *autoAbility
 	}
 

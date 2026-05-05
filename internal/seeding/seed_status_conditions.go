@@ -47,7 +47,7 @@ func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Co
 	for i, row := range dbRows {
 		statusses[i].ID = row.ID
 		l.json.statusConditions[i].ID = row.ID
-		l.StatusConditions[statusses[i].Name] = statusses[i]
+		l.StatusConditions[Key(statusses[i])] = statusses[i]
 		l.StatusConditionsID[row.ID] = statusses[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -96,7 +96,7 @@ func (l *Lookup) completeStatusConditions() error {
 			return err
 		}
 
-		l.StatusConditions[status.Name] = *status
+		l.StatusConditions[Key(status)] = *status
 		l.StatusConditionsID[status.ID] = *status
 	}
 

@@ -47,7 +47,7 @@ func (l *Lookup) loop7SeedArenaCreations(qtx *database.Queries, ctx context.Cont
 	for i, row := range dbRows {
 		creations[i].ID = row.ID
 		l.json.monsterArenaCreations[i].ID = row.ID
-		l.ArenaCreations[creations[i].Name] = creations[i]
+		l.ArenaCreations[Key(creations[i])] = creations[i]
 		l.ArenaCreationsID[row.ID] = creations[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

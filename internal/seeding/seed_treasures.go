@@ -46,8 +46,7 @@ func (l *Lookup) loop4SeedTreasures(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		treasures[i].ID = row.ID
-		key := Key(treasures[i])
-		l.Treasures[key] = treasures[i]
+		l.Treasures[Key(treasures[i])] = treasures[i]
 		l.TreasuresID[row.ID] = treasures[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

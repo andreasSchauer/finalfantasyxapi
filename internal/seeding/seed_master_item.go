@@ -29,8 +29,7 @@ func (l *Lookup) loop1SeedMasterItems(qtx *database.Queries, ctx context.Context
 
 	for i, row := range dbRows {
 		items[i].ID = row.ID
-		key := Key(items[i])
-		l.MasterItems[key] = items[i]
+		l.MasterItems[Key(items[i])] = items[i]
 		l.MasterItemsID[row.ID] = items[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

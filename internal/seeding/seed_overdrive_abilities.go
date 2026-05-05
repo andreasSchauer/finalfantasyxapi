@@ -31,8 +31,7 @@ func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.overdriveAbilities[i].ID = row.ID
-		key := Key(abilities[i])
-		l.OverdriveAbilities[key] = abilities[i]
+		l.OverdriveAbilities[Key(abilities[i])] = abilities[i]
 		l.OverdriveAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

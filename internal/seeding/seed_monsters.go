@@ -86,8 +86,7 @@ func (l *Lookup) loop1SeedMonsters(qtx *database.Queries, ctx context.Context) e
 	for i, row := range dbRows {
 		monsters[i].ID = row.ID
 		l.json.monsters[i].ID = row.ID
-		key := Key(monsters[i])
-		l.Monsters[key] = monsters[i]
+		l.Monsters[Key(monsters[i])] = monsters[i]
 		l.MonstersID[row.ID] = monsters[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

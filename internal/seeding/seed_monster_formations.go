@@ -37,8 +37,7 @@ func (l *Lookup) loop5SeedMonsterFormations(qtx *database.Queries, ctx context.C
 	for i, row := range dbRows {
 		formations[i].ID = row.ID
 		l.json.monsterFormations[i].ID = row.ID
-		key := Key(formations[i])
-		l.MonsterFormations[key] = formations[i]
+		l.MonsterFormations[Key(formations[i])] = formations[i]
 		l.MonsterFormationsID[row.ID] = formations[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

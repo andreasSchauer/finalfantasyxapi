@@ -30,7 +30,7 @@ func (l *Lookup) loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Co
 	for i, row := range dbRows {
 		classes[i].ID = row.ID
 		l.json.characterClasses[i].ID = row.ID
-		l.CharClasses[classes[i].Name] = classes[i]
+		l.CharClasses[Key(classes[i])] = classes[i]
 		l.CharClassesID[row.ID] = classes[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

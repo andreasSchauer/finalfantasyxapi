@@ -27,7 +27,7 @@ func (l *Lookup) loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context)
 
 	for i, row := range dbRows {
 		rages[i].ID = row.ID
-		l.RonsoRages[rages[i].Name] = rages[i]
+		l.RonsoRages[Key(rages[i])] = rages[i]
 		l.RonsoRagesID[row.ID] = rages[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

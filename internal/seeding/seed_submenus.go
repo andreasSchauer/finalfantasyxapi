@@ -39,7 +39,7 @@ func (l *Lookup) loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) e
 	for i, row := range dbRows {
 		submenus[i].ID = row.ID
 		l.json.submenus[i].ID = row.ID
-		l.Submenus[submenus[i].Name] = submenus[i]
+		l.Submenus[Key(submenus[i])] = submenus[i]
 		l.SubmenusID[row.ID] = submenus[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

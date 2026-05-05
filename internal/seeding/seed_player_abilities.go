@@ -57,8 +57,7 @@ func (l *Lookup) loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Con
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.playerAbilities[i].ID = row.ID
-		key := Key(abilities[i])
-		l.PlayerAbilities[key] = abilities[i]
+		l.PlayerAbilities[Key(abilities[i])] = abilities[i]
 		l.PlayerAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

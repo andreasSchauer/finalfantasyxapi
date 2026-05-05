@@ -57,7 +57,7 @@ func (l *Lookup) loop2SeedSongs(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		songs[i].ID = row.ID
 		l.json.songs[i].ID = row.ID
-		l.Songs[songs[i].Name] = songs[i]
+		l.Songs[Key(songs[i])] = songs[i]
 		l.SongsID[row.ID] = songs[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -98,7 +98,7 @@ func (l *Lookup) completeSongs() error {
 			return err
 		}
 
-		l.Songs[song.Name] = *song
+		l.Songs[Key(song)] = *song
 		l.SongsID[song.ID] = *song
 	}
 

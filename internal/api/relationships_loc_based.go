@@ -108,7 +108,7 @@ func findSidequest(cfg *Config, questID int32) (seeding.Sidequest, error) {
 	quest, _ := seeding.GetResourceByID(questID, cfg.l.QuestsID)
 
 	if quest.Type == database.QuestTypeSidequest {
-		sidequest, err := seeding.GetResource(quest.Name, cfg.l.Sidequests)
+		sidequest, err := seeding.GetResource(quest, cfg.l.Sidequests)
 		if err != nil {
 			return seeding.Sidequest{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
 		}
@@ -116,7 +116,7 @@ func findSidequest(cfg *Config, questID int32) (seeding.Sidequest, error) {
 		return sidequest, nil
 	}
 
-	subquest, err := seeding.GetResource(quest.Name, cfg.l.Subquests)
+	subquest, err := seeding.GetResource(quest, cfg.l.Subquests)
 	if err != nil {
 		return seeding.Sidequest{}, newHTTPError(http.StatusInternalServerError, err.Error(), err)
 	}

@@ -33,7 +33,7 @@ func (l *Lookup) loop5SeedMixes(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		mixes[i].ID = row.ID
 		l.json.mixes[i].ID = row.ID
-		l.Mixes[mixes[i].Name] = mixes[i]
+		l.Mixes[Key(mixes[i])] = mixes[i]
 		l.MixesID[row.ID] = mixes[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -72,7 +72,7 @@ func (l *Lookup) completeMixes() error {
 			return err
 		}
 
-		l.Mixes[mix.Name] = *mix
+		l.Mixes[Key(mix)] = *mix
 		l.MixesID[mix.ID] = *mix
 	}
 

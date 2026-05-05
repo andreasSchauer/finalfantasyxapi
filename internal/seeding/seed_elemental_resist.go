@@ -32,8 +32,7 @@ func (l *Lookup) loop2SeedElementalResists(qtx *database.Queries, ctx context.Co
 
 	for i, row := range dbRows {
 		resists[i].ID = row.ID
-		key := Key(resists[i])
-		l.ElementalResists[key] = resists[i]
+		l.ElementalResists[Key(resists[i])] = resists[i]
 		l.ElementalResistsID[row.ID] = resists[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
