@@ -43,8 +43,8 @@ func (l *Lookup) loop5SeedAltStateChanges(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractAltStateChanges() ([]AltStateChange, error) {
-	changes := []AltStateChange{}
+func (l *Lookup) extractAltStateChanges() ([]Alt, error) {
+	changes := []Alt{}
 
 	for i := range l.json.monsters {
 		mon := &l.json.monsters[i]
@@ -60,8 +60,8 @@ func (l *Lookup) extractAltStateChanges() ([]AltStateChange, error) {
 	return dedupeRows(changes, l.Hashes), nil
 }
 
-func (l *Lookup) prepareAltStateChanges(states []AlteredState) ([]AltStateChange, error) {
-	changes := []AltStateChange{}
+func (l *Lookup) prepareAltStateChanges(states []AlteredState) ([]Alt, error) {
+	changes := []Alt{}
 	var err error
 
 	for i := range states {
@@ -89,7 +89,7 @@ func (l *Lookup) prepareAltStateChanges(states []AlteredState) ([]AltStateChange
 	return changes, nil
 }
 
-func (l *Lookup) completeAltStateChanges(changes []AltStateChange) error {
+func (l *Lookup) completeAltStateChanges(changes []Alt) error {
 	for i := range changes {
 		change := &changes[i]
 

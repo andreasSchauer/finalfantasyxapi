@@ -62,6 +62,7 @@ func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster
 	}
 
 	mon.Stats = createStats(mon.BaseStats)
+	mon.AlteredStates = getAlteredStatesAlterations(mon.AlteredStates)
 
 	return mon, nil
 }

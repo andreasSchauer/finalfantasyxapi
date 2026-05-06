@@ -10,13 +10,22 @@ import (
 )
 
 type AlteredState struct {
-	URL         string           `json:"url"`
-	Condition   string           `json:"condition"`
-	IsTemporary bool             `json:"is_temporary"`
-	Changes     []AltStateChange `json:"changes"`
+	URL         string `json:"url"`
+	Condition   string `json:"condition"`
+	IsTemporary bool   `json:"is_temporary"`
+	Alts        []Alt  `json:"changes"`
+	Alterations
 }
 
-type AltStateChange struct {
+func getAlteredStatesAlterations(states []AlteredState) []AlteredState {
+	for i := range states {
+		states[i].Alterations = getAlterations(states[i].Alts)
+	}
+
+	return states
+}
+
+type Alt struct {
 	AlterationType   database.AlterationType `json:"alteration_type"`
 	Distance         *int32                  `json:"distance,omitempty"`
 	Properties       []NamedAPIResource      `json:"properties,omitempty"`
@@ -29,7 +38,7 @@ type AltStateChange struct {
 	RemovedStatus    *NamedAPIResource       `json:"removed_status_condition,omitempty"`
 }
 
-func (c *AltStateChange) IsZero() bool {
+func (c *Alt) IsZero() bool {
 	return c.Distance == nil &&
 		c.Properties == nil &&
 		c.AutoAbilities == nil &&
@@ -52,7 +61,7 @@ func getMonsterAlteredStates(cfg *Config, r *http.Request, mon seeding.Monster) 
 			URL:         createResourceURLQuery(cfg, cfg.e.monsters.endpoint, mon.ID, q),
 			Condition:   altState.Condition,
 			IsTemporary: altState.IsTemporary,
-			Changes:     getAltStateChanges(cfg, altState),
+			Alts:        getAlts(cfg, altState),
 		}
 
 		alteredStates = append(alteredStates, alteredState)
@@ -61,21 +70,21 @@ func getMonsterAlteredStates(cfg *Config, r *http.Request, mon seeding.Monster) 
 	return alteredStates
 }
 
-func getAltStateChanges(cfg *Config, as seeding.AlteredState) []AltStateChange {
-	altStateChanges := []AltStateChange{}
+func getAlts(cfg *Config, as seeding.AlteredState) []Alt {
+	alts := []Alt{}
 
 	for _, change := range as.Changes {
-		altStateChange := convertAltStateChange(cfg, change)
+		altStateChange := convertAlt(cfg, change)
 		altStateChange.AlterationType = database.AlterationType(change.AlterationType)
 		altStateChange.Distance = change.Distance
-		altStateChanges = append(altStateChanges, altStateChange)
+		alts = append(alts, altStateChange)
 	}
 
-	return altStateChanges
+	return alts
 }
 
-func convertAltStateChange(cfg *Config, asc seeding.AltStateChange) AltStateChange {
-	return AltStateChange{
+func convertAlt(cfg *Config, asc seeding.Alt) Alt {
+	return Alt{
 		Properties:       h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.e.properties, asc.Properties)),
 		AutoAbilities:    h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.e.autoAbilities, asc.AutoAbilities)),
 		BaseStats:        h.SliceOrNil(toResAmtType(cfg, cfg.e.stats, asc.BaseStats, newBaseStat)),

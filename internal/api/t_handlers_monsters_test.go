@@ -391,7 +391,7 @@ func TestGetMonster(t *testing.T) {
 			abilities: []int32{69, 70, 71, 72, 415, 481, 548, 565, 706, 804, 831},
 			defaultState: &testDefaultState{
 				IsTemporary: false,
-				Changes: []testAltStateChange{
+				Changes: []testAlt{
 					{
 						AlterationType: "change",
 						ElemResists: []testElemResist{
@@ -443,7 +443,7 @@ func TestGetMonster(t *testing.T) {
 			},
 			defaultState: &testDefaultState{
 				IsTemporary: false,
-				Changes: []testAltStateChange{
+				Changes: []testAlt{
 					{
 						AlterationType:   "loss",
 						StatusImmunities: []int32{14, 33},
@@ -491,7 +491,7 @@ func TestGetMonster(t *testing.T) {
 			autoAbilities: []int32{102},
 			defaultState: &testDefaultState{
 				IsTemporary: false,
-				Changes: []testAltStateChange{
+				Changes: []testAlt{
 					{
 						AlterationType: "loss",
 						Properties:     []int32{6},
@@ -542,7 +542,7 @@ func TestGetMonster(t *testing.T) {
 			},
 			defaultState: &testDefaultState{
 				IsTemporary: false,
-				Changes: []testAltStateChange{
+				Changes: []testAlt{
 					{
 						AlterationType: "change",
 						BaseStats: map[string]int32{
@@ -584,7 +584,7 @@ func TestGetMonster(t *testing.T) {
 			distance: 4,
 			defaultState: &testDefaultState{
 				IsTemporary: false,
-				Changes: []testAltStateChange{
+				Changes: []testAlt{
 					{
 						AlterationType: "change",
 						Distance:       h.GetInt32Ptr(1),
@@ -625,7 +625,7 @@ func TestGetMonster(t *testing.T) {
 			},
 			defaultState: &testDefaultState{
 				IsTemporary: false,
-				Changes: []testAltStateChange{
+				Changes: []testAlt{
 					{
 						AlterationType: "gain",
 						AutoAbilities:  []int32{99},

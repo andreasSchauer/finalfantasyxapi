@@ -9,9 +9,9 @@ import (
 type AlteredState struct {
 	ID          int32
 	MonsterID   int32
-	Condition   string           `json:"condition"`
-	IsTemporary bool             `json:"is_temporary"`
-	Changes     []AltStateChange `json:"changes"`
+	Condition   string `json:"condition"`
+	IsTemporary bool   `json:"is_temporary"`
+	Changes     []Alt  `json:"changes"`
 }
 
 func (a AlteredState) ToHashFields() []any {
@@ -35,7 +35,7 @@ func (a AlteredState) Error() string {
 	return fmt.Sprintf("altered state with monster id: %d, is temporary: %t, condition: %s", a.MonsterID, a.IsTemporary, a.Condition)
 }
 
-type AltStateChange struct {
+type Alt struct {
 	ID               int32
 	AlteredStateID   int32
 	AlterationType   string            `json:"alteration_type"`
@@ -48,7 +48,7 @@ type AltStateChange struct {
 	AddedStatus      *InflictedStatus  `json:"added_status"`
 }
 
-func (a AltStateChange) ToHashFields() []any {
+func (a Alt) ToHashFields() []any {
 	return []any{
 		fmt.Sprintf("%T", a),
 		a.AlteredStateID,
@@ -58,14 +58,14 @@ func (a AltStateChange) ToHashFields() []any {
 	}
 }
 
-func (a AltStateChange) GetID() int32 {
+func (a Alt) GetID() int32 {
 	return a.ID
 }
 
-func (a *AltStateChange) SetID(id int32) {
+func (a *Alt) SetID(id int32) {
 	a.ID = id
 }
 
-func (a AltStateChange) Error() string {
-	return fmt.Sprintf("alt stat change with altered state id: %d, alteration type: %s", a.AlteredStateID, a.AlterationType)
+func (a Alt) Error() string {
+	return fmt.Sprintf("alt with altered state id: %d, alteration type: %s", a.AlteredStateID, a.AlterationType)
 }

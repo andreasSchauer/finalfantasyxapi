@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func (l *Lookup) getAltStateChanges() []AltStateChange {
-	changes := []AltStateChange{}
+func (l *Lookup) getAltStateChanges() []Alt {
+	changes := []Alt{}
 
 	for _, mon := range l.json.monsters {
 		for _, state := range mon.AlteredStates {
@@ -18,7 +18,7 @@ func (l *Lookup) getAltStateChanges() []AltStateChange {
 	return changes
 }
 
-func (l *Lookup) getAltStateChangeAutoAbilities(c AltStateChange) ([]AutoAbility, error) {
+func (l *Lookup) getAltStateChangeAutoAbilities(c Alt) ([]AutoAbility, error) {
 	return getResources(c.AutoAbilities, l.AutoAbilities)
 }
 
@@ -36,7 +36,7 @@ func (l *Lookup) seedJuncAltStateChangesAutoAbilities(qtx *database.Queries, ctx
 	})
 }
 
-func (l *Lookup) getAltStateChangeBaseStats(c AltStateChange) ([]BaseStat, error) {
+func (l *Lookup) getAltStateChangeBaseStats(c Alt) ([]BaseStat, error) {
 	return c.BaseStats, nil
 }
 
@@ -54,7 +54,7 @@ func (l *Lookup) seedJuncAltStateChangesBaseStats(qtx *database.Queries, ctx con
 	})
 }
 
-func (l *Lookup) getAltStateChangeElementalResists(c AltStateChange) ([]ElementalResist, error) {
+func (l *Lookup) getAltStateChangeElementalResists(c Alt) ([]ElementalResist, error) {
 	return c.ElemResists, nil
 }
 
@@ -72,7 +72,7 @@ func (l *Lookup) seedJuncAltStateChangesElementalResists(qtx *database.Queries, 
 	})
 }
 
-func (l *Lookup) getAltStateChangeProperties(c AltStateChange) ([]Property, error) {
+func (l *Lookup) getAltStateChangeProperties(c Alt) ([]Property, error) {
 	return getResources(c.Properties, l.Properties)
 }
 
@@ -90,7 +90,7 @@ func (l *Lookup) seedJuncAltStateChangesProperties(qtx *database.Queries, ctx co
 	})
 }
 
-func (l *Lookup) getAltStateChangeStatusImmunities(c AltStateChange) ([]StatusCondition, error) {
+func (l *Lookup) getAltStateChangeStatusImmunities(c Alt) ([]StatusCondition, error) {
 	return getResources(c.StatusImmunities, l.StatusConditions)
 }
 

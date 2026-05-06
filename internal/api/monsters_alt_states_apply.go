@@ -41,7 +41,7 @@ func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName stri
 		IsTemporary: false,
 	}
 
-	for _, change := range altState.Changes {
+	for _, change := range altState.Alts {
 		switch database.AlterationType(change.AlterationType) {
 		case database.AlterationTypeChange:
 			mon, appliedState, defaultState = applyAltStateChange(mon, change, appliedState, defaultState)
@@ -85,8 +85,8 @@ func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName string) 
 	return int(id), nil
 }
 
-func applyAltStateChange(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
-	defStateChange := AltStateChange{
+func applyAltStateChange(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
+	defStateChange := Alt{
 		AlterationType: database.AlterationTypeChange,
 	}
 
@@ -99,16 +99,16 @@ func applyAltStateChange(mon Monster, change AltStateChange, appliedState Applie
 	mon.BaseStats, defStateChange.BaseStats = modifyResourcesChange(mon.BaseStats, change.BaseStats)
 	mon.ElemResists, defStateChange.ElemResists = modifyResourcesChange(mon.ElemResists, change.ElemResists)
 
-	defaultState.Changes = append(defaultState.Changes, defStateChange)
+	defaultState.Alts = append(defaultState.Alts, defStateChange)
 
 	return mon, appliedState, defaultState
 }
 
-func applyAltStateGain(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
-	defStateLoss := AltStateChange{
+func applyAltStateGain(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
+	defStateLoss := Alt{
 		AlterationType: database.AlterationTypeLoss,
 	}
-	defStateGain := AltStateChange{
+	defStateGain := Alt{
 		AlterationType: database.AlterationTypeGain,
 	}
 
@@ -123,18 +123,18 @@ func applyAltStateGain(mon Monster, change AltStateChange, appliedState AppliedS
 	}
 
 	if !defStateLoss.IsZero() {
-		defaultState.Changes = append(defaultState.Changes, defStateLoss)
+		defaultState.Alts = append(defaultState.Alts, defStateLoss)
 	}
 
 	if !defStateGain.IsZero() {
-		defaultState.Changes = append(defaultState.Changes, defStateGain)
+		defaultState.Alts = append(defaultState.Alts, defStateGain)
 	}
 
 	return mon, appliedState, defaultState
 }
 
-func applyAltStateLoss(mon Monster, change AltStateChange, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
-	defStateGain := AltStateChange{
+func applyAltStateLoss(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
+	defStateGain := Alt{
 		AlterationType: database.AlterationTypeGain,
 	}
 
@@ -142,7 +142,7 @@ func applyAltStateLoss(mon Monster, change AltStateChange, appliedState AppliedS
 	mon.AutoAbilities, defStateGain.AutoAbilities = modifyResourcesLoss(mon.AutoAbilities, change.AutoAbilities)
 
 	if !defStateGain.IsZero() {
-		defaultState.Changes = append(defaultState.Changes, defStateGain)
+		defaultState.Alts = append(defaultState.Alts, defStateGain)
 	}
 
 	return mon, appliedState, defaultState
