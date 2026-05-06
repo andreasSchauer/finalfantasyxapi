@@ -199,9 +199,10 @@ func getAeonAgilityParams(cfg *Config, r *http.Request, aeon Aeon) (AgilityParam
 	}
 
 	agilityParams := AgilityParams{
-		TickSpeed: agilityTier.TickSpeed,
-		MinICV:    minICV,
-		MaxICV:    agilityTier.CharacterMaxICV,
+		AgilityTier: 	idToUnnamedAPIResource(cfg, cfg.e.agilityTiers, agilityTier.ID),
+		TickSpeed: 		agilityTier.TickSpeed,
+		MinICV:    		minICV,
+		MaxICV:    		agilityTier.CharacterMaxICV,
 	}
 
 	return agilityParams, nil

@@ -33,7 +33,7 @@ func compareMonsters(test test, exp expMonster, got Monster) {
 	compIdApiResource(test, "species", test.cfg.e.monsterSpecies.endpoint, exp.species, got.Species)
 	compare(test, "ctb icon type", exp.ctbIconType, got.CTBIconType)
 	compare(test, "distance", exp.distance, got.Distance)
-	checkResAmtTypes(test, "base stats", exp.baseStats, got.BaseStats)
+	checkResAmtTypes(test, "base stats", exp.baseStats, statsToBaseStats(got.Stats))
 	checkResAmtTypes(test, "status resists", exp.statusResists, got.StatusResists)
 	compTestStructPtrs(test, "agility params", exp.agility, got.AgilityParameters, compareAgilityParams)
 	compStructSlices(test, "bribe chances", exp.bribeChances, got.BribeChances)

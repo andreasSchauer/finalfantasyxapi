@@ -13,7 +13,8 @@ type Character struct {
 	CelestialWeapon        *NamedAPIResource                  `json:"celestial_weapon"`
 	OverdriveCommand       *NamedAPIResource                  `json:"overdrive_command"`
 	CharacterClasses       []NamedAPIResource                 `json:"character_classes"`
-	BaseStats              []BaseStat                         `json:"base_stats"`
+	BaseStats              []BaseStat         				  `json:"-"`
+	Stats				   Stats			  				  `json:"stats"`
 	DefaultPlayerAbilities []NamedAPIResource                 `json:"default_player_abilities"`
 	StdSgPlayerAbilities   []NamedAPIResource                 `json:"std_sg_player_abilities"`
 	ExpSgPlayerAbilities   []NamedAPIResource                 `json:"exp_sg_player_abilities"`

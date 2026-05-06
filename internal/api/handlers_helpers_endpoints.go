@@ -170,9 +170,10 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 		return
 	}
 
-	// this is for the simple subsection /endpoint/{id}/simple
-	// used to be 'if subsection.dbQuery == nil', so if something breaks, just use that again
-	if sectionName == "simple" {
+	// this is for the simple subsection /endpoint/{id}/simple,
+	// used when aspects of the resource itself need to be simplified (like /aeons/{id}/stats)
+	// the resource fetches itself and doesn't need a db query
+	if subsection.dbQuery == nil {
 		if subsection.relationsFn != nil {
 			var err error
 			subsection.relations, err = subsection.relationsFn(cfg, r, []int32{parseRes.ID})

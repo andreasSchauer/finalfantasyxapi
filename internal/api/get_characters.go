@@ -37,6 +37,8 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 		OverdriveModes:         rel.OverdriveModes,
 	}
 
+	response.Stats = createStats(response.BaseStats)
+
 	return response, nil
 }
 

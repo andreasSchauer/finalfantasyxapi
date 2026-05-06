@@ -44,7 +44,8 @@ type Monster struct {
 	ScanText             *string              `json:"scan_text"`
 	Areas                []AreaAPIResource    `json:"areas"`
 	Formations           []UnnamedAPIResource `json:"monster_formations"`
-	BaseStats            []BaseStat           `json:"base_stats"`
+	BaseStats            []BaseStat           `json:"-"`
+	Stats				 Stats			  	  `json:"stats"`
 	Items                *MonsterItems        `json:"items"`
 	BribeChances         []BribeChance        `json:"bribe_chances,omitempty"`
 	Equipment            *MonsterEquipment    `json:"equipment"`

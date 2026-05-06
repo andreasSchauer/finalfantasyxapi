@@ -17,7 +17,8 @@ type Aeon struct {
 	AgilityParameters      AgilityParams      `json:"agility_parameters"`
 	CelestialWeapon        *NamedAPIResource  `json:"celestial_weapon"`
 	CharacterClasses       []NamedAPIResource `json:"character_classes"`
-	BaseStats              []BaseStat         `json:"base_stats"`
+	BaseStats              []BaseStat         `json:"-"`
+	Stats				   Stats			  `json:"stats"`
 	AeonCommands           []NamedAPIResource `json:"aeon_commands"`
 	DefaultPlayerAbilities []NamedAPIResource `json:"default_player_abilities"`
 	Overdrives             []NamedAPIResource `json:"overdrives"`

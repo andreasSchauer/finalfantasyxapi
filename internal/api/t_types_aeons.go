@@ -6,7 +6,7 @@ type expAeon struct {
 	untypedUnit            int32
 	area                   int32
 	battlesToRegen         int32
-	agility                AgilityParams
+	agility                testAgilityParams
 	celestialWeapon        *int32
 	characterClasses       []int32
 	baseStats              map[string]int32
@@ -26,10 +26,10 @@ func compareAeons(test test, exp expAeon, got Aeon) {
 	compIdApiResource(test, "untyped unit", test.cfg.e.playerUnits.endpoint, exp.untypedUnit, got.UntypedUnit)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
 	compare(test, "battles to regenerate", exp.battlesToRegen, got.BattlesToRegenerate)
-	compStructs(test, "agility params", exp.agility, got.AgilityParameters)
+	compareAgilityParams(test, "agility params", exp.agility, got.AgilityParameters)
 	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.e.celestialWeapons.endpoint, exp.celestialWeapon, got.CelestialWeapon)
 	checkResIDsInSlice(test, "character classes", test.cfg.e.characterClasses.endpoint, exp.characterClasses, got.CharacterClasses)
-	checkResAmtTypes(test, "base stats", exp.baseStats, got.BaseStats)
+	checkResAmtTypes(test, "base stats", exp.baseStats, statsToBaseStats(got.Stats))
 	checkResIDsInSlice(test, "aeon commands", test.cfg.e.aeonCommands.endpoint, exp.aeonCommands, got.AeonCommands)
 	checkResIDsInSlice(test, "default abilities", test.cfg.e.playerAbilities.endpoint, exp.defaultPlayerAbilities, got.DefaultPlayerAbilities)
 	checkResIDsInSlice(test, "overdrives", test.cfg.e.overdrives.endpoint, exp.overdrives, got.Overdrives)

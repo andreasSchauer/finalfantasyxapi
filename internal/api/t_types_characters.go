@@ -28,7 +28,7 @@ func compareCharacters(test test, exp expCharacter, got Character) {
 	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.e.celestialWeapons.endpoint, exp.celestialWeapon, got.CelestialWeapon)
 	compIdApiResourcePtrs(test, "overdrive command", test.cfg.e.overdriveCommands.endpoint, exp.overdriveCommand, got.OverdriveCommand)
 	checkResIDsInSlice(test, "character classes", test.cfg.e.characterClasses.endpoint, exp.characterClasses, got.CharacterClasses)
-	checkResAmtTypes(test, "base stats", exp.baseStats, got.BaseStats)
+	checkResAmtTypes(test, "base stats", exp.baseStats, statsToBaseStats(got.Stats))
 	checkResIDsInSlice(test, "default abilities", test.cfg.e.playerAbilities.endpoint, exp.defaultPlayerAbilities, got.DefaultPlayerAbilities)
 	checkResIDsInSlice(test, "standard sg abilities", test.cfg.e.playerAbilities.endpoint, exp.stdSgPlayerAbilities, got.StdSgPlayerAbilities)
 	checkResIDsInSlice(test, "expert sg abilities", test.cfg.e.playerAbilities.endpoint, exp.expSgPlayerAbilities, got.ExpSgPlayerAbilities)
