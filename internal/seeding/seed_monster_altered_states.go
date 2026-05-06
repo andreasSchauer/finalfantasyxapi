@@ -61,7 +61,7 @@ func (l *Lookup) completeAlteredStates(states []AlteredState) error {
 			return err
 		}
 
-		err = l.completeAltStateChanges(state.Changes)
+		err = l.completeAlts(state.Changes)
 		if err != nil {
 			return err
 		}

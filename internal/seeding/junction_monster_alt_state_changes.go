@@ -23,7 +23,7 @@ func (l *Lookup) getAltAutoAbilities(c Alt) ([]AutoAbility, error) {
 }
 
 func (l *Lookup) seedJuncAltsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "alt state changes + auto-abilities"
+	const desc string = "alts + auto-abilities"
 	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltAutoAbilities)
 	if err != nil {
 		return err
@@ -41,7 +41,7 @@ func (l *Lookup) getAltBaseStats(c Alt) ([]BaseStat, error) {
 }
 
 func (l *Lookup) seedJuncAltsBaseStats(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "alt state changes + base stats"
+	const desc string = "alts + base stats"
 	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltBaseStats)
 	if err != nil {
 		return err
@@ -59,7 +59,7 @@ func (l *Lookup) getAltElementalResists(c Alt) ([]ElementalResist, error) {
 }
 
 func (l *Lookup) seedJuncAltsElementalResists(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "alt state changes + elemental resists"
+	const desc string = "alts + elemental resists"
 	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltElementalResists)
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func (l *Lookup) getAltProperties(c Alt) ([]Property, error) {
 }
 
 func (l *Lookup) seedJuncAltsProperties(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "alt state changes + properties"
+	const desc string = "alts + properties"
 	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltProperties)
 	if err != nil {
 		return err
@@ -95,7 +95,7 @@ func (l *Lookup) getAltStatusImmunities(c Alt) ([]StatusCondition, error) {
 }
 
 func (l *Lookup) seedJuncAltsStatusImmunities(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "alt state changes + status immunities"
+	const desc string = "alts + status immunities"
 	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltStatusImmunities)
 	if err != nil {
 		return err

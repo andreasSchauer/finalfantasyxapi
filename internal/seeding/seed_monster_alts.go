@@ -10,7 +10,7 @@ import (
 )
 
 func (l *Lookup) loop5SeedAlts(qtx *database.Queries, ctx context.Context) error {
-	changes, err := l.extractAltStateChanges()
+	changes, err := l.extractAlts()
 	if err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func (l *Lookup) loop5SeedAlts(qtx *database.Queries, ctx context.Context) error
 
 	dbRows, err := qtx.CreateAltStateChangeBulk(ctx, params)
 	if err != nil {
-		return fmt.Errorf("couldn't create alt state changes: %v", err)
+		return fmt.Errorf("couldn't create alts: %v", err)
 	}
 
 	for _, row := range dbRows {
@@ -43,13 +43,13 @@ func (l *Lookup) loop5SeedAlts(qtx *database.Queries, ctx context.Context) error
 	return nil
 }
 
-func (l *Lookup) extractAltStateChanges() ([]Alt, error) {
+func (l *Lookup) extractAlts() ([]Alt, error) {
 	changes := []Alt{}
 
 	for i := range l.json.monsters {
 		mon := &l.json.monsters[i]
 
-		changesNew, err := l.prepareAltStateChanges(mon.AlteredStates)
+		changesNew, err := l.prepareAlts(mon.AlteredStates)
 		if err != nil {
 			return nil, err
 		}
@@ -60,7 +60,7 @@ func (l *Lookup) extractAltStateChanges() ([]Alt, error) {
 	return dedupeRows(changes, l.Hashes), nil
 }
 
-func (l *Lookup) prepareAltStateChanges(states []AlteredState) ([]Alt, error) {
+func (l *Lookup) prepareAlts(states []AlteredState) ([]Alt, error) {
 	changes := []Alt{}
 	var err error
 
@@ -89,7 +89,7 @@ func (l *Lookup) prepareAltStateChanges(states []AlteredState) ([]Alt, error) {
 	return changes, nil
 }
 
-func (l *Lookup) completeAltStateChanges(changes []Alt) error {
+func (l *Lookup) completeAlts(changes []Alt) error {
 	for i := range changes {
 		change := &changes[i]
 
