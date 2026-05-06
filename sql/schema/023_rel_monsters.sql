@@ -291,7 +291,7 @@ DROP TABLE IF EXISTS j_monsters_ronso_rages;
 DROP TABLE IF EXISTS j_monsters_auto_abilities;
 DROP TABLE IF EXISTS j_monsters_properties;
 DROP TABLE IF EXISTS monster_abilities;
-DROP TABLE IF EXISTS alt_state_changes;
+DROP TABLE IF EXISTS alts;
 DROP TABLE IF EXISTS altered_states;
 DROP TABLE IF EXISTS equipment_drops;
 DROP TABLE IF EXISTS monster_equipment_slots;

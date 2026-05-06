@@ -13,7 +13,7 @@ type AlteredState struct {
 	URL         string `json:"url"`
 	Condition   string `json:"condition"`
 	IsTemporary bool   `json:"is_temporary"`
-	Alts        []Alt  `json:"changes"`
+	Alts        []Alt  `json:"-"`
 	Alterations
 }
 

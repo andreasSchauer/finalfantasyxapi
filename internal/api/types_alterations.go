@@ -21,14 +21,14 @@ type AltStateGain struct {
 	AutoAbilities    []NamedAPIResource `json:"auto_abilities,omitempty"`
 	StatusImmunities []NamedAPIResource `json:"status_immunities,omitempty"`
 	StatusResists    []StatusResist     `json:"status_resists,omitempty"`
-	Status           *InflictedStatus   `json:"added_status_condition,omitempty"`
+	Status           *InflictedStatus   `json:"status,omitempty"`
 }
 
 type AltStateLoss struct {
 	Properties       []NamedAPIResource `json:"properties,omitempty"`
 	AutoAbilities    []NamedAPIResource `json:"auto_abilities,omitempty"`
 	StatusImmunities []NamedAPIResource `json:"status_immunities,omitempty"`
-	Status           *NamedAPIResource  `json:"removed_status_condition,omitempty"`
+	Status           *NamedAPIResource  `json:"status,omitempty"`
 }
 
 func getAlterations(alts []Alt) Alterations {
