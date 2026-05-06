@@ -11,9 +11,10 @@ type Ability struct {
 	ID            int32
 	Name          string `json:"name"`
 	Version       *int32 `json:"version"`
-	Type          database.AbilityType
 	Specification *string `json:"specification"`
+	Type          database.AbilityType
 	Attributes
+	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (a Ability) ToHashFields() []any {

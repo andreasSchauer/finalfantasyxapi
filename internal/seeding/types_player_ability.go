@@ -29,7 +29,6 @@ type PlayerAbility struct {
 	AeonLearnItem       *ItemAmount         `json:"aeon_learn_item"`
 	MPCost              int32               `json:"mp_cost"`
 	Cursor              *string             `json:"cursor"`
-	BattleInteractions  []BattleInteraction `json:"battle_interactions"`
 }
 
 func (p PlayerAbility) ToHashFields() []any {

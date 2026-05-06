@@ -8,7 +8,7 @@ import (
 )
 
 type MiscAbility struct {
-	ID int32
+	ID 				   int32
 	Ability
 	TopmenuID          *int32
 	SubmenuID          *int32
@@ -21,7 +21,6 @@ type MiscAbility struct {
 	OpenSubmenu        *string             `json:"open_submenu"`
 	LearnedBy          []string            `json:"learned_by"`
 	Cursor             *string             `json:"cursor"`
-	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (u MiscAbility) ToHashFields() []any {

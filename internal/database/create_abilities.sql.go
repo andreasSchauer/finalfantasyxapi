@@ -330,20 +330,21 @@ func (q *Queries) CreateOverdriveAbilityBulk(ctx context.Context, arg CreateOver
 }
 
 const createOverdriveBulk = `-- name: CreateOverdriveBulk :many
-INSERT INTO overdrives (data_hash, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor, topmenu_id, od_command_id, character_class_id)
+INSERT INTO overdrives (data_hash, name, version, specification, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor, topmenu_id, od_command_id, character_class_id)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),
     unnest($3::null_int[]),
-    unnest($4::text[]),
+    unnest($4::null_string[]),
     unnest($5::text[]),
-    unnest($6::int[]),
-    unnest($7::null_string[]),
-    unnest($8::null_int[]),
-    unnest($9::null_target_type[]),
-    unnest($10::null_int[]),
+    unnest($6::text[]),
+    unnest($7::int[]),
+    unnest($8::null_string[]),
+    unnest($9::null_int[]),
+    unnest($10::null_target_type[]),
     unnest($11::null_int[]),
-    unnest($12::null_int[])
+    unnest($12::null_int[]),
+    unnest($13::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
@@ -352,6 +353,7 @@ type CreateOverdriveBulkParams struct {
 	DataHash         []string
 	Name             []string
 	Version          []sql.NullInt32
+	Specification    []sql.NullString
 	Description      []string
 	Effect           []string
 	AttributesID     []int32
@@ -373,6 +375,7 @@ func (q *Queries) CreateOverdriveBulk(ctx context.Context, arg CreateOverdriveBu
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Name),
 		pq.Array(arg.Version),
+		pq.Array(arg.Specification),
 		pq.Array(arg.Description),
 		pq.Array(arg.Effect),
 		pq.Array(arg.AttributesID),

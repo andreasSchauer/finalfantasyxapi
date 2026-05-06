@@ -28,7 +28,7 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		Type:               enumToNamedAPIResource(cfg, cfg.e.abilityType.endpoint, string(ability.Type), cfg.t.AbilityType),
 		TypedAbility:       refToNamedApiResource(cfg, ability.GetAbilityRef()),
 		Monsters:           monsters,
-		BattleInteractions: getAbilityBattleInteractions(cfg, ability),
+		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	switch ability.Type {

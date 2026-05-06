@@ -7,11 +7,14 @@ import (
 )
 
 type Overdrive struct {
-	ID          int32
-	ODCommandID *int32
-	CharClassID *int32
-	TopmenuID   *int32
-	Ability
+	ID          	   int32
+	ODCommandID 	   *int32
+	CharClassID 	   *int32
+	TopmenuID   	   *int32
+	Name          	   string 			  `json:"name"`
+	Version       	   *int32 	  		  `json:"version"`
+	Specification 	   *string 			  `json:"specification"`
+	Attributes
 	Description        string             `json:"description"`
 	Effect             string             `json:"effect"`
 	Topmenu            *string            `json:"topmenu"`
@@ -30,10 +33,11 @@ func (o Overdrive) ToHashFields() []any {
 		h.DerefOrNil(o.CharClassID),
 		o.Name,
 		h.DerefOrNil(o.Version),
+		h.DerefOrNil(o.Specification),
 		o.Description,
 		o.Effect,
 		h.DerefOrNil(o.TopmenuID),
-		o.Attributes,
+		o.Attributes.ID,
 		h.DerefOrNil(o.UnlockCondition),
 		h.DerefOrNil(o.CountdownInSec),
 		h.DerefOrNil(o.Cursor),

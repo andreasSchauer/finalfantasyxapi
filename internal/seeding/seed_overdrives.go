@@ -19,6 +19,7 @@ func (l *Lookup) loop4SeedOverdrives(qtx *database.Queries, ctx context.Context)
 		DataHash:         make([]string, len(overdrives)),
 		Name:             make([]string, len(overdrives)),
 		Version:          make([]sql.NullInt32, len(overdrives)),
+		Specification:    make([]sql.NullString, len(overdrives)),
 		Description:      make([]string, len(overdrives)),
 		Effect:           make([]string, len(overdrives)),
 		AttributesID:     make([]int32, len(overdrives)),
@@ -34,9 +35,10 @@ func (l *Lookup) loop4SeedOverdrives(qtx *database.Queries, ctx context.Context)
 		params.DataHash[i] = generateDataHash(o)
 		params.Name[i] = o.Name
 		params.Version[i] = h.GetNullInt32(o.Version)
+		params.Specification[i] = h.GetNullString(o.Specification)
 		params.Description[i] = o.Description
 		params.Effect[i] = o.Effect
-		params.AttributesID[i] = o.Ability.Attributes.ID
+		params.AttributesID[i] = o.Attributes.ID
 		params.UnlockCondition[i] = h.GetNullString(o.UnlockCondition)
 		params.CountdownInSec[i] = h.GetNullInt32(o.CountdownInSec)
 		params.Cursor[i] = database.ToNullTargetType(o.Cursor)
@@ -83,7 +85,7 @@ func (l *Lookup) extractOverdrives() ([]Overdrive, error) {
 			return nil, err
 		}
 
-		overdrive.Ability.Attributes.ID, err = l.getHashID(overdrive.Ability.Attributes)
+		overdrive.Attributes.ID, err = l.getHashID(overdrive.Attributes)
 		if err != nil {
 			return nil, err
 		}

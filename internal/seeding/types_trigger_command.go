@@ -16,7 +16,6 @@ type TriggerCommand struct {
 	Topmenu            *string             `json:"topmenu"`
 	RelatedStats       []string            `json:"related_stats"`
 	Cursor             string              `json:"cursor"`
-	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (t TriggerCommand) ToHashFields() []any {

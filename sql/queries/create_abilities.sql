@@ -91,11 +91,12 @@ RETURNING id, data_hash;
 
 
 -- name: CreateOverdriveBulk :many
-INSERT INTO overdrives (data_hash, name, version, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor, topmenu_id, od_command_id, character_class_id)
+INSERT INTO overdrives (data_hash, name, version, specification, description, effect, attributes_id, unlock_condition, countdown_in_sec, cursor, topmenu_id, od_command_id, character_class_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[]),
     unnest(sqlc.arg('version')::null_int[]),
+    unnest(sqlc.arg('specification')::null_string[]),
     unnest(sqlc.arg('description')::text[]),
     unnest(sqlc.arg('effect')::text[]),
     unnest(sqlc.arg('attributes_id')::int[]),

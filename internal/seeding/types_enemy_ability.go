@@ -11,7 +11,6 @@ type EnemyAbility struct {
 	ID int32
 	Ability
 	Effect             *string             `json:"effect"`
-	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (e EnemyAbility) ToHashFields() []any {

@@ -57,7 +57,7 @@ func createAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subs
 		Specification:      ability.Specification,
 		Rank:               rank,
 		Type:               &typeStr,
-		BattleInteractions: getAbilityBattleInteractionsSimple(cfg, ability),
+		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil

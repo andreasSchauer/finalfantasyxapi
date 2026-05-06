@@ -11,7 +11,6 @@ type ItemAbility struct {
 	Ability
 	ItemID             int32
 	Cursor             string              `json:"cursor"`
-	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (a ItemAbility) ToHashFields() []any {

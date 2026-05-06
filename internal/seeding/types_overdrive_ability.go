@@ -12,7 +12,6 @@ type OverdriveAbility struct {
 	Ability
 	Overdrive          LookupObject        `json:"overdrive"` // not meant for seeding (still needed?)
 	RelatedStats       []string            `json:"related_stats"`
-	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
 func (o OverdriveAbility) ToHashFields() []any {

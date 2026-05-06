@@ -4043,6 +4043,7 @@ type Overdrife struct {
 	DataHash         string
 	Name             string
 	Version          sql.NullInt32
+	Specification    sql.NullString
 	Description      string
 	Effect           string
 	AttributesID     int32

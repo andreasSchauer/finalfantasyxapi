@@ -89,6 +89,7 @@ CREATE TABLE overdrives (
     data_hash TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     version INTEGER,
+    specification TEXT,
     description TEXT NOT NULL,
     effect TEXT NOT NULL,
     attributes_id INTEGER NOT NULL REFERENCES ability_attributes(id),
