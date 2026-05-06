@@ -76,7 +76,7 @@ CREATE TABLE altered_states (
 
 
 -- 5
-CREATE TABLE alt_state_changes (
+CREATE TABLE alts (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     altered_state_id INTEGER NOT NULL REFERENCES altered_states(id),
@@ -195,42 +195,42 @@ CREATE TABLE j_equipment_drops_characters (
 );
 
 
-CREATE TABLE j_alt_state_changes_properties (
+CREATE TABLE j_alts_properties (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    alt_state_change_id INTEGER NOT NULL REFERENCES alt_state_changes(id),
+    alt_id INTEGER NOT NULL REFERENCES alts(id),
     property_id INTEGER NOT NULL REFERENCES properties(id)
 );
 
 
-CREATE TABLE j_alt_state_changes_auto_abilities (
+CREATE TABLE j_alts_auto_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    alt_state_change_id INTEGER NOT NULL REFERENCES alt_state_changes(id),
+   alt_id INTEGER NOT NULL REFERENCES alts(id),
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id)
 );
 
 
-CREATE TABLE j_alt_state_changes_base_stats (
+CREATE TABLE j_alts_base_stats (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    alt_state_change_id INTEGER NOT NULL REFERENCES alt_state_changes(id),
+    alt_id INTEGER NOT NULL REFERENCES alts(id),
     base_stat_id INTEGER NOT NULL REFERENCES base_stats(id)
 );
 
 
-CREATE TABLE j_alt_state_changes_elem_resists (
+CREATE TABLE j_alts_elem_resists (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    alt_state_change_id INTEGER NOT NULL REFERENCES alt_state_changes(id),
+    alt_id INTEGER NOT NULL REFERENCES alts(id),
     elem_resist_id INTEGER NOT NULL REFERENCES elemental_resists(id)
 );
 
 
-CREATE TABLE j_alt_state_changes_status_immunities (
+CREATE TABLE j_alts_status_immunities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    alt_state_change_id INTEGER NOT NULL REFERENCES alt_state_changes(id),
+    alt_id INTEGER NOT NULL REFERENCES alts(id),
     status_condition_id INTEGER NOT NULL REFERENCES status_conditions(id)
 );
 
@@ -273,11 +273,11 @@ DROP TABLE IF EXISTS j_formation_trigger_commands_users;
 DROP TABLE IF EXISTS j_monster_formations_trigger_commands;
 DROP TABLE IF EXISTS j_monster_selections_monsters;
 DROP TABLE IF EXISTS j_monster_formations_encounter_areas;
-DROP TABLE IF EXISTS j_alt_state_changes_status_immunities;
-DROP TABLE IF EXISTS j_alt_state_changes_elem_resists;
-DROP TABLE IF EXISTS j_alt_state_changes_base_stats;
-DROP TABLE IF EXISTS j_alt_state_changes_auto_abilities;
-DROP TABLE IF EXISTS j_alt_state_changes_properties;
+DROP TABLE IF EXISTS j_alts_status_immunities;
+DROP TABLE IF EXISTS j_alts_elem_resists;
+DROP TABLE IF EXISTS j_alts_base_stats;
+DROP TABLE IF EXISTS j_alts_auto_abilities;
+DROP TABLE IF EXISTS j_alts_properties;
 DROP TABLE IF EXISTS j_equipment_drops_characters;
 DROP TABLE IF EXISTS j_monster_equipment_slots_chances;
 DROP TABLE IF EXISTS j_monster_equipment_abilities;

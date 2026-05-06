@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func (l *Lookup) getAltStateChanges() []Alt {
+func (l *Lookup) getAlts() []Alt {
 	changes := []Alt{}
 
 	for _, mon := range l.json.monsters {
@@ -18,92 +18,92 @@ func (l *Lookup) getAltStateChanges() []Alt {
 	return changes
 }
 
-func (l *Lookup) getAltStateChangeAutoAbilities(c Alt) ([]AutoAbility, error) {
+func (l *Lookup) getAltAutoAbilities(c Alt) ([]AutoAbility, error) {
 	return getResources(c.AutoAbilities, l.AutoAbilities)
 }
 
-func (l *Lookup) seedJuncAltStateChangesAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+func (l *Lookup) seedJuncAltsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alt state changes + auto-abilities"
-	jParams, err := processJunctions(l, desc, l.getAltStateChanges(), l.getAltStateChangeAutoAbilities)
+	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltAutoAbilities)
 	if err != nil {
 		return err
 	}
 
-	return qtx.CreateAltStateChangesAutoAbilitiesJunctionBulk(ctx, database.CreateAltStateChangesAutoAbilitiesJunctionBulkParams{
+	return qtx.CreateAltsAutoAbilitiesJunctionBulk(ctx, database.CreateAltsAutoAbilitiesJunctionBulkParams{
 		DataHash:         jParams.DataHashes,
-		AltStateChangeID: jParams.ParentIDs,
+		AltID: jParams.ParentIDs,
 		AutoAbilityID:    jParams.ChildIDs,
 	})
 }
 
-func (l *Lookup) getAltStateChangeBaseStats(c Alt) ([]BaseStat, error) {
+func (l *Lookup) getAltBaseStats(c Alt) ([]BaseStat, error) {
 	return c.BaseStats, nil
 }
 
-func (l *Lookup) seedJuncAltStateChangesBaseStats(qtx *database.Queries, ctx context.Context) error {
+func (l *Lookup) seedJuncAltsBaseStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alt state changes + base stats"
-	jParams, err := processJunctions(l, desc, l.getAltStateChanges(), l.getAltStateChangeBaseStats)
+	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltBaseStats)
 	if err != nil {
 		return err
 	}
 
-	return qtx.CreateAltStateChangesBaseStatsJunctionBulk(ctx, database.CreateAltStateChangesBaseStatsJunctionBulkParams{
+	return qtx.CreateAltsBaseStatsJunctionBulk(ctx, database.CreateAltsBaseStatsJunctionBulkParams{
 		DataHash:         jParams.DataHashes,
-		AltStateChangeID: jParams.ParentIDs,
+		AltID: jParams.ParentIDs,
 		BaseStatID:       jParams.ChildIDs,
 	})
 }
 
-func (l *Lookup) getAltStateChangeElementalResists(c Alt) ([]ElementalResist, error) {
+func (l *Lookup) getAltElementalResists(c Alt) ([]ElementalResist, error) {
 	return c.ElemResists, nil
 }
 
-func (l *Lookup) seedJuncAltStateChangesElementalResists(qtx *database.Queries, ctx context.Context) error {
+func (l *Lookup) seedJuncAltsElementalResists(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alt state changes + elemental resists"
-	jParams, err := processJunctions(l, desc, l.getAltStateChanges(), l.getAltStateChangeElementalResists)
+	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltElementalResists)
 	if err != nil {
 		return err
 	}
 
-	return qtx.CreateAltStateChangesElemResistsJunctionBulk(ctx, database.CreateAltStateChangesElemResistsJunctionBulkParams{
+	return qtx.CreateAltsElemResistsJunctionBulk(ctx, database.CreateAltsElemResistsJunctionBulkParams{
 		DataHash:         jParams.DataHashes,
-		AltStateChangeID: jParams.ParentIDs,
+		AltID: jParams.ParentIDs,
 		ElemResistID:     jParams.ChildIDs,
 	})
 }
 
-func (l *Lookup) getAltStateChangeProperties(c Alt) ([]Property, error) {
+func (l *Lookup) getAltProperties(c Alt) ([]Property, error) {
 	return getResources(c.Properties, l.Properties)
 }
 
-func (l *Lookup) seedJuncAltStateChangesProperties(qtx *database.Queries, ctx context.Context) error {
+func (l *Lookup) seedJuncAltsProperties(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alt state changes + properties"
-	jParams, err := processJunctions(l, desc, l.getAltStateChanges(), l.getAltStateChangeProperties)
+	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltProperties)
 	if err != nil {
 		return err
 	}
 
-	return qtx.CreateAltStateChangesPropertiesJunctionBulk(ctx, database.CreateAltStateChangesPropertiesJunctionBulkParams{
+	return qtx.CreateAltsPropertiesJunctionBulk(ctx, database.CreateAltsPropertiesJunctionBulkParams{
 		DataHash:         jParams.DataHashes,
-		AltStateChangeID: jParams.ParentIDs,
+		AltID: jParams.ParentIDs,
 		PropertyID:       jParams.ChildIDs,
 	})
 }
 
-func (l *Lookup) getAltStateChangeStatusImmunities(c Alt) ([]StatusCondition, error) {
+func (l *Lookup) getAltStatusImmunities(c Alt) ([]StatusCondition, error) {
 	return getResources(c.StatusImmunities, l.StatusConditions)
 }
 
-func (l *Lookup) seedJuncAltStateChangesStatusImmunities(qtx *database.Queries, ctx context.Context) error {
+func (l *Lookup) seedJuncAltsStatusImmunities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alt state changes + status immunities"
-	jParams, err := processJunctions(l, desc, l.getAltStateChanges(), l.getAltStateChangeStatusImmunities)
+	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltStatusImmunities)
 	if err != nil {
 		return err
 	}
 
-	return qtx.CreateAltStateChangesStatusImmunitiesJunctionBulk(ctx, database.CreateAltStateChangesStatusImmunitiesJunctionBulkParams{
+	return qtx.CreateAltsStatusImmunitiesJunctionBulk(ctx, database.CreateAltsStatusImmunitiesJunctionBulkParams{
 		DataHash:          jParams.DataHashes,
-		AltStateChangeID:  jParams.ParentIDs,
+		AltID:  jParams.ParentIDs,
 		StatusConditionID: jParams.ChildIDs,
 	})
 }

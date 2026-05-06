@@ -44,7 +44,7 @@ func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName stri
 	for _, change := range altState.Alts {
 		switch database.AlterationType(change.AlterationType) {
 		case database.AlterationTypeChange:
-			mon, appliedState, defaultState = applyAltStateChange(mon, change, appliedState, defaultState)
+			mon, appliedState, defaultState = applyAlt(mon, change, appliedState, defaultState)
 
 		case database.AlterationTypeGain:
 			mon, appliedState, defaultState = applyAltStateGain(mon, change, appliedState, defaultState)
@@ -85,7 +85,7 @@ func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName string) 
 	return int(id), nil
 }
 
-func applyAltStateChange(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
+func applyAlt(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
 	defStateChange := Alt{
 		AlterationType: database.AlterationTypeChange,
 	}

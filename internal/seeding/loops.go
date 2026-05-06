@@ -132,7 +132,7 @@ func (l *Lookup) seedLoop5(qtx *database.Queries, ctx context.Context) error {
 		l.loop5SeedMonsterFormations,
 		l.loop5SeedAbilityDamages,
 		l.loop5SeedStatChanges,
-		l.loop5SeedAltStateChanges,
+		l.loop5SeedAlts,
 	})
 }
 
@@ -208,11 +208,11 @@ func (l *Lookup) seedJunctions(qtx *database.Queries, ctx context.Context) error
 		l.seedJuncBattleInteractionsRemovedStatusConditions,
 		l.seedJuncBattleInteractionsStatChanges,
 		l.seedJuncDamagesDamageCalc,
-		l.seedJuncAltStateChangesAutoAbilities,
-		l.seedJuncAltStateChangesBaseStats,
-		l.seedJuncAltStateChangesElementalResists,
-		l.seedJuncAltStateChangesProperties,
-		l.seedJuncAltStateChangesStatusImmunities,
+		l.seedJuncAltsAutoAbilities,
+		l.seedJuncAltsBaseStats,
+		l.seedJuncAltsElementalResists,
+		l.seedJuncAltsProperties,
+		l.seedJuncAltsStatusImmunities,
 		l.seedJuncMonsterItemsOtherItems,
 		l.seedJuncMonsterEquipmentEquipmentDrops,
 		l.seedJuncMonsterEquipmentSlotChances,

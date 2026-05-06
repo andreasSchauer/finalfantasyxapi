@@ -9,7 +9,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func (l *Lookup) loop5SeedAltStateChanges(qtx *database.Queries, ctx context.Context) error {
+func (l *Lookup) loop5SeedAlts(qtx *database.Queries, ctx context.Context) error {
 	changes, err := l.extractAltStateChanges()
 	if err != nil {
 		return err

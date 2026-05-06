@@ -184,7 +184,7 @@ RETURNING id, data_hash;
 
 
 -- name: CreateAltStateChangeBulk :many
-INSERT INTO alt_state_changes (data_hash, altered_state_id, alteration_type, distance, added_status_id)
+INSERT INTO alts (data_hash, altered_state_id, alteration_type, distance, added_status_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('altered_state_id')::int[]),
@@ -357,46 +357,46 @@ SELECT
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAltStateChangesPropertiesJunctionBulk :exec
-INSERT INTO j_alt_state_changes_properties (data_hash, alt_state_change_id, property_id)
+-- name: CreateAltsPropertiesJunctionBulk :exec
+INSERT INTO j_alts_properties (data_hash, alt_id, property_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
-    unnest(sqlc.arg('alt_state_change_id')::int[]),
+    unnest(sqlc.arg('alt_id')::int[]),
     unnest(sqlc.arg('property_id')::int[])
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAltStateChangesAutoAbilitiesJunctionBulk :exec
-INSERT INTO j_alt_state_changes_auto_abilities (data_hash, alt_state_change_id, auto_ability_id)
+-- name: CreateAltsAutoAbilitiesJunctionBulk :exec
+INSERT INTO j_alts_auto_abilities (data_hash, alt_id, auto_ability_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
-    unnest(sqlc.arg('alt_state_change_id')::int[]),
+    unnest(sqlc.arg('alt_id')::int[]),
     unnest(sqlc.arg('auto_ability_id')::int[])
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAltStateChangesBaseStatsJunctionBulk :exec
-INSERT INTO j_alt_state_changes_base_stats (data_hash, alt_state_change_id, base_stat_id)
+-- name: CreateAltsBaseStatsJunctionBulk :exec
+INSERT INTO j_alts_base_stats (data_hash, alt_id, base_stat_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
-    unnest(sqlc.arg('alt_state_change_id')::int[]),
+    unnest(sqlc.arg('alt_id')::int[]),
     unnest(sqlc.arg('base_stat_id')::int[])
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAltStateChangesElemResistsJunctionBulk :exec
-INSERT INTO j_alt_state_changes_elem_resists (data_hash, alt_state_change_id, elem_resist_id)
+-- name: CreateAltsElemResistsJunctionBulk :exec
+INSERT INTO j_alts_elem_resists (data_hash, alt_id, elem_resist_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
-    unnest(sqlc.arg('alt_state_change_id')::int[]),
+    unnest(sqlc.arg('alt_id')::int[]),
     unnest(sqlc.arg('elem_resist_id')::int[])
 ON CONFLICT(data_hash) DO NOTHING;
 
 
--- name: CreateAltStateChangesStatusImmunitiesJunctionBulk :exec
-INSERT INTO j_alt_state_changes_status_immunities (data_hash, alt_state_change_id, status_condition_id)
+-- name: CreateAltsStatusImmunitiesJunctionBulk :exec
+INSERT INTO j_alts_status_immunities (data_hash, alt_id, status_condition_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
-    unnest(sqlc.arg('alt_state_change_id')::int[]),
+    unnest(sqlc.arg('alt_id')::int[]),
     unnest(sqlc.arg('status_condition_id')::int[])
 ON CONFLICT(data_hash) DO NOTHING;

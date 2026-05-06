@@ -13,7 +13,7 @@ import (
 )
 
 const createAltStateChangeBulk = `-- name: CreateAltStateChangeBulk :many
-INSERT INTO alt_state_changes (data_hash, altered_state_id, alteration_type, distance, added_status_id)
+INSERT INTO alts (data_hash, altered_state_id, alteration_type, distance, added_status_id)
 SELECT
     unnest($1::text[]),
     unnest($2::int[]),
@@ -66,106 +66,6 @@ func (q *Queries) CreateAltStateChangeBulk(ctx context.Context, arg CreateAltSta
 	return items, nil
 }
 
-const createAltStateChangesAutoAbilitiesJunctionBulk = `-- name: CreateAltStateChangesAutoAbilitiesJunctionBulk :exec
-INSERT INTO j_alt_state_changes_auto_abilities (data_hash, alt_state_change_id, auto_ability_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAltStateChangesAutoAbilitiesJunctionBulkParams struct {
-	DataHash         []string
-	AltStateChangeID []int32
-	AutoAbilityID    []int32
-}
-
-func (q *Queries) CreateAltStateChangesAutoAbilitiesJunctionBulk(ctx context.Context, arg CreateAltStateChangesAutoAbilitiesJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createAltStateChangesAutoAbilitiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AltStateChangeID), pq.Array(arg.AutoAbilityID))
-	return err
-}
-
-const createAltStateChangesBaseStatsJunctionBulk = `-- name: CreateAltStateChangesBaseStatsJunctionBulk :exec
-INSERT INTO j_alt_state_changes_base_stats (data_hash, alt_state_change_id, base_stat_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAltStateChangesBaseStatsJunctionBulkParams struct {
-	DataHash         []string
-	AltStateChangeID []int32
-	BaseStatID       []int32
-}
-
-func (q *Queries) CreateAltStateChangesBaseStatsJunctionBulk(ctx context.Context, arg CreateAltStateChangesBaseStatsJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createAltStateChangesBaseStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AltStateChangeID), pq.Array(arg.BaseStatID))
-	return err
-}
-
-const createAltStateChangesElemResistsJunctionBulk = `-- name: CreateAltStateChangesElemResistsJunctionBulk :exec
-INSERT INTO j_alt_state_changes_elem_resists (data_hash, alt_state_change_id, elem_resist_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAltStateChangesElemResistsJunctionBulkParams struct {
-	DataHash         []string
-	AltStateChangeID []int32
-	ElemResistID     []int32
-}
-
-func (q *Queries) CreateAltStateChangesElemResistsJunctionBulk(ctx context.Context, arg CreateAltStateChangesElemResistsJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createAltStateChangesElemResistsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AltStateChangeID), pq.Array(arg.ElemResistID))
-	return err
-}
-
-const createAltStateChangesPropertiesJunctionBulk = `-- name: CreateAltStateChangesPropertiesJunctionBulk :exec
-INSERT INTO j_alt_state_changes_properties (data_hash, alt_state_change_id, property_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAltStateChangesPropertiesJunctionBulkParams struct {
-	DataHash         []string
-	AltStateChangeID []int32
-	PropertyID       []int32
-}
-
-func (q *Queries) CreateAltStateChangesPropertiesJunctionBulk(ctx context.Context, arg CreateAltStateChangesPropertiesJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createAltStateChangesPropertiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AltStateChangeID), pq.Array(arg.PropertyID))
-	return err
-}
-
-const createAltStateChangesStatusImmunitiesJunctionBulk = `-- name: CreateAltStateChangesStatusImmunitiesJunctionBulk :exec
-INSERT INTO j_alt_state_changes_status_immunities (data_hash, alt_state_change_id, status_condition_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateAltStateChangesStatusImmunitiesJunctionBulkParams struct {
-	DataHash          []string
-	AltStateChangeID  []int32
-	StatusConditionID []int32
-}
-
-func (q *Queries) CreateAltStateChangesStatusImmunitiesJunctionBulk(ctx context.Context, arg CreateAltStateChangesStatusImmunitiesJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createAltStateChangesStatusImmunitiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AltStateChangeID), pq.Array(arg.StatusConditionID))
-	return err
-}
-
 const createAlteredStateBulk = `-- name: CreateAlteredStateBulk :many
 INSERT INTO altered_states (data_hash, monster_id, condition, is_temporary)
 SELECT
@@ -215,6 +115,106 @@ func (q *Queries) CreateAlteredStateBulk(ctx context.Context, arg CreateAlteredS
 		return nil, err
 	}
 	return items, nil
+}
+
+const createAltsAutoAbilitiesJunctionBulk = `-- name: CreateAltsAutoAbilitiesJunctionBulk :exec
+INSERT INTO j_alts_auto_abilities (data_hash, alt_id, auto_ability_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltsAutoAbilitiesJunctionBulkParams struct {
+	DataHash      []string
+	AltID         []int32
+	AutoAbilityID []int32
+}
+
+func (q *Queries) CreateAltsAutoAbilitiesJunctionBulk(ctx context.Context, arg CreateAltsAutoAbilitiesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAltsAutoAbilitiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AltID), pq.Array(arg.AutoAbilityID))
+	return err
+}
+
+const createAltsBaseStatsJunctionBulk = `-- name: CreateAltsBaseStatsJunctionBulk :exec
+INSERT INTO j_alts_base_stats (data_hash, alt_id, base_stat_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltsBaseStatsJunctionBulkParams struct {
+	DataHash   []string
+	AltID      []int32
+	BaseStatID []int32
+}
+
+func (q *Queries) CreateAltsBaseStatsJunctionBulk(ctx context.Context, arg CreateAltsBaseStatsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAltsBaseStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AltID), pq.Array(arg.BaseStatID))
+	return err
+}
+
+const createAltsElemResistsJunctionBulk = `-- name: CreateAltsElemResistsJunctionBulk :exec
+INSERT INTO j_alts_elem_resists (data_hash, alt_id, elem_resist_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltsElemResistsJunctionBulkParams struct {
+	DataHash     []string
+	AltID        []int32
+	ElemResistID []int32
+}
+
+func (q *Queries) CreateAltsElemResistsJunctionBulk(ctx context.Context, arg CreateAltsElemResistsJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAltsElemResistsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AltID), pq.Array(arg.ElemResistID))
+	return err
+}
+
+const createAltsPropertiesJunctionBulk = `-- name: CreateAltsPropertiesJunctionBulk :exec
+INSERT INTO j_alts_properties (data_hash, alt_id, property_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltsPropertiesJunctionBulkParams struct {
+	DataHash   []string
+	AltID      []int32
+	PropertyID []int32
+}
+
+func (q *Queries) CreateAltsPropertiesJunctionBulk(ctx context.Context, arg CreateAltsPropertiesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAltsPropertiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AltID), pq.Array(arg.PropertyID))
+	return err
+}
+
+const createAltsStatusImmunitiesJunctionBulk = `-- name: CreateAltsStatusImmunitiesJunctionBulk :exec
+INSERT INTO j_alts_status_immunities (data_hash, alt_id, status_condition_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateAltsStatusImmunitiesJunctionBulkParams struct {
+	DataHash          []string
+	AltID             []int32
+	StatusConditionID []int32
+}
+
+func (q *Queries) CreateAltsStatusImmunitiesJunctionBulk(ctx context.Context, arg CreateAltsStatusImmunitiesJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createAltsStatusImmunitiesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.AltID), pq.Array(arg.StatusConditionID))
+	return err
 }
 
 const createEncounterAreaBulk = `-- name: CreateEncounterAreaBulk :many

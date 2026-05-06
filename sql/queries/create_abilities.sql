@@ -1,6 +1,6 @@
 -- name: CreateAbilityBulk :many
 INSERT INTO abilities (data_hash, name, version, specification, attributes_id, type)
- 
+ SELECT
     unnest(sqlc.arg('data_hash')::text[]), 
     unnest(sqlc.arg('name')::text[]), 
     unnest(sqlc.arg('version')::null_int[]), 

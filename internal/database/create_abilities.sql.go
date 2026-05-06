@@ -85,7 +85,7 @@ func (q *Queries) CreateAbilityAttributesBulk(ctx context.Context, arg CreateAbi
 
 const createAbilityBulk = `-- name: CreateAbilityBulk :many
 INSERT INTO abilities (data_hash, name, version, specification, attributes_id, type)
-SELECT 
+ SELECT
     unnest($1::text[]), 
     unnest($2::text[]), 
     unnest($3::null_int[]), 

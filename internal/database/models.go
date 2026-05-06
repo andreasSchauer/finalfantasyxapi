@@ -3033,7 +3033,7 @@ type AgilityTier struct {
 	CharacterMaxIcv sql.NullInt32
 }
 
-type AltStateChange struct {
+type Alt struct {
 	ID             int32
 	DataHash       string
 	AlteredStateID int32
@@ -3395,38 +3395,38 @@ type JAeonsWeaponArmor struct {
 	AeonEquipmentID int32
 }
 
-type JAltStateChangesAutoAbility struct {
-	ID               int32
-	DataHash         string
-	AltStateChangeID int32
-	AutoAbilityID    int32
+type JAltsAutoAbility struct {
+	ID            int32
+	DataHash      string
+	AltID         int32
+	AutoAbilityID int32
 }
 
-type JAltStateChangesBaseStat struct {
-	ID               int32
-	DataHash         string
-	AltStateChangeID int32
-	BaseStatID       int32
+type JAltsBaseStat struct {
+	ID         int32
+	DataHash   string
+	AltID      int32
+	BaseStatID int32
 }
 
-type JAltStateChangesElemResist struct {
-	ID               int32
-	DataHash         string
-	AltStateChangeID int32
-	ElemResistID     int32
+type JAltsElemResist struct {
+	ID           int32
+	DataHash     string
+	AltID        int32
+	ElemResistID int32
 }
 
-type JAltStateChangesProperty struct {
-	ID               int32
-	DataHash         string
-	AltStateChangeID int32
-	PropertyID       int32
+type JAltsProperty struct {
+	ID         int32
+	DataHash   string
+	AltID      int32
+	PropertyID int32
 }
 
-type JAltStateChangesStatusImmunity struct {
+type JAltsStatusImmunity struct {
 	ID                int32
 	DataHash          string
-	AltStateChangeID  int32
+	AltID             int32
 	StatusConditionID int32
 }
 
