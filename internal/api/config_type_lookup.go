@@ -142,7 +142,7 @@ func (t *TypeLookup) initAbilityType() {
 			Description: "Abilities that are only available in specific boss fights.",
 		},
 		{
-			Name:        string(database.AbilityTypeUnspecifiedAbility),
+			Name:        string(database.AbilityTypeMiscAbility),
 			Description: "Abilities that don't fit the other categories. Most of these are accessible from the start of the game.",
 		},
 		{
@@ -803,7 +803,7 @@ func (t *TypeLookup) initMixCategory() {
 			Description: "Mixes that heal the party.",
 		},
 		{
-			Name:        string(database.MixCategoryPositiveStatus),
+			Name:        string(database.MixCategoryBuffs),
 			Description: "Mixes that grant positive status effects to the party.",
 		},
 		{
@@ -1651,6 +1651,10 @@ func (t *TypeLookup) initTargetType() {
 			Description: "The action targets its user.",
 		},
 		{
+			Name:        string(database.TargetTypeSelfAllEnemies),
+			Description: "The action targets its user and all units of the user's opposing party.",
+		},
+		{
 			Name:        string(database.TargetTypeSingleAlly),
 			Description: "The action targets one unit of the user's party.",
 		},
@@ -1689,6 +1693,10 @@ func (t *TypeLookup) initTargetType() {
 		{
 			Name:        string(database.TargetTypeEveryone),
 			Description: "The action targets every unit on the field.",
+		},
+		{
+			Name:        string(database.TargetTypeEveryoneElse),
+			Description: "The action targets every unit on the field except its user.",
 		},
 	}
 

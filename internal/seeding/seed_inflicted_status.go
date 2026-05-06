@@ -118,8 +118,8 @@ func (l *Lookup) extractInflictedStatusses() ([]InflictedStatus, error) {
 		statusses = append(statusses, statussesNew...)
 	}
 
-	for i := range l.json.unspecifiedAbilities {
-		ability := &l.json.unspecifiedAbilities[i]
+	for i := range l.json.miscAbilities {
+		ability := &l.json.miscAbilities[i]
 
 		statussesNew, err := l.prepareAbilityInflictedStatusses(ability.BattleInteractions)
 		if err != nil {

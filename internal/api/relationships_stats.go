@@ -57,9 +57,12 @@ func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat
 		return Stat{}, err
 	}
 
-	properties, err := getResourcesDbItem(cfg, r, cfg.e.properties, stat, queries.Properties)
-	if err != nil {
-		return Stat{}, err
+	var properties []NamedAPIResource
+	if queries.Properties != nil {
+		properties, err = getResourcesDbItem(cfg, r, cfg.e.properties, stat, queries.Properties)
+		if err != nil {
+			return Stat{}, err
+		}
 	}
 
 	rel := Stat{
@@ -94,7 +97,7 @@ func getStatQueries(cfg *Config, r *http.Request) (StatQueries, error) {
 			ItemAbilities:      cfg.db.GetStatItemAbilityIDsStatChange,
 			TriggerCommands:    cfg.db.GetStatTriggerCommandIDsStatChange,
 			StatusConditions:   cfg.db.GetStatStatusConditionIDsStatChange,
-			Properties:         cfg.db.GetStatPropertyIDsStatChange,
+			Properties:         nil,
 		}
 	} else {
 		queries = StatQueries{

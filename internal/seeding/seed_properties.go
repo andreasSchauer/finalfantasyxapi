@@ -2,19 +2,25 @@ package seeding
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func (l *Lookup) loop1SeedProperties(qtx *database.Queries, ctx context.Context) error {
-	properties := dedupeRows(l.json.properties, l.Hashes)
+func (l *Lookup) loop3SeedProperties(qtx *database.Queries, ctx context.Context) error {
+	properties, err := l.extractProperties()
+	if err != nil {
+		return err
+	}
 
 	params := database.CreatePropertyBulkParams{
-		DataHash:       make([]string, len(properties)),
-		Name:           make([]string, len(properties)),
-		Effect:         make([]string, len(properties)),
-		NullifyArmored: make([]database.NullNullifyArmored, len(properties)),
+		DataHash:         make([]string, len(properties)),
+		Name:             make([]string, len(properties)),
+		Effect:           make([]string, len(properties)),
+		NullifyArmored:   make([]database.NullNullifyArmored, len(properties)),
+		ModifierChangeID: make([]sql.NullInt32, len(properties)),
 	}
 
 	for i, p := range properties {
@@ -22,6 +28,7 @@ func (l *Lookup) loop1SeedProperties(qtx *database.Queries, ctx context.Context)
 		params.Name[i] = p.Name
 		params.Effect[i] = p.Effect
 		params.NullifyArmored[i] = database.ToNullNullifyArmored(p.NullifyArmored)
+		params.ModifierChangeID[i] = h.ObjPtrToNullInt32ID(p.ModifierChange)
 	}
 
 	dbRows, err := qtx.CreatePropertyBulk(ctx, params)
@@ -40,39 +47,26 @@ func (l *Lookup) loop1SeedProperties(qtx *database.Queries, ctx context.Context)
 	return nil
 }
 
-func (l *Lookup) completeProperties() error {
+func (l *Lookup) extractProperties() ([]Property, error) {
+	properties := []Property{}
+	var err error
+
 	for i := range l.json.properties {
 		property := &l.json.properties[i]
 
-		err := assignIDs(l, property.ModifierChanges)
-		if err != nil {
-			return err
+		if property.ModifierChange != nil {
+			property.ModifierChange.ID, err = l.getHashID(property.ModifierChange)
+			if err != nil {
+				return nil, err
+			}
 		}
 
-		l.Properties[Key(property)] = *property
-		l.PropertiesID[property.ID] = *property
+		properties = append(properties, *property)
 	}
 
-	return nil
+	return dedupeRows(properties, l.Hashes), nil
 }
 
-func (l *Lookup) getPropertyModifierChanges(p Property) ([]ModifierChange, error) {
-	return p.ModifierChanges, nil
-}
-
-func (l *Lookup) seedJuncPropertiesModifierChanges(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "properties + modifier changes"
-	jParams, err := processJunctions(l, desc, l.json.properties, l.getPropertyModifierChanges)
-	if err != nil {
-		return err
-	}
-
-	return qtx.CreatePropertiesModifierChangesJunctionBulk(ctx, database.CreatePropertiesModifierChangesJunctionBulkParams{
-		DataHash:         jParams.DataHashes,
-		PropertyID:       jParams.ParentIDs,
-		ModifierChangeID: jParams.ChildIDs,
-	})
-}
 
 func (l *Lookup) getPropertyRelatedStats(p Property) ([]Stat, error) {
 	return getResources(p.RelatedStats, l.Stats)

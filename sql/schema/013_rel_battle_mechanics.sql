@@ -12,6 +12,10 @@ ADD COLUMN added_elem_resist_id INTEGER REFERENCES elemental_resists(id),
 ADD COLUMN inflicted_delay_id INTEGER REFERENCES inflicted_delays(id);
 
 
+ALTER TABLE properties
+ADD COLUMN modifier_change_id INTEGER REFERENCES modifier_changes(id);
+
+
 -- 5
 CREATE TABLE od_mode_actions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -69,25 +73,7 @@ CREATE TABLE j_properties_related_stats (
 );
 
 
-CREATE TABLE j_properties_stat_changes (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    property_id INTEGER NOT NULL REFERENCES properties(id),
-    stat_change_id INTEGER NOT NULL REFERENCES stat_changes(id)
-);
-
-
-CREATE TABLE j_properties_modifier_changes (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    property_id INTEGER NOT NULL REFERENCES properties(id),
-    modifier_change_id INTEGER NOT NULL REFERENCES modifier_changes(id)
-);
-
-
 -- +goose Down
-DROP TABLE IF EXISTS j_properties_modifier_changes;
-DROP TABLE IF EXISTS j_properties_stat_changes;
 DROP TABLE IF EXISTS j_properties_related_stats;
 DROP TABLE IF EXISTS j_status_conditions_modifier_changes;
 DROP TABLE IF EXISTS j_status_conditions_stat_changes;
@@ -95,6 +81,10 @@ DROP TABLE IF EXISTS j_status_conditions_removed_status_conditions;
 DROP TABLE IF EXISTS j_status_conditions_related_stats;
 DROP TABLE IF EXISTS j_overdrive_modes_actions_to_learn;
 DROP TABLE IF EXISTS od_mode_actions;
+
+
+ALTER TABLE properties
+DROP COLUMN IF EXISTS modifier_change_id;
 
 
 ALTER TABLE status_conditions

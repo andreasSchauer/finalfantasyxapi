@@ -142,8 +142,8 @@ func refToNamedApiResource(cfg *Config, ref seeding.AbilityReference) NamedAPIRe
 	var res NamedAPIResource
 
 	switch database.AbilityType(ref.AbilityType) {
-	case database.AbilityTypeUnspecifiedAbility:
-		res = nameToNamedAPIResource(cfg, cfg.e.unspecifiedAbilities, ref.Name, ref.Version)
+	case database.AbilityTypeMiscAbility:
+		res = nameToNamedAPIResource(cfg, cfg.e.miscAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypePlayerAbility:
 		res = nameToNamedAPIResource(cfg, cfg.e.playerAbilities, ref.Name, ref.Version)

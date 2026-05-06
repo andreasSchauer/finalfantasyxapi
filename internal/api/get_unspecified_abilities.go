@@ -6,13 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getUnspecifiedAbility(r *http.Request, i handlerInput[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList], id int32) (UnspecifiedAbility, error) {
+func (cfg *Config) getMiscAbility(r *http.Request, i handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList], id int32) (MiscAbility, error) {
 	ability, err := verifyParamsAndGet(cfg, r, i, id)
 	if err != nil {
-		return UnspecifiedAbility{}, err
+		return MiscAbility{}, err
 	}
 
-	response := UnspecifiedAbility{
+	response := MiscAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
 		Version:            ability.Version,
@@ -33,24 +33,24 @@ func (cfg *Config) getUnspecifiedAbility(r *http.Request, i handlerInput[seeding
 
 	battleInteractions, err := applyUser(cfg, r, i, response, "ability_user")
 	if err != nil {
-		return UnspecifiedAbility{}, err
+		return MiscAbility{}, err
 	}
 	response.BattleInteractions = battleInteractions
 
 	return response, nil
 }
 
-func (cfg *Config) retrieveUnspecifiedAbilities(r *http.Request, i handlerInput[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+func (cfg *Config) retrieveMiscAbilities(r *http.Request, i handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	resources, err := retrieveAPIResources(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(intListQuery(cfg, r, i, resources, "rank", cfg.db.GetUnspecifiedAbilityIDsByRank)),
-		frl(nameIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetUnspecifiedAbilityIDsByCharClass)),
-		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetUnspecifiedAbilityIDsByCanCopycat)),
-		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetUnspecifiedAbilityIDsByAppearsInHelpBar)),
-		frl(boolQuery2(cfg, r, i, resources, "user_atk", cfg.db.GetUnspecifiedAbilityIDsBasedOnUserAttack)),
+		frl(intListQuery(cfg, r, i, resources, "rank", cfg.db.GetMiscAbilityIDsByRank)),
+		frl(nameIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass)),
+		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetMiscAbilityIDsByCanCopycat)),
+		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetMiscAbilityIDsByAppearsInHelpBar)),
+		frl(boolQuery2(cfg, r, i, resources, "user_atk", cfg.db.GetMiscAbilityIDsBasedOnUserAttack)),
 	})
 }

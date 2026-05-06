@@ -28,8 +28,8 @@ func lookupAbilityBattleInteractions(cfg *Config, ability seeding.Ability) []see
 		lookup, _ := seeding.GetResource(ability.Name, cfg.l.Items)
 		seedBattleInteractions = lookup.BattleInteractions
 
-	case database.AbilityTypeUnspecifiedAbility:
-		lookup, _ := seeding.GetResource(abilityRef, cfg.l.UnspecifiedAbilities)
+	case database.AbilityTypeMiscAbility:
+		lookup, _ := seeding.GetResource(abilityRef, cfg.l.MiscAbilities)
 		seedBattleInteractions = lookup.BattleInteractions
 
 	case database.AbilityTypeOverdriveAbility:

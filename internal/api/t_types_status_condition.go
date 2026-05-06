@@ -22,19 +22,19 @@ func compareStatusConditions(test test, exp expStatusCondition, got StatusCondit
 }
 
 type testStatusInfliction struct {
-	playerAbilities      []int32
-	overdriveAbilities   []int32
-	itemAbilities        []int32
-	unspecifiedAbilities []int32
-	enemyAbilities       []int32
-	statusConditions     []int32
+	playerAbilities    []int32
+	overdriveAbilities []int32
+	itemAbilities      []int32
+	miscAbilities      []int32
+	enemyAbilities     []int32
+	statusConditions   []int32
 }
 
 func compareStatusInflictions(test test, fieldName string, exp testStatusInfliction, got StatusInfliction) {
 	checkResIDsInSlice(test, fieldName+" - player abilities", test.cfg.e.playerAbilities.endpoint, exp.playerAbilities, got.PlayerAbilities)
 	checkResIDsInSlice(test, fieldName+" - overdrive abilities", test.cfg.e.overdriveAbilities.endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
 	checkResIDsInSlice(test, fieldName+" - item abilities", test.cfg.e.itemAbilities.endpoint, exp.itemAbilities, got.ItemAbilities)
-	checkResIDsInSlice(test, fieldName+" - unspecified abilities", test.cfg.e.unspecifiedAbilities.endpoint, exp.unspecifiedAbilities, got.UnspecifiedAbilities)
+	checkResIDsInSlice(test, fieldName+" - misc abilities", test.cfg.e.miscAbilities.endpoint, exp.miscAbilities, got.MiscAbilities)
 	checkResIDsInSlice(test, fieldName+" - enemy abilities", test.cfg.e.enemyAbilities.endpoint, exp.enemyAbilities, got.EnemyAbilities)
 	checkResIDsInSlice(test, fieldName+" - status conditions", test.cfg.e.statusConditions.endpoint, exp.statusConditions, got.StatusConditions)
 }

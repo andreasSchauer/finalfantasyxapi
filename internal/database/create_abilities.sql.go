@@ -184,6 +184,89 @@ func (q *Queries) CreateEnemyAbilityBulk(ctx context.Context, arg CreateEnemyAbi
 	return items, nil
 }
 
+const createMiscAbilitiesLearnedByJunctionBulk = `-- name: CreateMiscAbilitiesLearnedByJunctionBulk :exec
+INSERT INTO j_misc_abilities_learned_by (data_hash, misc_ability_id, character_class_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::int[])
+ON CONFLICT(data_hash) DO NOTHING
+`
+
+type CreateMiscAbilitiesLearnedByJunctionBulkParams struct {
+	DataHash         []string
+	MiscAbilityID    []int32
+	CharacterClassID []int32
+}
+
+func (q *Queries) CreateMiscAbilitiesLearnedByJunctionBulk(ctx context.Context, arg CreateMiscAbilitiesLearnedByJunctionBulkParams) error {
+	_, err := q.db.ExecContext(ctx, createMiscAbilitiesLearnedByJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.MiscAbilityID), pq.Array(arg.CharacterClassID))
+	return err
+}
+
+const createMiscAbilityBulk = `-- name: CreateMiscAbilityBulk :many
+INSERT INTO misc_abilities (data_hash, ability_id, description, effect, cursor, topmenu_id, submenu_id, open_submenu_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::int[]),
+    unnest($3::text[]),
+    unnest($4::text[]),
+    unnest($5::null_target_type[]),
+    unnest($6::null_int[]),
+    unnest($7::null_int[]),
+    unnest($8::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateMiscAbilityBulkParams struct {
+	DataHash      []string
+	AbilityID     []int32
+	Description   []string
+	Effect        []string
+	Cursor        []NullTargetType
+	TopmenuID     []sql.NullInt32
+	SubmenuID     []sql.NullInt32
+	OpenSubmenuID []sql.NullInt32
+}
+
+type CreateMiscAbilityBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateMiscAbilityBulk(ctx context.Context, arg CreateMiscAbilityBulkParams) ([]CreateMiscAbilityBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createMiscAbilityBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AbilityID),
+		pq.Array(arg.Description),
+		pq.Array(arg.Effect),
+		pq.Array(arg.Cursor),
+		pq.Array(arg.TopmenuID),
+		pq.Array(arg.SubmenuID),
+		pq.Array(arg.OpenSubmenuID),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateMiscAbilityBulkRow
+	for rows.Next() {
+		var i CreateMiscAbilityBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const createOverdriveAbilitiesRelatedStatsJunctionBulk = `-- name: CreateOverdriveAbilitiesRelatedStatsJunctionBulk :exec
 INSERT INTO j_overdrive_abilities_related_stats (data_hash, overdrive_ability_id, stat_id)
 SELECT
@@ -579,87 +662,4 @@ type CreateTriggerCommandsRelatedStatsJunctionBulkParams struct {
 func (q *Queries) CreateTriggerCommandsRelatedStatsJunctionBulk(ctx context.Context, arg CreateTriggerCommandsRelatedStatsJunctionBulkParams) error {
 	_, err := q.db.ExecContext(ctx, createTriggerCommandsRelatedStatsJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.TriggerCommandID), pq.Array(arg.StatID))
 	return err
-}
-
-const createUnspecifiedAbilitiesLearnedByJunctionBulk = `-- name: CreateUnspecifiedAbilitiesLearnedByJunctionBulk :exec
-INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateUnspecifiedAbilitiesLearnedByJunctionBulkParams struct {
-	DataHash             []string
-	UnspecifiedAbilityID []int32
-	CharacterClassID     []int32
-}
-
-func (q *Queries) CreateUnspecifiedAbilitiesLearnedByJunctionBulk(ctx context.Context, arg CreateUnspecifiedAbilitiesLearnedByJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createUnspecifiedAbilitiesLearnedByJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.UnspecifiedAbilityID), pq.Array(arg.CharacterClassID))
-	return err
-}
-
-const createUnspecifiedAbilityBulk = `-- name: CreateUnspecifiedAbilityBulk :many
-INSERT INTO unspecified_abilities (data_hash, ability_id, description, effect, cursor, topmenu_id, submenu_id, open_submenu_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::text[]),
-    unnest($4::text[]),
-    unnest($5::null_target_type[]),
-    unnest($6::null_int[]),
-    unnest($7::null_int[]),
-    unnest($8::null_int[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
-RETURNING id, data_hash
-`
-
-type CreateUnspecifiedAbilityBulkParams struct {
-	DataHash      []string
-	AbilityID     []int32
-	Description   []string
-	Effect        []string
-	Cursor        []NullTargetType
-	TopmenuID     []sql.NullInt32
-	SubmenuID     []sql.NullInt32
-	OpenSubmenuID []sql.NullInt32
-}
-
-type CreateUnspecifiedAbilityBulkRow struct {
-	ID       int32
-	DataHash string
-}
-
-func (q *Queries) CreateUnspecifiedAbilityBulk(ctx context.Context, arg CreateUnspecifiedAbilityBulkParams) ([]CreateUnspecifiedAbilityBulkRow, error) {
-	rows, err := q.db.QueryContext(ctx, createUnspecifiedAbilityBulk,
-		pq.Array(arg.DataHash),
-		pq.Array(arg.AbilityID),
-		pq.Array(arg.Description),
-		pq.Array(arg.Effect),
-		pq.Array(arg.Cursor),
-		pq.Array(arg.TopmenuID),
-		pq.Array(arg.SubmenuID),
-		pq.Array(arg.OpenSubmenuID),
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []CreateUnspecifiedAbilityBulkRow
-	for rows.Next() {
-		var i CreateUnspecifiedAbilityBulkRow
-		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }

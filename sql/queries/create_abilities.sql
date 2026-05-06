@@ -22,8 +22,8 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 
 
--- name: CreateUnspecifiedAbilityBulk :many
-INSERT INTO unspecified_abilities (data_hash, ability_id, description, effect, cursor, topmenu_id, submenu_id, open_submenu_id)
+-- name: CreateMiscAbilityBulk :many
+INSERT INTO misc_abilities (data_hash, ability_id, description, effect, cursor, topmenu_id, submenu_id, open_submenu_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('ability_id')::int[]),
@@ -123,11 +123,11 @@ RETURNING id, data_hash;
 
 
 
--- name: CreateUnspecifiedAbilitiesLearnedByJunctionBulk :exec
-INSERT INTO j_unspecified_abilities_learned_by (data_hash, unspecified_ability_id, character_class_id)
+-- name: CreateMiscAbilitiesLearnedByJunctionBulk :exec
+INSERT INTO j_misc_abilities_learned_by (data_hash, misc_ability_id, character_class_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
-    unnest(sqlc.arg('unspecified_ability_id')::int[]),
+    unnest(sqlc.arg('misc_ability_id')::int[]),
     unnest(sqlc.arg('character_class_id')::int[])
 ON CONFLICT(data_hash) DO NOTHING;
 

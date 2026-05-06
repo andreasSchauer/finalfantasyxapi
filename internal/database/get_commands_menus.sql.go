@@ -132,7 +132,7 @@ const getSubmenuAbilityIDs = `-- name: GetSubmenuAbilityIDs :many
 SELECT a.id
 FROM abilities a
 LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN unspecified_abilities ua ON ua.ability_id = a.id
+LEFT JOIN misc_abilities ua ON ua.ability_id = a.id
 WHERE pa.submenu_id = $1 OR ua.submenu_id = $1
 ORDER BY a.id
 `
@@ -191,7 +191,7 @@ const getSubmenuOpenedByAbilityID = `-- name: GetSubmenuOpenedByAbilityID :one
 SELECT a.id
 FROM abilities a
 LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN unspecified_abilities ua ON ua.ability_id = a.id
+LEFT JOIN misc_abilities ua ON ua.ability_id = a.id
 WHERE pa.open_submenu_id = $1 OR ua.open_submenu_id = $1
 `
 
@@ -248,7 +248,7 @@ const getTopmenuAbilityIDs = `-- name: GetTopmenuAbilityIDs :many
 SELECT a.id
 FROM abilities a
 LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN unspecified_abilities ua ON ua.ability_id = a.id
+LEFT JOIN misc_abilities ua ON ua.ability_id = a.id
 LEFT JOIN trigger_commands tc ON tc.ability_id = a.id
 WHERE pa.topmenu_id = $1 OR ua.topmenu_id = $1 OR tc.topmenu_id = $1
 ORDER BY a.id

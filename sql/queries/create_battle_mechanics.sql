@@ -136,12 +136,13 @@ RETURNING id, data_hash;
 
 
 -- name: CreatePropertyBulk :many
-INSERT INTO properties (data_hash, name, effect, nullify_armored)
+INSERT INTO properties (data_hash, name, effect, nullify_armored, modifier_change_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[]),
     unnest(sqlc.arg('effect')::text[]),
-    unnest(sqlc.arg('nullify_armored')::null_nullify_armored[])
+    unnest(sqlc.arg('nullify_armored')::null_nullify_armored[]),
+    unnest(sqlc.arg('modifier_change_id')::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 
@@ -214,22 +215,4 @@ SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('property_id')::int[]),
     unnest(sqlc.arg('stat_id')::int[])
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreatePropertiesStatChangesJunctionBulk :exec
-INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
-SELECT
-    unnest(sqlc.arg('data_hash')::text[]),
-    unnest(sqlc.arg('property_id')::int[]),
-    unnest(sqlc.arg('stat_change_id')::int[])
-ON CONFLICT(data_hash) DO NOTHING;
-
-
--- name: CreatePropertiesModifierChangesJunctionBulk :exec
-INSERT INTO j_properties_modifier_changes (data_hash, property_id, modifier_change_id)
-SELECT
-    unnest(sqlc.arg('data_hash')::text[]),
-    unnest(sqlc.arg('property_id')::int[]),
-    unnest(sqlc.arg('modifier_change_id')::int[])
 ON CONFLICT(data_hash) DO NOTHING;

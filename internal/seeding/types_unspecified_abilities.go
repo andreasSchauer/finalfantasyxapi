@@ -7,7 +7,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type UnspecifiedAbility struct {
+type MiscAbility struct {
 	ID int32
 	Ability
 	TopmenuID          *int32
@@ -24,7 +24,7 @@ type UnspecifiedAbility struct {
 	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
-func (u UnspecifiedAbility) ToHashFields() []any {
+func (u MiscAbility) ToHashFields() []any {
 	return []any{
 		fmt.Sprintf("%T", u),
 		u.Ability.ID,
@@ -37,30 +37,30 @@ func (u UnspecifiedAbility) ToHashFields() []any {
 	}
 }
 
-func (u UnspecifiedAbility) ToKeyFields() []any {
+func (u MiscAbility) ToKeyFields() []any {
 	return []any{
 		u.Ability.Name,
 		h.DerefOrNil(u.Ability.Version),
 	}
 }
 
-func (u UnspecifiedAbility) GetID() int32 {
+func (u MiscAbility) GetID() int32 {
 	return u.ID
 }
 
-func (u UnspecifiedAbility) GetAbilityRef() AbilityReference {
+func (u MiscAbility) GetAbilityRef() AbilityReference {
 	return AbilityReference{
 		Name:        u.Name,
 		Version:     u.Version,
-		AbilityType: string(database.AbilityTypeUnspecifiedAbility),
+		AbilityType: string(database.AbilityTypeMiscAbility),
 	}
 }
 
-func (u UnspecifiedAbility) Error() string {
-	return fmt.Sprintf("unspecified ability '%s'", h.NameToString(u.Name, u.Version, u.Specification))
+func (u MiscAbility) Error() string {
+	return fmt.Sprintf("misc ability '%s'", h.NameToString(u.Name, u.Version, u.Specification))
 }
 
-func (u UnspecifiedAbility) GetResParamsNamed() ResParamsNamed {
+func (u MiscAbility) GetResParamsNamed() ResParamsNamed {
 	return ResParamsNamed{
 		ID:            u.ID,
 		Name:          u.Name,

@@ -27,7 +27,7 @@ CREATE TYPE node_type AS ENUM('hp', 'mp', 'strength', 'defense', 'magic', 'magic
 CREATE TYPE key_item_category AS ENUM ('celestial', 'jecht-sphere', 'other', 'primer', 'story');
 
 
-CREATE TYPE mix_category AS ENUM ('9999-damage', 'critical-hits', 'fire-elemental', 'gravity-based', 'hp-mp', 'ice-elemental', 'lightning-elemental', 'non-elemental', 'overdrive-speed', 'positive-status', 'recovery', 'water-elemental');
+CREATE TYPE mix_category AS ENUM ('9999-damage', 'buffs', 'critical-hits', 'fire-elemental', 'gravity-based', 'hp-mp', 'ice-elemental', 'lightning-elemental', 'non-elemental', 'overdrive-speed', 'recovery', 'water-elemental');
 
 
 

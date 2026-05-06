@@ -191,8 +191,8 @@ func createTriggerCommandSimple(cfg *Config, _ *http.Request, id int32, _ Subsec
 	return abilitySimple, nil
 }
 
-func createUnspecifiedAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.unspecifiedAbilities
+func createMiscAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+	i := cfg.e.miscAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{

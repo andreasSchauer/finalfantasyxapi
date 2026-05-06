@@ -431,26 +431,6 @@ func (q *Queries) CreateOverdriveModesActionsToLearnJunctionBulk(ctx context.Con
 	return err
 }
 
-const createPropertiesModifierChangesJunctionBulk = `-- name: CreatePropertiesModifierChangesJunctionBulk :exec
-INSERT INTO j_properties_modifier_changes (data_hash, property_id, modifier_change_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreatePropertiesModifierChangesJunctionBulkParams struct {
-	DataHash         []string
-	PropertyID       []int32
-	ModifierChangeID []int32
-}
-
-func (q *Queries) CreatePropertiesModifierChangesJunctionBulk(ctx context.Context, arg CreatePropertiesModifierChangesJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createPropertiesModifierChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.PropertyID), pq.Array(arg.ModifierChangeID))
-	return err
-}
-
 const createPropertiesRelatedStatsJunctionBulk = `-- name: CreatePropertiesRelatedStatsJunctionBulk :exec
 INSERT INTO j_properties_related_stats(data_hash, property_id, stat_id)
 SELECT
@@ -471,42 +451,24 @@ func (q *Queries) CreatePropertiesRelatedStatsJunctionBulk(ctx context.Context, 
 	return err
 }
 
-const createPropertiesStatChangesJunctionBulk = `-- name: CreatePropertiesStatChangesJunctionBulk :exec
-INSERT INTO j_properties_stat_changes (data_hash, property_id, stat_change_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreatePropertiesStatChangesJunctionBulkParams struct {
-	DataHash     []string
-	PropertyID   []int32
-	StatChangeID []int32
-}
-
-func (q *Queries) CreatePropertiesStatChangesJunctionBulk(ctx context.Context, arg CreatePropertiesStatChangesJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createPropertiesStatChangesJunctionBulk, pq.Array(arg.DataHash), pq.Array(arg.PropertyID), pq.Array(arg.StatChangeID))
-	return err
-}
-
 const createPropertyBulk = `-- name: CreatePropertyBulk :many
-INSERT INTO properties (data_hash, name, effect, nullify_armored)
+INSERT INTO properties (data_hash, name, effect, nullify_armored, modifier_change_id)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),
     unnest($3::text[]),
-    unnest($4::null_nullify_armored[])
+    unnest($4::null_nullify_armored[]),
+    unnest($5::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
 
 type CreatePropertyBulkParams struct {
-	DataHash       []string
-	Name           []string
-	Effect         []string
-	NullifyArmored []NullNullifyArmored
+	DataHash         []string
+	Name             []string
+	Effect           []string
+	NullifyArmored   []NullNullifyArmored
+	ModifierChangeID []sql.NullInt32
 }
 
 type CreatePropertyBulkRow struct {
@@ -520,6 +482,7 @@ func (q *Queries) CreatePropertyBulk(ctx context.Context, arg CreatePropertyBulk
 		pq.Array(arg.Name),
 		pq.Array(arg.Effect),
 		pq.Array(arg.NullifyArmored),
+		pq.Array(arg.ModifierChangeID),
 	)
 	if err != nil {
 		return nil, err

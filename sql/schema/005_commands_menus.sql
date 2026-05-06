@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TYPE target_type AS ENUM ('self', 'single-ally', 'single-enemy', 'single-target', 'random-ally', 'random-enemy', 'all-allies', 'all-enemies', 'target-party', 'n-targets', 'everyone');
+CREATE TYPE target_type AS ENUM ('self', 'self-all-enemies', 'single-ally', 'single-enemy', 'single-target', 'random-ally', 'random-enemy', 'all-allies', 'all-enemies', 'target-party', 'n-targets', 'everyone', 'everyone-else');
 CREATE DOMAIN null_target_type AS target_type;
 
 

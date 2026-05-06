@@ -66,13 +66,13 @@ type QueryLookup struct {
 	characterClasses map[string]QueryParam
 	monsters         map[string]QueryParam
 
-	abilities            map[string]QueryParam
-	playerAbilities      map[string]QueryParam
-	overdriveAbilities   map[string]QueryParam
-	itemAbilities        map[string]QueryParam
-	triggerCommands      map[string]QueryParam
-	unspecifiedAbilities map[string]QueryParam
-	enemyAbilities       map[string]QueryParam
+	abilities          map[string]QueryParam
+	playerAbilities    map[string]QueryParam
+	overdriveAbilities map[string]QueryParam
+	itemAbilities      map[string]QueryParam
+	triggerCommands    map[string]QueryParam
+	miscAbilities      map[string]QueryParam
+	enemyAbilities     map[string]QueryParam
 
 	aeonCommands      map[string]QueryParam
 	overdriveCommands map[string]QueryParam
@@ -165,7 +165,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initOverdriveAbilitiesParams()
 	cfg.initItemAbilitiesParams()
 	cfg.initTriggerCommandsParams()
-	cfg.initUnspecifiedAbilitiesParams()
+	cfg.initMiscAbilitiesParams()
 	cfg.initEnemyAbilitiesParams()
 
 	cfg.q.aeonCommands = cfg.assignDefaultParams()
@@ -2023,11 +2023,11 @@ func (cfg *Config) initTriggerCommandsParams() {
 	cfg.q.triggerCommands = paramsMap
 }
 
-func (cfg *Config) initUnspecifiedAbilitiesParams() {
+func (cfg *Config) initMiscAbilitiesParams() {
 	params := []QueryParam{
 		{
 			Name:        "ability_user",
-			Description: "If an unspecified ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
+			Description: "If an misc ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
 			Type:        "name/id",
 			ExampleVals: []string{"wakka", "valefor"},
 			ForList:     false,
@@ -2036,7 +2036,7 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 		},
 		{
 			Name:           "bomb_wpn",
-			Description:    "If an unspecified ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Description:    "If an misc ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
 			Type:           "bool",
 			ForList:        false,
 			ForSingle:      true,
@@ -2044,28 +2044,28 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 		},
 		{
 			Name:        "rank",
-			Description: "Searches for unspecified abilities with the specified ranks.",
+			Description: "Searches for misc abilities with the specified ranks.",
 			Type:        "int-list",
 			ForList:     true,
 			ForSingle:   false,
 		},
 		{
 			Name:        "copycat",
-			Description: "Searches for unspecified abilities that can be copied by 'copycat'.",
+			Description: "Searches for misc abilities that can be copied by 'copycat'.",
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 		{
 			Name:        "help_bar",
-			Description: "Searches for unspecified abilities whose names appear in the help bar.",
+			Description: "Searches for misc abilities whose names appear in the help bar.",
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
 		},
 		{
 			Name:        "user",
-			Description: "Searches for unspecified abilities that are learned by the specified character class.",
+			Description: "Searches for misc abilities that are learned by the specified character class.",
 			Type:        "name/id",
 			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
@@ -2074,7 +2074,7 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 		},
 		{
 			Name:        "user_atk",
-			Description: "Searches for unspecified abilities whose range, shatter rate, accuracy, and damage constant are based on the user's attack.",
+			Description: "Searches for misc abilities whose range, shatter rate, accuracy, and damage constant are based on the user's attack.",
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
@@ -2082,7 +2082,7 @@ func (cfg *Config) initUnspecifiedAbilitiesParams() {
 	}
 
 	paramsMap := cfg.completeQueryParamsInit(params, true)
-	cfg.q.unspecifiedAbilities = paramsMap
+	cfg.q.miscAbilities = paramsMap
 }
 
 func (cfg *Config) initEnemyAbilitiesParams() {

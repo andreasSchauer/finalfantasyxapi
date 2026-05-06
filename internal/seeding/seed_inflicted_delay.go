@@ -83,7 +83,7 @@ func (l *Lookup) extractInflictedDelays() []InflictedDelay {
 		}
 	}
 
-	for _, ability := range l.json.unspecifiedAbilities {
+	for _, ability := range l.json.miscAbilities {
 		for _, bi := range ability.BattleInteractions {
 			if bi.InflictedDelay != nil {
 				delays = append(delays, *bi.InflictedDelay)

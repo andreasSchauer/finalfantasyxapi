@@ -57,12 +57,12 @@ func (ns NullAaActivationCondition) Value() (driver.Value, error) {
 type AbilityType string
 
 const (
-	AbilityTypeUnspecifiedAbility AbilityType = "unspecified-ability"
-	AbilityTypePlayerAbility      AbilityType = "player-ability"
-	AbilityTypeEnemyAbility       AbilityType = "enemy-ability"
-	AbilityTypeOverdriveAbility   AbilityType = "overdrive-ability"
-	AbilityTypeTriggerCommand     AbilityType = "trigger-command"
-	AbilityTypeItemAbility        AbilityType = "item-ability"
+	AbilityTypeMiscAbility      AbilityType = "misc-ability"
+	AbilityTypePlayerAbility    AbilityType = "player-ability"
+	AbilityTypeEnemyAbility     AbilityType = "enemy-ability"
+	AbilityTypeOverdriveAbility AbilityType = "overdrive-ability"
+	AbilityTypeTriggerCommand   AbilityType = "trigger-command"
+	AbilityTypeItemAbility      AbilityType = "item-ability"
 )
 
 func (e *AbilityType) Scan(src interface{}) error {
@@ -1843,6 +1843,7 @@ type MixCategory string
 
 const (
 	MixCategory9999Damage         MixCategory = "9999-damage"
+	MixCategoryBuffs              MixCategory = "buffs"
 	MixCategoryCriticalHits       MixCategory = "critical-hits"
 	MixCategoryFireElemental      MixCategory = "fire-elemental"
 	MixCategoryGravityBased       MixCategory = "gravity-based"
@@ -1851,7 +1852,6 @@ const (
 	MixCategoryLightningElemental MixCategory = "lightning-elemental"
 	MixCategoryNonElemental       MixCategory = "non-elemental"
 	MixCategoryOverdriveSpeed     MixCategory = "overdrive-speed"
-	MixCategoryPositiveStatus     MixCategory = "positive-status"
 	MixCategoryRecovery           MixCategory = "recovery"
 	MixCategoryWaterElemental     MixCategory = "water-elemental"
 )
@@ -2752,17 +2752,19 @@ func (ns NullStatusConditionCategory) Value() (driver.Value, error) {
 type TargetType string
 
 const (
-	TargetTypeSelf         TargetType = "self"
-	TargetTypeSingleAlly   TargetType = "single-ally"
-	TargetTypeSingleEnemy  TargetType = "single-enemy"
-	TargetTypeSingleTarget TargetType = "single-target"
-	TargetTypeRandomAlly   TargetType = "random-ally"
-	TargetTypeRandomEnemy  TargetType = "random-enemy"
-	TargetTypeAllAllies    TargetType = "all-allies"
-	TargetTypeAllEnemies   TargetType = "all-enemies"
-	TargetTypeTargetParty  TargetType = "target-party"
-	TargetTypeNTargets     TargetType = "n-targets"
-	TargetTypeEveryone     TargetType = "everyone"
+	TargetTypeSelf           TargetType = "self"
+	TargetTypeSelfAllEnemies TargetType = "self-all-enemies"
+	TargetTypeSingleAlly     TargetType = "single-ally"
+	TargetTypeSingleEnemy    TargetType = "single-enemy"
+	TargetTypeSingleTarget   TargetType = "single-target"
+	TargetTypeRandomAlly     TargetType = "random-ally"
+	TargetTypeRandomEnemy    TargetType = "random-enemy"
+	TargetTypeAllAllies      TargetType = "all-allies"
+	TargetTypeAllEnemies     TargetType = "all-enemies"
+	TargetTypeTargetParty    TargetType = "target-party"
+	TargetTypeNTargets       TargetType = "n-targets"
+	TargetTypeEveryone       TargetType = "everyone"
+	TargetTypeEveryoneElse   TargetType = "everyone-else"
 )
 
 func (e *TargetType) Scan(src interface{}) error {
@@ -3628,6 +3630,13 @@ type JItemsRelatedStat struct {
 	StatID   int32
 }
 
+type JMiscAbilitiesLearnedBy struct {
+	ID               int32
+	DataHash         string
+	MiscAbilityID    int32
+	CharacterClassID int32
+}
+
 type JMonsterEquipmentAbility struct {
 	ID                 int32
 	DataHash           string
@@ -3762,25 +3771,11 @@ type JPlayerAbilitiesRelatedStat struct {
 	StatID          int32
 }
 
-type JPropertiesModifierChange struct {
-	ID               int32
-	DataHash         string
-	PropertyID       int32
-	ModifierChangeID int32
-}
-
 type JPropertiesRelatedStat struct {
 	ID         int32
 	DataHash   string
 	PropertyID int32
 	StatID     int32
-}
-
-type JPropertiesStatChange struct {
-	ID           int32
-	DataHash     string
-	PropertyID   int32
-	StatChangeID int32
 }
 
 type JShopEquipmentAbility struct {
@@ -3862,13 +3857,6 @@ type JTriggerCommandsRelatedStat struct {
 	StatID           int32
 }
 
-type JUnspecifiedAbilitiesLearnedBy struct {
-	ID                   int32
-	DataHash             string
-	UnspecifiedAbilityID int32
-	CharacterClassID     int32
-}
-
 type KeyItem struct {
 	ID           int32
 	DataHash     string
@@ -3889,6 +3877,18 @@ type MasterItem struct {
 	DataHash string
 	Name     string
 	Type     ItemType
+}
+
+type MiscAbility struct {
+	ID            int32
+	DataHash      string
+	AbilityID     int32
+	Description   string
+	Effect        string
+	Cursor        NullTargetType
+	TopmenuID     sql.NullInt32
+	SubmenuID     sql.NullInt32
+	OpenSubmenuID sql.NullInt32
 }
 
 type Mix struct {
@@ -4122,11 +4122,12 @@ type Primer struct {
 }
 
 type Property struct {
-	ID             int32
-	DataHash       string
-	Name           string
-	Effect         string
-	NullifyArmored NullNullifyArmored
+	ID               int32
+	DataHash         string
+	Name             string
+	Effect           string
+	NullifyArmored   NullNullifyArmored
+	ModifierChangeID sql.NullInt32
 }
 
 type Quest struct {
@@ -4329,16 +4330,4 @@ type TriggerCommand struct {
 	Effect      string
 	Cursor      TargetType
 	TopmenuID   sql.NullInt32
-}
-
-type UnspecifiedAbility struct {
-	ID            int32
-	DataHash      string
-	AbilityID     int32
-	Description   string
-	Effect        string
-	Cursor        NullTargetType
-	TopmenuID     sql.NullInt32
-	SubmenuID     sql.NullInt32
-	OpenSubmenuID sql.NullInt32
 }

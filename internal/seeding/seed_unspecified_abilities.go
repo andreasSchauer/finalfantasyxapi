@@ -9,13 +9,13 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func (l *Lookup) loop3SeedUnspecifiedAbilities(qtx *database.Queries, ctx context.Context) error {
-	abilities, err := l.extractUnspecifiedAbilities()
+func (l *Lookup) loop3SeedMiscAbilities(qtx *database.Queries, ctx context.Context) error {
+	abilities, err := l.extractMiscAbilities()
 	if err != nil {
 		return err
 	}
 
-	params := database.CreateUnspecifiedAbilityBulkParams{
+	params := database.CreateMiscAbilityBulkParams{
 		DataHash:      make([]string, len(abilities)),
 		AbilityID:     make([]int32, len(abilities)),
 		Description:   make([]string, len(abilities)),
@@ -37,28 +37,28 @@ func (l *Lookup) loop3SeedUnspecifiedAbilities(qtx *database.Queries, ctx contex
 		params.OpenSubmenuID[i] = h.GetNullInt32(a.OpenSubmenuID)
 	}
 
-	dbRows, err := qtx.CreateUnspecifiedAbilityBulk(ctx, params)
+	dbRows, err := qtx.CreateMiscAbilityBulk(ctx, params)
 	if err != nil {
-		return fmt.Errorf("couldn't create unspecified abilities: %v", err)
+		return fmt.Errorf("couldn't create misc abilities: %v", err)
 	}
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.json.unspecifiedAbilities[i].ID = row.ID
-		l.UnspecifiedAbilities[Key(abilities[i])] = abilities[i]
-		l.UnspecifiedAbilitiesID[row.ID] = abilities[i]
+		l.json.miscAbilities[i].ID = row.ID
+		l.MiscAbilities[Key(abilities[i])] = abilities[i]
+		l.MiscAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractUnspecifiedAbilities() ([]UnspecifiedAbility, error) {
-	abilities := []UnspecifiedAbility{}
+func (l *Lookup) extractMiscAbilities() ([]MiscAbility, error) {
+	abilities := []MiscAbility{}
 	var err error
 
-	for i := range l.json.unspecifiedAbilities {
-		ability := &l.json.unspecifiedAbilities[i]
+	for i := range l.json.miscAbilities {
+		ability := &l.json.miscAbilities[i]
 
 		ability.Ability.ID, err = l.getHashID(ability.Ability)
 		if err != nil {
@@ -86,36 +86,36 @@ func (l *Lookup) extractUnspecifiedAbilities() ([]UnspecifiedAbility, error) {
 	return dedupeRows(abilities, l.Hashes), nil
 }
 
-func (l *Lookup) completeUnspecifiedAbilities() error {
-	for i := range l.json.unspecifiedAbilities {
-		ability := &l.json.unspecifiedAbilities[i]
+func (l *Lookup) completeMiscAbilities() error {
+	for i := range l.json.miscAbilities {
+		ability := &l.json.miscAbilities[i]
 
 		err := l.completeBattleInteractions(ability.BattleInteractions)
 		if err != nil {
 			return err
 		}
 
-		l.UnspecifiedAbilities[Key(ability)] = *ability
-		l.UnspecifiedAbilitiesID[ability.ID] = *ability
+		l.MiscAbilities[Key(ability)] = *ability
+		l.MiscAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
-func (l *Lookup) getUnspecifiedAbilityLearnedBy(ua UnspecifiedAbility) ([]CharacterClass, error) {
+func (l *Lookup) getMiscAbilityLearnedBy(ua MiscAbility) ([]CharacterClass, error) {
 	return getResources(ua.LearnedBy, l.CharClasses)
 }
 
-func (l *Lookup) seedJuncUnspecifiedAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "unspecified abilities + learned by"
-	jParams, err := processJunctions(l, desc, l.json.unspecifiedAbilities, l.getUnspecifiedAbilityLearnedBy)
+func (l *Lookup) seedJuncMiscAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "misc abilities + learned by"
+	jParams, err := processJunctions(l, desc, l.json.miscAbilities, l.getMiscAbilityLearnedBy)
 	if err != nil {
 		return err
 	}
 
-	return qtx.CreateUnspecifiedAbilitiesLearnedByJunctionBulk(ctx, database.CreateUnspecifiedAbilitiesLearnedByJunctionBulkParams{
-		DataHash:             jParams.DataHashes,
-		UnspecifiedAbilityID: jParams.ParentIDs,
-		CharacterClassID:     jParams.ChildIDs,
+	return qtx.CreateMiscAbilitiesLearnedByJunctionBulk(ctx, database.CreateMiscAbilitiesLearnedByJunctionBulkParams{
+		DataHash:         jParams.DataHashes,
+		MiscAbilityID:    jParams.ParentIDs,
+		CharacterClassID: jParams.ChildIDs,
 	})
 }

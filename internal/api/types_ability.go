@@ -155,7 +155,7 @@ func (a TriggerCommand) Error() string {
 	return fmt.Sprintf("trigger command '%s'", h.NameToString(a.Name, a.Version, nil))
 }
 
-type UnspecifiedAbility struct {
+type MiscAbility struct {
 	ID                 int32               `json:"id"`
 	Name               string              `json:"name"`
 	Version            *int32              `json:"version,omitempty"`
@@ -174,7 +174,7 @@ type UnspecifiedAbility struct {
 	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
-func (a UnspecifiedAbility) canUseAbility(cfg *Config, unitName string) bool {
+func (a MiscAbility) canUseAbility(cfg *Config, unitName string) bool {
 	for _, class := range a.LearnedBy {
 		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
 
@@ -186,10 +186,10 @@ func (a UnspecifiedAbility) canUseAbility(cfg *Config, unitName string) bool {
 	return false
 }
 
-func (a UnspecifiedAbility) getBattleInteractions() []BattleInteraction {
+func (a MiscAbility) getBattleInteractions() []BattleInteraction {
 	return a.BattleInteractions
 }
 
-func (a UnspecifiedAbility) Error() string {
-	return fmt.Sprintf("unspecified ability '%s'", h.NameToString(a.Name, a.Version, nil))
+func (a MiscAbility) Error() string {
+	return fmt.Sprintf("misc ability '%s'", h.NameToString(a.Name, a.Version, nil))
 }

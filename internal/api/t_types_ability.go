@@ -140,7 +140,7 @@ func compareOverdriveAbilities(test test, exp expOverdriveAbility, got Overdrive
 	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
-type expUnspecifiedAbility struct {
+type expMiscAbility struct {
 	testGeneral
 	expNameVer
 	rank               *int32
@@ -153,11 +153,11 @@ type expUnspecifiedAbility struct {
 	battleInteractions []expBattleInteraction
 }
 
-func (e expUnspecifiedAbility) GetTestGeneral() testGeneral {
+func (e expMiscAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareUnspecifiedAbilities(test test, exp expUnspecifiedAbility, got UnspecifiedAbility) {
+func compareMiscAbilities(test test, exp expMiscAbility, got MiscAbility) {
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)

@@ -86,8 +86,8 @@ func (l *Lookup) extractModifierChanges() ([]ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.unspecifiedAbilities {
-		ability := &l.json.unspecifiedAbilities[i]
+	for i := range l.json.miscAbilities {
+		ability := &l.json.miscAbilities[i]
 
 		newChanges, err := l.prepareAbilityModifierChanges(ability.BattleInteractions)
 		if err != nil {
@@ -122,12 +122,16 @@ func (l *Lookup) extractModifierChanges() ([]ModifierChange, error) {
 	for i := range l.json.properties {
 		property := &l.json.properties[i]
 
-		newChanges, err := l.prepareModifierChanges(property.ModifierChanges)
+		if property.ModifierChange == nil {
+			continue
+		}
+		
+		change, err := l.prepareModifierChange(property.ModifierChange)
 		if err != nil {
 			return nil, err
 		}
 
-		changes = append(changes, newChanges...)
+		changes = append(changes, *change)
 	}
 
 	for i := range l.json.statusConditions {
@@ -162,12 +166,9 @@ func (l *Lookup) prepareAbilityModifierChanges(battleInteractions []BattleIntera
 
 func (l *Lookup) prepareModifierChanges(changes []ModifierChange) ([]ModifierChange, error) {
 	changesNew := []ModifierChange{}
-	var err error
 
 	for i := range changes {
-		change := &changes[i]
-
-		change.ModifierID, err = assignFK(change.ModifierName, l.Modifiers)
+		change, err := l.prepareModifierChange(&changes[i])
 		if err != nil {
 			return nil, err
 		}
@@ -176,4 +177,19 @@ func (l *Lookup) prepareModifierChanges(changes []ModifierChange) ([]ModifierCha
 	}
 
 	return changesNew, nil
+}
+
+func (l *Lookup) prepareModifierChange(mc *ModifierChange) (*ModifierChange, error) {
+	var err error
+
+	if mc == nil {
+		return nil, nil
+	}
+
+	mc.ModifierID, err = assignFK(mc.ModifierName, l.Modifiers)
+	if err != nil {
+		return nil, err
+	}
+
+	return mc, nil
 }

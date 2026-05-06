@@ -94,8 +94,8 @@ func (cfg *Config) HandleTriggerCommands(w http.ResponseWriter, r *http.Request)
 	routerNameVersion(cfg, w, r, cfg.e.triggerCommands)
 }
 
-func (cfg *Config) HandleUnspecifiedAbilities(w http.ResponseWriter, r *http.Request) {
-	routerNameVersion(cfg, w, r, cfg.e.unspecifiedAbilities)
+func (cfg *Config) HandleMiscAbilities(w http.ResponseWriter, r *http.Request) {
+	routerNameVersion(cfg, w, r, cfg.e.miscAbilities)
 }
 
 func (cfg *Config) HandleEnemyAbilities(w http.ResponseWriter, r *http.Request) {

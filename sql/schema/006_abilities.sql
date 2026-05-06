@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TYPE ability_type AS ENUM ('unspecified-ability', 'player-ability', 'enemy-ability', 'overdrive-ability', 'trigger-command', 'item-ability');
+CREATE TYPE ability_type AS ENUM ('misc-ability', 'player-ability', 'enemy-ability', 'overdrive-ability', 'trigger-command', 'item-ability');
 
 
 CREATE TYPE player_ability_category AS ENUM ('skill', 'special', 'white-magic', 'black-magic', 'aeon');
@@ -31,7 +31,7 @@ CREATE TABLE abilities (
 
 
 -- 3
-CREATE TABLE unspecified_abilities (
+CREATE TABLE misc_abilities (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     ability_id INTEGER UNIQUE NOT NULL REFERENCES abilities(id),
@@ -116,7 +116,7 @@ DROP TABLE IF EXISTS trigger_commands;
 DROP TABLE IF EXISTS overdrive_abilities;
 DROP TABLE IF EXISTS enemy_abilities;
 DROP TABLE IF EXISTS player_abilities;
-DROP TABLE IF EXISTS unspecified_abilities;
+DROP TABLE IF EXISTS misc_abilities;
 DROP TABLE IF EXISTS abilities;
 DROP TABLE IF EXISTS ability_attributes;
 DROP TYPE IF EXISTS player_ability_category;

@@ -86,8 +86,8 @@ func (l *Lookup) extractStatChanges() ([]StatChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.unspecifiedAbilities {
-		ability := &l.json.unspecifiedAbilities[i]
+	for i := range l.json.miscAbilities {
+		ability := &l.json.miscAbilities[i]
 
 		newChanges, err := l.prepareAbilityStatChanges(ability.BattleInteractions)
 		if err != nil {
@@ -112,17 +112,6 @@ func (l *Lookup) extractStatChanges() ([]StatChange, error) {
 		autoAbility := &l.json.autoAbilities[i]
 
 		newChanges, err := l.prepareStatChanges(autoAbility.StatChanges)
-		if err != nil {
-			return nil, err
-		}
-
-		changes = append(changes, newChanges...)
-	}
-
-	for i := range l.json.properties {
-		property := &l.json.properties[i]
-
-		newChanges, err := l.prepareStatChanges(property.StatChanges)
 		if err != nil {
 			return nil, err
 		}

@@ -8,19 +8,19 @@ import (
 )
 
 type StatusInfliction struct {
-	PlayerAbilities      []NamedAPIResource `json:"player_abilities"`
-	OverdriveAbilities   []NamedAPIResource `json:"overdrive_abilities"`
-	ItemAbilities        []NamedAPIResource `json:"item_abilities"`
-	UnspecifiedAbilities []NamedAPIResource `json:"unspecified_abilities"`
-	EnemyAbilities       []NamedAPIResource `json:"enemy_abilities"`
-	StatusConditions     []NamedAPIResource `json:"status_conditions"`
+	PlayerAbilities    []NamedAPIResource `json:"player_abilities"`
+	OverdriveAbilities []NamedAPIResource `json:"overdrive_abilities"`
+	ItemAbilities      []NamedAPIResource `json:"item_abilities"`
+	MiscAbilities      []NamedAPIResource `json:"misc_abilities"`
+	EnemyAbilities     []NamedAPIResource `json:"enemy_abilities"`
+	StatusConditions   []NamedAPIResource `json:"status_conditions"`
 }
 
 func (s StatusInfliction) IsZero() bool {
 	return len(s.PlayerAbilities) == 0 &&
 		len(s.OverdriveAbilities) == 0 &&
 		len(s.ItemAbilities) == 0 &&
-		len(s.UnspecifiedAbilities) == 0 &&
+		len(s.MiscAbilities) == 0 &&
 		len(s.EnemyAbilities) == 0 &&
 		len(s.StatusConditions) == 0
 }
@@ -86,11 +86,11 @@ func getStatusRemoval(cfg *Config, r *http.Request, status seeding.StatusConditi
 
 func populateStatusInfliction(cfg *Config, abilities []TypedAPIResource) StatusInfliction {
 	infliction := StatusInfliction{
-		PlayerAbilities:      []NamedAPIResource{},
-		OverdriveAbilities:   []NamedAPIResource{},
-		ItemAbilities:        []NamedAPIResource{},
-		UnspecifiedAbilities: []NamedAPIResource{},
-		EnemyAbilities:       []NamedAPIResource{},
+		PlayerAbilities:    []NamedAPIResource{},
+		OverdriveAbilities: []NamedAPIResource{},
+		ItemAbilities:      []NamedAPIResource{},
+		MiscAbilities:      []NamedAPIResource{},
+		EnemyAbilities:     []NamedAPIResource{},
 	}
 
 	for _, ability := range abilities {
@@ -114,10 +114,10 @@ func populateStatusInfliction(cfg *Config, abilities []TypedAPIResource) StatusI
 			res := nameToNamedAPIResource(cfg, cfg.e.itemAbilities, itemAbility.Name, itemAbility.Version)
 			infliction.ItemAbilities = append(infliction.ItemAbilities, res)
 
-		case string(database.AbilityTypeUnspecifiedAbility):
-			unspecifiedAbility, _ := seeding.GetResource(obj, cfg.l.UnspecifiedAbilities)
-			res := nameToNamedAPIResource(cfg, cfg.e.unspecifiedAbilities, unspecifiedAbility.Name, unspecifiedAbility.Version)
-			infliction.UnspecifiedAbilities = append(infliction.UnspecifiedAbilities, res)
+		case string(database.AbilityTypeMiscAbility):
+			miscAbility, _ := seeding.GetResource(obj, cfg.l.MiscAbilities)
+			res := nameToNamedAPIResource(cfg, cfg.e.miscAbilities, miscAbility.Name, miscAbility.Version)
+			infliction.MiscAbilities = append(infliction.MiscAbilities, res)
 
 		case string(database.AbilityTypeEnemyAbility):
 			enemyAbility, _ := seeding.GetResource(obj, cfg.l.EnemyAbilities)

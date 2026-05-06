@@ -93,8 +93,8 @@ func (l *Lookup) extractAbilityDamages() ([]AbilityDamage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range l.json.unspecifiedAbilities {
-		ability := &l.json.unspecifiedAbilities[i]
+	for i := range l.json.miscAbilities {
+		ability := &l.json.miscAbilities[i]
 
 		newDamages, err := l.prepareAbilityDamages(ability.BattleInteractions)
 		if err != nil {

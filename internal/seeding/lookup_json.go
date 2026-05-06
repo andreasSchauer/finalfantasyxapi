@@ -49,7 +49,7 @@ type jsonLookup struct {
 	topmenus              []Topmenu
 	treasureLists         []TreasureList
 	triggerCommands       []TriggerCommand
-	unspecifiedAbilities  []UnspecifiedAbility
+	miscAbilities         []MiscAbility
 }
 
 func loadJSONFile[T any](path string, target *T) error {
@@ -128,7 +128,7 @@ func (l *Lookup) loadJSONFiles() error {
 	checkErr(loadJSONFile("data/topmenus.json", &l.json.topmenus))
 	checkErr(loadJSONFile("data/treasures.json", &l.json.treasureLists))
 	checkErr(loadJSONFile("data/trigger_commands.json", &l.json.triggerCommands))
-	checkErr(loadJSONFile("data/unspecified_abilities.json", &l.json.unspecifiedAbilities))
+	checkErr(loadJSONFile("data/misc_abilities.json", &l.json.miscAbilities))
 
 	return err
 }

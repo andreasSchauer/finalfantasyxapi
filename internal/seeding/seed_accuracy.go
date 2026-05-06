@@ -71,7 +71,7 @@ func (l *Lookup) extractAccuracies() []Accuracy {
 		}
 	}
 
-	for _, ability := range l.json.unspecifiedAbilities {
+	for _, ability := range l.json.miscAbilities {
 		for _, bi := range ability.BattleInteractions {
 			accuracies = append(accuracies, bi.Accuracy)
 		}

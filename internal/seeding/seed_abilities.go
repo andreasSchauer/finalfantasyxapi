@@ -101,14 +101,14 @@ func (l *Lookup) extractAbilities() ([]Ability, error) {
 		abilities = append(abilities, command.Ability)
 	}
 
-	for i := range l.json.unspecifiedAbilities {
-		ability := &l.json.unspecifiedAbilities[i]
+	for i := range l.json.miscAbilities {
+		ability := &l.json.miscAbilities[i]
 		ability.Attributes.ID, err = l.getHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.Type = database.AbilityTypeUnspecifiedAbility
+		ability.Type = database.AbilityTypeMiscAbility
 		abilities = append(abilities, ability.Ability)
 	}
 
@@ -185,7 +185,7 @@ func (l *Lookup) extractAbilityAttributes() []Attributes {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range l.json.unspecifiedAbilities {
+	for _, ability := range l.json.miscAbilities {
 		attributes = append(attributes, ability.Attributes)
 	}
 

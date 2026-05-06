@@ -7,39 +7,39 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func TestGetUnspecifiedAbility(t *testing.T) {
-	tests := []expUnspecifiedAbility{
+func TestGetMiscAbility(t *testing.T) {
+	tests := []expMiscAbility{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/25",
+				requestURL:     "/api/misc-abilities/25",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "unspecified ability with provided id '25' doesn't exist. max id: 24.",
+				expectedErr:    "misc ability with provided id '25' doesn't exist. max id: 24.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/2?ability_user=wakka",
+				requestURL:     "/api/misc-abilities/2?ability_user=wakka",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input for parameter 'ability_user': player unit 'wakka' can't learn unspecified ability 'attack - 2'",
+				expectedErr:    "invalid input for parameter 'ability_user': player unit 'wakka' can't learn misc ability 'attack - 2'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/2?ability_user=we",
+				requestURL:     "/api/misc-abilities/2?ability_user=we",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "unknown player unit 'we' used for parameter 'ability_user'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/2?bomb_wpn=true",
+				requestURL:     "/api/misc-abilities/2?bomb_wpn=true",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid usage of parameter 'bomb_wpn'. when using parameter 'bomb_wpn', the following parameter(s) must be present: 'ability_user'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/1?ability_user=wakka",
+				requestURL:     "/api/misc-abilities/1?ability_user=wakka",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -96,7 +96,7 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/1?ability_user=3&bomb_wpn=true",
+				requestURL:     "/api/misc-abilities/1?ability_user=3&bomb_wpn=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -153,7 +153,7 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/2?ability_user=16&bomb_wpn=true",
+				requestURL:     "/api/misc-abilities/2?ability_user=16&bomb_wpn=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -210,7 +210,7 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/10",
+				requestURL:     "/api/misc-abilities/10",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -229,7 +229,7 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/4",
+				requestURL:     "/api/misc-abilities/4",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -248,14 +248,14 @@ func TestGetUnspecifiedAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetUnspecifiedAbility", testCfg.HandleUnspecifiedAbilities, compareUnspecifiedAbilities)
+	testSingleResources(t, tests, "GetMiscAbility", testCfg.HandleMiscAbilities, compareMiscAbilities)
 }
 
-func TestGetMultipleUnspecifiedAbilities(t *testing.T) {
+func TestGetMultipleMiscAbilities(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/attack",
+				requestURL:     "/api/misc-abilities/attack",
 				expectedStatus: http.StatusMultipleChoices,
 			},
 			count:   2,
@@ -263,7 +263,7 @@ func TestGetMultipleUnspecifiedAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/switch",
+				requestURL:     "/api/misc-abilities/switch",
 				expectedStatus: http.StatusMultipleChoices,
 			},
 			count:   7,
@@ -271,7 +271,7 @@ func TestGetMultipleUnspecifiedAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities/summon",
+				requestURL:     "/api/misc-abilities/summon",
 				expectedStatus: http.StatusMultipleChoices,
 			},
 			count:   8,
@@ -279,14 +279,14 @@ func TestGetMultipleUnspecifiedAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.e.unspecifiedAbilities.endpoint, "GetMultipleUnspecifiedAbilities", testCfg.HandleUnspecifiedAbilities, compareAPIResourceLists[NamedApiResourceList])
+	testIdList(t, tests, testCfg.e.miscAbilities.endpoint, "GetMultipleMiscAbilities", testCfg.HandleMiscAbilities, compareAPIResourceLists[NamedApiResourceList])
 }
 
-func TestRetrieveUnspecifiedAbilities(t *testing.T) {
+func TestRetrieveMiscAbilities(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities?limit=max",
+				requestURL:     "/api/misc-abilities?limit=max",
 				expectedStatus: http.StatusOK,
 			},
 			count:    24,
@@ -296,7 +296,7 @@ func TestRetrieveUnspecifiedAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities?rank=1",
+				requestURL:     "/api/misc-abilities?rank=1",
 				expectedStatus: http.StatusOK,
 			},
 			count:    3,
@@ -306,7 +306,7 @@ func TestRetrieveUnspecifiedAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities?help_bar=true",
+				requestURL:     "/api/misc-abilities?help_bar=true",
 				expectedStatus: http.StatusOK,
 			},
 			count:    3,
@@ -316,7 +316,7 @@ func TestRetrieveUnspecifiedAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/unspecified-abilities?user=characters&copycat=true",
+				requestURL:     "/api/misc-abilities?user=characters&copycat=true",
 				expectedStatus: http.StatusOK,
 			},
 			count:    3,
@@ -326,5 +326,5 @@ func TestRetrieveUnspecifiedAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.e.unspecifiedAbilities.endpoint, "RetrieveUnspecifiedAbilities", testCfg.HandleUnspecifiedAbilities, compareAPIResourceLists[NamedApiResourceList])
+	testIdList(t, tests, testCfg.e.miscAbilities.endpoint, "RetrieveMiscAbilities", testCfg.HandleMiscAbilities, compareAPIResourceLists[NamedApiResourceList])
 }

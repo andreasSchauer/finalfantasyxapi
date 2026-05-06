@@ -26,7 +26,6 @@ func (l *Lookup) seedLoop1(qtx *database.Queries, ctx context.Context) error {
 		l.loop1SeedAgilityTiers,
 		l.loop1SeedElements,
 		l.loop1SeedOverdriveModes,
-		l.loop1SeedProperties,
 		l.loop1SeedModifiers,
 		l.loop1SeedPlayerUnits,
 		l.loop1SeedCharacterClasses,
@@ -70,11 +69,12 @@ func (l *Lookup) seedLoop2(qtx *database.Queries, ctx context.Context) error {
 func (l *Lookup) seedLoop3(qtx *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("- seed loop 3")()
 	return l.seedLoop(qtx, ctx, []seedFunc{
+		l.loop3SeedProperties,
 		l.loop3SeedStatusConditions,
 		l.loop3SeedQuestCompletions,
 		l.loop3SeedAeonCommands,
 		l.loop3SeedOverdriveCommands,
-		l.loop3SeedUnspecifiedAbilities,
+		l.loop3SeedMiscAbilities,
 		l.loop3SeedEnemyAbilities,
 		l.loop3SeedOverdriveAbilities,
 		l.loop3SeedTriggerCommands,
@@ -159,7 +159,6 @@ func (l *Lookup) seedLoop7(qtx *database.Queries, ctx context.Context) error {
 func (l *Lookup) seedJunctions(qtx *database.Queries, ctx context.Context) error {
 	return l.seedLoop(qtx, ctx, []seedFunc{
 		l.seedJuncOverdriveModeActions,
-		l.seedJuncPropertiesModifierChanges,
 		l.seedJuncPropertiesRelatedStats,
 		l.seedJuncStatusConditionModifierChanges,
 		l.seedJuncStatusConditionRelatedStats,
@@ -181,7 +180,7 @@ func (l *Lookup) seedJunctions(qtx *database.Queries, ctx context.Context) error
 		l.seedJuncPlayerAbilitiesLearnedBy,
 		l.seedJuncPlayerAbilitiesRelatedStats,
 		l.seedJuncTriggerCommandsRelatedStats,
-		l.seedJuncUnspecifiedAbilitiesLearnedBy,
+		l.seedJuncMiscAbilitiesLearnedBy,
 		l.seedJuncItemsAvailableMenus,
 		l.seedJuncItemsRelatedStats,
 		l.seedJuncAbilityPoolsAutoAbilities,

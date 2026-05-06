@@ -27,7 +27,6 @@ func TestGetStat(t *testing.T) {
 					"item abilities":      2,
 					"trigger commands":    0,
 					"status conditions":   0,
-					"properties":          0,
 				},
 			},
 			expUnique:          newExpUnique(2, "mp"),
@@ -38,7 +37,6 @@ func TestGetStat(t *testing.T) {
 			itemAbilities:      []int32{65, 67},
 			triggerCommands:    []int32{},
 			statusConditions:   []int32{},
-			properties:         []int32{},
 		},
 		{
 			testGeneral: testGeneral{

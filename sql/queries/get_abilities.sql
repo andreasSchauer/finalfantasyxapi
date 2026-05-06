@@ -749,57 +749,57 @@ ORDER BY ia.id;
 
 
 
--- name: GetUnspecifiedAbilityIDsByName :many
+-- name: GetMiscAbilityIDsByName :many
 SELECT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 WHERE a.name = $1
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDs :many
-SELECT id FROM unspecified_abilities ORDER BY id;
+-- name: GetMiscAbilityIDs :many
+SELECT id FROM misc_abilities ORDER BY id;
 
 
--- name: GetUnspecifiedAbilityIDsByCharClass :many
+-- name: GetMiscAbilityIDsByCharClass :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
-JOIN j_unspecified_abilities_learned_by j ON j.unspecified_ability_id = ua.id
+FROM misc_abilities ua
+JOIN j_misc_abilities_learned_by j ON j.misc_ability_id = ua.id
 JOIN character_classes cc ON j.character_class_id = cc.id
 WHERE cc.id = $1
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsByRank :many
+-- name: GetMiscAbilityIDsByRank :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.rank = ANY(sqlc.arg(rank)::int[])
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsByCanCopycat :many
+-- name: GetMiscAbilityIDsByCanCopycat :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.can_copycat = $1
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsByAppearsInHelpBar :many
+-- name: GetMiscAbilityIDsByAppearsInHelpBar :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.appears_in_help_bar = $1
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsBasedOnUserAttack :many
+-- name: GetMiscAbilityIDsBasedOnUserAttack :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
@@ -807,9 +807,9 @@ WHERE bi.based_on_user_attack = true
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsByTargetType :many
+-- name: GetMiscAbilityIDsByTargetType :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
@@ -817,9 +817,9 @@ WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsDarkable :many
+-- name: GetMiscAbilityIDsDarkable :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
@@ -829,9 +829,9 @@ WHERE sc.id = 4
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsByInflictedStatus :many
+-- name: GetMiscAbilityIDsByInflictedStatus :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
@@ -864,9 +864,9 @@ WHERE
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsDealsDelay :many
+-- name: GetMiscAbilityIDsDealsDelay :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
@@ -875,9 +875,9 @@ WHERE idl.ctb_attack_type = 'attack'
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsByAttackType :many
+-- name: GetMiscAbilityIDsByAttackType :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
@@ -889,9 +889,9 @@ WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY ua.id;
 
 
--- name: GetUnspecifiedAbilityIDsByDamageFormula :many
+-- name: GetMiscAbilityIDsByDamageFormula :many
 SELECT DISTINCT ua.id
-FROM unspecified_abilities ua
+FROM misc_abilities ua
 JOIN abilities a ON ua.ability_id = a.id
 JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
 JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id

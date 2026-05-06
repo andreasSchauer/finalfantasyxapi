@@ -98,8 +98,8 @@ func (l *Lookup) extractBattleInteractions() ([]BattleInteraction, error) {
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range l.json.unspecifiedAbilities {
-		ability := &l.json.unspecifiedAbilities[i]
+	for i := range l.json.miscAbilities {
+		ability := &l.json.miscAbilities[i]
 
 		bisNew, err := l.prepareBattleInteractions(ability.BattleInteractions)
 		if err != nil {

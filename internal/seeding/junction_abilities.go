@@ -29,7 +29,7 @@ func (l *Lookup) getAbilities() []Ability {
 		abilities = append(abilities, command.Ability)
 	}
 
-	for _, ability := range l.json.unspecifiedAbilities {
+	for _, ability := range l.json.miscAbilities {
 		abilities = append(abilities, ability.Ability)
 	}
 
@@ -70,8 +70,8 @@ func (l *Lookup) getAbilityBattleInteractions(a Ability) ([]BattleInteraction, e
 		}
 		return tc.BattleInteractions, nil
 
-	case database.AbilityTypeUnspecifiedAbility:
-		ua, err := GetResource(a.GetAbilityRef().Untyped(), l.UnspecifiedAbilities)
+	case database.AbilityTypeMiscAbility:
+		ua, err := GetResource(a.GetAbilityRef().Untyped(), l.MiscAbilities)
 		if err != nil {
 			return nil, err
 		}

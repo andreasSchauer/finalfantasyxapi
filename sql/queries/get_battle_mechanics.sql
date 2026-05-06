@@ -345,15 +345,6 @@ WHERE sc.stat_id = $1
 ORDER BY scon.id;
 
 
--- name: GetStatPropertyIDsStatChange :many
-SELECT DISTINCT p.id
-FROM properties p
-JOIN j_properties_stat_changes j ON j.property_id = p.id
-JOIN stat_changes sc ON j.stat_change_id = sc.id
-WHERE sc.stat_id = $1
-ORDER BY p.id;
-
-
 -- name: GetStatPlayerAbilityIDsStatChange :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
@@ -433,8 +424,7 @@ ORDER BY sc.id;
 -- name: GetModifierPropertyIDs :many
 SELECT DISTINCT p.id
 FROM properties p
-JOIN j_properties_modifier_changes j ON j.property_id = p.id
-JOIN modifier_changes mc ON j.modifier_change_id = mc.id
+JOIN modifier_changes mc ON p.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY p.id;
 

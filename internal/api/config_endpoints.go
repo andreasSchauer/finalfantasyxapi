@@ -26,13 +26,13 @@ type endpoints struct {
 	characterClasses handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]
 	monsters         handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
 
-	abilities            handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]
-	playerAbilities      handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
-	overdriveAbilities   handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]
-	itemAbilities        handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]
-	triggerCommands      handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]
-	unspecifiedAbilities handlerInput[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList]
-	enemyAbilities       handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
+	abilities          handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]
+	playerAbilities    handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
+	overdriveAbilities handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]
+	itemAbilities      handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]
+	triggerCommands    handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]
+	miscAbilities      handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]
+	enemyAbilities     handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
 
 	aeonCommands      handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]
 	overdriveCommands handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]
@@ -630,21 +630,21 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.unspecifiedAbilities = handlerInput[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:         "unspecified-abilities",
-		resourceType:     "unspecified ability",
-		objLookup:        cfg.l.UnspecifiedAbilities,
-		objLookupID:      cfg.l.UnspecifiedAbilitiesID,
-		queryLookup:      cfg.q.unspecifiedAbilities,
-		idToResFunc:      idToNamedAPIResource[seeding.UnspecifiedAbility, UnspecifiedAbility, NamedAPIResource, NamedApiResourceList],
+	e.miscAbilities = handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]{
+		endpoint:         "misc-abilities",
+		resourceType:     "misc ability",
+		objLookup:        cfg.l.MiscAbilities,
+		objLookupID:      cfg.l.MiscAbilitiesID,
+		queryLookup:      cfg.q.miscAbilities,
+		idToResFunc:      idToNamedAPIResource[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
-		getMultipleQuery: cfg.db.GetUnspecifiedAbilityIDsByName,
-		retrieveQuery:    cfg.db.GetUnspecifiedAbilityIDs,
-		getSingleFunc:    cfg.getUnspecifiedAbility,
-		retrieveFunc:     cfg.retrieveUnspecifiedAbilities,
+		getMultipleQuery: cfg.db.GetMiscAbilityIDsByName,
+		retrieveQuery:    cfg.db.GetMiscAbilityIDs,
+		getSingleFunc:    cfg.getMiscAbility,
+		retrieveFunc:     cfg.retrieveMiscAbilities,
 		subsections: map[string]Subsection{
 			"simple": {
-				createSubFn: createUnspecifiedAbilitySimple,
+				createSubFn: createMiscAbilitySimple,
 			},
 		},
 	}

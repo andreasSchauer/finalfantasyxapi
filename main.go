@@ -51,7 +51,7 @@ func main() {
 	mux.HandleFunc("GET /api/overdrive-abilities/", apiCfg.HandleOverdriveAbilities)
 	mux.HandleFunc("GET /api/item-abilities/", apiCfg.HandleItemAbilities)
 	mux.HandleFunc("GET /api/trigger-commands/", apiCfg.HandleTriggerCommands)
-	mux.HandleFunc("GET /api/unspecified-abilities/", apiCfg.HandleUnspecifiedAbilities)
+	mux.HandleFunc("GET /api/misc-abilities/", apiCfg.HandleMiscAbilities)
 	mux.HandleFunc("GET /api/enemy-abilities/", apiCfg.HandleEnemyAbilities)
 
 	mux.HandleFunc("GET /api/aeon-commands/", apiCfg.HandleAeonCommands)

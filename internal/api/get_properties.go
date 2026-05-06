@@ -23,14 +23,14 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property,
 	}
 
 	response := Property{
-		ID:              property.ID,
-		Name:            property.Name,
-		Effect:          property.Effect,
-		NullifyArmored:  property.NullifyArmored,
-		RelatedStats:    namesToNamedAPIResources(cfg, cfg.e.stats, property.RelatedStats),
-		ModifierChanges: convertObjSlice(cfg, property.ModifierChanges, convertModifierChange),
-		AutoAbilities:   autoAbilities,
-		Monsters:        monsters,
+		ID:             property.ID,
+		Name:           property.Name,
+		Effect:         property.Effect,
+		NullifyArmored: property.NullifyArmored,
+		RelatedStats:   namesToNamedAPIResources(cfg, cfg.e.stats, property.RelatedStats),
+		ModifierChange: convertObjPtr(cfg, property.ModifierChange, convertModifierChange),
+		AutoAbilities:  autoAbilities,
+		Monsters:       monsters,
 	}
 
 	return response, nil
