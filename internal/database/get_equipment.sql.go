@@ -13,39 +13,32 @@ import (
 )
 
 const getAutoAbilityEquipmentTableIDs = `-- name: GetAutoAbilityEquipmentTableIDs :many
-SELECT DISTINCT et.id
-FROM equipment_tables et
-WHERE EXISTS (
-    SELECT 1
-    FROM j_equipment_tables_required_auto_abilities j
-    JOIN auto_abilities aa ON j.auto_ability_id = aa.id
-    WHERE j.equipment_table_id = et.id
-        AND aa.id = $1
-)
-OR EXISTS (
-    SELECT 1
-    FROM ability_pools ap
-    JOIN j_ability_pools_auto_abilities j ON j.ability_pool_id = ap.id
-    JOIN auto_abilities aa ON j.auto_ability_id = aa.id
-    WHERE ap.equipment_table_id = et.id
-        AND aa.id = $1
-)
-ORDER BY et.id
+SELECT j.equipment_table_id
+FROM j_equipment_tables_required_auto_abilities j
+WHERE j.auto_ability_id = $1
+
+UNION
+
+SELECT ap.equipment_table_id
+FROM ability_pools ap
+JOIN j_ability_pools_auto_abilities j ON j.ability_pool_id = ap.id
+WHERE j.auto_ability_id = $1
+ORDER BY equipment_table_id
 `
 
-func (q *Queries) GetAutoAbilityEquipmentTableIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAutoAbilityEquipmentTableIDs, id)
+func (q *Queries) GetAutoAbilityEquipmentTableIDs(ctx context.Context, autoAbilityID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityEquipmentTableIDs, autoAbilityID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var equipment_table_id int32
+		if err := rows.Scan(&equipment_table_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, equipment_table_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -172,16 +165,10 @@ func (q *Queries) GetAutoAbilityIDsByMonster(ctx context.Context, id int32) ([]i
 }
 
 const getAutoAbilityIDsByMonsterItems = `-- name: GetAutoAbilityIDsByMonsterItems :many
-SELECT DISTINCT aa.id
-FROM auto_abilities aa
-JOIN item_amounts ia1 ON aa.required_item_amount_id = ia1.id
-JOIN master_items mit ON ia1.master_item_id = mit.id
-JOIN item_amounts ia2 ON ia2.master_item_id = mit.id
-WHERE EXISTS (
-    SELECT 1
+WITH monster_drops AS (
+    SELECT ia.master_item_id
     FROM monster_items mi
-    JOIN monsters m ON mi.monster_id = m.id
-    WHERE ia2.id IN (
+    JOIN item_amounts ia ON ia.id IN (
         mi.steal_common_id,
         mi.steal_rare_id,
         mi.drop_common_id,
@@ -190,22 +177,26 @@ WHERE EXISTS (
         mi.secondary_drop_rare_id,
         mi.bribe_id
     )
-    AND m.id = $1
+    WHERE mi.monster_id = $1
+
+    UNION ALL
+
+    SELECT ia.master_item_id
+    FROM monster_items mi
+    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
+    JOIN possible_items pi ON pi.id = jmio.possible_item_id
+    JOIN item_amounts ia ON pi.item_amount_id = ia.id
+    WHERE mi.monster_id = $1
 )
-OR EXISTS (
-    SELECT 1
-    FROM possible_items pi
-    JOIN j_monster_items_other_items jmio ON pi.id = jmio.possible_item_id
-    JOIN monster_items mi ON jmio.monster_items_id = mi.id
-    JOIN monsters m ON mi.monster_id = m.id
-    WHERE pi.item_amount_id = ia2.id
-      AND m.id = $1
-)
+SELECT DISTINCT aa.id
+FROM auto_abilities aa
+JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
+JOIN monster_drops md ON ia_req.master_item_id = md.master_item_id
 ORDER BY aa.id
 `
 
-func (q *Queries) GetAutoAbilityIDsByMonsterItems(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByMonsterItems, id)
+func (q *Queries) GetAutoAbilityIDsByMonsterItems(ctx context.Context, monsterID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByMonsterItems, monsterID)
 	if err != nil {
 		return nil, err
 	}
@@ -228,41 +219,40 @@ func (q *Queries) GetAutoAbilityIDsByMonsterItems(ctx context.Context, id int32)
 }
 
 const getAutoAbilityItemMonsterIDs = `-- name: GetAutoAbilityItemMonsterIDs :many
+WITH target_items AS (
+    SELECT mit.id AS master_item_id
+    FROM auto_abilities aa
+    JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
+    JOIN master_items mit ON ia_req.master_item_id = mit.id
+    WHERE aa.id = $3
+),
+monster_sources AS (
+    SELECT mi.monster_id, ia.master_item_id
+    FROM monster_items mi
+    JOIN item_amounts ia ON ia.id IN (
+        mi.steal_common_id,
+        mi.steal_rare_id,
+        mi.drop_common_id,
+        mi.drop_rare_id,
+        mi.secondary_drop_common_id,
+        mi.secondary_drop_rare_id,
+        mi.bribe_id
+    )
+
+    UNION ALL
+
+    SELECT mi.monster_id, ia.master_item_id
+    FROM monster_items mi
+    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
+    JOIN possible_items pi ON pi.id = jmio.possible_item_id
+    JOIN item_amounts ia ON pi.item_amount_id = ia.id
+)
 SELECT DISTINCT m.id
 FROM monsters m
-JOIN monster_items mi ON mi.monster_id = m.id
+JOIN monster_sources ms ON m.id = ms.monster_id
+JOIN target_items ti ON ms.master_item_id = ti.master_item_id
 WHERE ($1::BOOLEAN IS NULL OR m.is_repeatable = $1::BOOLEAN)
   AND ($2::availability_type[] IS NULL OR m.availability = ANY($2::availability_type[]))
-  AND (
-    EXISTS (
-      SELECT 1
-      FROM item_amounts ia
-      JOIN master_items mit ON ia.master_item_id = mit.id
-      JOIN item_amounts ia2 ON ia2.master_item_id = mit.id
-      JOIN auto_abilities aa ON aa.required_item_amount_id = ia2.id
-      WHERE ia.id IN (
-          mi.steal_common_id,
-          mi.steal_rare_id,
-          mi.drop_common_id,
-          mi.drop_rare_id,
-          mi.secondary_drop_common_id,
-          mi.secondary_drop_rare_id,
-          mi.bribe_id
-      )
-      AND aa.id = $3
-  )
-    OR EXISTS (
-      SELECT 1
-      FROM j_monster_items_other_items jmio
-      JOIN possible_items pi ON pi.id = jmio.possible_item_id
-      JOIN item_amounts ia ON pi.item_amount_id = ia.id
-      JOIN master_items mit ON ia.master_item_id = mit.id
-      JOIN item_amounts ia2 ON ia2.master_item_id = mit.id
-      JOIN auto_abilities aa ON aa.required_item_amount_id = ia2.id
-      WHERE jmio.monster_items_id = mi.id
-        AND aa.id = $3
-    )
-  )
 ORDER BY m.id
 `
 
@@ -635,33 +625,29 @@ func (q *Queries) GetEquipmentIDs(ctx context.Context) ([]int32, error) {
 const getEquipmentIDsByAutoAbilty = `-- name: GetEquipmentIDsByAutoAbilty :many
 WITH wanted AS (
     SELECT $1::int[] AS ids
-)
-SELECT en.id
-FROM equipment_names en
-JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
-JOIN equipment_tables et ON j.equipment_table_id = et.id
-CROSS JOIN wanted w
-WHERE (
-    SELECT COUNT(*)
-    FROM unnest(w.ids) AS req(id)
-    WHERE EXISTS (
-        SELECT 1
-        FROM j_equipment_tables_required_auto_abilities jreq
-        JOIN auto_abilities aa ON jreq.auto_ability_id = aa.id
-        WHERE jreq.equipment_table_id = et.id
-        AND aa.id = req.id
-        
-        UNION ALL
-
-        SELECT 1
-        FROM ability_pools ap
-        JOIN j_ability_pools_auto_abilities jpool ON jpool.ability_pool_id = ap.id
-        JOIN auto_abilities aa ON jpool.auto_ability_id = aa.id
-        WHERE ap.equipment_table_id = et.id
-        AND aa.id = req.id
-    )
-) = cardinality(w.ids)
-ORDER BY en.id
+),
+all_matches AS (
+    SELECT en.id AS equipment_name_id, jreq.auto_ability_id
+    FROM equipment_names en
+    JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
+    JOIN equipment_tables et ON j.equipment_table_id = et.id
+    JOIN j_equipment_tables_required_auto_abilities jreq ON jreq.equipment_table_id = et.id
+                
+    UNION                                  
+                         
+    SELECT en.id AS equipment_name_id, jpool.auto_ability_id
+    FROM equipment_names en
+    JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
+    JOIN equipment_tables et ON j.equipment_table_id = et.id
+    JOIN ability_pools ap ON ap.equipment_table_id = et.id
+    JOIN j_ability_pools_auto_abilities jpool ON jpool.ability_pool_id = ap.id
+)                                                               
+SELECT m.equipment_name_id
+FROM all_matches m
+JOIN wanted w ON m.auto_ability_id = ANY(w.ids)
+GROUP BY m.equipment_name_id, w.ids
+HAVING COUNT(DISTINCT m.auto_ability_id) = cardinality(w.ids)
+ORDER BY m.equipment_name_id
 `
 
 func (q *Queries) GetEquipmentIDsByAutoAbilty(ctx context.Context, autoAbilityIds []int32) ([]int32, error) {
@@ -672,11 +658,11 @@ func (q *Queries) GetEquipmentIDsByAutoAbilty(ctx context.Context, autoAbilityId
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var equipment_name_id int32
+		if err := rows.Scan(&equipment_name_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, equipment_name_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -873,31 +859,23 @@ func (q *Queries) GetEquipmentTableIDs(ctx context.Context) ([]int32, error) {
 const getEquipmentTableIDsByAutoAbilty = `-- name: GetEquipmentTableIDsByAutoAbilty :many
 WITH wanted AS (
     SELECT $1::int[] AS ids
-)
-SELECT et.id
-FROM equipment_tables et
-CROSS JOIN wanted w
-WHERE (
-    SELECT COUNT(*)
-    FROM unnest(w.ids) AS req(id)
-    WHERE EXISTS (
-        SELECT 1
-        FROM j_equipment_tables_required_auto_abilities jreq
-        JOIN auto_abilities aa ON jreq.auto_ability_id = aa.id
-        WHERE jreq.equipment_table_id = et.id
-        AND aa.id = req.id
-        
-        UNION ALL
+),
+all_matches AS (
+    SELECT equipment_table_id, auto_ability_id
+    FROM j_equipment_tables_required_auto_abilities
 
-        SELECT 1
-        FROM ability_pools ap
-        JOIN j_ability_pools_auto_abilities jpool ON jpool.ability_pool_id = ap.id
-        JOIN auto_abilities aa ON jpool.auto_ability_id = aa.id
-        WHERE ap.equipment_table_id = et.id
-        AND aa.id = req.id
-    )
-) = cardinality(w.ids)
-ORDER BY et.id
+    UNION
+
+    SELECT ap.equipment_table_id, jpool.auto_ability_id
+    FROM ability_pools ap
+    JOIN j_ability_pools_auto_abilities jpool ON jpool.ability_pool_id = ap.id
+)
+SELECT m.equipment_table_id
+FROM all_matches m
+JOIN wanted w ON m.auto_ability_id = ANY(w.ids)
+GROUP BY m.equipment_table_id, w.ids
+HAVING COUNT(DISTINCT m.auto_ability_id) = cardinality(w.ids)
+ORDER BY m.equipment_table_id
 `
 
 func (q *Queries) GetEquipmentTableIDsByAutoAbilty(ctx context.Context, autoAbilityIds []int32) ([]int32, error) {
@@ -908,11 +886,11 @@ func (q *Queries) GetEquipmentTableIDsByAutoAbilty(ctx context.Context, autoAbil
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var equipment_table_id int32
+		if err := rows.Scan(&equipment_table_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, equipment_table_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

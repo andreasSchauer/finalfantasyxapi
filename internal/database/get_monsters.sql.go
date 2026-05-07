@@ -1253,51 +1253,45 @@ func (q *Queries) GetMonsterIDsBySpecies(ctx context.Context, species MonsterSpe
 
 const getMonsterIDsByStatusResists = `-- name: GetMonsterIDsByStatusResists :many
 WITH wanted AS (
-    SELECT $2::int[] AS ids
+    SELECT $1::int[] AS ids
+),
+all_matches AS (
+  SELECT monster_id, status_condition_id
+  FROM j_monsters_immunities
+
+  UNION
+
+  SELECT jmsr.monster_id, sr.status_condition_id
+  FROM j_monsters_status_resists jmsr
+  JOIN status_resists sr ON sr.id = jmsr.status_resist_id
+  WHERE sr.resistance >= $2
 )
-SELECT m.id
-FROM monsters m
-CROSS JOIN wanted w
-WHERE (
-    SELECT COUNT(*)
-    FROM unnest(w.ids) AS req(id)
-    WHERE EXISTS (
-        SELECT 1
-        FROM j_monsters_immunities jmi
-        WHERE jmi.monster_id = m.id
-          AND jmi.status_condition_id = req.id
-
-        UNION ALL
-
-        SELECT 1
-        FROM j_monsters_status_resists jmsr
-        JOIN status_resists sr ON sr.id = jmsr.status_resist_id
-        WHERE jmsr.monster_id = m.id
-          AND sr.status_condition_id = req.id
-          AND sr.resistance >= $1
-    )
-) = cardinality(w.ids)
-ORDER BY m.id
+SELECT m.monster_id
+FROM all_matches m
+JOIN wanted w ON m.status_condition_id = ANY(w.ids)
+GROUP BY m.monster_id, w.ids
+HAVING COUNT(DISTINCT m.status_condition_id) = cardinality(w.ids)
+ORDER BY m.monster_id
 `
 
 type GetMonsterIDsByStatusResistsParams struct {
-	MinResistance      interface{}
 	StatusConditionIds []int32
+	MinResistance      interface{}
 }
 
 func (q *Queries) GetMonsterIDsByStatusResists(ctx context.Context, arg GetMonsterIDsByStatusResistsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByStatusResists, arg.MinResistance, pq.Array(arg.StatusConditionIds))
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByStatusResists, pq.Array(arg.StatusConditionIds), arg.MinResistance)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

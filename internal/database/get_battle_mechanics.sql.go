@@ -93,25 +93,20 @@ func (q *Queries) GetAgilityTierIDsByAgility(ctx context.Context, agility int32)
 const getElementAutoAbilityIDs = `-- name: GetElementAutoAbilityIDs :many
 SELECT aa.id
 FROM auto_abilities aa
-WHERE EXISTS (
-    SELECT 1
-    FROM elemental_resists er
-    JOIN elements e ON er.element_id = e.id
-    WHERE aa.added_elem_resist_id = er.id
-      AND e.id = $1
+JOIN elemental_resists er ON aa.added_elem_resist_id = er.id
+WHERE er.element_id = $1
 
-    UNION ALL
+UNION
 
-    SELECT 1
-    FROM elements e
-    WHERE aa.on_hit_element_id = e.id
-      AND e.id = $1
-)
-ORDER BY aa.id
+SELECT id
+FROM auto_abilities
+WHERE on_hit_element_id = $1
+
+ORDER BY id
 `
 
-func (q *Queries) GetElementAutoAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getElementAutoAbilityIDs, id)
+func (q *Queries) GetElementAutoAbilityIDs(ctx context.Context, elementID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getElementAutoAbilityIDs, elementID)
 	if err != nil {
 		return nil, err
 	}

@@ -167,34 +167,24 @@ func (q *Queries) GetItemIDsCategory(ctx context.Context, category []ItemCategor
 }
 
 const getItemIDsMonster = `-- name: GetItemIDsMonster :many
+WITH dropped_item_amounts AS (
+    SELECT mi.steal_common_id AS id FROM monster_items mi
+    UNION ALL SELECT mi.steal_rare_id FROM monster_items mi
+    UNION ALL SELECT mi.drop_common_id FROM monster_items mi
+    UNION ALL SELECT mi.drop_rare_id FROM monster_items mi
+    UNION ALL SELECT mi.secondary_drop_common_id FROM monster_items mi
+    UNION ALL SELECT mi.secondary_drop_rare_id FROM monster_items mi
+    UNION ALL SELECT mi.bribe_id FROM monster_items mi
+    UNION ALL
+    SELECT pi.item_amount_id
+    FROM possible_items pi
+    JOIN j_monster_items_other_items jmio ON jmio.possible_item_id = pi.id
+    JOIN monster_items mi ON jmio.monster_items_id = mi.id
+)
 SELECT DISTINCT i.id
 FROM items i
-WHERE EXISTS (
-    SELECT 1
-    FROM monsters m
-    JOIN monster_items mi ON mi.monster_id = m.id
-    JOIN item_amounts ia ON ia.id IN (
-        mi.steal_common_id,
-        mi.steal_rare_id,
-        mi.drop_common_id,
-        mi.drop_rare_id,
-        mi.secondary_drop_common_id,
-        mi.secondary_drop_rare_id,
-        mi.bribe_id
-    )
-    JOIN master_items mit ON mit.id = ia.master_item_id
-    WHERE mit.id = i.master_item_id
-)
-OR EXISTS (
-    SELECT 1
-    FROM monsters m
-    JOIN monster_items mi ON mi.monster_id = m.id
-    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
-    JOIN possible_items pi ON pi.id = jmio.possible_item_id
-    JOIN item_amounts ia ON ia.id = pi.item_amount_id
-    JOIN master_items mit ON mit.id = ia.master_item_id
-    WHERE mit.id = i.master_item_id
-)
+JOIN item_amounts ia ON i.master_item_id = ia.master_item_id
+JOIN dropped_item_amounts dia ON ia.id = dia.id
 ORDER BY i.id
 `
 
@@ -382,39 +372,32 @@ func (q *Queries) GetItemMixIDs(ctx context.Context, id int32) ([]int32, error) 
 }
 
 const getItemMonsterIDs = `-- name: GetItemMonsterIDs :many
+WITH m_items AS (
+  SELECT i.master_item_id
+  FROM items i
+  WHERE i.id = $3
+),
+monster_item_amounts AS (
+    SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.steal_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.secondary_drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.secondary_drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.bribe_id AS item_amount_id FROM monster_items mi
+    UNION ALL
+    SELECT mi.monster_id, pi.item_amount_id
+    FROM possible_items pi
+    JOIN j_monster_items_other_items jmio ON jmio.possible_item_id = pi.id
+    JOIN monster_items mi ON jmio.monster_items_id = mi.id
+)
 SELECT DISTINCT m.id
 FROM monsters m
-JOIN monster_items mi ON mi.monster_id = m.id
+JOIN monster_item_amounts mia ON mia.monster_id = m.id
+JOIN item_amounts ia ON mia.item_amount_id = ia.id
+JOIN m_items mi ON mi.master_item_id = ia.master_item_id
 WHERE ($1::BOOLEAN IS NULL OR m.is_repeatable = $1::BOOLEAN)
   AND ($2::availability_type[] IS NULL OR m.availability = ANY($2::availability_type[]))
-  AND (
-    EXISTS (
-      SELECT 1
-      FROM item_amounts ia
-      JOIN master_items mit ON ia.master_item_id = mit.id
-      JOIN items i ON i.master_item_id = mit.id
-      WHERE ia.id IN (
-          mi.steal_common_id,
-          mi.steal_rare_id,
-          mi.drop_common_id,
-          mi.drop_rare_id,
-          mi.secondary_drop_common_id,
-          mi.secondary_drop_rare_id,
-          mi.bribe_id
-      )
-      AND i.id = $3
-  )
-    OR EXISTS (
-      SELECT 1
-      FROM j_monster_items_other_items jmio
-      JOIN possible_items pi ON pi.id = jmio.possible_item_id
-      JOIN item_amounts ia ON pi.item_amount_id = ia.id
-      JOIN master_items mit ON ia.master_item_id = mit.id
-      JOIN items i ON i.master_item_id = mit.id
-      WHERE jmio.monster_items_id = mi.id
-        AND i.id = $3
-    )
-  )
 ORDER BY m.id
 `
 
@@ -968,33 +951,24 @@ func (q *Queries) GetMasterItemIDsByType(ctx context.Context, itemType []ItemTyp
 }
 
 const getMasterItemIDsMonster = `-- name: GetMasterItemIDsMonster :many
-SELECT DISTINCT mit.id
-FROM master_items mit
-WHERE EXISTS (
-    SELECT 1
-    FROM monsters m
-    JOIN monster_items mi ON mi.monster_id = m.id
-    JOIN item_amounts ia ON ia.id IN (
-        mi.steal_common_id,
-        mi.steal_rare_id,
-        mi.drop_common_id,
-        mi.drop_rare_id,
-        mi.secondary_drop_common_id,
-        mi.secondary_drop_rare_id,
-        mi.bribe_id
-    )
-    WHERE mit.id = ia.master_item_id
+WITH dropped_item_amounts AS (
+    SELECT mi.steal_common_id AS id FROM monster_items mi
+    UNION ALL SELECT mi.steal_rare_id FROM monster_items mi
+    UNION ALL SELECT mi.drop_common_id FROM monster_items mi
+    UNION ALL SELECT mi.drop_rare_id FROM monster_items mi
+    UNION ALL SELECT mi.secondary_drop_common_id FROM monster_items mi
+    UNION ALL SELECT mi.secondary_drop_rare_id FROM monster_items mi
+    UNION ALL SELECT mi.bribe_id FROM monster_items mi
+    UNION ALL
+    SELECT pi.item_amount_id
+    FROM possible_items pi
+    JOIN j_monster_items_other_items jmio ON jmio.possible_item_id = pi.id
+    JOIN monster_items mi ON jmio.monster_items_id = mi.id
 )
-OR EXISTS (
-    SELECT 1
-    FROM monsters m
-    JOIN monster_items mi ON mi.monster_id = m.id
-    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
-    JOIN possible_items pi ON pi.id = jmio.possible_item_id
-    JOIN item_amounts ia ON ia.id = pi.item_amount_id
-    WHERE mit.id = ia.master_item_id
-)
-ORDER BY mit.id
+SELECT DISTINCT ia.master_item_id
+FROM item_amounts ia
+JOIN dropped_item_amounts dia ON ia.id = dia.id
+ORDER BY ia.master_item_id
 `
 
 func (q *Queries) GetMasterItemIDsMonster(ctx context.Context) ([]int32, error) {
@@ -1005,11 +979,11 @@ func (q *Queries) GetMasterItemIDsMonster(ctx context.Context) ([]int32, error) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var master_item_id int32
+		if err := rows.Scan(&master_item_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, master_item_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1118,34 +1092,25 @@ func (q *Queries) GetMasterItemIDsTreasure(ctx context.Context) ([]int32, error)
 }
 
 const getMasterItemMonstersBool = `-- name: GetMasterItemMonstersBool :one
+WITH monster_item_amounts AS (
+    SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.steal_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.secondary_drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.secondary_drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.bribe_id AS item_amount_id FROM monster_items mi
+    UNION ALL
+    SELECT mi.monster_id, pi.item_amount_id
+    FROM possible_items pi
+    JOIN j_monster_items_other_items jmio ON jmio.possible_item_id = pi.id
+    JOIN monster_items mi ON jmio.monster_items_id = mi.id
+)
 SELECT EXISTS (
   SELECT 1
-  FROM monsters m
-  JOIN monster_items mi ON mi.monster_id = m.id
-  WHERE (
-    EXISTS (
-      SELECT 1
-      FROM item_amounts ia
-      WHERE ia.id IN (
-        mi.steal_common_id,
-        mi.steal_rare_id,
-        mi.drop_common_id,
-        mi.drop_rare_id,
-        mi.secondary_drop_common_id,
-        mi.secondary_drop_rare_id,
-        mi.bribe_id
-      )
-      AND ia.master_item_id = $1
-    )
-    OR EXISTS (
-      SELECT 1
-      FROM j_monster_items_other_items jmio
-      JOIN possible_items pi ON pi.id = jmio.possible_item_id
-      JOIN item_amounts ia ON ia.id = pi.item_amount_id
-      WHERE jmio.monster_items_id = mi.id
-        AND ia.master_item_id = $1
-    )
-  )
+  FROM monster_item_amounts mia
+  JOIN item_amounts ia ON mia.item_amount_id = ia.id
+  WHERE ia.master_item_id = $1
 ) AS obtainable_from_monsters
 `
 

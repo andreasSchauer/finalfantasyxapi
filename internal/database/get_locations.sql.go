@@ -2491,26 +2491,13 @@ const getShopIDsEquipmentFilter = `-- name: GetShopIDsEquipmentFilter :many
 SELECT DISTINCT sh.id
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
-WHERE (
-  $1::shop_type IS NULL OR se.shop_type = $1::shop_type
-)
-AND (
-  $2::int[] IS NULL
-  OR
-  se.empty_slots_amount::int = ANY($2::int[])
-)
-AND ($3::int IS NULL OR EXISTS (
-  SELECT 1
-  FROM equipment_names en
-  WHERE en.id = se.equipment_name_id
-    AND en.character_id = $3::int
-))
-AND ($4::int IS NULL OR EXISTS (
-  SELECT 1
-  FROM j_shop_equipment_abilities j
-  WHERE j.shop_equipment_id = se.id
-    AND j.auto_ability_id = $4::int
-))
+LEFT JOIN equipment_names en ON se.equipment_name_id = en.id
+LEFT JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+WHERE 
+    ($1::shop_type IS NULL OR se.shop_type = $1::shop_type)
+    AND ($2::int[] IS NULL OR se.empty_slots_amount::int = ANY($2::int[]))
+    AND ($3::int IS NULL OR en.character_id = $3::int)
+    AND ($4::int IS NULL OR j.auto_ability_id = $4::int)
 ORDER BY sh.id
 `
 
