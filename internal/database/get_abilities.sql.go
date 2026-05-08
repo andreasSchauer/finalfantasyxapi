@@ -276,44 +276,39 @@ func (q *Queries) GetAbilityIDsByDamageType(ctx context.Context, damageType []Da
 }
 
 const getAbilityIDsByElement = `-- name: GetAbilityIDsByElement :many
-SELECT DISTINCT a.id
+SELECT j.ability_id
+FROM j_battle_interactions_damage j
+JOIN damages d ON j.damage_id = d.id
+WHERE $1::int[] IS NOT NULL
+  AND d.element_id = ANY($1::int[])
+
+UNION
+
+SELECT a.id AS ability_id
 FROM abilities a
-WHERE
-    ($1::int[] IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id IS NOT NULL
-    ))
-    OR
-    ($1::int[] IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id = ANY($1::int[])
-    ))
-ORDER BY a.id
+WHERE $1::int[] IS NULL
+  AND a.id NOT IN (
+    SELECT j.ability_id
+    FROM j_battle_interactions_damage j
+    JOIN damages d ON j.damage_id = d.id
+    AND d.element_id IS NOT NULL
+  )
+ORDER BY ability_id
 `
 
-func (q *Queries) GetAbilityIDsByElement(ctx context.Context, element []int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsByElement, pq.Array(element))
+func (q *Queries) GetAbilityIDsByElement(ctx context.Context, elementID []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByElement, pq.Array(elementID))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -325,37 +320,36 @@ func (q *Queries) GetAbilityIDsByElement(ctx context.Context, element []int32) (
 }
 
 const getAbilityIDsByInflictedStatus = `-- name: GetAbilityIDsByInflictedStatus :many
-SELECT DISTINCT a.id
+SELECT a.id
 FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    ($1::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND ist.status_condition_id = $1::int
-    ))
-    OR
-    ($1::int = 6 AND EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-    OR
-    ($1::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ) AND NOT EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-ORDER BY a.id
+JOIN j_battle_interactions_inflicted_status_conditions j ON j.ability_id = a.id
+JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
+WHERE ist.status_condition_id = $1
+  AND $1::int IS NOT NULL 
+  AND $1::int != 6
+
+UNION
+
+SELECT a.id
+FROM abilities a
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.inflicted_delay_id IS NOT NULL
+  AND $1::int = 6
+
+UNION
+
+SELECT a.id
+FROM abilities a
+WHERE $1::int IS NULL
+  AND a.id NOT IN (
+    SELECT j1.ability_id FROM j_battle_interactions_inflicted_status_conditions j1
+    UNION
+    SELECT j2.ability_id FROM j_abilities_battle_interactions j2 
+    JOIN battle_interactions bi ON j2.battle_interaction_id = bi.id
+    WHERE bi.inflicted_delay_id IS NOT NULL
+)
+ORDER BY id
 `
 
 func (q *Queries) GetAbilityIDsByInflictedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
@@ -446,26 +440,21 @@ func (q *Queries) GetAbilityIDsByRank(ctx context.Context, rank []int32) ([]int3
 }
 
 const getAbilityIDsByRemovedStatus = `-- name: GetAbilityIDsByRemovedStatus :many
-SELECT DISTINCT a.id
+SELECT ability_id
+FROM j_battle_interactions_removed_status_conditions
+WHERE $1::int IS NOT NULL
+  AND status_condition_id = $1::int
+
+UNION
+
+SELECT a.id AS ability_id
 FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    ($1::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND j2.status_condition_id = $1::int
-    ))
-    OR
-    ($1::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ))
-ORDER BY a.id
+WHERE $1::int IS NULL
+  AND a.id NOT IN (
+    SELECT ability_id
+    FROM j_battle_interactions_removed_status_conditions
+  )
+ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsByRemovedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
@@ -476,11 +465,11 @@ func (q *Queries) GetAbilityIDsByRemovedStatus(ctx context.Context, statusID sql
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

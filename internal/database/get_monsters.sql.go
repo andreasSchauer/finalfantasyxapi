@@ -911,43 +911,41 @@ func (q *Queries) GetMonsterIDsByIsZombie(ctx context.Context, isZombie bool) ([
 }
 
 const getMonsterIDsByItem = `-- name: GetMonsterIDsByItem :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_items mi ON mi.monster_id = m.id
-LEFT JOIN j_monster_items_other_items jmio
-  ON jmio.monster_items_id = mi.id
-LEFT JOIN possible_items pi
-  ON pi.id = jmio.possible_item_id
-JOIN item_amounts ia
-  ON ia.id IN (
-      mi.steal_common_id,
-      mi.steal_rare_id,
-      mi.drop_common_id,
-      mi.drop_rare_id,
-      mi.secondary_drop_common_id,
-      mi.secondary_drop_rare_id,
-      mi.bribe_id,
-      pi.item_amount_id
-  )
-JOIN master_items mit ON ia.master_item_id = mit.id
-JOIN items i ON i.master_item_id = mit.id
+WITH monster_item_amounts AS (
+    SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.steal_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.secondary_drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.secondary_drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.bribe_id AS item_amount_id FROM monster_items mi
+    UNION ALL
+    SELECT mi.monster_id, pi.item_amount_id
+    FROM possible_items pi
+    JOIN j_monster_items_other_items jmio ON jmio.possible_item_id = pi.id
+    JOIN monster_items mi ON jmio.monster_items_id = mi.id
+)
+SELECT DISTINCT mia.monster_id
+FROM monster_item_amounts mia
+JOIN item_amounts ia ON mia.item_amount_id = ia.id
+JOIN items i ON ia.master_item_id = i.master_item_id
 WHERE i.id = $1
-ORDER BY m.id
+ORDER BY mia.monster_id
 `
 
-func (q *Queries) GetMonsterIDsByItem(ctx context.Context, itemID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItem, itemID)
+func (q *Queries) GetMonsterIDsByItem(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItem, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1264,7 +1262,7 @@ all_matches AS (
   SELECT jmsr.monster_id, sr.status_condition_id
   FROM j_monsters_status_resists jmsr
   JOIN status_resists sr ON sr.id = jmsr.status_resist_id
-  WHERE sr.resistance >= $2
+  WHERE sr.resistance >= $2::int
 )
 SELECT m.monster_id
 FROM all_matches m
@@ -1276,7 +1274,7 @@ ORDER BY m.monster_id
 
 type GetMonsterIDsByStatusResistsParams struct {
 	StatusConditionIds []int32
-	MinResistance      interface{}
+	MinResistance      int32
 }
 
 func (q *Queries) GetMonsterIDsByStatusResists(ctx context.Context, arg GetMonsterIDsByStatusResistsParams) ([]int32, error) {

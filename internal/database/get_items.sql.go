@@ -600,31 +600,22 @@ func (q *Queries) GetItemTreasureIDs(ctx context.Context, arg GetItemTreasureIDs
 }
 
 const getKeyItemAreaIDs = `-- name: GetKeyItemAreaIDs :many
-SELECT DISTINCT a.id
-FROM areas a
-WHERE
-  EXISTS (
-    SELECT 1
-    FROM completion_areas ca
-    JOIN quest_completions qc ON ca.completion_id = qc.id
-    JOIN item_amounts ia ON qc.item_amount_id = ia.id
-    JOIN master_items mi ON ia.master_item_id = mi.id
-    JOIN key_items ki ON ki.master_item_id = mi.id
-    WHERE ca.area_id = a.id
-      AND ki.id = $1
-  )
-  OR
-  EXISTS (
-    SELECT 1
-    FROM treasures t
-    JOIN j_treasures_items j ON j.treasure_id = t.id
-    JOIN item_amounts ia ON j.item_amount_id = ia.id
-    JOIN master_items mi ON ia.master_item_id = mi.id
-    JOIN key_items ki ON ki.master_item_id = mi.id
-    WHERE t.area_id = a.id
-      AND ki.id = $1
-  )
-ORDER BY a.id
+SELECT ca.area_id
+FROM completion_areas ca
+JOIN quest_completions qc ON ca.completion_id = qc.id
+JOIN item_amounts ia ON qc.item_amount_id = ia.id
+JOIN key_items ki ON ki.master_item_id = ia.master_item_id
+WHERE ki.id = $1
+
+UNION
+
+SELECT t.area_id
+FROM treasures t
+JOIN j_treasures_items j ON j.treasure_id = t.id
+JOIN item_amounts ia ON j.item_amount_id = ia.id
+JOIN key_items ki ON ki.master_item_id = ia.master_item_id
+WHERE ki.id = $1
+ORDER BY area_id
 `
 
 func (q *Queries) GetKeyItemAreaIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -635,11 +626,11 @@ func (q *Queries) GetKeyItemAreaIDs(ctx context.Context, id int32) ([]int32, err
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -689,27 +680,24 @@ func (q *Queries) GetKeyItemIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getKeyItemIDsByAvailability = `-- name: GetKeyItemIDsByAvailability :many
-SELECT DISTINCT ki.id
+SELECT ki.id
 FROM key_items ki
-JOIN master_items mi ON ki.master_item_id = mi.id
-JOIN item_amounts ia ON ia.master_item_id = mi.id
-WHERE
-  EXISTS (
-    SELECT 1
-    FROM j_treasures_items j
-    JOIN treasures t ON j.treasure_id = t.id
-    WHERE j.item_amount_id = ia.id
-      AND ($1::availability_type[] IS NULL OR t.availability = ANY($1::availability_type[]))
-  )
-  OR
-  EXISTS (
-    SELECT 1
-    FROM quest_completions qc
-    JOIN quests q ON q.completion_id = qc.id
-    WHERE qc.item_amount_id = ia.id
-      AND ($1::availability_type[] IS NULL OR q.availability = ANY($1::availability_type[]))
-  )
-ORDER BY ki.id
+JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
+JOIN j_treasures_items j ON j.item_amount_id = ia.id
+JOIN treasures t ON j.treasure_id = t.id
+WHERE ($1::availability_type[] IS NULL
+   OR t.availability = ANY($1::availability_type[]))
+
+UNION
+
+SELECT ki.id
+FROM key_items ki
+JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
+JOIN quest_completions qc ON qc.item_amount_id = ia.id
+JOIN quests q ON q.completion_id = qc.id
+WHERE ($1::availability_type[] IS NULL
+   OR q.availability = ANY($1::availability_type[]))
+ORDER BY id
 `
 
 func (q *Queries) GetKeyItemIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {

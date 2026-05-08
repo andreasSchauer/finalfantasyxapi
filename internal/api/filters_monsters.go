@@ -85,7 +85,7 @@ func getMonstersByStatusResists(cfg *Config, r *http.Request, ids []int32) ([]in
 	return dbIDs, nil
 }
 
-func verifyMonsterResistance(cfg *Config, r *http.Request) (int, error) {
+func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
 	queryParam := cfg.q.monsters["resistance"]
 
 	resistance, err := parseIntQuery(r, queryParam)
@@ -93,7 +93,7 @@ func verifyMonsterResistance(cfg *Config, r *http.Request) (int, error) {
 		return 0, err
 	}
 
-	return resistance, nil
+	return int32(resistance), nil
 }
 
 func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {

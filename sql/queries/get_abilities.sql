@@ -125,60 +125,54 @@ ORDER BY a.id;
 
 
 -- name: GetAbilityIDsByInflictedStatus :many
-SELECT DISTINCT a.id
+SELECT a.id
 FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND ist.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int = 6 AND EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ) AND NOT EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-ORDER BY a.id;
+JOIN j_battle_interactions_inflicted_status_conditions j ON j.ability_id = a.id
+JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
+WHERE ist.status_condition_id = sqlc.narg('status_id')
+  AND sqlc.narg('status_id')::int IS NOT NULL 
+  AND sqlc.narg('status_id')::int != 6
+
+UNION
+
+SELECT a.id
+FROM abilities a
+JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.inflicted_delay_id IS NOT NULL
+  AND sqlc.narg('status_id')::int = 6
+
+UNION
+
+SELECT a.id
+FROM abilities a
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND a.id NOT IN (
+    SELECT j1.ability_id FROM j_battle_interactions_inflicted_status_conditions j1
+    UNION
+    SELECT j2.ability_id FROM j_abilities_battle_interactions j2 
+    JOIN battle_interactions bi ON j2.battle_interaction_id = bi.id
+    WHERE bi.inflicted_delay_id IS NOT NULL
+)
+ORDER BY id;
 
 
 -- name: GetAbilityIDsByRemovedStatus :many
-SELECT DISTINCT a.id
+SELECT ability_id
+FROM j_battle_interactions_removed_status_conditions
+WHERE sqlc.narg('status_id')::int IS NOT NULL
+  AND status_condition_id = sqlc.narg('status_id')::int
+
+UNION
+
+SELECT a.id AS ability_id
 FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND j2.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ))
-ORDER BY a.id;
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND a.id NOT IN (
+    SELECT ability_id
+    FROM j_battle_interactions_removed_status_conditions
+  )
+ORDER BY ability_id;
 
 
 -- name: GetAbilityIDsWithStatChanges :many
@@ -224,29 +218,25 @@ ORDER BY a.id;
 
 
 -- name: GetAbilityIDsByElement :many
-SELECT DISTINCT a.id
+SELECT j.ability_id
+FROM j_battle_interactions_damage j
+JOIN damages d ON j.damage_id = d.id
+WHERE sqlc.narg('element_id')::int[] IS NOT NULL
+  AND d.element_id = ANY(sqlc.narg('element_id')::int[])
+
+UNION
+
+SELECT a.id AS ability_id
 FROM abilities a
-WHERE
-    (sqlc.narg('element')::int[] IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id IS NOT NULL
-    ))
-    OR
-    (sqlc.narg('element')::int[] IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id = ANY(sqlc.narg('element')::int[])
-    ))
-ORDER BY a.id;
+WHERE sqlc.narg('element_id')::int[] IS NULL
+  AND a.id NOT IN (
+    SELECT j.ability_id
+    FROM j_battle_interactions_damage j
+    JOIN damages d ON j.damage_id = d.id
+    AND d.element_id IS NOT NULL
+  )
+ORDER BY ability_id;
+
 
 
 -- name: GetAbilityIDsByDamageType :many
