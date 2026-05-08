@@ -40,12 +40,11 @@ func (q *Queries) GetAbilityIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getAbilityIDsBasedOnUserAttack = `-- name: GetAbilityIDsBasedOnUserAttack :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+SELECT DISTINCT j.ability_id
+FROM j_abilities_battle_interactions j
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.based_on_user_attack = true
-ORDER BY a.id
+ORDER BY j.ability_id
 `
 
 func (q *Queries) GetAbilityIDsBasedOnUserAttack(ctx context.Context) ([]int32, error) {
@@ -56,11 +55,11 @@ func (q *Queries) GetAbilityIDsBasedOnUserAttack(ctx context.Context) ([]int32, 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -72,14 +71,11 @@ func (q *Queries) GetAbilityIDsBasedOnUserAttack(ctx context.Context) ([]int32, 
 }
 
 const getAbilityIDsBreakDmgLimit = `-- name: GetAbilityIDsBreakDmgLimit :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
+SELECT DISTINCT j.ability_id
+FROM j_battle_interactions_damage j
+JOIN damages d ON j.damage_id = d.id
 WHERE d.break_dmg_limit IS NOT NULL
-ORDER BY a.id
+ORDER BY j.ability_id
 `
 
 func (q *Queries) GetAbilityIDsBreakDmgLimit(ctx context.Context) ([]int32, error) {
@@ -90,11 +86,11 @@ func (q *Queries) GetAbilityIDsBreakDmgLimit(ctx context.Context) ([]int32, erro
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -137,16 +133,11 @@ func (q *Queries) GetAbilityIDsByAppearsInHelpBar(ctx context.Context, appearsIn
 }
 
 const getAbilityIDsByAttackType = `-- name: GetAbilityIDsByAttackType :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+SELECT DISTINCT j.ability_id
+FROM j_damages_damage_calc j
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.attack_type = ANY($1::attack_type[])
-ORDER BY a.id
+ORDER BY j.ability_id
 `
 
 func (q *Queries) GetAbilityIDsByAttackType(ctx context.Context, attackType []AttackType) ([]int32, error) {
@@ -157,11 +148,11 @@ func (q *Queries) GetAbilityIDsByAttackType(ctx context.Context, attackType []At
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -204,16 +195,11 @@ func (q *Queries) GetAbilityIDsByCanCopycat(ctx context.Context, canCopycat bool
 }
 
 const getAbilityIDsByDamageFormula = `-- name: GetAbilityIDsByDamageFormula :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+SELECT DISTINCT j.ability_id
+FROM j_damages_damage_calc j
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.damage_formula = $1
-ORDER BY a.id
+ORDER BY j.ability_id
 `
 
 func (q *Queries) GetAbilityIDsByDamageFormula(ctx context.Context, damageFormula DamageFormula) ([]int32, error) {
@@ -224,11 +210,11 @@ func (q *Queries) GetAbilityIDsByDamageFormula(ctx context.Context, damageFormul
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -240,16 +226,11 @@ func (q *Queries) GetAbilityIDsByDamageFormula(ctx context.Context, damageFormul
 }
 
 const getAbilityIDsByDamageType = `-- name: GetAbilityIDsByDamageType :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+SELECT DISTINCT j.ability_id
+FROM j_damages_damage_calc j
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.damage_type = ANY($1::damage_type[])
-ORDER BY a.id
+ORDER BY j.ability_id
 `
 
 func (q *Queries) GetAbilityIDsByDamageType(ctx context.Context, damageType []DamageType) ([]int32, error) {
@@ -260,11 +241,11 @@ func (q *Queries) GetAbilityIDsByDamageType(ctx context.Context, damageType []Da
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -320,9 +301,8 @@ func (q *Queries) GetAbilityIDsByElement(ctx context.Context, elementID []int32)
 }
 
 const getAbilityIDsByInflictedStatus = `-- name: GetAbilityIDsByInflictedStatus :many
-SELECT a.id
-FROM abilities a
-JOIN j_battle_interactions_inflicted_status_conditions j ON j.ability_id = a.id
+SELECT j.ability_id
+FROM j_battle_interactions_inflicted_status_conditions j
 JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
 WHERE ist.status_condition_id = $1
   AND $1::int IS NOT NULL 
@@ -330,26 +310,25 @@ WHERE ist.status_condition_id = $1
 
 UNION
 
-SELECT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+SELECT j.ability_id
+FROM j_abilities_battle_interactions j
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.inflicted_delay_id IS NOT NULL
   AND $1::int = 6
 
 UNION
 
-SELECT a.id
+SELECT a.id AS ability_id
 FROM abilities a
 WHERE $1::int IS NULL
   AND a.id NOT IN (
-    SELECT j1.ability_id FROM j_battle_interactions_inflicted_status_conditions j1
+    SELECT ability_id FROM j_battle_interactions_inflicted_status_conditions
     UNION
-    SELECT j2.ability_id FROM j_abilities_battle_interactions j2 
-    JOIN battle_interactions bi ON j2.battle_interaction_id = bi.id
+    SELECT j.ability_id FROM j_abilities_battle_interactions j 
+    JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
     WHERE bi.inflicted_delay_id IS NOT NULL
 )
-ORDER BY id
+ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsByInflictedStatus(ctx context.Context, statusID sql.NullInt32) ([]int32, error) {
@@ -360,11 +339,11 @@ func (q *Queries) GetAbilityIDsByInflictedStatus(ctx context.Context, statusID s
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -380,13 +359,12 @@ SELECT DISTINCT a.id
 FROM abilities a
 JOIN monster_abilities ma ON ma.ability_id = a.id
 JOIN j_monsters_abilities j ON j.monster_ability_id = ma.id
-JOIN monsters m ON j.monster_id = m.id
-WHERE m.id = $1
+WHERE j.monster_id = $1
 ORDER BY a.id
 `
 
-func (q *Queries) GetAbilityIDsByMonster(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityIDsByMonster, id)
+func (q *Queries) GetAbilityIDsByMonster(ctx context.Context, monsterID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityIDsByMonster, monsterID)
 	if err != nil {
 		return nil, err
 	}
@@ -481,12 +459,11 @@ func (q *Queries) GetAbilityIDsByRemovedStatus(ctx context.Context, statusID sql
 }
 
 const getAbilityIDsByTargetType = `-- name: GetAbilityIDsByTargetType :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+SELECT DISTINCT j.ability_id
+FROM j_abilities_battle_interactions j
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = ANY($1::target_type[])
-ORDER BY a.id
+ORDER BY j.ability_id
 `
 
 func (q *Queries) GetAbilityIDsByTargetType(ctx context.Context, targetType []TargetType) ([]int32, error) {
@@ -497,11 +474,11 @@ func (q *Queries) GetAbilityIDsByTargetType(ctx context.Context, targetType []Ta
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -540,14 +517,11 @@ func (q *Queries) GetAbilityIDsByType(ctx context.Context, abilityType []Ability
 }
 
 const getAbilityIDsCanCrit = `-- name: GetAbilityIDsCanCrit :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
+SELECT DISTINCT j.ability_id
+FROM j_battle_interactions_damage j
+JOIN damages d ON j.damage_id = d.id
 WHERE d.critical IS NOT NULL
-ORDER BY a.id
+ORDER BY j.ability_id
 `
 
 func (q *Queries) GetAbilityIDsCanCrit(ctx context.Context) ([]int32, error) {
@@ -558,11 +532,11 @@ func (q *Queries) GetAbilityIDsCanCrit(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -574,14 +548,10 @@ func (q *Queries) GetAbilityIDsCanCrit(ctx context.Context) ([]int32, error) {
 }
 
 const getAbilityIDsDarkable = `-- name: GetAbilityIDsDarkable :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = 4
-ORDER BY a.id
+SELECT DISTINCT ability_id
+FROM j_battle_interactions_affected_by
+WHERE status_condition_id = 4
+ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsDarkable(ctx context.Context) ([]int32, error) {
@@ -592,11 +562,11 @@ func (q *Queries) GetAbilityIDsDarkable(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -608,13 +578,12 @@ func (q *Queries) GetAbilityIDsDarkable(ctx context.Context) ([]int32, error) {
 }
 
 const getAbilityIDsDealsDelay = `-- name: GetAbilityIDsDealsDelay :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+SELECT DISTINCT j.ability_id
+FROM j_abilities_battle_interactions j
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
-ORDER BY a.id
+ORDER BY j.ability_id
 `
 
 func (q *Queries) GetAbilityIDsDealsDelay(ctx context.Context) ([]int32, error) {
@@ -625,11 +594,11 @@ func (q *Queries) GetAbilityIDsDealsDelay(ctx context.Context) ([]int32, error) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -641,14 +610,10 @@ func (q *Queries) GetAbilityIDsDealsDelay(ctx context.Context) ([]int32, error) 
 }
 
 const getAbilityIDsReflectable = `-- name: GetAbilityIDsReflectable :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = 28
-ORDER BY a.id
+SELECT DISTINCT ability_id
+FROM j_battle_interactions_affected_by
+WHERE status_condition_id = 28
+ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsReflectable(ctx context.Context) ([]int32, error) {
@@ -659,11 +624,11 @@ func (q *Queries) GetAbilityIDsReflectable(ctx context.Context) ([]int32, error)
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -675,14 +640,10 @@ func (q *Queries) GetAbilityIDsReflectable(ctx context.Context) ([]int32, error)
 }
 
 const getAbilityIDsSilenceable = `-- name: GetAbilityIDsSilenceable :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = 13
-ORDER BY a.id
+SELECT DISTINCT ability_id
+FROM j_battle_interactions_affected_by
+WHERE status_condition_id = 13
+ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsSilenceable(ctx context.Context) ([]int32, error) {
@@ -693,11 +654,11 @@ func (q *Queries) GetAbilityIDsSilenceable(ctx context.Context) ([]int32, error)
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -709,13 +670,9 @@ func (q *Queries) GetAbilityIDsSilenceable(ctx context.Context) ([]int32, error)
 }
 
 const getAbilityIDsWithModifierChanges = `-- name: GetAbilityIDsWithModifierChanges :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
-ORDER BY a.id
+SELECT DISTINCT ability_id
+FROM j_battle_interactions_modifier_changes
+ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsWithModifierChanges(ctx context.Context) ([]int32, error) {
@@ -726,11 +683,11 @@ func (q *Queries) GetAbilityIDsWithModifierChanges(ctx context.Context) ([]int32
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -742,13 +699,9 @@ func (q *Queries) GetAbilityIDsWithModifierChanges(ctx context.Context) ([]int32
 }
 
 const getAbilityIDsWithStatChanges = `-- name: GetAbilityIDsWithStatChanges :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
-ORDER BY a.id
+SELECT DISTINCT ability_id
+FROM j_battle_interactions_stat_changes
+ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsWithStatChanges(ctx context.Context) ([]int32, error) {
@@ -759,11 +712,11 @@ func (q *Queries) GetAbilityIDsWithStatChanges(ctx context.Context) ([]int32, er
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -820,13 +773,12 @@ SELECT DISTINCT m.id
 FROM monsters m
 JOIN j_monsters_abilities j ON j.monster_id = m.id
 JOIN monster_abilities ma ON j.monster_ability_id = ma.id
-JOIN abilities a ON ma.ability_id = a.id
-WHERE a.id = $1
+WHERE ma.ability_id = $1
 ORDER BY m.id
 `
 
-func (q *Queries) GetAbilityMonsterIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAbilityMonsterIDs, id)
+func (q *Queries) GetAbilityMonsterIDs(ctx context.Context, abilityID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAbilityMonsterIDs, abilityID)
 	if err != nil {
 		return nil, err
 	}
