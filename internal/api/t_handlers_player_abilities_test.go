@@ -298,10 +298,10 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 				requestURL:     "/api/player-abilities?status_inflict=none&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:    50,
+			count:    54,
 			previous: nil,
 			next:     nil,
-			results:  []int32{20, 28, 36, 39, 53, 76, 86, 96, 102},
+			results:  []int32{20, 24, 28, 36, 39, 43, 53, 76, 86, 96, 102},
 		},
 		{
 			testGeneral: testGeneral{

@@ -1,11 +1,8 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -26,26 +23,12 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Type:               enumToNamedAPIResource(cfg, cfg.e.abilityType.endpoint, string(ability.Type), cfg.t.AbilityType),
+		Rank: 				ability.Rank,
+		CanCopycat: 		ability.CanCopycat,
+		AppearsInHelpBar: 	ability.AppearsInHelpBar,
 		TypedAbility:       refToNamedApiResource(cfg, ability.GetAbilityRef()),
 		Monsters:           monsters,
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
-	}
-
-	switch ability.Type {
-	case database.AbilityTypeOverdriveAbility:
-		attributes, err := cfg.db.GetOverdriveAbilityAttributes(r.Context(), id)
-		if err != nil {
-			return Ability{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get attributes for %s", ability), err)
-		}
-
-		response.Rank = h.NullInt32ToPtr(attributes.Rank)
-		response.CanCopycat = false
-		response.AppearsInHelpBar = false
-
-	default:
-		response.Rank = ability.Rank
-		response.CanCopycat = ability.CanCopycat
-		response.AppearsInHelpBar = ability.AppearsInHelpBar
 	}
 
 	return response, nil

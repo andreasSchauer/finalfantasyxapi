@@ -246,8 +246,7 @@ SELECT DISTINCT m.id
 FROM monsters m
 JOIN j_monsters_abilities j ON j.monster_id = m.id
 JOIN monster_abilities ma ON j.monster_ability_id = ma.id
-JOIN abilities a ON ma.ability_id = a.id
-JOIN enemy_abilities ea ON ea.ability_id = a.id
+JOIN enemy_abilities ea ON ma.ability_id = ea.ability_id
 WHERE ea.id = $1
 ORDER BY m.id;
 
@@ -262,8 +261,7 @@ FROM enemy_abilities ea
 JOIN abilities a ON ea.ability_id = a.id
 JOIN monster_abilities ma ON ma.ability_id = a.id
 JOIN j_monsters_abilities j ON j.monster_ability_id = ma.id
-JOIN monsters m ON j.monster_id = m.id
-WHERE m.id = $1
+WHERE j.monster_id = $1
 ORDER BY ea.id;
 
 
@@ -288,8 +286,7 @@ ORDER BY ea.id;
 -- name: GetEnemyAbilityIDsByTargetType :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = ea.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY ea.id;
@@ -298,44 +295,31 @@ ORDER BY ea.id;
 -- name: GetEnemyAbilityIDsDarkable :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = 4
+JOIN j_battle_interactions_affected_by j ON j.ability_id = ea.ability_id
+WHERE j.status_condition_id = 4
 ORDER BY ea.id;
 
 
 -- name: GetEnemyAbilityIDsSilenceable :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = 13
+JOIN j_battle_interactions_affected_by j ON j.ability_id = ea.ability_id
+WHERE j.status_condition_id = 13
 ORDER BY ea.id;
 
 
 -- name: GetEnemyAbilityIDsReflectable :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = 28
+JOIN j_battle_interactions_affected_by j ON j.ability_id = ea.ability_id
+WHERE j.status_condition_id = 28
 ORDER BY ea.id;
 
 
 -- name: GetEnemyAbilityIDsDealsDelay :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = ea.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
@@ -343,72 +327,62 @@ ORDER BY ea.id;
 
 
 -- name: GetEnemyAbilityIDsByInflictedStatus :many
-SELECT DISTINCT ea.id
+SELECT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND ist.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int = 6 AND EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ) AND NOT EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-ORDER BY ea.id;
+JOIN j_battle_interactions_inflicted_status_conditions j ON j.ability_id = ea.ability_id
+JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
+WHERE ist.status_condition_id = sqlc.narg('status_id')
+  AND sqlc.narg('status_id')::int IS NOT NULL 
+  AND sqlc.narg('status_id')::int != 6
+
+UNION
+
+SELECT ea.id
+FROM enemy_abilities ea
+JOIN j_abilities_battle_interactions j ON j.ability_id = ea.ability_id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.inflicted_delay_id IS NOT NULL
+  AND sqlc.narg('status_id')::int = 6
+
+UNION
+
+SELECT ea.id
+FROM enemy_abilities ea
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND ea.ability_id NOT IN (
+    SELECT ability_id FROM j_battle_interactions_inflicted_status_conditions
+    UNION
+    SELECT j.ability_id FROM j_abilities_battle_interactions j 
+    JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+    WHERE bi.inflicted_delay_id IS NOT NULL
+)
+ORDER BY id;
 
 
 -- name: GetEnemyAbilityIDsByRemovedStatus :many
-SELECT DISTINCT ea.id
+SELECT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND j2.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ))
-ORDER BY ea.id;
+JOIN j_battle_interactions_removed_status_conditions j ON j.ability_id = ea.ability_id
+WHERE sqlc.narg('status_id')::int IS NOT NULL
+  AND status_condition_id = sqlc.narg('status_id')::int
+
+UNION
+
+SELECT ea.id
+FROM enemy_abilities ea
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND ea.ability_id NOT IN (
+    SELECT ability_id
+    FROM j_battle_interactions_removed_status_conditions
+  )
+ORDER BY id;
 
 
 -- name: GetEnemyAbilityIDsCanCrit :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
+JOIN j_battle_interactions_damage j ON j.ability_id = ea.ability_id
+JOIN damages d ON j.damage_id = d.id
 WHERE d.critical IS NOT NULL
 ORDER BY ea.id;
 
@@ -416,52 +390,39 @@ ORDER BY ea.id;
 -- name: GetEnemyAbilityIDsBreakDmgLimit :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
+JOIN j_battle_interactions_damage j ON j.ability_id = ea.ability_id
+JOIN damages d ON j.damage_id = d.id
 WHERE d.break_dmg_limit IS NOT NULL
 ORDER BY ea.id;
 
 
 -- name: GetEnemyAbilityIDsByElement :many
-SELECT DISTINCT ea.id
+SELECT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-WHERE
-    (sqlc.narg('element')::int[] IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id IS NOT NULL
-    ))
-    OR
-    (sqlc.narg('element')::int[] IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id = ANY(sqlc.narg('element')::int[])
-    ))
-ORDER BY ea.id;
+JOIN j_battle_interactions_damage j ON j.ability_id = ea.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE sqlc.narg('element_id')::int[] IS NOT NULL
+  AND d.element_id = ANY(sqlc.narg('element_id')::int[])
+
+UNION
+
+SELECT ea.id
+FROM enemy_abilities ea
+WHERE sqlc.narg('element_id')::int[] IS NULL
+  AND ea.ability_id NOT IN (
+    SELECT j.ability_id
+    FROM j_battle_interactions_damage j
+    JOIN damages d ON j.damage_id = d.id
+    AND d.element_id IS NOT NULL
+  )
+ORDER BY id;
 
 
 -- name: GetEnemyAbilityIDsByDamageType :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+JOIN j_damages_damage_calc j ON j.ability_id = ea.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.damage_type = ANY(sqlc.narg('damage_type')::damage_type[])
 ORDER BY ea.id;
 
@@ -469,13 +430,8 @@ ORDER BY ea.id;
 -- name: GetEnemyAbilityIDsByAttackType :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+JOIN j_damages_damage_calc j ON j.ability_id = ea.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY ea.id;
 
@@ -483,13 +439,8 @@ ORDER BY ea.id;
 -- name: GetEnemyAbilityIDsByDamageFormula :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+JOIN j_damages_damage_calc j ON j.ability_id = ea.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.damage_formula = $1
 ORDER BY ea.id;
 
@@ -522,8 +473,7 @@ ORDER BY ia.id;
 -- name: GetItemAbilityIDsByTargetType :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = ia.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY ia.id;
@@ -541,8 +491,7 @@ ORDER BY ia.id;
 -- name: GetItemAbilityIDsDealsDelay :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = ia.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
@@ -550,123 +499,98 @@ ORDER BY ia.id;
 
 
 -- name: GetItemAbilityIDsByInflictedStatus :many
-SELECT DISTINCT ia.id
+SELECT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND ist.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int = 6 AND EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ) AND NOT EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-ORDER BY ia.id;
+JOIN j_battle_interactions_inflicted_status_conditions j ON j.ability_id = ia.ability_id
+JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
+WHERE ist.status_condition_id = sqlc.narg('status_id')
+  AND sqlc.narg('status_id')::int IS NOT NULL 
+  AND sqlc.narg('status_id')::int != 6
+
+UNION
+
+SELECT ia.id
+FROM item_abilities ia
+JOIN j_abilities_battle_interactions j ON j.ability_id = ia.ability_id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.inflicted_delay_id IS NOT NULL
+  AND sqlc.narg('status_id')::int = 6
+
+UNION
+
+SELECT ia.id
+FROM item_abilities ia
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND ia.ability_id NOT IN (
+    SELECT ability_id FROM j_battle_interactions_inflicted_status_conditions
+    UNION
+    SELECT j.ability_id FROM j_abilities_battle_interactions j 
+    JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+    WHERE bi.inflicted_delay_id IS NOT NULL
+)
+ORDER BY id;
 
 
 -- name: GetItemAbilityIDsByRemovedStatus :many
-SELECT DISTINCT ia.id
+SELECT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND j2.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ))
-ORDER BY ia.id;
+JOIN j_battle_interactions_removed_status_conditions j ON j.ability_id = ia.ability_id
+WHERE sqlc.narg('status_id')::int IS NOT NULL
+  AND status_condition_id = sqlc.narg('status_id')::int
+
+UNION
+
+SELECT ia.id
+FROM item_abilities ia
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND ia.ability_id NOT IN (
+    SELECT ability_id
+    FROM j_battle_interactions_removed_status_conditions
+  )
+ORDER BY id;
 
 
 -- name: GetItemAbilityIDsWithStatChanges :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = ia.ability_id
 ORDER BY ia.id;
 
 
 -- name: GetItemAbilityIDsWithModifierChanges :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = ia.ability_id
 ORDER BY ia.id;
 
 
 -- name: GetItemAbilityIDsByElement :many
-SELECT DISTINCT ia.id
+SELECT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-WHERE
-    (sqlc.narg('element')::int[] IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id IS NOT NULL
-    ))
-    OR
-    (sqlc.narg('element')::int[] IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id = ANY(sqlc.narg('element')::int[])
-    ))
-ORDER BY ia.id;
+JOIN j_battle_interactions_damage j ON j.ability_id = ia.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE sqlc.narg('element_id')::int[] IS NOT NULL
+  AND d.element_id = ANY(sqlc.narg('element_id')::int[])
+
+UNION
+
+SELECT ia.id
+FROM item_abilities ia
+WHERE sqlc.narg('element_id')::int[] IS NULL
+  AND ia.ability_id NOT IN (
+    SELECT j.ability_id
+    FROM j_battle_interactions_damage j
+    JOIN damages d ON j.damage_id = d.id
+    AND d.element_id IS NOT NULL
+  )
+ORDER BY id;
 
 
 -- name: GetItemAbilityIDsByAttackType :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+JOIN j_damages_damage_calc j ON j.ability_id = ia.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY ia.id;
 
@@ -674,13 +598,8 @@ ORDER BY ia.id;
 -- name: GetItemAbilityIDsByDamageFormula :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+JOIN j_damages_damage_calc j ON j.ability_id = ia.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.damage_formula = $1
 ORDER BY ia.id;
 
@@ -691,11 +610,11 @@ ORDER BY ia.id;
 
 
 -- name: GetMiscAbilityIDsByName :many
-SELECT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
+SELECT ma.id
+FROM misc_abilities ma
+JOIN abilities a ON ma.ability_id = a.id
 WHERE a.name = $1
-ORDER BY ua.id;
+ORDER BY ma.id;
 
 
 -- name: GetMiscAbilityIDs :many
@@ -703,145 +622,129 @@ SELECT id FROM misc_abilities ORDER BY id;
 
 
 -- name: GetMiscAbilityIDsByCharClass :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN j_misc_abilities_learned_by j ON j.misc_ability_id = ua.id
+SELECT DISTINCT ma.id
+FROM misc_abilities ma
+JOIN j_misc_abilities_learned_by j ON j.misc_ability_id = ma.id
 JOIN character_classes cc ON j.character_class_id = cc.id
 WHERE cc.id = $1
-ORDER BY ua.id;
+ORDER BY ma.id;
 
 
 -- name: GetMiscAbilityIDsByRank :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
+SELECT DISTINCT ma.id
+FROM misc_abilities ma
+JOIN abilities a ON ma.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.rank = ANY(sqlc.arg(rank)::int[])
-ORDER BY ua.id;
+ORDER BY ma.id;
 
 
 -- name: GetMiscAbilityIDsByCanCopycat :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
+SELECT DISTINCT ma.id
+FROM misc_abilities ma
+JOIN abilities a ON ma.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.can_copycat = $1
-ORDER BY ua.id;
+ORDER BY ma.id;
 
 
 -- name: GetMiscAbilityIDsByAppearsInHelpBar :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
+SELECT DISTINCT ma.id
+FROM misc_abilities ma
+JOIN abilities a ON ma.ability_id = a.id
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 WHERE aa.appears_in_help_bar = $1
-ORDER BY ua.id;
+ORDER BY ma.id;
 
 
 -- name: GetMiscAbilityIDsBasedOnUserAttack :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+SELECT DISTINCT ma.id
+FROM misc_abilities ma
+JOIN j_abilities_battle_interactions j ON j.ability_id = ma.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.based_on_user_attack = true
-ORDER BY ua.id;
+ORDER BY ma.id;
 
 
 -- name: GetMiscAbilityIDsByTargetType :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+SELECT DISTINCT ma.id
+FROM misc_abilities ma
+JOIN j_abilities_battle_interactions j ON j.ability_id = ma.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
-ORDER BY ua.id;
+ORDER BY ma.id;
 
 
 -- name: GetMiscAbilityIDsDarkable :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = 4
-ORDER BY ua.id;
+SELECT DISTINCT ma.id
+FROM misc_abilities ma
+JOIN j_battle_interactions_affected_by j ON j.ability_id = ma.ability_id
+WHERE j.status_condition_id = 4
+ORDER BY ma.id;
 
 
 -- name: GetMiscAbilityIDsByInflictedStatus :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND ist.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int = 6 AND EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ) AND NOT EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-ORDER BY ua.id;
+SELECT ma.id
+FROM misc_abilities ma
+JOIN j_battle_interactions_inflicted_status_conditions j ON j.ability_id = ma.ability_id
+JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
+WHERE ist.status_condition_id = sqlc.narg('status_id')
+  AND sqlc.narg('status_id')::int IS NOT NULL 
+  AND sqlc.narg('status_id')::int != 6
+
+UNION
+
+SELECT ma.id
+FROM misc_abilities ma
+JOIN j_abilities_battle_interactions j ON j.ability_id = ma.ability_id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.inflicted_delay_id IS NOT NULL
+  AND sqlc.narg('status_id')::int = 6
+
+UNION
+
+SELECT ma.id
+FROM misc_abilities ma
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND ma.ability_id NOT IN (
+    SELECT ability_id FROM j_battle_interactions_inflicted_status_conditions
+    UNION
+    SELECT j.ability_id FROM j_abilities_battle_interactions j 
+    JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+    WHERE bi.inflicted_delay_id IS NOT NULL
+)
+ORDER BY id;
 
 
 -- name: GetMiscAbilityIDsDealsDelay :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+SELECT DISTINCT ma.id
+FROM misc_abilities ma
+JOIN j_abilities_battle_interactions j ON j.ability_id = ma.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
-ORDER BY ua.id;
+ORDER BY ma.id;
 
 
 -- name: GetMiscAbilityIDsByAttackType :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+SELECT DISTINCT ma.id
+FROM misc_abilities ma
+JOIN j_damages_damage_calc j ON j.ability_id = ma.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
-ORDER BY ua.id;
+ORDER BY ma.id;
 
 
 -- name: GetMiscAbilityIDsByDamageFormula :many
-SELECT DISTINCT ua.id
-FROM misc_abilities ua
-JOIN abilities a ON ua.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+SELECT DISTINCT ma.id
+FROM misc_abilities ma
+JOIN j_damages_damage_calc j ON j.ability_id = ma.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.damage_formula = $1
-ORDER BY ua.id;
+ORDER BY ma.id;
+
+
+
 
 
 
@@ -857,30 +760,19 @@ WHERE oa.id = ANY(sqlc.arg('overdrive_ability_ids')::int[])
 ORDER BY oa.id, aa.rank;
 
 
--- name: GetOverdriveAbilityAttributes :one
-SELECT aa.rank, aa.can_copycat, aa.appears_in_help_bar
-FROM ability_attributes aa
-JOIN overdrives o ON o.attributes_id = aa.id
-JOIn j_overdrives_overdrive_abilities j ON j.overdrive_id = o.id
-JOIN overdrive_abilities oa ON j.overdrive_ability_id = oa.id
-JOIN abilities a ON oa.ability_id = a.id
-WHERE a.id = $1;
-
-
--- name: GetOverdriveAbilityOverdriveIDs :many
-SELECT o.id
-FROM overdrives o
-JOIN j_overdrives_overdrive_abilities j ON j.overdrive_id = o.id
-JOIN overdrive_abilities oa ON j.overdrive_ability_id = oa.id
-WHERE oa.id = $1;
-
-
 -- name: GetOverdriveAbilityIDsByName :many
 SELECT oa.id
 FROM overdrive_abilities oa
 JOIN abilities a ON oa.ability_id = a.id
 WHERE a.name = $1
 ORDER BY oa.id;
+
+
+-- name: GetOverdriveAbilityOverdriveIDs :many
+SELECT overdrive_id
+FROM j_overdrives_overdrive_abilities
+WHERE overdrive_ability_id = $1
+ORDER BY overdrive_id;
 
 
 -- name: GetOverdriveAbilityIDs :many
@@ -918,8 +810,7 @@ ORDER BY oa.id;
 -- name: GetOverdriveAbilityIDsByTargetType :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = oa.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY oa.id;
@@ -928,8 +819,7 @@ ORDER BY oa.id;
 -- name: GetOverdriveAbilityIDsDealsDelay :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = oa.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
@@ -937,72 +827,62 @@ ORDER BY oa.id;
 
 
 -- name: GetOverdriveAbilityIDsByInflictedStatus :many
-SELECT DISTINCT oa.id
+SELECT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND ist.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int = 6 AND EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ) AND NOT EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-ORDER BY oa.id;
+JOIN j_battle_interactions_inflicted_status_conditions j ON j.ability_id = oa.ability_id
+JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
+WHERE ist.status_condition_id = sqlc.narg('status_id')
+  AND sqlc.narg('status_id')::int IS NOT NULL 
+  AND sqlc.narg('status_id')::int != 6
+
+UNION
+
+SELECT oa.id
+FROM overdrive_abilities oa
+JOIN j_abilities_battle_interactions j ON j.ability_id = oa.ability_id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.inflicted_delay_id IS NOT NULL
+  AND sqlc.narg('status_id')::int = 6
+
+UNION
+
+SELECT oa.id
+FROM overdrive_abilities oa
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND oa.ability_id NOT IN (
+    SELECT ability_id FROM j_battle_interactions_inflicted_status_conditions
+    UNION
+    SELECT j.ability_id FROM j_abilities_battle_interactions j 
+    JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+    WHERE bi.inflicted_delay_id IS NOT NULL
+)
+ORDER BY id;
 
 
 -- name: GetOverdriveAbilityIDsByRemovedStatus :many
-SELECT DISTINCT oa.id
+SELECT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND j2.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ))
-ORDER BY oa.id;
+JOIN j_battle_interactions_removed_status_conditions j ON j.ability_id = oa.ability_id
+WHERE sqlc.narg('status_id')::int IS NOT NULL
+  AND status_condition_id = sqlc.narg('status_id')::int
+
+UNION
+
+SELECT oa.id
+FROM overdrive_abilities oa
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND oa.ability_id NOT IN (
+    SELECT ability_id
+    FROM j_battle_interactions_removed_status_conditions
+  )
+ORDER BY id;
 
 
 -- name: GetOverdriveAbilityIDsCanCrit :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
+JOIN j_battle_interactions_damage j ON j.ability_id = oa.ability_id
+JOIN damages d ON j.damage_id = d.id
 WHERE d.critical IS NOT NULL
 ORDER BY oa.id;
 
@@ -1010,62 +890,44 @@ ORDER BY oa.id;
 -- name: GetOverdriveAbilityIDsWithStatChanges :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = oa.ability_id
 ORDER BY oa.id;
 
 
 -- name: GetOverdriveAbilityIDsWithModifierChanges :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = oa.ability_id
 ORDER BY oa.id;
 
 
 -- name: GetOverdriveAbilityIDsByElement :many
-SELECT DISTINCT oa.id
+SELECT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-WHERE
-    (sqlc.narg('element')::int[] IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id IS NOT NULL
-    ))
-    OR
-    (sqlc.narg('element')::int[] IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id = ANY(sqlc.narg('element')::int[])
-    ))
-ORDER BY oa.id;
+JOIN j_battle_interactions_damage j ON j.ability_id = oa.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE sqlc.narg('element_id')::int[] IS NOT NULL
+  AND d.element_id = ANY(sqlc.narg('element_id')::int[])
+
+UNION
+
+SELECT oa.id
+FROM overdrive_abilities oa
+WHERE sqlc.narg('element_id')::int[] IS NULL
+  AND oa.ability_id NOT IN (
+    SELECT j.ability_id
+    FROM j_battle_interactions_damage j
+    JOIN damages d ON j.damage_id = d.id
+    AND d.element_id IS NOT NULL
+  )
+ORDER BY id;
 
 
 -- name: GetOverdriveAbilityIDsByAttackType :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+JOIN j_damages_damage_calc j ON j.ability_id = oa.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY oa.id;
 
@@ -1073,13 +935,8 @@ ORDER BY oa.id;
 -- name: GetOverdriveAbilityIDsByDamageFormula :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+JOIN j_damages_damage_calc j ON j.ability_id = oa.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.damage_formula = $1
 ORDER BY oa.id;
 
@@ -1100,8 +957,7 @@ SELECT DISTINCT m.id
 FROM monsters m
 JOIN j_monsters_abilities j ON j.monster_id = m.id
 JOIN monster_abilities ma ON j.monster_ability_id = ma.id
-JOIN abilities a ON ma.ability_id = a.id
-JOIN player_abilities pa ON pa.ability_id = a.id
+JOIN player_abilities pa ON ma.ability_id = pa.ability_id
 WHERE pa.id = $1
 ORDER BY m.id;
 
@@ -1196,8 +1052,7 @@ ORDER BY pa.id;
 -- name: GetPlayerAbilityIDsBasedOnUserAttack :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = pa.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.based_on_user_attack = true
 ORDER BY pa.id;
@@ -1206,8 +1061,7 @@ ORDER BY pa.id;
 -- name: GetPlayerAbilityIDsByTargetType :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = pa.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY pa.id;
@@ -1216,44 +1070,31 @@ ORDER BY pa.id;
 -- name: GetPlayerAbilityIDsDarkable :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = 4
+JOIN j_battle_interactions_affected_by j ON j.ability_id = pa.ability_id
+WHERE j.status_condition_id = 4
 ORDER BY pa.id;
 
 
 -- name: GetPlayerAbilityIDsSilenceable :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = 13
+JOIN j_battle_interactions_affected_by j ON j.ability_id = pa.ability_id
+WHERE j.status_condition_id = 13
 ORDER BY pa.id;
 
 
 -- name: GetPlayerAbilityIDsReflectable :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_affected_by j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = 28
+JOIN j_battle_interactions_affected_by j ON j.ability_id = pa.ability_id
+WHERE j.status_condition_id = 28
 ORDER BY pa.id;
 
 
 -- name: GetPlayerAbilityIDsDealsDelay :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = pa.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 WHERE idl.ctb_attack_type = 'attack'
@@ -1261,123 +1102,98 @@ ORDER BY pa.id;
 
 
 -- name: GetPlayerAbilityIDsByInflictedStatus :many
-SELECT DISTINCT pa.id
+SELECT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND ist.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int = 6 AND EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_inflicted_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ) AND NOT EXISTS (
-        SELECT 1
-        FROM inflicted_delays idl
-        WHERE bi.inflicted_delay_id = idl.id
-    ))
-ORDER BY pa.id;
+JOIN j_battle_interactions_inflicted_status_conditions j ON j.ability_id = pa.ability_id
+JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
+WHERE ist.status_condition_id = sqlc.narg('status_id')
+  AND sqlc.narg('status_id')::int IS NOT NULL 
+  AND sqlc.narg('status_id')::int != 6
+
+UNION
+
+SELECT pa.id
+FROM player_abilities pa
+JOIN j_abilities_battle_interactions j ON j.ability_id = pa.ability_id
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+WHERE bi.inflicted_delay_id IS NOT NULL
+  AND sqlc.narg('status_id')::int = 6
+
+UNION
+
+SELECT pa.id
+FROM player_abilities pa
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND pa.ability_id NOT IN (
+    SELECT ability_id FROM j_battle_interactions_inflicted_status_conditions
+    UNION
+    SELECT j.ability_id FROM j_abilities_battle_interactions j 
+    JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+    WHERE bi.inflicted_delay_id IS NOT NULL
+)
+ORDER BY id;
 
 
 -- name: GetPlayerAbilityIDsByRemovedStatus :many
-SELECT DISTINCT pa.id
+SELECT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-WHERE
-    (sqlc.narg('status_id')::int IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-          AND j2.status_condition_id = sqlc.narg('status_id')::int
-    ))
-    OR
-    (sqlc.narg('status_id')::int IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_battle_interactions_removed_status_conditions j2
-        WHERE j2.ability_id = a.id
-          AND j2.battle_interaction_id = bi.id
-    ))
-ORDER BY pa.id;
+JOIN j_battle_interactions_removed_status_conditions j ON j.ability_id = pa.ability_id
+WHERE sqlc.narg('status_id')::int IS NOT NULL
+  AND status_condition_id = sqlc.narg('status_id')::int
+
+UNION
+
+SELECT pa.id
+FROM player_abilities pa
+WHERE sqlc.narg('status_id')::int IS NULL
+  AND pa.ability_id NOT IN (
+    SELECT ability_id
+    FROM j_battle_interactions_removed_status_conditions
+  )
+ORDER BY id;
 
 
 -- name: GetPlayerAbilityIDsWithStatChanges :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = pa.ability_id
 ORDER BY pa.id;
 
 
 -- name: GetPlayerAbilityIDsWithModifierChanges :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = pa.ability_id
 ORDER BY pa.id;
 
 
 -- name: GetPlayerAbilityIDsByElement :many
-SELECT DISTINCT pa.id
+SELECT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-WHERE
-    (sqlc.narg('element')::int[] IS NULL AND NOT EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id IS NOT NULL
-    ))
-    OR
-    (sqlc.narg('element')::int[] IS NOT NULL AND EXISTS (
-        SELECT 1
-        FROM j_abilities_battle_interactions j1
-        JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-        JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-        JOIN damages d ON j2.damage_id = d.id
-        WHERE j1.ability_id = a.id
-          AND d.element_id = ANY(sqlc.narg('element')::int[])
-    ))
-ORDER BY pa.id;
+JOIN j_battle_interactions_damage j ON j.ability_id = pa.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE sqlc.narg('element_id')::int[] IS NOT NULL
+  AND d.element_id = ANY(sqlc.narg('element_id')::int[])
+
+UNION
+
+SELECT pa.id
+FROM player_abilities pa
+WHERE sqlc.narg('element_id')::int[] IS NULL
+  AND pa.ability_id NOT IN (
+    SELECT j.ability_id
+    FROM j_battle_interactions_damage j
+    JOIN damages d ON j.damage_id = d.id
+    AND d.element_id IS NOT NULL
+  )
+ORDER BY id;
 
 
 -- name: GetPlayerAbilityIDsByDamageType :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+JOIN j_damages_damage_calc j ON j.ability_id = pa.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.damage_type = ANY(sqlc.narg('damage_type')::damage_type[])
 ORDER BY pa.id;
 
@@ -1385,13 +1201,8 @@ ORDER BY pa.id;
 -- name: GetPlayerAbilityIDsByAttackType :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+JOIN j_damages_damage_calc j ON j.ability_id = pa.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.attack_type = ANY(sqlc.narg('attack_type')::attack_type[])
 ORDER BY pa.id;
 
@@ -1399,13 +1210,8 @@ ORDER BY pa.id;
 -- name: GetPlayerAbilityIDsByDamageFormula :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN j_damages_damage_calc j3 ON j3.ability_id = a.id AND j3.battle_interaction_id = bi.id AND j3.damage_id = d.id
-JOIN ability_damages ad ON j3.ability_damage_id = ad.id
+JOIN j_damages_damage_calc j ON j.ability_id = pa.ability_id
+JOIN ability_damages ad ON j.ability_damage_id = ad.id
 WHERE ad.damage_formula = $1
 ORDER BY pa.id;
 
@@ -1421,23 +1227,19 @@ ORDER BY tc.id;
 
 
 -- name: GetTriggerCommandMonsterFormationIDs :many
-SELECT mf.id
-FROM monster_formations mf
-JOIN j_monster_formations_trigger_commands j ON j.monster_formation_id = mf.id
+SELECT j.monster_formation_id
+FROM j_monster_formations_trigger_commands j
 JOIN formation_trigger_commands ftc ON j.trigger_command_id = ftc.id
-JOIN trigger_commands tc ON ftc.trigger_command_id = tc.id
-WHERE tc.id = $1
-ORDER BY mf.id;
+WHERE ftc.trigger_command_id = $1
+ORDER BY j.monster_formation_id;
 
 
 -- name: GetTriggerCommandCharClassIDs :many
-SELECT cc.id
-FROM character_classes cc
-JOIN j_formation_trigger_commands_users j ON j.character_class_id = cc.id
+SELECT j.character_class_id
+FROM j_formation_trigger_commands_users j
 JOIN formation_trigger_commands ftc ON j.trigger_command_id = ftc.id
-JOIN trigger_commands tc ON ftc.trigger_command_id = tc.id
-WHERE tc.id = $1
-ORDER BY cc.id;
+WHERE ftc.trigger_command_id = $1
+ORDER BY j.character_class_id;
 
 
 -- name: GetTriggerCommandIDs :many
@@ -1475,8 +1277,7 @@ ORDER BY tc.id;
 -- name: GetTriggerCommandIDsByTargetType :many
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
-JOIN abilities a ON tc.ability_id = a.id
-JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+JOIN j_abilities_battle_interactions j ON j.ability_id = tc.ability_id
 JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE bi.target = ANY(sqlc.narg('target_type')::target_type[])
 ORDER BY tc.id;
@@ -1485,22 +1286,14 @@ ORDER BY tc.id;
 -- name: GetTriggerCommandIDsWithStatChanges :many
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
-JOIN abilities a ON tc.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = tc.ability_id
 ORDER BY tc.id;
 
 
 -- name: GetTriggerCommandIDsWithModifierChanges :many
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
-JOIN abilities a ON tc.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = tc.ability_id
 ORDER BY tc.id;
 
 
@@ -1509,12 +1302,10 @@ ORDER BY tc.id;
 
 
 -- name: GetOverdriveOverdriveAbilityIDs :many
-SELECT oa.id
-FROM overdrive_abilities oa
-JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
-JOIN overdrives o ON j.overdrive_id = o.id
-WHERE o.id = $1
-ORDER BY oa.id;
+SELECT overdrive_ability_id
+FROM j_overdrives_overdrive_abilities
+WHERE overdrive_id = $1
+ORDER BY overdrive_ability_id;
 
 
 -- name: GetOverdriveIDs :many
@@ -1530,13 +1321,7 @@ ORDER BY o.id;
 
 
 -- name: GetOverdriveIDsByUser :many
-SELECT o.id
-FROM overdrives o
-JOIN character_classes cc ON o.character_class_id = cc.id
-WHERE cc.id = $1
-ORDER BY o.id;
-
-
+SELECT id FROM overdrives WHERE character_class_id = $1 ORDER BY id;
 
 
 
@@ -1549,6 +1334,5 @@ SELECT id FROM ronso_rages ORDER BY id;
 SELECT m.id
 FROM monsters m
 JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
-JOIN ronso_rages r ON j.ronso_rage_id = r.id
-WHERE r.id = $1
+WHERE j.ronso_rage_id = $1
 ORDER BY m.id;

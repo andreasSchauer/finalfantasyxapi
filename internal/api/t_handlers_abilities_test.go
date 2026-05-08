@@ -108,7 +108,7 @@ func TestGetAbility(t *testing.T) {
 			},
 			expNameVer:       newExpNameVer(269, "hyper mighty g", 0),
 			rank:             h.GetInt32Ptr(6),
-			appearsInHelpBar: false,
+			appearsInHelpBar: true,
 			canCopyCat:       false,
 			abilityType:      2,
 			typedAbility:     "/overdrive-abilities/167",
