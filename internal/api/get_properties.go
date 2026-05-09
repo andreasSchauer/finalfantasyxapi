@@ -12,7 +12,7 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property,
 		return Property{}, err
 	}
 
-	autoAbilities, err := getResourcesDbItem(cfg, r, cfg.e.autoAbilities, property, cfg.db.GetPropertyAutoAbilityIDs)
+	autoAbilities, err := getResourcesDbItem(cfg, r, cfg.e.autoAbilities, property, ToIntManyNull(cfg.db.GetPropertyAutoAbilityIDs))
 	if err != nil {
 		return Property{}, err
 	}

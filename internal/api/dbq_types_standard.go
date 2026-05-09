@@ -27,12 +27,6 @@ func ToIntManyNull(q DbQueryNullIntMany) DbQueryIntMany {
 	}
 }
 
-func ToIntManyAny(q DbQueryAny) DbQueryIntMany {
-	return func(ctx context.Context, id int32) ([]int32, error) {
-		return q(ctx, id)
-	}
-}
-
 func ToIntManyNoInput(q DbQueryNoInput) DbQueryIntMany {
 	return func(ctx context.Context, _ int32) ([]int32, error) {
 		return q(ctx)

@@ -35,8 +35,7 @@ AND (sqlc.arg(agility)::int) <= max_agility;
 SELECT DISTINCT sc.id
 FROM status_conditions sc
 JOIN elemental_resists er ON sc.added_elem_resist_id = er.id
-JOIN elements e ON er.element_id = e.id
-WHERE e.id = $1;
+WHERE er.element_id = $1;
 
 
 -- name: GetElementAutoAbilityIDs :many
@@ -57,89 +56,69 @@ ORDER BY id;
 -- name: GetElementPlayerAbilityIDs :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+JOIN j_battle_interactions_damage j ON j.ability_id = pa.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE d.element_id = $1
 ORDER BY pa.id;
 
 
 -- name: GetElementOverdriveAbilityIDs :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+JOIN j_battle_interactions_damage j ON j.ability_id = oa.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE d.element_id = $1
 ORDER BY oa.id;
 
 
 -- name: GetElementItemAbilityIDs :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+JOIN j_battle_interactions_damage j ON j.ability_id = ia.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE d.element_id = $1
 ORDER BY ia.id;
 
 
 -- name: GetElementEnemyAbilityIDs :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+JOIN j_battle_interactions_damage j ON j.ability_id = ea.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE d.element_id = $1
 ORDER BY ea.id;
 
 
 -- name: GetElementMonsterIDsWeak :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN j_monsters_elem_resists j ON j.monster_id = m.id
+SELECT DISTINCT j.monster_id
+FROM j_monsters_elem_resists j
 JOIN elemental_resists er ON j.elem_resist_id = er.id
 WHERE er.element_id = $1 AND er.affinity = 'weak'
-ORDER BY m.id;
+ORDER BY j.monster_id;
 
 
 -- name: GetElementMonsterIDsHalved :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN j_monsters_elem_resists j ON j.monster_id = m.id
+SELECT DISTINCT j.monster_id
+FROM j_monsters_elem_resists j
 JOIN elemental_resists er ON j.elem_resist_id = er.id
 WHERE er.element_id = $1 AND er.affinity = 'halved'
-ORDER BY m.id;
+ORDER BY j.monster_id;
 
 
 -- name: GetElementMonsterIDsImmune :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN j_monsters_elem_resists j ON j.monster_id = m.id
+SELECT DISTINCT j.monster_id
+FROM j_monsters_elem_resists j
 JOIN elemental_resists er ON j.elem_resist_id = er.id
 WHERE er.element_id = $1 AND er.affinity = 'immune'
-ORDER BY m.id;
+ORDER BY j.monster_id;
 
 
 -- name: GetElementMonsterIDsAbsorb :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN j_monsters_elem_resists j ON j.monster_id = m.id
+SELECT DISTINCT j.monster_id
+FROM j_monsters_elem_resists j
 JOIN elemental_resists er ON j.elem_resist_id = er.id
 WHERE er.element_id = $1 AND er.affinity = 'absorb'
-ORDER BY m.id;
+ORDER BY j.monster_id;
 
 
 -- name: GetElementIDs :many
@@ -152,59 +131,47 @@ SELECT id FROM elements ORDER BY id;
 
 
 -- name: GetStatusConditionAutoAbilityIDs :many
-SELECT aa.id
-FROM auto_abilities aa
-JOIN j_auto_abilities_added_statusses j ON j.auto_ability_id = aa.id
-JOIN status_conditions sc ON j.status_condition_id = sc.id
-WHERE sc.id = $1
+SELECT jast.auto_ability_id
+FROM j_auto_abilities_added_statusses jast
+WHERE jast.status_condition_id = $1
 
 UNION
 
-SELECT aa.id
-FROM auto_abilities aa
-JOIN j_auto_abilities_added_status_resists j ON j.auto_ability_id = aa.id
-JOIN status_resists sr ON j.status_resist_id = sr.id
-JOIN status_conditions sc ON sr.status_condition_id = sc.id
-WHERE sc.id = $1
+SELECT jasr.auto_ability_id
+FROM j_auto_abilities_added_status_resists jasr
+JOIN status_resists sr ON jasr.status_resist_id = sr.id
+WHERE sr.status_condition_id = $1
 
 UNION
 
-SELECT aa.id
+SELECT aa.id AS auto_ability_id
 FROM auto_abilities aa
 JOIN inflicted_statusses ist ON aa.on_hit_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE ist.status_condition_id = $1
 
-ORDER BY id;
-
+ORDER BY auto_ability_id;
 
 
 -- name: GetStatusConditionAbilityIDsInflicted :many
-SELECT a.id FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = j1.battle_interaction_id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+SELECT j.ability_id
+FROM j_battle_interactions_inflicted_status_conditions j
+JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
 WHERE ist.status_condition_id = sqlc.arg(status_condition_id)::int AND ist.probability BETWEEN sqlc.arg('min_rate')::int AND sqlc.arg('max_rate')::int
 
 UNION
 
-SELECT a.id FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+SELECT j.ability_id
+FROM j_abilities_battle_interactions j
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE sqlc.arg(status_condition_id)::int = 6 AND bi.inflicted_delay_id IS NOT NULL
-
-ORDER BY id;
+ORDER BY ability_id;
 
 
 -- name: GetStatusConditionAbilityIDsRemoved :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
-ORDER BY a.id;
+SELECT ability_id
+FROM j_battle_interactions_removed_status_conditions
+WHERE status_condition_id = $1
+ORDER BY ability_id;
 
 
 -- name: GetStatusConditionInflictedDelayConditionIDs :many
@@ -218,30 +185,25 @@ ORDER BY sc.id;
 
 
 -- name: GetStatusConditionRemovedConditionIDs :many
-SELECT DISTINCT scp.id
-FROM status_conditions scp
-JOIN j_status_conditions_removed_status_conditions j ON j.parent_condition_id = scp.id
-JOIN status_conditions scc ON j.child_condition_id = scc.id
-WHERE scc.id = $1
-ORDER BY scp.id;
+SELECT parent_condition_id
+FROM j_status_conditions_removed_status_conditions
+WHERE child_condition_id = $1
+ORDER BY parent_condition_id;
 
 
 -- name: GetStatusConditionResistingMonsterIDs :many
-SELECT m.id
-FROM monsters m
-JOIN j_monsters_immunities jmi ON jmi.monster_id = m.id
-WHERE jmi.status_condition_id = sqlc.arg(status_condition_id)::int
+SELECT jmi.monster_id
+FROM j_monsters_immunities jmi
+WHERE jmi.status_condition_id = $1
 
 UNION
 
-SELECT m.id
-FROM monsters m
-JOIN j_monsters_status_resists jmsr ON jmsr.monster_id = m.id
-JOIN status_resists sr ON sr.id = jmsr.status_resist_id
-WHERE sr.status_condition_id = sqlc.arg(status_condition_id)::int
+SELECT jsr.monster_id
+FROM j_monsters_status_resists jsr
+JOIN status_resists sr ON sr.id = jsr.status_resist_id
+WHERE sr.status_condition_id = $1
   AND sr.resistance >= sqlc.arg('min_resistance')::int
-
-ORDER BY id;
+ORDER BY monster_id;
 
 
 -- name: GetStatusConditionIDs :many
@@ -259,132 +221,104 @@ SELECT id FROM status_conditions WHERE category = ANY(sqlc.arg('category')::stat
 -- name: GetStatSphereIDs :many
 SELECT DISTINCT sph.id
 FROM spheres sph
-JOIN items i ON sph.item_id = i.id
-JOIN j_items_related_stats j ON j.item_id = i.id
+JOIN j_items_related_stats j ON j.item_id = sph.item_id
 WHERE j.stat_id = $1
 ORDER BY sph.id;
 
 
 -- name: GetStatAutoAbilityIDs :many
-SELECT DISTINCT aa.id
-FROM auto_abilities aa
-JOIN j_auto_abilities_related_stats j ON j.auto_ability_id = aa.id
-WHERE j.stat_id = $1
-ORDER BY aa.id;
+SELECT auto_ability_id
+FROM j_auto_abilities_related_stats
+WHERE stat_id = $1
+ORDER BY auto_ability_id;
 
 
 -- name: GetStatStatusConditionIDs :many
-SELECT DISTINCT sc.id
-FROM status_conditions sc
-JOIN j_status_conditions_related_stats j ON j.status_condition_id = sc.id
-WHERE j.stat_id = $1
-ORDER BY sc.id;
+SELECT status_condition_id
+FROM j_status_conditions_related_stats
+WHERE stat_id = $1
+ORDER BY status_condition_id;
 
 
 -- name: GetStatPropertyIDs :many
-SELECT DISTINCT p.id
-FROM properties p
-JOIN j_properties_related_stats j ON j.property_id = p.id
-WHERE j.stat_id = $1
-ORDER BY p.id;
+SELECT property_id
+FROM j_properties_related_stats
+WHERE stat_id = $1
+ORDER BY property_id;
 
 
 -- name: GetStatPlayerAbilityIDs :many
-SELECT DISTINCT pa.id
-FROM player_abilities pa
-JOIN j_player_abilities_related_stats j ON j.player_ability_id = pa.id
-WHERE j.stat_id = $1
-ORDER BY pa.id;
+SELECT player_ability_id
+FROM j_player_abilities_related_stats
+WHERE stat_id = $1
+ORDER BY player_ability_id;
 
 
 -- name: GetStatOverdriveAbilityIDs :many
-SELECT DISTINCT oa.id
-FROM overdrive_abilities oa
-JOIN j_overdrive_abilities_related_stats j ON j.overdrive_ability_id = oa.id
-WHERE j.stat_id = $1
-ORDER BY oa.id;
+SELECT overdrive_ability_id
+FROM j_overdrive_abilities_related_stats
+WHERE stat_id = $1
+ORDER BY overdrive_ability_id;
 
 
 -- name: GetStatItemAbilityIDs :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN items i ON ia.item_id = i.id
-JOIN j_items_related_stats j ON j.item_id = i.id
+JOIN j_items_related_stats j ON j.item_id = ia.item_id
 WHERE j.stat_id = $1
 ORDER BY ia.id;
 
 
 -- name: GetStatTriggerCommandIDs :many
-SELECT DISTINCT tc.id
-FROM trigger_commands tc
-JOIN j_trigger_commands_related_stats j ON j.trigger_command_id = tc.id
-WHERE j.stat_id = $1
-ORDER BY tc.id;
+SELECT trigger_command_id
+FROM j_trigger_commands_related_stats
+WHERE stat_id = $1
+ORDER BY trigger_command_id;
 
 
 -- name: GetStatAutoAbilityIDsStatChange :many
-SELECT DISTINCT aa.id
-FROM auto_abilities aa
-JOIN j_auto_abilities_stat_changes j ON j.auto_ability_id = aa.id
-JOIN stat_changes sc ON j.stat_change_id = sc.id
-WHERE sc.stat_id = $1
-ORDER BY aa.id;
+SELECT auto_ability_id
+FROM j_auto_abilities_stat_changes
+WHERE stat_change_id = $1
+ORDER BY auto_ability_id;
 
 
 -- name: GetStatStatusConditionIDsStatChange :many
-SELECT DISTINCT scon.id
-FROM status_conditions scon
-JOIN j_status_conditions_stat_changes j ON j.status_condition_id = scon.id
-JOIN stat_changes sc ON j.stat_change_id = sc.id
-WHERE sc.stat_id = $1
-ORDER BY scon.id;
+SELECT status_condition_id
+FROM j_status_conditions_stat_changes
+WHERE stat_change_id = $1
+ORDER BY status_condition_id;
 
 
 -- name: GetStatPlayerAbilityIDsStatChange :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
-WHERE sc.stat_id = $1
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = pa.ability_id
+WHERE j.stat_change_id = $1
 ORDER BY pa.id;
 
 
 -- name: GetStatOverdriveAbilityIDsStatChange :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
-WHERE sc.stat_id = $1
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = oa.ability_id
+WHERE j.stat_change_id = $1
 ORDER BY oa.id;
 
 
 -- name: GetStatItemAbilityIDsStatChange :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
-WHERE sc.stat_id = $1
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = ia.ability_id
+WHERE j.stat_change_id = $1
 ORDER BY ia.id;
 
 
 -- name: GetStatTriggerCommandIDsStatChange :many
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
-JOIN abilities a ON tc.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
-WHERE sc.stat_id = $1
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = tc.ability_id
+WHERE j.stat_change_id = $1
 ORDER BY tc.id;
 
 
@@ -399,21 +333,19 @@ SELECT id FROM stats ORDER BY id;
 
 
 -- name: GetModifierAutoAbilityIDs :many
-SELECT DISTINCT aa.id
-FROM auto_abilities aa
-JOIN j_auto_abilities_modifier_changes j ON j.auto_ability_id = aa.id
+SELECT DISTINCT j.auto_ability_id
+FROM j_auto_abilities_modifier_changes j
 JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
-ORDER BY aa.id;
+ORDER BY j.auto_ability_id;
 
 
 -- name: GetModifierStatusConditionIDs :many
-SELECT DISTINCT sc.id
-FROM status_conditions sc
-JOIN j_status_conditions_modifier_changes j ON j.status_condition_id = sc.id
+SELECT DISTINCT j.status_condition_id
+FROM j_status_conditions_modifier_changes j
 JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
-ORDER BY sc.id;
+ORDER BY j.status_condition_id;
 
 
 -- name: GetModifierPropertyIDs :many
@@ -427,11 +359,8 @@ ORDER BY p.id;
 -- name: GetModifierPlayerAbilityIDs :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = pa.ability_id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY pa.id;
 
@@ -439,11 +368,8 @@ ORDER BY pa.id;
 -- name: GetModifierOverdriveAbilityIDs :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = oa.ability_id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY oa.id;
 
@@ -451,11 +377,8 @@ ORDER BY oa.id;
 -- name: GetModifierItemAbilityIDs :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = ia.ability_id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY ia.id;
 
@@ -463,11 +386,8 @@ ORDER BY ia.id;
 -- name: GetModifierTriggerCommandIDs :many
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
-JOIN abilities a ON tc.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = tc.ability_id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY tc.id;
 
@@ -475,11 +395,8 @@ ORDER BY tc.id;
 -- name: GetModifierEnemyAbilityIDs :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = ea.ability_id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY ea.id;
 
@@ -495,18 +412,17 @@ SELECT id FROM modifiers WHERE category = ANY(sqlc.arg('category')::modifier_cat
 
 
 -- name: GetPropertyAutoAbilityIDs :many
-SELECT aa.id
-FROM auto_abilities aa
-WHERE aa.added_property_id = sqlc.arg('property_id')::int
-ORDER BY aa.id;
+SELECT id
+FROM auto_abilities
+WHERE added_property_id = $1
+ORDER BY id;
 
 
 -- name: GetPropertyMonsterIDs :many
-SELECT m.id
-FROM monsters m
-JOIN j_monsters_properties j ON j.monster_id = m.id
-WHERE j.property_id = $1
-ORDER BY m.id;
+SELECT monster_id
+FROM j_monsters_properties
+WHERE property_id = $1
+ORDER BY monster_id;
 
 
 -- name: GetPropertyIDs :many

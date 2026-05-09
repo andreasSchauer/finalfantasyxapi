@@ -17,22 +17,22 @@ func getElementRelationships(cfg *Config, r *http.Request, element seeding.Eleme
 		return Element{}, err
 	}
 
-	playerAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, element, cfg.db.GetElementPlayerAbilityIDs)
+	playerAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, element, ToIntManyNull(cfg.db.GetElementPlayerAbilityIDs))
 	if err != nil {
 		return Element{}, err
 	}
 
-	overdriveAbilities, err := getResourcesDbItem(cfg, r, cfg.e.overdriveAbilities, element, cfg.db.GetElementOverdriveAbilityIDs)
+	overdriveAbilities, err := getResourcesDbItem(cfg, r, cfg.e.overdriveAbilities, element, ToIntManyNull(cfg.db.GetElementOverdriveAbilityIDs))
 	if err != nil {
 		return Element{}, err
 	}
 
-	itemAbilities, err := getResourcesDbItem(cfg, r, cfg.e.itemAbilities, element, cfg.db.GetElementItemAbilityIDs)
+	itemAbilities, err := getResourcesDbItem(cfg, r, cfg.e.itemAbilities, element, ToIntManyNull(cfg.db.GetElementItemAbilityIDs))
 	if err != nil {
 		return Element{}, err
 	}
 
-	enemyAbilities, err := getResourcesDbItem(cfg, r, cfg.e.enemyAbilities, element, cfg.db.GetElementEnemyAbilityIDs)
+	enemyAbilities, err := getResourcesDbItem(cfg, r, cfg.e.enemyAbilities, element, ToIntManyNull(cfg.db.GetElementEnemyAbilityIDs))
 	if err != nil {
 		return Element{}, err
 	}

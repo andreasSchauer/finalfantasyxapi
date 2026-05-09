@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/lib/pq"
 )
@@ -131,18 +132,14 @@ func (q *Queries) GetElementAutoAbilityIDs(ctx context.Context, elementID int32)
 const getElementEnemyAbilityIDs = `-- name: GetElementEnemyAbilityIDs :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+JOIN j_battle_interactions_damage j ON j.ability_id = ea.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE d.element_id = $1
 ORDER BY ea.id
 `
 
-func (q *Queries) GetElementEnemyAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getElementEnemyAbilityIDs, id)
+func (q *Queries) GetElementEnemyAbilityIDs(ctx context.Context, elementID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getElementEnemyAbilityIDs, elementID)
 	if err != nil {
 		return nil, err
 	}
@@ -194,18 +191,14 @@ func (q *Queries) GetElementIDs(ctx context.Context) ([]int32, error) {
 const getElementItemAbilityIDs = `-- name: GetElementItemAbilityIDs :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+JOIN j_battle_interactions_damage j ON j.ability_id = ia.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE d.element_id = $1
 ORDER BY ia.id
 `
 
-func (q *Queries) GetElementItemAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getElementItemAbilityIDs, id)
+func (q *Queries) GetElementItemAbilityIDs(ctx context.Context, elementID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getElementItemAbilityIDs, elementID)
 	if err != nil {
 		return nil, err
 	}
@@ -228,12 +221,11 @@ func (q *Queries) GetElementItemAbilityIDs(ctx context.Context, id int32) ([]int
 }
 
 const getElementMonsterIDsAbsorb = `-- name: GetElementMonsterIDsAbsorb :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN j_monsters_elem_resists j ON j.monster_id = m.id
+SELECT DISTINCT j.monster_id
+FROM j_monsters_elem_resists j
 JOIN elemental_resists er ON j.elem_resist_id = er.id
 WHERE er.element_id = $1 AND er.affinity = 'absorb'
-ORDER BY m.id
+ORDER BY j.monster_id
 `
 
 func (q *Queries) GetElementMonsterIDsAbsorb(ctx context.Context, elementID int32) ([]int32, error) {
@@ -244,11 +236,11 @@ func (q *Queries) GetElementMonsterIDsAbsorb(ctx context.Context, elementID int3
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -260,12 +252,11 @@ func (q *Queries) GetElementMonsterIDsAbsorb(ctx context.Context, elementID int3
 }
 
 const getElementMonsterIDsHalved = `-- name: GetElementMonsterIDsHalved :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN j_monsters_elem_resists j ON j.monster_id = m.id
+SELECT DISTINCT j.monster_id
+FROM j_monsters_elem_resists j
 JOIN elemental_resists er ON j.elem_resist_id = er.id
 WHERE er.element_id = $1 AND er.affinity = 'halved'
-ORDER BY m.id
+ORDER BY j.monster_id
 `
 
 func (q *Queries) GetElementMonsterIDsHalved(ctx context.Context, elementID int32) ([]int32, error) {
@@ -276,11 +267,11 @@ func (q *Queries) GetElementMonsterIDsHalved(ctx context.Context, elementID int3
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -292,12 +283,11 @@ func (q *Queries) GetElementMonsterIDsHalved(ctx context.Context, elementID int3
 }
 
 const getElementMonsterIDsImmune = `-- name: GetElementMonsterIDsImmune :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN j_monsters_elem_resists j ON j.monster_id = m.id
+SELECT DISTINCT j.monster_id
+FROM j_monsters_elem_resists j
 JOIN elemental_resists er ON j.elem_resist_id = er.id
 WHERE er.element_id = $1 AND er.affinity = 'immune'
-ORDER BY m.id
+ORDER BY j.monster_id
 `
 
 func (q *Queries) GetElementMonsterIDsImmune(ctx context.Context, elementID int32) ([]int32, error) {
@@ -308,11 +298,11 @@ func (q *Queries) GetElementMonsterIDsImmune(ctx context.Context, elementID int3
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -324,12 +314,11 @@ func (q *Queries) GetElementMonsterIDsImmune(ctx context.Context, elementID int3
 }
 
 const getElementMonsterIDsWeak = `-- name: GetElementMonsterIDsWeak :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN j_monsters_elem_resists j ON j.monster_id = m.id
+SELECT DISTINCT j.monster_id
+FROM j_monsters_elem_resists j
 JOIN elemental_resists er ON j.elem_resist_id = er.id
 WHERE er.element_id = $1 AND er.affinity = 'weak'
-ORDER BY m.id
+ORDER BY j.monster_id
 `
 
 func (q *Queries) GetElementMonsterIDsWeak(ctx context.Context, elementID int32) ([]int32, error) {
@@ -340,11 +329,11 @@ func (q *Queries) GetElementMonsterIDsWeak(ctx context.Context, elementID int32)
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -358,18 +347,14 @@ func (q *Queries) GetElementMonsterIDsWeak(ctx context.Context, elementID int32)
 const getElementOverdriveAbilityIDs = `-- name: GetElementOverdriveAbilityIDs :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+JOIN j_battle_interactions_damage j ON j.ability_id = oa.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE d.element_id = $1
 ORDER BY oa.id
 `
 
-func (q *Queries) GetElementOverdriveAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getElementOverdriveAbilityIDs, id)
+func (q *Queries) GetElementOverdriveAbilityIDs(ctx context.Context, elementID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getElementOverdriveAbilityIDs, elementID)
 	if err != nil {
 		return nil, err
 	}
@@ -394,18 +379,14 @@ func (q *Queries) GetElementOverdriveAbilityIDs(ctx context.Context, id int32) (
 const getElementPlayerAbilityIDs = `-- name: GetElementPlayerAbilityIDs :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_damage j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN damages d ON j2.damage_id = d.id
-JOIN elements e ON d.element_id = e.id
-WHERE e.id = $1
+JOIN j_battle_interactions_damage j ON j.ability_id = pa.ability_id
+JOIN damages d ON j.damage_id = d.id
+WHERE d.element_id = $1
 ORDER BY pa.id
 `
 
-func (q *Queries) GetElementPlayerAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getElementPlayerAbilityIDs, id)
+func (q *Queries) GetElementPlayerAbilityIDs(ctx context.Context, elementID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getElementPlayerAbilityIDs, elementID)
 	if err != nil {
 		return nil, err
 	}
@@ -431,23 +412,22 @@ const getElementStatusConditionID = `-- name: GetElementStatusConditionID :one
 SELECT DISTINCT sc.id
 FROM status_conditions sc
 JOIN elemental_resists er ON sc.added_elem_resist_id = er.id
-JOIN elements e ON er.element_id = e.id
-WHERE e.id = $1
+WHERE er.element_id = $1
 `
 
-func (q *Queries) GetElementStatusConditionID(ctx context.Context, id int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getElementStatusConditionID, id)
+func (q *Queries) GetElementStatusConditionID(ctx context.Context, elementID int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getElementStatusConditionID, elementID)
+	var id int32
 	err := row.Scan(&id)
 	return id, err
 }
 
 const getModifierAutoAbilityIDs = `-- name: GetModifierAutoAbilityIDs :many
-SELECT DISTINCT aa.id
-FROM auto_abilities aa
-JOIN j_auto_abilities_modifier_changes j ON j.auto_ability_id = aa.id
+SELECT DISTINCT j.auto_ability_id
+FROM j_auto_abilities_modifier_changes j
 JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
-ORDER BY aa.id
+ORDER BY j.auto_ability_id
 `
 
 func (q *Queries) GetModifierAutoAbilityIDs(ctx context.Context, modifierID int32) ([]int32, error) {
@@ -458,11 +438,11 @@ func (q *Queries) GetModifierAutoAbilityIDs(ctx context.Context, modifierID int3
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, auto_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -476,11 +456,8 @@ func (q *Queries) GetModifierAutoAbilityIDs(ctx context.Context, modifierID int3
 const getModifierEnemyAbilityIDs = `-- name: GetModifierEnemyAbilityIDs :many
 SELECT DISTINCT ea.id
 FROM enemy_abilities ea
-JOIN abilities a ON ea.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = ea.ability_id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY ea.id
 `
@@ -565,11 +542,8 @@ func (q *Queries) GetModifierIDsByCategory(ctx context.Context, category []Modif
 const getModifierItemAbilityIDs = `-- name: GetModifierItemAbilityIDs :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = ia.ability_id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY ia.id
 `
@@ -600,11 +574,8 @@ func (q *Queries) GetModifierItemAbilityIDs(ctx context.Context, modifierID int3
 const getModifierOverdriveAbilityIDs = `-- name: GetModifierOverdriveAbilityIDs :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = oa.ability_id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY oa.id
 `
@@ -635,11 +606,8 @@ func (q *Queries) GetModifierOverdriveAbilityIDs(ctx context.Context, modifierID
 const getModifierPlayerAbilityIDs = `-- name: GetModifierPlayerAbilityIDs :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = pa.ability_id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY pa.id
 `
@@ -699,12 +667,11 @@ func (q *Queries) GetModifierPropertyIDs(ctx context.Context, modifierID int32) 
 }
 
 const getModifierStatusConditionIDs = `-- name: GetModifierStatusConditionIDs :many
-SELECT DISTINCT sc.id
-FROM status_conditions sc
-JOIN j_status_conditions_modifier_changes j ON j.status_condition_id = sc.id
+SELECT DISTINCT j.status_condition_id
+FROM j_status_conditions_modifier_changes j
 JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
-ORDER BY sc.id
+ORDER BY j.status_condition_id
 `
 
 func (q *Queries) GetModifierStatusConditionIDs(ctx context.Context, modifierID int32) ([]int32, error) {
@@ -715,11 +682,11 @@ func (q *Queries) GetModifierStatusConditionIDs(ctx context.Context, modifierID 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var status_condition_id int32
+		if err := rows.Scan(&status_condition_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, status_condition_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -733,11 +700,8 @@ func (q *Queries) GetModifierStatusConditionIDs(ctx context.Context, modifierID 
 const getModifierTriggerCommandIDs = `-- name: GetModifierTriggerCommandIDs :many
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
-JOIN abilities a ON tc.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_modifier_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN modifier_changes mc ON j2.modifier_change_id = mc.id
+JOIN j_battle_interactions_modifier_changes j ON j.ability_id = tc.ability_id
+JOIN modifier_changes mc ON j.modifier_change_id = mc.id
 WHERE mc.modifier_id = $1
 ORDER BY tc.id
 `
@@ -820,14 +784,14 @@ func (q *Queries) GetOverdriveModeIDsByType(ctx context.Context, type_ Overdrive
 }
 
 const getPropertyAutoAbilityIDs = `-- name: GetPropertyAutoAbilityIDs :many
-SELECT aa.id
-FROM auto_abilities aa
-WHERE aa.added_property_id = $1::int
-ORDER BY aa.id
+SELECT id
+FROM auto_abilities
+WHERE added_property_id = $1
+ORDER BY id
 `
 
-func (q *Queries) GetPropertyAutoAbilityIDs(ctx context.Context, propertyID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getPropertyAutoAbilityIDs, propertyID)
+func (q *Queries) GetPropertyAutoAbilityIDs(ctx context.Context, addedPropertyID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getPropertyAutoAbilityIDs, addedPropertyID)
 	if err != nil {
 		return nil, err
 	}
@@ -877,11 +841,10 @@ func (q *Queries) GetPropertyIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getPropertyMonsterIDs = `-- name: GetPropertyMonsterIDs :many
-SELECT m.id
-FROM monsters m
-JOIN j_monsters_properties j ON j.monster_id = m.id
-WHERE j.property_id = $1
-ORDER BY m.id
+SELECT monster_id
+FROM j_monsters_properties
+WHERE property_id = $1
+ORDER BY monster_id
 `
 
 func (q *Queries) GetPropertyMonsterIDs(ctx context.Context, propertyID int32) ([]int32, error) {
@@ -892,11 +855,11 @@ func (q *Queries) GetPropertyMonsterIDs(ctx context.Context, propertyID int32) (
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -908,11 +871,10 @@ func (q *Queries) GetPropertyMonsterIDs(ctx context.Context, propertyID int32) (
 }
 
 const getStatAutoAbilityIDs = `-- name: GetStatAutoAbilityIDs :many
-SELECT DISTINCT aa.id
-FROM auto_abilities aa
-JOIN j_auto_abilities_related_stats j ON j.auto_ability_id = aa.id
-WHERE j.stat_id = $1
-ORDER BY aa.id
+SELECT auto_ability_id
+FROM j_auto_abilities_related_stats
+WHERE stat_id = $1
+ORDER BY auto_ability_id
 `
 
 func (q *Queries) GetStatAutoAbilityIDs(ctx context.Context, statID int32) ([]int32, error) {
@@ -923,11 +885,11 @@ func (q *Queries) GetStatAutoAbilityIDs(ctx context.Context, statID int32) ([]in
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, auto_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -939,27 +901,25 @@ func (q *Queries) GetStatAutoAbilityIDs(ctx context.Context, statID int32) ([]in
 }
 
 const getStatAutoAbilityIDsStatChange = `-- name: GetStatAutoAbilityIDsStatChange :many
-SELECT DISTINCT aa.id
-FROM auto_abilities aa
-JOIN j_auto_abilities_stat_changes j ON j.auto_ability_id = aa.id
-JOIN stat_changes sc ON j.stat_change_id = sc.id
-WHERE sc.stat_id = $1
-ORDER BY aa.id
+SELECT auto_ability_id
+FROM j_auto_abilities_stat_changes
+WHERE stat_change_id = $1
+ORDER BY auto_ability_id
 `
 
-func (q *Queries) GetStatAutoAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatAutoAbilityIDsStatChange, statID)
+func (q *Queries) GetStatAutoAbilityIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatAutoAbilityIDsStatChange, statChangeID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, auto_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1000,8 +960,7 @@ func (q *Queries) GetStatIDs(ctx context.Context) ([]int32, error) {
 const getStatItemAbilityIDs = `-- name: GetStatItemAbilityIDs :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN items i ON ia.item_id = i.id
-JOIN j_items_related_stats j ON j.item_id = i.id
+JOIN j_items_related_stats j ON j.item_id = ia.item_id
 WHERE j.stat_id = $1
 ORDER BY ia.id
 `
@@ -1032,17 +991,13 @@ func (q *Queries) GetStatItemAbilityIDs(ctx context.Context, statID int32) ([]in
 const getStatItemAbilityIDsStatChange = `-- name: GetStatItemAbilityIDsStatChange :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN abilities a ON ia.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
-WHERE sc.stat_id = $1
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = ia.ability_id
+WHERE j.stat_change_id = $1
 ORDER BY ia.id
 `
 
-func (q *Queries) GetStatItemAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatItemAbilityIDsStatChange, statID)
+func (q *Queries) GetStatItemAbilityIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatItemAbilityIDsStatChange, statChangeID)
 	if err != nil {
 		return nil, err
 	}
@@ -1065,11 +1020,10 @@ func (q *Queries) GetStatItemAbilityIDsStatChange(ctx context.Context, statID in
 }
 
 const getStatOverdriveAbilityIDs = `-- name: GetStatOverdriveAbilityIDs :many
-SELECT DISTINCT oa.id
-FROM overdrive_abilities oa
-JOIN j_overdrive_abilities_related_stats j ON j.overdrive_ability_id = oa.id
-WHERE j.stat_id = $1
-ORDER BY oa.id
+SELECT overdrive_ability_id
+FROM j_overdrive_abilities_related_stats
+WHERE stat_id = $1
+ORDER BY overdrive_ability_id
 `
 
 func (q *Queries) GetStatOverdriveAbilityIDs(ctx context.Context, statID int32) ([]int32, error) {
@@ -1080,11 +1034,11 @@ func (q *Queries) GetStatOverdriveAbilityIDs(ctx context.Context, statID int32) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var overdrive_ability_id int32
+		if err := rows.Scan(&overdrive_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, overdrive_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1098,17 +1052,13 @@ func (q *Queries) GetStatOverdriveAbilityIDs(ctx context.Context, statID int32) 
 const getStatOverdriveAbilityIDsStatChange = `-- name: GetStatOverdriveAbilityIDsStatChange :many
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
-JOIN abilities a ON oa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
-WHERE sc.stat_id = $1
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = oa.ability_id
+WHERE j.stat_change_id = $1
 ORDER BY oa.id
 `
 
-func (q *Queries) GetStatOverdriveAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatOverdriveAbilityIDsStatChange, statID)
+func (q *Queries) GetStatOverdriveAbilityIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatOverdriveAbilityIDsStatChange, statChangeID)
 	if err != nil {
 		return nil, err
 	}
@@ -1131,11 +1081,10 @@ func (q *Queries) GetStatOverdriveAbilityIDsStatChange(ctx context.Context, stat
 }
 
 const getStatPlayerAbilityIDs = `-- name: GetStatPlayerAbilityIDs :many
-SELECT DISTINCT pa.id
-FROM player_abilities pa
-JOIN j_player_abilities_related_stats j ON j.player_ability_id = pa.id
-WHERE j.stat_id = $1
-ORDER BY pa.id
+SELECT player_ability_id
+FROM j_player_abilities_related_stats
+WHERE stat_id = $1
+ORDER BY player_ability_id
 `
 
 func (q *Queries) GetStatPlayerAbilityIDs(ctx context.Context, statID int32) ([]int32, error) {
@@ -1146,11 +1095,11 @@ func (q *Queries) GetStatPlayerAbilityIDs(ctx context.Context, statID int32) ([]
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var player_ability_id int32
+		if err := rows.Scan(&player_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, player_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1164,17 +1113,13 @@ func (q *Queries) GetStatPlayerAbilityIDs(ctx context.Context, statID int32) ([]
 const getStatPlayerAbilityIDsStatChange = `-- name: GetStatPlayerAbilityIDsStatChange :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
-JOIN abilities a ON pa.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
-WHERE sc.stat_id = $1
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = pa.ability_id
+WHERE j.stat_change_id = $1
 ORDER BY pa.id
 `
 
-func (q *Queries) GetStatPlayerAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatPlayerAbilityIDsStatChange, statID)
+func (q *Queries) GetStatPlayerAbilityIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatPlayerAbilityIDsStatChange, statChangeID)
 	if err != nil {
 		return nil, err
 	}
@@ -1197,11 +1142,10 @@ func (q *Queries) GetStatPlayerAbilityIDsStatChange(ctx context.Context, statID 
 }
 
 const getStatPropertyIDs = `-- name: GetStatPropertyIDs :many
-SELECT DISTINCT p.id
-FROM properties p
-JOIN j_properties_related_stats j ON j.property_id = p.id
-WHERE j.stat_id = $1
-ORDER BY p.id
+SELECT property_id
+FROM j_properties_related_stats
+WHERE stat_id = $1
+ORDER BY property_id
 `
 
 func (q *Queries) GetStatPropertyIDs(ctx context.Context, statID int32) ([]int32, error) {
@@ -1212,11 +1156,11 @@ func (q *Queries) GetStatPropertyIDs(ctx context.Context, statID int32) ([]int32
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var property_id int32
+		if err := rows.Scan(&property_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, property_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1230,8 +1174,7 @@ func (q *Queries) GetStatPropertyIDs(ctx context.Context, statID int32) ([]int32
 const getStatSphereIDs = `-- name: GetStatSphereIDs :many
 SELECT DISTINCT sph.id
 FROM spheres sph
-JOIN items i ON sph.item_id = i.id
-JOIN j_items_related_stats j ON j.item_id = i.id
+JOIN j_items_related_stats j ON j.item_id = sph.item_id
 WHERE j.stat_id = $1
 ORDER BY sph.id
 `
@@ -1260,11 +1203,10 @@ func (q *Queries) GetStatSphereIDs(ctx context.Context, statID int32) ([]int32, 
 }
 
 const getStatStatusConditionIDs = `-- name: GetStatStatusConditionIDs :many
-SELECT DISTINCT sc.id
-FROM status_conditions sc
-JOIN j_status_conditions_related_stats j ON j.status_condition_id = sc.id
-WHERE j.stat_id = $1
-ORDER BY sc.id
+SELECT status_condition_id
+FROM j_status_conditions_related_stats
+WHERE stat_id = $1
+ORDER BY status_condition_id
 `
 
 func (q *Queries) GetStatStatusConditionIDs(ctx context.Context, statID int32) ([]int32, error) {
@@ -1275,11 +1217,11 @@ func (q *Queries) GetStatStatusConditionIDs(ctx context.Context, statID int32) (
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var status_condition_id int32
+		if err := rows.Scan(&status_condition_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, status_condition_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1291,27 +1233,25 @@ func (q *Queries) GetStatStatusConditionIDs(ctx context.Context, statID int32) (
 }
 
 const getStatStatusConditionIDsStatChange = `-- name: GetStatStatusConditionIDsStatChange :many
-SELECT DISTINCT scon.id
-FROM status_conditions scon
-JOIN j_status_conditions_stat_changes j ON j.status_condition_id = scon.id
-JOIN stat_changes sc ON j.stat_change_id = sc.id
-WHERE sc.stat_id = $1
-ORDER BY scon.id
+SELECT status_condition_id
+FROM j_status_conditions_stat_changes
+WHERE stat_change_id = $1
+ORDER BY status_condition_id
 `
 
-func (q *Queries) GetStatStatusConditionIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatStatusConditionIDsStatChange, statID)
+func (q *Queries) GetStatStatusConditionIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatStatusConditionIDsStatChange, statChangeID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var status_condition_id int32
+		if err := rows.Scan(&status_condition_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, status_condition_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1323,11 +1263,10 @@ func (q *Queries) GetStatStatusConditionIDsStatChange(ctx context.Context, statI
 }
 
 const getStatTriggerCommandIDs = `-- name: GetStatTriggerCommandIDs :many
-SELECT DISTINCT tc.id
-FROM trigger_commands tc
-JOIN j_trigger_commands_related_stats j ON j.trigger_command_id = tc.id
-WHERE j.stat_id = $1
-ORDER BY tc.id
+SELECT trigger_command_id
+FROM j_trigger_commands_related_stats
+WHERE stat_id = $1
+ORDER BY trigger_command_id
 `
 
 func (q *Queries) GetStatTriggerCommandIDs(ctx context.Context, statID int32) ([]int32, error) {
@@ -1338,11 +1277,11 @@ func (q *Queries) GetStatTriggerCommandIDs(ctx context.Context, statID int32) ([
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var trigger_command_id int32
+		if err := rows.Scan(&trigger_command_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, trigger_command_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1356,17 +1295,13 @@ func (q *Queries) GetStatTriggerCommandIDs(ctx context.Context, statID int32) ([
 const getStatTriggerCommandIDsStatChange = `-- name: GetStatTriggerCommandIDsStatChange :many
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
-JOIN abilities a ON tc.ability_id = a.id
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_stat_changes j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN stat_changes sc ON j2.stat_change_id = sc.id
-WHERE sc.stat_id = $1
+JOIN j_battle_interactions_stat_changes j ON j.ability_id = tc.ability_id
+WHERE j.stat_change_id = $1
 ORDER BY tc.id
 `
 
-func (q *Queries) GetStatTriggerCommandIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatTriggerCommandIDsStatChange, statID)
+func (q *Queries) GetStatTriggerCommandIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatTriggerCommandIDsStatChange, statChangeID)
 	if err != nil {
 		return nil, err
 	}
@@ -1389,20 +1324,18 @@ func (q *Queries) GetStatTriggerCommandIDsStatChange(ctx context.Context, statID
 }
 
 const getStatusConditionAbilityIDsInflicted = `-- name: GetStatusConditionAbilityIDsInflicted :many
-SELECT a.id FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN j_battle_interactions_inflicted_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = j1.battle_interaction_id
-JOIN inflicted_statusses ist ON j2.inflicted_status_id = ist.id
+SELECT j.ability_id
+FROM j_battle_interactions_inflicted_status_conditions j
+JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
 WHERE ist.status_condition_id = $1::int AND ist.probability BETWEEN $2::int AND $3::int
 
 UNION
 
-SELECT a.id FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
+SELECT j.ability_id
+FROM j_abilities_battle_interactions j
+JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 WHERE $1::int = 6 AND bi.inflicted_delay_id IS NOT NULL
-
-ORDER BY id
+ORDER BY ability_id
 `
 
 type GetStatusConditionAbilityIDsInflictedParams struct {
@@ -1419,11 +1352,11 @@ func (q *Queries) GetStatusConditionAbilityIDsInflicted(ctx context.Context, arg
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1435,29 +1368,25 @@ func (q *Queries) GetStatusConditionAbilityIDsInflicted(ctx context.Context, arg
 }
 
 const getStatusConditionAbilityIDsRemoved = `-- name: GetStatusConditionAbilityIDsRemoved :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN j_abilities_battle_interactions j1 ON j1.ability_id = a.id
-JOIN battle_interactions bi ON j1.battle_interaction_id = bi.id
-JOIN j_battle_interactions_removed_status_conditions j2 ON j2.ability_id = a.id AND j2.battle_interaction_id = bi.id
-JOIN status_conditions sc ON j2.status_condition_id = sc.id
-WHERE sc.id = $1
-ORDER BY a.id
+SELECT ability_id
+FROM j_battle_interactions_removed_status_conditions
+WHERE status_condition_id = $1
+ORDER BY ability_id
 `
 
-func (q *Queries) GetStatusConditionAbilityIDsRemoved(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionAbilityIDsRemoved, id)
+func (q *Queries) GetStatusConditionAbilityIDsRemoved(ctx context.Context, statusConditionID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionAbilityIDsRemoved, statusConditionID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1469,45 +1398,40 @@ func (q *Queries) GetStatusConditionAbilityIDsRemoved(ctx context.Context, id in
 }
 
 const getStatusConditionAutoAbilityIDs = `-- name: GetStatusConditionAutoAbilityIDs :many
-SELECT aa.id
-FROM auto_abilities aa
-JOIN j_auto_abilities_added_statusses j ON j.auto_ability_id = aa.id
-JOIN status_conditions sc ON j.status_condition_id = sc.id
-WHERE sc.id = $1
+SELECT jast.auto_ability_id
+FROM j_auto_abilities_added_statusses jast
+WHERE jast.status_condition_id = $1
 
 UNION
 
-SELECT aa.id
-FROM auto_abilities aa
-JOIN j_auto_abilities_added_status_resists j ON j.auto_ability_id = aa.id
-JOIN status_resists sr ON j.status_resist_id = sr.id
-JOIN status_conditions sc ON sr.status_condition_id = sc.id
-WHERE sc.id = $1
+SELECT jasr.auto_ability_id
+FROM j_auto_abilities_added_status_resists jasr
+JOIN status_resists sr ON jasr.status_resist_id = sr.id
+WHERE sr.status_condition_id = $1
 
 UNION
 
-SELECT aa.id
+SELECT aa.id AS auto_ability_id
 FROM auto_abilities aa
 JOIN inflicted_statusses ist ON aa.on_hit_status_id = ist.id
-JOIN status_conditions sc ON ist.status_condition_id = sc.id
-WHERE sc.id = $1
+WHERE ist.status_condition_id = $1
 
-ORDER BY id
+ORDER BY auto_ability_id
 `
 
-func (q *Queries) GetStatusConditionAutoAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionAutoAbilityIDs, id)
+func (q *Queries) GetStatusConditionAutoAbilityIDs(ctx context.Context, statusConditionID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionAutoAbilityIDs, statusConditionID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, auto_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1606,27 +1530,25 @@ func (q *Queries) GetStatusConditionInflictedDelayConditionIDs(ctx context.Conte
 }
 
 const getStatusConditionRemovedConditionIDs = `-- name: GetStatusConditionRemovedConditionIDs :many
-SELECT DISTINCT scp.id
-FROM status_conditions scp
-JOIN j_status_conditions_removed_status_conditions j ON j.parent_condition_id = scp.id
-JOIN status_conditions scc ON j.child_condition_id = scc.id
-WHERE scc.id = $1
-ORDER BY scp.id
+SELECT parent_condition_id
+FROM j_status_conditions_removed_status_conditions
+WHERE child_condition_id = $1
+ORDER BY parent_condition_id
 `
 
-func (q *Queries) GetStatusConditionRemovedConditionIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionRemovedConditionIDs, id)
+func (q *Queries) GetStatusConditionRemovedConditionIDs(ctx context.Context, childConditionID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatusConditionRemovedConditionIDs, childConditionID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var parent_condition_id int32
+		if err := rows.Scan(&parent_condition_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, parent_condition_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1638,21 +1560,18 @@ func (q *Queries) GetStatusConditionRemovedConditionIDs(ctx context.Context, id 
 }
 
 const getStatusConditionResistingMonsterIDs = `-- name: GetStatusConditionResistingMonsterIDs :many
-SELECT m.id
-FROM monsters m
-JOIN j_monsters_immunities jmi ON jmi.monster_id = m.id
-WHERE jmi.status_condition_id = $1::int
+SELECT jmi.monster_id
+FROM j_monsters_immunities jmi
+WHERE jmi.status_condition_id = $1
 
 UNION
 
-SELECT m.id
-FROM monsters m
-JOIN j_monsters_status_resists jmsr ON jmsr.monster_id = m.id
-JOIN status_resists sr ON sr.id = jmsr.status_resist_id
-WHERE sr.status_condition_id = $1::int
+SELECT jsr.monster_id
+FROM j_monsters_status_resists jsr
+JOIN status_resists sr ON sr.id = jsr.status_resist_id
+WHERE sr.status_condition_id = $1
   AND sr.resistance >= $2::int
-
-ORDER BY id
+ORDER BY monster_id
 `
 
 type GetStatusConditionResistingMonsterIDsParams struct {
@@ -1668,11 +1587,11 @@ func (q *Queries) GetStatusConditionResistingMonsterIDs(ctx context.Context, arg
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
