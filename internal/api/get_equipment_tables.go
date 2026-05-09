@@ -43,7 +43,7 @@ func (cfg *Config) retrieveEquipmentTables(r *http.Request, i handlerInput[seedi
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
-		frl(idListQuery(cfg, r, i, resources, "auto_abilities", len(cfg.l.AutoAbilities), cfg.db.GetEquipmentTableIDsByAutoAbilty)),
+		frl(idListQuery(cfg, r, i, resources, "auto_abilities", len(cfg.l.AutoAbilities), cfg.db.GetEquipmentTableIDsByAutoAbility)),
 		frl(enumQuery(cfg, r, i, cfg.t.EquipType, resources, "type", cfg.db.GetEquipmentTableIDsEquipType)),
 		frl(boolQuery2(cfg, r, i, resources, "celestial_weapon", cfg.db.GetEquipmentTableIDsCelestialWeapon)),
 	})

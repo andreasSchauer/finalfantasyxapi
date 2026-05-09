@@ -2488,17 +2488,23 @@ func (q *Queries) GetShopIDsByCategory(ctx context.Context, category []ShopCateg
 }
 
 const getShopIDsEquipmentFilter = `-- name: GetShopIDsEquipmentFilter :many
-SELECT DISTINCT sh.id
-FROM shops sh
-JOIN shop_equipment_pieces se ON se.shop_id = sh.id
+SELECT DISTINCT se.shop_id
+FROM shop_equipment_pieces se
 LEFT JOIN equipment_names en ON se.equipment_name_id = en.id
 LEFT JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+CROSS JOIN (
+    SELECT
+        $1::shop_type AS shop_type,
+        $2::int[] AS empty_slots,
+        $3::int AS character_id,
+        $4::int AS auto_ability_id
+) w
 WHERE 
-    ($1::shop_type IS NULL OR se.shop_type = $1::shop_type)
-    AND ($2::int[] IS NULL OR se.empty_slots_amount::int = ANY($2::int[]))
-    AND ($3::int IS NULL OR en.character_id = $3::int)
-    AND ($4::int IS NULL OR j.auto_ability_id = $4::int)
-ORDER BY sh.id
+    (w.shop_type IS NULL OR se.shop_type = w.shop_type)
+    AND (w.empty_slots IS NULL OR se.empty_slots_amount::int = ANY(w.empty_slots))
+    AND (w.character_id IS NULL OR en.character_id = w.character_id)
+    AND (w.auto_ability_id IS NULL OR j.auto_ability_id = w.auto_ability_id)
+ORDER BY se.shop_id
 `
 
 type GetShopIDsEquipmentFilterParams struct {
@@ -2521,11 +2527,11 @@ func (q *Queries) GetShopIDsEquipmentFilter(ctx context.Context, arg GetShopIDsE
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var shop_id int32
+		if err := rows.Scan(&shop_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, shop_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

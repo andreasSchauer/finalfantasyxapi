@@ -765,7 +765,7 @@ const getEquipmentShopIDs = `-- name: GetEquipmentShopIDs :many
 SELECT DISTINCT se.shop_id
 FROM shop_equipment_pieces se
 JOIN equipment_names en ON se.equipment_name_id = en.id
-CROSS JOIN (SELECT $1::availability_type[] AS values) w
+CROSS JOIN (SELECT $1::availability_type[] AS availability) w
 CROSS JOIN LATERAL (
     SELECT CASE se.shop_type
         WHEN 'pre-airship' THEN 'pre-story'::availability_type
@@ -773,7 +773,7 @@ CROSS JOIN LATERAL (
     END AS shop_availability
 ) calc
 WHERE en.id = $2::int
-  AND (w.values IS NULL OR calc.shop_availability = ANY(w.values))
+  AND (w.availability IS NULL OR calc.shop_availability = ANY(w.availability))
 ORDER BY se.shop_id
 `
 
@@ -843,11 +843,8 @@ func (q *Queries) GetEquipmentTableIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getEquipmentTableIDsByAutoAbilty = `-- name: GetEquipmentTableIDsByAutoAbilty :many
-WITH wanted AS (
-    SELECT $1::int[] AS ids
-),
-all_matches AS (
+const getEquipmentTableIDsByAutoAbility = `-- name: GetEquipmentTableIDsByAutoAbility :many
+WITH all_matches AS (
     SELECT equipment_table_id, auto_ability_id
     FROM j_equipment_tables_required_auto_abilities
 
@@ -859,14 +856,15 @@ all_matches AS (
 )
 SELECT m.equipment_table_id
 FROM all_matches m
-JOIN wanted w ON m.auto_ability_id = ANY(w.ids)
+CROSS JOIN (SELECT $1::int[] AS ids) w
+WHERE m.auto_ability_id = ANY(w.ids)
 GROUP BY m.equipment_table_id, w.ids
 HAVING COUNT(DISTINCT m.auto_ability_id) = cardinality(w.ids)
 ORDER BY m.equipment_table_id
 `
 
-func (q *Queries) GetEquipmentTableIDsByAutoAbilty(ctx context.Context, autoAbilityIds []int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEquipmentTableIDsByAutoAbilty, pq.Array(autoAbilityIds))
+func (q *Queries) GetEquipmentTableIDsByAutoAbility(ctx context.Context, autoAbilityIds []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getEquipmentTableIDsByAutoAbility, pq.Array(autoAbilityIds))
 	if err != nil {
 		return nil, err
 	}
@@ -947,9 +945,9 @@ SELECT DISTINCT t.id
 FROM treasures t
 JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
 JOIN equipment_names en ON te.equipment_name_id = en.id
-CROSS JOIN (SELECT $1::availability_type[] AS values) w
+CROSS JOIN (SELECT $1::availability_type[] AS availability) w
 WHERE en.id = $2::int
-  AND (w.values IS NULL OR t.availability = ANY(w.values))
+  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
 ORDER BY t.id
 `
 

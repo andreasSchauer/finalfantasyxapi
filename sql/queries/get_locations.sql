@@ -1164,17 +1164,23 @@ SELECT id FROM shops WHERE category = ANY(sqlc.narg('category')::shop_category[]
 
 
 -- name: GetShopIDsEquipmentFilter :many
-SELECT DISTINCT sh.id
-FROM shops sh
-JOIN shop_equipment_pieces se ON se.shop_id = sh.id
+SELECT DISTINCT se.shop_id
+FROM shop_equipment_pieces se
 LEFT JOIN equipment_names en ON se.equipment_name_id = en.id
 LEFT JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+CROSS JOIN (
+    SELECT
+        sqlc.narg('shop_type')::shop_type AS shop_type,
+        sqlc.narg('empty_slots')::int[] AS empty_slots,
+        sqlc.narg('character_id')::int AS character_id,
+        sqlc.narg('auto_ability_id')::int AS auto_ability_id
+) w
 WHERE 
-    (sqlc.narg('shop_type')::shop_type IS NULL OR se.shop_type = sqlc.narg('shop_type')::shop_type)
-    AND (sqlc.narg('empty_slots')::int[] IS NULL OR se.empty_slots_amount::int = ANY(sqlc.narg('empty_slots')::int[]))
-    AND (sqlc.narg('character_id')::int IS NULL OR en.character_id = sqlc.narg('character_id')::int)
-    AND (sqlc.narg('auto_ability_id')::int IS NULL OR j.auto_ability_id = sqlc.narg('auto_ability_id')::int)
-ORDER BY sh.id;
+    (w.shop_type IS NULL OR se.shop_type = w.shop_type)
+    AND (w.empty_slots IS NULL OR se.empty_slots_amount::int = ANY(w.empty_slots))
+    AND (w.character_id IS NULL OR en.character_id = w.character_id)
+    AND (w.auto_ability_id IS NULL OR j.auto_ability_id = w.auto_ability_id)
+ORDER BY se.shop_id;
 
 
 -- name: GetShopIDsWithItems :many

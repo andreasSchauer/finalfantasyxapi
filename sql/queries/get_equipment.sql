@@ -181,11 +181,8 @@ SELECT celestial_weapon_id::int FROM j_equipment_tables_names WHERE equipment_ta
 SELECT id FROM equipment_tables ORDER BY id;
 
 
--- name: GetEquipmentTableIDsByAutoAbilty :many
-WITH wanted AS (
-    SELECT sqlc.arg('auto_ability_ids')::int[] AS ids
-),
-all_matches AS (
+-- name: GetEquipmentTableIDsByAutoAbility :many
+WITH all_matches AS (
     SELECT equipment_table_id, auto_ability_id
     FROM j_equipment_tables_required_auto_abilities
 
@@ -197,7 +194,8 @@ all_matches AS (
 )
 SELECT m.equipment_table_id
 FROM all_matches m
-JOIN wanted w ON m.auto_ability_id = ANY(w.ids)
+CROSS JOIN (SELECT sqlc.arg('auto_ability_ids')::int[] AS ids) w
+WHERE m.auto_ability_id = ANY(w.ids)
 GROUP BY m.equipment_table_id, w.ids
 HAVING COUNT(DISTINCT m.auto_ability_id) = cardinality(w.ids)
 ORDER BY m.equipment_table_id;
@@ -223,9 +221,9 @@ SELECT DISTINCT t.id
 FROM treasures t
 JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
 JOIN equipment_names en ON te.equipment_name_id = en.id
-CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS values) w
+CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
 WHERE en.id = sqlc.arg('equipment_id')::int
-  AND (w.values IS NULL OR t.availability = ANY(w.values))
+  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
 ORDER BY t.id;
 
 
@@ -233,7 +231,7 @@ ORDER BY t.id;
 SELECT DISTINCT se.shop_id
 FROM shop_equipment_pieces se
 JOIN equipment_names en ON se.equipment_name_id = en.id
-CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS values) w
+CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
 CROSS JOIN LATERAL (
     SELECT CASE se.shop_type
         WHEN 'pre-airship' THEN 'pre-story'::availability_type
@@ -241,7 +239,7 @@ CROSS JOIN LATERAL (
     END AS shop_availability
 ) calc
 WHERE en.id = sqlc.arg('equipment_id')::int
-  AND (w.values IS NULL OR calc.shop_availability = ANY(w.values))
+  AND (w.availability IS NULL OR calc.shop_availability = ANY(w.availability))
 ORDER BY se.shop_id;
 
 

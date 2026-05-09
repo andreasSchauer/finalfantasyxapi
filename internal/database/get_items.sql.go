@@ -16,8 +16,7 @@ const getItemAutoAbilityIDs = `-- name: GetItemAutoAbilityIDs :many
 SELECT DISTINCT aa.id
 FROM auto_abilities aa
 JOIN item_amounts ia ON aa.required_item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON ia.master_item_id = i.master_item_id
 WHERE i.id = $1
 ORDER BY aa.id
 `
@@ -46,15 +45,13 @@ func (q *Queries) GetItemAutoAbilityIDs(ctx context.Context, id int32) ([]int32,
 }
 
 const getItemBlitzballPrizeIDs = `-- name: GetItemBlitzballPrizeIDs :many
-SELECT DISTINCT bp.id
-FROM blitzball_positions bp
-JOIN blitzball_items bi ON bi.position_id = bp.id
+SELECT DISTINCT bi.position_id
+FROM blitzball_items bi
 JOIN possible_items pi ON bi.possible_item_id = pi.id
 JOIN item_amounts ia ON pi.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON ia.master_item_id = i.master_item_id
 WHERE i.id = $1
-ORDER BY bp.id
+ORDER BY bi.position_id
 `
 
 func (q *Queries) GetItemBlitzballPrizeIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -65,11 +62,11 @@ func (q *Queries) GetItemBlitzballPrizeIDs(ctx context.Context, id int32) ([]int
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var position_id int32
+		if err := rows.Scan(&position_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, position_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -108,27 +105,22 @@ func (q *Queries) GetItemIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getItemIDsByRelatedStat = `-- name: GetItemIDsByRelatedStat :many
-SELECT i.id
-FROM items i
-JOIN j_items_related_stats j ON j.item_id = i.id
-JOIN stats s ON j.stat_id = s.id
-WHERE s.id = $1
-ORDER BY i.id
+SELECT item_id FROM j_items_related_stats WHERE stat_id = $1 ORDER BY item_id
 `
 
-func (q *Queries) GetItemIDsByRelatedStat(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemIDsByRelatedStat, id)
+func (q *Queries) GetItemIDsByRelatedStat(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsByRelatedStat, statID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var item_id int32
+		if err := rows.Scan(&item_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, item_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -214,10 +206,8 @@ func (q *Queries) GetItemIDsMonster(ctx context.Context) ([]int32, error) {
 const getItemIDsQuest = `-- name: GetItemIDsQuest :many
 SELECT DISTINCT i.id
 FROM items i
-JOIN master_items mi ON i.master_item_id = mi.id
-JOIN item_amounts ia ON ia.master_item_id = mi.id
+JOIN item_amounts ia ON i.master_item_id = ia.master_item_id
 JOIN quest_completions qc ON qc.item_amount_id = ia.id
-JOIN quests q ON q.completion_id = qc.id
 ORDER BY i.id
 `
 
@@ -249,7 +239,6 @@ SELECT DISTINCT i.id
 FROM items i
 JOIN shop_items si ON si.item_id = i.id
 JOIN j_shops_items j ON j.shop_item_id = si.id
-JOIN shops s ON j.shop_id = s.id
 ORDER BY i.id
 `
 
@@ -279,10 +268,8 @@ func (q *Queries) GetItemIDsShop(ctx context.Context) ([]int32, error) {
 const getItemIDsTreasure = `-- name: GetItemIDsTreasure :many
 SELECT DISTINCT i.id
 FROM items i
-JOIN master_items mi ON i.master_item_id = mi.id
-JOIN item_amounts ia ON ia.master_item_id = mi.id
+JOIN item_amounts ia ON i.master_item_id = ia.master_item_id
 JOIN j_treasures_items j ON j.item_amount_id = ia.id
-JOIN treasures t ON j.treasure_id = t.id
 ORDER BY i.id
 `
 
@@ -310,10 +297,7 @@ func (q *Queries) GetItemIDsTreasure(ctx context.Context) ([]int32, error) {
 }
 
 const getItemIDsWithAbility = `-- name: GetItemIDsWithAbility :many
-SELECT i.id
-FROM items i
-JOIN item_abilities ia ON ia.item_id = i.id
-ORDER BY i.id
+SELECT item_id FROM item_abilities ORDER BY item_id
 `
 
 func (q *Queries) GetItemIDsWithAbility(ctx context.Context) ([]int32, error) {
@@ -324,11 +308,11 @@ func (q *Queries) GetItemIDsWithAbility(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var item_id int32
+		if err := rows.Scan(&item_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, item_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -340,27 +324,25 @@ func (q *Queries) GetItemIDsWithAbility(ctx context.Context) ([]int32, error) {
 }
 
 const getItemMixIDs = `-- name: GetItemMixIDs :many
-SELECT DISTINCT m.id
-FROM mixes m
-JOIN mix_combinations mc ON mc.mix_id = m.id
-JOIN items i ON mc.first_item_id = i.id OR mc.second_item_id = i.id
-WHERE i.id = $1
-ORDER BY m.id
+SELECT DISTINCT mix_id
+FROM mix_combinations
+WHERE first_item_id = $1 OR second_item_id = $1
+ORDER BY mix_id
 `
 
-func (q *Queries) GetItemMixIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemMixIDs, id)
+func (q *Queries) GetItemMixIDs(ctx context.Context, firstItemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemMixIDs, firstItemID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var mix_id int32
+		if err := rows.Scan(&mix_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, mix_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -396,8 +378,13 @@ FROM monsters m
 JOIN monster_item_amounts mia ON mia.monster_id = m.id
 JOIN item_amounts ia ON mia.item_amount_id = ia.id
 JOIN m_items mi ON mi.master_item_id = ia.master_item_id
-WHERE ($1::BOOLEAN IS NULL OR m.is_repeatable = $1::BOOLEAN)
-  AND ($2::availability_type[] IS NULL OR m.availability = ANY($2::availability_type[]))
+CROSS JOIN (
+    SELECT
+        $1::BOOLEAN AS repeatable,
+        $2::availability_type[] AS availability
+) w
+WHERE (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
+  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 ORDER BY m.id
 `
 
@@ -434,8 +421,7 @@ const getItemPlayerAbilityIDs = `-- name: GetItemPlayerAbilityIDs :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
 JOIN item_amounts ia ON pa.aeon_learn_item_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON ia.master_item_id = i.master_item_id
 WHERE i.id = $1
 ORDER BY pa.id
 `
@@ -468,23 +454,27 @@ SELECT DISTINCT q.id
 FROM quests q
 JOIN quest_completions qc ON q.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON ia.master_item_id = i.master_item_id
+CROSS JOIN (
+    SELECT
+        $1::BOOLEAN AS repeatable,
+        $2::availability_type[] AS availability
+) w
 WHERE
-  i.id = $1
-  AND ($2::BOOLEAN IS NULL OR q.is_repeatable = $2::BOOLEAN)
-  AND ($3::availability_type[] IS NULL OR q.availability = ANY($3::availability_type[]))
+  i.id = $3
+  AND (w.repeatable IS NULL OR q.is_repeatable = w.repeatable)
+  AND (w.availability IS NULL OR q.availability = ANY(w.availability))
 ORDER BY q.id
 `
 
 type GetItemQuestIDsParams struct {
-	ItemID       int32
 	Repeatable   sql.NullBool
 	Availability []AvailabilityType
+	ItemID       int32
 }
 
 func (q *Queries) GetItemQuestIDs(ctx context.Context, arg GetItemQuestIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemQuestIDs, arg.ItemID, arg.Repeatable, pq.Array(arg.Availability))
+	rows, err := q.db.QueryContext(ctx, getItemQuestIDs, arg.Repeatable, pq.Array(arg.Availability), arg.ItemID)
 	if err != nil {
 		return nil, err
 	}
@@ -507,47 +497,40 @@ func (q *Queries) GetItemQuestIDs(ctx context.Context, arg GetItemQuestIDsParams
 }
 
 const getItemShopIDs = `-- name: GetItemShopIDs :many
-WITH wanted AS (
-   SELECT $2::availability_type[] AS values
-)
-SELECT DISTINCT s.id
-FROM shops s
-JOIN j_shops_items j ON j.shop_id = s.id
+SELECT DISTINCT j.shop_id
+FROM j_shops_items j
 JOIN shop_items si ON j.shop_item_id = si.id
 JOIN items i ON si.item_id = i.id
-CROSS JOIN wanted w
-WHERE
-    i.id = $1::int
-    AND (
-        w.values IS NULL
-        OR (
-            CASE j.shop_type
-                WHEN 'pre-airship' THEN 'pre-story'::availability_type
-                WHEN 'post-airship' THEN 'post'::availability_type
-            END
-        ) = ANY(w.values)
-    )
-ORDER BY s.id
+CROSS JOIN (SELECT $1::availability_type[] AS availability) w
+CROSS JOIN LATERAL (
+  SELECT CASE j.shop_type
+      WHEN 'pre-airship' THEN 'pre-story'::availability_type
+      WHEN 'post-airship' THEN 'post'::availability_type
+  END AS shop_availability
+) calc
+WHERE i.id = $2::int
+  AND (w.availability IS NULL OR calc.shop_availability = ANY(w.availability))
+ORDER BY j.shop_id
 `
 
 type GetItemShopIDsParams struct {
-	ItemID       int32
 	Availability []AvailabilityType
+	ItemID       int32
 }
 
 func (q *Queries) GetItemShopIDs(ctx context.Context, arg GetItemShopIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemShopIDs, arg.ItemID, pq.Array(arg.Availability))
+	rows, err := q.db.QueryContext(ctx, getItemShopIDs, pq.Array(arg.Availability), arg.ItemID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var shop_id int32
+		if err := rows.Scan(&shop_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, shop_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -565,19 +548,20 @@ JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
 JOIN master_items mi ON ia.master_item_id = mi.id
 JOIN items i ON i.master_item_id = mi.id
+CROSS JOIN (SELECT $1::availability_type[] AS availability) w
 WHERE
-  i.id = $1
-  AND ($2::availability_type[] IS NULL OR t.availability = ANY($2::availability_type[]))
+  i.id = $2
+  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
 ORDER BY t.id
 `
 
 type GetItemTreasureIDsParams struct {
-	ItemID       int32
 	Availability []AvailabilityType
+	ItemID       int32
 }
 
 func (q *Queries) GetItemTreasureIDs(ctx context.Context, arg GetItemTreasureIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemTreasureIDs, arg.ItemID, pq.Array(arg.Availability))
+	rows, err := q.db.QueryContext(ctx, getItemTreasureIDs, pq.Array(arg.Availability), arg.ItemID)
 	if err != nil {
 		return nil, err
 	}
@@ -680,13 +664,17 @@ func (q *Queries) GetKeyItemIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getKeyItemIDsByAvailability = `-- name: GetKeyItemIDsByAvailability :many
+WITH w AS (
+  SELECT $1::availability_type[] AS availability
+)
 SELECT ki.id
 FROM key_items ki
 JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
 JOIN j_treasures_items j ON j.item_amount_id = ia.id
 JOIN treasures t ON j.treasure_id = t.id
-WHERE ($1::availability_type[] IS NULL
-   OR t.availability = ANY($1::availability_type[]))
+CROSS JOIN w
+WHERE (w.availability IS NULL
+   OR t.availability = ANY(w.availability))
 
 UNION
 
@@ -695,8 +683,9 @@ FROM key_items ki
 JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
 JOIN quest_completions qc ON qc.item_amount_id = ia.id
 JOIN quests q ON q.completion_id = qc.id
-WHERE ($1::availability_type[] IS NULL
-   OR q.availability = ANY($1::availability_type[]))
+CROSS JOIN w
+WHERE (w.availability IS NULL
+   OR q.availability = ANY(w.availability))
 ORDER BY id
 `
 
@@ -753,10 +742,8 @@ func (q *Queries) GetKeyItemIDsCategory(ctx context.Context, category []KeyItemC
 const getKeyItemIDsQuest = `-- name: GetKeyItemIDsQuest :many
 SELECT DISTINCT ki.id
 FROM key_items ki
-JOIN master_items mi ON ki.master_item_id = mi.id
-JOIN item_amounts ia ON ia.master_item_id = mi.id
+JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
 JOIN quest_completions qc ON qc.item_amount_id = ia.id
-JOIN quests q ON q.completion_id = qc.id
 ORDER BY ki.id
 `
 
@@ -786,10 +773,8 @@ func (q *Queries) GetKeyItemIDsQuest(ctx context.Context) ([]int32, error) {
 const getKeyItemIDsTreasure = `-- name: GetKeyItemIDsTreasure :many
 SELECT DISTINCT ki.id
 FROM key_items ki
-JOIN master_items mi ON ki.master_item_id = mi.id
-JOIN item_amounts ia ON ia.master_item_id = mi.id
+JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
 JOIN j_treasures_items j ON j.item_amount_id = ia.id
-JOIN treasures t ON j.treasure_id = t.id
 ORDER BY ki.id
 `
 
@@ -821,8 +806,7 @@ SELECT DISTINCT q.id
 FROM quests q
 JOIN quest_completions qc ON q.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN key_items ki ON ia.master_item_id = ki.master_item_id
 WHERE ki.id = $1
 ORDER BY q.id
 `
@@ -851,14 +835,12 @@ func (q *Queries) GetKeyItemQuestIDs(ctx context.Context, id int32) ([]int32, er
 }
 
 const getKeyItemTreasureIDs = `-- name: GetKeyItemTreasureIDs :many
-SELECT DISTINCT t.id
-FROM treasures t
-JOIN j_treasures_items j ON j.treasure_id = t.id
+SELECT DISTINCT j.treasure_id
+FROM j_treasures_items j
 JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN key_items ki ON ia.master_item_id = ki.master_item_id
 WHERE ki.id = $1
-ORDER BY t.id
+ORDER BY j.treasure_id
 `
 
 func (q *Queries) GetKeyItemTreasureIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -869,11 +851,11 @@ func (q *Queries) GetKeyItemTreasureIDs(ctx context.Context, id int32) ([]int32,
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var treasure_id int32
+		if err := rows.Scan(&treasure_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, treasure_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -983,12 +965,10 @@ func (q *Queries) GetMasterItemIDsMonster(ctx context.Context) ([]int32, error) 
 }
 
 const getMasterItemIDsQuest = `-- name: GetMasterItemIDsQuest :many
-SELECT DISTINCT mi.id
-FROM master_items mi
-JOIN item_amounts ia ON ia.master_item_id = mi.id
+SELECT DISTINCT ia.master_item_id
+FROM item_amounts ia
 JOIN quest_completions qc ON qc.item_amount_id = ia.id
-JOIN quests q ON q.completion_id = qc.id
-ORDER BY mi.id
+ORDER BY ia.master_item_id
 `
 
 func (q *Queries) GetMasterItemIDsQuest(ctx context.Context) ([]int32, error) {
@@ -999,11 +979,11 @@ func (q *Queries) GetMasterItemIDsQuest(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var master_item_id int32
+		if err := rows.Scan(&master_item_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, master_item_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1015,13 +995,11 @@ func (q *Queries) GetMasterItemIDsQuest(ctx context.Context) ([]int32, error) {
 }
 
 const getMasterItemIDsShop = `-- name: GetMasterItemIDsShop :many
-SELECT DISTINCT mi.id
-FROM master_items mi
-JOIN items i ON i.master_item_id = mi.id
+SELECT DISTINCT i.master_item_id
+FROM items i
 JOIN shop_items si ON si.item_id = i.id
 JOIN j_shops_items j ON j.shop_item_id = si.id
-JOIN shops s ON j.shop_id = s.id
-ORDER BY mi.id
+ORDER BY i.master_item_id
 `
 
 func (q *Queries) GetMasterItemIDsShop(ctx context.Context) ([]int32, error) {
@@ -1032,11 +1010,11 @@ func (q *Queries) GetMasterItemIDsShop(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var master_item_id int32
+		if err := rows.Scan(&master_item_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, master_item_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1048,12 +1026,10 @@ func (q *Queries) GetMasterItemIDsShop(ctx context.Context) ([]int32, error) {
 }
 
 const getMasterItemIDsTreasure = `-- name: GetMasterItemIDsTreasure :many
-SELECT DISTINCT mi.id
-FROM master_items mi
-JOIN item_amounts ia ON ia.master_item_id = mi.id
+SELECT DISTINCT ia.master_item_id
+FROM item_amounts ia
 JOIN j_treasures_items j ON j.item_amount_id = ia.id
-JOIN treasures t ON j.treasure_id = t.id
-ORDER BY mi.id
+ORDER BY ia.master_item_id
 `
 
 func (q *Queries) GetMasterItemIDsTreasure(ctx context.Context) ([]int32, error) {
@@ -1064,11 +1040,11 @@ func (q *Queries) GetMasterItemIDsTreasure(ctx context.Context) ([]int32, error)
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var master_item_id int32
+		if err := rows.Scan(&master_item_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, master_item_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1129,17 +1105,15 @@ func (q *Queries) GetMasterItemQuestsBool(ctx context.Context, masterItemID int3
 const getMasterItemShopsBool = `-- name: GetMasterItemShopsBool :one
 SELECT EXISTS (
   SELECT 1
-  FROM shops s
-  JOIN j_shops_items j ON j.shop_id = s.id
+  FROM j_shops_items j
   JOIN shop_items si ON j.shop_item_id = si.id
   JOIN items i ON si.item_id = i.id
-  JOIN master_items mi ON i.master_item_id = mi.id
-  WHERE mi.id = $1
+  WHERE i.master_item_id = $1
 ) AS obtainable_from_shops
 `
 
-func (q *Queries) GetMasterItemShopsBool(ctx context.Context, id int32) (bool, error) {
-	row := q.db.QueryRowContext(ctx, getMasterItemShopsBool, id)
+func (q *Queries) GetMasterItemShopsBool(ctx context.Context, masterItemID int32) (bool, error) {
+	row := q.db.QueryRowContext(ctx, getMasterItemShopsBool, masterItemID)
 	var obtainable_from_shops bool
 	err := row.Scan(&obtainable_from_shops)
 	return obtainable_from_shops, err
@@ -1148,8 +1122,7 @@ func (q *Queries) GetMasterItemShopsBool(ctx context.Context, id int32) (bool, e
 const getMasterItemTreasuresBool = `-- name: GetMasterItemTreasuresBool :one
 SELECT EXISTS (
   SELECT 1
-  FROM treasures t
-  JOIN j_treasures_items j ON j.treasure_id = t.id
+  FROM j_treasures_items j
   JOIN item_amounts ia ON j.item_amount_id = ia.id
   WHERE ia.master_item_id = $1
 ) AS obtainable_from_treasures
@@ -1217,55 +1190,43 @@ func (q *Queries) GetMixIDsByCategory(ctx context.Context, category []MixCategor
 }
 
 const getMixIDsByItems = `-- name: GetMixIDsByItems :many
-SELECT DISTINCT m.id
-FROM mixes m
-JOIN mix_combinations mc ON mc.mix_id = m.id
-WHERE
-  (
-    $1::int IS NULL
-    AND (
-        mc.first_item_id = $2::int
-        OR
-        mc.second_item_id = $2::int
-    )
-  )
-  OR (
-    $1::int IS NOT NULL
-    AND (
-      (
-        mc.first_item_id = $2::int
-        AND
-        mc.second_item_id = $1::int
-      )
-      OR
-      (
-        mc.first_item_id = $1::int
-        AND
-        mc.second_item_id = $2::int
-      )
-    )
+WITH mi AS (
+  SELECT
+      $1::int AS first,
+      $2::int AS second
 )
-ORDER BY m.id
+SELECT DISTINCT mc.mix_id
+FROM mix_combinations mc
+CROSS JOIN mi
+WHERE
+  (mi.second IS NULL AND (mc.first_item_id = mi.first OR mc.second_item_id = mi.first))
+  OR 
+  (mi.second IS NOT NULL AND (
+      (mc.first_item_id = mi.first AND mc.second_item_id = mi.second)
+      OR
+      (mc.first_item_id = mi.second AND mc.second_item_id = mi.first)
+  ))
+ORDER BY mc.mix_id
 `
 
 type GetMixIDsByItemsParams struct {
-	SecondItemID sql.NullInt32
 	FirstItemID  int32
+	SecondItemID sql.NullInt32
 }
 
 func (q *Queries) GetMixIDsByItems(ctx context.Context, arg GetMixIDsByItemsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMixIDsByItems, arg.SecondItemID, arg.FirstItemID)
+	rows, err := q.db.QueryContext(ctx, getMixIDsByItems, arg.FirstItemID, arg.SecondItemID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var mix_id int32
+		if err := rows.Scan(&mix_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, mix_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1277,16 +1238,14 @@ func (q *Queries) GetMixIDsByItems(ctx context.Context, arg GetMixIDsByItemsPara
 }
 
 const getPrimerAreaIDs = `-- name: GetPrimerAreaIDs :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN treasures t ON t.area_id = a.id
+SELECT DISTINCT t.area_id
+FROM treasures t
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN key_items ki ON ia.master_item_id = ki.master_item_id
 JOIN primers p ON p.key_item_id = ki.id
 WHERE p.id = $1
-ORDER BY a.id
+ORDER BY t.area_id
 `
 
 func (q *Queries) GetPrimerAreaIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -1297,11 +1256,11 @@ func (q *Queries) GetPrimerAreaIDs(ctx context.Context, id int32) ([]int32, erro
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1343,8 +1302,7 @@ const getPrimerIDsByAvailability = `-- name: GetPrimerIDsByAvailability :many
 SELECT DISTINCT p.id
 FROM primers p
 JOIN key_items ki ON p.key_item_id = ki.id
-JOIN master_items mi ON ki.master_item_id = mi.id
-JOIN item_amounts ia ON ia.master_item_id = mi.id
+JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
 JOIN j_treasures_items j ON j.item_amount_id = ia.id
 JOIN treasures t ON j.treasure_id = t.id
 WHERE t.availability = ANY($1::availability_type[])
@@ -1375,15 +1333,13 @@ func (q *Queries) GetPrimerIDsByAvailability(ctx context.Context, availability [
 }
 
 const getPrimerTreasureIDs = `-- name: GetPrimerTreasureIDs :many
-SELECT DISTINCT t.id
-FROM treasures t
-JOIN j_treasures_items j ON j.treasure_id = t.id
+SELECT DISTINCT j.treasure_id
+FROM j_treasures_items j
 JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN key_items ki ON ia.master_item_id = ki.master_item_id
 JOIN primers p ON p.key_item_id = ki.id
 WHERE p.id = $1
-ORDER BY t.id
+ORDER BY j.treasure_id
 `
 
 func (q *Queries) GetPrimerTreasureIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -1394,11 +1350,11 @@ func (q *Queries) GetPrimerTreasureIDs(ctx context.Context, id int32) ([]int32, 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var treasure_id int32
+		if err := rows.Scan(&treasure_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, treasure_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
