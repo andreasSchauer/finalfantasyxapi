@@ -22,7 +22,7 @@ func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.Ce
 	}
 	table, _ := seeding.GetResourceByID(tables[0].ID, cfg.l.EquipmentTablesID)
 
-	wpnTreasure, err := getResDbItemOne(cfg, r, cfg.e.treasures, celestialWeapon, cfg.db.GetCelestialWeaponTreasureID)
+	wpnTreasure, err := getResDbItemOne(cfg, r, cfg.e.treasures, celestialWeapon, ToIntOneNull(cfg.db.GetCelestialWeaponTreasureID))
 	if err != nil {
 		return CelestialWeapon{}, err
 	}

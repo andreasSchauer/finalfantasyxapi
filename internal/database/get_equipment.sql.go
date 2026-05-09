@@ -131,29 +131,27 @@ func (q *Queries) GetAutoAbilityIDsByEquipType(ctx context.Context, type_ EquipT
 }
 
 const getAutoAbilityIDsByMonster = `-- name: GetAutoAbilityIDsByMonster :many
-SELECT DISTINCT aa.id
-FROM auto_abilities aa
-JOIN equipment_drops ed ON ed.auto_ability_id = aa.id
+SELECT DISTINCT ed.auto_ability_id
+FROM equipment_drops ed
 JOIN j_monster_equipment_abilities j ON j.equipment_drop_id = ed.id
 JOIN monster_equipment me ON j.monster_equipment_id = me.id
-JOIN monsters m ON me.monster_id = m.id
-WHERE m.id = $1
-ORDER BY aa.id
+WHERE me.monster_id = $1
+ORDER BY ed.auto_ability_id
 `
 
-func (q *Queries) GetAutoAbilityIDsByMonster(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByMonster, id)
+func (q *Queries) GetAutoAbilityIDsByMonster(ctx context.Context, monsterID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByMonster, monsterID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, auto_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -286,26 +284,36 @@ func (q *Queries) GetAutoAbilityItemMonsterIDs(ctx context.Context, arg GetAutoA
 }
 
 const getAutoAbilityMonsterIDs = `-- name: GetAutoAbilityMonsterIDs :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_equipment me ON me.monster_id = m.id
+WITH filtered_monsters AS (
+    SELECT id FROM monsters
+    WHERE (
+        $2::BOOLEAN IS NULL
+        OR
+        is_repeatable = $2::BOOLEAN
+    )
+    AND (
+        $3::availability_type[] IS NULL
+        OR
+        availability = ANY($3::availability_type[])
+    )
+)
+SELECT DISTINCT fm.id
+FROM filtered_monsters fm
+JOIN monster_equipment me ON me.monster_id = fm.id
 JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
 JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
-JOIN auto_abilities aa ON ed.auto_ability_id = aa.id
-WHERE ($1::BOOLEAN IS NULL OR m.is_repeatable = $1::BOOLEAN)
-  AND ($2::availability_type[] IS NULL OR m.availability = ANY($2::availability_type[]))
-  AND aa.id = $3
-ORDER BY m.id
+WHERE ed.auto_ability_id = $1
+ORDER BY fm.id
 `
 
 type GetAutoAbilityMonsterIDsParams struct {
+	AutoAbilityID int32
 	Repeatable    sql.NullBool
 	Availability  []AvailabilityType
-	AutoAbilityID int32
 }
 
 func (q *Queries) GetAutoAbilityMonsterIDs(ctx context.Context, arg GetAutoAbilityMonsterIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAutoAbilityMonsterIDs, arg.Repeatable, pq.Array(arg.Availability), arg.AutoAbilityID)
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityMonsterIDs, arg.AutoAbilityID, arg.Repeatable, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -332,8 +340,7 @@ SELECT DISTINCT sh.id
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
-WHERE
-(
+WHERE (
     $2::availability_type[] IS NULL
     OR
     sh.availability = ANY($2::availability_type[])
@@ -376,14 +383,13 @@ SELECT DISTINCT sh.id
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
-WHERE
-    (
-        $2::availability_type[] IS NULL
-        OR
-        sh.availability = ANY($2::availability_type[])
-    )
-    AND se.shop_type = 'pre-airship'
-    AND j.auto_ability_id = $1
+WHERE (
+    $2::availability_type[] IS NULL
+    OR
+    sh.availability = ANY($2::availability_type[])
+)
+AND se.shop_type = 'pre-airship'
+AND j.auto_ability_id = $1
 ORDER BY sh.id
 `
 
@@ -420,9 +426,12 @@ SELECT DISTINCT t.id
 FROM treasures t
 JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
 JOIN j_treasure_equipment_abilities j ON j.treasure_equipment_id = te.id
-JOIN auto_abilities aa ON j.auto_ability_id = aa.id
-WHERE ($1::availability_type[] IS NULL OR t.availability = ANY($1::availability_type[]))
-  AND aa.id = $2
+WHERE (
+    $1::availability_type[] IS NULL
+    OR
+    t.availability = ANY($1::availability_type[])
+)
+AND j.auto_ability_id = $2
 ORDER BY t.id
 `
 
@@ -455,14 +464,12 @@ func (q *Queries) GetAutoAbilityTreasureIDs(ctx context.Context, arg GetAutoAbil
 }
 
 const getCelestialWeaponAutoAbilityIDs = `-- name: GetCelestialWeaponAutoAbilityIDs :many
-SELECT DISTINCT aa.id
-FROM auto_abilities aa
-JOIN j_equipment_tables_required_auto_abilities j1 ON j1.auto_ability_id = aa.id
-JOIN equipment_tables et ON j1.equipment_table_id = et.id
-JOIN j_equipment_tables_names j2 ON j2.equipment_table_id = et.id
-JOIN celestial_weapons cw ON j2.celestial_weapon_id = cw.id
-WHERE cw.id = $1::int AND et.id = $2::int
-ORDER BY aa.id
+SELECT DISTINCT j1.auto_ability_id
+FROM j_equipment_tables_required_auto_abilities j1
+JOIN j_equipment_tables_names j2 ON j1.equipment_table_id = j2.equipment_table_id
+WHERE j2.celestial_weapon_id = $1::int
+  AND j2.equipment_table_id = $2::int
+ORDER BY j1.auto_ability_id
 `
 
 type GetCelestialWeaponAutoAbilityIDsParams struct {
@@ -478,11 +485,11 @@ func (q *Queries) GetCelestialWeaponAutoAbilityIDs(ctx context.Context, arg GetC
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, auto_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -548,43 +555,37 @@ func (q *Queries) GetCelestialWeaponIDsByFormula(ctx context.Context, formula Ce
 }
 
 const getCelestialWeaponTreasureID = `-- name: GetCelestialWeaponTreasureID :one
-SELECT t.id
-FROM treasures t
-JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
+SELECT te.treasure_id
+FROM treasure_equipment_pieces te
 JOIN equipment_names en ON te.equipment_name_id = en.id
 JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
-JOIN celestial_weapons cw ON j.celestial_weapon_id = cw.id
-WHERE cw.id = $1
+WHERE j.celestial_weapon_id = $1
 `
 
-func (q *Queries) GetCelestialWeaponTreasureID(ctx context.Context, id int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getCelestialWeaponTreasureID, id)
-	err := row.Scan(&id)
-	return id, err
+func (q *Queries) GetCelestialWeaponTreasureID(ctx context.Context, celestialWeaponID sql.NullInt32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getCelestialWeaponTreasureID, celestialWeaponID)
+	var treasure_id int32
+	err := row.Scan(&treasure_id)
+	return treasure_id, err
 }
 
 const getEquipmentEquipmentTableIDs = `-- name: GetEquipmentEquipmentTableIDs :many
-SELECT DISTINCT et.id
-FROM equipment_tables et
-JOIN j_equipment_tables_names j ON j.equipment_table_id = et.id
-JOIN equipment_names en ON j.equipment_name_id = en.id
-WHERE en.id = $1
-ORDER BY et.id
+SELECT equipment_table_id FROM j_equipment_tables_names WHERE equipment_name_id = $1 ORDER BY equipment_table_id
 `
 
-func (q *Queries) GetEquipmentEquipmentTableIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEquipmentEquipmentTableIDs, id)
+func (q *Queries) GetEquipmentEquipmentTableIDs(ctx context.Context, equipmentNameID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getEquipmentEquipmentTableIDs, equipmentNameID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var equipment_table_id int32
+		if err := rows.Scan(&equipment_table_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, equipment_table_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -623,10 +624,7 @@ func (q *Queries) GetEquipmentIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getEquipmentIDsByAutoAbilty = `-- name: GetEquipmentIDsByAutoAbilty :many
-WITH wanted AS (
-    SELECT $1::int[] AS ids
-),
-all_matches AS (
+WITH all_matches AS (
     SELECT en.id AS equipment_name_id, jreq.auto_ability_id
     FROM equipment_names en
     JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
@@ -644,7 +642,8 @@ all_matches AS (
 )                                                               
 SELECT m.equipment_name_id
 FROM all_matches m
-JOIN wanted w ON m.auto_ability_id = ANY(w.ids)
+CROSS JOIN (SELECT $1::int[] AS ids) w
+WHERE m.auto_ability_id = ANY(w.ids)
 GROUP BY m.equipment_name_id, w.ids
 HAVING COUNT(DISTINCT m.auto_ability_id) = cardinality(w.ids)
 ORDER BY m.equipment_name_id
@@ -701,12 +700,11 @@ func (q *Queries) GetEquipmentIDsByCharacter(ctx context.Context, characterID in
 }
 
 const getEquipmentIDsByEquipType = `-- name: GetEquipmentIDsByEquipType :many
-SELECT DISTINCT en.id
-FROM equipment_names en
-JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
+SELECT DISTINCT j.equipment_name_id
+FROM j_equipment_tables_names j
 JOIN equipment_tables et ON j.equipment_table_id = et.id
 WHERE et.type = $1
-ORDER BY en.id
+ORDER BY j.equipment_name_id
 `
 
 func (q *Queries) GetEquipmentIDsByEquipType(ctx context.Context, type_ EquipType) ([]int32, error) {
@@ -717,11 +715,11 @@ func (q *Queries) GetEquipmentIDsByEquipType(ctx context.Context, type_ EquipTyp
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var equipment_name_id int32
+		if err := rows.Scan(&equipment_name_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, equipment_name_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -733,12 +731,11 @@ func (q *Queries) GetEquipmentIDsByEquipType(ctx context.Context, type_ EquipTyp
 }
 
 const getEquipmentIDsCelestialWeapon = `-- name: GetEquipmentIDsCelestialWeapon :many
-SELECT DISTINCT en.id
-FROM equipment_names en
-JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
+SELECT DISTINCT j.equipment_name_id
+FROM j_equipment_tables_names j
 JOIN equipment_tables et ON j.equipment_table_id = et.id
 WHERE et.classification = 'celestial-weapon'
-ORDER BY en.id
+ORDER BY j.equipment_name_id
 `
 
 func (q *Queries) GetEquipmentIDsCelestialWeapon(ctx context.Context) ([]int32, error) {
@@ -749,11 +746,11 @@ func (q *Queries) GetEquipmentIDsCelestialWeapon(ctx context.Context) ([]int32, 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var equipment_name_id int32
+		if err := rows.Scan(&equipment_name_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, equipment_name_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -765,46 +762,39 @@ func (q *Queries) GetEquipmentIDsCelestialWeapon(ctx context.Context) ([]int32, 
 }
 
 const getEquipmentShopIDs = `-- name: GetEquipmentShopIDs :many
-WITH wanted AS (
-   SELECT $2::availability_type[] AS values
-)
-SELECT DISTINCT sh.id
-FROM shops sh
-JOIN shop_equipment_pieces se ON se.shop_id = sh.id
+SELECT DISTINCT se.shop_id
+FROM shop_equipment_pieces se
 JOIN equipment_names en ON se.equipment_name_id = en.id
-CROSS JOIN wanted w
-WHERE
-    en.id = $1::int
-    AND (
-        w.values IS NULL
-        OR (
-            CASE se.shop_type
-                WHEN 'pre-airship' THEN 'pre-story'::availability_type
-                WHEN 'post-airship' THEN 'post'::availability_type
-            END
-        ) = ANY(w.values)
-    )
-ORDER BY sh.id
+CROSS JOIN (SELECT $1::availability_type[] AS values) w
+CROSS JOIN LATERAL (
+    SELECT CASE se.shop_type
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS shop_availability
+) calc
+WHERE en.id = $2::int
+  AND (w.values IS NULL OR calc.shop_availability = ANY(w.values))
+ORDER BY se.shop_id
 `
 
 type GetEquipmentShopIDsParams struct {
-	EquipmentID  int32
 	Availability []AvailabilityType
+	EquipmentID  int32
 }
 
 func (q *Queries) GetEquipmentShopIDs(ctx context.Context, arg GetEquipmentShopIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEquipmentShopIDs, arg.EquipmentID, pq.Array(arg.Availability))
+	rows, err := q.db.QueryContext(ctx, getEquipmentShopIDs, pq.Array(arg.Availability), arg.EquipmentID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var shop_id int32
+		if err := rows.Scan(&shop_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, shop_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -816,17 +806,14 @@ func (q *Queries) GetEquipmentShopIDs(ctx context.Context, arg GetEquipmentShopI
 }
 
 const getEquipmentTableCelestialWeaponID = `-- name: GetEquipmentTableCelestialWeaponID :one
-SELECT cw.id
-FROM celestial_weapons cw
-JOIN j_equipment_tables_names j ON j.celestial_weapon_id = cw.id
-JOIN equipment_tables et ON j.equipment_table_id = et.id
-WHERE et.id = $1
+SELECT celestial_weapon_id::int FROM j_equipment_tables_names WHERE equipment_table_id = $1
 `
 
-func (q *Queries) GetEquipmentTableCelestialWeaponID(ctx context.Context, id int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getEquipmentTableCelestialWeaponID, id)
-	err := row.Scan(&id)
-	return id, err
+func (q *Queries) GetEquipmentTableCelestialWeaponID(ctx context.Context, equipmentTableID int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getEquipmentTableCelestialWeaponID, equipmentTableID)
+	var celestial_weapon_id int32
+	err := row.Scan(&celestial_weapon_id)
+	return celestial_weapon_id, err
 }
 
 const getEquipmentTableIDs = `-- name: GetEquipmentTableIDs :many
@@ -960,13 +947,9 @@ SELECT DISTINCT t.id
 FROM treasures t
 JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
 JOIN equipment_names en ON te.equipment_name_id = en.id
-WHERE
-(
-    $1::availability_type[] IS NULL
-    OR
-    t.availability = ANY($1::availability_type[])
-)
-AND en.id = $2::int
+CROSS JOIN (SELECT $1::availability_type[] AS values) w
+WHERE en.id = $2::int
+  AND (w.values IS NULL OR t.availability = ANY(w.values))
 ORDER BY t.id
 `
 

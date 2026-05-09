@@ -7,7 +7,6 @@ package database
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/lib/pq"
 )
@@ -118,39 +117,6 @@ func (q *Queries) GetBlitzballPrizeIDsByCategory(ctx context.Context, category B
 		return nil, err
 	}
 	return items, nil
-}
-
-const getParentSidequest = `-- name: GetParentSidequest :one
-SELECT q.id, q.data_hash, q.name, q.type, q.availability, q.is_repeatable, q.completion_id
-FROM subquests su
-LEFT JOIN sidequests si ON su.sidequest_id = si.id
-LEFT JOIN quests q ON si.quest_id = q.id
-WHERE su.id = $1
-`
-
-type GetParentSidequestRow struct {
-	ID           sql.NullInt32
-	DataHash     sql.NullString
-	Name         sql.NullString
-	Type         NullQuestType
-	Availability NullAvailabilityType
-	IsRepeatable sql.NullBool
-	CompletionID sql.NullInt32
-}
-
-func (q *Queries) GetParentSidequest(ctx context.Context, id int32) (GetParentSidequestRow, error) {
-	row := q.db.QueryRowContext(ctx, getParentSidequest, id)
-	var i GetParentSidequestRow
-	err := row.Scan(
-		&i.ID,
-		&i.DataHash,
-		&i.Name,
-		&i.Type,
-		&i.Availability,
-		&i.IsRepeatable,
-		&i.CompletionID,
-	)
-	return i, err
 }
 
 const getQuestIDs = `-- name: GetQuestIDs :many
@@ -405,7 +371,7 @@ func (q *Queries) GetSubquestIDsByAvailability(ctx context.Context, availability
 }
 
 const getSubquestIDsByRepeatable = `-- name: GetSubquestIDsByRepeatable :many
-SELECT s.id
+SELECT DISTINCT s.id
 FROM subquests s
 JOIN quests q ON s.quest_id = q.id
 WHERE q.is_repeatable = $1

@@ -18,7 +18,7 @@ func createSubmenuOpenedBy(cfg *Config, r *http.Request, submenu seeding.Submenu
 		return nil, err
 	}
 
-	overdriveCommands, err := getResourcesDbItem(cfg, r, cfg.e.overdriveCommands, submenu, cfg.db.GetSubmenuOpenedByOverdriveCommandIDs)
+	overdriveCommands, err := getResourcesDbItem(cfg, r, cfg.e.overdriveCommands, submenu, ToIntManyNull(cfg.db.GetSubmenuOpenedByOverdriveCommandIDs))
 	if err != nil {
 		return nil, err
 	}

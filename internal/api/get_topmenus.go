@@ -12,22 +12,22 @@ func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, T
 		return Topmenu{}, err
 	}
 
-	submenus, err := getResourcesDbItem(cfg, r, cfg.e.submenus, topmenu, cfg.db.GetTopmenuSubmenuIDs)
+	submenus, err := getResourcesDbItem(cfg, r, cfg.e.submenus, topmenu, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs))
 	if err != nil {
 		return Topmenu{}, err
 	}
 
-	overdriveCommands, err := getResourcesDbItem(cfg, r, cfg.e.overdriveCommands, topmenu, cfg.db.GetTopmenuOverdriveCommandIDs)
+	overdriveCommands, err := getResourcesDbItem(cfg, r, cfg.e.overdriveCommands, topmenu, ToIntManyNull(cfg.db.GetTopmenuOverdriveCommandIDs))
 	if err != nil {
 		return Topmenu{}, err
 	}
 
-	overdrives, err := getResourcesDbItem(cfg, r, cfg.e.overdrives, topmenu, cfg.db.GetTopmenuOverdriveIDs)
+	overdrives, err := getResourcesDbItem(cfg, r, cfg.e.overdrives, topmenu, ToIntManyNull(cfg.db.GetTopmenuOverdriveIDs))
 	if err != nil {
 		return Topmenu{}, err
 	}
 
-	aeonCommands, err := getResourcesDbItem(cfg, r, cfg.e.aeonCommands, topmenu, cfg.db.GetTopmenuAeonCommandIDs)
+	aeonCommands, err := getResourcesDbItem(cfg, r, cfg.e.aeonCommands, topmenu, ToIntManyNull(cfg.db.GetTopmenuAeonCommandIDs))
 	if err != nil {
 		return Topmenu{}, err
 	}

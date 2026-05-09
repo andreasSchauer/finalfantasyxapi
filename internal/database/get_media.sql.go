@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 )
 
 const getFmvIDs = `-- name: GetFmvIDs :many
@@ -37,15 +38,11 @@ func (q *Queries) GetFmvIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getSongFmvIDs = `-- name: GetSongFmvIDs :many
-SELECT DISTINCT f.id
-FROM fmvs f
-JOIN songs s ON f.song_id = s.id
-WHERE s.id = $1
-ORDER BY f.id
+SELECT id FROM fmvs WHERE song_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetSongFmvIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSongFmvIDs, id)
+func (q *Queries) GetSongFmvIDs(ctx context.Context, songID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSongFmvIDs, songID)
 	if err != nil {
 		return nil, err
 	}
@@ -157,10 +154,7 @@ func (q *Queries) GetSongIDsByComposer(ctx context.Context, composer NullCompose
 }
 
 const getSongIDsWithFMVs = `-- name: GetSongIDsWithFMVs :many
-SELECT s.id
-FROM songs s
-JOIN fmvs f ON f.song_id = s.id
-ORDER BY s.id
+SELECT DISTINCT song_id::int FROM fmvs WHERE song_id IS NOT NULL ORDER BY song_id
 `
 
 func (q *Queries) GetSongIDsWithFMVs(ctx context.Context) ([]int32, error) {
@@ -171,11 +165,11 @@ func (q *Queries) GetSongIDsWithFMVs(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -218,13 +212,12 @@ SELECT DISTINCT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
 JOIN formation_boss_songs fbs ON fd.boss_song_id = fbs.id
-JOIN songs s ON fbs.song_id = s.id
-WHERE s.id = $1
+WHERE fbs.song_id = $1
 ORDER BY mf.id
 `
 
-func (q *Queries) GetSongMonsterFormationIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSongMonsterFormationIDs, id)
+func (q *Queries) GetSongMonsterFormationIDs(ctx context.Context, songID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSongMonsterFormationIDs, songID)
 	if err != nil {
 		return nil, err
 	}

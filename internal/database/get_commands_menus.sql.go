@@ -65,28 +65,26 @@ func (q *Queries) GetOverdriveCommandIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getOverdriveCommandOverdriveAbilityIDs = `-- name: GetOverdriveCommandOverdriveAbilityIDs :many
-SELECT oa.id
-FROM overdrive_abilities oa
-JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+SELECT DISTINCT j.overdrive_ability_id
+FROM j_overdrives_overdrive_abilities j
 JOIN overdrives o ON j.overdrive_id = o.id
-JOIN overdrive_commands oc ON o.od_command_id = oc.id
-WHERE oc.id = $1
-ORDER BY oa.id
+WHERE o.od_command_id = $1
+ORDER BY j.overdrive_ability_id
 `
 
-func (q *Queries) GetOverdriveCommandOverdriveAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getOverdriveCommandOverdriveAbilityIDs, id)
+func (q *Queries) GetOverdriveCommandOverdriveAbilityIDs(ctx context.Context, odCommandID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveCommandOverdriveAbilityIDs, odCommandID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var overdrive_ability_id int32
+		if err := rows.Scan(&overdrive_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, overdrive_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -98,15 +96,11 @@ func (q *Queries) GetOverdriveCommandOverdriveAbilityIDs(ctx context.Context, id
 }
 
 const getOverdriveCommandOverdriveIDs = `-- name: GetOverdriveCommandOverdriveIDs :many
-SELECT o.id
-FROM overdrives o
-JOIN overdrive_commands oc ON o.od_command_id = oc.id
-WHERE oc.id = $1
-ORDER BY o.id
+SELECT id FROM overdrives WHERE od_command_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetOverdriveCommandOverdriveIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getOverdriveCommandOverdriveIDs, id)
+func (q *Queries) GetOverdriveCommandOverdriveIDs(ctx context.Context, odCommandID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getOverdriveCommandOverdriveIDs, odCommandID)
 	if err != nil {
 		return nil, err
 	}
@@ -129,12 +123,10 @@ func (q *Queries) GetOverdriveCommandOverdriveIDs(ctx context.Context, id int32)
 }
 
 const getSubmenuAbilityIDs = `-- name: GetSubmenuAbilityIDs :many
-SELECT a.id
-FROM abilities a
-LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN misc_abilities ua ON ua.ability_id = a.id
-WHERE pa.submenu_id = $1 OR ua.submenu_id = $1
-ORDER BY a.id
+SELECT pa.ability_id FROM player_abilities pa WHERE pa.submenu_id = $1
+UNION
+SELECT oa.ability_id FROM misc_abilities oa WHERE oa.submenu_id = $1
+ORDER BY ability_id
 `
 
 func (q *Queries) GetSubmenuAbilityIDs(ctx context.Context, submenuID sql.NullInt32) ([]int32, error) {
@@ -145,11 +137,11 @@ func (q *Queries) GetSubmenuAbilityIDs(ctx context.Context, submenuID sql.NullIn
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -188,18 +180,17 @@ func (q *Queries) GetSubmenuIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getSubmenuOpenedByAbilityID = `-- name: GetSubmenuOpenedByAbilityID :one
-SELECT a.id
-FROM abilities a
-LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN misc_abilities ua ON ua.ability_id = a.id
-WHERE pa.open_submenu_id = $1 OR ua.open_submenu_id = $1
+SELECT pa.ability_id FROM player_abilities pa WHERE pa.open_submenu_id = $1
+UNION
+SELECT oa.ability_id FROM misc_abilities oa WHERE oa.open_submenu_id = $1
+ORDER BY ability_id
 `
 
 func (q *Queries) GetSubmenuOpenedByAbilityID(ctx context.Context, openSubmenuID sql.NullInt32) (int32, error) {
 	row := q.db.QueryRowContext(ctx, getSubmenuOpenedByAbilityID, openSubmenuID)
-	var id int32
-	err := row.Scan(&id)
-	return id, err
+	var ability_id int32
+	err := row.Scan(&ability_id)
+	return ability_id, err
 }
 
 const getSubmenuOpenedByAeonCommandID = `-- name: GetSubmenuOpenedByAeonCommandID :one
@@ -214,15 +205,11 @@ func (q *Queries) GetSubmenuOpenedByAeonCommandID(ctx context.Context, submenuID
 }
 
 const getSubmenuOpenedByOverdriveCommandIDs = `-- name: GetSubmenuOpenedByOverdriveCommandIDs :many
-SELECT oc.id
-FROM overdrive_commands oc
-JOIN submenus s ON oc.submenu_id = s.id
-WHERE s.id = $1
-ORDER BY oc.id
+SELECT id FROM overdrive_commands WHERE submenu_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetSubmenuOpenedByOverdriveCommandIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSubmenuOpenedByOverdriveCommandIDs, id)
+func (q *Queries) GetSubmenuOpenedByOverdriveCommandIDs(ctx context.Context, submenuID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSubmenuOpenedByOverdriveCommandIDs, submenuID)
 	if err != nil {
 		return nil, err
 	}
@@ -245,13 +232,12 @@ func (q *Queries) GetSubmenuOpenedByOverdriveCommandIDs(ctx context.Context, id 
 }
 
 const getTopmenuAbilityIDs = `-- name: GetTopmenuAbilityIDs :many
-SELECT a.id
-FROM abilities a
-LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN misc_abilities ua ON ua.ability_id = a.id
-LEFT JOIN trigger_commands tc ON tc.ability_id = a.id
-WHERE pa.topmenu_id = $1 OR ua.topmenu_id = $1 OR tc.topmenu_id = $1
-ORDER BY a.id
+SELECT pa.ability_id FROM player_abilities pa WHERE pa.topmenu_id = $1
+UNION
+SELECT ma.ability_id FROM misc_abilities ma WHERE ma.topmenu_id = $1
+UNION
+SELECT tc.ability_id FROM trigger_commands tc WHERE tc.topmenu_id = $1
+ORDER BY ability_id
 `
 
 func (q *Queries) GetTopmenuAbilityIDs(ctx context.Context, topmenuID sql.NullInt32) ([]int32, error) {
@@ -262,11 +248,11 @@ func (q *Queries) GetTopmenuAbilityIDs(ctx context.Context, topmenuID sql.NullIn
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -278,15 +264,11 @@ func (q *Queries) GetTopmenuAbilityIDs(ctx context.Context, topmenuID sql.NullIn
 }
 
 const getTopmenuAeonCommandIDs = `-- name: GetTopmenuAeonCommandIDs :many
-SELECT ac.id
-FROM aeon_commands ac
-JOIN topmenus t ON ac.topmenu_id = t.id
-WHERE t.id = $1
-ORDER BY ac.id
+SELECT id FROM aeon_commands WHERE topmenu_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetTopmenuAeonCommandIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTopmenuAeonCommandIDs, id)
+func (q *Queries) GetTopmenuAeonCommandIDs(ctx context.Context, topmenuID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTopmenuAeonCommandIDs, topmenuID)
 	if err != nil {
 		return nil, err
 	}
@@ -336,15 +318,11 @@ func (q *Queries) GetTopmenuIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getTopmenuOverdriveCommandIDs = `-- name: GetTopmenuOverdriveCommandIDs :many
-SELECT oc.id
-FROM overdrive_commands oc
-JOIN topmenus t ON oc.topmenu_id = t.id
-WHERE t.id = $1
-ORDER BY oc.id
+SELECT id FROM overdrive_commands WHERE topmenu_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetTopmenuOverdriveCommandIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTopmenuOverdriveCommandIDs, id)
+func (q *Queries) GetTopmenuOverdriveCommandIDs(ctx context.Context, topmenuID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTopmenuOverdriveCommandIDs, topmenuID)
 	if err != nil {
 		return nil, err
 	}
@@ -367,15 +345,11 @@ func (q *Queries) GetTopmenuOverdriveCommandIDs(ctx context.Context, id int32) (
 }
 
 const getTopmenuOverdriveIDs = `-- name: GetTopmenuOverdriveIDs :many
-SELECT o.id
-FROM overdrives o
-JOIN topmenus t ON o.topmenu_id = t.id
-WHERE t.id = $1
-ORDER BY o.id
+SELECT id FROM overdrives WHERE topmenu_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetTopmenuOverdriveIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTopmenuOverdriveIDs, id)
+func (q *Queries) GetTopmenuOverdriveIDs(ctx context.Context, topmenuID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTopmenuOverdriveIDs, topmenuID)
 	if err != nil {
 		return nil, err
 	}
@@ -398,15 +372,11 @@ func (q *Queries) GetTopmenuOverdriveIDs(ctx context.Context, id int32) ([]int32
 }
 
 const getTopmenuSubmenuIDs = `-- name: GetTopmenuSubmenuIDs :many
-SELECT s.id
-FROM submenus s
-JOIN topmenus t ON s.topmenu_id = t.id
-WHERE t.id = $1
-ORDER BY s.id
+SELECT id FROM submenus s WHERE topmenu_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetTopmenuSubmenuIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTopmenuSubmenuIDs, id)
+func (q *Queries) GetTopmenuSubmenuIDs(ctx context.Context, topmenuID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTopmenuSubmenuIDs, topmenuID)
 	if err != nil {
 		return nil, err
 	}

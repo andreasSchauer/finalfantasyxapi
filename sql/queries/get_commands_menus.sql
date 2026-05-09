@@ -1,11 +1,9 @@
 -- name: GetOverdriveCommandOverdriveAbilityIDs :many
-SELECT oa.id
-FROM overdrive_abilities oa
-JOIN j_overdrives_overdrive_abilities j ON j.overdrive_ability_id = oa.id
+SELECT DISTINCT j.overdrive_ability_id
+FROM j_overdrives_overdrive_abilities j
 JOIN overdrives o ON j.overdrive_id = o.id
-JOIN overdrive_commands oc ON o.od_command_id = oc.id
-WHERE oc.id = $1
-ORDER BY oa.id;
+WHERE o.od_command_id = $1
+ORDER BY j.overdrive_ability_id;
 
 
 -- name: GetOverdriveCommandIDs :many
@@ -13,11 +11,7 @@ SELECT id FROM overdrive_commands ORDER BY id;
 
 
 -- name: GetOverdriveCommandOverdriveIDs :many
-SELECT o.id
-FROM overdrives o
-JOIN overdrive_commands oc ON o.od_command_id = oc.id
-WHERE oc.id = $1
-ORDER BY o.id;
+SELECT id FROM overdrives WHERE od_command_id = $1 ORDER BY id;
 
 
 
@@ -27,12 +21,10 @@ SELECT id FROM submenus ORDER BY id;
 
 
 -- name: GetSubmenuAbilityIDs :many
-SELECT a.id
-FROM abilities a
-LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN misc_abilities ua ON ua.ability_id = a.id
-WHERE pa.submenu_id = $1 OR ua.submenu_id = $1
-ORDER BY a.id;
+SELECT pa.ability_id FROM player_abilities pa WHERE pa.submenu_id = $1
+UNION
+SELECT oa.ability_id FROM misc_abilities oa WHERE oa.submenu_id = $1
+ORDER BY ability_id;
 
 
 -- name: GetSubmenuOpenedByAeonCommandID :one
@@ -40,71 +32,45 @@ SELECT id FROM aeon_commands WHERE submenu_id = $1;
 
 
 -- name: GetSubmenuOpenedByAbilityID :one
-SELECT a.id
-FROM abilities a
-LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN misc_abilities ua ON ua.ability_id = a.id
-WHERE pa.open_submenu_id = $1 OR ua.open_submenu_id = $1;
+SELECT pa.ability_id FROM player_abilities pa WHERE pa.open_submenu_id = $1
+UNION
+SELECT oa.ability_id FROM misc_abilities oa WHERE oa.open_submenu_id = $1
+ORDER BY ability_id;
 
 
 -- name: GetSubmenuOpenedByOverdriveCommandIDs :many
-SELECT oc.id
-FROM overdrive_commands oc
-JOIN submenus s ON oc.submenu_id = s.id
-WHERE s.id = $1
-ORDER BY oc.id;
-
-
-
+SELECT id FROM overdrive_commands WHERE submenu_id = $1 ORDER BY id;
 
 
 
 
 -- name: GetTopmenuSubmenuIDs :many
-SELECT s.id
-FROM submenus s
-JOIN topmenus t ON s.topmenu_id = t.id
-WHERE t.id = $1
-ORDER BY s.id;
+SELECT id FROM submenus s WHERE topmenu_id = $1 ORDER BY id;
 
 
 -- name: GetTopmenuAeonCommandIDs :many
-SELECT ac.id
-FROM aeon_commands ac
-JOIN topmenus t ON ac.topmenu_id = t.id
-WHERE t.id = $1
-ORDER BY ac.id;
+SELECT id FROM aeon_commands WHERE topmenu_id = $1 ORDER BY id;
 
 
 -- name: GetTopmenuOverdriveCommandIDs :many
-SELECT oc.id
-FROM overdrive_commands oc
-JOIN topmenus t ON oc.topmenu_id = t.id
-WHERE t.id = $1
-ORDER BY oc.id;
+SELECT id FROM overdrive_commands WHERE topmenu_id = $1 ORDER BY id;
 
 
 -- name: GetTopmenuOverdriveIDs :many
-SELECT o.id
-FROM overdrives o
-JOIN topmenus t ON o.topmenu_id = t.id
-WHERE t.id = $1
-ORDER BY o.id;
+SELECT id FROM overdrives WHERE topmenu_id = $1 ORDER BY id;
 
 
 -- name: GetTopmenuAbilityIDs :many
-SELECT a.id
-FROM abilities a
-LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN misc_abilities ua ON ua.ability_id = a.id
-LEFT JOIN trigger_commands tc ON tc.ability_id = a.id
-WHERE pa.topmenu_id = $1 OR ua.topmenu_id = $1 OR tc.topmenu_id = $1
-ORDER BY a.id;
+SELECT pa.ability_id FROM player_abilities pa WHERE pa.topmenu_id = $1
+UNION
+SELECT ma.ability_id FROM misc_abilities ma WHERE ma.topmenu_id = $1
+UNION
+SELECT tc.ability_id FROM trigger_commands tc WHERE tc.topmenu_id = $1
+ORDER BY ability_id;
 
 
 -- name: GetTopmenuIDs :many
 SELECT id FROM topmenus ORDER BY id;
-
 
 
 -- name: GetAeonCommandIDs :many

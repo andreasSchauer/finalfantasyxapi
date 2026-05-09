@@ -699,12 +699,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveOverdriveCommands,
 		subsections: map[string]Subsection{
 			"overdrive-abilities": {
-				dbQuery:     cfg.db.GetOverdriveCommandOverdriveAbilityIDs,
+				dbQuery:     ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveAbilityIDs),
 				createSubFn: createOverdriveAbilitySimple,
 				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 			"overdrives": {
-				dbQuery:     cfg.db.GetOverdriveCommandOverdriveIDs,
+				dbQuery:     ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveIDs),
 				createSubFn: createOverdriveSimple,
 			},
 		},

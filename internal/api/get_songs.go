@@ -17,7 +17,7 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, N
 		return Song{}, err
 	}
 
-	fmvs, err := getResourcesDbItem(cfg, r, cfg.e.fmvs, song, cfg.db.GetSongFmvIDs)
+	fmvs, err := getResourcesDbItem(cfg, r, cfg.e.fmvs, song, ToIntManyNull(cfg.db.GetSongFmvIDs))
 	if err != nil {
 		return Song{}, err
 	}

@@ -14,12 +14,7 @@ SELECT id FROM quests WHERE availability = ANY(sqlc.narg('availability')::availa
 SELECT id FROM quests WHERE is_repeatable = $1 ORDER BY id;
 
 
--- name: GetParentSidequest :one
-SELECT q.*
-FROM subquests su
-LEFT JOIN sidequests si ON su.sidequest_id = si.id
-LEFT JOIN quests q ON si.quest_id = q.id
-WHERE su.id = $1;
+
 
 
 -- name: GetSidequestSubquestIDs :many
@@ -51,7 +46,7 @@ ORDER BY s.id;
 
 
 -- name: GetSubquestIDsByRepeatable :many
-SELECT s.id
+SELECT DISTINCT s.id
 FROM subquests s
 JOIN quests q ON s.quest_id = q.id
 WHERE q.is_repeatable = $1
