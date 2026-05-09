@@ -55,7 +55,7 @@ func (l *Lookup) extractFormationData() ([]FormationData, error) {
 		mfData := &l.json.monsterFormations[i].FormationData
 
 		if mfData.BossMusic != nil {
-			mfData.BossMusic.ID, err = l.getHashID(mfData.BossMusic)
+			mfData.BossMusic.ID, err = l.GetHashID(mfData.BossMusic)
 			if err != nil {
 				return nil, err
 			}

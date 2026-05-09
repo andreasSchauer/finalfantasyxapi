@@ -54,7 +54,7 @@ func (l *Lookup) extractAbilities() ([]Ability, error) {
 
 	for i := range l.json.playerAbilities {
 		ability := &l.json.playerAbilities[i]
-		ability.Attributes.ID, err = l.getHashID(ability.Attributes)
+		ability.Attributes.ID, err = l.GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -65,7 +65,7 @@ func (l *Lookup) extractAbilities() ([]Ability, error) {
 
 	for i := range l.json.overdriveAbilities {
 		ability := &l.json.overdriveAbilities[i]
-		ability.Attributes.ID, err = l.getHashID(ability.Attributes)
+		ability.Attributes.ID, err = l.GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -81,7 +81,7 @@ func (l *Lookup) extractAbilities() ([]Ability, error) {
 			continue
 		}
 
-		item.Attributes.ID, err = l.getHashID(item.Attributes)
+		item.Attributes.ID, err = l.GetHashID(item.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -92,7 +92,7 @@ func (l *Lookup) extractAbilities() ([]Ability, error) {
 
 	for i := range l.json.triggerCommands {
 		command := &l.json.triggerCommands[i]
-		command.Attributes.ID, err = l.getHashID(command.Attributes)
+		command.Attributes.ID, err = l.GetHashID(command.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -103,7 +103,7 @@ func (l *Lookup) extractAbilities() ([]Ability, error) {
 
 	for i := range l.json.miscAbilities {
 		ability := &l.json.miscAbilities[i]
-		ability.Attributes.ID, err = l.getHashID(ability.Attributes)
+		ability.Attributes.ID, err = l.GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -114,7 +114,7 @@ func (l *Lookup) extractAbilities() ([]Ability, error) {
 
 	for i := range l.json.enemyAbilities {
 		ability := &l.json.enemyAbilities[i]
-		ability.Attributes.ID, err = l.getHashID(ability.Attributes)
+		ability.Attributes.ID, err = l.GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}

@@ -60,7 +60,7 @@ func (l *Lookup) extractMiscAbilities() ([]MiscAbility, error) {
 	for i := range l.json.miscAbilities {
 		ability := &l.json.miscAbilities[i]
 
-		ability.Ability.ID, err = l.getHashID(ability.Ability)
+		ability.Ability.ID, err = l.GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}

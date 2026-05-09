@@ -58,7 +58,7 @@ func (l *Lookup) extractItemAbilities() ([]ItemAbility, error) {
 		ability.Type = database.AbilityTypeItemAbility
 		ability.ItemID = item.ID
 
-		ability.Ability.ID, err = l.getHashID(ability.Ability)
+		ability.Ability.ID, err = l.GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}

@@ -72,7 +72,7 @@ func (l *Lookup) extractPlayerAbilities() ([]PlayerAbility, error) {
 	for i := range l.json.playerAbilities {
 		ability := &l.json.playerAbilities[i]
 
-		ability.Ability.ID, err = l.getHashID(ability.Ability)
+		ability.Ability.ID, err = l.GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}
@@ -103,7 +103,7 @@ func (l *Lookup) extractPlayerAbilities() ([]PlayerAbility, error) {
 		}
 
 		if ability.AeonLearnItem != nil {
-			ability.AeonLearnItem.ID, err = l.getHashID(ability.AeonLearnItem)
+			ability.AeonLearnItem.ID, err = l.GetHashID(ability.AeonLearnItem)
 			if err != nil {
 				return nil, err
 			}

@@ -79,7 +79,7 @@ func (l *Lookup) extractBlitzballItems() ([]BlitzballItem, error) {
 			item := &pos.Items[j]
 			item.PositionID = pos.ID
 
-			item.PossibleItem.ID, err = l.getHashID(item.PossibleItem)
+			item.PossibleItem.ID, err = l.GetHashID(item.PossibleItem)
 			if err != nil {
 				return nil, err
 			}

@@ -73,7 +73,7 @@ func (l *Lookup) extractSongs() ([]Song, error) {
 		song := &l.json.songs[i]
 
 		if song.Credits != nil {
-			song.Credits.ID, err = l.getHashID(*song.Credits)
+			song.Credits.ID, err = l.GetHashID(*song.Credits)
 			if err != nil {
 				return nil, err
 			}

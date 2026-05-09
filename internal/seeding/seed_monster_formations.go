@@ -52,12 +52,12 @@ func (l *Lookup) extractMonsterFormations() ([]MonsterFormation, error) {
 	for i := range l.json.monsterFormations {
 		mf := &l.json.monsterFormations[i]
 
-		mf.FormationData.ID, err = l.getHashID(mf.FormationData)
+		mf.FormationData.ID, err = l.GetHashID(mf.FormationData)
 		if err != nil {
 			return nil, err
 		}
 
-		mf.MonsterSelection.ID, err = l.getHashID(mf.MonsterSelection)
+		mf.MonsterSelection.ID, err = l.GetHashID(mf.MonsterSelection)
 		if err != nil {
 			return nil, err
 		}

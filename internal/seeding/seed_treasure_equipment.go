@@ -53,7 +53,7 @@ func (l *Lookup) extractTreasureEquipment() ([]TreasureEquipment, error) {
 				continue
 			}
 
-			treasure.Equipment.TreasureID, err = l.getHashID(treasure)
+			treasure.Equipment.TreasureID, err = l.GetHashID(treasure)
 			if err != nil {
 				return nil, err
 			}

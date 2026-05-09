@@ -49,7 +49,7 @@ func (l *Lookup) extractQuestCompletions() ([]QuestCompletion, error) {
 
 		if sidequest.Completion != nil {
 			completion := sidequest.Completion
-			completion.Reward.ID, err = l.getHashID(completion.Reward)
+			completion.Reward.ID, err = l.GetHashID(completion.Reward)
 			if err != nil {
 				return nil, err
 			}
@@ -62,7 +62,7 @@ func (l *Lookup) extractQuestCompletions() ([]QuestCompletion, error) {
 
 			if subquest.Completion != nil {
 				completion := subquest.Completion
-				completion.Reward.ID, err = l.getHashID(completion.Reward)
+				completion.Reward.ID, err = l.GetHashID(completion.Reward)
 				if err != nil {
 					return nil, err
 				}

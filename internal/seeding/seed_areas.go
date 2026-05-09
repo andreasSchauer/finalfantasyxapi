@@ -66,7 +66,7 @@ func (l *Lookup) extractAreas() ([]Area, error) {
 		for j := range location.Sublocations {
 			sublocation := &location.Sublocations[j]
 
-			sublocation.ID, err = l.getHashID(sublocation)
+			sublocation.ID, err = l.GetHashID(sublocation)
 			if err != nil {
 				return nil, err
 			}
@@ -91,7 +91,7 @@ func (l *Lookup) completeAreas(areas []Area) error {
 			return err
 		}
 
-		area.ID, err = l.getHashID(area)
+		area.ID, err = l.GetHashID(area)
 		if err != nil {
 			return err
 		}

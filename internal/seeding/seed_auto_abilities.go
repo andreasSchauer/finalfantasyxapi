@@ -104,21 +104,21 @@ func (l *Lookup) extractAutoAbilities() ([]AutoAbility, error) {
 		}
 
 		if ability.RequiredItem != nil {
-			ability.RequiredItem.ID, err = l.getHashID(ability.RequiredItem)
+			ability.RequiredItem.ID, err = l.GetHashID(ability.RequiredItem)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if ability.AddedElemResist != nil {
-			ability.AddedElemResist.ID, err = l.getHashID(ability.AddedElemResist)
+			ability.AddedElemResist.ID, err = l.GetHashID(ability.AddedElemResist)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if ability.OnHitStatus != nil {
-			ability.OnHitStatus.ID, err = l.getHashID(ability.OnHitStatus)
+			ability.OnHitStatus.ID, err = l.GetHashID(ability.OnHitStatus)
 			if err != nil {
 				return nil, err
 			}

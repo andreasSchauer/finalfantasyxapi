@@ -70,13 +70,13 @@ func (l *Lookup) prepareAlts(states []AlteredState) ([]Alt, error) {
 		for j := range state.Changes {
 			change := &state.Changes[j]
 
-			change.AlteredStateID, err = l.getHashID(state)
+			change.AlteredStateID, err = l.GetHashID(state)
 			if err != nil {
 				return nil, err
 			}
 
 			if change.AddedStatus != nil {
-				change.AddedStatus.ID, err = l.getHashID(change.AddedStatus)
+				change.AddedStatus.ID, err = l.GetHashID(change.AddedStatus)
 				if err != nil {
 					return nil, err
 				}

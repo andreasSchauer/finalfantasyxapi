@@ -52,17 +52,15 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			return nil, err
 		}
 
-		elemResist := seeding.ElementalResist{
+		id, err := cfg.l.GetHashID(seeding.ElementalResist{
 			ElementID: elementID,
 			Affinity:  affinity.Name,
-		}
-
-		elemResistLookup, err := seeding.GetResource(elemResist, cfg.l.ElementalResists)
+		})
 		if err != nil {
 			return nil, nil
 		}
 
-		ids = append(ids, elemResistLookup.ID)
+		ids = append(ids, id)
 	}
 
 	return ids, nil
@@ -107,8 +105,8 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAP
 	}
 
 	dbIDs, err := cfg.db.GetMonsterIDsByAutoAbilityIsForced(r.Context(), database.GetMonsterIDsByAutoAbilityIsForcedParams{
-		ID:       id,
-		IsForced: isForced,
+		AutoAbilityID:  id,
+		IsForced: 		isForced,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by auto-ability id '%d'.", i.resourceType, id), err)

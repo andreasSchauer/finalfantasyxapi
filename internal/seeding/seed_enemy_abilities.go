@@ -50,7 +50,7 @@ func (l *Lookup) extractEnemyAbilities() ([]EnemyAbility, error) {
 	for i := range l.json.enemyAbilities {
 		ability := &l.json.enemyAbilities[i]
 
-		ability.Ability.ID, err = l.getHashID(ability.Ability)
+		ability.Ability.ID, err = l.GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}

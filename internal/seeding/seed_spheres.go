@@ -66,7 +66,7 @@ func (l *Lookup) extractSpheres() ([]Sphere, error) {
 		}
 
 		if sphere.CreatedNode != nil {
-			sphere.CreatedNode.ID, err = l.getHashID(*sphere.CreatedNode)
+			sphere.CreatedNode.ID, err = l.GetHashID(*sphere.CreatedNode)
 			if err != nil {
 				return nil, err
 			}

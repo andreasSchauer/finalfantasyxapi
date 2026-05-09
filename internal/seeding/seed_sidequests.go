@@ -46,7 +46,7 @@ func (l *Lookup) extractSidequests() ([]Sidequest, error) {
 	for i := range l.json.sidequests {
 		sidequest := &l.json.sidequests[i]
 
-		sidequest.Quest.ID, err = l.getHashID(sidequest.Quest)
+		sidequest.Quest.ID, err = l.GetHashID(sidequest.Quest)
 		if err != nil {
 			return nil, err
 		}
@@ -117,7 +117,7 @@ func (l *Lookup) extractSubquests() ([]Subquest, error) {
 			subquest := &sidequest.Subquests[j]
 			subquest.SidequestID = sidequest.ID
 
-			subquest.Quest.ID, err = l.getHashID(subquest.Quest)
+			subquest.Quest.ID, err = l.GetHashID(subquest.Quest)
 			if err != nil {
 				return nil, err
 			}

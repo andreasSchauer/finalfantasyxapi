@@ -130,13 +130,13 @@ func (l *Lookup) prepareBattleInteractions(bis []BattleInteraction) ([]BattleInt
 	for j := range bis {
 		bi := &bis[j]
 
-		bi.Accuracy.ID, err = l.getHashID(bi.Accuracy)
+		bi.Accuracy.ID, err = l.GetHashID(bi.Accuracy)
 		if err != nil {
 			return nil, err
 		}
 
 		if bi.InflictedDelay != nil {
-			bi.InflictedDelay.ID, err = l.getHashID(bi.InflictedDelay)
+			bi.InflictedDelay.ID, err = l.GetHashID(bi.InflictedDelay)
 		}
 
 		bisNew = append(bisNew, *bi)

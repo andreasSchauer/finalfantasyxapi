@@ -65,7 +65,7 @@ func (l *Lookup) extractAeons() ([]Aeon, error) {
 	for i := range l.json.aeons {
 		aeon := &l.json.aeons[i]
 
-		aeon.PlayerUnit.ID, err = l.getHashID(aeon.PlayerUnit)
+		aeon.PlayerUnit.ID, err = l.GetHashID(aeon.PlayerUnit)
 		if err != nil {
 			return nil, err
 		}
@@ -76,7 +76,7 @@ func (l *Lookup) extractAeons() ([]Aeon, error) {
 		}
 
 		if aeon.PhysAtkAccuracy != nil {
-			aeon.PhysAtkAccuracy.ID, err = l.getHashID(aeon.PhysAtkAccuracy)
+			aeon.PhysAtkAccuracy.ID, err = l.GetHashID(aeon.PhysAtkAccuracy)
 			if err != nil {
 				return nil, err
 			}

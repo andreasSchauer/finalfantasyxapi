@@ -53,7 +53,7 @@ func (l *Lookup) extractMonsterEquipmentSlots() ([]MonsterEquipmentSlots, error)
 		}
 
 		abilitySlots := &mon.Equipment.AbilitySlots
-		abilitySlots.MonsterEquipmentID, err = l.getHashID(mon.Equipment)
+		abilitySlots.MonsterEquipmentID, err = l.GetHashID(mon.Equipment)
 		if err != nil {
 			return nil, err
 		}
@@ -62,7 +62,7 @@ func (l *Lookup) extractMonsterEquipmentSlots() ([]MonsterEquipmentSlots, error)
 		slots = append(slots, *abilitySlots)
 
 		attachedAbilities := &mon.Equipment.AttachedAbilities
-		attachedAbilities.MonsterEquipmentID, err = l.getHashID(mon.Equipment)
+		attachedAbilities.MonsterEquipmentID, err = l.GetHashID(mon.Equipment)
 		if err != nil {
 			return nil, err
 		}

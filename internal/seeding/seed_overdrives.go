@@ -85,7 +85,7 @@ func (l *Lookup) extractOverdrives() ([]Overdrive, error) {
 			return nil, err
 		}
 
-		overdrive.Attributes.ID, err = l.getHashID(overdrive.Attributes)
+		overdrive.Attributes.ID, err = l.GetHashID(overdrive.Attributes)
 		if err != nil {
 			return nil, err
 		}

@@ -46,7 +46,7 @@ func (l *Lookup) extractOverdriveAbilities() ([]OverdriveAbility, error) {
 	for i := range l.json.overdriveAbilities {
 		ability := &l.json.overdriveAbilities[i]
 
-		ability.Ability.ID, err = l.getHashID(ability.Ability)
+		ability.Ability.ID, err = l.GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}

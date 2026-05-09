@@ -56,7 +56,7 @@ func (l *Lookup) extractTriggerCommands() ([]TriggerCommand, error) {
 	for i := range l.json.triggerCommands {
 		command := &l.json.triggerCommands[i]
 
-		command.Ability.ID, err = l.getHashID(command.Ability)
+		command.Ability.ID, err = l.GetHashID(command.Ability)
 		if err != nil {
 			return nil, err
 		}

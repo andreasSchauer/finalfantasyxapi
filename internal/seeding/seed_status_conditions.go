@@ -63,14 +63,14 @@ func (l *Lookup) extractStatusConditions() ([]StatusCondition, error) {
 		status := &l.json.statusConditions[i]
 
 		if status.AddedElemResist != nil {
-			status.AddedElemResist.ID, err = l.getHashID(status.AddedElemResist)
+			status.AddedElemResist.ID, err = l.GetHashID(status.AddedElemResist)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if status.CtbOnInfliction != nil {
-			status.CtbOnInfliction.ID, err = l.getHashID(status.CtbOnInfliction)
+			status.CtbOnInfliction.ID, err = l.GetHashID(status.CtbOnInfliction)
 			if err != nil {
 				return nil, err
 			}

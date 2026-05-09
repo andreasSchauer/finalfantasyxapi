@@ -901,14 +901,15 @@ func (q *Queries) GetStatAutoAbilityIDs(ctx context.Context, statID int32) ([]in
 }
 
 const getStatAutoAbilityIDsStatChange = `-- name: GetStatAutoAbilityIDsStatChange :many
-SELECT auto_ability_id
-FROM j_auto_abilities_stat_changes
-WHERE stat_change_id = $1
-ORDER BY auto_ability_id
+SELECT j.auto_ability_id
+FROM j_auto_abilities_stat_changes j
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY j.auto_ability_id
 `
 
-func (q *Queries) GetStatAutoAbilityIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatAutoAbilityIDsStatChange, statChangeID)
+func (q *Queries) GetStatAutoAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatAutoAbilityIDsStatChange, statID)
 	if err != nil {
 		return nil, err
 	}
@@ -992,12 +993,13 @@ const getStatItemAbilityIDsStatChange = `-- name: GetStatItemAbilityIDsStatChang
 SELECT DISTINCT ia.id
 FROM item_abilities ia
 JOIN j_battle_interactions_stat_changes j ON j.ability_id = ia.ability_id
-WHERE j.stat_change_id = $1
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
 ORDER BY ia.id
 `
 
-func (q *Queries) GetStatItemAbilityIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatItemAbilityIDsStatChange, statChangeID)
+func (q *Queries) GetStatItemAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatItemAbilityIDsStatChange, statID)
 	if err != nil {
 		return nil, err
 	}
@@ -1053,12 +1055,13 @@ const getStatOverdriveAbilityIDsStatChange = `-- name: GetStatOverdriveAbilityID
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
 JOIN j_battle_interactions_stat_changes j ON j.ability_id = oa.ability_id
-WHERE j.stat_change_id = $1
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
 ORDER BY oa.id
 `
 
-func (q *Queries) GetStatOverdriveAbilityIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatOverdriveAbilityIDsStatChange, statChangeID)
+func (q *Queries) GetStatOverdriveAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatOverdriveAbilityIDsStatChange, statID)
 	if err != nil {
 		return nil, err
 	}
@@ -1114,12 +1117,13 @@ const getStatPlayerAbilityIDsStatChange = `-- name: GetStatPlayerAbilityIDsStatC
 SELECT DISTINCT pa.id
 FROM player_abilities pa
 JOIN j_battle_interactions_stat_changes j ON j.ability_id = pa.ability_id
-WHERE j.stat_change_id = $1
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
 ORDER BY pa.id
 `
 
-func (q *Queries) GetStatPlayerAbilityIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatPlayerAbilityIDsStatChange, statChangeID)
+func (q *Queries) GetStatPlayerAbilityIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatPlayerAbilityIDsStatChange, statID)
 	if err != nil {
 		return nil, err
 	}
@@ -1233,14 +1237,15 @@ func (q *Queries) GetStatStatusConditionIDs(ctx context.Context, statID int32) (
 }
 
 const getStatStatusConditionIDsStatChange = `-- name: GetStatStatusConditionIDsStatChange :many
-SELECT status_condition_id
-FROM j_status_conditions_stat_changes
-WHERE stat_change_id = $1
-ORDER BY status_condition_id
+SELECT j.status_condition_id
+FROM j_status_conditions_stat_changes j
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY j.status_condition_id
 `
 
-func (q *Queries) GetStatStatusConditionIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatStatusConditionIDsStatChange, statChangeID)
+func (q *Queries) GetStatStatusConditionIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatStatusConditionIDsStatChange, statID)
 	if err != nil {
 		return nil, err
 	}
@@ -1296,12 +1301,13 @@ const getStatTriggerCommandIDsStatChange = `-- name: GetStatTriggerCommandIDsSta
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
 JOIN j_battle_interactions_stat_changes j ON j.ability_id = tc.ability_id
-WHERE j.stat_change_id = $1
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
 ORDER BY tc.id
 `
 
-func (q *Queries) GetStatTriggerCommandIDsStatChange(ctx context.Context, statChangeID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatTriggerCommandIDsStatChange, statChangeID)
+func (q *Queries) GetStatTriggerCommandIDsStatChange(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getStatTriggerCommandIDsStatChange, statID)
 	if err != nil {
 		return nil, err
 	}

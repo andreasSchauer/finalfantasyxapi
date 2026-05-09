@@ -47,7 +47,7 @@ func (l *Lookup) extractPossibleItems() ([]PossibleItem, error) {
 		for j := range pos.Items {
 			item := &pos.Items[j]
 
-			item.ItemAmount.ID, err = l.getHashID(item.ItemAmount)
+			item.ItemAmount.ID, err = l.GetHashID(item.ItemAmount)
 			if err != nil {
 				return nil, err
 			}
@@ -66,7 +66,7 @@ func (l *Lookup) extractPossibleItems() ([]PossibleItem, error) {
 		for j := range mon.Items.OtherItems {
 			item := &mon.Items.OtherItems[j]
 
-			item.ItemAmount.ID, err = l.getHashID(item.ItemAmount)
+			item.ItemAmount.ID, err = l.GetHashID(item.ItemAmount)
 			if err != nil {
 				return nil, err
 			}

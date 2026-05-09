@@ -4,16 +4,14 @@ SELECT id FROM monsters WHERE name = $1;
 
 
 -- name: GetMonsterAreaIDs :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN encounter_areas ea ON ea.area_id = a.id
+SELECT DISTINCT ea.area_id
+FROM encounter_areas ea
 JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN monster_selections ms ON mf.monster_selection_id = ms.id
-JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON mf.monster_selection_id = j2.monster_selection_id
 JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
 WHERE ma.monster_id = $1
-ORDER BY a.id;
+ORDER BY ea.area_id;
 
 
 -- name: GetMonsterAreaIdPairs :many
@@ -32,23 +30,20 @@ ORDER BY ma.monster_id, a.id;
 
 
 -- name: GetMonsterMonsterFormationIDs :many
-SELECT mf.id
+SELECT DISTINCT mf.id
 FROM monster_formations mf
-JOIN monster_selections ms ON mf.monster_selection_id = ms.id 
-JOIN j_monster_selections_monsters j ON j.monster_selection_id = ms.id 
+JOIN j_monster_selections_monsters j ON mf.monster_selection_id = j.monster_selection_id
 JOIN monster_amounts ma ON j.monster_amount_id = ma.id
 WHERE ma.monster_id = $1
 ORDER BY mf.id;
 
 
 -- name: GetMonsterAbilityIDs :many
-SELECT a.id
-FROM abilities a
-JOIN monster_abilities ma ON ma.ability_id = a.id
+SELECT DISTINCT ma.ability_id
+FROM monster_abilities ma
 JOIN j_monsters_abilities j ON j.monster_ability_id = ma.id
-JOIN monsters m ON j.monster_id = m.id
-WHERE m.id = $1
-ORDER BY a.id;
+WHERE j.monster_id = $1
+ORDER BY ma.ability_id;
 
 
 -- name: GetMonsterIDs :many
@@ -56,14 +51,12 @@ SELECT id FROM monsters ORDER BY id;
 
 
 -- name: GetMonsterIDsByElemResistIDs :many
-SELECT m.id
-FROM monsters m
-JOIN j_monsters_elem_resists jmer ON jmer.monster_id = m.id
-WHERE jmer.elem_resist_id = ANY(sqlc.arg(elem_resist_ids)::int[])
-GROUP BY m.id
-HAVING COUNT(DISTINCT jmer.elem_resist_id)
-       = array_length(sqlc.arg(elem_resist_ids)::int[], 1)
-ORDER BY m.id;
+SELECT j.monster_id
+FROM j_monsters_elem_resists j
+WHERE j.elem_resist_id = ANY(sqlc.arg(elem_resist_ids)::int[])
+GROUP BY j.monster_id
+HAVING COUNT(DISTINCT j.elem_resist_id) = cardinality(sqlc.arg(elem_resist_ids)::int[])
+ORDER BY j.monster_id;
 
 
 -- name: GetMonsterIDsByStatusResists :many
@@ -113,111 +106,88 @@ ORDER BY mia.monster_id;
 
 
 -- name: GetMonsterIDsByItemSteal :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_items mi ON mi.monster_id = m.id
-JOIN item_amounts ia
-  ON ia.id = mi.steal_common_id
-  OR ia.id = mi.steal_rare_id
-JOIN master_items mit ON ia.master_item_id = mit.id
-JOIN items i ON i.master_item_id = mit.id
-WHERE i.id = sqlc.arg(item_id)
-ORDER BY m.id;
+WITH monster_item_amounts AS (
+    SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL
+    SELECT mi.monster_id, mi.steal_rare_id AS item_amount_id FROM monster_items mi
+)
+SELECT DISTINCT mia.monster_id
+FROM monster_item_amounts mia
+JOIN item_amounts ia ON mia.item_amount_id = ia.id
+JOIN items i ON ia.master_item_id = i.master_item_id
+WHERE i.id = $1
+ORDER BY mia.monster_id;
 
 
 -- name: GetMonsterIDsByItemDrop :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_items mi ON mi.monster_id = m.id
-JOIN item_amounts ia
-  ON ia.id IN (
-      mi.drop_common_id,
-      mi.drop_rare_id,
-      mi.secondary_drop_common_id,
-      mi.secondary_drop_rare_id
-  )
-JOIN master_items mit ON ia.master_item_id = mit.id
-JOIN items i ON i.master_item_id = mit.id
-WHERE i.id = sqlc.arg(item_id)
-ORDER BY m.id;
+WITH monster_item_amounts AS (
+    SELECT mi.monster_id, mi.drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL
+    SELECT mi.monster_id, mi.drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL
+    SELECT mi.monster_id, mi.secondary_drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL
+    SELECT mi.monster_id, mi.secondary_drop_rare_id AS item_amount_id FROM monster_items mi
+)
+SELECT DISTINCT mia.monster_id
+FROM monster_item_amounts mia
+JOIN item_amounts ia ON mia.item_amount_id = ia.id
+JOIN items i ON ia.master_item_id = i.master_item_id
+WHERE i.id = $1
+ORDER BY mia.monster_id;
 
 
 -- name: GetMonsterIDsByItemBribe :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_items mi ON mi.monster_id = m.id
+SELECT DISTINCT mi.monster_id
+FROM monster_items mi
 JOIN item_amounts ia ON ia.id = mi.bribe_id
-JOIN master_items mit ON ia.master_item_id = mit.id
-JOIN items i ON i.master_item_id = mit.id
-WHERE i.id = sqlc.arg(item_id)
-ORDER BY m.id;
+JOIN items i ON i.master_item_id = ia.master_item_id
+WHERE i.id = $1
+ORDER BY mi.monster_id;
 
 
 -- name: GetMonsterIDsByItemOther :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_items mi ON mi.monster_id = m.id
-JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
-JOIN possible_items pi ON pi.id = jmio.possible_item_id
+SELECT DISTINCT mi.monster_id
+FROM monster_items mi
+JOIN j_monster_items_other_items j ON j.monster_items_id = mi.id
+JOIN possible_items pi ON pi.id = j.possible_item_id
 JOIN item_amounts ia ON ia.id = pi.item_amount_id
-JOIN master_items mit ON ia.master_item_id = mit.id
-JOIN items i ON i.master_item_id = mit.id
-WHERE i.id = sqlc.arg(item_id)
-ORDER BY m.id;
+JOIN items i ON ia.master_item_id = i.master_item_id
+WHERE i.id = $1
+ORDER BY mi.monster_id;
 
 
 -- name: GetMonsterIDsByAutoAbility :many
-SELECT m.id
-FROM monsters m
-JOIN monster_equipment me ON me.monster_id = m.id
+SELECT DISTINCT me.monster_id
+FROM monster_equipment me
 JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
 JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
-JOIN auto_abilities aa ON ed.auto_ability_id = aa.id
-WHERE aa.id = $1
-ORDER BY m.id;
+WHERE ed.auto_ability_id = $1
+ORDER BY me.monster_id;
 
 
 -- name: GetMonsterIDsByEmptySlots :many
-SELECT m.id
-FROM monsters m
-JOIN monster_equipment me ON me.monster_id = m.id
+SELECT DISTINCT me.monster_id
+FROM monster_equipment me
 JOIN monster_equipment_slots asl ON asl.monster_equipment_id = me.id AND asl.type = 'ability-slots'
 JOIN monster_equipment_slots aa ON aa.monster_equipment_id = me.id AND aa.type = 'attached-abilities'
 JOIN j_monster_equipment_slots_chances j ON j.monster_equipment_id = me.id AND j.equipment_slots_id = aa.id
 JOIN equipment_slots_chances esc ON j.slots_chance_id = esc.id
 WHERE esc.amount = 0 AND (asl.min_amount = ANY(sqlc.arg(slots)::int[]) OR asl.max_amount = ANY(sqlc.arg(slots)::int[]))
-ORDER BY m.id;
+ORDER BY me.monster_id;
 
 
 -- name: GetMonsterIDsByAutoAbilityIsForced :many
-SELECT m.id
-FROM monsters m
-JOIN monster_equipment me ON me.monster_id = m.id
+SELECT DISTINCT me.monster_id
+FROM monster_equipment me
 JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
 JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
-JOIN auto_abilities aa ON ed.auto_ability_id = aa.id
-WHERE aa.id = $1 AND ed.is_forced = $2
-ORDER BY m.id;
+WHERE ed.auto_ability_id = $1 AND ed.is_forced = $2
+ORDER BY me.monster_id;
 
 
 -- name: GetMonsterIDsByRonsoRage :many
-SELECT m.id
-FROM monsters m
-JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
-WHERE j.ronso_rage_id = $1
-ORDER BY m.id;
-
-
--- name: GetMonsterIDsByPostAirship :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
-JOIN j_monster_selections_monsters j ON j.monster_amount_id = ma.id
-JOIN monster_selections ms ON j.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
-JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.is_post_airship = false
-ORDER BY m.id;
+SELECT monster_id FROM j_monsters_ronso_rages WHERE ronso_rage_id = $1 ORDER BY monster_id;
 
 
 -- name: GetMonsterIDsByDistance :many
@@ -283,7 +253,7 @@ SELECT id FROM monster_formations ORDER BY id;
 
 
 -- name: GetMonsterFormationIDsByCategory :many
-SELECT mf.id
+SELECT DISTINCT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
 WHERE fd.category = ANY(sqlc.narg('category')::monster_formation_category[])
@@ -291,7 +261,7 @@ ORDER BY mf.id;
 
 
 -- name: GetMonsterFormationIDsByAvailability :many
-SELECT mf.id
+SELECT DISTINCT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
 WHERE fd.availability = ANY(sqlc.narg('availability')::availability_type[])
@@ -299,7 +269,7 @@ ORDER BY mf.id;
 
 
 -- name: GetMonsterFormationIDsByRepeatable :many
-SELECT mf.id
+SELECT DISTINCT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
 WHERE fd.category = 'random-encounter' OR fd.category = 'on-demand-fight'
@@ -307,7 +277,7 @@ ORDER BY mf.id;
 
 
 -- name: GetMonsterFormationIDsByForcedAmbush :many
-SELECT mf.id
+SELECT DISTINCT mf.id
 FROM monster_formations mf
 JOIN formation_data fd ON mf.formation_data_id = fd.id
 WHERE fd.is_forced_ambush = $1
@@ -315,55 +285,48 @@ ORDER BY mf.id;
 
 
 -- name: GetMonsterFormationIDsByMonster :many
-SELECT mf.id
+SELECT DISTINCT mf.id
 FROM monster_formations mf
-JOIN monster_selections ms ON mf.monster_selection_id = ms.id
-JOIN j_monster_selections_monsters j ON j.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j ON mf.monster_selection_id = j.monster_selection_id
 JOIN monster_amounts ma ON j.monster_amount_id = ma.id
-JOIN monsters m ON ma.monster_id = m.id
-WHERE m.id = $1
+WHERE ma.monster_id = $1
 ORDER BY mf.id;
 
 
 -- name: GetMonsterFormationIDsByArea :many
-SELECT mf.id
+SELECT DISTINCT mf.id
 FROM monster_formations mf
 JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-WHERE a.id = $1
+WHERE ea.area_id = $1
 ORDER BY mf.id;
 
 
 -- name: GetMonsterFormationIDsBySublocation :many
-SELECT mf.id
+SELECT DISTINCT mf.id
 FROM monster_formations mf
 JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j.encounter_area_id = ea.id
 JOIN areas a ON ea.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
+WHERE a.sublocation_id = $1
 ORDER BY mf.id;
 
 
 -- name: GetMonsterFormationIDsByLocation :many
-SELECT mf.id
+SELECT DISTINCT mf.id
 FROM monster_formations mf
 JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j.encounter_area_id = ea.id
 JOIN areas a ON ea.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
+WHERE s.location_id = $1
 ORDER BY mf.id;
 
 
 -- name: GetMonsterFormationMonsterIDs :many
-SELECT m.id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
+SELECT DISTINCT ma.monster_id
+FROM monster_amounts ma
 JOIN j_monster_selections_monsters j ON j.monster_amount_id = ma.id
-JOIN monster_selections ms ON j.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
+JOIN monster_formations mf ON j.monster_selection_id = mf.monster_selection_id
 WHERE mf.id = $1
-ORDER BY m.id;
+ORDER BY ma.monster_id;

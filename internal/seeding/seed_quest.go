@@ -57,7 +57,7 @@ func (l *Lookup) extractQuests() ([]Quest, error) {
 		quest.Type = database.QuestTypeSidequest
 
 		if quest.Completion != nil {
-			quest.Completion.ID, err = l.getHashID(quest.Completion)
+			quest.Completion.ID, err = l.GetHashID(quest.Completion)
 			if err != nil {
 				return nil, err
 			}
@@ -74,7 +74,7 @@ func (l *Lookup) extractQuests() ([]Quest, error) {
 			quest.Type = database.QuestTypeSubquest
 
 			if quest.Completion != nil {
-				quest.Completion.ID, err = l.getHashID(quest.Completion)
+				quest.Completion.ID, err = l.GetHashID(quest.Completion)
 				if err != nil {
 					return nil, err
 				}

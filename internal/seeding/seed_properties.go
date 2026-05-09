@@ -55,7 +55,7 @@ func (l *Lookup) extractProperties() ([]Property, error) {
 		property := &l.json.properties[i]
 
 		if property.ModifierChange != nil {
-			property.ModifierChange.ID, err = l.getHashID(property.ModifierChange)
+			property.ModifierChange.ID, err = l.GetHashID(property.ModifierChange)
 			if err != nil {
 				return nil, err
 			}
@@ -66,7 +66,6 @@ func (l *Lookup) extractProperties() ([]Property, error) {
 
 	return dedupeRows(properties, l.Hashes), nil
 }
-
 
 func (l *Lookup) getPropertyRelatedStats(p Property) ([]Stat, error) {
 	return getResources(p.RelatedStats, l.Stats)

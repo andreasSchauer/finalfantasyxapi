@@ -277,24 +277,27 @@ ORDER BY trigger_command_id;
 
 
 -- name: GetStatAutoAbilityIDsStatChange :many
-SELECT auto_ability_id
-FROM j_auto_abilities_stat_changes
-WHERE stat_change_id = $1
-ORDER BY auto_ability_id;
+SELECT j.auto_ability_id
+FROM j_auto_abilities_stat_changes j
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY j.auto_ability_id;
 
 
 -- name: GetStatStatusConditionIDsStatChange :many
-SELECT status_condition_id
-FROM j_status_conditions_stat_changes
-WHERE stat_change_id = $1
-ORDER BY status_condition_id;
+SELECT j.status_condition_id
+FROM j_status_conditions_stat_changes j
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
+ORDER BY j.status_condition_id;
 
 
 -- name: GetStatPlayerAbilityIDsStatChange :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
 JOIN j_battle_interactions_stat_changes j ON j.ability_id = pa.ability_id
-WHERE j.stat_change_id = $1
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
 ORDER BY pa.id;
 
 
@@ -302,7 +305,8 @@ ORDER BY pa.id;
 SELECT DISTINCT oa.id
 FROM overdrive_abilities oa
 JOIN j_battle_interactions_stat_changes j ON j.ability_id = oa.ability_id
-WHERE j.stat_change_id = $1
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
 ORDER BY oa.id;
 
 
@@ -310,7 +314,8 @@ ORDER BY oa.id;
 SELECT DISTINCT ia.id
 FROM item_abilities ia
 JOIN j_battle_interactions_stat_changes j ON j.ability_id = ia.ability_id
-WHERE j.stat_change_id = $1
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
 ORDER BY ia.id;
 
 
@@ -318,7 +323,8 @@ ORDER BY ia.id;
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
 JOIN j_battle_interactions_stat_changes j ON j.ability_id = tc.ability_id
-WHERE j.stat_change_id = $1
+JOIN stat_changes sc ON j.stat_change_id = sc.id
+WHERE sc.stat_id = $1
 ORDER BY tc.id;
 
 

@@ -60,7 +60,7 @@ func (l *Lookup) extractCharacters() ([]Character, error) {
 	for i := range l.json.characters {
 		char := &l.json.characters[i]
 
-		char.PlayerUnit.ID, err = l.getHashID(char.PlayerUnit)
+		char.PlayerUnit.ID, err = l.GetHashID(char.PlayerUnit)
 		if err != nil {
 			return nil, err
 		}
