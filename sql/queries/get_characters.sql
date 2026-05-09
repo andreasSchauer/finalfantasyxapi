@@ -7,22 +7,18 @@ SELECT id FROM player_units WHERE type = $1 ORDER BY id;
 
 
 -- name: GetCharacterCharClassIDs :many
-SELECT cc.id
-FROM character_classes cc
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN characters c ON c.unit_id = pu.id
+SELECT j.class_id
+FROM j_character_class_player_units j
+JOIN characters c ON j.unit_id = c.unit_id
 WHERE c.id = $1
-ORDER BY cc.id;
+ORDER BY j.class_id;
 
 
 -- name: GetCharacterOverdriveIDs :many
 SELECT o.id
 FROM overdrives o
-JOIN character_classes cc ON o.character_class_id = cc.id
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN characters c ON c.unit_id = pu.id
+JOIN j_character_class_player_units j ON j.class_id = o.character_class_id
+JOIN characters c ON j.unit_id = c.unit_id
 WHERE c.id = $1
 ORDER BY o.id;
 
@@ -32,58 +28,40 @@ SELECT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_default_abilities da ON da.ability_id = a.id
-JOIN character_classes cc ON da.class_id = cc.id
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN characters c ON c.unit_id = pu.id
+JOIN j_character_class_player_units j ON j.class_id = da.class_id
+JOIN characters c ON j.unit_id = c.unit_id
 WHERE a.type = 'player-ability' AND c.id = $1
 ORDER BY pa.id;
 
 
 -- name: GetCharacterSgAbilityIDs :many
-SELECT pa.id
-FROM player_abilities pa
-JOIN characters c ON pa.standard_grid_char_id = c.id
-WHERE c.id = $1
-ORDER BY pa.id;
+SELECT id FROM player_abilities WHERE standard_grid_char_id = sqlc.arg('character_id')::int ORDER BY id;
 
 
 -- name: GetCharacterEgAbilityIDs :many
-SELECT pa.id
-FROM player_abilities pa
-JOIN characters c ON pa.expert_grid_char_id = c.id
-WHERE c.id = $1
-ORDER BY pa.id;
+SELECT id FROM player_abilities WHERE expert_grid_char_id = sqlc.arg('character_id')::int ORDER BY id;
 
 
 -- name: GetCharacterOverdriveCommandID :one
 SELECT oc.id
 FROM overdrive_commands oc
-JOIN character_classes cc ON oc.character_class_id = cc.id
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN characters c ON c.unit_id = pu.id
+JOIN j_character_class_player_units j ON j.class_id = oc.character_class_id
+JOIN characters c ON j.unit_id = c.unit_id
 WHERE c.id = $1;
 
 
 -- name: GetCharacterOverdriveAbilityIDs :many
-SELECT oa.id
-FROM overdrive_abilities oa
-JOIN j_overdrives_overdrive_abilities j1 ON j1.overdrive_ability_id = oa.id
-JOIN overdrives o ON j1.overdrive_id = o.id
-JOIN character_classes cc ON o.character_class_id = cc.id
-JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
-JOIN player_units pu ON j2.unit_id = pu.id
-JOIN characters c ON c.unit_id = pu.id
+SELECT jooa.overdrive_ability_id
+FROM j_overdrives_overdrive_abilities jooa
+JOIN overdrives o ON jooa.overdrive_id = o.id
+JOIN j_character_class_player_units jcp ON jcp.class_id = o.character_class_id
+JOIN characters c ON jcp.unit_id = c.unit_id
 WHERE c.id = $1
-ORDER BY oa.id;
+ORDER BY jooa.overdrive_ability_id;
 
 
 -- name: GetCharacterCelestialWeaponID :one
-SELECT cw.id
-FROM celestial_weapons cw
-JOIN characters c ON cw.character_id = c.id
-WHERE c.id = $1;
+SELECT id FROM celestial_weapons WHERE character_id = sqlc.arg('character_id')::int ORDER BY id;
 
 
 -- name: GetCharacterIDs :many
@@ -100,14 +78,13 @@ SELECT id FROM characters WHERE can_fight_underwater = $1 ORDER BY id;
 
 
 
+
 -- name: GetAeonCharClassIDs :many
-SELECT cc.id
-FROM character_classes cc
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN aeons a ON a.unit_id = pu.id
+SELECT j.class_id
+FROM j_character_class_player_units j
+JOIN aeons a ON a.unit_id = j.unit_id
 WHERE a.id = $1
-ORDER BY cc.id;
+ORDER BY j.class_id;
 
 
 -- name: GetAeonDefaultAbilityIDs :many
@@ -115,55 +92,42 @@ SELECT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_default_abilities da ON da.ability_id = a.id
-JOIN character_classes cc ON da.class_id = cc.id
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN aeons ae ON ae.unit_id = pu.id
+JOIN j_character_class_player_units j ON j.class_id = da.class_id
+JOIN aeons ae ON ae.unit_id = j.unit_id
 WHERE a.type = 'player-ability' AND ae.id = $1
 ORDER BY pa.id;
 
 
 -- name: GetAeonCelestialWeaponID :one
-SELECT cw.id
-FROM celestial_weapons cw
-JOIN aeons a ON cw.aeon_id = a.id
-WHERE a.id = $1;
+SELECT id FROM celestial_weapons WHERE aeon_id = sqlc.arg('aeon_id')::int;
 
 
 -- name: GetAeonAeonCommandIDs :many
-SELECT DISTINCT ac.id
-FROM aeon_commands ac
-JOIN j_aeon_commands_possible_abilities j1 ON j1.aeon_command_id = ac.id
-JOIN character_classes cc ON j1.character_class_id = cc.id
-JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
-JOIN player_units pu ON j2.unit_id = pu.id
-JOIN aeons a ON a.unit_id = pu.id
+SELECT DISTINCT j1.aeon_command_id
+FROM j_aeon_commands_possible_abilities j1
+JOIN j_character_class_player_units j2 ON j1.character_class_id = j2.class_id
+JOIN aeons a ON a.unit_id = j2.unit_id
 WHERE a.id = $1
-ORDER BY ac.id;
+ORDER BY j1.aeon_command_id;
 
 
 -- name: GetAeonOverdriveIDs :many
 SELECT o.id
 FROM overdrives o
-JOIN character_classes cc ON o.character_class_id = cc.id
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN aeons a ON a.unit_id = pu.id
+JOIN j_character_class_player_units j ON j.class_id = o.character_class_id
+JOIN aeons a ON a.unit_id = j.unit_id
 WHERE a.id = $1
 ORDER BY o.id;
 
 
 -- name: GetAeonOverdriveAbilityIDs :many
-SELECT oa.id
-FROM overdrive_abilities oa
-JOIN j_overdrives_overdrive_abilities j1 ON j1.overdrive_ability_id = oa.id
-JOIN overdrives o ON j1.overdrive_id = o.id
-JOIN character_classes cc ON o.character_class_id = cc.id
-JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
-JOIN player_units pu ON j2.unit_id = pu.id
-JOIN aeons a ON a.unit_id = pu.id
+SELECT jooa.overdrive_ability_id
+FROM j_overdrives_overdrive_abilities jooa
+JOIN overdrives o ON jooa.overdrive_id = o.id
+JOIN j_character_class_player_units jcp ON jcp.class_id = o.character_class_id
+JOIN aeons a ON a.unit_id = jcp.unit_id
 WHERE a.id = $1
-ORDER BY oa.id;
+ORDER BY jooa.overdrive_ability_id;
 
 
 -- name: GetAeonIDs :many
@@ -178,58 +142,46 @@ SELECT id FROM aeons WHERE is_optional = $1 ORDER BY id;
 
 
 -- name: GetCharacterClassUnitIDs :many
-SELECT pu.id
-FROM player_units pu
-JOIN j_character_class_player_units j ON j.unit_id = pu.id
-JOIN character_classes cc ON j.class_id = cc.id
-WHERE cc.id = $1
-ORDER BY pu.id;
+SELECT unit_id FROM j_character_class_player_units WHERE class_id = $1 ORDER BY unit_id;
 
 
 -- name: GetCharacterClassDefaultAbilityIDs :many
-SELECT a.id
-FROM abilities a
-JOIN j_default_abilities da ON da.ability_id = a.id
-JOIN character_classes cc ON da.class_id = cc.id
-WHERE cc.id = $1
-ORDER BY a.id;
+SELECT ability_id FROM j_default_abilities WHERE class_id = $1 ORDER BY ability_id;
 
 
 -- name: GetCharacterClassLearnableAbilityIDs :many
-SELECT a.id
-FROM abilities a
-LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN j_player_abilities_learned_by j1 ON j1.player_ability_id = pa.id
-LEFT JOIN misc_abilities oa ON oa.ability_id = a.id
-LEFT JOIN j_misc_abilities_learned_by j2 ON j2.misc_ability_id = oa.id
-LEFT JOIN character_classes cc ON j1.character_class_id = cc.id OR j2.character_class_id = cc.id
-WHERE cc.id = $1
-ORDER BY a.id;
+SELECT pa.ability_id
+FROM player_abilities pa
+JOIN j_player_abilities_learned_by j ON j.player_ability_id = pa.id
+WHERE j.character_class_id = $1
+
+UNION
+
+SELECT ma.ability_id
+FROM misc_abilities ma
+JOIN j_misc_abilities_learned_by j ON j.misc_ability_id = ma.id
+WHERE j.character_class_id = $1
+ORDER BY ability_id;
 
 
 -- name: GetCharacterClassDefaultOverdriveIDs :many
-SELECT o.id
-FROM overdrives o
-JOIN character_classes cc ON o.character_class_id = cc.id
-WHERE cc.id = $1 AND o.unlock_condition IS NULL
-ORDER BY o.id;
+SELECT id
+FROM overdrives
+WHERE character_class_id = sqlc.arg('class_id')::int
+  AND unlock_condition IS NULL
+ORDER BY id;
 
 
 -- name: GetCharacterClassLearnableOverdriveIDs :many
-SELECT o.id
-FROM overdrives o
-JOIN character_classes cc ON o.character_class_id = cc.id
-WHERE cc.id = $1 AND o.unlock_condition IS NOT NULL
-ORDER BY o.id;
+SELECT id
+FROM overdrives
+WHERE character_class_id = sqlc.arg('class_id')::int
+  AND unlock_condition IS NOT NULL
+ORDER BY id;
 
 
 -- name: GetCharacterClassSubmenuIDs :many
-SELECT s.id
-FROM submenus s
-JOIN j_submenus_users j ON j.submenu_id = s.id
-JOIN character_classes cc ON j.character_class_id = cc.id
-WHERE cc.id = $1
-ORDER BY s.id;
+SELECT submenu_id FROM j_submenus_users WHERE character_class_id = $1 ORDER BY submenu_id;
 
 
 -- name: GetCharacterClassesIDs :many

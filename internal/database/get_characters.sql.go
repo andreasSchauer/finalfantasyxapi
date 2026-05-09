@@ -12,15 +12,12 @@ import (
 )
 
 const getAeonAeonCommandIDs = `-- name: GetAeonAeonCommandIDs :many
-SELECT DISTINCT ac.id
-FROM aeon_commands ac
-JOIN j_aeon_commands_possible_abilities j1 ON j1.aeon_command_id = ac.id
-JOIN character_classes cc ON j1.character_class_id = cc.id
-JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
-JOIN player_units pu ON j2.unit_id = pu.id
-JOIN aeons a ON a.unit_id = pu.id
+SELECT DISTINCT j1.aeon_command_id
+FROM j_aeon_commands_possible_abilities j1
+JOIN j_character_class_player_units j2 ON j1.character_class_id = j2.class_id
+JOIN aeons a ON a.unit_id = j2.unit_id
 WHERE a.id = $1
-ORDER BY ac.id
+ORDER BY j1.aeon_command_id
 `
 
 func (q *Queries) GetAeonAeonCommandIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -31,11 +28,11 @@ func (q *Queries) GetAeonAeonCommandIDs(ctx context.Context, id int32) ([]int32,
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var aeon_command_id int32
+		if err := rows.Scan(&aeon_command_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, aeon_command_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -47,26 +44,22 @@ func (q *Queries) GetAeonAeonCommandIDs(ctx context.Context, id int32) ([]int32,
 }
 
 const getAeonCelestialWeaponID = `-- name: GetAeonCelestialWeaponID :one
-SELECT cw.id
-FROM celestial_weapons cw
-JOIN aeons a ON cw.aeon_id = a.id
-WHERE a.id = $1
+SELECT id FROM celestial_weapons WHERE aeon_id = $1::int
 `
 
-func (q *Queries) GetAeonCelestialWeaponID(ctx context.Context, id int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getAeonCelestialWeaponID, id)
+func (q *Queries) GetAeonCelestialWeaponID(ctx context.Context, aeonID int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getAeonCelestialWeaponID, aeonID)
+	var id int32
 	err := row.Scan(&id)
 	return id, err
 }
 
 const getAeonCharClassIDs = `-- name: GetAeonCharClassIDs :many
-SELECT cc.id
-FROM character_classes cc
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN aeons a ON a.unit_id = pu.id
+SELECT j.class_id
+FROM j_character_class_player_units j
+JOIN aeons a ON a.unit_id = j.unit_id
 WHERE a.id = $1
-ORDER BY cc.id
+ORDER BY j.class_id
 `
 
 func (q *Queries) GetAeonCharClassIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -77,11 +70,11 @@ func (q *Queries) GetAeonCharClassIDs(ctx context.Context, id int32) ([]int32, e
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var class_id int32
+		if err := rows.Scan(&class_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, class_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -97,10 +90,8 @@ SELECT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_default_abilities da ON da.ability_id = a.id
-JOIN character_classes cc ON da.class_id = cc.id
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN aeons ae ON ae.unit_id = pu.id
+JOIN j_character_class_player_units j ON j.class_id = da.class_id
+JOIN aeons ae ON ae.unit_id = j.unit_id
 WHERE a.type = 'player-ability' AND ae.id = $1
 ORDER BY pa.id
 `
@@ -183,16 +174,13 @@ func (q *Queries) GetAeonIDsOptional(ctx context.Context, isOptional bool) ([]in
 }
 
 const getAeonOverdriveAbilityIDs = `-- name: GetAeonOverdriveAbilityIDs :many
-SELECT oa.id
-FROM overdrive_abilities oa
-JOIN j_overdrives_overdrive_abilities j1 ON j1.overdrive_ability_id = oa.id
-JOIN overdrives o ON j1.overdrive_id = o.id
-JOIN character_classes cc ON o.character_class_id = cc.id
-JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
-JOIN player_units pu ON j2.unit_id = pu.id
-JOIN aeons a ON a.unit_id = pu.id
+SELECT jooa.overdrive_ability_id
+FROM j_overdrives_overdrive_abilities jooa
+JOIN overdrives o ON jooa.overdrive_id = o.id
+JOIN j_character_class_player_units jcp ON jcp.class_id = o.character_class_id
+JOIN aeons a ON a.unit_id = jcp.unit_id
 WHERE a.id = $1
-ORDER BY oa.id
+ORDER BY jooa.overdrive_ability_id
 `
 
 func (q *Queries) GetAeonOverdriveAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -203,11 +191,11 @@ func (q *Queries) GetAeonOverdriveAbilityIDs(ctx context.Context, id int32) ([]i
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var overdrive_ability_id int32
+		if err := rows.Scan(&overdrive_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, overdrive_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -221,10 +209,8 @@ func (q *Queries) GetAeonOverdriveAbilityIDs(ctx context.Context, id int32) ([]i
 const getAeonOverdriveIDs = `-- name: GetAeonOverdriveIDs :many
 SELECT o.id
 FROM overdrives o
-JOIN character_classes cc ON o.character_class_id = cc.id
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN aeons a ON a.unit_id = pu.id
+JOIN j_character_class_player_units j ON j.class_id = o.character_class_id
+JOIN aeons a ON a.unit_id = j.unit_id
 WHERE a.id = $1
 ORDER BY o.id
 `
@@ -253,26 +239,22 @@ func (q *Queries) GetAeonOverdriveIDs(ctx context.Context, id int32) ([]int32, e
 }
 
 const getCharacterCelestialWeaponID = `-- name: GetCharacterCelestialWeaponID :one
-SELECT cw.id
-FROM celestial_weapons cw
-JOIN characters c ON cw.character_id = c.id
-WHERE c.id = $1
+SELECT id FROM celestial_weapons WHERE character_id = $1::int ORDER BY id
 `
 
-func (q *Queries) GetCharacterCelestialWeaponID(ctx context.Context, id int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getCharacterCelestialWeaponID, id)
+func (q *Queries) GetCharacterCelestialWeaponID(ctx context.Context, characterID int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getCharacterCelestialWeaponID, characterID)
+	var id int32
 	err := row.Scan(&id)
 	return id, err
 }
 
 const getCharacterCharClassIDs = `-- name: GetCharacterCharClassIDs :many
-SELECT cc.id
-FROM character_classes cc
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN characters c ON c.unit_id = pu.id
+SELECT j.class_id
+FROM j_character_class_player_units j
+JOIN characters c ON j.unit_id = c.unit_id
 WHERE c.id = $1
-ORDER BY cc.id
+ORDER BY j.class_id
 `
 
 func (q *Queries) GetCharacterCharClassIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -283,11 +265,11 @@ func (q *Queries) GetCharacterCharClassIDs(ctx context.Context, id int32) ([]int
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var class_id int32
+		if err := rows.Scan(&class_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, class_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -299,27 +281,22 @@ func (q *Queries) GetCharacterCharClassIDs(ctx context.Context, id int32) ([]int
 }
 
 const getCharacterClassDefaultAbilityIDs = `-- name: GetCharacterClassDefaultAbilityIDs :many
-SELECT a.id
-FROM abilities a
-JOIN j_default_abilities da ON da.ability_id = a.id
-JOIN character_classes cc ON da.class_id = cc.id
-WHERE cc.id = $1
-ORDER BY a.id
+SELECT ability_id FROM j_default_abilities WHERE class_id = $1 ORDER BY ability_id
 `
 
-func (q *Queries) GetCharacterClassDefaultAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getCharacterClassDefaultAbilityIDs, id)
+func (q *Queries) GetCharacterClassDefaultAbilityIDs(ctx context.Context, classID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterClassDefaultAbilityIDs, classID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -331,15 +308,15 @@ func (q *Queries) GetCharacterClassDefaultAbilityIDs(ctx context.Context, id int
 }
 
 const getCharacterClassDefaultOverdriveIDs = `-- name: GetCharacterClassDefaultOverdriveIDs :many
-SELECT o.id
-FROM overdrives o
-JOIN character_classes cc ON o.character_class_id = cc.id
-WHERE cc.id = $1 AND o.unlock_condition IS NULL
-ORDER BY o.id
+SELECT id
+FROM overdrives
+WHERE character_class_id = $1::int
+  AND unlock_condition IS NULL
+ORDER BY id
 `
 
-func (q *Queries) GetCharacterClassDefaultOverdriveIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getCharacterClassDefaultOverdriveIDs, id)
+func (q *Queries) GetCharacterClassDefaultOverdriveIDs(ctx context.Context, classID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterClassDefaultOverdriveIDs, classID)
 	if err != nil {
 		return nil, err
 	}
@@ -362,30 +339,33 @@ func (q *Queries) GetCharacterClassDefaultOverdriveIDs(ctx context.Context, id i
 }
 
 const getCharacterClassLearnableAbilityIDs = `-- name: GetCharacterClassLearnableAbilityIDs :many
-SELECT a.id
-FROM abilities a
-LEFT JOIN player_abilities pa ON pa.ability_id = a.id
-LEFT JOIN j_player_abilities_learned_by j1 ON j1.player_ability_id = pa.id
-LEFT JOIN misc_abilities oa ON oa.ability_id = a.id
-LEFT JOIN j_misc_abilities_learned_by j2 ON j2.misc_ability_id = oa.id
-LEFT JOIN character_classes cc ON j1.character_class_id = cc.id OR j2.character_class_id = cc.id
-WHERE cc.id = $1
-ORDER BY a.id
+SELECT pa.ability_id
+FROM player_abilities pa
+JOIN j_player_abilities_learned_by j ON j.player_ability_id = pa.id
+WHERE j.character_class_id = $1
+
+UNION
+
+SELECT ma.ability_id
+FROM misc_abilities ma
+JOIN j_misc_abilities_learned_by j ON j.misc_ability_id = ma.id
+WHERE j.character_class_id = $1
+ORDER BY ability_id
 `
 
-func (q *Queries) GetCharacterClassLearnableAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getCharacterClassLearnableAbilityIDs, id)
+func (q *Queries) GetCharacterClassLearnableAbilityIDs(ctx context.Context, characterClassID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterClassLearnableAbilityIDs, characterClassID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -397,15 +377,15 @@ func (q *Queries) GetCharacterClassLearnableAbilityIDs(ctx context.Context, id i
 }
 
 const getCharacterClassLearnableOverdriveIDs = `-- name: GetCharacterClassLearnableOverdriveIDs :many
-SELECT o.id
-FROM overdrives o
-JOIN character_classes cc ON o.character_class_id = cc.id
-WHERE cc.id = $1 AND o.unlock_condition IS NOT NULL
-ORDER BY o.id
+SELECT id
+FROM overdrives
+WHERE character_class_id = $1::int
+  AND unlock_condition IS NOT NULL
+ORDER BY id
 `
 
-func (q *Queries) GetCharacterClassLearnableOverdriveIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getCharacterClassLearnableOverdriveIDs, id)
+func (q *Queries) GetCharacterClassLearnableOverdriveIDs(ctx context.Context, classID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterClassLearnableOverdriveIDs, classID)
 	if err != nil {
 		return nil, err
 	}
@@ -428,27 +408,22 @@ func (q *Queries) GetCharacterClassLearnableOverdriveIDs(ctx context.Context, id
 }
 
 const getCharacterClassSubmenuIDs = `-- name: GetCharacterClassSubmenuIDs :many
-SELECT s.id
-FROM submenus s
-JOIN j_submenus_users j ON j.submenu_id = s.id
-JOIN character_classes cc ON j.character_class_id = cc.id
-WHERE cc.id = $1
-ORDER BY s.id
+SELECT submenu_id FROM j_submenus_users WHERE character_class_id = $1 ORDER BY submenu_id
 `
 
-func (q *Queries) GetCharacterClassSubmenuIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getCharacterClassSubmenuIDs, id)
+func (q *Queries) GetCharacterClassSubmenuIDs(ctx context.Context, characterClassID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterClassSubmenuIDs, characterClassID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var submenu_id int32
+		if err := rows.Scan(&submenu_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, submenu_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -460,27 +435,22 @@ func (q *Queries) GetCharacterClassSubmenuIDs(ctx context.Context, id int32) ([]
 }
 
 const getCharacterClassUnitIDs = `-- name: GetCharacterClassUnitIDs :many
-SELECT pu.id
-FROM player_units pu
-JOIN j_character_class_player_units j ON j.unit_id = pu.id
-JOIN character_classes cc ON j.class_id = cc.id
-WHERE cc.id = $1
-ORDER BY pu.id
+SELECT unit_id FROM j_character_class_player_units WHERE class_id = $1 ORDER BY unit_id
 `
 
-func (q *Queries) GetCharacterClassUnitIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getCharacterClassUnitIDs, id)
+func (q *Queries) GetCharacterClassUnitIDs(ctx context.Context, classID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterClassUnitIDs, classID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var unit_id int32
+		if err := rows.Scan(&unit_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, unit_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -550,10 +520,8 @@ SELECT pa.id
 FROM player_abilities pa
 JOIN abilities a ON pa.ability_id = a.id
 JOIN j_default_abilities da ON da.ability_id = a.id
-JOIN character_classes cc ON da.class_id = cc.id
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN characters c ON c.unit_id = pu.id
+JOIN j_character_class_player_units j ON j.class_id = da.class_id
+JOIN characters c ON j.unit_id = c.unit_id
 WHERE a.type = 'player-ability' AND c.id = $1
 ORDER BY pa.id
 `
@@ -582,15 +550,11 @@ func (q *Queries) GetCharacterDefaultAbilityIDs(ctx context.Context, id int32) (
 }
 
 const getCharacterEgAbilityIDs = `-- name: GetCharacterEgAbilityIDs :many
-SELECT pa.id
-FROM player_abilities pa
-JOIN characters c ON pa.expert_grid_char_id = c.id
-WHERE c.id = $1
-ORDER BY pa.id
+SELECT id FROM player_abilities WHERE expert_grid_char_id = $1::int ORDER BY id
 `
 
-func (q *Queries) GetCharacterEgAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getCharacterEgAbilityIDs, id)
+func (q *Queries) GetCharacterEgAbilityIDs(ctx context.Context, characterID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterEgAbilityIDs, characterID)
 	if err != nil {
 		return nil, err
 	}
@@ -694,16 +658,13 @@ func (q *Queries) GetCharacterIDsStoryBased(ctx context.Context, isStoryBased bo
 }
 
 const getCharacterOverdriveAbilityIDs = `-- name: GetCharacterOverdriveAbilityIDs :many
-SELECT oa.id
-FROM overdrive_abilities oa
-JOIN j_overdrives_overdrive_abilities j1 ON j1.overdrive_ability_id = oa.id
-JOIN overdrives o ON j1.overdrive_id = o.id
-JOIN character_classes cc ON o.character_class_id = cc.id
-JOIN j_character_class_player_units j2 ON j2.class_id = cc.id
-JOIN player_units pu ON j2.unit_id = pu.id
-JOIN characters c ON c.unit_id = pu.id
+SELECT jooa.overdrive_ability_id
+FROM j_overdrives_overdrive_abilities jooa
+JOIN overdrives o ON jooa.overdrive_id = o.id
+JOIN j_character_class_player_units jcp ON jcp.class_id = o.character_class_id
+JOIN characters c ON jcp.unit_id = c.unit_id
 WHERE c.id = $1
-ORDER BY oa.id
+ORDER BY jooa.overdrive_ability_id
 `
 
 func (q *Queries) GetCharacterOverdriveAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
@@ -714,11 +675,11 @@ func (q *Queries) GetCharacterOverdriveAbilityIDs(ctx context.Context, id int32)
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var overdrive_ability_id int32
+		if err := rows.Scan(&overdrive_ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, overdrive_ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -732,10 +693,8 @@ func (q *Queries) GetCharacterOverdriveAbilityIDs(ctx context.Context, id int32)
 const getCharacterOverdriveCommandID = `-- name: GetCharacterOverdriveCommandID :one
 SELECT oc.id
 FROM overdrive_commands oc
-JOIN character_classes cc ON oc.character_class_id = cc.id
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN characters c ON c.unit_id = pu.id
+JOIN j_character_class_player_units j ON j.class_id = oc.character_class_id
+JOIN characters c ON j.unit_id = c.unit_id
 WHERE c.id = $1
 `
 
@@ -748,10 +707,8 @@ func (q *Queries) GetCharacterOverdriveCommandID(ctx context.Context, id int32) 
 const getCharacterOverdriveIDs = `-- name: GetCharacterOverdriveIDs :many
 SELECT o.id
 FROM overdrives o
-JOIN character_classes cc ON o.character_class_id = cc.id
-JOIN j_character_class_player_units j ON j.class_id = cc.id
-JOIN player_units pu ON j.unit_id = pu.id
-JOIN characters c ON c.unit_id = pu.id
+JOIN j_character_class_player_units j ON j.class_id = o.character_class_id
+JOIN characters c ON j.unit_id = c.unit_id
 WHERE c.id = $1
 ORDER BY o.id
 `
@@ -780,15 +737,11 @@ func (q *Queries) GetCharacterOverdriveIDs(ctx context.Context, id int32) ([]int
 }
 
 const getCharacterSgAbilityIDs = `-- name: GetCharacterSgAbilityIDs :many
-SELECT pa.id
-FROM player_abilities pa
-JOIN characters c ON pa.standard_grid_char_id = c.id
-WHERE c.id = $1
-ORDER BY pa.id
+SELECT id FROM player_abilities WHERE standard_grid_char_id = $1::int ORDER BY id
 `
 
-func (q *Queries) GetCharacterSgAbilityIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getCharacterSgAbilityIDs, id)
+func (q *Queries) GetCharacterSgAbilityIDs(ctx context.Context, characterID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getCharacterSgAbilityIDs, characterID)
 	if err != nil {
 		return nil, err
 	}
