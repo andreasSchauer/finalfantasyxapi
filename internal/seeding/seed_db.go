@@ -13,6 +13,7 @@ import (
 func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	defer fmt.Println()
 	defer h.MeasureTime("database seeding")()
+	ctx := context.Background()
 
 	const migrationsDir = "sql/schema/"
 	fullPath, err := h.GetAbsoluteFilepath(migrationsDir)
@@ -34,7 +35,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		defer h.MeasureTime("initial database seeding")()
 		fmt.Println("initial database seeding...")
 
-		return l.seedLoop(qtx, context.Background(), []seedFunc{
+		return l.seedLoop(qtx, ctx, []seedFunc{
 			l.seedLoop1,
 			l.seedLoop2,
 			l.seedLoop3,
@@ -55,13 +56,23 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 
 	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		defer h.MeasureTime("seeding junctions")()
-		return l.seedJunctions(qtx, context.Background())
+		return l.seedJunctions(qtx, ctx)
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	err = db.RefreshMonsterDropsView(context.Background())
+	err = db.RefreshMonsterItemDropsView(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.RefreshMonsterEncountersView(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.RefreshGeographyView(ctx)
 	if err != nil {
 		return nil, err
 	}

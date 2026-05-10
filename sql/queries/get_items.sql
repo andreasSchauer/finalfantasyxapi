@@ -1,23 +1,8 @@
 -- name: GetMasterItemMonstersBool :one
-WITH monster_item_amounts AS (
-    SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.steal_rare_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.drop_common_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.drop_rare_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.secondary_drop_common_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.secondary_drop_rare_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.bribe_id AS item_amount_id FROM monster_items mi
-    UNION ALL
-    SELECT mi.monster_id, pi.item_amount_id
-    FROM possible_items pi
-    JOIN j_monster_items_other_items jmio ON jmio.possible_item_id = pi.id
-    JOIN monster_items mi ON jmio.monster_items_id = mi.id
-)
 SELECT EXISTS (
   SELECT 1
-  FROM monster_item_amounts mia
-  JOIN item_amounts ia ON mia.item_amount_id = ia.id
-  WHERE ia.master_item_id = $1
+  FROM mv_monster_item_drops
+  WHERE master_item_id = $1
 ) AS obtainable_from_monsters;
 
 
@@ -59,7 +44,7 @@ SELECT id FROM master_items WHERE type = ANY(sqlc.narg('item_type')::item_type[]
 
 
 -- name: GetMasterItemIDsMonster :many
-SELECT DISTINCT master_item_id FROM mv_monster_drops ORDER BY master_item_id;
+SELECT DISTINCT master_item_id FROM mv_monster_item_drops ORDER BY master_item_id;
 
 
 -- name: GetMasterItemIDsTreasure :many
@@ -100,7 +85,7 @@ WITH w AS (
 SELECT DISTINCT m.id
 FROM monsters m
 CROSS JOIN w
-JOIN mv_monster_drops md ON md.monster_id = m.id
+JOIN mv_monster_item_drops md ON md.monster_id = m.id
 WHERE md.master_item_id = w.target_master_id
   AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
   AND (w.availability IS NULL OR m.availability = ANY(w.availability))
@@ -208,25 +193,7 @@ SELECT item_id FROM j_items_related_stats WHERE stat_id = $1 ORDER BY item_id;
 
 
 -- name: GetItemIDsMonster :many
-WITH dropped_item_amounts AS (
-    SELECT mi.steal_common_id AS id FROM monster_items mi
-    UNION ALL SELECT mi.steal_rare_id FROM monster_items mi
-    UNION ALL SELECT mi.drop_common_id FROM monster_items mi
-    UNION ALL SELECT mi.drop_rare_id FROM monster_items mi
-    UNION ALL SELECT mi.secondary_drop_common_id FROM monster_items mi
-    UNION ALL SELECT mi.secondary_drop_rare_id FROM monster_items mi
-    UNION ALL SELECT mi.bribe_id FROM monster_items mi
-    UNION ALL
-    SELECT pi.item_amount_id
-    FROM possible_items pi
-    JOIN j_monster_items_other_items jmio ON jmio.possible_item_id = pi.id
-    JOIN monster_items mi ON jmio.monster_items_id = mi.id
-)
-SELECT DISTINCT i.id
-FROM items i
-JOIN item_amounts ia ON i.master_item_id = ia.master_item_id
-JOIN dropped_item_amounts dia ON ia.id = dia.id
-ORDER BY i.id;
+SELECT DISTINCT item_id FROM mv_monster_item_drops ORDER BY master_item_id;
 
 
 -- name: GetItemIDsTreasure :many

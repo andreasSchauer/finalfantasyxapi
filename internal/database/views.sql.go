@@ -9,11 +9,29 @@ import (
 	"context"
 )
 
-const refreshMonsterDropsView = `-- name: RefreshMonsterDropsView :exec
-REFRESH MATERIALIZED VIEW mv_monster_drops
+const refreshGeographyView = `-- name: RefreshGeographyView :exec
+REFRESH MATERIALIZED VIEW mv_geography
 `
 
-func (q *Queries) RefreshMonsterDropsView(ctx context.Context) error {
-	_, err := q.db.ExecContext(ctx, refreshMonsterDropsView)
+func (q *Queries) RefreshGeographyView(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, refreshGeographyView)
+	return err
+}
+
+const refreshMonsterEncountersView = `-- name: RefreshMonsterEncountersView :exec
+REFRESH MATERIALIZED VIEW mv_monster_encounters
+`
+
+func (q *Queries) RefreshMonsterEncountersView(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, refreshMonsterEncountersView)
+	return err
+}
+
+const refreshMonsterItemDropsView = `-- name: RefreshMonsterItemDropsView :exec
+REFRESH MATERIALIZED VIEW mv_monster_item_drops
+`
+
+func (q *Queries) RefreshMonsterItemDropsView(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, refreshMonsterItemDropsView)
 	return err
 }

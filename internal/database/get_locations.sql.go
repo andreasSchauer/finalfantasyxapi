@@ -500,32 +500,14 @@ func (q *Queries) GetAreaIDsWithFMVs(ctx context.Context) ([]int32, error) {
 }
 
 const getAreaIDsWithItemFromMonster = `-- name: GetAreaIDsWithItemFromMonster :many
-WITH target_monster_ids AS (
-    SELECT mi.monster_id
-    FROM monster_items mi
-    JOIN item_amounts ia ON ia.id IN (
-      mi.steal_common_id, mi.steal_rare_id, mi.drop_common_id, mi.drop_rare_id, mi.secondary_drop_common_id, mi.secondary_drop_rare_id, mi.bribe_id
-    )
-    JOIN items i ON i.master_item_id = ia.master_item_id
-    WHERE i.id = $1::int
-
-    UNION
-
-    SELECT mi.monster_id
-    FROM monster_items mi
-    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
-    JOIN possible_items pi ON jmio.possible_item_id = pi.id
-    JOIN item_amounts ia ON pi.item_amount_id = ia.id
-    JOIN items i ON i.master_item_id = ia.master_item_id
-    WHERE i.id = $1::int
-)
 SELECT DISTINCT ea.area_id
-FROM target_monster_ids tmi
-JOIN monster_amounts ma ON ma.monster_id = tmi.monster_id
+FROM mv_monster_item_drops md
+JOIN monster_amounts ma ON ma.monster_id = md.monster_id
 JOIN j_monster_selections_monsters jmsm ON jmsm.monster_amount_id = ma.id
 JOIN monster_formations mf ON mf.monster_selection_id = jmsm.monster_selection_id
 JOIN j_monster_formations_encounter_areas jme ON jme.monster_formation_id = mf.id
-JOIN encounter_areas ea ON jme.encounter_area_id = ea.id
+JOIN encounter_areas ea ON ea.id = jme.encounter_area_id
+WHERE md.item_id = $1::int
 ORDER BY ea.area_id
 `
 
@@ -1621,35 +1603,12 @@ func (q *Queries) GetLocationIDsWithFMVs(ctx context.Context) ([]int32, error) {
 }
 
 const getLocationIDsWithItemFromMonster = `-- name: GetLocationIDsWithItemFromMonster :many
-WITH target_monster_ids AS (
-    SELECT mi.monster_id
-    FROM monster_items mi
-    JOIN item_amounts ia ON ia.id IN (
-      mi.steal_common_id, mi.steal_rare_id, mi.drop_common_id, mi.drop_rare_id, mi.secondary_drop_common_id, mi.secondary_drop_rare_id, mi.bribe_id
-    )
-    JOIN items i ON i.master_item_id = ia.master_item_id
-    WHERE i.id = $1::int
-
-    UNION
-
-    SELECT mi.monster_id
-    FROM monster_items mi
-    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
-    JOIN possible_items pi ON jmio.possible_item_id = pi.id
-    JOIN item_amounts ia ON pi.item_amount_id = ia.id
-    JOIN items i ON i.master_item_id = ia.master_item_id
-    WHERE i.id = $1::int
-)
-SELECT DISTINCT s.location_id
-FROM target_monster_ids tmi
-JOIN monster_amounts ma ON ma.monster_id = tmi.monster_id
-JOIN j_monster_selections_monsters jmsm ON jmsm.monster_amount_id = ma.id
-JOIN monster_formations mf ON mf.monster_selection_id = jmsm.monster_selection_id
-JOIN j_monster_formations_encounter_areas jme ON jme.monster_formation_id = mf.id
-JOIN encounter_areas ea ON jme.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-ORDER BY s.location_id
+SELECT DISTINCT g.location_id
+FROM mv_monster_item_drops md
+JOIN mv_monster_encounters me ON me.monster_id = md.monster_id
+JOIN mv_geography g ON g.area_id = me.area_id
+WHERE md.item_id = $1
+ORDER BY g.location_id
 `
 
 func (q *Queries) GetLocationIDsWithItemFromMonster(ctx context.Context, itemID int32) ([]int32, error) {
@@ -1711,14 +1670,13 @@ func (q *Queries) GetLocationIDsWithItemFromQuest(ctx context.Context, id int32)
 }
 
 const getLocationIDsWithItemFromShop = `-- name: GetLocationIDsWithItemFromShop :many
-SELECT DISTINCT s.location_id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
-JOIN shops sh ON sh.area_id = a.id
+SELECT DISTINCT g.location_id
+FROM mv_geography g
+JOIN shops sh ON sh.area_id = g.area_id
 JOIN j_shops_items j ON j.shop_id = sh.id
 JOIN shop_items si ON j.shop_item_id = si.id
 WHERE si.item_id = $1
-ORDER BY s.location_id
+ORDER BY g.location_id
 `
 
 func (q *Queries) GetLocationIDsWithItemFromShop(ctx context.Context, itemID int32) ([]int32, error) {
@@ -1745,15 +1703,14 @@ func (q *Queries) GetLocationIDsWithItemFromShop(ctx context.Context, itemID int
 }
 
 const getLocationIDsWithItemFromTreasure = `-- name: GetLocationIDsWithItemFromTreasure :many
-SELECT DISTINCT s.location_id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
-JOIN treasures t ON t.area_id = a.id
+SELECT DISTINCT g.location_id
+FROM mv_geography g
+JOIN treasures t ON t.area_id = g.area_id
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
 JOIN items i ON i.master_item_id = ia.master_item_id
 WHERE i.id = $1
-ORDER BY s.location_id
+ORDER BY g.location_id
 `
 
 func (q *Queries) GetLocationIDsWithItemFromTreasure(ctx context.Context, id int32) ([]int32, error) {
@@ -2896,33 +2853,15 @@ func (q *Queries) GetSublocationIDsWithFMVs(ctx context.Context) ([]int32, error
 }
 
 const getSublocationIDsWithItemFromMonster = `-- name: GetSublocationIDsWithItemFromMonster :many
-WITH target_monster_ids AS (
-    SELECT mi.monster_id
-    FROM monster_items mi
-    JOIN item_amounts ia ON ia.id IN (
-      mi.steal_common_id, mi.steal_rare_id, mi.drop_common_id, mi.drop_rare_id, mi.secondary_drop_common_id, mi.secondary_drop_rare_id, mi.bribe_id
-    )
-    JOIN items i ON i.master_item_id = ia.master_item_id
-    WHERE i.id = $1::int
-
-    UNION
-
-    SELECT mi.monster_id
-    FROM monster_items mi
-    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
-    JOIN possible_items pi ON jmio.possible_item_id = pi.id
-    JOIN item_amounts ia ON pi.item_amount_id = ia.id
-    JOIN items i ON i.master_item_id = ia.master_item_id
-    WHERE i.id = $1::int
-)
 SELECT DISTINCT a.sublocation_id
-FROM target_monster_ids tmi
-JOIN monster_amounts ma ON ma.monster_id = tmi.monster_id
+FROM mv_monster_item_drops md
+JOIN monster_amounts ma ON ma.monster_id = md.monster_id
 JOIN j_monster_selections_monsters jmsm ON jmsm.monster_amount_id = ma.id
 JOIN monster_formations mf ON mf.monster_selection_id = jmsm.monster_selection_id
 JOIN j_monster_formations_encounter_areas jme ON jme.monster_formation_id = mf.id
-JOIN encounter_areas ea ON jme.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
+JOIN encounter_areas ea ON ea.id = jme.encounter_area_id
+JOIN areas a ON a.id = ea.area_id
+WHERE md.item_id = $1::int
 ORDER BY a.sublocation_id
 `
 

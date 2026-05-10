@@ -4031,9 +4031,27 @@ type MonsterSelection struct {
 	DataHash string
 }
 
-type MvMonsterDrop struct {
+type MvGeography struct {
+	AreaID          int32
+	SublocationID   int32
+	LocationID      int32
+	AreaName        string
+	SublocationName string
+	LocationName    string
+}
+
+type MvMonsterEncounter struct {
+	AreaID        int32
+	FormationID   int32
+	MonsterID     int32
+	MonsterAmount int32
+}
+
+type MvMonsterItemDrop struct {
 	MonsterID    int32
+	ItemID       int32
 	MasterItemID int32
+	SourceType   string
 }
 
 type OdModeAction struct {

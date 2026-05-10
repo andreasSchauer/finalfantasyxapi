@@ -893,30 +893,11 @@ func (q *Queries) GetMonsterIDsByIsZombie(ctx context.Context, isZombie bool) ([
 }
 
 const getMonsterIDsByItem = `-- name: GetMonsterIDsByItem :many
-WITH monster_item_amounts AS (
-    SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.steal_rare_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.drop_common_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.drop_rare_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.secondary_drop_common_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.secondary_drop_rare_id AS item_amount_id FROM monster_items mi
-    UNION ALL SELECT mi.monster_id, mi.bribe_id AS item_amount_id FROM monster_items mi
-    UNION ALL
-    SELECT mi.monster_id, pi.item_amount_id
-    FROM possible_items pi
-    JOIN j_monster_items_other_items jmio ON jmio.possible_item_id = pi.id
-    JOIN monster_items mi ON jmio.monster_items_id = mi.id
-)
-SELECT DISTINCT mia.monster_id
-FROM monster_item_amounts mia
-JOIN item_amounts ia ON mia.item_amount_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id
-WHERE i.id = $1
-ORDER BY mia.monster_id
+SELECT DISTINCT monster_id FROM mv_monster_item_drops WHERE item_id = $1 ORDER BY monster_id
 `
 
-func (q *Queries) GetMonsterIDsByItem(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItem, id)
+func (q *Queries) GetMonsterIDsByItem(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItem, itemID)
 	if err != nil {
 		return nil, err
 	}
@@ -939,16 +920,14 @@ func (q *Queries) GetMonsterIDsByItem(ctx context.Context, id int32) ([]int32, e
 }
 
 const getMonsterIDsByItemBribe = `-- name: GetMonsterIDsByItemBribe :many
-SELECT DISTINCT mi.monster_id
-FROM monster_items mi
-JOIN item_amounts ia ON ia.id = mi.bribe_id
-JOIN items i ON i.master_item_id = ia.master_item_id
-WHERE i.id = $1
-ORDER BY mi.monster_id
+SELECT DISTINCT monster_id
+FROM mv_monster_item_drops
+WHERE item_id = $1 AND source_type = 'bribe'
+ORDER BY monster_id
 `
 
-func (q *Queries) GetMonsterIDsByItemBribe(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemBribe, id)
+func (q *Queries) GetMonsterIDsByItemBribe(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemBribe, itemID)
 	if err != nil {
 		return nil, err
 	}
@@ -971,25 +950,14 @@ func (q *Queries) GetMonsterIDsByItemBribe(ctx context.Context, id int32) ([]int
 }
 
 const getMonsterIDsByItemDrop = `-- name: GetMonsterIDsByItemDrop :many
-WITH monster_item_amounts_drop AS (
-    SELECT mi.monster_id, mi.drop_common_id AS item_amount_id FROM monster_items mi
-    UNION ALL
-    SELECT mi.monster_id, mi.drop_rare_id AS item_amount_id FROM monster_items mi
-    UNION ALL
-    SELECT mi.monster_id, mi.secondary_drop_common_id AS item_amount_id FROM monster_items mi
-    UNION ALL
-    SELECT mi.monster_id, mi.secondary_drop_rare_id AS item_amount_id FROM monster_items mi
-)
-SELECT DISTINCT mia.monster_id
-FROM monster_item_amounts_drop mia
-JOIN item_amounts ia ON mia.item_amount_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id
-WHERE i.id = $1
-ORDER BY mia.monster_id
+SELECT DISTINCT monster_id
+FROM mv_monster_item_drops
+WHERE item_id = $1 AND source_type LIKE 'drop%'
+ORDER BY monster_id
 `
 
-func (q *Queries) GetMonsterIDsByItemDrop(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemDrop, id)
+func (q *Queries) GetMonsterIDsByItemDrop(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemDrop, itemID)
 	if err != nil {
 		return nil, err
 	}
@@ -1012,18 +980,14 @@ func (q *Queries) GetMonsterIDsByItemDrop(ctx context.Context, id int32) ([]int3
 }
 
 const getMonsterIDsByItemOther = `-- name: GetMonsterIDsByItemOther :many
-SELECT DISTINCT mi.monster_id
-FROM monster_items mi
-JOIN j_monster_items_other_items j ON j.monster_items_id = mi.id
-JOIN possible_items pi ON pi.id = j.possible_item_id
-JOIN item_amounts ia ON ia.id = pi.item_amount_id
-JOIN items i ON ia.master_item_id = i.master_item_id
-WHERE i.id = $1
-ORDER BY mi.monster_id
+SELECT DISTINCT monster_id
+FROM mv_monster_item_drops
+WHERE item_id = $1 AND source_type = 'other'
+ORDER BY monster_id
 `
 
-func (q *Queries) GetMonsterIDsByItemOther(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemOther, id)
+func (q *Queries) GetMonsterIDsByItemOther(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemOther, itemID)
 	if err != nil {
 		return nil, err
 	}
@@ -1046,21 +1010,14 @@ func (q *Queries) GetMonsterIDsByItemOther(ctx context.Context, id int32) ([]int
 }
 
 const getMonsterIDsByItemSteal = `-- name: GetMonsterIDsByItemSteal :many
-WITH monster_item_amounts_steal AS (
-    SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
-    UNION ALL
-    SELECT mi.monster_id, mi.steal_rare_id AS item_amount_id FROM monster_items mi
-)
-SELECT DISTINCT mia.monster_id
-FROM monster_item_amounts_steal mia
-JOIN item_amounts ia ON mia.item_amount_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id
-WHERE i.id = $1
-ORDER BY mia.monster_id
+SELECT DISTINCT monster_id
+FROM mv_monster_item_drops
+WHERE item_id = $1 AND source_type LIKE 'steal%'
+ORDER BY monster_id
 `
 
-func (q *Queries) GetMonsterIDsByItemSteal(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemSteal, id)
+func (q *Queries) GetMonsterIDsByItemSteal(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemSteal, itemID)
 	if err != nil {
 		return nil, err
 	}
