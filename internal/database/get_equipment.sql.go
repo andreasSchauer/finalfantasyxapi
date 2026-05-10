@@ -340,10 +340,11 @@ SELECT DISTINCT sh.id
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+CROSS JOIN (SELECT $2::availability_type[] AS availability) w
 WHERE (
-    $2::availability_type[] IS NULL
+    w.availability IS NULL
     OR
-    sh.availability = ANY($2::availability_type[])
+    sh.availability = ANY(w.availability)
 )
 AND se.shop_type = 'post-airship'
 AND j.auto_ability_id = $1
@@ -383,10 +384,11 @@ SELECT DISTINCT sh.id
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+CROSS JOIN (SELECT $2::availability_type[] AS availability) w
 WHERE (
-    $2::availability_type[] IS NULL
+    w.availability IS NULL
     OR
-    sh.availability = ANY($2::availability_type[])
+    sh.availability = ANY(w.availability)
 )
 AND se.shop_type = 'pre-airship'
 AND j.auto_ability_id = $1
@@ -806,7 +808,7 @@ func (q *Queries) GetEquipmentShopIDs(ctx context.Context, arg GetEquipmentShopI
 }
 
 const getEquipmentTableCelestialWeaponID = `-- name: GetEquipmentTableCelestialWeaponID :one
-SELECT celestial_weapon_id::int FROM j_equipment_tables_names WHERE equipment_table_id = $1
+SELECT celestial_weapon_id::int FROM j_equipment_tables_names WHERE celestial_weapon_id IS NOT NULL AND equipment_table_id = $1
 `
 
 func (q *Queries) GetEquipmentTableCelestialWeaponID(ctx context.Context, equipmentTableID int32) (int32, error) {

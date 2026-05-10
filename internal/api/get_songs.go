@@ -99,7 +99,7 @@ func getSongsArea(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, e
 	area, _ := seeding.GetResourceByID(id, cfg.l.AreasID)
 
 	queries := LocBasedMusicQueries{
-		CueSongs:  cfg.db.GetAreaCueSongIDs,
+		CueSongs:  ToIntManyNull(cfg.db.GetAreaCueSongIDs),
 		BmSongs:   cfg.db.GetAreaBackgroundMusicSongIDs,
 		FMVSongs:  cfg.db.GetAreaFMVSongIDs,
 		BossMusic: cfg.db.GetAreaBossSongIDs,

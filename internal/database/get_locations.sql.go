@@ -13,15 +13,11 @@ import (
 )
 
 const getAreaAeonIDs = `-- name: GetAreaAeonIDs :many
-SELECT ae.id
-FROM aeons ae
-JOIN areas a ON ae.area_id = a.id
-WHERE a.id = $1
-ORDER BY ae.id
+SELECT DISTINCT id FROM aeons WHERE area_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetAreaAeonIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaAeonIDs, id)
+func (q *Queries) GetAreaAeonIDs(ctx context.Context, areaID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaAeonIDs, areaID)
 	if err != nil {
 		return nil, err
 	}
@@ -44,28 +40,22 @@ func (q *Queries) GetAreaAeonIDs(ctx context.Context, id int32) ([]int32, error)
 }
 
 const getAreaBackgroundMusicSongIDs = `-- name: GetAreaBackgroundMusicSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN j_songs_background_music j ON j.song_id = so.id
-JOIN background_music bm ON j.bm_id = bm.id
-JOIN areas a ON j.area_id = a.id
-WHERE a.id = $1
-ORDER BY so.id
+SELECT DISTINCT song_id FROM j_songs_background_music WHERE area_id = $1 ORDER BY song_id
 `
 
-func (q *Queries) GetAreaBackgroundMusicSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaBackgroundMusicSongIDs, id)
+func (q *Queries) GetAreaBackgroundMusicSongIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaBackgroundMusicSongIDs, areaID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -77,31 +67,29 @@ func (q *Queries) GetAreaBackgroundMusicSongIDs(ctx context.Context, id int32) (
 }
 
 const getAreaBossSongIDs = `-- name: GetAreaBossSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN formation_boss_songs bs ON bs.song_id = so.id
+SELECT DISTINCT bs.song_id
+FROM formation_boss_songs bs
 JOIN formation_data fd ON fd.boss_song_id = bs.id
 JOIN monster_formations mf ON mf.formation_data_id = fd.id
 JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-WHERE a.id = $1
-ORDER BY so.id
+WHERE ea.area_id = $1
+ORDER BY bs.song_id
 `
 
-func (q *Queries) GetAreaBossSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaBossSongIDs, id)
+func (q *Queries) GetAreaBossSongIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaBossSongIDs, areaID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -113,15 +101,11 @@ func (q *Queries) GetAreaBossSongIDs(ctx context.Context, id int32) ([]int32, er
 }
 
 const getAreaCharacterIDs = `-- name: GetAreaCharacterIDs :many
-SELECT c.id
-FROM characters c
-JOIN areas a ON c.area_id = a.id
-WHERE a.id = $1
-ORDER BY c.id
+SELECT DISTINCT id FROM characters WHERE area_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetAreaCharacterIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaCharacterIDs, id)
+func (q *Queries) GetAreaCharacterIDs(ctx context.Context, areaID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaCharacterIDs, areaID)
 	if err != nil {
 		return nil, err
 	}
@@ -144,17 +128,16 @@ func (q *Queries) GetAreaCharacterIDs(ctx context.Context, id int32) ([]int32, e
 }
 
 const getAreaConnectionIDs = `-- name: GetAreaConnectionIDs :many
-SELECT ca.id
-FROM areas a
-JOIN j_area_connected_areas j ON j.area_id = a.id
+SELECT DISTINCT ca.id
+FROM j_area_connected_areas j
 JOIN area_connections ac ON j.connection_id = ac.id
 JOIN areas ca ON ac.area_id = ca.id
-WHERE a.id = $1
+WHERE j.area_id = $1
 ORDER BY ca.id
 `
 
-func (q *Queries) GetAreaConnectionIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaConnectionIDs, id)
+func (q *Queries) GetAreaConnectionIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaConnectionIDs, areaID)
 	if err != nil {
 		return nil, err
 	}
@@ -177,27 +160,32 @@ func (q *Queries) GetAreaConnectionIDs(ctx context.Context, id int32) ([]int32, 
 }
 
 const getAreaCueSongIDs = `-- name: GetAreaCueSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN cues c ON c.song_id = so.id
-LEFT JOIN j_cues_areas j ON j.cue_id = c.id
-JOIN areas a ON c.trigger_area_id = a.id
-WHERE a.id = $1 OR j.included_area_id = $1 ORDER BY so.id
+SELECT c.song_id
+FROM cues c
+WHERE c.trigger_area_id = $1
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN j_cues_areas j ON j.cue_id = c.id
+WHERE j.included_area_id = $1
+ORDER BY song_id
 `
 
-func (q *Queries) GetAreaCueSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaCueSongIDs, id)
+func (q *Queries) GetAreaCueSongIDs(ctx context.Context, triggerAreaID sql.NullInt32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaCueSongIDs, triggerAreaID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -209,27 +197,22 @@ func (q *Queries) GetAreaCueSongIDs(ctx context.Context, id int32) ([]int32, err
 }
 
 const getAreaFMVSongIDs = `-- name: GetAreaFMVSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN fmvs f ON f.song_id = so.id
-JOIN areas a ON f.area_id = a.id
-WHERE a.id = $1
-ORDER BY so.id
+SELECT DISTINCT song_id::int FROM fmvs WHERE song_id IS NOT NULL AND area_id = $1 ORDER BY song_id
 `
 
-func (q *Queries) GetAreaFMVSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaFMVSongIDs, id)
+func (q *Queries) GetAreaFMVSongIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaFMVSongIDs, areaID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -241,15 +224,11 @@ func (q *Queries) GetAreaFMVSongIDs(ctx context.Context, id int32) ([]int32, err
 }
 
 const getAreaFmvIDs = `-- name: GetAreaFmvIDs :many
-SELECT f.id
-FROM fmvs f
-JOIN areas a ON f.area_id = a.id
-WHERE a.id = $1
-ORDER BY f.id
+SELECT id FROM fmvs WHERE area_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetAreaFmvIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaFmvIDs, id)
+func (q *Queries) GetAreaFmvIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaFmvIDs, areaID)
 	if err != nil {
 		return nil, err
 	}
@@ -353,10 +332,7 @@ func (q *Queries) GetAreaIDsChocobo(ctx context.Context, canRideChocobo bool) ([
 }
 
 const getAreaIDsWithAeons = `-- name: GetAreaIDsWithAeons :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN aeons ae ON ae.area_id = a.id
-ORDER BY a.id
+SELECT DISTINCT area_id::int FROM aeons ORDER BY area_id
 `
 
 func (q *Queries) GetAreaIDsWithAeons(ctx context.Context) ([]int32, error) {
@@ -367,11 +343,11 @@ func (q *Queries) GetAreaIDsWithAeons(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -383,15 +359,13 @@ func (q *Queries) GetAreaIDsWithAeons(ctx context.Context) ([]int32, error) {
 }
 
 const getAreaIDsWithBosses = `-- name: GetAreaIDsWithBosses :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN encounter_areas ea ON ea.area_id = a.id
+SELECT DISTINCT ea.area_id
+FROM encounter_areas ea
 JOIN j_monster_formations_encounter_areas j ON j.encounter_area_id = ea.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
 JOIN formation_data fd ON mf.formation_data_id = fd.id
 JOIN formation_boss_songs bs ON fd.boss_song_id = bs.id
-JOIN songs so ON bs.song_id = so.id
-ORDER BY a.id
+ORDER BY ea.area_id
 `
 
 func (q *Queries) GetAreaIDsWithBosses(ctx context.Context) ([]int32, error) {
@@ -402,11 +376,11 @@ func (q *Queries) GetAreaIDsWithBosses(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -418,10 +392,7 @@ func (q *Queries) GetAreaIDsWithBosses(ctx context.Context) ([]int32, error) {
 }
 
 const getAreaIDsWithCharacters = `-- name: GetAreaIDsWithCharacters :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN characters c ON c.area_id = a.id
-ORDER BY a.id
+SELECT DISTINCT area_id::int FROM characters ORDER BY area_id
 `
 
 func (q *Queries) GetAreaIDsWithCharacters(ctx context.Context) ([]int32, error) {
@@ -432,11 +403,11 @@ func (q *Queries) GetAreaIDsWithCharacters(ctx context.Context) ([]int32, error)
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -502,10 +473,7 @@ func (q *Queries) GetAreaIDsWithDropOff(ctx context.Context, airshipDropOff bool
 }
 
 const getAreaIDsWithFMVs = `-- name: GetAreaIDsWithFMVs :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN fmvs f ON f.area_id = a.id
-ORDER BY a.id
+SELECT DISTINCT area_id FROM fmvs ORDER BY area_id
 `
 
 func (q *Queries) GetAreaIDsWithFMVs(ctx context.Context) ([]int32, error) {
@@ -516,11 +484,11 @@ func (q *Queries) GetAreaIDsWithFMVs(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -532,50 +500,48 @@ func (q *Queries) GetAreaIDsWithFMVs(ctx context.Context) ([]int32, error) {
 }
 
 const getAreaIDsWithItemFromMonster = `-- name: GetAreaIDsWithItemFromMonster :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN encounter_areas ea ON ea.area_id = a.id
-JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
-JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN monster_selections ms ON mf.monster_selection_id = ms.id
-JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
-JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
-JOIN monsters m ON ma.monster_id = m.id
-JOIN monster_items mi ON mi.monster_id = m.id
-LEFT JOIN j_monster_items_other_items jmio
-  ON jmio.monster_items_id = mi.id
-LEFT JOIN possible_items pi
-  ON pi.id = jmio.possible_item_id
-JOIN item_amounts ia
-  ON ia.id IN (
-      mi.steal_common_id,
-      mi.steal_rare_id,
-      mi.drop_common_id,
-      mi.drop_rare_id,
-      mi.secondary_drop_common_id,
-      mi.secondary_drop_rare_id,
-      mi.bribe_id,
-      pi.item_amount_id
-  )
-JOIN master_items mit ON ia.master_item_id = mit.id
-JOIN items i ON i.master_item_id = mit.id
-WHERE i.id = $1
-ORDER BY a.id
+WITH target_monster_ids AS (
+    SELECT mi.monster_id
+    FROM monster_items mi
+    JOIN item_amounts ia ON ia.id IN (
+      mi.steal_common_id, mi.steal_rare_id, mi.drop_common_id, mi.drop_rare_id, mi.secondary_drop_common_id, mi.secondary_drop_rare_id, mi.bribe_id
+    )
+    JOIN items i ON i.master_item_id = ia.master_item_id
+    WHERE i.id = $1::int
+
+    UNION
+
+    SELECT mi.monster_id
+    FROM monster_items mi
+    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
+    JOIN possible_items pi ON jmio.possible_item_id = pi.id
+    JOIN item_amounts ia ON pi.item_amount_id = ia.id
+    JOIN items i ON i.master_item_id = ia.master_item_id
+    WHERE i.id = $1::int
+)
+SELECT DISTINCT ea.area_id
+FROM target_monster_ids tmi
+JOIN monster_amounts ma ON ma.monster_id = tmi.monster_id
+JOIN j_monster_selections_monsters jmsm ON jmsm.monster_amount_id = ma.id
+JOIN monster_formations mf ON mf.monster_selection_id = jmsm.monster_selection_id
+JOIN j_monster_formations_encounter_areas jme ON jme.monster_formation_id = mf.id
+JOIN encounter_areas ea ON jme.encounter_area_id = ea.id
+ORDER BY ea.area_id
 `
 
-func (q *Queries) GetAreaIDsWithItemFromMonster(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromMonster, id)
+func (q *Queries) GetAreaIDsWithItemFromMonster(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromMonster, itemID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -587,15 +553,13 @@ func (q *Queries) GetAreaIDsWithItemFromMonster(ctx context.Context, id int32) (
 }
 
 const getAreaIDsWithItemFromQuest = `-- name: GetAreaIDsWithItemFromQuest :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN completion_areas ca ON ca.area_id = a.id
+SELECT DISTINCT ca.area_id
+FROM completion_areas ca
 JOIN quest_completions qc ON ca.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON i.master_item_id = ia.master_item_id
 WHERE i.id = $1
-ORDER BY a.id
+ORDER BY ca.area_id
 `
 
 func (q *Queries) GetAreaIDsWithItemFromQuest(ctx context.Context, id int32) ([]int32, error) {
@@ -606,11 +570,11 @@ func (q *Queries) GetAreaIDsWithItemFromQuest(ctx context.Context, id int32) ([]
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -622,29 +586,27 @@ func (q *Queries) GetAreaIDsWithItemFromQuest(ctx context.Context, id int32) ([]
 }
 
 const getAreaIDsWithItemFromShop = `-- name: GetAreaIDsWithItemFromShop :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN shops sh ON sh.area_id = a.id
+SELECT DISTINCT sh.area_id
+FROM shops sh
 JOIN j_shops_items j ON j.shop_id = sh.id
 JOIN shop_items si ON j.shop_item_id = si.id
-JOIN items i ON si.item_id = i.id
-WHERE i.id = $1
-ORDER BY a.id
+WHERE si.item_id = $1
+ORDER BY sh.area_id
 `
 
-func (q *Queries) GetAreaIDsWithItemFromShop(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromShop, id)
+func (q *Queries) GetAreaIDsWithItemFromShop(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromShop, itemID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -656,15 +618,13 @@ func (q *Queries) GetAreaIDsWithItemFromShop(ctx context.Context, id int32) ([]i
 }
 
 const getAreaIDsWithItemFromTreasure = `-- name: GetAreaIDsWithItemFromTreasure :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN treasures t ON t.area_id = a.id
+SELECT DISTINCT t.area_id
+FROM treasures t
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON i.master_item_id = ia.master_item_id
 WHERE i.id = $1
-ORDER BY a.id
+ORDER BY t.area_id
 `
 
 func (q *Queries) GetAreaIDsWithItemFromTreasure(ctx context.Context, id int32) ([]int32, error) {
@@ -675,11 +635,11 @@ func (q *Queries) GetAreaIDsWithItemFromTreasure(ctx context.Context, id int32) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -691,15 +651,13 @@ func (q *Queries) GetAreaIDsWithItemFromTreasure(ctx context.Context, id int32) 
 }
 
 const getAreaIDsWithKeyItemFromQuest = `-- name: GetAreaIDsWithKeyItemFromQuest :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN completion_areas ca ON ca.area_id = a.id
+SELECT DISTINCT ca.area_id
+FROM completion_areas ca
 JOIN quest_completions qc ON ca.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN key_items ki ON ki.master_item_id = ia.master_item_id
 WHERE ki.id = $1
-ORDER BY a.id
+ORDER BY ca.area_id
 `
 
 func (q *Queries) GetAreaIDsWithKeyItemFromQuest(ctx context.Context, id int32) ([]int32, error) {
@@ -710,11 +668,11 @@ func (q *Queries) GetAreaIDsWithKeyItemFromQuest(ctx context.Context, id int32) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -726,15 +684,13 @@ func (q *Queries) GetAreaIDsWithKeyItemFromQuest(ctx context.Context, id int32) 
 }
 
 const getAreaIDsWithKeyItemFromTreasure = `-- name: GetAreaIDsWithKeyItemFromTreasure :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN treasures t ON t.area_id = a.id
+SELECT DISTINCT t.area_id
+FROM treasures t
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN key_items ki ON ki.master_item_id = ia.master_item_id
 WHERE ki.id = $1
-ORDER BY a.id
+ORDER BY t.area_id
 `
 
 func (q *Queries) GetAreaIDsWithKeyItemFromTreasure(ctx context.Context, id int32) ([]int32, error) {
@@ -745,11 +701,11 @@ func (q *Queries) GetAreaIDsWithKeyItemFromTreasure(ctx context.Context, id int3
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -761,16 +717,13 @@ func (q *Queries) GetAreaIDsWithKeyItemFromTreasure(ctx context.Context, id int3
 }
 
 const getAreaIDsWithMonsters = `-- name: GetAreaIDsWithMonsters :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN encounter_areas ea ON ea.area_id = a.id
+SELECT DISTINCT ea.area_id
+FROM encounter_areas ea
 JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN monster_selections ms ON mf.monster_selection_id = ms.id
-JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON mf.monster_selection_id = j2.monster_selection_id
 JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
-JOIN monsters m ON ma.monster_id = m.id
-ORDER BY a.id
+ORDER BY ea.area_id
 `
 
 func (q *Queries) GetAreaIDsWithMonsters(ctx context.Context) ([]int32, error) {
@@ -781,11 +734,11 @@ func (q *Queries) GetAreaIDsWithMonsters(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -824,10 +777,7 @@ func (q *Queries) GetAreaIDsWithSaveSphere(ctx context.Context, hasSaveSphere bo
 }
 
 const getAreaIDsWithShops = `-- name: GetAreaIDsWithShops :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN shops sh ON sh.area_id = a.id
-ORDER BY a.id
+SELECT DISTINCT area_id FROM shops ORDER BY area_id
 `
 
 func (q *Queries) GetAreaIDsWithShops(ctx context.Context) ([]int32, error) {
@@ -838,11 +788,11 @@ func (q *Queries) GetAreaIDsWithShops(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -854,12 +804,7 @@ func (q *Queries) GetAreaIDsWithShops(ctx context.Context) ([]int32, error) {
 }
 
 const getAreaIDsWithSidequests = `-- name: GetAreaIDsWithSidequests :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN completion_areas ca ON ca.area_id = a.id
-JOIN quest_completions qc ON ca.completion_id = qc.id
-JOIN quests q ON q.completion_id = qc.id
-ORDER BY a.id
+SELECT DISTINCT area_id FROM completion_areas ORDER BY area_id
 `
 
 func (q *Queries) GetAreaIDsWithSidequests(ctx context.Context) ([]int32, error) {
@@ -870,11 +815,11 @@ func (q *Queries) GetAreaIDsWithSidequests(ctx context.Context) ([]int32, error)
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -886,10 +831,7 @@ func (q *Queries) GetAreaIDsWithSidequests(ctx context.Context) ([]int32, error)
 }
 
 const getAreaIDsWithTreasures = `-- name: GetAreaIDsWithTreasures :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN treasures t ON t.area_id = a.id
-ORDER BY a.id
+SELECT DISTINCT area_id FROM treasures ORDER BY area_id
 `
 
 func (q *Queries) GetAreaIDsWithTreasures(ctx context.Context) ([]int32, error) {
@@ -900,11 +842,11 @@ func (q *Queries) GetAreaIDsWithTreasures(ctx context.Context) ([]int32, error) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -920,13 +862,12 @@ SELECT DISTINCT mf.id
 FROM monster_formations mf
 JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-WHERE a.id = $1
+WHERE ea.area_id = $1
 ORDER BY mf.id
 `
 
-func (q *Queries) GetAreaMonsterFormationIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaMonsterFormationIDs, id)
+func (q *Queries) GetAreaMonsterFormationIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaMonsterFormationIDs, areaID)
 	if err != nil {
 		return nil, err
 	}
@@ -949,32 +890,29 @@ func (q *Queries) GetAreaMonsterFormationIDs(ctx context.Context, id int32) ([]i
 }
 
 const getAreaMonsterIDs = `-- name: GetAreaMonsterIDs :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
+SELECT DISTINCT ma.monster_id
+FROM monster_amounts ma
 JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_selections ms ON j1.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
+JOIN monster_formations mf ON mf.monster_selection_id = j1.monster_selection_id
 JOIN j_monster_formations_encounter_areas j2 ON j2.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j2.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-WHERE a.id = $1
-ORDER BY m.id
+WHERE ea.area_id = $1
+ORDER BY ma.monster_id
 `
 
-func (q *Queries) GetAreaMonsterIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaMonsterIDs, id)
+func (q *Queries) GetAreaMonsterIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaMonsterIDs, areaID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1032,15 +970,13 @@ func (q *Queries) GetAreaMonsterIdPairs(ctx context.Context, areaIds []int32) ([
 const getAreaQuestIDs = `-- name: GetAreaQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN quest_completions qc ON q.completion_id = qc.id
-JOIN completion_areas ca ON ca.completion_id = qc.id
-JOIN areas a ON ca.area_id = a.id
-WHERE a.id = $1
+JOIN completion_areas ca ON ca.completion_id = q.completion_id
+WHERE ca.area_id = $1
 ORDER BY q.id
 `
 
-func (q *Queries) GetAreaQuestIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaQuestIDs, id)
+func (q *Queries) GetAreaQuestIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaQuestIDs, areaID)
 	if err != nil {
 		return nil, err
 	}
@@ -1193,32 +1129,30 @@ func (q *Queries) GetAreaTreasureIdPairs(ctx context.Context, areaIds []int32) (
 }
 
 const getConnectedLocationIDs = `-- name: GetConnectedLocationIDs :many
-SELECT DISTINCT cl.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT cs.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN j_area_connected_areas j ON j.area_id = a.id
 JOIN area_connections ac ON j.connection_id = ac.id
 JOIN areas ca ON ac.area_id = ca.id
 JOIN sublocations cs ON ca.sublocation_id = cs.id
-JOIN locations cl ON cs.location_id = cl.id
-WHERE l.id = $1 AND l.id != cl.id
-ORDER BY cl.id
+WHERE s.location_id = $1 AND cs.location_id != $1
+ORDER BY cs.location_id
 `
 
-func (q *Queries) GetConnectedLocationIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getConnectedLocationIDs, id)
+func (q *Queries) GetConnectedLocationIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getConnectedLocationIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1230,30 +1164,28 @@ func (q *Queries) GetConnectedLocationIDs(ctx context.Context, id int32) ([]int3
 }
 
 const getConnectedSublocationIDs = `-- name: GetConnectedSublocationIDs :many
-SELECT DISTINCT cs.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT ca.sublocation_id
+FROM areas a
 JOIN j_area_connected_areas j ON j.area_id = a.id
 JOIN area_connections ac ON j.connection_id = ac.id
 JOIN areas ca ON ac.area_id = ca.id
-JOIN sublocations cs ON ca.sublocation_id = cs.id
-WHERE s.id = $1 AND s.id != cs.id
-ORDER BY cs.id
+WHERE a.sublocation_id = $1 AND ca.sublocation_id != $1
+ORDER BY ca.sublocation_id
 `
 
-func (q *Queries) GetConnectedSublocationIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getConnectedSublocationIDs, id)
+func (q *Queries) GetConnectedSublocationIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getConnectedSublocationIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1269,13 +1201,12 @@ SELECT ae.id
 FROM aeons ae
 JOIN areas a ON ae.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
+WHERE s.location_id = $1
 ORDER BY ae.id
 `
 
-func (q *Queries) GetLocationAeonIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationAeonIDs, id)
+func (q *Queries) GetLocationAeonIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationAeonIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -1301,13 +1232,12 @@ const getLocationAreaIDs = `-- name: GetLocationAreaIDs :many
 SELECT DISTINCT a.id
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
+WHERE s.location_id = $1
 ORDER BY a.id
 `
 
-func (q *Queries) GetLocationAreaIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationAreaIDs, id)
+func (q *Queries) GetLocationAreaIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationAreaIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -1330,30 +1260,27 @@ func (q *Queries) GetLocationAreaIDs(ctx context.Context, id int32) ([]int32, er
 }
 
 const getLocationBackgroundMusicSongIDs = `-- name: GetLocationBackgroundMusicSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN j_songs_background_music j ON j.song_id = so.id
-JOIN background_music bm ON j.bm_id = bm.id
+SELECT DISTINCT j.song_id
+FROM j_songs_background_music j
 JOIN areas a ON j.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
-ORDER BY so.id
+WHERE s.location_id = $1
+ORDER BY j.song_id
 `
 
-func (q *Queries) GetLocationBackgroundMusicSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationBackgroundMusicSongIDs, id)
+func (q *Queries) GetLocationBackgroundMusicSongIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationBackgroundMusicSongIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1365,33 +1292,31 @@ func (q *Queries) GetLocationBackgroundMusicSongIDs(ctx context.Context, id int3
 }
 
 const getLocationBossSongIDs = `-- name: GetLocationBossSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN formation_boss_songs bs ON bs.song_id = so.id
+SELECT DISTINCT bs.song_id
+FROM formation_boss_songs bs
 JOIN formation_data fd ON fd.boss_song_id = bs.id
 JOIN monster_formations mf ON mf.formation_data_id = fd.id
 JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j.encounter_area_id = ea.id
 JOIN areas a ON ea.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
-ORDER BY so.id
+WHERE s.location_id = $1
+ORDER BY bs.song_id
 `
 
-func (q *Queries) GetLocationBossSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationBossSongIDs, id)
+func (q *Queries) GetLocationBossSongIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationBossSongIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1407,13 +1332,12 @@ SELECT c.id
 FROM characters c
 JOIN areas a ON c.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
+WHERE s.location_id = $1
 ORDER BY c.id
 `
 
-func (q *Queries) GetLocationCharacterIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationCharacterIDs, id)
+func (q *Queries) GetLocationCharacterIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationCharacterIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -1436,30 +1360,36 @@ func (q *Queries) GetLocationCharacterIDs(ctx context.Context, id int32) ([]int3
 }
 
 const getLocationCueSongIDs = `-- name: GetLocationCueSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN cues c ON c.song_id = so.id
-LEFT JOIN j_cues_areas j ON j.cue_id = c.id
+SELECT c.song_id
+FROM cues c
 JOIN areas a ON c.trigger_area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
-ORDER BY so.id
+WHERE s.location_id = $1
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN j_cues_areas j ON j.cue_id = c.id
+JOIN areas a ON j.included_area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+WHERE s.location_id = $1
+ORDER BY song_id
 `
 
-func (q *Queries) GetLocationCueSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationCueSongIDs, id)
+func (q *Queries) GetLocationCueSongIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationCueSongIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1471,29 +1401,28 @@ func (q *Queries) GetLocationCueSongIDs(ctx context.Context, id int32) ([]int32,
 }
 
 const getLocationFMVSongIDs = `-- name: GetLocationFMVSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN fmvs f ON f.song_id = so.id
+SELECT DISTINCT f.song_id::int
+FROM fmvs f
 JOIN areas a ON f.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
-ORDER BY so.id
+WHERE f.song_id IS NOT NULL
+  AND s.location_id = $1
+ORDER BY f.song_id
 `
 
-func (q *Queries) GetLocationFMVSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationFMVSongIDs, id)
+func (q *Queries) GetLocationFMVSongIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationFMVSongIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var f_song_id int32
+		if err := rows.Scan(&f_song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, f_song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1509,13 +1438,12 @@ SELECT f.id
 FROM fmvs f
 JOIN areas a ON f.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
+WHERE s.location_id = $1
 ORDER BY f.id
 `
 
-func (q *Queries) GetLocationFmvIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationFmvIDs, id)
+func (q *Queries) GetLocationFmvIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationFmvIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -1565,12 +1493,11 @@ func (q *Queries) GetLocationIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getLocationIDsWithAeons = `-- name: GetLocationIDsWithAeons :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN aeons ae ON ae.area_id = a.id
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithAeons(ctx context.Context) ([]int32, error) {
@@ -1581,11 +1508,11 @@ func (q *Queries) GetLocationIDsWithAeons(ctx context.Context) ([]int32, error) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1597,17 +1524,15 @@ func (q *Queries) GetLocationIDsWithAeons(ctx context.Context) ([]int32, error) 
 }
 
 const getLocationIDsWithBosses = `-- name: GetLocationIDsWithBosses :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN encounter_areas ea ON ea.area_id = a.id
 JOIN j_monster_formations_encounter_areas j ON j.encounter_area_id = ea.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
 JOIN formation_data fd ON mf.formation_data_id = fd.id
 JOIN formation_boss_songs bs ON fd.boss_song_id = bs.id
-JOIN songs so ON bs.song_id = so.id
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithBosses(ctx context.Context) ([]int32, error) {
@@ -1618,11 +1543,11 @@ func (q *Queries) GetLocationIDsWithBosses(ctx context.Context) ([]int32, error)
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1634,12 +1559,11 @@ func (q *Queries) GetLocationIDsWithBosses(ctx context.Context) ([]int32, error)
 }
 
 const getLocationIDsWithCharacters = `-- name: GetLocationIDsWithCharacters :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN characters c ON c.area_id = a.id
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithCharacters(ctx context.Context) ([]int32, error) {
@@ -1650,11 +1574,11 @@ func (q *Queries) GetLocationIDsWithCharacters(ctx context.Context) ([]int32, er
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1666,12 +1590,11 @@ func (q *Queries) GetLocationIDsWithCharacters(ctx context.Context) ([]int32, er
 }
 
 const getLocationIDsWithFMVs = `-- name: GetLocationIDsWithFMVs :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN fmvs f ON f.area_id = a.id
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithFMVs(ctx context.Context) ([]int32, error) {
@@ -1682,11 +1605,11 @@ func (q *Queries) GetLocationIDsWithFMVs(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1698,52 +1621,50 @@ func (q *Queries) GetLocationIDsWithFMVs(ctx context.Context) ([]int32, error) {
 }
 
 const getLocationIDsWithItemFromMonster = `-- name: GetLocationIDsWithItemFromMonster :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
-JOIN areas a ON a.sublocation_id = s.id
-JOIN encounter_areas ea ON ea.area_id = a.id
-JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
-JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN monster_selections ms ON mf.monster_selection_id = ms.id
-JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
-JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
-JOIN monsters m ON ma.monster_id = m.id
-JOIN monster_items mi ON mi.monster_id = m.id
-LEFT JOIN j_monster_items_other_items jmio
-  ON jmio.monster_items_id = mi.id
-LEFT JOIN possible_items pi
-  ON pi.id = jmio.possible_item_id
-JOIN item_amounts ia
-  ON ia.id IN (
-      mi.steal_common_id,
-      mi.steal_rare_id,
-      mi.drop_common_id,
-      mi.drop_rare_id,
-      mi.secondary_drop_common_id,
-      mi.secondary_drop_rare_id,
-      mi.bribe_id,
-      pi.item_amount_id
-  )
-JOIN master_items mit ON ia.master_item_id = mit.id
-JOIN items i ON i.master_item_id = mit.id
-WHERE i.id = $1
-ORDER BY l.id
+WITH target_monster_ids AS (
+    SELECT mi.monster_id
+    FROM monster_items mi
+    JOIN item_amounts ia ON ia.id IN (
+      mi.steal_common_id, mi.steal_rare_id, mi.drop_common_id, mi.drop_rare_id, mi.secondary_drop_common_id, mi.secondary_drop_rare_id, mi.bribe_id
+    )
+    JOIN items i ON i.master_item_id = ia.master_item_id
+    WHERE i.id = $1::int
+
+    UNION
+
+    SELECT mi.monster_id
+    FROM monster_items mi
+    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
+    JOIN possible_items pi ON jmio.possible_item_id = pi.id
+    JOIN item_amounts ia ON pi.item_amount_id = ia.id
+    JOIN items i ON i.master_item_id = ia.master_item_id
+    WHERE i.id = $1::int
+)
+SELECT DISTINCT s.location_id
+FROM target_monster_ids tmi
+JOIN monster_amounts ma ON ma.monster_id = tmi.monster_id
+JOIN j_monster_selections_monsters jmsm ON jmsm.monster_amount_id = ma.id
+JOIN monster_formations mf ON mf.monster_selection_id = jmsm.monster_selection_id
+JOIN j_monster_formations_encounter_areas jme ON jme.monster_formation_id = mf.id
+JOIN encounter_areas ea ON jme.encounter_area_id = ea.id
+JOIN areas a ON ea.area_id = a.id
+JOIN sublocations s ON a.sublocation_id = s.id
+ORDER BY s.location_id
 `
 
-func (q *Queries) GetLocationIDsWithItemFromMonster(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationIDsWithItemFromMonster, id)
+func (q *Queries) GetLocationIDsWithItemFromMonster(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationIDsWithItemFromMonster, itemID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1755,17 +1676,15 @@ func (q *Queries) GetLocationIDsWithItemFromMonster(ctx context.Context, id int3
 }
 
 const getLocationIDsWithItemFromQuest = `-- name: GetLocationIDsWithItemFromQuest :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN completion_areas ca ON ca.area_id = a.id
 JOIN quest_completions qc ON ca.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON i.master_item_id = ia.master_item_id
 WHERE i.id = $1
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithItemFromQuest(ctx context.Context, id int32) ([]int32, error) {
@@ -1776,11 +1695,11 @@ func (q *Queries) GetLocationIDsWithItemFromQuest(ctx context.Context, id int32)
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1792,31 +1711,29 @@ func (q *Queries) GetLocationIDsWithItemFromQuest(ctx context.Context, id int32)
 }
 
 const getLocationIDsWithItemFromShop = `-- name: GetLocationIDsWithItemFromShop :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN shops sh ON sh.area_id = a.id
 JOIN j_shops_items j ON j.shop_id = sh.id
 JOIN shop_items si ON j.shop_item_id = si.id
-JOIN items i ON si.item_id = i.id
-WHERE i.id = $1
-ORDER BY l.id
+WHERE si.item_id = $1
+ORDER BY s.location_id
 `
 
-func (q *Queries) GetLocationIDsWithItemFromShop(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationIDsWithItemFromShop, id)
+func (q *Queries) GetLocationIDsWithItemFromShop(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationIDsWithItemFromShop, itemID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1828,17 +1745,15 @@ func (q *Queries) GetLocationIDsWithItemFromShop(ctx context.Context, id int32) 
 }
 
 const getLocationIDsWithItemFromTreasure = `-- name: GetLocationIDsWithItemFromTreasure :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN treasures t ON t.area_id = a.id
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON i.master_item_id = ia.master_item_id
 WHERE i.id = $1
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithItemFromTreasure(ctx context.Context, id int32) ([]int32, error) {
@@ -1849,11 +1764,11 @@ func (q *Queries) GetLocationIDsWithItemFromTreasure(ctx context.Context, id int
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1865,17 +1780,15 @@ func (q *Queries) GetLocationIDsWithItemFromTreasure(ctx context.Context, id int
 }
 
 const getLocationIDsWithKeyItemFromQuest = `-- name: GetLocationIDsWithKeyItemFromQuest :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN completion_areas ca ON ca.area_id = a.id
 JOIN quest_completions qc ON ca.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN key_items ki ON ki.master_item_id = ia.master_item_id
 WHERE ki.id = $1
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithKeyItemFromQuest(ctx context.Context, id int32) ([]int32, error) {
@@ -1886,11 +1799,11 @@ func (q *Queries) GetLocationIDsWithKeyItemFromQuest(ctx context.Context, id int
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1902,17 +1815,15 @@ func (q *Queries) GetLocationIDsWithKeyItemFromQuest(ctx context.Context, id int
 }
 
 const getLocationIDsWithKeyItemFromTreasure = `-- name: GetLocationIDsWithKeyItemFromTreasure :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN treasures t ON t.area_id = a.id
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN key_items ki ON ki.master_item_id = ia.master_item_id
 WHERE ki.id = $1
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithKeyItemFromTreasure(ctx context.Context, id int32) ([]int32, error) {
@@ -1923,11 +1834,11 @@ func (q *Queries) GetLocationIDsWithKeyItemFromTreasure(ctx context.Context, id 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1939,18 +1850,15 @@ func (q *Queries) GetLocationIDsWithKeyItemFromTreasure(ctx context.Context, id 
 }
 
 const getLocationIDsWithMonsters = `-- name: GetLocationIDsWithMonsters :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN encounter_areas ea ON ea.area_id = a.id
 JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN monster_selections ms ON mf.monster_selection_id = ms.id
-JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON mf.monster_selection_id = j2.monster_selection_id
 JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
-JOIN monsters m ON ma.monster_id = m.id
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithMonsters(ctx context.Context) ([]int32, error) {
@@ -1961,11 +1869,11 @@ func (q *Queries) GetLocationIDsWithMonsters(ctx context.Context) ([]int32, erro
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1977,12 +1885,11 @@ func (q *Queries) GetLocationIDsWithMonsters(ctx context.Context) ([]int32, erro
 }
 
 const getLocationIDsWithShops = `-- name: GetLocationIDsWithShops :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN shops sh ON sh.area_id = a.id
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithShops(ctx context.Context) ([]int32, error) {
@@ -1993,11 +1900,11 @@ func (q *Queries) GetLocationIDsWithShops(ctx context.Context) ([]int32, error) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2009,14 +1916,11 @@ func (q *Queries) GetLocationIDsWithShops(ctx context.Context) ([]int32, error) 
 }
 
 const getLocationIDsWithSidequests = `-- name: GetLocationIDsWithSidequests :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN completion_areas ca ON ca.area_id = a.id
-JOIN quest_completions qc ON ca.completion_id = qc.id
-JOIN quests q ON q.completion_id = qc.id
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithSidequests(ctx context.Context) ([]int32, error) {
@@ -2027,11 +1931,11 @@ func (q *Queries) GetLocationIDsWithSidequests(ctx context.Context) ([]int32, er
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2043,12 +1947,11 @@ func (q *Queries) GetLocationIDsWithSidequests(ctx context.Context) ([]int32, er
 }
 
 const getLocationIDsWithTreasures = `-- name: GetLocationIDsWithTreasures :many
-SELECT DISTINCT l.id
-FROM locations l
-JOIN sublocations s ON s.location_id = l.id
+SELECT DISTINCT s.location_id
+FROM sublocations s
 JOIN areas a ON a.sublocation_id = s.id
 JOIN treasures t ON t.area_id = a.id
-ORDER BY l.id
+ORDER BY s.location_id
 `
 
 func (q *Queries) GetLocationIDsWithTreasures(ctx context.Context) ([]int32, error) {
@@ -2059,11 +1962,11 @@ func (q *Queries) GetLocationIDsWithTreasures(ctx context.Context) ([]int32, err
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2081,13 +1984,12 @@ JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j.encounter_area_id = ea.id
 JOIN areas a ON ea.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
+WHERE s.location_id = $1
 ORDER BY mf.id
 `
 
-func (q *Queries) GetLocationMonsterFormationIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationMonsterFormationIDs, id)
+func (q *Queries) GetLocationMonsterFormationIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationMonsterFormationIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2110,19 +2012,16 @@ func (q *Queries) GetLocationMonsterFormationIDs(ctx context.Context, id int32) 
 }
 
 const getLocationMonsterIDs = `-- name: GetLocationMonsterIDs :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
+SELECT DISTINCT ma.monster_id
+FROM monster_amounts ma
 JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_selections ms ON j1.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
+JOIN monster_formations mf ON mf.monster_selection_id = j1.monster_selection_id
 JOIN j_monster_formations_encounter_areas j2 ON j2.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j2.encounter_area_id = ea.id
 JOIN areas a ON ea.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE location_id = $1
-ORDER BY m.id
+WHERE s.location_id = $1
+ORDER BY ma.monster_id
 `
 
 func (q *Queries) GetLocationMonsterIDs(ctx context.Context, locationID int32) ([]int32, error) {
@@ -2133,11 +2032,11 @@ func (q *Queries) GetLocationMonsterIDs(ctx context.Context, locationID int32) (
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2197,17 +2096,15 @@ func (q *Queries) GetLocationMonsterIdPairs(ctx context.Context, locationIds []i
 const getLocationQuestIDs = `-- name: GetLocationQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN quest_completions qc ON q.completion_id = qc.id
-JOIN completion_areas ca ON ca.completion_id = qc.id
+JOIN completion_areas ca ON ca.completion_id = q.completion_id
 JOIN areas a ON ca.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
+WHERE s.location_id = $1
 ORDER BY q.id
 `
 
-func (q *Queries) GetLocationQuestIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationQuestIDs, id)
+func (q *Queries) GetLocationQuestIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationQuestIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2234,13 +2131,12 @@ SELECT sh.id
 FROM shops sh
 JOIN areas a ON sh.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
+WHERE s.location_id = $1
 ORDER BY sh.id
 `
 
-func (q *Queries) GetLocationShopIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationShopIDs, id)
+func (q *Queries) GetLocationShopIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationShopIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2303,15 +2199,11 @@ func (q *Queries) GetLocationShopIdPairs(ctx context.Context, locationIds []int3
 }
 
 const getLocationSublocationIDs = `-- name: GetLocationSublocationIDs :many
-SELECT s.id
-FROM sublocations s
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
-ORDER BY s.id
+SELECT DISTINCT id FROM sublocations WHERE location_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetLocationSublocationIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationSublocationIDs, id)
+func (q *Queries) GetLocationSublocationIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationSublocationIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2338,13 +2230,12 @@ SELECT t.id
 FROM treasures t
 JOIN areas a ON t.area_id = a.id
 JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = $1
+WHERE s.location_id = $1
 ORDER BY t.id
 `
 
-func (q *Queries) GetLocationTreasureIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationTreasureIDs, id)
+func (q *Queries) GetLocationTreasureIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationTreasureIDs, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2543,10 +2434,7 @@ func (q *Queries) GetShopIDsEquipmentFilter(ctx context.Context, arg GetShopIDsE
 }
 
 const getShopIDsWithEquipment = `-- name: GetShopIDsWithEquipment :many
-SELECT DISTINCT s.id
-FROM shops s
-JOIN shop_equipment_pieces se ON se.shop_id = s.id
-ORDER BY s.id
+SELECT DISTINCT shop_id FROM shop_equipment_pieces ORDER BY shop_id
 `
 
 func (q *Queries) GetShopIDsWithEquipment(ctx context.Context) ([]int32, error) {
@@ -2557,11 +2445,11 @@ func (q *Queries) GetShopIDsWithEquipment(ctx context.Context) ([]int32, error) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var shop_id int32
+		if err := rows.Scan(&shop_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, shop_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2573,10 +2461,7 @@ func (q *Queries) GetShopIDsWithEquipment(ctx context.Context) ([]int32, error) 
 }
 
 const getShopIDsWithItems = `-- name: GetShopIDsWithItems :many
-SELECT DISTINCT s.id
-FROM shops s
-JOIN j_shops_items j ON j.shop_id = s.id
-ORDER BY s.id
+SELECT DISTINCT shop_id FROM j_shops_items ORDER BY shop_id
 `
 
 func (q *Queries) GetShopIDsWithItems(ctx context.Context) ([]int32, error) {
@@ -2587,11 +2472,11 @@ func (q *Queries) GetShopIDsWithItems(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var shop_id int32
+		if err := rows.Scan(&shop_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, shop_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2606,13 +2491,12 @@ const getSublocationAeonIDs = `-- name: GetSublocationAeonIDs :many
 SELECT ae.id
 FROM aeons ae
 JOIN areas a ON ae.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
+WHERE a.sublocation_id = $1
 ORDER BY ae.id
 `
 
-func (q *Queries) GetSublocationAeonIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationAeonIDs, id)
+func (q *Queries) GetSublocationAeonIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationAeonIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2635,15 +2519,11 @@ func (q *Queries) GetSublocationAeonIDs(ctx context.Context, id int32) ([]int32,
 }
 
 const getSublocationAreaIDs = `-- name: GetSublocationAreaIDs :many
-SELECT DISTINCT a.id
-FROM areas a
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
-ORDER BY a.id
+SELECT DISTINCT id FROM areas WHERE sublocation_id = $1 ORDER BY id
 `
 
-func (q *Queries) GetSublocationAreaIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationAreaIDs, id)
+func (q *Queries) GetSublocationAreaIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationAreaIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2666,29 +2546,26 @@ func (q *Queries) GetSublocationAreaIDs(ctx context.Context, id int32) ([]int32,
 }
 
 const getSublocationBackgroundMusicSongIDs = `-- name: GetSublocationBackgroundMusicSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN j_songs_background_music j ON j.song_id = so.id
-JOIN background_music bm ON j.bm_id = bm.id
+SELECT DISTINCT j.song_id
+FROM j_songs_background_music j
 JOIN areas a ON j.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
-ORDER BY so.id
+WHERE a.sublocation_id = $1
+ORDER BY j.song_id
 `
 
-func (q *Queries) GetSublocationBackgroundMusicSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationBackgroundMusicSongIDs, id)
+func (q *Queries) GetSublocationBackgroundMusicSongIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationBackgroundMusicSongIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2700,32 +2577,30 @@ func (q *Queries) GetSublocationBackgroundMusicSongIDs(ctx context.Context, id i
 }
 
 const getSublocationBossSongIDs = `-- name: GetSublocationBossSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN formation_boss_songs bs ON bs.song_id = so.id
+SELECT DISTINCT bs.song_id
+FROM formation_boss_songs bs
 JOIN formation_data fd ON fd.boss_song_id = bs.id
 JOIN monster_formations mf ON mf.formation_data_id = fd.id
 JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j.encounter_area_id = ea.id
 JOIN areas a ON ea.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
-ORDER BY so.id
+WHERE a.sublocation_id = $1
+ORDER BY bs.song_id
 `
 
-func (q *Queries) GetSublocationBossSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationBossSongIDs, id)
+func (q *Queries) GetSublocationBossSongIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationBossSongIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2740,13 +2615,12 @@ const getSublocationCharacterIDs = `-- name: GetSublocationCharacterIDs :many
 SELECT c.id
 FROM characters c
 JOIN areas a ON c.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
+WHERE a.sublocation_id = $1
 ORDER BY c.id
 `
 
-func (q *Queries) GetSublocationCharacterIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationCharacterIDs, id)
+func (q *Queries) GetSublocationCharacterIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationCharacterIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2769,29 +2643,34 @@ func (q *Queries) GetSublocationCharacterIDs(ctx context.Context, id int32) ([]i
 }
 
 const getSublocationCueSongIDs = `-- name: GetSublocationCueSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN cues c ON c.song_id = so.id
-LEFT JOIN j_cues_areas j ON j.cue_id = c.id
+SELECT c.song_id
+FROM cues c
 JOIN areas a ON c.trigger_area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
-ORDER BY so.id
+WHERE a.sublocation_id = $1
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN j_cues_areas j ON j.cue_id = c.id
+JOIN areas a ON j.included_area_id = a.id
+WHERE a.sublocation_id = $1
+ORDER BY song_id
 `
 
-func (q *Queries) GetSublocationCueSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationCueSongIDs, id)
+func (q *Queries) GetSublocationCueSongIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationCueSongIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var song_id int32
+		if err := rows.Scan(&song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2803,28 +2682,27 @@ func (q *Queries) GetSublocationCueSongIDs(ctx context.Context, id int32) ([]int
 }
 
 const getSublocationFMVSongIDs = `-- name: GetSublocationFMVSongIDs :many
-SELECT DISTINCT so.id
-FROM songs so
-JOIN fmvs f ON f.song_id = so.id
+SELECT DISTINCT f.song_id::int
+FROM fmvs f
 JOIN areas a ON f.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
-ORDER BY so.id
+WHERE f.song_id IS NOT NULL
+  AND a.sublocation_id = $1
+ORDER BY f.song_id
 `
 
-func (q *Queries) GetSublocationFMVSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationFMVSongIDs, id)
+func (q *Queries) GetSublocationFMVSongIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationFMVSongIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var f_song_id int32
+		if err := rows.Scan(&f_song_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, f_song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2839,13 +2717,12 @@ const getSublocationFmvIDs = `-- name: GetSublocationFmvIDs :many
 SELECT f.id
 FROM fmvs f
 JOIN areas a ON f.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
+WHERE a.sublocation_id = $1
 ORDER BY f.id
 `
 
-func (q *Queries) GetSublocationFmvIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationFmvIDs, id)
+func (q *Queries) GetSublocationFmvIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationFmvIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2895,11 +2772,10 @@ func (q *Queries) GetSublocationIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getSublocationIDsWithAeons = `-- name: GetSublocationIDsWithAeons :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN aeons ae ON ae.area_id = a.id
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithAeons(ctx context.Context) ([]int32, error) {
@@ -2910,11 +2786,11 @@ func (q *Queries) GetSublocationIDsWithAeons(ctx context.Context) ([]int32, erro
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2926,16 +2802,14 @@ func (q *Queries) GetSublocationIDsWithAeons(ctx context.Context) ([]int32, erro
 }
 
 const getSublocationIDsWithBosses = `-- name: GetSublocationIDsWithBosses :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN encounter_areas ea ON ea.area_id = a.id
 JOIN j_monster_formations_encounter_areas j ON j.encounter_area_id = ea.id
 JOIN monster_formations mf ON j.monster_formation_id = mf.id
 JOIN formation_data fd ON mf.formation_data_id = fd.id
 JOIN formation_boss_songs bs ON fd.boss_song_id = bs.id
-JOIN songs so ON bs.song_id = so.id
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithBosses(ctx context.Context) ([]int32, error) {
@@ -2946,11 +2820,11 @@ func (q *Queries) GetSublocationIDsWithBosses(ctx context.Context) ([]int32, err
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2962,11 +2836,10 @@ func (q *Queries) GetSublocationIDsWithBosses(ctx context.Context) ([]int32, err
 }
 
 const getSublocationIDsWithCharacters = `-- name: GetSublocationIDsWithCharacters :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN characters c ON c.area_id = a.id
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithCharacters(ctx context.Context) ([]int32, error) {
@@ -2977,11 +2850,11 @@ func (q *Queries) GetSublocationIDsWithCharacters(ctx context.Context) ([]int32,
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2993,11 +2866,10 @@ func (q *Queries) GetSublocationIDsWithCharacters(ctx context.Context) ([]int32,
 }
 
 const getSublocationIDsWithFMVs = `-- name: GetSublocationIDsWithFMVs :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN fmvs f ON f.area_id = a.id
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithFMVs(ctx context.Context) ([]int32, error) {
@@ -3008,11 +2880,11 @@ func (q *Queries) GetSublocationIDsWithFMVs(ctx context.Context) ([]int32, error
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3024,51 +2896,49 @@ func (q *Queries) GetSublocationIDsWithFMVs(ctx context.Context) ([]int32, error
 }
 
 const getSublocationIDsWithItemFromMonster = `-- name: GetSublocationIDsWithItemFromMonster :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
-JOIN encounter_areas ea ON ea.area_id = a.id
-JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
-JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN monster_selections ms ON mf.monster_selection_id = ms.id
-JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
-JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
-JOIN monsters m ON ma.monster_id = m.id
-JOIN monster_items mi ON mi.monster_id = m.id
-LEFT JOIN j_monster_items_other_items jmio
-  ON jmio.monster_items_id = mi.id
-LEFT JOIN possible_items pi
-  ON pi.id = jmio.possible_item_id
-JOIN item_amounts ia
-  ON ia.id IN (
-      mi.steal_common_id,
-      mi.steal_rare_id,
-      mi.drop_common_id,
-      mi.drop_rare_id,
-      mi.secondary_drop_common_id,
-      mi.secondary_drop_rare_id,
-      mi.bribe_id,
-      pi.item_amount_id
-  )
-JOIN master_items mit ON ia.master_item_id = mit.id
-JOIN items i ON i.master_item_id = mit.id
-WHERE i.id = $1
-ORDER BY s.id
+WITH target_monster_ids AS (
+    SELECT mi.monster_id
+    FROM monster_items mi
+    JOIN item_amounts ia ON ia.id IN (
+      mi.steal_common_id, mi.steal_rare_id, mi.drop_common_id, mi.drop_rare_id, mi.secondary_drop_common_id, mi.secondary_drop_rare_id, mi.bribe_id
+    )
+    JOIN items i ON i.master_item_id = ia.master_item_id
+    WHERE i.id = $1::int
+
+    UNION
+
+    SELECT mi.monster_id
+    FROM monster_items mi
+    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
+    JOIN possible_items pi ON jmio.possible_item_id = pi.id
+    JOIN item_amounts ia ON pi.item_amount_id = ia.id
+    JOIN items i ON i.master_item_id = ia.master_item_id
+    WHERE i.id = $1::int
+)
+SELECT DISTINCT a.sublocation_id
+FROM target_monster_ids tmi
+JOIN monster_amounts ma ON ma.monster_id = tmi.monster_id
+JOIN j_monster_selections_monsters jmsm ON jmsm.monster_amount_id = ma.id
+JOIN monster_formations mf ON mf.monster_selection_id = jmsm.monster_selection_id
+JOIN j_monster_formations_encounter_areas jme ON jme.monster_formation_id = mf.id
+JOIN encounter_areas ea ON jme.encounter_area_id = ea.id
+JOIN areas a ON ea.area_id = a.id
+ORDER BY a.sublocation_id
 `
 
-func (q *Queries) GetSublocationIDsWithItemFromMonster(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationIDsWithItemFromMonster, id)
+func (q *Queries) GetSublocationIDsWithItemFromMonster(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationIDsWithItemFromMonster, itemID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3080,16 +2950,14 @@ func (q *Queries) GetSublocationIDsWithItemFromMonster(ctx context.Context, id i
 }
 
 const getSublocationIDsWithItemFromQuest = `-- name: GetSublocationIDsWithItemFromQuest :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN completion_areas ca ON ca.area_id = a.id
 JOIN quest_completions qc ON ca.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON i.master_item_id = ia.master_item_id
 WHERE i.id = $1
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithItemFromQuest(ctx context.Context, id int32) ([]int32, error) {
@@ -3100,11 +2968,11 @@ func (q *Queries) GetSublocationIDsWithItemFromQuest(ctx context.Context, id int
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3116,30 +2984,28 @@ func (q *Queries) GetSublocationIDsWithItemFromQuest(ctx context.Context, id int
 }
 
 const getSublocationIDsWithItemFromShop = `-- name: GetSublocationIDsWithItemFromShop :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN shops sh ON sh.area_id = a.id
 JOIN j_shops_items j ON j.shop_id = sh.id
 JOIN shop_items si ON j.shop_item_id = si.id
-JOIN items i ON si.item_id = i.id
-WHERE i.id = $1
-ORDER BY s.id
+WHERE si.item_id = $1
+ORDER BY a.sublocation_id
 `
 
-func (q *Queries) GetSublocationIDsWithItemFromShop(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationIDsWithItemFromShop, id)
+func (q *Queries) GetSublocationIDsWithItemFromShop(ctx context.Context, itemID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationIDsWithItemFromShop, itemID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3151,16 +3017,14 @@ func (q *Queries) GetSublocationIDsWithItemFromShop(ctx context.Context, id int3
 }
 
 const getSublocationIDsWithItemFromTreasure = `-- name: GetSublocationIDsWithItemFromTreasure :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN treasures t ON t.area_id = a.id
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON i.master_item_id = ia.master_item_id
 WHERE i.id = $1
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithItemFromTreasure(ctx context.Context, id int32) ([]int32, error) {
@@ -3171,11 +3035,11 @@ func (q *Queries) GetSublocationIDsWithItemFromTreasure(ctx context.Context, id 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3187,16 +3051,14 @@ func (q *Queries) GetSublocationIDsWithItemFromTreasure(ctx context.Context, id 
 }
 
 const getSublocationIDsWithKeyItemFromQuest = `-- name: GetSublocationIDsWithKeyItemFromQuest :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN completion_areas ca ON ca.area_id = a.id
 JOIN quest_completions qc ON ca.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN key_items ki ON ki.master_item_id = ia.master_item_id
 WHERE ki.id = $1
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithKeyItemFromQuest(ctx context.Context, id int32) ([]int32, error) {
@@ -3207,11 +3069,11 @@ func (q *Queries) GetSublocationIDsWithKeyItemFromQuest(ctx context.Context, id 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3223,16 +3085,14 @@ func (q *Queries) GetSublocationIDsWithKeyItemFromQuest(ctx context.Context, id 
 }
 
 const getSublocationIDsWithKeyItemFromTreasure = `-- name: GetSublocationIDsWithKeyItemFromTreasure :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN treasures t ON t.area_id = a.id
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN key_items ki ON ki.master_item_id = mi.id
+JOIN key_items ki ON ki.master_item_id = ia.master_item_id
 WHERE ki.id = $1
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithKeyItemFromTreasure(ctx context.Context, id int32) ([]int32, error) {
@@ -3243,11 +3103,11 @@ func (q *Queries) GetSublocationIDsWithKeyItemFromTreasure(ctx context.Context, 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3259,17 +3119,14 @@ func (q *Queries) GetSublocationIDsWithKeyItemFromTreasure(ctx context.Context, 
 }
 
 const getSublocationIDsWithMonsters = `-- name: GetSublocationIDsWithMonsters :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN encounter_areas ea ON ea.area_id = a.id
 JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
 JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN monster_selections ms ON mf.monster_selection_id = ms.id
-JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
+JOIN j_monster_selections_monsters j2 ON mf.monster_selection_id = j2.monster_selection_id
 JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
-JOIN monsters m ON ma.monster_id = m.id
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithMonsters(ctx context.Context) ([]int32, error) {
@@ -3280,11 +3137,11 @@ func (q *Queries) GetSublocationIDsWithMonsters(ctx context.Context) ([]int32, e
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3296,11 +3153,10 @@ func (q *Queries) GetSublocationIDsWithMonsters(ctx context.Context) ([]int32, e
 }
 
 const getSublocationIDsWithShops = `-- name: GetSublocationIDsWithShops :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN shops sh ON sh.area_id = a.id
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithShops(ctx context.Context) ([]int32, error) {
@@ -3311,11 +3167,11 @@ func (q *Queries) GetSublocationIDsWithShops(ctx context.Context) ([]int32, erro
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3327,13 +3183,10 @@ func (q *Queries) GetSublocationIDsWithShops(ctx context.Context) ([]int32, erro
 }
 
 const getSublocationIDsWithSidequests = `-- name: GetSublocationIDsWithSidequests :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN completion_areas ca ON ca.area_id = a.id
-JOIN quest_completions qc ON ca.completion_id = qc.id
-JOIN quests q ON q.completion_id = qc.id
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithSidequests(ctx context.Context) ([]int32, error) {
@@ -3344,11 +3197,11 @@ func (q *Queries) GetSublocationIDsWithSidequests(ctx context.Context) ([]int32,
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3360,11 +3213,10 @@ func (q *Queries) GetSublocationIDsWithSidequests(ctx context.Context) ([]int32,
 }
 
 const getSublocationIDsWithTreasures = `-- name: GetSublocationIDsWithTreasures :many
-SELECT DISTINCT s.id
-FROM sublocations s
-JOIN areas a ON a.sublocation_id = s.id
+SELECT DISTINCT a.sublocation_id
+FROM areas a
 JOIN treasures t ON t.area_id = a.id
-ORDER BY s.id
+ORDER BY a.sublocation_id
 `
 
 func (q *Queries) GetSublocationIDsWithTreasures(ctx context.Context) ([]int32, error) {
@@ -3375,11 +3227,11 @@ func (q *Queries) GetSublocationIDsWithTreasures(ctx context.Context) ([]int32, 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3396,13 +3248,12 @@ FROM monster_formations mf
 JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j.encounter_area_id = ea.id
 JOIN areas a ON ea.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
+WHERE a.sublocation_id = $1
 ORDER BY mf.id
 `
 
-func (q *Queries) GetSublocationMonsterFormationIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationMonsterFormationIDs, id)
+func (q *Queries) GetSublocationMonsterFormationIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationMonsterFormationIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
@@ -3425,33 +3276,30 @@ func (q *Queries) GetSublocationMonsterFormationIDs(ctx context.Context, id int3
 }
 
 const getSublocationMonsterIDs = `-- name: GetSublocationMonsterIDs :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
+SELECT DISTINCT ma.monster_id
+FROM monster_amounts ma
 JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_selections ms ON j1.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
+JOIN monster_formations mf ON mf.monster_selection_id = j1.monster_selection_id
 JOIN j_monster_formations_encounter_areas j2 ON j2.monster_formation_id = mf.id
 JOIN encounter_areas ea ON j2.encounter_area_id = ea.id
 JOIN areas a ON ea.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
-ORDER BY m.id
+WHERE a.sublocation_id = $1
+ORDER BY ma.monster_id
 `
 
-func (q *Queries) GetSublocationMonsterIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationMonsterIDs, id)
+func (q *Queries) GetSublocationMonsterIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationMonsterIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3510,16 +3358,14 @@ func (q *Queries) GetSublocationMonsterIdPairs(ctx context.Context, sublocationI
 const getSublocationQuestIDs = `-- name: GetSublocationQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN quest_completions qc ON q.completion_id = qc.id
-JOIN completion_areas ca ON ca.completion_id = qc.id
+JOIN completion_areas ca ON ca.completion_id = q.completion_id
 JOIN areas a ON ca.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
+WHERE a.sublocation_id = $1
 ORDER BY q.id
 `
 
-func (q *Queries) GetSublocationQuestIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationQuestIDs, id)
+func (q *Queries) GetSublocationQuestIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationQuestIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
@@ -3545,13 +3391,12 @@ const getSublocationShopIDs = `-- name: GetSublocationShopIDs :many
 SELECT sh.id
 FROM shops sh
 JOIN areas a ON sh.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
+WHERE a.sublocation_id = $1
 ORDER BY sh.id
 `
 
-func (q *Queries) GetSublocationShopIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationShopIDs, id)
+func (q *Queries) GetSublocationShopIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationShopIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
@@ -3616,13 +3461,12 @@ const getSublocationTreasureIDs = `-- name: GetSublocationTreasureIDs :many
 SELECT t.id
 FROM treasures t
 JOIN areas a ON t.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = $1
+WHERE a.sublocation_id = $1
 ORDER BY t.id
 `
 
-func (q *Queries) GetSublocationTreasureIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationTreasureIDs, id)
+func (q *Queries) GetSublocationTreasureIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationTreasureIDs, sublocationID)
 	if err != nil {
 		return nil, err
 	}
@@ -3765,14 +3609,12 @@ func (q *Queries) GetTreasureIDsByIsAnimaTreasure(ctx context.Context, isAnimaTr
 }
 
 const getTreasureIDsByItem = `-- name: GetTreasureIDsByItem :many
-SELECT DISTINCT t.id
-FROM treasures t
-JOIN j_treasures_items j ON j.treasure_id = t.id
+SELECT DISTINCT j.treasure_id
+FROM j_treasures_items j
 JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN master_items mi ON ia.master_item_id = mi.id
-JOIN items i ON i.master_item_id = mi.id
+JOIN items i ON ia.master_item_id = i.master_item_id
 WHERE i.id = $1
-ORDER BY t.id
+ORDER BY j.treasure_id
 `
 
 func (q *Queries) GetTreasureIDsByItem(ctx context.Context, id int32) ([]int32, error) {
@@ -3783,11 +3625,11 @@ func (q *Queries) GetTreasureIDsByItem(ctx context.Context, id int32) ([]int32, 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var treasure_id int32
+		if err := rows.Scan(&treasure_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, treasure_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

@@ -101,7 +101,7 @@ func (cfg *Config) getAreaSongIDs(ctx context.Context, id int32) ([]int32, error
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of area with id '%d'.", err)
 	}
 
-	cueSongIDs, err := cfg.db.GetAreaCueSongIDs(ctx, id)
+	cueSongIDs, err := ToIntManyNull(cfg.db.GetAreaCueSongIDs)(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of area with id '%d'.", err)
 	}

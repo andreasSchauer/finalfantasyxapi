@@ -19,12 +19,12 @@ func (ac AreaConnection) GetAPIResource() APIResource {
 }
 
 func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocRel, error) {
-	characters, err := getResourcesDbItem(cfg, r, cfg.e.characters, area, cfg.db.GetAreaCharacterIDs)
+	characters, err := getResourcesDbItem(cfg, r, cfg.e.characters, area, ToIntManyNull(cfg.db.GetAreaCharacterIDs))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	aeons, err := getResourcesDbItem(cfg, r, cfg.e.aeons, area, cfg.db.GetAreaAeonIDs)
+	aeons, err := getResourcesDbItem(cfg, r, cfg.e.aeons, area, ToIntManyNull(cfg.db.GetAreaAeonIDs))
 	if err != nil {
 		return LocRel{}, err
 	}
@@ -55,7 +55,7 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 	}
 
 	music, err := getMusicLocBased(cfg, r, area, LocBasedMusicQueries{
-		CueSongs:  cfg.db.GetAreaCueSongIDs,
+		CueSongs:  ToIntManyNull(cfg.db.GetAreaCueSongIDs),
 		BmSongs:   cfg.db.GetAreaBackgroundMusicSongIDs,
 		FMVSongs:  cfg.db.GetAreaFMVSongIDs,
 		BossMusic: cfg.db.GetAreaBossSongIDs,

@@ -92,10 +92,11 @@ SELECT DISTINCT sh.id
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
 WHERE (
-    sqlc.narg('availability')::availability_type[] IS NULL
+    w.availability IS NULL
     OR
-    sh.availability = ANY(sqlc.narg('availability')::availability_type[])
+    sh.availability = ANY(w.availability)
 )
 AND se.shop_type = 'pre-airship'
 AND j.auto_ability_id = $1
@@ -107,10 +108,11 @@ SELECT DISTINCT sh.id
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
 WHERE (
-    sqlc.narg('availability')::availability_type[] IS NULL
+    w.availability IS NULL
     OR
-    sh.availability = ANY(sqlc.narg('availability')::availability_type[])
+    sh.availability = ANY(w.availability)
 )
 AND se.shop_type = 'post-airship'
 AND j.auto_ability_id = $1
@@ -174,7 +176,7 @@ ORDER BY aa.id;
 
 
 -- name: GetEquipmentTableCelestialWeaponID :one
-SELECT celestial_weapon_id::int FROM j_equipment_tables_names WHERE equipment_table_id = $1;
+SELECT celestial_weapon_id::int FROM j_equipment_tables_names WHERE celestial_weapon_id IS NOT NULL AND equipment_table_id = $1;
 
 
 -- name: GetEquipmentTableIDs :many
