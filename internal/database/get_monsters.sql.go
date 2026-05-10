@@ -971,7 +971,7 @@ func (q *Queries) GetMonsterIDsByItemBribe(ctx context.Context, id int32) ([]int
 }
 
 const getMonsterIDsByItemDrop = `-- name: GetMonsterIDsByItemDrop :many
-WITH monster_item_amounts AS (
+WITH monster_item_amounts_drop AS (
     SELECT mi.monster_id, mi.drop_common_id AS item_amount_id FROM monster_items mi
     UNION ALL
     SELECT mi.monster_id, mi.drop_rare_id AS item_amount_id FROM monster_items mi
@@ -981,7 +981,7 @@ WITH monster_item_amounts AS (
     SELECT mi.monster_id, mi.secondary_drop_rare_id AS item_amount_id FROM monster_items mi
 )
 SELECT DISTINCT mia.monster_id
-FROM monster_item_amounts mia
+FROM monster_item_amounts_drop mia
 JOIN item_amounts ia ON mia.item_amount_id = ia.id
 JOIN items i ON ia.master_item_id = i.master_item_id
 WHERE i.id = $1
@@ -1046,13 +1046,13 @@ func (q *Queries) GetMonsterIDsByItemOther(ctx context.Context, id int32) ([]int
 }
 
 const getMonsterIDsByItemSteal = `-- name: GetMonsterIDsByItemSteal :many
-WITH monster_item_amounts AS (
+WITH monster_item_amounts_steal AS (
     SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
     UNION ALL
     SELECT mi.monster_id, mi.steal_rare_id AS item_amount_id FROM monster_items mi
 )
 SELECT DISTINCT mia.monster_id
-FROM monster_item_amounts mia
+FROM monster_item_amounts_steal mia
 JOIN item_amounts ia ON mia.item_amount_id = ia.id
 JOIN items i ON ia.master_item_id = i.master_item_id
 WHERE i.id = $1

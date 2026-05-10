@@ -354,10 +354,11 @@ func (q *Queries) GetItemMixIDs(ctx context.Context, firstItemID int32) ([]int32
 }
 
 const getItemMonsterIDs = `-- name: GetItemMonsterIDs :many
-WITH m_items AS (
-  SELECT i.master_item_id
-  FROM items i
-  WHERE i.id = $3
+WITH w AS (
+    SELECT
+      $1::BOOLEAN AS repeatable,
+      $2::availability_type[] AS availability,
+      (SELECT i.master_item_id FROM items i WHERE i.id = $3)::int AS target_master_id
 ),
 monster_item_amounts AS (
     SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
@@ -375,15 +376,11 @@ monster_item_amounts AS (
 )
 SELECT DISTINCT m.id
 FROM monsters m
+CROSS JOIN w
 JOIN monster_item_amounts mia ON mia.monster_id = m.id
 JOIN item_amounts ia ON mia.item_amount_id = ia.id
-JOIN m_items mi ON mi.master_item_id = ia.master_item_id
-CROSS JOIN (
-    SELECT
-        $1::BOOLEAN AS repeatable,
-        $2::availability_type[] AS availability
-) w
-WHERE (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
+WHERE ia.master_item_id = w.target_master_id
+  AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
   AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 ORDER BY m.id
 `

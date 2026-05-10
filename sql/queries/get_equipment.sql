@@ -1,61 +1,60 @@
 -- name: GetAutoAbilityItemMonsterIDs :many
-WITH target_items AS (
-    SELECT mit.id AS master_item_id
-    FROM auto_abilities aa
-    JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
-    JOIN master_items mit ON ia_req.master_item_id = mit.id
-    WHERE aa.id = sqlc.arg(auto_ability_id)
+WITH w AS (
+    SELECT 
+        sqlc.narg('repeatable')::BOOLEAN AS repeatable,
+        sqlc.narg('availability')::availability_type[] AS availability,
+        (
+            SELECT mit.id AS master_item_id
+            FROM auto_abilities aa
+            JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
+            JOIN master_items mit ON ia_req.master_item_id = mit.id
+            WHERE aa.id = sqlc.arg(auto_ability_id)
+        )::int AS target_master_id
 ),
-monster_sources AS (
-    SELECT mi.monster_id, ia.master_item_id
-    FROM monster_items mi
-    JOIN item_amounts ia ON ia.id IN (
-        mi.steal_common_id,
-        mi.steal_rare_id,
-        mi.drop_common_id,
-        mi.drop_rare_id,
-        mi.secondary_drop_common_id,
-        mi.secondary_drop_rare_id,
-        mi.bribe_id
-    )
-
+monster_item_amounts AS (
+    SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.steal_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.secondary_drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.secondary_drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.bribe_id AS item_amount_id FROM monster_items mi
     UNION ALL
-
-    SELECT mi.monster_id, ia.master_item_id
-    FROM monster_items mi
-    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
-    JOIN possible_items pi ON pi.id = jmio.possible_item_id
-    JOIN item_amounts ia ON pi.item_amount_id = ia.id
+    SELECT mi.monster_id, pi.item_amount_id
+    FROM possible_items pi
+    JOIN j_monster_items_other_items jmio ON jmio.possible_item_id = pi.id
+    JOIN monster_items mi ON jmio.monster_items_id = mi.id
 )
 SELECT DISTINCT m.id
 FROM monsters m
-JOIN monster_sources ms ON m.id = ms.monster_id
-JOIN target_items ti ON ms.master_item_id = ti.master_item_id
-WHERE (sqlc.narg('repeatable')::BOOLEAN IS NULL OR m.is_repeatable = sqlc.narg('repeatable')::BOOLEAN)
-  AND (sqlc.narg('availability')::availability_type[] IS NULL OR m.availability = ANY(sqlc.narg('availability')::availability_type[]))
+CROSS JOIN w
+JOIN monster_item_amounts mit ON m.id = mit.monster_id
+JOIN item_amounts ia ON mit.item_amount_id = ia.id
+WHERE ia.master_item_id = w.target_master_id
+  AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
+  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 ORDER BY m.id;
 
 
 -- name: GetAutoAbilityMonsterIDs :many
-WITH filtered_monsters AS (
-    SELECT id FROM monsters
-    WHERE (
-        sqlc.narg('repeatable')::BOOLEAN IS NULL
-        OR
-        is_repeatable = sqlc.narg('repeatable')::BOOLEAN
-    )
-    AND (
-        sqlc.narg('availability')::availability_type[] IS NULL
-        OR
-        availability = ANY(sqlc.narg('availability')::availability_type[])
-    )
+WITH w AS (
+    SELECT 
+        sqlc.narg('repeatable')::BOOLEAN AS repeatable,
+        sqlc.narg('availability')::availability_type[] AS availability
+),
+filtered_monsters AS (
+    SELECT m.id
+    FROM monsters m
+    CROSS JOIN w
+    WHERE (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
+      AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 )
 SELECT DISTINCT fm.id
 FROM filtered_monsters fm
 JOIN monster_equipment me ON me.monster_id = fm.id
 JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
 JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
-WHERE ed.auto_ability_id = sqlc.arg(auto_ability_id)
+WHERE ed.auto_ability_id = sqlc.arg('auto_ability_id')
 ORDER BY fm.id;
 
 
@@ -64,11 +63,8 @@ SELECT DISTINCT t.id
 FROM treasures t
 JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
 JOIN j_treasure_equipment_abilities j ON j.treasure_equipment_id = te.id
-WHERE (
-    sqlc.narg('availability')::availability_type[] IS NULL
-    OR
-    t.availability = ANY(sqlc.narg('availability')::availability_type[])
-)
+CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
+WHERE w.availability IS NULL OR t.availability = ANY(w.availability)
 AND j.auto_ability_id = sqlc.arg(auto_ability_id)
 ORDER BY t.id;
 
@@ -93,11 +89,7 @@ FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
 CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-WHERE (
-    w.availability IS NULL
-    OR
-    sh.availability = ANY(w.availability)
-)
+WHERE w.availability IS NULL OR sh.availability = ANY(w.availability)
 AND se.shop_type = 'pre-airship'
 AND j.auto_ability_id = $1
 ORDER BY sh.id;
@@ -109,11 +101,7 @@ FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
 CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-WHERE (
-    w.availability IS NULL
-    OR
-    sh.availability = ANY(w.availability)
-)
+WHERE w.availability IS NULL OR sh.availability = ANY(w.availability)
 AND se.shop_type = 'post-airship'
 AND j.auto_ability_id = $1
 ORDER BY sh.id;

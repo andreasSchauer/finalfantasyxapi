@@ -61,6 +61,11 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
+	err = db.RefreshMonsterDropsView(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
 	fmt.Println()
 
 	return l, nil

@@ -4031,6 +4031,11 @@ type MonsterSelection struct {
 	DataHash string
 }
 
+type MvMonsterDrop struct {
+	MonsterID    int32
+	MasterItemID int32
+}
+
 type OdModeAction struct {
 	ID       int32
 	DataHash string

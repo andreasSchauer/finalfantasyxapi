@@ -217,40 +217,40 @@ func (q *Queries) GetAutoAbilityIDsByMonsterItems(ctx context.Context, monsterID
 }
 
 const getAutoAbilityItemMonsterIDs = `-- name: GetAutoAbilityItemMonsterIDs :many
-WITH target_items AS (
-    SELECT mit.id AS master_item_id
-    FROM auto_abilities aa
-    JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
-    JOIN master_items mit ON ia_req.master_item_id = mit.id
-    WHERE aa.id = $3
+WITH w AS (
+    SELECT 
+        $1::BOOLEAN AS repeatable,
+        $2::availability_type[] AS availability,
+        (
+            SELECT mit.id AS master_item_id
+            FROM auto_abilities aa
+            JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
+            JOIN master_items mit ON ia_req.master_item_id = mit.id
+            WHERE aa.id = $3
+        )::int AS target_master_id
 ),
-monster_sources AS (
-    SELECT mi.monster_id, ia.master_item_id
-    FROM monster_items mi
-    JOIN item_amounts ia ON ia.id IN (
-        mi.steal_common_id,
-        mi.steal_rare_id,
-        mi.drop_common_id,
-        mi.drop_rare_id,
-        mi.secondary_drop_common_id,
-        mi.secondary_drop_rare_id,
-        mi.bribe_id
-    )
-
+monster_item_amounts AS (
+    SELECT mi.monster_id, mi.steal_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.steal_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.secondary_drop_common_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.secondary_drop_rare_id AS item_amount_id FROM monster_items mi
+    UNION ALL SELECT mi.monster_id, mi.bribe_id AS item_amount_id FROM monster_items mi
     UNION ALL
-
-    SELECT mi.monster_id, ia.master_item_id
-    FROM monster_items mi
-    JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
-    JOIN possible_items pi ON pi.id = jmio.possible_item_id
-    JOIN item_amounts ia ON pi.item_amount_id = ia.id
+    SELECT mi.monster_id, pi.item_amount_id
+    FROM possible_items pi
+    JOIN j_monster_items_other_items jmio ON jmio.possible_item_id = pi.id
+    JOIN monster_items mi ON jmio.monster_items_id = mi.id
 )
 SELECT DISTINCT m.id
 FROM monsters m
-JOIN monster_sources ms ON m.id = ms.monster_id
-JOIN target_items ti ON ms.master_item_id = ti.master_item_id
-WHERE ($1::BOOLEAN IS NULL OR m.is_repeatable = $1::BOOLEAN)
-  AND ($2::availability_type[] IS NULL OR m.availability = ANY($2::availability_type[]))
+CROSS JOIN w
+JOIN monster_item_amounts mit ON m.id = mit.monster_id
+JOIN item_amounts ia ON mit.item_amount_id = ia.id
+WHERE ia.master_item_id = w.target_master_id
+  AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
+  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 ORDER BY m.id
 `
 
@@ -284,18 +284,17 @@ func (q *Queries) GetAutoAbilityItemMonsterIDs(ctx context.Context, arg GetAutoA
 }
 
 const getAutoAbilityMonsterIDs = `-- name: GetAutoAbilityMonsterIDs :many
-WITH filtered_monsters AS (
-    SELECT id FROM monsters
-    WHERE (
-        $2::BOOLEAN IS NULL
-        OR
-        is_repeatable = $2::BOOLEAN
-    )
-    AND (
-        $3::availability_type[] IS NULL
-        OR
-        availability = ANY($3::availability_type[])
-    )
+WITH w AS (
+    SELECT 
+        $2::BOOLEAN AS repeatable,
+        $3::availability_type[] AS availability
+),
+filtered_monsters AS (
+    SELECT m.id
+    FROM monsters m
+    CROSS JOIN w
+    WHERE (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
+      AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 )
 SELECT DISTINCT fm.id
 FROM filtered_monsters fm
