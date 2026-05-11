@@ -4032,27 +4032,68 @@ type MonsterSelection struct {
 }
 
 type MvGeography struct {
-	AreaID          int32
-	SublocationID   int32
 	LocationID      int32
-	AreaName        string
-	SublocationName string
+	SublocationID   int32
+	AreaID          int32
 	LocationName    string
+	SublocationName string
+	AreaName        string
+	AreaVersion     sql.NullInt32
+}
+
+type MvGeographyGraph struct {
+	LID            int32
+	SID            int32
+	AID            int32
+	LName          string
+	SName          string
+	AName          string
+	AVersion       sql.NullInt32
+	ClID           int32
+	CsID           int32
+	CaID           int32
+	ClName         string
+	CsName         string
+	CaName         string
+	CaVersion      sql.NullInt32
+	ConnectionType AreaConnectionType
+	IsStoryBased   bool
 }
 
 type MvItemSource struct {
 	MasterItemID int32
 	SourceID     int32
+	AreaID       int32
 	Amount       int32
 	SourceType   string
 	Availability AvailabilityType
 }
 
 type MvMonsterEncounter struct {
-	AreaID        int32
-	FormationID   int32
-	MonsterID     int32
-	MonsterAmount int32
+	FormationID       int32
+	MonsterID         int32
+	MonsterAmount     int32
+	DataID            int32
+	Category          MonsterFormationCategory
+	Availability      AvailabilityType
+	IsForcedAmbush    bool
+	CanEscape         bool
+	AreaID            int32
+	SongID            sql.NullInt32
+	FTriggerCommandID sql.NullInt32
+}
+
+type MvMonsterEquipmentDrop struct {
+	MonsterID           int32
+	AbilitySlotsID      int32
+	AttachedAbilitiesID int32
+	AutoAbilityID       int32
+	Availability        AvailabilityType
+	IsRepeatable        bool
+	EquipmentDropID     int32
+	IsForced            bool
+	Probability         interface{}
+	AutoAbilityType     EquipType
 }
 
 type MvMonsterItemDrop struct {
@@ -4062,6 +4103,7 @@ type MvMonsterItemDrop struct {
 	Amount       int32
 	SourceType   string
 	Availability AvailabilityType
+	IsRepeatable bool
 }
 
 type OdModeAction struct {

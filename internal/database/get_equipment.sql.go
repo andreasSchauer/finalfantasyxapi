@@ -131,12 +131,7 @@ func (q *Queries) GetAutoAbilityIDsByEquipType(ctx context.Context, type_ EquipT
 }
 
 const getAutoAbilityIDsByMonster = `-- name: GetAutoAbilityIDsByMonster :many
-SELECT DISTINCT ed.auto_ability_id
-FROM equipment_drops ed
-JOIN j_monster_equipment_abilities j ON j.equipment_drop_id = ed.id
-JOIN monster_equipment me ON j.monster_equipment_id = me.id
-WHERE me.monster_id = $1
-ORDER BY ed.auto_ability_id
+SELECT DISTINCT auto_ability_id FROM mv_monster_equipment_drops WHERE monster_id = $1 ORDER BY auto_ability_id
 `
 
 func (q *Queries) GetAutoAbilityIDsByMonster(ctx context.Context, monsterID int32) ([]int32, error) {
@@ -207,14 +202,13 @@ WITH w AS (
             WHERE aa.id = $3
         )::int AS target_master_id
 )
-SELECT DISTINCT m.id
-FROM monsters m
+SELECT DISTINCT md.monster_id
+FROM mv_monster_item_drops md
 CROSS JOIN w
-JOIN mv_monster_item_drops md ON md.monster_id = m.id
 WHERE md.master_item_id = w.target_master_id
-  AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
-ORDER BY m.id
+  AND (w.repeatable IS NULL OR md.is_repeatable = w.repeatable)
+  AND (w.availability IS NULL OR md.availability = ANY(w.availability))
+ORDER BY md.monster_id
 `
 
 type GetAutoAbilityItemMonsterIDsParams struct {
@@ -231,11 +225,11 @@ func (q *Queries) GetAutoAbilityItemMonsterIDs(ctx context.Context, arg GetAutoA
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -261,10 +255,8 @@ filtered_monsters AS (
 )
 SELECT DISTINCT fm.id
 FROM filtered_monsters fm
-JOIN monster_equipment me ON me.monster_id = fm.id
-JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
-JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
-WHERE ed.auto_ability_id = $1
+JOIN mv_monster_equipment_drops me ON me.monster_id = fm.id
+WHERE me.auto_ability_id = $1
 ORDER BY fm.id
 `
 
@@ -592,7 +584,7 @@ WITH all_matches AS (
     JOIN equipment_tables et ON j.equipment_table_id = et.id
     JOIN ability_pools ap ON ap.equipment_table_id = et.id
     JOIN j_ability_pools_auto_abilities jpool ON jpool.ability_pool_id = ap.id
-)                                                               
+)
 SELECT m.equipment_name_id
 FROM all_matches m
 CROSS JOIN (SELECT $1::int[] AS ids) w

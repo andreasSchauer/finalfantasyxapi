@@ -111,7 +111,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?method=a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'a' used for parameter 'method'. allowed values: 'treasure', 'shop'.",
+				expectedErr:    "invalid value 'a' used for parameter 'method'. allowed values: 'treasure', 'quest'.",
 			},
 		},
 	}

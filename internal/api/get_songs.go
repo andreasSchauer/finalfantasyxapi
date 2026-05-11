@@ -12,7 +12,7 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, N
 		return Song{}, err
 	}
 
-	bossFights, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, song, cfg.db.GetSongMonsterFormationIDs)
+	bossFights, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, song, ToIntManyNull(cfg.db.GetSongMonsterFormationIDs))
 	if err != nil {
 		return Song{}, err
 	}

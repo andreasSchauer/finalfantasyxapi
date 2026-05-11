@@ -2275,7 +2275,7 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,
-			AllowedValues: []string{"monster", "treasure", "shop", "quest"},
+			AllowedValues: []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
 	}
 
@@ -2316,7 +2316,7 @@ func (cfg *Config) initItemsParams() {
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,
-			AllowedValues: []string{"monster", "treasure", "shop", "quest"},
+			AllowedValues: []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
 		{
 			Name:        "has_ability",
@@ -2366,7 +2366,7 @@ func (cfg *Config) initKeyItemsParams() {
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,
-			AllowedValues: []string{"treasure", "shop"},
+			AllowedValues: []string{"treasure", "quest"},
 		},
 	}
 

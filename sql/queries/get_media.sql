@@ -3,12 +3,7 @@ SELECT id FROM fmvs WHERE song_id = $1 ORDER BY id;
 
 
 -- name: GetSongMonsterFormationIDs :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN formation_data fd ON mf.formation_data_id = fd.id
-JOIN formation_boss_songs fbs ON fd.boss_song_id = fbs.id
-WHERE fbs.song_id = $1
-ORDER BY mf.id;
+SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE song_id = $1 ORDER BY formation_id;
 
 
 -- name: GetSongIDs :many

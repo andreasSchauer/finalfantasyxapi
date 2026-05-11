@@ -124,14 +124,7 @@ func (q *Queries) GetMonsterAbilityIDs(ctx context.Context, monsterID int32) ([]
 }
 
 const getMonsterAreaIDs = `-- name: GetMonsterAreaIDs :many
-SELECT DISTINCT ea.area_id
-FROM encounter_areas ea
-JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
-JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN j_monster_selections_monsters j2 ON mf.monster_selection_id = j2.monster_selection_id
-JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
-WHERE ma.monster_id = $1
-ORDER BY ea.area_id
+SELECT DISTINCT area_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY area_id
 `
 
 func (q *Queries) GetMonsterAreaIDs(ctx context.Context, monsterID int32) ([]int32, error) {
@@ -201,7 +194,7 @@ func (q *Queries) GetMonsterAreaIdPairs(ctx context.Context, monsterIds []int32)
 }
 
 const getMonsterFormationIDs = `-- name: GetMonsterFormationIDs :many
-SELECT id FROM monster_formations ORDER BY id
+SELECT DISTINCT id FROM monster_formations ORDER BY id
 `
 
 func (q *Queries) GetMonsterFormationIDs(ctx context.Context) ([]int32, error) {
@@ -228,12 +221,7 @@ func (q *Queries) GetMonsterFormationIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getMonsterFormationIDsByArea = `-- name: GetMonsterFormationIDsByArea :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
-JOIN encounter_areas ea ON j.encounter_area_id = ea.id
-WHERE ea.area_id = $1
-ORDER BY mf.id
+SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE area_id = $1 ORDER BY formation_id
 `
 
 func (q *Queries) GetMonsterFormationIDsByArea(ctx context.Context, areaID int32) ([]int32, error) {
@@ -244,11 +232,11 @@ func (q *Queries) GetMonsterFormationIDsByArea(ctx context.Context, areaID int32
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -260,11 +248,10 @@ func (q *Queries) GetMonsterFormationIDsByArea(ctx context.Context, areaID int32
 }
 
 const getMonsterFormationIDsByAvailability = `-- name: GetMonsterFormationIDsByAvailability :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.availability = ANY($1::availability_type[])
-ORDER BY mf.id
+SELECT DISTINCT formation_id
+FROM mv_monster_encounters
+WHERE availability = ANY($1::availability_type[])
+ORDER BY formation_id
 `
 
 func (q *Queries) GetMonsterFormationIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
@@ -275,11 +262,11 @@ func (q *Queries) GetMonsterFormationIDsByAvailability(ctx context.Context, avai
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -291,11 +278,10 @@ func (q *Queries) GetMonsterFormationIDsByAvailability(ctx context.Context, avai
 }
 
 const getMonsterFormationIDsByCategory = `-- name: GetMonsterFormationIDsByCategory :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.category = ANY($1::monster_formation_category[])
-ORDER BY mf.id
+SELECT DISTINCT formation_id
+FROM mv_monster_encounters
+WHERE category = ANY($1::monster_formation_category[])
+ORDER BY formation_id
 `
 
 func (q *Queries) GetMonsterFormationIDsByCategory(ctx context.Context, category []MonsterFormationCategory) ([]int32, error) {
@@ -306,11 +292,11 @@ func (q *Queries) GetMonsterFormationIDsByCategory(ctx context.Context, category
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -322,11 +308,7 @@ func (q *Queries) GetMonsterFormationIDsByCategory(ctx context.Context, category
 }
 
 const getMonsterFormationIDsByForcedAmbush = `-- name: GetMonsterFormationIDsByForcedAmbush :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.is_forced_ambush = $1
-ORDER BY mf.id
+SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE is_forced_ambush = $1 ORDER BY formation_id
 `
 
 func (q *Queries) GetMonsterFormationIDsByForcedAmbush(ctx context.Context, isForcedAmbush bool) ([]int32, error) {
@@ -337,11 +319,11 @@ func (q *Queries) GetMonsterFormationIDsByForcedAmbush(ctx context.Context, isFo
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -353,14 +335,11 @@ func (q *Queries) GetMonsterFormationIDsByForcedAmbush(ctx context.Context, isFo
 }
 
 const getMonsterFormationIDsByLocation = `-- name: GetMonsterFormationIDsByLocation :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
-JOIN encounter_areas ea ON j.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.location_id = $1
-ORDER BY mf.id
+SELECT DISTINCT me.formation_id
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+WHERE g.location_id = $1
+ORDER BY me.formation_id
 `
 
 func (q *Queries) GetMonsterFormationIDsByLocation(ctx context.Context, locationID int32) ([]int32, error) {
@@ -371,11 +350,11 @@ func (q *Queries) GetMonsterFormationIDsByLocation(ctx context.Context, location
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -387,12 +366,7 @@ func (q *Queries) GetMonsterFormationIDsByLocation(ctx context.Context, location
 }
 
 const getMonsterFormationIDsByMonster = `-- name: GetMonsterFormationIDsByMonster :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN j_monster_selections_monsters j ON mf.monster_selection_id = j.monster_selection_id
-JOIN monster_amounts ma ON j.monster_amount_id = ma.id
-WHERE ma.monster_id = $1
-ORDER BY mf.id
+SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY formation_id
 `
 
 func (q *Queries) GetMonsterFormationIDsByMonster(ctx context.Context, monsterID int32) ([]int32, error) {
@@ -403,11 +377,11 @@ func (q *Queries) GetMonsterFormationIDsByMonster(ctx context.Context, monsterID
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -419,11 +393,10 @@ func (q *Queries) GetMonsterFormationIDsByMonster(ctx context.Context, monsterID
 }
 
 const getMonsterFormationIDsByRepeatable = `-- name: GetMonsterFormationIDsByRepeatable :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN formation_data fd ON mf.formation_data_id = fd.id
-WHERE fd.category = 'random-encounter' OR fd.category = 'on-demand-fight'
-ORDER BY mf.id
+SELECT DISTINCT formation_id
+FROM mv_monster_encounters
+WHERE category = 'random-encounter' OR category = 'on-demand-fight'
+ORDER BY formation_id
 `
 
 func (q *Queries) GetMonsterFormationIDsByRepeatable(ctx context.Context) ([]int32, error) {
@@ -434,11 +407,11 @@ func (q *Queries) GetMonsterFormationIDsByRepeatable(ctx context.Context) ([]int
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -450,13 +423,11 @@ func (q *Queries) GetMonsterFormationIDsByRepeatable(ctx context.Context) ([]int
 }
 
 const getMonsterFormationIDsBySublocation = `-- name: GetMonsterFormationIDsBySublocation :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN j_monster_formations_encounter_areas j ON j.monster_formation_id = mf.id
-JOIN encounter_areas ea ON j.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-WHERE a.sublocation_id = $1
-ORDER BY mf.id
+SELECT DISTINCT me.formation_id
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+WHERE g.sublocation_id = $1
+ORDER BY me.formation_id
 `
 
 func (q *Queries) GetMonsterFormationIDsBySublocation(ctx context.Context, sublocationID int32) ([]int32, error) {
@@ -467,11 +438,11 @@ func (q *Queries) GetMonsterFormationIDsBySublocation(ctx context.Context, sublo
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -483,16 +454,11 @@ func (q *Queries) GetMonsterFormationIDsBySublocation(ctx context.Context, sublo
 }
 
 const getMonsterFormationMonsterIDs = `-- name: GetMonsterFormationMonsterIDs :many
-SELECT DISTINCT ma.monster_id
-FROM monster_amounts ma
-JOIN j_monster_selections_monsters j ON j.monster_amount_id = ma.id
-JOIN monster_formations mf ON j.monster_selection_id = mf.monster_selection_id
-WHERE mf.id = $1
-ORDER BY ma.monster_id
+SELECT DISTINCT monster_id FROM mv_monster_encounters WHERE formation_id = $1 ORDER BY monster_id
 `
 
-func (q *Queries) GetMonsterFormationMonsterIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterFormationMonsterIDs, id)
+func (q *Queries) GetMonsterFormationMonsterIDs(ctx context.Context, formationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationMonsterIDs, formationID)
 	if err != nil {
 		return nil, err
 	}
@@ -542,12 +508,7 @@ func (q *Queries) GetMonsterIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getMonsterIDsByAutoAbility = `-- name: GetMonsterIDsByAutoAbility :many
-SELECT DISTINCT me.monster_id
-FROM monster_equipment me
-JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
-JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
-WHERE ed.auto_ability_id = $1
-ORDER BY me.monster_id
+SELECT DISTINCT monster_id FROM mv_monster_equipment_drops WHERE auto_ability_id = $1 ORDER BY monster_id
 `
 
 func (q *Queries) GetMonsterIDsByAutoAbility(ctx context.Context, autoAbilityID int32) ([]int32, error) {
@@ -574,12 +535,10 @@ func (q *Queries) GetMonsterIDsByAutoAbility(ctx context.Context, autoAbilityID 
 }
 
 const getMonsterIDsByAutoAbilityIsForced = `-- name: GetMonsterIDsByAutoAbilityIsForced :many
-SELECT DISTINCT me.monster_id
-FROM monster_equipment me
-JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
-JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
-WHERE ed.auto_ability_id = $1 AND ed.is_forced = $2
-ORDER BY me.monster_id
+SELECT DISTINCT monster_id
+FROM mv_monster_equipment_drops
+WHERE auto_ability_id = $1 AND is_forced = $2
+ORDER BY monster_id
 `
 
 type GetMonsterIDsByAutoAbilityIsForcedParams struct {
@@ -752,12 +711,16 @@ func (q *Queries) GetMonsterIDsByElemResistIDs(ctx context.Context, elemResistId
 
 const getMonsterIDsByEmptySlots = `-- name: GetMonsterIDsByEmptySlots :many
 SELECT DISTINCT me.monster_id
-FROM monster_equipment me
-JOIN monster_equipment_slots asl ON asl.monster_equipment_id = me.id AND asl.type = 'ability-slots'
-JOIN monster_equipment_slots aa ON aa.monster_equipment_id = me.id AND aa.type = 'attached-abilities'
-JOIN j_monster_equipment_slots_chances j ON j.monster_equipment_id = me.id AND j.equipment_slots_id = aa.id
+FROM mv_monster_equipment_drops me
+JOIN monster_equipment_slots asl ON me.ability_slots_id = asl.id
+JOIN j_monster_equipment_slots_chances j ON j.equipment_slots_id = me.attached_abilities_id
 JOIN equipment_slots_chances esc ON j.slots_chance_id = esc.id
-WHERE esc.amount = 0 AND (asl.min_amount = ANY($1::int[]) OR asl.max_amount = ANY($1::int[]))
+WHERE esc.amount = 0
+  AND (
+        asl.min_amount = ANY($1::int[])
+        OR
+        asl.max_amount = ANY($1::int[])
+)
 ORDER BY me.monster_id
 `
 
@@ -1199,12 +1162,7 @@ func (q *Queries) GetMonsterIDsByStatusResists(ctx context.Context, arg GetMonst
 }
 
 const getMonsterMonsterFormationIDs = `-- name: GetMonsterMonsterFormationIDs :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN j_monster_selections_monsters j ON mf.monster_selection_id = j.monster_selection_id
-JOIN monster_amounts ma ON j.monster_amount_id = ma.id
-WHERE ma.monster_id = $1
-ORDER BY mf.id
+SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY formation_id
 `
 
 func (q *Queries) GetMonsterMonsterFormationIDs(ctx context.Context, monsterID int32) ([]int32, error) {
@@ -1215,11 +1173,11 @@ func (q *Queries) GetMonsterMonsterFormationIDs(ctx context.Context, monsterID i
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

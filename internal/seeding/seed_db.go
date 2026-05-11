@@ -62,22 +62,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
-	err = db.RefreshMonsterItemDropsView(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.RefreshMonsterEncountersView(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.RefreshGeographyView(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.RefreshItemSourcesView(ctx)
+	err = refreshViews(db, ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -86,6 +71,7 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 
 	return l, nil
 }
+
 
 func setupDB(dbConn *sql.DB, migrationsDir string) error {
 	defer h.MeasureTime("\ndatabase setup")()
@@ -163,4 +149,27 @@ func dedupeRows[T Hashable](rows []T, hashes map[string]int32) []T {
 		new = append(new, row)
 	}
 	return new
+}
+
+
+func refreshViews(db *database.Queries, ctx context.Context) error {
+	defer h.MeasureTime("refreshing views")()
+	
+	fns := []func(context.Context) error{
+		db.RefreshMonsterItemDropsView,
+		db.RefreshMonsterEquipmentDropsView,
+		db.RefreshMonsterEncountersView,
+		db.RefreshGeographyView,
+		db.RefreshGeographyGraphView,
+		db.RefreshItemSourcesView,
+	}
+
+	for _, fn := range fns {
+		err := fn(ctx)
+		if err != nil {
+			return nil
+		}
+	}
+
+	return nil
 }

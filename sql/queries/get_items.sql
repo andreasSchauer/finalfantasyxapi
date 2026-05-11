@@ -1,9 +1,9 @@
 -- name: GetMasterItemObtainableBools :one
 SELECT 
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'treasures') as treasures,
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'shops') as shops,
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'quests') as quests,
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'monsters') as monsters;
+  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'treasure') as treasures,
+  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'shop') as shops,
+  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'quest') as quests,
+  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'monster') as monsters;
 
 
 -- name: GetMasterItemIDs :many
@@ -14,25 +14,14 @@ SELECT id FROM master_items ORDER BY id;
 SELECT id FROM master_items WHERE type = ANY(sqlc.narg('item_type')::item_type[]) ORDER BY id;
 
 
--- name: GetMasterItemIDsMonster :many
-SELECT DISTINCT master_item_id FROM mv_item_sources WHERE source_type = 'monsters' ORDER BY master_item_id;
-
-
--- name: GetMasterItemIDsTreasure :many
-SELECT DISTINCT master_item_id FROM mv_item_sources WHERE source_type = 'treasures' ORDER BY master_item_id;
-
-
--- name: GetMasterItemIDsShop :many
-SELECT DISTINCT master_item_id FROM mv_item_sources WHERE source_type = 'shops' ORDER BY master_item_id;;
-
-
--- name: GetMasterItemIDsQuest :many
-SELECT DISTINCT master_item_id FROM mv_item_sources WHERE source_type = 'quests' ORDER BY master_item_id;;
-
-
-
-
-
+-- name: GetMasterItemIDsByMethods :many
+SELECT mis.master_item_id
+FROM mv_item_sources mis
+CROSS JOIN (SELECT sqlc.arg('methods')::text[] AS methods) w
+WHERE mis.source_type = ANY(w.methods)
+GROUP BY mis.master_item_id, w.methods
+HAVING COUNT(DISTINCT mis.source_type) = cardinality(w.methods)
+ORDER BY mis.master_item_id;
 
 
 
@@ -40,15 +29,14 @@ SELECT DISTINCT master_item_id FROM mv_item_sources WHERE source_type = 'quests'
 WITH w AS (
     SELECT
       sqlc.narg('repeatable')::BOOLEAN AS repeatable,
-      sqlc.narg('availability')::availability_type[] AS availability,
-      (SELECT i.master_item_id FROM items i WHERE i.id = sqlc.arg(item_id))::int AS target
+      sqlc.narg('availability')::availability_type[] AS availability
 )
 SELECT DISTINCT m.id
 FROM mv_item_sources mis
 JOIN monsters m ON mis.source_id = m.id
 CROSS JOIN w
-WHERE mis.master_item_id = w.target
-  AND mis.source_type = 'monsters'
+WHERE mis.master_item_id = sqlc.arg(item_id)::int
+  AND mis.source_type = 'monster'
   AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
   AND (w.availability IS NULL OR mis.availability = ANY(w.availability))
 ORDER BY m.id;
@@ -56,30 +44,28 @@ ORDER BY m.id;
 
 -- name: GetItemTreasureIDs :many
 WITH w AS (
-    SELECT
-        sqlc.narg('availability')::availability_type[] AS availability,
-        (SELECT master_item_id FROM items WHERE id = sqlc.arg(item_id)) AS target
+    SELECT sqlc.narg('availability')::availability_type[] AS availability
 )
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
+JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE mis.master_item_id = w.target
-  AND mis.source_type = 'treasures'
+WHERE i.id = sqlc.arg(item_id)::int
+  AND mis.source_type = 'treasure'
   AND (w.availability IS NULL OR mis.availability = ANY(w.availability))
 ORDER BY mis.source_id;
 
 
 -- name: GetItemShopIDs :many
 WITH w AS (
-    SELECT
-        sqlc.narg('availability')::availability_type[] AS availability,
-        (SELECT master_item_id FROM items WHERE id = sqlc.arg(item_id)) AS target
+    SELECT sqlc.narg('availability')::availability_type[] AS availability
 )
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
+JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE mis.master_item_id = w.target
-  AND mis.source_type = 'shops'
+WHERE i.id = sqlc.arg(item_id)::int
+  AND mis.source_type = 'shop'
   AND (w.availability IS NULL OR mis.availability = ANY(w.availability))
 ORDER BY mis.source_id;
 
@@ -88,15 +74,15 @@ ORDER BY mis.source_id;
 WITH w AS (
     SELECT
       sqlc.narg('repeatable')::BOOLEAN AS repeatable,
-      sqlc.narg('availability')::availability_type[] AS availability,
-      (SELECT i.master_item_id FROM items i WHERE i.id = sqlc.arg(item_id))::int AS target
+      sqlc.narg('availability')::availability_type[] AS availability
 )
 SELECT DISTINCT q.id
 FROM mv_item_sources mis
 JOIN quests q ON mis.source_id = q.id
+JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE mis.master_item_id = w.target
-  AND mis.source_type = 'quests'
+WHERE i.id = sqlc.arg(item_id)::int
+  AND mis.source_type = 'quest'
   AND (w.repeatable IS NULL OR q.is_repeatable = w.repeatable)
   AND (w.availability IS NULL OR mis.availability = ANY(w.availability))
 ORDER BY q.id;
@@ -152,31 +138,14 @@ SELECT item_id FROM item_abilities ORDER BY item_id;
 SELECT item_id FROM j_items_related_stats WHERE stat_id = $1 ORDER BY item_id;
 
 
--- name: GetItemIDsMonster :many
-SELECT DISTINCT item_id FROM mv_monster_item_drops ORDER BY master_item_id;
-
-
--- name: GetItemIDsTreasure :many
-SELECT DISTINCT i.id
-FROM items i
-JOIN item_amounts ia ON i.master_item_id = ia.master_item_id
-JOIN j_treasures_items j ON j.item_amount_id = ia.id
-ORDER BY i.id;
-
-
--- name: GetItemIDsShop :many
-SELECT DISTINCT i.id
-FROM items i
-JOIN shop_items si ON si.item_id = i.id
-JOIN j_shops_items j ON j.shop_item_id = si.id
-ORDER BY i.id;
-
-
--- name: GetItemIDsQuest :many
-SELECT DISTINCT i.id
-FROM items i
-JOIN item_amounts ia ON i.master_item_id = ia.master_item_id
-JOIN quest_completions qc ON qc.item_amount_id = ia.id
+-- name: GetItemIDsByMethods :many
+SELECT i.id
+FROM mv_item_sources mis
+JOIN items i ON i.master_item_id = mis.master_item_id
+CROSS JOIN (SELECT sqlc.arg('methods')::text[] AS methods) w
+WHERE mis.source_type = ANY(w.methods)
+GROUP BY i.id, w.methods
+HAVING COUNT(DISTINCT mis.source_type) = cardinality(w.methods)
 ORDER BY i.id;
 
 
@@ -185,40 +154,40 @@ ORDER BY i.id;
 
 
 -- name: GetKeyItemTreasureIDs :many
-SELECT DISTINCT j.treasure_id
-FROM j_treasures_items j
-JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN key_items ki ON ia.master_item_id = ki.master_item_id
+SELECT DISTINCT mis.source_id
+FROM mv_item_sources mis
+JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
-ORDER BY j.treasure_id;
+  AND mis.source_type = 'treasure'
+ORDER BY mis.source_id;
 
 
 -- name: GetKeyItemQuestIDs :many
-SELECT DISTINCT q.id
-FROM quests q
-JOIN quest_completions qc ON q.completion_id = qc.id
-JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN key_items ki ON ia.master_item_id = ki.master_item_id
+SELECT DISTINCT mis.source_id
+FROM mv_item_sources mis
+JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
-ORDER BY q.id;
+  AND mis.source_type = 'quest'
+ORDER BY mis.source_id;
 
 
 -- name: GetKeyItemAreaIDs :many
 SELECT ca.area_id
 FROM completion_areas ca
-JOIN quest_completions qc ON ca.completion_id = qc.id
-JOIN item_amounts ia ON qc.item_amount_id = ia.id
-JOIN key_items ki ON ki.master_item_id = ia.master_item_id
+JOIN quests q ON ca.completion_id = q.completion_id
+JOIN mv_item_sources mis ON mis.source_id = q.id
+JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
+  AND mis.source_type = 'quest'
 
 UNION
 
 SELECT t.area_id
 FROM treasures t
-JOIN j_treasures_items j ON j.treasure_id = t.id
-JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN key_items ki ON ki.master_item_id = ia.master_item_id
+JOIN mv_item_sources mis ON mis.source_id = t.id
+JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
+  AND mis.source_type = 'treasure'
 ORDER BY area_id;
 
 
@@ -234,19 +203,14 @@ SELECT id FROM key_items ORDER BY id;
 SELECT id FROM key_items WHERE category = ANY(sqlc.narg('category')::key_item_category[]) ORDER BY id;
 
 
--- name: GetKeyItemIDsTreasure :many
-SELECT DISTINCT ki.id
-FROM key_items ki
-JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
-JOIN j_treasures_items j ON j.item_amount_id = ia.id
-ORDER BY ki.id;
-
-
--- name: GetKeyItemIDsQuest :many
-SELECT DISTINCT ki.id
-FROM key_items ki
-JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
-JOIN quest_completions qc ON qc.item_amount_id = ia.id
+-- name: GetKeyItemIDsByMethods :many
+SELECT ki.id
+FROM mv_item_sources mis
+JOIN key_items ki ON ki.master_item_id = mis.master_item_id
+CROSS JOIN (SELECT sqlc.arg('methods')::text[] AS methods) w
+WHERE mis.source_type = ANY(w.methods)
+GROUP BY ki.id, w.methods
+HAVING COUNT(DISTINCT mis.source_type) = cardinality(w.methods)
 ORDER BY ki.id;
 
 
@@ -255,25 +219,12 @@ WITH w AS (
   SELECT sqlc.narg('availability')::availability_type[] AS availability
 )
 SELECT ki.id
-FROM key_items ki
-JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
-JOIN j_treasures_items j ON j.item_amount_id = ia.id
-JOIN treasures t ON j.treasure_id = t.id
+FROM mv_item_sources mis
+JOIN key_items ki ON ki.master_item_id = mis.master_item_id
 CROSS JOIN w
-WHERE w.availability IS NULL OR t.availability = ANY(w.availability)
-
-UNION
-
-SELECT ki.id
-FROM key_items ki
-JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
-JOIN quest_completions qc ON qc.item_amount_id = ia.id
-JOIN quests q ON q.completion_id = qc.id
-CROSS JOIN w
-WHERE w.availability IS NULL OR q.availability = ANY(w.availability)
+WHERE (w.availability IS NULL OR mis.availability = ANY(w.availability))
+  AND (mis.source_type = 'treasure' OR mis.source_type = 'quest')
 ORDER BY id;
-
-
 
 
 
@@ -317,12 +268,11 @@ SELECT id FROM primers ORDER BY id;
 
 -- name: GetPrimerIDsByAvailability :many
 SELECT DISTINCT p.id
-FROM primers p
-JOIN key_items ki ON p.key_item_id = ki.id
-JOIN item_amounts ia ON ki.master_item_id = ia.master_item_id
-JOIN j_treasures_items j ON j.item_amount_id = ia.id
-JOIN treasures t ON j.treasure_id = t.id
-WHERE t.availability = ANY(sqlc.arg('availability')::availability_type[])
+FROM mv_item_sources mis
+JOIN key_items ki ON ki.master_item_id = mis.master_item_id
+JOIN primers p ON p.key_item_id = ki.id
+WHERE mis.availability = ANY(sqlc.arg('availability')::availability_type[])
+  AND mis.source_type = 'treasure'
 ORDER BY p.id;
 
 

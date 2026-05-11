@@ -16,14 +16,14 @@ SELECT id FROM agility_tiers ORDER BY id;
 -- name: GetAgilityTierIDsByAgility :many
 SELECT id FROM agility_tiers
 WHERE (sqlc.arg(agility)::int) >= min_agility
-AND (sqlc.arg(agility)::int) <= max_agility
+  AND (sqlc.arg(agility)::int) <= max_agility
 ORDER BY id;
 
 
 -- name: GetAgilityTierByAgility :one
 SELECT * FROM agility_tiers
 WHERE (sqlc.arg(agility)::int) >= min_agility
-AND (sqlc.arg(agility)::int) <= max_agility;
+  AND (sqlc.arg(agility)::int) <= max_agility;
 
 
 
@@ -156,7 +156,8 @@ ORDER BY auto_ability_id;
 SELECT j.ability_id
 FROM j_battle_interactions_inflicted_status_conditions j
 JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
-WHERE ist.status_condition_id = sqlc.arg(status_condition_id)::int AND ist.probability BETWEEN sqlc.arg('min_rate')::int AND sqlc.arg('max_rate')::int
+WHERE ist.status_condition_id = sqlc.arg(status_condition_id)::int
+  AND ist.probability BETWEEN sqlc.arg('min_rate')::int AND sqlc.arg('max_rate')::int
 
 UNION
 

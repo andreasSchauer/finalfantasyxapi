@@ -9,6 +9,15 @@ import (
 	"context"
 )
 
+const refreshGeographyGraphView = `-- name: RefreshGeographyGraphView :exec
+REFRESH MATERIALIZED VIEW mv_geography_graph
+`
+
+func (q *Queries) RefreshGeographyGraphView(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, refreshGeographyGraphView)
+	return err
+}
+
 const refreshGeographyView = `-- name: RefreshGeographyView :exec
 REFRESH MATERIALIZED VIEW mv_geography
 `
@@ -33,6 +42,15 @@ REFRESH MATERIALIZED VIEW mv_monster_encounters
 
 func (q *Queries) RefreshMonsterEncountersView(ctx context.Context) error {
 	_, err := q.db.ExecContext(ctx, refreshMonsterEncountersView)
+	return err
+}
+
+const refreshMonsterEquipmentDropsView = `-- name: RefreshMonsterEquipmentDropsView :exec
+REFRESH MATERIALIZED VIEW mv_monster_equipment_drops
+`
+
+func (q *Queries) RefreshMonsterEquipmentDropsView(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, refreshMonsterEquipmentDropsView)
 	return err
 }
 

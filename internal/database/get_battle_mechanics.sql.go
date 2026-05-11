@@ -15,7 +15,7 @@ import (
 const getAgilityTierByAgility = `-- name: GetAgilityTierByAgility :one
 SELECT id, data_hash, min_agility, max_agility, tick_speed, monster_min_icv, monster_max_icv, character_max_icv FROM agility_tiers
 WHERE ($1::int) >= min_agility
-AND ($1::int) <= max_agility
+  AND ($1::int) <= max_agility
 `
 
 func (q *Queries) GetAgilityTierByAgility(ctx context.Context, agility int32) (AgilityTier, error) {
@@ -64,7 +64,7 @@ func (q *Queries) GetAgilityTierIDs(ctx context.Context) ([]int32, error) {
 const getAgilityTierIDsByAgility = `-- name: GetAgilityTierIDsByAgility :many
 SELECT id FROM agility_tiers
 WHERE ($1::int) >= min_agility
-AND ($1::int) <= max_agility
+  AND ($1::int) <= max_agility
 ORDER BY id
 `
 
@@ -1333,7 +1333,8 @@ const getStatusConditionAbilityIDsInflicted = `-- name: GetStatusConditionAbilit
 SELECT j.ability_id
 FROM j_battle_interactions_inflicted_status_conditions j
 JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
-WHERE ist.status_condition_id = $1::int AND ist.probability BETWEEN $2::int AND $3::int
+WHERE ist.status_condition_id = $1::int
+  AND ist.probability BETWEEN $2::int AND $3::int
 
 UNION
 

@@ -208,15 +208,10 @@ func (q *Queries) GetSongIDsWithSpecialUseCase(ctx context.Context) ([]int32, er
 }
 
 const getSongMonsterFormationIDs = `-- name: GetSongMonsterFormationIDs :many
-SELECT DISTINCT mf.id
-FROM monster_formations mf
-JOIN formation_data fd ON mf.formation_data_id = fd.id
-JOIN formation_boss_songs fbs ON fd.boss_song_id = fbs.id
-WHERE fbs.song_id = $1
-ORDER BY mf.id
+SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE song_id = $1 ORDER BY formation_id
 `
 
-func (q *Queries) GetSongMonsterFormationIDs(ctx context.Context, songID int32) ([]int32, error) {
+func (q *Queries) GetSongMonsterFormationIDs(ctx context.Context, songID sql.NullInt32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getSongMonsterFormationIDs, songID)
 	if err != nil {
 		return nil, err
@@ -224,11 +219,11 @@ func (q *Queries) GetSongMonsterFormationIDs(ctx context.Context, songID int32) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
