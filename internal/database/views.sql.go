@@ -18,6 +18,15 @@ func (q *Queries) RefreshGeographyView(ctx context.Context) error {
 	return err
 }
 
+const refreshItemSourcesView = `-- name: RefreshItemSourcesView :exec
+REFRESH MATERIALIZED VIEW mv_item_sources
+`
+
+func (q *Queries) RefreshItemSourcesView(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, refreshItemSourcesView)
+	return err
+}
+
 const refreshMonsterEncountersView = `-- name: RefreshMonsterEncountersView :exec
 REFRESH MATERIALIZED VIEW mv_monster_encounters
 `

@@ -77,6 +77,11 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
+	err = db.RefreshItemSourcesView(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	fmt.Println()
 
 	return l, nil

@@ -4040,6 +4040,14 @@ type MvGeography struct {
 	LocationName    string
 }
 
+type MvItemSource struct {
+	MasterItemID int32
+	SourceID     int32
+	Amount       int32
+	SourceType   string
+	Availability AvailabilityType
+}
+
 type MvMonsterEncounter struct {
 	AreaID        int32
 	FormationID   int32
@@ -4051,7 +4059,9 @@ type MvMonsterItemDrop struct {
 	MonsterID    int32
 	ItemID       int32
 	MasterItemID int32
+	Amount       int32
 	SourceType   string
+	Availability AvailabilityType
 }
 
 type OdModeAction struct {
