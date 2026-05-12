@@ -662,7 +662,7 @@ ORDER BY g.location_id;
 SELECT DISTINCT g.location_id
 FROM mv_geography g
 JOIN shops sh ON sh.area_id = g.area_id
-ORDER BY g.sublocation_id;
+ORDER BY g.location_id;
 
 
 -- name: GetLocationIDsWithTreasures :many

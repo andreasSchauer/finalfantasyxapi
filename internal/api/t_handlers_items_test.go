@@ -295,6 +295,13 @@ func TestRetrieveItems(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/items?method=shop,treasures",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr: 	"invalid value 'treasures' used for parameter 'method'. allowed values: 'monster', 'treasure', 'shop', 'quest', 'blitzball'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/items?limit=max",
 				expectedStatus: http.StatusOK,
 			},

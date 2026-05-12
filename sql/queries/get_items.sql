@@ -252,14 +252,13 @@ ORDER BY j.treasure_id;
 
 
 -- name: GetPrimerAreaIDs :many
-SELECT DISTINCT t.area_id
-FROM treasures t
-JOIN j_treasures_items j ON j.treasure_id = t.id
-JOIN item_amounts ia ON j.item_amount_id = ia.id
-JOIN key_items ki ON ia.master_item_id = ki.master_item_id
+SELECT DISTINCT mis.area_id
+FROM mv_item_sources mis
+JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 JOIN primers p ON p.key_item_id = ki.id
 WHERE p.id = $1
-ORDER BY t.area_id;
+  AND mis.source_type = 'treasure'
+ORDER BY mis.area_id;
 
 
 -- name: GetPrimerIDs :many

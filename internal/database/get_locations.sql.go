@@ -1745,7 +1745,7 @@ const getLocationIDsWithShops = `-- name: GetLocationIDsWithShops :many
 SELECT DISTINCT g.location_id
 FROM mv_geography g
 JOIN shops sh ON sh.area_id = g.area_id
-ORDER BY g.sublocation_id
+ORDER BY g.location_id
 `
 
 func (q *Queries) GetLocationIDsWithShops(ctx context.Context) ([]int32, error) {

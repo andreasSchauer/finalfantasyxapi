@@ -25,7 +25,7 @@ func queryValuesToSlice(cfg *Config, query string, queryParam QueryParam) ([]str
 
 	for _, value := range values {
 		if !slices.Contains(queryParam.AllowedValues, value) {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. allowed values: %s.", query, queryParam.Name, h.FormatStringSlice(queryParam.AllowedValues)), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. allowed values: %s.", value, queryParam.Name, h.FormatStringSlice(queryParam.AllowedValues)), nil)
 		}
 	}
 

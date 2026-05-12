@@ -60,6 +60,39 @@ func TestGetAutoAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities/2?rel_availability=post",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"monstersDrop":       20,
+					"monstersItems":      2,
+					"shops pre airship":  0,
+					"shops post airship": 6,
+					"treasures":          1,
+					"equipment tables":   2,
+				},
+			},
+			expUnique:    newExpUnique(2, "piercing"),
+			monstersDrop: []int32{201, 206, 210, 243, 248, 287},
+			monstersItems: []testMonItemAmts{
+				{
+					index:   	0,
+					monster: 	247,
+					dropRare:   1,
+				},
+				{
+					index:     	1,
+					monster:   	285,
+					stealRare: 	1,
+				},
+			},
+			shopsPreAirship:  []int32{},
+			shopsPostAirship: []int32{2, 12, 16, 17, 27, 32},
+			treasures:        []int32{31},
+			equipmentTables:  []int32{76, 78},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/auto-abilities/45?rel_availability=always",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
