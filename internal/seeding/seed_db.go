@@ -163,6 +163,7 @@ func refreshViews(db *database.Queries, ctx context.Context) error {
 		db.RefreshGeographyGraphView,
 		db.RefreshItemSourcesView,
 		db.RefreshEquipmentSourcesView,
+		db.RefreshAbilitiesView,
 	}
 
 	for _, fn := range fns {

@@ -355,7 +355,119 @@ CREATE INDEX idx_mv_equipment_sources_source_id ON mv_equipment_sources (source_
 CREATE INDEX idx_mv_equipment_sources_area_id ON mv_equipment_sources (area_id);
 
 
+
+
+
+CREATE MATERIALIZED VIEW mv_abilities AS
+SELECT
+    a.id AS ability_id,
+    a.name,
+    a.version,
+    pa.id AS typed_id,
+    a.type,
+    aa.rank,
+    aa.can_copycat,
+    aa.appears_in_help_bar,
+    j.battle_interaction_id AS battle_int_id
+FROM abilities a
+JOIN ability_attributes aa ON a.attributes_id = aa.id
+JOIN player_abilities pa ON pa.ability_id = a.id
+LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+
+UNION ALL
+
+SELECT
+    a.id AS ability_id,
+    a.name,
+    a.version,
+    oa.id AS typed_id,
+    a.type,
+    aa.rank,
+    aa.can_copycat,
+    aa.appears_in_help_bar,
+    j.battle_interaction_id AS battle_int_id
+FROM abilities a
+JOIN ability_attributes aa ON a.attributes_id = aa.id
+JOIN overdrive_abilities oa ON oa.ability_id = a.id
+LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+
+UNION ALL
+
+SELECT
+    a.id AS ability_id,
+    a.name,
+    a.version,
+    ia.id AS typed_id,
+    a.type,
+    aa.rank,
+    aa.can_copycat,
+    aa.appears_in_help_bar,
+    j.battle_interaction_id AS battle_int_id
+FROM abilities a
+JOIN ability_attributes aa ON a.attributes_id = aa.id
+JOIN item_abilities ia ON ia.ability_id = a.id
+LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+
+UNION ALL
+
+SELECT
+    a.id AS ability_id,
+    a.name,
+    a.version,
+    tc.id AS typed_id,
+    a.type,
+    aa.rank,
+    aa.can_copycat,
+    aa.appears_in_help_bar,
+    j.battle_interaction_id AS battle_int_id
+FROM abilities a
+JOIN ability_attributes aa ON a.attributes_id = aa.id
+JOIN trigger_commands tc ON tc.ability_id = a.id
+LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+
+UNION ALL
+
+SELECT
+    a.id AS ability_id,
+    a.name,
+    a.version,
+    ma.id AS typed_id,
+    a.type,
+    aa.rank,
+    aa.can_copycat,
+    aa.appears_in_help_bar,
+    j.battle_interaction_id AS battle_int_id
+FROM abilities a
+JOIN ability_attributes aa ON a.attributes_id = aa.id
+JOIN misc_abilities ma ON ma.ability_id = a.id
+LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+
+UNION ALL
+
+SELECT
+    a.id AS ability_id,
+    a.name,
+    a.version,
+    ea.id AS typed_id,
+    a.type,
+    aa.rank,
+    aa.can_copycat,
+    aa.appears_in_help_bar,
+    j.battle_interaction_id AS battle_int_id
+FROM abilities a
+JOIN ability_attributes aa ON a.attributes_id = aa.id
+JOIN enemy_abilities ea ON ea.ability_id = a.id
+LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+ORDER BY ability_id;
+
+
+CREATE INDEX idx_mv_abilities_id ON mv_abilities (ability_id);
+CREATE INDEX idx_mv_abilities_typed_id ON mv_abilities (typed_id);
+
+
+
 -- +goose Down
+DROP MATERIALIZED VIEW IF EXISTS mv_abilities;
 DROP MATERIALIZED VIEW IF EXISTS mv_equipment_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_item_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_geography_graph;

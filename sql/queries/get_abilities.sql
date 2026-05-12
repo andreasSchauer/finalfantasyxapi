@@ -1218,6 +1218,8 @@ ORDER BY pa.id;
 
 
 
+
+
 -- name: GetTriggerCommandIDsByName :many
 SELECT tc.id
 FROM trigger_commands tc
@@ -1250,7 +1252,7 @@ SELECT id FROM trigger_commands ORDER BY id;
 SELECT DISTINCT tc.id
 FROM trigger_commands tc
 JOIN formation_trigger_commands ftc ON ftc.trigger_command_id = tc.id
-Join j_formation_trigger_commands_users j ON j.trigger_command_id = ftc.id
+JOIN j_formation_trigger_commands_users j ON j.trigger_command_id = ftc.id
 JOIN character_classes cc ON j.character_class_id = cc.id
 WHERE cc.id = $1
 ORDER BY tc.id;

@@ -4031,6 +4031,18 @@ type MonsterSelection struct {
 	DataHash string
 }
 
+type MvAbility struct {
+	AbilityID        int32
+	Name             string
+	Version          sql.NullInt32
+	TypedID          int32
+	Type             AbilityType
+	Rank             sql.NullInt32
+	CanCopycat       bool
+	AppearsInHelpBar bool
+	BattleIntID      sql.NullInt32
+}
+
 type MvEquipmentSource struct {
 	NameID           int32
 	Name             string
@@ -4041,7 +4053,7 @@ type MvEquipmentSource struct {
 	AutoAbilityID    sql.NullInt32
 	AutoAbility      sql.NullString
 	Availability     AvailabilityType
-	ShopType         sql.NullString
+	ShopType         NullShopType
 }
 
 type MvGeography struct {

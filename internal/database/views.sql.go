@@ -9,6 +9,15 @@ import (
 	"context"
 )
 
+const refreshAbilitiesView = `-- name: RefreshAbilitiesView :exec
+REFRESH MATERIALIZED VIEW mv_abilities
+`
+
+func (q *Queries) RefreshAbilitiesView(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, refreshAbilitiesView)
+	return err
+}
+
 const refreshEquipmentSourcesView = `-- name: RefreshEquipmentSourcesView :exec
 REFRESH MATERIALIZED VIEW mv_equipment_sources
 `

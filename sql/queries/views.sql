@@ -24,3 +24,7 @@ REFRESH MATERIALIZED VIEW mv_item_sources;
 
 -- name: RefreshEquipmentSourcesView :exec
 REFRESH MATERIALIZED VIEW mv_equipment_sources;
+
+
+-- name: RefreshAbilitiesView :exec
+REFRESH MATERIALIZED VIEW mv_abilities;
