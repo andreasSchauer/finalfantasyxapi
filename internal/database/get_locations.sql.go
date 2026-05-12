@@ -864,18 +864,11 @@ func (q *Queries) GetAreaMonsterIDs(ctx context.Context, areaID int32) ([]int32,
 
 const getAreaMonsterIdPairs = `-- name: GetAreaMonsterIdPairs :many
 SELECT DISTINCT
-  a.id AS area_id,
-  m.id AS monster_id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
-JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_selections ms ON j1.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
-JOIN j_monster_formations_encounter_areas j2 ON j2.monster_formation_id = mf.id
-JOIN encounter_areas ea ON j2.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-WHERE a.id = ANY($1::int[])
-ORDER BY a.id, m.id
+  area_id,
+  monster_id
+FROM mv_monster_encounters
+WHERE area_id = ANY($1::int[])
+ORDER BY area_id, monster_id
 `
 
 type GetAreaMonsterIdPairsRow struct {
@@ -966,12 +959,11 @@ func (q *Queries) GetAreaShopIDs(ctx context.Context, areaID int32) ([]int32, er
 
 const getAreaShopIdPairs = `-- name: GetAreaShopIdPairs :many
 SELECT DISTINCT
-  a.id AS area_id,
-  sh.id AS shop_id
-FROM shops sh
-JOIN areas a ON sh.area_id = a.id
-WHERE a.id = ANY($1::int[])
-ORDER BY a.id, sh.id
+  area_id,
+  id AS shop_id
+FROM shops
+WHERE area_id = ANY($1::int[])
+ORDER BY area_id, shop_id
 `
 
 type GetAreaShopIdPairsRow struct {
@@ -1031,12 +1023,11 @@ func (q *Queries) GetAreaTreasureIDs(ctx context.Context, areaID int32) ([]int32
 
 const getAreaTreasureIdPairs = `-- name: GetAreaTreasureIdPairs :many
 SELECT DISTINCT
-  a.id AS area_id,
-  t.id AS treasure_id
-FROM treasures t
-JOIN areas a ON t.area_id = a.id
-WHERE a.id = ANY($1::int[])
-ORDER BY a.id, t.id
+  area_id,
+  id AS treasure_id
+FROM treasures 
+WHERE area_id = ANY($1::int[])
+ORDER BY area_id, treasure_id
 `
 
 type GetAreaTreasureIdPairsRow struct {
@@ -1904,20 +1895,12 @@ func (q *Queries) GetLocationMonsterIDs(ctx context.Context, locationID int32) (
 
 const getLocationMonsterIdPairs = `-- name: GetLocationMonsterIdPairs :many
 SELECT DISTINCT
-  l.id AS location_id,
-  m.id AS monster_id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
-JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_selections ms ON j1.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
-JOIN j_monster_formations_encounter_areas j2 ON j2.monster_formation_id = mf.id
-JOIN encounter_areas ea ON j2.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = ANY($1::int[])
-ORDER BY l.id, m.id
+  g.location_id,
+  me.monster_id
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+WHERE g.location_id = ANY($1::int[])
+ORDER BY g.location_id, me.monster_id
 `
 
 type GetLocationMonsterIdPairsRow struct {
@@ -1925,8 +1908,8 @@ type GetLocationMonsterIdPairsRow struct {
 	MonsterID  int32
 }
 
-func (q *Queries) GetLocationMonsterIdPairs(ctx context.Context, locationIds []int32) ([]GetLocationMonsterIdPairsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationMonsterIdPairs, pq.Array(locationIds))
+func (q *Queries) GetLocationMonsterIdPairs(ctx context.Context, areaIds []int32) ([]GetLocationMonsterIdPairsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationMonsterIdPairs, pq.Array(areaIds))
 	if err != nil {
 		return nil, err
 	}
@@ -2013,14 +1996,12 @@ func (q *Queries) GetLocationShopIDs(ctx context.Context, locationID int32) ([]i
 
 const getLocationShopIdPairs = `-- name: GetLocationShopIdPairs :many
 SELECT DISTINCT
-  l.id AS location_id,
+  g.location_id,
   sh.id AS shop_id
 FROM shops sh
-JOIN areas a ON sh.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = ANY($1::int[])
-ORDER BY l.id, sh.id
+JOIN mv_geography g ON sh.area_id = g.area_id
+WHERE g.location_id = ANY($1::int[])
+ORDER BY g.location_id, shop_id
 `
 
 type GetLocationShopIdPairsRow struct {
@@ -2111,14 +2092,12 @@ func (q *Queries) GetLocationTreasureIDs(ctx context.Context, locationID int32) 
 
 const getLocationTreasureIdPairs = `-- name: GetLocationTreasureIdPairs :many
 SELECT DISTINCT
-  l.id AS location_id,
+  g.location_id,
   t.id AS treasure_id
 FROM treasures t
-JOIN areas a ON t.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = ANY($1::int[])
-ORDER BY l.id, t.id
+JOIN mv_geography g ON t.area_id = g.area_id
+WHERE g.location_id = ANY($1::int[])
+ORDER BY g.location_id, treasure_id
 `
 
 type GetLocationTreasureIdPairsRow struct {
@@ -3121,19 +3100,12 @@ func (q *Queries) GetSublocationMonsterIDs(ctx context.Context, sublocationID in
 
 const getSublocationMonsterIdPairs = `-- name: GetSublocationMonsterIdPairs :many
 SELECT DISTINCT
-  s.id AS sublocation_id,
-  m.id AS monster_id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
-JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_selections ms ON j1.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
-JOIN j_monster_formations_encounter_areas j2 ON j2.monster_formation_id = mf.id
-JOIN encounter_areas ea ON j2.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = ANY($1::int[])
-ORDER BY s.id, m.id
+  g.sublocation_id,
+  me.monster_id
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+WHERE g.sublocation_id = ANY($1::int[])
+ORDER BY g.sublocation_id, me.monster_id
 `
 
 type GetSublocationMonsterIdPairsRow struct {
@@ -3141,8 +3113,8 @@ type GetSublocationMonsterIdPairsRow struct {
 	MonsterID     int32
 }
 
-func (q *Queries) GetSublocationMonsterIdPairs(ctx context.Context, sublocationIds []int32) ([]GetSublocationMonsterIdPairsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationMonsterIdPairs, pq.Array(sublocationIds))
+func (q *Queries) GetSublocationMonsterIdPairs(ctx context.Context, areaIds []int32) ([]GetSublocationMonsterIdPairsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationMonsterIdPairs, pq.Array(areaIds))
 	if err != nil {
 		return nil, err
 	}
@@ -3229,13 +3201,12 @@ func (q *Queries) GetSublocationShopIDs(ctx context.Context, sublocationID int32
 
 const getSublocationShopIdPairs = `-- name: GetSublocationShopIdPairs :many
 SELECT DISTINCT
-  s.id AS sublocation_id,
+  g.sublocation_id,
   sh.id AS shop_id
 FROM shops sh
-JOIN areas a ON sh.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = ANY($1::int[])
-ORDER BY s.id, sh.id
+JOIN mv_geography g ON sh.area_id = g.area_id
+WHERE g.sublocation_id = ANY($1::int[])
+ORDER BY g.sublocation_id, shop_id
 `
 
 type GetSublocationShopIdPairsRow struct {
@@ -3299,13 +3270,12 @@ func (q *Queries) GetSublocationTreasureIDs(ctx context.Context, sublocationID i
 
 const getSublocationTreasureIdPairs = `-- name: GetSublocationTreasureIdPairs :many
 SELECT DISTINCT
-  s.id AS sublocation_id,
+  g.sublocation_id,
   t.id AS treasure_id
 FROM treasures t
-JOIN areas a ON t.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = ANY($1::int[])
-ORDER BY s.id, t.id
+JOIN mv_geography g ON t.area_id = g.area_id
+WHERE g.sublocation_id = ANY($1::int[])
+ORDER BY g.sublocation_id, treasure_id
 `
 
 type GetSublocationTreasureIdPairsRow struct {
@@ -3313,8 +3283,8 @@ type GetSublocationTreasureIdPairsRow struct {
 	TreasureID    int32
 }
 
-func (q *Queries) GetSublocationTreasureIdPairs(ctx context.Context, sublocationIds []int32) ([]GetSublocationTreasureIdPairsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationTreasureIdPairs, pq.Array(sublocationIds))
+func (q *Queries) GetSublocationTreasureIdPairs(ctx context.Context, locationIds []int32) ([]GetSublocationTreasureIdPairsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationTreasureIdPairs, pq.Array(locationIds))
 	if err != nil {
 		return nil, err
 	}

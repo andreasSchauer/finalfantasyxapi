@@ -424,7 +424,6 @@ func (cfg *Config) EndpointsInit() {
 			"overdrive-abilities": {
 				dbQuery:     cfg.db.GetCharacterOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
-				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 			"overdrives": {
 				dbQuery:     cfg.db.GetCharacterOverdriveIDs,
@@ -452,7 +451,6 @@ func (cfg *Config) EndpointsInit() {
 			"overdrive-abilities": {
 				dbQuery:     cfg.db.GetAeonOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
-				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 			"overdrives": {
 				dbQuery:     cfg.db.GetAeonOverdriveIDs,
@@ -479,12 +477,10 @@ func (cfg *Config) EndpointsInit() {
 			"default-abilities": {
 				dbQuery:     cfg.db.GetCharacterClassDefaultAbilityIDs,
 				createSubFn: createAbilitySimple,
-				relationsFn: getAbilitySectionRelations,
 			},
 			"learnable-abilities": {
 				dbQuery:     cfg.db.GetCharacterClassLearnableAbilityIDs,
 				createSubFn: createAbilitySimple,
-				relationsFn: getAbilitySectionRelations,
 			},
 			"default-overdrives": {
 				dbQuery:     cfg.db.GetCharacterClassDefaultOverdriveIDs,
@@ -517,7 +513,6 @@ func (cfg *Config) EndpointsInit() {
 			"abilities": {
 				dbQuery:     cfg.db.GetMonsterAbilityIDs,
 				createSubFn: createAbilitySimple,
-				relationsFn: getAbilitySectionRelations,
 			},
 			"areas": {
 				dbQuery:     cfg.db.GetMonsterAreaIDs,
@@ -545,7 +540,6 @@ func (cfg *Config) EndpointsInit() {
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createAbilitySimple,
-				relationsFn: getAbilitySectionRelations,
 			},
 		},
 	}
@@ -589,7 +583,6 @@ func (cfg *Config) EndpointsInit() {
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createOverdriveAbilitySimple,
-				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 		},
 	}
@@ -702,7 +695,6 @@ func (cfg *Config) EndpointsInit() {
 			"overdrive-abilities": {
 				dbQuery:     ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveAbilityIDs),
 				createSubFn: createOverdriveAbilitySimple,
-				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 			"overdrives": {
 				dbQuery:     ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveIDs),
@@ -729,7 +721,6 @@ func (cfg *Config) EndpointsInit() {
 			"overdrive-abilities": {
 				dbQuery:     cfg.db.GetOverdriveOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
-				relationsFn: getOverdriveAbilitySectionRelations,
 			},
 		},
 	}
@@ -769,7 +760,6 @@ func (cfg *Config) EndpointsInit() {
 			"abilities": {
 				dbQuery:     ToIntManyNull(cfg.db.GetSubmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
-				relationsFn: getAbilitySectionRelations,
 			},
 		},
 	}
@@ -789,7 +779,6 @@ func (cfg *Config) EndpointsInit() {
 			"abilities": {
 				dbQuery:     ToIntManyNull(cfg.db.GetTopmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
-				relationsFn: getAbilitySectionRelations,
 			},
 		},
 	}

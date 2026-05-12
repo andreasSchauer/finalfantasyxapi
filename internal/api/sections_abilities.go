@@ -3,7 +3,6 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -42,12 +41,6 @@ func createAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subs
 	i := cfg.e.abilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 	typeStr := string(ability.Type)
-	rank := ability.Rank
-
-	if ability.Type == database.AbilityTypeOverdriveAbility {
-		fetchedRank := subsection.relations[id][RelationRanks][0]
-		rank = &fetchedRank
-	}
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
@@ -55,7 +48,7 @@ func createAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subs
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		Rank:               rank,
+		Rank:               ability.Rank,
 		Type:               &typeStr,
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
@@ -63,25 +56,6 @@ func createAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subs
 	return abilitySimple, nil
 }
 
-func getAbilitySectionRelations(cfg *Config, r *http.Request, abilityIDs []int32) (map[int32]map[Relation][]int32, error) {
-	i := cfg.e.abilities
-	relations := make(map[int32]map[Relation][]int32)
-
-	abilityJunctions, err := getDbJunctions(r, abilityIDs, i.resourceType, "rank", cfg.db.GetAbilityIdRankPairs, juncAbilityRank)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, abilityID := range abilityIDs {
-		relationMap := make(map[Relation][]int32)
-
-		relationMap[RelationRanks], abilityJunctions = getJunctionIDs(abilityID, abilityJunctions)
-
-		relations[abilityID] = relationMap
-	}
-
-	return relations, nil
-}
 
 func createEnemyAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.enemyAbilities
@@ -121,40 +95,19 @@ func createOverdriveAbilitySimple(cfg *Config, r *http.Request, id int32, subsec
 	i := cfg.e.overdriveAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
-	rank := subsection.relations[id][RelationRanks][0]
-
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
 		URL:                createResourceURL(cfg, i.endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		Rank:               &rank,
+		Rank:               ability.Rank,
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
 }
 
-func getOverdriveAbilitySectionRelations(cfg *Config, r *http.Request, abilityIDs []int32) (map[int32]map[Relation][]int32, error) {
-	i := cfg.e.overdriveAbilities
-	relations := make(map[int32]map[Relation][]int32)
-
-	abilityJunctions, err := getDbJunctions(r, abilityIDs, i.resourceType, "rank", cfg.db.GetOverdriveAbilityIdRankPairs, juncOverdriveAbilityRank)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, abilityID := range abilityIDs {
-		relationMap := make(map[Relation][]int32)
-
-		relationMap[RelationRanks], abilityJunctions = getJunctionIDs(abilityID, abilityJunctions)
-
-		relations[abilityID] = relationMap
-	}
-
-	return relations, nil
-}
 
 func createPlayerAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.e.playerAbilities

@@ -8,17 +8,11 @@ SELECT DISTINCT area_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER B
 
 -- name: GetMonsterAreaIdPairs :many
 SELECT DISTINCT
-  ma.monster_id,
-  a.id AS area_id
-FROM areas a
-JOIN encounter_areas ea ON ea.area_id = a.id
-JOIN j_monster_formations_encounter_areas j1 ON j1.encounter_area_id = ea.id
-JOIN monster_formations mf ON j1.monster_formation_id = mf.id
-JOIN monster_selections ms ON mf.monster_selection_id = ms.id
-JOIN j_monster_selections_monsters j2 ON j2.monster_selection_id = ms.id
-JOIN monster_amounts ma ON j2.monster_amount_id = ma.id
-WHERE ma.monster_id = ANY(sqlc.arg('monster_ids')::int[])
-ORDER BY ma.monster_id, a.id;
+  monster_id,
+  area_id
+FROM mv_monster_encounters
+WHERE monster_id = ANY(sqlc.arg('monster_ids')::int[])
+ORDER BY monster_id, area_id;
 
 
 -- name: GetMonsterMonsterFormationIDs :many

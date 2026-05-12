@@ -20,12 +20,11 @@ SELECT id FROM shops WHERE area_id = $1 ORDER BY id;
 
 -- name: GetAreaShopIdPairs :many
 SELECT DISTINCT
-  a.id AS area_id,
-  sh.id AS shop_id
-FROM shops sh
-JOIN areas a ON sh.area_id = a.id
-WHERE a.id = ANY(sqlc.arg('area_ids')::int[])
-ORDER BY a.id, sh.id;
+  area_id,
+  id AS shop_id
+FROM shops
+WHERE area_id = ANY(sqlc.arg('area_ids')::int[])
+ORDER BY area_id, shop_id;
 
 
 -- name: GetAreaTreasureIDs :many
@@ -34,12 +33,11 @@ SELECT id FROM treasures WHERE area_id = $1 ORDER BY id;
 
 -- name: GetAreaTreasureIdPairs :many
 SELECT DISTINCT
-  a.id AS area_id,
-  t.id AS treasure_id
-FROM treasures t
-JOIN areas a ON t.area_id = a.id
-WHERE a.id = ANY(sqlc.arg('area_ids')::int[])
-ORDER BY a.id, t.id;
+  area_id,
+  id AS treasure_id
+FROM treasures 
+WHERE area_id = ANY(sqlc.arg('area_ids')::int[])
+ORDER BY area_id, treasure_id;
 
 
 -- name: GetAreaMonsterIDs :many
@@ -48,18 +46,11 @@ SELECT DISTINCT monster_id FROM mv_monster_encounters WHERE area_id = $1 ORDER B
 
 -- name: GetAreaMonsterIdPairs :many
 SELECT DISTINCT
-  a.id AS area_id,
-  m.id AS monster_id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
-JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_selections ms ON j1.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
-JOIN j_monster_formations_encounter_areas j2 ON j2.monster_formation_id = mf.id
-JOIN encounter_areas ea ON j2.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-WHERE a.id = ANY(sqlc.arg('area_ids')::int[])
-ORDER BY a.id, m.id;
+  area_id,
+  monster_id
+FROM mv_monster_encounters
+WHERE area_id = ANY(sqlc.arg('area_ids')::int[])
+ORDER BY area_id, monster_id;
 
 
 -- name: GetAreaMonsterFormationIDs :many
@@ -253,13 +244,12 @@ ORDER BY sh.id;
 
 -- name: GetSublocationShopIdPairs :many
 SELECT DISTINCT
-  s.id AS sublocation_id,
+  g.sublocation_id,
   sh.id AS shop_id
 FROM shops sh
-JOIN areas a ON sh.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = ANY(sqlc.arg('sublocation_ids')::int[])
-ORDER BY s.id, sh.id;
+JOIN mv_geography g ON sh.area_id = g.area_id
+WHERE g.sublocation_id = ANY(sqlc.arg('sublocation_ids')::int[])
+ORDER BY g.sublocation_id, shop_id;
 
 
 -- name: GetSublocationTreasureIDs :many
@@ -272,13 +262,12 @@ ORDER BY t.id;
 
 -- name: GetSublocationTreasureIdPairs :many
 SELECT DISTINCT
-  s.id AS sublocation_id,
+  g.sublocation_id,
   t.id AS treasure_id
 FROM treasures t
-JOIN areas a ON t.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = ANY(sqlc.arg('sublocation_ids')::int[])
-ORDER BY s.id, t.id;
+JOIN mv_geography g ON t.area_id = g.area_id
+WHERE g.sublocation_id = ANY(sqlc.arg('location_ids')::int[])
+ORDER BY g.sublocation_id, treasure_id;
 
 
 -- name: GetSublocationMonsterIDs :many
@@ -291,19 +280,12 @@ ORDER BY me.monster_id;
 
 -- name: GetSublocationMonsterIdPairs :many
 SELECT DISTINCT
-  s.id AS sublocation_id,
-  m.id AS monster_id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
-JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_selections ms ON j1.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
-JOIN j_monster_formations_encounter_areas j2 ON j2.monster_formation_id = mf.id
-JOIN encounter_areas ea ON j2.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-WHERE s.id = ANY(sqlc.arg('sublocation_ids')::int[])
-ORDER BY s.id, m.id;
+  g.sublocation_id,
+  me.monster_id
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+WHERE g.sublocation_id = ANY(sqlc.arg('area_ids')::int[])
+ORDER BY g.sublocation_id, me.monster_id;
 
 
 -- name: GetSublocationMonsterFormationIDs :many
@@ -537,14 +519,12 @@ ORDER BY sh.id;
 
 -- name: GetLocationShopIdPairs :many
 SELECT DISTINCT
-  l.id AS location_id,
+  g.location_id,
   sh.id AS shop_id
 FROM shops sh
-JOIN areas a ON sh.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = ANY(sqlc.arg('location_ids')::int[])
-ORDER BY l.id, sh.id;
+JOIN mv_geography g ON sh.area_id = g.area_id
+WHERE g.location_id = ANY(sqlc.arg('location_ids')::int[])
+ORDER BY g.location_id, shop_id;
 
 
 -- name: GetLocationTreasureIDs :many
@@ -557,14 +537,12 @@ ORDER BY t.id;
 
 -- name: GetLocationTreasureIdPairs :many
 SELECT DISTINCT
-  l.id AS location_id,
+  g.location_id,
   t.id AS treasure_id
 FROM treasures t
-JOIN areas a ON t.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = ANY(sqlc.arg('location_ids')::int[])
-ORDER BY l.id, t.id;
+JOIN mv_geography g ON t.area_id = g.area_id
+WHERE g.location_id = ANY(sqlc.arg('location_ids')::int[])
+ORDER BY g.location_id, treasure_id;
 
 
 -- name: GetLocationMonsterIDs :many
@@ -577,20 +555,12 @@ ORDER BY me.monster_id;
 
 -- name: GetLocationMonsterIdPairs :many
 SELECT DISTINCT
-  l.id AS location_id,
-  m.id AS monster_id
-FROM monsters m
-JOIN monster_amounts ma ON ma.monster_id = m.id
-JOIN j_monster_selections_monsters j1 ON j1.monster_amount_id = ma.id
-JOIN monster_selections ms ON j1.monster_selection_id = ms.id
-JOIN monster_formations mf ON mf.monster_selection_id = ms.id
-JOIN j_monster_formations_encounter_areas j2 ON j2.monster_formation_id = mf.id
-JOIN encounter_areas ea ON j2.encounter_area_id = ea.id
-JOIN areas a ON ea.area_id = a.id
-JOIN sublocations s ON a.sublocation_id = s.id
-JOIN locations l ON s.location_id = l.id
-WHERE l.id = ANY(sqlc.arg('location_ids')::int[])
-ORDER BY l.id, m.id;
+  g.location_id,
+  me.monster_id
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+WHERE g.location_id = ANY(sqlc.arg('area_ids')::int[])
+ORDER BY g.location_id, me.monster_id;
 
 
 -- name: GetLocationMonsterFormationIDs :many

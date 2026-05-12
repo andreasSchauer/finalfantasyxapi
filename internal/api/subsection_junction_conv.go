@@ -71,17 +71,3 @@ func juncLocationMonster(junction database.GetLocationMonsterIdPairsRow) Junctio
 		ChildID:  junction.MonsterID,
 	}
 }
-
-func juncAbilityRank(junction database.GetAbilityIdRankPairsRow) Junction {
-	return Junction{
-		ParentID: junction.AbilityID,
-		ChildID:  junction.Rank.Int32,
-	}
-}
-
-func juncOverdriveAbilityRank(junction database.GetOverdriveAbilityIdRankPairsRow) Junction {
-	return Junction{
-		ParentID: junction.OverdriveAbilityID,
-		ChildID:  junction.Rank.Int32,
-	}
-}

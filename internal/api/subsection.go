@@ -16,5 +16,4 @@ const (
 	RelationTreasures Relation = "treasures"
 	RelationShops     Relation = "shops"
 	RelationMonsters  Relation = "monsters"
-	RelationRanks     Relation = "ranks"
 )
