@@ -205,6 +205,8 @@ CREATE INDEX idx_mv_geo_sublocation ON mv_geography (sublocation_id);
 CREATE INDEX idx_mv_geo_location ON mv_geography (location_id);
 
 
+
+
 CREATE MATERIALIZED VIEW mv_geography_graph AS
 SELECT
     g.location_id AS l_id,
@@ -637,6 +639,7 @@ ORDER BY ability_id;
 
 CREATE INDEX idx_mv_abilities_id ON mv_abilities (ability_id);
 CREATE INDEX idx_mv_abilities_typed_id ON mv_abilities (typed_id);
+CREATE INDEX idx_mv_abilities_type ON mv_abilities (type);
 CREATE INDEX idx_mv_abilities_inflicted_status_id ON mv_abilities (inflicted_status_id);
 CREATE INDEX idx_mv_abilities_removed_status_id ON mv_abilities (removed_status_id);
 CREATE INDEX idx_mv_abilities_element_id ON mv_abilities (element_id);

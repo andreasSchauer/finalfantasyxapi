@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -42,20 +43,21 @@ func (cfg *Config) retrieveOverdriveAbilities(r *http.Request, i handlerInput[se
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
+	abilityType := database.AbilityTypeOverdriveAbility
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetOverdriveAbilityIDsByAttackType)),
-		frl(enumListQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetOverdriveAbilityIDsByTargetType)),
-		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetOverdriveAbilityIDsByDamageFormula)),
-		frl(intListQuery(cfg, r, i, resources, "rank", cfg.db.GetOverdriveAbilityIDsByRank)),
-		frl(nameIdListQueryNul(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetOverdriveAbilityIDsByElement)),
+		frl(enumListQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", getTypedAbilityIDsByAttackType(cfg, abilityType))),
+		frl(enumListQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", getTypedAbilityIDsByTargetType(cfg, abilityType))),
+		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", getTypedAbilityIDsByDamageFormula(cfg, abilityType))),
+		frl(intListQuery(cfg, r, i, resources, "rank", getTypedAbilityIDsByRank(cfg, abilityType))),
+		frl(nameIdListQueryNul(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType))),
 		frl(nameIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetOverdriveAbilityIDsByCharClass)),
 		frl(nameIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetOverdriveAbilityIDsByRelatedStat)),
-		frl(idQueryNul(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), cfg.db.GetOverdriveAbilityIDsByInflictedStatus)),
-		frl(idQueryNul(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), cfg.db.GetOverdriveAbilityIDsByRemovedStatus)),
-		frl(boolQuery2(cfg, r, i, resources, "can_crit", cfg.db.GetOverdriveAbilityIDsCanCrit)),
-		frl(boolQuery2(cfg, r, i, resources, "delay", cfg.db.GetOverdriveAbilityIDsDealsDelay)),
-		frl(boolQuery2(cfg, r, i, resources, "stat_changes", cfg.db.GetOverdriveAbilityIDsWithStatChanges)),
-		frl(boolQuery2(cfg, r, i, resources, "mod_changes", cfg.db.GetOverdriveAbilityIDsWithModifierChanges)),
+		frl(idQueryNul(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getTypedAbilityIDsByInflictedStatus(cfg, abilityType))),
+		frl(idQueryNul(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), getTypedAbilityIDsByRemovedStatus(cfg, abilityType))),
+		frl(boolQuery2(cfg, r, i, resources, "can_crit", getTypedAbilityIDsCanCrit(cfg, abilityType))),
+		frl(boolQuery2(cfg, r, i, resources, "delay", getTypedAbilityIDsDealsDelay(cfg, abilityType))),
+		frl(boolQuery2(cfg, r, i, resources, "stat_changes", getTypedAbilityIDsWithStatChanges(cfg, abilityType))),
+		frl(boolQuery2(cfg, r, i, resources, "mod_changes", getTypedAbilityIDsWithModifierChanges(cfg, abilityType))),
 	})
 }

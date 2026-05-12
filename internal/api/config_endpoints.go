@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -557,7 +558,7 @@ func (cfg *Config) EndpointsInit() {
 		queryLookup:      cfg.q.playerAbilities,
 		idToResFunc:      idToNamedAPIResource[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
-		getMultipleQuery: cfg.db.GetPlayerAbilityIDsByName,
+		getMultipleQuery: getTypedAbilityIDsByName(cfg, database.AbilityTypePlayerAbility),
 		retrieveQuery:    cfg.db.GetPlayerAbilityIDs,
 		getSingleFunc:    cfg.getPlayerAbility,
 		retrieveFunc:     cfg.retrievePlayerAbilities,
@@ -581,7 +582,7 @@ func (cfg *Config) EndpointsInit() {
 		queryLookup:      cfg.q.overdriveAbilities,
 		idToResFunc:      idToNamedAPIResource[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
-		getMultipleQuery: cfg.db.GetOverdriveAbilityIDsByName,
+		getMultipleQuery: getTypedAbilityIDsByName(cfg, database.AbilityTypeOverdriveAbility),
 		retrieveQuery:    cfg.db.GetOverdriveAbilityIDs,
 		getSingleFunc:    cfg.getOverdriveAbility,
 		retrieveFunc:     cfg.retrieveOverdriveAbilities,
@@ -619,7 +620,7 @@ func (cfg *Config) EndpointsInit() {
 		queryLookup:      cfg.q.triggerCommands,
 		idToResFunc:      idToNamedAPIResource[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
-		getMultipleQuery: cfg.db.GetTriggerCommandIDsByName,
+		getMultipleQuery: getTypedAbilityIDsByName(cfg, database.AbilityTypeTriggerCommand),
 		retrieveQuery:    cfg.db.GetTriggerCommandIDs,
 		getSingleFunc:    cfg.getTriggerCommand,
 		retrieveFunc:     cfg.retrieveTriggerCommands,
@@ -638,7 +639,7 @@ func (cfg *Config) EndpointsInit() {
 		queryLookup:      cfg.q.miscAbilities,
 		idToResFunc:      idToNamedAPIResource[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
-		getMultipleQuery: cfg.db.GetMiscAbilityIDsByName,
+		getMultipleQuery: getTypedAbilityIDsByName(cfg, database.AbilityTypeMiscAbility),
 		retrieveQuery:    cfg.db.GetMiscAbilityIDs,
 		getSingleFunc:    cfg.getMiscAbility,
 		retrieveFunc:     cfg.retrieveMiscAbilities,
@@ -657,7 +658,7 @@ func (cfg *Config) EndpointsInit() {
 		queryLookup:      cfg.q.enemyAbilities,
 		idToResFunc:      idToNamedAPIResource[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
-		getMultipleQuery: cfg.db.GetEnemyAbilityIDsByName,
+		getMultipleQuery: getTypedAbilityIDsByName(cfg, database.AbilityTypeEnemyAbility),
 		retrieveQuery:    cfg.db.GetEnemyAbilityIDs,
 		getSingleFunc:    cfg.getEnemyAbility,
 		retrieveFunc:     cfg.retrieveEnemyAbilities,

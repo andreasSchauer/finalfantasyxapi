@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -45,12 +46,13 @@ func (cfg *Config) retrieveMiscAbilities(r *http.Request, i handlerInput[seeding
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
+	abilityType := database.AbilityTypeMiscAbility
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(intListQuery(cfg, r, i, resources, "rank", cfg.db.GetMiscAbilityIDsByRank)),
+		frl(intListQuery(cfg, r, i, resources, "rank", getTypedAbilityIDsByRank(cfg, abilityType))),
 		frl(nameIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass)),
-		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetMiscAbilityIDsByCanCopycat)),
-		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetMiscAbilityIDsByAppearsInHelpBar)),
-		frl(boolQuery2(cfg, r, i, resources, "user_atk", cfg.db.GetMiscAbilityIDsBasedOnUserAttack)),
+		frl(boolQuery(cfg, r, i, resources, "copycat", getTypedAbilityIDsByCanCopycat(cfg, abilityType))),
+		frl(boolQuery(cfg, r, i, resources, "help_bar", getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType))),
+		frl(boolQuery2(cfg, r, i, resources, "user_atk", getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType))),
 	})
 }
