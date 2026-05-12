@@ -368,11 +368,40 @@ SELECT
     aa.rank,
     aa.can_copycat,
     aa.appears_in_help_bar,
-    j.battle_interaction_id AS battle_int_id
+    bi.id AS battle_int_id,
+    bi.target,
+    bi.based_on_user_attack,
+    bi.range,
+    bi.inflicted_delay_id,
+    d.critical,
+    d.break_dmg_limit,
+    d.element_id,
+    ad.attack_type,
+    ad.stat_id,
+    ad.damage_type,
+    ad.damage_formula,
+    ad.damage_constant,
+    idl.ctb_attack_type,
+    jab.status_condition_id AS affected_status_id,
+    jis.inflicted_status_id,
+    jrs.status_condition_id AS removed_status_id,
+    jsc.stat_change_id,
+    jmc.modifier_change_id
 FROM abilities a
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 JOIN player_abilities pa ON pa.ability_id = a.id
 LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
+LEFT JOIN damages d ON jd.damage_id = d.id
+LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
+LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
+LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_removed_status_conditions jrs ON jrs.ability_id = a.id AND jrs.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_stat_changes jsc ON jsc.ability_id = a.id AND jsc.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AND jmc.battle_interaction_id = bi.id
 
 UNION ALL
 
@@ -385,11 +414,40 @@ SELECT
     aa.rank,
     aa.can_copycat,
     aa.appears_in_help_bar,
-    j.battle_interaction_id AS battle_int_id
+    bi.id AS battle_int_id,
+    bi.target,
+    bi.based_on_user_attack,
+    bi.range,
+    bi.inflicted_delay_id,
+    d.critical,
+    d.break_dmg_limit,
+    d.element_id,
+    ad.attack_type,
+    ad.stat_id,
+    ad.damage_type,
+    ad.damage_formula,
+    ad.damage_constant,
+    idl.ctb_attack_type,
+    jab.status_condition_id AS affected_status_id,
+    jis.inflicted_status_id,
+    jrs.status_condition_id AS removed_status_id,
+    jsc.stat_change_id,
+    jmc.modifier_change_id
 FROM abilities a
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 JOIN overdrive_abilities oa ON oa.ability_id = a.id
 LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
+LEFT JOIN damages d ON jd.damage_id = d.id
+LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
+LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
+LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_removed_status_conditions jrs ON jrs.ability_id = a.id AND jrs.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_stat_changes jsc ON jsc.ability_id = a.id AND jsc.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AND jmc.battle_interaction_id = bi.id
 
 UNION ALL
 
@@ -402,11 +460,40 @@ SELECT
     aa.rank,
     aa.can_copycat,
     aa.appears_in_help_bar,
-    j.battle_interaction_id AS battle_int_id
+    bi.id AS battle_int_id,
+    bi.target,
+    bi.based_on_user_attack,
+    bi.range,
+    bi.inflicted_delay_id,
+    d.critical,
+    d.break_dmg_limit,
+    d.element_id,
+    ad.attack_type,
+    ad.stat_id,
+    ad.damage_type,
+    ad.damage_formula,
+    ad.damage_constant,
+    idl.ctb_attack_type,
+    jab.status_condition_id AS affected_status_id,
+    jis.inflicted_status_id,
+    jrs.status_condition_id AS removed_status_id,
+    jsc.stat_change_id,
+    jmc.modifier_change_id
 FROM abilities a
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 JOIN item_abilities ia ON ia.ability_id = a.id
 LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
+LEFT JOIN damages d ON jd.damage_id = d.id
+LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
+LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
+LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_removed_status_conditions jrs ON jrs.ability_id = a.id AND jrs.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_stat_changes jsc ON jsc.ability_id = a.id AND jsc.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AND jmc.battle_interaction_id = bi.id
 
 UNION ALL
 
@@ -419,11 +506,40 @@ SELECT
     aa.rank,
     aa.can_copycat,
     aa.appears_in_help_bar,
-    j.battle_interaction_id AS battle_int_id
+    bi.id AS battle_int_id,
+    bi.target,
+    bi.based_on_user_attack,
+    bi.range,
+    bi.inflicted_delay_id,
+    d.critical,
+    d.break_dmg_limit,
+    d.element_id,
+    ad.attack_type,
+    ad.stat_id,
+    ad.damage_type,
+    ad.damage_formula,
+    ad.damage_constant,
+    idl.ctb_attack_type,
+    jab.status_condition_id AS affected_status_id,
+    jis.inflicted_status_id,
+    jrs.status_condition_id AS removed_status_id,
+    jsc.stat_change_id,
+    jmc.modifier_change_id
 FROM abilities a
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 JOIN trigger_commands tc ON tc.ability_id = a.id
 LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
+LEFT JOIN damages d ON jd.damage_id = d.id
+LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
+LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
+LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_removed_status_conditions jrs ON jrs.ability_id = a.id AND jrs.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_stat_changes jsc ON jsc.ability_id = a.id AND jsc.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AND jmc.battle_interaction_id = bi.id
 
 UNION ALL
 
@@ -436,11 +552,40 @@ SELECT
     aa.rank,
     aa.can_copycat,
     aa.appears_in_help_bar,
-    j.battle_interaction_id AS battle_int_id
+    bi.id AS battle_int_id,
+    bi.target,
+    bi.based_on_user_attack,
+    bi.range,
+    bi.inflicted_delay_id,
+    d.critical,
+    d.break_dmg_limit,
+    d.element_id,
+    ad.attack_type,
+    ad.stat_id,
+    ad.damage_type,
+    ad.damage_formula,
+    ad.damage_constant,
+    idl.ctb_attack_type,
+    jab.status_condition_id AS affected_status_id,
+    jis.inflicted_status_id,
+    jrs.status_condition_id AS removed_status_id,
+    jsc.stat_change_id,
+    jmc.modifier_change_id
 FROM abilities a
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 JOIN misc_abilities ma ON ma.ability_id = a.id
 LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
+LEFT JOIN damages d ON jd.damage_id = d.id
+LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
+LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
+LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_removed_status_conditions jrs ON jrs.ability_id = a.id AND jrs.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_stat_changes jsc ON jsc.ability_id = a.id AND jsc.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AND jmc.battle_interaction_id = bi.id
 
 UNION ALL
 
@@ -453,16 +598,48 @@ SELECT
     aa.rank,
     aa.can_copycat,
     aa.appears_in_help_bar,
-    j.battle_interaction_id AS battle_int_id
+    bi.id AS battle_int_id,
+    bi.target,
+    bi.based_on_user_attack,
+    bi.range,
+    bi.inflicted_delay_id,
+    d.critical,
+    d.break_dmg_limit,
+    d.element_id,
+    ad.attack_type,
+    ad.stat_id,
+    ad.damage_type,
+    ad.damage_formula,
+    ad.damage_constant,
+    idl.ctb_attack_type,
+    jab.status_condition_id AS affected_status_id,
+    jis.inflicted_status_id,
+    jrs.status_condition_id AS removed_status_id,
+    jsc.stat_change_id,
+    jmc.modifier_change_id
 FROM abilities a
 JOIN ability_attributes aa ON a.attributes_id = aa.id
 JOIN enemy_abilities ea ON ea.ability_id = a.id
 LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
+LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
+LEFT JOIN damages d ON jd.damage_id = d.id
+LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
+LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
+LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_removed_status_conditions jrs ON jrs.ability_id = a.id AND jrs.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_stat_changes jsc ON jsc.ability_id = a.id AND jsc.battle_interaction_id = bi.id
+LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AND jmc.battle_interaction_id = bi.id
 ORDER BY ability_id;
 
 
 CREATE INDEX idx_mv_abilities_id ON mv_abilities (ability_id);
 CREATE INDEX idx_mv_abilities_typed_id ON mv_abilities (typed_id);
+CREATE INDEX idx_mv_abilities_inflicted_status_id ON mv_abilities (inflicted_status_id);
+CREATE INDEX idx_mv_abilities_removed_status_id ON mv_abilities (removed_status_id);
+CREATE INDEX idx_mv_abilities_element_id ON mv_abilities (element_id);
 
 
 

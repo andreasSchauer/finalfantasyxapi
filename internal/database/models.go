@@ -4032,15 +4032,33 @@ type MonsterSelection struct {
 }
 
 type MvAbility struct {
-	AbilityID        int32
-	Name             string
-	Version          sql.NullInt32
-	TypedID          int32
-	Type             AbilityType
-	Rank             sql.NullInt32
-	CanCopycat       bool
-	AppearsInHelpBar bool
-	BattleIntID      sql.NullInt32
+	AbilityID         int32
+	Name              string
+	Version           sql.NullInt32
+	TypedID           int32
+	Type              AbilityType
+	Rank              sql.NullInt32
+	CanCopycat        bool
+	AppearsInHelpBar  bool
+	BattleIntID       sql.NullInt32
+	Target            NullTargetType
+	BasedOnUserAttack sql.NullBool
+	Range             interface{}
+	InflictedDelayID  sql.NullInt32
+	Critical          NullCriticalType
+	BreakDmgLimit     NullBreakDmgLmtType
+	ElementID         sql.NullInt32
+	AttackType        NullAttackType
+	StatID            sql.NullInt32
+	DamageType        NullDamageType
+	DamageFormula     NullDamageFormula
+	DamageConstant    interface{}
+	CtbAttackType     NullCtbAttackType
+	AffectedStatusID  sql.NullInt32
+	InflictedStatusID sql.NullInt32
+	RemovedStatusID   sql.NullInt32
+	StatChangeID      sql.NullInt32
+	ModifierChangeID  sql.NullInt32
 }
 
 type MvEquipmentSource struct {
