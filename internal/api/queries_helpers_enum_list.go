@@ -34,6 +34,7 @@ func queryEnumsToSlice[E, N any](cfg *Config, query, endpoint string, queryParam
 			aliasVals, ok := et.aliasses[string(enum.Name)]
 			if ok {
 				enums = slices.Concat(enums, aliasVals)
+				continue
 			}
 		}
 

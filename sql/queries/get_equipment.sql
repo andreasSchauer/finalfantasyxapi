@@ -41,14 +41,13 @@ ORDER BY fm.id;
 
 
 -- name: GetAutoAbilityTreasureIDs :many
-SELECT DISTINCT t.id
-FROM treasures t
-JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
-JOIN j_treasure_equipment_abilities j ON j.treasure_equipment_id = te.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
 CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-WHERE (w.availability IS NULL OR t.availability = ANY(w.availability))
-  AND j.auto_ability_id = sqlc.arg(auto_ability_id)
-ORDER BY t.id;
+WHERE es.auto_ability_id = sqlc.arg('auto_ability_id')::int
+  AND es.source_type = 'treasure'
+  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+ORDER BY es.source_id;
 
 
 -- name: GetAutoAbilityEquipmentTableIDs :many
@@ -66,27 +65,25 @@ ORDER BY equipment_table_id;
 
 
 -- name: GetAutoAbilityShopIDsPre :many
-SELECT DISTINCT sh.id
-FROM shops sh
-JOIN shop_equipment_pieces se ON se.shop_id = sh.id
-JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
 CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-WHERE (w.availability IS NULL OR sh.availability = ANY(w.availability))
-  AND se.shop_type = 'pre-airship'
-  AND j.auto_ability_id = $1
-ORDER BY sh.id;
+WHERE es.auto_ability_id = sqlc.arg('auto_ability_id')::int
+  AND es.shop_type = 'pre-airship'
+  AND es.source_type = 'shop'
+  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+ORDER BY es.source_id;
 
 
 -- name: GetAutoAbilityShopIDsPost :many
-SELECT DISTINCT sh.id
-FROM shops sh
-JOIN shop_equipment_pieces se ON se.shop_id = sh.id
-JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
 CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-WHERE( w.availability IS NULL OR sh.availability = ANY(w.availability))
-  AND se.shop_type = 'post-airship'
-  AND j.auto_ability_id = $1
-ORDER BY sh.id;
+WHERE es.auto_ability_id = sqlc.arg('auto_ability_id')::int
+  AND es.shop_type = 'post-airship'
+  AND es.source_type = 'shop'
+  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+ORDER BY es.source_id;
 
 
 -- name: GetAutoAbilityIDs :many
@@ -160,30 +157,23 @@ SELECT equipment_table_id FROM j_equipment_tables_names WHERE equipment_name_id 
 
 
 -- name: GetEquipmentTreasureIDs :many
-SELECT DISTINCT t.id
-FROM treasures t
-JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
-JOIN equipment_names en ON te.equipment_name_id = en.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
 CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-WHERE en.id = sqlc.arg('equipment_id')::int
-  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
-ORDER BY t.id;
+WHERE es.name_id = sqlc.arg('equipment_id')::int
+  AND es.source_type = 'treasure'
+  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+ORDER BY es.source_id;
 
 
 -- name: GetEquipmentShopIDs :many
-SELECT DISTINCT se.shop_id
-FROM shop_equipment_pieces se
-JOIN equipment_names en ON se.equipment_name_id = en.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
 CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-CROSS JOIN LATERAL (
-    SELECT CASE se.shop_type
-        WHEN 'pre-airship' THEN 'pre-story'::availability_type
-        WHEN 'post-airship' THEN 'post'::availability_type
-    END AS shop_availability
-) calc
-WHERE en.id = sqlc.arg('equipment_id')::int
-  AND (w.availability IS NULL OR calc.shop_availability = ANY(w.availability))
-ORDER BY se.shop_id;
+WHERE es.name_id = sqlc.arg('equipment_id')::int
+  AND es.source_type = 'shop'
+  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+ORDER BY es.source_id;
 
 
 -- name: GetEquipmentIDs :many
@@ -240,11 +230,11 @@ ORDER BY m.equipment_name_id;
 
 
 -- name: GetCelestialWeaponTreasureID :one
-SELECT te.treasure_id
-FROM treasure_equipment_pieces te
-JOIN equipment_names en ON te.equipment_name_id = en.id
-JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
-WHERE j.celestial_weapon_id = $1;
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
+JOIN j_equipment_tables_names j ON j.equipment_name_id = es.name_id
+WHERE j.celestial_weapon_id = $1
+  AND es.source_type = 'treasure';
 
 
 -- name: GetCelestialWeaponAutoAbilityIDs :many

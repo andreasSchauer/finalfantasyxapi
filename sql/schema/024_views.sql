@@ -249,7 +249,6 @@ JOIN item_amounts ia ON j.item_amount_id = ia.id
 
 UNION ALL
 
--- Shops
 SELECT
     i.master_item_id,
     j.shop_id AS source_id,
@@ -267,7 +266,6 @@ JOIN items i ON si.item_id = i.id
 
 UNION ALL
 
--- Quests
 SELECT
     ia.master_item_id,
     q.id AS source_id,
@@ -311,8 +309,54 @@ CREATE INDEX idx_mv_item_sources_source_id ON mv_item_sources (source_id);
 CREATE INDEX idx_mv_item_sources_area_id ON mv_item_sources (area_id);
 
 
+CREATE MATERIALIZED VIEW mv_equipment_sources AS
+SELECT
+    en.id AS name_id,
+    en.name AS name,
+    t.id AS source_id,
+    t.area_id,
+    'treasure' AS source_type,
+    te.empty_slots_amount,
+    j.auto_ability_id,
+    aa.name AS auto_ability,
+    t.availability,
+    NULL::shop_type AS shop_type
+FROM treasures t
+JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
+LEFT JOIN j_treasure_equipment_abilities j ON j.treasure_equipment_id = te.id
+LEFT JOIN auto_abilities aa ON j.auto_ability_id = aa.id
+JOIN equipment_names en ON te.equipment_name_id = en.id
+
+UNION ALL
+
+SELECT
+    en.id AS name_id,
+    en.name AS name,
+    sh.id AS source_id,
+    sh.area_id,
+    'shop' AS source_type,
+    se.empty_slots_amount,
+    j.auto_ability_id,
+    aa.name AS auto_ability,
+    CASE se.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS availability,
+    se.shop_type::shop_type AS shop_type
+FROM shops sh
+JOIN shop_equipment_pieces se ON se.shop_id = sh.id
+LEFT JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+LEFT JOIN auto_abilities aa ON j.auto_ability_id = aa.id
+JOIN equipment_names en ON se.equipment_name_id = en.id;
+
+
+CREATE INDEX idx_mv_equipment_sources_name_id ON mv_equipment_sources (name_id);
+CREATE INDEX idx_mv_equipment_sources_source_id ON mv_equipment_sources (source_id);
+CREATE INDEX idx_mv_equipment_sources_area_id ON mv_equipment_sources (area_id);
+
 
 -- +goose Down
+DROP MATERIALIZED VIEW IF EXISTS mv_equipment_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_item_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_geography_graph;
 DROP MATERIALIZED VIEW IF EXISTS mv_geography;

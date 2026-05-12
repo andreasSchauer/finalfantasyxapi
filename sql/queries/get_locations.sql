@@ -822,10 +822,9 @@ SELECT id FROM shops WHERE category = ANY(sqlc.narg('category')::shop_category[]
 
 
 -- name: GetShopIDsEquipmentFilter :many
-SELECT DISTINCT se.shop_id
-FROM shop_equipment_pieces se
-LEFT JOIN equipment_names en ON se.equipment_name_id = en.id
-LEFT JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
+LEFT JOIN equipment_names en ON es.name_id = en.id
 CROSS JOIN (
     SELECT
         sqlc.narg('shop_type')::shop_type AS shop_type,
@@ -834,11 +833,11 @@ CROSS JOIN (
         sqlc.narg('auto_ability_id')::int AS auto_ability_id
 ) w
 WHERE 
-    (w.shop_type IS NULL OR se.shop_type = w.shop_type)
-    AND (w.empty_slots IS NULL OR se.empty_slots_amount::int = ANY(w.empty_slots))
+    (w.shop_type IS NULL OR es.shop_type = w.shop_type)
+    AND (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
     AND (w.character_id IS NULL OR en.character_id = w.character_id)
-    AND (w.auto_ability_id IS NULL OR j.auto_ability_id = w.auto_ability_id)
-ORDER BY se.shop_id;
+    AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
+ORDER BY es.source_id;
 
 
 -- name: GetShopIDsWithItems :many

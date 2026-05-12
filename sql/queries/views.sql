@@ -20,3 +20,7 @@ REFRESH MATERIALIZED VIEW mv_geography_graph;
 
 -- name: RefreshItemSourcesView :exec
 REFRESH MATERIALIZED VIEW mv_item_sources;
+
+
+-- name: RefreshEquipmentSourcesView :exec
+REFRESH MATERIALIZED VIEW mv_equipment_sources;

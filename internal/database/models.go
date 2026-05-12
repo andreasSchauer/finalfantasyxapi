@@ -4031,6 +4031,19 @@ type MonsterSelection struct {
 	DataHash string
 }
 
+type MvEquipmentSource struct {
+	NameID           int32
+	Name             string
+	SourceID         int32
+	AreaID           int32
+	SourceType       string
+	EmptySlotsAmount interface{}
+	AutoAbilityID    sql.NullInt32
+	AutoAbility      sql.NullString
+	Availability     AvailabilityType
+	ShopType         sql.NullString
+}
+
 type MvGeography struct {
 	LocationID      int32
 	SublocationID   int32

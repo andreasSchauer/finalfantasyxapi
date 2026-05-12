@@ -290,35 +290,34 @@ func (q *Queries) GetAutoAbilityMonsterIDs(ctx context.Context, arg GetAutoAbili
 }
 
 const getAutoAbilityShopIDsPost = `-- name: GetAutoAbilityShopIDsPost :many
-SELECT DISTINCT sh.id
-FROM shops sh
-JOIN shop_equipment_pieces se ON se.shop_id = sh.id
-JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
-CROSS JOIN (SELECT $2::availability_type[] AS availability) w
-WHERE( w.availability IS NULL OR sh.availability = ANY(w.availability))
-  AND se.shop_type = 'post-airship'
-  AND j.auto_ability_id = $1
-ORDER BY sh.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
+CROSS JOIN (SELECT $1::availability_type[] AS availability) w
+WHERE es.auto_ability_id = $2::int
+  AND es.shop_type = 'post-airship'
+  AND es.source_type = 'shop'
+  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+ORDER BY es.source_id
 `
 
 type GetAutoAbilityShopIDsPostParams struct {
-	AutoAbilityID int32
 	Availability  []AvailabilityType
+	AutoAbilityID int32
 }
 
 func (q *Queries) GetAutoAbilityShopIDsPost(ctx context.Context, arg GetAutoAbilityShopIDsPostParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAutoAbilityShopIDsPost, arg.AutoAbilityID, pq.Array(arg.Availability))
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityShopIDsPost, pq.Array(arg.Availability), arg.AutoAbilityID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var source_id int32
+		if err := rows.Scan(&source_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, source_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -330,35 +329,34 @@ func (q *Queries) GetAutoAbilityShopIDsPost(ctx context.Context, arg GetAutoAbil
 }
 
 const getAutoAbilityShopIDsPre = `-- name: GetAutoAbilityShopIDsPre :many
-SELECT DISTINCT sh.id
-FROM shops sh
-JOIN shop_equipment_pieces se ON se.shop_id = sh.id
-JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
-CROSS JOIN (SELECT $2::availability_type[] AS availability) w
-WHERE (w.availability IS NULL OR sh.availability = ANY(w.availability))
-  AND se.shop_type = 'pre-airship'
-  AND j.auto_ability_id = $1
-ORDER BY sh.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
+CROSS JOIN (SELECT $1::availability_type[] AS availability) w
+WHERE es.auto_ability_id = $2::int
+  AND es.shop_type = 'pre-airship'
+  AND es.source_type = 'shop'
+  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+ORDER BY es.source_id
 `
 
 type GetAutoAbilityShopIDsPreParams struct {
-	AutoAbilityID int32
 	Availability  []AvailabilityType
+	AutoAbilityID int32
 }
 
 func (q *Queries) GetAutoAbilityShopIDsPre(ctx context.Context, arg GetAutoAbilityShopIDsPreParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAutoAbilityShopIDsPre, arg.AutoAbilityID, pq.Array(arg.Availability))
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityShopIDsPre, pq.Array(arg.Availability), arg.AutoAbilityID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var source_id int32
+		if err := rows.Scan(&source_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, source_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -370,14 +368,13 @@ func (q *Queries) GetAutoAbilityShopIDsPre(ctx context.Context, arg GetAutoAbili
 }
 
 const getAutoAbilityTreasureIDs = `-- name: GetAutoAbilityTreasureIDs :many
-SELECT DISTINCT t.id
-FROM treasures t
-JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
-JOIN j_treasure_equipment_abilities j ON j.treasure_equipment_id = te.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
 CROSS JOIN (SELECT $1::availability_type[] AS availability) w
-WHERE (w.availability IS NULL OR t.availability = ANY(w.availability))
-  AND j.auto_ability_id = $2
-ORDER BY t.id
+WHERE es.auto_ability_id = $2::int
+  AND es.source_type = 'treasure'
+  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+ORDER BY es.source_id
 `
 
 type GetAutoAbilityTreasureIDsParams struct {
@@ -393,11 +390,11 @@ func (q *Queries) GetAutoAbilityTreasureIDs(ctx context.Context, arg GetAutoAbil
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var source_id int32
+		if err := rows.Scan(&source_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, source_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -500,18 +497,18 @@ func (q *Queries) GetCelestialWeaponIDsByFormula(ctx context.Context, formula Ce
 }
 
 const getCelestialWeaponTreasureID = `-- name: GetCelestialWeaponTreasureID :one
-SELECT te.treasure_id
-FROM treasure_equipment_pieces te
-JOIN equipment_names en ON te.equipment_name_id = en.id
-JOIN j_equipment_tables_names j ON j.equipment_name_id = en.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
+JOIN j_equipment_tables_names j ON j.equipment_name_id = es.name_id
 WHERE j.celestial_weapon_id = $1
+  AND es.source_type = 'treasure'
 `
 
 func (q *Queries) GetCelestialWeaponTreasureID(ctx context.Context, celestialWeaponID sql.NullInt32) (int32, error) {
 	row := q.db.QueryRowContext(ctx, getCelestialWeaponTreasureID, celestialWeaponID)
-	var treasure_id int32
-	err := row.Scan(&treasure_id)
-	return treasure_id, err
+	var source_id int32
+	err := row.Scan(&source_id)
+	return source_id, err
 }
 
 const getEquipmentEquipmentTableIDs = `-- name: GetEquipmentEquipmentTableIDs :many
@@ -707,19 +704,13 @@ func (q *Queries) GetEquipmentIDsCelestialWeapon(ctx context.Context) ([]int32, 
 }
 
 const getEquipmentShopIDs = `-- name: GetEquipmentShopIDs :many
-SELECT DISTINCT se.shop_id
-FROM shop_equipment_pieces se
-JOIN equipment_names en ON se.equipment_name_id = en.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
 CROSS JOIN (SELECT $1::availability_type[] AS availability) w
-CROSS JOIN LATERAL (
-    SELECT CASE se.shop_type
-        WHEN 'pre-airship' THEN 'pre-story'::availability_type
-        WHEN 'post-airship' THEN 'post'::availability_type
-    END AS shop_availability
-) calc
-WHERE en.id = $2::int
-  AND (w.availability IS NULL OR calc.shop_availability = ANY(w.availability))
-ORDER BY se.shop_id
+WHERE es.name_id = $2::int
+  AND es.source_type = 'shop'
+  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+ORDER BY es.source_id
 `
 
 type GetEquipmentShopIDsParams struct {
@@ -735,11 +726,11 @@ func (q *Queries) GetEquipmentShopIDs(ctx context.Context, arg GetEquipmentShopI
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var shop_id int32
-		if err := rows.Scan(&shop_id); err != nil {
+		var source_id int32
+		if err := rows.Scan(&source_id); err != nil {
 			return nil, err
 		}
-		items = append(items, shop_id)
+		items = append(items, source_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -886,14 +877,13 @@ func (q *Queries) GetEquipmentTableIDsEquipType(ctx context.Context, type_ Equip
 }
 
 const getEquipmentTreasureIDs = `-- name: GetEquipmentTreasureIDs :many
-SELECT DISTINCT t.id
-FROM treasures t
-JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
-JOIN equipment_names en ON te.equipment_name_id = en.id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
 CROSS JOIN (SELECT $1::availability_type[] AS availability) w
-WHERE en.id = $2::int
-  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
-ORDER BY t.id
+WHERE es.name_id = $2::int
+  AND es.source_type = 'treasure'
+  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+ORDER BY es.source_id
 `
 
 type GetEquipmentTreasureIDsParams struct {
@@ -909,11 +899,11 @@ func (q *Queries) GetEquipmentTreasureIDs(ctx context.Context, arg GetEquipmentT
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var source_id int32
+		if err := rows.Scan(&source_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, source_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
