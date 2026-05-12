@@ -52,6 +52,6 @@ func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.M
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[TypedAPIResource]{
 		frl(enumListQuery(cfg, r, i, cfg.t.ItemType, resources, "type", cfg.db.GetMasterItemIDsByType)),
-		frl(basicQueryWrapper(cfg, r, i, resources, "method", getMasterItemsByMethod)),
+		frl(valueListQuery(cfg, r, i, resources, "method", cfg.db.GetMasterItemIDsByMethods)),
 	})
 }
