@@ -346,6 +346,46 @@ func TestRetrieveAreas(t *testing.T) {
 			count:   22,
 			results: []int32{13, 28, 106, 210, 235, 240},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?location=13&treasures=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{129, 132, 134, 136, 138},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?shops=true&airship=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   10,
+			results: []int32{48, 69, 92, 141, 201, 213},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?sublocation=26&boss_fights=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{158},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?comp_sphere=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{6, 92, 157, 178, 184},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?fmvs=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   28,
+			results: []int32{3, 34, 50, 127, 181, 237},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.areas.endpoint, "RetrieveAreas", testCfg.HandleAreas, compareAPIResourceLists[AreaApiResourceList])

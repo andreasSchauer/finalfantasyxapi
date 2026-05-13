@@ -379,6 +379,26 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 			next:     nil,
 			results:  []int32{162, 163, 170, 173},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/overdrive-abilities?user=5",
+				expectedStatus: http.StatusOK,
+			},
+			count:    8,
+			previous: nil,
+			next:     nil,
+			results:  []int32{1, 2, 3, 4, 5, 6, 7, 8},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/overdrive-abilities?related_stat=5",
+				expectedStatus: http.StatusOK,
+			},
+			count:    3,
+			previous: nil,
+			next:     nil,
+			results:  []int32{162, 163, 173},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.overdriveAbilities.endpoint, "RetrieveOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[NamedApiResourceList])

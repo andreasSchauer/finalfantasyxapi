@@ -332,12 +332,11 @@ func (q *Queries) GetAbilityIDsByInflictedStatus(ctx context.Context, statusID s
 }
 
 const getAbilityIDsByMonster = `-- name: GetAbilityIDsByMonster :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN monster_abilities ma ON ma.ability_id = a.id
+SELECT DISTINCT ma.ability_id
+FROM monster_abilities ma
 JOIN j_monsters_abilities j ON j.monster_ability_id = ma.id
 WHERE j.monster_id = $1
-ORDER BY a.id
+ORDER BY ma.ability_id
 `
 
 func (q *Queries) GetAbilityIDsByMonster(ctx context.Context, monsterID int32) ([]int32, error) {
@@ -348,11 +347,11 @@ func (q *Queries) GetAbilityIDsByMonster(ctx context.Context, monsterID int32) (
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var ability_id int32
+		if err := rows.Scan(&ability_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, ability_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -680,12 +679,11 @@ func (q *Queries) GetAbilityIDsWithStatChanges(ctx context.Context) ([]int32, er
 }
 
 const getAbilityMonsterIDs = `-- name: GetAbilityMonsterIDs :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN j_monsters_abilities j ON j.monster_id = m.id
+SELECT DISTINCT j.monster_id
+FROM j_monsters_abilities j
 JOIN monster_abilities ma ON j.monster_ability_id = ma.id
 WHERE ma.ability_id = $1
-ORDER BY m.id
+ORDER BY j.monster_id
 `
 
 func (q *Queries) GetAbilityMonsterIDs(ctx context.Context, abilityID int32) ([]int32, error) {
@@ -696,11 +694,11 @@ func (q *Queries) GetAbilityMonsterIDs(ctx context.Context, abilityID int32) ([]
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -865,14 +863,13 @@ func (q *Queries) GetItemAbilityIDsByCategory(ctx context.Context, category []It
 const getItemAbilityIDsByRelatedStat = `-- name: GetItemAbilityIDsByRelatedStat :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN j_items_related_stats j ON j.player_ability_id = pa.id
-JOIN stats s ON j.stat_id = s.id
-WHERE s.id = $1
+JOIN j_items_related_stats j ON j.item_id = ia.id
+WHERE j.stat_id = $1
 ORDER BY ia.id
 `
 
-func (q *Queries) GetItemAbilityIDsByRelatedStat(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByRelatedStat, id)
+func (q *Queries) GetItemAbilityIDsByRelatedStat(ctx context.Context, statID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemAbilityIDsByRelatedStat, statID)
 	if err != nil {
 		return nil, err
 	}
@@ -1592,11 +1589,7 @@ func (q *Queries) GetRonsoRageIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getRonsoRageMonsterIDs = `-- name: GetRonsoRageMonsterIDs :many
-SELECT m.id
-FROM monsters m
-JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
-WHERE j.ronso_rage_id = $1
-ORDER BY m.id
+SELECT monster_id FROM j_monsters_ronso_rages WHERE ronso_rage_id = $1 ORDER BY monster_id
 `
 
 func (q *Queries) GetRonsoRageMonsterIDs(ctx context.Context, ronsoRageID int32) ([]int32, error) {
@@ -1607,11 +1600,11 @@ func (q *Queries) GetRonsoRageMonsterIDs(ctx context.Context, ronsoRageID int32)
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

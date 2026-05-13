@@ -363,6 +363,26 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			next:     nil,
 			results:  []int32{1, 12, 24, 34, 43, 55, 67, 95, 102},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/player-abilities?delay=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:    3,
+			previous: nil,
+			next:     nil,
+			results:  []int32{9, 10, 88},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/player-abilities?outside_battle=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:    3,
+			previous: nil,
+			next:     nil,
+			results:  []int32{45, 46, 47},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.playerAbilities.endpoint, "RetrievePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[NamedApiResourceList])

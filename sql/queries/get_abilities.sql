@@ -1,10 +1,9 @@
 -- name: GetAbilityMonsterIDs :many
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN j_monsters_abilities j ON j.monster_id = m.id
+SELECT DISTINCT j.monster_id
+FROM j_monsters_abilities j
 JOIN monster_abilities ma ON j.monster_ability_id = ma.id
 WHERE ma.ability_id = $1
-ORDER BY m.id;
+ORDER BY j.monster_id;
 
 
 -- name: GetAbilityIDs :many
@@ -12,12 +11,11 @@ SELECT id FROM abilities ORDER BY id;
 
 
 -- name: GetAbilityIDsByMonster :many
-SELECT DISTINCT a.id
-FROM abilities a
-JOIN monster_abilities ma ON ma.ability_id = a.id
+SELECT DISTINCT ma.ability_id
+FROM monster_abilities ma
 JOIN j_monsters_abilities j ON j.monster_ability_id = ma.id
 WHERE j.monster_id = $1
-ORDER BY a.id;
+ORDER BY ma.ability_id;
 
 
 -- name: GetAbilityIDsByType :many
@@ -456,9 +454,8 @@ ORDER BY ia.id;
 -- name: GetItemAbilityIDsByRelatedStat :many
 SELECT DISTINCT ia.id
 FROM item_abilities ia
-JOIN j_items_related_stats j ON j.player_ability_id = pa.id
-JOIN stats s ON j.stat_id = s.id
-WHERE s.id = $1
+JOIN j_items_related_stats j ON j.item_id = ia.id
+WHERE j.stat_id = $1
 ORDER BY ia.id;
 
 
@@ -662,8 +659,4 @@ SELECT id FROM ronso_rages ORDER BY id;
 
 
 -- name: GetRonsoRageMonsterIDs :many
-SELECT m.id
-FROM monsters m
-JOIN j_monsters_ronso_rages j ON j.monster_id = m.id
-WHERE j.ronso_rage_id = $1
-ORDER BY m.id;
+SELECT monster_id FROM j_monsters_ronso_rages WHERE ronso_rage_id = $1 ORDER BY monster_id;

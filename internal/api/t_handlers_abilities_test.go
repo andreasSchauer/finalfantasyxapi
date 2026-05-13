@@ -285,6 +285,54 @@ func TestRetrieveAbilities(t *testing.T) {
 			next:     nil,
 			results:  []int32{1, 5, 65, 89, 128, 170, 205, 399, 449, 530, 623, 830},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?copycat=true&target_type=single-enemy&user_atk=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:    2,
+			results:  []int32{20, 21},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?darkable=true&attack_type=absorb",
+				expectedStatus: http.StatusOK,
+			},
+			count:    2,
+			results:  []int32{538, 539},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?silenceable=true&reflectable=true&damage_type=magical&element=1",
+				expectedStatus: http.StatusOK,
+			},
+			count:    5,
+			results:  []int32{69, 73, 77, 565, 666},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?damage_formula=special-var&can_crit=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:    12,
+			results:  []int32{220, 225, 229, 328, 329},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?status_remove=4",
+				expectedStatus: http.StatusOK,
+			},
+			count:    12,
+			results:  []int32{53, 254, 260, 308, 673, 791},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?stat_changes=true&mod_changes=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:    6,
+			results:  []int32{27, 29, 264, 265, 272, 275},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.abilities.endpoint, "RetrieveAbilities", testCfg.HandleAbilities, compareAPIResourceLists[NamedApiResourceList])

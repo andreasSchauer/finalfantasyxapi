@@ -242,6 +242,16 @@ func TestRetrieveEnemyAbilities(t *testing.T) {
 			next:     nil,
 			results:  []int32{46, 227, 427, 429},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/enemy-abilities?bdl=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    101,
+			previous: nil,
+			next:     nil,
+			results:  []int32{2, 50, 69, 133, 196, 228, 278, 322, 406, 428, 443},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.enemyAbilities.endpoint, "RetrieveEnemyAbilities", testCfg.HandleEnemyAbilities, compareAPIResourceLists[NamedApiResourceList])

@@ -208,6 +208,30 @@ func TestRetrieveSublocations(t *testing.T) {
 			count:   1,
 			results: []int32{7},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?location=8",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{13, 14},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?item=1&method=treasure&boss_fights=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   4,
+			results: []int32{1, 6, 8, 16},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?shops=true&treasures=true&sidequests=true&fmvs=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{13, 25, 31},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.sublocations.endpoint, "RetrieveSublocations", testCfg.HandleSublocations, compareAPIResourceLists[NamedApiResourceList])

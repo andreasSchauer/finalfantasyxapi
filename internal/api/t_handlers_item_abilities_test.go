@@ -335,6 +335,16 @@ func TestRetrieveItemAbilities(t *testing.T) {
 			next:     nil,
 			results:  []int32{9, 10, 21, 22, 23},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/item-abilities?related_stat=1",
+				expectedStatus: http.StatusOK,
+			},
+			count:    2,
+			previous: nil,
+			next:     nil,
+			results:  []int32{64, 66},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.itemAbilities.endpoint, "RetrieveItemAbilities", testCfg.HandleItemAbilities, compareAPIResourceLists[NamedApiResourceList])

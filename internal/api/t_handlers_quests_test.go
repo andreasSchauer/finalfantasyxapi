@@ -83,6 +83,14 @@ func TestRetrieveQuests(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/quests?repeatable=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   12,
+			results: []int32{48, 54, 60, 70, 76},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests?limit=max&availability=post",
 				expectedStatus: http.StatusOK,
 			},

@@ -161,6 +161,22 @@ func TestRetrieveLocations(t *testing.T) {
 			count:   4,
 			results: []int32{18, 20, 25, 26},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?key_item=13",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{4},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?boss_fights=true&shops=true&treasures=true&sidequests=true&fmvs=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{8, 15, 18},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.locations.endpoint, "RetrieveLocations", testCfg.HandleLocations, compareAPIResourceLists[NamedApiResourceList])
