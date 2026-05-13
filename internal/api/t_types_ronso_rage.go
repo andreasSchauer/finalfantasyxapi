@@ -12,6 +12,7 @@ func (e expRonsoRage) GetTestGeneral() testGeneral {
 }
 
 func compareRonsoRages(test test, exp expRonsoRage, got RonsoRage) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "overdrive", test.cfg.e.overdrives.endpoint, exp.overdrive, got.Overdrive)
 	checkResIDsInSlice(test, "monsters", test.cfg.e.monsters.endpoint, exp.monsters, got.Monsters)

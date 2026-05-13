@@ -11,6 +11,11 @@ func createListURL(cfg *Config, endpoint string) string {
 	return fmt.Sprintf("http://%s/api/%s", cfg.host, endpoint)
 }
 
+func urlToPath(cfg *Config, url string) string {
+	prefix := fmt.Sprintf("http://%s/api", cfg.host)
+	return strings.TrimPrefix(url, prefix)
+}
+
 func createResourceURL(cfg *Config, endpoint string, id int32) string {
 	url := createListURL(cfg, endpoint)
 	return fmt.Sprintf("%s/%d", url, id)

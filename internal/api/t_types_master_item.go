@@ -13,6 +13,7 @@ func (e expMasterItem) GetTestGeneral() testGeneral {
 }
 
 func compareMasterItems(test test, exp expMasterItem, got MasterItem) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "item type", test.cfg.e.itemType.endpoint, exp.itemType, got.Type)
 	compPathApiResource(test, "typed item", exp.typedItem, got.TypedItem)

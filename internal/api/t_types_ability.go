@@ -17,6 +17,7 @@ func (e expAbility) GetTestGeneral() testGeneral {
 }
 
 func compareAbilities(test test, exp expAbility, got Ability) {
+	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compIdApiResource(test, "ability type", test.cfg.e.abilityType.endpoint, exp.abilityType, got.Type)
 	compare(test, "rank", exp.rank, got.Rank)
@@ -44,6 +45,7 @@ func (e expEnemyAbility) GetTestGeneral() testGeneral {
 }
 
 func compareEnemyAbilities(test test, exp expEnemyAbility, got EnemyAbility) {
+	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
@@ -71,6 +73,7 @@ func (e expItemAbility) GetTestGeneral() testGeneral {
 }
 
 func compareItemAbilities(test test, exp expItemAbility, got ItemAbility) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
@@ -103,6 +106,7 @@ func (e expPlayerAbility) GetTestGeneral() testGeneral {
 }
 
 func comparePlayerAbilities(test test, exp expPlayerAbility, got PlayerAbility) {
+	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
@@ -132,6 +136,7 @@ func (e expOverdriveAbility) GetTestGeneral() testGeneral {
 }
 
 func compareOverdriveAbilities(test test, exp expOverdriveAbility, got OverdriveAbility) {
+	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compare(test, "rank", exp.rank, got.Rank)
 	compIdApiResource(test, "untyped ability", test.cfg.e.abilities.endpoint, exp.untypedAbility, got.UntypedAbility)
@@ -158,6 +163,7 @@ func (e expMiscAbility) GetTestGeneral() testGeneral {
 }
 
 func compareMiscAbilities(test test, exp expMiscAbility, got MiscAbility) {
+	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
@@ -187,6 +193,7 @@ func (e expTriggerCommand) GetTestGeneral() testGeneral {
 }
 
 func compareTriggerCommands(test test, exp expTriggerCommand, got TriggerCommand) {
+	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)

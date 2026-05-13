@@ -29,6 +29,7 @@ func (e expMonster) GetTestGeneral() testGeneral {
 }
 
 func compareMonsters(test test, exp expMonster, got Monster) {
+	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compIdApiResource(test, "species", test.cfg.e.monsterSpecies.endpoint, exp.species, got.Species)
 	compare(test, "ctb icon type", exp.ctbIconType, got.CTBIconType)
@@ -59,6 +60,7 @@ type testMonItems struct {
 }
 
 func compareMonsterItems(test test, fieldName string, exp testMonItems, got MonsterItems) {
+	test.t.Helper()
 	itemMap := exp.items
 
 	compare(test, "item drop chance", exp.itemDropChance, got.DropChance)
@@ -80,6 +82,7 @@ type testMonEquipment struct {
 }
 
 func compareMonsterEquipment(test test, _ string, exp testMonEquipment, got MonsterEquipment) {
+	test.t.Helper()
 	compStructs(test, "ability slots", exp.abilitySlots, got.AbilitySlots)
 	compStructs(test, "attached abilities", exp.attachedAbilities, got.AttachedAbilities)
 	checkResIDsInSlice(test, "weapon abilities", test.cfg.e.autoAbilities.endpoint, exp.weaponAbilities, got.WeaponAbilities)
@@ -94,6 +97,7 @@ type testAgilityParams struct {
 }
 
 func compareAgilityParams(test test, fieldName string, exp testAgilityParams, got AgilityParams) {
+	test.t.Helper()
 	compIdApiResource(test, fieldName+" - agility tier", test.cfg.e.agilityTiers.endpoint, exp.agilityTier, got.AgilityTier)
 	compare(test, fieldName+" - tick speed", exp.tickSpeed, got.TickSpeed)
 	compare(test, fieldName+" - min icv", exp.minICV, got.MinICV)

@@ -15,6 +15,7 @@ func (e expOverdrive) GetTestGeneral() testGeneral {
 }
 
 func compareOverdrives(test test, exp expOverdrive, got Overdrive) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "countdown in sec", exp.countdownInSec, got.CountdownInSec)

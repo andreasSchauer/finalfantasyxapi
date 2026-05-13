@@ -18,6 +18,7 @@ func (e expEquipment) GetTestGeneral() testGeneral {
 }
 
 func compareEquipment(test test, exp expEquipment, got EquipmentName) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "equipment table", test.cfg.e.equipmentTables.endpoint, exp.equipmentTable, got.EquipmentTable)
 	compare(test, "priority", exp.priority, got.Priority)

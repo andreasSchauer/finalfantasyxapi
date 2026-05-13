@@ -140,6 +140,7 @@ func (l expListNames) getListParams() ListParams {
 }
 
 func compareListParams(test test, exp, got ListParams) {
+	test.t.Helper()
 	compare(test, "count", exp.Count, got.Count)
 	compPageURL(test, "previous", exp.Previous, got.Previous)
 	compPageURL(test, "next", exp.Next, got.Next)

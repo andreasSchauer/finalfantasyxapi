@@ -6,6 +6,7 @@ type testElemResist struct {
 }
 
 func compareElemResists(test test, fieldName string, exp testElemResist, got ElementalResist) {
+	test.t.Helper()
 	elemEndpoint := test.cfg.e.elements.endpoint
 	affinityEndpoint := test.cfg.e.elementalAffinity.endpoint
 

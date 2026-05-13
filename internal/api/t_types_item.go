@@ -20,6 +20,7 @@ func (e expItem) GetTestGeneral() testGeneral {
 }
 
 func compareItems(test test, exp expItem, got Item) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "untyped item", test.cfg.e.allItems.endpoint, exp.untypedItem, got.UntypedItem)
 	compIdApiResource(test, "category", test.cfg.e.itemCategory.endpoint, exp.category, got.Category)
@@ -51,6 +52,7 @@ func (t testMonItemAmts) GetIndex() int {
 }
 
 func compareMonItemAmts(test test, fieldName string, exp testMonItemAmts, got MonItemAmts) {
+	test.t.Helper()
 	compIdApiResource(test, fieldName+" - monster", test.cfg.e.monsters.endpoint, exp.monster, got.Monster)
 	compare(test, fieldName+" - steal common", exp.stealCommon, got.StealCommon)
 	compare(test, fieldName+" - steal rare", exp.stealRare, got.StealRare)

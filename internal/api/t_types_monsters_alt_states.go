@@ -36,7 +36,7 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []Alter
 
 	got := gotStates[0]
 	if got.Condition != "default" {
-		test.t.Errorf("%s: first altered state must be default when another is applied, got: %s", test.name, got.Condition)
+		test.t.Errorf("first altered state must be default when another is applied, got: %s", got.Condition)
 	}
 
 	compare(test, "default state is temporary", exp.IsTemporary, got.IsTemporary)

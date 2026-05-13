@@ -17,6 +17,7 @@ func (e expArenaCreation) GetTestGeneral() testGeneral {
 }
 
 func compareArenaCreations(test test, exp expArenaCreation, got ArenaCreation) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "category", exp.category, got.Category)
 	compIdApiResource(test, "monster", test.cfg.e.monsters.endpoint, exp.monster, got.Monster)

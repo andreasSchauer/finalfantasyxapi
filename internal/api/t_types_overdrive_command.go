@@ -15,6 +15,7 @@ func (e expOverdriveCommand) GetTestGeneral() testGeneral {
 }
 
 func compareOverdriveCommands(test test, exp expOverdriveCommand, got OverdriveCommand) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "rank", exp.rank, got.Rank)
 	compIdApiResource(test, "user", test.cfg.e.characterClasses.endpoint, exp.user, got.User)

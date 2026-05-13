@@ -17,6 +17,7 @@ func (e expKeyItem) GetTestGeneral() testGeneral {
 }
 
 func compareKeyItems(test test, exp expKeyItem, got KeyItem) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "untyped item", test.cfg.e.allItems.endpoint, exp.untypedItem, got.UntypedItem)
 	compIdApiResource(test, "category", test.cfg.e.keyItemCategory.endpoint, exp.category, got.Category)

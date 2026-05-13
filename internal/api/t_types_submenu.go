@@ -14,6 +14,7 @@ func (e expSubmenu) GetTestGeneral() testGeneral {
 }
 
 func compareSubmenus(test test, exp expSubmenu, got Submenu) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResourcePtrs(test, "topmenu", test.cfg.e.topmenus.endpoint, exp.topmenu, got.Topmenu)
 	checkResIDsInSlice(test, "users", test.cfg.e.characterClasses.endpoint, exp.users, got.Users)
@@ -28,6 +29,7 @@ type expMenuOpen struct {
 }
 
 func compareMenuOpen(test test, fieldName string, exp expMenuOpen, got MenuOpen) {
+	test.t.Helper()
 	compIdApiResourcePtrs(test, fieldName+" - ability", test.cfg.e.abilities.endpoint, exp.ability, got.Ability)
 	compIdApiResourcePtrs(test, fieldName+" - aeon command", test.cfg.e.aeonCommands.endpoint, exp.aeonCommand, got.AeonCommand)
 	checkResIDsInSlice(test, fieldName+" - overdrive commands", test.cfg.e.overdriveCommands.endpoint, exp.overdriveCommands, got.OverdriveCommands)

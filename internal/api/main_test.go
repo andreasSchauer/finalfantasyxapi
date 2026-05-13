@@ -2,6 +2,8 @@ package api
 
 import (
 	// "filepath"
+	"io"
+	"log"
 	"os"
 	"testing"
 )
@@ -9,8 +11,8 @@ import (
 var testCfg *Config
 
 func TestMain(m *testing.M) {
-	// will be used once the file is in ./internal/api
-	// _ = godotenv.Load(filepath.Join("..", "..", ".env"))
+	log.SetOutput(io.Discard)
+
 	err := LoadEnvFromRoot()
 	if err != nil {
 		panic(err)

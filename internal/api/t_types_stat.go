@@ -18,6 +18,7 @@ func (e expStat) GetTestGeneral() testGeneral {
 }
 
 func compareStats(test test, exp expStat, got Stat) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	checkResIDsInSlice(test, "spheres", test.cfg.e.spheres.endpoint, exp.spheres, got.Spheres)
 	checkResIDsInSlice(test, "auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.autoAbilities, got.AutoAbilities)

@@ -17,6 +17,7 @@ func (e expSphere) GetTestGeneral() testGeneral {
 }
 
 func compareSpheres(test test, exp expSphere, got Sphere) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "item", test.cfg.e.items.endpoint, exp.item, got.Item)
 	compStructPtrs(test, "created node", exp.createdNode, got.CreatedNode)

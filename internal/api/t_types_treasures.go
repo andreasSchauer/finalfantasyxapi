@@ -18,6 +18,7 @@ func (e expTreasure) GetTestGeneral() testGeneral {
 }
 
 func compareTreasures(test test, exp expTreasure, got Treasure) {
+	test.t.Helper()
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
 	compIdApiResource(test, "availability", test.cfg.e.availabilityType.endpoint, exp.availability, got.Availability)
@@ -36,6 +37,7 @@ type testFoundEquipment struct {
 }
 
 func compareFoundEquipment(test test, fieldName string, exp testFoundEquipment, got FoundEquipment) {
+	test.t.Helper()
 	enEndpoint := test.cfg.e.equipment.endpoint
 	aaEndpoint := test.cfg.e.autoAbilities.endpoint
 

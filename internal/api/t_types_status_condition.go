@@ -14,6 +14,7 @@ func (e expStatusCondition) GetTestGeneral() testGeneral {
 }
 
 func compareStatusConditions(test test, exp expStatusCondition, got StatusCondition) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	checkResIDsInSlice(test, "auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.autoAbilities, got.AutoAbilities)
 	compTestStructPtrs(test, "inflicted by", exp.inflictedBy, got.InflictedBy, compareStatusInflictions)
@@ -31,6 +32,7 @@ type testStatusInfliction struct {
 }
 
 func compareStatusInflictions(test test, fieldName string, exp testStatusInfliction, got StatusInfliction) {
+	test.t.Helper()
 	checkResIDsInSlice(test, fieldName+" - player abilities", test.cfg.e.playerAbilities.endpoint, exp.playerAbilities, got.PlayerAbilities)
 	checkResIDsInSlice(test, fieldName+" - overdrive abilities", test.cfg.e.overdriveAbilities.endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
 	checkResIDsInSlice(test, fieldName+" - item abilities", test.cfg.e.itemAbilities.endpoint, exp.itemAbilities, got.ItemAbilities)
@@ -48,6 +50,7 @@ type testStatusRemoval struct {
 }
 
 func compareStatusRemovals(test test, fieldName string, exp testStatusRemoval, got StatusRemoval) {
+	test.t.Helper()
 	checkResIDsInSlice(test, fieldName+" - player abilities", test.cfg.e.playerAbilities.endpoint, exp.playerAbilities, got.PlayerAbilities)
 	checkResIDsInSlice(test, fieldName+" - overdrive abilities", test.cfg.e.overdriveAbilities.endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
 	checkResIDsInSlice(test, fieldName+" - item abilities", test.cfg.e.itemAbilities.endpoint, exp.itemAbilities, got.ItemAbilities)

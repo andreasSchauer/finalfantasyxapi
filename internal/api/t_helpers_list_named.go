@@ -21,6 +21,7 @@ func compareSectionLists(test test, endpoint string, exp expListNames, got Secti
 
 // checks if the provided slice of strings contains all stated strings
 func checkStringsInSlice(test test, fieldName string, expNames, gotNames []string) {
+	test.t.Helper()
 	sliceBasicChecks(test, fieldName, expNames, gotNames)
 
 	gotMap := make(map[string]bool)
@@ -29,13 +30,13 @@ func checkStringsInSlice(test test, fieldName string, expNames, gotNames []strin
 	}
 
 	if len(gotMap) != len(gotNames) {
-		test.t.Errorf("%s: there appear to be duplicates in '%s'", test.name, fieldName)
+		test.t.Errorf("there appear to be duplicates in '%s'\n\n", fieldName)
 	}
 
 	for _, expName := range expNames {
 		_, ok := gotMap[expName]
 		if !ok {
-			test.t.Errorf("%s: %s doesn't contain all wanted names. missing '%s'.", test.name, fieldName, expName)
+			test.t.Errorf("%s doesn't contain all wanted names. missing '%s'.\n\n", fieldName, expName)
 		}
 	}
 }

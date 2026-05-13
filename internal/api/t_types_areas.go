@@ -15,6 +15,7 @@ func (e expArea) GetTestGeneral() testGeneral {
 }
 
 func compareAreas(test test, exp expArea, got Area) {
+	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compare(test, "displayName", exp.displayName, got.DisplayName)
 	compIdApiResource(test, "location", test.cfg.e.locations.endpoint, exp.parentLocation, got.ParentLocation)

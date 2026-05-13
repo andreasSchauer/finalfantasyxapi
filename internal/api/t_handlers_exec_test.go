@@ -15,10 +15,11 @@ type testCase interface {
 }
 
 func getTestName(name, requestURL string, caseNum int) string {
-	return fmt.Sprintf("%s: %d, requestURL: %s", name, caseNum, requestURL)
+	return fmt.Sprintf("%s-%d: %s", name, caseNum, requestURL)
 }
 
 func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
+	t.Helper()
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
 		name := getTestName(testFuncName, tc.requestURL, i+1)
@@ -37,6 +38,7 @@ func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncNam
 // compareAPIResourceLists for normal API Resources
 // compareSimpleResourceLists for Subsections
 func testIdList[G any](t *testing.T, tests []expListIDs, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListIDs, G)) {
+	t.Helper()
 	for i, exp := range tests {
 		tc := exp.testGeneral
 		name := getTestName(testFuncName, tc.requestURL, i+1)
@@ -60,6 +62,7 @@ func testIdList[G any](t *testing.T, tests []expListIDs, endpoint, testFuncName 
 // compareParameterLists for /parameters lists
 // compareSectionLists for /sections lists
 func testNameList[G any](t *testing.T, tests []expListNames, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListNames, G)) {
+	t.Helper()
 	for i, exp := range tests {
 		tc := exp.testGeneral
 		name := getTestName(testFuncName, tc.requestURL, i+1)
@@ -97,20 +100,24 @@ func setupTest[T any](t *testing.T, tc testGeneral, testName string, handlerFunc
 	handler.ServeHTTP(rr, req)
 
 	if rr.Code != tc.expectedStatus {
-		t.Fatalf("%s: expected %d, got %d, body=%s", testName, tc.expectedStatus, rr.Code, rr.Body.String())
+		if rr.Code >= 400 {
+			t.Fatalf("expected status: %d, got %d, body=%s\n\n", tc.expectedStatus, rr.Code, rr.Body.String())
+		}
+			
+		t.Fatalf("expected status: %d, got %d\n\n", tc.expectedStatus, rr.Code,)
 	}
 
 	if tc.expectedErr != "" {
 		rawErr := rr.Body.String()
 		if !strings.Contains(rawErr, tc.expectedErr) {
-			t.Fatalf("%s: expected error message to contain %s, got %q", testName, tc.expectedErr, rawErr)
+			t.Fatalf("error mismatch.\n- want: %s\n- got %s\n\n", tc.expectedErr, rawErr)
 		}
 		return test{}, zeroType, errCorrect
 	}
 
 	var got T
 	if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
-		t.Fatalf("%s: failed to decode: %v", testName, err)
+		t.Fatalf("failed to decode: %v\n\n", err)
 	}
 
 	test := test{

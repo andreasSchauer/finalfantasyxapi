@@ -21,6 +21,7 @@ type expBattleInteraction struct {
 }
 
 func compareBattleInteractions(test test, fieldName string, exp expBattleInteraction, got BattleInteraction) {
+	test.t.Helper()
 	compare(test, fieldName+" target", exp.target, got.Target)
 	compare(test, fieldName+" range", exp.abilityRange, got.Range)
 	compare(test, fieldName+" hit amount", exp.hitAmount, got.HitAmount)

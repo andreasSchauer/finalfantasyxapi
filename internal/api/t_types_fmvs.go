@@ -12,6 +12,7 @@ func (e expFMV) GetTestGeneral() testGeneral {
 }
 
 func compareFMVs(test test, exp expFMV, got FMV) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
 	compIdApiResourcePtrs(test, "song", test.cfg.e.songs.endpoint, exp.song, got.Song)

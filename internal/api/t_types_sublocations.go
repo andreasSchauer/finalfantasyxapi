@@ -14,6 +14,7 @@ func (e expSublocation) GetTestGeneral() testGeneral {
 }
 
 func compareSublocations(test test, exp expSublocation, got Sublocation) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "location", test.cfg.e.locations.endpoint, exp.parentLocation, got.ParentLocation)
 	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)

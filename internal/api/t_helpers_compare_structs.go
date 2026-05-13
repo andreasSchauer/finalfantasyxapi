@@ -16,7 +16,7 @@ func compStructs[T any](test test, fieldName string, exp, got T) {
 	}
 
 	if !reflect.DeepEqual(exp, got) {
-		test.t.Errorf("%s: expected %s %v, got %v", test.name, fieldName, exp, got)
+		test.t.Errorf("expected %s %v, got %v\n\n", fieldName, exp, got)
 	}
 }
 
@@ -94,6 +94,7 @@ func checkTestStructsInSlice[E testStructIdx, G any](test test, fieldName string
 
 // checks the length of a slice, whether it should be ignored (returns errIgnoredField in that case), and if the exp and got slice are present
 func sliceBasicChecks[E, G any](test test, fieldName string, exp []E, got []G) error {
+	test.t.Helper()
 	compLength(test, fieldName, len(got))
 
 	dontCheck := test.dontCheck

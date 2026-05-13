@@ -18,6 +18,7 @@ func (e expSong) GetTestGeneral() testGeneral {
 }
 
 func compareSongs(test test, exp expSong, got Song) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "composer", exp.composer, got.Composer)
 	compare(test, "arranger", exp.arranger, got.Arranger)
@@ -40,6 +41,7 @@ func (t testBackgroundMusic) GetIndex() int {
 }
 
 func compareBackgroundMusic(test test, _ string, exp testBackgroundMusic, got BackgroundMusic) {
+	test.t.Helper()
 	compare(test, "bg music - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
 	checkResIDsInSlice(test, "bg music - areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)
 }
@@ -57,6 +59,7 @@ func (t testCue) GetIndex() int {
 }
 
 func compareCues(test test, fieldName string, exp testCue, got Cue) {
+	test.t.Helper()
 	compIdApiResourcePtrs(test, fieldName+" - trigger area", test.cfg.e.areas.endpoint, exp.triggerArea, got.TriggerArea)
 	checkResIDsInSlice(test, fieldName+" - included areas", test.cfg.e.areas.endpoint, exp.includedAreas, got.IncludedAreas)
 	compare(test, fieldName+" - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)

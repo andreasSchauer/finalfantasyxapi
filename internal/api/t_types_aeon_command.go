@@ -14,6 +14,7 @@ func (e expAeonCommand) GetTestGeneral() testGeneral {
 }
 
 func compareAeonCommands(test test, exp expAeonCommand, got AeonCommand) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "user", test.cfg.e.characterClasses.endpoint, exp.user, got.User)
 	compIdApiResourcePtrs(test, "topmenu", test.cfg.e.topmenus.endpoint, exp.topmenu, got.Topmenu)
@@ -27,6 +28,7 @@ type expPossibleAbilityList struct {
 }
 
 func comparePosAbilityList(test test, fieldName string, exp expPossibleAbilityList, got PossibleAbilityList) {
+	test.t.Helper()
 	compIdApiResource(test, fieldName+" - user", test.cfg.e.characterClasses.endpoint, exp.user, got.User)
 	checkResIDsInSlice(test, fieldName+" - abilities", test.cfg.e.abilities.endpoint, exp.abilities, got.Abilities)
 }

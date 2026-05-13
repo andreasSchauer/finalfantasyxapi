@@ -17,6 +17,7 @@ func (e expCharacterClass) GetTestGeneral() testGeneral {
 }
 
 func compareCharacterClasses(test test, exp expCharacterClass, got CharacterClass) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "category", exp.category, got.Category)
 	checkResIDsInSlice(test, "members", test.cfg.e.playerUnits.endpoint, exp.members, got.Members)

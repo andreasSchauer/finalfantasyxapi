@@ -13,6 +13,7 @@ func (e expBlitzballPrize) GetTestGeneral() testGeneral {
 }
 
 func compareBlitzballPrizes(test test, exp expBlitzballPrize, got BlitzballPrize) {
+	test.t.Helper()
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compare(test, "category", exp.category, got.Category)
 	compare(test, "slot", exp.slot, got.Slot)

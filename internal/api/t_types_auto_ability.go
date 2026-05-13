@@ -16,6 +16,7 @@ func (e expAutoAbility) GetTestGeneral() testGeneral {
 }
 
 func compareAutoAbilities(test test, exp expAutoAbility, got AutoAbility) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	checkResIDsInSlice(test, "monsters drop", test.cfg.e.monsters.endpoint, exp.monstersDrop, got.MonstersDrop)
 	checkTestStructsInSlice(test, "monsters items", exp.monstersItems, got.MonstersItems, compareMonItemAmts)

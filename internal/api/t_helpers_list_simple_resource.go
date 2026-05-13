@@ -25,18 +25,19 @@ func compareSimpleResourceLists[T APIResource, S SimpleResource](test test, endp
 }
 
 func checkSubResIDsInSlice[T SimpleResource](test test, fieldName, endpoint string, expIDs []int32, gotRes []T) {
+	test.t.Helper()
 	sliceBasicChecks(test, fieldName, expIDs, gotRes)
 
 	gotMap := getSimpleResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
-		test.t.Errorf("%s: there appear to be duplicates in '%s'.", test.name, fieldName)
+		test.t.Errorf("there appear to be duplicates in '%s'.\n\n", fieldName)
 	}
 
 	for _, expID := range expIDs {
 		expURL := createResourceURL(test.cfg, endpoint, expID)
 		_, ok := gotMap[expURL]
 		if !ok {
-			test.t.Errorf("%s: '%s' doesn't contain all wanted resources. missing '%s'.", test.name, fieldName, expURL)
+			test.t.Errorf("'%s' doesn't contain all wanted resources. missing '%s'\n\n", fieldName, completeTestPath(endpoint, expID))
 		}
 	}
 }

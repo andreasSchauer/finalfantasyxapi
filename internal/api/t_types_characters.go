@@ -21,6 +21,7 @@ func (e expCharacter) GetTestGeneral() testGeneral {
 }
 
 func compareCharacters(test test, exp expCharacter, got Character) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "untyped unit", test.cfg.e.playerUnits.endpoint, exp.untypedUnit, got.UntypedUnit)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)

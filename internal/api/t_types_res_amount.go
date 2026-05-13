@@ -6,6 +6,7 @@ type testResAmount[A APIResource] struct {
 }
 
 func compareResAmounts[A APIResource](test test, fieldName string, exp testResAmount[A], got ResourceAmount[A]) {
+	test.t.Helper()
 	compIdApiResource(test, fieldName+" - resource", test.cfg.e.allItems.endpoint, exp.item, got)
 	compare(test, fieldName+" - amount", exp.amount, got.Amount)
 }
@@ -36,6 +37,7 @@ func (t testPossibleItem) GetIndex() int {
 }
 
 func comparePossibleItems(test test, fieldName string, exp testPossibleItem, got PossibleItem) {
+	test.t.Helper()
 	compareResAmounts(test, fieldName+" - itemAmount", exp.testResAmount, got.ResourceAmount)
 	compare(test, fieldName+" - chance", exp.chance, got.Chance)
 }

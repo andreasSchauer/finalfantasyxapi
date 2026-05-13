@@ -22,6 +22,7 @@ func (e expAeon) GetTestGeneral() testGeneral {
 }
 
 func compareAeons(test test, exp expAeon, got Aeon) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "untyped unit", test.cfg.e.playerUnits.endpoint, exp.untypedUnit, got.UntypedUnit)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
@@ -43,6 +44,7 @@ type expAeonEquipment struct {
 }
 
 func compareAeonEquipment(test test, _ string, exp expAeonEquipment, got AeonEquipment) {
+	test.t.Helper()
 	compIdApiResource(test, "auto ability", test.cfg.e.autoAbilities.endpoint, exp.autoAbility, got.AutoAbility)
 	compare(test, "celestial weapon", exp.celestialWeapon, got.CelestialWeapon)
 }

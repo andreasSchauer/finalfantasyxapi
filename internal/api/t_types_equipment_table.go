@@ -16,6 +16,7 @@ func (e expEquipmentTable) GetTestGeneral() testGeneral {
 }
 
 func compareEquipmentTables(test test, exp expEquipmentTable, got EquipmentTable) {
+	test.t.Helper()
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.e.celestialWeapons.endpoint, exp.celestialWeapon, got.CelestialWeapon)
 	compIdApiResourcePtrs(test, "specific character", test.cfg.e.characters.endpoint, exp.specificCharacter, got.SpecificCharacter)
@@ -32,6 +33,7 @@ type testAbilityPool struct {
 }
 
 func compareAbilityPools(test test, fieldName string, exp testAbilityPool, got AbilityPool) {
+	test.t.Helper()
 	checkResIDsInSlice(test, fieldName+" - auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.autoAbilities, got.AutoAbilities)
 	compare(test, fieldName+" - required amount", exp.reqAmount, got.ReqAmount)
 }

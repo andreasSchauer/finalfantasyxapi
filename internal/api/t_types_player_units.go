@@ -15,6 +15,7 @@ func (e expPlayerUnit) GetTestGeneral() testGeneral {
 }
 
 func comparePlayerUnits(test test, exp expPlayerUnit, got PlayerUnit) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "unit type", test.cfg.e.unitType.endpoint, exp.unitType, got.Type)
 	compPathApiResource(test, "typed unit", exp.typedUnit, got.TypedUnit)

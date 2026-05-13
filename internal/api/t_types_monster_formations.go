@@ -17,6 +17,7 @@ func (e expMonsterFormation) GetTestGeneral() testGeneral {
 }
 
 func compareMonsterFormations(test test, exp expMonsterFormation, got MonsterFormation) {
+	test.t.Helper()
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compare(test, "category", exp.category, got.Category)
 	compare(test, "is forced ambush", exp.isForcedAmbush, got.IsForcedAmbush)
@@ -33,6 +34,7 @@ type testFormationTC struct {
 }
 
 func compareFormationTCs(test test, fieldName string, exp testFormationTC, got FormationTriggerCommand) {
+	test.t.Helper()
 	tcEndpoint := test.cfg.e.triggerCommands.endpoint
 	charClassesEndpoint := test.cfg.e.characterClasses.endpoint
 

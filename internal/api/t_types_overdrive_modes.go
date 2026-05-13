@@ -15,6 +15,7 @@ func (e expOverdriveMode) GetTestGeneral() testGeneral {
 }
 
 func compareOverdriveModes(test test, exp expOverdriveMode, got OverdriveMode) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "description", exp.description, got.Description)
 	compare(test, "effect", exp.effect, got.Effect)

@@ -12,6 +12,7 @@ func (e expQuest) GetTestGeneral() testGeneral {
 }
 
 func compareQuests(test test, exp expQuest, got Quest) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "quest type", test.cfg.e.questType.endpoint, exp.questType, got.Type)
 	compPathApiResource(test, "typed quest", exp.typedQuest, got.TypedQuest)

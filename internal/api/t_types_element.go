@@ -20,6 +20,7 @@ func (e expElement) GetTestGeneral() testGeneral {
 }
 
 func compareElements(test test, exp expElement, got Element) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResourcePtrs(test, "status protection", test.cfg.e.statusConditions.endpoint, exp.statusProtection, got.StatusProtection)
 	checkResIDsInSlice(test, "auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.autoAbilities, got.AutoAbilities)

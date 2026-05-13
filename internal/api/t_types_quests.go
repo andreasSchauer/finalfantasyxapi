@@ -13,6 +13,7 @@ func (e expSidequest) GetTestGeneral() testGeneral {
 }
 
 func compareSidequests(test test, exp expSidequest, got Sidequest) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "untyped quest", test.cfg.e.quests.endpoint, exp.untypedQuest, got.UntypedQuest)
 	compTestStructPtrs(test, "completion", exp.completion, got.Completion, compareQuestCompletions)
@@ -33,6 +34,7 @@ func (e expSubquest) GetTestGeneral() testGeneral {
 }
 
 func compareSubquests(test test, exp expSubquest, got Subquest) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "untyped quest", test.cfg.e.quests.endpoint, exp.untypedQuest, got.UntypedQuest)
 	compIdApiResource(test, "parent sidequest", test.cfg.e.sidequests.endpoint, exp.parentSidequest, got.ParentSidequest)
@@ -46,6 +48,7 @@ type testQuestCompletion struct {
 }
 
 func compareQuestCompletions(test test, fieldName string, exp testQuestCompletion, got QuestCompletion) {
+	test.t.Helper()
 	checkResIDsInSlice(test, fieldName+" - areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)
 	compareResAmounts(test, fieldName+" - rewards", exp.reward, got.Reward)
 }

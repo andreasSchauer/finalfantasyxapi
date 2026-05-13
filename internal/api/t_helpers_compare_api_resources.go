@@ -9,10 +9,11 @@ func compPathApiResource[T HasAPIResource](test test, fieldName, expPath string,
 		return
 	}
 
-	expURL := completeTestURL(test.cfg, expPath)
+	//expURL := completeTestURL(test.cfg, expPath)
 	gotURL := gotRes.GetAPIResource().GetURL()
+	gotPath := urlToPath(test.cfg, gotURL)
 
-	compare(test, fieldName, expURL, gotURL)
+	compare(test, fieldName, expPath, gotPath)
 }
 
 // takes an expected path ptr and checks, if it matches the URL of target struct ptr's API Resource.
@@ -34,6 +35,7 @@ func compPathApiResourcePtrs[T HasAPIResource](test test, fieldName string, expP
 // takes an id, assembles the url, and checks, if it matches the URL of target struct's API Resource.
 // 23 == struct with api resource linking to host/api/endpoint/23
 func compIdApiResource[T HasAPIResource](test test, fieldName, endpoint string, expID int32, gotRes T) {
+	test.t.Helper()
 	expPath := completeTestPath(endpoint, expID)
 	compPathApiResource(test, fieldName, expPath, gotRes)
 }

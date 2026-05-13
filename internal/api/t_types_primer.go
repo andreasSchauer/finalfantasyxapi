@@ -13,6 +13,7 @@ func (e expPrimer) GetTestGeneral() testGeneral {
 }
 
 func comparePrimers(test test, exp expPrimer, got Primer) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "key item", test.cfg.e.keyItems.endpoint, exp.keyItem, got.KeyItem)
 	checkResIDsInSlice(test, "areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)

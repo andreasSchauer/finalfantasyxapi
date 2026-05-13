@@ -17,6 +17,7 @@ func (e expAgilityTier) GetTestGeneral() testGeneral {
 }
 
 func compareAgilityTiers(test test, exp expAgilityTier, got AgilityTier) {
+	test.t.Helper()
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compare(test, "from agility", exp.fromAgility, got.FromAgility)
 	compare(test, "to agility", exp.toAgility, got.ToAgility)

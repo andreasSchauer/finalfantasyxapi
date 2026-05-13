@@ -14,6 +14,7 @@ func (e expShop) GetTestGeneral() testGeneral {
 }
 
 func compareShops(test test, exp expShop, got Shop) {
+	test.t.Helper()
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
 	compIdApiResource(test, "category", test.cfg.e.shopCategory.endpoint, exp.category, got.Category)
@@ -27,6 +28,7 @@ type testSubShop struct {
 }
 
 func compareSubShops(test test, fieldName string, exp testSubShop, got SubShop) {
+	test.t.Helper()
 	checkTestStructsInSlice(test, fieldName+" - items", exp.items, got.Items, compareShopItems)
 	checkTestStructsInSlice(test, fieldName+" - equipment", exp.equipment, got.Equipment, compareShopEquipment)
 }
@@ -50,6 +52,7 @@ func newTestShopItem(idx int, itemID, price int32) testShopItem {
 }
 
 func compareShopItems(test test, fieldName string, exp testShopItem, got ShopItem) {
+	test.t.Helper()
 	compIdApiResource(test, fieldName+" - item", test.cfg.e.items.endpoint, exp.item, got.Item)
 	compare(test, fieldName+" - price", exp.price, got.Price)
 }
@@ -65,6 +68,7 @@ func (t testShopEquipment) GetIndex() int {
 }
 
 func compareShopEquipment(test test, fieldName string, exp testShopEquipment, got ShopEquipment) {
+	test.t.Helper()
 	compareFoundEquipment(test, fieldName+" - found equipment", exp.equipment, got.Equipment)
 	compare(test, fieldName+" - price", exp.price, got.Price)
 }

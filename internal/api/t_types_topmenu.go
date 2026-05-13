@@ -15,6 +15,7 @@ func (e expTopmenu) GetTestGeneral() testGeneral {
 }
 
 func compareTopmenus(test test, exp expTopmenu, got Topmenu) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	checkResIDsInSlice(test, "submenus", test.cfg.e.submenus.endpoint, exp.submenus, got.Submenus)
 	checkResIDsInSlice(test, "abilities", test.cfg.e.abilities.endpoint, exp.abilities, got.Abilities)

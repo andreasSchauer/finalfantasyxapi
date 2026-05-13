@@ -17,6 +17,7 @@ func (e expCelestialWeapon) GetTestGeneral() testGeneral {
 }
 
 func compareCelestialWeapons(test test, exp expCelestialWeapon, got CelestialWeapon) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "equipment", test.cfg.e.equipment.endpoint, exp.equipment, got.Equipment)
 	checkResIDsInSlice(test, "auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.autoAbilities, got.AutoAbilities)

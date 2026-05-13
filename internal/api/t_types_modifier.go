@@ -18,6 +18,7 @@ func (e expModifier) GetTestGeneral() testGeneral {
 }
 
 func compareModifiers(test test, exp expModifier, got Modifier) {
+	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	checkResIDsInSlice(test, "auto-abilities", test.cfg.e.autoAbilities.endpoint, exp.autoAbilities, got.AutoAbilities)
 	checkResIDsInSlice(test, "player abilities", test.cfg.e.playerAbilities.endpoint, exp.playerAbilities, got.PlayerAbilities)

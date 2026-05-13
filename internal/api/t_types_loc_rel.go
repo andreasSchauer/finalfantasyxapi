@@ -13,6 +13,7 @@ type expLocRel struct {
 }
 
 func compareLocRel(test test, exp expLocRel, got LocRel) {
+	test.t.Helper()
 	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
 	checkResIDsInSlice(test, "characters", test.cfg.e.characters.endpoint, exp.characters, got.Characters)
 	checkResIDsInSlice(test, "aeons", test.cfg.e.aeons.endpoint, exp.aeons, got.Aeons)
@@ -32,6 +33,7 @@ type testLocMusic struct {
 }
 
 func compareLocMusic(test test, _ string, exp testLocMusic, got LocBasedMusic) {
+	test.t.Helper()
 	songsEndpoint := test.cfg.e.songs.endpoint
 
 	checkResIDsInSlice(test, "bg music", songsEndpoint, exp.bgMusic, got.BackgroundMusic)
