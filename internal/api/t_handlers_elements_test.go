@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetElement(t *testing.T) {
+	t.Parallel()
 	tests := []expElement{
 		{
 			testGeneral: testGeneral{
@@ -51,6 +52,7 @@ func TestGetElement(t *testing.T) {
 }
 
 func TestRetrieveElements(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

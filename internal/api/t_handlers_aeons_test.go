@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetAeon(t *testing.T) {
+	t.Parallel()
 	tests := []expAeon{
 		{
 			testGeneral: testGeneral{
@@ -234,6 +235,7 @@ func TestGetAeon(t *testing.T) {
 }
 
 func TestRetrieveAeons(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

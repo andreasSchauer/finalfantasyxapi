@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetAbility(t *testing.T) {
+	t.Parallel()
 	tests := []expAbility{
 		{
 			testGeneral: testGeneral{
@@ -200,6 +201,7 @@ func TestGetAbility(t *testing.T) {
 }
 
 func TestRetrieveAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -339,6 +341,7 @@ func TestRetrieveAbilities(t *testing.T) {
 }
 
 func TestSubsectionAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetArenaCreation(t *testing.T) {
+	t.Parallel()
 	tests := []expArenaCreation{
 		{
 			testGeneral: testGeneral{
@@ -88,6 +89,7 @@ func TestGetArenaCreation(t *testing.T) {
 }
 
 func TestRetrieveArenaCreations(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

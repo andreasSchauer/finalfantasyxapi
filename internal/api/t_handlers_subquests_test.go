@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetSubquest(t *testing.T) {
+	t.Parallel()
 	tests := []expSubquest{
 		{
 			testGeneral: testGeneral{
@@ -90,6 +91,7 @@ func TestGetSubquest(t *testing.T) {
 }
 
 func TestRetrieveSubquests(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -121,6 +123,7 @@ func TestRetrieveSubquests(t *testing.T) {
 }
 
 func TestSubsectionSubquests(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

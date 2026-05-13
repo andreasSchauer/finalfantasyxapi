@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetMonsterFormation(t *testing.T) {
+	t.Parallel()
 	tests := []expMonsterFormation{
 		{
 			testGeneral: testGeneral{
@@ -121,6 +122,7 @@ func TestGetMonsterFormation(t *testing.T) {
 }
 
 func TestRetrieveMonsterFormations(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -215,6 +217,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 }
 
 func TestSubsectionMonsterFormations(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

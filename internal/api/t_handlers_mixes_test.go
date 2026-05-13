@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetMix(t *testing.T) {
+	t.Parallel()
 	tests := []expMix{
 		{
 			testGeneral: testGeneral{
@@ -105,6 +106,7 @@ func TestGetMix(t *testing.T) {
 }
 
 func TestRetrieveMixes(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

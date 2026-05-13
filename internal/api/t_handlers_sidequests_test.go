@@ -7,6 +7,7 @@ import (
 )
 
 func TestGetSidequest(t *testing.T) {
+	t.Parallel()
 	tests := []expSidequest{
 		{
 			testGeneral: testGeneral{
@@ -92,6 +93,7 @@ func TestGetSidequest(t *testing.T) {
 }
 
 func TestRetrieveSidequests(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

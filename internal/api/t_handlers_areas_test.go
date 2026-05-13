@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetArea(t *testing.T) {
+	t.Parallel()
 	tests := []expArea{
 		{
 			testGeneral: testGeneral{
@@ -234,6 +235,7 @@ func TestGetArea(t *testing.T) {
 }
 
 func TestRetrieveAreas(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -392,6 +394,7 @@ func TestRetrieveAreas(t *testing.T) {
 }
 
 func TestSubsectionAreas(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

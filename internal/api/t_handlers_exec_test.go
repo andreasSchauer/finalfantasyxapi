@@ -20,16 +20,19 @@ func getTestName(name, requestURL string, caseNum int) string {
 
 func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
 	t.Helper()
+
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
 		name := getTestName(testFuncName, tc.requestURL, i+1)
 
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
 			testObj, got, err := setupTest[G](t, tc, name, handlerFunc)
 			if errors.Is(err, errCorrect) {
 				return
 			}
-	
+
 			compFunc(testObj, exp, got)
 		})
 	}
@@ -49,6 +52,8 @@ func testIdList[G any](t *testing.T, tests []expListIDs, endpoint, testFuncName 
 		}
 
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
 			test, got, err := setupTest[G](t, exp.testGeneral, name, expHandler)
 			if errors.Is(err, errCorrect) {
 				return
@@ -78,6 +83,8 @@ func testNameList[G any](t *testing.T, tests []expListNames, endpoint, testFuncN
 		}
 
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			
 			test, got, err := setupTest[G](t, exp.testGeneral, name, expHandler)
 			if errors.Is(err, errCorrect) {
 				return

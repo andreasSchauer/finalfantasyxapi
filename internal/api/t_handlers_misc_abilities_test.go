@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetMiscAbility(t *testing.T) {
+	t.Parallel()
 	tests := []expMiscAbility{
 		{
 			testGeneral: testGeneral{
@@ -252,6 +253,7 @@ func TestGetMiscAbility(t *testing.T) {
 }
 
 func TestGetMultipleMiscAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -283,6 +285,7 @@ func TestGetMultipleMiscAbilities(t *testing.T) {
 }
 
 func TestRetrieveMiscAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

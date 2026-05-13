@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetTriggerCommand(t *testing.T) {
+	t.Parallel()
 	tests := []expTriggerCommand{
 		{
 			testGeneral: testGeneral{
@@ -183,6 +184,7 @@ func TestGetTriggerCommand(t *testing.T) {
 }
 
 func TestGetMultipleTriggerCommands(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -198,6 +200,7 @@ func TestGetMultipleTriggerCommands(t *testing.T) {
 }
 
 func TestRetrieveTriggerCommands(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

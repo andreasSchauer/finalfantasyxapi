@@ -7,6 +7,7 @@ import (
 )
 
 func TestGetAutoAbility(t *testing.T) {
+	t.Parallel()
 	tests := []expAutoAbility{
 		{
 			testGeneral: testGeneral{
@@ -191,6 +192,7 @@ func TestGetAutoAbility(t *testing.T) {
 }
 
 func TestRetrieveAutoAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

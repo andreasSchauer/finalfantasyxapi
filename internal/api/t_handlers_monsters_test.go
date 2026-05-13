@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetMonster(t *testing.T) {
+	t.Parallel()
 	tests := []expMonster{
 		{
 			testGeneral: testGeneral{
@@ -954,6 +955,7 @@ func TestGetMonster(t *testing.T) {
 }
 
 func TestGetMultipleMonsters(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -993,6 +995,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 }
 
 func TestRetrieveMonsters(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -1284,6 +1287,7 @@ func TestRetrieveMonsters(t *testing.T) {
 }
 
 func TestSubsectionMonsters(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

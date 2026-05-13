@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetEquipment(t *testing.T) {
+	t.Parallel()
 	tests := []expEquipment{
 		{
 			testGeneral: testGeneral{
@@ -195,6 +196,7 @@ func TestGetEquipment(t *testing.T) {
 }
 
 func TestRetrieveEquipment(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

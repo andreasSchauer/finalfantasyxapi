@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetAgilityTier(t *testing.T) {
+	t.Parallel()
 	tests := []expAgilityTier{
 		{
 			testGeneral: testGeneral{
@@ -86,6 +87,7 @@ func TestGetAgilityTier(t *testing.T) {
 }
 
 func TestRetrieveAgilityTiers(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

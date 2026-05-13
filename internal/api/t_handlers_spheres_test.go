@@ -7,6 +7,7 @@ import (
 )
 
 func TestGetSphere(t *testing.T) {
+	t.Parallel()
 	tests := []expSphere{
 		{
 			testGeneral: testGeneral{
@@ -129,6 +130,7 @@ func TestGetSphere(t *testing.T) {
 }
 
 func TestRetrieveSpheres(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

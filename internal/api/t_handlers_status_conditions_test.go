@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetStatusCondition(t *testing.T) {
+	t.Parallel()
 	tests := []expStatusCondition{
 		{
 			testGeneral: testGeneral{
@@ -198,6 +199,7 @@ func TestGetStatusCondition(t *testing.T) {
 }
 
 func TestRetrieveStatusConditions(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

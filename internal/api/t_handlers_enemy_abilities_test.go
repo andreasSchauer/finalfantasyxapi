@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetEnemyAbility(t *testing.T) {
+	t.Parallel()
 	tests := []expEnemyAbility{
 		{
 			testGeneral: testGeneral{
@@ -178,6 +179,7 @@ func TestGetEnemyAbility(t *testing.T) {
 }
 
 func TestGetMultipleEnemyAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -201,6 +203,7 @@ func TestGetMultipleEnemyAbilities(t *testing.T) {
 }
 
 func TestRetrieveEnemyAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

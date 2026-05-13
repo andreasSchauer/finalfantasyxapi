@@ -7,6 +7,7 @@ import (
 )
 
 func TestGetItem(t *testing.T) {
+	t.Parallel()
 	tests := []expItem{
 		{
 			testGeneral: testGeneral{
@@ -292,6 +293,7 @@ func TestGetItem(t *testing.T) {
 }
 
 func TestRetrieveItems(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

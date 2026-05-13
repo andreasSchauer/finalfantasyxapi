@@ -7,6 +7,7 @@ import (
 )
 
 func TestGetBlitzballPrize(t *testing.T) {
+	t.Parallel()
 	tests := []expBlitzballPrize{
 		{
 			testGeneral: testGeneral{
@@ -70,6 +71,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 }
 
 func TestRetrieveBlitzballPrizes(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

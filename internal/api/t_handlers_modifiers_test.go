@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetModifier(t *testing.T) {
+	t.Parallel()
 	tests := []expModifier{
 		{
 			testGeneral: testGeneral{
@@ -124,6 +125,7 @@ func TestGetModifier(t *testing.T) {
 }
 
 func TestRetrieveModifiers(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

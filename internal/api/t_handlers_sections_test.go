@@ -6,6 +6,7 @@ import (
 )
 
 func TestSections(t *testing.T) {
+	t.Parallel()
 	tests := []expListNames{
 		{
 			testGeneral: testGeneral{

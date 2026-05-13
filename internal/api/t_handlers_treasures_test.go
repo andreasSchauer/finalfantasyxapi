@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetTreasure(t *testing.T) {
+	t.Parallel()
 	tests := []expTreasure{
 		{
 			testGeneral: testGeneral{
@@ -145,6 +146,7 @@ func TestGetTreasure(t *testing.T) {
 }
 
 func TestRetrieveTreasures(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -200,6 +202,7 @@ func TestRetrieveTreasures(t *testing.T) {
 }
 
 func TestSubsectionTreasures(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetProperty(t *testing.T) {
+	t.Parallel()
 	tests := []expProperty{
 		{
 			testGeneral: testGeneral{
@@ -48,6 +49,7 @@ func TestGetProperty(t *testing.T) {
 }
 
 func TestRetrieveProperties(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

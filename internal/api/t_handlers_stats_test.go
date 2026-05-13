@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetStat(t *testing.T) {
+	t.Parallel()
 	tests := []expStat{
 		{
 			testGeneral: testGeneral{
@@ -90,6 +91,7 @@ func TestGetStat(t *testing.T) {
 }
 
 func TestRetrieveStats(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

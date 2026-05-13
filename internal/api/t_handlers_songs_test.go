@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetSong(t *testing.T) {
+	t.Parallel()
 	tests := []expSong{
 		{
 			testGeneral: testGeneral{
@@ -159,6 +160,7 @@ func TestGetSong(t *testing.T) {
 }
 
 func TestRetrieveSongs(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -230,6 +232,7 @@ func TestRetrieveSongs(t *testing.T) {
 }
 
 func TestSubsectionSongs(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

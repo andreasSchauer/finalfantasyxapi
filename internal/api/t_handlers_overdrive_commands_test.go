@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetOverdriveCommand(t *testing.T) {
+	t.Parallel()
 	tests := []expOverdriveCommand{
 		{
 			testGeneral: testGeneral{
@@ -67,6 +68,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 }
 
 func TestRetrieveOverdriveCommands(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

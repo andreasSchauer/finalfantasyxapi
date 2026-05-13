@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetQuest(t *testing.T) {
+	t.Parallel()
 	tests := []expQuest{
 		{
 			testGeneral: testGeneral{
@@ -64,6 +65,7 @@ func TestGetQuest(t *testing.T) {
 }
 
 func TestRetrieveQuests(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

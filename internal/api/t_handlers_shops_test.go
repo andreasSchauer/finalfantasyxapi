@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetShop(t *testing.T) {
+	t.Parallel()
 	tests := []expShop{
 		{
 			testGeneral: testGeneral{
@@ -231,6 +232,7 @@ func TestGetShop(t *testing.T) {
 }
 
 func TestRetrieveShops(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -318,6 +320,7 @@ func TestRetrieveShops(t *testing.T) {
 }
 
 func TestSubsectionShops(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetCharacter(t *testing.T) {
+	t.Parallel()
 	tests := []expCharacter{
 		{
 			testGeneral: testGeneral{
@@ -196,6 +197,7 @@ func TestGetCharacter(t *testing.T) {
 }
 
 func TestRetrieveCharacters(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

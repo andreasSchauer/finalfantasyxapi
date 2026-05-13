@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetOverdrive(t *testing.T) {
+	t.Parallel()
 	tests := []expOverdrive{
 		{
 			testGeneral: testGeneral{
@@ -82,6 +83,7 @@ func TestGetOverdrive(t *testing.T) {
 }
 
 func TestRetrieveOverdrives(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -105,6 +107,7 @@ func TestRetrieveOverdrives(t *testing.T) {
 }
 
 func TestSubsectionOverdrives(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

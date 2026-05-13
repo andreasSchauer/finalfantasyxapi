@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetKeyItem(t *testing.T) {
+	t.Parallel()
 	tests := []expKeyItem{
 		{
 			testGeneral: testGeneral{
@@ -82,6 +83,7 @@ func TestGetKeyItem(t *testing.T) {
 }
 
 func TestRetrieveKeyItems(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -27,6 +28,7 @@ type Config struct {
 func ConfigInit() (*Config, error) {
 	const domain = "localhost:8080"
 	const fetchLimit = 50
+	const connLimit = 25
 
 	dbURL := os.Getenv("DB_URL")
 	if dbURL == "" {
@@ -47,6 +49,9 @@ func ConfigInit() (*Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error opening database: %v", err)
 	}
+	dbConn.SetMaxOpenConns(connLimit)
+	dbConn.SetMaxIdleConns(connLimit)
+	dbConn.SetConnMaxLifetime(time.Hour)
 	dbQueries := database.New(dbConn)
 
 	apiCfg := Config{

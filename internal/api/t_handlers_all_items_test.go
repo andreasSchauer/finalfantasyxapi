@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetAllItem(t *testing.T) {
+	t.Parallel()
 	tests := []expMasterItem{
 		{
 			testGeneral: testGeneral{
@@ -68,6 +69,7 @@ func TestGetAllItem(t *testing.T) {
 }
 
 func TestRetrieveAllItems(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

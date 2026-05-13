@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetSublocation(t *testing.T) {
+	t.Parallel()
 	tests := []expSublocation{
 		{
 			testGeneral: testGeneral{
@@ -167,6 +168,7 @@ func TestGetSublocation(t *testing.T) {
 }
 
 func TestRetrieveSublocations(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -238,6 +240,7 @@ func TestRetrieveSublocations(t *testing.T) {
 }
 
 func TestSubsectionSublocations(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetPlayerAbility(t *testing.T) {
+	t.Parallel()
 	tests := []expPlayerAbility{
 		{
 			testGeneral: testGeneral{
@@ -231,6 +232,7 @@ func TestGetPlayerAbility(t *testing.T) {
 }
 
 func TestGetMultiplePlayerAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -254,6 +256,7 @@ func TestGetMultiplePlayerAbilities(t *testing.T) {
 }
 
 func TestRetrievePlayerAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
@@ -389,6 +392,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 }
 
 func TestSubsectionPlayerAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

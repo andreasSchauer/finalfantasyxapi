@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetItemAbility(t *testing.T) {
+	t.Parallel()
 	tests := []expItemAbility{
 		{
 			testGeneral: testGeneral{
@@ -304,6 +305,7 @@ func TestGetItemAbility(t *testing.T) {
 }
 
 func TestRetrieveItemAbilities(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

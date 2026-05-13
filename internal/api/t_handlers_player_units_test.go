@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetPlayerUnit(t *testing.T) {
+	t.Parallel()
 	tests := []expPlayerUnit{
 		{
 			testGeneral: testGeneral{
@@ -117,6 +118,7 @@ func TestGetPlayerUnit(t *testing.T) {
 }
 
 func TestRetrievePlayerUnits(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

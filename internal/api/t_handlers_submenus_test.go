@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetSubmenu(t *testing.T) {
+	t.Parallel()
 	tests := []expSubmenu{
 		{
 			testGeneral: testGeneral{
@@ -95,6 +96,7 @@ func TestGetSubmenu(t *testing.T) {
 }
 
 func TestRetrieveSubmenus(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetCelestialWeapon(t *testing.T) {
+	t.Parallel()
 	tests := []expCelestialWeapon{
 		{
 			testGeneral: testGeneral{
@@ -56,6 +57,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 }
 
 func TestRetrieveCelestialWeapons(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

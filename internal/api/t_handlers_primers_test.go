@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetPrimer(t *testing.T) {
+	t.Parallel()
 	tests := []expPrimer{
 		{
 			testGeneral: testGeneral{
@@ -50,6 +51,7 @@ func TestGetPrimer(t *testing.T) {
 }
 
 func TestRetrievePrimers(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

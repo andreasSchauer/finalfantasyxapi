@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetTopmenu(t *testing.T) {
+	t.Parallel()
 	tests := []expTopmenu{
 		{
 			testGeneral: testGeneral{
@@ -77,6 +78,7 @@ func TestGetTopmenu(t *testing.T) {
 }
 
 func TestRetrieveTopmenus(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

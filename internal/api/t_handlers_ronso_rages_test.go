@@ -6,6 +6,7 @@ import (
 )
 
 func TestGetRonsoRage(t *testing.T) {
+	t.Parallel()
 	tests := []expRonsoRage{
 		{
 			testGeneral: testGeneral{
@@ -44,6 +45,7 @@ func TestGetRonsoRage(t *testing.T) {
 }
 
 func TestRetrieveRonsoRages(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{

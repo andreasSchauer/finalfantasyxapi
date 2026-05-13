@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetFMV(t *testing.T) {
+	t.Parallel()
 	tests := []expFMV{
 		{
 			testGeneral: testGeneral{
@@ -54,6 +55,7 @@ func TestGetFMV(t *testing.T) {
 }
 
 func TestRetrieveFMVs(t *testing.T) {
+	t.Parallel()
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
