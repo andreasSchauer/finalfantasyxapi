@@ -7,11 +7,11 @@ func bothPtrsPresent[E, G any](test test, fieldName string, exp *E, got *G) bool
 		return false
 
 	case exp == nil && got != nil:
-		test.t.Fatalf("%s: expected %s nil, got %v", test.name, fieldName, *got)
+		test.t.Errorf("%s: expected %s nil, got %v", test.name, fieldName, *got)
 		return false
 
 	case exp != nil && got == nil:
-		test.t.Fatalf("%s: expected %s %v, got nil", test.name, fieldName, *exp)
+		test.t.Errorf("%s: expected %s %v, got nil", test.name, fieldName, *exp)
 		return false
 
 	default:
@@ -28,11 +28,11 @@ func bothResourcePtrsPresent[T HasAPIResource](test test, fieldName string, expP
 	case expPathPtr == nil && gotResPtr != nil:
 		res := *gotResPtr
 		gotURL := res.GetAPIResource().GetURL()
-		test.t.Fatalf("%s: expected nil for %s, but got %s", test.name, fieldName, gotURL)
+		test.t.Errorf("%s: expected nil for %s, but got %s", test.name, fieldName, gotURL)
 		return false
 
 	case expPathPtr != nil && gotResPtr == nil:
-		test.t.Fatalf("%s: expected %s %v, got nil", test.name, fieldName, *expPathPtr)
+		test.t.Errorf("%s: expected %s %v, got nil", test.name, fieldName, *expPathPtr)
 		return false
 
 	default:
@@ -47,11 +47,11 @@ func bothSlicesPresent[E, G any](test test, fieldName string, exp []E, got []G) 
 		return false
 
 	case exp == nil && got != nil:
-		test.t.Fatalf("%s: expected %s nil, got %v", test.name, fieldName, got)
+		test.t.Errorf("%s: expected %s nil, got %v", test.name, fieldName, got)
 		return false
 
 	case exp != nil && got == nil:
-		test.t.Fatalf("%s: expected %s %v, got nil", test.name, fieldName, exp)
+		test.t.Errorf("%s: expected %s %v, got nil", test.name, fieldName, exp)
 		return false
 
 	default:
@@ -65,11 +65,11 @@ func defaultAndAltStatesPresent(test test, exp *testDefaultState, gotStates []Al
 		return false
 
 	case exp == nil && len(gotStates) != 0:
-		test.t.Fatalf("%s: expected default state to be nil, but got alt states", test.name)
+		test.t.Errorf("%s: expected default state to be nil, but got alt states", test.name)
 		return false
 
 	case exp != nil && len(gotStates) == 0:
-		test.t.Fatalf("%s: expected default state to be not nil, but got no alt states", test.name)
+		test.t.Errorf("%s: expected default state to be not nil, but got no alt states", test.name)
 		return false
 
 	default:

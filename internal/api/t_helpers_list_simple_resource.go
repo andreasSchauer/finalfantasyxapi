@@ -29,14 +29,14 @@ func checkSubResIDsInSlice[T SimpleResource](test test, fieldName, endpoint stri
 
 	gotMap := getSimpleResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
-		test.t.Fatalf("%s: there appear to be duplicates in '%s'.", test.name, fieldName)
+		test.t.Errorf("%s: there appear to be duplicates in '%s'.", test.name, fieldName)
 	}
 
 	for _, expID := range expIDs {
 		expURL := createResourceURL(test.cfg, endpoint, expID)
 		_, ok := gotMap[expURL]
 		if !ok {
-			test.t.Fatalf("%s: '%s' doesn't contain all wanted resources. missing '%s'.", test.name, fieldName, expURL)
+			test.t.Errorf("%s: '%s' doesn't contain all wanted resources. missing '%s'.", test.name, fieldName, expURL)
 		}
 	}
 }

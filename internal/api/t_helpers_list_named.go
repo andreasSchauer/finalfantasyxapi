@@ -29,13 +29,13 @@ func checkStringsInSlice(test test, fieldName string, expNames, gotNames []strin
 	}
 
 	if len(gotMap) != len(gotNames) {
-		test.t.Fatalf("%s: there appear to be duplicates in '%s'", test.name, fieldName)
+		test.t.Errorf("%s: there appear to be duplicates in '%s'", test.name, fieldName)
 	}
 
 	for _, expName := range expNames {
 		_, ok := gotMap[expName]
 		if !ok {
-			test.t.Fatalf("%s: %s doesn't contain all wanted names. missing '%s'.", test.name, fieldName, expName)
+			test.t.Errorf("%s: %s doesn't contain all wanted names. missing '%s'.", test.name, fieldName, expName)
 		}
 	}
 }

@@ -16,61 +16,61 @@ func compare(test test, fieldName string, exp, got any) {
 	case int:
 		g, ok := got.(int)
 		if !ok {
-			t.Fatalf("%s: %s type mismatch: expected int, got %T", testName, fieldName, got)
+			t.Errorf("%s: %s type mismatch: expected int, got %T", testName, fieldName, got)
 		}
 		compInt(test, fieldName, e, g)
 
 	case int32:
 		g, ok := got.(int32)
 		if !ok {
-			t.Fatalf("%s: %s type mismatch: expected int32, got %T", testName, fieldName, got)
+			t.Errorf("%s: %s type mismatch: expected int32, got %T", testName, fieldName, got)
 		}
 		compInt32(test, fieldName, e, g)
 
 	case float32:
 		g, ok := got.(float32)
 		if !ok {
-			t.Fatalf("%s: %s type mismatch: expected float32, got %T", testName, fieldName, got)
+			t.Errorf("%s: %s type mismatch: expected float32, got %T", testName, fieldName, got)
 		}
 		compFloat32(test, fieldName, e, g)
 
 	case string:
 		g, ok := got.(string)
 		if !ok {
-			t.Fatalf("%s: %s type mismatch: expected string, got %T", testName, fieldName, got)
+			t.Errorf("%s: %s type mismatch: expected string, got %T", testName, fieldName, got)
 		}
 		compString(test, fieldName, e, g)
 
 	case bool:
 		g, ok := got.(bool)
 		if !ok {
-			t.Fatalf("%s: %s type mismatch: expected bool, got %T", testName, fieldName, got)
+			t.Errorf("%s: %s type mismatch: expected bool, got %T", testName, fieldName, got)
 		}
 		compBool(test, fieldName, e, g)
 
 	case *int32:
 		g, ok := got.(*int32)
 		if !ok {
-			t.Fatalf("%s: %s type mismatch: expected *int32, got %T", testName, fieldName, got)
+			t.Errorf("%s: %s type mismatch: expected *int32, got %T", testName, fieldName, got)
 		}
 		compInt32Ptr(test, fieldName, e, g)
 
 	case *float32:
 		g, ok := got.(*float32)
 		if !ok {
-			t.Fatalf("%s: %s type mismatch: expected *float32, got %T", testName, fieldName, got)
+			t.Errorf("%s: %s type mismatch: expected *float32, got %T", testName, fieldName, got)
 		}
 		compFloat32Ptr(test, fieldName, e, g)
 
 	case *string:
 		g, ok := got.(*string)
 		if !ok {
-			t.Fatalf("%s: %s type mismatch: expected *string, got %T", testName, fieldName, got)
+			t.Errorf("%s: %s type mismatch: expected *string, got %T", testName, fieldName, got)
 		}
 		compStringPtr(test, fieldName, e, g)
 
 	default:
-		t.Fatalf("%s: unsupported type for %s: %T", testName, fieldName, exp)
+		t.Errorf("%s: unsupported type for %s: %T", testName, fieldName, exp)
 	}
 }
 
@@ -84,31 +84,31 @@ func compPtr[T any](test test, fieldName string, exp, got *T, compFunc func(test
 
 func compInt(test test, fieldName string, exp, got int) {
 	if exp != got {
-		test.t.Fatalf("%s: expected %s %d, got %d", test.name, fieldName, exp, got)
+		test.t.Errorf("%s: expected %s %d, got %d", test.name, fieldName, exp, got)
 	}
 }
 
 func compInt32(test test, fieldName string, exp, got int32) {
 	if exp != got {
-		test.t.Fatalf("%s: expected %s %d, got %d", test.name, fieldName, exp, got)
+		test.t.Errorf("%s: expected %s %d, got %d", test.name, fieldName, exp, got)
 	}
 }
 
 func compFloat32(test test, fieldName string, exp, got float32) {
 	if exp != got {
-		test.t.Fatalf("%s: expected %s %.2f, got %.2f", test.name, fieldName, exp, got)
+		test.t.Errorf("%s: expected %s %.2f, got %.2f", test.name, fieldName, exp, got)
 	}
 }
 
 func compString(test test, fieldName, exp, got string) {
 	if exp != "" && exp != got {
-		test.t.Fatalf("%s: expected %s %s, got %s", test.name, fieldName, exp, got)
+		test.t.Errorf("%s: expected %s %s, got %s", test.name, fieldName, exp, got)
 	}
 }
 
 func compBool(test test, fieldName string, exp, got bool) {
 	if exp != got {
-		test.t.Fatalf("%s: expected %s %t, got %t", test.name, fieldName, exp, got)
+		test.t.Errorf("%s: expected %s %t, got %t", test.name, fieldName, exp, got)
 	}
 }
 

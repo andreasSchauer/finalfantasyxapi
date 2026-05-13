@@ -18,9 +18,9 @@ func compareMonsterAppliedStates(test test, _ string, exp testAppliedState, got 
 
 type testDefaultState struct {
 	IsTemporary bool
-	Change		*testAltStateChange
-	Gain		*testAltStateGain
-	Loss		*testAltStateLoss
+	Change      *testAltStateChange
+	Gain        *testAltStateGain
+	Loss        *testAltStateLoss
 }
 
 func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []AlteredState) {
@@ -36,7 +36,7 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []Alter
 
 	got := gotStates[0]
 	if got.Condition != "default" {
-		test.t.Fatalf("%s: first altered state must be default when another is applied, got: %s", test.name, got.Condition)
+		test.t.Errorf("%s: first altered state must be default when another is applied, got: %s", test.name, got.Condition)
 	}
 
 	compare(test, "default state is temporary", exp.IsTemporary, got.IsTemporary)
@@ -45,11 +45,10 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []Alter
 	compTestStructPtrs(test, "alt state loss", exp.Loss, got.Loss, compareAltStateLosses)
 }
 
-
 type testAltStateChange struct {
-	Distance 		 *int32
-	BaseStats        map[string]int32
-	ElemResists      []testElemResist
+	Distance    *int32
+	BaseStats   map[string]int32
+	ElemResists []testElemResist
 }
 
 func compareAltStateChanges(test test, fieldName string, exp testAltStateChange, got AltStateChange) {
@@ -65,7 +64,7 @@ type testAltStateGain struct {
 	AutoAbilities    []int32
 	StatusImmunities []int32
 	StatusResists    map[string]int32
-	Status      	 *InflictedStatus
+	Status           *InflictedStatus
 }
 
 func compareAltStateGains(test test, fieldName string, exp testAltStateGain, got AltStateGain) {
@@ -82,7 +81,7 @@ type testAltStateLoss struct {
 	Properties       []int32
 	AutoAbilities    []int32
 	StatusImmunities []int32
-	Status    		 *int32
+	Status           *int32
 }
 
 func compareAltStateLosses(test test, fieldName string, exp testAltStateLoss, got AltStateLoss) {

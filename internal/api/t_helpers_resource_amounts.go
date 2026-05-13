@@ -13,7 +13,7 @@ func checkResAmts[A APIResource](test test, fieldName string, exp map[string]int
 	for key, expVal := range exp {
 		gotVal, ok := gotMap[key]
 		if !ok {
-			test.t.Fatalf("%s: %s doesn't contain resource with key '%s'.", test.name, fieldName, key)
+			test.t.Errorf("%s: %s doesn't contain resource with key '%s'.", test.name, fieldName, key)
 		}
 		compare(test, key, expVal, gotVal)
 	}
@@ -27,7 +27,7 @@ func checkResAmtsID[A APIResource](test test, fieldName string, exp map[int32]in
 	for id, expVal := range exp {
 		gotVal, ok := gotMap[id]
 		if !ok {
-			test.t.Fatalf("%s: %s doesn't contain resource with id '%d'.", test.name, fieldName, id)
+			test.t.Errorf("%s: %s doesn't contain resource with id '%d'.", test.name, fieldName, id)
 		}
 		compare(test, fmt.Sprintf("id: '%d'", id), expVal, gotVal)
 	}

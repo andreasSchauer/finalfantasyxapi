@@ -16,7 +16,7 @@ func compStructs[T any](test test, fieldName string, exp, got T) {
 	}
 
 	if !reflect.DeepEqual(exp, got) {
-		test.t.Fatalf("%s: expected %s %v, got %v", test.name, fieldName, exp, got)
+		test.t.Errorf("%s: expected %s %v, got %v", test.name, fieldName, exp, got)
 	}
 }
 

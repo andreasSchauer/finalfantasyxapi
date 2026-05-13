@@ -20,37 +20,50 @@ func getTestName(name, requestURL string, caseNum int) string {
 
 func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
 	for i, exp := range tests {
-		test, got, err := setupTest[G](t, exp.GetTestGeneral(), testFuncName, i+1, handlerFunc)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
+		tc := exp.GetTestGeneral()
+		name := getTestName(testFuncName, tc.requestURL, i+1)
 
-		compFunc(test, exp, got)
+		t.Run(name, func(t *testing.T) {
+			testObj, got, err := setupTest[G](t, tc, name, handlerFunc)
+			if errors.Is(err, errCorrect) {
+				return
+			}
+	
+			compFunc(testObj, exp, got)
+		})
 	}
 }
 
 // compareAPIResourceLists for normal API Resources
 // compareSimpleResourceLists for Subsections
-func testIdList[T any](t *testing.T, tests []expListIDs, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListIDs, T)) {
+func testIdList[G any](t *testing.T, tests []expListIDs, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListIDs, G)) {
 	for i, exp := range tests {
+		tc := exp.testGeneral
+		name := getTestName(testFuncName, tc.requestURL, i+1)
+
 		expHandler := handlerFunc
 		if handlerFunc == nil {
 			expHandler = exp.handler
 		}
 
-		test, got, err := setupTest[T](t, exp.testGeneral, testFuncName, i+1, expHandler)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		compFunc(test, endpoint, exp, got)
+		t.Run(name, func(t *testing.T) {
+			test, got, err := setupTest[G](t, exp.testGeneral, name, expHandler)
+			if errors.Is(err, errCorrect) {
+				return
+			}
+			
+			compFunc(test, endpoint, exp, got)
+		})
 	}
 }
 
 // compareParameterLists for /parameters lists
 // compareSectionLists for /sections lists
-func testNameList[T any](t *testing.T, tests []expListNames, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListNames, T)) {
+func testNameList[G any](t *testing.T, tests []expListNames, endpoint, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, string, expListNames, G)) {
 	for i, exp := range tests {
+		tc := exp.testGeneral
+		name := getTestName(testFuncName, tc.requestURL, i+1)
+
 		expHandler := handlerFunc
 		if handlerFunc == nil {
 			expHandler = exp.handler
@@ -61,19 +74,20 @@ func testNameList[T any](t *testing.T, tests []expListNames, endpoint, testFuncN
 			expEndpoint = exp.endpoint
 		}
 
-		test, got, err := setupTest[T](t, exp.testGeneral, testFuncName, i+1, expHandler)
-		if errors.Is(err, errCorrect) {
-			continue
-		}
-
-		compFunc(test, expEndpoint, exp, got)
+		t.Run(name, func(t *testing.T) {
+			test, got, err := setupTest[G](t, exp.testGeneral, name, expHandler)
+			if errors.Is(err, errCorrect) {
+				return
+			}
+			
+			compFunc(test, expEndpoint, exp, got)
+		})
 	}
 }
 
 // makes the http request for the test and returns the result, as well as a test struct
-func setupTest[T any](t *testing.T, tc testGeneral, testFunc string, testNum int, handlerFunc func(http.ResponseWriter, *http.Request)) (test, T, error) {
+func setupTest[T any](t *testing.T, tc testGeneral, testName string, handlerFunc func(http.ResponseWriter, *http.Request)) (test, T, error) {
 	t.Helper()
-	testName := getTestName(testFunc, tc.requestURL, testNum)
 	var zeroType T
 
 	req := httptest.NewRequest(http.MethodGet, tc.requestURL, nil)
