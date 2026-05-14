@@ -87,6 +87,30 @@ func TestRetrieveAllItems(t *testing.T) {
 			count:   53,
 			results: []int32{1, 10, 29, 46, 54, 60, 80, 109, 112},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items?location=14&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   42,
+			results: []int32{1, 4, 16, 47, 57, 87, 100, 134, 160},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items?sublocation=19&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   33,
+			results: []int32{3, 14, 38, 103, 117, 142, 158},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items?area=36",
+				expectedStatus: http.StatusOK,
+			},
+			count:   4,
+			results: []int32{1, 2, 9, 138},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.allItems.endpoint, "RetrieveMasterItems", testCfg.HandleAllItems, compareAPIResourceLists[NamedApiResourceList])

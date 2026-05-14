@@ -2270,6 +2270,15 @@ func (cfg *Config) initAllItemsParams() {
 			References:  []string{createListURL(cfg, "item-type")},
 		},
 		{
+			Name:        "availability",
+			Description: "Searches for items with the given availabilities.",
+			Type:        "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
 			Name:          "method",
 			Description:   "Searches for items that can be obtained via all of the given methods.",
 			Type:          "value-list",
@@ -2333,6 +2342,15 @@ func (cfg *Config) initItemsParams() {
 			ForSingle:   false,
 			TypeLookup:  cfg.t.ItemCategory.lookup,
 			References:  []string{createListURL(cfg, "item-category")},
+		},
+		{
+			Name:        "availability",
+			Description: "Searches for items with the given availabilities.",
+			Type:        "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
 			Name:          "method",

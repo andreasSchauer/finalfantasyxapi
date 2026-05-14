@@ -87,6 +87,13 @@ func TestRetrieveKeyItems(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/key-items?method=a",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid value 'a' used for parameter 'method'. allowed values: 'treasure', 'quest'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -111,10 +118,27 @@ func TestRetrieveKeyItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/key-items?method=a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'a' used for parameter 'method'. allowed values: 'treasure', 'quest'.",
+				requestURL:     "/api/key-items?location=15",
+				expectedStatus: http.StatusOK,
 			},
+			count:   6,
+			results: []int32{4, 18, 25, 32, 49, 50},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items?sublocation=13",
+				expectedStatus: http.StatusOK,
+			},
+			count:   4,
+			results: []int32{19, 20, 28, 40},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items?area=239",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{60},
 		},
 	}
 

@@ -342,6 +342,30 @@ func TestRetrieveItems(t *testing.T) {
 			count:   4,
 			results: []int32{65, 67, 68, 69},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?location=17&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   22,
+			results: []int32{1, 7, 21, 34, 76, 102, 111},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?sublocation=12",
+				expectedStatus: http.StatusOK,
+			},
+			count:   4,
+			results: []int32{1, 2, 9, 11},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?area=240&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   31,
+			results: []int32{4, 23, 60, 89, 110},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.items.endpoint, "RetrieveItems", testCfg.HandleItems, compareAPIResourceLists[NamedApiResourceList])
