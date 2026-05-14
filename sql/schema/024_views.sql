@@ -2,8 +2,10 @@
 CREATE MATERIALIZED VIEW mv_monster_item_drops AS
 SELECT 
     mi.monster_id, 
+    m.name AS monster,
     i.id AS item_id,
     ia.master_item_id,
+    mit.name AS item,
     ia.amount,
     'steal_common' AS source_type,
     m.availability,
@@ -11,14 +13,17 @@ SELECT
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.steal_common_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON mit.id = i.id
 
 UNION ALL
 
 SELECT 
     mi.monster_id, 
+    m.name AS monster,
     i.id AS item_id,
     ia.master_item_id,
+    mit.name AS item,
     ia.amount,
     'steal_rare' AS source_type,
     m.availability,
@@ -26,14 +31,17 @@ SELECT
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.steal_rare_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON mit.id = i.id
 
 UNION ALL
 
 SELECT 
     mi.monster_id, 
+    m.name AS monster,
     i.id AS item_id,
     ia.master_item_id,
+    mit.name AS item,
     ia.amount,
     'drop_common' AS source_type,
     m.availability,
@@ -41,14 +49,17 @@ SELECT
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.drop_common_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON mit.id = i.id
 
 UNION ALL
 
 SELECT 
     mi.monster_id, 
+    m.name AS monster,
     i.id AS item_id,
     ia.master_item_id,
+    mit.name AS item,
     ia.amount,
     'drop_rare' AS source_type,
     m.availability,
@@ -56,14 +67,17 @@ SELECT
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.drop_rare_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON mit.id = i.id
 
 UNION ALL
 
 SELECT 
     mi.monster_id, 
+    m.name AS monster,
     i.id AS item_id,
     ia.master_item_id,
+    mit.name AS item,
     ia.amount,
     'drop_secondary_common' AS source_type,
     m.availability,
@@ -71,14 +85,17 @@ SELECT
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.secondary_drop_common_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON mit.id = i.id
 
 UNION ALL
 
 SELECT 
     mi.monster_id, 
+    m.name AS monster,
     i.id AS item_id,
     ia.master_item_id,
+    mit.name AS item,
     ia.amount,
     'drop_secondary_rare' AS source_type,
     m.availability,
@@ -86,14 +103,17 @@ SELECT
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.secondary_drop_rare_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON mit.id = i.id
 
 UNION ALL
 
 SELECT 
     mi.monster_id, 
+    m.name AS monster,
     i.id AS item_id,
     ia.master_item_id,
+    mit.name AS item,
     ia.amount,
     'bribe' AS source_type,
     m.availability,
@@ -101,14 +121,17 @@ SELECT
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.bribe_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON mit.id = i.id
 
 UNION ALL
 
 SELECT
     mi.monster_id,
+    m.name AS monster,
     i.id AS item_id,
     ia.master_item_id,
+    mit.name AS item,
     ia.amount,
     'other' AS source_type,
     m.availability,
@@ -118,7 +141,8 @@ JOIN monster_items mi ON mi.monster_id = m.id
 JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
 JOIN possible_items pi ON pi.id = jmio.possible_item_id
 JOIN item_amounts ia ON pi.item_amount_id = ia.id
-JOIN items i ON ia.master_item_id = i.master_item_id;
+JOIN master_items mit ON ia.master_item_id = mit.id
+JOIN items i ON mit.id = i.id;
 
 
 CREATE INDEX idx_mv_monster_item_drops_item ON mv_monster_item_drops (item_id);
@@ -130,9 +154,11 @@ CREATE INDEX idx_mv_monster_item_drops_monster ON mv_monster_item_drops (monster
 CREATE MATERIALIZED VIEW mv_monster_equipment_drops AS
 SELECT DISTINCT
     me.monster_id,
+    m.name AS monster,
     asl.id AS ability_slots_id,
     aa.id AS attached_abilities_id,
     ed.auto_ability_id,
+    au.name AS auto_ability,
     m.availability,
     m.is_repeatable,
     j.equipment_drop_id,
@@ -143,6 +169,7 @@ FROM monsters m
 JOIN monster_equipment me ON me.monster_id = m.id
 JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
 JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
+JOIN auto_abilities au ON ed.auto_ability_id = au.id
 JOIN monster_equipment_slots asl ON asl.monster_equipment_id = me.id AND asl.type = 'ability-slots'
 JOIN monster_equipment_slots aa ON aa.monster_equipment_id = me.id AND aa.type = 'attached-abilities';
 
@@ -161,6 +188,7 @@ CREATE MATERIALIZED VIEW mv_monster_encounters AS
 SELECT DISTINCT
     mf.id AS formation_id,
     ma.monster_id,
+    m.name AS monster,
     ma.amount AS monster_amount,
     fd.id AS data_id,
     fd.category,
@@ -175,6 +203,7 @@ JOIN j_monster_formations_encounter_areas jmfea ON ea.id = jmfea.encounter_area_
 JOIN monster_formations mf ON jmfea.monster_formation_id = mf.id
 JOIN j_monster_selections_monsters jmsm ON mf.monster_selection_id = jmsm.monster_selection_id
 JOIN monster_amounts ma ON jmsm.monster_amount_id = ma.id
+JOIN monsters m ON ma.monster_id = m.id
 JOIN formation_data fd ON mf.formation_data_id = fd.id
 LEFT JOIN formation_boss_songs fbs ON fd.boss_song_id = fbs.id
 LEFT JOIN j_monster_formations_trigger_commands jmft ON jmft.monster_formation_id = mf.id;
@@ -240,6 +269,7 @@ CREATE INDEX idx_mv_geo_graph_location ON mv_geography_graph (l_id);
 CREATE MATERIALIZED VIEW mv_item_sources AS
 SELECT
     ia.master_item_id,
+    mi.name AS item,
     t.id AS source_id,
     t.area_id,
     ia.amount,
@@ -248,11 +278,13 @@ SELECT
 FROM treasures t
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
 
 UNION ALL
 
 SELECT
     i.master_item_id,
+    mi.name AS item,
     j.shop_id AS source_id,
     sh.area_id,
     1 AS amount,
@@ -265,11 +297,13 @@ FROM shops sh
 JOIN j_shops_items j ON j.shop_id = sh.id
 JOIN shop_items si ON j.shop_item_id = si.id
 JOIN items i ON si.item_id = i.id
+JOIN master_items mi ON i.master_item_id = mi.id
 
 UNION ALL
 
 SELECT
     ia.master_item_id,
+    mi.name AS item,
     q.id AS source_id,
     ca.area_id,
     ia.amount,
@@ -279,11 +313,13 @@ FROM quests q
 JOIN quest_completions qc ON q.completion_id = qc.id
 JOIN completion_areas ca ON ca.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
 
 UNION ALL
 
 SELECT
     ia.master_item_id,
+    mi.name AS item,
     bi.position_id AS source_id,
     75 AS area_id,
     ia.amount,
@@ -292,11 +328,13 @@ SELECT
 FROM blitzball_items bi
 JOIN possible_items pi ON bi.possible_item_id = pi.id
 JOIN item_amounts ia ON pi.item_amount_id = ia.id
+JOIN master_items mi ON ia.master_item_id = mi.id
 
 UNION ALL
 
 SELECT
     mi.master_item_id,
+    mi.item,
     mi.monster_id AS source_id,
     me.area_id,
     mi.amount,
@@ -309,6 +347,8 @@ JOIN mv_monster_encounters me ON mi.monster_id = me.monster_id;
 CREATE INDEX idx_mv_item_sources_master_id ON mv_item_sources (master_item_id);
 CREATE INDEX idx_mv_item_sources_source_id ON mv_item_sources (source_id);
 CREATE INDEX idx_mv_item_sources_area_id ON mv_item_sources (area_id);
+
+
 
 
 CREATE MATERIALIZED VIEW mv_equipment_sources AS

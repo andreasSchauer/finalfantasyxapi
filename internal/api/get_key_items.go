@@ -44,5 +44,8 @@ func (cfg *Config) retrieveKeyItems(r *http.Request, i handlerInput[seeding.KeyI
 		frl(enumListQuery(cfg, r, i, cfg.t.KeyItemCategory, resources, "category", cfg.db.GetKeyItemIDsCategory)),
 		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetKeyItemIDsByAvailability)),
 		frl(valueListQuery(cfg, r, i, resources, "method", cfg.db.GetKeyItemIDsByMethods)),
+		frl(idQuery(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), cfg.db.GetKeyItemIDsByLocation)),
+		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), cfg.db.GetKeyItemIDsBySublocation)),
+		frl(idQuery(cfg, r, i, resources, "areas", len(cfg.e.areas.objLookup), cfg.db.GetKeyItemIDsByArea)),
 	})
 }

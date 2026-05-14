@@ -103,6 +103,69 @@ func (q *Queries) GetItemIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getItemIDsByArea = `-- name: GetItemIDsByArea :many
+SELECT DISTINCT i.id
+FROM items i
+JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+WHERE mis.area_id = $1
+ORDER BY i.id
+`
+
+func (q *Queries) GetItemIDsByArea(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsByArea, areaID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getItemIDsByLocation = `-- name: GetItemIDsByLocation :many
+SELECT DISTINCT i.id
+FROM items i
+JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.location_id = $1
+ORDER BY i.id
+`
+
+func (q *Queries) GetItemIDsByLocation(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsByLocation, locationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getItemIDsByMethods = `-- name: GetItemIDsByMethods :many
 SELECT i.id
 FROM mv_item_sources mis
@@ -154,6 +217,38 @@ func (q *Queries) GetItemIDsByRelatedStat(ctx context.Context, statID int32) ([]
 			return nil, err
 		}
 		items = append(items, item_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getItemIDsBySublocation = `-- name: GetItemIDsBySublocation :many
+SELECT DISTINCT i.id
+FROM items i
+JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.sublocation_id = $1
+ORDER BY i.id
+`
+
+func (q *Queries) GetItemIDsBySublocation(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsBySublocation, sublocationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -538,6 +633,37 @@ func (q *Queries) GetKeyItemIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getKeyItemIDsByArea = `-- name: GetKeyItemIDsByArea :many
+SELECT DISTINCT ki.id
+FROM key_items ki
+JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
+WHERE mis.area_id = $1
+ORDER BY ki.id
+`
+
+func (q *Queries) GetKeyItemIDsByArea(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getKeyItemIDsByArea, areaID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getKeyItemIDsByAvailability = `-- name: GetKeyItemIDsByAvailability :many
 WITH w AS (
   SELECT $1::availability_type[] AS availability
@@ -574,6 +700,38 @@ func (q *Queries) GetKeyItemIDsByAvailability(ctx context.Context, availability 
 	return items, nil
 }
 
+const getKeyItemIDsByLocation = `-- name: GetKeyItemIDsByLocation :many
+SELECT DISTINCT ki.id
+FROM key_items ki
+JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.location_id = $1
+ORDER BY ki.id
+`
+
+func (q *Queries) GetKeyItemIDsByLocation(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getKeyItemIDsByLocation, locationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getKeyItemIDsByMethods = `-- name: GetKeyItemIDsByMethods :many
 SELECT ki.id
 FROM mv_item_sources mis
@@ -587,6 +745,38 @@ ORDER BY ki.id
 
 func (q *Queries) GetKeyItemIDsByMethods(ctx context.Context, methods []string) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getKeyItemIDsByMethods, pq.Array(methods))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getKeyItemIDsBySublocation = `-- name: GetKeyItemIDsBySublocation :many
+SELECT DISTINCT ki.id
+FROM key_items ki
+JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.sublocation_id = $1
+ORDER BY ki.id
+`
+
+func (q *Queries) GetKeyItemIDsBySublocation(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getKeyItemIDsBySublocation, sublocationID)
 	if err != nil {
 		return nil, err
 	}
@@ -726,6 +916,64 @@ func (q *Queries) GetMasterItemIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getMasterItemIDsByArea = `-- name: GetMasterItemIDsByArea :many
+SELECT DISTINCT master_item_id FROM mv_item_sources WHERE area_id = $1 ORDER BY master_item_id
+`
+
+func (q *Queries) GetMasterItemIDsByArea(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMasterItemIDsByArea, areaID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var master_item_id int32
+		if err := rows.Scan(&master_item_id); err != nil {
+			return nil, err
+		}
+		items = append(items, master_item_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMasterItemIDsByLocation = `-- name: GetMasterItemIDsByLocation :many
+SELECT DISTINCT mis.master_item_id
+FROM mv_item_sources mis
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.location_id = $1
+ORDER BY mis.master_item_id
+`
+
+func (q *Queries) GetMasterItemIDsByLocation(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMasterItemIDsByLocation, locationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var master_item_id int32
+		if err := rows.Scan(&master_item_id); err != nil {
+			return nil, err
+		}
+		items = append(items, master_item_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMasterItemIDsByMethods = `-- name: GetMasterItemIDsByMethods :many
 SELECT mis.master_item_id
 FROM mv_item_sources mis
@@ -738,6 +986,37 @@ ORDER BY mis.master_item_id
 
 func (q *Queries) GetMasterItemIDsByMethods(ctx context.Context, methods []string) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getMasterItemIDsByMethods, pq.Array(methods))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var master_item_id int32
+		if err := rows.Scan(&master_item_id); err != nil {
+			return nil, err
+		}
+		items = append(items, master_item_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMasterItemIDsBySublocation = `-- name: GetMasterItemIDsBySublocation :many
+SELECT DISTINCT mis.master_item_id
+FROM mv_item_sources mis
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.sublocation_id = $1
+ORDER BY mis.master_item_id
+`
+
+func (q *Queries) GetMasterItemIDsBySublocation(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMasterItemIDsBySublocation, sublocationID)
 	if err != nil {
 		return nil, err
 	}

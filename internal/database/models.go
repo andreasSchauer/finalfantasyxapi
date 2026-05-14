@@ -4105,6 +4105,7 @@ type MvGeographyGraph struct {
 
 type MvItemSource struct {
 	MasterItemID int32
+	Item         string
 	SourceID     int32
 	AreaID       int32
 	Amount       int32
@@ -4115,6 +4116,7 @@ type MvItemSource struct {
 type MvMonsterEncounter struct {
 	FormationID       int32
 	MonsterID         int32
+	Monster           string
 	MonsterAmount     int32
 	DataID            int32
 	Category          MonsterFormationCategory
@@ -4128,9 +4130,11 @@ type MvMonsterEncounter struct {
 
 type MvMonsterEquipmentDrop struct {
 	MonsterID           int32
+	Monster             string
 	AbilitySlotsID      int32
 	AttachedAbilitiesID int32
 	AutoAbilityID       int32
+	AutoAbility         string
 	Availability        AvailabilityType
 	IsRepeatable        bool
 	EquipmentDropID     int32
@@ -4141,8 +4145,10 @@ type MvMonsterEquipmentDrop struct {
 
 type MvMonsterItemDrop struct {
 	MonsterID    int32
+	Monster      string
 	ItemID       int32
 	MasterItemID int32
+	Item         string
 	Amount       int32
 	SourceType   string
 	Availability AvailabilityType

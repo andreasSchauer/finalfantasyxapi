@@ -53,5 +53,8 @@ func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.M
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[TypedAPIResource]{
 		frl(enumListQuery(cfg, r, i, cfg.t.ItemType, resources, "type", cfg.db.GetMasterItemIDsByType)),
 		frl(valueListQuery(cfg, r, i, resources, "method", cfg.db.GetMasterItemIDsByMethods)),
+		frl(idQuery(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), cfg.db.GetMasterItemIDsByLocation)),
+		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), cfg.db.GetMasterItemIDsBySublocation)),
+		frl(idQuery(cfg, r, i, resources, "areas", len(cfg.e.areas.objLookup), cfg.db.GetMasterItemIDsByArea)),
 	})
 }

@@ -24,6 +24,27 @@ HAVING COUNT(DISTINCT mis.source_type) = cardinality(w.methods)
 ORDER BY mis.master_item_id;
 
 
+-- name: GetMasterItemIDsByLocation :many
+SELECT DISTINCT mis.master_item_id
+FROM mv_item_sources mis
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.location_id = $1
+ORDER BY mis.master_item_id;
+
+
+-- name: GetMasterItemIDsBySublocation :many
+SELECT DISTINCT mis.master_item_id
+FROM mv_item_sources mis
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.sublocation_id = $1
+ORDER BY mis.master_item_id;
+
+
+-- name: GetMasterItemIDsByArea :many
+SELECT DISTINCT master_item_id FROM mv_item_sources WHERE area_id = $1 ORDER BY master_item_id;
+
+
+
 
 -- name: GetItemMonsterIDs :many
 WITH w AS (
@@ -149,6 +170,32 @@ HAVING COUNT(DISTINCT mis.source_type) = cardinality(w.methods)
 ORDER BY i.id;
 
 
+-- name: GetItemIDsByLocation :many
+SELECT DISTINCT i.id
+FROM items i
+JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.location_id = $1
+ORDER BY i.id;
+
+
+-- name: GetItemIDsBySublocation :many
+SELECT DISTINCT i.id
+FROM items i
+JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.sublocation_id = $1
+ORDER BY i.id;
+
+
+-- name: GetItemIDsByArea :many
+SELECT DISTINCT i.id
+FROM items i
+JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+WHERE mis.area_id = $1
+ORDER BY i.id;
+
+
 
 
 
@@ -225,6 +272,32 @@ CROSS JOIN w
 WHERE (w.availability IS NULL OR mis.availability = ANY(w.availability))
   AND (mis.source_type = 'treasure' OR mis.source_type = 'quest')
 ORDER BY id;
+
+
+-- name: GetKeyItemIDsByLocation :many
+SELECT DISTINCT ki.id
+FROM key_items ki
+JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.location_id = $1
+ORDER BY ki.id;
+
+
+-- name: GetKeyItemIDsBySublocation :many
+SELECT DISTINCT ki.id
+FROM key_items ki
+JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.sublocation_id = $1
+ORDER BY ki.id;
+
+
+-- name: GetKeyItemIDsByArea :many
+SELECT DISTINCT ki.id
+FROM key_items ki
+JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
+WHERE mis.area_id = $1
+ORDER BY ki.id;
 
 
 

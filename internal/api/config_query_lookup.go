@@ -2277,6 +2277,30 @@ func (cfg *Config) initAllItemsParams() {
 			ForSingle:     false,
 			AllowedValues: []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
+		{
+			Name:          "location",
+			Description:   "Searches for items that can be obtained at the specified location.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			References:    []string{createListURL(cfg, "locations")},
+		},
+		{
+			Name:          "sublocation",
+			Description:   "Searches for items that can be obtained at the specified sublocation.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			References:    []string{createListURL(cfg, "sublocations")},
+		},
+		{
+			Name:          "area",
+			Description:   "Searches for items that can be obtained in the specified area.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			References:    []string{createListURL(cfg, "area")},
+		},
 	}
 
 	paramsMap := cfg.completeQueryParamsInit(params, false)
@@ -2334,6 +2358,30 @@ func (cfg *Config) initItemsParams() {
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "stats")},
 		},
+		{
+			Name:          "location",
+			Description:   "Searches for items that can be obtained at the specified location.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			References:    []string{createListURL(cfg, "locations")},
+		},
+		{
+			Name:          "sublocation",
+			Description:   "Searches for items that can be obtained at the specified sublocation.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			References:    []string{createListURL(cfg, "sublocations")},
+		},
+		{
+			Name:          "area",
+			Description:   "Searches for items that can be obtained in the specified area.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			References:    []string{createListURL(cfg, "area")},
+		},
 	}
 
 	paramsMap := cfg.completeQueryParamsInit(params, false)
@@ -2367,6 +2415,30 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			AllowedValues: []string{"treasure", "quest"},
+		},
+		{
+			Name:          "location",
+			Description:   "Searches for key-items that can be obtained at the specified location.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			References:    []string{createListURL(cfg, "locations")},
+		},
+		{
+			Name:          "sublocation",
+			Description:   "Searches for key-items that can be obtained at the specified sublocation.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			References:    []string{createListURL(cfg, "sublocations")},
+		},
+		{
+			Name:          "area",
+			Description:   "Searches for key-items that can be obtained in the specified area.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			References:    []string{createListURL(cfg, "area")},
 		},
 	}
 
