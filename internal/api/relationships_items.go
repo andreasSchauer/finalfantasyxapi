@@ -8,7 +8,7 @@ import (
 )
 
 func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item, error) {
-	availabilityParams, err := getAvailabilityParams(cfg, r, cfg.e.items, item.ID)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.items, item.ID)
 	if err != nil {
 		return Item{}, err
 	}
@@ -26,23 +26,23 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 	return rel, nil
 }
 
-func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabilityParams AvailabilityParams) (Item, error) {
-	monsters, err := runAvailabilityQuery(cfg, r, cfg.e.monsters, item, availabilityParams, convGetItemMonsterIDs(cfg))
+func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabilityParams RelAvailabilityParams) (Item, error) {
+	monsters, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, item, availabilityParams, convGetItemMonsterIDs(cfg))
 	if err != nil {
 		return Item{}, err
 	}
 
-	treasures, err := runAvailabilityQuery(cfg, r, cfg.e.treasures, item, availabilityParams, convGetItemTreasureIDs(cfg))
+	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, item, availabilityParams, convGetItemTreasureIDs(cfg))
 	if err != nil {
 		return Item{}, err
 	}
 
-	shops, err := runAvailabilityQuery(cfg, r, cfg.e.shops, item, availabilityParams, convGetItemShopIDs(cfg))
+	shops, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, item, availabilityParams, convGetItemShopIDs(cfg))
 	if err != nil {
 		return Item{}, err
 	}
 
-	quests, err := runAvailabilityQuery(cfg, r, cfg.e.quests, item, availabilityParams, convGetItemQuestIDs(cfg))
+	quests, err := runRelAvailabilityQuery(cfg, r, cfg.e.quests, item, availabilityParams, convGetItemQuestIDs(cfg))
 	if err != nil {
 		return Item{}, err
 	}

@@ -9,7 +9,7 @@ import (
 func getSphereRelationships(cfg *Config, r *http.Request, sphere seeding.Sphere) (Sphere, error) {
 	item, _ := seeding.GetResourceByID(sphere.ItemID, cfg.l.ItemsID)
 
-	availabilityParams, err := getAvailabilityParams(cfg, r, cfg.e.spheres, item.ID)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.spheres, item.ID)
 	if err != nil {
 		return Sphere{}, err
 	}

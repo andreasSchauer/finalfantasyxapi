@@ -11,17 +11,17 @@ import (
 func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.EquipmentName) (EquipmentName, error) {
 	i := cfg.e.equipment
 
-	availabilityParams, err := getAvailabilityParams(cfg, r, i, equipment.ID)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, i, equipment.ID)
 	if err != nil {
 		return EquipmentName{}, err
 	}
 
-	treasures, err := runAvailabilityQuery(cfg, r, cfg.e.treasures, equipment, availabilityParams, convGetEquipmentTreasureIDs(cfg))
+	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, equipment, availabilityParams, convGetEquipmentTreasureIDs(cfg))
 	if err != nil {
 		return EquipmentName{}, err
 	}
 
-	shops, err := runAvailabilityQuery(cfg, r, cfg.e.shops, equipment, availabilityParams, convGetEquipmentShopIDs(cfg))
+	shops, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, equipment, availabilityParams, convGetEquipmentShopIDs(cfg))
 	if err != nil {
 		return EquipmentName{}, err
 	}

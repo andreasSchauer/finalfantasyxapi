@@ -7,32 +7,32 @@ import (
 )
 
 func getAutoAbilityRelationships(cfg *Config, r *http.Request, autoAbility seeding.AutoAbility) (AutoAbility, error) {
-	availabilityParams, err := getAvailabilityParams(cfg, r, cfg.e.autoAbilities, autoAbility.ID)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.autoAbilities, autoAbility.ID)
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	monsterItems, err := runAvailabilityQuery(cfg, r, cfg.e.monsters, autoAbility, availabilityParams, convGetAutoAbilityItemMonsterIDs(cfg))
+	monsterItems, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, autoAbility, availabilityParams, convGetAutoAbilityItemMonsterIDs(cfg))
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	monstersDrop, err := runAvailabilityQuery(cfg, r, cfg.e.monsters, autoAbility, availabilityParams, convGetAutoAbilityMonsterIDs(cfg))
+	monstersDrop, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, autoAbility, availabilityParams, convGetAutoAbilityMonsterIDs(cfg))
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	shopsPre, err := runAvailabilityQuery(cfg, r, cfg.e.shops, autoAbility, availabilityParams, convGetAutoAbilityShopIDsPre(cfg))
+	shopsPre, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, autoAbility, availabilityParams, convGetAutoAbilityShopIDsPre(cfg))
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	shopsPost, err := runAvailabilityQuery(cfg, r, cfg.e.shops, autoAbility, availabilityParams, convGetAutoAbilityShopIDsPost(cfg))
+	shopsPost, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, autoAbility, availabilityParams, convGetAutoAbilityShopIDsPost(cfg))
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	treasures, err := runAvailabilityQuery(cfg, r, cfg.e.treasures, autoAbility, availabilityParams, convGetAutoAbilityTreasuresIDs(cfg))
+	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, autoAbility, availabilityParams, convGetAutoAbilityTreasuresIDs(cfg))
 	if err != nil {
 		return AutoAbility{}, err
 	}
