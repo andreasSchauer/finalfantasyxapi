@@ -10,6 +10,10 @@ import (
 // query uses an integer value as input.
 func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
+
 	integer, err := parseIntQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
@@ -31,6 +35,10 @@ func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg
 // query uses an integer value as input.
 func intQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
+
 	integer, err := parseIntQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil

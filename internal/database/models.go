@@ -460,12 +460,14 @@ func (ns NullAutoAbilityCategory) Value() (driver.Value, error) {
 type AvailabilityType string
 
 const (
-	AvailabilityTypeAlways    AvailabilityType = "always"
-	AvailabilityTypePreStory  AvailabilityType = "pre-story"
-	AvailabilityTypePost      AvailabilityType = "post"
-	AvailabilityTypePostStory AvailabilityType = "post-story"
-	AvailabilityTypePostGame  AvailabilityType = "post-game"
-	AvailabilityTypeStory     AvailabilityType = "story"
+	AvailabilityTypeAlways      AvailabilityType = "always"
+	AvailabilityTypePreStory    AvailabilityType = "pre-story"
+	AvailabilityTypePost        AvailabilityType = "post"
+	AvailabilityTypePostStory   AvailabilityType = "post-story"
+	AvailabilityTypePostGame    AvailabilityType = "post-game"
+	AvailabilityTypeStory       AvailabilityType = "story"
+	AvailabilityTypePreAirship  AvailabilityType = "pre-airship"
+	AvailabilityTypePostAirship AvailabilityType = "post-airship"
 )
 
 func (e *AvailabilityType) Scan(src interface{}) error {
@@ -3220,6 +3222,7 @@ type EncounterArea struct {
 	DataHash      string
 	AreaID        int32
 	Specification sql.NullString
+	Availability  AvailabilityType
 }
 
 type EnemyAbility struct {
@@ -4071,59 +4074,68 @@ type MvEquipmentSource struct {
 	AutoAbilityID    sql.NullInt32
 	AutoAbility      sql.NullString
 	Availability     AvailabilityType
+	SpecAvailability AvailabilityType
 	ShopType         NullShopType
 }
 
 type MvGeography struct {
-	LocationID      int32
-	SublocationID   int32
-	AreaID          int32
-	LocationName    string
-	SublocationName string
-	AreaName        string
-	AreaVersion     sql.NullInt32
+	LocationID    int32
+	SublocationID int32
+	AreaID        int32
+	Location      string
+	Sublocation   string
+	Area          string
+	Version       sql.NullInt32
+	Availability  AvailabilityType
 }
 
 type MvGeographyGraph struct {
 	LID            int32
 	SID            int32
 	AID            int32
-	LName          string
-	SName          string
-	AName          string
+	Location       string
+	Sublocation    string
+	Area           string
 	AVersion       sql.NullInt32
 	ClID           int32
 	CsID           int32
 	CaID           int32
-	ClName         string
-	CsName         string
-	CaName         string
+	CLocation      string
+	CSublocation   string
+	CArea          string
 	CaVersion      sql.NullInt32
 	ConnectionType AreaConnectionType
 	IsStoryBased   bool
 }
 
 type MvItemSource struct {
-	MasterItemID int32
-	Item         string
-	SourceID     int32
-	AreaID       int32
-	Amount       int32
-	SourceType   string
-	Availability AvailabilityType
+	MasterItemID     int32
+	Item             string
+	SourceID         int32
+	AreaID           int32
+	Amount           int32
+	SourceType       string
+	Availability     AvailabilityType
+	SpecAvailability AvailabilityType
 }
 
 type MvMonsterEncounter struct {
 	FormationID       int32
 	MonsterID         int32
 	Monster           string
+	Version           sql.NullInt32
 	MonsterAmount     int32
 	DataID            int32
 	Category          MonsterFormationCategory
 	Availability      AvailabilityType
+	SpecAvailability  AvailabilityType
 	IsForcedAmbush    bool
 	CanEscape         bool
 	AreaID            int32
+	Location          string
+	Sublocation       string
+	Area              string
+	AVersion          sql.NullInt32
 	SongID            sql.NullInt32
 	FTriggerCommandID sql.NullInt32
 }
@@ -4131,11 +4143,13 @@ type MvMonsterEncounter struct {
 type MvMonsterEquipmentDrop struct {
 	MonsterID           int32
 	Monster             string
+	Version             sql.NullInt32
 	AbilitySlotsID      int32
 	AttachedAbilitiesID int32
 	AutoAbilityID       int32
 	AutoAbility         string
 	Availability        AvailabilityType
+	SpecAvailability    AvailabilityType
 	IsRepeatable        bool
 	EquipmentDropID     int32
 	IsForced            bool
@@ -4144,15 +4158,17 @@ type MvMonsterEquipmentDrop struct {
 }
 
 type MvMonsterItemDrop struct {
-	MonsterID    int32
-	Monster      string
-	ItemID       int32
-	MasterItemID int32
-	Item         string
-	Amount       int32
-	SourceType   string
-	Availability AvailabilityType
-	IsRepeatable bool
+	MonsterID        int32
+	Monster          string
+	Version          sql.NullInt32
+	ItemID           int32
+	MasterItemID     int32
+	Item             string
+	Amount           int32
+	SourceType       string
+	Availability     AvailabilityType
+	SpecAvailability AvailabilityType
+	IsRepeatable     bool
 }
 
 type OdModeAction struct {

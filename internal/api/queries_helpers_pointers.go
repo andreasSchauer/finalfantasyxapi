@@ -39,6 +39,20 @@ func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]Qu
 	return &integer32, nil
 }
 
+func getQueryValuePtr(r *http.Request, queryName string, queryLookup map[string]QueryParam) (*string, error) {
+	queryParam := queryLookup[queryName]
+
+	value, err := parseValueQuery(r, queryParam)
+	if errors.Is(err, errEmptyQuery) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return &value, nil
+}
+
 func getQueryIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 

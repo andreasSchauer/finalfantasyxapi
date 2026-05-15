@@ -1,11 +1,7 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
-	"slices"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func parseValueListQuery(cfg *Config, r *http.Request, queryParam QueryParam) ([]string, error) {
@@ -24,8 +20,9 @@ func queryValuesToSlice(cfg *Config, query string, queryParam QueryParam) ([]str
 	}
 
 	for _, value := range values {
-		if !slices.Contains(queryParam.AllowedValues, value) {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. allowed values: %s.", value, queryParam.Name, h.FormatStringSlice(queryParam.AllowedValues)), nil)
+		err := checkValue(queryParam, value)
+		if err != nil {
+			return nil, err
 		}
 	}
 

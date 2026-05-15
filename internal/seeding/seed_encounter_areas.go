@@ -19,12 +19,14 @@ func (l *Lookup) loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Cont
 		DataHash:      make([]string, len(areas)),
 		AreaID:        make([]int32, len(areas)),
 		Specification: make([]sql.NullString, len(areas)),
+		Availability:  make([]database.AvailabilityType, len(areas)),
 	}
 
 	for i, a := range areas {
 		params.DataHash[i] = generateDataHash(a)
 		params.AreaID[i] = a.AreaID
 		params.Specification[i] = h.GetNullString(a.Specification)
+		params.Availability[i] = database.AvailabilityType(a.Availability)
 	}
 
 	dbRows, err := qtx.CreateEncounterAreaBulk(ctx, params)

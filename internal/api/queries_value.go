@@ -8,13 +8,14 @@ import (
 )
 
 
-func valueListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryValueList) ([]A, error) {
+
+func valueQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryValue) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
 		return inputRes, nil
 	}
 
-	values, err := parseValueListQuery(cfg, r, queryParam)
+	value, err := parseValueQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil
 	}
@@ -22,7 +23,7 @@ func valueListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 		return nil, err
 	}
 
-	dbIDs, err := dbQuery(r.Context(), values)
+	dbIDs, err := dbQuery(r.Context(), value)
 	if err != nil {
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}

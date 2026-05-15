@@ -59,7 +59,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 		EmptySlots:    emptySlots,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by auto ability id '%s', character id '%s', shop type '%s', empty slots amount '%s'.", i.resourceType, h.PtrToString(autoAbilityIdPtr), h.PtrToString(charIdPtr), h.PtrToString(shopTypePtr), h.FormatIntSlice(emptySlots)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by auto-ability id '%s', character id '%s', shop type '%s', empty slots amount '%s'.", i.resourceType, h.PtrToString(autoAbilityIdPtr), h.PtrToString(charIdPtr), h.PtrToString(shopTypePtr), h.FormatIntSlice(emptySlots)), err)
 	}
 
 	return dbIDs, nil

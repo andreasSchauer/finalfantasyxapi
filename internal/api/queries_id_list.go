@@ -10,6 +10,9 @@ import (
 // query uses a list of ids as database input to filter for resources
 func idListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryIntList) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
 
 	queryIDs, err := parseIdListQuery(cfg, r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {

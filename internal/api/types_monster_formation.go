@@ -16,8 +16,9 @@ type MonsterFormation struct {
 }
 
 type EncounterArea struct {
-	Area          AreaAPIResource `json:"area"`
-	Specification *string         `json:"specification"`
+	Area          AreaAPIResource 	`json:"area"`
+	Specification *string         	`json:"specification"`
+	Availability  NamedAPIResource	`json:"availability"`
 }
 
 func (ec EncounterArea) GetAPIResource() APIResource {
@@ -28,6 +29,7 @@ func convertEncounterArea(cfg *Config, el seeding.EncounterArea) EncounterArea {
 	return EncounterArea{
 		Area:          locAreaToAreaAPIResource(cfg, cfg.e.areas, el.LocationArea),
 		Specification: el.Specification,
+		Availability:  enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, el.Availability, cfg.t.AvailabilityType),
 	}
 }
 

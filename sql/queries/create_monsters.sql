@@ -63,11 +63,12 @@ RETURNING id, data_hash;
 
 
 -- name: CreateEncounterAreaBulk :many
-INSERT INTO encounter_areas (data_hash, area_id, specification)
+INSERT INTO encounter_areas (data_hash, area_id, specification, availability)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('area_id')::int[]),
-    unnest(sqlc.arg('specification')::null_string[])
+    unnest(sqlc.arg('specification')::null_string[]),
+    unnest(sqlc.arg('availability')::availability_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 

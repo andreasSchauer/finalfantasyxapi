@@ -392,19 +392,19 @@ func (t *TypeLookup) initAvailabilityType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AvailabilityTypeAlways),
-			Description: "The resource is always available once its location is reached in the story.",
+			Description: "The resource becomes and will always stay available once its location is reached in the story. Sometimes other conditions have to be met to unlock the resource. This only includes resources that are available before acquiring the airship.",
 		},
 		{
 			Name:        string(database.AvailabilityTypePreStory),
-			Description: "The resource is only available during the events of the story.",
+			Description: "The resource is only available during certain events of the story, before acquiring the airship. This includes scripted fights, tutorials, and locations that are only accessible during those events.",
 		},
 		{
 			Name:        string(database.AvailabilityTypePost),
-			Description: "The resource is only available after acquiring the airship. Note that for the resources that are located inside Sin to become available, you have to do the boss rush against it.",
+			Description: "The resource becomes available, or is only accessible after acquiring the airship. Note that in order to get access to the resources that are located inside Sin, you have to do the boss rush against it.",
 		},
 		{
 			Name:        string(database.AvailabilityTypePostStory),
-			Description: "The resource is only available during the events of the story that happen after acquiring the airship.",
+			Description: "The resource is only available during the events of the story that happen after acquiring the airship. These resources are either post-airship story bosses or resources that are past the point of no return.",
 		},
 		{
 			Name:        string(database.AvailabilityTypePostGame),
@@ -412,7 +412,15 @@ func (t *TypeLookup) initAvailabilityType() {
 		},
 		{
 			Name:        string(database.AvailabilityTypeStory),
-			Description: "The resource is only available during the events of the story. This value is essentially a combination of 'pre-story' and 'post-story'.",
+			Description: "The resource is only available during the events of the story and thus is missable. This value is essentially a combination of 'pre-story' and 'post-story'.",
+		},
+		{
+			Name:        string(database.AvailabilityTypePreAirship),
+			Description: "The resource is available before acquiring the airship. This value is essentially a combination of 'always' and 'pre-story'.",
+		},
+		{
+			Name:        string(database.AvailabilityTypePostAirship),
+			Description: "The resource is only available after acquiring the airship. This value is essentially a combination of 'post' and 'post-story'.",
 		},
 	}
 
@@ -429,6 +437,16 @@ func (t *TypeLookup) initAvailabilityType() {
 
 			string(database.AvailabilityTypeStory): {
 				database.AvailabilityTypePreStory,
+				database.AvailabilityTypePostStory,
+			},
+
+			string(database.AvailabilityTypePreAirship): {
+				database.AvailabilityTypeAlways,
+				database.AvailabilityTypePreStory,
+			},
+
+			string(database.AvailabilityTypePostAirship): {
+				database.AvailabilityTypePost,
 				database.AvailabilityTypePostStory,
 			},
 		},

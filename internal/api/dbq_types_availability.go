@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -16,6 +17,7 @@ type AvailabilityParams struct {
 	ParentID     int32
 	Availability []database.AvailabilityType
 	Repeatable   sql.NullBool
+	Method		 sql.NullString
 }
 
 func getAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], parentID int32) (AvailabilityParams, error) {
@@ -151,4 +153,101 @@ func convGetEquipmentShopIDs(cfg *Config) AvailabilityDbQuery {
 			Availability: p.Availability,
 		})
 	}
+}
+
+
+
+
+
+func getMasterItemIDsByLocation(cfg *Config, r *http.Request, id int32) ([]TypedAPIResource, error) {
+	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetMasterItemIDsByLocation(ctx, database.GetMasterItemIDsByLocationParams{
+			LocationID:  	p.ParentID,
+			Availability: 	p.Availability,
+			Method: 		p.Method,
+		})
+	}
+	return execAvailabilityQuery(cfg, r, cfg.e.allItems, id, cfg.e.locations.resourceType, dbQuery)
+}
+
+func getMasterItemIDsBySublocation(cfg *Config, r *http.Request, id int32) ([]TypedAPIResource, error) {
+	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetMasterItemIDsBySublocation(ctx, database.GetMasterItemIDsBySublocationParams{
+			SublocationID:  p.ParentID,
+			Availability: 	p.Availability,
+			Method: 		p.Method,
+		})
+	}
+	return execAvailabilityQuery(cfg, r, cfg.e.allItems, id, cfg.e.sublocations.resourceType, dbQuery)
+}
+
+func getMasterItemIDsByArea(cfg *Config, r *http.Request, id int32) ([]TypedAPIResource, error) {
+	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetMasterItemIDsByArea(ctx, database.GetMasterItemIDsByAreaParams{
+			AreaID:  		p.ParentID,
+			Availability: 	p.Availability,
+			Method: 		p.Method,
+		})
+	}
+	return execAvailabilityQuery(cfg, r, cfg.e.allItems, id, cfg.e.areas.resourceType, dbQuery)
+}
+
+func getItemIDsByLocation(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetItemIDsByLocation(ctx, database.GetItemIDsByLocationParams{
+			LocationID:  	p.ParentID,
+			Availability: 	p.Availability,
+			Method: 		p.Method,
+		})
+	}
+	return execAvailabilityQuery(cfg, r, cfg.e.items, id, cfg.e.locations.resourceType, dbQuery)
+}
+
+func getItemIDsBySublocation(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetItemIDsBySublocation(ctx, database.GetItemIDsBySublocationParams{
+			SublocationID:  p.ParentID,
+			Availability: 	p.Availability,
+			Method: 		p.Method,
+		})
+	}
+	return execAvailabilityQuery(cfg, r, cfg.e.items, id, cfg.e.sublocations.resourceType, dbQuery)
+}
+
+func getItemIDsByArea(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetItemIDsByArea(ctx, database.GetItemIDsByAreaParams{
+			AreaID:  		p.ParentID,
+			Availability: 	p.Availability,
+			Method: 		p.Method,
+		})
+	}
+	return execAvailabilityQuery(cfg, r, cfg.e.items, id, cfg.e.areas.resourceType, dbQuery)
+}
+
+
+func execAvailabilityQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, pResType string, dbQuery AvailabilityDbQuery) ([]A, error) {
+	paramAvailability := i.queryLookup["availability"]
+
+	availabilities, err := parseEnumListQuery(cfg, r, i.endpoint, paramAvailability, cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+
+	methodPtr, err := getQueryValuePtr(r, "method", i.queryLookup)
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := dbQuery(r.Context(), AvailabilityParams{
+		ParentID: 	  id,
+		Availability: availabilities,
+		Method: 	  h.GetNullString(methodPtr),
+	})
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by %s id '%d'.", i.resourceType, pResType, id), err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+	return resources, nil
 }

@@ -11,7 +11,7 @@ import (
 // used for query filters that can't really be generalized. this one simply checks, if it's empty and then calls the wrapperFn
 func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, string, QueryParam) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
-	query, err := checkEmptyQuery(r, queryParam)
+	query, err := basicQueryChecks(r, queryParam, i.queryLookup)
 	if err != nil {
 		return inputRes, nil
 	}
@@ -26,6 +26,19 @@ func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResource
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
 	return resources, nil
+}
+
+func basicQueryChecks(r *http.Request, queryParam QueryParam, queryLookup map[string]QueryParam) (string, error) {
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return "", err
+	}
+
+	if replParamsPresent(r, queryParam, queryLookup) {
+		return "", errQueryRedirect
+	}
+
+	return query, nil
 }
 
 // checks, if a queryParam is empty and returns errEmptyQuery, if it is
@@ -45,4 +58,15 @@ func checkNoneQuery(query string) error {
 	}
 
 	return nil
+}
+
+func replParamsPresent(r *http.Request, queryParam QueryParam, queryLookup map[string]QueryParam) bool {
+	for _, param := range queryParam.ReplacedBy {
+		p := queryLookup[param]
+		_, err := checkEmptyQuery(r, p)
+		if !errors.Is(err, errEmptyQuery) {
+			return true
+		}
+	}
+	return false
 }

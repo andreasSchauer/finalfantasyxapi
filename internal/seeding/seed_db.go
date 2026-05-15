@@ -156,11 +156,11 @@ func refreshViews(db *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("refreshing views")()
 	
 	fns := []func(context.Context) error{
-		db.RefreshMonsterItemDropsView,
-		db.RefreshMonsterEquipmentDropsView,
-		db.RefreshMonsterEncountersView,
 		db.RefreshGeographyView,
 		db.RefreshGeographyGraphView,
+		db.RefreshMonsterEncountersView,
+		db.RefreshMonsterItemDropsView,
+		db.RefreshMonsterEquipmentDropsView,
 		db.RefreshItemSourcesView,
 		db.RefreshEquipmentSourcesView,
 		db.RefreshAbilitiesView,

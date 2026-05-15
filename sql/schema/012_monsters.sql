@@ -99,7 +99,8 @@ CREATE TABLE encounter_areas (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     area_id INTEGER NOT NULL REFERENCES areas(id),
-    specification TEXT
+    specification TEXT,
+    availability availability_type NOT NULL
 );
 
 

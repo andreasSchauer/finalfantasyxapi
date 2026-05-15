@@ -10,6 +10,9 @@ import (
 // db query searches for resources with matching boolean db column value
 func boolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryBool) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
 
 	b, err := parseBooleanQuery(r, queryParam)
 	if errors.Is(err, errEmptyQuery) {

@@ -12,6 +12,9 @@ import (
 // query uses an id of another resource type to filter resources
 func idQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
 
 	id, err := parseIdQuery(r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
@@ -34,6 +37,9 @@ func idQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg 
 // like idOnlyQuery, but with more specialized logic in between (wrapperFn)
 func idQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, int32) ([]A, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
 
 	id, err := parseIdQuery(r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
@@ -53,6 +59,9 @@ func idQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 
 func idQueryNul[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryNullIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
 
 	idPtr, err := parseIdQueryNul(r, queryParam, maxID)
 	if errors.Is(err, errEmptyQuery) {
@@ -74,6 +83,7 @@ func idQueryNul[T seeding.Lookupable, R any, A APIResource, L APIResourceList](c
 // can be returned by id wrapperFns that use a second parameter for a set of allowed values
 func filterByIdAndValues[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, queryName, pResType string, dbQueryMap map[string]DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return dbQueriesToApiResources(cfg, r, i, id, pResType, dbQueryMap)

@@ -24,6 +24,7 @@ type QueryParam struct {
 	TypeLookup       map[string]EnumAPIResource `json:"-"`
 	RequiredParams   []string                   `json:"required_params,omitempty"`
 	UsableWith       []string                   `json:"usable_with,omitempty"`
+	ReplacedBy  	 []string                   `json:"replaced_by,omitempty"`
 	ForbiddenParams  []string                   `json:"forbidden_params,omitempty"`
 	References       []string                   `json:"references,omitempty"`
 	AllowedIDs       []int32                    `json:"-"`
@@ -496,6 +497,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"sublocation"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -655,6 +657,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"sublocation", "area"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -663,6 +666,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"area"},
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -719,6 +723,7 @@ func (cfg *Config) initShopsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"sublocation"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -801,6 +806,7 @@ func (cfg *Config) initTreasuresParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"sublocation", "area"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -809,6 +815,7 @@ func (cfg *Config) initTreasuresParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"area"},
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -972,6 +979,7 @@ func (cfg *Config) initSongsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"sublocation", "area"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -980,6 +988,7 @@ func (cfg *Config) initSongsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"area"},
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -1256,6 +1265,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"sublocation", "area"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -1264,6 +1274,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"area"},
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -2276,6 +2287,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			ReplacedBy:  []string{"location", "sublocation", "area"},
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
@@ -2284,6 +2296,7 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"location", "sublocation", "area"},
 			AllowedValues: []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
 		{
@@ -2292,6 +2305,7 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"sublocation", "area"},
 			References:    []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -2300,6 +2314,7 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"area"},
 			References:    []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -2350,6 +2365,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			ReplacedBy:  []string{"location", "sublocation", "area"},
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
@@ -2358,6 +2374,7 @@ func (cfg *Config) initItemsParams() {
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"location", "sublocation", "area"},
 			AllowedValues: []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
 		{
@@ -2382,6 +2399,7 @@ func (cfg *Config) initItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"sublocation", "area"},
 			References:    []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -2390,6 +2408,7 @@ func (cfg *Config) initItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"area"},
 			References:    []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -2440,6 +2459,7 @@ func (cfg *Config) initKeyItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"sublocation", "area"},
 			References:    []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -2448,6 +2468,7 @@ func (cfg *Config) initKeyItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"area"},
 			References:    []string{createListURL(cfg, "sublocations")},
 		},
 		{

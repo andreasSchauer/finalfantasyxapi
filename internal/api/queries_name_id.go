@@ -10,6 +10,9 @@ import (
 // query uses the name or id of another resource type to filter resources
 func nameIdQuery[T, P seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, dbQuery DbQueryIntMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
 
 	id, err := parseNameIdQuery(r, queryParam, pResType, pLookup)
 	if errors.Is(err, errEmptyQuery) {
@@ -31,6 +34,9 @@ func nameIdQuery[T, P seeding.Lookupable, R any, A APIResource, L APIResourceLis
 
 func nameIdQueryWrapper[T, P seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName, pResType string, pLookup map[string]P, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
 
 	id, err := parseNameIdQuery(r, queryParam, pResType, pLookup)
 	if errors.Is(err, errEmptyQuery) {

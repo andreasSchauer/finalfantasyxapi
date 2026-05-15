@@ -21,6 +21,7 @@ type DbQueryNullEnumList[N any] func(context.Context, []N) ([]int32, error)
 type DbQueryAny func(context.Context, any) ([]int32, error)
 type DbQueryStringMany func(context.Context, string) ([]int32, error)
 type DbQueryValueList func(context.Context, []string) ([]int32, error)
+type DbQueryValue func(context.Context, string) ([]int32, error)
 
 func ToIntManyNull(q DbQueryNullIntMany) DbQueryIntMany {
 	return func(ctx context.Context, id int32) ([]int32, error) {

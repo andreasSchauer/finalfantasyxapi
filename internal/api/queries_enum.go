@@ -10,6 +10,10 @@ import (
 // query uses an enum type (id or string possible) that needs to be checked for validity and then returns all resources matching that type
 func enumQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery DbQueryEnum[E]) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
+
 	enum, err := parseEnumQuery(r, i.endpoint, queryParam, et)
 	if errors.Is(err, errEmptyQuery) {
 		return inputRes, nil

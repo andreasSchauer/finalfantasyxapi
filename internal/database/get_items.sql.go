@@ -104,15 +104,29 @@ func (q *Queries) GetItemIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getItemIDsByArea = `-- name: GetItemIDsByArea :many
+WITH w AS (
+  SELECT 
+    $2::availability_type[] AS availability,
+    $3::text AS method
+)
 SELECT DISTINCT i.id
 FROM items i
 JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+CROSS JOIN w
 WHERE mis.area_id = $1
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+  AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY i.id
 `
 
-func (q *Queries) GetItemIDsByArea(ctx context.Context, areaID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemIDsByArea, areaID)
+type GetItemIDsByAreaParams struct {
+	AreaID       int32
+	Availability []AvailabilityType
+	Method       sql.NullString
+}
+
+func (q *Queries) GetItemIDsByArea(ctx context.Context, arg GetItemIDsByAreaParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsByArea, arg.AreaID, pq.Array(arg.Availability), arg.Method)
 	if err != nil {
 		return nil, err
 	}
@@ -170,16 +184,30 @@ func (q *Queries) GetItemIDsByAvailability(ctx context.Context, availability []A
 }
 
 const getItemIDsByLocation = `-- name: GetItemIDsByLocation :many
+WITH w AS (
+  SELECT 
+    $2::availability_type[] AS availability,
+    $3::text AS method
+)
 SELECT DISTINCT i.id
 FROM items i
 JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
+CROSS JOIN w
 WHERE g.location_id = $1
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+  AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY i.id
 `
 
-func (q *Queries) GetItemIDsByLocation(ctx context.Context, locationID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemIDsByLocation, locationID)
+type GetItemIDsByLocationParams struct {
+	LocationID   int32
+	Availability []AvailabilityType
+	Method       sql.NullString
+}
+
+func (q *Queries) GetItemIDsByLocation(ctx context.Context, arg GetItemIDsByLocationParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsByLocation, arg.LocationID, pq.Array(arg.Availability), arg.Method)
 	if err != nil {
 		return nil, err
 	}
@@ -201,19 +229,16 @@ func (q *Queries) GetItemIDsByLocation(ctx context.Context, locationID int32) ([
 	return items, nil
 }
 
-const getItemIDsByMethods = `-- name: GetItemIDsByMethods :many
-SELECT i.id
+const getItemIDsByMethod = `-- name: GetItemIDsByMethod :many
+SELECT DISTINCT i.id
 FROM mv_item_sources mis
 JOIN items i ON i.master_item_id = mis.master_item_id
-CROSS JOIN (SELECT $1::text[] AS methods) w
-WHERE mis.source_type = ANY(w.methods)
-GROUP BY i.id, w.methods
-HAVING COUNT(DISTINCT mis.source_type) = cardinality(w.methods)
+WHERE mis.source_type = $1::text
 ORDER BY i.id
 `
 
-func (q *Queries) GetItemIDsByMethods(ctx context.Context, methods []string) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemIDsByMethods, pq.Array(methods))
+func (q *Queries) GetItemIDsByMethod(ctx context.Context, method string) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsByMethod, method)
 	if err != nil {
 		return nil, err
 	}
@@ -263,16 +288,30 @@ func (q *Queries) GetItemIDsByRelatedStat(ctx context.Context, statID int32) ([]
 }
 
 const getItemIDsBySublocation = `-- name: GetItemIDsBySublocation :many
+WITH w AS (
+  SELECT 
+    $2::availability_type[] AS availability,
+    $3::text AS method
+)
 SELECT DISTINCT i.id
 FROM items i
 JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
+CROSS JOIN w
 WHERE g.sublocation_id = $1
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+  AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY i.id
 `
 
-func (q *Queries) GetItemIDsBySublocation(ctx context.Context, sublocationID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemIDsBySublocation, sublocationID)
+type GetItemIDsBySublocationParams struct {
+	SublocationID int32
+	Availability  []AvailabilityType
+	Method        sql.NullString
+}
+
+func (q *Queries) GetItemIDsBySublocation(ctx context.Context, arg GetItemIDsBySublocationParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemIDsBySublocation, arg.SublocationID, pq.Array(arg.Availability), arg.Method)
 	if err != nil {
 		return nil, err
 	}
@@ -766,19 +805,16 @@ func (q *Queries) GetKeyItemIDsByLocation(ctx context.Context, locationID int32)
 	return items, nil
 }
 
-const getKeyItemIDsByMethods = `-- name: GetKeyItemIDsByMethods :many
+const getKeyItemIDsByMethod = `-- name: GetKeyItemIDsByMethod :many
 SELECT ki.id
 FROM mv_item_sources mis
 JOIN key_items ki ON ki.master_item_id = mis.master_item_id
-CROSS JOIN (SELECT $1::text[] AS methods) w
-WHERE mis.source_type = ANY(w.methods)
-GROUP BY ki.id, w.methods
-HAVING COUNT(DISTINCT mis.source_type) = cardinality(w.methods)
+WHERE mis.source_type = $1::text
 ORDER BY ki.id
 `
 
-func (q *Queries) GetKeyItemIDsByMethods(ctx context.Context, methods []string) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getKeyItemIDsByMethods, pq.Array(methods))
+func (q *Queries) GetKeyItemIDsByMethod(ctx context.Context, method string) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getKeyItemIDsByMethod, method)
 	if err != nil {
 		return nil, err
 	}
@@ -951,11 +987,28 @@ func (q *Queries) GetMasterItemIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getMasterItemIDsByArea = `-- name: GetMasterItemIDsByArea :many
-SELECT DISTINCT master_item_id FROM mv_item_sources WHERE area_id = $1 ORDER BY master_item_id
+WITH w AS (
+  SELECT 
+    $2::availability_type[] AS availability,
+    $3::text AS method
+)
+SELECT DISTINCT mis.master_item_id
+FROM mv_item_sources mis
+CROSS JOIN w
+WHERE mis.area_id = $1
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+  AND (w.method IS NULL OR mis.source_type = w.method)
+ORDER BY master_item_id
 `
 
-func (q *Queries) GetMasterItemIDsByArea(ctx context.Context, areaID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMasterItemIDsByArea, areaID)
+type GetMasterItemIDsByAreaParams struct {
+	AreaID       int32
+	Availability []AvailabilityType
+	Method       sql.NullString
+}
+
+func (q *Queries) GetMasterItemIDsByArea(ctx context.Context, arg GetMasterItemIDsByAreaParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMasterItemIDsByArea, arg.AreaID, pq.Array(arg.Availability), arg.Method)
 	if err != nil {
 		return nil, err
 	}
@@ -1012,15 +1065,29 @@ func (q *Queries) GetMasterItemIDsByAvailability(ctx context.Context, availabili
 }
 
 const getMasterItemIDsByLocation = `-- name: GetMasterItemIDsByLocation :many
+WITH w AS (
+  SELECT 
+    $2::availability_type[] AS availability,
+    $3::text AS method
+)
 SELECT DISTINCT mis.master_item_id
 FROM mv_item_sources mis
 JOIN mv_geography g ON mis.area_id = g.area_id
+CROSS JOIN w
 WHERE g.location_id = $1
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+  AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY mis.master_item_id
 `
 
-func (q *Queries) GetMasterItemIDsByLocation(ctx context.Context, locationID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMasterItemIDsByLocation, locationID)
+type GetMasterItemIDsByLocationParams struct {
+	LocationID   int32
+	Availability []AvailabilityType
+	Method       sql.NullString
+}
+
+func (q *Queries) GetMasterItemIDsByLocation(ctx context.Context, arg GetMasterItemIDsByLocationParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMasterItemIDsByLocation, arg.LocationID, pq.Array(arg.Availability), arg.Method)
 	if err != nil {
 		return nil, err
 	}
@@ -1042,18 +1109,15 @@ func (q *Queries) GetMasterItemIDsByLocation(ctx context.Context, locationID int
 	return items, nil
 }
 
-const getMasterItemIDsByMethods = `-- name: GetMasterItemIDsByMethods :many
-SELECT mis.master_item_id
-FROM mv_item_sources mis
-CROSS JOIN (SELECT $1::text[] AS methods) w
-WHERE mis.source_type = ANY(w.methods)
-GROUP BY mis.master_item_id, w.methods
-HAVING COUNT(DISTINCT mis.source_type) = cardinality(w.methods)
-ORDER BY mis.master_item_id
+const getMasterItemIDsByMethod = `-- name: GetMasterItemIDsByMethod :many
+SELECT master_item_id
+FROM mv_item_sources
+WHERE source_type = $1::text
+ORDER BY master_item_id
 `
 
-func (q *Queries) GetMasterItemIDsByMethods(ctx context.Context, methods []string) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMasterItemIDsByMethods, pq.Array(methods))
+func (q *Queries) GetMasterItemIDsByMethod(ctx context.Context, method string) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMasterItemIDsByMethod, method)
 	if err != nil {
 		return nil, err
 	}
@@ -1076,15 +1140,29 @@ func (q *Queries) GetMasterItemIDsByMethods(ctx context.Context, methods []strin
 }
 
 const getMasterItemIDsBySublocation = `-- name: GetMasterItemIDsBySublocation :many
+WITH w AS (
+  SELECT
+    $2::availability_type[] AS availability,
+    $3::text AS method
+)
 SELECT DISTINCT mis.master_item_id
 FROM mv_item_sources mis
 JOIN mv_geography g ON mis.area_id = g.area_id
+CROSS JOIN w
 WHERE g.sublocation_id = $1
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+  AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY mis.master_item_id
 `
 
-func (q *Queries) GetMasterItemIDsBySublocation(ctx context.Context, sublocationID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMasterItemIDsBySublocation, sublocationID)
+type GetMasterItemIDsBySublocationParams struct {
+	SublocationID int32
+	Availability  []AvailabilityType
+	Method        sql.NullString
+}
+
+func (q *Queries) GetMasterItemIDsBySublocation(ctx context.Context, arg GetMasterItemIDsBySublocationParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMasterItemIDsBySublocation, arg.SublocationID, pq.Array(arg.Availability), arg.Method)
 	if err != nil {
 		return nil, err
 	}

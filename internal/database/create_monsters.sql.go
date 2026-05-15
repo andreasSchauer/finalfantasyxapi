@@ -218,11 +218,12 @@ func (q *Queries) CreateAltsStatusImmunitiesJunctionBulk(ctx context.Context, ar
 }
 
 const createEncounterAreaBulk = `-- name: CreateEncounterAreaBulk :many
-INSERT INTO encounter_areas (data_hash, area_id, specification)
+INSERT INTO encounter_areas (data_hash, area_id, specification, availability)
 SELECT
     unnest($1::text[]),
     unnest($2::int[]),
-    unnest($3::null_string[])
+    unnest($3::null_string[]),
+    unnest($4::availability_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
@@ -231,6 +232,7 @@ type CreateEncounterAreaBulkParams struct {
 	DataHash      []string
 	AreaID        []int32
 	Specification []sql.NullString
+	Availability  []AvailabilityType
 }
 
 type CreateEncounterAreaBulkRow struct {
@@ -239,7 +241,12 @@ type CreateEncounterAreaBulkRow struct {
 }
 
 func (q *Queries) CreateEncounterAreaBulk(ctx context.Context, arg CreateEncounterAreaBulkParams) ([]CreateEncounterAreaBulkRow, error) {
-	rows, err := q.db.QueryContext(ctx, createEncounterAreaBulk, pq.Array(arg.DataHash), pq.Array(arg.AreaID), pq.Array(arg.Specification))
+	rows, err := q.db.QueryContext(ctx, createEncounterAreaBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.AreaID),
+		pq.Array(arg.Specification),
+		pq.Array(arg.Availability),
+	)
 	if err != nil {
 		return nil, err
 	}

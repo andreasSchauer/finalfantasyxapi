@@ -9,6 +9,9 @@ import (
 
 func intListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryIntList) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
 
 	ints, err := parseIntListQuery(cfg, r, queryParam)
 	if errors.Is(err, errEmptyQuery) {

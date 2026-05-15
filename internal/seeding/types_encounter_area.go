@@ -8,9 +8,10 @@ import (
 
 type EncounterArea struct {
 	ID            int32
-	LocationArea  LocationArea `json:"location_area"`
+	LocationArea  LocationArea  `json:"location_area"`
 	AreaID        int32
-	Specification *string `json:"specification"`
+	Specification *string 		`json:"specification"`
+	Availability  string		`json:"availability"`
 }
 
 func (ea EncounterArea) ToHashFields() []any {
@@ -18,6 +19,7 @@ func (ea EncounterArea) ToHashFields() []any {
 		fmt.Sprintf("%T", ea),
 		ea.AreaID,
 		h.DerefOrNil(ea.Specification),
+		ea.Availability,
 	}
 }
 
