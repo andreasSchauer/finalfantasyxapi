@@ -761,15 +761,6 @@ func (cfg *Config) initShopsParams() {
 			References:  []string{createListURL(cfg, "characters")},
 		},
 		{
-			Name:        "shop_type",
-			Description: "Specifies whether the given auto-ability is sold before or after acquiring the airship when searching for shops with the 'auto_ability' or 'empty_slots' parameters.",
-			Type:        "enum",
-			ForList:     true,
-			ForSingle:   false,
-			UsableWith:  []string{"auto_ability", "empty_slots"},
-			TypeLookup:  cfg.t.ShopType.lookup,
-		},
-		{
 			Name:        "items",
 			Description: "Searches for shops that offer items.",
 			Type:        "bool",
@@ -790,6 +781,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			ReplacedBy:  []string{"location", "sublocation", "auto_ability", "empty_slots", "items", "equipment"},
 			References:  []string{createListURL(cfg, "availability")},
 		},
 	}
@@ -1300,6 +1292,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			ReplacedBy:  []string{"location", "sublocation", "area"},
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{

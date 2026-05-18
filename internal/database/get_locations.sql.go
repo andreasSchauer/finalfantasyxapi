@@ -2209,27 +2209,136 @@ func (q *Queries) GetShopIDsByCategory(ctx context.Context, category []ShopCateg
 	return items, nil
 }
 
+const getShopIDsByLocation = `-- name: GetShopIDsByLocation :many
+WITH w AS (
+  SELECT
+    $1::availability_type[] AS availability,
+    $2::int AS location_id
+)
+SELECT sh.id
+FROM shops sh
+CROSS JOIN w
+JOIN mv_geography g ON sh.area_id = g.area_id
+JOIN mv_item_sources mis ON mis.source_id = sh.id AND source_type = 'shop'
+WHERE g.location_id = w.location_id
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+
+UNION
+
+SELECT sh.id
+FROM shops sh
+CROSS JOIN w
+JOIN mv_geography g ON sh.area_id = g.area_id
+JOIN mv_equipment_sources mes ON mes.source_id = sh.id AND source_type = 'shop'
+WHERE g.location_id = w.location_id
+  AND (w.availability IS NULL OR mes.spec_availability = ANY(w.availability))
+ORDER BY id
+`
+
+type GetShopIDsByLocationParams struct {
+	Availability []AvailabilityType
+	LocationID   int32
+}
+
+func (q *Queries) GetShopIDsByLocation(ctx context.Context, arg GetShopIDsByLocationParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsByLocation, pq.Array(arg.Availability), arg.LocationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getShopIDsBySublocation = `-- name: GetShopIDsBySublocation :many
+WITH w AS (
+  SELECT
+    $1::availability_type[] AS availability,
+    $2::int AS sublocation_id
+)
+SELECT sh.id
+FROM shops sh
+CROSS JOIN w
+JOIN mv_geography g ON sh.area_id = g.area_id
+JOIN mv_item_sources mis ON mis.source_id = sh.id AND source_type = 'shop'
+WHERE g.sublocation_id = w.sublocation_id
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+
+UNION
+
+SELECT sh.id
+FROM shops sh
+CROSS JOIN w
+JOIN mv_geography g ON sh.area_id = g.area_id
+JOIN mv_equipment_sources mes ON mes.source_id = sh.id AND source_type = 'shop'
+WHERE g.sublocation_id = w.sublocation_id
+  AND (w.availability IS NULL OR mes.spec_availability = ANY(w.availability))
+ORDER BY id
+`
+
+type GetShopIDsBySublocationParams struct {
+	Availability  []AvailabilityType
+	SublocationID int32
+}
+
+func (q *Queries) GetShopIDsBySublocation(ctx context.Context, arg GetShopIDsBySublocationParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsBySublocation, pq.Array(arg.Availability), arg.SublocationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getShopIDsEquipmentFilter = `-- name: GetShopIDsEquipmentFilter :many
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
 LEFT JOIN equipment_names en ON es.name_id = en.id
 CROSS JOIN (
     SELECT
-        $1::shop_type AS shop_type,
+        $1::availability_type[] AS availability,
         $2::int[] AS empty_slots,
         $3::int AS character_id,
         $4::int AS auto_ability_id
 ) w
 WHERE 
-    (w.shop_type IS NULL OR es.shop_type = w.shop_type)
+    (w.availability IS NULL OR es.spec_availability = ANY(w.availability))
     AND (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
     AND (w.character_id IS NULL OR en.character_id = w.character_id)
     AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
+    AND es.source_type = 'shop'
 ORDER BY es.source_id
 `
 
 type GetShopIDsEquipmentFilterParams struct {
-	ShopType      NullShopType
+	Availability  []AvailabilityType
 	EmptySlots    []int32
 	CharacterID   sql.NullInt32
 	AutoAbilityID sql.NullInt32
@@ -2237,7 +2346,7 @@ type GetShopIDsEquipmentFilterParams struct {
 
 func (q *Queries) GetShopIDsEquipmentFilter(ctx context.Context, arg GetShopIDsEquipmentFilterParams) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getShopIDsEquipmentFilter,
-		arg.ShopType,
+		pq.Array(arg.Availability),
 		pq.Array(arg.EmptySlots),
 		arg.CharacterID,
 		arg.AutoAbilityID,
@@ -2264,11 +2373,40 @@ func (q *Queries) GetShopIDsEquipmentFilter(ctx context.Context, arg GetShopIDsE
 }
 
 const getShopIDsWithEquipment = `-- name: GetShopIDsWithEquipment :many
-SELECT DISTINCT shop_id FROM shop_equipment_pieces ORDER BY shop_id
+WITH w AS (
+  SELECT 
+    $1::availability_type[] AS methods,
+    $2::boolean AS has_equipment
+)
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE 'pre-story' = ANY(w.methods)
+  AND sap.has_equip_pre = w.has_equipment
+
+UNION
+
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE 'post' = ANY(w.methods)
+  AND sap.has_equip_post = w.has_equipment
+
+UNION
+
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE w.methods IS NULL
+  AND sap.has_equipment = w.has_equipment
+
+ORDER BY shop_id
 `
 
-func (q *Queries) GetShopIDsWithEquipment(ctx context.Context) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsWithEquipment)
+type GetShopIDsWithEquipmentParams struct {
+	Availability []AvailabilityType
+	HasEquipment bool
+}
+
+func (q *Queries) GetShopIDsWithEquipment(ctx context.Context, arg GetShopIDsWithEquipmentParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsWithEquipment, pq.Array(arg.Availability), arg.HasEquipment)
 	if err != nil {
 		return nil, err
 	}
@@ -2291,11 +2429,40 @@ func (q *Queries) GetShopIDsWithEquipment(ctx context.Context) ([]int32, error) 
 }
 
 const getShopIDsWithItems = `-- name: GetShopIDsWithItems :many
-SELECT DISTINCT shop_id FROM j_shops_items ORDER BY shop_id
+WITH w AS (
+  SELECT 
+    $1::availability_type[] AS methods,
+    $2::boolean AS has_items
+)
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE 'pre-story' = ANY(w.methods)
+  AND sap.has_items_pre = w.has_items
+
+UNION
+
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE 'post' = ANY(w.methods)
+  AND sap.has_items_post = w.has_items
+
+UNION
+
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE w.methods IS NULL
+  AND sap.has_items = w.has_items
+
+ORDER BY shop_id
 `
 
-func (q *Queries) GetShopIDsWithItems(ctx context.Context) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsWithItems)
+type GetShopIDsWithItemsParams struct {
+	Availability []AvailabilityType
+	HasItems     bool
+}
+
+func (q *Queries) GetShopIDsWithItems(ctx context.Context, arg GetShopIDsWithItemsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsWithItems, pq.Array(arg.Availability), arg.HasItems)
 	if err != nil {
 		return nil, err
 	}

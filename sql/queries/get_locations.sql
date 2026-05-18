@@ -797,26 +797,127 @@ FROM mv_equipment_sources es
 LEFT JOIN equipment_names en ON es.name_id = en.id
 CROSS JOIN (
     SELECT
-        sqlc.narg('shop_type')::shop_type AS shop_type,
+        sqlc.narg('availability')::availability_type[] AS availability,
         sqlc.narg('empty_slots')::int[] AS empty_slots,
         sqlc.narg('character_id')::int AS character_id,
         sqlc.narg('auto_ability_id')::int AS auto_ability_id
 ) w
 WHERE 
-    (w.shop_type IS NULL OR es.shop_type = w.shop_type)
+    (w.availability IS NULL OR es.spec_availability = ANY(w.availability))
     AND (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
     AND (w.character_id IS NULL OR en.character_id = w.character_id)
     AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
+    AND es.source_type = 'shop'
 ORDER BY es.source_id;
 
 
 -- name: GetShopIDsWithItems :many
-SELECT DISTINCT shop_id FROM j_shops_items ORDER BY shop_id;
+WITH w AS (
+  SELECT 
+    sqlc.narg('availability')::availability_type[] AS methods,
+    sqlc.arg('has_items')::boolean AS has_items
+)
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE 'pre-story' = ANY(w.methods)
+  AND sap.has_items_pre = w.has_items
+
+UNION
+
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE 'post' = ANY(w.methods)
+  AND sap.has_items_post = w.has_items
+
+UNION
+
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE w.methods IS NULL
+  AND sap.has_items = w.has_items
+
+ORDER BY shop_id;
 
 
 -- name: GetShopIDsWithEquipment :many
-SELECT DISTINCT shop_id FROM shop_equipment_pieces ORDER BY shop_id;
+WITH w AS (
+  SELECT 
+    sqlc.narg('availability')::availability_type[] AS methods,
+    sqlc.arg('has_equipment')::boolean AS has_equipment
+)
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE 'pre-story' = ANY(w.methods)
+  AND sap.has_equip_pre = w.has_equipment
+
+UNION
+
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE 'post' = ANY(w.methods)
+  AND sap.has_equip_post = w.has_equipment
+
+UNION
+
+SELECT sap.shop_id
+FROM mv_shop_availability sap, w
+WHERE w.methods IS NULL
+  AND sap.has_equipment = w.has_equipment
+
+ORDER BY shop_id;
 
 
 -- name: GetShopIDsByAvailability :many
 SELECT id FROM shops WHERE availability = ANY(sqlc.narg('availability')::availability_type[]) ORDER BY id;
+
+
+-- name: GetShopIDsByLocation :many
+WITH w AS (
+  SELECT
+    sqlc.narg('availability')::availability_type[] AS availability,
+    sqlc.arg('location_id')::int AS location_id
+)
+SELECT sh.id
+FROM shops sh
+CROSS JOIN w
+JOIN mv_geography g ON sh.area_id = g.area_id
+JOIN mv_item_sources mis ON mis.source_id = sh.id AND source_type = 'shop'
+WHERE g.location_id = w.location_id
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+
+UNION
+
+SELECT sh.id
+FROM shops sh
+CROSS JOIN w
+JOIN mv_geography g ON sh.area_id = g.area_id
+JOIN mv_equipment_sources mes ON mes.source_id = sh.id AND source_type = 'shop'
+WHERE g.location_id = w.location_id
+  AND (w.availability IS NULL OR mes.spec_availability = ANY(w.availability))
+ORDER BY id;
+
+
+-- name: GetShopIDsBySublocation :many
+WITH w AS (
+  SELECT
+    sqlc.narg('availability')::availability_type[] AS availability,
+    sqlc.arg('sublocation_id')::int AS sublocation_id
+)
+SELECT sh.id
+FROM shops sh
+CROSS JOIN w
+JOIN mv_geography g ON sh.area_id = g.area_id
+JOIN mv_item_sources mis ON mis.source_id = sh.id AND source_type = 'shop'
+WHERE g.sublocation_id = w.sublocation_id
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+
+UNION
+
+SELECT sh.id
+FROM shops sh
+CROSS JOIN w
+JOIN mv_geography g ON sh.area_id = g.area_id
+JOIN mv_equipment_sources mes ON mes.source_id = sh.id AND source_type = 'shop'
+WHERE g.sublocation_id = w.sublocation_id
+  AND (w.availability IS NULL OR mes.spec_availability = ANY(w.availability))
+ORDER BY id;

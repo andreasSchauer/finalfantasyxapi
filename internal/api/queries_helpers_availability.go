@@ -10,13 +10,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 type AvailabilityParams struct {
 	ParentID     int32
 	Availability []database.AvailabilityType
 	Method       sql.NullString
 }
-
 
 func getAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], parentID int32) (AvailabilityParams, error) {
 	queryParam := i.queryLookup["availability"]
@@ -40,7 +38,6 @@ func getAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIReso
 	return availabilityParams, nil
 }
 
-
 func runAvailabilityQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, pResType string, dbQuery AvailabilityDbQuery) ([]A, error) {
 	params, err := getAvailabilityParams(cfg, r, i, id)
 	if err != nil {
@@ -49,7 +46,7 @@ func runAvailabilityQuery[T seeding.Lookupable, R any, A APIResource, L APIResou
 
 	dbIDs, err := dbQuery(r.Context(), params)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by %s id '%d'.", i.resourceType, pResType, id), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss.", i.resourceType), err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)

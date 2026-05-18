@@ -440,6 +440,37 @@ CREATE INDEX idx_mv_equipment_sources_area_id ON mv_equipment_sources (area_id);
 
 
 
+CREATE MATERIALIZED VIEW mv_shop_availability AS
+WITH base AS (
+    SELECT 
+        sh.id AS shop_id,
+        sh.availability AS shop_availability,
+        EXISTS (
+            SELECT 1 FROM mv_item_sources mis 
+            WHERE mis.source_id = sh.id AND mis.source_type = 'shop' AND mis.spec_availability = 'pre-story'
+        ) AS has_items_pre,
+        EXISTS (
+            SELECT 1 FROM mv_equipment_sources mes 
+            WHERE mes.source_id = sh.id AND mes.source_type = 'shop' AND mes.spec_availability = 'pre-story'
+        ) AS has_equip_pre,
+        EXISTS (
+            SELECT 1 FROM mv_item_sources mis 
+            WHERE mis.source_id = sh.id AND mis.source_type = 'shop' AND mis.spec_availability = 'post'
+        ) AS has_items_post,
+        EXISTS (
+            SELECT 1 FROM mv_equipment_sources mes 
+            WHERE mes.source_id = sh.id AND mes.source_type = 'shop' AND mes.spec_availability = 'post'
+        ) AS has_equip_post
+    FROM shops sh
+)
+SELECT 
+    *,
+    (has_items_pre OR has_items_post) AS has_items,
+    (has_equip_pre OR has_equip_post) AS has_equipment
+FROM base;
+
+CREATE INDEX idx_mv_shop_avail_id ON mv_shop_availability (shop_id);
+
 
 
 CREATE MATERIALIZED VIEW mv_abilities AS
@@ -730,6 +761,7 @@ CREATE INDEX idx_mv_abilities_element_id ON mv_abilities (element_id);
 
 -- +goose Down
 DROP MATERIALIZED VIEW IF EXISTS mv_abilities;
+DROP MATERIALIZED VIEW IF EXISTS mv_shop_availability;
 DROP MATERIALIZED VIEW IF EXISTS mv_equipment_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_item_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_monster_equipment_drops;

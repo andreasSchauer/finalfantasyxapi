@@ -26,5 +26,9 @@ REFRESH MATERIALIZED VIEW mv_item_sources;
 REFRESH MATERIALIZED VIEW mv_equipment_sources;
 
 
+-- name: RefreshShopAvailabilityView :exec
+REFRESH MATERIALIZED VIEW mv_shop_availability;
+
+
 -- name: RefreshAbilitiesView :exec
 REFRESH MATERIALIZED VIEW mv_abilities;

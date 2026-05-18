@@ -58,7 +58,7 @@ func boolQuery2[T seeding.Lookupable, R any, A APIResource, L APIResourceList](c
 	return resources, nil
 }
 
-func boolQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, bool) ([]int32, error)) ([]A, error) {
+func boolQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, bool) ([]A, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
@@ -69,12 +69,10 @@ func boolQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 		return nil, err
 	}
 
-	dbIDs, err := wrapperFn(cfg, r, b)
+	resources, err := wrapperFn(cfg, r, b)
 	if err != nil {
 		return nil, err
 	}
-
-	resources := idsToAPIResources(cfg, i, dbIDs)
 
 	return resources, nil
 }

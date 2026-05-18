@@ -33,10 +33,10 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
 		frl(basicQueryWrapper(cfg, r, i, resources, "empty_slots", getShopsByEmptySlots)),
 		frl(idQueryWrapper(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), getShopsByAutoAbility)),
-		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationShopIDs)),
-		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationShopIDs)),
-		frl(boolQuery2(cfg, r, i, resources, "items", cfg.db.GetShopIDsWithItems)),
-		frl(boolQuery2(cfg, r, i, resources, "equipment", cfg.db.GetShopIDsWithEquipment)),
+		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.l.Locations), getShopIDsByLocation)),
+		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), getShopIDsBySublocation)),
+		frl(boolQueryWrapper(cfg, r, i, resources, "items", getShopIDsWithItems)),
+		frl(boolQueryWrapper(cfg, r, i, resources, "equipment", getShopIDsWithEquipment)),
 		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetShopIDsByAvailability)),
 		frl(enumListQuery(cfg, r, i, cfg.t.ShopCategory, resources, "category", cfg.db.GetShopIDsByCategory)),
 	})

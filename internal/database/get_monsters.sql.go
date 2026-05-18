@@ -501,6 +501,46 @@ func (q *Queries) GetMonsterIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getMonsterIDsByArea = `-- name: GetMonsterIDsByArea :many
+WITH w AS (
+  SELECT $2::availability_type[] AS availability
+)
+SELECT DISTINCT me.monster_id
+FROM mv_monster_encounters me
+CROSS JOIN w
+WHERE me.area_id = $1
+  AND (w.availability IS NULL OR me.spec_availability = ANY(w.availability))
+ORDER BY me.monster_id
+`
+
+type GetMonsterIDsByAreaParams struct {
+	AreaID       int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) GetMonsterIDsByArea(ctx context.Context, arg GetMonsterIDsByAreaParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByArea, arg.AreaID, pq.Array(arg.Availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
+			return nil, err
+		}
+		items = append(items, monster_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterIDsByAutoAbility = `-- name: GetMonsterIDsByAutoAbility :many
 SELECT DISTINCT monster_id FROM mv_monster_equipment_drops WHERE auto_ability_id = $1 ORDER BY monster_id
 `
@@ -996,6 +1036,47 @@ func (q *Queries) GetMonsterIDsByItemSteal(ctx context.Context, itemID int32) ([
 	return items, nil
 }
 
+const getMonsterIDsByLocation = `-- name: GetMonsterIDsByLocation :many
+WITH w AS (
+  SELECT $2::availability_type[] AS availability
+)
+SELECT DISTINCT me.monster_id
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+CROSS JOIN w
+WHERE g.location_id = $1
+  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
+ORDER BY me.monster_id
+`
+
+type GetMonsterIDsByLocationParams struct {
+	LocationID   int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) GetMonsterIDsByLocation(ctx context.Context, arg GetMonsterIDsByLocationParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByLocation, arg.LocationID, pq.Array(arg.Availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
+			return nil, err
+		}
+		items = append(items, monster_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterIDsByMaCreationArea = `-- name: GetMonsterIDsByMaCreationArea :many
 SELECT id FROM monsters WHERE area_conquest_location = $1
 `
@@ -1134,6 +1215,47 @@ type GetMonsterIDsByStatusResistsParams struct {
 
 func (q *Queries) GetMonsterIDsByStatusResists(ctx context.Context, arg GetMonsterIDsByStatusResistsParams) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getMonsterIDsByStatusResists, pq.Array(arg.StatusConditionIds), arg.MinResistance)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
+			return nil, err
+		}
+		items = append(items, monster_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterIDsBySublocation = `-- name: GetMonsterIDsBySublocation :many
+WITH w AS (
+  SELECT $2::availability_type[] AS availability
+)
+SELECT DISTINCT me.monster_id
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+CROSS JOIN w
+WHERE g.sublocation_id = $1
+  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
+ORDER BY me.monster_id
+`
+
+type GetMonsterIDsBySublocationParams struct {
+	SublocationID int32
+	Availability  []AvailabilityType
+}
+
+func (q *Queries) GetMonsterIDsBySublocation(ctx context.Context, arg GetMonsterIDsBySublocationParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsBySublocation, arg.SublocationID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}

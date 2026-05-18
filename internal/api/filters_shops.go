@@ -37,6 +37,11 @@ func getShopsByAutoAbility(cfg *Config, r *http.Request, id int32) ([]UnnamedAPI
 func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32) ([]int32, error) {
 	i := cfg.e.shops
 
+	availabilities, err := parseEnumListQuery(cfg, r, i.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+
 	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup["empty_slots"])
 	if errIsNotEmptyQuery(err) {
 		return nil, err
@@ -53,7 +58,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 	}
 
 	dbIDs, err := cfg.db.GetShopIDsEquipmentFilter(context.Background(), database.GetShopIDsEquipmentFilterParams{
-		ShopType:      cfg.t.ShopType.nullConvFunc(shopTypePtr),
+		Availability:  availabilities,
 		AutoAbilityID: h.GetNullInt32(autoAbilityIdPtr),
 		CharacterID:   h.GetNullInt32(charIdPtr),
 		EmptySlots:    emptySlots,
