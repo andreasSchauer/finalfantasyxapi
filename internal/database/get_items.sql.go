@@ -552,7 +552,7 @@ JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
 WHERE i.id = $1::int
   AND mis.source_type = 'shop'
-  AND (w.availability IS NULL OR mis.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
 ORDER BY mis.source_id
 `
 

@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type Quest struct {
@@ -21,7 +20,6 @@ func (q Quest) ToHashFields() []any {
 		fmt.Sprintf("%T", q),
 		q.Name,
 		q.Type,
-		h.ObjPtrToID(q.Completion),
 		q.Availability,
 		q.IsRepeatable,
 	}

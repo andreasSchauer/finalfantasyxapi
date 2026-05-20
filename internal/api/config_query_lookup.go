@@ -684,6 +684,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			ReplacedBy:  []string{"location", "sublocation", "area"},
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{

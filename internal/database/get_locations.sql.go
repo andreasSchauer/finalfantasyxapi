@@ -481,6 +481,46 @@ func (q *Queries) GetAreaIDsWithFMVs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getAreaIDsWithItemFromMethod = `-- name: GetAreaIDsWithItemFromMethod :many
+WITH w AS (
+    SELECT $2::text[] AS method
+)
+SELECT DISTINCT mis.area_id
+FROM mv_item_sources mis
+JOIN items i ON mis.master_item_id = i.master_item_id
+WHERE i.id = $1
+  AND (w.method IS NULL OR mis.source_type = ANY(w.method))
+ORDER BY mis.area_id
+`
+
+type GetAreaIDsWithItemFromMethodParams struct {
+	ID     int32
+	Method []string
+}
+
+func (q *Queries) GetAreaIDsWithItemFromMethod(ctx context.Context, arg GetAreaIDsWithItemFromMethodParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromMethod, arg.ID, pq.Array(arg.Method))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
+			return nil, err
+		}
+		items = append(items, area_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAreaIDsWithItemFromMonster = `-- name: GetAreaIDsWithItemFromMonster :many
 SELECT DISTINCT mis.area_id
 FROM mv_item_sources mis

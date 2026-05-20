@@ -221,6 +221,10 @@ SELECT id FROM monsters WHERE is_zombie = $1;
 
 
 
+-- name: GetMonsterFormationMonsterIDs :many
+SELECT DISTINCT monster_id FROM mv_monster_encounters WHERE formation_id = $1 ORDER BY monster_id;
+
+
 -- name: GetMonsterFormationIDs :many
 SELECT DISTINCT id FROM monster_formations ORDER BY id;
 
@@ -251,29 +255,50 @@ SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE is_forced_ambush =
 
 
 -- name: GetMonsterFormationIDsByMonster :many
-SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY formation_id;
-
+WITH w AS (
+  SELECT sqlc.narg('availability')::availability_type[] AS availability
+)
+SELECT DISTINCT me.formation_id
+FROM mv_monster_encounters me
+CROSS JOIN w
+WHERE me.monster_id = $1
+  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
+ORDER BY me.formation_id;
 
 
 -- name: GetMonsterFormationIDsByArea :many
-SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE area_id = $1 ORDER BY formation_id;
+WITH w AS (
+  SELECT sqlc.narg('availability')::availability_type[] AS availability
+)
+SELECT DISTINCT me.formation_id
+FROM mv_monster_encounters me
+CROSS JOIN w
+WHERE me.area_id = $1
+  AND (w.availability IS NULL OR me.spec_availability = ANY(w.availability))
+ORDER BY me.formation_id;
 
 
 -- name: GetMonsterFormationIDsBySublocation :many
+WITH w AS (
+  SELECT sqlc.narg('availability')::availability_type[] AS availability
+)
 SELECT DISTINCT me.formation_id
 FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
+CROSS JOIN w
 WHERE g.sublocation_id = $1
+  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
 ORDER BY me.formation_id;
 
 
 -- name: GetMonsterFormationIDsByLocation :many
+WITH w AS (
+  SELECT sqlc.narg('availability')::availability_type[] AS availability
+)
 SELECT DISTINCT me.formation_id
 FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
+CROSS JOIN w
 WHERE g.location_id = $1
+  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
 ORDER BY me.formation_id;
-
-
--- name: GetMonsterFormationMonsterIDs :many
-SELECT DISTINCT monster_id FROM mv_monster_encounters WHERE formation_id = $1 ORDER BY monster_id;

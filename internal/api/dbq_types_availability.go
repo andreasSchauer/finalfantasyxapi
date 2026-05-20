@@ -179,3 +179,49 @@ func runAvlBoolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceLi
 	resources := idsToAPIResources(cfg, i, dbIDs)
 	return resources, nil
 }
+
+func getMonsterFormationIDsByMonster(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
+	i := cfg.e.monsterFormations
+	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		_, err := checkEmptyQuery(r, i.queryLookup["area"])
+		if err != nil {
+			p.Availability = nil
+		}
+
+		return cfg.db.GetMonsterFormationIDsByMonster(ctx, database.GetMonsterFormationIDsByMonsterParams{
+			MonsterID:  	p.ParentID,
+			Availability: 	p.Availability,
+		})
+	}
+	return runAvailabilityQuery(cfg, r, cfg.e.monsterFormations, id, cfg.e.monsters.resourceType, dbQuery)
+}
+
+func getMonsterFormationIDsByLocation(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
+	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetMonsterFormationIDsByLocation(ctx, database.GetMonsterFormationIDsByLocationParams{
+			LocationID:  	p.ParentID,
+			Availability: 	p.Availability,
+		})
+	}
+	return runAvailabilityQuery(cfg, r, cfg.e.monsterFormations, id, cfg.e.locations.resourceType, dbQuery)
+}
+
+func getMonsterFormationIDsBySublocation(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
+	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetMonsterFormationIDsBySublocation(ctx, database.GetMonsterFormationIDsBySublocationParams{
+			SublocationID:  p.ParentID,
+			Availability: 	p.Availability,
+		})
+	}
+	return runAvailabilityQuery(cfg, r, cfg.e.monsterFormations, id, cfg.e.sublocations.resourceType, dbQuery)
+}
+
+func getMonsterFormationIDsByArea(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
+	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
+		return cfg.db.GetMonsterFormationIDsByArea(ctx, database.GetMonsterFormationIDsByAreaParams{
+			AreaID:  		p.ParentID,
+			Availability: 	p.Availability,
+		})
+	}
+	return runAvailabilityQuery(cfg, r, cfg.e.monsterFormations, id, cfg.e.areas.resourceType, dbQuery)
+}

@@ -218,14 +218,13 @@ func (q *Queries) CreateMonsterArenaCreationBulk(ctx context.Context, arg Create
 }
 
 const createQuestBulk = `-- name: CreateQuestBulk :many
-INSERT INTO quests (data_hash, name, type, availability, is_repeatable, completion_id)
+INSERT INTO quests (data_hash, name, type, availability, is_repeatable)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),
     unnest($3::quest_type[]),
     unnest($4::availability_type[]),
-    unnest($5::boolean[]),
-    unnest($6::null_int[])
+    unnest($5::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
@@ -236,7 +235,6 @@ type CreateQuestBulkParams struct {
 	Type         []QuestType
 	Availability []AvailabilityType
 	IsRepeatable []bool
-	CompletionID []sql.NullInt32
 }
 
 type CreateQuestBulkRow struct {
@@ -251,7 +249,6 @@ func (q *Queries) CreateQuestBulk(ctx context.Context, arg CreateQuestBulkParams
 		pq.Array(arg.Type),
 		pq.Array(arg.Availability),
 		pq.Array(arg.IsRepeatable),
-		pq.Array(arg.CompletionID),
 	)
 	if err != nil {
 		return nil, err
@@ -275,17 +272,19 @@ func (q *Queries) CreateQuestBulk(ctx context.Context, arg CreateQuestBulkParams
 }
 
 const createQuestCompletionBulk = `-- name: CreateQuestCompletionBulk :many
-INSERT INTO quest_completions (data_hash, condition, item_amount_id)
+INSERT INTO quest_completions (data_hash, quest_id, condition, item_amount_id)
 SELECT
     unnest($1::text[]),
-    unnest($2::null_string[]),
-    unnest($3::int[])
+    unnest($2::int[]),
+    unnest($3::null_string[]),
+    unnest($4::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
 
 type CreateQuestCompletionBulkParams struct {
 	DataHash     []string
+	QuestID      []int32
 	Condition    []sql.NullString
 	ItemAmountID []int32
 }
@@ -296,7 +295,12 @@ type CreateQuestCompletionBulkRow struct {
 }
 
 func (q *Queries) CreateQuestCompletionBulk(ctx context.Context, arg CreateQuestCompletionBulkParams) ([]CreateQuestCompletionBulkRow, error) {
-	rows, err := q.db.QueryContext(ctx, createQuestCompletionBulk, pq.Array(arg.DataHash), pq.Array(arg.Condition), pq.Array(arg.ItemAmountID))
+	rows, err := q.db.QueryContext(ctx, createQuestCompletionBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.QuestID),
+		pq.Array(arg.Condition),
+		pq.Array(arg.ItemAmountID),
+	)
 	if err != nil {
 		return nil, err
 	}

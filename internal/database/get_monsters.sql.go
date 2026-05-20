@@ -215,11 +215,24 @@ func (q *Queries) GetMonsterFormationIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getMonsterFormationIDsByArea = `-- name: GetMonsterFormationIDsByArea :many
-SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE area_id = $1 ORDER BY formation_id
+WITH w AS (
+  SELECT $2::availability_type[] AS availability
+)
+SELECT DISTINCT me.formation_id
+FROM mv_monster_encounters me
+CROSS JOIN w
+WHERE me.area_id = $1
+  AND (w.availability IS NULL OR me.spec_availability = ANY(w.availability))
+ORDER BY me.formation_id
 `
 
-func (q *Queries) GetMonsterFormationIDsByArea(ctx context.Context, areaID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByArea, areaID)
+type GetMonsterFormationIDsByAreaParams struct {
+	AreaID       int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) GetMonsterFormationIDsByArea(ctx context.Context, arg GetMonsterFormationIDsByAreaParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByArea, arg.AreaID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -329,15 +342,25 @@ func (q *Queries) GetMonsterFormationIDsByForcedAmbush(ctx context.Context, isFo
 }
 
 const getMonsterFormationIDsByLocation = `-- name: GetMonsterFormationIDsByLocation :many
+WITH w AS (
+  SELECT $2::availability_type[] AS availability
+)
 SELECT DISTINCT me.formation_id
 FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
+CROSS JOIN w
 WHERE g.location_id = $1
+  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
 ORDER BY me.formation_id
 `
 
-func (q *Queries) GetMonsterFormationIDsByLocation(ctx context.Context, locationID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByLocation, locationID)
+type GetMonsterFormationIDsByLocationParams struct {
+	LocationID   int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) GetMonsterFormationIDsByLocation(ctx context.Context, arg GetMonsterFormationIDsByLocationParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByLocation, arg.LocationID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -360,11 +383,24 @@ func (q *Queries) GetMonsterFormationIDsByLocation(ctx context.Context, location
 }
 
 const getMonsterFormationIDsByMonster = `-- name: GetMonsterFormationIDsByMonster :many
-SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY formation_id
+WITH w AS (
+  SELECT $2::availability_type[] AS availability
+)
+SELECT DISTINCT me.formation_id
+FROM mv_monster_encounters me
+CROSS JOIN w
+WHERE me.monster_id = $1
+  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
+ORDER BY me.formation_id
 `
 
-func (q *Queries) GetMonsterFormationIDsByMonster(ctx context.Context, monsterID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByMonster, monsterID)
+type GetMonsterFormationIDsByMonsterParams struct {
+	MonsterID    int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) GetMonsterFormationIDsByMonster(ctx context.Context, arg GetMonsterFormationIDsByMonsterParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByMonster, arg.MonsterID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -417,15 +453,25 @@ func (q *Queries) GetMonsterFormationIDsByRepeatable(ctx context.Context) ([]int
 }
 
 const getMonsterFormationIDsBySublocation = `-- name: GetMonsterFormationIDsBySublocation :many
+WITH w AS (
+  SELECT $2::availability_type[] AS availability
+)
 SELECT DISTINCT me.formation_id
 FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
+CROSS JOIN w
 WHERE g.sublocation_id = $1
+  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
 ORDER BY me.formation_id
 `
 
-func (q *Queries) GetMonsterFormationIDsBySublocation(ctx context.Context, sublocationID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsBySublocation, sublocationID)
+type GetMonsterFormationIDsBySublocationParams struct {
+	SublocationID int32
+	Availability  []AvailabilityType
+}
+
+func (q *Queries) GetMonsterFormationIDsBySublocation(ctx context.Context, arg GetMonsterFormationIDsBySublocationParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsBySublocation, arg.SublocationID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}

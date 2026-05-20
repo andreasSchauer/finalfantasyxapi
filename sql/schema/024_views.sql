@@ -310,7 +310,7 @@ SELECT
     ia.amount,
     'treasure' AS source_type,
     t.availability,
-    t.availability AS spec_availability
+    t.availability AS spec_availability -- change to area availability?
 FROM treasures t
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
@@ -346,9 +346,9 @@ SELECT
     ia.amount,
     'quest' AS source_type,
     q.availability,
-    q.availability AS spec_availability
+    q.availability AS spec_availability -- change to area availability?
 FROM quests q
-JOIN quest_completions qc ON q.completion_id = qc.id
+JOIN quest_completions qc ON qc.quest_id = q.id
 JOIN completion_areas ca ON ca.completion_id = qc.id
 JOIN item_amounts ia ON qc.item_amount_id = ia.id
 JOIN master_items mi ON ia.master_item_id = mi.id
@@ -440,26 +440,213 @@ CREATE INDEX idx_mv_equipment_sources_area_id ON mv_equipment_sources (area_id);
 
 
 
+CREATE MATERIALIZED VIEW mv_availabilities AS
+SELECT DISTINCT
+    m.id AS s_id,
+    m.name AS name,
+    m.version AS v,
+    'monster' AS source_type,
+    NULL::text AS sub_type,
+    m.availability AS avl_self,
+    fd.availability AS avl_event,
+    ea.availability AS avl_area,
+    g.area_id AS a_id,
+    g.location,
+    g.sublocation,
+    g.area,
+    g.version AS av
+FROM mv_geography g
+JOIN encounter_areas ea ON ea.area_id = g.area_id
+JOIN j_monster_formations_encounter_areas jmfea ON ea.id = jmfea.encounter_area_id
+JOIN monster_formations mf ON jmfea.monster_formation_id = mf.id
+JOIN j_monster_selections_monsters jmsm ON mf.monster_selection_id = jmsm.monster_selection_id
+JOIN monster_amounts ma ON jmsm.monster_amount_id = ma.id
+JOIN monsters m ON ma.monster_id = m.id
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+
+UNION ALL
+
+SELECT DISTINCT
+    mf.id AS s_id,
+    NULL::text AS name,
+    NULL::int AS v,
+    'monster-formation' AS source_type,
+    NULL::text AS sub_type,
+    fd.availability AS avl_self,
+    ea.availability AS avl_event,
+    g.availability AS avl_area,
+    g.area_id AS a_id,
+    g.location,
+    g.sublocation,
+    g.area,
+    g.version AS av
+FROM mv_geography g
+JOIN encounter_areas ea ON ea.area_id = g.area_id
+JOIN j_monster_formations_encounter_areas jmfea ON ea.id = jmfea.encounter_area_id
+JOIN monster_formations mf ON jmfea.monster_formation_id = mf.id
+JOIN formation_data fd ON mf.formation_data_id = fd.id
+
+UNION ALL
+
+SELECT DISTINCT
+    g.area_id AS s_id,
+    g.area AS name,
+    g.version::int AS v,
+    'area' AS source_type,
+    NULL::text AS sub_type,
+    g.availability AS avl_self,
+    g.availability AS avl_event,
+    g.availability AS avl_area,
+    g.area_id AS a_id,
+    g.location,
+    g.sublocation,
+    g.area,
+    g.version AS av
+FROM mv_geography g
+
+UNION ALL
+
+SELECT DISTINCT
+    t.id AS s_id,
+    NULL::text AS name,
+    NULL::int AS v,
+    'treasure' AS source_type,
+    NULL::text AS sub_type,
+    t.availability AS avl_self,
+    t.availability AS avl_event,
+    g.availability AS avl_area,
+    g.area_id AS a_id,
+    g.location,
+    g.sublocation,
+    g.area,
+    g.version AS av
+FROM treasures t
+JOIN mv_geography g ON t.area_id = g.area_id
+
+UNION ALL
+
+SELECT DISTINCT
+    sh.id AS s_id,
+    NULL::text AS name,
+    NULL::int AS v,
+    'shop' AS source_type,
+    'item'::text AS sub_type,
+    sh.availability AS avl_self,
+    CASE j.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS avl_event,
+    g.availability AS avl_area,
+    g.area_id AS a_id,
+    g.location,
+    g.sublocation,
+    g.area,
+    g.version AS av
+FROM shops sh
+JOIN mv_geography g ON sh.area_id = g.area_id
+JOIN j_shops_items j ON j.shop_id = sh.id
+
+UNION ALL
+
+SELECT DISTINCT
+    sh.id AS s_id,
+    NULL::text AS name,
+    NULL::int AS v,
+    'shop' AS source_type,
+    'equip'::text AS sub_type,
+    sh.availability AS avl_self,
+    CASE se.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS avl_event,
+    g.availability AS avl_area,
+    g.area_id AS a_id,
+    g.location,
+    g.sublocation,
+    g.area,
+    g.version AS av
+FROM shops sh
+JOIN mv_geography g ON sh.area_id = g.area_id
+JOIN shop_equipment_pieces se ON se.shop_id = sh.id
+
+UNION ALL
+
+SELECT DISTINCT
+    q.id AS s_id,
+    q.name,
+    NULL::int AS v,
+    'quest' AS source_type,
+    NULL::text AS sub_type,
+    q.availability AS avl_self,
+    q.availability AS avl_event,
+    g.availability AS avl_area,
+    g.area_id AS a_id,
+    g.location,
+    g.sublocation,
+    g.area,
+    g.version AS av
+FROM quests q
+LEFT JOIN quest_completions qc ON qc.quest_id = q.id
+LEFT JOIN completion_areas ca ON ca.completion_id = qc.id
+LEFT JOIN mv_geography g ON ca.area_id = g.area_id
+
+UNION ALL
+
+SELECT DISTINCT
+    bp.id AS s_id,
+    NULL::text AS name,
+    NULL::int AS v,
+    'blitzball' AS source_type,
+    NULL::text AS sub_type,
+    'always'::availability_type AS avl_self,
+    'always'::availability_type AS avl_event,
+    g.availability AS avl_area,
+    g.area_id AS a_id,
+    g.location,
+    g.sublocation,
+    g.area,
+    g.version AS av
+FROM blitzball_positions bp
+JOIN mv_geography g ON 75 = g.area_id;
+
+CREATE INDEX idx_mv_availabilities_lookup ON mv_availabilities (s_id, source_type, sub_type);
+
+
+
+
+
 CREATE MATERIALIZED VIEW mv_shop_availability AS
 WITH base AS (
     SELECT 
         sh.id AS shop_id,
         sh.availability AS shop_availability,
         EXISTS (
-            SELECT 1 FROM mv_item_sources mis 
-            WHERE mis.source_id = sh.id AND mis.source_type = 'shop' AND mis.spec_availability = 'pre-story'
+            SELECT 1 FROM mv_availabilities a 
+            WHERE a.s_id = sh.id
+              AND a.source_type = 'shop'
+              AND a.sub_type = 'item'
+              AND a.avl_event = 'pre-story'
         ) AS has_items_pre,
         EXISTS (
-            SELECT 1 FROM mv_equipment_sources mes 
-            WHERE mes.source_id = sh.id AND mes.source_type = 'shop' AND mes.spec_availability = 'pre-story'
+            SELECT 1 FROM mv_availabilities a 
+            WHERE a.s_id = sh.id
+              AND a.source_type = 'shop'
+              AND a.sub_type = 'equip'
+              AND a.avl_event = 'pre-story'
         ) AS has_equip_pre,
         EXISTS (
-            SELECT 1 FROM mv_item_sources mis 
-            WHERE mis.source_id = sh.id AND mis.source_type = 'shop' AND mis.spec_availability = 'post'
+            SELECT 1 FROM mv_availabilities a 
+            WHERE a.s_id = sh.id
+              AND a.source_type = 'shop'
+              AND a.sub_type = 'item'
+              AND a.avl_event = 'post'
         ) AS has_items_post,
         EXISTS (
-            SELECT 1 FROM mv_equipment_sources mes 
-            WHERE mes.source_id = sh.id AND mes.source_type = 'shop' AND mes.spec_availability = 'post'
+            SELECT 1 FROM mv_availabilities a 
+            WHERE a.s_id = sh.id
+              AND a.source_type = 'shop'
+              AND a.sub_type = 'equip'
+              AND a.avl_event = 'post'
         ) AS has_equip_post
     FROM shops sh
 )
@@ -470,6 +657,7 @@ SELECT
 FROM base;
 
 CREATE INDEX idx_mv_shop_avail_id ON mv_shop_availability (shop_id);
+
 
 
 
@@ -762,6 +950,7 @@ CREATE INDEX idx_mv_abilities_element_id ON mv_abilities (element_id);
 -- +goose Down
 DROP MATERIALIZED VIEW IF EXISTS mv_abilities;
 DROP MATERIALIZED VIEW IF EXISTS mv_shop_availability;
+DROP MATERIALIZED VIEW IF EXISTS mv_availabilities;
 DROP MATERIALIZED VIEW IF EXISTS mv_equipment_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_item_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_monster_equipment_drops;

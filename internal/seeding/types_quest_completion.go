@@ -8,6 +8,7 @@ import (
 
 type QuestCompletion struct {
 	ID        int32
+	QuestID	  int32
 	Condition *string          `json:"condition"`
 	Areas     []CompletionArea `json:"areas"`
 	Reward    ItemAmount       `json:"reward"`
@@ -16,7 +17,8 @@ type QuestCompletion struct {
 func (qc QuestCompletion) ToHashFields() []any {
 	return []any{
 		fmt.Sprintf("%T", qc),
-		qc.Condition,
+		qc.QuestID,
+		h.DerefOrNil(qc.Condition),
 		qc.Reward.ID,
 	}
 }

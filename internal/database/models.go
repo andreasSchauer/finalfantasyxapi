@@ -4064,6 +4064,22 @@ type MvAbility struct {
 	ModifierChangeID  sql.NullInt32
 }
 
+type MvAvailability struct {
+	SID         int32
+	Name        string
+	V           sql.NullInt32
+	SourceType  string
+	SubType     sql.NullString
+	AvlSelf     AvailabilityType
+	AvlEvent    AvailabilityType
+	AvlArea     AvailabilityType
+	AID         int32
+	Location    string
+	Sublocation string
+	Area        string
+	Av          sql.NullInt32
+}
+
 type MvEquipmentSource struct {
 	NameID           int32
 	Name             string
@@ -4289,12 +4305,12 @@ type Quest struct {
 	Type         QuestType
 	Availability AvailabilityType
 	IsRepeatable bool
-	CompletionID sql.NullInt32
 }
 
 type QuestCompletion struct {
 	ID           int32
 	DataHash     string
+	QuestID      int32
 	Condition    sql.NullString
 	ItemAmountID int32
 }

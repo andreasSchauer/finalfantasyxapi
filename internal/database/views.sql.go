@@ -18,6 +18,15 @@ func (q *Queries) RefreshAbilitiesView(ctx context.Context) error {
 	return err
 }
 
+const refreshAvailabilityView = `-- name: RefreshAvailabilityView :exec
+REFRESH MATERIALIZED VIEW mv_availabilities
+`
+
+func (q *Queries) RefreshAvailabilityView(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, refreshAvailabilityView)
+	return err
+}
+
 const refreshEquipmentSourcesView = `-- name: RefreshEquipmentSourcesView :exec
 REFRESH MATERIALIZED VIEW mv_equipment_sources
 `

@@ -19,14 +19,13 @@ RETURNING id, data_hash;
 
 
 -- name: CreateQuestBulk :many
-INSERT INTO quests (data_hash, name, type, availability, is_repeatable, completion_id)
+INSERT INTO quests (data_hash, name, type, availability, is_repeatable)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('name')::text[]),
     unnest(sqlc.arg('type')::quest_type[]),
     unnest(sqlc.arg('availability')::availability_type[]),
-    unnest(sqlc.arg('is_repeatable')::boolean[]),
-    unnest(sqlc.arg('completion_id')::null_int[])
+    unnest(sqlc.arg('is_repeatable')::boolean[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 
@@ -51,9 +50,10 @@ RETURNING id, data_hash;
 
 
 -- name: CreateQuestCompletionBulk :many
-INSERT INTO quest_completions (data_hash, condition, item_amount_id)
+INSERT INTO quest_completions (data_hash, quest_id, condition, item_amount_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('quest_id')::int[]),
     unnest(sqlc.arg('condition')::null_string[]),
     unnest(sqlc.arg('item_amount_id')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash

@@ -17,12 +17,14 @@ func (l *Lookup) loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Co
 
 	params := database.CreateQuestCompletionBulkParams{
 		DataHash:     make([]string, len(completions)),
+		QuestID: 	  make([]int32, len(completions)),
 		Condition:    make([]sql.NullString, len(completions)),
 		ItemAmountID: make([]int32, len(completions)),
 	}
 
 	for i, qc := range completions {
 		params.DataHash[i] = generateDataHash(qc)
+		params.QuestID[i] = qc.QuestID
 		params.Condition[i] = h.GetNullString(qc.Condition)
 		params.ItemAmountID[i] = qc.Reward.ID
 
@@ -54,6 +56,11 @@ func (l *Lookup) extractQuestCompletions() ([]QuestCompletion, error) {
 				return nil, err
 			}
 
+			completion.QuestID, err = assignFK(sidequest.Quest, l.Quests)
+			if err != nil {
+				return nil, err
+			}
+
 			completions = append(completions, *completion)
 		}
 
@@ -63,6 +70,11 @@ func (l *Lookup) extractQuestCompletions() ([]QuestCompletion, error) {
 			if subquest.Completion != nil {
 				completion := subquest.Completion
 				completion.Reward.ID, err = l.GetHashID(completion.Reward)
+				if err != nil {
+					return nil, err
+				}
+
+				completion.QuestID, err = assignFK(subquest.Quest, l.Quests)
 				if err != nil {
 					return nil, err
 				}
@@ -109,15 +121,22 @@ func (l *Lookup) loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Con
 
 func (l *Lookup) extractCompletionAreas() ([]CompletionArea, error) {
 	areas := []CompletionArea{}
+	var err error
 
 	for i := range l.json.sidequests {
 		sidequest := &l.json.sidequests[i]
 
 		if sidequest.Completion != nil {
+			sidequest.Completion.ID, err = l.GetHashID(sidequest.Completion)
+			if err != nil {
+				return nil, err
+			}
+
 			areasNew, err := l.prepareCompletionAreas(sidequest.Completion.Areas, sidequest.Completion.ID)
 			if err != nil {
 				return nil, err
 			}
+
 			areas = append(areas, areasNew...)
 		}
 
@@ -125,10 +144,16 @@ func (l *Lookup) extractCompletionAreas() ([]CompletionArea, error) {
 			subquest := &sidequest.Subquests[j]
 
 			if subquest.Completion != nil {
+				subquest.Completion.ID, err = l.GetHashID(subquest.Completion)
+				if err != nil {
+					return nil, err
+				}
+
 				areasNew, err := l.prepareCompletionAreas(subquest.Completion.Areas, subquest.Completion.ID)
 				if err != nil {
 					return nil, err
 				}
+
 				areas = append(areas, areasNew...)
 			}
 		}

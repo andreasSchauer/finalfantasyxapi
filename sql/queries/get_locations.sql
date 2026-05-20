@@ -139,6 +139,18 @@ SELECT DISTINCT area_id FROM shops ORDER BY area_id;
 SELECT DISTINCT area_id FROM treasures ORDER BY area_id;
 
 
+-- name: GetAreaIDsWithItemFromMethod :many
+WITH w AS (
+    SELECT sqlc.arg('method')::text[] AS method
+)
+SELECT DISTINCT mis.area_id
+FROM mv_item_sources mis
+JOIN items i ON mis.master_item_id = i.master_item_id
+WHERE i.id = $1
+  AND (w.method IS NULL OR mis.source_type = ANY(w.method))
+ORDER BY mis.area_id;
+
+
 -- name: GetAreaIDsWithItemFromMonster :many
 SELECT DISTINCT mis.area_id
 FROM mv_item_sources mis
