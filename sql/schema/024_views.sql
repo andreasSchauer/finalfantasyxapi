@@ -391,6 +391,7 @@ CREATE INDEX idx_mv_item_sources_area_id ON mv_item_sources (area_id);
 
 
 
+
 CREATE MATERIALIZED VIEW mv_equipment_sources AS
 SELECT
     en.id AS name_id,
@@ -440,6 +441,9 @@ CREATE INDEX idx_mv_equipment_sources_area_id ON mv_equipment_sources (area_id);
 
 
 
+
+
+
 CREATE MATERIALIZED VIEW mv_availabilities AS
 SELECT DISTINCT
     m.id AS s_id,
@@ -448,7 +452,7 @@ SELECT DISTINCT
     'monster' AS source_type,
     NULL::text AS sub_type,
     m.availability AS avl_self,
-    fd.availability AS avl_event,
+    fd.availability AS avl_context,
     ea.availability AS avl_area,
     g.area_id AS a_id,
     g.location,
@@ -473,7 +477,7 @@ SELECT DISTINCT
     'monster-formation' AS source_type,
     NULL::text AS sub_type,
     fd.availability AS avl_self,
-    NULL::availability_type AS avl_event,
+    fd.availability AS avl_context,
     ea.availability AS avl_area,
     g.area_id AS a_id,
     g.location,
@@ -495,8 +499,8 @@ SELECT DISTINCT
     'area' AS source_type,
     NULL::text AS sub_type,
     g.availability AS avl_self,
-    NULL::availability_type AS avl_event,
-    NULL::availability_type AS avl_area,
+    g.availability AS avl_context,
+    g.availability AS avl_area,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -513,8 +517,8 @@ SELECT DISTINCT
     'treasure' AS source_type,
     NULL::text AS sub_type,
     t.availability AS avl_self,
-    NULL::availability_type AS avl_event,
-    NULL::availability_type AS avl_area,
+    t.availability AS avl_context,
+    t.availability AS avl_area,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -535,8 +539,11 @@ SELECT DISTINCT
     CASE j.shop_type 
         WHEN 'pre-airship' THEN 'pre-story'::availability_type
         WHEN 'post-airship' THEN 'post'::availability_type
-    END AS avl_event,
-    NULL::availability_type AS avl_area,
+    END AS avl_context,
+    CASE j.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS avl_area,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -558,8 +565,11 @@ SELECT DISTINCT
     CASE se.shop_type 
         WHEN 'pre-airship' THEN 'pre-story'::availability_type
         WHEN 'post-airship' THEN 'post'::availability_type
-    END AS avl_event,
-    NULL::availability_type AS avl_area,
+    END AS avl_context,
+    CASE se.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS avl_area,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -578,8 +588,8 @@ SELECT DISTINCT
     'quest' AS source_type,
     NULL::text AS sub_type,
     q.availability AS avl_self,
-    NULL::availability_type AS avl_event,
-    NULL::availability_type AS avl_area,
+    q.availability AS avl_context,
+    q.availability AS avl_area,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -599,8 +609,8 @@ SELECT DISTINCT
     'blitzball' AS source_type,
     NULL::text AS sub_type,
     'always'::availability_type AS avl_self,
-    NULL::availability_type AS avl_event,
-    NULL::availability_type AS avl_area,
+    'always'::availability_type AS avl_context,
+    'always'::availability_type AS avl_area,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -625,28 +635,28 @@ WITH base AS (
             WHERE a.s_id = sh.id
               AND a.source_type = 'shop'
               AND a.sub_type = 'item'
-              AND a.avl_event = 'pre-story'
+              AND a.avl_context = 'pre-story'
         ) AS has_items_pre,
         EXISTS (
             SELECT 1 FROM mv_availabilities a 
             WHERE a.s_id = sh.id
               AND a.source_type = 'shop'
               AND a.sub_type = 'equip'
-              AND a.avl_event = 'pre-story'
+              AND a.avl_context = 'pre-story'
         ) AS has_equip_pre,
         EXISTS (
             SELECT 1 FROM mv_availabilities a 
             WHERE a.s_id = sh.id
               AND a.source_type = 'shop'
               AND a.sub_type = 'item'
-              AND a.avl_event = 'post'
+              AND a.avl_context = 'post'
         ) AS has_items_post,
         EXISTS (
             SELECT 1 FROM mv_availabilities a 
             WHERE a.s_id = sh.id
               AND a.source_type = 'shop'
               AND a.sub_type = 'equip'
-              AND a.avl_event = 'post'
+              AND a.avl_context = 'post'
         ) AS has_equip_post
     FROM shops sh
 )
