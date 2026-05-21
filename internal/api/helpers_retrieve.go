@@ -40,9 +40,9 @@ func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		filteredRes = getSharedResources(filteredRes, filtered.resources)
 	}
 
-	if i.availabilityFunc != nil {
+	if !i.avlParams.IsZero() {
 		var err error
-		filteredRes, err = i.availabilityFunc(cfg, r, i, filteredRes)
+		filteredRes, err = filterAvl(cfg, r, i, filteredRes)
 		if err != nil {
 			return zeroType, err
 		}
@@ -65,47 +65,50 @@ func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	return resourceList, nil
 }
 
-func filterAvlMonsters[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput [T, R, A, L], mons []A) ([]A, error) {
+func filterAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A) ([]A, error) {
 	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
 	if errIsNotEmptyQuery(err) {
 		return nil, err
 	}
 	if errors.Is(err, errEmptyQuery) {
-		return mons, nil
+		return resources, nil
 	}
 
-	ids := resToIDs(mons)
+	ids := resToIDs(resources)
 	avlType := AvlTypeSelf
-	sourceType := ViewSourceTypeMonster
 
-	location, _ := checkEmptyQuery(r, i.queryLookup["location"])
-	sublocation, _ := checkEmptyQuery(r, i.queryLookup["sublocation"])
-	area, _ := checkEmptyQuery(r, i.queryLookup["area"])
-
-	if location != "" || sublocation != "" {
-		avlType = AvlTypeContext
+	for _, param := range i.avlParams.context {
+		query, _ := checkEmptyQuery(r, i.queryLookup[param])
+		if query == "" {
+			avlType = AvlTypeContext
+			break
+		}
 	}
 
-	if area != "" {
-		avlType = AvlTypeArea
+	for _, param := range i.avlParams.area {
+		query, _ := checkEmptyQuery(r, i.queryLookup[param])
+		if query == "" {
+			avlType = AvlTypeArea
+			break
+		}
 	}
 
 	dbIDs, err := cfg.db.FilterIDsByAvailability(r.Context(), database.FilterIDsByAvailabilityParams{
-		Ids: 			ids,
-		SourceType: 	string(sourceType),
-		AvlType: 		string(avlType),
-		Availability: 	availabilities,
+		Ids:          ids,
+		SourceType:   string(i.avlParams.sourceType),
+		AvlType:      string(avlType),
+		Availability: availabilities,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
+	resNew := idsToAPIResources(cfg, i, dbIDs)
 
-	return resources, nil
+	return resNew, nil
 }
 
-func resToIDs[A APIResource] (resources []A) []int32 {
+func resToIDs[A APIResource](resources []A) []int32 {
 	ids := []int32{}
 
 	for _, res := range resources {
@@ -118,19 +121,19 @@ func resToIDs[A APIResource] (resources []A) []int32 {
 type AvlType string
 
 const (
-	AvlTypeSelf     AvlType = "self"
-	AvlTypeContext 	AvlType = "context"
-	AvlTypeArea     AvlType = "area"
+	AvlTypeSelf    AvlType = "self"
+	AvlTypeContext AvlType = "context"
+	AvlTypeArea    AvlType = "area"
 )
 
 type ViewSourceType string
 
 const (
-	ViewSourceTypeMonster			ViewSourceType = "monster"
-	ViewSourceTypeMonsterFormation	ViewSourceType = "monster-formation"
-	ViewSourceTypeArea				ViewSourceType = "area"
-	ViewSourceTypeTreasure			ViewSourceType = "treasure"
-	ViewSourceTypeShop				ViewSourceType = "shop"
-	ViewSourceTypeQuest				ViewSourceType = "quest"
-	ViewSourceTypeBlitzball			ViewSourceType = "blitzball"
+	ViewSourceTypeMonster          ViewSourceType = "monster"
+	ViewSourceTypeMonsterFormation ViewSourceType = "monster-formation"
+	ViewSourceTypeArea             ViewSourceType = "area"
+	ViewSourceTypeTreasure         ViewSourceType = "treasure"
+	ViewSourceTypeShop             ViewSourceType = "shop"
+	ViewSourceTypeQuest            ViewSourceType = "quest"
+	ViewSourceTypeBlitzball        ViewSourceType = "blitzball"
 )

@@ -505,7 +505,11 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetMonsterIDs,
 		getSingleFunc:    cfg.getMonster,
 		retrieveFunc:     cfg.retrieveMonsters,
-		availabilityFunc: filterAvlMonsters[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
+		avlParams: 		  avlParams{
+			context: 	[]string{"location", "sublocation"},
+			area: 	 	[]string{"area"},
+			sourceType: ViewSourceTypeMonster,
+		},
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createMonsterSimple,
