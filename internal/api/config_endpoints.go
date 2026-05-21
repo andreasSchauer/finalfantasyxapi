@@ -505,6 +505,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetMonsterIDs,
 		getSingleFunc:    cfg.getMonster,
 		retrieveFunc:     cfg.retrieveMonsters,
+		availabilityFunc: filterAvlMonsters[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createMonsterSimple,

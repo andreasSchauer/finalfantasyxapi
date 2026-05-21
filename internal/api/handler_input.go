@@ -19,5 +19,6 @@ type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 	resToListFunc    func(*Config, *http.Request, []A) (L, error)
 	getSingleFunc    func(*http.Request, handlerInput[T, R, A, L], int32) (R, error)
 	retrieveFunc     func(*http.Request, handlerInput[T, R, A, L]) (L, error)
+	availabilityFunc func(*Config, *http.Request, handlerInput[T, R, A, L], []A) ([]A, error)
 	subsections      map[string]Subsection
 }

@@ -4071,7 +4071,7 @@ type MvAvailability struct {
 	SourceType  string
 	SubType     sql.NullString
 	AvlSelf     AvailabilityType
-	AvlEvent    AvailabilityType
+	AvlContext  AvailabilityType
 	AvlArea     AvailabilityType
 	AID         int32
 	Location    string
