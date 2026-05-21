@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -42,7 +43,7 @@ func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 
 	if !i.avlParams.IsZero() {
 		var err error
-		filteredRes, err = filterAvl(cfg, r, i, filteredRes)
+		filteredRes, err = filterAvlMonsters(cfg, r, i, filteredRes)
 		if err != nil {
 			return zeroType, err
 		}
@@ -65,7 +66,7 @@ func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	return resourceList, nil
 }
 
-func filterAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A) ([]A, error) {
+func filterAvlMonsters[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A) ([]A, error) {
 	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
 	if errIsNotEmptyQuery(err) {
 		return nil, err
@@ -74,49 +75,55 @@ func filterAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cf
 		return resources, nil
 	}
 
-	ids := resToIDs(resources)
-	avlType := AvlTypeSelf
-
-	for _, param := range i.avlParams.context {
-		query, _ := checkEmptyQuery(r, i.queryLookup[param])
-		if query == "" {
-			avlType = AvlTypeContext
-			break
-		}
-	}
-
-	for _, param := range i.avlParams.area {
-		query, _ := checkEmptyQuery(r, i.queryLookup[param])
-		if query == "" {
-			avlType = AvlTypeArea
-			break
-		}
-	}
-
-	dbIDs, err := cfg.db.FilterIDsByAvailability(r.Context(), database.FilterIDsByAvailabilityParams{
-		Ids:          ids,
-		SourceType:   string(i.avlParams.sourceType),
-		AvlType:      string(avlType),
+	params := database.FilterMonsterIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		SourceType:   string(ViewSourceTypeMonster),
+		AvlType:      string(AvlTypeSelf),
 		Availability: availabilities,
-	})
+	}
+
+	locID, err := parseIdQuery(r, i.queryLookup["location"], len(cfg.l.Locations))
+	if err == nil {
+		params.AvlType = string(AvlTypeContext)
+		params.ContextID = h.GetNullInt32(&locID)
+		ct := string(ViewSourceTypeLocation)
+		params.ContextType = h.GetNullString(&ct)
+	}
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+
+	subLocID, err := parseIdQuery(r, i.queryLookup["sublocation"], len(cfg.l.Sublocations))
+	if err == nil {
+		params.AvlType = string(AvlTypeContext)
+		params.ContextID = h.GetNullInt32(&subLocID)
+		ct := string(ViewSourceTypeSublocation)
+		params.ContextType = h.GetNullString(&ct)
+	}
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	
+	areaID, err := parseIdQuery(r, i.queryLookup["area"], len(cfg.l.Areas))
+	if err == nil {
+		params.AvlType = string(AvlTypeArea)
+		params.ContextID = h.GetNullInt32(&areaID)
+		ct := string(ViewSourceTypeArea)
+		params.ContextType = h.GetNullString(&ct)
+	}
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+
+	dbIDs, err := cfg.db.FilterMonsterIDsByAvailability(r.Context(), params)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
 	resNew := idsToAPIResources(cfg, i, dbIDs)
-
 	return resNew, nil
 }
 
-func resToIDs[A APIResource](resources []A) []int32 {
-	ids := []int32{}
-
-	for _, res := range resources {
-		ids = append(ids, res.GetID())
-	}
-
-	return ids
-}
 
 type AvlType string
 
@@ -131,9 +138,22 @@ type ViewSourceType string
 const (
 	ViewSourceTypeMonster          ViewSourceType = "monster"
 	ViewSourceTypeMonsterFormation ViewSourceType = "monster-formation"
+	ViewSourceTypeLocation         ViewSourceType = "location"
+	ViewSourceTypeSublocation      ViewSourceType = "sublocation"
 	ViewSourceTypeArea             ViewSourceType = "area"
 	ViewSourceTypeTreasure         ViewSourceType = "treasure"
 	ViewSourceTypeShop             ViewSourceType = "shop"
 	ViewSourceTypeQuest            ViewSourceType = "quest"
 	ViewSourceTypeBlitzball        ViewSourceType = "blitzball"
+	ViewSourceTypeItem        	   ViewSourceType = "item"
 )
+
+func resToIDs[A APIResource](resources []A) []int32 {
+	ids := []int32{}
+
+	for _, res := range resources {
+		ids = append(ids, res.GetID())
+	}
+
+	return ids
+}

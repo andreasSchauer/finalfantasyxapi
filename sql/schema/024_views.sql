@@ -620,6 +620,7 @@ FROM blitzball_positions bp
 JOIN mv_geography g ON 75 = g.area_id;
 
 CREATE INDEX idx_mv_availabilities_lookup ON mv_availabilities (s_id, source_type, sub_type);
+CREATE INDEX idx_mv_availabilities_area_id ON mv_availabilities (a_id);
 
 
 

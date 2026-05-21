@@ -548,24 +548,11 @@ func (q *Queries) GetMonsterIDs(ctx context.Context) ([]int32, error) {
 }
 
 const getMonsterIDsByArea = `-- name: GetMonsterIDsByArea :many
-WITH w AS (
-  SELECT $2::availability_type[] AS availability
-)
-SELECT DISTINCT me.monster_id
-FROM mv_monster_encounters me
-CROSS JOIN w
-WHERE me.area_id = $1
-  AND (w.availability IS NULL OR me.spec_availability = ANY(w.availability))
-ORDER BY me.monster_id
+SELECT DISTINCT monster_id FROM mv_monster_encounters WHERE area_id = $1 ORDER BY monster_id
 `
 
-type GetMonsterIDsByAreaParams struct {
-	AreaID       int32
-	Availability []AvailabilityType
-}
-
-func (q *Queries) GetMonsterIDsByArea(ctx context.Context, arg GetMonsterIDsByAreaParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByArea, arg.AreaID, pq.Array(arg.Availability))
+func (q *Queries) GetMonsterIDsByArea(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByArea, areaID)
 	if err != nil {
 		return nil, err
 	}
@@ -1083,25 +1070,15 @@ func (q *Queries) GetMonsterIDsByItemSteal(ctx context.Context, itemID int32) ([
 }
 
 const getMonsterIDsByLocation = `-- name: GetMonsterIDsByLocation :many
-WITH w AS (
-  SELECT $2::availability_type[] AS availability
-)
 SELECT DISTINCT me.monster_id
 FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
-CROSS JOIN w
 WHERE g.location_id = $1
-  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
 ORDER BY me.monster_id
 `
 
-type GetMonsterIDsByLocationParams struct {
-	LocationID   int32
-	Availability []AvailabilityType
-}
-
-func (q *Queries) GetMonsterIDsByLocation(ctx context.Context, arg GetMonsterIDsByLocationParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByLocation, arg.LocationID, pq.Array(arg.Availability))
+func (q *Queries) GetMonsterIDsByLocation(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByLocation, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -1283,25 +1260,15 @@ func (q *Queries) GetMonsterIDsByStatusResists(ctx context.Context, arg GetMonst
 }
 
 const getMonsterIDsBySublocation = `-- name: GetMonsterIDsBySublocation :many
-WITH w AS (
-  SELECT $2::availability_type[] AS availability
-)
 SELECT DISTINCT me.monster_id
 FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
-CROSS JOIN w
 WHERE g.sublocation_id = $1
-  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
 ORDER BY me.monster_id
 `
 
-type GetMonsterIDsBySublocationParams struct {
-	SublocationID int32
-	Availability  []AvailabilityType
-}
-
-func (q *Queries) GetMonsterIDsBySublocation(ctx context.Context, arg GetMonsterIDsBySublocationParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsBySublocation, arg.SublocationID, pq.Array(arg.Availability))
+func (q *Queries) GetMonsterIDsBySublocation(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsBySublocation, sublocationID)
 	if err != nil {
 		return nil, err
 	}

@@ -86,36 +86,6 @@ func getItemIDsByArea(cfg *Config, r *http.Request, id int32) ([]NamedAPIResourc
 	return runAvailabilityQuery(cfg, r, cfg.e.items, id, cfg.e.areas.resourceType, dbQuery)
 }
 
-func getMonsterIDsByArea(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
-		return cfg.db.GetMonsterIDsByArea(ctx, database.GetMonsterIDsByAreaParams{
-			AreaID:       p.ParentID,
-			Availability: p.Availability,
-		})
-	}
-	return runAvailabilityQuery(cfg, r, cfg.e.monsters, id, cfg.e.areas.resourceType, dbQuery)
-}
-
-func getMonsterIDsBySublocation(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
-		return cfg.db.GetMonsterIDsBySublocation(ctx, database.GetMonsterIDsBySublocationParams{
-			SublocationID:  p.ParentID,
-			Availability: 	p.Availability,
-		})
-	}
-	return runAvailabilityQuery(cfg, r, cfg.e.monsters, id, cfg.e.sublocations.resourceType, dbQuery)
-}
-
-func getMonsterIDsByLocation(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
-		return cfg.db.GetMonsterIDsByLocation(ctx, database.GetMonsterIDsByLocationParams{
-			LocationID:  	p.ParentID,
-			Availability: 	p.Availability,
-		})
-	}
-	return runAvailabilityQuery(cfg, r, cfg.e.monsters, id, cfg.e.locations.resourceType, dbQuery)
-}
-
 func getShopIDsBySublocation(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
 	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
 		return cfg.db.GetShopIDsBySublocation(ctx, database.GetShopIDsBySublocationParams{

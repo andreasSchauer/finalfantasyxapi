@@ -76,9 +76,9 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 
 		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getMonstersByItem)),
 		frl(idQuery(cfg, r, i, resources, "ronso_rage", len(cfg.l.RonsoRages), cfg.db.GetMonsterIDsByRonsoRage)),
-		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.l.Locations), getMonsterIDsByLocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), getMonsterIDsBySublocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.l.Areas), getMonsterIDsByArea)),
+		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetMonsterIDsByLocation)),
+		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetMonsterIDsBySublocation)),
+		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetMonsterIDsByArea)),
 		frl(idQueryWrapper(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), getMonstersByAutoAbility)),
 
 		frl(intListQuery(cfg, r, i, resources, "empty_slots", cfg.db.GetMonsterIDsByEmptySlots)),
@@ -87,7 +87,6 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 		frl(enumListQuery(cfg, r, i, cfg.t.MonsterCategory, resources, "category", cfg.db.GetMonsterIDsByCategory)),
 		frl(enumQuery(cfg, r, i, cfg.t.MonsterSpecies, resources, "species", cfg.db.GetMonsterIDsBySpecies)),
 		frl(enumQuery(cfg, r, i, cfg.t.CreationArea, resources, "creation_area", ToEnumQuery(cfg.t.CreationArea, cfg.db.GetMonsterIDsByMaCreationArea))),
-		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetMonsterIDsByAvailability)),
 
 		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetMonsterIDsByIsRepeatable)),
 		frl(boolQuery(cfg, r, i, resources, "capture", cfg.db.GetMonsterIDsByCanBeCaptured)),

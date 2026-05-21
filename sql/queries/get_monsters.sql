@@ -122,40 +122,22 @@ ORDER BY monster_id;
 
 
 -- name: GetMonsterIDsByArea :many
-WITH w AS (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT me.monster_id
-FROM mv_monster_encounters me
-CROSS JOIN w
-WHERE me.area_id = $1
-  AND (w.availability IS NULL OR me.spec_availability = ANY(w.availability))
-ORDER BY me.monster_id;
+SELECT DISTINCT monster_id FROM mv_monster_encounters WHERE area_id = $1 ORDER BY monster_id;
 
 
 -- name: GetMonsterIDsBySublocation :many
-WITH w AS (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
 SELECT DISTINCT me.monster_id
 FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
-CROSS JOIN w
 WHERE g.sublocation_id = $1
-  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
 ORDER BY me.monster_id;
 
 
 -- name: GetMonsterIDsByLocation :many
-WITH w AS (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
 SELECT DISTINCT me.monster_id
 FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
-CROSS JOIN w
 WHERE g.location_id = $1
-  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
 ORDER BY me.monster_id;
 
 

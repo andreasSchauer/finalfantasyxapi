@@ -7,65 +7,10 @@ package database
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/lib/pq"
 )
-
-const filterIDsByAvailability = `-- name: FilterIDsByAvailability :many
-WITH w AS (
-    SELECT
-        $1::int[] AS ids,
-        $2::text AS source_type,
-        $3::text AS avl_type,
-        $4::availability_type[] AS availability
-)
-SELECT DISTINCT a.s_id
-FROM mv_availabilities a
-CROSS JOIN w
-WHERE a.s_id = ANY(w.ids)
-  AND a.source_type = w.source_type
-  AND CASE
-        WHEN w.avl_type = 'self' THEN a.avl_self
-        WHEN w.avl_type = 'context' THEN a.avl_context
-        WHEN w.avl_type = 'area' THEN a.avl_area
-      END = ANY(w.availability)
-ORDER BY a.s_id
-`
-
-type FilterIDsByAvailabilityParams struct {
-	Ids          []int32
-	SourceType   string
-	AvlType      string
-	Availability []AvailabilityType
-}
-
-func (q *Queries) FilterIDsByAvailability(ctx context.Context, arg FilterIDsByAvailabilityParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, filterIDsByAvailability,
-		pq.Array(arg.Ids),
-		arg.SourceType,
-		arg.AvlType,
-		pq.Array(arg.Availability),
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var s_id int32
-		if err := rows.Scan(&s_id); err != nil {
-			return nil, err
-		}
-		items = append(items, s_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
 
 const filterItemIDsByAvailability = `-- name: FilterItemIDsByAvailability :many
 WITH w AS (
@@ -74,7 +19,7 @@ WITH w AS (
         $2::text AS avl_type,
         $3::availability_type[] AS availability
 )
-SELECT DISTINCT i.id, mis.master_item_id, mis.item, mis.source_id, mis.area_id, mis.amount, mis.source_type, mis.availability, mis.spec_availability
+SELECT DISTINCT i.id
 FROM items i
 JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
 JOIN mv_availabilities a ON mis.source_id = a.s_id AND mis.source_type = a.source_type
@@ -94,42 +39,88 @@ type FilterItemIDsByAvailabilityParams struct {
 	Availability []AvailabilityType
 }
 
-type FilterItemIDsByAvailabilityRow struct {
-	ID               int32
-	MasterItemID     int32
-	Item             string
-	SourceID         int32
-	AreaID           int32
-	Amount           int32
-	SourceType       string
-	Availability     AvailabilityType
-	SpecAvailability AvailabilityType
-}
-
 // might use a source type array, if the sources need to be specified
-func (q *Queries) FilterItemIDsByAvailability(ctx context.Context, arg FilterItemIDsByAvailabilityParams) ([]FilterItemIDsByAvailabilityRow, error) {
+func (q *Queries) FilterItemIDsByAvailability(ctx context.Context, arg FilterItemIDsByAvailabilityParams) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, filterItemIDsByAvailability, pq.Array(arg.Ids), arg.AvlType, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []FilterItemIDsByAvailabilityRow
+	var items []int32
 	for rows.Next() {
-		var i FilterItemIDsByAvailabilityRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.MasterItemID,
-			&i.Item,
-			&i.SourceID,
-			&i.AreaID,
-			&i.Amount,
-			&i.SourceType,
-			&i.Availability,
-			&i.SpecAvailability,
-		); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterMonsterIDsByAvailability = `-- name: FilterMonsterIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::text AS source_type,
+        $3::text AS avl_type,
+        $4::availability_type[] AS availability,
+        $5::int AS context_id,
+        $6::text AS context_type
+)
+SELECT DISTINCT a.s_id
+FROM mv_availabilities a
+JOIN mv_geography g ON a.a_id = g.area_id
+CROSS JOIN w
+WHERE a.source_type = w.source_type
+  AND a.s_id = ANY(w.ids)
+  AND CASE
+        WHEN w.avl_type = 'self' THEN a.avl_self
+        WHEN w.avl_type = 'context' THEN a.avl_context
+        WHEN w.avl_type = 'area' THEN a.avl_area
+      END = ANY(w.availability)
+  AND (w.context_id IS NULL OR CASE
+       WHEN w.context_type = 'location' THEN g.location_id
+       WHEN w.context_type = 'sublocation' THEN g.sublocation_id
+       WHEN w.context_type = 'area' THEN g.area_id
+      END = w.context_id)
+ORDER BY a.s_id
+`
+
+type FilterMonsterIDsByAvailabilityParams struct {
+	Ids          []int32
+	SourceType   string
+	AvlType      string
+	Availability []AvailabilityType
+	ContextID    sql.NullInt32
+	ContextType  sql.NullString
+}
+
+func (q *Queries) FilterMonsterIDsByAvailability(ctx context.Context, arg FilterMonsterIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterMonsterIDsByAvailability,
+		pq.Array(arg.Ids),
+		arg.SourceType,
+		arg.AvlType,
+		pq.Array(arg.Availability),
+		arg.ContextID,
+		arg.ContextType,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var s_id int32
+		if err := rows.Scan(&s_id); err != nil {
+			return nil, err
+		}
+		items = append(items, s_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
