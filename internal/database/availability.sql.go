@@ -67,34 +67,38 @@ const filterMonsterIDsByAvailability = `-- name: FilterMonsterIDsByAvailability 
 WITH w AS (
     SELECT
         $1::int[] AS ids,
-        $2::text AS source_type,
-        $3::text AS avl_type,
-        $4::availability_type[] AS availability,
-        $5::int AS context_id,
-        $6::text AS context_type
+        $2::text AS avl_type,
+        $3::availability_type[] AS availability,
+        $4::int AS context_id,
+        $5::text AS context_type
+),
+available_monsters AS (
+    SELECT 
+        a.s_id,
+        CASE 
+            WHEN w.avl_type = 'self' THEN a.avl_self
+            WHEN w.avl_type = 'context' THEN a.avl_context
+            WHEN w.avl_type = 'area' THEN a.avl_area
+        END as current_avl
+    FROM mv_availabilities a
+    JOIN mv_geography g ON a.a_id = g.area_id
+    CROSS JOIN w
+    WHERE a.source_type = 'monster'
+      AND a.s_id = ANY(w.ids)
+      AND (w.context_id IS NULL OR CASE
+           WHEN w.context_type = 'location' THEN g.location_id
+           WHEN w.context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.context_type = 'area' THEN g.area_id
+          END = w.context_id)
 )
-SELECT DISTINCT a.s_id
-FROM mv_availabilities a
-JOIN mv_geography g ON a.a_id = g.area_id
-CROSS JOIN w
-WHERE a.source_type = w.source_type
-  AND a.s_id = ANY(w.ids)
-  AND CASE
-        WHEN w.avl_type = 'self' THEN a.avl_self
-        WHEN w.avl_type = 'context' THEN a.avl_context
-        WHEN w.avl_type = 'area' THEN a.avl_area
-      END = ANY(w.availability)
-  AND (w.context_id IS NULL OR CASE
-       WHEN w.context_type = 'location' THEN g.location_id
-       WHEN w.context_type = 'sublocation' THEN g.sublocation_id
-       WHEN w.context_type = 'area' THEN g.area_id
-      END = w.context_id)
-ORDER BY a.s_id
+SELECT s_id
+FROM available_monsters
+GROUP BY s_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
 `
 
 type FilterMonsterIDsByAvailabilityParams struct {
 	Ids          []int32
-	SourceType   string
 	AvlType      string
 	Availability []AvailabilityType
 	ContextID    sql.NullInt32
@@ -104,7 +108,6 @@ type FilterMonsterIDsByAvailabilityParams struct {
 func (q *Queries) FilterMonsterIDsByAvailability(ctx context.Context, arg FilterMonsterIDsByAvailabilityParams) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, filterMonsterIDsByAvailability,
 		pq.Array(arg.Ids),
-		arg.SourceType,
 		arg.AvlType,
 		pq.Array(arg.Availability),
 		arg.ContextID,

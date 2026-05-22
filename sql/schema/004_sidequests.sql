@@ -10,7 +10,7 @@ CREATE TYPE ma_creation_species AS ENUM ('bird', 'bomb', 'drake', 'elemental', '
 CREATE DOMAIN null_ma_creation_species AS ma_creation_species;
 CREATE TYPE creations_unlocked_category AS ENUM ('area', 'species');
 CREATE DOMAIN null_creations_unlocked_category AS creations_unlocked_category;
-CREATE TYPE availability_type AS ENUM ('always', 'pre-story', 'post', 'post-story', 'post-game', 'story', 'pre-airship', 'post-airship');
+CREATE TYPE availability_type AS ENUM ('always', 'post', 'pre-story', 'post-story', 'post-game', 'story', 'pre-airship', 'post-airship');
 CREATE DOMAIN null_availability_type AS availability_type;
 
 

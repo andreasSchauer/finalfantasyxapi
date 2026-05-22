@@ -461,8 +461,8 @@ type AvailabilityType string
 
 const (
 	AvailabilityTypeAlways      AvailabilityType = "always"
-	AvailabilityTypePreStory    AvailabilityType = "pre-story"
 	AvailabilityTypePost        AvailabilityType = "post"
+	AvailabilityTypePreStory    AvailabilityType = "pre-story"
 	AvailabilityTypePostStory   AvailabilityType = "post-story"
 	AvailabilityTypePostGame    AvailabilityType = "post-game"
 	AvailabilityTypeStory       AvailabilityType = "story"

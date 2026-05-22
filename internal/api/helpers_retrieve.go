@@ -41,9 +41,9 @@ func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		filteredRes = getSharedResources(filteredRes, filtered.resources)
 	}
 
-	if !i.avlParams.IsZero() {
+	if i.availabilityFunc != nil {
 		var err error
-		filteredRes, err = filterAvlMonsters(cfg, r, i, filteredRes)
+		filteredRes, err = i.availabilityFunc(cfg, r, i, filteredRes)
 		if err != nil {
 			return zeroType, err
 		}
@@ -66,7 +66,8 @@ func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	return resourceList, nil
 }
 
-func filterAvlMonsters[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A) ([]A, error) {
+// need to make this the function for handlerInput again, and maybe find a more scalable way for the parameters?
+func filterAvlMonsters(cfg *Config, r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList], resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
 	if errIsNotEmptyQuery(err) {
 		return nil, err
@@ -77,7 +78,6 @@ func filterAvlMonsters[T seeding.Lookupable, R any, A APIResource, L APIResource
 
 	params := database.FilterMonsterIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
-		SourceType:   string(ViewSourceTypeMonster),
 		AvlType:      string(AvlTypeSelf),
 		Availability: availabilities,
 	}
