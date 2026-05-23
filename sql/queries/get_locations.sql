@@ -90,7 +90,8 @@ SELECT id FROM fmvs WHERE area_id = $1 ORDER BY id;
 -- name: GetAreaQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN completion_areas ca ON ca.completion_id = q.completion_id
+JOIN quest_completions qc ON qc.quest_id = q.id
+JOIN completion_areas ca ON ca.completion_id = qc.id
 WHERE ca.area_id = $1
 ORDER BY q.id;
 
@@ -150,62 +151,17 @@ WITH w AS (
 SELECT DISTINCT mis.area_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
+CROSS JOIN w
 WHERE i.id = $1
   AND (w.method IS NULL OR mis.source_type = ANY(w.method))
 ORDER BY mis.area_id;
 
 
--- name: GetAreaIDsWithItemFromMonster :many
-SELECT DISTINCT mis.area_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'monster'
-ORDER BY mis.area_id;
-
-
--- name: GetAreaIDsWithItemFromShop :many
-SELECT DISTINCT mis.area_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'shop'
-ORDER BY mis.area_id;
-
-
--- name: GetAreaIDsWithItemFromTreasure :many
-SELECT DISTINCT mis.area_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'treasure'
-ORDER BY mis.area_id;
-
-
--- name: GetAreaIDsWithItemFromQuest :many
-SELECT DISTINCT mis.area_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'quest'
-ORDER BY mis.area_id;
-
-
--- name: GetAreaIDsWithKeyItemFromTreasure :many
+-- name: GetAreaIDsWithKeyItem :many
 SELECT DISTINCT mis.area_id
 FROM mv_item_sources mis
 JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
-  AND mis.source_type = 'treasure'
-ORDER BY mis.area_id;
-
-
--- name: GetAreaIDsWithKeyItemFromQuest :many
-SELECT DISTINCT mis.area_id
-FROM mv_item_sources mis
-JOIN key_items ki ON mis.master_item_id = ki.master_item_id
-WHERE ki.id = $1
-  AND mis.source_type = 'quest'
 ORDER BY mis.area_id;
 
 
@@ -365,7 +321,8 @@ ORDER BY f.id;
 -- name: GetSublocationQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN completion_areas ca ON ca.completion_id = q.completion_id
+JOIN quest_completions qc ON qc.quest_id = q.id
+JOIN completion_areas ca ON ca.completion_id = qc.id
 JOIN mv_geography g ON ca.area_id = g.area_id
 WHERE g.sublocation_id = $1
 ORDER BY q.id;
@@ -639,7 +596,8 @@ ORDER BY f.id;
 -- name: GetLocationQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN completion_areas ca ON ca.completion_id = q.completion_id
+JOIN quest_completions qc ON qc.quest_id = q.id
+JOIN completion_areas ca ON ca.completion_id = qc.id
 JOIN mv_geography g ON ca.area_id = g.area_id
 WHERE g.location_id = $1
 ORDER BY q.id;

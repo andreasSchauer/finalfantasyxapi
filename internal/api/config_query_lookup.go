@@ -531,7 +531,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []string{"item"},
-			AllowedValues:  []string{"monster", "treasure", "shop", "quest"},
+			AllowedValues:  []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
 		{
 			Name:        "key_item",

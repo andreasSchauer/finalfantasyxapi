@@ -465,6 +465,7 @@ WITH w AS (
 SELECT DISTINCT mis.area_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
+CROSS JOIN w
 WHERE i.id = $1
   AND (w.method IS NULL OR mis.source_type = ANY(w.method))
 ORDER BY mis.area_id
@@ -498,177 +499,16 @@ func (q *Queries) GetAreaIDsWithItemFromMethod(ctx context.Context, arg GetAreaI
 	return items, nil
 }
 
-const getAreaIDsWithItemFromMonster = `-- name: GetAreaIDsWithItemFromMonster :many
-SELECT DISTINCT mis.area_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'monster'
-ORDER BY mis.area_id
-`
-
-func (q *Queries) GetAreaIDsWithItemFromMonster(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromMonster, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var area_id int32
-		if err := rows.Scan(&area_id); err != nil {
-			return nil, err
-		}
-		items = append(items, area_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaIDsWithItemFromQuest = `-- name: GetAreaIDsWithItemFromQuest :many
-SELECT DISTINCT mis.area_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'quest'
-ORDER BY mis.area_id
-`
-
-func (q *Queries) GetAreaIDsWithItemFromQuest(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromQuest, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var area_id int32
-		if err := rows.Scan(&area_id); err != nil {
-			return nil, err
-		}
-		items = append(items, area_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaIDsWithItemFromShop = `-- name: GetAreaIDsWithItemFromShop :many
-SELECT DISTINCT mis.area_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'shop'
-ORDER BY mis.area_id
-`
-
-func (q *Queries) GetAreaIDsWithItemFromShop(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromShop, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var area_id int32
-		if err := rows.Scan(&area_id); err != nil {
-			return nil, err
-		}
-		items = append(items, area_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaIDsWithItemFromTreasure = `-- name: GetAreaIDsWithItemFromTreasure :many
-SELECT DISTINCT mis.area_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'treasure'
-ORDER BY mis.area_id
-`
-
-func (q *Queries) GetAreaIDsWithItemFromTreasure(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromTreasure, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var area_id int32
-		if err := rows.Scan(&area_id); err != nil {
-			return nil, err
-		}
-		items = append(items, area_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaIDsWithKeyItemFromQuest = `-- name: GetAreaIDsWithKeyItemFromQuest :many
+const getAreaIDsWithKeyItem = `-- name: GetAreaIDsWithKeyItem :many
 SELECT DISTINCT mis.area_id
 FROM mv_item_sources mis
 JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
-  AND mis.source_type = 'quest'
 ORDER BY mis.area_id
 `
 
-func (q *Queries) GetAreaIDsWithKeyItemFromQuest(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsWithKeyItemFromQuest, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var area_id int32
-		if err := rows.Scan(&area_id); err != nil {
-			return nil, err
-		}
-		items = append(items, area_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAreaIDsWithKeyItemFromTreasure = `-- name: GetAreaIDsWithKeyItemFromTreasure :many
-SELECT DISTINCT mis.area_id
-FROM mv_item_sources mis
-JOIN key_items ki ON mis.master_item_id = ki.master_item_id
-WHERE ki.id = $1
-  AND mis.source_type = 'treasure'
-ORDER BY mis.area_id
-`
-
-func (q *Queries) GetAreaIDsWithKeyItemFromTreasure(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsWithKeyItemFromTreasure, id)
+func (q *Queries) GetAreaIDsWithKeyItem(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsWithKeyItem, id)
 	if err != nil {
 		return nil, err
 	}
@@ -919,7 +759,8 @@ func (q *Queries) GetAreaMonsterIdPairs(ctx context.Context, areaIds []int32) ([
 const getAreaQuestIDs = `-- name: GetAreaQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN completion_areas ca ON ca.completion_id = q.completion_id
+JOIN quest_completions qc ON qc.quest_id = q.id
+JOIN completion_areas ca ON ca.completion_id = qc.id
 WHERE ca.area_id = $1
 ORDER BY q.id
 `
@@ -1978,7 +1819,8 @@ func (q *Queries) GetLocationMonsterIdPairs(ctx context.Context, areaIds []int32
 const getLocationQuestIDs = `-- name: GetLocationQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN completion_areas ca ON ca.completion_id = q.completion_id
+JOIN quest_completions qc ON qc.quest_id = q.id
+JOIN completion_areas ca ON ca.completion_id = qc.id
 JOIN mv_geography g ON ca.area_id = g.area_id
 WHERE g.location_id = $1
 ORDER BY q.id
@@ -3245,7 +3087,8 @@ func (q *Queries) GetSublocationMonsterIdPairs(ctx context.Context, areaIds []in
 const getSublocationQuestIDs = `-- name: GetSublocationQuestIDs :many
 SELECT DISTINCT q.id
 FROM quests q
-JOIN completion_areas ca ON ca.completion_id = q.completion_id
+JOIN quest_completions qc ON qc.quest_id = q.id
+JOIN completion_areas ca ON ca.completion_id = qc.id
 JOIN mv_geography g ON ca.area_id = g.area_id
 WHERE g.sublocation_id = $1
 ORDER BY q.id

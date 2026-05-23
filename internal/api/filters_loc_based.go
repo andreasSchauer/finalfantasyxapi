@@ -2,16 +2,31 @@ package api
 
 import (
 	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-// can replace with GetAreaIDsWithItemFromMethod
+
 func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, error) {
-	return filterByIdAndValues(cfg, r, cfg.e.areas, id, "method", cfg.e.items.resourceType, map[string]DbQueryIntMany{
-		"monster":  cfg.db.GetAreaIDsWithItemFromMonster,
-		"treasure": cfg.db.GetAreaIDsWithItemFromTreasure,
-		"shop":     cfg.db.GetAreaIDsWithItemFromShop,
-		"quest":    cfg.db.GetAreaIDsWithItemFromQuest,
+	i := cfg.e.areas
+	queryParamMethod := i.queryLookup["method"]
+
+	methods, err := parseValueListQuery(cfg, r, queryParamMethod)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+
+	dbIDs, err := cfg.db.GetAreaIDsWithItemFromMethod(r.Context(), database.GetAreaIDsWithItemFromMethodParams{
+		ID: 	id,
+		Method: methods,
 	})
+	if err != nil {
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethod, err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
 }
 
 func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
@@ -32,12 +47,6 @@ func getLocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResou
 	})
 }
 
-func getAreasByKeyItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, error) {
-	return dbQueriesToApiResources(cfg, r, cfg.e.areas, id, cfg.e.keyItems.resourceType, map[string]DbQueryIntMany{
-		"treasure": cfg.db.GetAreaIDsWithKeyItemFromTreasure,
-		"quest":    cfg.db.GetAreaIDsWithKeyItemFromQuest,
-	})
-}
 
 func getSublocationsByKeyItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	return dbQueriesToApiResources(cfg, r, cfg.e.sublocations, id, cfg.e.keyItems.resourceType, map[string]DbQueryIntMany{

@@ -293,7 +293,8 @@ ORDER BY mis.source_id;
 -- name: GetKeyItemAreaIDs :many
 SELECT ca.area_id
 FROM completion_areas ca
-JOIN quests q ON ca.completion_id = q.completion_id
+JOIN quest_completions qc ON ca.completion_id = qc.id
+JOIN quests q ON qc.quest_id = q.id
 JOIN mv_item_sources mis ON mis.source_id = q.id
 JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1

@@ -326,6 +326,16 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 		}
 	}
 
+	hasQuests, err := parseBooleanQuery(r, i.queryLookup["sidequests"])
+	if err == nil {
+		sourceType := ViewSourceTypeQuest
+		if hasQuests {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
 	params.RequiredSources = h.SliceOrNil(params.RequiredSources)
 	params.ExcludedSources = h.SliceOrNil(params.ExcludedSources)
 
