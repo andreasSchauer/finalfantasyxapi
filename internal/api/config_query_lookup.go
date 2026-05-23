@@ -782,7 +782,6 @@ func (cfg *Config) initShopsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			ReplacedBy:  []string{"location", "sublocation", "auto_ability", "empty_slots", "items", "equipment"},
 			References:  []string{createListURL(cfg, "availability")},
 		},
 	}
@@ -1293,7 +1292,6 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			ReplacedBy:  []string{"location", "sublocation", "area"},
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{

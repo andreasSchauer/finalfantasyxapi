@@ -19,19 +19,19 @@ type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 	resToListFunc    func(*Config, *http.Request, []A) (L, error)
 	getSingleFunc    func(*http.Request, handlerInput[T, R, A, L], int32) (R, error)
 	retrieveFunc     func(*http.Request, handlerInput[T, R, A, L]) (L, error)
-	availabilityFunc func(*Config, *http.Request, handlerInput[T, R, A, L], []A) ([]A, error)
+	avlFunc          func(*Config, *http.Request, []A) ([]A, error)
 	avlParams        avlParams
 	subsections      map[string]Subsection
 }
 
 type avlParams struct {
-	context 	[]string
-	area    	[]string
-	sourceType 	ViewSourceType
+	context    []string
+	area       []string
+	sourceType ViewSourceType
 }
 
 func (p avlParams) IsZero() bool {
 	return len(p.context) == 0 &&
-	len(p.area) == 0 &&
-	p.sourceType == ""
+		len(p.area) == 0 &&
+		p.sourceType == ""
 }

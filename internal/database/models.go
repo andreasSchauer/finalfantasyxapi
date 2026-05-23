@@ -4187,17 +4187,6 @@ type MvMonsterItemDrop struct {
 	IsRepeatable     bool
 }
 
-type MvShopAvailability struct {
-	ShopID           int32
-	ShopAvailability AvailabilityType
-	HasItemsPre      bool
-	HasEquipPre      bool
-	HasItemsPost     bool
-	HasEquipPost     bool
-	HasItems         sql.NullBool
-	HasEquipment     sql.NullBool
-}
-
 type OdModeAction struct {
 	ID       int32
 	DataHash string

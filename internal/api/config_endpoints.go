@@ -244,6 +244,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetMonsterFormationIDs,
 		getSingleFunc: cfg.getMonsterFormation,
 		retrieveFunc:  cfg.retrieveMonsterFormations,
+		avlFunc:       filterAvlMonsterFormations,
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createMonsterFormationSimple,
@@ -267,6 +268,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetShopIDs,
 		getSingleFunc: cfg.getShop,
 		retrieveFunc:  cfg.retrieveShops,
+		avlFunc: 	   filterAvlShops,
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createShopSimple,
@@ -505,7 +507,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery:    cfg.db.GetMonsterIDs,
 		getSingleFunc:    cfg.getMonster,
 		retrieveFunc:     cfg.retrieveMonsters,
-		availabilityFunc: filterAvlMonsters,
+		avlFunc:          filterAvlMonsters,
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createMonsterSimple,

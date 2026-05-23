@@ -35,11 +35,10 @@ func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[see
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
-		frl(idQueryWrapper(cfg, r, i, resources, "monster", len(cfg.l.Monsters), getMonsterFormationIDsByMonster)),
-		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.l.Locations), getMonsterFormationIDsByLocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), getMonsterFormationIDsBySublocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.l.Areas), getMonsterFormationIDsByArea)),
-		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetMonsterFormationIDsByAvailability)),
+		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetMonsterFormationIDsByMonster)),
+		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetMonsterFormationIDsByLocation)),
+		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetMonsterFormationIDsBySublocation)),
+		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetMonsterFormationIDsByArea)),
 		frl(boolQuery2(cfg, r, i, resources, "repeatable", cfg.db.GetMonsterFormationIDsByRepeatable)),
 		frl(boolQuery(cfg, r, i, resources, "ambush", cfg.db.GetMonsterFormationIDsByForcedAmbush)),
 		frl(enumListQuery(cfg, r, i, cfg.t.MonsterFormationCategory, resources, "category", cfg.db.GetMonsterFormationIDsByCategory)),

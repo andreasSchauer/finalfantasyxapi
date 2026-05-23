@@ -2195,33 +2195,6 @@ func (q *Queries) GetShopIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getShopIDsByAvailability = `-- name: GetShopIDsByAvailability :many
-SELECT id FROM shops WHERE availability = ANY($1::availability_type[]) ORDER BY id
-`
-
-func (q *Queries) GetShopIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsByAvailability, pq.Array(availability))
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getShopIDsByCategory = `-- name: GetShopIDsByCategory :many
 SELECT id FROM shops WHERE category = ANY($1::shop_category[]) ORDER BY id
 `
@@ -2251,9 +2224,7 @@ func (q *Queries) GetShopIDsByCategory(ctx context.Context, category []ShopCateg
 
 const getShopIDsByLocation = `-- name: GetShopIDsByLocation :many
 WITH w AS (
-  SELECT
-    $1::availability_type[] AS availability,
-    $2::int AS location_id
+  SELECT $1::int AS location_id
 )
 SELECT sh.id
 FROM shops sh
@@ -2261,7 +2232,6 @@ CROSS JOIN w
 JOIN mv_geography g ON sh.area_id = g.area_id
 JOIN mv_item_sources mis ON mis.source_id = sh.id AND source_type = 'shop'
 WHERE g.location_id = w.location_id
-  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
 
 UNION
 
@@ -2271,17 +2241,11 @@ CROSS JOIN w
 JOIN mv_geography g ON sh.area_id = g.area_id
 JOIN mv_equipment_sources mes ON mes.source_id = sh.id AND source_type = 'shop'
 WHERE g.location_id = w.location_id
-  AND (w.availability IS NULL OR mes.spec_availability = ANY(w.availability))
 ORDER BY id
 `
 
-type GetShopIDsByLocationParams struct {
-	Availability []AvailabilityType
-	LocationID   int32
-}
-
-func (q *Queries) GetShopIDsByLocation(ctx context.Context, arg GetShopIDsByLocationParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsByLocation, pq.Array(arg.Availability), arg.LocationID)
+func (q *Queries) GetShopIDsByLocation(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsByLocation, locationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2305,9 +2269,7 @@ func (q *Queries) GetShopIDsByLocation(ctx context.Context, arg GetShopIDsByLoca
 
 const getShopIDsBySublocation = `-- name: GetShopIDsBySublocation :many
 WITH w AS (
-  SELECT
-    $1::availability_type[] AS availability,
-    $2::int AS sublocation_id
+  SELECT $1::int AS sublocation_id
 )
 SELECT sh.id
 FROM shops sh
@@ -2315,7 +2277,6 @@ CROSS JOIN w
 JOIN mv_geography g ON sh.area_id = g.area_id
 JOIN mv_item_sources mis ON mis.source_id = sh.id AND source_type = 'shop'
 WHERE g.sublocation_id = w.sublocation_id
-  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
 
 UNION
 
@@ -2325,17 +2286,11 @@ CROSS JOIN w
 JOIN mv_geography g ON sh.area_id = g.area_id
 JOIN mv_equipment_sources mes ON mes.source_id = sh.id AND source_type = 'shop'
 WHERE g.sublocation_id = w.sublocation_id
-  AND (w.availability IS NULL OR mes.spec_availability = ANY(w.availability))
 ORDER BY id
 `
 
-type GetShopIDsBySublocationParams struct {
-	Availability  []AvailabilityType
-	SublocationID int32
-}
-
-func (q *Queries) GetShopIDsBySublocation(ctx context.Context, arg GetShopIDsBySublocationParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsBySublocation, pq.Array(arg.Availability), arg.SublocationID)
+func (q *Queries) GetShopIDsBySublocation(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsBySublocation, sublocationID)
 	if err != nil {
 		return nil, err
 	}
@@ -2363,14 +2318,12 @@ FROM mv_equipment_sources es
 LEFT JOIN equipment_names en ON es.name_id = en.id
 CROSS JOIN (
     SELECT
-        $1::availability_type[] AS availability,
-        $2::int[] AS empty_slots,
-        $3::int AS character_id,
-        $4::int AS auto_ability_id
+        $1::int[] AS empty_slots,
+        $2::int AS character_id,
+        $3::int AS auto_ability_id
 ) w
 WHERE 
-    (w.availability IS NULL OR es.spec_availability = ANY(w.availability))
-    AND (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
+    (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
     AND (w.character_id IS NULL OR en.character_id = w.character_id)
     AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
     AND es.source_type = 'shop'
@@ -2378,19 +2331,13 @@ ORDER BY es.source_id
 `
 
 type GetShopIDsEquipmentFilterParams struct {
-	Availability  []AvailabilityType
 	EmptySlots    []int32
 	CharacterID   sql.NullInt32
 	AutoAbilityID sql.NullInt32
 }
 
 func (q *Queries) GetShopIDsEquipmentFilter(ctx context.Context, arg GetShopIDsEquipmentFilterParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsEquipmentFilter,
-		pq.Array(arg.Availability),
-		pq.Array(arg.EmptySlots),
-		arg.CharacterID,
-		arg.AutoAbilityID,
-	)
+	rows, err := q.db.QueryContext(ctx, getShopIDsEquipmentFilter, pq.Array(arg.EmptySlots), arg.CharacterID, arg.AutoAbilityID)
 	if err != nil {
 		return nil, err
 	}
@@ -2413,51 +2360,25 @@ func (q *Queries) GetShopIDsEquipmentFilter(ctx context.Context, arg GetShopIDsE
 }
 
 const getShopIDsWithEquipment = `-- name: GetShopIDsWithEquipment :many
-WITH w AS (
-  SELECT 
-    $1::availability_type[] AS methods,
-    $2::boolean AS has_equipment
-)
-SELECT sap.shop_id
-FROM mv_shop_availability sap, w
-WHERE 'pre-story' = ANY(w.methods)
-  AND sap.has_equip_pre = w.has_equipment
-
-UNION
-
-SELECT sap.shop_id
-FROM mv_shop_availability sap, w
-WHERE 'post' = ANY(w.methods)
-  AND sap.has_equip_post = w.has_equipment
-
-UNION
-
-SELECT sap.shop_id
-FROM mv_shop_availability sap, w
-WHERE w.methods IS NULL
-  AND sap.has_equipment = w.has_equipment
-
-ORDER BY shop_id
+SELECT DISTINCT s_id 
+FROM mv_availabilities 
+WHERE source_type = 'shop' AND sub_type = 'equip'
+ORDER BY s_id
 `
 
-type GetShopIDsWithEquipmentParams struct {
-	Availability []AvailabilityType
-	HasEquipment bool
-}
-
-func (q *Queries) GetShopIDsWithEquipment(ctx context.Context, arg GetShopIDsWithEquipmentParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsWithEquipment, pq.Array(arg.Availability), arg.HasEquipment)
+func (q *Queries) GetShopIDsWithEquipment(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsWithEquipment)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var shop_id int32
-		if err := rows.Scan(&shop_id); err != nil {
+		var s_id int32
+		if err := rows.Scan(&s_id); err != nil {
 			return nil, err
 		}
-		items = append(items, shop_id)
+		items = append(items, s_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2469,51 +2390,25 @@ func (q *Queries) GetShopIDsWithEquipment(ctx context.Context, arg GetShopIDsWit
 }
 
 const getShopIDsWithItems = `-- name: GetShopIDsWithItems :many
-WITH w AS (
-  SELECT 
-    $1::availability_type[] AS methods,
-    $2::boolean AS has_items
-)
-SELECT sap.shop_id
-FROM mv_shop_availability sap, w
-WHERE 'pre-story' = ANY(w.methods)
-  AND sap.has_items_pre = w.has_items
-
-UNION
-
-SELECT sap.shop_id
-FROM mv_shop_availability sap, w
-WHERE 'post' = ANY(w.methods)
-  AND sap.has_items_post = w.has_items
-
-UNION
-
-SELECT sap.shop_id
-FROM mv_shop_availability sap, w
-WHERE w.methods IS NULL
-  AND sap.has_items = w.has_items
-
-ORDER BY shop_id
+SELECT DISTINCT s_id 
+FROM mv_availabilities 
+WHERE source_type = 'shop' AND sub_type = 'item'
+ORDER BY s_id
 `
 
-type GetShopIDsWithItemsParams struct {
-	Availability []AvailabilityType
-	HasItems     bool
-}
-
-func (q *Queries) GetShopIDsWithItems(ctx context.Context, arg GetShopIDsWithItemsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getShopIDsWithItems, pq.Array(arg.Availability), arg.HasItems)
+func (q *Queries) GetShopIDsWithItems(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getShopIDsWithItems)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var shop_id int32
-		if err := rows.Scan(&shop_id); err != nil {
+		var s_id int32
+		if err := rows.Scan(&s_id); err != nil {
 			return nil, err
 		}
-		items = append(items, shop_id)
+		items = append(items, s_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

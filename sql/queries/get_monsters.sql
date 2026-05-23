@@ -169,10 +169,6 @@ SELECT id FROM monsters WHERE area_conquest_location = $1 AND can_be_captured = 
 SELECT id FROM monsters WHERE category = ANY(sqlc.narg('category')::monster_category[]);
 
 
--- name: GetMonsterIDsByAvailability :many
-SELECT id FROM monsters WHERE availability = ANY(sqlc.narg('availability')::availability_type[]) ORDER BY id;
-
-
 -- name: GetMonsterIDsByIsRepeatable :many
 SELECT id FROM monsters WHERE is_repeatable = $1;
 
@@ -218,13 +214,6 @@ WHERE category = ANY(sqlc.narg('category')::monster_formation_category[])
 ORDER BY formation_id;
 
 
--- name: GetMonsterFormationIDsByAvailability :many
-SELECT DISTINCT formation_id
-FROM mv_monster_encounters
-WHERE availability = ANY(sqlc.narg('availability')::availability_type[])
-ORDER BY formation_id;
-
-
 -- name: GetMonsterFormationIDsByRepeatable :many
 SELECT DISTINCT formation_id
 FROM mv_monster_encounters
@@ -237,50 +226,24 @@ SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE is_forced_ambush =
 
 
 -- name: GetMonsterFormationIDsByMonster :many
-WITH w AS (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT me.formation_id
-FROM mv_monster_encounters me
-CROSS JOIN w
-WHERE me.monster_id = $1
-  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
-ORDER BY me.formation_id;
+SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY formation_id;
 
 
 -- name: GetMonsterFormationIDsByArea :many
-WITH w AS (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT me.formation_id
-FROM mv_monster_encounters me
-CROSS JOIN w
-WHERE me.area_id = $1
-  AND (w.availability IS NULL OR me.spec_availability = ANY(w.availability))
-ORDER BY me.formation_id;
+SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE area_id = $1 ORDER BY formation_id;
 
 
 -- name: GetMonsterFormationIDsBySublocation :many
-WITH w AS (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
 SELECT DISTINCT me.formation_id
 FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
-CROSS JOIN w
 WHERE g.sublocation_id = $1
-  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
 ORDER BY me.formation_id;
 
 
 -- name: GetMonsterFormationIDsByLocation :many
-WITH w AS (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
 SELECT DISTINCT me.formation_id
 FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
-CROSS JOIN w
 WHERE g.location_id = $1
-  AND (w.availability IS NULL OR me.availability = ANY(w.availability))
 ORDER BY me.formation_id;

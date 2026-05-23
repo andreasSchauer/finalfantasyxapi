@@ -164,7 +164,6 @@ func refreshViews(db *database.Queries, ctx context.Context) error {
 		db.RefreshItemSourcesView,
 		db.RefreshEquipmentSourcesView,
 		db.RefreshAvailabilityView,
-		db.RefreshShopAvailabilityView,
 		db.RefreshAbilitiesView,
 	}
 

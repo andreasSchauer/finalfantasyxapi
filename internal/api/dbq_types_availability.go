@@ -86,48 +86,6 @@ func getItemIDsByArea(cfg *Config, r *http.Request, id int32) ([]NamedAPIResourc
 	return runAvailabilityQuery(cfg, r, cfg.e.items, id, cfg.e.areas.resourceType, dbQuery)
 }
 
-func getShopIDsBySublocation(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
-	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
-		return cfg.db.GetShopIDsBySublocation(ctx, database.GetShopIDsBySublocationParams{
-			SublocationID:  p.ParentID,
-			Availability: 	p.Availability,
-		})
-	}
-	return runAvailabilityQuery(cfg, r, cfg.e.shops, id, cfg.e.sublocations.resourceType, dbQuery)
-}
-
-func getShopIDsByLocation(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
-	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
-		return cfg.db.GetShopIDsByLocation(ctx, database.GetShopIDsByLocationParams{
-			LocationID:  	p.ParentID,
-			Availability: 	p.Availability,
-		})
-	}
-	return runAvailabilityQuery(cfg, r, cfg.e.shops, id, cfg.e.locations.resourceType, dbQuery)
-}
-
-func getShopIDsWithItems(cfg *Config, r *http.Request, boolean bool) ([]UnnamedAPIResource, error) {
-	dbQuery := func(ctx context.Context, p AvailabilityBoolParams) ([]int32, error) {
-		return cfg.db.GetShopIDsWithItems(ctx, database.GetShopIDsWithItemsParams{
-			HasItems: 		p.Boolean,
-			Availability: 	p.Availability,
-		})
-	}
-
-	return runAvlBoolQuery(cfg, r, cfg.e.shops, boolean, dbQuery)
-}
-
-func getShopIDsWithEquipment(cfg *Config, r *http.Request, boolean bool) ([]UnnamedAPIResource, error) {
-	dbQuery := func(ctx context.Context, p AvailabilityBoolParams) ([]int32, error) {
-		return cfg.db.GetShopIDsWithEquipment(ctx, database.GetShopIDsWithEquipmentParams{
-			HasEquipment: 	p.Boolean,
-			Availability: 	p.Availability,
-		})
-	}
-
-	return runAvlBoolQuery(cfg, r, cfg.e.shops, boolean, dbQuery)
-}
-
 func runAvlBoolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput [T, R, A, L], boolean bool, dbQuery AvailabilityDbQueryBool) ([]A, error) {
 	queryParam := i.queryLookup["availability"]
 
@@ -148,50 +106,4 @@ func runAvlBoolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceLi
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
 	return resources, nil
-}
-
-func getMonsterFormationIDsByMonster(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
-	i := cfg.e.monsterFormations
-	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
-		_, err := checkEmptyQuery(r, i.queryLookup["area"])
-		if err != nil {
-			p.Availability = nil
-		}
-
-		return cfg.db.GetMonsterFormationIDsByMonster(ctx, database.GetMonsterFormationIDsByMonsterParams{
-			MonsterID:  	p.ParentID,
-			Availability: 	p.Availability,
-		})
-	}
-	return runAvailabilityQuery(cfg, r, cfg.e.monsterFormations, id, cfg.e.monsters.resourceType, dbQuery)
-}
-
-func getMonsterFormationIDsByLocation(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
-	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
-		return cfg.db.GetMonsterFormationIDsByLocation(ctx, database.GetMonsterFormationIDsByLocationParams{
-			LocationID:  	p.ParentID,
-			Availability: 	p.Availability,
-		})
-	}
-	return runAvailabilityQuery(cfg, r, cfg.e.monsterFormations, id, cfg.e.locations.resourceType, dbQuery)
-}
-
-func getMonsterFormationIDsBySublocation(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
-	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
-		return cfg.db.GetMonsterFormationIDsBySublocation(ctx, database.GetMonsterFormationIDsBySublocationParams{
-			SublocationID:  p.ParentID,
-			Availability: 	p.Availability,
-		})
-	}
-	return runAvailabilityQuery(cfg, r, cfg.e.monsterFormations, id, cfg.e.sublocations.resourceType, dbQuery)
-}
-
-func getMonsterFormationIDsByArea(cfg *Config, r *http.Request, id int32) ([]UnnamedAPIResource, error) {
-	dbQuery := func(ctx context.Context, p AvailabilityParams) ([]int32, error) {
-		return cfg.db.GetMonsterFormationIDsByArea(ctx, database.GetMonsterFormationIDsByAreaParams{
-			AreaID:  		p.ParentID,
-			Availability: 	p.Availability,
-		})
-	}
-	return runAvailabilityQuery(cfg, r, cfg.e.monsterFormations, id, cfg.e.areas.resourceType, dbQuery)
 }

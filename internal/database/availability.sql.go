@@ -40,6 +40,7 @@ type FilterItemIDsByAvailabilityParams struct {
 }
 
 // might use a source type array, if the sources need to be specified
+// needs to change (see monster query)
 func (q *Queries) FilterItemIDsByAvailability(ctx context.Context, arg FilterItemIDsByAvailabilityParams) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, filterItemIDsByAvailability, pq.Array(arg.Ids), arg.AvlType, pq.Array(arg.Availability))
 	if err != nil {
@@ -63,14 +64,85 @@ func (q *Queries) FilterItemIDsByAvailability(ctx context.Context, arg FilterIte
 	return items, nil
 }
 
+const filterMonsterFormationIDsByAvailability = `-- name: FilterMonsterFormationIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::text AS avl_type,
+        $3::availability_type[] AS availability,
+        $4::int AS loc_context_id,
+        $5::text AS loc_context_type
+),
+available_formations AS (
+    SELECT 
+        a.s_id,
+        CASE 
+            WHEN w.avl_type = 'self' THEN a.avl_self
+            WHEN w.avl_type = 'context' THEN a.avl_context
+            WHEN w.avl_type = 'area' THEN a.avl_area
+        END as current_avl
+    FROM mv_availabilities a
+    JOIN mv_geography g ON a.a_id = g.area_id
+    CROSS JOIN w
+    WHERE a.source_type = 'monster-formation'
+      AND a.s_id = ANY(w.ids)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
+)
+SELECT s_id
+FROM available_formations
+GROUP BY s_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
+`
+
+type FilterMonsterFormationIDsByAvailabilityParams struct {
+	Ids            []int32
+	AvlType        string
+	Availability   []AvailabilityType
+	LocContextID   sql.NullInt32
+	LocContextType sql.NullString
+}
+
+func (q *Queries) FilterMonsterFormationIDsByAvailability(ctx context.Context, arg FilterMonsterFormationIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterMonsterFormationIDsByAvailability,
+		pq.Array(arg.Ids),
+		arg.AvlType,
+		pq.Array(arg.Availability),
+		arg.LocContextID,
+		arg.LocContextType,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var s_id int32
+		if err := rows.Scan(&s_id); err != nil {
+			return nil, err
+		}
+		items = append(items, s_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const filterMonsterIDsByAvailability = `-- name: FilterMonsterIDsByAvailability :many
 WITH w AS (
     SELECT
         $1::int[] AS ids,
         $2::text AS avl_type,
         $3::availability_type[] AS availability,
-        $4::int AS context_id,
-        $5::text AS context_type
+        $4::int AS loc_context_id,
+        $5::text AS loc_context_type
 ),
 available_monsters AS (
     SELECT 
@@ -85,11 +157,11 @@ available_monsters AS (
     CROSS JOIN w
     WHERE a.source_type = 'monster'
       AND a.s_id = ANY(w.ids)
-      AND (w.context_id IS NULL OR CASE
-           WHEN w.context_type = 'location' THEN g.location_id
-           WHEN w.context_type = 'sublocation' THEN g.sublocation_id
-           WHEN w.context_type = 'area' THEN g.area_id
-          END = w.context_id)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
 )
 SELECT s_id
 FROM available_monsters
@@ -98,11 +170,11 @@ HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
 `
 
 type FilterMonsterIDsByAvailabilityParams struct {
-	Ids          []int32
-	AvlType      string
-	Availability []AvailabilityType
-	ContextID    sql.NullInt32
-	ContextType  sql.NullString
+	Ids            []int32
+	AvlType        string
+	Availability   []AvailabilityType
+	LocContextID   sql.NullInt32
+	LocContextType sql.NullString
 }
 
 func (q *Queries) FilterMonsterIDsByAvailability(ctx context.Context, arg FilterMonsterIDsByAvailabilityParams) ([]int32, error) {
@@ -110,8 +182,70 @@ func (q *Queries) FilterMonsterIDsByAvailability(ctx context.Context, arg Filter
 		pq.Array(arg.Ids),
 		arg.AvlType,
 		pq.Array(arg.Availability),
-		arg.ContextID,
-		arg.ContextType,
+		arg.LocContextID,
+		arg.LocContextType,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var s_id int32
+		if err := rows.Scan(&s_id); err != nil {
+			return nil, err
+		}
+		items = append(items, s_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterShopIDsByAvailability = `-- name: FilterShopIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::text AS avl_type,
+        $3::availability_type[] AS availability,
+        $4::text[] AS sub_types
+)
+SELECT s_id
+FROM (
+    SELECT 
+        a.s_id,
+        CASE 
+            WHEN w.avl_type = 'self' THEN a.avl_self
+            WHEN w.avl_type = 'context' THEN a.avl_context
+            WHEN w.avl_type = 'area' THEN a.avl_area
+        END as current_avl
+    FROM mv_availabilities a
+    CROSS JOIN w
+    WHERE a.source_type = 'shop'
+      AND a.s_id = ANY(w.ids)
+      AND (w.sub_types IS NULL OR a.sub_type = ANY(w.sub_types))
+) available_shops
+GROUP BY s_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
+`
+
+type FilterShopIDsByAvailabilityParams struct {
+	Ids          []int32
+	AvlType      string
+	Availability []AvailabilityType
+	SubTypes     []string
+}
+
+func (q *Queries) FilterShopIDsByAvailability(ctx context.Context, arg FilterShopIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterShopIDsByAvailability,
+		pq.Array(arg.Ids),
+		arg.AvlType,
+		pq.Array(arg.Availability),
+		pq.Array(arg.SubTypes),
 	)
 	if err != nil {
 		return nil, err
