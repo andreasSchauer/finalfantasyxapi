@@ -206,9 +206,7 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 		params.SubTypes = append(params.SubTypes, "equip")
 	}
 
-	if len(params.SubTypes) == 0 {
-		params.SubTypes = nil
-	}
+	params.SubTypes = h.SliceOrNil(params.SubTypes)
 
 	dbIDs, err := cfg.db.FilterShopIDsByAvailability(r.Context(), params)
 	if err != nil {
@@ -256,14 +254,80 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 	}
 
 	params := database.FilterAreaIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		Availability: availabilities,
+		Ids:          		resToIDs(resources),
+		Availability: 		availabilities,
+		RequiredSources: 	[]string{},
+		ExcludedSources: 	[]string{},
 	}
 
-	monID, err := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
-	if err == nil {
+	monID, _ := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
+	if monID != nil {
 		params.MonsterID = h.GetNullInt32(monID)
+		sourceType := ViewSourceTypeMonster
+		params.RequiredSources = append(params.RequiredSources, string(sourceType))
 	}
+
+	keyItemID, _ := getQueryIdPtr(r, cfg.e.keyItems, "key_item", i.queryLookup)
+	if keyItemID != nil {
+		params.KeyItemID = h.GetNullInt32(keyItemID)
+		sourceType := ViewSourceTypeKeyItem
+		params.RequiredSources = append(params.RequiredSources, string(sourceType))
+	}
+
+	itemID, _ := getQueryIdPtr(r, cfg.e.items, "item", i.queryLookup)
+	if itemID != nil {
+		params.ItemID = h.GetNullInt32(itemID)
+		sourceType := ViewSourceTypeItem
+		params.RequiredSources = append(params.RequiredSources, string(sourceType))
+	}
+
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup["method"])
+	if err == nil {
+		params.Methods = methods
+	}
+
+	hasMons, err := parseBooleanQuery(r, i.queryLookup["monsters"])
+	if err == nil {
+		sourceType := ViewSourceTypeMonster
+		if hasMons {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasBosses, err := parseBooleanQuery(r, i.queryLookup["boss_fights"])
+	if err == nil {
+		sourceType := ViewSourceTypeBoss
+		if hasBosses {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasShops, err := parseBooleanQuery(r, i.queryLookup["shops"])
+	if err == nil {
+		sourceType := ViewSourceTypeShop
+		if hasShops {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasTreasures, err := parseBooleanQuery(r, i.queryLookup["treasures"])
+	if err == nil {
+		sourceType := ViewSourceTypeTreasure
+		if hasTreasures {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	params.RequiredSources = h.SliceOrNil(params.RequiredSources)
+	params.ExcludedSources = h.SliceOrNil(params.ExcludedSources)
 
 	dbIDs, err := cfg.db.FilterAreaIDsByAvailability(r.Context(), params)
 	if err != nil {
@@ -286,6 +350,7 @@ type ViewSourceType string
 
 const (
 	ViewSourceTypeMonster          ViewSourceType = "monster"
+	ViewSourceTypeBoss             ViewSourceType = "boss"
 	ViewSourceTypeMonsterFormation ViewSourceType = "monster-formation"
 	ViewSourceTypeLocation         ViewSourceType = "location"
 	ViewSourceTypeSublocation      ViewSourceType = "sublocation"
@@ -295,6 +360,7 @@ const (
 	ViewSourceTypeQuest            ViewSourceType = "quest"
 	ViewSourceTypeBlitzball        ViewSourceType = "blitzball"
 	ViewSourceTypeItem             ViewSourceType = "item"
+	ViewSourceTypeKeyItem          ViewSourceType = "key-item"
 )
 
 func resToIDs[A APIResource](resources []A) []int32 {

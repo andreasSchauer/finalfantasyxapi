@@ -124,7 +124,11 @@ SELECT DISTINCT area_id FROM mv_monster_encounters ORDER BY area_id;
 
 
 -- name: GetAreaIDsWithBosses :many
-SELECT DISTINCT area_id FROM mv_monster_encounters WHERE song_id IS NOT NULL ORDER BY area_id;
+SELECT DISTINCT me.area_id
+FROM mv_monster_encounters me
+JOIN monsters m ON me.monster_id = m.id
+WHERE m.category = 'boss'
+ORDER BY me.area_id;
 
 
 -- name: GetAreaIDsWithShops :many

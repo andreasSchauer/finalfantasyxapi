@@ -17,40 +17,111 @@ WITH w AS (
     SELECT
         $1::int[] AS ids,
         $2::availability_type[] AS availability,
-        $3::int AS monster_id
+        $3::text[] AS reqs,
+        $4::text[] AS excls,
+        $5::int AS monster_id,
+        $6::int AS key_item_id,
+        $7::int AS item_id,
+        $8::text[] AS methods
 ),
-area_availabilities AS (
-    SELECT a.a_id, a.avl_self as current_avl
+available_areas AS (
+    SELECT a.a_id, a.avl_self as current_avl, 'area'::text AS s_type
     FROM mv_availabilities a
-    CROSS JOIN w
+    JOIN w ON a.a_id = ANY(w.ids)
     WHERE a.source_type = 'area'
-      AND a.a_id = ANY(w.ids)
-      AND w.monster_id IS NULL
 
     UNION ALL
 
-    SELECT a.a_id, a.avl_area as current_avl
+    SELECT a.a_id, a.avl_area as current_avl, 'monster'::text AS s_type
     FROM mv_availabilities a
-    CROSS JOIN w
+    JOIN w ON a.a_id = ANY(w.ids)
     WHERE a.source_type = 'monster'
-      AND a.a_id = ANY(w.ids)
+      AND w.monster_id IS NOT NULL
       AND a.s_id = w.monster_id
+
+    UNION ALL
+
+    SELECT
+        mis.area_id AS a_id,
+        'always'::availability_type AS current_avl,
+        'item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN items i ON mis.master_item_id = i.master_item_id
+    JOIN w ON mis.area_id = ANY(w.ids)
+    WHERE i.id = w.item_id
+      AND ARRAY[mis.availability] && (SELECT availability FROM w)
+      AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
+
+    UNION ALL
+
+    SELECT
+        mis.area_id AS a_id,
+        'always'::availability_type AS current_avl,
+        'key-item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN key_items ki ON mis.master_item_id = ki.master_item_id
+    JOIN w ON mis.area_id = ANY(w.ids)
+    WHERE ki.id = w.key_item_id
+      AND ARRAY[mis.availability] && (SELECT availability FROM w)
+
+    UNION ALL
+
+    SELECT
+        a.a_id,
+        CASE
+          WHEN a.source_type = 'monster' THEN a.avl_area
+          ELSE a.avl_self
+        END AS current_avl,
+        CASE
+          WHEN a.sub_type = 'boss' THEN 'boss'::text
+          ELSE a.source_type
+        END AS s_type
+    FROM mv_availabilities a
+    JOIN w ON a.a_id = ANY(w.ids)
+    WHERE a.source_type != 'area'
+      AND ARRAY[
+        CASE
+          WHEN a.source_type = 'monster' THEN a.avl_area
+          ELSE a.avl_self
+      END] && (SELECT availability FROM w)
 )
 SELECT a_id
-FROM area_availabilities
+FROM available_areas
 GROUP BY a_id
 HAVING ARRAY[MAX(current_avl)] && (SELECT availability FROM w)
+AND (
+    (SELECT reqs FROM w) IS NULL OR
+    ARRAY_AGG(DISTINCT s_type) @> (SELECT reqs FROM w)
+)
+AND (
+    (SELECT excls FROM w) IS NULL OR
+    NOT ARRAY_AGG(DISTINCT s_type) && (SELECT excls FROM w)
+)
 ORDER BY a_id
 `
 
 type FilterAreaIDsByAvailabilityParams struct {
-	Ids          []int32
-	Availability []AvailabilityType
-	MonsterID    sql.NullInt32
+	Ids             []int32
+	Availability    []AvailabilityType
+	RequiredSources []string
+	ExcludedSources []string
+	MonsterID       sql.NullInt32
+	KeyItemID       sql.NullInt32
+	ItemID          sql.NullInt32
+	Methods         []string
 }
 
 func (q *Queries) FilterAreaIDsByAvailability(ctx context.Context, arg FilterAreaIDsByAvailabilityParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, filterAreaIDsByAvailability, pq.Array(arg.Ids), pq.Array(arg.Availability), arg.MonsterID)
+	rows, err := q.db.QueryContext(ctx, filterAreaIDsByAvailability,
+		pq.Array(arg.Ids),
+		pq.Array(arg.Availability),
+		pq.Array(arg.RequiredSources),
+		pq.Array(arg.ExcludedSources),
+		arg.MonsterID,
+		arg.KeyItemID,
+		arg.ItemID,
+		pq.Array(arg.Methods),
+	)
 	if err != nil {
 		return nil, err
 	}

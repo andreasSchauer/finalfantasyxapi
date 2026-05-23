@@ -4069,7 +4069,7 @@ type MvAvailability struct {
 	Name        string
 	V           sql.NullInt32
 	SourceType  string
-	SubType     sql.NullString
+	SubType     string
 	AvlSelf     AvailabilityType
 	AvlContext  AvailabilityType
 	AvlArea     AvailabilityType

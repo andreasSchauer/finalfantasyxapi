@@ -452,7 +452,7 @@ SELECT DISTINCT
     'monster' AS source_type,
     CASE
         WHEN m.category = 'boss' THEN 'boss'
-        ELSE 'monster' -- I'm not quite sure how to handle it
+        ELSE 'monster' -- I'm not quite sure how to handle it, probably change GetAreasIDsWithBosses query
     END::text AS sub_type,
     m.availability AS avl_self,
     fd.availability AS avl_context,

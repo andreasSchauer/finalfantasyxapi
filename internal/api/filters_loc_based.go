@@ -4,6 +4,7 @@ import (
 	"net/http"
 )
 
+// can replace with GetAreaIDsWithItemFromMethod
 func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, error) {
 	return filterByIdAndValues(cfg, r, cfg.e.areas, id, "method", cfg.e.items.resourceType, map[string]DbQueryIntMany{
 		"monster":  cfg.db.GetAreaIDsWithItemFromMonster,

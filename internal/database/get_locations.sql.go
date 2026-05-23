@@ -320,7 +320,11 @@ func (q *Queries) GetAreaIDsWithAeons(ctx context.Context) ([]int32, error) {
 }
 
 const getAreaIDsWithBosses = `-- name: GetAreaIDsWithBosses :many
-SELECT DISTINCT area_id FROM mv_monster_encounters WHERE song_id IS NOT NULL ORDER BY area_id
+SELECT DISTINCT me.area_id
+FROM mv_monster_encounters me
+JOIN monsters m ON me.monster_id = m.id
+WHERE m.category = 'boss'
+ORDER BY me.area_id
 `
 
 func (q *Queries) GetAreaIDsWithBosses(ctx context.Context) ([]int32, error) {

@@ -109,82 +109,95 @@ WHERE a.source_type = 'treasure'
 ORDER BY a.s_id;
 
 
-
 -- name: FilterAreaIDsByAvailability :many
 WITH w AS (
     SELECT
         sqlc.arg('ids')::int[] AS ids,
         sqlc.arg('availability')::availability_type[] AS availability,
-        sqlc.narg('monster_id')::int AS monster_id
-),
-area_availabilities AS (
-    SELECT a.a_id, a.avl_self as current_avl
-    FROM mv_availabilities a
-    CROSS JOIN w
-    WHERE a.source_type = 'area'
-      AND a.a_id = ANY(w.ids)
-      AND w.monster_id IS NULL
-
-    UNION ALL
-
-    SELECT a.a_id, a.avl_area as current_avl
-    FROM mv_availabilities a
-    CROSS JOIN w
-    WHERE a.source_type = 'monster'
-      AND a.a_id = ANY(w.ids)
-      AND a.s_id = w.monster_id
-)
-SELECT a_id
-FROM area_availabilities
-GROUP BY a_id
-HAVING ARRAY[MAX(current_avl)] && (SELECT availability FROM w)
-ORDER BY a_id;
-
-
-
-
-
-WITH w AS (
-    SELECT
-        ARRAY[172]::int[] AS ids,
-        ARRAY['post']::availability_type[] AS availability,
+        sqlc.narg('required_sources')::text[] AS reqs,
+        sqlc.narg('excluded_sources')::text[] AS excls,
         sqlc.narg('monster_id')::int AS monster_id,
-        sqlc.narg('sub_sources')::text[] AS sub_sources
+        sqlc.narg('key_item_id')::int AS key_item_id,
+        sqlc.narg('item_id')::int AS item_id,
+        sqlc.narg('methods')::text[] AS methods
 ),
-area_availabilities AS (
-    SELECT a.a_id, a.avl_self as current_avl
-    FROM mv_availabilities a
-    CROSS JOIN w
-    WHERE a.source_type = 'area'
-      AND a.a_id = ANY(w.ids)
-      AND w.monster_id IS NULL
-
-    UNION ALL
-
-    SELECT a.a_id, a.avl_self as current_avl
-    FROM mv_availabilities a
-    CROSS JOIN w
-    WHERE a.source_type = 'monster'
-      AND a.a_id = ANY(w.ids)
-      AND a.s_id = w.monster_id
-
-    UNION ALL
-
-    SELECT a.a_id, a.avl_area as current_avl
+available_areas AS (
+    SELECT a.a_id, a.avl_self as current_avl, 'area'::text AS s_type
     FROM mv_availabilities a
     JOIN w ON a.a_id = ANY(w.ids)
-    WHERE a.source_type = ANY(w.sub_sources)
-      AND ARRAY[a.avl_area] && w.availability
+    WHERE a.source_type = 'area'
+
+    UNION ALL
+
+    SELECT a.a_id, a.avl_area as current_avl, 'monster'::text AS s_type
+    FROM mv_availabilities a
+    JOIN w ON a.a_id = ANY(w.ids)
+    WHERE a.source_type = 'monster'
+      AND w.monster_id IS NOT NULL
+      AND a.s_id = w.monster_id
+
+    UNION ALL
+
+    SELECT
+        mis.area_id AS a_id,
+        'always'::availability_type AS current_avl,
+        'item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN items i ON mis.master_item_id = i.master_item_id
+    JOIN w ON mis.area_id = ANY(w.ids)
+    WHERE i.id = w.item_id
+      AND ARRAY[mis.availability] && (SELECT availability FROM w)
+      AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
+
+    UNION ALL
+
+    SELECT
+        mis.area_id AS a_id,
+        'always'::availability_type AS current_avl,
+        'key-item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN key_items ki ON mis.master_item_id = ki.master_item_id
+    JOIN w ON mis.area_id = ANY(w.ids)
+    WHERE ki.id = w.key_item_id
+      AND ARRAY[mis.availability] && (SELECT availability FROM w)
+
+    UNION ALL
+
+    SELECT
+        a.a_id,
+        CASE
+          WHEN a.source_type = 'monster' THEN a.avl_area
+          ELSE a.avl_self
+        END AS current_avl,
+        CASE
+          WHEN a.sub_type = 'boss' THEN 'boss'::text
+          ELSE a.source_type
+        END AS s_type
+    FROM mv_availabilities a
+    JOIN w ON a.a_id = ANY(w.ids)
+    WHERE a.source_type != 'area'
+      AND ARRAY[
+        CASE
+          WHEN a.source_type = 'monster' THEN a.avl_area
+          ELSE a.avl_self
+      END] && (SELECT availability FROM w)
 )
 SELECT a_id
-FROM area_availabilities
+FROM available_areas
 GROUP BY a_id
-HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
-  AND (
-        (SELECT sub_sources FROM w) IS NULL OR 
-        COUNT(DISTINCT source_type) > 1
-      )
+HAVING ARRAY[MAX(current_avl)] && (SELECT availability FROM w)
+AND (
+    (SELECT reqs FROM w) IS NULL OR
+    ARRAY_AGG(DISTINCT s_type) @> (SELECT reqs FROM w)
+)
+AND (
+    (SELECT excls FROM w) IS NULL OR
+    NOT ARRAY_AGG(DISTINCT s_type) && (SELECT excls FROM w)
+)
 ORDER BY a_id;
+
+
+
 
 
 
