@@ -450,7 +450,10 @@ SELECT DISTINCT
     m.name AS name,
     m.version AS v,
     'monster' AS source_type,
-    NULL::text AS sub_type,
+    CASE
+        WHEN m.category = 'boss' THEN 'boss'
+        ELSE 'monster' -- I'm not quite sure how to handle it
+    END::text AS sub_type,
     m.availability AS avl_self,
     fd.availability AS avl_context,
     ea.availability AS avl_area,

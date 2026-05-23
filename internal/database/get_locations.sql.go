@@ -265,33 +265,6 @@ func (q *Queries) GetAreaIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getAreaIDsByAvailability = `-- name: GetAreaIDsByAvailability :many
-SELECT id FROM areas WHERE availability = ANY($1::availability_type[]) ORDER BY id
-`
-
-func (q *Queries) GetAreaIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsByAvailability, pq.Array(availability))
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getAreaIDsChocobo = `-- name: GetAreaIDsChocobo :many
 SELECT id FROM areas WHERE can_ride_chocobo = $1 ORDER BY id
 `
@@ -1088,6 +1061,33 @@ func (q *Queries) GetAreaTreasureIdPairs(ctx context.Context, areaIds []int32) (
 			return nil, err
 		}
 		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAreasByMonster = `-- name: GetAreasByMonster :many
+SELECT DISTINCT area_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY area_id
+`
+
+func (q *Queries) GetAreasByMonster(ctx context.Context, monsterID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreasByMonster, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
+			return nil, err
+		}
+		items = append(items, area_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

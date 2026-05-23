@@ -244,6 +244,36 @@ func filterAvlTreasures(cfg *Config, r *http.Request, resources []UnnamedAPIReso
 	return resNew, nil
 }
 
+func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) ([]AreaAPIResource, error) {
+	i := cfg.e.areas
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterAreaIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		Availability: availabilities,
+	}
+
+	monID, err := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
+	if err == nil {
+		params.MonsterID = h.GetNullInt32(monID)
+	}
+
+	dbIDs, err := cfg.db.FilterAreaIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
 type AvlType string
 
 const (

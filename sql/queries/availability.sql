@@ -110,9 +110,81 @@ ORDER BY a.s_id;
 
 
 
+-- name: FilterAreaIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('availability')::availability_type[] AS availability,
+        sqlc.narg('monster_id')::int AS monster_id
+),
+area_availabilities AS (
+    SELECT a.a_id, a.avl_self as current_avl
+    FROM mv_availabilities a
+    CROSS JOIN w
+    WHERE a.source_type = 'area'
+      AND a.a_id = ANY(w.ids)
+      AND w.monster_id IS NULL
+
+    UNION ALL
+
+    SELECT a.a_id, a.avl_area as current_avl
+    FROM mv_availabilities a
+    CROSS JOIN w
+    WHERE a.source_type = 'monster'
+      AND a.a_id = ANY(w.ids)
+      AND a.s_id = w.monster_id
+)
+SELECT a_id
+FROM area_availabilities
+GROUP BY a_id
+HAVING ARRAY[MAX(current_avl)] && (SELECT availability FROM w)
+ORDER BY a_id;
 
 
 
+
+
+WITH w AS (
+    SELECT
+        ARRAY[172]::int[] AS ids,
+        ARRAY['post']::availability_type[] AS availability,
+        sqlc.narg('monster_id')::int AS monster_id,
+        sqlc.narg('sub_sources')::text[] AS sub_sources
+),
+area_availabilities AS (
+    SELECT a.a_id, a.avl_self as current_avl
+    FROM mv_availabilities a
+    CROSS JOIN w
+    WHERE a.source_type = 'area'
+      AND a.a_id = ANY(w.ids)
+      AND w.monster_id IS NULL
+
+    UNION ALL
+
+    SELECT a.a_id, a.avl_self as current_avl
+    FROM mv_availabilities a
+    CROSS JOIN w
+    WHERE a.source_type = 'monster'
+      AND a.a_id = ANY(w.ids)
+      AND a.s_id = w.monster_id
+
+    UNION ALL
+
+    SELECT a.a_id, a.avl_area as current_avl
+    FROM mv_availabilities a
+    JOIN w ON a.a_id = ANY(w.ids)
+    WHERE a.source_type = ANY(w.sub_sources)
+      AND ARRAY[a.avl_area] && w.availability
+)
+SELECT a_id
+FROM area_availabilities
+GROUP BY a_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
+  AND (
+        (SELECT sub_sources FROM w) IS NULL OR 
+        COUNT(DISTINCT source_type) > 1
+      )
+ORDER BY a_id;
 
 
 

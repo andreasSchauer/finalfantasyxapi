@@ -203,6 +203,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAreaIDs,
 		getSingleFunc: cfg.getArea,
 		retrieveFunc:  cfg.retrieveAreas,
+		avlFunc:       filterAvlAreas,
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createAreaSimple,

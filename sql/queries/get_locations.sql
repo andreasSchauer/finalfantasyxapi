@@ -111,10 +111,6 @@ SELECT id FROM areas WHERE airship_drop_off = $1 ORDER BY id;
 SELECT id FROM areas WHERE can_ride_chocobo = $1 ORDER BY id;
 
 
--- name: GetAreaIDsByAvailability :many
-SELECT id FROM areas WHERE availability = ANY(sqlc.narg('availability')::availability_type[]) ORDER BY id;
-
-
 -- name: GetAreaIDsWithCharacters :many
 SELECT DISTINCT area_id::int FROM characters ORDER BY area_id;
 
@@ -137,6 +133,10 @@ SELECT DISTINCT area_id FROM shops ORDER BY area_id;
 
 -- name: GetAreaIDsWithTreasures :many
 SELECT DISTINCT area_id FROM treasures ORDER BY area_id;
+
+
+-- name: GetAreasByMonster :many
+SELECT DISTINCT area_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY area_id;
 
 
 -- name: GetAreaIDsWithItemFromMethod :many

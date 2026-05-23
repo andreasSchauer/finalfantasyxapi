@@ -509,6 +509,14 @@ func (cfg *Config) initAreasParams() {
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		{
+			Name:        "monster",
+			Description: "Searches for areas where the specified monster appears.",
+			Type:        "id",
+			ForList:     true,
+			ForSingle:   false,
+			References:  []string{createListURL(cfg, "monsters")},
+		},
+		{
 			Name:        "item",
 			Description: "Searches for areas where the specified item can be acquired. Can be specified further with the 'method' parameter.",
 			Type:        "id",

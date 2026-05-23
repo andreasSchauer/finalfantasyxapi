@@ -12,6 +12,66 @@ import (
 	"github.com/lib/pq"
 )
 
+const filterAreaIDsByAvailability = `-- name: FilterAreaIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::availability_type[] AS availability,
+        $3::int AS monster_id
+),
+area_availabilities AS (
+    SELECT a.a_id, a.avl_self as current_avl
+    FROM mv_availabilities a
+    CROSS JOIN w
+    WHERE a.source_type = 'area'
+      AND a.a_id = ANY(w.ids)
+      AND w.monster_id IS NULL
+
+    UNION ALL
+
+    SELECT a.a_id, a.avl_area as current_avl
+    FROM mv_availabilities a
+    CROSS JOIN w
+    WHERE a.source_type = 'monster'
+      AND a.a_id = ANY(w.ids)
+      AND a.s_id = w.monster_id
+)
+SELECT a_id
+FROM area_availabilities
+GROUP BY a_id
+HAVING ARRAY[MAX(current_avl)] && (SELECT availability FROM w)
+ORDER BY a_id
+`
+
+type FilterAreaIDsByAvailabilityParams struct {
+	Ids          []int32
+	Availability []AvailabilityType
+	MonsterID    sql.NullInt32
+}
+
+func (q *Queries) FilterAreaIDsByAvailability(ctx context.Context, arg FilterAreaIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterAreaIDsByAvailability, pq.Array(arg.Ids), pq.Array(arg.Availability), arg.MonsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var a_id int32
+		if err := rows.Scan(&a_id); err != nil {
+			return nil, err
+		}
+		items = append(items, a_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const filterItemIDsByAvailability = `-- name: FilterItemIDsByAvailability :many
 WITH w AS (
     SELECT
