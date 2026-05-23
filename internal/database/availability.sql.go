@@ -267,3 +267,46 @@ func (q *Queries) FilterShopIDsByAvailability(ctx context.Context, arg FilterSho
 	}
 	return items, nil
 }
+
+const filterTreasureIDsByAvailability = `-- name: FilterTreasureIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::availability_type[] AS availability
+)
+SELECT DISTINCT a.s_id
+FROM mv_availabilities a
+CROSS JOIN w
+WHERE a.source_type = 'treasure'
+  AND a.s_id = ANY(w.ids)
+  AND ARRAY[a.avl_self] &&  w.availability
+ORDER BY a.s_id
+`
+
+type FilterTreasureIDsByAvailabilityParams struct {
+	Ids          []int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) FilterTreasureIDsByAvailability(ctx context.Context, arg FilterTreasureIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterTreasureIDsByAvailability, pq.Array(arg.Ids), pq.Array(arg.Availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var s_id int32
+		if err := rows.Scan(&s_id); err != nil {
+			return nil, err
+		}
+		items = append(items, s_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

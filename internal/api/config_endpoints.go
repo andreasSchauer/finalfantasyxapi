@@ -268,7 +268,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetShopIDs,
 		getSingleFunc: cfg.getShop,
 		retrieveFunc:  cfg.retrieveShops,
-		avlFunc: 	   filterAvlShops,
+		avlFunc:       filterAvlShops,
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createShopSimple,
@@ -286,6 +286,7 @@ func (cfg *Config) EndpointsInit() {
 		resToListFunc: newUnnamedAPIResourceList,
 		retrieveQuery: cfg.db.GetTreasureIDs,
 		getSingleFunc: cfg.getTreasure,
+		avlFunc:       filterAvlTreasures,
 		retrieveFunc:  cfg.retrieveTreasures,
 	}
 

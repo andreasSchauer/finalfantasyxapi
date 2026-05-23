@@ -3435,33 +3435,6 @@ func (q *Queries) GetTreasureIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getTreasureIDsByAvailability = `-- name: GetTreasureIDsByAvailability :many
-SELECT id FROM treasures WHERE availability = ANY($1::availability_type[]) ORDER BY id
-`
-
-func (q *Queries) GetTreasureIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTreasureIDsByAvailability, pq.Array(availability))
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getTreasureIDsByIsAnimaTreasure = `-- name: GetTreasureIDsByIsAnimaTreasure :many
 SELECT id FROM treasures WHERE is_anima_treasure = $1 ORDER BY id
 `

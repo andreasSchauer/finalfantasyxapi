@@ -787,9 +787,6 @@ ORDER BY mis.source_id;
 SELECT id FROM treasures WHERE is_anima_treasure = $1 ORDER BY id;
 
 
--- name: GetTreasureIDsByAvailability :many
-SELECT id FROM treasures WHERE availability = ANY(sqlc.narg('availability')::availability_type[]) ORDER BY id;
-
 
 
 

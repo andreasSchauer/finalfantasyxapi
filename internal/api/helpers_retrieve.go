@@ -166,7 +166,6 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []Unname
 	return resNew, nil
 }
 
-
 func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
 	i := cfg.e.shops
 
@@ -182,7 +181,7 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 		Ids:          resToIDs(resources),
 		AvlType:      string(AvlTypeSelf),
 		Availability: availabilities,
-		SubTypes: 	  []string{},
+		SubTypes:     []string{},
 	}
 
 	_, err = parseIdQuery(r, i.queryLookup["auto_ability"], len(cfg.l.AutoAbilities))
@@ -220,6 +219,30 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 	return resNew, nil
 }
 
+func filterAvlTreasures(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
+	i := cfg.e.treasures
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterTreasureIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		Availability: availabilities,
+	}
+
+	dbIDs, err := cfg.db.FilterTreasureIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
 
 type AvlType string
 
