@@ -31,6 +31,7 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Subloc
 		ID:                    sublocation.ID,
 		Name:                  sublocation.Name,
 		ParentLocation:        nameToNamedAPIResource(cfg, cfg.e.locations, sublocation.Location.Name, nil),
+		Availability: 		   enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, sublocation.Availability, cfg.t.AvailabilityType),
 		ConnectedSublocations: connectedSublocations,
 		Areas:                 areas,
 		LocRel:                rel,
@@ -48,7 +49,7 @@ func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationSublocationIDs)),
 		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getSublocationsByItem)),
-		frl(idQueryWrapper(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), getSublocationsByKeyItem)),
+		frl(idQuery(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), cfg.db.GetSublocationIDsWithKeyItem)),
 		frl(boolQuery2(cfg, r, i, resources, "characters", cfg.db.GetSublocationIDsWithCharacters)),
 		frl(boolQuery2(cfg, r, i, resources, "aeons", cfg.db.GetSublocationIDsWithAeons)),
 		frl(boolQuery2(cfg, r, i, resources, "monsters", cfg.db.GetSublocationIDsWithMonsters)),

@@ -331,6 +331,15 @@ func (cfg *Config) initLocationsParams() {
 			References:  []string{createListURL(cfg, "key-items")},
 		},
 		{
+			Name:        "availability",
+			Description: "Searches for locations with the given availabilities.",
+			Type:        "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
 			Name:        "characters",
 			Description: "Searches for locations where a character permanently joins the party.",
 			Type:        "bool",
@@ -426,6 +435,15 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "key-items")},
+		},
+		{
+			Name:        "availability",
+			Description: "Searches for sublocations with the given availabilities.",
+			Type:        "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
 			Name:        "characters",

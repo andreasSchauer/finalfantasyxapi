@@ -8,7 +8,8 @@ CREATE TYPE shop_category AS ENUM ('standard', 'oaka', 'travel-agency', 'wantz')
 CREATE TABLE locations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
-    name TEXT UNIQUE NOT NULL
+    name TEXT UNIQUE NOT NULL,
+    availability availability_type NOT NULL
 );
 
 
@@ -18,6 +19,7 @@ CREATE TABLE sublocations (
     data_hash TEXT UNIQUE NOT NULL,
     location_id INTEGER NOT NULL REFERENCES locations(id),
     name TEXT UNIQUE NOT NULL,
+    availability availability_type NOT NULL,
     specification TEXT
 );
 

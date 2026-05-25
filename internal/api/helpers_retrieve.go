@@ -242,6 +242,81 @@ func filterAvlTreasures(cfg *Config, r *http.Request, resources []UnnamedAPIReso
 	return resNew, nil
 }
 
+func filterAvlQuests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
+	i := cfg.e.quests
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterQuestIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		Availability: availabilities,
+	}
+
+	dbIDs, err := cfg.db.FilterQuestIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
+func filterAvlSidequests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
+	i := cfg.e.sidequests
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterSidequestIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		Availability: availabilities,
+	}
+
+	dbIDs, err := cfg.db.FilterSidequestIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
+func filterAvlSubquests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
+	i := cfg.e.subquests
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterSubquestIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		Availability: availabilities,
+	}
+
+	dbIDs, err := cfg.db.FilterSubquestIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
 func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) ([]AreaAPIResource, error) {
 	i := cfg.e.areas
 
@@ -340,6 +415,218 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 	params.ExcludedSources = h.SliceOrNil(params.ExcludedSources)
 
 	dbIDs, err := cfg.db.FilterAreaIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
+func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
+	i := cfg.e.sublocations
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterSublocationIDsByAvailabilityParams{
+		Ids:          		resToIDs(resources),
+		Availability: 		availabilities,
+		RequiredSources: 	[]string{},
+		ExcludedSources: 	[]string{},
+	}
+
+	monID, _ := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
+	if monID != nil {
+		params.MonsterID = h.GetNullInt32(monID)
+		sourceType := ViewSourceTypeMonster
+		params.RequiredSources = append(params.RequiredSources, string(sourceType))
+	}
+
+	keyItemID, _ := getQueryIdPtr(r, cfg.e.keyItems, "key_item", i.queryLookup)
+	if keyItemID != nil {
+		params.KeyItemID = h.GetNullInt32(keyItemID)
+		sourceType := ViewSourceTypeKeyItem
+		params.RequiredSources = append(params.RequiredSources, string(sourceType))
+	}
+
+	itemID, _ := getQueryIdPtr(r, cfg.e.items, "item", i.queryLookup)
+	if itemID != nil {
+		params.ItemID = h.GetNullInt32(itemID)
+		sourceType := ViewSourceTypeItem
+		params.RequiredSources = append(params.RequiredSources, string(sourceType))
+	}
+
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup["method"])
+	if err == nil {
+		params.Methods = methods
+	}
+
+	hasMons, err := parseBooleanQuery(r, i.queryLookup["monsters"])
+	if err == nil {
+		sourceType := ViewSourceTypeMonster
+		if hasMons {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasBosses, err := parseBooleanQuery(r, i.queryLookup["boss_fights"])
+	if err == nil {
+		sourceType := ViewSourceTypeBoss
+		if hasBosses {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasShops, err := parseBooleanQuery(r, i.queryLookup["shops"])
+	if err == nil {
+		sourceType := ViewSourceTypeShop
+		if hasShops {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasTreasures, err := parseBooleanQuery(r, i.queryLookup["treasures"])
+	if err == nil {
+		sourceType := ViewSourceTypeTreasure
+		if hasTreasures {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasQuests, err := parseBooleanQuery(r, i.queryLookup["sidequests"])
+	if err == nil {
+		sourceType := ViewSourceTypeQuest
+		if hasQuests {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	params.RequiredSources = h.SliceOrNil(params.RequiredSources)
+	params.ExcludedSources = h.SliceOrNil(params.ExcludedSources)
+
+	dbIDs, err := cfg.db.FilterSublocationIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
+func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
+	i := cfg.e.locations
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterLocationIDsByAvailabilityParams{
+		Ids:          		resToIDs(resources),
+		Availability: 		availabilities,
+		RequiredSources: 	[]string{},
+		ExcludedSources: 	[]string{},
+	}
+
+	monID, _ := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
+	if monID != nil {
+		params.MonsterID = h.GetNullInt32(monID)
+		sourceType := ViewSourceTypeMonster
+		params.RequiredSources = append(params.RequiredSources, string(sourceType))
+	}
+
+	keyItemID, _ := getQueryIdPtr(r, cfg.e.keyItems, "key_item", i.queryLookup)
+	if keyItemID != nil {
+		params.KeyItemID = h.GetNullInt32(keyItemID)
+		sourceType := ViewSourceTypeKeyItem
+		params.RequiredSources = append(params.RequiredSources, string(sourceType))
+	}
+
+	itemID, _ := getQueryIdPtr(r, cfg.e.items, "item", i.queryLookup)
+	if itemID != nil {
+		params.ItemID = h.GetNullInt32(itemID)
+		sourceType := ViewSourceTypeItem
+		params.RequiredSources = append(params.RequiredSources, string(sourceType))
+	}
+
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup["method"])
+	if err == nil {
+		params.Methods = methods
+	}
+
+	hasMons, err := parseBooleanQuery(r, i.queryLookup["monsters"])
+	if err == nil {
+		sourceType := ViewSourceTypeMonster
+		if hasMons {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasBosses, err := parseBooleanQuery(r, i.queryLookup["boss_fights"])
+	if err == nil {
+		sourceType := ViewSourceTypeBoss
+		if hasBosses {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasShops, err := parseBooleanQuery(r, i.queryLookup["shops"])
+	if err == nil {
+		sourceType := ViewSourceTypeShop
+		if hasShops {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasTreasures, err := parseBooleanQuery(r, i.queryLookup["treasures"])
+	if err == nil {
+		sourceType := ViewSourceTypeTreasure
+		if hasTreasures {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	hasQuests, err := parseBooleanQuery(r, i.queryLookup["sidequests"])
+	if err == nil {
+		sourceType := ViewSourceTypeQuest
+		if hasQuests {
+			params.RequiredSources = append(params.RequiredSources, string(sourceType))
+		} else {
+			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
+		}
+	}
+
+	params.RequiredSources = h.SliceOrNil(params.RequiredSources)
+	params.ExcludedSources = h.SliceOrNil(params.ExcludedSources)
+
+	dbIDs, err := cfg.db.FilterLocationIDsByAvailability(r.Context(), params)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}

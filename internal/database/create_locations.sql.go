@@ -156,17 +156,19 @@ func (q *Queries) CreateAreaConnectionBulk(ctx context.Context, arg CreateAreaCo
 }
 
 const createLocationBulk = `-- name: CreateLocationBulk :many
-INSERT INTO locations (data_hash, name)
+INSERT INTO locations (data_hash, name, availability)
 SELECT
     unnest($1::text[]),
-    unnest($2::text[])
+    unnest($2::text[]),
+    unnest($3::availability_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
 
 type CreateLocationBulkParams struct {
-	DataHash []string
-	Name     []string
+	DataHash     []string
+	Name         []string
+	Availability []AvailabilityType
 }
 
 type CreateLocationBulkRow struct {
@@ -175,7 +177,7 @@ type CreateLocationBulkRow struct {
 }
 
 func (q *Queries) CreateLocationBulk(ctx context.Context, arg CreateLocationBulkParams) ([]CreateLocationBulkRow, error) {
-	rows, err := q.db.QueryContext(ctx, createLocationBulk, pq.Array(arg.DataHash), pq.Array(arg.Name))
+	rows, err := q.db.QueryContext(ctx, createLocationBulk, pq.Array(arg.DataHash), pq.Array(arg.Name), pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -403,19 +405,21 @@ func (q *Queries) CreateShopsItemsJunctionBulk(ctx context.Context, arg CreateSh
 }
 
 const createSublocationBulk = `-- name: CreateSublocationBulk :many
-INSERT INTO sublocations (data_hash, location_id, name)
+INSERT INTO sublocations (data_hash, location_id, name, availability)
 SELECT
     unnest($1::text[]),
     unnest($2::int[]),
-    unnest($3::text[])
+    unnest($3::text[]),
+    unnest($4::availability_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
 
 type CreateSublocationBulkParams struct {
-	DataHash   []string
-	LocationID []int32
-	Name       []string
+	DataHash     []string
+	LocationID   []int32
+	Name         []string
+	Availability []AvailabilityType
 }
 
 type CreateSublocationBulkRow struct {
@@ -424,7 +428,12 @@ type CreateSublocationBulkRow struct {
 }
 
 func (q *Queries) CreateSublocationBulk(ctx context.Context, arg CreateSublocationBulkParams) ([]CreateSublocationBulkRow, error) {
-	rows, err := q.db.QueryContext(ctx, createSublocationBulk, pq.Array(arg.DataHash), pq.Array(arg.LocationID), pq.Array(arg.Name))
+	rows, err := q.db.QueryContext(ctx, createSublocationBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.LocationID),
+		pq.Array(arg.Name),
+		pq.Array(arg.Availability),
+	)
 	if err != nil {
 		return nil, err
 	}

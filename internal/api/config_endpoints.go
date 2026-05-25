@@ -99,6 +99,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetLocationIDs,
 		getSingleFunc: cfg.getLocation,
 		retrieveFunc:  cfg.retrieveLocations,
+		avlFunc: 	   filterAvlLocations,
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createLocationSimple,
@@ -154,6 +155,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetSublocationIDs,
 		getSingleFunc: cfg.getSublocation,
 		retrieveFunc:  cfg.retrieveSublocations,
+		avlFunc: 	   filterAvlSublocations,
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createSublocationSimple,
@@ -302,6 +304,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetQuestIDs,
 		getSingleFunc: cfg.getQuest,
 		retrieveFunc:  cfg.retrieveQuests,
+		avlFunc: 	   filterAvlQuests,
 	}
 
 	e.sidequests = handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]{
@@ -315,6 +318,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetSidequestIDs,
 		getSingleFunc: cfg.getSidequest,
 		retrieveFunc:  cfg.retrieveSidequests,
+		avlFunc: 	   filterAvlSidequests,
 		subsections: map[string]Subsection{
 			"subquests": {
 				dbQuery:     cfg.db.GetSidequestSubquestIDs,
@@ -334,6 +338,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetSubquestIDs,
 		getSingleFunc: cfg.getSubquest,
 		retrieveFunc:  cfg.retrieveSubquests,
+		avlFunc: 	   filterAvlSubquests,
 	}
 
 	e.arenaCreations = handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]{

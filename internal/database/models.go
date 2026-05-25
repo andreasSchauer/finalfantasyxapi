@@ -3870,9 +3870,10 @@ type KeyItem struct {
 }
 
 type Location struct {
-	ID       int32
-	DataHash string
-	Name     string
+	ID           int32
+	DataHash     string
+	Name         string
+	Availability AvailabilityType
 }
 
 type MasterItem struct {
@@ -4433,6 +4434,7 @@ type Sublocation struct {
 	DataHash      string
 	LocationID    int32
 	Name          string
+	Availability  AvailabilityType
 	Specification sql.NullString
 }
 

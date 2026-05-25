@@ -371,64 +371,26 @@ JOIN treasures t ON t.area_id = g.area_id
 ORDER BY g.sublocation_id;
 
 
--- name: GetSublocationIDsWithItemFromMonster :many
+-- name: GetSublocationIDsWithItemFromMethod :many
+WITH w AS (
+    SELECT sqlc.arg('method')::text[] AS method
+)
 SELECT DISTINCT g.sublocation_id
 FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN items i ON mis.master_item_id = i.master_item_id
+CROSS JOIN w
 WHERE i.id = $1
-  AND mis.source_type = 'monster'
+  AND (w.method IS NULL OR mis.source_type = ANY(w.method))
 ORDER BY g.sublocation_id;
 
 
-
--- name: GetSublocationIDsWithItemFromShop :many
-SELECT DISTINCT g.sublocation_id
-FROM mv_geography g
-JOIN mv_item_sources mis ON mis.area_id = g.area_id
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'shop'
-ORDER BY g.sublocation_id;
-
-
--- name: GetSublocationIDsWithItemFromTreasure :many
-SELECT DISTINCT g.sublocation_id
-FROM mv_geography g
-JOIN mv_item_sources mis ON mis.area_id = g.area_id
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'treasure'
-ORDER BY g.sublocation_id;
-
-
--- name: GetSublocationIDsWithItemFromQuest :many
-SELECT DISTINCT g.sublocation_id
-FROM mv_geography g
-JOIN mv_item_sources mis ON mis.area_id = g.area_id
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'quest'
-ORDER BY g.sublocation_id;
-
-
--- name: GetSublocationIDsWithKeyItemFromTreasure :many
+-- name: GetSublocationIDsWithKeyItem :many
 SELECT DISTINCT g.sublocation_id
 FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
-  AND mis.source_type = 'treasure'
-ORDER BY g.sublocation_id;
-
-
--- name: GetSublocationIDsWithKeyItemFromQuest :many
-SELECT DISTINCT g.sublocation_id
-FROM mv_geography g
-JOIN mv_item_sources mis ON mis.area_id = g.area_id
-JOIN key_items ki ON mis.master_item_id = ki.master_item_id
-WHERE ki.id = $1
-  AND mis.source_type = 'quest'
 ORDER BY g.sublocation_id;
 
 
@@ -646,63 +608,28 @@ JOIN treasures t ON t.area_id = g.area_id
 ORDER BY g.location_id;
 
 
--- name: GetLocationIDsWithItemFromMonster :many
+
+
+-- name: GetLocationIDsWithItemFromMethod :many
+WITH w AS (
+    SELECT sqlc.arg('method')::text[] AS method
+)
 SELECT DISTINCT g.location_id
 FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN items i ON mis.master_item_id = i.master_item_id
+CROSS JOIN w
 WHERE i.id = $1
-  AND mis.source_type = 'monster'
+  AND (w.method IS NULL OR mis.source_type = ANY(w.method))
 ORDER BY g.location_id;
 
 
--- name: GetLocationIDsWithItemFromShop :many
-SELECT DISTINCT g.location_id
-FROM mv_geography g
-JOIN mv_item_sources mis ON mis.area_id = g.area_id
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'shop'
-ORDER BY g.location_id;
-
-
--- name: GetLocationIDsWithItemFromTreasure :many
-SELECT DISTINCT g.location_id
-FROM mv_geography g
-JOIN mv_item_sources mis ON mis.area_id = g.area_id
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'treasure'
-ORDER BY g.location_id;
-
-
--- name: GetLocationIDsWithItemFromQuest :many
-SELECT DISTINCT g.location_id
-FROM mv_geography g
-JOIN mv_item_sources mis ON mis.area_id = g.area_id
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'quest'
-ORDER BY g.location_id;
-
-
--- name: GetLocationIDsWithKeyItemFromTreasure :many
+-- name: GetLocationIDsWithKeyItem :many
 SELECT DISTINCT g.location_id
 FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
-  AND mis.source_type = 'treasure'
-ORDER BY g.location_id;
-
-
--- name: GetLocationIDsWithKeyItemFromQuest :many
-SELECT DISTINCT g.location_id
-FROM mv_geography g
-JOIN mv_item_sources mis ON mis.area_id = g.area_id
-JOIN key_items ki ON mis.master_item_id = ki.master_item_id
-WHERE ki.id = $1
-  AND mis.source_type = 'quest'
 ORDER BY g.location_id;
 
 

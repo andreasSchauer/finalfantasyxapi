@@ -30,6 +30,7 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 	response := Location{
 		ID:                 location.ID,
 		Name:               location.Name,
+		Availability: 		enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, location.Availability, cfg.t.AvailabilityType),
 		ConnectedLocations: connectedLocations,
 		Sublocations:       sublocations,
 		LocRel:             rel,
@@ -46,7 +47,7 @@ func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Loc
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getLocationsByItem)),
-		frl(idQueryWrapper(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), getLocationsByKeyItem)),
+		frl(idQuery(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), cfg.db.GetLocationIDsWithKeyItem)),
 		frl(boolQuery2(cfg, r, i, resources, "characters", cfg.db.GetLocationIDsWithCharacters)),
 		frl(boolQuery2(cfg, r, i, resources, "aeons", cfg.db.GetLocationIDsWithAeons)),
 		frl(boolQuery2(cfg, r, i, resources, "monsters", cfg.db.GetLocationIDsWithMonsters)),

@@ -5,11 +5,11 @@ import (
 )
 
 type Sublocation struct {
-	ID   int32
-	Name string `json:"sublocation"`
-
-	Areas    []Area `json:"areas"`
-	Location Location
+	ID   			int32
+	Name 			string 	`json:"sublocation"`
+	Availability 	string	`json:"availability"`
+	Areas    		[]Area 	`json:"areas"`
+	Location 		Location
 }
 
 func (s Sublocation) ToHashFields() []any {
@@ -17,6 +17,7 @@ func (s Sublocation) ToHashFields() []any {
 		fmt.Sprintf("%T", s),
 		s.Location.ID,
 		s.Name,
+		s.Availability,
 	}
 }
 

@@ -310,7 +310,7 @@ SELECT
     ia.amount,
     'treasure' AS source_type,
     t.availability,
-    t.availability AS spec_availability -- change to area availability?
+    t.availability AS spec_availability
 FROM treasures t
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id

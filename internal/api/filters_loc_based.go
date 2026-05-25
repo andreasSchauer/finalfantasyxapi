@@ -30,34 +30,45 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, 
 }
 
 func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	return filterByIdAndValues(cfg, r, cfg.e.sublocations, id, "method", cfg.e.items.resourceType, map[string]DbQueryIntMany{
-		"monster":  cfg.db.GetSublocationIDsWithItemFromMonster,
-		"treasure": cfg.db.GetSublocationIDsWithItemFromTreasure,
-		"shop":     cfg.db.GetSublocationIDsWithItemFromShop,
-		"quest":    cfg.db.GetSublocationIDsWithItemFromQuest,
+	i := cfg.e.sublocations
+	queryParamMethod := i.queryLookup["method"]
+
+	methods, err := parseValueListQuery(cfg, r, queryParamMethod)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+
+	dbIDs, err := cfg.db.GetSublocationIDsWithItemFromMethod(r.Context(), database.GetSublocationIDsWithItemFromMethodParams{
+		ID: 	id,
+		Method: methods,
 	})
+	if err != nil {
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethod, err)
+	}
+
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
 }
 
 func getLocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	return filterByIdAndValues(cfg, r, cfg.e.locations, id, "method", cfg.e.items.resourceType, map[string]DbQueryIntMany{
-		"monster":  cfg.db.GetLocationIDsWithItemFromMonster,
-		"treasure": cfg.db.GetLocationIDsWithItemFromTreasure,
-		"shop":     cfg.db.GetLocationIDsWithItemFromShop,
-		"quest":    cfg.db.GetLocationIDsWithItemFromQuest,
-	})
-}
+	i := cfg.e.locations
+	queryParamMethod := i.queryLookup["method"]
 
+	methods, err := parseValueListQuery(cfg, r, queryParamMethod)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
 
-func getSublocationsByKeyItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	return dbQueriesToApiResources(cfg, r, cfg.e.sublocations, id, cfg.e.keyItems.resourceType, map[string]DbQueryIntMany{
-		"treasure": cfg.db.GetSublocationIDsWithKeyItemFromTreasure,
-		"quest":    cfg.db.GetSublocationIDsWithKeyItemFromQuest,
+	dbIDs, err := cfg.db.GetLocationIDsWithItemFromMethod(r.Context(), database.GetLocationIDsWithItemFromMethodParams{
+		ID: 	id,
+		Method: methods,
 	})
-}
+	if err != nil {
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethod, err)
+	}
 
-func getLocationsByKeyItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	return dbQueriesToApiResources(cfg, r, cfg.e.locations, id, cfg.e.keyItems.resourceType, map[string]DbQueryIntMany{
-		"treasure": cfg.db.GetLocationIDsWithKeyItemFromTreasure,
-		"quest":    cfg.db.GetLocationIDsWithKeyItemFromQuest,
-	})
+	resources := idsToAPIResources(cfg, i, dbIDs)
+
+	return resources, nil
 }

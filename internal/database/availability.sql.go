@@ -43,13 +43,16 @@ available_areas AS (
 
     SELECT
         mis.area_id AS a_id,
-        'always'::availability_type AS current_avl,
+        'always'::availability_type AS current_avl, -- lowest rank to not raise MAX avl of GROUP BY bucket
         'item'::text AS s_type
     FROM mv_item_sources mis
     JOIN items i ON mis.master_item_id = i.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
     JOIN w ON mis.area_id = ANY(w.ids)
     WHERE i.id = w.item_id
-      AND ARRAY[mis.availability] && (SELECT availability FROM w)
+      AND ARRAY[a.avl_area] && (SELECT availability FROM w)
       AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 
     UNION ALL
@@ -60,18 +63,18 @@ available_areas AS (
         'key-item'::text AS s_type
     FROM mv_item_sources mis
     JOIN key_items ki ON mis.master_item_id = ki.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
     JOIN w ON mis.area_id = ANY(w.ids)
     WHERE ki.id = w.key_item_id
-      AND ARRAY[mis.availability] && (SELECT availability FROM w)
+      AND ARRAY[a.avl_area] && (SELECT availability FROM w)
 
     UNION ALL
 
     SELECT
         a.a_id,
-        CASE
-          WHEN a.source_type = 'monster' THEN a.avl_area
-          ELSE a.avl_self
-        END AS current_avl,
+        'always'::availability_type AS current_avl, -- avl logic already in where clause
         CASE
           WHEN a.sub_type = 'boss' THEN 'boss'::text
           ELSE a.source_type
@@ -185,6 +188,137 @@ func (q *Queries) FilterItemIDsByAvailability(ctx context.Context, arg FilterIte
 			return nil, err
 		}
 		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterLocationIDsByAvailability = `-- name: FilterLocationIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::availability_type[] AS availability,
+        $3::text[] AS reqs,
+        $4::text[] AS excls,
+        $5::int AS monster_id,
+        $6::int AS key_item_id,
+        $7::int AS item_id,
+        $8::text[] AS methods
+),
+available_locations AS (
+    SELECT l.id AS location_id, l.availability as current_avl, 'location'::text AS s_type
+    FROM locations l
+    JOIN w ON l.id = ANY(w.ids)
+
+    UNION ALL
+
+    SELECT g.location_id, a.avl_context as current_avl, 'monster'::text AS s_type
+    FROM mv_availabilities a
+    JOIN mv_geography g ON a.a_id = g.area_id
+    JOIN w ON g.location_id = ANY(w.ids)
+    WHERE a.source_type = 'monster'
+      AND w.monster_id IS NOT NULL
+      AND a.s_id = w.monster_id
+
+    UNION ALL
+
+    SELECT g.location_id, 'always'::availability_type AS current_avl, 'item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN items i ON mis.master_item_id = i.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    JOIN w ON g.location_id = ANY(w.ids)
+    WHERE i.id = w.item_id
+      AND ARRAY[a.avl_context] && (SELECT availability FROM w)
+      AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
+
+    UNION ALL
+
+    SELECT g.location_id, 'always'::availability_type AS current_avl, 'key-item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN key_items ki ON mis.master_item_id = ki.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    JOIN w ON g.location_id = ANY(w.ids)
+    WHERE ki.id = w.key_item_id
+      AND ARRAY[a.avl_context] && (SELECT availability FROM w)
+
+    UNION ALL
+
+    SELECT
+        g.location_id,
+        'always'::availability_type AS current_avl,
+        CASE
+          WHEN a.sub_type = 'boss' THEN 'boss'::text
+          ELSE a.source_type
+        END AS s_type
+    FROM mv_availabilities a
+    JOIN mv_geography g ON a.a_id = g.area_id
+    JOIN w ON g.location_id = ANY(w.ids)
+    WHERE a.source_type != 'area'
+      AND ARRAY[
+        CASE
+          WHEN a.source_type = 'shop' THEN a.avl_self
+          ELSE a.avl_context
+      END] && (SELECT availability FROM w)
+)
+SELECT location_id
+FROM available_locations
+GROUP BY location_id
+HAVING ARRAY[MAX(current_avl)] && (SELECT availability FROM w)
+AND (
+    (SELECT reqs FROM w) IS NULL OR
+    ARRAY_AGG(DISTINCT s_type) @> (SELECT reqs FROM w)
+)
+AND (
+    (SELECT excls FROM w) IS NULL OR
+    NOT ARRAY_AGG(DISTINCT s_type) && (SELECT excls FROM w)
+)
+ORDER BY location_id
+`
+
+type FilterLocationIDsByAvailabilityParams struct {
+	Ids             []int32
+	Availability    []AvailabilityType
+	RequiredSources []string
+	ExcludedSources []string
+	MonsterID       sql.NullInt32
+	KeyItemID       sql.NullInt32
+	ItemID          sql.NullInt32
+	Methods         []string
+}
+
+func (q *Queries) FilterLocationIDsByAvailability(ctx context.Context, arg FilterLocationIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterLocationIDsByAvailability,
+		pq.Array(arg.Ids),
+		pq.Array(arg.Availability),
+		pq.Array(arg.RequiredSources),
+		pq.Array(arg.ExcludedSources),
+		arg.MonsterID,
+		arg.KeyItemID,
+		arg.ItemID,
+		pq.Array(arg.Methods),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
+			return nil, err
+		}
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -337,6 +471,49 @@ func (q *Queries) FilterMonsterIDsByAvailability(ctx context.Context, arg Filter
 	return items, nil
 }
 
+const filterQuestIDsByAvailability = `-- name: FilterQuestIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::availability_type[] AS availability
+)
+SELECT DISTINCT a.s_id
+FROM mv_availabilities a
+CROSS JOIN w
+WHERE a.source_type = 'quest'
+  AND a.s_id = ANY(w.ids)
+  AND ARRAY[a.avl_self] &&  w.availability
+ORDER BY a.s_id
+`
+
+type FilterQuestIDsByAvailabilityParams struct {
+	Ids          []int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) FilterQuestIDsByAvailability(ctx context.Context, arg FilterQuestIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterQuestIDsByAvailability, pq.Array(arg.Ids), pq.Array(arg.Availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var s_id int32
+		if err := rows.Scan(&s_id); err != nil {
+			return nil, err
+		}
+		items = append(items, s_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const filterShopIDsByAvailability = `-- name: FilterShopIDsByAvailability :many
 WITH w AS (
     SELECT
@@ -389,6 +566,223 @@ func (q *Queries) FilterShopIDsByAvailability(ctx context.Context, arg FilterSho
 			return nil, err
 		}
 		items = append(items, s_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterSidequestIDsByAvailability = `-- name: FilterSidequestIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::availability_type[] AS availability
+)
+SELECT DISTINCT s.id
+FROM sidequests s
+JOIN mv_availabilities a ON s.quest_id = a.s_id AND a.source_type = 'quest'
+CROSS JOIN w
+WHERE s.id = ANY(w.ids)
+  AND ARRAY[a.avl_self] &&  w.availability
+ORDER BY s.id
+`
+
+type FilterSidequestIDsByAvailabilityParams struct {
+	Ids          []int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) FilterSidequestIDsByAvailability(ctx context.Context, arg FilterSidequestIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterSidequestIDsByAvailability, pq.Array(arg.Ids), pq.Array(arg.Availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterSublocationIDsByAvailability = `-- name: FilterSublocationIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::availability_type[] AS availability,
+        $3::text[] AS reqs,
+        $4::text[] AS excls,
+        $5::int AS monster_id,
+        $6::int AS key_item_id,
+        $7::int AS item_id,
+        $8::text[] AS methods
+),
+available_sublocations AS (
+    SELECT s.id AS sublocation_id, s.availability as current_avl, 'sublocation'::text AS s_type
+    FROM sublocations s
+    JOIN w ON s.id = ANY(w.ids)
+
+    UNION ALL
+
+    SELECT g.sublocation_id, a.avl_context as current_avl, 'monster'::text AS s_type
+    FROM mv_availabilities a
+    JOIN mv_geography g ON a.a_id = g.area_id
+    JOIN w ON g.sublocation_id = ANY(w.ids)
+    WHERE a.source_type = 'monster'
+      AND w.monster_id IS NOT NULL
+      AND a.s_id = w.monster_id
+
+    UNION ALL
+
+    SELECT g.sublocation_id, 'always'::availability_type AS current_avl, 'item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN items i ON mis.master_item_id = i.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    JOIN w ON g.sublocation_id = ANY(w.ids)
+    WHERE i.id = w.item_id
+      AND ARRAY[a.avl_context] && (SELECT availability FROM w)
+      AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
+
+    UNION ALL
+
+    SELECT g.sublocation_id, 'always'::availability_type AS current_avl, 'key-item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN key_items ki ON mis.master_item_id = ki.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    JOIN w ON g.sublocation_id = ANY(w.ids)
+    WHERE ki.id = w.key_item_id
+      AND ARRAY[a.avl_context] && (SELECT availability FROM w)
+
+    UNION ALL
+
+    SELECT
+        g.sublocation_id,
+        'always'::availability_type AS current_avl,
+        CASE
+          WHEN a.sub_type = 'boss' THEN 'boss'::text
+          ELSE a.source_type
+        END AS s_type
+    FROM mv_availabilities a
+    JOIN mv_geography g ON a.a_id = g.area_id
+    JOIN w ON g.sublocation_id = ANY(w.ids)
+    WHERE a.source_type != 'area'
+      AND ARRAY[
+        CASE
+          WHEN a.source_type = 'shop' THEN a.avl_self
+          ELSE a.avl_context
+      END] && (SELECT availability FROM w)
+)
+SELECT sublocation_id
+FROM available_sublocations
+GROUP BY sublocation_id
+HAVING ARRAY[MAX(current_avl)] && (SELECT availability FROM w)
+AND (
+    (SELECT reqs FROM w) IS NULL OR
+    ARRAY_AGG(DISTINCT s_type) @> (SELECT reqs FROM w)
+)
+AND (
+    (SELECT excls FROM w) IS NULL OR
+    NOT ARRAY_AGG(DISTINCT s_type) && (SELECT excls FROM w)
+)
+ORDER BY sublocation_id
+`
+
+type FilterSublocationIDsByAvailabilityParams struct {
+	Ids             []int32
+	Availability    []AvailabilityType
+	RequiredSources []string
+	ExcludedSources []string
+	MonsterID       sql.NullInt32
+	KeyItemID       sql.NullInt32
+	ItemID          sql.NullInt32
+	Methods         []string
+}
+
+func (q *Queries) FilterSublocationIDsByAvailability(ctx context.Context, arg FilterSublocationIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterSublocationIDsByAvailability,
+		pq.Array(arg.Ids),
+		pq.Array(arg.Availability),
+		pq.Array(arg.RequiredSources),
+		pq.Array(arg.ExcludedSources),
+		arg.MonsterID,
+		arg.KeyItemID,
+		arg.ItemID,
+		pq.Array(arg.Methods),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
+			return nil, err
+		}
+		items = append(items, sublocation_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterSubquestIDsByAvailability = `-- name: FilterSubquestIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::availability_type[] AS availability
+)
+SELECT DISTINCT s.id
+FROM subquests s
+JOIN mv_availabilities a ON s.quest_id = a.s_id AND a.source_type = 'quest'
+CROSS JOIN w
+WHERE s.id = ANY(w.ids)
+  AND ARRAY[a.avl_self] &&  w.availability
+ORDER BY s.id
+`
+
+type FilterSubquestIDsByAvailabilityParams struct {
+	Ids          []int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) FilterSubquestIDsByAvailability(ctx context.Context, arg FilterSubquestIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterSubquestIDsByAvailability, pq.Array(arg.Ids), pq.Array(arg.Availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

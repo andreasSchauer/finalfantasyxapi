@@ -11,13 +11,15 @@ func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) 
 	locations := dedupeRows(l.json.locations, l.Hashes)
 
 	params := database.CreateLocationBulkParams{
-		DataHash: make([]string, len(locations)),
-		Name:     make([]string, len(locations)),
+		DataHash: 		make([]string, len(locations)),
+		Name:     		make([]string, len(locations)),
+		Availability: 	make([]database.AvailabilityType, len(locations)),
 	}
 
-	for i, mi := range locations {
-		params.DataHash[i] = generateDataHash(mi)
-		params.Name[i] = mi.Name
+	for i, l := range locations {
+		params.DataHash[i] = generateDataHash(l)
+		params.Name[i] = l.Name
+		params.Availability[i] = database.AvailabilityType(l.Availability)
 	}
 
 	dbRows, err := qtx.CreateLocationBulk(ctx, params)

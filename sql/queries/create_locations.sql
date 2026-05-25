@@ -1,18 +1,20 @@
 -- name: CreateLocationBulk :many
-INSERT INTO locations (data_hash, name)
+INSERT INTO locations (data_hash, name, availability)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
-    unnest(sqlc.arg('name')::text[])
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('availability')::availability_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 
 
 -- name: CreateSublocationBulk :many
-INSERT INTO sublocations (data_hash, location_id, name)
+INSERT INTO sublocations (data_hash, location_id, name, availability)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('location_id')::int[]),
-    unnest(sqlc.arg('name')::text[])
+    unnest(sqlc.arg('name')::text[]),
+    unnest(sqlc.arg('availability')::availability_type[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 

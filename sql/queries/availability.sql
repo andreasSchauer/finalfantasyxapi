@@ -109,6 +109,51 @@ WHERE a.source_type = 'treasure'
 ORDER BY a.s_id;
 
 
+-- name: FilterQuestIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('availability')::availability_type[] AS availability
+)
+SELECT DISTINCT a.s_id
+FROM mv_availabilities a
+CROSS JOIN w
+WHERE a.source_type = 'quest'
+  AND a.s_id = ANY(w.ids)
+  AND ARRAY[a.avl_self] &&  w.availability
+ORDER BY a.s_id;
+
+
+-- name: FilterSidequestIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('availability')::availability_type[] AS availability
+)
+SELECT DISTINCT s.id
+FROM sidequests s
+JOIN mv_availabilities a ON s.quest_id = a.s_id AND a.source_type = 'quest'
+CROSS JOIN w
+WHERE s.id = ANY(w.ids)
+  AND ARRAY[a.avl_self] &&  w.availability
+ORDER BY s.id;
+
+
+-- name: FilterSubquestIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('availability')::availability_type[] AS availability
+)
+SELECT DISTINCT s.id
+FROM subquests s
+JOIN mv_availabilities a ON s.quest_id = a.s_id AND a.source_type = 'quest'
+CROSS JOIN w
+WHERE s.id = ANY(w.ids)
+  AND ARRAY[a.avl_self] &&  w.availability
+ORDER BY s.id;
+
+
 -- name: FilterAreaIDsByAvailability :many
 WITH w AS (
     SELECT
@@ -140,13 +185,16 @@ available_areas AS (
 
     SELECT
         mis.area_id AS a_id,
-        'always'::availability_type AS current_avl,
+        'always'::availability_type AS current_avl, -- lowest rank to not raise MAX avl of GROUP BY bucket
         'item'::text AS s_type
     FROM mv_item_sources mis
     JOIN items i ON mis.master_item_id = i.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
     JOIN w ON mis.area_id = ANY(w.ids)
     WHERE i.id = w.item_id
-      AND ARRAY[mis.availability] && (SELECT availability FROM w)
+      AND ARRAY[a.avl_area] && (SELECT availability FROM w)
       AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 
     UNION ALL
@@ -157,18 +205,18 @@ available_areas AS (
         'key-item'::text AS s_type
     FROM mv_item_sources mis
     JOIN key_items ki ON mis.master_item_id = ki.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
     JOIN w ON mis.area_id = ANY(w.ids)
     WHERE ki.id = w.key_item_id
-      AND ARRAY[mis.availability] && (SELECT availability FROM w)
+      AND ARRAY[a.avl_area] && (SELECT availability FROM w)
 
     UNION ALL
 
     SELECT
         a.a_id,
-        CASE
-          WHEN a.source_type = 'monster' THEN a.avl_area
-          ELSE a.avl_self
-        END AS current_avl,
+        'always'::availability_type AS current_avl, -- avl logic already in where clause
         CASE
           WHEN a.sub_type = 'boss' THEN 'boss'::text
           ELSE a.source_type
@@ -197,6 +245,184 @@ AND (
 ORDER BY a_id;
 
 
+
+
+-- name: FilterSublocationIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('availability')::availability_type[] AS availability,
+        sqlc.narg('required_sources')::text[] AS reqs,
+        sqlc.narg('excluded_sources')::text[] AS excls,
+        sqlc.narg('monster_id')::int AS monster_id,
+        sqlc.narg('key_item_id')::int AS key_item_id,
+        sqlc.narg('item_id')::int AS item_id,
+        sqlc.narg('methods')::text[] AS methods
+),
+available_sublocations AS (
+    SELECT s.id AS sublocation_id, s.availability as current_avl, 'sublocation'::text AS s_type
+    FROM sublocations s
+    JOIN w ON s.id = ANY(w.ids)
+
+    UNION ALL
+
+    SELECT g.sublocation_id, a.avl_context as current_avl, 'monster'::text AS s_type
+    FROM mv_availabilities a
+    JOIN mv_geography g ON a.a_id = g.area_id
+    JOIN w ON g.sublocation_id = ANY(w.ids)
+    WHERE a.source_type = 'monster'
+      AND w.monster_id IS NOT NULL
+      AND a.s_id = w.monster_id
+
+    UNION ALL
+
+    SELECT g.sublocation_id, 'always'::availability_type AS current_avl, 'item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN items i ON mis.master_item_id = i.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    JOIN w ON g.sublocation_id = ANY(w.ids)
+    WHERE i.id = w.item_id
+      AND ARRAY[a.avl_context] && (SELECT availability FROM w)
+      AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
+
+    UNION ALL
+
+    SELECT g.sublocation_id, 'always'::availability_type AS current_avl, 'key-item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN key_items ki ON mis.master_item_id = ki.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    JOIN w ON g.sublocation_id = ANY(w.ids)
+    WHERE ki.id = w.key_item_id
+      AND ARRAY[a.avl_context] && (SELECT availability FROM w)
+
+    UNION ALL
+
+    SELECT
+        g.sublocation_id,
+        'always'::availability_type AS current_avl,
+        CASE
+          WHEN a.sub_type = 'boss' THEN 'boss'::text
+          ELSE a.source_type
+        END AS s_type
+    FROM mv_availabilities a
+    JOIN mv_geography g ON a.a_id = g.area_id
+    JOIN w ON g.sublocation_id = ANY(w.ids)
+    WHERE a.source_type != 'area'
+      AND ARRAY[
+        CASE
+          WHEN a.source_type = 'shop' THEN a.avl_self
+          ELSE a.avl_context
+      END] && (SELECT availability FROM w)
+)
+SELECT sublocation_id
+FROM available_sublocations
+GROUP BY sublocation_id
+HAVING ARRAY[MAX(current_avl)] && (SELECT availability FROM w)
+AND (
+    (SELECT reqs FROM w) IS NULL OR
+    ARRAY_AGG(DISTINCT s_type) @> (SELECT reqs FROM w)
+)
+AND (
+    (SELECT excls FROM w) IS NULL OR
+    NOT ARRAY_AGG(DISTINCT s_type) && (SELECT excls FROM w)
+)
+ORDER BY sublocation_id;
+
+
+
+
+-- name: FilterLocationIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('availability')::availability_type[] AS availability,
+        sqlc.narg('required_sources')::text[] AS reqs,
+        sqlc.narg('excluded_sources')::text[] AS excls,
+        sqlc.narg('monster_id')::int AS monster_id,
+        sqlc.narg('key_item_id')::int AS key_item_id,
+        sqlc.narg('item_id')::int AS item_id,
+        sqlc.narg('methods')::text[] AS methods
+),
+available_locations AS (
+    SELECT l.id AS location_id, l.availability as current_avl, 'location'::text AS s_type
+    FROM locations l
+    JOIN w ON l.id = ANY(w.ids)
+
+    UNION ALL
+
+    SELECT g.location_id, a.avl_context as current_avl, 'monster'::text AS s_type
+    FROM mv_availabilities a
+    JOIN mv_geography g ON a.a_id = g.area_id
+    JOIN w ON g.location_id = ANY(w.ids)
+    WHERE a.source_type = 'monster'
+      AND w.monster_id IS NOT NULL
+      AND a.s_id = w.monster_id
+
+    UNION ALL
+
+    SELECT g.location_id, 'always'::availability_type AS current_avl, 'item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN items i ON mis.master_item_id = i.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    JOIN w ON g.location_id = ANY(w.ids)
+    WHERE i.id = w.item_id
+      AND ARRAY[a.avl_context] && (SELECT availability FROM w)
+      AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
+
+    UNION ALL
+
+    SELECT g.location_id, 'always'::availability_type AS current_avl, 'key-item'::text AS s_type
+    FROM mv_item_sources mis
+    JOIN key_items ki ON mis.master_item_id = ki.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    JOIN w ON g.location_id = ANY(w.ids)
+    WHERE ki.id = w.key_item_id
+      AND ARRAY[a.avl_context] && (SELECT availability FROM w)
+
+    UNION ALL
+
+    SELECT
+        g.location_id,
+        'always'::availability_type AS current_avl,
+        CASE
+          WHEN a.sub_type = 'boss' THEN 'boss'::text
+          ELSE a.source_type
+        END AS s_type
+    FROM mv_availabilities a
+    JOIN mv_geography g ON a.a_id = g.area_id
+    JOIN w ON g.location_id = ANY(w.ids)
+    WHERE a.source_type != 'area'
+      AND ARRAY[
+        CASE
+          WHEN a.source_type = 'shop' THEN a.avl_self
+          ELSE a.avl_context
+      END] && (SELECT availability FROM w)
+)
+SELECT location_id
+FROM available_locations
+GROUP BY location_id
+HAVING ARRAY[MAX(current_avl)] && (SELECT availability FROM w)
+AND (
+    (SELECT reqs FROM w) IS NULL OR
+    ARRAY_AGG(DISTINCT s_type) @> (SELECT reqs FROM w)
+)
+AND (
+    (SELECT excls FROM w) IS NULL OR
+    NOT ARRAY_AGG(DISTINCT s_type) && (SELECT excls FROM w)
+)
+ORDER BY location_id;
 
 
 
