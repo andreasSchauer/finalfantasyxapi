@@ -32,6 +32,139 @@ GROUP BY s_id
 HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w);
 
 
+-- name: FilterMasterItemIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('avl_type')::text AS avl_type,
+        sqlc.arg('availability')::availability_type[] AS availability,
+        sqlc.narg('loc_context_id')::int AS loc_context_id,
+        sqlc.narg('loc_context_type')::text AS loc_context_type
+),
+available_master_items AS (
+    SELECT 
+        mis.master_item_id,
+        CASE
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
+            WHEN w.avl_type = 'self' THEN a.avl_self
+            WHEN w.avl_type = 'context' THEN a.avl_context
+            WHEN w.avl_type = 'area' THEN a.avl_area
+        END as current_avl
+    FROM mv_item_sources mis
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE mis.master_item_id = ANY(w.ids)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
+)
+SELECT master_item_id
+FROM available_master_items
+GROUP BY master_item_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w);
+
+
+-- name: FilterItemIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('avl_type')::text AS avl_type,
+        sqlc.arg('availability')::availability_type[] AS availability,
+        sqlc.narg('loc_context_id')::int AS loc_context_id,
+        sqlc.narg('loc_context_type')::text AS loc_context_type
+),
+available_items AS (
+    SELECT 
+        i.id AS item_id,
+        CASE
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
+            WHEN w.avl_type = 'self' THEN a.avl_self
+            WHEN w.avl_type = 'context' THEN a.avl_context
+            WHEN w.avl_type = 'area' THEN a.avl_area
+        END as current_avl
+    FROM items i
+    JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE i.id = ANY(w.ids)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
+)
+SELECT item_id
+FROM available_items
+GROUP BY item_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w);
+
+
+-- name: FilterKeyItemIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('availability')::availability_type[] AS availability,
+        sqlc.narg('loc_context_id')::int AS loc_context_id,
+        sqlc.narg('loc_context_type')::text AS loc_context_type
+),
+available_key_items AS (
+    SELECT 
+        ki.id AS key_item_id,
+        a.avl_self as current_avl
+    FROM key_items ki
+    JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE ki.id = ANY(w.ids)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
+)
+SELECT key_item_id
+FROM available_key_items
+GROUP BY key_item_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w);
+
+
+-- name: FilterPrimerIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('availability')::availability_type[] AS availability
+),
+available_primers AS (
+    SELECT 
+        p.id AS primer_id,
+        a.avl_self as current_avl
+    FROM primers p
+    JOIN key_items ki ON p.key_item_id = ki.id
+    JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE p.id = ANY(w.ids)
+)
+SELECT primer_id
+FROM available_primers
+GROUP BY primer_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w);
+
+
 
 -- name: FilterMonsterFormationIDsByAvailability :many
 WITH w AS (
@@ -423,29 +556,3 @@ AND (
     NOT ARRAY_AGG(DISTINCT s_type) && (SELECT excls FROM w)
 )
 ORDER BY location_id;
-
-
-
-
-
--- might use a source type array, if the sources need to be specified
--- needs to change (see monster query)
--- name: FilterItemIDsByAvailability :many
-WITH w AS (
-    SELECT
-        sqlc.arg('ids')::int[] AS ids,
-        sqlc.arg('avl_type')::text AS avl_type,
-        sqlc.arg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT i.id
-FROM items i
-JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
-JOIN mv_availabilities a ON mis.source_id = a.s_id AND mis.source_type = a.source_type
-CROSS JOIN w
-WHERE i.id = ANY(w.ids)
-  AND CASE
-        WHEN w.avl_type = 'self' THEN a.avl_self
-        WHEN w.avl_type = 'context' THEN a.avl_context
-        WHEN w.avl_type = 'area' THEN a.avl_area
-      END = ANY(w.availability)
-ORDER BY i.id;

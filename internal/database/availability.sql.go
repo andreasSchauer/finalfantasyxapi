@@ -151,43 +151,133 @@ WITH w AS (
     SELECT
         $1::int[] AS ids,
         $2::text AS avl_type,
-        $3::availability_type[] AS availability
+        $3::availability_type[] AS availability,
+        $4::int AS loc_context_id,
+        $5::text AS loc_context_type
+),
+available_items AS (
+    SELECT 
+        i.id AS item_id,
+        CASE
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
+            WHEN w.avl_type = 'self' THEN a.avl_self
+            WHEN w.avl_type = 'context' THEN a.avl_context
+            WHEN w.avl_type = 'area' THEN a.avl_area
+        END as current_avl
+    FROM items i
+    JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE i.id = ANY(w.ids)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
 )
-SELECT DISTINCT i.id
-FROM items i
-JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
-JOIN mv_availabilities a ON mis.source_id = a.s_id AND mis.source_type = a.source_type
-CROSS JOIN w
-WHERE i.id = ANY(w.ids)
-  AND CASE
-        WHEN w.avl_type = 'self' THEN a.avl_self
-        WHEN w.avl_type = 'context' THEN a.avl_context
-        WHEN w.avl_type = 'area' THEN a.avl_area
-      END = ANY(w.availability)
-ORDER BY i.id
+SELECT item_id
+FROM available_items
+GROUP BY item_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
 `
 
 type FilterItemIDsByAvailabilityParams struct {
-	Ids          []int32
-	AvlType      string
-	Availability []AvailabilityType
+	Ids            []int32
+	AvlType        string
+	Availability   []AvailabilityType
+	LocContextID   sql.NullInt32
+	LocContextType sql.NullString
 }
 
-// might use a source type array, if the sources need to be specified
-// needs to change (see monster query)
 func (q *Queries) FilterItemIDsByAvailability(ctx context.Context, arg FilterItemIDsByAvailabilityParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, filterItemIDsByAvailability, pq.Array(arg.Ids), arg.AvlType, pq.Array(arg.Availability))
+	rows, err := q.db.QueryContext(ctx, filterItemIDsByAvailability,
+		pq.Array(arg.Ids),
+		arg.AvlType,
+		pq.Array(arg.Availability),
+		arg.LocContextID,
+		arg.LocContextType,
+	)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
+		var item_id int32
+		if err := rows.Scan(&item_id); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, item_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterKeyItemIDsByAvailability = `-- name: FilterKeyItemIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::availability_type[] AS availability,
+        $3::int AS loc_context_id,
+        $4::text AS loc_context_type
+),
+available_key_items AS (
+    SELECT 
+        ki.id AS key_item_id,
+        a.avl_self as current_avl
+    FROM key_items ki
+    JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE ki.id = ANY(w.ids)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
+)
+SELECT key_item_id
+FROM available_key_items
+GROUP BY key_item_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
+`
+
+type FilterKeyItemIDsByAvailabilityParams struct {
+	Ids            []int32
+	Availability   []AvailabilityType
+	LocContextID   sql.NullInt32
+	LocContextType sql.NullString
+}
+
+func (q *Queries) FilterKeyItemIDsByAvailability(ctx context.Context, arg FilterKeyItemIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterKeyItemIDsByAvailability,
+		pq.Array(arg.Ids),
+		pq.Array(arg.Availability),
+		arg.LocContextID,
+		arg.LocContextType,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var key_item_id int32
+		if err := rows.Scan(&key_item_id); err != nil {
+			return nil, err
+		}
+		items = append(items, key_item_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -319,6 +409,80 @@ func (q *Queries) FilterLocationIDsByAvailability(ctx context.Context, arg Filte
 			return nil, err
 		}
 		items = append(items, location_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterMasterItemIDsByAvailability = `-- name: FilterMasterItemIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::text AS avl_type,
+        $3::availability_type[] AS availability,
+        $4::int AS loc_context_id,
+        $5::text AS loc_context_type
+),
+available_master_items AS (
+    SELECT 
+        mis.master_item_id,
+        CASE
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
+            WHEN w.avl_type = 'self' THEN a.avl_self
+            WHEN w.avl_type = 'context' THEN a.avl_context
+            WHEN w.avl_type = 'area' THEN a.avl_area
+        END as current_avl
+    FROM mv_item_sources mis
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE mis.master_item_id = ANY(w.ids)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
+)
+SELECT master_item_id
+FROM available_master_items
+GROUP BY master_item_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
+`
+
+type FilterMasterItemIDsByAvailabilityParams struct {
+	Ids            []int32
+	AvlType        string
+	Availability   []AvailabilityType
+	LocContextID   sql.NullInt32
+	LocContextType sql.NullString
+}
+
+func (q *Queries) FilterMasterItemIDsByAvailability(ctx context.Context, arg FilterMasterItemIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterMasterItemIDsByAvailability,
+		pq.Array(arg.Ids),
+		arg.AvlType,
+		pq.Array(arg.Availability),
+		arg.LocContextID,
+		arg.LocContextType,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var master_item_id int32
+		if err := rows.Scan(&master_item_id); err != nil {
+			return nil, err
+		}
+		items = append(items, master_item_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -461,6 +625,60 @@ func (q *Queries) FilterMonsterIDsByAvailability(ctx context.Context, arg Filter
 			return nil, err
 		}
 		items = append(items, s_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterPrimerIDsByAvailability = `-- name: FilterPrimerIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::availability_type[] AS availability
+),
+available_primers AS (
+    SELECT 
+        p.id AS primer_id,
+        a.avl_self as current_avl
+    FROM primers p
+    JOIN key_items ki ON p.key_item_id = ki.id
+    JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE p.id = ANY(w.ids)
+)
+SELECT primer_id
+FROM available_primers
+GROUP BY primer_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
+`
+
+type FilterPrimerIDsByAvailabilityParams struct {
+	Ids          []int32
+	Availability []AvailabilityType
+}
+
+func (q *Queries) FilterPrimerIDsByAvailability(ctx context.Context, arg FilterPrimerIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterPrimerIDsByAvailability, pq.Array(arg.Ids), pq.Array(arg.Availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var primer_id int32
+		if err := rows.Scan(&primer_id); err != nil {
+			return nil, err
+		}
+		items = append(items, primer_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
