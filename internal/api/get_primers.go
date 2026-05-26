@@ -40,6 +40,6 @@ func (cfg *Config) retrievePrimers(r *http.Request, i handlerInput[seeding.Prime
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetPrimerIDsByAvailability)),
+
 	})
 }

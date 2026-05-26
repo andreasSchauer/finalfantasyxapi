@@ -58,12 +58,11 @@ func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seeding.Item, I
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(enumListQuery(cfg, r, i, cfg.t.ItemCategory, resources, "category", cfg.db.GetItemIDsCategory)),
-		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetItemIDsByAvailability)),
 		frl(boolQuery2(cfg, r, i, resources, "has_ability", cfg.db.GetItemIDsWithAbility)),
 		frl(nameIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetItemIDsByRelatedStat)),
 		frl(valueQuery(cfg, r, i, resources, "method", cfg.db.GetItemIDsByMethod)),
-		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), getItemIDsByLocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), getItemIDsBySublocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.e.areas.objLookup), getItemIDsByArea)),
+		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), getItemsByLocation)),
+		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), getItemsBySublocation)),
+		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.e.areas.objLookup), getItemsByArea)),
 	})
 }

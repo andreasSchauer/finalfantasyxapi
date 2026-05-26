@@ -2516,7 +2516,7 @@ func (cfg *Config) initSpheresParams() {
 		},
 		{
 			Name:        "repeatable",
-			Description: "Only displays an sphere's related monsters and quests that can be farmed.",
+			Description: "Only displays a sphere's related monsters and quests that can be farmed.",
 			Type:        "bool",
 			ForList:     false,
 			ForSingle:   true,
@@ -2528,6 +2528,32 @@ func (cfg *Config) initSpheresParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.SphereColor.lookup,
+		},
+		{
+			Name:          "location",
+			Description:   "Searches for spheres that can be obtained at the specified location.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			ReplacedBy:    []string{"sublocation", "area"},
+			References:    []string{createListURL(cfg, "locations")},
+		},
+		{
+			Name:          "sublocation",
+			Description:   "Searches for spheres that can be obtained at the specified sublocation.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			ReplacedBy:    []string{"area"},
+			References:    []string{createListURL(cfg, "sublocations")},
+		},
+		{
+			Name:          "area",
+			Description:   "Searches for spheres that can be obtained in the specified area.",
+			Type:          "id",
+			ForList:       true,
+			ForSingle:     false,
+			References:    []string{createListURL(cfg, "area")},
 		},
 	}
 

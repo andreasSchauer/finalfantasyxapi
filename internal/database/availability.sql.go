@@ -837,6 +837,82 @@ func (q *Queries) FilterSidequestIDsByAvailability(ctx context.Context, arg Filt
 	return items, nil
 }
 
+const filterSphereIDsByAvailability = `-- name: FilterSphereIDsByAvailability :many
+WITH w AS (
+    SELECT
+        $1::int[] AS ids,
+        $2::text AS avl_type,
+        $3::availability_type[] AS availability,
+        $4::int AS loc_context_id,
+        $5::text AS loc_context_type
+),
+available_spheres AS (
+    SELECT 
+        s.id AS sphere_id,
+        CASE
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
+            WHEN w.avl_type = 'self' THEN a.avl_self
+            WHEN w.avl_type = 'context' THEN a.avl_context
+            WHEN w.avl_type = 'area' THEN a.avl_area
+        END as current_avl
+    FROM spheres s
+    JOIN items i ON s.item_id = i.id
+    JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE s.id = ANY(w.ids)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
+)
+SELECT sphere_id
+FROM available_spheres
+GROUP BY sphere_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w)
+`
+
+type FilterSphereIDsByAvailabilityParams struct {
+	Ids            []int32
+	AvlType        string
+	Availability   []AvailabilityType
+	LocContextID   sql.NullInt32
+	LocContextType sql.NullString
+}
+
+func (q *Queries) FilterSphereIDsByAvailability(ctx context.Context, arg FilterSphereIDsByAvailabilityParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterSphereIDsByAvailability,
+		pq.Array(arg.Ids),
+		arg.AvlType,
+		pq.Array(arg.Availability),
+		arg.LocContextID,
+		arg.LocContextType,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var sphere_id int32
+		if err := rows.Scan(&sphere_id); err != nil {
+			return nil, err
+		}
+		items = append(items, sphere_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const filterSublocationIDsByAvailability = `-- name: FilterSublocationIDsByAvailability :many
 WITH w AS (
     SELECT

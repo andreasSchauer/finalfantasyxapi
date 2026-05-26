@@ -166,6 +166,227 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []Unname
 	return resNew, nil
 }
 
+func filterAvlMasterItems(cfg *Config, r *http.Request, resources []TypedAPIResource) ([]TypedAPIResource, error) {
+	i := cfg.e.allItems
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterMasterItemIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		AvlType:      string(AvlTypeSelf),
+		Availability: availabilities,
+	}
+
+	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeContext)
+		params.LocContextID = h.GetNullInt32(locID)
+		ct := string(ViewSourceTypeLocation)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeContext)
+		params.LocContextID = h.GetNullInt32(subLocID)
+		ct := string(ViewSourceTypeSublocation)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeArea)
+		params.LocContextID = h.GetNullInt32(areaID)
+		ct := string(ViewSourceTypeArea)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	dbIDs, err := cfg.db.FilterMasterItemIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
+func filterAvlItems(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
+	i := cfg.e.items
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterItemIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		AvlType:      string(AvlTypeSelf),
+		Availability: availabilities,
+	}
+
+	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeContext)
+		params.LocContextID = h.GetNullInt32(locID)
+		ct := string(ViewSourceTypeLocation)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeContext)
+		params.LocContextID = h.GetNullInt32(subLocID)
+		ct := string(ViewSourceTypeSublocation)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeArea)
+		params.LocContextID = h.GetNullInt32(areaID)
+		ct := string(ViewSourceTypeArea)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	dbIDs, err := cfg.db.FilterItemIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
+func filterAvlKeyItems(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
+	i := cfg.e.keyItems
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterKeyItemIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		Availability: availabilities,
+	}
+
+	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
+	if err == nil {
+		params.LocContextID = h.GetNullInt32(locID)
+		ct := string(ViewSourceTypeLocation)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
+	if err == nil {
+		params.LocContextID = h.GetNullInt32(subLocID)
+		ct := string(ViewSourceTypeSublocation)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
+	if err == nil {
+		params.LocContextID = h.GetNullInt32(areaID)
+		ct := string(ViewSourceTypeArea)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	dbIDs, err := cfg.db.FilterKeyItemIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
+func filterAvlSpheres(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
+	i := cfg.e.spheres
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterSphereIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		AvlType:      string(AvlTypeSelf),
+		Availability: availabilities,
+	}
+
+	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeContext)
+		params.LocContextID = h.GetNullInt32(locID)
+		ct := string(ViewSourceTypeLocation)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeContext)
+		params.LocContextID = h.GetNullInt32(subLocID)
+		ct := string(ViewSourceTypeSublocation)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeArea)
+		params.LocContextID = h.GetNullInt32(areaID)
+		ct := string(ViewSourceTypeArea)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	dbIDs, err := cfg.db.FilterSphereIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
+func filterAvlPrimers(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
+	i := cfg.e.primers
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterPrimerIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		Availability: availabilities,
+	}
+
+	dbIDs, err := cfg.db.FilterPrimerIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
 func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
 	i := cfg.e.shops
 

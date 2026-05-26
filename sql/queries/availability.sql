@@ -139,6 +139,45 @@ GROUP BY key_item_id
 HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w);
 
 
+-- name: FilterSphereIDsByAvailability :many
+WITH w AS (
+    SELECT
+        sqlc.arg('ids')::int[] AS ids,
+        sqlc.arg('avl_type')::text AS avl_type,
+        sqlc.arg('availability')::availability_type[] AS availability,
+        sqlc.narg('loc_context_id')::int AS loc_context_id,
+        sqlc.narg('loc_context_type')::text AS loc_context_type
+),
+available_spheres AS (
+    SELECT 
+        s.id AS sphere_id,
+        CASE
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
+            WHEN w.avl_type = 'self' THEN a.avl_self
+            WHEN w.avl_type = 'context' THEN a.avl_context
+            WHEN w.avl_type = 'area' THEN a.avl_area
+        END as current_avl
+    FROM spheres s
+    JOIN items i ON s.item_id = i.id
+    JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE s.id = ANY(w.ids)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
+)
+SELECT sphere_id
+FROM available_spheres
+GROUP BY sphere_id
+HAVING ARRAY[MIN(current_avl)] && (SELECT availability FROM w);
+
+
 -- name: FilterPrimerIDsByAvailability :many
 WITH w AS (
     SELECT

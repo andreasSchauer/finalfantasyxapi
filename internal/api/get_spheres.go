@@ -48,5 +48,8 @@ func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Spher
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(enumListQuery(cfg, r, i, cfg.t.SphereColor, resources, "color", cfg.db.GetSphereIDsByColor)),
+		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetSphereIDsByLocation)),
+		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSphereIDsBySublocation)),
+		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetSphereIDsByArea)),
 	})
 }

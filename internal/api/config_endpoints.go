@@ -804,6 +804,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetMasterItemIDs,
 		getSingleFunc: cfg.getMasterItem,
 		retrieveFunc:  cfg.retrieveMasterItems,
+		avlFunc: 	   filterAvlMasterItems,
 	}
 
 	e.items = handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]{
@@ -817,6 +818,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetItemIDs,
 		getSingleFunc: cfg.getItem,
 		retrieveFunc:  cfg.retrieveItems,
+		avlFunc: 	   filterAvlItems,
 		subsections: map[string]Subsection{
 			"mixes": {
 				dbQuery:     cfg.db.GetItemMixIDs,
@@ -836,6 +838,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetSphereIDs,
 		getSingleFunc: cfg.getSphere,
 		retrieveFunc:  cfg.retrieveSpheres,
+		avlFunc: 	   filterAvlSpheres,
 	}
 
 	e.keyItems = handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]{
@@ -849,6 +852,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetKeyItemIDs,
 		getSingleFunc: cfg.getKeyItem,
 		retrieveFunc:  cfg.retrieveKeyItems,
+		avlFunc: 	   filterAvlKeyItems,
 	}
 
 	e.primers = handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]{
@@ -862,6 +866,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetPrimerIDs,
 		getSingleFunc: cfg.getPrimer,
 		retrieveFunc:  cfg.retrievePrimers,
+		avlFunc: 	   filterAvlPrimers,
 	}
 
 	e.mixes = handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]{

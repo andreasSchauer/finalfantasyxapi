@@ -52,10 +52,9 @@ func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.M
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[TypedAPIResource]{
 		frl(enumListQuery(cfg, r, i, cfg.t.ItemType, resources, "type", cfg.db.GetMasterItemIDsByType)),
-		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetMasterItemIDsByAvailability)),
 		frl(valueQuery(cfg, r, i, resources, "method", cfg.db.GetMasterItemIDsByMethod)),
-		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), getMasterItemIDsByLocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), getMasterItemIDsBySublocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.e.areas.objLookup), getMasterItemIDsByArea)),
+		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), getMasterItemsByLocation)),
+		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), getMasterItemsBySublocation)),
+		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.e.areas.objLookup), getMasterItemsByArea)),
 	})
 }

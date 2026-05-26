@@ -21,60 +21,40 @@ WHERE source_type = sqlc.arg('method')::text
 ORDER BY master_item_id;
 
 
--- name: GetMasterItemIDsByAvailability :many
-WITH w AS (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT mis.master_item_id
-FROM mv_item_sources mis
-CROSS JOIN w
-WHERE (w.availability IS NULL OR mis.availability = ANY(w.availability))
-ORDER BY mis.master_item_id;
-
-
 -- name: GetMasterItemIDsByLocation :many
 WITH w AS (
-  SELECT 
-    sqlc.narg('availability')::availability_type[] AS availability,
-    sqlc.narg('method')::text AS method
+  SELECT sqlc.narg('method')::text AS method
 )
 SELECT DISTINCT mis.master_item_id
 FROM mv_item_sources mis
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE g.location_id = $1
-  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
   AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY mis.master_item_id;
 
 
 -- name: GetMasterItemIDsBySublocation :many
 WITH w AS (
-  SELECT
-    sqlc.narg('availability')::availability_type[] AS availability,
-    sqlc.narg('method')::text AS method
+  SELECT sqlc.narg('method')::text AS method
 )
 SELECT DISTINCT mis.master_item_id
 FROM mv_item_sources mis
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE g.sublocation_id = $1
-  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
   AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY mis.master_item_id;
 
 
 -- name: GetMasterItemIDsByArea :many
 WITH w AS (
-  SELECT 
-    sqlc.narg('availability')::availability_type[] AS availability,
-    sqlc.narg('method')::text AS method
+  SELECT sqlc.narg('method')::text AS method
 )
 SELECT DISTINCT mis.master_item_id
 FROM mv_item_sources mis
 CROSS JOIN w
 WHERE mis.area_id = $1
-  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
   AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY master_item_id;
 
@@ -206,23 +186,9 @@ WHERE mis.source_type = sqlc.arg('method')::text
 ORDER BY i.id;
 
 
--- name: GetItemIDsByAvailability :many
-WITH w AS (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT i.id
-FROM mv_item_sources mis
-JOIN items i ON i.master_item_id = mis.master_item_id
-CROSS JOIN w
-WHERE (w.availability IS NULL OR mis.availability = ANY(w.availability))
-ORDER BY i.id;
-
-
 -- name: GetItemIDsByLocation :many
 WITH w AS (
-  SELECT 
-    sqlc.narg('availability')::availability_type[] AS availability,
-    sqlc.narg('method')::text AS method
+  SELECT sqlc.narg('method')::text AS method
 )
 SELECT DISTINCT i.id
 FROM items i
@@ -230,16 +196,13 @@ JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE g.location_id = $1
-  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
   AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY i.id;
 
 
 -- name: GetItemIDsBySublocation :many
 WITH w AS (
-  SELECT 
-    sqlc.narg('availability')::availability_type[] AS availability,
-    sqlc.narg('method')::text AS method
+  SELECT sqlc.narg('method')::text AS method
 )
 SELECT DISTINCT i.id
 FROM items i
@@ -247,23 +210,19 @@ JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE g.sublocation_id = $1
-  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
   AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY i.id;
 
 
 -- name: GetItemIDsByArea :many
 WITH w AS (
-  SELECT 
-    sqlc.narg('availability')::availability_type[] AS availability,
-    sqlc.narg('method')::text AS method
+  SELECT sqlc.narg('method')::text AS method
 )
 SELECT DISTINCT i.id
 FROM items i
 JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
 WHERE mis.area_id = $1
-  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
   AND (w.method IS NULL OR mis.source_type = w.method)
 ORDER BY i.id;
 
@@ -331,18 +290,6 @@ WHERE mis.source_type = sqlc.arg('method')::text
 ORDER BY ki.id;
 
 
--- name: GetKeyItemIDsByAvailability :many
-WITH w AS (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT ki.id
-FROM mv_item_sources mis
-JOIN key_items ki ON ki.master_item_id = mis.master_item_id
-CROSS JOIN w
-WHERE (w.availability IS NULL OR mis.availability = ANY(w.availability))
-ORDER BY ki.id;
-
-
 -- name: GetKeyItemIDsByLocation :many
 SELECT DISTINCT ki.id
 FROM key_items ki
@@ -380,6 +327,35 @@ SELECT id FROM spheres ORDER BY id;
 SELECT id FROM spheres WHERE sphere_color = ANY(sqlc.arg('color')::sphere_color[]) ORDER BY id;
 
 
+-- name: GetSphereIDsByLocation :many
+SELECT DISTINCT s.id
+FROM spheres s
+JOIN items i ON s.item_id = i.id
+JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.location_id = $1
+ORDER BY s.id;
+
+
+-- name: GetSphereIDsBySublocation :many
+SELECT DISTINCT s.id
+FROM spheres s
+JOIN items i ON s.item_id = i.id
+JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+JOIN mv_geography g ON mis.area_id = g.area_id
+WHERE g.sublocation_id = $1
+ORDER BY s.id;
+
+
+-- name: GetSphereIDsByArea :many
+SELECT DISTINCT s.id
+FROM spheres s
+JOIN items i ON s.item_id = i.id
+JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
+WHERE mis.area_id = $1
+ORDER BY s.id;
+
+
 
 
 
@@ -405,16 +381,6 @@ ORDER BY mis.area_id;
 
 -- name: GetPrimerIDs :many
 SELECT id FROM primers ORDER BY id;
-
-
--- name: GetPrimerIDsByAvailability :many
-SELECT DISTINCT p.id
-FROM mv_item_sources mis
-JOIN key_items ki ON ki.master_item_id = mis.master_item_id
-JOIN primers p ON p.key_item_id = ki.id
-WHERE mis.availability = ANY(sqlc.arg('availability')::availability_type[])
-  AND mis.source_type = 'treasure'
-ORDER BY p.id;
 
 
 
