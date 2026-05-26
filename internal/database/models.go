@@ -4065,6 +4065,14 @@ type MvAbility struct {
 	ModifierChangeID  sql.NullInt32
 }
 
+type MvAutoAbilitySource struct {
+	AutoAbilityID int32
+	AutoAbility   string
+	SourceID      int32
+	SourceType    string
+	AreaID        int32
+}
+
 type MvAvailability struct {
 	SID         int32
 	Name        string

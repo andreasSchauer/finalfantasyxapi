@@ -1,6 +1,6 @@
 -- +goose Up
 CREATE MATERIALIZED VIEW mv_geography AS
-SELECT 
+SELECT DISTINCT
     l.id AS location_id,
     s.id AS sublocation_id,
     a.id AS area_id,
@@ -21,7 +21,7 @@ CREATE INDEX idx_mv_geo_location ON mv_geography (location_id);
 
 
 CREATE MATERIALIZED VIEW mv_geography_graph AS
-SELECT
+SELECT DISTINCT
     g.location_id AS l_id,
     g.sublocation_id AS s_id,
     g.area_id AS a_id,
@@ -91,7 +91,7 @@ CREATE INDEX idx_mv_enc_song ON mv_monster_encounters (song_id);
 
 
 CREATE MATERIALIZED VIEW mv_monster_item_drops AS
-SELECT 
+SELECT DISTINCT
     mi.monster_id, 
     m.name AS monster,
     m.version,
@@ -112,7 +112,7 @@ JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
-SELECT 
+SELECT DISTINCT
     mi.monster_id, 
     m.name AS monster,
     m.version,
@@ -133,7 +133,7 @@ JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
-SELECT 
+SELECT DISTINCT
     mi.monster_id, 
     m.name AS monster,
     m.version,
@@ -154,7 +154,7 @@ JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
-SELECT 
+SELECT DISTINCT
     mi.monster_id, 
     m.name AS monster,
     m.version,
@@ -175,7 +175,7 @@ JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
-SELECT 
+SELECT DISTINCT
     mi.monster_id, 
     m.name AS monster,
     m.version,
@@ -196,7 +196,7 @@ JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
-SELECT 
+SELECT DISTINCT
     mi.monster_id, 
     m.name AS monster,
     m.version,
@@ -217,7 +217,7 @@ JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
-SELECT 
+SELECT DISTINCT
     mi.monster_id, 
     m.name AS monster,
     m.version,
@@ -238,7 +238,7 @@ JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     mi.monster_id,
     m.name AS monster,
     m.version,
@@ -275,21 +275,20 @@ SELECT DISTINCT
     aa.id AS attached_abilities_id,
     ed.auto_ability_id,
     au.name AS auto_ability,
-    m.availability,
-    menc.spec_availability,
     m.is_repeatable,
     j.equipment_drop_id,
     ed.is_forced,
     ed.probability,
-    ed.type AS auto_ability_type
+    ed.type AS auto_ability_type,
+    jedc.character_id
 FROM monsters m
 JOIN monster_equipment me ON me.monster_id = m.id
 JOIN j_monster_equipment_abilities j ON j.monster_equipment_id = me.id
 JOIN equipment_drops ed ON j.equipment_drop_id = ed.id
+LEFT JOIN j_equipment_drops_characters jedc ON jedc.equipment_drop_id = ed.id -- new join
 JOIN auto_abilities au ON ed.auto_ability_id = au.id
 JOIN monster_equipment_slots asl ON asl.monster_equipment_id = me.id AND asl.type = 'ability-slots'
-JOIN monster_equipment_slots aa ON aa.monster_equipment_id = me.id AND aa.type = 'attached-abilities'
-JOIN mv_monster_encounters menc ON menc.monster_id = m.id;
+JOIN monster_equipment_slots aa ON aa.monster_equipment_id = me.id AND aa.type = 'attached-abilities';
 
 CREATE INDEX idx_mv_monster_equipment_drops_monster ON mv_monster_equipment_drops(monster_id);
 CREATE INDEX idx_mv_monster_equipment_drops_auto_ability ON mv_monster_equipment_drops(auto_ability_id);
@@ -302,15 +301,13 @@ CREATE INDEX idx_mv_monster_equipment_drops_equipment_drops ON mv_monster_equipm
 
 
 CREATE MATERIALIZED VIEW mv_item_sources AS
-SELECT
+SELECT DISTINCT
     ia.master_item_id,
     mi.name AS item,
     t.id AS source_id,
     t.area_id,
     ia.amount,
-    'treasure' AS source_type,
-    t.availability,
-    t.availability AS spec_availability
+    'treasure' AS source_type
 FROM treasures t
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
@@ -318,18 +315,13 @@ JOIN master_items mi ON ia.master_item_id = mi.id
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     i.master_item_id,
     mi.name AS item,
     j.shop_id AS source_id,
     sh.area_id,
     1 AS amount,
-    'shop' AS source_type,
-    sh.availability,
-    CASE j.shop_type 
-        WHEN 'pre-airship' THEN 'pre-story'::availability_type
-        WHEN 'post-airship' THEN 'post'::availability_type
-    END AS spec_availability
+    'shop' AS source_type
 FROM shops sh
 JOIN j_shops_items j ON j.shop_id = sh.id
 JOIN shop_items si ON j.shop_item_id = si.id
@@ -338,15 +330,13 @@ JOIN master_items mi ON i.master_item_id = mi.id
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     ia.master_item_id,
     mi.name AS item,
     q.id AS source_id,
     ca.area_id,
     ia.amount,
-    'quest' AS source_type,
-    q.availability,
-    q.availability AS spec_availability -- change to area availability?
+    'quest' AS source_type
 FROM quests q
 JOIN quest_completions qc ON qc.quest_id = q.id
 JOIN completion_areas ca ON ca.completion_id = qc.id
@@ -355,15 +345,13 @@ JOIN master_items mi ON ia.master_item_id = mi.id
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     ia.master_item_id,
     mi.name AS item,
     bi.position_id AS source_id,
     75 AS area_id,
     ia.amount,
-    'blitzball' AS source_type,
-    'always' AS availability,
-    'always' AS spec_availability
+    'blitzball' AS source_type
 FROM blitzball_items bi
 JOIN possible_items pi ON bi.possible_item_id = pi.id
 JOIN item_amounts ia ON pi.item_amount_id = ia.id
@@ -371,15 +359,13 @@ JOIN master_items mi ON ia.master_item_id = mi.id
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     mi.master_item_id,
     mi.item,
     mi.monster_id AS source_id,
     me.area_id,
     mi.amount,
-    'monster' AS source_type,
-    me.availability,
-    me.spec_availability
+    'monster' AS source_type
 FROM mv_monster_item_drops mi
 JOIN mv_monster_encounters me ON mi.monster_id = me.monster_id;
 
@@ -393,7 +379,7 @@ CREATE INDEX idx_mv_item_sources_area_id ON mv_item_sources (area_id);
 
 
 CREATE MATERIALIZED VIEW mv_equipment_sources AS
-SELECT
+SELECT DISTINCT
     en.id AS name_id,
     en.name AS name,
     t.id AS source_id,
@@ -402,8 +388,6 @@ SELECT
     te.empty_slots_amount,
     j.auto_ability_id,
     aa.name AS auto_ability,
-    t.availability,
-    t.availability AS spec_availability,
     NULL::shop_type AS shop_type
 FROM treasures t
 JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
@@ -413,7 +397,7 @@ JOIN equipment_names en ON te.equipment_name_id = en.id
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     en.id AS name_id,
     en.name AS name,
     sh.id AS source_id,
@@ -422,11 +406,6 @@ SELECT
     se.empty_slots_amount,
     j.auto_ability_id,
     aa.name AS auto_ability,
-    sh.availability,
-    CASE se.shop_type 
-        WHEN 'pre-airship' THEN 'pre-story'::availability_type
-        WHEN 'post-airship' THEN 'post'::availability_type
-    END AS spec_availability,
     se.shop_type::shop_type AS shop_type
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
@@ -440,6 +419,52 @@ CREATE INDEX idx_mv_equipment_sources_source_id ON mv_equipment_sources (source_
 CREATE INDEX idx_mv_equipment_sources_area_id ON mv_equipment_sources (area_id);
 
 
+
+
+CREATE MATERIALIZED VIEW mv_auto_ability_sources AS
+SELECT DISTINCT
+    aa.id AS auto_ability_id,
+    aa.name AS auto_ability,
+    t.id AS source_id,
+    'treasure' AS source_type,
+    en.character_id,
+    t.area_id
+FROM treasures t
+JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
+JOIN j_treasure_equipment_abilities j ON j.treasure_equipment_id = te.id
+JOIN auto_abilities aa ON j.auto_ability_id = aa.id
+JOIN equipment_names en ON te.equipment_name_id = en.id
+
+UNION ALL
+
+SELECT DISTINCT
+    aa.id AS auto_ability_id,
+    aa.name AS auto_ability,
+    sh.id AS source_id,
+    'shop' AS source_type,
+    en.character_id,
+    sh.area_id
+FROM shops sh
+JOIN shop_equipment_pieces se ON se.shop_id = sh.id
+JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+JOIN auto_abilities aa ON j.auto_ability_id = aa.id
+JOIN equipment_names en ON se.equipment_name_id = en.id
+
+UNION ALL
+
+SELECT DISTINCT
+    med.auto_ability_id,
+    med.auto_ability,
+    med.monster_id AS source_id,
+    'monster' AS source_type,
+    med.character_id,
+    me.area_id
+FROM mv_monster_equipment_drops med
+JOIN mv_monster_encounters me ON med.monster_id = me.monster_id;
+
+CREATE INDEX idx_mv_auto_ability_sources_auto_ability_id ON mv_auto_ability_sources (auto_ability_id);
+CREATE INDEX idx_mv_auto_ability_sources_lookup ON mv_auto_ability_sources (source_id, source_type);
+CREATE INDEX idx_mv_auto_ability_sources_area_id ON mv_auto_ability_sources (area_id);
 
 
 
@@ -629,8 +654,9 @@ CREATE INDEX idx_mv_availabilities_area_id ON mv_availabilities (a_id);
 
 
 
+
 CREATE MATERIALIZED VIEW mv_abilities AS
-SELECT
+SELECT DISTINCT
     a.id AS ability_id,
     a.name,
     a.version,
@@ -676,7 +702,7 @@ LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AN
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     a.id AS ability_id,
     a.name,
     a.version,
@@ -722,7 +748,7 @@ LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AN
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     a.id AS ability_id,
     a.name,
     a.version,
@@ -768,7 +794,7 @@ LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AN
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     a.id AS ability_id,
     a.name,
     a.version,
@@ -814,7 +840,7 @@ LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AN
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     a.id AS ability_id,
     a.name,
     a.version,
@@ -860,7 +886,7 @@ LEFT JOIN j_battle_interactions_modifier_changes jmc ON jmc.ability_id = a.id AN
 
 UNION ALL
 
-SELECT
+SELECT DISTINCT
     a.id AS ability_id,
     a.name,
     a.version,
@@ -918,6 +944,7 @@ CREATE INDEX idx_mv_abilities_element_id ON mv_abilities (element_id);
 -- +goose Down
 DROP MATERIALIZED VIEW IF EXISTS mv_abilities;
 DROP MATERIALIZED VIEW IF EXISTS mv_availabilities;
+DROP MATERIALIZED VIEW IF EXISTS mv_auto_ability_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_equipment_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_item_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_monster_equipment_drops;
