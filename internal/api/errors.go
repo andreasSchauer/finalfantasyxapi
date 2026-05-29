@@ -46,20 +46,20 @@ func newHTTPError(code int, msg string, err error) httpError {
 	}
 }
 
-func newHTTPErrorDB(resourceType string, parentItem seeding.Lookupable, err error) httpError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", resourceType, parentItem), err)
+func newHTTPErrorDB(fetchType string, parentItem seeding.Lookupable, err error) httpError {
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", fetchType, parentItem), err)
 }
 
 func newHTTPErrorDbPairs(childResType, parentResType string, err error) httpError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't %s + %s pairs.", childResType, parentResType), err)
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs.", childResType, parentResType), err)
 }
 
-func newHTTPErrorDbOne(resourceType string, parentItem seeding.Lookupable, err error) httpError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", resourceType, parentItem), err)
+func newHTTPErrorDbOne(fetchType string, parentItem seeding.Lookupable, err error) httpError {
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", fetchType, parentItem), err)
 }
 
-func newHTTPErrorDbFilter(resourceType string, queryParam QueryParam, err error) httpError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", resourceType, queryParam.Name), err)
+func newHTTPErrorDbFilter(fetchType string, queryParam QueryParam, err error) httpError {
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", fetchType, queryParam.Name), err)
 }
 
 func newHTTPErrorFetchLimit(fetchLimit int) httpError {

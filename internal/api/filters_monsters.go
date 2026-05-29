@@ -77,7 +77,7 @@ func getMonstersByStatusResists(cfg *Config, r *http.Request, ids []int32) ([]in
 		MinResistance:      resistance,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by status conditions.", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't filter monsters by status conditions.", err)
 	}
 
 	return dbIDs, nil

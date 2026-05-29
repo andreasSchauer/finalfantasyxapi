@@ -7,8 +7,7 @@ SELECT DISTINCT
     l.name AS location,
     s.name AS sublocation,
     a.name AS area,
-    a.version,
-    a.availability
+    a.version
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id;
@@ -61,8 +60,6 @@ SELECT DISTINCT
     ma.amount AS monster_amount,
     fd.id AS data_id,
     fd.category,
-    fd.availability,
-    ea.availability AS spec_availability,
     fd.is_forced_ambush,
     fd.can_escape,
     g.area_id,
@@ -100,15 +97,12 @@ SELECT DISTINCT
     mit.name AS item,
     ia.amount,
     'steal_common' AS source_type,
-    m.availability,
-    me.spec_availability,
     m.is_repeatable
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.steal_common_id = ia.id
 JOIN master_items mit ON ia.master_item_id = mit.id
 JOIN items i ON mit.id = i.id
-JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
@@ -121,15 +115,12 @@ SELECT DISTINCT
     mit.name AS item,
     ia.amount,
     'steal_rare' AS source_type,
-    m.availability,
-    me.spec_availability,
     m.is_repeatable
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.steal_rare_id = ia.id
 JOIN master_items mit ON ia.master_item_id = mit.id
 JOIN items i ON mit.id = i.id
-JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
@@ -142,15 +133,12 @@ SELECT DISTINCT
     mit.name AS item,
     ia.amount,
     'drop_common' AS source_type,
-    m.availability,
-    me.spec_availability,
     m.is_repeatable
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.drop_common_id = ia.id
 JOIN master_items mit ON ia.master_item_id = mit.id
 JOIN items i ON mit.id = i.id
-JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
@@ -163,15 +151,12 @@ SELECT DISTINCT
     mit.name AS item,
     ia.amount,
     'drop_rare' AS source_type,
-    m.availability,
-    me.spec_availability,
     m.is_repeatable
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.drop_rare_id = ia.id
 JOIN master_items mit ON ia.master_item_id = mit.id
 JOIN items i ON mit.id = i.id
-JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
@@ -184,15 +169,12 @@ SELECT DISTINCT
     mit.name AS item,
     ia.amount,
     'drop_secondary_common' AS source_type,
-    m.availability,
-    me.spec_availability,
     m.is_repeatable
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.secondary_drop_common_id = ia.id
 JOIN master_items mit ON ia.master_item_id = mit.id
 JOIN items i ON mit.id = i.id
-JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
@@ -205,15 +187,12 @@ SELECT DISTINCT
     mit.name AS item,
     ia.amount,
     'drop_secondary_rare' AS source_type,
-    m.availability,
-    me.spec_availability,
     m.is_repeatable
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.secondary_drop_rare_id = ia.id
 JOIN master_items mit ON ia.master_item_id = mit.id
 JOIN items i ON mit.id = i.id
-JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
@@ -226,15 +205,12 @@ SELECT DISTINCT
     mit.name AS item,
     ia.amount,
     'bribe' AS source_type,
-    m.availability,
-    me.spec_availability,
     m.is_repeatable
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
 JOIN item_amounts ia ON mi.bribe_id = ia.id
 JOIN master_items mit ON ia.master_item_id = mit.id
 JOIN items i ON mit.id = i.id
-JOIN mv_monster_encounters me ON me.monster_id = m.id
 
 UNION ALL
 
@@ -247,8 +223,6 @@ SELECT DISTINCT
     mit.name AS item,
     ia.amount,
     'other' AS source_type,
-    m.availability,
-    me.spec_availability,
     m.is_repeatable
 FROM monsters m
 JOIN monster_items mi ON mi.monster_id = m.id
@@ -256,8 +230,7 @@ JOIN j_monster_items_other_items jmio ON jmio.monster_items_id = mi.id
 JOIN possible_items pi ON pi.id = jmio.possible_item_id
 JOIN item_amounts ia ON pi.item_amount_id = ia.id
 JOIN master_items mit ON ia.master_item_id = mit.id
-JOIN items i ON mit.id = i.id
-JOIN mv_monster_encounters me ON me.monster_id = m.id;
+JOIN items i ON mit.id = i.id;
 
 
 CREATE INDEX idx_mv_monster_item_drops_item ON mv_monster_item_drops (item_id);
@@ -305,9 +278,11 @@ SELECT DISTINCT
     ia.master_item_id,
     mi.name AS item,
     t.id AS source_id,
-    t.area_id,
+    'treasure' AS source_type,
     ia.amount,
-    'treasure' AS source_type
+    FALSE AS is_repeatable,
+    FALSE AS is_repeatable_loc,
+    t.area_id
 FROM treasures t
 JOIN j_treasures_items j ON j.treasure_id = t.id
 JOIN item_amounts ia ON j.item_amount_id = ia.id
@@ -319,9 +294,11 @@ SELECT DISTINCT
     i.master_item_id,
     mi.name AS item,
     j.shop_id AS source_id,
-    sh.area_id,
+    'shop' AS source_type,
     1 AS amount,
-    'shop' AS source_type
+    TRUE AS is_repeatable,
+    TRUE AS is_repeatable_loc,
+    sh.area_id
 FROM shops sh
 JOIN j_shops_items j ON j.shop_id = sh.id
 JOIN shop_items si ON j.shop_item_id = si.id
@@ -334,9 +311,11 @@ SELECT DISTINCT
     ia.master_item_id,
     mi.name AS item,
     q.id AS source_id,
-    ca.area_id,
+    'quest' AS source_type,
     ia.amount,
-    'quest' AS source_type
+    q.is_repeatable,
+    q.is_repeatable AS is_repeatable_loc,
+    ca.area_id
 FROM quests q
 JOIN quest_completions qc ON qc.quest_id = q.id
 JOIN completion_areas ca ON ca.completion_id = qc.id
@@ -349,9 +328,11 @@ SELECT DISTINCT
     ia.master_item_id,
     mi.name AS item,
     bi.position_id AS source_id,
-    75 AS area_id,
+    'blitzball' AS source_type,
     ia.amount,
-    'blitzball' AS source_type
+    TRUE AS is_repeatable,
+    TRUE AS is_repeatable_loc,
+    75 AS area_id
 FROM blitzball_items bi
 JOIN possible_items pi ON bi.possible_item_id = pi.id
 JOIN item_amounts ia ON pi.item_amount_id = ia.id
@@ -363,15 +344,36 @@ SELECT DISTINCT
     mi.master_item_id,
     mi.item,
     mi.monster_id AS source_id,
-    me.area_id,
+    'monster' AS source_type,
     mi.amount,
-    'monster' AS source_type
+    CASE
+        WHEN me.category = 'static-encounter'::monster_formation_category
+         AND mi.source_type IN ('steal_common', 'steal_rare')
+        THEN TRUE
+
+        ELSE mi.is_repeatable
+    END AS is_repeatable,
+    CASE 
+        WHEN me.monster_id = 299 THEN TRUE -- dark yojimbo
+        
+        WHEN me.category IN (
+            'random-encounter'::monster_formation_category, 
+            'on-demand-fight'::monster_formation_category
+        ) THEN TRUE
+
+        WHEN me.category = 'static-encounter'::monster_formation_category
+         AND mi.source_type IN ('steal_common', 'steal_rare')
+        THEN TRUE
+
+        ELSE FALSE
+    END AS is_repeatable_loc,
+    me.area_id
 FROM mv_monster_item_drops mi
 JOIN mv_monster_encounters me ON mi.monster_id = me.monster_id;
 
 
 CREATE INDEX idx_mv_item_sources_master_id ON mv_item_sources (master_item_id);
-CREATE INDEX idx_mv_item_sources_source_id ON mv_item_sources (source_id);
+CREATE INDEX idx_mv_item_sources_lookup ON mv_item_sources (source_id, source_type, area_id);
 CREATE INDEX idx_mv_item_sources_area_id ON mv_item_sources (area_id);
 
 
@@ -383,11 +385,13 @@ SELECT DISTINCT
     en.id AS name_id,
     en.name AS name,
     t.id AS source_id,
-    t.area_id,
     'treasure' AS source_type,
     te.empty_slots_amount,
     j.auto_ability_id,
     aa.name AS auto_ability,
+    FALSE AS is_repeatable,
+    FALSE AS is_repeatable_loc,
+    t.area_id,
     NULL::shop_type AS shop_type
 FROM treasures t
 JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
@@ -401,11 +405,13 @@ SELECT DISTINCT
     en.id AS name_id,
     en.name AS name,
     sh.id AS source_id,
-    sh.area_id,
     'shop' AS source_type,
     se.empty_slots_amount,
     j.auto_ability_id,
     aa.name AS auto_ability,
+    TRUE AS is_repeatable,
+    TRUE AS is_repeatable_loc,
+    sh.area_id,
     se.shop_type::shop_type AS shop_type
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
@@ -415,7 +421,7 @@ JOIN equipment_names en ON se.equipment_name_id = en.id;
 
 
 CREATE INDEX idx_mv_equipment_sources_name_id ON mv_equipment_sources (name_id);
-CREATE INDEX idx_mv_equipment_sources_source_id ON mv_equipment_sources (source_id);
+CREATE INDEX idx_mv_equipment_sources_lookup ON mv_equipment_sources (source_id, source_type, area_id);
 CREATE INDEX idx_mv_equipment_sources_area_id ON mv_equipment_sources (area_id);
 
 
@@ -428,6 +434,8 @@ SELECT DISTINCT
     t.id AS source_id,
     'treasure' AS source_type,
     en.character_id,
+    FALSE AS is_repeatable,
+    FALSE AS is_repeatable_loc,
     t.area_id
 FROM treasures t
 JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
@@ -443,6 +451,8 @@ SELECT DISTINCT
     sh.id AS source_id,
     'shop' AS source_type,
     en.character_id,
+    TRUE AS is_repeatable,
+    TRUE AS is_repeatable_loc,
     sh.area_id
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
@@ -458,12 +468,21 @@ SELECT DISTINCT
     med.monster_id AS source_id,
     'monster' AS source_type,
     med.character_id,
+    med.is_repeatable,
+    CASE 
+        WHEN me.monster_id = 299 THEN TRUE -- dark yojimbo
+        WHEN me.category IN (
+            'random-encounter'::monster_formation_category, 
+            'on-demand-fight'::monster_formation_category
+        ) THEN TRUE
+        ELSE FALSE
+    END AS is_repeatable_loc,
     me.area_id
 FROM mv_monster_equipment_drops med
 JOIN mv_monster_encounters me ON med.monster_id = me.monster_id;
 
 CREATE INDEX idx_mv_auto_ability_sources_auto_ability_id ON mv_auto_ability_sources (auto_ability_id);
-CREATE INDEX idx_mv_auto_ability_sources_lookup ON mv_auto_ability_sources (source_id, source_type);
+CREATE INDEX idx_mv_auto_ability_sources_lookup ON mv_auto_ability_sources (source_id, source_type, area_id);
 CREATE INDEX idx_mv_auto_ability_sources_area_id ON mv_auto_ability_sources (area_id);
 
 
@@ -526,15 +545,16 @@ SELECT DISTINCT
     g.version::int AS v,
     'area' AS source_type,
     NULL::text AS sub_type,
-    g.availability AS avl_self,
-    g.availability AS avl_context,
-    g.availability AS avl_area,
+    a.availability AS avl_self,
+    a.availability AS avl_context,
+    a.availability AS avl_area,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
     g.area,
     g.version AS av
-FROM mv_geography g
+FROM areas a
+JOIN mv_geography g ON g.area_id = a.id
 
 UNION ALL
 

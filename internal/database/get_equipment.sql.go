@@ -76,6 +76,36 @@ func (q *Queries) GetAutoAbilityIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getAutoAbilityIDsByArea = `-- name: GetAutoAbilityIDsByArea :many
+SELECT DISTINCT auto_ability_id
+FROM mv_auto_ability_sources
+WHERE area_id = $1
+ORDER BY auto_ability_id
+`
+
+func (q *Queries) GetAutoAbilityIDsByArea(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByArea, areaID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
+			return nil, err
+		}
+		items = append(items, auto_ability_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAutoAbilityIDsByCategory = `-- name: GetAutoAbilityIDsByCategory :many
 SELECT id FROM auto_abilities WHERE category = ANY($1::auto_ability_category[]) ORDER BY id
 `
@@ -130,12 +160,59 @@ func (q *Queries) GetAutoAbilityIDsByEquipType(ctx context.Context, type_ EquipT
 	return items, nil
 }
 
-const getAutoAbilityIDsByMonster = `-- name: GetAutoAbilityIDsByMonster :many
-SELECT DISTINCT auto_ability_id FROM mv_monster_equipment_drops WHERE monster_id = $1 ORDER BY auto_ability_id
+const getAutoAbilityIDsByLocation = `-- name: GetAutoAbilityIDsByLocation :many
+SELECT DISTINCT a.auto_ability_id
+FROM mv_auto_ability_sources a
+JOIN mv_geography g ON a.area_id = g.area_id
+WHERE g.location_id = $1
+ORDER BY a.auto_ability_id
 `
 
-func (q *Queries) GetAutoAbilityIDsByMonster(ctx context.Context, monsterID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByMonster, monsterID)
+func (q *Queries) GetAutoAbilityIDsByLocation(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByLocation, locationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
+			return nil, err
+		}
+		items = append(items, auto_ability_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAutoAbilityIDsByMonster = `-- name: GetAutoAbilityIDsByMonster :many
+WITH w AS (
+  SELECT
+    $1::int AS monster_id,
+    $2::int AS character_id
+)
+SELECT DISTINCT a.auto_ability_id
+FROM mv_auto_ability_sources a
+CROSS JOIN w
+WHERE a.source_id = w.monster_id
+  AND a.source_type = 'monster'
+  AND (w.character_id IS NULL OR a.character_id = w.character_id OR a.character_id IS NULL)
+ORDER BY a.auto_ability_id
+`
+
+type GetAutoAbilityIDsByMonsterParams struct {
+	MonsterID   int32
+	CharacterID sql.NullInt32
+}
+
+func (q *Queries) GetAutoAbilityIDsByMonster(ctx context.Context, arg GetAutoAbilityIDsByMonsterParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByMonster, arg.MonsterID, arg.CharacterID)
 	if err != nil {
 		return nil, err
 	}
@@ -189,6 +266,80 @@ func (q *Queries) GetAutoAbilityIDsByMonsterItems(ctx context.Context, monsterID
 	return items, nil
 }
 
+const getAutoAbilityIDsByShop = `-- name: GetAutoAbilityIDsByShop :many
+WITH w AS (
+  SELECT
+    $1::int AS shop_id,
+    $2::int AS character_id
+)
+SELECT DISTINCT a.auto_ability_id
+FROM mv_auto_ability_sources a
+CROSS JOIN w
+WHERE a.source_id = w.shop_id
+  AND a.source_type = 'shop'
+  AND (w.character_id IS NULL OR a.character_id = w.character_id OR a.character_id IS NULL)
+ORDER BY a.auto_ability_id
+`
+
+type GetAutoAbilityIDsByShopParams struct {
+	ShopID      int32
+	CharacterID sql.NullInt32
+}
+
+func (q *Queries) GetAutoAbilityIDsByShop(ctx context.Context, arg GetAutoAbilityIDsByShopParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByShop, arg.ShopID, arg.CharacterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
+			return nil, err
+		}
+		items = append(items, auto_ability_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAutoAbilityIDsBySublocation = `-- name: GetAutoAbilityIDsBySublocation :many
+SELECT DISTINCT a.auto_ability_id
+FROM mv_auto_ability_sources a
+JOIN mv_geography g ON a.area_id = g.area_id
+WHERE g.sublocation_id = $1
+ORDER BY a.auto_ability_id
+`
+
+func (q *Queries) GetAutoAbilityIDsBySublocation(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsBySublocation, sublocationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
+			return nil, err
+		}
+		items = append(items, auto_ability_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAutoAbilityItemMonsterIDs = `-- name: GetAutoAbilityItemMonsterIDs :many
 WITH w AS (
     SELECT 
@@ -199,15 +350,16 @@ WITH w AS (
             FROM auto_abilities aa
             JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
             JOIN master_items mit ON ia_req.master_item_id = mit.id
-            WHERE aa.id = $3
+            WHERE aa.id = $3::int
         )::int AS target_master_id
 )
 SELECT DISTINCT md.monster_id
 FROM mv_monster_item_drops md
+JOIN monsters m ON md.monster_id = m.id
 CROSS JOIN w
 WHERE md.master_item_id = w.target_master_id
   AND (w.repeatable IS NULL OR md.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR md.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 ORDER BY md.monster_id
 `
 
@@ -243,21 +395,18 @@ func (q *Queries) GetAutoAbilityItemMonsterIDs(ctx context.Context, arg GetAutoA
 const getAutoAbilityMonsterIDs = `-- name: GetAutoAbilityMonsterIDs :many
 WITH w AS (
     SELECT 
+        $1::int AS auto_ability_id,
         $2::BOOLEAN AS repeatable,
         $3::availability_type[] AS availability
-),
-filtered_monsters AS (
-    SELECT m.id
-    FROM monsters m
-    CROSS JOIN w
-    WHERE (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
-      AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 )
-SELECT DISTINCT fm.id
-FROM filtered_monsters fm
-JOIN mv_monster_equipment_drops me ON me.monster_id = fm.id
-WHERE me.auto_ability_id = $1
-ORDER BY fm.id
+SELECT DISTINCT m.id
+FROM monsters m
+JOIN mv_monster_equipment_drops me ON me.monster_id = m.id
+CROSS JOIN w
+WHERE me.auto_ability_id = w.auto_ability_id
+  AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
+  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
+ORDER BY m.id
 `
 
 type GetAutoAbilityMonsterIDsParams struct {
@@ -290,23 +439,32 @@ func (q *Queries) GetAutoAbilityMonsterIDs(ctx context.Context, arg GetAutoAbili
 }
 
 const getAutoAbilityShopIDsPost = `-- name: GetAutoAbilityShopIDsPost :many
+WITH w as (
+  SELECT 
+    $1::int,
+    $2::availability_type[] AS availability
+)
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
-CROSS JOIN (SELECT $1::availability_type[] AS availability) w
-WHERE es.auto_ability_id = $2::int
+JOIN mv_availabilities a ON a.s_id = es.source_id
+ AND a.source_type = 'shop'
+ AND a.sub_type = 'equip'
+ AND a.a_id = es.area_id
+CROSS JOIN w
+WHERE es.auto_ability_id = w.auto_ability_id
   AND es.shop_type = 'post-airship'
   AND es.source_type = 'shop'
-  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
 ORDER BY es.source_id
 `
 
 type GetAutoAbilityShopIDsPostParams struct {
-	Availability  []AvailabilityType
 	AutoAbilityID int32
+	Availability  []AvailabilityType
 }
 
 func (q *Queries) GetAutoAbilityShopIDsPost(ctx context.Context, arg GetAutoAbilityShopIDsPostParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAutoAbilityShopIDsPost, pq.Array(arg.Availability), arg.AutoAbilityID)
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityShopIDsPost, arg.AutoAbilityID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -329,23 +487,32 @@ func (q *Queries) GetAutoAbilityShopIDsPost(ctx context.Context, arg GetAutoAbil
 }
 
 const getAutoAbilityShopIDsPre = `-- name: GetAutoAbilityShopIDsPre :many
+WITH w as (
+  SELECT
+    $1::int,
+    $2::availability_type[] AS availability
+)
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
-CROSS JOIN (SELECT $1::availability_type[] AS availability) w
-WHERE es.auto_ability_id = $2::int
+JOIN mv_availabilities a ON a.s_id = es.source_id
+ AND a.source_type = 'shop'
+ AND a.sub_type = 'equip'
+ AND a.a_id = es.area_id
+CROSS JOIN w
+WHERE es.auto_ability_id = w.auto_ability_id
   AND es.shop_type = 'pre-airship'
   AND es.source_type = 'shop'
-  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
 ORDER BY es.source_id
 `
 
 type GetAutoAbilityShopIDsPreParams struct {
-	Availability  []AvailabilityType
 	AutoAbilityID int32
+	Availability  []AvailabilityType
 }
 
 func (q *Queries) GetAutoAbilityShopIDsPre(ctx context.Context, arg GetAutoAbilityShopIDsPreParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAutoAbilityShopIDsPre, pq.Array(arg.Availability), arg.AutoAbilityID)
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityShopIDsPre, arg.AutoAbilityID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -368,22 +535,25 @@ func (q *Queries) GetAutoAbilityShopIDsPre(ctx context.Context, arg GetAutoAbili
 }
 
 const getAutoAbilityTreasureIDs = `-- name: GetAutoAbilityTreasureIDs :many
+WITH w as (
+  SELECT $2::availability_type[] AS availability
+)
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
-CROSS JOIN (SELECT $1::availability_type[] AS availability) w
-WHERE es.auto_ability_id = $2::int
-  AND es.source_type = 'treasure'
-  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+JOIN treasures t ON es.source_id = t.id AND es.source_type = 'treasure' AND es.area_id = t.area_id
+CROSS JOIN w
+WHERE es.auto_ability_id = $1::int
+  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
 ORDER BY es.source_id
 `
 
 type GetAutoAbilityTreasureIDsParams struct {
-	Availability  []AvailabilityType
 	AutoAbilityID int32
+	Availability  []AvailabilityType
 }
 
 func (q *Queries) GetAutoAbilityTreasureIDs(ctx context.Context, arg GetAutoAbilityTreasureIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAutoAbilityTreasureIDs, pq.Array(arg.Availability), arg.AutoAbilityID)
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityTreasureIDs, arg.AutoAbilityID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
@@ -704,33 +874,38 @@ func (q *Queries) GetEquipmentIDsCelestialWeapon(ctx context.Context) ([]int32, 
 }
 
 const getEquipmentShopIDs = `-- name: GetEquipmentShopIDs :many
-SELECT DISTINCT es.source_id
-FROM mv_equipment_sources es
-CROSS JOIN (SELECT $1::availability_type[] AS availability) w
-WHERE es.name_id = $2::int
-  AND es.source_type = 'shop'
-  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
-ORDER BY es.source_id
+WITH w AS (
+  SELECT
+    $1::int AS equipment_name_id,
+    $2::availability_type[] AS availability
+)
+SELECT DISTINCT sh.id
+FROM shops sh
+JOIN mv_equipment_sources es ON es.source_id = sh.id AND es.source_type = 'shop' AND es.area_id = sh.area_id
+CROSS JOIN w
+WHERE es.name_id = w.equipment_name_id
+  AND (w.availability IS NULL OR sh.availability = ANY(w.availability))
+ORDER BY sh.id
 `
 
 type GetEquipmentShopIDsParams struct {
-	Availability []AvailabilityType
 	EquipmentID  int32
+	Availability []AvailabilityType
 }
 
 func (q *Queries) GetEquipmentShopIDs(ctx context.Context, arg GetEquipmentShopIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEquipmentShopIDs, pq.Array(arg.Availability), arg.EquipmentID)
+	rows, err := q.db.QueryContext(ctx, getEquipmentShopIDs, arg.EquipmentID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var source_id int32
-		if err := rows.Scan(&source_id); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, source_id)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -877,33 +1052,38 @@ func (q *Queries) GetEquipmentTableIDsEquipType(ctx context.Context, type_ Equip
 }
 
 const getEquipmentTreasureIDs = `-- name: GetEquipmentTreasureIDs :many
-SELECT DISTINCT es.source_id
-FROM mv_equipment_sources es
-CROSS JOIN (SELECT $1::availability_type[] AS availability) w
-WHERE es.name_id = $2::int
-  AND es.source_type = 'treasure'
-  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
-ORDER BY es.source_id
+WITH w AS (
+  SELECT
+    $1::int AS equipment_name_id,
+    $2::availability_type[] AS availability
+)
+SELECT DISTINCT t.id
+FROM treasures t
+JOIN mv_equipment_sources es ON es.source_id = t.id AND es.source_type = 'treasure' AND es.area_id = t.area_id
+CROSS JOIN w
+WHERE es.name_id = w.equipment_name_id
+  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
+ORDER BY t.id
 `
 
 type GetEquipmentTreasureIDsParams struct {
-	Availability []AvailabilityType
 	EquipmentID  int32
+	Availability []AvailabilityType
 }
 
 func (q *Queries) GetEquipmentTreasureIDs(ctx context.Context, arg GetEquipmentTreasureIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getEquipmentTreasureIDs, pq.Array(arg.Availability), arg.EquipmentID)
+	rows, err := q.db.QueryContext(ctx, getEquipmentTreasureIDs, arg.EquipmentID, pq.Array(arg.Availability))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var source_id int32
-		if err := rows.Scan(&source_id); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, source_id)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

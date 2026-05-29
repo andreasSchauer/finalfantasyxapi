@@ -898,6 +898,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAutoAbilityIDs,
 		getSingleFunc: cfg.getAutoAbility,
 		retrieveFunc:  cfg.retrieveAutoAbilities,
+		avlFunc: 	   filterAvlAutoAbilities,
 		subsections: map[string]Subsection{
 			"simple": {
 				createSubFn: createAutoAbilitySimple,

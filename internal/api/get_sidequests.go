@@ -37,6 +37,6 @@ func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Si
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetSidequestIDsByAvailability)),
+
 	})
 }

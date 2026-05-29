@@ -6,10 +6,6 @@ SELECT id FROM quests ORDER BY id;
 SELECT id FROM quests WHERE type = $1 ORDER BY id;
 
 
--- name: GetQuestIDsByAvailability :many
-SELECT id FROM quests WHERE availability = ANY(sqlc.narg('availability')::availability_type[]) ORDER BY id;
-
-
 -- name: GetQuestIDsByRepeatable :many
 SELECT id FROM quests WHERE is_repeatable = $1 ORDER BY id;
 
@@ -25,24 +21,8 @@ SELECT id FROM subquests WHERE sidequest_id = $1 ORDER BY id;
 SELECT id FROM sidequests ORDER BY id;
 
 
--- name: GetSidequestIDsByAvailability :many
-SELECT DISTINCT s.id
-FROM sidequests s
-JOIN quests q ON s.quest_id = q.id
-WHERE q.availability = ANY(sqlc.narg('availability')::availability_type[])
-ORDER BY s.id;
-
-
 -- name: GetSubquestIDs :many
 SELECT id FROM subquests ORDER BY id;
-
-
--- name: GetSubquestIDsByAvailability :many
-SELECT DISTINCT s.id
-FROM subquests s
-JOIN quests q ON s.quest_id = q.id
-WHERE q.availability = ANY(sqlc.narg('availability')::availability_type[])
-ORDER BY s.id;
 
 
 -- name: GetSubquestIDsByRepeatable :many

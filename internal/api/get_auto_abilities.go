@@ -61,7 +61,11 @@ func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seeding
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(enumListQuery(cfg, r, i, cfg.t.AutoAbilityCategory, resources, "category", cfg.db.GetAutoAbilityIDsByCategory)),
 		frl(enumQuery(cfg, r, i, cfg.t.EquipType, resources, "type", cfg.db.GetAutoAbilityIDsByEquipType)),
-		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetAutoAbilityIDsByMonster)),
+		frl(idQueryWrapper(cfg, r, i, resources, "monster", len(cfg.l.Monsters), getAutoAbilitiesByMonster)),
 		frl(idQuery(cfg, r, i, resources, "monster_items", len(cfg.l.Monsters), cfg.db.GetAutoAbilityIDsByMonsterItems)),
+		frl(idQueryWrapper(cfg, r, i, resources, "shop", len(cfg.l.Shops), getAutoAbilitiesByShop)),
+		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetAutoAbilityIDsByLocation)),
+		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetAutoAbilityIDsBySublocation)),
+		frl(idQuery(cfg, r, i, resources, "areas", len(cfg.l.Areas), cfg.db.GetAutoAbilityIDsByArea)),
 	})
 }

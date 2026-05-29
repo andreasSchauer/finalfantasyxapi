@@ -4066,11 +4066,14 @@ type MvAbility struct {
 }
 
 type MvAutoAbilitySource struct {
-	AutoAbilityID int32
-	AutoAbility   string
-	SourceID      int32
-	SourceType    string
-	AreaID        int32
+	AutoAbilityID   int32
+	AutoAbility     string
+	SourceID        int32
+	SourceType      string
+	CharacterID     int32
+	IsRepeatable    bool
+	IsRepeatableLoc bool
+	AreaID          int32
 }
 
 type MvAvailability struct {
@@ -4093,13 +4096,13 @@ type MvEquipmentSource struct {
 	NameID           int32
 	Name             string
 	SourceID         int32
-	AreaID           int32
 	SourceType       string
 	EmptySlotsAmount interface{}
 	AutoAbilityID    sql.NullInt32
 	AutoAbility      sql.NullString
-	Availability     AvailabilityType
-	SpecAvailability AvailabilityType
+	IsRepeatable     bool
+	IsRepeatableLoc  bool
+	AreaID           int32
 	ShopType         NullShopType
 }
 
@@ -4111,7 +4114,6 @@ type MvGeography struct {
 	Sublocation   string
 	Area          string
 	Version       sql.NullInt32
-	Availability  AvailabilityType
 }
 
 type MvGeographyGraph struct {
@@ -4134,14 +4136,14 @@ type MvGeographyGraph struct {
 }
 
 type MvItemSource struct {
-	MasterItemID     int32
-	Item             string
-	SourceID         int32
-	AreaID           int32
-	Amount           int32
-	SourceType       string
-	Availability     AvailabilityType
-	SpecAvailability AvailabilityType
+	MasterItemID    int32
+	Item            string
+	SourceID        int32
+	SourceType      string
+	Amount          int32
+	IsRepeatable    bool
+	IsRepeatableLoc bool
+	AreaID          int32
 }
 
 type MvMonsterEncounter struct {
@@ -4152,8 +4154,6 @@ type MvMonsterEncounter struct {
 	MonsterAmount     int32
 	DataID            int32
 	Category          MonsterFormationCategory
-	Availability      AvailabilityType
-	SpecAvailability  AvailabilityType
 	IsForcedAmbush    bool
 	CanEscape         bool
 	AreaID            int32
@@ -4173,27 +4173,24 @@ type MvMonsterEquipmentDrop struct {
 	AttachedAbilitiesID int32
 	AutoAbilityID       int32
 	AutoAbility         string
-	Availability        AvailabilityType
-	SpecAvailability    AvailabilityType
 	IsRepeatable        bool
 	EquipmentDropID     int32
 	IsForced            bool
 	Probability         interface{}
 	AutoAbilityType     EquipType
+	CharacterID         sql.NullInt32
 }
 
 type MvMonsterItemDrop struct {
-	MonsterID        int32
-	Monster          string
-	Version          sql.NullInt32
-	ItemID           int32
-	MasterItemID     int32
-	Item             string
-	Amount           int32
-	SourceType       string
-	Availability     AvailabilityType
-	SpecAvailability AvailabilityType
-	IsRepeatable     bool
+	MonsterID    int32
+	Monster      string
+	Version      sql.NullInt32
+	ItemID       int32
+	MasterItemID int32
+	Item         string
+	Amount       int32
+	SourceType   string
+	IsRepeatable bool
 }
 
 type OdModeAction struct {

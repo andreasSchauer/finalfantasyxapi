@@ -146,33 +146,6 @@ func (q *Queries) GetQuestIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getQuestIDsByAvailability = `-- name: GetQuestIDsByAvailability :many
-SELECT id FROM quests WHERE availability = ANY($1::availability_type[]) ORDER BY id
-`
-
-func (q *Queries) GetQuestIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getQuestIDsByAvailability, pq.Array(availability))
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getQuestIDsByRepeatable = `-- name: GetQuestIDsByRepeatable :many
 SELECT id FROM quests WHERE is_repeatable = $1 ORDER BY id
 `
@@ -254,37 +227,6 @@ func (q *Queries) GetSidequestIDs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getSidequestIDsByAvailability = `-- name: GetSidequestIDsByAvailability :many
-SELECT DISTINCT s.id
-FROM sidequests s
-JOIN quests q ON s.quest_id = q.id
-WHERE q.availability = ANY($1::availability_type[])
-ORDER BY s.id
-`
-
-func (q *Queries) GetSidequestIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSidequestIDsByAvailability, pq.Array(availability))
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getSidequestSubquestIDs = `-- name: GetSidequestSubquestIDs :many
 SELECT id FROM subquests WHERE sidequest_id = $1 ORDER BY id
 `
@@ -318,37 +260,6 @@ SELECT id FROM subquests ORDER BY id
 
 func (q *Queries) GetSubquestIDs(ctx context.Context) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getSubquestIDs)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getSubquestIDsByAvailability = `-- name: GetSubquestIDsByAvailability :many
-SELECT DISTINCT s.id
-FROM subquests s
-JOIN quests q ON s.quest_id = q.id
-WHERE q.availability = ANY($1::availability_type[])
-ORDER BY s.id
-`
-
-func (q *Queries) GetSubquestIDsByAvailability(ctx context.Context, availability []AvailabilityType) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSubquestIDsByAvailability, pq.Array(availability))
 	if err != nil {
 		return nil, err
 	}

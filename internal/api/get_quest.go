@@ -33,7 +33,6 @@ func (cfg *Config) retrieveQuests(r *http.Request, i handlerInput[seeding.Quest,
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
 		frl(enumQuery(cfg, r, i, cfg.t.QuestType, resources, "type", cfg.db.GetQuestIDsByType)),
-		frl(enumListQuery(cfg, r, i, cfg.t.AvailabilityType, resources, "availability", cfg.db.GetQuestIDsByAvailability)),
 		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetQuestIDsByRepeatable)),
 	})
 }

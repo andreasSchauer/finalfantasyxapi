@@ -383,7 +383,7 @@ CROSS JOIN w
 WHERE mis.master_item_id = $1::int
   AND mis.source_type = 'monster'
   AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR mis.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 ORDER BY m.id
 `
 
@@ -451,6 +451,7 @@ func (q *Queries) GetItemPlayerAbilityIDs(ctx context.Context, id int32) ([]int3
 const getItemQuestIDs = `-- name: GetItemQuestIDs :many
 WITH w AS (
     SELECT
+      $1::int AS item_id,
       $2::BOOLEAN AS repeatable,
       $3::availability_type[] AS availability
 )
@@ -459,10 +460,10 @@ FROM mv_item_sources mis
 JOIN quests q ON mis.source_id = q.id
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE i.id = $1::int
+WHERE i.id = w.item_id
   AND mis.source_type = 'quest'
   AND (w.repeatable IS NULL OR q.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR mis.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR q.availability = ANY(w.availability))
 ORDER BY q.id
 `
 
@@ -497,15 +498,21 @@ func (q *Queries) GetItemQuestIDs(ctx context.Context, arg GetItemQuestIDsParams
 
 const getItemShopIDs = `-- name: GetItemShopIDs :many
 WITH w AS (
-    SELECT $2::availability_type[] AS availability
+    SELECT
+      $1::int AS item_id,
+      $2::availability_type[] AS availability
 )
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
+JOIN mv_availabilities a ON a.s_id = mis.source_id
+ AND a.source_type = 'shop'
+ AND a.sub_type = 'item'
+ AND a.a_id = mis.area_id
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE i.id = $1::int
+WHERE i.id = w.item_id
   AND mis.source_type = 'shop'
-  AND (w.availability IS NULL OR mis.spec_availability = ANY(w.availability))
+  AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
 ORDER BY mis.source_id
 `
 
@@ -544,10 +551,11 @@ WITH w AS (
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
+JOIN treasures t ON mis.source_id = t.id AND mis.source_type = 'treasure' AND mis.area_id = t.area_id
 CROSS JOIN w
 WHERE i.id = $1::int
   AND mis.source_type = 'treasure'
-  AND (w.availability IS NULL OR mis.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
 ORDER BY mis.source_id
 `
 

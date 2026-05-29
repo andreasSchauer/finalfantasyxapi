@@ -8,45 +8,47 @@ WITH w AS (
             FROM auto_abilities aa
             JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
             JOIN master_items mit ON ia_req.master_item_id = mit.id
-            WHERE aa.id = sqlc.arg(auto_ability_id)
+            WHERE aa.id = sqlc.arg('auto_ability_id')::int
         )::int AS target_master_id
 )
 SELECT DISTINCT md.monster_id
 FROM mv_monster_item_drops md
+JOIN monsters m ON md.monster_id = m.id
 CROSS JOIN w
 WHERE md.master_item_id = w.target_master_id
   AND (w.repeatable IS NULL OR md.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR md.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 ORDER BY md.monster_id;
 
 
 -- name: GetAutoAbilityMonsterIDs :many
 WITH w AS (
     SELECT 
+        sqlc.arg('auto_ability_id')::int AS auto_ability_id,
         sqlc.narg('repeatable')::BOOLEAN AS repeatable,
         sqlc.narg('availability')::availability_type[] AS availability
-),
-filtered_monsters AS (
-    SELECT m.id
-    FROM monsters m
-    CROSS JOIN w
-    WHERE (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
-      AND (w.availability IS NULL OR m.availability = ANY(w.availability))
 )
-SELECT DISTINCT fm.id
-FROM filtered_monsters fm
-JOIN mv_monster_equipment_drops me ON me.monster_id = fm.id
-WHERE me.auto_ability_id = sqlc.arg('auto_ability_id')
-ORDER BY fm.id;
+SELECT DISTINCT m.id
+FROM monsters m
+JOIN mv_monster_equipment_drops me ON me.monster_id = m.id
+CROSS JOIN w
+WHERE me.auto_ability_id = w.auto_ability_id
+  AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
+  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
+ORDER BY m.id;
+
 
 
 -- name: GetAutoAbilityTreasureIDs :many
+WITH w as (
+  SELECT sqlc.narg('availability')::availability_type[] AS availability
+)
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
-CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
+JOIN treasures t ON es.source_id = t.id AND es.source_type = 'treasure' AND es.area_id = t.area_id
+CROSS JOIN w
 WHERE es.auto_ability_id = sqlc.arg('auto_ability_id')::int
-  AND es.source_type = 'treasure'
-  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
 ORDER BY es.source_id;
 
 
@@ -65,24 +67,42 @@ ORDER BY equipment_table_id;
 
 
 -- name: GetAutoAbilityShopIDsPre :many
+WITH w as (
+  SELECT
+    sqlc.arg('auto_ability_id')::int,
+    sqlc.narg('availability')::availability_type[] AS availability
+)
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
-CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-WHERE es.auto_ability_id = sqlc.arg('auto_ability_id')::int
+JOIN mv_availabilities a ON a.s_id = es.source_id
+ AND a.source_type = 'shop'
+ AND a.sub_type = 'equip'
+ AND a.a_id = es.area_id
+CROSS JOIN w
+WHERE es.auto_ability_id = w.auto_ability_id
   AND es.shop_type = 'pre-airship'
   AND es.source_type = 'shop'
-  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
 ORDER BY es.source_id;
 
 
 -- name: GetAutoAbilityShopIDsPost :many
+WITH w as (
+  SELECT 
+    sqlc.arg('auto_ability_id')::int,
+    sqlc.narg('availability')::availability_type[] AS availability
+)
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
-CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-WHERE es.auto_ability_id = sqlc.arg('auto_ability_id')::int
+JOIN mv_availabilities a ON a.s_id = es.source_id
+ AND a.source_type = 'shop'
+ AND a.sub_type = 'equip'
+ AND a.a_id = es.area_id
+CROSS JOIN w
+WHERE es.auto_ability_id = w.auto_ability_id
   AND es.shop_type = 'post-airship'
   AND es.source_type = 'shop'
-  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
 ORDER BY es.source_id;
 
 
@@ -99,7 +119,18 @@ SELECT id FROM auto_abilities WHERE type = $1 ORDER BY id;
 
 
 -- name: GetAutoAbilityIDsByMonster :many
-SELECT DISTINCT auto_ability_id FROM mv_monster_equipment_drops WHERE monster_id = $1 ORDER BY auto_ability_id;
+WITH w AS (
+  SELECT
+    sqlc.arg('monster_id')::int AS monster_id,
+    sqlc.narg('character_id')::int AS character_id
+)
+SELECT DISTINCT a.auto_ability_id
+FROM mv_auto_ability_sources a
+CROSS JOIN w
+WHERE a.source_id = w.monster_id
+  AND a.source_type = 'monster'
+  AND (w.character_id IS NULL OR a.character_id = w.character_id OR a.character_id IS NULL)
+ORDER BY a.auto_ability_id;
 
 
 -- name: GetAutoAbilityIDsByMonsterItems :many
@@ -109,6 +140,46 @@ JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
 JOIN mv_monster_item_drops md ON ia_req.master_item_id = md.master_item_id
 WHERE md.monster_id = $1
 ORDER BY aa.id;
+
+
+-- name: GetAutoAbilityIDsByShop :many
+WITH w AS (
+  SELECT
+    sqlc.arg('shop_id')::int AS shop_id,
+    sqlc.narg('character_id')::int AS character_id
+)
+SELECT DISTINCT a.auto_ability_id
+FROM mv_auto_ability_sources a
+CROSS JOIN w
+WHERE a.source_id = w.shop_id
+  AND a.source_type = 'shop'
+  AND (w.character_id IS NULL OR a.character_id = w.character_id OR a.character_id IS NULL)
+ORDER BY a.auto_ability_id;
+
+
+-- name: GetAutoAbilityIDsByLocation :many
+SELECT DISTINCT a.auto_ability_id
+FROM mv_auto_ability_sources a
+JOIN mv_geography g ON a.area_id = g.area_id
+WHERE g.location_id = $1
+ORDER BY a.auto_ability_id;
+
+
+-- name: GetAutoAbilityIDsBySublocation :many
+SELECT DISTINCT a.auto_ability_id
+FROM mv_auto_ability_sources a
+JOIN mv_geography g ON a.area_id = g.area_id
+WHERE g.sublocation_id = $1
+ORDER BY a.auto_ability_id;
+
+
+-- name: GetAutoAbilityIDsByArea :many
+SELECT DISTINCT auto_ability_id
+FROM mv_auto_ability_sources
+WHERE area_id = $1
+ORDER BY auto_ability_id;
+
+
 
 
 
@@ -157,23 +228,33 @@ SELECT equipment_table_id FROM j_equipment_tables_names WHERE equipment_name_id 
 
 
 -- name: GetEquipmentTreasureIDs :many
-SELECT DISTINCT es.source_id
-FROM mv_equipment_sources es
-CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-WHERE es.name_id = sqlc.arg('equipment_id')::int
-  AND es.source_type = 'treasure'
-  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
-ORDER BY es.source_id;
+WITH w AS (
+  SELECT
+    sqlc.arg('equipment_id')::int AS equipment_name_id,
+    sqlc.narg('availability')::availability_type[] AS availability
+)
+SELECT DISTINCT t.id
+FROM treasures t
+JOIN mv_equipment_sources es ON es.source_id = t.id AND es.source_type = 'treasure' AND es.area_id = t.area_id
+CROSS JOIN w
+WHERE es.name_id = w.equipment_name_id
+  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
+ORDER BY t.id;
 
 
 -- name: GetEquipmentShopIDs :many
-SELECT DISTINCT es.source_id
-FROM mv_equipment_sources es
-CROSS JOIN (SELECT sqlc.narg('availability')::availability_type[] AS availability) w
-WHERE es.name_id = sqlc.arg('equipment_id')::int
-  AND es.source_type = 'shop'
-  AND (w.availability IS NULL OR es.availability = ANY(w.availability))
-ORDER BY es.source_id;
+WITH w AS (
+  SELECT
+    sqlc.arg('equipment_id')::int AS equipment_name_id,
+    sqlc.narg('availability')::availability_type[] AS availability
+)
+SELECT DISTINCT sh.id
+FROM shops sh
+JOIN mv_equipment_sources es ON es.source_id = sh.id AND es.source_type = 'shop' AND es.area_id = sh.area_id
+CROSS JOIN w
+WHERE es.name_id = w.equipment_name_id
+  AND (w.availability IS NULL OR sh.availability = ANY(w.availability))
+ORDER BY sh.id;
 
 
 -- name: GetEquipmentIDs :many

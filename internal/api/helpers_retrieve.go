@@ -387,6 +387,61 @@ func filterAvlPrimers(cfg *Config, r *http.Request, resources []NamedAPIResource
 	return resNew, nil
 }
 
+func filterAvlAutoAbilities(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
+	i := cfg.e.autoAbilities
+
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errIsNotEmptyQuery(err) {
+		return nil, err
+	}
+	if errors.Is(err, errEmptyQuery) {
+		return resources, nil
+	}
+
+	params := database.FilterAutoAbilityIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		AvlType:      string(AvlTypeSelf),
+		Availability: availabilities,
+	}
+
+	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeContext)
+		params.LocContextID = h.GetNullInt32(locID)
+		ct := string(ViewSourceTypeLocation)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeContext)
+		params.LocContextID = h.GetNullInt32(subLocID)
+		ct := string(ViewSourceTypeSublocation)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
+	if err == nil {
+		params.AvlType = string(AvlTypeArea)
+		params.LocContextID = h.GetNullInt32(areaID)
+		ct := string(ViewSourceTypeArea)
+		params.LocContextType = h.GetNullString(&ct)
+	}
+
+	charID, _ := getQueryIdPtr(r, cfg.e.characters, "character", i.queryLookup)
+	if charID != nil {
+		params.CharacterID = h.GetNullInt32(charID)
+	}
+
+	dbIDs, err := cfg.db.FilterAutoAbilityIDsByAvailability(r.Context(), params)
+	if err != nil {
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+	}
+
+	resNew := idsToAPIResources(cfg, i, dbIDs)
+	return resNew, nil
+}
+
 func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
 	i := cfg.e.shops
 
