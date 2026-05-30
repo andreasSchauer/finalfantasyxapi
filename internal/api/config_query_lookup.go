@@ -340,6 +340,14 @@ func (cfg *Config) initLocationsParams() {
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
+			Name:        "is_repeatable",
+			Description: "Searches for locations where the searched resources can be farmed. Must be combined with a parameter that looks up a farmable resource type.",
+			Type:        "bool",
+			ForList:     true,
+			ForSingle:   false,
+			UsableWith:  []string{"monster", "item", "monsters", "boss_fights", "shops", "treasures", "sidequests"},
+		},
+		{
 			Name:        "characters",
 			Description: "Searches for locations where a character permanently joins the party.",
 			Type:        "bool",
@@ -444,6 +452,14 @@ func (cfg *Config) initSublocationsParams() {
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "is_repeatable",
+			Description: "Searches for sublocations where the searched resources can be farmed. Must be combined with a parameter that looks up a farmable resource type.",
+			Type:        "bool",
+			ForList:     true,
+			ForSingle:   false,
+			UsableWith:  []string{"monster", "item", "monsters", "boss_fights", "shops", "treasures", "sidequests"},
 		},
 		{
 			Name:        "characters",
@@ -567,6 +583,14 @@ func (cfg *Config) initAreasParams() {
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "is_repeatable",
+			Description: "Searches for areas where the searched resources can be farmed. Must be combined with a parameter that looks up a farmable resource type.",
+			Type:        "bool",
+			ForList:     true,
+			ForSingle:   false,
+			UsableWith:  []string{"monster", "item", "monsters", "boss_fights", "shops", "treasures", "sidequests"},
 		},
 		{
 			Name:        "save_sphere",

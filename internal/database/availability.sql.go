@@ -25,14 +25,14 @@ WITH w AS (
         $8::text[] AS methods
 ),
 available_areas AS (
-    SELECT a.a_id, a.avl_self as current_avl, w.availability, 'area'::text AS s_type
+    SELECT a.a_id, a.avl_self AS current_avl, 'area'::text AS s_type
     FROM mv_availabilities a
     JOIN w ON a.a_id = ANY(w.ids)
     WHERE a.source_type = 'area'
 
     UNION ALL
 
-    SELECT a.a_id, a.avl_area as current_avl, w.availability 'monster'::text AS s_type
+    SELECT a.a_id, a.avl_area AS current_avl, 'monster'::text AS s_type
     FROM mv_availabilities a
     JOIN w ON a.a_id = ANY(w.ids)
     WHERE a.source_type = 'monster'
@@ -43,8 +43,9 @@ available_areas AS (
 
     SELECT
         mis.area_id AS a_id,
-        'always'::availability_type AS current_avl, -- lowest rank to not raise MAX avl of GROUP BY bucket
-        w.availability,
+        -- assigning the avl of the item's resource to the location would alter the results
+        -- so we assign the lowest rank to not raise MAX avl of GROUP BY bucket
+        'always'::availability_type AS current_avl,
         'item'::text AS s_type
     FROM mv_item_sources mis
     JOIN items i ON mis.master_item_id = i.master_item_id
@@ -61,7 +62,6 @@ available_areas AS (
     SELECT
         mis.area_id AS a_id,
         'always'::availability_type AS current_avl,
-        w.availability
         'key-item'::text AS s_type
     FROM mv_item_sources mis
     JOIN key_items ki ON mis.master_item_id = ki.master_item_id
@@ -76,8 +76,9 @@ available_areas AS (
 
     SELECT
         a.a_id,
-        'always'::availability_type AS current_avl, -- avl logic already in where clause
-        w.availability,
+        -- can't use alias in where clause,
+        -- so we assign the uninvasive option here and filter in the where clause
+        'always'::availability_type AS current_avl,
         CASE
           WHEN a.sub_type = 'boss' THEN 'boss'::text
           ELSE a.source_type
@@ -92,16 +93,14 @@ available_areas AS (
 )
 SELECT a_id
 FROM available_areas
-GROUP BY a_id, availability
-HAVING MAX(current_avl) = ANY(availability)
-AND (
-    (SELECT reqs FROM w) IS NULL OR
-    ARRAY_AGG(DISTINCT s_type) @> (SELECT reqs FROM w)
-)
-AND (
-    (SELECT excls FROM w) IS NULL OR
-    NOT ARRAY_AGG(DISTINCT s_type) && (SELECT excls FROM w)
-)
+CROSS JOIN w
+GROUP BY a_id, w.availability, w.item_id, w.monster_id, w.key_item_id, w.reqs, w.excls
+HAVING MAX(current_avl) = ANY(w.availability)
+   AND (w.item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['item'])
+   AND (w.monster_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['monster'])
+   AND (w.key_item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['key-item'])
+   AND (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
+   AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
 ORDER BY a_id
 `
 
@@ -166,8 +165,7 @@ available_auto_abilities AS (
             WHEN w.avl_type = 'self' THEN a.avl_self
             WHEN w.avl_type = 'context' THEN a.avl_context
             WHEN w.avl_type = 'area' THEN a.avl_area
-        END as current_avl,
-        w.availability
+        END AS current_avl
     FROM mv_auto_ability_sources aas
     JOIN mv_availabilities a ON a.s_id = aas.source_id
      AND a.source_type = aas.source_type
@@ -184,8 +182,9 @@ available_auto_abilities AS (
 )
 SELECT auto_ability_id
 FROM available_auto_abilities
-GROUP BY auto_ability_id, availability
-HAVING MIN(current_avl) = ANY(availability)
+CROSS JOIN w
+GROUP BY auto_ability_id, w.availability
+HAVING MIN(current_avl) = ANY(w.availability)
 `
 
 type FilterAutoAbilityIDsByAvailabilityParams struct {
@@ -244,8 +243,7 @@ available_items AS (
             WHEN w.avl_type = 'self' THEN a.avl_self
             WHEN w.avl_type = 'context' THEN a.avl_context
             WHEN w.avl_type = 'area' THEN a.avl_area
-        END as current_avl,
-        w.availability
+        END AS current_avl
     FROM items i
     JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
     JOIN mv_availabilities a ON a.s_id = mis.source_id
@@ -262,8 +260,9 @@ available_items AS (
 )
 SELECT item_id
 FROM available_items
-GROUP BY item_id, availability
-HAVING MIN(current_avl) = ANY(availability)
+CROSS JOIN w
+GROUP BY item_id, w.availability
+HAVING MIN(current_avl) = ANY(w.availability)
 `
 
 type FilterItemIDsByAvailabilityParams struct {
@@ -314,8 +313,7 @@ WITH w AS (
 available_key_items AS (
     SELECT 
         ki.id AS key_item_id,
-        a.avl_self as current_avl,
-        w.availability
+        a.avl_self AS current_avl
     FROM key_items ki
     JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
     JOIN mv_availabilities a ON a.s_id = mis.source_id
@@ -332,8 +330,9 @@ available_key_items AS (
 )
 SELECT key_item_id
 FROM available_key_items
-GROUP BY key_item_id, availability
-HAVING MIN(current_avl) = ANY(availability)
+CROSS JOIN w
+GROUP BY key_item_id, w.availability
+HAVING MIN(current_avl) = ANY(w.availability)
 `
 
 type FilterKeyItemIDsByAvailabilityParams struct {
@@ -384,13 +383,13 @@ WITH w AS (
         $8::text[] AS methods
 ),
 available_locations AS (
-    SELECT l.id AS location_id, l.availability as current_avl, w.availability, 'location'::text AS s_type
+    SELECT l.id AS location_id, l.availability AS current_avl, 'location'::text AS s_type
     FROM locations l
     JOIN w ON l.id = ANY(w.ids)
 
     UNION ALL
 
-    SELECT g.location_id, a.avl_context as current_avl, w.availability, 'monster'::text AS s_type
+    SELECT g.location_id, a.avl_context AS current_avl, 'monster'::text AS s_type
     FROM mv_availabilities a
     JOIN mv_geography g ON a.a_id = g.area_id
     JOIN w ON g.location_id = ANY(w.ids)
@@ -400,7 +399,7 @@ available_locations AS (
 
     UNION ALL
 
-    SELECT g.location_id, 'always'::availability_type AS current_avl, w.availability, 'item'::text AS s_type
+    SELECT g.location_id, 'always'::availability_type AS current_avl, 'item'::text AS s_type
     FROM mv_item_sources mis
     JOIN items i ON mis.master_item_id = i.master_item_id
     JOIN mv_availabilities a ON a.s_id = mis.source_id
@@ -414,7 +413,7 @@ available_locations AS (
 
     UNION ALL
 
-    SELECT g.location_id, 'always'::availability_type AS current_avl, w.availability, 'key-item'::text AS s_type
+    SELECT g.location_id, 'always'::availability_type AS current_avl, 'key-item'::text AS s_type
     FROM mv_item_sources mis
     JOIN key_items ki ON mis.master_item_id = ki.master_item_id
     JOIN mv_availabilities a ON a.s_id = mis.source_id
@@ -430,7 +429,6 @@ available_locations AS (
     SELECT
         g.location_id,
         'always'::availability_type AS current_avl,
-        w.availability,
         CASE
           WHEN a.sub_type = 'boss' THEN 'boss'::text
           ELSE a.source_type
@@ -446,16 +444,14 @@ available_locations AS (
 )
 SELECT location_id
 FROM available_locations
-GROUP BY location_id, availability
-HAVING MAX(current_avl) = ANY(availability)
-AND (
-    (SELECT reqs FROM w) IS NULL OR
-    ARRAY_AGG(DISTINCT s_type) @> (SELECT reqs FROM w)
-)
-AND (
-    (SELECT excls FROM w) IS NULL OR
-    NOT ARRAY_AGG(DISTINCT s_type) && (SELECT excls FROM w)
-)
+CROSS JOIN w
+GROUP BY location_id, w.availability, w.item_id, w.monster_id, w.key_item_id, w.reqs, w.excls
+HAVING MAX(current_avl) = ANY(w.availability)
+   AND (w.item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['item'])
+   AND (w.monster_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['monster'])
+   AND (w.key_item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['key-item'])
+   AND (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
+   AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
 ORDER BY location_id
 `
 
@@ -519,8 +515,7 @@ available_master_items AS (
             WHEN w.avl_type = 'self' THEN a.avl_self
             WHEN w.avl_type = 'context' THEN a.avl_context
             WHEN w.avl_type = 'area' THEN a.avl_area
-        END as current_avl,
-        w.availability
+        END AS current_avl
     FROM mv_item_sources mis
     JOIN mv_availabilities a ON a.s_id = mis.source_id
      AND a.source_type = mis.source_type
@@ -536,8 +531,9 @@ available_master_items AS (
 )
 SELECT master_item_id
 FROM available_master_items
-GROUP BY master_item_id, availability
-HAVING MIN(current_avl) = ANY(availability)
+CROSS JOIN w
+GROUP BY master_item_id, w.availability
+HAVING MIN(current_avl) = ANY(w.availability)
 `
 
 type FilterMasterItemIDsByAvailabilityParams struct {
@@ -593,7 +589,7 @@ available_formations AS (
             WHEN w.avl_type = 'self' THEN a.avl_self
             WHEN w.avl_type = 'context' THEN a.avl_context
             WHEN w.avl_type = 'area' THEN a.avl_area
-        END as current_avl
+        END AS current_avl
     FROM mv_availabilities a
     JOIN mv_geography g ON a.a_id = g.area_id
     CROSS JOIN w
@@ -607,8 +603,9 @@ available_formations AS (
 )
 SELECT s_id
 FROM available_formations
-GROUP BY s_id
-HAVING MIN(current_avl) = ANY(SELECT availability FROM w)
+CROSS JOIN w
+GROUP BY s_id, w.availability
+HAVING MIN(current_avl) = ANY(w.availability)
 `
 
 type FilterMonsterFormationIDsByAvailabilityParams struct {
@@ -664,8 +661,7 @@ available_monsters AS (
             WHEN w.avl_type = 'self' THEN a.avl_self
             WHEN w.avl_type = 'context' THEN a.avl_context
             WHEN w.avl_type = 'area' THEN a.avl_area
-        END as current_avl,
-        w.availability
+        END AS current_avl
     FROM mv_availabilities a
     JOIN mv_geography g ON a.a_id = g.area_id
     CROSS JOIN w
@@ -679,8 +675,9 @@ available_monsters AS (
 )
 SELECT s_id
 FROM available_monsters
-GROUP BY s_id, availability
-HAVING MIN(current_avl) = ANY(availability)
+CROSS JOIN w
+GROUP BY s_id, w.availability
+HAVING MIN(current_avl) = ANY(w.availability)
 `
 
 type FilterMonsterIDsByAvailabilityParams struct {
@@ -729,8 +726,7 @@ WITH w AS (
 available_primers AS (
     SELECT 
         p.id AS primer_id,
-        a.avl_self as current_avl,
-        w.availability
+        a.avl_self AS current_avl
     FROM primers p
     JOIN key_items ki ON p.key_item_id = ki.id
     JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
@@ -743,8 +739,9 @@ available_primers AS (
 )
 SELECT primer_id
 FROM available_primers
-GROUP BY primer_id, availability
-HAVING MIN(current_avl) = ANY(availability)
+CROSS JOIN w
+GROUP BY primer_id, w.availability
+HAVING MIN(current_avl) = ANY(w.availability)
 `
 
 type FilterPrimerIDsByAvailabilityParams struct {
@@ -825,25 +822,26 @@ WITH w AS (
         $2::text AS avl_type,
         $3::availability_type[] AS availability,
         $4::text[] AS sub_types
-)
-SELECT s_id
-FROM (
+),
+available_shops AS (
     SELECT 
         a.s_id,
         CASE 
             WHEN w.avl_type = 'self' THEN a.avl_self
             WHEN w.avl_type = 'context' THEN a.avl_context
             WHEN w.avl_type = 'area' THEN a.avl_area
-        END as current_avl,
-        w.availability
+        END AS current_avl
     FROM mv_availabilities a
     CROSS JOIN w
     WHERE a.source_type = 'shop'
-      AND a.s_id = ANY(w.ids)
-      AND (w.sub_types IS NULL OR a.sub_type = ANY(w.sub_types))
-) available_shops
-GROUP BY s_id, availability
-HAVING MIN(current_avl) = ANY(availability)
+        AND a.s_id = ANY(w.ids)
+        AND (w.sub_types IS NULL OR a.sub_type = ANY(w.sub_types))
+)
+SELECT s_id
+FROM available_shops
+CROSS JOIN w
+GROUP BY s_id, w.availability
+HAVING MIN(current_avl) = ANY(w.availability)
 `
 
 type FilterShopIDsByAvailabilityParams struct {
@@ -941,8 +939,7 @@ available_spheres AS (
             WHEN w.avl_type = 'self' THEN a.avl_self
             WHEN w.avl_type = 'context' THEN a.avl_context
             WHEN w.avl_type = 'area' THEN a.avl_area
-        END as current_avl,
-        w.availability
+        END AS current_avl
     FROM spheres s
     JOIN items i ON s.item_id = i.id
     JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
@@ -960,8 +957,9 @@ available_spheres AS (
 )
 SELECT sphere_id
 FROM available_spheres
-GROUP BY sphere_id, availability
-HAVING MIN(current_avl) = ANY(availability)
+CROSS JOIN w
+GROUP BY sphere_id, w.availability
+HAVING MIN(current_avl) = ANY(w.availability)
 `
 
 type FilterSphereIDsByAvailabilityParams struct {
@@ -1014,13 +1012,13 @@ WITH w AS (
         $8::text[] AS methods
 ),
 available_sublocations AS (
-    SELECT s.id AS sublocation_id, s.availability as current_avl, w.availability, 'sublocation'::text AS s_type
+    SELECT s.id AS sublocation_id, s.availability AS current_avl, 'sublocation'::text AS s_type
     FROM sublocations s
     JOIN w ON s.id = ANY(w.ids)
 
     UNION ALL
 
-    SELECT g.sublocation_id, a.avl_context as current_avl, w.availability 'monster'::text AS s_type
+    SELECT g.sublocation_id, a.avl_context AS current_avl, 'monster'::text AS s_type
     FROM mv_availabilities a
     JOIN mv_geography g ON a.a_id = g.area_id
     JOIN w ON g.sublocation_id = ANY(w.ids)
@@ -1030,7 +1028,7 @@ available_sublocations AS (
 
     UNION ALL
 
-    SELECT g.sublocation_id, 'always'::availability_type AS current_avl, w.availability, 'item'::text AS s_type
+    SELECT g.sublocation_id, 'always'::availability_type AS current_avl, 'item'::text AS s_type
     FROM mv_item_sources mis
     JOIN items i ON mis.master_item_id = i.master_item_id
     JOIN mv_availabilities a ON a.s_id = mis.source_id
@@ -1044,7 +1042,7 @@ available_sublocations AS (
 
     UNION ALL
 
-    SELECT g.sublocation_id, 'always'::availability_type AS current_avl, w.availability, 'key-item'::text AS s_type
+    SELECT g.sublocation_id, 'always'::availability_type AS current_avl, 'key-item'::text AS s_type
     FROM mv_item_sources mis
     JOIN key_items ki ON mis.master_item_id = ki.master_item_id
     JOIN mv_availabilities a ON a.s_id = mis.source_id
@@ -1060,7 +1058,6 @@ available_sublocations AS (
     SELECT
         g.sublocation_id,
         'always'::availability_type AS current_avl,
-        w.availability,
         CASE
           WHEN a.sub_type = 'boss' THEN 'boss'::text
           ELSE a.source_type
@@ -1076,16 +1073,14 @@ available_sublocations AS (
 )
 SELECT sublocation_id
 FROM available_sublocations
-GROUP BY sublocation_id, availability
-HAVING MAX(current_avl) = ANY(availability)
-AND (
-    (SELECT reqs FROM w) IS NULL OR
-    ARRAY_AGG(DISTINCT s_type) @> (SELECT reqs FROM w)
-)
-AND (
-    (SELECT excls FROM w) IS NULL OR
-    NOT ARRAY_AGG(DISTINCT s_type) && (SELECT excls FROM w)
-)
+CROSS JOIN w
+GROUP BY sublocation_id, w.availability, w.item_id, w.monster_id, w.key_item_id, w.reqs, w.excls
+HAVING MAX(current_avl) = ANY(w.availability)
+   AND (w.item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['item'])
+   AND (w.monster_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['monster'])
+   AND (w.key_item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['key-item'])
+   AND (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
+   AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
 ORDER BY sublocation_id
 `
 

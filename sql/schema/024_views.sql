@@ -62,6 +62,17 @@ SELECT DISTINCT
     fd.category,
     fd.is_forced_ambush,
     fd.can_escape,
+    fd.availability AS avl_context,
+    ea.availability AS avl_area,
+    m.is_repeatable,
+    CASE 
+        WHEN m.id = 299 THEN TRUE -- dark yojimbo
+        WHEN fd.category IN (
+            'random-encounter'::monster_formation_category, 
+            'on-demand-fight'::monster_formation_category
+        ) THEN TRUE
+        ELSE FALSE
+    END AS is_repeatable_loc,
     g.area_id,
     g.location,
     g.sublocation,
@@ -389,8 +400,6 @@ SELECT DISTINCT
     te.empty_slots_amount,
     j.auto_ability_id,
     aa.name AS auto_ability,
-    FALSE AS is_repeatable,
-    FALSE AS is_repeatable_loc,
     t.area_id,
     NULL::shop_type AS shop_type
 FROM treasures t
@@ -409,8 +418,6 @@ SELECT DISTINCT
     se.empty_slots_amount,
     j.auto_ability_id,
     aa.name AS auto_ability,
-    TRUE AS is_repeatable,
-    TRUE AS is_repeatable_loc,
     sh.area_id,
     se.shop_type::shop_type AS shop_type
 FROM shops sh
@@ -468,15 +475,8 @@ SELECT DISTINCT
     med.monster_id AS source_id,
     'monster' AS source_type,
     med.character_id,
-    med.is_repeatable,
-    CASE 
-        WHEN me.monster_id = 299 THEN TRUE -- dark yojimbo
-        WHEN me.category IN (
-            'random-encounter'::monster_formation_category, 
-            'on-demand-fight'::monster_formation_category
-        ) THEN TRUE
-        ELSE FALSE
-    END AS is_repeatable_loc,
+    me.is_repeatable,
+    me.is_repeatable_loc,
     me.area_id
 FROM mv_monster_equipment_drops med
 JOIN mv_monster_encounters me ON med.monster_id = me.monster_id;
@@ -491,7 +491,7 @@ CREATE INDEX idx_mv_auto_ability_sources_area_id ON mv_auto_ability_sources (are
 CREATE MATERIALIZED VIEW mv_availabilities AS
 SELECT DISTINCT
     m.id AS s_id,
-    m.name AS name,
+    m.name,
     m.version AS v,
     'monster' AS source_type,
     CASE
@@ -499,43 +499,37 @@ SELECT DISTINCT
         ELSE 'monster' -- I'm not quite sure how to handle it, probably change GetAreasIDsWithBosses query
     END::text AS sub_type,
     m.availability AS avl_self,
-    fd.availability AS avl_context,
-    ea.availability AS avl_area,
-    g.area_id AS a_id,
-    g.location,
-    g.sublocation,
-    g.area,
-    g.version AS av
-FROM mv_geography g
-JOIN encounter_areas ea ON ea.area_id = g.area_id
-JOIN j_monster_formations_encounter_areas jmfea ON ea.id = jmfea.encounter_area_id
-JOIN monster_formations mf ON jmfea.monster_formation_id = mf.id
-JOIN j_monster_selections_monsters jmsm ON mf.monster_selection_id = jmsm.monster_selection_id
-JOIN monster_amounts ma ON jmsm.monster_amount_id = ma.id
-JOIN monsters m ON ma.monster_id = m.id
-JOIN formation_data fd ON mf.formation_data_id = fd.id
+    me.avl_context,
+    me.avl_area,
+    m.is_repeatable,
+    me.is_repeatable_loc,
+    me.area_id AS a_id,
+    me.location,
+    me.sublocation,
+    me.area,
+    me.version AS av
+FROM mv_monster_encounters me
+JOIN monsters m ON me.monster_id = m.id
 
 UNION ALL
 
 SELECT DISTINCT
-    mf.id AS s_id,
+    me.formation_id AS s_id,
     NULL::text AS name,
     NULL::int AS v,
     'monster-formation' AS source_type,
     NULL::text AS sub_type,
-    fd.availability AS avl_self,
-    fd.availability AS avl_context,
-    ea.availability AS avl_area,
-    g.area_id AS a_id,
-    g.location,
-    g.sublocation,
-    g.area,
-    g.version AS av
-FROM mv_geography g
-JOIN encounter_areas ea ON ea.area_id = g.area_id
-JOIN j_monster_formations_encounter_areas jmfea ON ea.id = jmfea.encounter_area_id
-JOIN monster_formations mf ON jmfea.monster_formation_id = mf.id
-JOIN formation_data fd ON mf.formation_data_id = fd.id
+    me.avl_context AS avl_self,
+    me.avl_context,
+    me.avl_area,
+    me.is_repeatable,
+    me.is_repeatable_loc,
+    me.area_id AS a_id,
+    me.location,
+    me.sublocation,
+    me.area,
+    me.version AS av
+FROM mv_monster_encounters me
 
 UNION ALL
 
@@ -548,6 +542,8 @@ SELECT DISTINCT
     a.availability AS avl_self,
     a.availability AS avl_context,
     a.availability AS avl_area,
+    NULL::boolean AS is_repeatable,
+    NULL::boolean AS is_repeatable_loc,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -567,6 +563,8 @@ SELECT DISTINCT
     t.availability AS avl_self,
     t.availability AS avl_context,
     t.availability AS avl_area,
+    FALSE AS is_repeatable,
+    FALSE AS is_repeatable_loc,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -592,6 +590,8 @@ SELECT DISTINCT
         WHEN 'pre-airship' THEN 'pre-story'::availability_type
         WHEN 'post-airship' THEN 'post'::availability_type
     END AS avl_area,
+    FALSE AS is_repeatable,
+    FALSE AS is_repeatable_loc,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -618,6 +618,8 @@ SELECT DISTINCT
         WHEN 'pre-airship' THEN 'pre-story'::availability_type
         WHEN 'post-airship' THEN 'post'::availability_type
     END AS avl_area,
+    FALSE AS is_repeatable,
+    FALSE AS is_repeatable_loc,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -638,6 +640,8 @@ SELECT DISTINCT
     q.availability AS avl_self,
     q.availability AS avl_context,
     q.availability AS avl_area,
+    q.is_repeatable,
+    q.is_repeatable AS is_repeatable_loc,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
@@ -659,6 +663,8 @@ SELECT DISTINCT
     'always'::availability_type AS avl_self,
     'always'::availability_type AS avl_context,
     'always'::availability_type AS avl_area,
+    TRUE AS is_repeatable,
+    TRUE AS is_repeatable_loc,
     g.area_id AS a_id,
     g.location,
     g.sublocation,
