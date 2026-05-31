@@ -4077,19 +4077,21 @@ type MvAutoAbilitySource struct {
 }
 
 type MvAvailability struct {
-	SID         int32
-	Name        string
-	V           sql.NullInt32
-	SourceType  string
-	SubType     string
-	AvlSelf     AvailabilityType
-	AvlContext  AvailabilityType
-	AvlArea     AvailabilityType
-	AID         int32
-	Location    string
-	Sublocation string
-	Area        string
-	Av          sql.NullInt32
+	SID             int32
+	Name            string
+	V               sql.NullInt32
+	SourceType      string
+	SubType         string
+	AvlSelf         AvailabilityType
+	AvlContext      AvailabilityType
+	AvlArea         AvailabilityType
+	IsRepeatable    bool
+	IsRepeatableLoc bool
+	AID             int32
+	Location        string
+	Sublocation     string
+	Area            string
+	Av              sql.NullInt32
 }
 
 type MvEquipmentSource struct {
@@ -4100,8 +4102,6 @@ type MvEquipmentSource struct {
 	EmptySlotsAmount interface{}
 	AutoAbilityID    sql.NullInt32
 	AutoAbility      sql.NullString
-	IsRepeatable     bool
-	IsRepeatableLoc  bool
 	AreaID           int32
 	ShopType         NullShopType
 }
@@ -4156,6 +4156,10 @@ type MvMonsterEncounter struct {
 	Category          MonsterFormationCategory
 	IsForcedAmbush    bool
 	CanEscape         bool
+	AvlContext        AvailabilityType
+	AvlArea           AvailabilityType
+	IsRepeatable      bool
+	IsRepeatableLoc   bool
 	AreaID            int32
 	Location          string
 	Sublocation       string

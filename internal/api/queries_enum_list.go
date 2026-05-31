@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -14,7 +13,7 @@ func enumListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList
 	}
 
 	enums, err := parseEnumListQuery(cfg, r, i.endpoint, queryParam, et)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {

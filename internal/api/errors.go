@@ -21,8 +21,12 @@ var errNoIntRange = errors.New("query parameter doesn't have integer range.")
 var errCorrect = errors.New("test got the expected error.")
 var errIgnoredField = errors.New("this field of the test struct is ignored")
 
-func errIsNotEmptyQuery(err error) bool {
-	return err != nil && !errors.Is(err, errEmptyQuery)
+func errExceptEmptyQuery(err error) bool {
+	return err != nil && !queryIsEmpty(err)
+}
+
+func queryIsEmpty(err error) bool {
+	return queryIsEmpty(err)
 }
 
 type httpError struct {

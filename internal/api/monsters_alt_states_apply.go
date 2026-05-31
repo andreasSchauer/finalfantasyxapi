@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 	"slices"
@@ -22,7 +21,7 @@ func (as AppliedState) IsZero() bool {
 
 func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName string) (Monster, error) {
 	altStateID, err := getAltStateID(cfg, r, mon, queryName)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return mon, nil
 	}
 	if err != nil {

@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -14,7 +13,7 @@ func getQueryBoolPtr(r *http.Request, queryName string, queryLookup map[string]Q
 	queryParam := queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return nil, nil
 	}
 	if err != nil {
@@ -28,7 +27,7 @@ func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]Qu
 	queryParam := queryLookup[queryName]
 
 	integer, err := parseIntQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return nil, nil
 	}
 	if err != nil {
@@ -43,7 +42,7 @@ func getQueryValuePtr(r *http.Request, queryName string, queryLookup map[string]
 	queryParam := queryLookup[queryName]
 
 	value, err := parseValueQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return nil, nil
 	}
 	if err != nil {
@@ -57,7 +56,7 @@ func getQueryIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList
 	queryParam := queryLookup[queryName]
 
 	id, err := parseIdQuery(r, queryParam, len(i.objLookup))
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return nil, nil
 	}
 	if err != nil {
@@ -71,7 +70,7 @@ func getQueryNameIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResource
 	queryParam := queryLookup[queryName]
 
 	id, err := parseNameIdQuery(r, queryParam, i.resourceType, i.objLookup)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return nil, nil
 	}
 	if err != nil {
@@ -85,7 +84,7 @@ func getQueryEnumPtr[E, N any](r *http.Request, queryName, endpoint string, et E
 	queryParam := queryLookup[queryName]
 
 	enumRes, err := parseEnumQuery(r, endpoint, queryParam, et)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return nil, nil
 	}
 	if err != nil {

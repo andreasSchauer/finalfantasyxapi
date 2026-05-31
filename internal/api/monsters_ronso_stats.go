@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -16,7 +15,7 @@ func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName string
 	kimahriBS := toResAmtType(cfg, cfg.e.stats, kimahri.BaseStats, newBaseStat)
 
 	kimahriStatMap, err := parseStatQuery(cfg, r, queryParam, kimahriBS, allowedStatIDs)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return baseStats, nil
 	}
 	if err != nil {

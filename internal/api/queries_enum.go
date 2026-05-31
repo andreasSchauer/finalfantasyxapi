@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -15,7 +14,7 @@ func enumQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E,
 	}
 
 	enum, err := parseEnumQuery(r, i.endpoint, queryParam, et)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {
@@ -37,7 +36,7 @@ func enumQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E,
 func enumQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, E) ([]int32, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
 	enum, err := parseEnumQuery(r, i.endpoint, queryParam, et)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {

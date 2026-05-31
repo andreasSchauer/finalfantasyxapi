@@ -1,13 +1,10 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
-
-
 
 func valueQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryStringMany) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
@@ -16,7 +13,7 @@ func valueQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](c
 	}
 
 	value, err := parseValueQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {

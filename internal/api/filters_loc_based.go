@@ -6,18 +6,17 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
 func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, error) {
 	i := cfg.e.areas
 	queryParamMethod := i.queryLookup["method"]
 
 	methods, err := parseValueListQuery(cfg, r, queryParamMethod)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetAreaIDsWithItemFromMethod(r.Context(), database.GetAreaIDsWithItemFromMethodParams{
-		ID: 	id,
+		ID:     id,
 		Method: methods,
 	})
 	if err != nil {
@@ -34,12 +33,12 @@ func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIRe
 	queryParamMethod := i.queryLookup["method"]
 
 	methods, err := parseValueListQuery(cfg, r, queryParamMethod)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetSublocationIDsWithItemFromMethod(r.Context(), database.GetSublocationIDsWithItemFromMethodParams{
-		ID: 	id,
+		ID:     id,
 		Method: methods,
 	})
 	if err != nil {
@@ -56,12 +55,12 @@ func getLocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResou
 	queryParamMethod := i.queryLookup["method"]
 
 	methods, err := parseValueListQuery(cfg, r, queryParamMethod)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetLocationIDsWithItemFromMethod(r.Context(), database.GetLocationIDsWithItemFromMethodParams{
-		ID: 	id,
+		ID:     id,
 		Method: methods,
 	})
 	if err != nil {

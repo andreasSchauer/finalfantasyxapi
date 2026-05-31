@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -15,7 +14,7 @@ func nameIdListQueryNul[T, P seeding.Lookupable, R any, A APIResource, L APIReso
 	}
 
 	queryIDs, err := parseNameIdListQuery(cfg, r, queryParam, pResType, pLookup)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {

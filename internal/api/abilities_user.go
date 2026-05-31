@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -30,7 +29,7 @@ type biReplacement struct {
 
 func applyUser[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], ability userAbility, queryName string) ([]BattleInteraction, error) {
 	repl, err := getUnitRepl(cfg, r, i, queryName)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return ability.getBattleInteractions(), nil
 	}
 	if err != nil {
@@ -58,7 +57,7 @@ func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 	unit, _ := seeding.GetResourceByID(unitID, cfg.l.PlayerUnitsID)
 
 	bombWpn, err := parseBooleanQuery(r, queryParamBomb)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return unitRepl{}, err
 	}
 

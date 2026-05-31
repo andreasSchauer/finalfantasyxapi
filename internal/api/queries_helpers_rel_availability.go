@@ -9,23 +9,21 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 type RelAvailabilityParams struct {
 	ParentID     int32
 	Availability []database.AvailabilityType
 	Repeatable   sql.NullBool
 }
 
-
 func getRelAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], parentID int32) (RelAvailabilityParams, error) {
 	queryParam := i.queryLookup["rel_availability"]
 
 	availabilities, err := parseEnumListQuery(cfg, r, i.endpoint, queryParam, cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return RelAvailabilityParams{}, err
 	}
 
-	repeatable, err := getQueryBoolPtr(r, "repeatable", cfg.e.monsters.queryLookup)
+	repeatable, err := getQueryBoolPtr(r, "rel_repeatable", i.queryLookup)
 	if err != nil {
 		return RelAvailabilityParams{}, err
 	}
@@ -38,7 +36,6 @@ func getRelAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIR
 
 	return availabilityParams, nil
 }
-
 
 func runRelAvailabilityQuery[T, K seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item K, params RelAvailabilityParams, dbQuery RelAvailabilityDbQuery) ([]A, error) {
 	dbIDs, err := dbQuery(r.Context(), params)

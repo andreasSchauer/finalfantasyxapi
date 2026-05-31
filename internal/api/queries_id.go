@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -17,7 +16,7 @@ func idQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg 
 	}
 
 	id, err := parseIdQuery(r, queryParam, maxID)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {
@@ -42,7 +41,7 @@ func idQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	}
 
 	id, err := parseIdQuery(r, queryParam, maxID)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {
@@ -64,7 +63,7 @@ func idQueryNul[T seeding.Lookupable, R any, A APIResource, L APIResourceList](c
 	}
 
 	idPtr, err := parseIdQueryNul(r, queryParam, maxID)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {

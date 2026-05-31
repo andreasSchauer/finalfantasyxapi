@@ -15,7 +15,7 @@ func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg
 	}
 
 	integer, err := parseIntQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {
@@ -40,7 +40,7 @@ func intQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceLi
 	}
 
 	integer, err := parseIntQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {

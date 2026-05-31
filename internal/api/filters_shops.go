@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,7 +14,7 @@ func getShopsByEmptySlots(cfg *Config, r *http.Request, _ string, _ QueryParam) 
 
 	queryParamAutoAbility := i.queryLookup["auto_ability"]
 	_, err := checkEmptyQuery(r, queryParamAutoAbility)
-	if !errors.Is(err, errEmptyQuery) {
+	if !queryIsEmpty(err) {
 		return nil, errQueryRedirect
 	}
 
@@ -38,7 +37,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 	i := cfg.e.shops
 
 	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup["empty_slots"])
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 

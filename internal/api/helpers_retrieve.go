@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"net/http"
@@ -50,7 +51,7 @@ func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	}
 
 	flip, err := parseBooleanQuery(r, i.queryLookup["flip"])
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return zeroType, err
 	}
 
@@ -66,48 +67,31 @@ func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	return resourceList, nil
 }
 
+
 func filterAvlMonsters(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.monsters
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterMonsterIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		AvlType:      string(AvlTypeSelf),
-		Availability: availabilities,
+	locContext, err := getLocContextParams(cfg, r, i)
+	if err != nil {
+		return nil, err
 	}
 
-	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(locID)
-		ct := string(ViewSourceTypeLocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(subLocID)
-		ct := string(ViewSourceTypeSublocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeArea)
-		params.LocContextID = h.GetNullInt32(areaID)
-		ct := string(ViewSourceTypeArea)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	dbIDs, err := cfg.db.FilterMonsterIDsByAvailability(r.Context(), params)
+	dbIDs, err := cfg.db.FilterMonsterIDsByAvailability(r.Context(), database.FilterMonsterIDsByAvailabilityParams{
+		Ids:            resToIDs(resources),
+		Availability:   availabilities,
+		IsRepeatable:   isRepeatable,
+		AvlType:        locContext.AvlType,
+		LocContextID:   locContext.ID,
+		LocContextType: locContext.Type,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -115,49 +99,32 @@ func filterAvlMonsters(cfg *Config, r *http.Request, resources []NamedAPIResourc
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
 	i := cfg.e.monsterFormations
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterMonsterFormationIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		AvlType:      string(AvlTypeSelf),
-		Availability: availabilities,
+	locContext, err := getLocContextParams(cfg, r, i)
+	if err != nil {
+		return nil, err
 	}
 
-	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(locID)
-		ct := string(ViewSourceTypeLocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(subLocID)
-		ct := string(ViewSourceTypeSublocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeArea)
-		params.LocContextID = h.GetNullInt32(areaID)
-		ct := string(ViewSourceTypeArea)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	dbIDs, err := cfg.db.FilterMonsterFormationIDsByAvailability(r.Context(), params)
+	dbIDs, err := cfg.db.FilterMonsterFormationIDsByAvailability(r.Context(), database.FilterMonsterFormationIDsByAvailabilityParams{
+		Ids:          	resToIDs(resources),
+		Availability: 	availabilities,
+		IsRepeatable: 	isRepeatable,
+		AvlType:      	locContext.AvlType,
+		LocContextID: 	locContext.ID,
+		LocContextType: locContext.Type,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -165,49 +132,32 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []Unname
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlMasterItems(cfg *Config, r *http.Request, resources []TypedAPIResource) ([]TypedAPIResource, error) {
 	i := cfg.e.allItems
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterMasterItemIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		AvlType:      string(AvlTypeSelf),
-		Availability: availabilities,
+	locContext, err := getLocContextParams(cfg, r, i)
+	if err != nil {
+		return nil, err
 	}
 
-	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(locID)
-		ct := string(ViewSourceTypeLocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(subLocID)
-		ct := string(ViewSourceTypeSublocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeArea)
-		params.LocContextID = h.GetNullInt32(areaID)
-		ct := string(ViewSourceTypeArea)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	dbIDs, err := cfg.db.FilterMasterItemIDsByAvailability(r.Context(), params)
+	dbIDs, err := cfg.db.FilterMasterItemIDsByAvailability(r.Context(), database.FilterMasterItemIDsByAvailabilityParams{
+		Ids:          	resToIDs(resources),
+		Availability: 	availabilities,
+		IsRepeatable: 	isRepeatable,
+		AvlType:      	locContext.AvlType,
+		LocContextID: 	locContext.ID,
+		LocContextType: locContext.Type,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -215,49 +165,32 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, resources []TypedAPIReso
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlItems(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.items
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterItemIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		AvlType:      string(AvlTypeSelf),
-		Availability: availabilities,
+	locContext, err := getLocContextParams(cfg, r, i)
+	if err != nil {
+		return nil, err
 	}
 
-	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(locID)
-		ct := string(ViewSourceTypeLocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(subLocID)
-		ct := string(ViewSourceTypeSublocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeArea)
-		params.LocContextID = h.GetNullInt32(areaID)
-		ct := string(ViewSourceTypeArea)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	dbIDs, err := cfg.db.FilterItemIDsByAvailability(r.Context(), params)
+	dbIDs, err := cfg.db.FilterItemIDsByAvailability(r.Context(), database.FilterItemIDsByAvailabilityParams{
+		Ids:          	resToIDs(resources),
+		Availability: 	availabilities,
+		IsRepeatable: 	isRepeatable,
+		AvlType:      	locContext.AvlType,
+		LocContextID: 	locContext.ID,
+		LocContextType: locContext.Type,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -265,45 +198,30 @@ func filterAvlItems(cfg *Config, r *http.Request, resources []NamedAPIResource) 
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlKeyItems(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.keyItems
 
 	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterKeyItemIDsByAvailabilityParams{
+	locContext, err := getLocContextParams(cfg, r, i)
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := cfg.db.FilterKeyItemIDsByAvailability(r.Context(), database.FilterKeyItemIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
 		Availability: availabilities,
-	}
-
-	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
-	if err == nil {
-		params.LocContextID = h.GetNullInt32(locID)
-		ct := string(ViewSourceTypeLocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
-	if err == nil {
-		params.LocContextID = h.GetNullInt32(subLocID)
-		ct := string(ViewSourceTypeSublocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
-	if err == nil {
-		params.LocContextID = h.GetNullInt32(areaID)
-		ct := string(ViewSourceTypeArea)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	dbIDs, err := cfg.db.FilterKeyItemIDsByAvailability(r.Context(), params)
+		LocContextID: 	locContext.ID,
+		LocContextType: locContext.Type,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -311,49 +229,32 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, resources []NamedAPIResourc
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlSpheres(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.spheres
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterSphereIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		AvlType:      string(AvlTypeSelf),
-		Availability: availabilities,
+	locContext, err := getLocContextParams(cfg, r, i)
+	if err != nil {
+		return nil, err
 	}
 
-	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(locID)
-		ct := string(ViewSourceTypeLocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(subLocID)
-		ct := string(ViewSourceTypeSublocation)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeArea)
-		params.LocContextID = h.GetNullInt32(areaID)
-		ct := string(ViewSourceTypeArea)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	dbIDs, err := cfg.db.FilterSphereIDsByAvailability(r.Context(), params)
+	dbIDs, err := cfg.db.FilterSphereIDsByAvailability(r.Context(), database.FilterSphereIDsByAvailabilityParams{
+		Ids:          	resToIDs(resources),
+		Availability: 	availabilities,
+		IsRepeatable: 	isRepeatable,
+		AvlType:      	locContext.AvlType,
+		LocContextID: 	locContext.ID,
+		LocContextType: locContext.Type,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -361,24 +262,23 @@ func filterAvlSpheres(cfg *Config, r *http.Request, resources []NamedAPIResource
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlPrimers(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.primers
 
 	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterPrimerIDsByAvailabilityParams{
+	dbIDs, err := cfg.db.FilterPrimerIDsByAvailability(r.Context(), database.FilterPrimerIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
 		Availability: availabilities,
-	}
-
-	dbIDs, err := cfg.db.FilterPrimerIDsByAvailability(r.Context(), params)
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -386,54 +286,44 @@ func filterAvlPrimers(cfg *Config, r *http.Request, resources []NamedAPIResource
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlAutoAbilities(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.autoAbilities
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterAutoAbilityIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		AvlType:      string(AvlTypeSelf),
-		Availability: availabilities,
+	reqItem, err := getQueryBoolPtr(r, "req_item", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return nil, err
 	}
 
-	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(locID)
-		ct := string(ViewSourceTypeLocation)
-		params.LocContextType = h.GetNullString(&ct)
+	locContext, err := getLocContextParams(cfg, r, i)
+	if err != nil {
+		return nil, err
 	}
 
-	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.LocContextID = h.GetNullInt32(subLocID)
-		ct := string(ViewSourceTypeSublocation)
-		params.LocContextType = h.GetNullString(&ct)
+	charID, err := getQueryIdPtr(r, cfg.e.characters, "character", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return nil, err
 	}
 
-	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
-	if err == nil {
-		params.AvlType = string(AvlTypeArea)
-		params.LocContextID = h.GetNullInt32(areaID)
-		ct := string(ViewSourceTypeArea)
-		params.LocContextType = h.GetNullString(&ct)
-	}
-
-	charID, _ := getQueryIdPtr(r, cfg.e.characters, "character", i.queryLookup)
-	if charID != nil {
-		params.CharacterID = h.GetNullInt32(charID)
-	}
-
-	dbIDs, err := cfg.db.FilterAutoAbilityIDsByAvailability(r.Context(), params)
+	dbIDs, err := cfg.db.FilterAutoAbilityIDsByAvailability(r.Context(), database.FilterAutoAbilityIDsByAvailabilityParams{
+		Ids:          	resToIDs(resources),
+		Availability: 	availabilities,
+		IsRepeatable: 	isRepeatable,
+		AvlType:      	locContext.AvlType,
+		LocContextID: 	locContext.ID,
+		LocContextType: locContext.Type,
+		CharacterID: 	h.GetNullInt32(charID),
+		ReqItem:      	h.GetNullBool(reqItem),
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -441,50 +331,62 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, resources []NamedAPIRe
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
 	i := cfg.e.shops
 
 	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterShopIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		AvlType:      string(AvlTypeSelf),
-		Availability: availabilities,
-		SubTypes:     []string{},
-	}
+	avlType := AvlTypeSelf
+	subTypes := []string{}
 
 	_, err = parseIdQuery(r, i.queryLookup["auto_ability"], len(cfg.l.AutoAbilities))
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
+	if errExceptEmptyQuery(err) {
+		return nil, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
 	}
 
 	_, err = parseIntListQuery(cfg, r, i.queryLookup["empty_slots"])
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
+	if errExceptEmptyQuery(err) {
+		return nil, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
 	}
 
 	_, err = parseBooleanQuery(r, i.queryLookup["items"])
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.SubTypes = append(params.SubTypes, "item")
+	if errExceptEmptyQuery(err) {
+		return nil, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
+		subTypes = append(subTypes, "item")
 	}
 
 	_, err = parseBooleanQuery(r, i.queryLookup["equipment"])
-	if err == nil {
-		params.AvlType = string(AvlTypeContext)
-		params.SubTypes = append(params.SubTypes, "equip")
+	if errExceptEmptyQuery(err) {
+		return nil, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
+		subTypes = append(subTypes, "equip")
 	}
 
-	params.SubTypes = h.SliceOrNil(params.SubTypes)
-
-	dbIDs, err := cfg.db.FilterShopIDsByAvailability(r.Context(), params)
+	dbIDs, err := cfg.db.FilterShopIDsByAvailability(r.Context(), database.FilterShopIDsByAvailabilityParams{
+		Ids:          resToIDs(resources),
+		AvlType:      string(avlType),
+		Availability: availabilities,
+		SubTypes:     h.SliceOrNil(subTypes),
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -492,24 +394,23 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlTreasures(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
 	i := cfg.e.treasures
 
 	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterTreasureIDsByAvailabilityParams{
+	dbIDs, err := cfg.db.FilterTreasureIDsByAvailability(r.Context(), database.FilterTreasureIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
 		Availability: availabilities,
-	}
-
-	dbIDs, err := cfg.db.FilterTreasureIDsByAvailability(r.Context(), params)
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -517,24 +418,24 @@ func filterAvlTreasures(cfg *Config, r *http.Request, resources []UnnamedAPIReso
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlQuests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
 	i := cfg.e.quests
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterQuestIDsByAvailabilityParams{
+	dbIDs, err := cfg.db.FilterQuestIDsByAvailability(r.Context(), database.FilterQuestIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
 		Availability: availabilities,
-	}
-
-	dbIDs, err := cfg.db.FilterQuestIDsByAvailability(r.Context(), params)
+		IsRepeatable: isRepeatable,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -542,24 +443,24 @@ func filterAvlQuests(cfg *Config, r *http.Request, resources []QuestAPIResource)
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlSidequests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
 	i := cfg.e.sidequests
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterSidequestIDsByAvailabilityParams{
+	dbIDs, err := cfg.db.FilterSidequestIDsByAvailability(r.Context(), database.FilterSidequestIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
 		Availability: availabilities,
-	}
-
-	dbIDs, err := cfg.db.FilterSidequestIDsByAvailability(r.Context(), params)
+		IsRepeatable: isRepeatable,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -567,24 +468,24 @@ func filterAvlSidequests(cfg *Config, r *http.Request, resources []QuestAPIResou
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlSubquests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
 	i := cfg.e.subquests
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterSubquestIDsByAvailabilityParams{
+	dbIDs, err := cfg.db.FilterSubquestIDsByAvailability(r.Context(), database.FilterSubquestIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
 		Availability: availabilities,
-	}
-
-	dbIDs, err := cfg.db.FilterSubquestIDsByAvailability(r.Context(), params)
+		IsRepeatable: isRepeatable,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -592,105 +493,35 @@ func filterAvlSubquests(cfg *Config, r *http.Request, resources []QuestAPIResour
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) ([]AreaAPIResource, error) {
 	i := cfg.e.areas
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterAreaIDsByAvailabilityParams{
-		Ids:          		resToIDs(resources),
-		Availability: 		availabilities,
-		RequiredSources: 	[]string{},
-		ExcludedSources: 	[]string{},
+	sources, err := getLocBasedSources(cfg, r, i)
+	if err != nil {
+		return nil, err
 	}
 
-	monID, _ := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
-	if monID != nil {
-		params.MonsterID = h.GetNullInt32(monID)
-		sourceType := ViewSourceTypeMonster
-		params.RequiredSources = append(params.RequiredSources, string(sourceType))
-	}
-
-	keyItemID, _ := getQueryIdPtr(r, cfg.e.keyItems, "key_item", i.queryLookup)
-	if keyItemID != nil {
-		params.KeyItemID = h.GetNullInt32(keyItemID)
-		sourceType := ViewSourceTypeKeyItem
-		params.RequiredSources = append(params.RequiredSources, string(sourceType))
-	}
-
-	itemID, _ := getQueryIdPtr(r, cfg.e.items, "item", i.queryLookup)
-	if itemID != nil {
-		params.ItemID = h.GetNullInt32(itemID)
-		sourceType := ViewSourceTypeItem
-		params.RequiredSources = append(params.RequiredSources, string(sourceType))
-	}
-
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup["method"])
-	if err == nil {
-		params.Methods = methods
-	}
-
-	hasMons, err := parseBooleanQuery(r, i.queryLookup["monsters"])
-	if err == nil {
-		sourceType := ViewSourceTypeMonster
-		if hasMons {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasBosses, err := parseBooleanQuery(r, i.queryLookup["boss_fights"])
-	if err == nil {
-		sourceType := ViewSourceTypeBoss
-		if hasBosses {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasShops, err := parseBooleanQuery(r, i.queryLookup["shops"])
-	if err == nil {
-		sourceType := ViewSourceTypeShop
-		if hasShops {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasTreasures, err := parseBooleanQuery(r, i.queryLookup["treasures"])
-	if err == nil {
-		sourceType := ViewSourceTypeTreasure
-		if hasTreasures {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasQuests, err := parseBooleanQuery(r, i.queryLookup["sidequests"])
-	if err == nil {
-		sourceType := ViewSourceTypeQuest
-		if hasQuests {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	params.RequiredSources = h.SliceOrNil(params.RequiredSources)
-	params.ExcludedSources = h.SliceOrNil(params.ExcludedSources)
-
-	dbIDs, err := cfg.db.FilterAreaIDsByAvailability(r.Context(), params)
+	dbIDs, err := cfg.db.FilterAreaIDsByAvailability(r.Context(), database.FilterAreaIDsByAvailabilityParams{
+		Ids:             resToIDs(resources),
+		Availability:    availabilities,
+		IsRepeatable:    isRepeatable,
+		RequiredSources: sources.RequiredSources,
+		ExcludedSources: sources.ExcludedSources,
+		MonsterID: 		 sources.MonsterID,
+		ItemID: 		 sources.ItemID,
+		KeyItemID: 		 sources.KeyItemID,
+		Methods: 		 sources.Methods,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -698,105 +529,35 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.sublocations
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterSublocationIDsByAvailabilityParams{
-		Ids:          		resToIDs(resources),
-		Availability: 		availabilities,
-		RequiredSources: 	[]string{},
-		ExcludedSources: 	[]string{},
+	sources, err := getLocBasedSources(cfg, r, i)
+	if err != nil {
+		return nil, err
 	}
 
-	monID, _ := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
-	if monID != nil {
-		params.MonsterID = h.GetNullInt32(monID)
-		sourceType := ViewSourceTypeMonster
-		params.RequiredSources = append(params.RequiredSources, string(sourceType))
-	}
-
-	keyItemID, _ := getQueryIdPtr(r, cfg.e.keyItems, "key_item", i.queryLookup)
-	if keyItemID != nil {
-		params.KeyItemID = h.GetNullInt32(keyItemID)
-		sourceType := ViewSourceTypeKeyItem
-		params.RequiredSources = append(params.RequiredSources, string(sourceType))
-	}
-
-	itemID, _ := getQueryIdPtr(r, cfg.e.items, "item", i.queryLookup)
-	if itemID != nil {
-		params.ItemID = h.GetNullInt32(itemID)
-		sourceType := ViewSourceTypeItem
-		params.RequiredSources = append(params.RequiredSources, string(sourceType))
-	}
-
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup["method"])
-	if err == nil {
-		params.Methods = methods
-	}
-
-	hasMons, err := parseBooleanQuery(r, i.queryLookup["monsters"])
-	if err == nil {
-		sourceType := ViewSourceTypeMonster
-		if hasMons {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasBosses, err := parseBooleanQuery(r, i.queryLookup["boss_fights"])
-	if err == nil {
-		sourceType := ViewSourceTypeBoss
-		if hasBosses {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasShops, err := parseBooleanQuery(r, i.queryLookup["shops"])
-	if err == nil {
-		sourceType := ViewSourceTypeShop
-		if hasShops {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasTreasures, err := parseBooleanQuery(r, i.queryLookup["treasures"])
-	if err == nil {
-		sourceType := ViewSourceTypeTreasure
-		if hasTreasures {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasQuests, err := parseBooleanQuery(r, i.queryLookup["sidequests"])
-	if err == nil {
-		sourceType := ViewSourceTypeQuest
-		if hasQuests {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	params.RequiredSources = h.SliceOrNil(params.RequiredSources)
-	params.ExcludedSources = h.SliceOrNil(params.ExcludedSources)
-
-	dbIDs, err := cfg.db.FilterSublocationIDsByAvailability(r.Context(), params)
+	dbIDs, err := cfg.db.FilterSublocationIDsByAvailability(r.Context(), database.FilterSublocationIDsByAvailabilityParams{
+		Ids:             resToIDs(resources),
+		Availability:    availabilities,
+		IsRepeatable:    isRepeatable,
+		RequiredSources: sources.RequiredSources,
+		ExcludedSources: sources.ExcludedSources,
+		MonsterID: 		 sources.MonsterID,
+		ItemID: 		 sources.ItemID,
+		KeyItemID: 		 sources.KeyItemID,
+		Methods: 		 sources.Methods,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -804,105 +565,35 @@ func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIRes
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
 
 func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.locations
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
-	if errIsNotEmptyQuery(err) {
+	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return resources, nil
 	}
 
-	params := database.FilterLocationIDsByAvailabilityParams{
-		Ids:          		resToIDs(resources),
-		Availability: 		availabilities,
-		RequiredSources: 	[]string{},
-		ExcludedSources: 	[]string{},
+	sources, err := getLocBasedSources(cfg, r, i)
+	if err != nil {
+		return nil, err
 	}
 
-	monID, _ := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
-	if monID != nil {
-		params.MonsterID = h.GetNullInt32(monID)
-		sourceType := ViewSourceTypeMonster
-		params.RequiredSources = append(params.RequiredSources, string(sourceType))
-	}
-
-	keyItemID, _ := getQueryIdPtr(r, cfg.e.keyItems, "key_item", i.queryLookup)
-	if keyItemID != nil {
-		params.KeyItemID = h.GetNullInt32(keyItemID)
-		sourceType := ViewSourceTypeKeyItem
-		params.RequiredSources = append(params.RequiredSources, string(sourceType))
-	}
-
-	itemID, _ := getQueryIdPtr(r, cfg.e.items, "item", i.queryLookup)
-	if itemID != nil {
-		params.ItemID = h.GetNullInt32(itemID)
-		sourceType := ViewSourceTypeItem
-		params.RequiredSources = append(params.RequiredSources, string(sourceType))
-	}
-
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup["method"])
-	if err == nil {
-		params.Methods = methods
-	}
-
-	hasMons, err := parseBooleanQuery(r, i.queryLookup["monsters"])
-	if err == nil {
-		sourceType := ViewSourceTypeMonster
-		if hasMons {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasBosses, err := parseBooleanQuery(r, i.queryLookup["boss_fights"])
-	if err == nil {
-		sourceType := ViewSourceTypeBoss
-		if hasBosses {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasShops, err := parseBooleanQuery(r, i.queryLookup["shops"])
-	if err == nil {
-		sourceType := ViewSourceTypeShop
-		if hasShops {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasTreasures, err := parseBooleanQuery(r, i.queryLookup["treasures"])
-	if err == nil {
-		sourceType := ViewSourceTypeTreasure
-		if hasTreasures {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	hasQuests, err := parseBooleanQuery(r, i.queryLookup["sidequests"])
-	if err == nil {
-		sourceType := ViewSourceTypeQuest
-		if hasQuests {
-			params.RequiredSources = append(params.RequiredSources, string(sourceType))
-		} else {
-			params.ExcludedSources = append(params.ExcludedSources, string(sourceType))
-		}
-	}
-
-	params.RequiredSources = h.SliceOrNil(params.RequiredSources)
-	params.ExcludedSources = h.SliceOrNil(params.ExcludedSources)
-
-	dbIDs, err := cfg.db.FilterLocationIDsByAvailability(r.Context(), params)
+	dbIDs, err := cfg.db.FilterLocationIDsByAvailability(r.Context(), database.FilterLocationIDsByAvailabilityParams{
+		Ids:             resToIDs(resources),
+		Availability:    availabilities,
+		IsRepeatable:    isRepeatable,
+		RequiredSources: sources.RequiredSources,
+		ExcludedSources: sources.ExcludedSources,
+		MonsterID: 		 sources.MonsterID,
+		ItemID: 		 sources.ItemID,
+		KeyItemID: 		 sources.KeyItemID,
+		Methods: 		 sources.Methods,
+	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
@@ -910,6 +601,160 @@ func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResour
 	resNew := idsToAPIResources(cfg, i, dbIDs)
 	return resNew, nil
 }
+
+
+
+
+
+func checkAvlAndRep[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]database.AvailabilityType, sql.NullBool, error) {
+	availabilities, errAvl := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errExceptEmptyQuery(errAvl) {
+		return nil, sql.NullBool{}, errAvl
+	}
+
+	isRepeatable, errRepl := getQueryBoolPtr(r, "is_repeatable", i.queryLookup)
+	if errExceptEmptyQuery(errRepl) {
+		return nil, sql.NullBool{}, errRepl
+	}
+
+	if errors.Is(errAvl, errEmptyQuery) && errors.Is(errRepl, errEmptyQuery) {
+		return nil, sql.NullBool{}, errEmptyQuery
+	}
+
+	return h.SliceOrNil(availabilities), h.GetNullBool(isRepeatable), nil
+}
+
+
+
+
+type locContextParams struct {
+	AvlType 	string
+	ID   		sql.NullInt32
+	Type 		sql.NullString
+}
+
+func getLocContextParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (locContextParams, error) {
+	avlType := AvlTypeSelf
+	var locContextID *int32
+	var locContextType string
+
+	locID, err := getQueryIdPtr(r, cfg.e.locations, "location", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return locContextParams{}, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
+		locContextID = locID
+		locContextType = string(ViewSourceTypeLocation)
+	}
+
+	subLocID, err := getQueryIdPtr(r, cfg.e.sublocations, "sublocation", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return locContextParams{}, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
+		locContextID = subLocID
+		locContextType = string(ViewSourceTypeSublocation)
+	}
+
+	areaID, err := getQueryIdPtr(r, cfg.e.areas, "area", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return locContextParams{}, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeArea
+		locContextID = areaID
+		locContextType = string(ViewSourceTypeArea)
+	}
+
+	params := locContextParams{
+		AvlType:        string(avlType),
+		ID:   h.GetNullInt32(locContextID),
+		Type: h.GetNullString(&locContextType),
+	}
+
+	return params, nil
+}
+
+
+type locBasedSources struct {
+	RequiredSources []string
+	ExcludedSources []string
+	MonsterID       sql.NullInt32
+	ItemID          sql.NullInt32
+	KeyItemID       sql.NullInt32
+	Methods         []string
+}
+
+func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (locBasedSources, error) {
+	sourceMap := map[string]string{
+		"monsters": 	string(ViewSourceTypeMonster),
+		"boss_fights": 	string(ViewSourceTypeBoss),
+		"shops": 		string(ViewSourceTypeShop),
+		"treasures": 	string(ViewSourceTypeTreasure),
+		"sidequests": 	string(ViewSourceTypeQuest),
+	}
+	reqs := []string{}
+	excls := []string{}
+
+	monID, err := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return locBasedSources{}, err
+	}
+	if !queryIsEmpty(err) {
+		reqs = append(reqs, string(ViewSourceTypeMonster))
+	}
+	
+	itemID, err := getQueryIdPtr(r, cfg.e.items, "item", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return locBasedSources{}, err
+	}
+	if !queryIsEmpty(err) {
+		reqs = append(reqs, string(ViewSourceTypeItem))
+	}
+
+	keyItemID, err := getQueryIdPtr(r, cfg.e.keyItems, "key_item", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return locBasedSources{}, err
+	}
+	if !queryIsEmpty(err) {
+		reqs = append(reqs, string(ViewSourceTypeKeyItem))
+	}
+
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup["method"])
+	if errExceptEmptyQuery(err) {
+		return locBasedSources{}, err
+	}
+
+	for queryParam := range sourceMap {
+		b, err := parseBooleanQuery(r, i.queryLookup[queryParam])
+		if errExceptEmptyQuery(err) {
+			return locBasedSources{}, err
+		}
+		if !queryIsEmpty(err) {
+			if b {
+				reqs = append(reqs, sourceMap[queryParam])
+			} else {
+				excls = append(excls, sourceMap[queryParam])
+			}
+		}
+	}
+
+	sources := locBasedSources{
+		RequiredSources: h.SliceOrNil(reqs),
+		ExcludedSources: h.SliceOrNil(excls),
+		MonsterID: 		 h.GetNullInt32(monID),
+		ItemID: 		 h.GetNullInt32(itemID),
+		KeyItemID: 		 h.GetNullInt32(keyItemID),
+		Methods: 		 h.SliceOrNil(methods),
+	}
+
+	return sources, nil
+}
+
+
+
 
 type AvlType string
 

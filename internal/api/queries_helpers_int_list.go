@@ -2,7 +2,6 @@ package api
 
 import (
 	"cmp"
-	"errors"
 	"fmt"
 	"net/http"
 	"slices"
@@ -114,7 +113,7 @@ func cleanUpIntList(cfg *Config, r *http.Request, ints []int32) ([]int32, error)
 	ints = removeIntListDuplicates(ints)
 
 	limit, err := getRawQueryLimit(cfg, r)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return ints, nil
 	}
 	if err != nil {

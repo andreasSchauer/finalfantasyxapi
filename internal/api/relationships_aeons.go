@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -68,7 +67,7 @@ func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon) (Aeon, error) {
 func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName string) ([]BaseStat, error) {
 	queryParam := cfg.q.aeons[queryName]
 	battles, err := parseIntQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return aeon.BaseStats, nil
 	}
 	if err != nil {
@@ -97,7 +96,7 @@ func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName string) (
 	yunaBS := toResAmtType(cfg, cfg.e.stats, yuna.BaseStats, newBaseStat)
 
 	yunaStatMapInt, err := parseStatQuery(cfg, r, queryParam, yunaBS, allowedStatIDs)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return baseStats, nil
 	}
 	if err != nil {
@@ -199,10 +198,10 @@ func getAeonAgilityParams(cfg *Config, r *http.Request, aeon Aeon) (AgilityParam
 	}
 
 	agilityParams := AgilityParams{
-		AgilityTier: 	idToUnnamedAPIResource(cfg, cfg.e.agilityTiers, agilityTier.ID),
-		TickSpeed: 		agilityTier.TickSpeed,
-		MinICV:    		minICV,
-		MaxICV:    		agilityTier.CharacterMaxICV,
+		AgilityTier: idToUnnamedAPIResource(cfg, cfg.e.agilityTiers, agilityTier.ID),
+		TickSpeed:   agilityTier.TickSpeed,
+		MinICV:      minICV,
+		MaxICV:      agilityTier.CharacterMaxICV,
 	}
 
 	return agilityParams, nil

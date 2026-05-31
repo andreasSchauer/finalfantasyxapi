@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -15,7 +14,7 @@ func boolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cf
 	}
 
 	b, err := parseBooleanQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {
@@ -37,7 +36,7 @@ func boolQuery2[T seeding.Lookupable, R any, A APIResource, L APIResourceList](c
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {
@@ -62,7 +61,7 @@ func boolQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 	queryParam := i.queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {

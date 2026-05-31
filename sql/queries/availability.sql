@@ -6,7 +6,7 @@ WITH w AS (
         sqlc.narg('availability')::availability_type[] AS availability,
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 ),
 available_monsters AS (
     SELECT 
@@ -48,7 +48,7 @@ WITH w AS (
         sqlc.narg('availability')::availability_type[] AS availability,
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 ),
 available_master_items AS (
     SELECT 
@@ -92,7 +92,7 @@ WITH w AS (
         sqlc.narg('availability')::availability_type[] AS availability,
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 ),
 available_items AS (
     SELECT 
@@ -170,7 +170,7 @@ WITH w AS (
         sqlc.narg('availability')::availability_type[] AS availability,
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 ),
 available_spheres AS (
     SELECT 
@@ -244,7 +244,8 @@ WITH w AS (
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
         sqlc.narg('character_id')::int AS character_id,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable,
+        sqlc.narg('req_item')::boolean AS req_item
 ),
 available_auto_abilities AS (
     SELECT 
@@ -265,13 +266,44 @@ available_auto_abilities AS (
      AND a.a_id = aas.area_id
     JOIN mv_geography g ON aas.area_id = g.area_id
     CROSS JOIN w
-    WHERE aas.auto_ability_id = ANY(w.ids)
+    WHERE (w.req_item IS NULL OR w.req_item = FALSE)
+      AND aas.auto_ability_id = ANY(w.ids)
       AND (w.loc_context_id IS NULL OR CASE
            WHEN w.loc_context_type = 'location' THEN g.location_id
            WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
            WHEN w.loc_context_type = 'area' THEN g.area_id
           END = w.loc_context_id)
       AND (w.character_id IS NULL OR aas.character_id = w.character_id OR aas.character_id IS NULL)
+
+    UNION ALL
+
+    SELECT
+        aa.id AS auto_ability_id,
+        CASE
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
+            WHEN w.avl_type = 'self' THEN a.avl_self
+            WHEN w.avl_type = 'context' THEN a.avl_context
+            WHEN w.avl_type = 'area' THEN a.avl_area
+        END AS current_avl,
+        CASE
+            WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
+            ELSE mis.is_repeatable
+        END AS is_rep
+    FROM auto_abilities aa
+    JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
+    JOIN mv_item_sources mis ON mis.master_item_id = ia_req.master_item_id
+    JOIN mv_availabilities a ON a.s_id = mis.source_id
+     AND a.source_type = mis.source_type
+     AND a.a_id = mis.area_id
+    JOIN mv_geography g ON mis.area_id = g.area_id
+    CROSS JOIN w
+    WHERE w.req_item = TRUE
+      AND a.id = ANY(w.ids)
+      AND (w.loc_context_id IS NULL OR CASE
+           WHEN w.loc_context_type = 'location' THEN g.location_id
+           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
+           WHEN w.loc_context_type = 'area' THEN g.area_id
+          END = w.loc_context_id)
 )
 SELECT auto_ability_id
 FROM available_auto_abilities
@@ -290,7 +322,7 @@ WITH w AS (
         sqlc.narg('availability')::availability_type[] AS availability,
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 ),
 available_formations AS (
     SELECT 
@@ -370,7 +402,7 @@ WITH w AS (
     SELECT
         sqlc.arg('ids')::int[] AS ids,
         sqlc.narg('availability')::availability_type[] AS availability,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 )
 SELECT DISTINCT a.s_id
 FROM quests q
@@ -387,7 +419,7 @@ WITH w AS (
     SELECT
         sqlc.arg('ids')::int[] AS ids,
         sqlc.narg('availability')::availability_type[] AS availability,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 )
 SELECT DISTINCT s.id
 FROM sidequests s
@@ -405,7 +437,7 @@ WITH w AS (
     SELECT
         sqlc.arg('ids')::int[] AS ids,
         sqlc.narg('availability')::availability_type[] AS availability,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 )
 SELECT DISTINCT s.id
 FROM subquests s
@@ -429,7 +461,7 @@ WITH w AS (
         sqlc.narg('key_item_id')::int AS key_item_id,
         sqlc.narg('item_id')::int AS item_id,
         sqlc.narg('methods')::text[] AS methods,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 ),
 available_areas AS (
     SELECT a.a_id, a.avl_self AS current_avl, a.is_repeatable_loc AS is_rep, 'area'::text AS s_type
@@ -529,7 +561,7 @@ WITH w AS (
         sqlc.narg('key_item_id')::int AS key_item_id,
         sqlc.narg('item_id')::int AS item_id,
         sqlc.narg('methods')::text[] AS methods,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 ),
 available_sublocations AS (
     SELECT s.id AS sublocation_id, s.availability AS current_avl, NULL::boolean AS is_rep, 'sublocation'::text AS s_type
@@ -621,7 +653,7 @@ WITH w AS (
         sqlc.narg('key_item_id')::int AS key_item_id,
         sqlc.narg('item_id')::int AS item_id,
         sqlc.narg('methods')::text[] AS methods,
-        sqlc.narg('is_repeatable'):boolean AS is_repeatable
+        sqlc.narg('is_repeatable')::boolean AS is_repeatable
 ),
 available_locations AS (
     SELECT l.id AS location_id, l.availability AS current_avl, NULL::boolean AS is_rep, 'location'::text AS s_type

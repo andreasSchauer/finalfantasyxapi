@@ -10,21 +10,21 @@ import (
 func getStatusConditionRelationships(cfg *Config, r *http.Request, status seeding.StatusCondition) (StatusCondition, error) {
 	queryParamResistance := cfg.q.statusConditions["resistance"]
 	resistance, err := parseIntQuery(r, queryParamResistance)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return StatusCondition{}, err
 	}
 	resistance32 := int32(resistance)
 
 	queryParamMinRate := cfg.q.statusConditions["inflict_min"]
 	minRate, err := parseIntQuery(r, queryParamMinRate)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return StatusCondition{}, err
 	}
 	minRate32 := int32(minRate)
 
 	queryParamMaxRate := cfg.q.statusConditions["inflict_max"]
 	maxRate, err := parseIntQuery(r, queryParamMaxRate)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return StatusCondition{}, err
 	}
 	maxRate32 := int32(maxRate)

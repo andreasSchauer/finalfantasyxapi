@@ -11,7 +11,7 @@ func getMixCombinations(cfg *Config, r *http.Request, mix seeding.Mix) ([]MixCom
 	combinations := mix.PossibleCombinations
 
 	best, err := parseBooleanQuery(r, cfg.q.mixes["best"])
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 	if best {
@@ -19,7 +19,7 @@ func getMixCombinations(cfg *Config, r *http.Request, mix seeding.Mix) ([]MixCom
 	}
 
 	itemID, err := parseNameIdQuery(r, cfg.q.mixes["contains_item"], cfg.e.items.resourceType, cfg.e.items.objLookup)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 	if itemID != 0 {

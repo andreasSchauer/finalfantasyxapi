@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 )
 
@@ -11,7 +10,7 @@ func applyAeonStatsMonsters(cfg *Config, r *http.Request, mon Monster, queryName
 	queryParam := cfg.q.monsters[queryName]
 
 	queryStatMap, err := parseStatQuery(cfg, r, queryParam, aeonBaseStats, allowedStatIDs)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return mon.BaseStats, nil
 	}
 	if err != nil {

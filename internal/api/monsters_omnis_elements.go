@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -19,7 +18,7 @@ func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName str
 	}
 
 	circleCounts, err := parseOmnisQuery(cfg, r, queryName)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return mon.ElemResists, nil
 	}
 	if err != nil {

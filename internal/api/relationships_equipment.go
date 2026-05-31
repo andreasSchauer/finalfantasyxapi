@@ -74,7 +74,7 @@ func getEquipmentTableRef(cfg *Config, r *http.Request, queryParam QueryParam, e
 
 func getTableIndex(r *http.Request, queryParam QueryParam, maxID int) (int, error) {
 	tableIdx, err := parseIntQuery(r, queryParam)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return 0, err
 	}
 

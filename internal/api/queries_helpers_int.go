@@ -13,7 +13,7 @@ func parseIntQuery(r *http.Request, queryParam QueryParam) (int, error) {
 	query := r.URL.Query().Get(queryParam.Name)
 
 	val, err := checkQueryInt(queryParam, query)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return 0, errEmptyQuery
 	}
 	if err != nil {
@@ -26,7 +26,7 @@ func parseIntQuery(r *http.Request, queryParam QueryParam) (int, error) {
 // checks if query-int is valid and within allowed range. replaces special inputs with their corresponding value and replaces empty inputs with default values.
 func checkQueryInt(queryParam QueryParam, queryVal string) (int, error) {
 	defaultVal, err := checkIntQueryDefaultVal(queryParam, queryVal)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return 0, errEmptyQuery
 	}
 	if !errors.Is(err, errNoDefaultVal) {

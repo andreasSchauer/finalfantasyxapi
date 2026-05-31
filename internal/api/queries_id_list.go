@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -15,7 +14,7 @@ func idListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 	}
 
 	queryIDs, err := parseIdListQuery(cfg, r, queryParam, maxID)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {
@@ -37,7 +36,7 @@ func idListQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	queryParam := i.queryLookup[queryName]
 
 	queryIDs, err := parseIdListQuery(cfg, r, queryParam, maxID)
-	if errors.Is(err, errEmptyQuery) {
+	if queryIsEmpty(err) {
 		return inputRes, nil
 	}
 	if err != nil {

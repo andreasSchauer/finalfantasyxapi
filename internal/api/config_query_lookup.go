@@ -2385,7 +2385,7 @@ func (cfg *Config) initItemsParams() {
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
-			Name:        "repeatable",
+			Name:        "rel_repeatable",
 			Description: "Only displays an item's related monsters and quests that can be farmed.",
 			Type:        "bool",
 			ForList:     false,
@@ -2539,7 +2539,7 @@ func (cfg *Config) initSpheresParams() {
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
-			Name:        "repeatable",
+			Name:        "rel_repeatable",
 			Description: "Only displays a sphere's related monsters and quests that can be farmed.",
 			Type:        "bool",
 			ForList:     false,
@@ -2677,7 +2677,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
-			Name:        "repeatable",
+			Name:        "rel_repeatable",
 			Description: "Only displays an auto-ability's related monsters that can be farmed.",
 			Type:        "bool",
 			ForList:     false,

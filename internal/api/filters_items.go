@@ -11,13 +11,13 @@ func getMasterItemsByArea(cfg *Config, r *http.Request, id int32) ([]TypedAPIRes
 	i := cfg.e.allItems
 
 	method, err := getQueryValuePtr(r, "method", i.queryLookup)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetMasterItemIDsByArea(r.Context(), database.GetMasterItemIDsByAreaParams{
-		AreaID:       id,
-		Method:       h.GetNullString(method),
+		AreaID: id,
+		Method: h.GetNullString(method),
 	})
 	if err != nil {
 		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
@@ -32,13 +32,13 @@ func getMasterItemsBySublocation(cfg *Config, r *http.Request, id int32) ([]Type
 	i := cfg.e.allItems
 
 	method, err := getQueryValuePtr(r, "method", i.queryLookup)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetMasterItemIDsBySublocation(r.Context(), database.GetMasterItemIDsBySublocationParams{
-		SublocationID:  id,
-		Method:       	h.GetNullString(method),
+		SublocationID: id,
+		Method:        h.GetNullString(method),
 	})
 	if err != nil {
 		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
@@ -53,13 +53,13 @@ func getMasterItemsByLocation(cfg *Config, r *http.Request, id int32) ([]TypedAP
 	i := cfg.e.allItems
 
 	method, err := getQueryValuePtr(r, "method", i.queryLookup)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetMasterItemIDsByLocation(r.Context(), database.GetMasterItemIDsByLocationParams{
-		LocationID:  id,
-		Method:      h.GetNullString(method),
+		LocationID: id,
+		Method:     h.GetNullString(method),
 	})
 	if err != nil {
 		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
@@ -74,13 +74,13 @@ func getItemsByArea(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource,
 	i := cfg.e.items
 
 	method, err := getQueryValuePtr(r, "method", i.queryLookup)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetItemIDsByArea(r.Context(), database.GetItemIDsByAreaParams{
-		AreaID:       id,
-		Method:       h.GetNullString(method),
+		AreaID: id,
+		Method: h.GetNullString(method),
 	})
 	if err != nil {
 		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
@@ -95,13 +95,13 @@ func getItemsBySublocation(cfg *Config, r *http.Request, id int32) ([]NamedAPIRe
 	i := cfg.e.items
 
 	method, err := getQueryValuePtr(r, "method", i.queryLookup)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetItemIDsBySublocation(r.Context(), database.GetItemIDsBySublocationParams{
-		SublocationID:  id,
-		Method:       	h.GetNullString(method),
+		SublocationID: id,
+		Method:        h.GetNullString(method),
 	})
 	if err != nil {
 		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
@@ -116,13 +116,13 @@ func getItemsByLocation(cfg *Config, r *http.Request, id int32) ([]NamedAPIResou
 	i := cfg.e.items
 
 	method, err := getQueryValuePtr(r, "method", i.queryLookup)
-	if errIsNotEmptyQuery(err) {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetItemIDsByLocation(r.Context(), database.GetItemIDsByLocationParams{
-		LocationID:  id,
-		Method:      h.GetNullString(method),
+		LocationID: id,
+		Method:     h.GetNullString(method),
 	})
 	if err != nil {
 		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
