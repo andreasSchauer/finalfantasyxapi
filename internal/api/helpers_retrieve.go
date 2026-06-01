@@ -612,7 +612,7 @@ func checkAvlAndRep[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 		return nil, sql.NullBool{}, errAvl
 	}
 
-	isRepeatable, errRepl := getQueryBoolPtr(r, "is_repeatable", i.queryLookup)
+	isRepeatable, errRepl := getQueryBoolPtr(r, "repeatable", i.queryLookup)
 	if errExceptEmptyQuery(errRepl) {
 		return nil, sql.NullBool{}, errRepl
 	}
@@ -687,7 +687,10 @@ type locBasedSources struct {
 	Methods         []string
 }
 
+
 func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (locBasedSources, error) {
+	reqs := []string{}
+	excls := []string{}
 	sourceMap := map[string]string{
 		"monsters": 	string(ViewSourceTypeMonster),
 		"boss_fights": 	string(ViewSourceTypeBoss),
@@ -695,8 +698,6 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		"treasures": 	string(ViewSourceTypeTreasure),
 		"sidequests": 	string(ViewSourceTypeQuest),
 	}
-	reqs := []string{}
-	excls := []string{}
 
 	monID, err := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
 	if errExceptEmptyQuery(err) {

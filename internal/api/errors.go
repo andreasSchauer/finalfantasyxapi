@@ -26,7 +26,7 @@ func errExceptEmptyQuery(err error) bool {
 }
 
 func queryIsEmpty(err error) bool {
-	return queryIsEmpty(err)
+	return errors.Is(err, errEmptyQuery)
 }
 
 type httpError struct {

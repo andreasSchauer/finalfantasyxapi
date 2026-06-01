@@ -24,7 +24,7 @@ func getRelAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIR
 	}
 
 	repeatable, err := getQueryBoolPtr(r, "rel_repeatable", i.queryLookup)
-	if err != nil {
+	if errExceptEmptyQuery(err) {
 		return RelAvailabilityParams{}, err
 	}
 

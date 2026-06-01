@@ -667,9 +667,27 @@ SELECT id FROM treasures WHERE treasure_type = $1 ORDER BY id;
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = 1
+WHERE i.id = $1
   AND mis.source_type = 'treasure'
 ORDER BY mis.source_id;
+
+
+-- name: GetTreasureIDsEquipmentFilter :many
+WITH w AS (
+  SELECT
+        sqlc.narg('empty_slots')::int[] AS empty_slots,
+        sqlc.narg('character_id')::int AS character_id,
+        sqlc.narg('auto_ability_id')::int AS auto_ability_id
+)
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
+CROSS JOIN w
+WHERE 
+    (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
+    AND (w.character_id IS NULL OR es.character_id = w.character_id)
+    AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
+    AND es.source_type = 'treasure'
+ORDER BY es.source_id;
 
 
 -- name: GetTreasureIDsByIsAnimaTreasure :many
@@ -690,35 +708,29 @@ SELECT id FROM shops WHERE category = ANY(sqlc.narg('category')::shop_category[]
 
 
 -- name: GetShopIDsEquipmentFilter :many
-SELECT DISTINCT es.source_id
-FROM mv_equipment_sources es
-LEFT JOIN equipment_names en ON es.name_id = en.id
-CROSS JOIN (
-    SELECT
+WITH w AS (
+  SELECT
         sqlc.narg('empty_slots')::int[] AS empty_slots,
         sqlc.narg('character_id')::int AS character_id,
         sqlc.narg('auto_ability_id')::int AS auto_ability_id
-) w
+)
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
+CROSS JOIN w
 WHERE 
     (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
-    AND (w.character_id IS NULL OR en.character_id = w.character_id)
+    AND (w.character_id IS NULL OR es.character_id = w.character_id)
     AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
     AND es.source_type = 'shop'
 ORDER BY es.source_id;
 
 
 -- name: GetShopIDsWithItems :many
-SELECT DISTINCT s_id 
-FROM mv_availabilities 
-WHERE source_type = 'shop' AND sub_type = 'item'
-ORDER BY s_id;
+SELECT DISTINCT source_id FROM mv_item_sources WHERE source_type = 'shop' ORDER BY source_id;
 
 
 -- name: GetShopIDsWithEquipment :many
-SELECT DISTINCT s_id 
-FROM mv_availabilities 
-WHERE source_type = 'shop' AND sub_type = 'equip'
-ORDER BY s_id;
+SELECT DISTINCT source_id FROM mv_equipment_sources WHERE source_type = 'shop' ORDER BY source_id;
 
 
 -- name: GetShopIDsByLocation :many

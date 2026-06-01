@@ -42,12 +42,12 @@ func filterShopsEquipment(cfg *Config, r *http.Request, autoAbilityIdPtr *int32)
 	}
 
 	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, "character", i.queryLookup)
-	if err != nil {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	shopTypePtr, err := getQueryEnumPtr(r, "shop_type", i.endpoint, cfg.t.ShopType, i.queryLookup)
-	if err != nil {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 

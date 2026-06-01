@@ -66,32 +66,34 @@ ORDER BY master_item_id;
 -- name: GetItemMonsterIDs :many
 WITH w AS (
     SELECT
+      sqlc.arg('item_id')::int AS item_id,
       sqlc.narg('repeatable')::BOOLEAN AS repeatable,
       sqlc.narg('availability')::availability_type[] AS availability
 )
 SELECT DISTINCT m.id
 FROM mv_item_sources mis
-JOIN monsters m ON mis.source_id = m.id
+JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE mis.master_item_id = sqlc.arg(item_id)::int
+WHERE i.id = w.item_id
   AND mis.source_type = 'monster'
-  AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
+  AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
 ORDER BY m.id;
 
 
 -- name: GetItemTreasureIDs :many
 WITH w AS (
-    SELECT sqlc.narg('availability')::availability_type[] AS availability
+    SELECT
+      sqlc.arg('item_id')::int AS item_id,
+      sqlc.narg('availability')::availability_type[] AS availability
 )
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
-JOIN treasures t ON mis.source_id = t.id AND mis.source_type = 'treasure' AND mis.area_id = t.area_id
 CROSS JOIN w
-WHERE i.id = sqlc.arg(item_id)::int
+WHERE i.id = w.item_id
   AND mis.source_type = 'treasure'
-  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
+  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
 ORDER BY mis.source_id;
 
 
@@ -103,15 +105,11 @@ WITH w AS (
 )
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
-JOIN mv_availabilities a ON a.s_id = mis.source_id
- AND a.source_type = 'shop'
- AND a.sub_type = 'item'
- AND a.a_id = mis.area_id
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
 WHERE i.id = w.item_id
   AND mis.source_type = 'shop'
-  AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
+  AND (w.availability IS NULL OR mis.avl_context = ANY(w.availability))
 ORDER BY mis.source_id;
 
 
@@ -124,13 +122,12 @@ WITH w AS (
 )
 SELECT DISTINCT q.id
 FROM mv_item_sources mis
-JOIN quests q ON mis.source_id = q.id
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
 WHERE i.id = w.item_id
   AND mis.source_type = 'quest'
-  AND (w.repeatable IS NULL OR q.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR q.availability = ANY(w.availability))
+  AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
 ORDER BY q.id;
 
 

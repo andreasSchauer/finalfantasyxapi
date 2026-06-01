@@ -62,6 +62,7 @@ SELECT DISTINCT
     fd.category,
     fd.is_forced_ambush,
     fd.can_escape,
+    m.availability AS avl_self,
     fd.availability AS avl_context,
     ea.availability AS avl_area,
     m.is_repeatable,
@@ -291,6 +292,9 @@ SELECT DISTINCT
     t.id AS source_id,
     'treasure' AS source_type,
     ia.amount,
+    t.availability AS avl_self,
+    t.availability AS avl_context,
+    t.availability AS avl_area,
     FALSE AS is_repeatable,
     FALSE AS is_repeatable_loc,
     t.area_id
@@ -307,6 +311,15 @@ SELECT DISTINCT
     j.shop_id AS source_id,
     'shop' AS source_type,
     1 AS amount,
+    sh.availability AS avl_self,
+    CASE j.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS avl_context,
+    CASE j.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS avl_area,
     TRUE AS is_repeatable,
     TRUE AS is_repeatable_loc,
     sh.area_id
@@ -324,6 +337,9 @@ SELECT DISTINCT
     q.id AS source_id,
     'quest' AS source_type,
     ia.amount,
+    q.availability AS avl_self,
+    q.availability AS avl_context,
+    q.availability AS avl_area,
     q.is_repeatable,
     q.is_repeatable AS is_repeatable_loc,
     ca.area_id
@@ -341,6 +357,9 @@ SELECT DISTINCT
     bi.position_id AS source_id,
     'blitzball' AS source_type,
     ia.amount,
+    'always'::availability_type AS avl_self,
+    'always'::availability_type AS avl_context,
+    'always'::availability_type AS avl_area,
     TRUE AS is_repeatable,
     TRUE AS is_repeatable_loc,
     75 AS area_id
@@ -357,6 +376,9 @@ SELECT DISTINCT
     mi.monster_id AS source_id,
     'monster' AS source_type,
     mi.amount,
+    me.avl_self,
+    me.avl_context,
+    me.avl_area,
     CASE
         WHEN me.category = 'static-encounter'::monster_formation_category
          AND mi.source_type IN ('steal_common', 'steal_rare')
@@ -395,11 +417,17 @@ CREATE MATERIALIZED VIEW mv_equipment_sources AS
 SELECT DISTINCT
     en.id AS name_id,
     en.name AS name,
+    en.character_id,
     t.id AS source_id,
     'treasure' AS source_type,
     te.empty_slots_amount,
     j.auto_ability_id,
     aa.name AS auto_ability,
+    t.availability AS avl_self,
+    t.availability AS avl_context,
+    t.availability AS avl_area,
+    FALSE AS is_repeatable,
+    FALSE AS is_repeatable_loc,
     t.area_id,
     NULL::shop_type AS shop_type
 FROM treasures t
@@ -413,11 +441,23 @@ UNION ALL
 SELECT DISTINCT
     en.id AS name_id,
     en.name AS name,
+    en.character_id,
     sh.id AS source_id,
     'shop' AS source_type,
     se.empty_slots_amount,
     j.auto_ability_id,
     aa.name AS auto_ability,
+    sh.availability AS avl_self,
+    CASE se.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS avl_context,
+    CASE se.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS avl_area,
+    TRUE AS is_repeatable,
+    TRUE AS is_repeatable_loc,
     sh.area_id,
     se.shop_type::shop_type AS shop_type
 FROM shops sh
@@ -441,6 +481,9 @@ SELECT DISTINCT
     t.id AS source_id,
     'treasure' AS source_type,
     en.character_id,
+    t.availability AS avl_self,
+    t.availability AS avl_context,
+    t.availability AS avl_area,
     FALSE AS is_repeatable,
     FALSE AS is_repeatable_loc,
     t.area_id
@@ -458,6 +501,15 @@ SELECT DISTINCT
     sh.id AS source_id,
     'shop' AS source_type,
     en.character_id,
+    sh.availability AS avl_self,
+    CASE se.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS avl_context,
+    CASE se.shop_type 
+        WHEN 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN 'post-airship' THEN 'post'::availability_type
+    END AS avl_area,
     TRUE AS is_repeatable,
     TRUE AS is_repeatable_loc,
     sh.area_id
@@ -475,6 +527,9 @@ SELECT DISTINCT
     med.monster_id AS source_id,
     'monster' AS source_type,
     med.character_id,
+    me.avl_self,
+    me.avl_context,
+    me.avl_area,
     me.is_repeatable,
     me.is_repeatable_loc,
     me.area_id
@@ -498,7 +553,7 @@ SELECT DISTINCT
         WHEN m.category = 'boss' THEN 'boss'
         ELSE 'monster' -- I'm not quite sure how to handle it, probably change GetAreasIDsWithBosses query
     END::text AS sub_type,
-    m.availability AS avl_self,
+    me.avl_self,
     me.avl_context,
     me.avl_area,
     m.is_repeatable,

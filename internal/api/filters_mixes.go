@@ -12,7 +12,7 @@ func getMixesByItem(cfg *Config, r *http.Request, firstItemId int32) ([]NamedAPI
 	i := cfg.e.mixes
 
 	secondItemIdPtr, err := getQueryIdPtr(r, cfg.e.items, "second_item", i.queryLookup)
-	if err != nil {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 

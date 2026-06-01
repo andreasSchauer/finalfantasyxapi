@@ -74,35 +74,27 @@ WITH w as (
 )
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
-JOIN mv_availabilities a ON a.s_id = es.source_id
- AND a.source_type = 'shop'
- AND a.sub_type = 'equip'
- AND a.a_id = es.area_id
 CROSS JOIN w
 WHERE es.auto_ability_id = w.auto_ability_id
-  AND es.shop_type = 'pre-airship'
   AND es.source_type = 'shop'
-  AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
+  AND es.shop_type = 'pre-airship'
+  AND (w.availability IS NULL OR es.avl_context = ANY(w.availability))
 ORDER BY es.source_id;
 
 
 -- name: GetAutoAbilityShopIDsPost :many
 WITH w as (
-  SELECT 
+  SELECT
     sqlc.arg('auto_ability_id')::int,
     sqlc.narg('availability')::availability_type[] AS availability
 )
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
-JOIN mv_availabilities a ON a.s_id = es.source_id
- AND a.source_type = 'shop'
- AND a.sub_type = 'equip'
- AND a.a_id = es.area_id
 CROSS JOIN w
 WHERE es.auto_ability_id = w.auto_ability_id
-  AND es.shop_type = 'post-airship'
   AND es.source_type = 'shop'
-  AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
+  AND es.shop_type = 'post-airship'
+  AND (w.availability IS NULL OR es.avl_context = ANY(w.availability))
 ORDER BY es.source_id;
 
 

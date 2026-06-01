@@ -12,7 +12,7 @@ func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, id int32) ([]NamedA
 	i := cfg.e.autoAbilities
 
 	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, "character", i.queryLookup)
-	if err != nil {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -33,7 +33,7 @@ func getAutoAbilitiesByShop(cfg *Config, r *http.Request, id int32) ([]NamedAPIR
 	i := cfg.e.autoAbilities
 
 	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, "character", i.queryLookup)
-	if err != nil {
+	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 

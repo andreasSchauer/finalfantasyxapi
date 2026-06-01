@@ -7,15 +7,11 @@ import (
 )
 
 // can make those return sql.NullTypes, if the pointers have no other use
-// might modify those to return errEmptyQuery, then I can use them for filter queries, if needed
 
 func getQueryBoolPtr(r *http.Request, queryName string, queryLookup map[string]QueryParam) (*bool, error) {
 	queryParam := queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
-	if queryIsEmpty(err) {
-		return nil, nil
-	}
 	if err != nil {
 		return nil, err
 	}
@@ -27,9 +23,6 @@ func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]Qu
 	queryParam := queryLookup[queryName]
 
 	integer, err := parseIntQuery(r, queryParam)
-	if queryIsEmpty(err) {
-		return nil, nil
-	}
 	if err != nil {
 		return nil, err
 	}
@@ -42,9 +35,6 @@ func getQueryValuePtr(r *http.Request, queryName string, queryLookup map[string]
 	queryParam := queryLookup[queryName]
 
 	value, err := parseValueQuery(r, queryParam)
-	if queryIsEmpty(err) {
-		return nil, nil
-	}
 	if err != nil {
 		return nil, err
 	}
@@ -56,9 +46,6 @@ func getQueryIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList
 	queryParam := queryLookup[queryName]
 
 	id, err := parseIdQuery(r, queryParam, len(i.objLookup))
-	if queryIsEmpty(err) {
-		return nil, nil
-	}
 	if err != nil {
 		return nil, err
 	}
@@ -70,9 +57,6 @@ func getQueryNameIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResource
 	queryParam := queryLookup[queryName]
 
 	id, err := parseNameIdQuery(r, queryParam, i.resourceType, i.objLookup)
-	if queryIsEmpty(err) {
-		return nil, nil
-	}
 	if err != nil {
 		return nil, err
 	}
@@ -84,9 +68,6 @@ func getQueryEnumPtr[E, N any](r *http.Request, queryName, endpoint string, et E
 	queryParam := queryLookup[queryName]
 
 	enumRes, err := parseEnumQuery(r, endpoint, queryParam, et)
-	if queryIsEmpty(err) {
-		return nil, nil
-	}
 	if err != nil {
 		return nil, err
 	}
