@@ -344,48 +344,20 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 		return resources, nil
 	}
 
-	avlType := AvlTypeSelf
-	subTypes := []string{}
-
-	_, err = parseIdQuery(r, i.queryLookup["auto_ability"], len(cfg.l.AutoAbilities))
-	if errExceptEmptyQuery(err) {
+	sources, err := getShopSources(cfg, r, i)
+	if err != nil {
 		return nil, err
-	}
-	if !queryIsEmpty(err) {
-		avlType = AvlTypeContext
-	}
-
-	_, err = parseIntListQuery(cfg, r, i.queryLookup["empty_slots"])
-	if errExceptEmptyQuery(err) {
-		return nil, err
-	}
-	if !queryIsEmpty(err) {
-		avlType = AvlTypeContext
-	}
-
-	_, err = parseBooleanQuery(r, i.queryLookup["items"])
-	if errExceptEmptyQuery(err) {
-		return nil, err
-	}
-	if !queryIsEmpty(err) {
-		avlType = AvlTypeContext
-		subTypes = append(subTypes, "item")
-	}
-
-	_, err = parseBooleanQuery(r, i.queryLookup["equipment"])
-	if errExceptEmptyQuery(err) {
-		return nil, err
-	}
-	if !queryIsEmpty(err) {
-		avlType = AvlTypeContext
-		subTypes = append(subTypes, "equip")
 	}
 
 	dbIDs, err := cfg.db.FilterShopIDsByAvailability(r.Context(), database.FilterShopIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		AvlType:      string(avlType),
-		Availability: availabilities,
-		SubTypes:     h.SliceOrNil(subTypes),
+		Ids:          		resToIDs(resources),
+		Availability: 		availabilities,
+		AvlType:      		sources.AvlType,
+		RequiredSources:    sources.RequiredSources,
+		ExcludedSources: 	sources.ExcludedSources,
+		AutoAbilityID: 		sources.AutoAbilityID,
+		CharacterID: 		sources.CharacterID,
+		EmptySlots: 		sources.EmptySlots,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -755,6 +727,86 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 }
 
 
+type shopSources struct {
+	AvlType				string
+	RequiredSources 	[]string
+	ExcludedSources 	[]string
+	AutoAbilityID       sql.NullInt32
+	CharacterID       	sql.NullInt32
+	EmptySlots        	[]int32
+}
+
+
+func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (shopSources, error) {
+	avlType := AvlTypeSelf
+	reqs := []string{}
+	excls := []string{}
+
+	autoAbilityID, err := getQueryIdPtr(r, cfg.e.autoAbilities, "auto_ability", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return shopSources{}, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
+		reqs = append(reqs, "equip_filter")
+	}
+
+	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup["empty_slots"])
+	if errExceptEmptyQuery(err) {
+		return shopSources{}, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
+		reqs = append(reqs, "equip_filter")
+	}
+
+	charID, err := getQueryNameIdPtr(r, cfg.e.characters, "character", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return shopSources{}, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
+		reqs = append(reqs, "equip_filter")
+	}
+
+	hasItems, err := parseBooleanQuery(r, i.queryLookup["items"])
+	if errExceptEmptyQuery(err) {
+		return shopSources{}, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
+		if hasItems {
+			reqs = append(reqs, string(ViewSourceTypeItem))
+		} else {
+			excls = append(excls, string(ViewSourceTypeItem))
+		}
+	}
+
+	hasEquip, err := parseBooleanQuery(r, i.queryLookup["equipment"])
+	if errExceptEmptyQuery(err) {
+		return shopSources{}, err
+	}
+	if !queryIsEmpty(err) {
+		avlType = AvlTypeContext
+		if hasEquip {
+			reqs = append(reqs, string(ViewSourceTypeEquipment))
+		} else {
+			excls = append(excls, string(ViewSourceTypeEquipment))
+		}
+	}
+
+	sources := shopSources{
+		AvlType:      		string(avlType),
+		RequiredSources:    h.SliceOrNil(reqs),
+		ExcludedSources: 	h.SliceOrNil(excls),
+		AutoAbilityID: 		h.GetNullInt32(autoAbilityID),
+		CharacterID: 		h.GetNullInt32(charID),
+		EmptySlots: 		h.SliceOrNil(emptySlots),
+	}
+
+	return sources, nil
+}
+
 
 
 type AvlType string
@@ -780,6 +832,7 @@ const (
 	ViewSourceTypeBlitzball        ViewSourceType = "blitzball"
 	ViewSourceTypeItem             ViewSourceType = "item"
 	ViewSourceTypeKeyItem          ViewSourceType = "key-item"
+	ViewSourceTypeEquipment		   ViewSourceType = "equip"
 )
 
 func resToIDs[A APIResource](resources []A) []int32 {

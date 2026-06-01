@@ -440,21 +440,17 @@ func (q *Queries) GetAutoAbilityMonsterIDs(ctx context.Context, arg GetAutoAbili
 
 const getAutoAbilityShopIDsPost = `-- name: GetAutoAbilityShopIDsPost :many
 WITH w as (
-  SELECT 
-    $1::int,
+  SELECT
+    $1::int AS auto_ability_id,
     $2::availability_type[] AS availability
 )
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
-JOIN mv_availabilities a ON a.s_id = es.source_id
- AND a.source_type = 'shop'
- AND a.sub_type = 'equip'
- AND a.a_id = es.area_id
 CROSS JOIN w
 WHERE es.auto_ability_id = w.auto_ability_id
-  AND es.shop_type = 'post-airship'
   AND es.source_type = 'shop'
-  AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
+  AND es.shop_type = 'post-airship'
+  AND (w.availability IS NULL OR es.avl_context = ANY(w.availability))
 ORDER BY es.source_id
 `
 
@@ -489,20 +485,16 @@ func (q *Queries) GetAutoAbilityShopIDsPost(ctx context.Context, arg GetAutoAbil
 const getAutoAbilityShopIDsPre = `-- name: GetAutoAbilityShopIDsPre :many
 WITH w as (
   SELECT
-    $1::int,
+    $1::int AS auto_ability_id,
     $2::availability_type[] AS availability
 )
 SELECT DISTINCT es.source_id
 FROM mv_equipment_sources es
-JOIN mv_availabilities a ON a.s_id = es.source_id
- AND a.source_type = 'shop'
- AND a.sub_type = 'equip'
- AND a.a_id = es.area_id
 CROSS JOIN w
 WHERE es.auto_ability_id = w.auto_ability_id
-  AND es.shop_type = 'pre-airship'
   AND es.source_type = 'shop'
-  AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
+  AND es.shop_type = 'pre-airship'
+  AND (w.availability IS NULL OR es.avl_context = ANY(w.availability))
 ORDER BY es.source_id
 `
 

@@ -379,10 +379,6 @@ GROUP BY shop_id, w.availability, w.reqs, w.excls, w.auto_ability_id, w.empty_sl
 HAVING (w.availability IS NULL OR MIN(current_avl) = ANY(w.availability))
    AND (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
-   AND (
-       (w.auto_ability_id IS NULL AND w.empty_slots IS NULL AND w.character_id IS NULL)
-       OR ARRAY_AGG(s_type) @> ARRAY['equip_filter']
-   )
 ORDER BY shop_id;
 
 

@@ -70,7 +70,7 @@ WITH w AS (
       sqlc.narg('repeatable')::BOOLEAN AS repeatable,
       sqlc.narg('availability')::availability_type[] AS availability
 )
-SELECT DISTINCT m.id
+SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
@@ -78,7 +78,7 @@ WHERE i.id = w.item_id
   AND mis.source_type = 'monster'
   AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
   AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
-ORDER BY m.id;
+ORDER BY mis.source_id;
 
 
 -- name: GetItemTreasureIDs :many
@@ -120,7 +120,7 @@ WITH w AS (
       sqlc.narg('repeatable')::BOOLEAN AS repeatable,
       sqlc.narg('availability')::availability_type[] AS availability
 )
-SELECT DISTINCT q.id
+SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
@@ -128,7 +128,7 @@ WHERE i.id = w.item_id
   AND mis.source_type = 'quest'
   AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
   AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
-ORDER BY q.id;
+ORDER BY mis.source_id;
 
 
 -- name: GetItemBlitzballPrizeIDs :many

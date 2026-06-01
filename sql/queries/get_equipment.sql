@@ -69,7 +69,7 @@ ORDER BY equipment_table_id;
 -- name: GetAutoAbilityShopIDsPre :many
 WITH w as (
   SELECT
-    sqlc.arg('auto_ability_id')::int,
+    sqlc.arg('auto_ability_id')::int AS auto_ability_id,
     sqlc.narg('availability')::availability_type[] AS availability
 )
 SELECT DISTINCT es.source_id
@@ -85,7 +85,7 @@ ORDER BY es.source_id;
 -- name: GetAutoAbilityShopIDsPost :many
 WITH w as (
   SELECT
-    sqlc.arg('auto_ability_id')::int,
+    sqlc.arg('auto_ability_id')::int AS auto_ability_id,
     sqlc.narg('availability')::availability_type[] AS availability
 )
 SELECT DISTINCT es.source_id

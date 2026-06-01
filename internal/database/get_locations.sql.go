@@ -2035,18 +2035,18 @@ func (q *Queries) GetShopIDsBySublocation(ctx context.Context, sublocationID int
 }
 
 const getShopIDsEquipmentFilter = `-- name: GetShopIDsEquipmentFilter :many
-SELECT DISTINCT es.source_id
-FROM mv_equipment_sources es
-LEFT JOIN equipment_names en ON es.name_id = en.id
-CROSS JOIN (
-    SELECT
+WITH w AS (
+  SELECT
         $1::int[] AS empty_slots,
         $2::int AS character_id,
         $3::int AS auto_ability_id
-) w
+)
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
+CROSS JOIN w
 WHERE 
     (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
-    AND (w.character_id IS NULL OR en.character_id = w.character_id)
+    AND (w.character_id IS NULL OR es.character_id = w.character_id)
     AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
     AND es.source_type = 'shop'
 ORDER BY es.source_id
@@ -2082,10 +2082,7 @@ func (q *Queries) GetShopIDsEquipmentFilter(ctx context.Context, arg GetShopIDsE
 }
 
 const getShopIDsWithEquipment = `-- name: GetShopIDsWithEquipment :many
-SELECT DISTINCT s_id 
-FROM mv_availabilities 
-WHERE source_type = 'shop' AND sub_type = 'equip'
-ORDER BY s_id
+SELECT DISTINCT source_id FROM mv_equipment_sources WHERE source_type = 'shop' ORDER BY source_id
 `
 
 func (q *Queries) GetShopIDsWithEquipment(ctx context.Context) ([]int32, error) {
@@ -2096,11 +2093,11 @@ func (q *Queries) GetShopIDsWithEquipment(ctx context.Context) ([]int32, error) 
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var s_id int32
-		if err := rows.Scan(&s_id); err != nil {
+		var source_id int32
+		if err := rows.Scan(&source_id); err != nil {
 			return nil, err
 		}
-		items = append(items, s_id)
+		items = append(items, source_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2112,10 +2109,7 @@ func (q *Queries) GetShopIDsWithEquipment(ctx context.Context) ([]int32, error) 
 }
 
 const getShopIDsWithItems = `-- name: GetShopIDsWithItems :many
-SELECT DISTINCT s_id 
-FROM mv_availabilities 
-WHERE source_type = 'shop' AND sub_type = 'item'
-ORDER BY s_id
+SELECT DISTINCT source_id FROM mv_item_sources WHERE source_type = 'shop' ORDER BY source_id
 `
 
 func (q *Queries) GetShopIDsWithItems(ctx context.Context) ([]int32, error) {
@@ -2126,11 +2120,11 @@ func (q *Queries) GetShopIDsWithItems(ctx context.Context) ([]int32, error) {
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var s_id int32
-		if err := rows.Scan(&s_id); err != nil {
+		var source_id int32
+		if err := rows.Scan(&source_id); err != nil {
 			return nil, err
 		}
-		items = append(items, s_id)
+		items = append(items, source_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3065,13 +3059,13 @@ const getTreasureIDsByItem = `-- name: GetTreasureIDsByItem :many
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = 1
+WHERE i.id = $1
   AND mis.source_type = 'treasure'
 ORDER BY mis.source_id
 `
 
-func (q *Queries) GetTreasureIDsByItem(ctx context.Context) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getTreasureIDsByItem)
+func (q *Queries) GetTreasureIDsByItem(ctx context.Context, id int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDsByItem, id)
 	if err != nil {
 		return nil, err
 	}
@@ -3137,6 +3131,53 @@ func (q *Queries) GetTreasureIDsByTreasureType(ctx context.Context, treasureType
 			return nil, err
 		}
 		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTreasureIDsEquipmentFilter = `-- name: GetTreasureIDsEquipmentFilter :many
+WITH w AS (
+  SELECT
+        $1::int[] AS empty_slots,
+        $2::int AS character_id,
+        $3::int AS auto_ability_id
+)
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
+CROSS JOIN w
+WHERE 
+    (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
+    AND (w.character_id IS NULL OR es.character_id = w.character_id)
+    AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
+    AND es.source_type = 'treasure'
+ORDER BY es.source_id
+`
+
+type GetTreasureIDsEquipmentFilterParams struct {
+	EmptySlots    []int32
+	CharacterID   sql.NullInt32
+	AutoAbilityID sql.NullInt32
+}
+
+func (q *Queries) GetTreasureIDsEquipmentFilter(ctx context.Context, arg GetTreasureIDsEquipmentFilterParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getTreasureIDsEquipmentFilter, pq.Array(arg.EmptySlots), arg.CharacterID, arg.AutoAbilityID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var source_id int32
+		if err := rows.Scan(&source_id); err != nil {
+			return nil, err
+		}
+		items = append(items, source_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

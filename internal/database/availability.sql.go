@@ -26,38 +26,41 @@ WITH w AS (
         $9::boolean AS is_repeatable
 ),
 available_areas AS (
-    SELECT a.a_id, a.avl_self AS current_avl, a.is_repeatable_loc AS is_rep, 'area'::text AS s_type
+    SELECT
+        a.a_id,
+        a.avl_self AS current_avl,
+        a.is_repeatable_loc AS is_rep,
+        'area'::text AS s_type
     FROM mv_availabilities a
     JOIN w ON a.a_id = ANY(w.ids)
     WHERE a.source_type = 'area'
 
     UNION ALL
 
-    SELECT a.a_id, a.avl_area AS current_avl, a.is_repeatable_loc AS is_rep, 'monster'::text AS s_type
-    FROM mv_availabilities a
-    JOIN w ON a.a_id = ANY(w.ids)
-    WHERE a.source_type = 'monster'
-      AND w.monster_id IS NOT NULL
-      AND a.s_id = w.monster_id
-      AND (w.availability IS NULL OR a.avl_area = ANY(w.availability))
+    SELECT
+        me.area_id,
+        me.avl_area AS current_avl,
+        me.is_repeatable_loc AS is_rep,
+        'monster'::text AS s_type
+    FROM mv_monster_encounters me
+    JOIN w ON me.area_id = ANY(w.ids)
+    WHERE me.monster_id = w.monster_id
+      AND (w.availability IS NULL OR me.avl_area = ANY(w.availability))
 
     UNION ALL
 
+    -- selecting the avl of the item's resource as if it where the area's avl would alter the results
+    -- so we select the lowest rank to not raise MAX avl of GROUP BY bucket
     SELECT
         mis.area_id AS a_id,
-        -- assigning the avl of the item's resource to the location would alter the results
-        -- so we assign the lowest rank to not raise MAX avl of GROUP BY bucket
         'always'::availability_type AS current_avl,
         mis.is_repeatable_loc AS is_rep,
         'item'::text AS s_type
     FROM mv_item_sources mis
     JOIN items i ON mis.master_item_id = i.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN w ON mis.area_id = ANY(w.ids)
     WHERE i.id = w.item_id
-      AND (w.availability IS NULL OR a.avl_area = ANY(w.availability))
+      AND (w.availability IS NULL OR mis.avl_area = ANY(w.availability))
       AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 
     UNION ALL
@@ -69,19 +72,17 @@ available_areas AS (
         'key-item'::text AS s_type
     FROM mv_item_sources mis
     JOIN key_items ki ON mis.master_item_id = ki.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN w ON mis.area_id = ANY(w.ids)
     WHERE ki.id = w.key_item_id
-      AND (w.availability IS NULL OR a.avl_area = ANY(w.availability))
+      AND (w.availability IS NULL OR mis.avl_area = ANY(w.availability))
 
     UNION ALL
 
+    -- can't use alias in where clause,
+    -- so we select the non-altering option here and filter in the where clause
+    -- this branch selects sources with an area_id that are not areas
     SELECT
         a.a_id,
-        -- can't use alias in where clause,
-        -- so we assign the uninvasive option here and filter in the where clause
         'always'::availability_type AS current_avl,
         a.is_repeatable_loc AS is_rep,
         CASE
@@ -99,14 +100,11 @@ available_areas AS (
 SELECT a_id
 FROM available_areas
 CROSS JOIN w
-GROUP BY a_id, w.availability, w.item_id, w.monster_id, w.key_item_id, w.reqs, w.excls, w.is_repeatable
+GROUP BY a_id, w.availability, w.is_repeatable, w.reqs, w.excls
 HAVING (w.availability IS NULL OR MAX(current_avl) = ANY(w.availability))
-   AND (w.item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['item'])
-   AND (w.monster_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['monster'])
-   AND (w.key_item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['key-item'])
+   AND (w.is_repeatable IS NULL OR BOOL_OR(is_rep) = w.is_repeatable)
    AND (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
-   AND (w.is_repeatable IS NULL OR BOOL_OR(is_rep) = w.is_repeatable)
 ORDER BY a_id
 `
 
@@ -171,19 +169,16 @@ available_auto_abilities AS (
     SELECT 
         aas.auto_ability_id,
         CASE
-            WHEN aas.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
-            WHEN w.avl_type = 'self' THEN a.avl_self
-            WHEN w.avl_type = 'context' THEN a.avl_context
-            WHEN w.avl_type = 'area' THEN a.avl_area
+            WHEN aas.source_type = 'shop' AND w.avl_type = 'self' THEN aas.avl_context
+            WHEN w.avl_type = 'self' THEN aas.avl_self
+            WHEN w.avl_type = 'context' THEN aas.avl_context
+            WHEN w.avl_type = 'area' THEN aas.avl_area
         END AS current_avl,
         CASE
             WHEN w.loc_context_id IS NOT NULL THEN aas.is_repeatable_loc
             ELSE aas.is_repeatable
         END AS is_rep
     FROM mv_auto_ability_sources aas
-    JOIN mv_availabilities a ON a.s_id = aas.source_id
-     AND a.source_type = aas.source_type
-     AND a.a_id = aas.area_id
     JOIN mv_geography g ON aas.area_id = g.area_id
     CROSS JOIN w
     WHERE (w.req_item IS NULL OR w.req_item = FALSE)
@@ -200,10 +195,10 @@ available_auto_abilities AS (
     SELECT
         aa.id AS auto_ability_id,
         CASE
-            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
-            WHEN w.avl_type = 'self' THEN a.avl_self
-            WHEN w.avl_type = 'context' THEN a.avl_context
-            WHEN w.avl_type = 'area' THEN a.avl_area
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN mis.avl_context
+            WHEN w.avl_type = 'self' THEN mis.avl_self
+            WHEN w.avl_type = 'context' THEN mis.avl_context
+            WHEN w.avl_type = 'area' THEN mis.avl_area
         END AS current_avl,
         CASE
             WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
@@ -212,13 +207,10 @@ available_auto_abilities AS (
     FROM auto_abilities aa
     JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
     JOIN mv_item_sources mis ON mis.master_item_id = ia_req.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE w.req_item = TRUE
-      AND a.id = ANY(w.ids)
+      AND aa.id = ANY(w.ids)
       AND (w.loc_context_id IS NULL OR CASE
            WHEN w.loc_context_type = 'location' THEN g.location_id
            WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -290,10 +282,10 @@ available_items AS (
     SELECT 
         i.id AS item_id,
         CASE
-            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
-            WHEN w.avl_type = 'self' THEN a.avl_self
-            WHEN w.avl_type = 'context' THEN a.avl_context
-            WHEN w.avl_type = 'area' THEN a.avl_area
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN mis.avl_context
+            WHEN w.avl_type = 'self' THEN mis.avl_self
+            WHEN w.avl_type = 'context' THEN mis.avl_context
+            WHEN w.avl_type = 'area' THEN mis.avl_area
         END AS current_avl,
         CASE
             WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
@@ -301,9 +293,6 @@ available_items AS (
         END AS is_rep
     FROM items i
     JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE i.id = ANY(w.ids)
@@ -371,12 +360,9 @@ WITH w AS (
 available_key_items AS (
     SELECT 
         ki.id AS key_item_id,
-        a.avl_self AS current_avl
+        mis.avl_self AS current_avl
     FROM key_items ki
     JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE ki.id = ANY(w.ids)
@@ -442,47 +428,55 @@ WITH w AS (
         $9::boolean AS is_repeatable
 ),
 available_locations AS (
-    SELECT l.id AS location_id, l.availability AS current_avl, NULL::boolean AS is_rep, 'location'::text AS s_type
+    SELECT
+        l.id AS location_id,
+        l.availability AS current_avl,
+        NULL::boolean AS is_rep,
+        'location'::text AS s_type
     FROM locations l
     JOIN w ON l.id = ANY(w.ids)
 
     UNION ALL
 
-    SELECT g.location_id, a.avl_context AS current_avl, a.is_repeatable_loc AS is_rep, 'monster'::text AS s_type
-    FROM mv_availabilities a
-    JOIN mv_geography g ON a.a_id = g.area_id
-    JOIN w ON g.location_id = ANY(w.ids)
-    WHERE a.source_type = 'monster'
-      AND w.monster_id IS NOT NULL
-      AND a.s_id = w.monster_id
-      AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
+    SELECT
+        g.location_id,
+        me.avl_context AS current_avl,
+        me.is_repeatable_loc AS is_rep,
+        'monster'::text AS s_type
+    FROM mv_monster_encounters me
+    JOIN mv_geography g ON me.area_id = g.area_id
+    JOIN w ON g.locatoin_id = ANY(w.ids)
+    WHERE me.monster_id = w.monster_id
+      AND (w.availability IS NULL OR me.avl_context = ANY(w.availability))
 
     UNION ALL
 
-    SELECT g.location_id, 'always'::availability_type AS current_avl, mis.is_repeatable_loc AS is_rep, 'item'::text AS s_type
+    SELECT
+        g.location_id,
+        'always'::availability_type AS current_avl,
+        mis.is_repeatable_loc AS is_rep,
+        'item'::text AS s_type
     FROM mv_item_sources mis
     JOIN items i ON mis.master_item_id = i.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN mv_geography g ON mis.area_id = g.area_id
     JOIN w ON g.location_id = ANY(w.ids)
     WHERE i.id = w.item_id
-      AND a.avl_context = ANY(w.availability)
+      AND mis.avl_context = ANY(w.availability)
       AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 
     UNION ALL
 
-    SELECT g.location_id, 'always'::availability_type AS current_avl, mis.is_repeatable_loc AS is_rep, 'key-item'::text AS s_type
+    SELECT
+        g.location_id,
+        'always'::availability_type AS current_avl,
+        mis.is_repeatable_loc AS is_rep,
+        'key-item'::text AS s_type
     FROM mv_item_sources mis
     JOIN key_items ki ON mis.master_item_id = ki.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN mv_geography g ON mis.area_id = g.area_id
     JOIN w ON g.location_id = ANY(w.ids)
     WHERE ki.id = w.key_item_id
-      AND a.avl_context = ANY(w.availability)
+      AND mis.avl_context = ANY(w.availability)
 
     UNION ALL
 
@@ -506,14 +500,11 @@ available_locations AS (
 SELECT location_id
 FROM available_locations
 CROSS JOIN w
-GROUP BY location_id, w.availability, w.item_id, w.monster_id, w.key_item_id, w.reqs, w.excls, w.is_repeatable
+GROUP BY location_id, w.availability, w.is_repeatable, w.reqs, w.excls
 HAVING (w.availability IS NULL OR MAX(current_avl) = ANY(w.availability))
-   AND (w.item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['item'])
-   AND (w.monster_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['monster'])
-   AND (w.key_item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['key-item'])
+   AND (w.is_repeatable IS NULL OR BOOL_OR(is_rep) = w.is_repeatable)
    AND (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
-   AND (w.is_repeatable IS NULL OR BOOL_OR(is_rep) = w.is_repeatable)
 ORDER BY location_id
 `
 
@@ -576,19 +567,16 @@ available_master_items AS (
     SELECT 
         mis.master_item_id,
         CASE
-            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
-            WHEN w.avl_type = 'self' THEN a.avl_self
-            WHEN w.avl_type = 'context' THEN a.avl_context
-            WHEN w.avl_type = 'area' THEN a.avl_area
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN mis.avl_context
+            WHEN w.avl_type = 'self' THEN mis.avl_self
+            WHEN w.avl_type = 'context' THEN mis.avl_context
+            WHEN w.avl_type = 'area' THEN mis.avl_area
         END AS current_avl,
         CASE
             WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
             ELSE mis.is_repeatable
         END AS is_rep
     FROM mv_item_sources mis
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE mis.master_item_id = ANY(w.ids)
@@ -649,58 +637,56 @@ const filterMonsterFormationIDsByAvailability = `-- name: FilterMonsterFormation
 WITH w AS (
     SELECT
         $1::int[] AS ids,
-        $2::text AS avl_type,
-        $3::availability_type[] AS availability,
-        $4::int AS loc_context_id,
-        $5::text AS loc_context_type,
-        $6::boolean AS is_repeatable
+        $2::availability_type[] AS availability,
+        $3::boolean AS is_repeatable,
+        $4::text AS avl_type,
+        $5::int AS loc_context_id,
+        $6::text AS loc_context_type
 ),
 available_formations AS (
     SELECT 
-        a.s_id,
+        me.formation_id,
         CASE 
-            WHEN w.avl_type = 'self' THEN a.avl_self
-            WHEN w.avl_type = 'context' THEN a.avl_context
-            WHEN w.avl_type = 'area' THEN a.avl_area
+            WHEN w.avl_type = 'self' THEN me.avl_context
+            WHEN w.avl_type = 'context' THEN me.avl_context
+            WHEN w.avl_type = 'area' THEN me.avl_area
         END AS current_avl,
         me.is_repeatable_loc AS is_rep
-    FROM mv_availabilities a
-    JOIN mv_geography g ON a.a_id = g.area_id
-    JOIN mv_monster_encounters me ON me.formation_id = a.source_id AND a.source_type = 'monster-formation' AND me.area_id = a.a_id
+    FROM mv_monster_encounters me
+    JOIN mv_geography g ON me.area_id = g.area_id
     CROSS JOIN w
-    WHERE a.source_type = 'monster-formation'
-      AND a.s_id = ANY(w.ids)
+    WHERE me.formation_id = ANY(w.ids)
       AND (w.loc_context_id IS NULL OR CASE
            WHEN w.loc_context_type = 'location' THEN g.location_id
            WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
            WHEN w.loc_context_type = 'area' THEN g.area_id
           END = w.loc_context_id)
 )
-SELECT s_id
+SELECT formation_id
 FROM available_formations
 CROSS JOIN w
-GROUP BY s_id, w.availability, w.is_repeatable
+GROUP BY formation_id, w.availability, w.is_repeatable
 HAVING (w.availability IS NULL OR MIN(current_avl) = ANY(w.availability))
    AND (w.is_repeatable IS NULL OR BOOL_OR(is_rep) = w.is_repeatable)
 `
 
 type FilterMonsterFormationIDsByAvailabilityParams struct {
 	Ids            []int32
-	AvlType        string
 	Availability   []AvailabilityType
+	IsRepeatable   sql.NullBool
+	AvlType        string
 	LocContextID   sql.NullInt32
 	LocContextType sql.NullString
-	IsRepeatable   sql.NullBool
 }
 
 func (q *Queries) FilterMonsterFormationIDsByAvailability(ctx context.Context, arg FilterMonsterFormationIDsByAvailabilityParams) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, filterMonsterFormationIDsByAvailability,
 		pq.Array(arg.Ids),
-		arg.AvlType,
 		pq.Array(arg.Availability),
+		arg.IsRepeatable,
+		arg.AvlType,
 		arg.LocContextID,
 		arg.LocContextType,
-		arg.IsRepeatable,
 	)
 	if err != nil {
 		return nil, err
@@ -708,11 +694,11 @@ func (q *Queries) FilterMonsterFormationIDsByAvailability(ctx context.Context, a
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var s_id int32
-		if err := rows.Scan(&s_id); err != nil {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
 			return nil, err
 		}
-		items = append(items, s_id)
+		items = append(items, formation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -727,61 +713,59 @@ const filterMonsterIDsByAvailability = `-- name: FilterMonsterIDsByAvailability 
 WITH w AS (
     SELECT
         $1::int[] AS ids,
-        $2::text AS avl_type,
-        $3::availability_type[] AS availability,
-        $4::int AS loc_context_id,
-        $5::text AS loc_context_type,
-        $6::boolean AS is_repeatable
+        $2::availability_type[] AS availability,
+        $3::boolean AS is_repeatable,
+        $4::text AS avl_type,
+        $5::int AS loc_context_id,
+        $6::text AS loc_context_type
 ),
 available_monsters AS (
     SELECT 
-        a.s_id,
+        me.monster_id,
         CASE 
-            WHEN w.avl_type = 'self' THEN a.avl_self
-            WHEN w.avl_type = 'context' THEN a.avl_context
-            WHEN w.avl_type = 'area' THEN a.avl_area
+            WHEN w.avl_type = 'self' THEN me.avl_self
+            WHEN w.avl_type = 'context' THEN me.avl_context
+            WHEN w.avl_type = 'area' THEN me.avl_area
         END AS current_avl,
         CASE
             WHEN w.loc_context_id IS NOT NULL THEN me.is_repeatable_loc
             ELSE me.is_repeatable
         END AS is_rep
-    FROM mv_availabilities a
-    JOIN mv_geography g ON a.a_id = g.area_id
-    JOIN mv_monster_encounters me ON me.monster_id = a.source_id AND a.source_type = 'monster' AND me.area_id = a.a_id
+    FROM mv_monster_encounters me
+    JOIN mv_geography g ON me.area_id = g.area_id
     CROSS JOIN w
-    WHERE a.source_type = 'monster'
-      AND a.s_id = ANY(w.ids)
+    WHERE me.monster_id = ANY(w.ids)
       AND (w.loc_context_id IS NULL OR CASE
            WHEN w.loc_context_type = 'location' THEN g.location_id
            WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
            WHEN w.loc_context_type = 'area' THEN g.area_id
           END = w.loc_context_id)
 )
-SELECT s_id
+SELECT monster_id
 FROM available_monsters
 CROSS JOIN w
-GROUP BY s_id, w.availability, w.is_repeatable
+GROUP BY monster_id, w.availability, w.is_repeatable
 HAVING (w.availability IS NULL OR MIN(current_avl) = ANY(w.availability))
    AND (w.is_repeatable IS NULL OR BOOL_OR(is_rep) = w.is_repeatable)
 `
 
 type FilterMonsterIDsByAvailabilityParams struct {
 	Ids            []int32
-	AvlType        string
 	Availability   []AvailabilityType
+	IsRepeatable   sql.NullBool
+	AvlType        string
 	LocContextID   sql.NullInt32
 	LocContextType sql.NullString
-	IsRepeatable   sql.NullBool
 }
 
 func (q *Queries) FilterMonsterIDsByAvailability(ctx context.Context, arg FilterMonsterIDsByAvailabilityParams) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, filterMonsterIDsByAvailability,
 		pq.Array(arg.Ids),
-		arg.AvlType,
 		pq.Array(arg.Availability),
+		arg.IsRepeatable,
+		arg.AvlType,
 		arg.LocContextID,
 		arg.LocContextType,
-		arg.IsRepeatable,
 	)
 	if err != nil {
 		return nil, err
@@ -789,11 +773,11 @@ func (q *Queries) FilterMonsterIDsByAvailability(ctx context.Context, arg Filter
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var s_id int32
-		if err := rows.Scan(&s_id); err != nil {
+		var monster_id int32
+		if err := rows.Scan(&monster_id); err != nil {
 			return nil, err
 		}
-		items = append(items, s_id)
+		items = append(items, monster_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -813,13 +797,10 @@ WITH w AS (
 available_primers AS (
     SELECT 
         p.id AS primer_id,
-        a.avl_self AS current_avl
+        mis.avl_self AS current_avl
     FROM primers p
     JOIN key_items ki ON p.key_item_id = ki.id
     JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE p.id = ANY(w.ids)
@@ -911,34 +892,61 @@ WITH w AS (
         $1::int[] AS ids,
         $2::text AS avl_type,
         $3::availability_type[] AS availability,
-        $4::text[] AS sub_types
+        $4::text[] AS reqs,
+        $5::text[] AS excls,
+        $6::int AS auto_ability_id,
+        $7::int[] AS empty_slots,
+        $8::int AS character_id
 ),
 available_shops AS (
     SELECT 
-        a.s_id,
+        a.s_id AS shop_id,
         CASE 
             WHEN w.avl_type = 'self' THEN a.avl_self
             WHEN w.avl_type = 'context' THEN a.avl_context
             WHEN w.avl_type = 'area' THEN a.avl_area
-        END AS current_avl
+        END AS current_avl,
+        a.sub_type AS s_type
     FROM mv_availabilities a
-    CROSS JOIN w
+    JOIN w ON a.s_id = ANY(w.ids)
     WHERE a.source_type = 'shop'
-        AND a.s_id = ANY(w.ids)
-        AND (w.sub_types IS NULL OR a.sub_type = ANY(w.sub_types))
+
+    UNION ALL
+
+    SELECT 
+        es.source_id AS shop_id,
+        CASE 
+            WHEN w.avl_type = 'self' THEN es.avl_self
+            WHEN w.avl_type = 'context' THEN es.avl_context
+            WHEN w.avl_type = 'area' THEN es.avl_area
+        END AS current_avl,
+        'equip_filter' AS s_type
+    FROM mv_equipment_sources es
+    JOIN w ON es.source_id = ANY(w.ids)
+    WHERE es.source_type = 'shop'
+      AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
+      AND (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
+      AND (w.character_id IS NULL OR es.character_id = w.character_id)
 )
-SELECT s_id
+SELECT shop_id
 FROM available_shops
 CROSS JOIN w
-GROUP BY s_id, w.availability
-HAVING MIN(current_avl) = ANY(w.availability)
+GROUP BY shop_id, w.availability, w.reqs, w.excls, w.auto_ability_id, w.empty_slots, w.character_id
+HAVING (w.availability IS NULL OR MIN(current_avl) = ANY(w.availability))
+   AND (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
+   AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
+ORDER BY shop_id
 `
 
 type FilterShopIDsByAvailabilityParams struct {
-	Ids          []int32
-	AvlType      string
-	Availability []AvailabilityType
-	SubTypes     []string
+	Ids             []int32
+	AvlType         string
+	Availability    []AvailabilityType
+	RequiredSources []string
+	ExcludedSources []string
+	AutoAbilityID   sql.NullInt32
+	EmptySlots      []int32
+	CharacterID     sql.NullInt32
 }
 
 func (q *Queries) FilterShopIDsByAvailability(ctx context.Context, arg FilterShopIDsByAvailabilityParams) ([]int32, error) {
@@ -946,7 +954,11 @@ func (q *Queries) FilterShopIDsByAvailability(ctx context.Context, arg FilterSho
 		pq.Array(arg.Ids),
 		arg.AvlType,
 		pq.Array(arg.Availability),
-		pq.Array(arg.SubTypes),
+		pq.Array(arg.RequiredSources),
+		pq.Array(arg.ExcludedSources),
+		arg.AutoAbilityID,
+		pq.Array(arg.EmptySlots),
+		arg.CharacterID,
 	)
 	if err != nil {
 		return nil, err
@@ -954,11 +966,11 @@ func (q *Queries) FilterShopIDsByAvailability(ctx context.Context, arg FilterSho
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var s_id int32
-		if err := rows.Scan(&s_id); err != nil {
+		var shop_id int32
+		if err := rows.Scan(&shop_id); err != nil {
 			return nil, err
 		}
-		items = append(items, s_id)
+		items = append(items, shop_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1030,10 +1042,10 @@ available_spheres AS (
     SELECT 
         s.id AS sphere_id,
         CASE
-            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN a.avl_context
-            WHEN w.avl_type = 'self' THEN a.avl_self
-            WHEN w.avl_type = 'context' THEN a.avl_context
-            WHEN w.avl_type = 'area' THEN a.avl_area
+            WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN mis.avl_context
+            WHEN w.avl_type = 'self' THEN mis.avl_self
+            WHEN w.avl_type = 'context' THEN mis.avl_context
+            WHEN w.avl_type = 'area' THEN mis.avl_area
         END AS current_avl,
         CASE
             WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
@@ -1042,9 +1054,6 @@ available_spheres AS (
     FROM spheres s
     JOIN items i ON s.item_id = i.id
     JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE s.id = ANY(w.ids)
@@ -1115,47 +1124,55 @@ WITH w AS (
         $9::boolean AS is_repeatable
 ),
 available_sublocations AS (
-    SELECT s.id AS sublocation_id, s.availability AS current_avl, NULL::boolean AS is_rep, 'sublocation'::text AS s_type
+    SELECT
+        s.id AS sublocation_id,
+        s.availability AS current_avl,
+        NULL::boolean AS is_rep,
+        'sublocation'::text AS s_type
     FROM sublocations s
     JOIN w ON s.id = ANY(w.ids)
 
     UNION ALL
 
-    SELECT g.sublocation_id, a.avl_context AS current_avl, a.is_repeatable_loc AS is_rep, 'monster'::text AS s_type
-    FROM mv_availabilities a
-    JOIN mv_geography g ON a.a_id = g.area_id
+    SELECT
+        g.sublocation_id,
+        me.avl_context AS current_avl,
+        me.is_repeatable_loc AS is_rep,
+        'monster'::text AS s_type
+    FROM mv_monster_encounters me
+    JOIN mv_geography g ON me.area_id = g.area_id
     JOIN w ON g.sublocation_id = ANY(w.ids)
-    WHERE a.source_type = 'monster'
-      AND w.monster_id IS NOT NULL
-      AND a.s_id = w.monster_id
-      AND (w.availability IS NULL OR a.avl_context = ANY(w.availability))
+    WHERE me.monster_id = w.monster_id
+      AND (w.availability IS NULL OR me.avl_context = ANY(w.availability))
 
     UNION ALL
 
-    SELECT g.sublocation_id, 'always'::availability_type AS current_avl, mis.is_repeatable_loc AS is_rep, 'item'::text AS s_type
+    SELECT
+        g.sublocation_id,
+        'always'::availability_type AS current_avl,
+        mis.is_repeatable_loc AS is_rep,
+        'item'::text AS s_type
     FROM mv_item_sources mis
     JOIN items i ON mis.master_item_id = i.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN mv_geography g ON mis.area_id = g.area_id
     JOIN w ON g.sublocation_id = ANY(w.ids)
     WHERE i.id = w.item_id
-      AND a.avl_context = ANY(w.availability)
+      AND mis.avl_context = ANY(w.availability)
       AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 
     UNION ALL
 
-    SELECT g.sublocation_id, 'always'::availability_type AS current_avl, mis.is_repeatable_loc AS is_rep, 'key-item'::text AS s_type
+    SELECT
+        g.sublocation_id,
+        'always'::availability_type AS current_avl, 
+        mis.is_repeatable_loc AS is_rep,
+        'key-item'::text AS s_type
     FROM mv_item_sources mis
     JOIN key_items ki ON mis.master_item_id = ki.master_item_id
-    JOIN mv_availabilities a ON a.s_id = mis.source_id
-     AND a.source_type = mis.source_type
-     AND a.a_id = mis.area_id
     JOIN mv_geography g ON mis.area_id = g.area_id
     JOIN w ON g.sublocation_id = ANY(w.ids)
     WHERE ki.id = w.key_item_id
-      AND a.avl_context = ANY(w.availability)
+      AND mis.avl_context = ANY(w.availability)
 
     UNION ALL
 
@@ -1179,14 +1196,11 @@ available_sublocations AS (
 SELECT sublocation_id
 FROM available_sublocations
 CROSS JOIN w
-GROUP BY sublocation_id, w.availability, w.item_id, w.monster_id, w.key_item_id, w.reqs, w.excls, w.is_repeatable
+GROUP BY sublocation_id, w.availability, w.is_repeatable, w.reqs, w.excls
 HAVING (w.availability IS NULL OR MAX(current_avl) = ANY(w.availability))
-   AND (w.item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['item'])
-   AND (w.monster_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['monster'])
-   AND (w.key_item_id IS NULL OR ARRAY_AGG(s_type) @> ARRAY['key-item'])
+   AND (w.is_repeatable IS NULL OR BOOL_OR(is_rep) = w.is_repeatable)
    AND (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
-   AND (w.is_repeatable IS NULL OR BOOL_OR(is_rep) = w.is_repeatable)
 ORDER BY sublocation_id
 `
 

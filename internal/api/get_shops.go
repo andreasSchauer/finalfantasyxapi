@@ -31,8 +31,7 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
-		frl(basicQueryWrapper(cfg, r, i, resources, "empty_slots", getShopsByEmptySlots)),
-		frl(idQueryWrapper(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), getShopsByAutoAbility)),
+		frl(joinedQuery(cfg, r, i, resources, []string{"auto_ability", "empty_slots", "character"}, filterShopsEquipment)),
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetShopIDsByLocation)),
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetShopIDsBySublocation)),
 		frl(boolQuery2(cfg, r, i, resources, "items", cfg.db.GetShopIDsWithItems)),
