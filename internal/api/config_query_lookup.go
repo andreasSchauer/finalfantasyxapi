@@ -311,6 +311,7 @@ func (cfg *Config) initLocationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "items")},
 		},
 		{
@@ -320,6 +321,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []string{"item"},
+			ReplacedBy:     []string{"availability", "repeatable"},
 			AllowedValues:  []string{"monster", "treasure", "shop", "quest"},
 		},
 		{
@@ -328,6 +330,7 @@ func (cfg *Config) initLocationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "key-items")},
 		},
 		{
@@ -340,7 +343,7 @@ func (cfg *Config) initLocationsParams() {
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
-			Name:        "is_repeatable",
+			Name:        "repeatable",
 			Description: "Searches for locations where the searched resources can be farmed. Must be combined with a parameter that looks up a farmable resource type.",
 			Type:        "bool",
 			ForList:     true,
@@ -367,6 +370,8 @@ func (cfg *Config) initLocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
+
 		},
 		{
 			Name:        "boss_fights",
@@ -374,6 +379,8 @@ func (cfg *Config) initLocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
+
 		},
 		{
 			Name:        "shops",
@@ -381,6 +388,8 @@ func (cfg *Config) initLocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
+
 		},
 		{
 			Name:        "treasures",
@@ -388,6 +397,8 @@ func (cfg *Config) initLocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
+
 		},
 		{
 			Name:        "sidequests",
@@ -395,6 +406,7 @@ func (cfg *Config) initLocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "fmvs",
@@ -425,6 +437,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "items")},
 		},
 		{
@@ -434,6 +447,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []string{"item"},
+			ReplacedBy:     []string{"availability", "repeatable"},
 			AllowedValues:  []string{"monster", "treasure", "shop", "quest"},
 		},
 		{
@@ -442,6 +456,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "key-items")},
 		},
 		{
@@ -454,7 +469,7 @@ func (cfg *Config) initSublocationsParams() {
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
-			Name:        "is_repeatable",
+			Name:        "repeatable",
 			Description: "Searches for sublocations where the searched resources can be farmed. Must be combined with a parameter that looks up a farmable resource type.",
 			Type:        "bool",
 			ForList:     true,
@@ -481,6 +496,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "boss_fights",
@@ -488,6 +504,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "shops",
@@ -495,6 +512,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "treasures",
@@ -502,6 +520,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "sidequests",
@@ -509,6 +528,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "fmvs",
@@ -548,6 +568,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "monsters")},
 		},
 		{
@@ -556,6 +577,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "items")},
 		},
 		{
@@ -565,6 +587,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []string{"item"},
+			ReplacedBy:  	[]string{"availability", "repeatable"},
 			AllowedValues:  []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
 		{
@@ -573,6 +596,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "key-items")},
 		},
 		{
@@ -585,7 +609,7 @@ func (cfg *Config) initAreasParams() {
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
-			Name:        "is_repeatable",
+			Name:        "repeatable",
 			Description: "Searches for areas where the searched resources can be farmed. Must be combined with a parameter that looks up a farmable resource type.",
 			Type:        "bool",
 			ForList:     true,
@@ -640,6 +664,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "boss_fights",
@@ -647,6 +672,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "shops",
@@ -654,6 +680,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "treasures",
@@ -661,6 +688,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "sidequests",
@@ -668,6 +696,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:        "fmvs",
@@ -707,7 +736,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			ReplacedBy:  []string{"sublocation", "area"},
+			ReplacedBy:  []string{"sublocation", "area", "availability", "repeatable"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -716,7 +745,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			ReplacedBy:  []string{"area"},
+			ReplacedBy:  []string{"area", "availability", "repeatable"},
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -725,6 +754,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "areas")},
 		},
 		{
@@ -734,12 +764,11 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			ReplacedBy:  []string{"location", "sublocation", "area"},
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
 			Name:        "repeatable",
-			Description: "Searches for monster formations that can be triggered more than once.",
+			Description: "Searches for monster formations that can be farmed.",
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
@@ -774,7 +803,7 @@ func (cfg *Config) initShopsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			ReplacedBy:  []string{"sublocation"},
+			ReplacedBy:  []string{"sublocation", "availability"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -783,6 +812,7 @@ func (cfg *Config) initShopsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability"},
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -791,6 +821,7 @@ func (cfg *Config) initShopsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability"},
 			References:  []string{createListURL(cfg, "auto-abilities")},
 		},
 		{
@@ -799,6 +830,7 @@ func (cfg *Config) initShopsParams() {
 			Type:            "int-list",
 			ForList:         true,
 			ForSingle:       false,
+			ReplacedBy:  	 []string{"availability"},
 			AllowedIntRange: []int{0, 4},
 		},
 		{
@@ -808,6 +840,7 @@ func (cfg *Config) initShopsParams() {
 			ExampleVals: []string{"wakka"},
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability"},
 			References:  []string{createListURL(cfg, "characters")},
 		},
 		{
@@ -816,6 +849,7 @@ func (cfg *Config) initShopsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability"},
 		},
 		{
 			Name:        "equipment",
@@ -823,6 +857,7 @@ func (cfg *Config) initShopsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability"},
 		},
 		{
 			Name:        "availability",
@@ -982,6 +1017,13 @@ func (cfg *Config) initSidequestsParams() {
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
 			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "repeatable",
+			Description: "Searches for sidequests that can be completed more than once.",
+			Type:        "bool",
+			ForList:     true,
+			ForSingle:   false,
 		},
 	}
 
@@ -1339,7 +1381,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			ReplacedBy:  []string{"sublocation", "area"},
+			ReplacedBy:  []string{"sublocation", "area", "availability", "repeatable"},
 			References:  []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -1348,7 +1390,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			ReplacedBy:  []string{"area"},
+			ReplacedBy:  []string{"area", "availability", "repeatable"},
 			References:  []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -1357,6 +1399,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "areas")},
 		},
 		{
@@ -2361,8 +2404,14 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			ReplacedBy:  []string{"location", "sublocation", "area"},
 			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "repeatable",
+			Description: "Searches for items that can be farmed.",
+			Type:        "bool",
+			ForList:     true,
+			ForSingle:   false,
 		},
 		{
 			Name:          "method",
@@ -2370,7 +2419,6 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"location", "sublocation", "area"},
 			AllowedValues: []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
 		{
@@ -2379,7 +2427,7 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"sublocation", "area"},
+			ReplacedBy:    []string{"sublocation", "area", "availability", "repeatable"},
 			References:    []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -2388,7 +2436,7 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"area"},
+			ReplacedBy:    []string{"area", "availability", "repeatable"},
 			References:    []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -2397,6 +2445,7 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"availability", "repeatable"},
 			References:    []string{createListURL(cfg, "area")},
 		},
 	}
@@ -2439,8 +2488,14 @@ func (cfg *Config) initItemsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			ReplacedBy:  []string{"location", "sublocation", "area"},
 			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "repeatable",
+			Description: "Searches for items that can be farmed.",
+			Type:        "bool",
+			ForList:     true,
+			ForSingle:   false,
 		},
 		{
 			Name:          "method",
@@ -2448,7 +2503,6 @@ func (cfg *Config) initItemsParams() {
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"location", "sublocation", "area"},
 			AllowedValues: []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
 		{
@@ -2473,7 +2527,7 @@ func (cfg *Config) initItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"sublocation", "area"},
+			ReplacedBy:    []string{"sublocation", "area", "availability", "repeatable"},
 			References:    []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -2482,7 +2536,7 @@ func (cfg *Config) initItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"area"},
+			ReplacedBy:    []string{"area", "availability", "repeatable"},
 			References:    []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -2491,6 +2545,7 @@ func (cfg *Config) initItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"availability", "repeatable"},
 			References:    []string{createListURL(cfg, "area")},
 		},
 	}
@@ -2533,7 +2588,7 @@ func (cfg *Config) initKeyItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"sublocation", "area"},
+			ReplacedBy:    []string{"sublocation", "area", "availability", "repeatable"},
 			References:    []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -2542,7 +2597,7 @@ func (cfg *Config) initKeyItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"area"},
+			ReplacedBy:    []string{"area", "availability", "repeatable"},
 			References:    []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -2551,6 +2606,7 @@ func (cfg *Config) initKeyItemsParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"availability", "repeatable"},
 			References:    []string{createListURL(cfg, "area")},
 		},
 	}
@@ -2587,6 +2643,13 @@ func (cfg *Config) initSpheresParams() {
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
+			Name:        "repeatable",
+			Description: "Searches for spheres that can be farmed.",
+			Type:        "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+		{
 			Name:        "color",
 			Description: "Searches for spheres with any of the given colors.",
 			Type:        "enum-list",
@@ -2600,7 +2663,7 @@ func (cfg *Config) initSpheresParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"sublocation", "area"},
+			ReplacedBy:    []string{"sublocation", "area", "availability", "repeatable"},
 			References:    []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -2609,7 +2672,7 @@ func (cfg *Config) initSpheresParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"area"},
+			ReplacedBy:    []string{"area", "availability", "repeatable"},
 			References:    []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -2618,6 +2681,7 @@ func (cfg *Config) initSpheresParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"availability", "repeatable"},
 			References:    []string{createListURL(cfg, "area")},
 		},
 	}
@@ -2725,6 +2789,13 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			References:  []string{createListURL(cfg, "availability")},
 		},
 		{
+			Name:        "repeatable",
+			Description: "Searches for auto-abilities that can be farmed.",
+			Type:        "bool",
+			ForList:     true,
+			ForSingle:   false,
+		},
+		{
 			Name:        "category",
 			Description: "Searches for auto-abilities that are of the specified auto-ability categories.",
 			Type:        "enum-list",
@@ -2772,8 +2843,17 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ExampleVals: []string{"kimahri"},
 			ForList:     true,
 			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
 			UsableWith:  []string{"availability", "monster", "shop"},
 			References:  []string{createListURL(cfg, "monsters")},
+		},
+		{
+			Name:        "req_item",
+			Description: "Searches auto-abilities based on their required item's availability and/or farmability.",
+			Type:        "bool",
+			ForList:     true,
+			ForSingle:   false,
+			UsableWith:  []string{"availability", "repeatable"},
 		},
 		{
 			Name:          "location",
@@ -2781,7 +2861,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"sublocation", "area"},
+			ReplacedBy:    []string{"sublocation", "area", "availability", "repeatable"},
 			References:    []string{createListURL(cfg, "locations")},
 		},
 		{
@@ -2790,7 +2870,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
-			ReplacedBy:    []string{"area"},
+			ReplacedBy:    []string{"area", "availability", "repeatable"},
 			References:    []string{createListURL(cfg, "sublocations")},
 		},
 		{
@@ -2799,6 +2879,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:          "id",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"availability", "repeatable"},
 			References:    []string{createListURL(cfg, "area")},
 		},
 	}

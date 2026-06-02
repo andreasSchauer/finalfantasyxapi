@@ -217,8 +217,8 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, resources []NamedAPIResourc
 	}
 
 	dbIDs, err := cfg.db.FilterKeyItemIDsByAvailability(r.Context(), database.FilterKeyItemIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		Availability: availabilities,
+		Ids:          	resToIDs(resources),
+		Availability: 	availabilities,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
 	})
@@ -663,13 +663,6 @@ type locBasedSources struct {
 func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (locBasedSources, error) {
 	reqs := []string{}
 	excls := []string{}
-	sourceMap := map[string]string{
-		"monsters": 	string(ViewSourceTypeMonster),
-		"boss_fights": 	string(ViewSourceTypeBoss),
-		"shops": 		string(ViewSourceTypeShop),
-		"treasures": 	string(ViewSourceTypeTreasure),
-		"sidequests": 	string(ViewSourceTypeQuest),
-	}
 
 	monID, err := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
 	if errExceptEmptyQuery(err) {
@@ -700,18 +693,15 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		return locBasedSources{}, err
 	}
 
-	for queryParam := range sourceMap {
-		b, err := parseBooleanQuery(r, i.queryLookup[queryParam])
-		if errExceptEmptyQuery(err) {
-			return locBasedSources{}, err
-		}
-		if !queryIsEmpty(err) {
-			if b {
-				reqs = append(reqs, sourceMap[queryParam])
-			} else {
-				excls = append(excls, sourceMap[queryParam])
-			}
-		}
+	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[string]string{
+		"monsters": 	string(ViewSourceTypeMonster),
+		"boss_fights": 	string(ViewSourceTypeBoss),
+		"shops": 		string(ViewSourceTypeShop),
+		"treasures": 	string(ViewSourceTypeTreasure),
+		"sidequests": 	string(ViewSourceTypeQuest),
+	})
+	if err != nil {
+		return locBasedSources{}, err
 	}
 
 	sources := locBasedSources{
@@ -769,30 +759,12 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 		reqs = append(reqs, "equip_filter")
 	}
 
-	hasItems, err := parseBooleanQuery(r, i.queryLookup["items"])
-	if errExceptEmptyQuery(err) {
+	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[string]string{
+		"items": 		string(ViewSourceTypeItem),
+		"equipment": 	string(ViewSourceTypeEquipment),
+	})
+	if err != nil {
 		return shopSources{}, err
-	}
-	if !queryIsEmpty(err) {
-		avlType = AvlTypeContext
-		if hasItems {
-			reqs = append(reqs, string(ViewSourceTypeItem))
-		} else {
-			excls = append(excls, string(ViewSourceTypeItem))
-		}
-	}
-
-	hasEquip, err := parseBooleanQuery(r, i.queryLookup["equipment"])
-	if errExceptEmptyQuery(err) {
-		return shopSources{}, err
-	}
-	if !queryIsEmpty(err) {
-		avlType = AvlTypeContext
-		if hasEquip {
-			reqs = append(reqs, string(ViewSourceTypeEquipment))
-		} else {
-			excls = append(excls, string(ViewSourceTypeEquipment))
-		}
 	}
 
 	sources := shopSources{
@@ -805,6 +777,26 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	}
 
 	return sources, nil
+}
+
+
+
+func parseBoolSources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], reqs, excls []string, sourceMap map[string]string) ([]string, []string, error) {
+	for queryParam := range sourceMap {
+		b, err := parseBooleanQuery(r, i.queryLookup[queryParam])
+		if errExceptEmptyQuery(err) {
+			return nil, nil, err
+		}
+		if !queryIsEmpty(err) {
+			if b {
+				reqs = append(reqs, sourceMap[queryParam])
+			} else {
+				excls = append(excls, sourceMap[queryParam])
+			}
+		}
+	}
+
+	return reqs, excls, nil
 }
 
 
