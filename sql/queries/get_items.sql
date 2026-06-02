@@ -359,6 +359,15 @@ WHERE mis.area_id = $1
 ORDER BY s.id;
 
 
+-- name: GetSphereIDsByMethod :many
+SELECT DISTINCT s.id
+FROM spheres s
+JOIN items i ON s.item_id = i.id
+JOIN mv_item_sources mis ON i.master_item_id = mis.master_item_id
+WHERE mis.source_type = sqlc.arg('method')::text
+ORDER BY s.id;
+
+
 
 
 

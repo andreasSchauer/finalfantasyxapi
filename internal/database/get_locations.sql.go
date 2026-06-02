@@ -530,6 +530,33 @@ func (q *Queries) GetAreaIDsWithKeyItem(ctx context.Context, id int32) ([]int32,
 	return items, nil
 }
 
+const getAreaIDsWithMonster = `-- name: GetAreaIDsWithMonster :many
+SELECT DISTINCT area_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY area_id
+`
+
+func (q *Queries) GetAreaIDsWithMonster(ctx context.Context, monsterID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsWithMonster, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
+			return nil, err
+		}
+		items = append(items, area_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAreaIDsWithMonsters = `-- name: GetAreaIDsWithMonsters :many
 SELECT DISTINCT area_id FROM mv_monster_encounters ORDER BY area_id
 `
@@ -1451,6 +1478,37 @@ ORDER BY g.location_id
 
 func (q *Queries) GetLocationIDsWithKeyItem(ctx context.Context, id int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getLocationIDsWithKeyItem, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
+			return nil, err
+		}
+		items = append(items, location_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLocationIDsWithMonster = `-- name: GetLocationIDsWithMonster :many
+SELECT DISTINCT g.location_id
+FROM mv_geography g
+JOIN mv_monster_encounters me ON me.area_id = g.area_id
+WHERE me.monster_id = $1
+ORDER BY g.location_id
+`
+
+func (q *Queries) GetLocationIDsWithMonster(ctx context.Context, monsterID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationIDsWithMonster, monsterID)
 	if err != nil {
 		return nil, err
 	}
@@ -2589,6 +2647,37 @@ ORDER BY g.sublocation_id
 
 func (q *Queries) GetSublocationIDsWithKeyItem(ctx context.Context, id int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getSublocationIDsWithKeyItem, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
+			return nil, err
+		}
+		items = append(items, sublocation_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSublocationIDsWithMonster = `-- name: GetSublocationIDsWithMonster :many
+SELECT DISTINCT g.sublocation_id
+FROM mv_geography g
+JOIN mv_monster_encounters me ON me.area_id = g.area_id
+WHERE me.monster_id = $1
+ORDER BY g.sublocation_id
+`
+
+func (q *Queries) GetSublocationIDsWithMonster(ctx context.Context, monsterID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationIDsWithMonster, monsterID)
 	if err != nil {
 		return nil, err
 	}

@@ -11,6 +11,9 @@ func joinedQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 	allEmpty := true
 
 	for _, queryName := range queryNames {
+		if replParamsPresent(r, i.queryLookup[queryName], i.queryLookup) {
+			return inputRes, nil
+		}
 		_, err := checkEmptyQuery(r, i.queryLookup[queryName])
 		if !queryIsEmpty(err) {
 			allEmpty = false

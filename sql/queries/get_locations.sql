@@ -165,6 +165,10 @@ WHERE ki.id = $1
 ORDER BY mis.area_id;
 
 
+-- name: GetAreaIDsWithMonster :many
+SELECT DISTINCT area_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY area_id;
+
+
 -- name: GetAreaIDsWithSidequests :many
 SELECT DISTINCT area_id FROM completion_areas ORDER BY area_id;
 
@@ -394,6 +398,14 @@ WHERE ki.id = $1
 ORDER BY g.sublocation_id;
 
 
+-- name: GetSublocationIDsWithMonster :many
+SELECT DISTINCT g.sublocation_id
+FROM mv_geography g
+JOIN mv_monster_encounters me ON me.area_id = g.area_id
+WHERE me.monster_id = $1
+ORDER BY g.sublocation_id;
+
+
 -- name: GetSublocationIDsWithSidequests :many
 SELECT DISTINCT g.sublocation_id
 FROM mv_geography g
@@ -608,8 +620,6 @@ JOIN treasures t ON t.area_id = g.area_id
 ORDER BY g.location_id;
 
 
-
-
 -- name: GetLocationIDsWithItemFromMethod :many
 WITH w AS (
     SELECT sqlc.arg('method')::text[] AS method
@@ -630,6 +640,14 @@ FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
+ORDER BY g.location_id;
+
+
+-- name: GetLocationIDsWithMonster :many
+SELECT DISTINCT g.location_id
+FROM mv_geography g
+JOIN mv_monster_encounters me ON me.area_id = g.area_id
+WHERE me.monster_id = $1
 ORDER BY g.location_id;
 
 

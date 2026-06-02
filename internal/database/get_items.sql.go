@@ -1430,6 +1430,38 @@ func (q *Queries) GetSphereIDsByLocation(ctx context.Context, locationID int32) 
 	return items, nil
 }
 
+const getSphereIDsByMethod = `-- name: GetSphereIDsByMethod :many
+SELECT DISTINCT s.id
+FROM spheres s
+JOIN items i ON s.item_id = i.id
+JOIN mv_item_sources mis ON i.master_item_id = mis.master_item_id
+WHERE mis.source_type = $1::text
+ORDER BY s.id
+`
+
+func (q *Queries) GetSphereIDsByMethod(ctx context.Context, method string) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSphereIDsByMethod, method)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getSphereIDsBySublocation = `-- name: GetSphereIDsBySublocation :many
 SELECT DISTINCT s.id
 FROM spheres s

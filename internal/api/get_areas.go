@@ -51,6 +51,7 @@ func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, A
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[AreaAPIResource]{
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationAreaIDs)),
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationAreaIDs)),
+		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetAreaIDsWithMonster)),
 		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getAreasByItem)),
 		frl(idQuery(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), cfg.db.GetAreaIDsWithKeyItem)),
 		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetAreasByMonster)),

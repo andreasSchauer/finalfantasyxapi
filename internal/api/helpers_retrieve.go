@@ -183,6 +183,11 @@ func filterAvlItems(cfg *Config, r *http.Request, resources []NamedAPIResource) 
 		return nil, err
 	}
 
+	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return nil, err
+	}
+
 	dbIDs, err := cfg.db.FilterItemIDsByAvailability(r.Context(), database.FilterItemIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
 		Availability: 	availabilities,
@@ -190,6 +195,7 @@ func filterAvlItems(cfg *Config, r *http.Request, resources []NamedAPIResource) 
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
+		Method: 		h.GetNullString(method),
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -247,6 +253,11 @@ func filterAvlSpheres(cfg *Config, r *http.Request, resources []NamedAPIResource
 		return nil, err
 	}
 
+	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return nil, err
+	}
+
 	dbIDs, err := cfg.db.FilterSphereIDsByAvailability(r.Context(), database.FilterSphereIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
 		Availability: 	availabilities,
@@ -254,6 +265,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, resources []NamedAPIResource
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
+		Method: 		h.GetNullString(method),
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -669,7 +681,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		return locBasedSources{}, err
 	}
 	if !queryIsEmpty(err) {
-		reqs = append(reqs, string(ViewSourceTypeMonster))
+		reqs = append(reqs, "monster-single")
 	}
 	
 	itemID, err := getQueryIdPtr(r, cfg.e.items, "item", i.queryLookup)

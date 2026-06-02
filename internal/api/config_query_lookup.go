@@ -279,6 +279,12 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 		p.Usage = s + "{name|id},...|{'none'}"
 		p.ExampleUses = []string{s + "1", s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2), s + "none"}
 
+	case "value":
+		e1 := p.AllowedValues[0]
+		e2 := p.AllowedValues[1]
+		p.Usage = s + "{val}"
+		p.ExampleUses = []string{s + e1, s + e2}
+
 	case "value-list":
 		e1 := p.AllowedValues[0]
 		e2 := p.AllowedValues[1]
@@ -306,6 +312,32 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 func (cfg *Config) initLocationsParams() {
 	params := []QueryParam{
 		{
+			Name:        "availability",
+			Description: "Searches for locations with the given availabilities. Can be combined with other parameters that filter out locations with certain resources. In that case, this parameter searches for locations where all the requested resources/resource-types are present with the given availabilities.",
+			Type:        "enum-list",
+			ForList:     true,
+			ForSingle:   false,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "repeatable",
+			Description: "Searches for locations where the all the requested resources/resource-types can be farmed. Must be combined with a parameter that looks up a farmable resource type.",
+			Type:        "bool",
+			ForList:     true,
+			ForSingle:   false,
+			UsableWith:  []string{"monster", "item", "monsters", "boss_fights", "shops", "treasures", "sidequests"},
+		},
+		{
+			Name:        "monster",
+			Description: "Searches for locations where the specified monster can be found.",
+			Type:        "id",
+			ForList:     true,
+			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
+			References:  []string{createListURL(cfg, "monsters")},
+		},
+		{
 			Name:        "item",
 			Description: "Searches for locations where the specified item can be acquired. Can be specified further with the 'method' parameter.",
 			Type:        "id",
@@ -332,23 +364,6 @@ func (cfg *Config) initLocationsParams() {
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "key-items")},
-		},
-		{
-			Name:        "availability",
-			Description: "Searches for locations with the given availabilities.",
-			Type:        "enum-list",
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
-		},
-		{
-			Name:        "repeatable",
-			Description: "Searches for locations where the searched resources can be farmed. Must be combined with a parameter that looks up a farmable resource type.",
-			Type:        "bool",
-			ForList:     true,
-			ForSingle:   false,
-			UsableWith:  []string{"monster", "item", "monsters", "boss_fights", "shops", "treasures", "sidequests"},
 		},
 		{
 			Name:        "characters",
@@ -430,6 +445,15 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			References:  []string{createListURL(cfg, "locations")},
+		},
+		{
+			Name:        "monster",
+			Description: "Searches for sublocations where the specified monster can be found.",
+			Type:        "id",
+			ForList:     true,
+			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
+			References:  []string{createListURL(cfg, "monsters")},
 		},
 		{
 			Name:        "item",
@@ -564,7 +588,7 @@ func (cfg *Config) initAreasParams() {
 		},
 		{
 			Name:        "monster",
-			Description: "Searches for areas where the specified monster appears.",
+			Description: "Searches for areas where the specified monster can be found.",
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
@@ -2499,10 +2523,11 @@ func (cfg *Config) initItemsParams() {
 		},
 		{
 			Name:          "method",
-			Description:   "Searches for items that can be obtained via all of the given methods.",
-			Type:          "value-list",
+			Description:   "Searches for items that can be obtained via the given method.",
+			Type:          "value",
 			ForList:       true,
 			ForSingle:     false,
+			ReplacedBy:    []string{"availability", "repeatable"},
 			AllowedValues: []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
 		{
@@ -2648,6 +2673,15 @@ func (cfg *Config) initSpheresParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
+		},
+		{
+			Name:          "method",
+			Description:   "Searches for spheres that can be obtained via the given method.",
+			Type:          "value",
+			ForList:       true,
+			ForSingle:     false,
+			ReplacedBy:    []string{"availability", "repeatable"},
+			AllowedValues: []string{"monster", "treasure", "shop", "quest", "blitzball"},
 		},
 		{
 			Name:        "color",
