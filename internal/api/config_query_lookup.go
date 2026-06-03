@@ -1436,7 +1436,7 @@ func (cfg *Config) initMonstersParams() {
 		},
 		{
 			Name:        "availability",
-			Description: "Searches for monsters with the given availabilities.",
+			Description: "Searches for monsters with the given availabilities. If this parameter is combined with a geographical filter, it takes the availability directly from the monster formations that occur in the specified location, sublocation, or area.",
 			Type:        "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -1445,7 +1445,7 @@ func (cfg *Config) initMonstersParams() {
 		},
 		{
 			Name:        "repeatable",
-			Description: "Searches for monsters that can be farmed.",
+			Description: "Searches for monsters that can be farmed. If this parameter is combined with a geographical filter, it takes the repeatability directly from the monster formations that occur in the specified location, sublocation, or area.",
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
@@ -2423,7 +2423,7 @@ func (cfg *Config) initAllItemsParams() {
 		},
 		{
 			Name:        "availability",
-			Description: "Searches for items with the given availabilities.",
+			Description: "Searches for items with the given availabilities. The availability of an item is always taken from its sources. The least restrictive availability among those sources is the one that is assigned to the item.",
 			Type:        "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2432,7 +2432,7 @@ func (cfg *Config) initAllItemsParams() {
 		},
 		{
 			Name:        "repeatable",
-			Description: "Searches for items that can be farmed.",
+			Description: "Searches for items that can be farmed. The repeatability of an item is always taken from its sources. If one source within the filter rules can be farmed, then the item counts as repeatable.",
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
@@ -2507,7 +2507,7 @@ func (cfg *Config) initItemsParams() {
 		},
 		{
 			Name:        "availability",
-			Description: "Searches for items with the given availabilities.",
+			Description: "Searches for items with the given availabilities. The availability of an item is always taken from its sources. The least restrictive availability among those sources is the one that is assigned to the item.",
 			Type:        "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2516,7 +2516,7 @@ func (cfg *Config) initItemsParams() {
 		},
 		{
 			Name:        "repeatable",
-			Description: "Searches for items that can be farmed.",
+			Description: "Searches for items that can be farmed. The repeatability of an item is always taken from its sources. If one source within the filter rules can be farmed, then the item counts as repeatable.",
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
@@ -2583,7 +2583,7 @@ func (cfg *Config) initKeyItemsParams() {
 	params := []QueryParam{
 		{
 			Name:        "availability",
-			Description: "Searches for key-items with the given availabilities.",
+			Description: "Searches for key-items with the given availabilities. The availability of a key-item is always taken from its sources. The least restrictive availability among those sources is the one that is assigned to the key-item.",
 			Type:        "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2660,7 +2660,7 @@ func (cfg *Config) initSpheresParams() {
 		},
 		{
 			Name:        "availability",
-			Description: "Searches for spheres with the given availabilities.",
+			Description: "Searches for spheres with the given availabilities. The availability of a sphere is always taken from its sources. The least restrictive availability among those sources is the one that is assigned to the sphere.",
 			Type:        "enum-list",
 			ForList:     true,
 			ForSingle:   false,
@@ -2669,7 +2669,7 @@ func (cfg *Config) initSpheresParams() {
 		},
 		{
 			Name:        "repeatable",
-			Description: "Searches for spheres that can be farmed.",
+			Description: "Searches for spheres that can be farmed. The repeatability of a sphere is always taken from its sources. If one source within the filter rules can be farmed, then the sphere counts as repeatable.",
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
@@ -2728,7 +2728,7 @@ func (cfg *Config) initPrimersParams() {
 	params := []QueryParam{
 		{
 			Name:        "availability",
-			Description: "Searches for primers with the given availabilities.",
+			Description: "Searches for primers with the given availabilities. The availability of a primer is always taken from its sources. The least restrictive availability among those sources is the one that is assigned to the primer.",
 			Type:        "enum-list",
 			ForList:     true,
 			ForSingle:   false,

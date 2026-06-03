@@ -150,6 +150,11 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, resources []TypedAPIReso
 		return nil, err
 	}
 
+	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return nil, err
+	}
+
 	dbIDs, err := cfg.db.FilterMasterItemIDsByAvailability(r.Context(), database.FilterMasterItemIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
 		Availability: 	availabilities,
@@ -157,6 +162,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, resources []TypedAPIReso
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
+		Method: 		h.GetNullString(method),
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)

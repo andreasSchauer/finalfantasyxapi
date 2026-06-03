@@ -189,16 +189,6 @@ available_auto_abilities AS (
     CROSS JOIN w
     WHERE (w.req_item IS NULL OR w.req_item = FALSE)
       AND aas.auto_ability_id = ANY(w.ids)
-      AND (w.availability IS NULL OR CASE
-           WHEN aas.source_type = 'shop' AND w.avl_type = 'self' THEN aas.avl_context
-           WHEN w.avl_type = 'self' THEN aas.avl_self
-           WHEN w.avl_type = 'context' THEN aas.avl_context
-           WHEN w.avl_type = 'area' THEN aas.avl_area
-      END = ANY(w.availability))
-      AND (w.is_repeatable IS NULL OR CASE
-           WHEN w.loc_context_id IS NOT NULL THEN aas.is_repeatable_loc
-           ELSE aas.is_repeatable
-      END = w.is_repeatable)
       AND (w.loc_context_id IS NULL OR CASE
            WHEN w.loc_context_type = 'location' THEN g.location_id
            WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -227,16 +217,6 @@ available_auto_abilities AS (
     CROSS JOIN w
     WHERE w.req_item = TRUE
       AND aa.id = ANY(w.ids)
-      AND (w.availability IS NULL OR CASE
-           WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN mis.avl_context
-           WHEN w.avl_type = 'self' THEN mis.avl_self
-           WHEN w.avl_type = 'context' THEN mis.avl_context
-           WHEN w.avl_type = 'area' THEN mis.avl_area
-      END = ANY(w.availability))
-      AND (w.is_repeatable IS NULL OR CASE
-           WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
-           ELSE mis.is_repeatable
-      END = w.is_repeatable)
       AND (w.loc_context_id IS NULL OR CASE
            WHEN w.loc_context_type = 'location' THEN g.location_id
            WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -248,6 +228,7 @@ FROM available_auto_abilities
 CROSS JOIN w
 GROUP BY auto_ability_id, w.availability, w.is_repeatable
 HAVING (w.availability IS NULL OR MIN(current_avl) = ANY(w.availability))
+   AND (w.is_repeatable IS NULL OR BOOL_OR(is_rep) = w.is_repeatable)
 ORDER BY auto_ability_id
 `
 
@@ -312,16 +293,6 @@ JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE i.id = ANY(w.ids)
   AND (w.method IS NULL OR mis.source_type = w.method)
-  AND (w.availability IS NULL OR CASE
-      WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN mis.avl_context
-      WHEN w.avl_type = 'self' THEN mis.avl_self
-      WHEN w.avl_type = 'context' THEN mis.avl_context
-      WHEN w.avl_type = 'area' THEN mis.avl_area
-  END = ANY(w.availability))
-  AND (w.is_repeatable IS NULL OR CASE
-      WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
-      ELSE mis.is_repeatable
-  END = w.is_repeatable)
   AND (w.loc_context_id IS NULL OR CASE
       WHEN w.loc_context_type = 'location' THEN g.location_id
       WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -334,6 +305,10 @@ HAVING (w.availability IS NULL OR MIN(CASE
       WHEN w.avl_type = 'context' THEN mis.avl_context
       WHEN w.avl_type = 'area' THEN mis.avl_area
   END) = ANY(w.availability))
+  AND (w.is_repeatable IS NULL OR BOOL_OR(CASE
+      WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
+      ELSE mis.is_repeatable
+  END) = w.is_repeatable)
 ORDER BY i.id
 `
 
@@ -392,7 +367,6 @@ JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE ki.id = ANY(w.ids)
-  AND mis.avl_self = ANY(w.availability)
   AND (w.loc_context_id IS NULL OR CASE
        WHEN w.loc_context_type = 'location' THEN g.location_id
        WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -469,7 +443,7 @@ available_locations AS (
     JOIN mv_geography g ON me.area_id = g.area_id
     JOIN w ON g.location_id = ANY(w.ids)
     WHERE me.monster_id = w.monster_id
-      AND (w.availability IS NULL OR me.avl_context = ANY(w.availability))
+
       AND (w.is_repeatable IS NULL OR me.is_repeatable_loc = w.is_repeatable)
 
     UNION ALL
@@ -537,7 +511,7 @@ SELECT location_id
 FROM available_locations
 CROSS JOIN w
 GROUP BY location_id, w.availability, w.reqs, w.excls
-HAVING (w.availability IS NULL OR MAX(current_avl) = ANY(w.availability))
+HAVING (w.availability IS NULL OR MIN(current_avl) = ANY(w.availability))
    AND (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
 ORDER BY location_id
@@ -594,25 +568,17 @@ WITH w AS (
         $1::int[] AS ids,
         $2::text AS avl_type,
         $3::availability_type[] AS availability,
-        $4::int AS loc_context_id,
-        $5::text AS loc_context_type,
-        $6::boolean AS is_repeatable
+        $4::boolean AS is_repeatable,
+        $5::int AS loc_context_id,
+        $6::text AS loc_context_type,
+        $7::text AS method
 )
 SELECT mis.master_item_id
 FROM mv_item_sources mis
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE mis.master_item_id = ANY(w.ids)
-  AND (w.availability IS NULL OR CASE
-      WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN mis.avl_context
-      WHEN w.avl_type = 'self' THEN mis.avl_self
-      WHEN w.avl_type = 'context' THEN mis.avl_context
-      WHEN w.avl_type = 'area' THEN mis.avl_area
-  END = ANY(w.availability))
-  AND (w.is_repeatable IS NULL OR CASE
-      WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
-      ELSE mis.is_repeatable
-  END = w.is_repeatable)
+  AND (w.method IS NULL OR mis.source_type = w.method)
   AND (w.loc_context_id IS NULL OR CASE
       WHEN w.loc_context_type = 'location' THEN g.location_id
       WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -625,6 +591,10 @@ HAVING (w.availability IS NULL OR MIN(CASE
       WHEN w.avl_type = 'context' THEN mis.avl_context
       WHEN w.avl_type = 'area' THEN mis.avl_area
   END) = ANY(w.availability))
+  AND (w.is_repeatable IS NULL OR BOOL_OR(CASE
+      WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
+      ELSE mis.is_repeatable
+  END) = w.is_repeatable)
 ORDER BY mis.master_item_id
 `
 
@@ -632,9 +602,10 @@ type FilterMasterItemIDsByAvailabilityParams struct {
 	Ids            []int32
 	AvlType        string
 	Availability   []AvailabilityType
+	IsRepeatable   sql.NullBool
 	LocContextID   sql.NullInt32
 	LocContextType sql.NullString
-	IsRepeatable   sql.NullBool
+	Method         sql.NullString
 }
 
 func (q *Queries) FilterMasterItemIDsByAvailability(ctx context.Context, arg FilterMasterItemIDsByAvailabilityParams) ([]int32, error) {
@@ -642,9 +613,10 @@ func (q *Queries) FilterMasterItemIDsByAvailability(ctx context.Context, arg Fil
 		pq.Array(arg.Ids),
 		arg.AvlType,
 		pq.Array(arg.Availability),
+		arg.IsRepeatable,
 		arg.LocContextID,
 		arg.LocContextType,
-		arg.IsRepeatable,
+		arg.Method,
 	)
 	if err != nil {
 		return nil, err
@@ -682,12 +654,6 @@ FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
 CROSS JOIN w
 WHERE me.formation_id = ANY(w.ids)
-  AND (w.availability IS NULL OR CASE 
-      WHEN w.avl_type = 'self' THEN me.avl_context
-      WHEN w.avl_type = 'context' THEN me.avl_context
-      WHEN w.avl_type = 'area' THEN me.avl_area
-  END = ANY(w.availability))
-  AND (w.is_repeatable IS NULL OR me.is_repeatable_loc = w.is_repeatable)
   AND (w.loc_context_id IS NULL OR CASE
       WHEN w.loc_context_type = 'location' THEN g.location_id
       WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -699,6 +665,7 @@ HAVING (w.availability IS NULL OR MIN(CASE
       WHEN w.avl_type = 'context' THEN me.avl_context
       WHEN w.avl_type = 'area' THEN me.avl_area
   END) = ANY(w.availability))
+  AND (w.is_repeatable IS NULL OR BOOL_OR(me.is_repeatable_loc) = w.is_repeatable)
 ORDER BY me.formation_id
 `
 
@@ -756,15 +723,6 @@ FROM mv_monster_encounters me
 JOIN mv_geography g ON me.area_id = g.area_id
 CROSS JOIN w
 WHERE me.monster_id = ANY(w.ids)
-  AND (w.availability IS NULL OR CASE 
-      WHEN w.avl_type = 'self' THEN me.avl_self
-      WHEN w.avl_type = 'context' THEN me.avl_context
-      WHEN w.avl_type = 'area' THEN me.avl_area
-  END = ANY(w.availability))
-  AND (w.is_repeatable IS NULL OR CASE
-      WHEN w.loc_context_id IS NOT NULL THEN me.is_repeatable_loc
-      ELSE me.is_repeatable
-  END = w.is_repeatable)
   AND (w.loc_context_id IS NULL OR CASE
       WHEN w.loc_context_type = 'location' THEN g.location_id
       WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -776,6 +734,10 @@ HAVING (w.availability IS NULL OR MIN(CASE
       WHEN w.avl_type = 'context' THEN me.avl_context
       WHEN w.avl_type = 'area' THEN me.avl_area
   END) = ANY(w.availability))
+  AND (w.is_repeatable IS NULL OR BOOL_OR(CASE
+      WHEN w.loc_context_id IS NOT NULL THEN me.is_repeatable_loc
+      ELSE me.is_repeatable
+  END) = w.is_repeatable)
 ORDER BY me.monster_id
 `
 
@@ -824,13 +786,12 @@ WITH w AS (
         $1::int[] AS ids,
         $2::availability_type[] AS availability
 )
-SELECT p.id AS primer_id
+SELECT p.id
 FROM primers p
 JOIN key_items ki ON p.key_item_id = ki.id
 JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
 CROSS JOIN w
 WHERE p.id = ANY(w.ids)
-  AND mis.avl_self = ANY(w.availability)
 GROUP BY p.id, w.availability
 HAVING MIN(mis.avl_self) = ANY(w.availability)
 ORDER BY p.id
@@ -849,11 +810,11 @@ func (q *Queries) FilterPrimerIDsByAvailability(ctx context.Context, arg FilterP
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var primer_id int32
-		if err := rows.Scan(&primer_id); err != nil {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
 			return nil, err
 		}
-		items = append(items, primer_id)
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -934,11 +895,6 @@ available_shops AS (
     FROM mv_availabilities a
     JOIN w ON a.s_id = ANY(w.ids)
     WHERE a.source_type = 'shop'
-      AND (w.availability IS NULL OR CASE 
-        WHEN w.avl_type = 'self' THEN a.avl_self
-        WHEN w.avl_type = 'context' THEN a.avl_context
-        WHEN w.avl_type = 'area' THEN a.avl_area
-      END = ANY(w.availability))
 
     UNION ALL
 
@@ -953,11 +909,6 @@ available_shops AS (
     FROM mv_equipment_sources es
     JOIN w ON es.source_id = ANY(w.ids)
     WHERE es.source_type = 'shop'
-      AND (w.availability IS NULL OR CASE 
-        WHEN w.avl_type = 'self' THEN es.avl_self
-        WHEN w.avl_type = 'context' THEN es.avl_context
-        WHEN w.avl_type = 'area' THEN es.avl_area
-      END = ANY(w.availability))
       AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
       AND (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
       AND (w.character_id IS NULL OR es.character_id = w.character_id)
@@ -1081,28 +1032,22 @@ JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE s.id = ANY(w.ids)
   AND (w.method IS NULL OR mis.source_type = w.method)
-  AND (w.availability IS NULL OR CASE
-       WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN mis.avl_context
-       WHEN w.avl_type = 'self' THEN mis.avl_self
-       WHEN w.avl_type = 'context' THEN mis.avl_context
-       WHEN w.avl_type = 'area' THEN mis.avl_area
-  END = ANY(w.availability))
-  AND (w.is_repeatable IS NULL OR CASE
-       WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
-       ELSE mis.is_repeatable
-  END = w.is_repeatable)
   AND (w.loc_context_id IS NULL OR CASE
        WHEN w.loc_context_type = 'location' THEN g.location_id
        WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
        WHEN w.loc_context_type = 'area' THEN g.area_id
-      END = w.loc_context_id)
-GROUP BY s.id, w.availability
+  END = w.loc_context_id)
+GROUP BY s.id, w.availability, w.is_repeatable
 HAVING (w.availability IS NULL OR MIN(CASE
        WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN mis.avl_context
        WHEN w.avl_type = 'self' THEN mis.avl_self
        WHEN w.avl_type = 'context' THEN mis.avl_context
        WHEN w.avl_type = 'area' THEN mis.avl_area
-      END) = ANY(w.availability))
+  END) = ANY(w.availability))
+  AND (w.is_repeatable IS NULL OR BOOL_OR(CASE
+       WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
+       ELSE mis.is_repeatable
+  END) = w.is_repeatable)
 ORDER BY s.id
 `
 
