@@ -2,7 +2,6 @@ package api
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -71,7 +70,7 @@ func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 func filterAvlMonsters(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.monsters
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -86,8 +85,9 @@ func filterAvlMonsters(cfg *Config, r *http.Request, resources []NamedAPIResourc
 
 	dbIDs, err := cfg.db.FilterMonsterIDsByAvailability(r.Context(), database.FilterMonsterIDsByAvailabilityParams{
 		Ids:            resToIDs(resources),
-		Availability:   availabilities,
-		IsRepeatable:   isRepeatable,
+		Availability:   avlParams.availabilities,
+		IsRepeatable:   avlParams.isRepeatable,
+		PreAirship: 	avlParams.preAirship,
 		AvlType:        locContext.AvlType,
 		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,
@@ -104,7 +104,7 @@ func filterAvlMonsters(cfg *Config, r *http.Request, resources []NamedAPIResourc
 func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
 	i := cfg.e.monsterFormations
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -119,8 +119,9 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []Unname
 
 	dbIDs, err := cfg.db.FilterMonsterFormationIDsByAvailability(r.Context(), database.FilterMonsterFormationIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
-		Availability: 	availabilities,
-		IsRepeatable: 	isRepeatable,
+		Availability:   avlParams.availabilities,
+		IsRepeatable:   avlParams.isRepeatable,
+		PreAirship: 	avlParams.preAirship,
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
@@ -137,7 +138,7 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []Unname
 func filterAvlMasterItems(cfg *Config, r *http.Request, resources []TypedAPIResource) ([]TypedAPIResource, error) {
 	i := cfg.e.allItems
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -157,8 +158,9 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, resources []TypedAPIReso
 
 	dbIDs, err := cfg.db.FilterMasterItemIDsByAvailability(r.Context(), database.FilterMasterItemIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
-		Availability: 	availabilities,
-		IsRepeatable: 	isRepeatable,
+		Availability:   avlParams.availabilities,
+		IsRepeatable:   avlParams.isRepeatable,
+		PreAirship: 	avlParams.preAirship,
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
@@ -176,7 +178,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, resources []TypedAPIReso
 func filterAvlItems(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.items
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -196,8 +198,9 @@ func filterAvlItems(cfg *Config, r *http.Request, resources []NamedAPIResource) 
 
 	dbIDs, err := cfg.db.FilterItemIDsByAvailability(r.Context(), database.FilterItemIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
-		Availability: 	availabilities,
-		IsRepeatable: 	isRepeatable,
+		Availability:   avlParams.availabilities,
+		IsRepeatable:   avlParams.isRepeatable,
+		PreAirship: 	avlParams.preAirship,
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
@@ -215,7 +218,7 @@ func filterAvlItems(cfg *Config, r *http.Request, resources []NamedAPIResource) 
 func filterAvlKeyItems(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.keyItems
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	avlParams, err := checkAvl(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -230,7 +233,8 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, resources []NamedAPIResourc
 
 	dbIDs, err := cfg.db.FilterKeyItemIDsByAvailability(r.Context(), database.FilterKeyItemIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
-		Availability: 	availabilities,
+		Availability: 	avlParams.availabilities,
+		PreAirship:		avlParams.preAirship,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
 	})
@@ -246,7 +250,7 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, resources []NamedAPIResourc
 func filterAvlSpheres(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.spheres
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -266,8 +270,9 @@ func filterAvlSpheres(cfg *Config, r *http.Request, resources []NamedAPIResource
 
 	dbIDs, err := cfg.db.FilterSphereIDsByAvailability(r.Context(), database.FilterSphereIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
-		Availability: 	availabilities,
-		IsRepeatable: 	isRepeatable,
+		Availability:   avlParams.availabilities,
+		IsRepeatable:   avlParams.isRepeatable,
+		PreAirship: 	avlParams.preAirship,
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
@@ -285,7 +290,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, resources []NamedAPIResource
 func filterAvlPrimers(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.primers
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	avlParams, err := checkAvl(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -295,7 +300,8 @@ func filterAvlPrimers(cfg *Config, r *http.Request, resources []NamedAPIResource
 
 	dbIDs, err := cfg.db.FilterPrimerIDsByAvailability(r.Context(), database.FilterPrimerIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
-		Availability: availabilities,
+		Availability: 	avlParams.availabilities,
+		PreAirship:		avlParams.preAirship,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -309,7 +315,7 @@ func filterAvlPrimers(cfg *Config, r *http.Request, resources []NamedAPIResource
 func filterAvlAutoAbilities(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.autoAbilities
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -334,8 +340,9 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, resources []NamedAPIRe
 
 	dbIDs, err := cfg.db.FilterAutoAbilityIDsByAvailability(r.Context(), database.FilterAutoAbilityIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
-		Availability: 	availabilities,
-		IsRepeatable: 	isRepeatable,
+		Availability:   avlParams.availabilities,
+		IsRepeatable:   avlParams.isRepeatable,
+		PreAirship: 	avlParams.preAirship,
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
@@ -354,7 +361,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, resources []NamedAPIRe
 func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
 	i := cfg.e.shops
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	avlParams, err := checkAvl(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -369,7 +376,8 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 
 	dbIDs, err := cfg.db.FilterShopIDsByAvailability(r.Context(), database.FilterShopIDsByAvailabilityParams{
 		Ids:          		resToIDs(resources),
-		Availability: 		availabilities,
+		Availability: 	avlParams.availabilities,
+		PreAirship:		avlParams.preAirship,
 		AvlType:      		sources.AvlType,
 		RequiredSources:    sources.RequiredSources,
 		ExcludedSources: 	sources.ExcludedSources,
@@ -389,7 +397,7 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 func filterAvlTreasures(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
 	i := cfg.e.treasures
 
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	avlParams, err := checkAvl(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -399,7 +407,8 @@ func filterAvlTreasures(cfg *Config, r *http.Request, resources []UnnamedAPIReso
 
 	dbIDs, err := cfg.db.FilterTreasureIDsByAvailability(r.Context(), database.FilterTreasureIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
-		Availability: availabilities,
+		Availability: 	avlParams.availabilities,
+		PreAirship:		avlParams.preAirship,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -413,7 +422,7 @@ func filterAvlTreasures(cfg *Config, r *http.Request, resources []UnnamedAPIReso
 func filterAvlQuests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
 	i := cfg.e.quests
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -423,8 +432,9 @@ func filterAvlQuests(cfg *Config, r *http.Request, resources []QuestAPIResource)
 
 	dbIDs, err := cfg.db.FilterQuestIDsByAvailability(r.Context(), database.FilterQuestIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
-		Availability: availabilities,
-		IsRepeatable: isRepeatable,
+		Availability:   avlParams.availabilities,
+		IsRepeatable:   avlParams.isRepeatable,
+		PreAirship: 	avlParams.preAirship,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -438,7 +448,7 @@ func filterAvlQuests(cfg *Config, r *http.Request, resources []QuestAPIResource)
 func filterAvlSidequests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
 	i := cfg.e.sidequests
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -448,8 +458,9 @@ func filterAvlSidequests(cfg *Config, r *http.Request, resources []QuestAPIResou
 
 	dbIDs, err := cfg.db.FilterSidequestIDsByAvailability(r.Context(), database.FilterSidequestIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
-		Availability: availabilities,
-		IsRepeatable: isRepeatable,
+		Availability:   avlParams.availabilities,
+		IsRepeatable:   avlParams.isRepeatable,
+		PreAirship: 	avlParams.preAirship,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -463,7 +474,7 @@ func filterAvlSidequests(cfg *Config, r *http.Request, resources []QuestAPIResou
 func filterAvlSubquests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
 	i := cfg.e.subquests
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -473,8 +484,9 @@ func filterAvlSubquests(cfg *Config, r *http.Request, resources []QuestAPIResour
 
 	dbIDs, err := cfg.db.FilterSubquestIDsByAvailability(r.Context(), database.FilterSubquestIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
-		Availability: availabilities,
-		IsRepeatable: isRepeatable,
+		Availability:   avlParams.availabilities,
+		IsRepeatable:   avlParams.isRepeatable,
+		PreAirship: 	avlParams.preAirship,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -488,7 +500,7 @@ func filterAvlSubquests(cfg *Config, r *http.Request, resources []QuestAPIResour
 func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) ([]AreaAPIResource, error) {
 	i := cfg.e.areas
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -503,8 +515,9 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 
 	dbIDs, err := cfg.db.FilterAreaIDsByAvailability(r.Context(), database.FilterAreaIDsByAvailabilityParams{
 		Ids:             resToIDs(resources),
-		Availability:    availabilities,
-		IsRepeatable:    isRepeatable,
+		Availability:    avlParams.availabilities,
+		IsRepeatable:    avlParams.isRepeatable,
+		PreAirship: 	 avlParams.preAirship,
 		RequiredSources: sources.RequiredSources,
 		ExcludedSources: sources.ExcludedSources,
 		MonsterID: 		 sources.MonsterID,
@@ -524,7 +537,7 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.sublocations
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -539,8 +552,9 @@ func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIRes
 
 	dbIDs, err := cfg.db.FilterSublocationIDsByAvailability(r.Context(), database.FilterSublocationIDsByAvailabilityParams{
 		Ids:             resToIDs(resources),
-		Availability:    availabilities,
-		IsRepeatable:    isRepeatable,
+		Availability:    avlParams.availabilities,
+		IsRepeatable:    avlParams.isRepeatable,
+		PreAirship: 	 avlParams.preAirship,
 		RequiredSources: sources.RequiredSources,
 		ExcludedSources: sources.ExcludedSources,
 		MonsterID: 		 sources.MonsterID,
@@ -560,7 +574,7 @@ func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIRes
 func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
 	i := cfg.e.locations
 
-	availabilities, isRepeatable, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -575,8 +589,9 @@ func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResour
 
 	dbIDs, err := cfg.db.FilterLocationIDsByAvailability(r.Context(), database.FilterLocationIDsByAvailabilityParams{
 		Ids:             resToIDs(resources),
-		Availability:    availabilities,
-		IsRepeatable:    isRepeatable,
+		Availability:    avlParams.availabilities,
+		IsRepeatable:    avlParams.isRepeatable,
+		PreAirship: 	 avlParams.preAirship,
 		RequiredSources: sources.RequiredSources,
 		ExcludedSources: sources.ExcludedSources,
 		MonsterID: 		 sources.MonsterID,
@@ -592,28 +607,88 @@ func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResour
 	return resNew, nil
 }
 
+type avlParams struct {
+	availabilities 	[]int32
+	isRepeatable	sql.NullBool
+	preAirship		bool
+}
 
 
-
-
-func checkAvlAndRep[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) ([]database.AvailabilityType, sql.NullBool, error) {
+func checkAvlAndRep[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (avlParams, error) {
 	availabilities, errAvl := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
 	if errExceptEmptyQuery(errAvl) {
-		return nil, sql.NullBool{}, errAvl
+		return avlParams{}, errAvl
 	}
 
 	isRepeatable, errRepl := getQueryBoolPtr(r, "repeatable", i.queryLookup)
 	if errExceptEmptyQuery(errRepl) {
-		return nil, sql.NullBool{}, errRepl
+		return avlParams{}, errRepl
 	}
 
-	if errors.Is(errAvl, errEmptyQuery) && errors.Is(errRepl, errEmptyQuery) {
-		return nil, sql.NullBool{}, errEmptyQuery
+	if queryIsEmpty(errAvl) && queryIsEmpty(errRepl) {
+		return avlParams{}, errEmptyQuery
 	}
 
-	return h.SliceOrNil(availabilities), h.GetNullBool(isRepeatable), nil
+	preAirship, err := parseBooleanQuery(r, i.queryLookup["pre_airship"])
+	if errExceptEmptyQuery(err) {
+		return avlParams{}, err
+	}
+	avlRanks := avlToRanks(availabilities, preAirship)
+
+	params := avlParams{
+		availabilities: h.SliceOrNil(avlRanks),
+		isRepeatable: 	h.GetNullBool(isRepeatable),
+		preAirship: 	preAirship,
+	}
+
+	return params, nil
 }
 
+
+func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (avlParams, error) {
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	if errExceptEmptyQuery(err) {
+		return avlParams{}, err
+	}
+	if queryIsEmpty(err) {
+		return avlParams{}, errEmptyQuery
+	}
+
+	preAirship, err := parseBooleanQuery(r, i.queryLookup["pre_airship"])
+	if errExceptEmptyQuery(err) {
+		return avlParams{}, err
+	}
+	avlRanks := avlToRanks(availabilities, preAirship)
+
+	params := avlParams{
+		availabilities: h.SliceOrNil(avlRanks),
+		preAirship: 	preAirship,
+	}
+
+	return params, nil
+}
+
+
+func avlToRanks(avls []database.AvailabilityType, preAirship bool) []int32 {
+	rankMap := map[database.AvailabilityType]int32{
+		database.AvailabilityTypeAlways: 1,
+		database.AvailabilityTypePost: 2,
+		database.AvailabilityTypePreStory: 3,
+		database.AvailabilityTypePostStory: 4,
+	}
+	if preAirship {
+		rankMap[database.AvailabilityTypePreStory] = 2
+		rankMap[database.AvailabilityTypePost] = 3
+	}
+
+	ranks := []int32{}
+
+	for _, avl := range avls {
+		ranks = append(ranks, rankMap[avl])
+	}
+
+	return ranks
+}
 
 
 

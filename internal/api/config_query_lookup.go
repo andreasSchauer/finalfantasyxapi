@@ -326,7 +326,7 @@ func (cfg *Config) initLocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
-			UsableWith:  []string{"monster", "item", "monsters", "boss_fights", "shops", "treasures", "sidequests"},
+			UsableWith:  []string{"monster", "item", "key_item"},
 		},
 		{
 			Name:        "monster",
@@ -498,7 +498,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
-			UsableWith:  []string{"monster", "item", "monsters", "boss_fights", "shops", "treasures", "sidequests"},
+			UsableWith:  []string{"monster", "item", "key_item"},
 		},
 		{
 			Name:        "characters",
@@ -638,7 +638,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
-			UsableWith:  []string{"monster", "item", "monsters", "boss_fights", "shops", "treasures", "sidequests"},
+			UsableWith:  []string{"monster", "item", "key_item"},
 		},
 		{
 			Name:        "save_sphere",
