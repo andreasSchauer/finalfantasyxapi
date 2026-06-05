@@ -296,7 +296,6 @@ WHERE g.sublocation_id = $1
 ORDER BY song_id;
 
 
-
 -- name: GetSublocationBackgroundMusicSongIDs :many
 SELECT DISTINCT j.song_id
 FROM j_songs_background_music j

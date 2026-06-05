@@ -412,7 +412,8 @@ WITH w AS (
         $2::int[] AS availability,
         $3::boolean AS pre_airship,
         $4::int AS loc_context_id,
-        $5::text AS loc_context_type
+        $5::text AS loc_context_type,
+        $6::text AS method
 )
 SELECT ki.id
 FROM key_items ki
@@ -420,6 +421,7 @@ JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE ki.id = ANY(w.ids)
+  AND (w.method IS NULL OR mis.source_type = w.method)
   AND (w.loc_context_id IS NULL OR CASE
        WHEN w.loc_context_type = 'location' THEN g.location_id
        WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -436,6 +438,7 @@ type FilterKeyItemIDsByAvailabilityParams struct {
 	PreAirship     bool
 	LocContextID   sql.NullInt32
 	LocContextType sql.NullString
+	Method         sql.NullString
 }
 
 func (q *Queries) FilterKeyItemIDsByAvailability(ctx context.Context, arg FilterKeyItemIDsByAvailabilityParams) ([]int32, error) {
@@ -445,6 +448,7 @@ func (q *Queries) FilterKeyItemIDsByAvailability(ctx context.Context, arg Filter
 		arg.PreAirship,
 		arg.LocContextID,
 		arg.LocContextType,
+		arg.Method,
 	)
 	if err != nil {
 		return nil, err
@@ -1056,7 +1060,7 @@ available_shops AS (
                 END,
                 w.pre_airship
             ) AS current_avl,
-            'equip_filter' AS s_type
+            'equip-filter' AS s_type
         FROM mv_equipment_sources es
         CROSS JOIN w
         WHERE es.source_id = ANY(w.ids)
@@ -1067,7 +1071,7 @@ available_shops AS (
     ) AS raw_sources
     CROSS JOIN w
     GROUP BY shop_id, s_type, w.availability
-    HAVING (w.availability IS NULL OR MIN(current_avl) = ANY(w.availability))
+    HAVING (w.availability IS NULL OR BOOL_OR(current_avl = ANY(w.availability)))
 )
 SELECT shop_id
 FROM available_shops

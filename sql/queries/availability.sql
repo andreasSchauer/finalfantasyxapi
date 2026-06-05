@@ -1,19 +1,3 @@
-CREATE OR REPLACE FUNCTION get_avl_rank(avl availability_type, pre_airship BOOLEAN) 
-RETURNS INT AS $$
-    SELECT CASE 
-        WHEN avl = 'always' THEN 1
-
-        WHEN NOT pre_airship AND avl = 'post' THEN 2
-        WHEN NOT pre_airship AND avl = 'pre-story' THEN 3
-
-        WHEN pre_airship AND avl = 'pre-story' THEN 2
-        WHEN pre_airship AND avl = 'post' THEN 3
-
-        WHEN avl = 'post-story' THEN 4
-    END;
-$$ LANGUAGE sql IMMUTABLE;
-
-
 -- name: FilterMonsterIDsByAvailability :many
 WITH w AS (
     SELECT
@@ -223,7 +207,8 @@ WITH w AS (
         sqlc.arg('availability')::int[] AS availability,
         sqlc.arg('pre_airship')::boolean AS pre_airship,
         sqlc.narg('loc_context_id')::int AS loc_context_id,
-        sqlc.narg('loc_context_type')::text AS loc_context_type
+        sqlc.narg('loc_context_type')::text AS loc_context_type,
+        sqlc.narg('method')::text AS method
 )
 SELECT ki.id
 FROM key_items ki
@@ -231,6 +216,7 @@ JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE ki.id = ANY(w.ids)
+  AND (w.method IS NULL OR mis.source_type = w.method)
   AND (w.loc_context_id IS NULL OR CASE
        WHEN w.loc_context_type = 'location' THEN g.location_id
        WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -441,7 +427,7 @@ available_shops AS (
                 END,
                 w.pre_airship
             ) AS current_avl,
-            'equip_filter' AS s_type
+            'equip-filter' AS s_type
         FROM mv_equipment_sources es
         CROSS JOIN w
         WHERE es.source_id = ANY(w.ids)
@@ -452,7 +438,7 @@ available_shops AS (
     ) AS raw_sources
     CROSS JOIN w
     GROUP BY shop_id, s_type, w.availability
-    HAVING (w.availability IS NULL OR MIN(current_avl) = ANY(w.availability))
+    HAVING (w.availability IS NULL OR BOOL_OR(current_avl = ANY(w.availability)))
 )
 SELECT shop_id
 FROM available_shops

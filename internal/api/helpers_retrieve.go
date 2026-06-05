@@ -231,12 +231,18 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, resources []NamedAPIResourc
 		return nil, err
 	}
 
+	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return nil, err
+	}
+
 	dbIDs, err := cfg.db.FilterKeyItemIDsByAvailability(r.Context(), database.FilterKeyItemIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
 		Availability: 	avlParams.availabilities,
 		PreAirship:		avlParams.preAirship,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
+		Method: 		h.GetNullString(method),
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -629,9 +635,15 @@ func checkAvlAndRep[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 		return avlParams{}, errEmptyQuery
 	}
 
-	preAirship, err := parseBooleanQuery(r, i.queryLookup["pre_airship"])
-	if errExceptEmptyQuery(err) {
-		return avlParams{}, err
+	var preAirship bool
+	var err error
+
+	_, ok := i.queryLookup["pre_airship"]
+	if ok {
+		preAirship, err = parseBooleanQuery(r, i.queryLookup["pre_airship"])
+		if errExceptEmptyQuery(err) {
+			return avlParams{}, err
+		}
 	}
 	avlRanks := avlToRanks(availabilities, preAirship)
 
@@ -654,9 +666,14 @@ func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg
 		return avlParams{}, errEmptyQuery
 	}
 
-	preAirship, err := parseBooleanQuery(r, i.queryLookup["pre_airship"])
-	if errExceptEmptyQuery(err) {
-		return avlParams{}, err
+	var preAirship bool
+
+	_, ok := i.queryLookup["pre_airship"]
+	if ok {
+		preAirship, err = parseBooleanQuery(r, i.queryLookup["pre_airship"])
+		if errExceptEmptyQuery(err) {
+			return avlParams{}, err
+		}
 	}
 	avlRanks := avlToRanks(availabilities, preAirship)
 
@@ -831,7 +848,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	}
 	if !queryIsEmpty(err) {
 		avlType = AvlTypeContext
-		reqs = append(reqs, "equip_filter")
+		reqs = append(reqs, "equip-filter")
 	}
 
 	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup["empty_slots"])
@@ -840,7 +857,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	}
 	if !queryIsEmpty(err) {
 		avlType = AvlTypeContext
-		reqs = append(reqs, "equip_filter")
+		reqs = append(reqs, "equip-filter")
 	}
 
 	charID, err := getQueryNameIdPtr(r, cfg.e.characters, "character", i.queryLookup)
@@ -849,7 +866,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	}
 	if !queryIsEmpty(err) {
 		avlType = AvlTypeContext
-		reqs = append(reqs, "equip_filter")
+		reqs = append(reqs, "equip-filter")
 	}
 
 	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[string]string{
