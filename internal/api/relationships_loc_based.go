@@ -75,12 +75,12 @@ func getMusicLocBased(cfg *Config, r *http.Request, item seeding.Lookupable, que
 	return &music, nil
 }
 
-func getLocBasedSidequests(cfg *Config, r *http.Request, item seeding.Lookupable, dbQuery func(context.Context, int32) ([]int32, error)) ([]QuestAPIResource, error) {
+func getLocBasedSidequests(cfg *Config, r *http.Request, item seeding.Lookupable, p RelAvlParams, dbQuery RelAvailabilityDbQuery) ([]QuestAPIResource, error) {
 	resources := []QuestAPIResource{}
 
-	dbQuestIDs, err := dbQuery(r.Context(), item.GetID())
+	dbQuestIDs, err := dbQuery(r.Context(), p)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get quests of %s.", item), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", cfg.e.quests.resourceType, item), err)
 	}
 	if len(dbQuestIDs) == 0 {
 		return resources, nil

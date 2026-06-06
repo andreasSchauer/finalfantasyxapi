@@ -23,14 +23,19 @@ func getRelAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIR
 		return RelAvlParams{}, err
 	}
 
-	repeatable, err := getQueryBoolPtr(r, "rel_repeatable", i.queryLookup)
-	if errExceptEmptyQuery(err) {
-		return RelAvlParams{}, err
+	var repeatable *bool
+
+	_, ok := i.queryLookup["rel_repeatable"]
+	if ok {
+		repeatable, err = getQueryBoolPtr(r, "rel_repeatable", i.queryLookup)
+		if errExceptEmptyQuery(err) {
+			return RelAvlParams{}, err
+		}
 	}
 
 	availabilityParams := RelAvlParams{
 		ParentID:     parentID,
-		Availability: availabilities,
+		Availability: h.SliceOrNil(availabilities),
 		Repeatable:   h.GetNullBool(repeatable),
 	}
 

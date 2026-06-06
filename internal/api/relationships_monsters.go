@@ -7,12 +7,17 @@ import (
 )
 
 func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) (Monster, error) {
-	areas, err := getResourcesDbItem(cfg, r, cfg.e.areas, mon, cfg.db.GetMonsterAreaIDs)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.monsters, mon.ID)
+	if err != nil {
+		return Monster{}, err
+	}
+	
+	areas, err := runRelAvailabilityQuery(cfg, r, cfg.e.areas, mon, availabilityParams, getMonsterAreaIDs(cfg))
 	if err != nil {
 		return Monster{}, err
 	}
 
-	formations, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, mon, cfg.db.GetMonsterMonsterFormationIDs)
+	formations, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsterFormations, mon, availabilityParams, getMonsterMonsterFormationIDs(cfg))
 	if err != nil {
 		return Monster{}, err
 	}

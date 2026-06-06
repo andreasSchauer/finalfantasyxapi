@@ -8,23 +8,23 @@ import (
 
 func main() {
 	nullEnumTypes := []string{
-		"NullifyArmored",
-		"CreationsUnlockedCategory",
+		"Arranger",
+		"AvailabilityType",
+		"BgReplacementType",
+		"BreakDmgLmtType",
+		"Composer",
 		"CounterType",
+		"CreationsUnlockedCategory",
+		"CriticalType",
 		"MaCreationArea",
 		"MaCreationCategory",
 		"MaCreationSpecies",
-		"TargetType",
 		"MusicUseCase",
-		"BgReplacementType",
-		"SpecialActionType",
-		"CriticalType",
-		"BreakDmgLmtType",
-		"Composer",
-		"Arranger",
-		"ShopType",
-		"AvailabilityType",
 		"NodeState",
+		"NullifyArmored",
+		"ShopType",
+		"SpecialActionType",
+		"TargetType",
 	}
 
 	filePath := "./internal/database/conv_null_enum.go"

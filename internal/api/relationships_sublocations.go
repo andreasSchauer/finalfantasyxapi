@@ -7,6 +7,11 @@ import (
 )
 
 func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seeding.Sublocation) (LocRel, error) {
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.sublocations, sublocation.ID)
+	if err != nil {
+		return LocRel{}, err
+	}
+
 	characters, err := getResourcesDbItem(cfg, r, cfg.e.characters, sublocation, cfg.db.GetSublocationCharacterIDs)
 	if err != nil {
 		return LocRel{}, err
@@ -17,27 +22,27 @@ func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seedi
 		return LocRel{}, err
 	}
 
-	shops, err := getResourcesDbItem(cfg, r, cfg.e.shops, sublocation, cfg.db.GetSublocationShopIDs)
+	shops, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeShop))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	treasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, sublocation, cfg.db.GetSublocationTreasureIDs)
+	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeTreasure))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, sublocation, cfg.db.GetSublocationMonsterIDs)
+	monsters, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeMonster))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	formations, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, sublocation, cfg.db.GetSublocationMonsterFormationIDs)
+	formations, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsterFormations, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	sidequests, err := getLocBasedSidequests(cfg, r, sublocation, cfg.db.GetSublocationQuestIDs)
+	sidequests, err := getLocBasedSidequests(cfg, r, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeQuest))
 	if err != nil {
 		return LocRel{}, err
 	}

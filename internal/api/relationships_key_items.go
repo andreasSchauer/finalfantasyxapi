@@ -9,12 +9,17 @@ import (
 )
 
 func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyItem) (KeyItem, error) {
-	treasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, keyItem, cfg.db.GetKeyItemTreasureIDs)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.keyItems, keyItem.ID)
 	if err != nil {
 		return KeyItem{}, err
 	}
 
-	quests, err := getResourcesDbItem(cfg, r, cfg.e.quests, keyItem, cfg.db.GetKeyItemQuestIDs)
+	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeTreasure))
+	if err != nil {
+		return KeyItem{}, err
+	}
+
+	quests, err := runRelAvailabilityQuery(cfg, r, cfg.e.quests, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeQuest))
 	if err != nil {
 		return KeyItem{}, err
 	}
@@ -24,28 +29,40 @@ func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyIt
 		return KeyItem{}, err
 	}
 
-	rel := KeyItem{
-		Treasures: treasures,
-		Quests:    quests,
-		Areas:     areas,
-	}
-
+	var primer *NamedAPIResource
 	if keyItem.Category == string(database.KeyItemCategoryPrimer) {
 		primerRes := nameToNamedAPIResource(cfg, cfg.e.primers, keyItem.Name, nil)
-		rel.Primer = &primerRes
+		primer = &primerRes
 	}
 
-	if strings.HasSuffix(keyItem.Name, "crest") || strings.HasSuffix(keyItem.Name, "sigil") {
-		keyItemBase := strings.Split(keyItem.Name, " ")[0]
+	celestialWeapon, err := getKeyItemCelestialWeapon(cfg, r, keyItem)
+	if err != nil {
+		return KeyItem{}, err
+	}
 
-		celestialID, err := cfg.db.GetKeyItemCelestialWeapon(r.Context(), database.KeyItemBase(keyItemBase))
-		if err != nil {
-			return KeyItem{}, newHTTPErrorDbOne(cfg.e.celestialWeapons.resourceType, keyItem, err)
-		}
-
-		celestialRes := idToNamedAPIResource(cfg, cfg.e.celestialWeapons, celestialID)
-		rel.CelestialWeapon = &celestialRes
+	rel := KeyItem{
+		Primer:          primer,
+		CelestialWeapon: celestialWeapon,
+		Treasures:       treasures,
+		Quests:          quests,
+		Areas:           areas,
 	}
 
 	return rel, nil
+}
+
+func getKeyItemCelestialWeapon(cfg *Config, r *http.Request, keyItem seeding.KeyItem) (*NamedAPIResource, error) {
+	if !(strings.HasSuffix(keyItem.Name, "crest") || strings.HasSuffix(keyItem.Name, "sigil")) {
+		return nil, nil
+	}
+
+	keyItemBase := strings.Split(keyItem.Name, " ")[0]
+
+	celestialID, err := cfg.db.GetKeyItemCelestialWeapon(r.Context(), database.KeyItemBase(keyItemBase))
+	if err != nil {
+		return nil, newHTTPErrorDbOne(cfg.e.celestialWeapons.resourceType, keyItem, err)
+	}
+
+	celestialRes := idToNamedAPIResource(cfg, cfg.e.celestialWeapons, celestialID)
+	return &celestialRes, nil
 }

@@ -43,7 +43,7 @@ func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.Equ
 	}
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(idListQuery(cfg, r, i, resources, "auto_abilities", len(cfg.l.AutoAbilities), cfg.db.GetEquipmentIDsByAutoAbilty)),
+		frl(idListQuery(cfg, r, i, resources, "auto_abilities", len(cfg.l.AutoAbilities), cfg.db.GetEquipmentIDsByAutoAbility)),
 		frl(nameIdQuery(cfg, r, i, resources, "character", cfg.e.characters.resourceType, cfg.e.characters.objLookup, cfg.db.GetEquipmentIDsByCharacter)),
 		frl(enumQuery(cfg, r, i, cfg.t.EquipType, resources, "type", cfg.db.GetEquipmentIDsByEquipType)),
 		frl(boolQuery2(cfg, r, i, resources, "celestial_weapon", cfg.db.GetEquipmentIDsCelestialWeapon)),

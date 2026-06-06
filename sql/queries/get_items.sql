@@ -1,9 +1,47 @@
 -- name: GetMasterItemObtainableBools :one
+WITH w AS (
+    SELECT
+      sqlc.arg('master_item_id')::int AS master_item_id,
+      sqlc.narg('availability')::availability_type[] AS availability,
+      sqlc.narg('repeatable')::boolean AS repeatable
+)
 SELECT 
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'treasure') as treasures,
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'shop') as shops,
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'quest') as quests,
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'monster') as monsters;
+  EXISTS(
+    SELECT 1 FROM mv_item_sources mis
+    WHERE mis.master_item_id = w.master_item_id
+      AND mis.source_type = 'monster'
+      AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+      AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  ) as monsters,
+  EXISTS(
+    SELECT 1 FROM mv_item_sources mis
+    WHERE mis.master_item_id = w.master_item_id
+      AND mis.source_type = 'treasure'
+      AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+      AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  ) as treasures,
+  EXISTS(
+    SELECT 1 FROM mv_item_sources mis
+    WHERE mis.master_item_id = w.master_item_id
+      AND mis.source_type = 'shop'
+      AND (w.availability IS NULL OR mis.avl_context = ANY(w.availability))
+      AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  ) as shops,
+  EXISTS(
+    SELECT 1 FROM mv_item_sources mis
+    WHERE mis.master_item_id = w.master_item_id
+      AND mis.source_type = 'quest'
+      AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+      AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  ) as quests,
+  EXISTS(
+    SELECT 1 FROM mv_item_sources mis
+    WHERE mis.master_item_id = w.master_item_id
+      AND mis.source_type = 'blitzball'
+      AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+      AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  ) as blitzball
+FROM w;
 
 
 -- name: GetMasterItemIDs :many
@@ -62,81 +100,25 @@ ORDER BY master_item_id;
 
 
 
-
--- name: GetItemMonsterIDs :many
+-- name: GetItemSourceIDs :many
 WITH w AS (
     SELECT
       sqlc.arg('item_id')::int AS item_id,
-      sqlc.narg('repeatable')::BOOLEAN AS repeatable,
-      sqlc.narg('availability')::availability_type[] AS availability
+      sqlc.arg('source_type')::text AS source_type,
+      sqlc.narg('availability')::availability_type[] AS availability,
+      sqlc.narg('repeatable')::boolean AS repeatable
 )
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
 WHERE i.id = w.item_id
-  AND mis.source_type = 'monster'
+  AND mis.source_type = w.source_type
+  AND (w.availability IS NULL OR CASE
+    WHEN w.source_type = 'shop' THEN mis.avl_context
+    ELSE mis.avl_self
+  END = ANY(w.availability))
   AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
-ORDER BY mis.source_id;
-
-
--- name: GetItemTreasureIDs :many
-WITH w AS (
-    SELECT
-      sqlc.arg('item_id')::int AS item_id,
-      sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT mis.source_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-CROSS JOIN w
-WHERE i.id = w.item_id
-  AND mis.source_type = 'treasure'
-  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
-ORDER BY mis.source_id;
-
-
--- name: GetItemShopIDs :many
-WITH w AS (
-    SELECT
-      sqlc.arg('item_id')::int AS item_id,
-      sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT mis.source_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-CROSS JOIN w
-WHERE i.id = w.item_id
-  AND mis.source_type = 'shop'
-  AND (w.availability IS NULL OR mis.avl_context = ANY(w.availability))
-ORDER BY mis.source_id;
-
-
--- name: GetItemQuestIDs :many
-WITH w AS (
-    SELECT
-      sqlc.arg('item_id')::int AS item_id,
-      sqlc.narg('repeatable')::BOOLEAN AS repeatable,
-      sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT mis.source_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-CROSS JOIN w
-WHERE i.id = w.item_id
-  AND mis.source_type = 'quest'
-  AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
-ORDER BY mis.source_id;
-
-
--- name: GetItemBlitzballPrizeIDs :many
-SELECT DISTINCT mis.source_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'blitzball'
 ORDER BY mis.source_id;
 
 
@@ -232,6 +214,21 @@ ORDER BY i.id;
 
 
 
+-- name: GetKeyItemSourceIDs :many
+WITH w AS (
+    SELECT
+      sqlc.arg('key_item_id')::int AS key_item_id,
+      sqlc.arg('source_type')::text AS source_type,
+      sqlc.narg('availability')::availability_type[] AS availability
+)
+SELECT DISTINCT mis.source_id
+FROM mv_item_sources mis
+JOIN key_items ki ON mis.master_item_id = ki.master_item_id
+CROSS JOIN w
+WHERE ki.id = w.key_item_id
+  AND mis.source_type = w.source_type
+  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+ORDER BY mis.source_id;
 
 
 -- name: GetKeyItemTreasureIDs :many
@@ -317,6 +314,7 @@ FROM key_items ki
 JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
 WHERE mis.area_id = $1
 ORDER BY ki.id;
+
 
 
 

@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/lib/pq"
 )
@@ -129,6 +130,51 @@ SELECT DISTINCT area_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER B
 
 func (q *Queries) GetMonsterAreaIDs(ctx context.Context, monsterID int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getMonsterAreaIDs, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
+			return nil, err
+		}
+		items = append(items, area_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterAreaIDsRel = `-- name: GetMonsterAreaIDsRel :many
+WITH w AS (
+    SELECT
+      $1::int AS monster_id,
+      $2::availability_type[] AS availability,
+      $3::boolean AS repeatable
+)
+SELECT DISTINCT me.area_id
+FROM mv_monster_encounters me
+CROSS JOIN w
+WHERE me.monster_id = w.monster_id
+  AND (w.availability IS NULL OR me.avl_area = ANY(w.availability))
+  AND (w.repeatable IS NULL OR me.is_repeatable_loc = w.repeatable)
+ORDER BY me.area_id
+`
+
+type GetMonsterAreaIDsRelParams struct {
+	MonsterID    int32
+	Availability []AvailabilityType
+	Repeatable   sql.NullBool
+}
+
+func (q *Queries) GetMonsterAreaIDsRel(ctx context.Context, arg GetMonsterAreaIDsRelParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterAreaIDsRel, arg.MonsterID, pq.Array(arg.Availability), arg.Repeatable)
 	if err != nil {
 		return nil, err
 	}
@@ -1193,6 +1239,51 @@ SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE monster_id = $1 OR
 
 func (q *Queries) GetMonsterMonsterFormationIDs(ctx context.Context, monsterID int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getMonsterMonsterFormationIDs, monsterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
+			return nil, err
+		}
+		items = append(items, formation_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMonsterMonsterFormationIDsRel = `-- name: GetMonsterMonsterFormationIDsRel :many
+WITH w AS (
+    SELECT
+      $1::int AS monster_id,
+      $2::availability_type[] AS availability,
+      $3::boolean AS repeatable
+)
+SELECT DISTINCT me.formation_id
+FROM mv_monster_encounters me
+CROSS JOIN w
+WHERE me.monster_id = w.monster_id
+  AND (w.availability IS NULL OR me.avl_area = ANY(w.availability))
+  AND (w.repeatable IS NULL OR me.is_repeatable_loc = w.repeatable)
+ORDER BY me.formation_id
+`
+
+type GetMonsterMonsterFormationIDsRelParams struct {
+	MonsterID    int32
+	Availability []AvailabilityType
+	Repeatable   sql.NullBool
+}
+
+func (q *Queries) GetMonsterMonsterFormationIDsRel(ctx context.Context, arg GetMonsterMonsterFormationIDsRelParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterMonsterFormationIDsRel, arg.MonsterID, pq.Array(arg.Availability), arg.Repeatable)
 	if err != nil {
 		return nil, err
 	}

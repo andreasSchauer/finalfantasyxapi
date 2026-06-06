@@ -14,6 +14,27 @@ SELECT DISTINCT id FROM characters WHERE area_id = $1 ORDER BY id;
 SELECT DISTINCT id FROM aeons WHERE area_id = $1 ORDER BY id;
 
 
+-- name: GetAreaRelSourceIDs :many
+WITH w AS (
+    SELECT
+      sqlc.arg('area_id')::int AS area_id,
+      sqlc.arg('source_type')::text AS source_type,
+      sqlc.narg('availability')::availability_type[] AS availability,
+      sqlc.narg('repeatable')::boolean AS repeatable
+)
+SELECT DISTINCT a.s_id
+FROM mv_availabilities a
+CROSS JOIN w
+WHERE a.a_id = w.area_id
+  AND a.source_type = w.source_type
+  AND (w.availability IS NULL OR CASE
+    WHEN w.source_type IN ('monster', 'monster-formation') THEN a.avl_area
+    ELSE a.avl_self
+  END = ANY(w.availability))
+  AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)
+ORDER BY a.s_id;
+
+
 -- name: GetAreaShopIDs :many
 SELECT id FROM shops WHERE area_id = $1 ORDER BY id;
 
@@ -208,6 +229,28 @@ FROM aeons a
 JOIN mv_geography g ON a.area_id = g.area_id
 WHERE g.sublocation_id = $1
 ORDER BY a.id;
+
+
+-- name: GetSublocationRelSourceIDs :many
+WITH w AS (
+    SELECT
+      sqlc.arg('sublocation_id')::int AS sublocation_id,
+      sqlc.arg('source_type')::text AS source_type,
+      sqlc.narg('availability')::availability_type[] AS availability,
+      sqlc.narg('repeatable')::boolean AS repeatable
+)
+SELECT DISTINCT g.sublocation_id
+FROM mv_geography g
+JOIN mv_availabilities a ON g.area_id = a.a_id
+CROSS JOIN w
+WHERE g.sublocation_id = w.sublocation_id
+  AND a.source_type = w.source_type
+  AND (w.availability IS NULL OR CASE
+    WHEN w.source_type IN ('monster', 'monster-formation') THEN a.avl_context
+    ELSE a.avl_self
+  END = ANY(w.availability))
+  AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)
+ORDER BY g.sublocation_id;
 
 
 -- name: GetSublocationShopIDs :many
@@ -453,6 +496,28 @@ FROM aeons a
 JOIN mv_geography g ON a.area_id = g.area_id
 WHERE g.location_id = $1
 ORDER BY a.id;
+
+
+-- name: GetLocationRelSourceIDs :many
+WITH w AS (
+    SELECT
+      sqlc.arg('location_id')::int AS location_id,
+      sqlc.arg('source_type')::text AS source_type,
+      sqlc.narg('availability')::availability_type[] AS availability,
+      sqlc.narg('repeatable')::boolean AS repeatable
+)
+SELECT DISTINCT g.location_id
+FROM mv_geography g
+JOIN mv_availabilities a ON g.area_id = a.a_id
+CROSS JOIN w
+WHERE g.location_id = w.location_id
+  AND a.source_type = w.source_type
+  AND (w.availability IS NULL OR CASE
+    WHEN w.source_type IN ('monster', 'monster-formation') THEN a.avl_context
+    ELSE a.avl_self
+  END = ANY(w.availability))
+  AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)
+ORDER BY g.location_id;
 
 
 -- name: GetLocationShopIDs :many

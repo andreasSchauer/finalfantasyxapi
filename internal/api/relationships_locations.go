@@ -7,6 +7,11 @@ import (
 )
 
 func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Location) (LocRel, error) {
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.locations, location.ID)
+	if err != nil {
+		return LocRel{}, err
+	}
+
 	characters, err := getResourcesDbItem(cfg, r, cfg.e.characters, location, cfg.db.GetLocationCharacterIDs)
 	if err != nil {
 		return LocRel{}, err
@@ -17,27 +22,27 @@ func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Loc
 		return LocRel{}, err
 	}
 
-	shops, err := getResourcesDbItem(cfg, r, cfg.e.shops, location, cfg.db.GetLocationShopIDs)
+	shops, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeShop))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	treasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, location, cfg.db.GetLocationTreasureIDs)
+	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeTreasure))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, location, cfg.db.GetLocationMonsterIDs)
+	monsters, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeMonster))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	formations, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, location, cfg.db.GetLocationMonsterFormationIDs)
+	formations, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsterFormations, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	sidequests, err := getLocBasedSidequests(cfg, r, location, cfg.db.GetLocationQuestIDs)
+	sidequests, err := getLocBasedSidequests(cfg, r, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeQuest))
 	if err != nil {
 		return LocRel{}, err
 	}

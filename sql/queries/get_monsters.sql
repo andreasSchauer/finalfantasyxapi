@@ -6,6 +6,22 @@ SELECT id FROM monsters WHERE name = $1;
 SELECT DISTINCT area_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY area_id;
 
 
+-- name: GetMonsterAreaIDsRel :many
+WITH w AS (
+    SELECT
+      sqlc.arg('monster_id')::int AS monster_id,
+      sqlc.narg('availability')::availability_type[] AS availability,
+      sqlc.narg('repeatable')::boolean AS repeatable
+)
+SELECT DISTINCT me.area_id
+FROM mv_monster_encounters me
+CROSS JOIN w
+WHERE me.monster_id = w.monster_id
+  AND (w.availability IS NULL OR me.avl_area = ANY(w.availability))
+  AND (w.repeatable IS NULL OR me.is_repeatable_loc = w.repeatable)
+ORDER BY me.area_id;
+
+
 -- name: GetMonsterAreaIdPairs :many
 SELECT DISTINCT
   monster_id,
@@ -17,6 +33,22 @@ ORDER BY monster_id, area_id;
 
 -- name: GetMonsterMonsterFormationIDs :many
 SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY formation_id;
+
+
+-- name: GetMonsterMonsterFormationIDsRel :many
+WITH w AS (
+    SELECT
+      sqlc.arg('monster_id')::int AS monster_id,
+      sqlc.narg('availability')::availability_type[] AS availability,
+      sqlc.narg('repeatable')::boolean AS repeatable
+)
+SELECT DISTINCT me.formation_id
+FROM mv_monster_encounters me
+CROSS JOIN w
+WHERE me.monster_id = w.monster_id
+  AND (w.availability IS NULL OR me.avl_area = ANY(w.availability))
+  AND (w.repeatable IS NULL OR me.is_repeatable_loc = w.repeatable)
+ORDER BY me.formation_id;
 
 
 -- name: GetMonsterAbilityIDs :many

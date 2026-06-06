@@ -19,6 +19,11 @@ func (ac AreaConnection) GetAPIResource() APIResource {
 }
 
 func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocRel, error) {
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.areas, area.ID)
+	if err != nil {
+		return LocRel{}, err
+	}
+
 	characters, err := getResourcesDbItem(cfg, r, cfg.e.characters, area, ToIntManyNull(cfg.db.GetAreaCharacterIDs))
 	if err != nil {
 		return LocRel{}, err
@@ -29,27 +34,27 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 		return LocRel{}, err
 	}
 
-	shops, err := getResourcesDbItem(cfg, r, cfg.e.shops, area, cfg.db.GetAreaShopIDs)
+	shops, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeShop))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	treasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, area, cfg.db.GetAreaTreasureIDs)
+	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeTreasure))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, area, cfg.db.GetAreaMonsterIDs)
+	monsters, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeMonster))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	formations, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, area, cfg.db.GetAreaMonsterFormationIDs)
+	formations, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsterFormations, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	sidequests, err := getLocBasedSidequests(cfg, r, area, cfg.db.GetAreaQuestIDs)
+	sidequests, err := getLocBasedSidequests(cfg, r, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeQuest))
 	if err != nil {
 		return LocRel{}, err
 	}

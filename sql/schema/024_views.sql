@@ -459,7 +459,7 @@ SELECT DISTINCT
     TRUE AS is_repeatable,
     TRUE AS is_repeatable_loc,
     sh.area_id,
-    se.shop_type::shop_type AS shop_type
+    se.shop_type AS shop_type
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 LEFT JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
@@ -486,7 +486,8 @@ SELECT DISTINCT
     t.availability AS avl_area,
     FALSE AS is_repeatable,
     FALSE AS is_repeatable_loc,
-    t.area_id
+    t.area_id,
+    NULL::shop_type AS shop_type
 FROM treasures t
 JOIN treasure_equipment_pieces te ON te.treasure_id = t.id
 JOIN j_treasure_equipment_abilities j ON j.treasure_equipment_id = te.id
@@ -512,7 +513,8 @@ SELECT DISTINCT
     END AS avl_area,
     TRUE AS is_repeatable,
     TRUE AS is_repeatable_loc,
-    sh.area_id
+    sh.area_id,
+    se.shop_type AS shop_type
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
 JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
@@ -532,7 +534,8 @@ SELECT DISTINCT
     me.avl_area,
     me.is_repeatable,
     me.is_repeatable_loc,
-    me.area_id
+    me.area_id,
+    NULL::shop_type AS shop_type
 FROM mv_monster_equipment_drops med
 JOIN mv_monster_encounters me ON med.monster_id = me.monster_id;
 

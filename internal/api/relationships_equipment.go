@@ -16,12 +16,12 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 		return EquipmentName{}, err
 	}
 
-	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, equipment, availabilityParams, convGetEquipmentTreasureIDs(cfg))
+	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeTreasure))
 	if err != nil {
 		return EquipmentName{}, err
 	}
 
-	shops, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, equipment, availabilityParams, convGetEquipmentShopIDs(cfg))
+	shops, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeShop))
 	if err != nil {
 		return EquipmentName{}, err
 	}

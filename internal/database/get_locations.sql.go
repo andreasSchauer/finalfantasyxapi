@@ -815,6 +815,62 @@ func (q *Queries) GetAreaQuestIDs(ctx context.Context, areaID int32) ([]int32, e
 	return items, nil
 }
 
+const getAreaRelSourceIDs = `-- name: GetAreaRelSourceIDs :many
+WITH w AS (
+    SELECT
+      $1::int AS area_id,
+      $2::text AS source_type,
+      $3::availability_type[] AS availability,
+      $4::boolean AS repeatable
+)
+SELECT DISTINCT a.s_id
+FROM mv_availabilities a
+CROSS JOIN w
+WHERE a.a_id = w.area_id
+  AND a.source_type = w.source_type
+  AND (w.availability IS NULL OR CASE
+    WHEN w.source_type IN ('monster', 'monster-formation') THEN a.avl_area
+    ELSE a.avl_self
+  END = ANY(w.availability))
+  AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)
+ORDER BY a.s_id
+`
+
+type GetAreaRelSourceIDsParams struct {
+	AreaID       int32
+	SourceType   string
+	Availability []AvailabilityType
+	Repeatable   sql.NullBool
+}
+
+func (q *Queries) GetAreaRelSourceIDs(ctx context.Context, arg GetAreaRelSourceIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaRelSourceIDs,
+		arg.AreaID,
+		arg.SourceType,
+		pq.Array(arg.Availability),
+		arg.Repeatable,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var s_id int32
+		if err := rows.Scan(&s_id); err != nil {
+			return nil, err
+		}
+		items = append(items, s_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAreaShopIDs = `-- name: GetAreaShopIDs :many
 SELECT id FROM shops WHERE area_id = $1 ORDER BY id
 `
@@ -1773,6 +1829,63 @@ func (q *Queries) GetLocationQuestIDs(ctx context.Context, locationID int32) ([]
 			return nil, err
 		}
 		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLocationRelSourceIDs = `-- name: GetLocationRelSourceIDs :many
+WITH w AS (
+    SELECT
+      $1::int AS location_id,
+      $2::text AS source_type,
+      $3::availability_type[] AS availability,
+      $4::boolean AS repeatable
+)
+SELECT DISTINCT g.location_id
+FROM mv_geography g
+JOIN mv_availabilities a ON g.area_id = a.a_id
+CROSS JOIN w
+WHERE g.location_id = w.location_id
+  AND a.source_type = w.source_type
+  AND (w.availability IS NULL OR CASE
+    WHEN w.source_type IN ('monster', 'monster-formation') THEN a.avl_context
+    ELSE a.avl_self
+  END = ANY(w.availability))
+  AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)
+ORDER BY g.location_id
+`
+
+type GetLocationRelSourceIDsParams struct {
+	LocationID   int32
+	SourceType   string
+	Availability []AvailabilityType
+	Repeatable   sql.NullBool
+}
+
+func (q *Queries) GetLocationRelSourceIDs(ctx context.Context, arg GetLocationRelSourceIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationRelSourceIDs,
+		arg.LocationID,
+		arg.SourceType,
+		pq.Array(arg.Availability),
+		arg.Repeatable,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
+			return nil, err
+		}
+		items = append(items, location_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2942,6 +3055,63 @@ func (q *Queries) GetSublocationQuestIDs(ctx context.Context, sublocationID int3
 			return nil, err
 		}
 		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSublocationRelSourceIDs = `-- name: GetSublocationRelSourceIDs :many
+WITH w AS (
+    SELECT
+      $1::int AS sublocation_id,
+      $2::text AS source_type,
+      $3::availability_type[] AS availability,
+      $4::boolean AS repeatable
+)
+SELECT DISTINCT g.sublocation_id
+FROM mv_geography g
+JOIN mv_availabilities a ON g.area_id = a.a_id
+CROSS JOIN w
+WHERE g.sublocation_id = w.sublocation_id
+  AND a.source_type = w.source_type
+  AND (w.availability IS NULL OR CASE
+    WHEN w.source_type IN ('monster', 'monster-formation') THEN a.avl_context
+    ELSE a.avl_self
+  END = ANY(w.availability))
+  AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)
+ORDER BY g.sublocation_id
+`
+
+type GetSublocationRelSourceIDsParams struct {
+	SublocationID int32
+	SourceType    string
+	Availability  []AvailabilityType
+	Repeatable    sql.NullBool
+}
+
+func (q *Queries) GetSublocationRelSourceIDs(ctx context.Context, arg GetSublocationRelSourceIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationRelSourceIDs,
+		arg.SublocationID,
+		arg.SourceType,
+		pq.Array(arg.Availability),
+		arg.Repeatable,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
+			return nil, err
+		}
+		items = append(items, sublocation_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

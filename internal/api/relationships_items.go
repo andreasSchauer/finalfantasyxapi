@@ -27,27 +27,27 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 }
 
 func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabilityParams RelAvlParams) (Item, error) {
-	monsters, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, item, availabilityParams, convGetItemMonsterIDs(cfg))
+	monsters, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeMonster))
 	if err != nil {
 		return Item{}, err
 	}
 
-	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, item, availabilityParams, convGetItemTreasureIDs(cfg))
+	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeTreasure))
 	if err != nil {
 		return Item{}, err
 	}
 
-	shops, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, item, availabilityParams, convGetItemShopIDs(cfg))
+	shops, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeShop))
 	if err != nil {
 		return Item{}, err
 	}
 
-	quests, err := runRelAvailabilityQuery(cfg, r, cfg.e.quests, item, availabilityParams, convGetItemQuestIDs(cfg))
+	quests, err := runRelAvailabilityQuery(cfg, r, cfg.e.quests, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeQuest))
 	if err != nil {
 		return Item{}, err
 	}
 
-	blitzballPrizes, err := getResourcesDbItem(cfg, r, cfg.e.blitzballPrizes, item, cfg.db.GetItemBlitzballPrizeIDs)
+	blitzballPrizes, err := runRelAvailabilityQuery(cfg, r, cfg.e.blitzballPrizes, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeBlitzball))
 	if err != nil {
 		return Item{}, err
 	}

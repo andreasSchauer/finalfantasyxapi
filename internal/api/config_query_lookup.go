@@ -312,6 +312,22 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 func (cfg *Config) initLocationsParams() {
 	params := []QueryParam{
 		{
+			Name:        "rel_availability",
+			Description: "Only displays a location's related resources with the given availabilities. This affects shops, treasures, quests, monsters, and monster-formations.",
+			Type:        "enum-list",
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "rel_repeatable",
+			Description: "Only displays a location's related resources that can be farmed. This affects shops, treasures, quests, monsters, and monster-formations.",
+			Type:        "bool",
+			ForList:     false,
+			ForSingle:   true,
+		},
+		{
 			Name:        "availability",
 			Description: "Searches for locations with the given availabilities. Can be combined with other parameters that filter locations by resource/resource-type. In that case, this parameter searches for locations where all the requested resources/resource-types are present with the given availabilities. If a resource (like an item or a monster) has multiple availabilities in the same location, because there are multiple ways of receiving/encountering it, this filter defines the most accessible version of it as its actual availability. In that case, the area won't show up for the other availability types, even if the resource technically can have that availability, since it can be received/encountered easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:        "enum-list",
@@ -445,6 +461,22 @@ func (cfg *Config) initLocationsParams() {
 
 func (cfg *Config) initSublocationsParams() {
 	params := []QueryParam{
+		{
+			Name:        "rel_availability",
+			Description: "Only displays a sublocation's related resources with the given availabilities. This affects shops, treasures, quests, monsters, and monster-formations.",
+			Type:        "enum-list",
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "rel_repeatable",
+			Description: "Only displays a sublocation's related resources that can be farmed. This affects shops, treasures, quests, monsters, and monster-formations.",
+			Type:        "bool",
+			ForList:     false,
+			ForSingle:   true,
+		},
 		{
 			Name:        "location",
 			Description: "Searches for sublocations that are located within the specified location.",
@@ -587,6 +619,22 @@ func (cfg *Config) initSublocationsParams() {
 
 func (cfg *Config) initAreasParams() {
 	params := []QueryParam{
+		{
+			Name:        "rel_availability",
+			Description: "Only displays an area's related resources with the given availabilities. This affects shops, treasures, quests, monsters, and monster-formations.",
+			Type:        "enum-list",
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "rel_repeatable",
+			Description: "Only displays an area's related resources that can be farmed. This affects shops, treasures, quests, monsters, and monster-formations.",
+			Type:        "bool",
+			ForList:     false,
+			ForSingle:   true,
+		},
 		{
 			Name:        "location",
 			Description: "Searches for areas that are located within the specified location.",
@@ -1317,6 +1365,22 @@ func (cfg *Config) initCharacterClassesParams() {
 
 func (cfg *Config) initMonstersParams() {
 	params := []QueryParam{
+		{
+			Name:        "rel_availability",
+			Description: "Only displays a monster's related resources with the given availabilities. This affects areas and monster-formations.",
+			Type:        "enum-list",
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "rel_repeatable",
+			Description: "Only displays a monster's related resources that can be farmed. This affects areas and monster-formations.",
+			Type:        "bool",
+			ForList:     false,
+			ForSingle:   true,
+		},
 		{
 			Name:        "kimahri_stats",
 			Description: "Calculate the stats of Biran and Yenke Ronso that are based on Kimahri's stats. These are: HP, strength, magic, agility. If unused, their stats are based on Kimahri's base stats.",
@@ -2458,6 +2522,22 @@ func (cfg *Config) initSubmenusParams() {
 func (cfg *Config) initAllItemsParams() {
 	params := []QueryParam{
 		{
+			Name:        "rel_availability",
+			Description: "Only considers an item's related resources with the given availabilities when calculating the boolean fields. This affects monsters, treasures, shops, quests, and blitzball prizes.",
+			Type:        "enum-list",
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
+			Name:        "rel_repeatable",
+			Description: "Only considers an item's related resources that can be farmed when calculating the boolean fields. This affects monsters, treasures, shops, quests, and blitzball prizes.",
+			Type:        "bool",
+			ForList:     false,
+			ForSingle:   true,
+		},
+		{
 			Name:        "type",
 			Description: "Searches for items that are of the specified item-types.",
 			Type:        "enum-list",
@@ -2536,7 +2616,7 @@ func (cfg *Config) initItemsParams() {
 	params := []QueryParam{
 		{
 			Name:        "rel_availability",
-			Description: "Only displays an item's related resources with the given availabilities.",
+			Description: "Only displays an item's related resources with the given availabilities. This affects monsters, treasures, shops, quests, and blitzball prizes.",
 			Type:        "enum-list",
 			ForList:     false,
 			ForSingle:   true,
@@ -2545,7 +2625,7 @@ func (cfg *Config) initItemsParams() {
 		},
 		{
 			Name:        "rel_repeatable",
-			Description: "Only displays an item's related monsters and quests that can be farmed.",
+			Description: "Only displays an item's related resources that can be farmed. This affects monsters, treasures, shops, quests, and blitzball prizes.",
 			Type:        "bool",
 			ForList:     false,
 			ForSingle:   true,
@@ -2644,6 +2724,15 @@ func (cfg *Config) initItemsParams() {
 func (cfg *Config) initKeyItemsParams() {
 	params := []QueryParam{
 		{
+			Name:        "rel_availability",
+			Description: "Only displays a key-item's related resources with the given availabilities. This affects treasures and quests.",
+			Type:        "enum-list",
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.AvailabilityType.lookup,
+			References:  []string{createListURL(cfg, "availability")},
+		},
+		{
 			Name:        "availability",
 			Description: "Searches for key-items with the given availabilities. The availability of a key-item is always taken from its sources. The most accessible availability among those sources is the one that is assigned to the key-item. The key-item won't show up for the other availability types, even if it technically can have that availability, since it can be received easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:        "enum-list",
@@ -2707,7 +2796,7 @@ func (cfg *Config) initSpheresParams() {
 	params := []QueryParam{
 		{
 			Name:        "rel_availability",
-			Description: "Only displays a sphere's related resources with the given availabilities.",
+			Description: "Only displays a sphere's related resources with the given availabilities. This affects monsters, treasures, shops, quests, and blitzball prizes.",
 			Type:        "enum-list",
 			ForList:     false,
 			ForSingle:   true,
@@ -2716,7 +2805,7 @@ func (cfg *Config) initSpheresParams() {
 		},
 		{
 			Name:        "rel_repeatable",
-			Description: "Only displays a sphere's related monsters and quests that can be farmed.",
+			Description: "Only displays a sphere's related resources that can be farmed. This affects monsters, treasures, shops, quests, and blitzball prizes.",
 			Type:        "bool",
 			ForList:     false,
 			ForSingle:   true,
@@ -2870,7 +2959,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 	params := []QueryParam{
 		{
 			Name:        "rel_availability",
-			Description: "Only displays an auto-ability's related monsters with the given availabilities.",
+			Description: "Only displays an auto-ability's related resources with the given availabilities. This affects shops, treasures, and monsters.",
 			Type:        "enum-list",
 			ForList:     false,
 			ForSingle:   true,
@@ -2879,7 +2968,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 		},
 		{
 			Name:        "rel_repeatable",
-			Description: "Only displays an auto-ability's related monsters that can be farmed.",
+			Description: "Only displays an auto-ability's related resources that can be farmed. This affects shops, treasures, and monsters.",
 			Type:        "bool",
 			ForList:     false,
 			ForSingle:   true,
@@ -3045,7 +3134,7 @@ func (cfg *Config) initEquipmentParams() {
 		},
 		{
 			Name:        "rel_availability",
-			Description: "Only displays an equipment's related treasures and shops with the given availabilities.",
+			Description: "Only displays an equipment's related resources with the given availabilities. This affects treasures and shops.",
 			Type:        "enum-list",
 			ForList:     false,
 			ForSingle:   true,

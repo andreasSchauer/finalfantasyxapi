@@ -1,57 +1,3 @@
--- name: GetAutoAbilityItemMonsterIDs :many
-WITH w AS (
-    SELECT 
-        sqlc.narg('repeatable')::BOOLEAN AS repeatable,
-        sqlc.narg('availability')::availability_type[] AS availability,
-        (
-            SELECT mit.id AS master_item_id
-            FROM auto_abilities aa
-            JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
-            JOIN master_items mit ON ia_req.master_item_id = mit.id
-            WHERE aa.id = sqlc.arg('auto_ability_id')::int
-        )::int AS target_master_id
-)
-SELECT DISTINCT md.monster_id
-FROM mv_monster_item_drops md
-JOIN monsters m ON md.monster_id = m.id
-CROSS JOIN w
-WHERE md.master_item_id = w.target_master_id
-  AND (w.repeatable IS NULL OR md.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
-ORDER BY md.monster_id;
-
-
--- name: GetAutoAbilityMonsterIDs :many
-WITH w AS (
-    SELECT 
-        sqlc.arg('auto_ability_id')::int AS auto_ability_id,
-        sqlc.narg('repeatable')::BOOLEAN AS repeatable,
-        sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT m.id
-FROM monsters m
-JOIN mv_monster_equipment_drops me ON me.monster_id = m.id
-CROSS JOIN w
-WHERE me.auto_ability_id = w.auto_ability_id
-  AND (w.repeatable IS NULL OR m.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR m.availability = ANY(w.availability))
-ORDER BY m.id;
-
-
-
--- name: GetAutoAbilityTreasureIDs :many
-WITH w as (
-  SELECT sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT es.source_id
-FROM mv_equipment_sources es
-JOIN treasures t ON es.source_id = t.id AND es.source_type = 'treasure' AND es.area_id = t.area_id
-CROSS JOIN w
-WHERE es.auto_ability_id = sqlc.arg('auto_ability_id')::int
-  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
-ORDER BY es.source_id;
-
-
 -- name: GetAutoAbilityEquipmentTableIDs :many
 SELECT j.equipment_table_id
 FROM j_equipment_tables_required_auto_abilities j
@@ -66,36 +12,47 @@ WHERE j.auto_ability_id = $1
 ORDER BY equipment_table_id;
 
 
--- name: GetAutoAbilityShopIDsPre :many
+-- name: GetAutoAbilitySourceIDs :many
 WITH w as (
   SELECT
     sqlc.arg('auto_ability_id')::int AS auto_ability_id,
-    sqlc.narg('availability')::availability_type[] AS availability
+    sqlc.arg('source_type')::text AS source_type,
+    sqlc.narg('shop_type')::shop_type AS shop_type,
+    sqlc.narg('availability')::availability_type[] AS availability,
+    sqlc.narg('repeatable')::boolean AS repeatable
 )
-SELECT DISTINCT es.source_id
-FROM mv_equipment_sources es
+SELECT DISTINCT aas.source_id
+FROM mv_auto_ability_sources aas
 CROSS JOIN w
-WHERE es.auto_ability_id = w.auto_ability_id
-  AND es.source_type = 'shop'
-  AND es.shop_type = 'pre-airship'
-  AND (w.availability IS NULL OR es.avl_context = ANY(w.availability))
-ORDER BY es.source_id;
+WHERE aas.auto_ability_id = w.auto_ability_id
+  AND aas.source_type = w.source_type
+  AND aas.shop_type = w.shop_type
+  AND (w.availability IS NULL OR aas.avl_context = ANY(w.availability))
+  AND (w.repeatable IS NULL OR aas.is_repeatable = w.repeatable)
+ORDER BY aas.source_id;
 
 
--- name: GetAutoAbilityShopIDsPost :many
-WITH w as (
-  SELECT
-    sqlc.arg('auto_ability_id')::int AS auto_ability_id,
-    sqlc.narg('availability')::availability_type[] AS availability
+-- name: GetAutoAbilityItemMonsterIDs :many
+WITH w AS (
+    SELECT 
+        sqlc.narg('availability')::availability_type[] AS availability,
+        sqlc.narg('repeatable')::BOOLEAN AS repeatable,
+        (
+            SELECT mit.id AS master_item_id
+            FROM auto_abilities aa
+            JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
+            JOIN master_items mit ON ia_req.master_item_id = mit.id
+            WHERE aa.id = sqlc.arg('auto_ability_id')::int
+        )::int AS target_master_id
 )
-SELECT DISTINCT es.source_id
-FROM mv_equipment_sources es
+SELECT DISTINCT mis.source_id
+FROM mv_item_sources mis
 CROSS JOIN w
-WHERE es.auto_ability_id = w.auto_ability_id
-  AND es.source_type = 'shop'
-  AND es.shop_type = 'post-airship'
-  AND (w.availability IS NULL OR es.avl_context = ANY(w.availability))
-ORDER BY es.source_id;
+WHERE mis.master_item_id = w.target_master_id
+  AND mis.source_type = 'monster'
+  AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+ORDER BY mis.source_id;
 
 
 -- name: GetAutoAbilityIDs :many
@@ -219,34 +176,23 @@ SELECT id FROM equipment_tables WHERE classification = 'celestial-weapon' ORDER 
 SELECT equipment_table_id FROM j_equipment_tables_names WHERE equipment_name_id = $1 ORDER BY equipment_table_id;
 
 
--- name: GetEquipmentTreasureIDs :many
+-- name: GetEquipmentSourceIDs :many
 WITH w AS (
   SELECT
-    sqlc.arg('equipment_id')::int AS equipment_name_id,
+    sqlc.arg('equipment_name_id')::int AS equipment_name_id,
+    sqlc.arg('source_type')::text AS source_type,
     sqlc.narg('availability')::availability_type[] AS availability
 )
-SELECT DISTINCT t.id
-FROM treasures t
-JOIN mv_equipment_sources es ON es.source_id = t.id AND es.source_type = 'treasure' AND es.area_id = t.area_id
+SELECT DISTINCT es.source_id
+FROM mv_equipment_sources es
 CROSS JOIN w
 WHERE es.name_id = w.equipment_name_id
-  AND (w.availability IS NULL OR t.availability = ANY(w.availability))
-ORDER BY t.id;
-
-
--- name: GetEquipmentShopIDs :many
-WITH w AS (
-  SELECT
-    sqlc.arg('equipment_id')::int AS equipment_name_id,
-    sqlc.narg('availability')::availability_type[] AS availability
-)
-SELECT DISTINCT sh.id
-FROM shops sh
-JOIN mv_equipment_sources es ON es.source_id = sh.id AND es.source_type = 'shop' AND es.area_id = sh.area_id
-CROSS JOIN w
-WHERE es.name_id = w.equipment_name_id
-  AND (w.availability IS NULL OR sh.availability = ANY(w.availability))
-ORDER BY sh.id;
+  AND es.source_type = w.source_type
+  AND (w.availability IS NULL OR CASE
+    WHEN w.source_type = 'shop' THEN es.avl_context
+    ELSE es.avl_self
+  END = ANY(w.availability))
+ORDER BY es.source_id;
 
 
 -- name: GetEquipmentIDs :many
@@ -273,7 +219,7 @@ WHERE et.classification = 'celestial-weapon'
 ORDER BY j.equipment_name_id;
 
 
--- name: GetEquipmentIDsByAutoAbilty :many
+-- name: GetEquipmentIDsByAutoAbility :many
 WITH all_matches AS (
     SELECT en.id AS equipment_name_id, jreq.auto_ability_id
     FROM equipment_names en

@@ -11,8 +11,9 @@ type MasterItem struct {
 }
 
 type ObtainableFrom struct {
-	Monsters  bool `json:"monsters"`
-	Treasures bool `json:"treasures"`
-	Shops     bool `json:"shops"`
-	Quests    bool `json:"quests"`
+	Monsters  		bool 	`json:"monsters"`
+	Treasures 		bool 	`json:"treasures"`
+	Shops     		bool 	`json:"shops"`
+	Quests    		bool 	`json:"quests"`
+	BlitzballPrizes	bool	`json:"blitzball_prizes"`
 }

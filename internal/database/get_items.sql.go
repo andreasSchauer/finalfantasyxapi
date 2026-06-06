@@ -44,38 +44,6 @@ func (q *Queries) GetItemAutoAbilityIDs(ctx context.Context, id int32) ([]int32,
 	return items, nil
 }
 
-const getItemBlitzballPrizeIDs = `-- name: GetItemBlitzballPrizeIDs :many
-SELECT DISTINCT mis.source_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-WHERE i.id = $1
-  AND mis.source_type = 'blitzball'
-ORDER BY mis.source_id
-`
-
-func (q *Queries) GetItemBlitzballPrizeIDs(ctx context.Context, id int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemBlitzballPrizeIDs, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var source_id int32
-		if err := rows.Scan(&source_id); err != nil {
-			return nil, err
-		}
-		items = append(items, source_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getItemIDs = `-- name: GetItemIDs :many
 SELECT id FROM items ORDER BY id
 `
@@ -370,53 +338,6 @@ func (q *Queries) GetItemMixIDs(ctx context.Context, firstItemID int32) ([]int32
 	return items, nil
 }
 
-const getItemMonsterIDs = `-- name: GetItemMonsterIDs :many
-WITH w AS (
-    SELECT
-      $1::int AS item_id,
-      $2::BOOLEAN AS repeatable,
-      $3::availability_type[] AS availability
-)
-SELECT DISTINCT mis.source_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-CROSS JOIN w
-WHERE i.id = w.item_id
-  AND mis.source_type = 'monster'
-  AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
-ORDER BY mis.source_id
-`
-
-type GetItemMonsterIDsParams struct {
-	ItemID       int32
-	Repeatable   sql.NullBool
-	Availability []AvailabilityType
-}
-
-func (q *Queries) GetItemMonsterIDs(ctx context.Context, arg GetItemMonsterIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemMonsterIDs, arg.ItemID, arg.Repeatable, pq.Array(arg.Availability))
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var source_id int32
-		if err := rows.Scan(&source_id); err != nil {
-			return nil, err
-		}
-		items = append(items, source_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getItemPlayerAbilityIDs = `-- name: GetItemPlayerAbilityIDs :many
 SELECT DISTINCT pa.id
 FROM player_abilities pa
@@ -449,120 +370,42 @@ func (q *Queries) GetItemPlayerAbilityIDs(ctx context.Context, id int32) ([]int3
 	return items, nil
 }
 
-const getItemQuestIDs = `-- name: GetItemQuestIDs :many
+const getItemSourceIDs = `-- name: GetItemSourceIDs :many
 WITH w AS (
     SELECT
       $1::int AS item_id,
-      $2::BOOLEAN AS repeatable,
-      $3::availability_type[] AS availability
+      $2::text AS source_type,
+      $3::availability_type[] AS availability,
+      $4::boolean AS repeatable
 )
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
 WHERE i.id = w.item_id
-  AND mis.source_type = 'quest'
+  AND mis.source_type = w.source_type
+  AND (w.availability IS NULL OR CASE
+    WHEN w.source_type = 'shop' THEN mis.avl_context
+    ELSE mis.avl_self
+  END = ANY(w.availability))
   AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
-  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
 ORDER BY mis.source_id
 `
 
-type GetItemQuestIDsParams struct {
+type GetItemSourceIDsParams struct {
 	ItemID       int32
+	SourceType   string
+	Availability []AvailabilityType
 	Repeatable   sql.NullBool
-	Availability []AvailabilityType
 }
 
-func (q *Queries) GetItemQuestIDs(ctx context.Context, arg GetItemQuestIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemQuestIDs, arg.ItemID, arg.Repeatable, pq.Array(arg.Availability))
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var source_id int32
-		if err := rows.Scan(&source_id); err != nil {
-			return nil, err
-		}
-		items = append(items, source_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getItemShopIDs = `-- name: GetItemShopIDs :many
-WITH w AS (
-    SELECT
-      $1::int AS item_id,
-      $2::availability_type[] AS availability
-)
-SELECT DISTINCT mis.source_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-CROSS JOIN w
-WHERE i.id = w.item_id
-  AND mis.source_type = 'shop'
-  AND (w.availability IS NULL OR mis.avl_context = ANY(w.availability))
-ORDER BY mis.source_id
-`
-
-type GetItemShopIDsParams struct {
-	ItemID       int32
-	Availability []AvailabilityType
-}
-
-func (q *Queries) GetItemShopIDs(ctx context.Context, arg GetItemShopIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemShopIDs, arg.ItemID, pq.Array(arg.Availability))
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var source_id int32
-		if err := rows.Scan(&source_id); err != nil {
-			return nil, err
-		}
-		items = append(items, source_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getItemTreasureIDs = `-- name: GetItemTreasureIDs :many
-WITH w AS (
-    SELECT
-      $1::int AS item_id,
-      $2::availability_type[] AS availability
-)
-SELECT DISTINCT mis.source_id
-FROM mv_item_sources mis
-JOIN items i ON mis.master_item_id = i.master_item_id
-CROSS JOIN w
-WHERE i.id = w.item_id
-  AND mis.source_type = 'treasure'
-  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
-ORDER BY mis.source_id
-`
-
-type GetItemTreasureIDsParams struct {
-	ItemID       int32
-	Availability []AvailabilityType
-}
-
-func (q *Queries) GetItemTreasureIDs(ctx context.Context, arg GetItemTreasureIDsParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getItemTreasureIDs, arg.ItemID, pq.Array(arg.Availability))
+func (q *Queries) GetItemSourceIDs(ctx context.Context, arg GetItemSourceIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getItemSourceIDs,
+		arg.ItemID,
+		arg.SourceType,
+		pq.Array(arg.Availability),
+		arg.Repeatable,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -851,6 +694,52 @@ func (q *Queries) GetKeyItemQuestIDs(ctx context.Context, id int32) ([]int32, er
 	return items, nil
 }
 
+const getKeyItemSourceIDs = `-- name: GetKeyItemSourceIDs :many
+WITH w AS (
+    SELECT
+      $1::int AS key_item_id,
+      $2::text AS source_type,
+      $3::availability_type[] AS availability
+)
+SELECT DISTINCT mis.source_id
+FROM mv_item_sources mis
+JOIN key_items ki ON mis.master_item_id = ki.master_item_id
+CROSS JOIN w
+WHERE ki.id = w.key_item_id
+  AND mis.source_type = w.source_type
+  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+ORDER BY mis.source_id
+`
+
+type GetKeyItemSourceIDsParams struct {
+	KeyItemID    int32
+	SourceType   string
+	Availability []AvailabilityType
+}
+
+func (q *Queries) GetKeyItemSourceIDs(ctx context.Context, arg GetKeyItemSourceIDsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getKeyItemSourceIDs, arg.KeyItemID, arg.SourceType, pq.Array(arg.Availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var source_id int32
+		if err := rows.Scan(&source_id); err != nil {
+			return nil, err
+		}
+		items = append(items, source_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getKeyItemTreasureIDs = `-- name: GetKeyItemTreasureIDs :many
 SELECT DISTINCT mis.source_id
 FROM mv_item_sources mis
@@ -1090,28 +979,74 @@ func (q *Queries) GetMasterItemIDsByType(ctx context.Context, itemType []ItemTyp
 }
 
 const getMasterItemObtainableBools = `-- name: GetMasterItemObtainableBools :one
+WITH w AS (
+    SELECT
+      $1::int AS master_item_id,
+      $2::availability_type[] AS availability,
+      $3::boolean AS repeatable
+)
 SELECT 
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'treasure') as treasures,
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'shop') as shops,
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'quest') as quests,
-  EXISTS(SELECT 1 FROM mv_item_sources mis WHERE mis.master_item_id = $1 AND mis.source_type = 'monster') as monsters
+  EXISTS(
+    SELECT 1 FROM mv_item_sources mis
+    WHERE mis.master_item_id = w.master_item_id
+      AND mis.source_type = 'monster'
+      AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+      AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  ) as monsters,
+  EXISTS(
+    SELECT 1 FROM mv_item_sources mis
+    WHERE mis.master_item_id = w.master_item_id
+      AND mis.source_type = 'treasure'
+      AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+      AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  ) as treasures,
+  EXISTS(
+    SELECT 1 FROM mv_item_sources mis
+    WHERE mis.master_item_id = w.master_item_id
+      AND mis.source_type = 'shop'
+      AND (w.availability IS NULL OR mis.avl_context = ANY(w.availability))
+      AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  ) as shops,
+  EXISTS(
+    SELECT 1 FROM mv_item_sources mis
+    WHERE mis.master_item_id = w.master_item_id
+      AND mis.source_type = 'quest'
+      AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+      AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  ) as quests,
+  EXISTS(
+    SELECT 1 FROM mv_item_sources mis
+    WHERE mis.master_item_id = w.master_item_id
+      AND mis.source_type = 'blitzball'
+      AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+      AND (w.repeatable IS NULL OR mis.is_repeatable = w.repeatable)
+  ) as blitzball
+FROM w
 `
 
+type GetMasterItemObtainableBoolsParams struct {
+	MasterItemID int32
+	Availability []AvailabilityType
+	Repeatable   sql.NullBool
+}
+
 type GetMasterItemObtainableBoolsRow struct {
+	Monsters  bool
 	Treasures bool
 	Shops     bool
 	Quests    bool
-	Monsters  bool
+	Blitzball bool
 }
 
-func (q *Queries) GetMasterItemObtainableBools(ctx context.Context, masterItemID int32) (GetMasterItemObtainableBoolsRow, error) {
-	row := q.db.QueryRowContext(ctx, getMasterItemObtainableBools, masterItemID)
+func (q *Queries) GetMasterItemObtainableBools(ctx context.Context, arg GetMasterItemObtainableBoolsParams) (GetMasterItemObtainableBoolsRow, error) {
+	row := q.db.QueryRowContext(ctx, getMasterItemObtainableBools, arg.MasterItemID, pq.Array(arg.Availability), arg.Repeatable)
 	var i GetMasterItemObtainableBoolsRow
 	err := row.Scan(
+		&i.Monsters,
 		&i.Treasures,
 		&i.Shops,
 		&i.Quests,
-		&i.Monsters,
+		&i.Blitzball,
 	)
 	return i, err
 }

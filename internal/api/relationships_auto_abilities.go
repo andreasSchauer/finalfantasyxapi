@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -12,27 +13,29 @@ func getAutoAbilityRelationships(cfg *Config, r *http.Request, autoAbility seedi
 		return AutoAbility{}, err
 	}
 
-	monsterItems, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, autoAbility, availabilityParams, convGetAutoAbilityItemMonsterIDs(cfg))
+	monsterItems, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, autoAbility, availabilityParams, getAutoAbilityItemMonsterIDs(cfg))
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	monstersDrop, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, autoAbility, availabilityParams, convGetAutoAbilityMonsterIDs(cfg))
+	monstersDrop, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, autoAbility, availabilityParams, getAutoAbilitySourceIDs(cfg, ViewSourceTypeMonster, nil))
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	shopsPre, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, autoAbility, availabilityParams, convGetAutoAbilityShopIDsPre(cfg))
+	preAirship := database.ShopTypePreAirship
+	shopsPre, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, autoAbility, availabilityParams, getAutoAbilitySourceIDs(cfg, ViewSourceTypeShop, &preAirship))
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	shopsPost, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, autoAbility, availabilityParams, convGetAutoAbilityShopIDsPost(cfg))
+	postAirship := database.ShopTypePostAirship
+	shopsPost, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, autoAbility, availabilityParams, getAutoAbilitySourceIDs(cfg, ViewSourceTypeShop, &postAirship))
 	if err != nil {
 		return AutoAbility{}, err
 	}
 
-	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, autoAbility, availabilityParams, convGetAutoAbilityTreasuresIDs(cfg))
+	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, autoAbility, availabilityParams, getAutoAbilitySourceIDs(cfg, ViewSourceTypeTreasure, nil))
 	if err != nil {
 		return AutoAbility{}, err
 	}

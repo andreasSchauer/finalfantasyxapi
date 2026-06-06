@@ -4077,6 +4077,7 @@ type MvAutoAbilitySource struct {
 	IsRepeatable    bool
 	IsRepeatableLoc bool
 	AreaID          int32
+	ShopType        NullShopType
 }
 
 type MvAvailability struct {
