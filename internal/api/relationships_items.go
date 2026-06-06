@@ -26,7 +26,7 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 	return rel, nil
 }
 
-func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabilityParams RelAvailabilityParams) (Item, error) {
+func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabilityParams RelAvlParams) (Item, error) {
 	monsters, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsters, item, availabilityParams, convGetItemMonsterIDs(cfg))
 	if err != nil {
 		return Item{}, err

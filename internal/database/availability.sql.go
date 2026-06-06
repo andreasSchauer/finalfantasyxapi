@@ -35,7 +35,7 @@ resource_evaluation AS (
             FALSE AS is_rep
         FROM areas a
         CROSS JOIN w
-        WHERE a.a_id = ANY(w.ids)
+        WHERE a.id = ANY(w.ids)
 
         UNION ALL
 
@@ -106,7 +106,7 @@ content_evaluation AS (
         UNION ALL
 
         SELECT
-            a.a_id,
+            a.a_id as area_id,
             a.s_id as source_id,
             a.sub_type AS s_type,
             get_avl_rank(a.avl_area, w.pre_airship) AS current_avl

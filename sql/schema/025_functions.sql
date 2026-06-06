@@ -1,4 +1,6 @@
 -- +goose Up
+
+-- +goose StatementBegin
 CREATE OR REPLACE FUNCTION get_avl_rank(avl availability_type, pre_airship BOOLEAN) 
 RETURNS INT AS $$
     SELECT CASE 
@@ -13,8 +15,8 @@ RETURNS INT AS $$
         WHEN avl = 'post-story' THEN 4
     END;
 $$ LANGUAGE sql IMMUTABLE;
-
+-- +goose StatementEnd
 
 
 -- +goose Down
-DROP FUNCTION get_avl_rank;
+DROP FUNCTION IF EXISTS get_avl_rank(availability_type, BOOLEAN);
