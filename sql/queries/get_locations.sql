@@ -165,16 +165,18 @@ SELECT DISTINCT area_id FROM treasures ORDER BY area_id;
 SELECT DISTINCT area_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY area_id;
 
 
--- name: GetAreaIDsWithItemFromMethod :many
+-- name: GetAreaIDsWithItemFromMethods :many
 WITH w AS (
-    SELECT sqlc.arg('method')::text[] AS method
+    SELECT
+      sqlc.arg('item_id')::int AS item_id,
+      sqlc.arg('methods')::text[] AS methods
 )
 SELECT DISTINCT mis.area_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE i.id = $1
-  AND (w.method IS NULL OR mis.source_type = ANY(w.method))
+WHERE i.id = w.item_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY mis.area_id;
 
 
@@ -239,7 +241,7 @@ WITH w AS (
       sqlc.narg('availability')::availability_type[] AS availability,
       sqlc.narg('repeatable')::boolean AS repeatable
 )
-SELECT DISTINCT g.sublocation_id
+SELECT DISTINCT a.s_id
 FROM mv_geography g
 JOIN mv_availabilities a ON g.area_id = a.a_id
 CROSS JOIN w
@@ -250,7 +252,7 @@ WHERE g.sublocation_id = w.sublocation_id
     ELSE a.avl_self
   END = ANY(w.availability))
   AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)
-ORDER BY g.sublocation_id;
+ORDER BY a.s_id;
 
 
 -- name: GetSublocationShopIDs :many
@@ -417,17 +419,19 @@ JOIN treasures t ON t.area_id = g.area_id
 ORDER BY g.sublocation_id;
 
 
--- name: GetSublocationIDsWithItemFromMethod :many
+-- name: GetSublocationIDsWithItemFromMethods :many
 WITH w AS (
-    SELECT sqlc.arg('method')::text[] AS method
+    SELECT
+      sqlc.arg('item_id')::int AS item_id,
+      sqlc.arg('methods')::text[] AS methods
 )
 SELECT DISTINCT g.sublocation_id
 FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE i.id = $1
-  AND (w.method IS NULL OR mis.source_type = ANY(w.method))
+WHERE i.id = w.item_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY g.sublocation_id;
 
 
@@ -506,7 +510,7 @@ WITH w AS (
       sqlc.narg('availability')::availability_type[] AS availability,
       sqlc.narg('repeatable')::boolean AS repeatable
 )
-SELECT DISTINCT g.location_id
+SELECT DISTINCT a.s_id
 FROM mv_geography g
 JOIN mv_availabilities a ON g.area_id = a.a_id
 CROSS JOIN w
@@ -517,7 +521,7 @@ WHERE g.location_id = w.location_id
     ELSE a.avl_self
   END = ANY(w.availability))
   AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)
-ORDER BY g.location_id;
+ORDER BY a.s_id;
 
 
 -- name: GetLocationShopIDs :many
@@ -684,17 +688,19 @@ JOIN treasures t ON t.area_id = g.area_id
 ORDER BY g.location_id;
 
 
--- name: GetLocationIDsWithItemFromMethod :many
+-- name: GetLocationIDsWithItemFromMethods :many
 WITH w AS (
-    SELECT sqlc.arg('method')::text[] AS method
+    SELECT
+      sqlc.arg('item_id')::int AS item_id,
+      sqlc.arg('methods')::text[] AS methods
 )
 SELECT DISTINCT g.location_id
 FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE i.id = $1
-  AND (w.method IS NULL OR mis.source_type = ANY(w.method))
+WHERE i.id = w.item_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY g.location_id;
 
 

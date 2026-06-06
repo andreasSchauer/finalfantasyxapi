@@ -51,6 +51,6 @@ func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Spher
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetSphereIDsByLocation)),
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSphereIDsBySublocation)),
 		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetSphereIDsByArea)),
-		frl(valueQuery(cfg, r, i, resources, "method", cfg.db.GetSphereIDsByMethod)),
+		frl(valueListQuery(cfg, r, i, resources, "methods", cfg.db.GetSphereIDsByMethods)),
 	})
 }

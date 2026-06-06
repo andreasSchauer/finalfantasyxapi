@@ -60,7 +60,7 @@ func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seeding.Item, I
 		frl(enumListQuery(cfg, r, i, cfg.t.ItemCategory, resources, "category", cfg.db.GetItemIDsCategory)),
 		frl(boolQuery2(cfg, r, i, resources, "has_ability", cfg.db.GetItemIDsWithAbility)),
 		frl(nameIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetItemIDsByRelatedStat)),
-		frl(valueQuery(cfg, r, i, resources, "method", cfg.db.GetItemIDsByMethod)),
+		frl(valueListQuery(cfg, r, i, resources, "methods", cfg.db.GetItemIDsByMethods)),
 		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), getItemsByLocation)),
 		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), getItemsBySublocation)),
 		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.e.areas.objLookup), getItemsByArea)),

@@ -308,7 +308,7 @@ func TestRetrieveShops(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/shops?empty_slots=2-4&shop_type=post-airship",
+				requestURL:     "/api/shops?empty_slots=2-4&availability=post",
 				expectedStatus: http.StatusOK,
 			},
 			count:   12,

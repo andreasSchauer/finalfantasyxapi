@@ -486,8 +486,8 @@ func TestGetMonster(t *testing.T) {
 			defaultState: &testDefaultState{
 				IsTemporary: false,
 				Loss: &testAltStateLoss{
-					Properties:     []int32{6},
-					AutoAbilities:  []int32{102},
+					Properties:    []int32{6},
+					AutoAbilities: []int32{102},
 				},
 			},
 		},
@@ -573,7 +573,7 @@ func TestGetMonster(t *testing.T) {
 			defaultState: &testDefaultState{
 				IsTemporary: false,
 				Change: &testAltStateChange{
-					Distance:       h.GetInt32Ptr(1),
+					Distance: h.GetInt32Ptr(1),
 				},
 			},
 		},
@@ -611,10 +611,10 @@ func TestGetMonster(t *testing.T) {
 			defaultState: &testDefaultState{
 				IsTemporary: false,
 				Gain: &testAltStateGain{
-					AutoAbilities:  []int32{99},
+					AutoAbilities: []int32{99},
 				},
 				Loss: &testAltStateLoss{
-					Status:  h.GetInt32Ptr(22),
+					Status: h.GetInt32Ptr(22),
 				},
 			},
 		},
@@ -1069,21 +1069,21 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?method=steal",
+				requestURL:     "/api/monsters?methods=steal",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'method'. when using parameter 'method', the following parameter(s) must be present: 'item'.",
+				expectedErr:    "invalid usage of parameter 'methods'. when using parameter 'methods', the following parameter(s) must be present: 'item'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?item=22&method=steals",
+				requestURL:     "/api/monsters?item=22&methods=steals",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'steals' used for parameter 'method'. allowed values: 'steal', 'drop', 'bribe', 'other'.",
+				expectedErr:    "invalid value 'steals' used for parameter 'methods'. allowed values: 'steal', 'drop', 'bribe', 'other'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?item=asf&method=drop",
+				requestURL:     "/api/monsters?item=asf&methods=drop",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id 'asf' used for parameter 'item'.",
 			},
@@ -1171,7 +1171,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?item=7&method=drop",
+				requestURL:     "/api/monsters?item=7&methods=drop",
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,

@@ -371,7 +371,7 @@ func (cfg *Config) initLocationsParams() {
 			References:  []string{createListURL(cfg, "items")},
 		},
 		{
-			Name:           "method",
+			Name:           "methods",
 			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
 			Type:           "value-list",
 			ForList:        true,
@@ -529,7 +529,7 @@ func (cfg *Config) initSublocationsParams() {
 			References:  []string{createListURL(cfg, "items")},
 		},
 		{
-			Name:           "method",
+			Name:           "methods",
 			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
 			Type:           "value-list",
 			ForList:        true,
@@ -696,7 +696,7 @@ func (cfg *Config) initAreasParams() {
 			References:  []string{createListURL(cfg, "items")},
 		},
 		{
-			Name:           "method",
+			Name:           "methods",
 			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
 			Type:           "value-list",
 			ForList:        true,
@@ -1460,7 +1460,7 @@ func (cfg *Config) initMonstersParams() {
 			References:  []string{createListURL(cfg, "items")},
 		},
 		{
-			Name:           "method",
+			Name:           "methods",
 			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
 			Type:           "value-list",
 			ForList:        true,
@@ -2571,8 +2571,8 @@ func (cfg *Config) initAllItemsParams() {
 			ForSingle:   false,
 		},
 		{
-			Name:          "method",
-			Description:   "Searches for items that can be obtained via all of the given methods.",
+			Name:          "methods",
+			Description:   "Searches for items that can be obtained via at least one of the given methods.",
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,
@@ -2680,8 +2680,8 @@ func (cfg *Config) initItemsParams() {
 			ForSingle:   false,
 		},
 		{
-			Name:          "method",
-			Description:   "Searches for items that can be obtained via all of the given methods.",
+			Name:          "methods",
+			Description:   "Searches for items that can be obtained via at least one of the given methods.",
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,
@@ -2751,8 +2751,8 @@ func (cfg *Config) initKeyItemsParams() {
 			References:  []string{createListURL(cfg, "key-item-category")},
 		},
 		{
-			Name:          "method",
-			Description:   "Searches for key-items that can be obtained via all of the given methods.",
+			Name:          "methods",
+			Description:   "Searches for key-items that can be obtained via at least one of the given methods.",
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,
@@ -2843,8 +2843,8 @@ func (cfg *Config) initSpheresParams() {
 			ForSingle:   false,
 		},
 		{
-			Name:          "method",
-			Description:   "Searches for spheres that can be obtained via all of the given methods.",
+			Name:          "methods",
+			Description:   "Searches for spheres that can be obtained via at least one of the given methods.",
 			Type:          "value-list",
 			ForList:       true,
 			ForSingle:     false,

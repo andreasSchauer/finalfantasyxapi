@@ -15,7 +15,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.areas.endpoint,
 				handler:        testCfg.HandleAreas,
 			},
-			count:   22,
+			count:   27,
 			results: []string{"limit", "offset", "item", "save_sphere", "sublocation", "ids"},
 		},
 		{
@@ -25,8 +25,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.sublocations.endpoint,
 				handler:        testCfg.HandleSublocations,
 			},
-			count:   16,
-			results: []string{"location", "item", "method", "aeons", "shops", "fmvs", "ids"},
+			count:   22,
+			results: []string{"location", "item", "methods", "aeons", "shops", "fmvs", "ids"},
 		},
 		{
 			testGeneral: testGeneral{
@@ -35,7 +35,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.locations.endpoint,
 				handler:        testCfg.HandleLocations,
 			},
-			count:   15,
+			count:   21,
 			results: []string{"key_item", "characters", "aeons", "treasures", "sidequests", "ids", "flip"},
 		},
 		{
@@ -76,7 +76,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsters.endpoint,
 				handler:        testCfg.HandleMonsters,
 			},
-			count:   30,
+			count:   33,
 			results: []string{"kimahri_stats", "aeon_stats", "altered_state", "omnis_elements", "status_resists", "auto_ability", "area", "distance", "underwater", "species", "ids"},
 		},
 		{
@@ -86,7 +86,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsterFormations.endpoint,
 				handler:        testCfg.HandleMonsterFormations,
 			},
-			count:   12,
+			count:   13,
 			results: []string{"monster", "location", "ambush", "category", "ids"},
 		},
 		{
@@ -106,7 +106,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.shops.endpoint,
 				handler:        testCfg.HandleShops,
 			},
-			count:   14,
+			count:   13,
 			results: []string{"location", "auto_ability", "items", "equipment", "availability", "ids"},
 		},
 		{
@@ -126,7 +126,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.sidequests.endpoint,
 				handler:        testCfg.HandleSidequests,
 			},
-			count:   4,
+			count:   5,
 			results: []string{"limit", "offset", "availability"},
 		},
 		{
@@ -146,7 +146,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.treasures.endpoint,
 				handler:        testCfg.HandleTreasures,
 			},
-			count:   10,
+			count:   14,
 			results: []string{"sublocation", "loot_type", "treasure_type", "anima", "availability"},
 		},
 	}

@@ -105,7 +105,7 @@ WITH w AS (
         sqlc.arg('pre_airship')::boolean AS pre_airship,
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
-        sqlc.narg('method')::text AS method
+        sqlc.narg('methods')::text[] AS methods
 ),
 raw_master_items AS (
     SELECT
@@ -127,7 +127,7 @@ raw_master_items AS (
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE mis.master_item_id = ANY(w.ids)
-    AND (w.method IS NULL OR mis.source_type = w.method)
+    AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
     AND (w.loc_context_id IS NULL OR CASE
         WHEN w.loc_context_type = 'location' THEN g.location_id
         WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -157,7 +157,7 @@ WITH w AS (
         sqlc.arg('pre_airship')::boolean AS pre_airship,
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
-        sqlc.narg('method')::text AS method
+        sqlc.narg('methods')::text[] AS methods
 ),
 raw_items AS (
     SELECT
@@ -180,7 +180,7 @@ raw_items AS (
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE i.id = ANY(w.ids)
-    AND (w.method IS NULL OR mis.source_type = w.method)
+    AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
     AND (w.loc_context_id IS NULL OR CASE
         WHEN w.loc_context_type = 'location' THEN g.location_id
         WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -208,7 +208,7 @@ WITH w AS (
         sqlc.arg('pre_airship')::boolean AS pre_airship,
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
-        sqlc.narg('method')::text AS method
+        sqlc.narg('methods')::text[] AS methods
 )
 SELECT ki.id
 FROM key_items ki
@@ -216,7 +216,7 @@ JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE ki.id = ANY(w.ids)
-  AND (w.method IS NULL OR mis.source_type = w.method)
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
   AND (w.loc_context_id IS NULL OR CASE
        WHEN w.loc_context_type = 'location' THEN g.location_id
        WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -237,7 +237,7 @@ WITH w AS (
         sqlc.arg('pre_airship')::boolean AS pre_airship,
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
-        sqlc.narg('method')::text AS method
+        sqlc.narg('methods')::text[] AS methods
 ),
 raw_spheres AS (
     SELECT
@@ -261,7 +261,7 @@ raw_spheres AS (
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE s.id = ANY(w.ids)
-    AND (w.method IS NULL OR mis.source_type = w.method)
+    AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
     AND (w.loc_context_id IS NULL OR CASE
         WHEN w.loc_context_type = 'location' THEN g.location_id
         WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id

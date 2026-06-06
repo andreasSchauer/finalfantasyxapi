@@ -47,7 +47,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		reqs = append(reqs, string(ViewSourceTypeKeyItem))
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup["method"])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}

@@ -127,7 +127,7 @@ func TestGetAutoAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/55?rel_availability=story&repeatable=true",
+				requestURL:     "/api/auto-abilities/55?rel_availability=story&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{

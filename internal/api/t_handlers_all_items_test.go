@@ -25,10 +25,11 @@ func TestGetAllItem(t *testing.T) {
 			typedItem: "/items/4",
 			itemType:  1,
 			obtainableFrom: ObtainableFrom{
-				Monsters:  true,
-				Treasures: true,
-				Shops:     false,
-				Quests:    true,
+				Monsters:  		 true,
+				Treasures: 		 true,
+				Shops:     		 false,
+				Quests:    		 true,
+				BlitzballPrizes: true,
 			},
 		},
 		{
@@ -41,10 +42,11 @@ func TestGetAllItem(t *testing.T) {
 			typedItem: "/items/111",
 			itemType:  1,
 			obtainableFrom: ObtainableFrom{
-				Monsters:  true,
-				Treasures: false,
-				Shops:     false,
-				Quests:    true,
+				Monsters:  		 true,
+				Treasures: 		 false,
+				Shops:     		 false,
+				Quests:    		 true,
+				BlitzballPrizes: true,
 			},
 		},
 		{
@@ -57,10 +59,11 @@ func TestGetAllItem(t *testing.T) {
 			typedItem: "/key-items/18",
 			itemType:  2,
 			obtainableFrom: ObtainableFrom{
-				Monsters:  false,
-				Treasures: false,
-				Shops:     false,
-				Quests:    true,
+				Monsters:  		 false,
+				Treasures: 		 false,
+				Shops:     		 false,
+				Quests:    		 true,
+				BlitzballPrizes: false,
 			},
 		},
 	}
@@ -81,7 +84,7 @@ func TestRetrieveAllItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?type=1&method=quest&limit=maX",
+				requestURL:     "/api/all-items?type=1&methods=quest&limit=maX",
 				expectedStatus: http.StatusOK,
 			},
 			count:   53,

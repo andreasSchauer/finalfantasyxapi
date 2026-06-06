@@ -310,7 +310,7 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?item=3&method=quest,monster",
+				requestURL:     "/api/areas?item=3&methods=quest,monster",
 				expectedStatus: http.StatusOK,
 			},
 			count:   17,

@@ -116,7 +116,7 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAP
 }
 
 func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	return filterByIdAndValues(cfg, r, cfg.e.monsters, id, "method", cfg.e.items.resourceType, map[string]DbQueryIntMany{
+	return filterByIdAndValues(cfg, r, cfg.e.monsters, id, "methods", cfg.e.items.resourceType, map[string]DbQueryIntMany{
 		"steal": cfg.db.GetMonsterIDsByItemSteal,
 		"drop":  cfg.db.GetMonsterIDsByItemDrop,
 		"bribe": cfg.db.GetMonsterIDsByItemBribe,

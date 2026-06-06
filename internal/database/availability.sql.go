@@ -319,7 +319,7 @@ WITH w AS (
         $5::boolean AS pre_airship,
         $6::int AS loc_context_id,
         $7::text AS loc_context_type,
-        $8::text AS method
+        $8::text[] AS methods
 ),
 raw_items AS (
     SELECT
@@ -342,7 +342,7 @@ raw_items AS (
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE i.id = ANY(w.ids)
-    AND (w.method IS NULL OR mis.source_type = w.method)
+    AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
     AND (w.loc_context_id IS NULL OR CASE
         WHEN w.loc_context_type = 'location' THEN g.location_id
         WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -370,7 +370,7 @@ type FilterItemIDsByAvailabilityParams struct {
 	PreAirship     bool
 	LocContextID   sql.NullInt32
 	LocContextType sql.NullString
-	Method         sql.NullString
+	Methods        []string
 }
 
 func (q *Queries) FilterItemIDsByAvailability(ctx context.Context, arg FilterItemIDsByAvailabilityParams) ([]int32, error) {
@@ -382,7 +382,7 @@ func (q *Queries) FilterItemIDsByAvailability(ctx context.Context, arg FilterIte
 		arg.PreAirship,
 		arg.LocContextID,
 		arg.LocContextType,
-		arg.Method,
+		pq.Array(arg.Methods),
 	)
 	if err != nil {
 		return nil, err
@@ -413,7 +413,7 @@ WITH w AS (
         $3::boolean AS pre_airship,
         $4::int AS loc_context_id,
         $5::text AS loc_context_type,
-        $6::text AS method
+        $6::text[] AS methods
 )
 SELECT ki.id
 FROM key_items ki
@@ -421,7 +421,7 @@ JOIN mv_item_sources mis ON mis.master_item_id = ki.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
 WHERE ki.id = ANY(w.ids)
-  AND (w.method IS NULL OR mis.source_type = w.method)
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
   AND (w.loc_context_id IS NULL OR CASE
        WHEN w.loc_context_type = 'location' THEN g.location_id
        WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -438,7 +438,7 @@ type FilterKeyItemIDsByAvailabilityParams struct {
 	PreAirship     bool
 	LocContextID   sql.NullInt32
 	LocContextType sql.NullString
-	Method         sql.NullString
+	Methods        []string
 }
 
 func (q *Queries) FilterKeyItemIDsByAvailability(ctx context.Context, arg FilterKeyItemIDsByAvailabilityParams) ([]int32, error) {
@@ -448,7 +448,7 @@ func (q *Queries) FilterKeyItemIDsByAvailability(ctx context.Context, arg Filter
 		arg.PreAirship,
 		arg.LocContextID,
 		arg.LocContextType,
-		arg.Method,
+		pq.Array(arg.Methods),
 	)
 	if err != nil {
 		return nil, err
@@ -654,7 +654,7 @@ WITH w AS (
         $5::boolean AS pre_airship,
         $6::int AS loc_context_id,
         $7::text AS loc_context_type,
-        $8::text AS method
+        $8::text[] AS methods
 ),
 raw_master_items AS (
     SELECT
@@ -676,7 +676,7 @@ raw_master_items AS (
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE mis.master_item_id = ANY(w.ids)
-    AND (w.method IS NULL OR mis.source_type = w.method)
+    AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
     AND (w.loc_context_id IS NULL OR CASE
         WHEN w.loc_context_type = 'location' THEN g.location_id
         WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -704,7 +704,7 @@ type FilterMasterItemIDsByAvailabilityParams struct {
 	PreAirship     bool
 	LocContextID   sql.NullInt32
 	LocContextType sql.NullString
-	Method         sql.NullString
+	Methods        []string
 }
 
 func (q *Queries) FilterMasterItemIDsByAvailability(ctx context.Context, arg FilterMasterItemIDsByAvailabilityParams) ([]int32, error) {
@@ -716,7 +716,7 @@ func (q *Queries) FilterMasterItemIDsByAvailability(ctx context.Context, arg Fil
 		arg.PreAirship,
 		arg.LocContextID,
 		arg.LocContextType,
-		arg.Method,
+		pq.Array(arg.Methods),
 	)
 	if err != nil {
 		return nil, err
@@ -1191,7 +1191,7 @@ WITH w AS (
         $5::boolean AS pre_airship,
         $6::int AS loc_context_id,
         $7::text AS loc_context_type,
-        $8::text AS method
+        $8::text[] AS methods
 ),
 raw_spheres AS (
     SELECT
@@ -1215,7 +1215,7 @@ raw_spheres AS (
     JOIN mv_geography g ON mis.area_id = g.area_id
     CROSS JOIN w
     WHERE s.id = ANY(w.ids)
-    AND (w.method IS NULL OR mis.source_type = w.method)
+    AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
     AND (w.loc_context_id IS NULL OR CASE
         WHEN w.loc_context_type = 'location' THEN g.location_id
         WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
@@ -1243,7 +1243,7 @@ type FilterSphereIDsByAvailabilityParams struct {
 	PreAirship     bool
 	LocContextID   sql.NullInt32
 	LocContextType sql.NullString
-	Method         sql.NullString
+	Methods        []string
 }
 
 func (q *Queries) FilterSphereIDsByAvailability(ctx context.Context, arg FilterSphereIDsByAvailabilityParams) ([]int32, error) {
@@ -1255,7 +1255,7 @@ func (q *Queries) FilterSphereIDsByAvailability(ctx context.Context, arg FilterS
 		arg.PreAirship,
 		arg.LocContextID,
 		arg.LocContextType,
-		arg.Method,
+		pq.Array(arg.Methods),
 	)
 	if err != nil {
 		return nil, err

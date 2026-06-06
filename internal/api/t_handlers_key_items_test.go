@@ -87,9 +87,9 @@ func TestRetrieveKeyItems(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/key-items?method=a",
+				requestURL:     "/api/key-items?methods=a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'a' used for parameter 'method'. allowed values: 'treasure', 'quest'.",
+				expectedErr:    "invalid value 'a' used for parameter 'methods'. allowed values: 'treasure', 'quest'.",
 			},
 		},
 		{
@@ -110,7 +110,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/key-items?method=quest",
+				requestURL:     "/api/key-items?methods=quest",
 				expectedStatus: http.StatusOK,
 			},
 			count:   12,

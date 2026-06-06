@@ -458,26 +458,28 @@ func (q *Queries) GetAreaIDsWithFMVs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getAreaIDsWithItemFromMethod = `-- name: GetAreaIDsWithItemFromMethod :many
+const getAreaIDsWithItemFromMethods = `-- name: GetAreaIDsWithItemFromMethods :many
 WITH w AS (
-    SELECT $2::text[] AS method
+    SELECT
+      $1::int AS item_id,
+      $2::text[] AS methods
 )
 SELECT DISTINCT mis.area_id
 FROM mv_item_sources mis
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE i.id = $1
-  AND (w.method IS NULL OR mis.source_type = ANY(w.method))
+WHERE i.id = w.item_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY mis.area_id
 `
 
-type GetAreaIDsWithItemFromMethodParams struct {
-	ID     int32
-	Method []string
+type GetAreaIDsWithItemFromMethodsParams struct {
+	ItemID  int32
+	Methods []string
 }
 
-func (q *Queries) GetAreaIDsWithItemFromMethod(ctx context.Context, arg GetAreaIDsWithItemFromMethodParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromMethod, arg.ID, pq.Array(arg.Method))
+func (q *Queries) GetAreaIDsWithItemFromMethods(ctx context.Context, arg GetAreaIDsWithItemFromMethodsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsWithItemFromMethods, arg.ItemID, pq.Array(arg.Methods))
 	if err != nil {
 		return nil, err
 	}
@@ -1481,27 +1483,29 @@ func (q *Queries) GetLocationIDsWithFMVs(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
-const getLocationIDsWithItemFromMethod = `-- name: GetLocationIDsWithItemFromMethod :many
+const getLocationIDsWithItemFromMethods = `-- name: GetLocationIDsWithItemFromMethods :many
 WITH w AS (
-    SELECT $2::text[] AS method
+    SELECT
+      $1::int AS item_id,
+      $2::text[] AS methods
 )
 SELECT DISTINCT g.location_id
 FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE i.id = $1
-  AND (w.method IS NULL OR mis.source_type = ANY(w.method))
+WHERE i.id = w.item_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY g.location_id
 `
 
-type GetLocationIDsWithItemFromMethodParams struct {
-	ID     int32
-	Method []string
+type GetLocationIDsWithItemFromMethodsParams struct {
+	ItemID  int32
+	Methods []string
 }
 
-func (q *Queries) GetLocationIDsWithItemFromMethod(ctx context.Context, arg GetLocationIDsWithItemFromMethodParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getLocationIDsWithItemFromMethod, arg.ID, pq.Array(arg.Method))
+func (q *Queries) GetLocationIDsWithItemFromMethods(ctx context.Context, arg GetLocationIDsWithItemFromMethodsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationIDsWithItemFromMethods, arg.ItemID, pq.Array(arg.Methods))
 	if err != nil {
 		return nil, err
 	}
@@ -1847,7 +1851,7 @@ WITH w AS (
       $3::availability_type[] AS availability,
       $4::boolean AS repeatable
 )
-SELECT DISTINCT g.location_id
+SELECT DISTINCT a.s_id
 FROM mv_geography g
 JOIN mv_availabilities a ON g.area_id = a.a_id
 CROSS JOIN w
@@ -1858,7 +1862,7 @@ WHERE g.location_id = w.location_id
     ELSE a.avl_self
   END = ANY(w.availability))
   AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)
-ORDER BY g.location_id
+ORDER BY a.s_id
 `
 
 type GetLocationRelSourceIDsParams struct {
@@ -1881,11 +1885,11 @@ func (q *Queries) GetLocationRelSourceIDs(ctx context.Context, arg GetLocationRe
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var location_id int32
-		if err := rows.Scan(&location_id); err != nil {
+		var s_id int32
+		if err := rows.Scan(&s_id); err != nil {
 			return nil, err
 		}
-		items = append(items, location_id)
+		items = append(items, s_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -2707,27 +2711,29 @@ func (q *Queries) GetSublocationIDsWithFMVs(ctx context.Context) ([]int32, error
 	return items, nil
 }
 
-const getSublocationIDsWithItemFromMethod = `-- name: GetSublocationIDsWithItemFromMethod :many
+const getSublocationIDsWithItemFromMethods = `-- name: GetSublocationIDsWithItemFromMethods :many
 WITH w AS (
-    SELECT $2::text[] AS method
+    SELECT
+      $1::int AS item_id,
+      $2::text[] AS methods
 )
 SELECT DISTINCT g.sublocation_id
 FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN items i ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE i.id = $1
-  AND (w.method IS NULL OR mis.source_type = ANY(w.method))
+WHERE i.id = w.item_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY g.sublocation_id
 `
 
-type GetSublocationIDsWithItemFromMethodParams struct {
-	ID     int32
-	Method []string
+type GetSublocationIDsWithItemFromMethodsParams struct {
+	ItemID  int32
+	Methods []string
 }
 
-func (q *Queries) GetSublocationIDsWithItemFromMethod(ctx context.Context, arg GetSublocationIDsWithItemFromMethodParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getSublocationIDsWithItemFromMethod, arg.ID, pq.Array(arg.Method))
+func (q *Queries) GetSublocationIDsWithItemFromMethods(ctx context.Context, arg GetSublocationIDsWithItemFromMethodsParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationIDsWithItemFromMethods, arg.ItemID, pq.Array(arg.Methods))
 	if err != nil {
 		return nil, err
 	}
@@ -3073,7 +3079,7 @@ WITH w AS (
       $3::availability_type[] AS availability,
       $4::boolean AS repeatable
 )
-SELECT DISTINCT g.sublocation_id
+SELECT DISTINCT a.s_id
 FROM mv_geography g
 JOIN mv_availabilities a ON g.area_id = a.a_id
 CROSS JOIN w
@@ -3084,7 +3090,7 @@ WHERE g.sublocation_id = w.sublocation_id
     ELSE a.avl_self
   END = ANY(w.availability))
   AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)
-ORDER BY g.sublocation_id
+ORDER BY a.s_id
 `
 
 type GetSublocationRelSourceIDsParams struct {
@@ -3107,11 +3113,11 @@ func (q *Queries) GetSublocationRelSourceIDs(ctx context.Context, arg GetSubloca
 	defer rows.Close()
 	var items []int32
 	for rows.Next() {
-		var sublocation_id int32
-		if err := rows.Scan(&sublocation_id); err != nil {
+		var s_id int32
+		if err := rows.Scan(&s_id); err != nil {
 			return nil, err
 		}
-		items = append(items, sublocation_id)
+		items = append(items, s_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

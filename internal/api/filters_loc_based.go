@@ -4,23 +4,24 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, error) {
 	i := cfg.e.areas
-	queryParamMethod := i.queryLookup["method"]
+	queryParamMethods := i.queryLookup["methods"]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethod)
+	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetAreaIDsWithItemFromMethod(r.Context(), database.GetAreaIDsWithItemFromMethodParams{
-		ID:     id,
-		Method: methods,
+	dbIDs, err := cfg.db.GetAreaIDsWithItemFromMethods(r.Context(), database.GetAreaIDsWithItemFromMethodsParams{
+		ItemID:     id,
+		Methods: 	h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethod, err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -30,19 +31,19 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, 
 
 func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.sublocations
-	queryParamMethod := i.queryLookup["method"]
+	queryParamMethods := i.queryLookup["methods"]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethod)
+	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetSublocationIDsWithItemFromMethod(r.Context(), database.GetSublocationIDsWithItemFromMethodParams{
-		ID:     id,
-		Method: methods,
+	dbIDs, err := cfg.db.GetSublocationIDsWithItemFromMethods(r.Context(), database.GetSublocationIDsWithItemFromMethodsParams{
+		ItemID:     id,
+		Methods: 	h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethod, err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -52,19 +53,19 @@ func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIRe
 
 func getLocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.locations
-	queryParamMethod := i.queryLookup["method"]
+	queryParamMethods := i.queryLookup["methods"]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethod)
+	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetLocationIDsWithItemFromMethod(r.Context(), database.GetLocationIDsWithItemFromMethodParams{
-		ID:     id,
-		Method: methods,
+	dbIDs, err := cfg.db.GetLocationIDsWithItemFromMethods(r.Context(), database.GetLocationIDsWithItemFromMethodsParams{
+		ItemID:     id,
+		Methods: 	h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethod, err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)

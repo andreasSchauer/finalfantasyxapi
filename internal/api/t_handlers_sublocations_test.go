@@ -79,7 +79,7 @@ func TestGetSublocation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/13/",
 				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{},
+				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
 					"connected sublocations": 1,
 					"areas":                  7,
@@ -103,7 +103,7 @@ func TestGetSublocation(t *testing.T) {
 			areas:                 []int32{69, 70, 71, 72, 73, 74, 75},
 			expLocRel: expLocRel{
 				characters: []int32{6},
-				aeons: 		[]int32{},
+				aeons:      []int32{},
 				shops:      []int32{5},
 				treasures:  []int32{70, 71, 72, 73, 74},
 				monsters:   []int32{34, 35, 36},
@@ -115,7 +115,7 @@ func TestGetSublocation(t *testing.T) {
 					fmvsMusic: []int32{16, 20},
 					bossMusic: []int32{},
 				},
-				fmvs: 		[]int32{18, 19},
+				fmvs: []int32{18, 19},
 			},
 		},
 		{
@@ -220,7 +220,7 @@ func TestRetrieveSublocations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?item=1&method=treasure&boss_fights=true",
+				requestURL:     "/api/sublocations?item=1&methods=treasure&boss_fights=true",
 				expectedStatus: http.StatusOK,
 			},
 			count:   4,

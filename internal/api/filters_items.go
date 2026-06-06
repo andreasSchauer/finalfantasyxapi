@@ -9,18 +9,19 @@ import (
 
 func getMasterItemsByArea(cfg *Config, r *http.Request, id int32) ([]TypedAPIResource, error) {
 	i := cfg.e.allItems
+	queryParamMethods := i.queryLookup["methods"]
 
-	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetMasterItemIDsByArea(r.Context(), database.GetMasterItemIDsByAreaParams{
-		AreaID: id,
-		Method: h.GetNullString(method),
+		AreaID:  id,
+		Methods: h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -30,18 +31,19 @@ func getMasterItemsByArea(cfg *Config, r *http.Request, id int32) ([]TypedAPIRes
 
 func getMasterItemsBySublocation(cfg *Config, r *http.Request, id int32) ([]TypedAPIResource, error) {
 	i := cfg.e.allItems
+	queryParamMethods := i.queryLookup["methods"]
 
-	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetMasterItemIDsBySublocation(r.Context(), database.GetMasterItemIDsBySublocationParams{
-		SublocationID: id,
-		Method:        h.GetNullString(method),
+		SublocationID:  id,
+		Methods: 		h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -51,18 +53,19 @@ func getMasterItemsBySublocation(cfg *Config, r *http.Request, id int32) ([]Type
 
 func getMasterItemsByLocation(cfg *Config, r *http.Request, id int32) ([]TypedAPIResource, error) {
 	i := cfg.e.allItems
+	queryParamMethods := i.queryLookup["methods"]
 
-	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetMasterItemIDsByLocation(r.Context(), database.GetMasterItemIDsByLocationParams{
 		LocationID: id,
-		Method:     h.GetNullString(method),
+		Methods: 	h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -72,18 +75,19 @@ func getMasterItemsByLocation(cfg *Config, r *http.Request, id int32) ([]TypedAP
 
 func getItemsByArea(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.items
+	queryParamMethods := i.queryLookup["methods"]
 
-	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetItemIDsByArea(r.Context(), database.GetItemIDsByAreaParams{
-		AreaID: id,
-		Method: h.GetNullString(method),
+		AreaID:  id,
+		Methods: h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -93,18 +97,19 @@ func getItemsByArea(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource,
 
 func getItemsBySublocation(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.items
+	queryParamMethods := i.queryLookup["methods"]
 
-	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetItemIDsBySublocation(r.Context(), database.GetItemIDsBySublocationParams{
 		SublocationID: id,
-		Method:        h.GetNullString(method),
+		Methods: 	   h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)
@@ -114,18 +119,19 @@ func getItemsBySublocation(cfg *Config, r *http.Request, id int32) ([]NamedAPIRe
 
 func getItemsByLocation(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
 	i := cfg.e.items
+	queryParamMethods := i.queryLookup["methods"]
 
-	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetItemIDsByLocation(r.Context(), database.GetItemIDsByLocationParams{
 		LocationID: id,
-		Method:     h.GetNullString(method),
+		Methods: 	h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["method"], err)
+		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)

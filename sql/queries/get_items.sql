@@ -52,48 +52,54 @@ SELECT id FROM master_items ORDER BY id;
 SELECT id FROM master_items WHERE type = ANY(sqlc.narg('item_type')::item_type[]) ORDER BY id;
 
 
--- name: GetMasterItemIDsByMethod :many
+-- name: GetMasterItemIDsByMethods :many
 SELECT master_item_id
 FROM mv_item_sources
-WHERE source_type = sqlc.arg('method')::text
+WHERE source_type = ANY(sqlc.arg('methods')::text[])
 ORDER BY master_item_id;
 
 
 -- name: GetMasterItemIDsByLocation :many
 WITH w AS (
-  SELECT sqlc.narg('method')::text AS method
+  SELECT
+    sqlc.arg('location_id')::int AS location_id,
+    sqlc.narg('methods')::text[] AS methods
 )
 SELECT DISTINCT mis.master_item_id
 FROM mv_item_sources mis
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
-WHERE g.location_id = $1
-  AND (w.method IS NULL OR mis.source_type = w.method)
+WHERE g.location_id = w.location_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY mis.master_item_id;
 
 
 -- name: GetMasterItemIDsBySublocation :many
 WITH w AS (
-  SELECT sqlc.narg('method')::text AS method
+  SELECT
+    sqlc.arg('sublocation_id')::int AS sublocation_id,
+    sqlc.narg('methods')::text[] AS methods
 )
 SELECT DISTINCT mis.master_item_id
 FROM mv_item_sources mis
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
-WHERE g.sublocation_id = $1
-  AND (w.method IS NULL OR mis.source_type = w.method)
+WHERE g.sublocation_id = w.sublocation_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY mis.master_item_id;
 
 
 -- name: GetMasterItemIDsByArea :many
 WITH w AS (
-  SELECT sqlc.narg('method')::text AS method
+  SELECT
+    sqlc.arg('area_id')::int AS area_id,
+    sqlc.narg('methods')::text[] AS methods
 )
 SELECT DISTINCT mis.master_item_id
 FROM mv_item_sources mis
 CROSS JOIN w
-WHERE mis.area_id = $1
-  AND (w.method IS NULL OR mis.source_type = w.method)
+WHERE mis.area_id = w.area_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY master_item_id;
 
 
@@ -163,52 +169,58 @@ SELECT item_id FROM item_abilities ORDER BY item_id;
 SELECT item_id FROM j_items_related_stats WHERE stat_id = $1 ORDER BY item_id;
 
 
--- name: GetItemIDsByMethod :many
+-- name: GetItemIDsByMethods :many
 SELECT DISTINCT i.id
 FROM mv_item_sources mis
 JOIN items i ON i.master_item_id = mis.master_item_id
-WHERE mis.source_type = sqlc.arg('method')::text
+WHERE mis.source_type = ANY(sqlc.arg('methods')::text[])
 ORDER BY i.id;
 
 
 -- name: GetItemIDsByLocation :many
 WITH w AS (
-  SELECT sqlc.narg('method')::text AS method
+  SELECT
+    sqlc.arg('location_id')::int AS location_id,
+    sqlc.narg('methods')::text[] AS methods
 )
 SELECT DISTINCT i.id
 FROM items i
 JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
-WHERE g.location_id = $1
-  AND (w.method IS NULL OR mis.source_type = w.method)
+WHERE g.location_id = w.location_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY i.id;
 
 
 -- name: GetItemIDsBySublocation :many
 WITH w AS (
-  SELECT sqlc.narg('method')::text AS method
+  SELECT
+    sqlc.arg('sublocation_id')::int AS sublocation_id,
+    sqlc.narg('methods')::text[] AS methods
 )
 SELECT DISTINCT i.id
 FROM items i
 JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
 JOIN mv_geography g ON mis.area_id = g.area_id
 CROSS JOIN w
-WHERE g.sublocation_id = $1
-  AND (w.method IS NULL OR mis.source_type = w.method)
+WHERE g.sublocation_id = w.sublocation_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY i.id;
 
 
 -- name: GetItemIDsByArea :many
 WITH w AS (
-  SELECT sqlc.narg('method')::text AS method
+  SELECT
+    sqlc.arg('area_id')::int AS area_id,
+    sqlc.narg('methods')::text[] AS methods
 )
 SELECT DISTINCT i.id
 FROM items i
 JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
 CROSS JOIN w
-WHERE mis.area_id = $1
-  AND (w.method IS NULL OR mis.source_type = w.method)
+WHERE mis.area_id = w.area_id
+  AND (w.methods IS NULL OR mis.source_type = ANY(w.methods))
 ORDER BY i.id;
 
 
@@ -282,11 +294,11 @@ SELECT id FROM key_items ORDER BY id;
 SELECT id FROM key_items WHERE category = ANY(sqlc.narg('category')::key_item_category[]) ORDER BY id;
 
 
--- name: GetKeyItemIDsByMethod :many
+-- name: GetKeyItemIDsByMethods :many
 SELECT ki.id
 FROM mv_item_sources mis
 JOIN key_items ki ON ki.master_item_id = mis.master_item_id
-WHERE mis.source_type = sqlc.arg('method')::text
+WHERE mis.source_type = ANY(sqlc.arg('methods')::text[])
 ORDER BY ki.id;
 
 
@@ -357,12 +369,12 @@ WHERE mis.area_id = $1
 ORDER BY s.id;
 
 
--- name: GetSphereIDsByMethod :many
+-- name: GetSphereIDsByMethods :many
 SELECT DISTINCT s.id
 FROM spheres s
 JOIN items i ON s.item_id = i.id
 JOIN mv_item_sources mis ON i.master_item_id = mis.master_item_id
-WHERE mis.source_type = sqlc.arg('method')::text
+WHERE mis.source_type = ANY(sqlc.arg('methods')::text[])
 ORDER BY s.id;
 
 

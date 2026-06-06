@@ -72,7 +72,7 @@ func TestGetItem(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/items/69?repeatable=true",
+				requestURL:     "/api/items/69?rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"untyped item":         true,
@@ -297,9 +297,9 @@ func TestRetrieveItems(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/items?method=shop,treasures",
+				requestURL:     "/api/items?methods=shop,treasures",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr: 	"invalid value 'treasures' used for parameter 'method'. allowed values: 'monster', 'treasure', 'shop', 'quest', 'blitzball'.",
+				expectedErr:    "invalid value 'treasures' used for parameter 'methods'. allowed values: 'monster', 'treasure', 'shop', 'quest', 'blitzball'.",
 			},
 		},
 		{
@@ -328,7 +328,7 @@ func TestRetrieveItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/items?method=treasure,shop",
+				requestURL:     "/api/items?methods=treasure,shop&limit=max",
 				expectedStatus: http.StatusOK,
 			},
 			count:   8,

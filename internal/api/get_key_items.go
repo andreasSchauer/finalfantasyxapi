@@ -42,7 +42,7 @@ func (cfg *Config) retrieveKeyItems(r *http.Request, i handlerInput[seeding.KeyI
 
 	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
 		frl(enumListQuery(cfg, r, i, cfg.t.KeyItemCategory, resources, "category", cfg.db.GetKeyItemIDsCategory)),
-		frl(valueQuery(cfg, r, i, resources, "method", cfg.db.GetKeyItemIDsByMethod)),
+		frl(valueListQuery(cfg, r, i, resources, "methods", cfg.db.GetKeyItemIDsByMethods)),
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), cfg.db.GetKeyItemIDsByLocation)),
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), cfg.db.GetKeyItemIDsBySublocation)),
 		frl(idQuery(cfg, r, i, resources, "area", len(cfg.e.areas.objLookup), cfg.db.GetKeyItemIDsByArea)),

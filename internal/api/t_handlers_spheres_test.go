@@ -18,7 +18,7 @@ func TestGetSphere(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/spheres/4?rel_availability=pre-story&repeatable=true",
+				requestURL:     "/api/spheres/4?rel_availability=pre-story&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{

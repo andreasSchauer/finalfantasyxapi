@@ -25,7 +25,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, resources []TypedAPIReso
 		return nil, err
 	}
 
-	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, resources []TypedAPIReso
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
-		Method: 		h.GetNullString(method),
+		Methods: 		h.SliceOrNil(methods),
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -65,7 +65,7 @@ func filterAvlItems(cfg *Config, r *http.Request, resources []NamedAPIResource) 
 		return nil, err
 	}
 
-	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func filterAvlItems(cfg *Config, r *http.Request, resources []NamedAPIResource) 
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
-		Method: 		h.GetNullString(method),
+		Methods: 		h.SliceOrNil(methods),
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -105,7 +105,7 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, resources []NamedAPIResourc
 		return nil, err
 	}
 
-	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -116,7 +116,7 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, resources []NamedAPIResourc
 		PreAirship:		avlParams.preAirship,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
-		Method: 		h.GetNullString(method),
+		Methods: 		h.SliceOrNil(methods),
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -143,7 +143,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, resources []NamedAPIResource
 		return nil, err
 	}
 
-	method, err := getQueryValuePtr(r, "method", i.queryLookup)
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -156,7 +156,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, resources []NamedAPIResource
 		AvlType:      	locContext.AvlType,
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
-		Method: 		h.GetNullString(method),
+		Methods: 		h.SliceOrNil(methods),
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)

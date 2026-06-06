@@ -157,7 +157,7 @@ func TestRetrieveLocations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/locations?item=45&method=monster",
+				requestURL:     "/api/locations?item=45&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
 			count:   4,
