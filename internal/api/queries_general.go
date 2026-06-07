@@ -64,7 +64,7 @@ func replParamsPresent(r *http.Request, queryParam QueryParam, queryLookup map[s
 	for _, param := range queryParam.ReplacedBy {
 		p := queryLookup[param]
 		_, err := checkEmptyQuery(r, p)
-		if !errors.Is(err, errEmptyQuery) {
+		if !queryIsEmpty(err) {
 			return true
 		}
 	}

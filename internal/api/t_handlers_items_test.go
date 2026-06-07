@@ -328,11 +328,11 @@ func TestRetrieveItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/items?methods=treasure,shop&limit=max",
+				requestURL:     "/api/items?methods=treasure,blitzball&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   8,
-			results: []int32{1, 2, 9, 11, 12, 13, 16, 21},
+			count:   50,
+			results: []int32{1, 2, 9, 11, 12, 13, 16, 21, 71, 85, 101, 111},
 		},
 		{
 			testGeneral: testGeneral{

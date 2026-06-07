@@ -521,6 +521,18 @@ WHERE s.id = ANY(w.ids)
 ORDER BY s.id;
 
 
+-- name: FilterAreaIDsByAvailabilitySoft :many
+SELECT DISTINCT id FROM areas WHERE get_avl_rank(availability, false) = ANY(sqlc.narg('availability')::int[]) ORDER BY id;
+
+
+-- name: FilterSublocationIDsByAvailabilitySoft :many
+SELECT DISTINCT id FROM sublocations WHERE get_avl_rank(availability, false) = ANY(sqlc.narg('availability')::int[]) ORDER BY id;
+
+
+-- name: FilterLocationIDsByAvailabilitySoft :many
+SELECT DISTINCT id FROM locations WHERE get_avl_rank(availability, false) = ANY(sqlc.narg('availability')::int[]) ORDER BY id;
+
+
 -- name: FilterAreaIDsByAvailability :many
 WITH w AS (
     SELECT
@@ -528,12 +540,18 @@ WITH w AS (
         sqlc.narg('availability')::int[] AS availability,
         sqlc.narg('is_repeatable')::boolean AS is_repeatable,
         sqlc.arg('pre_airship')::boolean AS pre_airship,
-        sqlc.narg('required_sources')::text[] AS reqs,
+        sqlc.arg('required_sources')::text[] AS reqs,
         sqlc.narg('excluded_sources')::text[] AS excls,
         sqlc.narg('monster_id')::int AS monster_id,
         sqlc.narg('key_item_id')::int AS key_item_id,
         sqlc.narg('item_id')::int AS item_id,
         sqlc.narg('methods')::text[] AS methods
+),
+all_areas AS (
+    SELECT id AS area_id, 'area' AS s_type 
+    FROM areas
+    CROSS JOIN w
+    WHERE id = ANY(w.ids)
 ),
 resource_evaluation AS (
     SELECT area_id, s_type FROM (
@@ -629,6 +647,8 @@ content_evaluation AS (
     HAVING w.availability IS NULL OR MIN(current_avl) = ANY(w.availability)
 ),
 final_combination AS (
+    SELECT area_id, s_type FROM all_areas
+    UNION ALL
     SELECT area_id, s_type FROM resource_evaluation
     UNION ALL
     SELECT area_id, s_type FROM content_evaluation
@@ -637,7 +657,7 @@ SELECT area_id
 FROM final_combination
 CROSS JOIN w
 GROUP BY area_id, w.reqs, w.excls
-HAVING (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
+HAVING ARRAY_AGG(s_type) @> w.reqs
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
 ORDER BY area_id;
 
@@ -649,12 +669,18 @@ WITH w AS (
         sqlc.narg('availability')::int[] AS availability,
         sqlc.narg('is_repeatable')::boolean AS is_repeatable,
         sqlc.arg('pre_airship')::boolean AS pre_airship,
-        sqlc.narg('required_sources')::text[] AS reqs,
+        sqlc.arg('required_sources')::text[] AS reqs,
         sqlc.narg('excluded_sources')::text[] AS excls,
         sqlc.narg('monster_id')::int AS monster_id,
         sqlc.narg('key_item_id')::int AS key_item_id,
         sqlc.narg('item_id')::int AS item_id,
         sqlc.narg('methods')::text[] AS methods
+),
+all_sublocations AS (
+    SELECT id AS sublocation_id, 'sublocation' AS s_type 
+    FROM sublocations
+    CROSS JOIN w
+    WHERE id = ANY(w.ids)
 ),
 resource_evaluation AS (
     SELECT sublocation_id, s_type FROM (
@@ -755,6 +781,8 @@ content_evaluation AS (
     HAVING w.availability IS NULL OR MIN(current_avl) = ANY(w.availability)
 ),
 final_combination AS (
+    SELECT sublocation_id, s_type FROM all_sublocations
+    UNION ALL
     SELECT sublocation_id, s_type FROM resource_evaluation
     UNION ALL
     SELECT sublocation_id, s_type FROM content_evaluation
@@ -763,7 +791,7 @@ SELECT sublocation_id
 FROM final_combination
 CROSS JOIN w
 GROUP BY sublocation_id, w.reqs, w.excls
-HAVING (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
+HAVING ARRAY_AGG(s_type) @> w.reqs
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
 ORDER BY sublocation_id;
 
@@ -776,26 +804,21 @@ WITH w AS (
         sqlc.narg('availability')::int[] AS availability,
         sqlc.narg('is_repeatable')::boolean AS is_repeatable,
         sqlc.arg('pre_airship')::boolean AS pre_airship,
-        sqlc.narg('required_sources')::text[] AS reqs,
+        sqlc.arg('required_sources')::text[] AS reqs,
         sqlc.narg('excluded_sources')::text[] AS excls,
         sqlc.narg('monster_id')::int AS monster_id,
         sqlc.narg('key_item_id')::int AS key_item_id,
         sqlc.narg('item_id')::int AS item_id,
         sqlc.narg('methods')::text[] AS methods
 ),
+all_locations AS (
+    SELECT id AS location_id, 'location' AS s_type 
+    FROM locations
+    CROSS JOIN w
+    WHERE id = ANY(w.ids)
+),
 resource_evaluation AS (
     SELECT location_id, s_type FROM (
-        SELECT
-            l.id AS location_id,
-            'location'::text AS s_type,
-            get_avl_rank(l.availability, w.pre_airship) AS current_avl,
-            FALSE AS is_rep
-        FROM locations l
-        CROSS JOIN w
-        WHERE l.id = ANY(w.ids)
-
-        UNION ALL
-
         SELECT
             g.location_id,
             'monster-single'::text AS s_type,
@@ -882,14 +905,16 @@ content_evaluation AS (
     HAVING w.availability IS NULL OR MIN(current_avl) = ANY(w.availability)
 ),
 final_combination AS (
+    SELECT location_id, s_type FROM all_locations
+    UNION ALL
     SELECT location_id, s_type FROM resource_evaluation
     UNION ALL
     SELECT location_id, s_type FROM content_evaluation
 )
-SELECT location_id
+SELECT DISTINCT location_id
 FROM final_combination
 CROSS JOIN w
 GROUP BY location_id, w.reqs, w.excls
-HAVING (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
+HAVING ARRAY_AGG(s_type) @> w.reqs
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
 ORDER BY location_id;

@@ -26,7 +26,7 @@ func TestGetSphere(t *testing.T) {
 					"treasures":        0,
 					"shops":            0,
 					"quests":           0,
-					"blitzball prizes": 1,
+					"blitzball prizes": 0,
 				},
 			},
 			expUnique:   newExpUnique(4, "ability sphere"),
@@ -49,9 +49,7 @@ func TestGetSphere(t *testing.T) {
 			treasures: nil,
 			shops:     []int32{},
 			quests:    nil,
-			blitzballPrizes: map[int32]int32{
-				3: 1,
-			},
+			blitzballPrizes: nil,
 		},
 		{
 			testGeneral: testGeneral{
@@ -100,6 +98,65 @@ func TestGetSphere(t *testing.T) {
 			quests: map[int32]int32{
 				92: 3,
 			},
+			blitzballPrizes: nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres/16?rel_availability=post-game&rel_repeatable=false",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"monsters":         1,
+					"treasures":        3,
+					"shops":            0,
+					"quests":           1,
+					"blitzball prizes": 0,
+				},
+			},
+			expUnique: newExpUnique(16, "hp sphere"),
+			item:      85,
+			createdNode: &CreatedNode{
+				Node:  "hp",
+				Value: 300,
+			},
+			monsters: []testMonItemAmts{
+				{
+					index:    0,
+					monster:  28,
+					dropRare: 1,
+				},
+			},
+			treasures: map[int32]int32{
+				78:  1,
+				288: 1,
+				313: 1,
+			},
+			shops: []int32{},
+			quests: map[int32]int32{
+				92: 3,
+			},
+			blitzballPrizes: nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres/26?rel_availability=post-game&rel_repeatable=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"monsters":         0,
+					"treasures":        0,
+					"shops":            1,
+					"quests":           0,
+					"blitzball prizes": 0,
+				},
+			},
+			expUnique: newExpUnique(26, "clear sphere"),
+			item:      95,
+			createdNode: nil,
+			monsters: []testMonItemAmts{},
+			treasures: nil,
+			shops: []int32{33},
+			quests: nil,
 			blitzballPrizes: nil,
 		},
 		{

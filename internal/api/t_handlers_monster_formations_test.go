@@ -192,8 +192,8 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 				requestURL:     "/api/monster-formations?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   71,
-			results: []int32{7, 20, 70, 171, 213, 267, 287, 314, 331},
+			count:   70,
+			results: []int32{7, 20, 70, 171, 213, 266, 287, 314, 331},
 		},
 		{
 			testGeneral: testGeneral{

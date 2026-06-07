@@ -26,6 +26,12 @@ WITH w AS (
         $9::int AS item_id,
         $10::text[] AS methods
 ),
+all_areas AS (
+    SELECT id AS area_id, 'area' AS s_type 
+    FROM areas
+    CROSS JOIN w
+    WHERE id = ANY(w.ids)
+),
 resource_evaluation AS (
     SELECT area_id, s_type FROM (
         SELECT
@@ -120,6 +126,8 @@ content_evaluation AS (
     HAVING w.availability IS NULL OR MIN(current_avl) = ANY(w.availability)
 ),
 final_combination AS (
+    SELECT area_id, s_type FROM all_areas
+    UNION ALL
     SELECT area_id, s_type FROM resource_evaluation
     UNION ALL
     SELECT area_id, s_type FROM content_evaluation
@@ -128,7 +136,7 @@ SELECT area_id
 FROM final_combination
 CROSS JOIN w
 GROUP BY area_id, w.reqs, w.excls
-HAVING (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
+HAVING ARRAY_AGG(s_type) @> w.reqs
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
 ORDER BY area_id
 `
@@ -170,6 +178,33 @@ func (q *Queries) FilterAreaIDsByAvailability(ctx context.Context, arg FilterAre
 			return nil, err
 		}
 		items = append(items, area_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterAreaIDsByAvailabilitySoft = `-- name: FilterAreaIDsByAvailabilitySoft :many
+SELECT DISTINCT id FROM areas WHERE get_avl_rank(availability, false) = ANY($1::int[]) ORDER BY id
+`
+
+func (q *Queries) FilterAreaIDsByAvailabilitySoft(ctx context.Context, availability []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterAreaIDsByAvailabilitySoft, pq.Array(availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -485,19 +520,14 @@ WITH w AS (
         $9::int AS item_id,
         $10::text[] AS methods
 ),
+all_locations AS (
+    SELECT id AS location_id, 'location' AS s_type 
+    FROM locations
+    CROSS JOIN w
+    WHERE id = ANY(w.ids)
+),
 resource_evaluation AS (
     SELECT location_id, s_type FROM (
-        SELECT
-            l.id AS location_id,
-            'location'::text AS s_type,
-            get_avl_rank(l.availability, w.pre_airship) AS current_avl,
-            FALSE AS is_rep
-        FROM locations l
-        CROSS JOIN w
-        WHERE l.id = ANY(w.ids)
-
-        UNION ALL
-
         SELECT
             g.location_id,
             'monster-single'::text AS s_type,
@@ -584,15 +614,17 @@ content_evaluation AS (
     HAVING w.availability IS NULL OR MIN(current_avl) = ANY(w.availability)
 ),
 final_combination AS (
+    SELECT location_id, s_type FROM all_locations
+    UNION ALL
     SELECT location_id, s_type FROM resource_evaluation
     UNION ALL
     SELECT location_id, s_type FROM content_evaluation
 )
-SELECT location_id
+SELECT DISTINCT location_id
 FROM final_combination
 CROSS JOIN w
 GROUP BY location_id, w.reqs, w.excls
-HAVING (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
+HAVING ARRAY_AGG(s_type) @> w.reqs
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
 ORDER BY location_id
 `
@@ -634,6 +666,33 @@ func (q *Queries) FilterLocationIDsByAvailability(ctx context.Context, arg Filte
 			return nil, err
 		}
 		items = append(items, location_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterLocationIDsByAvailabilitySoft = `-- name: FilterLocationIDsByAvailabilitySoft :many
+SELECT DISTINCT id FROM locations WHERE get_avl_rank(availability, false) = ANY($1::int[]) ORDER BY id
+`
+
+func (q *Queries) FilterLocationIDsByAvailabilitySoft(ctx context.Context, availability []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterLocationIDsByAvailabilitySoft, pq.Array(availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1292,6 +1351,12 @@ WITH w AS (
         $9::int AS item_id,
         $10::text[] AS methods
 ),
+all_sublocations AS (
+    SELECT id AS sublocation_id, 'sublocation' AS s_type 
+    FROM sublocations
+    CROSS JOIN w
+    WHERE id = ANY(w.ids)
+),
 resource_evaluation AS (
     SELECT sublocation_id, s_type FROM (
         SELECT
@@ -1391,6 +1456,8 @@ content_evaluation AS (
     HAVING w.availability IS NULL OR MIN(current_avl) = ANY(w.availability)
 ),
 final_combination AS (
+    SELECT sublocation_id, s_type FROM all_sublocations
+    UNION ALL
     SELECT sublocation_id, s_type FROM resource_evaluation
     UNION ALL
     SELECT sublocation_id, s_type FROM content_evaluation
@@ -1399,7 +1466,7 @@ SELECT sublocation_id
 FROM final_combination
 CROSS JOIN w
 GROUP BY sublocation_id, w.reqs, w.excls
-HAVING (w.reqs IS NULL OR ARRAY_AGG(s_type) @> w.reqs)
+HAVING ARRAY_AGG(s_type) @> w.reqs
    AND (w.excls IS NULL OR NOT ARRAY_AGG(s_type) && w.excls)
 ORDER BY sublocation_id
 `
@@ -1441,6 +1508,33 @@ func (q *Queries) FilterSublocationIDsByAvailability(ctx context.Context, arg Fi
 			return nil, err
 		}
 		items = append(items, sublocation_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const filterSublocationIDsByAvailabilitySoft = `-- name: FilterSublocationIDsByAvailabilitySoft :many
+SELECT DISTINCT id FROM sublocations WHERE get_avl_rank(availability, false) = ANY($1::int[]) ORDER BY id
+`
+
+func (q *Queries) FilterSublocationIDsByAvailabilitySoft(ctx context.Context, availability []int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, filterSublocationIDsByAvailabilitySoft, pq.Array(availability))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

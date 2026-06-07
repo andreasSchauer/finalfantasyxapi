@@ -18,9 +18,19 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 		return resources, nil
 	}
 
-	sources, err := getLocBasedSources(cfg, r, i)
+	sources, err := getLocBasedSources(cfg, r, i, ViewSourceTypeArea)
 	if err != nil {
 		return nil, err
+	}
+
+	if sources.IsZero() && nullBoolIsZero(avlParams.isRepeatable) {
+		dbIDs, err := cfg.db.FilterAreaIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
+		if err != nil {
+			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		}
+
+		resNew := idsToAPIResources(cfg, i, dbIDs)
+		return resNew, nil
 	}
 
 	dbIDs, err := cfg.db.FilterAreaIDsByAvailability(r.Context(), database.FilterAreaIDsByAvailabilityParams{
@@ -55,9 +65,19 @@ func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIRes
 		return resources, nil
 	}
 
-	sources, err := getLocBasedSources(cfg, r, i)
+	sources, err := getLocBasedSources(cfg, r, i, ViewSourceTypeSublocation)
 	if err != nil {
 		return nil, err
+	}
+
+	if sources.IsZero() && nullBoolIsZero(avlParams.isRepeatable) {
+		dbIDs, err := cfg.db.FilterSublocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
+		if err != nil {
+			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		}
+
+		resNew := idsToAPIResources(cfg, i, dbIDs)
+		return resNew, nil
 	}
 
 	dbIDs, err := cfg.db.FilterSublocationIDsByAvailability(r.Context(), database.FilterSublocationIDsByAvailabilityParams{
@@ -92,9 +112,19 @@ func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResour
 		return resources, nil
 	}
 
-	sources, err := getLocBasedSources(cfg, r, i)
+	sources, err := getLocBasedSources(cfg, r, i, ViewSourceTypeLocation)
 	if err != nil {
 		return nil, err
+	}
+
+	if sources.IsZero() && nullBoolIsZero(avlParams.isRepeatable) {
+		dbIDs, err := cfg.db.FilterLocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
+		if err != nil {
+			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		}
+
+		resNew := idsToAPIResources(cfg, i, dbIDs)
+		return resNew, nil
 	}
 
 	dbIDs, err := cfg.db.FilterLocationIDsByAvailability(r.Context(), database.FilterLocationIDsByAvailabilityParams{

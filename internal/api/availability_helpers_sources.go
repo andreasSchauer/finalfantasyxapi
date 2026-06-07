@@ -10,6 +10,7 @@ import (
 
 
 type locBasedSources struct {
+	SrcType			ViewSourceType
 	RequiredSources []string
 	ExcludedSources []string
 	MonsterID       sql.NullInt32
@@ -19,8 +20,31 @@ type locBasedSources struct {
 }
 
 
-func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (locBasedSources, error) {
-	reqs := []string{}
+func (s locBasedSources) IsZero() bool {
+	return reqsAreZero(s.RequiredSources, s.SrcType) &&
+	s.ExcludedSources == nil &&
+	nullInt32IsZero(s.MonsterID) &&
+	nullInt32IsZero(s.ItemID) &&
+	nullInt32IsZero(s.KeyItemID) &&
+	s.Methods == nil
+}
+
+
+func reqsAreZero(reqs []string, srcType ViewSourceType) bool {
+	return len(reqs) == 1 && reqs[0] == string(srcType)
+}
+
+func nullInt32IsZero(n sql.NullInt32) bool {
+	return n.Valid == false && n.Int32 == 0
+}
+
+func nullBoolIsZero(n sql.NullBool) bool {
+	return n.Valid == false && n.Bool == false
+}
+
+
+func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], srcType ViewSourceType) (locBasedSources, error) {
+	reqs := []string{string(srcType)}
 	excls := []string{}
 
 	monID, err := getQueryIdPtr(r, cfg.e.monsters, "monster", i.queryLookup)
@@ -64,7 +88,8 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	}
 
 	sources := locBasedSources{
-		RequiredSources: h.SliceOrNil(reqs),
+		SrcType: 		 srcType,
+		RequiredSources: reqs,
 		ExcludedSources: h.SliceOrNil(excls),
 		MonsterID: 		 h.GetNullInt32(monID),
 		ItemID: 		 h.GetNullInt32(itemID),

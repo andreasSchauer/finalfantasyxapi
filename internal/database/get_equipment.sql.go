@@ -406,7 +406,7 @@ FROM mv_auto_ability_sources aas
 CROSS JOIN w
 WHERE aas.auto_ability_id = w.auto_ability_id
   AND aas.source_type = w.source_type
-  AND aas.shop_type = w.shop_type
+  AND (aas.shop_type IS NULL OR aas.shop_type = w.shop_type)
   AND (w.availability IS NULL OR aas.avl_context = ANY(w.availability))
   AND (w.repeatable IS NULL OR aas.is_repeatable = w.repeatable)
 ORDER BY aas.source_id

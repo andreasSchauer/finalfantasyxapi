@@ -66,8 +66,8 @@ func TestRetrievePrimers(t *testing.T) {
 				requestURL:     "/api/primers?availability=pre-story",
 				expectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{1, 3, 8, 19, 20, 21, 22},
+			count:   5,
+			results: []int32{8, 19, 20, 21, 22},
 		},
 	}
 

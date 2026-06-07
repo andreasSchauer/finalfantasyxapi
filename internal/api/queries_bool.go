@@ -34,6 +34,9 @@ func boolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cf
 // db query accumulates all resources that fulfill a certain condition. a false boolean flips these results.
 func boolQuery2[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryNoInput) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
 
 	b, err := parseBooleanQuery(r, queryParam)
 	if queryIsEmpty(err) {
@@ -59,6 +62,9 @@ func boolQuery2[T seeding.Lookupable, R any, A APIResource, L APIResourceList](c
 
 func boolQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, bool) ([]A, error)) ([]A, error) {
 	queryParam := i.queryLookup[queryName]
+	if replParamsPresent(r, queryParam, i.queryLookup) {
+		return inputRes, nil
+	}
 
 	b, err := parseBooleanQuery(r, queryParam)
 	if queryIsEmpty(err) {

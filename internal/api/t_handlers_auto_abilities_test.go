@@ -135,7 +135,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"monstersItems":      0,
 					"shops pre airship":  2,
 					"shops post airship": 0,
-					"treasures":          1,
+					"treasures":          0,
 					"equipment tables":   1,
 				},
 			},
@@ -144,7 +144,42 @@ func TestGetAutoAbility(t *testing.T) {
 			monstersItems:    []testMonItemAmts{},
 			shopsPreAirship:  []int32{4, 10},
 			shopsPostAirship: []int32{},
-			treasures:        []int32{89},
+			treasures:        []int32{},
+			equipmentTables:  []int32{137},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities/55?rel_availability=post-game&rel_repeatable=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"monstersDrop":       8,
+					"monstersItems":      2,
+					"shops pre airship":  0,
+					"shops post airship": 0,
+					"treasures":          0,
+					"equipment tables":   1,
+				},
+			},
+			expUnique:        newExpUnique(55, "fire ward"),
+			monstersDrop:     []int32{38, 53, 141, 151, 176, 191, 192, 239},
+			monstersItems:    []testMonItemAmts{
+				{
+					index:       0,
+					monster:     38,
+					stealCommon: 2,
+					stealRare:   3,
+				},
+				{
+					index:       1,
+					monster:     53,
+					stealCommon: 1,
+					stealRare:   2,
+				},
+			},
+			shopsPreAirship:  []int32{},
+			shopsPostAirship: []int32{},
+			treasures:        []int32{},
 			equipmentTables:  []int32{137},
 		},
 		{
@@ -185,6 +220,50 @@ func TestGetAutoAbility(t *testing.T) {
 			shopsPostAirship: []int32{7},
 			treasures:        []int32{},
 			equipmentTables:  []int32{25, 32, 46},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities/89?rel_availability=pre-airship",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"monstersDrop":       9,
+					"monstersItems":      4,
+					"shops pre airship":  1,
+					"shops post airship": 0,
+					"treasures":          2,
+					"equipment tables":   2,
+				},
+			},
+			expUnique:    newExpUnique(89, "sos nulblaze"),
+			monstersDrop: []int32{31, 71, 102, 143, 158, 181},
+			monstersItems: []testMonItemAmts{
+				{
+					index:     	0,
+					monster:   	38,
+					bribe: 		16,
+				},
+				{
+					index:     	1,
+					monster:   	53,
+					bribe: 		8,
+				},
+				{
+					index:     	2,
+					monster:   	68,
+					other: 		2,
+				},
+				{
+					index:       3,
+					monster:     109,
+					stealCommon: 2,
+					stealRare:   3,
+				},
+			},
+			shopsPreAirship:  []int32{14},
+			shopsPostAirship: []int32{},
+			treasures:        []int32{61, 291},
+			equipmentTables:  []int32{102, 142},
 		},
 	}
 
