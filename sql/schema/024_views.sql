@@ -67,7 +67,7 @@ SELECT DISTINCT
     ea.availability AS avl_area,
     m.is_repeatable,
     CASE 
-        WHEN m.id = 299 THEN TRUE -- dark yojimbo
+        WHEN m.id IN (299, 300) THEN TRUE -- dark yojimbo
         WHEN fd.category IN (
             'random-encounter'::monster_formation_category, 
             'on-demand-fight'::monster_formation_category
