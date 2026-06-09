@@ -23,23 +23,14 @@ type locBasedSources struct {
 func (s locBasedSources) IsZero() bool {
 	return reqsAreZero(s.RequiredSources, s.SrcType) &&
 	s.ExcludedSources == nil &&
-	nullInt32IsZero(s.MonsterID) &&
-	nullInt32IsZero(s.ItemID) &&
-	nullInt32IsZero(s.KeyItemID) &&
+	h.NullInt32IsZero(s.MonsterID) &&
+	h.NullInt32IsZero(s.ItemID) &&
+	h.NullInt32IsZero(s.KeyItemID) &&
 	s.Methods == nil
 }
 
-
 func reqsAreZero(reqs []string, srcType ViewSourceType) bool {
 	return len(reqs) == 1 && reqs[0] == string(srcType)
-}
-
-func nullInt32IsZero(n sql.NullInt32) bool {
-	return n.Valid == false && n.Int32 == 0
-}
-
-func nullBoolIsZero(n sql.NullBool) bool {
-	return n.Valid == false && n.Bool == false
 }
 
 
@@ -150,6 +141,9 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	})
 	if err != nil {
 		return shopSources{}, err
+	}
+	if len(reqs) > 0 || len(excls) > 0 {
+		avlType = AvlTypeContext
 	}
 
 	sources := shopSources{

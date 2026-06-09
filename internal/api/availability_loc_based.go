@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) ([]AreaAPIResource, error) {
@@ -23,7 +24,7 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 		return nil, err
 	}
 
-	if sources.IsZero() && nullBoolIsZero(avlParams.isRepeatable) {
+	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
 		dbIDs, err := cfg.db.FilterAreaIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -70,7 +71,7 @@ func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIRes
 		return nil, err
 	}
 
-	if sources.IsZero() && nullBoolIsZero(avlParams.isRepeatable) {
+	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
 		dbIDs, err := cfg.db.FilterSublocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
@@ -117,7 +118,7 @@ func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResour
 		return nil, err
 	}
 
-	if sources.IsZero() && nullBoolIsZero(avlParams.isRepeatable) {
+	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
 		dbIDs, err := cfg.db.FilterLocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
