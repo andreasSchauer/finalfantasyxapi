@@ -383,73 +383,46 @@ WITH w AS (
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
         sqlc.narg('character_id')::int AS character_id,
-        sqlc.narg('req_item')::boolean AS req_item
+        sqlc.arg('req_item')::boolean AS req_item
 ),
 raw_auto_abilities AS (
-    SELECT 
+    SELECT
         aas.auto_ability_id,
-        get_avl_rank (
-            CASE
-                WHEN aas.source_type = 'shop' AND w.avl_type = 'self' THEN aas.avl_context
-                WHEN w.avl_type = 'self' THEN aas.avl_self
-                WHEN w.avl_type = 'context' THEN aas.avl_context
-                WHEN w.avl_type = 'area' THEN aas.avl_area
-            END,
-            w.pre_airship
-        ) AS current_avl,
-        CASE
-            WHEN w.loc_context_id IS NOT NULL THEN aas.is_repeatable_loc
-            ELSE aas.is_repeatable
-        END AS is_rep,
-        CASE
-            WHEN aas.source_type = 'shop' THEN TRUE
-            ELSE FALSE
-        END AS is_shop
+        get_avl_rank_item (w.avl_type, aas.avl_self, aas.avl_context, aas.avl_area, w.pre_airship, (aas.source_type = 'shop')) AS current_avl,
+        get_is_rep(w.loc_context_id, aas.is_repeatable, aas.is_repeatable_loc) AS is_rep,
+        (aas.source_type = 'shop') AS is_shop
     FROM mv_auto_ability_sources aas
     JOIN mv_geography g ON aas.area_id = g.area_id
     CROSS JOIN w
     WHERE aas.auto_ability_id = ANY(w.ids)
-      AND (w.req_item IS NULL OR w.req_item = FALSE)
-      AND (w.loc_context_id IS NULL OR CASE
-           WHEN w.loc_context_type = 'location' THEN g.location_id
-           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
-           WHEN w.loc_context_type = 'area' THEN g.area_id
-      END = w.loc_context_id)
-      AND (w.character_id IS NULL OR aas.character_id = w.character_id OR aas.character_id IS NULL)
+    AND w.req_item = FALSE
+    AND (w.character_id IS NULL OR aas.character_id = w.character_id OR aas.character_id IS NULL)
+    AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
 
     UNION ALL
 
-    SELECT
-        aa.id AS auto_ability_id,
-        get_avl_rank (
-            CASE
-                WHEN mis.source_type = 'shop' AND w.avl_type = 'self' THEN mis.avl_context
-                WHEN w.avl_type = 'self' THEN mis.avl_self
-                WHEN w.avl_type = 'context' THEN mis.avl_context
-                WHEN w.avl_type = 'area' THEN mis.avl_area
-            END,
-            w.pre_airship
-        ) AS current_avl,
-        CASE
-            WHEN w.loc_context_id IS NOT NULL THEN mis.is_repeatable_loc
-            ELSE mis.is_repeatable
-        END AS is_rep,
-        CASE
-            WHEN mis.source_type = 'shop' THEN TRUE
-            ELSE FALSE
-        END AS is_shop
-    FROM auto_abilities aa
-    JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
-    JOIN mv_item_sources mis ON mis.master_item_id = ia_req.master_item_id
-    JOIN mv_geography g ON mis.area_id = g.area_id
-    CROSS JOIN w
-    WHERE aa.id = ANY(w.ids)
-      AND w.req_item = TRUE
-      AND (w.loc_context_id IS NULL OR CASE
-           WHEN w.loc_context_type = 'location' THEN g.location_id
-           WHEN w.loc_context_type = 'sublocation' THEN g.sublocation_id
-           WHEN w.loc_context_type = 'area' THEN g.area_id
-      END = w.loc_context_id)
+    SELECT sub.auto_ability_id, sub.current_avl, sub.is_rep, sub.is_shop FROM (
+        SELECT
+            aa.id AS auto_ability_id,
+            get_avl_rank_item (w.avl_type, mis.avl_self, mis.avl_context, mis.avl_area, w.pre_airship, (mis.source_type = 'shop')) AS current_avl,
+            get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep,
+            (mis.source_type = 'shop') AS is_shop,
+            mis.area_id,
+            BOOL_OR(get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc))
+                OVER (PARTITION BY aa.id, get_avl_rank_item (w.avl_type, mis.avl_self, mis.avl_context, mis.avl_area, w.pre_airship, (mis.source_type = 'shop'))) AS group_is_rep,
+            SUM(mis.amount) FILTER (WHERE NOT get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc))
+                OVER (PARTITION BY aa.id, get_avl_rank_item (w.avl_type, mis.avl_self, mis.avl_context, mis.avl_area, w.pre_airship, (mis.source_type = 'shop'))) AS group_total_amt,
+            ia_req.amount AS req_amount
+        FROM auto_abilities aa
+        JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
+        JOIN mv_item_sources mis ON mis.master_item_id = ia_req.master_item_id
+        JOIN mv_geography g ON mis.area_id = g.area_id
+        CROSS JOIN w
+        WHERE aa.id = ANY(w.ids)
+        AND w.req_item = TRUE
+        AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
+    ) AS sub
+    WHERE sub.group_is_rep OR (COALESCE(sub.group_total_amt, 0) >= sub.req_amount)
 ),
 auto_abilities_rep AS (
     SELECT

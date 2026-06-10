@@ -20,7 +20,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, resources []NamedAPIRe
 		return resources, nil
 	}
 
-	reqItem, err := getQueryBoolPtr(r, "req_item", i.queryLookup)
+	reqItem, err := parseBooleanQuery(r, i.queryLookup["req_item"])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, resources []NamedAPIRe
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
 		CharacterID: 	h.GetNullInt32(charID),
-		ReqItem:      	h.GetNullBool(reqItem),
+		ReqItem:      	reqItem,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
