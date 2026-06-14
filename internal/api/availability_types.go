@@ -3,9 +3,9 @@ package api
 type AvlType string
 
 const (
-	AvlTypeSelf    AvlType = "self"
-	AvlTypeContext AvlType = "context"
-	AvlTypeArea    AvlType = "area"
+	AvlTypeSelf     AvlType = "self"
+	AvlTypeContext  AvlType = "context"
+	AvlTypeContext2 AvlType = "context-2"
 )
 
 type ViewSourceType string
@@ -23,5 +23,5 @@ const (
 	ViewSourceTypeBlitzball        ViewSourceType = "blitzball"
 	ViewSourceTypeItem             ViewSourceType = "item"
 	ViewSourceTypeKeyItem          ViewSourceType = "key-item"
-	ViewSourceTypeEquipment		   ViewSourceType = "equip"
+	ViewSourceTypeEquipment        ViewSourceType = "equip"
 )

@@ -162,7 +162,7 @@ SELECT DISTINCT me.area_id
 FROM mv_monster_encounters me
 CROSS JOIN w
 WHERE me.monster_id = w.monster_id
-  AND (w.availability IS NULL OR me.avl_area = ANY(w.availability))
+  AND (w.availability IS NULL OR me.avl_context_2 = ANY(w.availability))
   AND (w.repeatable IS NULL OR me.is_repeatable_loc = w.repeatable)
 ORDER BY me.area_id
 `
@@ -1271,7 +1271,7 @@ SELECT DISTINCT me.formation_id
 FROM mv_monster_encounters me
 CROSS JOIN w
 WHERE me.monster_id = w.monster_id
-  AND (w.availability IS NULL OR me.avl_area = ANY(w.availability))
+  AND (w.availability IS NULL OR me.avl_context_2 = ANY(w.availability))
   AND (w.repeatable IS NULL OR me.is_repeatable_loc = w.repeatable)
 ORDER BY me.formation_id
 `

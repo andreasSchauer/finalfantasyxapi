@@ -208,7 +208,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 				requestURL:     "/api/monster-formations?repeatable=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   235,
+			count:   237,
 			results: []int32{9, 35, 58, 81, 103, 148, 165, 193, 239, 280, 319, 331},
 		},
 	}

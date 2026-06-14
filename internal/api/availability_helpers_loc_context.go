@@ -9,9 +9,9 @@ import (
 )
 
 type locContextParams struct {
-	AvlType 	string
-	ID   		sql.NullInt32
-	Type 		sql.NullString
+	AvlType string
+	ID      sql.NullInt32
+	Type    sql.NullString
 }
 
 func getLocContextParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (locContextParams, error) {
@@ -44,15 +44,15 @@ func getLocContextParams[T seeding.Lookupable, R any, A APIResource, L APIResour
 		return locContextParams{}, err
 	}
 	if !queryIsEmpty(err) {
-		avlType = AvlTypeArea
+		avlType = AvlTypeContext2
 		locContextID = areaID
 		locContextType = string(ViewSourceTypeArea)
 	}
 
 	params := locContextParams{
-		AvlType:        string(avlType),
-		ID:   h.GetNullInt32(locContextID),
-		Type: h.GetNullString(&locContextType),
+		AvlType: string(avlType),
+		ID:      h.GetNullInt32(locContextID),
+		Type:    h.GetNullString(&locContextType),
 	}
 
 	return params, nil

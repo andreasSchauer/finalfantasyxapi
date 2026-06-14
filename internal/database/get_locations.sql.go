@@ -831,7 +831,7 @@ CROSS JOIN w
 WHERE a.a_id = w.area_id
   AND a.source_type = w.source_type
   AND (w.availability IS NULL OR CASE
-    WHEN w.source_type IN ('monster', 'monster-formation') THEN a.avl_area
+    WHEN w.source_type IN ('monster', 'monster-formation') THEN a.avl_context_2
     ELSE a.avl_self
   END = ANY(w.availability))
   AND (w.repeatable IS NULL OR a.is_repeatable_loc = w.repeatable)

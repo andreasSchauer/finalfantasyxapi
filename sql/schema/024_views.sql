@@ -64,7 +64,7 @@ SELECT DISTINCT
     fd.can_escape,
     m.availability AS avl_self,
     fd.availability AS avl_context,
-    ea.availability AS avl_area,
+    ea.availability AS avl_context_2,
     m.is_repeatable,
     CASE 
         WHEN m.id IN (299, 300) THEN TRUE -- dark yojimbo
@@ -294,7 +294,7 @@ SELECT DISTINCT
     ia.amount,
     t.availability AS avl_self,
     t.availability AS avl_context,
-    t.availability AS avl_area,
+    t.availability AS avl_context_2,
     FALSE AS is_repeatable,
     FALSE AS is_repeatable_loc,
     t.area_id
@@ -312,14 +312,16 @@ SELECT DISTINCT
     'shop' AS source_type,
     1 AS amount,
     sh.availability AS avl_self,
-    CASE j.shop_type 
-        WHEN 'pre-airship' THEN 'pre-story'::availability_type
-        WHEN 'post-airship' THEN 'post'::availability_type
+    CASE
+        WHEN COUNT(j.shop_type) OVER (PARTITION BY i.master_item_id, j.shop_id) = 2 THEN 'always'::availability_type
+        WHEN j.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN j.shop_type = 'post-airship' THEN 'post'::availability_type
     END AS avl_context,
-    CASE j.shop_type 
-        WHEN 'pre-airship' THEN 'pre-story'::availability_type
-        WHEN 'post-airship' THEN 'post'::availability_type
-    END AS avl_area,
+    CASE
+        WHEN COUNT(j.shop_type) OVER (PARTITION BY i.master_item_id, j.shop_id) = 2 THEN 'always'::availability_type
+        WHEN j.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN j.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_context_2,
     TRUE AS is_repeatable,
     TRUE AS is_repeatable_loc,
     sh.area_id
@@ -339,7 +341,7 @@ SELECT DISTINCT
     ia.amount,
     q.availability AS avl_self,
     q.availability AS avl_context,
-    q.availability AS avl_area,
+    q.availability AS avl_context_2,
     q.is_repeatable,
     q.is_repeatable AS is_repeatable_loc,
     ca.area_id
@@ -359,7 +361,7 @@ SELECT DISTINCT
     ia.amount,
     'always'::availability_type AS avl_self,
     'always'::availability_type AS avl_context,
-    'always'::availability_type AS avl_area,
+    'always'::availability_type AS avl_context_2,
     TRUE AS is_repeatable,
     TRUE AS is_repeatable_loc,
     75 AS area_id
@@ -378,7 +380,7 @@ SELECT DISTINCT
     mi.amount,
     me.avl_self,
     me.avl_context,
-    me.avl_area,
+    me.avl_context_2,
     CASE
         WHEN me.category = 'static-encounter'::monster_formation_category
          AND mi.source_type IN ('steal_common', 'steal_rare')
@@ -414,6 +416,33 @@ CREATE INDEX idx_mv_item_sources_area_id ON mv_item_sources (area_id);
 
 
 CREATE MATERIALIZED VIEW mv_equipment_sources AS
+WITH shop_equip_configs AS (
+    SELECT
+        en.id AS name_id,
+        se.id AS shop_equipment_id,
+        sh.id AS shop_id,
+        se.shop_type,
+        en.character_id,
+        se.empty_slots_amount,
+        ARRAY_AGG(j.auto_ability_id ORDER BY j.auto_ability_id) AS ability_set
+    FROM shop_equipment_pieces se
+    JOIN shops sh ON se.shop_id = sh.id
+    JOIN equipment_names en ON se.equipment_name_id = en.id
+    LEFT JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+    GROUP BY en.id, se.id, sh.id, se.shop_type, en.character_id, se.empty_slots_amount
+),
+shop_equip_avl AS (
+    SELECT
+        shop_equipment_id,
+        CASE
+            WHEN COUNT(*) OVER (
+                PARTITION BY shop_id, name_id, character_id, empty_slots_amount, ability_set
+            ) = 2 THEN 'always'::availability_type
+            WHEN shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+            WHEN shop_type = 'post-airship' THEN 'post'::availability_type
+        END AS availability
+    FROM shop_equip_configs
+)
 SELECT DISTINCT
     en.id AS name_id,
     en.name AS name,
@@ -425,7 +454,7 @@ SELECT DISTINCT
     aa.name AS auto_ability,
     t.availability AS avl_self,
     t.availability AS avl_context,
-    t.availability AS avl_area,
+    t.availability AS avl_context_2,
     FALSE AS is_repeatable,
     FALSE AS is_repeatable_loc,
     t.area_id,
@@ -448,20 +477,15 @@ SELECT DISTINCT
     j.auto_ability_id,
     aa.name AS auto_ability,
     sh.availability AS avl_self,
-    CASE se.shop_type 
-        WHEN 'pre-airship' THEN 'pre-story'::availability_type
-        WHEN 'post-airship' THEN 'post'::availability_type
-    END AS avl_context,
-    CASE se.shop_type 
-        WHEN 'pre-airship' THEN 'pre-story'::availability_type
-        WHEN 'post-airship' THEN 'post'::availability_type
-    END AS avl_area,
+    sa.availability AS avl_context,
+    sa.availability AS avl_context_2,
     TRUE AS is_repeatable,
     TRUE AS is_repeatable_loc,
     sh.area_id,
     se.shop_type AS shop_type
 FROM shops sh
 JOIN shop_equipment_pieces se ON se.shop_id = sh.id
+JOIN shop_equip_avl sa ON sa.shop_equipment_id = se.id
 LEFT JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
 LEFT JOIN auto_abilities aa ON j.auto_ability_id = aa.id
 JOIN equipment_names en ON se.equipment_name_id = en.id;
@@ -483,7 +507,7 @@ SELECT DISTINCT
     en.character_id,
     t.availability AS avl_self,
     t.availability AS avl_context,
-    t.availability AS avl_area,
+    t.availability AS avl_context_2,
     FALSE AS is_repeatable,
     FALSE AS is_repeatable_loc,
     t.area_id,
@@ -503,14 +527,20 @@ SELECT DISTINCT
     'shop' AS source_type,
     en.character_id,
     sh.availability AS avl_self,
-    CASE se.shop_type 
-        WHEN 'pre-airship' THEN 'pre-story'::availability_type
-        WHEN 'post-airship' THEN 'post'::availability_type
+    CASE
+        WHEN BOOL_OR(se.shop_type = 'pre-airship') OVER (PARTITION BY aa.id, sh.id) 
+         AND BOOL_OR(se.shop_type = 'post-airship') OVER (PARTITION BY aa.id, sh.id) 
+        THEN 'always'::availability_type
+        WHEN se.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN se.shop_type = 'post-airship' THEN 'post'::availability_type
     END AS avl_context,
-    CASE se.shop_type 
-        WHEN 'pre-airship' THEN 'pre-story'::availability_type
-        WHEN 'post-airship' THEN 'post'::availability_type
-    END AS avl_area,
+    CASE
+        WHEN BOOL_OR(se.shop_type = 'pre-airship') OVER (PARTITION BY aa.id, sh.id, en.character_id) 
+         AND BOOL_OR(se.shop_type = 'post-airship') OVER (PARTITION BY aa.id, sh.id, en.character_id) 
+        THEN 'always'::availability_type
+        WHEN se.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN se.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_context_2,
     TRUE AS is_repeatable,
     TRUE AS is_repeatable_loc,
     sh.area_id,
@@ -531,7 +561,7 @@ SELECT DISTINCT
     med.character_id,
     me.avl_self,
     me.avl_context,
-    me.avl_area,
+    me.avl_context_2,
     me.is_repeatable,
     me.is_repeatable_loc,
     me.area_id,
@@ -558,7 +588,7 @@ SELECT DISTINCT
     END::text AS sub_type,
     me.avl_self,
     me.avl_context,
-    me.avl_area,
+    me.avl_context_2,
     m.is_repeatable,
     me.is_repeatable_loc,
     me.area_id AS a_id,
@@ -579,7 +609,7 @@ SELECT DISTINCT
     NULL::text AS sub_type,
     me.avl_context AS avl_self,
     me.avl_context,
-    me.avl_area,
+    me.avl_context_2,
     me.is_repeatable,
     me.is_repeatable_loc,
     me.area_id AS a_id,
@@ -599,7 +629,7 @@ SELECT DISTINCT
     NULL::text AS sub_type,
     a.availability AS avl_self,
     a.availability AS avl_context,
-    a.availability AS avl_area,
+    a.availability AS avl_context_2,
     NULL::boolean AS is_repeatable,
     NULL::boolean AS is_repeatable_loc,
     g.area_id AS a_id,
@@ -620,7 +650,7 @@ SELECT DISTINCT
     NULL::text AS sub_type,
     t.availability AS avl_self,
     t.availability AS avl_context,
-    t.availability AS avl_area,
+    t.availability AS avl_context_2,
     FALSE AS is_repeatable,
     FALSE AS is_repeatable_loc,
     g.area_id AS a_id,
@@ -647,7 +677,7 @@ SELECT DISTINCT
     CASE j.shop_type 
         WHEN 'pre-airship' THEN 'pre-story'::availability_type
         WHEN 'post-airship' THEN 'post'::availability_type
-    END AS avl_area,
+    END AS avl_context_2,
     FALSE AS is_repeatable,
     FALSE AS is_repeatable_loc,
     g.area_id AS a_id,
@@ -675,7 +705,7 @@ SELECT DISTINCT
     CASE se.shop_type 
         WHEN 'pre-airship' THEN 'pre-story'::availability_type
         WHEN 'post-airship' THEN 'post'::availability_type
-    END AS avl_area,
+    END AS avl_context_2,
     FALSE AS is_repeatable,
     FALSE AS is_repeatable_loc,
     g.area_id AS a_id,
@@ -697,7 +727,7 @@ SELECT DISTINCT
     NULL::text AS sub_type,
     q.availability AS avl_self,
     q.availability AS avl_context,
-    q.availability AS avl_area,
+    q.availability AS avl_context_2,
     q.is_repeatable,
     q.is_repeatable AS is_repeatable_loc,
     g.area_id AS a_id,
@@ -720,7 +750,7 @@ SELECT DISTINCT
     NULL::text AS sub_type,
     'always'::availability_type AS avl_self,
     'always'::availability_type AS avl_context,
-    'always'::availability_type AS avl_area,
+    'always'::availability_type AS avl_context_2,
     TRUE AS is_repeatable,
     TRUE AS is_repeatable_loc,
     g.area_id AS a_id,
