@@ -4080,6 +4080,16 @@ type MvAutoAbilitySource struct {
 	ShopType        NullShopType
 }
 
+type MvAvailabilitiesShopsLoc struct {
+	MasterItemID int32
+	Item         string
+	SourceID     int32
+	AvlArea      interface{}
+	AvlSubloc    interface{}
+	AvlLoc       interface{}
+	AreaID       int32
+}
+
 type MvAvailability struct {
 	SID             int32
 	Name            string

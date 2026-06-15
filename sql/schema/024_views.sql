@@ -313,12 +313,16 @@ SELECT DISTINCT
     1 AS amount,
     sh.availability AS avl_self,
     CASE
-        WHEN COUNT(j.shop_type) OVER (PARTITION BY i.master_item_id, j.shop_id) = 2 THEN 'always'::availability_type
+        WHEN BOOL_OR(j.shop_type = 'pre-airship') OVER (PARTITION BY i.master_item_id, sh.id) 
+         AND BOOL_OR(j.shop_type = 'post-airship') OVER (PARTITION BY i.master_item_id, sh.id) 
+        THEN 'always'::availability_type
         WHEN j.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
         WHEN j.shop_type = 'post-airship' THEN 'post'::availability_type
     END AS avl_context,
     CASE
-        WHEN COUNT(j.shop_type) OVER (PARTITION BY i.master_item_id, j.shop_id) = 2 THEN 'always'::availability_type
+        WHEN BOOL_OR(j.shop_type = 'pre-airship') OVER (PARTITION BY i.master_item_id, sh.id) 
+         AND BOOL_OR(j.shop_type = 'post-airship') OVER (PARTITION BY i.master_item_id, sh.id) 
+        THEN 'always'::availability_type
         WHEN j.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
         WHEN j.shop_type = 'post-airship' THEN 'post'::availability_type
     END AS avl_context_2,
@@ -435,9 +439,9 @@ shop_equip_avl AS (
     SELECT
         shop_equipment_id,
         CASE
-            WHEN COUNT(*) OVER (
-                PARTITION BY shop_id, name_id, character_id, empty_slots_amount, ability_set
-            ) = 2 THEN 'always'::availability_type
+            WHEN BOOL_OR(shop_type = 'pre-airship') OVER (PARTITION BY shop_id, name_id, character_id, empty_slots_amount, ability_set) 
+             AND BOOL_OR(shop_type = 'post-airship') OVER (PARTITION BY shop_id, name_id, character_id, empty_slots_amount, ability_set) 
+            THEN 'always'::availability_type
             WHEN shop_type = 'pre-airship' THEN 'pre-story'::availability_type
             WHEN shop_type = 'post-airship' THEN 'post'::availability_type
         END AS availability
@@ -766,6 +770,129 @@ CREATE INDEX idx_mv_availabilities_area_id ON mv_availabilities (a_id);
 
 
 
+CREATE MATERIALIZED VIEW mv_availabilities_shops_loc AS
+SELECT DISTINCT
+    j.shop_id,
+    'item' AS source_type,
+    i.master_item_id AS source_id,
+    mi.name AS source_name,
+    CASE
+        WHEN BOOL_OR(j.shop_type = 'pre-airship') OVER (PARTITION BY i.master_item_id, g.area_id) 
+         AND BOOL_OR(j.shop_type = 'post-airship') OVER (PARTITION BY i.master_item_id, g.area_id) 
+        THEN 'always'::availability_type
+        WHEN j.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN j.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_area,
+    CASE
+        WHEN BOOL_OR(j.shop_type = 'pre-airship') OVER (PARTITION BY i.master_item_id, g.sublocation_id) 
+         AND BOOL_OR(j.shop_type = 'post-airship') OVER (PARTITION BY i.master_item_id, g.sublocation_id) 
+        THEN 'always'::availability_type
+        WHEN j.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN j.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_subloc,
+    CASE
+        WHEN BOOL_OR(j.shop_type = 'pre-airship') OVER (PARTITION BY i.master_item_id, g.location_id) 
+         AND BOOL_OR(j.shop_type = 'post-airship') OVER (PARTITION BY i.master_item_id, g.location_id) 
+        THEN 'always'::availability_type
+        WHEN j.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN j.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_loc,
+    j.shop_type,
+    NULL::integer AS character_id,
+    g.area_id,
+    g.sublocation_id,
+    g.location_id
+FROM shops sh
+JOIN j_shops_items j ON j.shop_id = sh.id
+JOIN shop_items si ON j.shop_item_id = si.id
+JOIN items i ON si.item_id = i.id
+JOIN master_items mi ON i.master_item_id = mi.id
+JOIN mv_geography g ON sh.area_id = g.area_id
+
+UNION ALL
+
+SELECT DISTINCT
+    sh.id AS shop_id,
+    'auto-ability' AS source_type,
+    aa.id AS source_id,
+    aa.name AS source_name,
+    CASE
+        WHEN BOOL_OR(se.shop_type = 'pre-airship') OVER (PARTITION BY aa.id, g.area_id) 
+         AND BOOL_OR(se.shop_type = 'post-airship') OVER (PARTITION BY aa.id, g.area_id) 
+        THEN 'always'::availability_type
+        WHEN se.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN se.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_area,
+    CASE
+        WHEN BOOL_OR(se.shop_type = 'pre-airship') OVER (PARTITION BY aa.id, g.sublocation_id) 
+         AND BOOL_OR(se.shop_type = 'post-airship') OVER (PARTITION BY aa.id, g.sublocation_id) 
+        THEN 'always'::availability_type
+        WHEN se.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN se.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_subloc,
+    CASE
+        WHEN BOOL_OR(se.shop_type = 'pre-airship') OVER (PARTITION BY aa.id, g.location_id) 
+         AND BOOL_OR(se.shop_type = 'post-airship') OVER (PARTITION BY aa.id, g.location_id) 
+        THEN 'always'::availability_type
+        WHEN se.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN se.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_loc,
+    se.shop_type,
+    NULL::integer AS character_id,
+    g.area_id,
+    g.sublocation_id,
+    g.location_id
+FROM shops sh
+JOIN shop_equipment_pieces se ON se.shop_id = sh.id
+JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+JOIN auto_abilities aa ON j.auto_ability_id = aa.id
+JOIN mv_geography g ON sh.area_id = g.area_id
+
+UNION ALL
+
+SELECT DISTINCT
+    sh.id AS shop_id,
+    'auto-ability-char' AS source_type,
+    aa.id AS source_id,
+    aa.name AS source_name,
+    CASE
+        WHEN BOOL_OR(se.shop_type = 'pre-airship') OVER (PARTITION BY aa.id, en.character_id, g.area_id) 
+         AND BOOL_OR(se.shop_type = 'post-airship') OVER (PARTITION BY aa.id, en.character_id, g.area_id) 
+        THEN 'always'::availability_type
+        WHEN se.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN se.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_area,
+    CASE
+        WHEN BOOL_OR(se.shop_type = 'pre-airship') OVER (PARTITION BY aa.id, en.character_id, g.sublocation_id) 
+         AND BOOL_OR(se.shop_type = 'post-airship') OVER (PARTITION BY aa.id, en.character_id, g.sublocation_id) 
+        THEN 'always'::availability_type
+        WHEN se.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN se.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_subloc,
+    CASE
+        WHEN BOOL_OR(se.shop_type = 'pre-airship') OVER (PARTITION BY aa.id, en.character_id, g.location_id) 
+         AND BOOL_OR(se.shop_type = 'post-airship') OVER (PARTITION BY aa.id, en.character_id, g.location_id) 
+        THEN 'always'::availability_type
+        WHEN se.shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN se.shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_loc,
+    se.shop_type,
+    en.character_id,
+    g.area_id,
+    g.sublocation_id,
+    g.location_id
+FROM shops sh
+JOIN shop_equipment_pieces se ON se.shop_id = sh.id
+JOIN j_shop_equipment_abilities j ON j.shop_equipment_id = se.id
+JOIN auto_abilities aa ON j.auto_ability_id = aa.id
+JOIN equipment_names en ON se.equipment_name_id = en.id
+JOIN mv_geography g ON sh.area_id = g.area_id;
+
+CREATE INDEX idx_mv_shop_availabilities_shops ON mv_availabilities_shops_loc (shop_id);
+CREATE INDEX idx_mv_shop_availabilities_sources ON mv_availabilities_shops_loc (source_id, source_type);
+CREATE INDEX idx_mv_shop_availabilities_area_id ON mv_availabilities_shops_loc (area_id);
+CREATE INDEX idx_mv_shop_availabilities_subloc_id ON mv_availabilities_shops_loc (sublocation_id);
+CREATE INDEX idx_mv_shop_availabilities_loc_id ON mv_availabilities_shops_loc (location_id);
 
 
 
@@ -1057,6 +1184,7 @@ CREATE INDEX idx_mv_abilities_element_id ON mv_abilities (element_id);
 
 -- +goose Down
 DROP MATERIALIZED VIEW IF EXISTS mv_abilities;
+DROP MATERIALIZED VIEW IF EXISTS mv_availabilities_shops_loc;
 DROP MATERIALIZED VIEW IF EXISTS mv_availabilities;
 DROP MATERIALIZED VIEW IF EXISTS mv_auto_ability_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_equipment_sources;

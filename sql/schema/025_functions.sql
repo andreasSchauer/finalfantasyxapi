@@ -45,7 +45,6 @@ $$ LANGUAGE sql IMMUTABLE;
 -- +goose StatementEnd
 
 
-
 -- +goose StatementBegin
 CREATE OR REPLACE FUNCTION get_avl_rank_condition(avl_true availability_type, avl_false availability_type, pre_airship BOOLEAN, condition BOOLEAN)
 RETURNS INT AS $$
