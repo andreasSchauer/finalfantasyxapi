@@ -103,7 +103,7 @@ WITH w AS (
 raw_master_items AS (
     SELECT
         mis.master_item_id,
-        get_avl_rank_item(w.avl_type, mis.avl_self, mis.avl_context, mis.avl_context_2, w.pre_airship, (mis.source_type = 'shop')) AS current_avl,
+        get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
         get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep
     FROM mv_item_sources mis
     JOIN mv_geography g ON mis.area_id = g.area_id
@@ -150,7 +150,7 @@ WITH w AS (
 raw_items AS (
     SELECT
         i.id AS item_id,
-        get_avl_rank_item(w.avl_type, mis.avl_self, mis.avl_context, mis.avl_context_2, w.pre_airship, (mis.source_type = 'shop')) AS current_avl,
+        get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
         get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep
     FROM items i
     JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
@@ -197,7 +197,7 @@ WITH w AS (
 raw_spheres AS (
     SELECT
         s.id AS sphere_id,
-        get_avl_rank_item(w.avl_type, mis.avl_self, mis.avl_context, mis.avl_context_2, w.pre_airship, (mis.source_type = 'shop')) AS current_avl,
+        get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
         get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep
     FROM spheres s
     JOIN items i ON s.item_id = i.id
@@ -288,7 +288,7 @@ WITH w AS (
 raw_auto_abilities AS (
     SELECT
         aas.auto_ability_id,
-        get_avl_rank_item(w.avl_type, aas.avl_self, aas.avl_context, aas.avl_context_2, w.pre_airship, (aas.source_type = 'shop')) AS current_avl,
+        get_avl_rank_auto_ability(w.avl_type, w.loc_context_type, aas.source_type, aas.character_id, w.pre_airship, aas.avl_self, aas.avl_context, aas.avl_context_2, aas.avl_shop_loc, aas.avl_shop_subloc, aas.avl_shop_area, aas.avl_shop_loc_char, aas.avl_shop_subloc_char, aas.avl_shop_area_char) AS current_avl,
         get_is_rep(w.loc_context_id, aas.is_repeatable, aas.is_repeatable_loc) AS is_rep
     FROM mv_auto_ability_sources aas
     JOIN mv_geography g ON aas.area_id = g.area_id
@@ -303,17 +303,17 @@ raw_auto_abilities AS (
     SELECT sub.auto_ability_id, sub.current_avl, sub.is_rep FROM (
         SELECT
             aa.id AS auto_ability_id,
-            get_avl_rank_item(w.avl_type, mis.avl_self, mis.avl_context, mis.avl_context_2, w.pre_airship, (mis.source_type = 'shop')) AS current_avl,
+            get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
             get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep,
             mis.area_id,
             BOOL_OR(get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc)) FILTER (
                 WHERE w.availability IS NULL
                 OR
-                get_avl_rank_item(w.avl_type, mis.avl_self, mis.avl_context, mis.avl_context_2, w.pre_airship, (mis.source_type = 'shop')) = ANY(w.availability)
+                get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) = ANY(w.availability)
             ) OVER (PARTITION BY aa.id) AS group_is_rep,
             SUM(mis.amount) FILTER (
                 WHERE NOT get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc)
-                AND (w.availability IS NULL OR get_avl_rank_item(w.avl_type, mis.avl_self, mis.avl_context, mis.avl_context_2, w.pre_airship, (mis.source_type = 'shop')) = ANY(w.availability))
+                AND (w.availability IS NULL OR get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) = ANY(w.availability))
             ) OVER (PARTITION BY aa.id) AS group_total_amt,
             ia_req.amount AS req_amount
         FROM auto_abilities aa

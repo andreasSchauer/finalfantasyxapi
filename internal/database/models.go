@@ -4066,28 +4066,24 @@ type MvAbility struct {
 }
 
 type MvAutoAbilitySource struct {
-	AutoAbilityID   int32
-	AutoAbility     string
-	SourceID        int32
-	SourceType      string
-	CharacterID     int32
-	AvlSelf         AvailabilityType
-	AvlContext      AvailabilityType
-	AvlContext2     AvailabilityType
-	IsRepeatable    bool
-	IsRepeatableLoc bool
-	AreaID          int32
-	ShopType        NullShopType
-}
-
-type MvAvailabilitiesShopsLoc struct {
-	MasterItemID int32
-	Item         string
-	SourceID     int32
-	AvlArea      interface{}
-	AvlSubloc    interface{}
-	AvlLoc       interface{}
-	AreaID       int32
+	AutoAbilityID     int32
+	AutoAbility       string
+	SourceID          int32
+	SourceType        string
+	CharacterID       int32
+	AvlSelf           AvailabilityType
+	AvlContext        AvailabilityType
+	AvlContext2       AvailabilityType
+	AvlShopArea       NullAvailabilityType
+	AvlShopSubloc     NullAvailabilityType
+	AvlShopLoc        NullAvailabilityType
+	AvlShopAreaChar   NullAvailabilityType
+	AvlShopSublocChar NullAvailabilityType
+	AvlShopLocChar    NullAvailabilityType
+	IsRepeatable      bool
+	IsRepeatableLoc   bool
+	AreaID            int32
+	ShopType          NullShopType
 }
 
 type MvAvailability struct {
@@ -4164,6 +4160,9 @@ type MvItemSource struct {
 	AvlSelf         AvailabilityType
 	AvlContext      AvailabilityType
 	AvlContext2     AvailabilityType
+	AvlShopArea     NullAvailabilityType
+	AvlShopSubloc   NullAvailabilityType
+	AvlShopLoc      NullAvailabilityType
 	IsRepeatable    bool
 	IsRepeatableLoc bool
 	AreaID          int32
