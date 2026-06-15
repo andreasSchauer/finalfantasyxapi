@@ -240,28 +240,32 @@ raw_auto_abilities AS (
 
     SELECT sub.auto_ability_id, sub.current_avl, sub.is_rep FROM (
         SELECT
-            aa.id AS auto_ability_id,
-            get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
-            get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep,
+            calc.auto_ability_id,
+            calc.current_avl,
+            calc.is_rep,
             mis.area_id,
-            BOOL_OR(get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc)) FILTER (
-                WHERE w.availability IS NULL
-                OR
-                get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) = ANY(w.availability)
-            ) OVER (PARTITION BY aa.id) AS group_is_rep,
-            SUM(mis.amount) FILTER (
-                WHERE NOT get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc)
-                AND (w.availability IS NULL OR get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) = ANY(w.availability))
-            ) OVER (PARTITION BY aa.id) AS group_total_amt,
-            ia_req.amount AS req_amount
-        FROM auto_abilities aa
-        JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
-        JOIN mv_item_sources mis ON mis.master_item_id = ia_req.master_item_id
-        JOIN mv_geography g ON mis.area_id = g.area_id
+            BOOL_OR(calc.is_rep) FILTER (WHERE w.availability IS NULL OR calc.current_avl = ANY(w.availability)) 
+                OVER (PARTITION BY calc.auto_ability_id) AS group_is_rep,
+            SUM(calc.amount) FILTER (WHERE NOT calc.is_rep AND (w.availability IS NULL OR calc.current_avl = ANY(w.availability)))
+                OVER (PARTITION BY calc.auto_ability_id) AS group_total_amt,
+            calc.req_amount
+        FROM (
+            SELECT
+                aa.id AS auto_ability_id,
+                mis.amount,
+                ia_req.amount AS req_amount,
+                get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
+                get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep
+            FROM auto_abilities aa
+            JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
+            JOIN mv_item_sources mis ON mis.master_item_id = ia_req.master_item_id
+            JOIN mv_geography g ON mis.area_id = g.area_id
+            CROSS JOIN w
+            WHERE aa.id = ANY(w.ids)
+            AND w.req_item = TRUE
+            AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
+        ) AS calc
         CROSS JOIN w
-        WHERE aa.id = ANY(w.ids)
-        AND w.req_item = TRUE
-        AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
     ) AS sub
     WHERE sub.group_is_rep OR (COALESCE(sub.group_total_amt, 0) >= sub.req_amount)
 ),
