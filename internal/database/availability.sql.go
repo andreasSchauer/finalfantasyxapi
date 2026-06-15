@@ -243,7 +243,6 @@ raw_auto_abilities AS (
             calc.auto_ability_id,
             calc.current_avl,
             calc.is_rep,
-            mis.area_id,
             BOOL_OR(calc.is_rep) FILTER (WHERE w.availability IS NULL OR calc.current_avl = ANY(w.availability)) 
                 OVER (PARTITION BY calc.auto_ability_id) AS group_is_rep,
             SUM(calc.amount) FILTER (WHERE NOT calc.is_rep AND (w.availability IS NULL OR calc.current_avl = ANY(w.availability)))
