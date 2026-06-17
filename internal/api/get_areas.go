@@ -55,6 +55,7 @@ func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, A
 		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getAreasByItem)),
 		frl(idQuery(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), cfg.db.GetAreaIDsWithKeyItem)),
 		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetAreasByMonster)),
+		frl(idQuery(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), cfg.db.GetAreaIDsWithAutoAbility)),
 		frl(boolQuery(cfg, r, i, resources, "save_sphere", cfg.db.GetAreaIDsWithSaveSphere)),
 		frl(boolQuery(cfg, r, i, resources, "comp_sphere", cfg.db.GetAreaIDsWithCompSphere)),
 		frl(boolQuery(cfg, r, i, resources, "airship", cfg.db.GetAreaIDsWithDropOff)),

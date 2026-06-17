@@ -44,6 +44,7 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 		MonsterID: 		 sources.MonsterID,
 		ItemID: 		 sources.ItemID,
 		KeyItemID: 		 sources.KeyItemID,
+		AutoAbilityID: 	 sources.AutoAbilityID,
 		Methods: 		 sources.Methods,
 	})
 	if err != nil {
@@ -91,6 +92,7 @@ func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIRes
 		MonsterID: 		 sources.MonsterID,
 		ItemID: 		 sources.ItemID,
 		KeyItemID: 		 sources.KeyItemID,
+		AutoAbilityID: 	 sources.AutoAbilityID,
 		Methods: 		 sources.Methods,
 	})
 	if err != nil {
@@ -138,6 +140,7 @@ func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResour
 		MonsterID: 		 sources.MonsterID,
 		ItemID: 		 sources.ItemID,
 		KeyItemID: 		 sources.KeyItemID,
+		AutoAbilityID: 	 sources.AutoAbilityID,
 		Methods: 		 sources.Methods,
 	})
 	if err != nil {

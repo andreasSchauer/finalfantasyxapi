@@ -115,7 +115,6 @@ func filterAvlSidequests(cfg *Config, r *http.Request, resources []QuestAPIResou
 	dbIDs, err := cfg.db.FilterSidequestIDsByAvailability(r.Context(), database.FilterSidequestIDsByAvailabilityParams{
 		Ids:          resToIDs(resources),
 		Availability:   avlParams.availabilities,
-		IsRepeatable:   avlParams.isRepeatable,
 		PreAirship: 	avlParams.preAirship,
 	})
 	if err != nil {

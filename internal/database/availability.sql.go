@@ -24,7 +24,8 @@ WITH w AS (
         $7::int AS monster_id,
         $8::int AS key_item_id,
         $9::int AS item_id,
-        $10::text[] AS methods
+        $10::int AS auto_ability_id,
+        $11::text[] AS methods
 ),
 all_areas AS (
     SELECT id AS area_id, 'area' AS s_type 
@@ -69,6 +70,18 @@ raw_res_areas AS (
     CROSS JOIN w
     WHERE mis.area_id = ANY(w.ids)
         AND ki.id = w.key_item_id
+
+    UNION ALL
+
+    SELECT
+        aas.area_id,
+        'auto-ability'::text AS s_type,
+        get_avl_rank(aas.avl_context_2, w.pre_airship) AS current_avl,
+        aas.is_repeatable_loc AS is_rep
+    FROM mv_auto_ability_sources aas
+    CROSS JOIN w
+    WHERE aas.area_id = ANY(w.ids)
+        AND aas.auto_ability_id = w.auto_ability_id
 ),
 raw_res_areas_rep AS (
     SELECT
@@ -148,6 +161,7 @@ type FilterAreaIDsByAvailabilityParams struct {
 	MonsterID       sql.NullInt32
 	KeyItemID       sql.NullInt32
 	ItemID          sql.NullInt32
+	AutoAbilityID   sql.NullInt32
 	Methods         []string
 }
 
@@ -162,6 +176,7 @@ func (q *Queries) FilterAreaIDsByAvailability(ctx context.Context, arg FilterAre
 		arg.MonsterID,
 		arg.KeyItemID,
 		arg.ItemID,
+		arg.AutoAbilityID,
 		pq.Array(arg.Methods),
 	)
 	if err != nil {
@@ -509,7 +524,8 @@ WITH w AS (
         $7::int AS monster_id,
         $8::int AS key_item_id,
         $9::int AS item_id,
-        $10::text[] AS methods
+        $10::int AS auto_ability_id,
+        $11::text[] AS methods
 ),
 all_locations AS (
     SELECT id AS location_id, 'location' AS s_type 
@@ -557,6 +573,19 @@ raw_res_locations AS (
     CROSS JOIN w
     WHERE g.location_id = ANY(w.ids)
         AND ki.id = w.key_item_id
+
+    UNION ALL
+
+    SELECT
+        g.sublocation_id,
+        'auto-ability'::text AS s_type,
+        get_avl_rank(aas.avl_context, w.pre_airship) AS current_avl,
+        aas.is_repeatable_loc AS is_rep
+    FROM mv_auto_ability_sources aas
+    JOIN mv_geography g ON aas.area_id = g.area_id
+    CROSS JOIN w
+    WHERE aas.area_id = ANY(w.ids)
+        AND aas.auto_ability_id = w.auto_ability_id
 ),
 raw_res_locations_rep AS (
     SELECT
@@ -638,6 +667,7 @@ type FilterLocationIDsByAvailabilityParams struct {
 	MonsterID       sql.NullInt32
 	KeyItemID       sql.NullInt32
 	ItemID          sql.NullInt32
+	AutoAbilityID   sql.NullInt32
 	Methods         []string
 }
 
@@ -652,6 +682,7 @@ func (q *Queries) FilterLocationIDsByAvailability(ctx context.Context, arg Filte
 		arg.MonsterID,
 		arg.KeyItemID,
 		arg.ItemID,
+		arg.AutoAbilityID,
 		pq.Array(arg.Methods),
 	)
 	if err != nil {
@@ -1092,6 +1123,7 @@ available_shops AS (
         JOIN mv_geography g ON a.a_id = g.area_id
         CROSS JOIN w
         WHERE a.s_id = ANY(w.ids)
+          AND (w.auto_ability_id IS NULL AND w.empty_slots IS NULL AND w.character_id IS NULL)
           AND a.source_type = 'shop'
           AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
 
@@ -1176,8 +1208,7 @@ WITH w AS (
     SELECT
         $1::int[] AS ids,
         $2::int[] AS availability,
-        $3::boolean AS is_repeatable,
-        $4::boolean AS pre_airship
+        $3::boolean AS pre_airship
 )
 SELECT DISTINCT s.id
 FROM sidequests s
@@ -1186,24 +1217,17 @@ JOIN mv_availabilities a ON q.id = a.s_id AND a.source_type = 'quest'
 CROSS JOIN w
 WHERE s.id = ANY(w.ids)
   AND (w.availability IS NULL OR get_avl_rank(a.avl_self, w.pre_airship) = ANY(w.availability))
-  AND (w.is_repeatable IS NULL OR q.is_repeatable = w.is_repeatable)
 ORDER BY s.id
 `
 
 type FilterSidequestIDsByAvailabilityParams struct {
 	Ids          []int32
 	Availability []int32
-	IsRepeatable sql.NullBool
 	PreAirship   bool
 }
 
 func (q *Queries) FilterSidequestIDsByAvailability(ctx context.Context, arg FilterSidequestIDsByAvailabilityParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, filterSidequestIDsByAvailability,
-		pq.Array(arg.Ids),
-		pq.Array(arg.Availability),
-		arg.IsRepeatable,
-		arg.PreAirship,
-	)
+	rows, err := q.db.QueryContext(ctx, filterSidequestIDsByAvailability, pq.Array(arg.Ids), pq.Array(arg.Availability), arg.PreAirship)
 	if err != nil {
 		return nil, err
 	}
@@ -1330,7 +1354,8 @@ WITH w AS (
         $7::int AS monster_id,
         $8::int AS key_item_id,
         $9::int AS item_id,
-        $10::text[] AS methods
+        $10::int AS auto_ability_id,
+        $11::text[] AS methods
 ),
 all_sublocations AS (
     SELECT id AS sublocation_id, 'sublocation' AS s_type 
@@ -1378,6 +1403,19 @@ raw_res_sublocations AS (
     CROSS JOIN w
     WHERE g.sublocation_id = ANY(w.ids)
         AND ki.id = w.key_item_id
+
+    UNION ALL
+
+    SELECT
+        g.sublocation_id,
+        'auto-ability'::text AS s_type,
+        get_avl_rank(aas.avl_context, w.pre_airship) AS current_avl,
+        aas.is_repeatable_loc AS is_rep
+    FROM mv_auto_ability_sources aas
+    JOIN mv_geography g ON aas.area_id = g.area_id
+    CROSS JOIN w
+    WHERE aas.area_id = ANY(w.ids)
+        AND aas.auto_ability_id = w.auto_ability_id
 ),
 raw_res_sublocations_rep AS (
     SELECT
@@ -1459,6 +1497,7 @@ type FilterSublocationIDsByAvailabilityParams struct {
 	MonsterID       sql.NullInt32
 	KeyItemID       sql.NullInt32
 	ItemID          sql.NullInt32
+	AutoAbilityID   sql.NullInt32
 	Methods         []string
 }
 
@@ -1473,6 +1512,7 @@ func (q *Queries) FilterSublocationIDsByAvailability(ctx context.Context, arg Fi
 		arg.MonsterID,
 		arg.KeyItemID,
 		arg.ItemID,
+		arg.AutoAbilityID,
 		pq.Array(arg.Methods),
 	)
 	if err != nil {

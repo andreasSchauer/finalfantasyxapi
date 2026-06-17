@@ -16,6 +16,7 @@ type locBasedSources struct {
 	MonsterID       sql.NullInt32
 	ItemID          sql.NullInt32
 	KeyItemID       sql.NullInt32
+	AutoAbilityID	sql.NullInt32
 	Methods         []string
 }
 
@@ -62,6 +63,14 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		reqs = append(reqs, string(ViewSourceTypeKeyItem))
 	}
 
+	autoAbilityID, err := getQueryIdPtr(r, cfg.e.autoAbilities, "auto_ability", i.queryLookup)
+	if errExceptEmptyQuery(err) {
+		return locBasedSources{}, err
+	}
+	if !queryIsEmpty(err) {
+		reqs = append(reqs, string(ViewSourceTypeAutoAbility))
+	}
+
 	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
@@ -85,6 +94,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		MonsterID: 		 h.GetNullInt32(monID),
 		ItemID: 		 h.GetNullInt32(itemID),
 		KeyItemID: 		 h.GetNullInt32(keyItemID),
+		AutoAbilityID: 	 h.GetNullInt32(autoAbilityID),
 		Methods: 		 h.SliceOrNil(methods),
 	}
 

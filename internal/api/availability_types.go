@@ -23,5 +23,6 @@ const (
 	ViewSourceTypeBlitzball        ViewSourceType = "blitzball"
 	ViewSourceTypeItem             ViewSourceType = "item"
 	ViewSourceTypeKeyItem          ViewSourceType = "key-item"
+	ViewSourceTypeAutoAbility      ViewSourceType = "auto-ability"
 	ViewSourceTypeEquipment        ViewSourceType = "equip"
 )

@@ -51,6 +51,7 @@ func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.
 		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetSublocationIDsWithMonster)),
 		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getSublocationsByItem)),
 		frl(idQuery(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), cfg.db.GetSublocationIDsWithKeyItem)),
+		frl(idQuery(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), cfg.db.GetSublocationIDsWithAutoAbility)),
 		frl(boolQuery2(cfg, r, i, resources, "characters", cfg.db.GetSublocationIDsWithCharacters)),
 		frl(boolQuery2(cfg, r, i, resources, "aeons", cfg.db.GetSublocationIDsWithAeons)),
 		frl(boolQuery2(cfg, r, i, resources, "monsters", cfg.db.GetSublocationIDsWithMonsters)),

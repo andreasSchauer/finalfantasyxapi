@@ -188,6 +188,10 @@ WHERE ki.id = $1
 ORDER BY mis.area_id;
 
 
+-- name: GetAreaIDsWithAutoAbility :many
+SELECT DISTINCT area_id FROM mv_auto_ability_sources WHERE auto_ability_id = $1 ORDER BY area_id;
+
+
 -- name: GetAreaIDsWithMonster :many
 SELECT DISTINCT area_id FROM mv_monster_encounters WHERE monster_id = $1 ORDER BY area_id;
 
@@ -441,6 +445,14 @@ FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
+ORDER BY g.sublocation_id;
+
+
+-- name: GetSublocationIDsWithAutoAbility :many
+SELECT DISTINCT g.sublocation_id
+FROM mv_geography g
+JOIN mv_auto_ability_sources aas ON aas.area_id = g.area_id
+WHERE aas.auto_ability_id = $1
 ORDER BY g.sublocation_id;
 
 
@@ -710,6 +722,14 @@ FROM mv_geography g
 JOIN mv_item_sources mis ON mis.area_id = g.area_id
 JOIN key_items ki ON mis.master_item_id = ki.master_item_id
 WHERE ki.id = $1
+ORDER BY g.location_id;
+
+
+-- name: GetLocationIDsWithAutoAbility :many
+SELECT DISTINCT g.location_id
+FROM mv_geography g
+JOIN mv_auto_ability_sources aas ON aas.area_id = g.area_id
+WHERE aas.auto_ability_id = $1
 ORDER BY g.location_id;
 
 

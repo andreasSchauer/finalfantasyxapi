@@ -319,6 +319,33 @@ func (q *Queries) GetAreaIDsWithAeons(ctx context.Context) ([]int32, error) {
 	return items, nil
 }
 
+const getAreaIDsWithAutoAbility = `-- name: GetAreaIDsWithAutoAbility :many
+SELECT DISTINCT area_id FROM mv_auto_ability_sources WHERE auto_ability_id = $1 ORDER BY area_id
+`
+
+func (q *Queries) GetAreaIDsWithAutoAbility(ctx context.Context, autoAbilityID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaIDsWithAutoAbility, autoAbilityID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var area_id int32
+		if err := rows.Scan(&area_id); err != nil {
+			return nil, err
+		}
+		items = append(items, area_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAreaIDsWithBosses = `-- name: GetAreaIDsWithBosses :many
 SELECT DISTINCT me.area_id
 FROM mv_monster_encounters me
@@ -1371,6 +1398,37 @@ ORDER BY g.location_id
 
 func (q *Queries) GetLocationIDsWithAeons(ctx context.Context) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getLocationIDsWithAeons)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var location_id int32
+		if err := rows.Scan(&location_id); err != nil {
+			return nil, err
+		}
+		items = append(items, location_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLocationIDsWithAutoAbility = `-- name: GetLocationIDsWithAutoAbility :many
+SELECT DISTINCT g.location_id
+FROM mv_geography g
+JOIN mv_auto_ability_sources aas ON aas.area_id = g.area_id
+WHERE aas.auto_ability_id = $1
+ORDER BY g.location_id
+`
+
+func (q *Queries) GetLocationIDsWithAutoAbility(ctx context.Context, autoAbilityID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationIDsWithAutoAbility, autoAbilityID)
 	if err != nil {
 		return nil, err
 	}
@@ -2599,6 +2657,37 @@ ORDER BY g.sublocation_id
 
 func (q *Queries) GetSublocationIDsWithAeons(ctx context.Context) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getSublocationIDsWithAeons)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var sublocation_id int32
+		if err := rows.Scan(&sublocation_id); err != nil {
+			return nil, err
+		}
+		items = append(items, sublocation_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSublocationIDsWithAutoAbility = `-- name: GetSublocationIDsWithAutoAbility :many
+SELECT DISTINCT g.sublocation_id
+FROM mv_geography g
+JOIN mv_auto_ability_sources aas ON aas.area_id = g.area_id
+WHERE aas.auto_ability_id = $1
+ORDER BY g.sublocation_id
+`
+
+func (q *Queries) GetSublocationIDsWithAutoAbility(ctx context.Context, autoAbilityID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationIDsWithAutoAbility, autoAbilityID)
 	if err != nil {
 		return nil, err
 	}
