@@ -129,6 +129,13 @@ WHERE area_id = $1
 ORDER BY auto_ability_id;
 
 
+-- name: GetAutoAbilityIDsByMethods :many
+SELECT auto_ability_id
+FROM mv_auto_ability_sources
+WHERE source_type = ANY(sqlc.arg('methods')::text[])
+ORDER BY auto_ability_id;
+
+
 
 
 

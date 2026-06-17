@@ -64,6 +64,7 @@ func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seeding
 		frl(idQueryWrapper(cfg, r, i, resources, "monster", len(cfg.l.Monsters), getAutoAbilitiesByMonster)),
 		frl(idQuery(cfg, r, i, resources, "monster_items", len(cfg.l.Monsters), cfg.db.GetAutoAbilityIDsByMonsterItems)),
 		frl(idQueryWrapper(cfg, r, i, resources, "shop", len(cfg.l.Shops), getAutoAbilitiesByShop)),
+		frl(valueListQuery(cfg, r, i, resources, "methods", cfg.db.GetAutoAbilityIDsByMethods)),
 		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetAutoAbilityIDsByLocation)),
 		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetAutoAbilityIDsBySublocation)),
 		frl(idQuery(cfg, r, i, resources, "areas", len(cfg.l.Areas), cfg.db.GetAutoAbilityIDsByArea)),

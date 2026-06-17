@@ -35,6 +35,11 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, resources []NamedAPIRe
 		return nil, err
 	}
 
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
+	if errExceptEmptyQuery(err) {
+		return nil, err
+	}
+
 	dbIDs, err := cfg.db.FilterAutoAbilityIDsByAvailability(r.Context(), database.FilterAutoAbilityIDsByAvailabilityParams{
 		Ids:          	resToIDs(resources),
 		Availability:   avlParams.availabilities,
@@ -44,6 +49,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, resources []NamedAPIRe
 		LocContextID: 	locContext.ID,
 		LocContextType: locContext.Type,
 		CharacterID: 	h.GetNullInt32(charID),
+		Methods: 		methods,
 		ReqItem:      	reqItem,
 	})
 	if err != nil {

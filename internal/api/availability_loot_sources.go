@@ -24,11 +24,18 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 		return nil, err
 	}
 
+	locContext, err := getLocContextParams(cfg, r, i)
+	if err != nil {
+		return nil, err
+	}
+
 	dbIDs, err := cfg.db.FilterShopIDsByAvailability(r.Context(), database.FilterShopIDsByAvailabilityParams{
 		Ids:          		resToIDs(resources),
-		Availability: 	avlParams.availabilities,
-		PreAirship:		avlParams.preAirship,
+		Availability: 		avlParams.availabilities,
+		PreAirship:			avlParams.preAirship,
 		AvlType:      		sources.AvlType,
+		LocContextID: 		locContext.ID,
+		LocContextType: 	locContext.Type,
 		RequiredSources:    sources.RequiredSources,
 		ExcludedSources: 	sources.ExcludedSources,
 		AutoAbilityID: 		sources.AutoAbilityID,

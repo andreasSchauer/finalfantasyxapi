@@ -191,6 +191,36 @@ func (q *Queries) GetAutoAbilityIDsByLocation(ctx context.Context, locationID in
 	return items, nil
 }
 
+const getAutoAbilityIDsByMethods = `-- name: GetAutoAbilityIDsByMethods :many
+SELECT auto_ability_id
+FROM mv_auto_ability_sources
+WHERE source_type = ANY($1::text[])
+ORDER BY auto_ability_id
+`
+
+func (q *Queries) GetAutoAbilityIDsByMethods(ctx context.Context, methods []string) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAutoAbilityIDsByMethods, pq.Array(methods))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var auto_ability_id int32
+		if err := rows.Scan(&auto_ability_id); err != nil {
+			return nil, err
+		}
+		items = append(items, auto_ability_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAutoAbilityIDsByMonster = `-- name: GetAutoAbilityIDsByMonster :many
 WITH w AS (
   SELECT

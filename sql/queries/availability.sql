@@ -36,6 +36,8 @@ HAVING filter_avl_rep(
     MIN(m.current_avl),
     BOOL_OR(m.is_rep = w.is_repeatable),
     MIN(m.current_avl) FILTER (WHERE m.is_rep = w.is_repeatable),
+    BOOL_OR(m.is_rep) FILTER (WHERE m.current_avl = ANY(w.availability)),
+    MIN(m.current_avl) FILTER (WHERE m.is_rep = FALSE),
     w.availability,
     w.is_repeatable
 )
@@ -81,6 +83,8 @@ HAVING filter_avl_rep(
     MIN(mf.current_avl),
     BOOL_OR(mf.is_rep = w.is_repeatable),
     MIN(mf.current_avl) FILTER (WHERE mf.is_rep = w.is_repeatable),
+    BOOL_OR(mf.is_rep) FILTER (WHERE mf.current_avl = ANY(w.availability)),
+    MIN(mf.current_avl) FILTER (WHERE mf.is_rep = FALSE),
     w.availability,
     w.is_repeatable
 )
@@ -103,7 +107,7 @@ WITH w AS (
 raw_master_items AS (
     SELECT
         mis.master_item_id,
-        get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
+        get_avl_rank_item(mis.source_type, w.avl_type, w.loc_context_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
         get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep
     FROM mv_item_sources mis
     JOIN mv_geography g ON mis.area_id = g.area_id
@@ -128,6 +132,8 @@ HAVING filter_avl_rep(
     MIN(mi.current_avl),
     BOOL_OR(mi.is_rep = w.is_repeatable),
     MIN(mi.current_avl) FILTER (WHERE mi.is_rep = w.is_repeatable),
+    BOOL_OR(mi.is_rep) FILTER (WHERE mi.current_avl = ANY(w.availability)),
+    MIN(mi.current_avl) FILTER (WHERE mi.is_rep = FALSE),
     w.availability,
     w.is_repeatable
 )
@@ -150,7 +156,7 @@ WITH w AS (
 raw_items AS (
     SELECT
         i.id AS item_id,
-        get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
+        get_avl_rank_item(mis.source_type, w.avl_type, w.loc_context_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
         get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep
     FROM items i
     JOIN mv_item_sources mis ON mis.master_item_id = i.master_item_id
@@ -176,6 +182,8 @@ HAVING filter_avl_rep(
     MIN(i.current_avl),
     BOOL_OR(i.is_rep = w.is_repeatable),
     MIN(i.current_avl) FILTER (WHERE i.is_rep = w.is_repeatable),
+    BOOL_OR(i.is_rep) FILTER (WHERE i.current_avl = ANY(w.availability)),
+    MIN(i.current_avl) FILTER (WHERE i.is_rep = FALSE),
     w.availability,
     w.is_repeatable
 )
@@ -197,7 +205,7 @@ WITH w AS (
 raw_spheres AS (
     SELECT
         s.id AS sphere_id,
-        get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
+        get_avl_rank_item(mis.source_type, w.avl_type, w.loc_context_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
         get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep
     FROM spheres s
     JOIN items i ON s.item_id = i.id
@@ -224,6 +232,8 @@ HAVING filter_avl_rep(
     MIN(s.current_avl),
     BOOL_OR(s.is_rep = w.is_repeatable),
     MIN(s.current_avl) FILTER (WHERE s.is_rep = w.is_repeatable),
+    BOOL_OR(s.is_rep) FILTER (WHERE s.current_avl = ANY(w.availability)),
+    MIN(s.current_avl) FILTER (WHERE s.is_rep = FALSE),
     w.availability,
     w.is_repeatable
 )
@@ -283,12 +293,13 @@ WITH w AS (
         sqlc.narg('loc_context_id')::int AS loc_context_id,
         sqlc.narg('loc_context_type')::text AS loc_context_type,
         sqlc.narg('character_id')::int AS character_id,
+        sqlc.narg('methods')::text[] AS methods,
         sqlc.arg('req_item')::boolean AS req_item
 ),
 raw_auto_abilities AS (
     SELECT
         aas.auto_ability_id,
-        get_avl_rank_auto_ability(w.avl_type, w.loc_context_type, aas.source_type, aas.character_id, w.pre_airship, aas.avl_self, aas.avl_context, aas.avl_context_2, aas.avl_shop_loc, aas.avl_shop_subloc, aas.avl_shop_area, aas.avl_shop_loc_char, aas.avl_shop_subloc_char, aas.avl_shop_area_char) AS current_avl,
+        get_avl_rank_auto_ability(aas.source_type, w.avl_type, w.loc_context_type, aas.character_id, w.pre_airship, aas.avl_self, aas.avl_context, aas.avl_context_2, aas.avl_shop_loc, aas.avl_shop_subloc, aas.avl_shop_area, aas.avl_shop_loc_char, aas.avl_shop_subloc_char, aas.avl_shop_area_char) AS current_avl,
         get_is_rep(w.loc_context_id, aas.is_repeatable, aas.is_repeatable_loc) AS is_rep
     FROM mv_auto_ability_sources aas
     JOIN mv_geography g ON aas.area_id = g.area_id
@@ -296,6 +307,7 @@ raw_auto_abilities AS (
     WHERE aas.auto_ability_id = ANY(w.ids)
     AND w.req_item = FALSE
     AND (w.character_id IS NULL OR aas.character_id = w.character_id OR aas.character_id IS NULL)
+    AND (w.methods IS NULL OR aas.source_type = ANY(w.methods))
     AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
 
     UNION ALL
@@ -315,7 +327,7 @@ raw_auto_abilities AS (
                 aa.id AS auto_ability_id,
                 mis.amount,
                 ia_req.amount AS req_amount,
-                get_avl_rank_item(w.avl_type, w.loc_context_type, mis.source_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
+                get_avl_rank_item(mis.source_type, w.avl_type, w.loc_context_type, w.pre_airship, mis.avl_self, mis.avl_context, mis.avl_context_2, mis.avl_shop_loc, mis.avl_shop_subloc, mis.avl_shop_area) AS current_avl,
                 get_is_rep(w.loc_context_id, mis.is_repeatable, mis.is_repeatable_loc) AS is_rep
             FROM auto_abilities aa
             JOIN item_amounts ia_req ON aa.required_item_amount_id = ia_req.id
@@ -346,6 +358,8 @@ HAVING filter_avl_rep(
     MIN(a.current_avl),
     BOOL_OR(a.is_rep = w.is_repeatable),
     MIN(a.current_avl) FILTER (WHERE a.is_rep = w.is_repeatable),
+    BOOL_OR(a.is_rep) FILTER (WHERE a.current_avl = ANY(w.availability)),
+    MIN(a.current_avl) FILTER (WHERE a.is_rep = FALSE),
     w.availability,
     w.is_repeatable
 )
@@ -359,6 +373,8 @@ WITH w AS (
         sqlc.arg('avl_type')::text AS avl_type,
         sqlc.arg('availability')::int[] AS availability,
         sqlc.arg('pre_airship')::boolean AS pre_airship,
+        sqlc.narg('loc_context_id')::int AS loc_context_id,
+        sqlc.narg('loc_context_type')::text AS loc_context_type,
         sqlc.narg('required_sources')::text[] AS reqs,
         sqlc.narg('excluded_sources')::text[] AS excls,
         sqlc.narg('auto_ability_id')::int AS auto_ability_id,
@@ -373,9 +389,11 @@ available_shops AS (
             get_avl_rank(select_avl(avl_type, avl_self, avl_context, avl_context_2), w.pre_airship) AS current_avl,
             a.sub_type AS s_type
         FROM mv_availabilities a
+        JOIN mv_geography g ON a.a_id = g.area_id
         CROSS JOIN w
         WHERE a.s_id = ANY(w.ids)
           AND a.source_type = 'shop'
+          AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
 
         UNION ALL
 
@@ -384,12 +402,15 @@ available_shops AS (
             get_avl_rank(select_avl(avl_type, avl_self, avl_context, avl_context_2), w.pre_airship) AS current_avl,
             'equip-filter' AS s_type
         FROM mv_equipment_sources es
+        JOIN mv_geography g ON es.area_id = g.area_id
         CROSS JOIN w
         WHERE es.source_id = ANY(w.ids)
         AND es.source_type = 'shop'
+        AND (w.auto_ability_id IS NOT NULL OR w.empty_slots IS NOT NULL OR w.character_id IS NOT NULL)
         AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
         AND (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
         AND (w.character_id IS NULL OR es.character_id = w.character_id)
+        AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
     ) AS raw_sources
     CROSS JOIN w
     GROUP BY shop_id, s_type, w.availability
@@ -564,6 +585,8 @@ filtered_res_areas AS (
         MIN(a.current_avl),
         BOOL_OR(a.is_rep = w.is_repeatable),
         MIN(a.current_avl) FILTER (WHERE a.is_rep = w.is_repeatable),
+        BOOL_OR(a.is_rep) FILTER (WHERE a.current_avl = ANY(w.availability)),
+        MIN(a.current_avl) FILTER (WHERE a.is_rep = FALSE),
         w.availability,
         w.is_repeatable
     )
@@ -693,6 +716,8 @@ filtered_res_sublocations AS (
         MIN(s.current_avl),
         BOOL_OR(s.is_rep = w.is_repeatable),
         MIN(s.current_avl) FILTER (WHERE s.is_rep = w.is_repeatable),
+        BOOL_OR(s.is_rep) FILTER (WHERE s.current_avl = ANY(w.availability)),
+        MIN(s.current_avl) FILTER (WHERE s.is_rep = FALSE),
         w.availability,
         w.is_repeatable
     )
@@ -823,6 +848,8 @@ filtered_res_locations AS (
         MIN(l.current_avl),
         BOOL_OR(l.is_rep = w.is_repeatable),
         MIN(l.current_avl) FILTER (WHERE l.is_rep = w.is_repeatable),
+        BOOL_OR(l.is_rep) FILTER (WHERE l.current_avl = ANY(w.availability)),
+        MIN(l.current_avl) FILTER (WHERE l.is_rep = FALSE),
         w.availability,
         w.is_repeatable
     )

@@ -49,10 +49,16 @@ func getLocContextParams[T seeding.Lookupable, R any, A APIResource, L APIResour
 		locContextType = string(ViewSourceTypeArea)
 	}
 
+	var locCtxTypePtr *string
+
+	if locContextType != "" {
+		locCtxTypePtr = &locContextType
+	}
+
 	params := locContextParams{
 		AvlType: string(avlType),
 		ID:      h.GetNullInt32(locContextID),
-		Type:    h.GetNullString(&locContextType),
+		Type:    h.GetNullString(locCtxTypePtr),
 	}
 
 	return params, nil

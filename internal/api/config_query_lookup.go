@@ -3050,6 +3050,15 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			References:  []string{createListURL(cfg, "monsters")},
 		},
 		{
+			Name:          "methods",
+			Description:   "Searches for auto-abilities that can be obtained via at least one of the given methods.",
+			Type:          "value-list",
+			ForList:       true,
+			ForSingle:     false,
+			ReplacedBy:    []string{"availability", "repeatable"},
+			AllowedValues: []string{"monster", "treasure", "shop"},
+		},
+		{
 			Name:        "req_item",
 			Description: "Converts the 'availability' and 'repeatable' parameters to search auto-abilities based on their required item's sources' availability and/or farmability.",
 			Type:        "bool",
