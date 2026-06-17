@@ -98,3 +98,12 @@ func (q *Queries) RefreshMonsterItemDropsView(ctx context.Context) error {
 	_, err := q.db.ExecContext(ctx, refreshMonsterItemDropsView)
 	return err
 }
+
+const refreshShopEquipAvlsView = `-- name: RefreshShopEquipAvlsView :exec
+REFRESH MATERIALIZED VIEW mv_shop_equip_avls
+`
+
+func (q *Queries) RefreshShopEquipAvlsView(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, refreshShopEquipAvlsView)
+	return err
+}

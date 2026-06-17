@@ -32,7 +32,6 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 	dbIDs, err := cfg.db.FilterShopIDsByAvailability(r.Context(), database.FilterShopIDsByAvailabilityParams{
 		Ids:          		resToIDs(resources),
 		Availability: 		avlParams.availabilities,
-		PreAirship:			avlParams.preAirship,
 		AvlType:      		sources.AvlType,
 		LocContextID: 		locContext.ID,
 		LocContextType: 	locContext.Type,

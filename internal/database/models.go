@@ -4220,6 +4220,28 @@ type MvMonsterItemDrop struct {
 	IsRepeatable bool
 }
 
+type MvShopEquipAvl struct {
+	ShopEquipmentID  int32
+	ShopID           int32
+	NameID           int32
+	Name             string
+	AutoAbilityID    sql.NullInt32
+	AutoAbility      sql.NullString
+	CharacterID      int32
+	EmptySlotsAmount interface{}
+	ShopType         ShopType
+	EquipType        EquipType
+	AvlSelf          AvailabilityType
+	AreaID           int32
+	AvlAcs           interface{}
+	AvlAc            interface{}
+	AvlAs            interface{}
+	AvlCs            interface{}
+	AvlA             interface{}
+	AvlC             interface{}
+	AvlS             interface{}
+}
+
 type OdModeAction struct {
 	ID       int32
 	DataHash string

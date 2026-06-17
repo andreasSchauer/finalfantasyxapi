@@ -535,6 +535,100 @@ CREATE INDEX idx_mv_equipment_sources_area_id ON mv_equipment_sources (area_id);
 
 
 
+CREATE MATERIALIZED VIEW mv_shop_equip_avls AS
+WITH shop_equip_configs AS (
+    SELECT DISTINCT
+        se.id AS shop_equipment_id,
+        sh.id AS shop_id,
+        en.id AS name_id,
+        en.name,
+        jea.auto_ability_id,
+        aa.name AS auto_ability,
+        en.character_id,
+        se.empty_slots_amount,
+        se.shop_type,
+        t.type AS equip_type,
+        sh.availability AS avl_self,
+        sh.area_id
+    FROM shop_equipment_pieces se
+    JOIN shops sh ON se.shop_id = sh.id
+    JOIN equipment_names en ON se.equipment_name_id = en.id
+    JOIN j_equipment_tables_names jtn ON jtn.equipment_name_id = en.id
+    JOIN equipment_tables t ON jtn.equipment_table_id = t.id
+    LEFT JOIN j_shop_equipment_abilities jea ON jea.shop_equipment_id = se.id
+    LEFT JOIN auto_abilities aa ON jea.auto_ability_id = aa.id
+)
+SELECT
+    shop_equipment_id,
+    shop_id,
+    name_id,
+    name,
+    auto_ability_id,
+    auto_ability,
+    character_id,
+    empty_slots_amount,
+    shop_type,
+    equip_type,
+    avl_self,
+    area_id,
+    CASE
+        WHEN BOOL_OR(shop_type = 'pre-airship') OVER (PARTITION BY shop_id, equip_type, auto_ability_id, character_id, empty_slots_amount) 
+            AND BOOL_OR(shop_type = 'post-airship') OVER (PARTITION BY shop_id, equip_type, auto_ability_id, character_id, empty_slots_amount) 
+        THEN 'always'::availability_type
+        WHEN shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_acs,
+    CASE
+        WHEN BOOL_OR(shop_type = 'pre-airship') OVER (PARTITION BY shop_id, equip_type, auto_ability_id, character_id) 
+            AND BOOL_OR(shop_type = 'post-airship') OVER (PARTITION BY shop_id, equip_type, auto_ability_id, character_id) 
+        THEN 'always'::availability_type
+        WHEN shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_ac,
+    CASE
+        WHEN BOOL_OR(shop_type = 'pre-airship') OVER (PARTITION BY shop_id, equip_type, auto_ability_id, empty_slots_amount) 
+            AND BOOL_OR(shop_type = 'post-airship') OVER (PARTITION BY shop_id, equip_type, auto_ability_id, empty_slots_amount) 
+        THEN 'always'::availability_type
+        WHEN shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_as,
+    CASE
+        WHEN BOOL_OR(shop_type = 'pre-airship') OVER (PARTITION BY shop_id, equip_type, character_id, empty_slots_amount) 
+            AND BOOL_OR(shop_type = 'post-airship') OVER (PARTITION BY shop_id, equip_type, character_id, empty_slots_amount) 
+        THEN 'always'::availability_type
+        WHEN shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_cs,
+    CASE
+        WHEN BOOL_OR(shop_type = 'pre-airship') OVER (PARTITION BY shop_id, equip_type, auto_ability_id) 
+            AND BOOL_OR(shop_type = 'post-airship') OVER (PARTITION BY shop_id, equip_type, auto_ability_id) 
+        THEN 'always'::availability_type
+        WHEN shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_a,
+    CASE
+        WHEN BOOL_OR(shop_type = 'pre-airship') OVER (PARTITION BY shop_id, equip_type, character_id) 
+            AND BOOL_OR(shop_type = 'post-airship') OVER (PARTITION BY shop_id, equip_type, character_id) 
+        THEN 'always'::availability_type
+        WHEN shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_c,
+    CASE
+        WHEN BOOL_OR(shop_type = 'pre-airship') OVER (PARTITION BY shop_id, equip_type, empty_slots_amount) 
+            AND BOOL_OR(shop_type = 'post-airship') OVER (PARTITION BY shop_id, equip_type, empty_slots_amount) 
+        THEN 'always'::availability_type
+        WHEN shop_type = 'pre-airship' THEN 'pre-story'::availability_type
+        WHEN shop_type = 'post-airship' THEN 'post'::availability_type
+    END AS avl_s
+FROM shop_equip_configs;
+
+CREATE INDEX idx_mv_shop_equip_avls_shops ON mv_shop_equip_avls (shop_id);
+CREATE INDEX idx_mv_shop_equip_avls_auto_ability_id ON mv_shop_equip_avls (auto_ability_id);
+CREATE INDEX idx_mv_shop_equip_avls_character_id ON mv_shop_equip_avls (character_id);
+CREATE INDEX idx_mv_shop_equip_avls_empty_slots ON mv_shop_equip_avls (empty_slots_amount);
+CREATE INDEX idx_mv_shop_equip_avls_area_id ON mv_shop_equip_avls (area_id);
+
+
 
 CREATE MATERIALIZED VIEW mv_auto_ability_sources AS
 SELECT DISTINCT
@@ -1164,6 +1258,7 @@ CREATE INDEX idx_mv_abilities_element_id ON mv_abilities (element_id);
 DROP MATERIALIZED VIEW IF EXISTS mv_abilities;
 DROP MATERIALIZED VIEW IF EXISTS mv_availabilities;
 DROP MATERIALIZED VIEW IF EXISTS mv_auto_ability_sources;
+DROP MATERIALIZED VIEW IF EXISTS mv_shop_equip_avls;
 DROP MATERIALIZED VIEW IF EXISTS mv_equipment_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_item_sources;
 DROP MATERIALIZED VIEW IF EXISTS mv_monster_equipment_drops;

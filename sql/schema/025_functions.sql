@@ -2,7 +2,12 @@
 
 
 -- +goose StatementBegin
-CREATE OR REPLACE FUNCTION get_loc_ctx_id(w_loc_context_type TEXT, location_id INTEGER, sublocation_id INTEGER, area_id INTEGER)
+CREATE OR REPLACE FUNCTION get_loc_ctx_id(
+    w_loc_context_type TEXT, 
+    location_id INTEGER,
+    sublocation_id INTEGER,
+    area_id INTEGER
+)
 RETURNS INT AS $$
     SELECT CASE
         WHEN w_loc_context_type = 'location' THEN location_id
@@ -14,7 +19,12 @@ $$ LANGUAGE sql IMMUTABLE;
 
 
 -- +goose StatementBegin
-CREATE OR REPLACE FUNCTION select_avl(w_avl_type TEXT, avl_self availability_type, avl_context availability_type, avl_context_2 availability_type)
+CREATE OR REPLACE FUNCTION select_avl(
+    w_avl_type TEXT,
+    avl_self availability_type,
+    avl_context availability_type,
+    avl_context_2 availability_type
+)
 RETURNS availability_type AS $$
     SELECT CASE
         WHEN w_avl_type = 'self' THEN avl_self
@@ -26,7 +36,41 @@ $$ LANGUAGE sql IMMUTABLE;
 
 
 -- +goose StatementBegin
-CREATE OR REPLACE FUNCTION select_loc_avl(w_l_ctx_type TEXT, avl_loc availability_type, avl_subloc availability_type, avl_area availability_type)
+CREATE OR REPLACE FUNCTION select_shop_equip_avl(
+    auto_ability_id INTEGER,
+    character_id INTEGER,
+    empty_slots_amount INTEGER[],
+    avl_acs availability_type,
+    avl_ac availability_type,
+    avl_as availability_type,
+    avl_cs availability_type,
+    avl_a availability_type,
+    avl_c availability_type,
+    avl_s availability_type,
+    avl_self availability_type
+)
+RETURNS availability_type AS $$
+    SELECT CASE
+        WHEN (auto_ability_id IS NOT NULL AND character_id IS NOT NULL AND empty_slots_amount IS NOT NULL) THEN avl_acs
+        WHEN (auto_ability_id IS NOT NULL AND character_id IS NOT NULL) THEN avl_ac
+        WHEN (auto_ability_id IS NOT NULL AND empty_slots_amount IS NOT NULL) THEN avl_as
+        WHEN (character_id IS NOT NULL AND empty_slots_amount IS NOT NULL) THEN avl_cs
+        WHEN (auto_ability_id IS NOT NULL) THEN avl_a
+        WHEN (character_id IS NOT NULL) THEN avl_c
+        WHEN (empty_slots_amount IS NOT NULL) THEN avl_s
+        ELSE avl_self
+    END
+$$ LANGUAGE sql IMMUTABLE;
+-- +goose StatementEnd
+
+
+-- +goose StatementBegin
+CREATE OR REPLACE FUNCTION select_loc_avl(
+    w_l_ctx_type TEXT,
+    avl_loc availability_type,
+    avl_subloc availability_type,
+    avl_area availability_type
+)
 RETURNS availability_type AS $$
     SELECT CASE
         WHEN w_l_ctx_type = 'location' THEN avl_loc
@@ -38,7 +82,10 @@ $$ LANGUAGE sql IMMUTABLE;
 
 
 -- +goose StatementBegin
-CREATE OR REPLACE FUNCTION get_avl_rank(avl availability_type, w_pre_airship BOOLEAN) 
+CREATE OR REPLACE FUNCTION get_avl_rank(
+    avl availability_type,
+    w_pre_airship BOOLEAN
+) 
 RETURNS INT AS $$
     SELECT CASE 
         WHEN avl = 'always' THEN 1
@@ -116,7 +163,12 @@ $$ LANGUAGE sql IMMUTABLE;
 
 
 -- +goose StatementBegin
-CREATE OR REPLACE FUNCTION get_avl_rank_condition(avl_true availability_type, avl_false availability_type, w_pre_airship BOOLEAN, condition BOOLEAN)
+CREATE OR REPLACE FUNCTION get_avl_rank_condition(
+    avl_true availability_type,
+    avl_false availability_type,
+    w_pre_airship BOOLEAN,
+    condition BOOLEAN
+)
 RETURNS INT AS $$
     SELECT get_avl_rank(
         CASE
@@ -130,7 +182,11 @@ $$ LANGUAGE sql IMMUTABLE;
 
 
 -- +goose StatementBegin
-CREATE OR REPLACE FUNCTION get_is_rep(w_loc_context_id INTEGER, is_repeatable BOOLEAN, is_repeatable_loc BOOLEAN)
+CREATE OR REPLACE FUNCTION get_is_rep(
+    w_loc_context_id INTEGER,
+    is_repeatable BOOLEAN,
+    is_repeatable_loc BOOLEAN
+)
 RETURNS BOOLEAN AS $$
     SELECT CASE
         WHEN w_loc_context_id IS NOT NULL THEN is_repeatable_loc
@@ -168,5 +224,6 @@ DROP FUNCTION IF EXISTS get_avl_rank_auto_ability(TEXT, TEXT, TEXT, INTEGER, BOO
 DROP FUNCTION IF EXISTS get_avl_rank_item(TEXT, TEXT, TEXT, BOOLEAN, availability_type, availability_type, availability_type, availability_type, availability_type, availability_type);
 DROP FUNCTION IF EXISTS get_avl_rank(availability_type, BOOLEAN);
 DROP FUNCTION IF EXISTS select_loc_avl(TEXT, availability_type, availability_type, availability_type);
+DROP FUNCTION IF EXISTS select_shop_equip_avl(INTEGER, INTEGER, INTEGER, availability_type, availability_type, availability_type, availability_type, availability_type, availability_type, availability_type, availability_type);
 DROP FUNCTION IF EXISTS select_avl(TEXT, availability_type, availability_type, availability_type);
 DROP FUNCTION IF EXISTS get_loc_ctx_id(TEXT, INTEGER, INTEGER, INTEGER);

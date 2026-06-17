@@ -807,7 +807,7 @@ WITH w AS (
 raw_formations AS (
     SELECT
         me.formation_id,
-        get_avl_rank(select_avl(avl_type, avl_context, avl_context, avl_context_2), w.pre_airship) AS current_avl,
+        get_avl_rank(select_avl(w.avl_type, me.avl_context, me.avl_context, me.avl_context_2), w.pre_airship) AS current_avl,
         me.is_repeatable_loc AS is_rep
     FROM mv_monster_encounters me
     JOIN mv_geography g ON me.area_id = g.area_id
@@ -894,7 +894,7 @@ WITH w AS (
 raw_monsters AS (
     SELECT
         me.monster_id,
-        get_avl_rank(select_avl(avl_type, avl_self, avl_context, avl_context_2), w.pre_airship) AS current_avl,
+        get_avl_rank(select_avl(w.avl_type, me.avl_self, me.avl_context, me.avl_context_2), w.pre_airship) AS current_avl,
         get_is_rep(w.loc_context_id, me.is_repeatable, me.is_repeatable_loc) AS is_rep
     FROM mv_monster_encounters me
     JOIN mv_geography g ON me.area_id = g.area_id
@@ -1073,21 +1073,20 @@ WITH w AS (
         $1::int[] AS ids,
         $2::text AS avl_type,
         $3::int[] AS availability,
-        $4::boolean AS pre_airship,
-        $5::int AS loc_context_id,
-        $6::text AS loc_context_type,
-        $7::text[] AS reqs,
-        $8::text[] AS excls,
-        $9::int AS auto_ability_id,
-        $10::int[] AS empty_slots,
-        $11::int AS character_id
+        $4::int AS loc_context_id,
+        $5::text AS loc_context_type,
+        $6::text[] AS reqs,
+        $7::text[] AS excls,
+        $8::int AS auto_ability_id,
+        $9::int[] AS empty_slots,
+        $10::int AS character_id
 ),
 available_shops AS (
     SELECT shop_id, s_type
     FROM (
         SELECT
             a.s_id AS shop_id,
-            get_avl_rank(select_avl(avl_type, avl_self, avl_context, avl_context_2), w.pre_airship) AS current_avl,
+            get_avl_rank(select_avl(w.avl_type, a.avl_self, a.avl_context, a.avl_context_2), FALSE) AS current_avl,
             a.sub_type AS s_type
         FROM mv_availabilities a
         JOIN mv_geography g ON a.a_id = g.area_id
@@ -1099,18 +1098,17 @@ available_shops AS (
         UNION ALL
 
         SELECT
-            es.source_id AS shop_id,
-            get_avl_rank(select_avl(avl_type, avl_self, avl_context, avl_context_2), w.pre_airship) AS current_avl,
+            sa.shop_id,
+            get_avl_rank(select_shop_equip_avl(w.auto_ability_id, w.character_id, w.empty_slots, sa.avl_acs, sa.avl_ac, sa.avl_as, sa.avl_cs, sa.avl_a, sa.avl_c, sa.avl_s, sa.avl_self), FALSE) AS current_avl,
             'equip-filter' AS s_type
-        FROM mv_equipment_sources es
-        JOIN mv_geography g ON es.area_id = g.area_id
+        FROM mv_shop_equip_avls sa
+        JOIN mv_geography g ON sa.area_id = g.area_id
         CROSS JOIN w
-        WHERE es.source_id = ANY(w.ids)
-        AND es.source_type = 'shop'
+        WHERE sa.shop_id = ANY(w.ids)
         AND (w.auto_ability_id IS NOT NULL OR w.empty_slots IS NOT NULL OR w.character_id IS NOT NULL)
-        AND (w.auto_ability_id IS NULL OR es.auto_ability_id = w.auto_ability_id)
-        AND (w.empty_slots IS NULL OR es.empty_slots_amount::int = ANY(w.empty_slots))
-        AND (w.character_id IS NULL OR es.character_id = w.character_id)
+        AND (w.auto_ability_id IS NULL OR sa.auto_ability_id = w.auto_ability_id)
+        AND (w.empty_slots IS NULL OR sa.empty_slots_amount::int = ANY(w.empty_slots))
+        AND (w.character_id IS NULL OR sa.character_id = w.character_id)
         AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
     ) AS raw_sources
     CROSS JOIN w
@@ -1130,7 +1128,6 @@ type FilterShopIDsByAvailabilityParams struct {
 	Ids             []int32
 	AvlType         string
 	Availability    []int32
-	PreAirship      bool
 	LocContextID    sql.NullInt32
 	LocContextType  sql.NullString
 	RequiredSources []string
@@ -1145,7 +1142,6 @@ func (q *Queries) FilterShopIDsByAvailability(ctx context.Context, arg FilterSho
 		pq.Array(arg.Ids),
 		arg.AvlType,
 		pq.Array(arg.Availability),
-		arg.PreAirship,
 		arg.LocContextID,
 		arg.LocContextType,
 		pq.Array(arg.RequiredSources),
