@@ -224,6 +224,6 @@ DROP FUNCTION IF EXISTS get_avl_rank_auto_ability(TEXT, TEXT, TEXT, INTEGER, BOO
 DROP FUNCTION IF EXISTS get_avl_rank_item(TEXT, TEXT, TEXT, BOOLEAN, availability_type, availability_type, availability_type, availability_type, availability_type, availability_type);
 DROP FUNCTION IF EXISTS get_avl_rank(availability_type, BOOLEAN);
 DROP FUNCTION IF EXISTS select_loc_avl(TEXT, availability_type, availability_type, availability_type);
-DROP FUNCTION IF EXISTS select_shop_equip_avl(INTEGER, INTEGER, INTEGER, availability_type, availability_type, availability_type, availability_type, availability_type, availability_type, availability_type, availability_type);
+DROP FUNCTION IF EXISTS select_shop_equip_avl(INTEGER, INTEGER, INTEGER[], availability_type, availability_type, availability_type, availability_type, availability_type, availability_type, availability_type, availability_type);
 DROP FUNCTION IF EXISTS select_avl(TEXT, availability_type, availability_type, availability_type);
 DROP FUNCTION IF EXISTS get_loc_ctx_id(TEXT, INTEGER, INTEGER, INTEGER);
