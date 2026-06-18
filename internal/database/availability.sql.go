@@ -577,14 +577,14 @@ raw_res_locations AS (
     UNION ALL
 
     SELECT
-        g.sublocation_id,
+        g.location_id,
         'auto-ability'::text AS s_type,
         get_avl_rank(aas.avl_context, w.pre_airship) AS current_avl,
         aas.is_repeatable_loc AS is_rep
     FROM mv_auto_ability_sources aas
     JOIN mv_geography g ON aas.area_id = g.area_id
     CROSS JOIN w
-    WHERE aas.area_id = ANY(w.ids)
+    WHERE g.location_id = ANY(w.ids)
         AND aas.auto_ability_id = w.auto_ability_id
 ),
 raw_res_locations_rep AS (
@@ -1414,7 +1414,7 @@ raw_res_sublocations AS (
     FROM mv_auto_ability_sources aas
     JOIN mv_geography g ON aas.area_id = g.area_id
     CROSS JOIN w
-    WHERE aas.area_id = ANY(w.ids)
+    WHERE g.sublocation_id = ANY(w.ids)
         AND aas.auto_ability_id = w.auto_ability_id
 ),
 raw_res_sublocations_rep AS (

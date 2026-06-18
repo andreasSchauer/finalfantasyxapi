@@ -343,6 +343,62 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			count:   5,
 			results: []int32{51, 113, 117, 121, 129},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities?availability=post&req_item=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   7,
+			results: []int32{32, 35, 36, 42, 88, 105, 118},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities?availability=post&req_item=false&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   22,
+			results: []int32{3, 38, 42, 50, 84, 98, 110, 121, 127},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities?availability=always&monster=85&character=1",
+				expectedStatus: http.StatusOK,
+			},
+			count:   7,
+			results: []int32{5, 6, 7, 8, 27, 73, 116},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities?availability=pre-story&character=5&area=215",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{2, 10, 93},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities?availability=always&sublocation=25&character=2&methods=treasure",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{69, 83},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities?availability=post&location=4",
+				expectedStatus: http.StatusOK,
+			},
+			count:   11,
+			results: []int32{3, 38, 43, 51, 59, 102, 128, 129},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities?availability=post&area=239&repeatable=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   9,
+			results: []int32{37, 39, 60, 74, 127},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.autoAbilities.endpoint, "RetrieveAutoAbilities", testCfg.HandleAutoAbilities, compareAPIResourceLists[NamedApiResourceList])

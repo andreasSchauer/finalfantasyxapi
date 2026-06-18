@@ -179,6 +179,110 @@ func TestRetrieveLocations(t *testing.T) {
 			count:   3,
 			results: []int32{8, 15, 18},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=pre-airship&item=56&methods=monster&pre_airship=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{14, 15, 20, 22, 24},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=post-game&item=56&methods=monster&pre_airship=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{14, 20, 22, 24, 26},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=always&auto_ability=4&item=27&methods=monster",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{14},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=post&monsters=true&treasures=false&item=53",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{18, 23},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=pre-story&monster=31",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{8},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=always&monster=87&repeatable=true&boss_fights=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{15},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=pre-story",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{1, 3, 17},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=post&sidequests=true&boss_fights=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{16, 18, 20},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=post&monsters=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   11,
+			results: []int32{2, 16, 20, 23, 24, 26},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=post&monsters=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   15,
+			results: []int32{1, 7, 12, 15, 19, 22},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=always&monster=48",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{10, 11, 12},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=pre-story&shops=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   11,
+			results: []int32{7, 12, 15, 20, 23},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations?availability=always&key_item=23",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{16},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.locations.endpoint, "RetrieveLocations", testCfg.HandleLocations, compareAPIResourceLists[NamedApiResourceList])

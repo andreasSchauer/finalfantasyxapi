@@ -1281,6 +1281,78 @@ func TestRetrieveMonsters(t *testing.T) {
 			count:   71,
 			results: []int32{201, 202, 210, 227, 246, 268, 284, 307},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?availability=post&location=4",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{293},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?availability=post-game&location=4",
+				expectedStatus: http.StatusOK,
+			},
+			count:   4,
+			results: []int32{16, 17, 18, 293},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?availability=post&location=23",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{301},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?availability=post&location=25",
+				expectedStatus: http.StatusOK,
+			},
+			count:   11,
+			results: []int32{170, 201, 202, 203, 208, 210, 247},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?availability=post-game&area=142",
+				expectedStatus: http.StatusOK,
+			},
+			count:   10,
+			results: []int32{72, 74, 78, 295, 296},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?availability=story&sublocation=34",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{149, 150},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?availability=story&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   110,
+			results: []int32{1, 8, 23, 57, 109, 127, 185, 217, 226},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?availability=story&repeatable=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   25,
+			results: []int32{7, 31, 111, 118, 130, 209},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters?availability=post-game&repeatable=false&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   22,
+			results: []int32{28, 107, 165, 293, 298, 305, 307},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.monsters.endpoint, "RetrieveMonsters", testCfg.HandleMonsters, compareAPIResourceLists[NamedApiResourceList])

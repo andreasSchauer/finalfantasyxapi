@@ -211,6 +211,54 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			count:   237,
 			results: []int32{9, 35, 58, 81, 103, 148, 165, 193, 239, 280, 319, 331},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations?category=boss-fight&repeatable=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{226, 227},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations?availability=always&location=23",
+				expectedStatus: http.StatusOK,
+			},
+			count:   14,
+			results: []int32{230, 233, 234, 237, 240, 244},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations?availability=post&location=25",
+				expectedStatus: http.StatusOK,
+			},
+			count:   11,
+			results: []int32{256, 260, 265, 266, 269},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations?availability=pre-story&sublocation=33",
+				expectedStatus: http.StatusOK,
+			},
+			count:   4,
+			results: []int32{174, 190, 191, 192},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations?availability=story&area=236",
+				expectedStatus: http.StatusOK,
+			},
+			count:   8,
+			results: []int32{260, 262, 263, 265, 266, 267, 268, 269},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations?availability=post&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   70,
+			results: []int32{7, 20, 70, 78, 83, 171, 213, 255, 264, 295, 310, 331},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.monsterFormations.endpoint, "RetrieveMonsterFormations", testCfg.HandleMonsterFormations, compareAPIResourceLists[UnnamedApiResourceList])

@@ -99,6 +99,38 @@ func TestRetrieveQuests(t *testing.T) {
 			count:   44,
 			results: []int32{1, 6, 11, 24, 34, 46, 62, 80, 87},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/quests?availability=post&repeatable=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{58, 62},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/quests?availability=always&repeatable=false&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   43,
+			results: []int32{3, 10, 38, 59, 77, 92, 98},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/quests?availability=pre-story",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{97},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/quests?availability=always&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   53,
+			results: []int32{3, 20, 55, 68, 82, 94, 98},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.quests.endpoint, "RetrieveQuests", testCfg.HandleQuests, compareAPIResourceLists[TypedAPIResourceList])

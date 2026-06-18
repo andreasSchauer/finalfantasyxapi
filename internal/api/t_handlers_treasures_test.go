@@ -193,8 +193,40 @@ func TestRetrieveTreasures(t *testing.T) {
 				requestURL:     "/api/treasures?availability=pre-story&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   100,
+			count:   99,
 			results: []int32{1, 23, 91, 119, 139, 206, 239, 261, 263},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?availability=post&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   59,
+			results: []int32{5, 30, 43, 64, 81, 109, 153, 211, 308, 342},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?availability=always&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   174,
+			results: []int32{2, 54, 80, 108, 147, 179, 214, 265, 295, 303},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?availability=pre-story&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   99,
+			results: []int32{1, 55, 112, 206, 248, 267},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?availability=post-story",
+				expectedStatus: http.StatusOK,
+			},
+			count:   10,
+			results: []int32{317, 321, 324, 326},
 		},
 	}
 

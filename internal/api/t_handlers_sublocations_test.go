@@ -234,6 +234,110 @@ func TestRetrieveSublocations(t *testing.T) {
 			count:   3,
 			results: []int32{13, 25, 31},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=pre-airship&item=56&methods=monster&pre_airship=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{24, 26, 34, 36, 39},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=post-game&item=56&methods=monster&pre_airship=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{24, 34, 36, 39, 41},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=always&auto_ability=4&item=27&methods=monster",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{24},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=post&monsters=true&treasures=false&item=53",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{31, 37},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=pre-story&monster=31",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{14},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=always&monster=87&repeatable=true&boss_fights=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{27},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=pre-story",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{1, 4, 5, 30, 32},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=post&sidequests=true&boss_fights=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{29, 31, 34},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=post&monsters=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   11,
+			results: []int32{3, 16, 29, 35, 39, 41},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=post&monsters=false&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   30,
+			results: []int32{1, 5, 14, 21, 24, 28, 30, 38},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=always&monster=48",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{16, 17, 19},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=pre-story&shops=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   14,
+			results: []int32{12, 20, 27, 31, 33, 37},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations?availability=always&key_item=23",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{29},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.sublocations.endpoint, "RetrieveSublocations", testCfg.HandleSublocations, compareAPIResourceLists[NamedApiResourceList])

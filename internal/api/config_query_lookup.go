@@ -350,7 +350,7 @@ func (cfg *Config) initLocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
-			UsableWith:  []string{"monster", "item", "key_item"},
+			UsableWith:  []string{"monster", "item", "key_item", "auto_ability"},
 		},
 		{
 			Name:        "monster",
@@ -387,6 +387,15 @@ func (cfg *Config) initLocationsParams() {
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "key-items")},
+		},
+		{
+			Name:        "auto_ability",
+			Description: "Searches for locations where the specified auto-ability can be acquired. If combined with 'availability', the auto-ability must have a source inside the location whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the auto-ability must have a source whose farmability matches the given value.",
+			Type:        "id",
+			ForList:     true,
+			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
+			References:  []string{createListURL(cfg, "auto-abilities")},
 		},
 		{
 			Name:        "characters",
@@ -508,7 +517,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
-			UsableWith:  []string{"monster", "item", "key_item"},
+			UsableWith:  []string{"monster", "item", "key_item", "auto_ability"},
 		},
 		{
 			Name:        "monster",
@@ -545,6 +554,15 @@ func (cfg *Config) initSublocationsParams() {
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
 			References:  []string{createListURL(cfg, "key-items")},
+		},
+		{
+			Name:        "auto_ability",
+			Description: "Searches for sublocations where the specified auto-ability can be acquired. If combined with 'availability', the auto-ability must have a source inside the sublocation whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the auto-ability must have a source whose farmability matches the given value.",
+			Type:        "id",
+			ForList:     true,
+			ForSingle:   false,
+			ReplacedBy:  []string{"availability", "repeatable"},
+			References:  []string{createListURL(cfg, "auto-abilities")},
 		},
 		{
 			Name:        "characters",
@@ -675,7 +693,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "bool",
 			ForList:     true,
 			ForSingle:   false,
-			UsableWith:  []string{"monster", "item", "key_item"},
+			UsableWith:  []string{"monster", "item", "key_item", "auto_ability"},
 		},
 		{
 			Name:        "monster",

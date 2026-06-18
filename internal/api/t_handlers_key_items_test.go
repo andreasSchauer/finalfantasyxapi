@@ -140,6 +140,62 @@ func TestRetrieveKeyItems(t *testing.T) {
 			count:   1,
 			results: []int32{60},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items?availability=post",
+				expectedStatus: http.StatusOK,
+			},
+			count:   6,
+			results: []int32{8, 14, 16, 18, 24, 60},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items?availability=post-game&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   52,
+			results: []int32{3, 8, 11, 16, 26, 43, 60},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items?availability=story",
+				expectedStatus: http.StatusOK,
+			},
+			count:   8,
+			results: []int32{1, 2, 5, 6, 53, 54, 55, 56},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items?availability=always&location=8",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{19, 20, 28, 40, 41},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items?availability=always&sublocation=25",
+				expectedStatus: http.StatusOK,
+			},
+			count:   4,
+			results: []int32{4, 25, 32, 49},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items?availability=pre-airship&area=203",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{6, 12},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items?availability=pre-airship&methods=quest",
+				expectedStatus: http.StatusOK,
+			},
+			count:   7,
+			results: []int32{3, 4, 9, 10, 12, 20, 22},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.keyItems.endpoint, "RetrieveKeyItems", testCfg.HandleKeyItems, compareAPIResourceLists[NamedApiResourceList])

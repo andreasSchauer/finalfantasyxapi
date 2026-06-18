@@ -114,6 +114,54 @@ func TestRetrieveAllItems(t *testing.T) {
 			count:   4,
 			results: []int32{1, 2, 9, 138},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items?availability=story&location=9",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{5, 81},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items?availability=post-game&methods=shop&pre_airship=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   17,
+			results: []int32{1, 9, 11, 17, 20, 36, 95, 100},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items?availability=post-game&methods=shop&pre_airship=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   17,
+			results: []int32{1, 2, 11, 12, 13, 16, 18, 20, 36, 95, 100},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items?repeatable=true&methods=monster&area=172",
+				expectedStatus: http.StatusOK,
+			},
+			count:   20,
+			results: []int32{2, 10, 21, 36, 42, 54, 77, 102, 112},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items?availability=story&repeatable=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   8,
+			results: []int32{113, 114, 117, 118, 165, 166, 167, 168},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items?availability=post-game&repeatable=false&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   52,
+			results: []int32{115, 120, 125, 133, 145, 157, 172},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.allItems.endpoint, "RetrieveMasterItems", testCfg.HandleAllItems, compareAPIResourceLists[NamedApiResourceList])

@@ -15,7 +15,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.areas.endpoint,
 				handler:        testCfg.HandleAreas,
 			},
-			count:   27,
+			count:   28,
 			results: []string{"limit", "offset", "item", "save_sphere", "sublocation", "ids"},
 		},
 		{
@@ -25,7 +25,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.sublocations.endpoint,
 				handler:        testCfg.HandleSublocations,
 			},
-			count:   22,
+			count:   23,
 			results: []string{"location", "item", "methods", "aeons", "shops", "fmvs", "ids"},
 		},
 		{
@@ -35,7 +35,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.locations.endpoint,
 				handler:        testCfg.HandleLocations,
 			},
-			count:   21,
+			count:   22,
 			results: []string{"key_item", "characters", "aeons", "treasures", "sidequests", "ids", "flip"},
 		},
 		{
@@ -126,7 +126,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.sidequests.endpoint,
 				handler:        testCfg.HandleSidequests,
 			},
-			count:   5,
+			count:   4,
 			results: []string{"limit", "offset", "availability"},
 		},
 		{

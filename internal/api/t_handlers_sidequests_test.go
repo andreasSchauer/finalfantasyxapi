@@ -111,6 +111,22 @@ func TestRetrieveSidequests(t *testing.T) {
 			count:   5,
 			results: []int32{1, 2, 5, 6, 9},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sidequests?availability=always",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{3, 4, 7, 8, 10},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sidequests?availability=post",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{1, 2, 5, 6, 9},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.sidequests.endpoint, "RetrieveSidequests", testCfg.HandleSidequests, compareAPIResourceLists[NamedApiResourceList])

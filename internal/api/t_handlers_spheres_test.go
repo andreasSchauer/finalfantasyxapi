@@ -205,6 +205,94 @@ func TestRetrieveSpheres(t *testing.T) {
 			count:   6,
 			results: []int32{6, 7, 8, 9, 10, 11},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=always&location=12&repeatable=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{1, 2, 3},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=post&repeatable=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   14,
+			results: []int32{7, 10, 16, 21, 24, 30},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=post-game&repeatable=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   30,
+			results: []int32{1, 5, 10, 20, 25, 29, 30},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=always&repeatable=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   16,
+			results: []int32{1, 5, 11, 15, 27, 29},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=always&repeatable=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   6,
+			results: []int32{16, 17, 18, 20, 21, 25},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=always&repeatable=false&methods=treasure",
+				expectedStatus: http.StatusOK,
+			},
+			count:   15,
+			results: []int32{2, 4, 12, 15, 21, 25, 29},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=always&repeatable=false&methods=monster",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{16, 17},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=always&repeatable=false&methods=monster,treasure",
+				expectedStatus: http.StatusOK,
+			},
+			count:   6,
+			results: []int32{16, 17, 20, 21, 25, 29},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=story&sublocation=27",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{4, 7, 10},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=story&repeatable=true&sublocation=27",
+				expectedStatus: http.StatusOK,
+			},
+			count:   0,
+			results: []int32{},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres?availability=post&repeatable=true&area=205",
+				expectedStatus: http.StatusOK,
+			},
+			count:   17,
+			results: []int32{13, 15, 17, 19, 22, 25, 26, 30},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.spheres.endpoint, "RetrieveSpheres", testCfg.HandleSpheres, compareAPIResourceLists[NamedApiResourceList])

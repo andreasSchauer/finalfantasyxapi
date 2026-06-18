@@ -311,8 +311,56 @@ func TestRetrieveShops(t *testing.T) {
 				requestURL:     "/api/shops?empty_slots=2-4&availability=post",
 				expectedStatus: http.StatusOK,
 			},
-			count:   12,
+			count:   11,
 			results: []int32{1, 2, 12, 24, 27, 32, 36},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/shops?availability=post&location=15",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{36},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/shops?availability=pre-airship&sublocation=15",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{7, 8},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/shops?availability=pre-story&empty_slots=2&character=7&auto_ability=41",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{35},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/shops?availability=pre-story&equipment=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   11,
+			results: []int32{4, 10, 19, 22, 25, 31, 35},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/shops?availability=always&empty_slots=2&character=3",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{34},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/shops?availability=post&auto_ability=4",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{12},
 		},
 	}
 

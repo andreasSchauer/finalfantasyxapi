@@ -388,6 +388,110 @@ func TestRetrieveAreas(t *testing.T) {
 			count:   28,
 			results: []int32{3, 34, 50, 127, 181, 237},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=pre-airship&item=56&methods=monster&pre_airship=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   6,
+			results: []int32{139, 142, 158, 206, 211, 225},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=post-game&item=56&methods=monster&pre_airship=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   7,
+			results: []int32{139, 142, 205, 211, 225, 239, 240},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=always&auto_ability=4&item=27&methods=monster",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{139, 142},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=post&monsters=true&treasures=false&item=53",
+				expectedStatus: http.StatusOK,
+			},
+			count:   7,
+			results: []int32{26, 100, 101, 172, 192, 213, 230},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=pre-story&monster=31",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{77, 78, 79},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=pre-story&shops=true&monster=87&repeatable=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{161},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=post-story",
+				expectedStatus: http.StatusOK,
+			},
+			count:   3,
+			results: []int32{236, 237, 238},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=post&sidequests=true&boss_fights=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{172, 205},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=post&monsters=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   18,
+			results: []int32{7, 26, 107, 172, 209, 232, 240},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=post&monsters=false&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   222,
+			results: []int32{1, 18, 63, 74, 110, 136, 153, 180, 229, 238},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=always&monster=48",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{100, 101, 105, 108, 118},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=pre-story&shops=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   18,
+			results: []int32{66, 97, 125, 149, 185, 202, 214},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas?availability=always&key_item=23",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{172},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.areas.endpoint, "RetrieveAreas", testCfg.HandleAreas, compareAPIResourceLists[AreaApiResourceList])

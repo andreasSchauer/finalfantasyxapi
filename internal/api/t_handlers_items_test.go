@@ -366,6 +366,110 @@ func TestRetrieveItems(t *testing.T) {
 			count:   31,
 			results: []int32{4, 23, 60, 89, 110},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=post",
+				expectedStatus: http.StatusOK,
+			},
+			count:   12,
+			results: []int32{23, 45, 67, 68, 76, 79, 88, 99},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=post-story&location=18&methods=monster",
+				expectedStatus: http.StatusOK,
+			},
+			count:   10,
+			results: []int32{3, 5, 43, 45, 58, 61, 83, 96},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=post-game&repeatable=false&pre_airship=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   0,
+			results: []int32{},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=post-game&repeatable=false&pre_airship=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   0,
+			results: []int32{},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=post-game&repeatable=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   112,
+			results: []int32{1, 17, 19, 38, 54, 67, 88, 100, 112},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=post&repeatable=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   19,
+			results: []int32{23, 45, 67, 68, 76, 88, 90, 95, 105},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=always&repeatable=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   93,
+			results: []int32{1, 7, 21, 37, 56, 69, 80, 104, 112},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=always&repeatable=false",
+				expectedStatus: http.StatusOK,
+			},
+			count:   7,
+			results: []int32{85, 86, 87, 89, 90, 94, 105},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=story&sublocation=25",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{6, 82},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=post-game&area=23",
+				expectedStatus: http.StatusOK,
+			},
+			count:   10,
+			results: []int32{1, 9, 30, 31, 32, 38, 41, 70, 71, 72},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=always&methods=shop",
+				expectedStatus: http.StatusOK,
+			},
+			count:   14,
+			results: []int32{1, 2, 9, 14, 20, 36, 100},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?availability=always&methods=shop&location=12",
+				expectedStatus: http.StatusOK,
+			},
+			count:   6,
+			results: []int32{1, 9, 11, 12, 13, 14},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items?repeatable=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   112,
+			results: []int32{1, 17, 19, 38, 54, 67, 88, 100, 112},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.items.endpoint, "RetrieveItems", testCfg.HandleItems, compareAPIResourceLists[NamedApiResourceList])

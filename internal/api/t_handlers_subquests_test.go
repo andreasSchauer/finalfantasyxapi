@@ -117,6 +117,38 @@ func TestRetrieveSubquests(t *testing.T) {
 			count:   12,
 			results: []int32{38, 42, 44, 50, 52, 60, 64, 66},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/subquests?availability=always&repeatable=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   10,
+			results: []int32{38, 40, 50, 60, 64, 66},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/subquests?availability=post&repeatable=false&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   37,
+			results: []int32{1, 14, 24, 35, 70, 77},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/subquests?availability=pre-story",
+				expectedStatus: http.StatusOK,
+			},
+			count:   1,
+			results: []int32{87},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/subquests?availability=post&repeatable=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{48, 52},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.subquests.endpoint, "RetrieveSubquests", testCfg.HandleSubquests, compareAPIResourceLists[NamedApiResourceList])
