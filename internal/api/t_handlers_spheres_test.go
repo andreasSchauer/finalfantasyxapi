@@ -139,7 +139,7 @@ func TestGetSphere(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/spheres/26?rel_availability=post-game&rel_repeatable=true",
+				requestURL:     "/api/spheres/26?rel_availability=post&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -179,6 +179,74 @@ func TestGetSphere(t *testing.T) {
 			treasures:       nil,
 			shops:           []int32{33},
 			quests:          nil,
+			blitzballPrizes: nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres/2?rel_availability=always&rel_repeatable=false",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"monsters":         1,
+					"treasures":        1,
+					"shops":            0,
+					"quests":           0,
+					"blitzball prizes": 0,
+				},
+			},
+			expUnique:       newExpUnique(2, "mana sphere"),
+			item:            71,
+			createdNode:     nil,
+			monsters:        []testMonItemAmts{
+				{
+					index: 	 	0,
+					monster: 	107,
+					dropCommon: 1,
+					dropRare: 	1,
+				},
+			},
+			treasures:       map[int32]int32{
+				53: 2,
+			},
+			shops:           []int32{},
+			quests:          nil,
+			blitzballPrizes: nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/spheres/2?rel_availability=post&rel_repeatable=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"monsters":         10,
+					"treasures":        0,
+					"shops":            0,
+					"quests":           1,
+					"blitzball prizes": 0,
+				},
+			},
+			expUnique:       newExpUnique(2, "mana sphere"),
+			item:            71,
+			createdNode:     nil,
+			monsters:        []testMonItemAmts{
+				{
+					index: 	 	1,
+					monster: 	205,
+					dropCommon: 1,
+					dropRare: 	1,
+				},
+				{
+					index: 	 	5,
+					monster: 	240,
+					dropCommon: 2,
+					dropRare: 	3,
+				},
+			},
+			treasures:       nil,
+			shops:           []int32{},
+			quests:          map[int32]int32{
+				58: 10,
+			},
 			blitzballPrizes: nil,
 		},
 	}

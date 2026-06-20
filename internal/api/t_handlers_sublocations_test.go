@@ -51,7 +51,7 @@ func TestGetSublocation(t *testing.T) {
 					"treasures":              9,
 					"monsters":               51,
 					"formations":             50,
-					"sidequests":             2,
+					"quests":	              46,
 					"bg music":               2,
 					"cues music":             1,
 					"fmvs music":             0,
@@ -68,7 +68,7 @@ func TestGetSublocation(t *testing.T) {
 				treasures:  []int32{265, 268, 270, 272},
 				monsters:   []int32{138, 142, 149, 259, 270, 282, 292},
 				formations: []int32{193, 198, 205, 306, 312, 320, 331},
-				sidequests: []int32{1, 4},
+				quests:     []int32{1, 11, 19, 34, 42, 45, 46, 69, 74, 77},
 				music: &testLocMusic{
 					bgMusic:   []int32{71, 73},
 					bossMusic: []int32{16},
@@ -89,7 +89,7 @@ func TestGetSublocation(t *testing.T) {
 					"treasures":              5,
 					"monsters":               3,
 					"formations":             3,
-					"sidequests":             1,
+					"quests":	              2,
 					"bg music":               3,
 					"cues music":             3,
 					"fmvs music":             2,
@@ -108,7 +108,7 @@ func TestGetSublocation(t *testing.T) {
 				treasures:  []int32{70, 71, 72, 73, 74},
 				monsters:   []int32{34, 35, 36},
 				formations: []int32{38, 39, 40},
-				sidequests: []int32{8},
+				quests:     []int32{97, 98},
 				music: &testLocMusic{
 					bgMusic:   []int32{17, 32, 34},
 					cuesMusic: []int32{16, 35, 36},
@@ -124,7 +124,7 @@ func TestGetSublocation(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"shops":      true,
-					"sidequests": true,
+					"quests":	  true,
 				},
 				expLengths: map[string]int{
 					"connected sublocations": 2,
@@ -135,7 +135,7 @@ func TestGetSublocation(t *testing.T) {
 					"treasures":              23,
 					"monsters":               12,
 					"formations":             14,
-					"sidequests":             0,
+					"quests":	              0,
 					"bg music":               5,
 					"cues music":             3,
 					"fmvs music":             3,
@@ -153,6 +153,7 @@ func TestGetSublocation(t *testing.T) {
 				treasures:  []int32{15, 18, 24, 40, 44},
 				monsters:   []int32{7, 11, 14, 18, 293},
 				formations: []int32{9, 13, 17, 22, 25},
+				quests: 	[]int32{},
 				fmvs:       []int32{5, 6, 8},
 				music: &testLocMusic{
 					bgMusic:   []int32{18, 20, 22, 23, 27},

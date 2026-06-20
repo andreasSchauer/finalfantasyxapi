@@ -54,7 +54,7 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 		return LocRel{}, err
 	}
 
-	sidequests, err := getLocBasedSidequests(cfg, r, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeQuest))
+	quests, err := runRelAvailabilityQuery(cfg, r, cfg.e.quests, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeQuest))
 	if err != nil {
 		return LocRel{}, err
 	}
@@ -81,7 +81,7 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 		Treasures:  treasures,
 		Monsters:   monsters,
 		Formations: formations,
-		Sidequests: sidequests,
+		Quests:     quests,
 		Music:      music,
 		FMVs:       fmvs,
 	}

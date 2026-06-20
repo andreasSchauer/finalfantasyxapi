@@ -262,24 +262,18 @@ ORDER BY mis.source_id;
 
 
 -- name: GetKeyItemAreaIDs :many
-SELECT ca.area_id
-FROM completion_areas ca
-JOIN quest_completions qc ON ca.completion_id = qc.id
-JOIN quests q ON qc.quest_id = q.id
-JOIN mv_item_sources mis ON mis.source_id = q.id
+WITH w AS (
+    SELECT
+      sqlc.arg('key_item_id')::int AS key_item_id,
+      sqlc.narg('availability')::availability_type[] AS availability
+)
+SELECT mis.area_id
+FROM mv_item_sources mis
 JOIN key_items ki ON mis.master_item_id = ki.master_item_id
-WHERE ki.id = $1
-  AND mis.source_type = 'quest'
-
-UNION
-
-SELECT t.area_id
-FROM treasures t
-JOIN mv_item_sources mis ON mis.source_id = t.id
-JOIN key_items ki ON mis.master_item_id = ki.master_item_id
-WHERE ki.id = $1
-  AND mis.source_type = 'treasure'
-ORDER BY area_id;
+CROSS JOIN w
+WHERE ki.id = w.key_item_id
+  AND (w.availability IS NULL OR mis.avl_self = ANY(w.availability))
+ORDER BY mis.area_id;
 
 
 -- name: GetKeyItemCelestialWeapon :one

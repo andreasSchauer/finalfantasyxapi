@@ -29,6 +29,15 @@ func getKeyItemSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailability
 	}
 }
 
+func getKeyItemAreaIDs(cfg *Config, sourceType ViewSourceType) RelAvailabilityDbQuery {
+	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
+		return cfg.db.GetKeyItemAreaIDs(ctx, database.GetKeyItemAreaIDsParams{
+			KeyItemID:    p.ParentID,
+			Availability: p.Availability,
+		})
+	}
+}
+
 func getAutoAbilitySourceIDs(cfg *Config, sourceType ViewSourceType, shopType *database.ShopType) RelAvailabilityDbQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
 		return cfg.db.GetAutoAbilitySourceIDs(ctx, database.GetAutoAbilitySourceIDsParams{

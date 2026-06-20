@@ -287,6 +287,291 @@ func TestGetItem(t *testing.T) {
 			},
 			mixes: []int32{42, 56, 60, 63, 64},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items/55?rel_availability=post",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"untyped item": true,
+					"category": true,
+					"aeon learn abilities": true,
+					"auto abilities": true,
+					"mixes": true,
+				},
+				expLengths: map[string]int{
+					"monsters":             3,
+					"treasures":            0,
+					"shops":                0,
+					"quests":               0,
+					"blitzball prizes":     0,
+				},
+			},
+			expUnique:   newExpUnique(55, "chocobo wing"),
+			monsters: []testMonItemAmts{
+				{
+					index:       0,
+					monster:     242,
+					bribe: 		 60,
+				},
+				{
+					index:       1,
+					monster:     269,
+					stealRare: 	 1,
+				},
+				{
+					index:       2,
+					monster:     270,
+					stealRare:   1,
+				},
+			},
+			treasures:          nil,
+			shops:              []int32{},
+			quests:             nil,
+			blitzballPrizes:    nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items/55?rel_availability=always",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"untyped item": true,
+					"category": true,
+					"aeon learn abilities": true,
+					"auto abilities": true,
+					"mixes": true,
+				},
+				expLengths: map[string]int{
+					"monsters":             2,
+					"treasures":            0,
+					"shops":                0,
+					"quests":               1,
+					"blitzball prizes":     0,
+				},
+			},
+			expUnique:   newExpUnique(55, "chocobo wing"),
+			monsters: []testMonItemAmts{
+				{
+					index:       0,
+					monster:     100,
+					stealRare: 	 1,
+				},
+				{
+					index:       1,
+					monster:     261,
+					stealCommon: 2,
+				},
+			},
+			treasures:          nil,
+			shops:              []int32{},
+			quests:             map[int32]int32{
+				16: 99,
+			},
+			blitzballPrizes:    nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items/55?rel_availability=always&rel_repeatable=false",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"untyped item": true,
+					"category": true,
+					"aeon learn abilities": true,
+					"auto abilities": true,
+					"mixes": true,
+				},
+				expLengths: map[string]int{
+					"monsters":             0,
+					"treasures":            0,
+					"shops":                0,
+					"quests":               1,
+					"blitzball prizes":     0,
+				},
+			},
+			expUnique:   newExpUnique(55, "chocobo wing"),
+			monsters: []testMonItemAmts{},
+			treasures:          nil,
+			shops:              []int32{},
+			quests:             map[int32]int32{
+				16: 99,
+			},
+			blitzballPrizes:    nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items/55?rel_availability=always&rel_repeatable=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"untyped item": true,
+					"category": true,
+					"aeon learn abilities": true,
+					"auto abilities": true,
+					"mixes": true,
+				},
+				expLengths: map[string]int{
+					"monsters":             2,
+					"treasures":            0,
+					"shops":                0,
+					"quests":               0,
+					"blitzball prizes":     0,
+				},
+			},
+			expUnique:   newExpUnique(55, "chocobo wing"),
+			monsters: []testMonItemAmts{
+				{
+					index:       0,
+					monster:     100,
+					stealRare: 	 1,
+				},
+				{
+					index:       1,
+					monster:     261,
+					stealCommon: 2,
+				},
+			},
+			treasures:          nil,
+			shops:              []int32{},
+			quests:             nil,
+			blitzballPrizes:    nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items/2?rel_availability=always",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"untyped item": true,
+					"category": true,
+					"aeon learn abilities": true,
+					"auto abilities": true,
+					"mixes": true,
+				},
+				expLengths: map[string]int{
+					"monsters":             22,
+					"treasures":            11,
+					"shops":                4,
+					"quests":               0,
+					"blitzball prizes":     2,
+				},
+			},
+			expUnique:   newExpUnique(2, "hi-potion"),
+			monsters: []testMonItemAmts{
+				{
+					index:       0,
+					monster:     39,
+					stealRare: 	 1,
+					bribe: 		 60,
+				},
+				{
+					index:       8,
+					monster:     87,
+					stealCommon: 1,
+				},
+				{
+					index:       18,
+					monster:     162,
+					stealCommon: 1,
+					stealRare: 	 2,
+				},
+			},
+			treasures:          map[int32]int32{
+				4: 	 1,
+				103: 2,
+				219: 4,
+				224: 4,
+				232: 8,
+			},
+			shops:              []int32{24, 32, 33, 34},
+			quests:             nil,
+			blitzballPrizes:    map[int32]int32{
+				2: 2,
+				5: 1,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items/2?rel_availability=always&rel_repeatable=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"untyped item": true,
+					"category": true,
+					"aeon learn abilities": true,
+					"auto abilities": true,
+					"mixes": true,
+				},
+				expLengths: map[string]int{
+					"monsters":             22,
+					"treasures":            0,
+					"shops":                4,
+					"quests":               0,
+					"blitzball prizes":     2,
+				},
+			},
+			expUnique:   newExpUnique(2, "hi-potion"),
+			monsters: []testMonItemAmts{
+				{
+					index:       0,
+					monster:     39,
+					stealRare: 	 1,
+					bribe: 		 60,
+				},
+				{
+					index:       8,
+					monster:     87,
+					stealCommon: 1,
+				},
+				{
+					index:       18,
+					monster:     162,
+					stealCommon: 1,
+					stealRare: 	 2,
+				},
+			},
+			treasures:          nil,
+			shops:              []int32{24, 32, 33, 34},
+			quests:             nil,
+			blitzballPrizes:    map[int32]int32{
+				2: 2,
+				5: 1,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/items/2?rel_availability=post",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"untyped item": true,
+					"category": true,
+					"aeon learn abilities": true,
+					"auto abilities": true,
+					"mixes": true,
+				},
+				expLengths: map[string]int{
+					"monsters":             2,
+					"treasures":            1,
+					"shops":                9,
+					"quests":               0,
+					"blitzball prizes":     0,
+				},
+			},
+			expUnique:   newExpUnique(2, "hi-potion"),
+			monsters: []testMonItemAmts{
+				{
+					index:       0,
+					monster:     239,
+					stealCommon: 1,
+				},
+				{
+					index:       1,
+					monster:     242,
+					stealCommon: 2,
+				},
+			},
+			treasures:          map[int32]int32{
+				44: 1,
+			},
+			shops:              []int32{1, 5, 6, 7, 12, 20, 21, 27, 36},
+			quests:             nil,
+			blitzballPrizes:    nil,
+		},
 	}
 
 	testSingleResources(t, tests, "GetItem", testCfg.HandleItems, compareItems)

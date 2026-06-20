@@ -66,6 +66,125 @@ func TestGetAllItem(t *testing.T) {
 				BlitzballPrizes: false,
 			},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items/2?rel_availability=always",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+			},
+			expUnique: newExpUnique(2, "hi-potion"),
+			typedItem: "/items/2",
+			itemType:  1,
+			obtainableFrom: ObtainableFrom{
+				Monsters:  		 true,
+				Treasures: 		 true,
+				Shops:     		 true,
+				Quests:    		 false,
+				BlitzballPrizes: true,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items/2?rel_availability=always&rel_repeatable=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+			},
+			expUnique: newExpUnique(2, "hi-potion"),
+			typedItem: "/items/2",
+			itemType:  1,
+			obtainableFrom: ObtainableFrom{
+				Monsters:  		 true,
+				Treasures: 		 false,
+				Shops:     		 true,
+				Quests:    		 false,
+				BlitzballPrizes: true,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items/2?rel_availability=post",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+			},
+			expUnique: newExpUnique(2, "hi-potion"),
+			typedItem: "/items/2",
+			itemType:  1,
+			obtainableFrom: ObtainableFrom{
+				Monsters:  		 true,
+				Treasures: 		 true,
+				Shops:     		 true,
+				Quests:    		 false,
+				BlitzballPrizes: false,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items/55?rel_availability=post",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+			},
+			expUnique: newExpUnique(55, "chocobo wing"),
+			typedItem: "/items/55",
+			itemType:  1,
+			obtainableFrom: ObtainableFrom{
+				Monsters:  		 true,
+				Treasures: 		 false,
+				Shops:     		 false,
+				Quests:    		 false,
+				BlitzballPrizes: false,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items/55?rel_availability=always",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+			},
+			expUnique: newExpUnique(55, "chocobo wing"),
+			typedItem: "/items/55",
+			itemType:  1,
+			obtainableFrom: ObtainableFrom{
+				Monsters:  		 true,
+				Treasures: 		 false,
+				Shops:     		 false,
+				Quests:    		 true,
+				BlitzballPrizes: false,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items/55?rel_availability=always&rel_repeatable=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+			},
+			expUnique: newExpUnique(55, "chocobo wing"),
+			typedItem: "/items/55",
+			itemType:  1,
+			obtainableFrom: ObtainableFrom{
+				Monsters:  		 true,
+				Treasures: 		 false,
+				Shops:     		 false,
+				Quests:    		 false,
+				BlitzballPrizes: false,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/all-items/55?rel_availability=always&rel_repeatable=false",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+			},
+			expUnique: newExpUnique(55, "chocobo wing"),
+			typedItem: "/items/55",
+			itemType:  1,
+			obtainableFrom: ObtainableFrom{
+				Monsters:  		 false,
+				Treasures: 		 false,
+				Shops:     		 false,
+				Quests:    		 true,
+				BlitzballPrizes: false,
+			},
+		},
 	}
 
 	testSingleResources(t, tests, "GetMasterItem", testCfg.HandleAllItems, compareMasterItems)

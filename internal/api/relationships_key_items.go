@@ -24,7 +24,7 @@ func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyIt
 		return KeyItem{}, err
 	}
 
-	areas, err := getResourcesDbItem(cfg, r, cfg.e.areas, keyItem, cfg.db.GetKeyItemAreaIDs)
+	areas, err := runRelAvailabilityQuery(cfg, r, cfg.e.areas, keyItem, availabilityParams, getKeyItemAreaIDs(cfg, ViewSourceTypeArea))
 	if err != nil {
 		return KeyItem{}, err
 	}

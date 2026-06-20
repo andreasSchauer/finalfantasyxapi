@@ -77,6 +77,46 @@ func TestGetKeyItem(t *testing.T) {
 			treasures:       []int32{},
 			quests:          []int32{1},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items/39?rel_availability=always",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"areas":     2,
+					"treasures": 2,
+					"quests":    0,
+				},
+			},
+			expUnique:       newExpUnique(39, "al bhed primer v"),
+			untypedItem:     151,
+			category:        3,
+			celestialWeapon: nil,
+			primer:          h.GetInt32Ptr(5),
+			areas:           []int32{65, 170},
+			treasures:       []int32{68, 220},
+			quests:          []int32{},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/key-items/39?rel_availability=pre-story",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"areas":     0,
+					"treasures": 0,
+					"quests":    0,
+				},
+			},
+			expUnique:       newExpUnique(39, "al bhed primer v"),
+			untypedItem:     151,
+			category:        3,
+			celestialWeapon: nil,
+			primer:          h.GetInt32Ptr(5),
+			areas:           []int32{},
+			treasures:       []int32{},
+			quests:          []int32{},
+		},
 	}
 
 	testSingleResources(t, tests, "GetKeyItem", testCfg.HandleKeyItems, compareKeyItems)

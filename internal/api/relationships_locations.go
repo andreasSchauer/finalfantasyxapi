@@ -42,7 +42,7 @@ func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Loc
 		return LocRel{}, err
 	}
 
-	sidequests, err := getLocBasedSidequests(cfg, r, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeQuest))
+	quests, err := runRelAvailabilityQuery(cfg, r, cfg.e.quests, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeQuest))
 	if err != nil {
 		return LocRel{}, err
 	}
@@ -69,7 +69,7 @@ func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Loc
 		Treasures:  treasures,
 		Monsters:   monsters,
 		Formations: formations,
-		Sidequests: sidequests,
+		Quests:     quests,
 		Music:      music,
 		FMVs:       fmvs,
 	}

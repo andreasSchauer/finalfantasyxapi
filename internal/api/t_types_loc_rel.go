@@ -7,7 +7,7 @@ type expLocRel struct {
 	treasures  []int32
 	monsters   []int32
 	formations []int32
-	sidequests []int32
+	quests     []int32
 	fmvs       []int32
 	music      *testLocMusic
 }
@@ -21,7 +21,7 @@ func compareLocRel(test test, exp expLocRel, got LocRel) {
 	checkResIDsInSlice(test, "treasures", test.cfg.e.treasures.endpoint, exp.treasures, got.Treasures)
 	checkResIDsInSlice(test, "monsters", test.cfg.e.monsters.endpoint, exp.monsters, got.Monsters)
 	checkResIDsInSlice(test, "formations", test.cfg.e.monsterFormations.endpoint, exp.formations, got.Formations)
-	checkResIDsInSlice(test, "sidequests", test.cfg.e.sidequests.endpoint, exp.sidequests, got.Sidequests)
+	checkResIDsInSlice(test, "quests", test.cfg.e.quests.endpoint, exp.quests, got.Quests)
 	checkResIDsInSlice(test, "fmvs", test.cfg.e.fmvs.endpoint, exp.fmvs, got.FMVs)
 }
 

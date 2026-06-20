@@ -42,7 +42,7 @@ func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seedi
 		return LocRel{}, err
 	}
 
-	sidequests, err := getLocBasedSidequests(cfg, r, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeQuest))
+	quests, err := runRelAvailabilityQuery(cfg, r, cfg.e.quests, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeQuest))
 	if err != nil {
 		return LocRel{}, err
 	}
@@ -69,7 +69,7 @@ func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seedi
 		Treasures:  treasures,
 		Monsters:   monsters,
 		Formations: formations,
-		Sidequests: sidequests,
+		Quests:     quests,
 		Music:      music,
 		FMVs:       fmvs,
 	}
