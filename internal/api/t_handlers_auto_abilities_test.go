@@ -303,6 +303,204 @@ func TestGetAutoAbility(t *testing.T) {
 			treasures:        []int32{61, 291},
 			equipmentTables:  []int32{102, 142},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities/1?rel_availability=always",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"equipment tables": true,
+				},
+				expLengths: map[string]int{
+					"monsters drop":       3,
+					"monsters items":      12,
+					"shops pre airship":   2,
+					"shops post airship":  2,
+					"treasures":           4,
+				},
+			},
+			expUnique:    newExpUnique(1, "sensor"),
+			monstersDrop: []int32{16, 64, 99},
+			monstersItems: []testMonItemAmts{
+				{
+					index:     	0,
+					monster:   	39,
+					dropCommon: 1,
+					dropRare:   1,
+				},
+				{
+					index:     	5,
+					monster:   	105,
+					dropCommon: 2,
+				},
+				{
+					index:     	11,
+					monster:   	189,
+					dropCommon: 1,
+					dropRare:   1,
+				},
+			},
+			shopsPreAirship:  []int32{2, 16},
+			shopsPostAirship: []int32{2, 16},
+			treasures:        []int32{39, 54, 104, 174},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities/1?rel_availability=always&rel_repeatable=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"equipment tables": true,
+				},
+				expLengths: map[string]int{
+					"monsters drop":       3,
+					"monsters items":      12,
+					"shops pre airship":   2,
+					"shops post airship":  2,
+					"treasures":           0,
+				},
+			},
+			expUnique:    newExpUnique(1, "sensor"),
+			monstersDrop: []int32{16, 64, 99},
+			monstersItems: []testMonItemAmts{
+				{
+					index:     	0,
+					monster:   	39,
+					dropCommon: 1,
+					dropRare:   1,
+				},
+				{
+					index:     	6,
+					monster:   	139,
+					dropCommon: 1,
+					dropRare:   2,
+				},
+				{
+					index:     	9,
+					monster:   	177,
+					dropCommon: 1,
+					dropRare:   2,
+				},
+			},
+			shopsPreAirship:  []int32{2, 16},
+			shopsPostAirship: []int32{2, 16},
+			treasures:        []int32{},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities/1?rel_availability=pre-story",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"equipment tables": true,
+				},
+				expLengths: map[string]int{
+					"monsters drop":       7,
+					"monsters items":      16,
+					"shops pre airship":   1,
+					"shops post airship":  0,
+					"treasures":           1,
+				},
+			},
+			expUnique:    newExpUnique(1, "sensor"),
+			monstersDrop: []int32{11, 47, 94, 113},
+			monstersItems: []testMonItemAmts{
+				{
+					index:     	0,
+					monster:   	6,
+					dropCommon: 2,
+					dropRare:   2,
+				},
+				{
+					index:     	4,
+					monster:   	14,
+					dropCommon: 2,
+					dropRare:   2,
+				},
+				{
+					index:     	15,
+					monster:   	123,
+					dropCommon: 1,
+					dropRare:   1,
+				},
+			},
+			shopsPreAirship:  []int32{9},
+			shopsPostAirship: []int32{},
+			treasures:        []int32{84},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities/51?rel_availability=always&rel_repeatable=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"equipment tables": true,
+				},
+				expLengths: map[string]int{
+					"monsters drop":       1,
+					"monsters items":      8,
+					"shops pre airship":   0,
+					"shops post airship":  0,
+					"treasures":           0,
+				},
+			},
+			expUnique:    newExpUnique(51, "break damage limit"),
+			monstersDrop: []int32{299},
+			monstersItems: []testMonItemAmts{
+				{
+					index:     	0,
+					monster:   	261,
+					dropRare:   1,
+				},
+				{
+					index:     	3,
+					monster:   	265,
+					dropRare:   1,
+				},
+				{
+					index:     	7,
+					monster:   	299,
+					dropCommon: 1,
+				},
+			},
+			shopsPreAirship:  []int32{},
+			shopsPostAirship: []int32{},
+			treasures:        []int32{},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/auto-abilities/51?rel_availability=post&rel_repeatable=false",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"equipment tables": true,
+				},
+				expLengths: map[string]int{
+					"monsters drop":       8,
+					"monsters items":      9,
+					"shops pre airship":   0,
+					"shops post airship":  0,
+					"treasures":           0,
+				},
+			},
+			expUnique:    newExpUnique(51, "break damage limit"),
+			monstersDrop: []int32{293, 298, 302, 305},
+			monstersItems: []testMonItemAmts{
+				{
+					index:     	0,
+					monster:   	293,
+					dropCommon: 1,
+				},
+				{
+					index:     	4,
+					monster:   	302,
+					dropCommon: 1,
+				},
+				{
+					index:     	8,
+					monster:   	307,
+					dropCommon: 1,
+				},
+			},
+			shopsPreAirship:  []int32{},
+			shopsPostAirship: []int32{},
+			treasures:        []int32{},
+		},
 	}
 
 	testSingleResources(t, tests, "GetAutoAbility", testCfg.HandleAutoAbilities, compareAutoAbilities)

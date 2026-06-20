@@ -190,6 +190,69 @@ func TestGetEquipment(t *testing.T) {
 			treasures:     []int32{},
 			shops:         []int32{},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/equipment/805?rel_availability=always",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"equipment table": true,
+					"priority": true,
+					"celestial weapon": true,
+					"required auto-abilities": true,
+					"selectable auto-abilities": true,
+					"required slots": true,
+				},
+				expLengths: map[string]int{
+					"treasures": 1,
+					"shops":     0,
+				},
+			},
+			expUnique:     newExpUnique(805, "lucid ring"),
+			treasures:     []int32{194},
+			shops:         []int32{},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/equipment/805?rel_availability=pre-story",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"equipment table": true,
+					"priority": true,
+					"celestial weapon": true,
+					"required auto-abilities": true,
+					"selectable auto-abilities": true,
+					"required slots": true,
+				},
+				expLengths: map[string]int{
+					"treasures": 1,
+					"shops":     0,
+				},
+			},
+			expUnique:     newExpUnique(805, "lucid ring"),
+			treasures:     []int32{261},
+			shops:         []int32{},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/equipment/805?rel_availability=post",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{
+					"equipment table": true,
+					"priority": true,
+					"celestial weapon": true,
+					"required auto-abilities": true,
+					"selectable auto-abilities": true,
+					"required slots": true,
+				},
+				expLengths: map[string]int{
+					"treasures": 0,
+					"shops":     1,
+				},
+			},
+			expUnique:     newExpUnique(805, "lucid ring"),
+			treasures:     []int32{},
+			shops:         []int32{5},
+		},
 	}
 
 	testSingleResources(t, tests, "GetEquipment", testCfg.HandleEquipment, compareEquipment)

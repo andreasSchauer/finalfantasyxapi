@@ -2750,7 +2750,7 @@ func (cfg *Config) initKeyItemsParams() {
 	params := []QueryParam{
 		{
 			Name:        "rel_availability",
-			Description: "Only displays a key-item's related resources with the given availabilities. This affects treasures and quests.",
+			Description: "Only displays a key-item's related resources with the given availabilities. This affects areas, treasures and quests.",
 			Type:        "enum-list",
 			ForList:     false,
 			ForSingle:   true,
