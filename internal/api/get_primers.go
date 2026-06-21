@@ -34,12 +34,10 @@ func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Pri
 }
 
 func (cfg *Config) retrievePrimers(r *http.Request, i handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-
-	})
+	return filterIDs(cfg, r, i, ids, []filteredIdList{})
 }

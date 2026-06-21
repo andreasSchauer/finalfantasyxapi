@@ -5,16 +5,18 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 // validates id-queryParam and checks emptiness.
-func parseIdQuery(r *http.Request, queryParam QueryParam, maxID int) (int32, error) {
+func parseIdQuery[F seeding.Lookupable](r *http.Request, queryParam QueryParam, fLookup map[string]F) (int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return 0, err
 	}
 
-	id, err := parseQueryID(query, queryParam, maxID)
+	id, err := parseQueryID(query, queryParam, len(fLookup))
 	if err != nil {
 		return 0, err
 	}
@@ -23,7 +25,7 @@ func parseIdQuery(r *http.Request, queryParam QueryParam, maxID int) (int32, err
 }
 
 // validates id-queryParam and checks emptiness. accepts "none" as input.
-func parseIdQueryNul(r *http.Request, queryParam QueryParam, maxID int) (*int32, error) {
+func parseIdQueryNul[F seeding.Lookupable](r *http.Request, queryParam QueryParam, fLookup map[string]F) (*int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -34,7 +36,7 @@ func parseIdQueryNul(r *http.Request, queryParam QueryParam, maxID int) (*int32,
 		return nil, nil
 	}
 
-	id, err := parseQueryID(query, queryParam, maxID)
+	id, err := parseQueryID(query, queryParam, len(fLookup))
 	if err != nil {
 		return nil, err
 	}

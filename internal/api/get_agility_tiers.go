@@ -27,12 +27,12 @@ func (cfg *Config) getAgilityTier(r *http.Request, i handlerInput[seeding.Agilit
 }
 
 func (cfg *Config) retrieveAgilityTiers(r *http.Request, i handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]) (UnnamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return UnnamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
-		frl(intQuery(cfg, r, i, resources, "agility", cfg.db.GetAgilityTierIDsByAgility)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(intQuery(r, i, ids, "agility", cfg.db.GetAgilityTierIDsByAgility)),
 	})
 }

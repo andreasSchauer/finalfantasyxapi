@@ -24,23 +24,24 @@ func retrieveAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResou
 		return nil, err
 	}
 
-	return idsToAPIResources(cfg, i, dbIDs), nil
+	resources := idsToAPIResources(cfg, i, dbIDs)
+	return resources, nil
 }
 
-func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], resources []A, filteredLists []filteredResList[A]) (L, error) {
+func filterIDs[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], IDs []int32, filteredLists []filteredIdList) (L, error) {
 	var zeroType L
-	filteredRes := resources
+	filteredIDs := IDs
 
 	for _, filtered := range filteredLists {
 		if filtered.err != nil {
 			return zeroType, filtered.err
 		}
-		filteredRes = getSharedResources(filteredRes, filtered.resources)
+		filteredIDs = getSharedIDs(filteredIDs, filtered.IDs)
 	}
 
 	if i.avlFunc != nil {
 		var err error
-		filteredRes, err = i.avlFunc(cfg, r, filteredRes)
+		filteredIDs, err = i.avlFunc(cfg, r, filteredIDs)
 		if err != nil {
 			return zeroType, err
 		}
@@ -52,25 +53,15 @@ func filterAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	}
 
 	if flip {
-		filteredRes = removeResources(resources, filteredRes)
+		filteredIDs = removeIDs(IDs, filteredIDs)
 	}
 
-	resourceList, err := i.resToListFunc(cfg, r, filteredRes)
+	resources := idsToAPIResources(cfg, i, filteredIDs)
+
+	resourceList, err := i.resToListFunc(cfg, r, resources)
 	if err != nil {
 		return zeroType, err
 	}
 
 	return resourceList, nil
-}
-
-
-
-func resToIDs[A APIResource](resources []A) []int32 {
-	ids := []int32{}
-
-	for _, res := range resources {
-		ids = append(ids, res.GetID())
-	}
-
-	return ids
 }

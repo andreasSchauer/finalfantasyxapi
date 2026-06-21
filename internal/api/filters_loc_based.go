@@ -7,7 +7,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, error) {
+func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.areas
 	queryParamMethods := i.queryLookup["methods"]
 
@@ -24,12 +24,10 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]AreaAPIResource, 
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	return resources, nil
+	return dbIDs, nil
 }
 
-func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.sublocations
 	queryParamMethods := i.queryLookup["methods"]
 
@@ -46,12 +44,11 @@ func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIRe
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
 
-	return resources, nil
+	return dbIDs, nil
 }
 
-func getLocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+func getLocationsByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.locations
 	queryParamMethods := i.queryLookup["methods"]
 
@@ -68,7 +65,5 @@ func getLocationsByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResou
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	return resources, nil
+	return dbIDs, nil
 }

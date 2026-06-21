@@ -96,34 +96,10 @@ ORDER BY m.monster_id;
 
 
 -- name: GetMonsterIDsByItem :many
-SELECT DISTINCT monster_id FROM mv_monster_item_drops WHERE item_id = $1 ORDER BY monster_id;
-
-
--- name: GetMonsterIDsByItemSteal :many
 SELECT DISTINCT monster_id
 FROM mv_monster_item_drops
-WHERE item_id = $1 AND source_type LIKE 'steal%'
-ORDER BY monster_id;
-
-
--- name: GetMonsterIDsByItemDrop :many
-SELECT DISTINCT monster_id
-FROM mv_monster_item_drops
-WHERE item_id = $1 AND source_type LIKE 'drop%'
-ORDER BY monster_id;
-
-
--- name: GetMonsterIDsByItemBribe :many
-SELECT DISTINCT monster_id
-FROM mv_monster_item_drops
-WHERE item_id = $1 AND source_type = 'bribe'
-ORDER BY monster_id;
-
-
--- name: GetMonsterIDsByItemOther :many
-SELECT DISTINCT monster_id
-FROM mv_monster_item_drops
-WHERE item_id = $1 AND source_type = 'other'
+WHERE item_id = sqlc.arg('item_id')::int
+  AND source_type = ANY(sqlc.arg('methods')::text[])
 ORDER BY monster_id;
 
 

@@ -65,33 +65,33 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 }
 
 func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(basicQueryWrapper(cfg, r, i, resources, "elemental_resists", getMonstersByElemResists)),
-		frl(idListQueryWrapper(cfg, r, i, resources, "status_resists", len(cfg.l.StatusConditions), getMonstersByStatusResists)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(basicQueryWrapper(cfg, r, i, ids, "elemental_resists", getMonstersByElemResists)),
+		fidl(idListQueryWrapper(cfg, r, i, ids, "status_resists", cfg.l.StatusConditions, getMonstersByStatusResists)),
 
-		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getMonstersByItem)),
-		frl(idQuery(cfg, r, i, resources, "ronso_rage", len(cfg.l.RonsoRages), cfg.db.GetMonsterIDsByRonsoRage)),
-		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetMonsterIDsByLocation)),
-		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetMonsterIDsBySublocation)),
-		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetMonsterIDsByArea)),
-		frl(idQueryWrapper(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), getMonstersByAutoAbility)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "item", cfg.l.Items, getMonstersByItem)),
+		fidl(idQuery(r, i, ids, "ronso_rage", cfg.l.RonsoRages, cfg.db.GetMonsterIDsByRonsoRage)),
+		fidl(idQuery(r, i, ids, "location", cfg.l.Locations, cfg.db.GetMonsterIDsByLocation)),
+		fidl(idQuery(r, i, ids, "sublocation", cfg.l.Sublocations, cfg.db.GetMonsterIDsBySublocation)),
+		fidl(idQuery(r, i, ids, "area", cfg.l.Areas, cfg.db.GetMonsterIDsByArea)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "auto_ability", cfg.l.AutoAbilities, getMonstersByAutoAbility)),
 
-		frl(intListQuery(cfg, r, i, resources, "empty_slots", cfg.db.GetMonsterIDsByEmptySlots)),
-		frl(intListQuery(cfg, r, i, resources, "distance", cfg.db.GetMonsterIDsByDistance)),
+		fidl(intListQuery(cfg, r, i, ids, "empty_slots", cfg.db.GetMonsterIDsByEmptySlots)),
+		fidl(intListQuery(cfg, r, i, ids, "distance", cfg.db.GetMonsterIDsByDistance)),
 
-		frl(enumListQuery(cfg, r, i, cfg.t.MonsterCategory, resources, "category", cfg.db.GetMonsterIDsByCategory)),
-		frl(enumQuery(cfg, r, i, cfg.t.MonsterSpecies, resources, "species", cfg.db.GetMonsterIDsBySpecies)),
-		frl(enumQuery(cfg, r, i, cfg.t.CreationArea, resources, "creation_area", ToEnumQuery(cfg.t.CreationArea, cfg.db.GetMonsterIDsByMaCreationArea))),
+		fidl(enumListQuery(cfg, r, i, cfg.t.MonsterCategory, ids, "category", cfg.db.GetMonsterIDsByCategory)),
+		fidl(enumQuery(r, i, cfg.t.MonsterSpecies, ids, "species", cfg.db.GetMonsterIDsBySpecies)),
+		fidl(enumQuery(r, i, cfg.t.CreationArea, ids, "creation_area", ToEnumQuery(cfg.t.CreationArea, cfg.db.GetMonsterIDsByMaCreationArea))),
 
-		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetMonsterIDsByIsRepeatable)),
-		frl(boolQuery(cfg, r, i, resources, "capture", cfg.db.GetMonsterIDsByCanBeCaptured)),
-		frl(boolQuery(cfg, r, i, resources, "has_overdrive", cfg.db.GetMonsterIDsByHasOverdrive)),
-		frl(boolQuery(cfg, r, i, resources, "underwater", cfg.db.GetMonsterIDsByIsUnderwater)),
-		frl(boolQuery(cfg, r, i, resources, "zombie", cfg.db.GetMonsterIDsByIsZombie)),
+		fidl(boolQuery(r, i, ids, "repeatable", cfg.db.GetMonsterIDsByIsRepeatable)),
+		fidl(boolQuery(r, i, ids, "capture", cfg.db.GetMonsterIDsByCanBeCaptured)),
+		fidl(boolQuery(r, i, ids, "has_overdrive", cfg.db.GetMonsterIDsByHasOverdrive)),
+		fidl(boolQuery(r, i, ids, "underwater", cfg.db.GetMonsterIDsByIsUnderwater)),
+		fidl(boolQuery(r, i, ids, "zombie", cfg.db.GetMonsterIDsByIsZombie)),
 	})
 }

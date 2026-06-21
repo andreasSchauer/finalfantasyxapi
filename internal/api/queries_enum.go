@@ -7,15 +7,15 @@ import (
 )
 
 // query uses an enum type (id or string possible) that needs to be checked for validity and then returns all resources matching that type
-func enumQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, dbQuery DbQueryEnum[E]) ([]A, error) {
+func enumQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputIDs []int32, queryName string, dbQuery DbQueryEnum[E]) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 
 	enum, err := parseEnumQuery(r, i.endpoint, queryParam, et)
 	if queryIsEmpty(err) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
@@ -28,16 +28,15 @@ func enumQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E,
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-	return resources, nil
+	return dbIDs, nil
 }
 
 // like enum query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
-func enumQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, E) ([]int32, error)) ([]A, error) {
+func enumQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputIDs []int32, queryName string, wrapperFn func(*Config, *http.Request, E) ([]int32, error)) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	enum, err := parseEnumQuery(r, i.endpoint, queryParam, et)
 	if queryIsEmpty(err) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
@@ -45,11 +44,5 @@ func enumQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 
 	typedStr := et.convFunc(enum.Name)
 
-	dbIDs, err := wrapperFn(cfg, r, typedStr)
-	if err != nil {
-		return nil, err
-	}
-
-	resources := idsToAPIResources(cfg, i, dbIDs)
-	return resources, nil
+	return wrapperFn(cfg, r, typedStr)
 }

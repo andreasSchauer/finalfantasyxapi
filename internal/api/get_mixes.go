@@ -33,13 +33,13 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, Name
 }
 
 func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.MixCategory, resources, "category", cfg.db.GetMixIDsByCategory)),
-		frl(idQueryWrapper(cfg, r, i, resources, "req_item", len(cfg.l.Items), getMixesByItem)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.MixCategory, ids, "category", cfg.db.GetMixIDsByCategory)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "req_item", cfg.l.Items, getMixesByItem)),
 	})
 }

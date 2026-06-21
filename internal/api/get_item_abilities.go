@@ -39,24 +39,24 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.ItemAb
 }
 
 func (cfg *Config) retrieveItemAbilities(r *http.Request, i handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 	abilityType := database.AbilityTypeItemAbility
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.ItemCategory, resources, "category", cfg.db.GetItemAbilityIDsByCategory)),
-		frl(enumListQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", getTypedAbilityIDsByAttackType(cfg, abilityType))),
-		frl(enumListQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", getTypedAbilityIDsByTargetType(cfg, abilityType))),
-		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", getTypedAbilityIDsByDamageFormula(cfg, abilityType))),
-		frl(nameIdListQueryNul(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType))),
-		frl(nameIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetItemAbilityIDsByRelatedStat)),
-		frl(idQueryNul(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getTypedAbilityIDsByInflictedStatus(cfg, abilityType))),
-		frl(idQueryNul(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), getTypedAbilityIDsByRemovedStatus(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "outside_battle", cfg.db.GetItemAbilityIDsCanUseOutsideBattle)),
-		frl(boolQuery2(cfg, r, i, resources, "delay", getTypedAbilityIDsDealsDelay(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "stat_changes", getTypedAbilityIDsWithStatChanges(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "mod_changes", getTypedAbilityIDsWithModifierChanges(cfg, abilityType))),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.ItemCategory, ids, "category", cfg.db.GetItemAbilityIDsByCategory)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.AttackType, ids, "attack_type", getTypedAbilityIDsByAttackType(cfg, abilityType))),
+		fidl(enumListQuery(cfg, r, i, cfg.t.TargetType, ids, "target_type", getTypedAbilityIDsByTargetType(cfg, abilityType))),
+		fidl(enumQuery(r, i, cfg.t.DamageFormula, ids, "damage_formula", getTypedAbilityIDsByDamageFormula(cfg, abilityType))),
+		fidl(nameIdListQueryNul(cfg, r, i, ids, "element", cfg.e.elements.resourceType, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType))),
+		fidl(nameIdQuery(r, i, ids, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetItemAbilityIDsByRelatedStat)),
+		fidl(idQueryNul(r, i, ids, "status_inflict", cfg.l.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType))),
+		fidl(idQueryNul(r, i, ids, "status_remove", cfg.l.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "outside_battle", cfg.db.GetItemAbilityIDsCanUseOutsideBattle)),
+		fidl(boolQuery2(r, i, ids, "delay", getTypedAbilityIDsDealsDelay(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "stat_changes", getTypedAbilityIDsWithStatChanges(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "mod_changes", getTypedAbilityIDsWithModifierChanges(cfg, abilityType))),
 	})
 }

@@ -56,12 +56,12 @@ func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.Ce
 }
 
 func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumQuery(cfg, r, i, cfg.t.CelestialFormula, resources, "formula", cfg.db.GetCelestialWeaponIDsByFormula)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumQuery(r, i, cfg.t.CelestialFormula, ids, "formula", cfg.db.GetCelestialWeaponIDsByFormula)),
 	})
 }

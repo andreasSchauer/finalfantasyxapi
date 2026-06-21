@@ -37,27 +37,27 @@ func (cfg *Config) getEnemyAbility(r *http.Request, i handlerInput[seeding.Enemy
 
 func (cfg *Config) retrieveEnemyAbilities(r *http.Request, i handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
 	abilityType := database.AbilityTypeEnemyAbility
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetEnemyAbilityIDsByMonster)),
-		frl(enumListQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", getTypedAbilityIDsByDamageType(cfg, abilityType))),
-		frl(enumListQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", getTypedAbilityIDsByAttackType(cfg, abilityType))),
-		frl(enumListQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", getTypedAbilityIDsByTargetType(cfg, abilityType))),
-		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", getTypedAbilityIDsByDamageFormula(cfg, abilityType))),
-		frl(intListQuery(cfg, r, i, resources, "rank", getTypedAbilityIDsByRank(cfg, abilityType))),
-		frl(nameIdListQueryNul(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType))),
-		frl(idQueryNul(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getTypedAbilityIDsByInflictedStatus(cfg, abilityType))),
-		frl(idQueryNul(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), getTypedAbilityIDsByRemovedStatus(cfg, abilityType))),
-		frl(boolQuery(cfg, r, i, resources, "help_bar", getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "can_crit", getTypedAbilityIDsCanCrit(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "bdl", getTypedAbilityIDsBreakDmgLimit(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "darkable", getTypedAbilityIDsDarkable(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "silenceable", getTypedAbilityIDsSilenceable(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "reflectable", getTypedAbilityIDsReflectable(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "delay", getTypedAbilityIDsDealsDelay(cfg, abilityType))),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(idQuery(r, i, ids, "monster", cfg.l.Monsters, cfg.db.GetEnemyAbilityIDsByMonster)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.DamageType, ids, "damage_type", getTypedAbilityIDsByDamageType(cfg, abilityType))),
+		fidl(enumListQuery(cfg, r, i, cfg.t.AttackType, ids, "attack_type", getTypedAbilityIDsByAttackType(cfg, abilityType))),
+		fidl(enumListQuery(cfg, r, i, cfg.t.TargetType, ids, "target_type", getTypedAbilityIDsByTargetType(cfg, abilityType))),
+		fidl(enumQuery(r, i, cfg.t.DamageFormula, ids, "damage_formula", getTypedAbilityIDsByDamageFormula(cfg, abilityType))),
+		fidl(intListQuery(cfg, r, i, ids, "rank", getTypedAbilityIDsByRank(cfg, abilityType))),
+		fidl(nameIdListQueryNul(cfg, r, i, ids, "element", cfg.e.elements.resourceType, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType))),
+		fidl(idQueryNul(r, i, ids, "status_inflict", cfg.l.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType))),
+		fidl(idQueryNul(r, i, ids, "status_remove", cfg.l.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType))),
+		fidl(boolQuery(r, i, ids, "help_bar", getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "can_crit", getTypedAbilityIDsCanCrit(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "bdl", getTypedAbilityIDsBreakDmgLimit(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "darkable", getTypedAbilityIDsDarkable(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "silenceable", getTypedAbilityIDsSilenceable(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "reflectable", getTypedAbilityIDsReflectable(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "delay", getTypedAbilityIDsDealsDelay(cfg, abilityType))),
 	})
 }

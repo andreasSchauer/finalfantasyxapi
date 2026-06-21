@@ -29,19 +29,19 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 }
 
 func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]) (UnnamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return UnnamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
-		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationTreasureIDs)),
-		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationTreasureIDs)),
-		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetAreaTreasureIDs)),
-		frl(idQuery(cfg, r, i, resources, "item", len(cfg.l.Items), cfg.db.GetTreasureIDsByItem)),
-		frl(joinedQuery(cfg, r, i, resources, []string{"auto_ability", "empty_slots", "character"}, filterTreasuresEquipment)),
-		frl(boolQuery(cfg, r, i, resources, "anima", cfg.db.GetTreasureIDsByIsAnimaTreasure)),
-		frl(enumQuery(cfg, r, i, cfg.t.LootType, resources, "loot_type", cfg.db.GetTreasureIDsByLootType)),
-		frl(enumQuery(cfg, r, i, cfg.t.TreasureType, resources, "treasure_type", cfg.db.GetTreasureIDsByTreasureType)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(idQuery(r, i, ids, "location", cfg.l.Locations, cfg.db.GetLocationTreasureIDs)),
+		fidl(idQuery(r, i, ids, "sublocation", cfg.l.Sublocations, cfg.db.GetSublocationTreasureIDs)),
+		fidl(idQuery(r, i, ids, "area", cfg.l.Areas, cfg.db.GetAreaTreasureIDs)),
+		fidl(idQuery(r, i, ids, "item", cfg.l.Items, cfg.db.GetTreasureIDsByItem)),
+		fidl(joinedQuery(cfg, r, i, ids, []string{"auto_ability", "empty_slots", "character"}, filterTreasuresEquipment)),
+		fidl(boolQuery(r, i, ids, "anima", cfg.db.GetTreasureIDsByIsAnimaTreasure)),
+		fidl(enumQuery(r, i, cfg.t.LootType, ids, "loot_type", cfg.db.GetTreasureIDsByLootType)),
+		fidl(enumQuery(r, i, cfg.t.TreasureType, ids, "treasure_type", cfg.db.GetTreasureIDsByTreasureType)),
 	})
 }

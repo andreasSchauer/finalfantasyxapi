@@ -964,6 +964,53 @@ func (q *Queries) GetAreaShopIdPairs(ctx context.Context, areaIds []int32) ([]Ge
 	return items, nil
 }
 
+const getAreaSongIDs = `-- name: GetAreaSongIDs :many
+SELECT me.song_id::int FROM mv_monster_encounters me WHERE me.area_id = $1 AND me.song_id IS NOT NULL
+
+UNION
+
+SELECT c.song_id FROM cues c WHERE c.trigger_area_id = $1
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN j_cues_areas j ON j.cue_id = c.id
+WHERE j.included_area_id = $1
+
+UNION 
+
+SELECT j.song_id FROM j_songs_background_music j WHERE j.area_id = $1
+
+UNION
+
+SELECT f.song_id::int FROM fmvs f WHERE f.song_id IS NOT NULL AND f.area_id = $1
+ORDER BY song_id
+`
+
+func (q *Queries) GetAreaSongIDs(ctx context.Context, areaID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAreaSongIDs, areaID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var me_song_id int32
+		if err := rows.Scan(&me_song_id); err != nil {
+			return nil, err
+		}
+		items = append(items, me_song_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAreaTreasureIDs = `-- name: GetAreaTreasureIDs :many
 SELECT id FROM treasures WHERE area_id = $1 ORDER BY id
 `
@@ -2017,6 +2064,67 @@ func (q *Queries) GetLocationShopIdPairs(ctx context.Context, locationIds []int3
 			return nil, err
 		}
 		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLocationSongIDs = `-- name: GetLocationSongIDs :many
+SELECT me.song_id::int
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+WHERE g.location_id = $1 AND me.song_id IS NOT NULL
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN mv_geography g ON c.trigger_area_id = g.area_id
+WHERE g.location_id = $1
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN j_cues_areas j ON j.cue_id = c.id
+JOIN mv_geography g ON j.included_area_id = g.area_id
+WHERE g.location_id = $1
+
+UNION
+
+SELECT j.song_id
+FROM j_songs_background_music j
+JOIN mv_geography g ON j.area_id = g.area_id
+WHERE g.location_id = $1
+
+UNION
+
+SELECT f.song_id::int
+FROM fmvs f
+JOIN mv_geography g ON f.area_id = g.area_id
+WHERE f.song_id IS NOT NULL
+  AND g.location_id = $1
+ORDER BY song_id
+`
+
+func (q *Queries) GetLocationSongIDs(ctx context.Context, locationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getLocationSongIDs, locationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var me_song_id int32
+		if err := rows.Scan(&me_song_id); err != nil {
+			return nil, err
+		}
+		items = append(items, me_song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -3276,6 +3384,67 @@ func (q *Queries) GetSublocationShopIdPairs(ctx context.Context, sublocationIds 
 			return nil, err
 		}
 		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSublocationSongIDs = `-- name: GetSublocationSongIDs :many
+SELECT me.song_id::int
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+WHERE g.sublocation_id = $1 AND me.song_id IS NOT NULL
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN mv_geography g ON c.trigger_area_id = g.area_id
+WHERE g.sublocation_id = $1
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN j_cues_areas j ON j.cue_id = c.id
+JOIN mv_geography g ON j.included_area_id = g.area_id
+WHERE g.sublocation_id = $1
+
+UNION
+
+SELECT j.song_id
+FROM j_songs_background_music j
+JOIN mv_geography g ON j.area_id = g.area_id
+WHERE g.sublocation_id = $1
+
+UNION
+
+SELECT f.song_id::int
+FROM fmvs f
+JOIN mv_geography g ON f.area_id = g.area_id
+WHERE f.song_id IS NOT NULL
+  AND g.sublocation_id = $1
+ORDER BY song_id
+`
+
+func (q *Queries) GetSublocationSongIDs(ctx context.Context, sublocationID int32) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSublocationSongIDs, sublocationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var me_song_id int32
+		if err := rows.Scan(&me_song_id); err != nil {
+			return nil, err
+		}
+		items = append(items, me_song_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

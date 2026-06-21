@@ -318,7 +318,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "rel_repeatable",
@@ -334,7 +334,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        	"pre_airship",
@@ -359,7 +359,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "monsters")},
+			References:  []string{"monsters"},
 		},
 		{
 			Name:        "item",
@@ -368,7 +368,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "items")},
+			References:  []string{"items"},
 		},
 		{
 			Name:           "methods",
@@ -386,7 +386,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "key-items")},
+			References:  []string{"key-items"},
 		},
 		{
 			Name:        "auto_ability",
@@ -395,7 +395,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "auto-abilities")},
+			References:  []string{"auto-abilities"},
 		},
 		{
 			Name:        "characters",
@@ -477,7 +477,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "rel_repeatable",
@@ -492,7 +492,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "locations")},
+			References:  []string{"locations"},
 		},
 		{
 			Name:        "availability",
@@ -501,7 +501,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        	"pre_airship",
@@ -526,7 +526,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "monsters")},
+			References:  []string{"monsters"},
 		},
 		{
 			Name:        "item",
@@ -535,7 +535,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "items")},
+			References:  []string{"items"},
 		},
 		{
 			Name:           "methods",
@@ -553,7 +553,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "key-items")},
+			References:  []string{"key-items"},
 		},
 		{
 			Name:        "auto_ability",
@@ -562,7 +562,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "auto-abilities")},
+			References:  []string{"auto-abilities"},
 		},
 		{
 			Name:        "characters",
@@ -644,7 +644,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "rel_repeatable",
@@ -660,7 +660,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"sublocation"},
-			References:  []string{createListURL(cfg, "locations")},
+			References:  []string{"locations"},
 		},
 		{
 			Name:        "sublocation",
@@ -668,7 +668,7 @@ func (cfg *Config) initAreasParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "sublocations")},
+			References:  []string{"sublocations"},
 		},
 		{
 			Name:        "availability",
@@ -677,7 +677,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        	"pre_airship",
@@ -702,7 +702,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "monsters")},
+			References:  []string{"monsters"},
 		},
 		{
 			Name:        "item",
@@ -711,7 +711,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "items")},
+			References:  []string{"items"},
 		},
 		{
 			Name:           "methods",
@@ -729,7 +729,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "key-items")},
+			References:  []string{"key-items"},
 		},
 		{
 			Name:        "auto_ability",
@@ -738,7 +738,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "auto-abilities")},
+			References:  []string{"auto-abilities"},
 		},
 		{
 			Name:        "save_sphere",
@@ -847,7 +847,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "monsters")},
+			References:  []string{"monsters"},
 		},
 		{
 			Name:        "category",
@@ -856,7 +856,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.MonsterFormationCategory.lookup,
-			References:  []string{createListURL(cfg, "monster-formation-category")},
+			References:  []string{"monster-formation-category"},
 		},
 		{
 			Name:        "availability",
@@ -865,7 +865,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        	"pre_airship",
@@ -889,7 +889,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"sublocation", "area", "availability", "repeatable"},
-			References:  []string{createListURL(cfg, "locations")},
+			References:  []string{"locations"},
 		},
 		{
 			Name:        "sublocation",
@@ -898,7 +898,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"area", "availability", "repeatable"},
-			References:  []string{createListURL(cfg, "sublocations")},
+			References:  []string{"sublocations"},
 		},
 		{
 			Name:        "area",
@@ -907,7 +907,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "areas")},
+			References:  []string{"areas"},
 		},
 		{
 			Name:        "ambush",
@@ -931,7 +931,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.ShopCategory.lookup,
-			References:  []string{createListURL(cfg, "shop-category")},
+			References:  []string{"shop-category"},
 		},
 		{
 			Name:        "availability",
@@ -940,7 +940,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "location",
@@ -949,7 +949,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"sublocation", "availability"},
-			References:  []string{createListURL(cfg, "locations")},
+			References:  []string{"locations"},
 		},
 		{
 			Name:        "sublocation",
@@ -958,7 +958,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability"},
-			References:  []string{createListURL(cfg, "sublocations")},
+			References:  []string{"sublocations"},
 		},
 		{
 			Name:        	 "auto_ability",
@@ -968,7 +968,7 @@ func (cfg *Config) initShopsParams() {
 			ForSingle:   	 false,
 			ForbiddenParams: []string{"items", "equipment"},
 			ReplacedBy:  	 []string{"availability"},
-			References:  	 []string{createListURL(cfg, "auto-abilities")},
+			References:  	 []string{"auto-abilities"},
 		},
 		{
 			Name:            "empty_slots",
@@ -989,7 +989,7 @@ func (cfg *Config) initShopsParams() {
 			ForSingle:   	 false,
 			ForbiddenParams: []string{"items", "equipment"},
 			ReplacedBy:  	 []string{"availability"},
-			References:  	 []string{createListURL(cfg, "characters")},
+			References:  	 []string{"characters"},
 		},
 		{
 			Name:        "items",
@@ -1024,7 +1024,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"sublocation", "area"},
-			References:  []string{createListURL(cfg, "locations")},
+			References:  []string{"locations"},
 		},
 		{
 			Name:        "sublocation",
@@ -1033,7 +1033,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"area"},
-			References:  []string{createListURL(cfg, "sublocations")},
+			References:  []string{"sublocations"},
 		},
 		{
 			Name:        "area",
@@ -1041,7 +1041,7 @@ func (cfg *Config) initTreasuresParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "areas")},
+			References:  []string{"areas"},
 		},
 		{
 			Name:        "auto_ability",
@@ -1049,7 +1049,7 @@ func (cfg *Config) initTreasuresParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "auto-abilities")},
+			References:  []string{"auto-abilities"},
 		},
 		{
 			Name:            "empty_slots",
@@ -1066,7 +1066,7 @@ func (cfg *Config) initTreasuresParams() {
 			ExampleVals: []string{"wakka"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "characters")},
+			References:  []string{"characters"},
 		},
 		{
 			Name:        "item",
@@ -1074,7 +1074,7 @@ func (cfg *Config) initTreasuresParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "items")},
+			References:  []string{"items"},
 		},
 		{
 			Name:        "loot_type",
@@ -1083,7 +1083,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.LootType.lookup,
-			References:  []string{createListURL(cfg, "loot-type")},
+			References:  []string{"loot-type"},
 		},
 		{
 			Name:        "treasure_type",
@@ -1107,7 +1107,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 	}
 
@@ -1124,7 +1124,7 @@ func (cfg *Config) initQuestsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.QuestType.lookup,
-			References:  []string{createListURL(cfg, "quest-type")},
+			References:  []string{"quest-type"},
 		},
 		{
 			Name:        "availability",
@@ -1133,7 +1133,7 @@ func (cfg *Config) initQuestsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "repeatable",
@@ -1157,7 +1157,7 @@ func (cfg *Config) initSidequestsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 	}
 
@@ -1174,7 +1174,7 @@ func (cfg *Config) initSubquestsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "repeatable",
@@ -1230,7 +1230,7 @@ func (cfg *Config) initSongsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"sublocation", "area"},
-			References:  []string{createListURL(cfg, "locations")},
+			References:  []string{"locations"},
 		},
 		{
 			Name:        "sublocation",
@@ -1239,7 +1239,7 @@ func (cfg *Config) initSongsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"area"},
-			References:  []string{createListURL(cfg, "sublocations")},
+			References:  []string{"sublocations"},
 		},
 		{
 			Name:        "area",
@@ -1247,7 +1247,7 @@ func (cfg *Config) initSongsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "areas")},
+			References:  []string{"areas"},
 		},
 		{
 			Name:        "fmvs",
@@ -1293,7 +1293,7 @@ func (cfg *Config) initFMVsParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "locations")},
+			References:  []string{"locations"},
 		},
 	}
 
@@ -1310,7 +1310,7 @@ func (cfg *Config) initPlayerUnitsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.UnitType.lookup,
-			References:  []string{createListURL(cfg, "unit-type")},
+			References:  []string{"unit-type"},
 		},
 	}
 
@@ -1397,7 +1397,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "rel_repeatable",
@@ -1450,15 +1450,14 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses: []string{"?elemental_resists=fire=weak,water=absorb", "?elemental_resists=1=3,2=4"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "elements"), createListURL(cfg, "affinities")},
+			References:  []string{"elements", "affinities"},
 		},
-		{
-			Name:        "status_resists",
+		{			Name:        "status_resists",
 			Description: "Searches for monsters that resist or are immune to the specified status conditions. You can optionally use the 'resistance' parameter to specify the minimum resistance. By default, the minimum resistance is 1.",
 			Type:        "id-list",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 		{
 			Name:            "resistance",
@@ -1482,7 +1481,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "items")},
+			References:  []string{"items"},
 		},
 		{
 			Name:           "methods",
@@ -1499,7 +1498,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "auto-abilities")},
+			References:  []string{"auto-abilities"},
 		},
 		{
 			Name:           "is_forced",
@@ -1523,7 +1522,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "ronso-rages")},
+			References:  []string{"ronso-rages"},
 		},
 		{
 			Name:        "availability",
@@ -1532,7 +1531,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        	"pre_airship",
@@ -1556,7 +1555,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"sublocation", "area", "availability", "repeatable"},
-			References:  []string{createListURL(cfg, "locations")},
+			References:  []string{"locations"},
 		},
 		{
 			Name:        "sublocation",
@@ -1565,7 +1564,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"area", "availability", "repeatable"},
-			References:  []string{createListURL(cfg, "sublocations")},
+			References:  []string{"sublocations"},
 		},
 		{
 			Name:        "area",
@@ -1574,7 +1573,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
-			References:  []string{createListURL(cfg, "areas")},
+			References:  []string{"areas"},
 		},
 		{
 			Name:            "distance",
@@ -1619,7 +1618,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.MonsterSpecies.lookup,
-			References:  []string{createListURL(cfg, "monster-species")},
+			References:  []string{"monster-species"},
 		},
 		{
 			Name:        "creation_area",
@@ -1636,7 +1635,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.MonsterCategory.lookup,
-			References:  []string{createListURL(cfg, "monster-category")},
+			References:  []string{"monster-category"},
 		},
 	}
 
@@ -1653,7 +1652,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AbilityType.lookup,
-			References:  []string{createListURL(cfg, "ability-type")},
+			References:  []string{"ability-type"},
 		},
 		{
 			Name:        "rank",
@@ -1682,7 +1681,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "monsters")},
+			References:  []string{"monsters"},
 		},
 		{
 			Name:        "target_type",
@@ -1727,7 +1726,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AttackType.lookup,
-			References:  []string{createListURL(cfg, "attack-type")},
+			References:  []string{"attack-type"},
 		},
 		{
 			Name:        "damage_type",
@@ -1736,7 +1735,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageType.lookup,
-			References:  []string{createListURL(cfg, "damage-type")},
+			References:  []string{"damage-type"},
 		},
 		{
 			Name:        "damage_formula",
@@ -1745,7 +1744,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageFormula.lookup,
-			References:  []string{createListURL(cfg, "damage-formula")},
+			References:  []string{"damage-formula"},
 		},
 		{
 			Name:        "can_crit",
@@ -1768,7 +1767,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ExampleVals: []string{"fire", "ice"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "elements")},
+			References:  []string{"elements"},
 		},
 		{
 			Name:        "delay",
@@ -1783,7 +1782,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Type:        "id-nul",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 		{
 			Name:        "status_remove",
@@ -1791,7 +1790,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Type:        "id-nul",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 		{
 			Name:        "stat_changes",
@@ -1822,7 +1821,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals: []string{"wakka", "valefor"},
 			ForList:     false,
 			ForSingle:   true,
-			References:  []string{createListURL(cfg, "player-units")},
+			References:  []string{"player-units"},
 		},
 		{
 			Name:           "bomb_wpn",
@@ -1860,7 +1859,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.PlayerAbilityCategory.lookup,
-			References:  []string{createListURL(cfg, "player-ability-category")},
+			References:  []string{"player-ability-category"},
 		},
 		{
 			Name:        "outside_battle",
@@ -1897,7 +1896,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals: []string{"hp", "strength"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "stats")},
+			References:  []string{"stats"},
 		},
 		{
 			Name:        "user",
@@ -1906,7 +1905,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "character-classes")},
+			References:  []string{"character-classes"},
 		},
 		{
 			Name:        "std_sg",
@@ -1915,7 +1914,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals: []string{"tidus", "wakka"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "characters")},
+			References:  []string{"characters"},
 		},
 		{
 			Name:        "exp_sg",
@@ -1924,7 +1923,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals: []string{"tidus", "wakka"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "characters")},
+			References:  []string{"characters"},
 		},
 		{
 			Name:        "learn_item",
@@ -1932,7 +1931,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "items")},
+			References:  []string{"items"},
 		},
 		{
 			Name:        "target_type",
@@ -1977,7 +1976,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AttackType.lookup,
-			References:  []string{createListURL(cfg, "attack-type")},
+			References:  []string{"attack-type"},
 		},
 		{
 			Name:        "damage_type",
@@ -1986,7 +1985,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageType.lookup,
-			References:  []string{createListURL(cfg, "damage-type")},
+			References:  []string{"damage-type"},
 		},
 		{
 			Name:        "damage_formula",
@@ -1995,7 +1994,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageFormula.lookup,
-			References:  []string{createListURL(cfg, "damage-formula")},
+			References:  []string{"damage-formula"},
 		},
 		{
 			Name:        "element",
@@ -2004,7 +2003,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals: []string{"fire", "ice"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "elements")},
+			References:  []string{"elements"},
 		},
 		{
 			Name:        "delay",
@@ -2019,7 +2018,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Type:        "id-nul",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 		{
 			Name:        "status_remove",
@@ -2027,7 +2026,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Type:        "id-nul",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 		{
 			Name:        "stat_changes",
@@ -2065,7 +2064,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "character-classes")},
+			References:  []string{"character-classes"},
 		},
 		{
 			Name:        "related_stat",
@@ -2074,7 +2073,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ExampleVals: []string{"hp", "strength"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "stats")},
+			References:  []string{"stats"},
 		},
 		{
 			Name:        "target_type",
@@ -2091,7 +2090,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AttackType.lookup,
-			References:  []string{createListURL(cfg, "attack-type")},
+			References:  []string{"attack-type"},
 		},
 		{
 			Name:        "damage_formula",
@@ -2100,7 +2099,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageFormula.lookup,
-			References:  []string{createListURL(cfg, "damage-formula")},
+			References:  []string{"damage-formula"},
 		},
 		{
 			Name:        "can_crit",
@@ -2116,7 +2115,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ExampleVals: []string{"fire", "ice"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "elements")},
+			References:  []string{"elements"},
 		},
 		{
 			Name:        "delay",
@@ -2131,7 +2130,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			Type:        "id-nul",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 		{
 			Name:        "status_remove",
@@ -2139,7 +2138,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			Type:        "id-nul",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 		{
 			Name:        "stat_changes",
@@ -2170,7 +2169,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.ItemCategory.lookup,
-			References:  []string{createListURL(cfg, "item-category")},
+			References:  []string{"item-category"},
 		},
 		{
 			Name:        "outside_battle",
@@ -2186,7 +2185,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ExampleVals: []string{"hp", "strength"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "stats")},
+			References:  []string{"stats"},
 		},
 		{
 			Name:        "target_type",
@@ -2203,7 +2202,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AttackType.lookup,
-			References:  []string{createListURL(cfg, "attack-type")},
+			References:  []string{"attack-type"},
 		},
 		{
 			Name:        "damage_formula",
@@ -2212,7 +2211,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageFormula.lookup,
-			References:  []string{createListURL(cfg, "damage-formula")},
+			References:  []string{"damage-formula"},
 		},
 		{
 			Name:        "element",
@@ -2221,7 +2220,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ExampleVals: []string{"fire", "ice"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "elements")},
+			References:  []string{"elements"},
 		},
 		{
 			Name:        "delay",
@@ -2236,7 +2235,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Type:        "id-nul",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 		{
 			Name:        "status_remove",
@@ -2244,7 +2243,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Type:        "id-nul",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 		{
 			Name:        "stat_changes",
@@ -2275,7 +2274,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ExampleVals: []string{"wakka", "valefor"},
 			ForList:     false,
 			ForSingle:   true,
-			References:  []string{createListURL(cfg, "player-units")},
+			References:  []string{"player-units"},
 		},
 		{
 			Name:           "bomb_wpn",
@@ -2292,7 +2291,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ExampleVals: []string{"hp", "strength"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "stats")},
+			References:  []string{"stats"},
 		},
 		{
 			Name:        "user",
@@ -2301,7 +2300,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "character-classes")},
+			References:  []string{"character-classes"},
 		},
 	}
 
@@ -2318,7 +2317,7 @@ func (cfg *Config) initMiscAbilitiesParams() {
 			ExampleVals: []string{"wakka", "valefor"},
 			ForList:     false,
 			ForSingle:   true,
-			References:  []string{createListURL(cfg, "player-units")},
+			References:  []string{"player-units"},
 		},
 		{
 			Name:           "bomb_wpn",
@@ -2356,7 +2355,7 @@ func (cfg *Config) initMiscAbilitiesParams() {
 			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "character-classes")},
+			References:  []string{"character-classes"},
 		},
 		{
 			Name:        "user_atk",
@@ -2393,7 +2392,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "monsters")},
+			References:  []string{"monsters"},
 		},
 		{
 			Name:        "target_type",
@@ -2431,7 +2430,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AttackType.lookup,
-			References:  []string{createListURL(cfg, "attack-type")},
+			References:  []string{"attack-type"},
 		},
 		{
 			Name:        "damage_type",
@@ -2440,7 +2439,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageType.lookup,
-			References:  []string{createListURL(cfg, "damage-type")},
+			References:  []string{"damage-type"},
 		},
 		{
 			Name:        "damage_formula",
@@ -2449,7 +2448,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.DamageFormula.lookup,
-			References:  []string{createListURL(cfg, "damage-formula")},
+			References:  []string{"damage-formula"},
 		},
 		{
 			Name:        "can_crit",
@@ -2472,7 +2471,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ExampleVals: []string{"fire", "ice"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "elements")},
+			References:  []string{"elements"},
 		},
 		{
 			Name:        "delay",
@@ -2487,7 +2486,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Type:        "id-nul",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 		{
 			Name:        "status_remove",
@@ -2495,7 +2494,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Type:        "id-nul",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "status-conditions")},
+			References:  []string{"status-conditions"},
 		},
 	}
 
@@ -2519,7 +2518,7 @@ func (cfg *Config) initOverdrivesParams() {
 			ExampleVals: []string{"characters", "tidus"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "character-classes")},
+			References:  []string{"character-classes"},
 		},
 	}
 
@@ -2536,7 +2535,7 @@ func (cfg *Config) initSubmenusParams() {
 			ExampleVals: []string{"main", "left"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "topmenus")},
+			References:  []string{"topmenus"},
 		},
 	}
 
@@ -2553,7 +2552,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "rel_repeatable",
@@ -2569,7 +2568,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.ItemType.lookup,
-			References:  []string{createListURL(cfg, "item-type")},
+			References:  []string{"item-type"},
 		},
 		{
 			Name:        "availability",
@@ -2578,7 +2577,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        	"pre_airship",
@@ -2611,7 +2610,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"sublocation", "area", "availability", "repeatable"},
-			References:    []string{createListURL(cfg, "locations")},
+			References:    []string{"locations"},
 		},
 		{
 			Name:          "sublocation",
@@ -2620,7 +2619,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"area", "availability", "repeatable"},
-			References:    []string{createListURL(cfg, "sublocations")},
+			References:    []string{"sublocations"},
 		},
 		{
 			Name:          "area",
@@ -2629,7 +2628,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"availability", "repeatable"},
-			References:    []string{createListURL(cfg, "area")},
+			References:    []string{"area"},
 		},
 	}
 
@@ -2646,7 +2645,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "rel_repeatable",
@@ -2669,7 +2668,7 @@ func (cfg *Config) initItemsParams() {
 			ExampleVals: []string{"hp", "strength"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "stats")},
+			References:  []string{"stats"},
 		},
 		{
 			Name:        "category",
@@ -2678,7 +2677,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.ItemCategory.lookup,
-			References:  []string{createListURL(cfg, "item-category")},
+			References:  []string{"item-category"},
 		},
 		{
 			Name:        "availability",
@@ -2687,7 +2686,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        	"pre_airship",
@@ -2720,7 +2719,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"sublocation", "area", "availability", "repeatable"},
-			References:    []string{createListURL(cfg, "locations")},
+			References:    []string{"locations"},
 		},
 		{
 			Name:          "sublocation",
@@ -2729,7 +2728,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"area", "availability", "repeatable"},
-			References:    []string{createListURL(cfg, "sublocations")},
+			References:    []string{"sublocations"},
 		},
 		{
 			Name:          "area",
@@ -2738,7 +2737,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"availability", "repeatable"},
-			References:    []string{createListURL(cfg, "area")},
+			References:    []string{"area"},
 		},
 	}
 
@@ -2755,7 +2754,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "availability",
@@ -2764,7 +2763,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "category",
@@ -2773,7 +2772,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.KeyItemCategory.lookup,
-			References:  []string{createListURL(cfg, "key-item-category")},
+			References:  []string{"key-item-category"},
 		},
 		{
 			Name:          "methods",
@@ -2791,7 +2790,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"sublocation", "area", "availability", "repeatable"},
-			References:    []string{createListURL(cfg, "locations")},
+			References:    []string{"locations"},
 		},
 		{
 			Name:          "sublocation",
@@ -2800,7 +2799,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"area", "availability", "repeatable"},
-			References:    []string{createListURL(cfg, "sublocations")},
+			References:    []string{"sublocations"},
 		},
 		{
 			Name:          "area",
@@ -2809,7 +2808,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"availability", "repeatable"},
-			References:    []string{createListURL(cfg, "area")},
+			References:    []string{"area"},
 		},
 	}
 
@@ -2826,7 +2825,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "rel_repeatable",
@@ -2850,7 +2849,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        	"pre_airship",
@@ -2883,7 +2882,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"sublocation", "area", "availability", "repeatable"},
-			References:    []string{createListURL(cfg, "locations")},
+			References:    []string{"locations"},
 		},
 		{
 			Name:          "sublocation",
@@ -2892,7 +2891,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"area", "availability", "repeatable"},
-			References:    []string{createListURL(cfg, "sublocations")},
+			References:    []string{"sublocations"},
 		},
 		{
 			Name:          "area",
@@ -2901,7 +2900,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"availability", "repeatable"},
-			References:    []string{createListURL(cfg, "area")},
+			References:    []string{"area"},
 		},
 	}
 
@@ -2918,7 +2917,7 @@ func (cfg *Config) initPrimersParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 	}
 
@@ -2936,7 +2935,7 @@ func (cfg *Config) initMixesParams() {
 			ForList:         false,
 			ForSingle:       true,
 			ForbiddenParams: []string{"best"},
-			References:      []string{createListURL(cfg, "items")},
+			References:      []string{"items"},
 		},
 		{
 			Name:            "best",
@@ -2953,7 +2952,7 @@ func (cfg *Config) initMixesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.MixCategory.lookup,
-			References:  []string{createListURL(cfg, "mix-category")},
+			References:  []string{"mix-category"},
 		},
 		{
 			Name:        "req_item",
@@ -2962,7 +2961,7 @@ func (cfg *Config) initMixesParams() {
 			ExampleVals: []string{"grenade", "power_sphere"},
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "items")},
+			References:  []string{"items"},
 		},
 		{
 			Name:           "second_item",
@@ -2972,7 +2971,7 @@ func (cfg *Config) initMixesParams() {
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []string{"req_item"},
-			References:     []string{createListURL(cfg, "items")},
+			References:     []string{"items"},
 		},
 	}
 
@@ -2989,7 +2988,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "rel_repeatable",
@@ -3005,7 +3004,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        	"pre_airship",
@@ -3029,7 +3028,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:     true,
 			ForSingle:   false,
 			TypeLookup:  cfg.t.AutoAbilityCategory.lookup,
-			References:  []string{createListURL(cfg, "auto-ability-category")},
+			References:  []string{"auto-ability-category"},
 		},
 		{
 			Name:        "type",
@@ -3045,7 +3044,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "monsters")},
+			References:  []string{"monsters"},
 		},
 		{
 			Name:        "monster_items",
@@ -3053,7 +3052,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "monsters")},
+			References:  []string{"monsters"},
 		},
 		{
 			Name:        "shop",
@@ -3061,7 +3060,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:        "id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "monsters")},
+			References:  []string{"monsters"},
 		},
 		{
 			Name:        "character",
@@ -3072,7 +3071,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForSingle:   false,
 			ReplacedBy:  []string{"availability", "repeatable"},
 			UsableWith:  []string{"availability", "monster", "shop"},
-			References:  []string{createListURL(cfg, "monsters")},
+			References:  []string{"monsters"},
 		},
 		{
 			Name:          "methods",
@@ -3098,7 +3097,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"sublocation", "area", "availability", "repeatable"},
-			References:    []string{createListURL(cfg, "locations")},
+			References:    []string{"locations"},
 		},
 		{
 			Name:          "sublocation",
@@ -3107,7 +3106,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"area", "availability", "repeatable"},
-			References:    []string{createListURL(cfg, "sublocations")},
+			References:    []string{"sublocations"},
 		},
 		{
 			Name:          "area",
@@ -3116,7 +3115,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []string{"availability", "repeatable"},
-			References:    []string{createListURL(cfg, "area")},
+			References:    []string{"area"},
 		},
 	}
 
@@ -3132,7 +3131,7 @@ func (cfg *Config) initEquipmentTablesParams() {
 			Type:        "id-list",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "auto-abilities")},
+			References:  []string{"auto-abilities"},
 		},
 		{
 			Name:        "type",
@@ -3173,7 +3172,7 @@ func (cfg *Config) initEquipmentParams() {
 			ForList:     false,
 			ForSingle:   true,
 			TypeLookup:  cfg.t.AvailabilityType.lookup,
-			References:  []string{createListURL(cfg, "availability")},
+			References:  []string{"availability"},
 		},
 		{
 			Name:        "auto_abilities",
@@ -3181,7 +3180,7 @@ func (cfg *Config) initEquipmentParams() {
 			Type:        "id-list",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "auto-abilities")},
+			References:  []string{"auto-abilities"},
 		},
 		{
 			Name:        "character",
@@ -3190,7 +3189,7 @@ func (cfg *Config) initEquipmentParams() {
 			Type:        "name/id",
 			ForList:     true,
 			ForSingle:   false,
-			References:  []string{createListURL(cfg, "character")},
+			References:  []string{"character"},
 		},
 		{
 			Name:        "type",

@@ -7,15 +7,15 @@ import (
 )
 
 // query uses a list of ids as database input to filter for resources
-func idListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryIntList) ([]A, error) {
+func idListQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, fLookup map[string]F, dbQuery DbQueryIntList) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 
-	queryIDs, err := parseIdListQuery(cfg, r, queryParam, maxID)
+	queryIDs, err := parseIdListQuery(cfg, r, queryParam, fLookup)
 	if queryIsEmpty(err) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
@@ -26,29 +26,20 @@ func idListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	return resources, nil
+	return dbIDs, nil
 }
 
 // like idListQuery, but with more specialized logic in between (wrapperFn)
-func idListQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, []int32) ([]int32, error)) ([]A, error) {
+func idListQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, fLookup map[string]F, wrapperFn func(*Config, *http.Request, []int32) ([]int32, error)) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 
-	queryIDs, err := parseIdListQuery(cfg, r, queryParam, maxID)
+	queryIDs, err := parseIdListQuery(cfg, r, queryParam, fLookup)
 	if queryIsEmpty(err) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	dbIDs, err := wrapperFn(cfg, r, queryIDs)
-	if err != nil {
-		return nil, err
-	}
-
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	return resources, nil
+	return wrapperFn(cfg, r, queryIDs)
 }

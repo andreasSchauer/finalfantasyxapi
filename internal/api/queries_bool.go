@@ -7,15 +7,15 @@ import (
 )
 
 // db query searches for resources with matching boolean db column value
-func boolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryBool) ([]A, error) {
+func boolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, dbQuery DbQueryBool) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 
 	b, err := parseBooleanQuery(r, queryParam)
 	if queryIsEmpty(err) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
@@ -26,21 +26,19 @@ func boolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cf
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	return resources, nil
+	return dbIDs, nil
 }
 
 // db query accumulates all resources that fulfill a certain condition. a false boolean flips these results.
-func boolQuery2[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, dbQuery DbQueryNoInput) ([]A, error) {
+func boolQuery2[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, dbQuery DbQueryNoInput) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 
 	b, err := parseBooleanQuery(r, queryParam)
 	if queryIsEmpty(err) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
@@ -51,33 +49,26 @@ func boolQuery2[T seeding.Lookupable, R any, A APIResource, L APIResourceList](c
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
 	if !b {
-		resources = removeResources(inputRes, resources)
+		dbIDs = removeIDs(inputIDs, dbIDs)
 	}
 
-	return resources, nil
+	return dbIDs, nil
 }
 
-func boolQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, bool) ([]A, error)) ([]A, error) {
+func boolQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, wrapperFn func(*Config, *http.Request, bool) ([]int32, error)) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 
 	b, err := parseBooleanQuery(r, queryParam)
 	if queryIsEmpty(err) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	resources, err := wrapperFn(cfg, r, b)
-	if err != nil {
-		return nil, err
-	}
-
-	return resources, nil
+	return wrapperFn(cfg, r, b)
 }

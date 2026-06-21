@@ -23,9 +23,9 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Type:               enumToNamedAPIResource(cfg, cfg.e.abilityType.endpoint, string(ability.Type), cfg.t.AbilityType),
-		Rank: 				ability.Rank,
-		CanCopycat: 		ability.CanCopycat,
-		AppearsInHelpBar: 	ability.AppearsInHelpBar,
+		Rank:               ability.Rank,
+		CanCopycat:         ability.CanCopycat,
+		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		TypedAbility:       refToNamedApiResource(cfg, ability.GetAbilityRef()),
 		Monsters:           monsters,
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
@@ -35,32 +35,32 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 }
 
 func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]) (TypedAPIResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return TypedAPIResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[TypedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.AbilityType, resources, "type", cfg.db.GetAbilityIDsByType)),
-		frl(enumListQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", cfg.db.GetAbilityIDsByDamageType)),
-		frl(enumListQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", cfg.db.GetAbilityIDsByAttackType)),
-		frl(enumListQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", cfg.db.GetAbilityIDsByTargetType)),
-		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", cfg.db.GetAbilityIDsByDamageFormula)),
-		frl(intListQuery(cfg, r, i, resources, "rank", cfg.db.GetAbilityIDsByRank)),
-		frl(nameIdListQueryNul(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetAbilityIDsByElement)),
-		frl(idQueryNul(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), cfg.db.GetAbilityIDsByInflictedStatus)),
-		frl(idQueryNul(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), cfg.db.GetAbilityIDsByRemovedStatus)),
-		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.MonsterFormations), cfg.db.GetAbilityIDsByMonster)),
-		frl(boolQuery(cfg, r, i, resources, "copycat", cfg.db.GetAbilityIDsByCanCopycat)),
-		frl(boolQuery(cfg, r, i, resources, "help_bar", cfg.db.GetAbilityIDsByAppearsInHelpBar)),
-		frl(boolQuery2(cfg, r, i, resources, "can_crit", cfg.db.GetAbilityIDsCanCrit)),
-		frl(boolQuery2(cfg, r, i, resources, "bdl", cfg.db.GetAbilityIDsBreakDmgLimit)),
-		frl(boolQuery2(cfg, r, i, resources, "user_atk", cfg.db.GetAbilityIDsBasedOnUserAttack)),
-		frl(boolQuery2(cfg, r, i, resources, "darkable", cfg.db.GetAbilityIDsDarkable)),
-		frl(boolQuery2(cfg, r, i, resources, "silenceable", cfg.db.GetAbilityIDsSilenceable)),
-		frl(boolQuery2(cfg, r, i, resources, "reflectable", cfg.db.GetAbilityIDsReflectable)),
-		frl(boolQuery2(cfg, r, i, resources, "delay", cfg.db.GetAbilityIDsDealsDelay)),
-		frl(boolQuery2(cfg, r, i, resources, "stat_changes", cfg.db.GetAbilityIDsWithStatChanges)),
-		frl(boolQuery2(cfg, r, i, resources, "mod_changes", cfg.db.GetAbilityIDsWithModifierChanges)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.AbilityType, ids, "type", cfg.db.GetAbilityIDsByType)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.DamageType, ids, "damage_type", cfg.db.GetAbilityIDsByDamageType)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.AttackType, ids, "attack_type", cfg.db.GetAbilityIDsByAttackType)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.TargetType, ids, "target_type", cfg.db.GetAbilityIDsByTargetType)),
+		fidl(enumQuery(r, i, cfg.t.DamageFormula, ids, "damage_formula", cfg.db.GetAbilityIDsByDamageFormula)),
+		fidl(intListQuery(cfg, r, i, ids, "rank", cfg.db.GetAbilityIDsByRank)),
+		fidl(nameIdListQueryNul(cfg, r, i, ids, "element", cfg.e.elements.resourceType, cfg.l.Elements, cfg.db.GetAbilityIDsByElement)),
+		fidl(idQueryNul(r, i, ids, "status_inflict", cfg.l.StatusConditions, cfg.db.GetAbilityIDsByInflictedStatus)),
+		fidl(idQueryNul(r, i, ids, "status_remove", cfg.l.StatusConditions, cfg.db.GetAbilityIDsByRemovedStatus)),
+		fidl(idQuery(r, i, ids, "monster", cfg.l.MonsterFormations, cfg.db.GetAbilityIDsByMonster)),
+		fidl(boolQuery(r, i, ids, "copycat", cfg.db.GetAbilityIDsByCanCopycat)),
+		fidl(boolQuery(r, i, ids, "help_bar", cfg.db.GetAbilityIDsByAppearsInHelpBar)),
+		fidl(boolQuery2(r, i, ids, "can_crit", cfg.db.GetAbilityIDsCanCrit)),
+		fidl(boolQuery2(r, i, ids, "bdl", cfg.db.GetAbilityIDsBreakDmgLimit)),
+		fidl(boolQuery2(r, i, ids, "user_atk", cfg.db.GetAbilityIDsBasedOnUserAttack)),
+		fidl(boolQuery2(r, i, ids, "darkable", cfg.db.GetAbilityIDsDarkable)),
+		fidl(boolQuery2(r, i, ids, "silenceable", cfg.db.GetAbilityIDsSilenceable)),
+		fidl(boolQuery2(r, i, ids, "reflectable", cfg.db.GetAbilityIDsReflectable)),
+		fidl(boolQuery2(r, i, ids, "delay", cfg.db.GetAbilityIDsDealsDelay)),
+		fidl(boolQuery2(r, i, ids, "stat_changes", cfg.db.GetAbilityIDsWithStatChanges)),
+		fidl(boolQuery2(r, i, ids, "mod_changes", cfg.db.GetAbilityIDsWithModifierChanges)),
 	})
 }

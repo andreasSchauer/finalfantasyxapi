@@ -33,13 +33,13 @@ func (cfg *Config) getOverdrive(r *http.Request, i handlerInput[seeding.Overdriv
 }
 
 func (cfg *Config) retrieveOverdrives(r *http.Request, i handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(intListQuery(cfg, r, i, resources, "rank", cfg.db.GetOverdriveIDsByRank)),
-		frl(nameIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser))),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(intListQuery(cfg, r, i, ids, "rank", cfg.db.GetOverdriveIDsByRank)),
+		fidl(nameIdQuery(r, i, ids, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser))),
 	})
 }

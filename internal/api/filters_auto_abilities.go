@@ -8,7 +8,7 @@ import (
 )
 
 
-func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.autoAbilities
 
 	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, "character", i.queryLookup)
@@ -24,12 +24,10 @@ func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, id int32) ([]NamedA
 		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["monster"], err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	return resources, nil
+	return dbIDs, nil
 }
 
-func getAutoAbilitiesByShop(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+func getAutoAbilitiesByShop(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.autoAbilities
 
 	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, "character", i.queryLookup)
@@ -45,7 +43,5 @@ func getAutoAbilitiesByShop(cfg *Config, r *http.Request, id int32) ([]NamedAPIR
 		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["monster"], err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	return resources, nil
+	return dbIDs, nil
 }

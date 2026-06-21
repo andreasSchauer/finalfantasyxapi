@@ -37,14 +37,14 @@ func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seeding.Equ
 }
 
 func (cfg *Config) retrieveEquipmentTables(r *http.Request, i handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]) (UnnamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return UnnamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[UnnamedAPIResource]{
-		frl(idListQuery(cfg, r, i, resources, "auto_abilities", len(cfg.l.AutoAbilities), cfg.db.GetEquipmentTableIDsByAutoAbility)),
-		frl(enumQuery(cfg, r, i, cfg.t.EquipType, resources, "type", cfg.db.GetEquipmentTableIDsEquipType)),
-		frl(boolQuery2(cfg, r, i, resources, "celestial_weapon", cfg.db.GetEquipmentTableIDsCelestialWeapon)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(idListQuery(cfg, r, i, ids, "auto_abilities", cfg.l.AutoAbilities, cfg.db.GetEquipmentTableIDsByAutoAbility)),
+		fidl(enumQuery(r, i, cfg.t.EquipType, ids, "type", cfg.db.GetEquipmentTableIDsEquipType)),
+		fidl(boolQuery2(r, i, ids, "celestial_weapon", cfg.db.GetEquipmentTableIDsCelestialWeapon)),
 	})
 }

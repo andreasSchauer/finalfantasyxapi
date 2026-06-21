@@ -55,39 +55,39 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 }
 
 func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 	abilityType := database.AbilityTypePlayerAbility
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.PlayerAbilityCategory, resources, "category", cfg.db.GetPlayerAbilityIDsByCategory)),
-		frl(enumListQuery(cfg, r, i, cfg.t.DamageType, resources, "damage_type", getTypedAbilityIDsByDamageType(cfg, abilityType))),
-		frl(enumListQuery(cfg, r, i, cfg.t.AttackType, resources, "attack_type", getTypedAbilityIDsByAttackType(cfg, abilityType))),
-		frl(enumListQuery(cfg, r, i, cfg.t.TargetType, resources, "target_type", getTypedAbilityIDsByTargetType(cfg, abilityType))),
-		frl(enumQuery(cfg, r, i, cfg.t.DamageFormula, resources, "damage_formula", getTypedAbilityIDsByDamageFormula(cfg, abilityType))),
-		frl(intListQuery(cfg, r, i, resources, "mp", cfg.db.GetPlayerAbilityIDsByMpCost)),
-		frl(intQuery(cfg, r, i, resources, "mp_min", cfg.db.GetPlayerAbilityIDsByMpCostMin)),
-		frl(intQuery(cfg, r, i, resources, "mp_max", cfg.db.GetPlayerAbilityIDsByMpCostMax)),
-		frl(intListQuery(cfg, r, i, resources, "rank", getTypedAbilityIDsByRank(cfg, abilityType))),
-		frl(nameIdListQueryNul(cfg, r, i, resources, "element", cfg.e.elements.resourceType, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType))),
-		frl(nameIdQuery(cfg, r, i, resources, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass)),
-		frl(idQuery(cfg, r, i, resources, "learn_item", len(cfg.l.Items), cfg.db.GetPlayerAbilityIDsByLearnItem)),
-		frl(nameIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat)),
-		frl(idQueryNul(cfg, r, i, resources, "status_inflict", len(cfg.l.StatusConditions), getTypedAbilityIDsByInflictedStatus(cfg, abilityType))),
-		frl(idQueryNul(cfg, r, i, resources, "status_remove", len(cfg.l.StatusConditions), getTypedAbilityIDsByRemovedStatus(cfg, abilityType))),
-		frl(nameIdQuery(cfg, r, i, resources, "std_sg", cfg.e.characters.resourceType, cfg.l.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar))),
-		frl(nameIdQuery(cfg, r, i, resources, "exp_sg", cfg.e.characters.resourceType, cfg.l.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar))),
-		frl(boolQuery(cfg, r, i, resources, "outside_battle", cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle)),
-		frl(boolQuery(cfg, r, i, resources, "copycat", getTypedAbilityIDsByCanCopycat(cfg, abilityType))),
-		frl(boolQuery(cfg, r, i, resources, "help_bar", getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "user_atk", getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "darkable", getTypedAbilityIDsDarkable(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "silenceable", getTypedAbilityIDsSilenceable(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "reflectable", getTypedAbilityIDsReflectable(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "delay", getTypedAbilityIDsDealsDelay(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "stat_changes", getTypedAbilityIDsWithStatChanges(cfg, abilityType))),
-		frl(boolQuery2(cfg, r, i, resources, "mod_changes", getTypedAbilityIDsWithModifierChanges(cfg, abilityType))),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.PlayerAbilityCategory, ids, "category", cfg.db.GetPlayerAbilityIDsByCategory)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.DamageType, ids, "damage_type", getTypedAbilityIDsByDamageType(cfg, abilityType))),
+		fidl(enumListQuery(cfg, r, i, cfg.t.AttackType, ids, "attack_type", getTypedAbilityIDsByAttackType(cfg, abilityType))),
+		fidl(enumListQuery(cfg, r, i, cfg.t.TargetType, ids, "target_type", getTypedAbilityIDsByTargetType(cfg, abilityType))),
+		fidl(enumQuery(r, i, cfg.t.DamageFormula, ids, "damage_formula", getTypedAbilityIDsByDamageFormula(cfg, abilityType))),
+		fidl(intListQuery(cfg, r, i, ids, "mp", cfg.db.GetPlayerAbilityIDsByMpCost)),
+		fidl(intQuery(r, i, ids, "mp_min", cfg.db.GetPlayerAbilityIDsByMpCostMin)),
+		fidl(intQuery(r, i, ids, "mp_max", cfg.db.GetPlayerAbilityIDsByMpCostMax)),
+		fidl(intListQuery(cfg, r, i, ids, "rank", getTypedAbilityIDsByRank(cfg, abilityType))),
+		fidl(nameIdListQueryNul(cfg, r, i, ids, "element", cfg.e.elements.resourceType, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType))),
+		fidl(nameIdQuery(r, i, ids, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass)),
+		fidl(idQuery(r, i, ids, "learn_item", cfg.l.Items, cfg.db.GetPlayerAbilityIDsByLearnItem)),
+		fidl(nameIdQuery(r, i, ids, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat)),
+		fidl(idQueryNul(r, i, ids, "status_inflict", cfg.l.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType))),
+		fidl(idQueryNul(r, i, ids, "status_remove", cfg.l.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType))),
+		fidl(nameIdQuery(r, i, ids, "std_sg", cfg.e.characters.resourceType, cfg.l.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar))),
+		fidl(nameIdQuery(r, i, ids, "exp_sg", cfg.e.characters.resourceType, cfg.l.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar))),
+		fidl(boolQuery(r, i, ids, "outside_battle", cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle)),
+		fidl(boolQuery(r, i, ids, "copycat", getTypedAbilityIDsByCanCopycat(cfg, abilityType))),
+		fidl(boolQuery(r, i, ids, "help_bar", getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "user_atk", getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "darkable", getTypedAbilityIDsDarkable(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "silenceable", getTypedAbilityIDsSilenceable(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "reflectable", getTypedAbilityIDsReflectable(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "delay", getTypedAbilityIDsDealsDelay(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "stat_changes", getTypedAbilityIDsWithStatChanges(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, "mod_changes", getTypedAbilityIDsWithModifierChanges(cfg, abilityType))),
 	})
 }

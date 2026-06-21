@@ -26,12 +26,12 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 }
 
 func (cfg *Config) retrieveOverdriveModes(r *http.Request, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumQuery(cfg, r, i, cfg.t.OverdriveModeType, resources, "type", cfg.db.GetOverdriveModeIDsByType)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumQuery(r, i, cfg.t.OverdriveModeType, ids, "type", cfg.db.GetOverdriveModeIDsByType)),
 	})
 }

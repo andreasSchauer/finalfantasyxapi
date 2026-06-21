@@ -866,131 +866,20 @@ func (q *Queries) GetMonsterIDsByIsZombie(ctx context.Context, isZombie bool) ([
 }
 
 const getMonsterIDsByItem = `-- name: GetMonsterIDsByItem :many
-SELECT DISTINCT monster_id FROM mv_monster_item_drops WHERE item_id = $1 ORDER BY monster_id
-`
-
-func (q *Queries) GetMonsterIDsByItem(ctx context.Context, itemID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItem, itemID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var monster_id int32
-		if err := rows.Scan(&monster_id); err != nil {
-			return nil, err
-		}
-		items = append(items, monster_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMonsterIDsByItemBribe = `-- name: GetMonsterIDsByItemBribe :many
 SELECT DISTINCT monster_id
 FROM mv_monster_item_drops
-WHERE item_id = $1 AND source_type = 'bribe'
+WHERE item_id = $1::int
+  AND source_type = ANY($2::text[])
 ORDER BY monster_id
 `
 
-func (q *Queries) GetMonsterIDsByItemBribe(ctx context.Context, itemID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemBribe, itemID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var monster_id int32
-		if err := rows.Scan(&monster_id); err != nil {
-			return nil, err
-		}
-		items = append(items, monster_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+type GetMonsterIDsByItemParams struct {
+	ItemID  int32
+	Methods []string
 }
 
-const getMonsterIDsByItemDrop = `-- name: GetMonsterIDsByItemDrop :many
-SELECT DISTINCT monster_id
-FROM mv_monster_item_drops
-WHERE item_id = $1 AND source_type LIKE 'drop%'
-ORDER BY monster_id
-`
-
-func (q *Queries) GetMonsterIDsByItemDrop(ctx context.Context, itemID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemDrop, itemID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var monster_id int32
-		if err := rows.Scan(&monster_id); err != nil {
-			return nil, err
-		}
-		items = append(items, monster_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMonsterIDsByItemOther = `-- name: GetMonsterIDsByItemOther :many
-SELECT DISTINCT monster_id
-FROM mv_monster_item_drops
-WHERE item_id = $1 AND source_type = 'other'
-ORDER BY monster_id
-`
-
-func (q *Queries) GetMonsterIDsByItemOther(ctx context.Context, itemID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemOther, itemID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var monster_id int32
-		if err := rows.Scan(&monster_id); err != nil {
-			return nil, err
-		}
-		items = append(items, monster_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getMonsterIDsByItemSteal = `-- name: GetMonsterIDsByItemSteal :many
-SELECT DISTINCT monster_id
-FROM mv_monster_item_drops
-WHERE item_id = $1 AND source_type LIKE 'steal%'
-ORDER BY monster_id
-`
-
-func (q *Queries) GetMonsterIDsByItemSteal(ctx context.Context, itemID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItemSteal, itemID)
+func (q *Queries) GetMonsterIDsByItem(ctx context.Context, arg GetMonsterIDsByItemParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterIDsByItem, arg.ItemID, pq.Array(arg.Methods))
 	if err != nil {
 		return nil, err
 	}

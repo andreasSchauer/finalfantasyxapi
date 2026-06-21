@@ -53,20 +53,20 @@ func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seeding.AutoAb
 }
 
 func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.AutoAbilityCategory, resources, "category", cfg.db.GetAutoAbilityIDsByCategory)),
-		frl(enumQuery(cfg, r, i, cfg.t.EquipType, resources, "type", cfg.db.GetAutoAbilityIDsByEquipType)),
-		frl(idQueryWrapper(cfg, r, i, resources, "monster", len(cfg.l.Monsters), getAutoAbilitiesByMonster)),
-		frl(idQuery(cfg, r, i, resources, "monster_items", len(cfg.l.Monsters), cfg.db.GetAutoAbilityIDsByMonsterItems)),
-		frl(idQueryWrapper(cfg, r, i, resources, "shop", len(cfg.l.Shops), getAutoAbilitiesByShop)),
-		frl(valueListQuery(cfg, r, i, resources, "methods", cfg.db.GetAutoAbilityIDsByMethods)),
-		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetAutoAbilityIDsByLocation)),
-		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetAutoAbilityIDsBySublocation)),
-		frl(idQuery(cfg, r, i, resources, "areas", len(cfg.l.Areas), cfg.db.GetAutoAbilityIDsByArea)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.AutoAbilityCategory, ids, "category", cfg.db.GetAutoAbilityIDsByCategory)),
+		fidl(enumQuery(r, i, cfg.t.EquipType, ids, "type", cfg.db.GetAutoAbilityIDsByEquipType)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "monster", cfg.l.Monsters, getAutoAbilitiesByMonster)),
+		fidl(idQuery(r, i, ids, "monster_items", cfg.l.Monsters, cfg.db.GetAutoAbilityIDsByMonsterItems)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "shop", cfg.l.Shops, getAutoAbilitiesByShop)),
+		fidl(valueListQuery(cfg, r, i, ids, "methods", cfg.db.GetAutoAbilityIDsByMethods)),
+		fidl(idQuery(r, i, ids, "location", cfg.l.Locations, cfg.db.GetAutoAbilityIDsByLocation)),
+		fidl(idQuery(r, i, ids, "sublocation", cfg.l.Sublocations, cfg.db.GetAutoAbilityIDsBySublocation)),
+		fidl(idQuery(r, i, ids, "areas", cfg.l.Areas, cfg.db.GetAutoAbilityIDsByArea)),
 	})
 }

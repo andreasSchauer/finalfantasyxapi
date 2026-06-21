@@ -43,30 +43,30 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, A
 }
 
 func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]) (AreaApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return AreaApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[AreaAPIResource]{
-		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationAreaIDs)),
-		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSublocationAreaIDs)),
-		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetAreaIDsWithMonster)),
-		frl(idQueryWrapper(cfg, r, i, resources, "item", len(cfg.l.Items), getAreasByItem)),
-		frl(idQuery(cfg, r, i, resources, "key_item", len(cfg.l.KeyItems), cfg.db.GetAreaIDsWithKeyItem)),
-		frl(idQuery(cfg, r, i, resources, "monster", len(cfg.l.Monsters), cfg.db.GetAreasByMonster)),
-		frl(idQuery(cfg, r, i, resources, "auto_ability", len(cfg.l.AutoAbilities), cfg.db.GetAreaIDsWithAutoAbility)),
-		frl(boolQuery(cfg, r, i, resources, "save_sphere", cfg.db.GetAreaIDsWithSaveSphere)),
-		frl(boolQuery(cfg, r, i, resources, "comp_sphere", cfg.db.GetAreaIDsWithCompSphere)),
-		frl(boolQuery(cfg, r, i, resources, "airship", cfg.db.GetAreaIDsWithDropOff)),
-		frl(boolQuery(cfg, r, i, resources, "chocobo", cfg.db.GetAreaIDsChocobo)),
-		frl(boolQuery2(cfg, r, i, resources, "characters", cfg.db.GetAreaIDsWithCharacters)),
-		frl(boolQuery2(cfg, r, i, resources, "aeons", cfg.db.GetAreaIDsWithAeons)),
-		frl(boolQuery2(cfg, r, i, resources, "monsters", cfg.db.GetAreaIDsWithMonsters)),
-		frl(boolQuery2(cfg, r, i, resources, "boss_fights", cfg.db.GetAreaIDsWithBosses)),
-		frl(boolQuery2(cfg, r, i, resources, "shops", cfg.db.GetAreaIDsWithShops)),
-		frl(boolQuery2(cfg, r, i, resources, "treasures", cfg.db.GetAreaIDsWithTreasures)),
-		frl(boolQuery2(cfg, r, i, resources, "sidequests", cfg.db.GetAreaIDsWithSidequests)),
-		frl(boolQuery2(cfg, r, i, resources, "fmvs", cfg.db.GetAreaIDsWithFMVs)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(idQuery(r, i, ids, "location", cfg.l.Locations, cfg.db.GetLocationAreaIDs)),
+		fidl(idQuery(r, i, ids, "sublocation", cfg.l.Sublocations, cfg.db.GetSublocationAreaIDs)),
+		fidl(idQuery(r, i, ids, "monster", cfg.l.Monsters, cfg.db.GetAreaIDsWithMonster)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "item", cfg.l.Items, getAreasByItem)),
+		fidl(idQuery(r, i, ids, "key_item", cfg.l.KeyItems, cfg.db.GetAreaIDsWithKeyItem)),
+		fidl(idQuery(r, i, ids, "monster", cfg.l.Monsters, cfg.db.GetAreasByMonster)),
+		fidl(idQuery(r, i, ids, "auto_ability", cfg.l.AutoAbilities, cfg.db.GetAreaIDsWithAutoAbility)),
+		fidl(boolQuery(r, i, ids, "save_sphere", cfg.db.GetAreaIDsWithSaveSphere)),
+		fidl(boolQuery(r, i, ids, "comp_sphere", cfg.db.GetAreaIDsWithCompSphere)),
+		fidl(boolQuery(r, i, ids, "airship", cfg.db.GetAreaIDsWithDropOff)),
+		fidl(boolQuery(r, i, ids, "chocobo", cfg.db.GetAreaIDsChocobo)),
+		fidl(boolQuery2(r, i, ids, "characters", cfg.db.GetAreaIDsWithCharacters)),
+		fidl(boolQuery2(r, i, ids, "aeons", cfg.db.GetAreaIDsWithAeons)),
+		fidl(boolQuery2(r, i, ids, "monsters", cfg.db.GetAreaIDsWithMonsters)),
+		fidl(boolQuery2(r, i, ids, "boss_fights", cfg.db.GetAreaIDsWithBosses)),
+		fidl(boolQuery2(r, i, ids, "shops", cfg.db.GetAreaIDsWithShops)),
+		fidl(boolQuery2(r, i, ids, "treasures", cfg.db.GetAreaIDsWithTreasures)),
+		fidl(boolQuery2(r, i, ids, "sidequests", cfg.db.GetAreaIDsWithSidequests)),
+		fidl(boolQuery2(r, i, ids, "fmvs", cfg.db.GetAreaIDsWithFMVs)),
 	})
 }

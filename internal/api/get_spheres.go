@@ -41,16 +41,16 @@ func (cfg *Config) getSphere(r *http.Request, i handlerInput[seeding.Sphere, Sph
 }
 
 func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.SphereColor, resources, "color", cfg.db.GetSphereIDsByColor)),
-		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetSphereIDsByLocation)),
-		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.l.Sublocations), cfg.db.GetSphereIDsBySublocation)),
-		frl(idQuery(cfg, r, i, resources, "area", len(cfg.l.Areas), cfg.db.GetSphereIDsByArea)),
-		frl(valueListQuery(cfg, r, i, resources, "methods", cfg.db.GetSphereIDsByMethods)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.SphereColor, ids, "color", cfg.db.GetSphereIDsByColor)),
+		fidl(idQuery(r, i, ids, "location", cfg.l.Locations, cfg.db.GetSphereIDsByLocation)),
+		fidl(idQuery(r, i, ids, "sublocation", cfg.l.Sublocations, cfg.db.GetSphereIDsBySublocation)),
+		fidl(idQuery(r, i, ids, "area", cfg.l.Areas, cfg.db.GetSphereIDsByArea)),
+		fidl(valueListQuery(cfg, r, i, ids, "methods", cfg.db.GetSphereIDsByMethods)),
 	})
 }

@@ -35,16 +35,16 @@ func (cfg *Config) getKeyItem(r *http.Request, i handlerInput[seeding.KeyItem, K
 }
 
 func (cfg *Config) retrieveKeyItems(r *http.Request, i handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.KeyItemCategory, resources, "category", cfg.db.GetKeyItemIDsCategory)),
-		frl(valueListQuery(cfg, r, i, resources, "methods", cfg.db.GetKeyItemIDsByMethods)),
-		frl(idQuery(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), cfg.db.GetKeyItemIDsByLocation)),
-		frl(idQuery(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), cfg.db.GetKeyItemIDsBySublocation)),
-		frl(idQuery(cfg, r, i, resources, "area", len(cfg.e.areas.objLookup), cfg.db.GetKeyItemIDsByArea)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.KeyItemCategory, ids, "category", cfg.db.GetKeyItemIDsCategory)),
+		fidl(valueListQuery(cfg, r, i, ids, "methods", cfg.db.GetKeyItemIDsByMethods)),
+		fidl(idQuery(r, i, ids, "location", cfg.e.locations.objLookup, cfg.db.GetKeyItemIDsByLocation)),
+		fidl(idQuery(r, i, ids, "sublocation", cfg.e.sublocations.objLookup, cfg.db.GetKeyItemIDsBySublocation)),
+		fidl(idQuery(r, i, ids, "area", cfg.e.areas.objLookup, cfg.db.GetKeyItemIDsByArea)),
 	})
 }

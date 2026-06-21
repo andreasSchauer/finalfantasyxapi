@@ -29,7 +29,7 @@ func getKeyItemSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailability
 	}
 }
 
-func getKeyItemAreaIDs(cfg *Config, sourceType ViewSourceType) RelAvailabilityDbQuery {
+func getKeyItemAreaIDs(cfg *Config) RelAvailabilityDbQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
 		return cfg.db.GetKeyItemAreaIDs(ctx, database.GetKeyItemAreaIDsParams{
 			KeyItemID:    p.ParentID,

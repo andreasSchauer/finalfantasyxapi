@@ -104,6 +104,31 @@ SELECT DISTINCT song_id FROM j_songs_background_music WHERE area_id = $1 ORDER B
 SELECT DISTINCT song_id::int FROM fmvs WHERE song_id IS NOT NULL AND area_id = $1 ORDER BY song_id;
 
 
+
+-- name: GetAreaSongIDs :many
+SELECT me.song_id::int FROM mv_monster_encounters me WHERE me.area_id = $1 AND me.song_id IS NOT NULL
+
+UNION
+
+SELECT c.song_id FROM cues c WHERE c.trigger_area_id = $1
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN j_cues_areas j ON j.cue_id = c.id
+WHERE j.included_area_id = $1
+
+UNION 
+
+SELECT j.song_id FROM j_songs_background_music j WHERE j.area_id = $1
+
+UNION
+
+SELECT f.song_id::int FROM fmvs f WHERE f.song_id IS NOT NULL AND f.area_id = $1
+ORDER BY song_id;
+
+
 -- name: GetAreaFmvIDs :many
 SELECT id FROM fmvs WHERE area_id = $1 ORDER BY id;
 
@@ -360,6 +385,47 @@ JOIN mv_geography g ON f.area_id = g.area_id
 WHERE f.song_id IS NOT NULL
   AND g.sublocation_id = $1
 ORDER BY f.song_id;
+
+
+
+
+-- name: GetSublocationSongIDs :many
+SELECT me.song_id::int
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+WHERE g.sublocation_id = $1 AND me.song_id IS NOT NULL
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN mv_geography g ON c.trigger_area_id = g.area_id
+WHERE g.sublocation_id = $1
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN j_cues_areas j ON j.cue_id = c.id
+JOIN mv_geography g ON j.included_area_id = g.area_id
+WHERE g.sublocation_id = $1
+
+UNION
+
+SELECT j.song_id
+FROM j_songs_background_music j
+JOIN mv_geography g ON j.area_id = g.area_id
+WHERE g.sublocation_id = $1
+
+UNION
+
+SELECT f.song_id::int
+FROM fmvs f
+JOIN mv_geography g ON f.area_id = g.area_id
+WHERE f.song_id IS NOT NULL
+  AND g.sublocation_id = $1
+ORDER BY song_id;
+
 
 
 -- name: GetSublocationFmvIDs :many
@@ -637,6 +703,47 @@ JOIN mv_geography g ON f.area_id = g.area_id
 WHERE f.song_id IS NOT NULL
   AND g.location_id = $1
 ORDER BY f.song_id;
+
+
+
+
+-- name: GetLocationSongIDs :many
+SELECT me.song_id::int
+FROM mv_monster_encounters me
+JOIN mv_geography g ON me.area_id = g.area_id
+WHERE g.location_id = $1 AND me.song_id IS NOT NULL
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN mv_geography g ON c.trigger_area_id = g.area_id
+WHERE g.location_id = $1
+
+UNION
+
+SELECT c.song_id
+FROM cues c
+JOIN j_cues_areas j ON j.cue_id = c.id
+JOIN mv_geography g ON j.included_area_id = g.area_id
+WHERE g.location_id = $1
+
+UNION
+
+SELECT j.song_id
+FROM j_songs_background_music j
+JOIN mv_geography g ON j.area_id = g.area_id
+WHERE g.location_id = $1
+
+UNION
+
+SELECT f.song_id::int
+FROM fmvs f
+JOIN mv_geography g ON f.area_id = g.area_id
+WHERE f.song_id IS NOT NULL
+  AND g.location_id = $1
+ORDER BY song_id;
+
 
 
 -- name: GetLocationFmvIDs :many

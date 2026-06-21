@@ -25,12 +25,12 @@ func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.Bli
 }
 
 func (cfg *Config) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumQuery(cfg, r, i, cfg.t.BlitzballTournamentCategory, resources, "category", cfg.db.GetBlitzballPrizeIDsByCategory)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumQuery(r, i, cfg.t.BlitzballTournamentCategory, ids, "category", cfg.db.GetBlitzballPrizeIDsByCategory)),
 	})
 }

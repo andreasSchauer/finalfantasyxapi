@@ -43,13 +43,13 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 }
 
 func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(boolQuery(cfg, r, i, resources, "story_based", cfg.db.GetCharacterIDsStoryBased)),
-		frl(boolQuery(cfg, r, i, resources, "underwater", cfg.db.GetCharacterIDsCanFightUnderwater)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(boolQuery(r, i, ids, "story_based", cfg.db.GetCharacterIDsStoryBased)),
+		fidl(boolQuery(r, i, ids, "underwater", cfg.db.GetCharacterIDsCanFightUnderwater)),
 	})
 }

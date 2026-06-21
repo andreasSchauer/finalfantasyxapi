@@ -51,18 +51,18 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 }
 
 func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.ItemCategory, resources, "category", cfg.db.GetItemIDsCategory)),
-		frl(boolQuery2(cfg, r, i, resources, "has_ability", cfg.db.GetItemIDsWithAbility)),
-		frl(nameIdQuery(cfg, r, i, resources, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetItemIDsByRelatedStat)),
-		frl(valueListQuery(cfg, r, i, resources, "methods", cfg.db.GetItemIDsByMethods)),
-		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), getItemsByLocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), getItemsBySublocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.e.areas.objLookup), getItemsByArea)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.ItemCategory, ids, "category", cfg.db.GetItemIDsCategory)),
+		fidl(boolQuery2(r, i, ids, "has_ability", cfg.db.GetItemIDsWithAbility)),
+		fidl(nameIdQuery(r, i, ids, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetItemIDsByRelatedStat)),
+		fidl(valueListQuery(cfg, r, i, ids, "methods", cfg.db.GetItemIDsByMethods)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "location", cfg.e.locations.objLookup, getItemsByLocation)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "sublocation", cfg.e.sublocations.objLookup, getItemsBySublocation)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "area", cfg.e.areas.objLookup, getItemsByArea)),
 	})
 }

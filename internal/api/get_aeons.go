@@ -52,12 +52,12 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 }
 
 func (cfg *Config) retrieveAeons(r *http.Request, i handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(boolQuery(cfg, r, i, resources, "optional", cfg.db.GetAeonIDsOptional)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(boolQuery(r, i, ids, "optional", cfg.db.GetAeonIDsOptional)),
 	})
 }

@@ -37,15 +37,15 @@ func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.Equipmen
 }
 
 func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(idListQuery(cfg, r, i, resources, "auto_abilities", len(cfg.l.AutoAbilities), cfg.db.GetEquipmentIDsByAutoAbility)),
-		frl(nameIdQuery(cfg, r, i, resources, "character", cfg.e.characters.resourceType, cfg.e.characters.objLookup, cfg.db.GetEquipmentIDsByCharacter)),
-		frl(enumQuery(cfg, r, i, cfg.t.EquipType, resources, "type", cfg.db.GetEquipmentIDsByEquipType)),
-		frl(boolQuery2(cfg, r, i, resources, "celestial_weapon", cfg.db.GetEquipmentIDsCelestialWeapon)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(idListQuery(cfg, r, i, ids, "auto_abilities", cfg.l.AutoAbilities, cfg.db.GetEquipmentIDsByAutoAbility)),
+		fidl(nameIdQuery(r, i, ids, "character", cfg.e.characters.resourceType, cfg.e.characters.objLookup, cfg.db.GetEquipmentIDsByCharacter)),
+		fidl(enumQuery(r, i, cfg.t.EquipType, ids, "type", cfg.db.GetEquipmentIDsByEquipType)),
+		fidl(boolQuery2(r, i, ids, "celestial_weapon", cfg.db.GetEquipmentIDsCelestialWeapon)),
 	})
 }

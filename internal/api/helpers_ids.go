@@ -18,6 +18,7 @@ func fidl(ids []int32, err error) filteredIdList {
 	}
 }
 
+// s1 [1,2,3] s2 [2,3,4,5] => [1,2,3,4,5]
 func combineIdSlices(idSlices ...[]int32) []int32 {
 	ids := []int32{}
 
@@ -64,6 +65,7 @@ func addUniqueIDsToSlice(s1, s2 []int32) []int32 {
 	return s1
 }
 
+// s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,4,5]
 func getSharedIDs(s1, s2 []int32) []int32 {
 	sharedIDs := []int32{}
 	s2Map := getIdMap(s2)
@@ -106,4 +108,28 @@ func sortNamesByID[T seeding.Lookupable](s []string, lookup map[string]T) []stri
 	})
 
 	return s
+}
+
+// ids [1,2,3,4,5] idsToRemove [2,4] => keptIDs [1,3,5] removedIDs [2,4]
+func separateIDs(ids []int32, idsToRemove []int32) ([]int32, []int32) {
+	removeMap := getIdMap(idsToRemove)
+	kept := []int32{}
+	removed := []int32{}
+
+	for _, id := range ids {
+		_, ok := removeMap[id]
+		if !ok {
+			kept = append(kept, id)
+			continue
+		}
+		removed = append(removed, id)
+	}
+
+	return kept, removed
+}
+
+// items [1,2,3,4,5] changeItems [2,4] => [1,3,5]
+func removeIDs(items []int32, itemsToRemove []int32) []int32 {
+	keptIDs, _ := separateIDs(items, itemsToRemove)
+	return keptIDs
 }

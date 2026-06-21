@@ -57,12 +57,12 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerU
 }
 
 func (cfg *Config) retrievePlayerUnits(r *http.Request, i handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]) (TypedAPIResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return TypedAPIResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[TypedAPIResource]{
-		frl(enumQuery(cfg, r, i, cfg.t.UnitType, resources, "type", cfg.db.GetPlayerUnitIDsByType)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumQuery(r, i, cfg.t.UnitType, ids, "type", cfg.db.GetPlayerUnitIDsByType)),
 	})
 }

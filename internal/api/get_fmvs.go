@@ -25,12 +25,12 @@ func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, Name
 }
 
 func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(idQuery(cfg, r, i, resources, "location", len(cfg.l.Locations), cfg.db.GetLocationFmvIDs)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(idQuery(r, i, ids, "location", cfg.l.Locations, cfg.db.GetLocationFmvIDs)),
 	})
 }

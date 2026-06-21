@@ -37,13 +37,13 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 }
 
 func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.ArenaCreationCategory, resources, "category", cfg.db.GetArenaCreationIDsByCategory)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.ArenaCreationCategory, ids, "category", cfg.db.GetArenaCreationIDsByCategory)),
 	})
 }
 

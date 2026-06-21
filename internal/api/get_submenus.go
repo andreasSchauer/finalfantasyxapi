@@ -37,12 +37,12 @@ func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, S
 }
 
 func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(nameIdQuery(cfg, r, i, resources, "topmenu", cfg.e.topmenus.resourceType, cfg.l.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs))),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(nameIdQuery(r, i, ids, "topmenu", cfg.e.topmenus.resourceType, cfg.l.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs))),
 	})
 }

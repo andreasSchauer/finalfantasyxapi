@@ -37,12 +37,12 @@ func (cfg *Config) getModifier(r *http.Request, i handlerInput[seeding.Modifier,
 }
 
 func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.ModifierCategory, resources, "category", cfg.db.GetModifierIDsByCategory)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.ModifierCategory, ids, "category", cfg.db.GetModifierIDsByCategory)),
 	})
 }

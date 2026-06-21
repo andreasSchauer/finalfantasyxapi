@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -9,15 +8,15 @@ import (
 )
 
 // query uses an id of another resource type to filter resources
-func idQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryIntMany) ([]A, error) {
+func idQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, fLookup map[string]F, dbQuery DbQueryIntMany) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 
-	id, err := parseIdQuery(r, queryParam, maxID)
+	id, err := parseIdQuery(r, queryParam, fLookup)
 	if queryIsEmpty(err) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
@@ -28,84 +27,45 @@ func idQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg 
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	return resources, nil
+	return dbIDs, nil
 }
 
 // like idOnlyQuery, but with more specialized logic in between (wrapperFn)
-func idQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, wrapperFn func(*Config, *http.Request, int32) ([]A, error)) ([]A, error) {
+func idQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, fLookup map[string]F, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 
-	id, err := parseIdQuery(r, queryParam, maxID)
+	id, err := parseIdQuery(r, queryParam, fLookup)
 	if queryIsEmpty(err) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	resources, err := wrapperFn(cfg, r, id)
-	if err != nil {
-		return nil, err
-	}
-
-	return resources, nil
+	return wrapperFn(cfg, r, id)
 }
 
-func idQueryNul[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, maxID int, dbQuery DbQueryNullIntMany) ([]A, error) {
+func idQueryNul[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, fLookup map[string]F, dbQuery DbQueryNullIntMany) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 
-	idPtr, err := parseIdQueryNul(r, queryParam, maxID)
+	idPtr, err := parseIdQueryNul(r, queryParam, fLookup)
 	if queryIsEmpty(err) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	dbIds, err := dbQuery(r.Context(), h.GetNullInt32(idPtr))
+	dbIDs, err := dbQuery(r.Context(), h.GetNullInt32(idPtr))
 	if err != nil {
 		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIds)
-	return resources, nil
-}
-
-// can be returned by id wrapperFns that use a second parameter for a set of allowed values
-func filterByIdAndValues[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, queryName, pResType string, dbQueryMap map[string]DbQueryIntMany) ([]A, error) {
-	queryParam := i.queryLookup[queryName]
-
-	query, err := checkEmptyQuery(r, queryParam)
-	if err != nil {
-		return dbQueriesToApiResources(cfg, r, i, id, pResType, dbQueryMap)
-	}
-
-	values, err := queryListSplit(cfg, query)
-	if err != nil {
-		return nil, err
-	}
-	valueMap := make(map[string]bool)
-
-	filteredLists := []filteredResList[A]{}
-
-	for _, value := range values {
-		dbQuery, ok := dbQueryMap[value]
-		if !ok {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. allowed values: %s.", query, queryParam.Name, h.FormatStringSlice(queryParam.AllowedValues)), nil)
-		}
-
-		filteredLists = append(filteredLists, frl(getResourcesDbID(cfg, r, i, id, pResType, dbQuery)))
-
-		valueMap[value] = true
-	}
-
-	return combineFilteredAPIResources(filteredLists)
+	return dbIDs, nil
 }

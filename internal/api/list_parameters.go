@@ -28,10 +28,29 @@ func getQueryParamList[T seeding.Lookupable, R any, A APIResource, L APIResource
 
 	list := QueryParameterList{
 		ListParams: listParams,
-		Results:    shownResources,
+		Results:    createQueryParamRefResURLs(cfg, shownResources),
 	}
 
 	return list, nil
+}
+
+func createQueryParamRefResURLs(cfg *Config, params []QueryParam) ([]QueryParam) {
+	paramsNew := params
+
+	for i := range paramsNew {
+		param := paramsNew[i]
+		if param.References == nil {
+			continue
+		}
+
+		for j := range param.References {
+			ref := param.References[j]
+			param.References[j] = createListURL(cfg, ref)
+		}
+		paramsNew[i] = param
+	}
+
+	return paramsNew
 }
 
 func getAllowedResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], params []QueryParam) []QueryParam {

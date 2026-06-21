@@ -8,7 +8,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func getMixesByItem(cfg *Config, r *http.Request, firstItemId int32) ([]NamedAPIResource, error) {
+func getMixesByItem(cfg *Config, r *http.Request, firstItemId int32) ([]int32, error) {
 	i := cfg.e.mixes
 
 	secondItemIdPtr, err := getQueryIdPtr(r, cfg.e.items, "second_item", i.queryLookup)
@@ -23,7 +23,6 @@ func getMixesByItem(cfg *Config, r *http.Request, firstItemId int32) ([]NamedAPI
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by items.", i.resourceType), err)
 	}
-	resources := idsToAPIResources(cfg, i, dbIDs)
 
-	return resources, nil
+	return dbIDs, nil
 }

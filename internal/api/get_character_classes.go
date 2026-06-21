@@ -33,12 +33,12 @@ func (cfg *Config) getCharacterClass(r *http.Request, i handlerInput[seeding.Cha
 }
 
 func (cfg *Config) retrieveCharacterClasses(r *http.Request, i handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.CharacterClassCategory, resources, "category", cfg.db.GetCharacterClassesIDsByCategory)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.CharacterClassCategory, ids, "category", cfg.db.GetCharacterClassesIDsByCategory)),
 	})
 }

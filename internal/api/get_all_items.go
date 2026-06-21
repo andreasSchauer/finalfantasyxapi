@@ -45,16 +45,16 @@ func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterI
 }
 
 func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]) (TypedAPIResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return TypedAPIResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[TypedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.ItemType, resources, "type", cfg.db.GetMasterItemIDsByType)),
-		frl(valueListQuery(cfg, r, i, resources, "methods", cfg.db.GetMasterItemIDsByMethods)),
-		frl(idQueryWrapper(cfg, r, i, resources, "location", len(cfg.e.locations.objLookup), getMasterItemsByLocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "sublocation", len(cfg.e.sublocations.objLookup), getMasterItemsBySublocation)),
-		frl(idQueryWrapper(cfg, r, i, resources, "area", len(cfg.e.areas.objLookup), getMasterItemsByArea)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.ItemType, ids, "type", cfg.db.GetMasterItemIDsByType)),
+		fidl(valueListQuery(cfg, r, i, ids, "methods", cfg.db.GetMasterItemIDsByMethods)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "location", cfg.e.locations.objLookup, getMasterItemsByLocation)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "sublocation", cfg.e.sublocations.objLookup, getMasterItemsBySublocation)),
+		fidl(idQueryWrapper(cfg, r, i, ids, "area", cfg.e.areas.objLookup, getMasterItemsByArea)),
 	})
 }

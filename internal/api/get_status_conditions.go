@@ -41,12 +41,12 @@ func (cfg *Config) getStatusCondition(r *http.Request, i handlerInput[seeding.St
 }
 
 func (cfg *Config) retrieveStatusConditions(r *http.Request, i handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return NamedApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[NamedAPIResource]{
-		frl(enumListQuery(cfg, r, i, cfg.t.StatusConditionCategory, resources, "category", cfg.db.GetStatusConditionIDsByCategory)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumListQuery(cfg, r, i, cfg.t.StatusConditionCategory, ids, "category", cfg.db.GetStatusConditionIDsByCategory)),
 	})
 }

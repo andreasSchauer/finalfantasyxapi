@@ -8,7 +8,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) ([]AreaAPIResource, error) {
+func filterAvlAreas(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.areas
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
@@ -16,7 +16,7 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		return resources, nil
+		return inputIDs, nil
 	}
 
 	sources, err := getLocBasedSources(cfg, r, i, ViewSourceTypeArea)
@@ -30,12 +30,11 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 		}
 
-		resNew := idsToAPIResources(cfg, i, dbIDs)
-		return resNew, nil
+		return dbIDs, nil
 	}
 
 	dbIDs, err := cfg.db.FilterAreaIDsByAvailability(r.Context(), database.FilterAreaIDsByAvailabilityParams{
-		Ids:             resToIDs(resources),
+		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		IsRepeatable:    avlParams.isRepeatable,
 		PreAirship: 	 avlParams.preAirship,
@@ -51,12 +50,11 @@ func filterAvlAreas(cfg *Config, r *http.Request, resources []AreaAPIResource) (
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resNew := idsToAPIResources(cfg, i, dbIDs)
-	return resNew, nil
+	return dbIDs, nil
 }
 
 
-func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
+func filterAvlSublocations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.sublocations
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
@@ -64,7 +62,7 @@ func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIRes
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		return resources, nil
+		return inputIDs, nil
 	}
 
 	sources, err := getLocBasedSources(cfg, r, i, ViewSourceTypeSublocation)
@@ -78,12 +76,11 @@ func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIRes
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 		}
 
-		resNew := idsToAPIResources(cfg, i, dbIDs)
-		return resNew, nil
+		return dbIDs, nil
 	}
 
 	dbIDs, err := cfg.db.FilterSublocationIDsByAvailability(r.Context(), database.FilterSublocationIDsByAvailabilityParams{
-		Ids:             resToIDs(resources),
+		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		IsRepeatable:    avlParams.isRepeatable,
 		PreAirship: 	 avlParams.preAirship,
@@ -99,12 +96,11 @@ func filterAvlSublocations(cfg *Config, r *http.Request, resources []NamedAPIRes
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resNew := idsToAPIResources(cfg, i, dbIDs)
-	return resNew, nil
+	return dbIDs, nil
 }
 
 
-func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
+func filterAvlLocations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.locations
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
@@ -112,7 +108,7 @@ func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResour
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		return resources, nil
+		return inputIDs, nil
 	}
 
 	sources, err := getLocBasedSources(cfg, r, i, ViewSourceTypeLocation)
@@ -126,12 +122,11 @@ func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResour
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 		}
 
-		resNew := idsToAPIResources(cfg, i, dbIDs)
-		return resNew, nil
+		return dbIDs, nil
 	}
 
 	dbIDs, err := cfg.db.FilterLocationIDsByAvailability(r.Context(), database.FilterLocationIDsByAvailabilityParams{
-		Ids:             resToIDs(resources),
+		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		IsRepeatable:    avlParams.isRepeatable,
 		PreAirship: 	 avlParams.preAirship,
@@ -147,6 +142,5 @@ func filterAvlLocations(cfg *Config, r *http.Request, resources []NamedAPIResour
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resNew := idsToAPIResources(cfg, i, dbIDs)
-	return resNew, nil
+	return dbIDs, nil
 }

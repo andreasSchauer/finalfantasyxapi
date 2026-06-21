@@ -30,12 +30,12 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 }
 
 func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]) (QuestApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return QuestApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
-		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetSubquestIDsByRepeatable)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(boolQuery(r, i, ids, "repeatable", cfg.db.GetSubquestIDsByRepeatable)),
 	})
 }

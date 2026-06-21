@@ -7,12 +7,12 @@ import (
 )
 
 
-func joinedQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryNames []string, queryFn func(*Config, *http.Request) ([]int32, error)) ([]A, error) {
+func joinedQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryNames []string, queryFn func(*Config, *http.Request) ([]int32, error)) ([]int32, error) {
 	allEmpty := true
 
 	for _, queryName := range queryNames {
 		if replParamsPresent(r, i.queryLookup[queryName], i.queryLookup) {
-			return inputRes, nil
+			return inputIDs, nil
 		}
 		_, err := checkEmptyQuery(r, i.queryLookup[queryName])
 		if !queryIsEmpty(err) {
@@ -22,14 +22,8 @@ func joinedQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 	}
 
 	if allEmpty {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 
-	ids, err := queryFn(cfg, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resources := idsToAPIResources(cfg, i, ids)
-	return resources, nil
+	return queryFn(cfg, r)
 }

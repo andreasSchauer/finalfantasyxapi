@@ -7,8 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-
-func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
+func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.shops
 
 	avlParams, err := checkAvl(cfg, r, i)
@@ -16,7 +15,7 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		return resources, nil
+		return inputIDs, nil
 	}
 
 	sources, err := getShopSources(cfg, r, i)
@@ -30,27 +29,25 @@ func filterAvlShops(cfg *Config, r *http.Request, resources []UnnamedAPIResource
 	}
 
 	dbIDs, err := cfg.db.FilterShopIDsByAvailability(r.Context(), database.FilterShopIDsByAvailabilityParams{
-		Ids:          		resToIDs(resources),
-		Availability: 		avlParams.availabilities,
-		AvlType:      		sources.AvlType,
-		LocContextID: 		locContext.ID,
-		LocContextType: 	locContext.Type,
-		RequiredSources:    sources.RequiredSources,
-		ExcludedSources: 	sources.ExcludedSources,
-		AutoAbilityID: 		sources.AutoAbilityID,
-		CharacterID: 		sources.CharacterID,
-		EmptySlots: 		sources.EmptySlots,
+		Ids:             inputIDs,
+		Availability:    avlParams.availabilities,
+		AvlType:         sources.AvlType,
+		LocContextID:    locContext.ID,
+		LocContextType:  locContext.Type,
+		RequiredSources: sources.RequiredSources,
+		ExcludedSources: sources.ExcludedSources,
+		AutoAbilityID:   sources.AutoAbilityID,
+		CharacterID:     sources.CharacterID,
+		EmptySlots:      sources.EmptySlots,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resNew := idsToAPIResources(cfg, i, dbIDs)
-	return resNew, nil
+	return dbIDs, nil
 }
 
-
-func filterAvlTreasures(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
+func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.treasures
 
 	avlParams, err := checkAvl(cfg, r, i)
@@ -58,24 +55,22 @@ func filterAvlTreasures(cfg *Config, r *http.Request, resources []UnnamedAPIReso
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		return resources, nil
+		return inputIDs, nil
 	}
 
 	dbIDs, err := cfg.db.FilterTreasureIDsByAvailability(r.Context(), database.FilterTreasureIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		Availability: 	avlParams.availabilities,
-		PreAirship:		avlParams.preAirship,
+		Ids:          inputIDs,
+		Availability: avlParams.availabilities,
+		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resNew := idsToAPIResources(cfg, i, dbIDs)
-	return resNew, nil
+	return dbIDs, nil
 }
 
-
-func filterAvlQuests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
+func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.quests
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
@@ -83,25 +78,23 @@ func filterAvlQuests(cfg *Config, r *http.Request, resources []QuestAPIResource)
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		return resources, nil
+		return inputIDs, nil
 	}
 
 	dbIDs, err := cfg.db.FilterQuestIDsByAvailability(r.Context(), database.FilterQuestIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		Availability:   avlParams.availabilities,
-		IsRepeatable:   avlParams.isRepeatable,
-		PreAirship: 	avlParams.preAirship,
+		Ids:          inputIDs,
+		Availability: avlParams.availabilities,
+		IsRepeatable: avlParams.isRepeatable,
+		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resNew := idsToAPIResources(cfg, i, dbIDs)
-	return resNew, nil
+	return dbIDs, nil
 }
 
-
-func filterAvlSidequests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
+func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.sidequests
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
@@ -109,24 +102,22 @@ func filterAvlSidequests(cfg *Config, r *http.Request, resources []QuestAPIResou
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		return resources, nil
+		return inputIDs, nil
 	}
 
 	dbIDs, err := cfg.db.FilterSidequestIDsByAvailability(r.Context(), database.FilterSidequestIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		Availability:   avlParams.availabilities,
-		PreAirship: 	avlParams.preAirship,
+		Ids:          inputIDs,
+		Availability: avlParams.availabilities,
+		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resNew := idsToAPIResources(cfg, i, dbIDs)
-	return resNew, nil
+	return dbIDs, nil
 }
 
-
-func filterAvlSubquests(cfg *Config, r *http.Request, resources []QuestAPIResource) ([]QuestAPIResource, error) {
+func filterAvlSubquests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.subquests
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
@@ -134,19 +125,18 @@ func filterAvlSubquests(cfg *Config, r *http.Request, resources []QuestAPIResour
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		return resources, nil
+		return inputIDs, nil
 	}
 
 	dbIDs, err := cfg.db.FilterSubquestIDsByAvailability(r.Context(), database.FilterSubquestIDsByAvailabilityParams{
-		Ids:          resToIDs(resources),
-		Availability:   avlParams.availabilities,
-		IsRepeatable:   avlParams.isRepeatable,
-		PreAirship: 	avlParams.preAirship,
+		Ids:          inputIDs,
+		Availability: avlParams.availabilities,
+		IsRepeatable: avlParams.isRepeatable,
+		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resNew := idsToAPIResources(cfg, i, dbIDs)
-	return resNew, nil
+	return dbIDs, nil
 }

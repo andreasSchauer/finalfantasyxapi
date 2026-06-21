@@ -26,13 +26,13 @@ func (cfg *Config) getQuest(r *http.Request, i handlerInput[seeding.Quest, Quest
 }
 
 func (cfg *Config) retrieveQuests(r *http.Request, i handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]) (QuestApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
 		return QuestApiResourceList{}, err
 	}
 
-	return filterAPIResources(cfg, r, i, resources, []filteredResList[QuestAPIResource]{
-		frl(enumQuery(cfg, r, i, cfg.t.QuestType, resources, "type", cfg.db.GetQuestIDsByType)),
-		frl(boolQuery(cfg, r, i, resources, "repeatable", cfg.db.GetQuestIDsByRepeatable)),
+	return filterIDs(cfg, r, i, ids, []filteredIdList{
+		fidl(enumQuery(r, i, cfg.t.QuestType, ids, "type", cfg.db.GetQuestIDsByType)),
+		fidl(boolQuery(r, i, ids, "repeatable", cfg.db.GetQuestIDsByRepeatable)),
 	})
 }

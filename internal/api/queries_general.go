@@ -9,23 +9,22 @@ import (
 )
 
 // used for query filters that can't really be generalized. this one simply checks, if it's empty and then calls the wrapperFn
-func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputRes []A, queryName string, wrapperFn func(*Config, *http.Request, string, QueryParam) ([]int32, error)) ([]A, error) {
+func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, wrapperFn func(*Config, *http.Request, string, QueryParam) ([]int32, error)) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	query, err := basicQueryChecks(r, queryParam, i.queryLookup)
 	if err != nil {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 
 	dbIDs, err := wrapperFn(cfg, r, query, queryParam)
 	if errors.Is(err, errQueryRedirect) {
-		return inputRes, nil
+		return inputIDs, nil
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-	return resources, nil
+	return dbIDs, nil
 }
 
 func basicQueryChecks(r *http.Request, queryParam QueryParam, queryLookup map[string]QueryParam) (string, error) {

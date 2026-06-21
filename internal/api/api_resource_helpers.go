@@ -38,6 +38,12 @@ func separateResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRem
 	return kept, removed
 }
 
+// items [1,2,3,4,5] changeItems [2,4] => [1,3,5]
+func removeResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) []T {
+	keptItems, _ := separateResources(items, itemsToRemove)
+	return keptItems
+}
+
 func separateResourcesURL[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
 	removeMap := getResourceURLMap(itemsToRemove)
 	kept := []T{}
@@ -54,12 +60,6 @@ func separateResourcesURL[T HasAPIResource, C HasAPIResource](items []T, itemsTo
 	}
 
 	return kept, removed
-}
-
-// items [1,2,3,4,5] changeItems [2,4] => [1,3,5]
-func removeResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) []T {
-	keptItems, _ := separateResources(items, itemsToRemove)
-	return keptItems
 }
 
 func removeResourcesURL[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) []T {
@@ -164,19 +164,4 @@ func toHasAPIResSlice[T HasAPIResource](s []T) []HasAPIResource {
 		out[i] = v
 	}
 	return out
-}
-
-// used for method queries to combine multiple filtered lists. for example as a combination of all of them (see areas 'item' parameter)
-func combineFilteredAPIResources[A APIResource](filteredLists []filteredResList[A]) ([]A, error) {
-	resources := []A{}
-
-	for _, filtered := range filteredLists {
-		if filtered.err != nil {
-			return nil, filtered.err
-		}
-
-		resources = combineResources(resources, filtered.resources)
-	}
-
-	return resources, nil
 }

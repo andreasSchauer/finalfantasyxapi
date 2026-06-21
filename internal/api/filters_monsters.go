@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"slices"
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -93,14 +94,14 @@ func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
 	return int32(resistance), nil
 }
 
-func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
+func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.monsters
-	resourceType := i.resourceType
+
 	queryParam := i.queryLookup["is_forced"]
 
 	isForced, err := parseBooleanQuery(r, queryParam)
 	if queryIsEmpty(err) {
-		return getResourcesDbID(cfg, r, i, id, resourceType, cfg.db.GetMonsterIDsByAutoAbility)
+		return cfg.db.GetMonsterIDsByAutoAbility(r.Context(), id)
 	}
 
 	dbIDs, err := cfg.db.GetMonsterIDsByAutoAbilityIsForced(r.Context(), database.GetMonsterIDsByAutoAbilityIsForcedParams{
@@ -111,15 +112,55 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]NamedAP
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by auto-ability id '%d'.", i.resourceType, id), err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-	return resources, nil
+	return dbIDs, nil
 }
 
-func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]NamedAPIResource, error) {
-	return filterByIdAndValues(cfg, r, cfg.e.monsters, id, "methods", cfg.e.items.resourceType, map[string]DbQueryIntMany{
-		"steal": cfg.db.GetMonsterIDsByItemSteal,
-		"drop":  cfg.db.GetMonsterIDsByItemDrop,
-		"bribe": cfg.db.GetMonsterIDsByItemBribe,
-		"other": cfg.db.GetMonsterIDsByItemOther,
+func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
+	i := cfg.e.monsters
+	
+	methods, err := getMonsterItemMethods(cfg, r)
+	if err != nil {
+		return nil, err
+	}
+
+	dbIDs, err := cfg.db.GetMonsterIDsByItem(r.Context(), database.GetMonsterIDsByItemParams{
+		ItemID:  id,
+		Methods: methods,
 	})
+	if err != nil {
+		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["item"], err)
+	}
+
+	return dbIDs, nil
+}
+
+func getMonsterItemMethods(cfg *Config, r *http.Request) ([]string, error) {
+	i := cfg.e.monsters
+	paramMethods := i.queryLookup["methods"]
+	aliasses := map[string][]string{
+		"steal": {"steal_common", "steal_rare"},
+		"drop": {"drop_common", "drop_rare", "drop_secondary_common", "drop_secondary_rare"},
+	}
+
+	queryMethods, err := parseValueListQuery(cfg, r, paramMethods)
+	if errExceptEmptyQuery(err) {
+		return nil, err
+	}
+	if queryIsEmpty(err) {
+		queryMethods = paramMethods.AllowedValues
+	}
+
+	methods := []string{}
+
+	for _, method := range queryMethods {
+		vals, ok := aliasses[method]
+		if ok {
+			methods = slices.Concat(methods, vals)
+			continue
+		}
+
+		methods = append(methods, method)
+	}
+
+	return methods, nil
 }

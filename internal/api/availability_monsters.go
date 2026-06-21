@@ -8,7 +8,7 @@ import (
 )
 
 
-func filterAvlMonsters(cfg *Config, r *http.Request, resources []NamedAPIResource) ([]NamedAPIResource, error) {
+func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.monsters
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
@@ -16,7 +16,7 @@ func filterAvlMonsters(cfg *Config, r *http.Request, resources []NamedAPIResourc
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		return resources, nil
+		return inputIDs, nil
 	}
 
 	locContext, err := getLocContextParams(cfg, r, i)
@@ -25,7 +25,7 @@ func filterAvlMonsters(cfg *Config, r *http.Request, resources []NamedAPIResourc
 	}
 
 	dbIDs, err := cfg.db.FilterMonsterIDsByAvailability(r.Context(), database.FilterMonsterIDsByAvailabilityParams{
-		Ids:            resToIDs(resources),
+		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,
 		PreAirship: 	avlParams.preAirship,
@@ -37,12 +37,11 @@ func filterAvlMonsters(cfg *Config, r *http.Request, resources []NamedAPIResourc
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resNew := idsToAPIResources(cfg, i, dbIDs)
-	return resNew, nil
+	return dbIDs, nil
 }
 
 
-func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []UnnamedAPIResource) ([]UnnamedAPIResource, error) {
+func filterAvlMonsterFormations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.monsterFormations
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
@@ -50,7 +49,7 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []Unname
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		return resources, nil
+		return inputIDs, nil
 	}
 
 	locContext, err := getLocContextParams(cfg, r, i)
@@ -59,7 +58,7 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []Unname
 	}
 
 	dbIDs, err := cfg.db.FilterMonsterFormationIDsByAvailability(r.Context(), database.FilterMonsterFormationIDsByAvailabilityParams{
-		Ids:          	resToIDs(resources),
+		Ids:          	inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,
 		PreAirship: 	avlParams.preAirship,
@@ -71,6 +70,5 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, resources []Unname
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
 	}
 
-	resNew := idsToAPIResources(cfg, i, dbIDs)
-	return resNew, nil
+	return dbIDs, nil
 }

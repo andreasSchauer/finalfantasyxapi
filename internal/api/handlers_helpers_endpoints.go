@@ -239,7 +239,7 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 		return
 	}
 
-	ids, err := parseIdListQuery(cfg, r, queryParamIDs, len(i.objLookup))
+	ids, err := parseIdListQuery(cfg, r, queryParamIDs, i.objLookup)
 	if handleHTTPError(w, err) {
 		return
 	}
