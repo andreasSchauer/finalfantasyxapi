@@ -47,6 +47,6 @@ func (cfg *Config) retrieveStatusConditions(r *http.Request, i handlerInput[seed
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.StatusConditionCategory, ids, "category", cfg.db.GetStatusConditionIDsByCategory)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.StatusConditionCategory, ids, qpnCategory, cfg.db.GetStatusConditionIDsByCategory)),
 	})
 }

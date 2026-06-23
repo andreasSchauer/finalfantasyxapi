@@ -9,7 +9,7 @@ import (
 )
 
 // used for query filters that can't really be generalized. this one simply checks, if it's empty and then calls the wrapperFn
-func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, wrapperFn func(*Config, *http.Request, string, QueryParam) ([]int32, error)) ([]int32, error) {
+func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, wrapperFn func(*Config, *http.Request, string, QueryParam) ([]int32, error)) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	query, err := basicQueryChecks(r, queryParam, i.queryLookup)
 	if err != nil {
@@ -27,7 +27,7 @@ func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResource
 	return dbIDs, nil
 }
 
-func basicQueryChecks(r *http.Request, queryParam QueryParam, queryLookup map[string]QueryParam) (string, error) {
+func basicQueryChecks(r *http.Request, queryParam QueryParam, queryLookup map[QueryParamName]QueryParam) (string, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return "", err
@@ -42,7 +42,7 @@ func basicQueryChecks(r *http.Request, queryParam QueryParam, queryLookup map[st
 
 // checks, if a queryParam is empty and returns errEmptyQuery, if it is
 func checkEmptyQuery(r *http.Request, queryParam QueryParam) (string, error) {
-	query := r.URL.Query().Get(queryParam.Name)
+	query := r.URL.Query().Get(string(queryParam.Name))
 	if query == "" {
 		return "", errEmptyQuery
 	}
@@ -59,7 +59,7 @@ func checkNoneQuery(query string) error {
 	return nil
 }
 
-func replParamsPresent(r *http.Request, queryParam QueryParam, queryLookup map[string]QueryParam) bool {
+func replParamsPresent(r *http.Request, queryParam QueryParam, queryLookup map[QueryParamName]QueryParam) bool {
 	for _, param := range queryParam.ReplacedBy {
 		p := queryLookup[param]
 		_, err := checkEmptyQuery(r, p)

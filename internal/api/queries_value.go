@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func valueQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, dbQuery DbQueryStringMany) ([]int32, error) {
+func valueQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, dbQuery DbQueryStringMany) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
 		return inputIDs, nil
@@ -22,7 +22,7 @@ func valueQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r
 
 	dbIDs, err := dbQuery(r.Context(), value)
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParam, err)
 	}
 
 	return dbIDs, nil

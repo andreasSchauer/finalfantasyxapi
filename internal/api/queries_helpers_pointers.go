@@ -8,7 +8,7 @@ import (
 
 // can make those return sql.NullTypes, if the pointers have no other use
 
-func getQueryBoolPtr(r *http.Request, queryName string, queryLookup map[string]QueryParam) (*bool, error) {
+func getQueryBoolPtr(r *http.Request, queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (*bool, error) {
 	queryParam := queryLookup[queryName]
 
 	b, err := parseBooleanQuery(r, queryParam)
@@ -19,7 +19,7 @@ func getQueryBoolPtr(r *http.Request, queryName string, queryLookup map[string]Q
 	return &b, nil
 }
 
-func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]QueryParam) (*int32, error) {
+func getQueryIntPtr(r *http.Request, queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 
 	integer, err := parseIntQuery(r, queryParam)
@@ -31,7 +31,7 @@ func getQueryIntPtr(r *http.Request, queryName string, queryLookup map[string]Qu
 	return &integer32, nil
 }
 
-func getQueryValuePtr(r *http.Request, queryName string, queryLookup map[string]QueryParam) (*string, error) {
+func getQueryValuePtr(r *http.Request, queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (*string, error) {
 	queryParam := queryLookup[queryName]
 
 	value, err := parseValueQuery(r, queryParam)
@@ -42,7 +42,7 @@ func getQueryValuePtr(r *http.Request, queryName string, queryLookup map[string]
 	return &value, nil
 }
 
-func getQueryIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
+func getQueryIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := parseIdQuery(r, queryParam, i.objLookup)
@@ -53,10 +53,10 @@ func getQueryIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList
 	return &id, nil
 }
 
-func getQueryNameIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName string, queryLookup map[string]QueryParam) (*int32, error) {
+func getQueryNameIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 
-	id, err := parseNameIdQuery(r, queryParam, i.resourceType, i.objLookup)
+	id, err := parseNameIdQuery(r, queryParam, i.resTypeSing, i.objLookup)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func getQueryNameIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResource
 	return &id, nil
 }
 
-func getQueryEnumPtr[E, N any](r *http.Request, queryName, endpoint string, et EnumType[E, N], queryLookup map[string]QueryParam) (*string, error) {
+func getQueryEnumPtr[E, N any](r *http.Request, queryName QueryParamName, endpoint EndpointName, et EnumType[E, N], queryLookup map[QueryParamName]QueryParam) (*string, error) {
 	queryParam := queryLookup[queryName]
 
 	enumRes, err := parseEnumQuery(r, endpoint, queryParam, et)

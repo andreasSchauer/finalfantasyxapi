@@ -31,11 +31,11 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(joinedQuery(cfg, r, i, ids, []string{"auto_ability", "empty_slots", "character"}, filterShopsEquipment)),
-		fidl(idQuery(r, i, ids, "location", cfg.l.Locations, cfg.db.GetShopIDsByLocation)),
-		fidl(idQuery(r, i, ids, "sublocation", cfg.l.Sublocations, cfg.db.GetShopIDsBySublocation)),
-		fidl(boolQuery2(r, i, ids, "items", cfg.db.GetShopIDsWithItems)),
-		fidl(boolQuery2(r, i, ids, "equipment", cfg.db.GetShopIDsWithEquipment)),
-		fidl(enumListQuery(cfg, r, i, cfg.t.ShopCategory, ids, "category", cfg.db.GetShopIDsByCategory)),
+		fidl(joinedQuery(cfg, r, i, ids, []QueryParamName{qpnAutoAbility, qpnEmptySlots, qpnCharacter}, filterShopsEquipment)),
+		fidl(idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetShopIDsByLocation)),
+		fidl(idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetShopIDsBySublocation)),
+		fidl(boolQuery2(r, i, ids, qpnItems, cfg.db.GetShopIDsWithItems)),
+		fidl(boolQuery2(r, i, ids, qpnEquipment, cfg.db.GetShopIDsWithEquipment)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.ShopCategory, ids, qpnCategory, cfg.db.GetShopIDsByCategory)),
 	})
 }

@@ -31,6 +31,6 @@ func (cfg *Config) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seedi
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumQuery(r, i, cfg.t.BlitzballTournamentCategory, ids, "category", cfg.db.GetBlitzballPrizeIDsByCategory)),
+		fidl(enumQuery(r, i, cfg.t.BlitzballTournamentCategory, ids, qpnCategory, cfg.db.GetBlitzballPrizeIDsByCategory)),
 	})
 }

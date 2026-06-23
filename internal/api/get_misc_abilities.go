@@ -32,7 +32,7 @@ func (cfg *Config) getMiscAbility(r *http.Request, i handlerInput[seeding.MiscAb
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, i, response, "ability_user")
+	battleInteractions, err := applyUser(cfg, r, i, response, qpnAbilityUser)
 	if err != nil {
 		return MiscAbility{}, err
 	}
@@ -49,10 +49,10 @@ func (cfg *Config) retrieveMiscAbilities(r *http.Request, i handlerInput[seeding
 	abilityType := database.AbilityTypeMiscAbility
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(intListQuery(cfg, r, i, ids, "rank", getTypedAbilityIDsByRank(cfg, abilityType))),
-		fidl(nameIdQuery(r, i, ids, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass)),
-		fidl(boolQuery(r, i, ids, "copycat", getTypedAbilityIDsByCanCopycat(cfg, abilityType))),
-		fidl(boolQuery(r, i, ids, "help_bar", getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, "user_atk", getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType))),
+		fidl(intListQuery(cfg, r, i, ids, qpnRank, getTypedAbilityIDsByRank(cfg, abilityType))),
+		fidl(nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSing, cfg.l.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass)),
+		fidl(boolQuery(r, i, ids, qpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType))),
+		fidl(boolQuery(r, i, ids, qpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, qpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType))),
 	})
 }

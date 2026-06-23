@@ -41,10 +41,10 @@ func (cfg *Config) retrieveKeyItems(r *http.Request, i handlerInput[seeding.KeyI
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.KeyItemCategory, ids, "category", cfg.db.GetKeyItemIDsCategory)),
-		fidl(valueListQuery(cfg, r, i, ids, "methods", cfg.db.GetKeyItemIDsByMethods)),
-		fidl(idQuery(r, i, ids, "location", cfg.e.locations.objLookup, cfg.db.GetKeyItemIDsByLocation)),
-		fidl(idQuery(r, i, ids, "sublocation", cfg.e.sublocations.objLookup, cfg.db.GetKeyItemIDsBySublocation)),
-		fidl(idQuery(r, i, ids, "area", cfg.e.areas.objLookup, cfg.db.GetKeyItemIDsByArea)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.KeyItemCategory, ids, qpnCategory, cfg.db.GetKeyItemIDsCategory)),
+		fidl(valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetKeyItemIDsByMethods)),
+		fidl(idQuery(r, i, ids, qpnLocation, cfg.e.locations.objLookup, cfg.db.GetKeyItemIDsByLocation)),
+		fidl(idQuery(r, i, ids, qpnSublocation, cfg.e.sublocations.objLookup, cfg.db.GetKeyItemIDsBySublocation)),
+		fidl(idQuery(r, i, ids, qpnArea, cfg.e.areas.objLookup, cfg.db.GetKeyItemIDsByArea)),
 	})
 }

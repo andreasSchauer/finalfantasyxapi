@@ -27,7 +27,7 @@ type biReplacement struct {
 	DamageConstant *int32
 }
 
-func applyUser[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], ability userAbility, queryName string) ([]BattleInteraction, error) {
+func applyUser[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], ability userAbility, queryName QueryParamName) ([]BattleInteraction, error) {
 	repl, err := getUnitRepl(cfg, r, i, queryName)
 	if queryIsEmpty(err) {
 		return ability.getBattleInteractions(), nil
@@ -46,11 +46,11 @@ func applyUser[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cf
 	return battleInteractions, nil
 }
 
-func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], queryName string) (unitRepl, error) {
+func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], queryName QueryParamName) (unitRepl, error) {
 	queryParamUser := i.queryLookup[queryName]
-	queryParamBomb := i.queryLookup["bomb_wpn"]
+	queryParamBomb := i.queryLookup[qpnBombWpn]
 
-	unitID, err := parseNameIdQuery(r, queryParamUser, cfg.e.playerUnits.resourceType, cfg.e.playerUnits.objLookup)
+	unitID, err := parseNameIdQuery(r, queryParamUser, cfg.e.playerUnits.resTypeSing, cfg.e.playerUnits.objLookup)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -85,7 +85,7 @@ func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 }
 
 func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
-	id, err := checkQueryNameID(repl.unit.Name, string(repl.unit.Type), queryParamUser, cfg.l.Characters)
+	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingular(repl.unit.Type), queryParamUser, cfg.l.Characters)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -101,7 +101,7 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam
 }
 
 func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
-	id, err := checkQueryNameID(repl.unit.Name, string(repl.unit.Type), queryParamUser, cfg.l.Aeons)
+	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingular(repl.unit.Type), queryParamUser, cfg.l.Aeons)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -115,9 +115,9 @@ func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (un
 	return repl, nil
 }
 
-func verifyAbilityUsage(cfg *Config, ability userAbility, repl unitRepl, queryName string) error {
+func verifyAbilityUsage(cfg *Config, ability userAbility, repl unitRepl, queryName QueryParamName) error {
 	if !ability.canUseAbility(cfg, repl.unit.Name) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, cfg.e.playerUnits.resourceType, repl.unit.Name, ability), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, cfg.e.playerUnits.resTypeSing, repl.unit.Name, ability), nil)
 	}
 
 	return nil

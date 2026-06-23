@@ -10,7 +10,7 @@ import (
 func getMixCombinations(cfg *Config, r *http.Request, mix seeding.Mix) ([]MixCombination, error) {
 	combinations := mix.PossibleCombinations
 
-	best, err := parseBooleanQuery(r, cfg.q.mixes["best"])
+	best, err := parseBooleanQuery(r, cfg.q.mixes[qpnBest])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -18,7 +18,7 @@ func getMixCombinations(cfg *Config, r *http.Request, mix seeding.Mix) ([]MixCom
 		combinations = mix.BestCombinations
 	}
 
-	itemID, err := parseNameIdQuery(r, cfg.q.mixes["contains_item"], cfg.e.items.resourceType, cfg.e.items.objLookup)
+	itemID, err := parseNameIdQuery(r, cfg.q.mixes[qpnContainsItem], cfg.e.items.resTypeSing, cfg.e.items.objLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

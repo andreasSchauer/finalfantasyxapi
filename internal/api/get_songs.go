@@ -59,12 +59,12 @@ func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, S
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(idQuery(r, i, ids, "location", cfg.l.Locations, cfg.db.GetLocationSongIDs)),
-		fidl(idQuery(r, i, ids, "sublocation", cfg.l.Sublocations, cfg.db.GetSublocationSongIDs)),
-		fidl(idQuery(r, i, ids, "area", cfg.l.Areas, cfg.db.GetAreaSongIDs)),
-		fidl(boolQuery2(r, i, ids, "special_use", cfg.db.GetSongIDsWithSpecialUseCase)),
-		fidl(boolQuery2(r, i, ids, "fmvs", cfg.db.GetSongIDsWithFMVs)),
-		fidl(enumQuery(r, i, cfg.t.Composer, ids, "composer", ToEnumQuery(cfg.t.Composer, cfg.db.GetSongIDsByComposer))),
-		fidl(enumQuery(r, i, cfg.t.Arranger, ids, "arranger", ToEnumQuery(cfg.t.Arranger, cfg.db.GetSongIDsByArranger))),
+		fidl(idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetLocationSongIDs)),
+		fidl(idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetSublocationSongIDs)),
+		fidl(idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetAreaSongIDs)),
+		fidl(boolQuery2(r, i, ids, qpnSpecialUse, cfg.db.GetSongIDsWithSpecialUseCase)),
+		fidl(boolQuery2(r, i, ids, qpnFMVs, cfg.db.GetSongIDsWithFMVs)),
+		fidl(enumQuery(r, i, cfg.t.Composer, ids, qpnComposer, ToEnumQuery(cfg.t.Composer, cfg.db.GetSongIDsByComposer))),
+		fidl(enumQuery(r, i, cfg.t.Arranger, ids, qpnArranger, ToEnumQuery(cfg.t.Arranger, cfg.db.GetSongIDsByArranger))),
 	})
 }

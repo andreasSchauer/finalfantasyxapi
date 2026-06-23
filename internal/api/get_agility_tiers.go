@@ -33,6 +33,6 @@ func (cfg *Config) retrieveAgilityTiers(r *http.Request, i handlerInput[seeding.
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(intQuery(r, i, ids, "agility", cfg.db.GetAgilityTierIDsByAgility)),
+		fidl(intQuery(r, i, ids, qpnAgility, cfg.db.GetAgilityTierIDsByAgility)),
 	})
 }

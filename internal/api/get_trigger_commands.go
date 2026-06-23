@@ -41,7 +41,7 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.Tri
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, i, response, "ability_user")
+	battleInteractions, err := applyUser(cfg, r, i, response, qpnAbilityUser)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
@@ -57,7 +57,7 @@ func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seedi
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(nameIdQuery(r, i, ids, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass)),
-		fidl(nameIdQuery(r, i, ids, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat)),
+		fidl(nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSing, cfg.l.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass)),
+		fidl(nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSing, cfg.l.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat)),
 	})
 }

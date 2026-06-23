@@ -16,7 +16,7 @@ type RelAvlParams struct {
 }
 
 func getRelAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], parentID int32) (RelAvlParams, error) {
-	queryParam := i.queryLookup["rel_availability"]
+	queryParam := i.queryLookup[qpnRelAvailability]
 
 	availabilities, err := parseEnumListQuery(cfg, r, i.endpoint, queryParam, cfg.t.AvailabilityType)
 	if errExceptEmptyQuery(err) {
@@ -25,9 +25,9 @@ func getRelAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIR
 
 	var repeatable *bool
 
-	_, ok := i.queryLookup["rel_repeatable"]
+	_, ok := i.queryLookup[qpnRelRepeatable]
 	if ok {
-		repeatable, err = getQueryBoolPtr(r, "rel_repeatable", i.queryLookup)
+		repeatable, err = getQueryBoolPtr(r, qpnRelRepeatable, i.queryLookup)
 		if errExceptEmptyQuery(err) {
 			return RelAvlParams{}, err
 		}
@@ -45,7 +45,7 @@ func getRelAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIR
 func runRelAvailabilityQuery[T, K seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item K, params RelAvlParams, dbQuery RelAvailabilityDbQuery) ([]A, error) {
 	dbIDs, err := dbQuery(r.Context(), params)
 	if err != nil {
-		return nil, newHTTPErrorDB(i.resourceType, item, err)
+		return nil, newHTTPErrorDB(i.resTypePlural, item, err)
 	}
 
 	resources := idsToAPIResources(cfg, i, dbIDs)

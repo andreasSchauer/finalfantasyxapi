@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -24,7 +23,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -40,7 +39,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
@@ -62,7 +61,7 @@ func filterAvlItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -78,7 +77,7 @@ func filterAvlItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
@@ -100,7 +99,7 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -114,7 +113,7 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
@@ -136,7 +135,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, 
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -152,7 +151,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, 
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
@@ -175,7 +174,7 @@ func filterAvlPrimers(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, 
 		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil

@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -19,7 +18,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		return inputIDs, nil
 	}
 
-	reqItem, err := parseBooleanQuery(r, i.queryLookup["req_item"])
+	reqItem, err := parseBooleanQuery(r, i.queryLookup[qpnReqItem])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -29,12 +28,12 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		return nil, err
 	}
 
-	charID, err := getQueryIdPtr(r, cfg.e.characters, "character", i.queryLookup)
+	charID, err := getQueryIdPtr(r, cfg.e.characters, qpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup["methods"])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -52,7 +51,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		ReqItem:        reqItem,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil

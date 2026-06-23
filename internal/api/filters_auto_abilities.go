@@ -7,11 +7,10 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.autoAbilities
 
-	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, "character", i.queryLookup)
+	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, qpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -21,7 +20,7 @@ func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, id int32) ([]int32,
 		CharacterID: h.GetNullInt32(charIdPtr),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["monster"], err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, i.queryLookup[qpnMonster], err)
 	}
 
 	return dbIDs, nil
@@ -30,17 +29,17 @@ func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, id int32) ([]int32,
 func getAutoAbilitiesByShop(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.autoAbilities
 
-	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, "character", i.queryLookup)
+	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, qpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetAutoAbilityIDsByShop(r.Context(), database.GetAutoAbilityIDsByShopParams{
-		ShopID: 	 id,
+		ShopID:      id,
 		CharacterID: h.GetNullInt32(charIdPtr),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["monster"], err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, i.queryLookup[qpnMonster], err)
 	}
 
 	return dbIDs, nil

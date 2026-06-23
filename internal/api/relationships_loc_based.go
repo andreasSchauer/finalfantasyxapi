@@ -80,7 +80,7 @@ func getLocBasedSidequests(cfg *Config, r *http.Request, item seeding.Lookupable
 
 	dbQuestIDs, err := dbQuery(r.Context(), p)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", cfg.e.quests.resourceType, item), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", cfg.e.quests.resTypePlural, item), err)
 	}
 	if len(dbQuestIDs) == 0 {
 		return resources, nil

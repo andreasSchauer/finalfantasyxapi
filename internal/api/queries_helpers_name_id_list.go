@@ -7,7 +7,7 @@ import (
 )
 
 // checks for emptiness of name/id-list-queryParam and converts its input into a slice of valid ids. accepts "none" as input.
-func parseNameIdListQuery[P seeding.Lookupable](cfg *Config, r *http.Request, queryParam QueryParam, pResType string, pLookup map[string]P) ([]int32, error) {
+func parseNameIdListQuery[P seeding.Lookupable](cfg *Config, r *http.Request, queryParam QueryParam, pResType ResTypeSingular, pLookup map[string]P) ([]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func parseNameIdListQuery[P seeding.Lookupable](cfg *Config, r *http.Request, qu
 }
 
 // converts a list of unique query ids or single-resource names into a slice of valid ids.
-func queryNamesIDsToSlice[P seeding.Lookupable](cfg *Config, query string, queryParam QueryParam, pResType string, pLookup map[string]P) ([]int32, error) {
+func queryNamesIDsToSlice[P seeding.Lookupable](cfg *Config, query string, queryParam QueryParam, pResType ResTypeSingular, pLookup map[string]P) ([]int32, error) {
 	queryStrs, err := queryListSplit(cfg, query)
 	if err != nil {
 		return nil, err

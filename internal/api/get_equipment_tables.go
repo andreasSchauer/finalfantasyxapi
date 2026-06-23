@@ -43,8 +43,8 @@ func (cfg *Config) retrieveEquipmentTables(r *http.Request, i handlerInput[seedi
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(idListQuery(cfg, r, i, ids, "auto_abilities", cfg.l.AutoAbilities, cfg.db.GetEquipmentTableIDsByAutoAbility)),
-		fidl(enumQuery(r, i, cfg.t.EquipType, ids, "type", cfg.db.GetEquipmentTableIDsEquipType)),
-		fidl(boolQuery2(r, i, ids, "celestial_weapon", cfg.db.GetEquipmentTableIDsCelestialWeapon)),
+		fidl(idListQuery(cfg, r, i, ids, qpnAutoAbilities, cfg.l.AutoAbilities, cfg.db.GetEquipmentTableIDsByAutoAbility)),
+		fidl(enumQuery(r, i, cfg.t.EquipType, ids, qpnType, cfg.db.GetEquipmentTableIDsEquipType)),
+		fidl(boolQuery2(r, i, ids, qpnCelestialWeapon, cfg.db.GetEquipmentTableIDsCelestialWeapon)),
 	})
 }

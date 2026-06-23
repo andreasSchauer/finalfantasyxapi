@@ -32,6 +32,6 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request, i handlerInput[seedin
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumQuery(r, i, cfg.t.OverdriveModeType, ids, "type", cfg.db.GetOverdriveModeIDsByType)),
+		fidl(enumQuery(r, i, cfg.t.OverdriveModeType, ids, qpnType, cfg.db.GetOverdriveModeIDsByType)),
 	})
 }

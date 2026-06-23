@@ -1,7 +1,7 @@
 package api
 
 // checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resources
-func compareAPIResourceLists[T APIResourceList](test test, endpoint string, expList expListIDs, gotList T) {
+func compareAPIResourceLists[T APIResourceList](test test, endpoint EndpointName, expList expListIDs, gotList T) {
 	test.t.Helper()
 	compareListParams(test, expList.getListParams(), gotList.getListParams())
 
@@ -27,7 +27,7 @@ func checkResPathsInSlice[T HasAPIResource](test test, fieldName string, expPath
 	}
 }
 
-func checkResIDsInSlice[T HasAPIResource](test test, fieldName, endpoint string, expIDs []int32, gotRes []T) {
+func checkResIDsInSlice[T HasAPIResource](test test, fieldName string, endpoint EndpointName, expIDs []int32, gotRes []T) {
 	test.t.Helper()
 	sliceBasicChecks(test, fieldName, expIDs, gotRes)
 

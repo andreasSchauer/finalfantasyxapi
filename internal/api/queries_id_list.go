@@ -7,7 +7,7 @@ import (
 )
 
 // query uses a list of ids as database input to filter for resources
-func idListQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, fLookup map[string]F, dbQuery DbQueryIntList) ([]int32, error) {
+func idListQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DbQueryIntList) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
 		return inputIDs, nil
@@ -23,14 +23,14 @@ func idListQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceLis
 
 	dbIDs, err := dbQuery(r.Context(), queryIDs)
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParam, err)
 	}
 
 	return dbIDs, nil
 }
 
 // like idListQuery, but with more specialized logic in between (wrapperFn)
-func idListQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, fLookup map[string]F, wrapperFn func(*Config, *http.Request, []int32) ([]int32, error)) ([]int32, error) {
+func idListQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn func(*Config, *http.Request, []int32) ([]int32, error)) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 
 	queryIDs, err := parseIdListQuery(cfg, r, queryParam, fLookup)

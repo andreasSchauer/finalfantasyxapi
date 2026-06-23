@@ -59,14 +59,14 @@ func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seeding
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.AutoAbilityCategory, ids, "category", cfg.db.GetAutoAbilityIDsByCategory)),
-		fidl(enumQuery(r, i, cfg.t.EquipType, ids, "type", cfg.db.GetAutoAbilityIDsByEquipType)),
-		fidl(idQueryWrapper(cfg, r, i, ids, "monster", cfg.l.Monsters, getAutoAbilitiesByMonster)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.AutoAbilityCategory, ids, qpnCategory, cfg.db.GetAutoAbilityIDsByCategory)),
+		fidl(enumQuery(r, i, cfg.t.EquipType, ids, qpnType, cfg.db.GetAutoAbilityIDsByEquipType)),
+		fidl(idQueryWrapper(cfg, r, i, ids, qpnMonster, cfg.l.Monsters, getAutoAbilitiesByMonster)),
 		fidl(idQuery(r, i, ids, "monster_items", cfg.l.Monsters, cfg.db.GetAutoAbilityIDsByMonsterItems)),
-		fidl(idQueryWrapper(cfg, r, i, ids, "shop", cfg.l.Shops, getAutoAbilitiesByShop)),
-		fidl(valueListQuery(cfg, r, i, ids, "methods", cfg.db.GetAutoAbilityIDsByMethods)),
-		fidl(idQuery(r, i, ids, "location", cfg.l.Locations, cfg.db.GetAutoAbilityIDsByLocation)),
-		fidl(idQuery(r, i, ids, "sublocation", cfg.l.Sublocations, cfg.db.GetAutoAbilityIDsBySublocation)),
+		fidl(idQueryWrapper(cfg, r, i, ids, qpnShop, cfg.l.Shops, getAutoAbilitiesByShop)),
+		fidl(valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetAutoAbilityIDsByMethods)),
+		fidl(idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetAutoAbilityIDsByLocation)),
+		fidl(idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetAutoAbilityIDsBySublocation)),
 		fidl(idQuery(r, i, ids, "areas", cfg.l.Areas, cfg.db.GetAutoAbilityIDsByArea)),
 	})
 }

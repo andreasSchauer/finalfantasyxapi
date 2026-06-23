@@ -17,7 +17,7 @@ func verifyParamsAndGet[T seeding.Lookupable, R any, A APIResource, L APIResourc
 
 	resource, err := seeding.GetResourceByID(id, i.objLookupID)
 	if err != nil {
-		return zeroType, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with id '%d' doesn't exist.", i.resourceType, id), err)
+		return zeroType, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with id '%d' doesn't exist.", i.resTypeSing, id), err)
 	}
 
 	return resource, nil
@@ -31,7 +31,7 @@ func verifyParamsAndRetrieve[T seeding.Lookupable, R any, A APIResource, L APIRe
 
 	dbIDs, err := i.retrieveQuery(r.Context())
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss.", i.resourceType), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s.", i.resTypePlural), err)
 	}
 
 	return dbIDs, nil

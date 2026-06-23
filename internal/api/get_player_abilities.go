@@ -45,7 +45,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		BattleInteractions:    convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, i, response, "ability_user")
+	battleInteractions, err := applyUser(cfg, r, i, response, qpnAbilityUser)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
@@ -62,32 +62,32 @@ func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seedi
 	abilityType := database.AbilityTypePlayerAbility
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.PlayerAbilityCategory, ids, "category", cfg.db.GetPlayerAbilityIDsByCategory)),
-		fidl(enumListQuery(cfg, r, i, cfg.t.DamageType, ids, "damage_type", getTypedAbilityIDsByDamageType(cfg, abilityType))),
-		fidl(enumListQuery(cfg, r, i, cfg.t.AttackType, ids, "attack_type", getTypedAbilityIDsByAttackType(cfg, abilityType))),
-		fidl(enumListQuery(cfg, r, i, cfg.t.TargetType, ids, "target_type", getTypedAbilityIDsByTargetType(cfg, abilityType))),
-		fidl(enumQuery(r, i, cfg.t.DamageFormula, ids, "damage_formula", getTypedAbilityIDsByDamageFormula(cfg, abilityType))),
-		fidl(intListQuery(cfg, r, i, ids, "mp", cfg.db.GetPlayerAbilityIDsByMpCost)),
-		fidl(intQuery(r, i, ids, "mp_min", cfg.db.GetPlayerAbilityIDsByMpCostMin)),
-		fidl(intQuery(r, i, ids, "mp_max", cfg.db.GetPlayerAbilityIDsByMpCostMax)),
-		fidl(intListQuery(cfg, r, i, ids, "rank", getTypedAbilityIDsByRank(cfg, abilityType))),
-		fidl(nameIdListQueryNul(cfg, r, i, ids, "element", cfg.e.elements.resourceType, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType))),
-		fidl(nameIdQuery(r, i, ids, "user", cfg.e.characterClasses.resourceType, cfg.l.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass)),
-		fidl(idQuery(r, i, ids, "learn_item", cfg.l.Items, cfg.db.GetPlayerAbilityIDsByLearnItem)),
-		fidl(nameIdQuery(r, i, ids, "related_stat", cfg.e.stats.resourceType, cfg.l.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat)),
-		fidl(idQueryNul(r, i, ids, "status_inflict", cfg.l.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType))),
-		fidl(idQueryNul(r, i, ids, "status_remove", cfg.l.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType))),
-		fidl(nameIdQuery(r, i, ids, "std_sg", cfg.e.characters.resourceType, cfg.l.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar))),
-		fidl(nameIdQuery(r, i, ids, "exp_sg", cfg.e.characters.resourceType, cfg.l.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar))),
-		fidl(boolQuery(r, i, ids, "outside_battle", cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle)),
-		fidl(boolQuery(r, i, ids, "copycat", getTypedAbilityIDsByCanCopycat(cfg, abilityType))),
-		fidl(boolQuery(r, i, ids, "help_bar", getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, "user_atk", getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, "darkable", getTypedAbilityIDsDarkable(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, "silenceable", getTypedAbilityIDsSilenceable(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, "reflectable", getTypedAbilityIDsReflectable(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, "delay", getTypedAbilityIDsDealsDelay(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, "stat_changes", getTypedAbilityIDsWithStatChanges(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, "mod_changes", getTypedAbilityIDsWithModifierChanges(cfg, abilityType))),
+		fidl(enumListQuery(cfg, r, i, cfg.t.PlayerAbilityCategory, ids, qpnCategory, cfg.db.GetPlayerAbilityIDsByCategory)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.DamageType, ids, qpnDamageType, getTypedAbilityIDsByDamageType(cfg, abilityType))),
+		fidl(enumListQuery(cfg, r, i, cfg.t.AttackType, ids, qpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType))),
+		fidl(enumListQuery(cfg, r, i, cfg.t.TargetType, ids, qpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType))),
+		fidl(enumQuery(r, i, cfg.t.DamageFormula, ids, qpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType))),
+		fidl(intListQuery(cfg, r, i, ids, qpnMp, cfg.db.GetPlayerAbilityIDsByMpCost)),
+		fidl(intQuery(r, i, ids, qpnMpMin, cfg.db.GetPlayerAbilityIDsByMpCostMin)),
+		fidl(intQuery(r, i, ids, qpnMpMax, cfg.db.GetPlayerAbilityIDsByMpCostMax)),
+		fidl(intListQuery(cfg, r, i, ids, qpnRank, getTypedAbilityIDsByRank(cfg, abilityType))),
+		fidl(nameIdListQueryNul(cfg, r, i, ids, qpnElement, cfg.e.elements.resTypeSing, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType))),
+		fidl(nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSing, cfg.l.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass)),
+		fidl(idQuery(r, i, ids, qpnLearnItem, cfg.l.Items, cfg.db.GetPlayerAbilityIDsByLearnItem)),
+		fidl(nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSing, cfg.l.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat)),
+		fidl(idQueryNul(r, i, ids, qpnStatusInflict, cfg.l.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType))),
+		fidl(idQueryNul(r, i, ids, qpnStatusRemove, cfg.l.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType))),
+		fidl(nameIdQuery(r, i, ids, qpnStdSg, cfg.e.characters.resTypeSing, cfg.l.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar))),
+		fidl(nameIdQuery(r, i, ids, qpnExpSg, cfg.e.characters.resTypeSing, cfg.l.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar))),
+		fidl(boolQuery(r, i, ids, qpnOutsideBattle, cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle)),
+		fidl(boolQuery(r, i, ids, qpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType))),
+		fidl(boolQuery(r, i, ids, qpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, qpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, qpnDarkable, getTypedAbilityIDsDarkable(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, qpnSilenceable, getTypedAbilityIDsSilenceable(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, qpnReflectable, getTypedAbilityIDsReflectable(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, qpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, qpnStatChanges, getTypedAbilityIDsWithStatChanges(cfg, abilityType))),
+		fidl(boolQuery2(r, i, ids, qpnModChanges, getTypedAbilityIDsWithModifierChanges(cfg, abilityType))),
 	})
 }

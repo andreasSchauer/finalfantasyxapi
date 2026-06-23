@@ -7,7 +7,7 @@ import (
 )
 
 
-func joinedQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryNames []string, queryFn func(*Config, *http.Request) ([]int32, error)) ([]int32, error) {
+func joinedQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryNames []QueryParamName, queryFn func(*Config, *http.Request) ([]int32, error)) ([]int32, error) {
 	allEmpty := true
 
 	for _, queryName := range queryNames {

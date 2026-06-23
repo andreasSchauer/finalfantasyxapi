@@ -1,18 +1,18 @@
 package api
 
-func compareParameterLists(test test, _ string, exp expListNames, got QueryParameterList) {
+func compareParameterLists(test test, _ EndpointName, exp expListNames, got QueryParameterList) {
 	test.t.Helper()
 	compareListParams(test, exp.getListParams(), got.getListParams())
 	gotNames := []string{}
 
 	for _, param := range got.Results {
-		gotNames = append(gotNames, param.Name)
+		gotNames = append(gotNames, string(param.Name))
 	}
 
 	checkStringsInSlice(test, "results", exp.results, gotNames)
 }
 
-func compareSectionLists(test test, endpoint string, exp expListNames, got SectionList) {
+func compareSectionLists(test test, endpoint EndpointName, exp expListNames, got SectionList) {
 	test.t.Helper()
 	compareListParams(test, exp.getListParams(), got.getListParams())
 

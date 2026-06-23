@@ -34,17 +34,18 @@ func getQueryParamList[T seeding.Lookupable, R any, A APIResource, L APIResource
 	return list, nil
 }
 
-func createQueryParamRefResURLs(cfg *Config, params []QueryParam) ([]QueryParam) {
+func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
 	paramsNew := params
 
 	for i := range paramsNew {
 		param := paramsNew[i]
-		if param.References == nil {
+		if param.ReferencesInt == nil {
 			continue
 		}
+		param.References = make([]string, len(param.ReferencesInt))
 
-		for j := range param.References {
-			ref := param.References[j]
+		for j := range param.ReferencesInt {
+			ref := param.ReferencesInt[j]
 			param.References[j] = createListURL(cfg, ref)
 		}
 		paramsNew[i] = param
@@ -74,7 +75,7 @@ func getAllowedValuesFromTypes(cfg *Config, params []QueryParam) []QueryParam {
 		types := createEnumResourceSlice(cfg, "", param.TypeLookup)
 
 		for _, typeRes := range types {
-			param.AllowedValues = append(param.AllowedValues, typeRes.Name)
+			param.AllowedValues = append(param.AllowedValues, QueryValue(typeRes.Name))
 		}
 		params[idx] = param
 	}

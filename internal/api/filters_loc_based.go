@@ -9,7 +9,7 @@ import (
 
 func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.areas
-	queryParamMethods := i.queryLookup["methods"]
+	queryParamMethods := i.queryLookup[qpnMethods]
 
 	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
@@ -17,11 +17,11 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	}
 
 	dbIDs, err := cfg.db.GetAreaIDsWithItemFromMethods(r.Context(), database.GetAreaIDsWithItemFromMethodsParams{
-		ItemID:     id,
-		Methods: 	h.SliceOrNil(methods),
+		ItemID:  id,
+		Methods: h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParamMethods, err)
 	}
 
 	return dbIDs, nil
@@ -29,7 +29,7 @@ func getAreasByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 
 func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.sublocations
-	queryParamMethods := i.queryLookup["methods"]
+	queryParamMethods := i.queryLookup[qpnMethods]
 
 	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
@@ -37,20 +37,19 @@ func getSublocationsByItem(cfg *Config, r *http.Request, id int32) ([]int32, err
 	}
 
 	dbIDs, err := cfg.db.GetSublocationIDsWithItemFromMethods(r.Context(), database.GetSublocationIDsWithItemFromMethodsParams{
-		ItemID:     id,
-		Methods: 	h.SliceOrNil(methods),
+		ItemID:  id,
+		Methods: h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParamMethods, err)
 	}
-
 
 	return dbIDs, nil
 }
 
 func getLocationsByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.locations
-	queryParamMethods := i.queryLookup["methods"]
+	queryParamMethods := i.queryLookup[qpnMethods]
 
 	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
@@ -58,11 +57,11 @@ func getLocationsByItem(cfg *Config, r *http.Request, id int32) ([]int32, error)
 	}
 
 	dbIDs, err := cfg.db.GetLocationIDsWithItemFromMethods(r.Context(), database.GetLocationIDsWithItemFromMethodsParams{
-		ItemID:     id,
-		Methods: 	h.SliceOrNil(methods),
+		ItemID:  id,
+		Methods: h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParamMethods, err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParamMethods, err)
 	}
 
 	return dbIDs, nil

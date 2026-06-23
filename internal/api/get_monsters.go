@@ -71,27 +71,27 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Mons
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(basicQueryWrapper(cfg, r, i, ids, "elemental_resists", getMonstersByElemResists)),
-		fidl(idListQueryWrapper(cfg, r, i, ids, "status_resists", cfg.l.StatusConditions, getMonstersByStatusResists)),
+		fidl(basicQueryWrapper(cfg, r, i, ids, qpnElementalResists, getMonstersByElemResists)),
+		fidl(idListQueryWrapper(cfg, r, i, ids, qpnStatusResists, cfg.l.StatusConditions, getMonstersByStatusResists)),
 
-		fidl(idQueryWrapper(cfg, r, i, ids, "item", cfg.l.Items, getMonstersByItem)),
-		fidl(idQuery(r, i, ids, "ronso_rage", cfg.l.RonsoRages, cfg.db.GetMonsterIDsByRonsoRage)),
-		fidl(idQuery(r, i, ids, "location", cfg.l.Locations, cfg.db.GetMonsterIDsByLocation)),
-		fidl(idQuery(r, i, ids, "sublocation", cfg.l.Sublocations, cfg.db.GetMonsterIDsBySublocation)),
-		fidl(idQuery(r, i, ids, "area", cfg.l.Areas, cfg.db.GetMonsterIDsByArea)),
-		fidl(idQueryWrapper(cfg, r, i, ids, "auto_ability", cfg.l.AutoAbilities, getMonstersByAutoAbility)),
+		fidl(idQueryWrapper(cfg, r, i, ids, qpnItem, cfg.l.Items, getMonstersByItem)),
+		fidl(idQuery(r, i, ids, qpnRonsoRage, cfg.l.RonsoRages, cfg.db.GetMonsterIDsByRonsoRage)),
+		fidl(idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetMonsterIDsByLocation)),
+		fidl(idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetMonsterIDsBySublocation)),
+		fidl(idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetMonsterIDsByArea)),
+		fidl(idQueryWrapper(cfg, r, i, ids, qpnAutoAbility, cfg.l.AutoAbilities, getMonstersByAutoAbility)),
 
-		fidl(intListQuery(cfg, r, i, ids, "empty_slots", cfg.db.GetMonsterIDsByEmptySlots)),
-		fidl(intListQuery(cfg, r, i, ids, "distance", cfg.db.GetMonsterIDsByDistance)),
+		fidl(intListQuery(cfg, r, i, ids, qpnEmptySlots, cfg.db.GetMonsterIDsByEmptySlots)),
+		fidl(intListQuery(cfg, r, i, ids, qpnDistance, cfg.db.GetMonsterIDsByDistance)),
 
-		fidl(enumListQuery(cfg, r, i, cfg.t.MonsterCategory, ids, "category", cfg.db.GetMonsterIDsByCategory)),
-		fidl(enumQuery(r, i, cfg.t.MonsterSpecies, ids, "species", cfg.db.GetMonsterIDsBySpecies)),
-		fidl(enumQuery(r, i, cfg.t.CreationArea, ids, "creation_area", ToEnumQuery(cfg.t.CreationArea, cfg.db.GetMonsterIDsByMaCreationArea))),
+		fidl(enumListQuery(cfg, r, i, cfg.t.MonsterCategory, ids, qpnCategory, cfg.db.GetMonsterIDsByCategory)),
+		fidl(enumQuery(r, i, cfg.t.MonsterSpecies, ids, qpnSpecies, cfg.db.GetMonsterIDsBySpecies)),
+		fidl(enumQuery(r, i, cfg.t.CreationArea, ids, qpnCreationArea, ToEnumQuery(cfg.t.CreationArea, cfg.db.GetMonsterIDsByMaCreationArea))),
 
-		fidl(boolQuery(r, i, ids, "repeatable", cfg.db.GetMonsterIDsByIsRepeatable)),
-		fidl(boolQuery(r, i, ids, "capture", cfg.db.GetMonsterIDsByCanBeCaptured)),
-		fidl(boolQuery(r, i, ids, "has_overdrive", cfg.db.GetMonsterIDsByHasOverdrive)),
-		fidl(boolQuery(r, i, ids, "underwater", cfg.db.GetMonsterIDsByIsUnderwater)),
-		fidl(boolQuery(r, i, ids, "zombie", cfg.db.GetMonsterIDsByIsZombie)),
+		fidl(boolQuery(r, i, ids, qpnRepeatable, cfg.db.GetMonsterIDsByIsRepeatable)),
+		fidl(boolQuery(r, i, ids, qpnCapture, cfg.db.GetMonsterIDsByCanBeCaptured)),
+		fidl(boolQuery(r, i, ids, qpnHasOverdrive, cfg.db.GetMonsterIDsByHasOverdrive)),
+		fidl(boolQuery(r, i, ids, qpnUnderwater, cfg.db.GetMonsterIDsByIsUnderwater)),
+		fidl(boolQuery(r, i, ids, qpnZombie, cfg.db.GetMonsterIDsByIsZombie)),
 	})
 }

@@ -34,7 +34,7 @@ func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResou
 		return
 	}
 
-	parseRes, err := parseID(segment, i.resourceType, len(i.objLookupID))
+	parseRes, err := parseID(segment, i.resTypeSing, len(i.objLookupID))
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -65,7 +65,7 @@ func handleEndpointNameOrID[T seeding.Lookupable, R any, A APIResource, L APIRes
 		return
 	}
 
-	parseRes, err := parseSingleSegmentResource(i.resourceType, segment, i.objLookup)
+	parseRes, err := parseSingleSegmentResource(i.resTypeSing, segment, i.objLookup)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -91,7 +91,7 @@ func handleEndpointNameVersion[T seeding.Lookupable, R any, A APIResource, L API
 	name := segments[0]
 	versionStr := segments[1]
 
-	parseRes, err := parseNameVersionResource(i.resourceType, name, versionStr, i.objLookup)
+	parseRes, err := parseNameVersionResource(i.resTypeSing, name, versionStr, i.objLookup)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -159,7 +159,7 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 	idStr := segments[0]
 	sectionName := segments[1]
 
-	parseRes, err := parseID(idStr, i.resourceType, len(i.objLookup))
+	parseRes, err := parseID(idStr, i.resTypeSing, len(i.objLookup))
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -227,7 +227,7 @@ func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 
 func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := "simple"
-	queryParamIDs := i.queryLookup["ids"]
+	queryParamIDs := i.queryLookup[qpnIDs]
 	_, err := checkEmptyQuery(r, queryParamIDs)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "parameter 'ids' can't be empty.", err)

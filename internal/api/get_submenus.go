@@ -43,6 +43,6 @@ func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seeding.Subm
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(nameIdQuery(r, i, ids, "topmenu", cfg.e.topmenus.resourceType, cfg.l.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs))),
+		fidl(nameIdQuery(r, i, ids, qpnTopmenu, cfg.e.topmenus.resTypeSing, cfg.l.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs))),
 	})
 }

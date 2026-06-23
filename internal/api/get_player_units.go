@@ -63,6 +63,6 @@ func (cfg *Config) retrievePlayerUnits(r *http.Request, i handlerInput[seeding.P
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumQuery(r, i, cfg.t.UnitType, ids, "type", cfg.db.GetPlayerUnitIDsByType)),
+		fidl(enumQuery(r, i, cfg.t.UnitType, ids, qpnType, cfg.db.GetPlayerUnitIDsByType)),
 	})
 }

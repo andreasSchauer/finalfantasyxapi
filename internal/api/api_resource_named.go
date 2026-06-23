@@ -115,7 +115,7 @@ func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIR
 }
 
 // only used for newNamedAPIResourceFromType, since the newer function won't work with that
-func newNamedAPIResourceSimple(cfg *Config, endpoint string, id int32, name string) NamedAPIResource {
+func newNamedAPIResourceSimple(cfg *Config, endpoint EndpointName, id int32, name string) NamedAPIResource {
 	if name == "" {
 		return NamedAPIResource{}
 	}

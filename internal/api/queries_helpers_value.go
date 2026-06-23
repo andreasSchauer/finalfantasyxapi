@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 
@@ -25,8 +23,8 @@ func parseValueQuery(r *http.Request, queryParam QueryParam) (string, error) {
 }
 
 func checkValue(queryParam QueryParam, value string) (error) {
-	if !slices.Contains(queryParam.AllowedValues, value) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. allowed values: %s.", value, queryParam.Name, h.FormatStringSlice(queryParam.AllowedValues)), nil)
+	if !slices.Contains(queryParam.AllowedValues, QueryValue(value)) {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. allowed values: %s.", value, queryParam.Name, formatQvSlice(queryParam.AllowedValues)), nil)
 	}
 
 	return nil

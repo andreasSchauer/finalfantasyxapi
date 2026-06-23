@@ -43,7 +43,7 @@ type testGeneral struct {
 	expectedErr    string
 	dontCheck      map[string]bool
 	expLengths     map[string]int
-	endpoint       string
+	endpoint       EndpointName
 	handler        func(http.ResponseWriter, *http.Request)
 }
 

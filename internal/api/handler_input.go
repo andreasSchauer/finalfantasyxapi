@@ -7,12 +7,13 @@ import (
 )
 
 type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList] struct {
-	endpoint         string
-	resourceType     string
+	endpoint         EndpointName
+	resTypeSing      ResTypeSingular
+	resTypePlural	 ResTypePlural
 	usage            []string
 	objLookup        map[string]T
 	objLookupID      map[int32]T
-	queryLookup      map[string]QueryParam
+	queryLookup      map[QueryParamName]QueryParam
 	getMultipleQuery DbQueryStringMany
 	retrieveQuery    DbQueryNoInput
 	idToResFunc      func(*Config, handlerInput[T, R, A, L], int32) A

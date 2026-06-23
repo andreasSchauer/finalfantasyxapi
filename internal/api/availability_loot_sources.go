@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -41,7 +40,7 @@ func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 		EmptySlots:      sources.EmptySlots,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
@@ -64,7 +63,7 @@ func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32
 		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
@@ -88,7 +87,7 @@ func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, e
 		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
@@ -111,7 +110,7 @@ func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int3
 		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
@@ -135,7 +134,7 @@ func filterAvlSubquests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32
 		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil

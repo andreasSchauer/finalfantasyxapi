@@ -13,7 +13,7 @@ func verifyDefaultParamsOnly[T seeding.Lookupable, R any, A APIResource, L APIRe
 	q := r.URL.Query()
 
 	for query := range q {
-		queryParam, ok := cfg.q.defaultParams[query]
+		queryParam, ok := cfg.q.defaultParams[QueryParamName(query)]
 		if !ok {
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("only default parameters are allowed when using /api/%s/%s. available default parameters: %s.", i.endpoint, *segment, queryMapToString(cfg.q.defaultParams)), nil)
 		}
@@ -32,7 +32,7 @@ func verifyQueryParams[T seeding.Lookupable, R any, A APIResource, L APIResource
 	canUseDefaultOnlyParam := verifyDefaultOnlyParam(cfg, q, i.queryLookup)
 
 	for query := range q {
-		queryParam, ok := i.queryLookup[query]
+		queryParam, ok := i.queryLookup[QueryParamName(query)]
 		if !ok {
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s. use /api/%s/parameters for available parameters.", query, i.endpoint, i.endpoint), nil)
 		}
@@ -50,11 +50,11 @@ func verifyQueryParams[T seeding.Lookupable, R any, A APIResource, L APIResource
 	return nil
 }
 
-func verifyDefaultOnlyParam(cfg *Config, q url.Values, lookup map[string]QueryParam) bool {
+func verifyDefaultOnlyParam(cfg *Config, q url.Values, lookup map[QueryParamName]QueryParam) bool {
 	defaultOnlyCount := 0
 
 	for query := range q {
-		queryParam, ok := lookup[query]
+		queryParam, ok := lookup[QueryParamName(query)]
 		if !ok {
 			return false
 		}
@@ -68,7 +68,7 @@ func verifyDefaultOnlyParam(cfg *Config, q url.Values, lookup map[string]QueryPa
 			continue
 		}
 
-		if !isDefaultParam(cfg, query) {
+		if !isDefaultParam(cfg, QueryParamName(query)) {
 			return false
 		}
 	}
@@ -76,12 +76,12 @@ func verifyDefaultOnlyParam(cfg *Config, q url.Values, lookup map[string]QueryPa
 	return true
 }
 
-func isDefaultParam(cfg *Config, queryName string) bool {
+func isDefaultParam(cfg *Config, queryName QueryParamName) bool {
 	_, ok := cfg.q.defaultParams[queryName]
 	return ok
 }
 
-func verifyQueryUsage(q url.Values, queryParam QueryParam, endpoint string, id *int32, segment *string) error {
+func verifyQueryUsage(q url.Values, queryParam QueryParam, endpoint EndpointName, id *int32, segment *string) error {
 	if queryParam.ForSegment != nil && !segmentsMatch(queryParam.ForSegment, segment) {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in the following format: '/api/%s/%s%s'.", queryParam.Name, queryParam.Name, endpoint, *queryParam.ForSegment, queryParam.Usage), nil)
 	}
@@ -157,10 +157,10 @@ func verifyRequiredParams(q url.Values, queryParam QueryParam) error {
 	}
 
 	for _, reqParam := range queryParam.RequiredParams {
-		reqParamVal := q.Get(reqParam)
+		reqParamVal := q.Get(string(reqParam))
 
 		if reqParamVal == "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. when using parameter '%s', the following parameter(s) must be present: %s.", queryParam.Name, queryParam.Name, h.FormatStringSlice(queryParam.RequiredParams)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. when using parameter '%s', the following parameter(s) must be present: %s.", queryParam.Name, queryParam.Name, formatQpnSlice(queryParam.RequiredParams)), nil)
 		}
 	}
 
@@ -173,10 +173,10 @@ func verifyForbiddenParams(q url.Values, queryParam QueryParam) error {
 	}
 
 	for _, frbParam := range queryParam.ForbiddenParams {
-		frbParamVal := q.Get(frbParam)
+		frbParamVal := q.Get(string(frbParam))
 
 		if frbParamVal != "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can't be used in combination with the following parameter(s): %s.", queryParam.Name, queryParam.Name, h.FormatStringSlice(queryParam.ForbiddenParams)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can't be used in combination with the following parameter(s): %s.", queryParam.Name, queryParam.Name, formatQpnSlice(queryParam.ForbiddenParams)), nil)
 		}
 	}
 
@@ -189,12 +189,12 @@ func verifyUsableWith(q url.Values, queryParam QueryParam) error {
 	}
 
 	for _, reqParam := range queryParam.UsableWith {
-		reqParamVal := q.Get(reqParam)
+		reqParamVal := q.Get(string(reqParam))
 
 		if reqParamVal != "" {
 			return nil
 		}
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in combination with at least one of the following parameters: %s.", queryParam.Name, queryParam.Name, h.FormatStringSlice(queryParam.UsableWith)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in combination with at least one of the following parameters: %s.", queryParam.Name, queryParam.Name, formatQpnSlice(queryParam.UsableWith)), nil)
 }

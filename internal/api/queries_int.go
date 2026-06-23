@@ -8,7 +8,7 @@ import (
 )
 
 // query uses an integer value as input.
-func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, dbQuery DbQueryIntMany) ([]int32, error) {
+func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, dbQuery DbQueryIntMany) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
 		return inputIDs, nil
@@ -24,14 +24,14 @@ func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *
 
 	dbIDs, err := dbQuery(r.Context(), int32(integer))
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParam, err)
 	}
 
 	return dbIDs, nil
 }
 
 // query uses an integer value as input.
-func intQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]int32, error) {
+func intQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
 		return inputIDs, nil

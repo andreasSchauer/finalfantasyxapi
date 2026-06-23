@@ -9,7 +9,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func queryMapToSlice(lookup map[string]QueryParam) []QueryParam {
+func queryMapToSlice(lookup map[QueryParamName]QueryParam) []QueryParam {
 	queryParams := []QueryParam{}
 
 	for key := range lookup {
@@ -23,8 +23,8 @@ func queryMapToSlice(lookup map[string]QueryParam) []QueryParam {
 	return queryParams
 }
 
-func querySliceToMap(cfg *Config, params []QueryParam) map[string]QueryParam {
-	paramMap := make(map[string]QueryParam)
+func querySliceToMap(cfg *Config, params []QueryParam) map[QueryParamName]QueryParam {
+	paramMap := make(map[QueryParamName]QueryParam)
 
 	for i, param := range params {
 		param.ID = i + 1
@@ -36,12 +36,12 @@ func querySliceToMap(cfg *Config, params []QueryParam) map[string]QueryParam {
 	return paramMap
 }
 
-func queryMapToString(lookup map[string]QueryParam) string {
+func queryMapToString(lookup map[QueryParamName]QueryParam) string {
 	params := queryMapToSlice(lookup)
 	names := []string{}
 
 	for _, param := range params {
-		names = append(names, param.Name)
+		names = append(names, string(param.Name))
 	}
 
 	return h.FormatStringSlice(names)
@@ -77,7 +77,7 @@ func queryIntMapToSlice(m map[string]int32) []int32 {
 }
 
 func getRawQueryLimit(cfg *Config, r *http.Request) (int, error) {
-	queryParamLimit := cfg.q.defaultParams["limit"]
+	queryParamLimit := cfg.q.defaultParams[qpnLimit]
 	query, err := checkEmptyQuery(r, queryParamLimit)
 	if err != nil {
 		return 0, err

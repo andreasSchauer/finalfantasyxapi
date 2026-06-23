@@ -10,7 +10,7 @@ import (
 
 // checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored. also checks for emptiness and replaces empty inputs with default values, if they exist.
 func parseIntQuery(r *http.Request, queryParam QueryParam) (int, error) {
-	query := r.URL.Query().Get(queryParam.Name)
+	query := r.URL.Query().Get(string(queryParam.Name))
 
 	val, err := checkQueryInt(queryParam, query)
 	if queryIsEmpty(err) {

@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -27,7 +26,7 @@ func filterAvlAreas(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
 		dbIDs, err := cfg.db.FilterAreaIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
-			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+			return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 		}
 
 		return dbIDs, nil
@@ -37,22 +36,21 @@ func filterAvlAreas(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		IsRepeatable:    avlParams.isRepeatable,
-		PreAirship: 	 avlParams.preAirship,
+		PreAirship:      avlParams.preAirship,
 		RequiredSources: sources.RequiredSources,
 		ExcludedSources: sources.ExcludedSources,
-		MonsterID: 		 sources.MonsterID,
-		ItemID: 		 sources.ItemID,
-		KeyItemID: 		 sources.KeyItemID,
-		AutoAbilityID: 	 sources.AutoAbilityID,
-		Methods: 		 sources.Methods,
+		MonsterID:       sources.MonsterID,
+		ItemID:          sources.ItemID,
+		KeyItemID:       sources.KeyItemID,
+		AutoAbilityID:   sources.AutoAbilityID,
+		Methods:         sources.Methods,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
 }
-
 
 func filterAvlSublocations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.sublocations
@@ -73,7 +71,7 @@ func filterAvlSublocations(cfg *Config, r *http.Request, inputIDs []int32) ([]in
 	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
 		dbIDs, err := cfg.db.FilterSublocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
-			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+			return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 		}
 
 		return dbIDs, nil
@@ -83,22 +81,21 @@ func filterAvlSublocations(cfg *Config, r *http.Request, inputIDs []int32) ([]in
 		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		IsRepeatable:    avlParams.isRepeatable,
-		PreAirship: 	 avlParams.preAirship,
+		PreAirship:      avlParams.preAirship,
 		RequiredSources: sources.RequiredSources,
 		ExcludedSources: sources.ExcludedSources,
-		MonsterID: 		 sources.MonsterID,
-		ItemID: 		 sources.ItemID,
-		KeyItemID: 		 sources.KeyItemID,
-		AutoAbilityID: 	 sources.AutoAbilityID,
-		Methods: 		 sources.Methods,
+		MonsterID:       sources.MonsterID,
+		ItemID:          sources.ItemID,
+		KeyItemID:       sources.KeyItemID,
+		AutoAbilityID:   sources.AutoAbilityID,
+		Methods:         sources.Methods,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
 }
-
 
 func filterAvlLocations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.locations
@@ -119,7 +116,7 @@ func filterAvlLocations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32
 	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
 		dbIDs, err := cfg.db.FilterLocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
-			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+			return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 		}
 
 		return dbIDs, nil
@@ -129,17 +126,17 @@ func filterAvlLocations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32
 		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		IsRepeatable:    avlParams.isRepeatable,
-		PreAirship: 	 avlParams.preAirship,
+		PreAirship:      avlParams.preAirship,
 		RequiredSources: sources.RequiredSources,
 		ExcludedSources: sources.ExcludedSources,
-		MonsterID: 		 sources.MonsterID,
-		ItemID: 		 sources.ItemID,
-		KeyItemID: 		 sources.KeyItemID,
-		AutoAbilityID: 	 sources.AutoAbilityID,
-		Methods: 		 sources.Methods,
+		MonsterID:       sources.MonsterID,
+		ItemID:          sources.ItemID,
+		KeyItemID:       sources.KeyItemID,
+		AutoAbilityID:   sources.AutoAbilityID,
+		Methods:         sources.Methods,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil

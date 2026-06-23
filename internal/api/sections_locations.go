@@ -42,17 +42,17 @@ func getLocationSectionRelations(cfg *Config, r *http.Request, locIDs []int32) (
 	i := cfg.e.locations
 	relations := make(map[int32]map[Relation][]int32)
 
-	treasureJunctions, err := getDbJunctions(r, locIDs, i.resourceType, cfg.e.treasures.resourceType, cfg.db.GetLocationTreasureIdPairs, juncLocationTreasure)
+	treasureJunctions, err := getDbJunctions(r, locIDs, i.resTypeSing, cfg.e.treasures.resTypeSing, cfg.db.GetLocationTreasureIdPairs, juncLocationTreasure)
 	if err != nil {
 		return nil, err
 	}
 
-	shopJunctions, err := getDbJunctions(r, locIDs, i.resourceType, cfg.e.shops.resourceType, cfg.db.GetLocationShopIdPairs, juncLocationShop)
+	shopJunctions, err := getDbJunctions(r, locIDs, i.resTypeSing, cfg.e.shops.resTypeSing, cfg.db.GetLocationShopIdPairs, juncLocationShop)
 	if err != nil {
 		return nil, err
 	}
 
-	monsterJunctions, err := getDbJunctions(r, locIDs, i.resourceType, cfg.e.monsters.resourceType, cfg.db.GetLocationMonsterIdPairs, juncLocationMonster)
+	monsterJunctions, err := getDbJunctions(r, locIDs, i.resTypeSing, cfg.e.monsters.resTypeSing, cfg.db.GetLocationMonsterIdPairs, juncLocationMonster)
 	if err != nil {
 		return nil, err
 	}

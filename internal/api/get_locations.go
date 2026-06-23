@@ -46,17 +46,17 @@ func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Loc
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(idQuery(r, i, ids, "monster", cfg.l.Monsters, cfg.db.GetLocationIDsWithMonster)),
-		fidl(idQueryWrapper(cfg, r, i, ids, "item", cfg.l.Items, getLocationsByItem)),
-		fidl(idQuery(r, i, ids, "key_item", cfg.l.KeyItems, cfg.db.GetLocationIDsWithKeyItem)),
-		fidl(idQuery(r, i, ids, "auto_ability", cfg.l.AutoAbilities, cfg.db.GetLocationIDsWithAutoAbility)),
-		fidl(boolQuery2(r, i, ids, "characters", cfg.db.GetLocationIDsWithCharacters)),
-		fidl(boolQuery2(r, i, ids, "aeons", cfg.db.GetLocationIDsWithAeons)),
-		fidl(boolQuery2(r, i, ids, "monsters", cfg.db.GetLocationIDsWithMonsters)),
-		fidl(boolQuery2(r, i, ids, "boss_fights", cfg.db.GetLocationIDsWithBosses)),
-		fidl(boolQuery2(r, i, ids, "shops", cfg.db.GetLocationIDsWithShops)),
-		fidl(boolQuery2(r, i, ids, "treasures", cfg.db.GetLocationIDsWithTreasures)),
-		fidl(boolQuery2(r, i, ids, "sidequests", cfg.db.GetLocationIDsWithSidequests)),
-		fidl(boolQuery2(r, i, ids, "fmvs", cfg.db.GetLocationIDsWithFMVs)),
+		fidl(idQuery(r, i, ids, qpnMonster, cfg.l.Monsters, cfg.db.GetLocationIDsWithMonster)),
+		fidl(idQueryWrapper(cfg, r, i, ids, qpnItem, cfg.l.Items, getLocationsByItem)),
+		fidl(idQuery(r, i, ids, qpnKeyItem, cfg.l.KeyItems, cfg.db.GetLocationIDsWithKeyItem)),
+		fidl(idQuery(r, i, ids, qpnAutoAbility, cfg.l.AutoAbilities, cfg.db.GetLocationIDsWithAutoAbility)),
+		fidl(boolQuery2(r, i, ids, qpnCharacters, cfg.db.GetLocationIDsWithCharacters)),
+		fidl(boolQuery2(r, i, ids, qpnAeons, cfg.db.GetLocationIDsWithAeons)),
+		fidl(boolQuery2(r, i, ids, qpnMonsters, cfg.db.GetLocationIDsWithMonsters)),
+		fidl(boolQuery2(r, i, ids, qpnBossFights, cfg.db.GetLocationIDsWithBosses)),
+		fidl(boolQuery2(r, i, ids, qpnShops, cfg.db.GetLocationIDsWithShops)),
+		fidl(boolQuery2(r, i, ids, qpnTreasures, cfg.db.GetLocationIDsWithTreasures)),
+		fidl(boolQuery2(r, i, ids, qpnSidequests, cfg.db.GetLocationIDsWithSidequests)),
+		fidl(boolQuery2(r, i, ids, qpnFMVs, cfg.db.GetLocationIDsWithFMVs)),
 	})
 }

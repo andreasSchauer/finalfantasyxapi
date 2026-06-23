@@ -19,7 +19,7 @@ func (as AppliedState) IsZero() bool {
 	return as.Condition == ""
 }
 
-func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName string) (Monster, error) {
+func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) (Monster, error) {
 	altStateID, err := getAltStateID(cfg, r, mon, queryName)
 	if queryIsEmpty(err) {
 		return mon, nil
@@ -64,9 +64,9 @@ func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName stri
 	return mon, nil
 }
 
-func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName string) (int, error) {
+func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) (int, error) {
 	queryParam := cfg.q.monsters[queryName]
-	query := r.URL.Query().Get(queryParam.Name)
+	query := r.URL.Query().Get(string(queryParam.Name))
 
 	if query == "" {
 		return 0, errEmptyQuery

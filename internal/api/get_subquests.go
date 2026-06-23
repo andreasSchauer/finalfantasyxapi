@@ -36,6 +36,6 @@ func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Sub
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(boolQuery(r, i, ids, "repeatable", cfg.db.GetSubquestIDsByRepeatable)),
+		fidl(boolQuery(r, i, ids, qpnRepeatable, cfg.db.GetSubquestIDsByRepeatable)),
 	})
 }

@@ -27,6 +27,6 @@ func getUsageString[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	return usage
 }
 
-func getUsagePath(usage, endpoint string) string {
+func getUsagePath(usage string, endpoint EndpointName) string {
 	return fmt.Sprintf("/api/%s%s", endpoint, usage)
 }

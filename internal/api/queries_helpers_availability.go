@@ -10,14 +10,13 @@ import (
 )
 
 type avlParams struct {
-	availabilities 	[]int32
-	isRepeatable	sql.NullBool
-	preAirship		bool
+	availabilities []int32
+	isRepeatable   sql.NullBool
+	preAirship     bool
 }
 
-
 func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (avlParams, error) {
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup["availability"], cfg.t.AvailabilityType)
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup[qpnAvailability], cfg.t.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return avlParams{}, err
 	}
@@ -27,9 +26,9 @@ func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg
 
 	var preAirship bool
 
-	_, ok := i.queryLookup["pre_airship"]
+	_, ok := i.queryLookup[qpnPreAirship]
 	if ok {
-		preAirship, err = parseBooleanQuery(r, i.queryLookup["pre_airship"])
+		preAirship, err = parseBooleanQuery(r, i.queryLookup[qpnPreAirship])
 		if errExceptEmptyQuery(err) {
 			return avlParams{}, err
 		}
@@ -38,12 +37,11 @@ func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg
 
 	params := avlParams{
 		availabilities: h.SliceOrNil(avlRanks),
-		preAirship: 	preAirship,
+		preAirship:     preAirship,
 	}
 
 	return params, nil
 }
-
 
 func checkAvlAndRep[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (avlParams, error) {
 	params, errAvl := checkAvl(cfg, r, i)
@@ -51,7 +49,7 @@ func checkAvlAndRep[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 		return avlParams{}, errAvl
 	}
 
-	isRepeatable, errRepl := getQueryBoolPtr(r, "repeatable", i.queryLookup)
+	isRepeatable, errRepl := getQueryBoolPtr(r, qpnRepeatable, i.queryLookup)
 	if errExceptEmptyQuery(errRepl) {
 		return avlParams{}, errRepl
 	}
@@ -65,13 +63,11 @@ func checkAvlAndRep[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	return params, nil
 }
 
-
-
 func avlToRanks(avls []database.AvailabilityType, preAirship bool) []int32 {
 	rankMap := map[database.AvailabilityType]int32{
-		database.AvailabilityTypeAlways: 1,
-		database.AvailabilityTypePost: 2,
-		database.AvailabilityTypePreStory: 3,
+		database.AvailabilityTypeAlways:    1,
+		database.AvailabilityTypePost:      2,
+		database.AvailabilityTypePreStory:  3,
 		database.AvailabilityTypePostStory: 4,
 	}
 	if preAirship {

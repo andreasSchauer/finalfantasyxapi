@@ -46,12 +46,12 @@ func getAeonRelationships(cfg *Config, r *http.Request, ae seeding.Aeon) (Aeon, 
 func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon) (Aeon, error) {
 	var err error
 
-	aeon.BaseStats, err = applyAeonStatsBattles(cfg, r, aeon, "battles")
+	aeon.BaseStats, err = applyAeonStatsBattles(cfg, r, aeon, qpnBattles)
 	if err != nil {
 		return Aeon{}, err
 	}
 
-	aeon.BaseStats, err = applyYunaStats(cfg, r, aeon, "yuna_stats")
+	aeon.BaseStats, err = applyYunaStats(cfg, r, aeon, qpnYunaStats)
 	if err != nil {
 		return Aeon{}, err
 	}
@@ -64,7 +64,7 @@ func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon) (Aeon, error) {
 	return aeon, nil
 }
 
-func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName string) ([]BaseStat, error) {
+func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName QueryParamName) ([]BaseStat, error) {
 	queryParam := cfg.q.aeons[queryName]
 	battles, err := parseIntQuery(r, queryParam)
 	if queryIsEmpty(err) {
@@ -87,7 +87,7 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName st
 	return baseStats, nil
 }
 
-func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName string) ([]BaseStat, error) {
+func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName QueryParamName) ([]BaseStat, error) {
 	allowedStatIDs := []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	baseStats := aeon.BaseStats
 	queryParam := cfg.q.aeons[queryName]

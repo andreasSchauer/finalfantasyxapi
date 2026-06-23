@@ -82,7 +82,7 @@ func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat
 }
 
 func getStatQueries(cfg *Config, r *http.Request) (StatQueries, error) {
-	changesOnly, err := parseBooleanQuery(r, cfg.q.stats["changes_only"])
+	changesOnly, err := parseBooleanQuery(r, cfg.q.stats[qpnChangesOnly])
 	if errExceptEmptyQuery(err) {
 		return StatQueries{}, err
 	}

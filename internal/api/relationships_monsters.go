@@ -31,22 +31,22 @@ func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) 
 }
 
 func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster, error) {
-	mon, err := applyAlteredState(cfg, r, mon, "altered_state")
+	mon, err := applyAlteredState(cfg, r, mon, qpnAlteredState)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	mon.BaseStats, err = applyAeonStatsMonsters(cfg, r, mon, "aeon_stats")
+	mon.BaseStats, err = applyAeonStatsMonsters(cfg, r, mon, qpnAeonStats)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	mon.BaseStats, err = applyRonsoStats(cfg, r, mon, "kimahri_stats")
+	mon.BaseStats, err = applyRonsoStats(cfg, r, mon, qpnKimahriStats)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	mon.ElemResists, err = applyOmnisElements(cfg, r, mon, "omnis_elements")
+	mon.ElemResists, err = applyOmnisElements(cfg, r, mon, qpnOmnisElements)
 	if err != nil {
 		return Monster{}, err
 	}

@@ -50,24 +50,28 @@ func newHTTPError(code int, msg string, err error) httpError {
 	}
 }
 
-func newHTTPErrorDB(fetchType string, parentItem seeding.Lookupable, err error) httpError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %ss of %s.", fetchType, parentItem), err)
-}
-
-func newHTTPErrorDbPairs(childResType, parentResType string, err error) httpError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs.", childResType, parentResType), err)
-}
-
-func newHTTPErrorDbOne(fetchType string, parentItem seeding.Lookupable, err error) httpError {
+func newHTTPErrorDB(fetchType ResTypePlural, parentItem seeding.Lookupable, err error) httpError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", fetchType, parentItem), err)
 }
 
-func newHTTPErrorDbFilter(fetchType string, queryParam QueryParam, err error) httpError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %ss for parameter '%s'.", fetchType, queryParam.Name), err)
+func newHTTPErrorDbPairs(childResType, parentResType ResTypeSingular, err error) httpError {
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs.", childResType, parentResType), err)
+}
+
+func newHTTPErrorDbOne(fetchType ResTypeSingular, parentItem seeding.Lookupable, err error) httpError {
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", fetchType, parentItem), err)
+}
+
+func newHTTPErrorDbFilter(fetchType ResTypePlural, queryParam QueryParam, err error) httpError {
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s for parameter '%s'.", fetchType, queryParam.Name), err)
 }
 
 func newHTTPErrorFetchLimit(fetchLimit int) httpError {
 	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of inputs is %d.", fetchLimit), nil)
+}
+
+func newHTTPErrorAvailability(fetchType ResTypePlural, err error) httpError {
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by availability", fetchType), err)
 }
 
 func handleHTTPError(w http.ResponseWriter, err error) bool {

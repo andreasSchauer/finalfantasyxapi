@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func createListURL(cfg *Config, endpoint string) string {
+func createListURL(cfg *Config, endpoint EndpointName) string {
 	return fmt.Sprintf("http://%s/api/%s", cfg.host, endpoint)
 }
 
@@ -16,12 +16,12 @@ func urlToPath(cfg *Config, url string) string {
 	return strings.TrimPrefix(url, prefix)
 }
 
-func createResourceURL(cfg *Config, endpoint string, id int32) string {
+func createResourceURL(cfg *Config, endpoint EndpointName, id int32) string {
 	url := createListURL(cfg, endpoint)
 	return fmt.Sprintf("%s/%d", url, id)
 }
 
-func createResourceURLQuery(cfg *Config, endpoint string, id int32, q url.Values) string {
+func createResourceURLQuery(cfg *Config, endpoint EndpointName, id int32, q url.Values) string {
 	url := createResourceURL(cfg, endpoint, id)
 	return fmt.Sprintf("%s?%s", url, q.Encode())
 }
@@ -30,7 +30,7 @@ func completeTestURL(cfg *Config, path string) string {
 	return fmt.Sprintf("http://%s/api%s", cfg.host, path)
 }
 
-func completeTestPath(endpoint string, id int32) string {
+func completeTestPath(endpoint EndpointName, id int32) string {
 	return fmt.Sprintf("/%s/%d", endpoint, id)
 }
 

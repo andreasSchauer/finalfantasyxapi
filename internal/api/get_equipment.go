@@ -43,9 +43,9 @@ func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.Equ
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(idListQuery(cfg, r, i, ids, "auto_abilities", cfg.l.AutoAbilities, cfg.db.GetEquipmentIDsByAutoAbility)),
-		fidl(nameIdQuery(r, i, ids, "character", cfg.e.characters.resourceType, cfg.e.characters.objLookup, cfg.db.GetEquipmentIDsByCharacter)),
-		fidl(enumQuery(r, i, cfg.t.EquipType, ids, "type", cfg.db.GetEquipmentIDsByEquipType)),
-		fidl(boolQuery2(r, i, ids, "celestial_weapon", cfg.db.GetEquipmentIDsCelestialWeapon)),
+		fidl(idListQuery(cfg, r, i, ids, qpnAutoAbilities, cfg.l.AutoAbilities, cfg.db.GetEquipmentIDsByAutoAbility)),
+		fidl(nameIdQuery(r, i, ids, qpnCharacter, cfg.e.characters.resTypeSing, cfg.e.characters.objLookup, cfg.db.GetEquipmentIDsByCharacter)),
+		fidl(enumQuery(r, i, cfg.t.EquipType, ids, qpnType, cfg.db.GetEquipmentIDsByEquipType)),
+		fidl(boolQuery2(r, i, ids, qpnCelestialWeapon, cfg.db.GetEquipmentIDsCelestialWeapon)),
 	})
 }

@@ -62,6 +62,6 @@ func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seed
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumQuery(r, i, cfg.t.CelestialFormula, ids, "formula", cfg.db.GetCelestialWeaponIDsByFormula)),
+		fidl(enumQuery(r, i, cfg.t.CelestialFormula, ids, qpnFormula, cfg.db.GetCelestialWeaponIDsByFormula)),
 	})
 }

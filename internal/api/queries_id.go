@@ -8,7 +8,7 @@ import (
 )
 
 // query uses an id of another resource type to filter resources
-func idQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, fLookup map[string]F, dbQuery DbQueryIntMany) ([]int32, error) {
+func idQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DbQueryIntMany) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
 		return inputIDs, nil
@@ -24,14 +24,14 @@ func idQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](r
 
 	dbIDs, err := dbQuery(r.Context(), id)
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParam, err)
 	}
 
 	return dbIDs, nil
 }
 
 // like idOnlyQuery, but with more specialized logic in between (wrapperFn)
-func idQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, fLookup map[string]F, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]int32, error) {
+func idQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn func(*Config, *http.Request, int32) ([]int32, error)) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
 		return inputIDs, nil
@@ -48,7 +48,7 @@ func idQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResource
 	return wrapperFn(cfg, r, id)
 }
 
-func idQueryNul[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName string, fLookup map[string]F, dbQuery DbQueryNullIntMany) ([]int32, error) {
+func idQueryNul[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DbQueryNullIntMany) ([]int32, error) {
 	queryParam := i.queryLookup[queryName]
 	if replParamsPresent(r, queryParam, i.queryLookup) {
 		return inputIDs, nil
@@ -64,7 +64,7 @@ func idQueryNul[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList
 
 	dbIDs, err := dbQuery(r.Context(), h.GetNullInt32(idPtr))
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, queryParam, err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParam, err)
 	}
 
 	return dbIDs, nil

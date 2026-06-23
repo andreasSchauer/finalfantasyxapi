@@ -26,7 +26,7 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 		return EquipmentName{}, err
 	}
 
-	tableRef, err := getEquipmentTableRef(cfg, r, i.queryLookup["table"], equipment)
+	tableRef, err := getEquipmentTableRef(cfg, r, i.queryLookup[qpnTable], equipment)
 	if err != nil {
 		return EquipmentName{}, err
 	}

@@ -1,12 +1,10 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
-
 
 func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.monsters
@@ -28,18 +26,17 @@ func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,
-		PreAirship: 	avlParams.preAirship,
+		PreAirship:     avlParams.preAirship,
 		AvlType:        locContext.AvlType,
 		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil
 }
-
 
 func filterAvlMonsterFormations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.e.monsterFormations
@@ -58,16 +55,16 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, inputIDs []int32) 
 	}
 
 	dbIDs, err := cfg.db.FilterMonsterFormationIDsByAvailability(r.Context(), database.FilterMonsterFormationIDsByAvailabilityParams{
-		Ids:          	inputIDs,
+		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,
-		PreAirship: 	avlParams.preAirship,
-		AvlType:      	locContext.AvlType,
-		LocContextID: 	locContext.ID,
+		PreAirship:     avlParams.preAirship,
+		AvlType:        locContext.AvlType,
+		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by availability", i.resourceType), err)
+		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 	}
 
 	return dbIDs, nil

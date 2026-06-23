@@ -39,7 +39,7 @@ func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seeding.Mix, Mi
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.MixCategory, ids, "category", cfg.db.GetMixIDsByCategory)),
-		fidl(idQueryWrapper(cfg, r, i, ids, "req_item", cfg.l.Items, getMixesByItem)),
+		fidl(enumListQuery(cfg, r, i, cfg.t.MixCategory, ids, qpnCategory, cfg.db.GetMixIDsByCategory)),
+		fidl(idQueryWrapper(cfg, r, i, ids, qpnReqItem, cfg.l.Items, getMixesByItem)),
 	})
 }

@@ -59,7 +59,7 @@ func (r EnumAPIResource) GetTestKey() string {
 	return r.Name
 }
 
-func enumToNamedAPIResource[E, N any](cfg *Config, endpoint, key string, et EnumType[E, N]) NamedAPIResource {
+func enumToNamedAPIResource[E, N any](cfg *Config, endpoint EndpointName, key string, et EnumType[E, N]) NamedAPIResource {
 	enumRes, _ := GetEnumAPIResource(key, et)
 
 	resource := newNamedAPIResourceSimple(cfg, endpoint, enumRes.ID, enumRes.Name)
@@ -109,7 +109,7 @@ func newEnumAPIResourceList(cfg *Config, r *http.Request, resources []EnumAPIRes
 	return list, nil
 }
 
-func createEnumResourceSlice(cfg *Config, endpoint string, lookup map[string]EnumAPIResource) []EnumAPIResource {
+func createEnumResourceSlice(cfg *Config, endpoint EndpointName, lookup map[string]EnumAPIResource) []EnumAPIResource {
 	resources := []EnumAPIResource{}
 
 	for _, resource := range lookup {

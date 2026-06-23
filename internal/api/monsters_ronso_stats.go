@@ -6,7 +6,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName string) ([]BaseStat, error) {
+func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) ([]BaseStat, error) {
 	allowedStatIDs := []int32{1, 3, 5, 7}
 	baseStats := mon.BaseStats
 	queryParam := cfg.q.monsters[queryName]

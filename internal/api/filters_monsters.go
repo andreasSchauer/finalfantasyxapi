@@ -38,7 +38,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
-		elementID, err := checkQueryNameID(elementStr, cfg.e.elements.resourceType, queryParam, cfg.l.Elements)
+		elementID, err := checkQueryNameID(elementStr, cfg.e.elements.resTypeSing, queryParam, cfg.l.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -84,7 +84,7 @@ func getMonstersByStatusResists(cfg *Config, r *http.Request, ids []int32) ([]in
 }
 
 func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
-	queryParam := cfg.q.monsters["resistance"]
+	queryParam := cfg.q.monsters[qpnResistance]
 
 	resistance, err := parseIntQuery(r, queryParam)
 	if err != nil {
@@ -97,7 +97,7 @@ func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
 func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.monsters
 
-	queryParam := i.queryLookup["is_forced"]
+	queryParam := i.queryLookup[qpnIsForced]
 
 	isForced, err := parseBooleanQuery(r, queryParam)
 	if queryIsEmpty(err) {
@@ -109,7 +109,7 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]int32, 
 		IsForced:      isForced,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %ss by auto-ability id '%d'.", i.resourceType, id), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%d'.", i.resTypePlural, id), err)
 	}
 
 	return dbIDs, nil
@@ -117,7 +117,7 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]int32, 
 
 func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
 	i := cfg.e.monsters
-	
+
 	methods, err := getMonsterItemMethods(cfg, r)
 	if err != nil {
 		return nil, err
@@ -128,7 +128,7 @@ func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) 
 		Methods: methods,
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resourceType, i.queryLookup["item"], err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, i.queryLookup[qpnItem], err)
 	}
 
 	return dbIDs, nil
@@ -136,10 +136,10 @@ func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) 
 
 func getMonsterItemMethods(cfg *Config, r *http.Request) ([]string, error) {
 	i := cfg.e.monsters
-	paramMethods := i.queryLookup["methods"]
+	paramMethods := i.queryLookup[qpnMethods]
 	aliasses := map[string][]string{
 		"steal": {"steal_common", "steal_rare"},
-		"drop": {"drop_common", "drop_rare", "drop_secondary_common", "drop_secondary_rare"},
+		"drop":  {"drop_common", "drop_rare", "drop_secondary_common", "drop_secondary_rare"},
 	}
 
 	queryMethods, err := parseValueListQuery(cfg, r, paramMethods)
@@ -147,7 +147,7 @@ func getMonsterItemMethods(cfg *Config, r *http.Request) ([]string, error) {
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		queryMethods = paramMethods.AllowedValues
+		queryMethods = qvsToStrings(paramMethods.AllowedValues)
 	}
 
 	methods := []string{}
