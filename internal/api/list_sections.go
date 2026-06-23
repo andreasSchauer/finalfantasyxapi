@@ -21,7 +21,7 @@ func getSectionList[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	sectionNames := []string{}
 
 	for section := range sectionMap {
-		sectionNames = append(sectionNames, section)
+		sectionNames = append(sectionNames, string(section))
 	}
 	slices.Sort(sectionNames)
 

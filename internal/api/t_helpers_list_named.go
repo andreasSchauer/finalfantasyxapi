@@ -20,7 +20,7 @@ func compareSectionLists(test test, endpoint EndpointName, exp expListNames, got
 }
 
 // checks if the provided slice of strings contains all stated strings
-func checkStringsInSlice(test test, fieldName string, expNames, gotNames []string) {
+func checkStringsInSlice(test test, fieldName string, expNames []NamedParam, gotNames []string) {
 	test.t.Helper()
 	sliceBasicChecks(test, fieldName, expNames, gotNames)
 
@@ -34,7 +34,7 @@ func checkStringsInSlice(test test, fieldName string, expNames, gotNames []strin
 	}
 
 	for _, expName := range expNames {
-		_, ok := gotMap[expName]
+		_, ok := gotMap[string(expName)]
 		if !ok {
 			test.t.Errorf("%s doesn't contain all wanted names. missing '%s'.\n\n", fieldName, expName)
 		}

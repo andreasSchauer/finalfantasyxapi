@@ -19,7 +19,7 @@ type QueryParam struct {
 	DefaultOnly      bool                       `json:"only_use_alone"`
 	ForSingle        bool                       `json:"for_single"`
 	ForList          bool                       `json:"for_list"`
-	ForSegment       *string                    `json:"for_segment"`
+	ForSegment       *SectionName               `json:"for_segment"`
 	IsRequired       bool                       `json:"is_required"`
 	TypeLookup       map[string]EnumAPIResource `json:"-"`
 	RequiredParams   []QueryParamName           `json:"required_params,omitempty"`
@@ -27,7 +27,7 @@ type QueryParam struct {
 	ReplacedBy       []QueryParamName           `json:"replaced_by,omitempty"`
 	ForbiddenParams  []QueryParamName           `json:"forbidden_params,omitempty"`
 	ReferencesInt    []EndpointName             `json:"-"`
-	References    	 []string             		`json:"references,omitempty"`
+	References       []string                   `json:"references,omitempty"`
 	AllowedIDs       []int32                    `json:"-"`
 	AllowedResources []string                   `json:"allowed_resources,omitempty"`
 	AllowedValues    []QueryValue               `json:"allowed_values,omitempty"`
@@ -214,7 +214,7 @@ func (cfg *Config) completeQueryParamsInit(params []QueryParam, hasSimpleView bo
 			DefaultOnly: true,
 			ForList:     false,
 			ForSingle:   false,
-			ForSegment:  h.GetStrPtr("simple"),
+			ForSegment:  getSnPtr(snSimple),
 		}
 		params = append(params, queryParamIDs)
 	}

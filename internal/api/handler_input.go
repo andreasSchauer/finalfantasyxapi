@@ -21,5 +21,5 @@ type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 	getSingleFunc    func(*http.Request, handlerInput[T, R, A, L], int32) (R, error)
 	retrieveFunc     func(*http.Request, handlerInput[T, R, A, L]) (L, error)
 	avlFunc          func(*Config, *http.Request, []int32) ([]int32, error)
-	subsections      map[string]Subsection
+	subsections      map[SectionName]Subsection
 }

@@ -16,7 +16,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleAreas,
 			},
 			count:   28,
-			results: []string{"limit", "offset", "item", "save_sphere", "sublocation", "ids"},
+			results: qpnsToNamedParams([]QueryParamName{qpnLimit, qpnOffset, qpnItem, qpnSaveSphere, qpnSublocation, qpnIDs}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -26,7 +26,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleSublocations,
 			},
 			count:   23,
-			results: []string{"location", "item", "methods", "aeons", "shops", "fmvs", "ids"},
+			results: qpnsToNamedParams([]QueryParamName{qpnLocation, qpnItem, qpnMethods, qpnAeons, qpnShops, qpnFMVs, qpnIDs}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -36,7 +36,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleLocations,
 			},
 			count:   22,
-			results: []string{"key_item", "characters", "aeons", "treasures", "sidequests", "ids", "flip"},
+			results: qpnsToNamedParams([]QueryParamName{qpnKeyItem, qpnCharacters, qpnAeons, qpnTreasures, qpnSidequests, qpnIDs, qpnFlip}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -46,7 +46,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleArenaCreations,
 			},
 			count:   4,
-			results: []string{"limit", "offset", "category"},
+			results: qpnsToNamedParams([]QueryParamName{qpnLimit, qpnOffset, qpnCategory}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -56,7 +56,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleBlitzballPrizes,
 			},
 			count:   4,
-			results: []string{"limit", "offset", "category"},
+			results: qpnsToNamedParams([]QueryParamName{qpnLimit, qpnOffset, qpnCategory}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -66,7 +66,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleFMVs,
 			},
 			count:   4,
-			results: []string{"limit", "offset", "location"},
+			results: qpnsToNamedParams([]QueryParamName{qpnLimit, qpnOffset, qpnLocation}),
 		},
 
 		{
@@ -77,7 +77,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleMonsters,
 			},
 			count:   33,
-			results: []string{"kimahri_stats", "aeon_stats", "altered_state", "omnis_elements", "status_resists", "auto_ability", "area", "distance", "underwater", "species", "ids"},
+			results: qpnsToNamedParams([]QueryParamName{qpnKimahriStats, qpnAeonStats, qpnAlteredState, qpnOmnisElements, qpnStatusResists, qpnAutoAbility, qpnArea, qpnDistance, qpnUnderwater, qpnSpecies, qpnIDs}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -87,7 +87,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleMonsterFormations,
 			},
 			count:   13,
-			results: []string{"monster", "location", "ambush", "category", "ids"},
+			results: qpnsToNamedParams([]QueryParamName{qpnMonster, qpnLocation, qpnAmbush, qpnCategory, qpnIDs}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -97,7 +97,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleOverdriveModes,
 			},
 			count:   4,
-			results: []string{"limit", "offset", "type"},
+			results: qpnsToNamedParams([]QueryParamName{qpnLimit, qpnOffset, qpnType}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -107,7 +107,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleShops,
 			},
 			count:   13,
-			results: []string{"location", "auto_ability", "items", "equipment", "availability", "ids"},
+			results: qpnsToNamedParams([]QueryParamName{qpnLocation, qpnAutoAbility, qpnItems, qpnEquipment, qpnAvailability, qpnIDs}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -117,7 +117,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleSongs,
 			},
 			count:   10,
-			results: []string{"area", "fmvs", "composer", "special_use"},
+			results: qpnsToNamedParams([]QueryParamName{qpnArea, qpnFMVs, qpnComposer, qpnSpecialUse}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -127,7 +127,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleSidequests,
 			},
 			count:   4,
-			results: []string{"limit", "offset", "availability"},
+			results: qpnsToNamedParams([]QueryParamName{qpnLimit, qpnOffset, qpnAvailability}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -137,7 +137,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleSubquests,
 			},
 			count:   5,
-			results: []string{"limit", "offset", "availability", "repeatable"},
+			results: qpnsToNamedParams([]QueryParamName{qpnLimit, qpnOffset, qpnAvailability, qpnRepeatable}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -147,7 +147,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleTreasures,
 			},
 			count:   14,
-			results: []string{"sublocation", "loot_type", "treasure_type", "anima", "availability"},
+			results: qpnsToNamedParams([]QueryParamName{qpnSublocation, qpnLootType, qpnTreasureType, qpnAnima, qpnAvailability}),
 		},
 	}
 

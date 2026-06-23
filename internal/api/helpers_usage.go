@@ -20,7 +20,7 @@ func getUsageString[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 
 	if i.subsections != nil {
 		sectionUsage := getUsagePath("/id/{subsection}", i.endpoint)
-		sectionStr := h.GetMapKeyStr(i.subsections)
+		sectionStr := formatSectionNames(i.subsections)
 		usage = fmt.Sprintf("%s, '%s'. supported subsections: %s.", usage, sectionUsage, sectionStr)
 	}
 

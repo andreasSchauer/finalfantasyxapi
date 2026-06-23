@@ -119,13 +119,14 @@ func verifyQueryUsage(q url.Values, queryParam QueryParam, endpoint EndpointName
 	return nil
 }
 
-func segmentsMatch(sParam, sReq *string) bool {
+func segmentsMatch(sParam *SectionName, sReq *string) bool {
 	switch {
 	case sParam == nil && sReq == nil:
 		return true
 
 	case sParam != nil && sReq != nil:
-		return *sParam == *sReq
+		segment := *sParam
+		return string(segment) == *sReq
 
 	default:
 		return false

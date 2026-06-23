@@ -16,14 +16,14 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleAreas,
 			},
 			count: 6,
-			results: []string{
-				"simple",
-				"connected",
-				"monsters",
-				"monster-formations",
-				"songs",
-				"treasures",
-			},
+			results: snsToNamedParams([]SectionName{
+				snSimple,
+				snConnected,
+				snMonsters,
+				snMonsterFormations,
+				snSongs,
+				snTreasures,
+			}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -33,16 +33,16 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleSublocations,
 			},
 			count: 8,
-			results: []string{
-				"simple",
-				"areas",
-				"connected",
-				"monsters",
-				"monster-formations",
-				"shops",
-				"songs",
-				"treasures",
-			},
+			results: snsToNamedParams([]SectionName{
+				snSimple,
+				snAreas,
+				snConnected,
+				snMonsters,
+				snMonsterFormations,
+				snShops,
+				snSongs,
+				snTreasures,
+			}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -52,17 +52,17 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleLocations,
 			},
 			count: 9,
-			results: []string{
-				"simple",
-				"areas",
-				"connected",
-				"monsters",
-				"monster-formations",
-				"shops",
-				"songs",
-				"sublocations",
-				"treasures",
-			},
+			results: snsToNamedParams([]SectionName{
+				snSimple,
+				snAreas,
+				snConnected,
+				snMonsters,
+				snMonsterFormations,
+				snShops,
+				snSongs,
+				snSublocations,
+				snTreasures,
+			}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -72,12 +72,12 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleAeons,
 			},
 			count: 4,
-			results: []string{
-				"default-abilities",
-				"overdrive-abilities",
-				"overdrives",
-				"stats",
-			},
+			results: snsToNamedParams([]SectionName{
+				snDefaultAbilities,
+				snOverdriveAbilities,
+				snOverdrives,
+				snStats,
+			}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -87,13 +87,13 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleCharacters,
 			},
 			count: 5,
-			results: []string{
-				"default-abilities",
-				"std-sg-abilities",
-				"exp-sg-abilities",
-				"overdrive-abilities",
-				"overdrives",
-			},
+			results: snsToNamedParams([]SectionName{
+				snDefaultAbilities,
+				snStdSgAbilities,
+				snExpSgAbilities,
+				snOverdriveAbilities,
+				snOverdrives,
+			}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -103,12 +103,12 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleCharacterClasses,
 			},
 			count: 4,
-			results: []string{
-				"default-abilities",
-				"learnable-abilities",
-				"default-overdrives",
-				"learnable-overdrives",
-			},
+			results: snsToNamedParams([]SectionName{
+				snDefaultAbilities,
+				snLearnableOverdrives,
+				snDefaultOverdrives,
+				snLearnableOverdrives,
+			}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -118,7 +118,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleArenaCreations,
 			},
 			count:   0,
-			results: []string{},
+			results: []NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -128,7 +128,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleBlitzballPrizes,
 			},
 			count:   0,
-			results: []string{},
+			results: []NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -138,7 +138,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleFMVs,
 			},
 			count:   0,
-			results: []string{},
+			results: []NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -148,12 +148,12 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleMonsters,
 			},
 			count: 4,
-			results: []string{
-				"simple",
-				"abilities",
-				"areas",
-				"monster-formations",
-			},
+			results: snsToNamedParams([]SectionName{
+				snSimple,
+				snAbilities,
+				snAreas,
+				snMonsterFormations,
+			}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -163,10 +163,10 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleMonsterFormations,
 			},
 			count: 2,
-			results: []string{
-				"simple",
-				"monsters",
-			},
+			results: snsToNamedParams([]SectionName{
+				snSimple,
+				snMonsters,
+			}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -176,7 +176,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleOverdriveModes,
 			},
 			count:   0,
-			results: []string{},
+			results: []NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -186,9 +186,9 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleShops,
 			},
 			count: 1,
-			results: []string{
-				"simple",
-			},
+			results: snsToNamedParams([]SectionName{
+				snSimple,
+			}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -198,7 +198,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleSongs,
 			},
 			count:   0,
-			results: []string{},
+			results: []NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -208,9 +208,9 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleSidequests,
 			},
 			count: 1,
-			results: []string{
-				"subquests",
-			},
+			results: snsToNamedParams([]SectionName{
+				snSubquests,
+			}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -220,7 +220,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleSubquests,
 			},
 			count:   0,
-			results: []string{},
+			results: []NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -230,7 +230,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleTreasures,
 			},
 			count:   0,
-			results: []string{},
+			results: []NamedParam{},
 		},
 	}
 

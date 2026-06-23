@@ -1,9 +1,12 @@
 package api
 
-import h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+import (
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+)
 
+type NamedParam string
 
-type QueryParamName string
+type QueryParamName NamedParam
 
 const (
 	qpnAbilityUser      QueryParamName = "ability_user"
@@ -117,6 +120,20 @@ const (
 	qpnZombie           QueryParamName = "zombie"
 )
 
+func qpnsToNamedParams(qpns []QueryParamName) []NamedParam {
+	if qpns == nil {
+		return nil
+	}
+	
+	nps := make([]NamedParam, len(qpns))
+
+	for i, sn := range qpns {
+		nps[i] = NamedParam(sn)
+	}
+
+	return nps
+}
+
 func formatQpnSlice(qpns []QueryParamName) string {
 	if qpns == nil {
 		return ""
@@ -130,8 +147,6 @@ func formatQpnSlice(qpns []QueryParamName) string {
 
 	return h.FormatStringSlice(strings)
 }
-
-
 
 type QueryParamType string
 
@@ -152,26 +167,24 @@ const (
 	qptValueList     QueryParamType = "value-list"
 )
 
-
-
 type QueryValue string
 
 const (
-	qvBlitzball		QueryValue = "blitzball"
-	qvMonster		QueryValue = "monster"
-	qvQuest			QueryValue = "quest"
-	qvShop			QueryValue = "shop"
-	qvTreasure		QueryValue = "treasure"
+	qvBlitzball QueryValue = "blitzball"
+	qvMonster   QueryValue = "monster"
+	qvQuest     QueryValue = "quest"
+	qvShop      QueryValue = "shop"
+	qvTreasure  QueryValue = "treasure"
 
-	qvSteal			QueryValue = "steal"
-	qvDrop			QueryValue = "drop"
-	qvBribe			QueryValue = "bribe"
-	qvOther			QueryValue = "other"
+	qvSteal QueryValue = "steal"
+	qvDrop  QueryValue = "drop"
+	qvBribe QueryValue = "bribe"
+	qvOther QueryValue = "other"
 
-	qvF				QueryValue = "f"
-	qvL				QueryValue = "l"
-	qvW				QueryValue = "w"
-	qvI				QueryValue = "i"
+	qvF QueryValue = "f"
+	qvL QueryValue = "l"
+	qvW QueryValue = "w"
+	qvI QueryValue = "i"
 )
 
 func qvsToStrings(qvs []QueryValue) []string {

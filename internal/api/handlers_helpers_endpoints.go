@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -19,17 +18,17 @@ func handleEndpointList[T seeding.Lookupable, R any, A APIResource, L APIResourc
 func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	segment := segments[0]
 
-	if segment == "parameters" {
+	if segment == string(snParameters) {
 		handleParameters(cfg, w, r, i)
 		return
 	}
 
-	if segment == "sections" {
+	if segment == string(snSections) {
 		handleSections(cfg, w, r, i)
 		return
 	}
 
-	if segment == "simple" {
+	if segment == string(snSimple) {
 		handleSimple(cfg, w, r, i)
 		return
 	}
@@ -50,17 +49,17 @@ func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResou
 func handleEndpointNameOrID[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	segment := segments[0]
 
-	if segment == "parameters" {
+	if segment == string(snParameters) {
 		handleParameters(cfg, w, r, i)
 		return
 	}
 
-	if segment == "sections" {
+	if segment == string(snSections) {
 		handleSections(cfg, w, r, i)
 		return
 	}
 
-	if segment == "simple" {
+	if segment == string(snSimple) {
 		handleSimple(cfg, w, r, i)
 		return
 	}
@@ -164,9 +163,9 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 		return
 	}
 
-	subsection, ok := i.subsections[sectionName]
+	subsection, ok := i.subsections[SectionName(sectionName)]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s.", sectionName, i.endpoint, h.GetMapKeyStr(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s.", sectionName, i.endpoint, formatSectionNames(i.subsections)), nil)
 		return
 	}
 
@@ -198,7 +197,7 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 }
 
 func handleParameters[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
-	segment := "parameters"
+	segment := string(snParameters)
 	err := verifyDefaultParamsOnly(cfg, r, i, &segment)
 	if handleHTTPError(w, err) {
 		return
@@ -212,7 +211,7 @@ func handleParameters[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 }
 
 func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
-	segment := "sections"
+	segment := string(snSections)
 	err := verifyDefaultParamsOnly(cfg, r, i, &segment)
 	if handleHTTPError(w, err) {
 		return
@@ -226,7 +225,7 @@ func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 }
 
 func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
-	segment := "simple"
+	segment := string(snSimple)
 	queryParamIDs := i.queryLookup[qpnIDs]
 	_, err := checkEmptyQuery(r, queryParamIDs)
 	if err != nil {
@@ -244,7 +243,7 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 		return
 	}
 
-	resources, err := createSimpleResources(cfg, r, ids, i.subsections[segment])
+	resources, err := createSimpleResources(cfg, r, ids, i.subsections[SectionName(segment)])
 	if handleHTTPError(w, err) {
 		return
 	}

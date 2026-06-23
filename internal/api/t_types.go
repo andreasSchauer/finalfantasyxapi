@@ -128,7 +128,7 @@ type expListNames struct {
 	count    int
 	previous *string
 	next     *string
-	results  []string
+	results  []NamedParam
 }
 
 func (l expListNames) getListParams() ListParams {
