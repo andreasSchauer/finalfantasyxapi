@@ -319,7 +319,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:       false,
 			ForSingle:     true,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -335,7 +335,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -360,7 +360,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"monsters"},
+			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          qpnItem,
@@ -369,7 +369,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"items"},
+			ReferencesInt: []EndpointName{epItems},
 		},
 		{
 			Name:           qpnMethods,
@@ -387,7 +387,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"key-items"},
+			ReferencesInt: []EndpointName{epKeyItems},
 		},
 		{
 			Name:          qpnAutoAbility,
@@ -396,7 +396,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"auto-abilities"},
+			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
 		{
 			Name:        qpnCharacters,
@@ -474,7 +474,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:       false,
 			ForSingle:     true,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -489,7 +489,7 @@ func (cfg *Config) initSublocationsParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnAvailability,
@@ -498,7 +498,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -523,7 +523,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"monsters"},
+			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          qpnItem,
@@ -532,7 +532,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"items"},
+			ReferencesInt: []EndpointName{epItems},
 		},
 		{
 			Name:           qpnMethods,
@@ -550,7 +550,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"key-items"},
+			ReferencesInt: []EndpointName{epKeyItems},
 		},
 		{
 			Name:          qpnAutoAbility,
@@ -559,7 +559,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"auto-abilities"},
+			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
 		{
 			Name:        qpnCharacters,
@@ -637,7 +637,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:       false,
 			ForSingle:     true,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -653,7 +653,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -661,7 +661,7 @@ func (cfg *Config) initAreasParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:          qpnAvailability,
@@ -670,7 +670,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -695,7 +695,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"monsters"},
+			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          qpnItem,
@@ -704,7 +704,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"items"},
+			ReferencesInt: []EndpointName{epItems},
 		},
 		{
 			Name:           qpnMethods,
@@ -722,7 +722,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"key-items"},
+			ReferencesInt: []EndpointName{epKeyItems},
 		},
 		{
 			Name:          qpnAutoAbility,
@@ -731,7 +731,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"auto-abilities"},
+			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
 		{
 			Name:        qpnSaveSphere,
@@ -836,7 +836,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"monsters"},
+			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          qpnCategory,
@@ -845,7 +845,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.MonsterFormationCategory.lookup,
-			ReferencesInt: []EndpointName{"monster-formation-category"},
+			ReferencesInt: []EndpointName{epMonsterFormationCategory},
 		},
 		{
 			Name:          qpnAvailability,
@@ -854,7 +854,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -878,7 +878,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation, qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -887,7 +887,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:          qpnArea,
@@ -896,7 +896,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"areas"},
+			ReferencesInt: []EndpointName{epAreas},
 		},
 		{
 			Name:        qpnAmbush,
@@ -920,7 +920,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.ShopCategory.lookup,
-			ReferencesInt: []EndpointName{"shop-category"},
+			ReferencesInt: []EndpointName{epShopCategory},
 		},
 		{
 			Name:          qpnAvailability,
@@ -929,7 +929,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:          qpnLocation,
@@ -938,7 +938,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation, qpnAvailability},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -947,7 +947,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability},
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:            qpnAutoAbility,
@@ -957,7 +957,7 @@ func (cfg *Config) initShopsParams() {
 			ForSingle:       false,
 			ForbiddenParams: []QueryParamName{qpnItems, qpnEquipment},
 			ReplacedBy:      []QueryParamName{qpnAvailability},
-			ReferencesInt:   []EndpointName{"auto-abilities"},
+			ReferencesInt:   []EndpointName{epAutoAbilities},
 		},
 		{
 			Name:            qpnEmptySlots,
@@ -978,7 +978,7 @@ func (cfg *Config) initShopsParams() {
 			ForSingle:       false,
 			ForbiddenParams: []QueryParamName{qpnItems, qpnEquipment},
 			ReplacedBy:      []QueryParamName{qpnAvailability},
-			ReferencesInt:   []EndpointName{"characters"},
+			ReferencesInt:   []EndpointName{epCharacters},
 		},
 		{
 			Name:            qpnItems,
@@ -1013,7 +1013,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation, qpnArea},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -1022,7 +1022,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnArea},
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:          qpnArea,
@@ -1030,7 +1030,7 @@ func (cfg *Config) initTreasuresParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"areas"},
+			ReferencesInt: []EndpointName{epAreas},
 		},
 		{
 			Name:          qpnAutoAbility,
@@ -1038,7 +1038,7 @@ func (cfg *Config) initTreasuresParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"auto-abilities"},
+			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
 		{
 			Name:            qpnEmptySlots,
@@ -1055,7 +1055,7 @@ func (cfg *Config) initTreasuresParams() {
 			ExampleVals:   []string{"wakka"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"characters"},
+			ReferencesInt: []EndpointName{epCharacters},
 		},
 		{
 			Name:          qpnItem,
@@ -1063,7 +1063,7 @@ func (cfg *Config) initTreasuresParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"items"},
+			ReferencesInt: []EndpointName{epItems},
 		},
 		{
 			Name:          qpnLootType,
@@ -1072,7 +1072,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.LootType.lookup,
-			ReferencesInt: []EndpointName{"loot-type"},
+			ReferencesInt: []EndpointName{epLootType},
 		},
 		{
 			Name:        qpnTreasureType,
@@ -1096,7 +1096,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 	}
 
@@ -1113,7 +1113,7 @@ func (cfg *Config) initQuestsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.QuestType.lookup,
-			ReferencesInt: []EndpointName{"quest-type"},
+			ReferencesInt: []EndpointName{epQuestType},
 		},
 		{
 			Name:          qpnAvailability,
@@ -1122,7 +1122,7 @@ func (cfg *Config) initQuestsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:        qpnRepeatable,
@@ -1146,7 +1146,7 @@ func (cfg *Config) initSidequestsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 	}
 
@@ -1163,7 +1163,7 @@ func (cfg *Config) initSubquestsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:        qpnRepeatable,
@@ -1219,7 +1219,7 @@ func (cfg *Config) initSongsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation, qpnArea},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -1228,7 +1228,7 @@ func (cfg *Config) initSongsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnArea},
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:          qpnArea,
@@ -1236,7 +1236,7 @@ func (cfg *Config) initSongsParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"areas"},
+			ReferencesInt: []EndpointName{epAreas},
 		},
 		{
 			Name:        qpnFMVs,
@@ -1282,7 +1282,7 @@ func (cfg *Config) initFMVsParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 	}
 
@@ -1299,7 +1299,7 @@ func (cfg *Config) initPlayerUnitsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.UnitType.lookup,
-			ReferencesInt: []EndpointName{"unit-type"},
+			ReferencesInt: []EndpointName{epUnitType},
 		},
 	}
 
@@ -1386,7 +1386,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       false,
 			ForSingle:     true,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -1439,7 +1439,7 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses:   []string{"?elemental_resists=fire=weak,water=absorb", "?elemental_resists=1=3,2=4"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"elements", "affinities"},
+			ReferencesInt: []EndpointName{epElements, epElementalAffinity},
 		},
 		{
 			Name:          qpnStatusResists,
@@ -1447,7 +1447,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:          qptIdList,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:            qpnResistance,
@@ -1471,7 +1471,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"items"},
+			ReferencesInt: []EndpointName{epItems},
 		},
 		{
 			Name:           qpnMethods,
@@ -1488,7 +1488,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"auto-abilities"},
+			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
 		{
 			Name:           qpnIsForced,
@@ -1512,7 +1512,7 @@ func (cfg *Config) initMonstersParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"ronso-rages"},
+			ReferencesInt: []EndpointName{epRonsoRages},
 		},
 		{
 			Name:          qpnAvailability,
@@ -1521,7 +1521,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -1545,7 +1545,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation, qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -1554,7 +1554,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:          qpnArea,
@@ -1563,7 +1563,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"areas"},
+			ReferencesInt: []EndpointName{epAreas},
 		},
 		{
 			Name:            qpnDistance,
@@ -1608,7 +1608,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.MonsterSpecies.lookup,
-			ReferencesInt: []EndpointName{"monster-species"},
+			ReferencesInt: []EndpointName{epMonsterSpecies},
 		},
 		{
 			Name:        qpnCreationArea,
@@ -1625,7 +1625,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.MonsterCategory.lookup,
-			ReferencesInt: []EndpointName{"monster-category"},
+			ReferencesInt: []EndpointName{epMonsterCategory},
 		},
 	}
 
@@ -1642,7 +1642,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AbilityType.lookup,
-			ReferencesInt: []EndpointName{"ability-type"},
+			ReferencesInt: []EndpointName{epAbilityType},
 		},
 		{
 			Name:        qpnRank,
@@ -1671,7 +1671,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"monsters"},
+			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:        qpnTargetType,
@@ -1716,7 +1716,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{"attack-type"},
+			ReferencesInt: []EndpointName{epAttackType},
 		},
 		{
 			Name:          qpnDamageType,
@@ -1725,7 +1725,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.DamageType.lookup,
-			ReferencesInt: []EndpointName{"damage-type"},
+			ReferencesInt: []EndpointName{epDamageType},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -1734,7 +1734,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{"damage-formula"},
+			ReferencesInt: []EndpointName{epDamageFormula},
 		},
 		{
 			Name:        qpnCanCrit,
@@ -1757,7 +1757,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ExampleVals:   []string{"fire", "ice"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"elements"},
+			ReferencesInt: []EndpointName{epElements},
 		},
 		{
 			Name:        qpnDelay,
@@ -1772,7 +1772,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Type:          qptIdNul,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:          qpnStatusRemove,
@@ -1780,7 +1780,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Type:          qptIdNul,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:        qpnStatChanges,
@@ -1811,7 +1811,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals:   []string{"wakka", "valefor"},
 			ForList:       false,
 			ForSingle:     true,
-			ReferencesInt: []EndpointName{"player-units"},
+			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
 			Name:           qpnBombWpn,
@@ -1849,7 +1849,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.PlayerAbilityCategory.lookup,
-			ReferencesInt: []EndpointName{"player-ability-category"},
+			ReferencesInt: []EndpointName{epPlayerAbilityCategory},
 		},
 		{
 			Name:        qpnOutsideBattle,
@@ -1886,7 +1886,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals:   []string{"hp", "strength"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"stats"},
+			ReferencesInt: []EndpointName{epStats},
 		},
 		{
 			Name:          qpnUser,
@@ -1895,7 +1895,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals:   []string{"characters", "tidus"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"character-classes"},
+			ReferencesInt: []EndpointName{epCharacterClasses},
 		},
 		{
 			Name:          qpnStdSg,
@@ -1904,7 +1904,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals:   []string{"tidus", "wakka"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"characters"},
+			ReferencesInt: []EndpointName{epCharacters},
 		},
 		{
 			Name:          qpnExpSg,
@@ -1913,7 +1913,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals:   []string{"tidus", "wakka"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"characters"},
+			ReferencesInt: []EndpointName{epCharacters},
 		},
 		{
 			Name:          qpnLearnItem,
@@ -1921,7 +1921,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"items"},
+			ReferencesInt: []EndpointName{epItems},
 		},
 		{
 			Name:        qpnTargetType,
@@ -1966,7 +1966,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{"attack-type"},
+			ReferencesInt: []EndpointName{epAttackType},
 		},
 		{
 			Name:          qpnDamageType,
@@ -1975,7 +1975,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.DamageType.lookup,
-			ReferencesInt: []EndpointName{"damage-type"},
+			ReferencesInt: []EndpointName{epDamageType},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -1984,7 +1984,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{"damage-formula"},
+			ReferencesInt: []EndpointName{epDamageFormula},
 		},
 		{
 			Name:          qpnElement,
@@ -1993,7 +1993,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ExampleVals:   []string{"fire", "ice"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"elements"},
+			ReferencesInt: []EndpointName{epElements},
 		},
 		{
 			Name:        qpnDelay,
@@ -2008,7 +2008,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Type:          qptIdNul,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:          qpnStatusRemove,
@@ -2016,7 +2016,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Type:          qptIdNul,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:        qpnStatChanges,
@@ -2054,7 +2054,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ExampleVals:   []string{"characters", "tidus"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"character-classes"},
+			ReferencesInt: []EndpointName{epCharacterClasses},
 		},
 		{
 			Name:          qpnRelatedStat,
@@ -2063,7 +2063,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ExampleVals:   []string{"hp", "strength"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"stats"},
+			ReferencesInt: []EndpointName{epStats},
 		},
 		{
 			Name:        qpnTargetType,
@@ -2080,7 +2080,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{"attack-type"},
+			ReferencesInt: []EndpointName{epAttackType},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -2089,7 +2089,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{"damage-formula"},
+			ReferencesInt: []EndpointName{epDamageFormula},
 		},
 		{
 			Name:        qpnCanCrit,
@@ -2105,7 +2105,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ExampleVals:   []string{"fire", "ice"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"elements"},
+			ReferencesInt: []EndpointName{epElements},
 		},
 		{
 			Name:        qpnDelay,
@@ -2120,7 +2120,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			Type:          qptIdNul,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:          qpnStatusRemove,
@@ -2128,7 +2128,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			Type:          qptIdNul,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:        qpnStatChanges,
@@ -2159,7 +2159,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.ItemCategory.lookup,
-			ReferencesInt: []EndpointName{"item-category"},
+			ReferencesInt: []EndpointName{epItemCategory},
 		},
 		{
 			Name:        qpnOutsideBattle,
@@ -2175,7 +2175,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ExampleVals:   []string{"hp", "strength"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"stats"},
+			ReferencesInt: []EndpointName{epStats},
 		},
 		{
 			Name:        qpnTargetType,
@@ -2192,7 +2192,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{"attack-type"},
+			ReferencesInt: []EndpointName{epAttackType},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -2201,7 +2201,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{"damage-formula"},
+			ReferencesInt: []EndpointName{epDamageFormula},
 		},
 		{
 			Name:          qpnElement,
@@ -2210,7 +2210,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ExampleVals:   []string{"fire", "ice"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"elements"},
+			ReferencesInt: []EndpointName{epElements},
 		},
 		{
 			Name:        qpnDelay,
@@ -2225,7 +2225,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Type:          qptIdNul,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:          qpnStatusRemove,
@@ -2233,7 +2233,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Type:          qptIdNul,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:        qpnStatChanges,
@@ -2264,7 +2264,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ExampleVals:   []string{"wakka", "valefor"},
 			ForList:       false,
 			ForSingle:     true,
-			ReferencesInt: []EndpointName{"player-units"},
+			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
 			Name:           qpnBombWpn,
@@ -2281,7 +2281,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ExampleVals:   []string{"hp", "strength"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"stats"},
+			ReferencesInt: []EndpointName{epStats},
 		},
 		{
 			Name:          qpnUser,
@@ -2290,7 +2290,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ExampleVals:   []string{"characters", "tidus"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"character-classes"},
+			ReferencesInt: []EndpointName{epCharacterClasses},
 		},
 	}
 
@@ -2307,7 +2307,7 @@ func (cfg *Config) initMiscAbilitiesParams() {
 			ExampleVals:   []string{"wakka", "valefor"},
 			ForList:       false,
 			ForSingle:     true,
-			ReferencesInt: []EndpointName{"player-units"},
+			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
 			Name:           qpnBombWpn,
@@ -2345,7 +2345,7 @@ func (cfg *Config) initMiscAbilitiesParams() {
 			ExampleVals:   []string{"characters", "tidus"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"character-classes"},
+			ReferencesInt: []EndpointName{epCharacterClasses},
 		},
 		{
 			Name:        qpnUserAtk,
@@ -2382,7 +2382,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"monsters"},
+			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:        qpnTargetType,
@@ -2420,7 +2420,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{"attack-type"},
+			ReferencesInt: []EndpointName{epAttackType},
 		},
 		{
 			Name:          qpnDamageType,
@@ -2429,7 +2429,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.DamageType.lookup,
-			ReferencesInt: []EndpointName{"damage-type"},
+			ReferencesInt: []EndpointName{epDamageType},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -2438,7 +2438,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{"damage-formula"},
+			ReferencesInt: []EndpointName{epDamageFormula},
 		},
 		{
 			Name:        qpnCanCrit,
@@ -2461,7 +2461,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ExampleVals:   []string{"fire", "ice"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"elements"},
+			ReferencesInt: []EndpointName{epElements},
 		},
 		{
 			Name:        qpnDelay,
@@ -2476,7 +2476,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Type:          qptIdNul,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:          qpnStatusRemove,
@@ -2484,7 +2484,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Type:          qptIdNul,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"status-conditions"},
+			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 	}
 
@@ -2508,7 +2508,7 @@ func (cfg *Config) initOverdrivesParams() {
 			ExampleVals:   []string{"characters", "tidus"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"character-classes"},
+			ReferencesInt: []EndpointName{epCharacterClasses},
 		},
 	}
 
@@ -2525,7 +2525,7 @@ func (cfg *Config) initSubmenusParams() {
 			ExampleVals:   []string{"main", "left"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"topmenus"},
+			ReferencesInt: []EndpointName{epTopmenus},
 		},
 	}
 
@@ -2542,7 +2542,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       false,
 			ForSingle:     true,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2558,7 +2558,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.ItemType.lookup,
-			ReferencesInt: []EndpointName{"item-type"},
+			ReferencesInt: []EndpointName{epItemType},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2567,7 +2567,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -2600,7 +2600,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation, qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -2609,7 +2609,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:          qpnArea,
@@ -2618,7 +2618,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"area"},
+			ReferencesInt: []EndpointName{epAreas},
 		},
 	}
 
@@ -2635,7 +2635,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       false,
 			ForSingle:     true,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2658,7 +2658,7 @@ func (cfg *Config) initItemsParams() {
 			ExampleVals:   []string{"hp", "strength"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"stats"},
+			ReferencesInt: []EndpointName{epStats},
 		},
 		{
 			Name:          qpnCategory,
@@ -2667,7 +2667,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.ItemCategory.lookup,
-			ReferencesInt: []EndpointName{"item-category"},
+			ReferencesInt: []EndpointName{epItemCategory},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2676,7 +2676,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -2709,7 +2709,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation, qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -2718,7 +2718,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:          qpnArea,
@@ -2727,7 +2727,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"area"},
+			ReferencesInt: []EndpointName{epAreas},
 		},
 	}
 
@@ -2744,7 +2744,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       false,
 			ForSingle:     true,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2753,7 +2753,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:          qpnCategory,
@@ -2762,7 +2762,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.KeyItemCategory.lookup,
-			ReferencesInt: []EndpointName{"key-item-category"},
+			ReferencesInt: []EndpointName{epKeyItemCategory},
 		},
 		{
 			Name:          qpnMethods,
@@ -2780,7 +2780,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation, qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -2789,7 +2789,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:          qpnArea,
@@ -2798,7 +2798,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"area"},
+			ReferencesInt: []EndpointName{epAreas},
 		},
 	}
 
@@ -2815,7 +2815,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       false,
 			ForSingle:     true,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2839,7 +2839,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -2872,7 +2872,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation, qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -2881,7 +2881,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:          qpnArea,
@@ -2890,7 +2890,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"area"},
+			ReferencesInt: []EndpointName{epAreas},
 		},
 	}
 
@@ -2907,7 +2907,7 @@ func (cfg *Config) initPrimersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 	}
 
@@ -2925,7 +2925,7 @@ func (cfg *Config) initMixesParams() {
 			ForList:         false,
 			ForSingle:       true,
 			ForbiddenParams: []QueryParamName{qpnBest},
-			ReferencesInt:   []EndpointName{"items"},
+			ReferencesInt:   []EndpointName{epItems},
 		},
 		{
 			Name:            qpnBest,
@@ -2942,7 +2942,7 @@ func (cfg *Config) initMixesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.MixCategory.lookup,
-			ReferencesInt: []EndpointName{"mix-category"},
+			ReferencesInt: []EndpointName{epMixCategory},
 		},
 		{
 			Name:          qpnReqItem,
@@ -2951,7 +2951,7 @@ func (cfg *Config) initMixesParams() {
 			ExampleVals:   []string{"grenade", "power_sphere"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"items"},
+			ReferencesInt: []EndpointName{epItems},
 		},
 		{
 			Name:           qpnSecondItem,
@@ -2961,7 +2961,7 @@ func (cfg *Config) initMixesParams() {
 			ForList:        true,
 			ForSingle:      false,
 			RequiredParams: []QueryParamName{qpnReqItem},
-			ReferencesInt:  []EndpointName{"items"},
+			ReferencesInt:  []EndpointName{epItems},
 		},
 	}
 
@@ -2978,7 +2978,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       false,
 			ForSingle:     true,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2994,7 +2994,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -3018,7 +3018,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			TypeLookup:    cfg.t.AutoAbilityCategory.lookup,
-			ReferencesInt: []EndpointName{"auto-ability-category"},
+			ReferencesInt: []EndpointName{epAutoAbilityCategory},
 		},
 		{
 			Name:        qpnType,
@@ -3034,7 +3034,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"monsters"},
+			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          qpnMonsterItems,
@@ -3042,7 +3042,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"monsters"},
+			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          qpnShop,
@@ -3050,7 +3050,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"monsters"},
+			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          qpnCharacter,
@@ -3061,7 +3061,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
 			UsableWith:    []QueryParamName{qpnAvailability, qpnMonster, qpnShop},
-			ReferencesInt: []EndpointName{"monsters"},
+			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          qpnMethods,
@@ -3087,7 +3087,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnSublocation, qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"locations"},
+			ReferencesInt: []EndpointName{epLocations},
 		},
 		{
 			Name:          qpnSublocation,
@@ -3096,7 +3096,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnArea, qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"sublocations"},
+			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
 			Name:          qpnArea,
@@ -3105,7 +3105,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			ReplacedBy:    []QueryParamName{qpnAvailability, qpnRepeatable},
-			ReferencesInt: []EndpointName{"area"},
+			ReferencesInt: []EndpointName{epAreas},
 		},
 	}
 
@@ -3121,7 +3121,7 @@ func (cfg *Config) initEquipmentTablesParams() {
 			Type:          qptIdList,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"auto-abilities"},
+			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
 		{
 			Name:        qpnType,
@@ -3162,7 +3162,7 @@ func (cfg *Config) initEquipmentParams() {
 			ForList:       false,
 			ForSingle:     true,
 			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{"availability"},
+			ReferencesInt: []EndpointName{epAvailabilityType},
 		},
 		{
 			Name:          qpnAutoAbilities,
@@ -3170,7 +3170,7 @@ func (cfg *Config) initEquipmentParams() {
 			Type:          qptIdList,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"auto-abilities"},
+			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
 		{
 			Name:          qpnCharacter,
@@ -3179,7 +3179,7 @@ func (cfg *Config) initEquipmentParams() {
 			Type:          qptNameId,
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{"characters"},
+			ReferencesInt: []EndpointName{epCharacters},
 		},
 		{
 			Name:        qpnType,
