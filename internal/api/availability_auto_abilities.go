@@ -18,7 +18,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		return inputIDs, nil
 	}
 
-	reqItem, err := parseBooleanQuery(r, i.queryLookup[qpnReqItem])
+	customize, err := parseBooleanQuery(r, i.queryLookup[qpnCustomize])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		LocContextType: locContext.Type,
 		CharacterID:    h.GetNullInt32(charID),
 		Methods:        methods,
-		ReqItem:        reqItem,
+		Customize:      customize,
 	})
 	if err != nil {
 		return nil, newHTTPErrorAvailability(i.resTypePlural, err)

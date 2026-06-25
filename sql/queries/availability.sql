@@ -294,7 +294,7 @@ WITH w AS (
         sqlc.narg('loc_context_type')::text AS loc_context_type,
         sqlc.narg('character_id')::int AS character_id,
         sqlc.narg('methods')::text[] AS methods,
-        sqlc.arg('req_item')::boolean AS req_item
+        sqlc.arg('customize')::boolean AS customize
 ),
 raw_auto_abilities AS (
     SELECT
@@ -305,7 +305,7 @@ raw_auto_abilities AS (
     JOIN mv_geography g ON aas.area_id = g.area_id
     CROSS JOIN w
     WHERE aas.auto_ability_id = ANY(w.ids)
-    AND w.req_item = FALSE
+    AND w.customize = FALSE
     AND (w.character_id IS NULL OR aas.character_id = w.character_id OR aas.character_id IS NULL)
     AND (w.methods IS NULL OR aas.source_type = ANY(w.methods))
     AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
@@ -335,7 +335,7 @@ raw_auto_abilities AS (
             JOIN mv_geography g ON mis.area_id = g.area_id
             CROSS JOIN w
             WHERE aa.id = ANY(w.ids)
-            AND w.req_item = TRUE
+            AND w.customize = TRUE
             AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
         ) AS calc
         CROSS JOIN w

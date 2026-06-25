@@ -42,6 +42,7 @@ const (
 	qpnContainsItem     QueryParamName = "contains_item"
 	qpnCopycat          QueryParamName = "copycat"
 	qpnCreationArea     QueryParamName = "creation_area"
+	qpnCustomize		QueryParamName = "customize"
 	qpnDamageFormula    QueryParamName = "damage_formula"
 	qpnDamageType       QueryParamName = "damage_type"
 	qpnDarkable         QueryParamName = "darkable"
@@ -124,7 +125,7 @@ func qpnsToNamedParams(qpns []QueryParamName) []NamedParam {
 	if qpns == nil {
 		return nil
 	}
-	
+
 	nps := make([]NamedParam, len(qpns))
 
 	for i, sn := range qpns {
@@ -175,16 +176,14 @@ const (
 	qvQuest     QueryValue = "quest"
 	qvShop      QueryValue = "shop"
 	qvTreasure  QueryValue = "treasure"
-
-	qvSteal QueryValue = "steal"
-	qvDrop  QueryValue = "drop"
-	qvBribe QueryValue = "bribe"
-	qvOther QueryValue = "other"
-
-	qvF QueryValue = "f"
-	qvL QueryValue = "l"
-	qvW QueryValue = "w"
-	qvI QueryValue = "i"
+	qvSteal     QueryValue = "steal"
+	qvDrop      QueryValue = "drop"
+	qvBribe     QueryValue = "bribe"
+	qvOther     QueryValue = "other"
+	qvF         QueryValue = "f"
+	qvL         QueryValue = "l"
+	qvW         QueryValue = "w"
+	qvI         QueryValue = "i"
 )
 
 func qvsToStrings(qvs []QueryValue) []string {

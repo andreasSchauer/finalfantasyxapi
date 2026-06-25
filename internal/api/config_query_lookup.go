@@ -3073,8 +3073,8 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			AllowedValues: []QueryValue{qvMonster, qvTreasure, qvShop},
 		},
 		{
-			Name:        qpnReqItem,
-			Description: "Converts the 'availability' and 'repeatable' parameters to search auto-abilities based on their required item's sources' availability and/or farmability.",
+			Name:        qpnCustomize,
+			Description: "Converts the 'availability' and 'repeatable' parameters to search for auto-abilities based on their required item's availability and/or farmability.",
 			Type:        qptBool,
 			ForList:     true,
 			ForSingle:   false,

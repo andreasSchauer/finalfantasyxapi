@@ -543,7 +543,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=post&req_item=true",
+				requestURL:     "/api/auto-abilities?availability=post&customize=true",
 				expectedStatus: http.StatusOK,
 			},
 			count:   7,
@@ -551,7 +551,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=post&req_item=false&limit=max",
+				requestURL:     "/api/auto-abilities?availability=post&customize=false&limit=max",
 				expectedStatus: http.StatusOK,
 			},
 			count:   22,

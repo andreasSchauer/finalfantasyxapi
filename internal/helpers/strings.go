@@ -91,3 +91,12 @@ func FormatIntSlice(IDs []int32) string {
 
 	return strings.Join(formattedIDs, ", ")
 }
+
+
+func FormatInt32Ptr(i *int32) string {
+	if i == nil {
+		return ""
+	}
+
+	return string(*i)
+}

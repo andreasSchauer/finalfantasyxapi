@@ -7,7 +7,8 @@ SELECT DISTINCT
     l.name AS location,
     s.name AS sublocation,
     a.name AS area,
-    a.version
+    a.version,
+    a.specification
 FROM areas a
 JOIN sublocations s ON a.sublocation_id = s.id
 JOIN locations l ON s.location_id = l.id;

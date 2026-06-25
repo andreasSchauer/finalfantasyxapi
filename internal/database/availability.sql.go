@@ -239,7 +239,7 @@ WITH w AS (
         $7::text AS loc_context_type,
         $8::int AS character_id,
         $9::text[] AS methods,
-        $10::boolean AS req_item
+        $10::boolean AS customize
 ),
 raw_auto_abilities AS (
     SELECT
@@ -250,7 +250,7 @@ raw_auto_abilities AS (
     JOIN mv_geography g ON aas.area_id = g.area_id
     CROSS JOIN w
     WHERE aas.auto_ability_id = ANY(w.ids)
-    AND w.req_item = FALSE
+    AND w.customize = FALSE
     AND (w.character_id IS NULL OR aas.character_id = w.character_id OR aas.character_id IS NULL)
     AND (w.methods IS NULL OR aas.source_type = ANY(w.methods))
     AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
@@ -280,7 +280,7 @@ raw_auto_abilities AS (
             JOIN mv_geography g ON mis.area_id = g.area_id
             CROSS JOIN w
             WHERE aa.id = ANY(w.ids)
-            AND w.req_item = TRUE
+            AND w.customize = TRUE
             AND (w.loc_context_id IS NULL OR get_loc_ctx_id(w.loc_context_type, g.location_id, g.sublocation_id, g.area_id) = w.loc_context_id)
         ) AS calc
         CROSS JOIN w
@@ -321,7 +321,7 @@ type FilterAutoAbilityIDsByAvailabilityParams struct {
 	LocContextType sql.NullString
 	CharacterID    sql.NullInt32
 	Methods        []string
-	ReqItem        bool
+	Customize      bool
 }
 
 func (q *Queries) FilterAutoAbilityIDsByAvailability(ctx context.Context, arg FilterAutoAbilityIDsByAvailabilityParams) ([]int32, error) {
@@ -335,7 +335,7 @@ func (q *Queries) FilterAutoAbilityIDsByAvailability(ctx context.Context, arg Fi
 		arg.LocContextType,
 		arg.CharacterID,
 		pq.Array(arg.Methods),
-		arg.ReqItem,
+		arg.Customize,
 	)
 	if err != nil {
 		return nil, err
