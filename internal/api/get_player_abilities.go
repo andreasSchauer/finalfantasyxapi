@@ -8,7 +8,7 @@ import (
 )
 
 func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList], id int32) (PlayerAbility, error) {
-	ability, err := verifyParamsAndGet(cfg, r, i, id)
+	ability, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
@@ -55,7 +55,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 }
 
 func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

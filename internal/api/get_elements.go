@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getElement(r *http.Request, i handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList], id int32) (Element, error) {
-	element, err := verifyParamsAndGet(cfg, r, i, id)
+	element, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Element{}, err
 	}
@@ -37,5 +37,5 @@ func (cfg *Config) getElement(r *http.Request, i handlerInput[seeding.Element, E
 }
 
 func (cfg *Config) retrieveElements(r *http.Request, i handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	return verifyParamsAndRetrieve(cfg, r, i)
+	return verifyParamsAndRetrieve(r, i)
 }

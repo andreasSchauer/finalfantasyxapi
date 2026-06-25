@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getAeonCommand(r *http.Request, i handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList], id int32) (AeonCommand, error) {
-	command, err := verifyParamsAndGet(cfg, r, i, id)
+	command, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return AeonCommand{}, err
 	}
@@ -36,5 +36,5 @@ func (cfg *Config) getAeonCommand(r *http.Request, i handlerInput[seeding.AeonCo
 }
 
 func (cfg *Config) retrieveAeonCommands(r *http.Request, i handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	return verifyParamsAndRetrieve(cfg, r, i)
+	return verifyParamsAndRetrieve(r, i)
 }

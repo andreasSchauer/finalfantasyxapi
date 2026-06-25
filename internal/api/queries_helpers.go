@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"net/http"
 	"slices"
+	"strconv"
 	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -95,4 +96,16 @@ func getRawQueryLimit(cfg *Config, r *http.Request) (int, error) {
 	}
 
 	return limit, nil
+}
+
+func getLimitMax(cfg *Config) string {
+	queryParamLimit := cfg.q.defaultParams[qpnLimit]
+
+	for _, input := range queryParamLimit.SpecialInputs {
+		if input.Key == "max" {
+			return strconv.Itoa(input.Val)
+		}
+	}
+
+	return ""
 }

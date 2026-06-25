@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getStat(r *http.Request, i handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList], id int32) (Stat, error) {
-	stat, err := verifyParamsAndGet(cfg, r, i, id)
+	stat, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Stat{}, err
 	}
@@ -39,5 +39,5 @@ func (cfg *Config) getStat(r *http.Request, i handlerInput[seeding.Stat, Stat, N
 }
 
 func (cfg *Config) retrieveStats(r *http.Request, i handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	return verifyParamsAndRetrieve(cfg, r, i)
+	return verifyParamsAndRetrieve(r, i)
 }

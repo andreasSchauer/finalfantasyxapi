@@ -16,7 +16,7 @@ type QueryParam struct {
 	ExampleVals      []string                   `json:"-"`
 	Usage            string                     `json:"usage"`
 	ExampleUses      []string                   `json:"example_uses"`
-	DefaultOnly      bool                       `json:"only_use_alone"`
+	IsExclusive      bool                       `json:"only_use_alone"`
 	ForSingle        bool                       `json:"for_single"`
 	ForList          bool                       `json:"for_list"`
 	ForSegment       *SectionName               `json:"for_segment"`
@@ -209,9 +209,9 @@ func (cfg *Config) completeQueryParamsInit(params []QueryParam, hasSimpleView bo
 	if hasSimpleView {
 		queryParamIDs := QueryParam{
 			Name:        qpnIDs,
-			Description: "Used to input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",
+			Description: "Used to manually input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",
 			Type:        qptIdList,
-			DefaultOnly: true,
+			IsExclusive: true,
 			ForList:     false,
 			ForSingle:   false,
 			ForSegment:  getSnPtr(snSimple),

@@ -8,7 +8,7 @@ import (
 )
 
 func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList], id int32) (MasterItem, error) {
-	masterItem, err := verifyParamsAndGet(cfg, r, i, id)
+	masterItem, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return MasterItem{}, err
 	}
@@ -45,7 +45,7 @@ func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterI
 }
 
 func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

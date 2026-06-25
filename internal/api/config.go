@@ -27,7 +27,7 @@ type Config struct {
 
 func ConfigInit() (*Config, error) {
 	const domain = "localhost:8080"
-	const fetchLimit = 50
+	const fetchLimit = 1000
 	const connLimit = 25
 
 	dbURL := os.Getenv("DB_URL")

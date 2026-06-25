@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList], id int32) (CelestialWeapon, error) {
-	celestialWeapon, err := verifyParamsAndGet(cfg, r, i, id)
+	celestialWeapon, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return CelestialWeapon{}, err
 	}
@@ -56,7 +56,7 @@ func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.Ce
 }
 
 func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

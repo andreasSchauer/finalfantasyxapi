@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList], id int32) (Primer, error) {
-	primer, err := verifyParamsAndGet(cfg, r, i, id)
+	primer, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Primer{}, err
 	}
@@ -34,7 +34,7 @@ func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Pri
 }
 
 func (cfg *Config) retrievePrimers(r *http.Request, i handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

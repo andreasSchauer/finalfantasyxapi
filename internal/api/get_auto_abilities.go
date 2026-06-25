@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList], id int32) (AutoAbility, error) {
-	autoAbility, err := verifyParamsAndGet(cfg, r, i, id)
+	autoAbility, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return AutoAbility{}, err
 	}
@@ -53,7 +53,7 @@ func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seeding.AutoAb
 }
 
 func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

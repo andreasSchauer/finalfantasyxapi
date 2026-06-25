@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList], id int32) (Sidequest, error) {
-	sidequest, err := verifyParamsAndGet(cfg, r, i, id)
+	sidequest, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Sidequest{}, err
 	}
@@ -31,7 +31,7 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 }
 
 func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

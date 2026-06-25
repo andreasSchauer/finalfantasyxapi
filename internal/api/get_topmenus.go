@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList], id int32) (Topmenu, error) {
-	topmenu, err := verifyParamsAndGet(cfg, r, i, id)
+	topmenu, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Topmenu{}, err
 	}
@@ -51,5 +51,5 @@ func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, T
 }
 
 func (cfg *Config) retrieveTopmenus(r *http.Request, i handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	return verifyParamsAndRetrieve(cfg, r, i)
+	return verifyParamsAndRetrieve(r, i)
 }

@@ -27,9 +27,9 @@ func verifyDefaultParamsOnly[T seeding.Lookupable, R any, A APIResource, L APIRe
 	return nil
 }
 
-func verifyQueryParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id *int32, segment *string) error {
+func verifyQueryParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], id *int32, segment *string) error {
 	q := r.URL.Query()
-	canUseDefaultOnlyParam := verifyDefaultOnlyParam(cfg, q, i.queryLookup)
+	canUseExclusiveParam := verifyExclusiveParam(q, i.queryLookup)
 
 	for query := range q {
 		queryParam, ok := i.queryLookup[QueryParamName(query)]
@@ -37,8 +37,8 @@ func verifyQueryParams[T seeding.Lookupable, R any, A APIResource, L APIResource
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s. use /api/%s/parameters for available parameters.", query, i.endpoint, i.endpoint), nil)
 		}
 
-		if queryParam.DefaultOnly && !canUseDefaultOnlyParam {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' can only be used with default parameters. available default parameters: %s.", queryParam.Name, queryMapToString(cfg.q.defaultParams)), nil)
+		if queryParam.IsExclusive && !canUseExclusiveParam {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' can't be combined with other parameters.", queryParam.Name), nil)
 		}
 
 		err := verifyQueryUsage(q, queryParam, i.endpoint, id, segment)
@@ -50,25 +50,14 @@ func verifyQueryParams[T seeding.Lookupable, R any, A APIResource, L APIResource
 	return nil
 }
 
-func verifyDefaultOnlyParam(cfg *Config, q url.Values, lookup map[QueryParamName]QueryParam) bool {
-	defaultOnlyCount := 0
-
+func verifyExclusiveParam(q url.Values, lookup map[QueryParamName]QueryParam) bool {
 	for query := range q {
 		queryParam, ok := lookup[QueryParamName(query)]
 		if !ok {
 			return false
 		}
 
-		if queryParam.DefaultOnly {
-			defaultOnlyCount++
-			if defaultOnlyCount > 1 {
-				return false
-			}
-
-			continue
-		}
-
-		if !isDefaultParam(cfg, QueryParamName(query)) {
+		if queryParam.IsExclusive && len(q) > 1 {
 			return false
 		}
 	}

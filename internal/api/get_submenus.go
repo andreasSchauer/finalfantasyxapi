@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList], id int32) (Submenu, error) {
-	submenu, err := verifyParamsAndGet(cfg, r, i, id)
+	submenu, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Submenu{}, err
 	}
@@ -37,7 +37,7 @@ func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, S
 }
 
 func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

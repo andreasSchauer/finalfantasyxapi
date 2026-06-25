@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList], id int32) (EquipmentName, error) {
-	equipment, err := verifyParamsAndGet(cfg, r, i, id)
+	equipment, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return EquipmentName{}, err
 	}
@@ -37,7 +37,7 @@ func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.Equipmen
 }
 
 func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

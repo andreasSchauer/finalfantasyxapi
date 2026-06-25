@@ -99,7 +99,7 @@ func getMonsterSectionRelations(cfg *Config, r *http.Request, monIDs []int32) (m
 	for _, monID := range monIDs {
 		relationMap := make(map[Relation][]int32)
 
-		relationMap[RelationMonsters], monsterJunctions = getJunctionIDs(monID, monsterJunctions)
+		relationMap[RelationAreas], monsterJunctions = getJunctionIDs(monID, monsterJunctions)
 
 		relations[monID] = relationMap
 	}

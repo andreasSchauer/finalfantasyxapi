@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getQuest(r *http.Request, i handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList], id int32) (Quest, error) {
-	quest, err := verifyParamsAndGet(cfg, r, i, id)
+	quest, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Quest{}, err
 	}
@@ -26,7 +26,7 @@ func (cfg *Config) getQuest(r *http.Request, i handlerInput[seeding.Quest, Quest
 }
 
 func (cfg *Config) retrieveQuests(r *http.Request, i handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

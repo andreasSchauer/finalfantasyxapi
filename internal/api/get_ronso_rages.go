@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList], id int32) (RonsoRage, error) {
-	ronsoRage, err := verifyParamsAndGet(cfg, r, i, id)
+	ronsoRage, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return RonsoRage{}, err
 	}
@@ -30,5 +30,5 @@ func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seeding.RonsoRag
 }
 
 func (cfg *Config) retrieveRonsoRages(r *http.Request, i handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	return verifyParamsAndRetrieve(cfg, r, i)
+	return verifyParamsAndRetrieve(r, i)
 }

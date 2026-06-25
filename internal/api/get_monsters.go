@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList], id int32) (Monster, error) {
-	monster, err := verifyParamsAndGet(cfg, r, i, id)
+	monster, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -65,7 +65,7 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 }
 
 func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

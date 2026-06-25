@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList], id int32) (Ability, error) {
-	ability, err := verifyParamsAndGet(cfg, r, i, id)
+	ability, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Ability{}, err
 	}
@@ -35,7 +35,7 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 }
 
 func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList], id int32) (Song, error) {
-	song, err := verifyParamsAndGet(cfg, r, i, id)
+	song, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Song{}, err
 	}
@@ -53,7 +53,7 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, N
 }
 
 func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList], id int32) (Property, error) {
-	property, err := verifyParamsAndGet(cfg, r, i, id)
+	property, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Property{}, err
 	}
@@ -37,5 +37,5 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property,
 }
 
 func (cfg *Config) retrieveProperties(r *http.Request, i handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	return verifyParamsAndRetrieve(cfg, r, i)
+	return verifyParamsAndRetrieve(r, i)
 }

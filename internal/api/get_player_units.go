@@ -8,7 +8,7 @@ import (
 )
 
 func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList], id int32) (PlayerUnit, error) {
-	unit, err := verifyParamsAndGet(cfg, r, i, id)
+	unit, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return PlayerUnit{}, err
 	}
@@ -57,7 +57,7 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerU
 }
 
 func (cfg *Config) retrievePlayerUnits(r *http.Request, i handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

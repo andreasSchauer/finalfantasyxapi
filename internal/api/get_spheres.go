@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getSphere(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList], id int32) (Sphere, error) {
-	sphere, err := verifyParamsAndGet(cfg, r, i, id)
+	sphere, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Sphere{}, err
 	}
@@ -41,7 +41,7 @@ func (cfg *Config) getSphere(r *http.Request, i handlerInput[seeding.Sphere, Sph
 }
 
 func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

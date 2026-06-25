@@ -8,7 +8,7 @@ import (
 )
 
 func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList], id int32) (EquipmentTable, error) {
-	table, err := verifyParamsAndGet(cfg, r, i, id)
+	table, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return EquipmentTable{}, err
 	}
@@ -37,7 +37,7 @@ func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seeding.Equ
 }
 
 func (cfg *Config) retrieveEquipmentTables(r *http.Request, i handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList], id int32) (Treasure, error) {
-	treasure, err := verifyParamsAndGet(cfg, r, i, id)
+	treasure, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Treasure{}, err
 	}
@@ -29,7 +29,7 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 }
 
 func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

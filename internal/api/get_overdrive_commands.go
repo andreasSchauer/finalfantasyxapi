@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList], id int32) (OverdriveCommand, error) {
-	command, err := verifyParamsAndGet(cfg, r, i, id)
+	command, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return OverdriveCommand{}, err
 	}
@@ -32,5 +32,5 @@ func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.O
 }
 
 func (cfg *Config) retrieveOverdriveCommands(r *http.Request, i handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	return verifyParamsAndRetrieve(cfg, r, i)
+	return verifyParamsAndRetrieve(r, i)
 }

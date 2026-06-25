@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList], id int32) (FMV, error) {
-	fmv, err := verifyParamsAndGet(cfg, r, i, id)
+	fmv, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return FMV{}, err
 	}
@@ -25,7 +25,7 @@ func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, Name
 }
 
 func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getKeyItem(r *http.Request, i handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList], id int32) (KeyItem, error) {
-	keyItem, err := verifyParamsAndGet(cfg, r, i, id)
+	keyItem, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return KeyItem{}, err
 	}
@@ -35,7 +35,7 @@ func (cfg *Config) getKeyItem(r *http.Request, i handlerInput[seeding.KeyItem, K
 }
 
 func (cfg *Config) retrieveKeyItems(r *http.Request, i handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

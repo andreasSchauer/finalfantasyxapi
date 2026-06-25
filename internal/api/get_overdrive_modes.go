@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList], id int32) (OverdriveMode, error) {
-	mode, err := verifyParamsAndGet(cfg, r, i, id)
+	mode, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return OverdriveMode{}, err
 	}
@@ -26,7 +26,7 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 }
 
 func (cfg *Config) retrieveOverdriveModes(r *http.Request, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

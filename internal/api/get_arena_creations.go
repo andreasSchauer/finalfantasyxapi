@@ -8,7 +8,7 @@ import (
 )
 
 func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList], id int32) (ArenaCreation, error) {
-	creation, err := verifyParamsAndGet(cfg, r, i, id)
+	creation, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return ArenaCreation{}, err
 	}
@@ -37,7 +37,7 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 }
 
 func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

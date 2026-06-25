@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList], id int32) (Character, error) {
-	character, err := verifyParamsAndGet(cfg, r, i, id)
+	character, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Character{}, err
 	}
@@ -43,7 +43,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 }
 
 func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

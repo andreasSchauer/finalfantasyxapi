@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList], id int32) (Subquest, error) {
-	subquest, err := verifyParamsAndGet(cfg, r, i, id)
+	subquest, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Subquest{}, err
 	}
@@ -30,7 +30,7 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 }
 
 func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

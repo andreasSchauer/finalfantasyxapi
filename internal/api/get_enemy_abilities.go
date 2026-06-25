@@ -8,7 +8,7 @@ import (
 )
 
 func (cfg *Config) getEnemyAbility(r *http.Request, i handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList], id int32) (EnemyAbility, error) {
-	ability, err := verifyParamsAndGet(cfg, r, i, id)
+	ability, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return EnemyAbility{}, err
 	}
@@ -37,7 +37,7 @@ func (cfg *Config) getEnemyAbility(r *http.Request, i handlerInput[seeding.Enemy
 
 func (cfg *Config) retrieveEnemyAbilities(r *http.Request, i handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	abilityType := database.AbilityTypeEnemyAbility
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

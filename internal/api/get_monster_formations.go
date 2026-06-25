@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList], id int32) (MonsterFormation, error) {
-	formation, err := verifyParamsAndGet(cfg, r, i, id)
+	formation, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return MonsterFormation{}, err
 	}
@@ -29,7 +29,7 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 }
 
 func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

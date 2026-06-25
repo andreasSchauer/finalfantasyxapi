@@ -8,7 +8,7 @@ import (
 )
 
 func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList], id int32) (ItemAbility, error) {
-	ability, err := verifyParamsAndGet(cfg, r, i, id)
+	ability, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return ItemAbility{}, err
 	}
@@ -39,7 +39,7 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.ItemAb
 }
 
 func (cfg *Config) retrieveItemAbilities(r *http.Request, i handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

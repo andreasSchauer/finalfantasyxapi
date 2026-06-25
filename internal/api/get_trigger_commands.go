@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList], id int32) (TriggerCommand, error) {
-	ability, err := verifyParamsAndGet(cfg, r, i, id)
+	ability, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
@@ -51,7 +51,7 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.Tri
 }
 
 func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

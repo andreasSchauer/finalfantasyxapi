@@ -232,21 +232,36 @@ func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 
 func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := string(snSimple)
+
+	_, ok := i.subsections[snSimple]
+	if !ok {
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("simple view is not available for endpoint /%s.", i.endpoint), nil)
+		return
+	}
+
+	var ids []int32
+
+	err := verifyQueryParams(r, i, nil, &segment)
+	if handleHTTPError(w, err) {
+		return
+	}
+	
 	queryParamIDs := i.queryLookup[qpnIDs]
-	_, err := checkEmptyQuery(r, queryParamIDs)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "parameter 'ids' can't be empty.", err)
-		return
-	}
+	_, err = checkEmptyQuery(r, queryParamIDs)
+	if queryIsEmpty(err) {
+		ids, err = i.retrieveFunc(r, i)
+		if handleHTTPError(w, err) {
+			return
+		}
+	} else {
+		ids, err = parseIdListQuery(cfg, r, queryParamIDs, i.objLookup)
+		if handleHTTPError(w, err) {
+			return
+		}
 
-	err = verifyQueryParams(cfg, r, i, nil, &segment)
-	if handleHTTPError(w, err) {
-		return
-	}
-
-	ids, err := parseIdListQuery(cfg, r, queryParamIDs, i.objLookup)
-	if handleHTTPError(w, err) {
-		return
+		q := r.URL.Query()
+		q.Set(string(qpnLimit), getLimitMax(cfg))
+		r.URL.RawQuery = q.Encode()
 	}
 
 	resources, err := createSimpleResources(cfg, r, ids, i.subsections[SectionName(segment)])

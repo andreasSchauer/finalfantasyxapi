@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32) (Sublocation, error) {
-	sublocation, err := verifyParamsAndGet(cfg, r, i, id)
+	sublocation, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Sublocation{}, err
 	}
@@ -41,7 +41,7 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Subloc
 }
 
 func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

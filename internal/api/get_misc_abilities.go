@@ -8,7 +8,7 @@ import (
 )
 
 func (cfg *Config) getMiscAbility(r *http.Request, i handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList], id int32) (MiscAbility, error) {
-	ability, err := verifyParamsAndGet(cfg, r, i, id)
+	ability, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return MiscAbility{}, err
 	}
@@ -42,7 +42,7 @@ func (cfg *Config) getMiscAbility(r *http.Request, i handlerInput[seeding.MiscAb
 }
 
 func (cfg *Config) retrieveMiscAbilities(r *http.Request, i handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

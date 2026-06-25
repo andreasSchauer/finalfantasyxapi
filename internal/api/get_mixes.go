@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList], id int32) (Mix, error) {
-	mix, err := verifyParamsAndGet(cfg, r, i, id)
+	mix, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Mix{}, err
 	}
@@ -33,7 +33,7 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, Name
 }
 
 func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}

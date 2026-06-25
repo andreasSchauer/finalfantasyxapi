@@ -7,7 +7,7 @@ import (
 )
 
 func (cfg *Config) getStatusCondition(r *http.Request, i handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList], id int32) (StatusCondition, error) {
-	status, err := verifyParamsAndGet(cfg, r, i, id)
+	status, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return StatusCondition{}, err
 	}
@@ -41,7 +41,7 @@ func (cfg *Config) getStatusCondition(r *http.Request, i handlerInput[seeding.St
 }
 
 func (cfg *Config) retrieveStatusConditions(r *http.Request, i handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(cfg, r, i)
+	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
