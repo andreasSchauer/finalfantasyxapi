@@ -36,10 +36,10 @@ func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.Equipmen
 	return response, nil
 }
 
-func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
-		return NamedApiResourceList{}, err
+		return nil, err
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{

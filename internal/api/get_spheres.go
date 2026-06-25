@@ -40,10 +40,10 @@ func (cfg *Config) getSphere(r *http.Request, i handlerInput[seeding.Sphere, Sph
 	return response, nil
 }
 
-func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
-		return NamedApiResourceList{}, err
+		return nil, err
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{

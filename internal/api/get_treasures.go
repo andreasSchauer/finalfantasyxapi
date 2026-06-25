@@ -28,10 +28,10 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 	return response, nil
 }
 
-func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]) (UnnamedApiResourceList, error) {
+func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
-		return UnnamedApiResourceList{}, err
+		return nil, err
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{

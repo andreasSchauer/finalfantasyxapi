@@ -36,11 +36,6 @@ func (cfg *Config) getElement(r *http.Request, i handlerInput[seeding.Element, E
 	return response, nil
 }
 
-func (cfg *Config) retrieveElements(r *http.Request, i handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
-	if err != nil {
-		return NamedApiResourceList{}, err
-	}
-
-	return i.resToListFunc(cfg, r, resources)
+func (cfg *Config) retrieveElements(r *http.Request, i handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+	return verifyParamsAndRetrieve(cfg, r, i)
 }

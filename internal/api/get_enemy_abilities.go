@@ -35,11 +35,11 @@ func (cfg *Config) getEnemyAbility(r *http.Request, i handlerInput[seeding.Enemy
 	return response, nil
 }
 
-func (cfg *Config) retrieveEnemyAbilities(r *http.Request, i handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+func (cfg *Config) retrieveEnemyAbilities(r *http.Request, i handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	abilityType := database.AbilityTypeEnemyAbility
 	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
-		return NamedApiResourceList{}, err
+		return nil, err
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{

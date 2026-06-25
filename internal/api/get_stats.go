@@ -38,11 +38,6 @@ func (cfg *Config) getStat(r *http.Request, i handlerInput[seeding.Stat, Stat, N
 	return response, nil
 }
 
-func (cfg *Config) retrieveStats(r *http.Request, i handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
-	if err != nil {
-		return NamedApiResourceList{}, err
-	}
-
-	return i.resToListFunc(cfg, r, resources)
+func (cfg *Config) retrieveStats(r *http.Request, i handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+	return verifyParamsAndRetrieve(cfg, r, i)
 }

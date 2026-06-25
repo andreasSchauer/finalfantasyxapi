@@ -56,10 +56,10 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerU
 	return response, nil
 }
 
-func (cfg *Config) retrievePlayerUnits(r *http.Request, i handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]) (TypedAPIResourceList, error) {
+func (cfg *Config) retrievePlayerUnits(r *http.Request, i handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
-		return TypedAPIResourceList{}, err
+		return nil, err
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{

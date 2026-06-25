@@ -30,10 +30,10 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 	return response, nil
 }
 
-func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]) (QuestApiResourceList, error) {
+func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
-		return QuestApiResourceList{}, err
+		return nil, err
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{})

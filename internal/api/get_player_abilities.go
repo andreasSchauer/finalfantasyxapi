@@ -54,10 +54,10 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 	return response, nil
 }
 
-func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
+func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
-		return NamedApiResourceList{}, err
+		return nil, err
 	}
 	abilityType := database.AbilityTypePlayerAbility
 

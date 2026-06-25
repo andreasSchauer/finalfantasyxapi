@@ -35,11 +35,6 @@ func (cfg *Config) getAeonCommand(r *http.Request, i handlerInput[seeding.AeonCo
 	return response, nil
 }
 
-func (cfg *Config) retrieveAeonCommands(r *http.Request, i handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
-	if err != nil {
-		return NamedApiResourceList{}, err
-	}
-
-	return i.resToListFunc(cfg, r, resources)
+func (cfg *Config) retrieveAeonCommands(r *http.Request, i handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+	return verifyParamsAndRetrieve(cfg, r, i)
 }

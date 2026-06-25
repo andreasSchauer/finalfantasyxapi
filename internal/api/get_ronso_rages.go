@@ -29,11 +29,6 @@ func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seeding.RonsoRag
 	return response, nil
 }
 
-func (cfg *Config) retrieveRonsoRages(r *http.Request, i handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
-	if err != nil {
-		return NamedApiResourceList{}, err
-	}
-
-	return i.resToListFunc(cfg, r, resources)
+func (cfg *Config) retrieveRonsoRages(r *http.Request, i handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+	return verifyParamsAndRetrieve(cfg, r, i)
 }

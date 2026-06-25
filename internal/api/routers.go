@@ -13,7 +13,7 @@ func routerIdOnly[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 
 	switch len(segments) {
 	case 0:
-		handleEndpointList(w, r, i)
+		handleEndpointList(cfg, w, r, i)
 		return
 
 	case 1:
@@ -36,7 +36,7 @@ func routerNameOrID[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 
 	switch len(segments) {
 	case 0:
-		handleEndpointList(w, r, i)
+		handleEndpointList(cfg, w, r, i)
 		return
 
 	case 1:
@@ -59,7 +59,7 @@ func routerNameVersion[T seeding.Lookupable, R any, A APIResource, L APIResource
 
 	switch len(segments) {
 	case 0:
-		handleEndpointList(w, r, i)
+		handleEndpointList(cfg, w, r, i)
 		return
 
 	case 1:

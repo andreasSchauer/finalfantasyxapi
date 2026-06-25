@@ -50,11 +50,6 @@ func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, T
 	return response, nil
 }
 
-func (cfg *Config) retrieveTopmenus(r *http.Request, i handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]) (NamedApiResourceList, error) {
-	resources, err := retrieveAPIResources(cfg, r, i)
-	if err != nil {
-		return NamedApiResourceList{}, err
-	}
-
-	return i.resToListFunc(cfg, r, resources)
+func (cfg *Config) retrieveTopmenus(r *http.Request, i handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+	return verifyParamsAndRetrieve(cfg, r, i)
 }

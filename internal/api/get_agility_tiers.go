@@ -26,10 +26,10 @@ func (cfg *Config) getAgilityTier(r *http.Request, i handlerInput[seeding.Agilit
 	return response, nil
 }
 
-func (cfg *Config) retrieveAgilityTiers(r *http.Request, i handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]) (UnnamedApiResourceList, error) {
+func (cfg *Config) retrieveAgilityTiers(r *http.Request, i handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(cfg, r, i)
 	if err != nil {
-		return UnnamedApiResourceList{}, err
+		return nil, err
 	}
 
 	return filterIDs(cfg, r, i, ids, []filteredIdList{

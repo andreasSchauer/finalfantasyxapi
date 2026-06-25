@@ -7,8 +7,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func handleEndpointList[T seeding.Lookupable, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
-	resourceList, err := i.retrieveFunc(r, i)
+func handleEndpointList[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+	ids, err := i.retrieveFunc(r, i)
+	if handleHTTPError(w, err) {
+		return
+	}
+	resources := idsToAPIResources(cfg, i, ids)
+
+	resourceList, err := i.resToListFunc(cfg, r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}
