@@ -42,7 +42,7 @@ func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seeding.Mod
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.ModifierCategory, ids, qpnCategory, cfg.db.GetModifierIDsByCategory)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		enumListQuery(cfg, r, i, cfg.t.ModifierCategory, ids, qpnCategory, cfg.db.GetModifierIDsByCategory),
 	})
 }

@@ -31,8 +31,8 @@ func (cfg *Config) retrieveQuests(r *http.Request, i handlerInput[seeding.Quest,
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumQuery(r, i, cfg.t.QuestType, ids, qpnType, cfg.db.GetQuestIDsByType)),
-		fidl(boolQuery(r, i, ids, qpnRepeatable, cfg.db.GetQuestIDsByRepeatable)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		enumQuery(r, i, cfg.t.QuestType, ids, qpnType, cfg.db.GetQuestIDsByType),
+		boolQuery(r, i, ids, qpnRepeatable, cfg.db.GetQuestIDsByRepeatable),
 	})
 }

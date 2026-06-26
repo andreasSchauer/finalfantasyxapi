@@ -48,8 +48,8 @@ func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Ch
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(boolQuery(r, i, ids, qpnStoryBased, cfg.db.GetCharacterIDsStoryBased)),
-		fidl(boolQuery(r, i, ids, qpnUnderwater, cfg.db.GetCharacterIDsCanFightUnderwater)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		boolQuery(r, i, ids, qpnStoryBased, cfg.db.GetCharacterIDsStoryBased),
+		boolQuery(r, i, ids, qpnUnderwater, cfg.db.GetCharacterIDsCanFightUnderwater),
 	})
 }

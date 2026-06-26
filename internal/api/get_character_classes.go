@@ -38,7 +38,7 @@ func (cfg *Config) retrieveCharacterClasses(r *http.Request, i handlerInput[seed
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.CharacterClassCategory, ids, qpnCategory, cfg.db.GetCharacterClassesIDsByCategory)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		enumListQuery(cfg, r, i, cfg.t.CharacterClassCategory, ids, qpnCategory, cfg.db.GetCharacterClassesIDsByCategory),
 	})
 }

@@ -57,7 +57,7 @@ func (cfg *Config) retrieveAeons(r *http.Request, i handlerInput[seeding.Aeon, A
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(boolQuery(r, i, ids, qpnOptional, cfg.db.GetAeonIDsOptional)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		boolQuery(r, i, ids, qpnOptional, cfg.db.GetAeonIDsOptional),
 	})
 }

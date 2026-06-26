@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"slices"
@@ -10,13 +11,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getMonstersByElemResists(cfg *Config, r *http.Request, query string, queryParam QueryParam) ([]int32, error) {
+func getMonstersByElemResists(cfg *Config, r *http.Request, ctx context.Context, query string, queryParam QueryParam) ([]int32, error) {
 	ids, err := getElemResistIDs(cfg, query, queryParam)
 	if err != nil {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetMonsterIDsByElemResistIDs(r.Context(), ids)
+	dbIDs, err := cfg.db.GetMonsterIDsByElemResistIDs(ctx, ids)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by elemental affinities.", err)
 	}
@@ -66,13 +67,13 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 	return ids, nil
 }
 
-func getMonstersByStatusResists(cfg *Config, r *http.Request, ids []int32) ([]int32, error) {
+func getMonstersByStatusResists(cfg *Config, r *http.Request, ctx context.Context, ids []int32) ([]int32, error) {
 	resistance, err := verifyMonsterResistance(cfg, r)
 	if err != nil {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetMonsterIDsByStatusResists(r.Context(), database.GetMonsterIDsByStatusResistsParams{
+	dbIDs, err := cfg.db.GetMonsterIDsByStatusResists(ctx, database.GetMonsterIDsByStatusResistsParams{
 		StatusConditionIds: ids,
 		MinResistance:      resistance,
 	})
@@ -94,17 +95,17 @@ func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
 	return int32(resistance), nil
 }
 
-func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]int32, error) {
+func getMonstersByAutoAbility(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.e.monsters
 
 	queryParam := i.queryLookup[qpnIsForced]
 
 	isForced, err := parseBooleanQuery(r, queryParam)
 	if queryIsEmpty(err) {
-		return cfg.db.GetMonsterIDsByAutoAbility(r.Context(), id)
+		return cfg.db.GetMonsterIDsByAutoAbility(ctx, id)
 	}
 
-	dbIDs, err := cfg.db.GetMonsterIDsByAutoAbilityIsForced(r.Context(), database.GetMonsterIDsByAutoAbilityIsForcedParams{
+	dbIDs, err := cfg.db.GetMonsterIDsByAutoAbilityIsForced(ctx, database.GetMonsterIDsByAutoAbilityIsForcedParams{
 		AutoAbilityID: id,
 		IsForced:      isForced,
 	})
@@ -115,7 +116,7 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, id int32) ([]int32, 
 	return dbIDs, nil
 }
 
-func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) {
+func getMonstersByItem(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.e.monsters
 
 	methods, err := getMonsterItemMethods(cfg, r)
@@ -123,7 +124,7 @@ func getMonstersByItem(cfg *Config, r *http.Request, id int32) ([]int32, error) 
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetMonsterIDsByItem(r.Context(), database.GetMonsterIDsByItemParams{
+	dbIDs, err := cfg.db.GetMonsterIDsByItem(ctx, database.GetMonsterIDsByItemParams{
 		ItemID:  id,
 		Methods: methods,
 	})

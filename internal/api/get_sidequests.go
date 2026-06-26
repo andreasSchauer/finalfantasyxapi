@@ -36,5 +36,5 @@ func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Si
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{})
+	return filterIDs(cfg, r, i, ids, []IdFilter{})
 }

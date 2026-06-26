@@ -34,12 +34,12 @@ func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[see
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(idQuery(r, i, ids, qpnMonster, cfg.l.Monsters, cfg.db.GetMonsterFormationIDsByMonster)),
-		fidl(idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetMonsterFormationIDsByLocation)),
-		fidl(idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetMonsterFormationIDsBySublocation)),
-		fidl(idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetMonsterFormationIDsByArea)),
-		fidl(boolQuery(r, i, ids, qpnAmbush, cfg.db.GetMonsterFormationIDsByForcedAmbush)),
-		fidl(enumListQuery(cfg, r, i, cfg.t.MonsterFormationCategory, ids, qpnCategory, cfg.db.GetMonsterFormationIDsByCategory)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		idQuery(r, i, ids, qpnMonster, cfg.l.Monsters, cfg.db.GetMonsterFormationIDsByMonster),
+		idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetMonsterFormationIDsByLocation),
+		idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetMonsterFormationIDsBySublocation),
+		idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetMonsterFormationIDsByArea),
+		boolQuery(r, i, ids, qpnAmbush, cfg.db.GetMonsterFormationIDsByForcedAmbush),
+		enumListQuery(cfg, r, i, cfg.t.MonsterFormationCategory, ids, qpnCategory, cfg.db.GetMonsterFormationIDsByCategory),
 	})
 }

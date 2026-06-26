@@ -35,15 +35,13 @@ func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.Ce
 	return response, nil
 }
 
-
-
 func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumQuery(r, i, cfg.t.CelestialFormula, ids, qpnFormula, cfg.db.GetCelestialWeaponIDsByFormula)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		enumQuery(r, i, cfg.t.CelestialFormula, ids, qpnFormula, cfg.db.GetCelestialWeaponIDsByFormula),
 	})
 }

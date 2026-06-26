@@ -34,14 +34,14 @@ func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Tre
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetLocationTreasureIDs)),
-		fidl(idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetSublocationTreasureIDs)),
-		fidl(idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetAreaTreasureIDs)),
-		fidl(idQuery(r, i, ids, qpnItem, cfg.l.Items, cfg.db.GetTreasureIDsByItem)),
-		fidl(joinedQuery(cfg, r, i, ids, []QueryParamName{qpnAutoAbility, qpnEmptySlots, qpnCharacter}, filterTreasuresEquipment)),
-		fidl(boolQuery(r, i, ids, qpnAnima, cfg.db.GetTreasureIDsByIsAnimaTreasure)),
-		fidl(enumQuery(r, i, cfg.t.LootType, ids, qpnLootType, cfg.db.GetTreasureIDsByLootType)),
-		fidl(enumQuery(r, i, cfg.t.TreasureType, ids, qpnTreasureType, cfg.db.GetTreasureIDsByTreasureType)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetLocationTreasureIDs),
+		idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetSublocationTreasureIDs),
+		idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetAreaTreasureIDs),
+		idQuery(r, i, ids, qpnItem, cfg.l.Items, cfg.db.GetTreasureIDsByItem),
+		joinedQuery(cfg, r, i, ids, []QueryParamName{qpnAutoAbility, qpnEmptySlots, qpnCharacter}, filterTreasuresEquipment),
+		boolQuery(r, i, ids, qpnAnima, cfg.db.GetTreasureIDsByIsAnimaTreasure),
+		enumQuery(r, i, cfg.t.LootType, ids, qpnLootType, cfg.db.GetTreasureIDsByLootType),
+		enumQuery(r, i, cfg.t.TreasureType, ids, qpnTreasureType, cfg.db.GetTreasureIDsByTreasureType),
 	})
 }

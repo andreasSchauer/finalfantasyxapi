@@ -50,11 +50,11 @@ func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.M
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.ItemType, ids, qpnType, cfg.db.GetMasterItemIDsByType)),
-		fidl(valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetMasterItemIDsByMethods)),
-		fidl(idQueryWrapper(cfg, r, i, ids, qpnLocation, cfg.e.locations.objLookup, getMasterItemsByLocation)),
-		fidl(idQueryWrapper(cfg, r, i, ids, qpnSublocation, cfg.e.sublocations.objLookup, getMasterItemsBySublocation)),
-		fidl(idQueryWrapper(cfg, r, i, ids, qpnArea, cfg.e.areas.objLookup, getMasterItemsByArea)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		enumListQuery(cfg, r, i, cfg.t.ItemType, ids, qpnType, cfg.db.GetMasterItemIDsByType),
+		valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetMasterItemIDsByMethods),
+		idQueryWrapper(cfg, r, i, ids, qpnLocation, cfg.e.locations.objLookup, getMasterItemsByLocation),
+		idQueryWrapper(cfg, r, i, ids, qpnSublocation, cfg.e.sublocations.objLookup, getMasterItemsBySublocation),
+		idQueryWrapper(cfg, r, i, ids, qpnArea, cfg.e.areas.objLookup, getMasterItemsByArea),
 	})
 }

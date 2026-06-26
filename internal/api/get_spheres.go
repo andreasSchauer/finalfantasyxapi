@@ -46,11 +46,11 @@ func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Spher
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.SphereColor, ids, qpnColor, cfg.db.GetSphereIDsByColor)),
-		fidl(idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetSphereIDsByLocation)),
-		fidl(idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetSphereIDsBySublocation)),
-		fidl(idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetSphereIDsByArea)),
-		fidl(valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetSphereIDsByMethods)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		enumListQuery(cfg, r, i, cfg.t.SphereColor, ids, qpnColor, cfg.db.GetSphereIDsByColor),
+		idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetSphereIDsByLocation),
+		idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetSphereIDsBySublocation),
+		idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetSphereIDsByArea),
+		valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetSphereIDsByMethods),
 	})
 }

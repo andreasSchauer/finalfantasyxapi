@@ -9,7 +9,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func filterShopsEquipment(cfg *Config, r *http.Request) ([]int32, error) {
+func filterShopsEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]int32, error) {
 	i := cfg.e.shops
 
 	autoAbilityID, err := getQueryIdPtr(r, cfg.e.autoAbilities, qpnAutoAbility, i.queryLookup)
@@ -27,7 +27,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request) ([]int32, error) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetShopIDsEquipmentFilter(context.Background(), database.GetShopIDsEquipmentFilterParams{
+	dbIDs, err := cfg.db.GetShopIDsEquipmentFilter(ctx, database.GetShopIDsEquipmentFilterParams{
 		AutoAbilityID: h.GetNullInt32(autoAbilityID),
 		CharacterID:   h.GetNullInt32(charID),
 		EmptySlots:    h.SliceOrNil(emptySlots),
@@ -39,7 +39,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterTreasuresEquipment(cfg *Config, r *http.Request) ([]int32, error) {
+func filterTreasuresEquipment(cfg *Config, r *http.Request,  ctx context.Context) ([]int32, error) {
 	i := cfg.e.treasures
 
 	autoAbilityID, err := getQueryIdPtr(r, cfg.e.autoAbilities, qpnAutoAbility, i.queryLookup)
@@ -57,7 +57,7 @@ func filterTreasuresEquipment(cfg *Config, r *http.Request) ([]int32, error) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetTreasureIDsEquipmentFilter(context.Background(), database.GetTreasureIDsEquipmentFilterParams{
+	dbIDs, err := cfg.db.GetTreasureIDsEquipmentFilter(ctx, database.GetTreasureIDsEquipmentFilterParams{
 		AutoAbilityID: h.GetNullInt32(autoAbilityID),
 		CharacterID:   h.GetNullInt32(charID),
 		EmptySlots:    h.SliceOrNil(emptySlots),

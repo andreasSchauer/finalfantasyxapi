@@ -42,8 +42,8 @@ func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seedin
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.ArenaCreationCategory, ids, qpnCategory, cfg.db.GetArenaCreationIDsByCategory)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		enumListQuery(cfg, r, i, cfg.t.ArenaCreationCategory, ids, qpnCategory, cfg.db.GetArenaCreationIDsByCategory),
 	})
 }
 

@@ -51,8 +51,8 @@ func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seedi
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSing, cfg.l.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass)),
-		fidl(nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSing, cfg.l.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSing, cfg.l.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
+		nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSing, cfg.l.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
 	})
 }

@@ -1,13 +1,14 @@
 package api
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, id int32) ([]int32, error) {
+func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.e.autoAbilities
 
 	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, qpnCharacter, i.queryLookup)
@@ -15,7 +16,7 @@ func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, id int32) ([]int32,
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetAutoAbilityIDsByMonster(r.Context(), database.GetAutoAbilityIDsByMonsterParams{
+	dbIDs, err := cfg.db.GetAutoAbilityIDsByMonster(ctx, database.GetAutoAbilityIDsByMonsterParams{
 		MonsterID:   id,
 		CharacterID: h.GetNullInt32(charIdPtr),
 	})
@@ -26,7 +27,7 @@ func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, id int32) ([]int32,
 	return dbIDs, nil
 }
 
-func getAutoAbilitiesByShop(cfg *Config, r *http.Request, id int32) ([]int32, error) {
+func getAutoAbilitiesByShop(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.e.autoAbilities
 
 	charIdPtr, err := getQueryNameIdPtr(r, cfg.e.characters, qpnCharacter, i.queryLookup)
@@ -34,7 +35,7 @@ func getAutoAbilitiesByShop(cfg *Config, r *http.Request, id int32) ([]int32, er
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetAutoAbilityIDsByShop(r.Context(), database.GetAutoAbilityIDsByShopParams{
+	dbIDs, err := cfg.db.GetAutoAbilityIDsByShop(ctx, database.GetAutoAbilityIDsByShopParams{
 		ShopID:      id,
 		CharacterID: h.GetNullInt32(charIdPtr),
 	})

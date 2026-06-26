@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strings"
@@ -9,22 +10,24 @@ import (
 )
 
 // used for query filters that can't really be generalized. this one simply checks, if it's empty and then calls the wrapperFn
-func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, wrapperFn func(*Config, *http.Request, string, QueryParam) ([]int32, error)) ([]int32, error) {
-	queryParam := i.queryLookup[queryName]
-	query, err := basicQueryChecks(r, queryParam, i.queryLookup)
-	if err != nil {
-		return inputIDs, nil
-	}
+func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, wrapperFn func(*Config, *http.Request, context.Context, string, QueryParam) ([]int32, error)) IdFilter {
+	return func (ctx context.Context) ([]int32, error) {
+		queryParam := i.queryLookup[queryName]
+		query, err := basicQueryChecks(r, queryParam, i.queryLookup)
+		if err != nil {
+			return inputIDs, nil
+		}
 
-	dbIDs, err := wrapperFn(cfg, r, query, queryParam)
-	if errors.Is(err, errQueryRedirect) {
-		return inputIDs, nil
-	}
-	if err != nil {
-		return nil, err
-	}
+		dbIDs, err := wrapperFn(cfg, r, ctx, query, queryParam)
+		if errors.Is(err, errQueryRedirect) {
+			return inputIDs, nil
+		}
+		if err != nil {
+			return nil, err
+		}
 
-	return dbIDs, nil
+		return dbIDs, nil
+	}
 }
 
 func basicQueryChecks(r *http.Request, queryParam QueryParam, queryLookup map[QueryParamName]QueryParam) (string, error) {

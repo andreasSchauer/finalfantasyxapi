@@ -30,7 +30,7 @@ func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seeding.FMV, FMV
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetLocationFmvIDs)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetLocationFmvIDs),
 	})
 }

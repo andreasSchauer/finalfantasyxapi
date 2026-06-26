@@ -7,6 +7,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+type IdFilter func(context.Context) ([]int32, error)
 type DbQueryNoInput func(context.Context) ([]int32, error)
 type DbQueryIntOne func(context.Context, int32) (int32, error)
 type DbQueryIntMany func(context.Context, int32) ([]int32, error)

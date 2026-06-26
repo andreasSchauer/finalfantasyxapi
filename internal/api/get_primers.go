@@ -39,5 +39,5 @@ func (cfg *Config) retrievePrimers(r *http.Request, i handlerInput[seeding.Prime
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{})
+	return filterIDs(cfg, r, i, ids, []IdFilter{})
 }

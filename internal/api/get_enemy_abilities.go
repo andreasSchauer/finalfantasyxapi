@@ -42,22 +42,22 @@ func (cfg *Config) retrieveEnemyAbilities(r *http.Request, i handlerInput[seedin
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(idQuery(r, i, ids, qpnMonster, cfg.l.Monsters, cfg.db.GetEnemyAbilityIDsByMonster)),
-		fidl(enumListQuery(cfg, r, i, cfg.t.DamageType, ids, qpnDamageType, getTypedAbilityIDsByDamageType(cfg, abilityType))),
-		fidl(enumListQuery(cfg, r, i, cfg.t.AttackType, ids, qpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType))),
-		fidl(enumListQuery(cfg, r, i, cfg.t.TargetType, ids, qpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType))),
-		fidl(enumQuery(r, i, cfg.t.DamageFormula, ids, qpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType))),
-		fidl(intListQuery(cfg, r, i, ids, qpnRank, getTypedAbilityIDsByRank(cfg, abilityType))),
-		fidl(nameIdListQueryNul(cfg, r, i, ids, qpnElement, cfg.e.elements.resTypeSing, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType))),
-		fidl(idQueryNul(r, i, ids, qpnStatusInflict, cfg.l.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType))),
-		fidl(idQueryNul(r, i, ids, qpnStatusRemove, cfg.l.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType))),
-		fidl(boolQuery(r, i, ids, qpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, qpnCanCrit, getTypedAbilityIDsCanCrit(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, qpnBDL, getTypedAbilityIDsBreakDmgLimit(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, qpnDarkable, getTypedAbilityIDsDarkable(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, qpnSilenceable, getTypedAbilityIDsSilenceable(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, qpnReflectable, getTypedAbilityIDsReflectable(cfg, abilityType))),
-		fidl(boolQuery2(r, i, ids, qpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType))),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		idQuery(r, i, ids, qpnMonster, cfg.l.Monsters, cfg.db.GetEnemyAbilityIDsByMonster),
+		enumListQuery(cfg, r, i, cfg.t.DamageType, ids, qpnDamageType, getTypedAbilityIDsByDamageType(cfg, abilityType)),
+		enumListQuery(cfg, r, i, cfg.t.AttackType, ids, qpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType)),
+		enumListQuery(cfg, r, i, cfg.t.TargetType, ids, qpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType)),
+		enumQuery(r, i, cfg.t.DamageFormula, ids, qpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType)),
+		intListQuery(cfg, r, i, ids, qpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
+		nameIdListQueryNul(cfg, r, i, ids, qpnElement, cfg.e.elements.resTypeSing, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
+		idQueryNul(r, i, ids, qpnStatusInflict, cfg.l.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
+		idQueryNul(r, i, ids, qpnStatusRemove, cfg.l.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
+		boolQuery(r, i, ids, qpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
+		boolQuery2(r, i, ids, qpnCanCrit, getTypedAbilityIDsCanCrit(cfg, abilityType)),
+		boolQuery2(r, i, ids, qpnBDL, getTypedAbilityIDsBreakDmgLimit(cfg, abilityType)),
+		boolQuery2(r, i, ids, qpnDarkable, getTypedAbilityIDsDarkable(cfg, abilityType)),
+		boolQuery2(r, i, ids, qpnSilenceable, getTypedAbilityIDsSilenceable(cfg, abilityType)),
+		boolQuery2(r, i, ids, qpnReflectable, getTypedAbilityIDsReflectable(cfg, abilityType)),
+		boolQuery2(r, i, ids, qpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType)),
 	})
 }

@@ -56,13 +56,13 @@ func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seeding.Item, I
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(enumListQuery(cfg, r, i, cfg.t.ItemCategory, ids, qpnCategory, cfg.db.GetItemIDsCategory)),
-		fidl(boolQuery2(r, i, ids, qpnHasAbility, cfg.db.GetItemIDsWithAbility)),
-		fidl(nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSing, cfg.l.Stats, cfg.db.GetItemIDsByRelatedStat)),
-		fidl(valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetItemIDsByMethods)),
-		fidl(idQueryWrapper(cfg, r, i, ids, qpnLocation, cfg.e.locations.objLookup, getItemsByLocation)),
-		fidl(idQueryWrapper(cfg, r, i, ids, qpnSublocation, cfg.e.sublocations.objLookup, getItemsBySublocation)),
-		fidl(idQueryWrapper(cfg, r, i, ids, qpnArea, cfg.e.areas.objLookup, getItemsByArea)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		enumListQuery(cfg, r, i, cfg.t.ItemCategory, ids, qpnCategory, cfg.db.GetItemIDsCategory),
+		boolQuery2(r, i, ids, qpnHasAbility, cfg.db.GetItemIDsWithAbility),
+		nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSing, cfg.l.Stats, cfg.db.GetItemIDsByRelatedStat),
+		valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetItemIDsByMethods),
+		idQueryWrapper(cfg, r, i, ids, qpnLocation, cfg.e.locations.objLookup, getItemsByLocation),
+		idQueryWrapper(cfg, r, i, ids, qpnSublocation, cfg.e.sublocations.objLookup, getItemsBySublocation),
+		idQueryWrapper(cfg, r, i, ids, qpnArea, cfg.e.areas.objLookup, getItemsByArea),
 	})
 }

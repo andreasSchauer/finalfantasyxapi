@@ -36,19 +36,19 @@ func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []filteredIdList{
-		fidl(idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetLocationSublocationIDs)),
-		fidl(idQuery(r, i, ids, qpnMonster, cfg.l.Monsters, cfg.db.GetSublocationIDsWithMonster)),
-		fidl(idQueryWrapper(cfg, r, i, ids, qpnItem, cfg.l.Items, getSublocationsByItem)),
-		fidl(idQuery(r, i, ids, qpnKeyItem, cfg.l.KeyItems, cfg.db.GetSublocationIDsWithKeyItem)),
-		fidl(idQuery(r, i, ids, qpnAutoAbility, cfg.l.AutoAbilities, cfg.db.GetSublocationIDsWithAutoAbility)),
-		fidl(boolQuery2(r, i, ids, qpnCharacters, cfg.db.GetSublocationIDsWithCharacters)),
-		fidl(boolQuery2(r, i, ids, qpnAeons, cfg.db.GetSublocationIDsWithAeons)),
-		fidl(boolQuery2(r, i, ids, qpnMonsters, cfg.db.GetSublocationIDsWithMonsters)),
-		fidl(boolQuery2(r, i, ids, qpnBossFights, cfg.db.GetSublocationIDsWithBosses)),
-		fidl(boolQuery2(r, i, ids, qpnShops, cfg.db.GetSublocationIDsWithShops)),
-		fidl(boolQuery2(r, i, ids, qpnTreasures, cfg.db.GetSublocationIDsWithTreasures)),
-		fidl(boolQuery2(r, i, ids, qpnSidequests, cfg.db.GetSublocationIDsWithSidequests)),
-		fidl(boolQuery2(r, i, ids, qpnFMVs, cfg.db.GetSublocationIDsWithFMVs)),
+	return filterIDs(cfg, r, i, ids, []IdFilter{
+		idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetLocationSublocationIDs),
+		idQuery(r, i, ids, qpnMonster, cfg.l.Monsters, cfg.db.GetSublocationIDsWithMonster),
+		idQueryWrapper(cfg, r, i, ids, qpnItem, cfg.l.Items, getSublocationsByItem),
+		idQuery(r, i, ids, qpnKeyItem, cfg.l.KeyItems, cfg.db.GetSublocationIDsWithKeyItem),
+		idQuery(r, i, ids, qpnAutoAbility, cfg.l.AutoAbilities, cfg.db.GetSublocationIDsWithAutoAbility),
+		boolQuery2(r, i, ids, qpnCharacters, cfg.db.GetSublocationIDsWithCharacters),
+		boolQuery2(r, i, ids, qpnAeons, cfg.db.GetSublocationIDsWithAeons),
+		boolQuery2(r, i, ids, qpnMonsters, cfg.db.GetSublocationIDsWithMonsters),
+		boolQuery2(r, i, ids, qpnBossFights, cfg.db.GetSublocationIDsWithBosses),
+		boolQuery2(r, i, ids, qpnShops, cfg.db.GetSublocationIDsWithShops),
+		boolQuery2(r, i, ids, qpnTreasures, cfg.db.GetSublocationIDsWithTreasures),
+		boolQuery2(r, i, ids, qpnSidequests, cfg.db.GetSublocationIDsWithSidequests),
+		boolQuery2(r, i, ids, qpnFMVs, cfg.db.GetSublocationIDsWithFMVs),
 	})
 }
