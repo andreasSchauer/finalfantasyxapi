@@ -12,12 +12,7 @@ func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, S
 		return Submenu{}, err
 	}
 
-	abilities, err := getResourcesDbItem(cfg, r, cfg.e.abilities, submenu, ToIntManyNull(cfg.db.GetSubmenuAbilityIDs))
-	if err != nil {
-		return Submenu{}, err
-	}
-
-	menuOpen, err := createSubmenuOpenedBy(cfg, r, submenu)
+	rel, err := getSubmenuRelationships(cfg, r, submenu)
 	if err != nil {
 		return Submenu{}, err
 	}
@@ -29,8 +24,8 @@ func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, S
 		Effect:      submenu.Effect,
 		Topmenu:     namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, submenu.Topmenu, nil),
 		Users:       namesToNamedAPIResources(cfg, cfg.e.characterClasses, submenu.Users),
-		OpenedBy:    menuOpen,
-		Abilities:   abilities,
+		OpenedBy:    rel.OpenedBy,
+		Abilities:   rel.Abilities,
 	}
 
 	return response, nil

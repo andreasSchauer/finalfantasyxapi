@@ -12,27 +12,7 @@ func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.Ce
 		return CelestialWeapon{}, err
 	}
 
-	crest, _ := seeding.GetResource(celestialWeapon.KeyItemBase+" crest", cfg.l.KeyItems)
-	sigil, _ := seeding.GetResource(celestialWeapon.KeyItemBase+" sigil", cfg.l.KeyItems)
-	equipment, _ := seeding.GetResource(celestialWeapon, cfg.l.EquipmentNames)
-
-	tables, err := getResourcesDbItem(cfg, r, cfg.e.equipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
-	if err != nil {
-		return CelestialWeapon{}, err
-	}
-	table, _ := seeding.GetResourceByID(tables[0].ID, cfg.l.EquipmentTablesID)
-
-	wpnTreasure, err := getResDbItemOne(cfg, r, cfg.e.treasures, celestialWeapon, ToIntOneNull(cfg.db.GetCelestialWeaponTreasureID))
-	if err != nil {
-		return CelestialWeapon{}, err
-	}
-
-	crestTreasures, err := getResourcesDbItem(cfg, r, cfg.e.treasures, crest, cfg.db.GetKeyItemTreasureIDs)
-	if err != nil {
-		return CelestialWeapon{}, err
-	}
-
-	sigilQuests, err := getResourcesDbItem(cfg, r, cfg.e.quests, sigil, cfg.db.GetKeyItemQuestIDs)
+	rel, err := getCelestialWeaponRelationships(cfg, r, celestialWeapon)
 	if err != nil {
 		return CelestialWeapon{}, err
 	}
@@ -43,17 +23,19 @@ func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.Ce
 		Formula:       celestialWeapon.Formula,
 		Character:     nameToNamedAPIResource(cfg, cfg.e.characters, celestialWeapon.Character, nil),
 		Aeon:          namePtrToNamedAPIResPtr(cfg, cfg.e.aeons, celestialWeapon.Aeon, nil),
-		Equipment:     nameToNamedAPIResource(cfg, cfg.e.equipment, equipment.Name, nil),
-		AutoAbilities: namesToNamedAPIResources(cfg, cfg.e.autoAbilities, table.RequiredAutoAbilities),
-		Crest:         nameToNamedAPIResource(cfg, cfg.e.keyItems, crest.Name, nil),
-		Sigil:         nameToNamedAPIResource(cfg, cfg.e.keyItems, sigil.Name, nil),
-		WpnTreasure:   wpnTreasure,
-		CrestTreasure: crestTreasures[0],
-		SigilQuest:    sigilQuests[0],
+		AutoAbilities: rel.AutoAbilities,
+		Equipment:     rel.Equipment,
+		Crest:         rel.Crest,
+		Sigil:         rel.Sigil,
+		WpnTreasure:   rel.WpnTreasure,
+		CrestTreasure: rel.CrestTreasure,
+		SigilQuest:    rel.SigilQuest,
 	}
 
 	return response, nil
 }
+
+
 
 func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)

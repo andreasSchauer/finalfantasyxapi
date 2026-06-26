@@ -12,7 +12,7 @@ func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.O
 		return OverdriveCommand{}, err
 	}
 
-	overdrives, err := getResourcesDbItem(cfg, r, cfg.e.overdrives, command, ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveIDs))
+	overdrives, err := getResourcesDbItem(cfg, r.Context(), cfg.e.overdrives, command, ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveIDs))
 	if err != nil {
 		return OverdriveCommand{}, err
 	}

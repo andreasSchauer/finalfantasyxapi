@@ -12,12 +12,7 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, N
 		return Song{}, err
 	}
 
-	bossFights, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, song, ToIntManyNull(cfg.db.GetSongMonsterFormationIDs))
-	if err != nil {
-		return Song{}, err
-	}
-
-	fmvs, err := getResourcesDbItem(cfg, r, cfg.e.fmvs, song, ToIntManyNull(cfg.db.GetSongFmvIDs))
+	rel, err := getSongRelationships(cfg, r, song)
 	if err != nil {
 		return Song{}, err
 	}
@@ -38,8 +33,8 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, N
 		OstTrackNumber:       song.OSTTrackNumber,
 		BackgroundMusic:      convertObjSlice(cfg, song.BackgroundMusic, convertBackgroundMusic),
 		Cues:                 convertObjSlice(cfg, song.Cues, convertCue),
-		BossFights:           bossFights,
-		FMVs:                 fmvs,
+		BossFights:           rel.BossFights,
+		FMVs:                 rel.FMVs,
 	}
 
 	if song.Credits != nil {

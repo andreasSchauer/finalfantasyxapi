@@ -4,30 +4,36 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"golang.org/x/sync/errgroup"
 )
 
-func getMonsterRelationships(cfg *Config, r *http.Request, mon seeding.Monster) (Monster, error) {
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.monsters, mon.ID)
-	if err != nil {
-		return Monster{}, err
-	}
+func getMonsterRelationships(cfg *Config, r *http.Request, monster seeding.Monster) (Monster, error) {
+	var rel Monster
+	g, ctx := errgroup.WithContext(r.Context())
 	
-	areas, err := runRelAvailabilityQuery(cfg, r, cfg.e.areas, mon, availabilityParams, getMonsterAreaIDs(cfg))
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.monsters, monster.ID)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	formations, err := runRelAvailabilityQuery(cfg, r, cfg.e.monsterFormations, mon, availabilityParams, getMonsterMonsterFormationIDs(cfg))
+	g.Go(func() error {
+		var err error
+		rel.Areas, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.areas, monster, availabilityParams, getMonsterAreaIDs(cfg))
+		return err
+	})
+	
+	g.Go(func() error {
+		var err error
+		rel.Formations, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.monsterFormations, monster, availabilityParams, getMonsterMonsterFormationIDs(cfg))
+		return err
+	})
+	
+	err = g.Wait()
 	if err != nil {
 		return Monster{}, err
 	}
 
-	monster := Monster{
-		Areas:      areas,
-		Formations: formations,
-	}
-
-	return monster, nil
+	return rel, nil
 }
 
 func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster, error) {

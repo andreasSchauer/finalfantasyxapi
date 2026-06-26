@@ -26,7 +26,7 @@ func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seeding.Equ
 	}
 
 	if table.SpecificCharacter != nil && table.Classification == string(database.EquipClassCelestialWeapon) {
-		classRes, err := getResPtrDB(cfg, r, cfg.e.celestialWeapons, table, cfg.db.GetEquipmentTableCelestialWeaponID)
+		classRes, err := getResPtrDB(cfg, r.Context(), cfg.e.celestialWeapons, table, cfg.db.GetEquipmentTableCelestialWeaponID)
 		if err != nil {
 			return EquipmentTable{}, err
 		}

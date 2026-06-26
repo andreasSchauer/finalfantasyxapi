@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"database/sql"
 	"net/http"
 
@@ -42,8 +43,8 @@ func getRelAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIR
 	return availabilityParams, nil
 }
 
-func runRelAvailabilityQuery[T, K seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item K, params RelAvlParams, dbQuery RelAvailabilityDbQuery) ([]A, error) {
-	dbIDs, err := dbQuery(r.Context(), params)
+func runRelAvailabilityQuery[T, K seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, ctx context.Context, i handlerInput[T, R, A, L], item K, params RelAvlParams, dbQuery RelAvailabilityDbQuery) ([]A, error) {
+	dbIDs, err := dbQuery(ctx, params)
 	if err != nil {
 		return nil, newHTTPErrorDB(i.resTypePlural, item, err)
 	}

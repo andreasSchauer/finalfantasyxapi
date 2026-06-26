@@ -1,8 +1,8 @@
 package api
 
 import (
-	"net/http"
-
+	"context"
+	
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
@@ -46,14 +46,16 @@ type StatusInteractionQueries struct {
 	StatusConditions DbQueryIntMany
 }
 
-func getStatusInfliction(cfg *Config, r *http.Request, status seeding.StatusCondition, queries StatusInteractionQueries) (*StatusInfliction, error) {
-	abilities, err := getResourcesDbItem(cfg, r, cfg.e.abilities, status, queries.Abilities)
+func getStatusInfliction(cfg *Config, ctx context.Context, status seeding.StatusCondition, queries StatusInteractionQueries) (*StatusInfliction, error) {
+	var statusInfliction StatusInfliction
+	
+	abilities, err := getResourcesDbItem(cfg, ctx, cfg.e.abilities, status, queries.Abilities)
 	if err != nil {
 		return nil, err
 	}
-	statusInfliction := populateStatusInfliction(cfg, abilities)
+	statusInfliction = populateStatusInfliction(cfg, abilities)
 
-	statusInfliction.StatusConditions, err = getResourcesDbItem(cfg, r, cfg.e.statusConditions, status, queries.StatusConditions)
+	statusInfliction.StatusConditions, err = getResourcesDbItem(cfg, ctx, cfg.e.statusConditions, status, queries.StatusConditions)
 	if err != nil {
 		return nil, err
 	}
@@ -65,14 +67,14 @@ func getStatusInfliction(cfg *Config, r *http.Request, status seeding.StatusCond
 	return &statusInfliction, nil
 }
 
-func getStatusRemoval(cfg *Config, r *http.Request, status seeding.StatusCondition, queries StatusInteractionQueries) (*StatusRemoval, error) {
-	abilities, err := getResourcesDbItem(cfg, r, cfg.e.abilities, status, queries.Abilities)
+func getStatusRemoval(cfg *Config, ctx context.Context, status seeding.StatusCondition, queries StatusInteractionQueries) (*StatusRemoval, error) {
+	abilities, err := getResourcesDbItem(cfg, ctx, cfg.e.abilities, status, queries.Abilities)
 	if err != nil {
 		return nil, err
 	}
 	statusRemoval := populateStatusRemoval(cfg, abilities)
 
-	statusRemoval.StatusConditions, err = getResourcesDbItem(cfg, r, cfg.e.statusConditions, status, queries.StatusConditions)
+	statusRemoval.StatusConditions, err = getResourcesDbItem(cfg, ctx, cfg.e.statusConditions, status, queries.StatusConditions)
 	if err != nil {
 		return nil, err
 	}

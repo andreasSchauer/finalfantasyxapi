@@ -1,53 +1,65 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"golang.org/x/sync/errgroup"
 )
 
 func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.EquipmentName) (EquipmentName, error) {
 	i := cfg.e.equipment
+	var table seeding.EquipmentTable
+	
+	rel := EquipmentName{
+		Character: nameToNamedAPIResource(cfg, cfg.e.characters, equipment.CharacterName, nil),
+	}
+	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := getRelAvailabilityParams(cfg, r, i, equipment.ID)
 	if err != nil {
 		return EquipmentName{}, err
 	}
 
-	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeTreasure))
+	g.Go(func() error{
+		var err error
+		rel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.treasures, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeTreasure))
+		return err
+	})
+	
+	g.Go(func() error{
+		var err error
+		rel.Shops, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.shops, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeShop))
+		return err
+	})
+	
+	g.Go(func() error{
+		var err error
+		rel.EquipmentTable, err = getEquipmentTableRef(cfg, r, ctx, i.queryLookup[qpnTable], equipment)
+		if err != nil {
+			return err
+		}
+		table, _ = seeding.GetResourceByID(rel.EquipmentTable.ID, cfg.l.EquipmentTablesID)
+		rel.Type = table.Type
+		rel.Classification = table.Classification
+		rel.Priority = table.Priority
+		rel.RequiredSlots = table.RequiredSlots
+		rel.RequiredAutoAbilities = namesToNamedAPIResources(cfg, cfg.e.autoAbilities, table.RequiredAutoAbilities)
+		rel.SelectableAutoAbilities = convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool)
+		return nil
+	})
+
+	err = g.Wait()
 	if err != nil {
 		return EquipmentName{}, err
-	}
-
-	shops, err := runRelAvailabilityQuery(cfg, r, cfg.e.shops, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeShop))
-	if err != nil {
-		return EquipmentName{}, err
-	}
-
-	tableRef, err := getEquipmentTableRef(cfg, r, i.queryLookup[qpnTable], equipment)
-	if err != nil {
-		return EquipmentName{}, err
-	}
-	table, _ := seeding.GetResourceByID(tableRef.ID, cfg.l.EquipmentTablesID)
-
-	rel := EquipmentName{
-		Character:               nameToNamedAPIResource(cfg, cfg.e.characters, equipment.CharacterName, nil),
-		EquipmentTable:          tableRef,
-		Type:                    table.Type,
-		Classification:          table.Classification,
-		Priority:                table.Priority,
-		RequiredAutoAbilities:   namesToNamedAPIResources(cfg, cfg.e.autoAbilities, table.RequiredAutoAbilities),
-		SelectableAutoAbilities: convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool),
-		RequiredSlots:           table.RequiredSlots,
-		Treasures:               treasures,
-		Shops:                   shops,
 	}
 
 	if table.Classification == string(database.EquipClassCelestialWeapon) {
 		char, _ := seeding.GetResource(equipment.CharacterName, cfg.l.Characters)
-		cwRes, err := getResPtrDB(cfg, r, cfg.e.celestialWeapons, char, cfg.db.GetCharacterCelestialWeaponID)
+		cwRes, err := getResPtrDB(cfg, r.Context(), cfg.e.celestialWeapons, char, cfg.db.GetCharacterCelestialWeaponID)
 		if err != nil {
 			return EquipmentName{}, err
 		}
@@ -57,8 +69,8 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 	return rel, nil
 }
 
-func getEquipmentTableRef(cfg *Config, r *http.Request, queryParam QueryParam, equipment seeding.EquipmentName) (UnnamedAPIResource, error) {
-	tables, err := getResourcesDbItem(cfg, r, cfg.e.equipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
+func getEquipmentTableRef(cfg *Config, r *http.Request, ctx context.Context, queryParam QueryParam, equipment seeding.EquipmentName) (UnnamedAPIResource, error) {
+	tables, err := getResourcesDbItem(cfg, ctx, cfg.e.equipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
 	if err != nil {
 		return UnnamedAPIResource{}, err
 	}

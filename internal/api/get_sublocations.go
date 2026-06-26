@@ -12,16 +12,6 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Subloc
 		return Sublocation{}, err
 	}
 
-	connectedSublocations, err := getResourcesDbItem(cfg, r, cfg.e.sublocations, sublocation, cfg.db.GetConnectedSublocationIDs)
-	if err != nil {
-		return Sublocation{}, err
-	}
-
-	areas, err := getResourcesDbItem(cfg, r, cfg.e.areas, sublocation, cfg.db.GetSublocationAreaIDs)
-	if err != nil {
-		return Sublocation{}, err
-	}
-
 	rel, err := getSublocationRelationships(cfg, r, sublocation)
 	if err != nil {
 		return Sublocation{}, err
@@ -32,9 +22,9 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Subloc
 		Name:                  sublocation.Name,
 		ParentLocation:        nameToNamedAPIResource(cfg, cfg.e.locations, sublocation.Location.Name, nil),
 		Availability:          enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, sublocation.Availability, cfg.t.AvailabilityType),
-		ConnectedSublocations: connectedSublocations,
-		Areas:                 areas,
-		LocRel:                rel,
+		ConnectedSublocations: rel.ConnectedSublocations,
+		Areas:                 rel.Areas,
+		LocRel:                rel.LocRel,
 	}
 
 	return response, nil

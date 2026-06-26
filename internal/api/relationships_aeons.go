@@ -4,43 +4,49 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"golang.org/x/sync/errgroup"
 )
 
-func getAeonRelationships(cfg *Config, r *http.Request, ae seeding.Aeon) (Aeon, error) {
-	celestialWeapon, err := getResPtrDB(cfg, r, cfg.e.celestialWeapons, ae, cfg.db.GetAeonCelestialWeaponID)
+func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon, error) {
+	var rel Aeon
+	g, ctx := errgroup.WithContext(r.Context())
+
+	g.Go(func() error {
+		var err error
+		rel.CelestialWeapon, err = getResPtrDB(cfg, ctx, cfg.e.celestialWeapons, aeon, cfg.db.GetAeonCelestialWeaponID)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.CharacterClasses, err = getResourcesDbItem(cfg, ctx, cfg.e.characterClasses, aeon, cfg.db.GetAeonCharClassIDs)
+		return err
+	}) 
+
+	g.Go(func() error {
+		var err error
+		rel.AeonCommands, err = getResourcesDbItem(cfg, ctx, cfg.e.aeonCommands, aeon, cfg.db.GetAeonAeonCommandIDs)
+		return err
+	})
+	
+	g.Go(func() error {
+		var err error
+		rel.Overdrives, err = getResourcesDbItem(cfg, ctx, cfg.e.overdrives, aeon, cfg.db.GetAeonOverdriveIDs)
+		return err
+	})
+	
+	g.Go(func() error {
+		var err error
+		rel.DefaultPlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.playerAbilities, aeon, cfg.db.GetAeonDefaultAbilityIDs)
+		return err
+	})
+
+	err := g.Wait()
 	if err != nil {
 		return Aeon{}, err
 	}
 
-	characterClasses, err := getResourcesDbItem(cfg, r, cfg.e.characterClasses, ae, cfg.db.GetAeonCharClassIDs)
-	if err != nil {
-		return Aeon{}, err
-	}
-
-	aeonCommands, err := getResourcesDbItem(cfg, r, cfg.e.aeonCommands, ae, cfg.db.GetAeonAeonCommandIDs)
-	if err != nil {
-		return Aeon{}, err
-	}
-
-	overdrives, err := getResourcesDbItem(cfg, r, cfg.e.overdrives, ae, cfg.db.GetAeonOverdriveIDs)
-	if err != nil {
-		return Aeon{}, err
-	}
-
-	defaultAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, ae, cfg.db.GetAeonDefaultAbilityIDs)
-	if err != nil {
-		return Aeon{}, err
-	}
-
-	aeon := Aeon{
-		CelestialWeapon:        celestialWeapon,
-		CharacterClasses:       characterClasses,
-		AeonCommands:           aeonCommands,
-		Overdrives:             overdrives,
-		DefaultPlayerAbilities: defaultAbilities,
-	}
-
-	return aeon, nil
+	return rel, nil
 }
 
 func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon) (Aeon, error) {

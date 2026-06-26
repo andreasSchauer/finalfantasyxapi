@@ -7,38 +7,33 @@ import (
 )
 
 func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList], id int32) (TriggerCommand, error) {
-	ability, err := verifyParamsAndGet(r, i, id)
+	command, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
 
-	monsterFormations, err := getResourcesDbItem(cfg, r, cfg.e.monsterFormations, ability, cfg.db.GetTriggerCommandMonsterFormationIDs)
-	if err != nil {
-		return TriggerCommand{}, err
-	}
-
-	users, err := getResourcesDbItem(cfg, r, cfg.e.characterClasses, ability, cfg.db.GetTriggerCommandCharClassIDs)
+	rel, err := getTriggerCommandRelationships(cfg, r, command)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
 
 	response := TriggerCommand{
-		ID:                 ability.ID,
-		Name:               ability.Name,
-		Version:            ability.Version,
-		Specification:      ability.Specification,
-		UntypedAbility:     idToTypedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
-		Description:        ability.Description,
-		Effect:             ability.Effect,
-		Rank:               ability.Rank,
-		AppearsInHelpBar:   ability.AppearsInHelpBar,
-		CanCopycat:         ability.CanCopycat,
-		UsedBy:             users,
-		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),
-		Topmenu:            namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, ability.Topmenu, nil),
-		Cursor:             ability.Cursor,
-		MonsterFormations:  monsterFormations,
-		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
+		ID:                 command.ID,
+		Name:               command.Name,
+		Version:            command.Version,
+		Specification:      command.Specification,
+		UntypedAbility:     idToTypedAPIResource(cfg, cfg.e.abilities, command.Ability.ID),
+		Description:        command.Description,
+		Effect:             command.Effect,
+		Rank:               command.Rank,
+		AppearsInHelpBar:   command.AppearsInHelpBar,
+		CanCopycat:         command.CanCopycat,
+		UsedBy:             rel.UsedBy,
+		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, command.RelatedStats),
+		Topmenu:            namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, command.Topmenu, nil),
+		Cursor:             command.Cursor,
+		MonsterFormations:  rel.MonsterFormations,
+		BattleInteractions: convertObjSlice(cfg, command.BattleInteractions, convertBattleInteraction),
 	}
 
 	battleInteractions, err := applyUser(cfg, r, i, response, qpnAbilityUser)

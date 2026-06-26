@@ -13,7 +13,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 		return PlayerAbility{}, err
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, ability, cfg.db.GetPlayerAbilityMonsterIDs)
+	monsters, err := getResourcesDbItem(cfg, r.Context(), cfg.e.monsters, ability, cfg.db.GetPlayerAbilityMonsterIDs)
 	if err != nil {
 		return PlayerAbility{}, err
 	}

@@ -12,7 +12,7 @@ func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seeding.RonsoRag
 		return RonsoRage{}, err
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, ronsoRage, cfg.db.GetRonsoRageMonsterIDs)
+	monsters, err := getResourcesDbItem(cfg, r.Context(), cfg.e.monsters, ronsoRage, cfg.db.GetRonsoRageMonsterIDs)
 	if err != nil {
 		return RonsoRage{}, err
 	}

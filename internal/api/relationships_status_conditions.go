@@ -5,66 +5,90 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"golang.org/x/sync/errgroup"
 )
 
 func getStatusConditionRelationships(cfg *Config, r *http.Request, status seeding.StatusCondition) (StatusCondition, error) {
+	var rel StatusCondition
+	g, ctx := errgroup.WithContext(r.Context())
+	
+	res, err := getStatusQueryResistance(cfg, r)
+	if err != nil {
+		return StatusCondition{}, err
+	}
+
+	g.Go(func() error {
+		var err error
+		rel.AutoAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.autoAbilities, status, cfg.db.GetStatusConditionAutoAbilityIDs)
+		return err
+	})
+	
+	g.Go(func() error {
+		var err error
+		rel.MonstersResistance, err = getResourcesDbItem(cfg, ctx, cfg.e.monsters, status, convGetStatusConditionResistingMonsterIDs(cfg, res.Resistance))
+		return err
+	})
+	
+	g.Go(func() error {
+		var err error
+		rel.InflictedBy, err = getStatusInfliction(cfg, ctx, status, StatusInteractionQueries{
+			Abilities:        convGetStatusConditionAbilityIDsInflicted(cfg, res.MinRate, res.MaxRate),
+			StatusConditions: cfg.db.GetStatusConditionInflictedDelayConditionIDs,
+		})
+		return err
+	})
+	
+	g.Go(func() error {
+		var err error
+		rel.RemovedBy, err = getStatusRemoval(cfg, ctx, status, StatusInteractionQueries{
+			Abilities:        cfg.db.GetStatusConditionAbilityIDsRemoved,
+			StatusConditions: cfg.db.GetStatusConditionRemovedConditionIDs,
+		})
+		return err
+	})
+	
+	err = g.Wait()
+	if err != nil {
+		return StatusCondition{}, err
+	}
+
+	return rel, nil
+}
+
+
+type StatusQueryResistance struct {
+	Resistance 	int32
+	MinRate		int32
+	MaxRate		int32
+}
+
+func getStatusQueryResistance(cfg *Config, r *http.Request) (StatusQueryResistance, error) {
+	var res StatusQueryResistance
+	
 	queryParamResistance := cfg.q.statusConditions[qpnResistance]
 	resistance, err := parseIntQuery(r, queryParamResistance)
 	if errExceptEmptyQuery(err) {
-		return StatusCondition{}, err
+		return StatusQueryResistance{}, err
 	}
-	resistance32 := int32(resistance)
+	res.Resistance = int32(resistance)
 
 	queryParamMinRate := cfg.q.statusConditions[qpnInflictMin]
 	minRate, err := parseIntQuery(r, queryParamMinRate)
 	if errExceptEmptyQuery(err) {
-		return StatusCondition{}, err
+		return StatusQueryResistance{}, err
 	}
-	minRate32 := int32(minRate)
+	res.MinRate = int32(minRate)
 
 	queryParamMaxRate := cfg.q.statusConditions[qpnInflictMax]
 	maxRate, err := parseIntQuery(r, queryParamMaxRate)
 	if errExceptEmptyQuery(err) {
-		return StatusCondition{}, err
+		return StatusQueryResistance{}, err
 	}
-	maxRate32 := int32(maxRate)
+	res.MaxRate = int32(maxRate)
 
-	if minRate > maxRate {
-		return StatusCondition{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid use of parameter '%s'. '%s' can't be higher than '%s'.", queryParamMinRate.Name, queryParamMinRate.Name, queryParamMaxRate.Name), nil)
-	}
-
-	autoAbilities, err := getResourcesDbItem(cfg, r, cfg.e.autoAbilities, status, cfg.db.GetStatusConditionAutoAbilityIDs)
-	if err != nil {
-		return StatusCondition{}, err
+	if res.MinRate > res.MaxRate {
+		return StatusQueryResistance{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid use of parameter '%s'. '%s' can't be higher than '%s'.", queryParamMinRate.Name, queryParamMinRate.Name, queryParamMaxRate.Name), nil)
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, status, convGetStatusConditionResistingMonsterIDs(cfg, resistance32))
-	if err != nil {
-		return StatusCondition{}, err
-	}
-
-	inflictedBy, err := getStatusInfliction(cfg, r, status, StatusInteractionQueries{
-		Abilities:        convGetStatusConditionAbilityIDsInflicted(cfg, minRate32, maxRate32),
-		StatusConditions: cfg.db.GetStatusConditionInflictedDelayConditionIDs,
-	})
-	if err != nil {
-		return StatusCondition{}, err
-	}
-
-	removedBy, err := getStatusRemoval(cfg, r, status, StatusInteractionQueries{
-		Abilities:        cfg.db.GetStatusConditionAbilityIDsRemoved,
-		StatusConditions: cfg.db.GetStatusConditionRemovedConditionIDs,
-	})
-	if err != nil {
-		return StatusCondition{}, err
-	}
-
-	rel := StatusCondition{
-		AutoAbilities:      autoAbilities,
-		InflictedBy:        inflictedBy,
-		RemovedBy:          removedBy,
-		MonstersResistance: monsters,
-	}
-
-	return rel, nil
+	return res, nil
 }

@@ -12,12 +12,7 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property,
 		return Property{}, err
 	}
 
-	autoAbilities, err := getResourcesDbItem(cfg, r, cfg.e.autoAbilities, property, ToIntManyNull(cfg.db.GetPropertyAutoAbilityIDs))
-	if err != nil {
-		return Property{}, err
-	}
-
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, property, cfg.db.GetPropertyMonsterIDs)
+	rel, err := getPropertyRelationships(cfg, r, property)
 	if err != nil {
 		return Property{}, err
 	}
@@ -29,12 +24,14 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property,
 		NullifyArmored: property.NullifyArmored,
 		RelatedStats:   namesToNamedAPIResources(cfg, cfg.e.stats, property.RelatedStats),
 		ModifierChange: convertObjPtr(cfg, property.ModifierChange, convertModifierChange),
-		AutoAbilities:  autoAbilities,
-		Monsters:       monsters,
+		AutoAbilities:  rel.AutoAbilities,
+		Monsters:       rel.Monsters,
 	}
 
 	return response, nil
 }
+
+
 
 func (cfg *Config) retrieveProperties(r *http.Request, i handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	return verifyParamsAndRetrieve(r, i)

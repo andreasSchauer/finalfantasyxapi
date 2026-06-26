@@ -5,46 +5,55 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"golang.org/x/sync/errgroup"
 )
 
 func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Character) (Character, error) {
-	celestialWeapon, err := getResPtrDB(cfg, r, cfg.e.celestialWeapons, char, cfg.db.GetCharacterCelestialWeaponID)
-	if err != nil {
-		return Character{}, err
-	}
-
-	overdriveCommand, err := getResPtrDB(cfg, r, cfg.e.overdriveCommands, char, cfg.db.GetCharacterOverdriveCommandID)
-	if err != nil {
-		return Character{}, err
-	}
-
-	characterClasses, err := getResourcesDbItem(cfg, r, cfg.e.characterClasses, char, cfg.db.GetCharacterCharClassIDs)
-	if err != nil {
-		return Character{}, err
-	}
-
-	defaultAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, char, cfg.db.GetCharacterDefaultAbilityIDs)
-	if err != nil {
-		return Character{}, err
-	}
-
-	stdSgAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, char, cfg.db.GetCharacterSgAbilityIDs)
-	if err != nil {
-		return Character{}, err
-	}
-	expSgAbilities, err := getResourcesDbItem(cfg, r, cfg.e.playerAbilities, char, cfg.db.GetCharacterEgAbilityIDs)
-	if err != nil {
-		return Character{}, err
-	}
-
 	rel := Character{
-		CelestialWeapon:        celestialWeapon,
-		OverdriveCommand:       overdriveCommand,
-		CharacterClasses:       characterClasses,
-		DefaultPlayerAbilities: defaultAbilities,
-		StdSgPlayerAbilities:   stdSgAbilities,
-		ExpSgPlayerAbilities:   expSgAbilities,
-		OverdriveModes:         getCharacterModeAmts(cfg, char),
+		OverdriveModes: getCharacterModeAmts(cfg, char),
+	}
+	g, ctx := errgroup.WithContext(r.Context())
+	
+	g.Go(func() error{
+		var err error
+		rel.CelestialWeapon, err = getResPtrDB(cfg, ctx, cfg.e.celestialWeapons, char, cfg.db.GetCharacterCelestialWeaponID)
+		return err
+	})
+
+	g.Go(func() error{
+		var err error
+		rel.OverdriveCommand, err = getResPtrDB(cfg, ctx, cfg.e.overdriveCommands, char, cfg.db.GetCharacterOverdriveCommandID)
+		return err
+	})
+
+	g.Go(func() error{
+		var err error
+		rel.CharacterClasses, err = getResourcesDbItem(cfg, ctx, cfg.e.characterClasses, char, cfg.db.GetCharacterCharClassIDs)
+		return err
+	})
+
+	g.Go(func() error{
+		var err error
+		rel.DefaultPlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.playerAbilities, char, cfg.db.GetCharacterDefaultAbilityIDs)
+		return err
+	})
+
+	g.Go(func() error{
+		var err error
+		rel.StdSgPlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.playerAbilities, char, cfg.db.GetCharacterSgAbilityIDs)
+		return err
+	})
+
+	g.Go(func() error{
+		var err error
+		rel.ExpSgPlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.playerAbilities, char, cfg.db.GetCharacterEgAbilityIDs)
+		return err
+	})
+
+
+	err := g.Wait()
+	if err != nil {
+		return Character{}, err
 	}
 
 	return rel, nil

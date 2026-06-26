@@ -12,7 +12,7 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		return Ability{}, err
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r, cfg.e.monsters, ability, cfg.db.GetAbilityMonsterIDs)
+	monsters, err := getResourcesDbItem(cfg, r.Context(), cfg.e.monsters, ability, cfg.db.GetAbilityMonsterIDs)
 	if err != nil {
 		return Ability{}, err
 	}

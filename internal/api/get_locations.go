@@ -12,16 +12,6 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 		return Location{}, err
 	}
 
-	connectedLocations, err := getResourcesDbItem(cfg, r, cfg.e.locations, location, cfg.db.GetConnectedLocationIDs)
-	if err != nil {
-		return Location{}, err
-	}
-
-	sublocations, err := getResourcesDbItem(cfg, r, cfg.e.sublocations, location, cfg.db.GetLocationSublocationIDs)
-	if err != nil {
-		return Location{}, err
-	}
-
 	rel, err := getLocationRelationships(cfg, r, location)
 	if err != nil {
 		return Location{}, err
@@ -30,10 +20,10 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 	response := Location{
 		ID:                 location.ID,
 		Name:               location.Name,
+		ConnectedLocations: rel.ConnectedLocations,
+		Sublocations: 		rel.Sublocations,
 		Availability:       enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, location.Availability, cfg.t.AvailabilityType),
-		ConnectedLocations: connectedLocations,
-		Sublocations:       sublocations,
-		LocRel:             rel,
+		LocRel: 			rel.LocRel,
 	}
 
 	return response, nil

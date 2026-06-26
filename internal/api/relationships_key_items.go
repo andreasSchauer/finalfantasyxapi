@@ -1,64 +1,71 @@
 package api
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"golang.org/x/sync/errgroup"
 )
 
 func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyItem) (KeyItem, error) {
+	var rel KeyItem
+	g, ctx := errgroup.WithContext(r.Context())
+	
 	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.keyItems, keyItem.ID)
 	if err != nil {
 		return KeyItem{}, err
 	}
 
-	treasures, err := runRelAvailabilityQuery(cfg, r, cfg.e.treasures, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeTreasure))
-	if err != nil {
-		return KeyItem{}, err
-	}
+	g.Go(func() error {
+		var err error
+		rel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.treasures, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeTreasure))
+		return err
+	})
 
-	quests, err := runRelAvailabilityQuery(cfg, r, cfg.e.quests, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeQuest))
-	if err != nil {
-		return KeyItem{}, err
-	}
+	g.Go(func() error {
+		var err error
+		rel.Quests, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.quests, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeQuest))
+		return err
+	})
 
-	areas, err := runRelAvailabilityQuery(cfg, r, cfg.e.areas, keyItem, availabilityParams, getKeyItemAreaIDs(cfg))
-	if err != nil {
-		return KeyItem{}, err
-	}
+	g.Go(func() error {
+		var err error
+		rel.Areas, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.areas, keyItem, availabilityParams, getKeyItemAreaIDs(cfg))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.CelestialWeapon, err = getKeyItemCelestialWeapon(cfg, ctx, keyItem)
+		return err
+	})
 
 	var primer *NamedAPIResource
 	if keyItem.Category == string(database.KeyItemCategoryPrimer) {
 		primerRes := nameToNamedAPIResource(cfg, cfg.e.primers, keyItem.Name, nil)
 		primer = &primerRes
 	}
+	rel.Primer = primer
 
-	celestialWeapon, err := getKeyItemCelestialWeapon(cfg, r, keyItem)
+	err = g.Wait()
 	if err != nil {
 		return KeyItem{}, err
-	}
-
-	rel := KeyItem{
-		Primer:          primer,
-		CelestialWeapon: celestialWeapon,
-		Treasures:       treasures,
-		Quests:          quests,
-		Areas:           areas,
 	}
 
 	return rel, nil
 }
 
-func getKeyItemCelestialWeapon(cfg *Config, r *http.Request, keyItem seeding.KeyItem) (*NamedAPIResource, error) {
+func getKeyItemCelestialWeapon(cfg *Config, ctx context.Context, keyItem seeding.KeyItem) (*NamedAPIResource, error) {
 	if !(strings.HasSuffix(keyItem.Name, "crest") || strings.HasSuffix(keyItem.Name, "sigil")) {
 		return nil, nil
 	}
 
 	keyItemBase := strings.Split(keyItem.Name, " ")[0]
 
-	celestialID, err := cfg.db.GetKeyItemCelestialWeapon(r.Context(), database.KeyItemBase(keyItemBase))
+	celestialID, err := cfg.db.GetKeyItemCelestialWeapon(ctx, database.KeyItemBase(keyItemBase))
 	if err != nil {
 		return nil, newHTTPErrorDbOne(cfg.e.celestialWeapons.resTypeSing, keyItem, err)
 	}

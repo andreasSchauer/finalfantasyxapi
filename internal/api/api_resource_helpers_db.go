@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -9,10 +10,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getResDbItemOne[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], filterItem seeding.Lookupable, dbQuery DbQueryIntOne) (A, error) {
+func getResDbItemOne[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, ctx context.Context, i handlerInput[T, R, A, L], filterItem seeding.Lookupable, dbQuery DbQueryIntOne) (A, error) {
 	var zeroType A
 
-	dbId, err := dbQuery(r.Context(), filterItem.GetID())
+	dbId, err := dbQuery(ctx, filterItem.GetID())
 	if err != nil {
 		return zeroType, newHTTPErrorDB(i.resTypePlural, filterItem, err)
 	}
@@ -22,8 +23,8 @@ func getResDbItemOne[T seeding.Lookupable, R any, A APIResource, L APIResourceLi
 }
 
 // get relationship resources of item. handlerInput = endpoint of fetched resources
-func getResourcesDbItem[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], filterItem seeding.Lookupable, dbQuery DbQueryIntMany) ([]A, error) {
-	dbIds, err := dbQuery(r.Context(), filterItem.GetID())
+func getResourcesDbItem[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, ctx context.Context, i handlerInput[T, R, A, L], filterItem seeding.Lookupable, dbQuery DbQueryIntMany) ([]A, error) {
+	dbIds, err := dbQuery(ctx, filterItem.GetID())
 	if err != nil {
 		return nil, newHTTPErrorDB(i.resTypePlural, filterItem, err)
 	}
@@ -32,8 +33,8 @@ func getResourcesDbItem[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	return resources, nil
 }
 
-func getResPtrDB[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], item seeding.Lookupable, dbQuery DbQueryIntOne) (*A, error) {
-	dbID, err := dbQuery(r.Context(), item.GetID())
+func getResPtrDB[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, ctx context.Context, i handlerInput[T, R, A, L], item seeding.Lookupable, dbQuery DbQueryIntOne) (*A, error) {
+	dbID, err := dbQuery(ctx, item.GetID())
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
