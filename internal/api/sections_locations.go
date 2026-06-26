@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"golang.org/x/sync/errgroup"
 )
 
 type LocationSimple struct {
@@ -41,18 +42,31 @@ func createLocationSimple(cfg *Config, r *http.Request, id int32, subsection Sub
 func getLocationSectionRelations(cfg *Config, r *http.Request, locIDs []int32) (map[int32]map[Relation][]int32, error) {
 	i := cfg.e.locations
 	relations := make(map[int32]map[Relation][]int32)
+	g, ctx := errgroup.WithContext(r.Context())
 
-	treasureJunctions, err := getDbJunctions(r, locIDs, i.resTypeSing, cfg.e.treasures.resTypeSing, cfg.db.GetLocationTreasureIdPairs, juncLocationTreasure)
-	if err != nil {
-		return nil, err
-	}
+	var treasureJunctions []Junction
+	g.Go(func() error {
+		var err error
+		treasureJunctions, err = getDbJunctions(ctx, locIDs, i.resTypeSing, cfg.e.treasures.resTypeSing, cfg.db.GetLocationTreasureIdPairs, juncLocationTreasure)
+		return err
+	})
+	
+	var shopJunctions []Junction
+	g.Go(func() error {
+		var err error
+		shopJunctions, err = getDbJunctions(ctx, locIDs, i.resTypeSing, cfg.e.shops.resTypeSing, cfg.db.GetLocationShopIdPairs, juncLocationShop)
+		return err
+	})
+	
+	var monsterJunctions []Junction
+	g.Go(func() error {
+		var err error
+		monsterJunctions, err = getDbJunctions(ctx, locIDs, i.resTypeSing, cfg.e.monsters.resTypeSing, cfg.db.GetLocationMonsterIdPairs, juncLocationMonster)
+		return err
+	})
+	
 
-	shopJunctions, err := getDbJunctions(r, locIDs, i.resTypeSing, cfg.e.shops.resTypeSing, cfg.db.GetLocationShopIdPairs, juncLocationShop)
-	if err != nil {
-		return nil, err
-	}
-
-	monsterJunctions, err := getDbJunctions(r, locIDs, i.resTypeSing, cfg.e.monsters.resTypeSing, cfg.db.GetLocationMonsterIdPairs, juncLocationMonster)
+	err := g.Wait()
 	if err != nil {
 		return nil, err
 	}

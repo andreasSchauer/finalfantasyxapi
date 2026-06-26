@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"golang.org/x/sync/errgroup"
 )
 
 type AreaSimple struct {
@@ -53,18 +54,30 @@ func createAreaSimple(cfg *Config, r *http.Request, id int32, subsection Subsect
 func getAreaSectionRelations(cfg *Config, r *http.Request, areaIDs []int32) (map[int32]map[Relation][]int32, error) {
 	i := cfg.e.areas
 	relations := make(map[int32]map[Relation][]int32)
+	g, ctx := errgroup.WithContext(r.Context())
 
-	treasureJunctions, err := getDbJunctions(r, areaIDs, i.resTypeSing, cfg.e.treasures.resTypeSing, cfg.db.GetAreaTreasureIdPairs, juncAreaTreasure)
-	if err != nil {
-		return nil, err
-	}
+	var treasureJunctions []Junction
+	g.Go(func() error {
+		var err error
+		treasureJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSing, cfg.e.treasures.resTypeSing, cfg.db.GetAreaTreasureIdPairs, juncAreaTreasure)
+		return err
+	})
 
-	shopJunctions, err := getDbJunctions(r, areaIDs, i.resTypeSing, cfg.e.shops.resTypeSing, cfg.db.GetAreaShopIdPairs, juncAreaShop)
-	if err != nil {
-		return nil, err
-	}
+	var shopJunctions []Junction
+	g.Go(func() error {
+		var err error
+		shopJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSing, cfg.e.shops.resTypeSing, cfg.db.GetAreaShopIdPairs, juncAreaShop)
+		return err
+	})
 
-	monsterJunctions, err := getDbJunctions(r, areaIDs, i.resTypeSing, cfg.e.monsters.resTypeSing, cfg.db.GetAreaMonsterIdPairs, juncAreaMonster)
+	var monsterJunctions []Junction
+	g.Go(func() error {
+		var err error
+		monsterJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSing, cfg.e.monsters.resTypeSing, cfg.db.GetAreaMonsterIdPairs, juncAreaMonster)
+		return err
+	})
+
+	err := g.Wait()
 	if err != nil {
 		return nil, err
 	}

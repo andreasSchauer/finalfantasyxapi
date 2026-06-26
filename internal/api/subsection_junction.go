@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"net/http"
 )
 
 type Junction struct {
@@ -11,8 +10,8 @@ type Junction struct {
 }
 
 // queries db for junctionPairs and converts them into a []Junction
-func getDbJunctions[R any](r *http.Request, ids []int32, parentResType, childResType ResTypeSingular, dbQuery func(context.Context, []int32) ([]R, error), converter func(R) Junction) ([]Junction, error) {
-	dbJunctions, err := dbQuery(r.Context(), ids)
+func getDbJunctions[R any](ctx context.Context, ids []int32, parentResType, childResType ResTypeSingular, dbQuery func(context.Context, []int32) ([]R, error), converter func(R) Junction) ([]Junction, error) {
+	dbJunctions, err := dbQuery(ctx, ids)
 	if err != nil {
 		return nil, newHTTPErrorDbPairs(parentResType, childResType, err)
 	}
