@@ -159,7 +159,7 @@ func TestSubsectionSubquests(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests/1/subquests?limit=max",
+				requestURL:     "/api/sidequests/1/subquests",
 				expectedStatus: http.StatusOK,
 			},
 			count:          36,

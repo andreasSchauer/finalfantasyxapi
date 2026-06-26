@@ -355,7 +355,7 @@ func TestSubsectionAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/1/learnable-abilities?limit=max",
+				requestURL:     "/api/character-classes/1/learnable-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleCharacterClasses,
 			},
@@ -365,7 +365,7 @@ func TestSubsectionAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/submenus/2/abilities?limit=max",
+				requestURL:     "/api/submenus/2/abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSubmenus,
 			},

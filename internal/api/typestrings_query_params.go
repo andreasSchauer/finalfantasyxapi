@@ -207,3 +207,13 @@ func formatQvSlice(qvs []QueryValue) string {
 	strings := qvsToStrings(qvs)
 	return h.FormatStringSlice(strings)
 }
+
+
+type QuerySpecialVal string
+
+const (
+	qsvMax			QuerySpecialVal = "max"
+	qsvImmune		QuerySpecialVal = "immune"
+	qsvInfinite		QuerySpecialVal = "infinite"
+	qsvAlways		QuerySpecialVal = "always"
+)

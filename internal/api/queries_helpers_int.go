@@ -65,7 +65,7 @@ func checkIntQuerySpecialVals(queryParam QueryParam, query string) (int, error) 
 	}
 
 	for _, input := range queryParam.SpecialInputs {
-		if strings.ToLower(query) == input.Key {
+		if strings.ToLower(query) == string(input.Key) {
 			return input.Val, nil
 		}
 	}

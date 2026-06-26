@@ -1459,24 +1459,32 @@ func TestSubsectionMonsters(t *testing.T) {
 				requestURL:     "/api/monsters/?ids=1&location=15",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testCfg.HandleMonsters,
-				expectedErr:    "parameter 'ids' can only be used with default parameters. available default parameters: 'limit', 'offset', 'flip'.",
+				expectedErr:    "parameter 'ids' can't be combined with other parameters.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/simple?ids=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,",
-				expectedStatus: http.StatusBadRequest,
+				requestURL:     "/api/monsters/simple?limit=max",
+				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleMonsters,
-				expectedErr:    "fetch limit exceeded. the maximum amount of inputs is 50.",
+				dontCheck: map[string]bool{
+					"parent resource": true,
+				},
 			},
+			count:   307,
+			results: []int32{1, 22, 33, 68, 123, 199, 278, 307},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/simple",
-				expectedStatus: http.StatusBadRequest,
+				requestURL:     "/api/monsters/simple?ids=1-21",
+				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleMonsters,
-				expectedErr:    "parameter 'ids' can't be empty.",
+				dontCheck: map[string]bool{
+					"parent resource": true,
+				},
 			},
+			count:   21,
+			results: []int32{1, 7, 18, 21},
 		},
 		{
 			testGeneral: testGeneral{
@@ -1492,7 +1500,7 @@ func TestSubsectionMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/simple?ids=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21&limit=max",
+				requestURL:     "/api/monsters/simple?ids=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleMonsters,
 				dontCheck: map[string]bool{
@@ -1529,7 +1537,7 @@ func TestSubsectionMonsters(t *testing.T) {
 				handler:        testCfg.HandleAreas,
 			},
 			count:          21,
-			next:           h.GetStrPtr("/areas/239/monsters?limit=20&offset=20"),
+			next:           nil,
 			parentResource: h.GetStrPtr("/areas/239"),
 			results:        []int32{190, 201, 210, 239, 245, 249, 253},
 		},
@@ -1552,6 +1560,14 @@ func TestSubsectionMonsters(t *testing.T) {
 			count:          3,
 			parentResource: h.GetStrPtr("/monster-formations/140"),
 			results:        []int32{104, 99, 103},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/simple?ids=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1",
+				expectedStatus: http.StatusBadRequest,
+				handler:        testCfg.HandleMonsters,
+				expectedErr:    "fetch limit exceeded. the maximum amount of inputs is 1000.",
+			},
 		},
 	}
 

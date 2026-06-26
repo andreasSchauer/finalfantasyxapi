@@ -491,6 +491,30 @@ func TestSubsectionSublocations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations/simple?availability=pre-story",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleSublocations,
+				dontCheck: map[string]bool{
+					"parent resource": true,
+				},
+			},
+			count:   5,
+			results: []int32{1, 4, 5, 30, 32},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations/simple?availability=post&sidequests=true&boss_fights=true",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleSublocations,
+				dontCheck: map[string]bool{
+					"parent resource": true,
+				},
+			},
+			count:   3,
+			results: []int32{29, 31, 34},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/15/sublocations/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleLocations,

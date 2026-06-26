@@ -38,6 +38,28 @@ func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncNam
 	}
 }
 
+func testStatusses(t *testing.T, tests []testGeneral, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request)) {
+	t.Helper()
+	for i, exp := range tests {
+		name := getTestName(testFuncName, exp.requestURL, i+1)
+
+		expHandler := handlerFunc
+		if handlerFunc == nil {
+			expHandler = exp.handler
+		}
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			_, _, err := setupTest[any](t, exp, name, expHandler)
+			if errors.Is(err, errCorrect) {
+				return
+			}
+		})
+	}
+}
+
+
 // compareAPIResourceLists for normal API Resources
 // compareSimpleResourceLists for Subsections
 func testIdList[G any](t *testing.T, tests []expListIDs, endpoint EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, EndpointName, expListIDs, G)) {
@@ -51,6 +73,11 @@ func testIdList[G any](t *testing.T, tests []expListIDs, endpoint EndpointName, 
 			expHandler = exp.handler
 		}
 
+		expEndpoint := endpoint
+		if endpoint == "" {
+			expEndpoint = exp.endpoint
+		}
+
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
@@ -58,8 +85,8 @@ func testIdList[G any](t *testing.T, tests []expListIDs, endpoint EndpointName, 
 			if errors.Is(err, errCorrect) {
 				return
 			}
-			
-			compFunc(test, endpoint, exp, got)
+
+			compFunc(test, expEndpoint, exp, got)
 		})
 	}
 }
@@ -94,6 +121,8 @@ func testNameList[G any](t *testing.T, tests []expListNames, endpoint EndpointNa
 		})
 	}
 }
+
+
 
 // makes the http request for the test and returns the result, as well as a test struct
 func setupTest[T any](t *testing.T, tc testGeneral, testName string, handlerFunc func(http.ResponseWriter, *http.Request)) (test, T, error) {

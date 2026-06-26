@@ -3,7 +3,122 @@ package api
 import (
 	"net/http"
 	"testing"
+
+
 )
+
+
+func TestSubsections(t *testing.T) {
+	t.Parallel()
+	tests := []testGeneral{
+		{
+			requestURL:     "/api/treasures/1/simple?availability=post",
+			expectedStatus: http.StatusBadRequest,
+			handler:        testCfg.HandleTreasures,
+			expectedErr: 	"endpoint /treasures doesn't have any subsections.",
+		},
+		{
+			requestURL:     "/api/sublocations/1/simple?limit=2",
+			expectedStatus: http.StatusBadRequest,
+			handler:        testCfg.HandleSublocations,
+			expectedErr: 	"query parameters can't be used in combination with subsections.",
+		},
+		{
+			requestURL:     "/api/sublocations/1/areas?limit=2",
+			expectedStatus: http.StatusBadRequest,
+			handler:        testCfg.HandleSublocations,
+			expectedErr: 	"query parameters can't be used in combination with subsections.",
+		},
+		{
+			requestURL:     "/api/sublocations/simple?ids=1-5&offset=3",
+			expectedStatus: http.StatusBadRequest,
+			handler:        testCfg.HandleSublocations,
+			expectedErr: 	"parameter 'ids' can't be combined with other parameters.",
+		},
+		{
+			requestURL:     "/api/locations/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleLocations,
+		},
+		{
+			requestURL:     "/api/sublocations/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleSublocations,
+		},
+		{
+			requestURL:     "/api/areas/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleAreas,
+		},
+		{
+			requestURL:     "/api/monster-formations/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleMonsterFormations,
+		},
+		{
+			requestURL:     "/api/shops/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleShops,
+		},
+		{
+			requestURL:     "/api/monsters/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleMonsters,
+		},
+		{
+			requestURL:     "/api/abilities/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleAbilities,
+		},
+		{
+			requestURL:     "/api/player-abilities/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandlePlayerAbilities,
+		},
+		{
+			requestURL:     "/api/overdrive-abilities/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleOverdriveAbilities,
+		},
+		{
+			requestURL:     "/api/item-abilities/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleItemAbilities,
+		},
+		{
+			requestURL:     "/api/trigger-commands/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleTriggerCommands,
+		},
+		{
+			requestURL:     "/api/misc-abilities/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleMiscAbilities,
+		},
+		{
+			requestURL:     "/api/enemy-abilities/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleEnemyAbilities,
+		},
+		{
+			requestURL:     "/api/overdrives/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleOverdrives,
+		},
+		{
+			requestURL:     "/api/mixes/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleMixes,
+		},
+		{
+			requestURL:     "/api/auto-abilities/1/simple",
+			expectedStatus: http.StatusOK,
+			handler:        testCfg.HandleAutoAbilities,
+		},
+	}
+
+	testStatusses(t, tests, "Subsections", nil)
+}
 
 func TestSections(t *testing.T) {
 	t.Parallel()

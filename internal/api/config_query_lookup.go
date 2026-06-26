@@ -38,8 +38,8 @@ type QueryParam struct {
 }
 
 type SpecialQueryInput struct {
-	Key string `json:"key"`
-	Val int    `json:"value"`
+	Key QuerySpecialVal `json:"key"`
+	Val int    			`json:"value"`
 }
 
 // QueryLookup holds all the Query Parameters for the application
@@ -116,7 +116,7 @@ func (cfg *Config) QueryLookupInit() {
 			ForSingle:   false,
 			SpecialInputs: []SpecialQueryInput{
 				{
-					Key: "max",
+					Key: qsvMax,
 					Val: 9999,
 				},
 			},
@@ -303,7 +303,7 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 		for _, input := range p.SpecialInputs {
 			usageTrimmed := strings.TrimSuffix(p.Usage, "}")
 			p.Usage = fmt.Sprintf("%s|'%s'}", usageTrimmed, input.Key)
-			p.ExampleUses = append(p.ExampleUses, s+input.Key)
+			p.ExampleUses = append(p.ExampleUses, s + string(input.Key))
 		}
 	}
 
@@ -1459,7 +1459,7 @@ func (cfg *Config) initMonstersParams() {
 			AllowedIntRange: []int{1, 254},
 			SpecialInputs: []SpecialQueryInput{
 				{
-					Key: "immune",
+					Key: qsvImmune,
 					Val: 254,
 				},
 			},
@@ -3260,11 +3260,11 @@ func (cfg *Config) initStatusConditionsParams() {
 			AllowedIntRange: []int{1, 255},
 			SpecialInputs: []SpecialQueryInput{
 				{
-					Key: "infinite",
+					Key: qsvInfinite,
 					Val: 254,
 				},
 				{
-					Key: "always",
+					Key: qsvAlways,
 					Val: 255,
 				},
 			},
@@ -3279,11 +3279,11 @@ func (cfg *Config) initStatusConditionsParams() {
 			AllowedIntRange: []int{1, 255},
 			SpecialInputs: []SpecialQueryInput{
 				{
-					Key: "infinite",
+					Key: qsvInfinite,
 					Val: 254,
 				},
 				{
-					Key: "always",
+					Key: qsvAlways,
 					Val: 255,
 				},
 			},
@@ -3298,7 +3298,7 @@ func (cfg *Config) initStatusConditionsParams() {
 			AllowedIntRange: []int{1, 254},
 			SpecialInputs: []SpecialQueryInput{
 				{
-					Key: "immune",
+					Key: qsvImmune,
 					Val: 254,
 				},
 			},

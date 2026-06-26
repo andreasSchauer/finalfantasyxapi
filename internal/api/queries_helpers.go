@@ -102,7 +102,7 @@ func getLimitMax(cfg *Config) string {
 	queryParamLimit := cfg.q.defaultParams[qpnLimit]
 
 	for _, input := range queryParamLimit.SpecialInputs {
-		if input.Key == "max" {
+		if input.Key == qsvMax {
 			return strconv.Itoa(input.Val)
 		}
 	}
