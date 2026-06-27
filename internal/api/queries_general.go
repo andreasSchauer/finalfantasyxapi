@@ -10,7 +10,7 @@ import (
 )
 
 // used for query filters that can't really be generalized. this one simply checks, if it's empty and then calls the wrapperFn
-func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, wrapperFn func(*Config, *http.Request, context.Context, string, QueryParam) ([]int32, error)) IdFilter {
+func basicQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapBasic) IdFilter {
 	return func (ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		query, err := basicQueryChecks(r, queryParam, i.queryLookup)

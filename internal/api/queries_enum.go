@@ -35,7 +35,7 @@ func enumQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E,
 }
 
 // like enum query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
-func enumQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputIDs []int32, queryName QueryParamName, wrapperFn func(*Config, *http.Request, context.Context, E) ([]int32, error)) IdFilter {
+func enumQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapEnum[E]) IdFilter {
 	return func (ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		enum, err := parseEnumQuery(r, i.endpoint, queryParam, et)

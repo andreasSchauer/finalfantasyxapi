@@ -33,7 +33,7 @@ func idListQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceLis
 }
 
 // like idListQuery, but with more specialized logic in between (wrapperFn)
-func idListQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn func(*Config, *http.Request, context.Context, []int32) ([]int32, error)) IdFilter {
+func idListQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn QueryWrapIntSlice) IdFilter {
 	return func (ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 

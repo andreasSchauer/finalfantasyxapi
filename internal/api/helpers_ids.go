@@ -6,17 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type filteredIdList struct {
-	IDs []int32
-	err error
-}
 
-func fidl(ids []int32, err error) filteredIdList {
-	return filteredIdList{
-		IDs: ids,
-		err: err,
-	}
-}
 
 // s1 [1,2,3] s2 [2,3,4,5] => [1,2,3,4,5]
 func combineIdSlices(idSlices ...[]int32) []int32 {
@@ -29,22 +19,19 @@ func combineIdSlices(idSlices ...[]int32) []int32 {
 	return ids
 }
 
-func filterIdSlices(filteredLists []filteredIdList) ([]int32, error) {
-	switch len(filteredLists) {
+func filterIdSlices(slices [][]int32) ([]int32, error) {
+	switch len(slices) {
 	case 0:
 		return []int32{}, nil
 
 	case 1:
-		return filteredLists[0].IDs, nil
+		return slices[0], nil
 
 	default:
-		ids := filteredLists[0].IDs
+		ids := slices[0]
 
-		for _, filtered := range filteredLists {
-			if filtered.err != nil {
-				return nil, filtered.err
-			}
-			ids = getSharedIDs(ids, filtered.IDs)
+		for i := 1; i < len(slices); i++ {
+			ids = getSharedIDs(ids, slices[i])
 		}
 
 		return ids, nil

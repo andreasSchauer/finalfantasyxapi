@@ -8,7 +8,7 @@ import (
 )
 
 
-func joinedQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryNames []QueryParamName, queryFn func(*Config, *http.Request, context.Context) ([]int32, error)) IdFilter {
+func joinedQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryNames []QueryParamName, wrapperFn QueryWrapJoined) IdFilter {
 	return func (ctx context.Context) ([]int32, error) {
 		allEmpty := true
 
@@ -27,6 +27,6 @@ func joinedQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 			return inputIDs, nil
 		}
 
-		return queryFn(cfg, r, ctx)
+		return wrapperFn(cfg, r, ctx)
 	}
 }

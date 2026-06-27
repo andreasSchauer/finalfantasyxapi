@@ -2,9 +2,11 @@ package api
 
 import (
 	"net/http"
+	"sync"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"golang.org/x/sync/errgroup"
 )
 
 func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList], id int32) (ArenaCreation, error) {
@@ -54,23 +56,57 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.Are
 		return nil, nil
 	}
 
-	monsterIdSlices := []filteredIdList{}
+	monsterIdSlices := [][]int32{}
+	g, ctx := errgroup.WithContext(r.Context())
+	var mu sync.Mutex
 
 	if mf.RequiredArea != nil {
-		area := database.ToNullMaCreationArea(mf.RequiredArea)
-		idSlice := fidl(cfg.db.GetCaptureMonsterIDsByMaCreationArea(r.Context(), area))
-		monsterIdSlices = append(monsterIdSlices, idSlice)
+		g.Go(func() error {
+			area := database.ToNullMaCreationArea(mf.RequiredArea)
+			idSlice, err := cfg.db.GetCaptureMonsterIDsByMaCreationArea(ctx, area)
+			if err != nil {
+				return err
+			}
+
+			mu.Lock()
+			monsterIdSlices = append(monsterIdSlices, idSlice)
+			mu.Unlock()
+			return nil
+		})
 	}
 
 	if mf.RequiredSpecies != nil {
-		species := database.MonsterSpecies(*mf.RequiredSpecies)
-		idSlice := fidl(cfg.db.GetCaptureMonsterIDsBySpecies(r.Context(), species))
-		monsterIdSlices = append(monsterIdSlices, idSlice)
+		g.Go(func() error {
+			species := database.MonsterSpecies(*mf.RequiredSpecies)
+			idSlice, err := cfg.db.GetCaptureMonsterIDsBySpecies(ctx, species)
+			if err != nil {
+				return err
+			}
+
+			mu.Lock()
+			monsterIdSlices = append(monsterIdSlices, idSlice)
+			mu.Unlock()
+			return nil
+		})
 	}
 
 	if mf.UnderwaterOnly {
-		idSlice := fidl(cfg.db.GetCaptureMonsterIDsByIsUnderwater(r.Context()))
-		monsterIdSlices = append(monsterIdSlices, idSlice)
+		g.Go(func() error {
+			idSlice, err := cfg.db.GetCaptureMonsterIDsByIsUnderwater(ctx)
+			if err != nil {
+				return err
+			}
+
+			mu.Lock()
+			monsterIdSlices = append(monsterIdSlices, idSlice)
+			mu.Unlock()
+			return nil
+		})
+	}
+
+	err := g.Wait()
+	if err != nil {
+		return nil, err
 	}
 
 	monsterIDs, err := filterIdSlices(monsterIdSlices)
@@ -79,6 +115,5 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.Are
 	}
 
 	monsters := idsToAPIResources(cfg, cfg.e.monsters, monsterIDs)
-
 	return monsters, nil
 }
