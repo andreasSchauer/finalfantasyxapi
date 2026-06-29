@@ -558,7 +558,7 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=pre-airship&item=56&methods=monster&pre_airship=true",
+				requestURL:     "/api/areas?availability=pre-airship&item=56&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
 			count:   6,

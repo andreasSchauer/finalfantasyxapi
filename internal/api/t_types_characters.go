@@ -11,8 +11,8 @@ type expCharacter struct {
 	characterClasses       []int32
 	baseStats              map[string]int32
 	defaultPlayerAbilities []int32
-	stdSgPlayerAbilities   []int32
-	expSgPlayerAbilities   []int32
+	stdSphereGrid		   *expSphereGrid
+	expSphereGrid		   *expSphereGrid
 	overdriveModes         map[string]int32
 }
 
@@ -31,7 +31,17 @@ func compareCharacters(test test, exp expCharacter, got Character) {
 	checkResIDsInSlice(test, "character classes", test.cfg.e.characterClasses.endpoint, exp.characterClasses, got.CharacterClasses)
 	checkResAmtTypes(test, "base stats", exp.baseStats, statsToBaseStats(got.Stats))
 	checkResIDsInSlice(test, "default abilities", test.cfg.e.playerAbilities.endpoint, exp.defaultPlayerAbilities, got.DefaultPlayerAbilities)
-	//checkResIDsInSlice(test, "standard sg abilities", test.cfg.e.playerAbilities.endpoint, exp.stdSgPlayerAbilities, got.StdSgPlayerAbilities)
-	//checkResIDsInSlice(test, "expert sg abilities", test.cfg.e.playerAbilities.endpoint, exp.expSgPlayerAbilities, got.ExpSgPlayerAbilities)
+	compTestStructPtrs(test, "std sg", exp.stdSphereGrid, got.StdSphereGrid, compareSphereGrids)
+	compTestStructPtrs(test, "exp sg", exp.expSphereGrid, got.ExpSphereGrid, compareSphereGrids)
 	checkResAmts(test, "overdrive modes", exp.overdriveModes, got.OverdriveModes)
+}
+
+
+type expSphereGrid struct {
+	playerAbilities []int32
+}
+
+func compareSphereGrids(test test, fieldName string, exp expSphereGrid, got SphereGrid) {
+	test.t.Helper()
+	checkResIDsInSlice(test, fieldName + " abilities", test.cfg.e.playerAbilities.endpoint, exp.playerAbilities, got.PlayerAbilities)
 }

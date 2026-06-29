@@ -4,7 +4,6 @@ package api
 func compareAPIResourceLists[T APIResourceList](test test, endpoint EndpointName, expList expListIDs, gotList T) {
 	test.t.Helper()
 	compareListParams(test, expList.getListParams(), gotList.getListParams())
-
 	checkResIDsInSlice(test, "results", endpoint, expList.results, gotList.getResults())
 }
 

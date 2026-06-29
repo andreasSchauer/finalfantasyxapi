@@ -339,7 +339,7 @@ func TestRetrieveSublocations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=pre-airship&item=56&methods=monster&pre_airship=true",
+				requestURL:     "/api/sublocations?availability=pre-airship&item=56&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
 			count:   5,

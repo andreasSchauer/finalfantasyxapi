@@ -16,7 +16,9 @@ type avlParams struct {
 }
 
 func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (avlParams, error) {
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, i.queryLookup[qpnAvailability], cfg.t.AvailabilityType)
+	queryParamAvl := i.queryLookup[qpnAvailability]
+	
+	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, queryParamAvl, cfg.t.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return avlParams{}, err
 	}
@@ -32,7 +34,13 @@ func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg
 		if errExceptEmptyQuery(err) {
 			return avlParams{}, err
 		}
+
+		avlQuery := r.URL.Query().Get(string(queryParamAvl.Name))
+		if avlQuery == string(database.AvailabilityTypePreAirship) {
+			preAirship = true
+		}
 	}
+
 	avlRanks := avlToRanks(availabilities, preAirship)
 
 	params := avlParams{

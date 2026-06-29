@@ -19,14 +19,14 @@ func TestGetCharacter(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/characters/1",
+				requestURL:     "/api/characters/1?osg_stats=standard",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
 					"character classes":     2,
 					"default abilities":     0,
-					"standard sg abilities": 11,
-					"expert sg abilities":   11,
+					"std sg abilities": 11,
+					"exp sg abilities":   11,
 				},
 			},
 			expUnique: expUnique{
@@ -40,20 +40,24 @@ func TestGetCharacter(t *testing.T) {
 			overdriveCommand: h.GetInt32Ptr(1),
 			characterClasses: []int32{1, 5},
 			baseStats: map[string]int32{
-				"hp":            520,
-				"mp":            12,
-				"strength":      15,
-				"defense":       10,
-				"magic":         5,
-				"magic defense": 5,
-				"agility":       10,
-				"luck":          18,
-				"evasion":       10,
-				"accuracy":      10,
+				"hp":            3120,
+				"mp":            152,
+				"strength":      54,
+				"defense":       34,
+				"magic":         11,
+				"magic defense": 7,
+				"agility":       44,
+				"luck":          19,
+				"evasion":       29,
+				"accuracy":      29,
 			},
 			defaultPlayerAbilities: []int32{},
-			stdSgPlayerAbilities:   []int32{9, 10, 13, 22, 27, 38, 56, 59},
-			expSgPlayerAbilities:   []int32{10, 22, 25, 57, 58, 59},
+			stdSphereGrid: &expSphereGrid{
+				playerAbilities: []int32{9, 10, 13, 22, 27, 38, 56, 59},
+			},
+			expSphereGrid: &expSphereGrid{
+				playerAbilities: []int32{10, 22, 25, 57, 58, 59},
+			},
 			overdriveModes: map[string]int32{
 				"warrior":   150,
 				"victim":    120,
@@ -68,10 +72,10 @@ func TestGetCharacter(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"character classes":     2,
-					"default abilities":     1,
-					"standard sg abilities": 5,
-					"expert sg abilities":   4,
+					"character classes":    2,
+					"default abilities":    1,
+					"std sg abilities": 	5,
+					"exp sg abilities":   	4,
 				},
 			},
 			expUnique: expUnique{
@@ -97,8 +101,12 @@ func TestGetCharacter(t *testing.T) {
 				"accuracy":      5,
 			},
 			defaultPlayerAbilities: []int32{33},
-			stdSgPlayerAbilities:   []int32{12, 32, 33, 52, 87},
-			expSgPlayerAbilities:   []int32{12, 32, 33, 52},
+			stdSphereGrid: &expSphereGrid{
+				playerAbilities: []int32{12, 32, 33, 52, 87},
+			},
+			expSphereGrid: &expSphereGrid{
+				playerAbilities: []int32{12, 32, 33, 52},
+			},
 			overdriveModes: map[string]int32{
 				"comrade":   100,
 				"healer":    100,
@@ -109,14 +117,14 @@ func TestGetCharacter(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/characters/4",
+				requestURL:     "/api/characters/4?osg_stats=expert",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
 					"character classes":     2,
 					"default abilities":     4,
-					"standard sg abilities": 20,
-					"expert sg abilities":   19,
+					"std sg abilities": 20,
+					"exp sg abilities":   19,
 				},
 			},
 			expUnique: expUnique{
@@ -130,20 +138,24 @@ func TestGetCharacter(t *testing.T) {
 			overdriveCommand: h.GetInt32Ptr(4),
 			characterClasses: []int32{1, 8},
 			baseStats: map[string]int32{
-				"hp":            380,
-				"mp":            92,
-				"strength":      5,
-				"defense":       8,
-				"magic":         20,
-				"magic defense": 30,
-				"agility":       5,
+				"hp":            2580,
+				"mp":            332,
+				"strength":      15,
+				"defense":       38,
+				"magic":         54,
+				"magic defense": 78,
+				"agility":       22,
 				"luck":          17,
-				"evasion":       40,
-				"accuracy":      3,
+				"evasion":       83,
+				"accuracy":      13,
 			},
 			defaultPlayerAbilities: []int32{69, 70, 71, 72},
-			stdSgPlayerAbilities:   []int32{21, 29, 43, 69, 74, 78, 83, 86},
-			expSgPlayerAbilities:   []int32{29, 30, 43, 70, 74, 75, 79, 81, 87},
+			stdSphereGrid: &expSphereGrid{
+				playerAbilities: []int32{21, 29, 43, 69, 74, 78, 83, 86},
+			},
+			expSphereGrid: &expSphereGrid{
+				playerAbilities: []int32{29, 30, 43, 70, 74, 75, 79, 81, 87},
+			},
 			overdriveModes: map[string]int32{
 				"comrade":   100,
 				"victim":    130,
@@ -160,8 +172,6 @@ func TestGetCharacter(t *testing.T) {
 				expLengths: map[string]int{
 					"character classes":     1,
 					"default abilities":     15,
-					"standard sg abilities": 0,
-					"expert sg abilities":   0,
 				},
 			},
 			expUnique: expUnique{
@@ -187,8 +197,8 @@ func TestGetCharacter(t *testing.T) {
 				"accuracy":      10,
 			},
 			defaultPlayerAbilities: []int32{45, 46, 48, 69, 71, 74, 75, 76},
-			stdSgPlayerAbilities:   []int32{},
-			expSgPlayerAbilities:   []int32{},
+			stdSphereGrid: nil,
+			expSphereGrid: nil,
 			overdriveModes:         nil,
 		},
 	}

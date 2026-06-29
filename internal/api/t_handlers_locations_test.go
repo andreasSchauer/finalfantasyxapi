@@ -305,7 +305,7 @@ func TestRetrieveLocations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=pre-airship&item=56&methods=monster&pre_airship=true",
+				requestURL:     "/api/locations?availability=pre-airship&item=56&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
 			count:   5,
