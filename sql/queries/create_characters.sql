@@ -9,7 +9,7 @@ RETURNING id, data_hash;
 
 
 -- name: CreateCharacterBulk :many
-INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater, area_id)
+INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater, area_id, std_sphere_grid_id, exp_sphere_grid_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('unit_id')::int[]),
@@ -18,7 +18,33 @@ SELECT
     unnest(sqlc.arg('armor_type')::armor_type[]),
     unnest(sqlc.arg('physical_attack_range')::int[]),
     unnest(sqlc.arg('can_fight_underwater')::boolean[]),
-    unnest(sqlc.arg('area_id')::null_int[])
+    unnest(sqlc.arg('area_id')::null_int[]),
+    unnest(sqlc.arg('std_sphere_grid_id')::null_int[]),
+    unnest(sqlc.arg('exp_sphere_grid_id')::null_int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash;
+
+
+-- name: CreateSphereGridBulk :many
+INSERT INTO sphere_grids (data_hash, type, hp, mp, strength, defense, magic, magic_defense, agility, luck, evasion, accuracy, lv_1_locks, lv_2_locks, lv_3_locks, lv_4_locks, empty_nodes)
+SELECT
+    unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('type')::sphere_grid_type[]),
+    unnest(sqlc.arg('hp')::int[]),
+    unnest(sqlc.arg('mp')::int[]),
+    unnest(sqlc.arg('strength')::int[]),
+    unnest(sqlc.arg('defense')::int[]),
+    unnest(sqlc.arg('magic')::int[]),
+    unnest(sqlc.arg('magic_defense')::int[]),
+    unnest(sqlc.arg('agility')::int[]),
+    unnest(sqlc.arg('luck')::int[]),
+    unnest(sqlc.arg('evasion')::int[]),
+    unnest(sqlc.arg('accuracy')::int[]),
+    unnest(sqlc.arg('lv_1_locks')::int[]),
+    unnest(sqlc.arg('lv_2_locks')::int[]),
+    unnest(sqlc.arg('lv_3_locks')::int[]),
+    unnest(sqlc.arg('lv_4_locks')::int[]),
+    unnest(sqlc.arg('empty_nodes')::int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash;
 

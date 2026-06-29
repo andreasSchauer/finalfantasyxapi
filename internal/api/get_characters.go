@@ -32,9 +32,14 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 		CharacterClasses:       rel.CharacterClasses,
 		BaseStats:              toResAmtType(cfg, cfg.e.stats, character.BaseStats, newBaseStat),
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
-		StdSgPlayerAbilities:   rel.StdSgPlayerAbilities,
-		ExpSgPlayerAbilities:   rel.ExpSgPlayerAbilities,
+		StdSphereGrid:          rel.StdSphereGrid,
+		ExpSphereGrid:          rel.ExpSphereGrid,
 		OverdriveModes:         rel.OverdriveModes,
+	}
+
+	response.BaseStats, err = applyOsgStats(cfg, r, response)
+	if err != nil {
+		return Character{}, err
 	}
 
 	response.Stats = createStats(response.BaseStats)

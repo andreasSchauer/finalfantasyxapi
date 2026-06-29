@@ -103,3 +103,13 @@ func replaceBaseStats(baseStats []BaseStat, statMap map[string]int32) []BaseStat
 }
 
 
+func addToBaseStats(baseStats []BaseStat, statMap map[string]int32) []BaseStat {
+	for i, baseStat := range baseStats {
+		toAdd, ok := statMap[baseStat.Stat.Name]
+		if ok {
+			baseStats[i].Value += toAdd
+		}
+	}
+
+	return baseStats
+}

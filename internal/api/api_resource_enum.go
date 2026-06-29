@@ -25,8 +25,8 @@ func (l EnumApiResourceList) getResults() []HasAPIResource {
 type EnumAPIResource struct {
 	ID          int32  `json:"id"`
 	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
 	URL         string `json:"url"`
+	Description string `json:"description,omitempty"`
 }
 
 func (r EnumAPIResource) IsZero() bool {

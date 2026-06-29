@@ -220,7 +220,7 @@ func (q *Queries) CreateAeonsWeaponArmorJunctionBulk(ctx context.Context, arg Cr
 }
 
 const createCharacterBulk = `-- name: CreateCharacterBulk :many
-INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater, area_id)
+INSERT INTO characters (data_hash, unit_id, is_story_based, weapon_type, armor_type, physical_attack_range, can_fight_underwater, area_id, std_sphere_grid_id, exp_sphere_grid_id)
 SELECT
     unnest($1::text[]),
     unnest($2::int[]),
@@ -229,7 +229,9 @@ SELECT
     unnest($5::armor_type[]),
     unnest($6::int[]),
     unnest($7::boolean[]),
-    unnest($8::null_int[])
+    unnest($8::null_int[]),
+    unnest($9::null_int[]),
+    unnest($10::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
@@ -243,6 +245,8 @@ type CreateCharacterBulkParams struct {
 	PhysicalAttackRange []int32
 	CanFightUnderwater  []bool
 	AreaID              []sql.NullInt32
+	StdSphereGridID     []sql.NullInt32
+	ExpSphereGridID     []sql.NullInt32
 }
 
 type CreateCharacterBulkRow struct {
@@ -260,6 +264,8 @@ func (q *Queries) CreateCharacterBulk(ctx context.Context, arg CreateCharacterBu
 		pq.Array(arg.PhysicalAttackRange),
 		pq.Array(arg.CanFightUnderwater),
 		pq.Array(arg.AreaID),
+		pq.Array(arg.StdSphereGridID),
+		pq.Array(arg.ExpSphereGridID),
 	)
 	if err != nil {
 		return nil, err
@@ -436,6 +442,96 @@ func (q *Queries) CreatePlayerUnitBulk(ctx context.Context, arg CreatePlayerUnit
 	var items []CreatePlayerUnitBulkRow
 	for rows.Next() {
 		var i CreatePlayerUnitBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createSphereGridBulk = `-- name: CreateSphereGridBulk :many
+INSERT INTO sphere_grids (data_hash, type, hp, mp, strength, defense, magic, magic_defense, agility, luck, evasion, accuracy, lv_1_locks, lv_2_locks, lv_3_locks, lv_4_locks, empty_nodes)
+SELECT
+    unnest($1::text[]),
+    unnest($2::sphere_grid_type[]),
+    unnest($3::int[]),
+    unnest($4::int[]),
+    unnest($5::int[]),
+    unnest($6::int[]),
+    unnest($7::int[]),
+    unnest($8::int[]),
+    unnest($9::int[]),
+    unnest($10::int[]),
+    unnest($11::int[]),
+    unnest($12::int[]),
+    unnest($13::int[]),
+    unnest($14::int[]),
+    unnest($15::int[]),
+    unnest($16::int[]),
+    unnest($17::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
+RETURNING id, data_hash
+`
+
+type CreateSphereGridBulkParams struct {
+	DataHash     []string
+	Type         []SphereGridType
+	Hp           []int32
+	Mp           []int32
+	Strength     []int32
+	Defense      []int32
+	Magic        []int32
+	MagicDefense []int32
+	Agility      []int32
+	Luck         []int32
+	Evasion      []int32
+	Accuracy     []int32
+	Lv1Locks     []int32
+	Lv2Locks     []int32
+	Lv3Locks     []int32
+	Lv4Locks     []int32
+	EmptyNodes   []int32
+}
+
+type CreateSphereGridBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateSphereGridBulk(ctx context.Context, arg CreateSphereGridBulkParams) ([]CreateSphereGridBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createSphereGridBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Type),
+		pq.Array(arg.Hp),
+		pq.Array(arg.Mp),
+		pq.Array(arg.Strength),
+		pq.Array(arg.Defense),
+		pq.Array(arg.Magic),
+		pq.Array(arg.MagicDefense),
+		pq.Array(arg.Agility),
+		pq.Array(arg.Luck),
+		pq.Array(arg.Evasion),
+		pq.Array(arg.Accuracy),
+		pq.Array(arg.Lv1Locks),
+		pq.Array(arg.Lv2Locks),
+		pq.Array(arg.Lv3Locks),
+		pq.Array(arg.Lv4Locks),
+		pq.Array(arg.EmptyNodes),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateSphereGridBulkRow
+	for rows.Next() {
+		var i CreateSphereGridBulkRow
 		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
 			return nil, err
 		}

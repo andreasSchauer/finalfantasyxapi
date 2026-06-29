@@ -1,5 +1,7 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+
 type Character struct {
 	ID                     int32                              `json:"id"`
 	Name                   string                             `json:"name"`
@@ -16,7 +18,29 @@ type Character struct {
 	BaseStats              []BaseStat         				  `json:"-"`
 	Stats				   Stats			  				  `json:"stats"`
 	DefaultPlayerAbilities []NamedAPIResource                 `json:"default_player_abilities"`
-	StdSgPlayerAbilities   []NamedAPIResource                 `json:"std_sg_player_abilities"`
-	ExpSgPlayerAbilities   []NamedAPIResource                 `json:"exp_sg_player_abilities"`
+	StdSphereGrid		   *SphereGrid						  `json:"std_sphere_grid"`
+	ExpSphereGrid		   *SphereGrid						  `json:"exp_sphere_grid"`
 	OverdriveModes         []ResourceAmount[NamedAPIResource] `json:"overdrive_modes"`
+}
+
+
+type SphereGrid struct {
+	seeding.StatTable
+	Lv1Locks	 			int32				`json:"lv_1_locks"`
+	Lv2Locks	 			int32				`json:"lv_2_locks"`
+	Lv3Locks	 			int32				`json:"lv_3_locks"`
+	Lv4Locks	 			int32				`json:"lv_4_locks"`
+	EmptyNodes	 			int32				`json:"empty_nodes"`
+	PlayerAbilities   		[]NamedAPIResource  `json:"player_abilities"`
+}
+
+func convertSphereGrid(_ *Config, sg seeding.SphereGrid) SphereGrid {
+	return SphereGrid{
+		StatTable: 	sg.StatTable,
+		Lv1Locks: 	sg.Lv1Locks,
+		Lv2Locks: 	sg.Lv2Locks,
+		Lv3Locks: 	sg.Lv3Locks,
+		Lv4Locks: 	sg.Lv4Locks,
+		EmptyNodes: sg.EmptyNodes,
+	}
 }

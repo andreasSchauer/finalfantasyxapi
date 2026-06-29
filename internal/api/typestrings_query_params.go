@@ -82,6 +82,7 @@ const (
 	qpnOffset           QueryParamName = "offset"
 	qpnOmnisElements    QueryParamName = "omnis_elements"
 	qpnOptional         QueryParamName = "optional"
+	qpnOsgStats			QueryParamName = "osg_stats"
 	qpnOutsideBattle    QueryParamName = "outside_battle"
 	qpnPreAirship       QueryParamName = "pre_airship"
 	qpnRank             QueryParamName = "rank"

@@ -1310,6 +1310,14 @@ func (cfg *Config) initPlayerUnitsParams() {
 func (cfg *Config) initCharactersParams() {
 	params := []QueryParam{
 		{
+			Name:        qpnOsgStats,
+			Description: "Adds all stat gains within the character's stated sphere grid to their base stats. This includes stat nodes behind sphere locks.",
+			Type:        qptEnum,
+			ForList:     false,
+			ForSingle:   true,
+			TypeLookup:  cfg.t.SphereGridType.lookup,
+		},
+		{
 			Name:        qpnStoryBased,
 			Description: "Searches for characters that are only playable during certain sections of the story.",
 			Type:        qptBool,

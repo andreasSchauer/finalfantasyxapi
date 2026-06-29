@@ -43,6 +43,7 @@ func (l *Lookup) seedLoop1(qtx *database.Queries, ctx context.Context) error {
 		l.loop1SeedMonsterSelections,
 		l.loop1SeedEquipmentSlotsChances,
 		l.loop1SeedQuests,
+		l.loop1SeedSphereGrids,
 	})
 }
 

@@ -70,6 +70,14 @@ func (l *Lookup) extractCharacters() ([]Character, error) {
 			return nil, err
 		}
 
+		if char.StdSphereGrid != nil {
+			char.StdSphereGrid.ID, err = l.GetHashID(*char.StdSphereGrid)
+		}
+
+		if char.ExpSphereGrid != nil {
+			char.ExpSphereGrid.ID, err = l.GetHashID(*char.ExpSphereGrid)
+		}
+
 		chars = append(chars, *char)
 	}
 

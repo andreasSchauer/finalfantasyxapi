@@ -52,6 +52,7 @@ type TypeLookup struct {
 	ShopCategory                EnumType[database.ShopCategory, any]
 	ShopType                    EnumType[database.ShopType, database.NullShopType]
 	SphereColor                 EnumType[database.SphereColor, any]
+	SphereGridType	                EnumType[database.SphereGridType, any]
 	StatusConditionCategory     EnumType[database.StatusConditionCategory, any]
 	TreasureType                EnumType[database.TreasureType, any]
 
@@ -107,6 +108,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initShopCategory()
 	cfg.t.initShopType()
 	cfg.t.initSphereColor()
+	cfg.t.initSphereGridType()
 	cfg.t.initStatusConditionCategory()
 	cfg.t.initTreasureType()
 
@@ -1315,6 +1317,24 @@ func (t *TypeLookup) initSphereColor() {
 		isEndpoint: false,
 		lookup:     enumSliceToMap(typeSlice),
 		convFunc:   func(s string) database.SphereColor { return database.SphereColor(s) },
+	}
+}
+
+func (t *TypeLookup) initSphereGridType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.SphereGridTypeStandard),
+		},
+		{
+			Name: string(database.SphereGridTypeExpert),
+		},
+	}
+
+	t.SphereGridType = EnumType[database.SphereGridType, any]{
+		name:       "sphere grid type",
+		isEndpoint: false,
+		lookup:     enumSliceToMap(typeSlice),
+		convFunc:   func(s string) database.SphereGridType { return database.SphereGridType(s) },
 	}
 }
 

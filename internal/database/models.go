@@ -2708,6 +2708,48 @@ func (ns NullSphereEffect) Value() (driver.Value, error) {
 	return string(ns.SphereEffect), nil
 }
 
+type SphereGridType string
+
+const (
+	SphereGridTypeStandard SphereGridType = "standard"
+	SphereGridTypeExpert   SphereGridType = "expert"
+)
+
+func (e *SphereGridType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = SphereGridType(s)
+	case string:
+		*e = SphereGridType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for SphereGridType: %T", src)
+	}
+	return nil
+}
+
+type NullSphereGridType struct {
+	SphereGridType SphereGridType
+	Valid          bool // Valid is true if SphereGridType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullSphereGridType) Scan(value interface{}) error {
+	if value == nil {
+		ns.SphereGridType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.SphereGridType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullSphereGridType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.SphereGridType), nil
+}
+
 type StatusConditionCategory string
 
 const (
@@ -3157,6 +3199,8 @@ type Character struct {
 	ArmorType           ArmorType
 	PhysicalAttackRange interface{}
 	CanFightUnderwater  bool
+	StdSphereGridID     sql.NullInt32
+	ExpSphereGridID     sql.NullInt32
 	AreaID              sql.NullInt32
 }
 
@@ -4130,6 +4174,7 @@ type MvGeography struct {
 	Sublocation   string
 	Area          string
 	Version       sql.NullInt32
+	Specification sql.NullString
 }
 
 type MvGeographyGraph struct {
@@ -4435,6 +4480,27 @@ type Sphere struct {
 	TargetNodePosition    NodePosition
 	TargetNodeState       NullNodeState
 	CreatedNodeID         sql.NullInt32
+}
+
+type SphereGrid struct {
+	ID           int32
+	DataHash     string
+	Type         SphereGridType
+	Hp           int32
+	Mp           int32
+	Strength     int32
+	Defense      int32
+	Magic        int32
+	MagicDefense int32
+	Agility      int32
+	Luck         int32
+	Evasion      int32
+	Accuracy     int32
+	Lv1Locks     int32
+	Lv2Locks     int32
+	Lv3Locks     int32
+	Lv4Locks     int32
+	EmptyNodes   int32
 }
 
 type SpheresTargetableNode struct {

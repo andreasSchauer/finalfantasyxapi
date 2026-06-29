@@ -31,7 +31,7 @@ func compareCharacters(test test, exp expCharacter, got Character) {
 	checkResIDsInSlice(test, "character classes", test.cfg.e.characterClasses.endpoint, exp.characterClasses, got.CharacterClasses)
 	checkResAmtTypes(test, "base stats", exp.baseStats, statsToBaseStats(got.Stats))
 	checkResIDsInSlice(test, "default abilities", test.cfg.e.playerAbilities.endpoint, exp.defaultPlayerAbilities, got.DefaultPlayerAbilities)
-	checkResIDsInSlice(test, "standard sg abilities", test.cfg.e.playerAbilities.endpoint, exp.stdSgPlayerAbilities, got.StdSgPlayerAbilities)
-	checkResIDsInSlice(test, "expert sg abilities", test.cfg.e.playerAbilities.endpoint, exp.expSgPlayerAbilities, got.ExpSgPlayerAbilities)
+	//checkResIDsInSlice(test, "standard sg abilities", test.cfg.e.playerAbilities.endpoint, exp.stdSgPlayerAbilities, got.StdSgPlayerAbilities)
+	//checkResIDsInSlice(test, "expert sg abilities", test.cfg.e.playerAbilities.endpoint, exp.expSgPlayerAbilities, got.ExpSgPlayerAbilities)
 	checkResAmts(test, "overdrive modes", exp.overdriveModes, got.OverdriveModes)
 }
