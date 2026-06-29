@@ -14,8 +14,8 @@ type EnumType[E, N any] struct {
 	aliasses     map[string][]E
 }
 
-// TypeLookup holds all the enum types for the application that are either used as endpoint or query param
-type TypeLookup struct {
+// Types holds all the enum types for the application that are either used as endpoint or query param
+type Types struct {
 	AbilityType EnumType[database.AbilityType, any]
 	UnitType    EnumType[database.UnitType, any]
 	ItemType    EnumType[database.ItemType, any]
@@ -23,17 +23,22 @@ type TypeLookup struct {
 
 	AaActivationCondition       EnumType[database.AaActivationCondition, any]
 	ElementalAffinity           EnumType[database.ElementalAffinity, any]
+	AlterationType    	        EnumType[database.AlterationType, any]
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
+	ArmorType  			        EnumType[database.ArmorType, any]
 	Arranger                    EnumType[database.Arranger, database.NullArranger]
 	AutoAbilityCategory         EnumType[database.AutoAbilityCategory, any]
 	AvailabilityType            EnumType[database.AvailabilityType, any]
+	BgReplacementType			EnumType[database.BgReplacementType, database.NullBgReplacementType]
+	BlitzballPositionSlot		EnumType[database.BlitzballPositionSlot, any]
 	BlitzballTournamentCategory EnumType[database.BlitzballTournamentCategory, any]
 	CelestialFormula            EnumType[database.CelestialFormula, any]
 	CharacterClassCategory      EnumType[database.CharacterClassCategory, any]
 	CounterType                 EnumType[database.CounterType, database.NullCounterType]
 	Composer                    EnumType[database.Composer, database.NullComposer]
 	CreationArea                EnumType[database.MaCreationArea, database.NullMaCreationArea]
+	CreationsUnlockedCategory   EnumType[database.CreationsUnlockedCategory, database.NullCreationsUnlockedCategory]
 	CTBIconType                 EnumType[database.CtbIconType, any]
 	EquipClass                  EnumType[database.EquipClass, any]
 	EquipType                   EnumType[database.EquipType, any]
@@ -45,16 +50,22 @@ type TypeLookup struct {
 	MonsterCategory             EnumType[database.MonsterCategory, any]
 	MonsterFormationCategory    EnumType[database.MonsterFormationCategory, any]
 	MonsterSpecies              EnumType[database.MonsterSpecies, any]
+	MusicUseCase              	EnumType[database.MusicUseCase, database.NullMusicUseCase]
 	NodePosition                EnumType[database.NodePosition, any]
 	NodeState                   EnumType[database.NodeState, database.NullNodeState]
+	NodeType                	EnumType[database.NodeType, any]
+	NullifyArmored              EnumType[database.NullifyArmored, database.NullNullifyArmored]
 	OverdriveModeType           EnumType[database.OverdriveModeType, any]
 	PlayerAbilityCategory       EnumType[database.PlayerAbilityCategory, any]
 	ShopCategory                EnumType[database.ShopCategory, any]
 	ShopType                    EnumType[database.ShopType, database.NullShopType]
+	SpecialActionType           EnumType[database.SpecialActionType, database.NullSpecialActionType]
 	SphereColor                 EnumType[database.SphereColor, any]
-	SphereGridType	                EnumType[database.SphereGridType, any]
+	SphereEffect                EnumType[database.SphereEffect, any]
+	SphereGridType              EnumType[database.SphereGridType, any]
 	StatusConditionCategory     EnumType[database.StatusConditionCategory, any]
 	TreasureType                EnumType[database.TreasureType, any]
+	WeaponType	                EnumType[database.WeaponType, any]
 
 	AccSourceType     EnumType[database.AccSourceType, any]
 	AttackType        EnumType[database.AttackType, any]
@@ -70,7 +81,7 @@ type TypeLookup struct {
 }
 
 func (cfg *Config) TypeLookupInit() {
-	cfg.t = &TypeLookup{}
+	cfg.t = &Types{}
 
 	cfg.t.initAbilityType()
 	cfg.t.initUnitType()
@@ -78,18 +89,23 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initQuestType()
 
 	cfg.t.initAaActivationCondition()
+	cfg.t.initAlterationType()
 	cfg.t.initAreaConnectionType()
 	cfg.t.initArenaCreationCategory()
+	cfg.t.initArmorType()
 	cfg.t.initArranger()
 	cfg.t.initAutoAbilityCategory()
 	cfg.t.initAvailabilityType()
+	cfg.t.initBgReplacementType()
+	cfg.t.initBlitzballPositionSlot()
 	cfg.t.initBlitzballTournamentCategory()
 	cfg.t.initCelestialFormula()
 	cfg.t.initCharacterClassCategory()
 	cfg.t.initComposer()
 	cfg.t.initCounterType()
-	cfg.t.initCTBIconType()
 	cfg.t.initCreationArea()
+	cfg.t.initCreationsUnlockedCategory()
+	cfg.t.initCTBIconType()
 	cfg.t.initElementalAffinity()
 	cfg.t.initEquipClass()
 	cfg.t.initEquipType()
@@ -101,16 +117,22 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initMonsterCategory()
 	cfg.t.initMonsterFormationCategory()
 	cfg.t.initMonsterSpecies()
+	cfg.t.initMusicUseCase()
 	cfg.t.initNodePosition()
 	cfg.t.initNodeState()
+	cfg.t.initNodeType()
+	cfg.t.initNullifyArmored()
 	cfg.t.initOverdriveModeType()
 	cfg.t.initPlayerAbilityCategory()
 	cfg.t.initShopCategory()
 	cfg.t.initShopType()
+	cfg.t.initSpecialActionType()
 	cfg.t.initSphereColor()
+	cfg.t.initSphereEffect()
 	cfg.t.initSphereGridType()
 	cfg.t.initStatusConditionCategory()
 	cfg.t.initTreasureType()
+	cfg.t.initWeaponType()
 
 	cfg.t.initAccSourceType()
 	cfg.t.initAttackType()
@@ -125,7 +147,7 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initTargetType()
 }
 
-func (t *TypeLookup) initAbilityType() {
+func (t *Types) initAbilityType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AbilityTypePlayerAbility),
@@ -163,7 +185,7 @@ func (t *TypeLookup) initAbilityType() {
 	}
 }
 
-func (t *TypeLookup) initUnitType() {
+func (t *Types) initUnitType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.UnitTypeCharacter),
@@ -185,7 +207,7 @@ func (t *TypeLookup) initUnitType() {
 	}
 }
 
-func (t *TypeLookup) initItemType() {
+func (t *Types) initItemType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.ItemTypeItem),
@@ -207,7 +229,7 @@ func (t *TypeLookup) initItemType() {
 	}
 }
 
-func (t *TypeLookup) initQuestType() {
+func (t *Types) initQuestType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.QuestTypeSidequest),
@@ -229,7 +251,7 @@ func (t *TypeLookup) initQuestType() {
 	}
 }
 
-func (t *TypeLookup) initAaActivationCondition() {
+func (t *Types) initAaActivationCondition() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AaActivationConditionAlways),
@@ -257,7 +279,27 @@ func (t *TypeLookup) initAaActivationCondition() {
 	}
 }
 
-func (t *TypeLookup) initAreaConnectionType() {
+func (t *Types) initAlterationType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.AlterationTypeChange),
+		},
+		{
+			Name: string(database.AlterationTypeGain),
+		},
+		{
+			Name: string(database.AlterationTypeLoss),
+		},
+	}
+
+	t.AlterationType = EnumType[database.AlterationType, any]{
+		name:       "alteration type",
+		lookup:     enumSliceToMap(typeSlice),
+		convFunc:   func(s string) database.AlterationType { return database.AlterationType(s) },
+	}
+}
+
+func (t *Types) initAreaConnectionType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AreaConnectionTypeBothDirections),
@@ -281,7 +323,7 @@ func (t *TypeLookup) initAreaConnectionType() {
 	}
 }
 
-func (t *TypeLookup) initArenaCreationCategory() {
+func (t *Types) initArenaCreationCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.MaCreationCategoryArea),
@@ -304,7 +346,42 @@ func (t *TypeLookup) initArenaCreationCategory() {
 	}
 }
 
-func (t *TypeLookup) initArranger() {
+func (t *Types) initArmorType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.ArmorTypeShield),
+		},
+		{
+			Name: string(database.ArmorTypeRing),
+		},
+		{
+			Name: string(database.ArmorTypeArmguard),
+		},
+		{
+			Name: string(database.ArmorTypeBangle),
+		},
+		{
+			Name: string(database.ArmorTypeArmlet),
+		},
+		{
+			Name: string(database.ArmorTypeBracer),
+		},
+		{
+			Name: string(database.ArmorTypeTarge),
+		},
+		{
+			Name: string(database.ArmorTypeSeymourArmor),
+		},
+	}
+
+	t.ArmorType = EnumType[database.ArmorType, any]{
+		name:       "armor type",
+		lookup:     enumSliceToMap(typeSlice),
+		convFunc:   func(s string) database.ArmorType { return database.ArmorType(s) },
+	}
+}
+
+func (t *Types) initArranger() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.ArrangerNobuouematsu),
@@ -330,7 +407,7 @@ func (t *TypeLookup) initArranger() {
 	}
 }
 
-func (t *TypeLookup) initAutoAbilityCategory() {
+func (t *Types) initAutoAbilityCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AutoAbilityCategoryStatX),
@@ -390,7 +467,7 @@ func (t *TypeLookup) initAutoAbilityCategory() {
 	}
 }
 
-func (t *TypeLookup) initAvailabilityType() {
+func (t *Types) initAvailabilityType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AvailabilityTypeAlways),
@@ -455,7 +532,49 @@ func (t *TypeLookup) initAvailabilityType() {
 	}
 }
 
-func (t *TypeLookup) initBlitzballTournamentCategory() {
+func (t *Types) initBgReplacementType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.BgReplacementTypeUntilTrigger),
+		},
+		{
+			Name: string(database.BgReplacementTypeUntilZoneChange),
+		},
+	}
+
+	t.BgReplacementType = EnumType[database.BgReplacementType, database.NullBgReplacementType]{
+		name:         "bg replacement type",
+		lookup:       enumSliceToMap(typeSlice),
+		convFunc:     func(s string) database.BgReplacementType { return database.BgReplacementType(s) },
+		nullConvFunc: database.ToNullBgReplacementType,
+		getNullEnum:  database.GetNullBgReplacementType,
+	}
+}
+
+func (t *Types) initBlitzballPositionSlot() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.BlitzballPositionSlot1st),
+		},
+		{
+			Name: string(database.BlitzballPositionSlot2nd),
+		},
+		{
+			Name: string(database.BlitzballPositionSlot3rd),
+		},
+		{
+			Name: string(database.BlitzballPositionSlotTopScorer),
+		},
+	}
+
+	t.BlitzballPositionSlot = EnumType[database.BlitzballPositionSlot, any]{
+		name:       "blitzball position slot",
+		lookup:     enumSliceToMap(typeSlice),
+		convFunc:   func(s string) database.BlitzballPositionSlot { return database.BlitzballPositionSlot(s) },
+	}
+}
+
+func (t *Types) initBlitzballTournamentCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.BlitzballTournamentCategoryLeague),
@@ -473,7 +592,7 @@ func (t *TypeLookup) initBlitzballTournamentCategory() {
 	}
 }
 
-func (t *TypeLookup) initCelestialFormula() {
+func (t *Types) initCelestialFormula() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.CelestialFormulaHpHigh),
@@ -497,7 +616,7 @@ func (t *TypeLookup) initCelestialFormula() {
 	}
 }
 
-func (t *TypeLookup) initCharacterClassCategory() {
+func (t *Types) initCharacterClassCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.CharacterClassCategoryGroup),
@@ -518,7 +637,7 @@ func (t *TypeLookup) initCharacterClassCategory() {
 	}
 }
 
-func (t *TypeLookup) initComposer() {
+func (t *Types) initComposer() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.ComposerNobuouematsu),
@@ -541,7 +660,7 @@ func (t *TypeLookup) initComposer() {
 	}
 }
 
-func (t *TypeLookup) initCounterType() {
+func (t *Types) initCounterType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.CounterTypePhysical),
@@ -563,7 +682,7 @@ func (t *TypeLookup) initCounterType() {
 	}
 }
 
-func (t *TypeLookup) initCTBIconType() {
+func (t *Types) initCTBIconType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.CtbIconTypeMonster),
@@ -595,7 +714,7 @@ func (t *TypeLookup) initCTBIconType() {
 	}
 }
 
-func (t *TypeLookup) initCreationArea() {
+func (t *Types) initCreationArea() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.MaCreationAreaBesaid),
@@ -648,7 +767,26 @@ func (t *TypeLookup) initCreationArea() {
 	}
 }
 
-func (t *TypeLookup) initElementalAffinity() {
+func (t *Types) initCreationsUnlockedCategory() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.CreationsUnlockedCategoryArea),
+		},
+		{
+			Name: string(database.CreationsUnlockedCategorySpecies),
+		},
+	}
+
+	t.CreationsUnlockedCategory = EnumType[database.CreationsUnlockedCategory, database.NullCreationsUnlockedCategory]{
+		name:         "creations unlocked category",
+		lookup:       enumSliceToMap(typeSlice),
+		convFunc:     func(s string) database.CreationsUnlockedCategory { return database.CreationsUnlockedCategory(s) },
+		nullConvFunc: database.ToNullCreationsUnlockedCategory,
+		getNullEnum:  database.GetNullCreationsUnlockedCategory,
+	}
+}
+
+func (t *Types) initElementalAffinity() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.ElementalAffinityNeutral),
@@ -684,7 +822,7 @@ func (t *TypeLookup) initElementalAffinity() {
 	}
 }
 
-func (t *TypeLookup) initEquipClass() {
+func (t *Types) initEquipClass() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.EquipClassStandard),
@@ -708,7 +846,7 @@ func (t *TypeLookup) initEquipClass() {
 	}
 }
 
-func (t *TypeLookup) initEquipType() {
+func (t *Types) initEquipType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.EquipTypeWeapon),
@@ -726,7 +864,7 @@ func (t *TypeLookup) initEquipType() {
 	}
 }
 
-func (t *TypeLookup) initItemCategory() {
+func (t *Types) initItemCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.ItemCategoryHealing),
@@ -762,7 +900,7 @@ func (t *TypeLookup) initItemCategory() {
 	}
 }
 
-func (t *TypeLookup) initKeyItemCategory() {
+func (t *Types) initKeyItemCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.KeyItemCategoryStory),
@@ -794,7 +932,7 @@ func (t *TypeLookup) initKeyItemCategory() {
 	}
 }
 
-func (t *TypeLookup) initLootType() {
+func (t *Types) initLootType() {
 
 	typeSlice := []EnumAPIResource{
 		{
@@ -816,7 +954,7 @@ func (t *TypeLookup) initLootType() {
 	}
 }
 
-func (t *TypeLookup) initMixCategory() {
+func (t *Types) initMixCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.MixCategoryRecovery),
@@ -876,7 +1014,7 @@ func (t *TypeLookup) initMixCategory() {
 	}
 }
 
-func (t *TypeLookup) initModifierCategory() {
+func (t *Types) initModifierCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.ModifierCategoryFixedValue),
@@ -904,7 +1042,7 @@ func (t *TypeLookup) initModifierCategory() {
 	}
 }
 
-func (t *TypeLookup) initMonsterFormationCategory() {
+func (t *Types) initMonsterFormationCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.MonsterFormationCategoryRandomEncounter),
@@ -940,7 +1078,7 @@ func (t *TypeLookup) initMonsterFormationCategory() {
 	}
 }
 
-func (t *TypeLookup) initMonsterSpecies() {
+func (t *Types) initMonsterSpecies() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.MonsterSpeciesAdamantoise),
@@ -1120,7 +1258,7 @@ func (t *TypeLookup) initMonsterSpecies() {
 	}
 }
 
-func (t *TypeLookup) initMonsterCategory() {
+func (t *Types) initMonsterCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.MonsterCategoryMonster),
@@ -1141,7 +1279,44 @@ func (t *TypeLookup) initMonsterCategory() {
 	}
 }
 
-func (t *TypeLookup) initNodePosition() {
+func (t *Types) initMusicUseCase() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.MusicUseCaseBlitzballGame),
+		},
+		{
+			Name: string(database.MusicUseCaseBlitzballMenu),
+		},
+		{
+			Name: string(database.MusicUseCaseBossBattleDefault),
+		},
+		{
+			Name: string(database.MusicUseCaseChocobo),
+		},
+		{
+			Name: string(database.MusicUseCaseGameOver),
+		},
+		{
+			Name: string(database.MusicUseCaseMainMenu),
+		},
+		{
+			Name: string(database.MusicUseCaseRandomEncounterDefault),
+		},
+		{
+			Name: string(database.MusicUseCaseVictory),
+		},
+	}
+
+	t.MusicUseCase = EnumType[database.MusicUseCase, database.NullMusicUseCase]{
+		name:         "music use case",
+		lookup:       enumSliceToMap(typeSlice),
+		convFunc:     func(s string) database.MusicUseCase { return database.MusicUseCase(s) },
+		nullConvFunc: database.ToNullMusicUseCase,
+		getNullEnum:  database.GetNullMusicUseCase,
+	}
+}
+
+func (t *Types) initNodePosition() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.NodePositionNeighboring),
@@ -1165,7 +1340,7 @@ func (t *TypeLookup) initNodePosition() {
 	}
 }
 
-func (t *TypeLookup) initNodeState() {
+func (t *Types) initNodeState() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.NodeStateActiveSelf),
@@ -1199,7 +1374,94 @@ func (t *TypeLookup) initNodeState() {
 	}
 }
 
-func (t *TypeLookup) initOverdriveModeType() {
+func (t *Types) initNodeType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.NodeTypeHp),
+		},
+		{
+			Name: string(database.NodeTypeMp),
+		},
+		{
+			Name: string(database.NodeTypeStrength),
+		},
+		{
+			Name: string(database.NodeTypeDefense),
+		},
+		{
+			Name: string(database.NodeTypeMagic),
+		},
+		{
+			Name: string(database.NodeTypeMagicDefense),
+		},
+		{
+			Name: string(database.NodeTypeAgility),
+		},
+		{
+			Name: string(database.NodeTypeLuck),
+		},
+		{
+			Name: string(database.NodeTypeEvasion),
+		},
+		{
+			Name: string(database.NodeTypeAccuracy),
+		},
+		{
+			Name: string(database.NodeTypeSkill),
+		},
+		{
+			Name: string(database.NodeTypeSpecial),
+		},
+		{
+			Name: string(database.NodeTypeWhtMagic),
+		},
+		{
+			Name: string(database.NodeTypeBlkMagic),
+		},
+		{
+			Name: string(database.NodeTypeLv1Lock),
+		},
+		{
+			Name: string(database.NodeTypeLv2Lock),
+		},
+		{
+			Name: string(database.NodeTypeLv3Lock),
+		},
+		{
+			Name: string(database.NodeTypeLv4Lock),
+		},
+		{
+			Name: string(database.NodeTypeEmpty),
+		},
+	}
+
+	t.NodeType = EnumType[database.NodeType, any]{
+		name:       "node type",
+		lookup:     enumSliceToMap(typeSlice),
+		convFunc:   func(s string) database.NodeType { return database.NodeType(s) },
+	}
+}
+
+func (t *Types) initNullifyArmored() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.NullifyArmoredTarget),
+		},
+		{
+			Name: string(database.NullifyArmoredBearer),
+		},
+	}
+
+	t.NullifyArmored = EnumType[database.NullifyArmored, database.NullNullifyArmored]{
+		name:         "nullify armored",
+		lookup:       enumSliceToMap(typeSlice),
+		convFunc:     func(s string) database.NullifyArmored { return database.NullifyArmored(s) },
+		nullConvFunc: database.ToNullNullifyArmored,
+		getNullEnum:  database.GetNullNullifyArmored,
+	}
+}
+
+func (t *Types) initOverdriveModeType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.OverdriveModeTypeFormula),
@@ -1219,7 +1481,7 @@ func (t *TypeLookup) initOverdriveModeType() {
 	}
 }
 
-func (t *TypeLookup) initPlayerAbilityCategory() {
+func (t *Types) initPlayerAbilityCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.PlayerAbilityCategorySkill),
@@ -1246,7 +1508,7 @@ func (t *TypeLookup) initPlayerAbilityCategory() {
 	}
 }
 
-func (t *TypeLookup) initShopCategory() {
+func (t *Types) initShopCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.ShopCategoryStandard),
@@ -1270,7 +1532,7 @@ func (t *TypeLookup) initShopCategory() {
 	}
 }
 
-func (t *TypeLookup) initShopType() {
+func (t *Types) initShopType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.ShopTypePreAirship),
@@ -1290,7 +1552,32 @@ func (t *TypeLookup) initShopType() {
 	}
 }
 
-func (t *TypeLookup) initSphereColor() {
+func (t *Types) initSpecialActionType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.SpecialActionTypeBribe),
+		},
+		{
+			Name: string(database.SpecialActionTypeStealGil),
+		},
+		{
+			Name: string(database.SpecialActionTypeStealItem),
+		},
+		{
+			Name: string(database.SpecialActionTypeTransferOverdrive),
+		},
+	}
+
+	t.SpecialActionType = EnumType[database.SpecialActionType, database.NullSpecialActionType]{
+		name:         "special action type",
+		lookup:       enumSliceToMap(typeSlice),
+		convFunc:     func(s string) database.SpecialActionType { return database.SpecialActionType(s) },
+		nullConvFunc: database.ToNullSpecialActionType,
+		getNullEnum:  database.GetNullSpecialActionType,
+	}
+}
+
+func (t *Types) initSphereColor() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.SphereColorRed),
@@ -1320,7 +1607,30 @@ func (t *TypeLookup) initSphereColor() {
 	}
 }
 
-func (t *TypeLookup) initSphereGridType() {
+func (t *Types) initSphereEffect() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.SphereEffectActivation),
+		},
+		{
+			Name: string(database.SphereEffectRemoval),
+		},
+		{
+			Name: string(database.SphereEffectCreation),
+		},
+		{
+			Name: string(database.SphereEffectTeleportation),
+		},
+	}
+
+	t.SphereEffect = EnumType[database.SphereEffect, any]{
+		name:       "sphere effect",
+		lookup:     enumSliceToMap(typeSlice),
+		convFunc:   func(s string) database.SphereEffect { return database.SphereEffect(s) },
+	}
+}
+
+func (t *Types) initSphereGridType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.SphereGridTypeStandard),
@@ -1338,7 +1648,7 @@ func (t *TypeLookup) initSphereGridType() {
 	}
 }
 
-func (t *TypeLookup) initStatusConditionCategory() {
+func (t *Types) initStatusConditionCategory() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.StatusConditionCategoryNegative),
@@ -1359,7 +1669,7 @@ func (t *TypeLookup) initStatusConditionCategory() {
 	}
 }
 
-func (t *TypeLookup) initTreasureType() {
+func (t *Types) initTreasureType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.TreasureTypeChest),
@@ -1383,7 +1693,42 @@ func (t *TypeLookup) initTreasureType() {
 	}
 }
 
-func (t *TypeLookup) initAccSourceType() {
+func (t *Types) initWeaponType() {
+	typeSlice := []EnumAPIResource{
+		{
+			Name: string(database.WeaponTypeSword),
+		},
+		{
+			Name: string(database.WeaponTypeStaff),
+		},
+		{
+			Name: string(database.WeaponTypeBlitzball),
+		},
+		{
+			Name: string(database.WeaponTypeDoll),
+		},
+		{
+			Name: string(database.WeaponTypeSpear),
+		},
+		{
+			Name: string(database.WeaponTypeBlade),
+		},
+		{
+			Name: string(database.WeaponTypeClaw),
+		},
+		{
+			Name: string(database.WeaponTypeSeymourStaff),
+		},
+	}
+
+	t.WeaponType = EnumType[database.WeaponType, any]{
+		name:       "weapon type",
+		lookup:     enumSliceToMap(typeSlice),
+		convFunc:   func(s string) database.WeaponType { return database.WeaponType(s) },
+	}
+}
+
+func (t *Types) initAccSourceType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.AccSourceTypeAccuracy),
@@ -1403,7 +1748,7 @@ func (t *TypeLookup) initAccSourceType() {
 	}
 }
 
-func (t *TypeLookup) initAttackType() {
+func (t *Types) initAttackType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name: string(database.AttackTypeAttack),
@@ -1424,7 +1769,7 @@ func (t *TypeLookup) initAttackType() {
 	}
 }
 
-func (t *TypeLookup) initBreakDmgLimitType() {
+func (t *Types) initBreakDmgLimitType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.BreakDmgLmtTypeAlways),
@@ -1446,7 +1791,7 @@ func (t *TypeLookup) initBreakDmgLimitType() {
 	}
 }
 
-func (t *TypeLookup) initCalculationType() {
+func (t *Types) initCalculationType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.CalculationTypeAddedPercentage),
@@ -1478,7 +1823,7 @@ func (t *TypeLookup) initCalculationType() {
 	}
 }
 
-func (t *TypeLookup) initCriticalType() {
+func (t *Types) initCriticalType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.CriticalTypeCrit),
@@ -1504,13 +1849,15 @@ func (t *TypeLookup) initCriticalType() {
 	}
 }
 
-func (t *TypeLookup) initCtbAttackType() {
+func (t *Types) initCtbAttackType() {
 	typeSlice := []EnumAPIResource{
 		{
-			Name: string(database.CtbAttackTypeAttack),
+			Name:        string(database.CtbAttackTypeAttack),
+			Description: "The action inflicts delay and makes the target's next turn come later.",
 		},
 		{
-			Name: string(database.CtbAttackTypeHeal),
+			Name:        string(database.CtbAttackTypeHeal),
+			Description: "The action makes the target's next turn come earlier.",
 		},
 	}
 
@@ -1522,7 +1869,7 @@ func (t *TypeLookup) initCtbAttackType() {
 	}
 }
 
-func (t *TypeLookup) initDamageFormula() {
+func (t *Types) initDamageFormula() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.DamageFormulaStrVsDef),
@@ -1602,7 +1949,7 @@ func (t *TypeLookup) initDamageFormula() {
 	}
 }
 
-func (t *TypeLookup) initDamageType() {
+func (t *Types) initDamageType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.DamageTypePhysical),
@@ -1626,7 +1973,7 @@ func (t *TypeLookup) initDamageType() {
 	}
 }
 
-func (t *TypeLookup) initDelayType() {
+func (t *Types) initDelayType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.DelayTypeCtbBased),
@@ -1646,7 +1993,7 @@ func (t *TypeLookup) initDelayType() {
 	}
 }
 
-func (t *TypeLookup) initDurationType() {
+func (t *Types) initDurationType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.DurationTypeTurns),
@@ -1682,7 +2029,7 @@ func (t *TypeLookup) initDurationType() {
 	}
 }
 
-func (t *TypeLookup) initTargetType() {
+func (t *Types) initTargetType() {
 	typeSlice := []EnumAPIResource{
 		{
 			Name:        string(database.TargetTypeSelf),

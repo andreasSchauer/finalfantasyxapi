@@ -16,7 +16,7 @@ type Config struct {
 	db          *database.Queries
 	dbConn      *sql.DB
 	l           *seeding.Lookup
-	t           *TypeLookup
+	t           *Types
 	q           *QueryLookup
 	e           *endpoints
 	platform    string
