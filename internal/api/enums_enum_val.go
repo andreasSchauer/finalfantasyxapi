@@ -1,21 +1,12 @@
 package api
 
 import (
-
 	"slices"
 	"strconv"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-type EnumApiResourceList struct {
-	ListParams
-	Results []EnumVal `json:"results"`
-}
-
-func (l EnumApiResourceList) getListParams() ListParams {
-	return l.ListParams
-}
 
 type EnumVal struct {
 	ID          int32  `json:"id"`
@@ -32,7 +23,7 @@ func (e EnumVal) GetID() int32 {
 }
 
 
-// Searches an EnumAPIResource based on its value or an idString (mostly from queries)
+// Verifies an EnumVal based on its value or an idString (mostly from query params)
 func CheckEnumVal[E, N any](key string, et EnumType[E, N]) (EnumVal, error) {
 	id, err := strconv.Atoi(key)
 	if err == nil {
@@ -56,33 +47,41 @@ func CheckEnumVal[E, N any](key string, et EnumType[E, N]) (EnumVal, error) {
 	if found {
 		return res, nil
 	}
-
+	
 	return EnumVal{}, errNoResource
 }
 
 
 func createEnumValSlice(lookup map[string]EnumVal) []EnumVal {
-	resources := []EnumVal{}
+	vals := []EnumVal{}
 
-	for _, resource := range lookup {
-		resources = append(resources, resource)
+	for _, val := range lookup {
+		vals = append(vals, val)
 	}
 
-	slices.SortStableFunc(resources, h.SortOnId)
+	slices.SortStableFunc(vals, h.SortOnId)
 
-	return resources
+	return vals
 }
 
-func enumSliceToMap(enumTypes []EnumVal) map[string]EnumVal {
+func enumSliceToMap(enumVals []EnumVal) map[string]EnumVal {
 	typeMap := make(map[string]EnumVal)
 
-	for i, enumType := range enumTypes {
-		typeMap[enumType.Name] = EnumVal{
+	for i, enumVal := range enumVals {
+		typeMap[enumVal.Name] = EnumVal{
 			ID:          int32(i + 1),
-			Name:        enumType.Name,
-			Description: enumType.Description,
+			Name:        enumVal.Name,
+			Description: enumVal.Description,
 		}
 	}
 
 	return typeMap
+}
+
+func getEnumValIDs(enumVals []EnumVal) []EnumVal {
+	for i := range enumVals {
+		enumVals[i].ID = int32(i + 1)
+	}
+
+	return enumVals
 }

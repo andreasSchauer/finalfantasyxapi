@@ -114,18 +114,6 @@ func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIR
 	return list, nil
 }
 
-// only used for newNamedAPIResourceFromType, since the newer function won't work with that
-func newNamedAPIResourceSimple(cfg *Config, endpoint EndpointName, id int32, name string) NamedAPIResource {
-	if name == "" {
-		return NamedAPIResource{}
-	}
-
-	return NamedAPIResource{
-		ID:   id,
-		Name: name,
-		URL:  createResourceURL(cfg, endpoint, id),
-	}
-}
 
 func refsToNamedAPIResources(cfg *Config, refs []seeding.AbilityReference) []NamedAPIResource {
 	abilities := []NamedAPIResource{}

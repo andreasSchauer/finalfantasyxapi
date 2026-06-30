@@ -1,73 +1,6 @@
 package api
 
-
-type EnumEndpoint EndpointName
-
-const (
-	enumEpAbilityType					EnumEndpoint = "ability-type"
-	enumEpUnitType						EnumEndpoint = "unit-type"
-	enumEpItemType						EnumEndpoint = "item-type"
-	enumEpQuestType						EnumEndpoint = "quest-type"
-
-	enumEpAaActivationCondition			EnumEndpoint = "auto-ability-activation-condition"
-	enumEpAlterationType				EnumEndpoint = "alteration-type"
-	enumEpAreaConnectionType			EnumEndpoint = "area-connection-type"
-	enumEpArenaCreationCategory			EnumEndpoint = "arena-creation-category"
-	enumEpArmorType						EnumEndpoint = "armor-type"
-	enumEpArranger						EnumEndpoint = "arranger"
-	enumEpAutoAbilityCategory			EnumEndpoint = "auto-ability-category"
-	enumEpAvailabilityType				EnumEndpoint = "availability-type"
-	enumEpBgReplacementType				EnumEndpoint = "bg-replacement-type"
-	enumEpBlitzballPositionSlot			EnumEndpoint = "blitzball-position-slot"
-	enumEpBlitzballTournamentCategory	EnumEndpoint = "blitzball-tournament-category"
-	enumEpCelestialFormula				EnumEndpoint = "celestial-formula"
-	enumEpCharacterClassCategory		EnumEndpoint = "character-class-category"
-	enumEpComposer						EnumEndpoint = "composer"
-	enumEpCounterType					EnumEndpoint = "counter-type"
-	enumEpCreationArea					EnumEndpoint = "creation-area"
-	enumEpCreationsUnlockedCategory		EnumEndpoint = "creations-unlocked-category"
-	enumEpCTBIconType					EnumEndpoint = "ctb-icon-type"
-	enumEpElementalAffinity				EnumEndpoint = "elemental-affinity"
-	enumEpEquipClass					EnumEndpoint = "equip-class"
-	enumEpEquipType						EnumEndpoint = "equip-type"
-	enumEpItemCategory					EnumEndpoint = "item-category"
-	enumEpKeyItemCategory				EnumEndpoint = "key-item-category"
-	enumEpLootType						EnumEndpoint = "loot-type"
-	enumEpMixCategory					EnumEndpoint = "mix-category"
-	enumEpModifierCategory				EnumEndpoint = "modifier-category"
-	enumEpMonsterCategory				EnumEndpoint = "monster-category"
-	enumEpMonsterFormationCategory		EnumEndpoint = "monster-formation-category"
-	enumEpMonsterSpecies				EnumEndpoint = "monster-species"
-	enumEpMusicUseCase					EnumEndpoint = "music-use-case"
-	enumEpNodePosition					EnumEndpoint = "node-position"
-	enumEpNodeState						EnumEndpoint = "node-state"
-	enumEpNodeType						EnumEndpoint = "node-type"
-	enumEpNullifyArmored				EnumEndpoint = "nullify-armored"
-	enumEpOverdriveModeType				EnumEndpoint = "overdrive-mode-type"
-	enumEpPlayerAbilityCategory			EnumEndpoint = "player-ability-category"
-	enumEpShopCategory					EnumEndpoint = "shop-category"
-	enumEpShopType						EnumEndpoint = "shop-type"
-	enumEpSpecialActionType				EnumEndpoint = "special-action-type"
-	enumEpSphereColor					EnumEndpoint = "sphere-color"
-	enumEpSphereEffect					EnumEndpoint = "sphere-effect"
-	enumEpSphereGridType				EnumEndpoint = "sphere-grid-type"
-	enumEpStatusConditionCategory		EnumEndpoint = "status-condition-category"
-	enumEpTreasureType					EnumEndpoint = "treasure-type"
-	enumEpWeaponType					EnumEndpoint = "weapon-type"
-
-	enumEpAccSourceType					EnumEndpoint = "accuracy-source-type"
-	enumEpAttackType					EnumEndpoint = "attack-type"
-	enumEpBreakDmgLimitType				EnumEndpoint = "break-dmg-limit-type"
-	enumEpCalculationType				EnumEndpoint = "calculation-type"
-	enumEpCriticalType					EnumEndpoint = "critical-type"
-	enumEpCtbAttackType					EnumEndpoint = "ctb-attack-type"
-	enumEpDamageFormula					EnumEndpoint = "damage-formula"
-	enumEpDamageType					EnumEndpoint = "damage-type"
-	enumEpDelayType						EnumEndpoint = "delay-type"
-	enumEpDurationType					EnumEndpoint = "duration-type"
-	enumEpTargetType					EnumEndpoint = "target-type"
-)
-
+import h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 
 
 type EnumName string
@@ -135,3 +68,8 @@ const (
 	enumNameDurationType      			EnumName = "duration type"
 	enumNameTargetType        			EnumName = "target type"
 )
+
+
+func getEnumEndpoint(e EnumName) EndpointName {
+	return EndpointName(h.GetNameWithDashes(string(e), " "))
+}
